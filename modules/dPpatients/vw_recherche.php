@@ -1,29 +1,32 @@
-<?php
+<?php /* $Id: $ */
 
-
-// Creation du patient
-$patient       = new CPatient();
-
-$patients      = array();
+/**
+* @package Mediboard
+* @subpackage dPpatients
+* @version $Revision: $
+* @author Alexis Granger
+*/
 
 // Récupération des critères de recherche
-$antecedent_patient      = mbGetValueFromGetOrSession("antecedent_patient"     );
-$traitement_patient      = mbGetValueFromGetOrSession("traitement_patient"     );
-$diagnostic_patient      = mbGetValueFromGetOrSession("diagnostic_patient"     );
-$motif_consult           = mbGetValueFromGetOrSession("motif_consult"          );
-$remarque_consult        = mbGetValueFromGetOrSession("remarque_consult"       );
-$examen_consult          = mbGetValueFromGetOrSession("examen_consult"         );
-$traitement_consult      = mbGetValueFromGetOrSession("traitement_consult"     );
-$typeAdmission_sejour    = mbGetValueFromGetOrSession("typeAdmission_sejour"   );
-$convalescence_sejour    = mbGetValueFromGetOrSession("convalescence_sejour"   );
-$remarque_sejour         = mbGetValueFromGetOrSession("remarque_sejour"        );
-$materiel_intervention   = mbGetValueFromGetOrSession("materiel_intervention"  );
-$examen_intervention     = mbGetValueFromGetOrSession("examen_intervention"    );
-$remarque_intervention   = mbGetValueFromGetOrSession("remarque_intervention"  );
+$antecedent_patient      = mbGetValueFromGetOrSession("antecedent_patient"          );
+$traitement_patient      = mbGetValueFromGetOrSession("traitement_patient"          );
+$diagnostic_patient      = mbGetValueFromGetOrSession("diagnostic_patient"          );
+$motif_consult           = mbGetValueFromGetOrSession("motif_consult"               );
+$remarque_consult        = mbGetValueFromGetOrSession("remarque_consult"            );
+$examen_consult          = mbGetValueFromGetOrSession("examen_consult"              );
+$traitement_consult      = mbGetValueFromGetOrSession("traitement_consult"          );
+$typeAdmission_sejour    = mbGetValueFromGetOrSession("typeAdmission_sejour"        );
+$convalescence_sejour    = mbGetValueFromGetOrSession("convalescence_sejour"        );
+$remarque_sejour         = mbGetValueFromGetOrSession("remarque_sejour"             );
+$materiel_intervention   = mbGetValueFromGetOrSession("materiel_intervention"       );
+$examen_intervention     = mbGetValueFromGetOrSession("examen_intervention"         );
+$remarque_intervention   = mbGetValueFromGetOrSession("remarque_intervention"       );
 
-$recherche_consult = mbGetValueFromGetOrSession("recherche_consult","or");
-$recherche_sejour = mbGetValueFromGetOrSession("recherche_sejour","or");
-$recherche_intervention = mbGetValueFromGetOrSession("recherche_intervention","or");
+$recherche_consult       = mbGetValueFromGetOrSession("recherche_consult","or"      );
+$recherche_sejour        = mbGetValueFromGetOrSession("recherche_sejour","or"       );
+$recherche_intervention  = mbGetValueFromGetOrSession("recherche_intervention","or" );
+
+
 
 //----- Criteres de recherche -----
 
@@ -36,17 +39,19 @@ if($antecedent_patient){
   $where_ant["rques"]   = "LIKE '%$antecedent_patient%'";
 }
 $order_ant = "antecedent_id, rques";
-//mbTrace("Liste des antécédents trouvés (clé) et identifiants des dossiers (valeur)");
+
 if ($where_ant) {
   $antecedents = $ant->loadList($where_ant, $order_ant, "0, 30");
 }
 foreach($antecedents as $key=>$value){
-   if($value->object_class == "CPatient"){
-	  $antecedents_[$key] = $value->object_id;
-	  $pat = new CPatient();
-	  $patients_ant[$value->object_id] = $pat->load($value->object_id);
+   if($value->object_class != "CPatient"){
+   	unset($antecedents[$key]);
    }
+   $antecedents_[$key] = $value->object_id;
+   $value->loadRefsFwd();
 }
+
+
 
 // Recherche sur les traitements
 $trait = new CTraitement();
@@ -61,12 +66,14 @@ if($where_trait) {
   $traitements = $trait->loadList($where_trait, $order_trait, "0, 30");
 }
 foreach($traitements as $key=>$value){
-   if($value->object_class == "CPatient"){
-	  $traitements_[$key] = $value->object_id;
-	  $pat = new CPatient();
-	  $patients_trait[$value->object_id] = $pat->load($value->object_id);
+   if($value->object_class != "CPatient"){
+   	unset($traitements_[$key]);
    }
+   $traitements_[$key] = $value->object_id;
+   $value->loadRefsFwd();
 }
+
+
 
 // Recherche sur les diagnostics
 $where_motif = null;
@@ -85,6 +92,8 @@ $pat_diag = new CPatient();
 if($where_diag){
   $patients_diag = $pat_diag->loadList($where_diag, $order_diag, "0, 30");
 }
+
+
 
 // Recherche sur les Consultations
 $consultations = array();
@@ -131,20 +140,18 @@ if($recherche_consult == "or") {
 }
 
 $patients_consult = array();
-$pat_consult = new CPatient();
+
 $order_consult = "patient_id";
 if($where_consult){
   $consultations = $consult->loadList($where_consult, $order_consult, "0, 30");
 }
 
 foreach($consultations as $key=>$value){
-  $pat = new CPatient();
-  $patients_consult[$value->patient_id] = $pat->load($value->patient_id);
+	$value->loadRefPatient();
 }
 
 
-
-// Sejour
+// Recherche sur les sejours
 $sejours = array();
 $sejour = new CSejour();
 $patients_sejour = array();
@@ -182,19 +189,18 @@ if($recherche_sejour == "or") {
   }
 }
 
-$pat_sejour = new CPatient();
 $order_sejour = "patient_id";
 if($where_sejour){
   $sejours = $sejour->loadList($where_sejour, $order_sejour, "0, 30");
 }
 
 foreach($sejours as $key=>$value){
-  $pat = new CPatient();
-  $patients_sejour[$value->patient_id] = $pat->load($value->patient_id);
+	$value->loadRefPatient();
 }
 
 
-// Interventions
+
+// Recherches sur les Interventions
 $interventions = array();
 $intervention = new COperation();
 $patients_intervention = array();
@@ -232,20 +238,27 @@ if($recherche_intervention == "or"){
 }
 
 $order_intervention = "rques";
-
 if($where_intervention){
 	$interventions = $intervention->loadlist($where_intervention, $order_intervention, "0, 30");
 }
 
-foreach($interventions as $key=>$value){
-	$pat = new CPatient();
-	$value->loadRefSejour();
-    $patients_intervention[$value->_ref_sejour->patient_id] = $pat->load($value->_ref_sejour->patient_id);
+foreach($interventions as &$intervention){
+	$intervention->loadRefSejour();
+	$intervention->_ref_sejour->loadRefPatient();
 }
+
+
+
 
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("sejours"                 , $sejours                 );
+$smarty->assign("interventions"           , $interventions           );
+$smarty->assign("consultations"           , $consultations           );
+$smarty->assign("antecedents"             , $antecedents             );
+$smarty->assign("traitements"             , $traitements             );
 
 $smarty->assign("ant"                     , $ant                     );
 $smarty->assign("trait"                   , $trait                   );
@@ -253,8 +266,7 @@ $smarty->assign("intervention"            , $intervention            );
 $smarty->assign("consult"                 , $consult                 );
 $smarty->assign("sejour"                  , $sejour                  );
 $smarty->assign("pat_diag"                , $pat_diag                );
-$smarty->assign("pat_consult"             , $pat_consult             );
-$smarty->assign("pat_sejour"              , $pat_sejour              );
+
 
 
 $smarty->assign("antecedent_patient"      , $antecedent_patient      );
@@ -281,8 +293,6 @@ $smarty->assign("patients_diag"           , $patients_diag           );
 $smarty->assign("patients_consult"        , $patients_consult        );
 $smarty->assign("patients_sejour"         , $patients_sejour         );
 $smarty->assign("patients_intervention"   , $patients_intervention   );
-
-$smarty->assign("board"                , 0                   );
 
 $smarty->display("vw_recherche.tpl");
 

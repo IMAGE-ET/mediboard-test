@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Description';
 $locales['CAddiction-addiction-court'] = 'Description de l\'addication du patient';
@@ -35,7 +34,7 @@ $locales['CAntecedent-object_class-desc'] = '';
 $locales['CAntecedent-object_id'] = '';
 $locales['CAntecedent-object_id-court'] = '';
 $locales['CAntecedent-object_id-desc'] = '';
-$locales['CAntecedent-rques'] = 'Remarques';
+$locales['CAntecedent-rques'] = 'Antécédents';
 $locales['CAntecedent-rques-court'] = '';
 $locales['CAntecedent-rques-desc'] = 'Remarques sur l\'antécédent';
 $locales['CAntecedent-type'] = 'Type';
@@ -147,9 +146,9 @@ $locales['CPatient-incapable_majeur-desc'] = 'Etat d\'incapacité majeure du pati
 $locales['CPatient-lieu_naissance'] = 'Lieu de naissance';
 $locales['CPatient-lieu_naissance-court'] = '';
 $locales['CPatient-lieu_naissance-desc'] = 'Lieu de naissance du patient';
-$locales['CPatient-listCim10'] = '';
+$locales['CPatient-listCim10'] = 'Diagnostics';
 $locales['CPatient-listCim10-court'] = '';
-$locales['CPatient-listCim10-desc'] = '';
+$locales['CPatient-listCim10-desc'] = 'Diagnostics';
 $locales['CPatient-matricule'] = 'N° SS';
 $locales['CPatient-matricule-court'] = '';
 $locales['CPatient-matricule-desc'] = 'Numéro de sécurité sociale du patient';
@@ -300,4 +299,5 @@ $locales['mod-dPpatients-tab-vw_edit_patients'] = 'Edition d\'un dossier';
 $locales['mod-dPpatients-tab-vw_full_patients'] = 'Consulter un dossier';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';
 $locales['mod-dPpatients-tab-vw_medecins'] = 'Médecins correspondants';
+$locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
 ?>

@@ -13,6 +13,11 @@ $can->needsRead();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id", 0);
 
+// recuperation des id dans le cas d'une recherche de dossiers cliniques 
+$consultation_id = mbGetValueFromGet("consultation_id", 0);
+$sejour_id       = mbGetValueFromGet("sejour_id", 0);
+$operation_id    = mbGetValueFromGet("operation_id", 0);
+
 if(!$patient_id) {
   $AppUI->setMsg("Vous devez selectionner un patient", UI_MSG_ALERT);
   $AppUI->redirect("m=dPpatients&tab=0");
@@ -62,12 +67,16 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("codePraticienEc"   , $codePraticienEc);
-$smarty->assign("etablissements"    , $etablissements);
-$smarty->assign("patient"           , $patient         );
-$smarty->assign("listPrat"          , $listPrat        );
-$smarty->assign("object"            , $patient         );
-$smarty->assign("diagnosticsInstall", $diagnosticsInstall);
+$smarty->assign("consultation_id"   , $consultation_id    );
+$smarty->assign("sejour_id"         , $sejour_id          );
+$smarty->assign("operation_id"      , $operation_id       );
+
+$smarty->assign("codePraticienEc"   , $codePraticienEc    );
+$smarty->assign("etablissements"    , $etablissements     );
+$smarty->assign("patient"           , $patient            );
+$smarty->assign("listPrat"          , $listPrat           );
+$smarty->assign("object"            , $patient            );
+$smarty->assign("diagnosticsInstall", $diagnosticsInstall );
 
 $smarty->display("vw_full_patients.tpl");
 

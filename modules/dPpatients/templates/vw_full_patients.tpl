@@ -6,6 +6,7 @@
 
 function viewCompleteItem(sClassName, id) {
   url = new Url;
+
   url.setModuleAction("system", "httpreq_vw_complete_object");
   url.addParam("object_class", sClassName);
   url.addParam("object_id", id);
@@ -77,7 +78,22 @@ function printPatient(id) {
 }
 
 function pageMain() {
+  
+  if("{{$consultation_id}}" != '0'){
+    viewCompleteItem('CConsultation', "{{$consultation_id}}");
+  }
+  
+  if("{{$operation_id}}" != '0'){
+    viewCompleteItem('COperation', "{{$operation_id}}");
+  }
+  
+  if("{{$sejour_id}}" != '0'){
+    viewCompleteItem('CSejour', "{{$sejour_id}}");
+  }
+  
   ViewFullPatient.main();
+  
+  
   initNotes();
 }
 

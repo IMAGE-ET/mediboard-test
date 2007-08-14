@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPpatients-tab-vw_recherche'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-court'] = '';
@@ -300,4 +299,5 @@ $locales['mod-dPpatients-tab-vw_edit_patients'] = '';
 $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';
 $locales['mod-dPpatients-tab-vw_medecins'] = '';
+$locales['mod-dPpatients-tab-vw_recherche'] = '';
 ?>
