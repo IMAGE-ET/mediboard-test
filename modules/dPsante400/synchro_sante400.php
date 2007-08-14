@@ -8,18 +8,30 @@ $can->needsEdit();
 
 CRecordSante400::$verbose = mbGetValueFromGet("verbose");
 
-switch ($mode_compat = $dPconfig["interop"]["mode_compat"]) {
-  case "medicap" : 
-  $mouvFactory = new CMouvSejourEcap;
-  break;
+// Factory matrix
+$factories = array (
+  "medicap" => array (
+    "sejour" => new CMouvSejourEcap,
+    "intervention" => new CMouvInterventionECap,
+  ),
+  "tonkin" => array (
+    "sejour" => new CMouvSejourTonkin,
+  ),
+);
 
-  case "tonkin" : 
-  $mouvFactory = new CMouvSejourTonkin;
-  break;
-  
-  default: 
-  trigger_error($mode_compat ? "Mode de compatibilité '$mode_compat' inconnu" : "Mode de compatibilité non initalisé", E_USER_ERROR);
-  die();
+if (null == $mode_compat = $dPconfig["interop"]["mode_compat"]) {
+  trigger_error("Mode de compatibilité non initalisé", E_USER_ERROR);  
+}
+
+if (!array_key_exists($mode_compat, $factories)) {
+  trigger_error("Mode de compatibilité '$mode_compat' non géré", E_USER_ERROR);  
+}
+
+$types = array_keys($factories[$mode_compat]);
+$type = mbGetValueFromGetOrSession("type", reset($types));
+
+if (null == $mouvFactory = @$factories[$mode_compat][$type]) {
+  trigger_error("Pas de gestionnaire en mode de compatibilité '$mode_compat' et type de mouvement '$type'", E_USER_ERROR);
 }
 
 $marked = mbGetValueFromGetOrSession("marked", "1");
@@ -53,6 +65,8 @@ foreach ($mouvs as $mouv) {
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("connection", CRecordSante400::$dbh);
+$smarty->assign("types", $types);
+$smarty->assign("type", $type);
 $smarty->assign("marked", $marked);
 $smarty->assign("count", $count);
 $smarty->assign("procs", $procs);

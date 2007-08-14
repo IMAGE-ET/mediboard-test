@@ -1,6 +1,7 @@
 <?php
-$locales['config-dPsante400-cache_hours-desc'] = 'Durée du cache en heures. Les objets en cache ne sont pas synchronisés';
+$locales['CMouvement400-type-intervention'] = 'Mouvement d\'intervention';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
+$locales['CIdSante400-back-object_id'] = '';
 $locales['CIdSante400-id400'] = 'ID400';
 $locales['CIdSante400-id400-court'] = '';
 $locales['CIdSante400-id400-desc'] = 'Identifiant Santé 400 de l\'objet';
@@ -22,7 +23,15 @@ $locales['CIdSante400.more'] = '';
 $locales['CIdSante400.none'] = '';
 $locales['CIdSante400.one'] = '';
 $locales['CMbObject-back-identifiants'] = 'Identifiants externes';
+$locales['CMouvement400-marked'] = 'Marquage';
+$locales['CMouvement400-marked-0'] = 'Mouvements à traiter';
+$locales['CMouvement400-marked-1'] = 'Mouvement traités avec un erreur';
+$locales['CMouvement400-marked-desc'] = 'Marquage des mouvements';
+$locales['CMouvement400-type'] = 'Type';
+$locales['CMouvement400-type-desc'] = 'Type de mouvement';
+$locales['CMouvement400-type-sejour'] = 'Mouvement de séjour';
 $locales['config-dPsante400-cache_hours'] = 'Durée du cache en heures';
+$locales['config-dPsante400-cache_hours-desc'] = 'Durée du cache en heures. Les objets en cache ne sont pas synchronisés';
 $locales['config-dPsante400-dsn'] = 'DSN';
 $locales['config-dPsante400-dsn-desc'] = 'Nom de la Source de Données à traiter';
 $locales['config-dPsante400-group_id'] = 'Filtrer sur un établissement';
@@ -35,5 +44,4 @@ $locales['config-dPsante400-pass'] = 'Mot de passe';
 $locales['config-dPsante400-pass-desc'] = 'Mot de passe de la DSN';
 $locales['config-dPsante400-user'] = 'Utilisateur';
 $locales['config-dPsante400-user-desc'] = 'Nom d\'utilisation de la DSN';
-$locales['CIdSante400-back-object_id'] = '';
 ?>

@@ -20,6 +20,24 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
 {{if !$dialog}}
 <tr>
+  <td style="text-align: left">
+
+    <form action="?" name="typeFilter" method="get">
+
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
+
+    <label for="type" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
+    <select name="type" onchange="this.form.submit()">
+      {{foreach from=$types item=_type}}
+      <option value="{{$_type}}" {{if $_type == $type}}selected="selected"{{/if}}>{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
+      {{/foreach}}
+    </select>
+
+    </form>
+  
+  </td>
+
   <td style="text-align: right">
 
     <form action="?" name="markFilter" method="get">
@@ -27,10 +45,10 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="{{$actionType}}" value="{{$action}}" />
 
-    <label for="marked" title="Types de mouvements">Type de mouvements</label>
+    <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
     <select name="marked" onchange="this.form.submit()">
-      <option value="0" {{if !$marked}}selected="selected"{{/if}}>Mouvements à traiter</option>
-      <option value="1" {{if  $marked}}selected="selected"{{/if}}>Mouvement traités avec un erreur</option>
+      <option value="0" {{if !$marked}}selected="selected"{{/if}}>{{tr}}CMouvement400-marked-0{{/tr}}</option>
+      <option value="1" {{if  $marked}}selected="selected"{{/if}}>{{tr}}CMouvement400-marked-1{{/tr}}</option>
     </select>
 
     </form>
@@ -40,7 +58,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 {{/if}}
 
 <tr>
-  <td>
+  <td colspan="2">
 
 <table class="tbl">
 

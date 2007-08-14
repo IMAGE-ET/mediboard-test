@@ -30,8 +30,6 @@ class CMouvSejourEcap extends CMouvement400 {
   // Identifiant unique d'intervention stocké en dur dand la DHE
   protected $dheCIDC = null;
   
-  static $cache = array();
-  
   function __construct() {
     $this->base = "ECAPFILE";
     $this->table = "TRSJ0";
