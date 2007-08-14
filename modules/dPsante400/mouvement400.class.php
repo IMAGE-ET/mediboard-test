@@ -19,13 +19,30 @@ class CMouvement400 extends CRecordSante400 {
   public $type = null;
   public $prod = null;
   public $when = null;
+  public $changedFields = array();
 
   function initialize() {
+    // Consume metadata
     $this->when = $this->consumeDateTimeFlat("TRDATE", "TRHEURE");
     $this->rec = $this->consume($this->idField);
     $this->prod = $this->consume($this->prodField);
     $this->type = $this->consume($this->typeField);
-
+    
+    // Analyse changed fields
+    foreach (array_keys($this->data) as $beforeName) {
+      $matches = array();
+    	if (!preg_match("/B_(\w*)/i", $beforeName, $matches)) {
+    	  continue;
+    	}
+    	
+    	$name = $matches[1];
+    	$afterName = "A_$name";
+    	if ($this->data[$beforeName] != $this->data[$afterName]) {
+    	  $this->changedFields[] = $name;
+    	}
+    }
+    
+    // Initialize prefix
     $this->valuePrefix = $this->type == "S" ? "B_": "A_";
   }
   
@@ -169,6 +186,8 @@ class CMouvement400 extends CRecordSante400 {
   
   function proceed() {
     $this->trace($this->data, "Données à traiter dans le mouvement");
+    $this->trace(join(" ", $this->changedFields), "Données modifiées");
+    
     try {
       $this->synchronize();
       $return = true;
