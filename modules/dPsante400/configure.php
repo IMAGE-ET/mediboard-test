@@ -11,8 +11,11 @@ global $can;
 
 $can->needsAdmin();
 
+$types = CMouvFactory::getTypes();
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("types", $types);
 $smarty->display("configure.tpl");
 
 ?>

@@ -8,6 +8,23 @@ function purgeObjects() {
   }
 }
 
+var Moves = {
+  doAction: function(sAction) {
+    if (sAction == "purge") {
+      if (!confirm("Merci de confirmer la purge de tous les mouvements")) {
+        return;
+      }
+    }
+
+    var url = new Url;
+    url.setModuleAction("dPsante400", "httpreq_do_moves");
+    url.addParam("action", sAction);
+    url.addElement($("PurgeType"));
+    url.addElement($("PurgeMarked"));
+    url.requestUpdate("purgeMoves");
+  },
+}
+
 </script>
 
 <h2>Environnement d'execution</h2>
@@ -127,12 +144,59 @@ function purgeObjects() {
 
 </form>
 
+<h2>Purge des mouvements non traités</h2>
+
+<div class="big-warning">
+  Attention, cette option permet de purger la base de données tierce de tous les
+  mouvements non traités par Mediboard. une application tierces.
+  <br />
+  A utiliser avec une extrême prudence, car <strong>l'opération est irréversible</strong> !
+</div>
+
+<table class="tbl">
+  <tr>
+    <th>Choix des mouvements</th>
+    <th>Action sur les mouvements</th>
+    <th>Status</th>
+  </tr>
+  <tr>
+    <td>
+      <label for="PurgeType" title="{{tr}}CMouvement400-type-desc{{/tr}}">{{tr}}CMouvement400-type{{/tr}}</label>
+      <select id="PurgeType" name="type">
+        {{foreach from=$types item=_type}}        
+        <option value="{{$_type}}">{{tr}}CMouvement400-type-{{$_type}}{{/tr}}</option>
+        {{foreachelse}}
+        <option value="">Pas de type disponible</option>
+        {{/foreach}}
+      </select>
+      
+      <br />
+      
+	    <label for="marked" title="{{tr}}CMouvement400-marked-desc{{/tr}}">{{tr}}CMouvement400-marked{{/tr}}</label>
+	    <select id="PurgeMarked" name="marked">
+	      <option value="0">{{tr}}CMouvement400-marked-0{{/tr}}</option>
+	      <option value="1">{{tr}}CMouvement400-marked-1{{/tr}}</option>
+	    </select>
+    </td>
+    <td>
+      <button class="search" onclick="Moves.doAction('count')">
+        Compter
+      </button>
+      <button class="trash" onclick="Moves.doAction('purge')">
+        Purger
+      </button>
+    </td>
+    <td class="text" id="purgeMoves" />
+  </tr>
+
+</table>
+
 <h2>Purge des données importés</h2>
 
 <div class="big-warning">
-  Attention, cette option permet de purger la base de données de tous les éléments 
-  synchronisés dupuis une application tierces, A utiliser avec une extrême prudence, 
-  car <strong>l'opération est irréversible</strong> !
+  Attention, cette option permet de purger la base de données de Mediboard de tous 
+  les éléments synchronisés dupuis une application tierces. 
+  <br /> A utiliser avec une extrême prudence, car <strong>l'opération est irréversible</strong> !
 </div>
 
 <table class="tbl">
@@ -142,8 +206,8 @@ function purgeObjects() {
   </tr>
   <tr>
     <td>
-      <button class="tick" onclick="purgeObjects()">
-        Purger tous les objets syncrhonisés
+      <button class="trash" onclick="purgeObjects()">
+        Purger tous les objets synchronisés
       </button>
     </td>
     <td class="text" id="purgeObjects" />

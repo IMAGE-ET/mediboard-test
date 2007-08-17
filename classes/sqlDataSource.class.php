@@ -17,7 +17,8 @@ abstract class CSQLDataSource {
   public $link      = null;
   public $chrono    = null;
 
-  function CSQLDataSource(){
+  function __construct() {
+    $this->chrono = new Chronometer;
   }
   
   /**
@@ -153,6 +154,8 @@ abstract class CSQLDataSource {
     global $dPconfig;
     $dsConfig = $dPconfig["db"][$dsn];
     
+    
+    $this->chrono->start = new Chronometer;
     $this->link = $this->connect($dsn, 
 	    $dsConfig["dbhost"],
 	    $dsConfig["dbname"],
@@ -165,8 +168,6 @@ abstract class CSQLDataSource {
     if (!$this->link) {
       trigger_error( "FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR );
     }
-    
-    $this->chrono = new Chronometer;
   }
   
   /**

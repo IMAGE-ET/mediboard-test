@@ -5,6 +5,10 @@ class CRecordSante400 {
   static $chrono = null;
   static $verbose = false;
  
+  // Fake data source for chrono purposes
+  static $ds = null;
+  
+  
   public $data = array();
   public $valuePrefix = "";
   
@@ -26,9 +30,12 @@ class CRecordSante400 {
       die;
     }
     
-    global $dbChronos;
-    $dbChronos[$dsn] = new Chronometer;
-    self::$chrono =& $dbChronos[$dsn];
+    // Fake data source for chrono purposes
+    CSQLDataSource::$dataSources[$dsn] = new CMySQLDataSource();
+    $ds =& CSQLDataSource::$dataSources[$dsn];
+    $ds->dsn = $dsn;
+    self::$chrono =& CSQLDataSource::$dataSources[$dsn]->chrono;
+    
     self::$chrono->start();
     self::$dbh = new PDO("odbc:$dsn", $dsnConfig["user"], $dsnConfig["pass"]);
     self::$dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -77,6 +84,10 @@ class CRecordSante400 {
     return $records;
   }
   
+  /**
+   * Prepare and execute query
+   * @return int the number of affected rows (-1 for SELECTs);
+   */
   function query($sql, $values = array()) {
     try {
       self::connect();
@@ -96,10 +107,10 @@ class CRecordSante400 {
       $this->data = $sth->fetch(PDO::FETCH_ASSOC);
       self::$chrono->stop("query");
     } catch (PDOException $e) {
-      // Fetch throws this exception in case of UPDATE query
+      // Fetch throws this exception in case of UPDATE or DELETE query
       if ($e->getCode() == 24000) {
         self::$chrono->stop("query");
-        return;
+	      return $sth->rowCount($values);
       }
   
       trigger_error("Error querying '$sql' : " . $e->getMessage(), E_USER_ERROR);
@@ -113,7 +124,7 @@ class CRecordSante400 {
       throw new Exception("Couldn't find row for query '$sql' with values [$values]");
     }
   }
-  
+    
   /**
    * Transforms a DDMMYYYY AS400 date into a YYYY-MM-DD SQL date 
    */

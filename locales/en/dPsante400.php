@@ -1,5 +1,4 @@
 <?php
-$locales['CMouvement400-type-intervention'] = '';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
 $locales['CIdSante400-back-object_id'] = '';
 $locales['CIdSante400-id400'] = '';
@@ -28,7 +27,9 @@ $locales['CMouvement400-marked-0'] = '';
 $locales['CMouvement400-marked-1'] = '';
 $locales['CMouvement400-marked-desc'] = 'Mouvement mark';
 $locales['CMouvement400-type'] = 'Type';
+$locales['CMouvement400-type-attendue'] = '';
 $locales['CMouvement400-type-desc'] = 'Mouvement type';
+$locales['CMouvement400-type-intervention'] = '';
 $locales['CMouvement400-type-sejour'] = '';
 $locales['config-dPsante400-cache_hours'] = '';
 $locales['config-dPsante400-cache_hours-desc'] = '';

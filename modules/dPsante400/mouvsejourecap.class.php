@@ -273,6 +273,22 @@ class CMouvSejourEcap extends CMouvement400 {
     );
 
     $DMED = $this->consume("DMED");
+    
+    // Gestion des id400
+    $tag = "CIDC:{$this->id400EtabECap->id400}";
+    $this->id400Pat = new CIdSante400();
+    $this->id400Pat->object_class = "CPatient";
+    $this->id400Pat->id400 = $DMED;
+    $this->id400Pat->tag = $tag;
+    
+    // Gestion du cache
+    $this->patient = $this->id400Pat->getCachedObject();
+    if ($this->patient->_id) {
+      $this->trace($this->patient->getProps(), "Patient depuis le cache");
+      $this->markCache(self::STATUS_PATIENT);
+      return;
+    }
+    
     $pat400 = new CRecordSante400();
     
     $query = "SELECT * FROM $this->base.ECPAPF " .
@@ -283,63 +299,27 @@ class CMouvSejourEcap extends CMouvement400 {
       $DMED,
     );
     $pat400->query($query, $values);
+    $pat400->valuePrefix = "PA";
 
     $this->patient = new CPatient;
-    $this->patient->nom              = $pat400->consume("PAZNOM");
-    $this->patient->prenom           = $pat400->consume("PAZPRE");
-    $this->patient->nom_jeune_fille  = $pat400->consume("PAZNJF");
-    $this->patient->naissance        = $pat400->consumeDate("PADNAI");
+    $this->patient->nom              = $pat400->consume("ZNOM");
+    $this->patient->prenom           = $pat400->consume("ZPRE");
+    $this->patient->nom_jeune_fille  = $pat400->consume("ZNJF");
+    $this->patient->naissance        = $pat400->consumeDate("DNAI");
     $this->patient->loadMatchingObject();
     
-    $this->patient->sexe             = @$transformSexe[$pat400->consume("PAZSEX")];
-    $this->patient->adresse          = $pat400->consumeMulti("PAZAD1", "PAZAD2");
-    $this->patient->ville            = $pat400->consume("PAZVIL");
-    $this->patient->cp               = $pat400->consume("PACPO");
-    $this->patient->tel              = $pat400->consumeTel("PAZTL1");
-    $this->patient->tel2             = $pat400->consumeTel("PAZTL2");
+    $this->patient->sexe             = @$transformSexe[$pat400->consume("ZSEX")];
+    $this->patient->adresse          = $pat400->consumeMulti("ZAD1", "ZAD2");
+    $this->patient->ville            = $pat400->consume("ZVIL");
+    $this->patient->cp               = $pat400->consume("CPO");
+    $this->patient->tel              = $pat400->consumeTel("ZTL1");
+    $this->patient->tel2             = $pat400->consumeTel("ZTL2");
     
-    $this->patient->matricule         = $pat400->consume("PANSEC") . $pat400->consume("PACSEC");
-    $this->patient->rang_beneficiaire = $pat400->consume("PARBEN");;
+    $this->patient->matricule         = $pat400->consume("NSEC") . $pat400->consume("CSEC");
+    $this->patient->rang_beneficiaire = $pat400->consume("RBEN");;
 
-//    $this->patient->pays              = $pat400->consume("PAZPAY");
-    $this->patient->nationalite       = @$transformNationalite[$pat400->consume("PACNAT")];
-    $this->patient->lieu_naissance    = null;
-    $this->patient->profession        = null;
-        
-    $this->patient->employeur_nom     = null;
-    $this->patient->employeur_adresse = null;
-    $this->patient->employeur_ville   = null;
-    $this->patient->employeur_cp      = null;
-    $this->patient->employeur_tel     = null;
-    $this->patient->employeur_urssaf  = null;
-
-    $this->patient->prevenir_nom     = null;
-    $this->patient->prevenir_prenom  = null;
-    $this->patient->prevenir_adresse = null;
-    $this->patient->prevenir_ville   = null;
-    $this->patient->prevenir_cp      = null;
-    $this->patient->prevenir_tel     = null;
-    $this->patient->prevenir_parente = null;
-    
-    $this->patient->medecin_traitant = null;
-    $this->patient->medecin1         = null;
-    $this->patient->medecin2         = null;
-    $this->patient->medecin3         = null;
-    $this->patient->incapable_majeur = null;
-    $this->patient->ATNC             = null;
-    $this->patient->SHS              = null;
-    $this->patient->regime_sante     = null;
-    $this->patient->rques            = null;
-    $this->patient->listCim10        = null;
-    $this->patient->cmu              = null;
-    $this->patient->ald              = null;
-
-    
-    // Gestion des id400
-    $tag = "CIDC:{$this->id400EtabECap->id400}";
-    $this->id400Pat = new CIdSante400();
-    $this->id400Pat->id400 = $DMED;
-    $this->id400Pat->tag = $tag;
+//    $this->patient->pays              = $pat400->consume("ZPAY");
+    $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
     $this->trace($this->patient->getProps(), "Patient à enregistrer");
 

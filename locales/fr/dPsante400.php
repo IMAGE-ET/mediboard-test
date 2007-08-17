@@ -1,5 +1,4 @@
 <?php
-$locales['CMouvement400-type-intervention'] = 'Mouvement d\'intervention';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
 $locales['CIdSante400-back-object_id'] = '';
 $locales['CIdSante400-id400'] = 'ID400';
@@ -28,7 +27,9 @@ $locales['CMouvement400-marked-0'] = 'Mouvements à traiter';
 $locales['CMouvement400-marked-1'] = 'Mouvement traités avec un erreur';
 $locales['CMouvement400-marked-desc'] = 'Marquage des mouvements';
 $locales['CMouvement400-type'] = 'Type';
+$locales['CMouvement400-type-attendue'] = 'Mouvement de DHE';
 $locales['CMouvement400-type-desc'] = 'Type de mouvement';
+$locales['CMouvement400-type-intervention'] = 'Mouvement d\'intervention';
 $locales['CMouvement400-type-sejour'] = 'Mouvement de séjour';
 $locales['config-dPsante400-cache_hours'] = 'Durée du cache en heures';
 $locales['config-dPsante400-cache_hours-desc'] = 'Durée du cache en heures. Les objets en cache ne sont pas synchronisés';

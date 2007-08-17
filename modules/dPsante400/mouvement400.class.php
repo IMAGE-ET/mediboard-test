@@ -1,5 +1,6 @@
 <?php
 
+global $AppUI;
 require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
 
 class CMouvement400 extends CRecordSante400 {
@@ -115,7 +116,21 @@ class CMouvement400 extends CRecordSante400 {
 
     return $req->consume("TOTAL");
   }
+  
+  /**
+   * Purge all mouvements
+   * @return int the number of deleted mouvements
+   */
+  function purge($marked = false) {
+    $req = new CRecordSante400();
+    $query = "DELETE  FROM $this->base.$this->table";
+    $query.= $this->getMarkedClause($marked);
+    $query.= $this->getFilterClause();
+    return $req->query($query);
 
+//    return $req->consume("TOTAL");
+  }
+  
   function load($rec) {
     global $dPconfig;
     $idConfig = $dPconfig["dPsante400"];
