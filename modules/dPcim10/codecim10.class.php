@@ -37,8 +37,6 @@ class CCodeCIM10 {
   
   // Other
   var $_isInfo = null;
-  // Id de la base de données (qui doit être dans le config.php)
-  var $dbcim10 = null;
   
   /**
    * Construction

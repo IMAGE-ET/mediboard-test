@@ -44,6 +44,19 @@
       </select>
     </td>
   </tr>
+  <br />
+  <tr>
+    <th class="title" colspan="2">Autres Informations</th>
+  </tr>
+  <tr>
+    <td>Non urgent<input type="radio" name="urgence" value="0" checked="checked" /></td>
+    <td>Urgent<input type="radio" name="urgence" value="1" /></td>
+  </tr>
+  <tr>
+  
+  </tr>
+  
+  
   <tr>
     <td colspan="2" class="button">
       <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">

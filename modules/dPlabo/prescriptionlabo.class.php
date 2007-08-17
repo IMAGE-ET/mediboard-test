@@ -25,6 +25,7 @@ class CPrescriptionLabo extends CMbObject {
   var $date       = null;
   var $verouillee = null;
   var $validee    = null;
+  var $urgence    = null;
   
   // DB references
   var $patient_id   = null;
@@ -56,7 +57,8 @@ class CPrescriptionLabo extends CMbObject {
       "praticien_id" => "ref class|CMediusers notNull",
       "date"         => "dateTime",
       "verouillee"   => "bool",
-      "validee"      => "bool"
+      "validee"      => "bool",
+      "urgence"      => "bool"
     );
   }
   
