@@ -33,6 +33,8 @@ $filter->nullifyEmptyFields();
 if ($dialog && $idSante400->_id) {
   $filter->object_class = $idSante400->object_class;
   $filter->object_id    = $idSante400->object_id   ;
+  $filter->tag          = $idSante400->tag;
+  $filter->id400        = $idSante400->id400;   
 }
 
 // Chargment de la cible si ojet unique
@@ -54,7 +56,6 @@ $filter->last_update = mbGetValue($idSante400->last_update, mbDateTime());
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("listClasses", $listClasses);
 $smarty->assign("target", $target);
 $smarty->assign("filter", $filter);
