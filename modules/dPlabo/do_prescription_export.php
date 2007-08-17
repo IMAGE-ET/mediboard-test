@@ -75,13 +75,10 @@ $idPresc->object_id = $mbPrescription->_id;
 $idPresc->store();
 
 // Gestion du sexe du patient
-$transSexe["m"] = "Masculin";
-$transSexe["f"] = "Féminin";
-$transSexe["j"] = "Féminin";
+$transSexe["m"] = "1";
+$transSexe["f"] = "2";
+$transSexe["j"] = "2";
 
-// Gestion des urgences
-$transUrgence["0"] = "Non urgent";
-$transUrgence["1"] = "Urgent";
 
 
 $mbPatient =& $mbPrescription->_ref_patient;
@@ -115,8 +112,15 @@ if($mbPatient->sexe == "f" || $mbPatient->sexe == "j"){
   }
 }
 
-
-
+$transTitre["Monsieur"]      = "1"; 
+$transTitre["Madame"]        = "2"; 
+$transTitre["Mademoiselle"]  = "3"; 
+$transTitre["Enfant garçon"] = "4"; 
+$transTitre["Enfant fille"]  = "5"; 
+$transTitre["Bébé garçon"]   = "6"; 
+$transTitre["Bébé fille"]    = "7"; 
+$transTitre["Docteur"]       = "8"; 
+$transTitre["Doctoresse"]    = "A"; 
 
 
 $doc->setDocument("tmp/Prescription-".$mbPrescription->_id.".xml");
@@ -136,9 +140,9 @@ $numero           = $doc->addElement($prescription, "numero", $num_prat.$num_pre
 $patient          = $doc->addElement($prescription, "Patient");
 $nom              = $doc->addElement($patient, "nom", $mbPatient->nom);
 $prenom           = $doc->addElement($patient, "prenom", $mbPatient->prenom);
-$titre            = $doc->addElement($patient, "titre", $titre_);
+$titre            = $doc->addElement($patient, "titre", $transTitre[$titre_]);
 $sexe             = $doc->addElement($patient, "sexe", $transSexe[$mbPatient->sexe]);
-$datenaissance    = $doc->addElement($patient, "datenaissance", $mbPatient->naissance);
+$datenaissance    = $doc->addElement($patient, "datenaissance", mbTranformTime(null, $mbPatient->naissance, "%Y%m%d"));
 $adresseligne1    = $doc->addElement($patient, "adresseligne1", $mbPatient->adresse);
 $adresseligne2    = $doc->addElement($patient, "adresseligne2", "");
 $codepostal       = $doc->addElement($patient, "codepostal", $mbPatient->cp);
@@ -148,9 +152,9 @@ $assurance        = $doc->addElement($patient, "assurance", $mbPatient->regime_s
 
 // Prescription --> Dossier 
 $dossier          = $doc->addElement($prescription, "Dossier");
-$dateprelevement  = $doc->addElement($dossier,"dateprelevement", mbDate($mbPrescription->date));
+$dateprelevement  = $doc->addElement($dossier,"dateprelevement", mbTranformTime(null, mbDate($mbPrescription->date), "%Y%m%d"));
 $heureprelevement = $doc->addElement($dossier,"heureprelevement", mbTime($mbPrescription->date));
-$urgent           = $doc->addElement($dossier,"urgent", $transUrgence[$mbPrescription->urgence]);
+$urgent           = $doc->addElement($dossier,"urgent", $mbPrescription->urgence);
 $afaxer           = $doc->addElement($dossier,"afaxer", "");
 $atelephoner      = $doc->addElement($dossier,"atelephoner", "");
  
@@ -159,24 +163,6 @@ $analyse          = $doc->addElement($prescription, "Analyse");
 foreach($mbPrescription->_ref_examens as $curr_analyse) {
   $code = $doc->addElement($analyse,"code", $curr_analyse->identifiant);
 }
-
-/*
-$prescription    = $doc->addElement($doc, "prescription");
-$doc->addAttribute($prescription, "id"  , $mbPrescription->_id);
-$doc->addAttribute($prescription, "date", mbDate());
-$nomPraticien    = $doc->addElement($prescription, "nomPraticien"   , $mbPrescription->_ref_praticien->_user_last_name);
-$prenomPraticien = $doc->addElement($prescription, "prenomPraticien", $mbPrescription->_ref_praticien->_user_first_name);
-$nomPatient      = $doc->addElement($prescription, "nomPatient"     , $mbPatient->nom);
-$prenomPatient   = $doc->addElement($prescription, "prenomPatient"  , $mbPrescription->_ref_patient->prenom);
-$date            = $doc->addElement($prescription, "date"           , mbDate($mbPrescription->date));
-$analyses       = $doc->addElement($prescription, "analyses");
-foreach($mbPrescription->_ref_examens as $curr_analyse) {
-  $analyse = $doc->addElement($analyses, "analyse");
-  $doc->addAttribute($analyse, "id", $curr_analyse->_id);
-  $identifiant = $doc->addElement($analyse, "identifiant", $curr_analyse->identifiant);
-  $libelle     = $doc->addElement($analyse, "libelle"    , $curr_analyse->libelle);
-}
-*/
 
 if(!$doc->schemaValidate()) {
   $AppUI->setMsg("Document non valide", UI_MSG_ERROR );

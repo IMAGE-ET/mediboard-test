@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!-- by Romain Ollivier (openXtrem) -->
+<!-- by Alexis Granger (openXtrem) -->
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
 	<xs:element name="Prescription">
 		<xs:complexType>
@@ -10,24 +10,29 @@
 						<xs:sequence>
 							<xs:element name="nom" type="xs:string" />
 							<xs:element name="prenom" type="xs:string" />
-							<xs:element name="titre" type="xs:string" />
-							<xs:element name="sexe" type="xs:string" />
-							<xs:element name="datenaissance" type="xs:string" />
-							<xs:element name="adresseligne1" type="xs:string" />
-							<xs:element name="adresseligne2" type="xs:string" />
-							<xs:element name="codepostal" type="xs:string" />
+							<xs:element name="titre" type="typeTitre" />
+							<xs:element name="sexe" type="typeSexe" />
+							<xs:element name="datenaissance"
+								type="typeDate" />
+							<xs:element name="adresseligne1"
+								type="xs:string" />
+							<xs:element name="adresseligne2"
+								type="xs:string" />
+							<xs:element name="codepostal"
+								type="xs:string" />
 							<xs:element name="ville" type="xs:string" />
 							<xs:element name="pays" type="xs:string" />
-							<xs:element name="assurance" type="xs:string" />
+							<xs:element name="assurance"
+								type="xs:string" />
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Dossier">
 					<xs:complexType>
 						<xs:sequence>
-						   <xs:element name="dateprelevement" type="xs:string" />
+						   <xs:element name="dateprelevement" type="typeDate" />
 						   <xs:element name="heureprelevement" type="xs:string" />
-						   <xs:element name="urgent" type="xs:string" />
+						   <xs:element name="urgent" type="typeUrgence" />
 						   <xs:element name="afaxer" type="xs:string" />
 						   <xs:element name="atelephoner" type="xs:string" />
 						</xs:sequence>
@@ -43,4 +48,40 @@
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
+
+
+
+	<xs:simpleType name="typeDate">
+		<xs:restriction base="xs:string">
+			<xs:pattern value="\d{4}\d{2}\d{2}"></xs:pattern>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="typeTitre">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"></xs:enumeration>
+			<xs:enumeration value="2"></xs:enumeration>
+			<xs:enumeration value="3"></xs:enumeration>
+			<xs:enumeration value="4"></xs:enumeration>
+			<xs:enumeration value="5"></xs:enumeration>
+			<xs:enumeration value="6"></xs:enumeration>
+			<xs:enumeration value="7"></xs:enumeration>
+			<xs:enumeration value="8"></xs:enumeration>
+			<xs:enumeration value="A"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="typeSexe">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="1"></xs:enumeration>
+			<xs:enumeration value="2"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="typeUrgence">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="0"></xs:enumeration>
+			<xs:enumeration value="1"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
 </xs:schema>
