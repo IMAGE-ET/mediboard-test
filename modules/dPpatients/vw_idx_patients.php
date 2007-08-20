@@ -69,7 +69,7 @@ if ($patient_naissance == "on"){
   }
 }
 
-if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
+if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "LIKE '$patient_ville%'";
 if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
 
 $patients        = array();
