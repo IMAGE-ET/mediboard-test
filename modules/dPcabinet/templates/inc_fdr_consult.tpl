@@ -14,27 +14,49 @@ function popFile(objectClass, objectId, elementClass, elementId){
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
+
+function loadActes(subject_id, chir_id) {
+  url_actes = new Url;
+  
+  url_actes.addParam("chir_id", chir_id);
+  url_actes.addParam("module", "dPcabinet");
+  url_actes.addParam("do_subject_aed", "do_consultation_aed");
+  url_actes.addParam("object_class", "CConsultation");
+  url_actes.addParam("object_id", subject_id);
+  url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
+  url_actes.requestUpdate('ccam');
+}
+
+
 function modifTarif() {
   var oForm = document.tarifFrm;
-  var secteurs = oForm.choix.value;
-  if(secteurs != '') {
-    var pos = secteurs.indexOf("/");
-    var size = secteurs.length;
-    var secteur1 = eval(secteurs.substring(0, pos));
-    var secteur2 = eval(secteurs.substring(pos+1, size));
-    oForm.secteur1.value = secteur1;
-    oForm.secteur2.value = secteur2;
-    oForm._somme.value = secteur1 + secteur2;
-    for (i = 0;i < oForm.choix.length;++i)
-    if(oForm.choix.options[i].selected == true)
-     oForm.tarif.value = oForm.choix.options[i].text;
-   } else {
-     oForm.secteur1.value = 0;
-     oForm.secteur2.value = 0;
-     oForm._somme.value = '';
-     oForm.tarif.value = '';
-   }  
+  var tarif = oForm.choix.value;
+  
+  // tarif_array: secteur1 secteur2 codes_ccam
+  var tarif_array = tarif.split(" ");
+  var secteur1 = tarif_array[0];
+  var secteur2 = tarif_array[1];
+  var codes_ccam = tarif_array[2];
+  
+  oForm.secteur1.value = tarif_array[0];
+  oForm.secteur2.value = tarif_array[1];
+  oForm._newCode.value = codes_ccam;
+  
+  oForm._somme.value = parseFloat(tarif_array[0]) + parseFloat(tarif_array[1]); 
+  
+  
+  var aCCAM = oForm.codes_ccam.value.split("|");
+  // Si la chaine est vide, il crée un tableau à un élément vide donc :
+  aCCAM.removeByValue("");
+  if(oForm._newCode.value != ''){
+    aCCAM.push(oForm._newCode.value);
+  }
+  aCCAM.sort();
+  oForm.codes_ccam.value = aCCAM.join("|");     
 }
+
+
+
 
 function effectuerReglement() {
   var oForm = document.tarifFrm;
@@ -80,6 +102,10 @@ function reloadFdr() {
   {{/if}}
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
+  
+  
+  // rafraichissement de la div ccam
+  loadActes({{$consult->_id}}, {{$userSel->_id}});
 }
 
 function reloadAfterSaveDoc(){
@@ -107,7 +133,11 @@ function confirmFileDeletion(oButton) {
 
 function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
+
 }
+
+  
+
 </script>
 
 
@@ -266,25 +296,26 @@ function submitFdr(oForm) {
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       {{mb_field object=$consult field="_check_premiere" hidden=1 prop=""}}
- 
+     
       <table class="form">
         {{if !$consult->tarif}}
         <tr>
           <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
           <td>
-            <select name="choix"  class="notNull str" onchange="modifTarif()">
+            <select name="choix"  class="notNull str" onchange="modifTarif();">
               <option value="" selected="selected">&mdash; Choix du tarif</option>
               {{if $tarifsChir|@count}}
               <optgroup label="Tarifs praticien">
               {{foreach from=$tarifsChir item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}}/{{$curr_tarif->secteur2}}">{{$curr_tarif->description}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->description}}</option>
+                
               {{/foreach}}
               </optgroup>
               {{/if}}
               {{if $tarifsCab|@count}}
               <optgroup label="Tarifs cabinet">
               {{foreach from=$tarifsCab item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}}/{{$curr_tarif->secteur2}}">{{$curr_tarif->description}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->description}}</option>
               {{/foreach}}
               </optgroup>
               {{/if}}
@@ -303,7 +334,12 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
-          </td>
+            
+           </td>
+        </tr>
+        <tr>
+          <td>{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}</td>
+          <td><input type="hidden" name="_newCode" /></td>
         </tr>
         {{else}}
         <tr>

@@ -35,13 +35,18 @@ $mediuser->loadRefFunction();
 
 // Liste des tarifs du praticien
 $listeTarifsChir = null;
+
+$is_praticien = 0;
+
 if ($mediuser->isPraticien()) {
+  $is_praticien = 1;
   $where = array();
   $where["function_id"] = "IS NULL";
   $where["chir_id"] = "= '$mediuser->user_id'";
   $listeTarifsChir = new CTarif();
   $listeTarifsChir = $listeTarifsChir->loadList($where);
 }
+
 
 // Liste des tarifs de la spécialité
 $where = array();
@@ -58,11 +63,13 @@ $listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")
 // Création du template
 $smarty = new CSmartyDP();
 
+
 $smarty->assign("filter", $filter);
 $smarty->assign("mediuser", $mediuser);
 $smarty->assign("listeTarifsChir", $listeTarifsChir);
 $smarty->assign("listeTarifsSpe", $listeTarifsSpe);
 $smarty->assign("tarif", $tarif);
+$smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("listPrat", $listPrat);
 
 $smarty->display("vw_compta.tpl");

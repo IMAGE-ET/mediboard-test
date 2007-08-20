@@ -2,12 +2,12 @@
 
 global $AppUI, $can, $m, $g;
 
+
 $object_class    = mbGetValueFromGetOrSession("object_class");
 $object_id       = mbGetValueFromGetOrSession("object_id");
 $module          = mbGetValueFromGetOrSession("module");
 $do_subject_aed  = mbGetValueFromGetOrSession("do_subject_aed");
 $chir_id         = mbGetValueFromGetOrSession("chir_id");
-
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();

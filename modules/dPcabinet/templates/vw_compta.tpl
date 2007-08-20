@@ -1,5 +1,6 @@
 <!-- $Id$ -->
 
+{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
 <script type="text/javascript">
 function checkRapport(){
@@ -24,9 +25,51 @@ function checkRapport(){
   return false;
 }
 
+
+var oCcamField = null;
+
 function pageMain() {
+
+  refreshListCCAM();
+
+  // Creation du tokenField
+  oCcamField = new TokenField(document.editFrm.codes_ccam, {   
+    onChange : updateTokenCcam,
+    sProps : "notNull code ccam"
+  } );
+  
   regFieldCalendar("printFrm", "_date_min");
   regFieldCalendar("printFrm", "_date_max");
+
+  function refreshListCCAM() {
+    oCcamNode = document.getElementById("listCodesCcam");
+    
+    var oForm = document.editFrm;
+    var aCcam = oForm.codes_ccam.value.split("|");
+    // Si la chaine est vide, il crée un tableau à un élément vide donc :
+    aCcam.removeByValue("");
+  
+    var aCodeNodes = new Array();
+    var iCode = 0;
+    while (sCode = aCcam[iCode++]) {
+      var sCodeNode = sCode;
+        sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
+        sCodeNode += "<\/button>";
+      aCodeNodes.push(sCodeNode);
+    }
+    oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
+    //periodicalTimeUpdater.currentlyExecuting = false;
+  }
+
+
+  
+  function updateTokenCcam(){
+    refreshListCCAM();
+    document.editFrm._codeCCAM.value="";
+  }
+
+  
+
 }
 
 </script>
@@ -98,6 +141,16 @@ function pageMain() {
               <tr>
                 <th colspan="3">Tarifs du praticien</th>
               </tr>
+              <tr>   
+                {{if $is_praticien=="0"}}
+                <td class="text">
+                <div class="big-info">
+                N'étant pas praticien, vous n'avez pas accès à la liste de tarifs personnels.
+                </div>
+                </td>
+                {{/if}}
+              </tr>
+              {{if $is_praticien=="1"}}
               <tr>
                 <th>Nom</th>
                 <th>Secteur 1</th>
@@ -116,8 +169,10 @@ function pageMain() {
                 </td>
               </tr>
               {{/foreach}}
+              {{/if}}
             </table>
           </td>
+          
           <td>
             <table class="tbl">
               <tr><th colspan="3">Tarifs du cabinet</th></tr>
@@ -169,6 +224,35 @@ function pageMain() {
                   {{mb_field object=$tarif field="description"}}
                 </td>
               </tr>
+              <tr>
+                <th>
+                  {{mb_label object=$tarif field="codes_ccam" defaultFor="_codeCCAM"}}
+                </th>
+                <td>
+                  <input type="text" name="_codeCCAM" size="10" value="" />
+                  <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+                  <input type="hidden" name="_codable_class" value="CConsultation" />
+			      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
+			      <script type="text/javascript">
+			        CCAMSelector.init = function(){
+			        this.sForm  = "editFrm";
+			        this.sView  = "_codeCCAM";
+			        this.sChir  = "chir_id";
+			        this.sClass = "_codable_class";
+			        this.pop();
+			      }
+			      </script>             
+                </td>
+     
+                <tr>
+                  <th>
+                    Liste des codes CCAM
+                    {{mb_field object=$tarif field="codes_ccam" onchange="refreshListCCAM();" hidden=1 prop=""}}
+                  </th>
+                  <td colspan="2" class="text" id="listCodesCcam">
+                  </td>
+                </tr>
+             
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
                 <td>{{mb_field object=$tarif field="secteur1" size="6"}}</td>
