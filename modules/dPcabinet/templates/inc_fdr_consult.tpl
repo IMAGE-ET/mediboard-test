@@ -6,6 +6,8 @@ function cancelTarif() {
   oForm.tarif.value = "";
   oForm.paye.value = "0";
   oForm.date_paiement.value = "";
+  oForm._somme.value = "0";
+
   submitFdr(oForm);
 }
 
@@ -15,44 +17,48 @@ function popFile(objectClass, objectId, elementClass, elementId){
 }
 
 
-function loadActes(subject_id, chir_id) {
-  url_actes = new Url;
-  
-  url_actes.addParam("chir_id", chir_id);
-  url_actes.addParam("module", "dPcabinet");
-  url_actes.addParam("do_subject_aed", "do_consultation_aed");
-  url_actes.addParam("object_class", "CConsultation");
-  url_actes.addParam("object_id", subject_id);
-  url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
-  url_actes.requestUpdate('ccam');
-}
-
-
 function modifTarif() {
+
   var oForm = document.tarifFrm;
-  var tarif = oForm.choix.value;
+  var choix = oForm.choix.value;
   
   // tarif_array: secteur1 secteur2 codes_ccam
-  var tarif_array = tarif.split(" ");
-  var secteur1 = tarif_array[0];
-  var secteur2 = tarif_array[1];
-  var codes_ccam = tarif_array[2];
+  if(choix != ''){
+    var tarif_array = choix.split(" ");
+    var secteur1 = tarif_array[0];
+    var secteur2 = tarif_array[1];
+    var codes_ccam = tarif_array[2];
   
-  oForm.secteur1.value = tarif_array[0];
-  oForm.secteur2.value = tarif_array[1];
-  oForm._newCode.value = codes_ccam;
+    oForm.secteur1.value = tarif_array[0];
+    oForm.secteur2.value = tarif_array[1];
+    oForm._newCode.value = codes_ccam;
   
-  oForm._somme.value = parseFloat(tarif_array[0]) + parseFloat(tarif_array[1]); 
+    oForm._somme.value = parseFloat(tarif_array[0]) + parseFloat(tarif_array[1]); 
+    
   
-  
-  var aCCAM = oForm.codes_ccam.value.split("|");
-  // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCCAM.removeByValue("");
-  if(oForm._newCode.value != ''){
-    aCCAM.push(oForm._newCode.value);
+    var aCCAM = oForm.codes_ccam.value.split("|");
+    // Si la chaine est vide, il crée un tableau à un élément vide donc :
+    aCCAM.removeByValue("");
+    if(oForm._newCode.value != ''){
+      aCCAM.push(oForm._newCode.value);
+    }
+    aCCAM.sort();
+    oForm.codes_ccam.value = aCCAM.join("|"); 
+    
+    
+    for (i = 0;i < oForm.choix.length;++i)
+      if(oForm.choix.options[i].selected == true)
+       oForm.tarif.value = oForm.choix.options[i].text;
+         
+  } 
+  else {
+    oForm.secteur1.value = 0;
+    oForm.secteur2.value = 0; 
+    oForm._somme.value = '';
+    oForm.tarif.value = '';
+
   }
-  aCCAM.sort();
-  oForm.codes_ccam.value = aCCAM.join("|");     
+  
 }
 
 

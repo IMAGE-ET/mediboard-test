@@ -128,6 +128,7 @@ $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("noReglement"   , $noReglement);
+$smarty->assign("userSel"       , $userSel);
 
 $smarty->display("inc_fdr_consult.tpl");
 

@@ -36,6 +36,21 @@ function checkDelCode() {
   return true;
 }
 
+
+
+function refreshFdr(consult_id) {
+  // reload pour mettre a jour le champ codes_ccam dans la gestion des tarifs
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
+  {{if $noReglement}}
+  url.addParam("noReglement", "1"); 
+  {{/if}}
+  url.addParam("selConsult", consult_id);
+  url.requestUpdate('fdrConsultContent', { waitingText : null }) ;
+}
+
+
+
 function addCode(subject_id, chir_id) {
   if(checkAddCode()){
     var oForm = document.manageCodes;
@@ -44,15 +59,20 @@ function addCode(subject_id, chir_id) {
     aCCAM.removeByValue("");
     if(oForm._newCode.value != '')
       aCCAM.push(oForm._newCode.value);
-      aCCAM.sort();
-      oForm.codes_ccam.value = aCCAM.join("|");
-      submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
-    }
+    aCCAM.sort();
+    oForm.codes_ccam.value = aCCAM.join("|");
+  
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
+    
+  }
 }
 
 function loadActes(subject_id, chir_id) {
   PairEffect.initGroup("acteEffect");
 
+  //rafraichissement du inc_fdr
+  refreshFdr(subject_id);
+  
   url_actes = new Url;
   url_actes.addParam("chir_id", chir_id);  
   url_actes.addParam("module","{{$module}}");
@@ -74,7 +94,9 @@ function delCode(subject_id) {
     }
     aCCAM.sort();
     oForm.codes_ccam.value = aCCAM.join("|");
-    submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id)}});
+  
+    submitFormAjax(oForm, 'systemMsg', {onComplete: function() { loadActes(subject_id) } } );
+  
   }
 }
 
