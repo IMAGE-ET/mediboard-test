@@ -25,6 +25,14 @@ function checkRapport(){
   return false;
 }
 
+function updateSecteur(acte){
+  var url = new Url();
+  url.setModuleAction("dPcabinet", "httpreq_vw_tarif_ccam");
+  url.addParam("listCodes", acte);
+  url.requestUpdate('tarifCodes', { waitingText : null });
+}
+
+
 
 var oCcamField = null;
 
@@ -42,10 +50,16 @@ function pageMain() {
   regFieldCalendar("printFrm", "_date_max");
 
   function refreshListCCAM() {
+    
+    
+  
     oCcamNode = document.getElementById("listCodesCcam");
     
     var oForm = document.editFrm;
     var aCcam = oForm.codes_ccam.value.split("|");
+   
+  
+   
     // Si la chaine est vide, il crée un tableau à un élément vide donc :
     aCcam.removeByValue("");
   
@@ -59,13 +73,25 @@ function pageMain() {
     }
     oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
     //periodicalTimeUpdater.currentlyExecuting = false;
+  
+  
+  
   }
 
 
   
   function updateTokenCcam(){
     refreshListCCAM();
+    
+      //mise a jour du tarif
+    updateSecteur(document.editFrm._codeCCAM.value);
+   
+    
     document.editFrm._codeCCAM.value="";
+    
+    
+   
+   
   }
 
   
@@ -141,15 +167,15 @@ function pageMain() {
               <tr>
                 <th colspan="3">Tarifs du praticien</th>
               </tr>
-              <tr>   
-                {{if $is_praticien=="0"}}
+              {{if $is_praticien=="0"}}
+              <tr>
                 <td class="text">
                 <div class="big-info">
                 N'étant pas praticien, vous n'avez pas accès à la liste de tarifs personnels.
                 </div>
                 </td>
-                {{/if}}
               </tr>
+              {{/if}}
               {{if $is_praticien=="1"}}
               <tr>
                 <th>Nom</th>
@@ -171,9 +197,7 @@ function pageMain() {
               {{/foreach}}
               {{/if}}
             </table>
-          </td>
           
-          <td>
             <table class="tbl">
               <tr><th colspan="3">Tarifs du cabinet</th></tr>
               <tr>
@@ -253,10 +277,12 @@ function pageMain() {
                   </td>
                 </tr>
              
+              
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
                 <td>{{mb_field object=$tarif field="secteur1" size="6"}}</td>
               </tr>
+              
               <tr>
                 <th>{{mb_label object=$tarif field="secteur2"}}</th>
                 <td>{{mb_field object=$tarif field="secteur2" size="6"}}</td>

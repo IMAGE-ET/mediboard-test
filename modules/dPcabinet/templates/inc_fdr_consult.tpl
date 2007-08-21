@@ -6,7 +6,7 @@ function cancelTarif() {
   oForm.tarif.value = "";
   oForm.paye.value = "0";
   oForm.date_paiement.value = "";
-  oForm._somme.value = "0";
+ 
 
   submitFdr(oForm);
 }
@@ -62,8 +62,6 @@ function modifTarif() {
 }
 
 
-
-
 function effectuerReglement() {
   var oForm = document.tarifFrm;
   oForm.paye.value = "1";
@@ -109,7 +107,6 @@ function reloadFdr() {
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
   
-  
   // rafraichissement de la div ccam
   loadActes({{$consult->_id}}, {{$userSel->_id}});
 }
@@ -139,10 +136,7 @@ function confirmFileDeletion(oButton) {
 
 function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
-
 }
-
-  
 
 </script>
 
@@ -313,7 +307,7 @@ function submitFdr(oForm) {
               {{if $tarifsChir|@count}}
               <optgroup label="Tarifs praticien">
               {{foreach from=$tarifsChir item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->description}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->_view}}</option>
                 
               {{/foreach}}
               </optgroup>
@@ -321,7 +315,7 @@ function submitFdr(oForm) {
               {{if $tarifsCab|@count}}
               <optgroup label="Tarifs cabinet">
               {{foreach from=$tarifsCab item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->description}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->_view}}</option>
               {{/foreach}}
               </optgroup>
               {{/if}}

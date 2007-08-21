@@ -12,6 +12,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $codeacte = mbGetValueFromGetOrSession("codeacte");
+
 $code = new CCodeCCAM($codeacte);
 $code->Load();
 

@@ -53,6 +53,7 @@ class CTarif extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_view = $this->description." (".str_replace("|", ' ', $this->codes_ccam).")";
     if($this->chir_id == null)
       $_type = "chir";
     else

@@ -84,6 +84,122 @@ class CCodeCCAM {
     }
   }
   
+  
+  // Chargement des variables
+  function LoadMedium() {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("select * from actes where CODE = %", $this->code);
+    $result = $ds->exec($query);
+    if($ds->numRows($result) == 0) {
+      $this->code = "";
+      //On rentre les champs de la table actes
+      $this->libelleCourt = "";
+      $this->libelleLong = "";
+    } else {
+      $row = $ds->fetchArray($result);
+    
+      //On rentre les champs de la table actes
+      $this->libelleCourt = $row["LIBELLECOURT"];
+      $this->libelleLong = $row["LIBELLELONG"];
+    
+      //On rentre les caracteristiques des chapitres
+      $this->loadChaps();
+      
+      // Extraction des remarques
+      $this->remarques = array();
+      $query = $ds->prepare("select * from notes where CODEACTE = %", $this->code);
+      $result = $ds->exec($query);
+      while ($row = $ds->fetchArray($result)) {
+        $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
+      }
+      
+      // Extraction des activités
+      $query = "select ACTIVITE as numero " .
+          "\nfrom activiteacte " .
+          "\nwhere CODEACTE = %";
+      $query = $ds->prepare($query, $this->code);
+      $result = $ds->exec($query);
+      while($obj = $ds->fetchObject($result)) {
+        $obj->libelle = "";
+        $this->activites[$obj->numero] = $obj;
+      }
+      
+      // Libellés des activités
+      foreach($this->remarques as $remarque) {
+        $match = null;
+        if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
+          $this->activites[$match[1]]->libelle = $match[2];
+        }
+      }
+     
+      // Détail des activités
+      foreach($this->activites as $key => $value) {
+        $activite =& $this->activites[$key];
+  
+        // Type de l'activité
+        $query = "select LIBELLE as `type`" .
+            "\nfrom activite " .
+            "\nwhere CODE = %";
+        $query = $ds->prepare($query, $activite->numero);
+        $result = $ds->exec($query);
+        $obj = $ds->fetchObject($result);
+        $activite->type = $obj->type;
+  
+        // Extraction des modificateurs
+        $activite->modificateurs = array();
+        $modificateurs =& $activite->modificateurs;
+        $query = "select * from modificateuracte " .
+            "\nwhere CODEACTE = %1" .
+            "\nand CODEACTIVITE = %2";
+        $query = $ds->prepare($query, $this->code, $activite->numero);
+        $result = $ds->exec($query);
+        
+        while($row = $ds->fetchArray($result)) {
+          $query = "select CODE as code, LIBELLE as libelle" .
+              "\nfrom modificateur " .
+              "\nwhere CODE = %" .
+              "\norder by CODE";
+          $query = $ds->prepare($query, $row["MODIFICATEUR"]);
+          $modificateurs[] = $ds->fetchObject($ds->exec($query));
+        }
+  
+        // Extraction des phases
+        $activite->phases = array();
+        $phases =& $activite->phases;
+        $query = "select PHASE as phase, PRIXUNITAIRE as tarif" .
+            "\nfrom phaseacte " .
+            "\nwhere CODEACTE = %1" .
+            "\nand ACTIVITE = %2" .
+            "\norder by PHASE";
+        $query = $ds->prepare($query, $this->code, $activite->numero);
+        $result = $ds->exec($query);
+              
+        while($obj = $ds->fetchObject($result)) {
+          $phases[$obj->phase] = $obj;
+          $phase =& $phases[$obj->phase];
+          $phase->tarif = floatval($obj->tarif)/100;
+          $phase->libelle = "Phase Principale";
+          
+          // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
+          $phase->_modificateurs = $modificateurs;
+        }
+        
+        // Libellés des phases
+        foreach($this->remarques as $remarque) {
+          if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
+            if (isset($phases[$match[1]])) {
+              $phases[$match[1]]->libelle = $match[2];
+            }
+          }
+        }
+      }
+    }
+  }
+
+    
+  
+  
+  
   function loadChaps() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("select * from actes where CODE = %", $this->code);

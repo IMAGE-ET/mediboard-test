@@ -39,7 +39,7 @@ switch($type) {
 
     foreach($codes as $key => $value) {
       $list[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
-      $list[$value["favoris_code"]]["codeccam"]->loadLite();
+      $list[$value["favoris_code"]]["codeccam"]->loadMedium();
       $list[$value["favoris_code"]]["codeccam"]->occ = "0";
     }
   
@@ -71,13 +71,13 @@ if($type=="ccam"){
 
   foreach($codes as $key => $value) {
     $list2[$value["code_acte"]]["codeccam"] = new CCodeCCAM($value["code_acte"]);
-    $list2[$value["code_acte"]]["codeccam"]->loadLite();
+    $list2[$value["code_acte"]]["codeccam"]->loadMedium();
     $list2[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
   }
 
   // Fusion des 2 tableaux
   $fusion = $list2;
-    
+ 
   foreach($list as $keycode => $code){
   	if(!array_key_exists($keycode, $fusion)) {
   		$fusion[$keycode] = $code;

@@ -35,9 +35,6 @@ function view_() {
   url.redirect();
 }
 
-
-
-
 </script>
 
 
@@ -66,7 +63,14 @@ function view_() {
       {{else}}
       <span style="float:right">{{$curr_code.codeccam->occ}} acte(s)</span>
       {{/if}}
-      </strong>
+      </strong><br />
+      <small>(
+      {{foreach from=$curr_code.codeccam->activites item=curr_activite}}
+        {{foreach from=$curr_activite->phases item=curr_phase}}
+          {{$curr_activite->numero}}-{{$curr_phase->phase}}
+        {{/foreach}}
+      {{/foreach}}   
+      )</small>
       <br />
       {{$curr_code.codeccam->libelleLong}}
       <br />
