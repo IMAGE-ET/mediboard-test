@@ -437,6 +437,8 @@ class CAppUI {
     return $return;
   }
 
+
+  
  /**
   * Display an ajax step, and exit on error messages
   * @param string $msg : the message
@@ -452,13 +454,23 @@ class CAppUI {
     
     $msg = nl2br($msg);
 
-    echo "<div class='$class'>$msg</div>";
+    echo "\n<div class='$class'>$msg</div>";
     
     if ($msgType == UI_MSG_ERROR) {
       die;
     }
   }
 
+ /**
+  * Echo an ajax callback with given value
+  * @param string $callback : name of the javascript function 
+  * @param string $value : value paramater for javascript function
+  */
+  function callbackAjax($callback, $value) {
+    echo "\n<script type='text/javascript'>$callBack($value);</script>";
+  }
+
+  
 /**
  * Login function
  *
