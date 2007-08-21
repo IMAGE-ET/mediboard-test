@@ -2,8 +2,8 @@
 
 <script type="text/javascript">
 
-function selectCode(code) {
-  window.opener.CCAMSelector.set(code);
+function selectCode(code,tarif) {
+  window.opener.CCAMSelector.set(code,tarif);
   window.close();
 }
 
@@ -87,7 +87,7 @@ function pageMain() {
                   {{/if}}
 
                   {{if $dialog}}
-                  <button class="tick" type="button" onclick="selectCode('{{$codeacte}}')">Sélectionner ce code</button>
+                  <button class="tick" type="button" onclick="selectCode('{{$codeacte}}','{{$tarif}}')">Sélectionner ce code</button>
                   {{/if}}
                 </td>
               </tr>

@@ -3,6 +3,7 @@
 var CCAMSelector = {
   sForm  : null,
   sView  : null,
+  sTarif : null,
   sClass : null,
   sChir  : null,
   options : {
@@ -22,9 +23,12 @@ var CCAMSelector = {
     url.popup(this.options.width, this.options.height, "CCAM Selector");
   },
   
-  set: function(code) {
+  set: function(code,tarif) {
     var oForm = document[this.sForm];
     oForm[this.sView].value = code;
+    if(this.sTarif != null){
+      oForm[this.sTarif].value = tarif;
+    }
   }
    
   

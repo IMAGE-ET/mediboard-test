@@ -21,6 +21,7 @@ $favoris = new CFavoriCCAM();
 $smarty = new CSmartyDP();
 
 // @todo : ne passer que $code. Adapter le template en conséquence
+$smarty->assign("tarif"   , $code->activites["1"]->phases["0"]->tarif);
 $smarty->assign("favoris" , $favoris);
 $smarty->assign("codeacte", strtoupper($code->code));
 $smarty->assign("libelle" , $code->libelleLong);
@@ -32,6 +33,7 @@ $smarty->assign("place"   , $code->place);
 $smarty->assign("chap"    , $code->chapitres);
 $smarty->assign("asso"    , $code->assos);
 $smarty->assign("incomp"  , $code->incomps);
+
 
 $smarty->display("vw_full_code.tpl");
 

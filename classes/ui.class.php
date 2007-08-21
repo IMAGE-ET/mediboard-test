@@ -467,9 +467,9 @@ class CAppUI {
   * @param string $value : value paramater for javascript function
   */
   function callbackAjax($callback, $value) {
-    echo "\n<script type='text/javascript'>$callBack($value);</script>";
+    echo "\n<script type='text/javascript'>$callback($value);</script>";
   }
-
+  
   
 /**
  * Login function

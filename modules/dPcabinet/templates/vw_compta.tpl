@@ -25,11 +25,37 @@ function checkRapport(){
   return false;
 }
 
-function updateSecteur(acte){
-  var url = new Url();
-  url.setModuleAction("dPcabinet", "httpreq_vw_tarif_ccam");
-  url.addParam("listCodes", acte);
-  url.requestUpdate('tarifCodes', { waitingText : null });
+
+var tarif = {
+  add: function(value){
+    var oForm = document.editFrm;
+    if(oForm.secteur1.value==''){
+      oForm.secteur1.value = 0;
+    } 
+    oForm.secteur1.value = parseFloat(oForm.secteur1.value) + parseFloat(value);
+  },
+  
+  del: function(value){
+    var oForm = document.editFrm;
+    if(oForm.secteur1.value==''){
+      oForm.secteur1.value = 0;
+    } 
+    oForm.secteur1.value = parseFloat(oForm.secteur1.value) - parseFloat(value);
+    round(oForm.secteur1.value,2);
+    
+  },
+  
+  calcul: function(type,code){
+    var oForm = document.editFrm;
+
+  
+    var url = new Url();
+    url.setModuleAction("dPcabinet", "httpreq_code_tarif");
+    url.addParam("code", code);
+    // valeur du callback ==> addTarif ou delTarif
+    url.addParam("callback", type);
+    url.requestUpdate('systemMsg');
+  }
 }
 
 
@@ -37,7 +63,6 @@ function updateSecteur(acte){
 var oCcamField = null;
 
 function pageMain() {
-
   refreshListCCAM();
 
   // Creation du tokenField
@@ -50,51 +75,34 @@ function pageMain() {
   regFieldCalendar("printFrm", "_date_max");
 
   function refreshListCCAM() {
-    
-    
-  
     oCcamNode = document.getElementById("listCodesCcam");
     
     var oForm = document.editFrm;
     var aCcam = oForm.codes_ccam.value.split("|");
-   
   
-   
     // Si la chaine est vide, il crée un tableau à un élément vide donc :
     aCcam.removeByValue("");
   
     var aCodeNodes = new Array();
     var iCode = 0;
     while (sCode = aCcam[iCode++]) {
+    
       var sCodeNode = sCode;
-        sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
+        sCodeNode += "<button class='cancel notext' type='button' onclick='tarif.calcul(\"tarif.del\",\"" + sCode + "\"); oCcamField.remove(\"" + sCode + "\")'>";
         sCodeNode += "<\/button>";
       aCodeNodes.push(sCodeNode);
+      
     }
     oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
     //periodicalTimeUpdater.currentlyExecuting = false;
-  
-  
-  
   }
 
 
-  
   function updateTokenCcam(){
-    refreshListCCAM();
-    
-      //mise a jour du tarif
-    updateSecteur(document.editFrm._codeCCAM.value);
-   
+    refreshListCCAM();    
     
     document.editFrm._codeCCAM.value="";
-    
-    
-   
-   
   }
-
-  
 
 }
 
@@ -254,18 +262,21 @@ function pageMain() {
                 </th>
                 <td>
                   <input type="text" name="_codeCCAM" size="10" value="" />
-                  <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+                  <button class="tick notext" type="button" onclick="tarif.calcul('tarif.add',document.editFrm._codeCCAM.value); oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
                   <input type="hidden" name="_codable_class" value="CConsultation" />
-			      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>
-			      <script type="text/javascript">
+			      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>             
+                  <script type="text/javascript">
 			        CCAMSelector.init = function(){
 			        this.sForm  = "editFrm";
 			        this.sView  = "_codeCCAM";
+			        //this.sTarif = "_tarif";
 			        this.sChir  = "chir_id";
 			        this.sClass = "_codable_class";
 			        this.pop();
 			      }
-			      </script>             
+			      </script>
+                
+                
                 </td>
      
                 <tr>
@@ -276,11 +287,10 @@ function pageMain() {
                   <td colspan="2" class="text" id="listCodesCcam">
                   </td>
                 </tr>
-             
-              
+
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
-                <td>{{mb_field object=$tarif field="secteur1" size="6"}}</td>
+                <td>{{mb_field object=$tarif field="secteur1" size="6"}}<input type="hidden" name="_tarif" /></td>
               </tr>
               
               <tr>
