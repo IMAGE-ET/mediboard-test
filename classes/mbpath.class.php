@@ -13,7 +13,8 @@ require_once ("Archive/Zip.php");
 class CMbPath {
   /**
    * Ensures a directory exists by building all tree sub-diriectories if possible
-   * @return job done boolean
+   * @param string $dir directory path
+   * @return boolean job done
    */
   function forceDir($dir, $mode = 0755) {
     if (!$dir) {

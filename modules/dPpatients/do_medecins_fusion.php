@@ -24,45 +24,24 @@ if (intval(dPgetParam($_POST, "del"))) {
   $do->doStore();
 }
 
-$medecin_id = $do->_obj->medecin_id;
+$newMedecin =& $do->_obj;
 
-// Régularisation des liens étrangers
-$sql = "UPDATE `patients` SET" .
-    "\n`medecin_traitant` = '$medecin_id'" .
-    "\nWHERE `medecin_traitant` = '$medecin1->medecin_id'";
-$ds->exec( $sql ); $msg = $ds->error();
-$sql = "UPDATE `patients` SET" .
-    "\n`medecin_traitant` = '$medecin_id'" .
-    "\nWHERE `medecin_traitant` = '$medecin2->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();
+// Transfert de toutes les backrefs
+if ($msg = $newMedecin->transferBackRefsFrom($medecin1)) {
+  $do->errorRedirect($msg);
+}
 
-$sql = "UPDATE `patients` SET" .
-    "\n`medecin1` = '$medecin_id'" .
-    "\nWHERE `medecin1` = '$medecin1->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
-    "\n`medecin1` = '$medecin_id'" .
-    "\nWHERE `medecin1` = '$medecin2->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();
+if ($msg = $newMedecin->transferBackRefsFrom($medecin2)) {
+  $do->errorRedirect($msg);
+}
 
-$sql = "UPDATE `patients` SET" .
-    "\n`medecin2` = '$medecin_id'" .
-    "\nWHERE `medecin2` = '$medecin1->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
-    "\n`medecin2` = '$medecin_id'" .
-    "\nWHERE `medecin2` = '$medecin2->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();
-
-$sql = "UPDATE `patients` SET" .
-    "\n`medecin3` = '$medecin_id'" .
-    "\nWHERE `medecin3` = '$medecin1->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();$sql = "UPDATE `patients` SET" .
-    "\n`medecin3` = '$medecin_id'" .
-    "\nWHERE `medecin3` = '$medecin2->medecin_id'";
-$ds->exec( $sql ); $msg .= $ds->error();
-
-if($msg) {
-  mbTrace($msg, "erreur sql", true);
-  exit(0);
+// Suppression des anciens objets
+if ($msg = $medecin1->delete()) {
+  $do->errorRedirect($msg);
+}
+  
+if ($msg = $medecin2->delete()) {
+  $do->errorRedirect($msg);
 }
 
 $medecin1->delete();

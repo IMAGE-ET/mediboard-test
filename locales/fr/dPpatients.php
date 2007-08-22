@@ -1,4 +1,5 @@
 <?php
+$locales['msg-CMedecin-delete'] = 'Médecin supprimé';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Description';
 $locales['CAddiction-addiction-court'] = 'Description de l\'addication du patient';
@@ -58,12 +59,17 @@ $locales['CAntecedent.type.trans'] = 'Transfusion';
 $locales['CConsultation-_ext_codes_ccam'] = 'Actes prévus';
 $locales['CConsultation-_ref_actes_ccam'] = 'Actes codés';
 $locales['CDossierMedical-back-addictions'] = 'Addicitions';
-$locales['CDossierMedical-back-antecedants'] = 'Antécédents';
+$locales['CDossierMedical-back-antecedents'] = 'Antécédents';
 $locales['CDossierMedical-back-traitements'] = 'Traitements';
 $locales['CMedecin'] = 'Médecin';
 $locales['CMedecin-adresse'] = 'Adresse';
 $locales['CMedecin-adresse-court'] = '';
 $locales['CMedecin-adresse-desc'] = 'Adresse du cabinet du médecin';
+$locales['CMedecin-back-patients-4'] = 'Patients en correspondance 4';
+$locales['CMedecin-back-patients1'] = 'Patients en correspondance 1';
+$locales['CMedecin-back-patients2'] = 'Patients en correspondance 2';
+$locales['CMedecin-back-patients3'] = 'Patients en correspondance 3';
+$locales['CMedecin-back-patients_traites'] = 'Patients traités';
 $locales['CMedecin-complementaires'] = 'Complémentaires';
 $locales['CMedecin-complementaires-court'] = '';
 $locales['CMedecin-complementaires-desc'] = 'Disciplines complémentaires d\'exercice';
@@ -300,4 +306,6 @@ $locales['mod-dPpatients-tab-vw_full_patients'] = 'Consulter un dossier';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';
 $locales['mod-dPpatients-tab-vw_medecins'] = 'Médecins correspondants';
 $locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
+$locales['msg-CMedecin-create'] = 'Médecin créé';
+$locales['msg-CMedecin-modify'] = 'Médecin modifié';
 ?>

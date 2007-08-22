@@ -1,13 +1,13 @@
 {{if !$app->user_id}}
 
 <div class="error">{{tr}}Veuillez vous reconnecter{{/tr}}</div>
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 AjaxResponse.onDisconnected();
 </script>
 
 {{else}}
 
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 AjaxResponse.onPerformances({{$performance|@json}});
 </script>
 

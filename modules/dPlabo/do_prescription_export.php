@@ -160,11 +160,18 @@ $atelephoner      = $doc->addElement($dossier,"atelephoner", "");
  
 // Prescription --> Analyse
 $analyse          = $doc->addElement($prescription, "Analyse"); 
-foreach($mbPrescription->_ref_examens as $curr_analyse) {
+foreach ($mbPrescription->_ref_examens as $curr_analyse) {
   $code = $doc->addElement($analyse,"code", $curr_analyse->identifiant);
 }
 
-if(!$doc->schemaValidate()) {
+// Sauvegarde du fichier temporaire
+$tmpPath = "tmp/dPlabo/export_prescription.xml";
+CMbPath::forceDir(dirname($tmpPath));
+$doc->save($tmpPath);
+$doc->load($tmpPath);
+
+// Validation du document
+if (!$doc->schemaValidate()) {
   $AppUI->setMsg("Document non valide", UI_MSG_ERROR );
   redirect();
 }

@@ -9,8 +9,8 @@
 
 global $AppUI, $m;
 
-class CDoPatientAddEdit extends CDoObjectAddEdit {
-  function CDoPatientAddEdit() {
+class CDoPatientMerge extends CDoObjectAddEdit {
+  function CDoPatientMerge() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");
     
     $this->createMsg = "Patient créé";
@@ -25,6 +25,9 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
       $this->redirectDelete .= $this->redirect."&tab=vw_edit_patients";
       $this->redirectStore  .= $this->redirect."&tab=vw_edit_patients";
     }
+    
+    $this->redirectError = "";
+    
   }
   
   function doStore() {
@@ -52,87 +55,50 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
 }
 
 
-$do = new CDoPatientAddEdit;
+$do = new CDoPatientMerge;
 
 // Test sur les Patient
+
+// Erreur sur les ID du patient
 $patient1 = new CPatient;
-$patient2 = new CPatient;
-if (!$patient1->load($_POST["patient1_id"]) || !$patient2->load($_POST["patient2_id"])){
-  // Erreur sur les ID du patient
-  $AppUI->setMsg("Fusion Impossible", UI_MSG_ERROR );
-  $do->redirect = "";
-  $do->doRedirect();
+if (!$patient1->load($_POST["patient1_id"])) {
+  $do->errorRedirect("Patient 1 n'existe pas ou plus");
 }
 
+$patient2 = new CPatient;
+if (!$patient2->load($_POST["patient2_id"])) {
+  $do->errorRedirect("Patient 2 n'existe pas ou plus");
+}
 
 $do->doBind();
 
 // Création du nouveau patient
 if (intval(dPgetParam($_POST, "del"))) {
-  // Suppression Impossible
-  $AppUI->setMsg("Fusion Impossible", UI_MSG_ERROR );
-  $do->redirect = "";
-  $do->doRedirect();
-} else {
-  $do->doStore();
+  $do->errorRedirect("Fusion impossible");
 }
 
-$patient_id = $do->_obj->patient_id;
+$do->doStore();
 
-// Régularisation des liens étrangers
-$sql = "UPDATE sejour" .
-    "\nSET patient_id = '$patient_id'" .
-    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
-$ds->exec( $sql ); $msg = $ds->error();
+$newPatient =& $do->_obj;
 
-$sql = "UPDATE consultation" .
-    "\nSET patient_id = '$patient_id'" .
-    "\nWHERE patient_id IN ('$patient1->patient_id','$patient2->patient_id')";
-$ds->exec( $sql ); $msg .= $ds->error();
-
-$sql = "UPDATE antecedent" .
-    "\nSET object_id = '$patient_id'" .
-    "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-$ds->exec( $sql ); $msg .= $ds->error();
-
-$sql = "UPDATE traitement" .
-    "\nSET object_id = '$patient_id'" .
-    "\nWHERE object_class = 'CPatient' AND object_id IN ('$patient1->patient_id','$patient2->patient_id')";
-$ds->exec( $sql ); $msg .= $ds->error();
-
-if(CModule::getInstalled("dPfiles")) {
-  $sql = "UPDATE files_mediboard" .
-      "\nSET object_id = '$patient_id'" .
-      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
-      "\nAND object_class = 'CPatient'";
-  $ds->exec( $sql ); $msg .= $ds->error();
+// Transfert de toutes les backrefs
+if ($msg = $newPatient->transferBackRefsFrom($patient1)) {
+  $do->errorRedirect($msg);
 }
 
-
-if(CModule::getInstalled("dPcompteRendu")) {
-  $sql = "UPDATE compte_rendu" .
-      "\nSET object_id = '$patient_id'" .
-      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
-      "\nAND object_class = 'CPatient'";
-  $ds->exec( $sql ); $msg .= $ds->error();
+if ($msg = $newPatient->transferBackRefsFrom($patient2)) {
+  $do->errorRedirect($msg);
 }
 
-if(CModule::getInstalled("dPsante400")) {
-  $sql = "UPDATE id_sante400" .
-      "\nSET object_id = '$patient_id'" .
-      "\nWHERE object_id IN ('$patient1->patient_id','$patient2->patient_id')" .
-      "\nAND object_class = 'CPatient'";
-  $ds->exec( $sql ); $msg .= $ds->error();
+// Suppression des anciens objets
+if ($msg = $patient1->delete()) {
+  $do->errorRedirect($msg);
 }
-
-if($msg) {
-  $AppUI->setMsg($msg, UI_MSG_ERROR );
-  $do->redirect = "";
-}else{
-  $patient1->delete();
-  $patient2->delete();
+  
+if ($msg = $patient2->delete()) {
+  $do->errorRedirect($msg);
 }
-
+  
 $do->doRedirect();
 
 ?>

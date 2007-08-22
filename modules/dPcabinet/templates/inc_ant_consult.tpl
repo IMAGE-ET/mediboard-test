@@ -302,7 +302,7 @@ function copyTraitement(traitement_id){
         <button class="search" type="button" onclick="CIM10Selector.init()">Chercher un diagnostic</button>
         <input type="text" name="code_diag" size="5"/>
        
-        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)" />Valider</button>
+        <button class="tick notext" type="button" onclick="reloadCim10(code_diag.value)" >Valider</button>
        
        
         <script type="text/javascript">   

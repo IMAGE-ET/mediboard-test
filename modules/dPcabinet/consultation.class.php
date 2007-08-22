@@ -169,14 +169,19 @@ class CConsultation extends CCodableCCAM {
   	if (($this->_hour !== null) && ($this->_min !== null)) {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
-    if($this->date_paiement == "0000-00-00")
+    
+    if ($this->date_paiement == "0000-00-00") {
       $this->date_paiement = null;
-    if(($this->_somme !== null) && ($this->_somme != $this->secteur1 + $this->secteur2)){
+    }
+
+    if (($this->_somme !== null) && ($this->_somme != $this->secteur1 + $this->secteur2)){
       $this->secteur1 = 0;
       $this->secteur2 = $this->_somme;
     }
-    // @todo : verifier si on ne fait ça que si _check_premiere est non null
-    $this->premiere = $this->_check_premiere ? 1 : 0;
+    
+    if ($this->_check_premiere !== null) {
+      $this->premiere = $this->_check_premiere ? 1 : 0;
+    }
   }
 
   function check() {

@@ -137,4 +137,13 @@ class CDoObjectAddEdit {
     $this->doRedirect();
   }
 
+  /**
+   * Sets a error messages and redirects
+   * @param string $msg 
+   */
+  function errorRedirect($msg) {
+	  $AppUI->setMsg($msg, UI_MSG_ERROR );
+	  $do->redirect =& $this->redirectError;
+	  $do->doRedirect();
+  }
 }

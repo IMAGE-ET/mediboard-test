@@ -1,4 +1,5 @@
 <?php
+$locales['msg-CMedecin-delete'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-court'] = '';
@@ -58,12 +59,17 @@ $locales['CAntecedent.type.trans'] = '';
 $locales['CConsultation-_ext_codes_ccam'] = '';
 $locales['CConsultation-_ref_actes_ccam'] = '';
 $locales['CDossierMedical-back-addictions'] = '';
-$locales['CDossierMedical-back-antecedants'] = '';
+$locales['CDossierMedical-back-antecedents'] = '';
 $locales['CDossierMedical-back-traitements'] = '';
 $locales['CMedecin'] = '';
 $locales['CMedecin-adresse'] = '';
 $locales['CMedecin-adresse-court'] = '';
 $locales['CMedecin-adresse-desc'] = '';
+$locales['CMedecin-back-patients-4'] = '';
+$locales['CMedecin-back-patients1'] = '';
+$locales['CMedecin-back-patients2'] = '';
+$locales['CMedecin-back-patients3'] = '';
+$locales['CMedecin-back-patients_traites'] = '';
 $locales['CMedecin-complementaires'] = '';
 $locales['CMedecin-complementaires-court'] = '';
 $locales['CMedecin-complementaires-desc'] = '';
@@ -300,4 +306,6 @@ $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';
 $locales['mod-dPpatients-tab-vw_medecins'] = '';
 $locales['mod-dPpatients-tab-vw_recherche'] = '';
+$locales['msg-CMedecin-create'] = '';
+$locales['msg-CMedecin-modify'] = '';
 ?>

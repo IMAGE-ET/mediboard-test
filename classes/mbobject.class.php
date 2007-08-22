@@ -799,6 +799,39 @@ class CMbObject {
   }
 
   /**
+   * Transfer all back refs from given object of same class
+   * @param CMbObject $object
+   * @return string store-like error message if failed, null if successful
+   */
+  function transferBackRefsFrom(CMbObject &$object) {
+    if (!$object->_id) {
+      return "transferNoId";
+    }
+    if ($object->_class_name != $this->_class_name) {
+      return "trasferDifferentType";
+    }
+    
+    $object->loadAllBackRefs();
+    foreach ($object->_back as $backName => $backObjects) {
+      if (count($backObjects)) {
+        $backSpec = $this->_backSpecs[$backName];
+        $backObject = new $backSpec->class;
+		    $backField = $backSpec->field;
+		    $fwdSpec =& $backObject->_specs[$backField];
+	      
+        // Change back field and store back objects
+	      foreach ($backObjects as $backObject) {
+          $backObject->$backField = $this->_id;
+          if ($msg = $backObject->store()) {
+            return $msg;
+          }
+        }
+      }
+    }
+    
+  }
+  
+  /**
    * Check whether the object can be deleted.
    * Default behaviour counts for back reference without cascade 
    * @return null if ok error message otherwise
