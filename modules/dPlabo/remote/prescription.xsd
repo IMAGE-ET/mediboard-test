@@ -30,18 +30,22 @@
 				<xs:element name="Dossier">
 					<xs:complexType>
 						<xs:sequence>
-						   <xs:element name="dateprelevement" type="typeDate" />
-						   <xs:element name="heureprelevement" type="xs:string" />
-						   <xs:element name="urgent" type="typeUrgence" />
-						   <xs:element name="afaxer" type="xs:string" />
-						   <xs:element name="atelephoner" type="xs:string" />
+							<xs:element name="dateprelevement"
+								type="typeDate" />
+							<xs:element name="heureprelevement"
+								type="xs:string" />
+							<xs:element name="urgent"
+								type="typeUrgence" />
+							<xs:element name="afaxer" type="xs:string" />
+							<xs:element name="atelephoner"
+								type="xs:string" />
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
 				<xs:element name="Analyse">
 					<xs:complexType>
 						<xs:sequence>
-							<xs:element name="code" type="xs:string" />
+							<xs:element name="code" type="xs:string" maxOccurs="unbounded" minOccurs="1"/>
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
