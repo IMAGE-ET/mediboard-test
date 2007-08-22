@@ -166,6 +166,14 @@ $library->url = "http://phpmailer.sourceforge.net/";
 $library->fileName = "phpmailer-1.73.tar.gz";
 $library->description = "Composant PHP d'envoi d'email";
 
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "phpmailer";
+$renamer->targetDir = "phpmailer";
+
+$library->renamer = $renamer;
+
+
 $libraries[$library->name] = $library;
 
 $library = new CLibrary;
@@ -174,6 +182,13 @@ $library->url = "http://mike.teczno.com/json.html";
 $library->fileName = "JSON.tar.gz";
 $library->extraDir = "json";
 $library->description = "Composant PHP de genération de données JSON. Bientôt en package PEAR";
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "json";
+$renamer->targetDir = "json";
+
+$library->renamer = $renamer;
+
 
 $libraries[$library->name] = $library;
 
@@ -227,6 +242,7 @@ $patch->dirName = "jscalendar";
 $patch->sourceName = "calendar-fr.js";
 $patch->targetDir = "lang";
 
+
 $library->patches[] = $patch;
 
 $libraries[$library->name] = $library;
@@ -237,6 +253,13 @@ $library->url = "http://phpthumb.sourceforge.net/";
 $library->fileName = "phpThumb_1.7.5.zip";
 $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "phpThumb";
+$renamer->targetDir = "phpThumb";
+
+$library->renamer = $renamer;
+
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
@@ -385,13 +408,28 @@ $libraries[$library->name] = $library;
 <?php if ($renamer = $library->renamer) { ?>
 <tr>
   <td />
-  <td colspan="3">
-    Renommage de la bibliothèque <?php echo $renamer->sourceDir; ?>/ 
-    en <?php echo $renamer->targetDir; ?>/
-  </td>
+  
+
+  <?php 
+  
+  if($renamer->sourceDir != $renamer->targetDir) {
+    echo "<td colspan='3'>";
+    echo "Renommage de la bibliothèque $renamer->sourceDir en $renamer->targetDir";
+    echo "</td>";
+  }
+  
+  ?>
+  
   <td>
     <?php if ($renamer->apply()) { ?>
-    <div class="message">Renommage effectué</div>
+    <?php 
+
+    if($renamer->sourceDir != $renamer->targetDir) { 
+      echo "<div class='message'>Renommage effectué</div>";
+    }
+
+    ?>
+      
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
     <?php } ?>
