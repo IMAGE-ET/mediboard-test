@@ -101,45 +101,43 @@ var Action = {
     <td colspan="4">{{$_idSante400->id400}}</td>
   </tr>
   {{/foreach}}
-  
-  
-  <form name="editId400" action="" method="post" onsubmit="return checkForm(this)">
-    <input type="hidden" name="m" value="dPsante400" />
-    <input type="hidden" name="dosql" value="do_idsante400_aed" />
-    <input type="hidden" name="object_class" value="CMediusers" />
-    <input type="hidden" name="tag" value="{{$remote_name}}" />
-    <input type="hidden" name="last_update" value="{{$date}}" />
-  <tr>
-  <th colspan="8">Ajout d'un praticien au laboratoire {{$remote_name}}</th>
-  </tr>
-  <tr>
-    <td>Praticien</td>
-    <td>
-    
-	  <input name="object_id" class="{{$newId400->_props.object_id}}" value="{{$newId400->object_id}}" />
-	  
-      <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
-      <script type="text/javascript">
-        ObjectSelector.initEdit = function(){
-          this.sForm     = "editId400";
-          this.sId       = "object_id";
-          this.sClass    = "object_class";
-          this.onlyclass = "false";
-          this.pop();
-        }
-      </script>
-      </td>
- 
-    <td>{{mb_label object=$newId400 field="id400" }}</td>
-    <td>{{mb_field object=$newId400 field="id400" canNull="false"}}</td>
- 
-    <td>
-  <button class="submit" type="submit" name="btnFuseAction">Créer</button>
- 
-    </td>
-  </tr>
-  
-  </tr>
-  </form>
 </table>
 
+
+  
+<form name="editId400" action="" method="post" onsubmit="return checkForm(this)">
+  <input type="hidden" name="m" value="dPsante400" />
+  <input type="hidden" name="dosql" value="do_idsante400_aed" />
+  <input type="hidden" name="object_class" value="CMediusers" />
+  <input type="hidden" name="tag" value="{{$remote_name}}" />
+  <input type="hidden" name="last_update" value="{{$date}}" />
+
+  <table class="tbl">
+    <tr>
+      <th colspan="8">Ajout d'un praticien au laboratoire {{$remote_name}}</th>
+    </tr>
+    <tr>
+      <td>Praticien</td>
+      <td>
+	    <input name="object_id" class="{{$newId400->_props.object_id}}" value="{{$newId400->object_id}}" />
+	    <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
+        <script type="text/javascript">
+          ObjectSelector.initEdit = function(){
+            this.sForm     = "editId400";
+            this.sId       = "object_id";
+            this.sClass    = "object_class";
+            this.onlyclass = "false";
+            this.pop();
+          }
+        </script>
+        </td>
+ 
+        <td>{{mb_label object=$newId400 field="id400" }}</td>
+        <td>{{mb_field object=$newId400 field="id400" canNull="false"}}</td>
+ 
+        <td>
+          <button class="submit" type="submit" name="btnFuseAction">Créer</button>
+        </td>
+     </tr>
+  </table>
+</form>
