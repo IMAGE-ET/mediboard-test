@@ -5,7 +5,6 @@
  * @subpackage Style
  * @version $Revision$
  * @author Thomas Despoix
- * latest version: $HeadURL$ 
  */
 
 global $performance;
@@ -172,9 +171,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 // Initialize custom error handler
 if (!@filesize($logPath)) {
   $initTime = date("Y-m-d H:i:s");
-  
-  $logInit = "<link rel='stylesheet' type='text/css' href='../style/mediboard/main.css?build=24' media='all' />";  
-  $logInit .= "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
+  $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
   file_put_contents($logPath, $logInit);
 }
 
