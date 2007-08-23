@@ -16,13 +16,22 @@ $can->needsAdmin();
  */
 function importCatalogue($cat, $parent_id = null) {  
   global $AppUI, $remote_name;
+ 
+  //$ana = new CExamenLabo();
+  //mbTrace($ana);
+  //die();
   
   set_time_limit(180);
   
+  $compteur["analyses"] = 0;
+  $compteur["chapitres"] = 0;
+  $compteur["sousChapitre"] = 0; 
+  
+ 
   $catalogues = array();
   // Creation du catalogue global LABO
   $catal = new CCatalogueLabo();
-  
+  $catalogue = new CCatalogueLabo();
   $catal->identifiant = substr(hash('md5',$remote_name), 0, 4);  // libelle modifié par hash
   
   $catal->libelle = $remote_name;
@@ -34,7 +43,7 @@ function importCatalogue($cat, $parent_id = null) {
   $idCat->id400 = $remote_name;
   
   $idCat->bindObject($catal);
-  $AppUI->stepAjax("Catalogue '$catal->libelle' importé", UI_MSG_OK);
+  //$AppUI->stepAjax("Catalogue '$catal->libelle' importé", UI_MSG_OK);
   
   $path = $remote_name;
   // on met a jour $catalogues
@@ -48,31 +57,32 @@ function importCatalogue($cat, $parent_id = null) {
     	$path = $remote_name;
     }
   	//$pathssChap = "$remote_name/$analyse_->sschapitre";
-    $catalogue = new CCatalogueLabo();
+    $catChapitre = new CCatalogueLabo();
     
     // si le catalogue n'existe pas deja
     if(!array_key_exists($path,$catalogues)){
       // creation du catalogue
-      $catalogue->identifiant = substr(hash('md5',$chapitre), 0, 4);  // libelle modifié par hash;
-      $catalogue->libelle = $chapitre;
-      $catalogue->pere_id = $catal->_id;
-      $catalogue->decodeUtfStrings();
+      $catChapitre->identifiant = substr(hash('md5',$chapitre), 0, 4);  // libelle modifié par hash;
+      $catChapitre->libelle = $chapitre;
+      $catChapitre->pere_id = $catal->_id;
+      $catChapitre->decodeUtfStrings();
       
       //creation de l'id400 
-      $idCatalogue = new CIdSante400();
-      $idCatalogue->tag = $remote_name;
-      $idCatalogue->id400 = substr(hash('md5',$chapitre), 0, 4);
+      $idCatChapitre = new CIdSante400();
+      $idCatChapitre->tag = $remote_name;
+      $idCatChapitre->id400 = substr(hash('md5',$chapitre), 0, 4);
       
-      $idCatalogue->bindObject($catalogue);
+      $idCatChapitre->bindObject($catChapitre);
 
-      $AppUI->stepAjax("Catalogue '$catalogue->libelle' importé", UI_MSG_OK);
-      
+      //$AppUI->stepAjax("Catalogue '$catChapitre->libelle' importé", UI_MSG_OK);
+      $compteur["chapitres"]++;
       // on met a jour $catalogues
-      $catalogues[$path] = $catalogue;
+      $catalogues[$path] = $catChapitre;
       	    	
     }
     
-    $catalogue = $catalogues[$path];
+    $catChapitre = $catalogues[$path];
+    $catalogue = $catChapitre;
     // si il y a un sous chapitre a creer==> le pere du sous chapitre est $catalogue->_id;
     $sschapitre = (string) $_analyse->sschapitre;
     
@@ -81,28 +91,27 @@ function importCatalogue($cat, $parent_id = null) {
       $path .= $sschapitre;
       
       
-      $cataloguessChap = new CCatalogueLabo();
+      $catssChapitre = new CCatalogueLabo();
       
       if(!array_key_exists($path,$catalogues)){
         // creation du catalogue
-        $cataloguessChap->identifiant = substr(hash('md5',$sschapitre), 0, 4);  // libelle modifié par hash;
-        $cataloguessChap->libelle = $sschapitre;
-        $cataloguessChap->pere_id = $catalogue->_id;
-        $cataloguessChap->decodeUtfStrings();
-        
+        $catssChapitre->identifiant = substr(hash('md5',$sschapitre), 0, 4);  // libelle modifié par hash;
+        $catssChapitre->libelle = $sschapitre;
+        $catssChapitre->pere_id = $catChapitre->_id;
+        $catssChapitre->decodeUtfStrings();
         //creation de l'id400
-        $idCatalogue = new CIdSante400();
-        $idCatalogue->tag = $sschapitre;
-        $idCatalogue->id400 = substr(hash('md5', $sschapitre), 0, 4);
-       
-        $idCatalogue->bindObject($cataloguessChap);
-        $AppUI->stepAjax("Sous Catalogue '$cataloguessChap->libelle' importé", UI_MSG_OK);
-      
+        $idCatssChapitre = new CIdSante400();
+        $idCatssChapitre->tag = $remote_name;
+        $idCatssChapitre->id400 = substr(hash('md5', $sschapitre), 0, 4);
+        
+        $idCatssChapitre->bindObject($catssChapitre);
+        //$AppUI->stepAjax("Sous Catalogue '$catssChapitre->libelle' importé", UI_MSG_OK);
+        $compteur["sousChapitre"]++; 
         //on met à jour les catalogues
-        $catalogues[$path] = $cataloguessChap;
+        $catalogues[$path] = $catssChapitre;
       }
-    
-      $catalogue = $catalogues[$path];
+      $catssChapitre = $catalogues[$path];
+      $catalogue = $catssChapitre;
     }
     // Code de l'analyse
     $catAtt = $_analyse->attributes();
@@ -117,14 +126,42 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse->identifiant = (string) $code;
     $analyse->libelle = (string) $_analyse->libelle;
     $analyse->decodeUtfStrings();
+    $analyse->technique = (string) $_analyse->technique;
+    
+    switch((string) $_analyse->materiel){	
+      case "SANG VEINEUX":
+    	$analyse->type_prelevement = "sang";
+    	break;
+      case "URINE":
+    	$analyse->type_prelevement = "urine";
+    	break;
+      case "BIOPSIE":
+    	$analyse->type_prelevement = "biopsie";
+    	break;
+    }
+    
+    //$analyse->applicabilite = (string) $_analyse->applicablesexe;
+    $analyse->execution_lun = (string) $_analyse->joursrealisation->lundi;
+    $analyse->execution_mar = (string) $_analyse->joursrealisation->mardi;
+    $analyse->execution_mer = (string) $_analyse->joursrealisation->mercredi;
+    $analyse->execution_jeu = (string) $_analyse->joursrealisation->jeudi;
+    $analyse->execution_ven = (string) $_analyse->joursrealisation->vendredi;
+    $analyse->execution_sam = (string) $_analyse->joursrealisation->samedi;
+    $analyse->execution_dim = (string) $_analyse->joursrealisation->dimanche;
+    
+    
     
     $analyse->catalogue_labo_id = $catalogue->_id;
     $analyse->type = "num";
   	
     $idAnalyse->bindObject($analyse);
-    $AppUI->stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
-  }
+    //$AppUI->stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
+    $compteur["analyses"]++;
+  }// fin du foreach
+  $AppUI->stepAjax("Analyses Importées: ".$compteur["analyses"].", Chapitres Importés: ".$compteur["chapitres"].", Sous chapitres Importés: ".$compteur["sousChapitre"], UI_MSG_OK);
 }
+
+
 
 // Check import configuration
 $config = $dPconfig[$m]["CCatalogueLabo"];
