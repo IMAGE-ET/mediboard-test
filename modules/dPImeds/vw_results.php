@@ -36,6 +36,13 @@ $id400 = new CIdSante400;
 $id400->loadLatestFor($sejour);
 $sejour400 = $id400->id400;
 
+/**
+ * Hack temporaire pour la démo, il faut gérer les id400 proprement, 
+ * sur un tag configurable pour le module etc.
+ **/
+$patient400 = 00073648;
+$sejour400 = 07500684;
+
 // Création du template
 $smarty = new CSmartyDP();
 
