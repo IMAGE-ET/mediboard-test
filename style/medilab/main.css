@@ -1,0 +1,926 @@
+/* ID: $Id */
+
+/* Body */
+
+body {
+  font-family: arial, sans-serif;
+  font-size: 11px;  
+  background: #fff;
+  margin: 0px;
+}
+
+#login {
+  margin: 40px 0px 0px; 
+}
+
+/* Login */
+
+#login table {
+  border: solid #000 3px;
+  width: 600px;
+  background: #fff;
+  margin: auto;
+  padding: 5px;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 9px;
+  white-space: normal;
+}
+
+/* Form tables */
+
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #ffd;
+  vertical-align: top;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border-right: 1px solid #ddd;
+}
+
+table.form th.title {
+  color: #fff;
+  font-size: 14px;
+  font-weight: bold; 
+  text-align: center;
+  background-color: #68c;
+  border: #aaa 1px outset;
+}
+
+table.form tr.groupexpand td,
+table.form tr.groupcollapse td,
+table.form tr.groupexpand th,
+table.form tr.groupcollapse th {
+  padding-left: 25px;
+}
+
+table.form tr.triggerShow td,
+table.form tr.triggerHide td,
+table.form tr.triggerShow th,
+table.form tr.triggerHide th {
+  padding-left:25px;
+}
+
+table.form th.category {
+  color: #fff;
+  font-weight: bold;  
+  font-style: italic;  
+  text-align: center;
+  background-color: #68c;
+  border: #68c 1px outset;
+}
+
+table.form th.mandatory {
+  color: #f00;
+  font-weight: bold;
+}
+
+label.notNull {
+  padding-right: 13px;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.notNullOK {
+  padding-right: 13px;
+  background: url(./images/icons/greenbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form th a:link {
+  color: #eee;
+}
+
+table.form th a.button:link,
+table.form th a.buttonedit:link,
+table.form th a.buttonsearch:link,
+table.form th a.buttonsave:link {
+	color: #000;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background-color: #ffd;
+  text-align: left;
+  padding: 1px 4px;
+  border: none;
+}
+
+table.form td.dark {
+  background-color: #ffc;
+}
+
+table.form td.light {
+  background-color: #fff;
+}
+
+table.form td.compte_rendu {
+  background: #ffd;
+}
+
+table.form td.text {
+  white-space: normal;
+}
+
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.readonly input {
+  background-color: #ffd;
+  border: 1px dotted;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.form td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.form td.date img {
+  margin-top: 3px;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  max-height:200px;
+  overflow: auto;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+div.autocomplete ul li.selected { 
+	background-color: #ffd;
+    font-weight:bold;
+}
+div.autocomplete ul li {
+  list-style-type:none;
+  display:block;
+  margin:0;
+  padding:2px;
+  cursor:pointer;
+}
+
+/* Navigation */
+
+td#mainHeader table {
+  width: 100%;
+}
+
+td#mainHeader td.logo {
+  text-align: left;
+}
+
+td#mainHeader td.welcome {
+  text-align: right;
+  font-size: 14px;
+  font-style: italic;
+}
+
+#menubar {
+  text-align: right;
+  border: 2px solid #000;
+  background-color: #68c;
+  color: #fff;
+  width: 100%;
+  line-height: 150%;
+}
+
+#menubar a.textSelected {
+  color: #a00;
+  font-weight: bold;
+}
+
+#menubar a.textNonSelected {
+  color: #fff;
+}
+
+#menubar a.textNonSelected img {
+  opacity: 0.6;
+  filter: alpha(opacity=60);
+}
+
+#menubar a.textNonSelected:hover img {
+  opacity: 1;
+  filter: alpha(opacity=100);
+}
+
+#menubar a {
+  color: #000;
+}
+
+#menubar a:hover {
+  color: #a00;
+}
+
+#topMenu #menubar a {
+  margin: 1px 0;
+  padding-left: 3px;
+  border-left: 1px solid #fff;
+}
+
+#leftMenu {
+  vertical-align: top;
+  width: 140px;
+  overflow: hidden;
+}
+
+#leftMenu #menubar {
+  border: 2px solid #000;
+  padding: 2px;
+  background-color: #68c;
+  color: #fff;
+  width: 130px;
+}
+
+#leftMenu #menubar a {
+  border: 1px solid transparent;
+  margin-top: -1px;
+  text-align: center;
+  display: block;
+}
+
+#leftMenu #menubar #menuTools {
+  height: 14px;
+}
+
+#leftMenu #menubar #menuTools a {
+  text-decoration: none;
+  height: 16px;
+  width: 16px;
+  float: left;
+}
+
+#leftMenu #menubar a.textSelected {
+  border-color: #fff;
+  background-color: #abe;
+}
+#leftMenu #menubar a:hover {
+  border-color: #ddd;
+}
+
+#leftMenu #menubar a img {
+  margin: 0 auto;
+  display: block;
+}
+
+#leftMenu #menubar.iconed a.textNonSelected img {
+  display: block;
+}
+#leftMenu #menubar.iconed #menuTools a#toggleIcons {
+  background: url(./images/icons/action_up.png);
+}
+
+#leftMenu #menubar.uniconed #menuTools a#toggleIcons {
+  background: url(./images/icons/action_down.png);
+}
+
+#leftMenu #menubar.uniconed a.textNonSelected img {
+  display: none;
+}
+
+#leftMenu #systemMsg {
+  text-align: left;
+}
+
+/* Tabbed items */
+
+td.tabox {
+  background-color: #fff;
+  border: solid #fff 0px;
+}
+
+table.tabmenu {
+  margin: 5px 10px;
+  border-spacing: 0px;
+}
+
+table.tabmenu td {
+  height: 25px;
+}
+
+table.tabmenu td.normal {
+  background: url(./images/icons/tabBg.png) repeat-x center;
+}
+
+table.tabmenu td.normal a {
+  color: #fff;
+}
+
+table.tabmenu td.normalLeft {
+  width: 15px;
+  background: url(./images/icons/tabLeft.png) no-repeat center right;
+}
+
+table.tabmenu td.normalRight {
+  width: 15px;
+  background: url(./images/icons/tabRight.png) no-repeat center left;
+}
+
+table.tabmenu td.selected {
+  background: url(./images/icons/tabSelectedBg.png) repeat-x center;
+}
+
+table.tabmenu td.selectedLeft {
+  width: 15px;
+  background: url(./images/icons/tabSelectedLeft.gif) no-repeat center right;
+}
+
+table.tabmenu td.selectedRight {
+  width: 15px;
+  background: url(./images/icons/tabSelectedRight.gif) no-repeat center left;
+}
+
+/* Inputs */
+input,
+select,
+textarea {
+  color: #082F54;
+  background-image:url(./images/pictures/input.png);
+  border:1px solid black;
+  font-size: 12px;
+  margin: 1px;
+  padding: 1px;
+}
+
+button, 
+a.button, 
+a.buttonedit, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttondown,
+a.buttonadd, 
+a.buttonremove,
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  color: #000;
+  text-decoration: none;
+  cursor: default;
+  border: 1px black solid;
+  font-size: 12px;
+  background-color: #ddd;
+  margin: 0 2px;
+  padding: 0 2px;
+  padding-left: 18px;
+  padding-bottom: 1px;
+  background-image: url(../tonkin/images/buttons/button.png);
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  height: 18px
+}
+
+button:hover,
+a.button:hover,
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background-image: url(../tonkin/images/buttons/buttonover.png);
+  background-position: left bottom;
+}
+
+button.notext,
+a.notext {
+  background-position: -1px bottom;
+  width: 20px;
+}
+
+button.trash, 
+a.buttontrash {
+  background-image: url(../tonkin/images/buttons/trash.png);
+}
+
+button.trash:hover, 
+a.buttontrash:hover {
+  background-image: url(../tonkin/images/buttons/trashover.png);
+}
+
+button.submit, 
+a.buttonsubmit {
+  background-image: url(../tonkin/images/buttons/save.png);
+}
+
+button.submit:hover, 
+a.buttonsubmit:hover {
+  background-image: url(../tonkin/images/buttons/saveover.png);
+}
+
+button.new, 
+a.buttonnew {
+  background-image: url(../tonkin/images/buttons/new.png);
+}
+
+button.new:hover, 
+a.buttonnew:hover {
+  background-image: url(../tonkin/images/buttons/newover.png);
+}
+
+button.print, 
+a.buttonprint {
+  background-image: url(../tonkin/images/buttons/print.png);
+}
+
+button.print:hover, 
+a.buttonprint:hover {
+  background-image: url(../tonkin/images/buttons/printover.png);
+}
+
+button.cancel, 
+a.buttoncancel {
+  background-image: url(../tonkin/images/buttons/cancel.png);
+}
+
+button.cancel:hover, 
+a.buttoncancel:hover {
+  background-image: url(../tonkin/images/buttons/cancelover.png);
+}
+
+button.modify, 
+a.buttonmodify {
+  background-image: url(../tonkin/images/buttons/save.png);
+}
+
+button.modify:hover, 
+a.buttonmodify:hover {
+  background-image: url(../tonkin/images/buttons/saveover.png);
+}
+
+button.search, 
+a.buttonsearch {
+  background-image: url(../tonkin/images/buttons/search.png);
+}
+
+button.search:hover, 
+a.buttonsearch:hover {
+  background-image: url(../tonkin/images/buttons/searchover.png);
+}
+
+button.lock, 
+a.buttonlock {
+  background-image: url(../tonkin/images/buttons/lock.png);
+}
+
+button.lock:hover, 
+a.buttonlock:hover {
+  background-image: url(../tonkin/images/buttons/lockover.png);
+}
+
+button.tick, 
+a.buttontick {
+  background-image: url(../tonkin/images/buttons/tick.png);
+}
+
+button.tick:hover, 
+a.buttontick:hover {
+  background-image: url(../tonkin/images/buttons/tickover.png);
+}
+
+button.down, 
+a.buttondown {
+  background-image: url(../tonkin/images/buttons/down.png);
+}
+
+button.down:hover, 
+a.buttondown:hover {
+  background-image: url(../tonkin/images/buttons/downover.png);
+}
+
+button.change, 
+a.buttonchange {
+  background-image: url(../tonkin/images/buttons/change.png);
+}
+
+button.change:hover, 
+a.buttonchange:hover {
+  background-image: url(../tonkin/images/buttons/changeover.png);
+}
+
+button.edit, 
+a.buttonedit {
+  background-image: url(../tonkin/images/buttons/edit.png);
+}
+
+button.edit:hover, 
+a.buttonedit:hover {
+  background-image: url(../tonkin/images/buttons/editover.png);
+}
+
+button.hslip, 
+a.buttonhslip {
+  background-image: url(../tonkin/images/buttons/hslip.png);
+}
+
+button.hslip:hover, 
+a.buttonhslip:hover {
+  background-image: url(../tonkin/images/buttons/hslipover.png);
+}
+
+button.add, 
+a.buttonadd {
+  background-image: url(../tonkin/images/buttons/add.png);
+}
+
+button.add:hover, 
+a.buttonadd:hover {
+  background-image: url(../tonkin/images/buttons/addover.png);
+}
+
+button.remove, a.buttonremove {
+  background-image: url(../tonkin/images/buttons/remove.png);
+}
+
+button.remove:hover, a.buttonremove:hover {
+  background-image: url(../tonkin/images/buttons/removeover.png);
+}
+
+button.notext, button.notext:hover{
+  padding : 0px 0px 0px 14px;
+}
+
+a.notext, a.notext:hover{
+  padding : 0px 0px 1px 18px;
+}
+
+select {
+  border: 1px #a5acb2 solid;
+  font-size: 10px;
+  padding: 0;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background: #fff;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background: #fff;
+}
+
+input,
+select,
+textarea {
+  padding: 1px;
+  border: 1px #a5acb2 solid;
+  background: #fff;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  padding: 0px;
+  border: 2px #a5acb2 inset;
+  background: #ddf;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 0px;
+  border-spacing: 1px;
+  background-color: #fff;
+}
+
+table.tbl a {
+  display: block;
+}
+
+a.actionPat {
+  display: inline;
+  float: right;
+  margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th a {
+  color: #fff;
+}
+
+table.tbl th {
+  background-color: #68c;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  text-align: center;
+  font-style: italic;
+  white-space: nowrap;
+}
+
+table.tbl tr.triggerShow td,
+table.tbl tr.triggerHide td{
+  padding-left: 25px;
+}
+
+table.tbl th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #68c;
+  border: #aaa 1px outset;
+}
+
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
+  background-color: #fdd;
+}
+
+table.tbl td,
+div.tree-header {
+  background-color: #ffd;
+  padding: 2px;
+  white-space: nowrap;
+  border-bottom: 1px solid #ddd;
+}
+
+div.selected,
+table.tbl tr.selected td,
+table.form tr.selected td {
+  background-color: #edb;
+}
+
+table.tbl th.text {
+  white-space: normal;
+}
+
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #fff;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+table.tbl td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  width: 100px;
+  min-height: 15px;
+  float: left;
+}
+
+table.tbl td.date img {
+  margin-top: 3px;
+}
+
+table.titleblock td.titlecell {
+  font-family: Arial;
+  font-size: 20px; 
+  color: #68c;
+  width: 100%;
+  padding-bottom: 5px;
+}
+
+/* Main table */
+
+table.main th.title {
+  font-size: 14px;
+  color: #fff;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #68c;
+  border: #68c 1px outset;
+}
+
+table.main th.urgence {
+  background-color: #08F;
+}
+
+table.form th.modify,
+table.main th.modify {
+  color: #fc0;
+}
+
+table.main th.urgence.modify {
+  color: #fc0;
+}
+
+/* System message */
+
+#systemMsg {
+  font-size: 80%;
+  text-align: left;
+}
+
+table.dialog #systemMsg {
+  float: right;
+}
+
+div.loading {
+  background-image: url(images/icons/loading.gif);
+}
+
+div.message, div.loading, div.error, div.warning {
+   white-space: normal;
+}
+
+/* Tooltips */
+
+div.tooltip table.decoration td.content {
+  border-color: #ccc;
+}
+
+table.note th,
+table.note td {
+  font-style: normal;
+  color: #000000;
+  background: transparent;
+  text-align: left;
+}
+
+table.note th {
+  font-weight: bold;
+}
+
+div.progressBar div.bar {
+/*  opacity: 0.5; */
+}
+
+
+/* dPlabo catalogues */
+
+tr.catalogue-1 th {
+  font-size: 160%;
+  font-variant: small-caps;
+  
+}
+
+tr.catalogue-2 th {
+  font-size: 130%;
+  background-color: #79d;
+}
+
+
+tr.catalogue-3 th {
+  color: #444;
+  font-weight: bold;
+  text-align: left;
+  background-color: transparent;
+}
+
+
+/* Différentiel Proxilab  */
+
+table.form td,
+table.form th,
+table.form td.readonly input {
+	background-color: #fff;
+}
+
+table.form th.category {
+  background-color: #ae0040;
+  font-style: normal;
+}
+
+input:focus, 
+select:focus, 
+textarea:focus {
+	padding: 1px;
+  background-color: #fde0b6;
+  border: 1px solid #ae0040;
+}
+
+label {
+	color: #ae0040;
+}
+
+button, 
+a.button, 
+a.buttonedit, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttondown, 
+a.buttonadd, 
+a.buttonremove, 
+input[type="submit"], 
+input[type="reset"], 
+input[type="button"] {
+	color: #ae0040;
+  border: 1px outset #444;
+}
+
+table.tbl th {
+	background-color: #feebcd;
+  font-style: normal;
+	color: #ae0040;
+}
+
+table.tbl td,
+div.tree-header {
+	background-color: #fff;
+	color: #ae0040;
+}
+
+div.selected,
+table.tbl tr.selected td,
+table.form tr.selected td {
+  background-color: #ddf;
+}
+
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
+  background-color: #eef;
+}
+
+#menubar,
+#leftMenu #menubar {
+  background-color: #c55
+}
+
+#leftMenu #menubar a.textSelected {
+  background-color: #fcb;
+}
+
+#leftMenu #menubar a:hover {
+	color: #fff;
+	font-weight: bold;
+}
+
+table.main th.title,
+table.tbl th.title {
+	color: #fff;
+  background-color: #ae0040;
+  text-align: left;
+}

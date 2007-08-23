@@ -1,0 +1,46 @@
+body {
+  font-family: Georgia, serifs;
+  font-size: 12px;
+  background: #ddf;
+}
+
+textarea#htmlarea {
+  width: 99%;
+  height: 100%;
+}
+
+span.hilite {
+  background: #f5f;
+}
+
+@media screen {
+  span.field {
+    background: #bbd;
+  }
+
+  span.value {
+    background: #ddd;
+  }
+
+  span.name {
+    background: #bdb;
+  }
+
+  span.choice {
+    background: #ddd;
+  }
+  
+  hr.pagebreak {
+    border-style: dashed;
+    border-top-color: #fff;
+    border-right-color: #fff;
+    border-bottom-color: #aaa;
+    border-left-color: #aaa;
+  }
+}
+
+@media print {
+  hr.pagebreak {
+    page-break-before:always;
+  }
+}
