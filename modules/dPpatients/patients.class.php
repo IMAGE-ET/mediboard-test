@@ -158,7 +158,7 @@ class CPatient extends CDossierMedical {
     $specs["sexe"]              = "enum list|m|f|j default|m";
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential";
-    $specs["cp"]                = "numchar length|5 confidential";
+    $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
     $specs["tel"]               = "numchar length|10 confidential";
     $specs["tel2"]              = "numchar length|10 confidential";
     $specs["incapable_majeur"]  = "bool";

@@ -143,12 +143,12 @@ class CCatalogueLabo extends CMbObject {
     
     $examen = new CExamenLabo;
     $where = array("catalogue_labo_id" => "= $this->catalogue_labo_id");
-    $order = "identifiant";
+    $order = "libelle";
     $this->_ref_examens_labo = $examen->loadList($where, $order);
 
     $catalogue = new CCatalogueLabo;
     $where = array("pere_id" => "= $this->catalogue_labo_id");
-    $order = "identifiant";
+    $order = "libelle";
     $this->_ref_catalogues_labo = $catalogue->loadList($where, $order);
   }
   
