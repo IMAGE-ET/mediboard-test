@@ -128,16 +128,21 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse->decodeUtfStrings();
     $analyse->technique = (string) $_analyse->technique;
     
-    switch((string) $_analyse->materiel){	
+    $materiel = utf8_decode((string) $_analyse->materiel);
+    $materiel = trim($materiel);
+    
+    switch($materiel){	
       case "SANG VEINEUX":
     	$analyse->type_prelevement = "sang";
     	break;
+    	
       case "URINE":
     	$analyse->type_prelevement = "urine";
     	break;
       case "BIOPSIE":
     	$analyse->type_prelevement = "biopsie";
     	break;
+      
     }
     
     //$analyse->applicabilite = (string) $_analyse->applicablesexe;
