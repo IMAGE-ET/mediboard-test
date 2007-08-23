@@ -50,7 +50,6 @@ $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
 $idSantePrat = new CIdSante400();
 $idSantePrat->loadLatestFor($prat, $tagCatalogue);
 
-
 // Si le praticien n'a pas d'id400, il ne peut pas envoyer la prescription
 if (!$idSantePrat->_id){
   $AppUI->setMsg("Le praticien n'a pas d'id400 pour le catalogue LABO", UI_MSG_ERROR );

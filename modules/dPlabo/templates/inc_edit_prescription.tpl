@@ -49,8 +49,11 @@
     <th class="title" colspan="2">Autres Informations</th>
   </tr>
   <tr>
-    <td>Non urgent<input type="radio" name="urgence" value="0" checked="checked" /></td>
-    <td>Urgent<input type="radio" name="urgence" value="1" /></td>
+    <td>Urgent:</td>
+    <td>
+        Non<input type="radio" name="urgence" value="0" checked="checked" />
+        Oui<input type="radio" name="urgence" value="1" />
+    </td>
   </tr>
   <tr>
   
