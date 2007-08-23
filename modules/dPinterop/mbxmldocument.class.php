@@ -146,6 +146,10 @@ class CMbXMLDocument extends DOMDocument {
     parent::save($this->documentfilename);
   }
   
+  /**
+   * Create a CFile attachment to given CMbObject
+   * @return string store-like message, null if successful
+   */
   function addFile($object) {
     global $AppUI;
     $this->saveFile();
@@ -159,12 +163,11 @@ class CMbXMLDocument extends DOMDocument {
     $file->file_date          = unix2dateTime(time());
     $file->file_real_filename = uniqid(rand());
     $file->file_owner         = $AppUI->user_id;
-    $res = $file->moveFile($this->documentfilename); 
-    if($res) {
-      return $file->store();
-    } else {
-      return false;
+    if (!$file->moveFile($this->documentfilename)) {
+      return "error-CFile-move-file";
     }
+
+    return $file->store();
   }
 }
 

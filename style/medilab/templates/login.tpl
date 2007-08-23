@@ -59,7 +59,7 @@
     <tr>
       <td class="logo" colspan="3 ">
         <a href="http://www.mediboard.org/">
-          <img src="style/{{$uistyle}}/images/pictures/proxilab-600.jpg" alt="MediLab logo" />
+          <img src="style/{{$uistyle}}/images/pictures/proxilab-360.jpg" alt="MediLab logo" />
         </a>
       </td>
     </tr>

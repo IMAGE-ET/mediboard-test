@@ -175,7 +175,12 @@ if (!$doc->schemaValidate()) {
   redirect();
 }
 
-$doc->addFile($mbPrescription);
+// Créer le document joint
+if ($msg = $doc->addFile($mbPrescription)) {
+  $AppUI->setMsg("Document non valide", UI_MSG_ERROR );
+  redirect();
+}
+
 
 $AppUI->setMsg("Document envoyé", UI_MSG_OK );
 redirect();
