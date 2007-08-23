@@ -62,7 +62,7 @@ if (!$idSantePrat->_id){
 $idPresc = new CIdSante400();
 
 //Paramétrage de l'id 400
-$idPresc->tag = "$tagCatalogue Prat: ".str_pad($idSantePrat->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
+$idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePrat->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
 $idPresc->object_class = "CPrescriptionLabo";              // object_class
 $idPresc->loadMatchingObject("id400 DESC");                // Chargement de l'id 400 s'il existe
 

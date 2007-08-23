@@ -79,5 +79,24 @@ var Action = {
   <td id="action-import"></td>
 </tr>
 
+
+<tr>
+  <th colspan="8" class="title">Praticiens du laboratoire</th>
+</tr>
+<tr>
+  <th>Praticien</th>
+  <th>ID Santé400</th>
+</tr>
+  {{foreach from=$list_idSante400 item=_idSante400}}
+  <tr>
+    <td>
+      {{assign var="object" value=$_idSante400->_ref_object}}
+      <div onmouseover="ObjectTooltip.create(this, '{{$_idSante400->object_class}}', {{$_idSante400->object_id}})">
+        {{$object->_view}}
+      </div>
+    </td>
+    <td>{{$_idSante400->id400}}</td>
+  </tr>
+  {{/foreach}}
 </table>
 

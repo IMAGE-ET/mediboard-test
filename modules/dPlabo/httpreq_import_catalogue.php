@@ -17,10 +17,6 @@ $can->needsAdmin();
 function importCatalogue($cat, $parent_id = null) {  
   global $AppUI, $remote_name;
  
-  //$ana = new CExamenLabo();
-  //mbTrace($ana);
-  //die();
-  
   set_time_limit(180);
   
   $compteur["analyses"] = 0;
@@ -56,7 +52,7 @@ function importCatalogue($cat, $parent_id = null) {
     if(!$chapitre){
     	$path = $remote_name;
     }
-  	//$pathssChap = "$remote_name/$analyse_->sschapitre";
+  
     $catChapitre = new CCatalogueLabo();
     
     // si le catalogue n'existe pas deja
@@ -135,14 +131,12 @@ function importCatalogue($cat, $parent_id = null) {
       case "SANG VEINEUX":
     	$analyse->type_prelevement = "sang";
     	break;
-    	
       case "URINE":
     	$analyse->type_prelevement = "urine";
     	break;
       case "BIOPSIE":
     	$analyse->type_prelevement = "biopsie";
     	break;
-      
     }
     
     //$analyse->applicabilite = (string) $_analyse->applicablesexe;
@@ -153,8 +147,6 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse->execution_ven = (string) $_analyse->joursrealisation->vendredi;
     $analyse->execution_sam = (string) $_analyse->joursrealisation->samedi;
     $analyse->execution_dim = (string) $_analyse->joursrealisation->dimanche;
-    
-    
     
     $analyse->catalogue_labo_id = $catalogue->_id;
     $analyse->type = "num";
