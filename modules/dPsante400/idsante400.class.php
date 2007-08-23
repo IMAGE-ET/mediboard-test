@@ -30,7 +30,7 @@
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->loggable = true;
+    $spec->loggable = false;
     return $spec;
   }
 

@@ -45,7 +45,16 @@ class CCatalogueLabo extends CMbObject {
     }
     
     if ($this->hasAncestor($this)) {
-      return "CCatalogue-cyclic-link";
+      return "Cyclic catalog creation";
+    }
+    
+    // Checks whether there is a sibling catalogue in the same hierarchy
+    $root = $this->getRootCatalogue();
+    foreach ($this->getSiblings() as $_sibling) {
+      $_root = $_sibling->getRootCatalogue();
+      if ($root->_id == $_root->_id) {
+        return "CCatalogue-sibling-conflict ($this->identifiant)";
+      }
     }
   }
   
@@ -106,7 +115,7 @@ class CCatalogueLabo extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_shortview = $this->identifiant;
-    $this->_view = "[$this->identifiant] $this->libelle";
+    $this->_view = $this->libelle;
   }
   
   function computeLevel() {
