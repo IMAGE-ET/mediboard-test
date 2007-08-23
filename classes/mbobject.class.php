@@ -1304,6 +1304,20 @@ class CMbObject {
     // Register only the fields of this object
     function fillLimitedTemplate(&$template){
     }
+    
+    /**
+     * Decode all string fields (str, text, html)
+     * @return void
+     */
+    function decodeUtfStrings() {
+      foreach($this->_specs as $name => $spec) {
+        if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
+          if (null !== $this->$name) {
+            $this->$name = utf8_decode($this->$name);
+          }
+        }
+      }
+    }
 }
 
 function htmlReplace($find, $replace, &$source) {

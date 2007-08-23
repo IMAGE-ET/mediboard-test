@@ -55,8 +55,8 @@ function importCatalogue($cat, $parent_id = null) {
       // creation du catalogue
       $catalogue->identifiant = substr(hash('md5',$chapitre), 0, 4);  // libelle modifié par hash;
       $catalogue->libelle = $chapitre;
-      
       $catalogue->pere_id = $catal->_id;
+      $catalogue->decodeUtfStrings();
       
       //creation de l'id400 
       $idCatalogue = new CIdSante400();
@@ -88,6 +88,8 @@ function importCatalogue($cat, $parent_id = null) {
         $cataloguessChap->identifiant = substr(hash('md5',$sschapitre), 0, 4);  // libelle modifié par hash;
         $cataloguessChap->libelle = $sschapitre;
         $cataloguessChap->pere_id = $catalogue->_id;
+        $cataloguessChap->decodeUtfStrings();
+        
         //creation de l'id400
         $idCatalogue = new CIdSante400();
         $idCatalogue->tag = $sschapitre;
@@ -114,15 +116,15 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse = new CExamenLabo();
     $analyse->identifiant = (string) $code;
     $analyse->libelle = (string) $_analyse->libelle;
-
+    $analyse->decodeUtfStrings();
+    
     $analyse->catalogue_labo_id = $catalogue->_id;
     $analyse->type = "num";
   	
     $idAnalyse->bindObject($analyse);
     $AppUI->stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
-  }// fin du foreach
+  }
 }
-
 
 // Check import configuration
 $config = $dPconfig[$m]["CCatalogueLabo"];

@@ -135,7 +135,7 @@ class CPrescriptionLabo extends CMbObject {
     }
     
     // Vérification de l'etat saisie
-    $saisie = true;
+    $saisie = count($this->_ref_prescription_items);
     foreach ($this->_ref_internal_items as $_item) {
       if (null === $_item->resultat) {
         $saisie = false;
