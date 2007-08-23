@@ -845,6 +845,12 @@ table.form th.category {
   font-style: normal;
 }
 
+input, 
+select, 
+textarea {
+  border: 1px solid #ae0040;
+}
+
 input:focus, 
 select:focus, 
 textarea:focus {
@@ -919,7 +925,8 @@ div.tree-header:hover {
 }
 
 table.main th.title,
-table.tbl th.title {
+table.tbl th.title,
+table.form th.title {
 	color: #fff;
   background-color: #ae0040;
   text-align: left;
