@@ -45,16 +45,7 @@ class CCatalogueLabo extends CMbObject {
     }
     
     if ($this->hasAncestor($this)) {
-      return "Cyclic catalog creation";
-    }
-    
-    // Checks whether there is a sibling catalogue in the same hierarchy
-    $root = $this->getRootCatalogue();
-    foreach ($this->getSiblings() as $_sibling) {
-      $_root = $_sibling->getRootCatalogue();
-      if ($root->_id == $_root->_id) {
-        return "CCatalogue-sibling-conflict";
-      }
+      return "CCatalogue-cyclic-link";
     }
   }
   
