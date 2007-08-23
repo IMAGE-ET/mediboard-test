@@ -171,13 +171,13 @@ $doc->load($tmpPath);
 
 // Validation du document
 if (!$doc->schemaValidate()) {
-  $AppUI->setMsg("Document non valide", UI_MSG_ERROR );
+  $AppUI->setMsg("Document de prescription non valide", UI_MSG_ERROR );
   redirect();
 }
 
 // Créer le document joint
 if ($msg = $doc->addFile($mbPrescription)) {
-  $AppUI->setMsg("Document non valide", UI_MSG_ERROR );
+  $AppUI->setMsg("Docuement non attaché: $msg", UI_MSG_ERROR );
   redirect();
 }
 
