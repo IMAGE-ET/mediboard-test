@@ -177,7 +177,7 @@ if (!$doc->schemaValidate()) {
 
 // Créer le document joint
 if ($msg = $doc->addFile($mbPrescription)) {
-  $AppUI->setMsg("Docuement non attaché: $msg", UI_MSG_ERROR );
+  $AppUI->setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
   redirect();
 }
 

@@ -55,10 +55,10 @@
     <td>{{mb_value object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
   </tr>
 
-  {{if !$prescriptionItem->_ref_examen_labo->_external}}
+  {{if !$examen->_external}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>
-    <td>{{mb_value object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
+    <td>{{mb_value object=$prescriptionItem field="resultat" prop=$examen->type}}</td>
   </tr>
   {{/if}}
   <tr>
@@ -71,10 +71,10 @@
     <td class="date">{{mb_field object=$prescriptionItem field="date" form="editPrescriptionItem"}}</td>
   </tr>
 
-  {{if !$prescriptionItem->_ref_examen_labo->_external}}
+  {{if !$examen->_external}}
   <tr>
     <th>{{mb_label object=$prescriptionItem field="resultat"}}</th>
-    <td>{{mb_field object=$prescriptionItem field="resultat" prop=$prescriptionItem->_ref_examen_labo->type}}</td>
+    <td>{{mb_field object=$prescriptionItem field="resultat" prop=$examen->type}}</td>
   </tr>
   {{/if}}
   <tr>
@@ -96,7 +96,22 @@
       </button>
     </td>
   </tr>
+
+  {{else}}
+
+  {{if !$examen->_external}}
+	<!-- Non vérouillée -->
+	<tr>
+    <td class="text" colspan="2">
+      <div class="big-info">
+        Merci de <strong>vérouiller la prescription</strong> pour pourvoir saisir les résultats.
+      </div>
+    </td>
+  </tr>
   {{/if}}
+	  
+  {{/if}}
+  
 </table>
 
 {{/if}}
