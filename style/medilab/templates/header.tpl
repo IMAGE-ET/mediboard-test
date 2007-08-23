@@ -29,7 +29,7 @@ var Menu = {
 
 {{if @$app->user_prefs.MenuPosition == "left"}}
 <td id="leftMenu">
-  {{thumb src="style/$uistyle/images/pictures/proxilab.jpg" w="140" f="png"}}
+  <img src="style/{{$uistyle}}/images/pictures/proxilab-140.jpg" alt="{{tr}}menu-logout{{/tr}}" />
   
   {{if !$offline}}
   <!-- Changement d'établissement courant -->
