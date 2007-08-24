@@ -8,7 +8,7 @@ function pageMain() {
   regFieldCalendar("recherche", "date_debut");
   
   var oAccord = new Rico.Accordion($('accordionResultats'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionResultats', { iBottomMargin : 5 }),
+    panelHeight: ViewPort.SetAccordHeight('accordionResultats', { iBottomMargin : 10 }),
     showDelay: 50, 
     showSteps: 3 
   } );       
@@ -61,7 +61,7 @@ function pageMain() {
       </tr>       
          
       
-         
+      {{if $canCabinet->read}}
       <!-- Criteres sur les consultations -->   
       <tr>
         <th class="category" colspan="4">Consultation</th>
@@ -84,8 +84,10 @@ function pageMain() {
         <th>{{mb_label object=$consult field="traitement"}}</th>
         <td><input type="text" name="traitement_consult" value="{{$traitement_consult|stripslashes}}"/></td>
       </tr>
+      {{/if}}
       
       
+      {{if $canPlanningOp->read}}
       <!-- Critères sur les séjours --> 
       <tr>
         <th class="category" colspan="4">Séjour</th>
@@ -147,7 +149,7 @@ function pageMain() {
        
         </td>
       </tr>  
-      
+      {{/if}}
     
       <tr>
         <td class="button" colspan="4">
@@ -278,7 +280,7 @@ function pageMain() {
         
           
          
-         {{if $consultations}}
+         {{if $consultations && $canCabinet->read}}
          <div id="acc_consultation">
            <div  class="accordionTabTitleBar" id="IdentiteHeader">
              Résultats par Consultations ({{$consultations|@count}})
@@ -316,7 +318,7 @@ function pageMain() {
          {{/if}}
          
           
-         {{if $interventions}}
+         {{if $interventions && $canPlanningOp->read}}
          <div id="acc_intervention">
            <div  class="accordionTabTitleBar" id="IdentiteHeader">
              Résultats par Interventions ({{$interventions|@count}})
@@ -354,7 +356,7 @@ function pageMain() {
          {{/if}}
           
           
-         {{if $sejours}}
+         {{if $sejours && $canPlanningOp->read}}
          <div id="acc_sejour">
            <div  class="accordionTabTitleBar" id="IdentiteHeader">
              Résultats par Séjours ({{$sejours|@count}})

@@ -162,7 +162,7 @@ function pageMain() {
 
 <script language="Javascript" type="text/javascript">
 var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: ViewPort.SetAccordHeight('accordionConsult'),
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
   showDelay:50,
   showSteps:3,
   onShowTab: storeVoletAcc,

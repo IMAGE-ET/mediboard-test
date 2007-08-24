@@ -9,6 +9,13 @@
 
 global $AppUI, $can, $m;
 
+// Droit sur les consultations
+$canCabinet = CModule::getCanDo("dPcabinet");
+
+// Droit sur les interventions et séjours
+$canPlanningOp = CModule::getCanDo("dPplanningOp");
+
+
 
 $user_id = $AppUI->user_id;
 
@@ -102,173 +109,170 @@ if($where_diag){
 }
 
 
-
-// Recherche sur les Consultations
-$consultations = array();
-$consult = new CConsultation();
-$patient_consult = array();
-
-
-if($recherche_consult == "and") {
-  if($motif_consult){
-    $where_consult["motif"]      = "LIKE '%$motif_consult%'";
-  }
-  if($remarque_consult){
-   $where_consult["rques"]      = "LIKE '%$remarque_consult%'";
-  }  
-  if($examen_consult){
-   $where_consult["examen"]     = "LIKE '%$examen_consult%'";
-  }
-  if($traitement_consult){ 
-   $where_consult["traitement"] = "LIKE '%$traitement_consult%'";
-  }
-}
+  // Recherche sur les Consultations
+  $consultations = array();
+  $consult = new CConsultation();
+  $patient_consult = array();
 
 
-if($recherche_consult == "or") {
-  if($motif_consult){
-    $where_motif = "`motif` LIKE '%$motif_consult%'";
-    $where_consult[] = $where_motif;  
+  if($recherche_consult == "and") {
+    if($motif_consult){
+      $where_consult["motif"]      = "LIKE '%$motif_consult%'";
+    }
+    if($remarque_consult){
+     $where_consult["rques"]      = "LIKE '%$remarque_consult%'";
+    }  
+    if($examen_consult){
+     $where_consult["examen"]     = "LIKE '%$examen_consult%'";
+    }
+    if($traitement_consult){ 
+     $where_consult["traitement"] = "LIKE '%$traitement_consult%'";
+    }
   }
-  if($remarque_consult){
-    $where_remarque = "`rques` LIKE '%$remarque_consult%'";
-    $where_consult[] = $where_remarque; 
+
+
+  if($recherche_consult == "or") {
+    if($motif_consult){
+      $where_motif = "`motif` LIKE '%$motif_consult%'";
+      $where_consult[] = $where_motif;  
+    }
+    if($remarque_consult){
+      $where_remarque = "`rques` LIKE '%$remarque_consult%'";
+      $where_consult[] = $where_remarque; 
+    }
+    if($examen_consult){
+      $where_examen = "`examen` LIKE '%$examen_consult%'";	
+      $where_consult[] = $where_examen;  
+    }
+    if($traitement_consult){
+      $where_traitement = "`traitement` LIKE '%$traitement_consult%'";	
+      $where_consult[] = $where_traitement;  
+    }
+    if($where_consult){
+      $where_consult = implode(" OR ", $where_consult);
+    }
   }
-  if($examen_consult){
-    $where_examen = "`examen` LIKE '%$examen_consult%'";	
-    $where_consult[] = $where_examen;  
-  }
-  if($traitement_consult){
-    $where_traitement = "`traitement` LIKE '%$traitement_consult%'";	
-    $where_consult[] = $where_traitement;  
-  }
+ 
+  $patients_consult = array();
+
+  $order_consult = "patient_id";
   if($where_consult){
-    $where_consult = implode(" OR ", $where_consult);
+    $consultations = $consult->loadList($where_consult, $order_consult, "0, 30"); 
   }
-}
 
-$patients_consult = array();
-
-$order_consult = "patient_id";
-if($where_consult){
-  $consultations = $consult->loadList($where_consult, $order_consult, "0, 30");
-}
-
-foreach($consultations as $key=>$value){
-	$value->loadRefPatient();
-}
-
-
-// Recherche sur les sejours
-$sejours = array();
-$sejour = new CSejour();
-$patients_sejour = array();
-$where_sejour = null;
-
-
-if($recherche_sejour == "and"){
-  if($typeAdmission_sejour){
-    $where_sejour["type"]         = "LIKE '%$typeAdmission_sejour%'";
+  foreach($consultations as $key=>$value){
+  	$value->loadRefPatient();
   }
-  if($convalescence_sejour){
-   $where_sejour["convalescence"] = "LIKE '%$convalescence_sejour%'";
-  }  
-  if($remarque_sejour){
-   $where_sejour["rques"]         = "LIKE '%$remarque_sejour%'";
-  }
-}
+
+  // Recherche sur les sejours
+  $sejours = array();
+  $sejour = new CSejour();
+  $patients_sejour = array();
+  $where_sejour = null;
 
 
-if($recherche_sejour == "or") {
-  if($typeAdmission_sejour){
-    $where_type = "`type` LIKE '%$typeAdmission_sejour%'";
-    $where_sejour[] = $where_type;   
+  if($recherche_sejour == "and"){
+    if($typeAdmission_sejour){
+      $where_sejour["type"]         = "LIKE '%$typeAdmission_sejour%'";
+    }
+    if($convalescence_sejour){
+     $where_sejour["convalescence"] = "LIKE '%$convalescence_sejour%'";
+    }  
+    if($remarque_sejour){
+     $where_sejour["rques"]         = "LIKE '%$remarque_sejour%'";
+    }
   }
-  if($convalescence_sejour){
-    $where_convalescence = "`convalescence` LIKE '%$convalescence_sejour%'";
-    $where_sejour[] = $where_convalescence;  
+
+
+  if($recherche_sejour == "or") {
+    if($typeAdmission_sejour){
+      $where_type = "`type` LIKE '%$typeAdmission_sejour%'";
+      $where_sejour[] = $where_type;   
+    }
+    if($convalescence_sejour){
+      $where_convalescence = "`convalescence` LIKE '%$convalescence_sejour%'";
+      $where_sejour[] = $where_convalescence;  
+    }
+    if($remarque_sejour){
+      $where_remarque = "`rques` LIKE '%$remarque_sejour%'";	
+      $where_sejour[] = $where_remarque;  
+    }
+    if($where_sejour){
+      $where_sejour = implode(" OR ", $where_sejour);
+    }
   }
-  if($remarque_sejour){
-    $where_remarque = "`rques` LIKE '%$remarque_sejour%'";	
-    $where_sejour[] = $where_remarque;  
-  }
+
+  $order_sejour = "patient_id";
   if($where_sejour){
-    $where_sejour = implode(" OR ", $where_sejour);
+    $sejours = $sejour->loadList($where_sejour, $order_sejour, "0, 30");
   }
-}
 
-$order_sejour = "patient_id";
-if($where_sejour){
-  $sejours = $sejour->loadList($where_sejour, $order_sejour, "0, 30");
-}
-
-foreach($sejours as $key=>$value){
-	$value->loadRefPatient();
-}
+  foreach($sejours as $key=>$value){
+  	$value->loadRefPatient();
+  }
 
 
 
-// Recherches sur les Interventions
-$interventions = array();
-$intervention = new COperation();
-$patients_intervention = array();
-$where_intervention = null;
+  // Recherches sur les Interventions
+  $interventions = array();
+  $intervention = new COperation();
+  $patients_intervention = array();
+  $where_intervention = null;
 
 
-if($recherche_intervention == "and") {
-  if($materiel_intervention){
-    $where_intervention["materiel"] = "LIKE '%$materiel_intervention%'";
+  if($recherche_intervention == "and") {
+    if($materiel_intervention){
+      $where_intervention["materiel"] = "LIKE '%$materiel_intervention%'";
+    }
+    if($examen_intervention){
+      $where_intervention["examen"]    = "LIKE '%$examen_intervention%'";
+    }  
+    if($remarque_intervention){
+      $where_intervention["rques"]     = "LIKE '%$remarque_intervention%'";
+    }
+    if($libelle_intervention){
+      $where_intervention["libelle"]     = "LIKE '%$libelle_intervention%'";
+    }
+    if($ccam_intervention){
+      $where_intervention["codes_ccam"]     = "LIKE '%$ccam_intervention%'";
+    }
   }
-  if($examen_intervention){
-   $where_intervention["examen"]    = "LIKE '%$examen_intervention%'";
-  }  
-  if($remarque_intervention){
-   $where_intervention["rques"]     = "LIKE '%$remarque_intervention%'";
-  }
-  if($libelle_intervention){
-   $where_intervention["libelle"]     = "LIKE '%$libelle_intervention%'";
-  }
-  if($ccam_intervention){
-   $where_intervention["codes_ccam"]     = "LIKE '%$ccam_intervention%'";
-  }
-}
 
-if($recherche_intervention == "or"){
-  if($materiel_intervention){
- 	$where_materiel = "`materiel` LIKE '%$materiel_intervention%'";
-	$where_intervention[] = $where_materiel;
-  } 
-  if($examen_intervention){
-	$where_examen = "`examen` LIKE '%$examen_intervention%'";
-	$where_intervention[] = $where_examen;
+  if($recherche_intervention == "or"){
+    if($materiel_intervention){
+   	  $where_materiel = "`materiel` LIKE '%$materiel_intervention%'";
+	  $where_intervention[] = $where_materiel;
+    } 
+    if($examen_intervention){
+  	  $where_examen = "`examen` LIKE '%$examen_intervention%'";
+	  $where_intervention[] = $where_examen;
+    }
+    if($remarque_intervention){
+   	  $where_remarque = "`rques` LIKE '%$remarque_intervention%'";
+      $where_intervention[] = $where_remarque;
+    }
+    if($libelle_intervention){
+	  $where_libelle = "`libelle` LIKE '%$libelle_intervention%'";
+      $where_intervention[] = $where_libelle;
+    }
+    if($ccam_intervention){
+	  $where_ccam = "`codes_ccam` LIKE '%$ccam_intervention%'";
+      $where_intervention[] = $where_ccam;
+    }
+    if($where_intervention){
+      $where_intervention = implode(" OR ", $where_intervention);
+    } 
   }
-  if($remarque_intervention){
-	$where_remarque = "`rques` LIKE '%$remarque_intervention%'";
-    $where_intervention[] = $where_remarque;
-  }
-  if($libelle_intervention){
-	$where_libelle = "`libelle` LIKE '%$libelle_intervention%'";
-    $where_intervention[] = $where_libelle;
-  }
-  if($ccam_intervention){
-	$where_ccam = "`codes_ccam` LIKE '%$ccam_intervention%'";
-    $where_intervention[] = $where_ccam;
-  }
+
+  $order_intervention = "rques";
   if($where_intervention){
-    $where_intervention = implode(" OR ", $where_intervention);
+  	$interventions = $intervention->loadlist($where_intervention, $order_intervention, "0, 30");
   }
-  
-}
 
-$order_intervention = "rques";
-if($where_intervention){
-	$interventions = $intervention->loadlist($where_intervention, $order_intervention, "0, 30");
-}
-
-foreach($interventions as &$intervention){
-	$intervention->loadRefSejour();
+  foreach($interventions as &$intervention){
+  	$intervention->loadRefSejour();
 	$intervention->_ref_sejour->loadRefPatient();
-}
+  }
 
 
 
@@ -276,6 +280,9 @@ foreach($interventions as &$intervention){
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("canCabinet"              , $canCabinet              );
+$smarty->assign("canPlanningOp"           , $canPlanningOp           );
 
 $smarty->assign("sejours"                 , $sejours                 );
 $smarty->assign("interventions"           , $interventions           );

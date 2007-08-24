@@ -105,7 +105,7 @@ var oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClas
 });
 {{else}}
 var oAccord = new Rico.Accordion( $('accordionConsult'), {
-  panelHeight: ViewPort.SetAccordHeight('accordionConsult'),
+  panelHeight: ViewPort.SetAccordHeight('accordionConsult',{ iBottomMargin : 12 } ),
   onShowTab: storeKeyCat,
   showDelay:50,
   showSteps:3,

@@ -74,7 +74,7 @@ function pageMain() {
   } 
   
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 8 } ),
+    panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
     showDelay:50, 
     showSteps:3 
   } );
