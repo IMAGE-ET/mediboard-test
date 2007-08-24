@@ -18,6 +18,8 @@ $date = mbDateTime();
 //Création d'un nouvel id400 pour le laboratoire
 $newId400 = new CIdSante400();
 
+$prat = new CMediusers();
+$listPrat = $prat->loadPraticiens();
 
 $config = $dPconfig[$m]["CCatalogueLabo"];
 $remote_name = $config["remote_name"];
@@ -36,6 +38,7 @@ foreach ($list_idSante400 as $curr_idSante400) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("listPrat", $listPrat);
 $smarty->assign("date", $date);
 $smarty->assign("remote_name", $remote_name);
 $smarty->assign("newId400", $newId400);

@@ -1,7 +1,5 @@
 {{* $Id: $ *}}
 
-{{mb_include_script module="system" script="object_selector"}}
-
 
 <script type="text/javascript">
 
@@ -119,25 +117,19 @@ var Action = {
     <tr>
       <td>Praticien</td>
       <td>
-	    <input name="object_id" class="{{$newId400->_props.object_id}}" value="{{$newId400->object_id}}" />
-	    <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
-        <script type="text/javascript">
-          ObjectSelector.initEdit = function(){
-            this.sForm     = "editId400";
-            this.sId       = "object_id";
-            this.sClass    = "object_class";
-            this.onlyclass = "false";
-            this.pop();
-          }
-        </script>
-        </td>
+	    <select name="object_id">
+	    {{foreach from=$listPrat item=_prat}}
+	      <option value="{{$_prat->_id}}">{{$_prat->_view}}</option>
+	    {{/foreach}}
+	    </select>
+      </td>
  
-        <td>{{mb_label object=$newId400 field="id400" }}</td>
-        <td>{{mb_field object=$newId400 field="id400" canNull="false"}}</td>
+      <td>{{mb_label object=$newId400 field="id400" }}</td>
+      <td>{{mb_field object=$newId400 field="id400" canNull="false"}}</td>
  
-        <td>
-          <button class="submit" type="submit" name="btnFuseAction">Créer</button>
-        </td>
-     </tr>
+      <td>
+        <button class="submit" type="submit" name="btnFuseAction">Créer</button>
+      </td>
+    </tr>
   </table>
 </form>
