@@ -78,7 +78,7 @@
   {{/if}}
     <td>
       <strong>
-        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;codeacte={{$curr_code.code}}">
+        <a href="?m={{$m}}&amp;dialog={{$dialog}}&amp;{{$actionType}}=vw_full_code&amp;codeacte={{$curr_code.code}}&amp;object_class={{$object_class}}">
           {{$curr_code.code}}
         </a>
       </strong>

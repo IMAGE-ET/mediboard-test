@@ -13,11 +13,13 @@ $can->needsRead();
 
 $ds = CSQLDataSource::get("ccamV2");
 
-$clefs    = mbGetValueFromGetOrSession("clefs");
-$code     = mbGetValueFromGetOrSession("code");
-$selacces = mbGetValueFromGetOrSession("selacces");
-$seltopo1 = mbGetValueFromGetOrSession("seltopo1");
-$seltopo2 = mbGetValueFromGetOrSession("seltopo2");
+
+$object_class    = mbGetValueFromGet("object_class");
+$clefs           = mbGetValueFromGetOrSession("clefs");
+$code            = mbGetValueFromGetOrSession("code");
+$selacces        = mbGetValueFromGetOrSession("selacces");
+$seltopo1        = mbGetValueFromGetOrSession("seltopo1");
+$seltopo2        = mbGetValueFromGetOrSession("seltopo2");
 
 // Création de la requête
 $query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";
@@ -98,16 +100,17 @@ while($row = $ds->fetchArray($result)) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("clefs"   , $clefs);
-$smarty->assign("selacces", $selacces);
-$smarty->assign("seltopo1", $seltopo1);
-$smarty->assign("seltopo2", $seltopo2);
-$smarty->assign("code"    , $code);
-$smarty->assign("acces"   , $acces);
-$smarty->assign("topo1"   , $topo1);
-$smarty->assign("topo2"   , $topo2);
-$smarty->assign("codes"   , $codes);
-$smarty->assign("numcodes", $numcodes);
+$smarty->assign("object_class" , $object_class);
+$smarty->assign("clefs"        , $clefs);
+$smarty->assign("selacces"     , $selacces);
+$smarty->assign("seltopo1"     , $seltopo1);
+$smarty->assign("seltopo2"     , $seltopo2);
+$smarty->assign("code"         , $code);
+$smarty->assign("acces"        , $acces);
+$smarty->assign("topo1"        , $topo1);
+$smarty->assign("topo2"        , $topo2);
+$smarty->assign("codes"        , $codes);
+$smarty->assign("numcodes"     , $numcodes);
 
 $smarty->display("vw_find_code.tpl");
 

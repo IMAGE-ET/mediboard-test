@@ -13,11 +13,13 @@ function setClose(code, type,tarif) {
 }
 
 function createFavori() {
+  var oForm = document.selView;
   var sType = "{{$type}}";
   var sModule = sType == "ccam" ? "dPccam" : "dPcim10";
 
   var url = new Url;
   url.setModuleAction(sModule, "vw_find_code");
+  url.addParam("object_class", oForm.object_class.value);
   url.addParam("dialog", 1);
   url.redirect();
 }

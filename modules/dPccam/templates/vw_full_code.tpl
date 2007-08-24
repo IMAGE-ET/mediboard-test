@@ -71,14 +71,13 @@ function pageMain() {
                   <input type="hidden" name="favoris_code" value="{{$codeacte}}" />
                   <input type="hidden" name="favoris_user" value="{{$user}}" />
                   
-                  {{mb_label object=$favoris field="object_class"}}
                   
-                  <select name="object_class" class="{{$favoris->_props.object_class}}">
-                    <option value="">&mdash; Choisir le type du code</option>
-                    <option value="COperation">Opération</option>
-                    <option value="CConsultation">Consultation</option>
-                    <option value="CSejour">Séjour</option>
-                  </select>
+                  
+                 <select name="object_class" class="{{$favoris->_props.object_class}}">
+                    <option value="COperation"  {{if $object_class == "COperation"}} selected="selected" {{/if}}>Opération</option>
+                    <option value="CConsultation" {{if $object_class == "CConsultation"}} selected="selected" {{/if}}>Consultation</option>
+                    <option value="CSejour" {{if $object_class == "CSejour"}} selected="selected" {{/if}}>Séjour</option>
+                 </select>
                   <button class="submit" type="submit" name="btnFuseAction">
                     Ajouter à mes favoris
                   </button>
