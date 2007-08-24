@@ -67,7 +67,7 @@ class CDossierMedical extends CMbObject {
       return;
     }
 
-    // Classements des antécédants
+    // Classements des antécédents
     foreach ($antecedents as $_antecedent) {
       $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
     }
