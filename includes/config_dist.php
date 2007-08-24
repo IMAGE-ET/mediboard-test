@@ -15,7 +15,7 @@
 // Global hosting settings
 $dPconfig["root_dir"] = "D:/Sites/Mediboard.org/demo";  // No trailing slash, no backslashes for Win users (use slashes instead)
 $dPconfig["company_name"] = "mediboard.org";
-$dPconfig["page_title"] = "Mediboard : système de gestion des établissements de santé";
+$dPconfig["page_title"] = "Mediboard SIH";
 $dPconfig["base_url"] = "http://www.mediboard.org/demo";
 $dPconfig["site_domain"] = "mediboard.org";
 
