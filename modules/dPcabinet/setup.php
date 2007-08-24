@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.70";
+$config["mod_version"]     = "0.72";
 $config["mod_type"]        = "user";
 
 
@@ -671,7 +671,18 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `tarifs` ADD `codes_ccam` VARCHAR(255);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.70";
+    $this->makeRevision("0.70");
+    $sql = "UPDATE `consultation_anesth` SET  `plaquettes` = `plaquettes`/1000";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.71");
+    $sql = "ALTER TABLE `consultation_anesth` " .
+           "CHANGE `plaquettes` `plaquettes` int(4) unsigned zerofill NULL";
+    $this->addQuery($sql);
+    
+ 
+    
+    $this->mod_version = "0.72";
   }
 }
 ?>

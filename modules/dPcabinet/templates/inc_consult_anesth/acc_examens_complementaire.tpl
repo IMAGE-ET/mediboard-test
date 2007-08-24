@@ -191,7 +191,7 @@ function reloadListExamComp() {
         <tr>
           <th>{{mb_label object=$consult_anesth field="plaquettes"}}</th>
           <td>
-            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}}
+            {{mb_field object=$consult_anesth field="plaquettes" tabindex="107" size="6" onchange="submitForm(this.form)"}} (x1000) /mm3
           </td>
           <th>{{mb_label object=$consult_anesth field="tsivy" defaultFor="_min_tsivy"}}</th>
           <td>

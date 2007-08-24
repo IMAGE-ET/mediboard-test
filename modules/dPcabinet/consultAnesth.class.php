@@ -122,7 +122,7 @@ class CConsultAnesth extends CDossierMedical {
     $specs["na"]               = "float min|0";
     $specs["k"]                = "float min|0";
     $specs["tsivy"]            = "time";
-    $specs["plaquettes"]       = "numchar maxLength|7 pos";
+    $specs["plaquettes"]       = "numchar maxLength|4 pos";
     $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
     $specs["pouls"]            = "numchar maxLength|4 pos";
     $specs["spo2"]             = "float minMax|0|100";
