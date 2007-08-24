@@ -152,42 +152,46 @@ function pageMain() {
 		  <br />
             {{mb_field object=$filter field="libelle" canNull="true"}}
           </th>
-          <th class="category"> {{mb_label object=$filter field="rubrique_id"}}
+          <th class="category">
+            {{mb_label object=$filter field="rubrique_id"}}
             <br />
-            <select name="rubrique_id">
-             <optgroup label="{{$etablissement}}">
-            {{foreach from=$listRubriques item=rubrique}}
-              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
-                {{$rubrique->nom}}
-              </option>
-            {{/foreach}}
-            </optgroup>
-            <optgroup label="{{$fonction}}">
-            {{foreach from=$listRubriquesFonction item=rubrique}}
-              <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $gestioncab->rubrique_id}}selected="selected"{{/if}}>
-                {{$rubrique->nom}}
-              </option>
-            {{/foreach}}
-            </optgroup>
+            <select name="rubrique_id" onchange="this.form.submit()">
+              <option value="">&mdash; toutes</option>
+              <optgroup label="{{$etablissement}}">
+              {{foreach from=$listRubriques item=rubrique}}
+                <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $filter->rubrique_id}}selected="selected"{{/if}}>
+                  {{$rubrique->nom}}
+                </option>
+              {{/foreach}}
+              </optgroup>
+              <optgroup label="{{$fonction}}">
+              {{foreach from=$listRubriquesFonction item=rubrique}}
+                <option value="{{$rubrique->rubrique_id}}" {{if $rubrique->rubrique_id == $filter->rubrique_id}}selected="selected"{{/if}}>
+                  {{$rubrique->nom}}
+                </option>
+              {{/foreach}}
+              </optgroup>
             </select>
           </th>
-          <th class="category">{{mb_label object=$filter field="rubrique_id"}}
+          <th class="category">
+            {{mb_label object=$filter field="mode_paiement_id"}}
             <br />
-            <select name="mode_paiement_id">
-            <optgroup label="{{$etablissement}}">
-            {{foreach from=$listModesPaiement item=mode}}
-              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
-                {{$mode->nom}}
-              </option>
-            {{/foreach}}
-            </optgroup>
-            <optgroup label="{{$fonction}}">
-            {{foreach from=$listModePaiementFonction item=mode}}
-              <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $gestioncab->mode_paiement_id}}selected="selected"{{/if}}>
-                {{$mode->nom}}
-              </option>
-            {{/foreach}}
-            </optgroup>
+            <select name="mode_paiement_id" onchange="this.form.submit()">
+              <option value="">&mdash; tous</option>
+              <optgroup label="{{$etablissement}}">
+              {{foreach from=$listModesPaiement item=mode}}
+                <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $filter->mode_paiement_id}}selected="selected"{{/if}}>
+                  {{$mode->nom}}
+                </option>
+              {{/foreach}}
+              </optgroup>
+              <optgroup label="{{$fonction}}">
+              {{foreach from=$listModePaiementFonction item=mode}}
+                <option value="{{$mode->mode_paiement_id}}" {{if $mode->mode_paiement_id == $filter->mode_paiement_id}}selected="selected"{{/if}}>
+                  {{$mode->nom}}
+                </option>
+              {{/foreach}}
+              </optgroup>
             </select>
           </th>
           <th class="category">Montant</th>
@@ -196,27 +200,27 @@ function pageMain() {
         <tr>
           <td>
             <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
-            {{$fiche->date|date_format:"%d/%m/%Y"}}
+            {{mb_value object=$fiche field="date"}}
             </a>
           </td>
           <td>
             <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
-            {{$fiche->libelle}}
+            {{mb_value object=$fiche field="libelle"}}
             </a>
           </td>
           <td>
             <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
-            {{$fiche->_ref_rubrique->nom}}
+            {{mb_value object=$fiche->_ref_rubrique field="nom"}}
             </a>
           </td>
           <td>
             <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
-            {{$fiche->_ref_mode_paiement->nom}}
+            {{mb_value object=$fiche->_ref_mode_paiement field="nom"}}
             </a>
           </td>
           <td>
             <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
-            {{$fiche->montant}} €
+            {{mb_value object=$fiche field="montant"}}
             </a>
           </td>
         </tr>

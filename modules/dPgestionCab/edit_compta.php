@@ -20,9 +20,6 @@ $etablissement = $user->_ref_function->_ref_group->text;
 $fonction = $user->_ref_function->text;
 
 $gestioncab_id    = mbGetValueFromGetOrSession("gestioncab_id");
-$libelle          = mbGetValueFromGetOrSession("libelle"          , "");
-$rubrique_id      = mbGetValueFromGetOrSession("rubrique_id"      , 0);
-$mode_paiement_id = mbGetValueFromGetOrSession("mode_paiement_id" , 0);
 
 //Recuperation des identifiants pour les filtres
 $filter = new CGestionCab;
@@ -62,12 +59,12 @@ $listModePaiementFonction = $listModePaiementFonction->loadList($where);
 
 $listGestionCab    = new CGestionCab();
 $where["date"]     = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
-if($libelle)
+if($filter->libelle)
   $where["libelle"] = "LIKE '%$filter->libelle%'";
-if($rubrique_id)
-  $where["rubrique_id"] = "= '$rubrique_id'";
-if($mode_paiement_id)
-  $where["mode_paiement_id"] = "= '$mode_paiement_id'";
+if($filter->rubrique_id)
+  $where["rubrique_id"] = "= '$filter->rubrique_id'";
+if($filter->mode_paiement_id)
+  $where["mode_paiement_id"] = "= '$filter->mode_paiement_id'";
 $order = "date ASC";
 $listGestionCab    = $listGestionCab->loadList($where, $order);
 foreach($listGestionCab as $key => $fiche) {
@@ -82,9 +79,6 @@ $smarty->assign("fonction"       						, $fonction);
 $smarty->assign("gestioncab"       					, $gestioncab);
 $smarty->assign("gestioncab"       					, $gestioncab);
 $smarty->assign("filter"           					, $filter);
-$smarty->assign("libelle"          					, $libelle);
-$smarty->assign("rubrique_id"      					, $rubrique_id);
-$smarty->assign("mode_paiement_id" 					, $mode_paiement_id);
 $smarty->assign("listRubriques"    					, $listRubriques);
 $smarty->assign("listRubriquesFonction"			, $listRubriquesFonction);
 $smarty->assign("listModesPaiement"					, $listModesPaiement);
