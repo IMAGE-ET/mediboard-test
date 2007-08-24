@@ -235,7 +235,7 @@ function reloadAfterSaveDoc(){
 
 <table class="form">
   {{assign var="affectation" value=$patient->_ref_curr_affectation}}
-  {{if $affectation->affectation_id}}
+  {{if $affectation && $affectation->affectation_id}}
   <tr>
   	<th colspan="3" class="category">Chambre actuelle</th>
   </tr>
@@ -246,7 +246,7 @@ function reloadAfterSaveDoc(){
     </td>
   </tr>
   {{assign var="affectation" value=$patient->_ref_next_affectation}}
-  {{elseif $affectation->affectation_id}}
+  {{elseif $affectation && $affectation->affectation_id}}
   <tr>
     <th colspan="3" class="category">Prochaine chambre</th>
   </tr>

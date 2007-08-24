@@ -414,13 +414,21 @@ class CPatient extends CDossierMedical {
     $now = mbDateTime();
     
     $this->_ref_curr_affectation = new CAffectation();
-    $where["entree"] = "< '$now'";
-    $where["sortie"] = ">= '$now'";
-    $this->_ref_curr_affectation->loadObject($where, $order);
+    if(!$this->_ref_curr_affectation->_ref_module) {
+      $where["entree"] = "< '$now'";
+      $where["sortie"] = ">= '$now'";
+      $this->_ref_curr_affectation->loadObject($where, $order);
+    } else {
+      $this->_ref_curr_affectation = null;
+    }
     
     $this->_ref_next_affectation = new CAffectation();
-    $where["entree"] = "> '$now'";
-    $this->_ref_next_affectation->loadObject($where, $order);
+    if(!$this->_ref_next_affectation->_ref_module) {
+      $where["entree"] = "> '$now'";
+      $this->_ref_next_affectation->loadObject($where, $order);
+    } else {
+      $this->_ref_next_affectation = null;
+    }
   }
   
   
