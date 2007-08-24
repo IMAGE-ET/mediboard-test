@@ -9,7 +9,10 @@
 
 
 abstract class CSQLDataSource { 
-
+  static $engines = array (
+    "mysql" => "CMySQLDataSource",
+    "ingres" => "CIngresDataSource",
+  );
 	static $dataSources = array();
 	static $trace = false;
     
@@ -27,7 +30,7 @@ abstract class CSQLDataSource {
    * @return CSQLDataSource
    */
   static function get($dsn) {  	
-  	if(!array_key_exists($dsn, self::$dataSources)){
+  	if(!array_key_exists($dsn, self::$dataSources)) {
   	  $dataSource = new CMySQLDataSource();
   	  $dataSource->init($dsn);
   	  self::$dataSources[$dsn] = $dataSource;
@@ -45,8 +48,15 @@ abstract class CSQLDataSource {
    * @param string $port
    * @param bool $persist 
    */
-  abstract function connect($dsn, $host, $name, $user, $pass, $port, $persist);
+  abstract function connect($host, $name, $user, $pass);
 
+  /**
+   * Launch the actual query
+   * @param string $query SQL query
+   * @return resource result
+   */
+  abstract function query($query);
+  
   /**
    * Get the first table like given name
    * @param string $table 
@@ -78,13 +88,6 @@ abstract class CSQLDataSource {
    */
   abstract function insertId();
 
-  /**
-   * Execute a any query
-   * @param string $query
-   * @return resource The result resource on SELECT, true on others, false if failed 
-   **/
-  abstract function exec($query);
-  
   /**
    * Free a query result
    * @param resource $result
@@ -156,18 +159,39 @@ abstract class CSQLDataSource {
     
     
     $this->chrono->start = new Chronometer;
-    $this->link = $this->connect($dsn, 
+    $this->link = $this->connect(
 	    $dsConfig["dbhost"],
 	    $dsConfig["dbname"],
 	    $dsConfig["dbuser"],
-	    $dsConfig["dbpass"],
-	    $dsConfig["dbport"],
-	    $dPconfig["dbpersist"]
+	    $dsConfig["dbpass"]
     );
     
     if (!$this->link) {
       trigger_error( "FATAL ERROR: link to '$this->dsn' not found.", E_USER_ERROR );
     }
+  }
+  
+  /**
+   * Execute a any query
+   * @param string $query SQL Query
+   * @return resource The result resource on SELECT, true on others, false if failed 
+   **/
+    function exec($query) {
+    if (CSQLDataSource::$trace) {
+      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
+    }
+    
+    $this->chrono->start();
+    $result = $this->query($query);
+    $this->chrono->stop();
+
+    if (!$result) {
+      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
+      trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
+      return false;
+    }
+  
+	  return $result;
   }
   
   /**

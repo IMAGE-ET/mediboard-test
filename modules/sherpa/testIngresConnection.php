@@ -43,7 +43,7 @@ $firstnames = array("Pierre", "Thomas", "Jean", "Lise", "Marie", "Anne");
 $lastnames = array("Dupont", "Lafitte", "Caillet", "Bataille", "Lebihan", "Barthélémy", "Garreau");
 $nbrows = 5;
 
-$base = "cptransit";
+$base = "CPtransit";
 $user = "system";
 $pass = "";
 $table = "patient";

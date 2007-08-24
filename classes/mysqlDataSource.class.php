@@ -10,24 +10,16 @@
 
 class CMySQLDataSource extends CSQLDataSource {
 		
-  function connect($dsn, $host, $name, $user, $pass, $port, $persist) {
-     if (!function_exists( "mysql_connect" )) {
-       trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
-       die;
-     }
+  function connect($host, $name, $user, $pass) {
+    if (!function_exists( "mysql_connect" )) {
+      trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
+      die;
+    }
 	    
-     if ($persist) {
-       if (null == $this->link = mysql_pconnect( "$host:$port", $user, $pass )) { 
-         trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
-         die;
-       } 
-     }
-     else {
-       if (null == $this->link = mysql_connect( "$host:$port", $user, $pass )) { 
-         trigger_error( "FATAL ERROR: Connection to database server failed", E_USER_ERROR );
-         die;
-       }
-     }
+    if (null == $this->link = mysql_connect($host, $user, $pass)) { 
+      trigger_error( "FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR );
+      die;
+    }
      
     if ($name) {
       if (!mysql_select_db($name, $this->link)) {
@@ -54,29 +46,15 @@ class CMySQLDataSource extends CSQLDataSource {
   }
 
   function errno() {
-    return mysql_errno($this->link);
+    return mysql_error($this->link);
   }
 
   function insertId() {
     return mysql_insert_id($this->link);
   }
 
-  function exec($query) {
-    if (CSQLDataSource::$trace) {
-      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
-    }
-    
-    $this->chrono->start();
-    $result = mysql_query($query, $this->link );
-    $this->chrono->stop();
-
-    if (!$result) {
-      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
-      trigger_error("Erreur SQL : ".$this->error(), E_USER_WARNING);
-      return false;
-    }
-  
-	  return $result;
+  function query($query) {
+    return mysql_query($query, $this->link);
   }
 
   function freeResult($result) {

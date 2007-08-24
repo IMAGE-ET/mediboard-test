@@ -774,7 +774,7 @@ class CMbObject {
 
     // Cas du module non installé
     if (!$backObject->_ref_module) {
-      continue;
+      return;
     }
     
     // Vérification de la possibilité de supprimer chaque backref

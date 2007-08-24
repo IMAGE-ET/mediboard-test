@@ -25,10 +25,9 @@ $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 $dPconfig["baseMediboard"] = "std";
 $dPconfig["db"]["std"] = array(
   "dbhost" => "localhost",  // Change to connect to a distant Database
-  "dbname" => "mediboard", // Change to match your Mediboard Database Name
-  "dbuser" => "mbadmin",    // Change to match your MySQL Username
-  "dbpass" => "adminmb",    // Change to match your MySQL Password
-  "dbport" => ""            // Change to match your Db Port or use the standard value of 3306 if string is empty
+  "dbname" => "mediboard",  // Change to match your Mediboard Database Name
+  "dbuser" => "mbadmin",    // Change to match your Username
+  "dbpass" => "adminmb",    // Change to match your Password
 );
 
 // Other databases config
@@ -40,7 +39,6 @@ $dPconfig["db"]["cim10"] = array(
   "dbname" => "cim10",
   "dbuser" => "CIM10Admin",
   "dbpass" => "AdminCIM10",
-  "dbport" => ""
 );
 
 $dPconfig["baseCCAM"] = "ccamV2";
@@ -49,7 +47,6 @@ $dPconfig["db"]["ccamV2"] = array(
   "dbname" => "ccamV2",
   "dbuser" => "CCAMAdmin",
   "dbpass" => "AdminCCAM",
-  "dbport" => ""
 );
 
 // GHS
@@ -59,7 +56,6 @@ $dPconfig["db"]["GHS1010"] = array(
   "dbname" => "ghs1010",
   "dbuser" => "GHSAdmin",
   "dbpass" => "AdminGHS",
-  "dbport" => ""
 );
 
 // Codes INSEE
@@ -69,7 +65,6 @@ $dPconfig["db"]["INSEE"] = array(
   "dbname" => "INSEE",
   "dbuser" => "INSEEAdmin",
   "dbpass" => "AdminINSEE",
-  "dbport" => ""
 );
 
 // Transit
@@ -79,15 +74,14 @@ $dPconfig["db"]["Transit"] = array(
   "dbname" => "Transit",
   "dbuser" => "TransitAdmin",
   "dbpass" => "AdminTransit",
-  "dbport" => ""
 );
 
+// Sherpa
 $dPconfig["db"]["sherpa"] = array(
   "dbhost" => "localhost",
   "dbname" => "CPTransit",
   "dbuser" => "CPTAdmin",
   "dbpass" => "AdminCPT",
-  "dbport" => ""
 );
   
 // you can add as much databases as you want by using
@@ -128,13 +122,6 @@ $dPconfig["shared_memory"] = "none";
 $dPconfig["object_handlers"] = array (
 //  "CMyObjectHandler" => true,
 );
-
-/********* 
- * Configuration settings to be removed with dotProject legacy purge
- */
-
-// Set this value to true to use persistent database connections
-$dPconfig["dbpersist"] = false;
 
 // Compatibility mode
 $dPconfig["interop"]["mode_compat"] = "default";
