@@ -10,6 +10,7 @@
 require_once("checkauth.php");
 require_once("checkconfig.php");
 
+// Data sources to test in the wizard
 $dbConfigs = array (
   "std"     => $dPconfig["db"]["std"],
   "cim10"   => $dPconfig["db"]["cim10"],

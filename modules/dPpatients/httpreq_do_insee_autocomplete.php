@@ -23,7 +23,7 @@ if($ville = @$_GET[$_GET["fieldcity"]]) {
 }
 
 if ($can->read && $sql) {
-	 $result = $ds->loadList($sql, 30, $AppUI->cfg["baseINSEE"]);
+	 $result = $ds->loadList($sql, 30);
   // Création du template
   $smarty = new CSmartyDP();
 

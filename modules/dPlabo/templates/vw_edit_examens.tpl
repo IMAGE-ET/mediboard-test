@@ -24,13 +24,10 @@ function pageMain() {
   regFieldCalendar('editExamen', 'fin_application');
 
   var oAccord = new Rico.Accordion($('accordionExamen'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionExamen', { sOtherElmt: 'button', iBottomMargin : 12 }),
+    panelHeight: 320,
     showDelay: 50, 
     showSteps: 3 
   } );
-      
-      
-      
 }
 </script>
 
