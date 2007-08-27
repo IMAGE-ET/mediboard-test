@@ -187,8 +187,8 @@ div.autocomplete ul {
   padding:0px;
 }
 div.autocomplete ul li.selected { 
-	background-color: #ffd;
-    font-weight:bold;
+	background-color: #fafaa4;
+    /*font-weight:bold;EEDD*/
 }
 div.autocomplete ul li {
   list-style-type:none;
