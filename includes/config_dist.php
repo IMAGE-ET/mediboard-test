@@ -22,7 +22,6 @@ $dPconfig["site_domain"] = "mediboard.org";
 $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 
 // Standard database config
-$dPconfig["baseMediboard"] = "std";
 $dPconfig["db"]["std"] = array(
   "dbhost" => "localhost",  // Change to connect to a distant Database
   "dbname" => "mediboard",  // Change to match your Mediboard Database Name
@@ -33,16 +32,16 @@ $dPconfig["db"]["std"] = array(
 // Other databases config
 
 // CIM10
-$dPconfig["baseCIM10"] = "cim10";
 $dPconfig["db"]["cim10"] = array(
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "cim10",
   "dbuser" => "CIM10Admin",
   "dbpass" => "AdminCIM10",
 );
 
-$dPconfig["baseCCAM"] = "ccamV2";
 $dPconfig["db"]["ccamV2"] = array(
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "ccamV2",
   "dbuser" => "CCAMAdmin",
@@ -50,8 +49,8 @@ $dPconfig["db"]["ccamV2"] = array(
 );
 
 // GHS
-$dPconfig["baseGHS"] = "GHS1010";
 $dPconfig["db"]["GHS1010"] = array(
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "ghs1010",
   "dbuser" => "GHSAdmin",
@@ -59,8 +58,8 @@ $dPconfig["db"]["GHS1010"] = array(
 );
 
 // Codes INSEE
-$dPconfig["baseINSEE"] = "INSEE";
 $dPconfig["db"]["INSEE"] = array(
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "INSEE",
   "dbuser" => "INSEEAdmin",
@@ -68,8 +67,8 @@ $dPconfig["db"]["INSEE"] = array(
 );
 
 // Transit
-$dPconfig["baseTransit"] = "Transit";
 $dPconfig["db"]["Transit"] = array(
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "Transit",
   "dbuser" => "TransitAdmin",
@@ -78,6 +77,7 @@ $dPconfig["db"]["Transit"] = array(
 
 // Sherpa
 $dPconfig["db"]["sherpa"] = array(
+  "dbtype" => "ingres",
   "dbhost" => "localhost",
   "dbname" => "CPTransit",
   "dbuser" => "CPTAdmin",

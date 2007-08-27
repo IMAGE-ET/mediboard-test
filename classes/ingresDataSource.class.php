@@ -27,7 +27,7 @@ class CIngresDataSource extends CSQLDataSource {
     }
     
     if (!$name) { 
-      trigger_error( "FATAL ERROR: Ingres server host has to be 'localhost'", E_USER_ERROR );
+      trigger_error( "FATAL ERROR: Ingres driver has to select a specific database	 'localhost'", E_USER_ERROR );
       die;
     }
     

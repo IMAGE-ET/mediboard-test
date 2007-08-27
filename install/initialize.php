@@ -10,7 +10,15 @@
 require_once("checkauth.php");
 require_once("checkconfig.php");
 
-$dbConfigs = $dPconfig["db"];
+$dbConfigs = array (
+  "std"     => $dPconfig["db"]["std"],
+  "cim10"   => $dPconfig["db"]["cim10"],
+  "ccamV2"  => $dPconfig["db"]["ccamV2"],
+  "GHS1010" => $dPconfig["db"]["GHS1010"],
+  "INSEE"   => $dPconfig["db"]["INSEE"],
+  "Transit" => $dPconfig["db"]["Transit"],
+);
+
 unset($dbConfigs["ccam"]);
 
 require_once("mbdb.class.php");

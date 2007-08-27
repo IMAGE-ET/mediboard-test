@@ -82,13 +82,6 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="baseMediboard" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseMediboard" value="<?php echo @$dPconfig["baseMediboard"]; ?>" /></td>
-    <th><label for="baseGHS" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseGHS" value="<?php echo @$dPconfig["baseGHS"]; ?>" /></td>
-  </tr>
-
-  <tr>
     <th><label for="db[std][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
     <td><input type="text" size="40" name="db[std][dbhost]" value="<?php echo @$dPconfig["db"]["std"]["dbhost"]; ?>" /></td>
     <th><label for="db[GHS1010][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
@@ -122,13 +115,6 @@ $dPconfig = $mbConfig->values;
   </tr>
 
   <tr>
-    <th><label for="baseCCAM" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseCCAM" value="<?php echo @$dPconfig["baseCCAM"]; ?>" /></td>
-    <th><label for="baseCIM10" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseCIM10" value="<?php echo @$dPconfig["baseCIM10"]; ?>" /></td>
-  </tr>
-
-  <tr>
     <th><label for="db[ccamV2][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
     <td><input type="text" size="40" name="db[ccamV2][dbhost]" value="<?php echo @$dPconfig["db"]["ccamV2"]["dbhost"]; ?>" /></td>
     <th><label for="db[cim10][dbhost]" title="Nom de l'hôte">Nom de l'hôte :</label></th>
@@ -159,13 +145,6 @@ $dPconfig = $mbConfig->values;
   <tr>
     <th class="category" colspan="2">Base de donées INSEE</th>
     <th class="category" colspan="2">Base de donées Transit</th>
-  </tr>
-
-  <tr>
-    <th><label for="baseINSEE" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseINSEE" value="<?php echo @$dPconfig["baseINSEE"]; ?>" /></td>
-    <th><label for="baseTransit" title="Merci de choisir une configuration de base de données">Nom de la configuration :</label></th>
-    <td class="readonly"><input type="text" readonly="readonly" size="20" name="baseTransit" value="<?php echo @$dPconfig["baseTransit"]; ?>" /></td>
   </tr>
 
   <tr>
