@@ -31,7 +31,7 @@ function popPlanning(debut) {
   url.addParam("_date_min", debut);
   url.addParam("_date_max", debut);
   url.addParam("salle"    , 0);
-  url.popup(700, 550, "Planning");
+  url.popup(900, 550, "Planning");
 }
 </script>
 <table class="main">

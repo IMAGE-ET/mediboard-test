@@ -14,14 +14,14 @@ $can->needsRead();
 
 $now       = mbDate();
 $filter = new COperation;
-$filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
-$filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
-$filter->_prat_id = mbGetValueFromGetOrSession("chir", null);
-$filter->salle_id = mbGetValueFromGetOrSession("salle", 0);
-$filter->_plage = mbGetValueFromGetOrSession("vide", 0);
-$filter->_intervention = mbGetValueFromGetOrSession("type", 0);
-$filter->_specialite = mbGetValueFromGetOrSession("spe", null);
-$filter->_codes_ccam = mbGetValueFromGetOrSession("code_ccam", "");
+$filter->_date_min = mbGetValueFromGet("_date_min", $now);
+$filter->_date_max = mbGetValueFromGet("_date_max", $now);
+$filter->_prat_id = mbGetValueFromGet("chir");
+$filter->salle_id = mbGetValueFromGet("salle");
+$filter->_plage = mbGetValueFromGet("vide");
+$filter->_intervention = mbGetValueFromGet("type");
+$filter->_specialite = mbGetValueFromGet("spe");
+$filter->_codes_ccam = mbGetValueFromGet("code_ccam");
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires

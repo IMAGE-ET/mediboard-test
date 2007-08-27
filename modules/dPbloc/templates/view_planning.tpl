@@ -43,8 +43,8 @@ function printAdmission(id) {
 		  <th>Heure</th>
 		  <th>Intervention</th>
 		  <th>Coté</th>
-          <th>Anesthésie</th>
-          <th>Hospi</th>
+      <th>Anesthésie</th>
+      <th>Hospi</th>
 		  <th>Remarques</th>
 		  <th>Matériel</th>
 		  <th>Nom - Prénom</th>
@@ -54,7 +54,7 @@ function printAdmission(id) {
 		{{foreach from=$curr_plageop->_ref_operations item=curr_op}}
 		<tr>
 		  {{if $curr_op->annulee}}
-		  <td>[ANNULE]</td>
+		  <td class="cancelled">ANNULEE</td>
 		  {{else}}
 		  <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
 		  {{/if}}

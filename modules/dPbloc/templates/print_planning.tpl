@@ -26,7 +26,7 @@ function popPlanning() {
   url.addElement(form.chir);
   url.addElement(form.spe);
   url.addElement(form.salle);
-  url.popup(700, 550, 'Planning');
+  url.popup(900, 550, 'Planning');
 }
 
 function changeDate(sDebut, sFin){
