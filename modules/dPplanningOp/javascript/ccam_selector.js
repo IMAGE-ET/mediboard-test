@@ -7,7 +7,7 @@ var CCAMSelector = {
   sClass : null,
   sChir  : null,
   options : {
-    width : 600,
+    width : 700,
     height: 500
   },
 

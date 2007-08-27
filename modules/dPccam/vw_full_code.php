@@ -22,8 +22,11 @@ $favoris = new CFavoriCCAM();
 // Création du template
 $smarty = new CSmartyDP();
 
+
 // @todo : ne passer que $code. Adapter le template en conséquence
-$smarty->assign("tarif"        , $code->activites["1"]->phases["0"]->tarif);
+if($code->activites && $code->activites["1"]->phases){
+  $smarty->assign("tarif"        , $code->activites["1"]->phases["0"]->tarif);
+}
 $smarty->assign("favoris"      , $favoris);
 $smarty->assign("codeacte"     , strtoupper($code->code));
 $smarty->assign("libelle"      , $code->libelleLong);

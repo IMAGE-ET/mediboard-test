@@ -108,7 +108,7 @@ function pageMain() {
         <tr>
           <td><strong>Activités associées</strong></td>
         </tr>
- 
+        
         {{foreach from=$act item=curr_act}}
         <tr>
           <td style="vertical-align: top; width: 100%">
