@@ -90,6 +90,11 @@ class CMySQLDataSource extends CSQLDataSource {
 
   function fetchArray($result) {
     // Uses the link
+    return ingres_fetch_array(INGRES_BOTH, $this->link);
+  }
+
+  function fetchAssoc($result) {
+    // Uses the link
     return ingres_fetch_array(INGRES_ASSOC, $this->link);
   }
 
