@@ -18,15 +18,7 @@ $class = mbGetValueFromGet("class");
 // Liste des users accessibles
 $listPrat = new CMediusers();
 $listFct = $listPrat->loadFonctions(PERM_EDIT);
-$where = array();
-$where["users_mediboard.function_id"] = $ds->prepareIn(array_keys($listFct));
-$ljoin = array();
-$ljoin["users"] = "`users`.`user_id` = `users_mediboard`.`user_id`";
-$order = "`users`.`user_last_name`, `users`.`user_first_name`";
-$listPrat = $listPrat->loadList($where, $order, null, null, $ljoin);
-foreach ($listPrat as $keyUser => $mediuser) {
-  $mediuser->_ref_function =& $listFct[$mediuser->function_id];
-}
+$listPrat = $listPrat->loadUsers(PERM_EDIT);
 
 $listFunc = new CFunctions();
 $listFunc = $listFunc->loadSpecialites(PERM_EDIT);
