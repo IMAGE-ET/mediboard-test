@@ -8,7 +8,7 @@
  */
 
 
-class CMySQLDataSource extends CSQLDataSource {
+class CIngresDataSource extends CSQLDataSource {
 		
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "ingres_connect" )) {
