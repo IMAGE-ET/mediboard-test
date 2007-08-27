@@ -13,8 +13,7 @@ $can->needsRead();
 
 $ds = CSQLDataSource::get("ccamV2");
 
-
-$object_class    = mbGetValueFromGet("object_class");
+$object_class    = mbGetValueFromGetOrSession("object_class");
 $clefs           = mbGetValueFromGetOrSession("clefs");
 $code            = mbGetValueFromGetOrSession("code");
 $selacces        = mbGetValueFromGetOrSession("selacces");
