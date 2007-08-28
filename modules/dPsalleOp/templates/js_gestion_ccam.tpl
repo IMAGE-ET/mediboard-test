@@ -42,9 +42,6 @@ function refreshFdr(consult_id) {
   // reload pour mettre a jour le champ codes_ccam dans la gestion des tarifs
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
-  {{if $noReglement}}
-  url.addParam("noReglement", "1"); 
-  {{/if}}
   url.addParam("selConsult", consult_id);
   url.requestUpdate('fdrConsultContent', { waitingText : null }) ;
 }
