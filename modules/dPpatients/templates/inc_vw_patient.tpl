@@ -242,7 +242,7 @@ function reloadAfterSaveDoc(){
   <tr>
     <td colspan="3">
       {{$affectation->_ref_lit->_view}}
-      depuis {{$affectation->entree|date_format:"%d %b %Y à %H:%M"}}
+      depuis le {{$affectation->entree|date_format:"%d %b %Y à %H:%M"}}
     </td>
   </tr>
   {{assign var="affectation" value=$patient->_ref_next_affectation}}
