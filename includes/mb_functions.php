@@ -571,6 +571,7 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/ricoex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/prototype_hack.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/cjl_cookie.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);

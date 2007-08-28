@@ -22,8 +22,12 @@ class CNumSpec extends CMbFieldSpec {
   var $minLength = null;
   var $maxLength = null;
   var $minMax    = null;
+
+  
   
   function checkProperty($object){
+  	
+  	
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -187,7 +191,6 @@ class CNumSpec extends CMbFieldSpec {
     if (!array_key_exists("maxlength", $params)) {
       $params["maxlength"] = $maxLength;
     }
-
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }

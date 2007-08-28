@@ -15,6 +15,7 @@ class CNumcharSpec extends CNumSpec {
   function getSpecType() {
     return("numchar");
   }
+  
 
   function getDBSpec(){
     $type_sql = "BUGINT ZEROFILL";

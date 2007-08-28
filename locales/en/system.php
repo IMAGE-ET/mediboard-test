@@ -1,6 +1,5 @@
 <?php
-$locales['config-db-dbpass'] = 'Password
-';
+$locales['config-system-type_telephone'] = '';
 $locales['Abbreviation'] = '';
 $locales['active'] = '';
 $locales['added'] = '';
@@ -88,6 +87,7 @@ $locales['CNote.public.1'] = '';
 $locales['config-db'] = 'Data source';
 $locales['config-db-dbhost'] = '';
 $locales['config-db-dbname'] = 'Database name';
+$locales['config-db-dbpass'] = 'Password';
 $locales['config-db-dbuser'] = 'User';
 $locales['configure'] = '';
 $locales['Could not open locales file to save.'] = '';

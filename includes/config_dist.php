@@ -199,4 +199,7 @@ $dPconfig["dPlabo"] = array (
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
   ),
 );
+
+$dPconfig["system"]["type_telephone"] = "france";
+
 ?>

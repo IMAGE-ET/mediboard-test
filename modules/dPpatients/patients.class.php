@@ -8,6 +8,7 @@
 */
 
 global $AppUI;
+
 require_once($AppUI->getModuleClass("dPpatients", "dossierMedical"));
 
 /**
@@ -78,27 +79,14 @@ class CPatient extends CDossierMedical {
   var $_jour        = null;
   var $_mois        = null;
   var $_annee       = null;
-  var $_tel1        = null;
+  var $_age         = null;
+  
+  // nouvelle gestion des numeros de telephone
+  var $_tel         = null;
   var $_tel2        = null;
   var $_tel3        = null;
   var $_tel4        = null;
-  var $_tel5        = null;
-  var $_tel21       = null;
-  var $_tel22       = null;
-  var $_tel23       = null;
-  var $_tel24       = null;
-  var $_tel25       = null;
-  var $_tel31       = null;
-  var $_tel32       = null;
-  var $_tel33       = null;
-  var $_tel34       = null;
-  var $_tel35       = null;
-  var $_tel41       = null;
-  var $_tel42       = null;
-  var $_tel43       = null;
-  var $_tel44       = null;
-  var $_tel45       = null;
-  var $_age         = null;
+  
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -140,8 +128,10 @@ class CPatient extends CDossierMedical {
   }
  
   function getSpecs() {
+  	
     $specs = parent::getSpecs();
-
+    global $dPconfig;
+    
     $specs["nom"]               = "notNull str confidential";
     $specs["prenom"]            = "notNull str";
     $specs["nom_jeune_fille"]   = "str confidential";
@@ -159,8 +149,25 @@ class CPatient extends CDossierMedical {
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
+    
     $specs["tel"]               = "numchar length|10 confidential";
     $specs["tel2"]              = "numchar length|10 confidential";
+    $specs["prevenir_tel"]      = "numchar length|10 confidential";
+    $specs["employeur_tel"]     = "numchar length|10 confidential";
+        
+    if($dPconfig['system']['type_telephone']=="france"){
+      $specs["_tel"]               = "str mask|_telFrance";
+      $specs["_tel2"]              = "str mask|_telFrance";
+      $specs["_tel3"]              = "str mask|_telFrance";
+      $specs["_tel4"]              = "str mask|_telFrance";
+    }
+    if($dPconfig['system']['type_telephone']=="suisse"){
+      $specs["_tel"]               = "str mask|_telSuisse";
+      $specs["_tel2"]              = "str mask|_telSuisse";
+      $specs["_tel3"]              = "str mask|_telSuisse";
+      $specs["_tel4"]              = "str mask|_telSuisse";
+    }
+    
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     $specs["naissance"]         = "date confidential";
@@ -178,7 +185,6 @@ class CPatient extends CDossierMedical {
     $specs["employeur_adresse"]  = "text";
     $specs["employeur_cp"]       = "numchar length|5";
     $specs["employeur_ville"]    = "str confidential";
-    $specs["employeur_tel"]      = "numchar length|10 confidential";
     $specs["employeur_urssaf"]   = "numchar length|11 confidential";
 
     $specs["prevenir_nom"]       = "str confidential";
@@ -186,7 +192,6 @@ class CPatient extends CDossierMedical {
     $specs["prevenir_adresse"]   = "text";
     $specs["prevenir_cp"]        = "numchar length|5";
     $specs["prevenir_ville"]     = "str confidential";
-    $specs["prevenir_tel"]       = "numchar length|10 confidential";
     $specs["prevenir_parente"]   = "enum list|conjoint|enfant|ascendant|colateral|divers";
     return $specs;
   }
@@ -219,6 +224,8 @@ class CPatient extends CDossierMedical {
   
   function updateFormFields() {
     parent::updateFormFields();
+    
+    global $dPconfig;
 
     $this->nom = strtoupper($this->nom);
     $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
@@ -235,26 +242,21 @@ class CPatient extends CDossierMedical {
     
     $this->_naissance = sprintf("%02d/%02d/%04d", $this->_jour, $this->_mois, $this->_annee);
 
-    $this->_tel1 = substr($this->tel, 0, 2);
-    $this->_tel2 = substr($this->tel, 2, 2);
-    $this->_tel3 = substr($this->tel, 4, 2);
-    $this->_tel4 = substr($this->tel, 6, 2);
-    $this->_tel5 = substr($this->tel, 8, 2);
-    $this->_tel21 = substr($this->tel2, 0, 2);
-    $this->_tel22 = substr($this->tel2, 2, 2);
-    $this->_tel23 = substr($this->tel2, 4, 2);
-    $this->_tel24 = substr($this->tel2, 6, 2);
-    $this->_tel25 = substr($this->tel2, 8, 2);
-    $this->_tel31 = substr($this->prevenir_tel, 0, 2);
-    $this->_tel32 = substr($this->prevenir_tel, 2, 2);
-    $this->_tel33 = substr($this->prevenir_tel, 4, 2);
-    $this->_tel34 = substr($this->prevenir_tel, 6, 2);
-    $this->_tel35 = substr($this->prevenir_tel, 8, 2);
-    $this->_tel41 = substr($this->employeur_tel, 0, 2);
-    $this->_tel42 = substr($this->employeur_tel, 2, 2);
-    $this->_tel43 = substr($this->employeur_tel, 4, 2);
-    $this->_tel44 = substr($this->employeur_tel, 6, 2);
-    $this->_tel45 = substr($this->employeur_tel, 8, 2);
+    // expression reguliere de $this->_tel
+    $checkReg = "/(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)/";
+    
+    if($dPconfig['system']['type_telephone']=="france"){
+      $removeReg = '${1}${2}-${3}${4}-${5}${6}-${7}${8}-${9}${10}';
+    }
+    
+    if($dPconfig['system']['type_telephone']=="suisse"){
+      $removeReg = '${1}${2}${3}-${4}${5}${6}-${7}${8}-${9}${10}';
+    }
+    
+    $this->_tel  = preg_replace($checkReg, $removeReg, $this->tel);
+    $this->_tel2 = preg_replace($checkReg, $removeReg, $this->tel2);
+    $this->_tel3 = preg_replace($checkReg, $removeReg, $this->prevenir_tel);
+    $this->_tel4 = preg_replace($checkReg, $removeReg, $this->employeur_tel);
 
     $this->evalAge();
     
@@ -299,6 +301,8 @@ class CPatient extends CDossierMedical {
   
   
   function updateDBFields() {
+  	 global $dPconfig;
+  	 
     $soundex2 = new soundex2;
     if ($this->nom) {
   	  $this->nom = strtoupper($this->nom);
@@ -315,58 +319,40 @@ class CPatient extends CDossierMedical {
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
 
-  	if (($this->_tel1 !== null) && ($this->_tel2 !== null) && ($this->_tel3 !== null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
-      $this->tel = 
-        $this->_tel1 .
-        $this->_tel2 .
-        $this->_tel3 .
-        $this->_tel4 .
-        $this->_tel5;
+    if($dPconfig['system']['type_telephone']=="france"){
+      $motif = "^[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$";	
     }
+    if($dPconfig['system']['type_telephone']=="suisse"){
+      $motif = "^[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$";	
+    }
+    
+    // test pour savoir si le form tel correspond a l'expression reguliere
+    if(ereg($motif, $this->_tel)){
+      $this->tel = str_replace("-","",$this->_tel);
+    }
+    if(ereg($motif, $this->_tel2)){
+      $this->tel2 = str_replace("-","",$this->_tel2);
+    }
+    if(ereg($motif, $this->_tel3)){
+      $this->prevenir_tel = str_replace("-","",$this->_tel3);
+    }
+    if(ereg($motif, $this->_tel4)){
+      $this->employeur_tel = str_replace("-","",$this->_tel4);
+    }
+   
     if ($this->tel == "0000000000") {
       $this->tel = "";
-    }
-
-  	if (($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
-      $this->tel2 = 
-        $this->_tel21 .
-        $this->_tel22 .
-        $this->_tel23 .
-        $this->_tel24 .
-        $this->_tel25;
     }
     if ($this->tel2 == "0000000000") {
       $this->tel2 = "";
     }
-    
-    if (($this->_tel31 !== null) && ($this->_tel32 !== null) && ($this->_tel33 !== null) && ($this->_tel34 !== null) && ($this->_tel35 !== null)) {
-      $this->prevenir_tel = 
-        $this->_tel31 .
-        $this->_tel32 .
-        $this->_tel33 .
-        $this->_tel34 .
-        $this->_tel35;
-    }
     if ($this->prevenir_tel == "0000000000") {
       $this->prevenir_tel = "";
-    }
-
-    if ($this->prevenir_tel == "0000000000") {
-      $this->prevenir_tel = "";
-    }
-    
-    if(($this->_tel41 !== null) && ($this->_tel42 !== null) && ($this->_tel43 !== null) && ($this->_tel44 !== null) && ($this->_tel45 !== null)) {
-      $this->employeur_tel = 
-        $this->_tel41 .
-        $this->_tel42 .
-        $this->_tel43 .
-        $this->_tel44 .
-        $this->_tel45;
     }
     if ($this->employeur_tel == "0000000000") {
       $this->employeur_tel = "";
     }
-
+  	
     if ($this->cp == "00000") {
       $this->cp = "";
     }
