@@ -65,7 +65,7 @@ function pageMain(){
   <tr>
     <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
     <td>{{mb_field object=$patient field="lieu_naissance" tabindex="108"}}</td>
-    <th>{{mb_label object=$patient field="tel" defaultFor="_tel1"}}</th>
+    <th>{{mb_label object=$patient field="_tel"}}</th>
     <td>{{mb_field object=$patient field="_tel"}}</td>
   </tr>
   <tr>
@@ -73,8 +73,8 @@ function pageMain(){
     <td>
       {{mb_field object=$patient field="nationalite" tabindex="109"}}
     </td>
-    <th>{{mb_label object=$patient field="tel2" defaultFor="_tel21"}}</th>
-    <td>{{mb_field object=$patient field="_tel2"}}</td>
+    <th>{{mb_label object=$patient field="_tel2"}}</th>
+    <td>{{mb_field object=$patient field="_tel2" tabindex="109"}}</td>
   </tr>
   
   <tr>
