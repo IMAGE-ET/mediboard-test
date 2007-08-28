@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CMedecin-delete'] = 'Médecin supprimé';
+$locales['CPatient-_tel2-desc'] = 'Numéro de portable du patient';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Description';
 $locales['CAddiction-addiction-court'] = 'Description de l\'addication du patient';
@@ -245,6 +245,9 @@ $locales['CPatient-tel2-desc'] = 'Numéro de portable du patient';
 $locales['CPatient-ville'] = 'Ville';
 $locales['CPatient-ville-court'] = '';
 $locales['CPatient-ville-desc'] = '';
+$locales['CPatient-_tel'] = 'Téléphone';
+$locales['CPatient-_tel-desc'] = 'Numéro de téléphone du patient';
+$locales['CPatient-_tel2'] = 'Portable';
 $locales['CPatient.ATNC.'] = ' ';
 $locales['CPatient.ATNC.0'] = 'Non';
 $locales['CPatient.ATNC.1'] = 'Oui';
@@ -307,5 +310,6 @@ $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';
 $locales['mod-dPpatients-tab-vw_medecins'] = 'Médecins correspondants';
 $locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
 $locales['msg-CMedecin-create'] = 'Médecin créé';
+$locales['msg-CMedecin-delete'] = 'Médecin supprimé';
 $locales['msg-CMedecin-modify'] = 'Médecin modifié';
 ?>

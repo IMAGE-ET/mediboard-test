@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CMedecin-delete'] = '';
+$locales['CPatient-_tel2-desc'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-court'] = '';
@@ -245,6 +245,9 @@ $locales['CPatient-tel2-desc'] = 'Patient\'s mobile number';
 $locales['CPatient-ville'] = 'City';
 $locales['CPatient-ville-court'] = '';
 $locales['CPatient-ville-desc'] = '';
+$locales['CPatient-_tel'] = '';
+$locales['CPatient-_tel-desc'] = '';
+$locales['CPatient-_tel2'] = '';
 $locales['CPatient.ATNC.'] = ' ';
 $locales['CPatient.ATNC.0'] = 'Non';
 $locales['CPatient.ATNC.1'] = 'Oui';
@@ -307,5 +310,6 @@ $locales['mod-dPpatients-tab-vw_idx_patients'] = '';
 $locales['mod-dPpatients-tab-vw_medecins'] = '';
 $locales['mod-dPpatients-tab-vw_recherche'] = '';
 $locales['msg-CMedecin-create'] = '';
+$locales['msg-CMedecin-delete'] = '';
 $locales['msg-CMedecin-modify'] = '';
 ?>
