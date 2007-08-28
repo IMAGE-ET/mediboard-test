@@ -246,11 +246,11 @@ class CPatient extends CDossierMedical {
     $checkReg = "/(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)(\d)/";
     
     if($dPconfig['system']['type_telephone']=="france"){
-      $removeReg = '${1}${2}-${3}${4}-${5}${6}-${7}${8}-${9}${10}';
+      $removeReg = '${1}${2} ${3}${4} ${5}${6} ${7}${8} ${9}${10}';
     }
     
     if($dPconfig['system']['type_telephone']=="suisse"){
-      $removeReg = '${1}${2}${3}-${4}${5}${6}-${7}${8}-${9}${10}';
+      $removeReg = '${1}${2}${3} ${4}${5}${6} ${7}${8} ${9}${10}';
     }
     
     $this->_tel  = preg_replace($checkReg, $removeReg, $this->tel);
@@ -320,24 +320,24 @@ class CPatient extends CDossierMedical {
     }
 
     if($dPconfig['system']['type_telephone']=="france"){
-      $motif = "^[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]-[0-9][0-9]$";	
+      $motif = "^[0-9][0-9] [0-9][0-9] [0-9][0-9] [0-9][0-9] [0-9][0-9]$";	
     }
     if($dPconfig['system']['type_telephone']=="suisse"){
-      $motif = "^[0-9][0-9][0-9]-[0-9][0-9][0-9]-[0-9][0-9]-[0-9][0-9]$";	
+      $motif = "^[0-9][0-9][0-9] [0-9][0-9][0-9] [0-9][0-9] [0-9][0-9]$";	
     }
     
     // test pour savoir si le form tel correspond a l'expression reguliere
     if(ereg($motif, $this->_tel)){
-      $this->tel = str_replace("-","",$this->_tel);
+      $this->tel = str_replace(" ","",$this->_tel);
     }
     if(ereg($motif, $this->_tel2)){
-      $this->tel2 = str_replace("-","",$this->_tel2);
+      $this->tel2 = str_replace(" ","",$this->_tel2);
     }
     if(ereg($motif, $this->_tel3)){
-      $this->prevenir_tel = str_replace("-","",$this->_tel3);
+      $this->prevenir_tel = str_replace(" ","",$this->_tel3);
     }
     if(ereg($motif, $this->_tel4)){
-      $this->employeur_tel = str_replace("-","",$this->_tel4);
+      $this->employeur_tel = str_replace(" ","",$this->_tel4);
     }
    
     if ($this->tel == "0000000000") {
