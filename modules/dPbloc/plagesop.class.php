@@ -43,6 +43,7 @@ class CPlageOp extends CMbObject {
   var $_ref_salle      = null;
   var $_ref_operations = null;
   var $_nb_operations  = null;
+  var $_nb_operations_placees  = null;
   var $_fill_rate      = null;
 
   function CPlageOp() {
@@ -257,6 +258,15 @@ class CPlageOp extends CMbObject {
       $result["time"] = $result["time"] + $addedTime;
     }
     $this->_fill_rate = number_format($result["time"]*100/(strtotime($this->fin)-strtotime($this->debut)), 2);
+        
+    $sql = "SELECT COUNT(`operations`.`operation_id`) AS total," . $select_time .
+        "\nFROM `operations`, `plagesop`" .
+        "\nWHERE `operations`.`plageop_id` = '$this->plageop_id'" .
+        "\nAND `operations`.`plageop_id` = `plagesop`.`plageop_id`" .
+        "\nAND `operations`.`rank` > 0" .
+        "\nAND `operations`.`annulee` = '0'";
+    $result = $this->_spec->ds->loadHash($sql);
+    $this->_nb_operations_placees = $result["total"];
   }
   
   function getPerm($permType) {
