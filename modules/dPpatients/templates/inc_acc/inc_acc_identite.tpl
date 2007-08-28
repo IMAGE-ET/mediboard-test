@@ -1,11 +1,3 @@
-<script type="text/javascript">
-
-function pageMain(){
-  InputMask.setupElementMasks();
-}
-
-</script>
-
 <table class="form">
   <tr>
     <th class="halfPane category" colspan="2">
@@ -65,16 +57,29 @@ function pageMain(){
   <tr>
     <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
     <td>{{mb_field object=$patient field="lieu_naissance" tabindex="108"}}</td>
-    <th>{{mb_label object=$patient field="_tel"}}</th>
-    <td>{{mb_field object=$patient field="_tel"}}</td>
+    <th>{{mb_label object=$patient field="tel" defaultFor="_tel1"}}</th>
+    <td>
+      {{mb_field object=$patient field="_tel1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
+      {{mb_field object=$patient field="_tel2" tabindex="156" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
+      {{mb_field object=$patient field="_tel3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
+      {{mb_field object=$patient field="_tel4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
+      {{mb_field object=$patient field="_tel5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
+    </td>
   </tr>
+  
   <tr>
     <th>{{mb_label object=$patient field="nationalite"}}</th>
     <td>
       {{mb_field object=$patient field="nationalite" tabindex="109"}}
     </td>
-    <th>{{mb_label object=$patient field="_tel2"}}</th>
-    <td>{{mb_field object=$patient field="_tel2" tabindex="109"}}</td>
+    <th>{{mb_label object=$patient field="tel2" defaultFor="_tel21"}}</th>
+    <td>
+      {{mb_field object=$patient field="_tel21" tabindex="160" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel22', 2)"}} -
+      {{mb_field object=$patient field="_tel22" tabindex="161" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel23', 2)"}} -
+      {{mb_field object=$patient field="_tel23" tabindex="162" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel24', 2)"}} -
+      {{mb_field object=$patient field="_tel24" tabindex="163" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel25', 2)"}} -
+      {{mb_field object=$patient field="_tel25" tabindex="164" size="2" maxlength="2" prop="num length|2"}}
+    </td>
   </tr>
   
   <tr>

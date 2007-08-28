@@ -55,12 +55,24 @@
       <div style="display:none;" class="autocomplete" id="prevenir_ville_auto_complete"></div>
     </td>
     <th>{{mb_label object=$patient field="employeur_tel" defaultFor="_tel41"}}</th>
-    <td>{{mb_field object=$patient field="_tel4"}}</td>
+    <td>
+      {{mb_field object=$patient field="_tel41" tabindex="355" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel42', 2)"}} -
+      {{mb_field object=$patient field="_tel42" tabindex="356" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel43', 2)"}} -
+      {{mb_field object=$patient field="_tel43" tabindex="357" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel44', 2)"}} -
+      {{mb_field object=$patient field="_tel44" tabindex="358" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel45', 2)"}} -
+      {{mb_field object=$patient field="_tel45" tabindex="359" size="2" maxlength="2" prop="num length|2"}}
+    </td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="prevenir_tel" defaultFor="_tel31"}}</th>
-    <td>{{mb_field object=$patient field="_tel3"}}</td>
+    <td>
+      {{mb_field object=$patient field="_tel31" tabindex="306" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel32', 2)"}} -
+      {{mb_field object=$patient field="_tel32" tabindex="307" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel33', 2)"}} -
+      {{mb_field object=$patient field="_tel33" tabindex="308" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel34', 2)"}} -
+      {{mb_field object=$patient field="_tel34" tabindex="309" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel35', 2)"}} -
+      {{mb_field object=$patient field="_tel35" tabindex="310" size="2" maxlength="2" prop="num length|2"}}
+    </td>
     <th>{{mb_label object=$patient field="employeur_urssaf"}}</th>
     <td>{{mb_field object=$patient field="employeur_urssaf" tabindex="360"}}</td>
   </tr>
