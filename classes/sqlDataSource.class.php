@@ -30,8 +30,19 @@ abstract class CSQLDataSource {
    * @return CSQLDataSource
    */
   static function get($dsn) {  	
-  	if(!array_key_exists($dsn, self::$dataSources)) {
-  	  $dataSource = new CMySQLDataSource();
+  	if (!array_key_exists($dsn, self::$dataSources)) {
+      global $dPconfig;
+  	  if (null == $dbtype = @$dPconfig["db"][$dsn]["dbtype"]) {
+        trigger_error( "FATAL ERROR: Undefined type DSN type '$dsn'.", E_USER_ERROR );
+        die;
+      }
+
+  	  if (null == $dsClass = @self::$engines[$dbtype]) {
+        trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
+        die;
+  	  }
+
+  	  $dataSource = new $dsClass;
   	  $dataSource->init($dsn);
   	  self::$dataSources[$dsn] = $dataSource;
   	}
@@ -45,8 +56,6 @@ abstract class CSQLDataSource {
    * @param string $name
    * @param string $user
    * @param string $pass
-   * @param string $port
-   * @param bool $persist 
    */
   abstract function connect($host, $name, $user, $pass);
 

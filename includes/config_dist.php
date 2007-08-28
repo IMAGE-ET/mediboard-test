@@ -23,7 +23,8 @@ $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 
 // Standard database config
 $dPconfig["db"]["std"] = array(
-  "dbhost" => "localhost",  // Change to connect to a distant Database
+  "dbtype" => "mysql",      // Change to use another dbms
+  "dbhost" => "localhost",    // Change to connect to a distant Database
   "dbname" => "mediboard",  // Change to match your Mediboard Database Name
   "dbuser" => "mbadmin",    // Change to match your Username
   "dbpass" => "adminmb",    // Change to match your Password
@@ -77,7 +78,7 @@ $dPconfig["db"]["Transit"] = array(
 
 // Sherpa
 $dPconfig["db"]["sherpa"] = array(
-  "dbtype" => "ingres",
+  "dbtype" => "mysql",
   "dbhost" => "localhost",
   "dbname" => "CPTransit",
   "dbuser" => "CPTAdmin",
