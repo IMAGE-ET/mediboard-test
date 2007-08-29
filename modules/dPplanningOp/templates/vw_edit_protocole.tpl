@@ -133,7 +133,7 @@ function pageMain() {
 
 <input type="hidden" name="dosql" value="do_protocole_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="_class_name" value="COperation" />
+<input type="hidden" name="_class_name_" value="COperation" />
 
 {{mb_field object=$protocole field="protocole_id" hidden=1 prop=""}}
 
@@ -218,7 +218,7 @@ function pageMain() {
               this.sForm  = "editFrm";
               this.sView  = "_codeCCAM";
               this.sChir  = "chir_id";
-              this.sClass = "_class_name";
+              this.sClass = "_class_name_";
               this.pop();
             }
           </script>          
