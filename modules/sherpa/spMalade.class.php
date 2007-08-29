@@ -42,7 +42,7 @@ class CSpMalade extends CSpObject {
       trigger_error("mapping object should be a 'CPatient'");
     }
     
-    $this->malnum = 100 * ($mbObject->_id % 10000);
+    $this->malnum = str_pad($mbObject->_id % 100000, 6, "0", STR_PAD_LEFT);
     $this->malnom = substr($mbObject->nom, 0, 20);
     $this->malpre = substr($mbObject->prenom, 0, 10);
     $this->datnai = "$mbObject->_jour$mbObject->_mois$mbObject->_annee";
