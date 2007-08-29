@@ -31,10 +31,10 @@ function printAdmission(id) {
 	  {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
     le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}</b>
     {{if $curr_plageop->_ref_anesth->_view}}
-	    <b> - Anesthesiste: {{$curr_plageop->_ref_anesth->_view}}</b>
+	    <b> - Anesthesiste : Dr. {{$curr_plageop->_ref_anesth->_view}}</b>
 	  {{/if}}
     {{if $curr_plageop->_ref_personnel}}
-      <b> - Personnel: 
+      <b> - Personnel : 
       {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
       {{foreach from=$_personnel->_ref_user item=_user}}
          {{$_user->_view}};
