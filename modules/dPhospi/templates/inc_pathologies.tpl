@@ -1,3 +1,4 @@
+{{if ((!$curr_sejour->pathologie && $affichage_patho=="non_complet") || ($affichage_patho=="tous") ) }}
 <tr>
   <td class="patient" colspan="2" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
     {{if $curr_sejour->pathologie}}
@@ -100,4 +101,6 @@
     {{/if}}
   </td>
   </tr>
+{{/if}}
+
 {{/if}}

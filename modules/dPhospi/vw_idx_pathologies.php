@@ -7,8 +7,12 @@
 * @author Alexis Granger
 */
 
+
+
 global $AppUI, $can, $m, $g;
 require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
+
+$affichage_patho = mbGetValueFromPostOrSession("affichage_patho","tous"); 
 
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
 $pathos = new CDiscipline();
@@ -58,6 +62,8 @@ if ($can->edit) {
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("affichage_patho", $affichage_patho);
 $smarty->assign("pathos",$pathos);
 $smarty->assign("date" , $date);
 $smarty->assign("heureLimit", $heureLimit);

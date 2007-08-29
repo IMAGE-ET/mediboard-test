@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $g;
 
-
+$affichage_patho = mbGetValueFromGetOrSession("affichage_patho");
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
 $pathos = new CDiscipline();
 
@@ -28,11 +28,14 @@ foreach($sejour->_ref_operations as &$operation) {
   $operation->loadRefsCodesCCAM();
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("pathos",$pathos);
 $smarty->assign("date" , $date);
 $smarty->assign("curr_sejour" , $sejour);
+$smarty->assign("affichage_patho", $affichage_patho);
 $smarty->display("inc_pathologies.tpl");
 
 ?>

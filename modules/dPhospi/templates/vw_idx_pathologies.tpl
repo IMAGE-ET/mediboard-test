@@ -3,6 +3,7 @@
 function reloadPatient(oForm) {
   var url_patient = new Url;
   url_patient.setModuleAction("dPhospi", "httpreq_pathologies");
+  url_patient.addParam("affichage_patho", "{{$affichage_patho}}");
   url_patient.addParam("sejour_id", oForm.sejour_id.value);
   url_patient.requestUpdate('sejour-'+oForm.sejour_id.value, { waitingText : null });
 }
@@ -14,6 +15,18 @@ function pageMain() {
 </script>
 
 <table>
+  <tr>
+    <td colspan="4" style="text-align: right">
+    Type d'affichage
+      <form name="selAffichage" action="?m=dPhospi&tab=vw_idx_pathologies" method="post"> 
+      
+      <select name="affichage_patho" onchange="submit()">
+        <option value="tous" {{if $affichage_patho=="tous"}} selected=selected {{/if}}>Tous</option>
+        <option value="non_complet" {{if $affichage_patho=="non_complet"}} selected=selected {{/if}}>Non complétés</option>
+      </select>
+      </form>
+    </td>
+  </tr>
   <tr>
     <th colspan="4">
       {{$date|date_format:"%A %d %B %Y"}}
