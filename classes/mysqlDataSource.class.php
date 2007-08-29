@@ -93,6 +93,26 @@ class CMySQLDataSource extends CSQLDataSource {
     return $this->loadResult("SELECT VERSION()");
   }
   
+  function queriesForDSN($user, $pass, $base) {
+    $queries = array();
+    $host = "localhost";
+    
+    // Create database
+    $queries["create-db"] = "CREATE DATABASE `$base` ;";
+
+    // Create user with global permissions
+    $queries["global-privileges"] = "GRANT USAGE" .
+      "\nON * . * " .
+      "\nTO '$user'@'$host'" .
+      "\nIDENTIFIED BY '$pass';";
+      
+    // Grant user with database permissions
+    $queries["base-privileges"] = "GRANT ALL PRIVILEGES" .
+      "\nON `$base` . *" .
+      "\nTO '$user'@'$host';";
+    
+    return $queries;
+  }
 }
 
 ?>

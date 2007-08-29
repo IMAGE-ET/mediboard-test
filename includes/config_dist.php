@@ -88,6 +88,7 @@ $dPconfig["db"]["sherpa"] = array(
 // you can add as much databases as you want by using
 //$dPconfig["logical_name"] = "physical_name";
 //$dPconfig["db"]["physical_name"] = array(
+//  "dbtype" => "dbtype",
 //  "dbhost" => "dbhost",
 //  "dbname" => "dbname",
 //  "dbuser" => "dbuser",

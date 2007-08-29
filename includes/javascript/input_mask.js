@@ -8,9 +8,10 @@
 var is_gecko = /gecko/i.test(navigator.userAgent);
 var is_ie    = /MSIE/.test(navigator.userAgent);
 
-function setSelectionRange(input, start, end) {
+function setSelectionRangeInput(input, start, end) {
 	if (is_gecko) {
-		input.setSelectionRange(start, end);
+		input.selectionStart = start;
+		input.selectionEnd = end;
 	} else {
 		// assumed IE
 		var range = input.createTextRange();
@@ -83,11 +84,6 @@ InputMask = {
     } );
   },
   
-  showValue: function(event) {
-    Console.debug(event.type, "Event type");
-    Console.debug(this.value, "Element value");
-  },
-  
   /* This is triggered when the key is pressed in the form input.  It is
    * bound to the element, so 'this' is the input element.
    */
@@ -118,6 +114,11 @@ InputMask = {
   
   applyMaskEx: function(event) {
     var start = getSelectionStart(this);
+    var end = getSelectionEnd(this);
+    if (start == this.value.length) {
+      start = -1;
+    }
+    
     var match = /_(\w+)/.exec(this.className);
     if (match.length != 2 || !InputMask.masks[match[1]] ) {
       return;
@@ -149,6 +150,12 @@ InputMask = {
       fullMask = fullMask.substr(0, lastNotFilled);
     }
     this.value = fullMask;
+    
+    if (-1 == start) {
+      end = start = this.value.length;
+    }
+    
+    setSelectionRangeInput(this, start, end);
   },
 
   /* Returns true if the key is a printable character.

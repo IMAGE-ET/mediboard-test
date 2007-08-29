@@ -64,7 +64,7 @@
         <a href="http://www.dotproject.net/">
           <img src="images/pictures/dp_icon.gif" alt="dotProject logo" />
         </a>
-        <p>Version {{$version.string}}</p>
+        <p>Version 1.02</p>
       </td>
       {{if $demoVersion}}
       <td class="logo">

@@ -19,6 +19,22 @@
 </tr>
 
 <tr>
+  {{assign var="var" value="dbtype"}}
+  <th>
+    <label for="{{$section}}[{{$dsn}}][{{$var}}]" title="{{tr}}config-{{$section}}-{{$var}}{{/tr}}">
+      {{tr}}config-{{$section}}-{{$var}}{{/tr}}
+    </label>  
+  </th>
+  <td>
+    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    <select class="str" name="{{$section}}[{{$dsn}}][{{$var}}]">
+      <option value="mysql"  {{if "mysql"  == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-mysql{{/tr}}</option>
+      <option value="ingres" {{if "ingres" == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-ingres{{/tr}}</option>
+    </select>
+  </td>
+</tr>
+
+<tr>
   {{assign var="var" value="dbhost"}}
   <th>
     <label for="{{$section}}[{{$dsn}}][{{$var}}]" title="{{tr}}config-{{$section}}-{{$var}}{{/tr}}">
@@ -82,13 +98,23 @@
 
 var DSN = {
   create: function (sDSN) {
+    var oForm = document.forms["CreateDSN-" + sDSN];
+    
     var url = new Url;
-    url.setModuleAction("system", "test");
+    url.setModuleAction("system", "httpreq_create_dsn");
+    url.addParam("dsn", sDSN);
+    url.addElement(oForm.master_user);
+    url.addElement(oForm.master_pass);
+    url.requestUpdate("config-dsn-create-" + sDSN);
   },
   test: function (sDSN) {
-    
+    var url = new Url;
+    url.setModuleAction("system", "httpreq_test_dsn");
+    url.addParam("dsn", sDSN);
+    url.requestUpdate("config-dsn-test-" + sDSN);
   }
 }
+
 </script>
 
 </form>
@@ -104,7 +130,7 @@ var DSN = {
 <!-- Test DSN -->
 <tr>
   <td>
-    <button class="search" onclick="DSN.test('{{$dsn}}');">
+    <button type="button" class="search" onclick="DSN.test('{{$dsn}}');">
       {{tr}}config-dsn-test{{/tr}}
     </button>
   </td>
@@ -121,7 +147,7 @@ var DSN = {
       <label for="master_pass">{{tr}}CreateDSN-master_pass{{/tr}}</label>
       <input name="master_pass" type="password" />
       <br/>
-      <button class="modify" onclick="submitFormAjax(this, 'config-dsn-create-{{$dsn}}')">
+      <button type="button" class="modify" onclick="DSN.create('{{$dsn}}');">
         {{tr}}config-dsn-create{{/tr}}
       </button>
     </form>

@@ -16,11 +16,6 @@ class CIngresDataSource extends CSQLDataSource {
       die;
     }
 	    
-    if (null == $this->link = ingres_connect( "$host:$port", $user, $pass )) { 
-      trigger_error( "FATAL ERROR: Connection to Ingres server failed", E_USER_ERROR );
-      die;
-    }
-    
     if ("localhost" != $host) { 
       trigger_error( "FATAL ERROR: Ingres server host has to be 'localhost'", E_USER_ERROR );
       die;
@@ -31,24 +26,37 @@ class CIngresDataSource extends CSQLDataSource {
       die;
     }
     
-
-    if (!mysql_select_db($name, $this->link)) {
-      trigger_error( "FATAL ERROR: Ingres hostDatabase not found ($name)", E_USER_ERROR );
+    if (null == $this->link = ingres_connect($name, $user, $pass)) { 
+      trigger_error( "FATAL ERROR: Connection to Ingres server failed", E_USER_ERROR );
       die;
     }
-    
-    ingres_autocommit($this->link);
+            
+//    ingres_autocommit($this->link);
     return $this->link;
   }  
     
   function loadTable($table) {
-    $query = $this->prepare("SHOW TABLES LIKE %", $table);
-    return $this->loadResult($query);
+    $query = "SELECT * FROM iitables".
+      "\nWHERE table_name = %";
+            
+    $values = array (
+      $table,
+    );    
+    
+    return $this->loadResult($this->prepare($query, $values));
   }
 
   function loadField($table, $field) {
-    $query = $this->prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
-    return $this->loadResult($query);
+    $query = "SELECT column_name FROM iiocolumns".
+      "\nWHERE table_name = %".
+      "\nAND column_name = %";
+            
+    $values = array (
+      $table,
+      $field
+    );    
+    
+    return $this->loadResult($this->prepare($query, $values));
   }   
 
   function error() {
@@ -111,6 +119,11 @@ class CIngresDataSource extends CSQLDataSource {
     // No such implementation
     return "";
   }
+  
+  function queriesForDSN($user, $pass, $base) {
+    return array(); 
+  }
+  
 }
 
 ?>

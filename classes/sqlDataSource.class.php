@@ -19,6 +19,8 @@ abstract class CSQLDataSource {
   public $dsn       = null;
   public $link      = null;
   public $chrono    = null;
+  
+  public $config = array();
 
   function __construct() {
     $this->chrono = new Chronometer;
@@ -158,21 +160,30 @@ abstract class CSQLDataSource {
   abstract function version();  
   
   /**
+   * Get queries for creation of a base on the server and a user with access to it
+   * @param string $user user name
+   * @param string $pass user password
+   * @param string $base database name
+   * @return array key-named queries
+   */
+  abstract function queriesForDSN($user, $pass, $base); 
+  
+  /**
    * Initialize a data source by creating the link to the data base
    */
   function init($dsn) {
     $this->dsn = $dsn;
     
     global $dPconfig;
-    $dsConfig = $dPconfig["db"][$dsn];
+    $this->config = $dPconfig["db"][$dsn];
     
     
     $this->chrono->start = new Chronometer;
     $this->link = $this->connect(
-	    $dsConfig["dbhost"],
-	    $dsConfig["dbname"],
-	    $dsConfig["dbuser"],
-	    $dsConfig["dbpass"]
+	    $this->config["dbhost"],
+	    $this->config["dbname"],
+	    $this->config["dbuser"],
+	    $this->config["dbpass"]
     );
     
     if (!$this->link) {
