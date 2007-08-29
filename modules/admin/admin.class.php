@@ -18,7 +18,8 @@ $utypes = array(
   9  => "Qualite",
   10 => "Secrétaire",
   12 => "Surveillante de bloc",
-  13 => "Médecin"
+  13 => "Médecin",
+  14 => "Personnel"
 );
 
 ##
