@@ -26,21 +26,20 @@ function printAdmission(id) {
   {{foreach from=$plagesop item=curr_plageop}}
   <tr>
     <td class="text">
-	  <b>Dr. {{$curr_plageop->_ref_chir->_view}} -
-	  {{$curr_plageop->_ref_salle->nom}} de
-	  {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
-    le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}</b>
+	  <b>Dr. {{$curr_plageop->_ref_chir->_view}}</b> -
+	  <b>{{$curr_plageop->_ref_salle->nom}}</b>
+	  de {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
+    le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
     {{if $curr_plageop->_ref_anesth->_view}}
-	    <b> - Anesthesiste : Dr. {{$curr_plageop->_ref_anesth->_view}}</b>
+	    - Anesthesiste : <b>Dr. {{$curr_plageop->_ref_anesth->_view}}</b>
 	  {{/if}}
     {{if $curr_plageop->_ref_personnel}}
-      <b> - Personnel : 
+      - Personnel : 
       {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
       {{foreach from=$_personnel->_ref_user item=_user}}
          {{$_user->_view}};
       {{/foreach}}
       {{/foreach}}
-      </b>
     {{/if}}
 	</td>
   </tr>
