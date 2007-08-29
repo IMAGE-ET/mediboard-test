@@ -61,8 +61,7 @@ foreach($listOps as $key => $value) {
 $affOper = array();
 // Classement pour le/les services
 foreach($listService as $currService){
-  $affOper[$currService] = $listOps;
-  $listOpService =& $affOper[$currService];
+  $affOper[$currService] = array();
   
   //Liste des lits du service
   $table    = "lit";
@@ -81,18 +80,16 @@ foreach($listService as $currService){
     $listLit[] = $aLit["lit_id"]; 
   }
   
-  foreach($listOpService as $key => $value) {
-    $oper =& $listOpService[$key];
+  foreach($listOps as $key => $value) {
+    $oper = $listOps[$key];
     foreach($oper->_ref_sejour->_ref_affectations as $keyAff=>$currAff){
       $affect =& $oper->_ref_sejour->_ref_affectations[$keyAff];          
       if(mbDate($affect->entree) <= $date_suivi && mbDate($affect->sortie) >= $date_suivi && in_array($affect->lit_id,$listLit)){
         $affect->loadRefLit();
         $affect->_ref_lit->loadCompleteView();
         $oper->_ref_sejour->_curr_affectation =& $affect;
+        $affOper[$currService][$oper->_id] = $oper;
       }
-    }
-    if(!$oper->_ref_sejour->_curr_affectation){
-      unset($listOpService[$key]);
     }
   }
 }
