@@ -13,6 +13,7 @@ $can->needsRead();
 
 $affectations = array();
 
+$affectation = new CAffectationPersonnel();
 // Récupération de la liste des classes disponibles
 $listClasses = getInstalledClasses();
 
@@ -42,6 +43,7 @@ foreach($list_affectations as $key=>$value){
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("affectation", $affectation);
 $smarty->assign("filter", $filter);
 $smarty->assign("listClasses",$listClasses);
 $smarty->assign("affectations", $affectations);

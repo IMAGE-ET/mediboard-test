@@ -1,7 +1,20 @@
 {{mb_include_script module="system" script="object_selector"}}
 
+<script type="text/javascript">
+
+function pageMain() {
+  regFieldCalendar("editAffectation", "debut", true);
+  regFieldCalendar("editAffectation", "fin", true);
+}
+
+</script>
+
 
 <table class="main">
+<tr>
+<td>
+
+<table class="form">
   <tr>
     <td>
      <form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
@@ -18,9 +31,9 @@
         <tr>
           <th class="category" colspan="6">
             {{if $affectations|@count == 50}}
-            Plus de 50 identifiants, seuls les 50 plus récents sont affichés
+            Plus de 50 affectations, seules les 50 plus récentes sont affichées
             {{else}}
-            {{$affectations|@count}} identifiants trouvés
+            {{$affectations|@count}} affectations trouvées
             {{/if}}
           </th>
         </tr>
@@ -77,9 +90,8 @@
       </tr>
     </table>
    </form>
-  </td>
-  </tr>
-  
+   </td>
+  </tr>  
   <tr>
     <td>
       <table class="tbl">
@@ -103,5 +115,88 @@
        {{/foreach}}
      </table>
    </td>
- </tr>
+  </tr>
 </table>
+
+</td>
+<td>
+
+    <form name="editAffectation" action="index.php?m={{$m}}" method="post">
+    <input type="hidden" name="m" value="{{$m}}" />
+    <input type="hidden" name="dosql" value="do_affectation_aed" />
+    <input type="hidden" name="del" value="0" />
+
+<table class="form" style="valign: top">
+  <tr>		    
+    <th class="title" colspan="2">Création d'une affectation</th>
+  </tr>
+  <tr>  
+    <td>{{mb_label object=$affectation field="object_id"}}</td>
+    <td>
+      <input name="object_id" class="notNull" />
+      <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
+      <script type="text/javascript">
+        ObjectSelector.initEdit = function(){
+          this.sForm     = "editAffectation";
+          this.sId       = "object_id";
+          this.sClass    = "object_class";
+          this.onlyclass = "false";
+          this.pop();
+        }
+      </script>
+      </td>
+  </tr>
+  <tr>  
+    <td>{{mb_label object=$affectation field="object_class"}}</td>
+    <td>
+      <select name="object_class" class="notNull">
+        <option value="">&mdash; Choisir une classe</option>
+        {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
+        <option value="{{$curr_class}}">
+          {{$curr_class}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>  
+  </tr>
+  <tr>  
+    <td>{{mb_label object=$affectation field="user_id"}}</td>
+    <td>
+      <input name="user_id" class="notNull" />
+      <input type="hidden" name="object_class_CMediusers" value="CMediusers" />
+      <button class="search" type="button" onclick="ObjectSelector.initEditUser()">Chercher</button>
+      <script type="text/javascript">
+        ObjectSelector.initEditUser = function(){
+          this.sForm     = "editAffectation";
+          this.sId       = "user_id";
+          this.sClass    = "object_class_CMediusers";
+          this.onlyclass = "true";
+          this.pop();
+        }
+      </script>
+    </td>
+  </tr>
+  <tr>  
+    <td>{{mb_label object=$affectation field="realise"}}</td>
+    <td>{{mb_field object=$affectation field="realise"}}</td>
+  </tr>
+  <tr>  
+    <td>{{mb_label object=$affectation field="debut"}}</td>
+    <td class="date">{{mb_field object=$affectation field="debut" form="editAffectation"}}</td>
+  </tr>
+    <tr>  
+    <td>{{mb_label object=$affectation field="fin"}}</td>
+    <td class="date">{{mb_field object=$affectation field="fin" form="editAffectation"}}</td>
+  </tr>
+  <tr>
+    <td colspan="2" style="text-align: center">
+      <button class="submit" type="submit" name="envoyer">Créer</button>
+    </td>
+  </tr>
+  
+</table>
+    </form>
+</td>
+</tr>
+</table>
+   
