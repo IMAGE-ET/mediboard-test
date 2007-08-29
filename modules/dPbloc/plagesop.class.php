@@ -86,6 +86,20 @@ class CPlageOp extends CMbObject {
     $this->_ref_anesth->load($this->anesth_id);
   }
   
+  
+  function loadPersonnel(){
+    $where["object_id"] = " = '$this->_id'";
+    $where["object_class"] = " = '$this->_class_name'";
+    
+    $this->_ref_personnel = new CAffectationPersonnel();
+    $this->_ref_personnel = $this->_ref_personnel->loadList($where);
+   
+    foreach($this->_ref_personnel as $key=>$value){
+	   $value->loadUser();
+    }
+  }
+  
+  
   function loadRefSpec() {
     $this->_ref_spec = new CFunctions;
     $this->_ref_spec->load($this->spec_id);

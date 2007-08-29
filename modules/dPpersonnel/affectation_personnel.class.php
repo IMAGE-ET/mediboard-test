@@ -39,6 +39,13 @@ class CAffectationPersonnel extends CMbMetaObject {
     return $specs;
   }
   
+  
+  function loadUser(){
+  	$where["user_id"] = " = '$this->user_id'";
+  	$this->_ref_user = new CMediusers();
+  	$this->_ref_user = $this->_ref_user->loadList($where);
+  }
+ 
   function updateFormFields() {
     $this->_view = "Affectation de $this->user_id";
     $this->loadRefs();  

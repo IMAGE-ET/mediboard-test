@@ -9,6 +9,8 @@
 
 global $AppUI, $can, $m, $g;
 $ds = CSQLDataSource::get("std");
+$getInstalledPpers = CModule::getInstalled("dPpersonnel");
+
 
 $can->needsRead();
 
@@ -95,14 +97,21 @@ foreach($plagesop as $keyPlage => $valuePlage) {
       }
     }
     $plage->_ref_operations = $listOp;
+    
+    if($getInstalledPpers){
+      $plage->loadPersonnel();
+    }  
   }
+
 }
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"  , $filter);
-$smarty->assign("plagesop", $plagesop);
+$smarty->assign("filter"     , $filter);
+$smarty->assign("plagesop"   , $plagesop);
 
 $smarty->display("view_planning.tpl");
 

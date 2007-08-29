@@ -34,6 +34,27 @@ function printAdmission(id) {
   </tr>
   <tr>
     <td>
+      {{if $curr_plageop->_ref_anesth->_view}}
+	  <b>Anesthesiste: {{$curr_plageop->_ref_anesth->_view}}</b>
+	  {{/if}}
+	</td>
+  </tr>
+  <tr>
+    <td>
+      {{if $curr_plageop->_ref_personnel}}
+      <b>Personnel: 
+      {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
+      {{foreach from=$_personnel->_ref_user item=_user}}
+         {{$_user->_view}}
+      {{/foreach}}
+      {{/foreach}}
+      </b>
+      {{/if}}
+	</td>
+  </tr>
+      
+  <tr>
+    <td>
 	  <table class="tbl">
 	    <tr>
 		  <th colspan="7"><b>Intervention</b></th>
