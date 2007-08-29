@@ -68,7 +68,9 @@ function loadActes(subject_id, chir_id) {
   PairEffect.initGroup("acteEffect");
 
   //rafraichissement du inc_fdr
-  //refreshFdr(subject_id);
+   if("{{$module}}" == "dPcabinet"){
+    refreshFdr(subject_id);
+  }
   
   url_actes = new Url;
   url_actes.addParam("chir_id", chir_id);  
