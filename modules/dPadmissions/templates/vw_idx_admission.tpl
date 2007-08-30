@@ -49,9 +49,9 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td id="allAdmissions" class="halfPane">
+    <td id="allAdmissions" style="width: 250px">
     </td>
-    <td id="listAdmissions" class="halfPane">
+    <td id="listAdmissions" style="width: 100%">
     </td>
   </tr>
 </table>
