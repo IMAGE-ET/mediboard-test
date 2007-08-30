@@ -132,6 +132,13 @@ function popPlanning() {
   url.popup(700, 550, "Planning");
 }
 
+function showRapport() {
+  url = new Url;
+  url.setModuleAction("dPhospi", "vw_rapport");
+  url.addParam("date","{{$date}}")
+  url.popup(800, 600, "Rapport");
+}
+
 function showLegend() {
   url = new Url;
   url.setModuleAction("dPhospi", "legende");
@@ -209,7 +216,9 @@ function pageMain() {
   <tr>
     <td>
       <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
+      <a href="#" onclick="showRapport()" class="buttonprint">Rapport</a>
     </td>
+    
     <td>
       <form name="chgAff" action="?m={{$m}}" method="get">
       {{foreach from=$services item=curr_service}}
