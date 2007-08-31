@@ -31,8 +31,10 @@ if (!$prat_id) {
   }
 }
 
+$med = new CMediusers();
 $user_id = $AppUI->user_id;
-  
+$userCourant = $med->load($user_id);
+
 // Compte-rendu selectionné
 $compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
@@ -69,8 +71,10 @@ foreach($listObjectClass as $keyClass=>$value){
   }
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("isPraticien"         , $userCourant->isPraticien());
 $smarty->assign("user_id"             , $user_id);
 $smarty->assign("prat_id"             , $prat_id);
 $smarty->assign("compte_rendu_id"     , $compte_rendu_id);

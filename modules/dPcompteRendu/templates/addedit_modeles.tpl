@@ -84,6 +84,7 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_modele_aed" />
       {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
+      {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
       {{if $compte_rendu->compte_rendu_id}}
       <button class="new" type="button" onclick="nouveau()">
         Créer un modèle
@@ -163,7 +164,9 @@ function pageMain() {
             <td class="button" colspan="2">
             {{if $compte_rendu->compte_rendu_id}}
             <button class="modify" type="submit">Modifier</button>
+            {{if $isPraticien}}
             <button class="modify" onclick="copie(this.form)">Dupliquer</button>
+            {{/if}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
             Supprimer
             </button>
