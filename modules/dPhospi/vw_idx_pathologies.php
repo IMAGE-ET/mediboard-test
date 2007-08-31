@@ -63,10 +63,12 @@ if ($can->edit) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("affichage_patho", $affichage_patho);
-$smarty->assign("pathos",$pathos);
-$smarty->assign("date" , $date);
-$smarty->assign("heureLimit", $heureLimit);
+$smarty->assign("affichage_patho"       , $affichage_patho);
+$smarty->assign("pathos"                , $pathos);
+$smarty->assign("date"                  , $date);
+$smarty->assign("yesterday"             , mbDate("-1 day", $date));
+$smarty->assign("tomorow"               , mbDate("+1 day", $date));
+$smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->display("vw_idx_pathologies.tpl");
 
