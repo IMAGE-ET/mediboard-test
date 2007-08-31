@@ -45,14 +45,31 @@
     double
   </button>
   {{/if}}
-  
   </form>
+  
+  <!-- Prestations -->
+  {{if $prestations}}
+  <form name="editPrestFrm{{$curr_adm->sejour_id}}" method="post">
+    <input type="hidden" name="m" value="dPplanningOp" />
+    <input type="hidden" name="dosql" value="do_sejour_aed" />
+    <input type="hidden" name="sejour_id" value="{{$curr_adm->sejour_id}}" />
+    <input type="hidden" name="patient_id" value="{{$curr_adm->patient_id}}" />
+  <select name="prestation_id" onchange="submitFormAjax(this.form, 'systemMsg')">
+  <option value="">&mdash; Prestation</option>
+  {{foreach from=$prestations item="_prestation"}}
+    <option value="{{$_prestation->_id}}" {{if $curr_adm->prestation_id==$_prestation->_id}} selected = selected {{/if}}>{{$_prestation->_view}}</option>
+  {{/foreach}}
+  </select>
+  </form>
+  {{/if}}
+  <br />
   {{assign var=affectation value=$curr_adm->_ref_first_affectation}}
   {{if $affectation->affectation_id}}
   {{$affectation->_ref_lit->_view}}
   {{else}}
   Pas de chambre
   {{/if}}
+  
 </td>
 
 {{if $curr_adm->annule == 1}}

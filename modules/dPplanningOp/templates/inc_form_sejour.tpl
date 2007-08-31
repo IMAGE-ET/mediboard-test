@@ -231,6 +231,7 @@
   <td {{if $mode_operation}}colspan="3"{{/if}}>
     {{mb_field object=$sejour field="chambre_seule"}}
   </td>
+  
   {{if !$mode_operation}}
   <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
   <td>
@@ -239,43 +240,68 @@
   {{/if}}
 </tr>
 
-{{if !$mode_operation}}
+
+
+
 <tr>
+{{if $prestations}}
+<th>{{mb_label object=$sejour field="prestation_id"}}</th>
+  <td>
+  <select name="prestation_id">
+  <option value="">&mdash; Choix d'une prestation</option>
+  {{foreach from=$prestations item="_prestation"}}
+    <option value="{{$_prestation->_id}}" {{if $sejour->prestation_id == $_prestation->_id}}selected = selected{{/if}}>{{$_prestation->_view}}</option>
+  {{/foreach}}
+  </select>
+  </td>
+  
+{{else}}
+  <td colspan="2"></td>
+{{/if}}
+{{if $mode_operation}}
+<td colspan="2"></td>
+</tr>
+{{/if}}
+
+<!-- Si on est pas en mode operation, on affiche la suite -->
+{{if !$mode_operation}}
+
   <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
   <td>
     {{mb_field object=$sejour field="repas_sans_sel"}}
   </td>
+
+</tr>
+
+
+
+<tr>
   <th>{{mb_label object=$sejour field="isolement"}}</th>
   <td>
     {{mb_field object=$sejour field="isolement"}}
   </td>
-</tr>
-
-<tr>
   <th>{{mb_label object=$sejour field="repas_diabete"}}</th>
   <td>
     {{mb_field object=$sejour field="repas_diabete"}}
   </td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$sejour field="television"}}</th>
   <td>
     {{mb_field object=$sejour field="television"}}
   </td>
-</tr>
-
-<tr>
   <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
   <td>
     {{mb_field object=$sejour field="repas_sans_residu"}}
   </td>
-  <td colspan="2"></td>
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="venue_SHS"}}</th>
   <td colspan="3">
     {{mb_field object=$sejour field="venue_SHS" size="8" maxlength="8"}}
-  </td>
-</tr>
+  </td></tr>
 {{/if}}
 
 <tr>
@@ -285,6 +311,7 @@
   <td class="text" colspan="3">
     {{mb_label object=$sejour field="rques"}}
   </td>
+  <td colspan="2"></td>
 </tr>
 
 <tr>

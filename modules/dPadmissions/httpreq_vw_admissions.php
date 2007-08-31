@@ -19,6 +19,11 @@ $selTri    = mbGetValueFromGetOrSession("selTri", "nom");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
+// Chargement des prestations
+$prestation = new CPrestation();
+$prestations = $prestation->loadList();
+
+
 // Operations de la journée
 $today = new CSejour;
 
@@ -66,12 +71,12 @@ foreach ($today as $keySejour => $valueSejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date"     , $date);
-$smarty->assign("selAdmis" , $selAdmis);
-$smarty->assign("selSaisis", $selSaisis);
-$smarty->assign("selTri"   , $selTri);
-$smarty->assign("today"    , $today);
-
+$smarty->assign("date"        , $date        );
+$smarty->assign("selAdmis"    , $selAdmis    );
+$smarty->assign("selSaisis"   , $selSaisis   );
+$smarty->assign("selTri"      , $selTri      );
+$smarty->assign("today"       , $today       );
+$smarty->assign("prestations" , $prestations );
 $smarty->display("inc_vw_admissions.tpl");
 
 ?>

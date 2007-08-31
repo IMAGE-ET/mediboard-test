@@ -17,6 +17,10 @@ $patient_id     = mbGetValueFromGet("patient_id"    , 0);
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
+// Chargement des prestations
+$prestation = new CPrestation();
+$prestations = $prestation->loadList();
+
 $sejour = new CSejour;
 $praticien = new CMediusers;
 if($sejour_id) {
@@ -75,7 +79,7 @@ $smarty->assign("sejours"  , $sejours);
 $smarty->assign("listPraticiens", $listPraticiens);
 $smarty->assign("mode_operation", $mode_operation);
 $smarty->assign("etablissements", $etablissements);
-
+$smarty->assign("prestations"   , $prestations   );
 $smarty->display("inc_form_sejour.tpl");
 
 ?>

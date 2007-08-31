@@ -19,6 +19,10 @@ $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
+// Chargement des prestations
+$prestation = new CPrestation();
+$prestations = $prestation->loadList();
+
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
@@ -116,7 +120,7 @@ $smarty->assign("heure_entree_veille" , $heure_entree_veille);
 $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
 //$smarty->assign("locked_sejour"         , $locked_sejour);
 
-
+$smarty->assign("prestations", $prestations);
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);
 $smarty->assign("praticien"     , $praticien);
