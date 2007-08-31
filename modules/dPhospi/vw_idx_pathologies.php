@@ -12,7 +12,7 @@
 global $AppUI, $can, $m, $g;
 require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
-$affichage_patho = mbGetValueFromPostOrSession("affichage_patho","tous"); 
+$affichage_patho = mbGetValueFromPostOrSession("affichage_patho","non_complet"); 
 
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
 $pathos = new CDiscipline();

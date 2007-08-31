@@ -21,8 +21,12 @@ function pageMain() {
       <form name="selAffichage" action="?m=dPhospi&tab=vw_idx_pathologies" method="post"> 
       
       <select name="affichage_patho" onchange="submit()">
-        <option value="tous" {{if $affichage_patho=="tous"}} selected=selected {{/if}}>Tous</option>
-        <option value="non_complet" {{if $affichage_patho=="non_complet"}} selected=selected {{/if}}>Non complétés</option>
+        <option value="tous" {{if $affichage_patho=="tous"}} selected=selected {{/if}}>
+          Tous
+        </option>
+        <option value="non_complet" {{if $affichage_patho=="non_complet"}} selected=selected {{/if}}>
+          Non complétés
+        </option>
       </select>
       </form>
     </td>
