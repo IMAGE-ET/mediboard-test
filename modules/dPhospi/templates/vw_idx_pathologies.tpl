@@ -14,7 +14,7 @@ function pageMain() {
 
 </script>
 
-<table>
+<table class="main">
   <tr>
     <td colspan="4" style="text-align: right">
     Type d'affichage
