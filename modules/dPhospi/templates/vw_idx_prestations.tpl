@@ -31,7 +31,11 @@
     <tr>
       {{if $prestation->_id}}
       <th class="title modify" colspan="2">
-        Modification d'une prestation &lsquo;{{$prestation->nom}}&rsquo;
+        <div class="idsante400" id="{{$prestation->_class_name}}-{{$prestation->_id}}"></div>
+        <a style="float:right;" href="#nothing" onclick="view_log('{{$prestation->_class_name}}',{{$prestation->_id}})">
+        <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+        </a>
+        Modification de la prestation &lsquo;{{$prestation->nom}}&rsquo;
       </th>
       {{else}}
       <th class="title" colspan="2">
