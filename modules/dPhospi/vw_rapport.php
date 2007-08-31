@@ -68,7 +68,7 @@ foreach($list_affectations as $key=>$_affectation){
 	   $totalPrat[$_prat->_view]["ambu"]++;	
 	 } 
 	 // Autres cas
-   	 if($_prat->_id == $_affectation->_ref_sejour->_ref_praticien->_id && $_affectation->_ref_sejour->type != "ambu"){
+   	 if($_prat->_id == $_affectation->_ref_sejour->_ref_praticien->_id && $_affectation->_ref_sejour->type == "comp"){
 	   $totalPrat[$_prat->_view]["hospi"]++;
 	 }
 	 // Total des hospitalisations (Ambu + autres)
