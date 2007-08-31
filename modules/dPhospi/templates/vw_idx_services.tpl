@@ -29,9 +29,13 @@
     <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
-      {{if $serviceSel->service_id}}
+      {{if $serviceSel->_id}}
       <th class="title modify" colspan="2">
-        Modification du service &lsquo;{{$serviceSel->nom}}&rsquo;
+        <div class="idsante400" id="{{$serviceSel->_class_name}}-{{$serviceSel->_id}}"></div>
+        <a style="float:right;" href="#" onclick="view_log('{{$serviceSel->_class_name}}',{{$serviceSel->_id}})">
+          <img src="images/icons/history.gif" alt="historique" />
+        </a>
+        Modification du service &lsquo;{{$serviceSel->_view}}&rsquo;
       </th>
       {{else}}
       <th class="title" colspan="2">

@@ -22,8 +22,6 @@ function storeVoletAcc(objAcc){
   }
 }
 
-
-
 function loadSejour(sejour_id) {
   url_sejour = new Url;
   url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
@@ -63,7 +61,7 @@ function pageMain() {
             <form name="selService" action="?m={{$m}}" method="get">
               <input type="hidden" name="m" value="{{$m}}" />
               <select name="service_id" onChange="submit()">
-                <option value="">&mdash; Choix d'un service &mdash;</option>
+                <option value="">&mdash; Choix d'un service</option>
                 {{foreach from=$services item=curr_service}}
 	            <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service->_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
               {{/foreach}}

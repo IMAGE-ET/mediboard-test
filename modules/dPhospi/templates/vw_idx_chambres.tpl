@@ -49,8 +49,12 @@ function pageMain() {
     <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
-      {{if $chambreSel->chambre_id}}
+      {{if $chambreSel->_id}}
       <th class="title modify" colspan="2">
+        <div class="idsante400" id="{{$chambreSel->_class_name}}-{{$chambreSel->_id}}"></div>
+        <a style="float:right;" href="#" onclick="view_log('{{$chambreSel->_class_name}}',{{$chambreSel->_id}})">
+          <img src="images/icons/history.gif" alt="historique" />
+        </a>
         Modification de la chambre &lsquo;{{$chambreSel->nom}}&rsquo;
       {{else}}
       <th class="title" colspan="2">

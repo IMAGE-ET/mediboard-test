@@ -65,9 +65,9 @@ function pageMain() {
       {{if $patient->patient_id}}
         <th class="title modify" colspan="5">
         
-          <div class="idsante400" id="CPatient-{{$patient->patient_id}}"></div>
+          <div class="idsante400" id="CPatient-{{$patient->_id}}"></div>
               
-          <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->patient_id}})">
+          <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->_id}})">
             <img src="images/icons/history.gif" alt="historique" />
           </a>
           Modification du dossier de {{$patient->_view}}
