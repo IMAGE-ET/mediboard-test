@@ -58,10 +58,10 @@ function pageMain() {
         </tr>
         {{foreach from=$libre item=curr_lit}}
         <tr>
-          <td>{{$curr_lit.service}}</td>
-          <td>{{$curr_lit.chambre}}</td>
-          <td>{{$curr_lit.lit}}</td>
-          <td>{{$curr_lit.limite|date_format:"%A %d %B %Y à %H h %M"}}
+          <td class="text">{{$curr_lit.service}}</td>
+          <td class="text">{{$curr_lit.chambre}}</td>
+          <td class="text">{{$curr_lit.lit}}</td>
+          <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %H h %M"}}
         </tr>
         {{/foreach}}
         {{else}}
@@ -83,15 +83,15 @@ function pageMain() {
         </tr>
         {{foreach from=$listAff item=curr_aff}}
         <tr>
-          <td>{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
-          <td>{{$curr_aff->_ref_lit->nom}}</td>
-          <td>
+          <td class="text">{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
+          <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
+          <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
+          <td class="text">{{$curr_aff->_ref_lit->nom}}</td>
+          <td class="text">
             Du {{$curr_aff->_ref_sejour->entree_prevue|date_format:"%A %d %B %Y à %H h %M"}}
             au {{$curr_aff->_ref_sejour->sortie_prevue|date_format:"%A %d %B %Y à %H h %M"}}
           </td>
-          <td>
+          <td class="text">
             Du {{$curr_aff->entree|date_format:"%A %d %B %Y à %H h %M"}}
             au {{$curr_aff->sortie|date_format:"%A %d %B %Y à %H h %M"}}
           </td>
