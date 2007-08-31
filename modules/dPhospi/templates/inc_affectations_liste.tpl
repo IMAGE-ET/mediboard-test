@@ -95,7 +95,7 @@
       </tr>
       {{if $curr_sejour->rques != ""}}
       <tr>
-        <td class="date" colspan="2" style="background-color: #ff5">
+        <td class="date highlight" colspan="2">
           <em>Séjour</em>: {{$curr_sejour->rques|nl2br}}
         </td>
       </tr>
@@ -103,7 +103,7 @@
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
       {{if $curr_operation->rques != ""}}
       <tr>
-        <td class="date" colspan="2" style="background-color: #ff5">
+        <td class="date highlight" colspan="2">
           <em>Intervention</em>: {{$curr_operation->rques|nl2br}}
         </td>
       </tr>
@@ -111,14 +111,14 @@
       {{/foreach}}
       {{if $curr_sejour->_ref_patient->rques}}
       <tr>
-        <td class="date" colspan="2" style="background-color: #ff5">
+        <td class="date highlight" colspan="2">
           <em>Patient</em>: {{$curr_sejour->_ref_patient->rques|nl2br}}
         </td>
       </tr>
       {{/if}}
       {{if $curr_sejour->chambre_seule}}
       <tr>
-        <td class="date" style="background-color: #f55;" colspan="2">
+        <td class="date highlight" colspan="2">
           <strong>Chambre seule</strong>
         </td>
       </tr>

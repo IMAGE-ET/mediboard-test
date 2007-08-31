@@ -2658,4 +2658,10 @@ span.listeCurrent a {
  	color:red ;
 }
 
+table.tbl td.highlight{
+  background-color: #ff5;
+}
 
+td.highlight{
+  background-color: #ff5;
+}

@@ -129,6 +129,10 @@
               <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}
             </a>
+            {{if $curr_op->rques}}
+            Remarques: {{$curr_op->rques|nl2br}}
+            <br />
+            {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
             <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
@@ -217,6 +221,10 @@
             <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
             {{/foreach}}
             </a>
+            {{if $curr_op->rques}}
+            Remarques: {{$curr_op->rques|nl2br}}
+            <br />
+            {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
             <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">

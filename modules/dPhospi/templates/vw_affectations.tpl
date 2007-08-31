@@ -291,7 +291,7 @@ function pageMain() {
           <td class="date">{{mb_field object=$affectation field="sortie" form="addAffectationsejour" }}</td>
       </tr>
       <tr>
-        <td class="date" colspan="2" style="background-color: #ff5">
+        <td class="date highlight" colspan="2">
           <label for="rques">Remarques</label> : 
           <textarea name="rques"></textarea>
         </td>

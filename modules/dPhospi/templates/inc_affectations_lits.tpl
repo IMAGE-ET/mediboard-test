@@ -134,7 +134,7 @@
   </tr>
   {{if $curr_affectation->rques}}
     <tr class="dates">
-      <td class="text" colspan="2" style="background-color: #ff5">
+      <td class="text highlight" colspan="2">
         <em>Remarques:</em> {{$curr_affectation->rques|nl2br}}
       </td>
     </tr>
@@ -296,7 +296,7 @@ Septique
 </tr>
 {{if $sejour->rques != ""}}
 <tr class="dates">
-  <td class="text" colspan="2" style="background-color: #ff5">
+  <td class="text highlight" colspan="2">
     <em>Séjour</em>: {{$sejour->rques|nl2br}}
   </td>
 </tr>
@@ -304,7 +304,7 @@ Septique
 {{foreach from=$sejour->_ref_operations item=curr_operation}}
 {{if $curr_operation->rques != ""}}
 <tr class="dates">
-  <td class="text" colspan="2" style="background-color: #ff5">
+  <td class="text highlight" colspan="2">
     <em>Intervention</em>: {{$curr_operation->rques|nl2br}}
   </td>
 </tr>
@@ -312,7 +312,7 @@ Septique
 {{/foreach}}
 {{if $patient->rques != ""}}
 <tr class="dates">
-  <td class="text" colspan="2" style="background-color: #ff5">
+  <td class="text highlight" colspan="2">
     <em>Patient</em>: {{$patient->rques|nl2br}}
   </td>
 </tr>
