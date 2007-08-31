@@ -72,12 +72,13 @@ function pageMain() {
       onChange : updateTokenCim10
     } ); 
   } 
-  
+  {{if $consult->consultation_id}}
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
     panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
     showDelay:50, 
     showSteps:3 
   } );
+  {{/if}}
   
 }
 </script>
