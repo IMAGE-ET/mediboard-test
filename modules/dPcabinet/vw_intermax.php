@@ -22,7 +22,7 @@ $intermaxFunctions = array(
 $smarty = new CSmartyDP();
 
 $smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("newLine", "---");
+$smarty->assign("newLine"          , "---");
 
 $smarty->display("vw_intermax.tpl");
 
