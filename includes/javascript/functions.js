@@ -678,7 +678,7 @@ Class.extend(ObjectTooltip, {
     this.oOptions = {
       mode: "view",
       popup: false,
-      duration: 200
+      duration: 400
     };
     
     Object.extend(this.oOptions, oOptions);
@@ -710,6 +710,10 @@ Class.extend(ObjectTooltip, {
     this.eDiv.hide();
   },
   
+  stopShow: function() {
+    clearTimeout(this.idTimeout);
+  },
+  
   load: function() {
     url = new Url;
     url.setModuleAction(this.mode.module, this.mode.action);
@@ -732,6 +736,7 @@ Class.extend(ObjectTooltip, {
       Event.observe(this.eTrigger, "mouseout", this.hide.bind(this));
     }
     if(this.oOptions.mode == "notes") {
+      Event.observe(this.eTrigger, "mouseout", this.stopShow.bind(this));
       Event.observe(this.eDiv, "click", this.hide.bind(this));
     }
   },
