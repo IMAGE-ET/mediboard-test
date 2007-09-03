@@ -77,6 +77,9 @@ function reloadAfterSaveDoc(){
       <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
+      <div style="float:left;" class="noteDiv {{$patient->_class_name}}-{{$patient->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
       Identité
     </th>
     <th class="category" colspan="2">Coordonnées</th>

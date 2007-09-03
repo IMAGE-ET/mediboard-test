@@ -31,6 +31,9 @@
     <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
       <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
     </a>
+    <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+    </div>
     {{/if}}
     {{tr}}msg-CSejour-informations{{/tr}}
   </th>

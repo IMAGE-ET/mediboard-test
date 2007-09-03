@@ -36,6 +36,9 @@ function pageMain() {
     <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
       <img src="images/icons/history.gif" alt="historique" />
     </a>
+    <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
+      <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+    </div>
       Modification du séjour {{$sejour->_view}}
     </th>
     {{else}}

@@ -26,6 +26,9 @@
       <a style="float:right;" href="#" onclick="view_log('COperation',{{$op->operation_id}})">
         <img src="images/icons/history.gif" alt="{{tr}}History.desc{{/tr}}" />
       </a>
+      <div style="float:left;" class="noteDiv {{$op->_class_name}}-{{$op->_id}}">
+        <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+      </div>
       {{/if}}
       {{tr}}msg-COperation-informations{{/tr}}
     </th>
