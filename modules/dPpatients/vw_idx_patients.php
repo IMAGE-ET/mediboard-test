@@ -44,6 +44,23 @@ $patient_day         = mbGetValueFromGetOrSession("Date_Day"    , date("d"));
 $patient_month       = mbGetValueFromGetOrSession("Date_Month"  , date("m"));
 $patient_year        = mbGetValueFromGetOrSession("Date_Year"   , date("Y"));
 
+$useVitale = mbGetValueFromGet("useVitale", 0);
+if($useVitale) {
+  $vitaleValue = mbGetValueFromGet("vitale", array());
+  $patient_nom = mbGetValue($vitaleValue["nom"], $patient_nom);
+  mbSetValueToSession("nom", $patient_nom);
+  $patient_prenom = mbGetValue($vitaleValue["prenom"], $patient_prenom);
+  mbSetValueToSession("prenom", $patient_prenom);
+  $patient_day = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%d"), $patient_day);
+  mbSetValueToSession("Date_Day", $patient_day);
+  $patient_month = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%m"), $patient_month);
+  mbSetValueToSession("Date_Month", $patient_day);
+  $patient_year = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%Y"), $patient_year);
+  mbSetValueToSession("Date_Year", $patient_day);
+  $patient_naissance = "on";
+  mbSetValueToSession("naissance", "on");
+}
+
 $where        = array();
 $whereSoundex = array();
 $soundexObj   = new soundex2();
@@ -105,6 +122,12 @@ if ($patient->_id) {
   $patient->loadDossierComplet();
 }
 
+// Module de carte vitale
+
+$intermaxFunctions = array(
+  "Lire Vitale",
+);
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -128,6 +151,9 @@ $smarty->assign("chir"           , $chir                                      );
 $smarty->assign("anesth"         , $anesth                                    );
 $smarty->assign("listPrat"       , $listPrat                                  );
 $smarty->assign("board"          , 0                                          );
+
+$smarty->assign("intermaxFunctions", $intermaxFunctions);
+$smarty->assign("newLine"          , "---");
 
 $smarty->display("vw_idx_patients.tpl");
 ?>
