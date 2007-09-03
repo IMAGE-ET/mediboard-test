@@ -34,7 +34,9 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
       <input type="hidden" name="id" value="{{$date}}" />
       <input type="hidden" name="mode" value="allsaisie" />
       <input type="hidden" name="value" value="1" />
-      <button class="tick" type="submit">Saisis</button>
+      <button class="tick" type="submit">
+        {{tr}}CSejour-saisi_SHS-tous{{/tr}}
+      </button>
       </form>
     </th>
     <th>Anesth</th>

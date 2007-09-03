@@ -107,12 +107,12 @@
   {{if !$curr_adm->saisi_SHS}}
   <input type="hidden" name="value" value="1" />
   <button class="tick" type="button" onclick="submitAdmission(this.form);">
-    Saisi
+    {{tr}}CSejour-saisi_SHS{{/tr}}
   </button>
   {{else}}
   <input type="hidden" name="value" value="0" />
   <button class="cancel" type="button" onclick="submitAdmission(this.form);">
-    Annuler
+    {{tr}}Cancel{{/tr}}
   </button>
   {{/if}}
   {{if $curr_adm->modif_SHS == 1}}
