@@ -24,6 +24,13 @@
         </tr>
         
         <tr>
+          <th><label for="jeuneFille" title="Nom de naissance">Nom de naissance</label></th>
+          <td><input tabindex="2" type="text" name="jeuneFille" value="{{$jeuneFille|stripslashes}}" /></td>
+          <td colspan="2"></td>
+        </tr>
+        
+        
+        <tr>
           <th colspan="2">
             <label for="check_naissance" title="Date de naissance du patient à rechercher">
               <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>

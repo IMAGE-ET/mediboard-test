@@ -33,15 +33,16 @@ if ($new = mbGetValueFromGet("new")) {
 }
 
 // Récuperation des patients recherchés
-$patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
-$patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
-$soundex           = mbGetValueFromGetOrSession("soundex"   , "off"    );
-$patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
-$patient_ville     = mbGetValueFromGetOrSession("ville"     , ""       );
-$patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
-$patient_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
-$patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
-$patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
+$patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
+$patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
+$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
+$soundex             = mbGetValueFromGetOrSession("soundex"     , "off"    );
+$patient_naissance   = mbGetValueFromGetOrSession("naissance"   , "off"    );
+$patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
+$patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
+$patient_day         = mbGetValueFromGetOrSession("Date_Day"    , date("d"));
+$patient_month       = mbGetValueFromGetOrSession("Date_Month"  , date("m"));
+$patient_year        = mbGetValueFromGetOrSession("Date_Year"   , date("Y"));
 
 $where        = array();
 $whereSoundex = array();
@@ -55,13 +56,19 @@ if ($patient_prenom) {
   $where["prenom"]                 = "LIKE '$patient_prenom%'";
   $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
 }
+if ($patient_jeuneFille) {
+  $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
+  $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
+}
+
 
 if ($patient_naissance == "on"){
   $year =($patient_year)?"$patient_year-":"%-";
   $month =($patient_month)?"$patient_month-":"%-";
   $day =($patient_day)?"$patient_day":"%";
-  $day = str_pad($day,2,"0",STR_PAD_LEFT);
-  
+  if($day!="%"){
+    $day = str_pad($day,2,"0",STR_PAD_LEFT);
+  }
   $naissance = $year.$month.$day;
   
   if($patient_year || $patient_month || $patient_day){
@@ -108,6 +115,7 @@ $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("nom"            , $patient_nom                               );
 $smarty->assign("prenom"         , $patient_prenom                            );
+$smarty->assign("jeuneFille"     , $patient_jeuneFille                        );
 $smarty->assign("soundex"        , $soundex                                   );
 $smarty->assign("naissance"      , $patient_naissance                         );
 $smarty->assign("ville"          , $patient_ville                             );
