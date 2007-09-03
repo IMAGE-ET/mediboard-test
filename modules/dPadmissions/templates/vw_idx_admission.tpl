@@ -2,6 +2,12 @@
 
 <script type="text/javascript">
 
+function showLegend() {
+  url = new Url;
+  url.setModuleAction("dPadmissions", "vw_legende");
+  url.popup(300, 150, "Legende");
+}
+
 function printAdmission(id) {
   var url = new Url;
   url.setModuleAction("dPadmissions", "print_admission");
@@ -48,6 +54,9 @@ function pageMain() {
 </script>
 
 <table class="main">
+<tr>
+<td><a href="#" onclick="showLegend()" class="buttonsearch">Légende</a></td>
+</tr>
   <tr>
     <td id="allAdmissions" style="width: 250px">
     </td>
