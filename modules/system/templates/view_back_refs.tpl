@@ -8,7 +8,8 @@
 {{/foreach}}
 </tr>
 
-{{foreach from=$object->_backSpecs key=backName item=backSpec}}
+{{foreach from=$object->_back key=backName item=backObjects}}
+{{assign var=backSpec value=$object->_backSpecs.$backName}}
 <tr>
   <th class="category" colspan="{{$objects|@count}}">
     {{tr}}{{$backSpec->_initiator}}-back-{{$backName}}{{/tr}}	

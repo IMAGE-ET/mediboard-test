@@ -5,23 +5,19 @@
  *  @subpackage classes
  *  @version $Revision: 1793 $
  *  @author Thomas Despoix
-*/
-
-/**
- * Class CMbObject 
- * @abstract Adds Mediboard abstraction layer functionality
  */
-
-global $mbObjectCount, $mbCacheObjectCount;
-$mbObjectCount = 0;
-$mbCacheObjectCount = 0;
-
 
 require_once("./classes/request.class.php");
 require_once("./classes/mbFieldSpecFact.class.php");
 require_once("./classes/mbObjectSpec.class.php");
  
+/**
+ * Class CMbObject 
+ * @abstract Adds Mediboard abstraction layer functionality
+ */
 class CMbObject {
+  static $objectCount = 0;
+  static $cacheCount = 0;
   static $handlers = null;
   
   /**
@@ -80,8 +76,7 @@ class CMbObject {
    */
  
   function CMbObject($table, $key) {
-    global $mbObjectCount;
-    $mbObjectCount++;
+    self::$objectCount++;
     
     $this->_tbl     = $table;
     $this->_tbl_key = $key;
@@ -548,7 +543,7 @@ class CMbObject {
   }
   
   function loadRefModule($name) {
-    $this->_ref_module = CModule::getInstalled($name);
+    $this->_ref_module = CModule::getActive($name);
   }
 
   /**

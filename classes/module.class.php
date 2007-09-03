@@ -24,14 +24,12 @@ if(!defined("PERM_DENY")) {
 }
 
 /**
-* Module class
-*/
-
-global $module_installed;
-global $module_active;
-global $module_visible;
-
+ * Module class
+ */
 class CModule extends CMbObject {
+	static $installed = array();
+	static $active    = array();
+	static $visible   = array();
   
   // primary key
   var $mod_id;
@@ -133,26 +131,18 @@ class CModule extends CMbObject {
     $modules = new CModule;
     $order = "mod_ui_order";
     $modules = $modules->loadList(null, $order);
-    
-    global $module_installed;
-    global $module_active;
-    global $module_visible;
-
-    $module_installed = array();
-    $module_active = array();
-    $module_visible = array();
-    
+        
     foreach($modules as $keyModule => $valModule) {
       $module =& $modules[$keyModule];
         
-      $module_installed[$module->mod_name] = $module;
+      self::$installed[$module->mod_name] = $module;
       
       if($module->mod_active == 1) {
-        $module_active[$module->mod_name] =& $module;
+        self::$active[$module->mod_name] =& $module;
       }
     
       if($module->mod_ui_active == 1) {
-        $module_visible[$module->mod_name] =& $module;
+        self::$visible[$module->mod_name] =& $module;
       }
     }
   }
@@ -237,39 +227,33 @@ class CModule extends CMbObject {
    * Returns all or a named installed module
    */
   function getInstalled($moduleName = null) {
-    global $module_installed;
-
     if ($moduleName) {
-      return @$module_installed[$moduleName];
+      return @self::$installed[$moduleName];
     }
 
-    return $module_installed;
+    return self::$installed;
   }
 
   /**
    * Returns all or a named active module
    */
   function getActive($moduleName = null) {
-    global $module_active;
-
     if ($moduleName) {
-      return @$module_active[$moduleName];
+      return @self::$active[$moduleName];
     }
 
-    return $module_active;
+    return self::$active;
   }
    
   /**
    * Returns all or a named visible module
    */
   function getVisible($moduleName = null) {
-    global $module_visible;
-
     if ($moduleName) {
-      return @$module_visible[$moduleName];
+      return @self::$visible[$moduleName];
     }
 
-    return $module_visible;
+    return self::$visible;
   }
   
   /**
