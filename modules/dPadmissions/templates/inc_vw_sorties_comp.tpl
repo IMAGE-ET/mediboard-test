@@ -46,4 +46,45 @@
     <td class="text">{{$curr_sortie->_ref_lit->_view}}</td>
   </tr>
   {{/foreach}}
+  {{foreach from=$listSejourC item=curr_sejour}}
+  <tr>
+    <td>
+      <form name="editFrm{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      <input type="hidden" name="sejour_id" value="{{$curr_sejour->_id}}" />
+      {{if $curr_sejour->sortie_reelle}}
+      <input type="hidden" name="sortie_reelle" value="" />
+      <button class="cancel" type="button" onclick="submitComp(this.form)">
+        Annuler la sortie
+      </button>
+      <br />
+      {{$curr_sejour->sortie_reelle|date_format:"%H h %M"}} / 
+      {{tr}}CSejour.mode_sortie.{{$curr_sejour->mode_sortie}}{{/tr}} 
+      {{else}}
+      <input type="hidden" name="sortie_reelle" value="{{$date_sortie}}" />
+      <button class="tick" type="button" onclick="submitComp(this.form)">
+        Effectuer la sortie
+      </button>
+      <br />      
+      {{mb_field object=$curr_sejour field="mode_sortie"}}
+      
+      {{/if}}
+     
+    
+      </form>
+    </td>
+    <td class="text">
+		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->_ref_patient->patient_id}}">
+		    <img src="images/icons/edit.png" alt="modifier" />
+		  </a>
+      <b>{{$curr_sejour->_ref_patient->_view}}</b>
+    </td>
+    <td>{{$curr_sejour->sortie_prevue|date_format:"%H h %M"}}</td>
+    <td class="text">Dr. {{$curr_sejour->_ref_praticien->_view}}</td>
+    <td class="text">Aucune chambre</td>
+  </tr>
+  {{/foreach}}
+  
 </table>

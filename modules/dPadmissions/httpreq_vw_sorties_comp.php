@@ -17,6 +17,9 @@ $vue = mbGetValueFromGetOrSession("vue", 0);
 // Récupération des dates
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
+$date_sortie = mbDateTime();
+
+
 $now  = mbDate();
 
 // Récupération des sorties du jour
@@ -36,7 +39,11 @@ $order = "patients.nom, patients.prenom";
 $where["type"] = "= 'comp'";
 $where["sejour.group_id"] = "= '$g'";
 $listComp = $list->loadList($where, $order, null, null, $ljoin);
+$tab_temp = array();
 foreach($listComp as $key => $value) {
+  // stockage dans un tableau temporaire  l'id du sejour en clé...
+  $tab_temp[$value->sejour_id] = $value;
+  
   $listComp[$key]->loadRefsFwd();
   if($listComp[$key]->_ref_next->affectation_id) {
     unset($listComp[$key]);
@@ -46,14 +53,31 @@ foreach($listComp as $key => $value) {
   }
 }
 
+// Recuperation de la liste des sejours ne comportant pas d'affectation
+$sejour = new CSejour();
+$whereSejour["type"] = " = 'comp'";
+$whereSejour["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$listSejourComp = $sejour->loadList($whereSejour);
+$listSejourC = array();
+foreach($listSejourComp as $key=>$sejourComp){
+	$sejourComp->loadRefPraticien();
+    $sejourComp->loadRefPatient();
+    $listSejourC[$sejourComp->_id] = $sejourComp;
+    if(array_key_exists($sejourComp->_id,$tab_temp)){
+      unset($listSejourC[$sejourComp->_id]);
+    }
+}
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("date"     , $date );
-$smarty->assign("now"      , $now );
-$smarty->assign("vue"      , $vue );
-$smarty->assign("listComp" , $listComp );
-
+$smarty->assign("date"           , $date );
+$smarty->assign("now"            , $now );
+$smarty->assign("vue"            , $vue );
+$smarty->assign("listComp"       , $listComp );
+$smarty->assign("listSejourC"    , $listSejourC);
+$smarty->assign("date_sortie"    , $date_sortie);
 $smarty->display("inc_vw_sorties_comp.tpl");
 
 ?>

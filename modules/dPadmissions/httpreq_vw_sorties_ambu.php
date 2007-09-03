@@ -17,6 +17,8 @@ $vue = mbGetValueFromGetOrSession("vue", 0);
 // Récupération des dates
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
+$date_sortie = mbDateTime();
+
 $now  = mbDate();
 
 // Récupération des sorties du jour
@@ -36,7 +38,11 @@ $order = "patients.nom, patients.prenom";
 $where["type"] = "= 'ambu'";
 $where["sejour.group_id"] = "= '$g'";
 $listAmbu = $list->loadList($where, $order, null, null, $ljoin);
+$tab_temp = array();
 foreach($listAmbu as $key => $value) {
+  // stockage dans un tableau temporaire  l'id du sejour en clé...
+  $tab_temp[$value->sejour_id] = $value;
+  
   $listAmbu[$key]->loadRefsFwd();
   if($listAmbu[$key]->_ref_next->affectation_id) {
     unset($listAmbu[$key]);
@@ -46,13 +52,32 @@ foreach($listAmbu as $key => $value) {
   }
 }
 
+//mbTrace($listAmbu);
+
+
+$sejour = new CSejour();
+$whereSejour["type"] = " = 'ambu'";
+$whereSejour["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$listSejourAmbu = $sejour->loadList($whereSejour);
+$listSejourA = array();
+foreach($listSejourAmbu as $key=>$sejourAmbu){
+    $sejourAmbu->loadRefPraticien();
+    $sejourAmbu->loadRefPatient();
+    $listSejourA[$sejourAmbu->_id] = $sejourAmbu;
+    if(array_key_exists($sejourAmbu->_id,$tab_temp)){
+      unset($listSejourA[$sejourAmbu->_id]);
+    }
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("date"     , $date );
 $smarty->assign("now"      , $now );
 $smarty->assign("vue"      , $vue );
-$smarty->assign("listAmbu" , $listAmbu );
-
+$smarty->assign("listAmbu"       , $listAmbu );
+$smarty->assign("listSejourA" , $listSejourA );
+$smarty->assign("date_sortie", $date_sortie);
 $smarty->display("inc_vw_sorties_ambu.tpl");
 
 ?>

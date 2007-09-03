@@ -8,9 +8,11 @@ function reloadAmbu() {
   ambuUrl.requestUpdate('sortiesAmbu', { waitingText : null });
 }
 
+
 function submitAmbu(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAmbu });
 }
+
 
 function reloadComp() {
   var compUrl = new Url;
