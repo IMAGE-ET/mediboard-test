@@ -19,7 +19,7 @@ $utypes = array(
   10 => "Secrétaire",
   12 => "Surveillante de bloc",
   13 => "Médecin",
-  14 => "Personnel de bloc"
+  14 => "Personnel"
 );
 
 ##
