@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-saisi_SHS-tous'] = '';
+$locales['CSejour-facturable'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -364,6 +364,7 @@ $locales['CSejour-rques-desc'] = '';
 $locales['CSejour-saisi_SHS'] = '';
 $locales['CSejour-saisi_SHS-court'] = '';
 $locales['CSejour-saisi_SHS-desc'] = '';
+$locales['CSejour-saisi_SHS-tous'] = '';
 $locales['CSejour-septique'] = '';
 $locales['CSejour-septique-court'] = '';
 $locales['CSejour-septique-desc'] = '';

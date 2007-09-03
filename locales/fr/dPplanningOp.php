@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-saisi_SHS-tous'] = 'Préparés';
+$locales['CSejour-facturable'] = 'Facturable';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -364,6 +364,7 @@ $locales['CSejour-rques-desc'] = 'Remarques';
 $locales['CSejour-saisi_SHS'] = 'Préparé';
 $locales['CSejour-saisi_SHS-court'] = '';
 $locales['CSejour-saisi_SHS-desc'] = '';
+$locales['CSejour-saisi_SHS-tous'] = 'Préparés';
 $locales['CSejour-septique'] = 'Septique';
 $locales['CSejour-septique-court'] = '';
 $locales['CSejour-septique-desc'] = 'Septique';

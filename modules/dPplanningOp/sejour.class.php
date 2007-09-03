@@ -55,6 +55,7 @@ class CSejour extends CCodableCCAM {
   var $repas_sans_residu  = null;
   var $mode_sortie        = null;
   var $prestation_id      = null;
+  var $facturable         = null; 
   
   // Form Fields
   var $_duree_prevue       = null;
@@ -141,6 +142,7 @@ class CSejour extends CCodableCCAM {
     $specs["repas_sans_residu"]   = "bool";
     $specs["mode_sortie"]         = "enum list|normal|transfert|deces";
     $specs["prestation_id"]       = "ref class|CPrestation";
+    $specs["facturable"]          = "bool notNull default|1";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
     $specs["_admission"] 		  = "text";

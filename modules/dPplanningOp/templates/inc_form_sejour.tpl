@@ -208,6 +208,14 @@
   </td>
 </tr>
 
+<tr>
+  <th>{{mb_label object=$sejour field="facturable"}}</th>
+  <td colspan="3">
+  {{mb_field object=$sejour field="facturable"}}
+  </td>
+</tr>
+
+
 <tr {{if $mode_operation}}style="display: none;"{{/if}}>
   <th>{{mb_label object=$sejour field="modalite" typeEnum="radio"}}</th>
   <td colspan="3">
@@ -221,7 +229,7 @@
     {{mb_field object=$sejour field="ATNC"}}
   </td>
   <th>{{mb_label object=$sejour field="hormone_croissance"}}</th>
-  <td colspan="2">
+  <td>
     {{mb_field object=$sejour field="hormone_croissance"}}
   </td>  
 </tr>
@@ -311,7 +319,6 @@
   <td class="text" colspan="3">
     {{mb_label object=$sejour field="rques"}}
   </td>
-  <td colspan="2"></td>
 </tr>
 
 <tr>
