@@ -80,14 +80,13 @@ foreach($classes as $class) {
       $fwdObject = new $fwdClass;
       
       // Find corresponding back ref
-      $fwdObject->makeBackSpecs();
       $backSpec = null;
       foreach ($fwdObject->_backSpecs as $_backSpec) {
+        $fwdObject->makeBackSpec($_backSpec);
         if ($_backSpec->class == $spec->className && $_backSpec->field == $spec->fieldName) {
           $backSpec = $_backSpec;
         }
       }
-      
       checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backSpec->name");
     }
   }

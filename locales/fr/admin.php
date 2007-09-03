@@ -114,4 +114,10 @@ $locales['msg-CPermModule-modify'] = 'Permission modifiée';
 $locales['msg-CPermObject-create'] = 'Permission créée';
 $locales['msg-CPermObject-delete'] = 'Permission supprimée';
 $locales['msg-CPermObject-modify'] = 'Permission modifiée';
+$locales['CMbObject-back-'] = '';
+$locales['CModule-back-'] = '';
+$locales['CUser-back-'] = '';
+$locales['CUser-template'] = 'Modèle';
+$locales['CUser-template-court'] = '';
+$locales['CUser-template-desc'] = 'L\'utilisateur est-il utilisé comme modèle';
 ?>

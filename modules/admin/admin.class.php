@@ -19,7 +19,7 @@ $utypes = array(
   10 => "Secrétaire",
   12 => "Surveillante de bloc",
   13 => "Médecin",
-  14 => "Personnel"
+  14 => "Personnel de bloc"
 );
 
 ##
@@ -48,8 +48,9 @@ class CUser extends CMbObject {
   var $user_pic         = null;
   var $user_signature   = null;
   var $user_last_login  = null;
+  var $template         = null;
 
-  var $_user_password    = null;
+  var $_user_password   = null;
 
   var $_ref_preferences = null;
   
@@ -86,7 +87,8 @@ class CUser extends CMbObject {
       "user_birthday"   => "dateTime",
       "user_pic"        => "text",
       "user_signature"  => "text",
-      "user_last_login" => "dateTime"
+      "user_last_login" => "dateTime",
+      "template"        => "bool notNull default|0"
     );
   }
   

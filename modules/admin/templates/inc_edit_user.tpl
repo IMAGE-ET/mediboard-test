@@ -24,12 +24,14 @@
   </tr>
   
   <tr>
-    <th rowspan="2">{{mb_label object=$user field="user_username"}}</th>
-    <td rowspan="2">{{mb_field tabindex="101" object=$user field="user_username"}}</td>
+    <th>{{mb_label object=$user field="user_username"}}</th>
+    <td>{{mb_field tabindex="101" object=$user field="user_username"}}</td>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
     <td><input tabindex="110" type="password" name="_user_password" class="str sameAs|_user_password" value="" /></td>
   </tr>
   <tr>
+    <th>{{mb_label object=$user field="template"}}</th>
+    <td>{{mb_field tabindex="101" object=$user field="template"}}</td>
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
     <td><input tabindex="111" type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
   </tr>
