@@ -35,6 +35,8 @@ class CCodeCCAM {
   // Variable calculées
   var $_code7 = null;
   
+  var $_default = null;
+  
   /**
    * Construction
    */
@@ -193,9 +195,16 @@ class CCodeCCAM {
           }
         }
       }
+      $this->_default = reset($this->activites);
+      if($this->_default->phases){
+        $this->_default = $this->_default->phases[0]->tarif;
+      }
+      else {
+      	$this->_default = 0;
+      }
     }
   }
-
+  
     
   
   
