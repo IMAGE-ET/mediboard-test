@@ -140,7 +140,7 @@ class CSejour extends CCodableCCAM {
     $specs["repas_diabete"]       = "bool";
     $specs["repas_sans_sel"]      = "bool";
     $specs["repas_sans_residu"]   = "bool";
-    $specs["mode_sortie"]         = "enum list|normal|transfert|deces";
+    $specs["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
     $specs["_date_min"] 		  = "dateTime";
