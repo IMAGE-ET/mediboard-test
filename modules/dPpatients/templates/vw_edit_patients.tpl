@@ -4,6 +4,117 @@
 
 
 <script type="text/javascript">
+
+var Intermax = {
+  currentFunction : "unknown",
+  newLine : {{$newLine|json}},
+  
+  bindContent: function(sContent) {
+    var aContentLines = sContent.split(this.newLine);
+    var oContent = {}
+    var sCurrentCategory = "";
+    aContentLines.each(function(line) {
+      
+      // Create new category
+      if (aMatches = line.match(/\[(\w*)\]/)) {
+        sCurrentCategory = aMatches[1];
+        oContent[sCurrentCategory] = {}
+      }
+      
+      // Fill a key-value pair in current category
+      if (aMatches = line.match(/(\w*)=(.*)/)) {
+        sKey = aMatches[1];
+        sValue = aMatches[2];
+        oContent[sCurrentCategory][sKey] = sValue;
+      }
+      
+    } );
+    
+	return oContent;
+  },
+  
+  makeContent: function(oContent) {
+    var sContent = '';
+    $H(oContent).each(function(pair) {
+      sContent += printf ("[%s]%s", pair.key, Intermax.newLine);
+      $H(pair.value).each( function(pair) {
+        sContent += printf ("%s = %s%s", pair.key, pair.value, Intermax.newLine);
+      } );
+    } );
+    
+    return sContent;
+  },
+
+  trigger: function(sFunction) {
+    this.currentFunction = sFunction;
+    
+    var oContent = {
+      FONCTION: {
+        NOM: sFunction
+      },
+      PARAM: {
+        AFFICHAGE: 1
+      }
+    }
+    
+    var sContent = this.makeContent(oContent);
+    document.intermaxTrigger.performWrite(sContent);
+  },
+  
+  result: function() {
+    document.intermaxResult.performRead();
+    setTimeout(Intermax.handleContent.bind(Intermax), 100);
+    
+  },
+  
+  handleContent: function() {
+    if (oAppletContent = document.intermaxResult.getContent()) {
+      // Append with empty Js String will cast a Java string to a Js string
+      var sContent = oAppletContent + ""; 
+      oContent = this.bindContent(sContent);
+      this.createResultMessages(oContent);
+      var fResultHandler = this.ResultHandler[oContent.FONCTION.NOM] || Prototype.emptyFunction;
+      fResultHandler(oContent);
+    }
+  },
+  
+  createResultMessages: function(oContent) {
+  },
+  
+  ResultHandler : {
+    "Lire Vitale" : function (oContent) {
+      oVitale = oContent.VITALE;
+      
+      url = new Url;
+      url.setModuleTab("dPpatients", "vw_edit_patients");
+
+      url.addParam("useVitale", "1");
+      url.addParam("vitale[nom]", oVitale.VIT_NOM);
+      url.addParam("vitale[prenom]", oVitale.VIT_PRENOM);
+
+      var sAdresse = [
+        oVitale.VIT_ADRESSE_1, 
+        oVitale.VIT_ADRESSE_2,
+        oVitale.VIT_ADRESSE_1, 
+        oVitale.VIT_ADRESSE_2,
+        oVitale.VIT_ADRESSE_1].without("").join("\n");
+      url.addParam("vitale[adresse]", sAdresse);
+      
+      var sNaissance = Date.fromLocaleDate(oVitale.VIT_DATE_NAISSANCE).toDATE();
+      url.addParam("vitale[naissance]", sNaissance);
+      
+      var sMatricule = oVitale.VIT_NUMERO_SS_INDIV ?
+        oVitale.VIT_NUMERO_SS_INDIV + oVitale.VIT_CLE_SS_INDIV :
+        oVitale.VIT_NUMERO_SS + oVitale.VIT_CLE_SS
+      url.addParam("vitale[matricule]", sMatricule);
+      url.redirect();
+      
+      window.setPat = function(patient_id, patient_view) {
+      }
+    }
+  }
+}
+
 var httpreq_running = false;
 function confirmCreation(oForm){
   if(httpreq_running) {
@@ -42,6 +153,40 @@ function pageMain() {
 
 </script>
 
+
+{{if $app->user_prefs.GestionFSE}}
+<!-- Yoplet to trigger functions -->
+
+<applet 
+  name="intermaxTrigger"
+  code="org.yoplet.Yoplet.class" 
+  archive="includes/applets/yoplet.jar" 
+  width="0" 
+  height="0"
+>
+  <param name="action" value="sleep"/>
+  <param name="lineSeparator" value="{{$newLine}}"/>
+  <param name="debug" value="false" />
+  <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.INI" />
+  <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/CALL.FLG" />
+</applet>
+
+<!-- Yoplet to read results -->
+<applet 
+  name="intermaxResult"
+  code="org.yoplet.Yoplet.class" 
+  archive="includes/applets/yoplet.jar" 
+  width="0" 
+  height="0"
+>
+  <param name="action" value="sleep"/>
+  <param name="lineSeparator" value="{{$newLine}}"/>
+  <param name="debug" value="false" />
+  <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.OUT" />
+  <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" />
+</applet>
+{{/if}}
+
 <table class="main">
   {{if $patient->patient_id}}
   <tr>
@@ -64,6 +209,9 @@ function pageMain() {
       <tr>
       {{if $patient->patient_id}}
         <th class="title modify" colspan="5">
+          {{if $app->user_prefs.GestionFSE}}
+					  <button class="search" type="button" onclick="Intermax.result();" style="float: left;">Carte vitale</button>
+					{{/if}}
         
           <div class="idsante400" id="CPatient-{{$patient->_id}}"></div>
               
@@ -73,7 +221,12 @@ function pageMain() {
           Modification du dossier de {{$patient->_view}}
         </th>
       {{else}}
-        <th class="title" colspan="5">Création d'un dossier</th>
+        <th class="title" colspan="5">
+          {{if $app->user_prefs.GestionFSE}}
+					  <button class="search" type="button" onclick="Intermax.result();" style="float: left;">Carte vitale</button>
+					{{/if}}
+          Création d'un dossier
+        </th>
       {{/if}}
       </tr>
       

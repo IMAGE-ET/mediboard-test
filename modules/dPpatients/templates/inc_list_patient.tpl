@@ -111,8 +111,6 @@ var Intermax = {
 }
 </script>
 
-
-
 {{if $app->user_prefs.GestionFSE}}
 <!-- Yoplet to trigger functions -->
 
