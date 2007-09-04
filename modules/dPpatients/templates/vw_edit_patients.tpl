@@ -149,6 +149,8 @@ function pageMain() {
   initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
   initPaysField("editFrm", "pays","_tel1");
   regFieldCalendar("editFrm", "cmu");
+  initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
+  initPaysField("editFrm", "assure_pays","_assure_tel1");
 }
 
 </script>
@@ -266,6 +268,14 @@ function pageMain() {
               </div>
               <div id="CorrespContent"  class="accordionTabContentBox">
               {{include file="inc_acc/inc_acc_corresp.tpl"}}
+              </div>
+            </div>
+            <div id="Assure">
+              <div id="AssureHeader" class="accordionTabTitleBar">
+                Assuré social
+              </div>
+              <div id="AssureContent"  class="accordionTabContentBox">
+              {{include file="inc_acc/inc_acc_assure.tpl"}}
               </div>
             </div>
           </div>

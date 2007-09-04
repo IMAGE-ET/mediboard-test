@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.44";
+$config["mod_version"]     = "0.45";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -335,7 +335,26 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `antecedent` CHANGE `type` `type` enum('med','alle','trans','obst','chir','fam','anesth','gyn') NOT NULL DEFAULT 'med';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.44";
+    $this->makeRevision("0.44");
+    $sql = "ALTER TABLE `patients`
+						ADD `assure_nom` VARCHAR(255), 
+						ADD `assure_nom_jeune_fille` VARCHAR(255), 
+						ADD `assure_prenom` VARCHAR(255), 
+						ADD `assure_naissance` DATE, 
+						ADD `assure_sexe` ENUM('m','f','j'), 
+						ADD `assure_adresse` TEXT, 
+						ADD `assure_ville` VARCHAR(255), 
+						ADD `assure_cp` INT(5) UNSIGNED ZEROFILL, 
+						ADD `assure_tel` BIGINT(10) UNSIGNED ZEROFILL, 
+						ADD `assure_tel2` BIGINT(10) UNSIGNED ZEROFILL, 
+						ADD `assure_pays` VARCHAR(255), 
+						ADD `assure_nationalite` ENUM('local','etranger') NOT NULL, 
+						ADD `assure_lieu_naissance` VARCHAR(255), 
+						ADD `assure_profession` VARCHAR(255),
+            ADD `assure_rques` TEXT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.45";
   }
 }
 

@@ -45,6 +45,14 @@ function setField(oField, sValue) {
             {{include file="inc_acc/inc_acc_fusion_corresp.tpl"}}
           </div>
         </div>
+        <div id="Assure">
+          <div id="AssureHeader" class="accordionTabTitleBar">
+            Assuré social
+          </div>
+          <div id="AssureContent"  class="accordionTabContentBox">
+            {{include file="inc_acc/inc_acc_fusion_assure.tpl"}}
+          </div>
+        </div>
       </div>
     </td>
   </tr>

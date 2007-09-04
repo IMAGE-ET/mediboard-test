@@ -70,6 +70,23 @@ class CPatient extends CDossierMedical {
   var $prevenir_ville   = null;
   var $prevenir_tel     = null;
   var $prevenir_parente = null;
+
+  // Assuré
+  var $assure_nom              = null;
+  var $assure_nom_jeune_fille  = null;
+  var $assure_prenom           = null;
+  var $assure_naissance        = null;
+  var $assure_sexe             = null;
+  var $assure_adresse          = null;
+  var $assure_ville            = null;
+  var $assure_cp               = null;
+  var $assure_tel              = null;
+  var $assure_tel2             = null;
+  var $assure_pays             = null;
+  var $assure_nationalite      = null;
+  var $assure_lieu_naissance   = null;
+  var $assure_profession       = null;
+  var $assure_rques            = null;
   
   // Other fields
   var $_static_cim10 = null;
@@ -100,6 +117,22 @@ class CPatient extends CDossierMedical {
   var $_tel44       = null;
   var $_tel45       = null;
   var $_age         = null;
+  
+  // Assuré
+  var $_assure_naissance   = null;
+  var $_assure_jour        = null;
+  var $_assure_mois        = null;
+  var $_assure_annee       = null;
+  var $_assure_tel1        = null;
+  var $_assure_tel2        = null;
+  var $_assure_tel3        = null;
+  var $_assure_tel4        = null;
+  var $_assure_tel5        = null;
+  var $_assure_tel21       = null;
+  var $_assure_tel22       = null;
+  var $_assure_tel23       = null;
+  var $_assure_tel24       = null;
+  var $_assure_tel25       = null;
   
   
   // Navigation Fields
@@ -192,6 +225,23 @@ class CPatient extends CDossierMedical {
     $specs["prevenir_ville"]     = "str confidential";
     $specs["prevenir_tel"]       = "numchar length|10 confidential";
     $specs["prevenir_parente"]   = "enum list|conjoint|enfant|ascendant|colateral|divers";
+    
+    $specs["assure_nom"]               = "str confidential";
+    $specs["assure_prenom"]            = "str";
+    $specs["assure_nom_jeune_fille"]   = "str confidential";
+    $specs["assure_sexe"]              = "enum list|m|f|j default|m";
+    $specs["assure_naissance"]         = "date confidential";
+    $specs["assure_adresse"]           = "text confidential";
+    $specs["assure_ville"]             = "str confidential";
+    $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
+    $specs["assure_tel"]               = "numchar length|10 confidential";
+    $specs["assure_tel2"]              = "numchar length|10 confidential";
+    $specs["assure_pays"]              = "str";
+    $specs["assure_nationalite"]       = "notNull enum list|local|etranger default|local";
+    $specs["assure_lieu_naissance"]    = "str";
+    $specs["assure_profession"]        = "str";
+    $specs["assure_rques"]             = "text";
+    
     return $specs;
   }
   
@@ -263,6 +313,28 @@ class CPatient extends CDossierMedical {
     $this->_tel45 = substr($this->employeur_tel, 8, 2);
 
     $this->evalAge();
+    
+    // Assuré
+    if($this->assure_naissance) {
+      $aNaissance = split("-", $this->assure_naissance);
+    
+      $this->_assure_jour  = $aNaissance[2];
+      $this->_assure_mois  = $aNaissance[1];
+      $this->_assure_annee = $aNaissance[0];
+    
+      $this->_assure_naissance = sprintf("%02d/%02d/%04d", $this->_jour, $this->_mois, $this->_annee);
+    }
+
+    $this->_assure_tel1 = substr($this->assure_tel, 0, 2);
+    $this->_assure_tel2 = substr($this->assure_tel, 2, 2);
+    $this->_assure_tel3 = substr($this->assure_tel, 4, 2);
+    $this->_assure_tel4 = substr($this->assure_tel, 6, 2);
+    $this->_assure_tel5 = substr($this->assure_tel, 8, 2);
+    $this->_assure_tel21 = substr($this->assure_tel2, 0, 2);
+    $this->_assure_tel22 = substr($this->assure_tel2, 2, 2);
+    $this->_assure_tel23 = substr($this->assure_tel2, 4, 2);
+    $this->_assure_tel24 = substr($this->assure_tel2, 6, 2);
+    $this->_assure_tel25 = substr($this->assure_tel2, 8, 2);
     
     if($this->_age != "??" && $this->_age <= 15)
       $this->_shortview = "Enf.";
@@ -384,6 +456,55 @@ class CPatient extends CDossierMedical {
         $this->_annee . "-" .
         $this->_mois  . "-" .
         $this->_jour;
+  	}
+  	
+  	// Assuré
+
+    if ($this->assure_nom) {
+  	  $this->assure_nom = strtoupper($this->assure_nom);
+    }
+    
+    if ($this->assure_nom_jeune_fille) {
+  	  $this->assure_nom_jeune_fille = strtoupper($this->assure_nom_jeune_fille);
+    }
+
+    if ($this->assure_prenom) {
+      $this->assure_prenom = ucwords(strtolower($this->assure_prenom));
+    }
+
+  	if (($this->_assure_tel1 !== null) && ($this->_assure_tel2 !== null) && ($this->_assure_tel3 !== null) && ($this->_assure_tel4 !== null) && ($this->_assure_tel5 !== null)) {
+      $this->assure_tel = 
+        $this->_assure_tel1 .
+        $this->_assure_tel2 .
+        $this->_assure_tel3 .
+        $this->_assure_tel4 .
+        $this->_assure_tel5;
+    }
+    if ($this->assure_tel == "0000000000") {
+      $this->assure_tel = "";
+    }
+
+  	if (($this->_assure_tel21 !== null) && ($this->_assure_tel22 !== null) && ($this->_assure_tel23 !== null) && ($this->_assure_tel24 !== null) && ($this->_assure_tel25 !== null)) {
+      $this->assure_tel2 = 
+        $this->_assure_tel21 .
+        $this->_assure_tel22 .
+        $this->_assure_tel23 .
+        $this->_assure_tel24 .
+        $this->_assure_tel25;
+    }
+    if ($this->assure_tel2 == "0000000000") {
+      $this->assure_tel2 = "";
+    }
+
+    if ($this->assure_cp == "00000") {
+      $this->assure_cp = "";
+    }
+
+  	if(($this->_assure_annee != null) && ($this->_assure_mois != null) && ($this->_assure_jour != null)) {
+      $this->assure_naissance = 
+        $this->_assure_annee . "-" .
+        $this->_assure_mois  . "-" .
+        $this->_assure_jour;
   	}
   }
   

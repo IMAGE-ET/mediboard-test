@@ -74,7 +74,7 @@
       {{mb_field object=$patient field="_tel35" tabindex="310" size="2" maxlength="2" prop="num length|2"}}
     </td>
     <th>{{mb_label object=$patient field="employeur_urssaf"}}</th>
-    <td>{{mb_field object=$patient field="employeur_urssaf" tabindex="360"}}</td>
+    <td>{{mb_field object=$patient field="employeur_urssaf" tabindex="360" onblur="oAccord.changeTabAndFocus(3, this.form.assure_nom);"}}</td>
   </tr>
   
   <tr>
