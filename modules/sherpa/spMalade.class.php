@@ -51,7 +51,7 @@ class CSpMalade extends CSpObject {
     
     $patient = $mbObject;
         
-    $this->malnum = $this->loadLatestId()+1;
+    $this->malnum = str_pad($this->loadLatestId()+1, 6, "0", STR_PAD_LEFT);
     $this->malnom = $this->makeString($patient->nom, 20);
     $this->malpre = $this->makeString($patient->prenom, 10);
     $this->datnai = $this->makeDate($patient->naissance);
