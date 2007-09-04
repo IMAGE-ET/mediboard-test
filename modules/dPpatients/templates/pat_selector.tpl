@@ -268,7 +268,12 @@ var Intermax = {
   <td><input name="name" value="{{$name|stripslashes}}" size="30" /></td>
   <td>
     {{if $app->user_prefs.GestionFSE}}
-      <button class="search" type="button" onclick="Intermax.result();">Carte vitale</button>
+      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+        Lire Vitale
+      </button>
+      <button class="tick" type="button" onclick="Intermax.result();">
+        Résultat Vitale
+      </button>
     {{/if}}
   </td>
 </tr>

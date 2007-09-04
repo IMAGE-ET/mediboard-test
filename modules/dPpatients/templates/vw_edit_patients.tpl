@@ -210,7 +210,12 @@ function pageMain() {
       {{if $patient->patient_id}}
         <th class="title modify" colspan="5">
           {{if $app->user_prefs.GestionFSE}}
-					  <button class="search" type="button" onclick="Intermax.result();" style="float: left;">Carte vitale</button>
+			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
+			        Lire Vitale
+			      </button>
+			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+			        Résultat Vitale
+			      </button>
 					{{/if}}
         
           <div class="idsante400" id="CPatient-{{$patient->_id}}"></div>
@@ -223,7 +228,12 @@ function pageMain() {
       {{else}}
         <th class="title" colspan="5">
           {{if $app->user_prefs.GestionFSE}}
-					  <button class="search" type="button" onclick="Intermax.result();" style="float: left;">Carte vitale</button>
+			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
+			        Lire Vitale
+			      </button>
+			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+			        Résultat Vitale
+			      </button>
 					{{/if}}
           Création d'un dossier
         </th>
