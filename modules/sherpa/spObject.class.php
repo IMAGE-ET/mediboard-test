@@ -13,16 +13,36 @@
  */
 class CSpObject extends CMbObject {  
   public $_ref_id400 = null;
-
+  
+  function CSpObject($table, $key) {
+    foreach(array_keys($this->getSpecs()) as $prop) {
+      $this->$prop = null;
+    }
+    
+    $this->CMbObject($table, $key);    
+    $this->loadRefModule(basename(dirname(__FILE__)));
+  }
+  
   function loadExternal() {
     $this->_external = true;
   }
+  
   /**
-   * Map the sherpa object form a mediboard 
+   * Map this to a Mediboard object
+   * @param CMbObject $mbObject
+   * @return CMbObject the mapped object
+   */
+  function mapTo() {
+  }
+  
+  /**
+   * Map this from a Mediboard object
+   * @param CMbObject $mbObject
+   * @return null
    */
   function mapFrom(CMbObject &$mbObject) {
   }
-  
+      
   function getSpec() {
     $spec = parent::getSpec();
     $spec->dsn = "sherpa";
@@ -73,6 +93,7 @@ class CSpObject extends CMbObject {
     if ("0000-00-00" == $date) {
       return "00/00/0000";
     }
+    
     return mbTranformTime(null, $date, "%d/%m/%Y");
   }
   

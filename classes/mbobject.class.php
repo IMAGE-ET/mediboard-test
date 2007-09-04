@@ -292,6 +292,8 @@ class CMbObject {
   
   /**
    * Bind an object with an array
+   * @param array $hash associative array of values to match with
+   * @param bool $doStripSlashes true to strip slashes
    */
 
   function bind($hash, $doStripSlashes = true) {

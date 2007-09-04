@@ -1,6 +1,5 @@
 {{* $Id: $ *}}
 
-
 <script type="text/javascript">
 
 var Action = {

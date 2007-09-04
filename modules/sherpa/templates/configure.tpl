@@ -41,3 +41,39 @@
 {{assign var=dsn value=sherpa}}
 {{include file="../../system/templates/configure_dsn.tpl"}}
   
+  
+<!-- Import des tables -->
+<script type="text/javascript">
+
+var Action = {
+  module: "sherpa",
+  action: "httpreq_import_base",
+  
+  import: function (sClass) {
+    var url = new Url;
+    url.setModuleAction(this.module, this.action);
+    url.addParam("class", sClass);
+    url.requestUpdate("import-" + sClass);
+  },
+}
+
+</script>
+
+<table class="tbl">
+
+<tr>
+  <th class="title" colspan="100">{{tr}}sherpa-import-classes{{/tr}}</th>
+</tr>
+
+{{foreach from=$spClasses item=_class}}
+<tr>
+  <td>
+    <button class="tick" onclick="Action.import('{{$_class}}')">
+      {{tr}}sherpa-import-class{{/tr}}
+      '{{tr}}{{$_class}}{{/tr}}'
+    </button>
+  </td>
+  <td id="import-{{$_class}}"></td>
+</tr>
+{{/foreach}}
+</table>

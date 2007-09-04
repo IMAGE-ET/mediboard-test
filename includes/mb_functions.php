@@ -853,6 +853,26 @@ function bindHashToObject($hash, &$object, $doStripSlashes = true) {
   }
 }
 
+function mbDateToLocale($date) {
+  $parts = split("-", $date);
+  
+  $day   = $parts[2];
+  $month = $parts[1];
+  $year  = $parts[0];
+  
+  return sprintf("%02d/%02d/%04d", $day, $month, $year);
+}
+
+function mbDateFromLocale($date) {
+  $parts = split("/", $date);
+  
+  $day   = $parts[0];
+  $month = $parts[1];
+  $year  = $parts[2];
+  
+  return sprintf("%04d-%02d-%02d", $year, $month, $day);
+}
+
 /**
  * @todo A SUPPRIMER APRES VERIFICATION
  */
