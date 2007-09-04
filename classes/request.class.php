@@ -239,29 +239,13 @@ class CRequest {
    */
   function getCountRequest($obj = null) {
     // MbObject binding
+    $sql = "SELECT COUNT(*) as total";
     if ($obj) {
-    	// Removed for performance tests
-//      if (!is_a($obj, "CMbObject")) {
-//        trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
-//      }
-
-      if (count($this->select)) {
-        trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
-      }
-
-      $this->select[] = "COUNT(`$obj->_tbl`.*) as total";
-      
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-
       $this->table[] = "$obj->_tbl";
-    } else {
-      $this->select[] = "COUNT(`".reset($select)."`) as total";
     }
-    
-    $select = join($select, ", ");
-    $sql = "SELECT $select";
     
     // Table clauses
     $table = implode(", ", $this->table);

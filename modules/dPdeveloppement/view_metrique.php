@@ -29,7 +29,7 @@ foreach ($listesTables as $keyListTables => $currListTables){
   $sql="SHOW TABLE STATUS LIKE '$keyListTables'";
   $statusTable = $ds->loadList($sql);
   if($statusTable){
-    $result[$keyListTables]["descr"] = $currListTables;
+    $result[$keyListTables]["descr"]  = $currListTables;
     $result[$keyListTables]["nombre"] = $statusTable[0]["Rows"];
   }
 }
