@@ -2,9 +2,11 @@
   {{foreach from=$notes item="curr_note"}}
   <tr>
     <th class="info {{$curr_note->degre}}">
-      {{$curr_note->date|date_format:"%d/%m/%Y %H:%M"}} &mdash; 
       {{$curr_note->_ref_user->_view}}
       ({{$curr_note->_ref_user->_ref_function->_view}})
+      <br />
+      {{$curr_note->date|date_format:"%d/%m/%Y %H:%M"}}
+      <br /> 
     </th>
   </tr>
   <tr>
