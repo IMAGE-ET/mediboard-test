@@ -13,6 +13,8 @@ $dialog = mbGetValueFromGet("dialog");
 
 $can->needsRead();
 
+$canSante400 = CModule::getCanDo("dPsante400");
+
 // Récupération de la liste des classes disponibles
 $listClasses = getInstalledClasses();
 
@@ -61,7 +63,7 @@ $smarty->assign("target", $target);
 $smarty->assign("filter", $filter);
 $smarty->assign("idSante400", $idSante400);
 $smarty->assign("list_idSante400", $list_idSante400);
-
+$smarty->assign("canSante400", $canSante400);
 $smarty->display("view_identifiants.tpl");
 
 ?>

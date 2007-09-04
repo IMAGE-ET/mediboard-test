@@ -74,6 +74,9 @@ function reloadAfterSaveDoc(){
 <table class="form">
   <tr>
     <th class="category" colspan="2">
+      
+      <div class="idsante400" id="{{$patient->_class_name}}-{{$patient->_id}}"></div>
+           
       <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
