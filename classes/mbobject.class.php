@@ -371,6 +371,25 @@ class CMbObject {
   }
   
   /**
+   * Object count of the list which objects match defined properties
+   */
+  function countMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
+    $request = new CRequest;
+    $request->addLJoin($leftjoin);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+
+    $this->updateDBFields();
+    foreach($this->getProps() as $key => $value) {
+      if ($value !== null) {
+        $request->addWhereClause($key, "= '$value'");
+      }
+    }
+    return $this->countList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+  }
+  
+  /**
    * Loads the first object matching the query
    */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
@@ -408,6 +427,25 @@ class CMbObject {
     $result = $this->loadQueryList($request->getRequest($this));
     
     return $result;
+  }
+
+  /**
+   * Object count of a list by a request constructor
+   */
+  function countList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
+    global $dPconfig;
+    
+  	$request = new CRequest();
+    $request->addLJoin($leftjoin);
+    $request->addWhere($where);
+    $request->addGroup($group);
+    $request->addOrder($order);
+    $request->setLimit($limit);
+    
+    $result = $this->_spec->ds->exec($request->getCountRequest($this));
+    $row = $this->_spec->ds->fetchArray($result);
+    
+    return $row["total"];
   }
   
   function loadListByReq($request) {
