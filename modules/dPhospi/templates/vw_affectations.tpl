@@ -202,19 +202,22 @@ function pageMain() {
 </script>
 
 <table class="main">
-
-  {{if $alerte}}
   <tr>
     <td colspan="3">
+      {{if $alerte}}
       <div class="warning">
         <a href="#" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
       </div>
+      {{else}}
+      <div class="message">
+        Tous les patients sont placés pour la semaine à venir
+      </div>
+      {{/if}}
     </td>
     <th>
       {{$totalLits}} place(s) de libre
     </th>
   </tr>
-  {{/if}}
 
   <tr>
     <td>
