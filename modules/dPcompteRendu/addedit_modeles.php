@@ -48,14 +48,35 @@ if($compte_rendu->object_id){
 $templateManager = new CTemplateManager;
 $templateManager->editor = "fckeditor2.3.2";
 
-if ($compte_rendu->_id) {
-  $prat_id = $compte_rendu->chir_id;
-  $templateManager->valueMode = false;
-  $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->_id);
-  $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->object_class);
-  $templateManager->applyTemplate($compte_rendu);
-  $templateManager->initHTMLArea();
+
+// L'utilisateur est il une secretaire ?
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$secretaire = $mediuser->isFromType(array("Secrétaire"));
+
+// si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus
+if(($secretaire)||($compte_rendu->chir_id == $mediuser->user_id)||($compte_rendu->function_id==$mediuser->function_id)){
+	$droit = 1;
 }
+// sinon, seulement, droit en lecture
+else {
+	$droit = 0;
+}
+
+
+if ($compte_rendu->_id) {
+  // si pas de droit en ecriture, pas besoin d'initialiser fckeditor
+  if($droit){
+    $prat_id = $compte_rendu->chir_id;
+    $templateManager->valueMode = false;
+    $templateManager->loadLists($compte_rendu->chir_id, $compte_rendu->_id);
+    $templateManager->loadHelpers($compte_rendu->chir_id, $compte_rendu->object_class);
+    $templateManager->applyTemplate($compte_rendu);
+    $templateManager->initHTMLArea();
+  }
+}
+
+
 
 // Class and fields
 $listObjectClass     = array();
@@ -74,6 +95,8 @@ foreach($listObjectClass as $keyClass=>$value){
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("mediuser"            , $mediuser);
 $smarty->assign("isPraticien"         , $userCourant->isPraticien());
 $smarty->assign("user_id"             , $user_id);
 $smarty->assign("prat_id"             , $prat_id);
@@ -83,7 +106,7 @@ $smarty->assign("listFunc"            , $listFunc);
 $smarty->assign("listObjectClass"     , $listObjectClass);
 $smarty->assign("compte_rendu"        , $compte_rendu);
 $smarty->assign("listObjectAffichage" , $listObjectAffichage);
-
+$smarty->assign("droit"               , $droit);
 $smarty->display("addedit_modeles.tpl");
 
 ?>

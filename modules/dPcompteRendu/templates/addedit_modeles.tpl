@@ -1,5 +1,10 @@
 <script type="text/javascript">
 
+function popFile(objectClass, objectId, elementClass, elementId, sfn){
+  var url = new Url;
+  url.ViewFilePopup(objectClass, objectId, elementClass, elementId, sfn);
+}
+
 function copie() {
   var oForm = document.editFrm;
   oForm.compte_rendu_id.value = 0;
@@ -7,7 +12,6 @@ function copie() {
   oForm.nom.value = "Copie de "+oForm.nom.value;
   oForm.submit();
 } 
-
 
 function nouveau() {
   var url = new Url;
@@ -86,9 +90,11 @@ function pageMain() {
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
       {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
       {{if $compte_rendu->compte_rendu_id}}
+    
       <button class="new" type="button" onclick="nouveau()">
         Créer un modèle
       </button>
+      
       {{/if}}  
       <table class="form">
         <tr>
@@ -103,12 +109,21 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$compte_rendu field="nom"}}</th>
-          <td>{{mb_field object=$compte_rendu field="nom"}}</td>
+          <td>
+          {{if $droit}}
+            {{mb_field object=$compte_rendu field="nom"}}
+          {{else}}
+            {{mb_field object=$compte_rendu field="nom" readonly="readonly"}}
+          {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
           <td>
-            <select name="function_id" class="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
+            {{if !$droit}}
+               <input type="hidden" name="function_id" />
+            {{/if}}
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="function_id" class="{{$compte_rendu->_props.function_id}}" onchange="this.form.chir_id.value = ''">
               <option value="">&mdash; Associer à une fonction &mdash;</option>
               {{foreach from=$listFunc item=curr_func}}
               <option class="mediuser" style="border-color: #{{$curr_func->color}};" value="{{$curr_func->function_id}}" {{if $curr_func->function_id == $compte_rendu->function_id}} selected="selected" {{/if}}>
@@ -116,12 +131,16 @@ function pageMain() {
               </option>
               {{/foreach}}
             </select>
+         
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$compte_rendu field="chir_id"}}</th>
           <td>
-            <select name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''; ">
+            {{if !$droit}}
+              <input type="hidden" name="chir_id" value="{{$mediuser->_id}}" />
+            {{/if}}
+            <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''; ">
               <option value="">&mdash; Associer à un praticien &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
@@ -160,13 +179,15 @@ function pageMain() {
               {{/if}}
             </td>
           </tr>
+          
           <tr>
+            {{if $isPraticien}}
+            {{if !$droit}}<td colspan="2">{{else}}<td>{{/if}}<button class="modify" onclick="copie(this.form)">Dupliquer</button></td>
+            {{/if}}
+            {{if $droit}}
             <td class="button" colspan="2">
             {{if $compte_rendu->compte_rendu_id}}
             <button class="modify" type="submit">Modifier</button>
-            {{if $isPraticien}}
-            <button class="modify" onclick="copie(this.form)">Dupliquer</button>
-            {{/if}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
             Supprimer
             </button>
@@ -174,13 +195,25 @@ function pageMain() {
             <button class="submit" type="submit">Créer</button>
             {{/if}}
             </td>
+            {{/if}}
           </tr>
+          
         </table>
       </td>
       
       <td class="greedyPane" style="height: 500px">
        {{if $compte_rendu->compte_rendu_id}}
-       {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
+         {{if $droit}}
+         {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
+         {{else}}
+         {{mb_field object=$compte_rendu field="source" id="htmlarea" hidden="1"}}
+         
+         <!-- Affichage du compte rendu sous forme de fichier en lecture seule -->       
+         <div  class="previewfile">
+            {{$compte_rendu->source|smarty:nodefaults}}
+         </div>
+         
+         {{/if}}
        {{/if}}
       </td>
   </tr>
