@@ -1,5 +1,4 @@
 <?php
-$locales['CSejour-prestation_id'] = '';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-back-lit_id'] = '';
 $locales['CAffectation-back-sejour_id'] = '';
@@ -68,6 +67,7 @@ $locales['CLit.one'] = '';
 $locales['CPrestation-description'] = '';
 $locales['CPrestation-group_id'] = '';
 $locales['CPrestation-nom'] = '';
+$locales['CSejour-prestation_id'] = '';
 $locales['CSejour.groupe.avant'] = '';
 $locales['CSejour.groupe.matin'] = '';
 $locales['CSejour.groupe.soir'] = '';

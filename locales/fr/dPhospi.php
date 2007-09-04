@@ -1,5 +1,4 @@
 <?php
-$locales['CSejour-prestation_id'] = 'Prestation';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-back-lit_id'] = '';
 $locales['CAffectation-back-sejour_id'] = '';
@@ -68,6 +67,7 @@ $locales['CLit.one'] = '';
 $locales['CPrestation-description'] = 'Description';
 $locales['CPrestation-group_id'] = 'Etablissement';
 $locales['CPrestation-nom'] = 'Niveau de prestation';
+$locales['CSejour-prestation_id'] = 'Prestation';
 $locales['CSejour.groupe.avant'] = 'Admissions antérieures';
 $locales['CSejour.groupe.matin'] = 'Admissions du matin';
 $locales['CSejour.groupe.soir'] = 'Admissions du soir';
@@ -96,6 +96,6 @@ $locales['mod-dPhospi-tab-vw_idx_pathologies'] = 'Pathologies';
 $locales['mod-dPhospi-tab-vw_idx_prestations'] = 'Prestations';
 $locales['mod-dPhospi-tab-vw_idx_sejour'] = 'Consulter un séjour';
 $locales['mod-dPhospi-tab-vw_idx_services'] = 'Services';
-$locales['mod-dPhospi-tab-vw_recherche'] = 'Chercher une chambre';
+$locales['mod-dPhospi-tab-vw_recherche'] = 'Etat des lits';
 $locales['mod-dPhospi-tab-vw_suivi_bloc'] = 'Suivi bloc';
 ?>
