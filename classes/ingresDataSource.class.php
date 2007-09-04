@@ -9,7 +9,8 @@
 
 
 class CIngresDataSource extends CSQLDataSource {
-		
+  private $nextLimit = null;
+  
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "ingres_connect" )) {
       trigger_error( "FATAL ERROR: Ingres support not available.  Please check your configuration.", E_USER_ERROR );
@@ -31,7 +32,6 @@ class CIngresDataSource extends CSQLDataSource {
       die;
     }
             
-//    ingres_autocommit($this->link);
     return $this->link;
   }  
     
@@ -41,7 +41,7 @@ class CIngresDataSource extends CSQLDataSource {
             
     $values = array (
       $table,
-    );    
+    );
     
     return $this->loadResult($this->prepare($query, $values));
   }
@@ -73,7 +73,22 @@ class CIngresDataSource extends CSQLDataSource {
   }
 
   function query($query) {
-    return ingres_query($query, $this->link);
+    // Extract back quotes
+    $query = str_replace("`", "", $query);
+
+    // Handle limits
+    preg_match("/LIMIT 0,[\s]*([\d]+)/i", $query, $matches);
+    $this->nextLimit = @$matches[1];
+    $query = preg_replace("/(LIMIT 0,[\s]*[\d]+)/i", "", $query);
+    
+    $ret = ingres_query($query, $this->link);
+    
+    // Simulate autocommit because ingres_autocommit() is unavailable
+    if (preg_match("/^(INSERT|UPDATE|DELETE)/i", $query)) {
+      ingres_commit($this->link);
+    }
+    
+    return $ret;
   }
   
   function freeResult($result) {
@@ -91,22 +106,34 @@ class CIngresDataSource extends CSQLDataSource {
     return -1;
   }
 
+  private function _fetchArray($mode) {
+    // Simulates limit
+    if ($this->nextLimit-- === 0) {
+      return;
+    }
+    
+   // Uses the link
+   return ingres_fetch_array($mode, $this->link);
+  }
+  
   function fetchRow($result) {
-    // Uses the link
-    return ingres_fetch_array(INGRES_NUM, $this->link);
+    return $this->_fetchArray(INGRES_NUM);
   }
 
   function fetchArray($result) {
-    // Uses the link
-    return ingres_fetch_array(INGRES_BOTH, $this->link);
+    return $this->_fetchArray(INGRES_BOTH);
   }
 
   function fetchAssoc($result) {
-    // Uses the link
-    return ingres_fetch_array(INGRES_ASSOC, $this->link);
+    return $this->_fetchArray(INGRES_ASSOC);
   }
 
   function fetchObject($result) {
+    // Simulates limit
+    if ($this->nextLimit-- == 0) {
+      return;
+    }
+    
     // Uses the link
     return ingres_fetch_object(INGRES_ASSOC, $this->link);
   }

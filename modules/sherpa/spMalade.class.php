@@ -27,27 +27,41 @@ class CSpMalade extends CSpObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
  	}
   
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->mbClass = "CPatient";
+    return $spec;
+  }
+ 	
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["malnum"] = "numchar length|6";
     $specs["malnom"] = "str maxLength|20";
     $specs["malpre"] = "str maxLength|10";
-    $specs["datnai"] = "numchar length|8";
+    $specs["datnai"] = "str length|10";
     
     return $specs;
   }
   
   function mapFrom(CMbObject &$mbObject) {
-    if (!is_a($mbObject, "CPatient")) {
-      trigger_error("mapping object should be a 'CPatient'");
+    $mbClass = $this->_spec->mbClass;
+    if (!is_a($mbObject, $mbClass)) {
+      trigger_error("mapping object should be a '$mbClass'");
     }
     
-    $this->malnum = str_pad($mbObject->_id % 100000, 6, "0", STR_PAD_LEFT);
-    $this->malnom = substr($mbObject->nom, 0, 20);
-    $this->malpre = substr($mbObject->prenom, 0, 10);
-    $this->datnai = "$mbObject->_jour$mbObject->_mois$mbObject->_annee";
+    $patient = $mbObject;
+        
+    $this->malnum = $this->loadLatestId()+1;
+    $this->malnom = $this->makeString($patient->nom, 20);
+    $this->malpre = $this->makeString($patient->prenom, 10);
+    $this->datnai = $this->makeDate($patient->naissance);
   }
 
+  function loadLatestId() {
+    $ds =& $this->_spec->ds;
+    $query = "SELECT MAX(`$this->_tbl_key`) FROM `$this->_tbl`";
+    return $ds->loadResult($query);
+  }  
 }
 
 ?>

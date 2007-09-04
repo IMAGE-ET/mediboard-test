@@ -43,7 +43,7 @@ class CMbMetaObject extends CMbObject{
    */
   function loadRefsFwd() {	
     parent::loadRefsFwd();
-
+    
     if (!class_exists($this->object_class)) {
       trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
     }

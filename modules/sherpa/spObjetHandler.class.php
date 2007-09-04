@@ -35,7 +35,7 @@ class CSpObjectHandler extends CMbObjectHandler {
         trigger_error("Error mapping object '$mbObject->_view' : $msg", E_USER_WARNING);
         return;
       }
-
+      
       // Store id400;
       $id400->id400 = $spInstance->_id;
       $id400->last_update = mbDateTime();

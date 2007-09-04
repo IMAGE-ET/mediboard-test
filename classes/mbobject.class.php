@@ -97,9 +97,7 @@ class CMbObject {
     static $static = false;
     if (!$static) {
       $spec = $this->getSpec();
-      
-      //initialisation de la connexion
-      $spec->ds = CSQLDataSource::get("std");
+      $spec->init();
       
       $class = get_class($this);
       $this->_class_name =& $class;
@@ -424,23 +422,17 @@ class CMbObject {
    * class must implement the Load() factory, see examples in Webo classes
    * @note to optimize request, only select object oids in $sql
    */
-  function loadQueryList($sql, $maxrows = null) {
+  function loadQueryList($sql) {
     $cur = $this->_spec->ds->exec($sql);
     $list = array();
-    $cnt = 0;
-    $class = get_class($this);
-    $table_key = $this->_tbl_key;
     while ($row = $this->_spec->ds->fetchArray($cur)) {
-      $key = $row[$table_key];
-      $newObject = new $class();
+      $newObject = new $this->_class_name;
       $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
       $list[$newObject->_id] = $newObject;
-      if($maxrows && $maxrows == $cnt++) {
-        break;
-      }
     }
+
     $this->_spec->ds->freeResult($cur);
     return $list;
   }
@@ -685,9 +677,10 @@ class CMbObject {
 
     // DB query
     if ($objBefore->_id) {
-        $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
     } else {
-        $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $this->_tbl_key);
+      $keyToUpadate = $this->_spec->incremented ? $this->_tbl_key : null;
+      $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $keyToUpadate);
     }
     
 

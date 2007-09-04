@@ -256,32 +256,32 @@ abstract class CSQLDataSource {
   }
 
   /**
-  * This global function loads the first field of the first row returned by the query.
-  *
-  * @param string The SQL query
-  * @param strong The db identifier
-  * @return The value returned in the query or null if the query failed.
-  */
+   * This global function loads the first field of the first row returned by the query.
+   * @param string The SQL query
+   * @param strong The db identifier
+   * @return The value returned in the query or null if the query failed.
+   */
   function loadResult($sql) {
     $cur = $this->exec($sql);
     $cur or exit($this->error());
     $ret = null;
     if ($row = $this->fetchRow($cur)) {
-      $ret = $row[0];
+      $ret = reset($row);
     }
+    
     $this->freeResult($cur);
     return $ret;
   }
 
   
   /**
-  * This global function loads the first row of a query into an object 
-  *
-  * If an object is passed to this function, the returned row is bound to the existing elements of <var>object</var>.
-  * If <var>object</var> has a value of null, then all of the returned query fields returned in the object. 
-  * @param string The SQL query
-  * @param object The address of variable
-  **/
+   * This global function loads the first row of a query into an object 
+   *
+   * If an object is passed to this function, the returned row is bound to the existing elements of <var>object</var>.
+   * If <var>object</var> has a value of null, then all of the returned query fields returned in the object. 
+   * @param string The SQL query
+   * @param object The address of variable
+   **/
   function loadObject($sql, &$object) {
     $class = get_class($object);
     if ($object != null) {
@@ -349,7 +349,7 @@ abstract class CSQLDataSource {
     $list = array();
     while ($hash = $this->fetchAssoc($cur)) {
       $list[] = $hash;
-      if ($maxrows && $maxrows == count($list)) {
+      if ($maxrows == count($list)) {
         break;
       }
     }
