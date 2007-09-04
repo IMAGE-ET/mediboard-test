@@ -57,6 +57,10 @@ foreach($listComp as $key => $value) {
 $sejour = new CSejour();
 $whereSejour["type"] = " = 'comp'";
 $whereSejour["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$whereSejour["annule"] = " = '0'";
+if($vue) {
+  $whereSejour["sortie_reelle"] = "IS NULL";
+}
 $listSejourComp = $sejour->loadList($whereSejour);
 $listSejourC = array();
 foreach($listSejourComp as $key=>$sejourComp){

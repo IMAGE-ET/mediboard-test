@@ -58,6 +58,11 @@ foreach($listAmbu as $key => $value) {
 $sejour = new CSejour();
 $whereSejour["type"] = " = 'ambu'";
 $whereSejour["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$whereSejour["annule"] = " = '0'";
+
+if($vue) {
+  $whereSejour["sortie_reelle"] = "IS NULL";
+}
 $listSejourAmbu = $sejour->loadList($whereSejour);
 $listSejourA = array();
 foreach($listSejourAmbu as $key=>$sejourAmbu){
