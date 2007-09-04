@@ -41,7 +41,12 @@
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
       <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b></td>
-    <td>{{$curr_sortie->sortie|date_format:"%H h %M"}}</td>
+    <td>
+      {{$curr_sortie->sortie|date_format:"%H h %M"}}
+      {{if $curr_sortie->confirme}}
+         <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
+      {{/if}}
+    </td>
     <td class="text">Dr. {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}</td>
     <td class="text">{{$curr_sortie->_ref_lit->_view}}</td>
   </tr>
