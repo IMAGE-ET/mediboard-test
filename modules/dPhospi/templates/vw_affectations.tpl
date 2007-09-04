@@ -210,6 +210,9 @@ function pageMain() {
         <a href="#" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
       </div>
     </td>
+    <th>
+      {{$totalLits}} place(s) de libre
+    </th>
   </tr>
   {{/if}}
 
@@ -219,7 +222,7 @@ function pageMain() {
       <a href="#" onclick="showRapport()" class="buttonprint">Rapport</a>
     </td>
     
-    <td>
+    <td colspan="2">
       <form name="chgAff" action="?m={{$m}}" method="get">
       {{foreach from=$services item=curr_service}}
         <input
@@ -236,9 +239,6 @@ function pageMain() {
       {{/foreach}}
       </form>
     </td>
-    <th>
-      Planning du {{$date|date_format:"%A %d %B %Y"}} : {{$totalLits}} place(s) de libre
-    </th>
     <td>
       <form name="chgMode" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />

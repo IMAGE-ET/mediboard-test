@@ -28,7 +28,8 @@ $totalLits = 0;
 $where = array();
 $where["group_id"] = "= '$g'";
 $services = new CService;
-$services = $services->loadListWithPerms(PERM_READ,$where);
+$order = "nom";
+$services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
 // Chargment des services
 $fullService = mbGetValueFromCookie("fullService");

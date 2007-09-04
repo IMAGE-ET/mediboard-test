@@ -76,7 +76,7 @@ foreach($classes as $class) {
     
     if (is_a($spec, "CRefSpec")) {
       // CAccessLog serves as dummy class when we need to instanciate anyhow
-      $fwdClass = $spec->class != "CMbObject" ? $spec->class : "CAccessLog"; 
+      $fwdClass = ($spec->class != "CMbObject") && has_default_constructor($spec->class) ? $spec->class : "CAccessLog";
       $fwdObject = new $fwdClass;
       
       // Find corresponding back ref
