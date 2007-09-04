@@ -47,6 +47,7 @@ class CMediusers extends CMbObject {
   var $_user_cp         = null;
   var $_user_ville      = null;
   var $_user_last_login = null;
+  var $_user_template   = null;
 
   // Other fields
   var $_view       = null;
@@ -143,6 +144,7 @@ class CMediusers extends CMbObject {
     $user->user_address1    = $this->_user_adresse   ;
     $user->user_zip         = $this->_user_cp        ;
     $user->user_city        = $this->_user_ville     ;
+    $user->template         = 0                      ;
 
     return $user;
   }
@@ -178,6 +180,7 @@ class CMediusers extends CMbObject {
       $this->_user_cp         = $user->user_zip;
       $this->_user_ville      = $user->user_city;
       $this->_user_last_login = $user->user_last_login;
+      $this->_user_template   = $user->template;
       // Encrypt this datas
       $this->checkConfidential();
       $this->_view            = $this->_user_last_name." ".$this->_user_first_name;
