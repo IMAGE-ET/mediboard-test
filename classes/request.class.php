@@ -123,28 +123,35 @@ class CRequest {
    * @param CMbObject $obj Object on which table we prefix selects, ne prefix if null
    */
   function getRequest($obj = null) {
+
+    $arraySelect = array();
+    $arrayTable = array();
+
     // MbObject binding
     if ($obj) {
-    	// Removed for performance tests
-//      if (!is_a($obj, "CMbObject")) {
-//        trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
-//      }
-
+    // Removed for performance tests
+    //  if (!is_a($obj, "CMbObject")) {
+    //    trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
+    //  }
       if (count($this->select)) {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
       }
 
-      $this->select[] = "`$obj->_tbl`.*";
+      $arraySelect[] = "`$obj->_tbl`.*";
       
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
 
-      $this->table[] = "$obj->_tbl";
+      $arrayTable[] = "$obj->_tbl";
+    }
+    else {
+      $arraySelect = $this->select;
+      $arrayTable = $this->table;
     }
     
     // Select clauses
-    foreach ($this->select as $as => $column) {
+    foreach ($arraySelect as $as => $column) {
       $select[$as] = is_string($as) ? "$column AS `$as`" : $column;
     }
     
@@ -152,7 +159,7 @@ class CRequest {
     $sql = "SELECT $select";
     
     // Table clauses
-    $table = implode(", ", $this->table);
+    $table = implode(", ", $arrayTable);
     $sql .= "\nFROM $table";
         
 
@@ -240,15 +247,18 @@ class CRequest {
   function getCountRequest($obj = null) {
     // MbObject binding
     $sql = "SELECT COUNT(*) as total";
+    $arrayTable = array();
     if ($obj) {
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-      $this->table[] = "$obj->_tbl";
+      $arrayTable[] = "$obj->_tbl";
+    } else {
+      $arrayTable = $this->table;
     }
     
     // Table clauses
-    $table = implode(", ", $this->table);
+    $table = implode(", ", $arrayTable);
     $sql .= "\nFROM $table";
         
 
