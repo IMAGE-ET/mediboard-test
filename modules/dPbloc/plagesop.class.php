@@ -243,6 +243,7 @@ class CPlageOp extends CMbObject {
     $plages = $this->loadList($where);
     $debut = $this->debut;
     $fin = $this->fin;
+    $temps_inter_op = $this->temps_inter_op;
     $msg = null;
     if(count($plages) > 0)
       $msg = $this->load(reset($plages)->plageop_id);
@@ -250,6 +251,7 @@ class CPlageOp extends CMbObject {
       $this->plageop_id = null;
     $this->debut = $debut;
     $this->fin = $fin;
+    $this->temps_inter_op = $temps_inter_op;
     $this->updateFormFields();
     return $msg;
   }

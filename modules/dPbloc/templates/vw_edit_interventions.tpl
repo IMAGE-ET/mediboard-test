@@ -11,7 +11,7 @@
   
   {{if $getInstalledPpers}}
   <tr>
-    <th class="title">Ajouter au personnel</th><th class="title">Liste du personnel</th>
+    <th class="title">Ajout de personnes</th><th class="title">Personnes en salle</th>
   </tr>
   <tr>
     <td>
@@ -57,7 +57,7 @@
             {{/foreach}}
             </select>
             
-            <button class="submit" type="submit">Ajouter au personnel du bloc</button>
+            <button class="submit" type="submit">Ajouter en salle</button>
             </form>
           </td>
         </tr>
