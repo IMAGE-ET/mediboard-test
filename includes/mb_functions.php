@@ -772,7 +772,11 @@ function getInstalledClasses($properties = array()) {
     	unset($listClasses[$key]);
     	continue;
     }
-  	$object = new $class;
+    try {
+  	  $object = new $class;
+    } catch (Exception $e) {
+      unset($listClasses[$key]);
+    }
     //if ($object->_ref_module === null) {
     //  unset($listClasses[$key]);
     //}
