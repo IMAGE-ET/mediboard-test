@@ -18,9 +18,11 @@ class CSpObject extends CMbObject {
     foreach(array_keys($this->getSpecs()) as $prop) {
       $this->$prop = null;
     }
-    
-    $this->CMbObject($table, $key);    
+        
     $this->loadRefModule(basename(dirname(__FILE__)));
+    if($this->_ref_module) {
+      $this->CMbObject($table, $key);
+    }
   }
   
   function loadExternal() {
