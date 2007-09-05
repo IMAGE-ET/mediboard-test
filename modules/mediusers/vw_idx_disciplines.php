@@ -16,11 +16,14 @@ $discipline_id = mbGetValueFromGetOrSession("discipline_id");
 // CHargement d'une discipline
 $specialite = new CDiscipline;
 $specialite->load($discipline_id);
-$specialite->loadRefsBack();
+$specialite->loadRefs();
 
 //Liste de toutes les disciplines
 $listDiscipline = new CDiscipline;
 $listDiscipline = $listDiscipline->loadList();
+foreach($listDiscipline as &$discipline) {
+  $discipline->loadRefs();
+}
 
 
 // Création du template

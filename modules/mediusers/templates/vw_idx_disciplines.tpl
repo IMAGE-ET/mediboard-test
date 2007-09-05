@@ -8,6 +8,7 @@
         <tr>
           <th>Spécialité Médicale</th>
           <th>Catégorie</th>
+          <th>Praticiens</th>
         </tr>
         {{foreach from=$listDiscipline item=curr_discipline}}
         <tr>
@@ -20,6 +21,9 @@
             <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
               {{$curr_discipline->categorie}}
             </a>
+          </td>
+          <td>
+            {{$curr_discipline->_ref_users|@count}}
           </td>      
         </tr>
         {{/foreach}}
