@@ -49,10 +49,10 @@ $templateManager = new CTemplateManager;
 $templateManager->editor = "fckeditor2.3.2";
 
 
-// L'utilisateur est il une secretaire ?
+// L'utilisateur est il une secretaire ou un administrateur?
 $mediuser = new CMediusers();
 $mediuser->load($AppUI->user_id);
-$secretaire = $mediuser->isFromType(array("Secrétaire"));
+$secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
 // si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus
 if(($secretaire)||($compte_rendu->chir_id == $mediuser->user_id)||($compte_rendu->function_id==$mediuser->function_id)){
