@@ -7,6 +7,12 @@
  *  @author Romain OLLIVIER
 */
 
+if(function_exists("ingres_connect")) {
+  echo "ok";
+} else {
+  echo "bad";
+}
+
 ?>
 
 <script type="text/javascript">
@@ -50,9 +56,10 @@ function pageMain() {
   <div class="text">
     <h2>L'equipe</h2>
     <ul>
+      <li>Romain Ollivier</li>
       <li>Thomas Despoix</li>
       <li>Sebastien Fillonneau</li>
-      <li>Romain Ollivier</li>
+      <li>Alexis Granger</li>
     </ul>
     <h2>Sociétés actives</h2>
     <ul>
