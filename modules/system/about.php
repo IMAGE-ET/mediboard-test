@@ -7,6 +7,7 @@
  *  @author Romain OLLIVIER
 */
 
+dl("/home/ing90/ingres/lib/libcompat.1.so");
 dl("ingres.so");
 
 if(function_exists("ingres_connect")) {
