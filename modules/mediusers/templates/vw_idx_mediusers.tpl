@@ -217,6 +217,15 @@ function pageMain() {
           <td>{{mb_field object=$mediuserSel field="_user_first_name"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$mediuserSel field="compte"}}</th>
+          <td>
+              {{mb_field object=$mediuserSel field="_compte_banque"}}
+              {{mb_field object=$mediuserSel field="_compte_guichet"}}
+              {{mb_field object=$mediuserSel field="_compte_numero"}}
+              {{mb_field object=$mediuserSel field="_compte_cle"}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$mediuserSel field="adeli"}}</th>
           <td>{{mb_field object=$mediuserSel field="adeli"}}</td>
         </tr>

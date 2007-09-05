@@ -28,7 +28,8 @@ class CMediusers extends CMbObject {
   var $actif         = null;
   var $deb_activite  = null;
   var $fin_activite  = null;
-
+  var $compte        = null;
+  
   // DB References
   var $function_id   = null;
   var $discipline_id = null;
@@ -53,7 +54,11 @@ class CMediusers extends CMbObject {
   var $_view       = null;
   var $_shortview  = null;
   var $_profile_id = null;
-
+  var $_compte_banque = null;
+  var $_compte_guichet = null;
+  var $_compte_numero = null;
+  var $_compte_cle = null;
+  
   // Object references
   var $_ref_function   = null;
   var $_ref_discipline = null;
@@ -78,7 +83,7 @@ class CMediusers extends CMbObject {
       "deb_activite"  => "date",
       "fin_activite"  => "date",
       "spec_cpam_id"  => "ref class|CSpecCPAM",
-      
+      "compte"        => "str length|23 confidential",
       "_user_username"   => "notNull str minLength|4",
       "_user_password"   => "str minLength|4",
       "_user_password2"  => "str sameAs|_user_password",
@@ -88,7 +93,11 @@ class CMediusers extends CMbObject {
       "_user_phone"      => "num length|10 confidential",
       "_user_adresse"    => "str confidential",
       "_user_cp"         => "num length|5 confidential",
-      "_user_ville"      => "str confidential"
+      "_user_ville"      => "str confidential",
+      "_compte_banque"   => "num length|5 confidential",
+      "_compte_guichet"  => "num length|5 confidential",
+      "_compte_numero"   => "str length|11 confidential",
+      "_compte_cle"      => "num length|2 confidential"
       );
   }
 
@@ -196,6 +205,21 @@ class CMediusers extends CMbObject {
         $this->_shortview .=  strtoupper($value[0]);
       }
     }
+    
+    $this->_compte_banque  = substr($this->compte, 0, 5);
+    $this->_compte_guichet = substr($this->compte, 5, 10);
+    $this->_compte_numero  = substr($this->compte, 10, 21);
+    $this->_compte_cle     = substr($this->compte, 21, 23);
+  }
+  
+  function updateDBFields() {
+  	if(($this->_compte_banque !== null) && ($this->_compte_guichet !== null) && ($this->_compte_numero !== null) && ($this->_compte_cle !== null)) {
+      $this->compte = 
+        $this->_compte_banque .
+        $this->_compte_guichet .
+        $this->_compte_numero .
+        $this->_compte_cle;
+    }
   }
 
   function loadRefFunction() {
@@ -250,7 +274,9 @@ class CMediusers extends CMbObject {
     if ($this->user_id != $dPuser->user_id) {
       $this->user_id = null;
     }
-
+    
+    $this->updateDBFields();
+    
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {
       $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
