@@ -15,15 +15,17 @@ class CCodeSpec extends CMbFieldSpec {
   var $cim10 = null;
   var $adeli = null;
   var $insee = null;
+  var $rib   = null;
   
   function getSpecType() {
     return("code");
   }
   
   function checkProperty($object){
+ 
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    
+       
     // ccam
     if($this->ccam){
       if (!preg_match ("/^([a-z0-9]){0,7}$/i", $propValue)) {
@@ -41,7 +43,31 @@ class CCodeSpec extends CMbFieldSpec {
       if (!preg_match ("/^([0-9]){9}$/i", $propValue)) {
         return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
       }
-      
+
+    // RIB
+    }elseif($this->rib){
+      $compte_banque  = substr($propValue, 0, 5);
+      $compte_guichet = substr($propValue, 5, 5);
+      $compte_numero  = substr($propValue, 10, 11);
+      $compte_cle     = substr($propValue, 21, 2);
+      $tabcompte = "";
+      $len = strlen($compte_numero);
+      for ($i=0; $i < $len; $i++) {
+                $car = substr($compte_numero, $i, 1);
+                if (!is_numeric($car)) {
+                        $c = ord($car) - 64;
+                        $b = ($c < 10) ? $c : (($c < 19) ? $c - 9 : $c - 17);
+                        $tabcompte .= $b;
+                }
+                else {
+                        $tabcompte .= $car;
+                }
+        }
+        $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
+        if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
+        	return "Rib incorrect";
+        }
+        
     // insee
     }elseif($this->insee){
       $matches = null;
@@ -75,8 +101,9 @@ class CCodeSpec extends CMbFieldSpec {
       $type_sql = "VARCHAR(9)";
     }elseif($this->insee){
       $type_sql = "VARCHAR(15)";
-    }
-    
+    }elseif($this->rib){
+      $type_sql = "VARCHAR(23)";
+    }    
     return $type_sql;
   }
 
@@ -99,7 +126,11 @@ class CCodeSpec extends CMbFieldSpec {
     // adeli
     }elseif($this->adeli){
       $object->$fieldName = "123456789";
-      
+
+    // rib
+    }elseif($this->rib){
+      $object->$fieldName = "11111111111111111111111";
+    
     // insee
     }elseif($this->insee){
       $object->$fieldName = "100000000000047";

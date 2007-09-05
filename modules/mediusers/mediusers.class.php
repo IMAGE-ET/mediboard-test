@@ -83,7 +83,7 @@ class CMediusers extends CMbObject {
       "deb_activite"  => "date",
       "fin_activite"  => "date",
       "spec_cpam_id"  => "ref class|CSpecCPAM",
-      "compte"        => "str length|23 confidential",
+      "compte"        => "code rib confidential",
       "_user_username"   => "notNull str minLength|4",
       "_user_password"   => "str minLength|4",
       "_user_password2"  => "str sameAs|_user_password",
@@ -207,9 +207,9 @@ class CMediusers extends CMbObject {
     }
     
     $this->_compte_banque  = substr($this->compte, 0, 5);
-    $this->_compte_guichet = substr($this->compte, 5, 10);
-    $this->_compte_numero  = substr($this->compte, 10, 21);
-    $this->_compte_cle     = substr($this->compte, 21, 23);
+    $this->_compte_guichet = substr($this->compte, 5, 5);
+    $this->_compte_numero  = substr($this->compte, 10, 11);
+    $this->_compte_cle     = substr($this->compte, 21, 2);
   }
   
   function updateDBFields() {
@@ -258,6 +258,9 @@ class CMediusers extends CMbObject {
 
   function store() {
     global $AppUI;
+
+    $this->updateDBFields();
+    
     if ($msg = $this->check()) {
       return $AppUI->_(get_class( $this )) .
       $AppUI->_("::store-check failed:") .
@@ -269,13 +272,11 @@ class CMediusers extends CMbObject {
     if ($msg = $dPuser->store()) {
       return $msg;
     }
-
+    
     // User might have been re-created
     if ($this->user_id != $dPuser->user_id) {
       $this->user_id = null;
     }
-    
-    $this->updateDBFields();
     
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {

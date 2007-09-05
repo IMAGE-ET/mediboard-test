@@ -25,9 +25,11 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
     $old = new CMediusers();
     $old->load($this->_obj->user_id);
 
+    
     if ($msg = $this->_obj->store()) {
-      if ($this->redirectError) {
-        $AppUI->setMsg($msg, UI_MSG_ERROR);
+    	$AppUI->setMsg($msg, UI_MSG_ERROR);
+    	if ($this->redirectError) {
+      	//$AppUI->setMsg($msg, UI_MSG_ERROR);
         $AppUI->redirect($this->redirectError);
       }
     } else {

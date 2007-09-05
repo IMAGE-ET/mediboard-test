@@ -219,9 +219,9 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$mediuserSel field="compte"}}</th>
           <td>
-              {{mb_field object=$mediuserSel field="_compte_banque"}}
-              {{mb_field object=$mediuserSel field="_compte_guichet"}}
-              {{mb_field object=$mediuserSel field="_compte_numero"}}
+              {{mb_field object=$mediuserSel field="_compte_banque" onkeyup="followUp(this, '_compte_guichet', 5)" }}
+              {{mb_field object=$mediuserSel field="_compte_guichet" onkeyup="followUp(this, '_compte_numero', 5)" }}
+              {{mb_field object=$mediuserSel field="_compte_numero" onkeyup="followUp(this, '_compte_cle', 11)" }}
               {{mb_field object=$mediuserSel field="_compte_cle"}}
           </td>
         </tr>
