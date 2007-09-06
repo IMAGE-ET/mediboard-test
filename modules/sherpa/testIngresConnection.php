@@ -39,6 +39,16 @@ p {
  * Test script for Ingres DB connection 
  */
 
+// Check the ingres_connect function
+if (!function_exists( "ingres_connect" )) {
+  echo "Initialement, la fonction ingres_connect() n'est pas trouvée : on load dynamiquement la librairie<br />";
+  dl("ingres.so");
+}
+if (!function_exists( "ingres_connect" )) {
+  echo "La fonction ingres_connect n'est toutjours pas trouvée<br />";
+}
+
+// Test with results
 $firstnames = array("Pierre", "Thomas", "Jean", "Lise", "Marie", "Anne");
 $lastnames = array("Dupont", "Lafitte", "Caillet", "Bataille", "Lebihan", "Barthélémy", "Garreau");
 $nbrows = 5;
