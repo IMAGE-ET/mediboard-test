@@ -31,7 +31,9 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
   
-
+// Chargement de la liste des banques
+$banque = new CBanque();
+$banques = $banque->loadList();
 /*  
 $consult->loadRefs();
 
@@ -208,6 +210,7 @@ $consult->loadPossibleActes();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);
 $smarty->assign("codePraticienEc", $codePraticienEc);

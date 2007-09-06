@@ -16,6 +16,11 @@ $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 $noReglement  = mbGetValueFromGet("noReglement" , 0);
 
+//Chargement de la liste des banques
+$banque = new CBanque();
+$banques = $banque->loadList();
+
+
 $consult = new CConsultation();
 
 // Test compliqué afin de savoir quelle consultation charger
@@ -122,6 +127,7 @@ if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_cons
 }
 $smarty->assign("_is_anesth", $_is_anesth);  
 
+$smarty->assign("banques"       , $banques);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("tarifsChir"    , $tarifsChir);

@@ -1,5 +1,5 @@
 <?php
-$locales['CTarif-codes_ccam-desc'] = '';
+$locales['CBanque-description'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -7,6 +7,7 @@ $locales['CAddiction-type-desc'] = '';
 $locales['CAddiction.type.cannabis'] = '';
 $locales['CAddiction.type.oenolisme'] = '';
 $locales['CAddiction.type.tabac'] = '';
+$locales['CBanque-nom'] = '';
 $locales['CConsultAnesth'] = '';
 $locales['CConsultAnesth-antecedents'] = '';
 $locales['CConsultAnesth-antecedents-court'] = '';
@@ -642,6 +643,7 @@ $locales['CTarif-chir_id'] = '';
 $locales['CTarif-chir_id-court'] = '';
 $locales['CTarif-chir_id-desc'] = '';
 $locales['CTarif-codes_ccam'] = '';
+$locales['CTarif-codes_ccam-desc'] = '';
 $locales['CTarif-description'] = '';
 $locales['CTarif-description-court'] = '';
 $locales['CTarif-description-desc'] = '';

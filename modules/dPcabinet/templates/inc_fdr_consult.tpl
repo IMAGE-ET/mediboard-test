@@ -369,6 +369,19 @@ function submitFdr(oForm) {
           </td>
         </tr>
         <tr>
+          <th>
+           Banque
+          </th>
+          <td>
+           <select name="banque_id">
+           <option value="">&mdash; Choix d'une banque</option> 
+           {{foreach from=$banques item=banque}}
+             <option value="{{$banque->_id}}" {{if $consult->banque_id == $banque->_id}}selectd = "selected"{{/if}}>{{$banque->_view}}</option>
+           {{/foreach}}
+           </select>
+          </td>
+        </tr>
+        <tr>
           <td colspan="2" class="button">
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>

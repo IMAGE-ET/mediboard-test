@@ -1,5 +1,5 @@
 <?php
-$locales['CTarif-codes_ccam-desc'] = 'Ajout de codes ccam';
+$locales['CBanque-description'] = 'Description';
 $locales['CAddiction-addiction'] = 'Information';
 $locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -7,6 +7,7 @@ $locales['CAddiction-type-desc'] = 'Type d\'addiction';
 $locales['CAddiction.type.cannabis'] = 'Cannabis';
 $locales['CAddiction.type.oenolisme'] = 'Oenolisme';
 $locales['CAddiction.type.tabac'] = 'Tabac';
+$locales['CBanque-nom'] = 'Nom';
 $locales['CConsultAnesth'] = 'Consultation Anesthésique';
 $locales['CConsultAnesth-antecedents'] = '';
 $locales['CConsultAnesth-antecedents-court'] = '';
@@ -642,6 +643,7 @@ $locales['CTarif-chir_id'] = '';
 $locales['CTarif-chir_id-court'] = '';
 $locales['CTarif-chir_id-desc'] = '';
 $locales['CTarif-codes_ccam'] = 'Ajout de codes ccam';
+$locales['CTarif-codes_ccam-desc'] = 'Ajout de codes ccam';
 $locales['CTarif-description'] = 'Nom';
 $locales['CTarif-description-court'] = '';
 $locales['CTarif-description-desc'] = 'Veuillez saisir un nom pour ce tarif';

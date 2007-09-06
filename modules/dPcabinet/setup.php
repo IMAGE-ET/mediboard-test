@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.72";
+$config["mod_version"]     = "0.75";
 $config["mod_type"]        = "user";
 
 
@@ -680,9 +680,79 @@ class CSetupdPcabinet extends CSetup {
            "CHANGE `plaquettes` `plaquettes` int(4) unsigned zerofill NULL";
     $this->addQuery($sql);
     
- 
+    $this->makeRevision("0.72");
+    $sql = "CREATE TABLE `banque` (
+             `banque_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+             `nom` VARCHAR(255) NOT NULL, 
+             `description` VARCHAR(255), 
+              PRIMARY KEY (`banque_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.72";
+    $this->makeRevision("0.73");
+    $sql = "ALTER TABLE `consultation` ADD `banque_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $this->makeRevision("0.74");
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'AXA Banque', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque accord', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'LCL', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Populaire', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Natexis', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'La banque Postale', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'BNP Paribas', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Caisse d\'epargne', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Ixis', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Océor', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Palatine', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Crédit Foncier', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Compagnie 1818', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Caisse des dépôts', 'Caisse des dépôts et consignations') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Crédit Agricole', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'HSBC', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Crédit coopératif', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Crédit Mutuel', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'CIC', 'Crédit Industriel et Commercial') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Dexia', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Société générale', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Groupama Banque', '') ;";
+    $this->addQuery($sql); 
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Crédit du Nord', '') ;"; 
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Courtois', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Tarneaud', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Kolb', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Laydernier', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Nuger', '') ;";
+    $this->addQuery($sql);
+    $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Rhône-Alpes', '') ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.75";
   }
 }
 ?>

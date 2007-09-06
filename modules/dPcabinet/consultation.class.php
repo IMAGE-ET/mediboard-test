@@ -41,6 +41,7 @@ class CConsultation extends CCodableCCAM {
   var $tarif         = null;
   var $type_tarif    = null;
   var $arrivee       = null;
+  var $banque_id     = null;
 
   // Form fields
   var $_etat           = null;
@@ -109,6 +110,7 @@ class CConsultation extends CCodableCCAM {
     $specs["tarif"]           = "str";
     $specs["arrivee"]         = "dateTime";
     $specs["type_tarif"]      = "enum list|cheque|CB|especes|tiers|autre default|cheque";
+    $specs["banque_id"]       = "ref class|CBanque";
     $specs["_date_min"]       = "date";
     $specs["_date_max"] 	  = "date moreEquals|_date_min";
     $specs["_etat_paiement"]  = "enum list|paye|impaye default|paye";
