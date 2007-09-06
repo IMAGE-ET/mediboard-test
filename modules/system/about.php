@@ -7,14 +7,6 @@
  *  @author Romain OLLIVIER
 */
 
-dl("ingres.so");
-
-if(function_exists("ingres_connect")) {
-  echo "ok";
-} else {
-  echo "bad";
-}
-
 ?>
 
 <script type="text/javascript">
