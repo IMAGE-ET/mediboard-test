@@ -1,5 +1,5 @@
 <?php
-$locales['CMediusers-compte'] = '';
+$locales['CMediusers-banque_id'] = '';
 $locales['CDiscipline'] = '';
 $locales['CDiscipline-categorie'] = '';
 $locales['CDiscipline-categorie-court'] = '';
@@ -75,6 +75,7 @@ $locales['CMediusers-back-spec_cpam_id'] = '';
 $locales['CMediusers-commentaires'] = '';
 $locales['CMediusers-commentaires-court'] = '';
 $locales['CMediusers-commentaires-desc'] = '';
+$locales['CMediusers-compte'] = '';
 $locales['CMediusers-deb_activite'] = '';
 $locales['CMediusers-deb_activite-court'] = '';
 $locales['CMediusers-deb_activite-desc'] = '';

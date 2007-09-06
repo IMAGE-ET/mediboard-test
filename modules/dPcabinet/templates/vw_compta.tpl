@@ -152,6 +152,7 @@ function pageMain() {
           <td class="button" colspan="2">
             <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';">Impression compta</button>
+            <button class="print" type="submit" onclick="document.printFrm.a.value='print_bordereau';">Impression bordereau</button>
           </td>
         </tr>
       </table>

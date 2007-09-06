@@ -29,6 +29,7 @@ class CMediusers extends CMbObject {
   var $deb_activite  = null;
   var $fin_activite  = null;
   var $compte        = null;
+  var $banque_id     = null;
   
   // DB References
   var $function_id   = null;
@@ -60,6 +61,7 @@ class CMediusers extends CMbObject {
   var $_compte_cle = null;
   
   // Object references
+  var $_ref_banque     = null;
   var $_ref_function   = null;
   var $_ref_discipline = null;
   var $_ref_packs      = array();
@@ -84,6 +86,7 @@ class CMediusers extends CMbObject {
       "fin_activite"  => "date",
       "spec_cpam_id"  => "ref class|CSpecCPAM",
       "compte"        => "code rib confidential",
+      "banque_id"     => "ref class|CBanque",
       "_user_username"   => "notNull str minLength|4",
       "_user_password"   => "str minLength|4",
       "_user_password2"  => "str sameAs|_user_password",
@@ -222,11 +225,17 @@ class CMediusers extends CMbObject {
     }
   }
 
+  function loadRefBanque(){
+  	$this->_ref_banque = new CBanque();
+  	$this->_ref_banque->load($this->banque_id);	
+  }
+  
+  
   function loadRefFunction() {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
   }
-
+  
   function loadRefsFwd() {
     // Forward references
     $this->loadRefFunction();
@@ -383,6 +392,7 @@ class CMediusers extends CMbObject {
     return $mediusers;
   }
 
+  
   function loadEtablissements($permType = PERM_READ){
     // Liste de Tous les établissements
     $group = new CGroups;

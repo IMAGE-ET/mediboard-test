@@ -15,6 +15,10 @@ $can->needsRead();
 $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 
+// Chargement des banques
+$banque = new CBanque();
+$banques = $banque->loadList();
+
 // Récupération des fonctions
 $groups = new CGroups;
 $order = "text";
@@ -46,6 +50,7 @@ $profiles = $profiles->loadList($where);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("banques"      , $banques      );
 $smarty->assign("mediuserSel"  , $mediuserSel  );
 $smarty->assign("profiles"     , $profiles     );
 $smarty->assign("groups"       , $groups       );

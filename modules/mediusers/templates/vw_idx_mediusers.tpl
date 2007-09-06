@@ -226,6 +226,18 @@ function pageMain() {
           </td>
         </tr>
         <tr>
+          <th>
+            {{mb_label object=$mediuserSel field="banque_id"}}
+          </th>
+          <td>
+          <select name="banque_id">
+          <option value="">&mdash; Choix d'une banque</option>
+          {{foreach from=$banques item="banque"}}
+            <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
+          {{/foreach}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$mediuserSel field="adeli"}}</th>
           <td>{{mb_field object=$mediuserSel field="adeli"}}</td>
         </tr>

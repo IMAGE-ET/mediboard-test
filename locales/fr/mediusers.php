@@ -1,5 +1,5 @@
 <?php
-$locales['CMediusers-compte'] = 'Compte bancaire';
+$locales['CMediusers-banque_id'] = 'Banque';
 $locales['CDiscipline'] = 'Disciplines';
 $locales['CDiscipline-categorie'] = 'Catégorie';
 $locales['CDiscipline-categorie-court'] = '';
@@ -75,6 +75,7 @@ $locales['CMediusers-back-spec_cpam_id'] = '';
 $locales['CMediusers-commentaires'] = 'Commentaires';
 $locales['CMediusers-commentaires-court'] = '';
 $locales['CMediusers-commentaires-desc'] = 'Commentaires sur l\'utilisateur';
+$locales['CMediusers-compte'] = 'Compte bancaire';
 $locales['CMediusers-deb_activite'] = 'Début d\'activité';
 $locales['CMediusers-deb_activite-court'] = '';
 $locales['CMediusers-deb_activite-desc'] = 'Date de début d\'activité de l\'utilisateur';

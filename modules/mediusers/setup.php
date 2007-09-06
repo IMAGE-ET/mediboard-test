@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.27";
+$config["mod_version"]     = "0.28";
 $config["mod_type"]        = "user";
 
 class CSetupmediusers extends CSetup {
@@ -405,7 +405,11 @@ class CSetupmediusers extends CSetup {
      $sql = "ALTER TABLE `users_mediboard` ADD `compte` VARCHAR(23);";
      $this->addQuery($sql);
      
-     $this->mod_version = "0.27";
+     $this->makeRevision("0.27");
+     $sql = "ALTER TABLE `users_mediboard` ADD `banque_id` INT(11) UNSIGNED;";
+     $this->addQuery($sql);
+     
+     $this->mod_version = "0.28";
   }
 }
 ?>

@@ -61,6 +61,8 @@ class CConsultation extends CCodableCCAM {
   var $_ref_examcomp       = null;
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
+  
+  var $_ref_banque         = null;
 
    // Foreign form fields : updated at loadRefs()
    var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
@@ -301,6 +303,11 @@ class CConsultation extends CCodableCCAM {
       $nbDocs = parent::getNumDocs();
     }
     return $nbDocs;
+  }
+  
+  function loadRefBanque(){
+  	$this->_ref_banque = new CBanque();
+  	$this->_ref_banque->load($this->banque_id);	
   }
   
   function loadRefConsultAnesth() {
