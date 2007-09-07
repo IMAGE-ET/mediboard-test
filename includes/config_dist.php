@@ -184,6 +184,8 @@ $dPconfig["graph_engine"] = "jpgraph";
 
 $dPconfig["graph_svg"] = "non";
 
+$dPconfig["dPpatients"]["CPatient"]["tag_ipp"] = 'sherpa group:$g';
+
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",
   "mark_row" => "0",

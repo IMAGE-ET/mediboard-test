@@ -120,6 +120,38 @@ function pageMain() {
 
 </script>
 
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
+<table class="form">  
+  <tr>
+    <th class="category" colspan="100">Tag pour les IPP</th>
+  </tr>
+  
+  <tr>
+    {{assign var="class" value="CPatient"}}
+    {{assign var="var" value="tag_ipp"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+    
+      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  <tr>
+    <td class="button" colspan="6">
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    </td>
+  </tr>
+</table>
+</form>
+
+
 <h2>Import de la base données de l'ordre des médecin</h2>
 <button class="tick" id="start_process" onclick="startProcess()">
   Commencer le processus

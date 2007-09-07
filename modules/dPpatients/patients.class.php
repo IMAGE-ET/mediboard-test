@@ -738,19 +738,19 @@ class CPatient extends CDossierMedical {
   
   
   function loadIPP(){
-  	global $dpConfig, $g;
+  	global $dPconfig, $g;
   	// Récuperation du tag de l'id Externe (ex: sherpa group:10)
     
   	// si pas de fichier de config ==> IPP = id mediboard
-  	if(!$dpConfig["dPpatients"]["CPatient"]["tag_ipp"]){
-    	$this->_IPP = $this->_id;
+  	if(!$dPconfig["dPpatients"]["CPatient"]["tag_ipp"]){
+  		$this->_IPP = $this->_id;
     	return;
     }
     
     // sinon, $_IPP = valeur id400
     // creation du tag de l'id Externe
-  	$tag = str_replace('$g',$g, $dpConfig["dPpatients"]["CPatient"]["tag_ipp"]);
-  
+  	$tag = str_replace('$g',$g, $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]);
+
   	// Recuperation de la valeur de l'id400
   	$id400 = new CIdSante400();
     $id400->loadLatestFor($this, $tag);

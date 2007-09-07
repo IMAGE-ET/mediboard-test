@@ -1,5 +1,5 @@
 <?php
-$locales['CPatient.assure_nationalite.local'] = '';
+$locales['config-dPpatients-CPatient-tag_ipp'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-court'] = '';
@@ -298,6 +298,7 @@ $locales['CPatient-_tel2'] = '';
 $locales['CPatient-_tel2-desc'] = '';
 $locales['CPatient.assure_nationalite.'] = '';
 $locales['CPatient.assure_nationalite.etranger'] = '';
+$locales['CPatient.assure_nationalite.local'] = '';
 $locales['CPatient.assure_sexe.'] = '';
 $locales['CPatient.assure_sexe.f'] = '';
 $locales['CPatient.assure_sexe.j'] = '';
