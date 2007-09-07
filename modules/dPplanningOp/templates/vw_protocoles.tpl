@@ -102,6 +102,9 @@ function setClose(protocole_id) {
                 {{foreach from=$curr_protocole->_ext_codes_ccam item=curr_code}}
                 &mdash; {{$curr_code->code}}
                 {{/foreach}}
+                {{if $curr_protocole->DP}}
+                &mdash; {{$curr_protocole->DP}}
+                {{/if}}
               </strong>
             </a>
             {{if $curr_protocole->libelle}}
@@ -149,7 +152,12 @@ function setClose(protocole_id) {
           {{/foreach}}
           </td>
         </tr>
-        
+        {{if $protSel->DP}}
+        <tr>
+          <th>Diagnostic Principal</th>
+          <td>{{$protSel->DP}}</td>
+        </tr>
+        {{/if}}
         <tr>
           <th>Temps opératoire :</th>
           <td>{{$protSel->temp_operation|date_format:"%Hh%M"}}</td>

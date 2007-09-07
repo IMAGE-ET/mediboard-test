@@ -59,7 +59,7 @@ var ProtocoleSelector = {
     oOpForm[this.sRques_op].value    = protocole.rques_operation;
 
     oSejourForm[this.sType].value          = protocole.type;
-    oSejourForm[this.sDP.value]          = protocole.DP;
+    oSejourForm[this.sDP].value            = protocole.DP;
     oSejourForm[this.sConvalescence].value = protocole.convalescence;
     oSejourForm[this.sRques_sej].value     = protocole.rques_sejour;
     
