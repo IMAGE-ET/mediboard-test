@@ -158,10 +158,8 @@ function pageMain() {
                 <option value="">&mdash; Choisir un objet</option>
               </select>
               {{else}}
-              {{tr}}
-                {{$compte_rendu->object_class}}
+                {{tr}}{{$compte_rendu->object_class}}{{/tr}}
                 {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
-              {{/tr}}
               {{/if}}
             </td>
           </tr>
