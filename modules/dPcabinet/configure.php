@@ -15,8 +15,10 @@ $can->needsAdmin();
 $banque = new CBanque();
 $banque_id = mbGetValueFromGetOrSession("banque_id");
 
-// Recuperation de la liste des banques
-$banques = $banque->loadList();
+$orderBanque = "nom ASC";
+$banques = $banque->loadList(null,$orderBanque);
+
+
 
 // Chargement de la banque selectionnée
 if($banque_id){

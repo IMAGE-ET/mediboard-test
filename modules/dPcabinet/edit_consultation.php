@@ -31,9 +31,11 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
   
-// Chargement de la liste des banques
+// Chargement des banques
+$orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList();
+$banques = $banque->loadList(null,$orderBanque);
+
 /*  
 $consult->loadRefs();
 

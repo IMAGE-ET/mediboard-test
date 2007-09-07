@@ -16,8 +16,9 @@ $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 
 // Chargement des banques
+$orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList();
+$banques = $banque->loadList(null,$orderBanque);
 
 // Récupération des fonctions
 $groups = new CGroups;

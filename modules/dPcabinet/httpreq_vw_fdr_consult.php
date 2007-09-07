@@ -16,9 +16,10 @@ $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 $noReglement  = mbGetValueFromGet("noReglement" , 0);
 
-//Chargement de la liste des banques
+// Chargement des banques
+$orderBanque = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList();
+$banques = $banque->loadList(null,$orderBanque);
 
 
 $consult = new CConsultation();
