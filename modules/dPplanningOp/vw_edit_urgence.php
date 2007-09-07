@@ -12,8 +12,12 @@ global $AppUI, $can, $m, $tab, $dPconfig;
 $can->needsRead();
 
 // Liste des Etablissements selon Permissions
-$etablissements = new CMediusers();
-$etablissements = $etablissements->loadEtablissements(PERM_READ);
+$etablissements = CMediusers::loadEtablissements(PERM_READ);
+
+
+// Chargement des prestations
+$prestation = new CPrestation();
+$prestations = $prestation->loadList();
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
@@ -167,6 +171,8 @@ $smarty->assign("mins"         , $mins);
 $smarty->assign("hours_duree"  , $hours_duree);
 $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
+
+$smarty->assign("prestations", $prestations);
 
 $smarty->display("vw_edit_planning.tpl");
 
