@@ -72,6 +72,27 @@ function pageMain() {
           <td>{{mb_field object=$user field="titres"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$user field="compte"}}</th>
+          <td>
+              {{mb_field object=$user field="_compte_banque" onkeyup="followUp(this, '_compte_guichet', 5)" }}
+              {{mb_field object=$user field="_compte_guichet" onkeyup="followUp(this, '_compte_numero', 5)" }}
+              {{mb_field object=$user field="_compte_numero" onkeyup="followUp(this, '_compte_cle', 11)" }}
+              {{mb_field object=$user field="_compte_cle"}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            {{mb_label object=$user field="banque_id"}}
+          </th>
+          <td>
+          <select name="banque_id">
+          <option value="">&mdash; Choix d'une banque</option>
+          {{foreach from=$banques item="banque"}}
+            <option value="{{$banque->_id}}" {{if $user->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
+          {{/foreach}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$user field="_user_email"}}</th>
           <td>{{mb_field object=$user field="_user_email"}}</td>
         </tr>
