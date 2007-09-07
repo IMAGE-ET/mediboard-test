@@ -144,6 +144,7 @@ class CPatient extends CDossierMedical {
   var $_adresse_ligne2 = null;
   var $_adresse_ligne3 = null;
   var $_pays           = null;
+  var $_IPP            = null;
   
   // DHE Fields
   var $_urlDHE       = null;
@@ -734,6 +735,35 @@ class CPatient extends CDossierMedical {
       }
     }
   }
+  
+  
+  function loadIPP(){
+  	global $dpConfig, $g;
+  	// Récuperation du tag de l'id Externe (ex: sherpa group:10)
+    
+  	// si pas de fichier de config ==> IPP = id mediboard
+  	if(!$dpConfig["dPpatients"]["CPatient"]["tag_ipp"]){
+    	$this->_IPP = $this->_id;
+    	return;
+    }
+    
+    // sinon, $_IPP = valeur id400
+    // creation du tag de l'id Externe
+  	$tag = str_replace('$g',$g, $dpConfig["dPpatients"]["CPatient"]["tag_ipp"]);
+  
+  	// Recuperation de la valeur de l'id400
+  	$id400 = new CIdSante400();
+    $id400->loadLatestFor($this, $tag);
+  	
+    // Stockage de la valeur de l'id400
+    $this->_IPP = $id400->id400;
+    
+    // Si pas d'id400 correspondant, on stocke "_"
+    if(!$this->_IPP){
+    	$this->_IPP = "_";
+    }
+  }
+  
   
   function checkSimilar($nom, $prenom) {
     $soundex2 = new soundex2;

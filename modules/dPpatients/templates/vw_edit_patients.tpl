@@ -101,7 +101,7 @@ function pageMain() {
           <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->_id}})">
             <img src="images/icons/history.gif" alt="historique" />
           </a>
-          Modification du dossier de {{$patient->_view}}
+          Modification du dossier de {{$patient->_view}} [{{$patient->_IPP}}]
         </th>
       {{else}}
         <th class="title" colspan="5">

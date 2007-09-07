@@ -22,6 +22,9 @@ $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsFwd();
 
+// Chargement de l'ipp
+$patient->loadIPP();
+
 if (!$patient_id) {
   $patient->nom    = $name;
   $patient->prenom = $firstName;
