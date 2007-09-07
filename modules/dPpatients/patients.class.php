@@ -743,7 +743,7 @@ class CPatient extends CDossierMedical {
     
   	// si pas de fichier de config ==> IPP = id mediboard
   	if(!$dPconfig["dPpatients"]["CPatient"]["tag_ipp"]){
-  		$this->_IPP = $this->_id;
+  		$this->_IPP = "";
     	return;
     }
     
@@ -760,7 +760,7 @@ class CPatient extends CDossierMedical {
     
     // Si pas d'id400 correspondant, on stocke "_"
     if(!$this->_IPP){
-    	$this->_IPP = "_";
+    	$this->_IPP = "-";
     }
   }
   

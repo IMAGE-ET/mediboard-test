@@ -83,7 +83,7 @@ function reloadAfterSaveDoc(){
       <div style="float:left;" class="noteDiv {{$patient->_class_name}}-{{$patient->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
-      Identité
+      Identité {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
     </th>
     <th class="category" colspan="2">Coordonnées</th>
   </tr>

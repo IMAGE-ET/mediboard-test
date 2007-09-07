@@ -128,6 +128,9 @@ $intermaxFunctions = array(
   "Lire Vitale",
 );
 
+// Chargement de l'IPP du patient
+$patient->loadIPP();
+
 // Création du template
 $smarty = new CSmartyDP();
 
