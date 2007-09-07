@@ -23,7 +23,7 @@ class CIngresDataSource extends CSQLDataSource {
     }
     
     if (!$name) { 
-      trigger_error( "FATAL ERROR: Ingres driver has to select a specific database	 'localhost'", E_USER_ERROR );
+      trigger_error( "FATAL ERROR: Ingres driver has to select a specific database on 'localhost'", E_USER_ERROR );
       die;
     }
     
@@ -84,7 +84,7 @@ class CIngresDataSource extends CSQLDataSource {
     $ret = ingres_query($query, $this->link);
     
     // Simulate autocommit because ingres_autocommit() is unavailable
-    if (preg_match("/^(INSERT|UPDATE|DELETE)/i", $query)) {
+    if ($ret && preg_match("/^(INSERT|UPDATE|DELETE)/i", $query)) {
       ingres_commit($this->link);
     }
     
@@ -150,7 +150,6 @@ class CIngresDataSource extends CSQLDataSource {
   function queriesForDSN($user, $pass, $base) {
     return array(); 
   }
-  
 }
 
 ?>

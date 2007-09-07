@@ -445,7 +445,7 @@ abstract class CSQLDataSource {
    * @param string $keyName The var name of the key to set
    * @return bool job done
    **/
-  function updateObject($table, &$object, $keyName) {
+  function updateObject($table, &$object, $keyName, $nullifyEmptyStrings = true) {
     global $dPconfig;
     if ($dPconfig["readonly"]) {
       return false;
@@ -472,7 +472,7 @@ abstract class CSQLDataSource {
       $v = trim($v);
 
       // Nullify empty values or escape
-      $val = $v === "" ? "NULL" : "'" . $this->escape($v) . "'";
+      $val = ($nullifyEmptyStrings && $v === "") ? "NULL" : "'" . $this->escape($v) . "'";
         
       $tmp[] = "`$k`=$val";
     }

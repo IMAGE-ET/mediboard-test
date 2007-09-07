@@ -72,6 +72,12 @@ $link = ingres_connect($base, $user, $pass)
     or die("Could not connect user '$user' : " . ingres_error($link));
 echo "Connected successfully to '$base'...";
 
+$query ="UPDATE t_dossier SET anndos=NULL WHERE numdos='900001'";
+do_query($query, "Non nullable");
+ingres_commit($link);
+die;
+
+
 // Select from a table that exists in all Ingres databases
 $query = "SELECT * FROM iitables " .
     "\nWHERE table_name = '$table' " .

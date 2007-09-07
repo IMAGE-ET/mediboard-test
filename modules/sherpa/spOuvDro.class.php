@@ -1,0 +1,109 @@
+<?php /* $Id: patients.class.php 2249 2007-07-11 16:00:10Z mytto $ */
+
+/**
+* @package Mediboard
+* @subpackage dPpatients
+* @version $Revision: 2249 $
+* @author Romain Ollivier
+*/
+
+global $AppUI;
+require_once($AppUI->getModuleClass("sherpa", "spObject"));
+
+/**
+ * Classe du malade sherpa
+ */
+class CSpOuvDro extends CSpObject {  
+  // DB Table key
+  var $numdos = null;
+
+  // DB Fields : see getSpecs();
+  
+	function CSpOuvDro() {
+	  $this->CSpObject("t_ouvdro", "numdos");    
+	}
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->mbClass = "CSejour";
+    return $spec;
+  }
+ 	
+  function getSpecs() {
+    $specs = parent::getSpecs();
+
+//    $specs["drofla"]  = "bool"            ; /* Flag                             */
+//    $specs["referan"] = "str maxLength|9" ; /* Annee de Reference (AAA Annnnn)  */
+    $specs["numdos"]  = "numchar length|6"    ; /* No de dossier (Annnnn)           */
+//    $specs["typmal"]  = "bool"            ; /* Type de malade (Externe/Hospit.) */
+    $specs["malnum"]  = "numchar length|6"    ; /* No de malade                     */
+//    $specs["admiss"]  = "bool"            ; /* Mode d'Admission                 */
+//    $specs["accide"]  = "bool"            ; /* Accident  O/N                    */
+//    $specs["acctie"]  = "bool"            ; /*          Cause par 1 Tiers O/N   */
+//    $specs["acctra"]  = "bool"            ; /*          Du Travail        O/N   */
+//    $specs["datacc"]  = "str length|10"   ; /* Date de l'accident               */
+//    $specs["numacc"]  = "str maxLength|9" ; /* No de l'accident                 */
+//    $specs["oridro"]  = "bool"            ; /* Origine des Droits               */
+//    $specs["datval"]  = "str length|10"   ; /* Date Validite CAS ou etabl. PEC  */
+//    $specs["codorg"]  = "str maxLength|3" ; /* Code organ. delivr. CAS ou PEC   */
+//    $specs["grdreg"]  = "str maxLength|2" ; /* Grand regime                     */
+//    $specs["caisse"]  = "str maxLength|3" ; /* Organisme gestionnaire           */
+//    $specs["centre"]  = "str maxLength|3" ; /* centre gestionnaire              */
+//    $specs["cleorg"]  = "bool"            ; /* Cle organisme                    */
+//    $specs["regime"]  = "str maxLength|3" ; /* Regime                           */
+//    $specs["risque"]  = "str maxLength|2" ; /* Nature d'assurance               */
+//    $specs["datcho"]  = "str length|10"   ; /* Date cessation activite          */
+//    $specs["nomemp"]  = "str maxLength|30"; /* Nom employeur                    */
+//    $specs["adremp"]  = "str maxLength|30"; /* Adresse employeur                */
+//    $specs["vilemp"]  = "str maxLength|30"; /* Code postal et ville employeur   */
+//    $specs["matemp"]  = "str maxLength|9" ; /* No matricule employeur           */
+//    $specs["forgou"]  = "bool"            ; /* Forfait gouvernemental  O/N      */
+//    $specs["art115"]  = "bool"            ; /* Article 115 (pension guerre) O/N */
+//    $specs["num115"]  = "str maxLength|5" ; /* No pensionne de guerre           */
+//    $specs["exoner"]  = "bool"            ; /* Justification exoneration        */
+//    $specs["pfjamo"]  = "bool"            ; /* FJ Prise en charge AMO           */
+//    $specs["exof18"]  = "bool"            ; /* Exo de la PAT (18 Euros)         */
+//    $specs["mutuel"]  = "str length|12"   ; /* Code mutuelle                    */
+//    $specs["numadh"]  = "str maxLength|9" ; /* No d'adherent                    */
+//    $specs["pratra"]  = "str maxLength|5" ; /* Medecin traitant                 */
+//    $specs["prares"]  = "str maxLength|3" ; /* Responsable                      */
+//    $specs["dnaiss"]  = "str length|10"   ; /* Date Naiss. Selon Secu jj/mm/aaaa*/
+//    $specs["ghscod"]  = "num"             ; /* Code GHS                         */
+    $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
+    
+    return $specs;
+  }
+  
+  function updateFormFields() {
+    $this->_view = "$this->numdos ($this->malnum)";
+  }
+  
+  function mapTo() {
+    // Load patient
+    $malade = new CSpMalade();
+    $malade->load($this->malnum); 
+    if (!$patient = $malade->loadMbObject()) {
+      throw new Exception("Malade '$this->malnum' is not linked to a Mb Patient");
+    }
+    
+    $sejour = new CSejour();
+    $sejour->patient_id = $patient->_id;
+    return $sejour;
+  }
+  
+  function mapFrom(CMbObject &$mbObject) {
+    $mbClass = $this->_spec->mbClass;
+    if (!is_a($mbObject, $mbClass)) {
+      trigger_error("mapping object should be a '$mbClass'");
+    }
+        
+    $sejour = $mbObject;
+    $sejour->loadRefPatient();
+    $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    
+    $this->malnum = $idMalde->id400;
+    $this->datmaj = mbDateToLocale(mbDateTime());
+  }
+}
+
+?>

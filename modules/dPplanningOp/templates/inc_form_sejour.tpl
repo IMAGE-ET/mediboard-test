@@ -194,13 +194,25 @@
 
 {{if !$mode_operation}}
 <tr>
-  <th>Entrée réelle :</th>
-  <td colspan="3">{{$sejour->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+  <th>{{mb_label object=$sejour field=entree_reelle}}</th>
+  <td class="date" colspan="3">
+    {{if $can->admin}}
+    {{mb_field object=$sejour field=entree_reelle form=editSejour}}
+    {{else}}
+		{{mb_value object=$sejour field=entree_reelle}}
+		{{/if}}    
+  </td>
 </tr>
 
 <tr>
-  <th>Sortie réelle :</th>
-  <td colspan="3">{{$sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}</td>
+  <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
+  <td class="date" colspan="3">
+    {{if $can->admin}}
+    {{mb_field object=$sejour field=sortie_reelle form=editSejour}}
+    {{else}}
+		{{mb_value object=$sejour field=sortie_reelle}}
+		{{/if}}    
+  </td>
 </tr>
 {{/if}}
 
@@ -369,5 +381,7 @@
 prepareForm(document.editSejour);
 regFieldCalendar("editSejour", "_date_entree_prevue");
 regFieldCalendar("editSejour", "_date_sortie_prevue");
+regFieldCalendar("editSejour", "entree_reelle", true);
+regFieldCalendar("editSejour", "sortie_reelle", true);
 removePlageOp(false);
 </script>

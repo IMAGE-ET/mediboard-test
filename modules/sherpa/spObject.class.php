@@ -50,6 +50,7 @@ class CSpObject extends CMbObject {
     $spec->dsn = "sherpa";
     $spec->incremented = false;
     $spec->loggable = false;
+    $spec->nullifyEmptyStrings = false;
     return $spec;
   }
 
@@ -84,6 +85,21 @@ class CSpObject extends CMbObject {
     $this->_ref_id400->object_class = $this->_spec->mbClass;
     $this->_ref_id400->id400 = $this->_id;
     $this->_ref_id400->loadMatchingObject();
+    return $this->_ref_id400;
+  }
+  
+  /**
+   * Load the linked mediboard object
+   * @return CMbObject, null if failed
+   */
+  function loadMbObject() {
+    $this->loadId400();
+    $id400 =& $this->_ref_id400;
+    if ($id400->_id) {
+      $id400->loadRefsFwd();
+    }
+    
+    return $id400->_ref_object;
   }
   
   /**

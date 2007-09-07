@@ -83,8 +83,8 @@ function mbRelativePath($absPath) {
  * @return void 
  **/
 function mbTrace($var, $label = null, $log = false) {
-  $export = print_r($var, true);
-  //$export = var_export($var, true); 
+//  $export = print_r($var, true);
+  $export = var_export($var, true); 
   $export = htmlspecialchars($export);
   $errorTime = date("Y-m-d H:i:s");
   

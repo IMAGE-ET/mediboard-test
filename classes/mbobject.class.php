@@ -717,7 +717,7 @@ class CMbObject {
 
     // DB query
     if ($objBefore->_id) {
-      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key, $this->_spec->nullifyEmptyStrings);
     } else {
       $keyToUpadate = $this->_spec->incremented ? $this->_tbl_key : null;
       $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $keyToUpadate);
@@ -1061,7 +1061,8 @@ class CMbObject {
   }
   
   /**
-   * Return the object properties in an array
+   * Get Object properties
+   * @return array 
    */
   function getProps() {
     $result = array();

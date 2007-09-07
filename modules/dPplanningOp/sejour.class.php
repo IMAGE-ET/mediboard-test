@@ -81,7 +81,7 @@ class CSejour extends CCodableCCAM {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
 
-  //Filter Fields
+  // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
   var $_admission 			= null;

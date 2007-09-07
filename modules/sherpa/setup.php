@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "sherpa";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 
 class CSetupsherpa extends CSetup {
@@ -50,12 +50,44 @@ class CSetupsherpa extends CSetup {
     
     $this->makeRevision("0.13");
     $sql = "ALTER TABLE `t_malade` " .
-          "\nCHANGE `malnom` `malnom` VARCHAR(20), " .
-          "\nCHANGE `malpre` `malpre` VARCHAR(10), " .
-          "\nCHANGE `datnai` `datnai` CHAR(10);";
+        "\nCHANGE `malnom` `malnom` VARCHAR(20), " .
+        "\nCHANGE `malpre` `malpre` VARCHAR(10), " .
+        "\nCHANGE `datnai` `datnai` CHAR(10);";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `t_malade` ".
+      "\nCHANGE `malnom` `malnom` VARCHAR(50),".
+      "\nCHANGE `malpre` `malpre` VARCHAR(30),".
+      "\nCHANGE `datnai` `datnai` VARCHAR(10),".
+      "\nADD `datmaj` CHAR(19);";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `t_dossier` (".
+      "\n`numdos` INT( 6 ) UNSIGNED ZEROFILL NOT NULL DEFAULT '0',".
+      "\n`malnum` INT(6) UNSIGNED ZEROFILL,".
+      "\n`anndos` VARCHAR(2),".
+      "\n`datmaj` CHAR(19),".
+      "PRIMARY KEY (`numdos`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `t_ouvdro` (".
+      "\n`numdos` INT( 6 ) UNSIGNED ZEROFILL NOT NULL DEFAULT '0',".
+      "\n`malnum` INT(6) UNSIGNED ZEROFILL,".
+      "\n`datmaj` CHAR(19),".
+      "\nPRIMARY KEY (`numdos`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    $sql = "CREATE TABLE `t_sejmed` (".
+      "\n`numdos` INT( 6 ) UNSIGNED ZEROFILL NOT NULL DEFAULT '0',".
+      "\n`malnum` INT(6) UNSIGNED ZEROFILL,".
+      "\n`datent` CHAR(10),".
+      "\n`litcod` CHAR(4),".
+      "\n`sercod` CHAR(2),". 
+      "\n`pracod` CHAR(3),". 
+      "\n`datsor` CHAR(10),". 
+      "\n`depart` ENUM('D','T','S','E','R','P'),".
+      "\nPRIMARY KEY (`numdos`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
     
   }
 }
