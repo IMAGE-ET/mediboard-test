@@ -111,6 +111,8 @@ if($sejour->_ref_operations){
   }
 }
 
+$sejour->loadNumDossier();
+
 // Création du template
 $smarty = new CSmartyDP();
 

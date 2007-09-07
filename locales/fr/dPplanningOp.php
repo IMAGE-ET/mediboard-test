@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-facturable'] = 'Facturable';
+$locales['config-dPplanningOp-CSejour-tag_dossier'] = 'Tag numéro de dossier';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -322,6 +322,7 @@ $locales['CSejour-entree_prevue-desc'] = '';
 $locales['CSejour-entree_reelle'] = 'Entrée reelle';
 $locales['CSejour-entree_reelle-court'] = '';
 $locales['CSejour-entree_reelle-desc'] = '';
+$locales['CSejour-facturable'] = 'Facturable';
 $locales['CSejour-group_id'] = 'Etablissement';
 $locales['CSejour-group_id-court'] = 'Etab';
 $locales['CSejour-group_id-desc'] = 'Etablissement ou se déroule le séjour. Obligatoire';

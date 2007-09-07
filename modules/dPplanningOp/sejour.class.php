@@ -69,7 +69,7 @@ class CSejour extends CCodableCCAM {
   var $_venue_SHS_guess    = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
-  
+  var $_num_dossier        = null;
   // Object References
   var $_ref_patient           = null;
   var $_ref_praticien         = null;
@@ -319,6 +319,37 @@ class CSejour extends CCodableCCAM {
       $acte_ccam->loadRefsFwd();
     } 
   }
+  
+  
+  function loadNumDossier(){
+  	global $dPconfig, $g;
+  	// Récuperation du tag de l'id Externe (ex: sherpa group:10)
+    
+  	// si pas de fichier de config ==> IPP = ""
+  	if(!$dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]){
+  		$this->_num_dossier = "";
+    	return;
+    }
+    
+    // sinon, $_num_dossier = valeur id400
+    // creation du tag de l'id Externe
+  	$tag = str_replace('$g',$g, $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]);
+
+  	// Recuperation de la valeur de l'id400
+  	$id400 = new CIdSante400();
+    $id400->loadLatestFor($this, $tag);
+  	
+    // Stockage de la valeur de l'id400
+    $this->_num_dossier = $id400->id400;
+    
+    // Si pas d'id400 correspondant, on stocke "_"
+    if(!$this->_num_dossier){
+    	$this->_num_dossier = "-";
+    }
+  }
+  
+  
+  
   
   
   function getExecutant_id($code) {

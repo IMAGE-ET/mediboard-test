@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-facturable'] = '';
+$locales['config-dPplanningOp-CSejour-tag_dossier'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -322,6 +322,7 @@ $locales['CSejour-entree_prevue-desc'] = '';
 $locales['CSejour-entree_reelle'] = '';
 $locales['CSejour-entree_reelle-court'] = '';
 $locales['CSejour-entree_reelle-desc'] = '';
+$locales['CSejour-facturable'] = '';
 $locales['CSejour-group_id'] = '';
 $locales['CSejour-group_id-court'] = '';
 $locales['CSejour-group_id-desc'] = '';

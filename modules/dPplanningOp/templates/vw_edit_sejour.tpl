@@ -39,7 +39,7 @@ function pageMain() {
     <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
       <img alt="Ecrire une note" src="images/icons/note_grey.png" />
     </div>
-      Modification du séjour {{$sejour->_view}}
+      Modification du séjour {{$sejour->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
     </th>
     {{else}}
     <th colspan="2" class="title">      

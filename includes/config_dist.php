@@ -165,7 +165,8 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_entree_jour"   => "10",
   "heure_sortie_ambu"   => "18",
   "heure_sortie_autre"  => "8",
-  "locked"              => "0"
+  "locked"              => "0",
+  "tag_dossier"         => ""
 
 );
 
