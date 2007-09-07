@@ -55,7 +55,7 @@ $mediuser->load($AppUI->user_id);
 $secretaire = $mediuser->isFromType(array("Secrétaire", "Administrator"));
 
 // si l'utilisateur courant est la secretaire ou le proprietaire du modele alors droit dessus
-if(($secretaire)||($compte_rendu->chir_id == $mediuser->user_id)||($compte_rendu->function_id==$mediuser->function_id)){
+if(!($compte_rendu->_id)||($secretaire)||($compte_rendu->chir_id == $mediuser->user_id)||($compte_rendu->function_id==$mediuser->function_id)){
 	$droit = 1;
 }
 // sinon, seulement, droit en lecture
