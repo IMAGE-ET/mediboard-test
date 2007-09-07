@@ -88,7 +88,6 @@ function pageMain() {
       <input type="hidden" name="dosql" value="do_modele_aed" />
       {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
-      {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
       {{if $compte_rendu->compte_rendu_id}}
     
       <button class="new" type="button" onclick="nouveau()">
@@ -159,7 +158,10 @@ function pageMain() {
                 <option value="">&mdash; Choisir un objet</option>
               </select>
               {{else}}
-              {{tr}}{{$compte_rendu->object_class}}{{/tr}}
+              {{tr}}
+                {{$compte_rendu->object_class}}
+                {{mb_field object=$compte_rendu field="object_class" hidden=1 prop="" }}
+              {{/tr}}
               {{/if}}
             </td>
           </tr>
