@@ -57,13 +57,12 @@ Intermax.createResultMessages = function(oContent) {
         <tr>
           <th colspan="2">
             <label for="check_naissance" title="Date de naissance du patient à rechercher">
-              <input type="checkbox" name="check_naissance" onclick="affNaissance()" {{if $naissance == "on"}}checked="checked"{{/if}}/>
+              
               <input type="hidden" name="naissance" {{if $naissance == "on"}}value="on"{{else}}value="off"{{/if}} />
               Date de naissance
             </label>
           </th>
           <td colspan="2">
-            {{if $naissance == "on"}}
                {{html_select_date
                  time=$datePat
                  start_year=1900
@@ -72,16 +71,7 @@ Intermax.createResultMessages = function(oContent) {
                  month_empty="Mois"
                  year_empty="Année"
                  all_extra="style='display:inline;'"}}
-                 {{else}}
-               {{html_select_date
-                 time=$datePat
-                 start_year=1900
-                 field_order=DMY
-                 day_empty="Jour"
-                 month_empty="Mois"
-                 year_empty="Année"
-                 all_extra="style='display:none;'"}}
-               {{/if}}  
+                 
           </td>
         </tr>
         

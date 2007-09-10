@@ -37,12 +37,12 @@ $patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
 $patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
 $patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
 $soundex             = mbGetValueFromGetOrSession("soundex"     , "off"    );
-$patient_naissance   = mbGetValueFromGetOrSession("naissance"   , "off"    );
 $patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
 $patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
 $patient_day         = mbGetValueFromGetOrSession("Date_Day"    , date("d"));
 $patient_month       = mbGetValueFromGetOrSession("Date_Month"  , date("m"));
 $patient_year        = mbGetValueFromGetOrSession("Date_Year"   , date("Y"));
+$patient_naissance   = null;
 
 $useVitale = mbGetValueFromGet("useVitale", 0);
 if($useVitale) {
@@ -78,6 +78,10 @@ if ($patient_jeuneFille) {
   $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 }
 
+
+if(($patient_year) || ($patient_month) || ($patient_day)){
+	$patient_naissance = "on";
+}
 
 if ($patient_naissance == "on"){
   $year =($patient_year)?"$patient_year-":"%-";
@@ -127,6 +131,7 @@ if ($patient->_id) {
 $intermaxFunctions = array(
   "Lire Vitale",
 );
+
 
 // Chargement de l'IPP du patient
 $patient->loadIPP();
