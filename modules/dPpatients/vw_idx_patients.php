@@ -39,9 +39,9 @@ $patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
 $soundex             = mbGetValueFromGetOrSession("soundex"     , "off"    );
 $patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
 $patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
-$patient_day         = mbGetValueFromGetOrSession("Date_Day"    , date("d"));
-$patient_month       = mbGetValueFromGetOrSession("Date_Month"  , date("m"));
-$patient_year        = mbGetValueFromGetOrSession("Date_Year"   , date("Y"));
+$patient_day         = mbGetValueFromGetOrSession("Date_Day"    , "");
+$patient_month       = mbGetValueFromGetOrSession("Date_Month"  , "");
+$patient_year        = mbGetValueFromGetOrSession("Date_Year"   , "");
 $patient_naissance   = null;
 
 $useVitale = mbGetValueFromGet("useVitale", 0);
