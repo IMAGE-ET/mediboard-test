@@ -84,7 +84,8 @@
   <input type="hidden" name="mode" value="admis" />
   {{if !$curr_adm->entree_reelle}}
   <input type="hidden" name="value" value="o" />
-  <button class="tick" type="button" onclick="submitAdmission(this.form);">
+  
+  <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_adm->entree_prevue) || ($date_demain < $curr_adm->entree_prevue))}}confirmation(this.form);{{else}}submitAdmission(this.form);{{/if}};">
     Admis
   </button>
   {{else}}
@@ -93,7 +94,11 @@
     Annuler
   </button>
   <br />
+  {{if (($date_actuelle > $curr_adm->entree_prevue) || ($date_demain < $curr_adm->entree_prevue))}}
+    {{$curr_adm->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+  {{else}}
   {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}
+  {{/if}}
   {{/if}}
   </form>
 </td>

@@ -26,6 +26,20 @@ function submitComp(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadComp });
 }
 
+
+function confirmationComp(oForm){
+   if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
+     submitComp(oForm);
+   }
+}
+
+function confirmationAmbu(oForm){
+   if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
+     submitAmbu(oForm);
+   }
+}
+
+
 function pageMain() {
   
   var ambuUpdater = new Url;

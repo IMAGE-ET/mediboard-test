@@ -17,6 +17,10 @@ $vue = mbGetValueFromGetOrSession("vue", 0);
 // Récupération des dates
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
+$date_actuelle = mbDateTime("00:00:00");
+$date_demain = mbDateTime("00:00:00","+ 1 day");
+
+
 $date_sortie = mbDateTime();
 
 $now  = mbDate();
@@ -74,9 +78,10 @@ foreach($listSejourAmbu as $key=>$sejourAmbu){
     }
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("date_demain", $date_demain);
+$smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"     , $date );
 $smarty->assign("now"      , $now );
 $smarty->assign("vue"      , $vue );

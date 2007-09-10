@@ -27,7 +27,7 @@
       {{tr}}CAffectation._mode_sortie.{{$curr_sortie->_ref_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="effectue" value="1" />
-      <button class="tick" type="button" onclick="submitAmbu(this.form)">
+      <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_sortie->_ref_sejour->sortie_prevue) || ($date_demain < $curr_sortie->_ref_sejour->sortie_prevue))}}confirmationAmbu(this.form);{{else}}submitAmbu(this.form);{{/if}}">
         Effectuer la sortie
       </button>
       <br />      
@@ -71,8 +71,8 @@
       {{tr}}CSejour.mode_sortie.{{$curr_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="sortie_reelle" value="{{$date_sortie}}" />
-      <button class="tick" type="button" onclick="submitAmbu(this.form)">
-        Effectuer la sortie
+     <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_sejour->sortie_prevue) || ($date_demain < $curr_sejour->sortie_prevue))}}confirmationAmbu(this.form);{{else}}submitAmbu(this.form);{{/if}}">
+         Effectuer la sortie
       </button>
       <br />      
       {{mb_field object=$curr_sejour field="mode_sortie"}}

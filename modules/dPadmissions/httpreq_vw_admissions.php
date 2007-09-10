@@ -19,6 +19,10 @@ $selTri    = mbGetValueFromGetOrSession("selTri", "nom");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
+$date_actuelle = mbDateTime("00:00:00");
+$date_demain = mbDateTime("00:00:00","+ 1 day");
+
+
 // Chargement des prestations
 $prestation = new CPrestation();
 $prestations = $prestation->loadList();
@@ -71,6 +75,8 @@ foreach ($today as $keySejour => $valueSejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("date_demain", $date_demain);
+$smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"        , $date        );
 $smarty->assign("selAdmis"    , $selAdmis    );
 $smarty->assign("selSaisis"   , $selSaisis   );

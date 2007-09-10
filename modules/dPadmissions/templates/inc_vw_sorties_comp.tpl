@@ -28,7 +28,7 @@
       {{tr}}CAffectation._mode_sortie.{{$curr_sortie->_ref_sejour->mode_sortie}}{{/tr}}
       {{else}}
       <input type="hidden" name="effectue" value="1" />
-      <button class="tick" type="button" onclick="submitComp(this.form)">
+      <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_sortie->_ref_sejour->sortie_prevue) || ($date_demain < $curr_sortie->_ref_sejour->sortie_prevue))}}confirmationComp(this.form);{{else}}submitComp(this.form);{{/if}}">
         Effectuer la sortie
       </button><br />
       {{mb_field object=$curr_sortie field="_mode_sortie"}}
@@ -69,7 +69,7 @@
       {{tr}}CSejour.mode_sortie.{{$curr_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="sortie_reelle" value="{{$date_sortie}}" />
-      <button class="tick" type="button" onclick="submitComp(this.form)">
+      <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_sejour->sortie_prevue) || ($date_demain < $curr_sejour->sortie_prevue))}}confirmationComp(this.form);{{else}}submitComp(this.form);{{/if}}">
         Effectuer la sortie
       </button>
       <br />      

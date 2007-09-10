@@ -31,6 +31,13 @@ function reloadAdmission() {
   admUrl.requestUpdate('listAdmissions', { waitingText : null });
 }
 
+function confirmation(oForm){
+   if(confirm('La date enregistrée d\'admission est différente de la date prévue, souhaitez vous confimer l\'admission du patient ?')){
+     submitAdmission(oForm);
+   }
+}
+
+
 function submitAdmission(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAdmission });
 }
