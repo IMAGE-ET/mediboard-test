@@ -62,6 +62,10 @@ if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] =
   $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
 }
 
+//Chargement de l'IPP
+$patient->loadIPP();
+
+
 // Création du template
 $smarty = new CSmartyDP();
 

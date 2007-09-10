@@ -13,7 +13,7 @@
       <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
-      {{$object->_view}}
+      {{$object->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
     </th>
   </tr>
 

@@ -17,6 +17,7 @@
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$object->_id}}" />
       {{$object->_view}}
+      {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
       <button type="button" class="print" onclick="printPatient({{$object->_id}})">
         Imprimer
       </button>

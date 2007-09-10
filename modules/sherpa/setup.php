@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "sherpa";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 
 class CSetupsherpa extends CSetup {
@@ -87,8 +87,44 @@ class CSetupsherpa extends CSetup {
       "\nPRIMARY KEY (`numdos`)) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
-    
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `t_malade`".
+			"CHANGE `malnum` `malnum` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,".
+			"ADD `malpat` VARCHAR(50),".
+			"ADD `vilnai` VARCHAR(30),".
+			"ADD `nation` VARCHAR(03),".
+			"ADD `sexe` CHAR(1),".
+			"ADD `malnss` VARCHAR(13),". 
+			"ADD `clenss` VARCHAR(02),".
+			"ADD `parent` VARCHAR(02),".
+			"ADD `malru1` VARCHAR(25),".
+			"ADD `malru2` VARCHAR(25),".
+			"ADD `malpos` VARCHAR(05),".
+			"ADD `malvil` VARCHAR(25),".
+			"ADD `maltel` VARCHAR(14),".
+			"ADD `malpro` VARCHAR(30),".
+			"ADD `perso1` VARCHAR(30),".
+			"ADD `prvad1` VARCHAR(25),".
+			"ADD `prvil1` VARCHAR(30),".
+			"ADD `prtel1` VARCHAR(14),".
+			"ADD `malie1` VARCHAR(20),".
+			"ADD `perso2` VARCHAR(30),".
+			"ADD `prvad2` VARCHAR(25),".
+			"ADD `prvil2` VARCHAR(30),".
+			"ADD `prtel2` VARCHAR(14),".
+			"ADD `malie2` VARCHAR(20),".
+			"ADD `assnss` VARCHAR(13),".
+			"ADD `nsscle` VARCHAR(02),".
+			"ADD `assnom` VARCHAR(50),".
+			"ADD `asspre` VARCHAR(30),".
+			"ADD `asspat` VARCHAR(50),".
+			"ADD `assru1` VARCHAR(25),".
+			"ADD `assru2` VARCHAR(25),".
+			"ADD `asspos` VARCHAR(05),".
+			"ADD `assvil` VARCHAR(25);";
+		$this->addQuery($sql);
+		
+		$this->mod_version = "0.16";
   }
 }
 ?>
