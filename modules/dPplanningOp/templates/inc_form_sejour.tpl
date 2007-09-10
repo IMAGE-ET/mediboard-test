@@ -1,12 +1,20 @@
 <script type="text/javascript">
 
-function check(){
+function checkPresta(){
   var oForm = document.editSejour;
   if(oForm.prestation_id.value != ""){
     setRadioValue(oForm.chambre_seule, "1");
   } 
 }
 
+
+function checkChambre(){
+  var oForm = document.editSejour;
+  var valeur_chambre = getCheckedValue(oForm.chambre_seule);
+  if(valeur_chambre == "0"){
+    oForm.prestation_id.value = "";
+  }
+}
 
 </script>
 
@@ -264,7 +272,7 @@ function check(){
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td {{if $mode_operation}}colspan="3"{{/if}}>
-    {{mb_field object=$sejour field="chambre_seule" onchange="check();"}}
+    {{mb_field object=$sejour field="chambre_seule" onchange="checkChambre();"}}
   </td>
   
   {{if !$mode_operation}}
@@ -282,7 +290,7 @@ function check(){
 {{if $prestations}}
 <th>{{mb_label object=$sejour field="prestation_id"}}</th>
   <td>
-  <select name="prestation_id" onchange="check();">
+  <select name="prestation_id" onchange="checkPresta();">
   <option value="">&mdash; Choix d'une prestation</option>
   {{foreach from=$prestations item="_prestation"}}
     <option value="{{$_prestation->_id}}" {{if $sejour->prestation_id == $_prestation->_id}}selected = selected{{/if}}>{{$_prestation->_view}}</option>
