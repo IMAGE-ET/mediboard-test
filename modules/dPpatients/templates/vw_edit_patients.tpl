@@ -17,8 +17,6 @@ Intermax.action = function(){
 Intermax.createResultMessages = function(oContent) {
 }
 
-
-
 var httpreq_running = false;
 function confirmCreation(oForm){
   if(httpreq_running) {

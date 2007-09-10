@@ -316,7 +316,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient->tel2             = $pat400->consumeTel("ZTL2");
     
     $this->patient->matricule         = $pat400->consume("NSEC") . $pat400->consume("CSEC");
-    $this->patient->rang_beneficiaire = $pat400->consume("RBEN");;
+    $this->patient->rang_beneficiaire = str_pad($pat400->consume("RBEN"), 2, "0", STR_PAD_LEFT);
 
 //    $this->patient->pays              = $pat400->consume("ZPAY");
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];

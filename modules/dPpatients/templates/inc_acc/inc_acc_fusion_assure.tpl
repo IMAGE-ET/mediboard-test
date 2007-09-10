@@ -245,4 +245,18 @@
       {{mb_field object=$finalPatient field="assure_profession" tabindex="425"}}
     </td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$finalPatient field="assure_matricule"}}</th>
+    <td>
+      <input type="radio" name="_choix_assure_matricule" value="{{$patient1->assure_matricule}}" checked="checked" onclick="setField(this.form.assure_matricule, '{{$patient1->assure_matricule|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->assure_matricule}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_assure_matricule" value="{{$patient2->assure_matricule}}" onclick="setField(this.form.assure_matricule, '{{$patient2->assure_matricule|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->assure_matricule}}
+    </td>
+    <td>
+      {{mb_field object=$finalPatient field="assure_matricule" tabindex="426" size="15" maxlength="15"}}
+    </td>
+	</tr>  
 </table>

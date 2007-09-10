@@ -171,6 +171,18 @@
     </td>
   </tr>
   <tr>
+    <th>{{mb_label object=$finalPatient field="rang_beneficiaire"}}</th>
+    <td>
+      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient1->rang_beneficiaire}}" checked="checked" onclick="setField(this.form.rang_beneficiaire, '{{$patient1->rang_beneficiaire|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->rang_beneficiaire}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient2->rang_beneficiaire}}" onclick="setField(this.form.SHS, '{{$patient2->SHS|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->rang_beneficiaire}}
+    </td>
+    <td>{{mb_field object=$finalPatient field="rang_beneficiaire" tabindex="207"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$finalPatient field="SHS"}}</th>
     <td>
       <input type="radio" name="_choix_SHS" value="{{$patient1->SHS}}" checked="checked" onclick="setField(this.form.SHS, '{{$patient1->SHS|smarty:nodefaults|JSAttribute}}')" />
@@ -180,6 +192,6 @@
       <input type="radio" name="_choix_SHS" value="{{$patient2->SHS}}" onclick="setField(this.form.SHS, '{{$patient2->SHS|smarty:nodefaults|JSAttribute}}')" />
       {{$patient2->SHS}}
     </td>
-    <td>{{mb_field object=$finalPatient field="SHS" tabindex="207" size="10" maxlength="10"}}</td>
+    <td>{{mb_field object=$finalPatient field="SHS" tabindex="208" size="10" maxlength="10"}}</td>
   </tr>
 </table>

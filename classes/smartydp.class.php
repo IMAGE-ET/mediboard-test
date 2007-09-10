@@ -206,14 +206,8 @@ function smarty_function_mb_include_script($params, &$smarty) {
   }
   
   
-  return "<script type='text/javascript' src=$path></script>";
+  return "<script type='text/javascript' src='$path'></script>";
 }
-
-
-
-
-
-
 
 /**
  * dotProject integration of Smarty engine main class

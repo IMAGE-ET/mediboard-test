@@ -87,6 +87,7 @@ class CPatient extends CDossierMedical {
   var $assure_lieu_naissance   = null;
   var $assure_profession       = null;
   var $assure_rques            = null;
+  var $assure_matricule        = null;
   
   // Other fields
   var $_static_cim10 = null;
@@ -205,7 +206,7 @@ class CPatient extends CDossierMedical {
     $specs["rques"]             = "text";
     $specs["cmu"]               = "date";
     $specs["ald"]               = "text";
-    $specs["rang_beneficiaire"] = "enum list|1|2|11|12|13";
+    $specs["rang_beneficiaire"] = "enum list|01|02|11|12|13";
       
     $specs["pays"]              = "str";
     $specs["nationalite"]       = "notNull enum list|local|etranger default|local";
@@ -242,6 +243,7 @@ class CPatient extends CDossierMedical {
     $specs["assure_lieu_naissance"]    = "str";
     $specs["assure_profession"]        = "str";
     $specs["assure_rques"]             = "text";
+    $specs["assure_matricule"]         = "code insee confidential";
     
     return $specs;
   }

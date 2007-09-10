@@ -116,10 +116,15 @@ var Medecin = {
   <tr>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
     <td>{{mb_field object=$patient field="ATNC" tabindex="206"}}</td>
+    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
+    <td colspan="2">{{mb_field object=$patient field="rang_beneficiaire" tabindex="256"}}</td>
+
+<!-- 
     <th>{{mb_label object=$patient field="SHS"}}</th>
     <td colspan="2">
       {{mb_field object=$patient field="SHS" tabindex="256" size="8" maxlength="8" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom);"}}
     </td>
-  </tr>
+ -->
+   </tr>
 
 </table>

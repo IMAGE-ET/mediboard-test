@@ -83,10 +83,14 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="assure_rques"}}</th>
-    <td>{{mb_field object=$patient field="assure_rques" tabindex="410"}}</td>
+    <th rowspan="2">{{mb_label object=$patient field="assure_rques"}}</th>
+    <td rowspan="2">{{mb_field object=$patient field="assure_rques" tabindex="410"}}</td>
     <th>{{mb_label object=$patient field="assure_profession"}}</th>
     <td>{{mb_field object=$patient field="assure_profession" tabindex="465"}}</td>
+	</tr>
+	<tr>
+    <th>{{mb_label object=$patient field="assure_matricule"}}</th>
+    <td>{{mb_field object=$patient field="assure_matricule" tabindex="466" size="17" maxlength="15"}}</td>
   </tr>
 
 </table>

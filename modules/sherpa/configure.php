@@ -7,17 +7,14 @@
  * @author Sherpa
  */
 
-global $can, $AppUI;
+global $can;
 
 $can->needsAdmin();
-
-$AppUI->getAllClasses();
-$spClasses = getChildClasses("CSpObject");
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("spClasses", $spClasses);
+$smarty->assign("spClasses", array("CSpMalade", "CSpSejMed", "CSpDossier"));
 $smarty->display("configure.tpl");
 
 ?>

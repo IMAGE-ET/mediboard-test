@@ -124,6 +124,15 @@ class CSpObject extends CMbObject {
   function makeString($string, $length) {
     return strtoupper(substr($string, 0, $length));
   }
+
+  /**
+   * Mediboard phone number to Sherpa phone number
+   * @param string $string to convert
+   * @return string
+   */
+  function makePhone($tel) {
+    return preg_replace("/(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)/", "$1.$2.$2.$4.$5", $tel);
+  }
 }
 
 ?>
