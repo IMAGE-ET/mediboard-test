@@ -1,3 +1,15 @@
+<script type="text/javascript">
+
+function check(){
+  var oForm = document.editSejour;
+  if(oForm.prestation_id.value != ""){
+    setRadioValue(oForm.chambre_seule, "1");
+  } 
+}
+
+
+</script>
+
 <!-- $Id: $ -->
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
@@ -252,7 +264,7 @@
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td {{if $mode_operation}}colspan="3"{{/if}}>
-    {{mb_field object=$sejour field="chambre_seule"}}
+    {{mb_field object=$sejour field="chambre_seule" onchange="check();"}}
   </td>
   
   {{if !$mode_operation}}
@@ -270,7 +282,7 @@
 {{if $prestations}}
 <th>{{mb_label object=$sejour field="prestation_id"}}</th>
   <td>
-  <select name="prestation_id">
+  <select name="prestation_id" onchange="check();">
   <option value="">&mdash; Choix d'une prestation</option>
   {{foreach from=$prestations item="_prestation"}}
     <option value="{{$_prestation->_id}}" {{if $sejour->prestation_id == $_prestation->_id}}selected = selected{{/if}}>{{$_prestation->_view}}</option>
