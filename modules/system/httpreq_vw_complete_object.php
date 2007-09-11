@@ -36,7 +36,9 @@ $template = is_file($object->_view_template) ?
 if($object->_class_name == "CSejour"){
   $object->loadNumDossier();
 }
-  
+if($object->_class_name == "CPatient"){
+  $object->loadIPP();
+}  
 // Création du template
 $smarty = new CSmartyDP();
 
