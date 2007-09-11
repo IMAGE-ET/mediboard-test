@@ -62,14 +62,15 @@ class CMbObject {
    * References
    */
   
-  var $_back          = null; // All back references
-  var $_ref_module    = null; // Parent module
-  var $_ref_logs      = null; // history of the object
-  var $_ref_first_log = null;
-  var $_ref_last_log  = null;
-  var $_ref_notes     = array(); // Notes
-  var $_ref_documents = array(); // Documents
-  var $_ref_files     = array(); // Fichiers
+  var $_back           = null; // All back references
+  var $_ref_module     = null; // Parent module
+  var $_ref_logs       = null; // history of the object
+  var $_ref_first_log  = null;
+  var $_ref_last_log   = null;
+  var $_ref_last_id400 = null;
+  var $_ref_notes      = array(); // Notes
+  var $_ref_documents  = array(); // Documents
+  var $_ref_files      = array(); // Fichiers
 
   /**
    * Constructor
@@ -246,6 +247,19 @@ class CMbObject {
     }
     
     return count($this->_ref_files) + count($this->_ref_documents);
+  }
+  
+  /*
+   * Chargement du dernier identifiant id400
+   * @param : $tag = nom du tag à utiliser
+   */
+
+  function loadLastId400($tag = null) {
+    $id400 = new CIdSante400();
+    if($id400->_ref_module) {
+      $id400->loadLatestFor($this, $tag);
+      $this->_ref_last_id400 = $id400;
+    }
   }
   
   /**
