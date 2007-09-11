@@ -83,7 +83,7 @@
       </form>
     </td>
     <td class="text">
-		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->_ref_patient->patient_id}}">
+		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->patient_id}}">
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
       <b>{{$curr_sejour->_ref_patient->_view}}</b>
