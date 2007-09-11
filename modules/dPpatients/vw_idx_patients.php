@@ -14,6 +14,8 @@ $can->needsRead();
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
+$showCount = 50;
+
 // L'utilisateur est-il un chirurgien
 $chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;
 
@@ -105,11 +107,19 @@ $patientsSoundex = array();
 
 $order = "nom, prenom, naissance";
 $pat = new CPatient();
+
+// Patient counts
+$patientsCount = $where ? $pat->countList($where) : 0;
+$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
+$patientsSoundexCount -= $patientsCount;
+
+// Chargement des patients
 if ($where && ($soundex == "off")) {
-  $patients = $pat->loadList($where, $order, "0, 100");
+  $patients = $pat->loadList($where, $order, "0, $showCount");
 }
-if($whereSoundex && ($nbExact = (100 - count($patients)))) {
-  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $nbExact");
+
+if ($whereSoundex) {
+  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $showCount");
   $patientsSoundex = array_diff_key($patientsSoundex, $patients);
 }
 
@@ -132,7 +142,6 @@ $intermaxFunctions = array(
   "Lire Vitale",
 );
 
-
 // Chargement de l'IPP du patient
 $patient->loadIPP();
 
@@ -154,6 +163,8 @@ $smarty->assign("cp"             , $patient_cp                                );
 $smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
 $smarty->assign("patients"       , $patients                                  );
 $smarty->assign("patientsSoundex", $patientsSoundex                           );
+$smarty->assign("patientsCount"  , $patientsCount                             );
+$smarty->assign("patientsSoundexCount", $patientsSoundexCount                      );
 $smarty->assign("patient"        , $patient                                   );
 $smarty->assign("chir"           , $chir                                      );
 $smarty->assign("anesth"         , $anesth                                    );

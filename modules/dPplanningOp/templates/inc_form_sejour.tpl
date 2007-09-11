@@ -317,7 +317,6 @@ function checkChambre(){
 
 </tr>
 
-
 {{if $can->edit}}
 <tr>
   <th>{{mb_label object=$sejour field="isolement"}}</th>
