@@ -53,7 +53,7 @@ class CSpDossier extends CSpObject {
     
     $sejour = new CSejour();
     $sejour->patient_id = $patient->_id;
-    $sejour->annule = $this->anndos == 'SH';
+    $sejour->annule = $this->anndos == 'SH' ? "1" : "0";
     return $sejour;
   }
   

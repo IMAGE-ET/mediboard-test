@@ -59,7 +59,7 @@ function checkChambre(){
   </th>
 </tr>
 
-{{if $sejour->annule == 1}}
+{{if $sejour->annule}}
 <tr>
   <th class="category cancelled" colspan="4">
   {{tr}}CSejour-annule{{/tr}}
@@ -374,14 +374,8 @@ function checkChambre(){
     <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$sejour->_view|smarty:nodefaults|JSAttribute}}'});">
       Supprimer
     </button>
-    {{if $sejour->annule == "0"}}
-      {{assign var="annule_text" value="Annuler"}}
-      {{assign var="annule_class" value="cancel"}}
-    {{/if}}
-    {{if $sejour->annule == "1"}}
-      {{assign var="annule_text" value="Rétablir"}}
-      {{assign var="annule_class" value="change"}}
-    {{/if}}
+    {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
+    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
     <button class="{{$annule_class}}" type="button" onclick="cancelSejour();">
       {{$annule_text}}
     </button>
