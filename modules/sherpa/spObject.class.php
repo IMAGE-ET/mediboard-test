@@ -126,13 +126,35 @@ class CSpObject extends CMbObject {
   }
 
   /**
-   * Mediboard phone number to Sherpa phone number
+   * Mediboard  to Sherpa phone number
    * @param string $string to convert
    * @return string
    */
   function makePhone($tel) {
     return preg_replace("/(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)/", "$1.$2.$2.$4.$5", $tel);
   }
+
+  /**
+   * Sherpa to Mediboard phone number
+   * @param string $string to convert
+   * @return string
+   */
+  function importPhone($tel) {
+    $return = preg_replace("/\D/", "", $tel);
+    return strlen($return) == 10 ? $return : ""; 
+  }
+  
+  /**
+   * Sherpa to Mediboard matricule 
+   * @param string $matricule
+   * @param string $cle
+   * @return string
+   */
+  function importMatricule($matricule, $cle) {
+    $return =  "$matricule$cle";
+    return strlen($return) == 15 ? $return : ""; 
+  }
+  
 }
 
 ?>

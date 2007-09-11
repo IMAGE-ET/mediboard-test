@@ -35,11 +35,11 @@ class CSpSejMed extends CSpObject {
 //    $specs["sejfla"] = "bool"         ; /* Flag                        */
     $specs["numdos"] = "numchar length|6" ; /* Numero de dossier           */
     $specs["malnum"] = "numchar length|6" ; /* Numero de malade            */
-    $specs["datent"] = "str length|10"; /* Date et heure d'entree      */
+    $specs["datent"] = "str length|19"; /* Date et heure d'entree      */
     $specs["litcod"] = "str length|4" ; /* Lit                         */
     $specs["sercod"] = "str length|2" ; /* Service                     */
     $specs["pracod"] = "str length|3" ; /* Code interne du praticien   */
-    $specs["datsor"] = "str length|10"; /* Date et heure de sortie     */
+    $specs["datsor"] = "str length|19"; /* Date et heure de sortie     */
 
     /* Nature Interruption Sejour  */
     $specs["depart"] = "enum list|D|T|S|E|R|P";
@@ -57,15 +57,30 @@ class CSpSejMed extends CSpObject {
   }
   
   function mapTo() {
-    // Load patient
+    global $g;
+
+    // Etablissement
+    $sejour = new CSejour();
+    $sejour->group_id = $g;
+    
+    // Patient
     $malade = new CSpMalade();
-    $malade->load($this->malnum); 
-    if (!$patient = $malade->loadMbObject()) {
-      throw new Exception("Malade '$this->malnum' is not linked to a Mb Patient");
+    $malade->load($this->malnum);
+    if ($patient = $malade->loadMbObject()) {
+      $sejour->patient_id = $patient->_id;
     }
     
-    $sejour = new CSejour();
-    $sejour->patient_id = $patient->_id;
+    // Praticien
+    $praticien = CSpObjectHandler::getMbObjectFor("CMediusers", $this->pracod);
+    $sejour->praticien_id = $praticien->_id;
+    
+    
+    // Entrée et sortie
+    $this->datent = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datent));
+    $sejour->entree_prevue = mbDateFromLocale($this->datent);
+    $this->datsor = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datsor));
+    $sejour->sortie_prevue = mbDateFromLocale($this->datsor);
+    
     return $sejour;
   }
   
@@ -77,19 +92,17 @@ class CSpSejMed extends CSpObject {
     
     $sejour = $mbObject;
     $sejour->loadRefsFwd();
-    $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);
     
-    $this->malnum = $idMalde->id400;
+    $this->malnum = $idMalade->id400;
     
     // Date d'entrée
     $entree = mbGetValue($sejour->entree_reelle, $sejour->entree_prevue); 
-    $this->datent = mbDateToLocale(mbDate($entree));
+    $this->datent = mbDateToLocale($entree);
     
     // Date de sortie, on ne passe pas les sorties prévues
     $sortie = $sejour->sortie_reelle;
-    if ($sortie) {
-      $this->datsor = mbDateToLocale(mbDate($sortie));
-    }
+    $this->datsor = $sortie ? mbDateToLocale($sortie) : "";
     
     // Code du praticien
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);

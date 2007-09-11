@@ -123,6 +123,24 @@ class CSpObjectHandler extends CMbObjectHandler {
     return $id400;
   }
 
+  /**
+   * Get MbObject for Id400
+   * @param mbClass $mbObject
+   * @return int $id
+   */
+  function getMbObjectFor($mbClass, $id) {
+    global $g;
+    $order = "last_update DESC";
+    $id400 = new CIdSante400;
+    $id400->tag = "sherpa group:$g";
+    $id400->object_class = $mbClass;
+    $id400->id400 = $id;
+    $id400->loadMatchingObject();
+    $id400->loadRefsFwd();
+    return $id400->_ref_object;
+  }
+  
+  
   function onStore(CMbObject &$mbObject) {
     if (!$this->isHandled($mbObject)) {
       return;

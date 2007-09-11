@@ -40,7 +40,7 @@ class CSpMalade extends CSpObject {
     $specs["vilnai"] = "str maxLength|30"; /* Lieu de naissance            */
 //    $specs["depnai"] = "str maxLength|02"; /* departement de naissance     */
     $specs["nation"] = "str maxLength|03"; /* Nationalite                  */
-    $specs["sexe"  ] = "str length|1"    ; /* Sexe                         */
+    $specs["sexe"  ] = "enum list|F|M"   ; /* Sexe                         */
     $specs["malnss"] = "str maxLength|13"; /* No matricule du malade       */
     $specs["clenss"] = "str maxLength|02"; /* Cle matricule                */
     $specs["parent"] = "str maxLength|02"; /* Rang beneficiaire            */
@@ -89,54 +89,73 @@ class CSpMalade extends CSpObject {
     static $liensMatrix = array(
       "FILLE" => "enfant",
       "FILS" => "enfant",
-    );
+      "ENFANT" => "enfant",
+      "SA FILLE" => "enfant",
+      "MARI" => "conjoint",
+      "FEMME" => "conjoint",
+      "EPOUX" => "conjoint",
+      "EPOUSE" => "conjoint",
+      "PERE" => "ascendant",
+      "MERE" => "ascendant",
+      "PAPA" => "ascendant",
+      "MAMAN" => "ascendant",
+      "PARENT" => "ascendant",
+      "PARENTS" => "ascendant",
+      "GRANSPARENTS" => "ascendant",
+      "PARENTS" => "ascendant",
+      "FRERE" => "colateral",
+      "SOEUR" => "colateral",
+      "ONCLE" => "colateral",
+      "TANTE" => "colateral",
+      "NEVEU" => "colateral",
+      "NIECE" => "colateral",
+      );
     
+    static $sexesMatrix = array(
+      "M" => "m",
+      "F" => "f",
+    );
     
     $patient = new CPatient();
     $patient->nom    = $this->malnom;
     $patient->prenom = $this->malpre;
     $patient->naissance = mbDateFromLocale($this->datnai);
-    
     $patient->lieu_naissance = $this->vilnai; 
-//    $this->nation = CInsee::getPaysAlpha2($patient->pays);
-//    $this->sexe   = $sexesMatrix[$patient->sexe];
-//    
-//    $this->malnss = $patient->matricule ? substr($patient->matricule, 0, 13) : "";
-//    $this->clenss = $patient->matricule ? substr($patient->matricule, 13, 2) : "";
-//    
-//    $parts = split("\r\n", $patient->adresse);
-//    $this->malru1 = @$parts[0];
-//    $this->malru2 = @$parts[1];
-//
-//    $this->malpos = $patient->cp;
-//    $this->malvil = $this->makeString($patient->ville, 25);
-//    $this->maltel = $this->makePhone(mbGetValue($patient->tel, $patient->tel2));
-//    $this->malpro = $this->makeString($patient->profession, 30);
-//    
-//    $this->perso1 = $this->makeString("$patient->prevenir_nom $patient->prevenir_prenom", 30);
-//    $this->prvad1 = $this->makeString($patient->prevenir_adresse, 25);
-//    $this->prvil1 = $this->makeString($patient->prevenir_ville, 30);
-//    $this->prtel1 = $this->makePhone($patient->prevenir_tel);
-//    $this->malie1 = $this->makeString($AppUI->_("CPatient.prevenir_parente.$patient->prevenir_parente"), 20);
-//    
+
+    $pays = new CPaysInsee();
+    $pays->alpha_2 = "FR"; // $this->nation;
+    $pays->loadMatchingObject();
+    $patient->pays = $pays->nom_fr;
+    
+    $patient->sexe      = @$sexesMatrix[$this->sexe];
+    $patient->matricule = $this->importMatricule($this->malnss, $this->clenss);
+    $patient->adresse   = "$this->malru1\n$this->malru2";
+    $patient->cp        = $this->malpos;
+    $patient->ville     = $this->malvil;
+    $patient->tel       = $this->ImportPhone($this->maltel);
+    $patient->profession= $this->malpro;
+
+    $patient->prevenir_nom     = $this->perso1;
+    $patient->prevenir_adresse = $this->prvad1;
+    $patient->prevenir_ville   = $this->prvil1;
+    $patient->prevenir_tel     = $this->ImportPhone($this->prtel1);
+    // VERIFIER LA MATRICE
+    $patient->prevenir_parente = mbGetValue(@$liensMatrix[$this->malie1], "divers");
+
 //    $this->perso2 = $this->makeString($patient->employeur_nom, 30);
 //    $this->prvad2 = $this->makeString($patient->employeur_adresse, 25);
 //    $this->prvil2 = $this->makeString($patient->employeur_ville, 30);
 //    $this->prtel2 = $this->makePhone($patient->employeur_tel);
 //    $this->malie2 = $this->makeString("Employ. $patient->employeur_urssaf", 20);
-//    
-//    $this->assnss = $patient->assure_matricule ? substr($patient->assure_matricule, 0, 13) : "";
-//    $this->nsscle = $patient->assure_matricule ? substr($patient->assure_matricule, 13, 2) : "";
-//    $this->assnom = $this->makeString($patient->assure_nom, 50);
-//    $this->asspre = $this->makeString($patient->assure_prenom, 30);
-//    $this->asspat = $this->makeString($patient->assure_nom_jeune_fille, 30);
-//
-//    $parts = split("\r\n", $patient->assure_adresse);
-//    $this->assru1 = @$parts[0];
-//    $this->assru2 = @$parts[1];
-//    $this->asspos = $patient->assure_cp;
-//    $this->assvil = $this->makeString($patient->assure_ville, 25);
-    
+
+    $patient->assure_matricule       = $this->importMatricule($this->assnss, $this->nsscle);
+    $patient->assure_nom             = $this->assnom;
+    $patient->assure_prenom          = $this->asspre;
+    $patient->assure_nom_jeune_fille = $this->asspat;
+    $patient->assure_adresse         = "$this->assru1\n$this->assru2";
+    $patient->assure_cp              = $this->asspos;
+    $patient->assure_ville           = $this->assvil;
+
     return $patient;
   }
   
@@ -159,8 +178,13 @@ class CSpMalade extends CSpObject {
     $this->malpre = $this->makeString($patient->prenom, 30);
     $this->malpat = $this->makeString($patient->nom_jeune_fille, 50);
     $this->datnai = mbDateToLocale($patient->naissance);
-    $this->vilnai = $this->makeString($patient->lieu_naissance, 30);    
-    $this->nation = CInsee::getPaysAlpha2($patient->pays);
+    $this->vilnai = $this->makeString($patient->lieu_naissance, 30);
+    
+    $pays = new CPaysInsee();
+    $pays->nom_fr = $patient->pays;
+    $pays->loadMatchingObject();
+    $this->nation = $pays->alpha_2;
+    
     $this->sexe   = $sexesMatrix[$patient->sexe];
     
     $this->malnss = $patient->matricule ? substr($patient->matricule, 0, 13) : "";

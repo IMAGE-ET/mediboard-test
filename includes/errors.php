@@ -83,7 +83,27 @@ function mbRelativePath($absPath) {
  * @return void 
  **/
 function mbTrace($var, $label = null, $log = false) {
-//  $export = print_r($var, true);
+  $export = print_r($var, true);
+//  $export = var_export($var, true); 
+  $export = htmlspecialchars($export);
+  $errorTime = date("Y-m-d H:i:s");
+  
+  $msg = "<pre>[$errorTime] $label: $export</pre>";
+  
+  if ($log) {
+    global $logPath;
+    file_put_contents($logPath, $msg, FILE_APPEND);
+  } else {
+    echo $msg;
+  }
+  
+}
+
+/**
+ * Traces variable using preformated text prefixed with a label
+ * @return void 
+ **/
+function mbExport($var, $label = null, $log = false) {
   $export = var_export($var, true); 
   $export = htmlspecialchars($export);
   $errorTime = date("Y-m-d H:i:s");
@@ -98,6 +118,7 @@ function mbTrace($var, $label = null, $log = false) {
   }
   
 }
+
 
 
 /**

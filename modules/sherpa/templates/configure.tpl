@@ -27,6 +27,19 @@
       </select>
     </td>
   </tr>  
+
+	<tr>
+	  {{assign var="var" value="import_segment"}}
+	  <th>
+	    <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	      {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	    </label>  
+	  </th>
+	  <td>
+	    <input class="num" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	  </td>
+	</tr>
+	
     
   <tr>
     <td class="button" colspan="2">
@@ -49,10 +62,11 @@ var Action = {
   module: "sherpa",
   action: "httpreq_import_base",
   
-  import: function (sClass) {
+  import: function (sClass, sAction) {
     var url = new Url;
     url.setModuleAction(this.module, this.action);
     url.addParam("class", sClass);
+    url.addParam("action", sAction);
     url.requestUpdate("import-" + sClass);
   },
 }
@@ -68,9 +82,15 @@ var Action = {
 {{foreach from=$spClasses item=_class}}
 <tr>
   <td>
-    <button class="tick" onclick="Action.import('{{$_class}}')">
-      {{tr}}sherpa-import-class{{/tr}}
+    {{tr}}sherpa-import-class{{/tr}}
       '{{tr}}{{$_class}}{{/tr}}'
+  </td>
+  <td>
+    <button class="new" onclick="Action.import('{{$_class}}', 'start')">
+      {{tr}}Start{{/tr}}      
+    </button>
+    <button class="change" onclick="Action.import('{{$_class}}', 'continue')">
+      {{tr}}Continue{{/tr}}      
     </button>
   </td>
   <td id="import-{{$_class}}"></td>

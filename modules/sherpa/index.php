@@ -9,7 +9,7 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("view_etablissements", null, TAB_READ);
+//$module->registerTab("view_etablissements", null, TAB_READ);
 $module->registerTab("view_malades", null, TAB_READ);
 $module->registerTab("view_dossiers", null, TAB_READ);
 $module->registerTab("view_sejours", null, TAB_READ);

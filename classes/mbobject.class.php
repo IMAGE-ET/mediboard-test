@@ -324,7 +324,7 @@ class CMbObject {
     global $dPconfig;
     
   	if ($oid) {
-      $this->_id = intval($oid);
+      $this->_id = $oid;
     }
 
     if (!$this->_id) {

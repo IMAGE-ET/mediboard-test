@@ -21,26 +21,26 @@ $filter->numdos = mbGetValueFromGetOrSession("numdos");
 $filter->malnum = mbGetValueFromGetOrSession("malnum");
 $entree_day   = mbGetValue(mbGetValueFromGetOrSession("debutDay"  ), "__");
 $entree_month = mbGetValue(mbGetValueFromGetOrSession("debutMonth"), "__");
-$entree_year  = mbGetValue(mbGetValueFromGetOrSession("debutYear" ), "____");
+$entree_year  = mbGetValue(mbGetValueFromGetOrSession("debutYear" ), "__");
 $filter->datent = "$entree_day/$entree_month/$entree_year";
 $filter->litcod = mbGetValueFromGetOrSession("litcod");
 $filter->pracod = mbGetValueFromGetOrSession("pracod");
 $sortie_day   = mbGetValue(mbGetValueFromGetOrSession("finDay"  ), "__");
 $sortie_month = mbGetValue(mbGetValueFromGetOrSession("finMonth"), "__");
-$sortie_year  = mbGetValue(mbGetValueFromGetOrSession("finYear" ), "____");
+$sortie_year  = mbGetValue(mbGetValueFromGetOrSession("finYear" ), "__");
 $filter->datsor = "$sortie_day/$sortie_month/$sortie_year";
 
 // Clauses where du filtre
 $where = array();
 
 if ($filter->numdos) {
-  $where["numdos"] = "LIKE '$filter->numdos'";
+  $where["numdos"] = "LIKE '$filter->numdos%'";
 }
 if ($filter->malnum) {
   $where["malnum"] = "LIKE '$filter->malnum%'";
 }
-if ($filter->datent != "__/__/____") {
-  $where["datent"] = "LIKE '$filter->datent'";
+if ($filter->datent != "__/__/__") {
+  $where[] = "ASCII(`datent`) LIKE '$filter->datent%'";
 }
 if ($filter->litcod) {
   $where["litcod"] = "LIKE '$filter->litcod%'";
@@ -48,8 +48,8 @@ if ($filter->litcod) {
 if ($filter->pracod) {
   $where["pracod"] = "LIKE '$filter->pracod%'";
 }
-if ($filter->datsor != "__/__/____") {
-  $where["datsor"] = "LIKE '$filter->datsor'";
+if ($filter->datsor != "__/__/__") {
+  $where[] = "ASCII(`datsor`) LIKE '$filter->datsor%'";
 }
 
 $order = "malnum";

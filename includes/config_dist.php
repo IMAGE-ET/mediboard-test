@@ -197,7 +197,6 @@ $dPconfig["dPsante400"] = array (
   "group_id" => "",
 );
 
-
 $dPconfig["dPlabo"] = array (
   "CCatalogueLabo" => array (
     "remote_name" => "LABO",
@@ -207,4 +206,7 @@ $dPconfig["dPlabo"] = array (
 
 $dPconfig["system"]["type_telephone"] = "france";
 
+$dPconfig["sherpa"] = array (
+  "import_segment" => "100",
+);
 ?>

@@ -1,6 +1,9 @@
 <?php
-$locales['CSpDossier-anndos'] = '';
+$locales['sherpa-import-class'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
+$locales['config-sherpa-import_segment'] = '';
+$locales['CSpDossier'] = '';
+$locales['CSpDossier-anndos'] = '';
 $locales['CSpDossier-malnum'] = '';
 $locales['CSpDossier-numdos'] = '';
 $locales['CSpEtablissement-group_id'] = '';
@@ -10,6 +13,7 @@ $locales['CSpEtablissement-increment_patient-desc'] = '';
 $locales['CSpEtablissement-increment_year'] = '';
 $locales['CSpEtablissement-increment_year-desc'] = '';
 $locales['CSpEtablissement.create'] = '';
+$locales['CSpMalade'] = '';
 $locales['CSpMalade-datnai'] = '';
 $locales['CSpMalade-datnai-desc'] = '';
 $locales['CSpMalade-malnom'] = '';
@@ -33,8 +37,10 @@ $locales['CSpSejMed-sercod'] = '';
 $locales['mod-sherpa-tab-view_dossiers'] = '';
 $locales['mod-sherpa-tab-view_droits'] = '';
 $locales['mod-sherpa-tab-view_etablissements'] = '';
+$locales['mod-sherpa-tab-view_idsherpa'] = '';
 $locales['mod-sherpa-tab-view_malades'] = '';
 $locales['mod-sherpa-tab-view_sejours'] = '';
 $locales['module-sherpa-court'] = '';
 $locales['module-sherpa-long'] = '';
+$locales['sherpa-import-classes'] = '';
 ?>

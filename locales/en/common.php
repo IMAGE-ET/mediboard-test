@@ -1,5 +1,5 @@
 <?php
-$locales['Merge'] = 'Merge';
+$locales['Continue'] = '';
 $locales['- New Item -'] = '';
 $locales['::deleted not recreated'] = 'Object was deleted and couldn\'t be recreated';
 $locales['::store-check failed:'] = '';
@@ -79,6 +79,7 @@ $locales['Meeting'] = 'Meeting';
 $locales['menu-changePassword'] = 'Change password';
 $locales['menu-logout'] = 'Logout';
 $locales['menu-myInfo'] = 'My Info';
+$locales['Merge'] = 'Merge';
 $locales['Message'] = 'Message';
 $locales['Mobile Phone'] = 'Mobile Phone';
 $locales['modele-choice'] = '';
@@ -214,6 +215,7 @@ $locales['Select'] = 'Select';
 $locales['select-choice'] = 'Please choose';
 $locales['Show'] = 'Show';
 $locales['sort by'] = 'sort by';
+$locales['Start'] = '';
 $locales['Starts'] = 'Starts';
 $locales['State'] = 'State';
 $locales['Status'] = 'Status';

@@ -1,5 +1,5 @@
 <?php
-$locales['Merge'] = 'Fusionner';
+$locales['Continue'] = 'Continer';
 $locales['- New Item -'] = '-- Créer';
 $locales['::deleted not recreated'] = 'L\'objet a été supprimé par un tiers et n\'a pas pu être recréé';
 $locales['::store-check failed:'] = ': impossible de sauvegarder l\'objet, ';
@@ -79,6 +79,7 @@ $locales['Meeting'] = 'Meeting';
 $locales['menu-changePassword'] = 'Changer le mot de passe';
 $locales['menu-logout'] = 'Déconnexion';
 $locales['menu-myInfo'] = 'Mon Compte';
+$locales['Merge'] = 'Fusionner';
 $locales['Message'] = 'Message';
 $locales['Mobile Phone'] = 'Téléphone Portable';
 $locales['modele-choice'] = 'Choisir un modèle';
@@ -214,6 +215,7 @@ $locales['Select'] = 'Sélectionner';
 $locales['select-choice'] = 'Veuillez Choisir';
 $locales['Show'] = 'Voir';
 $locales['sort by'] = 'trier par';
+$locales['Start'] = 'Commencer';
 $locales['Starts'] = 'Débuts';
 $locales['State'] = 'Etat';
 $locales['Status'] = 'Status';

@@ -25,7 +25,7 @@
       {{html_select_date
            prefix="debut"
            time=$datent
-           start_year=1900
+           start_year=2005
            field_order=DMY
            day_empty="Jour"
            month_empty="Mois"
@@ -55,7 +55,7 @@
       {{html_select_date
            prefix="fin"
            time=$datsor
-           start_year=1900
+           start_year=2005
            field_order=DMY
            day_empty="Jour"
            month_empty="Mois"

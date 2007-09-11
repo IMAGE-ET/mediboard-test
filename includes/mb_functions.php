@@ -858,7 +858,7 @@ function mbDateToLocale($date) {
 }
 
 function mbDateFromLocale($date) {
-  return preg_replace("/(\d{2})/(\d{2})/(\d{4})/", "$3-$2-$1", $date);
+  return preg_replace("/(\d{2})\/(\d{2})\/(\d{4})/", "$3-$2-$1", $date);
 }
 
 /**

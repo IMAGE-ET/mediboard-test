@@ -30,7 +30,6 @@ class CDateTimeSpec extends CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})[ \+]([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/", $propValue)) {
-    mbTrace($propValue, "Date Time invalid ");
       return "format de dateTime invalide";
     }
     return null;
