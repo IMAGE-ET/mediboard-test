@@ -60,7 +60,7 @@ foreach ($today as $keySejour => $valueSejour) {
   $sejour->loadRefPraticien();
   $sejour->loadRefsOperations();
   $sejour->loadRefsAffectations();
-
+  $sejour->loadNumDossier();
   foreach($sejour->_ref_operations as $key_op => $curr_op) {
     $sejour->_ref_operations[$key_op]->loadRefsConsultAnesth();
     //$sejour->_ref_operations[$key_op]->_ref_consult_anesth->loadRefsFwd();
@@ -69,10 +69,12 @@ foreach ($today as $keySejour => $valueSejour) {
     $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_date_consult =& $sejour->_ref_operations[$key_op]->_ref_consult_anesth->_ref_consultation->_date;
   }
   $affectation =& $sejour->_ref_first_affectation;
+ 
   if ($affectation->affectation_id) {
     $affectation->loadRefLit();
     $affectation->_ref_lit->loadCompleteView();
   }
+ 
 }
 
 // Création du template

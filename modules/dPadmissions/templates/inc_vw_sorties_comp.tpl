@@ -40,7 +40,9 @@
 		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->_ref_patient->patient_id}}">
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
-      <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b></td>
+      <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
+      {{if $curr_sortie->_ref_sejour->_num_dossier}}[{{$curr_sortie->_ref_sejour->_num_dossier}}]{{/if}}
+      </td>
     <td>
       {{$curr_sortie->sortie|date_format:"%H h %M"}}
       {{if $curr_sortie->confirme}}
@@ -85,6 +87,7 @@
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
       <b>{{$curr_sejour->_ref_patient->_view}}</b>
+      {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
     </td>
     <td>{{$curr_sejour->sortie_prevue|date_format:"%H h %M"}}</td>
     <td class="text">Dr. {{$curr_sejour->_ref_praticien->_view}}</td>

@@ -42,6 +42,7 @@
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
       <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
+      {{if $curr_sortie->_ref_sejour->_num_dossier}}[{{$curr_sortie->_ref_sejour->_num_dossier}}]{{/if}}
     </td>
     <td>
       {{$curr_sortie->sortie|date_format:"%H h %M"}}
@@ -87,6 +88,7 @@
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
       <b>{{$curr_sejour->_ref_patient->_view}}</b>
+      {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
     </td>
     <td>{{$curr_sejour->sortie_prevue|date_format:"%H h %M"}}</td>
     <td class="text">Dr. {{$curr_sejour->_ref_praticien->_view}}</td>

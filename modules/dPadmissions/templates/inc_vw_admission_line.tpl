@@ -11,7 +11,7 @@
     <img src="images/icons/edit.png" alt="modifier" />
   </a>
   <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{$curr_adm->_ref_patient->_view}}
+  {{$curr_adm->_ref_patient->_view}} {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
   </a>
 </td>
 

@@ -53,6 +53,7 @@ foreach($listComp as $key => $value) {
     unset($listComp[$key]);
   } else {
     $listComp[$key]->_ref_sejour->loadRefsFwd();
+    $listComp[$key]->_ref_sejour->loadNumDossier();
     $listComp[$key]->_ref_lit->loadCompleteView();
   }
 }
@@ -70,6 +71,7 @@ $listSejourC = array();
 foreach($listSejourComp as $key=>$sejourComp){
 	$sejourComp->loadRefPraticien();
     $sejourComp->loadRefPatient();
+    $sejourComp->loadNumDossier();
     $listSejourC[$sejourComp->_id] = $sejourComp;
     if(array_key_exists($sejourComp->_id,$tab_temp)){
       unset($listSejourC[$sejourComp->_id]);

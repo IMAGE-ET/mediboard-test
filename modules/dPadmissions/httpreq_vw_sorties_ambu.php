@@ -52,6 +52,7 @@ foreach($listAmbu as $key => $value) {
     unset($listAmbu[$key]);
   } else {
     $listAmbu[$key]->_ref_sejour->loadRefsFwd();
+    $listAmbu[$key]->_ref_sejour->loadNumDossier();
     $listAmbu[$key]->_ref_lit->loadCompleteView();
   }
 }
@@ -72,6 +73,7 @@ $listSejourA = array();
 foreach($listSejourAmbu as $key=>$sejourAmbu){
     $sejourAmbu->loadRefPraticien();
     $sejourAmbu->loadRefPatient();
+    $sejourAmbu->loadNumDossier();
     $listSejourA[$sejourAmbu->_id] = $sejourAmbu;
     if(array_key_exists($sejourAmbu->_id,$tab_temp)){
       unset($listSejourA[$sejourAmbu->_id]);
