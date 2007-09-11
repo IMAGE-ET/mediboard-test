@@ -1,4 +1,5 @@
 <?php
+$locales['msg-CIdSante400-title-delete'] = '';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
 $locales['CIdSante400-back-object_id'] = '';
 $locales['CIdSante400-id400'] = '';
@@ -45,4 +46,9 @@ $locales['config-dPsante400-pass'] = 'Password';
 $locales['config-dPsante400-pass-desc'] = 'DSN password';
 $locales['config-dPsante400-user'] = 'User';
 $locales['config-dPsante400-user-desc'] = 'DSN username';
+$locales['msg-CIdSante400-create'] = '';
+$locales['msg-CIdSante400-delete'] = '';
+$locales['msg-CIdSante400-modify'] = '';
+$locales['msg-CIdSante400-title-create'] = '';
+$locales['msg-CIdSante400-title-modify'] = '';
 ?>

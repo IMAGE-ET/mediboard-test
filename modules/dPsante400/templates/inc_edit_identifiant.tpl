@@ -13,9 +13,9 @@
     <a style="float:right;" href="#" onclick="view_log('CIDSante400',{{$idSante400->_id}})">
       <img src="images/icons/history.gif" alt="historique" />
     </a>
-    Modification de l'ID400 &lsquo;{{$idSante400->_view}}&rsquo;
+    {{tr}}msg-CIdSante400-title-modify{{/tr}} &lsquo;{{$idSante400->_view}}&rsquo;
   {{else}}
-    Création d'un ID400
+    {{tr}}msg-CIdSante400-title-create{{/tr}}
   {{/if}}
   </th>
   

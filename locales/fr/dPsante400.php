@@ -1,9 +1,10 @@
 <?php
-$locales['CIdSante400'] = 'Identifiant Sante 400';
+$locales['msg-CIdSante400-title-delete'] = 'Suppression de l\'identifiant externe';
+$locales['CIdSante400'] = 'Identifiant Externe';
 $locales['CIdSante400-back-object_id'] = '';
-$locales['CIdSante400-id400'] = 'ID400';
+$locales['CIdSante400-id400'] = 'Identifiant Externe';
 $locales['CIdSante400-id400-court'] = '';
-$locales['CIdSante400-id400-desc'] = 'Identifiant Santé 400 de l\'objet';
+$locales['CIdSante400-id400-desc'] = 'Identifiant Externe de l\'objet';
 $locales['CIdSante400-last_update'] = 'Mise à jour';
 $locales['CIdSante400-last_update-court'] = '';
 $locales['CIdSante400-last_update-desc'] = 'Date et heure de la dernière mise à jour par synchronisation';
@@ -45,4 +46,9 @@ $locales['config-dPsante400-pass'] = 'Mot de passe';
 $locales['config-dPsante400-pass-desc'] = 'Mot de passe de la DSN';
 $locales['config-dPsante400-user'] = 'Utilisateur';
 $locales['config-dPsante400-user-desc'] = 'Nom d\'utilisation de la DSN';
+$locales['msg-CIdSante400-create'] = 'Identifiant Externe créé';
+$locales['msg-CIdSante400-delete'] = 'Identifiant Externe supprimé';
+$locales['msg-CIdSante400-modify'] = 'Identifiant Externe modifié';
+$locales['msg-CIdSante400-title-create'] = 'Création de l\'identifiant externe';
+$locales['msg-CIdSante400-title-modify'] = 'Modification de l\'identifiant externe';
 ?>
