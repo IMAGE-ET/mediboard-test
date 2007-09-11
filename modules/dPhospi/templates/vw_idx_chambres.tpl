@@ -108,11 +108,14 @@ function pageMain() {
   <input type="hidden" name="del" value="0" />
     <table class="form">
     <tr>
-      <th class="category" colspan="2">Lits</th>
+      <th class="category" colspan="2">
+      
+      Lits
+      </th>
     {{foreach from=$chambreSel->_ref_lits item=curr_lit}}
     <tr>
       <th>Lit</th>
-      <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
+      <td><div class="idsante400" id="{{$curr_lit->_class_name}}-{{$curr_lit->_id}}"></div><a href="?m={{$m}}&amp;tab={{$tab}}&amp;chambre_id={{$curr_lit->chambre_id}}&amp;lit_id={{$curr_lit->lit_id}}">{{$curr_lit->nom}}</a></td>
     </tr>
 	  {{/foreach}}
     <tr>
