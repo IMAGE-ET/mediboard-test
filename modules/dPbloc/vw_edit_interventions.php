@@ -27,6 +27,7 @@ $plage = new CPlageOp;
 $plage->load($plageop_id);
 $plage->loadRefsFwd();
 
+
 // Liste de droite
 $list1 = new COperation;
 $where = array();
@@ -49,6 +50,19 @@ $list2 = $list2->loadList($where, $order, null, null, $ljoin);
 foreach($list2 as $key => $value) {
   $list2[$key]->loadRefsFwd();
   $list2[$key]->_ref_sejour->loadRefsFwd();
+}
+
+
+// liste des plages du praticien
+$listPlages = new CPlageOp();
+$listSalle = array();
+$where = array();
+
+$where["date"] = "= '$plage->date'";
+$where["chir_id"] = "= '$plage->chir_id'";
+$listPlages = $listPlages->loadList($where);
+foreach($listPlages as $keyPlages=>$valPlages){
+  $listPlages[$keyPlages]->loadRefSalle();
 }
 
 
@@ -89,6 +103,7 @@ if($getInstalledPpers){
   $smarty->assign("listAnesth"        , $listAnesth);
   $smarty->assign("listPers"          , $listPers);
 }
+$smarty->assign("listPlages"         , $listPlages);
 $smarty->assign("plage"             , $plage);
 $smarty->assign("anesth"            , $anesth);
 $smarty->assign("list1"             , $list1);

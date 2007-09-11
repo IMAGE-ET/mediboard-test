@@ -118,6 +118,23 @@
 			Admission le {{$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
             <br />
 			Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+			{{if $listPlages|@count != '1'}}
+			<br />
+			<form name="changeSalle" action="index.php?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="dosql" value="do_planning_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="rank" value="0" />
+            <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+            Changement de salle
+			<select name="plageop_id" onchange="this.form.submit()">
+			{{foreach from=$listPlages item="_plage"}}
+			  <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>{{$_plage->_ref_salle->nom}}
+			  / {{$_plage->debut|date_format:"%Hh%M"}} à {{$plage->fin|date_format:"%Hh%M"}}</option>
+			{{/foreach}}
+			</select>
+			</form>
+			{{/if}}
 		  </td>
 		  <td class="text">
 		    <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
