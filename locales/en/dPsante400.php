@@ -1,5 +1,4 @@
 <?php
-$locales['msg-CIdSante400-title-delete'] = '';
 $locales['CIdSante400'] = 'Identifiant Sante 400';
 $locales['CIdSante400-back-object_id'] = '';
 $locales['CIdSante400-id400'] = '';
@@ -8,6 +7,7 @@ $locales['CIdSante400-id400-desc'] = '';
 $locales['CIdSante400-last_update'] = '';
 $locales['CIdSante400-last_update-court'] = '';
 $locales['CIdSante400-last_update-desc'] = '';
+$locales['CIdSante400-object'] = '';
 $locales['CIdSante400-object_class'] = '';
 $locales['CIdSante400-object_class-court'] = '';
 $locales['CIdSante400-object_class-desc'] = '';
@@ -50,5 +50,6 @@ $locales['msg-CIdSante400-create'] = '';
 $locales['msg-CIdSante400-delete'] = '';
 $locales['msg-CIdSante400-modify'] = '';
 $locales['msg-CIdSante400-title-create'] = '';
+$locales['msg-CIdSante400-title-delete'] = '';
 $locales['msg-CIdSante400-title-modify'] = '';
 ?>

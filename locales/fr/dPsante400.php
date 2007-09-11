@@ -1,18 +1,18 @@
 <?php
-$locales['msg-CIdSante400-title-delete'] = 'Suppression de l\'identifiant externe';
 $locales['CIdSante400'] = 'Identifiant Externe';
 $locales['CIdSante400-back-object_id'] = '';
-$locales['CIdSante400-id400'] = 'Identifiant Externe';
-$locales['CIdSante400-id400-court'] = '';
+$locales['CIdSante400-id400'] = 'ID Externe';
+$locales['CIdSante400-id400-court'] = 'ID Externe';
 $locales['CIdSante400-id400-desc'] = 'Identifiant Externe de l\'objet';
 $locales['CIdSante400-last_update'] = 'Mise à jour';
-$locales['CIdSante400-last_update-court'] = '';
+$locales['CIdSante400-last_update-court'] = 'Maj';
 $locales['CIdSante400-last_update-desc'] = 'Date et heure de la dernière mise à jour par synchronisation';
+$locales['CIdSante400-object'] = 'Objet';
 $locales['CIdSante400-object_class'] = 'Classe';
 $locales['CIdSante400-object_class-court'] = '';
 $locales['CIdSante400-object_class-desc'] = 'Classe de l\'object';
 $locales['CIdSante400-object_id'] = 'Objet';
-$locales['CIdSante400-object_id-court'] = '';
+$locales['CIdSante400-object_id-court'] = 'ID Mb';
 $locales['CIdSante400-object_id-desc'] = 'Identifiant de l\'object';
 $locales['CIdSante400-tag'] = 'Etiquette';
 $locales['CIdSante400-tag-court'] = '';
@@ -50,5 +50,6 @@ $locales['msg-CIdSante400-create'] = 'Identifiant Externe créé';
 $locales['msg-CIdSante400-delete'] = 'Identifiant Externe supprimé';
 $locales['msg-CIdSante400-modify'] = 'Identifiant Externe modifié';
 $locales['msg-CIdSante400-title-create'] = 'Création de l\'identifiant externe';
+$locales['msg-CIdSante400-title-delete'] = 'Suppression de l\'identifiant externe';
 $locales['msg-CIdSante400-title-modify'] = 'Modification de l\'identifiant externe';
 ?>

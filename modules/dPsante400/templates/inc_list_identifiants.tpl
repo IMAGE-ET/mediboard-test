@@ -13,13 +13,13 @@
   
   <tr>
     {{if !$dialog}}
-    <th>classe</th>
-    <th>ID Mediboard</th>
-    <th>Objet</th>
+    <th>{{tr}}CIdSante400-object_class{{/tr}}</th>  
+    <th>{{tr}}CIdSante400-object_id-court{{/tr}}</th> 
+    <th>{{tr}}CIdSante400-object{{/tr}}</th>
     {{/if}}
-    <th>Mise à jour</th>
-    <th>ID Santé400</th>
-    <th>Etiquette</th>
+    <th>{{tr}}CIdSante400-last_update{{/tr}}</th>
+    <th>{{tr}}CIdSante400-id400-court{{/tr}}</th> 
+    <th>{{tr}}CIdSante400-tag{{/tr}}</th>
   </tr>
   {{foreach from=$list_idSante400 item=_idSante400}}
   <tr {{if $_idSante400->_id == $idSante400->_id}}class="selected"{{/if}}>
