@@ -72,8 +72,11 @@ function pageMain() {
       </form>
     </td>
     <th class="halfPane">
+      <a href="index.php?m=dPadmissions&tab=vw_idx_sortie&date={{$hier}}"><<<</a>
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <a href="index.php?m=dPadmissions&tab=vw_idx_sortie&date={{$demain}}">>>></a>
+
     </th>
   </tr>
   <tr>

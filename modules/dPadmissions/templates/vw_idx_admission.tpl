@@ -60,6 +60,9 @@ function pageMain() {
 
 </script>
 
+
+
+
 <table class="main">
 <tr>
 <td><a href="#" onclick="showLegend()" class="buttonsearch">Légende</a></td>

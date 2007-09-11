@@ -18,6 +18,10 @@ $month = mbTranformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 
+$hier = mbDate("- 1 day", $date);
+$demain = mbDate("+ 1 day", $date);
+
+
 // Liste des admissions par jour
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
@@ -71,6 +75,8 @@ foreach($list1 as $key => $value) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("hier", $hier);
+$smarty->assign("demain", $demain);
 
 $smarty->assign('date', $date);
 $smarty->assign('lastmonth', $lastmonth);

@@ -22,6 +22,9 @@ $next      = mbDate("+1 DAY", $date);
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
 
+$hier = mbDate("- 1 day", $date);
+$demain = mbDate("+ 1 day", $date);
+
 
 // Chargement des prestations
 $prestation = new CPrestation();
@@ -74,6 +77,8 @@ foreach ($today as $keySejour => $valueSejour) {
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("hier", $hier);
+$smarty->assign("demain", $demain);
 
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);

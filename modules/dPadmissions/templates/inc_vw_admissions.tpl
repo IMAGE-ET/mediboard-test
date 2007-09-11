@@ -7,8 +7,10 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
 <table class="tbl">
   <tr>
     <th colspan="9">
+      <a href="index.php?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}"><<<</a>
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+      <a href="index.php?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}">>>></a>
       <br /> 
       <em>
       {{if $selAdmis == "n"}}Admissions non effectuées
