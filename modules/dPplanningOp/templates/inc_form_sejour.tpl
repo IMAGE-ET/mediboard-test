@@ -258,6 +258,7 @@ function checkChambre(){
   </td>
 </tr>
 
+{{if $can->edit}}
 <tr {{if $mode_operation}}style="display: none;"{{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
   <td>
@@ -268,6 +269,7 @@ function checkChambre(){
     {{mb_field object=$sejour field="hormone_croissance"}}
   </td>  
 </tr>
+{{/if}}
 
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
@@ -282,9 +284,6 @@ function checkChambre(){
   </td>
   {{/if}}
 </tr>
-
-
-
 
 <tr>
 {{if $prestations}}
@@ -309,15 +308,17 @@ function checkChambre(){
 <!-- Si on est pas en mode operation, on affiche la suite -->
 {{if !$mode_operation}}
 
+	{{if $can->edit}}
   <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
   <td>
     {{mb_field object=$sejour field="repas_sans_sel"}}
   </td>
+	{{/if}}
 
 </tr>
 
 
-
+{{if $can->edit}}
 <tr>
   <th>{{mb_label object=$sejour field="isolement"}}</th>
   <td>
@@ -328,16 +329,19 @@ function checkChambre(){
     {{mb_field object=$sejour field="repas_diabete"}}
   </td>
 </tr>
+{{/if}}
 
 <tr>
   <th>{{mb_label object=$sejour field="television"}}</th>
   <td>
     {{mb_field object=$sejour field="television"}}
   </td>
+	{{if $can->edit}}
   <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
   <td>
     {{mb_field object=$sejour field="repas_sans_residu"}}
   </td>
+	{{/if}}
 </tr>
 
 <tr>
