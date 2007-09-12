@@ -6,7 +6,7 @@
 {{assign var=background value="#ccc"}}
 {{/if}}
 
-<td class="text" style="background: {{$background}}">
+<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_adm->_ref_patient->patient_id}}">
     <img src="images/icons/edit.png" alt="modifier" />
   </a>
@@ -15,19 +15,19 @@
   </a>
 </td>
 
-<td class="text" style="background: {{$background}}">
+<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   Dr. {{$curr_adm->_ref_praticien->_view}}
   </a>
 </td>
 
-<td style="background: {{$background}}">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   {{$curr_adm->entree_prevue|date_format:"%Hh%M"}} ({{$curr_adm->type|truncate:1:"":true}})
   </a>
 </td>
 
-<td class="text" style="background: {{$background}}">
+<td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editChFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
   
   <input type="hidden" name="m" value="dPhospi" />
@@ -73,10 +73,10 @@
 </td>
 
 {{if $curr_adm->annule == 1}}
-<td style="background: {{$background}}" align="center" colspan="5">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" align="center" colspan="5">
   <strong>ANNULE</strong></td>
 {{else}}
-<td style="background: {{$background}}">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editAdmFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
@@ -104,7 +104,7 @@
   </form>
 </td>
 
-<td style="background: {{$background}}">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <form name="editSaisFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
@@ -127,7 +127,7 @@
   </form>
 </td>
 
-<td style="background: {{$background}}">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
   {{$curr_op->_ref_consult_anesth->_date_consult|date_format:"%d/%m/%Y"}}
@@ -136,7 +136,7 @@
   {{/foreach}}
 </td>
 
-<td style="background: {{$background}}" class="button">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}" class="button">
   {{if $curr_adm->_couvert_cmu}}
     <img src="images/icons/tick.png" alt="Droits CMU en cours" />
   {{else}}
@@ -144,7 +144,7 @@
   {{/if}}
 </td>
 
-<td style="background: {{$background}}">
+<td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   {{foreach from=$curr_adm->_ref_operations item=curr_op}}
   {{if $curr_op->depassement}}
   <!-- Pas de possibilité d'imprimer les dépassements pour l'instant -->

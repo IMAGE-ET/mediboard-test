@@ -11,7 +11,7 @@
   </tr>
   {{foreach from=$listComp item=curr_sortie}}
   <tr>
-    <td>
+    <td style="{{if !$curr_sortie->_ref_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
@@ -35,7 +35,7 @@
       {{/if}}
       </form>
     </td>
-    <td class="text">
+    <td class="text" style="{{if !$curr_sortie->_ref_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
     
 		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->_ref_patient->patient_id}}">
 		    <img src="images/icons/edit.png" alt="modifier" />
@@ -43,19 +43,19 @@
 	  {{if $curr_sortie->_ref_sejour->_num_dossier}}[{{$curr_sortie->_ref_sejour->_num_dossier}}]{{/if}}
       <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b> 
       </td>
-    <td>
+    <td style="{{if !$curr_sortie->_ref_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{$curr_sortie->sortie|date_format:"%H h %M"}}
       {{if $curr_sortie->confirme}}
          <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
       {{/if}}
     </td>
-    <td class="text">Dr. {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}</td>
-    <td class="text">{{$curr_sortie->_ref_lit->_view}}</td>
+    <td class="text" style="{{if !$curr_sortie->_ref_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr. {{$curr_sortie->_ref_sejour->_ref_praticien->_view}}</td>
+    <td class="text" style="{{if !$curr_sortie->_ref_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">{{$curr_sortie->_ref_lit->_view}}</td>
   </tr>
   {{/foreach}}
   {{foreach from=$listSejourC item=curr_sejour}}
   <tr>
-    <td>
+    <td style="{{if !$curr_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       <form name="editFrm{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="del" value="0" />
@@ -82,7 +82,7 @@
     
       </form>
     </td>
-    <td class="text">
+    <td class="text" style="{{if !$curr_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
 		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->patient_id}}">
 		    <img src="images/icons/edit.png" alt="modifier" />
 		  </a>
@@ -90,9 +90,9 @@
       <b>{{$curr_sejour->_ref_patient->_view}}</b>
       
     </td>
-    <td>{{$curr_sejour->sortie_prevue|date_format:"%H h %M"}}</td>
-    <td class="text">Dr. {{$curr_sejour->_ref_praticien->_view}}</td>
-    <td class="text">Aucune chambre</td>
+    <td style="{{if !$curr_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">{{$curr_sejour->sortie_prevue|date_format:"%H h %M"}}</td>
+    <td class="text" style="{{if !$curr_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr. {{$curr_sejour->_ref_praticien->_view}}</td>
+    <td class="text" style="{{if !$curr_sejour->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Aucune chambre</td>
   </tr>
   {{/foreach}}
   
