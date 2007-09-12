@@ -11,7 +11,7 @@
     <img src="images/icons/edit.png" alt="modifier" />
   </a>
   <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  {{$curr_adm->_ref_patient->_view}} {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}}
+  {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}} {{$curr_adm->_ref_patient->_view}}
   </a>
 </td>
 
@@ -94,7 +94,8 @@
     Annuler
   </button>
   <br />
-  {{if (($date_actuelle > $curr_adm->entree_prevue) || ($date_demain < $curr_adm->entree_prevue))}}
+  
+  {{if ($curr_adm->entree_reelle < $date_min) || ($curr_adm->entree_reelle > $date_max)}}
     {{$curr_adm->entree_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
   {{else}}
   {{$curr_adm->entree_reelle|date_format:"%Hh%M"}}

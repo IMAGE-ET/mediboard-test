@@ -25,6 +25,9 @@ $date_demain = mbDateTime("00:00:00","+ 1 day");
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
+$date_min = mbDateTime("00:00:00", $date);
+$date_max = mbDateTime("23:59:00", $date);
+
 
 // Chargement des prestations
 $prestation = new CPrestation();
@@ -82,6 +85,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
 
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", $date_max);
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"        , $date        );
