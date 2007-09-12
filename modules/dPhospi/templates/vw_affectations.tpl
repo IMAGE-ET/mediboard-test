@@ -127,33 +127,33 @@ function setupCalendar(affectation_id) {
 }
 
 function popPlanning() {
-  url = new Url;
+  var url = new Url;
   url.setModuleAction("dPhospi", "vw_affectations");
   url.popup(700, 550, "Planning");
 }
 
 function showRapport() {
-  url = new Url;
+  var url = new Url;
   url.setModuleAction("dPhospi", "vw_rapport");
   url.addParam("date","{{$date}}")
   url.popup(800, 600, "Rapport");
 }
 
 function showLegend() {
-  url = new Url;
+  var url = new Url;
   url.setModuleAction("dPhospi", "legende");
   url.popup(500, 500, "Legend");
 }
 
 function showAlerte() {
-  url = new Url;
+  var url = new Url;
   url.setModuleAction("dPhospi", "vw_etat_semaine");
   url.popup(500, 250, "Alerte");
 }
 
 function reloadService(oElement) {
   if (oElement.checked) {
-    idService = oElement.value;
+    var idService = oElement.value;
     var url = new Url;
     url.setModuleAction("dPhospi", "httpreq_vw_aff_service");
     url.addParam("service_id", idService);
@@ -163,10 +163,10 @@ function reloadService(oElement) {
 }
 
 function viewPrevTimeHospi(affectation_id, chir_id, codes) {
-  oElement = $("tpsPrev"+affectation_id);
+  var oElement = $("tpsPrev"+affectation_id);
   oElement.show();
   if(oElement.alt != "infos - cliquez pour fermer") {
-    url = new Url;
+    var url = new Url;
     url.setModuleAction("dPplanningOp", "httpreq_get_hospi_time");
     url.addParam("chir_id", chir_id);
     url.addParam("codes", codes);
@@ -177,7 +177,7 @@ function viewPrevTimeHospi(affectation_id, chir_id, codes) {
 }
 
 function hidePrevTimeHospi(affectation_id) {
-  oElement = $("tpsPrev"+affectation_id);
+  var oElement = $("tpsPrev"+affectation_id);
   oElement.hide();
 }
 
