@@ -134,8 +134,14 @@ if ($patient->_id) {
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $patient->loadDossierComplet();
+  
 }
 
+if ($patient->_id) {
+  foreach($patient->_ref_sejours as $key=>$sejour){
+  	$sejour->loadNumDossier();
+  }
+}
 // Module de carte vitale
 
 $intermaxFunctions = array(
@@ -144,6 +150,7 @@ $intermaxFunctions = array(
 
 // Chargement de l'IPP du patient
 $patient->loadIPP();
+
 
 // Création du template
 $smarty = new CSmartyDP();

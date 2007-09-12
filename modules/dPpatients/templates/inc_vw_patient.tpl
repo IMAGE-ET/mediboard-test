@@ -279,6 +279,7 @@ function reloadAfterSaveDoc(){
       {{else}}
       <a class="actionPat" title="Pas d'accès aux admissions">
       {{/if}}
+        {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
         Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y"}} 
         au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y"}}
         {{if $curr_sejour->_nb_files_docs}}
