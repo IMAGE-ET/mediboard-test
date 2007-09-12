@@ -71,11 +71,27 @@ class CCodeSpec extends CMbFieldSpec {
     // insee
     }elseif($this->insee){
       $matches = null;
-      if (!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
-        return "Matricule incorrect, doit contenir exactement 15 chiffres (commençant par 1 ou 2)";
+      $matricule1 = null;
+      $matricule2 = null;
+      
+      if ((!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches))) {
+        $matricule1 =  "Matricule incorrect";
       }
-      $code = $matches[1];
-      $cle  = $matches[2];
+      if((!preg_match ("/^([0-9]{7,8}[A-Z])$/i", $propValue))){
+        $matricule2 = "Matricule incorrect";
+      }
+
+      if(!$matricule1 && !$matricule2){
+      	return "Matricule incorrect";
+      }
+    
+     // Test dans le cas du matricule 1
+     if(!$matches){
+        return null;
+     }
+     
+     $code = $matches[1];
+     $cle  = $matches[2];
       
       // Use bcmod since standard modulus can't work on numbers exceedind the 2^32 limit
       if (function_exists("bcmod")) {
