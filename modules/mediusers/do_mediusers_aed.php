@@ -39,10 +39,15 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
         $user->load($this->_obj->user_id);
         $msg = $user->copyPermissionsFrom($profile_id, true);
       }
-        
+      
+      // si modifDroit = 0, pas le droit de les modifier
+      $modifDroit = mbGetAbsValueFromPostOrSession("modifDroit", "1");
+      
       // Insert new group and function permission
-      $this->_obj->insFunctionPermission();
-      $this->_obj->insGroupPermission();
+      if($modifDroit){
+        $this->_obj->insFunctionPermission(); 
+        $this->_obj->insGroupPermission();
+      }
       
       $isNotNew = @$_POST[$this->objectKeyGetVarName];
       $AppUI->setMsg( $isNotNew ? $this->modifyMsg : $this->createMsg, UI_MSG_OK);
