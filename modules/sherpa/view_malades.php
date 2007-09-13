@@ -31,7 +31,7 @@ $filter->datnai = "$malade_day/$malade_month/$malade_year";
 $where = array();
 
 if ($filter->malnum) {
-  $where["malnum"] = "LIKE '$filter->malnum'";
+  $where["malnum"] = "LIKE '$filter->malnum%'";
 }
 
 if ($filter->malnom) {

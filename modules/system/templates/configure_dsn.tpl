@@ -15,6 +15,10 @@
 <tr>
   <th class="category" colspan="100">
     {{tr}}config-{{$section}}{{/tr}} '{{$dsn}}'
+    {{assign var=dsnConfig value=0}}
+    {{if $dsn|array_key_exists:$dPconfig.$section}}
+    {{assign var=dsnConfig value=$dPconfig.$section.$dsn}}
+    {{/if}} 
   </th>
 </tr>
 
@@ -26,7 +30,7 @@
     </label>  
   </th>
   <td>
-    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <select class="str" name="{{$section}}[{{$dsn}}][{{$var}}]">
       <option value="mysql"  {{if "mysql"  == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-mysql{{/tr}}</option>
       <option value="ingres" {{if "ingres" == $value}} selected="selected" {{/if}}>{{tr}}config-{{$section}}-{{$var}}-ingres{{/tr}}</option>
@@ -42,7 +46,7 @@
     </label>  
   </th>
   <td>
-    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
@@ -55,7 +59,7 @@
     </label>  
   </th>
   <td>
-    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
@@ -68,7 +72,7 @@
     </label>  
   </th>
   <td>
-    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
@@ -81,14 +85,16 @@
     </label>  
   </th>
   <td>
-    {{assign var=value value=$dPconfig.$section.$dsn.$var}}
+    {{mb_ternary test=$dsnConfig var=value value=$dsnConfig.$var other=""}}
     <input class="str" name="{{$section}}[{{$dsn}}][{{$var}}]" value="{{$value}}" />
   </td>
 </tr>
 
 <tr>
   <td class="button" colspan="2">
-    <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    {{mb_ternary test=$dsnConfig var=button_text value=Modify other=Create}}
+    {{mb_ternary test=$dsnConfig var=button_class value=modify other=new}}
+    <button class="{{$button_class}}" type="submit">{{tr}}{{$button_text}}{{/tr}}</button>
   </td>
 </tr>
 

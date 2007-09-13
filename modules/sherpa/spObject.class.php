@@ -30,6 +30,15 @@ class CSpObject extends CMbObject {
   }
   
   /**
+   * Change the data source
+   * @param int $g group_id
+   */
+  function changeDSN($g) {
+    $this->_spec->dsn = "sherpa-$g";
+    $this->_spec->init();
+  }
+  
+  /**
    * Map this to a Mediboard object
    * @param CMbObject $mbObject
    * @return CMbObject the mapped object
@@ -46,8 +55,9 @@ class CSpObject extends CMbObject {
   }
       
   function getSpec() {
+    global $g;
     $spec = parent::getSpec();
-    $spec->dsn = "sherpa";
+    $spec->dsn = "sherpa-$g";
     $spec->incremented = false;
     $spec->loggable = false;
     $spec->nullifyEmptyStrings = false;

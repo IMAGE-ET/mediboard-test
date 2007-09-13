@@ -94,7 +94,8 @@ class CSpObjectHandler extends CMbObjectHandler {
       
       foreach ($this->createSpInstances($mbObject) as $spInstance) {
         // Store sherpa object
-	      $spInstance->_id = $id400->id400;
+        $spInstance->changeDSN($g);
+        $spInstance->_id = $id400->id400;
         $spInstance->mapFrom($mbObject);
 	      
 	      if ($msg = $spInstance->store()) {
@@ -165,6 +166,7 @@ class CSpObjectHandler extends CMbObjectHandler {
       
       // Propagate for all sherpa instances associated to this id400 
       foreach ($this->createSpInstances($mbObject) as $spInstance) {
+        $spInstance->changeDSN($group_id);
 	      $spInstance->_id = $id400->id400;
         $spInstance->mapFrom($mbObject);
         
