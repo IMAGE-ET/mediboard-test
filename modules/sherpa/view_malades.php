@@ -11,8 +11,9 @@ global $can, $m;
 
 $can->needsRead();
 
-// Chargement du patient sélectionné
+$max = 30;
 
+// Chargement du patient sélectionné
 $malade = new CSpMalade;
 $malade->load(mbGetValueFromGetOrSession("sel_malnum"));
 
@@ -49,9 +50,11 @@ if ($filter->datnai != "__/__/____") {
 $order = "malnom, malpre, datnai";
 
 // Chargement des objets filtrés
+$maladesCount = 0;
 $malades = array();
 if (count($where)) {
-  $malades = $malade->loadList($where, $order, "0, 30");
+  $malades = $malade->loadList($where, $order, "0, $max");
+  $maladesCount = $malade->countList($where);
 }
 
 // Désélection si le malade n'est pas dans la recherche
@@ -77,6 +80,7 @@ $smarty->assign("filter"   , $filter);
 $smarty->assign("dateMal"  , str_replace("_", "", "$malade_year-$malade_month-$malade_day"));
 $smarty->assign("malades"  , $malades);
 $smarty->assign("malade"   , $malade );
+$smarty->assign("maladesCount", $maladesCount);
 
 $smarty->display("view_malades.tpl");
 ?>

@@ -19,6 +19,16 @@
   {{if $droit->_id}}
   
   <tr>
+		<th>{{mb_label object=$droit field="drofla"}}</th>
+		<td>{{mb_value object=$droit field="drofla"}}</td>
+  </tr>
+
+  <tr>
+		<th>{{mb_label object=$droit field="referan"}}</th>
+		<td>{{mb_value object=$droit field="referan"}}</td>
+  </tr>
+
+  <tr>
 		<th>{{mb_label object=$droit field="numdos"}}</th>
 		<td>{{mb_value object=$droit field="numdos"}}</td>
   </tr>
@@ -26,6 +36,11 @@
   <tr>
 		<th>{{mb_label object=$droit field="malnum"}}</th>
 		<td>{{mb_value object=$droit field="malnum"}}</td>
+  </tr>
+  
+  <tr>
+		<th>{{mb_label object=$droit field="prares"}}</th>
+		<td>{{mb_value object=$droit field="prares"}}</td>
   </tr>
   
   {{if $can->edit}}

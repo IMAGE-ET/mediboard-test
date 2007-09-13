@@ -149,12 +149,25 @@ class CSpObject extends CMbObject {
    * @param string $string to convert
    * @return string
    */
+  function importCodePostal($tel) {
+    // Quelques 'o'  à la place de 0
+    $tel = preg_replace("/o/i", "0", $tel);
+    
+    $return = preg_replace("/\D/", "", $tel);
+    return strlen($return) != 5 ? $return : ""; 
+  }
+  
+  /**
+   * Sherpa to Mediboard phone number
+   * @param string $string to convert
+   * @return string
+   */
   function importPhone($tel) {
     $return = preg_replace("/\D/", "", $tel);
     return strlen($return) == 10 ? $return : ""; 
   }
   
-  /**
+   /**
    * Sherpa to Mediboard matricule 
    * @param string $matricule
    * @param string $cle

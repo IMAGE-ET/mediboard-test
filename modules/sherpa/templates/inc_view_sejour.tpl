@@ -24,6 +24,11 @@
   </tr>
   
   <tr>
+		<th>{{mb_label object=$sejour field="sejfla"}}</th>
+		<td>{{mb_value object=$sejour field="sejfla"}}</td>
+  </tr>
+
+  <tr>
 		<th>{{mb_label object=$sejour field="malnum"}}</th>
 		<td>{{mb_value object=$sejour field="malnum"}}</td>
   </tr>

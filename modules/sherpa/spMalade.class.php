@@ -44,7 +44,7 @@ class CSpMalade extends CSpObject {
     $specs["malnss"] = "str maxLength|13"; /* No matricule du malade       */
     $specs["clenss"] = "str maxLength|02"; /* Cle matricule                */
     $specs["parent"] = "str maxLength|02"; /* Rang beneficiaire            */
-    $specs["rannai"] = "num minMax|1|6"  ; /* Rang de Naissance            */
+    $specs["rannai"] = "enum list|1|2|3|4|5|6"  ; /* Rang de Naissance            */
 //    $specs["relign"] = "str maxLength|02"; /* Religion                     */
     $specs["malru1"] = "str maxLength|25"; /* Adresse 1                    */
     $specs["malru2"] = "str maxLength|25"; /* Adresse 2                    */
@@ -130,7 +130,7 @@ class CSpMalade extends CSpObject {
     $patient->sexe      = @$sexesMatrix[$this->sexe];
     $patient->matricule = $this->importMatricule($this->malnss, $this->clenss);
     $patient->adresse   = "$this->malru1\n$this->malru2";
-    $patient->cp        = $this->malpos;
+    $patient->cp        = $this->importCodePostal($this->malpos);
     $patient->ville     = $this->malvil;
     $patient->tel       = $this->ImportPhone($this->maltel);
     $patient->profession= $this->malpro;
@@ -153,7 +153,7 @@ class CSpMalade extends CSpObject {
     $patient->assure_prenom          = $this->asspre;
     $patient->assure_nom_jeune_fille = $this->asspat;
     $patient->assure_adresse         = "$this->assru1\n$this->assru2";
-    $patient->assure_cp              = $this->asspos;
+    $patient->assure_cp              = $this->importCodePostal($this->asspos);
     $patient->assure_ville           = $this->assvil;
 
     return $patient;
@@ -179,6 +179,7 @@ class CSpMalade extends CSpObject {
     $this->malpre = $this->makeString($patient->prenom, 30);
     $this->malpat = $this->makeString($patient->nom_jeune_fille, 50);
     $this->datnai = mbDateToLocale($patient->naissance);
+    $this->rannai = $patient->rang_naissance;
     $this->vilnai = $this->makeString($patient->lieu_naissance, 30);
     
     $pays = new CPaysInsee();

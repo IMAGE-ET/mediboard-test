@@ -5,7 +5,10 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="3">Recherche d'un malade</th>
+    <th class="title" colspan="3">
+      Recherche d'un malade
+      ({{$maladesCount}} {{tr}}found{{/tr}})
+    </th>
   </tr>
   <tr>
     <th>{{mb_label object=$filter field="malnum"}}</th>

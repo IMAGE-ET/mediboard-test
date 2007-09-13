@@ -19,6 +19,10 @@
   {{if $malade->_id}}
   
   <tr>
+    <th>{{mb_label object=$malade field="malfla"}}</th>
+	<td>{{mb_value object=$malade field="malfla"}}</td>
+  </tr>
+  <tr>
     <th>{{mb_label object=$malade field="malnom"}}</th>
 	<td>{{mb_value object=$malade field="malnom"}}</td>
   </tr>
@@ -29,6 +33,11 @@
   <tr>
 	<th>{{mb_label object=$malade field="datnai"}}</th>
 	<td>{{mb_value object=$malade field="datnai"}}</td>
+  </tr>
+    <tr>
+  <tr>
+	<th>{{mb_label object=$malade field="rannai"}}</th>
+	<td>{{mb_value object=$malade field="rannai"}}</td>
   </tr>
     <tr>
 	<th>{{mb_label object=$malade field="vilnai"}}</th>

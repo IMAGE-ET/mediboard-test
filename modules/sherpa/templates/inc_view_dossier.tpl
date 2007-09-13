@@ -19,6 +19,11 @@
   {{if $dossier->_id}}
   
   <tr>
+		<th>{{mb_label object=$dossier field="topfac"}}</th>
+		<td>{{mb_value object=$dossier field="topfac"}}</td>
+  </tr>
+  
+  <tr>
 		<th>{{mb_label object=$dossier field="numdos"}}</th>
 		<td>{{mb_value object=$dossier field="numdos"}}</td>
   </tr>

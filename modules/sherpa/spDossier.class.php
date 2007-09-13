@@ -31,11 +31,12 @@ class CSpDossier extends CSpObject {
  	
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["numdos"] = "numchar length|6"    ; /* Numero de dossier            */
-    $specs["malnum"] = "numchar length|6"    ; /* Numero de malade             */
+    $specs["topfac"] = "str length|1"    ; /* Date de derniere mise a jour */
+    $specs["numdos"] = "numchar length|6"; /* Numero de dossier            */
+    $specs["malnum"] = "numchar length|6"; /* Numero de malade             */
     $specs["anndos"] = "str maxLength|2" ; /* 'SH' si séjour annule        */
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
-
+    
     return $specs;
   }
   
@@ -67,6 +68,7 @@ class CSpDossier extends CSpObject {
     $sejour->loadRefPatient();
     $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
     
+    $this->topfac = "N";
     $this->anndos = $sejour->annule ? "SH" : "";
     $this->malnum = $idMalde->id400;
     $this->datmaj = mbDateToLocale(mbDateTime());

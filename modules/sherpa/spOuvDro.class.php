@@ -32,8 +32,8 @@ class CSpOuvDro extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
 
-//    $specs["drofla"]  = "bool"            ; /* Flag                             */
-//    $specs["referan"] = "str maxLength|9" ; /* Annee de Reference (AAA Annnnn)  */
+    $specs["drofla"]  = "str length|1"       ; /* Flag                         */
+    $specs["referan"] = "str length|9"      ; /* Annee de Reference (AAA Annnnn)  */
     $specs["numdos"]  = "numchar length|6"    ; /* No de dossier (Annnnn)           */
 //    $specs["typmal"]  = "bool"            ; /* Type de malade (Externe/Hospit.) */
     $specs["malnum"]  = "numchar length|6"    ; /* No de malade                     */
@@ -66,7 +66,7 @@ class CSpOuvDro extends CSpObject {
 //    $specs["mutuel"]  = "str length|12"   ; /* Code mutuelle                    */
 //    $specs["numadh"]  = "str maxLength|9" ; /* No d'adherent                    */
 //    $specs["pratra"]  = "str maxLength|5" ; /* Medecin traitant                 */
-//    $specs["prares"]  = "str maxLength|3" ; /* Responsable                      */
+    $specs["prares"]  = "str maxLength|3" ; /* Responsable                      */
 //    $specs["dnaiss"]  = "str length|10"   ; /* Date Naiss. Selon Secu jj/mm/aaaa*/
 //    $specs["ghscod"]  = "num"             ; /* Code GHS                         */
     $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
@@ -96,12 +96,25 @@ class CSpOuvDro extends CSpObject {
     if (!is_a($mbObject, $mbClass)) {
       trigger_error("mapping object should be a '$mbClass'");
     }
-        
+    
+    $this->drofla = "A";
+    
     $sejour = $mbObject;
-    $sejour->loadRefPatient();
+    $sejour->loadRefsFwd();
+    
+    // Numéro de dossier amélioré
+    $this->referan = mbTranformTime(null, $sejour->entree_prevue, "%Y") . substr($this->numdos, 1);
+    
+    // Malade
     $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
     
     $this->malnum = $idMalde->id400;
+    
+    // Praticien responsable
+    $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);
+    $this->prares = $idPraticien->id400;
+    
+    // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }
 }

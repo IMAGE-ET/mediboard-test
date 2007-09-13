@@ -32,7 +32,7 @@ class CSpSejMed extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
 
-//    $specs["sejfla"] = "bool"         ; /* Flag                        */
+    $specs["sejfla"]  = "str length|1"    ; /* Flag                        */
     $specs["numdos"] = "numchar length|6" ; /* Numero de dossier           */
     $specs["malnum"] = "numchar length|6" ; /* Numero de malade            */
     $specs["datent"] = "str length|19"; /* Date et heure d'entree      */
@@ -89,6 +89,8 @@ class CSpSejMed extends CSpObject {
     if (!is_a($mbObject, $mbClass)) {
       trigger_error("mapping object should be a '$mbClass'");
     }
+    
+    $this->sejfla = "A";
     
     $sejour = $mbObject;
     $sejour->loadRefsFwd();
