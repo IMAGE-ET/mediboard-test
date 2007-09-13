@@ -277,10 +277,13 @@ function reloadAfterSaveDoc(){
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
     <td>
+      {{if $curr_sejour->group_id == $g}}
       <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
-      {{if $canAdmissions->view}}
+      {{/if}}
+      
+      {{if $canAdmissions->view && $curr_sejour->group_id == $g}}
       <a class="actionPat" title="Accès à l'admission" href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
       {{else}}
       <a class="actionPat" title="Pas d'accès aux admissions">
