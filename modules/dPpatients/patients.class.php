@@ -50,7 +50,8 @@ class CPatient extends CDossierMedical {
   var $cmu              = null;
   var $ald              = null;
   var $rang_beneficiaire= null;
-
+  var $rang_naissance   = null;
+  
   var $pays             = null;
   var $nationalite      = null;
   var $lieu_naissance   = null;
@@ -207,7 +208,8 @@ class CPatient extends CDossierMedical {
     $specs["cmu"]               = "date";
     $specs["ald"]               = "text";
     $specs["rang_beneficiaire"] = "enum list|01|02|11|12|13";
-      
+    $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
+    
     $specs["pays"]              = "str";
     $specs["nationalite"]       = "notNull enum list|local|etranger default|local";
     $specs["lieu_naissance"]    = "str";

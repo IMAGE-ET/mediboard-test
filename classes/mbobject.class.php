@@ -598,7 +598,6 @@ class CMbObject {
    */
 
   function repair() {
-    global $dPconfig;
     $properties = get_object_vars($this);
     foreach($this->_props as $propName => $propSpec) {
       if (!array_key_exists($propName, $properties)) {

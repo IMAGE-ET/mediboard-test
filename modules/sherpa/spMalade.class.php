@@ -31,7 +31,7 @@ class CSpMalade extends CSpObject {
  	
   function getSpecs() {
     $specs = parent::getSpecs();
-//    $specs["malfla"] = "str length|1"    ; /* Flag                         */
+    $specs["malfla"] = "str length|1"    ; /* Flag                         */
     $specs["malnum"] = "numchar length|6"; /* No de client                 */
     $specs["malnom"] = "str maxLength|50"; /* Nom                          */
     $specs["malpre"] = "str maxLength|30"; /* Prenom                       */
@@ -44,7 +44,7 @@ class CSpMalade extends CSpObject {
     $specs["malnss"] = "str maxLength|13"; /* No matricule du malade       */
     $specs["clenss"] = "str maxLength|02"; /* Cle matricule                */
     $specs["parent"] = "str maxLength|02"; /* Rang beneficiaire            */
-//    $specs["rannai"] = "numchar length|1"; /* Rang de Naissance            */
+    $specs["rannai"] = "num minMax|1|6"  ; /* Rang de Naissance            */
 //    $specs["relign"] = "str maxLength|02"; /* Religion                     */
     $specs["malru1"] = "str maxLength|25"; /* Adresse 1                    */
     $specs["malru2"] = "str maxLength|25"; /* Adresse 2                    */
@@ -123,7 +123,7 @@ class CSpMalade extends CSpObject {
     $patient->lieu_naissance = $this->vilnai; 
 
     $pays = new CPaysInsee();
-    $pays->alpha_2 = "FR"; // $this->nation;
+    $pays->alpha_3 = $this->nation;
     $pays->loadMatchingObject();
     $patient->pays = $pays->nom_fr;
     
@@ -174,6 +174,7 @@ class CSpMalade extends CSpObject {
     
     $patient = $mbObject;
         
+    $this->malfla = "A";
     $this->malnom = $this->makeString($patient->nom, 50);
     $this->malpre = $this->makeString($patient->prenom, 30);
     $this->malpat = $this->makeString($patient->nom_jeune_fille, 50);
@@ -183,12 +184,13 @@ class CSpMalade extends CSpObject {
     $pays = new CPaysInsee();
     $pays->nom_fr = $patient->pays;
     $pays->loadMatchingObject();
-    $this->nation = $pays->alpha_2;
+    $this->nation = $pays->alpha_3;
     
     $this->sexe   = $sexesMatrix[$patient->sexe];
     
     $this->malnss = $patient->matricule ? substr($patient->matricule, 0, 13) : "";
     $this->clenss = $patient->matricule ? substr($patient->matricule, 13, 2) : "";
+    $this->parent = $patient->rang_beneficiaire;
     
     $parts = split("\r\n", $patient->adresse);
     $this->malru1 = @$parts[0];
@@ -209,7 +211,7 @@ class CSpMalade extends CSpObject {
     $this->prvad2 = $this->makeString($patient->employeur_adresse, 25);
     $this->prvil2 = $this->makeString($patient->employeur_ville, 30);
     $this->prtel2 = $this->makePhone($patient->employeur_tel);
-    $this->malie2 = $this->makeString("Employ. $patient->employeur_urssaf", 20);
+    $this->malie2 = $patient->employeur_urssaf ? $this->makeString("Employ. $patient->employeur_urssaf", 20) : "";
     
     $this->assnss = $patient->assure_matricule ? substr($patient->assure_matricule, 0, 13) : "";
     $this->nsscle = $patient->assure_matricule ? substr($patient->assure_matricule, 13, 2) : "";
