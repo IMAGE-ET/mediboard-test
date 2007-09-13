@@ -294,14 +294,16 @@ function reloadAfterSaveDoc(){
       </a>
 	</td>
     {{if $curr_sejour->annule}}
- 	<td class="cancelled">
+ 	<td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
       <strong>SEJOUR ANNULE</strong>
 	</td>
     {{else}}
- 	<td>
- 	  {{if $curr_sejour->group_id == $g}}
-      Dr. {{$curr_sejour->_ref_praticien->_view}}
+      {{if $curr_sejour->group_id == $g}}
+      <td>
+        Dr. {{$curr_sejour->_ref_praticien->_view}}
+      </td>
       {{else}}
+      <td style="background-color:#afa">
         {{$curr_sejour->_ref_group->text|upper}}
       {{/if}}
 	</td>
