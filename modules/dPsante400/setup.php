@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsante400";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 
 class CSetupdPsante400 extends CSetup {
@@ -59,7 +59,11 @@ class CSetupdPsante400 extends CSetup {
     $sql = "ALTER TABLE `id_sante400` ADD INDEX ( `id400` ) ;";    
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "UPDATE `id_sante400` SET `tag`='labo code4' WHERE `tag`='LABO' AND `object_class`='CMediusers' ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   } 
 }
 ?>

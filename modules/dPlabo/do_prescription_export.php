@@ -43,25 +43,30 @@ if ($mbPrescription->load($mb_prescription_id)) {
   $mbPrescription->loadRefs();
 }
 
-// Chargement de l'id400 LABO du praticien
-// exemple: 0017
+// Chargement de l'id400 "labo code4" du praticien
 $prat =& $mbPrescription->_ref_praticien;
-$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
-$idSantePrat = new CIdSante400();
-$idSantePrat->loadLatestFor($prat, $tagCatalogue);
+$tagCode4 = "labo code4";
+$idSantePratCode4 = new CIdSante400();
+$idSantePratCode4->loadLatestFor($prat, $tagCode4);
+
+// Chargement de l'id400 "labo code9" du praticien
+$tagCode9 = "labo code9";
+$idSantePratCode9 = new CIdSante400();
+$idSantePratCode9->loadLatestFor($prat, $tagCode9);
 
 // Si le praticien n'a pas d'id400, il ne peut pas envoyer la prescription
-if (!$idSantePrat->_id){
+if (!$idSantePratCode4->_id || !$idSantePratCode9->_id){
   $AppUI->setMsg("Le praticien n'a pas d'id400 pour le catalogue LABO", UI_MSG_ERROR );
   redirect();
 }
 
+$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
 
 //Creation de l'id400
 $idPresc = new CIdSante400();
 
 //Paramétrage de l'id 400
-$idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePrat->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
+$idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
 $idPresc->object_class = "CPrescriptionLabo";              // object_class
 $idPresc->loadMatchingObject("id400 DESC");                // Chargement de l'id 400 s'il existe
 
@@ -128,7 +133,7 @@ $doc->setDocument("tmp/Prescription-".$mbPrescription->_id.".xml");
 $prescription     = $doc->addElement($doc, "Prescription");
 
 // Prescription --> Numero
-$num_prat = str_pad($idSantePrat->id400, 4, '0', STR_PAD_LEFT);
+$num_prat = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT);
 $num_presc = $idPresc->id400;
 $num_presc %= 1000;
 $num_presc = str_pad($num_presc, 4, '0', STR_PAD_LEFT);
