@@ -19,7 +19,9 @@ function createFavori() {
 
   var url = new Url;
   url.setModuleAction(sModule, "vw_find_code");
-  url.addParam("object_class", oForm.object_class.value);
+  if(sModule=="dPccam"){
+    url.addParam("object_class", oForm.object_class.value);
+  }
   url.addParam("dialog", 1);
   url.redirect();
 }
