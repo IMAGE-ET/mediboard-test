@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.47";
+$config["mod_version"]     = "0.48";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -363,8 +363,13 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients`
             ADD `assure_matricule` VARCHAR(15);";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.47");
+    $sql = "ALTER TABLE `patients`
+            ADD `rang_naissance` ENUM('1','2','3','4','5','6');";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.47";
+    $this->mod_version = "0.48";
   }
 }
 

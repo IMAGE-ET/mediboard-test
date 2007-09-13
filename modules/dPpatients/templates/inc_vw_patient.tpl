@@ -184,6 +184,7 @@ function reloadAfterSaveDoc(){
   </tr>
   <tr>
     {{if !$app->user_prefs.simpleCabinet}}
+    {{if $canPlanningOp->edit}}
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
@@ -194,18 +195,23 @@ function reloadAfterSaveDoc(){
         Urgence
       </a>
     </td>
+    {{/if}}
+    {{if $canPlanningOp->read}}
     <td class="button">
       <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
       </a>
     </td>
+    {{/if}}
     <td class="button">
     {{else}}
     <td colspan="4" class="button">
     {{/if}}
+      {{if $canCabinet->edit}}
       <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
+      {{/if}}
     </td>
   </tr>
   {{if $listPrat|@count && $canCabinet->edit}}
@@ -293,7 +299,11 @@ function reloadAfterSaveDoc(){
 	</td>
     {{else}}
  	<td>
+ 	  {{if $curr_sejour->group_id == $g}}
       Dr. {{$curr_sejour->_ref_praticien->_view}}
+      {{else}}
+        {{$curr_sejour->_ref_group->text|upper}}
+      {{/if}}
 	</td>
     {{/if}}
   </tr>

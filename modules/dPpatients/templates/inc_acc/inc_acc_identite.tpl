@@ -53,10 +53,10 @@
       <div style="display:none;" class="autocomplete" id="pays_auto_complete"></div>
     </td>
   </tr>
-
+  
   <tr>
-    <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
-    <td>{{mb_field object=$patient field="lieu_naissance" tabindex="108"}}</td>
+    <th>{{mb_label object=$patient field="rang_naissance"}}</th>
+    <td>{{mb_field object=$patient field="rang_naissance" tabindex="108"}}</td>
     <th>{{mb_label object=$patient field="tel" defaultFor="_tel1"}}</th>
     <td>
       {{mb_field object=$patient field="_tel1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
@@ -64,14 +64,12 @@
       {{mb_field object=$patient field="_tel3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
       {{mb_field object=$patient field="_tel4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
       {{mb_field object=$patient field="_tel5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
-    </td>
+    </td>  
   </tr>
-  
+
   <tr>
-    <th>{{mb_label object=$patient field="nationalite"}}</th>
-    <td>
-      {{mb_field object=$patient field="nationalite" tabindex="109"}}
-    </td>
+    <th>{{mb_label object=$patient field="lieu_naissance"}}</th>
+    <td>{{mb_field object=$patient field="lieu_naissance" tabindex="109"}}</td>
     <th>{{mb_label object=$patient field="tel2" defaultFor="_tel21"}}</th>
     <td>
       {{mb_field object=$patient field="_tel21" tabindex="160" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel22', 2)"}} -
@@ -83,10 +81,18 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="rques"}}</th>
-    <td>{{mb_field object=$patient field="rques" tabindex="110"}}</td>
+    <th>{{mb_label object=$patient field="nationalite"}}</th>
+    <td>
+      {{mb_field object=$patient field="nationalite" tabindex="110"}}
+    </td>
     <th>{{mb_label object=$patient field="profession"}}</th>
     <td>{{mb_field object=$patient field="profession" tabindex="165" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$patient field="rques"}}</th>
+    <td>{{mb_field object=$patient field="rques" tabindex="111"}}</td>
+    <td colspan="2"></td>
   </tr>
 
 </table>
