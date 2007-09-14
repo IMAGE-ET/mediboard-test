@@ -95,7 +95,10 @@ var Action = {
     <button class="new" onclick="Action.import('{{$_class}}', 'start')">
       {{tr}}Start{{/tr}}      
     </button>
-    <button class="change" onclick="Action.import('{{$_class}}', 'continue')">
+    <button class="change" onclick="Action.import('{{$_class}}', 'retry')">
+      {{tr}}Retry{{/tr}}      
+    </button>
+    <button class="tick" onclick="Action.import('{{$_class}}', 'continue')">
       {{tr}}Continue{{/tr}}      
     </button>
   </td>

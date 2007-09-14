@@ -103,17 +103,17 @@ class CSpSejMed extends CSpObject {
     $this->datent = mbDateToLocale($entree);
     
     // Date de sortie, on ne passe pas les sorties prévues
-    $sortie = $sejour->sortie_reelle;
+    $sortie_prevue = $sejour->type == "ambu" ? $sejour->sortie_prevue : null;
+    $sortie = mbGetValue($sejour->sortie_reelle ,$sortie_prevue);
     $this->datsor = $sortie ? mbDateToLocale($sortie) : "";
     
     // Code du praticien
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);
-    $this->pracod = "";
     $this->pracod = $idPraticien->id400;
     
     // Codes du lit et services
     $sejour->loadRefsAffectations();
-    $affectation = $sejour->_ref_last_affectation;
+    $affectation = $sejour->_ref_first_affectation;
     $affectation->loadRefLit();
     $lit = $affectation->_ref_lit;
     $lit->loadCompleteView();

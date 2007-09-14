@@ -154,6 +154,11 @@ class CSpObject extends CMbObject {
     $tel = preg_replace("/o/i", "0", $tel);
     
     $return = preg_replace("/\D/", "", $tel);
+    
+    if (strlen($return) == 2) {
+      $return .= "000";
+    }
+    
     return strlen($return) != 5 ? $return : ""; 
   }
   

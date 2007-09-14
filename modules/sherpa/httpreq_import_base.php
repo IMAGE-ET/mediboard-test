@@ -20,12 +20,23 @@ if (!class_inherits_from($spClass, "CSpObject")) {
 }
 
 // Filtre sur les enregistrements
-$max = $dPconfig["sherpa"]["import_segment"];
 $spObject = new $spClass();
 $action = mbGetValueFromGet("action", "start");
-$idMin = $action != "start" ? mbGetValueFromGetOrSession("idMin") : "000000";
+
+// Tous les départspossibles
+$idMins = array(
+  "start"    => "000000",
+  "continue" => mbGetValueFromGetOrSession("idContinue"),
+  "retry"    => mbGetValueFromGetOrSession("idRetry"),
+);
+
+$idMin = mbGetValue(@$idMins[$action], "000000");
+mbSetValueToSession("idRetry", $idMin);
+
+// Comptage
 $where[$spObject->_tbl_key] = "> '$idMin'";
 $count = $spObject->countList($where);
+$max = $dPconfig["sherpa"]["import_segment"];
 $max = min($max, $count);
 $AppUI->stepAjax("Import de $max sur $count objets de type '$spClass' à partir de l'ID '$idMin'", UI_MSG_OK);
 
@@ -55,8 +66,8 @@ foreach ($spObjects as $_spObject) {
 }
 
 // Enregistrement du dernier identifiant dans la session
-if (!$errors && @$_spObject->_id) {
-  mbSetValueToSession("idMin", $_spObject->_id);
+if (@$_spObject->_id) {
+  mbSetValueToSession("idContinue", $_spObject->_id);
   $AppUI->stepAjax("Dernier ID traité : '$_spObject->_id'", UI_MSG_OK);
 }
 
