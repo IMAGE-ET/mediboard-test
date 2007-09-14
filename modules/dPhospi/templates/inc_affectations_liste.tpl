@@ -49,6 +49,11 @@
       <tr>
         <td class="date" colspan="2"><em>Dr. {{$curr_sejour->_ref_praticien->_view}}</em></td>
       </tr>
+      {{if $curr_sejour->prestation_id}}
+      <tr>
+        <td class="date" colspan="2"><em>Prestation: </em>{{$curr_sejour->_ref_prestation->_view}}</td>
+      </tr>
+      {{/if}}
       <tr>
         <td class="date" colspan="2">
           {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}

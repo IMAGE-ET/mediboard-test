@@ -104,6 +104,7 @@ function loadServiceComplet(&$service, $date, $mode) {
           }
 
           $sejour =& $affectation->_ref_sejour;
+          $sejour->loadRefPrestation();
           $sejour->loadRefsOperations();
           $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
           $sejour->_ref_patient =& getCachedPatient($sejour->patient_id);
@@ -143,6 +144,7 @@ function loadSejourNonAffectes($where) {
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
 
   foreach ($sejourNonAffectes as &$sejour) {
+  	$sejour->loadRefPrestation();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
     

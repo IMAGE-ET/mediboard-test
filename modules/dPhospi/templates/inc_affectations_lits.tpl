@@ -19,6 +19,7 @@
 
 <tbody class="hoverable">
 <tr class="patient">
+ 
   {{if $curr_affectation->confirme}}
     <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
   {{else}}
@@ -49,7 +50,7 @@
       {{else}}
         <font>
      {{/if}}
-    {{/if}}
+    {{/if}} 
     {{if $sejour->type == "ambu"}}
       <img src="images/icons/X.png" alt="X" title="Sortant ce soir" />
     {{elseif $curr_affectation->sortie|date_format:"%Y-%m-%d" == $demain}}
@@ -82,9 +83,9 @@
     {{$sejour->_ref_praticien->_shortview}}
   </td>
 </tr>
-
 {{if !$curr_affectation->sejour_id}}
-  <tr class="dates">
+ 
+  <tr class="dates">   
     <td class="text">
     {{if $can->edit}}
     <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
@@ -132,6 +133,7 @@
     {{/if}}
   </td>
   </tr>
+
   {{if $curr_affectation->rques}}
     <tr class="dates">
       <td class="text highlight" colspan="2">
@@ -198,6 +200,7 @@
   </td>
   {{/if}}
 </tr>
+ 
 <tr class="dates">
   {{if $aff_next->affectation_id}}
   <td class="text" colspan="2">
@@ -253,6 +256,15 @@
 <tr class="dates">
   <td class="text" colspan="2"><em>Dr. {{$sejour->_ref_praticien->_view}}</em></td>
 </tr>
+
+   {{if $curr_affectation->_ref_sejour->prestation_id}}
+     <tr class="dates">
+       <td colspan="2">
+      <strong>Prestation:</strong> {{$curr_affectation->_ref_sejour->_ref_prestation->_view}}
+     </td>
+     </tr>
+    {{/if}}
+   
 <tr class="dates">
   <td class="text" colspan="2">
     {{foreach from=$sejour->_ref_operations item=curr_operation}}

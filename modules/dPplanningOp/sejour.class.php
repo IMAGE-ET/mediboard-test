@@ -284,6 +284,11 @@ class CSejour extends CCodableCCAM {
     $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->load($this->praticien_id);
   }
+
+  function loadRefPrestation() {
+    $this->_ref_prestation = new CPrestation;
+    $this->_ref_prestation->load($this->prestation_id);
+  }
   
   function loadRefEtablissement(){
     // Chargement de l'établissement correspondant
