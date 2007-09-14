@@ -318,14 +318,16 @@ function reloadAfterSaveDoc(){
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
-      {{if $canPlanningOp->view}}
+      {{if $canPlanningOp->view && $curr_sejour->group_id == $g}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
       {{else}}
       <a class="actionPat" title="Modification d'intervention non autorisée">
       {{/if}}
+        {{if $curr_sejour->group_id == $g}}
         <img src="images/icons/planning.png" alt="modifier"/>
+        {{/if}}
       </a>
-      {{if $canPlanningOp->view}}
+      {{if $canPlanningOp->view && $curr_sejour->group_id == $g}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
       {{else}}
       <a class="actionPat" title="Modification d'intervention non autorisée">
@@ -337,13 +339,19 @@ function reloadAfterSaveDoc(){
       </a>
     </td>
     {{if $curr_op->annulee}}
- 	<td class="cancelled">
+ 	<td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
       <strong>OPERATION ANNULEE</strong>
 	</td>
     {{else}}
-    <td>
-      Dr. {{$curr_op->_ref_chir->_view}}
-    </td>
+      {{if $curr_sejour->group_id != $g}}
+      <td style="background-color:#afa">
+        {{$curr_sejour->_ref_group->_view|upper}}
+      </td>
+      {{else}}
+      <td>
+        Dr. {{$curr_op->_ref_chir->_view}}
+      </td>
+      {{/if}}
     {{/if}}
   </tr>
   {{/foreach}}
