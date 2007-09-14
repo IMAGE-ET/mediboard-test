@@ -16,7 +16,7 @@
         <tr>
           <td>{{$praticien.prat->_view}}</td>
           <td>
-            <form name="editFrmPrat-{{$praticien.prat->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editCode4-{{$praticien.prat->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPsante400" />
               <input type="hidden" name="dosql" value="do_idsante400_aed" />
               <input type="hidden" name="del" value="0" />
@@ -32,7 +32,7 @@
             </form>
           </td>
           <td>
-            <form name="editFrmPrat-{{$praticien.prat->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editCode9-{{$praticien.prat->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
               <input type="hidden" name="m" value="dPsante400" />
               <input type="hidden" name="dosql" value="do_idsante400_aed" />
               <input type="hidden" name="del" value="0" />
