@@ -108,8 +108,9 @@ class CSpSejMed extends CSpObject {
     
     // Code du praticien
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);
+    $this->pracod = "";
     $this->pracod = $idPraticien->id400;
-
+    
     // Codes du lit et services
     $sejour->loadRefsAffectations();
     $affectation = $sejour->_ref_last_affectation;
@@ -117,9 +118,9 @@ class CSpSejMed extends CSpObject {
     $lit = $affectation->_ref_lit;
     $lit->loadCompleteView();
     
-    $idChambre = CSpObjectHandler::getId400For($lit->_ref_chambre);
-    $this->litcod = $idChambre->id400;
-
+    $idLit = CSpObjectHandler::getId400For($lit);
+    $this->litcod = $idLit->id400;
+    
     $idService = CSpObjectHandler::getId400For($lit->_ref_chambre->_ref_service);
     $this->sercod = $idService->id400;
     

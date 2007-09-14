@@ -121,6 +121,12 @@ class CSpObjectHandler extends CMbObjectHandler {
     global $g;
     $id400 = new CIdSante400;
     $id400->loadLatestFor($mbObject, "sherpa group:$g");
+    
+    // Necessary to empty values
+    if ($id400->id400 === null) {
+      $id400->id400 = "";
+    }
+    
     return $id400;
   }
 

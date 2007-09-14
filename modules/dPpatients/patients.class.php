@@ -380,6 +380,12 @@ class CPatient extends CDossierMedical {
     }
   }
   
+  function updateAssureField($field) {
+    if ($this->rang_beneficiaire == "01") {
+      $assure_field = "assure_$field";
+      $this->$assure_field = $this->$field;
+    }
+  }
   
   function updateDBFields() {
   	 global $dPconfig;
@@ -464,6 +470,24 @@ class CPatient extends CDossierMedical {
   	}
   	
   	// Assuré
+
+    // Assuré = patient ssi rang du bénéficiaire vaut 1
+    $this->updateAssureField("nom");
+    $this->updateAssureField("nom_jeune_fille");
+    $this->updateAssureField("prenom");
+    $this->updateAssureField("naissance");
+    $this->updateAssureField("sexe");
+    $this->updateAssureField("adresse");
+    $this->updateAssureField("ville");
+    $this->updateAssureField("cp");
+    $this->updateAssureField("tel");
+    $this->updateAssureField("tel2");
+    $this->updateAssureField("pays");
+    $this->updateAssureField("nationalite");
+    $this->updateAssureField("lieu_naissance");
+    $this->updateAssureField("profession");
+    $this->updateAssureField("rques");
+    $this->updateAssureField("matricule");
 
     if ($this->assure_nom) {
   	  $this->assure_nom = strtoupper($this->assure_nom);

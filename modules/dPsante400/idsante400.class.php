@@ -50,12 +50,16 @@
     if (!is_a($mbObject, "CMbObject")) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
-    
+        
     $this->_id = null;
     $this->object_class = $object_class;
     $this->object_id = $mbObject->_id;
     $this->tag = $tag;
-    $this->loadMatchingObject("`last_update` DESC");
+    
+    // Don't load if object is undefined
+    if ($mbObject->_id) {
+      $this->loadMatchingObject("`last_update` DESC");
+    }
   }
   
   /**

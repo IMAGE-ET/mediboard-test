@@ -97,10 +97,19 @@ class CSpOuvDro extends CSpObject {
       trigger_error("mapping object should be a '$mbClass'");
     }
     
-    $this->drofla = "A";
-    
     $sejour = $mbObject;
     $sejour->loadRefsFwd();
+
+    $typeMatrix = array(
+      "ambu" => "Z",
+			"exte" => "E",
+			"comp" => "H",
+			"seances" => "H",
+			"SSR" => "H",
+			"psy" => "H",
+		);
+    
+    $this->drofla = $typeMatrix[$sejour->type];
     
     // Numéro de dossier amélioré
     $this->referan = mbTranformTime(null, $sejour->entree_prevue, "%Y") . substr($this->numdos, 1);
