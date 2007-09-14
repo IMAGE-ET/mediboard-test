@@ -30,14 +30,27 @@ class CSpObjectHandler extends CMbObjectHandler {
     return $spInstances;
   }
   
+  /**
+   * Check id for object
+   */
+  function checkId(CMbObject &$mbObject, $id) {
+    switch ($mbObject->_class_name) {
+      case "CSejour" : 
+	    $yearWanted = substr($mbObject->entree_prevue, 3, 1);
+	    $yearGiven = substr($id, 0, 1);
+	    return $yearGiven == $yearWanted;
+	    
+      default:
+      return true;    
+    }
+  }
+      
   function makeId(CMbObject &$mbObject) {
     global $g;
     $id400 = new CIdSante400();
     $id400->tag = "sherpa group:$g";
     $id400->object_class = $mbObject->_class_name;
     $ds =& $id400->_spec->ds;
-    
-    
     
     switch ($mbObject->_class_name) {
       case "CSejour" : 
@@ -157,6 +170,12 @@ class CSpObjectHandler extends CMbObjectHandler {
     foreach ($this->getIds400For($mbObject) as $id400) {
       // Store id400;
       $id400->last_update = mbDateTime();
+      
+      // Check if id has to be rebuilt
+      if (!$this->checkId($mbObject, $id400->id400)) {
+        $id400->id400 = $this->makeId($mbObject);
+      }
+      
       if ($msg = $id400->store()) {
         trigger_error("Error updating id400 for object  '$mbObject->_view' : $msg", E_USER_WARNING);
         continue;

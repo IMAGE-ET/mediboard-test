@@ -116,7 +116,6 @@ class CSpOuvDro extends CSpObject {
     
     // Malade
     $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
-    
     $this->malnum = $idMalde->id400;
     
     // Praticien responsable

@@ -589,10 +589,9 @@ class CPatient extends CDossierMedical {
     }
   }
   
-  
   function loadRefsDocs() {
     $docs_valid = parent::loadRefsDocs();
-    if($docs_valid)
+    if ($docs_valid)
       $this->_nb_docs .= "$docs_valid";
   }
   
