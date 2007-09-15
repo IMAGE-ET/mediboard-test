@@ -15,7 +15,7 @@
 class CSpObjectHandler extends CMbObjectHandler {
   static $associations = array(
     "CPatient" => array ("CSpMalade"),
-    "CSejour" => array("CSpDossier", "CSpOuvDro", "CSpSejMed"),
+    "CSejour" => array("CSpSejMed", "CSpDossier", "CSpOuvDro"),
   );
     
   function isHandled(CMbObject &$mbObject) {

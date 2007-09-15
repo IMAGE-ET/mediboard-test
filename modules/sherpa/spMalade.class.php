@@ -118,7 +118,7 @@ class CSpMalade extends CSpObject {
     
     $patient = new CPatient();
     $patient->nom    = $this->malnom;
-    $patient->prenom = $this->malpre;
+    $patient->prenom = mbGetValue($this->malpre, "inconnu");
     $patient->naissance = mbDateFromLocale($this->datnai);
     $patient->lieu_naissance = $this->vilnai; 
 
