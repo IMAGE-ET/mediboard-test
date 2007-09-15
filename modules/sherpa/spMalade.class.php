@@ -48,7 +48,7 @@ class CSpMalade extends CSpObject {
 //    $specs["relign"] = "str maxLength|02"; /* Religion                     */
     $specs["malru1"] = "str maxLength|25"; /* Adresse 1                    */
     $specs["malru2"] = "str maxLength|25"; /* Adresse 2                    */
-//    $specs["malcom"] = "str maxLength|25"; /* Commune                      */
+    $specs["malcom"] = "str maxLength|25"; /* Commune                      */
     $specs["malpos"] = "str maxLength|05"; /* Code postal                  */
     $specs["malvil"] = "str maxLength|25"; /* Ville                        */
     $specs["maltel"] = "str maxLength|14"; /* No telephone                 */
@@ -73,7 +73,7 @@ class CSpMalade extends CSpObject {
     $specs["asspat"] = "str maxLength|50"; /* Nom de jeune fille           */
     $specs["assru1"] = "str maxLength|25"; /* Adresse 1                    */
     $specs["assru2"] = "str maxLength|25"; /* Adresse 2                    */
-//    $specs["asscom"] = "str maxLength|25"; /* Commune                      */
+    $specs["asscom"] = "str maxLength|25"; /* Commune                      */
     $specs["asspos"] = "str maxLength|05"; /* Code postal                  */
     $specs["assvil"] = "str maxLength|25"; /* Ville                        */
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
@@ -131,7 +131,7 @@ class CSpMalade extends CSpObject {
     $patient->sexe      = @$sexesMatrix[$this->sexe];
     $patient->matricule = $this->importMatricule($this->malnss, $this->clenss);
     $patient->rang_beneficiaire = $this->parent;
-    $patient->adresse   = "$this->malru1\n$this->malru2";
+    $patient->adresse   = "$this->malru1\n$this->malru2\n$this->malcom";
     $patient->cp        = $this->importCodePostal($this->malpos);
     $patient->ville     = $this->malvil;
     $patient->tel       = $this->ImportPhone($this->maltel);
@@ -154,7 +154,7 @@ class CSpMalade extends CSpObject {
     $patient->assure_nom             = $this->assnom;
     $patient->assure_prenom          = $this->asspre;
     $patient->assure_nom_jeune_fille = $this->asspat;
-    $patient->assure_adresse         = "$this->assru1\n$this->assru2";
+    $patient->assure_adresse         = "$this->assru1\n$this->assru2\n$this->asscom";
     $patient->assure_cp              = $this->importCodePostal($this->asspos);
     $patient->assure_ville           = $this->assvil;
 
@@ -198,7 +198,8 @@ class CSpMalade extends CSpObject {
     $parts = split("\r\n", $patient->adresse);
     $this->malru1 = @$parts[0];
     $this->malru2 = @$parts[1];
-
+    $this->malcom = @$parts[2];
+    
     $this->malpos = $patient->cp;
     $this->malvil = $this->makeString($patient->ville, 25);
     $this->maltel = $this->makePhone(mbGetValue($patient->tel, $patient->tel2));
@@ -225,6 +226,7 @@ class CSpMalade extends CSpObject {
     $parts = split("\r\n", $patient->assure_adresse);
     $this->assru1 = @$parts[0];
     $this->assru2 = @$parts[1];
+    $this->asscom = @$parts[2];
     $this->asspos = $patient->assure_cp;
     $this->assvil = $this->makeString($patient->assure_ville, 25);
     
