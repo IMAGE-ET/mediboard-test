@@ -149,16 +149,18 @@ class CSpObject extends CMbObject {
    * @param string $string to convert
    * @return string
    */
-  function importCodePostal($tel) {
+  function importCodePostal($string) {
     // Quelques 'o'  à la place de 0
-    $tel = preg_replace("/o/i", "0", $tel);
+    mbExport($string, "A importer");
+    $string = preg_replace("/o/i", "0", $string);
     
-    $return = preg_replace("/\D/", "", $tel);
+    $return = preg_replace("/\D/", "", $string);
     
     if (strlen($return) == 2) {
       $return .= "000";
     }
     
+    mbExport($return, "importé");
     return strlen($return) != 5 ? $return : ""; 
   }
   
