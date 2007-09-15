@@ -85,8 +85,6 @@ if ($can->edit) {
       $whereFilter = "1 = 1";
   }
   
-  mbTrace($whereFilter, $filterAdm);
-  
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(
