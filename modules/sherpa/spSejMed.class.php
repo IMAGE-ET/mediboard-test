@@ -81,6 +81,11 @@ class CSpSejMed extends CSpObject {
     $this->datsor = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datsor));
     $sejour->sortie_prevue = mbDateFromLocale($this->datsor);
     
+    if ($this->datsor) {
+      $sejour->entree_reelle = $sejour->entree_prevue;
+      $sejour->sortie_reelle = $sejour->sortie_prevue;
+    }
+    
     // Sercod
     switch ($this->sercod) {
       case "ZT":
@@ -156,8 +161,8 @@ class CSpSejMed extends CSpObject {
       $sercod = $sejour->facturable ? "PB" : "EX";
     } 
     else {
-      if ($sejour->type == "ambu") $sercod = "A";
       if ($sejour->type == "comp") $sercod = "2";
+      if (mbTimeRelative($sejour->entree_prevue, $sejour->sortie_pervue)  <= "48:00:00") $sercod = "A";
       
       if (!$sejour->chambre_seule) {
         $sercod .= 2;
