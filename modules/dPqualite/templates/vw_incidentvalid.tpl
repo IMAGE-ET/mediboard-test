@@ -216,7 +216,7 @@ function pageMain() {
         
       {{if $can->admin && !$fiche->date_validation &&!$fiche->annulee}}
         <tr>
-          <th><label for="degre_urgence" title="{{tr}}CFicheEi-degre_urgence-desc{{/tr}}">{{tr}}CFicheEi-degre_urgence{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="degre_urgence"}}</th>
           <td>
             <select name="degre_urgence" class="notNull {{$fiche->_props.degre_urgence}}">
             <option value="">&mdash; {{tr}}select-choice{{/tr}}</option>
@@ -225,7 +225,34 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th><label for="service_valid_user_id" title="{{tr}}CFicheEi-service_valid_user_id-desc{{/tr}}">{{tr}}CFicheEi-service_valid_user_id{{/tr}}</label></th>
+          <th>{{mb_label object=$fiche field="gravite"}}</th>
+          <td>
+            <select name="gravite" class="notNull {{$fiche->_props.gravite}}">
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+              {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
+            </select>
+          </td>
+        </tr>
+        <tr>     
+          <th>{{mb_label object=$fiche field="plainte"}}</th>
+          <td>
+            <select name="plainte" class="notNull {{$fiche->_props.plainte}}">
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+              {{html_options options=$fiche->_enumsTrans.plainte selected=$fiche->plainte}}
+            </select>
+          </td>
+        </tr>
+        <tr> 
+          <th>{{mb_label object=$fiche field="commission"}}</th>
+          <td>
+            <select name="commission" class="notNull {{$fiche->_props.commission}}">
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+              {{html_options options=$fiche->_enumsTrans.commission selected=$fiche->commission}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$fiche field="service_valid_user_id"}}</th>
           <td>
             <select name="service_valid_user_id" class="notNull {{$fiche->_props.service_valid_user_id}}">
             <option value="">&mdash; {{tr}}select-choice{{/tr}} &mdash;</option>

@@ -82,13 +82,14 @@ class CFicheEi extends CMbObject {
       "descr_faits"                  => "notNull text",
       "mesures"                      => "notNull text",
       "descr_consequences"           => "notNull text",
-      "gravite"                      => "notNull enum list|nul|mod|imp",
       "suite_even"                   => "notNull enum list|trans|plong|deces|autre",
       "suite_even_descr"             => "text",
-      "plainte"                      => "notNull enum list|non|oui",
-      "commission"                   => "notNull enum list|non|oui",
       "deja_survenu"                 => "enum list|non|oui",
+      //Prise en charge de la fiche
       "degre_urgence"                => "enum list|1|2|3|4",
+      "gravite"                      => "enum list|nul|mod|imp",
+      "plainte"                      => "enum list|non|oui",
+      "commission"                   => "enum list|non|oui",
       "annulee"                      => "bool",
       "remarques"                    => "text",
       //1ere Validation Qualité

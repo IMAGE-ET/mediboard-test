@@ -221,43 +221,20 @@ function pageMain() {
           <th colspan="4" class="category">{{tr}}_CFicheEi-infoscompl{{/tr}}</th>
         </tr>
         <tr>
-          <th>{{mb_label object=$fiche field="autre"}}</th>
-          <td>{{mb_field object=$fiche field="autre"}}</td>        
-          <th>{{mb_label object=$fiche field="gravite"}}</th>
-          <td>
-            <select name="gravite" class="{{$fiche->_props.gravite}}">
-              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
-            </select>
-          </td>
-        </tr>
-        <tr>
           <th>{{mb_label object=$fiche field="descr_faits"}}</th>
-          <td>{{mb_field object=$fiche field="descr_faits"}}</td> 
-          <th>{{mb_label object=$fiche field="plainte"}}</th>
-          <td>
-            <select name="plainte" class="{{$fiche->_props.plainte}}">
-              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.plainte selected=$fiche->plainte}}
-            </select>
-          </td>
-        </tr>
-        <tr>
+          <td>{{mb_field object=$fiche field="descr_faits"}}</td>
           <th>{{mb_label object=$fiche field="mesures"}}</th>
-          <td>{{mb_field object=$fiche field="mesures"}}</td> 
-          <th>{{mb_label object=$fiche field="commission"}}</th>
-          <td>
-            <select name="commission" class="{{$fiche->_props.commission}}">
-              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
-              {{html_options options=$fiche->_enumsTrans.commission selected=$fiche->commission}}
-            </select>
-          </td>
+          <td>{{mb_field object=$fiche field="mesures"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$fiche field="descr_consequences"}}</th>
           <td>{{mb_field object=$fiche field="descr_consequences"}}</td>
-          <th>{{mb_label object=$fiche field="suite_even"}}</th> 
-          <td>
+          <th>{{mb_label object=$fiche field="autre"}}</th>
+          <td>{{mb_field object=$fiche field="autre"}}</td>
+        </tr>
+        <tr>
+          <th colspan="2">{{mb_label object=$fiche field="suite_even"}}</th> 
+          <td colspan="2">
             <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
