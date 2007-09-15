@@ -122,7 +122,7 @@ function checkChambre(){
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
-  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
+  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
   </td>
   <td colspan="2" class="button">
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
@@ -238,22 +238,16 @@ function checkChambre(){
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="type"}}
+  <td>
+    {{mb_field object=$sejour field="type" onchange="changeTypeHospi(this.value)"}}
   </td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="reanimation"}}</th>
-  <td colspan="3">
-  {{mb_field object=$sejour field="reanimation"}}
-  </td>
-</tr>
-
-<tr>
-  <th>{{mb_label object=$sejour field="zt"}}</th>
-  <td colspan="3">
-  {{mb_field object=$sejour field="zt"}}
+  <td colspan="2">
+    <div id="showFor-comp" {{if !$sejour->_id || $sejour->type != "comp"}} style="display: none;" {{/if}}>
+      {{mb_label object=$sejour field="reanimation"}}{{mb_field object=$sejour field="reanimation"}}
+    </div>
+    <div id="showFor-ambu" {{if $sejour->_id && $sejour->type != "ambu"}} style="display: none;" {{/if}}>
+      {{mb_label object=$sejour field="zt"}}{{mb_field object=$sejour field="zt"}}
+    </div>
   </td>
 </tr>
 
@@ -299,8 +293,8 @@ function checkChambre(){
   {{/if}}
 </tr>
 
-<tr>
 {{if $prestations}}
+<tr>
 <th>{{mb_label object=$sejour field="prestation_id"}}</th>
   <td>
   <select name="prestation_id" onchange="checkPresta();">
@@ -310,12 +304,9 @@ function checkChambre(){
   {{/foreach}}
   </select>
   </td>
-  
-{{else}}
+  {{if $mode_operation}}
   <td colspan="2"></td>
-{{/if}}
-{{if $mode_operation}}
-<td colspan="2"></td>
+  {{/if}}
 </tr>
 {{/if}}
 

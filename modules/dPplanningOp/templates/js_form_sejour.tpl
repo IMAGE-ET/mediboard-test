@@ -81,6 +81,19 @@ function modifSejour() {
   }
 }
 
+function changeTypeHospi(value) {
+  if(value == "ambu") {
+    $('showFor-ambu').show();
+    $('showFor-comp').hide();
+  } else if(value == "comp") {
+    $('showFor-comp').show();
+    $('showFor-ambu').hide();
+  } else {
+    $('showFor-comp').hide();
+    $('showFor-ambu').hide();
+  }
+}
+
 function updateSortiePrevue() {
   var oForm = document.editSejour;
     
