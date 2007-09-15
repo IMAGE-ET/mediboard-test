@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-CSejour-tag_dossier'] = '';
+$locales['CSejour-reanimation-desc'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -47,6 +47,7 @@ $locales['config-dPplanningOp-COperation-min_intervalle'] = '';
 $locales['config-dPplanningOp-CSejour-heure_deb'] = '';
 $locales['config-dPplanningOp-CSejour-heure_fin'] = '';
 $locales['config-dPplanningOp-CSejour-min_intervalle'] = '';
+$locales['config-dPplanningOp-CSejour-tag_dossier'] = '';
 $locales['COperation'] = '';
 $locales['COperation-anapath'] = '';
 $locales['COperation-anapath-court'] = '';
@@ -350,6 +351,7 @@ $locales['CSejour-patient_id-desc'] = '';
 $locales['CSejour-praticien_id'] = '';
 $locales['CSejour-praticien_id-court'] = '';
 $locales['CSejour-praticien_id-desc'] = '';
+$locales['CSejour-reanimation'] = '';
 $locales['CSejour-repas_diabete'] = '';
 $locales['CSejour-repas_diabete-court'] = '';
 $locales['CSejour-repas_diabete-desc'] = '';

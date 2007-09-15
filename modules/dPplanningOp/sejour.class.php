@@ -29,6 +29,7 @@ class CSejour extends CCodableCCAM {
   var $modalite           = null;
   var $annule             = null; // complète $op->annule
   var $chambre_seule      = null; // remplace $op->chambre
+  var $reanimation        = null;
 
   var $entree_prevue      = null;
   var $sortie_prevue      = null;
@@ -120,6 +121,7 @@ class CSejour extends CCodableCCAM {
     $specs["modalite"]            = "notNull enum list|office|libre|tiers default|libre";
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";
+    $specs["reanimation"]         = "bool notNull default|0";
     $specs["entree_prevue"]       = "notNull dateTime";
     $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";
@@ -143,14 +145,15 @@ class CSejour extends CCodableCCAM {
     $specs["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
-    $specs["_date_min"] 		  = "dateTime";
-    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
-    $specs["_admission"] 		  = "text";
-    $specs["_service"] 		      = "text";
+
+    $specs["_date_min"] 		      = "dateTime";
+    $specs["_date_max"] 		      = "dateTime moreEquals|_date_min";
+    $specs["_admission"] 		      = "text";
+    $specs["_service"] 		        = "text";
     $specs["_type_admission"]     = "text";
     $specs["_specialite"] 	      = "text";
     $specs["_date_min_stat"]      = "date";
-    $specs["_date_max_stat"] 	  = "date moreEquals|_date_min_stat";
+    $specs["_date_max_stat"] 	    = "date moreEquals|_date_min_stat";
     $specs["_filter_type"]        = "enum list|comp|ambu|exte|seances|ssr|psy";
     return $specs;
   }

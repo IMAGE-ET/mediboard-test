@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.71";
+$config["mod_version"]     = "0.72";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -678,8 +678,12 @@ class CSetupdPplanningOp extends CSetup {
     $this->makeRevision("0.70");
     $sql = "ALTER TABLE `sejour` ADD `facturable` ENUM('0','1') NOT NULL DEFAULT '1';"; 
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.71");
+    $sql = "ALTER TABLE `sejour` ADD `reanimation` enum('0','1') NOT NULL DEFAULT '1' AFTER `chambre_seule`;";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.71";
+    $this->mod_version = "0.72";
   }
 }
 ?>

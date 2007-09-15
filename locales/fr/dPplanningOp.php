@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-CSejour-tag_dossier'] = 'Tag numéro de dossier';
+$locales['CSejour-reanimation-desc'] = 'Entrée du patient en service de réanimation';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -47,6 +47,7 @@ $locales['config-dPplanningOp-COperation-min_intervalle'] = 'Subdivision des heu
 $locales['config-dPplanningOp-CSejour-heure_deb'] = 'Heure début de séjour';
 $locales['config-dPplanningOp-CSejour-heure_fin'] = 'Heure fin de séjour';
 $locales['config-dPplanningOp-CSejour-min_intervalle'] = 'Subdivision des heures';
+$locales['config-dPplanningOp-CSejour-tag_dossier'] = 'Tag numéro de dossier';
 $locales['COperation'] = 'Opération';
 $locales['COperation-anapath'] = '';
 $locales['COperation-anapath-court'] = '';
@@ -350,6 +351,7 @@ $locales['CSejour-patient_id-desc'] = 'Patient concerné. Obligatoire';
 $locales['CSejour-praticien_id'] = 'Praticien';
 $locales['CSejour-praticien_id-court'] = 'Prat';
 $locales['CSejour-praticien_id-desc'] = 'Praticien responsable. Obligatoire';
+$locales['CSejour-reanimation'] = 'Réanimation';
 $locales['CSejour-repas_diabete'] = 'Repas diabétique';
 $locales['CSejour-repas_diabete-court'] = '';
 $locales['CSejour-repas_diabete-desc'] = 'Repas diabétique';

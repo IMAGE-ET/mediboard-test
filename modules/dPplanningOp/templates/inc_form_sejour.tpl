@@ -244,6 +244,13 @@ function checkChambre(){
 </tr>
 
 <tr>
+  <th>{{mb_label object=$sejour field="reanimation"}}</th>
+  <td colspan="3">
+  {{mb_field object=$sejour field="reanimation"}}
+  </td>
+</tr>
+
+<tr>
   <th>{{mb_label object=$sejour field="facturable"}}</th>
   <td colspan="3">
   {{mb_field object=$sejour field="facturable"}}
