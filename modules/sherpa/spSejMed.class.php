@@ -121,8 +121,16 @@ class CSpSejMed extends CSpObject {
 	    else {
 	      $sejour->chambre_seule = 1;
         $mbpresta = CSpObjectHandler::getMbObjectFor("CPrestation", $presta);
+        
         $sejour->prestation_id = $mbpresta->_id;
 	    }
+    }
+    
+    switch ($this->depart) {
+      case "S" : $sejour->mode_sortie = "normal"; break;
+      case "D" : $sejour->mode_sortie = "deces" ; break;
+      case "T" : 
+      case "E" : $sejour->mode_sortie = "transfert"; break;
     }
     
     return $sejour;
