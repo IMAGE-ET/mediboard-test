@@ -119,6 +119,7 @@ class CSpMalade extends CSpObject {
     $patient = new CPatient();
     $patient->nom    = $this->malnom;
     $patient->prenom = mbGetValue($this->malpre, "inconnu");
+    $patient->nom_jeune_fille = $this->malpat;
     $patient->naissance = mbDateFromLocale($this->datnai);
     $patient->lieu_naissance = $this->vilnai; 
 
@@ -129,6 +130,7 @@ class CSpMalade extends CSpObject {
     
     $patient->sexe      = @$sexesMatrix[$this->sexe];
     $patient->matricule = $this->importMatricule($this->malnss, $this->clenss);
+    $patient->rang_beneficiaire = $this->parent;
     $patient->adresse   = "$this->malru1\n$this->malru2";
     $patient->cp        = $this->importCodePostal($this->malpos);
     $patient->ville     = $this->malvil;
