@@ -81,9 +81,13 @@ class CSpSejMed extends CSpObject {
     $this->datsor = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datsor));
     $sejour->sortie_prevue = mbDateFromLocale($this->datsor);
     
-    mbTrace($this->getProps(), "GetProps");
     // Sercod
     switch ($this->sercod) {
+      case "ZT":
+      $sejour->type = "ambu";
+      $sejour->zt = "1";
+      break;
+
       case "SR":
       $sejour->type = "comp";
       $sejour->reanimation = 1;
@@ -167,6 +171,11 @@ class CSpSejMed extends CSpObject {
       if ($sejour->reanimation) {
         $sercode = "SR";
       }
+      
+      if ($sejour->zt) {
+        $sercode = "ZT";
+      }
+      
     }
 
     $this->sercod = $sercod;
