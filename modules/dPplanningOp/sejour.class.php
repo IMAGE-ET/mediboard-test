@@ -122,8 +122,8 @@ class CSejour extends CCodableCCAM {
     $specs["modalite"]            = "notNull enum list|office|libre|tiers default|libre";
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";
-    $specs["reanimation"]         = "bool notNull default|0";
-    $specs["zt"]                  = "bool notNull default|0";
+    $specs["reanimation"]         = "bool default|0";
+    $specs["zt"]                  = "bool default|0";
     $specs["entree_prevue"]       = "notNull dateTime";
     $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";
