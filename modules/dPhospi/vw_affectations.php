@@ -18,8 +18,9 @@ $ds = CSQLDataSource::get("std");
 // A passer en variable de configuration
 $heureLimit = "16:00:00";
 
-$date = mbGetValueFromGetOrSession("date", mbDate()); 
-$mode = mbGetValueFromGetOrSession("mode", 0);
+$date      = mbGetValueFromGetOrSession("date", mbDate()); 
+$mode      = mbGetValueFromGetOrSession("mode", 0); 
+$filterAdm = mbGetValueFromGetOrSession("filterAdm", 0);
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -70,6 +71,22 @@ $alerte = $ds->loadResult($sql->getRequest());
 $groupSejourNonAffectes = array();
 
 if ($can->edit) {
+  switch ($filterAdm) {
+    case "ambu" :
+      $whereFilter = "type = 'ambu'";
+      break;
+    case "csejour" :
+      $whereFilter = "HOUR(TIMEDIFF(sejour.sortie_prevue, sejour.entree_prevue)) <= 48";
+      break;
+    case "comp" :
+      $whereFilter = "type = 'comp'";
+      break;
+    default :
+      $whereFilter = "1 = 1";
+  }
+  
+  mbTrace($whereFilter, $filterAdm);
+  
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(
@@ -77,6 +94,7 @@ if ($can->edit) {
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
+  $where[] = $whereFilter;
 
   $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
   
@@ -86,6 +104,7 @@ if ($can->edit) {
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
+  $where[] = $whereFilter;
   
   $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
   
@@ -95,6 +114,7 @@ if ($can->edit) {
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
+  $where[] = $whereFilter;
   
   $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
   
@@ -104,6 +124,7 @@ if ($can->edit) {
     "annule" => "= '0'",
     "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
   );
+  $where[] = $whereFilter;
   
   $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
 }
@@ -122,6 +143,7 @@ $smarty->assign("date"                  , $date );
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);
+$smarty->assign("filterAdm"             , $filterAdm);
 $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("services"              , $services);
 $smarty->assign("alerte"                , $alerte);

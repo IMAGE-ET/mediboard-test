@@ -270,6 +270,23 @@ function pageMain() {
       <div id="calendar-container"></div>
       {{if $can->edit}}
       
+      <table class="form">
+        <tr>
+          <td class="button">
+            <form name="chgFilter" action="?m={{$m}}" method="get">
+              <input type="hidden" name="m" value="{{$m}}" />
+              <label for="filterAdm" title="Admissions à afficher">Admissions</label>
+              <select name="filterAdm" onchange="submit()">
+                <option value="0" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash Tout afficher</option>
+                <option value="ambu" {{if $filterAdm == "ambu"}}selected="selected"{{/if}}>Ambulatoires</option>
+                <option value="comp" {{if $filterAdm == "comp"}}selected="selected"{{/if}}>Hospi. complètes</option>
+                <option value="csejour" {{if $filterAdm == "csejour"}}selected="selected"{{/if}}>Courts séjours</option>
+              </select>
+            </form>
+          </td>
+        </tr>
+      </table>
+      
       <form name="addAffectationsejour" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="lit_id" value="" />
