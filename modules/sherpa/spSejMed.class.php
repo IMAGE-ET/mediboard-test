@@ -179,10 +179,6 @@ class CSpSejMed extends CSpObject {
 
     $this->sercod = $sercod;
     
-    mbExport($sejour->getProps(), "Sejour à storer");
-    mbExport($this->getProps(), "SejMed à storer");
-    die;
-    
     // Codes du lit 
     $sejour->loadRefsAffectations();
     $affectation = $sejour->_ref_first_affectation;
