@@ -333,7 +333,7 @@ function mbTimeRelative($from, $to) {
   $hours = intval($diff / 3600);
   $mins = intval(($diff % 3600) / 60);
   $secs = intval($diff % 60);
-  return "$hours:$mins:$secs";
+  return "$hours:".str_pad($mins, 2, "0").":".str_pad($sec, 2, "0");
 }
 
 /**
@@ -768,7 +768,7 @@ function getInstalledClasses($properties = array()) {
   $AppUI->getAllClasses();
   $listClasses = getChildClasses("CMbObject", $properties);
   foreach ($listClasses as $key => $class) {
-    if(!has_default_constructor($class)) {
+    if(!has_default_constructor($class) || substr($class, 0, 3) == "CSp") {
     	unset($listClasses[$key]);
     	continue;
     }
