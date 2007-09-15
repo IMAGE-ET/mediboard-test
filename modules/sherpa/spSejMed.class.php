@@ -140,7 +140,7 @@ class CSpSejMed extends CSpObject {
     }
     
     if (!$sejour->sortie_prevue) {
-      mbDate("+$duree_prevue DAYS", $sejour->entree_prevue);
+      $sejour->sortie_prevue = mbDate("+$duree_prevue DAYS", $sejour->entree_prevue);
     }
     
     switch ($this->depart) {
