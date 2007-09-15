@@ -81,39 +81,52 @@ class CSpSejMed extends CSpObject {
     $this->datsor = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datsor));
     $sejour->sortie_prevue = mbDateFromLocale($this->datsor);
     
+    
     if ($this->datsor) {
       $sejour->entree_reelle = $sejour->entree_prevue;
       $sejour->sortie_reelle = $sejour->sortie_prevue;
     }
     
     // Sercod
+    $duree_prevue = 2;
     switch ($this->sercod) {
       case "ZT":
       $sejour->type = "ambu";
       $sejour->zt = "1";
+      $duree_prevue = 0;
       break;
 
       case "SR":
       $sejour->type = "comp";
       $sejour->reanimation = 1;
+      $duree_prevue = 3;
       break;
 
       case "PB":
       $sejour->type = "ambu";
       $sejour->facturable = 1;
+      $duree_prevue = 0;
       break;
       
       case "EX":
       $sejour->type = "ambu";
       $sejour->facturable = 0;
+      $duree_prevue = 0;
       break;
       
       default:
 	    switch (substr($this->sercod, 0, 1)) {
-	      case "A" : $sejour->type = "ambu"; break;
-	      case "2" : $sejour->type = "comp"; break;
+	      case "A" : 
+	      $sejour->type = "ambu"; 
+        $duree_prevue = 1;
+	      break;
+	      
+	      case "2" : 
+	      $sejour->type = "comp"; 
+	      $duree_prevue = 3;
+	      break;
 	    }
-	    
+
 	    $presta = substr($this->sercod, 1, 1);
 	    if ($presta == "2") {
 	      $sejour->chambre_seule = 0;
@@ -124,6 +137,10 @@ class CSpSejMed extends CSpObject {
         
         $sejour->prestation_id = $mbpresta->_id;
 	    }
+    }
+    
+    if ($sejour->sortie_prevue) {
+      mbDate("+$duree_prevue DAYS", $sejour->entree_prevue);
     }
     
     switch ($this->depart) {
