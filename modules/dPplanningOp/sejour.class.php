@@ -357,11 +357,7 @@ class CSejour extends CCodableCCAM {
     	$this->_num_dossier = "-";
     }
   }
-  
-  
-  
-  
-  
+    
   function getExecutant_id($code) {
       return $this->praticien_id;
   }

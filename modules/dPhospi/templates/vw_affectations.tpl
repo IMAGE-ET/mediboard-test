@@ -83,7 +83,7 @@ function setupCalendar(affectation_id) {
         showsTime   : true,
         onUpdate    : function() { 
           if (calendar.dateClicked) {
-            form = eval("document.entreeAffectation" + affectation_id);
+            var form = eval("document.entreeAffectation" + affectation_id);
             form.submit();
           }
         }
@@ -100,7 +100,7 @@ function setupCalendar(affectation_id) {
         showsTime   : true,
         onUpdate    : function() { 
           if (calendar.dateClicked) {
-            form = eval("document.sortieAffectation" + affectation_id);
+            var form = eval("document.sortieAffectation" + affectation_id);
             form.submit();
           }
         }
@@ -116,7 +116,7 @@ function setupCalendar(affectation_id) {
         showsTime   : true,
         onUpdate    : function() { 
           if (calendar.dateClicked) {
-            form = eval("document.splitAffectation" + affectation_id);
+            var form = eval("document.splitAffectation" + affectation_id);
             submitAffectationSplit(form);
           }
         }

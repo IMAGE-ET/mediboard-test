@@ -81,6 +81,41 @@ class CSpSejMed extends CSpObject {
     $this->datsor = trim(preg_replace("/(\d{2})\/(\d{2})\/(\d{2})/", "$1/$2/20$3", $this->datsor));
     $sejour->sortie_prevue = mbDateFromLocale($this->datsor);
     
+    mbTrace($this->getProps(), "GetProps");
+    // Sercod
+    switch ($this->sercod) {
+      case "SR":
+      $sejour->type = "comp";
+      $sejour->reanimation = 1;
+      break;
+
+      case "PB":
+      $sejour->type = "ambu";
+      $sejour->facturable = 1;
+      break;
+      
+      case "EX":
+      $sejour->type = "ambu";
+      $sejour->facturable = 0;
+      break;
+      
+      default:
+	    switch (substr($this->sercod, 0, 1)) {
+	      case "A" : $sejour->type = "ambu"; break;
+	      case "2" : $sejour->type = "comp"; break;
+	    }
+	    
+	    $presta = substr($this->sercod, 1, 1);
+	    if ($presta == "2") {
+	      $sejour->chambre_seule = 0;
+	    }
+	    else {
+	      $sejour->chambre_seule = 1;
+        $mbpresta = CSpObjectHandler::getMbObjectFor("CPrestation", $presta);
+        $sejour->prestation_id = $mbpresta->_id;
+	    }
+    }
+    
     return $sejour;
   }
   
@@ -111,18 +146,42 @@ class CSpSejMed extends CSpObject {
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);
     $this->pracod = $idPraticien->id400;
     
-    // Codes du lit et services
+    // Codes d'admission/prestation
+    $sercod = "";
+    if ($sejour->type == "exte") {
+      $sercod = $sejour->facturable ? "PB" : "EX";
+    } 
+    else {
+      if ($sejour->type == "ambu") $sercod = "A";
+      if ($sejour->type == "comp") $sercod = "2";
+      
+      if (!$sejour->chambre_seule) {
+        $sercod .= 2;
+      } else {
+	      $presta = new CPrestation();
+	      $presta->load($sejour->prestation_id);
+        $idPresta = CSpObjectHandler::getId400For($presta);
+        $sercod .= mbGetValue($idPresta->id400, 1);
+      }
+      
+      if ($sejour->reanimation) {
+        $sercode = "SR";
+      }
+    }
+
+    $this->sercod = $sercod;
+    
+    // Codes du lit 
     $sejour->loadRefsAffectations();
     $affectation = $sejour->_ref_first_affectation;
     $affectation->loadRefLit();
-    $lit = $affectation->_ref_lit;
-    $lit->loadCompleteView();
-    
-    $idLit = CSpObjectHandler::getId400For($lit);
+    $idLit = CSpObjectHandler::getId400For($affectation->_ref_lit);
     $this->litcod = $idLit->id400;
-    
-    $idService = CSpObjectHandler::getId400For($lit->_ref_chambre->_ref_service);
-    $this->sercod = $idService->id400;
+
+    // Si externe, valeur prioritaire
+    if ($sejour->type == "exte") {
+      $this->litcod = $sejour->facturable ? "BLOC" : "AMEX";
+    }
     
     // Mode de sortie 
     $this->depart = "";

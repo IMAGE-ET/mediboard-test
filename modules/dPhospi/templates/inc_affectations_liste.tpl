@@ -7,26 +7,26 @@
     </table>
 
     {{foreach from=$sejourNonAffectes item=curr_sejour}}
-    <form name="addAffectationsejour{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
+    <form name="addAffectationsejour{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="lit_id" value="" />
-    <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+    <input type="hidden" name="sejour_id" value="{{$curr_sejour->_id}}" />
     <input type="hidden" name="entree" value="{{$curr_sejour->entree_prevue}}" />
     <input type="hidden" name="sortie" value="{{$curr_sejour->sortie_prevue}}" />
 
     </form>
 
-    <table class="sejourcollapse" id="sejour{{$curr_sejour->sejour_id}}">
+    <table class="sejourcollapse" id="sejour{{$curr_sejour->_id}}">
       <tr>
         <td class="selectsejour" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
           {{if $curr_sejour->pathologie != ""}}  
-          <input type="radio" id="hospitalisation{{$curr_sejour->sejour_id}}" onclick="selectHospitalisation({{$curr_sejour->sejour_id}})" />
-          <script type="text/javascript">new Draggable('sejour{{$curr_sejour->sejour_id}}', {revert:true})</script>
+          <input type="radio" id="hospitalisation{{$curr_sejour->_id}}" onclick="selectHospitalisation({{$curr_sejour->_id}})" />
+          <script type="text/javascript">new Draggable('sejour{{$curr_sejour->_id}}', {revert:true})</script>
           {{/if}}
         </td>
-        <td class="patient" onclick="flipSejour({{$curr_sejour->sejour_id}})">
-          <strong><a name="sejour{{$curr_sejour->sejour_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
+        <td class="patient" onclick="flipSejour({{$curr_sejour->_id}})">
+          <strong><a name="sejour{{$curr_sejour->_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
           {{if $curr_sejour->type != "ambu" && $curr_sejour->type != "exte"}}
           ({{$curr_sejour->_duree_prevue}}j)
           {{else}}
@@ -70,12 +70,12 @@
       <tr>
         <td class="date" colspan="2">
         
-        <form name="EditSejour{{$curr_sejour->sejour_id}}" action="?m=dPhospi" method="post">
+        <form name="EditSejour{{$curr_sejour->_id}}" action="?m=dPhospi" method="post">
 
         <input type="hidden" name="m" value="dPplanningOp" />
         <input type="hidden" name="otherm" value="dPhospi" />
         <input type="hidden" name="dosql" value="do_sejour_aed" />
-        <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+        <input type="hidden" name="sejour_id" value="{{$curr_sejour->_id}}" />
         
         <em>Pathologie:</em>
         <select name="pathologie">
@@ -98,7 +98,7 @@
         
         </td>
       </tr>
-      {{if $curr_sejour->rques != ""}}
+      {{if $curr_sejour->rques}}
       <tr>
         <td class="date highlight" colspan="2">
           <em>Séjour</em>: {{$curr_sejour->rques|nl2br}}
@@ -106,7 +106,7 @@
       </tr>
       {{/if}}
       {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
-      {{if $curr_operation->rques != ""}}
+      {{if $curr_operation->rques}}
       <tr>
         <td class="date highlight" colspan="2">
           <em>Intervention</em>: {{$curr_operation->rques|nl2br}}
