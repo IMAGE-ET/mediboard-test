@@ -123,10 +123,7 @@ class CSpMalade extends CSpObject {
     $patient->naissance = mbDateFromLocale($this->datnai);
     $patient->lieu_naissance = $this->vilnai; 
 
-    $pays = new CPaysInsee();
-    $pays->alpha_3 = $this->nation;
-    $pays->loadMatchingObject();
-    $patient->pays = $pays->nom_fr;
+    $patient->nationalite = in_array($this->nation, array("FR", "FRA")) ? "local" : "etranger";
     
     $patient->sexe      = @$sexesMatrix[$this->sexe];
     $patient->matricule = $this->importMatricule($this->malnss, $this->clenss);
@@ -184,10 +181,7 @@ class CSpMalade extends CSpObject {
     $this->rannai = $patient->rang_naissance;
     $this->vilnai = $this->makeString($patient->lieu_naissance, 30);
     
-    $pays = new CPaysInsee();
-    $pays->nom_fr = $patient->pays;
-    $pays->loadMatchingObject();
-    $this->nation = $pays->alpha_3;
+    $this->nation = $patient->nationalite == "local" ? "FRA" : "";
     
     $this->sexe   = $sexesMatrix[$patient->sexe];
     
