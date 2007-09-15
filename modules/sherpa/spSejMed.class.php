@@ -150,7 +150,7 @@ class CSpSejMed extends CSpObject {
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);
     $this->pracod = $idPraticien->id400;
     
-    // Codes d'admission/prestation
+    // Codes d'admission/prestation    
     $sercod = "";
     if ($sejour->type == "exte") {
       $sercod = $sejour->facturable ? "PB" : "EX";
@@ -169,16 +169,19 @@ class CSpSejMed extends CSpObject {
       }
       
       if ($sejour->reanimation) {
-        $sercode = "SR";
+        $sercod = "SR";
       }
       
       if ($sejour->zt) {
-        $sercode = "ZT";
+        $sercod = "ZT";
       }
-      
     }
 
     $this->sercod = $sercod;
+    
+    mbExport($sejour->getProps(), "Sejour à storer");
+    mbExport($this->getProps(), "SejMed à storer");
+    die;
     
     // Codes du lit 
     $sejour->loadRefsAffectations();
