@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-reanimation-desc'] = 'Entrée du patient en service de réanimation';
+$locales['CSejour-zt-desc'] = 'Placement de très courte durée';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -352,6 +352,7 @@ $locales['CSejour-praticien_id'] = 'Praticien';
 $locales['CSejour-praticien_id-court'] = 'Prat';
 $locales['CSejour-praticien_id-desc'] = 'Praticien responsable. Obligatoire';
 $locales['CSejour-reanimation'] = 'Réanimation';
+$locales['CSejour-reanimation-desc'] = 'Entrée du patient en service de réanimation';
 $locales['CSejour-repas_diabete'] = 'Repas diabétique';
 $locales['CSejour-repas_diabete-court'] = '';
 $locales['CSejour-repas_diabete-desc'] = 'Repas diabétique';
@@ -386,6 +387,7 @@ $locales['CSejour-type-desc'] = 'Type d\'admission';
 $locales['CSejour-venue_SHS'] = 'Code de venue SHS';
 $locales['CSejour-venue_SHS-court'] = '';
 $locales['CSejour-venue_SHS-desc'] = 'Code Administratif SHS';
+$locales['CSejour-zt'] = 'ZT';
 $locales['CSejour-_admission'] = 'Classement des admissions';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = 'Classement des admissions';

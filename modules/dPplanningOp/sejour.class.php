@@ -29,7 +29,8 @@ class CSejour extends CCodableCCAM {
   var $modalite           = null;
   var $annule             = null; // complète $op->annule
   var $chambre_seule      = null; // remplace $op->chambre
-  var $reanimation        = null;
+  var $reanimation        = null; // Entrée en réanimation
+  var $zt                 = null; // Entrée en zone de très courte durée
 
   var $entree_prevue      = null;
   var $sortie_prevue      = null;
@@ -122,6 +123,7 @@ class CSejour extends CCodableCCAM {
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";
     $specs["reanimation"]         = "bool notNull default|0";
+    $specs["zt"]                  = "bool notNull default|0";
     $specs["entree_prevue"]       = "notNull dateTime";
     $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";

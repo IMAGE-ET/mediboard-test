@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-reanimation-desc'] = '';
+$locales['CSejour-zt-desc'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -352,6 +352,7 @@ $locales['CSejour-praticien_id'] = '';
 $locales['CSejour-praticien_id-court'] = '';
 $locales['CSejour-praticien_id-desc'] = '';
 $locales['CSejour-reanimation'] = '';
+$locales['CSejour-reanimation-desc'] = '';
 $locales['CSejour-repas_diabete'] = '';
 $locales['CSejour-repas_diabete-court'] = '';
 $locales['CSejour-repas_diabete-desc'] = '';
@@ -386,6 +387,7 @@ $locales['CSejour-type-desc'] = '';
 $locales['CSejour-venue_SHS'] = '';
 $locales['CSejour-venue_SHS-court'] = '';
 $locales['CSejour-venue_SHS-desc'] = '';
+$locales['CSejour-zt'] = '';
 $locales['CSejour-_admission'] = '';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = '';
