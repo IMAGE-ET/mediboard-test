@@ -13,12 +13,16 @@ $can->needsRead();
 
 // Récupération de la chambre à ajouter/editer
 $chambreSel = new CChambre;
-$chambreSel->load(mbGetValueFromGetOrSession("chambre_id"));
+$chambreSel->load(mbGetValueFromGetOrSession("chambre_id", 0));
 $chambreSel->loadRefs();
+
+if(!$chambreSel->_id) {
+  mbSetValueToSession("lit_id", 0);
+}
 
 // Récupération du lit à ajouter/editer
 $litSel = new CLit;
-$litSel->load(mbGetValueFromGetOrSession("lit_id"));
+$litSel->load(mbGetValueFromGetOrSession("lit_id", 0));
 $litSel->loadRefs();
 
 // Récupération des chambres/services
