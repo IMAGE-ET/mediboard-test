@@ -187,7 +187,8 @@ class CSpSejMed extends CSpObject {
     } 
     else {
       if ($sejour->type == "comp") $sercod = "2";
-      if (mbTimeRelative($sejour->entree_prevue, $sejour->sortie_prevue)  <= "48:00:00") $sercod = "A";
+      $duree_time = mbTimeRelative($sejour->entree_prevue, $sejour->sortie_prevue);
+      if ($duree_time  <= "48:00:00") $sercod = "A";
       
       if (!$sejour->chambre_seule) {
         $sercod .= 2;

@@ -50,6 +50,11 @@ var ElementChecker = {
     
     sMsg = this["check_" + this.sTypeSpec]();
     
+    // Free DOM element references
+    this.oElement = null;
+    this.oTargetElement = null;
+    this.oCompare = null;
+
     return sMsg;
   },
   
