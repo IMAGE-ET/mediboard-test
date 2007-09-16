@@ -277,7 +277,7 @@ function pageMain() {
               <input type="hidden" name="m" value="{{$m}}" />
               <label for="filterAdm" title="Admissions à afficher">Admissions</label>
               <select name="filterAdm" onchange="submit()">
-                <option value="0" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash Tout afficher</option>
+                <option value="tout" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash Tout afficher</option>
                 <option value="ambu" {{if $filterAdm == "ambu"}}selected="selected"{{/if}}>Ambulatoires</option>
                 <option value="comp" {{if $filterAdm == "comp"}}selected="selected"{{/if}}>Hospi. complètes</option>
                 <option value="csejour" {{if $filterAdm == "csejour"}}selected="selected"{{/if}}>Courts séjours</option>

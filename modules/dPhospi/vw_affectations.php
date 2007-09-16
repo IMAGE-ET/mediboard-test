@@ -20,7 +20,7 @@ $heureLimit = "16:00:00";
 
 $date      = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode      = mbGetValueFromGetOrSession("mode", 0); 
-$filterAdm = mbGetValueFromGetOrSession("filterAdm", 0);
+$filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -84,6 +84,8 @@ if ($can->edit) {
     default :
       $whereFilter = "1 = 1";
   }
+  
+  mbTrace($whereFilter);
   
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
