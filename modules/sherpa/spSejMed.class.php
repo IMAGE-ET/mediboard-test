@@ -187,8 +187,8 @@ class CSpSejMed extends CSpObject {
     } 
     else {
       if ($sejour->type == "comp") $sercod = "2";
-      $duree_time = mbTimeRelative($sejour->entree_prevue, $sejour->sortie_prevue);
-      if ($duree_time  <= "48:00:00") $sercod = "A";
+      $duree_time = mbHoursRelative($sejour->entree_prevue, $sejour->sortie_prevue);
+      if ($duree_time  <= 48) $sercod = "A";
       
       if (!$sejour->chambre_seule) {
         $sercod .= 2;
@@ -209,7 +209,7 @@ class CSpSejMed extends CSpObject {
     }
 
     $this->sercod = $sercod;
-    
+        
     // Codes du lit 
     $sejour->loadRefsAffectations();
     $affectation = $sejour->_ref_first_affectation;
