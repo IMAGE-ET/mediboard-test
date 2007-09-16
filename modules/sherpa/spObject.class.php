@@ -141,7 +141,7 @@ class CSpObject extends CMbObject {
    * @return string
    */
   function makePhone($tel) {
-    return preg_replace("/(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)/", "$1.$2.$2.$4.$5", $tel);
+    return preg_replace("/(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)/", "$1.$2.$3.$4.$5", $tel);
   }
 
   /**
