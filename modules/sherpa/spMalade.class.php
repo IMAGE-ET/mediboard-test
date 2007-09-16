@@ -190,9 +190,9 @@ class CSpMalade extends CSpObject {
     $this->parent = $patient->rang_beneficiaire;
     
     $parts = split("\r\n", $patient->adresse);
-    $this->malru1 = @$parts[0];
-    $this->malru2 = @$parts[1];
-    $this->malcom = @$parts[2];
+    $this->malru1 = $this->makeString(@$parts[0], 25);
+    $this->malru2 = $this->makeString(@$parts[1], 25);
+    $this->malcom = $this->makeString(@$parts[2], 25);
     
     $this->malpos = $patient->cp;
     $this->malvil = $this->makeString($patient->ville, 25);
@@ -218,9 +218,9 @@ class CSpMalade extends CSpObject {
     $this->asspat = $this->makeString($patient->assure_nom_jeune_fille, 30);
 
     $parts = split("\r\n", $patient->assure_adresse);
-    $this->assru1 = @$parts[0];
-    $this->assru2 = @$parts[1];
-    $this->asscom = @$parts[2];
+    $this->assru1 = $this->makeString(@$parts[0], 25);
+    $this->assru2 = $this->makeString(@$parts[1], 25);
+    $this->asscom = $this->makeString(@$parts[2], 25);
     $this->asspos = $patient->assure_cp;
     $this->assvil = $this->makeString($patient->assure_ville, 25);
     

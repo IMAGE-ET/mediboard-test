@@ -132,7 +132,7 @@ class CSpObject extends CMbObject {
    * @return string
    */
   function makeString($string, $length) {
-    return strtoupper(substr($string, 0, $length));
+    return $string ? strtoupper(substr($string, 0, $length)) : "";
   }
 
   /**
