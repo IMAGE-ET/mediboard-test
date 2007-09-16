@@ -14,6 +14,6 @@ $module->registerTab("view_malades", null, TAB_READ);
 $module->registerTab("view_dossiers", null, TAB_READ);
 $module->registerTab("view_sejours", null, TAB_READ);
 $module->registerTab("view_droits", null, TAB_READ);
-$module->registerTab("view_idsherpa", null, TAB_ADMIN);
+$module->registerTab("view_idsherpa", null, TAB_EDIT);
 
 ?>
