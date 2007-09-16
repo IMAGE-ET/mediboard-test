@@ -10,6 +10,11 @@
   <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_adm->_ref_patient->patient_id}}">
     <img src="images/icons/edit.png" alt="modifier" />
   </a>
+  {{if $canPlanningOp->read}}
+  <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_adm->_id}}">
+    <img src="images/icons/planning.png" alt="modifier" />
+  </a>
+  {{/if}}
   <a name="adm{{$curr_adm->sejour_id}}" href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
   {{if $curr_adm->_num_dossier}}[{{$curr_adm->_num_dossier}}]{{/if}} {{$curr_adm->_ref_patient->_view}}
   </a>

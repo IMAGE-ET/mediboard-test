@@ -85,16 +85,17 @@ $smarty = new CSmartyDP();
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
 
-$smarty->assign("date_min", $date_min);
-$smarty->assign("date_max", $date_max);
-$smarty->assign("date_demain", $date_demain);
+$smarty->assign("date_min"     , $date_min);
+$smarty->assign("date_max"     , $date_max);
+$smarty->assign("date_demain"  , $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
-$smarty->assign("date"        , $date        );
-$smarty->assign("selAdmis"    , $selAdmis    );
-$smarty->assign("selSaisis"   , $selSaisis   );
-$smarty->assign("selTri"      , $selTri      );
-$smarty->assign("today"       , $today       );
-$smarty->assign("prestations" , $prestations );
+$smarty->assign("date"         , $date        );
+$smarty->assign("selAdmis"     , $selAdmis    );
+$smarty->assign("selSaisis"    , $selSaisis   );
+$smarty->assign("selTri"       , $selTri      );
+$smarty->assign("today"        , $today       );
+$smarty->assign("prestations"  , $prestations );
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->display("inc_vw_admissions.tpl");
 
 ?>
