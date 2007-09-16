@@ -169,8 +169,10 @@ function prepareForm(oForm) {
   oForm.locked = (oForm._locked && oForm._locked.value) == "1"; 
 
   // Build label targets
-  aLabels = oForm.getElementsByTagName("label");
-  iLabel = 0;
+  var aLabels = oForm.getElementsByTagName("label");
+  var iLabel = 0;
+  var oLabel = null;
+  var sFor = null;
   while (oLabel = aLabels[iLabel++]) {
     // oLabel.getAttribute("for") is not accessible in IE
     if (sFor = oLabel.htmlFor) { 
@@ -182,6 +184,9 @@ function prepareForm(oForm) {
 
   // For each element
   var iElement = 0;
+  var oElement = null;
+  var sPropSpec = null;
+  var aSpecFragments = null;
   while (oElement = oForm.elements[iElement++]) {
   	// Locked object
   	if (oForm.locked) {
@@ -225,6 +230,7 @@ function prepareForm(oForm) {
 function prepareForms() {
   // For each form
   var iForm = 0;
+  var oForm = null;
   while (oForm = document.forms[iForm++]) {
     prepareForm(oForm);
   }
@@ -239,8 +245,9 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
     }  
   }
   
-  url = new Url;
+  var url = new Url;
   var iElement = 0;
+  var oElement = null;
   while (oElement = oForm.elements[iElement++]) {
     if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
       url.addParam(oElement.name, oElement.value);
@@ -265,8 +272,9 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
     }  
   }
   
-  url = new Url;
+  var url = new Url;
   var iElement = 0;
+  var oElement = null;
   while (oElement = oForm.elements[iElement++]) {
     if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
       url.addParam(oElement.name, oElement.value);
