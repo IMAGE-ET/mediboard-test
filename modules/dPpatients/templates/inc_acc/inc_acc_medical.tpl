@@ -109,20 +109,16 @@ var Medecin = {
   <tr>
     <th>{{mb_label object=$patient field="incapable_majeur"}}</th>
     <td>{{mb_field object=$patient field="incapable_majeur" tabindex="204"}}</td>
-    <th>{{mb_label object=$patient field="matricule"}}</th>
-    <td colspan="2">{{mb_field object=$patient field="matricule" tabindex="255" size="17" maxlength="15"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
-    <td>{{mb_field object=$patient field="ATNC" tabindex="206"}}</td>
-    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
-    <td colspan="2">{{mb_field object=$patient field="rang_beneficiaire" tabindex="256"}}</td>
+    <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
 
 <!-- 
     <th>{{mb_label object=$patient field="SHS"}}</th>
     <td colspan="2">
-      {{mb_field object=$patient field="SHS" tabindex="256" size="8" maxlength="8" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom);"}}
+      {{mb_field object=$patient field="SHS" tabindex="256" size="8" maxlength="8";"}}
     </td>
  -->
    </tr>

@@ -86,13 +86,19 @@
       {{mb_field object=$patient field="nationalite" tabindex="110"}}
     </td>
     <th>{{mb_label object=$patient field="profession"}}</th>
-    <td>{{mb_field object=$patient field="profession" tabindex="165" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+    <td>{{mb_field object=$patient field="profession" tabindex="165"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="rques"}}</th>
-    <td>{{mb_field object=$patient field="rques" tabindex="111"}}</td>
-    <td colspan="2"></td>
+    <th rowspan="2">{{mb_label object=$patient field="rques"}}</th>
+    <td rowspan="2">{{mb_field object=$patient field="rques" tabindex="111"}}</td>
+    <th>{{mb_label object=$patient field="matricule"}}</th>
+    <td>{{mb_field object=$patient field="matricule" tabindex="166" size="17" maxlength="15"}}</td>
   </tr>
 
+  <tr>
+    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
+    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="177" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+  </tr>
+  
 </table>

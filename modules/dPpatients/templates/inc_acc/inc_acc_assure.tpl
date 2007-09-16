@@ -90,7 +90,7 @@
 	</tr>
 	<tr>
     <th>{{mb_label object=$patient field="assure_matricule"}}</th>
-    <td>{{mb_field object=$patient field="assure_matricule" tabindex="466" size="17" maxlength="15"}}</td>
+    <td>{{mb_field object=$patient field="assure_matricule" tabindex="466" onblur="oAccord.changeTabAndFocus(0, this.form.nom)"}}</td>
   </tr>
 
 </table>
