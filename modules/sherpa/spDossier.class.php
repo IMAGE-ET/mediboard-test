@@ -73,11 +73,6 @@ class CSpDossier extends CSpObject {
     if ($sejour->annule) $this->anndos = "SH";
     if (!$sejour->facturable) $this->anndos = "NF";
       
-    mbExport($sejour->facturable, "Facturable");
-    mbExport($sejour->annule, "Annulé");
-    mbExport($this->getProps());
-    die;  
-      
     $this->malnum = $idMalde->id400;
     $this->datmaj = mbDateToLocale(mbDateTime());
   }
