@@ -33,7 +33,7 @@ class CStrSpec extends CMbFieldSpec {
         return "Erreur système";
       } 
       if (strlen($propValue) != $length) {
-        return "N'a pas la bonne longueur (longueur souhaitée : $length)'";
+        return "N'a pas la bonne longueur '$propValue' (longueur souhaitée : $length)'";
       }
     }
     
@@ -44,7 +44,7 @@ class CStrSpec extends CMbFieldSpec {
         return "Erreur système";
       }     
       if (strlen($propValue) < $length) {
-        return "N'a pas la bonne longueur (longueur minimale souhaitée : $length)'";
+        return "N'a pas la bonne longueur '$propValue' (longueur minimale souhaitée : $length)'";
       }
     }
     
@@ -55,7 +55,7 @@ class CStrSpec extends CMbFieldSpec {
         return "Erreur système";
       }
       if (strlen($propValue) > $length) {
-        return "N'a pas la bonne longueur (longueur maximale souhaitée : $length)'";
+        return "N'a pas la bonne longueur '$propValue' (longueur maximale souhaitée : $length)'";
       }
     }
     

@@ -197,7 +197,7 @@ class CSpObjectHandler extends CMbObjectHandler {
         
 	      // Propagated object
 	      if ($msg = $spInstance->store()) {
-	        trigger_error("Error propagating object '$spInstance->_view' : $msg", E_USER_WARNING);
+	        trigger_error("Error propagating object '$spInstance->_class_name ($spInstance->_id)' : $msg", E_USER_WARNING);
 	        continue;
 	      }	      
       }

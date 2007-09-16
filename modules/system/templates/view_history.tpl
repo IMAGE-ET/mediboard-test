@@ -53,7 +53,9 @@
     </td>
   </tr>
   <tr>
-    <td class="button" colspan="5"><button>Go</button></td>
+    <td class="button" colspan="5">
+      <button class="search">{{tr}}Search{{/tr}}</button>
+    </td>
   </tr>
 </table>
 </form>
