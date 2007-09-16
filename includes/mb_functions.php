@@ -336,6 +336,16 @@ function mbTimeRelative($from, $to) {
   return "$hours:".str_pad($mins, 2, "0").":".str_pad($secs, 2, "0");
 }
 
+function mbHoursRelative($from, $to) {
+  if (!$from || !$to) {
+    return null;
+  }
+  $from = intval(strtotime($from) / 3600);
+  $to   = intval(strtotime($to  ) / 3600);
+  $hours = intval($to - $from);
+  return $hours;
+}
+
 /**
  * Return the std variance of an array
  * @return float: ecart-type
