@@ -170,6 +170,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "tag_dossier"         => ""
 
 );
+$dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
 $dPconfig["dPcabinet"]["CPlageconsult"] = array (

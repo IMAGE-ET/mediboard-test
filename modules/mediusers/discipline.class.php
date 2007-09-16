@@ -150,6 +150,11 @@ class CDiscipline extends CMbObject {
   }
   
   function isCompat($patho1, $patho2, $septique1, $septique2) {
+    
+    if(!$patho1 || !$patho2) {
+      return true;
+    }
+    
     assert($septique1 !== null);
     assert($septique2 !== null);
 
