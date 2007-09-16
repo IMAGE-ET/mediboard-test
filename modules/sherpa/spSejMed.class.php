@@ -36,7 +36,7 @@ class CSpSejMed extends CSpObject {
     $specs["numdos"] = "numchar length|6" ; /* Numero de dossier           */
     $specs["malnum"] = "numchar length|6" ; /* Numero de malade            */
     $specs["datent"] = "str length|19"; /* Date et heure d'entree      */
-    $specs["litcod"] = "str length|4" ; /* Lit                         */
+    $specs["litcod"] = "str maxLength|4" ; /* Lit                         */
     $specs["sercod"] = "str length|2" ; /* Service                     */
     $specs["pracod"] = "str length|3" ; /* Code interne du praticien   */
     $specs["datsor"] = "str length|19"; /* Date et heure de sortie     */
