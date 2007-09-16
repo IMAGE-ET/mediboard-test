@@ -63,6 +63,11 @@ $dPconfig = $mbConfig->values;
     <td><input type="text" size="40" name="site_domain" value="<?php echo $dPconfig['site_domain'] ?>" /></td>
   </tr>
 
+  <tr>
+    <th><label for="offline" title="Nom de domaine de premier du système">Mode maintenance :</label></th>
+    <td><input type="text" size="40" name="offline" value="<?php echo $dPconfig['offline'] ?>" /></td>
+  </tr>
+
 </table>
 
 <table class="form">

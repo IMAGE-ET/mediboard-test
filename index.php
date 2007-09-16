@@ -22,6 +22,11 @@ require_once("./includes/config.php");
 require_once("./includes/version.php");
 require_once("./classes/sharedmemory.class.php");
 
+if($dPconfig["offline"]) {
+  header("location: offline.php");
+  die("Le système est actuellement en cours de maintenance");
+}
+
 // Check that the user has correctly set the root directory
 is_file($dPconfig["root_dir"]."/includes/config.php") 
   or die("ERREUR FATALE: le repertoire racine est probablement mal configuré");
