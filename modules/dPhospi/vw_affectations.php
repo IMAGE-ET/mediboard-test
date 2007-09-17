@@ -21,7 +21,7 @@ $heureLimit = "16:00:00";
 $date      = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode      = mbGetValueFromGetOrSession("mode", 0); 
 $filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
-$triAdm    = mbGetValueFromGetOrSession("triAdm", "aucun");
+$triAdm    = mbGetValueFromGetOrSession("triAdm", "praticien");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -78,11 +78,9 @@ if ($can->edit) {
     case "date_entree" :
       $orderTri = "entree_prevue ASC";
       break;
-    case "praticien" :
-      $orderTri = "praticien_id";
-      break;
-    default :
+    case "praticien" :  
       $orderTri = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+      break;
   }
 
 	
