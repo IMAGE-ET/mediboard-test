@@ -139,7 +139,7 @@ class CIngresDataSource extends CSQLDataSource {
   }
 
   function escape($value) {
-    return str_replace("'", "\\'", $value);
+    return str_replace("'", " ", $value);
   }
 
   function version() {
