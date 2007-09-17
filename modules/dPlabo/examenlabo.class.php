@@ -101,7 +101,7 @@ class CExamenLabo extends CMbObject {
       "execution_ven"        => "bool",
       "execution_sam"        => "bool",
       "execution_dim"        => "bool",
-      "duree_execution"      => "num pos",
+      "duree_execution"      => "num",
       "remarques"            => "text",
     );
   }

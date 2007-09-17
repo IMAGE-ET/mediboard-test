@@ -168,6 +168,13 @@ foreach ($mbPrescription->_ref_examens as $curr_analyse) {
   $code = $doc->addElement($analyse,"code", $curr_analyse->identifiant);
 }
 
+
+// Prescription -> Prescripteur
+$prescripteur = $doc->addElement($prescription, "Prescripteur");
+$code9 = $doc->addElement($prescripteur, "Code9", $idSantePratCode9->id400);
+$code4 = $doc->addElement($prescripteur, "Code4", $idSantePratCode4->id400);
+
+
 // Sauvegarde du fichier temporaire
 $tmpPath = "tmp/dPlabo/export_prescription.xml";
 CMbPath::forceDir(dirname($tmpPath));

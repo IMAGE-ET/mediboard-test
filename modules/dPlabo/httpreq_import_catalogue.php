@@ -124,6 +124,8 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse->decodeUtfStrings();
     $analyse->technique = (string) $_analyse->technique;
     
+    $analyse->duree_execution = (string) $_analyse->delaitechnique;
+    
     $materiel = utf8_decode((string) $_analyse->materiel);
     $materiel = trim($materiel);
     

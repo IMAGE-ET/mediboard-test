@@ -49,6 +49,14 @@
 						</xs:sequence>
 					</xs:complexType>
 				</xs:element>
+				<xs:element name="Prescripteur">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="Code9" type="typeCode9" />
+							<xs:element name="Code4" type="typeCode4" />
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
 			</xs:sequence>
 		</xs:complexType>
 	</xs:element>
@@ -86,6 +94,18 @@
 		<xs:restriction base="xs:string">
 			<xs:enumeration value="0"></xs:enumeration>
 			<xs:enumeration value="1"></xs:enumeration>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="typeCode4">
+		<xs:restriction base="xs:string">
+			<xs:length value="4"></xs:length>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:simpleType name="typeCode9">
+		<xs:restriction base="xs:string">
+			<xs:length value="9"></xs:length>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>
