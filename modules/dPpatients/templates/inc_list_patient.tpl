@@ -63,7 +63,7 @@ Intermax.createResultMessages = function(oContent) {
     </th>
     <td colspan="2">
          {{html_select_date
-           time=$datePat
+           time=0000-00-00
            start_year=1900
            field_order=DMY
            day_empty="Jour"
