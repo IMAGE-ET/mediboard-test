@@ -13,7 +13,7 @@ $can->needsRead();
 
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
 $patient_id   = mbGetValueFromGet("patient_id");
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$praticien_id = mbGetValueFromGet("praticien_id");
 
 // Liste des Etablissements selon Permissions
 $etablissements = new CMediusers();
