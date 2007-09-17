@@ -20,6 +20,9 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
 
+$date_min = mbDateTime("00:00:00", $date);
+$date_max = mbDateTime("23:59:00", $date);
+
 
 $date_sortie = mbDateTime();
 
@@ -82,6 +85,10 @@ foreach($listSejourAmbu as $key=>$sejourAmbu){
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("date_min", $date_min);
+$smarty->assign("date_max", $date_max);
+
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"     , $date );

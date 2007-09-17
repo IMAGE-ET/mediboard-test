@@ -23,7 +23,12 @@
         Annuler la sortie
       </button>
       <br />
-      {{$curr_sortie->_ref_sejour->sortie_reelle|date_format:"%H h %M"}} / 
+    {{if ($curr_sortie->_ref_sejour->sortie_reelle < $date_min) || ($curr_sortie->_ref_sejour->sortie_reelle > $date_max)}}
+      {{$curr_sortie->_ref_sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+    {{else}}
+      {{$curr_sortie->_ref_sejour->sortie_reelle|date_format:"%H h %M"}}
+    {{/if}}
+      / 
       {{tr}}CAffectation._mode_sortie.{{$curr_sortie->_ref_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="effectue" value="1" />
@@ -69,8 +74,14 @@
         Annuler la sortie
       </button>
       <br />
-      {{$curr_sejour->sortie_reelle|date_format:"%H h %M"}} / 
-      {{tr}}CSejour.mode_sortie.{{$curr_sejour->mode_sortie}}{{/tr}} 
+      
+    {{if ($curr_sejour->sortie_reelle < $date_min) || ($curr_sejour->sortie_reelle > $date_max)}}
+      {{$curr_sejour->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+    {{else}}
+      {{$curr_sejour->sortie_reelle|date_format:"%H h %M"}} 
+    {{/if}}
+    / 
+    {{tr}}CSejour.mode_sortie.{{$curr_sejour->mode_sortie}}{{/tr}} 
       {{else}}
       <input type="hidden" name="sortie_reelle" value="{{$date_sortie}}" />
      <button class="tick" type="button" onclick="{{if (($date_actuelle > $curr_sejour->sortie_prevue) || ($date_demain < $curr_sejour->sortie_prevue))}}confirmationAmbu(this.form);{{else}}submitAmbu(this.form);{{/if}}">
