@@ -42,7 +42,7 @@ function printAdmission(id) {
 		<tr>
 		  <th>Heure</th>
 		  <th>Type</th>
-          <th>Durée</th>
+          <th>Dur.</th>
           <th>Conv.</th>
           <th>Chambre</th>
           <th>Remarques</th>
@@ -58,7 +58,13 @@ function printAdmission(id) {
         {{foreach from=$curr_prat.sejours item=curr_sejour}}
         <tr>
           <td>{{$curr_sejour->entree_prevue|date_format:"%Hh%M"}}</td>
-          <td>{{$curr_sejour->type|truncate:1:""|capitalize}}</td>
+          <td>
+            {{if !$curr_sejour->facturable}}
+            <strong>NF</strong>
+            {{/if}}
+            
+            {{$curr_sejour->type|truncate:1:""|capitalize}}
+          </td>
           <td>{{$curr_sejour->_duree_prevue}} j</td>
           <td class="text">{{$curr_sejour->convalescence|nl2br}}</td>
           <td class="text">
@@ -111,12 +117,12 @@ function printAdmission(id) {
             {{/foreach}}
           </td>
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
+            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
               {{$curr_sejour->_ref_patient->_view}}
             </a>
           </td>
           <td>
-            <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
+            <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
               {{$curr_sejour->_ref_patient->_naissance}} ({{$curr_sejour->_ref_patient->_age}})
             </a>
           </td>

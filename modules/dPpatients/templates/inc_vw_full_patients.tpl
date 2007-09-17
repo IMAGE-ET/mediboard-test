@@ -84,10 +84,10 @@ function popEtatSejour(sejour_id) {
 {{foreach from=$patient->_ref_sejours item=curr_sejour}}
 <tr id="CSejour-{{$curr_sejour->_id}}">
   <td>
-  	<a href="#" onclick="popEtatSejour({{$curr_sejour->sejour_id}});">
+  	<a href="#" onclick="popEtatSejour({{$curr_sejour->_id}});">
     	<img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
     </a>
-    <a title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+    <a title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
 
@@ -109,7 +109,7 @@ function popEtatSejour(sejour_id) {
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 
       keywords: '', 
-      id: {{$curr_sejour->sejour_id|smarty:nodefaults|JSAttribute}}, 
+      id: {{$curr_sejour->_id|smarty:nodefaults|JSAttribute}}, 
       view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
       title="{{$curr_sejour->_nb_files_docs}} doc(s)">
       {{$curr_sejour->_nb_files_docs}}
