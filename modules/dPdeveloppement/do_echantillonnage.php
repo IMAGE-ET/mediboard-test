@@ -181,6 +181,10 @@ foreach($aCabinet as $title => $value){
           $nom    = $praticiens->listStaticProps["_user_last_name"];
           $praticiens->setField("_user_username", str_replace(" ","",strtolower(substr($prenom,0,1).$nom)));
           $praticiens->setField("_user_password", strtolower($prenom));
+          $praticiens->setField("_compte_banque", "00000");
+          $praticiens->setField("_compte_guichet", "00000");
+          $praticiens->setField("_compte_numero", "00000000000");
+          $praticiens->setField("_compte_cle", "97");
           $praticiens->store();
           
           $user = new CUser;
@@ -276,9 +280,12 @@ for($i=1; $i<=$_nb_pat; $i++){
                       "_jour"  => rand(1,28),
                       "_mois"  => rand(1,12),
                       "_annee" => rand(1900,$annee_max),
+                      "assure_cp" => rand(1000,99999),
+                      "cp" => rand(10000,95000),
                       "rques"  => "[DEMO]");
+  // @TODO : "assure_cp" a enlever lorsque sample sera corrigé pour numSpec
   $patients->setManyFields($tabFields);
-  $patients->store();
+  echo($patients->store());
 }
 
 /**********************************************************************************/

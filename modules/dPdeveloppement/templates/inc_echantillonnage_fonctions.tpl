@@ -25,7 +25,8 @@ function extractSelectedMultiple(url, sField){
 function goto_etape2(){
   var oForm = document.echantillonage;
   var validation = false;
-  if(oForm._create_group[0].checked){
+  
+  if(!oForm._create_group.length || (oForm._create_group.length && oForm._create_group[0].checked)){
     if(oForm.etablissement.value == ""){
       alert("Veuillez saisir un nom pour l'etablissement");
     }else{
@@ -37,7 +38,7 @@ function goto_etape2(){
   if(validation){   
     var url = new Url;
     url.setModuleAction("{{$m}}", "httpreq_echantillonnage_etape2");
-    if(oForm._create_group[1].checked){
+    if(oForm._create_group.length && oForm._create_group[1].checked){
       url.addParam("group_id", oForm.groups_selected.value);
     }
     url.requestUpdate('Etape2Content');
@@ -52,7 +53,7 @@ function goto_etape3(){
   var validation3 = false;
   var sAlert = "";
   if(oForm._nb_cab.value>=1 || oForm._nb_anesth.value>=1){ validation1 = true; }
-  if(oForm._create_group[1].checked && oForm.elements["fct_selected[]"].selectedIndex==-1){
+  if(oForm._create_group.length && oForm._create_group[1].checked && oForm.elements["fct_selected[]"].selectedIndex==-1){
     if(!validation1){
       sAlert += "Vous devez créer des fonctions ou en selectionner.\n";
     }
@@ -87,7 +88,7 @@ function goto_etape3(){
     url.setModuleAction("{{$m}}", "httpreq_echantillonnage_etape3");
     url.addParam("_nb_cab", oForm._nb_cab.value);
     url.addParam("_nb_anesth", oForm._nb_anesth.value);
-    if(oForm._create_group[1].checked){
+    if(oForm._create_group.length && oForm._create_group[1].checked){
       url = extractSelectedMultiple(url, "fct_selected[]");
     }
     url.requestUpdate('Etape3Content', {method : "get"});
