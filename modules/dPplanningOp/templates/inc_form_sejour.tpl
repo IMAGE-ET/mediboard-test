@@ -227,7 +227,7 @@ function checkChambre(){
 <tr>
   <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
   <td class="date" colspan="3">
-    {{if $can->admin}}
+    {{if $can->view}}
     {{mb_field object=$sejour field=sortie_reelle form=editSejour}}
     {{else}}
 		{{mb_value object=$sejour field=sortie_reelle}}
