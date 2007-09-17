@@ -21,6 +21,7 @@ $heureLimit = "16:00:00";
 $date      = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode      = mbGetValueFromGetOrSession("mode", 0); 
 $filterAdm = mbGetValueFromGetOrSession("filterAdm", "tout");
+$triAdm    = mbGetValueFromGetOrSession("triAdm", "aucun");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
@@ -71,6 +72,20 @@ $alerte = $ds->loadResult($sql->getRequest());
 $groupSejourNonAffectes = array();
 
 if ($can->edit) {
+
+		
+  switch ($triAdm) {
+    case "date_entree" :
+      $orderTri = "entree_prevue ASC";
+      break;
+    case "praticien" :
+      $orderTri = "praticien_id";
+      break;
+    default :
+      $orderTri = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+  }
+
+	
   switch ($filterAdm) {
     case "ambu" :
       $whereFilter = "type = 'ambu'";
@@ -93,8 +108,9 @@ if ($can->edit) {
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
-
-  $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where);
+  $order = $orderTri;
+  
+  $groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
   
   // Admissions du matin
   $where = array(
@@ -103,8 +119,9 @@ if ($can->edit) {
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
+  $order = $orderTri;
   
-  $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where);
+  $groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
   
   // Admissions du soir
   $where = array(
@@ -113,8 +130,9 @@ if ($can->edit) {
     "annule" => "= '0'"
   );
   $where[] = $whereFilter;
+  $order = $orderTri;
   
-  $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where);
+  $groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
   
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
@@ -123,8 +141,9 @@ if ($can->edit) {
     "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
   );
   $where[] = $whereFilter;
+  $order = $orderTri;
   
-  $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where);
+  $groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
 }
 
 $affectation = new CAffectation();
@@ -142,6 +161,7 @@ $smarty->assign("demain"                , mbDate("+ 1 day", $date));
 $smarty->assign("heureLimit"            , $heureLimit);
 $smarty->assign("mode"                  , $mode);
 $smarty->assign("filterAdm"             , $filterAdm);
+$smarty->assign("triAdm"                , $triAdm);
 $smarty->assign("totalLits"             , $totalLits);
 $smarty->assign("services"              , $services);
 $smarty->assign("alerte"                , $alerte);

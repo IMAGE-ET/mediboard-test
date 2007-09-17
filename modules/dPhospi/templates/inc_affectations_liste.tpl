@@ -28,7 +28,7 @@
         <td class="patient" onclick="flipSejour({{$curr_sejour->_id}})">
           <strong><a name="sejour{{$curr_sejour->_id}}">{{$curr_sejour->_ref_patient->_view}}</a></strong>
           {{if $curr_sejour->type != "ambu" && $curr_sejour->type != "exte"}}
-          ({{$curr_sejour->_duree_prevue}}j)
+          ({{$curr_sejour->_duree_prevue}}j - {{$curr_sejour->_ref_praticien->_shortview}})
           {{else}}
           ({{$curr_sejour->type|truncate:1:""|capitalize}})
           {{/if}}
@@ -36,7 +36,7 @@
           <div style="float: right;"><strong>CMU</strong></div>
           {{/if}}
         </td>
-      </tr>      
+      </tr> 
       <tr>
         <td class="date" colspan="2"><em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %H:%M"}}</td>
       </tr>

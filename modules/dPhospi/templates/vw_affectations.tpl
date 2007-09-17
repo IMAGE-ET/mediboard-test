@@ -285,6 +285,19 @@ function pageMain() {
             </form>
           </td>
         </tr>
+        <tr>
+          <td class="button">
+            <form name="chgFilter_" action="?m={{$m}}" method="get">
+              <input type="hidden" name="m" value="{{$m}}" />
+              <label for="triAdm" title="Admissions à afficher">Trier par</label>
+              <select name="triAdm" onchange="submit()">
+                <option value="aucun" {{if $triAdm == 0}}selected="selected"{{/if}}>&mdash; Choix d'un tri</option>
+                <option value="praticien" {{if $triAdm == "praticien"}}selected="selected"{{/if}}>Praticien</option>
+                <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Date d'entrée</option>
+              </select>
+            </form>
+          </td>
+        </tr>
       </table>
       
       <form name="addAffectationsejour" action="?m={{$m}}" method="post">

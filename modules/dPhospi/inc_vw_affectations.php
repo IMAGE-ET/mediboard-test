@@ -128,7 +128,7 @@ function loadServiceComplet(&$service, $date, $mode) {
 /**
  *  Chargement des admissions à affecter
  */
-function loadSejourNonAffectes($where) {
+function loadSejourNonAffectes($where, $order = null) {
   global $g;
   
   $leftjoin = array(
@@ -138,8 +138,11 @@ function loadSejourNonAffectes($where) {
   );
   $where["sejour.group_id"] = "= '$g'";
   $where[] = "affectation.affectation_id IS NULL";
-  $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
   
+  if($order == null){
+    $order = "users_mediboard.function_id, sejour.entree_prevue, patients.nom, patients.prenom";
+  }
+
   $sejourNonAffectes = new CSejour;
   $sejourNonAffectes = $sejourNonAffectes->loadList($where, $order, null, null, $leftjoin);
 
