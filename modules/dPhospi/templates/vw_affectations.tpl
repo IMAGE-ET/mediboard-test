@@ -292,7 +292,7 @@ function pageMain() {
               <label for="triAdm" title="Admissions à afficher">Trier par</label>
               <select name="triAdm" onchange="submit()">
                 <option value="praticien" {{if $triAdm == "praticien"}}selected="selected"{{/if}}>Praticien</option>
-                <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Date d'entrée</option>
+                <option value="date_entree" {{if $triAdm == "date_entree"}}selected="selected"{{/if}}>Heure d'entrée</option>
               </select>
             </form>
           </td>
