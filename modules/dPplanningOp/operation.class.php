@@ -121,7 +121,7 @@ class COperation extends CCodableCCAM {
     $specs["code_uf"]        = "str length|3";
     $specs["libelle_uf"]     = "str maxLength|35";
     $specs["libelle"]        = "str confidential";
-    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total";
+    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total|inconnu";
     $specs["temp_operation"] = "time";
     $specs["entree_salle"]   = "time";
     $specs["sortie_salle"]   = "time";
