@@ -1,5 +1,4 @@
 <?php
-$locales['config-dPplanningOp-tel_anesth'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';

@@ -274,21 +274,6 @@
       <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
-
-  <tr>
-    <th class="category" colspan="6">Numéro de téléphone des anesthésistes</th>
-  </tr>
-  
-  <tr>
-    <th colspan="3">
-      <label for="{{$m}}[tel_anesth]" title="{{tr}}config-{{$m}}-tel_anesth{{/tr}}">
-        {{tr}}config-{{$m}}-tel_anesth{{/tr}}
-      </label>  
-    </th>
-    <td colspan="3">
-      <input class="str" name="{{$m}}[tel_anesth]" value="{{$dPconfig.$m.tel_anesth}}" />
-    </td>
-  </tr>
   
   <tr>
     <td class="button" colspan="100">

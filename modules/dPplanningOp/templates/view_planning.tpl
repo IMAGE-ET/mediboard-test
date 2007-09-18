@@ -151,7 +151,15 @@
   <tr>
     <td class="text" colspan="2">
       Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
-      avant votre intervention. Pour cela, téléphonez au {{$dPconfig.$m.tel_anesth}}
+      avant votre intervention.
+     {{if $sejour->_ref_group->tel_anesth}}
+       Pour cela, téléphonez au
+       {{$sejour->_ref_group->_tel_anesth1}}
+       {{$sejour->_ref_group->_tel_anesth2}}
+       {{$sejour->_ref_group->_tel_anesth3}}
+       {{$sejour->_ref_group->_tel_anesth4}}
+       {{$sejour->_ref_group->_tel_anesth5}}
+     {{/if}}
     </td>
   <tr>
   

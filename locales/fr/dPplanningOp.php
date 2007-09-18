@@ -1,5 +1,4 @@
 <?php
-$locales['config-dPplanningOp-tel_anesth'] = 'Numéro de téléphone des anesthésistes';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';

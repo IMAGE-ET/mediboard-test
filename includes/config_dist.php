@@ -169,7 +169,6 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "locked"              => "0",
   "tag_dossier"         => ""
 );
-$dPconfig["dPplanningOp"]["tel_anesth"] = "-";
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
