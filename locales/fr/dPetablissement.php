@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';
 $locales['CGroups'] = 'Etablissements';
 $locales['CGroups-adresse'] = 'Adresse';
 $locales['CGroups-adresse-court'] = '';
@@ -44,9 +43,11 @@ $locales['CGroups-_fax1'] = 'Télécopie';
 $locales['CGroups-_fax1-desc'] = 'Numéro de fax';
 $locales['CGroups-_tel1'] = 'Téléphone';
 $locales['CGroups-_tel1-desc'] = 'Numéro de téléphone filaire';
+$locales['CGroups-_tel_anesth1'] = 'Anesthésiste';
 $locales['CGroups.create'] = '';
 $locales['CGroups.modify'] = '';
 $locales['CGroups.more'] = '';
 $locales['CGroups.none'] = '';
 $locales['CGroups.one'] = '';
+$locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';
 ?>

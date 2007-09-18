@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "core";
 
 class CSetupdPetablissement extends CSetup {
@@ -56,8 +56,14 @@ class CSetupdPetablissement extends CSetup {
             "\nADD `mail` varchar(50) DEFAULT NULL," .
             "\nADD `web` varchar(255) DEFAULT NULL;" ;
     $this->addQuery($sql);
+
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `groups_mediboard`  
+            ADD `tel_anesth` BIGINT(10) UNSIGNED ZEROFILL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
     
   } 
   

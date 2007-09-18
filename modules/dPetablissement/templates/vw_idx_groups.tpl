@@ -100,6 +100,16 @@ function pageMain() {
 		  </td>
         </tr>
         <tr>
+          <th>{{mb_label object=$usergroup field="_tel_anesth1" defaultFor="_tel_anesth1"}}</th>
+		    <td>
+		      {{mb_field object=$usergroup field="_tel_anesth1" tabindex="160" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel_anesth2', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel_anesth2" tabindex="161" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel_anesth3', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel_anesth3" tabindex="162" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel_anesth4', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel_anesth4" tabindex="163" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel_anesth5', 2)"}} -
+		      {{mb_field object=$usergroup field="_tel_anesth5" tabindex="164" size="2" maxlength="2" prop="num length|2"}}
+		    </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$usergroup field="mail"}}</th>
           <td>{{mb_field object=$usergroup field="mail"}}</td>
         </tr>
