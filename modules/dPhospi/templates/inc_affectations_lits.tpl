@@ -17,7 +17,6 @@
 {{assign var="aff_prev" value=$curr_affectation->_ref_prev}}
 {{assign var="aff_next" value=$curr_affectation->_ref_next}}
 
-<tbody class="hoverable">
 <tr class="patient">
  
   {{if $curr_affectation->confirme}}
@@ -225,7 +224,7 @@
     </form>
     
     <a style="float: right;">
-<img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
+      <img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
     </a>
     {{/if}}
 
@@ -244,7 +243,7 @@
     </form>
     
     <a>
-<img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de sortie" />
+      <img id="sortieAffectation{{$curr_affectation->affectation_id}}__trigger_sortie" src="images/icons/planning.png" alt="Planning" title="Modifier la date de sortie" />
     </a>
     {{/if}}
   </td>
@@ -378,5 +377,4 @@ Septique
   {{/if}}
   </td>
 </tr>
-</tbody>
 {{/foreach}}
