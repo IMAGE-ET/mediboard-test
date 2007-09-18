@@ -1,5 +1,5 @@
 <?php
-$locales['COperation.cote.inconnu'] = '';
+$locales['config-dPplanningOp-tel_anesth'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -208,6 +208,7 @@ $locales['COperation.cote.'] = ' ';
 $locales['COperation.cote.bilatéral'] = '';
 $locales['COperation.cote.droit'] = '';
 $locales['COperation.cote.gauche'] = '';
+$locales['COperation.cote.inconnu'] = '';
 $locales['COperation.cote.total'] = '';
 $locales['COperation.create'] = '';
 $locales['COperation.create_urgence'] = '';

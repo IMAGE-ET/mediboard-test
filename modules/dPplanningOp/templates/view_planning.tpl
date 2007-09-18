@@ -151,7 +151,7 @@
   <tr>
     <td class="text" colspan="2">
       Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
-      avant votre intervention. Pour cela, téléphonez au 05 46 00 77 08
+      avant votre intervention. Pour cela, téléphonez au {{$dPconfig.$m.tel_anesth}}
     </td>
   <tr>
   
