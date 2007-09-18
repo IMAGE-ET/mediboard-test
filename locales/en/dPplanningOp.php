@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-zt-desc'] = '';
+$locales['COperation.cote.inconnu'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -388,6 +388,7 @@ $locales['CSejour-venue_SHS'] = '';
 $locales['CSejour-venue_SHS-court'] = '';
 $locales['CSejour-venue_SHS-desc'] = '';
 $locales['CSejour-zt'] = '';
+$locales['CSejour-zt-desc'] = '';
 $locales['CSejour-_admission'] = '';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = '';

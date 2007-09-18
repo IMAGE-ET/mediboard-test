@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour-zt-desc'] = 'Placement de très courte durée';
+$locales['COperation.cote.inconnu'] = 'Inconnu';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -388,6 +388,7 @@ $locales['CSejour-venue_SHS'] = 'Code de venue SHS';
 $locales['CSejour-venue_SHS-court'] = '';
 $locales['CSejour-venue_SHS-desc'] = 'Code Administratif SHS';
 $locales['CSejour-zt'] = 'ZT';
+$locales['CSejour-zt-desc'] = 'Placement de très courte durée';
 $locales['CSejour-_admission'] = 'Classement des admissions';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = 'Classement des admissions';
