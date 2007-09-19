@@ -188,13 +188,12 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   }
 } 
 
+set_error_handler("errorHandler");
 
 // Initialize custom error handler
 if (!@filesize($logPath)) {
-  $initTime = date("Y-m-d H:i:s");
+  $initTime = mbDateTime();
   $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
   file_put_contents($logPath, $logInit);
 }
-
-set_error_handler("errorHandler");
 ?>
