@@ -26,19 +26,19 @@ function printAdmission(id) {
   {{foreach from=$plagesop item=curr_plageop}}
   <tr>
     <td class="text">
-	  <b>Dr. {{$curr_plageop->_ref_chir->_view}}</b> -
-	  <b>{{$curr_plageop->_ref_salle->nom}}</b>
+	  <strong>Dr. {{$curr_plageop->_ref_chir->_view}}</strong> -
+	  <strong>{{$curr_plageop->_ref_salle->nom}}</strong>
 	  de {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
     le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
-    {{if $curr_plageop->_ref_anesth->_view}}
-	    - Anesthesiste : <b>Dr. {{$curr_plageop->_ref_anesth->_view}}</b>
+    
+    {{if $curr_plageop->anesth_id}}
+	    - Anesthesiste : <strong>Dr. {{$curr_plageop->_ref_anesth->_view}}</strong>
 	  {{/if}}
+	  
     {{if $curr_plageop->_ref_personnel}}
       - Personnel : 
       {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
-      {{foreach from=$_personnel->_ref_user item=_user}}
-         {{$_user->_view}};
-      {{/foreach}}
+      {{$_personnel->_ref_user->_view}};
       {{/foreach}}
     {{/if}}
 	</td>
@@ -52,23 +52,32 @@ function printAdmission(id) {
     <td>
 	  <table class="tbl">
 	    <tr>
-		  <th colspan="7"><b>Intervention</b></th>
-		  <th colspan="4"><b>Patient</b></th>
+		  <th class="title" colspan="6">Intervention</th>
+		  <th class="title" colspan="3">Sejour</th>
+		  <th class="title" colspan="2">Patient</th>
 		</tr>
 		<tr>
+		  <!-- Intervention -->
 		  <th>Heure</th>
 		  <th>Intervention</th>
 		  <th>Coté</th>
       <th>Anesthésie</th>
-      <th>Hospi</th>
 		  <th>Remarques</th>
 		  <th>Matériel</th>
+
+		  <!-- Sejour -->
+      <th>Hospi</th>
+      <th>Entrée</th>
+		  <th>Chambre</th>
+
+		  <!-- Patient -->
 		  <th>Nom - Prénom</th>
 		  <th>Age</th>
-		  <th>Chambre</th>
 		</tr>
+
 		{{foreach from=$curr_plageop->_ref_operations item=curr_op}}
 		<tr>
+		  <!-- Intervention -->
 		  {{if $curr_op->annulee}}
 		  <td class="cancelled">ANNULEE</td>
 		  {{else}}
@@ -88,28 +97,50 @@ function printAdmission(id) {
         {{/foreach}}
       </td>
 		  <td>{{$curr_op->cote|truncate:1:""|capitalize}}</td>
-          <td>{{if $curr_op->type_anesth != null}}{{$curr_op->_lu_type_anesth}}{{else}}Non Disponible{{/if}}</td>
-          <td>{{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}}</td>
+      <td>
+        {{if $curr_op->type_anesth != null}}
+        {{$curr_op->_lu_type_anesth}}
+        {{else}}
+        Non Disponible
+        {{/if}}
+      </td>
 		  <td class="text">{{$curr_op->rques|nl2br}}</td>
 		  <td class="text">
-		    {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}<em>Materiel manquant:</em>{{/if}}
+		    {{if $curr_op->commande_mat == '0' && $curr_op->materiel != ''}}
+		    <em>Materiel manquant:</em>
+		    {{/if}}
 		    {{$curr_op->materiel|nl2br}}
 		  </td>
+      
+		  <!-- Sejour -->
+      {{assign var=sejour value=$curr_op->_ref_sejour}}
+      <td>
+        {{$sejour->type|truncate:1:""|capitalize}}
+        ({{$sejour->_duree_prevue}}j)
+      </td>
 		  <td>
-		    <a href="#" onclick="printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
-		      {{$curr_op->_ref_sejour->_ref_patient->_view}}
-		    </a>
-		  </td>
-		  <td>
-		    <a href="#" onclick="printAdmission({{$curr_op->_ref_sejour->sejour_id}})">
-		      {{$curr_op->_ref_sejour->_ref_patient->_age}} ans
-		    </a>
+		    {{mb_value object=$sejour field=_entree}}
 		  </td>
 		  <td class="text">
-        {{assign var="affectation" value=$curr_op->_ref_sejour->_ref_first_affectation}}
-		    {{if $affectation->affectation_id}}
+        {{assign var="affectation" value=$sejour->_ref_first_affectation}}
+		    {{if $affectation->_id}}
 		    {{$affectation->_ref_lit->_view}}
+		    {{else}}
+		    Non placé
 		    {{/if}}
+		  </td>
+
+		  <!-- Patient -->
+      {{assign var=patient value=$sejour->_ref_patient}}
+		  <td>
+		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
+		      {{$patient->_view}}
+		    </a>
+		  </td>
+		  <td>
+		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
+		      {{$patient->_age}} ans
+		    </a>
 		  </td>
 		</tr>
 		{{/foreach}}

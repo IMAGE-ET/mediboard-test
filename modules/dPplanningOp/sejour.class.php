@@ -60,6 +60,8 @@ class CSejour extends CCodableCCAM {
   var $facturable         = null; 
   
   // Form Fields
+  var $_entree             = null;
+  var $_sortie             = null;
   var $_duree_prevue       = null;
   var $_duree_reelle       = null;
   var $_date_entree_prevue = null;
@@ -148,6 +150,8 @@ class CSejour extends CCodableCCAM {
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
 
+    $specs["_entree"]             = "dateTime";
+    $specs["_sortie"] 		        = "dateTime";
     $specs["_date_min"] 		      = "dateTime";
     $specs["_date_max"] 		      = "dateTime moreEquals|_date_min";
     $specs["_admission"] 		      = "text";
@@ -222,20 +226,26 @@ class CSejour extends CCodableCCAM {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_entree = mbGetValue($this->entree_reelle, $this->entree_prevue);
+    $this->_sortie = mbGetValue($this->sortie_reelle, $this->sortie_prevue);
+    
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
+
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
     $this->_hour_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%H");
     $this->_hour_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%H");
     $this->_min_entree_prevue  = mbTranformTime(null, $this->entree_prevue, "%M");
     $this->_min_sortie_prevue  = mbTranformTime(null, $this->sortie_prevue, "%M");
+
     $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
     $this->_venue_SHS_guess .= 
       $this->type == "exte" ? "5" :
       $this->type == "ambu" ? "4" : "0";
     $this->_venue_SHS_guess .="xxxxx";
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
+
     $this->_view = "Séjour de ";
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";

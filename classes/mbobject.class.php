@@ -71,7 +71,8 @@ class CMbObject {
   var $_ref_notes      = array(); // Notes
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
-
+  var $_ref_personnel  = null; 
+  
   /**
    * Constructor
    */
@@ -511,9 +512,8 @@ class CMbObject {
    */
 
   function updateFormFields() {
-    $k                    = $this->_tbl_key;
-    $this->_view          = $this->_tbl . " #" . $this->$k;
-    $this->_shortview     = "#" . $this->$k;
+    $this->_view = "$this->_class_name#$this->_id";
+    $this->_shortview = "#$this->_id";
     $this->_view_template     = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
     $this->_complete_view_template = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_complete.tpl";
   }
@@ -1113,6 +1113,7 @@ class CMbObject {
       "documents"    => "CCompteRendu object_id",
       "permissions"  => "CPermObject object_id",
       "logs"         => "CUserLog object_id",
+      "personnel"    => "CAffectationPersonnel object_id",
     );
   }
   
@@ -1336,30 +1337,35 @@ class CMbObject {
     $this->_ref_last_log  = end($this->_ref_logs);
   }
 
-/**
- * This function register this object to a templateManager object
- */
-    // Register object and references
-    function fillTemplate(&$template){
+  function loadPersonnel() {
+    if (null == $this->_ref_personnel = $this->loadBackRefs("personnel")) {
+      return;
     }
-    
-    // Register only the fields of this object
-    function fillLimitedTemplate(&$template){
-    }
-    
-    /**
-     * Decode all string fields (str, text, html)
-     * @return void
-     */
-    function decodeUtfStrings() {
-      foreach($this->_specs as $name => $spec) {
-        if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
-          if (null !== $this->$name) {
-            $this->$name = utf8_decode($this->$name);
-          }
-        }
-      }
-    }
+  }
+
+	/**
+	 * This function register this object to a templateManager object
+	 */
+   function fillTemplate(&$template){
+   }
+   
+   // Register only the fields of this object
+   function fillLimitedTemplate(&$template){
+   }
+   
+   /**
+    * Decode all string fields (str, text, html)
+    * @return void
+    */
+   function decodeUtfStrings() {
+     foreach($this->_specs as $name => $spec) {
+       if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
+         if (null !== $this->$name) {
+           $this->$name = utf8_decode($this->$name);
+         }
+       }
+     }
+   }
 }
 
 function htmlReplace($find, $replace, &$source) {

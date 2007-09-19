@@ -15,7 +15,7 @@ class CSpObject extends CMbObject {
   public $_ref_id400 = null;
   
   function CSpObject($table, $key) {
-    foreach(array_keys($this->getSpecs()) as $prop) {
+    foreach (array_keys($this->getSpecs()) as $prop) {
       $this->$prop = null;
     }
         

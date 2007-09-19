@@ -87,6 +87,18 @@ class CMbArray {
   }
   
   /**
+   * Give a default value to key if key is not set
+   * @param array $array the arary to alter
+   * @param int|string $key The key to check
+   * @param mixed $value The default value if key is not set
+   */
+  function defaultValue(&$array, $key, $value) {
+    if (!array_key_exists($key, $array)) {
+      $array[$key] = $value;
+    }
+  }
+  
+  /**
    * Return a string of XML attributes based on given array key-value pairs 
    */
   function makeXmlAttributes(&$array) {

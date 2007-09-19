@@ -9,7 +9,6 @@
 	</th>
   </tr>
   
-  {{if $getInstalledPpers}}
   <tr>
     <th class="title">Ajout de personnes</th><th class="title">Personnes en salle</th>
   </tr>
@@ -28,7 +27,7 @@
             <input type="hidden" name="_type_repeat" value="1" />
           
             <select name="anesth_id">
-            <option value="" />&mdash; Anesthésistes &mdash;</option>
+            <option value="">&mdash; Anesthésistes &mdash;</option>
             {{foreach from=$listAnesth item=_anesth}}
             <option value="{{$_anesth->_id}}" {{if $plage->anesth_id == $_anesth->_id}} selected="selected" {{/if}}>{{$_anesth->_view}}</option>
             {{/foreach}}
@@ -38,6 +37,8 @@
             
           </td>
         </tr>
+
+			  {{if $plage->_ref_personnel !== null}}
         <tr>
           <td>
             <form name="editAffectation" action="index.php?m={{$m}}" method="post">
@@ -46,21 +47,22 @@
             
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
-		    <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
-		    <input type="hidden" name="realise" value="0" />
-		    
+            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="realise" value="0" />
 		    
             <select name="user_id">
-            <option value="" />&mdash; Personnel de bloc &mdash;</option>
-            {{foreach from=$listPers item=_personnelBloc}}
-            <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_view}}</option>
-            {{/foreach}}
+              <option value="">&mdash; Personnel de bloc &mdash;</option>
+              {{foreach from=$personnels item=_personnelBloc}}
+              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_view}}</option>
+              {{/foreach}}
             </select>
             
             <button class="submit" type="submit">Ajouter en salle</button>
             </form>
           </td>
         </tr>
+        {{/if}}
+        
       </table>   
     </td>
     
@@ -73,28 +75,31 @@
           {{else}}
             <td>Aucun anesthésiste</td>
           {{/if}}
-          
         </tr>
+        
+        {{if $plage->_ref_personnel !== null}}
         <tr>
           <th>Personnel : </th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
-            {{foreach from=$personnels key=key item=_personnel}}
-            <form name="editAffectation" action="index.php?m={{$m}}" method="post">
+            {{foreach from=$plage->_ref_personnel item=_affectation}}
+            <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPpersonnel" />
               <input type="hidden" name="dosql" value="do_affectation_aed" />
-              <input type="hidden" name="affect_id" value="{{$key}}" />
+              <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
               <input type="hidden" name="del" value="1" />
-              <button class='cancel' type='submit'>{{$_personnel->_view}}</button>
+              <button class='cancel' type='submit'>{{$_affectation->_ref_user->_view}}</button>
             </form>
             
             {{/foreach}}
           </td>
         </tr>
+        {{/if}}
+
       </table>
     </td> 
   </tr>
-  {{/if}}
+
   <tr>
     <td width="50%">
 	  <table class="tbl">

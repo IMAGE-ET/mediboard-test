@@ -9,8 +9,6 @@
 
 global $AppUI, $can, $m;
 
-$getInstalledPpers = CModule::getInstalled("dPpersonnel");
-
 $can->needsRead();
 
 if(!($plageop_id = mbGetValueFromGetOrSession("plageop_id"))) {
@@ -52,7 +50,6 @@ foreach($list2 as $key => $value) {
   $list2[$key]->_ref_sejour->loadRefsFwd();
 }
 
-
 // liste des plages du praticien
 $listPlages = new CPlageOp();
 $listSalle = array();
@@ -65,45 +62,32 @@ foreach($listPlages as $keyPlages=>$valPlages){
   $listPlages[$keyPlages]->loadRefSalle();
 }
 
+// liste des anesthesistes
+$mediuser = new CMediusers();
+$listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
 
-if($getInstalledPpers){
-  // liste des anesthesistes
-  $mediuser = new CMediusers();
-  $listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
+$plage->loadPersonnel();
+if (null !== $plage->_ref_personnel) {
 
   // liste du personnel de bloc
   $mediuser = new CMediusers();
-  $listPers = $mediuser->loadListFromType(array("Personnel"));
+  $personnels = $mediuser->loadListFromType(array("Personnel"));
 
-  // liste du personnel présent dans la plage opératoire
-  $wherePersonnel["object_id"] = " = '$plage->_id'";
-  $wherePersonnel["object_class"] = " = '$plage->_class_name'";
-
-  $affectation = new CAffectationPersonnel();
-  $affectation->updateFormFields();
-
-  $affectations = $affectation->loadList($wherePersonnel);
-
-  $personnels = array();
-
-  foreach($affectations as $key=>$value){
-	$med = new CMediusers();
-	$personnels[$value->_id] = $med->load($value->user_id);
+  foreach($plage->_ref_personnel as $personnel) {
+    $personnel->loadUser();
+		unset($personnels[$personnel->_id]);
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("getInstalledPpers" , $getInstalledPpers);
-
-if($getInstalledPpers){
+if (null !== $plage->_ref_personnel){
   $smarty->assign("personnels"        , $personnels);
-  $smarty->assign("affectations"      , $affectations);
-  $smarty->assign("listAnesth"        , $listAnesth);
-  $smarty->assign("listPers"          , $listPers);
 }
-$smarty->assign("listPlages"         , $listPlages);
+
+$smarty->assign("listAnesth"        , $listAnesth);
+$smarty->assign("listPlages"        , $listPlages);
 $smarty->assign("plage"             , $plage);
 $smarty->assign("anesth"            , $anesth);
 $smarty->assign("list1"             , $list1);

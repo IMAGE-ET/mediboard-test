@@ -16,15 +16,15 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   global $dPconfig,$AppUI;
 
   if (isset($content)) {
-  	$content = $AppUI->_($content);
+    $content = $AppUI->_($content);
     
     foreach ($params as $_key => $_val) {
       switch ($_key) {
         case "escape":
           if($_val=="JSAttribute"){
-          	$content = JSAttribute($content);
+            $content = JSAttribute($content);
           }else{
-          	$content = smarty_modifier_escape($content, $_val);
+            $content = smarty_modifier_escape($content, $_val);
           }
           break;
           
@@ -111,7 +111,7 @@ function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
  * - defaultOption   : {optionnel} Ajout d'un "option" en amont des valeurs ayant pour value ""
  * - class           : {optionnel} Permet de donner une classe aux champs
  * - hidden          : {optionnel} Permet de forcer le type "hidden"
- * 		  - canNull			: {optionnel} Permet de passer outre le notNull de la spécification
+ * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification
  */
 function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
@@ -126,15 +126,18 @@ function smarty_function_mb_field($params, &$smarty) {
  
   $spec = $propKey ?  CMbFieldSpecFact::getSpec($object, $field, $prop) : $object->_specs[$field];
 
-  if($canNull === "true") {
-  		$spec->notNull = 0;
-  		$tabSpec = split(" ",$spec->prop);
-  		CMbArray::extract($tabSpec, "0");
-  		$spec->prop = join($tabSpec, " ");
-  } elseif ($canNull === "false") {
-  		$spec->notNull = 1;
-  		$spec->prop = "notNull ".$spec->prop;
+  if ($canNull === true) {
+    $spec->notNull = 0;
+    $tabSpec = split(" ",$spec->prop);
+    CMbArray::extract($tabSpec, "0");
+    $spec->prop = join($tabSpec, " ");
+  } 
+  
+  if ($canNull === false) {
+    $spec->notNull = 1;
+    $spec->prop = "notNull $spec->prop";
   }
+  
   return $spec->getFormElement($object, $params);
 }
 
@@ -199,7 +202,7 @@ function smarty_function_mb_include_script($params, &$smarty) {
     $path = "$path?build=$version_build";
   }
   if($module XOR $script){
-  	trigger_error("Module: $module Script: $script");
+    trigger_error("Module: $module Script: $script");
   }
   if($module && $script){
     $path = "modules/$module/javascript/$script.js?build=$version_build";  

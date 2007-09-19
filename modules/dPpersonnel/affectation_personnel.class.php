@@ -16,6 +16,8 @@ class CAffectationPersonnel extends CMbMetaObject {
   
   // DB references
   var $user_id = null;
+  
+  // DB fields
   var $realise = null;
   var $debut   = null;
   var $fin     = null;
@@ -23,6 +25,9 @@ class CAffectationPersonnel extends CMbMetaObject {
   // Form fields
   var $_debut  = null;
   var $_fin    = null;
+  
+  // References
+  var $_ref_user = null;
   
   function CAffectationPersonnel() {
 	$this->CMbObject("affectation_personnel", "affect_id");
@@ -39,11 +44,14 @@ class CAffectationPersonnel extends CMbMetaObject {
     return $specs;
   }
   
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+    $this->loadUser();
+  }
   
   function loadUser(){
-  	$where["user_id"] = " = '$this->user_id'";
   	$this->_ref_user = new CMediusers();
-  	$this->_ref_user = $this->_ref_user->loadList($where);
+  	$this->_ref_user->load($this->user_id);
   }
  
   function updateFormFields() {

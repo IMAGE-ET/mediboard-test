@@ -62,6 +62,13 @@ class CRefSpec extends CMbFieldSpec {
   function getDBSpec(){
     return "INT(11) UNSIGNED";
   }
+  
+  function getFormHtmlElement($object, $params, $value, $className) {
+    $length = 8;
+    CMbArray::defaultValue($params, "size", $length+2);
+    CMbArray::defaultValue($params, "maxlength", $length);
+    return $this->getFormElementText($object, $params, $value, $className);
+  }
 }
 
 ?>

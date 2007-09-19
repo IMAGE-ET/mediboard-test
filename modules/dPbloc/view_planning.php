@@ -9,8 +9,6 @@
 
 global $AppUI, $can, $m, $g;
 $ds = CSQLDataSource::get("std");
-$getInstalledPpers = CModule::getInstalled("dPpersonnel");
-
 
 $can->needsRead();
 
@@ -63,13 +61,11 @@ $where["salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_RE
 $plagesop = $plagesop->loadList($where, $order);
 
 // Operations de chaque plage
-foreach($plagesop as $keyPlage => $valuePlage) {
-  $plage =& $plagesop[$keyPlage];
+foreach($plagesop as &$plage) {
   $plage->loadRefsFwd();
   
-  $listOp = new COperation;
   $where = array();
-  $where["plageop_id"] = "= '".$valuePlage->plageop_id."'";
+  $where["plageop_id"] = "= '$plage->_id'";
   switch ($filter->_intervention) {
     case "1" : $where["rank"] = "!= '0'"; break;
     case "2" : $where["rank"] = "= '0'"; break;
@@ -80,38 +76,41 @@ foreach($plagesop as $keyPlage => $valuePlage) {
   }
   
   $order = "operations.rank";
+
+  $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order);
+
   if ((sizeof($listOp) == 0) && ($filter->_plage == "false"))
-    unset($plagesop[$keyPlage]);
+    unset($plagesop[$plage->_id]);
   else {
-    foreach($listOp as $keyOp => $currOp) {
-      $operation =& $listOp[$keyOp];
+    foreach($listOp as $operation) {
       $operation->loadRefsFwd();
       $operation->_ref_sejour->loadRefsFwd();
+            
       // On utilise la first_affectation pour contenir l'affectation courante du patient
-      $operation->_ref_sejour->_ref_first_affectation = $operation->_ref_sejour->getCurrAffectation($operation->_datetime);
-      $affectation =& $operation->_ref_sejour->_ref_first_affectation;
-      if ($affectation->affectation_id) {
+      $sejour =& $operation->_ref_sejour;
+      $sejour->_ref_first_affectation = $sejour->getCurrAffectation($operation->_datetime);
+      $affectation =& $sejour->_ref_first_affectation;
+      if ($affectation->_id) {
         $affectation->loadRefsFwd();
         $affectation->_ref_lit->loadCompleteView();
       }
     }
     $plage->_ref_operations = $listOp;
-    
-    if($getInstalledPpers){
-      $plage->loadPersonnel();
-    }  
+    $plage->loadPersonnel();
+    if (null !== $$plage->_ref_personnel) {
+      foreach ($plage->_ref_personnel as $_personnel) {
+        $_personnel->loadUser();
+      }
+    }
   }
-
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter"     , $filter);
-$smarty->assign("plagesop"   , $plagesop);
+$smarty->assign("filter"  , $filter);
+$smarty->assign("plagesop", $plagesop);
 
 $smarty->display("view_planning.tpl");
 

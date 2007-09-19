@@ -2,7 +2,7 @@
 
 {{mb_include_script path="lib/fckeditor/fckeditor.js"}}
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 function initFCKEditor() {
 	var field = document.getElementById("htmlarea");
 	var oFCKeditor = new FCKeditor(field.name, '100%', '100%') ;
