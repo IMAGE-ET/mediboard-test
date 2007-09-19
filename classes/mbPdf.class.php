@@ -9,8 +9,11 @@
 
 define ("K_TCPDF_EXTERNAL_CONFIG", "config_externe");
 
-define ("K_PATH_MAIN", "C:\Documents and Settings\Thomas\Mes documents\Projects\Mediboard/lib/tcpdf/");
-define ("K_PATH_URL", "http://localhost/");
+global $dPconfig;
+
+define ("K_PATH_MAIN", $dPconfig['root_dir']."/lib/tcpdf/");
+define ("K_PATH_URL", "http://".$dPconfig['site_domain']);
+
 define ("FPDF_FONTPATH", K_PATH_MAIN."fonts/");
 define ("K_PATH_CACHE", K_PATH_MAIN."cache/");
 define ("K_PATH_URL_CACHE", K_PATH_URL."cache/");

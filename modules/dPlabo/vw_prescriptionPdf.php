@@ -24,7 +24,8 @@ $prescription->loadRefsBack();
 $pdf = new CPrescriptionPdf("P", "mm", "A4", true); 
 
 // Affichage de l'entete du document
-$image = "proxilab.png";
+$image = "logo.jpg";
+
 $taille = "75";
 $texte = "Av. des Sciences 1B\nCase postale 961\n1401 Yverdon-les-Bains\nTel:  024 424 80 50\nFax: 024 424 80 51";
 $pdf->SetHeaderData($image, $taille, "", $texte);
@@ -53,9 +54,8 @@ $pdf->Ln(30);
 // Affichage des analyses
 $pdf->Cell(180,7,utf8_encode("Analyses demandées:"),0);
 $pdf->Ln(8);
-$pdf->SetFont("verai",null,"10");
 	
-$pdf->SetFillColor(240,245,255);
+$pdf->SetFillColor(246,246,246);
 $pdf->Cell(25,7,utf8_encode("Identifiant"),1,0,'C',1);
 $pdf->Cell(125,7,utf8_encode("Libellé de l'analyse"),1,0,'C',1);
 $pdf->Cell(30,7,utf8_encode("Type"),1,0,'C',1);
@@ -64,10 +64,10 @@ $pdf->Ln();
 
 foreach($prescription->_ref_prescription_items as $key => $prescription){
     $examen_labo =& $prescription->_ref_examen_labo;
-	$pdf->SetFillColor(230,245,255);
-	$pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',1);
-    $pdf->Cell(125,7,utf8_encode($examen_labo->libelle),1,0,'L',1);
-	$pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',1);
+	//$pdf->SetFillColor(230,245,255);
+	$pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
+    $pdf->Cell(125,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
+	$pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
     $pdf->Ln();
 }
 
@@ -75,9 +75,8 @@ foreach($prescription->_ref_prescription_items as $key => $prescription){
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
 $pdf->SetBarcode($prescription->_id);
 
-// Modification du type d'affichage pour le texte des codes barres
-$pdf->SetFont("freeserif",null,"10");
+// Nom du fichier: prescription.pdf   / I : sortie standard
+$pdf->Output("prescription.pdf","I");
 
-$pdf->Output();
 
 ?>
