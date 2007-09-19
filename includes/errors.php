@@ -7,11 +7,11 @@
  * @author Thomas Despoix
  */
 
-global $performance;
+global $performance, $dPconfig;
 $performance["error"] = 0;
 $performance["warning"] = 0;
 $performance["notice"] = 0;
-$logPath = "tmp/mb-log.html";
+$logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
 
 error_reporting( E_ALL );
 ini_set("error_log", $logPath);

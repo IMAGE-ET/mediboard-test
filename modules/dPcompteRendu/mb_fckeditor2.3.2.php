@@ -6,6 +6,8 @@
 * @author Sébastien Fillonneau
 */
 
+global $AppUI, $dPconfig;
+
 $mbPath = "../..";
 $m = "dPcompteRendu";
 
@@ -26,6 +28,8 @@ class CTemplateManager {
 // required includes for start-up
 require_once("$mbPath/includes/config_dist.php");
 require_once("$mbPath/includes/config.php");
+require_once("$mbPath/includes/mb_functions.php");
+require_once("$mbPath/includes/errors.php");
 require_once("$mbPath/classes/ui.class.php");
 require_once("$mbPath/includes/session.php");
 require_once("$mbPath/classes/sharedmemory.class.php");
@@ -36,7 +40,7 @@ $templateManager =& $_SESSION[$m]["templateManager"];
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 
-$smarty = new CSmartyDP();
+$smarty = new CSmartyDP($dPconfig["root_dir"]."/modules/$m", 0);
 
 $smarty->assign("templateManager" , $templateManager);
 

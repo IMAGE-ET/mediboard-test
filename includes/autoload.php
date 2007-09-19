@@ -23,7 +23,7 @@ if ($shm->isReady()) {
     }
     
     $shm->put("class-paths", $classPaths);
-  } 
+  }
 
   function __autoload($className) {
     global $classPaths, $performance;

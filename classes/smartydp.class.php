@@ -223,7 +223,7 @@ class CSmartyDP extends Smarty {
    * Directories initialisation
    * Standard data assignment
    */
-  function CSmartyDP($rootDir = null) {
+  function CSmartyDP($rootDir = null, $useDataSources = 1) {
     global $AppUI, $version, $dPconfig, $canRead, $can, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax;
 
     $root = $dPconfig["root_dir"];
@@ -265,7 +265,9 @@ class CSmartyDP extends Smarty {
     
     // Standard data assignment
     $this->assign("app", $AppUI);
-    $this->assign("dataSources", CSQLDataSource::$dataSources);
+    if($useDataSources) {
+      $this->assign("dataSources", CSQLDataSource::$dataSources);
+    }
     $this->assign("dPconfig", $dPconfig);
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
     $this->assign("version", $version); 
