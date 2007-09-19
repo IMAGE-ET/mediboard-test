@@ -160,6 +160,22 @@ $library->renamer = $renamer;
 
 $libraries[$library->name] = $library;
 
+
+$library = new CLibrary;
+$library->name = "TCPDF";
+$library->url = "http://sourceforge.net/projects/tcpdf/";
+$library->fileName = "tcpdf_1_53_0_TC034.zip";
+$library->description = "Composant de génération de fichiers PDF avec codes barres";
+
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "tcpdf";
+$renamer->targetDir = "tcpdf";
+
+$library->renamer = $renamer;
+
+$libraries[$library->name] = $library;
+
+
 $library = new CLibrary;
 $library->name = "PHPMailer";
 $library->url = "http://phpmailer.sourceforge.net/";
