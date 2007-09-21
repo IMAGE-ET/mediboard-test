@@ -416,8 +416,13 @@ class CSejour extends CCodableCCAM {
     $order = "entree";
     $where = array();
     $where["sejour_id"] = $this->_spec->ds->prepare("= %", $this->sejour_id);
-    $where["entree"] = $this->_spec->ds->prepare("< %", $date);
-    $where["sortie"] = $this->_spec->ds->prepare(">= %", $date);
+    if(mbTime(null, $date) == "00:00:00") {
+      $where["entree"] = $this->_spec->ds->prepare("< %", mbDate(null, $date)." 23:59:59");
+      $where["sortie"] = $this->_spec->ds->prepare(">= %", mbDate(null, $date)." 00:00:01");
+    } else {
+      $where["entree"] = $this->_spec->ds->prepare("< %", $date);
+      $where["sortie"] = $this->_spec->ds->prepare(">= %", $date);
+    }
     $curr_affectation->loadObject($where, $order);
     return $curr_affectation;
   }
