@@ -16,6 +16,8 @@ $can->needsRead();
 $selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $selTri = mbGetValueFromGetOrSession("selTri", "nom");
+$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
+$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 
 $date_actuelle = mbDateTime("00:00:00");
@@ -34,6 +36,8 @@ $smarty->assign("date"     , $date);
 $smarty->assign("selAdmis" , $selAdmis);
 $smarty->assign("selSaisis", $selSaisis);
 $smarty->assign("selTri"   , $selTri);
+$smarty->assign("order_way"   , $order_way);
+$smarty->assign("order_col"   , $order_col);
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
 

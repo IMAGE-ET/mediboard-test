@@ -7,9 +7,13 @@
           </th>
         <tr>
           <th class="text">Date</th>
-          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Toutes les admissions</a></th>
-          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Dossiers non préparés</a></th>
-          <th class="text"><a href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Admissions non effectuées</a></th>
+          
+          
+          <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=0">Toutes les admissions</a></th>
+          <th class="text"><a class={{if $selAdmis=='0' && $selSaisis=='n'}}"selected"{{else}}"selectable"{{/if}} href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selSaisis=n">Dossiers non préparés</a></th>
+          <th class="text"><a class={{if $selAdmis=='n' && $selSaisis=='0'}}"selected"{{else}}"selectable"{{/if}} href="?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=n&amp;selSaisis=0">Admissions non effectuées</a></th>
+        
+        
         </tr>
         {{foreach from=$list1 item=curr_list}}
         <tr {{if $curr_list.date == $date}}class="selected"{{/if}}>

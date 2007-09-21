@@ -95,6 +95,8 @@ class CSejour extends CCodableCCAM {
   var $_date_min_stat		= null;
   var $_date_max_stat 	= null;
   var $_filter_type 		= null;
+  
+  var $_modifier_sortie = null;
     
 	function CSejour() {
     global $dPconfig;
@@ -151,15 +153,15 @@ class CSejour extends CCodableCCAM {
     $specs["facturable"]          = "bool notNull default|1";
 
     $specs["_entree"]             = "dateTime";
-    $specs["_sortie"] 		        = "dateTime";
-    $specs["_date_min"] 		      = "dateTime";
-    $specs["_date_max"] 		      = "dateTime moreEquals|_date_min";
-    $specs["_admission"] 		      = "text";
-    $specs["_service"] 		        = "text";
+    $specs["_sortie"] 		      = "dateTime";
+    $specs["_date_min"] 		  = "dateTime";
+    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
+    $specs["_admission"] 		  = "text";
+    $specs["_service"] 		      = "text";
     $specs["_type_admission"]     = "text";
     $specs["_specialite"] 	      = "text";
     $specs["_date_min_stat"]      = "date";
-    $specs["_date_max_stat"] 	    = "date moreEquals|_date_min_stat";
+    $specs["_date_max_stat"] 	  = "date moreEquals|_date_min_stat";
     $specs["_filter_type"]        = "enum list|comp|ambu|exte|seances|ssr|psy";
     return $specs;
   }
@@ -206,6 +208,19 @@ class CSejour extends CCodableCCAM {
         $lastAff->sortie = $this->sortie_prevue;
         $lastAff->store();
       }
+    }
+    
+    //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
+    if($this->mode_sortie){
+    	$this->_ref_last_affectation->effectue = 1;
+        $this->_ref_last_affectation->store();
+        
+    } 
+    
+    if($this->mode_sortie === ""){
+    	$this->_ref_last_affectation->effectue = 0;
+    	$this->sortie_reelle = "";
+    	$this->_ref_last_affectation->store();
     }
   }
   
@@ -272,6 +287,16 @@ class CSejour extends CCodableCCAM {
     } elseif(!$this->_at_midnight && $this->type == "comp") {
       $this->type = "ambu";
     }
+    
+    // Signaler l'action de validation de la sortie
+    if($this->_modifier_sortie){
+    	$this->sortie_reelle = mbDateTime();
+    }
+    
+    if(!$this->_modifier_sortie){
+    	$this->sortie_reelle = "";
+    }
+    
   }
   
   // Calcul des droits CMU pour la duree totale du sejour

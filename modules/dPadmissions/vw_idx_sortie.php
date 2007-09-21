@@ -16,6 +16,8 @@ $vue = mbGetValueFromGetOrSession("vue", 0);
 
 // Récupération des dates
 $date = mbGetValueFromGetOrSession("date", mbDate());
+$order_col = mbGetValueFromGetOrSession("order_col","_nomPatient");
+$order_way = mbGetValueFromGetOrSession("order_way","ASC");
 
 $date_actuelle = mbDateTime("00:00:00");
 $date_demain = mbDateTime("00:00:00","+ 1 day");
@@ -34,6 +36,8 @@ $smarty->assign("now" , $now );
 $smarty->assign("vue" , $vue );
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
+$smarty->assign("order_col", $order_col);
+$smarty->assign("order_way", $order_way);
 
 $smarty->display("vw_idx_sortie.tpl");
 

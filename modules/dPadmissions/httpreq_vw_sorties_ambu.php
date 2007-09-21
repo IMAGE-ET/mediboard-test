@@ -11,6 +11,10 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
+// Type de tri
+$selTri = mbGetValueFromGetOrSession("selTri", "nom");
+$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
+$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
 // Type d'affichage
 $vue = mbGetValueFromGetOrSession("vue", 0);
 
@@ -29,59 +33,48 @@ $date_sortie = mbDateTime();
 $now  = mbDate();
 
 // Récupération des sorties du jour
-$list = new CAffectation;
+$listSejourAmbu = new CSejour();
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
-$ljoin["sejour"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"] = "lit.lit_id = affectation.lit_id";
-$ljoin["chambre"] = "chambre.chambre_id = lit.chambre_id";
-$ljoin["service"] = "service.service_id = chambre.service_id";
-$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-$where["sortie"] = "BETWEEN '$limit1' AND '$limit2'";
+$ljoinAmbu["patients"] = "sejour.patient_id = patients.patient_id";
+$ljoinAmbu["users"] = "sejour.praticien_id = users.user_id";
+$whereAmbu["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
+$whereAmbu["type"] = " = 'ambu'";
+$whereAmbu["group_id"] = "= '$g'";
+$whereAmbu["annule"] = " = '0'";
+
 if($vue) {
-  $where["effectue"] = "= '0'";
+  $ljoinAmbu["affectation"] = "sejour.sejour_id = affectation.sejour_id";
+  $whereAmbu["effectue"] = "= '0'";
 }
-$order = "patients.nom, patients.prenom";
-$where["type"] = "= 'ambu'";
-$where["sejour.group_id"] = "= '$g'";
-$listAmbu = $list->loadList($where, $order, null, null, $ljoin);
-$tab_temp = array();
-foreach($listAmbu as $key => $value) {
-  // stockage dans un tableau temporaire  l'id du sejour en clé...
-  $tab_temp[$value->sejour_id] = $value;
+
+
+if($order_col == "_nomPatient"){
+  $orderAmbu = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+}
+if($order_col == "sortie_prevue"){
+  $orderAmbu = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
+}
+if($order_col == "_nomPraticien"){
+  $orderAmbu = "users.user_last_name $order_way, users.user_first_name";
+}
+
+$listSejourAmbu = $listSejourAmbu->loadList($whereAmbu, $orderAmbu, null, null, $ljoinAmbu);
+
+foreach($listSejourAmbu as $key => $sejour){
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
+  $sejour->loadRefsAffectations();
+  $sejour->loadNumDossier();
+  $affectation =& $sejour->_ref_last_affectation;
   
-  $listAmbu[$key]->loadRefsFwd();
-  if($listAmbu[$key]->_ref_next->affectation_id) {
-    unset($listAmbu[$key]);
-  } else {
-    $listAmbu[$key]->_ref_sejour->loadRefsFwd();
-    $listAmbu[$key]->_ref_sejour->loadNumDossier();
-    $listAmbu[$key]->_ref_lit->loadCompleteView();
+  if($affectation->affectation_id){
+  	$affectation->loadReflit();
+  	$affectation->_ref_lit->loadCompleteView();
   }
+ 
 }
 
-//mbTrace($listAmbu);
-
-
-$sejour = new CSejour();
-$whereSejour["type"] = " = 'ambu'";
-$whereSejour["sortie_prevue"] = "BETWEEN '$limit1' AND '$limit2'";
-$whereSejour["annule"] = " = '0'";
-
-if($vue) {
-  $whereSejour["sortie_reelle"] = "IS NULL";
-}
-$listSejourAmbu = $sejour->loadList($whereSejour);
-$listSejourA = array();
-foreach($listSejourAmbu as $key=>$sejourAmbu){
-    $sejourAmbu->loadRefPraticien();
-    $sejourAmbu->loadRefPatient();
-    $sejourAmbu->loadNumDossier();
-    $listSejourA[$sejourAmbu->_id] = $sejourAmbu;
-    if(array_key_exists($sejourAmbu->_id,$tab_temp)){
-      unset($listSejourA[$sejourAmbu->_id]);
-    }
-}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -89,13 +82,16 @@ $smarty = new CSmartyDP();
 $smarty->assign("date_min", $date_min);
 $smarty->assign("date_max", $date_max);
 
+$smarty->assign("order_col", $order_col);
+$smarty->assign("order_way", $order_way);
+$smarty->assign("selTri"   , $selTri);
+
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"     , $date );
 $smarty->assign("now"      , $now );
 $smarty->assign("vue"      , $vue );
-$smarty->assign("listAmbu"       , $listAmbu );
-$smarty->assign("listSejourA" , $listSejourA );
+$smarty->assign("listSejourAmbu"       , $listSejourAmbu );
 $smarty->assign("date_sortie", $date_sortie);
 $smarty->display("inc_vw_sorties_ambu.tpl");
 

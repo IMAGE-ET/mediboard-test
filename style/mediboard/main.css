@@ -224,6 +224,50 @@ a.buttonremove:hover {
   background-color: #bbb;
 }
 
+a.selected{
+  background: url(../../images/icons/td_selected.png) no-repeat bottom center;
+  padding-bottom: 8px;		
+}	
+
+a.selectable{
+  padding-bottom: 8px;	
+}
+a.selectable:hover{
+  background: url(../../images/icons/td_selected.png) no-repeat bottom center;
+  padding-bottom: 8px;		
+}	
+
+
+a.sortable{
+  background: url(../../images/icons/a_sortable.png) no-repeat bottom center;
+  padding-bottom: 8px;	
+}
+
+a.sortable:hover{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;	
+}
+
+a.ASC{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+a.ASC:hover{
+  background: url(../../images/icons/a_desc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+a.DESC{
+  background: url(../../images/icons/a_desc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+a.DESC:hover{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+
 button.edit, a.buttonedit {
   background-image: url(images/buttons/edit.png);
   padding-left: 18px;

@@ -15,7 +15,9 @@ $can->needsRead();
 
 $selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
-$selTri    = mbGetValueFromGetOrSession("selTri", "nom");
+$order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
+$order_way = mbGetValueFromGetOrSession("order_way");
+$selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
 
@@ -38,7 +40,7 @@ $prestations = $prestation->loadList();
 $today = new CSejour;
 
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
-
+$ljoin["users"] = "sejour.praticien_id = users.user_id";
 $where["group_id"] = "= '$g'";
 $where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {
@@ -49,11 +51,18 @@ if($selSaisis != "0") {
   $where["saisi_SHS"] = "= '0'";
   $where["annule"] = "= '0'";
 }
-if($selTri == "nom")
-  $order = "patients.nom, patients.prenom, sejour.entree_prevue";
-if($selTri == "heure")
-  $order = "sejour.entree_prevue, patients.nom, patients.prenom";
 
+if($order_col == "_nomPatient"){
+  $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+}
+if($order_col == "entree_prevue"){
+  $order = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
+}
+if($order_col == "_nomPraticien"){
+  $order = "users.user_last_name $order_way, users.user_first_name";
+}
+
+  
 $today = $today->loadList($where, $order, null, null, $ljoin);
 
 foreach ($today as $keySejour => $valueSejour) {
@@ -93,6 +102,8 @@ $smarty->assign("date"         , $date        );
 $smarty->assign("selAdmis"     , $selAdmis    );
 $smarty->assign("selSaisis"    , $selSaisis   );
 $smarty->assign("selTri"       , $selTri      );
+$smarty->assign("order_col"    , $order_col   );
+$smarty->assign("order_way"    , $order_way   );
 $smarty->assign("today"        , $today       );
 $smarty->assign("prestations"  , $prestations );
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));

@@ -24,9 +24,19 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
     </th>
   </tr>
   <tr>
-    <th><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selTri=nom">Nom</a></th>
-    <th>Chirurgien</th>
-    <th><a href="index.php?m={{$m}}&amp;tab=vw_idx_admission&amp;selAdmis=0&amp;selTri=heure">Heure</a></th>
+    <th>
+    {{mb_colonne class="CSejour" field="_nomPatient" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    </th>
+    
+    <th>
+    {{mb_colonne class="CSejour" field="_nomPraticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    </th>
+    
+    <th>
+    {{mb_colonne class="CSejour" field="entree_prevue" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_admission&selAdmis=$selAdmis&selSaisis=$selSaisis"}}
+    </th>
+    
+    
     <th>Chambre</th>
     <th>Admis</th>
     <th>

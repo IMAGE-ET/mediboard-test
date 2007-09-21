@@ -133,14 +133,15 @@ class CAffectation extends CMbObject {
       if($this->sortie != $this->_ref_sejour->sortie_prevue) {
         $this->_ref_sejour->sortie_prevue = $this->sortie;
       }
+      /*
       if($this->effectue) {
         $this->_ref_sejour->sortie_reelle = mbDateTime();
         $this->_ref_sejour->mode_sortie = $this->_mode_sortie;
       } else {
         $this->_ref_sejour->sortie_reelle = "";
         $this->_ref_sejour->mode_sortie = "";
-      }
-      $changeSejour = 1;
+      }*/
+      //$changeSejour = 1;
     }
     if($changeSejour) {
       $this->_ref_sejour->_date_entree_prevue = null;

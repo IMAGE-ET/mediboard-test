@@ -17,6 +17,8 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $month = mbTranformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
+$selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");
+$selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
@@ -77,6 +79,9 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("hier", $hier);
 $smarty->assign("demain", $demain);
+
+$smarty->assign("selAdmis", $selAdmis);
+$smarty->assign("selSaisis", $selSaisis);
 
 $smarty->assign('date', $date);
 $smarty->assign('lastmonth', $lastmonth);

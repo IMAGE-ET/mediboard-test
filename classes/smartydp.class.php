@@ -188,6 +188,45 @@ function smarty_function_mb_ternary($params, &$smarty) {
 }
 
 
+
+function smarty_function_mb_colonne($params, &$smarty) {
+  global $AppUI;
+  
+  $class     = CMbArray::extract($params, "class"     , null, true);
+  $field     = CMbArray::extract($params, "field"     , null, true);
+  $order_col = CMbArray::extract($params, "order_col" , null, true);
+  $order_way = CMbArray::extract($params, "order_way" , null, true);
+  $url       = CMbArray::extract($params, "url"       , null, true);
+  
+  $sHtml  = "<label for=\"$field\" title=\"".$AppUI->_($class."-".$field."-desc")."\">";
+  $sHtml .= $AppUI->_($class."-".$field);
+  $sHtml .= "</label>";
+    
+  if($order_col == $field) {
+  	$css_class = "sorted";
+  } else {
+  	$css_class = "sortable";
+  }
+  // Inversion de l'order_way
+  if($order_way=="ASC"){
+  	$order_way_inv = "DESC";
+  } else {
+  	$order_way_inv = "ASC";
+  }
+  
+  if($css_class == "sorted"){
+  	return "<a class='$css_class $order_way' href='$url&amp;order_col=$order_col&amp;order_way=$order_way_inv'>$sHtml</a>";
+  }
+  if($css_class == "sortable"){
+  	return "<a class='$css_class' href='$url&amp;order_col=$field&amp;order_way=ASC'>$sHtml</a>";
+  }
+  
+  
+}
+
+
+
+
 function smarty_function_mb_include_script($params, &$smarty) {
   global $AppUI, $version;
   $version_build = $version['build'];
@@ -259,6 +298,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_value"          , "smarty_function_mb_value");
     $this->register_function("mb_label"          , "smarty_function_mb_label");
     $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
+    $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
     $this->register_function("mb_include_script" , "smarty_function_mb_include_script");
     $this->register_modifier("json"              , "smarty_modifier_json");
     $this->register_modifier("const"             , "smarty_modifier_const");
