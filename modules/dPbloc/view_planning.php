@@ -14,14 +14,17 @@ $can->needsRead();
 
 $now       = mbDate();
 $filter = new COperation;
-$filter->_date_min = mbGetValueFromGet("_date_min", $now);
-$filter->_date_max = mbGetValueFromGet("_date_max", $now);
-$filter->_prat_id = mbGetValueFromGet("chir");
-$filter->salle_id = mbGetValueFromGet("salle");
-$filter->_plage = mbGetValueFromGet("vide");
-$filter->_intervention = mbGetValueFromGet("type");
-$filter->_specialite = mbGetValueFromGet("spe");
-$filter->_codes_ccam = mbGetValueFromGet("code_ccam");
+$filter->_date_min     = mbGetValueFromGet("_date_min", $now);
+$filter->_date_max     = mbGetValueFromGet("_date_max", $now);
+$filter->_prat_id      = mbGetValueFromGet("chir");
+$filter->salle_id      = mbGetValueFromGet("salle");
+$filter->_plage        = mbGetValueFromGet("_plage");
+$filter->_intervention = mbGetValueFromGet("_intervention");
+$filter->_specialite   = mbGetValueFromGet("spe");
+$filter->_codes_ccam   = mbGetValueFromGet("code_ccam");
+
+$filterSejour = new CSejour;
+$filterSejour->type = mbGetValueFromGet("type");
 
 //On sort les plages opératoires
 //  Chir - Salle - Horaires
@@ -80,28 +83,31 @@ foreach($plagesop as &$plage) {
   $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order);
 
-  if ((sizeof($listOp) == 0) && ($filter->_plage == "false"))
-    unset($plagesop[$plage->_id]);
-  else {
-    foreach($listOp as $operation) {
-      $operation->loadRefsFwd();
-      $operation->_ref_sejour->loadRefsFwd();
-            
-      // On utilise la first_affectation pour contenir l'affectation courante du patient
-      $sejour =& $operation->_ref_sejour;
-      $sejour->_ref_first_affectation = $sejour->getCurrAffectation($operation->_datetime);
-      $affectation =& $sejour->_ref_first_affectation;
-      if ($affectation->_id) {
-        $affectation->loadRefsFwd();
-        $affectation->_ref_lit->loadCompleteView();
-      }
+  
+  foreach($listOp as $keyOp => &$operation) {
+    $operation->loadRefsFwd();
+    $sejour =& $operation->_ref_sejour;
+    if($filterSejour->type && $filterSejour->type != $sejour->type) {
+      unset($listOp[$keyOp]);
+    } else {
+     $sejour->loadRefsFwd();   
+     // On utilise la first_affectation pour contenir l'affectation courante du patient
+     $sejour->_ref_first_affectation = $sejour->getCurrAffectation($operation->_datetime);
+     $affectation =& $sejour->_ref_first_affectation;
+     if ($affectation->_id) {
+       $affectation->loadRefsFwd();
+       $affectation->_ref_lit->loadCompleteView();
+     }
     }
-    $plage->_ref_operations = $listOp;
-    $plage->loadPersonnel();
-    if (null !== $plage->_ref_personnel) {
-      foreach ($plage->_ref_personnel as $_personnel) {
-        $_personnel->loadUser();
-      }
+  }
+  if ((sizeof($listOp) == 0) && !$filter->_plage) {
+    unset($plagesop[$plage->_id]);
+  }
+  $plage->_ref_operations = $listOp;
+  $plage->loadPersonnel();
+  if (null !== $plage->_ref_personnel) {
+    foreach ($plage->_ref_personnel as $_personnel) {
+      $_personnel->loadUser();
     }
   }
 }

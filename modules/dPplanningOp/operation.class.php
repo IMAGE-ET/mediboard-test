@@ -93,11 +93,11 @@ class COperation extends CCodableCCAM {
   var $_date_min	 	= null;
   var $_date_max 		= null;
   var $_plage 			= null;
-  var $_service 		= null;
-  var $_intervention 	= null;
-  var $_specialite 		= null;
-  var $_scodes_ccam     = null;
-  var $_prat_id     	= null;
+  var $_service 		 = null;
+  var $_intervention = null;
+  var $_specialite 	 = null;
+  var $_scodes_ccam  = null;
+  var $_prat_id      = null;
 
   function COperation() {
     global $dPconfig;
@@ -148,20 +148,20 @@ class COperation extends CCodableCCAM {
     $specs["entree_bloc"]    = "time";
     $specs["anapath"]        = "bool";
     $specs["labo"]           = "bool";
-    $specs["_date_min"] 	 = "date";
-    $specs["_date_max"] 	 = "date moreEquals|_date_min";
-    $specs["_plage"] 		 = "bool";
+    $specs["_date_min"]      = "date";
+    $specs["_date_max"]      = "date moreEquals|_date_min";
+    $specs["_plage"]         = "bool";
     $specs["_intervention"]  = "text";
-    $specs["_prat_id"]  	 = "text";
+    $specs["_prat_id"]       = "text";
     $specs["_specialite"]    = "text";
     return $specs;
   }
   
   
   function getExecutant_id($code) {
-  	$this->loadRefChir();
-  	$this->loadRefPlageOp();
-  	return ($code == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
+    $this->loadRefChir();
+    $this->loadRefPlageOp();
+    return ($code == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
   }
   
   
@@ -333,7 +333,7 @@ class COperation extends CCodableCCAM {
   }
   
   function loadRefPraticien(){
-  	$this->loadRefChir();
+    $this->loadRefChir();
   }
   
   function loadRefPlageOp() {
@@ -358,7 +358,7 @@ class COperation extends CCodableCCAM {
   }
   
   function preparePossibleActes() {
-  	$this->loadRefPlageOp();
+    $this->loadRefPlageOp();
   }
   
   
@@ -407,7 +407,7 @@ class COperation extends CCodableCCAM {
  
   
   function fillTemplate(&$template) {
-  	$this->loadRefsFwd();
+    $this->loadRefsFwd();
     $this->_ref_sejour->loadRefsFwd();
     $this->_ref_chir->fillTemplate($template);
     $this->_ref_sejour->_ref_patient->fillTemplate($template);

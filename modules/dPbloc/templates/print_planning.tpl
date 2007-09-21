@@ -20,12 +20,13 @@ function popPlanning() {
   url.setModuleAction("dPbloc", "view_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.addElement(form.vide);
+  url.addParam("_plage", getCheckedValue(form._plage));
   url.addElement(form.code_ccam, "CCAM");
-  url.addElement(form.type);
+  url.addElement(form._intervention);
   url.addElement(form.chir);
   url.addElement(form.spe);
   url.addElement(form.salle);
+  url.addElement(form.type);
   url.popup(900, 550, 'Planning');
 }
 
@@ -80,7 +81,7 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_plage"}}</td>
-          <td colspan="2">{{mb_field object=$filter field="_plage" checked="checked"}}</td>
+          <td colspan="2">{{mb_field object=$filter field="_plage"}}</td>
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
@@ -106,7 +107,7 @@ function pageMain() {
         <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
           <td>{{mb_label object=$filter field="_intervention"}}</td>
-          <td><select name="type">
+          <td><select name="_intervention">
             <option value="0">&mdash; Toutes les interventions &mdash;</option>
             <option value="1">insérées dans le planning</option>
             <option value="2">à insérer dans le planning</option>
@@ -145,6 +146,12 @@ function pageMain() {
 	              </option>
               {{/foreach}}
             </select>
+          </td>
+        </tr>
+        <tr>
+          <td>{{mb_label object=$filterSejour field="type"}}</td>
+          <td>
+            {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
           </td>
         </tr>
       </table>
