@@ -16,7 +16,7 @@ $can->needsRead();
 $selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
-$order_way = mbGetValueFromGetOrSession("order_way");
+$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
 $selTri = mbGetValueFromGetOrSession("selTri", "nom");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
 $next      = mbDate("+1 DAY", $date);
@@ -50,6 +50,10 @@ if($selAdmis != "0") {
 if($selSaisis != "0") {
   $where["saisi_SHS"] = "= '0'";
   $where["annule"] = "= '0'";
+}
+
+if($order_col != "_nomPatient" && $order_col != "entree_prevue" && $order_col != "_nomPraticien"){
+	$order_col = "_nomPatient";	
 }
 
 if($order_col == "_nomPatient"){

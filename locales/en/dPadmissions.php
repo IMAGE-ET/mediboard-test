@@ -1,7 +1,10 @@
 <?php
 $locales['CPatient-_nomPatient'] = '';
+$locales['CPatient-_nomPatient-desc'] = '';
 $locales['CSejour-_nomPatient'] = '';
+$locales['CSejour-_nomPatient-desc'] = '';
 $locales['CSejour-_nomPraticien'] = '';
+$locales['CSejour-_nomPraticien-desc'] = '';
 $locales['CSejour.mode_sortie.deces'] = '';
 $locales['CSejour.mode_sortie.normal'] = '';
 $locales['CSejour.mode_sortie.transfert'] = '';

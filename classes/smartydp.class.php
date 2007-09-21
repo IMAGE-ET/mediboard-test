@@ -202,26 +202,15 @@ function smarty_function_mb_colonne($params, &$smarty) {
   $sHtml .= $AppUI->_($class."-".$field);
   $sHtml .= "</label>";
     
-  if($order_col == $field) {
-  	$css_class = "sorted";
-  } else {
-  	$css_class = "sortable";
-  }
-  // Inversion de l'order_way
-  if($order_way=="ASC"){
-  	$order_way_inv = "DESC";
-  } else {
-  	$order_way_inv = "ASC";
-  }
-  
+  $css_class = ($order_col == $field) ? "sorted" : "sortable";
+  $order_way_inv = ($order_way == "ASC") ? "DESC" : "ASC";
+   
   if($css_class == "sorted"){
   	return "<a class='$css_class $order_way' href='$url&amp;order_col=$order_col&amp;order_way=$order_way_inv'>$sHtml</a>";
   }
   if($css_class == "sortable"){
   	return "<a class='$css_class' href='$url&amp;order_col=$field&amp;order_way=ASC'>$sHtml</a>";
   }
-  
-  
 }
 
 

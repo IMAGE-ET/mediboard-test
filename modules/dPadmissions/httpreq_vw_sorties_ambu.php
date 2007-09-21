@@ -48,6 +48,10 @@ if($vue) {
   $whereAmbu["effectue"] = "= '0'";
 }
 
+if($order_col != "_nomPatient" && $order_col != "sortie_prevue" && $order_col != "_nomPraticien"){
+	$order_col = "_nomPatient";	
+}
+
 
 if($order_col == "_nomPatient"){
   $orderAmbu = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
