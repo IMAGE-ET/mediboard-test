@@ -78,6 +78,26 @@ class CPrescriptionLabo extends CMbObject {
     $this->_view      = "Prescription du ".mbTranformTime(null, $this->date, "%d/%m/%Y %Hh%M");
   }
   
+  function loadIdPresc(){
+  	global $dPconfig;
+  	
+  	$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+  
+  	$this->loadRefsFwd();
+  	$prat =& $this->_ref_praticien;
+  	
+    $tagCode4 = "labo code4";
+    $idSantePratCode4 = new CIdSante400();
+    $idSantePratCode4->loadLatestFor($prat, $tagCode4);
+	
+    $idPresc = new CIdSante400();
+    $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
+    $idPresc->object_class = "CPrescriptionLabo";
+    $idPresc->loadMatchingObject("id400 DESC");
+  	
+    return $idPresc->id400;
+  }
+  
   function loadRefsFwd() {
     if (!$this->_ref_patient) {
       $this->_ref_patient = new CPatient();

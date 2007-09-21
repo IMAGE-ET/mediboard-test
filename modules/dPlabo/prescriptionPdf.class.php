@@ -10,16 +10,28 @@
 
 // Classe de gestion des pdf spécifique aux prescriptions
 class CPrescriptionPdf extends CMbPdf {
-	/**
-     * decalage pour l'affichage des codes-barres
-	 */
-	var $decalage;
-		
-	public function Footer() {
-		$this->viewBarcode(20,260,5,null,15,true);
+
+	var $decalage = null;
+	var $praticien = null;
+	var $patient = null;
+	var $sexe = null;
+	var $naissance = null;
+	var $prelevement = null;
+	
+	public function setBarcode($bc="", $praticien = "", $patient = "", $sexe = "", $naissance = "", $prelev = "") {
+		$this->barcode = $bc;
+		$this->praticien = $praticien;
+		$this->patient = $patient;
+		$this->prelev = $prelev;
+		$this->sexe = $sexe;
+		$this->naissance = $naissance;
 	}
 		
-
+		
+	public function Footer() {
+		$this->viewBarcode(15,240,5,null,30,true);
+	}
+	
 	public function viewPraticien($pratView, $functionView, $groupView){
 		return "Medecin: <br />".utf8_encode($pratView).
 		                "<br />".utf8_encode($functionView).
@@ -55,14 +67,28 @@ class CPrescriptionPdf extends CMbPdf {
 	 * @param int $decalage: decalage entre les 2 lignes de codes barres
 	 * @param bool $traduction: affichage de la traduction des codes barres
 	 */
-	public function viewBarcode($x,$y,$h,$codage = "C128B", $decalage = 15, $traduction = true){
+	public function viewBarcode($x,$y,$h,$codage = "C128B", $decalage = 30, $traduction = true){
+	  
 	  $this->decalage = 0;
 	  if ($this->barcode) {
 	    $this->Ln();
 	    $compteur = 0;
 	    while($compteur < 4){
 	      if($traduction == true){
-	        $this->writeHTMLCell(0, 0, $x + $this->decalage + 3, $y + 4, $this->barcode, 0, 0, 0);
+	      	$this->SetFontSize(7);
+	      	$this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 15, utf8_encode("Dr ".$this->praticien), 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 12, utf8_encode($this->patient), 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 9, strtoupper($this->sexe)." ".$this->naissance, 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 6, utf8_encode($this->prelev), 0, 0, 0);
+	        
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 15 + $decalage, utf8_encode("Dr ".$this->praticien), 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 12 + $decalage, utf8_encode($this->patient), 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 9  + $decalage, strtoupper($this->sexe)." ".$this->naissance, 0, 0, 0);
+	        $this->writeHTMLCell(0, 0, $x + $this->decalage, $y - 6  + $decalage, utf8_encode($this->prelev), 0, 0, 0);
+	        
+	        $this->SetFontSize(10);
+	      	$this->writeHTMLCell(0, 0, $x + $this->decalage + 3, $y + 4, $this->barcode, 0, 0, 0);
+	        
             $this->writeHTMLCell(0, 0, $x + $this->decalage + 3, $y + $decalage + 4, $this->barcode, 0, 0, 0);      
 		  }
           $this->writeBarcode($x + $this->decalage, $y, 180, $h, $codage, false, false, 2, $this->barcode);

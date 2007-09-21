@@ -62,21 +62,9 @@ if (!$idSantePratCode4->_id || !$idSantePratCode9->_id){
 
 $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
 
-//Creation de l'id400
-$idPresc = new CIdSante400();
+// Chargement de la valeur de l'id externe de la prescription ==> retourne uniquement l'id400
+$id400Presc = $mbPrescription->loadIdPresc();
 
-//Paramétrage de l'id 400
-$idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
-$idPresc->object_class = "CPrescriptionLabo";              // object_class
-$idPresc->loadMatchingObject("id400 DESC");                // Chargement de l'id 400 s'il existe
-
-$idPresc->id400++;                                         // Incrementation de son id400
-$idPresc->id400 = str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
-
-$idPresc->_id = null;
-$idPresc->last_update = mbDateTime();
-$idPresc->object_id = $mbPrescription->_id;
-$idPresc->store();
 
 // Gestion du sexe du patient
 $transSexe["m"] = "1";
@@ -134,7 +122,7 @@ $prescription     = $doc->addElement($doc, "Prescription");
 
 // Prescription --> Numero
 $num_prat = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT);
-$num_presc = $idPresc->id400;
+$num_presc = $id400Presc;
 $num_presc %= 1000;
 $num_presc = str_pad($num_presc, 4, '0', STR_PAD_LEFT);
 

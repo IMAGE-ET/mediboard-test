@@ -7,6 +7,7 @@
  *  @author Alexis Granger
  */
 
+global $dPconfig;
 
 // Recuperation de l'id de la prescription
 $prescription_id = mbGetValueFromGet("prescription_id");
@@ -62,8 +63,8 @@ $pdf->Cell(30,7,utf8_encode("Type"),1,0,'C',1);
 $pdf->Ln();
     
 
-foreach($prescription->_ref_prescription_items as $key => $prescription){
-    $examen_labo =& $prescription->_ref_examen_labo;
+foreach($prescription->_ref_prescription_items as $key => $presc){
+    $examen_labo =& $presc->_ref_examen_labo;
 	//$pdf->SetFillColor(230,245,255);
 	$pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
     $pdf->Cell(125,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
@@ -71,12 +72,40 @@ foreach($prescription->_ref_prescription_items as $key => $prescription){
     $pdf->Ln();
 }
 
+
+$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+
+// Chargement de l'id externe labo code4 du praticien
+// Chargement de l'id400 "labo code4" du praticien
+$tagCode4 = "labo code4";
+$idSantePratCode4 = new CIdSante400();
+$idSantePratCode4->loadLatestFor($praticien, $tagCode4);
+
+
+if($idSantePratCode4->id400){
+	$numPrat = $idSantePratCode4->id400;
+	$numPrat = str_pad($numPrat, 4, '0', STR_PAD_LEFT);
+} else {
+	$numPrat = "xxxx";
+}
+
+// Chargement de la valeur de l'id externe de la prescription ==> retourne uniquement l'id400
+if($prescription->verouillee){
+  $id400Presc = $prescription->loadIdPresc();
+  $id400Presc = str_pad($id400Presc, 4, '0', STR_PAD_LEFT);
+} else {
+  $id400Presc = "xxxx";
+}
+
+$num = $numPrat.$id400Presc;
+
 // Initialisation du code barre, => utilisation par default du codage C128B
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
-$pdf->SetBarcode($prescription->_id);
+$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, $prescription->_ref_patient->_view, $prescription->_ref_patient->sexe,mbTranformTime($prescription->_ref_patient->naissance,null,"%d-%m-%y"), mbTranformTime($prescription->date,null,"%d-%m-%y %H:%M"));
 
-// Nom du fichier: prescription.pdf   / I : sortie standard
-$pdf->Output("prescription.pdf","I");
+
+// Nom du fichier: prescription-xxxxxxxx.pdf   / I : sortie standard
+$pdf->Output("prescription-$num.pdf","I");
 
 
 ?>
