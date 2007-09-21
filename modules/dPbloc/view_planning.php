@@ -98,7 +98,7 @@ foreach($plagesop as &$plage) {
     }
     $plage->_ref_operations = $listOp;
     $plage->loadPersonnel();
-    if (null !== $$plage->_ref_personnel) {
+    if (null !== $plage->_ref_personnel) {
       foreach ($plage->_ref_personnel as $_personnel) {
         $_personnel->loadUser();
       }
