@@ -57,7 +57,7 @@ if($order_col == "_nomPatient"){
   $orderAmbu = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
 }
 if($order_col == "sortie_prevue"){
-  $orderAmbu = "sejour.entree_prevue $order_way, patients.nom, patients.prenom";
+  $orderAmbu = "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
 }
 if($order_col == "_nomPraticien"){
   $orderAmbu = "users.user_last_name $order_way, users.user_first_name";
