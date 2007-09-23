@@ -72,13 +72,15 @@ class CCodeCCAM {
       $this->libelleLong = $row["LIBELLELONG"];
       $query1 = "select * from activiteacte where ";
       $query1 .= $ds->prepare("CODEACTE = %", $this->code);
-      $query1 .= "and ACTIVITE = '4'";
+      $query1 .= " and ACTIVITE = '4'";
+      $query1 .= " group by MODIFICATEUR";
       $result1 = $ds->exec($query1);
       if($ds->numRows($result1)) {
         $query2 = "select * from modificateuracte where ";
         $query2 .= $ds->prepare("CODEACTE = %", $this->code);
-        $query2 .= "and CODEACTIVITE = '4'";
-        $query2 .= "and MODIFICATEUR = '7'";
+        $query2 .= " and CODEACTIVITE = '4'";
+        $query2 .= " and MODIFICATEUR = '7'";
+        $query2 .= " group by MODIFICATEUR";
         $result2 = $ds->exec($query2);
         $this->_code7 = $ds->numRows($result2);
       } else
@@ -152,7 +154,8 @@ class CCodeCCAM {
         $modificateurs =& $activite->modificateurs;
         $query = "select * from modificateuracte " .
             "\nwhere CODEACTE = %1" .
-            "\nand CODEACTIVITE = %2";
+            "\nand CODEACTIVITE = %2" .
+            "\ngroup by MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
         
@@ -172,7 +175,8 @@ class CCodeCCAM {
             "\nfrom phaseacte " .
             "\nwhere CODEACTE = %1" .
             "\nand ACTIVITE = %2" .
-            "\norder by PHASE";
+            "\ngroup by PHASE" .
+            "\norder by PHASE, DATE1 DESC";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
               
@@ -311,7 +315,8 @@ class CCodeCCAM {
         $modificateurs =& $activite->modificateurs;
         $query = "select * from modificateuracte " .
             "\nwhere CODEACTE = %1" .
-            "\nand CODEACTIVITE = %2";
+            "\nand CODEACTIVITE = %2" .
+            "\ngroup by MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
         
@@ -331,7 +336,8 @@ class CCodeCCAM {
             "\nfrom phaseacte " .
             "\nwhere CODEACTE = %1" .
             "\nand ACTIVITE = %2" .
-            "\norder by PHASE";
+            "\ngroup by PHASE" .
+            "\norder by PHASE, DATE1 DESC";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
               
@@ -382,7 +388,7 @@ class CCodeCCAM {
       }
       
       //On rentre la procédure associée
-      $query = $ds->prepare("select * from procedures where CODEACTE = %", $this->code);
+      $query = $ds->prepare("select * from procedures where CODEACTE = % group by CODEACTE order by DATEEFFET DESC", $this->code);
       $result = $ds->exec($query);
       if($ds->numRows($result) > 0) {
         $row = $ds->fetchArray($result);
