@@ -57,13 +57,13 @@ class CCodeCCAM {
   // Chargement des variables importantes
   function LoadLite() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = %", $this->code);
+    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if(mysql_num_rows($result) == 0) {
       $this->code = "-";
       //On rentre les champs de la table actes
-      $this->libelleCourt = "";
-      $this->libelleLong = "";
+      $this->libelleCourt = "Acte inconnu ou supprimé";
+      $this->libelleLong = "Acte inconnu ou supprimé";
       $this->_code7 = 1;
     } else {
       $row = $ds->fetchArray($result);
@@ -73,7 +73,6 @@ class CCodeCCAM {
       $query1 = "select * from activiteacte where ";
       $query1 .= $ds->prepare("CODEACTE = %", $this->code);
       $query1 .= " and ACTIVITE = '4'";
-      $query1 .= " group by MODIFICATEUR";
       $result1 = $ds->exec($query1);
       if($ds->numRows($result1)) {
         $query2 = "select * from modificateuracte where ";
@@ -92,13 +91,13 @@ class CCodeCCAM {
   // Chargement des variables
   function LoadMedium() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = %", $this->code);
+    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if($ds->numRows($result) == 0) {
       $this->code = "";
       //On rentre les champs de la table actes
-      $this->libelleCourt = "";
-      $this->libelleLong = "";
+      $this->libelleCourt = "Acte inconnu ou supprimé";
+      $this->libelleLong = "Acte inconnu ou supprimé";
     } else {
       $row = $ds->fetchArray($result);
     
@@ -215,7 +214,7 @@ class CCodeCCAM {
   
   function loadChaps() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = %", $this->code);
+    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
 
@@ -253,13 +252,13 @@ class CCodeCCAM {
   // Chargement des variables
   function Load() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = %", $this->code);
+    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if($ds->numRows($result) == 0) {
       $this->code = "";
       //On rentre les champs de la table actes
-      $this->libelleCourt = "";
-      $this->libelleLong = "";
+      $this->libelleCourt = "Acte inconnu ou supprimé";
+      $this->libelleLong = "Acte inconnu ou supprimé";
     } else {
       $row = $ds->fetchArray($result);
     
@@ -367,7 +366,7 @@ class CCodeCCAM {
       $i = 0;
       while($row = $ds->fetchArray($result)) {
         $this->assos[$i]["code"] = $row["ACTEASSO"];
-        $query = $ds->prepare("select * from actes where CODE = %", $row["ACTEASSO"]);
+        $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $row["ACTEASSO"]);
         $result2 = $ds->exec($query);
         $row2 = $ds->fetchArray($result2);
         $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
@@ -380,7 +379,7 @@ class CCodeCCAM {
       $i = 0;
       while($row = $ds->fetchArray($result)) {
         $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
-        $query = $ds->prepare("select * from actes where CODE = %", $row["INCOMPATIBLE"]);
+        $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
         $result2 = $ds->exec($query);
         $row2 = $ds->fetchArray($result2);
         $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
@@ -393,7 +392,7 @@ class CCodeCCAM {
       if($ds->numRows($result) > 0) {
         $row = $ds->fetchArray($result);
         $this->procedure["code"] = $row["CODEPROCEDURE"];
-        $query = $ds->prepare("select LIBELLELONG from actes where CODE = %", $this->procedure["code"]);
+        $query = $ds->prepare("select LIBELLELONG from actes where CODE = % and DATEFIN = '00000000'", $this->procedure["code"]);
         $result = $ds->exec($query);
         $row = $ds->fetchArray($result);
         $this->procedure["texte"] = $row["LIBELLELONG"];

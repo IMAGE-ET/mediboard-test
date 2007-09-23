@@ -25,7 +25,7 @@ $query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";
 
 // Si un autre élément est rempli
 if ($code || $clefs || $selacces || $seltopo1) {
-  $query .= " or (1";
+  $query .= " or (DATEFIN = '00000000'";
   // On fait la recherche sur le code
   if ($code != "") {
 	$query .= " AND CODE LIKE '" . addslashes($code) . "%'";

@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("ccamV2");
 
 if($codeacte = @$_POST["codeacte"]){
-  $sql = "SELECT CODE, LIBELLELONG FROM actes WHERE CODE LIKE '" . addslashes($codeacte) . "%'";
+  $sql = "SELECT CODE, LIBELLELONG FROM actes WHERE CODE LIKE '" . addslashes($codeacte) . "%' and DATEFIN = '00000000'";
 }
 
 $result = $ds->loadList($sql, null);
