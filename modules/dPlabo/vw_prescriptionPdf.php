@@ -48,7 +48,15 @@ $patient =& $prescription->_ref_patient;
 // Affichage du praticien et du patient à l'aide d'un tableau
 $pdf->createTab($pdf->viewPraticien($praticien->_view,$praticien->_ref_function->_view, $praticien->_ref_function->_ref_group->_view),
                 $pdf->viewPatient($patient->_view, $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
-                
+
+$urgent = "";
+if($prescription->urgence){
+	$urgent = "(URGENT)";
+}
+$pdf->setY(65);
+$pdf->writeHTML(utf8_encode("Prélèvement du ".(mbTranformTime($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent));
+
+
 //Saut de ligne
 $pdf->Ln(30);
 

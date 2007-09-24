@@ -30,6 +30,12 @@ class CPrescriptionPdf extends CMbPdf {
 		
 	public function Footer() {
 		$this->viewBarcode(15,240,5,null,30,true);
+		$this->SetFontSize(12);
+		//mbTrace($this->getX(),"get x");
+		//mbTrace($this->getY(),"get y");
+		
+		$this->setXY(40,286);
+		$this->writeHTML("ETIQUETTE A COLLER SUR LE TUBE AVANT LE PRELEVEMENT");
 	}
 	
 	public function viewPraticien($pratView, $functionView, $groupView){
