@@ -46,19 +46,15 @@ $patient_month       = mbGetValueFromGet("Date_Month"  , "");
 $patient_year        = mbGetValueFromGet("Date_Year"   , "");
 $patient_naissance   = null;
 
-$useVitale = mbGetValueFromGet("useVitale", 0);
-if($useVitale) {
-  $vitaleValue = mbGetValueFromGet("vitale", array());
-  $patient_nom = mbGetValue($vitaleValue["nom"], $patient_nom);
-  mbSetValueToSession("nom", $patient_nom);
-  $patient_prenom = mbGetValue($vitaleValue["prenom"], $patient_prenom);
-  mbSetValueToSession("prenom", $patient_prenom);
-  $patient_day = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%d"), $patient_day);
-  mbSetValueToSession("Date_Day", $patient_day);
-  $patient_month = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%m"), $patient_month);
-  mbSetValueToSession("Date_Month", $patient_day);
-  $patient_year = mbGetValue(mbTranformTime(null, $vitaleValue["naissance"], "%Y"), $patient_year);
-  mbSetValueToSession("Date_Year", $patient_day);
+if (mbGetValueFromGet("useVitale")) {
+  $patVitale = new CPatient;
+  $patVitale->getValuesFromVitaleEx();
+  $patVitale->updateFormFields();
+  $patient_nom    = $patVitale->nom;
+  $patient_prenom = $patVitale->prenom;
+  $patient_day    = $patVitale->_jour;
+  $patient_month  = $patVitale->_mois;
+  $patient_year   = $patVitale->_annee;
   $patient_naissance = "on";
   mbSetValueToSession("naissance", "on");
 }
@@ -142,15 +138,9 @@ if ($patient->_id) {
   	$sejour->loadNumDossier();
   }
 }
-// Module de carte vitale
-
-$intermaxFunctions = array(
-  "Lire Vitale",
-);
 
 // Chargement de l'IPP du patient
 $patient->loadIPP();
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -176,9 +166,6 @@ $smarty->assign("chir"           , $chir                                      );
 $smarty->assign("anesth"         , $anesth                                    );
 $smarty->assign("listPrat"       , $listPrat                                  );
 $smarty->assign("board"          , 0                                          );
-
-$smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("newLine"          , "---");
 
 $smarty->display("vw_idx_patients.tpl");
 ?>

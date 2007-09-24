@@ -1,6 +1,6 @@
 <!-- $Id$ -->
 
-<script language="JavaScript" type="text/javascript">
+<script type="text/javascript">
 
 function chgSoundex() {
   var oForm = document.find;
@@ -15,7 +15,7 @@ function chgSoundex() {
       {{include file="inc_list_patient.tpl"}}
     </td>
 
-    {{if $patient->patient_id}}
+    {{if $patient->_id}}
     <td class="halfPane" id="vwPatient">
       {{include file="inc_vw_patient.tpl"}}
     </td>

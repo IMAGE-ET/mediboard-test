@@ -1,4 +1,4 @@
-<table class="tbl chambrecollapse" id="chambre{{$curr_chambre->_id}}">
+<table class="tbl chambrecollapse" id="chambre-{{$curr_chambre->_id}}">
   <tr>
     <th class="chambre" colspan="2" onclick="
         flipChambre({{$curr_chambre->_id}});
@@ -41,7 +41,7 @@
       <img src="images/icons/path.png" alt="warning" title="{{$curr_chambre->_conflits_pathologies}} Conflit(s) de pathologies" />
       {{/if}}
 
-      <strong><a name="chambre{{$curr_chambre->chambre_id}}">{{$curr_chambre->nom}}</a></strong>
+      <strong><a name="chambre{{$curr_chambre->_id}}">{{$curr_chambre->nom}}</a></strong>
     </th>
   </tr>
   {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}

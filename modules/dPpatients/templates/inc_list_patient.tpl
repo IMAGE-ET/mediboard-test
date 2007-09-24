@@ -1,20 +1,12 @@
 {{mb_include_script path="includes/javascript/intermax.js"}}
 
-
 <script type="text/javascript">
-
-Intermax.initialize = function(){
-  Intermax.url.setModuleTab("dPpatients", "vw_idx_patients");
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  var url = new Url;
+  url.setModuleTab("dPpatients", "vw_idx_patients");
+  url.addParam("useVitale", 1);
+  url.redirect();
 }
-
-Intermax.action = function(){
-  Intermax.url.redirect();
-}
-
-Intermax.createResultMessages = function(oContent) {
-}
-
-
 </script>
 
 {{if $app->user_prefs.GestionFSE}}

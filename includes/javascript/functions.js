@@ -9,12 +9,66 @@ function main() {
 	  SystemMessage.init();
 	  SystemMessage.doEffect();
 	  WaitingMessage.init();
+	  
+	  
+		Event.observe(window, 'beforeunload', function() {
+		  Event.unloadCache();
+		}, false);
+		
 	  initPuces();
 	  pageMain();
+//		References.audit();
 	}
 	catch (e) {
 		Console.debug(e);
 	}	
+}
+
+/**
+ * References manipulation
+ */
+var References = { 
+  /**
+   * Prints out info on references counting
+   */
+  audit: function() {
+    Console.debug(Prototype, "Prototype");
+    return;
+    
+    for (key in window) {
+      try {
+	      Console.trace(key);
+	      Console.trace(window[key] == "[object Object]");
+      }
+      catch (e) {
+      }
+    }
+  },
+  
+	/**
+	 * Clean references involved in memory leaks
+	 */
+  clean: function(obj) {
+	  var chi, cou, len, nam;
+	  chi = obj.childNodes;
+	  if(chi) {
+	    len = chi.length;
+	    for (cou = 0; cou < len; cou++) {
+				this.clean(obj.childNodes[cou]);
+	    }
+	  }
+	  
+	  chi = obj.attributes;
+	  if(chi) {
+	    len = chi.length;
+	    for(cou = 0; cou < len; cou++) {
+	      nam = chi[cou].name;
+	      if(typeof(obj[nam]) == 'function') {
+	        obj[nam] = null;
+	      }
+	    }
+	  }
+  }
 }
 
 var WaitingMessage = {
@@ -97,7 +151,7 @@ var AjaxResponse = {
 /**
  * System message effects
  */
-SystemMessage = {
+var SystemMessage = {
   id: "systemMsg",
   autohide: null,
   effect: null,
@@ -371,54 +425,6 @@ var Assert = {
     }
   }
 };
-
-/**
- * Function that clean references to avoid memory leaks
- */
-
-cleanReferences = function(obj) {
-  var chi, cou, len, nam;
-  chi = obj.childNodes;
-  if(chi) {
-    len = chi.length;
-    for (cou = 0; cou < len; cou++) {
-      cleanReferences(obj.childNodes[cou]);
-    }
-  }
-  chi = obj.attributes;
-  if(chi) {
-    len = chi.length;
-    for(cou = 0; cou < len; cou++) {
-      nam = chi[cou].name;
-      if(typeof(obj[nam]) == 'function') {
-        obj[nam] = null;
-      }
-    }
-  }
-}
-
-/**
- * Element.ClassNames class
- */
-
-Class.extend(Element.ClassNames, {
-  
-  load: function (sCookieName, nDuration) {
-    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
-    if (sValue = oCookie.getSubValue(this.element.id)) {
-      this.set(sValue);
-    }
-  },
-  
-  save: function (sCookieName, nDuration) {
-    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
-    oCookie.setSubValue(this.element.id, this.toString());
-  },
-  
-  toggle: function (sClassName) {
-    this[this.include(sClassName) ? "remove" : "add"](sClassName)
-  }
-});
 
 /**
  * PairEffect Class

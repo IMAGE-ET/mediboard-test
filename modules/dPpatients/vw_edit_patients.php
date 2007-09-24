@@ -30,24 +30,14 @@ if (!$patient_id) {
   $patient->prenom = $firstName;
 }
 
-// Module de carte vitale
-
-$intermaxFunctions = array(
-  "Lire Vitale",
-);
-
 if (mbGetValueFromGet("useVitale")) {
-  $patient->getValuesFromVitale();
+  $patient->getValuesFromVitaleEx();
+  $patient->updateFormFields();
 }
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("dateCMU", $dateCMU);
 $smarty->assign("patient", $patient);
-
-$smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("newLine"          , "---");
-
 $smarty->display("vw_edit_patients.tpl");
 ?>

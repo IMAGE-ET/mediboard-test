@@ -1,17 +1,37 @@
 <!-- $Id: vw_resume.tpl 1748 2007-03-20 18:58:41Z MyttO $ -->
 
 {{mb_include_script path="includes/javascript/intermax.js"}}
+{{mb_include_script module="dpPatients" script="pat_selector"}}
 
 <script type="text/javascript">
 
-Intermax.initialize = function(){
-  Intermax.url.setModuleAction("dPpatients", "pat_selector"); 
+Intermax.createResultMessages = function(oContent) {
+  var idFonction = oContent.FONCTION.NOM.replace(" ", "-");
+
+  // Select div result handler      
+  var sSelector = "tr#" + idFonction + " td.result div.handler";
+  var eResultHandler = $$(sSelector)[0];
+  eResultHandler.innerHTML = "";
+
+  // Create handler messages
+  oParam = oContent.PARAM;
+  eResultHandler.appendChild(Dom.createMessage("Appel : " + oParam.APPEL, oParam.APPEL == "OK" ? "message" : "error"))
+  eResultHandler.appendChild(Dom.createMessage("Exécution: " + oParam.EXECUTION, oParam.EXECUTION == "OK" ? "message" : "error"))
+  eResultHandler.appendChild(Dom.createMessage("Erreur : " + oParam.ERREUR, oParam.ERREUR == undefined  ? "message" : "error"))
+  eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == undefined ? "message" : "error"))
 }
 
-Intermax.action = function(){
-  Intermax.url.popup(800, 500, "Patient");
+Intermax.ResultHandler = {
+  "Lire Vitale": function() {
+    PatSelector.set = function(id, view) {
+      Console.debug(view, "Found and update patient");
+      Console.debug(id, "With ID");
+    }
+    
+    PatSelector.options.useVitale = 1;
+    PatSelector.pop();
+  }
 }
-
 </script>
 
 <table class="tbl">
@@ -51,4 +71,4 @@ Intermax.action = function(){
   </tr>
   {{/foreach}}
   
-</table>
+</table

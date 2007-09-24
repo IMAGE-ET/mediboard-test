@@ -20,9 +20,6 @@ $intermaxFunctions = array(
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("newLine"          , "---");
-
 $smarty->display("vw_intermax.tpl");
 

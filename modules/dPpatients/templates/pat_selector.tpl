@@ -15,7 +15,7 @@ var Patient = {
     url.addParam("patient_id", patient_id);
     url.addParam("dialog", "1");
 
-	var oForm = null;
+	  var oForm = null;
     if (oForm = document.patientSearch) {
       url.addElement(oForm.name);
       url.addElement(oForm.firstName);
@@ -36,31 +36,10 @@ var Patient = {
   },
   
   select: function(patient_id, patient_view) {
-    var oSelector = window.opener.PatSelector;
-    if (oSelector) {
-      oSelector.set(patient_id, patient_view);
-    }
-    else {
-      window.opener.setPat(patient_id, patient_view);
-    }
+		window.opener.PatSelector.set(patient_id, patient_view);
     window.close();
   }
 }
-
-
-Intermax.initialize = function(){
-      Intermax.url.setModuleAction("dPpatients", "pat_selector");
-      Intermax.url.addParam("dialog", 1);
-}
-
-Intermax.action = function(){
-     Intermax.url.redirect();
-}
-
-Intermax.createResultMessages = function(oContent) {
-}
-
-
 
 </script>
 
@@ -104,6 +83,7 @@ Intermax.createResultMessages = function(oContent) {
 	  <td>
 	    {{mb_value object=$patVitale field="naissance"}}
 	    {{mb_field object=$patVitale field="naissance" hidden="true"}}
+	    {{mb_field object=$patVitale field="rang_naissance" hidden="true"}}
 	  </td>
 	</tr>
 	
@@ -112,17 +92,22 @@ Intermax.createResultMessages = function(oContent) {
 	  <td>
 	    {{mb_value object=$patVitale field="matricule"}}
 	    {{mb_field object=$patVitale field="matricule" hidden="true"}}
+	    {{mb_field object=$patVitale field="assure_matricule" hidden="true"}}
+	    {{mb_field object=$patVitale field="rang_beneficiaire" hidden="true"}}
+	  </td>
+	</tr>
+
+	<tr>
+	  <th>{{mb_label object=$patVitale field="regime_sante"}}</th>
+	  <td>
+	    {{mb_value object=$patVitale field="regime_sante"}}
+	    {{mb_field object=$patVitale field="code_regime" hidden="true"}}
+	    {{mb_field object=$patVitale field="caisse_gest" hidden="true"}}
+	    {{mb_field object=$patVitale field="centre_gest" hidden="true"}}
+	    {{mb_field object=$patVitale field="regime_sante" hidden="true"}}
 	  </td>
 	</tr>
 	
-	<tr>
-	  <th>{{mb_label object=$patVitale field="adresse"}}</th>
-	  <td>
-	    {{mb_value object=$patVitale field="adresse"}}
-	    {{mb_field object=$patVitale field="adresse" hidden="true"}}
-	  </td>
-  </tr>
-
 </table>
 
 </form>

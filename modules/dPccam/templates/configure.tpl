@@ -6,7 +6,7 @@ function startCCAM() {
 }
 </script>
 
-<h2>Import de la base de données CCAM V2</h2>
+<h2>Import de la base de données CCAM</h2>
 
 <table class="tbl">
 

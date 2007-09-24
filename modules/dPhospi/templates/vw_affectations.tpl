@@ -1,14 +1,10 @@
 <script language="JavaScript" type="text/javascript">
 function flipChambre(chambre_id) {
-  Element.classNames("chambre" + chambre_id).flip("chambrecollapse", "chambreexpand");
+  Element.classNames("chambre-" + chambre_id).flip("chambrecollapse", "chambreexpand");
 }
 
 function flipSejour(sejour_id) {
-  if(sejour_id){
-    Element.classNames("sejour" + sejour_id).flip("sejourcollapse", "sejourexpand");
-  }else{
-    Element.classNames("sejour").flip("sejourcollapse", "sejourexpand");
-  }
+  Element.classNames("sejour-" + sejour_id).flip("sejourcollapse", "sejourexpand");
 }
 
 var selected_hospitalisation = null;
@@ -277,7 +273,7 @@ function pageMain() {
               <input type="hidden" name="m" value="{{$m}}" />
               <label for="filterAdm" title="Admissions à afficher">Admissions</label>
               <select name="filterAdm" onchange="submit()">
-                <option value="tout" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash Tout afficher</option>
+                <option value="tout" {{if $filterAdm == 0}}selected="selected"{{/if}}>&mdash; Tout afficher</option>
                 <option value="ambu" {{if $filterAdm == "ambu"}}selected="selected"{{/if}}>Ambulatoires</option>
                 <option value="comp" {{if $filterAdm == "comp"}}selected="selected"{{/if}}>Hospi. complètes</option>
                 <option value="csejour" {{if $filterAdm == "csejour"}}selected="selected"{{/if}}>Courts séjours</option>
@@ -304,14 +300,14 @@ function pageMain() {
       <input type="hidden" name="lit_id" value="" />
       <input type="hidden" name="sejour_id" value="" />
             
-      <table class="sejourcollapse" id="sejour">
+      <table class="sejourcollapse" id="sejour-bloque">
         <tr>
         <td class="selectsejour">
           <input type="radio" id="hospitalisation" onclick="selectHospitalisation()" />
-          <script type="text/javascript">new Draggable('sejour', {revert:true})</script>
+          <script type="text/javascript">new Draggable('sejour-bloque', {revert:true})</script>
         </td>
-        <td class="patient" onclick="flipSejour()">
-          <strong><a name="sejour">[BLOQUER UN LIT]</a></strong>
+        <td class="patient" onclick="flipSejour('bloque')">
+          <strong><a name="sejourbloque">[BLOQUER UN LIT]</a></strong>
         </td>
         </tr>
         <tr>

@@ -17,12 +17,12 @@
 
     </form>
 
-    <table class="sejourcollapse" id="sejour{{$curr_sejour->_id}}">
+    <table class="sejourcollapse" id="sejour-{{$curr_sejour->_id}}">
       <tr>
         <td class="selectsejour" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
           {{if !$dPconfig.dPhospi.pathologies || $curr_sejour->pathologie}}  
           <input type="radio" id="hospitalisation{{$curr_sejour->_id}}" onclick="selectHospitalisation({{$curr_sejour->_id}})" />
-          <script type="text/javascript">new Draggable('sejour{{$curr_sejour->_id}}', {revert:true})</script>
+          <script type="text/javascript">new Draggable('sejour-{{$curr_sejour->_id}}', {revert:true})</script>
           {{/if}}
         </td>
         <td class="patient" onclick="flipSejour({{$curr_sejour->_id}})">

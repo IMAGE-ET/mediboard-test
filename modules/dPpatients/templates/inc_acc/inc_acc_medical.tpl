@@ -43,9 +43,10 @@ var Medecin = {
 </script>
 
 <table class="form">
+
   <tr>
-    <th>{{mb_label object=$patient field="regime_sante"}}</th>
-    <td>{{mb_field object=$patient field="regime_sante" tabindex="201" size="40" maxlength="40"}}</td>
+    <th>{{mb_label object=$patient field="code_regime"}}</th>
+    <td>{{mb_field object=$patient field="code_regime" tabindex="201"}}</td>
     <th>
       {{mb_label object=$patient field="medecin_traitant"}}
       {{mb_field object=$patient field="medecin_traitant" hidden=1}}
@@ -56,16 +57,10 @@ var Medecin = {
     </td>
     <td class="button"><button class="search" tabindex="251" type="button" onclick="Medecin.pop('_traitant')">Choisir</button></td>
   </tr>
-  
+
   <tr>
-    <th>{{mb_label object=$patient field="cmu"}}</th>
-    <td class="date">
-      <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
-      {{mb_field object=$patient field="cmu" hidden=1 prop="date"}}
-      <img id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
-      <button class="cancel notext" type="button" onclick="CMU.del()">{{tr}}Delete{{/tr}}</button>
-      <button class="tick notext" type="button" onclick="CMU.set('{{$dateCMU}}')">{{tr}}Create{{/tr}}</button>
-    </td>
+    <th>{{mb_label object=$patient field="caisse_gest"}}</th>
+    <td>{{mb_field object=$patient field="caisse_gest" tabindex="202"}}</td>
     <th>
       {{mb_label object=$patient field="medecin1"}}
       {{mb_field object=$patient field="medecin1" hidden=1}}
@@ -76,12 +71,10 @@ var Medecin = {
     </td>
     <td class="button"><button class="search" tabindex="252" type="button" onclick="Medecin.pop('1')">Choisir</button></td>
   </tr>
-  
+
   <tr>
-    <th rowspan="2">{{mb_label object=$patient field="ald"}}</th>
-    <td rowspan="2">
-      {{mb_field object=$patient field="ald" tabindex="203"}}
-    </td>
+    <th>{{mb_label object=$patient field="centre_gest"}}</th>
+    <td>{{mb_field object=$patient field="centre_gest" tabindex="203"}}</td>
     <th>
       {{mb_label object=$patient field="medecin2"}}
       {{mb_field object=$patient field="medecin2" hidden=1}}
@@ -91,10 +84,13 @@ var Medecin = {
       <button class="cancel notext" type="button" onclick="Medecin.del('2')">{{tr}}Delete{{/tr}}</button>
     </td>
     <td class="button">
-      <button class="search" tabindex="253" type="button" onclick="Medecin.pop('2')">Choisir</button></td>
+      <button class="search" tabindex="253" type="button" onclick="Medecin.pop('2')">Choisir</button>
+    </td>
   </tr>
-  
+
   <tr>
+    <th>{{mb_label object=$patient field="regime_sante"}}</th>
+    <td>{{mb_field object=$patient field="regime_sante" tabindex="204	"}}</td>
     <th>
       {{mb_label object=$patient field="medecin3"}}
       {{mb_field object=$patient field="medecin3" hidden=1}}
@@ -107,20 +103,25 @@ var Medecin = {
   </tr>
   
   <tr>
+    <th>{{mb_label object=$patient field="cmu"}}</th>
+    <td class="date">
+      <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
+      {{mb_field object=$patient field="cmu" hidden=1 prop="date"}}
+      <img id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
+      <button class="cancel notext" type="button" onclick="CMU.del()">{{tr}}Delete{{/tr}}</button>
+      <button class="tick notext" type="button" onclick="CMU.set('{{$dateCMU}}')">{{tr}}Create{{/tr}}</button>
+    </td>
     <th>{{mb_label object=$patient field="incapable_majeur"}}</th>
     <td>{{mb_field object=$patient field="incapable_majeur" tabindex="204"}}</td>
   </tr>
   
   <tr>
+    <th>{{mb_label object=$patient field="ald"}}</th>
+    <td>
+      {{mb_field object=$patient field="ald" tabindex="203"}}
+    </td>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
     <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
-
-<!-- 
-    <th>{{mb_label object=$patient field="SHS"}}</th>
-    <td colspan="2">
-      {{mb_field object=$patient field="SHS" tabindex="256" size="8" maxlength="8";"}}
-    </td>
- -->
-   </tr>
-
+  </tr>
+  
 </table>

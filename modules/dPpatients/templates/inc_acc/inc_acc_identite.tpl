@@ -90,15 +90,19 @@
   </tr>
   
   <tr>
-    <th rowspan="2">{{mb_label object=$patient field="rques"}}</th>
-    <td rowspan="2">{{mb_field object=$patient field="rques" tabindex="111"}}</td>
-    <th>{{mb_label object=$patient field="matricule"}}</th>
-    <td>{{mb_field object=$patient field="matricule" tabindex="166" size="17" maxlength="15"}}</td>
+    <th rowspan="3">{{mb_label object=$patient field="rques"}}</th>
+    <td rowspan="3">{{mb_field object=$patient field="rques" tabindex="111"}}</td>
+    <th>{{mb_label object=$patient field="fin_validite_vitale"}}</th>
+    <td class="date">{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" tabindex="166" }}</td>
   </tr>
 
   <tr>
-    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
-    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="177" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+    <th>{{mb_label object=$patient field="matricule"}}</th>
+    <td>{{mb_field object=$patient field="matricule" tabindex="167"}}</td>
   </tr>
   
+  <tr>
+    <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
+    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="168" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+  </tr>
 </table>

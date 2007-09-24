@@ -18,11 +18,13 @@ $firstName = mbGetValueFromGet("firstName");
 $patVitale = null;
 if (mbGetValueFromGet("useVitale")) {
   $patVitale = new CPatient;
-  $patVitale->getValuesFromVitale();
+  $patVitale->getValuesFromVitaleEx();
   
   $name = $patVitale->nom; 
   $firstName = $patVitale->prenom; 
 }
+
+
 
 // Recherche sur valeurs exactes et phonétique
 $where        = array();
@@ -84,26 +86,14 @@ loadConsultationsDuJour($patientsSoundex);
 loadAdmissionsDuJour($patients);
 loadAdmissionsDuJour($patientsSoundex);
 
-// Module de carte vitale
-
-$intermaxFunctions = array(
-  "Lire Vitale",
-);
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("name"             , $name            );
 $smarty->assign("firstName"        , $firstName       );
-
 $smarty->assign("patVitale"        , $patVitale);
-
 $smarty->assign("patients"         , $patients        );
 $smarty->assign("patientsSoundex"  , $patientsSoundex );
-
-$smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("newLine"          , "---");
 
 $smarty->display("pat_selector.tpl");
 

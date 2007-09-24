@@ -9,12 +9,14 @@ var PatSelector = {
   sView_easy: null,
   options : {
     width : 750,
-    height: 500
+    height: 500,
+    useVitale: 0
   },
     
   pop: function() {
     var url = new Url();
     url.setModuleAction("dPpatients", "pat_selector");
+    url.addParam("useVitale", this.options.useVitale);
     url.popup(this.options.width, this.options.height, "Patient");
   },
   

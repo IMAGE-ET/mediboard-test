@@ -133,11 +133,11 @@
   </tr>
   <tr>
     <th>{{mb_label object=$finalPatient field="adresse"}}</th>
-    <td>
+    <td class="text">
       <input type="radio" name="_choix_adresse" value="{{$patient1->adresse}}" checked="checked" onclick="setField(this.form.adresse, '{{$patient1->adresse|smarty:nodefaults|JSAttribute}}')" />
       {{$patient1->adresse}}
     </td>
-    <td>
+    <td class="text">
       <input type="radio" name="_choix_adresse" value="{{$patient2->adresse}}" onclick="setField(this.form.adresse, '{{$patient2->adresse|smarty:nodefaults|JSAttribute}}')" />
       {{$patient2->adresse}}
     </td>
@@ -244,5 +244,49 @@
     <td>
       {{mb_field object=$finalPatient field="profession" tabindex="125"}}
     </td>
+
+  {{assign var=field value=fin_validite_vitale}}
+  <tr>
+    <th>{{mb_label object=$finalPatient field=$field}}</th>
+    <td>
+      <input type="radio" name="_choix_{{$field}}" value="{{$patient1->$field}}" checked="checked" onclick="setField(this.form.{{$field}}, '{{$patient1->$field|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->$field}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_{{$field}}" value="{{$patient2->$field}}" onclick="setField(this.form.{{$field}}, '{{$patient2->$field|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->$field}}
+    </td>
+    <td class="date">{{mb_field object=$finalPatient field=$field tabindex="207"}}</td>
+  </tr>
+
+  {{assign var=field value=matricule}}
+  <tr>
+    <th>{{mb_label object=$finalPatient field=$field}}</th>
+    <td>
+      <input type="radio" name="_choix_{{$field}}" value="{{$patient1->$field}}" checked="checked" onclick="setField(this.form.{{$field}}, '{{$patient1->$field|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->$field}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_{{$field}}" value="{{$patient2->$field}}" onclick="setField(this.form.{{$field}}, '{{$patient2->$field|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->$field}}
+    </td>
+    <td>
+      {{mb_field object=$finalPatient field=$field tabindex="206" size="15" maxlength="15"}}
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$finalPatient field="rang_beneficiaire"}}</th>
+    <td>
+      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient1->rang_beneficiaire}}" checked="checked" onclick="setField(this.form.rang_beneficiaire, '{{$patient1->rang_beneficiaire|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->rang_beneficiaire}}
+    </td>
+    <td>
+      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient2->rang_beneficiaire}}" onclick="setField(this.form.rang_beneficiaire, '{{$patient2->rang_beneficiaire|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->rang_beneficiaire}}
+    </td>
+    <td>{{mb_field object=$finalPatient field="rang_beneficiaire" tabindex="207"}}</td>
+  </tr>
+
   </tr>
 </table>

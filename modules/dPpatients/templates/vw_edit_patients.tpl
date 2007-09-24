@@ -6,16 +6,13 @@
 
 <script type="text/javascript">
 
-Intermax.initialize = function(){
-     Intermax.url.setModuleTab("dPpatients", "vw_edit_patients");
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  var url = new Url;
+  url.setModuleTab("dPpatients", "vw_edit_patients");
+  url.addParam("useVitale", 1);
+  url.redirect();
 }
 
-Intermax.action = function(){
-     Intermax.url.redirect();
-}
-
-Intermax.createResultMessages = function(oContent) {
-}
 
 var httpreq_running = false;
 function confirmCreation(oForm){
@@ -51,6 +48,7 @@ function pageMain() {
   initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
   initPaysField("editFrm", "pays","_tel1");
   regFieldCalendar("editFrm", "cmu");
+  regFieldCalendar("editFrm", "fin_validite_vitale");
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","_assure_tel1");
 }

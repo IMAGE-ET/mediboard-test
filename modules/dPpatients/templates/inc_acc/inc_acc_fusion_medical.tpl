@@ -1,10 +1,12 @@
 <table class="form">
+
   <tr>
     <th class="category">Champ</th>
     <th width="30%" class="category">1er patient</th>
     <th width="30%" class="category">2ème patient</th>
     <th width="30%" class="category">Résultat</th>
   </tr>
+  
   <tr>
     <th>{{mb_label object=$finalPatient field="regime_sante"}}</th>
     <td>
@@ -19,6 +21,7 @@
       {{mb_field object=$finalPatient field="regime_sante" tabindex="200"}}
      </td>
   </tr>
+
   <tr>
     <th>
       {{mb_label object=$finalPatient field="cmu"}}
@@ -38,6 +41,7 @@
       <input type="text" readonly="readonly" name="_cmu_view" value="{{$finalPatient->cmu|date_format:"%d/%m/%Y"}}" />
     </td>
   </tr>
+
   <tr>
     <th>{{mb_label object=$finalPatient field="ald"}}</th>
     <td class="text">
@@ -52,6 +56,7 @@
       {{mb_field object=$finalPatient field="ald" tabindex="201" rows="3"}}
     </td>
   </tr>
+
   <tr>
     <th>{{mb_label object=$finalPatient field="incapable_majeur"}}</th>
     <td>
@@ -66,6 +71,7 @@
       {{mb_field object=$finalPatient field="incapable_majeur" tabindex="202"}}
     </td>
   </tr>
+
   <tr>
     <th>{{mb_label object=$finalPatient field="ATNC"}}</th>
     <td>
@@ -80,6 +86,7 @@
       {{mb_field object=$finalPatient field="ATNC" tabindex="204"}}
     </td>
   </tr>
+
   <tr>
     <th>
       {{mb_label object=$finalPatient field="medecin_traitant"}}
@@ -99,6 +106,7 @@
       <input type="text" readonly="readonly" name="_medecin_traitant_view" value="{{$finalPatient->_ref_medecin_traitant->_view}}" />
     </td>
   </tr>
+
   <tr>
     <th>
       {{mb_label object=$finalPatient field="medecin1"}}
@@ -118,6 +126,7 @@
       <input type="text" readonly="readonly" name="_medecin1_view" value="{{$finalPatient->_ref_medecin1->_view}}" />
     </td>
   </tr>
+
   <tr>
     <th>
       {{mb_label object=$finalPatient field="medecin2"}}
@@ -137,6 +146,7 @@
       <input type="text" readonly="readonly" name="_medecin2_view" value="{{$finalPatient->_ref_medecin2->_view}}" />
     </td>
   </tr>
+
   <tr>
     <th>
       {{mb_label object=$finalPatient field="medecin3"}}
@@ -156,32 +166,7 @@
       <input type="text" readonly="readonly" name="_medecin3_view" value="{{$finalPatient->_ref_medecin3->_view}}" />
     </td>
   </tr>
-  <tr>
-    <th>{{mb_label object=$finalPatient field="matricule"}}</th>
-    <td>
-      <input type="radio" name="_choix_matricule" value="{{$patient1->matricule}}" checked="checked" onclick="setField(this.form.matricule, '{{$patient1->matricule|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->matricule}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_matricule" value="{{$patient2->matricule}}" onclick="setField(this.form.matricule, '{{$patient2->matricule|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->matricule}}
-    </td>
-    <td>
-      {{mb_field object=$finalPatient field="matricule" tabindex="206" size="15" maxlength="15"}}
-    </td>
-  </tr>
-  <tr>
-    <th>{{mb_label object=$finalPatient field="rang_beneficiaire"}}</th>
-    <td>
-      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient1->rang_beneficiaire}}" checked="checked" onclick="setField(this.form.rang_beneficiaire, '{{$patient1->rang_beneficiaire|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->rang_beneficiaire}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_rang_beneficiaire" value="{{$patient2->rang_beneficiaire}}" onclick="setField(this.form.SHS, '{{$patient2->SHS|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->rang_beneficiaire}}
-    </td>
-    <td>{{mb_field object=$finalPatient field="rang_beneficiaire" tabindex="207"}}</td>
-  </tr>
+  
   <tr>
     <th>{{mb_label object=$finalPatient field="SHS"}}</th>
     <td>
@@ -194,4 +179,5 @@
     </td>
     <td>{{mb_field object=$finalPatient field="SHS" tabindex="208" size="10" maxlength="10"}}</td>
   </tr>
+
 </table>

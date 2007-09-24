@@ -45,12 +45,16 @@ class CPatient extends CDossierMedical {
   var $ATNC             = null;
   var $matricule        = null;
   var $SHS              = null;
+  var $code_regime      = null;
+  var $caisse_gest      = null;
+  var $centre_gest      = null;
   var $regime_sante     = null;
   var $rques            = null;
   var $cmu              = null;
   var $ald              = null;
   var $rang_beneficiaire= null;
   var $rang_naissance   = null;
+  var $fin_validite_vitale = null;
   
   var $pays             = null;
   var $nationalite      = null;
@@ -193,6 +197,9 @@ class CPatient extends CDossierMedical {
     $specs["medecin2"]          = "ref class|CMedecin";
     $specs["medecin3"]          = "ref class|CMedecin";
     $specs["matricule"]         = "code insee confidential";
+    $specs["code_regime"]       = "numchar length|2";
+    $specs["caisse_gest"]       = "numchar length|3";
+    $specs["centre_gest"]       = "numchar length|4";
     $specs["regime_sante"]      = "str";
     $specs["SHS"]               = "numchar length|8";
     $specs["sexe"]              = "enum list|m|f|j default|m";
@@ -209,6 +216,7 @@ class CPatient extends CDossierMedical {
     $specs["ald"]               = "text";
     $specs["rang_beneficiaire"] = "enum list|01|02|11|12|13";
     $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
+    $specs["fin_validite_vitale"] = "date";
     
     $specs["pays"]              = "str";
     $specs["nationalite"]       = "notNull enum list|local|etranger default|local";
@@ -263,17 +271,63 @@ class CPatient extends CDossierMedical {
       "remarques" => null
     );
   }
-    
-  function getValuesFromVitale() {
-    if (null == $propsVitale = mbGetValueFromGetOrSession("vitale")) {
+      
+  function getValuesFromVitaleEx() {
+    if (null == $intermax = mbGetValueFromGetOrSession("intermax")) {
       return;
     }
-
-    foreach ($propsVitale as $propVitale => $valVitale) {
-      $this->$propVitale = $valVitale;
+    
+    $vitale = $intermax["VITALE"];
+    $this->nom    = $vitale["VIT_NOM"];
+    $this->prenom = $vitale["VIT_PRENOM"];
+    $this->naissance = mbDateFromLocale($vitale["VIT_DATE_NAISSANCE"]);
+    $this->rang_naissance = $vitale["VIT_RANG_GEMELLAIRE"];
+    
+    // Adresse
+    if ($vitale["VIT_ADRESSE_1"]) {
+	    $this->adresse = join("\n", array(
+	      $vitale["VIT_ADRESSE_1"],
+	      $vitale["VIT_ADRESSE_2"],
+	      $vitale["VIT_ADRESSE_3"],
+	      $vitale["VIT_ADRESSE_4"],
+	      $vitale["VIT_ADRESSE_5"])
+	    );
     }
     
-    $this->updateFormFields();
+    // Matricules
+    $this->assure_matricule = join("", array($vitale["VIT_NUMERO_SS"], $vitale["VIT_CLE_SS"]));
+    $this->matricule = $this->assure_matricule;
+    if ($vitale["VIT_NUMERO_SS_INDIV"]) {
+      $this->matricule = join("", array($vitale["VIT_NUMERO_SS_INDIV"], $vitale["VIT_CLE_SS_INDIV"]));
+    }
+    
+    // Assuré
+    $this->assure_nom          = $vitale["VIT_NOM_ASSURE"];
+    $this->assure_prenom       = $vitale["VIT_PRENOM_ASSURE"];
+    $this->fin_validite_vitale = mbDateFromLocale($vitale["VIT_FIN_VALID_VITALE"]);
+    mbExport($this->getProps());
+    
+    // Régime
+    $this->code_regime = $vitale["VIT_CODE_REGIME"];
+    $this->caisse_gest = $vitale["VIT_CAISSE_GEST"];
+    $this->centre_gest = $vitale["VIT_CENTRE_GEST"];
+    $this->regime_sante = $vitale["VIT_NOM_AMO"];
+    
+    // Rang bénéficiaire
+    $codeRangMatrix = array(
+			"00"=> "01", // Assuré
+			"01"=> "02", // Ascendant, descendant, collatéraux ascendants
+			"02"=> "02", // Conjoint
+			"03"=> "02", // Conjoint divorcé
+			"04"=> "02", // Concubin
+			"05"=> "02", // Conjoint séparé
+			"06"=> "11", // Enfant
+			"07"=> "02", // Bénéficiaire hors article 313
+			"08"=> "02", // Conjoint veuf
+			"09"=> "02", // Autre ayant droit
+    );
+    
+    $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
   }
   
   function updateFormFields() {

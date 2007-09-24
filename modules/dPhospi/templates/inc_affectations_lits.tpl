@@ -1,4 +1,4 @@
-<tr class="lit" id="lit{{$curr_lit->lit_id}}">
+<tr class="lit" id="lit-{{$curr_lit->_id}}">
   <td>
     {{if $curr_lit->_overbooking}}
       <img src="images/icons/warning.png" alt="warning" title="Over-booking: {{$curr_lit->_overbooking}} collisions" />
@@ -7,7 +7,7 @@
   </td>
   <td class="action">
     {{if $can->edit}}
-      <input name="choixLit" type="radio" id="lit{{$curr_lit->lit_id}}" onclick="selectLit({{$curr_lit->lit_id}})" />
+      <input name="choixLit" type="radio" id="lit{{$curr_lit->_id}}" onclick="selectLit({{$curr_lit->_id}})" />
     {{/if}}
   </td>
 </tr>

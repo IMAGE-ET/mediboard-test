@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.48";
+$config["mod_version"]     = "0.49";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -368,8 +368,16 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients`
             ADD `rang_naissance` ENUM('1','2','3','4','5','6');";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.48");
+    $sql = "ALTER TABLE `patients`
+						ADD `code_regime` TINYINT(2) UNSIGNED ZEROFILL, 
+						ADD `caisse_gest` MEDIUMINT(3) UNSIGNED ZEROFILL, 
+						ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL, 
+						ADD `fin_validite_vitale` DATE;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.48";
+    $this->mod_version = "0.49";
   }
 }
 
