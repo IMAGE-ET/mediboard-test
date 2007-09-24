@@ -27,6 +27,7 @@ $pdf = new CPrescriptionPdf("P", "mm", "A4", true);
 // Affichage de l'entete du document
 $image = "logo.jpg";
 
+
 $taille = "75";
 $texte = "Av. des Sciences 1B\nCase postale 961\n1401 Yverdon-les-Bains\nTel:  024 424 80 50\nFax: 024 424 80 51";
 $pdf->SetHeaderData($image, $taille, "", $texte);
@@ -47,22 +48,21 @@ $patient =& $prescription->_ref_patient;
 
 // Affichage du praticien et du patient à l'aide d'un tableau
 $pdf->createTab($pdf->viewPraticien($praticien->_view,$praticien->_ref_function->_view, $praticien->_ref_function->_ref_group->_view),
-                $pdf->viewPatient($patient->_view, $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
+                $pdf->viewPatient($patient->_view, mbTranformTime($patient->naissance,null,'%d-%m-%y'), $patient->adresse, $patient->cp, $patient->ville, $patient->tel));
 
 $urgent = "";
 if($prescription->urgence){
 	$urgent = "(URGENT)";
 }
 $pdf->setY(65);
-$pdf->writeHTML(utf8_encode("Prélèvement du ".(mbTranformTime($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent));
+$pdf->writeHTML(utf8_encode("<b>Prélèvement du ".(mbTranformTime($prescription->date,null,'%d-%m-%y à %H:%M'))." ".$urgent."</b>"));
 
 
 //Saut de ligne
 $pdf->Ln(30);
 
 // Affichage des analyses
-$pdf->Cell(180,7,utf8_encode("Analyses demandées:"),0);
-$pdf->Ln(8);
+$pdf->writeHTML(utf8_encode("<b>Analyses demandées:</b>"));
 	
 $pdf->SetFillColor(246,246,246);
 $pdf->Cell(25,7,utf8_encode("Identifiant"),1,0,'C',1);

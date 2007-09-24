@@ -39,14 +39,16 @@ class CPrescriptionPdf extends CMbPdf {
 	}
 	
 	public function viewPraticien($pratView, $functionView, $groupView){
-		return "Medecin: <br />".utf8_encode($pratView).
+		
+		return "<b>Medecin:</b> <br />".utf8_encode($pratView).
 		                "<br />".utf8_encode($functionView).
 		                "<br />".utf8_encode($groupView);
 	}
 		
 		
-    public function viewPatient($patientView, $patientAdresse, $patientCP, $patientVille, $patientTel){
-		return "Patient: <br />".utf8_encode($patientView).
+    public function viewPatient($patientView, $patientNaissance, $patientAdresse, $patientCP, $patientVille, $patientTel){
+		return "<b>Patient:</b> <br />".utf8_encode($patientView).
+						"<br />Naissance le ".utf8_encode($patientNaissance).
 		                "<br />".utf8_encode($patientAdresse).
 		                "<br />".utf8_encode($patientCP).
 		                " ".utf8_encode($patientVille).
