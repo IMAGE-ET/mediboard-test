@@ -72,7 +72,7 @@ function importPacks($packs){
 	}
 	
 	// Recapitulatif des importations
-	$AppUI->stepAjax("Packs Importées: ".$nb["packs"], UI_MSG_OK);	
+	$AppUI->stepAjax("Packs Importés: ".$nb["packs"], UI_MSG_OK);	
 	$AppUI->stepAjax("Analyses Importées: ".$nb["analysesOK"], UI_MSG_OK);	
     $AppUI->stepAjax("Analyses non importées: ".$nb["analysesKO"], UI_MSG_WARNING);	
 	foreach($erreurs as $key=>$erreur){
