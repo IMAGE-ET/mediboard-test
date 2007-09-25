@@ -135,8 +135,11 @@ if ($can->edit) {
   // Admissions antérieures
   $twoDaysBefore = mbDate("-2 days", $date);
   $where = array(
+    "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
+    "sortie_prevue" => ">= '$date 00:00:00'",
+    //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
     "annule" => "= '0'",
-    "'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue"
+    "type" => "!= 'exte'"
   );
   $where[] = $whereFilter;
   $order = $orderTri;
