@@ -12,7 +12,7 @@ global $can;
 $objects = array();
 
 $object_class = mbGetValueFromGet("object_class");
-$object_ids = split(",", mbGetValueFromGet("object_ids"));
+$object_ids = mbGetValueFromGet("object_ids");
 
 // Load compared Object
 foreach ($object_ids as $object_id) {

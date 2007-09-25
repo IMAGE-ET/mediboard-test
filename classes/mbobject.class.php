@@ -849,7 +849,7 @@ class CMbObject {
       return "transferNoId";
     }
     if ($object->_class_name != $this->_class_name) {
-      return "trasferDifferentType";
+      return "transferDifferentType";
     }
     
     $object->loadAllBackRefs();

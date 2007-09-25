@@ -293,7 +293,7 @@ class CSejour extends CCodableCCAM {
     	$this->sortie_reelle = mbDateTime();
     }
     
-    if(!$this->_modifier_sortie){
+    if($this->_modifier_sortie === 0){
     	$this->sortie_reelle = "";
     }
     
