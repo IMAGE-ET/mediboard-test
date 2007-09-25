@@ -12,7 +12,8 @@ class CPackExamensLabo extends CMbObject {
   var $pack_examens_labo_id = null;
   
   // DB references
-  var $function_id = null;
+  var $function_id  = null;
+  var $code         = null;
   
   // DB fields
   var $libelle = null;
@@ -32,8 +33,9 @@ class CPackExamensLabo extends CMbObject {
   
   function getSpecs() {
     return array (
-      "function_id" => "ref class|CFunctions",
-      "libelle"     => "str notNull"
+      "code"         => "num",
+      "function_id"  => "ref class|CFunctions",
+      "libelle"      => "str notNull"
     );
   }
   

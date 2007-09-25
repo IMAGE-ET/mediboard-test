@@ -203,6 +203,9 @@ $dPconfig["dPlabo"] = array (
     "remote_name" => "LABO",
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
   ),
+  "CPackExamensLabo" => array (
+    "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/pack.xml",
+  ),
 );
 
 $dPconfig["system"]["type_telephone"] = "france";

@@ -12,7 +12,8 @@ var Action = {
   },
   
   Requests: {
-    "import": "httpreq_import_catalogue"
+    "importCatalogues": "httpreq_import_catalogue",
+    "importPacks": "httpreq_import_pack"
   }
 }
 
@@ -75,6 +76,52 @@ var Action = {
 </tr>
 
 <tr>
-  <td><button class="tick" onclick="Action.update('import')">Importer</button></td>
-  <td id="action-import"></td>
+  <td><button class="tick" onclick="Action.update('importCatalogues')">Importer</button></td>
+  <td id="action-importCatalogues"></td>
 </tr>
+
+</table>
+
+<table class="form">
+
+  <!-- CPack -->  
+  {{assign var="class" value="CPackExamensLabo"}}
+    
+  <tr>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
+    
+  {{assign var="var" value="remote_url"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>  
+    
+  <tr>
+    <td class="button" colspan="100">
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    </td>
+  </tr>
+  
+</table>
+
+
+
+<table class="tbl">
+
+<tr>
+  <th class="title" colspan="100">Configuration</th>
+</tr>
+
+<tr>
+  <td><button class="tick" onclick="Action.update('importPacks')">Importer</button></td>
+  <td id="action-importPacks"></td>
+</tr>
+
+</table>

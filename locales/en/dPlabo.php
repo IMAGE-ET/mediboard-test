@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPlabo-tab-vw_edit_idLabo'] = '';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
@@ -154,6 +153,7 @@ $locales['config-dPlabo-CCatalogueLabo-remote_name'] = 'Remote catalogue name';
 $locales['config-dPlabo-CCatalogueLabo-remote_name-desc'] = 'Remote catalogue name, used as identifier';
 $locales['config-dPlabo-CCatalogueLabo-remote_url'] = 'Catalog URL';
 $locales['config-dPlabo-CCatalogueLabo-remote_url-desc'] = 'Remote catalogue URL';
+$locales['config-dPlabo-CPackExamensLabo-remote_url'] = '';
 $locales['CPackExamensLabo'] = '';
 $locales['CPackExamensLabo-back-function_id'] = '';
 $locales['CPackExamensLabo-back-items_examen_labo'] = 'Test';
@@ -248,6 +248,7 @@ $locales['mod-dPlabo-inc-acc_realisation'] = 'Execution';
 $locales['mod-dPlabo-tab-add_pack_exams'] = '';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = '';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = '';
+$locales['mod-dPlabo-tab-vw_edit_idLabo'] = '';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = '';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = '';
 $locales['mod-dPlabo-tab-vw_resultats'] = 'Results';

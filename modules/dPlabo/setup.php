@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.24";
+$config["mod_version"]     = "0.25";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -178,7 +178,12 @@ class CSetupdPlabo extends CSetup {
             ADD `urgence` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `pack_examens_labo`
+            ADD `code` INT(11);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.25";
   }
 }
 ?>

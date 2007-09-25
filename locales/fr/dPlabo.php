@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPlabo-tab-vw_edit_idLabo'] = 'Identifiants Labo';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';
@@ -154,6 +153,7 @@ $locales['config-dPlabo-CCatalogueLabo-remote_name'] = 'Nom du catalogue distant
 $locales['config-dPlabo-CCatalogueLabo-remote_name-desc'] = 'Nom du catalogue distant, utilisé en tant qu\'identifiant';
 $locales['config-dPlabo-CCatalogueLabo-remote_url'] = 'Url du catalogue';
 $locales['config-dPlabo-CCatalogueLabo-remote_url-desc'] = 'URL du catalogue distant';
+$locales['config-dPlabo-CPackExamensLabo-remote_url'] = 'Url des packs';
 $locales['CPackExamensLabo'] = 'Pack d\'analyse';
 $locales['CPackExamensLabo-back-function_id'] = '';
 $locales['CPackExamensLabo-back-items_examen_labo'] = 'Analyse';
@@ -248,6 +248,7 @@ $locales['mod-dPlabo-inc-acc_realisation'] = 'Réalisation';
 $locales['mod-dPlabo-tab-add_pack_exams'] = 'Packs (contenu)';
 $locales['mod-dPlabo-tab-vw_edit_catalogues'] = 'Catalogues';
 $locales['mod-dPlabo-tab-vw_edit_examens'] = 'Analyses';
+$locales['mod-dPlabo-tab-vw_edit_idLabo'] = 'Identifiants Labo';
 $locales['mod-dPlabo-tab-vw_edit_packs'] = 'Packs (gestion)';
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = 'Prescriptions';
 $locales['mod-dPlabo-tab-vw_resultats'] = 'Résultats';
