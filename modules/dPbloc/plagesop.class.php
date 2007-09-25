@@ -185,6 +185,16 @@ class CPlageOp extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
+    // Erreur si on change de praticien alors qu'il y a déjà des interventions
+    if($this->_id) {
+      $oldPlage = new CPlageOp;
+      $oldPlage->load($this->_id);
+      $oldPlage->loadRefsBack();
+      if(count($oldPlage->_ref_operations) && ($oldPlage->chir_id != $this->chir_id)) {
+        $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
+        return $msg;
+      }
+    }
     return parent::store();
   }
   
