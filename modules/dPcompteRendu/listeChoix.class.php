@@ -61,7 +61,7 @@ class CListeChoix extends CMbObject {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
     $this->_ref_modele = new CCompteRendu;
-    $this->_ref_modele->load($this->_id);
+    $this->_ref_modele->load($this->compte_rendu_id);
   }
   
   function updateFormFields() {
