@@ -33,7 +33,7 @@ function selectLit(lit_id) {
 function submitAffectation() {
   if (selected_lit && selected_hospi) {
     if(selected_hospitalisation){
-      var form = eval("document.addAffectationsejour" + selected_hospitalisation);
+      var form = eval("document.addAffectationsejour_" + selected_hospitalisation);
     }else{
       var form = eval("document.addAffectationsejour");    
     }
@@ -43,10 +43,10 @@ function submitAffectation() {
 }
 
 function DragDropSejour(sejour_id, lit_id){
-  var form = eval("document.addAffectation" + sejour_id);
+  var oForm = eval("document.addAffectation" + sejour_id);
   $(sejour_id).style.display="none";
-  form.lit_id.value = lit_id;
-  form.submit();
+  oForm.lit_id.value = lit_id;
+  oForm.submit();
 }
 
 function submitAffectationSplit(form) {

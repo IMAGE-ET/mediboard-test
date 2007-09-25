@@ -7,7 +7,7 @@
     </table>
 
     {{foreach from=$sejourNonAffectes item=curr_sejour}}
-    <form name="addAffectationsejour{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
+    <form name="addAffectationsejour_{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
 
     <input type="hidden" name="dosql" value="do_affectation_aed" />
     <input type="hidden" name="lit_id" value="" />
@@ -17,12 +17,12 @@
 
     </form>
 
-    <table class="sejourcollapse" id="sejour-{{$curr_sejour->_id}}">
+    <table class="sejourcollapse" id="sejour_{{$curr_sejour->_id}}">
       <tr>
         <td class="selectsejour" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
           {{if !$dPconfig.dPhospi.pathologies || $curr_sejour->pathologie}}  
           <input type="radio" id="hospitalisation{{$curr_sejour->_id}}" onclick="selectHospitalisation({{$curr_sejour->_id}})" />
-          <script type="text/javascript">new Draggable('sejour-{{$curr_sejour->_id}}', {revert:true})</script>
+          <script type="text/javascript">new Draggable('sejour_{{$curr_sejour->_id}}', {revert:true})</script>
           {{/if}}
         </td>
         <td class="patient" onclick="flipSejour({{$curr_sejour->_id}})">

@@ -3,7 +3,7 @@
     <th class="chambre" colspan="2" onclick="
         flipChambre({{$curr_chambre->_id}});
         {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-        Droppables.add('lit{{$curr_lit->_id}}', { 
+        Droppables.add('lit-{{$curr_lit->_id}}', { 
           onDrop:function(element){
             DragDropSejour(element.id,{{$curr_lit->_id}})
           }, 
