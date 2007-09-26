@@ -200,14 +200,15 @@ class COperation extends CCodableCCAM {
       }
     }
     
-    // Test pour savoir si l'intervention est bien comprise dans le sejour
-    /*
-    $this->loadRefSejour();
-    $this->loadRefPlageOp();
-    if(!($this->_ref_plageop->date >= mbDate($this->_ref_sejour->entree_prevue) && $this->_ref_plageop->date <= mbDate($this->_ref_sejour->sortie_prevue))){
-    	$msg .= "Intervention en dehors du séjour";
+    // Test pour savoir si la plage operatoire est bien comprise dans le sejour
+    // Pas de test si on a pas plageop_id
+    if($this->plageop_id){
+      $this->loadRefSejour();
+      $this->loadRefPlageOp();
+      if(!($this->_ref_plageop->date >= mbDate($this->_ref_sejour->entree_prevue) && $this->_ref_plageop->date <= mbDate($this->_ref_sejour->sortie_prevue))){
+     	$msg .= "Intervention en dehors du séjour";
+      }
     }
-    */
 
     return $msg . parent::check();
   }

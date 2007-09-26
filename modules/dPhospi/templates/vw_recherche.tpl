@@ -24,6 +24,17 @@ function pageMain() {
       </select>
       </form>
     </td>
+    <td>
+    <form name="typeService" action="?m={{$m}}" method="get">
+    <input type="hidden" name="m" value="{{$m}}" />
+    <select name="selService" onchange="submit()">
+    <option value="">&mdash; Tous les services</option>
+    {{foreach from=$services item="service"}}
+      <option value="{{$service->_id}}" {{if $selService == $service->_id}}selected="selected"{{/if}}>{{$service->_view}}</option>
+    {{/foreach}}
+    </select>
+    </form>
+    </td>
     <td style="text-align: right;">
       {{if $typeVue}}
       <form name="choosePrat" action="?m={{$m}}" method="get">

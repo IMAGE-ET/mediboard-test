@@ -182,7 +182,7 @@ class CSejour extends CCodableCCAM {
       $msg.= "Pathologie non disponible<br />";
     }
 
-    /*
+    
     $this->loadRefsOperations();
     foreach($this->_ref_operations as $key => $operation){
     	$operation->loadRefPlageop();
@@ -211,7 +211,7 @@ class CSejour extends CCodableCCAM {
         $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
       }     
     }
-    */
+    
 
     return $msg . parent::check();
   }

@@ -124,12 +124,16 @@ var Patient = {
 <table class="form">
 
 <tr>
-  <th class="category" colspan="3">Critères de sélection</th>
+  <th class="category" colspan="6">Critères de sélection</th>
 </tr>
 
 <tr>
   <th><label for="name" title="Nom du patient à rechercher, au moins les premières lettres">Nom</label></th>
-  <td><input name="name" value="{{$name|stripslashes}}" size="30" /></td>
+  <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
+  
+  <th><label for="nomjf" title="Nom de naissance">Nom de naissance</label></th>
+  <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="2" /></td>
+  
   <td>
     {{if $app->user_prefs.GestionFSE}}
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
@@ -144,7 +148,22 @@ var Patient = {
 
 <tr>
   <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-  <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" /></td>
+  <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="3" /></td>
+  
+  <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
+  <td>
+         {{html_select_date
+           time=$datePat
+           start_year=1900
+           field_order=DMY
+           day_empty="Jour"
+           month_empty="Mois"
+           year_empty="Année"
+           day_extra="tabindex='6'"
+           month_extra="tabindex='7'"
+           year_extra="tabindex='8'"
+           all_extra="style='display:inline;'"}}         
+    </td>
   <td><button class="search" type="submit">Rechercher</button></td>
 </tr>
 

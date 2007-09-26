@@ -14,6 +14,7 @@ $ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $typeVue = mbGetValueFromGetOrSession("typeVue");
 $selPrat = mbGetValueFromGetOrSession("selPrat");
+$selService = mbGetValueFromGetOrSession("selService");
 
 $date_recherche = mbGetValueFromGetOrSession("date_recherche", mbDateTime());
 
@@ -28,6 +29,11 @@ $where["group_id"] = "= '$g'";
 $order = "nom";
 $services = $services->loadListWithPerms(PERM_READ,$where, $order);
 
+// Where permettant de trier suivant les services
+$whereService = "\nAND service.service_id  " .$ds->prepareIn(array_keys($services));
+if($selService){
+  $whereService = "\nAND service.service_id  = '$selService'";
+}
 
 //
 // Cas de l'affichage des lits libres
@@ -50,6 +56,7 @@ if(count($arrayIn)>0)
 else
   $notIn = 0;
 
+
 $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, MIN(affectation.entree) AS limite" .
 		"\nFROM lit" .
 		"\nLEFT JOIN affectation" .
@@ -61,7 +68,7 @@ $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, M
 		"\nON service.service_id = chambre.service_id" .
 		"\nWHERE lit.lit_id NOT IN($notIn)" .
     "\nAND service.group_id = '$g'" .
-    "\nAND service.service_id " . $ds->prepareIn(array_keys($services)) .
+    $whereService .
 		"\nGROUP BY lit.lit_id" .
 		"\nORDER BY service.nom, limite DESC, chambre.nom, lit.nom";
 $libre = $ds->loadlist($sql);
@@ -87,7 +94,7 @@ if ($typeVue == 1) {
 		"\nON sejour.sejour_id = affectation.sejour_id" .
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
-		"\nAND service.service_id " . $ds->prepareIn(array_keys($services)) .
+		$whereService .
     "\nAND sejour.praticien_id = '$selPrat'" .
     "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
@@ -112,7 +119,8 @@ $smarty->assign("typeVue"       , $typeVue       );
 $smarty->assign("selPrat"       , $selPrat       );
 $smarty->assign("listPrat"      , $listPrat      );
 $smarty->assign("listAff"       , $listAff       );
-
+$smarty->assign("selService"    , $selService    );
+$smarty->assign("services"      , $services      );
 $smarty->display("vw_recherche.tpl");
 
 ?>
