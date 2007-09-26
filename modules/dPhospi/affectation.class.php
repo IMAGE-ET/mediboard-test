@@ -126,21 +126,14 @@ class CAffectation extends CMbObject {
     if(!$this->_ref_prev->affectation_id && $this->sejour_id) {
       if($this->entree != $this->_ref_sejour->entree_prevue) {
         $this->_ref_sejour->entree_prevue = $this->entree;
+        $changeSejour = 1;
       }
     }
     if(!$this->_ref_next->affectation_id  && $this->sejour_id) {
       if($this->sortie != $this->_ref_sejour->sortie_prevue) {
         $this->_ref_sejour->sortie_prevue = $this->sortie;
+        $changeSejour = 1;
       }
-      /*
-      if($this->effectue) {
-        $this->_ref_sejour->sortie_reelle = mbDateTime();
-        $this->_ref_sejour->mode_sortie = $this->_mode_sortie;
-      } else {
-        $this->_ref_sejour->sortie_reelle = "";
-        $this->_ref_sejour->mode_sortie = "";
-      }*/
-      $changeSejour = 1;
     }
     if($changeSejour) {
       $this->_ref_sejour->_date_entree_prevue = null;
