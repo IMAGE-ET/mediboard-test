@@ -1,3 +1,12 @@
+<script type="text/javascript">
+
+function pageMain() {
+  regFieldCalendar("filterFrm", "_date_min", true);
+  regFieldCalendar("filterFrm", "_date_max", true);
+}
+
+</script>
+
 {{if !$dialog}}
 <form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
 
@@ -7,7 +16,7 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="5">
+    <th class="category" colspan="10">
       {{if $list|@count == 100}}
       Plus de 100 historiques, seuls les 100 plus récents sont affichés
       {{else}}
@@ -15,45 +24,54 @@
       {{/if}}
     </th>
   </tr>
+  
   <tr>
-    <th><label for="user_id" title="Identifiant de l'utilisateur">Utilisateur</label></th>
+    <th>{{mb_label object=$filter field=user_id}}</th>
     <td>
-      <select name="user_id">
-        <option value="0">&mdash; Tous les utilisateurs</option>
+      <select name="user_id" class="ref">
+        <option value="">&mdash; Tous les utilisateurs</option>
         {{foreach from=$listUsers item=curr_user}}
-        <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $user_id}}selected="selected"{{/if}}>
+        <option value="{{$curr_user->user_id}}" {{if $curr_user->user_id == $filter->user_id}}selected="selected"{{/if}}>
           {{$curr_user->_view}}
         </option>
         {{/foreach}}
       </select>
     </td>
-    <th><label for="object_class" title="Classe de l'object">Classe</label></th>
+
+    <th>{{mb_label object=$filter field=object_class}}</th>
     <td>
       <select name="object_class" class="str maxLength|25">
         <option value="0">&mdash; Toutes les classes</option>
-        {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
-        <option value="{{$curr_class}}" {{if $curr_class == $object_class}}selected="selected"{{/if}}>
+        {{foreach from=$listClasses item=curr_class}}
+        <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
           {{tr}}{{$curr_class}}{{/tr}}
         </option>
         {{/foreach}}
       </select>
     </td>
+
+    <th>{{mb_label object=$filter field="_date_min"}}</td>
+    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" canNull=false}} </td>
+
   </tr>
   <tr>
-    <th><label for="type" title="Action effectuée">Action</label></th>
+    <th>{{mb_label object=$filter field=type}}</th>
     <td>
       <select name="type" class="enum list|0|create|store|delete">
         <option value="0">&mdash; Tous les types</option>
         {{html_options options=$userLog->_enumsTrans.type selected=$type}}
       </select>
     </td>
-    <th><label for="object_id" title="Identifiant de l'object">Objet</label></th>
-    <td>
-      <input name="object_id" class="ref" value="{{$object_id}}" />
-    </td>
+
+    <th>{{mb_label object=$filter field=object_id}}</th>
+    <td>{{mb_field object=$filter field=object_id canNull=true}}</td>
+
+    <th>{{mb_label object=$filter field="_date_max"}}</td>
+    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" canNull=false}} </td>
   </tr>
+
   <tr>
-    <td class="button" colspan="5">
+    <td class="button" colspan="10">
       <button class="search">{{tr}}Search{{/tr}}</button>
     </td>
   </tr>

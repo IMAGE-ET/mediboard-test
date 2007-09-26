@@ -21,7 +21,11 @@ class CUserLog extends CMbMetaObject {
   var $date         = null;
   var $type         = null;
   var $fields       = null;
-
+  
+  // Filter Fields
+  var $_date_min	 			= null;
+  var $_date_max 				= null;
+  
   // Object References
   var $_fields = null;
   var $_ref_user = null;
@@ -45,6 +49,10 @@ class CUserLog extends CMbMetaObject {
     $specs["date"]         = "notNull dateTime";
     $specs["type"]         = "notNull enum list|create|store|delete";
     $specs["fields"]       = "text";
+
+    $specs["_date_min"] 		  = "dateTime";
+    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
+    
     return $specs;
   }
   

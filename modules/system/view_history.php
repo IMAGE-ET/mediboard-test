@@ -15,22 +15,26 @@ if (!$can->read && !$dialog) {
   $can->redirect();
 }
 
-$user_id      = mbGetValueFromGetOrSession("user_id"     , null);
-$object_id    = mbGetValueFromGetOrSession("object_id"   , null);
-$object_class = mbGetValueFromGetOrSession("object_class", null);
-$type         = mbGetValueFromGetOrSession("type"        , null);
+$today = mbDate();
+$tomorow = mbDate("+1 day");
+
+$filter = new CUserLog();
+$filter->_date_min    = mbGetValueFromGetOrSession("_date_min", $today);
+$filter->_date_max    = mbGetValueFromGetOrSession("_date_max", $tomorow);
+$filter->user_id      = mbGetValueFromGetOrSession("user_id");
+$filter->object_id    = mbGetValueFromGetOrSession("object_id");
+$filter->object_class = mbGetValueFromGetOrSession("object_class");
+$filter->type         = mbGetValueFromGetOrSession("type"        );
 
 // Récupération de la liste des classes disponibles
 $AppUI->getAllClasses();
 $listClasses = getChildClasses();
 
 // Récupération de la liste des utilisateurs disponibles
-$where = array();
-//$where["user_username"] = "NOT LIKE '>>%'";
-$where["template"] = "= '0'";
+$user = new CUser;
+$user->template = "0";
 $order = "user_last_name, user_first_name";
-$listUsers = new CUser;
-$listUsers = $listUsers->loadList($where, $order);
+$listUsers = $user->loadMatchingList($order);
 
 // Récupération des types disponibles
 $userLog = new CUserLog;
@@ -38,17 +42,15 @@ $userLog->buildEnums();
 
 // Récupération des logs correspondants
 $where = array();
-if($user_id)
-  $where["user_id"] = "= '$user_id'";
-if($object_id !== "" && $object_id !== null)
-  $where["object_id"] = "= '$object_id'";
-if($object_class)
-  $where["object_class"] = "= '$object_class'";
-if($type)
-  $where["type"] = "= '$type'";
+if ($filter->user_id     ) $where["user_id"     ] = "= '$filter->user_id'";
+if ($filter->object_id   ) $where["object_id"   ] = "= '$filter->object_id'";
+if ($filter->object_class) $where["object_class"] = "= '$filter->object_class'";
+if ($filter->type        ) $where["type"        ] = "= '$filter->type'";
+$where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+
+$log = new CUserLog;
 $order = "date DESC";
-$list = new CUserLog;
-$list = $list->loadList($where, $order, "0, 100");
+$list = $log->loadList($where, $order, "0, 100");
 $item = "";
 foreach($list as $key => $value) {
   $list[$key]->loadRefsFwd();
@@ -60,10 +62,8 @@ foreach($list as $key => $value) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("dialog"      , $dialog      );
-$smarty->assign("object_class", $object_class);
-$smarty->assign("object_id"   , $object_id   );
-$smarty->assign("user_id"     , $user_id     );
-$smarty->assign("type"        , $type        );
+$smarty->assign("filter"      , $filter      );
+
 $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
 $smarty->assign("userLog"     , $userLog     );

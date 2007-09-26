@@ -6,15 +6,15 @@ function main() {
 	  initFCKEditor();
 	  BrowserDetect.init();
 	  ObjectInitialisation.hackIt();
-	  SystemMessage.init();
-	  SystemMessage.doEffect();
+//	  SystemMessage.init();
+//	  SystemMessage.doEffect();
 	  WaitingMessage.init();
 	  
 	  
 		Event.observe(window, 'beforeunload', function() {
 		  Event.unloadCache();
 		}, false);
-		
+	
 	  initPuces();
 	  pageMain();
 //		References.audit();

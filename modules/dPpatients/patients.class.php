@@ -316,7 +316,7 @@ class CPatient extends CDossierMedical {
     // Rang bénéficiaire
     $codeRangMatrix = array(
 			"00"=> "01", // Assuré
-			"01"=> "02", // Ascendant, descendant, collatéraux ascendants
+			"01"=> "02", // DEVRAIT ETRE 31 // Ascendant, descendant, collatéraux ascendants
 			"02"=> "02", // Conjoint
 			"03"=> "02", // Conjoint divorcé
 			"04"=> "02", // Concubin

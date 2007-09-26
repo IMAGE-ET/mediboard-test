@@ -49,6 +49,7 @@ class CSpSejMed extends CSpObject {
 //    $specs["etapro"] = "str length|2" ; /* Code Etabl. Ext. Prov.      */
 //    $specs["etades"] = "str length|2" ; /* Code Etabl. Ext. Dest.      */
 
+    $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
     return $specs;
   }
   
@@ -172,7 +173,7 @@ class CSpSejMed extends CSpObject {
     $this->datent = mbDateToLocale($entree);
     
     // Date de sortie, on ne passe pas les sorties prévues
-    $sortie_prevue = $sejour->type == "ambu" ? $sejour->sortie_prevue : null;
+    $sortie_prevue = in_array($sejour->type, array("ambu", "exte")) ? $sejour->sortie_prevue : null;
     $sortie = mbGetValue($sejour->sortie_reelle ,$sortie_prevue);
     $this->datsor = $sortie ? mbDateToLocale($sortie) : "";
     
@@ -229,6 +230,9 @@ class CSpSejMed extends CSpObject {
       if ($sejour->mode_sortie == "deces"    ) $this->depart = "D";
       if ($sejour->mode_sortie == "transfert") $this->depart = $sejour->_duree_reelle >= 2 ? "T" : "E";
     }
+    
+    // Mise à jour
+    $this->datmaj = mbDateToLocale(mbDateTime());
   }
 }
 
