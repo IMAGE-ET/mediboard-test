@@ -232,11 +232,13 @@ class CSejour extends CCodableCCAM {
       $firstAff =& $this->_ref_first_affectation;
       if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
         $firstAff->entree = $this->entree_prevue;
+        $firstAff->_no_synchro = 1;
         $firstAff->store();
       }
       $lastAff =& $this->_ref_last_affectation;
       if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
         $lastAff->sortie = $this->sortie_prevue;
+        $lastAff->_no_synchro = 1;
         $lastAff->store();
       }
     }
