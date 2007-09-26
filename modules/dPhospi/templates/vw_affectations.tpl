@@ -4,7 +4,7 @@ function flipChambre(chambre_id) {
 }
 
 function flipSejour(sejour_id) {
-  Element.classNames("sejour-" + sejour_id).flip("sejourcollapse", "sejourexpand");
+  Element.classNames("sejour_" + sejour_id).flip("sejourcollapse", "sejourexpand");
 }
 
 var selected_hospitalisation = null;
