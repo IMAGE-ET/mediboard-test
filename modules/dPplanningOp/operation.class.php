@@ -199,6 +199,14 @@ class COperation extends CCodableCCAM {
         $msg .= "Praticien non valide";
       }
     }
+    
+    // Test pour savoir si l'intervention est bien comprise dans le sejour
+    $this->loadRefSejour();
+    $this->loadRefPlageOp();
+    if(!($this->_ref_plageop->date >= mbDate($this->_ref_sejour->entree_prevue) && $this->_ref_plageop->date <= mbDate($this->_ref_sejour->sortie_prevue))){
+    	$msg .= "Intervention en dehors du séjour";
+    }
+    
     return $msg . parent::check();
   }
   

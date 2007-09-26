@@ -182,6 +182,35 @@ class CSejour extends CCodableCCAM {
       $msg.= "Pathologie non disponible<br />";
     }
 
+    $this->loadRefsOperations();
+    foreach($this->_ref_operations as $key => $operation){
+    	$operation->loadRefPlageop();
+    	if(!($operation->_ref_plageop->date >= mbDate($this->entree_prevue) && $operation->_ref_plageop->date <= mbDate($this->sortie_prevue))){
+    	  $msg.= "Interventions en dehors des nouvelles dates du sejour";	
+    	}
+    }
+    
+    $this->loadRefPatient();
+    $this->_ref_patient->loadRefsSejours();
+    
+    // suppression de la liste des sejours le sejour courant
+    $listSejour = array();
+    foreach($this->_ref_patient->_ref_sejours as $key => $sejour){
+    	$listSejour[$key] = $sejour;
+    	if($key == $this->_id){
+    		unset($listSejour[$key]);
+    	}
+    }
+    
+    foreach($listSejour as $key => $sejour){
+      //Test sur les entree prevues du sejour
+      if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
+        or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
+        or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
+        $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
+      }     
+    }
+    
     return $msg . parent::check();
   }
     
