@@ -42,6 +42,7 @@ class CConsultation extends CCodableCCAM {
   var $type_tarif    = null;
   var $arrivee       = null;
   var $banque_id     = null;
+  var $categorie_id  = null;
 
   // Form fields
   var $_etat           = null;
@@ -63,6 +64,7 @@ class CConsultation extends CCodableCCAM {
   var $_ref_exampossum     = null;
   
   var $_ref_banque         = null;
+  var $_ref_categorie      = null;
 
    // Foreign form fields : updated at loadRefs()
    var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
@@ -113,6 +115,7 @@ class CConsultation extends CCodableCCAM {
     $specs["arrivee"]         = "dateTime";
     $specs["type_tarif"]      = "enum list|cheque|CB|especes|tiers|autre default|cheque";
     $specs["banque_id"]       = "ref class|CBanque";
+    $specs["categorie_id"]    = "ref class|CConsultationCategorie";
     $specs["_date_min"]       = "date";
     $specs["_date_max"] 	  = "date moreEquals|_date_min";
     $specs["_etat_paiement"]  = "enum list|paye|impaye default|paye";
@@ -208,6 +211,12 @@ class CConsultation extends CCodableCCAM {
     $this->loadRefsExamAudio(); 
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
+  }
+  
+  
+  function loadRefCategorie() {
+    $this->_ref_categorie = new CConsultationCategorie();
+    $this->_ref_categorie->load($this->categorie_id);
   }
   
   function loadComplete() {

@@ -108,6 +108,8 @@ if ($plageconsult_id) {
   foreach ($plage->_ref_consultations as $keyConsult => $valConsult) {
     $consultation =& $plage->_ref_consultations[$keyConsult];
     $consultation->loadRefPatient();
+    // Chargement de la categorie
+    $consultation->loadRefCategorie();
     
     $keyPlace = mbTimeCountIntervals($plage->debut, $consultation->heure, $plage->freq);
     

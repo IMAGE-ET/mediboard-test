@@ -497,6 +497,14 @@ div#console div.value {
   margin-left: 0px;
 }
 
+.categorieConsult { 
+  padding-left: 20px;
+  height: 18px; 
+  margin-left: 0px;
+}
+
+
+
 optgroup.group {
   text-align: center;
   font-variant: small-caps;

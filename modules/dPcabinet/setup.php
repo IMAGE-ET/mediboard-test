@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.75";
+$config["mod_version"]     = "0.77";
 $config["mod_type"]        = "user";
 
 
@@ -752,7 +752,21 @@ class CSetupdPcabinet extends CSetup {
     $sql = " INSERT INTO `banque` ( `banque_id` , `nom` , `description` ) VALUES ( '' , 'Banque Rhône-Alpes', '') ;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.75";
+    $this->makeRevision("0.75");
+    $sql = "CREATE TABLE `consultation_cat` (
+            `categorie_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+            `function_id` INT(11) UNSIGNED NOT NULL, 
+            `nom_categorie` VARCHAR(255) NOT NULL, 
+            `nom_icone` VARCHAR(255) NOT NULL, 
+             PRIMARY KEY (`categorie_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.76");
+    $sql = "ALTER TABLE `consultation`
+            ADD `categorie_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.77";
   }
 }
 ?>

@@ -57,6 +57,7 @@ if(!$consultation_id) {
   $canConsult->needsRead("consultation_id");
 
   $consult->loadRefs();
+  
   $consult->_ref_plageconsult->loadRefs();
 
   $chir =& $consult->_ref_plageconsult->_ref_chir;
@@ -80,12 +81,27 @@ if(!$consultation_id) {
 	}
 }
 
+// Chargement de la liste des categories disponible pour le cabinet du user
+$categorie = new CConsultationCategorie();
+$whereCategorie["function_id"] = " = '$mediuser->function_id'";
+$orderCategorie = "nom_categorie ASC";
+$categories = $categorie->loadList($whereCategorie,$orderCategorie);
+
+
+// Creation du tableau de categories simplifié pour le traitement en JSON
+$listCat = array();
+foreach($categories as $key => $cat){
+  $listCat[$cat->_id] = $cat->nom_icone;
+}
+
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("plageConsult"     	, $plageConsult     );
+$smarty->assign("listCat"           , $listCat           );
+$smarty->assign("categories"        , $categories        );
+$smarty->assign("plageConsult"     	, $plageConsult      );
 $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );

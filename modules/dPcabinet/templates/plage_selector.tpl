@@ -155,7 +155,16 @@ function pageMain() {
       {{/if}}
       {{foreach from=$listPlace item=_place}}
       <tr>
-        <td><button type="button" class="tick" onclick="setClose('{{$_place.time|date_format:"%H:%M"}}')">{{$_place.time|date_format:"%Hh%M"}}</button></td>
+        <td>
+          <div style="float:left">
+          <button type="button" class="tick" onclick="setClose('{{$_place.time|date_format:"%H:%M"}}')">{{$_place.time|date_format:"%Hh%M"}}</button>
+          </div>
+          <div style="float:right">
+          {{foreach from=$_place.consultations item=_consultation}}
+            <img src="./modules/dPcabinet/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
+          {{/foreach}}
+          </div>
+        </td>
         <td class="text">
           {{foreach from=$_place.consultations item=_consultation}}
           

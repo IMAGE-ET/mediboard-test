@@ -6,6 +6,12 @@
 
 <script type="text/javascript">
 
+var listCat = {{$listCat|@json}};
+
+function reloadIcone(icone){
+  $('iconeBackground').src = "./modules/dPcabinet/categories/"+listCat[icone];
+}
+
 function changePause(){
   oForm = document.editFrm;
   if(oForm._pause.checked){
@@ -266,7 +272,18 @@ function printDocument(iDocument_id) {
             </select>
           </td>
         </tr>
-
+		<tr>
+		  <th>{{mb_label object=$consult field="categorie_id"}}</th>
+		  <td>
+		    <select name="categorie_id" onchange="reloadIcone(this.value)">
+		    <option value="">&mdash; Choix d'une categorie</option>
+		    {{foreach from=$categories item="categorie"}}
+		      <option class="categorieConsult" style="background-image:url(./modules/dPcabinet/categories/{{$categorie->nom_icone}});background-repeat:no-repeat;" value="{{$categorie->_id}}" {{if $consult->categorie_id == $categorie->_id}}selected="selected"{{/if}}>{{$categorie->_view}}</option>
+		    {{/foreach}}
+		    </select>
+		    <img id="iconeBackground" />
+		    </td>
+		</tr>
       </table>
       
       <table class="form">

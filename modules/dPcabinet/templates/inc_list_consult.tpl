@@ -46,16 +46,16 @@
 {{/if}}
 
   <tr>
-    <th class="title" colspan="2">Consultations</th>
+    <th class="title" colspan="3">Consultations</th>
   </tr>
   <tr>
     <th>Heure</th>
-    <th>Patient / Motif</th>
+    <th colspan="2">Patient / Motif</th>
   </tr>
 {{if $listPlage|@count}}
 {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <th colspan="2">{{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
+    <th colspan="3">{{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
   </tr>
   {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
   {{if !$curr_consult->patient_id}}
@@ -107,6 +107,9 @@
       {{else}}
         [PAUSE]
       {{/if}}
+    </td>
+    <td rowspan="2">
+      <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}"/>
     </td>
   </tr>
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>

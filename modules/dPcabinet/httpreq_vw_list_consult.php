@@ -82,6 +82,7 @@ foreach ($listPlage as &$plage) {
     }
 
     $consultation->loadRefPatient();
+    $consultation->loadRefCategorie();
     $consultation->getNumDocsAndFiles();
   }
 }
