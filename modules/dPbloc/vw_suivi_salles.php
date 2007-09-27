@@ -41,13 +41,14 @@ foreach($listSalles as $keySalle=>$currSalle){
   $plages = $plages->loadList($where, $order);
   foreach($plages as $key => $value) {
     $plages[$key]->loadRefs(0);
+    $plages[$key]->_unordered_operations = array();
     foreach($plages[$key]->_ref_operations as $key2 => $value) {
+      $plages[$key]->_ref_operations[$key2]->loadRefSejour();
+      $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
+      $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
       if($plages[$key]->_ref_operations[$key2]->rank == 0) {
+        $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
         unset($plages[$key]->_ref_operations[$key2]);
-      }else {
-        $plages[$key]->_ref_operations[$key2]->loadRefSejour();
-        $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-        $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
       }
     }
   }
