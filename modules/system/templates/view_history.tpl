@@ -59,7 +59,7 @@ function pageMain() {
     <td>
       <select name="type" class="enum list|0|create|store|delete">
         <option value="0">&mdash; Tous les types</option>
-        {{html_options options=$userLog->_enumsTrans.type selected=$type}}
+        {{html_options options=$userLog->_enumsTrans.type selected=$filter->type}}
       </select>
     </td>
 
