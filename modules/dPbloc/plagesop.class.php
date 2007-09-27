@@ -190,7 +190,7 @@ class CPlageOp extends CMbObject {
       $oldPlage = new CPlageOp;
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
-      if(count($oldPlage->_ref_operations) && ($oldPlage->chir_id != $this->chir_id)) {
+      if(count($oldPlage->_ref_operations) && $oldPlage->chir_id && ($oldPlage->chir_id != $this->chir_id)) {
         $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
         return $msg;
       }
