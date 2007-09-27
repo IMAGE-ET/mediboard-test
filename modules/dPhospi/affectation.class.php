@@ -86,10 +86,6 @@ class CAffectation extends CMbObject {
   	  $this->entree = $obj->entree;
   	if(!$this->sortie && $obj->affectation_id)
   	  $this->sortie = $obj->sortie;
-  	if($obj->_ref_next->affectation_id && ($this->sortie != $obj->sortie))
-  	  return "Le patient a subi un déplacement";
-  	if($obj->_ref_prev->affectation_id && ($this->entree != $obj->entree))
-  	  return "Le patient a subi un déplacement";
     if ($this->sortie <= $this->entree) {
       return "La date de sortie doit être supérieure à la date d'entrée";
     }
@@ -110,15 +106,28 @@ class CAffectation extends CMbObject {
   }
   
   function store() {
+    $oldAff = new CAffectation();
+    if($this->_id) {
+      $oldAff->load($this->_id);
+      $oldAff->loadRefsAffectations();
+    }
     if($msg = parent::store()) {
       return $msg;
     }
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
     
-    $this->loadRefsFwd();
+    $this->loadRefSejour();
+    if($oldAff->_id) {
+      $this->_ref_prev = $oldAff->_ref_prev;
+      $this->_ref_next = $oldAff->_ref_next;
+    } else {
+      $this->loadRefsAffectations();
+    }
      
     $changeSejour = 0;
+    $changePrev   = 0;
+    $changeNext   = 0;
 
     if($this->_no_synchro) {
       return $msg;
@@ -128,12 +137,28 @@ class CAffectation extends CMbObject {
         $this->_ref_sejour->entree_prevue = $this->entree;
         $changeSejour = 1;
       }
+    } elseif($this->sejour_id) {
+      if($this->entree != $this->_ref_prev->sortie) {
+        $this->_ref_prev->sortie = $this->entree;
+        $changePrev = 1;
+      }
     }
     if(!$this->_ref_next->affectation_id  && $this->sejour_id) {
       if($this->sortie != $this->_ref_sejour->sortie_prevue) {
         $this->_ref_sejour->sortie_prevue = $this->sortie;
         $changeSejour = 1;
       }
+    } elseif($this->sejour_id) {
+      if($this->sortie != $this->_ref_next->entree) {
+        $this->_ref_next->entree = $this->sortie;
+        $changeNext = 1;
+      }
+    }
+    if($changePrev) {
+      $this->_ref_prev->store();
+    }
+    if($changeNext) {
+      $this->_ref_next->store();
     }
     if($changeSejour) {
       $this->_ref_sejour->_date_entree_prevue = null;

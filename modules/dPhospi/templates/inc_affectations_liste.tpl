@@ -30,7 +30,7 @@
           {{if $curr_sejour->type != "ambu" && $curr_sejour->type != "exte"}}
           ({{$curr_sejour->_duree_prevue}}j - {{$curr_sejour->_ref_praticien->_shortview}})
           {{else}}
-          ({{$curr_sejour->type|truncate:1:""|capitalize}})
+          ({{$curr_sejour->type|truncate:1:""|capitalize}} - {{$curr_sejour->_ref_praticien->_shortview}})
           {{/if}}
           {{if $curr_sejour->_couvert_cmu}}
           <div style="float: right;"><strong>CMU</strong></div>

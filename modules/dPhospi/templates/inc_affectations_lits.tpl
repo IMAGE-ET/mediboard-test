@@ -143,44 +143,28 @@
 {{else}}
 
 <tr class="dates">
-  {{if $aff_prev->affectation_id}}
-  <td class="text">
-    <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
-    {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
-    ({{$curr_affectation->_entree_relative}} jours)
-  </td>
-  <td class="action">
-    {{if $can->edit}}
-    <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
-
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="del" value="1" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
-
-    </form>
-    
-    <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
-      <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-    </a>
-    {{/if}}
-  </td>
-  {{else}}
   <td class="text">
     {{if $can->edit}}
-    <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+      <form name="rmvAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
 
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="del" value="1" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="1" />
+      <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
 
-    </form>
-    <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
-      <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
-    </a>
+      </form>
+      <a style="float: right;" href="#" onclick="confirmDeletion(document.rmvAffectation{{$curr_affectation->affectation_id}},{typeName:'l\'affectation',objName:'{{$patient->_view|addslashes}}'})">
+        <img src="images/icons/trash.png" alt="trash" title="Supprimer l'affectation" />
+      </a>
     {{/if}}
-    <em>Entrée</em>:
-    {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
-    ({{$curr_affectation->_entree_relative}} jours)
+    {{if $aff_prev->affectation_id}}
+      <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
+      {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+      ({{$curr_affectation->_entree_relative}} jours)
+    {{else}}
+      <em>Entrée</em>:
+      {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+      ({{$curr_affectation->_entree_relative}} jours)
+    {{/if}}
   </td>
   <td class="action">
     {{if $can->edit}}
@@ -197,40 +181,33 @@
     </a>
     {{/if}}
   </td>
-  {{/if}}
 </tr>
- 
 <tr class="dates">
-  {{if $aff_next->affectation_id}}
-  <td class="text" colspan="2">
-    <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
-    {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
-    ({{$curr_affectation->_sortie_relative}} jours)
-  </td>
-  {{else}}
   <td class="text">
-    {{if $can->edit}}
-    <form name="splitAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
-
-    <input type="hidden" name="dosql" value="do_affectation_split" />
-    <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
-    <input type="hidden" name="sejour_id" value="{{$curr_affectation->sejour_id}}" />
-    <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
-    <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
-    <input type="hidden" name="no_synchro" value="1" />
-    <input type="hidden" name="_new_lit_id" value="" />
-    <input type="hidden" name="_date_split" value="{{$curr_affectation->sortie}}" />
-
-    </form>
-    
-    <a style="float: right;">
-      <img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
-    </a>
+    {{if $aff_next->affectation_id}}
+      <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
+      {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+      ({{$curr_affectation->_sortie_relative}} jours)
+    {{else}}
+      {{if $can->edit}}
+        <form name="splitAffectation{{$curr_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+          <input type="hidden" name="dosql" value="do_affectation_split" />
+          <input type="hidden" name="affectation_id" value="{{$curr_affectation->affectation_id}}" />
+          <input type="hidden" name="sejour_id" value="{{$curr_affectation->sejour_id}}" />
+          <input type="hidden" name="entree" value="{{$curr_affectation->entree}}" />
+          <input type="hidden" name="sortie" value="{{$curr_affectation->sortie}}" />
+          <input type="hidden" name="no_synchro" value="1" />
+          <input type="hidden" name="_new_lit_id" value="" />
+          <input type="hidden" name="_date_split" value="{{$curr_affectation->sortie}}" />
+        </form>
+        <a style="float: right;">
+          <img id="splitAffectation{{$curr_affectation->affectation_id}}__trigger_split" src="images/icons/move.gif" alt="Move" title="Déplacer un patient" />
+        </a>
+      {{/if}}
+      <em>Sortie</em>:
+      {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+      ({{$curr_affectation->_sortie_relative}} jours)
     {{/if}}
-
-    <em>Sortie</em>:
-    {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
-    ({{$curr_affectation->_sortie_relative}} jours)
   </td>
   <td class="action">
     {{if $can->edit}}
@@ -247,8 +224,8 @@
     </a>
     {{/if}}
   </td>
-  {{/if}}
 </tr>
+
 <tr class="dates">
   <td colspan="2"><em>Age</em>: {{$patient->_age}} ans</td>
 </tr>

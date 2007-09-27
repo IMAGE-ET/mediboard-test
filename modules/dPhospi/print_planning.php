@@ -13,14 +13,14 @@ require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
-$filter->_date_min = mbGetValueFromGet("_date_min"    , date("Y-m-d")." 06:00:00");
-$filter->_date_max = mbGetValueFromGet("_date_max"    , date("Y-m-d")." 21:00:00");
-$filter->_service = mbGetValueFromGet("service", 0);
-$filter->_filter_type = mbGetValueFromGet("_filter_type"   , 0);
-$filter->praticien_id = mbGetValueFromGet("chir"   , 0);
-$filter->_specialite = mbGetValueFromGet("spe"    , 0);
-$filter->convalescence = mbGetValueFromGet("conv"   , 0);
-$filter->_admission = mbGetValueFromGet("ordre"  , "heure");
+$filter->_date_min     = mbGetValueFromGet("_date_min"   , date("Y-m-d")." 06:00:00");
+$filter->_date_max     = mbGetValueFromGet("_date_max"   , date("Y-m-d")." 21:00:00");
+$filter->_service      = mbGetValueFromGet("_service"     , 0);
+$filter->_filter_type  = mbGetValueFromGet("_filter_type", 0);
+$filter->praticien_id  = mbGetValueFromGet("praticien_id"        , 0);
+$filter->_specialite   = mbGetValueFromGet("_specialite"         , 0);
+$filter->convalescence = mbGetValueFromGet("convalescence"        , 0);
+$filter->_admission    = mbGetValueFromGet("_admission"       , "heure");
 
 $total   = 0;
 
@@ -29,6 +29,7 @@ $sejours = new CSejour;
 $sejourReq = new CRequest;
 
 $sejourReq->addLJoinClause("patients", "patients.patient_id = sejour.patient_id");
+$sejourReq->addLJoinClause("users", "users.user_id = sejour.praticien_id");
 
 $sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
 $sejourReq->addWhereClause("sejour.group_id", "= '$g'");
@@ -53,14 +54,15 @@ if ($filter->convalescence == "n") {
   $sejourReq->addWhereClause(null, "(sejour.convalescence IS NULL OR sejour.convalescence = '')");
 }
 
-$sejourReq->addOrder("DATE(sejour.entree_prevue)");
-$sejourReq->addOrder("sejour.praticien_id");
+$sejourReq->addOrder("users.user_last_name");
+$sejourReq->addOrder("users.user_first_name");
 
-if($filter->_filter_type  == "heure") {
+if($filter->_admission  == "heure") {
   $sejourReq->addOrder("sejour.entree_prevue");
 } else {
   $sejourReq->addOrder("patients.nom");
   $sejourReq->addOrder("patients.prenom");
+  $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 }
 
 $sejours = $sejours->loadListByReq($sejourReq);

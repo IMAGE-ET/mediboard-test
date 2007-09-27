@@ -19,11 +19,11 @@ function popPlanning() {
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addElement(form.ordre);
-  url.addElement(form.service);
+  url.addElement(form._service);
   url.addElement(form._filter_type);
-  url.addElement(form.chir);
-  url.addElement(form.spe);
-  url.addElement(form.conv);
+  url.addElement(form.praticien_id);
+  url.addElement(form._specialite);
+  url.addElement(form.convalescence);
   url.popup(700, 500, "Planning");
   return;
 }
@@ -73,7 +73,7 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="_admission"}}</td>
           <td colspan="2">
-            <select name="ordre">
+            <select name="_admission">
               <option value="heure">Par heure d'admission</option>
               <option value="nom">Par nom du patient</option>
             </select>
@@ -84,7 +84,7 @@ function pageMain() {
           <td>{{mb_label object=$filter field="_service"}}</td>
            
           <td colspan="2">
-          	<select name="service">
+          	<select name="_service">
             	<option value="0">&mdash; Tous les services &mdash;</option>
             	{{foreach from=$listServ item=curr_serv}}
             	<option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
@@ -105,7 +105,7 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="praticien_id"}}</td>
-          <td><select name="chir">
+          <td><select name="praticien_id">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
@@ -114,7 +114,7 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_specialite"}}</td>
-          <td><select name="spe">
+          <td><select name="_specialite">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
               <option class="mediuser" style="border-color: #{{$curr_spec->color}};" value="{{$curr_spec->function_id}}">{{$curr_spec->text}}</option>
@@ -123,7 +123,7 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="convalescence"}}</td>
-          <td><select name="conv">
+          <td><select name="convalescence">
             <option value="0">&mdash; Indifférent &mdash;</option>
 	        <option value="o">avec</option>
 	        <option value="n">sans</option>
