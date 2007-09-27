@@ -132,7 +132,7 @@ var Patient = {
   <td><input name="name" value="{{$name|stripslashes}}" size="30" tabindex="1" /></td>
   
   <th><label for="nomjf" title="Nom de naissance">Nom de naissance</label></th>
-  <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="2" /></td>
+  <td><input name="nomjf" value="{{$nomjf|stripslashes}}" size="30" tabindex="3" /></td>
   
   <td>
     {{if $app->user_prefs.GestionFSE}}
@@ -148,7 +148,7 @@ var Patient = {
 
 <tr>
   <th><label for="firstName" title="Prénom du patient à rechercher, au moins les premières lettres">Prénom</label></th>
-  <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="3" /></td>
+  <td><input name="firstName" value="{{$firstName|stripslashes}}" size="30" tabindex="2" /></td>
   
   <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
   <td>
@@ -159,9 +159,9 @@ var Patient = {
            day_empty="Jour"
            month_empty="Mois"
            year_empty="Année"
-           day_extra="tabindex='6'"
-           month_extra="tabindex='7'"
-           year_extra="tabindex='8'"
+           day_extra="tabindex='4'"
+           month_extra="tabindex='5'"
+           year_extra="tabindex='6'"
            all_extra="style='display:inline;'"}}         
     </td>
   <td><button class="search" type="submit">Rechercher</button></td>
