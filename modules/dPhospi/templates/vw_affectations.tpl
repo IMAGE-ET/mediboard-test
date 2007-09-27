@@ -199,7 +199,10 @@ function pageMain() {
 
 <table class="main">
   <tr>
-    <td colspan="3">
+    <td colspan="2">
+      <div style="float:right;">
+        <strong>Planning du {{$date|date_format:"%A %d %B %Y"}}</strong>
+      </div>
       {{if $alerte}}
       <div class="warning">
         <a href="#" onclick="showAlerte()">Il y a {{$alerte}} patient(s) à placer dans la semaine qui vient</a>
@@ -221,7 +224,7 @@ function pageMain() {
       <a href="#" onclick="showRapport()" class="buttonprint">Rapport</a>
     </td>
     
-    <td colspan="2">
+    <td>
       <form name="chgAff" action="?m={{$m}}" method="get">
       {{foreach from=$services item=curr_service}}
         <input
@@ -251,7 +254,7 @@ function pageMain() {
   </tr>
 
   <tr>
-    <td class="greedyPane" colspan="3">
+    <td class="greedyPane" colspan="2">
       <table class="affectations">
         <tr>
         {{foreach from=$services item=curr_service}}
