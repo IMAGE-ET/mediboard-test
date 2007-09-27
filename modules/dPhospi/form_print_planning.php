@@ -13,15 +13,14 @@ $can->needsRead();
 
 $filter = new CSejour();
 $today      = mbDate();
-$filter->_date_min = mbGetValueFromGetOrSession("_date_min","$today 06:00:00");
-$filter->_date_max = mbGetValueFromGetOrSession("_date_max","$today 21:00:00");
-$filter->_admission = mbGetValueFromGetOrSession("ordre");
-$filter->_service = mbGetValueFromGetOrSession("service");
-$filter->praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$filter->convalescence = mbGetValueFromGetOrSession("conv");
-$filter->_specialite = mbGetValueFromGetOrSession("spe");
-$filter->_filter_type = mbGetValueFromGetOrSession("_filter_type");
-//$filter->type = mbGetValueFromGetOrSession("type");
+$filter->_date_min     = mbGetValueFromGetOrSession("_date_min","$today 06:00:00");
+$filter->_date_max     = mbGetValueFromGetOrSession("_date_max","$today 21:00:00");
+$filter->_admission    = mbGetValueFromGetOrSession("_admission");
+$filter->_service      = mbGetValueFromGetOrSession("_service");
+$filter->praticien_id  = mbGetValueFromGetOrSession("praticien_id");
+$filter->convalescence = mbGetValueFromGetOrSession("convalescence");
+$filter->_specialite   = mbGetValueFromGetOrSession("_specialite");
+$filter->_filter_type  = mbGetValueFromGetOrSession("_filter_type");
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
