@@ -178,40 +178,64 @@ class CSejour extends CCodableCCAM {
     $msg    = null;
     $pathos = new CDiscipline();
 
+    $oldSejour = new CSejour();
+    if($this->_id) {
+      $oldSejour->load($this->_id);
+    }
+    
+    // Test de la pathologies
     if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_enums["categorie"]))) {
       $msg.= "Pathologie non disponible<br />";
     }
+    
+    // Test de coherence de date avec les interventions
+    if($this->entree_prevue === null && $this->sortie_prevue === null) {
+      $entree = $oldSejour->entree_prevue;
+      $sortie = $oldSejour->sortie_prevue;
+    } else {
+      $entree = $this->entree_prevue;
+      $sortie = $this->sortie_prevue;
+    }
 
-    /*
-    $this->loadRefsOperations();
-    foreach($this->_ref_operations as $key => $operation){
-    	$operation->loadRefPlageop();
-    	if(!($operation->_ref_plageop->date >= mbDate($this->entree_prevue) && $operation->_ref_plageop->date <= mbDate($this->sortie_prevue))){
-    	  $msg.= "Interventions en dehors des nouvelles dates du sejour";	
-    	}
+    if($entree !== null && $sortie !== null) {
+      $this->loadRefsOperations();
+      foreach($this->_ref_operations as $key => $operation){
+      	$operation->loadRefPlageop();
+        if(!($operation->_ref_plageop->date >= mbDate($entree) && $operation->_ref_plageop->date <= mbDate($sortie))){
+           $msg.= "Interventions en dehors des nouvelles dates du sejour";	
+        }
+      }
+    }
+
+    // Test de colision avec un autre sejour
+    $patient = new CPatient;
+    if($this->patient_id) {
+      $patient->load($this->patient_id);
+    } elseif($oldSejour->patient_id) {
+      $patient->load($oldSejour->patient_id);
     }
     
-    $this->loadRefPatient();
-    $this->_ref_patient->loadRefsSejours();
+    if($patient->_id) {
+      $patient->loadRefsSejours();
+
+      // suppression de la liste des sejours le sejour courant
+      $listSejour = array();
+      foreach($patient->_ref_sejours as $key => $sejour){
+    	  $listSejour[$key] = $sejour;
+    	  if($key == $this->_id){
+    		  unset($listSejour[$key]);
+        }
+      }
     
-    // suppression de la liste des sejours le sejour courant
-    $listSejour = array();
-    foreach($this->_ref_patient->_ref_sejours as $key => $sejour){
-    	$listSejour[$key] = $sejour;
-    	if($key == $this->_id){
-    		unset($listSejour[$key]);
-    	}
+      foreach($listSejour as $key => $sejour){
+        //Test sur les entree prevues du sejour
+        if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
+          or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
+          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
+          $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
+        }     
+      }
     }
-    
-    foreach($listSejour as $key => $sejour){
-      //Test sur les entree prevues du sejour
-      if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
-        or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
-        or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
-        $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
-      }     
-    }
-    */
 
     return $msg . parent::check();
   }
@@ -475,7 +499,7 @@ class CSejour extends CCodableCCAM {
   }
   
   function loadRefsOperations($where = array()) {
-    $where["sejour_id"] = "= '$this->sejour_id'";
+    $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";
 
     $operations = new COperation;
