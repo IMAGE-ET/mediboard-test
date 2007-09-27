@@ -21,11 +21,11 @@ function popPlanning() {
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addParam("_plage", getCheckedValue(form._plage));
-  url.addElement(form.code_ccam, "CCAM");
+  url.addElement(form._codes_ccam);
   url.addElement(form._intervention);
-  url.addElement(form.chir);
-  url.addElement(form.spe);
-  url.addElement(form.salle);
+  url.addElement(form._prat_id);
+  url.addElement(form._specialite);
+  url.addElement(form.salle_id);
   url.addElement(form.type);
   url.popup(900, 550, 'Planning');
 }
@@ -85,14 +85,14 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
-          <td><input type="text" name="code_ccam" size="10" value="" /></td>
+          <td><input type="text" name="_codes_ccam" size="10" value="" /></td>
           <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
           <script type="text/javascript">
           CCAMSelector.init = function(){
             this.sForm  = "paramFrm";
             this.sClass = "_class_name";
             this.sChir  = "_chir";
-            this.sView  = "code_ccam";
+            this.sView  = "_codes_ccam";
             this.pop();
           }
           </script>
@@ -115,7 +115,7 @@ function pageMain() {
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_prat_id"}}</td>
-          <td><select name="chir">
+          <td><select name="_prat_id">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
@@ -126,7 +126,7 @@ function pageMain() {
         </tr>
         <tr>
 		  <td>{{mb_label object=$filter field="_specialite"}}</td>
-          <td><select name="spe">
+          <td><select name="_specialite">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
               <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
@@ -138,7 +138,7 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="salle_id"}}</td>
           <td>
-            <select name="salle">
+            <select name="salle_id">
               <option value="0">&mdash; Toutes les salles &mdash;</option>
               {{foreach from=$listSalles item=curr_salle}}
 	              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>

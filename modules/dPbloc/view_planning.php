@@ -16,12 +16,12 @@ $now       = mbDate();
 $filter = new COperation;
 $filter->_date_min     = mbGetValueFromGet("_date_min", $now);
 $filter->_date_max     = mbGetValueFromGet("_date_max", $now);
-$filter->_prat_id      = mbGetValueFromGet("chir");
-$filter->salle_id      = mbGetValueFromGet("salle");
+$filter->_prat_id      = mbGetValueFromGet("_prat_id");
+$filter->salle_id      = mbGetValueFromGet("salle_id");
 $filter->_plage        = mbGetValueFromGet("_plage");
 $filter->_intervention = mbGetValueFromGet("_intervention");
-$filter->_specialite   = mbGetValueFromGet("spe");
-$filter->_codes_ccam   = mbGetValueFromGet("code_ccam");
+$filter->_specialite   = mbGetValueFromGet("_specialite");
+$filter->_codes_ccam   = mbGetValueFromGet("_codes_ccam");
 
 $filterSejour = new CSejour;
 $filterSejour->type = mbGetValueFromGet("type");
@@ -43,17 +43,10 @@ $chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-// On ne teste pas les droits pour l'instant...
-
-//if($user->isFromType(array("Anesthésiste"))) {
-  if($chir_id) {
-    $where["chir_id"] = $ds->prepare("= %", $filter->_prat_id);
-  }
-//} else {
-//  $listPrat = new CMediusers;
-//  $listPrat = $listPrat->loadPraticiens(PERM_READ, $spe);
-//  $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir_id);
-//}
+// En fonction du praticien
+if($filter->_prat_id) {
+  $where["chir_id"] = $ds->prepare("= %", $filter->_prat_id);
+}
 
 // En fonction de la salle
 $salle = new CSalle;

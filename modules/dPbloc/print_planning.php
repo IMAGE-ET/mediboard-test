@@ -16,12 +16,12 @@ $now       = mbDate();
 $filter = new COperation;
 $filter->_date_min     = mbGetValueFromGet("_date_min"    , "$now");
 $filter->_date_max     = mbGetValueFromGet("_date_max"    , "$now");
-$filter->_prat_id      = mbGetValueFromGetOrSession("chir");
-$filter->salle_id      = mbGetValueFromGetOrSession("salle");
+$filter->_prat_id      = mbGetValueFromGetOrSession("_prat_id");
+$filter->salle_id      = mbGetValueFromGetOrSession("salle_id");
 $filter->_plage        = mbGetValueFromGetOrSession("_plage");
 $filter->_intervention = mbGetValueFromGetOrSession("_intervention");
-$filter->_specialite   = mbGetValueFromGetOrSession("spe");
-$filter->_codes_ccam   = mbGetValueFromGetOrSession("code_ccam");
+$filter->_specialite   = mbGetValueFromGetOrSession("_specialite");
+$filter->_codes_ccam   = mbGetValueFromGetOrSession("_codes_ccam");
 
 $filterSejour = new CSejour;
 $filterSejour->type = mbGetValueFromGetOrSession("type");
