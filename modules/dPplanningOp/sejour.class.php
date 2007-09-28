@@ -204,7 +204,7 @@ class CSejour extends CCodableCCAM {
       $this->loadRefsOperations();
       foreach($this->_ref_operations as $key => $operation){
       	$operation->loadRefPlageop();
-      	$isCurrOp = $this->_curr_op_id;
+      	$isCurrOp = $this->_curr_op_id == $operation->_id;
       	if($isCurrOp) {
       	  $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
       	} else {
