@@ -55,9 +55,18 @@ foreach($listHours_ as $key=>$hour){
 	$listHours[$hour] = $hour;
 }
 
+/*
 foreach($listMins_ as $key=>$min){
 	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
+*/
+// Liste des minutes
+$listMins = array();
+$listMins[] = "00";
+$listMins[] = "15";
+$listMins[] = "30";
+$listMins[] = "45";
+
 
 
 // Création du tableau de visualisation
