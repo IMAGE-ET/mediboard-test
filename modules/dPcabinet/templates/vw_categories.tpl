@@ -8,7 +8,7 @@
       <select name="selCabinet" onchange="submit()">
         <option value="">&mdash; Choix du cabinet</option>
         {{foreach from=$listFunctions item="cabinet"}}
-        <option value="{{$cabinet->_id}}" {{if $selCabinet == $cabinet->_id}}selected=selected{{/if}}>{{$cabinet->_view}}</option>
+        <option class="mediuser" style="border-color: #{{$cabinet->color}}" value="{{$cabinet->_id}}" {{if $selCabinet == $cabinet->_id}}selected=selected{{/if}}>{{$cabinet->_view}}</option>
         {{/foreach}}
       </select>
       </form>

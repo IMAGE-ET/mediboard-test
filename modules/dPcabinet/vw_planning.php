@@ -74,6 +74,7 @@ foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
     continue;
   }
   $consultation->loadRefPatient();
+  $consultation->loadRefCategorie();
   $consultation->getNumDocsAndFiles();    
 }
 

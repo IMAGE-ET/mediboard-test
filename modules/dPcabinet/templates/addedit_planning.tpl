@@ -6,11 +6,16 @@
 
 <script type="text/javascript">
 
-var listCat = {{$listCat|@json}};
 
-function reloadIcone(icone){
-  $('iconeBackground').src = "./modules/dPcabinet/categories/"+listCat[icone];
+function refreshListCategorie(praticien_id){
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_view_list_categorie");
+  url.addParam("praticien_id", praticien_id);
+  url.requestUpdate("listCategorie", {
+    waitingText: null
+  });
 }
+
 
 function changePause(){
   oForm = document.editFrm;
@@ -161,7 +166,7 @@ function printDocument(iDocument_id) {
             <label for="chir_id" title="Praticien pour la consultation">Praticien</label>
           </th>
           <td>
-            <select name="chir_id" class="{{$consult->_props.patient_id}}" onChange="ClearRDV()">
+            <select name="chir_id" class="{{$consult->_props.patient_id}}" onChange="ClearRDV(); refreshListCategorie(this.value)">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -272,18 +277,23 @@ function printDocument(iDocument_id) {
             </select>
           </td>
         </tr>
-		<tr>
-		  <th>{{mb_label object=$consult field="categorie_id"}}</th>
-		  <td>
-		    <select name="categorie_id" onchange="reloadIcone(this.value)">
-		    <option value="">&mdash; Choix d'une categorie</option>
-		    {{foreach from=$categories item="categorie"}}
-		      <option class="categorieConsult" style="background-image:url(./modules/dPcabinet/categories/{{$categorie->nom_icone}});background-repeat:no-repeat;" value="{{$categorie->_id}}" {{if $consult->categorie_id == $categorie->_id}}selected="selected"{{/if}}>{{$categorie->_view}}</option>
-		    {{/foreach}}
-		    </select>
-		    <img id="iconeBackground" />
-		    </td>
-		</tr>
+        
+          <tbody id="listCategorie">
+          
+          {{if $consult->_id || $praticien_id}}
+          {{assign var="categorie_id" value=$consult->categorie_id}}
+          {{assign var="categories" value=$categories}}
+          {{assign var="listCat" value=$listCat}}
+          {{include file="httpreq_view_list_categorie.tpl"}}
+          {{elseif $praticien_id}}
+          {{assign var="categorie_id" value=""}}
+          {{assign var="categories" value=$categories}}
+          {{assign var="listCat" value=$listCat}}
+          {{include file="httpreq_view_list_categorie.tpl"}}
+          {{/if}}
+        
+          </tbody>
+        
       </table>
       
       <table class="form">

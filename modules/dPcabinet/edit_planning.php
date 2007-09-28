@@ -11,6 +11,13 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+// Chargement du praticien selectionne
+$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$praticienSel = new CMediusers();
+$praticienSel->load($praticien_id);
+
+
+
 $consult = new CConsultation();
 $chir = new CMediusers;
 $pat = new CPatient;
@@ -55,10 +62,9 @@ if(!$consultation_id) {
   $canConsult = $consult->canDo();
   
   $canConsult->needsRead("consultation_id");
-
-  $consult->loadRefs();
   
-  $consult->_ref_plageconsult->loadRefs();
+  $consult->loadRefs();
+  $consult->_ref_plageconsult->loadRefs();  
 
   $chir =& $consult->_ref_plageconsult->_ref_chir;
   $pat  =& $consult->_ref_patient;
@@ -81,9 +87,11 @@ if(!$consultation_id) {
 	}
 }
 
-// Chargement de la liste des categories disponible pour le cabinet du user
+
+
+
 $categorie = new CConsultationCategorie();
-$whereCategorie["function_id"] = " = '$mediuser->function_id'";
+$whereCategorie["function_id"] = " = '$praticienSel->function_id'";
 $orderCategorie = "nom_categorie ASC";
 $categories = $categorie->loadList($whereCategorie,$orderCategorie);
 
@@ -93,8 +101,6 @@ $listCat = array();
 foreach($categories as $key => $cat){
   $listCat[$cat->_id] = $cat->nom_icone;
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -106,7 +112,7 @@ $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
-
+$smarty->assign("praticien_id"      , $praticien_id      );
 $smarty->assign("listModelePrat"		, $listModelePrat);
 $smarty->assign("listModeleFunc"		, $listModeleFunc);
 

@@ -320,10 +320,17 @@ function pageMain() {
           {{/if}}
           
           <td {{$style|smarty:nodefaults}}>
+            <div style="float: left">
             {{if $curr_consult->patient_id!=0}}
               <a href="{{$href_consult}}" title="Voir la consultation">{{$curr_consult->heure|date_format:"%Hh%M"}}</a>
             {{else}}
               {{$curr_consult->heure|date_format:"%Hh%M"}}
+            {{/if}}
+            </div>
+            {{if $curr_consult->categorie_id}}
+            <div style="float: right">
+              <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}" />
+            </div>
             {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>
