@@ -303,11 +303,11 @@ function pageMain() {
       <input type="hidden" name="lit_id" value="" />
       <input type="hidden" name="sejour_id" value="" />
             
-      <table class="sejourcollapse" id="sejour-bloque">
+      <table class="sejourcollapse" id="sejour_bloque">
         <tr>
         <td class="selectsejour">
           <input type="radio" id="hospitalisation" onclick="selectHospitalisation()" />
-          <script type="text/javascript">new Draggable('sejour-bloque', {revert:true})</script>
+          <script type="text/javascript">new Draggable('sejour_bloque', {revert:true})</script>
         </td>
         <td class="patient" onclick="flipSejour('bloque')">
           <strong><a name="sejourbloque">[BLOQUER UN LIT]</a></strong>
