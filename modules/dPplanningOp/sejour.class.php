@@ -216,7 +216,8 @@ class CSejour extends CCodableCCAM {
     }
     
     if($patient->_id) {
-      $patient->loadRefsSejours();
+      $where = array("annule" => "= '0'");
+      $patient->loadRefsSejours($where);
 
       // suppression de la liste des sejours le sejour courant
       $listSejour = array();
