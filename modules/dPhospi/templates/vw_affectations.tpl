@@ -43,8 +43,11 @@ function submitAffectation() {
 }
 
 function DragDropSejour(sejour_id, lit_id){
-  var oForm = eval("document.addAffectation" + sejour_id);
   $(sejour_id).style.display="none";
+  if(sejour_id == 'sejour_bloque') {
+    sejour_id = "sejour";
+  }
+  var oForm = eval("document.addAffectation" + sejour_id);
   oForm.lit_id.value = lit_id;
   oForm.submit();
 }
