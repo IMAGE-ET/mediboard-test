@@ -1450,200 +1450,25 @@ table.contacts td.hilite {
 	background-color: #fff;
 }
 
-  /* @import "./calendar.css";  */
+  /* @import "./calendar.css    */
 
-/* popup calendar */
-
-body.popcal {
-	background-color: #eee;
+.calendar td.day.current {
+  background-color: #fff;
 }
 
-table.poptitle {
-	background-color: #fff;
+.calendar td.day.spot {
+  border: 1px solid #0f0;
+  padding: 1px 3px 1px 1px;
 }
 
-table.poptitle td {
-	background-color: #fff;
+.calendar td.day.spot.hilite {
+  border: 1px outset #0f0;
+  padding: 1px 3px 1px 1px;
 }
 
-table.poptitle th {
-	background-color: #fff;
-	color: #000;
-	font-size: 10pt;
-	font-weight: bold;
-}
-
-table.popcal {
-	background-color: #ccc;
-}
-
-table.popcal th {
-	background-color: #fff;
-	color: #000;
-	font-size: 9pt;
-	font-weight: normal;
-}
-
-table.popcal td {
-	background-color: #fff;
-	font-size: 8pt;
-	text-align: center;
-}
-
-table.popcal td.empty {
-	background-color: #ddd;
-}
-
-table.mocal td.day  {
-	background-color: #fff;
-	text-align: center;
-}
-
-table.popcal td.today {
-}
-
-table.popcal td.weekend {
-	background-color: #eee;
-}
-
-table.popcal a {
-	display: block;
-}
-
-table.popcal a:hover {
-	background-color: #eef;
-}
-
-table.popcal a:link,
-table.popcal a:visited {
-	color: #00f;
-	text-decoration: none;
-}
-
-table.popcal a.today:link,
-table.popcal a.today:visited {
-	color: #f00;
-	font-weight: bold;
-}
-
-table.popcal a.weekend:link,
-table.popcal a.weekend:visited {
-	color: #00a;
-}
-
-table.popcal a.empty:link,
-table.popcal a.empty:visited {
-	color: #777;
-}
-
-/* month calendar - title area */
-table.motitle {
-	background-color: #777;
-}
-table.motitle td {
-	background-color: #eee;
-}
-table.motitle th {
-	background-color: #eee;
-	font-size: 10pt;
-}
-
-table.mocal {
-	background-color: #777;
-}
-table.mocal th {
-	background-color: #555;
-	color: #fff;
-}
-table.mocal td {
-}
-table.mocal td.week {
-	vertical-align: top;
-	background-color: #888;
-	height: 80px;
-}
-table.mocal td.empty {
-	background-color: #ddd;
-	color: #aaa;
-	text-align: left;
-	vertical-align: top;
-	height: 80px;
-}
-table.mocal td.day  {
-	background-color: #fff;
-	color: #336;
-	text-align: left;
-	vertical-align: top;
-	height: 80px;
-}
-table.mocal td.today {
-	background-color: #ace;
-	color: #fff;
-	text-align: left;
-	vertical-align: top;
-}
-
-table.mocal td.weekend {
-	background-color: #eee;
-	text-align: left;
-	vertical-align: top;
-}
-
-table.mocal .event {
-}
-
-
-/* mini calendar - title area */
-table.minititle {
-}
-
-table.minititle td {
-}
-
-table.minititle th {
-	font-weight: normal;
-}
-
-table.minical {
-}
-
-table.minical th {
-	font-weight: normal;
-}
-
-table.minical td {
-}
-
-table.minical td.week {
-}
-
-table.minical td.empty {
-	color: #aaa;
-}
-
-table.minical td.day  {
-	text-align: center;
-}
-
-table.minical td.today {
-	background-color: #ddd;
-	text-align: center;
-}
-
-table.minical td.weekend {
-	text-align: center;
-}
-
-table.minical .event {
-}
-
-table.minical a {
-	display: block;
-	text-decoration: none;
-}
-
-table.minical a:hover {
-	background-color: #fff;
+.calendar td.day.spot.selected {
+  border: 1px inset #0f0;
+  padding: 1px 3px 1px 1px;
 }
 
   /* @import "./ccam.css";      */
