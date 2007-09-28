@@ -32,8 +32,13 @@ function checkChambre(){
 {{/if}}
 
 <!-- Champ de copie des informations de l'intervention dans le cas ou il y en une -->
-<input type="hidden" name="_curr_op_id"   value="{{$op->_id}}" />
-<input type="hidden" name="_curr_op_date" value="{{$op->_ref_plageop->date}}" />
+{{if $op->_id}}
+  <input type="hidden" name="_curr_op_id"   value="{{$op->_id}}" />
+  <input type="hidden" name="_curr_op_date" value="{{$op->_ref_plageop->date}}" />
+{{else}}
+  <input type="hidden" name="_curr_op_id"   value="" />
+  <input type="hidden" name="_curr_op_date" value="" />
+{{/if}}
 
 {{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
 {{mb_field object=$sejour field="modif_SHS" hidden=1 prop=""}}
