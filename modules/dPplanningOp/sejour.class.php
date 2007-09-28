@@ -208,7 +208,7 @@ class CSejour extends CCodableCCAM {
       	if($isCurrOp) {
       	  $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
       	} else {
-     	    $opInBounds = $operation->_ref_plageop->date >= mbDate($entree) && $operation->_ref_plageop->date <= mbDate($sortie);
+     	    $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
       	}
         if(!$opInBounds){
            $msg.= "Interventions en dehors des nouvelles dates du sejour";	
