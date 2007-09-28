@@ -65,7 +65,7 @@ function modifTarif() {
 function effectuerReglement() {
   var oForm = document.tarifFrm;
   oForm.paye.value = "1";
-  oForm.date_paiement.value = makeDATEFromDate(new Date());
+  oForm.date_paiement.value = new Date().toDATE();
   submitFdr(oForm);
 }
 

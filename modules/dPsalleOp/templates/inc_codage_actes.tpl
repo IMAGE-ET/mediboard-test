@@ -52,7 +52,7 @@
         <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
         <td>
           <input type="text" name="execution" class="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
-          <button class="tick" onclick="this.form.execution.value = makeDATETIMEFromDate(new Date());">Maintenant</button><br />
+          <button class="tick" onclick="this.form.execution.value = new Date().toDATETIME());">Maintenant</button><br />
         </td>
       </tr>
       

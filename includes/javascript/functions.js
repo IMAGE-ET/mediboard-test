@@ -835,91 +835,78 @@ function reloadNotes(){
   initNotes(); 
 }
 
-/**
- * Date utility functions
- * @todo: extend Date class
- */
+var dateStatus = function(date) {
+  var sDate = date.toDATE();
+  var aStyles = [];
 
-function makeDateFromDATE(sDate) {
-  // sDate must be: YYYY-MM-DD
-  var aParts = sDate.split("-");
-  Assert.that(aParts.length == 3, "'%s' is not a valid Date format", sDate);
+  if (this.limit.start && this.limit.start > sDate) {
+    aStyles.push("disabled");
+  }
 
-  var year  = parseInt(aParts[0], 10);
-  var month = parseInt(aParts[1], 10);
-  var day   = parseInt(aParts[2], 10);
+  if (this.limit.stop && this.limit.stop < sDate) {
+    aStyles.push("disabled");
+  }
+
+	if (this.current.start || this.current.stop) {
+    aStyles.push("current");
+	}
+	
+  if (this.current.start && this.current.start > sDate) {
+    aStyles = aStyles.without("current");
+  }
+
+  if (this.current.stop && this.current.stop < sDate) {
+    aStyles = aStyles.without("current");
+  }
   
-  return new Date(year, month - 1, day); // Js months are 0-11!!
+  if (this.spots.include(sDate)) {
+    aStyles.push("spot");
+  }
+  
+  aStyles.removeDuplicates();
+  return aStyles.join(" ");
 }
 
-function makeDateFromDATETIME(sDateTime) {
-  // sDateTime must be: YYYY-MM-DD HH:MM:SS
-  var aHalves = sDateTime.split(" ");
-  Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
-
-  var sDate = aHalves[0];
-  var date = makeDateFromDATE(sDate);
-
-  var sTime = aHalves[1];
-  var aParts = sTime.split(":");
-  Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
-
-  date.setHours  (parseInt(aParts[0], 10));
-  date.setMinutes(parseInt(aParts[1], 10));
-  date.setSeconds(parseInt(aParts[2], 10));
+Object.extend(Calendar, {
+  dateStatus: function(date) {
+  },
   
-  return date;
-}
+  regField: function(sFormName, sFieldName, bTime, userDates) {
+	  var dates = {
+		  current: {
+		    start: null,
+		    stop: null
+		  },
+		  limit: {
+		    start: null,
+		    stop: null
+		  },
+		  spots: []
+		};
+		
+		Object.extend(dates, userDates);
 
-function makeDateFromLocaleDate(sDate) {
-  // sDate must be: dd/mm/yyyy
-  var aParts = sDate.split("/");
-  Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
-
-  var year  = parseInt(aParts[2], 10);
-  var month = parseInt(aParts[1], 10);
-  var day   = parseInt(aParts[0], 10);
-  
-  return new Date(year, month - 1, day); // Js months are 0-11!!
-}
-
-function makeDATEFromDate(date) {
-  var y = date.getFullYear();
-  var m = date.getMonth()+1; // Js months are 0-11!!
-  var d = date.getDate();
-  
-  return printf("%04d-%02d-%02d", y, m, d);
-}
-
-function makeLocaleDateFromDate(date) {
-  var y = date.getFullYear();
-  var m = date.getMonth()+1; // Js months are 0-11!!
-  var d = date.getDate();
-  
-  return printf("%02d/%02d/%04d", d, m, y);
-}
-
-
-function makeLocaleDateTimeFromDate(date) {
-  var h = date.getHours();
-  var m = date.getMinutes();
-  
-  return makeLocaleDateFromDate(date) + printf(" %02d:%02d", h, m);
-}
-
-
-function makeDATETIMEFromDate(date, useSpace) {
-  var h = date.getHours();
-  var m = date.getMinutes();
-  var s = date.getSeconds();
-  
-  if(useSpace)
-    return makeDATEFromDate(date) + printf(" %02d:%02d:%02d", h, m, s);
-  else
-    return makeDATEFromDate(date) + printf("+%02d:%02d:%02d", h, m, s);
-}
+		// Test element existence
+		var sInputId = sFormName + "_" + sFieldName;
+	  if (!$(sInputId)) {
+	    return;
+	  }
+	
+	  var cal = Calendar.setup( {
+	      inputField  : sInputId,
+	      displayArea : sInputId + "_da",
+	      ifFormat    : "%Y-%m-%d" + (bTime ? " %H:%M:%S" : ""),
+	      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
+	      button      : sInputId + "_trigger",
+	      showsTime   : bTime,
+	      dateStatusFunc: dateStatus.bind(dates)
+	    } 
+	  );
+	}
+} );
 
 function regFieldCalendar(sFormName, sFieldName, bTime) {
+  
   if (bTime == null) bTime = false;
   
   var sInputId = sFormName + "_" + sFieldName;
@@ -945,11 +932,11 @@ function regRedirectPopupCal(sInitDate, sRedirectBase, sContainerId, bTime) {
   
   Calendar.setup( {
       button      : sContainerId,
-      date        : makeDateFromDATE(sInitDate),
+      date        : Date.fromDATE(sInitDate),
       showsTime   : bTime,
       onUpdate    : function(calendar) { 
         if (calendar.dateClicked) {
-          sDate = bTime ? makeDATETIMEFromDate(calendar.date) : makeDATEFromDate(calendar.date)
+          sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
           window.location = sRedirectBase + sDate;
         }
       }
@@ -961,7 +948,7 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
   if (sContainerId == null) sContainerId = "calendar-container";
   if (bTime == null) bTime = false;
 
-  dInit = bTime ? makeDateFromDATETIME(sInitDate) : makeDateFromDATE(sInitDate);
+  dInit = bTime ? Date.fromDATETIME(sInitDate) : Date.fromDATE(sInitDate);
   
   Calendar.setup( {
       date         : dInit,
@@ -969,7 +956,7 @@ function regRedirectFlatCal(sInitDate, sRedirectBase, sContainerId, bTime) {
       flat         : sContainerId,
       flatCallback : function(calendar) { 
         if (calendar.dateClicked) {
-          sDate = bTime ? makeDATETIMEFromDate(calendar.date) : makeDATEFromDate(calendar.date)
+          sDate = bTime ? calendar.date.toDATETIME() : calendar.date.toDATE();
           window.location = sRedirectBase + sDate;
         }
       }
@@ -994,28 +981,88 @@ var Duration = {
 }
 
 Object.extend(Date, { 
-  fromDATE: makeDateFromDATE,
-  fromDATETIME : makeDateFromDATETIME,
-  fromLocaleDate : makeDateFromLocaleDate,
-  fromLocaleDateTime : null
+  fromDATE: function(sDate) {
+	  // sDate must be: YYYY-MM-DD
+	  var aParts = sDate.split("-");
+	  Assert.that(aParts.length == 3, "'%s' is not a valid DATE", sDate);
+	
+	  var year  = parseInt(aParts[0], 10);
+	  var month = parseInt(aParts[1], 10);
+	  var day   = parseInt(aParts[2], 10);
+	  
+	  return new Date(year, month - 1, day); // Js months are 0-11!!
+	},
+
+  fromDATETIME : function(sDateTime) {
+	  // sDateTime must be: YYYY-MM-DD HH:MM:SS
+	  var aHalves = sDateTime.split(" ");
+	  Assert.that(aHalves.length == 2, "'%s' is not a valid DATETIME", sDateTime);
+	
+	  var sDate = aHalves[0];
+	  var date = Date.fromDATE(sDate);
+	
+	  var sTime = aHalves[1];
+	  var aParts = sTime.split(":");
+	  Assert.that(aParts.length == 3, "'%s' is not a valid TIME", sTime);
+	
+	  date.setHours  (parseInt(aParts[0], 10));
+	  date.setMinutes(parseInt(aParts[1], 10));
+	  date.setSeconds(parseInt(aParts[2], 10));
+	  
+	  return date;
+	},
+
+  fromLocaleDate : function(sDate) {
+	  // sDate must be: dd/mm/yyyy
+	  var aParts = sDate.split("/");
+	  Assert.that(aParts.length == 3, "'%s' is not a valid display date", sDate);
+	
+	  var year  = parseInt(aParts[2], 10);
+	  var month = parseInt(aParts[1], 10);
+	  var day   = parseInt(aParts[0], 10);
+	  
+	  return new Date(year, month - 1, day); // Js months are 0-11!!
+	},
+
+  fromLocaleDateTime : null,
+  
+  
 } );
 
 Class.extend(Date, {
   toDATE: function() {
-    return makeDATEFromDate(this);
-  },
+	  var y = this.getFullYear();
+	  var m = this.getMonth()+1; // Js months are 0-11!!
+	  var d = this.getDate();
+	  
+	  return printf("%04d-%02d-%02d", y, m, d);
+	},
   
   toDATETIME: function(useSpace) {
-    return makeDATETIMEFromDate(this, useSpace);
-  },
+	  var h = this.getHours();
+	  var m = this.getMinutes();
+	  var s = this.getSeconds();
+	  
+	  if(useSpace)
+	    return this.toDATE() + printf(" %02d:%02d:%02d", h, m, s);
+	  else
+	    return this.toDATE() + printf("+%02d:%02d:%02d", h, m, s);
+	},
   
   toLocaleDate: function() {
-    return makeLocaleDateFromDate(this);
-  },
+	  var y = this.getFullYear();
+	  var m = this.getMonth()+1; // Js months are 0-11!!
+	  var d = this.getDate();
+	  
+	  return printf("%02d/%02d/%04d", d, m, y);
+	},
   
-  toLocaleDateTime: function() {
-    return makeLocaleDateTimeFromDate(this);
-  },
+  toLocaleDateTime: function () {
+	  var h = this.getHours();
+	  var m = this.getMinutes();
+	  
+	  return this.toLocaleDate() + printf(" %02d:%02d", h, m);
+	},
   
   addDays: function(iDays) {
     this.setDate(this.getDate() + iDays);

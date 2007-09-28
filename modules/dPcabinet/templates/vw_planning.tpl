@@ -22,7 +22,7 @@ function checkPlage() {
 
 function putArrivee(oForm) {
   var today = new Date();
-  oForm.arrivee.value = makeDATETIMEFromDate(today, true);
+  oForm.arrivee.value = today.toDATETIME(true);
   oForm.submit();
 }
 

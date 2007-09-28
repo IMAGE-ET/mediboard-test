@@ -48,8 +48,8 @@ var PlageOpSelector = {
         Form.Element.setValue(oOpFormEasy[this.sDate_easy]    , sDate);
       }
      
-      var dAdm = makeDateFromLocaleDate(sDate);
-      oOpForm._date.value = makeDATEFromDate(dAdm);
+      var dAdm = Date.fromLocaleDate(sDate);
+      oOpForm._date.value = dAdm.toDATE();;
       // Initialize admission date according to operation date
       switch(bAdm) {
         case 0 :
@@ -64,9 +64,9 @@ var PlageOpSelector = {
       if (bAdm != 2) {
         oSejourForm[this.s_hour_entree_prevue].value = dAdm.getHours();
         oSejourForm[this.s_min_entree_prevue].value  = dAdm.getMinutes();
-        oSejourForm[this.s_date_entree_prevue].value = makeDATEFromDate(dAdm);
+        oSejourForm[this.s_date_entree_prevue].value = dAdm.toDATE();
         var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
-        div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
+        div_rdv_adm.innerHTML = dAdm.toLocaleDate();
       }
       
       oSejourForm._curr_op_date.value = Date.fromLocaleDate(sDate).toDATE();
