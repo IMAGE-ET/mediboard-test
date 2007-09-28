@@ -178,7 +178,7 @@ $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "minutes_interval" => "15"
 );
 
-$dPconfig["dPbloc"]["CPlageop"] = array (
+$dPconfig["dPbloc"]["CPlageOp"] = array (
   "hours_start"      => "8",
   "hours_stop"       => "20",
   "minutes_interval" => "15"
