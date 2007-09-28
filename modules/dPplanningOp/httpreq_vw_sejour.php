@@ -72,6 +72,7 @@ $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
 
 $smarty->assign("sejour"   , $sejour);
+$smarty->assign("op"       , new COperation);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("patient"  , $patient);
 $smarty->assign("sejours"  , $sejours);
