@@ -11,6 +11,11 @@
  * The plagesop Class
  */
 class CPlageOp extends CMbObject {
+  static $minutes = array();
+  static $hours = array();
+  static $hours_start = null;  
+  static $hours_stop = null;
+  
   // DB Table key
   var $plageop_id = null;
   
@@ -303,5 +308,13 @@ class CPlageOp extends CMbObject {
     return ($this->_ref_salle->getPerm($permType) && $pratPerm);
   }
 }
+
+global $dPconfig;
+$pcConfig =& $dPconfig["dPbloc"]["CPlageop"];
+
+CPlageop::$hours_start = $pcConfig["hours_start"];
+CPlageop::$hours_stop  = $pcConfig["hours_stop"];
+CPlageop::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+CPlageop::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
 
 ?>

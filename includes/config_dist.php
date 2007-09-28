@@ -178,6 +178,12 @@ $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "minutes_interval" => "15"
 );
 
+$dPconfig["dPbloc"]["CPlageop"] = array (
+  "hours_start"      => "8",
+  "hours_stop"       => "20",
+  "minutes_interval" => "15"
+);
+    
 $dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
 
 $dPconfig["dPfiles"]["nb_upload_files"] = "1";

@@ -1,5 +1,7 @@
 <?php
-$locales['mod-dPbloc-tab-print_planning'] = 'Impression des plannings';
+$locales['config-dPbloc-CPlageop-hours_start'] = 'Heure de début';
+$locales['config-dPbloc-CPlageop-hours_stop'] = 'Heure de fin';
+$locales['config-dPbloc-CPlageop-minutes_interval'] = 'Intervalles en minutes';
 $locales['CPlageOp'] = 'Plage Opératoire';
 $locales['CPlageOp-anesth_id'] = 'Anesthésiste';
 $locales['CPlageOp-anesth_id-court'] = '';
@@ -58,6 +60,7 @@ $locales['CSalle.none'] = '';
 $locales['CSalle.one'] = '';
 $locales['CSalle.stats.0'] = '0';
 $locales['CSalle.stats.1'] = '1';
+$locales['mod-dPbloc-tab-print_planning'] = 'Impression des plannings';
 $locales['mod-dPbloc-tab-vw_edit_interventions'] = 'Gestion des interventions';
 $locales['mod-dPbloc-tab-vw_edit_planning'] = 'Planning du jour';
 $locales['mod-dPbloc-tab-vw_idx_materiel'] = 'Commande de matériel';

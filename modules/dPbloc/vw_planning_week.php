@@ -22,18 +22,19 @@ for($i = 0; $i < 7; $i++) {
   $listDays[$dateArr] = $dateArr;  
 }
 
-// Liste des heures
-$listHours = array();
-for($i = 8; $i <= 20; $i++) {
-  $listHours[$i] = $i;
+
+$plagesel = new CPlageOp;
+// Liste des heures et minutes
+$listHours_ = CPlageop::$hours;
+$listMins_ = CPlageop::$minutes;
+ 
+foreach($listHours_ as $key=>$hour){
+	$listHours[$hour] = $hour;
+}
+foreach($listMins_ as $key=>$min){
+	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
 
-// Liste des minutes
-$listMins = array();
-$listMins[] = "00";
-$listMins[] = "15";
-$listMins[] = "30";
-$listMins[] = "45";
 
 // Liste des Salles
 $salle = new CSalle();
@@ -92,8 +93,8 @@ foreach($listDays as $keyDate=>$valDate){
         }
       } 
     }
-    if($heure_fin>20 && $heure_deb<=20 && $min_deb<45){
-      $heure_fin = "20";
+    if($heure_fin>16 && $heure_deb<=16 && $min_deb<45){
+      $heure_fin = "16";
       $min_fin   = "45";
     }elseif($heure_deb<8 && (($heure_fin==8 && $min_fin>0) || $heure_fin>8)){
       $heure_deb = "08";

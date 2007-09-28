@@ -1,5 +1,7 @@
 <?php
-$locales['mod-dPbloc-tab-print_planning'] = '';
+$locales['config-dPbloc-CPlageop-hours_start'] = '';
+$locales['config-dPbloc-CPlageop-hours_stop'] = '';
+$locales['config-dPbloc-CPlageop-minutes_interval'] = '';
 $locales['CPlageOp'] = 'Plage Opératoire';
 $locales['CPlageOp-anesth_id'] = '';
 $locales['CPlageOp-anesth_id-court'] = '';
@@ -58,6 +60,7 @@ $locales['CSalle.none'] = '';
 $locales['CSalle.one'] = '';
 $locales['CSalle.stats.0'] = '0';
 $locales['CSalle.stats.1'] = '1';
+$locales['mod-dPbloc-tab-print_planning'] = '';
 $locales['mod-dPbloc-tab-vw_edit_interventions'] = '';
 $locales['mod-dPbloc-tab-vw_edit_planning'] = '';
 $locales['mod-dPbloc-tab-vw_idx_materiel'] = '';

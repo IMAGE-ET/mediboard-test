@@ -154,13 +154,13 @@ foreach ($plages as $keyPlages=>$valPlages){
       } 
     }
     
-    if($heure_fin>CPlageConsult::$hours_stop && $heure_deb<=CPlageConsult::$hours_stop && $min_deb<end(CPlageconsult::$minutes)){
-      $heure_fin = CPlageConsult::$hours_stop;
-      $min_fin   = end(CPlageconsult::$minutes);
-    }elseif($heure_deb<CPlageconsult::$hours_start && $heure_fin>=CPlageconsult::$hours_start && $min_fin>0){
-      $heure_deb = CPlageconsult::$hours_start;
-      $min_deb   = reset(CPlageconsult::$minutes);;
-    }elseif($heure_fin>CPlageConsult::$hours_stop || $heure_deb<CPlageconsult::$hours_start){
+    if($heure_fin>CPlageop::$hours_stop && $heure_deb<=CPlageop::$hours_stop && $min_deb<end(CPlageop::$minutes)){
+      $heure_fin = CPlageop::$hours_stop;
+      $min_fin   = end(CPlageop::$minutes);
+    }elseif($heure_deb<CPlageop::$hours_start && $heure_fin>=CPlageop::$hours_start && $min_fin>0){
+      $heure_deb = CPlageop::$hours_start;
+      $min_deb   = reset(CPlageop::$minutes);;
+    }elseif($heure_fin>CPlageop::$hours_stop || $heure_deb<CPlageop::$hours_start){
       // Plages Hors semainier
       $outPlage = true;
     }

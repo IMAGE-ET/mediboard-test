@@ -46,19 +46,18 @@ $anesths = $mediuser->loadAnesthesistes();
 
 $_temps_inter_op = range(0,59,15);
 
+// Liste des heures et minutes
+$listHours_ = CPlageop::$hours;
+$listMins_ = CPlageop::$minutes;
 
-// Liste des heures
-$listHours = array();
-for($i = 8; $i <= 20; $i++) {
-  $listHours[$i] = $i;
+// Remplissage de la clé du tableau d'heures 
+foreach($listHours_ as $key=>$hour){
+	$listHours[$hour] = $hour;
 }
 
-// Liste des minutes
-$listMins = array();
-$listMins[] = "00";
-$listMins[] = "15";
-$listMins[] = "30";
-$listMins[] = "45";
+foreach($listMins_ as $key=>$min){
+	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
+}
 
 
 // Création du tableau de visualisation
