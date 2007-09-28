@@ -17,7 +17,6 @@ function main() {
 	
 	  initPuces();
 	  pageMain();
-//		References.audit();
 	}
 	catch (e) {
 		Console.debug(e);
@@ -27,24 +26,7 @@ function main() {
 /**
  * References manipulation
  */
-var References = { 
-  /**
-   * Prints out info on references counting
-   */
-  audit: function() {
-    Console.debug(Prototype, "Prototype");
-    return;
-    
-    for (key in window) {
-      try {
-	      Console.trace(key);
-	      Console.trace(window[key] == "[object Object]");
-      }
-      catch (e) {
-      }
-    }
-  },
-  
+var References = {   
 	/**
 	 * Clean references involved in memory leaks
 	 */
@@ -122,8 +104,6 @@ function createDocument(oSelect, consultation_id) {
   
   oSelect.value = "";
 }
-
-
 
 function closeWindowByEscape(e) {
   var keycode;
@@ -835,40 +815,39 @@ function reloadNotes(){
   initNotes(); 
 }
 
-var dateStatus = function(date) {
-  var sDate = date.toDATE();
-  var aStyles = [];
-
-  if (this.limit.start && this.limit.start > sDate) {
-    aStyles.push("disabled");
-  }
-
-  if (this.limit.stop && this.limit.stop < sDate) {
-    aStyles.push("disabled");
-  }
-
-	if (this.current.start || this.current.stop) {
-    aStyles.push("current");
-	}
-	
-  if (this.current.start && this.current.start > sDate) {
-    aStyles = aStyles.without("current");
-  }
-
-  if (this.current.stop && this.current.stop < sDate) {
-    aStyles = aStyles.without("current");
-  }
-  
-  if (this.spots.include(sDate)) {
-    aStyles.push("spot");
-  }
-  
-  aStyles.removeDuplicates();
-  return aStyles.join(" ");
-}
-
 Object.extend(Calendar, {
+
+	// This function is bound to date specification
   dateStatus: function(date) {
+	  var sDate = date.toDATE();
+	  var aStyles = [];
+	
+	  if (this.limit.start && this.limit.start > sDate) {
+	    aStyles.push("disabled");
+	  }
+	
+	  if (this.limit.stop && this.limit.stop < sDate) {
+	    aStyles.push("disabled");
+	  }
+	
+		if (this.current.start || this.current.stop) {
+	    aStyles.push("current");
+		}
+		
+	  if (this.current.start && this.current.start > sDate) {
+	    aStyles = aStyles.without("current");
+	  }
+	
+	  if (this.current.stop && this.current.stop < sDate) {
+	    aStyles = aStyles.without("current");
+	  }
+	  
+	  if (this.spots.include(sDate)) {
+	    aStyles.push("spot");
+	  }
+	  
+	  aStyles.removeDuplicates();
+	  return aStyles.join(" ");
   },
   
   regField: function(sFormName, sFieldName, bTime, userDates) {
@@ -899,7 +878,7 @@ Object.extend(Calendar, {
 	      daFormat    : "%d/%m/%Y" + (bTime ? " %H:%M" : ""),
 	      button      : sInputId + "_trigger",
 	      showsTime   : bTime,
-	      dateStatusFunc: dateStatus.bind(dates)
+	      dateStatusFunc: Calendar.dateStatus.bind(dates)
 	    } 
 	  );
 	}
