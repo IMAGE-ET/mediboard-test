@@ -129,10 +129,14 @@
       <input type="hidden" name="plageop_id" value="" />
       <input type="hidden" name="_date" value="" />
       <input type="hidden" name="_datestr" value="" />
-      <select name="date" onchange="{{if !$op->operation_id}}updateEntreePrevue();{{/if}} Value.synchronize(this); modifSejour()">
+      <select name="date" onchange="
+        {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
+        Value.synchronize(this);
+        document.editSejour._curr_op_date.value = this.value;
+        modifSejour();">
         {{if $op->operation_id}}
-        <option value="{{$op->date}}" selected="selected">
-          Inchangée ({{$op->date|date_format:"%d/%m/%Y"}} )
+        <option value="{{$op->_datetime|date_format:"%Y-%m-%d"}}" selected="selected">
+          {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
         </option>
         {{/if}}
         <option value="{{$today}}">

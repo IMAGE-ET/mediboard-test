@@ -69,6 +69,8 @@ var PlageOpSelector = {
         div_rdv_adm.innerHTML = makeLocaleDateFromDate(dAdm);
       }
       
+      oSejourForm._curr_op_date.value = Date.fromLocaleDate(sDate).toDATE();
+      
       oSejourForm[this.s_date_entree_prevue].onchange();
     }
   }

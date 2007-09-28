@@ -30,6 +30,13 @@ function checkChambre(){
 {{if $mode_operation}}
   <input type="hidden" name="callback" value="submitFormOperation" />
 {{/if}}
+
+<!-- Champ de copie des informations de l'intervention dans le cas ou il y en une -->
+{{if $op->_id}}
+  <input type="hidden" name="_curr_op_id"   value="{{$op->_id}}" />
+  <input type="hidden" name="_curr_op_date" value="{{$op->_ref_plageop->date}}" />
+{{/if}}
+
 {{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
 {{mb_field object=$sejour field="modif_SHS" hidden=1 prop=""}}
 <input type="hidden" name="annule" value="{{$sejour->annule|default:"0"}}" />

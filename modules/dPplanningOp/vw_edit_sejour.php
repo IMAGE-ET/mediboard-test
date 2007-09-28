@@ -125,6 +125,7 @@ $smarty->assign("heure_entree_jour"   , $heure_entree_jour);
 $smarty->assign("prestations", $prestations);
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("sejour"        , $sejour);
+$smarty->assign("op"            , new COperation);
 $smarty->assign("praticien"     , $praticien);
 $smarty->assign("patient"       , $patient);
 $smarty->assign("sejours"       , $sejours);

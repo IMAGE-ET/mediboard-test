@@ -74,6 +74,9 @@ class CSejour extends CCodableCCAM {
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
   var $_num_dossier        = null;
+  var $_curr_op_id         = null;
+  var $_curr_op_date       = null;
+  
   // Object References
   var $_ref_patient           = null;
   var $_ref_praticien         = null;
@@ -201,7 +204,13 @@ class CSejour extends CCodableCCAM {
       $this->loadRefsOperations();
       foreach($this->_ref_operations as $key => $operation){
       	$operation->loadRefPlageop();
-        if(!($operation->_ref_plageop->date >= mbDate($entree) && $operation->_ref_plageop->date <= mbDate($sortie))){
+      	$isCurrOp = $this->_curr_op_id;
+      	if($isCurrOp) {
+      	  $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+      	} else {
+     	    $opInBounds = $operation->_ref_plageop->date >= mbDate($entree) && $operation->_ref_plageop->date <= mbDate($sortie);
+      	}
+        if(!$opInBounds){
            $msg.= "Interventions en dehors des nouvelles dates du sejour";	
         }
       }
