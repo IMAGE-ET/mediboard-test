@@ -1471,6 +1471,10 @@ table.contacts td.hilite {
   padding: 1px 3px 1px 1px;
 }
 
+.calendar td.day.weekend {
+	color: #822;
+}
+
   /* @import "./ccam.css";      */
 
 table.fullCode {
