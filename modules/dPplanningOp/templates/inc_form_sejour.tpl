@@ -35,6 +35,9 @@ function checkChambre(){
 {{if $op->_id}}
   <input type="hidden" name="_curr_op_id"   value="{{$op->_id}}" />
   <input type="hidden" name="_curr_op_date" value="{{$op->_ref_plageop->date}}" />
+{{else}}
+  <input type="hidden" name="_curr_op_id"   value="" />
+  <input type="hidden" name="_curr_op_date" value="" />
 {{/if}}
 
 {{mb_field object=$sejour field="saisi_SHS" hidden=1 prop=""}}
