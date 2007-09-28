@@ -310,11 +310,11 @@ class CPlageOp extends CMbObject {
 }
 
 global $dPconfig;
-$pcConfig =& $dPconfig["dPbloc"]["CPlageop"];
+$pcConfig =& $dPconfig["dPbloc"]["CPlageOp"];
 
-CPlageop::$hours_start = $pcConfig["hours_start"];
-CPlageop::$hours_stop  = $pcConfig["hours_stop"];
-CPlageop::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
-CPlageop::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
+CPlageOp::$hours_start = $pcConfig["hours_start"];
+CPlageOp::$hours_stop  = $pcConfig["hours_stop"];
+CPlageOp::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+CPlageOp::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
 
 ?>

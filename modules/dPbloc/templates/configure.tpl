@@ -5,8 +5,8 @@
 
 <table class="form">
 
-  <!-- CPlageop -->  
-  {{assign var="class" value="CPlageop"}}
+  <!-- CPlageOp -->  
+  {{assign var="class" value="CPlageOp"}}
     
   <tr>
     <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>

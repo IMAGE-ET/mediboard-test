@@ -47,8 +47,8 @@ $anesths = $mediuser->loadAnesthesistes();
 $_temps_inter_op = range(0,59,15);
 
 // Liste des heures et minutes
-$listHours_ = CPlageop::$hours;
-$listMins_ = CPlageop::$minutes;
+$listHours_ = CPlageOp::$hours;
+$listMins_ = CPlageOp::$minutes;
 
 // Remplissage de la clé du tableau d'heures 
 foreach($listHours_ as $key=>$hour){

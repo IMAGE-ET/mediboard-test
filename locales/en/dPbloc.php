@@ -1,7 +1,7 @@
 <?php
-$locales['config-dPbloc-CPlageop-hours_start'] = '';
-$locales['config-dPbloc-CPlageop-hours_stop'] = '';
-$locales['config-dPbloc-CPlageop-minutes_interval'] = '';
+$locales['config-dPbloc-CPlageOp-hours_start'] = '';
+$locales['config-dPbloc-CPlageOp-hours_stop'] = '';
+$locales['config-dPbloc-CPlageOp-minutes_interval'] = '';
 $locales['CPlageOp'] = 'Plage Opératoire';
 $locales['CPlageOp-anesth_id'] = '';
 $locales['CPlageOp-anesth_id-court'] = '';

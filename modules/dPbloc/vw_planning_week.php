@@ -25,8 +25,8 @@ for($i = 0; $i < 7; $i++) {
 
 $plagesel = new CPlageOp;
 // Liste des heures et minutes
-$listHours_ = CPlageop::$hours;
-$listMins_ = CPlageop::$minutes;
+$listHours_ = CPlageOp::$hours;
+$listMins_ = CPlageOp::$minutes;
  
 foreach($listHours_ as $key=>$hour){
 	$listHours[$hour] = $hour;
