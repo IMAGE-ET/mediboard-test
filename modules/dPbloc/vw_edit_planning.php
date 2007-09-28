@@ -55,18 +55,9 @@ foreach($listHours_ as $key=>$hour){
 	$listHours[$hour] = $hour;
 }
 
-/*
 foreach($listMins_ as $key=>$min){
 	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
-*/
-// Liste des minutes
-$listMins = array();
-$listMins[] = "00";
-$listMins[] = "15";
-$listMins[] = "30";
-$listMins[] = "45";
-
 
 
 // Création du tableau de visualisation
@@ -100,7 +91,22 @@ foreach($listPlages as $keyPlages=>$valPlages){
   // Détermination des horaire non vides
   $heure_encours = array_search(intval($valPlages->_heuredeb),$listHours);
   $min_encours   = array_search($valPlages->_minutedeb,$listMins);
+  
+  
   $dans_plage = true;
+  
+  if($valPlages->_heurefin>CPlageOp::$hours_stop && $valPlages->_heuredeb<=CPlageOp::$hours_stop && $valPlages->_minutedeb<end(CPlageOp::$minutes)){
+      $valPlages->_heurefin = CPlageOp::$hours_stop;
+      $valPlages->_minutefin   = end(CPlageOp::$minutes);
+  }elseif($valPlages->_heuredeb<CPlageOp::$hours_start && $valPlages->_heurefin>=CPlageOp::$hours_start && $valPlages->_minutefin>0){
+      $valPlages->_heuredeb = CPlageOp::$hours_start;
+      $valPlages->_minutedeb   = reset(CPlageOp::$minutes);;
+  }elseif($valPlages->_heurefin>CPlageOp::$hours_stop || $valPlages->_heuredeb<CPlageOp::$hours_start){
+      // Plages Hors semainier
+      $dans_plage = false;
+  }
+
+  
   while($dans_plage == true){      
     $min_encours ++;
     if(!array_key_exists($min_encours,$listMins)){

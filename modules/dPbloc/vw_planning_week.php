@@ -93,13 +93,14 @@ foreach($listDays as $keyDate=>$valDate){
         }
       } 
     }
-    if($heure_fin>16 && $heure_deb<=16 && $min_deb<45){
-      $heure_fin = "16";
-      $min_fin   = "45";
-    }elseif($heure_deb<8 && (($heure_fin==8 && $min_fin>0) || $heure_fin>8)){
-      $heure_deb = "08";
-      $min_deb   = "00";
-    }elseif($heure_fin>20 || $heure_deb<8){
+
+    if($heure_fin>CPlageOp::$hours_stop && $heure_deb<=CPlageOp::$hours_stop && $min_deb<end(CPlageOp::$minutes)){
+      $heure_fin = CPlageOp::$hours_stop;
+      $min_fin   = end(CPlageOp::$minutes);
+    }elseif($heure_deb<CPlageOp::$hours_start && $heure_fin>=CPlageOp::$hours_start && $min_fin>0){
+      $heure_deb = CPlageOp::$hours_start;
+      $min_deb   = reset(CPlageOp::$minutes);;
+    }elseif($heure_fin>CPlageOp::$hours_stop || $heure_deb<CPlageOp::$hours_start){
       // Plages Hors semainier
       $outPlage = true;
     }
