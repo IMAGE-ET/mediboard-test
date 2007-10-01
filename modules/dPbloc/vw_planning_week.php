@@ -23,17 +23,6 @@ for($i = 0; $i < 7; $i++) {
 }
 
 
-$plagesel = new CPlageOp;
-// Liste des heures et minutes
-$listHours_ = CPlageOp::$hours;
-$listMins_ = CPlageOp::$minutes;
- 
-foreach($listHours_ as $key=>$hour){
-	$listHours[$hour] = $hour;
-}
-foreach($listMins_ as $key=>$min){
-	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
-}
 
 
 // Liste des Salles
@@ -47,14 +36,16 @@ $listSalles = $salle->loadListWithPerms(PERM_READ, $where, $order);
 $arrayAffichage = array();
 foreach($listDays as $keyDate=>$valDate){
   foreach($listSalles as $keySalle=>$valSalle){
-    foreach($listHours as $keyHours=>$valHours){
-      foreach($listMins as $keyMins=>$valMins){
+    foreach(CPlageOp::$hours as $keyHours=>$valHours){
+      foreach(CPlageOp::$minutes as $keyMins=>$valMins){
         // Initialisation du tableau
         $arrayAffichage["$keyDate-s$keySalle-$valHours:$valMins"] = "empty";
       }
     }
   }
 }
+
+
 // Extraction des plagesOp par date
 foreach($listDays as $keyDate=>$valDate){
   // Récupération des plages par jour
@@ -63,80 +54,60 @@ foreach($listDays as $keyDate=>$valDate){
   $where["date"] = "= '$keyDate'";
   $order = "debut";
   $listPlages = $listPlages->loadList($where,$order);
-  foreach($listPlages as $keyPlages=>$valPlages){
-    // Test validité des plages dans le semainier    
-    $heure_fin = $valPlages->_heurefin;
-    $heure_deb = $valPlages->_heuredeb;
-    $min_deb   = $valPlages->_minutedeb;
-    $min_fin   = $valPlages->_minutefin;
-    $outPlage = false;
-    foreach (array("min_deb","min_fin") as $minute){
-      $minute_trouve = array_search(${$minute},$listMins);
-      if ($minute_trouve===false){
-        $afterValue = 0;
-        foreach ($listMins as $valueMin){
-          if (${$minute} > $valueMin && $afterValue!==null){
-            $afterValue = $valueMin;
-          } elseif($afterValue!==null){
-            // Entre l'ancienne valeur et celle ci
-            $centerValue = $afterValue + ($valueMin-$afterValue)/2;
-            $afterValue = null;
-            if(${$minute}>$centerValue){
-              ${$minute} = $valueMin;
-            }else{
-              ${$minute} = $afterValue;
-            }
-          }
-        }
-        if($afterValue!==null){
-          ${$minute} = $afterValue;
-        }
-      } 
-    }
 
-    if($heure_fin>CPlageOp::$hours_stop && $heure_deb<=CPlageOp::$hours_stop && $min_deb<end(CPlageOp::$minutes)){
-      $heure_fin = CPlageOp::$hours_stop;
-      $min_fin   = end(CPlageOp::$minutes);
-    }elseif($heure_deb<CPlageOp::$hours_start && $heure_fin>=CPlageOp::$hours_start && $min_fin>0){
-      $heure_deb = CPlageOp::$hours_start;
-      $min_deb   = reset(CPlageOp::$minutes);;
-    }elseif($heure_fin>CPlageOp::$hours_stop || $heure_deb<CPlageOp::$hours_start){
-      // Plages Hors semainier
+  foreach($listPlages as $keyPlages=>$valPlages){
+    $listPlages[$keyPlages]->loadRefsFwd();
+    $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
+    $listPlages[$keyPlages]->getNbOperations();
+  
+    // Plages pas totalement comprises dans le semainier
+    if($valPlages->_heurefin > CPlageOp::$hours_stop){
+      $valPlages->_heurefin = CPlageOp::$hours_stop;
+      $valPlages->_minutefin = end(CPlageOp::$minutes);
+    }
+    if($valPlages->_heuredeb < CPlageOp::$hours_start){
+      $valPlages->_heuredeb = CPlageOp::$hours_start;
+      $valPlages->_minutedeb   = reset(CPlageOp::$minutes);
+    }
+  
+    // Initialisation des variables 
+    $outPlage = false;
+    $dans_plage = true;
+  
+    // Cas des plages non comprises dans le semainier
+    if($valPlages->_heurefin <= CPlageOp::$hours_start || $valPlages->_heuredeb >= CPlageOp::$hours_stop){
       $outPlage = true;
     }
-    
-    if(!$outPlage){
-      $listPlages[$keyPlages]->loadRefsFwd();
-      $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
-      $listPlages[$keyPlages]->getNbOperations();
-      
+  
+    // si on est dans le semainier
+    if(!$outPlage){ 	
       // Mémorisation dans le tableau d'affichage
-      $nbquartheure = ($heure_fin-$heure_deb)*4;
-      $nbquartheure = $nbquartheure - array_search($min_deb,$listMins) + array_search($min_fin,$listMins);
+      $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
+      $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,CPlageOp::$minutes) + array_search($valPlages->_minutefin,CPlageOp::$minutes);
       $valPlages->_nbQuartHeure = $nbquartheure;
-      
-      $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".intval($heure_deb).":".$min_deb] = $valPlages;
-      // Détermination des horaire non vides
-      $heure_encours = array_search(intval($heure_deb),$listHours);
-      $min_encours   = array_search($min_deb,$listMins);
-      $dans_plage = true;
-      while($dans_plage == true){      
+      $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
+       
+  	  // Détermination des horaire non vides
+      $heure_encours = array_search(intval($valPlages->_heuredeb),CPlageOp::$hours);
+      $min_encours   = array_search($valPlages->_minutedeb,CPlageOp::$minutes);
+   
+  	  while($dans_plage == true){      
         $min_encours ++;
-        if(!array_key_exists($min_encours,$listMins)){
+        if(!array_key_exists($min_encours,CPlageOp::$minutes)){
           $min_encours=0;
           $heure_encours ++;
-          if(!array_key_exists($heure_encours,$listHours)){
-            $heure_encours=8;
+          if(!array_key_exists($heure_encours,CPlageOp::$hours)){
+            $heure_encours=CPlageOp::$hours_start;
           }
-        }      
-        if($heure_encours==$heure_fin && $listMins[$min_encours]==$min_fin){
+        } 
+        if($heure_encours == $valPlages->_heurefin && CPlageOp::$minutes[$min_encours] == $valPlages->_minutefin){
           $dans_plage = false;
         }else{
-          $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".$heure_encours.":".$listMins[$min_encours]] = "full"; 
-        }         
-      }  
-    }
-  }  
+          $arrayAffichage["$keyDate-s".$valPlages->salle_id."-".$heure_encours.":".CPlageOp::$minutes[$min_encours]] = "full"; 
+        }
+      } 
+     }
+   }
 }
 
 // Liste des Spécialités
@@ -147,13 +118,13 @@ $listSpec = $listSpec->loadSpecialites();
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listDays"       , $listDays      );
-$smarty->assign("listSalles"     , $listSalles    );
-$smarty->assign("listHours"      , $listHours     );
-$smarty->assign("listMins"       , $listMins      );
-$smarty->assign("arrayAffichage" , $arrayAffichage);
-$smarty->assign("date"           , $date          );
-$smarty->assign("listSpec"       , $listSpec      );
+$smarty->assign("listDays"       , $listDays          );
+$smarty->assign("listSalles"     , $listSalles        );
+$smarty->assign("listHours"      , CPlageOp::$hours   );
+$smarty->assign("listMins"       , CPlageOp::$minutes );
+$smarty->assign("arrayAffichage" , $arrayAffichage    );
+$smarty->assign("date"           , $date              );
+$smarty->assign("listSpec"       , $listSpec          );
 
 $smarty->display("vw_planning_week.tpl");
 ?>

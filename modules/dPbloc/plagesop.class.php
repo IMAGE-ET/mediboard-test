@@ -314,7 +314,15 @@ $pcConfig =& $dPconfig["dPbloc"]["CPlageOp"];
 
 CPlageOp::$hours_start = mbGetValue($pcConfig["hours_start"], "8");
 CPlageOp::$hours_stop  = mbGetValue($pcConfig["hours_stop"], "20");
-CPlageOp::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
-CPlageOp::$minutes = mbGetValue(range(0, 59, $pcConfig["minutes_interval"]), range(0,59,15));
+$listHours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+$listMins  = mbGetValue(range(0, 59, $pcConfig["minutes_interval"]), range(0,59,15));
+
+foreach($listHours as $key => $hour){
+	CPlageOp::$hours[$hour] = $hour;
+}
+
+foreach($listMins as $key => $min){
+	CPlageOp::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
+}
 
 ?>

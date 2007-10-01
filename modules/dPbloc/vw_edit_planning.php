@@ -46,25 +46,11 @@ $anesths = $mediuser->loadAnesthesistes();
 
 $_temps_inter_op = range(0,59,15);
 
-// Liste des heures et minutes
-$listHours_ = CPlageOp::$hours;
-$listMins_ = CPlageOp::$minutes;
-
-// Remplissage de la clé du tableau d'heures 
-foreach($listHours_ as $key=>$hour){
-	$listHours[$hour] = $hour;
-}
-
-foreach($listMins_ as $key=>$min){
-	$listMins[] = str_pad($min, 2, "0", STR_PAD_LEFT);
-}
-
-
 // Création du tableau de visualisation
 $arrayAffichage = array();
 foreach($listSalles as $keySalle=>$valSalle){
-  foreach($listHours as $keyHours=>$valHours){
-    foreach($listMins as $keyMins=>$valMins){
+  foreach(CPlageOp::$hours as $keyHours=>$valHours){
+    foreach(CPlageOp::$minutes as $keyMins=>$valMins){
       // Initialisation du tableau
       $arrayAffichage["$keySalle-$valHours:$valMins"] = "empty";
     }
@@ -77,52 +63,65 @@ $where = array();
 $where["date"] = "= '$date'";
 $order = "debut";
 $listPlages = $listPlages->loadList($where,$order);
+
+
 foreach($listPlages as $keyPlages=>$valPlages){
   $listPlages[$keyPlages]->loadRefsFwd();
   $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
   $listPlages[$keyPlages]->getNbOperations();
   
-  // Mémorisation dans le tableau d'affichage
-  $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
-  $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,$listMins) + array_search($valPlages->_minutefin,$listMins);
-  $valPlages->_nbQuartHeure = $nbquartheure;
-  $arrayAffichage[$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
   
-  // Détermination des horaire non vides
-  $heure_encours = array_search(intval($valPlages->_heuredeb),$listHours);
-  $min_encours   = array_search($valPlages->_minutedeb,$listMins);
+  // Plages pas totalement comprises dans le semainier
+  if($valPlages->_heurefin > CPlageOp::$hours_stop){
+      $valPlages->_heurefin = CPlageOp::$hours_stop;
+      $valPlages->_minutefin = end(CPlageOp::$minutes);
+  }
+  if($valPlages->_heuredeb < CPlageOp::$hours_start){
+      $valPlages->_heuredeb = CPlageOp::$hours_start;
+      $valPlages->_minutedeb   = reset(CPlageOp::$minutes);
+  }
   
-  
+  // Initialisation des variables 
+  $outPlage = false;
   $dans_plage = true;
   
-  if($valPlages->_heurefin>CPlageOp::$hours_stop && $valPlages->_heuredeb<=CPlageOp::$hours_stop && $valPlages->_minutedeb<end(CPlageOp::$minutes)){
-      $valPlages->_heurefin = CPlageOp::$hours_stop;
-      $valPlages->_minutefin   = end(CPlageOp::$minutes);
-  }elseif($valPlages->_heuredeb<CPlageOp::$hours_start && $valPlages->_heurefin>=CPlageOp::$hours_start && $valPlages->_minutefin>0){
-      $valPlages->_heuredeb = CPlageOp::$hours_start;
-      $valPlages->_minutedeb   = reset(CPlageOp::$minutes);;
-  }elseif($valPlages->_heurefin>CPlageOp::$hours_stop || $valPlages->_heuredeb<CPlageOp::$hours_start){
-      // Plages Hors semainier
-      $dans_plage = false;
+  // Cas des plages non comprises dans le semainier
+  if($valPlages->_heurefin <= CPlageOp::$hours_start || $valPlages->_heuredeb >= CPlageOp::$hours_stop){
+      $outPlage = true;
   }
-
   
-  while($dans_plage == true){      
-    $min_encours ++;
-    if(!array_key_exists($min_encours,$listMins)){
-      $min_encours=0;
-      $heure_encours ++;
-      if(!array_key_exists($heure_encours,$listHours)){
-        $heure_encours=8;
+  // si on est dans le semainier
+  if(!$outPlage){ 	
+    // Mémorisation dans le tableau d'affichage
+    $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
+    $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,CPlageOp::$minutes) + array_search($valPlages->_minutefin,CPlageOp::$minutes);
+    $valPlages->_nbQuartHeure = $nbquartheure;
+    $arrayAffichage[$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
+ 
+  	// Détermination des horaire non vides
+    $heure_encours = array_search(intval($valPlages->_heuredeb),CPlageOp::$hours);
+    $min_encours   = array_search($valPlages->_minutedeb,CPlageOp::$minutes);
+  
+  	while($dans_plage == true){      
+      $min_encours ++;
+      if(!array_key_exists($min_encours,CPlageOp::$minutes)){
+        $min_encours=0;
+        $heure_encours ++;
+        if(!array_key_exists($heure_encours,CPlageOp::$hours)){
+          $heure_encours=CPlageOp::$hours_start;
+        }
       }
-    }
-    if($heure_encours==$valPlages->_heurefin && $listMins[$min_encours]==$valPlages->_minutefin){
-      $dans_plage = false;
-    }else{
-      $arrayAffichage[$valPlages->salle_id."-".$heure_encours.":".$listMins[$min_encours]] = "full";       
-    }
-  }  
+      if($heure_encours == $valPlages->_heurefin && CPlageOp::$minutes[$min_encours] == $valPlages->_minutefin){
+        $dans_plage = false;
+      }else{
+        $arrayAffichage[$valPlages->salle_id."-".$heure_encours.":".CPlageOp::$minutes[$min_encours]] = "full";       
+      }
+    } 
+  }
 }
+
+
+
 
 // Liste des Spécialités
 $listSpec = new CFunctions();
@@ -132,16 +131,16 @@ $listSpec = $listSpec->loadSpecialites();
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("_temps_inter_op", $_temps_inter_op);
-$smarty->assign("listSalles"     , $listSalles    );
-$smarty->assign("listHours"      , $listHours     );
-$smarty->assign("listMins"       , $listMins      );
-$smarty->assign("arrayAffichage" , $arrayAffichage);
-$smarty->assign("date"           , $date          );
-$smarty->assign("listSpec"       , $listSpec      );
-$smarty->assign("plagesel"       , $plagesel      );
-$smarty->assign("specs"          , $specs         );
-$smarty->assign("anesths"        , $anesths       );
+$smarty->assign("_temps_inter_op", $_temps_inter_op   );
+$smarty->assign("listSalles"     , $listSalles        );
+$smarty->assign("listHours"      , CPlageOp::$hours   );
+$smarty->assign("listMins"       , CPlageOp::$minutes );
+$smarty->assign("arrayAffichage" , $arrayAffichage    );
+$smarty->assign("date"           , $date              );
+$smarty->assign("listSpec"       , $listSpec          );
+$smarty->assign("plagesel"       , $plagesel          );
+$smarty->assign("specs"          , $specs             );
+$smarty->assign("anesths"        , $anesths           );
 
 $smarty->display("vw_edit_planning.tpl");
 ?>
