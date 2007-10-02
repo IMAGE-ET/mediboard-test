@@ -187,6 +187,7 @@
         this.sPlage_id_easy = "plageop_id";
         this.sDate         = "_datestr";
         this.sDate_easy    = "_datestr";
+        this.sType         = "type";
         
         this.s_hour_entree_prevue = "_hour_entree_prevue";
         this.s_min_entree_prevue  = "_min_entree_prevue";

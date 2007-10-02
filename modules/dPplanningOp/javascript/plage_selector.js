@@ -27,11 +27,11 @@ var PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, sDate, bAdm) {
+  set: function(plage_id, sDate, bAdm, typeHospi) {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
- 
+
     if(!oSejourForm._duree_prevue.value) {
       oSejourForm._duree_prevue.value = 0;
     }
@@ -72,6 +72,10 @@ var PlageOpSelector = {
       oSejourForm._curr_op_date.value = Date.fromLocaleDate(sDate).toDATE();
       
       oSejourForm[this.s_date_entree_prevue].onchange();
+      
+      if(typeHospi == "comp" && oSejourForm[this.sType].value=="ambu"){
+        oSejourForm[this.sType].value = "comp";
+      }
     }
   }
 }

@@ -20,9 +20,16 @@ function setClose(date) {
     adm = 2;
   }
   
-  window.opener.PlageOpSelector.set(key,val,adm);
+  var typeHospi = "ambu";
+  // passage en hospi complete si admission == veille
+  if(getCheckedValue(form.admission) == "veille"){
+    typeHospi = "comp";
+  }
+    
+  window.opener.PlageOpSelector.set(key,val,adm,typeHospi);
   window.close();
 }
+
 </script>
 
 <form action="index.php" name="frmSelector" method="get">
@@ -96,7 +103,7 @@ function setClose(date) {
         </tr>
         <tr>
           <td>
-            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}} />
+            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}}" />
           </td>
           <td>
             <label for="admission_veille">La veille</label>
