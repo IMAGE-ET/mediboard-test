@@ -45,7 +45,7 @@ class CEtabExterne extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["transferts"] = "CSejour etablisement_transfert_id";
+    $backRefs["transferts"] = "CSejour etablissement_transfert_id";
     return $backRefs;
   }
   

@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "core";
 
 class CSetupdPetablissement extends CSetup {
@@ -63,7 +63,21 @@ class CSetupdPetablissement extends CSetup {
             ADD `tel_anesth` BIGINT(10) UNSIGNED ZEROFILL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "CREATE TABLE `etab_externe` (
+           `etab_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `nom` VARCHAR(255) NOT NULL, 
+           `raison_sociale` VARCHAR(50), 
+           `adresse` TEXT, 
+           `cp` INT(5) UNSIGNED ZEROFILL, 
+           `ville` VARCHAR(50),  
+           `tel` BIGINT(10) UNSIGNED ZEROFILL, 
+           `fax` BIGINT(10) UNSIGNED ZEROFILL, 
+           `finess` INT(9) UNSIGNED ZEROFILL, 
+           PRIMARY KEY (`etab_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
     
   } 
   

@@ -100,6 +100,9 @@ class CSejour extends CCodableCCAM {
   var $_filter_type 		= null;
   
   var $_modifier_sortie = null;
+  
+  // BackRef
+  var $etablissement_transfert_id = null;
     
 	function CSejour() {
     global $dPconfig;
@@ -154,7 +157,8 @@ class CSejour extends CCodableCCAM {
     $specs["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
-
+    $specs["etablissement_transfert_id"] = "ref class|CEtabExterne";
+    
     $specs["_entree"]             = "dateTime";
     $specs["_sortie"] 		      = "dateTime";
     $specs["_date_min"] 		  = "dateTime";

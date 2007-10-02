@@ -1,4 +1,20 @@
 <?php
+$locales['CEtabExterne-finess-desc'] = '';
+$locales['CEtabExterne-adresse'] = '';
+$locales['CEtabExterne-adresse-desc'] = '';
+$locales['CEtabExterne-cp'] = '';
+$locales['CEtabExterne-cp-desc'] = '';
+$locales['CEtabExterne-finess'] = '';
+$locales['CEtabExterne-nom'] = '';
+$locales['CEtabExterne-nom-desc'] = '';
+$locales['CEtabExterne-raison_sociale'] = '';
+$locales['CEtabExterne-raison_sociale-desc'] = '';
+$locales['CEtabExterne-ville'] = '';
+$locales['CEtabExterne-ville-desc'] = '';
+$locales['CEtabExterne-_fax1'] = '';
+$locales['CEtabExterne-_fax1-desc'] = '';
+$locales['CEtabExterne-_tel1'] = '';
+$locales['CEtabExterne-_tel1-desc'] = '';
 $locales['CGroups'] = 'Etablissements';
 $locales['CGroups-adresse'] = '';
 $locales['CGroups-adresse-court'] = '';
@@ -49,5 +65,6 @@ $locales['CGroups.modify'] = '';
 $locales['CGroups.more'] = '';
 $locales['CGroups.none'] = '';
 $locales['CGroups.one'] = '';
+$locales['mod-dPetablissement-tab-vw_etab_externe'] = '';
 $locales['mod-dPetablissement-tab-vw_idx_groups'] = '';
 ?>

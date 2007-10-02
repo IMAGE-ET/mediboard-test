@@ -1,5 +1,19 @@
 <script type="text/javascript">
 
+function loadTransfert(form, mode_sortie){
+  // si Transfert, affichage du select
+  if(mode_sortie=="transfert"){
+    //Chargement de la liste des etablissement externes
+    var url = new Url();
+    url.setModuleAction("dPadmissions", "httpreq_vw_etab_externes");
+    url.requestUpdate('listEtabExterne-'+form.name, { waitingText : null });
+  } else {
+    // sinon, on vide le contenu de la div
+    $("listEtabExterne-" + form.name).innerHTML = "";
+  }
+}
+
+
 function reloadAmbu() {
   var ambuUrl = new Url;
   ambuUrl.setModuleAction("dPadmissions", "httpreq_vw_sorties_ambu");

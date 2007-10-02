@@ -22,7 +22,7 @@
   {{foreach from=$listSejourAmbu item=curr_sortie}}
   <tr>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      <form name="editFrm{{$curr_sortie->_ref_last_affectation->affectation_id}}" action="?m={{$m}}" method="post">
+      <form name="editFrm{{$curr_sortie->_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -30,7 +30,8 @@
       
       {{if $curr_sortie->mode_sortie}}
       <input type="hidden" name="mode_sortie" value="" />
-       <input type="hidden" name="_modifier_sortie" value="0" />
+      <input type="hidden" name="etablissement_transfert_id" value="" />
+      <input type="hidden" name="_modifier_sortie" value="0" />
       <button class="cancel" type="button" onclick="submitAmbu(this.form)">
         Annuler la sortie
       </button>
@@ -49,8 +50,8 @@
         Effectuer la sortie
       </button>
       <br />      
-      {{mb_field object=$curr_sortie field="mode_sortie"}}
-
+      {{mb_field object=$curr_sortie field="mode_sortie" onchange="loadTransfert(this.form, this.value)"}}
+      <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
       {{/if}}
     
       </form>

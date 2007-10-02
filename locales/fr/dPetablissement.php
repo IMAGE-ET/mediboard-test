@@ -1,4 +1,20 @@
 <?php
+$locales['CEtabExterne-finess-desc'] = 'Numéro FINESS de l\'établissement';
+$locales['CEtabExterne-adresse'] = 'Adresse';
+$locales['CEtabExterne-adresse-desc'] = 'Adresse de l\'établissement';
+$locales['CEtabExterne-cp'] = 'Code Postal';
+$locales['CEtabExterne-cp-desc'] = 'Code Postal de l\'établissement';
+$locales['CEtabExterne-finess'] = 'Numéro FINESS';
+$locales['CEtabExterne-nom'] = 'Intitulé';
+$locales['CEtabExterne-nom-desc'] = 'Intitulé de l\'établissement';
+$locales['CEtabExterne-raison_sociale'] = 'Raison Sociale';
+$locales['CEtabExterne-raison_sociale-desc'] = 'Raison sociale de l\'établissement';
+$locales['CEtabExterne-ville'] = 'Ville';
+$locales['CEtabExterne-ville-desc'] = 'Ville de l\'établissement';
+$locales['CEtabExterne-_fax1'] = 'Fax';
+$locales['CEtabExterne-_fax1-desc'] = 'Fax de l\'établissement';
+$locales['CEtabExterne-_tel1'] = 'Téléphone';
+$locales['CEtabExterne-_tel1-desc'] = 'Téléphone de l\'établissement';
 $locales['CGroups'] = 'Etablissements';
 $locales['CGroups-adresse'] = 'Adresse';
 $locales['CGroups-adresse-court'] = '';
@@ -49,5 +65,6 @@ $locales['CGroups.modify'] = '';
 $locales['CGroups.more'] = '';
 $locales['CGroups.none'] = '';
 $locales['CGroups.one'] = '';
+$locales['mod-dPetablissement-tab-vw_etab_externe'] = 'Etablissements externes';
 $locales['mod-dPetablissement-tab-vw_idx_groups'] = 'Gestion des établissements';
 ?>
