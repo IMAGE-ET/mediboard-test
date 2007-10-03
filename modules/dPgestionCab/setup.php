@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 
 class CSetupdPgestionCab extends CSetup {
@@ -212,7 +212,11 @@ class CSetupdPgestionCab extends CSetup {
     $sql = "UPDATE `rubrique_gestioncab` SET `function_id` = NULL WHERE `function_id` = '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `params_paie` ADD `csp` FLOAT NOT NULL DEFAULT 0";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
   }
 }
 ?>

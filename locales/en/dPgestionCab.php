@@ -1,4 +1,5 @@
 <?php
+$locales['CParamsPaie-csp-desc'] = '';
 $locales['CEmployeCab'] = 'Employés';
 $locales['CEmployeCab-adresse'] = '';
 $locales['CEmployeCab-adresse-court'] = '';
@@ -159,6 +160,7 @@ $locales['CParamsPaie-csgds-desc '] = '';
 $locales['CParamsPaie-csgnds'] = '';
 $locales['CParamsPaie-csgnds-court'] = '';
 $locales['CParamsPaie-csgnds-desc'] = '';
+$locales['CParamsPaie-csp'] = '';
 $locales['CParamsPaie-employecab_id'] = '';
 $locales['CParamsPaie-employecab_id-court'] = '';
 $locales['CParamsPaie-employecab_id-desc'] = '';

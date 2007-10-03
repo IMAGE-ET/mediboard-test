@@ -164,6 +164,11 @@
           <td>-</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$paramsPaie field="csp"}}</th>
+          <td>-</td>
+          <td>{{mb_field object=$paramsPaie field="csp"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="3">
             <button class="submit" type="submit">Sauver</button>
           </td>

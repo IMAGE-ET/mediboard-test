@@ -1,4 +1,5 @@
 <?php
+$locales['CParamsPaie-csp-desc'] = 'Contribution solidarité exprimée en pourcentage';
 $locales['CEmployeCab'] = 'Employés';
 $locales['CEmployeCab-adresse'] = 'Adresse';
 $locales['CEmployeCab-adresse-court'] = '';
@@ -159,6 +160,7 @@ $locales['CParamsPaie-csgds-desc '] = 'CSG déductible';
 $locales['CParamsPaie-csgnds'] = 'CSG non déductible';
 $locales['CParamsPaie-csgnds-court'] = '';
 $locales['CParamsPaie-csgnds-desc'] = 'CSG non déductible';
+$locales['CParamsPaie-csp'] = 'Contribution solidarité';
 $locales['CParamsPaie-employecab_id'] = '';
 $locales['CParamsPaie-employecab_id-court'] = '';
 $locales['CParamsPaie-employecab_id-desc'] = '';

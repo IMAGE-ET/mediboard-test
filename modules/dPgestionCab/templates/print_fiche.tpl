@@ -367,6 +367,19 @@
     <tr>
       <td height="17" align="left" bgcolor="#e63"></td>
       <td align="right" bgcolor="#e63">
+        <font color="#fff">Contribution solidarité</font>
+      </td>
+      <td align="left"></td>
+      <td align="right">
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csp|string_format:"%.2f"}} %</font>
+      </td>
+      <td align="right">{{$fichePaie->_csp|string_format:"%.2f"}} €</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td height="17" align="left" bgcolor="#e63"></td>
+      <td align="right" bgcolor="#e63">
         <font color="#309">Mutuelle</font>
       </td>
       <td align="right">

@@ -50,11 +50,12 @@ class CFichePaie extends CMbObject {
   var $_acs     = null; // assurance chomage salariale
   var $_acp     = null; // assurance chomage patronale
   var $_aatp    = null; // assurance accident de travail patronale
+  var $_csp     = null; // contribution solidarité patronale
   var $_reduc_bas_salaires = null;
-  var $_total_retenues = null;
-  var $_total_cot_patr = null;
-  var $_salaire_a_payer = null;
-  var $_salaire_net = null;
+  var $_total_retenues     = null;
+  var $_total_cot_patr     = null;
+  var $_salaire_a_payer    = null;
+  var $_salaire_net        = null;
 
 
   // Object References
@@ -140,8 +141,10 @@ class CFichePaie extends CMbObject {
       $this->_total_cot_patr += $this->_acp;
       $this->_aatp    = $this->_salaire_brut * $this->_ref_params_paie->aatp / 100;
       $this->_total_cot_patr += $this->_aatp;
-      $this->_reduc_bas_salaires = (0.26/0.6)*(1.6*($this->_ref_params_paie->smic*$this->heures/$this->_salaire_brut)-1);
-      $this->_reduc_bas_salaires = min(0.26, $this->_reduc_bas_salaires)*$this->_salaire_brut;
+      $this->_csp     = $this->_salaire_brut * $this->_ref_params_paie->csp / 100;
+      $this->_total_cot_patr += $this->_csp;
+      $this->_reduc_bas_salaires = (0.281/0.6)*(1.6*($this->_ref_params_paie->smic*$this->heures/$this->_salaire_brut)-1);
+      $this->_reduc_bas_salaires = min(0.281, $this->_reduc_bas_salaires)*$this->_salaire_brut;
       $this->_reduc_bas_salaires = max(0, $this->_reduc_bas_salaires);
       $this->_total_cot_patr -= $this->_reduc_bas_salaires;
       $this->_total_retenues += $this->mutuelle;
