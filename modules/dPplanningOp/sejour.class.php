@@ -375,6 +375,11 @@ class CSejour extends CCodableCCAM {
      $this->_couvert_cmu = $this->_date_sortie_prevue <= $this->_ref_patient->cmu;
   }
   
+  function loadRefEtabExterne(){
+  	$this->_ref_etabExterne = new CEtabExterne();
+  	$this->_ref_etabExterne->load($this->etablissement_transfert_id);
+  }
+  
   function loadRefPatient() {
     $where = array (
       "patient_id" => "= '$this->patient_id'"
@@ -435,6 +440,7 @@ class CSejour extends CCodableCCAM {
       $acte_ccam->loadRefsFwd();
     } 
   }
+  
   
   
   function loadNumDossier(){

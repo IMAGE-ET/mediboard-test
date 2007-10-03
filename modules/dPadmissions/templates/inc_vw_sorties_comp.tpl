@@ -42,6 +42,9 @@
      {{/if}} 
        / 
       {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
+      {{if $curr_sortie->etablissement_transfert_id}}
+        <br />{{$curr_sortie->_ref_etabExterne->_view}}
+      {{/if}}
       {{else}}
       <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
       <input type="hidden" name="_modifier_sortie" value="1" />

@@ -70,6 +70,7 @@ foreach($listSejourComp as $key => $sejour){
   $sejour->loadRefPatient();
   $sejour->loadRefPraticien();
   $sejour->loadRefsAffectations();
+  $sejour->loadRefEtabExterne();
   $sejour->loadNumDossier();
   $affectation =& $sejour->_ref_last_affectation;
   
