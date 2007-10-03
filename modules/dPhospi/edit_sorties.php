@@ -124,6 +124,7 @@ $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );
 $smarty->assign("sortiesComp"  , $sortiesComp );
 $smarty->assign("vue"          , $vue         );
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 
 $smarty->display("edit_sorties.tpl");
 

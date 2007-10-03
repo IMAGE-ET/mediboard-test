@@ -92,6 +92,7 @@ $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("selTri", $selTri);
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("date"           , $date );
 $smarty->assign("now"            , $now );
 $smarty->assign("vue"            , $vue );

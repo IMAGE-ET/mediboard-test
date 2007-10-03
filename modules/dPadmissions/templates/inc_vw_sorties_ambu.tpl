@@ -57,12 +57,17 @@
       </form>
     </td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-		  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
-		    <img src="images/icons/edit.png" alt="modifier" />
-		  </a>
+	  <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_patient->patient_id}}">
+        <img src="images/icons/edit.png" alt="modifier" />
+ 	  </a>
+      {{if $canPlanningOp->read}}
+        <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_id}}">
+        <img src="images/icons/planning.png" alt="modifier" />
+        </a>
+      {{/if}}
 	  {{if $curr_sortie->_num_dossier}}[{{$curr_sortie->_num_dossier}}]{{/if}}
       <b>{{$curr_sortie->_ref_patient->_view}}</b>
-      
+
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{$curr_sortie->sortie_prevue|date_format:"%H h %M"}}

@@ -125,6 +125,11 @@ function pageMain() {
                 {{else}}
                 <td class="text">
                 {{/if}}
+                 {{if $canPlanningOp->read}}
+                 <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_ref_sejour->_id}}">
+                   <img src="images/icons/planning.png" alt="modifier" />
+                 </a>
+                 {{/if}}
                   <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
                 </td>
                 <td class="text" style="background:#{{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}}">
@@ -163,6 +168,11 @@ function pageMain() {
                 {{else}}
                 <td class="text">
                 {{/if}}
+                 {{if $canPlanningOp->read}}
+                 <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_ref_sejour->_id}}">
+                   <img src="images/icons/planning.png" alt="modifier" />
+                 </a>
+                 {{/if}}
                   <b>{{$curr_sortie->_ref_sejour->_ref_patient->_view}}</b>
                 </td>
                 <td class="text" style="background:#{{$curr_sortie->_ref_sejour->_ref_praticien->_ref_function->color}}">

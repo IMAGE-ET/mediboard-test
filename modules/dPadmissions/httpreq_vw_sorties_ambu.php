@@ -89,7 +89,7 @@ $smarty->assign("date_max", $date_max);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("selTri"   , $selTri);
-
+$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"     , $date );
