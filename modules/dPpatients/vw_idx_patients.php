@@ -64,14 +64,17 @@ $whereSoundex = array();
 $soundexObj   = new soundex2();
 
 if ($patient_nom) {
+  $patient_nom = trim($patient_nom);
   $where["nom"]                 = "LIKE '$patient_nom%'";
   $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
 }
 if ($patient_prenom) {
+  $patient_prenom = trim($patient_prenom);
   $where["prenom"]                 = "LIKE '$patient_prenom%'";
   $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
 }
 if ($patient_jeuneFille) {
+  $patient_jeuneFille = trim($patient_jeuneFille);
   $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
   $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
 }

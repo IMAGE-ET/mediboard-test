@@ -35,16 +35,19 @@ $soundexObj   = new soundex2();
 
 
 if($name){
+  $name = trim($name);
   $where["nom"]                    = "LIKE '$name%'";
   $whereSoundex["nom_soundex2"]    = "LIKE '".$soundexObj->build($name)."%'";
 }
 
 if($firstName){
+  $firstName = trim($firstName);
   $where["prenom"]                 = "LIKE '$firstName%'";
   $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($firstName)."%'";
 }
 
 if($nomjf){
+  $nomjf = trim($nomjf);
   $where["nom_jeune_fille"]        = "LIKE '$nomjf%'";
   $whereSoundex["nomjf_soundex2"]    = "LIKE '".$soundexObj->build($nomjf)."%'";  
 }
