@@ -28,7 +28,9 @@ function pageMain() {
         <tr>
           <th class="title" colspan="2">
             {{$selOp->_ref_sejour->_ref_patient->_view}} 
-            ({{$selOp->_ref_sejour->_ref_patient->_age}} ans) 
+            ({{$selOp->_ref_sejour->_ref_patient->_age}} ans 
+            {{if $selOp->_ref_sejour->_ref_patient->_age != "??"}}- 
+            {{$selOp->_ref_sejour->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>
