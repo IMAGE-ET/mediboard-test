@@ -1,14 +1,18 @@
 <?php
-$locales['CEtabExterne-finess-desc'] = '';
+$locales['CEtabExterne-ape-desc'] = '';
 $locales['CEtabExterne-adresse'] = '';
 $locales['CEtabExterne-adresse-desc'] = '';
+$locales['CEtabExterne-ape'] = '';
 $locales['CEtabExterne-cp'] = '';
 $locales['CEtabExterne-cp-desc'] = '';
 $locales['CEtabExterne-finess'] = '';
+$locales['CEtabExterne-finess-desc'] = '';
 $locales['CEtabExterne-nom'] = '';
 $locales['CEtabExterne-nom-desc'] = '';
 $locales['CEtabExterne-raison_sociale'] = '';
 $locales['CEtabExterne-raison_sociale-desc'] = '';
+$locales['CEtabExterne-siret'] = '';
+$locales['CEtabExterne-siret-desc'] = '';
 $locales['CEtabExterne-ville'] = '';
 $locales['CEtabExterne-ville-desc'] = '';
 $locales['CEtabExterne-_fax1'] = '';

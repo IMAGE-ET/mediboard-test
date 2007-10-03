@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "core";
 
 class CSetupdPetablissement extends CSetup {
@@ -77,7 +77,13 @@ class CSetupdPetablissement extends CSetup {
            PRIMARY KEY (`etab_id`)) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `etab_externe`
+            ADD `siret` CHAR(14), 
+            ADD `ape` CHAR(4);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.17";
     
   } 
   

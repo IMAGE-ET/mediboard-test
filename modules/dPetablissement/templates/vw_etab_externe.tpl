@@ -98,7 +98,14 @@ function pageMain() {
           <th>{{mb_label object=$etabExterne field="finess"}}</th>
           <td>{{mb_field object=$etabExterne field="finess" tabindex="16"}}</td>
         </tr>
-      
+        <tr>
+          <th>{{mb_label object=$etabExterne field="siret"}}</th>
+          <td>{{mb_field object=$etabExterne field="siret"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$etabExterne field="ape"}}</th>
+          <td>{{mb_field object=$etabExterne field="ape"}}</td>
+ 		</tr>
         <tr>
           <td class="button" colspan="2">
           {{if $etabExterne->_id}}

@@ -23,6 +23,8 @@ class CEtabExterne extends CMbObject {
   var $tel            = null;
   var $fax            = null;
   var $finess         = null;
+  var $siret          = null;
+  var $ape            = null;
   
   // Form fields
   var $_tel1        = null;
@@ -58,7 +60,9 @@ class CEtabExterne extends CMbObject {
       "ville"          => "str maxLength|50 confidential",
       "tel"            => "numchar length|10",
       "fax"            => "numchar length|10",
-      "finess"         => "numchar length|9"
+      "finess"         => "numchar length|9",
+      "siret"          => "str length|14",
+      "ape"            => "str length|4"
     );
   }
   
