@@ -21,6 +21,7 @@ class CAffectationPersonnel extends CMbMetaObject {
   var $realise = null;
   var $debut   = null;
   var $fin     = null;
+  var $tag     = null;
 
   // Form fields
   var $_debut  = null;
@@ -41,6 +42,7 @@ class CAffectationPersonnel extends CMbMetaObject {
     $specs["realise"] = "notNull bool";
     $specs["debut"]   = "dateTime";
     $specs["fin"]     = "dateTime moreThan|debut";
+    $specs["tag"]     = "str maxLength|80";
     return $specs;
   }
   

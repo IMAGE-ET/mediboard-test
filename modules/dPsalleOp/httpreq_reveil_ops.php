@@ -62,9 +62,15 @@ foreach($listOps as $key => $value) {
   }
 }
 
+// Chargement de la liste du personnel
+$mediuser = new CMediusers();
+$personnels = $mediuser->loadListFromType(array("Personnel"));
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("personnels"    , $personnels              );
 $smarty->assign("listSalles"    , $listSalles              );
 $smarty->assign("listAnesths"   , $listAnesths             );
 $smarty->assign("listChirs"     , $listChirs               );

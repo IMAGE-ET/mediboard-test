@@ -46,6 +46,7 @@ $order = "entree_reveil";
 $listReveil = $listReveil->loadList($where, $order);
 foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
+  $listReveil[$key]->loadRefPersonnelReveil();
   if($listReveil[$key]->_ref_sejour->type == "exte"){
     unset($listReveil[$key]);
     continue;
@@ -76,6 +77,7 @@ $order = "sortie_reveil DESC";
 $listOut = $listOut->loadList($where, $order);
 foreach($listOut as $key => $value) {
   $listOut[$key]->loadRefsFwd();
+  $listOut[$key]->loadRefPersonnelReveil();
   if($listOut[$key]->_ref_sejour->type == "exte"){
     unset($listOut[$key]);
     continue;
@@ -97,8 +99,10 @@ foreach($listOut as $key => $value) {
   }
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
+
 
 $smarty->assign("listSalles"    , $listSalles  );
 $smarty->assign("listAnesths"   , $listAnesths );

@@ -1,3 +1,19 @@
+<script type="text/javascript">
+
+var submitReveil = function(oFormAffectation, oFormOperation){
+  oFormOperation.entree_reveil.value = '';
+  // s'il y a une affectation, on submit les deux formulaires
+  if(oFormAffectation.affect_id.value != ""){
+    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} ); 
+  }
+  else {
+  // sinon, on ne submit que l'operation
+    oFormOperation.submit();  
+  }
+}
+
+</script>
+        
       <table class="form">
         <tr>
           <th class="category">
@@ -45,6 +61,16 @@
             {{/if}}
           </td>
           <td class="button">
+          
+            
+            <form name="delPersonnel{{$curr_op->_id}}" action="index.php?m={{$m}}" method="post">
+              <input type="hidden" name="m" value="dPpersonnel" />
+              <input type="hidden" name="dosql" value="do_affectation_aed" />
+              <input type="hidden" name="del" value="1" />
+              <input type="hidden" name="affect_id" value="{{$curr_op->_ref_affectation_personnel->_id}}" />
+            </form>
+            
+            
             <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
@@ -55,7 +81,10 @@
               {{elseif $can->edit}}
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
-	          <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
+	          {{if $curr_op->_ref_affectation_personnel->_id}}
+	          {{$curr_op->_ref_affectation_personnel->_ref_user->_view}}
+	          {{/if}}
+	          <button class="cancel notext" type="button" onclick="submitReveil(document.delPersonnel{{$curr_op->_id}}, this.form);">{{tr}}Cancel{{/tr}}</button>
               {{elseif $modif_operation}}
               <select name="entree_reveil" onchange="this.form.submit()">
                 <option value="">-</option>

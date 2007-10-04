@@ -386,6 +386,17 @@ class COperation extends CCodableCCAM {
     $this->_ref_sejour->load($this->sejour_id);
   }
   
+  
+  function loadRefPersonnelReveil() {
+  	$this->_ref_affectation_personnel = new CAffectationPersonnel();
+  	$where["object_id"] = "= '$this->_id'";
+  	$where["object_class"] = "= '$this->_class_name'";
+  	$where["tag"] = " = 'reveil'";
+    $this->_ref_affectation_personnel->loadObject($where);
+  }
+  
+
+
   function loadRefsFwd() {
     $this->loadRefsConsultAnesth();
     $this->_ref_consult_anesth->loadRefConsultation();

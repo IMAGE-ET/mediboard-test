@@ -49,6 +49,9 @@
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
               <input type="hidden" name="del" value="0" />
 	          <input name="entree_reveil" size="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
+	          	          {{if $curr_op->_ref_affectation_personnel->_id}}
+	          {{$curr_op->_ref_affectation_personnel->_ref_user->_view}}
+	          {{/if}}
 	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
             </form>
             {{else}}
@@ -64,6 +67,7 @@
               {{if $can->edit}}
 	          <input name="sortie_reveil" size="5" type="text" value="{{$curr_op->sortie_reveil|date_format:"%H:%M"}}">
 	          <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+
 	          <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
               {{elseif $modif_operation}}
               <select name="sortie_reveil" onchange="this.form.submit()">
