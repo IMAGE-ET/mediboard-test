@@ -10,21 +10,6 @@ function selectCim10(code) {
   cim10url.popup(800, 500, "CIM10");
 }
 
-/*
-function popCode() {
-  cim10url.setModuleAction("dPcim10", "vw_find_code");
-  cim10url.popup(700, 500, "CIM10");
-}
-
-function setCode(sCode, type, sFullCode) {
-  oCimField.add(sCode);
-  {{if $_is_anesth}}
-  oCimAnesthField.add(sCode);
-  {{/if}}
-  updateTokenCim10();
-}
-*/
-
 function reloadCim10(sCode){
   var oForm = document.addDiagFrm;
   
@@ -183,7 +168,15 @@ function copyTraitement(traitement_id){
 
       <table class="form">
         <tr>
-          <td colspan="2"><strong>Ajouter un antécédent</strong></td>
+          <th>
+            <input type="checkbox" name="_date_ant" onclick="dateAntecedent()" />
+            {{mb_label object=$antecedent field="date"}}
+          </th>
+          <td class="date">
+            <div id="editAntFrm_date_da"></div>
+            <input type="hidden" name="date" value="" />
+            <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+          </td>
           <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
             {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
@@ -204,16 +197,9 @@ function copyTraitement(traitement_id){
 
         </tr>
         <tr>
-          <th>
-            <input type="checkbox" name="_date_ant" onclick="dateAntecedent()" />
-            {{mb_label object=$antecedent field="date"}}
-          </th>
-          <td class="date">
-            <div id="editAntFrm_date_da"></div>
-            <input type="hidden" name="date" value="" />
-            <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
-          </td>
-          <td rowspan="2">
+          <th />
+          <td />
+          <td rowspan="3">
             <textarea name="rques" onblur="if(verifNonEmpty(this)){submitAnt(this.form);dateAntecedent();}"></textarea>
           </td>
         </tr>
@@ -224,8 +210,10 @@ function copyTraitement(traitement_id){
           </td>
         </tr>
         <tr>
-          <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.rques)){submitAnt(this.form);dateAntecedent();}">Ajouter</button>
+          <td class="button" colspan="2">
+            <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.rques)){submitAnt(this.form);dateAntecedent();}">
+              {{tr}}Add{{/tr}} un antécédant
+            </button>
           </td>
         </tr>
       </table>
@@ -246,7 +234,15 @@ function copyTraitement(traitement_id){
       
       <table class="form">
         <tr>
-          <td colspan="2"><strong>Ajouter un traitement</strong></td>
+          <th>
+            <input type="checkbox" name="_datetrmt" onclick="dateTrmt()" />
+            {{mb_label object=$traitement field="debut"}}
+          </th>
+          <td class="date">
+            <div id="editTrmtFrm_debut_da"></div>
+            <input type="hidden" name="debut" class="{{$traitement->_props.debut}}" value="" />
+            <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+          </td>
           <td>
             {{mb_label object=$traitement field="traitement"}}
             <select name="_helpers_traitement" size="1" onchange="pasteHelperContent(this)">
@@ -260,16 +256,9 @@ function copyTraitement(traitement_id){
           </td>
         </tr>
         <tr>
-          <th>
-            <input type="checkbox" name="_datetrmt" onclick="dateTrmt()" />
-            {{mb_label object=$traitement field="debut"}}
-          </th>
-          <td class="date">
-            <div id="editTrmtFrm_debut_da"></div>
-            <input type="hidden" name="debut" class="{{$traitement->_props.debut}}" value="" />
-            <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
-          </td>
-          <td rowspan="2">
+          <th />
+          <td />
+          <td rowspan="3">
             <textarea name="traitement" onblur="if(verifNonEmpty(this)){submitAnt(this.form);finTrmt();}"></textarea>
           </td>
         </tr>
@@ -285,8 +274,10 @@ function copyTraitement(traitement_id){
           </td>
         </tr>
         <tr>
-          <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.traitement)){submitAnt(this.form);finTrmt();}">Ajouter</button>
+          <td class="button" colspan="2">
+            <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.traitement)){submitAnt(this.form);finTrmt();}">
+              {{tr}}Add{{/tr}} un traitement
+            </button>
           </td>
         </tr>
       </table>

@@ -1,3 +1,23 @@
+<<script type="text/javascript">
+
+var Addiction = {
+  delete: function(oForm, onComplete) {
+    var oOptions = {
+      typeName: 'cette addiction',
+      ajax: 1,
+      target: 'systemMsg'
+    };
+    
+    var oOptionsAjax = {
+      onComplete: onComplete
+    };
+    
+    confirmDeletion(oForm, oOptions, oOptionsAjax);
+  }
+}
+
+</script>
+
 <strong>Addictions du patient</strong>
 
 <ul>
@@ -16,13 +36,13 @@
         <input type="hidden" name="dosql" value="do_addiction_aed" />
         {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
 
-        <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
+        <button class="trash notext" type="button" onclick="Addiction.delete(this.form, reloadAntecedents)">
           {{tr}}Delete{{/tr}}        
         </button> 
         
         {{if $_is_anesth}}
         <button class="add notext" type="button" onclick="copyAddiction({{$curr_addiction->_id}})">
-          {{tr}}Delete{{/tr}}        
+          {{tr}}Add{{/tr}}        
         </button>
         {{/if}}
         {{$curr_addiction->addiction}}

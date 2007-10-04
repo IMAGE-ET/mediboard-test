@@ -45,6 +45,7 @@ function reloadListTech() {
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('COperation', this.form.rques)">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth->_ref_operation field="rques" onblur="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
+      
       <br />
       {{/if}}
       <form name="editAsaFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -54,7 +55,9 @@ function reloadListTech() {
       {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
       {{mb_label object=$consult_anesth field="ASA"}}
       {{mb_field object=$consult_anesth field="ASA" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-      <br /><br />
+		  {{mb_label object=$consult_anesth field="position"}}
+		  {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      <br />
       {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
         <option value="">&mdash; Choisir une aide</option>
@@ -63,7 +66,7 @@ function reloadListTech() {
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       
-      <br /><br />
+      <br />
       {{mb_label object=$consult_anesth field="prepa_preop"}}
       <select name="_helpers_prepa_preop" size="1" onchange="pasteHelperContent(this);this.form.prepa_preop.onchange();">
         <option value="">&mdash; Choisir une aide</option>
@@ -71,10 +74,9 @@ function reloadListTech() {
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-
       </form>
+
       <br />
-      
       <form name="edittechniqueFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -91,6 +93,7 @@ function reloadListTech() {
       <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.technique)){submitTech(this.form);}">Ajouter</button>
       </form>
     </td>
+    
     <td class="text" rowspan="2" id="listTech">
       {{include file="../../dPcabinet/templates/inc_consult_anesth/techniques_comp.tpl"}}
     </td>

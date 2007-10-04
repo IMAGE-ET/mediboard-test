@@ -40,7 +40,4 @@
       {{/foreach}}
     </ul>
   {{/if}}
-
-  {{mb_label object=$consult_anesth field="position"}}
-  {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 </form>

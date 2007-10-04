@@ -45,7 +45,10 @@ function finAddiction(oForm){
 <table class="form">
 
   <tr>
-    <td colspan="2"><strong>Addiction</strong></td>
+    <th>{{mb_label object=$addiction field="type"}}</th>
+    <td>
+      {{mb_field object=$addiction field="type" onchange="putHelperContent(this,'addiction')"}}
+    </td>
     <td>
       {{mb_label object=$addiction field="addiction"}}
       {{foreach from=$addiction->_aides.addiction item=_helpers key=dependsOn}}
@@ -67,17 +70,13 @@ function finAddiction(oForm){
   </tr>
   
   <tr>
-    <th>{{mb_label object=$addiction field="type"}}</th>
-    <td>
-      {{mb_field object=$addiction field="type" onchange="putHelperContent(this,'addiction')"}}
+    <td class="button" colspan="2">
+      <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.addiction)){submitAddiction(this.form);finAddiction(this.form);}">
+        {{tr}}Add{{/tr}} une addiction
+      </button>
     </td>
     <td>
       <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>
-    </td>
-  </tr>
-  <tr>
-    <td class="button" colspan="3">
-      <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.addiction)){submitAddiction(this.form);finAddiction(this.form);}">Ajouter</button>
     </td>
   </tr>
 </table>

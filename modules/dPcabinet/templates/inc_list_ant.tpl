@@ -1,3 +1,39 @@
+<script type="text/javascript">
+
+var Antecedent = {
+  delete: function(oForm, onComplete) {
+    var oOptions = {
+      typeName: 'cet antécédent',
+      ajax: 1,
+      target: 'systemMsg'
+    };
+    
+    var oOptionsAjax = {
+      onComplete: onComplete
+    };
+    
+    confirmDeletion(oForm, oOptions, oOptionsAjax);
+  }
+}
+
+var Traitement = {
+  delete: function(oForm, onComplete) {
+    var oOptions = {
+      typeName: 'ce traitement',
+      ajax: 1,
+      target: 'systemMsg'
+    };
+    
+    var oOptionsAjax = {
+      onComplete: onComplete
+    };
+    
+    confirmDeletion(oForm, oOptions, oOptionsAjax);
+  }
+}
+
+</script>
+
      {{if $dPconfig.dPcabinet.addictions}}
         {{include file="inc_consult_anesth/inc_list_addiction.tpl}}    
       {{/if}}
@@ -12,25 +48,25 @@
           {{foreach from=$list_antecedent item=curr_antecedent}}
           <ul>
             <li>
-              <form name="delAntFrm" action="?m=dPcabinet" method="post">
+              <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
 
               <input type="hidden" name="m" value="dPpatients" />
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="dosql" value="do_antecedent_aed" />
-              <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->antecedent_id}}" />
+              <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
               
-              <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cet antécédent',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
+              <button class="trash notext" type="button" onclick="Antecedent.delete(this.form, reloadAntecedents)">
                 {{tr}}delete{{/tr}}
               </button> 
               {{if $_is_anesth}}
-              <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->antecedent_id}})">
+              <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
                 {{tr}}add{{/tr}}
               </button>
               {{/if}}         
               {{if $curr_antecedent->date}}
                 {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
               {{/if}}
-              <em>{{$curr_antecedent->rques}}</em>
+              {{$curr_antecedent->rques}}
             </form>
             </li>
           </ul>
@@ -39,7 +75,7 @@
         {{/if}}
         {{/foreach}}
       {{else}}
-        <li>Pas d'antécédents</li>
+        <li><em>Pas d'antécédents</em></li>
       {{/if}}
       </ul>
       <strong>Traitements du patient</strong>
@@ -51,7 +87,7 @@
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-          <button class="trash notext" type="button" onclick="confirmDeletion(this.form,{typeName:'ce traitement',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedents})">
+          <button class="trash notext" type="button" onclick="Traitement.delete(this.form, reloadAntecedents)">
             {{tr}}delete{{/tr}}
           </button>
           {{if $_is_anesth}}
@@ -64,11 +100,11 @@
           {{elseif $curr_trmt->debut}}
             Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
           {{/if}}
-          <em>{{$curr_trmt->traitement}}</em>
+          {{$curr_trmt->traitement}}
           </form>
         </li>
         {{foreachelse}}
-        <li>Pas de traitements</li>
+        <li><em>Pas de traitements</em></li>
         {{/foreach}}
       </ul>
       <strong>Diagnostics du patient</strong>
@@ -87,6 +123,6 @@
           {{$curr_code->code}}: {{$curr_code->libelle}}
         </li>
         {{foreachelse}}
-        <li>Pas de diagnostic</li>
+        <li><em>Pas de diagnostic</em></li>
         {{/foreach}}
       </ul>

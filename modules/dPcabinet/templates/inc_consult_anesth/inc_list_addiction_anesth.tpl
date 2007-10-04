@@ -1,4 +1,5 @@
 <strong>Addictions significatifs</strong>
+
 <ul>
 {{if $consult_anesth->_ref_addictions}}
   {{foreach from=$consult_anesth->_ref_types_addiction key=curr_type item=list_addiction}}
@@ -14,10 +15,10 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_addiction_aed" />
         {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
-        <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'cette addiction',ajax:1,target:'systemMsg'},{onComplete:reloadAntecedentsAnesth})">
+        <button class="trash notext" type="button" onclick="Addiction.delete(this.form, reloadAntecedentsAnesth)">
         {{tr}}Delete{{/tr}}
         </button>
-        <em>{{$curr_addiction->addiction}}</em>
+        {{$curr_addiction->addiction}}
        </form>
       </li>
     </ul>
