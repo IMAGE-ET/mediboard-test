@@ -341,6 +341,10 @@ class CSejour extends CCodableCCAM {
   }
   
   function updateDBFields() {
+    global $AppUI;
+    if($AppUI->user_id == 1) {
+      mbTrace($this, "before");
+    }
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
       $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
       $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
@@ -366,6 +370,10 @@ class CSejour extends CCodableCCAM {
     
     if($this->_modifier_sortie === 0){
     	$this->sortie_reelle = "";
+    }
+    if($AppUI->user_id == 1) {
+      mbTrace($this, "after");
+      die();
     }
     
   }
