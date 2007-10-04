@@ -52,7 +52,7 @@ $deplacements = new CAffectation;
 $deplacements = $deplacements->loadList($where, $order, null, null, $ljoin);
 foreach($deplacements as $key => $value) {
   $deplacements[$key]->loadRefsFwd();
-  
+    
   if(!$deplacements[$key]->_ref_next->affectation_id) {
     unset($deplacements[$key]);
   } else {
@@ -72,6 +72,14 @@ foreach($deplacements as $key => $value) {
     }
   }
 }
+
+
+foreach($deplacements as $key => $deplacement){ 
+  for($i = -10; $i < 10; $i++) {
+    $timing[$deplacement->_id][] = mbDateTime("$i minutes", $deplacement->sortie);
+  }
+} 
+
 
 // Récupération des sorties ambu du jour
 $where["type"] = "= 'ambu'";
@@ -117,8 +125,11 @@ foreach($sortiesComp as $key => $value) {
   }
 }
 
+  
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("timing"       , $timing      );
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );

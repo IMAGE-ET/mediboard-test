@@ -1,7 +1,15 @@
 <script type="text/javascript">
+
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
 }
+
+function saveSortie(oFormSortie, oFormAffectation){
+  if(oFormSortie){
+    oFormAffectation.sortie.value = oFormSortie.sortie.value;
+  }
+}
+
 </script>
 
 <table class="main">
@@ -43,11 +51,12 @@ function pageMain() {
               {{foreach from=$deplacements item=curr_sortie}}
               <tr>
                 <td>
-                <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post">
+                <form name="editFrm{{$curr_sortie->affectation_id}}" action="?m={{$m}}" method="post" onsubmit="saveSortie(document.editSortie{{$curr_sortie->affectation_id}}, this);">
                 <input type="hidden" name="m" value="{{$m}}" />
                 <input type="hidden" name="del" value="0" />
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
                 <input type="hidden" name="affectation_id" value="{{$curr_sortie->affectation_id}}" />
+                <input type="hidden" name="sortie" value="{{$curr_sortie->sortie}}" />
                 {{if $curr_sortie->confirme}}
                 <input type="hidden" name="confirme" value="0" />
                 <input type="hidden" name="effectue" value="0" />
@@ -79,7 +88,22 @@ function pageMain() {
                 <td class="text">
                   {{$curr_sortie->_ref_next->_ref_lit->_view}}
                 </td>
-                <td>{{$curr_sortie->sortie|date_format:"%H h %M"}}</td>
+                <td>
+                {{if $curr_sortie->confirme}}
+                  {{$curr_sortie->sortie|date_format:"%H h %M"}}
+                {{else}}
+                <form name="editSortie{{$curr_sortie->affectation_id}}" action="">
+                  <select name="sortie">
+                  {{assign var="curr_id" value=$curr_sortie->_id}}
+                  {{foreach from=$timing.$curr_id|smarty:nodefaults item="time"}}
+                  <option value="{{$time}}" {{if $time==$curr_sortie->sortie}}selected = "selected"{{/if}}>
+                   {{$time|date_format:"%H h %M"}}
+                  </option>
+                  {{/foreach}}
+                  </select>
+                </form>
+                {{/if}}                  
+                </td>
               </tr>
               {{/foreach}}
             </table>
