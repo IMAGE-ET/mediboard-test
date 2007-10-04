@@ -7,7 +7,6 @@ function setClose(code, type,tarif) {
   if(type=="cim10"){
   var oSelector = window.opener.CIM10Selector;
   }
-  
   oSelector.set(code,tarif);
   window.close();
 }
@@ -78,7 +77,7 @@ function view_() {
       <br />
       {{$curr_code.codeccam->libelleLong}}
       <br />
-      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}','{{$curr_code.codeccam->activites[1]->phases[0]->tarif}}' )">
+      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">
         {{tr}}Select{{/tr}}
       </button>
     </td>  
