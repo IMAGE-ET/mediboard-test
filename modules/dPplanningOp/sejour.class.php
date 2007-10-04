@@ -341,18 +341,12 @@ class CSejour extends CCodableCCAM {
   }
   
   function updateDBFields() {
-    global $AppUI;
-    if($AppUI->user_id == 1) {
-      mbTrace($this, "before");
-    }
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
-      $time_entree_prevue = mbTime(null, "$this->_hour_entree_prevue:$this->_min_entree_prevue");
-      $this->entree_prevue = mbAddDateTime($time_entree_prevue, $this->_date_entree_prevue);
+      $this->entree_prevue = "$this->_date_entree_prevue $this->_hour_entree_prevue:$this->_min_entree_prevue:00";
     }
     
     if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
-      $time_sortie_prevue = mbTime(null, "$this->_hour_sortie_prevue:$this->_min_sortie_prevue");
-      $this->sortie_prevue = mbAddDateTime($time_sortie_prevue, $this->_date_sortie_prevue);
+      $this->sortie_prevue = "$this->_date_sortie_prevue $this->_hour_sortie_prevue:$this->_min_sortie_prevue:00";
     }
     
     // Synchro durée d'hospi / type d'hospi
@@ -370,10 +364,6 @@ class CSejour extends CCodableCCAM {
     
     if($this->_modifier_sortie === 0){
     	$this->sortie_reelle = "";
-    }
-    if($AppUI->user_id == 1) {
-      mbTrace($this, "after");
-      die();
     }
     
   }
