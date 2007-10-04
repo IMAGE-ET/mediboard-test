@@ -39,7 +39,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
       <table class="tbl">
         <tr>
           {{if $can->edit}}
-          <th>-</th>
+          <th />
           {{/if}}
           <th>{{tr}}CDocGed-_reference_doc{{/tr}}</th>
           <th>{{tr}}CDocGed-titre{{/tr}}</th>
@@ -51,21 +51,24 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           <td>
             {{if $can->admin}}
             <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-            <input type="hidden" name="dosql" value="do_docged_aed" />
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="_validation" value="1" />
-            <input type="hidden" name="ged[doc_ged_id]" value="{{$currProc->doc_ged_id}}" />  
-            <input type="hidden" name="ged[user_id]" value="{{$currProc->user_id}}" />
-            <input type="hidden" name="ged[group_id]" value="{{$currProc->group_id}}" />
-            <input type="hidden" name="ged[annule]" value="1" />
-            <input type="hidden" name="ged[etat]" value="{{$currProc->etat}}" />
-            <button class="cancel notext" style="float: left;" type="submit" title="{{tr}}button-CDocGed-cancel{{/tr}}">
-            </button>
+              <input type="hidden" name="dosql" value="do_docged_aed" />
+              <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="_validation" value="1" />
+              <input type="hidden" name="ged[doc_ged_id]" value="{{$currProc->doc_ged_id}}" />  
+              <input type="hidden" name="ged[user_id]" value="{{$currProc->user_id}}" />
+              <input type="hidden" name="ged[group_id]" value="{{$currProc->group_id}}" />
+              <input type="hidden" name="ged[annule]" value="1" />
+              <input type="hidden" name="ged[etat]" value="{{$currProc->etat}}" />
+              <button class="cancel notext" style="float: left;" type="submit" title="{{tr}}button-CDocGed-cancel{{/tr}}">
+                {{tr}}button-CDocGed-cancel{{/tr}}
+              </button>
             </form>
             {{/if}}
             {{if $currProc->etat==$docGed|const:'TERMINE'}}
-            <a class="buttonedit notext" style="float: left;" href="index.php?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}" title="{{tr}}button-CDocGed-edit{{/tr}}"></a>
+            <button type="button" class="edit notext" style="float: left;" onclick="document.location = 'index.php?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}'" title="{{tr}}button-CDocGed-edit{{/tr}}">
+              {{tr}}button-CDocGed-edit{{/tr}}
+            </button>
             {{/if}}
           </td>
           {{/if}}
