@@ -45,6 +45,7 @@ $sql = "SELECT lit.lit_id" .
 		"\nLEFT JOIN lit" .
 		"\nON lit.lit_id = affectation.lit_id" .
 		"\nWHERE '$date_recherche' BETWEEN affectation.entree AND affectation.sortie" .
+		"\nAND affectation.effectue = '0'" . // Pas de prise enc ompte des affectations effectuées
 		"\nGROUP BY lit.lit_id";
 $occupes = $ds->loadlist($sql);
 $arrayIn = array();
@@ -70,7 +71,7 @@ $sql = "SELECT lit.nom AS lit, chambre.nom AS chambre, service.nom AS service, M
     "\nAND service.group_id = '$g'" .
     $whereService .
 		"\nGROUP BY lit.lit_id" .
-		"\nORDER BY service.nom, limite DESC, chambre.nom, lit.nom";
+		"\nORDER BY service.nom, chambre.nom, lit.nom, limite DESC";
 $libre = $ds->loadlist($sql);
 $listAff = null;
 }
