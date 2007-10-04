@@ -18,6 +18,7 @@
             {{mb_field object=$curr_examcomp field="exam_id" hidden=1 prop=""}}
             {{mb_field object=$curr_examcomp field="fait" hidden=1 prop=""}}
             <button class="trash notext" type="button" onclick="delExamComp(this.form)">
+              {{tr}}Delete{{/tr}}
             </button>
             {{$curr_examcomp->examen}}
             {{if !$curr_examcomp->fait}}

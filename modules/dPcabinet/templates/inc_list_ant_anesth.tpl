@@ -67,7 +67,7 @@
 <ul>
   {{foreach from=$consult_anesth->_ref_traitements item=curr_trmt}}
   <li>
-    <form name="delTrmtFrm" action="?m=dPcabinet" method="post">
+    <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />

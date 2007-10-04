@@ -9,7 +9,7 @@
     {{foreach from=$list_addiction item=curr_addiction}}
     <ul>
       <li>
-        <form name="delAddictionFrm" action="?m=dPcabinet" method="post">
+        <form name="delAddictionFrm-{{$curr_addiction->_id}}" action="?m=dPcabinet" method="post">
 
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="del" value="0" />

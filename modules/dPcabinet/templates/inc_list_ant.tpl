@@ -82,7 +82,7 @@ var Traitement = {
       <ul>
         {{foreach from=$patient->_ref_traitements item=curr_trmt}}
         <li>
-          <form name="delTrmtFrm" action="?m=dPcabinet" method="post">
+          <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
           <input type="hidden" name="m" value="dPpatients" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
@@ -108,7 +108,6 @@ var Traitement = {
         {{/foreach}}
       </ul>
       <strong>Diagnostics du patient</strong>
-      {{$patient->listCim10}}
       <ul>
         {{foreach from=$patient->_codes_cim10 item=curr_code}}
         <li>

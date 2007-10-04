@@ -212,7 +212,7 @@ function copyTraitement(traitement_id){
         <tr>
           <td class="button" colspan="2">
             <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.rques)){submitAnt(this.form);dateAntecedent();}">
-              {{tr}}Add{{/tr}} un antécédant
+              {{tr}}Add{{/tr}} un antécédent
             </button>
           </td>
         </tr>
@@ -308,9 +308,6 @@ function copyTraitement(traitement_id){
         
       </form>
       
-      
-      
-      
       <form name="editDiagFrm" action="?m={{$m}}" method="post">
 
       <input type="hidden" name="m" value="dPpatients" />
@@ -346,7 +343,7 @@ function copyTraitement(traitement_id){
       </form>      
     </td>
 
-    <td>
+    <td class="halfPane">
       <table class="form">
         <tr>
           <th class="category">

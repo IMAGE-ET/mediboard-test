@@ -65,7 +65,7 @@ function reloadListExamComp() {
 <table class="form">
   <tr>
     <td class="text">
-      <form name="editexamcompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+      <form name="addExamCompFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_examcomp_aed" />
