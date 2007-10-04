@@ -57,7 +57,7 @@ foreach($listOps as $key => $value) {
   $timing[$key]["sortie_reveil"] = array();
   foreach($timing[$key] as $key2 => $value2) {
     for($i = -10; $i < 10 && $value->$key2 !== null; $i++) {
-      $timing[$key][$key2][] = mbTime("+ $i minutes", $value->$key2);
+      $timing[$key][$key2][] = mbTime("$i minutes", $value->$key2);
     }
   }
 }
