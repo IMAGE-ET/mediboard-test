@@ -71,6 +71,9 @@
   </div>
 </div>
 
+<!-- Up button -->
+<div id="goUp" title="Retour en haut de la page" onclick="document.documentElement.scrollTop = 0;"></div>
+
 {{if !$offline}}
 <script type="text/javascript">
 function popChgPwd() {

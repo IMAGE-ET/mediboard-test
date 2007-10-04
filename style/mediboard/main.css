@@ -1040,6 +1040,24 @@ div.big-error {
   padding-left: 60px;
 }
 
+#goUp {
+	background: #Ccc url(./images/icons/action_up.png) no-repeat center;
+  opacity: 0.5;	
+	border: 1px solid #666;	
+	cursor: pointer;
+	position: fixed;
+	width: 18px;
+	height: 18px;
+	right: 5px;
+	bottom: 5px;
+	z-index: 1000;
+}
+
+#goUp:hover {
+  background-color: #fff;
+  opacity: 1;	
+}
+
 @media print {
   div.warning,
   div.error,
@@ -1453,22 +1471,20 @@ table.contacts td.hilite {
   /* @import "./calendar.css    */
 
 .calendar td.day.current {
-  background-color: #fff;
+  background-color: #ddd;
 }
 
 .calendar td.day.spot {
-  border: 1px solid #0f0;
-  padding: 1px 3px 1px 1px;
+  border: 2px solid #080;
+  padding: 0px 2px 0px 0px;
 }
 
 .calendar td.day.spot.hilite {
-  border: 1px outset #0f0;
-  padding: 1px 3px 1px 1px;
+  border-style: outset;
 }
 
 .calendar td.day.spot.selected {
-  border: 1px inset #0f0;
-  padding: 1px 3px 1px 1px;
+  border-style: inset;
 }
 
 .calendar td.day.weekend {
