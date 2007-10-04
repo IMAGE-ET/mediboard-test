@@ -342,11 +342,17 @@ class CSejour extends CCodableCCAM {
   
   function updateDBFields() {
     if ($this->_hour_entree_prevue !== null and $this->_min_entree_prevue !== null) {
-      $this->entree_prevue = "$this->_date_entree_prevue $this->_hour_entree_prevue:$this->_min_entree_prevue:00";
+      $this->entree_prevue = "$this->_date_entree_prevue";
+      $this->entree_prevue.= " ".str_pad($this->_hour_entree_prevue, 2, "0", STR_PAD_LEFT);
+      $this->entree_prevue.= ":".str_pad($this->_min_entree_prevue, 2, "0", STR_PAD_LEFT);
+      $this->entree_prevue.= ":00";
     }
     
     if ($this->_hour_sortie_prevue !== null and $this->_min_sortie_prevue !== null) {
-      $this->sortie_prevue = "$this->_date_sortie_prevue $this->_hour_sortie_prevue:$this->_min_sortie_prevue:00";
+      $this->sortie_prevue = "$this->_date_sortie_prevue";
+      $this->sortie_prevue.= " ".str_pad($this->_hour_sortie_prevue, 2, "0", STR_PAD_LEFT);
+      $this->sortie_prevue.= ":".str_pad($this->_min_sortie_prevue, 2, "0", STR_PAD_LEFT); 
+      $this->sortie_prevue.= ":00";
     }
     
     // Synchro durée d'hospi / type d'hospi
