@@ -163,8 +163,13 @@ Class.extend(Url, {
     
     AjaxResponse.onAfterEval = oDefaultOptions.onAfterEval;
     
-    if (oDefaultOptions.waitingText)
+    if (oDefaultOptions.waitingText) {
       $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
+	    if (ioTarget == SystemMessage.id) {
+	      $(ioTarget).show();
+	    }
+
+    }
   
     References.clean($(ioTarget));
     new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);

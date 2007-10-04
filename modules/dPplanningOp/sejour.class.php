@@ -88,6 +88,9 @@ class CSejour extends CCodableCCAM {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
 
+  // Distant fields
+  var $_dates_operations = null;
+  
   // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
@@ -528,13 +531,21 @@ class CSejour extends CCodableCCAM {
 
     $operations = new COperation;
     $this->_ref_operations = $operations->loadList($where, $order);
-    
-    if(count($this->_ref_operations) > 0) {
+        
+    if (count($this->_ref_operations) > 0) {
       $this->_ref_last_operation =& reset($this->_ref_operations);
     } else {
       $this->_ref_last_operation =& new COperation;
     }
   }
+  
+  function makeDatesOperations() {
+    $this->_dates_operations = array();
+    foreach ($this->_ref_operations as $operation) {
+      $this->_dates_operations[] = mbDate($operation->_datetime);
+    }
+  }
+  
   
   function loadRefsBack() {
     $this->loadRefsFiles();

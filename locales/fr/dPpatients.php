@@ -1,9 +1,9 @@
 <?php
 $locales['CPatient-centre_gest-desc'] = 'Centre gestionnaire du régime de santé';
 $locales['CAddiction'] = '';
-$locales['CAddiction-addiction'] = 'Description';
-$locales['CAddiction-addiction-court'] = 'Description de l\'addication du patient';
-$locales['CAddiction-addiction-desc'] = '';
+$locales['CAddiction-addiction'] = 'Addiction';
+$locales['CAddiction-addiction-court'] = 'Add';
+$locales['CAddiction-addiction-desc'] = 'Description de l\'addication';
 $locales['CAddiction-back-object_id'] = '';
 $locales['CAddiction-object_class'] = '';
 $locales['CAddiction-object_class-court'] = '';

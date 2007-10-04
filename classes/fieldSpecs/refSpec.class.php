@@ -64,6 +64,7 @@ class CRefSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
+    mbTrace("Ref");
     $length = 8;
     CMbArray::defaultValue($params, "size", $length+2);
     CMbArray::defaultValue($params, "maxlength", $length);

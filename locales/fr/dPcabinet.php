@@ -1,7 +1,7 @@
 <?php
-$locales['CConsultation-categorie_id'] = 'Catégorie';
-$locales['CAddiction-addiction'] = 'Information';
-$locales['CAddiction-addiction-desc'] = 'Information sur l\'addiction';
+$locales['CAn'] = '';
+$locales['CAddiction-addiction'] = 'Addiction';
+$locales['CAddiction-addiction-desc'] = 'Description de l\'addiction';
 $locales['CAddiction-type'] = 'Type';
 $locales['CAddiction-type-desc'] = 'Type d\'addiction';
 $locales['CAddiction.type.cannabis'] = 'Cannabis';
@@ -211,6 +211,7 @@ $locales['CConsultation-arrivee-desc'] = '';
 $locales['CConsultation-back-consult_anesth'] = 'Dossier d\'anesthésie';
 $locales['CConsultation-back-patient_id'] = '';
 $locales['CConsultation-back-plageconsult_id'] = '';
+$locales['CConsultation-categorie_id'] = 'Catégorie';
 $locales['CConsultation-chrono'] = '';
 $locales['CConsultation-chrono-court'] = '';
 $locales['CConsultation-chrono-desc'] = '';

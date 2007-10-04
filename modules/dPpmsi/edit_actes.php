@@ -35,7 +35,7 @@ $timing["retrait_garrot"] = array();
 $timing["sortie_salle"]    = array();
 foreach($timing as $key => $value) {
   for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
-    $timing[$key][] = mbTime("+ $i minutes", $selOp->$key);
+    $timing[$key][] = mbTime("$i minutes", $selOp->$key);
   }
 }
 

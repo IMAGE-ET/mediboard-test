@@ -68,13 +68,13 @@ if ($sejour_id) {
 
   $sejour->loadRefs();
   
-  foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
-    $operation =& $sejour->_ref_operations[$keyOp];
+  foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefsFwd();
   }
 
-  foreach ($sejour->_ref_affectations as $keyAff => $valueAff) {
-    $affectation =& $sejour->_ref_affectations[$keyAff];
+  $sejour->makeDatesOperations();
+
+  foreach ($sejour->_ref_affectations as &$affectation) {
     $affectation->loadRefLit();
     $lit =& $affectation->_ref_lit;
     $lit->loadCompleteView();

@@ -395,7 +395,7 @@ class CPatient extends CDossierMedical {
     $this->_assure_tel24 = substr($this->assure_tel2, 6, 2);
     $this->_assure_tel25 = substr($this->assure_tel2, 8, 2);
     
-    if($this->_age != "??" && $this->_age <= 15)
+    if ($this->_age != "??" && $this->_age <= 15)
       $this->_shortview = "Enf.";
     elseif($this->sexe == "m")
       $this->_shortview = "M.";
@@ -403,6 +403,7 @@ class CPatient extends CDossierMedical {
       $this->_shortview = "Mme.";
     else
       $this->_shortview = "Mlle.";
+      
     $this->_view = $this->_shortview." $this->nom $this->prenom";
     
     // Navigation fields

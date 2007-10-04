@@ -1475,7 +1475,9 @@ table.contacts td.hilite {
 }
 
 .calendar td.day.spot {
-  border: 2px solid #080;
+  border-style: solid;
+  border-color: #ca0;
+  border-width: 0px 2px 2px 0px;
   padding: 0px 2px 0px 0px;
 }
 

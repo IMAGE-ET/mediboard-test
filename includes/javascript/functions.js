@@ -6,8 +6,8 @@ function main() {
 	  initFCKEditor();
 	  BrowserDetect.init();
 	  ObjectInitialisation.hackIt();
-//	  SystemMessage.init();
-//	  SystemMessage.doEffect();
+	  SystemMessage.init();
+	  SystemMessage.doEffect();
 	  WaitingMessage.init();
 	  
 	  
@@ -192,10 +192,7 @@ var SystemMessage = {
       Element.show(oDiv);
       return;
     }
-    
-    // Watch for content manipulation
-    oDiv.watch("innerHTML", this.refresh.bind(this));
-    
+        
     // Hide empty message
     if (!oDiv.innerHTML.strip()) {
       new Effect.Fade(oDiv);
@@ -815,10 +812,10 @@ function reloadNotes(){
   initNotes(); 
 }
 
-Object.extend(Calendar, {
 
+Object.extend(Calendar, {
 	// This function is bound to date specification
-  dateStatus: function(date) {
+	dateStatus: function(date) {
 	  var sDate = date.toDATE();
 	  var aStyles = [];
 	
@@ -849,6 +846,7 @@ Object.extend(Calendar, {
 	  aStyles.removeDuplicates();
 	  return aStyles.join(" ");
   },
+
   
   regField: function(sFormName, sFieldName, bTime, userDates) {
 	  var dates = {

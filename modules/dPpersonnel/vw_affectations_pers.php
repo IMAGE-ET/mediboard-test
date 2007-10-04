@@ -18,6 +18,7 @@ $classes = getInstalledClasses();
 $affectation = new CAffectationPersonnel();
 $affectation->load(mbGetValueFromGetOrSession("affect_id"));
 mbTrace($affectation->getProps());
+mbTrace($affectation->getSpecs());
 
 // Liste des classes disponibles
 $classes = getInstalledClasses();

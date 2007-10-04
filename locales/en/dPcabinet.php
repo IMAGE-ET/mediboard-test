@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-categorie_id'] = '';
+$locales['CAn'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -211,6 +211,7 @@ $locales['CConsultation-arrivee-desc'] = '';
 $locales['CConsultation-back-consult_anesth'] = 'Anesthesiology file';
 $locales['CConsultation-back-patient_id'] = '';
 $locales['CConsultation-back-plageconsult_id'] = '';
+$locales['CConsultation-categorie_id'] = '';
 $locales['CConsultation-chrono'] = '';
 $locales['CConsultation-chrono-court'] = '';
 $locales['CConsultation-chrono-desc'] = '';

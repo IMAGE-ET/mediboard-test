@@ -152,7 +152,7 @@ function pageMain() {
       <select name="object_class" class="notNull">
         <option value="">&mdash; Choisir une classe</option>
         {{foreach from=$classes item=curr_class}}
-        <option value="{{$curr_class}}" {{if $affectation->_object_class == $curr_class}}selected="selected"{{/if}}>
+        <option value="{{$curr_class}}" {{if $affectation->object_class == $curr_class}}selected="selected"{{/if}}>
           {{$curr_class}}
         </option>
         {{/foreach}}

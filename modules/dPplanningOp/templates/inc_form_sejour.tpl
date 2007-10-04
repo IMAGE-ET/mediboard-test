@@ -411,26 +411,35 @@ function checkChambre(){
 <script type="text/javascript">
 // Explicit form preparation for Ajax loading
 prepareForm(document.editSejour);
-//var options = {
-//  current: {
-//    start: "2007-09-22",
-//    stop: "2007-09-28"
-//  },
-//  limit: {
-//    start: "2007-09-20",
-//    stop: "2007-09-30"
-//  },
-//  spots: ["2007-09-24", "2007-09-27"]
-//}
-//
-//Console.debug(options, "dates", { level: 2 } );
-//
-//Calendar.regField("editSejour", "_date_entree_prevue", false, options);
+var datesOperations = {{$sejour->_dates_operations|@json}};
+var dates = {
+  current: {
+    start: "{{$sejour->entree_prevue}}",
+    stop: "{{$sejour->sortie_prevue}}",
+  },
+  spots: datesOperations
+}
 
-regFieldCalendar("editSejour", "_date_entree_prevue");
+Calendar.regField("editSejour", "entree_reelle", true, dates);
+Calendar.regField("editSejour", "sortie_reelle", true, dates);
 
-regFieldCalendar("editSejour", "_date_sortie_prevue");
-regFieldCalendar("editSejour", "entree_reelle", true);
-regFieldCalendar("editSejour", "sortie_reelle", true);
+dates.limit = {
+  start: null,
+  stop: datesOperations.first()
+}
+
+Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
+
+dates.limit = {
+  start: datesOperations.last(),
+  stop: null 
+}
+
+Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
+
+//regFieldCalendar("editSejour", "_date_entree_prevue");
+//regFieldCalendar("editSejour", "_date_sortie_prevue");
+//regFieldCalendar("editSejour", "entree_reelle", true);
+//regFieldCalendar("editSejour", "sortie_reelle", true);
 removePlageOp(false);
 </script>
