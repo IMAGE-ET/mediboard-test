@@ -52,7 +52,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
         $objFile->doIt();
-        if($AppUI->msgNo != UI_MSG_OK){
+        if(!$AppUI->isMsgOK()){
           // Erreur sur le fichier !
           if ($this->redirectError) {
             $this->redirect =& $this->redirectError;
@@ -79,7 +79,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       if(!$lastNumRef->doc_ged_id){
         $this->_obj->num_ref = 1;
       }else{
-        $this->_obj->num_ref = intval($lastNumRef->num_ref) +1;
+        $this->_obj->num_ref = intval($lastNumRef->num_ref) + 1;
       }
     }
     

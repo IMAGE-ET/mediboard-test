@@ -66,7 +66,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $objFile->doBind();
         $objFile->_obj->object_id = $doc_ged_id;
         $objFile->dostore();
-        if($AppUI->msgNo == UI_MSG_OK){
+        if($AppUI->isMsgOK()){
           $file_upload_ok = true;
           $file_id = $objFile->_obj->file_id;
         }else{

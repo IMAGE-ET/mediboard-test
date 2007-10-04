@@ -14,6 +14,8 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{tr}}CDocGed.create{{/tr}}
       </a>
       
+      <!-- Liste des procédures terminées -->
+      
       {{if $procTermine|@count}}
       <table class="form">
         <tr>
@@ -77,6 +79,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
       </table><br /><br />
       {{/if}}
       
+      <!-- Liste des procédures en cours de rédaction -->
       
       {{if $procDemande|@count}}
       <table class="form">
@@ -122,6 +125,8 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{/foreach}}
       </table><br /><br />      
       {{/if}}
+      
+      <!-- Liste des procédures demandées en attente -->
       
       <table class="form">
         <tr>
@@ -179,7 +184,8 @@ function popFile(objectClass, objectId, elementClass, elementId){
       <input type="hidden" name="suivi[file_id]" value="" />    
       
       <table class="form">
-        <tr>          
+        <tr>
+          <!-- Procédure demandée ou terminée -->          
           {{if $docGed->doc_ged_id && ($docGed->etat == $docGed|const:'DEMANDE' || $docGed->etat==$docGed|const:'TERMINE')}}
             <th class="title modify" colspan="2">
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
@@ -192,18 +198,21 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{tr}}msg-CDocGed-title-modify{{/tr}}
               {{/if}}
             </th>
+          <!-- Procédure en cours de rédaction -->
           {{elseif $docGed->doc_ged_id && $docGed->etat==$docGed|const:'REDAC'}}
-            <th class="title" colspan="2">
+            <th class="title modify" colspan="2">
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'VALID'}}" />
               <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'REDAC'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
               {{tr}}msg-CDocGed-etatredac_REDAC{{/tr}}
             </th>
+          <!-- Procédure validée -->
           {{elseif $docGed->doc_ged_id}}
             <th class="title modify" colspan="2">
               {{tr}}msg-CDocGed-title-valid{{/tr}}
             </th>
           {{else}}
+          <!-- Nouvelle procedure -->
             <th class="title" colspan="2">
               <input type="hidden" name="ged[annule]" value="0" />
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
@@ -212,7 +221,8 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{tr}}msg-CDocGed-title-create{{/tr}}
             </th>
           {{/if}}                    
-        </tr>       
+        </tr>
+        <!-- Nouvelle procédure, procédure terminée ou demandée -->
         {{if $docGed->etat==$docGed|const:'TERMINE' || $docGed->etat==$docGed|const:'DEMANDE' || !$docGed->doc_ged_id}}
           {{if $docGed->doc_ged_id && $docGed->etat!=$docGed|const:'TERMINE'}}
           <tr>
@@ -266,6 +276,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               {{/if}}
             </td>
           </tr>
+        <!-- Procédure en cours de rédaction -->
         {{elseif $docGed->etat==$docGed|const:'REDAC'}}
           <tr>
             <th>{{tr}}CDocGed.one{{/tr}}</th>
@@ -319,6 +330,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               </button>
             </td>
           </tr>
+        <!-- Procédure validée -->
         {{else}}
           <tr>
             <td class="button text" colspan="2">

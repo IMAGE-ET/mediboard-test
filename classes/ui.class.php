@@ -56,11 +56,6 @@ class CAppUI {
   var $locale_mask = "";
 
   var $messages = array();
-
-/** @var string Message string*/
-  var $msg = "";
-/** @var string */
-  var $msgNo = 0;
   
 /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
@@ -380,29 +375,13 @@ class CAppUI {
     $msg = $this->_($msg);
     @$this->messages[$type][$msg]++;
   }
-
- /**
-  * Display the formatted message and icon
-  * @param boolean If true the current message state is cleared.
-  */
-  function getMsgOld($reset = true) {
-    $msg = $this->msg;
-
-    switch($this->msgNo) {
-      case UI_MSG_OK      : $class = "message"; break;
-      case UI_MSG_ALERT   : $class = "message"; break;
-      case UI_MSG_WARNING : $class = "warning"; break;
-      case UI_MSG_ERROR   : $class = "error" ; break;
-      default: $class = "message"; break;
-    }
-
-    if ($reset) {
-      $this->msg = "";
-      $this->msgNo = 0;
-    }
-    
-
-    return $msg ? "<div class='$class'>$msg</div>" : "";
+  
+  function isMsgOK() {
+    $errors = 0;
+    $errors += count(@$this->messages[UI_MSG_ALERT]);
+    $errors += count(@$this->messages[UI_MSG_WARNING]);
+    $errors += count(@$this->messages[UI_MSG_ERROR]);
+    return $errors == 0;
   }
 
   /**
