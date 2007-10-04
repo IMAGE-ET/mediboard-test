@@ -83,11 +83,13 @@ if ($operation_id && $op->load($operation_id)) {
   $prat =& $sejour->_ref_praticien;
   
   $patient =& $sejour->_ref_patient;
-  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
-  /*if(!$op->canEdit() || !$sejour->canEdit()) {
-    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
-    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
-  }*/
+  
+//  // On vérifie que l'utilisateur a les droits sur l'operation et le sejour
+//  if(!$op->canEdit() || !$sejour->canEdit()) {
+//    $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
+//    $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
+//  }
+  
   // Ancienne methode
   if (!array_key_exists($op->chir_id, $listPraticiens)) {
     $AppUI->setMsg("Vous n'avez pas accès à cette opération", UI_MSG_WARNING);
@@ -95,12 +97,11 @@ if ($operation_id && $op->load($operation_id)) {
   }
 }
 
-//mbTrace($sejour);
+$sejour->makeDatesOperations();
 
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
-//mbTrace($sejour);
 // Récupération des modèles
 
 // Modèles de l'utilisateur

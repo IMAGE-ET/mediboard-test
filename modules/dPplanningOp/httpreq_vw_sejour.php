@@ -37,6 +37,8 @@ if($sejour_id) {
   $sejours =& $patient->_ref_sejours;
 }
 
+$sejour->makeDatesOperations();
+
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);

@@ -541,7 +541,18 @@ class CSejour extends CCodableCCAM {
   
   function makeDatesOperations() {
     $this->_dates_operations = array();
-    foreach ($this->_ref_operations as $operation) {
+    
+    // On s'assure d'avoir les opérations
+    if (!$this->_ref_operations) {
+      $this->loadRefsOperations();
+    }
+    
+    foreach ($this->_ref_operations as &$operation) {
+      // On s'assure d'avoir les plages op
+      if (!$operation->_ref_plageop) {
+        $operation->loadRefPlageOp();
+      }
+
       $this->_dates_operations[] = mbDate($operation->_datetime);
     }
   }
