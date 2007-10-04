@@ -149,7 +149,7 @@ function redactionDoc(oForm){
       {{if $procTermine|@count}}
         <br />
         {{if !$procAnnuleVisible}}
-        <a class="buttontrash" href="index.php?m={{$m}}&amp;procAnnuleVisible=1">
+        <a class="buttonedit" href="index.php?m={{$m}}&amp;procAnnuleVisible=1">
         {{tr}}button-CDocGed-viewcancel{{/tr}}
         </a>
         {{else}}
