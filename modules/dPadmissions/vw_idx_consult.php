@@ -58,6 +58,7 @@ foreach($listPlages as &$element) {
         continue;
       }
       $consultation->loadRefPatient();
+      $consultation->loadRefCategorie();
       $consultation->getNumDocsAndFiles();
     }
   }
