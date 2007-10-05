@@ -1,5 +1,14 @@
 <script type="text/javascript">
 
+
+var codageCCAM = function(operation_id){
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_codage_actes_reveil");
+  url.addParam("operation_id", operation_id);
+  url.popup(700,500,"Actes CCAM");
+}
+
+
 var submitReveil = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = '';
   // s'il y a une affectation, on submit les deux formulaires
@@ -37,7 +46,17 @@ var submitReveil = function(oFormAffectation, oFormOperation){
   <tr>
     <td>{{$curr_op->_ref_salle->nom}}</td>
     <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
-    <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
+    <td class="text">
+      <div style="float: left; display: inline">
+      {{$curr_op->_ref_sejour->_ref_patient->_view}}
+      </div>
+      <div style="float: right; display: inline">
+        <a href="#" onclick="codageCCAM('{{$curr_op->_id}}');">
+        <img src="images/icons/anesth.png" alt="Anesth" />
+        </a>
+      </div>
+    
+    </td>
     <td class="text">
       {{assign var="affectation" value=$curr_op->_ref_sejour->_ref_first_affectation}}
       {{if $affectation->affectation_id}}
@@ -46,7 +65,7 @@ var submitReveil = function(oFormAffectation, oFormOperation){
       Non placé
       {{/if}}
     </td>
-    <td class="button">
+    <td>
       {{if $can->edit}}
         <form name="editSortieBlocFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">
           <input type="hidden" name="m" value="dPplanningOp" />
@@ -60,7 +79,7 @@ var submitReveil = function(oFormAffectation, oFormOperation){
       {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
       {{/if}}
     </td>
-    <td class="button">
+    <td>
     
       
       <form name="delPersonnel{{$curr_op->_id}}" action="?m={{$m}}" method="post">

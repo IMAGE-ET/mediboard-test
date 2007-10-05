@@ -46,7 +46,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
           <td>{{$curr_op->_ref_salle->nom}}</td>
           <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
-          <td class="button">
+          <td>
             {{if $can->edit}}
               <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
                 <input type="hidden" name="m" value="dPplanningOp" />
@@ -60,7 +60,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
               {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
             {{/if}}
           </td>
-          <td class="button">
+          <td>
             {{if $can->edit || $modif_operation}}
              
             <form name="selPersonnel{{$curr_op->_id}}" action="index.php?m={{$m}}" method="post">

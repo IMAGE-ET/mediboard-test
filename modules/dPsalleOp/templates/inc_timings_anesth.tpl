@@ -1,5 +1,5 @@
         <tr>
-          <th>Timming<br/>Anesthésie</th>
+          <th class="category" style="vertical-align: middle">Timming<br/>Anesthésie</th>
           <td>
             <form name="timing_anesth{{$selOp->operation_id}}" action="index.php?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />

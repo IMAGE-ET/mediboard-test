@@ -23,7 +23,7 @@ function pageMain() {
   <tr>
     <td style="width: 200px;" id="listplages"></td>
     <td class="greedyPane">
-      <table class="tbl">
+      <table class="form">
         {{if $selOp->operation_id}}
         <tr>
           <th class="title" colspan="2">
@@ -34,16 +34,12 @@ function pageMain() {
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>
-        
-        
+          
         {{include file="inc_timings_anesth.tpl"}}
-      
-      
-      
       
         <!-- <tbody id = "ccam"> -->
         <tr>
-          <th>Actes<br /><br />
+          <th class="category" style="vertical-align: middle">Actes<br /><br />
           {{tr}}{{$selOp->_class_name}}{{/tr}}
           {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
           <br />
