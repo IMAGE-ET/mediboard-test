@@ -129,7 +129,9 @@ foreach($sortiesComp as $key => $value) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("timing"       , $timing      );
+if($deplacements){
+  $smarty->assign("timing"       , $timing      );
+}
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );
