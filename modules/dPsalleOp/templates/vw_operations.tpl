@@ -8,6 +8,31 @@
 
 
 <script type="text/javascript">
+
+
+function submitTiming(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadTiming(oForm.operation_id.value) } });
+}
+
+function reloadTiming(operation_id){
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_vw_timing");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("timing", "systemMsg");
+}
+
+function submitAnesth(oForm) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAnesth(oForm.operation_id.value) } });
+}
+
+function reloadAnesth(operation_id){
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
+  url.addParam("operation_id", operation_id);
+  url.requestUpdate("anesth", "systemMsg");
+}
+
+
 function pageMain() {
   PairEffect.initGroup("acteEffect");
   
