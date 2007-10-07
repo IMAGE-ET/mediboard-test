@@ -70,32 +70,35 @@ function printAdmission(id) {
           <td class="text">
             {{assign var="affectation" value=$curr_sejour->_ref_first_affectation}}
             {{if $affectation->affectation_id}}
-            {{$affectation->_ref_lit->_view}}
+              {{$affectation->_ref_lit->_view}}
             {{else}}
-            Non placé
+              Non placé
             {{/if}}
             ({{tr}}chambre_seule.{{$curr_sejour->chambre_seule}}{{/tr}})
           </td>
           <td class="text">{{$curr_sejour->rques}}</td>
           <td>
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
-            {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
-            {{if $curr_operation->time_operation != "00:00:00"}}
-              à {{$curr_operation->time_operation|date_format:"%Hh%M"}}
-            {{/if}}
-            <br />
+              {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
+              {{if $curr_operation->time_operation != "00:00:00"}}
+                à {{$curr_operation->time_operation|date_format:"%Hh%M"}}
+              {{/if}}
+              <br />
             {{/foreach}}
           </td>
           <td class="text">
             {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
+              <ul style="padding-left: 0px;">
               {{if $curr_operation->libelle}}
                 <em>[{{$curr_operation->libelle}}]</em>
                 <br />
               {{/if}}
               {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-                {{$curr_code->libelleLong|truncate:60:"...":false}} <em>({{$curr_code->code}})</em>
+                <em>{{$curr_code->code}} : </em>
+                {{$curr_code->libelleLong|truncate:60:"...":false}}
+                <br/>
               {{/foreach}}
-              <br />
+              </ul>
             {{/foreach}}
           </td>
           <td>
