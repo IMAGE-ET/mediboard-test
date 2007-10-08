@@ -1,5 +1,32 @@
 <script type="text/javascript">
 
+function loadTransfert(form, mode_sortie){
+  // si Transfert, affichage du select
+  if(mode_sortie=="transfert"){
+    //Chargement de la liste des etablissement externes
+    var url = new Url();
+    url.setModuleAction("dPadmissions", "httpreq_vw_etab_externes");
+    url.requestUpdate('listEtabExterne', { waitingText : null });
+  } else {
+    // sinon, on vide le contenu de la div
+    $("listEtabExterne").innerHTML = "";
+  }
+}
+
+
+function checkModeSortie(){
+  var oForm = document.editSejour;
+  if(!oForm.sortie_reelle.value && !oForm.mode_sortie.value){
+    return true;
+  }
+  if(oForm.sortie_reelle.value && oForm.mode_sortie.value){
+    return true;
+  }
+  alert("Date de sortie reelle et mode de sortie incompatible");
+  return false;
+}
+
+
 function checkPresta(){
   var oForm = document.editSejour;
   if(oForm.prestation_id.value != ""){
@@ -22,7 +49,7 @@ function checkChambre(){
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
-<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi()){return checkForm(this);}else{return false;}">
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi() && checkModeSortie()){return checkForm(this);}else{return false;}">
 
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -244,7 +271,23 @@ function checkChambre(){
 		{{/if}}    
   </td>
 </tr>
+
+<tr>
+  <th>{{mb_label object=$sejour field=mode_sortie}}</th>
+  <td colspan="3">
+    {{if $can->view}}
+      {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);"}}
+      <div id="listEtabExterne" style="display: inline"></div>
+    {{else}}
+	  {{mb_value object=$sejour field=mode_sortie}}
+	{{/if}}    
+  </td>
+</tr>
+
+
+
 {{/if}}
+
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
