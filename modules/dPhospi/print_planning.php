@@ -54,16 +54,19 @@ if ($filter->convalescence == "n") {
   $sejourReq->addWhereClause(null, "(sejour.convalescence IS NULL OR sejour.convalescence = '')");
 }
 
+$sejourReq->addOrder("DATE(sejour.entree_prevue)");
 $sejourReq->addOrder("users.user_last_name");
 $sejourReq->addOrder("users.user_first_name");
 
 if($filter->_admission  == "heure") {
-  $sejourReq->addOrder("sejour.entree_prevue");
+  $sejourReq->addOrder("TIME(sejour.entree_prevue)");
 } else {
   $sejourReq->addOrder("patients.nom");
   $sejourReq->addOrder("patients.prenom");
   $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 }
+
+mbTrace($sejourReq->getRequest($sejours));
 
 $sejours = $sejours->loadListByReq($sejourReq);
 
