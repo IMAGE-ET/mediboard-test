@@ -72,8 +72,6 @@ if ($sejour_id) {
     $operation->loadRefsFwd();
   }
 
-  $sejour->makeDatesOperations();
-
   foreach ($sejour->_ref_affectations as &$affectation) {
     $affectation->loadRefLit();
     $lit =& $affectation->_ref_lit;
@@ -83,6 +81,8 @@ if ($sejour_id) {
   $praticien =& $sejour->_ref_praticien;
   $patient =& $sejour->_ref_patient;
 }
+
+$sejour->makeDatesOperations();
 
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
