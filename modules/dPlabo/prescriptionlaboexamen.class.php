@@ -14,6 +14,7 @@ class CPrescriptionLaboExamen extends CMbObject {
   // DB references
   var $prescription_labo_id = null;
   var $examen_labo_id       = null;
+  var $pack_examens_labo_id = null;
   var $resultat             = null;
   var $date                 = null;
   var $commentaire          = null;
@@ -21,6 +22,7 @@ class CPrescriptionLaboExamen extends CMbObject {
   // Forward references
   var $_ref_prescription_labo = null;
   var $_ref_examen_labo       = null;
+  var $_ref_pack              = null;
 
   // Distant fields
   var $_hors_limite = null;
@@ -35,6 +37,7 @@ class CPrescriptionLaboExamen extends CMbObject {
     return array (
       "prescription_labo_id" => "ref class|CPrescriptionLabo notNull",
       "examen_labo_id"       => "ref class|CExamenLabo notNull",
+      "pack_examens_labo_id" => "ref class|CPackExamensLabo",
       "resultat"             => "str",
       "date"                 => "date",
       "commentaire"          => "text"
@@ -113,10 +116,18 @@ class CPrescriptionLaboExamen extends CMbObject {
       $this->_ref_examen_labo->load($this->examen_labo_id);
     }
   }
+
+  function loadRefPack() {
+    if (!$this->_ref_pack) {
+      $this->_ref_pack = new CPackExamensLabo();
+      $this->_ref_pack->load($this->pack_examens_labo_id);
+    }
+  }
   
   function loadRefsFwd() {
     $this->loadRefPrescription();
     $this->loadRefExamen();
+    $this->loadRefPack();
   }
   
   function loadSiblings($limit = 10) {
