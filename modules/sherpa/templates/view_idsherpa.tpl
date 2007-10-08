@@ -1,34 +1,6 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      
-      <table class="form">
-        <tr>
-          <th colspan="2" class="title">
-            Etablissements externes
-          </th>
-        </tr>
-        {{foreach from=$listEtabExternes item="etab_externe"}}
-        <tr>
-          <th>{{$etab_externe->_view}}</th>
-          <td>
-            <form name="editFrmEtab-{{$etab_externe->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-              <input type="hidden" name="m" value="dPsante400" />
-              <input type="hidden" name="dosql" value="do_idsante400_aed" />
-              <input type="hidden" name="del" value="0" />
-              <input type="hidden" name="id_sante400_id" value="{{$etab_externe->_ref_last_id400->_id}}" />
-              <input type="hidden" name="object_class" value="CEtabExterne" />
-              <input type="hidden" name="object_id" value="{{$etab_externe->_id}}" />
-              <input type="hidden" name="tag" value="sherpa group:{{$g}}" />
-              <input type="hidden" name="last_update" value="{{$today}}" />
-              {{mb_field object=$etab_externe->_ref_last_id400 field="id400"}}
-              <button type="submit" class="notext submit">{{tr}}Submit{{/tr}}</button>
-            </form>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
-    
       <table class="form">
         <tr>
           <th colspan="2" class="title">
@@ -56,6 +28,7 @@
         {{/foreach}}
       </table>
     </td>
+
     <td class="halfPane">
       <table class="form">
         <tr>
@@ -91,5 +64,35 @@
         {{/foreach}}
       </table>
     </td>
+
+    <td class="halfPane">
+      <table class="form">
+        <tr>
+          <th colspan="2" class="title">
+            Etablissements externes
+          </th>
+        </tr>
+        {{foreach from=$listEtabExternes item="etab_externe"}}
+        <tr>
+          <th>{{$etab_externe->_view}}</th>
+          <td>
+            <form name="editFrmEtab-{{$etab_externe->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+              <input type="hidden" name="m" value="dPsante400" />
+              <input type="hidden" name="dosql" value="do_idsante400_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="id_sante400_id" value="{{$etab_externe->_ref_last_id400->_id}}" />
+              <input type="hidden" name="object_class" value="CEtabExterne" />
+              <input type="hidden" name="object_id" value="{{$etab_externe->_id}}" />
+              <input type="hidden" name="tag" value="sherpa group:{{$g}}" />
+              <input type="hidden" name="last_update" value="{{$today}}" />
+              {{mb_field object=$etab_externe->_ref_last_id400 field="id400"}}
+              <button type="submit" class="notext submit">{{tr}}Submit{{/tr}}</button>
+            </form>
+          </td>
+        </tr>
+        {{/foreach}}
+      </table>
+    </td>
+
   </tr>
 </table>

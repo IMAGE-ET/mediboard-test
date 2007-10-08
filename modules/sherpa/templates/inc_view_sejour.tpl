@@ -48,12 +48,22 @@
 		<td>{{mb_value object=$sejour field="sercod"}}</td>
   </tr>
   
-    <tr>
+  <tr>
 		<th>{{mb_label object=$sejour field="pracod"}}</th>
 		<td>{{mb_value object=$sejour field="pracod"}}</td>
   </tr>
    
-    <tr>
+  <tr>
+		<th>{{mb_label object=$sejour field="depart"}}</th>
+		<td>{{mb_value object=$sejour field="depart"}}</td>
+  </tr>
+
+  <tr>
+		<th>{{mb_label object=$sejour field="etades"}}</th>
+		<td>{{mb_value object=$sejour field="etades"}}</td>
+  </tr>
+
+  <tr>
 		<th>{{mb_label object=$sejour field="datsor"}}</th>
 		<td>{{mb_value object=$sejour field="datsor"}}</td>
   </tr>

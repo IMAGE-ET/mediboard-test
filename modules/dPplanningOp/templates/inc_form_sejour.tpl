@@ -26,6 +26,10 @@ function checkModeSortie(){
   return false;
 }
 
+function checkSejour() {
+  var oForm = document.editSejour;
+  return checkDureeHospi() && checkModeSortie() && checkForm(oForm);
+}
 
 function checkPresta(){
   var oForm = document.editSejour;
@@ -49,7 +53,7 @@ function checkChambre(){
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
-<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="if(checkDureeHospi() && checkModeSortie()){return checkForm(this);}else{return false;}">
+<form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkSejour()">
 
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -457,8 +461,8 @@ prepareForm(document.editSejour);
 var datesOperations = {{$sejour->_dates_operations|@json}};
 var dates = {
   current: {
-    start: "{{$sejour->entree_prevue}}",
-    stop: "{{$sejour->sortie_prevue}}",
+    start: "{{$sejour->_date_entree_prevue}}",
+    stop: "{{$sejour->_date_sortie_prevue}}",
   },
   spots: datesOperations
 }

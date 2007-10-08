@@ -47,7 +47,7 @@ class CSpSejMed extends CSpObject {
 //              /* S(ortie), E(xterieur < 48)  */
 //              /* R(etour Trf > 48), P(sy)    */
 //    $specs["etapro"] = "str length|2" ; /* Code Etabl. Ext. Prov.      */
-//    $specs["etades"] = "str length|2" ; /* Code Etabl. Ext. Dest.      */
+    $specs["etades"] = "str length|2" ; /* Code Etabl. Ext. Dest.      */
 
     $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
     return $specs;
@@ -225,10 +225,16 @@ class CSpSejMed extends CSpObject {
     
     // Mode de sortie 
     $this->depart = "";
+    $this->etades = "";
     if ($sejour->sortie_reelle) {
       if ($sejour->mode_sortie == "normal"   ) $this->depart = "S";
       if ($sejour->mode_sortie == "deces"    ) $this->depart = "D";
-      if ($sejour->mode_sortie == "transfert") $this->depart = $sejour->_duree_reelle >= 2 ? "T" : "E";
+
+      if ($sejour->mode_sortie == "transfert") {
+        $this->depart = $sejour->_duree_reelle >= 2 ? "T" : "E";
+        $idEtab = CSpObjectHandler::getId400For($sejour->_ref_etabExterne);
+        $this->etades = $idEtab->id400;
+      }
     }
     
     // Mise à jour

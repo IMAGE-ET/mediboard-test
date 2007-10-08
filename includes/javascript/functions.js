@@ -9,12 +9,6 @@ function main() {
 	  SystemMessage.init();
 	  SystemMessage.doEffect();
 	  WaitingMessage.init();
-	  
-	  
-		Event.observe(window, 'beforeunload', function() {
-		  Event.unloadCache();
-		}, false);
-	
 	  initPuces();
 	  pageMain();
 	}
@@ -860,7 +854,7 @@ Object.extend(Calendar, {
 		  },
 		  spots: []
 		};
-		
+				
 		Object.extend(dates, userDates);
 
 		// Test element existence

@@ -87,7 +87,8 @@ class CSejour extends CCodableCCAM {
   var $_ref_last_affectation  = null;
   var $_ref_GHM               = array();
   var $_ref_group             = null;
-
+  var $_ref_etabExterne       = null;
+  
   // Distant fields
   var $_dates_operations = null;
   
@@ -423,6 +424,7 @@ class CSejour extends CCodableCCAM {
     $this->loadRefPatient();
     $this->loadRefPraticien();
     $this->loadRefEtablissement();
+    $this->loadRefEtabExterne();
     $this->loadRefsCodesCCAM();
   }
   

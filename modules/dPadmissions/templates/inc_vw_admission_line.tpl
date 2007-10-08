@@ -127,7 +127,7 @@
   </button>
   {{/if}}
   {{if $curr_adm->modif_SHS == 1}}
-  <img src="images/icons/warning.png" alt="modifié" />
+  <img src="images/icons/warning.png" alt="warning" title="Le dossier a été modifié, il faut le répréparer" />
   {{/if}}
   </form>
 </td>
