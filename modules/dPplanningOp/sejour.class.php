@@ -288,14 +288,19 @@ class CSejour extends CCodableCCAM {
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
     if($this->mode_sortie){
     	$this->_ref_last_affectation->effectue = 1;
-        $this->_ref_last_affectation->store();
-        
+        $this->_ref_last_affectation->store();  
     } 
     
     if($this->mode_sortie === ""){
-    	$this->_ref_last_affectation->effectue = 0;
-    	$this->sortie_reelle = "";
-    	$this->_ref_last_affectation->store();
+      $this->_ref_last_affectation->effectue = 0;
+      $this->sortie_reelle = "";
+      $this->_ref_last_affectation->store();
+    }
+    
+    if (null !== $this->mode_sortie) {
+      if ("transfert" != $this->mode_sortie) {
+        $this->etablissement_transfert_id = "";
+      }
     }
   }
   
