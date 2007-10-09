@@ -15,6 +15,7 @@ class CPlageOp extends CMbObject {
   static $hours = array();
   static $hours_start = null;  
   static $hours_stop = null;
+  static $minutes_interval = null;
   
   // DB Table key
   var $plageop_id = null;
@@ -100,20 +101,24 @@ class CPlageOp extends CMbObject {
     $this->_ref_salle = new CSalle;
     $this->_ref_salle->load($this->salle_id);
   }
+  
+  function makeView(){
+    if($this->chir_id){
+      $this->_view = $this->_ref_chir->_view;
+    } elseif($this->spec_id){
+      $this->_view = $this->_ref_spec->_shortview;
+    }
+    if($this->anesth_id){
+      $this->_view .= " - ".$this->_ref_anesth->_shortview;
+    }	
+  }
 
   function loadRefsFwd() {
     $this->loadRefChir();
     $this->loadRefAnesth();
     $this->loadRefSpec();
     $this->loadRefSalle();
-    if($this->chir_id){
-      $this->_view = "Dr. ".$this->_ref_chir->_view;
-    } elseif($this->spec_id){
-      $this->_view = $this->_ref_spec->_shortview;
-    }
-    if($this->anesth_id){
-      $this->_view .= " - ".$this->_ref_anesth->_shortview;
-    }
+    $this->makeView();
   }
   
   function loadRefsBack($annulee = 1, $order = "rank") {
@@ -191,7 +196,7 @@ class CPlageOp extends CMbObject {
       return $msg;
     }
     // Erreur si on change de praticien alors qu'il y a déjà des interventions
-    if($this->_id) {
+    if (null !== $this->chir_id && $this->_id) {
       $oldPlage = new CPlageOp;
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
@@ -312,17 +317,20 @@ class CPlageOp extends CMbObject {
 global $dPconfig;
 $pcConfig =& $dPconfig["dPbloc"]["CPlageOp"];
 
-CPlageOp::$hours_start = mbGetValue($pcConfig["hours_start"], "8");
-CPlageOp::$hours_stop  = mbGetValue($pcConfig["hours_stop"], "20");
+CPlageOp::$hours_start = str_pad(mbGetValue($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
+CPlageOp::$hours_stop  = str_pad(mbGetValue($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
+CPlageOp::$minutes_interval = mbGetValue($pcConfig["minutes_interval"],"15");
+
 $listHours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
-$listMins  = mbGetValue(range(0, 59, $pcConfig["minutes_interval"]), range(0,59,15));
+$listMins  = range(0, 59, CPlageOp::$minutes_interval);
 
 foreach($listHours as $key => $hour){
-	CPlageOp::$hours[$hour] = $hour;
+	CPlageOp::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
 }
 
 foreach($listMins as $key => $min){
 	CPlageOp::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
 
+	
 ?>

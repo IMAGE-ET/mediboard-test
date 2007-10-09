@@ -18,20 +18,17 @@
           <td class="salle">{{$curr_salle->nom}}</td>
           {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
           {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
-            {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min"}}
+            {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min:00"}}
             
-            {{if is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "empty"}}
+            {{if $affichages.$keyAff === "empty"}}
               <td class="empty{{if !$keymin}} firsthour{{/if}}"></td>
-            {{elseif is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "full"}}
+            {{elseif $affichages.$keyAff === "full"}}
            
             {{else}}
-              {{if $arrayAffichage.$keyAff->chir_id}}
-                {{assign var=colorCell value=$arrayAffichage.$keyAff->_ref_chir->_ref_function->color}}
-              {{else}}
-                {{assign var=colorCell value=$arrayAffichage.$keyAff->_ref_spec->color}}
-              {{/if}}
-              
-              {{assign var="pct" value=$arrayAffichage.$keyAff->_fill_rate}}
+              {{assign var=plage value=$affichages.$keyAff}}
+              {{mb_ternary var=colorCell test=$plage->chir_id value=$plage->_ref_chir->_ref_function->color other=$plage->_ref_spec->color}}
+             
+              {{assign var="pct" value=$plage->_fill_rate}}
               {{if $pct gt 100}}
               {{assign var="pct" value=100}}
               {{/if}}
@@ -40,16 +37,16 @@
               {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
               {{else}}{{assign var="backgroundClass" value="full"}}
               {{/if}}
-              <td nowrap="nowrap" style="vertical-align: top; text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}" title="{{$arrayAffichage.$keyAff->_fill_rate}} % du temps occupé">
+              <td nowrap="nowrap" style="vertical-align: top; text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$plage->_nbQuartHeure}}" title="{{$plage->_fill_rate}} % du temps occupé">
                 <div class="progressBar" style="height: 3px;">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
                   </div>
                 </div>
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}" title="Agencer les interventions">
-                  {{$arrayAffichage.$keyAff->_view}}
-                </a> ({{$arrayAffichage.$keyAff->_nb_operations_placees}}/{{$arrayAffichage.$keyAff->_nb_operations}})
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$arrayAffichage.$keyAff->plageop_id}}&amp;date={{$curr_day}}">
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
+                  {{$plage->_view}}
+                </a> ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
+                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$curr_day}}">
                   <img src="images/icons/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>

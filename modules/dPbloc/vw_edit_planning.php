@@ -46,16 +46,6 @@ $anesths = $mediuser->loadAnesthesistes();
 
 $_temps_inter_op = range(0,59,15);
 
-// Création du tableau de visualisation
-$arrayAffichage = array();
-foreach($listSalles as $keySalle=>$valSalle){
-  foreach(CPlageOp::$hours as $keyHours=>$valHours){
-    foreach(CPlageOp::$minutes as $keyMins=>$valMins){
-      // Initialisation du tableau
-      $arrayAffichage["$keySalle-$valHours:$valMins"] = "empty";
-    }
-  }
-}
 
 // Récupération des plages pour le jour demandé
 $listPlages = new CPlageOp();
@@ -64,78 +54,61 @@ $where["date"] = "= '$date'";
 $order = "debut";
 $listPlages = $listPlages->loadList($where,$order);
 
+// Détermination des bornes du semainier
+$min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
+$max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
 
-foreach($listPlages as $keyPlages=>$valPlages){
-  $listPlages[$keyPlages]->loadRefsFwd();
-  $listPlages[$keyPlages]->_ref_chir->loadRefsFwd();
-  $listPlages[$keyPlages]->getNbOperations();
+
+// Détermination des bornes de chaque plage
+foreach($listPlages as &$plage){
+  $plage->loadRefsFwd();
+  $plage->_ref_chir->loadRefsFwd();
+  $plage->getNbOperations();
   
+  $plage->fin = min($plage->fin, $max);
+  $plage->debut = max($plage->debut, $min);
   
-  // Plages pas totalement comprises dans le semainier
-  if($valPlages->_heurefin > CPlageOp::$hours_stop){
-      $valPlages->_heurefin = CPlageOp::$hours_stop;
-      $valPlages->_minutefin = end(CPlageOp::$minutes);
-  }
-  if($valPlages->_heuredeb < CPlageOp::$hours_start){
-      $valPlages->_heuredeb = CPlageOp::$hours_start;
-      $valPlages->_minutedeb   = reset(CPlageOp::$minutes);
-  }
+  $plage->updateFormFields();
+  $plage->makeView();
   
-  // Initialisation des variables 
-  $outPlage = false;
-  $dans_plage = true;
-  
-  // Cas des plages non comprises dans le semainier
-  if($valPlages->_heurefin <= CPlageOp::$hours_start || $valPlages->_heuredeb >= CPlageOp::$hours_stop){
-      $outPlage = true;
-  }
-  
-  // si on est dans le semainier
-  if(!$outPlage){ 	
-    // Mémorisation dans le tableau d'affichage
-    $nbquartheure = ($valPlages->_heurefin-$valPlages->_heuredeb)*4;
-    $nbquartheure = $nbquartheure - array_search($valPlages->_minutedeb,CPlageOp::$minutes) + array_search($valPlages->_minutefin,CPlageOp::$minutes);
-    $valPlages->_nbQuartHeure = $nbquartheure;
-    $arrayAffichage[$valPlages->salle_id."-".intval($valPlages->_heuredeb).":".$valPlages->_minutedeb] = $valPlages;
- 
-  	// Détermination des horaire non vides
-    $heure_encours = array_search(intval($valPlages->_heuredeb),CPlageOp::$hours);
-    $min_encours   = array_search($valPlages->_minutedeb,CPlageOp::$minutes);
-  
-  	while($dans_plage == true){      
-      $min_encours ++;
-      if(!array_key_exists($min_encours,CPlageOp::$minutes)){
-        $min_encours=0;
-        $heure_encours ++;
-        if(!array_key_exists($heure_encours,CPlageOp::$hours)){
-          $heure_encours=CPlageOp::$hours_start;
-        }
-      }
-      if($heure_encours == $valPlages->_heurefin && CPlageOp::$minutes[$min_encours] == $valPlages->_minutefin){
-        $dans_plage = false;
-      }else{
-        $arrayAffichage[$valPlages->salle_id."-".$heure_encours.":".CPlageOp::$minutes[$min_encours]] = "full";       
-      }
-    } 
+  if($plage->debut >= $plage->fin){  
+    unset($listPlages[$plage->_id]);
+  }  
+}
+
+// Création du tableau de visualisation vide
+$affichages = array();
+foreach($listSalles as $keySalle=>$valSalle){
+  foreach(CPlageOp::$hours as $keyHours=>$valHours){
+    foreach(CPlageOp::$minutes as $keyMins=>$valMins){
+      // Initialisation du tableau
+      $affichages["$keySalle-$valHours:$valMins:00"] = "empty";
+    }
   }
 }
 
-
-
+// Remplissage du tableau de visualisation
+foreach($listPlages as &$plage){
+    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
+      $affichages[$plage->salle_id."-".$time] = "full";
+    } 
+    $affichages[$plage->salle_id."-".$plage->debut] = $plage->_id;
+}
 
 // Liste des Spécialités
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites();
 
-
 //Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("listPlages"     ,$listPlages);
 $smarty->assign("_temps_inter_op", $_temps_inter_op   );
 $smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
-$smarty->assign("arrayAffichage" , $arrayAffichage    );
+$smarty->assign("affichages"     , $affichages    );
 $smarty->assign("date"           , $date              );
 $smarty->assign("listSpec"       , $listSpec          );
 $smarty->assign("plagesel"       , $plagesel          );
