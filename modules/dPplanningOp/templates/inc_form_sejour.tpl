@@ -16,12 +16,19 @@ function loadTransfert(form, mode_sortie){
 
 function checkModeSortie(){
   var oForm = document.editSejour;
-  if(!oForm.sortie_reelle.value && !oForm.mode_sortie.value){
+  
+	if (!oForm.sortie_reelle) {
+	  return true;
+	}
+
+  if (!oForm.sortie_reelle.value && !oForm.mode_sortie.value){
     return true;
   }
+  
   if(oForm.sortie_reelle.value && oForm.mode_sortie.value){
     return true;
   }
+
   alert("Date de sortie reelle et mode de sortie incompatible");
   return false;
 }
