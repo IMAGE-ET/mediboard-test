@@ -11,8 +11,9 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 // Chargement des etablissements externes
+$order = "nom";
 $etab = new CEtabExterne();
-$listEtab = $etab->loadList();
+$listEtab = $etab->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
