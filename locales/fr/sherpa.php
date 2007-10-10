@@ -1,5 +1,5 @@
 <?php
-$locales['sherpa-import-class'] = 'Import de la table';
+$locales['CSpSejMed.depart.E'] = 'E';
 $locales['config-object_handlers-CSpObjectHandler'] = 'Activer le gestionnaire Sherpa';
 $locales['config-sherpa-import_segment'] = 'Longueur du segment d\'import';
 $locales['CSpDossier'] = 'Dossier Sherpa';
@@ -29,10 +29,17 @@ $locales['CSpOuvDro-numdos'] = 'Numéro de dossier';
 $locales['CSpSejMed'] = 'Sejour Médical Sherpa';
 $locales['CSpSejMed-datent'] = 'Date d\'entrée';
 $locales['CSpSejMed-datsor'] = 'Date de sortie';
+$locales['CSpSejMed-depart'] = 'Départ';
+$locales['CSpSejMed-depart.S'] = 'S';
+$locales['CSpSejMed-depart.T'] = 'T';
+$locales['CSpSejMed-etades'] = 'Etablissement de destination';
+$locales['CSpSejMed-etades-desc'] = 'ETADES';
 $locales['CSpSejMed-litcod'] = 'Lit';
 $locales['CSpSejMed-malnum'] = 'Numéro de malade';
 $locales['CSpSejMed-numdos'] = 'Numéro de dossier';
 $locales['CSpSejMed-pracod'] = 'Praticien';
+$locales['CSpSejMed-sejfla'] = 'Drapeau séjour';
+$locales['CSpSejMed-sejfla-desc'] = 'SEJFLA';
 $locales['CSpSejMed-sercod'] = 'Service';
 $locales['mod-sherpa-tab-view_dossiers'] = 'Dossiers';
 $locales['mod-sherpa-tab-view_droits'] = 'Ouverture de droits';
@@ -42,5 +49,6 @@ $locales['mod-sherpa-tab-view_malades'] = 'Malades';
 $locales['mod-sherpa-tab-view_sejours'] = 'Séjours';
 $locales['module-sherpa-court'] = 'Sherpa';
 $locales['module-sherpa-long'] = 'Integration de e-Sherpa';
+$locales['sherpa-import-class'] = 'Import de la table';
 $locales['sherpa-import-classes'] = 'Import des tables';
 ?>

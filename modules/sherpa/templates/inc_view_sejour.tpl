@@ -43,7 +43,7 @@
 		<td>{{mb_value object=$sejour field="litcod"}}</td>
   </tr>
   
-    <tr>
+  <tr>
 		<th>{{mb_label object=$sejour field="sercod"}}</th>
 		<td>{{mb_value object=$sejour field="sercod"}}</td>
   </tr>
@@ -94,7 +94,7 @@
 	  {{if $id400->_id}}
     <td>{{mb_value object=$id400 field=last_update}}</td>
     <td>
-      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$sejour->_id}}">
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
         {{$sejour->_view}}
       </a>
     </td>
@@ -102,7 +102,6 @@
     <td colspan="2"><em>Pas de correspondance</em></td>
     {{/if}}
   </tr>
-  <tr>
 </table>
 
 {{/if}}

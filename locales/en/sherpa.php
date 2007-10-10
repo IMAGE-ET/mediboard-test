@@ -1,5 +1,5 @@
 <?php
-$locales['sherpa-import-class'] = '';
+$locales['CSpSejMed.depart.E'] = 'E';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
 $locales['config-sherpa-import_segment'] = '';
 $locales['CSpDossier'] = '';
@@ -29,10 +29,17 @@ $locales['CSpOuvDro-numdos'] = '';
 $locales['CSpSejMed'] = '';
 $locales['CSpSejMed-datent'] = '';
 $locales['CSpSejMed-datsor'] = '';
+$locales['CSpSejMed-depart'] = '';
+$locales['CSpSejMed-depart.S'] = 'S';
+$locales['CSpSejMed-depart.T'] = 'T';
+$locales['CSpSejMed-etades'] = '';
+$locales['CSpSejMed-etades-desc'] = '';
 $locales['CSpSejMed-litcod'] = '';
 $locales['CSpSejMed-malnum'] = '';
 $locales['CSpSejMed-numdos'] = '';
 $locales['CSpSejMed-pracod'] = '';
+$locales['CSpSejMed-sejfla'] = '';
+$locales['CSpSejMed-sejfla-desc'] = '';
 $locales['CSpSejMed-sercod'] = '';
 $locales['mod-sherpa-tab-view_dossiers'] = '';
 $locales['mod-sherpa-tab-view_droits'] = '';
@@ -42,5 +49,6 @@ $locales['mod-sherpa-tab-view_malades'] = '';
 $locales['mod-sherpa-tab-view_sejours'] = '';
 $locales['module-sherpa-court'] = '';
 $locales['module-sherpa-long'] = '';
+$locales['sherpa-import-class'] = '';
 $locales['sherpa-import-classes'] = '';
 ?>
