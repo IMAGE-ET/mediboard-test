@@ -56,9 +56,9 @@ function popPlanning(debut) {
               {{assign var="keyAff" value="$keySalle-$curr_hour:$curr_min:00"}}
               {{assign var=affichage value=$affichages.$keyAff}}
             
-            {{if $affichages.$keyAff === "empty"}}
+            {{if $affichage === "empty"}}
               <td class="empty{{if !$keymin}} firsthour{{/if}}"></td>
-            {{elseif $affichages.$keyAff === "full"}}
+            {{elseif $affichage === "full"}}
            
             {{else}}
               {{assign var=plage value=$listPlages.$affichage}}

@@ -42,21 +42,24 @@ foreach($listDays as $keyDate=>$valDate){
   }
 }
 
+$listPlages = array();
+
+
 // Extraction des plagesOp par date
 foreach($listDays as $keyDate=>$valDate){
   // Récupération des plages par jour
-  $listPlages = new CPlageOp();
+  $listPlage = new CPlageOp();
   $where = array();
   $where["date"] = "= '$keyDate'";
   $order = "debut";
-  $listPlages = $listPlages->loadList($where,$order);
+  $listPlages[$keyDate] = $listPlage->loadList($where,$order);
   
   // Détermination des bornes du semainier
   $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
   $max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
   
   // Détermination des bornes de chaque plage
-  foreach($listPlages as $plage){
+  foreach($listPlages[$keyDate] as $plage){
     $plage->loadRefsFwd();
     $plage->_ref_chir->loadRefsFwd();
     $plage->getNbOperations();
@@ -68,17 +71,17 @@ foreach($listDays as $keyDate=>$valDate){
     $plage->makeView();
   
     if($plage->debut >= $plage->fin){  
-      unset($listPlages[$plage->_id]);
+      unset($listPlages[$keyDate][$plage->_id]);
     }
   }
   
   
-  foreach($listPlages as $plage){
+  foreach($listPlages[$keyDate] as $plage){
     $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
     for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
       $affichages["$keyDate-s".$plage->salle_id."-".$time] = "full";
     } 
-    $affichages["$keyDate-s".$plage->salle_id."-".$plage->debut] = $plage;
+    $affichages["$keyDate-s".$plage->salle_id."-".$plage->debut] = $plage->_id;
   }
 }
 
@@ -86,10 +89,10 @@ foreach($listDays as $keyDate=>$valDate){
 $listSpec = new CFunctions();
 $listSpec = $listSpec->loadSpecialites();
 
-
 //Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("listDays"       , $listDays          );
 $smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("listHours"      , CPlageOp::$hours   );

@@ -19,13 +19,16 @@
           {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
           {{foreach from=$listMins|smarty:nodefaults item=curr_min key=keymin}}
             {{assign var="keyAff" value="$curr_day-s$keySalle-$curr_hour:$curr_min:00"}}
+            {{assign var=affichage value=$affichages.$keyAff}}
             
-            {{if $affichages.$keyAff === "empty"}}
+            {{if $affichage === "empty"}}
               <td class="empty{{if !$keymin}} firsthour{{/if}}"></td>
-            {{elseif $affichages.$keyAff === "full"}}
+            {{elseif $affichage === "full"}}
            
             {{else}}
-              {{assign var=plage value=$affichages.$keyAff}}
+            {{assign var=_listPlages value=$listPlages.$curr_day}}
+            {{assign var=plage value=$_listPlages.$affichage}}
+         
               {{mb_ternary var=colorCell test=$plage->chir_id value=$plage->_ref_chir->_ref_function->color other=$plage->_ref_spec->color}}
              
               {{assign var="pct" value=$plage->_fill_rate}}
