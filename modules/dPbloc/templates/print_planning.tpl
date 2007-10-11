@@ -13,7 +13,7 @@ function checkFormPrint() {
   popPlanning();
 }
 
-
+  
 function popPlanning() {
   form = document.paramFrm;
   var url = new Url;
@@ -27,6 +27,7 @@ function popPlanning() {
   url.addElement(form._specialite);
   url.addElement(form.salle_id);
   url.addElement(form.type);
+  url.addParam("_ccam_libelle", getCheckedValue(form._ccam_libelle));
   url.popup(900, 550, 'Planning');
 }
 
@@ -60,9 +61,11 @@ function pageMain() {
   <tr>
     <td>
       <table class="form">
-        <tr><th class="category" colspan="3">Choix de la période</th></tr>
         <tr>
-          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <th class="category" colspan="3">Choix de la période</th>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_date_min"}}</th>
           <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
@@ -76,15 +79,15 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-           <td>{{mb_label object=$filter field="_date_max"}}</td>
+           <th>{{mb_label object=$filter field="_date_max"}}</th>
            <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_plage"}}</td>
+          <th>{{mb_label object=$filter field="_plage"}}</th>
           <td colspan="2">{{mb_field object=$filter field="_plage"}}</td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_codes_ccam"}}</td>
+          <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
           <td><input type="text" name="_codes_ccam" size="10" value="" /></td>
           <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
           <script type="text/javascript">
@@ -104,9 +107,11 @@ function pageMain() {
     <td>
 
       <table class="form">
-        <tr><th class="category" colspan="2">Choix des paramètres de tri</th></tr>
         <tr>
-          <td>{{mb_label object=$filter field="_intervention"}}</td>
+          <th class="category" colspan="2">Choix des paramètres de tri</th>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_intervention"}}</th>
           <td><select name="_intervention">
             <option value="0">&mdash; Toutes les interventions &mdash;</option>
             <option value="1">insérées dans le planning</option>
@@ -114,45 +119,53 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_prat_id"}}</td>
-          <td><select name="_prat_id">
-            <option value="0">&mdash; Tous les praticiens &mdash;</option>
-            {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
-                {{$curr_prat->_view}}
-              </option>
-            {{/foreach}}
-          </select></td>
-        </tr>
-        <tr>
-		  <td>{{mb_label object=$filter field="_specialite"}}</td>
-          <td><select name="_specialite">
-            <option value="0">&mdash; Toutes les spécialités &mdash;</option>
-            {{foreach from=$listSpec item=curr_spec}}
-              <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
-                {{$curr_spec->text}}
-              </option>
-            {{/foreach}}
-          </select></td>
-        </tr>
-        <tr>
-          <td>{{mb_label object=$filter field="salle_id"}}</td>
+          <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
-            <select name="salle_id">
-              <option value="0">&mdash; Toutes les salles &mdash;</option>
-              {{foreach from=$listSalles item=curr_salle}}
-	              <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
-	                {{$curr_salle->nom}}
-	              </option>
+            <select name="_prat_id">
+              <option value="0">&mdash; Tous les praticiens &mdash;</option>
+              {{foreach from=$listPrat item=curr_prat}}
+                <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
+                  {{$curr_prat->_view}}
+                </option>
               {{/foreach}}
             </select>
           </td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filterSejour field="type"}}</td>
+          <th>{{mb_label object=$filter field="_specialite"}}</th>
+          <td>
+            <select name="_specialite">
+              <option value="0">&mdash; Toutes les spécialités &mdash;</option>
+              {{foreach from=$listSpec item=curr_spec}}
+                <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">
+                  {{$curr_spec->text}}
+                </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="salle_id"}}</th>
+          <td>
+            <select name="salle_id">
+              <option value="0">&mdash; Toutes les salles &mdash;</option>
+              {{foreach from=$listSalles item=curr_salle}}
+                <option value="{{$curr_salle->salle_id}}" {{if $curr_salle->_id == $filter->salle_id}}selected="selected"{{/if}}>
+                  {{$curr_salle->nom}}
+                </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filterSejour field="type"}}</th>
           <td>
             {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
           </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
+          <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>
         </tr>
       </table>
 

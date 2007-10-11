@@ -98,6 +98,7 @@ class COperation extends CCodableCCAM {
   var $_specialite 	 = null;
   var $_scodes_ccam  = null;
   var $_prat_id      = null;
+  var $_ccam_libelle = null;
 
   function COperation() {
     global $dPconfig;
@@ -154,6 +155,7 @@ class COperation extends CCodableCCAM {
     $specs["_intervention"]  = "text";
     $specs["_prat_id"]       = "text";
     $specs["_specialite"]    = "text";
+    $specs["_ccam_libelle"]  = "bool default|1";
     return $specs;
   }
   

@@ -79,9 +79,11 @@ function printAdmission(id) {
 		<tr>
 		  <!-- Intervention -->
 		  {{if $curr_op->annulee}}
-		  <td class="cancelled">ANNULEE</td>
+		    <td class="cancelled">ANNULEE</td>
+		  {{elseif $curr_op->rank}}
+		    <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
 		  {{else}}
-		  <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
+		    <td>NP</td>
 		  {{/if}}
 		  <td class="text">
         {{if $curr_op->libelle}}
@@ -90,8 +92,12 @@ function printAdmission(id) {
         {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
         {{if !$curr_code->_code7}}<strong>{{/if}}
-        <em>{{$curr_code->code}} : </em>
-        {{$curr_code->libelleLong|truncate:60:"...":false}}
+        <em>{{$curr_code->code}}</em>
+        {{if $filter->_ccam_libelle}}
+          : {{$curr_code->libelleLong|truncate:60:"...":false}}
+        {{else}}
+          ;
+        {{/if}}
         {{if !$curr_code->_code7}}</strong>{{/if}}
         <br/>
         {{/foreach}}

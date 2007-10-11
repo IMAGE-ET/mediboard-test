@@ -22,6 +22,7 @@ $filter->_plage        = mbGetValueFromGet("_plage");
 $filter->_intervention = mbGetValueFromGet("_intervention");
 $filter->_specialite   = mbGetValueFromGet("_specialite");
 $filter->_codes_ccam   = mbGetValueFromGet("_codes_ccam");
+$filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", 1);
 
 $filterSejour = new CSejour;
 $filterSejour->type = mbGetValueFromGet("type");
