@@ -231,7 +231,7 @@ class CSpSejMed extends CSpObject {
       if ($sejour->mode_sortie == "deces"    ) $this->depart = "D";
 
       if ($sejour->mode_sortie == "transfert") {
-        $this->depart = $sejour->_duree_reelle >= 2 ? "T" : "E";
+        $this->depart = "T";
         $idEtab = CSpObjectHandler::getId400For($sejour->_ref_etabExterne);
         $this->etades = $idEtab->id400;
       }
