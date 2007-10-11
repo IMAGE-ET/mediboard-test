@@ -24,6 +24,7 @@ function popPlanning() {
   url.addElement(form.praticien_id);
   url.addElement(form._specialite);
   url.addElement(form.convalescence);
+  url.addParam("_ccam_libelle", getCheckedValue(form._ccam_libelle));
   url.popup(700, 500, "Planning");
   return;
 }
@@ -56,10 +57,12 @@ function pageMain() {
     <td>
 
       <table class="form">
-        <tr><th class="category" colspan="3">Choix de la période</th></tr>
+        <tr>
+          <th class="category" colspan="3">Choix de la période</th>
+        </tr>
         
         <tr>
-          <td>{{mb_label object=$filter field="_date_min"}}</td>
+          <th>{{mb_label object=$filter field="_date_min"}}</th>
           <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
             <input type="radio" name="select_days" onclick="changeDate('{{$today_deb}}','{{$today_fin}}');" value="today" checked="checked" /> 
@@ -68,10 +71,13 @@ function pageMain() {
               <label for="select_days_tomorrow">Lendemain</label>
           </td>
         </tr>
-	    <td>{{mb_label object=$filter field="_date_max"}}</td>
-        <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+
         <tr>
-          <td>{{mb_label object=$filter field="_admission"}}</td>
+          <th>{{mb_label object=$filter field="_date_max"}}</th>
+          <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_admission"}}</th>
           <td colspan="2">
             <select name="_admission">
               <option value="heure">Par heure d'admission</option>
@@ -81,15 +87,14 @@ function pageMain() {
         </tr>
 
         <tr>
-          <td>{{mb_label object=$filter field="_service"}}</td>
-           
+          <th>{{mb_label object=$filter field="_service"}}</th>
           <td colspan="2">
           	<select name="_service">
             	<option value="0">&mdash; Tous les services &mdash;</option>
             	{{foreach from=$listServ item=curr_serv}}
             	<option value="{{$curr_serv->service_id}}">{{$curr_serv->nom}}</option>
             	{{/foreach}}
-         	</select>
+             </select>
          </td>
         </tr>
       </table>
@@ -98,13 +103,15 @@ function pageMain() {
     <td>
 
       <table class="form">
-        <tr><th class="category" colspan="2">Paramètres de filtrage</th></tr>
         <tr>
-          <td>{{mb_label object=$filter field="_filter_type"}}</td>
+          <th class="category" colspan="2">Paramètres de filtrage</th>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_filter_type"}}</th>
           <td>{{mb_field object=$filter field="_filter_type" defaultOption="&mdash; Tous types d'admission &mdash;"}}</td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="praticien_id"}}</td>
+          <th>{{mb_label object=$filter field="praticien_id"}}</th>
           <td><select name="praticien_id">
             <option value="0">&mdash; Tous les praticiens &mdash;</option>
             {{foreach from=$listPrat item=curr_prat}}
@@ -113,7 +120,7 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_specialite"}}</td>
+          <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td><select name="_specialite">
             <option value="0">&mdash; Toutes les spécialités &mdash;</option>
             {{foreach from=$listSpec item=curr_spec}}
@@ -122,12 +129,18 @@ function pageMain() {
           </select></td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="convalescence"}}</td>
-          <td><select name="convalescence">
-            <option value="0">&mdash; Indifférent &mdash;</option>
-	        <option value="o">avec</option>
-	        <option value="n">sans</option>
-          </select></td>
+          <th>{{mb_label object=$filter field="convalescence"}}</th>
+          <td>
+            <select name="convalescence">
+              <option value="0">&mdash; Indifférent &mdash;</option>
+              <option value="o">avec</option>
+              <option value="n">sans</option>
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
+          <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>
         </tr>
       </table>
 
@@ -135,7 +148,13 @@ function pageMain() {
   </tr>
   <tr>
     <td colspan="2">
-      <table class="form"><tr><td class="button"><button type="button" onclick="checkFormPrint()" class="print">Afficher</button></td></tr></table>
+      <table class="form">
+        <tr>
+          <td class="button">
+            <button type="button" onclick="checkFormPrint()" class="print">Afficher</button>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

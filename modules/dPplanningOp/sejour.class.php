@@ -102,7 +102,9 @@ class CSejour extends CCodableCCAM {
   var $_date_min_stat		= null;
   var $_date_max_stat 	= null;
   var $_filter_type 		= null;
+  var $_ccam_libelle    = null;
   
+  // Object tool field
   var $_modifier_sortie = null;
   
   // BackRef
@@ -163,17 +165,18 @@ class CSejour extends CCodableCCAM {
     $specs["facturable"]          = "bool notNull default|1";
     $specs["etablissement_transfert_id"] = "ref class|CEtabExterne";
     
-    $specs["_entree"]             = "dateTime";
-    $specs["_sortie"] 		      = "dateTime";
+    $specs["_entree"]         = "dateTime";
+    $specs["_sortie"] 		    = "dateTime";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
     $specs["_admission"] 		  = "text";
-    $specs["_service"] 		      = "text";
-    $specs["_type_admission"]     = "text";
-    $specs["_specialite"] 	      = "text";
-    $specs["_date_min_stat"]      = "date";
-    $specs["_date_max_stat"] 	  = "date moreEquals|_date_min_stat";
-    $specs["_filter_type"]        = "enum list|comp|ambu|exte|seances|ssr|psy";
+    $specs["_service"] 	      = "text";
+    $specs["_type_admission"] = "text";
+    $specs["_specialite"]     = "text";
+    $specs["_date_min_stat"]  = "date";
+    $specs["_date_max_stat"]  = "date moreEquals|_date_min_stat";
+    $specs["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy";
+    $specs["_ccam_libelle"]   = "bool default|1";
     return $specs;
   }
   
@@ -211,15 +214,15 @@ class CSejour extends CCodableCCAM {
     if($entree !== null && $sortie !== null) {
       $this->loadRefsOperations();
       foreach($this->_ref_operations as $key => $operation){
-      	$operation->loadRefPlageop();
-      	$isCurrOp = $this->_curr_op_id == $operation->_id;
-      	if($isCurrOp) {
-      	  $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
-      	} else {
-     	    $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
-      	}
+        $operation->loadRefPlageop();
+        $isCurrOp = $this->_curr_op_id == $operation->_id;
+        if($isCurrOp) {
+          $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+        } else {
+           $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
+        }
         if(!$opInBounds){
-           $msg.= "Interventions en dehors des nouvelles dates du sejour";	
+           $msg.= "Interventions en dehors des nouvelles dates du sejour";  
         }
       }
     }
@@ -239,9 +242,9 @@ class CSejour extends CCodableCCAM {
       // suppression de la liste des sejours le sejour courant
       $listSejour = array();
       foreach($patient->_ref_sejours as $key => $sejour){
-    	  $listSejour[$key] = $sejour;
-    	  if($key == $this->_id){
-    		  unset($listSejour[$key]);
+        $listSejour[$key] = $sejour;
+        if($key == $this->_id){
+          unset($listSejour[$key]);
         }
       }
     
@@ -287,7 +290,7 @@ class CSejour extends CCodableCCAM {
     
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
     if($this->mode_sortie){
-    	$this->_ref_last_affectation->effectue = 1;
+      $this->_ref_last_affectation->effectue = 1;
         $this->_ref_last_affectation->store();  
     } 
     
@@ -374,11 +377,11 @@ class CSejour extends CCodableCCAM {
     
     // Signaler l'action de validation de la sortie
     if($this->_modifier_sortie){
-    	$this->sortie_reelle = mbDateTime();
+      $this->sortie_reelle = mbDateTime();
     }
     
     if($this->_modifier_sortie === 0){
-    	$this->sortie_reelle = "";
+      $this->sortie_reelle = "";
     }
     
   }
@@ -389,8 +392,8 @@ class CSejour extends CCodableCCAM {
   }
   
   function loadRefEtabExterne(){
-  	$this->_ref_etabExterne = new CEtabExterne();
-  	$this->_ref_etabExterne->load($this->etablissement_transfert_id);
+    $this->_ref_etabExterne = new CEtabExterne();
+    $this->_ref_etabExterne->load($this->etablissement_transfert_id);
   }
   
   function loadRefPatient() {
@@ -458,29 +461,29 @@ class CSejour extends CCodableCCAM {
   
   
   function loadNumDossier(){
-  	global $dPconfig, $g;
-  	// Récuperation du tag de l'id Externe (ex: sherpa group:10)
+    global $dPconfig, $g;
+    // Récuperation du tag de l'id Externe (ex: sherpa group:10)
     
-  	// si pas de fichier de config ==> IPP = ""
-  	if(!$dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]){
-  		$this->_num_dossier = "";
-    	return;
+    // si pas de fichier de config ==> IPP = ""
+    if(!$dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]){
+      $this->_num_dossier = "";
+      return;
     }
     
     // sinon, $_num_dossier = valeur id400
     // creation du tag de l'id Externe
-  	$tag = str_replace('$g',$g, $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]);
+    $tag = str_replace('$g',$g, $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]);
 
-  	// Recuperation de la valeur de l'id400
-  	$id400 = new CIdSante400();
+    // Recuperation de la valeur de l'id400
+    $id400 = new CIdSante400();
     $id400->loadLatestFor($this, $tag);
-  	
+    
     // Stockage de la valeur de l'id400
     $this->_num_dossier = $id400->id400;
     
     // Si pas d'id400 correspondant, on stocke "_"
     if(!$this->_num_dossier){
-    	$this->_num_dossier = "-";
+      $this->_num_dossier = "-";
     }
   }
     

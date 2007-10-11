@@ -13,14 +13,15 @@ require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
-$filter->_date_min     = mbGetValueFromGet("_date_min"   , date("Y-m-d")." 06:00:00");
-$filter->_date_max     = mbGetValueFromGet("_date_max"   , date("Y-m-d")." 21:00:00");
-$filter->_service      = mbGetValueFromGet("_service"     , 0);
+$filter->_date_min     = mbGetValueFromGet("_date_min", date("Y-m-d")." 06:00:00");
+$filter->_date_max     = mbGetValueFromGet("_date_max", date("Y-m-d")." 21:00:00");
+$filter->_service      = mbGetValueFromGet("_service", 0);
 $filter->_filter_type  = mbGetValueFromGet("_filter_type", 0);
-$filter->praticien_id  = mbGetValueFromGet("praticien_id"        , 0);
-$filter->_specialite   = mbGetValueFromGet("_specialite"         , 0);
-$filter->convalescence = mbGetValueFromGet("convalescence"        , 0);
-$filter->_admission    = mbGetValueFromGet("_admission"       , "heure");
+$filter->praticien_id  = mbGetValueFromGet("praticien_id", 0);
+$filter->_specialite   = mbGetValueFromGet("_specialite", 0);
+$filter->convalescence = mbGetValueFromGet("convalescence", 0);
+$filter->_admission    = mbGetValueFromGet("_admission", "heure");
+$filter->_ccam_libelle = mbGetValueFromGet("_ccam_libelle", 1);
 
 $total   = 0;
 
@@ -66,8 +67,6 @@ if($filter->_admission  == "heure") {
   $sejourReq->addOrder("DATE(sejour.entree_prevue)");
 }
 
-mbTrace($sejourReq->getRequest($sejours));
-
 $sejours = $sejours->loadListByReq($sejourReq);
 
 $listDays = array();
@@ -110,10 +109,10 @@ foreach ($sejours as $key => &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter" 	, $filter		 );
-$smarty->assign("listDays"  , $listDays      );
-$smarty->assign("listPrats" , $listPrats     );
-$smarty->assign("total"     , count($sejours));
+$smarty->assign("filter" 	 , $filter	      );
+$smarty->assign("listDays" , $listDays      );
+$smarty->assign("listPrats", $listPrats     );
+$smarty->assign("total"    , count($sejours));
 
 $smarty->display("print_planning.tpl");
 

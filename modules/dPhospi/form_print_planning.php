@@ -21,6 +21,7 @@ $filter->praticien_id  = mbGetValueFromGetOrSession("praticien_id");
 $filter->convalescence = mbGetValueFromGetOrSession("convalescence");
 $filter->_specialite   = mbGetValueFromGetOrSession("_specialite");
 $filter->_filter_type  = mbGetValueFromGetOrSession("_filter_type");
+$filter->_ccam_libelle = mbGetValueFromGetOrSession("_ccam_libelle");
 
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
