@@ -97,10 +97,10 @@ function printAdmission(id) {
                 <em>{{$curr_code->code}}</em>
                 {{if $filter->_ccam_libelle}}
                   : {{$curr_code->libelleLong|truncate:60:"...":false}}
+                  <br/>
                 {{else}}
                   ;
                 {{/if}}
-                <br/>
               {{/foreach}}
               </ul>
             {{/foreach}}

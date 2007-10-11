@@ -87,19 +87,19 @@ function printAdmission(id) {
 		  {{/if}}
 		  <td class="text">
         {{if $curr_op->libelle}}
-        <em>[{{$curr_op->libelle}}]</em>
-        <br />
+          <em>[{{$curr_op->libelle}}]</em>
+          <br />
         {{/if}}
         {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-        {{if !$curr_code->_code7}}<strong>{{/if}}
-        <em>{{$curr_code->code}}</em>
-        {{if $filter->_ccam_libelle}}
-          : {{$curr_code->libelleLong|truncate:60:"...":false}}
-        {{else}}
-          ;
-        {{/if}}
-        {{if !$curr_code->_code7}}</strong>{{/if}}
-        <br/>
+          {{if !$curr_code->_code7}}<strong>{{/if}}
+          <em>{{$curr_code->code}}</em>
+          {{if $filter->_ccam_libelle}}
+            : {{$curr_code->libelleLong|truncate:60:"...":false}}
+            <br/>
+          {{else}}
+            ;
+          {{/if}}
+          {{if !$curr_code->_code7}}</strong>{{/if}}
         {{/foreach}}
       </td>
 		  <td>{{$curr_op->cote|truncate:1:""|capitalize}}</td>
