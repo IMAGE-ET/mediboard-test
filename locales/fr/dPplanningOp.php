@@ -1,4 +1,5 @@
 <?php
+$locales['COperation-_ccam_libelle-desc'] = 'Afficher la description complète des codes CCAM';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -169,6 +170,7 @@ $locales['COperation-time_operation-desc'] = '';
 $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-court'] = 'Anesthésie mise en oeuvre pour l\'intervention';
 $locales['COperation-type_anesth-desc'] = '';
+$locales['COperation-_ccam_libelle'] = 'Affichage des libellés CCAM';
 $locales['COperation-_codes_ccam'] = 'Code CCAM';
 $locales['COperation-_codes_ccam-court'] = '';
 $locales['COperation-_codes_ccam-desc'] = 'Rechercher en fonction d\'un code CCAM';
@@ -392,6 +394,8 @@ $locales['CSejour-zt-desc'] = 'Placement de très courte durée';
 $locales['CSejour-_admission'] = 'Classement des admissions';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = 'Classement des admissions';
+$locales['CSejour-_ccam_libelle'] = 'Affichage des libellés CCAM';
+$locales['CSejour-_ccam_libelle-desc'] = 'Afficher la description complète des codes CCAM';
 $locales['CSejour-_date_entree_prevue'] = 'Entrée prévue';
 $locales['CSejour-_date_entree_prevue-desc'] = 'Choisir une date d\'entrée';
 $locales['CSejour-_date_max'] = 'Jusqu\'au';

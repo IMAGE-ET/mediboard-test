@@ -1,4 +1,5 @@
 <?php
+$locales['COperation-_ccam_libelle-desc'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -169,6 +170,7 @@ $locales['COperation-time_operation-desc'] = '';
 $locales['COperation-type_anesth'] = '';
 $locales['COperation-type_anesth-court'] = '';
 $locales['COperation-type_anesth-desc'] = '';
+$locales['COperation-_ccam_libelle'] = '';
 $locales['COperation-_codes_ccam'] = '';
 $locales['COperation-_codes_ccam-court'] = '';
 $locales['COperation-_codes_ccam-desc'] = '';
@@ -392,6 +394,8 @@ $locales['CSejour-zt-desc'] = '';
 $locales['CSejour-_admission'] = '';
 $locales['CSejour-_admission-court'] = '';
 $locales['CSejour-_admission-desc'] = '';
+$locales['CSejour-_ccam_libelle'] = '';
+$locales['CSejour-_ccam_libelle-desc'] = '';
 $locales['CSejour-_date_entree_prevue'] = '';
 $locales['CSejour-_date_entree_prevue-desc'] = '';
 $locales['CSejour-_date_max'] = '';

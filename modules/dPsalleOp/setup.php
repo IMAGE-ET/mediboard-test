@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.19";
+$config["mod_version"]     = "0.20";
 $config["mod_type"]        = "user";
 
 class CSetupdPsalleOp extends CSetup {
@@ -86,8 +86,12 @@ class CSetupdPsalleOp extends CSetup {
         "\nCHANGE `subject_class` `object_class` VARCHAR(25) NOT NULL;";
     $this->addQuery($sql); 
     
+    $this->makeRevision("0.19");
+    $sql = "ALTER TABLE `acte_ccam`
+            ADD `code_association` TINYINT(4)";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.19";
+    $this->mod_version = "0.20";
     
   }
 }

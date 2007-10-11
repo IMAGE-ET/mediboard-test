@@ -25,11 +25,14 @@ class CActeCCAM extends CMbMetaObject {
   var $execution           = null;
   var $modificateurs       = null;
   var $montant_depassement = null;
-  var $commentaire         = null;  
+  var $commentaire         = null;
+  var $code_association    = null;
 
   // Form fields
-  var $_modificateurs = array();
-  var $_anesth = null;
+  var $_modificateurs     = array();
+  var $_anesth            = null;
+  var $_linked_actes      = null;
+  var $_guess_association = null;
   
   // Object references
   var $_ref_executant = null;
@@ -52,6 +55,7 @@ class CActeCCAM extends CMbMetaObject {
     $specs["montant_depassement"] = "currency min|0";
     $specs["commentaire"]         = "text";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
+    $specs["code_association"]    = "num minMax|1|5";
     return $specs;
   }
   
@@ -70,9 +74,8 @@ class CActeCCAM extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
-    $this->_view = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs"; 
-  
-    $this->_anesth=($this->code_activite==4)?true:false;
+    $this->_view   = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
+    $this->_anesth = ($this->code_activite == 4) ? true : false;
   }
   
   function loadRefObject(){
@@ -91,17 +94,14 @@ class CActeCCAM extends CMbMetaObject {
   }
    
   function loadRefsFwd() {
-    //$this->loadRefOperation();
     parent::loadRefsFwd();
-    //$this->loadRefObject();
+
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
   }
   
-  function getFavoris($chir,$class,$view){
-  	//$vue=($view=="taux")?$vue="nb_acte DESC":$vue="code_acte ASC";
-  	$condition=($class=="")?"executant_id = '$chir'":
-  	"executant_id = '$chir' AND object_class = '$class'";
+  function getFavoris($chir,$class,$view) {
+  	$condition = ( $class == "" ) ? "executant_id = '$chir'" : "executant_id = '$chir' AND object_class = '$class'";
   	$sql = "select code_acte, object_class, count(code_acte) as nb_acte
             from acte_ccam
             where $condition
@@ -117,6 +117,54 @@ class CActeCCAM extends CMbMetaObject {
     	$this->loadRefObject();
     }
     return $this->_ref_object->getPerm($permType);
+  }
+  
+  function getLinkedActes() {
+    $acte = new CActeCCAM();
+    
+    $where = array();
+    $where["acte_id"]       = "<> '$this->_id'";
+    $where["object_class"]  = "= '$this->object_class'";
+    $where["object_id"]     = "= '$this->object_id'";
+    $where["code_activite"] = "= '$this->code_activite'";
+    
+    $this->_linked_actes = $acte->loadList($were);
+  }
+  
+  function guessAssociation() {
+    $this->getLinkedActes();
+    $this->loadRefCodeCCAM();
+    
+    // Cas d'un seul actes
+    if(!count($this->_linked_actes)) {
+      $this->_guess_association = null;
+      return $this->_guess_association;
+    }
+    
+    // Cas général pour plusieurs actes
+    $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
+    $orderedActes = array();
+    $orderedActes[$this->_id] = $tarif;
+    foreach($this->_linked_actes as &$acte) {
+      $acte->loadRefCodeCCAM();
+      $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
+      $orderedActes[$acte->_id] = $tarif;
+    }
+    asort($orderedActes);
+    $position = array_search($this->_id, array_keys($orderedActes));
+    
+    switch($position) {
+      case 0 :
+        $this->_guess_association = 1;
+        break;
+      case 1 :
+        $this->_gess_association = 2;
+        break;
+      default :
+        $this->_guess_association = "X";
+    }
+    
+    return $this->_guess_association;
   }
 }
 
