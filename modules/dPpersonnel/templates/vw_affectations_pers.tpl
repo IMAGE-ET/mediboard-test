@@ -185,41 +185,37 @@ function pageMain() {
               </table>
             </form>
           </td>
-        </tr>  
-        <tr>
-          <td>
-            <table class="tbl">
-              <tr>
-                <th colspan="1">Personnel</th>
-                <th colspan="3">Objet</th>
-              </tr>
-              <tr>
-                <th>Nom</th>
-                <th>Classe</th>
-                <th>Id Mb</th>
-                <th>Vue</th>
-              </tr>
-              {{foreach from=$listAffectations key=key item=_affectation}}
-              <tr>
-                <th class="category" colspan="4">{{tr}}CPersonnel.emplacement.{{$key}}{{/tr}}</th>
-              </tr>
-                {{foreach from=$_affectation item=affect}}
-               <tr>
-                 <td>
-                   <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id={{$affect->_id}}">
-                     {{$affect->_ref_personnel->_ref_user->_view}}
-                   </a>
-                 </td>
-                 <td>{{$affect->object_class}}</td>
-                 <td>{{$affect->object_id}}</td>
-                 <td>{{$affect->_ref_object->_view}}</td>
-               </tr>
-                {{/foreach}}
-              {{/foreach}}
-            </table>
-          </td>
-        </tr>
-      </table>
+        </tr> 
+       </table>
+       <table class="tbl">
+         <tr>
+           <th colspan="1" class="title">Personnel</th>
+           <th colspan="3" class="title">Objet</th>
+         </tr>
+         <tr>
+           <th>Nom</th>
+           <th>Classe</th>
+           <th>Id Mb</th>
+           <th>Vue</th>
+         </tr>
+         {{foreach from=$listAffectations key=key item=_affectation}}
+         <tr>
+           <th class="category" colspan="4">{{tr}}CPersonnel.emplacement.{{$key}}{{/tr}}</th>
+         </tr>
+           {{foreach from=$_affectation item=affect}}
+          <tr>
+            <td>
+              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id={{$affect->_id}}">
+                {{$affect->_ref_personnel->_ref_user->_view}}
+              </a>
+            </td>
+            <td>{{$affect->object_class}}</td>
+            <td>{{$affect->object_id}}</td>
+            <td>{{$affect->_ref_object->_view}}</td>
+          </tr>
+           {{/foreach}}
+         {{/foreach}}
+       </table>
     </td>
     <td>
       <form name="editAffectation" action="index.php?m={{$m}}" method="post">
