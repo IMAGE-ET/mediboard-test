@@ -4,7 +4,7 @@
 var checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
   // si affectation renseignée, on submit les deux formulaires
-  if(oFormAffectation.user_id.value != ""){
+  if(oFormAffectation.personnel_id.value != ""){
     submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} );
   }
   else {
@@ -71,10 +71,10 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
               <input type="hidden" name="object_class" value="{{$curr_op->_class_name}}" />
               <input type="hidden" name="tag" value="reveil" />
               <input type="hidden" name="realise" value="0" />
-              <select name="user_id">
+              <select name="personnel_id">
               <option value="">&mdash; Personnel</option>
               {{foreach from=$personnels item="personnel"}}
-              <option value="{{$personnel->_id}}">{{$personnel->_view}}</option>
+              <option value="{{$personnel->_id}}">{{$personnel->_ref_user->_view}}</option>
               {{/foreach}}
               </select>
             </form>

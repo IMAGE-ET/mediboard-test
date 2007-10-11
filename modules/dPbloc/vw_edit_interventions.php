@@ -68,15 +68,24 @@ $listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
 
 $plage->loadPersonnel();
 if (null !== $plage->_ref_personnel) {
-
-  // liste du personnel de bloc
-  $mediuser = new CMediusers();
-  $personnels = $mediuser->loadListFromType(array("Personnel"));
+  // Chargement de la liste du personnel de bloc
+  $pers = new CPersonnel();
+  $wherePers = array();
+  $ljoinPers["users"] = "personnel.user_id = users.user_id";
+  $wherePers["emplacement"] = " = 'op'";
+  $orderPers = "users.user_last_name";
+  $personnels = $pers->loadList($wherePers, $orderPers, null, null, $ljoinPers);
 
   foreach($plage->_ref_personnel as $personnel) {
-    $personnel->loadUser();
+    $personnel->loadPersonnel();
+    $personnel->_ref_personnel->loadRefUser();
 		unset($personnels[$personnel->_id]);
   }
+}
+
+
+foreach($personnels as $key => $_personnel){
+  $_personnel->loadRefUser();	
 }
 
 // Création du template

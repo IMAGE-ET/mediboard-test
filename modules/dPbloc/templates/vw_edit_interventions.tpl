@@ -18,7 +18,7 @@
         <tr>
           <td>
             <!-- liste déroulante de choix de l'anesthesiste  et du personnel de bloc -->
-            <form name="editPlage" action="index.php?m={{$m}}" method="post" onsubmit="return checkPlage()">
+            <form name="editPlage" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPbloc" />
             <input type="hidden" name="dosql" value="do_plagesop_aed" />
             <input type="hidden" name="del" value="0" />
@@ -50,10 +50,10 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
 		    
-            <select name="user_id">
+            <select name="personnel_id">
               <option value="">&mdash; Personnel de bloc &mdash;</option>
               {{foreach from=$personnels item=_personnelBloc}}
-              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_view}}</option>
+              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
             </select>
             
@@ -88,7 +88,7 @@
               <input type="hidden" name="dosql" value="do_affectation_aed" />
               <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
               <input type="hidden" name="del" value="1" />
-              <button class='cancel' type='submit'>{{$_affectation->_ref_user->_view}}</button>
+              <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
             </form>
             
             {{/foreach}}

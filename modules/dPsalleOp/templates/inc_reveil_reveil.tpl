@@ -117,7 +117,7 @@ var submitReveil = function(oFormAffectation, oFormOperation){
       </form>
        
       {{if $curr_op->_ref_affectation_personnel->_id}}
-      <br />{{$curr_op->_ref_affectation_personnel->_ref_user->_view}}
+      <br />{{$curr_op->_ref_affectation_personnel->_ref_personnel->_ref_user->_view}}
       {{/if}}
       
     </td>

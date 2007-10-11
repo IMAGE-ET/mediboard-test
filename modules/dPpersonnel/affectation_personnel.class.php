@@ -15,20 +15,20 @@ class CAffectationPersonnel extends CMbMetaObject {
   var $affect_id = null;
   
   // DB references
-  var $user_id = null;
+  var $personnel_id = null;
   
   // DB fields
   var $realise = null;
   var $debut   = null;
   var $fin     = null;
-  var $tag     = null;
 
   // Form fields
   var $_debut  = null;
   var $_fin    = null;
   
   // References
-  var $_ref_user = null;
+  var $_ref_personnel = null;
+  var $_ref_object = null;
   
   function CAffectationPersonnel() {
 	$this->CMbObject("affectation_personnel", "affect_id");
@@ -38,26 +38,32 @@ class CAffectationPersonnel extends CMbMetaObject {
 	
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["user_id"] = "notNull ref class|CMediusers";
+    $specs["personnel_id"] = "notNull ref class|CPersonnel";
     $specs["realise"] = "notNull bool";
     $specs["debut"]   = "dateTime";
     $specs["fin"]     = "dateTime moreThan|debut";
-    $specs["tag"]     = "str maxLength|80";
     return $specs;
   }
   
   function loadRefsFwd() {
     parent::loadRefsFwd();
-    $this->loadUser();
+    $this->loadPersonnel();
   }
   
-  function loadUser(){
-  	$this->_ref_user = new CMediusers();
-  	$this->_ref_user->load($this->user_id);
+  function loadPersonnel(){
+  	$this->_ref_personnel = new CPersonnel();
+  	$this->_ref_personnel->load($this->personnel_id);
+  }
+  
+  function loadRefObject(){
+   
+      $this->_ref_object = new $this->object_class;
+      $this->_ref_object->load($this->object_id);
+    
   }
  
   function updateFormFields() {
-    $this->_view = "Affectation de $this->user_id";
+    $this->_view = "Affectation de $this->personnel_id";
     $this->loadRefs();  
     if($this->object_class == "CPlageOp"){
     	$this->_debut = mbAddDateTime($this->_ref_object->debut, $this->_ref_object->date);

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpersonnel";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.12";
 $config["mod_type"]        = "user";
 
 
@@ -40,8 +40,46 @@ class CSetupdPpersonnel extends CSetup {
             ADD `tag` VARCHAR(80);";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.11";
+    $this->makeRevision("0.11");
+    $sql = "CREATE TABLE `personnel` (
+            `personnel_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+            `user_id` INT(11) UNSIGNED NOT NULL, 
+            `emplacement` ENUM('op','reveil','service') NOT NULL, 
+            PRIMARY KEY (`personnel_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
     
+    $sql = "ALTER TABLE `affectation_personnel` 
+            CHANGE `user_id` `personnel_id` INT(11) UNSIGNED NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `affectation_personnel` 
+            SET `tag` = 'op' 
+            WHERE `tag` IS NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "INSERT INTO `personnel`
+            SELECT '', affectation_personnel.personnel_id, affectation_personnel.tag
+            FROM `users`, `affectation_personnel`
+            WHERE users.user_id = affectation_personnel.personnel_id 
+              AND users.user_type = '14' 
+              AND users.template = '0'
+            GROUP BY users.user_id, affectation_personnel.tag;";
+    $this->addQuery($sql);
+
+    $sql = "UPDATE `affectation_personnel`, `personnel`
+            SET affectation_personnel.personnel_id = personnel.personnel_id
+            WHERE affectation_personnel.personnel_id = personnel.user_id
+              AND affectation_personnel.tag = personnel.emplacement;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `affectation_personnel`
+            DROP `tag`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `affectation_personnel` ADD INDEX ( `personnel_id` );";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.12";
   }
 }
     

@@ -62,10 +62,16 @@ foreach($listOps as $key => $value) {
   }
 }
 
-// Chargement de la liste du personnel
-$mediuser = new CMediusers();
-$personnels = $mediuser->loadListFromType(array("Personnel"));
-
+// Chargement de la liste du personnel pour le reveil
+$personnel = new CPersonnel();
+$wherePers = array();
+$wherePers["emplacement"] = " = 'reveil'";
+$ljoinPers["users"] = "personnel.user_id = users.user_id";
+$orderPers = "users.user_last_name";   
+$personnels = $personnel->loadList($wherePers, $orderPers, null, null, $ljoinPers);
+foreach($personnels as $key => $_personnel){
+  $_personnel->loadRefUser();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
