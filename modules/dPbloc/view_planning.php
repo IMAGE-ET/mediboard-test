@@ -101,7 +101,8 @@ foreach($plagesop as &$plage) {
   $plage->loadPersonnel();
   if (null !== $plage->_ref_personnel) {
     foreach ($plage->_ref_personnel as $_personnel) {
-      $_personnel->loadUser();
+      $_personnel->loadPersonnel();
+      $_personnel->_ref_personnel->loadRefUser();
     }
   }
 }
