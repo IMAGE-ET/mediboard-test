@@ -15,12 +15,9 @@ if (!$can->read && !$dialog) {
   $can->redirect();
 }
 
-$today = mbDate();
-$tomorow = mbDate("+1 day");
-
 $filter = new CUserLog();
-$filter->_date_min    = mbGetValueFromGetOrSession("_date_min", $today);
-$filter->_date_max    = mbGetValueFromGetOrSession("_date_max", $tomorow);
+$filter->_date_min    = mbGetValueFromGetOrSession("_date_min");
+$filter->_date_max    = mbGetValueFromGetOrSession("_date_max");
 $filter->user_id      = mbGetValueFromGetOrSession("user_id");
 $filter->object_id    = mbGetValueFromGetOrSession("object_id");
 $filter->object_class = mbGetValueFromGetOrSession("object_class");
@@ -66,7 +63,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("dialog"      , $dialog      );
 $smarty->assign("filter"      , $filter      );
-
 $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
 $smarty->assign("userLog"     , $userLog     );

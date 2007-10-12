@@ -1,4 +1,5 @@
 <?php
+$locales['CUserLog-_date_max-desc'] = '';
 $locales['Abbreviation'] = '';
 $locales['active'] = '';
 $locales['added'] = '';
@@ -123,6 +124,9 @@ $locales['CUserLog-type-desc'] = '';
 $locales['CUserLog-user_id'] = '';
 $locales['CUserLog-user_id-court'] = '';
 $locales['CUserLog-user_id-desc'] = '';
+$locales['CUserLog-_date_max'] = '';
+$locales['CUserLog-_date_min'] = '';
+$locales['CUserLog-_date_min-desc'] = '';
 $locales['CUserLog.create'] = '';
 $locales['CUserLog.modify'] = '';
 $locales['CUserLog.more'] = '';

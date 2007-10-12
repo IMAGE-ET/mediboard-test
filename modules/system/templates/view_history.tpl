@@ -1,3 +1,4 @@
+{{mb_include_script module="system" script="object_selector"}}
 <script type="text/javascript">
 
 function pageMain() {
@@ -64,7 +65,22 @@ function pageMain() {
     </td>
 
     <th>{{mb_label object=$filter field=object_id}}</th>
-    <td>{{mb_field object=$filter field=object_id canNull=true}}</td>
+    <td>{{mb_field object=$filter field=object_id canNull=true}}
+    <button type="button" class="search" onclick="ObjectSelector.init()">
+        Chercher un objet
+      </button>
+      <script language="Javascript" type="text/javascript">
+        ObjectSelector.init = function(){  
+          this.sForm     = "filterFrm";
+          this.sId       = "object_id";
+          this.sView     = "object_id";
+          this.sClass    = "object_class";
+          this.onlyclass = "false";
+          this.pop();
+        } 
+       </script>
+   
+   </td>
 
     <th>{{mb_label object=$filter field="_date_max"}}</td>
     <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" canNull=false}} </td>
