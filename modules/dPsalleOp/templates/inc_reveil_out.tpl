@@ -1,6 +1,6 @@
 <table class="form">
   <tr>
-    <th class="category">{{$listOut|@count}} patients sortis du bloc</th>
+    <th class="category">{{$listOut|@count}} patient(s) sortis du bloc</th>
   </tr>
 </table>
 

@@ -27,7 +27,7 @@ var submitReveil = function(oFormAffectation, oFormOperation){
   <tr>
     <th class="category">
       {{if $hour}}<div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>{{/if}}
-      {{$listReveil|@count}} patients en salle de reveil
+      {{$listReveil|@count}} patient(s) en salle de reveil
     </th>
   </tr>
 </table>

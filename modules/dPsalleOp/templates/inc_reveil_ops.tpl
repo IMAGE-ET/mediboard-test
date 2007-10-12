@@ -23,7 +23,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
-          <th class="category">{{$listOps|@count}} patients en attente</th>
+          <th class="category">{{$listOps|@count}} patient(s) en attente</th>
           <th class="category" colspan="2">
             <div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>
             {{$date|date_format:"%A %d %B %Y"}}
