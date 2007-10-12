@@ -1,5 +1,5 @@
 <?php
-$locales['CAffectation-_chambre_dep-desc'] = 'Chambre d\'origine';
+$locales['CAffectation-_sortie_dep-desc'] = 'Heure prévue';
 $locales['CAffectation'] = 'Affectations';
 $locales['CAffectation-back-lit_id'] = '';
 $locales['CAffectation-back-sejour_id'] = '';
@@ -27,6 +27,7 @@ $locales['CAffectation-sortie-desc'] = 'Sortie';
 $locales['CAffectation-_chambre'] = 'Chambre';
 $locales['CAffectation-_chambre-desc'] = 'Chambre';
 $locales['CAffectation-_chambre_dep'] = 'Origine';
+$locales['CAffectation-_chambre_dep-desc'] = 'Chambre d\'origine';
 $locales['CAffectation-_patient'] = 'Patient';
 $locales['CAffectation-_patient-desc'] = 'Patient';
 $locales['CAffectation-_patient_dep'] = 'Patient';
@@ -35,6 +36,7 @@ $locales['CAffectation-_praticien'] = 'Praticien';
 $locales['CAffectation-_praticien-desc'] = 'Praticien';
 $locales['CAffectation-_praticien_dep'] = 'Praticien';
 $locales['CAffectation-_praticien_dep-desc'] = 'Praticien';
+$locales['CAffectation-_sortie_dep'] = 'Heure prévue';
 $locales['CAffectation.confirme.'] = '';
 $locales['CAffectation.confirme.0'] = '0';
 $locales['CAffectation.confirme.1'] = '1';

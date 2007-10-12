@@ -63,6 +63,9 @@ if($order_col == "_praticien_dep"){
 if($order_col == "_chambre_dep"){
   $orderDep = "chambre.nom $order_way, patients.nom, patients.prenom";
 }
+if($order_col == "_sortie_dep"){
+  $orderDep = "affectation.sortie $order_way, patients.nom, patients.prenom";
+}
 
 
 

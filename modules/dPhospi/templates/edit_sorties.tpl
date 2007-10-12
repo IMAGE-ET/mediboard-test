@@ -42,12 +42,12 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th>Confirmation</th>
-                <th>{{mb_colonne class="CAffectation" field="_patient_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_praticien_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_chambre_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_patient_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>Destination</th>
-                <th>Heure prévue</th>
-              </tr>
+                <th>{{mb_colonne class="CAffectation" field="_sortie_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                </tr>
               {{foreach from=$deplacements item=curr_sortie}}
               <tr>
                 <td>
@@ -117,10 +117,10 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th>Confirmation</th>
-                <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
-                <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
               </tr>
               <tr><th colspan="5">Hospitalisations complètes</th></tr>
               {{foreach from=$sortiesComp item=curr_sortie}}
