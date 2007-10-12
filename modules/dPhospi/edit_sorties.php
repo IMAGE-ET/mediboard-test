@@ -15,6 +15,9 @@ $ds = CSQLDataSource::get("std");
 $vue       = mbGetValueFromGetOrSession("vue"      , 0);
 $typeOrder = mbGetValueFromGetOrSession("typeOrder", 1);
 
+$order_way = mbGetValueFromGetOrSession("order_way", "ASC");
+$order_col = mbGetValueFromGetOrSession("order_col", "_patient");
+
 // Liste des services
 $services = new CService;
 $where = array();
@@ -29,8 +32,10 @@ $where = array();
 $ljoin = array();
 $limit1 = $date." 00:00:00";
 $limit2 = $date." 23:59:59";
+
 $ljoin["sejour"]   = "sejour.sejour_id = affectation.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
+$ljoin["users"]    = "sejour.praticien_id = users.user_id";
 $ljoin["lit"]      = "lit.lit_id = affectation.lit_id";
 $ljoin["chambre"]  = "chambre.chambre_id = lit.chambre_id";
 $ljoin["service"]  = "service.service_id = chambre.service_id";
@@ -41,15 +46,30 @@ $where["service.group_id"] = "= '$g'";
 if ($vue) {
   $where["confirme"] = "= '0'";
 }
-if ($typeOrder) {
-  $order = "service.nom, chambre.nom, lit.nom";
-} else {
-  $order = "patients.nom, patients.prenom";
+
+/*
+if($order_col != "_patient_deplacement" && $order_col != "_praticien_deplacement"  && $order_col != "_chambre_deplacement"){
+  $order_col = "_patient";	
 }
+*/
+$orderDep = null;
+
+if($order_col == "_patient_dep"){
+  $orderDep = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+}
+if($order_col == "_praticien_dep"){
+  $orderDep = "users.user_last_name $order_way, users.user_first_name";
+}
+if($order_col == "_chambre_dep"){
+  $orderDep = "chambre.nom $order_way, patients.nom, patients.prenom";
+}
+
+
+
 
 // Récupération des déplacements du jour
 $deplacements = new CAffectation;
-$deplacements = $deplacements->loadList($where, $order, null, null, $ljoin);
+$deplacements = $deplacements->loadList($where, $orderDep, null, null, $ljoin);
 foreach($deplacements as $key => $value) {
   $deplacements[$key]->loadRefsFwd();
     
@@ -79,6 +99,27 @@ foreach($deplacements as $key => $deplacement){
     $timing[$deplacement->_id][] = mbDateTime("$i minutes", $deplacement->sortie);
   }
 } 
+
+
+/*
+if($order_col != "_patient" && $order_col != "_praticien" && $order_col != "sortie" && $order_col != "_chambre"){
+  $order_col = "_patient";	
+}
+*/
+$order = null;
+
+if($order_col == "_patient"){
+  $order = "patients.nom $order_way, patients.prenom, sejour.entree_prevue";
+}
+if($order_col == "_praticien"){
+  $order = "users.user_last_name $order_way, users.user_first_name";
+}
+if($order_col == "sortie"){
+  $order = "sejour.sortie_prevue $order_way, patients.nom, patients.prenom";
+}
+if($order_col == "_chambre"){
+  $order = "chambre.nom $order_way, patients.nom, patients.prenom";
+}
 
 
 // Récupération des sorties ambu du jour
@@ -132,6 +173,8 @@ $smarty = new CSmartyDP();
 if($deplacements){
   $smarty->assign("timing"       , $timing      );
 }
+$smarty->assign("order_way", $order_way);
+$smarty->assign("order_col", $order_col);
 $smarty->assign("date"         , $date        );
 $smarty->assign("deplacements" , $deplacements);
 $smarty->assign("sortiesAmbu"  , $sortiesAmbu );

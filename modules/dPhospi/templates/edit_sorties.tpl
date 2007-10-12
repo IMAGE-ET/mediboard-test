@@ -42,9 +42,9 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th>Confirmation</th>
-                <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;typeOrder=0">Patient</a></th>
-                <th>Praticien</th>
-                <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;typeOrder=1">Origine</a></th>
+                <th>{{mb_colonne class="CAffectation" field="_patient_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre_dep" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
                 <th>Destination</th>
                 <th>Heure prévue</th>
               </tr>
@@ -117,10 +117,10 @@ function saveSortie(oFormSortie, oFormAffectation){
               </tr>
               <tr>
                 <th>Confirmation</th>
-                <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;typeOrder=0">Patient</a></th>
-                <th>Praticien</th>
-                <th><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;typeOrder=1">Chambre</a></th>
-                <th>Heure prévue</th>
+                <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
+                <th>{{mb_colonne class="CAffectation" field="sortie" order_col=$order_col order_way=$order_way url="?m=$m&tab=$tab"}}</th>
               </tr>
               <tr><th colspan="5">Hospitalisations complètes</th></tr>
               {{foreach from=$sortiesComp item=curr_sortie}}
@@ -150,6 +150,9 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                 {{/if}}
                  {{if $canPlanningOp->read}}
+                 <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->patient_id}}">
+                     <img src="images/icons/edit.png" alt="modifier" />
+                 </a>
                  <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_ref_sejour->_id}}">
                    <img src="images/icons/planning.png" alt="modifier" />
                  </a>
@@ -193,6 +196,9 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <td class="text">
                 {{/if}}
                  {{if $canPlanningOp->read}}
+                 <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sortie->_ref_sejour->patient_id}}">
+                     <img src="images/icons/edit.png" alt="modifier" />
+                 </a>
                  <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sortie->_ref_sejour->_id}}">
                    <img src="images/icons/planning.png" alt="modifier" />
                  </a>
