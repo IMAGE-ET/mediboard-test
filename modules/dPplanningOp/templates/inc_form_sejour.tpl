@@ -289,7 +289,9 @@ function checkChambre(){
     {{if $can->view}}
       {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);"}}
       <span id="listEtabExterne">
-        {{$sejour->_ref_etabExterne->_view}}
+        {{if $sejour->_id}}
+          {{$sejour->_ref_etabExterne->_view}}
+        {{/if}}
       </span>
     {{else}}
 	  {{mb_value object=$sejour field=mode_sortie}}
