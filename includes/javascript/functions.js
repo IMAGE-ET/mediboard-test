@@ -1018,7 +1018,7 @@ Object.extend(Date, {
 	  return new Date(year, month - 1, day); // Js months are 0-11!!
 	},
 
-  fromLocaleDateTime : null,
+  fromLocaleDateTime : null
   
   
 } );
