@@ -118,6 +118,16 @@ function mbGetAbsValueFromPostOrSession($valName, $valDefault = null) {
 }
 
 /**
+ * Returns the value of a variable retreived it from the session
+ * @access public
+ * @return any 
+ **/
+function mbGetValueFromSession($valName, $valDefault = null) {
+  global $m;
+  return dPgetParam($_SESSION[$m], $valName, $valDefault);
+}
+
+/**
  * Sets a value to the session[$m]. Very useful to nullify object ids after deletion
  * @access public
  * @return void

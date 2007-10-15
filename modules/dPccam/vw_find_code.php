@@ -20,11 +20,113 @@ $selacces        = mbGetValueFromGetOrSession("selacces");
 $seltopo1        = mbGetValueFromGetOrSession("seltopo1");
 $seltopo2        = mbGetValueFromGetOrSession("seltopo2");
 
+$chap1old        = mbGetValueFromSession("chap1");
+$chap1           = mbGetValueFromGetOrSession("chap1");
+if($chap1 && $chap1 == $chap1old) {
+  $chap2old = mbGetValueFromSession("chap2");
+  $chap2    = mbGetValueFromGetOrSession("chap2");
+} else {
+  $chap2 = "";
+  mbSetValueToSession("chap2");
+}
+if($chap2 && $chap2 == $chap2old) {
+  $chap3old = mbGetValueFromSession("chap3");
+  $chap3    = mbGetValueFromGetOrSession("chap3");
+} else {
+  $chap3 = "";
+  mbSetValueToSession("chap3");
+}
+if($chap3 && $chap3 == $chap3old) {
+  $chap4old = mbGetValueFromSession("chap4");
+  $chap4    = mbGetValueFromGetOrSession("chap4");
+} else {
+  $chap4 = "";
+  mbSetValueToSession("chap4");
+}
+
+// On récupère les voies d'accès
+$query = "SELECT * FROM acces1";
+$result = $ds->exec($query);
+$i = 1;
+while($row = $ds->fetchArray($result)) {
+  $acces[$i]["code"]  = $row["CODE"];
+  $acces[$i]["texte"] = $row["ACCES"];
+  $i++;
+}
+
+// On récupère les appareils : topographie1
+$query = "SELECT * FROM topographie1";
+$result = $ds->exec($query);
+
+$i = 1;
+while($row = $ds->fetchArray($result)) {
+  $topo1[$i]["code"]  = $row["CODE"];
+  $topo1[$i]["texte"] = $row["LIBELLE"];
+  $i++;
+}
+
+// On récupère les systèmes correspondants à l'appareil : topographie2
+$query = "SELECT * FROM topographie2 WHERE PERE = '$seltopo1'";
+$result = $ds->exec($query);
+$topo2 = array();
+$i = 1;
+while($row = $ds->fetchArray($result)) {
+  $topo2[$i]["code"]  = $row["CODE"];
+  $topo2[$i]["texte"] = $row["LIBELLE"];
+  $i++;
+}
+
+// On récupère les chapitres de niveau 1
+$listChap1 = array();
+$query = "SELECT * FROM arborescence WHERE CODEPERE = '000001' ORDER BY RANG";
+$result = $ds->exec($query);
+while($row = $ds->fetchArray($result)) {
+  $codeChap = $row["CODEMENU"];
+  $listChap1[$codeChap]["rang"]  = $row["RANG"];
+  $listChap1[$codeChap]["texte"] = $row["LIBELLE"];
+}
+
+// On récupère les chapitres de niveau 2
+$listChap2 = array();
+if($chap1) {
+  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap1' ORDER BY RANG";
+  $result = $ds->exec($query);
+  while($row = $ds->fetchArray($result)) {
+    $codeChap = $row["CODEMENU"];
+    $listChap2[$codeChap]["rang"]  = $row["RANG"];
+    $listChap2[$codeChap]["texte"] = $row["LIBELLE"];
+  }
+}
+
+// On récupère les chapitres de niveau 3
+$listChap3 = array();
+if($chap2) {
+  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap2' ORDER BY RANG";
+  $result = $ds->exec($query);
+  while($row = $ds->fetchArray($result)) {
+    $codeChap = $row["CODEMENU"];
+    $listChap3[$codeChap]["rang"]  = $row["RANG"];
+    $listChap3[$codeChap]["texte"] = $row["LIBELLE"];
+  }
+}
+
+// On récupère les chapitres de niveau 4
+$listChap4 = array();
+if($chap3) {
+  $query = "SELECT * FROM arborescence WHERE CODEPERE = '$chap3' ORDER BY RANG";
+  $result = $ds->exec($query);
+  while($row = $ds->fetchArray($result)) {
+    $codeChap = $row["CODEMENU"];
+    $listChap4[$codeChap]["rang"]  = $row["RANG"];
+    $listChap4[$codeChap]["texte"] = $row["LIBELLE"];
+  }
+}
+
 // Création de la requête
 $query = "SELECT CODE, LIBELLELONG FROM actes WHERE 0";
 
 // Si un autre élément est rempli
-if ($code || $clefs || $selacces || $seltopo1) {
+if ($code || $clefs || $selacces || $seltopo1 || $chap1 || $chap2 || $chap3 || $chap4) {
   $query .= " or (DATEFIN = '00000000'";
   // On fait la recherche sur le code
   if ($code != "") {
@@ -37,15 +139,33 @@ if ($code || $clefs || $selacces || $seltopo1) {
       $query .= " AND (LIBELLELONG LIKE '%" .  addslashes($value) . "%')";
   }
   
-  // On trie selon les voies d'accès
+  // On filtre selon les voies d'accès
   if ($selacces)
     $query .= " AND CODE LIKE '___" . $selacces . "___'";
-  // On tris selon les topologies de niveau 1 ou 2
+
+  // On filtre selon les topologies de niveau 1 ou 2
   if ($seltopo1) {
     if ($seltopo2)
       $query .= " AND CODE LIKE '" . $seltopo2 . "_____'";
     else
       $query .= " AND CODE LIKE '" . $seltopo1 . "______'";
+  }
+  
+  // On filtre selon le chapitre 4
+  if($chap4) {
+    $query .= " AND ARBORESCENCE4 = '".$listChap4[$chap4]["rang"]."'";
+  }
+  // On filtre selon le chapitre 3
+  if($chap3) {
+    $query .= " AND ARBORESCENCE3 = '".$listChap3[$chap3]["rang"]."'";
+  }
+  // On filtre selon le chapitre 2
+  if($chap2) {
+    $query .= " AND ARBORESCENCE2 = '".$listChap2[$chap2]["rang"]."'";
+  }
+  // On filtre selon le chapitre 1
+  if($chap1) {
+    $query .= " AND ARBORESCENCE1 = '".$listChap1[$chap1]["rang"]."'";
   }
   
   $query .= ")";
@@ -58,58 +178,34 @@ $result = $ds->exec($query);
 $i = 0;
 $codes = array();
 while($row = $ds->fetchArray($result)) {
-  $codes[$i]["code"] = $row["CODE"];
+  $codes[$i]["code"]  = $row["CODE"];
   $codes[$i]["texte"] = $row["LIBELLELONG"];
   $i++;
 }
 $numcodes = $i;
 
-//On récupère les voies d'accès
-$query = "select * from acces1";
-$result = $ds->exec($query);
-$i = 1;
-while($row = $ds->fetchArray($result)) {
-  $acces[$i]["code"] = $row["CODE"];
-  $acces[$i]["texte"] = $row["ACCES"];
-  $i++;
-}
-
-//On récupère les appareils : topographie1
-$query = "select * from topographie1";
-$result = $ds->exec($query);
-
-$i = 1;
-while($row = $ds->fetchArray($result)) {
-  $topo1[$i]["code"] = $row["CODE"];
-  $topo1[$i]["texte"] = $row["LIBELLE"];
-  $i++;
-}
-
-// On récupère les systèmes correspondants à l'appareil : topographie2
-$query = "SELECT * FROM topographie2 WHERE PERE = '$seltopo1'";
-$result = $ds->exec($query);
-$topo2 = array();
-$i = 1;
-while($row = $ds->fetchArray($result)) {
-  $topo2[$i]["code"] = $row["CODE"];
-  $topo2[$i]["texte"] = $row["LIBELLE"];
-  $i++;
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object_class" , $object_class);
-$smarty->assign("clefs"        , $clefs);
-$smarty->assign("selacces"     , $selacces);
-$smarty->assign("seltopo1"     , $seltopo1);
-$smarty->assign("seltopo2"     , $seltopo2);
-$smarty->assign("code"         , $code);
-$smarty->assign("acces"        , $acces);
-$smarty->assign("topo1"        , $topo1);
-$smarty->assign("topo2"        , $topo2);
-$smarty->assign("codes"        , $codes);
-$smarty->assign("numcodes"     , $numcodes);
+$smarty->assign("object_class", $object_class);
+$smarty->assign("clefs"       , $clefs);
+$smarty->assign("selacces"    , $selacces);
+$smarty->assign("seltopo1"    , $seltopo1);
+$smarty->assign("seltopo2"    , $seltopo2);
+$smarty->assign("chap1"       , $chap1);
+$smarty->assign("chap2"       , $chap2);
+$smarty->assign("chap3"       , $chap3);
+$smarty->assign("chap4"       , $chap4);
+$smarty->assign("code"        , $code);
+$smarty->assign("acces"       , $acces);
+$smarty->assign("topo1"       , $topo1);
+$smarty->assign("topo2"       , $topo2);
+$smarty->assign("listChap1"   , $listChap1);
+$smarty->assign("listChap2"   , $listChap2);
+$smarty->assign("listChap3"   , $listChap3);
+$smarty->assign("listChap4"   , $listChap4);
+$smarty->assign("codes"       , $codes);
+$smarty->assign("numcodes"    , $numcodes);
 
 $smarty->display("vw_find_code.tpl");
 

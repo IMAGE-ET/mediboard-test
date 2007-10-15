@@ -69,13 +69,13 @@ if (!$AppUI->user_id) {
 }
 
 // Don't output anything. Usefull for fileviewers, popup dialogs, ajax requests, etc.
-$suppressHeaders = dPgetParam($_GET, "suppressHeaders");
+$suppressHeaders = dPgetParam($_REQUEST, "suppressHeaders");
 
 // Output the charset header in case of an ajax request
 $ajax = dPgetParam($_REQUEST, "ajax", false);
 
 // Check if we are in the dialog mode
-$dialog = dPgetParam( $_REQUEST, "dialog");
+$dialog = dPgetParam($_REQUEST, "dialog");
 
 // check if the user is trying to log in
 if (isset($_POST["login"])) {

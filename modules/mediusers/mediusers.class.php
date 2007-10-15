@@ -236,11 +236,15 @@ class CMediusers extends CMbObject {
     $this->_ref_function->load($this->function_id);
   }
   
+  function loadRefDiscipline() {
+    $this->_ref_discipline = new CDiscipline;
+    $this->_ref_discipline->load($this->discipline_id);
+  }
+  
   function loadRefsFwd() {
     // Forward references
     $this->loadRefFunction();
-    $this->_ref_discipline = new CDiscipline;
-    $this->_ref_discipline->load($this->discipline_id);
+    $this->loadRefDiscipline();
   }
 
   function loadRefsBack() {

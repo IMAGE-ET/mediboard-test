@@ -24,6 +24,11 @@ Class.extend(Url, {
     this.addParam("tab", sTab);
   },
   
+  setModuleDosql: function(sModule, sDosql) {
+    this.addParam("m", sModule);
+    this.addParam("dosql", sDosql);
+  },
+  
   addParam: function(sName, sValue) {
     this.oParams[sName] = sValue;
   },

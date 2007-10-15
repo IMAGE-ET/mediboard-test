@@ -128,37 +128,263 @@ class CActeCCAM extends CMbMetaObject {
     $where["object_id"]     = "= '$this->object_id'";
     $where["code_activite"] = "= '$this->code_activite'";
     
-    $this->_linked_actes = $acte->loadList($were);
+    $this->_linked_actes = $acte->loadList($where);
   }
   
   function guessAssociation() {
-    $this->getLinkedActes();
-    $this->loadRefCodeCCAM();
+    /*
+     * Calculs initiaux
+     */
     
-    // Cas d'un seul actes
-    if(!count($this->_linked_actes)) {
-      $this->_guess_association = null;
-      return $this->_guess_association;
+    // Chargements initiaux
+    $this->loadRefCodeCCAM();
+    $this->getLinkedActes();
+    foreach($this->_linked_actes as &$acte) {
+      $acte->loadRefCodeCCAM();
     }
     
-    // Cas général pour plusieurs actes
+    // Nombre d'actes
+    $numActes = count($this->_linked_actes) + 1;
+    
+    // Calcul de la position tarifaire de l'acte
     $tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
     $orderedActes = array();
     $orderedActes[$this->_id] = $tarif;
     foreach($this->_linked_actes as &$acte) {
-      $acte->loadRefCodeCCAM();
       $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
       $orderedActes[$acte->_id] = $tarif;
     }
-    asort($orderedActes);
+    arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
     
+    // Nombre d'actes du chap. 18
+    $numChap18 = 0;
+    if($this->_ref_code_ccam->chapitres[0] == "18") {
+      $numChap18++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if($this->_ref_code_ccam->chapitres[0] == "18") {
+        $numChap18++;
+      }
+    }
+    
+    // Nombre d'actes du chap. 19.01
+    $numChap1901 = 0;
+    if($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "01") {
+      $numChap1901++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if($linkedActe->_ref_code_ccam->chapitres[0] == "19" && $linkedActe->_ref_code_ccam->chapitres[1] == "01") {
+        $numChap1901++;
+      }
+    }
+    
+    // Nombre d'actes du chap. 19.02
+    $numChap1902 = 0;
+    if($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02") {
+      $numChap1902++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if($linkedActe->_ref_code_ccam->chapitres[0] == "19" && $linkedActe->_ref_code_ccam->chapitres[1] == "02") {
+        $numChap1902++;
+      }
+    }
+     
+    // Nombre d'actes des chap. 02, 03, 05 à 10, 16, 17
+    $numChap02 = 0;
+    $listChaps = array("02", "03", "05", "06", "07", "08", "09", "10", "16", "17");
+    if(in_array($this->_ref_code_ccam->chapitres[0], $listChaps)) {
+      $numChap02++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0], $listChaps)) {
+        $numChap02++;
+      }
+    }
+     
+    // Nombre d'actes des chap. 01, 04, 11, 15
+    $numChap01 = 0;
+    $listChaps = array("01", "04", "11", "15");
+    if(in_array($this->_ref_code_ccam->chapitres[0], $listChaps)) {
+      $numChap01++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0], $listChaps)) {
+        $numChap01++;
+      }
+    }
+    
+    // Le praticien est-il un ORL
+    $pratORL = false;
+    if($this->object_class == "COperation") {
+      $this->loadRefExecutant();
+      $this->_ref_executant->loadRefDiscipline();
+      if($this->_ref_executant->_ref_discipline->_compat == "ORL") {
+        $pratORL = true;
+      }
+    }
+    
+    // Diagnostic principal en S ou T avec lésions multiples
+    // Diagnostic principal en C (carcinologie)
+    $DPST = false;
+    $DPC  = false;
+    if($this->object_class == "COperation") {
+      $this->loadRefObject();
+      $this->_ref_object->loadRefSejour();
+      if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "S" || substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "T") {
+        $DPST = true;
+      }
+      if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "C") {
+        $DPC = true;
+      }
+    }
+    
+    // Association d'1 exérèse, d'1 curage et d'1 reconstruction
+    $assoEx  = false;
+    $assoCur = false;
+    $assoRec = false;
+    if($numActes == 3) {
+      if(stripos($this->_ref_code_ccam->libelleLong, "exérèse")) {
+        $assoEx = true;
+      }
+      if(stripos($this->_ref_code_ccam->libelleLong, "curage")) {
+        $assoCu = true;
+      }
+      if(stripos($this->_ref_code_ccam->libelleLong, "reconstruction")) {
+        $assoRec = true;
+      }
+      foreach($this->_linked_actes as $linkedActe) {
+        if(stripos($linkedActe->_ref_code_ccam->libelleLong, "exérèse")) {
+          $assoEx = true;
+        }
+        if(stripos($linkedActe->_ref_code_ccam->libelleLong, "curage")) {
+          $assoCu = true;
+        }
+        if(stripos($linkedActe->_ref_code_ccam->libelleLong, "reconstruction")) {
+          $assoRec = true;
+        }
+      }
+    }
+    $assoExCurRec = $assoEx && $assoCur && $assoRec;
+    
+    
+    /*
+     * Application des règles
+     */
+    
+    // Cas d'un seul actes (règle A)
+    if($numActes == 1) {
+      $this->_guess_association = "A";
+      return $this->_guess_association;
+    }
+    
+    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B et C)
+    if($numActes == 2) {
+      // 1 acte + 1 geste complémentaire chap. 18 (règle B)
+      if($numChap18 == 1) {
+        $this->_guess_association = "B";
+        return $this->_guess_association;
+      }
+      // 1 acte + 1 supplément des chap. 19.02 (règle C)
+      if($numChap1902 == 1) {
+        $this->_guess_association = "C1";
+        return $this->_guess_association;
+      }
+    }
+    
+    // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle D)
+    if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
+      $this->_guess_association = "D1";
+      return $this->_guess_association;
+    }
+    
+    // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 (règle E)
+    if($numActes == 2 && ($numChap02 == 1 || $numChap1901 == 1)) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "E1";
+          break;
+        case 1 :
+          $this->_guess_association = "E2";
+          break;
+      }
+      return $this->_guess_association;
+    }
+    
+    // 1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 + 1 acte des chap. 18 ou 19.02 (règle F)
+    if($numActes == 3 && ($numChap02 == 1 || $numChap1901 == 1) && ($numChap18 == 1 || $numChap1902 == 1)) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "F1";
+          break;
+        case 1 :
+          if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
+            $this->_guess_association = "F1";
+          } else {
+            $this->_guess_association = "F2";
+          }
+          break;
+        case 2 :
+          if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
+            $this->_guess_association = "F1";
+          } else {
+            $this->_guess_association = "F2";
+          }
+          break;
+      }
+      return $this->_guess_association;
+    }
+    
+    // 2 actes des chap. 01, 04, 11 ou 15 (règle G)
+    if($numActes == 2 && $numChap01 == 2 && $membresDiff) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "G1";
+          break;
+        case 1 :
+          $this->_guess_association = "G3";
+          break;
+      }
+      return $this->_guess_association;
+    }
+    
+    // 3 actes des chap. 01, 04, 11 ou 15 avec DP en S ou T (lésions traumatiques multiples) (règle H)
+    if($numActes == 3 && $numChap01 == 3 && $DPST) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "H1";
+          break;
+        case 1 :
+          $this->_guess_association = "H3";
+          break;
+        case 2 :
+          $this->_guess_association = "H2";
+          break;
+      }
+    }
+    
+    // 3 actes, chirurgien ORL, DP en C (carcinologie) et association d'1 exérèse, d'1 curage et d'1 reconstruction (règle I)
+    if($numActes == 3 && $pratORL && $DPC && $assoExCurRec) {
+      switch($position) {
+        case 0 :
+          $this->_guess_association = "I1";
+          break;
+        case 1 :
+          $this->_guess_association = "I2";
+          break;
+        case 2 :
+          $this->_guess_association = "I2";
+          break;
+      }
+    }
+    
+    // Cas général pour plusieurs actes (règle Z)
     switch($position) {
       case 0 :
-        $this->_guess_association = 1;
+        $this->_guess_association = "Z1";
         break;
       case 1 :
-        $this->_gess_association = 2;
+        $this->_guess_association = "Z2";
         break;
       default :
         $this->_guess_association = "X";

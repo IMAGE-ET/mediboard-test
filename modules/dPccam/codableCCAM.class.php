@@ -73,7 +73,7 @@ class CCodableCCAM extends CMbObject {
           $_code = $possible_acte->code_activite = $activite->numero;
           
           
-          $possible_acte->_anesth=($activite->numero==4)?true:false;
+          $possible_acte->_anesth= ( $activite->numero == 4 ) ? true : false;
           
           
           $possible_acte->code_phase = $phase->phase;
@@ -100,6 +100,8 @@ class CCodableCCAM extends CMbObject {
               }
             }
           }
+          
+          $possible_acte->guessAssociation();
           
           $phase->_connected_acte = $possible_acte;
           

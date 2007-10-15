@@ -73,9 +73,9 @@ var Intermax = {
   
   sendContent: function(oContent) {
     var url = new Url;
-    url.setModuleAction("dPpatients", "httpreq_intermax_content");
+    url.setModuleDosql("dPpatients", "httpreq_intermax_content");
     url.addObjectParam("intermax", oContent);
-    url.requestUpdate(SystemMessage.id);
+    url.requestUpdate(SystemMessage.id, { method: "post" });
   },
   
   createResultMessages: Prototype.emptyFunction,
