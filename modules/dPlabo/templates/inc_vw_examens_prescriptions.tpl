@@ -1,5 +1,19 @@
 <script type="text/javascript">
 
+var Prescriptions = {
+  collapse: function() {
+    Element.hide.apply(null, $$("tbody.prescriptionEffect"));
+  },
+  
+  expand: function() {
+    Element.show.apply(null, $$("tbody.prescriptionEffect"));
+  },
+  
+  initEffect: function(pack) {
+    new PairEffect(pack);
+  }
+}
+
 Object.extend(Droppables, {
   addPrescription: function(prescription_id) {
     var oDragOptions = {
@@ -36,71 +50,38 @@ Object.extend(Droppables, {
     <th>Int</th>
     <th>Ext</th>
   </tr>
-  {{foreach from=$prescription->_ref_prescription_items item="_item"}}
-  {{assign var="curr_examen" value=$_item->_ref_examen_labo}}
-  <tbody class="hoverable">
-  <tr id="PrescriptionItem-{{$_item->_id}}">
-    <td>
-      <a href="#{{$_item->_class_name}}-{{$_item->_id}}" onclick="Prescription.Examen.edit({{$_item->_id}})">
-        {{$curr_examen->_view}}
-      </a>
-      <form name="delPrescriptionExamen-{{$_item->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPlabo" />
-        <input type="hidden" name="dosql" value="do_prescription_examen_aed" />
-        <input type="hidden" name="prescription_labo_id" value="{{$prescription->_id}}" />
-        <input type="hidden" name="prescription_labo_examen_id" value="{{$_item->_id}}" />
-        <input type="hidden" name="del" value="1" />
-        {{if $prescription->_status < $prescription|const:"VEROUILLEE"}}
-        <button type="button" class="trash notext" title="{{tr}}Delete{{/tr}}" onclick="Prescription.Examen.del(this.form)" >
-          {{tr}}Delete{{/tr}}
-        </button>
-        {{/if}}
-        <button type="button" class="search notext" title="{{tr}}View{{/tr}}" onclick="ObjectTooltip.create(this, 'CExamenLabo', {{$curr_examen->_id}}, { mode: 'complete', popup: true })">
-          {{tr}}View{{/tr}}
-        </button>
-      </form>
-    </td>
-    {{if $curr_examen->type == "num"}}
-    <td>{{$curr_examen->unite}}</td>
-    <td>{{$curr_examen->min}} &ndash; {{$curr_examen->max}}</td>
-    {{else}}
-    <td colspan="2">{{mb_value object=$curr_examen field="type"}}</td>
-    {{/if}}
-    <td>
-      {{if !$curr_examen->_external}}
-      {{if $_item->date}}
-        {{assign var=msgClass value=""}}
-        {{if $curr_examen->type == "num" && $_item->resultat}}
-          {{mb_ternary var=msgClass test=$_item->_hors_limite value=warning other=message}}
-        {{/if}}
-        
-        <div class="{{$msgClass}}">
-          {{mb_value object=$_item field=resultat}}
-        </div>
-      {{else}}
-        <em>En attente</em>
-      {{/if}}
-      {{else}}
-        <em>Analyse externe</em>
-      {{/if}}
-    </td>
-    {{if $curr_examen->_external}}
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" />
-    </td>
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" checked="checked" />
-    </td>
-    {{else}}
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" disabled="disabled" checked="checked" />
-    </td>
-    <td>
-      <input type="radio" name="radio-{{$_item->_id}}" name="" disabled="disabled" />
-    </td>
-    {{/if}}
+  
+  <!-- Affichage des prescriptions sous forme de packs -->
+  {{foreach from=$tab_pack_prescription item="pack" key="key"}}
+  <tr id="{{$key}}-trigger">
+    <th colspan="6">
+      <!-- Affichage du nom du pack en passant par la premiere analyse -->
+      {{$pack[0]->_ref_pack->_view}}   
+    </th>
   </tr>
-  </tbody>
+  
+  <tbody class="prescriptionEffect" id="{{$key}}">
+  <tr class="script"><td><script type="text/javascript">Prescriptions.initEffect("{{$key}}");</script></td></tr>
+  {{foreach from=$pack item="_item"}}
+    {{assign var="curr_examen" value=$_item->_ref_examen_labo}}
+    {{include file="inc_view_analyse.tpl"}}
   {{/foreach}}
+  </tbody>
+ {{/foreach}}
+ 
+ 
+ <!-- Affichage des autres analyses -->
+  {{if $tab_pack_prescription && $tab_prescription}}
+  <tr>
+    <th colspan="6">Autres analyses</th>
+  </tr>
+  <tbody>
+  {{/if}}
+  {{foreach from=$tab_prescription item="_item" key="key"}}
+    {{assign var="curr_examen" value=$_item->_ref_examen_labo}}
+    {{include file="inc_view_analyse.tpl"}}   
+  </tbody>
+   {{/foreach}}  
+   
 </table>
 {{/if}}

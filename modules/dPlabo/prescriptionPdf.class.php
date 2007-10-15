@@ -26,27 +26,32 @@ class CPrescriptionPdf extends CMbPdf {
 		$this->sexe = $sexe;
 		$this->naissance = $naissance;
 	}
-		
-		
+  
+ 	
 	public function Footer() {
-		$this->viewBarcode(15,240,5,null,30,true);
-		$this->SetFontSize(12);
-		//mbTrace($this->getX(),"get x");
-		//mbTrace($this->getY(),"get y");
-		
-		$this->setXY(40,286);
-		$this->writeHTML("ETIQUETTE A COLLER SUR LE TUBE AVANT LE PRELEVEMENT");
+	  $this->viewBarcode(15,240,5,null,30,true);
+	  $this->SetFontSize(12);	
+	  
+		$this->SetXY($this->original_lMargin, 290); 
+		$this->Cell(0, 0, "ETIQUETTE A COLLER SUR LE TUBE AVANT LE PRELEVEMENT", 0, 0, 'C');
+	
+    $this->SetXY($this->original_lMargin, 290); 
+	  // Impression du numero des pages
+    $this->AliasNbPages();
+		$this->SetFontSize(8);
+
+		$this->Cell(0, 0, $this->l['w_page']." ".$this->PageNo().' / {nb}', 0, 0, 'R');
 	}
 	
-	public function viewPraticien($pratView, $functionView, $groupView){
-		
+	
+	public function viewPraticien($pratView, $functionView, $groupView){	
 		return "<b>Medecin:</b> <br />".utf8_encode($pratView).
 		                "<br />".utf8_encode($functionView).
 		                "<br />".utf8_encode($groupView);
 	}
+  
 		
-		
-    public function viewPatient($patientView, $patientNaissance, $patientAdresse, $patientCP, $patientVille, $patientTel){
+  public function viewPatient($patientView, $patientNaissance, $patientAdresse, $patientCP, $patientVille, $patientTel){
 		return "<b>Patient:</b> <br />".utf8_encode($patientView).
 						"<br />Naissance le ".utf8_encode($patientNaissance).
 		                "<br />".utf8_encode($patientAdresse).
@@ -75,8 +80,7 @@ class CPrescriptionPdf extends CMbPdf {
 	 * @param int $decalage: decalage entre les 2 lignes de codes barres
 	 * @param bool $traduction: affichage de la traduction des codes barres
 	 */
-	public function viewBarcode($x,$y,$h,$codage = "C128B", $decalage = 30, $traduction = true){
-	  
+	public function viewBarcode($x,$y,$h,$codage = "C128B", $decalage = 30, $traduction = true){  
 	  $this->decalage = 0;
 	  if ($this->barcode) {
 	    $this->Ln();
