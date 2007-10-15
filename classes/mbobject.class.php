@@ -642,6 +642,61 @@ class CMbObject {
     
     return $msg;
   }
+
+  
+    /**
+   * Split a tel number into tel parts
+   *
+   * @param string $telField
+   * @param string $partFieldPrefix
+   */
+  function updateFormTel($telField, $partFieldPrefix) {
+    $partField1 = $partFieldPrefix . "1";
+    $partField2 = $partFieldPrefix . "2";
+    $partField3 = $partFieldPrefix . "3";
+    $partField4 = $partFieldPrefix . "4";
+    $partField5 = $partFieldPrefix . "5";
+    
+    $this->$partField1 = substr($this->$telField, 0, 2);
+    $this->$partField2 = substr($this->$telField, 2, 2);
+    $this->$partField3 = substr($this->$telField, 4, 2);
+    $this->$partField4 = substr($this->$telField, 6, 2);
+    $this->$partField5 = substr($this->$telField, 8, 2);
+  }
+  
+  
+  /**
+   * Aggregate a tel number from tel parts
+   *
+   * @param string $telField
+   * @param string $partFieldPrefix
+   */
+  function updateDBTel($telField, $partFieldPrefix) {
+    $partField1 = $partFieldPrefix . "1";
+    $partField2 = $partFieldPrefix . "2";
+    $partField3 = $partFieldPrefix . "3";
+    $partField4 = $partFieldPrefix . "4";
+    $partField5 = $partFieldPrefix . "5";
+    
+    if ($this->$partField1 === null) return;
+    if ($this->$partField2 === null) return;
+    if ($this->$partField3 === null) return;
+    if ($this->$partField4 === null) return;
+    if ($this->$partField5 === null) return;
+
+    $this->$telField = 
+      $this->$partField1 .
+      $this->$partField2 .
+      $this->$partField3 .
+      $this->$partField4 .
+      $this->$partField5;
+      
+    if ($this->$telField == "0000000000") {
+      $this->$telField = "";
+    }
+  }
+  
+  
   
   /**
    * Update the form fields from the DB fields

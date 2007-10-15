@@ -76,46 +76,13 @@ class CEtabExterne extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
     
-    $this->_tel1 = substr($this->tel, 0, 2);
-    $this->_tel2 = substr($this->tel, 2, 2);
-    $this->_tel3 = substr($this->tel, 4, 2);
-    $this->_tel4 = substr($this->tel, 6, 2);
-    $this->_tel5 = substr($this->tel, 8, 2);
-    
-    
-    $this->_fax1 = substr($this->fax, 0, 2);
-    $this->_fax2 = substr($this->fax, 2, 2);
-    $this->_fax3 = substr($this->fax, 4, 2);
-    $this->_fax4 = substr($this->fax, 6, 2);
-    $this->_fax5 = substr($this->fax, 8, 2);
+    $this->updateFormTel("tel", "_tel");
+    $this->updateFormTel("fax", "_fax");   
   }
   
   function updateDBFields() {
-    if ($this->_tel1 !== null 
-     && $this->_tel2 !== null 
-     && $this->_tel3 !== null 
-     && $this->_tel4 !== null
-     && $this->_tel5 !== null) {
-      $this->tel = 
-        $this->_tel1 .
-        $this->_tel2 .
-        $this->_tel3 .
-        $this->_tel4 .
-        $this->_tel5;
-    }
-
-    if ($this->_fax1 !== null 
-     && $this->_fax2 !== null 
-     && $this->_fax3 !== null 
-     && $this->_fax4 !== null
-     && $this->_fax5 !== null) {
-      $this->fax = 
-        $this->_fax1 .
-        $this->_fax2 .
-        $this->_fax3 .
-        $this->_fax4 .
-        $this->_fax5;
-    }
+    $this->updateDBTel("tel", "_tel");
+    $this->updateDBTel("fax", "_fax");
   }  
 }
 ?>

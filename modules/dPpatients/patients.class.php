@@ -342,25 +342,6 @@ class CPatient extends CDossierMedical {
     $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
   }
   
-  /**
-   * Split a tel number into tel parts
-   *
-   * @param string $telField
-   * @param string $partFieldPrefix
-   */
-  function updateFormTel($telField, $partFieldPrefix) {
-    $partField1 = $partFieldPrefix . "1";
-    $partField2 = $partFieldPrefix . "2";
-    $partField3 = $partFieldPrefix . "3";
-    $partField4 = $partFieldPrefix . "4";
-    $partField5 = $partFieldPrefix . "5";
-    
-    $this->$partField1 = substr($this->$telField, 0, 2);
-    $this->$partField2 = substr($this->$telField, 2, 2);
-    $this->$partField3 = substr($this->$telField, 4, 2);
-    $this->$partField4 = substr($this->$telField, 6, 2);
-    $this->$partField5 = substr($this->$telField, 8, 2);
-  }
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -383,22 +364,10 @@ class CPatient extends CDossierMedical {
     $this->_naissance = mbDateToLocale($this->naissance);
 
     $this->updateFormTel("tel", "_tel");
-    $this->_tel21 = substr($this->tel2, 0, 2);
-    $this->_tel22 = substr($this->tel2, 2, 2);
-    $this->_tel23 = substr($this->tel2, 4, 2);
-    $this->_tel24 = substr($this->tel2, 6, 2);
-    $this->_tel25 = substr($this->tel2, 8, 2);
-    $this->_tel31 = substr($this->prevenir_tel, 0, 2);
-    $this->_tel32 = substr($this->prevenir_tel, 2, 2);
-    $this->_tel33 = substr($this->prevenir_tel, 4, 2);
-    $this->_tel34 = substr($this->prevenir_tel, 6, 2);
-    $this->_tel35 = substr($this->prevenir_tel, 8, 2);
-    $this->_tel41 = substr($this->employeur_tel, 0, 2);
-    $this->_tel42 = substr($this->employeur_tel, 2, 2);
-    $this->_tel43 = substr($this->employeur_tel, 4, 2);
-    $this->_tel44 = substr($this->employeur_tel, 6, 2);
-    $this->_tel45 = substr($this->employeur_tel, 8, 2);
-
+    $this->updateFormTel("tel2", "_tel2");
+    $this->updateFormTel("prevenir_tel", "_tel3");
+    $this->updateFormTel("employeur_tel", "_tel4");
+    
     $this->evalAge();
     
     // Assuré
@@ -412,16 +381,8 @@ class CPatient extends CDossierMedical {
       $this->_assure_naissance = sprintf("%02d/%02d/%04d", $this->_jour, $this->_mois, $this->_annee);
     }
 
-    $this->_assure_tel1 = substr($this->assure_tel, 0, 2);
-    $this->_assure_tel2 = substr($this->assure_tel, 2, 2);
-    $this->_assure_tel3 = substr($this->assure_tel, 4, 2);
-    $this->_assure_tel4 = substr($this->assure_tel, 6, 2);
-    $this->_assure_tel5 = substr($this->assure_tel, 8, 2);
-    $this->_assure_tel21 = substr($this->assure_tel2, 0, 2);
-    $this->_assure_tel22 = substr($this->assure_tel2, 2, 2);
-    $this->_assure_tel23 = substr($this->assure_tel2, 4, 2);
-    $this->_assure_tel24 = substr($this->assure_tel2, 6, 2);
-    $this->_assure_tel25 = substr($this->assure_tel2, 8, 2);
+    $this->updateFormTel("assure_tel", "_assure_tel");  
+    $this->updateFormTel("assure_tel2", "_assure_tel2");
     
     if ($this->_age != "??" && $this->_age <= 15)
       $this->_shortview = "Enf.";
@@ -470,37 +431,7 @@ class CPatient extends CDossierMedical {
     }
   }
   
-  /**
-   * Aggregate a tel number from tel parts
-   *
-   * @param string $telField
-   * @param string $partFieldPrefix
-   */
-  function updateDBTel($telField, $partFieldPrefix) {
-    $partField1 = $partFieldPrefix . "1";
-    $partField2 = $partFieldPrefix . "2";
-    $partField3 = $partFieldPrefix . "3";
-    $partField4 = $partFieldPrefix . "4";
-    $partField5 = $partFieldPrefix . "5";
     
-    if ($this->$partField1 === null) return;
-    if ($this->$partField2 === null) return;
-    if ($this->$partField3 === null) return;
-    if ($this->$partField4 === null) return;
-    if ($this->$partField5 === null) return;
-
-    $this->$telField = 
-      $this->$partField1 .
-      $this->$partField2 .
-      $this->$partField3 .
-      $this->$partField4 .
-      $this->$partField5;
-      
-    if ($this->$telField == "0000000000") {
-      $this->$telField = "";
-    }
-  }
-  
   function updateDBFields() {
   	global $dPconfig;
   	 
@@ -521,47 +452,10 @@ class CPatient extends CDossierMedical {
     }
 
     $this->updateDBTel("tel", "_tel");
-
-  	if (($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
-      $this->tel2 = 
-        $this->_tel21 .
-        $this->_tel22 .
-        $this->_tel23 .
-        $this->_tel24 .
-        $this->_tel25;
-    }
-    if ($this->tel2 == "0000000000") {
-      $this->tel2 = "";
-    }
+    $this->updateDBTel("tel2", "_tel2");
+    $this->updateDBTel("prevenir_tel", "_tel3");
+    $this->updateDBTel("employeur_tel", "_tel4");
     
-    if (($this->_tel31 !== null) && ($this->_tel32 !== null) && ($this->_tel33 !== null) && ($this->_tel34 !== null) && ($this->_tel35 !== null)) {
-      $this->prevenir_tel = 
-        $this->_tel31 .
-        $this->_tel32 .
-        $this->_tel33 .
-        $this->_tel34 .
-        $this->_tel35;
-    }
-    if ($this->prevenir_tel == "0000000000") {
-      $this->prevenir_tel = "";
-    }
-
-    if ($this->prevenir_tel == "0000000000") {
-      $this->prevenir_tel = "";
-    }
-    
-    if(($this->_tel41 !== null) && ($this->_tel42 !== null) && ($this->_tel43 !== null) && ($this->_tel44 !== null) && ($this->_tel45 !== null)) {
-      $this->employeur_tel = 
-        $this->_tel41 .
-        $this->_tel42 .
-        $this->_tel43 .
-        $this->_tel44 .
-        $this->_tel45;
-    }
-    if ($this->employeur_tel == "0000000000") {
-      $this->employeur_tel = "";
-    }
-
     if ($this->cp == "00000") {
       $this->cp = "";
     }
@@ -605,30 +499,9 @@ class CPatient extends CDossierMedical {
       $this->assure_prenom = ucwords(strtolower($this->assure_prenom));
     }
 
-  	if (($this->_assure_tel1 !== null) && ($this->_assure_tel2 !== null) && ($this->_assure_tel3 !== null) && ($this->_assure_tel4 !== null) && ($this->_assure_tel5 !== null)) {
-      $this->assure_tel = 
-        $this->_assure_tel1 .
-        $this->_assure_tel2 .
-        $this->_assure_tel3 .
-        $this->_assure_tel4 .
-        $this->_assure_tel5;
-    }
-    if ($this->assure_tel == "0000000000") {
-      $this->assure_tel = "";
-    }
-
-  	if (($this->_assure_tel21 !== null) && ($this->_assure_tel22 !== null) && ($this->_assure_tel23 !== null) && ($this->_assure_tel24 !== null) && ($this->_assure_tel25 !== null)) {
-      $this->assure_tel2 = 
-        $this->_assure_tel21 .
-        $this->_assure_tel22 .
-        $this->_assure_tel23 .
-        $this->_assure_tel24 .
-        $this->_assure_tel25;
-    }
-    if ($this->assure_tel2 == "0000000000") {
-      $this->assure_tel2 = "";
-    }
-
+    $this->updateDBTel("assure_tel", "_assure_tel");
+  	$this->updateDBTel("assure_tel2", "_assure_tel2");
+  	
     if ($this->assure_cp == "00000") {
       $this->assure_cp = "";
     }

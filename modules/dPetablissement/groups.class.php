@@ -104,54 +104,16 @@ class CGroups extends CMbObject {
       $this->_shortview = substr($this->text, 0, 23)."...";
     else
       $this->_shortview = $this->text;
-    
-    $this->_tel1 = substr($this->tel, 0, 2);
-    $this->_tel2 = substr($this->tel, 2, 2);
-    $this->_tel3 = substr($this->tel, 4, 2);
-    $this->_tel4 = substr($this->tel, 6, 2);
-    $this->_tel5 = substr($this->tel, 8, 2);
-    
-    $this->_tel_anesth1 = substr($this->tel_anesth, 0, 2);
-    $this->_tel_anesth2 = substr($this->tel_anesth, 2, 2);
-    $this->_tel_anesth3 = substr($this->tel_anesth, 4, 2);
-    $this->_tel_anesth4 = substr($this->tel_anesth, 6, 2);
-    $this->_tel_anesth5 = substr($this->tel_anesth, 8, 2);
-    
-    
-    $this->_fax1 = substr($this->fax, 0, 2);
-    $this->_fax2 = substr($this->fax, 2, 2);
-    $this->_fax3 = substr($this->fax, 4, 2);
-    $this->_fax4 = substr($this->fax, 6, 2);
-    $this->_fax5 = substr($this->fax, 8, 2);
+   
+    $this->updateFormTel("tel", "_tel");
+    $this->updateFormTel("tel_anesth", "_tel_anesth");
+    $this->updateFormTel("fax", "_fax");
   }
   
   function updateDBFields() {
-    if (($this->_tel1 != null) && ($this->_tel2 != null) && ($this->_tel3 != null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
-      $this->tel = 
-        $this->_tel1 .
-        $this->_tel2 .
-        $this->_tel3 .
-        $this->_tel4 .
-        $this->_tel5;
-    }
-
-    if (($this->_tel_anesth1 != null) && ($this->_tel_anesth2 != null) && ($this->_tel_anesth3 != null) && ($this->_tel_anesth4 !== null) && ($this->_tel_anesth5 !== null)) {
-      $this->tel_anesth = 
-        $this->_tel_anesth1 .
-        $this->_tel_anesth2 .
-        $this->_tel_anesth3 .
-        $this->_tel_anesth4 .
-        $this->_tel_anesth5;
-    }
-    
-    if (($this->_fax1 != null) && ($this->_fax2 != null) && ($this->_fax3 != null) && ($this->_fax4 !== null) && ($this->_fax5 !== null)) {
-      $this->fax = 
-        $this->_fax1 .
-        $this->_fax2 .
-        $this->_fax3 .
-        $this->_fax4 .
-        $this->_fax5;
-    }
+    $this->updateDBTel("tel", "_tel");
+    $this->updateDBTel("tel_anesth", "_tel_anesth");
+    $this->updateDBTel("fax", "_fax");
   }
   
 
