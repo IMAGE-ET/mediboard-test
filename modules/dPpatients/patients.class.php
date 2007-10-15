@@ -255,6 +255,12 @@ class CPatient extends CDossierMedical {
     $specs["assure_rques"]             = "text";
     $specs["assure_matricule"]         = "code insee confidential";
     
+    $specs["_jour"]                    = "num length|2 min|01 max|31";
+    $specs["_mois"]                    = "num length|2 min|01 max|12";
+    $specs["_annee"]                   = "num length|4 min|1900";
+    $specs["_assure_jour"]             = "num length|2 min|01 max|31";
+    $specs["_assure_mois"]             = "num length|2 min|01 max|12";
+    $specs["_assure_annee"]            = "num length|4 min|1900";   
     return $specs;
   }
   
