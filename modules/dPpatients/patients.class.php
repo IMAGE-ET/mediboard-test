@@ -214,7 +214,7 @@ class CPatient extends CDossierMedical {
     $specs["rques"]             = "text";
     $specs["cmu"]               = "date";
     $specs["ald"]               = "text";
-    $specs["rang_beneficiaire"] = "enum list|01|02|11|12|13";
+    $specs["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
     $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
     $specs["fin_validite_vitale"] = "date";
     
@@ -301,11 +301,17 @@ class CPatient extends CDossierMedical {
       $this->matricule = join("", array($vitale["VIT_NUMERO_SS_INDIV"], $vitale["VIT_CLE_SS_INDIV"]));
     }
     
+    $sexeMatrix = array (
+      "1" => "m",
+      "2" => "f",
+    );
+      
+    $this->sexe = $sexeMatrix[$this->matricule[0]];
+    
     // Assuré
     $this->assure_nom          = $vitale["VIT_NOM_ASSURE"];
     $this->assure_prenom       = $vitale["VIT_PRENOM_ASSURE"];
     $this->fin_validite_vitale = mbDateFromLocale($vitale["VIT_FIN_VALID_VITALE"]);
-    mbExport($this->getProps());
     
     // Régime
     $this->code_regime = $vitale["VIT_CODE_REGIME"];
@@ -330,6 +336,26 @@ class CPatient extends CDossierMedical {
     $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
   }
   
+  /**
+   * Split a tel number into tel parts
+   *
+   * @param string $telField
+   * @param string $partFieldPrefix
+   */
+  function updateFormTel($telField, $partFieldPrefix) {
+    $partField1 = $partFieldPrefix . "1";
+    $partField2 = $partFieldPrefix . "2";
+    $partField3 = $partFieldPrefix . "3";
+    $partField4 = $partFieldPrefix . "4";
+    $partField5 = $partFieldPrefix . "5";
+    
+    $this->$partField1 = substr($this->$telField, 0, 2);
+    $this->$partField2 = substr($this->$telField, 2, 2);
+    $this->$partField3 = substr($this->$telField, 4, 2);
+    $this->$partField4 = substr($this->$telField, 6, 2);
+    $this->$partField5 = substr($this->$telField, 8, 2);
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     
@@ -350,11 +376,7 @@ class CPatient extends CDossierMedical {
     
     $this->_naissance = mbDateToLocale($this->naissance);
 
-    $this->_tel1 = substr($this->tel, 0, 2);
-    $this->_tel2 = substr($this->tel, 2, 2);
-    $this->_tel3 = substr($this->tel, 4, 2);
-    $this->_tel4 = substr($this->tel, 6, 2);
-    $this->_tel5 = substr($this->tel, 8, 2);
+    $this->updateFormTel("tel", "_tel");
     $this->_tel21 = substr($this->tel2, 0, 2);
     $this->_tel22 = substr($this->tel2, 2, 2);
     $this->_tel23 = substr($this->tel2, 4, 2);
@@ -442,8 +464,39 @@ class CPatient extends CDossierMedical {
     }
   }
   
+  /**
+   * Aggregate a tel number from tel parts
+   *
+   * @param string $telField
+   * @param string $partFieldPrefix
+   */
+  function updateDBTel($telField, $partFieldPrefix) {
+    $partField1 = $partFieldPrefix . "1";
+    $partField2 = $partFieldPrefix . "2";
+    $partField3 = $partFieldPrefix . "3";
+    $partField4 = $partFieldPrefix . "4";
+    $partField5 = $partFieldPrefix . "5";
+    
+    if ($this->$partField1 === null) return;
+    if ($this->$partField2 === null) return;
+    if ($this->$partField3 === null) return;
+    if ($this->$partField4 === null) return;
+    if ($this->$partField5 === null) return;
+
+    $this->$telField = 
+      $this->$partField1 .
+      $this->$partField2 .
+      $this->$partField3 .
+      $this->$partField4 .
+      $this->$partField5;
+      
+    if ($this->$telField == "0000000000") {
+      $this->$telField = "";
+    }
+  }
+  
   function updateDBFields() {
-  	 global $dPconfig;
+  	global $dPconfig;
   	 
     $soundex2 = new soundex2;
     if ($this->nom) {
@@ -461,17 +514,7 @@ class CPatient extends CDossierMedical {
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
 
-  	if (($this->_tel1 !== null) && ($this->_tel2 !== null) && ($this->_tel3 !== null) && ($this->_tel4 !== null) && ($this->_tel5 !== null)) {
-      $this->tel = 
-        $this->_tel1 .
-        $this->_tel2 .
-        $this->_tel3 .
-        $this->_tel4 .
-        $this->_tel5;
-    }
-    if ($this->tel == "0000000000") {
-      $this->tel = "";
-    }
+    $this->updateDBTel("tel", "_tel");
 
   	if (($this->_tel21 !== null) && ($this->_tel22 !== null) && ($this->_tel23 !== null) && ($this->_tel24 !== null) && ($this->_tel25 !== null)) {
       $this->tel2 = 
@@ -590,6 +633,13 @@ class CPatient extends CDossierMedical {
         $this->_assure_mois  . "-" .
         $this->_assure_jour;
   	}
+  	
+//  	mbExport($this->naissance, "Naissance");
+//  	mbExport($this->_annee, "Année");
+//  	mbExport($this->_mois, "Mois");
+//  	mbExport($this->_jour, "Jour");
+//  	die;
+  	
   }
   
   // Backward references

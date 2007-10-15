@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.49";
+$config["mod_version"]     = "0.50";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -376,8 +376,13 @@ class CSetupdPpatients extends CSetup {
 						ADD `centre_gest` MEDIUMINT(4) UNSIGNED ZEROFILL, 
 						ADD `fin_validite_vitale` DATE;";
     $this->addQuery($sql);
-    
-    $this->mod_version = "0.49";
+
+    $this->makeRevision("0.49");
+    $sql = "ALTER TABLE `patients`
+						CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.50";
   }
 }
 
