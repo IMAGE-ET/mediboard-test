@@ -7,6 +7,15 @@ Class.extend = function (oClass, oExtension) {
 }
 
 /**
+ * Object utility object
+ */
+
+// Can't use Object.extend() due to recursions
+Object.clone = function(object) {
+  return Object.extend({}, object);
+}
+
+/**
  * Try utility object
  */
 

@@ -3,14 +3,23 @@
     <th class="chambre" colspan="2" onclick="
         flipChambre({{$curr_chambre->_id}});
         {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-        Droppables.add('lit-{{$curr_lit->_id}}', { 
-          onDrop:function(element){
-            DragDropSejour(element.id,{{$curr_lit->_id}})
-          }, 
-          hoverclass:'litselected'
-        });
+        Droppables.addLit({{$curr_lit->_id}});
         {{foreach from=$curr_lit->_ref_affectations item=curr_aff}}
-        setupCalendar({{$curr_aff->_id}});
+        Calendar.setupAffectation({{$curr_aff->_id}}, {
+          sejour: {
+            start: '{{$curr_aff->_ref_sejour->entree_prevue}}',
+            stop: '{{$curr_aff->_ref_sejour->sortie_prevue}}'
+          },
+          currAffect : {
+            start : '{{$curr_aff->entree}}',
+            stop : '{{$curr_aff->sortie}}'
+          },
+          outerAffect : {
+            start : '{{$curr_aff->_ref_prev->entree}}',
+            stop : '{{$curr_aff->_ref_next->sortie}}'
+          }
+          
+        });
         {{/foreach}}
         {{/foreach}}">
       {{if $curr_chambre->_overbooking}}

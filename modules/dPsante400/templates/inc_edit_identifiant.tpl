@@ -45,7 +45,7 @@
 	  <input type="hidden" name="object_id" class="{{$filter->_props.object_id}}" value="{{$filter->object_id}}" />
       {{$target->_view}}
 	  {{else}}
-      <input name="object_id" class="{{$filter->_props.object_id}}" value="{{$idSante400->object_id}}" />
+	    {{mb_field object=$idSante400 field=object_id}}
       <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
       <script type="text/javascript">
         ObjectSelector.initEdit = function(){

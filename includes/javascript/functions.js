@@ -841,6 +841,21 @@ Object.extend(Calendar, {
 	  return aStyles.join(" ");
   },
 
+	prepareDates: function(dates) {
+	  dates.current.start = Calendar.prepareDate(dates.current.start);
+	  dates.current.stop  = Calendar.prepareDate(dates.current.stop);
+	  dates.limit.start = Calendar.prepareDate(dates.limit.start);
+	  dates.limit.stop  = Calendar.prepareDate(dates.limit.stop);
+	  dates.spots = dates.spots.map(Calendar.prepareDate);
+	},
+	
+  prepareDate: function(datetime) {
+    if (!datetime) {
+      return null;
+    }
+    
+    return Date.isDATETIME(datetime) ? Date.fromDATETIME(datetime).toDATE() : datetime;
+  },
   
   regField: function(sFormName, sFieldName, bTime, userDates) {
 	  var dates = {
@@ -952,6 +967,10 @@ var Duration = {
 }
 
 Object.extend(Date, { 
+	isDATETIME: function(sDateTime) {
+	  return sDateTime.match(/\d\d\d\d-\d\d-\d\d \d\d:\d\d:\d\d/);
+	},
+	
   fromDATE: function(sDate) {
 	  // sDate must be: YYYY-MM-DD
 	  var aParts = sDate.split("-");
