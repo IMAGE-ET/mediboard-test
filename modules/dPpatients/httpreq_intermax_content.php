@@ -15,6 +15,6 @@ $intermax = mbGetValueFromGetOrSession("intermax", array());
 
 $fonction = @$intermax["FONCTION"]["NOM"];
 
-$AppUI->stepAjax("Fonction Intermax '$fonction', reçue", UI_MSG_OK);
+$AppUI->stepAjax("Fonction Intermax '$fonction' reçue", UI_MSG_OK);
 $AppUI->callbackAjax("Intermax.handleResult", $fonction);
 ?>

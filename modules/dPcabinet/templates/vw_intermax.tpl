@@ -6,11 +6,9 @@
 <script type="text/javascript">
 
 Intermax.createResultMessages = function(oContent) {
-  var idFonction = oContent.FONCTION.NOM.replace(" ", "-");
-
   // Select div result handler      
-  var sSelector = "tr#" + idFonction + " td.result div.handler";
-  var eResultHandler = $$(sSelector)[0];
+  var idFonction = oContent.FONCTION.NOM.replace(/ /g, "-");
+  var eResultHandler = $(idFonction);
   eResultHandler.innerHTML = "";
 
   // Create handler messages
@@ -59,16 +57,16 @@ Intermax.ResultHandler = {
   </tr>
 
   {{foreach from=$intermaxFunctions item="_function"}}
-  <tr id="{{$_function|replace:" ":"-"}}">
+  <tr>
     <td>
       <button class="tick" onclick="Intermax.trigger('{{$_function}}');">
         {{tr}}InterMax.{{$_function}}{{/tr}}
       </button>
     </td>
-    <td class="result">
+    <td id="{{$_function|replace:" ":"-"}}">
       <div class="handler">My Result</div>
     </td>
   </tr>
   {{/foreach}}
   
-</table
+</table>

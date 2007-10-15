@@ -54,6 +54,10 @@ function thumb($params, &$smarty) {
 }
 
 function smarty_modifier_json($object) {
+  if (function_exists("json_encode")) {
+    return json_encode($object);
+  }
+  
   // create a new instance of Services_JSON
   $json = new Services_JSON();
   $sJson = html_entity_decode($json->encode($object),ENT_NOQUOTES);

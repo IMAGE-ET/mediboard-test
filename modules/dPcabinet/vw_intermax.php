@@ -12,12 +12,15 @@ global $AppUI, $can, $m;
 $can->edit &= $AppUI->user_prefs["GestionFSE"];
 $can->needsEdit();
 
-$intermaxFunctions = array(
+$intermaxFunctions = array (
   "Configuration",
+  "Professionnels de santé",
   "Lire Vitale",
   "Lire CPS",
-);
-
+  "Formater FSE",
+  );
+  
+  
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("intermaxFunctions", $intermaxFunctions);

@@ -257,6 +257,10 @@ var Console = {
   },
   
   debug: function(oValue, sLabel, oOptions) {
+    if (Preferences.INFOSYSTEM != "1") {
+      return;
+    }
+  
     sLabel = sLabel || "Value";
 
     var oDefault = {
