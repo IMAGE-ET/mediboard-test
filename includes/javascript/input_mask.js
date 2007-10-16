@@ -72,7 +72,7 @@ InputMask = {
   
   masksEx: {
     telSuisse: "### ### ## ##",
-    telFrance: "## ## ## ## ##",
+    telFrance: "## ## ## ## ##"
   },
 
   /* Finds every element with class input_mask and applies masks to them.
