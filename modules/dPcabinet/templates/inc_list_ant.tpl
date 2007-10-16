@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 var Antecedent = {
-  delete: function(oForm, onComplete) {
+  remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'cet antécédent',
       ajax: 1,
@@ -17,7 +17,7 @@ var Antecedent = {
 }
 
 var Traitement = {
-  delete: function(oForm, onComplete) {
+  remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'ce traitement',
       ajax: 1,
@@ -55,7 +55,7 @@ var Traitement = {
               <input type="hidden" name="dosql" value="do_antecedent_aed" />
               <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
               
-              <button class="trash notext" type="button" onclick="Antecedent.delete(this.form, reloadAntecedents)">
+              <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadAntecedents)">
                 {{tr}}delete{{/tr}}
               </button> 
               {{if $_is_anesth}}
@@ -87,7 +87,7 @@ var Traitement = {
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="dosql" value="do_traitement_aed" />
           <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-          <button class="trash notext" type="button" onclick="Traitement.delete(this.form, reloadAntecedents)">
+          <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadAntecedents)">
             {{tr}}delete{{/tr}}
           </button>
           {{if $_is_anesth}}
