@@ -29,8 +29,9 @@ function reloadAnesth(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", "systemMsg");
+  url.requestUpdate("anesth", "systemMsg", { onComplete: loadActes(operation_id,"{{$selOp->chir_id}}") });
 }
+
 
 
 function pageMain() {
@@ -85,13 +86,13 @@ function pageMain() {
         
         {{if $selOp->materiel}}
         <tr>
-          <th>Matériel</th>
+          <th class="category">Matériel</th>
           <td><strong>{{$selOp->materiel|nl2br}}</strong></td>
         </tr>
         {{/if}}
         {{if $selOp->rques}}
         <tr>
-          <th>Remarques</th>
+          <th class="category">Remarques</th>
           <td>{{$selOp->rques|nl2br}}</td>
         </tr>
         {{/if}}

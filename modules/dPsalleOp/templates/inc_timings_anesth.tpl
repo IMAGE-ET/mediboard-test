@@ -15,10 +15,10 @@
                   Entrée patient:
                   {{if $can->edit}}
                   <input name="entree_salle" size="5" type="text" value="{{$selOp->entree_salle|date_format:"%H:%M"}}" />
-                  <button type="button" class="tick notext" onclick="submitTiming(this.form)">{{tr}}Save{{/tr}}</button>
+                  <button type="button" class="tick notext" onclick="submitTiming(this.form);submitAnesth(anesth{{$selOp->operation_id}});">{{tr}}Save{{/tr}}</button>
                   <button type="button" class="cancel notext" onclick="this.form.entree_salle.value = ''; submitTiming(this.form);">{{tr}}Cancel{{/tr}}</button>
                   {{elseif $modif_operation}}
-                  <select name="entree_salle" onchange="submitTiming(this.form)">
+                  <select name="entree_salle" onchange="submitTiming(this.form);submitAnesth(anesth{{$selOp->operation_id}});">
                     <option value="">-</option>
                     {{foreach from=$timing.entree_salle|smarty:nodefaults item=curr_time}}
                     <option value="{{$curr_time}}" {{if $curr_time == $selOp->entree_salle}}selected="selected"{{/if}}>
@@ -33,7 +33,7 @@
                   
                   {{elseif $can->edit || $modif_operation}}
                   <input type="hidden" name="entree_salle" value="" />
-                  <button type="button" class="submit" onclick="this.form.entree_salle.value = 'current'; submitTiming(this.form)">entrée patient</button>
+                  <button type="button" class="submit" onclick="this.form.entree_salle.value = 'current'; submitTiming(this.form);submitAnesth(anesth{{$selOp->operation_id}});">entrée patient</button>
                   {{else}}-{{/if}}
                 </td>
                 <td class="button">
