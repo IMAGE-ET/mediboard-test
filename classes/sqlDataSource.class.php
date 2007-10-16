@@ -221,8 +221,9 @@ abstract class CSQLDataSource {
    * @return int number of queried lines, false if failed
    */
   function queryDump($dumpPath, $utfDecode = false) {
-		$sqlLines = file($dumpPath);
-		$query = "";
+		$sqlLines  = file($dumpPath);
+		$query     = "";
+		$nbQueries = 0;
 		foreach ($sqlLines as $lineNumber => $sqlLine) {
 		  $sqlLine = trim($sqlLine);
 		  if ($utfDecode) {
@@ -248,11 +249,12 @@ abstract class CSQLDataSource {
 	        trigger_error("Error reading dump on line $lineNumber : $msg");
 	        return false;
 	      }
+	      $nbQueries++;
 	      $query = "";
 	    }
 		}  
 
-		return $lineNumber;
+		return $nbQueries;
   }
 
   /**

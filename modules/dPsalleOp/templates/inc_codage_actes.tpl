@@ -42,7 +42,7 @@
       <tr id="acte{{$key}}-trigger">  
         <td colspan="2">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} ({{$acte->_tarif|string_format:"%.2f"}} €)
         </td>
       </tr>
     

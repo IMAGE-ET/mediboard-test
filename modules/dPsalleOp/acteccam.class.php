@@ -33,6 +33,7 @@ class CActeCCAM extends CMbMetaObject {
   var $_anesth            = null;
   var $_linked_actes      = null;
   var $_guess_association = null;
+  var $_guess_regle_asso  = null;
   
   // Object references
   var $_ref_executant = null;
@@ -74,6 +75,7 @@ class CActeCCAM extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
+    mbRemoveValuesInArray("", $this->_modificateurs);
     $this->_view   = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_anesth = ($this->code_activite == 4) ? true : false;
   }
@@ -274,7 +276,8 @@ class CActeCCAM extends CMbMetaObject {
     
     // Cas d'un seul actes (règle A)
     if($numActes == 1) {
-      $this->_guess_association = "A";
+      $this->_guess_association = "";
+      $this->_guess_regle_asso  = "A";
       return $this->_guess_association;
     }
     
@@ -282,19 +285,22 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 2) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
-        $this->_guess_association = "B";
+        $this->_guess_association = "";
+      $this->_guess_regle_asso    = "B";
         return $this->_guess_association;
       }
       // 1 acte + 1 supplément des chap. 19.02 (règle C)
       if($numChap1902 == 1) {
-        $this->_guess_association = "C1";
+        $this->_guess_association = "1";
+      $this->_guess_regle_asso    = "C";
         return $this->_guess_association;
       }
     }
     
     // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle D)
     if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
-      $this->_guess_association = "D1";
+      $this->_guess_association = "1";
+      $this->_guess_regle_asso  = "D";
       return $this->_guess_association;
     }
     
@@ -302,10 +308,12 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 2 && ($numChap02 == 1 || $numChap1901 == 1)) {
       switch($position) {
         case 0 :
-          $this->_guess_association = "E1";
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "E";
           break;
         case 1 :
-          $this->_guess_association = "E2";
+          $this->_guess_association = "2";
+          $this->_guess_regle_asso  = "E";
           break;
       }
       return $this->_guess_association;
@@ -315,20 +323,25 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 3 && ($numChap02 == 1 || $numChap1901 == 1) && ($numChap18 == 1 || $numChap1902 == 1)) {
       switch($position) {
         case 0 :
-          $this->_guess_association = "F1";
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "F";
           break;
         case 1 :
           if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
-            $this->_guess_association = "F1";
+            $this->_guess_association = "1";
+            $this->_guess_regle_asso  = "F";
           } else {
-            $this->_guess_association = "F2";
+            $this->_guess_association = "2";
+            $this->_guess_regle_asso  = "F";
           }
           break;
         case 2 :
           if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
-            $this->_guess_association = "F1";
+            $this->_guess_association = "1";
+            $this->_guess_regle_asso  = "F";
           } else {
-            $this->_guess_association = "F2";
+            $this->_guess_association = "2";
+            $this->_guess_regle_asso  = "F";
           }
           break;
       }
@@ -339,10 +352,12 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 2 && $numChap01 == 2 && $membresDiff) {
       switch($position) {
         case 0 :
-          $this->_guess_association = "G1";
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "G";
           break;
         case 1 :
-          $this->_guess_association = "G3";
+          $this->_guess_association = "3";
+          $this->_guess_regle_asso  = "G";
           break;
       }
       return $this->_guess_association;
@@ -352,13 +367,16 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 3 && $numChap01 == 3 && $DPST) {
       switch($position) {
         case 0 :
-          $this->_guess_association = "H1";
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "H";
           break;
         case 1 :
-          $this->_guess_association = "H3";
+          $this->_guess_association = "3";
+          $this->_guess_regle_asso  = "H";
           break;
         case 2 :
-          $this->_guess_association = "H2";
+          $this->_guess_association = "2";
+          $this->_guess_regle_asso  = "H";
           break;
       }
     }
@@ -367,13 +385,16 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 3 && $pratORL && $DPC && $assoExCurRec) {
       switch($position) {
         case 0 :
-          $this->_guess_association = "I1";
+          $this->_guess_association = "1";
+          $this->_guess_regle_asso  = "I";
           break;
         case 1 :
-          $this->_guess_association = "I2";
+          $this->_guess_association = "2";
+          $this->_guess_regle_asso  = "I";
           break;
         case 2 :
-          $this->_guess_association = "I2";
+          $this->_guess_association = "2";
+          $this->_guess_regle_asso  = "I";
           break;
       }
     }
@@ -381,16 +402,39 @@ class CActeCCAM extends CMbMetaObject {
     // Cas général pour plusieurs actes (règle Z)
     switch($position) {
       case 0 :
-        $this->_guess_association = "Z1";
+        $this->_guess_association = "1";
+        $this->_guess_regle_asso  = "Z";
         break;
       case 1 :
-        $this->_guess_association = "Z2";
+        $this->_guess_association = "2";
+        $this->_guess_regle_asso  = "Z";
         break;
       default :
         $this->_guess_association = "X";
+        $this->_guess_regle_asso  = "Z";
     }
     
     return $this->_guess_association;
+  }
+  
+  function getTarif() {
+    $this->guessAssociation();
+    if($this->code_association !== null) {
+      $code_asso = $this->code_association;
+    } else {
+      $code_asso = $this->_guess_association;
+    }
+    $this->_tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
+    $coeffAsso    = $this->_ref_code_ccam->getCoeffAsso($code_asso);
+    $forfait     = 0;
+    $coefficient = 100;
+    foreach($this->_modificateurs as $modif) {
+      $result = $this->_ref_code_ccam->getForfait($modif);
+      $forfait     += $result["forfait"];
+      $coefficient += ($result["coefficient"]) - 100;
+    }
+    $this->_tarif = ($this->_tarif * ($coefficient / 100) + $forfait) * ($coeffAsso / 100);
+    return $this->_tarif;
   }
 }
 

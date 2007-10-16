@@ -57,7 +57,7 @@ class CCodeCCAM {
   // Chargement des variables importantes
   function LoadLite() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
+    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if(mysql_num_rows($result) == 0) {
       $this->code = "-";
@@ -70,16 +70,16 @@ class CCodeCCAM {
       //On rentre les champs de la table actes
       $this->libelleCourt = $row["LIBELLECOURT"];
       $this->libelleLong = $row["LIBELLELONG"];
-      $query1 = "select * from activiteacte where ";
+      $query1 = "SELECT * FROM activiteacte WHERE ";
       $query1 .= $ds->prepare("CODEACTE = %", $this->code);
-      $query1 .= " and ACTIVITE = '4'";
+      $query1 .= " AND ACTIVITE = '4'";
       $result1 = $ds->exec($query1);
       if($ds->numRows($result1)) {
-        $query2 = "select * from modificateuracte where ";
+        $query2 = "SELECT * FROM modificateuracte WHERE ";
         $query2 .= $ds->prepare("CODEACTE = %", $this->code);
-        $query2 .= " and CODEACTIVITE = '4'";
-        $query2 .= " and MODIFICATEUR = '7'";
-        $query2 .= " group by MODIFICATEUR";
+        $query2 .= " AND CODEACTIVITE = '4'";
+        $query2 .= " AND MODIFICATEUR = '7'";
+        $query2 .= " GROUP BY MODIFICATEUR";
         $result2 = $ds->exec($query2);
         $this->_code7 = $ds->numRows($result2);
       } else
@@ -91,7 +91,7 @@ class CCodeCCAM {
   // Chargement des variables
   function LoadMedium() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
+    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if($ds->numRows($result) == 0) {
       $this->code = "";
@@ -110,16 +110,16 @@ class CCodeCCAM {
       
       // Extraction des remarques
       $this->remarques = array();
-      $query = $ds->prepare("select * from notes where CODEACTE = %", $this->code);
+      $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
       $result = $ds->exec($query);
       while ($row = $ds->fetchArray($result)) {
         $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
       }
       
       // Extraction des activités
-      $query = "select ACTIVITE as numero " .
-          "\nfrom activiteacte " .
-          "\nwhere CODEACTE = %";
+      $query = "SELECT ACTIVITE AS numero " .
+          "\nFROM activiteacte " .
+          "\nWHERE CODEACTE = %";
       $query = $ds->prepare($query, $this->code);
       $result = $ds->exec($query);
       while($obj = $ds->fetchObject($result)) {
@@ -140,9 +140,9 @@ class CCodeCCAM {
         $activite =& $this->activites[$key];
   
         // Type de l'activité
-        $query = "select LIBELLE as `type`" .
-            "\nfrom activite " .
-            "\nwhere CODE = %";
+        $query = "SELECT LIBELLE AS `type`" .
+            "\nFROM activite " .
+            "\nWHERE CODE = %";
         $query = $ds->prepare($query, $activite->numero);
         $result = $ds->exec($query);
         $obj = $ds->fetchObject($result);
@@ -151,18 +151,18 @@ class CCodeCCAM {
         // Extraction des modificateurs
         $activite->modificateurs = array();
         $modificateurs =& $activite->modificateurs;
-        $query = "select * from modificateuracte " .
-            "\nwhere CODEACTE = %1" .
-            "\nand CODEACTIVITE = %2" .
-            "\ngroup by MODIFICATEUR";
+        $query = "SELECT * FROM modificateuracte " .
+            "\nWHERE CODEACTE = %1" .
+            "\nAND CODEACTIVITE = %2" .
+            "\nGROUP BY MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
         
         while($row = $ds->fetchArray($result)) {
-          $query = "select CODE as code, LIBELLE as libelle" .
-              "\nfrom modificateur " .
-              "\nwhere CODE = %" .
-              "\norder by CODE";
+          $query = "SELECT CODE AS code, LIBELLE AS libelle" .
+              "\nFROM modificateur " .
+              "\nWHERE CODE = %" .
+              "\nORDER BY CODE";
           $query = $ds->prepare($query, $row["MODIFICATEUR"]);
           $modificateurs[] = $ds->fetchObject($ds->exec($query));
         }
@@ -170,12 +170,12 @@ class CCodeCCAM {
         // Extraction des phases
         $activite->phases = array();
         $phases =& $activite->phases;
-        $query = "select PHASE as phase, PRIXUNITAIRE as tarif" .
-            "\nfrom phaseacte " .
-            "\nwhere CODEACTE = %1" .
-            "\nand ACTIVITE = %2" .
-            "\ngroup by PHASE" .
-            "\norder by PHASE, DATE1 DESC";
+        $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
+            "\nFROM phaseacte " .
+            "\nWHERE CODEACTE = %1" .
+            "\nAND ACTIVITE = %2" .
+            "\nGROUP BY PHASE" .
+            "\nORDER BY PHASE, DATE1 DESC";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
               
@@ -214,7 +214,7 @@ class CCodeCCAM {
   
   function loadChaps() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
+    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     $row = $ds->fetchArray($result);
 
@@ -229,11 +229,11 @@ class CCodeCCAM {
     // On rentre les infos sur les chapitres
     foreach($this->chapitres as $key => $value) {
       $rang = $this->chapitres[$key]["db"];
-      $query = $ds->prepare("select * from arborescence where CODEPERE = %1 and rang = %2", $pere, $rang);
+      $query = $ds->prepare("SELECT * FROM arborescence WHERE CODEPERE = %1 AND rang = %2", $pere, $rang);
       $result = $ds->exec($query);
       $row = $ds->fetchArray($result);
       
-      $query = $ds->prepare("select * from notesarborescence where CODEMENU = %", $row["CODEMENU"]);
+      $query = $ds->prepare("SELECT * FROM notesarborescence WHERE CODEMENU = %", $row["CODEMENU"]);
       $result2 = $ds->exec($query);
       
       $track .= substr($row["RANG"], -2) . ".";
@@ -252,7 +252,7 @@ class CCodeCCAM {
   // Chargement des variables
   function Load() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $this->code);
+    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
     if($ds->numRows($result) == 0) {
       $this->code = "";
@@ -271,16 +271,16 @@ class CCodeCCAM {
       
       // Extraction des remarques
       $this->remarques = array();
-      $query = $ds->prepare("select * from notes where CODEACTE = %", $this->code);
+      $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
       $result = $ds->exec($query);
       while ($row = $ds->fetchArray($result)) {
         $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
       }
       
       // Extraction des activités
-      $query = "select ACTIVITE as numero " .
-          "\nfrom activiteacte " .
-          "\nwhere CODEACTE = %";
+      $query = "SELECT ACTIVITE AS numero " .
+          "\nFROM activiteacte " .
+          "\nWHERE CODEACTE = %";
       $query = $ds->prepare($query, $this->code);
       $result = $ds->exec($query);
       while($obj = $ds->fetchObject($result)) {
@@ -301,9 +301,9 @@ class CCodeCCAM {
         $activite =& $this->activites[$key];
   
         // Type de l'activité
-        $query = "select LIBELLE as `type`" .
-            "\nfrom activite " .
-            "\nwhere CODE = %";
+        $query = "SELECT LIBELLE AS `type`" .
+            "\nFROM activite " .
+            "\nWHERE CODE = %";
         $query = $ds->prepare($query, $activite->numero);
         $result = $ds->exec($query);
         $obj = $ds->fetchObject($result);
@@ -312,18 +312,18 @@ class CCodeCCAM {
         // Extraction des modificateurs
         $activite->modificateurs = array();
         $modificateurs =& $activite->modificateurs;
-        $query = "select * from modificateuracte " .
-            "\nwhere CODEACTE = %1" .
-            "\nand CODEACTIVITE = %2" .
-            "\ngroup by MODIFICATEUR";
+        $query = "SELECT * FROM modificateuracte " .
+            "\nWHERE CODEACTE = %1" .
+            "\nAND CODEACTIVITE = %2" .
+            "\nGROUP BY MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
         
         while($row = $ds->fetchArray($result)) {
-          $query = "select CODE as code, LIBELLE as libelle" .
-              "\nfrom modificateur " .
-              "\nwhere CODE = %" .
-              "\norder by CODE";
+          $query = "SELECT CODE AS code, LIBELLE AS libelle" .
+              "\nFROM modificateur " .
+              "\nWHERE CODE = %" .
+              "\nORDER BY CODE";
           $query = $ds->prepare($query, $row["MODIFICATEUR"]);
           $modificateurs[] = $ds->fetchObject($ds->exec($query));
         }
@@ -331,12 +331,12 @@ class CCodeCCAM {
         // Extraction des phases
         $activite->phases = array();
         $phases =& $activite->phases;
-        $query = "select PHASE as phase, PRIXUNITAIRE as tarif" .
-            "\nfrom phaseacte " .
-            "\nwhere CODEACTE = %1" .
-            "\nand ACTIVITE = %2" .
-            "\ngroup by PHASE" .
-            "\norder by PHASE, DATE1 DESC";
+        $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
+            "\nFROM phaseacte " .
+            "\nWHERE CODEACTE = %1" .
+            "\nAND ACTIVITE = %2" .
+            "\nGROUP BY PHASE" .
+            "\nORDER BY PHASE, DATE1 DESC";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
               
@@ -361,12 +361,12 @@ class CCodeCCAM {
       }
       
       //On rentre les actes associés
-      $query = $ds->prepare("select * from associabilite where CODEACTE = % group by ACTEASSO", $this->code);
+      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO", $this->code);
       $result = $ds->exec($query);
       $i = 0;
       while($row = $ds->fetchArray($result)) {
         $this->assos[$i]["code"] = $row["ACTEASSO"];
-        $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $row["ACTEASSO"]);
+        $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["ACTEASSO"]);
         $result2 = $ds->exec($query);
         $row2 = $ds->fetchArray($result2);
         $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
@@ -374,12 +374,12 @@ class CCodeCCAM {
       }
       
       //On rentre les actes incompatibles
-      $query = $ds->prepare("select * from incompatibilite where CODEACTE = % group by INCOMPATIBLE", $this->code);
+      $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE", $this->code);
       $result = $ds->exec($query);
       $i = 0;
       while($row = $ds->fetchArray($result)) {
         $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
-        $query = $ds->prepare("select * from actes where CODE = % and DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
+        $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
         $result2 = $ds->exec($query);
         $row2 = $ds->fetchArray($result2);
         $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
@@ -387,12 +387,12 @@ class CCodeCCAM {
       }
       
       //On rentre la procédure associée
-      $query = $ds->prepare("select * from procedures where CODEACTE = % group by CODEACTE order by DATEEFFET DESC", $this->code);
+      $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
       $result = $ds->exec($query);
       if($ds->numRows($result) > 0) {
         $row = $ds->fetchArray($result);
         $this->procedure["code"] = $row["CODEPROCEDURE"];
-        $query = $ds->prepare("select LIBELLELONG from actes where CODE = % and DATEFIN = '00000000'", $this->procedure["code"]);
+        $query = $ds->prepare("SELECT LIBELLELONG FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->procedure["code"]);
         $result = $ds->exec($query);
         $row = $ds->fetchArray($result);
         $this->procedure["texte"] = $row["LIBELLELONG"];
@@ -401,6 +401,31 @@ class CCodeCCAM {
         $this->procedure["texte"] = "";
       }
     }
+  }
+  
+  function getForfait($modificateur) {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM modificateurforfait WHERE CODE = % AND DATEFIN = '00000000'", $modificateur);
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+    $valeur = array();
+    $valeur["forfait"] = $row["FORFAIT"] / 100;
+    $valeur["coefficient"] = $row["COEFFICIENT"] / 10;
+    return $valeur;
+  }
+  
+  function getCoeffAsso($code) {
+    if($code == "X")
+      return 0;
+    if(!$code) {
+      return 100;
+    }
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM association WHERE CODE = % AND DATEFIN = '00000000'", $code);
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+    $valeur = $row["COEFFICIENT"] / 10;
+    return $valeur;
   }
 } 
 
