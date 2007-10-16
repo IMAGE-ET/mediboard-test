@@ -45,21 +45,24 @@ $AppUI->stepAjax("Import des données de base effectué avec succès ($lineCount li
 
 // Ajout des fichiers NX dans les tables
 $listTables = array(
-              "actes"             => "TB101.txt",
-              "activite"          => "TB060.txt",
-              "activiteacte"      => "TB201.txt",
-              "arborescence"      => "TB091.txt",
-              "associabilite"     => "TB220.txt",
-              "association"       => "TB002.txt",
-              "incompatibilite"   => "TB130.txt",
-              "modificateur"      => "TB083.txt",
-              "modificateuracte"  => "TBCCAM06.txt",
-              "notes"             => "TBCCAM11.txt",
-              "notesarborescence" => "TB092.txt",
-              "phase"             => "TB066.txt",
-              "phaseacte"         => "TB310.txt",
-              "procedures"        => "TB120.txt",
-              "typenote"          => "TB050.txt"
+              "actes"               => "TB101.txt",
+              "activite"            => "TB060.txt",
+              "activiteacte"        => "TB201.txt",
+              "arborescence"        => "TB091.txt",
+              "associabilite"       => "TB220.txt",
+              "association"         => "TB002.txt",
+              "incompatibilite"     => "TB130.txt",
+              "modificateur"        => "TB083.txt",
+              "modificateuracte"    => "TBCCAM06.txt",
+              "modificateurcompat"  => "TB009.txt",
+              "modificateurforfait" => "TB011.txt",
+              "modificateurnombre"  => "TB019.txt",
+              "notes"               => "TBCCAM11.txt",
+              "notesarborescence"   => "TB092.txt",
+              "phase"               => "TB066.txt",
+              "phaseacte"           => "TB310.txt",
+              "procedures"          => "TB120.txt",
+              "typenote"            => "TB050.txt"
               );
 
 function addFileIntoDB($file, $table) {
