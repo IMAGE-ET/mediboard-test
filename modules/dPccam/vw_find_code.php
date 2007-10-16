@@ -82,7 +82,7 @@ $query = "SELECT * FROM arborescence WHERE CODEPERE = '000001' ORDER BY RANG";
 $result = $ds->exec($query);
 while($row = $ds->fetchArray($result)) {
   $codeChap = $row["CODEMENU"];
-  $listChap1[$codeChap]["rang"]  = $row["RANG"];
+  $listChap1[$codeChap]["rang"]  = substr($row["RANG"], 4, 2);
   $listChap1[$codeChap]["texte"] = $row["LIBELLE"];
 }
 
@@ -93,7 +93,7 @@ if($chap1) {
   $result = $ds->exec($query);
   while($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
-    $listChap2[$codeChap]["rang"]  = $row["RANG"];
+    $listChap2[$codeChap]["rang"]  = substr($row["RANG"], 4, 2);
     $listChap2[$codeChap]["texte"] = $row["LIBELLE"];
   }
 }
@@ -105,7 +105,7 @@ if($chap2) {
   $result = $ds->exec($query);
   while($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
-    $listChap3[$codeChap]["rang"]  = $row["RANG"];
+    $listChap3[$codeChap]["rang"]  = substr($row["RANG"], 4, 2);
     $listChap3[$codeChap]["texte"] = $row["LIBELLE"];
   }
 }
@@ -117,7 +117,7 @@ if($chap3) {
   $result = $ds->exec($query);
   while($row = $ds->fetchArray($result)) {
     $codeChap = $row["CODEMENU"];
-    $listChap4[$codeChap]["rang"]  = $row["RANG"];
+    $listChap4[$codeChap]["rang"]  = substr($row["RANG"], 4, 2);
     $listChap4[$codeChap]["texte"] = $row["LIBELLE"];
   }
 }
