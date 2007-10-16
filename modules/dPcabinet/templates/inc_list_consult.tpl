@@ -109,7 +109,9 @@
       {{/if}}
     </td>
     <td rowspan="2">
+      {{if $curr_consult->_ref_categorie->_id}}
       <img src="./modules/dPcabinet/categories/{{$curr_consult->_ref_categorie->nom_icone}}" alt="{{$curr_consult->_ref_categorie->nom_categorie}}" title="{{$curr_consult->_ref_categorie->nom_categorie}}"/>
+      {{/if}}
     </td>
   </tr>
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
