@@ -85,9 +85,11 @@
       <tr>
         <th />
         <td>
-          <strong onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
-            Code d'association : {{$acte->_guess_association}}
-          </strong>
+          <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+            <strong>
+              Code d'association : {{$acte->_guess_association}}
+            </strong>
+          </label>
         </td>
       </tr>
 
