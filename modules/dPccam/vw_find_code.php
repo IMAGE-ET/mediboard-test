@@ -153,19 +153,19 @@ if ($code || $clefs || $selacces || $seltopo1 || $chap1 || $chap2 || $chap3 || $
   
   // On filtre selon le chapitre 4
   if($chap4) {
-    $query .= " AND ARBORESCENCE4 = '".$listChap4[$chap4]["rang"]."'";
+    $query .= " AND ARBORESCENCE4 = '0000".$listChap4[$chap4]["rang"]."'";
   }
   // On filtre selon le chapitre 3
   if($chap3) {
-    $query .= " AND ARBORESCENCE3 = '".$listChap3[$chap3]["rang"]."'";
+    $query .= " AND ARBORESCENCE3 = '0000".$listChap3[$chap3]["rang"]."'";
   }
   // On filtre selon le chapitre 2
   if($chap2) {
-    $query .= " AND ARBORESCENCE2 = '".$listChap2[$chap2]["rang"]."'";
+    $query .= " AND ARBORESCENCE2 = '0000".$listChap2[$chap2]["rang"]."'";
   }
   // On filtre selon le chapitre 1
   if($chap1) {
-    $query .= " AND ARBORESCENCE1 = '".$listChap1[$chap1]["rang"]."'";
+    $query .= " AND ARBORESCENCE1 = '0000".$listChap1[$chap1]["rang"]."'";
   }
   
   $query .= ")";

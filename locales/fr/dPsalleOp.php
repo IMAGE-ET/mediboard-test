@@ -1,7 +1,6 @@
 <?php
-$locales['pref-ccam-1'] = 'Visible';
+$locales['CActeCCAM-regle-association-Z'] = 'Règle classique d\'association de deux actes au plus';
 $locales['CActeCCAM'] = 'Actes CCAM';
-$locales['pref-ccam-0'] = 'Cacher';
 $locales['CActeCCAM-back-executant_id'] = '';
 $locales['CActeCCAM-back-object_id'] = '';
 $locales['CActeCCAM-code_acte'] = '';
@@ -34,6 +33,15 @@ $locales['CActeCCAM-object_class-desc'] = '';
 $locales['CActeCCAM-object_id'] = '';
 $locales['CActeCCAM-object_id-court'] = '';
 $locales['CActeCCAM-object_id-desc'] = '';
+$locales['CActeCCAM-regle-association-A'] = '1 acte : pas d\'association';
+$locales['CActeCCAM-regle-association-B'] = '1 acte + 1 acte des chap. 18 ou 19.02';
+$locales['CActeCCAM-regle-association-C'] = '1 acte + 1 ou plusieurs actes du chap. 18 + 1 ou plusieurs actes du chap. 19.02';
+$locales['CActeCCAM-regle-association-D'] = '1 acte + 1 ou plusieurs suppléments du chap. 19.02';
+$locales['CActeCCAM-regle-association-E'] = '1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01';
+$locales['CActeCCAM-regle-association-F'] = '1 acte + 1 acte des chap. 02, 03, 05 à 10, 16, 17 ou 19.01 + 1 acte des chap. 18 ou 19.02';
+$locales['CActeCCAM-regle-association-G'] = '2 actes des chap. 01, 04, 11 ou 15';
+$locales['CActeCCAM-regle-association-H'] = '3 actes des chap. 01, 04 ou 11 à 16 pour lésions traumatiques multiples';
+$locales['CActeCCAM-regle-association-I'] = '3 actes par un ORL concernant la carcinologie et associant 1 exérèse, 1 curage et 1 reconstruction';
 $locales['CActeCCAM.create'] = '';
 $locales['CActeCCAM.modify'] = '';
 $locales['CActeCCAM.more'] = '';
@@ -42,4 +50,6 @@ $locales['CActeCCAM.object_class.CConsultation'] = '';
 $locales['CActeCCAM.object_class.COperation'] = '';
 $locales['CActeCCAM.object_class.CSejour'] = '';
 $locales['CActeCCAM.one'] = '';
+$locales['pref-ccam-0'] = 'Cacher';
+$locales['pref-ccam-1'] = 'Visible';
 ?>
