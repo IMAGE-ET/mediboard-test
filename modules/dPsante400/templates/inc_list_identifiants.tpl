@@ -29,7 +29,7 @@
     <td>
       {{assign var="object" value=$_idSante400->_ref_object}}
       {{if $object->_id}}
-      <div onmouseover="ObjectTooltip.create(this, '{{$_idSante400->object_class}}', {{$_idSante400->object_id}})">
+      <div onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_idSante400->object_class}}', object_id: {{$_idSante400->object_id}} } })">
         {{$object->_view}}
       </div>
       {{else}}

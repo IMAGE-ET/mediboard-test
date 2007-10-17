@@ -15,7 +15,7 @@
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
           <li>
             <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}"
-              onmouseover="ObjectTooltip.create(this, 'COperation', {{$curr_op->_id}})"
+              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
               >
               <strong>Dr. {{$curr_op->_ref_chir->_view}}</strong>
               le {{$curr_op->_ref_plageop->date|date_format:"%d %b %Y"}}
@@ -43,7 +43,7 @@
     <tr>
       <td>
         <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}"
-          onmouseover="ObjectTooltip.create(this, 'CConsultation', {{$curr_consult->_id}})"
+          onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
         >
           <strong>Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</strong>
           {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}}

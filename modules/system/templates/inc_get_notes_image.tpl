@@ -1,5 +1,5 @@
 <a style="float:left;" href="#nothing"
-  onmouseover="ObjectTooltip.create(this, '{{$object->_class_name}}', {{$object->_id}}, { mode: 'notes' })"
+  onmouseover="ObjectTooltip.create(this, { mode: 'objectNotes', params: { object_class: '{{$object->_class_name}}', object_id: {{$object->_id}} } })"
   onclick="new Note().create('{{$object->_class_name}}', {{$object->_id}});">
   {{if $notes|@count}}
   {{if $high}}

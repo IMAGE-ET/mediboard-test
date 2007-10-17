@@ -42,7 +42,10 @@
       <tr id="acte{{$key}}-trigger">  
         <td colspan="2">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}} ({{$acte->_tarif|string_format:"%.2f"}} €)
+          Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+          {{if $acte->_id}}
+             &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
+          {{/if}}
         </td>
       </tr>
     
@@ -76,6 +79,15 @@
             {{assign var="selActe" value=$listExecutants.$keyActe}}
             {{$selActe->_view}}
           {{else}}-{{/if}}
+        </td>
+      </tr>
+      
+      <tr>
+        <th />
+        <td>
+          <strong onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+            Code d'association : {{$acte->_guess_association}}
+          </strong>
         </td>
       </tr>
 

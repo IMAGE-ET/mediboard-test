@@ -69,7 +69,9 @@
             </a>
           </td>
           <td class="{{cycle name=celltxt values="dark, light"}} text" style="vertical-align: middle;">
-            <span onmouseover="ObjectTooltip.create(this, '{{$curr_file->_class_name}}', {{$curr_file->_id}});">{{$curr_file->_view}}</span>
+            <span onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
+              {{$curr_file->_view}}
+            </span>
             <hr />
 
             {{if $curr_file->_class_name=="CCompteRendu" && $canFile->edit && !$accordDossier}}

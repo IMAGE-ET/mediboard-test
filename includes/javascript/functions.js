@@ -639,6 +639,18 @@ var ViewPort = {
 }
 
 /**
+ * Unique Id generator helper
+ */
+
+var UniqueId = {
+  iCounter: 0,
+  generate: function() {
+    var id = "mbUniqueId-" + this.iCounter++;
+    return id;
+  }
+}
+
+/**
  * ObjectTooltip Class
  *   Handle object tooltip creation, associated with a MbObject and a target HTML element
  */
@@ -648,18 +660,21 @@ var ObjectTooltip = Class.create();
 Class.extend(ObjectTooltip, {
 
   // Constructor
-  initialize: function(eTrigger, sClass, iObject, oOptions) {
-    this.eTrigger = $(eTrigger);
-    this.sClass = sClass;
-    this.iObject = iObject;
-    this.eDiv = null;
-    this.eTarget = null;
+  initialize: function(eTrigger, oOptions) {
+    eTrigger = $(eTrigger);
+    if(!eTrigger.id) {
+      eTrigger.id = UniqueId.generate();
+    }
+    this.sTrigger = eTrigger.id;
+    this.sDiv = null;
+    this.sTarget = null;
     this.idTimeOut = null;
 
     this.oOptions = {
-      mode: "view",
+      mode: "objectView",
       popup: false,
-      duration: 400
+      duration: 400,
+      params: {}
     };
     
     Object.extend(this.oOptions, oOptions);
@@ -678,17 +693,20 @@ Class.extend(ObjectTooltip, {
   },
   
   show: function() {
-    if (this.oOptions.popup || !this.eTarget.innerHTML) {
+    var eDiv    = $(this.sDiv);
+    var eTarget = $(this.sTarget);
+    if (this.oOptions.popup || !eTarget.innerHTML) {
       this.load();
     }
     if (!this.oOptions.popup) {
-      this.eDiv.show();
+      eDiv.show();
     }
   },
   
   hide: function() {
+    var eDiv = $(this.sDiv);
     clearTimeout(this.idTimeout);
-    this.eDiv.hide();
+    eDiv.hide();
   },
   
   stopShow: function() {
@@ -696,40 +714,48 @@ Class.extend(ObjectTooltip, {
   },
   
   load: function() {
-    url = new Url;
+    var eTarget = $(this.sTarget);
+    var url = new Url;
     url.setModuleAction(this.mode.module, this.mode.action);
-    url.addParam("object_class", this.sClass);
-    url.addParam("object_id", this.iObject);
-    
+    $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
     if(!this.oOptions.popup) {
-      url.requestUpdate(this.eTarget);
+      url.requestUpdate(eTarget);
       return;
     }
     
     if(this.oOptions.popup) {
-      url.popup(this.mode.width, this.mode.height, this.sClass);
+      url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       return;
     }
   },
   
   addHandlers: function() {
-    if(this.oOptions.mode == "view") {
-      Event.observe(this.eTrigger, "mouseout", this.hide.bind(this));
+    var eDiv     = $(this.sDiv);
+    var eTrigger = $(this.sTrigger);
+    if(this.oOptions.mode == "objectView" || this.oOptions.mode == "translate") {
+      Event.observe(eTrigger, "mouseout", this.hide.bind(this));
     }
-    if(this.oOptions.mode == "notes") {
-      Event.observe(this.eTrigger, "mouseout", this.stopShow.bind(this));
-      Event.observe(this.eDiv, "click", this.hide.bind(this));
+    if(this.oOptions.mode == "objectNotes") {
+      Event.observe(eTrigger, "mouseout", this.stopShow.bind(this));
+      Event.observe(eDiv, "click", this.hide.bind(this));
     }
   },
   
-  createDiv: function() {    
-    this.eDiv  = Dom.cloneElemById("tooltipTpl",true);
-    Element.classNames(this.eDiv).add(this.mode.sClass);
-    Element.hide(this.eDiv);
-    this.eDiv.removeAttribute("_extended");
-    this.eTrigger.parentNode.insertBefore(this.eDiv, this.eTrigger.nextSibling);
-    this.eTarget = document.getElementsByClassName("content", this.eDiv)[0];
-    this.eTarget.removeAttribute("_extended");
+  createDiv: function() {
+    var eTrigger = $(this.sTrigger);  
+    var eDiv  = Dom.cloneElemById("tooltipTpl",true);
+    eDiv.id = UniqueId.generate();
+    Element.classNames(eDiv).add(this.mode.sClass);
+    Element.hide(eDiv);
+    eDiv.removeAttribute("_extended");
+    this.sDiv = eDiv.id;
+    eTrigger.parentNode.insertBefore(eDiv, eTrigger.nextSibling);
+    var eTarget = document.getElementsByClassName("content", eDiv)[0];
+    eTarget.removeAttribute("_extended");
+    if(!eTarget.id) {
+      eTarget.id = UniqueId.generate();
+    }
+    this.sTarget = eTarget.id;
   }  
    
   
@@ -742,29 +768,34 @@ Class.extend(ObjectTooltip, {
 
 Object.extend(ObjectTooltip, {
   modes: {
-    complete: {
+    objectCompleteView: {
       module: "system",
       action: "httpreq_vw_complete_object",
       sClass: "tooltip",
       width: 600,
       height: 500
     },
-    view: {
+    objectView: {
       module: "system",
       action: "httpreq_vw_object",
       sClass: "tooltip",
       width: 300,
       height: 250
     },
-    notes: {
+    objectNotes: {
       module: "system",
       action: "httpreq_vw_object_notes",
       sClass: "postit"
+    },
+    translate: {
+      module: "system",
+      action: "httpreq_vw_translation",
+      sClass: "tooltip"
     }
   },
-  create: function(eTrigger, sClass, iObject, oOptions) {
+  create: function(eTrigger, oOptions) {
     if (!eTrigger.oTooltip) {
-      eTrigger.oTooltip = new ObjectTooltip(eTrigger, sClass, iObject, oOptions);
+      eTrigger.oTooltip = new ObjectTooltip(eTrigger, oOptions);
     }
 
     eTrigger.oTooltip.launchShow();    
