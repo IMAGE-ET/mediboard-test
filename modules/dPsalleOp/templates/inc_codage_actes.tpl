@@ -81,7 +81,7 @@
           {{else}}-{{/if}}
         </td>
       </tr>
-      
+      {{if $acte->_id}}
       <tr>
         <th />
         <td>
@@ -92,7 +92,7 @@
           </label>
         </td>
       </tr>
-
+      {{/if}}
       <tr class="{{$acte->_view}}">
         <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
         <td class="text">
@@ -128,7 +128,9 @@
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
           
-          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">Modifier cet acte</button>
+          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
+            Modifier cet acte
+          </button>
           
           
           <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
@@ -137,7 +139,9 @@
           
           
           {{else}}
-          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">Coder cet acte</button>
+          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
+            Coder cet acte
+          </button>
           {{/if}}
         </td>
       </tr>

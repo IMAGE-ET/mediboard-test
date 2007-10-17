@@ -161,58 +161,70 @@ class CActeCCAM extends CMbMetaObject {
     
     // Nombre d'actes du chap. 18
     $numChap18 = 0;
-    if($this->_ref_code_ccam->chapitres[0] == "18") {
+    if($this->_ref_code_ccam->chapitres[0]["db"] == "000018") {
       $numChap18++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if($this->_ref_code_ccam->chapitres[0] == "18") {
+      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000018") {
         $numChap18++;
       }
     }
     
     // Nombre d'actes du chap. 19.01
     $numChap1901 = 0;
-    if($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "01") {
+    if($this->_ref_code_ccam->chapitres[0]["db"] == "000019" && $this->_ref_code_ccam->chapitres[1]["db"] == "000001") {
       $numChap1901++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if($linkedActe->_ref_code_ccam->chapitres[0] == "19" && $linkedActe->_ref_code_ccam->chapitres[1] == "01") {
+      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000019" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000001") {
         $numChap1901++;
       }
     }
     
     // Nombre d'actes du chap. 19.02
     $numChap1902 = 0;
-    if($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02") {
+    if($this->_ref_code_ccam->chapitres[0]["db"] == "000019" && $this->_ref_code_ccam->chapitres[1]["db"] == "000002") {
       $numChap1902++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if($linkedActe->_ref_code_ccam->chapitres[0] == "19" && $linkedActe->_ref_code_ccam->chapitres[1] == "02") {
+      if($linkedActe->_ref_code_ccam->chapitres[0]["db"] == "000019" && $linkedActe->_ref_code_ccam->chapitres[1]["db"] == "000002") {
         $numChap1902++;
       }
     }
      
     // Nombre d'actes des chap. 02, 03, 05 à 10, 16, 17
     $numChap02 = 0;
-    $listChaps = array("02", "03", "05", "06", "07", "08", "09", "10", "16", "17");
-    if(in_array($this->_ref_code_ccam->chapitres[0], $listChaps)) {
+    $listChaps = array("000002", "000003", "000005", "000006", "000007", "000008", "000009", "000010", "000016", "000017");
+    if(in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
       $numChap02++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if(in_array($linkedActe->_ref_code_ccam->chapitres[0], $listChaps)) {
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
         $numChap02++;
       }
     }
      
     // Nombre d'actes des chap. 01, 04, 11, 15
-    $numChap01 = 0;
-    $listChaps = array("01", "04", "11", "15");
-    if(in_array($this->_ref_code_ccam->chapitres[0], $listChaps)) {
-      $numChap01++;
+    $numChap0115 = 0;
+    $listChaps = array("000001", "000004", "000011", "000015");
+    if(in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+      $numChap0115++;
     }
     foreach($this->_linked_actes as $linkedActe) {
-      if(in_array($linkedActe->_ref_code_ccam->chapitres[0], $listChaps)) {
-        $numChap01++;
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+        $numChap0115++;
+      }
+    }
+     
+    // Nombre d'actes des chap. 01, 04, 11, 12, 13, 14, 15, 16
+    $numChap0116 = 0;
+    $listChaps = array("000001", "000004", "000011", "000012", "000013", "000014", "000015", "000016");
+    if(in_array($this->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+      $numChap0116++;
+    }
+    foreach($this->_linked_actes as $linkedActe) {
+      if(in_array($linkedActe->_ref_code_ccam->chapitres[0]["db"], $listChaps)) {
+        $numChap0116++;
       }
     }
     
@@ -235,6 +247,7 @@ class CActeCCAM extends CMbMetaObject {
       $this->_ref_object->loadRefSejour();
       if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "S" || substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "T") {
         $DPST = true;
+        $membresDiff = true;
       }
       if(substr(0, 1, $this->_ref_object->_ref_sejour->DP) == "C") {
         $DPC = true;
@@ -349,7 +362,7 @@ class CActeCCAM extends CMbMetaObject {
     }
     
     // 2 actes des chap. 01, 04, 11 ou 15 (règle G)
-    if($numActes == 2 && $numChap01 == 2 && $membresDiff) {
+    if($numActes == 2 && $numChap0115 == 2 && $membresDiff) {
       switch($position) {
         case 0 :
           $this->_guess_association = "1";
@@ -363,8 +376,8 @@ class CActeCCAM extends CMbMetaObject {
       return $this->_guess_association;
     }
     
-    // 3 actes des chap. 01, 04, 11 ou 15 avec DP en S ou T (lésions traumatiques multiples) (règle H)
-    if($numActes == 3 && $numChap01 == 3 && $DPST) {
+    // 3 actes des chap. 01, 04 ou 11 à 16 avec DP en S ou T (lésions traumatiques multiples) (règle H)
+    if($numActes == 3 && $numChap0116 == 3 && $DPST) {
       switch($position) {
         case 0 :
           $this->_guess_association = "1";
