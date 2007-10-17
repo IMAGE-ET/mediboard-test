@@ -875,6 +875,8 @@ Object.extend(Calendar, {
 		};
 				
 		Object.extend(dates, userDates);
+		Calendar.prepareDates(dates);
+		
 
 		// Test element existence
 		var sInputId = sFormName + "_" + sFieldName;

@@ -110,6 +110,8 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
     start: options.outerAffect.start,
     stop: options.currAffect.stop
   }
+
+	Calendar.prepareDates(dates);
 	
   var form = null;
   
@@ -137,6 +139,8 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
     stop: options.outerAffect.stop
   }
 	
+	Calendar.prepareDates(dates);
+
   if (form = eval("document.sortieAffectation" + affectation_id)) {
     Calendar.setup( {
         inputField  : form.name + "_sortie",
@@ -159,6 +163,8 @@ Calendar.setupAffectation = function(affectation_id, affectOptions) {
     start: options.currAffect.start,
     stop: options.currAffect.stop
   }
+
+	Calendar.prepareDates(dates);
 
   if (form = eval("document.splitAffectation" + affectation_id)) {
     Calendar.setup( {
