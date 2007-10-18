@@ -1,5 +1,5 @@
 <iframe 
-  src="{{$url}}?ctyp=s&amp;cdiv=0&amp;csdv=0&amp;ndos={{$sejour400}}" 
+  src="{{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$sejour->_num_dossier}}" 
   name="Imeds-sejour" 
   width="100%" 
   height="100%"

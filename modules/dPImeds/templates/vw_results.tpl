@@ -50,12 +50,12 @@
   </tr>
   <tr>
     <td>
-      {{if $patient400}}
+      {{if $patient->_IPP}}
       {{include file="inc_patient_results.tpl"}}
       {{/if}}
     </td>
     <td>
-      {{if $sejour400}}
+      {{if $sejour->_num_dossier}}
       {{include file="inc_sejour_results.tpl"}}
       {{/if}}
     </td>
