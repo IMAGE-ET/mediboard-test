@@ -43,9 +43,6 @@
         <td colspan="2">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
           Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
-          {{if $acte->_id}}
-             &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
-          {{/if}}
         </td>
       </tr>
     
@@ -88,6 +85,7 @@
           <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
             <strong>
               Code d'association : {{$acte->_guess_association}}
+              &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
             </strong>
           </label>
         </td>
