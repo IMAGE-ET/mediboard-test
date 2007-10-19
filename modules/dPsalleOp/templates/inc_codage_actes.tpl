@@ -85,7 +85,7 @@
           <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
             <strong>
               Code d'association : {{$acte->_guess_association}}
-              &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
+              <!-- &mdash; {{$acte->_tarif|string_format:"%.2f"}} € -->
             </strong>
           </label>
         </td>
