@@ -32,7 +32,7 @@ function printAdmission(id) {
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="3"><strong>Patient</strong></th>
+          <th colspan="4"><strong>Patient</strong></th>
           <th colspan="6"><strong>Sejour</strong></th>
         </tr>
         <tr>
