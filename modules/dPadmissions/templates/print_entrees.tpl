@@ -60,7 +60,7 @@ function printAdmission(id) {
             </a>
           </td>
           <td>
-            {{if $patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
+            {{if $curr_sejour->_ref_patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
           </td>
           <td class="text">
             <a href="#" onclick="printAdmission({{$curr_sejour->sejour_id}})">
