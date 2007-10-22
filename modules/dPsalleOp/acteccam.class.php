@@ -156,6 +156,7 @@ class CActeCCAM extends CMbMetaObject {
       $tarif = $acte->_ref_code_ccam->activites[$acte->code_activite]->phases[$acte->code_phase]->tarif;
       $orderedActes[$acte->_id] = $tarif;
     }
+    ksort($orderedActes);
     arsort($orderedActes);
     $position = array_search($this->_id, array_keys($orderedActes));
     
