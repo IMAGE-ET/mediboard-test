@@ -8,6 +8,13 @@ function showLegend() {
   url.popup(300, 150, "Legende");
 }
 
+function printPlanning() {
+  url = new Url;
+  url.setModuleAction("dPadmissions", "print_entrees");
+  url.addParam("date", "{{$date}}");
+  url.popup(700, 550, "Entrees");
+}
+
 function printAdmission(id) {
   var url = new Url;
   url.setModuleAction("dPadmissions", "print_admission");
@@ -65,7 +72,12 @@ function pageMain() {
 
 <table class="main">
 <tr>
-<td><a href="#" onclick="showLegend()" class="buttonsearch">Légende</a></td>
+  <td>
+    <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
+  </td>
+  <td>
+    <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
+  </td>
 </tr>
   <tr>
     <td id="allAdmissions" style="width: 250px">

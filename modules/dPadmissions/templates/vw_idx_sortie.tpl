@@ -1,5 +1,12 @@
 <script type="text/javascript">
 
+function printPlanning() {
+  url = new Url;
+  url.setModuleAction("dPadmissions", "print_sorties");
+  url.addParam("date", "{{$date}}");
+  url.popup(700, 550, "Sorties");
+}
+
 function loadTransfert(form, mode_sortie){
   // si Transfert, affichage du select
   if(mode_sortie=="transfert"){
@@ -85,13 +92,15 @@ function pageMain() {
       </select>
       </form>
     </td>
-    <th class="halfPane">
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"><<<</a>
-      {{$date|date_format:"%A %d %B %Y"}}
-      <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}">>>></a>
-
-    </th>
+    <td class="halfPane" style="text-align: center">
+      <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
+      <strong>
+        <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
+        {{$date|date_format:"%A %d %B %Y"}}
+        <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+        <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}"> >>> </a>
+      </strong>
+    </td>
   </tr>
   <tr>
     <td id="sortiesAmbu">

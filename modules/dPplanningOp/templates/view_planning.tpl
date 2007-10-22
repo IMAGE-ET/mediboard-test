@@ -45,7 +45,7 @@
   </tr>
   
   <tr>
-    <th>Date de naissance / Sexe </th>
+    <th>Date de naissance / Sexe</th>
     <td>
       né(e) le {{$patient->_naissance}}
       de sexe 

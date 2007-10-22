@@ -33,15 +33,15 @@ function printAdmission(id) {
   </tr>
   <tr>
     <td>
-	  <table class="tbl">
-	    <tr>
-		  <th colspan="6"><strong>Admission</strong></th>
-		  <th colspan="5"><strong>Intervention(s)</strong></th>
-		  <th colspan="3"><strong>Patient</strong></th>
-		</tr>
-		<tr>
-		  <th>Heure</th>
-		  <th>Type</th>
+	    <table class="tbl">
+	      <tr>
+		      <th colspan="6"><strong>Admission</strong></th>
+		      <th colspan="5"><strong>Intervention(s)</strong></th>
+		      <th colspan="3"><strong>Patient</strong></th>
+		    </tr>
+		    <tr>
+		      <th>Heure</th>
+		      <th>Type</th>
           <th>Dur.</th>
           <th>Conv.</th>
           <th>Chambre</th>
@@ -130,7 +130,7 @@ function printAdmission(id) {
           </td>
           <td>
             <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{$curr_sejour->_ref_patient->_naissance}} ({{$curr_sejour->_ref_patient->_age}})
+              {{$curr_sejour->_ref_patient->_naissance}} ({{$curr_sejour->_ref_patient->_age}} ans)
             </a>
           </td>
           <td class="text">
