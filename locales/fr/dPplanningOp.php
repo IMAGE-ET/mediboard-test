@@ -1,5 +1,5 @@
 <?php
-$locales['COperation-_ccam_libelle-desc'] = 'Afficher la description complète des codes CCAM';
+$locales['mod-dPplanningOp-tab-vw_edit_compta'] = 'Comptabilité';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -171,6 +171,7 @@ $locales['COperation-type_anesth'] = 'Type d\'anesthésie';
 $locales['COperation-type_anesth-court'] = 'Anesthésie mise en oeuvre pour l\'intervention';
 $locales['COperation-type_anesth-desc'] = '';
 $locales['COperation-_ccam_libelle'] = 'Affichage des libellés CCAM';
+$locales['COperation-_ccam_libelle-desc'] = 'Afficher la description complète des codes CCAM';
 $locales['COperation-_codes_ccam'] = 'Code CCAM';
 $locales['COperation-_codes_ccam-court'] = '';
 $locales['COperation-_codes_ccam-desc'] = 'Rechercher en fonction d\'un code CCAM';

@@ -16,5 +16,6 @@ $module->registerTab("vw_edit_urgence"   , null, TAB_READ);
 $module->registerTab("vw_protocoles"     , null, TAB_EDIT);
 $module->registerTab("vw_edit_protocole" , null, TAB_EDIT);
 $module->registerTab("vw_edit_typeanesth", null, TAB_ADMIN);
+$module->registerTab("vw_edit_compta"    , null, TAB_EDIT);
 
 ?>

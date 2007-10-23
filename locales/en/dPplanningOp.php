@@ -1,5 +1,5 @@
 <?php
-$locales['COperation-_ccam_libelle-desc'] = '';
+$locales['mod-dPplanningOp-tab-vw_edit_compta'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -171,6 +171,7 @@ $locales['COperation-type_anesth'] = '';
 $locales['COperation-type_anesth-court'] = '';
 $locales['COperation-type_anesth-desc'] = '';
 $locales['COperation-_ccam_libelle'] = '';
+$locales['COperation-_ccam_libelle-desc'] = '';
 $locales['COperation-_codes_ccam'] = '';
 $locales['COperation-_codes_ccam-court'] = '';
 $locales['COperation-_codes_ccam-desc'] = '';

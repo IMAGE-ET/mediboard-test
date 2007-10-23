@@ -2,17 +2,17 @@
 
 class CCodableCCAM extends CMbObject {
 	
-  var $codes_ccam         = null;
-  var $_codes_ccam        = null;
-  var $_ref_actes_ccam    = null;
-  var $_ext_codes_ccam    = null;
-  var $_acte_execution    = null;
-  var $_acte_depassement  = null;
-  var $_datetime          = null;
-  var $_praticien_id      = null;
-  var $temp_operation     = null;
-  var $_ref_anesth        = null;
-  var $_anesth = null;
+  var $codes_ccam          = null;
+  var $_codes_ccam         = null;
+  var $_ref_actes_ccam     = null;
+  var $_ext_codes_ccam     = null;
+  var $_acte_execution     = null;
+  var $_acte_depassement   = null;
+  var $_datetime           = null;
+  var $_praticien_id       = null;
+  var $temp_operation      = null;
+  var $_ref_anesth         = null;
+  var $_anesth             = null;
 
   function updateFormFields() {
   	parent::updateFormFields();
@@ -46,6 +46,66 @@ class CCodableCCAM extends CMbObject {
     }
   }
 
+  
+
+  function getMaxCodagesActes() {
+    if(!$this->_id || $this->codes_ccam === null) {
+      return;
+    }
+
+    $oldObject = new $this->_class_name;
+	  $oldObject->load($this->_id);
+	  $oldObject->codes_ccam = $this->codes_ccam;
+	  $oldObject->updateFormFields();
+	    
+	  $nb_codes_ccam_minimal = array();
+	  $codes_ccam_minimal = array();
+	  $nb_codes_ccam = array();
+	    
+	  $oldObject->loadRefsActesCCAM();
+	    
+	  // Creation du tableau minimal de codes ccam
+	  foreach($oldObject->_ref_actes_ccam as $key => $acte){
+	    @$codes_ccam_minimal[$acte->code_acte][$acte->code_activite][$acte->code_phase]++;
+	  }
+	  foreach($codes_ccam_minimal as $key => $acte){
+	    $nb_codes_ccam_minimal[$key] = reset(max($acte));
+	  }
+	  foreach($nb_codes_ccam_minimal as $key => $acte){
+	    for($i = 0; $i < $acte; $i++){
+	      $oldObject->_codes_ccam_minimal[] = $key;
+	    }
+	  }
+
+	  // Transformation du tableau de codes ccam
+	  foreach($oldObject->_codes_ccam as $key => $code){
+	    @$nb_codes_ccam[$code]++;
+	  }
+	    	   
+	  // Test entre les deux tableaux
+	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
+	    if($nb_code_minimal > @$nb_codes_ccam[$code]){
+	      return "Impossible de supprimer le code";
+	    }
+	  }
+  }
+  
+  
+  
+  function check(){
+    $oldObject = new $this->_class_name;
+    if($this->_id) {
+      $oldObject->load($this->_id);
+    }
+    
+    if($this->codes_ccam != $oldObject->codes_ccam){
+      if ($msg = $this->getMaxCodagesActes()) {
+        return $msg;
+      }
+    }   
+    return parent::check();
+  }
+  
   function loadRefsActesCCAM() {
   	$acte = new CActeCCAM();
   	$acte->object_id = $this->_id;

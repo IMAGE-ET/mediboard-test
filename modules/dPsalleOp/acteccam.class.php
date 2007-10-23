@@ -27,6 +27,7 @@ class CActeCCAM extends CMbMetaObject {
   var $montant_depassement = null;
   var $commentaire         = null;
   var $code_association    = null;
+  var $regle               = null;
 
   // Form fields
   var $_modificateurs     = array();
@@ -57,6 +58,7 @@ class CActeCCAM extends CMbMetaObject {
     $specs["commentaire"]         = "text";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
+    $specs["regle"]               = "bool";
     return $specs;
   }
   
@@ -67,8 +69,12 @@ class CActeCCAM extends CMbMetaObject {
   }
   
   function check() {
+    
+    if ($msg = $this->getSiblings()) {
+      return $msg;
+    }
+    
     return parent::check(); 
-
     // datetime_execution: attention à rester dans la plage de l'opération
   }
    
@@ -121,6 +127,42 @@ class CActeCCAM extends CMbMetaObject {
     return $this->_ref_object->getPerm($permType);
   }
   
+  function getSiblings(){
+    if ($this->object_class === null && $this->object_id === null){
+      return;
+    }
+    
+    $acte = new CActeCCAM();
+    $where = array();
+    if($this->_id){
+      // dans le cas de la modification
+      $where["acte_id"]       = "<> '$this->_id'";  
+    }
+    $where["code_acte"]    = "= '$this->code_acte'";
+    $where["object_class"]  = "= '$this->object_class'";
+    $where["object_id"]     = "= '$this->object_id'";
+    $where["code_activite"] = "= '$this->code_activite'";
+    $where["code_phase"]    = "= '$this->code_phase'";
+    $this->_ref_siblings = $acte->loadList($where);
+    $siblings = count($this->_ref_siblings);
+    // retourne le nombre de code semblables
+
+    // recherche de la liste des codes dans l'operation
+    $object = new $this->object_class;
+    $object->load($this->object_id);
+
+    // compteur d'acte prevue ayant le meme code_acte dans l'intervention
+    $nbCode = 0;
+    foreach($object->_codes_ccam as $key => $code){
+      if($code == $this->code_acte){
+        $nbCode++;
+      }
+    }
+    if ($siblings >= $nbCode){
+      return "Acte deja codé";
+    }
+  }
+    
   function getLinkedActes() {
     $acte = new CActeCCAM();
     
@@ -137,7 +179,7 @@ class CActeCCAM extends CMbMetaObject {
     /*
      * Calculs initiaux
      */
-    
+
     // Chargements initiaux
     $this->loadRefCodeCCAM();
     $this->getLinkedActes();
@@ -243,6 +285,8 @@ class CActeCCAM extends CMbMetaObject {
     // Diagnostic principal en C (carcinologie)
     $DPST = false;
     $DPC  = false;
+    $membresDiff = false;
+    
     if($this->object_class == "COperation") {
       $this->loadRefObject();
       $this->_ref_object->loadRefSejour();
@@ -430,6 +474,7 @@ class CActeCCAM extends CMbMetaObject {
     
     return $this->_guess_association;
   }
+  
   
   function getTarif() {
     $this->guessAssociation();
