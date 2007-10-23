@@ -171,6 +171,7 @@ if($typeVue == 1){
   $smarty->assign("chir_id"        , $chir_id        );
   $smarty->assign("nbActes"        , $nbActes        );
 }
+$smarty->assign("praticien"     , $mediuser          );
 $smarty->assign("debut"         , $_date_min         );
 $smarty->assign("fin"           , $_date_max         );
 $smarty->assign("typeVue"       , $typeVue           );
