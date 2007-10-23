@@ -9,6 +9,14 @@
 
 global $AppUI, $can, $m, $tab, $dPconfig;
 
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+
+// Si ni praticien ni admin, redirect
+if(!$user->isPraticien() && $can->needsAdmin()){
+  $AppUI->redirect();
+}
+ 
 // Gestion des bouton radio des dates
 $now       = mbDate();
 $week_deb  = mbDate("last sunday", $now);
@@ -22,9 +30,21 @@ $month_fin  = mbDate("-1 day", $month_fin);
 // Chargement du filter permettant de faire la recherche
 $filter = new COperation();
 
+// Chargement du user courant
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+
 // Chargement de la liste de tous les praticiens
 $praticien = new CMediusers();
-$praticiens = $praticien->loadPraticiens(PERM_READ);
+$praticiens = array();
+
+if ($user->isFromType(array("Administrator"))){
+  $praticiens = $praticien->loadPraticiens(PERM_EDIT);
+}
+
+if ($user->isPraticien()){
+  $praticiens[] = $user;
+}
 
 
 // Création du template
