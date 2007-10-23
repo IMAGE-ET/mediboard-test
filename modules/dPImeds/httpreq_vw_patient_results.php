@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $can, $dPconfig;
+global $can, $g, $dPconfig;
 
 $can->needsRead();
 
