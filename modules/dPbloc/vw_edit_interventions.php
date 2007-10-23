@@ -67,6 +67,7 @@ $mediuser = new CMediusers();
 $listAnesth = $mediuser->loadListFromType(array("Anesthésiste"));
 
 $plage->loadPersonnel();
+$personnels = array();
 if (null !== $plage->_ref_personnel) {
   // Chargement de la liste du personnel de bloc
   $pers = new CPersonnel();
@@ -91,10 +92,7 @@ foreach($personnels as $key => $_personnel){
 // Création du template
 $smarty = new CSmartyDP();
 
-if (null !== $plage->_ref_personnel){
-  $smarty->assign("personnels"        , $personnels);
-}
-
+$smarty->assign("personnels"        , $personnels);
 $smarty->assign("listAnesth"        , $listAnesth);
 $smarty->assign("listPlages"        , $listPlages);
 $smarty->assign("plage"             , $plage);
