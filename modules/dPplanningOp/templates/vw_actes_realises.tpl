@@ -25,6 +25,9 @@ var reloadActeCCAM = function(acte_ccam_id){
     <td class="halfpane">
       <table class="main">
         <tr>
+          <td>
+            Dr. {{$praticien->_view}}
+          </td>
         </tr>
         <tr>
           <td>
