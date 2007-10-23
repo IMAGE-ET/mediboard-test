@@ -355,14 +355,16 @@ class CPatient extends CDossierMedical {
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom);
     
-    $aNaissance = split("-", $this->naissance);
+    if($this->naissance){
+      $aNaissance = split("-", $this->naissance);
     
-    $this->_jour  = $aNaissance[2];
-    $this->_mois  = $aNaissance[1];
-    $this->_annee = $aNaissance[0];
+      $this->_jour  = $aNaissance[2];
+      $this->_mois  = $aNaissance[1];
+      $this->_annee = $aNaissance[0];
     
-    $this->_naissance = mbDateToLocale($this->naissance);
-
+      $this->_naissance = mbDateToLocale($this->naissance);
+    }
+    
     $this->updateFormTel("tel", "_tel");
     $this->updateFormTel("tel2", "_tel2");
     $this->updateFormTel("prevenir_tel", "_tel3");
@@ -378,7 +380,7 @@ class CPatient extends CDossierMedical {
       $this->_assure_mois  = $aNaissance[1];
       $this->_assure_annee = $aNaissance[0];
     
-      $this->_assure_naissance = sprintf("%02d/%02d/%04d", $this->_jour, $this->_mois, $this->_annee);
+      $this->_assure_naissance = sprintf("%02d/%02d/%04d", $this->_assure_jour, $this->_assure_mois, $this->_assure_annee);
     }
 
     $this->updateFormTel("assure_tel", "_assure_tel");  
@@ -460,6 +462,10 @@ class CPatient extends CDossierMedical {
       $this->cp = "";
     }
 
+    if(($this->_annee === "") && ($this->_mois === "") && ($this->_jour === "")) {
+      $this->naissance = "";
+    }
+    
   	if(($this->_annee != null) && ($this->_mois != null) && ($this->_jour != null)) {
       $this->naissance = 
         $this->_annee . "-" .
