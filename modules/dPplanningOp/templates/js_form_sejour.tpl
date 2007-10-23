@@ -140,9 +140,18 @@ function updateHeureSortie() {
 }
 
 function checkSejoursToReload() {
+  var oForm = document.editSejour
   if(bChangePat) {
-    reloadListSejours();
     bChangePat = 0;
+    if(oForm.patient_id.value) {
+      if (confirm('Voulez-vous créer un nouveau sejour pour ce patient ?')) {
+        if($("selectSejours")) {
+          reloadListSejours();
+        }
+      }
+    } else {
+      reloadListSejours();
+    }
   }
 }
 
@@ -152,7 +161,7 @@ function reloadListSejours() {
   var iPatient_id = oForm.patient_id.value;
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
   sejoursUrl.addParam("patient_id", iPatient_id);
-  sejoursUrl.requestUpdate('selectSejours', { waitingText : null });
+  sejoursUrl.requestUpdate("selectSejours", { waitingText : null });
 }
 
 function reloadSejour(sejour_id) {

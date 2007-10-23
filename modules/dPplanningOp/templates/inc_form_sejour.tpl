@@ -102,6 +102,9 @@ function checkChambre(){
     <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
     </div>
+    <a class="action" style="float: right"  title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+      <img src="images/icons/edit.png" alt="modifier" />
+     </a>
     {{/if}}
     {{tr}}msg-CSejour-informations{{/tr}}
   </th>
