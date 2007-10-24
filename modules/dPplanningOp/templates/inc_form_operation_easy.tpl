@@ -119,7 +119,7 @@
   <!-- Selection du patient -->
   <tr>
    <th>
-    <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="bChangePat = 1;" />
+    <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
     {{mb_label object=$sejour field="patient_id"}}
    </th>
   <td class="readonly">

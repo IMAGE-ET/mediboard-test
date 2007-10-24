@@ -169,7 +169,7 @@ function checkChambre(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="bChangePat = 1;" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
@@ -179,16 +179,18 @@ function checkChambre(){
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
     <script type="text/javascript">
       PatSelector.init = function(){
-      this.sForm     = "editSejour";
-      this.sFormEasy = "editOpEasy";
+        bOldPat = document.editSejour.patient_id.value;
+        
+        this.sForm     = "editSejour";
+        this.sFormEasy = "editOpEasy";
       
-      this.sView_easy = "_patient_view"; 
-      this.sId_easy   = "patient_id";
+        this.sView_easy = "_patient_view"; 
+        this.sId_easy   = "patient_id";
       
-      this.sId   = "patient_id";
-      this.sView = "_patient_view";
-      this.pop();
-    }
+        this.sId   = "patient_id";
+        this.sView = "_patient_view";
+        this.pop();
+      }
     </script>
   </td>
   
