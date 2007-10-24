@@ -40,7 +40,7 @@ function pageMain() {
       <form name="choosePrat" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="selPrat" onchange="submit()">
-      <option value="">&mdash; Selectionner un praticien &mdash;</option>
+      <option value="">&mdash; Tous les praticiens</option>
       {{foreach from=$listPrat item=curr_prat}}
         <option value="{{$curr_prat->user_id}}" {{if $selPrat == $curr_prat->user_id}}selected="selected"{{/if}}>
           {{$curr_prat->_view}}
@@ -77,7 +77,7 @@ function pageMain() {
         {{/foreach}}
         {{else}}
         <tr>
-          <th class="title" colspan="6">
+          <th class="title" colspan="8">
             {{if $selPrat}}
               Dr. {{$listPrat.$selPrat->_view}} -
             {{/if}}
@@ -86,25 +86,62 @@ function pageMain() {
         </tr>
         <tr>
           <th>Patient</th>
+          <th>Praticien</th>
           <th>Service</th>
           <th>Chambre</th>
           <th>Lit</th>
           <th>Séjour</th>
           <th>Occupation du lit</th>
+          <th>Bornes GHM</th>
         </tr>
         {{foreach from=$listAff item=curr_aff}}
+        {{assign var=sejour value=$curr_aff->_ref_sejour}}
+        {{assign var=patient value=$sejour->_ref_patient}}
+        {{assign var=praticien value=$sejour->_ref_praticien}}
+        {{assign var=GHM value=$sejour->_ref_GHM}}
         <tr>
-          <td class="text">{{$curr_aff->_ref_sejour->_ref_patient->_view}}</td>
+          <td class="text">
+            {{if $canPlanningOp->read}}
+            <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+              <img src="images/icons/edit.png" alt="modifier" />
+            </a>
+            <a class="action" style="float: right"  title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+              <img src="images/icons/planning.png" alt="modifier" />
+            </a>
+            {{/if}}
+            {{$patient->_view}}
+          </td>
+          <td class="text">{{$praticien->_view}}</td>
           <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
           <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
           <td class="text">{{$curr_aff->_ref_lit->nom}}</td>
           <td class="text">
-            Du {{$curr_aff->_ref_sejour->entree_prevue|date_format:"%A %d %B %Y à %H h %M"}}
-            au {{$curr_aff->_ref_sejour->sortie_prevue|date_format:"%A %d %B %Y à %H h %M"}}
+            Du {{$sejour->entree_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
+            au {{$sejour->sortie_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
+            ({{$sejour->_duree_prevue}} jours)
           </td>
           <td class="text">
-            Du {{$curr_aff->entree|date_format:"%A %d %B %Y à %H h %M"}}
-            au {{$curr_aff->sortie|date_format:"%A %d %B %Y à %H h %M"}}
+            Du {{$curr_aff->entree|date_format:"%d/%m/%Y à %Hh%M"}}
+            au {{$curr_aff->sortie|date_format:"%d/%m/%Y à %Hh%M"}}
+            ({{$curr_aff->_duree}} jours)
+          </td>
+          <td>
+            {{if $GHM->_DP}}
+              De {{$GHM->_borne_basse}}
+              à {{$GHM->_borne_haute}} jours
+              <br />
+              {{if $GHM->_borne_basse > $GHM->_duree}}
+              <img src="images/icons/cross.png" alt="alerte" />
+              Séjour trop court
+              {{elseif $GHM->_borne_haute < $GHM->_duree}}
+              <img src="images/icons/cross.png" alt="alerte" />
+              Séjour trop long
+              {{else}}
+              <img src="images/icons/tick.png" alt="ok" />
+              {{/if}}
+            {{else}}
+            -
+            {{/if}}
           </td>
         </tr>
         {{/foreach}}

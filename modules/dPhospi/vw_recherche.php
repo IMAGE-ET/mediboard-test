@@ -82,6 +82,12 @@ $listAff = null;
 if ($typeVue == 1) {
   // Recherche des patients du praticien
   $date = mbDate(null, $date_recherche);
+  
+  if($selPrat) {
+    $wherePrat = "\nAND sejour.praticien_id = '$selPrat'";
+  } else {
+    $wherePrat = "\nAND sejour.praticien_id  " .$ds->prepareIn(array_keys($listPrat));
+  }
 
   $sql = "SELECT affectation.*" .
 		"\nFROM affectation" .
@@ -96,7 +102,7 @@ if ($typeVue == 1) {
 		"\nWHERE affectation.entree < '$date 23:59:59'" .
 		"\nAND affectation.sortie > '$date 00:00:00'" .
 		$whereService .
-    "\nAND sejour.praticien_id = '$selPrat'" .
+    $wherePrat .
     "\nAND sejour.group_id = '$g'" .
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
@@ -104,6 +110,7 @@ if ($typeVue == 1) {
   foreach($listAff as $key => $currAff) {
     $listAff[$key]->loadRefs();
     $listAff[$key]->_ref_sejour->loadRefsFwd();
+    $listAff[$key]->_ref_sejour->loadRefGHM();
     $listAff[$key]->_ref_lit->loadRefsFwd();
     $listAff[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
   }
@@ -115,13 +122,15 @@ if ($typeVue == 1) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("date_recherche", $date_recherche);
-$smarty->assign("libre"         , $libre         );
-$smarty->assign("typeVue"       , $typeVue       );
-$smarty->assign("selPrat"       , $selPrat       );
-$smarty->assign("listPrat"      , $listPrat      );
-$smarty->assign("listAff"       , $listAff       );
-$smarty->assign("selService"    , $selService    );
-$smarty->assign("services"      , $services      );
+$smarty->assign("libre"         , $libre);
+$smarty->assign("typeVue"       , $typeVue);
+$smarty->assign("selPrat"       , $selPrat);
+$smarty->assign("listPrat"      , $listPrat);
+$smarty->assign("listAff"       , $listAff);
+$smarty->assign("selService"    , $selService);
+$smarty->assign("services"      , $services);
+$smarty->assign("canPlanningOp" , CModule::getCanDo("dPplanningOp"));
+
 $smarty->display("vw_recherche.tpl");
 
 ?>

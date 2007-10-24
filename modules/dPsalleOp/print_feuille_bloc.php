@@ -23,6 +23,7 @@ if($operation->load($operation_id)) {
   foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
     $acte =& $operation->_ref_actes_ccam[$keyActe];
     $acte->loadRefsFwd();
+    $acte->guessAssociation();
   }
 }  
 

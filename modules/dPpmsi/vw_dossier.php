@@ -63,6 +63,7 @@ if ($patient->patient_id) {
       foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
         $acte =& $operation->_ref_actes_ccam[$keyActe];
         $acte->loadRefsFwd();
+        $acte->guessAssociation();
       }
       if($operation->plageop_id) {
         $plage =& $operation->_ref_plageop;

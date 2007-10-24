@@ -465,8 +465,9 @@ class CGHM  extends CMbObject {
         unset($this->_DASs[$key]);
       }
     }
-    if(!$this->_CM)
+    if(!$this->_CM) {
       $this->getCM();
+    }
     $sql = "SELECT * FROM arbre WHERE CM_id = '$this->_CM'";
     $listeBranches = $this->_dsghm->loadList($sql);
     $parcoursBranches = 0;
@@ -480,6 +481,14 @@ class CGHM  extends CMbObject {
         while($row[$type] == $oldrow[$type] && $row[$cond] == $oldrow[$cond]) {
           // On avance d'une ligne
           $parcoursBranches++;
+          if(!isset($listeBranches[$parcoursBranches])) {
+            if($this->_CM != 1) {
+              $this->_CM--;
+              $this->_chrono->stop();
+              $this->getGHM();
+            }
+            return;
+          }
           $row = $listeBranches[$parcoursBranches];
         }
       }
@@ -493,10 +502,16 @@ class CGHM  extends CMbObject {
         $this->_chemin .= " pour ".$row["GHM"]."\n";
         // On avance d'une ligne
         $parcoursBranches++;
+        if(!isset($listeBranches[$parcoursBranches])) {
+          if($this->_CM != 1) {
+            $this->_CM--;
+            $this->_chrono->stop();
+            $this->getGHM();
+          }
+          return;
+        }
         $row = $listeBranches[$parcoursBranches];
-        if(!($row = @$listeBranches[$parcoursBranches])) {
-          $this->_GHM = 0;
-        } else if(!$row[$type]) {
+        if(!$row[$type]) {
           $this->_GHM = $row["GHM"];
         } else {
           // On reviens à la dernière condition correcte
@@ -519,12 +534,18 @@ class CGHM  extends CMbObject {
       $this->_GHM_nom = $row["nom"];
       $this->_GHM_groupe = $row["groupe"];
       $this->_GHS = $row["GHS"];
-      $this->_borne_basse = $row["borne_basse"];
-      $this->_borne_haute = $row["borne_haute"];
+      if($this->_CM != "24") {
+        $this->_borne_basse = $row["borne_basse"];
+        $this->_borne_haute = $row["borne_haute"];
+      } else {
+        $this->_borne_basse = 0;
+        $this->_borne_haute = 2;
+      }
       $this->_tarif_2006 = $row["tarif_2006"];
       $this->_EXH = $row["EXH"];
     }
     $this->_chrono->stop();
     $this->_chemin .= "Calculé en ".$this->_chrono->total." secondes";
+    return;
   }
 }

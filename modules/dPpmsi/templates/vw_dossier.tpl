@@ -81,12 +81,19 @@ function submitAllForms(operation_id) {
   submitOpForm(operation_id);
 }
 
-function pageMain() {
-  PairEffect.initGroup("effectSejour");
-}
-
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   popFile(objectClass, objectId, elementClass, elementId, sfn);
+}
+
+function printFeuilleBloc(oper_id) {
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "print_feuille_bloc");
+  url.addParam("operation_id", oper_id);
+  url.popup(700, 600, 'FeuilleBloc');
+}
+
+function pageMain() {
+  PairEffect.initGroup("effectSejour");
 }
 </script>
 
@@ -225,9 +232,9 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         {{/foreach}}
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
         <tr>
-          <td colspan="4">
-            <strong>Consultation pré-anesthésique</strong>
-          </td>
+          <th class="category" colspan="4">
+            Consultation pré-anesthésique
+          </th>
         </tr>
         <tr>
           <th>Consultation</th>
@@ -250,24 +257,19 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{/if}}
         <tr>
+          <th class="category" colspan="4">
+            Intervention
+          </th>
+        </tr>
+        <tr>
+          <td class="button" colspan="4">
+            <button class="print" onclick="printFeuilleBloc({{$curr_op->operation_id}})">
+              Imprimer la feuille de bloc
+            </button>
+          </td>
+        </tr>
+        <tr>
           <td colspan="4">
-            <strong>Intervention</strong>
-          </td>
-        </tr>
-        <tr>
-          <th>Date</th>
-          <td class="text" colspan="3">
-            Le {{$curr_op->_datetime|date_format:"%A %d %b %Y"}}
-            par le Dr. {{$curr_op->_ref_chir->_view}},
-          </td>
-        </tr>
-        <tr>
-          <th rowspan="6">Heures</th>
-          <th>Entrée en salle</th>
-          <td>
-            {{$curr_op->entree_salle|date_format:"%Hh%M"}}
-          </td>
-          <td rowspan="6">
             <form name="editPatFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
             <input type="hidden" name="dosql" value="do_patients_aed" />
@@ -293,7 +295,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               </tr>
 
               <tr>
-                <td id="updatePat{{$curr_op->operation_id}}" />
+                <td colspan="2" id="updatePat{{$curr_op->operation_id}}" />
               </tr>
             </table>
  
@@ -326,7 +328,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               </tr>
 
               <tr>
-                <td id="updateSejour{{$curr_op->operation_id}}" />
+                <td colspan="2" id="updateSejour{{$curr_op->operation_id}}" />
               </tr>
             </table>
 
@@ -379,7 +381,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               </tr>
 
               <tr>
-                <td id="updateOp{{$curr_op->operation_id}}" />
+                <td colspan="2" id="updateOp{{$curr_op->operation_id}}" />
               </tr>
 
             </table>
@@ -396,64 +398,44 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
           </td>
         </tr>
         <tr>
-          <th>Pose du garrot</th>
-          <td>
-            {{$curr_op->pose_garrot|date_format:"%Hh%M"}}
+          <td colspan="4">
+            <table class="tbl">
+              <tr>
+                <th class="category">supprimer</th>
+                <th class="category">Code</th>
+                <th class="category">Activité</th>
+                <th class="category">Phase &mdash; Modifs.</th>
+                <th class="category">Association</th>
+              </tr>
+              {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
+              <tr>
+                <td class="button">
+                  <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                  <input type="hidden" name="m" value="dPsalleOp" />
+                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
+                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
+                    {{tr}}Delete{{/tr}}
+                  </button>
+                  </form>
+                </td>
+                <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
+                <td class="button">{{$curr_acte->code_activite}}</td>
+                <td class="button">
+                  {{$curr_acte->code_phase}}
+                  {{if $curr_acte->modificateurs}}
+                    &mdash; {{$curr_acte->modificateurs}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{$curr_acte->_guess_association}}
+                </td>
+              </tr>
+              {{/foreach}}
+            </table>
           </td>
         </tr>
-        <tr>
-          <th>Début d'intervention</th>
-          <td>
-            {{$curr_op->debut_op|date_format:"%Hh%M"}}
-          </td>
-        </tr>
-        <tr>
-          <th>Fin d'intervention</th>
-          <td>
-            {{$curr_op->fin_op|date_format:"%Hh%M"}}
-          </td>
-        </tr>
-        <tr>
-          <th>Retrait du garrot</th>
-          <td>
-            {{$curr_op->retrait_garrot|date_format:"%Hh%M"}}
-          </td>
-        </tr>
-        <tr>
-          <th>Sortie de salle</th>
-          <td>
-            {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
-          </td>
-        </tr>
-        <tr>
-          <td class="button">supprimer</td>
-          <td class="button"><strong>Code</strong></td>
-          <td class="button"><strong>Activité</strong></td>
-          <td class="button"><strong>Phase &mdash; Modificateurs</strong></td>
-        </tr>
-        {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
-        <tr>
-          <td class="button">
-            <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-            <input type="hidden" name="m" value="dPsalleOp" />
-            <input type="hidden" name="dosql" value="do_acteccam_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-            <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
-            {{tr}}Delete{{/tr}}
-            </button>
-            </form>
-          </td>
-          <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
-          <td class="button">{{$curr_acte->code_activite}}</td>
-          <td class="button">
-            {{$curr_acte->code_phase}}
-            {{if $curr_acte->modificateurs}}
-              &mdash; {{$curr_acte->modificateurs}}
-            {{/if}}
-          </td>
-        </tr>
-        {{/foreach}}
 
         <tr>
           <td class="button" colspan="4">
@@ -501,6 +483,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <button class="modify" type="submit">Valider</button>
             </form>
             {{if $curr_sejour->_ref_GHM->_CM}}
+            <br />
             <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
             <br />
             <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} €)
@@ -510,7 +493,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             <em>Appartenance aux groupes {{$GHM->_GHM_groupe}}</em>
             <br />
             <strong>Bornes d'hospitalisation</strong> :
-            de {{$GHM->_borne_basse}} jour(s)
+            de {{$GHM->_borne_basse}}
             à {{$GHM->_borne_haute}} jours
             {{else}}
             <strong>{{$GHM->_GHM}}</strong>

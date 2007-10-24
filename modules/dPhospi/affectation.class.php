@@ -30,6 +30,7 @@ class CAffectation extends CMbObject {
   var $_entree_relative;
   var $_sortie_relative;
   var $_mode_sortie;
+  var $_duree;
   
   // Object references
   var $_ref_lit    = null;
@@ -67,6 +68,10 @@ class CAffectation extends CMbObject {
 	function loadView() {
   	$this->loadRefLit();
     $this->_ref_lit->loadCompleteView();
+  }
+  
+  function updateFormFields() {
+    $this->_duree = mbDaysRelative($this->entree, $this->sortie);
   }
   
   function check() {

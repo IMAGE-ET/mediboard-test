@@ -258,14 +258,15 @@
     <td colspan="2">
       <table width="100%" style="border-spacing: 0px;font-size: 100%;">
         <tr>
-          <th class="category" colspan="4">Actes CCAM</th>
+          <th class="category" colspan="5">Actes CCAM</th>
         </tr>
         {{assign var="styleBorder" value="border: solid #aaa 1px;"}}
         <tr>
           <th style="{{$styleBorder}}text-align:left;">Code</th>
           <th style="{{$styleBorder}}text-align:left;">Exécutant</th>
           <th style="{{$styleBorder}}text-align:left;">Activité</th>
-          <th style="{{$styleBorder}}text-align:left;">Phase &mdash; Modificateurs</th>
+          <th style="{{$styleBorder}}text-align:left;">Phase &mdash; Modifs.</th>
+          <th style="{{$styleBorder}}text-align:left;">Association</th>
         </tr>
         {{foreach from=$operation->_ref_actes_ccam item=currActe}}
         <tr>
@@ -281,6 +282,7 @@
             &mdash; {{$currActe->modificateurs}}
             {{/if}}
           </td>
+          <td style="{{$styleBorder}}">{{$currActe->_guess_association}}</td>
         </tr>
         {{/foreach}}
       </table>
