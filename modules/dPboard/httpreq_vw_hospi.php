@@ -17,7 +17,7 @@ $date      = mbGetValueFromGetOrSession("date", mbDate());
 $board     = mbGetValueFromGet("board", 0);
 
 $where = array();
-$were["praticien_id"] = "= '$chirSel'";
+$where["praticien_id"] = "= '$chirSel'";
 $where["entree_prevue"] = "<= '$date 23:59:59'";
 $where["sortie_prevue"] = ">= '$date 00:00:00'";
 

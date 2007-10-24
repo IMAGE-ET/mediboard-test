@@ -20,7 +20,7 @@ function pageMain() {
       <input type="hidden" name="m" value="{{$m}}" />
       <select name="typeVue" onchange="submit()">
         <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Afficher les lits disponible</option>
-        <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients d'un chirurgien</option>
+        <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Afficher les patients présents</option>
       </select>
       </form>
     </td>
@@ -53,7 +53,7 @@ function pageMain() {
   </tr>
   <tr>
     <td><div id="calendar-container"></div></td>
-    <td class="greedyPane">
+    <td colspan="2" class="greedyPane">
       <table class="tbl">
         {{if $typeVue == 0}}
         <tr>
