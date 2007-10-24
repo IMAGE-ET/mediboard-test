@@ -97,8 +97,6 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
 
   if (isset($_POST[$valName])) {
     $_SESSION[$m][$valName] = $_POST[$valName];
-    mbTrace($_SESSION);
-    die;
   }
   
   return dPgetParam($_SESSION[$m], $valName, $valDefault);
