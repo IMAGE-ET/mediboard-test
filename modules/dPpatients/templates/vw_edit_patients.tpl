@@ -2,17 +2,18 @@
 
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
-{{mb_include_script path="includes/javascript/intermax.js"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
 
 <script type="text/javascript">
 
-Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-  url.setModuleTab("dPpatients", "vw_edit_patients");
-  url.addParam("useVitale", 1);
-  url.redirect();
-}
-
+//if (Intermax) {
+//	Intermax.ResultHandler["Lire Vitale"] = function() {
+//	  var url = new Url;
+//	  url.setModuleTab("dPpatients", "vw_edit_patients");
+//	  url.addParam("useVitale", 1);
+//	  url.redirect();
+//	}
+//}
 
 var httpreq_running = false;
 function confirmCreation(oForm){
@@ -55,14 +56,8 @@ function pageMain() {
 
 </script>
 
-
-{{if $app->user_prefs.GestionFSE}}
-  {{assign var="debug" value="false"}}
-  {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-{{/if}}
-
 <table class="main">
-  {{if $patient->patient_id}}
+  {{if $patient->_id}}
   <tr>
     <td><a class="buttonnew" href="?m={{$m}}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>

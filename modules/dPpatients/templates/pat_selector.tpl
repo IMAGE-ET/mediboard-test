@@ -1,6 +1,6 @@
 {{* $Id$ *}}
 
-{{mb_include_script path="includes/javascript/intermax.js"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
 
 <script type="text/javascript">
 
@@ -41,12 +41,16 @@ var Patient = {
   }
 }
 
+//if (Intermax) {
+//	Intermax.ResultHandler["Lire Vitale"] = function() {
+//	  var url = new Url;
+//	  url.setModuleAction("dPpatients", "pat_selector");
+//	  url.addParam("useVitale", 1);
+//	  url.addParam("dialog", 1);
+//	  url.redirect();
+//	}
+//}
 </script>
-
-{{if $app->user_prefs.GestionFSE}}
-{{assign var="debug" value="false"}}
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}    
-{{/if}}
 
 {{if $patVitale}}
 

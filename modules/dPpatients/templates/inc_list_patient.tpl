@@ -1,20 +1,18 @@
-{{mb_include_script path="includes/javascript/intermax.js"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
 
 <script type="text/javascript">
-Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-  url.setModuleTab("dPpatients", "vw_idx_patients");
-  url.addParam("useVitale", 1);
-  url.redirect();
-}
+
+//if (Intermax) {
+//	Intermax.ResultHandler["Lire Vitale"] = function() {
+//	  var url = new Url;
+//	  url.setModuleTab("dPpatients", "vw_idx_patients");
+//	  url.addParam("useVitale", 1);
+//	  url.redirect();
+//	}
+//}
 </script>
 
-{{if $app->user_prefs.GestionFSE}}
-{{assign var="debug" value="false"}}
-{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-{{/if}}
-
-<form name="find" action="./index.php" method="get">
+<form name="find" action="?" method="get">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
@@ -72,24 +70,24 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <tr>
     <td class="button" colspan="4">
       {{if $board}}
-        <button class="search" type="button" onclick="updateListPatients()">Rechercher</button>
+      <button class="search" type="button" onclick="updateListPatients()">Rechercher</button>
       {{else}}
-        <button class="search" type="submit">Rechercher</button>
-   {{if $app->user_prefs.GestionFSE}}
-     <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-       Lire Vitale
-     </button>
-     <button class="tick" type="button" onclick="Intermax.result();">
-       Résultat Vitale
-     </button>
-   {{/if}}
+      <button class="search" type="submit">Rechercher</button>
+      {{if $app->user_prefs.GestionFSE}}
+      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+        Lire Vitale
+      </button>
+      <button class="tick" type="button" onclick="Intermax.result();">
+        Résultat Vitale
+      </button>
+      {{/if}}
       {{/if}}
     </td>
   </tr>
 </table>
 </form>
 
-<form name="fusion" action="index.php" method="get">
+<form name="fusion" action="?" method="get">
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="a" value="fusion_pat" />
 <table class="tbl">
