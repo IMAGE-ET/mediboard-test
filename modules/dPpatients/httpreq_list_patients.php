@@ -18,6 +18,7 @@ $patient_id = mbGetValueFromGetOrSession("patient_id");
 // Patients
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
 $patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
+$patient_jeuneFille= mbGetValueFromGetOrSession("jeuneFille"  , ""       );
 $patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
 $patient_ville     = mbGetValueFromGetOrSession("ville"     , ""       );
 $patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
@@ -93,6 +94,9 @@ $smarty->assign("ville"          , $patient_ville                             );
 $smarty->assign("cp"             , $patient_cp                                );
 $smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
 $smarty->assign("patients"       , $patients                                  );
+$smarty->assign("patientsCount"  , count($patients)                           );
+$smarty->assign("patientsSoundexCount", count($patientsSoundex)               );
+$smarty->assign("jeuneFille"     , $patient_jeuneFille                        );
 $smarty->assign("patientsSoundex", $patientsSoundex                           );
 $smarty->assign("patient"        , $patient                                   );
 
