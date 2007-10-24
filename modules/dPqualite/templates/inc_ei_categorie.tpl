@@ -1,9 +1,9 @@
 {{if $categorie->ei_categorie_id}}
-<a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
+<a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id=0">
   {{tr}}CEiCategorie.create{{/tr}}
 </a>
 {{/if}}
-<form name="editCategorie" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editCategorie" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_eiCategorie_aed" />
 <input type="hidden" name="ei_categorie_id" value="{{$categorie->ei_categorie_id}}" />
 <input type="hidden" name="del" value="0" />
@@ -42,7 +42,7 @@
   {{foreach from=$listCategories item=curr_cat}}
   <tr>
     <td class="text">
-      <a href="index.php?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="{{tr}}CEiCategorie.modify{{/tr}}">
+      <a href="?m={{$m}}&amp;tab=vw_edit_ei&amp;ei_categorie_id={{$curr_cat->ei_categorie_id}}" title="{{tr}}CEiCategorie.modify{{/tr}}">
         {{$curr_cat->nom}}
       </a>
     </td>

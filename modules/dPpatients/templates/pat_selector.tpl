@@ -41,15 +41,13 @@ var Patient = {
   }
 }
 
-//if (Intermax) {
-//	Intermax.ResultHandler["Lire Vitale"] = function() {
-//	  var url = new Url;
-//	  url.setModuleAction("dPpatients", "pat_selector");
-//	  url.addParam("useVitale", 1);
-//	  url.addParam("dialog", 1);
-//	  url.redirect();
-//	}
-//}
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  var url = new Url;
+  url.setModuleAction("dPpatients", "pat_selector");
+  url.addParam("useVitale", 1);
+  url.addParam("dialog", 1);
+  url.redirect();
+}
 </script>
 
 {{if $patVitale}}

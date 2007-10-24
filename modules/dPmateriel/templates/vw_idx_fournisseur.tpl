@@ -9,7 +9,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="2">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id=0">
         Ajouter un nouveau fournisseur
       </a>
       <table class="tbl">
@@ -23,7 +23,7 @@ function pageMain() {
         {{foreach from=$listFournisseur item=curr_fournisseur}}
         <tr {{if $curr_fournisseur->_id == $fournisseur->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->_id}}" title="Modifier le fournisseur">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_fournisseur&amp;fournisseur_id={{$curr_fournisseur->_id}}" title="Modifier le fournisseur">
               {{$curr_fournisseur->societe}}
             </a>
           </td>
@@ -40,7 +40,7 @@ function pageMain() {
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-      <form name="editFournisseur" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFournisseur" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_fournisseur_aed" />
 	  <input type="hidden" name="fournisseur_id" value="{{$fournisseur->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -106,7 +106,7 @@ function pageMain() {
   <tr>
     <td class="halfPane">
       {{if $fournisseur->_id}}
-      <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0&amp;fournisseur_id={{$fournisseur->_id}}'">
+      <button class="new" type="button" onclick="window.location='?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0&amp;fournisseur_id={{$fournisseur->_id}}'">
         Créer une nouvelle référence pour ce fournisseur
       </button>
       {{/if}}

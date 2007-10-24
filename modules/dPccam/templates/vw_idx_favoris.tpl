@@ -53,7 +53,7 @@ function modifClass(){
       {{else}}
       <span style="float:right">{{$curr_code->occ}} acte(s)</span>
       {{/if}}
-      <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>
+      <a href="?m={{$m}}&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>
        
       <span style="float:right">
       {{if $curr_code->class=="CConsultation"}}{{tr}}CFavoriCCAM.filter_class.CConsultation{{/tr}}{{/if}}
@@ -69,7 +69,7 @@ function modifClass(){
       {{if $curr_code->favoris_id != 0}}
       {{if $can->edit}}
       <br />
-      <form name="delFavoris" action="index.php?m={{$m}}" method="post">
+      <form name="delFavoris" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="favoris_id" value="{{$curr_code->favoris_id}}" />

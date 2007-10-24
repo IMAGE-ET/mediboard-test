@@ -69,7 +69,7 @@ var File = {
             {{assign var="confirmDeleteType" value="le fichier"}}
             {{assign var="confirmDeleteName" value=$curr_file->file_name}}
             {{assign var="elementId" value=$curr_file->file_id}}
-            {{assign var="srcImg" value="index.php?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}        
+            {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}        
           {{/if}}
             <div id="viewFile-{{$curr_file->_id}}">
               {{assign var="fileSel" value=$curr_file}}

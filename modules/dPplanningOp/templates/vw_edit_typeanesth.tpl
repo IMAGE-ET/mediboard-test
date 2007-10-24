@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
         {{tr}}CTypeAnesth.create{{/tr}}
       </a>
       <table class="tbl">
@@ -11,7 +11,7 @@
         {{foreach from=$listTypeAnesth item=curr_TypeAnesth}}
         <tr>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="{{tr}}CTypeAnesth-modify{{/tr}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="{{tr}}CTypeAnesth-modify{{/tr}}">
               {{$curr_TypeAnesth->name}}
             </a>
           </td>
@@ -20,7 +20,7 @@
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editType" action="./index.php?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
+      <form name="editType" action="?m={{$m}}&amp;tab=vw_edit_typeanesth" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_typeanesth_aed" />
       {{mb_field object=$type_anesth field="type_anesth_id" hidden=1 prop=""}}

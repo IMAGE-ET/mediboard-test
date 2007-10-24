@@ -2,7 +2,7 @@
   <tr>
 
     <td colspan="2">
-      <form name="selectPrat" action="index.php" method="get">
+      <form name="selectPrat" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
         
       <table class="form">
@@ -48,10 +48,10 @@
         {{foreach from=$listModelePrat item=curr_modele}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
+            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
+            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">
@@ -83,10 +83,10 @@
         {{foreach from=$listModeleFunc item=curr_modele}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
+            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
+            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
           </td>
           <td>
             <form name="editFrm" action="?m={{$m}}" method="post">

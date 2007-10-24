@@ -20,7 +20,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td colspan="2">
-      <form name="userSelector" action="index.php" method="get">
+      <form name="userSelector" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <label for="employecab_id" title="Veuillez sélectionner l'employé concerné">Employé Concerné</label>
       <select name="employecab_id" onchange="this.form.submit()">
@@ -33,7 +33,7 @@ function pageMain() {
       </form>
       {{if $fichePaie->fiche_paie_id}}
       <br />
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_paie&amp;fiche_paie_id=0" title="Créer une nouvelle fiche de paie">
         Créer une nouvelle fiche de paie
       </a>
       {{/if}}
@@ -41,7 +41,7 @@ function pageMain() {
   </tr>
   <tr>
     <td class="halfPane">
-      <form name="editFrm" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_fichePaie_aed" />
       <input type="hidden" name="m" value="dPgestionCab" />
       <input type="hidden" name="fiche_paie_id" value="{{$fichePaie->fiche_paie_id}}" />
@@ -121,7 +121,7 @@ function pageMain() {
         {{foreach from=$listFiches item=curr_fiche}}
         <tr>
           <td>
-            <form name="editFrm{{$curr_fiche->fiche_paie_id}}" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editFrm{{$curr_fiche->fiche_paie_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_fichePaie_aed" />
             <input type="hidden" name="m" value="dPgestionCab" />
             <input type="hidden" name="fiche_paie_id" value="{{$curr_fiche->fiche_paie_id}}" />
@@ -130,7 +130,7 @@ function pageMain() {
               Supprimer
             </button>
             </form>
-            <a href="index.php?m=dPgestionCab&amp;tab=edit_paie&amp;fiche_paie_id={{$curr_fiche->fiche_paie_id}}" title="Editer cette fiche" >
+            <a href="?m=dPgestionCab&amp;tab=edit_paie&amp;fiche_paie_id={{$curr_fiche->fiche_paie_id}}" title="Editer cette fiche" >
               {{$curr_fiche->_view}}
             </a>
           </td>

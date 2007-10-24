@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 </script>
 
@@ -8,7 +8,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="selCabinet" action="index.php" method="get">
+      <form name="selCabinet" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>

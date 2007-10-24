@@ -2,7 +2,7 @@
 
 <script language="javascript" type="text/javascript">
 function pageMain() {
-  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 </script>
 

@@ -6,6 +6,7 @@ function verifNonEmpty(oElement){
   }
   return false;
 }
+
 function view_history_consult(id){
   url = new Url();
   url.setModuleAction("dPcabinet", "vw_history");
@@ -138,6 +139,8 @@ function pageMain() {
   <tr>
     <td id="listConsult" style="width: 200px; vertical-align: top;" />
     <td class="greedyPane" id="tdConsultation">
+    
+    {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=true}}
     
     {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}

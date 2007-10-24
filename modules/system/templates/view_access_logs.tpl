@@ -15,7 +15,7 @@ function zoom(date, module, action, interval) {
 }
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
@@ -26,7 +26,7 @@ function pageMain() {
   <th>
   	Logs d'accès du  {{$date|date_format:"%A %d %b %Y"}}
     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-    <form action="index.php" name="typevue" method="get">
+    <form action="?" name="typevue" method="get">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="tab" value="{{$tab}}" />
     <label for="interval" title="Echelle d'affichage">Intervalle</label>
@@ -68,15 +68,15 @@ function pageMain() {
         <td class="button">
           {{if $groupmod == 2}}
           <a href="#" onclick="zoom('{{$date}}', 0, 0, '{{$interval}}')" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour la journée" />
+            <img src="?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module=0&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour la journée" />
           </a>
           {{elseif $groupmod == 1}}
           <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', 0, '{{$interval}}')" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}}" />
+            <img src="?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName=0&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}}" />
           </a>
           {{else}}
           <a href="#" onclick="zoom('{{$date}}', '{{$log->module}}', '{{$log->action}}', '{{$interval}}')" title="Agrandir">
-            <img src="index.php?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName={{$log->action}}&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
+            <img src="?m=dPstats&amp;a=graph_accesslog&amp;suppressHeaders=1&amp;date={{$date}}&amp;module={{$log->module}}&amp;actionName={{$log->action}}&amp;interval={{$interval}}" alt="Graphique pour {{$log->module}} - {{$log->action}}" />
           </a>
           {{/if}}
         </td>

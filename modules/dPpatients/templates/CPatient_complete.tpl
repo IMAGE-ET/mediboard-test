@@ -12,7 +12,7 @@
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
 
-      <form name="actionPat" action="./index.php" method="get">
+      <form name="actionPat" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$object->_id}}" />

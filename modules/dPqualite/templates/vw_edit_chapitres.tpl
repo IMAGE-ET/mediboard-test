@@ -10,7 +10,7 @@
       </select>
       </form><br />
 
-      <a class="buttonnew" href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id=0">
+      <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id=0">
         {{tr}}CChapitreDoc.create{{/tr}}
       </a>
       <table class="tbl">
@@ -21,12 +21,12 @@
         {{foreach from=$listChapitres item=curr_chapitre}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="{{tr}}CChapitreDoc.modify{{/tr}}">
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="{{tr}}CChapitreDoc.modify{{/tr}}">
               {{$curr_chapitre->nom}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="{{tr}}CChapitreDoc.modify{{/tr}}">
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="{{tr}}CChapitreDoc.modify{{/tr}}">
               {{$curr_chapitre->code}}
             </a>
           </td>
@@ -35,7 +35,7 @@
       </table>
     </td>
     <td class="halfPane">
-      <form name="editChapitre" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editChapitre" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_chapitre_aed" />
 	  <input type="hidden" name="doc_chapitre_id" value="{{$chapitre->doc_chapitre_id}}" />
       <input type="hidden" name="del" value="0" />

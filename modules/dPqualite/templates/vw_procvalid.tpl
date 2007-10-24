@@ -74,7 +74,7 @@ function redactionDoc(oForm){
         {{foreach from=$procDemande item=currProc}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{if $currProc->_lastactif->doc_ged_suivi_id}}
                 {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
               {{else}}
@@ -83,12 +83,12 @@ function redactionDoc(oForm){
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_ref_group->text}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}
             </a>
           </td>
@@ -116,17 +116,17 @@ function redactionDoc(oForm){
         {{foreach from=$procEnCours item=currProc}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->titre}}
             </a>
           </td>
           <td>
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_reference_doc}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_ref_group->text}}
             </a>
           </td>
@@ -149,11 +149,11 @@ function redactionDoc(oForm){
       {{if $procTermine|@count}}
         <br />
         {{if !$procAnnuleVisible}}
-        <a class="buttonedit" href="index.php?m={{$m}}&amp;procAnnuleVisible=1">
+        <a class="buttonedit" href="?m={{$m}}&amp;procAnnuleVisible=1">
         {{tr}}button-CDocGed-viewcancel{{/tr}}
         </a>
         {{else}}
-        <a class="buttoncancel" href="index.php?m={{$m}}&amp;procAnnuleVisible=0">
+        <a class="buttoncancel" href="?m={{$m}}&amp;procAnnuleVisible=0">
         {{tr}}button-CDocGed-notviewcancel{{/tr}}
         </a>
         <table class="form">
@@ -172,17 +172,17 @@ function redactionDoc(oForm){
           {{foreach from=$procTermine item=currProc}}
           <tr>
             <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
+              <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
                 {{$currProc->titre}}
               </a>
             </td>
             <td>
-              <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
+              <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
                 {{$currProc->_reference_doc}}
               </a>
             </td>
             <td class="text">
-              <a href="index.php?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
+              <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}&amp;lastactif=1">
                 {{$currProc->_ref_group->text}}
               </a>
             </td>

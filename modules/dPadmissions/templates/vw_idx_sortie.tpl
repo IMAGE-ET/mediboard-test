@@ -75,7 +75,7 @@ function pageMain() {
   compUpdater.addParam("vue", "{{$vue}}");
   compUpdater.periodicalUpdate('sortiesComp', { frequency: 90 });
 
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
@@ -95,10 +95,10 @@ function pageMain() {
     <td class="halfPane" style="text-align: center">
       <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
       <strong>
-        <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
+        <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$hier}}"> <<< </a>
         {{$date|date_format:"%A %d %B %Y"}}
         <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-        <a href="index.php?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}"> >>> </a>
+        <a href="?m=dPadmissions&amp;tab=vw_idx_sortie&amp;date={{$demain}}"> >>> </a>
       </strong>
     </td>
   </tr>

@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
@@ -30,7 +30,7 @@ function pageMain() {
     </td>
 
     <td class="text" {{if !$GHM->_DP}} style="background-color:#fdd" {{/if}}>
-      <a title="Voir le dossier PMSI" href="index.php?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_sejour->patient_id}}">
+      <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_sejour->patient_id}}">
         {{$curr_sejour->_ref_patient->_view}}
       </a>
     </td>
@@ -53,7 +53,7 @@ function pageMain() {
     </td>
     
     <td class="text" {{if !$GHM->ghm_id}} style="background-color:#fdd" {{/if}}>
-      <a title="Labo de groupage pour l'intervention" href="index.php?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
+      <a title="Labo de groupage pour l'intervention" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
       	{{$GHM->_GHM}}
         {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
       </a>

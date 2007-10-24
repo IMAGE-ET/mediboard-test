@@ -6,7 +6,7 @@ function pageMain() {
 </script>
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id=0">
         Créer un nouveau menu
       </a>
       <table class="tbl">
@@ -18,17 +18,17 @@ function pageMain() {
         {{foreach from=$listMenus item=curr_menu}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
+            <a href="?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
               {{$curr_menu->nom}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
+            <a href="?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
               {{$curr_menu->_ref_typerepas->nom}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
+            <a href="?m={{$m}}&amp;tab=vw_edit_menu&amp;menu_id={{$curr_menu->menu_id}}" title="Modifier le repas">
               {{assign var="premier" value=1}}
               {{foreach from=$typePlats->_enums.type item=curr_typePlat}}
                 {{if $curr_menu->$curr_typePlat}}
@@ -47,7 +47,7 @@ function pageMain() {
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editMenu" action="./index.php?m={{$m}}&amp;tab=vw_edit_menu" method="post" onsubmit="return checkForm(this)">
+      <form name="editMenu" action="?m={{$m}}&amp;tab=vw_edit_menu" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPrepas" />
       <input type="hidden" name="dosql" value="do_menu_aed" />
 	  <input type="hidden" name="menu_id" value="{{$menu->menu_id}}" />

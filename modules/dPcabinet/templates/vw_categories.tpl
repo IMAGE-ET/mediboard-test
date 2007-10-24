@@ -18,7 +18,7 @@
   {{if $selCabinet && $droit}}
   <tr>
     <td class="halfPane">
-	  <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id=0" class="buttonnew">
+	  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;categorie_id=0" class="buttonnew">
 		Créer une catégorie
 	  </a>
 	  <table class="tbl">

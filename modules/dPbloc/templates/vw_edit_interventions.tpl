@@ -18,7 +18,7 @@
         <tr>
           <td>
             <!-- liste déroulante de choix de l'anesthesiste  et du personnel de bloc -->
-            <form name="editPlage" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editPlage" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="m" value="dPbloc" />
             <input type="hidden" name="dosql" value="do_plagesop_aed" />
             <input type="hidden" name="del" value="0" />
@@ -41,7 +41,7 @@
 			  {{if $plage->_ref_personnel !== null}}
         <tr>
           <td>
-            <form name="editAffectation" action="index.php?m={{$m}}" method="post">
+            <form name="editAffectation" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPpersonnel" />
             <input type="hidden" name="dosql" value="do_affectation_aed" />
             
@@ -115,7 +115,7 @@
               <img src="images/icons/history.gif" alt="historique" />
             </a>
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+		    <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
 		    </a>
 		    </strong>
@@ -125,7 +125,7 @@
 			Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
 			{{if $listPlages|@count != '1'}}
 			<br />
-			<form name="changeSalle" action="index.php?m={{$m}}" method="post">
+			<form name="changeSalle" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="del" value="0" />
@@ -142,7 +142,7 @@
 			{{/if}}
 		  </td>
 		  <td class="text">
-		    <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+		    <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
             {{if $curr_op->libelle}}
               <em>[{{$curr_op->libelle}}]</em>
               <br />
@@ -157,7 +157,7 @@
             {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
-            <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
+            <form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="setanesth" />
@@ -176,7 +176,7 @@
 		    {{if $curr_op->annulee}}
 		    <img src="images/icons/cross.png" width="12" height="12" alt="annulée" border="0" />
 		    {{else}}
-		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=insert&amp;id={{$curr_op->operation_id}}">
+		    <a href="?m={{$m}}&amp;a=do_order_op&amp;cmd=insert&amp;id={{$curr_op->operation_id}}">
 		    <img src="images/icons/tick.png" width="12" height="12" alt="ajouter" border="0" />
 			</a>
 			{{/if}}
@@ -198,13 +198,13 @@
 		    <a name="{{$curr_op->operation_id}}" style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
-			<form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
+			<form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="sethour" />
             <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
 		    <strong>
-		    <a href="index.php?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
+		    <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
 		    </a>
 		    </strong>
@@ -234,7 +234,7 @@
 			</form>
 		  </td>
 		  <td class="text">
-		    <a href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
+		    <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
             {{if $curr_op->libelle}}
               <em>[{{$curr_op->libelle}}]</em>
               <br />
@@ -249,7 +249,7 @@
             {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
-            <form name="editFrm{{$curr_op->operation_id}}" action="index.php" method="get">
+            <form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="setanesth" />
@@ -266,17 +266,17 @@
 		  </td>
 		  <td>
 		    {{if $curr_op->rank != 1}}
-		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=up&amp;id={{$curr_op->operation_id}}">
+		    <a href="?m={{$m}}&amp;a=do_order_op&amp;cmd=up&amp;id={{$curr_op->operation_id}}">
 		    <img src="images/icons/uparrow.png" width="12" height="12" alt="monter" border="0" />
 			</a>
 			<br />
 			{{/if}}
-			<a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=rm&amp;id={{$curr_op->operation_id}}">
+			<a href="?m={{$m}}&amp;a=do_order_op&amp;cmd=rm&amp;id={{$curr_op->operation_id}}">
 		    <img src="images/icons/cross.png" width="12" height="12" alt="supprimer" border="0" />
 			</a>
 			{{if $curr_op->rank != $max}}
 			<br />
-		    <a href="index.php?m={{$m}}&amp;a=do_order_op&amp;cmd=down&amp;id={{$curr_op->operation_id}}">
+		    <a href="?m={{$m}}&amp;a=do_order_op&amp;cmd=down&amp;id={{$curr_op->operation_id}}">
 		    <img src="images/icons/downarrow.png" width="12" height="12" alt="descendre" border="0" />
 			</a>
 			{{/if}}

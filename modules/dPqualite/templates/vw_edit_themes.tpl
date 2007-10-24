@@ -10,7 +10,7 @@
       </select>
       </form><br />
     
-      <a class="buttonnew" href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id=0">
+      <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id=0">
         {{tr}}CThemeDoc.create{{/tr}}
       </a>
       <table class="tbl">
@@ -20,7 +20,7 @@
         {{foreach from=$listThemes item=curr_theme}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="{{tr}}CThemeDoc.modify{{/tr}}">
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id={{$curr_theme->doc_theme_id}}" title="{{tr}}CThemeDoc.modify{{/tr}}">
               {{$curr_theme->nom}}
             </a>
           </td>
@@ -29,7 +29,7 @@
       </table>
     </td>
     <td class="halfPane">
-      <form name="editThème" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editThème" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_theme_aed" />
 	  <input type="hidden" name="doc_theme_id" value="{{$theme->doc_theme_id}}" />
       <input type="hidden" name="del" value="0" />

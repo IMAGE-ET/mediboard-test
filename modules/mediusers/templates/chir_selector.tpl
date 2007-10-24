@@ -10,7 +10,7 @@ function setClose(){
 }
 </script>
 
-<form action="index.php" name="frmSelector" method="get">
+<form action="?" name="frmSelector" method="get">
 
 <input type="hidden" name="m" value="mediusers" />
 <input type="hidden" name="a" value="chir_selector" />

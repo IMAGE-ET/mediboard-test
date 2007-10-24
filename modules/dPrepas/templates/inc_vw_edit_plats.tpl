@@ -1,6 +1,6 @@
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id=0">
         Créer un nouveau plat
       </a>
       <table class="tbl">
@@ -12,17 +12,17 @@
         {{foreach from=$listPlats item=curr_plat}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
               {{$curr_plat->nom}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
               {{tr}}CPlat.type.{{$curr_plat->type}}{{/tr}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;plat_id={{$curr_plat->plat_id}}" title="Modifier le plat">
               {{assign var="keyrepas" value=$curr_plat->typerepas}}
               {{$listTypeRepas.$keyrepas->nom}}
             </a>
@@ -32,7 +32,7 @@
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editPlat" action="./index.php?m={{$m}}&amp;tab=vw_edit_plats" method="post" onsubmit="return checkForm(this)">
+      <form name="editPlat" action="?m={{$m}}&amp;tab=vw_edit_plats" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPrepas" />
       <input type="hidden" name="dosql" value="do_plat_aed" />
 	  <input type="hidden" name="plat_id" value="{{$plat->plat_id}}" />

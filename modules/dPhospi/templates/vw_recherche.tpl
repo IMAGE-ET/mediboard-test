@@ -8,7 +8,7 @@ function popPlanning(date) {
 }
 
 function pageMain() {
-  regRedirectFlatCal("{{$date_recherche}}", "index.php?m={{$m}}&tab={{$tab}}&date_recherche=", null, true);
+  regRedirectFlatCal("{{$date_recherche}}", "?m={{$m}}&tab={{$tab}}&date_recherche=", null, true);
 }
 
 </script>

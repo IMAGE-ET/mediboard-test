@@ -109,7 +109,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="patFrm" action="index.php" method="get">
+      <form name="patFrm" action="?" method="get">
       <table class="form">
         <tr>
           <th><label for="patNom" title="Merci de choisir un patient pour voir son dossier">Choix du patient</label></th>

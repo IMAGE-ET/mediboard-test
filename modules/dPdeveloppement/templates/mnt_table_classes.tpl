@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th>
-      <form action="index.php" name="mntTable" method="get">
+      <form action="?" name="mntTable" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
 

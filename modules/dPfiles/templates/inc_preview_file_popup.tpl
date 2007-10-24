@@ -80,8 +80,8 @@ window.onbeforeunload= function () {
           {{assign var="stylecontenu" value=null}}
           {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
-          <a href="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}" title="Télécharger le fichier">
-            <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
+          <a href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}" title="Télécharger le fichier">
+            <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}&amp;phpThumb=1&amp;w=700{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" alt="Grand aperçu" />
           </a> 
           {{/if}}
       {{/if}}

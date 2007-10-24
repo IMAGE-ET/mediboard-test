@@ -9,7 +9,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;etab_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;etab_id=0" class="buttonnew">
         Créer un établissement externe
       </a>
       <table class="tbl">
@@ -19,7 +19,7 @@ function pageMain() {
         {{foreach from=$listEtabExternes item=curr_etab}}
         <tr {{if $curr_etab->_id == $etabExterne->_id}}class="selected"{{/if}}>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;etab_id={{$curr_etab->_id}}">
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;etab_id={{$curr_etab->_id}}">
               {{$curr_etab->nom}}
             </a>
           </td>
@@ -29,7 +29,7 @@ function pageMain() {
       </table>
     </td>
     <td class="halfPane">
-      <form name="etabExterne" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="etabExterne" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_etabExterne_aed" />
 	  <input type="hidden" name="etab_id" value="{{$etabExterne->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -109,12 +109,16 @@ function pageMain() {
         <tr>
           <td class="button" colspan="2">
           {{if $etabExterne->_id}}
-            <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$etabExterne->nom|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+            <button class="modify" type="submit" name="modify">
+              {{tr}}Modify{{/tr}}
+            </button>
+            <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$etabExterne->nom|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
             </button>
           {{else}}
-            <button class="submit" type="submit" name="btnFuseAction">Créer</button>
+            <button class="new" type="submit" name="create">
+              {{tr}}Create{{/tr}}
+            </button>
           {{/if}}
           </td>
         </tr>

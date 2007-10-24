@@ -1,6 +1,6 @@
 {{include file="inc_echantillonnage_fonctions.tpl"}}
 
-<form action="index.php?m={{$m}}" name="echantillonage" method="post" onsubmit="return checkForm(this)">
+<form action="?m={{$m}}" name="echantillonage" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="dosql" value="do_echantillonnage" />
 <input type="hidden" name="tab" value="{{$tab}}" />

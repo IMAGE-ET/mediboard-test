@@ -16,4 +16,5 @@ $module->registerTab("mnt_backref_classes" 		, null, TAB_READ);
 $module->registerTab("mnt_traduction_classes" , null, TAB_READ);
 $module->registerTab("vw_refMandatory"     		, null, TAB_READ);
 $module->registerTab("echantillonnage"     		, null, TAB_READ);
+$module->registerTab("launch_tests"        		, null, TAB_READ);
 ?>

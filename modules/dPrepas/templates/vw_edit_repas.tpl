@@ -33,7 +33,7 @@ function pageMain() {
 }
 {{/if}}
 </script>
-<form name="editMenu" action="./index.php?m={{$m}}&amp;tab=vw_edit_repas" method="post" onsubmit="return checkForm(this)">
+<form name="editMenu" action="?m={{$m}}&amp;tab=vw_edit_repas" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPrepas" />
 <input type="hidden" name="dosql" value="do_repas_aed" />
 <input type="hidden" name="repas_id" value="{{if $repas}}{{$repas->repas_id}}{{/if}}" />

@@ -8,7 +8,7 @@
 <input type="hidden" name="del" value="0" />
 
 {{if $tab && $can->edit && $user_id}}
-<a href="index.php?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
+<a href="?m={{$m}}&amp;tab=edit_prefs&amp;user_id=0" class="buttonedit">
   Editer les Préférences par Défaut
 </a>
 {{/if}}
@@ -156,6 +156,18 @@
     </td>
   </tr>
 
+  {{assign var="var" value="InterMaxDir"}}
+  <tr>
+    <th>
+      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
+        {{tr}}pref-{{$var}}{{/tr}}
+      </label>
+    </th>
+    <td>
+      <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
+    </td>
+  </tr>
+
   {{assign var="var" value="DossierCabinet"}}
   <tr>
     <th>
@@ -166,18 +178,6 @@
         <option value="dPcabinet" {{if $prefsUser.$module.$var == "dPcabinet" }}selected="selected"{{/if}}>{{tr}}module-dPcabinet-court{{/tr}}</option>
         <option value="dPpatients"{{if $prefsUser.$module.$var == "dPpatients"}}selected="selected"{{/if}}>{{tr}}module-dPpatients-court{{/tr}}</option>
       </select>
-    </td>
-  </tr>
-
-  {{assign var="var" value="InterMaxDir"}}
-  <tr>
-    <th>
-      <label for="pref_name[{{$var}}]" title="{{tr}}pref-{{$var}}-desc{{/tr}}">
-        {{tr}}pref-{{$var}}{{/tr}}
-      </label>
-    </th>
-    <td>
-      <input class="str" type="text" size="40" name="pref_name[{{$var}}]" value="{{$prefsUser.$module.$var}}" />
     </td>
   </tr>
 

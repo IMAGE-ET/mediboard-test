@@ -2,14 +2,12 @@
 
 <script type="text/javascript">
 
-//if (Intermax) {
-//	Intermax.ResultHandler["Lire Vitale"] = function() {
-//	  var url = new Url;
-//	  url.setModuleTab("dPpatients", "vw_idx_patients");
-//	  url.addParam("useVitale", 1);
-//	  url.redirect();
-//	}
-//}
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  var url = new Url;
+  url.setModuleTab("dPpatients", "vw_idx_patients");
+  url.addParam("useVitale", 1);
+  url.redirect();
+}
 </script>
 
 <form name="find" action="?" method="get">

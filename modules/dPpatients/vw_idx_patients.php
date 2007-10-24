@@ -52,9 +52,9 @@ if (mbGetValueFromGet("useVitale")) {
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;
-  $patient_day    = $patVitale->_jour;
-  $patient_month  = $patVitale->_mois;
-  $patient_year   = $patVitale->_annee;
+//  $patient_day    = $patVitale->_jour;
+//  $patient_month  = $patVitale->_mois;
+//  $patient_year   = $patVitale->_annee;
   $patient_naissance = "on";
   mbSetValueToSession("naissance", "on");
 }

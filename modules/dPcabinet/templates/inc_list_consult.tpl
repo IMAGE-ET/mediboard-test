@@ -1,10 +1,10 @@
 {{if !$board}}
 {{if $canCabinet->view}}
 <script type="text/javascript">
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 </script>
 {{/if}}
-<form name="changeView" action="index.php" method="get">
+<form name="changeView" action="?" method="get">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <table class="form">

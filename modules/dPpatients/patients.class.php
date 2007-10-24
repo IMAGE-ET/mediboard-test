@@ -279,7 +279,7 @@ class CPatient extends CDossierMedical {
   }
       
   function getValuesFromVitaleEx() {
-    if (null == $intermax = mbGetValueFromGetOrSession("intermax")) {
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
     }
     
@@ -328,7 +328,7 @@ class CPatient extends CDossierMedical {
     // Rang bénéficiaire
     $codeRangMatrix = array(
 			"00"=> "01", // Assuré
-			"01"=> "02", // DEVRAIT ETRE 31 // Ascendant, descendant, collatéraux ascendants
+			"01"=> "31", // Ascendant, descendant, collatéraux ascendants
 			"02"=> "02", // Conjoint
 			"03"=> "02", // Conjoint divorcé
 			"04"=> "02", // Concubin
@@ -348,6 +348,7 @@ class CPatient extends CDossierMedical {
     
     global $dPconfig;
 
+//    mbExport($this->getProps());
     $this->nom = strtoupper($this->nom);
     $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
     $this->prenom = ucwords(strtolower($this->prenom));

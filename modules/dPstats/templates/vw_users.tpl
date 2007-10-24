@@ -12,7 +12,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="users" action="index.php" method="get" onsubmit="return checkForm(this)">
+      <form name="users" action="?" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>
@@ -57,7 +57,7 @@ function pageMain() {
       </form>
     </td>
     <td>
-      <form name="Form1" action="index.php" method="get" onsubmit="return checkForm(this)">
+      <form name="Form1" action="?" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>

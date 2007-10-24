@@ -38,7 +38,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
 <table class="main">
   <tr>
     <td class="greedyPane" colspan="2">
-      <form name="patFrm" action="index.php" method="get">
+      <form name="patFrm" action="?" method="get">
       <table class="form">
         <tr><th>Choix du patient :</th>
           <td class="readonly">
@@ -88,7 +88,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tbody class="consEffect" id="cons{{$curr_consult->consultation_id}}">
           <tr>
             <td colspan="2">
-              <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+              <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
                 Voir la consultation
               </a>
             </td>
@@ -151,7 +151,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tbody class="operEffect" id="oper{{$curr_op->operation_id}}">
           <tr>
             <td colspan="2">
-              <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_planning&amp;selChir={{$curr_op->_ref_plageop->chir_id}}&amp;date={{$curr_op->_ref_plageop->date}}">
+              <a href="?m=dPplanningOp&amp;tab=vw_idx_planning&amp;selChir={{$curr_op->_ref_plageop->chir_id}}&amp;date={{$curr_op->_ref_plageop->date}}">
                 Voir l'intervention
               </a>
             </td>

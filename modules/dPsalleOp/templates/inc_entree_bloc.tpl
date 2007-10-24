@@ -1,5 +1,5 @@
 
-<form action="index.php" name="selection" method="get">
+<form action="?" name="selection" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <table class="form">
   <tr>
@@ -28,7 +28,7 @@
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
     <td class="button">
       {{if $can->edit || $modif_operation}}
-      <form name="editEntreeBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
+      <form name="editEntreeBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_planning_aed" />
       <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />

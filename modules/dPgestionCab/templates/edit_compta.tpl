@@ -25,13 +25,13 @@ function pageMain() {
   
     <!-- Modification d'une fiche -->
     <td class="halfpane">
-      <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_gestioncab_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="gestioncab_id" value="{{$gestioncab->gestioncab_id}}" />
       <input type="hidden" name="function_id" value="{{$gestioncab->function_id}}" />
       {{if $gestioncab->gestioncab_id}}
-      <a class="buttonnew" href="index.php?m={{$m}}&gestioncab_id=0">Créer une nouvelle fiche</a>
+      <a class="buttonnew" href="?m={{$m}}&gestioncab_id=0">Créer une nouvelle fiche</a>
       {{/if}}
       <table class="form">
         <tr>
@@ -126,7 +126,7 @@ function pageMain() {
     
     <!-- Recherche de fiches -->
     <td class="halfpane">
-      <form name="selectFrm" action="index.php" method="get" onSubmit="return checkForm(this)">
+      <form name="selectFrm" action="?" method="get" onSubmit="return checkForm(this)">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="tbl">
         <tr>
@@ -199,27 +199,27 @@ function pageMain() {
         {{foreach from=$listGestionCab item=fiche}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
+            <a href="?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
             {{mb_value object=$fiche field="date"}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
+            <a href="?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
             {{mb_value object=$fiche field="libelle"}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
+            <a href="?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
             {{mb_value object=$fiche->_ref_rubrique field="nom"}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
+            <a href="?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
             {{mb_value object=$fiche->_ref_mode_paiement field="nom"}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
+            <a href="?m={{$m}}&gestioncab_id={{$fiche->gestioncab_id}}">
             {{mb_value object=$fiche field="montant"}}
             </a>
           </td>

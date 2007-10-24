@@ -2,7 +2,7 @@
 
 function pageMain() {
   regFieldCalendar("addPlage", "date");
-  regRedirectPopupCal("{{$debut}}", "index.php?m={{$m}}&tab={{$tab}}&debut=");
+  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");
 }
 
 </script>
@@ -10,10 +10,10 @@ function pageMain() {
 <table class="main">
   <tr>
     <th class="title" colspan="2">
-      <a href="index.php?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
+      <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
       semaine du {{$debut|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
+      <a href="?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
   <tr>
@@ -33,7 +33,7 @@ function pageMain() {
             {{foreach from=$plagesPerDay item=curr_plage}}
               {{if $curr_plage->_hour_deb == $curr_hour}}
                 <td align="center" bgcolor="{{$curr_plage->_state}}" rowspan="{{$curr_plage->_hour_fin-$curr_plage->_hour_deb}}">
-                  <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;plage_id={{$curr_plage->plageressource_id}}">
+                  <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plage_id={{$curr_plage->plageressource_id}}">
                     {{if $curr_plage->libelle}}
                     {{$curr_plage->libelle}}
                     <br />
@@ -66,7 +66,7 @@ function pageMain() {
         {{if $plage->plageressource_id}}
         <tr>
           <td colspan="4">
-            <a class="buttonnew" href="index.php?m={{$m}}&amp;plage_id=0">Créer de nouvelles plages</a>
+            <a class="buttonnew" href="?m={{$m}}&amp;plage_id=0">Créer de nouvelles plages</a>
           </td>
         </tr>
         <tr>

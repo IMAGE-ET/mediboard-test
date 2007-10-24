@@ -265,7 +265,7 @@ function pageMain() {
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="valid_user_id" value="{{$user_id}}" />
-            <button class="edit" type="button" onclick="window.location.href='index.php?m={{$m}}&amp;tab=vw_incident&amp;fiche_ei_id={{$fiche->fiche_ei_id}}';">
+            <button class="edit" type="button" onclick="window.location.href='?m={{$m}}&amp;tab=vw_incident&amp;fiche_ei_id={{$fiche->fiche_ei_id}}';">
               {{tr}}Edit{{/tr}}
             </button>
             <button class="modify" type="submit">

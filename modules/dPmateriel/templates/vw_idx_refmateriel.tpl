@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id=0">
         Créer une nouvelle référence
       </a>
       <table class="tbl">
@@ -15,7 +15,7 @@
         {{foreach from=$listReference item=curr_reference}}
         <tr {{if $curr_reference->_id == $reference->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id={{$curr_reference->_id}}" title="Modifier la référence">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_refmateriel&amp;reference_id={{$curr_reference->_id}}" title="Modifier la référence">
               {{$curr_reference->_ref_fournisseur->societe}}
             </a>
           </td>
@@ -29,7 +29,7 @@
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-      <form name="editreference" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editreference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_refmateriel_aed" />
 	  <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
       <input type="hidden" name="del" value="0" />

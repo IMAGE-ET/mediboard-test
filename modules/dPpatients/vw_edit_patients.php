@@ -35,6 +35,7 @@ if (mbGetValueFromGet("useVitale")) {
   $patient->updateFormFields();
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("dateCMU", $dateCMU);

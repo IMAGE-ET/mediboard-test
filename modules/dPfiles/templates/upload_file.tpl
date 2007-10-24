@@ -6,7 +6,7 @@ if (window.opener.reloadAfterUploadFile) {
 </script>
 {{/if}}
 
-<form name="uploadFrm" action="index.php?m=dPfiles&amp;a=upload_file&amp;dialog=1" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
+<form name="uploadFrm" action="?m=dPfiles&amp;a=upload_file&amp;dialog=1" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPfiles" />
 <input type="hidden" name="a" value="upload_file" />
 <input type="hidden" name="dialog" value="1" />

@@ -10,7 +10,7 @@ function cancelObject(oObject) {
 
 </script>
 
-<form name="editPermObj" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editPermObj" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_perms_obj_aed" />
 <input type="hidden" name="del" value="0" />
@@ -96,7 +96,7 @@ function cancelObject(oObject) {
       {{/if}}
     </td>
     <td class="button">
-      <form name="editPermObj{{$perm->perm_object_id}}" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editPermObj{{$perm->perm_object_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="dosql" value="do_perms_obj_aed" />
       <input type="hidden" name="del" value="0" />

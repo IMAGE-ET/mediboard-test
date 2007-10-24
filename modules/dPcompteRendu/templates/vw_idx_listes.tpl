@@ -16,7 +16,7 @@ function pageMain() {
     <form name="filterFrm" action="?" method="get">
     
     <input type="hidden" name="m" value="{{$m}}" />
-	<a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="buttonnew"><strong>Créer une liste de choix</strong></a>        
+	<a href="?m={{$m}}&amp;tab={{$tab}}&amp;liste_id=0" class="buttonnew"><strong>Créer une liste de choix</strong></a>        
     <table class="form">
 
       <tr>

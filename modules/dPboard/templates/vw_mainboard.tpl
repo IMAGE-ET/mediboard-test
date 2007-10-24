@@ -197,18 +197,22 @@ function pageMain() {
     updateListOperations();
     updateListPatients();
     updateListHospi();
+    ViewPort.SetAvlHeight("consultations", 0.5);
+    ViewPort.SetAvlHeight("operations", 0.5);
+  	ViewPort.SetAvlHeight("patients", 1);
+  	ViewPort.SetAvlHeight("hospi", 1);
   {{/if}}
   {{if $view == "week"}}
     updateSemainier();
   {{/if}}
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
 </script>
 
 <table class="main">
   <tr>
-    <th>
+    <th class="halfPane">
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$prec}}">&lt;&lt;&lt;</a>
       <input type="hidden" name="m" value="{{$m}}" />
@@ -217,7 +221,7 @@ function pageMain() {
       <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$suiv}}">&gt;&gt;&gt;</a>
       </form>
     </th>
-    <th>
+    <th class="halfPane">
       <form name="editFrmView" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="radio" name="view" value="day" {{if $view == "day"}}checked="checked"{{/if}} onclick="this.form.submit()" />
@@ -227,48 +231,57 @@ function pageMain() {
       </form>
     </th>
   </tr>
+  
   {{if $view == "day"}}
+  <tbody class="viewported">
   <tr>
-    <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
+    <!--  Consultations -->
+    <td class="viewport" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
       <div style="position:absolute" id="icon-consultations">
-        <a href="index.php?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
+        <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
           <img src="images/modules/dPcabinet.png" height="24px" width="24px" />
         </a>
       </div>
-      <div style="overflow: auto; height: 250px;" id="consultations">
+      <div id="consultations">
       </div>
     </td>
-    <td style="border: 1px dotted #000;" class="halfPane" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
+    
+    <!-- Operations -->
+    <td class="viewport" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
-        <a href="index.php?m=dPplanningOp&amp;tab=vw_idx_patients">
+        <a href="?m=dPplanningOp&amp;tab=vw_idx_patients">
           <img src="images/modules/dPplanningOp.png" height="24px" width="24px" />
         </a>
       </div>
-      <div style="overflow: auto; height: 250px;" id="operations">
+      <div id="operations">
       </div>
     </td>
   </tr>
+  
   <tr>
-    <td style="border: 1px dotted #000;" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
+    <!-- Recherche de patients -->
+    <td class="viewport" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
       <div style="position:absolute" id="icon-patients">
-        <a href="index.php?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
+        <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
           <img src="images/modules/dPpatients.png" height="24px" width="24px" />
         </a>
       </div>
-      <div style="overflow: auto; height: 250px;" id="patients">
+      <div id="patients" style="overflow: auto">
       </div>
     </td>
-    <td style="border: 1px dotted #000;" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
+
+    <!-- Patients hospitalisés -->
+    <td class="viewport" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
       <div style="position:absolute" id="icon-hospi">
         <img src="images/modules/dPhospi.png" height="24px" width="24px" />
       </div>
-      <div style="overflow: auto; height: 250px;">
-        <div id="hospi">
-        </div>
+      <div id="hospi" style="overflow: auto">
       </div>
     </td>
   </tr>
+  </tbody>
   {{/if}}
+  
   {{if $view == "week"}}
   <tr>
     <td style="border: 1px dotted #000;" colspan="2">

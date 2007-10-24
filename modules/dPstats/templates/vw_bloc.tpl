@@ -25,7 +25,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="bloc" action="index.php" method="get" onsubmit="return checkForm(this)">
+      <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <input type="hidden" name="_chir" value="{{$user_id}}" />
       <input type="hidden" name="_class_name" value="" />

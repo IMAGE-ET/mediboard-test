@@ -1,7 +1,7 @@
 <h1>
   {{tr}}Change User Password{{/tr}}
 </h1>
-<form name="chpwdFrm" action="index.php?m={{$m}}&amp;a=chpwd" method="post" onsubmit="return checkForm(this)">
+<form name="chpwdFrm" action="?m={{$m}}&amp;a=chpwd" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_chpwd_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dialog" value="1" />

@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
+      <a class="buttonnew" href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id=0">
         Ajouter une nouvelle spécialité médicale
       </a>
       <table class="tbl">
@@ -13,12 +13,12 @@
         {{foreach from=$listDiscipline item=curr_discipline}}
         <tr>
           <td class="text">
-            <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
+            <a href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
               {{$curr_discipline->_view}}
             </a>
           </td>
           <td>
-            <a href="index.php?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
+            <a href="?m=mediusers&amp;tab=vw_idx_disciplines&amp;discipline_id={{$curr_discipline->discipline_id}}" title="Modifier la spécialité">
               {{$curr_discipline->categorie}}
             </a>
           </td>
@@ -31,7 +31,7 @@
     </td>
     <td class="halfPane">
       {{if $can->edit}}
-      <form name="editSpeMed" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editSpeMed" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_discipline_aed" />
       {{mb_field object=$specialite field="discipline_id" hidden=1 prop=""}}
       <input type="hidden" name="del" value="0" />
@@ -74,7 +74,7 @@
          </tr>
          {{foreach from=$specialite->_ref_users item=curr_user}}
          <tr>
-           <td class="text"><a href="index.php?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr. {{$curr_user->_view}}</a></td>
+           <td class="text"><a href="?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr. {{$curr_user->_view}}</a></td>
          </tr>
          {{foreachelse}}
          <tr>

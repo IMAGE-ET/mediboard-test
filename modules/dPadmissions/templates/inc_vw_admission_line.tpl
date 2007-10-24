@@ -33,7 +33,7 @@
 </td>
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <form name="editChFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
+  <form name="editChFrm{{$curr_adm->sejour_id}}" action="?" method="post">
   
   <input type="hidden" name="m" value="dPhospi" />
   <input type="hidden" name="otherm" value="dPadmissions" />
@@ -82,7 +82,7 @@
   <strong>ANNULE</strong></td>
 {{else}}
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <form name="editAdmFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
+  <form name="editAdmFrm{{$curr_adm->sejour_id}}" action="?" method="post">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
   <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />
@@ -110,7 +110,7 @@
 </td>
 
 <td style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-  <form name="editSaisFrm{{$curr_adm->sejour_id}}" action="index.php" method="post">
+  <form name="editSaisFrm{{$curr_adm->sejour_id}}" action="?" method="post">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="dosql" value="do_edit_admis" />
   <input type="hidden" name="id" value="{{$curr_adm->sejour_id}}" />

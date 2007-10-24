@@ -13,7 +13,7 @@ function selectCode() {
 <table class="fullCode">
   <tr>
     <th colspan="2">
-      <form action="index.php" name="selectLang" method="get" >
+      <form action="?" name="selectLang" method="get" >
 
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="{{$actionType}}" value="{{$action}}" />

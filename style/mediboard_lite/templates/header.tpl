@@ -50,8 +50,8 @@
             <a href="{{$portal.tracker}}" title="{{tr}}portal-tracker{{/tr}}" target="_blank">{{tr}}portal-tracker{{/tr}}</a> |
             <a href="#" onclick="popChgPwd();">{{tr}}menu-changePassword{{/tr}}</a> |
             <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |
-            <a href="./index.php?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
-            <a href="./index.php?logout=-1">{{tr}}menu-logout{{/tr}}</a>
+            <a href="?m=admin&amp;a=edit_prefs&amp;user_id={{$app->user_id}}">{{tr}}mod-admin-tab-edit_prefs{{/tr}}</a> |
+            <a href="?logout=-1">{{tr}}menu-logout{{/tr}}</a>
           </td>
         </tr>
       </table>

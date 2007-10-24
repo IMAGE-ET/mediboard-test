@@ -5,7 +5,7 @@
       {{foreach from=$listDays key=curr_day item=plagesPerDay}}
         <tr>
           <th>
-            <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}">
+            <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;date={{$curr_day}}">
               <strong>{{$curr_day|date_format:"%a %d %b"}}</strong>
             </a>
           </th>
@@ -46,10 +46,10 @@
                   </div>
                 </div>
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
+                <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
                   {{$plage->_view}}
                 </a> ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$curr_day}}">
+                <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$curr_day}}">
                   <img src="images/icons/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>

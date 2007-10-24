@@ -1,22 +1,22 @@
 <!-- $Id: vw_resume.tpl 1748 2007-03-20 18:58:41Z MyttO $ -->
 
-{{mb_include_script path="includes/javascript/intermax.js"}}
 {{mb_include_script module="dpPatients" script="pat_selector"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
 
 <script type="text/javascript">
 
-Intermax.createResultMessages = function(oContent) {
+Intermax.createResultMessages = function() {
   // Select div result handler      
-  var idFonction = oContent.FONCTION.NOM.replace(/ /g, "-");
+  var idFonction = this.oContent.FONCTION.NOM.replace(/ /g, "-");
   var eResultHandler = $(idFonction);
   eResultHandler.innerHTML = "";
 
   // Create handler messages
-  oParam = oContent.PARAM;
+  oParam = this.oContent.PARAM;
   eResultHandler.appendChild(Dom.createMessage("Appel : " + oParam.APPEL, oParam.APPEL == "OK" ? "message" : "error"))
   eResultHandler.appendChild(Dom.createMessage("Exécution: " + oParam.EXECUTION, oParam.EXECUTION == "OK" ? "message" : "error"))
-  eResultHandler.appendChild(Dom.createMessage("Erreur : " + oParam.ERREUR, oParam.ERREUR == undefined  ? "message" : "error"))
-  eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == undefined ? "message" : "error"))
+  if (oParam.ERREUR) eResultHandler.appendChild(Dom.createMessage("Erreur : " + oParam.ERREUR, oParam.ERREUR == undefined  ? "message" : "error"))
+  if (oParam.ERREUR_API) eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == undefined ? "message" : "error"))
 }
 
 Intermax.ResultHandler = {
@@ -40,15 +40,8 @@ Intermax.ResultHandler = {
   </tr>
   
   <tr>
-    <td style="text-align: center" colspan="2">
-    {{assign var="debug" value="true"}}
-    {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
-    </td>
-  </tr>
-  
-  <tr>
-    <th>Fonctions disponibles</th>
-    <th>
+    <th class="title">Fonctions disponibles</th>
+    <th class="title">
       <button class="tick result" onclick="Intermax.result();" style="float:right">
         {{tr}}InterMax.Result{{/tr}}
       </button>
@@ -56,17 +49,22 @@ Intermax.ResultHandler = {
     </th>
   </tr>
 
-  {{foreach from=$intermaxFunctions item="_function"}}
+  {{foreach from=$intermaxFunctions key=category item=_functions}}
+  <tr>
+    <th colspan="10">{{$category}}</th>
+  </tr>
+  {{foreach from=$_functions item=_function}}
   <tr>
     <td>
       <button class="tick" onclick="Intermax.trigger('{{$_function}}');">
-        {{tr}}InterMax.{{$_function}}{{/tr}}
+        {{$_function}}
       </button>
     </td>
     <td id="{{$_function|replace:" ":"-"}}">
       <div class="handler">My Result</div>
     </td>
   </tr>
+  {{/foreach}}
   {{/foreach}}
   
 </table>

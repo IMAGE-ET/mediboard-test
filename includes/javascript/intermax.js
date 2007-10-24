@@ -1,34 +1,39 @@
 var Intermax = {
+  oContent : {},
   currentFunction : "unknown",
   newLine : "---",
   
+  alert: function(sError) {
+    var sLogicMaxFonction = "LogicMax : " +  this.oContent.FONCTION.NOM + "\n\n";
+    var sLogicMaxError = sError.charAt(0) == "-" ? "\n\n[Erreur LogicMax "+sError+"]" : "";
+    alert(sLogicMaxFonction + Intermax.errors[sError] + sLogicMaxError);
+  },
+  
   bindContent: function(sContent) {
     var aContentLines = sContent.split(this.newLine);
-    var oContent = {}
+    this.oContent = {}
     var sCurrentCategory = "";
     aContentLines.each(function(line) {
       
       // Create new category
       if (aMatches = line.match(/\[(\w*)\]/)) {
         sCurrentCategory = aMatches[1];
-        oContent[sCurrentCategory] = {}
+        Intermax.oContent[sCurrentCategory] = {}
       }
       
       // Fill a key-value pair in current category
       if (aMatches = line.match(/(\w*)=(.*)/)) {
         sKey = aMatches[1];
         sValue = aMatches[2];
-        oContent[sCurrentCategory][sKey] = sValue;
+        Intermax.oContent[sCurrentCategory][sKey] = sValue;
       }
       
     } );
-    
-	return oContent;
   },
-  
-  makeContent: function(oContent) {
+    
+  makeContent: function() {
     var sContent = '';
-    $H(oContent).each(function(pair) {
+    $H(this.oContent).each(function(pair) {
       sContent += printf ("[%s]%s", pair.key, Intermax.newLine);
       $H(pair.value).each( function(pair) {
         sContent += printf ("%s = %s%s", pair.key, pair.value, Intermax.newLine);
@@ -37,11 +42,11 @@ var Intermax = {
     return sContent;
   },
 
-  trigger: function(sFunction) {
+  trigger: function(sFunction, oCallContent) {
     this.currentFunction = sFunction;
     Console.debug(this.currentFunction, "Trigger InterMax function");
     
-    var oContent = {
+    this.oContent = {
       FONCTION: {
         NOM: sFunction
       },
@@ -50,7 +55,9 @@ var Intermax = {
       }
     }
     
-    var sContent = this.makeContent(oContent);
+    Object.extend(this.oContent, oCallContent);
+    
+    var sContent = this.makeContent();
     document.intermaxTrigger.performWrite(sContent);
   },
   
@@ -61,21 +68,32 @@ var Intermax = {
   },
   
   handleContent: function() {
-    if (oAppletContent = document.intermaxResult.getContent()) {
-      // Append with empty Js String will cast a Java string to a Js string
-      var sContent = oAppletContent + ""; 
-      oContent = this.bindContent(sContent);
-      this.createResultMessages(oContent);
-      
-      this.sendContent(oContent);
+    // Get result from Yoplet
+    var oAppletContent = document.intermaxResult.getContent();
+
+    // Append with empty Js String will cast a Java string to a Js string
+    var sContent = oAppletContent + ""; 
+    this.bindContent(sContent);
+    if (!$H(this.oContent).values().length) {
+	    Intermax.alert("100");
+      return;
     }
+    
+	  if (this.oContent.PARAM.EXECUTION == 'KO') {
+	    Intermax.alert(this.oContent.PARAM.ERREUR);
+	    return;
+	  }
+    
+    // 
+    this.createResultMessages();
+    this.sendContent();
   },
   
-  sendContent: function(oContent) {
+  sendContent: function() {
     var url = new Url;
     url.setModuleDosql("dPpatients", "httpreq_intermax_content");
-    url.addObjectParam("intermax", oContent);
-    url.requestUpdate(SystemMessage.id, { method: "post" });
+    url.addObjectParam("intermax", this.oContent);
+    url.requestUpdate(SystemMessage.id, { method: "post" } );
   },
   
   createResultMessages: Prototype.emptyFunction,
@@ -83,10 +101,10 @@ var Intermax = {
   handleResult: function(sFunction) {
     
 		// Activate function handler
-    var fResultHandler = this.ResultHandler[oContent.FONCTION.NOM] || function() { 
+    var fResultHandler = this.ResultHandler[this.oContent.FONCTION.NOM] || function() { 
       Console.debug(sFunction, "Unhandled InterMax function"); 
     }
-    fResultHandler(oContent);
+    fResultHandler();
   },
 
   ResultHandler : {

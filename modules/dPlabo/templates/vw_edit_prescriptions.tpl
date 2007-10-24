@@ -258,7 +258,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <form name="patFrm" action="index.php" method="get">
+      <form name="patFrm" action="?" method="get">
       <table class="form">
         <tr>
           <th>

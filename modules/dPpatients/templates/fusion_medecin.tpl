@@ -10,7 +10,7 @@ function setField(oField, sValue) {
 
 <h2 class="module {{$m}}">Fusion de médecins</h2>
 
-<form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_medecins_fusion" />
 <input type="hidden" name="del" value="0" />

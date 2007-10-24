@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id=0">
         Créer une nouvelle fiche
       </a>
       <table class="tbl">
@@ -14,7 +14,7 @@
         {{foreach from=$listMateriel item=curr_materiel}}
         <tr {{if $curr_materiel->_id == $materiel->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->_id}}" title="Modifier le matériel">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_materiel&amp;materiel_id={{$curr_materiel->_id}}" title="Modifier le matériel">
               {{$curr_materiel->nom}}
             </a>
           </td>
@@ -26,7 +26,7 @@
       </table>
     </td>
     <td class="halfPane">
-      <form name="editMat" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editMat" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_materiel_aed" />
 	  <input type="hidden" name="materiel_id" value="{{$materiel->_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -77,7 +77,7 @@
   <tr>
     <td class="halfPane">
          {{if $materiel->_id}}
-         <button class="new" type="button" onclick="window.location='index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={{$materiel->_id}}'">
+         <button class="new" type="button" onclick="window.location='?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0&amp;materiel_id={{$materiel->_id}}'">
            Créer un nouveau stock pour ce matériel
          </button>
          {{/if}}

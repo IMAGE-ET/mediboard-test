@@ -19,7 +19,7 @@ function pageMain() {
   new Ajax.Autocompleter(
     'selection_codeacte',
     'codeacte_auto_complete',
-    'index.php?m=dPccam&ajax=1&suppressHeaders=1&a=httpreq_do_ccam_autocomplete', {
+    '?m=dPccam&ajax=1&suppressHeaders=1&a=httpreq_do_ccam_autocomplete', {
       minChars: 2,
       frequency: 0.15,
       updateElement: updateFields

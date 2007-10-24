@@ -1,6 +1,6 @@
 <!-- $Id: $ -->
 
-<form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_user_aed" />
 <input type="hidden" name="del" value="0" />

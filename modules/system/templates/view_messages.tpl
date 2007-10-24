@@ -68,7 +68,7 @@ function pageMain() {
   
   <td class="pane">
 
-  <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;message_id=0"><strong>Créer un message</strong></a>
+  <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;message_id=0"><strong>Créer un message</strong></a>
 
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 

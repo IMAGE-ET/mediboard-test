@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <th>
-      <form action="index.php" name="mntBackRef" method="get">
+      <form action="?" name="mntBackRef" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
 

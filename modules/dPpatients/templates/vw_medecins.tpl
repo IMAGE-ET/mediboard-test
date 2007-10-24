@@ -20,7 +20,7 @@ function pageMain() {
   <tr>
     <td class="greedyPane">
     
-      <form name="find" action="./index.php" method="get">
+      <form name="find" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       {{if $dialog}}
       <input type="hidden" name="a" value="vw_medecins" />
@@ -58,7 +58,7 @@ function pageMain() {
       </form>
 
       {{if !$dialog}}
-      <form name="fusion" action="index.php" method="get">
+      <form name="fusion" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="a" value="fusion_medecin" />
       {{/if}}
@@ -136,14 +136,14 @@ function pageMain() {
     
     {{if !$dialog}}
     <td class="pane">
-      <form name="editFrm" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_medecins_aed" />
       {{mb_field object=$medecin field="medecin_id" hidden=1 prop=""}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         {{if !$dialog && $medecin->medecin_id}}
         <tr>
-          <td colspan="2"><a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau médecin</a></td>
+          <td colspan="2"><a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;new=1">Créer un nouveau médecin</a></td>
         </tr>
         {{/if}}
         <tr>

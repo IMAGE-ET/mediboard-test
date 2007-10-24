@@ -2,7 +2,7 @@
 
 
 <div id="login">
-  <form name="loginFrm" action="./index.php" method="post">
+  <form name="loginFrm" action="?" method="post">
   <input type="hidden" name="login" value="{{$time}}" />
   <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
   <input type="hidden" name="dialog" value="{{$dialog}}" />

@@ -38,7 +38,7 @@ function setClose(protocole_id) {
   <tr>
     <td colspan="2">
 
-      <form name="selectFrm" action="index.php" method="get">
+      <form name="selectFrm" action="?" method="get">
       
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" {{if $dialog}} name="a" {{else}} name="tab" {{/if}} value="vw_protocoles" />
@@ -229,7 +229,7 @@ function setClose(protocole_id) {
         {{if $can->edit}}
         <tr>
           <td class="button" colspan="2">
-            <form name="modif" action="./index.php" method="get">
+            <form name="modif" action="?" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="tab" value="vw_edit_protocole" />
             {{mb_field object=$protSel field="protocole_id" hidden=1 prop=""}}

@@ -97,6 +97,8 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
 
   if (isset($_POST[$valName])) {
     $_SESSION[$m][$valName] = $_POST[$valName];
+    mbTrace($_SESSION);
+    die;
   }
   
   return dPgetParam($_SESSION[$m], $valName, $valDefault);
@@ -881,26 +883,8 @@ function mbDateFromLocale($date) {
   return preg_replace("/(\d{2})\/(\d{2})\/(\d{4})/", "$3-$2-$1", $date);
 }
 
-/**
- * @todo A SUPPRIMER APRES VERIFICATION
- */
-function unix2dateTime( $time ) {
-  // converts a unix time stamp to the default date format
-  return $time > 0 ? date("Y-m-d H:i:s", $time) : null;
-}
-
-/**
- * @todo A SUPPRIMER APRES VERIFICATION
- */
-function dateTime2unix( $time ) {
-  if ($time == "0000-00-00 00:00:00") {
-	return -1;
-  }
-  if( ! preg_match( "/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})(.?)$/", $time, $a ) ) {
-	return -1;
-  } else {
-    return mktime( $a[4], $a[5], $a[6], $a[2], $a[3], $a[1] );
-  }
+function in_range($value, $min, $max) {
+  return $value <= $max && $value >= $min;
 }
 
 ?>

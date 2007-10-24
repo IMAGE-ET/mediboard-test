@@ -12,7 +12,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <a class="buttonnew" href="index.php?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id=0">
+      <a class="buttonnew" href="?m=dPfacturation&amp;tab=vw_idx_facture&amp;facture_id=0">
         Créer une nouvelle facture
       </a>
       <table class="tbl">
@@ -101,7 +101,7 @@ function pageMain() {
   <tr>
     <td class="halfPane">
          {{if $facture->_id}}
-         <button class="new" type="button" onclick="window.location='index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_item_id=0&amp;facture_id={{$facture->_id}}'">
+         <button class="new" type="button" onclick="window.location='?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_item_id=0&amp;facture_id={{$facture->_id}}'">
            Créer un nouveau élément de la facture
          </button>        
          {{include file="list_element.tpl"}}

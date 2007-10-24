@@ -2,7 +2,7 @@
           <th class="category" style="vertical-align: middle">Timming</th>
           <td>
             <div id="timing">
-            <form name="timing{{$selOp->operation_id}}" action="index.php?m={{$m}}" method="post">
+            <form name="timing{{$selOp->operation_id}}" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />
@@ -181,7 +181,7 @@
             <td>
          <div id="anesth">
          
-            <form name="anesth{{$selOp->operation_id}}" action="index.php?m={{$m}}" method="post">
+            <form name="anesth{{$selOp->operation_id}}" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />

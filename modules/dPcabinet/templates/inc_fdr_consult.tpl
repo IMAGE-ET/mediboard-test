@@ -1,4 +1,11 @@
 <script type="text/javascript">
+
+Intermax.ResultHandler["Formater FSE"] = function() {
+  Console.trace("Pas d'erreur, on continue avec les données suivantes");
+	Console.trace(Intermax.oContent, "Content pour Formater FSE");
+
+}
+
 function cancelTarif() {
   var oForm = document.tarifFrm;
   oForm.secteur1.value = 0;
@@ -7,18 +14,16 @@ function cancelTarif() {
   oForm.paye.value = "0";
   oForm.date_paiement.value = "";
  
-
   submitFdr(oForm);
 }
 
-function popFile(objectClass, objectId, elementClass, elementId){
+function popFile(objectClass, objectId, elementClass, elementId) {
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
 
 function modifTarif() {
-
   var oForm = document.tarifFrm;
   var choix = oForm.choix.value;
   
@@ -56,9 +61,7 @@ function modifTarif() {
     oForm.secteur2.value = 0; 
     oForm._somme.value = '';
     oForm.tarif.value = '';
-
   }
-  
 }
 
 
@@ -421,35 +424,15 @@ function submitFdr(oForm) {
     <th class="category" colspan="3">Feuille de Soins Electronique</th>
   </tr>
   <tr>
-    <td id="yoplet-container" colspan="3">
-    
-    
-    {{if $app->user_prefs.InterMaxDir}}
-    
-<!--
-    <applet 
-      name="intermax-yoplet"
-      code="org.lostinthegarden.applet.impl.DefaultFileOperatorImpl.class" 
-      archive="includes/applets/yoplet.jar" 
-      width="400" 
-      height="100"
-    >
-      <param name="action" value="sleep"/>
-      <param name="debug" value="true" />
-      <param name="readPath"  value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt " />
-      <param name="writePath" value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt" />
-      <param name="watchPath" value="{{$app->user_prefs.InterMaxDir}}\INTERMAX.txt" />
-      <param name="content" value="Another content" />
-    </applet>
-
--->
-    {{else}}
-    <div class="big-warning">
-      {{tr}}pref-InterMaxDir{{/tr}} inconnu.
-      <br />
-      {{tr}}pref-InterMaxDir-undef{{/tr}} (cf. préférences)
-    </div>
-    {{/if}}
+    <td id="yoplet-container">
+      <button class="search" type="button" onclick="Intermax.trigger('Formater FSE', { CPS: {CPS_NUMERO_CPS: '{{$consult->_ref_chir->adeli}}' } });">
+        Formater FSE
+      </button>
+    </td>
+    <td>
+      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+        Récupérer FSE
+      </button>
     </td>
   </tr>
   {{/if}}

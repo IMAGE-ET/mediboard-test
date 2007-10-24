@@ -36,7 +36,7 @@ function pageMain() {
     <td style="width: 320px;">
     
       <!-- Sélection du catalogue -->
-      <form name="selectCatalogue" action="index.php" method="get">
+      <form name="selectCatalogue" action="?" method="get">
 
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />

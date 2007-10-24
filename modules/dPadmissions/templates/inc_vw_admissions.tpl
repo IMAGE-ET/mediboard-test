@@ -1,16 +1,16 @@
 <script type="text/javascript">
 
-regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date=");
+regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_idx_admission&date=");
 
 </script>
 
 <table class="tbl">
   <tr>
     <th colspan="9">
-      <a href="index.php?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
+      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$hier}}" style="display: inline"><<<</a>
       {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
+      <a href="?m=dPadmissions&tab=vw_idx_admission&date={{$demain}}" style="display: inline">>>></a>
       <br /> 
       <em>
       {{if $selAdmis == "n"}}Admissions non effectuées
@@ -40,7 +40,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_admission&date="
     <th>Chambre</th>
     <th>Admis</th>
     <th>
-      <form name="editAllAdmFrm" action="index.php" method="post">
+      <form name="editAllAdmFrm" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_edit_admis" />
       <input type="hidden" name="id" value="{{$date}}" />

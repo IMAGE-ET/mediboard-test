@@ -503,14 +503,14 @@ function checkForm(oForm) {
       var oLabel = getLabelFor(oElement);
       
       if (sMsg = ElementChecker.checkElement()) {
-        aMsg.push("\n => " + sMsg);
+        aMsg.push("\n\t\t=> " + sMsg);
       }
       
       if (aMsg.length != 0) {
         var sLabelTitle = oLabel ? oLabel.getAttribute("title") : null;
         var sMsgFailed = sLabelTitle ? sLabelTitle : printf("%s (val:'%s', spec:'%s')", oElement.name, oElement.value, sPropSpec);
         sMsgFailed += aMsg.join("");
-        aMsgFailed.push("- " + sMsgFailed);
+        aMsgFailed.push("\t- " + sMsgFailed);
         
         if (!oElementFirstFailed) {
           oElementFirstFailed = oElement;

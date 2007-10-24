@@ -22,7 +22,7 @@ function checkPlage() {
 }
 
 function pageMain() {
-  regRedirectFlatCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
 function popPlanning(debut) {
@@ -79,10 +79,10 @@ function popPlanning(debut) {
                   </div>
                 </div>
                 <strong>
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
+                <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
                   {{$plage->_view}}
                 </a> ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
-                <a href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$date}}">
+                <a href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id={{$plage->plageop_id}}&amp;date={{$date}}">
                   <img src="images/icons/edit.png" alt="editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 </strong>
@@ -94,7 +94,7 @@ function popPlanning(debut) {
         {{/foreach}} 
       </table>
       {{if $plagesel->plageop_id}}
-      <a class="buttonnew" href="index.php?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
+      <a class="buttonnew" href="?m=dPbloc&amp;tab=vw_edit_planning&amp;plageop_id=0">
         Créer une nouvelle plage opératoire
       </a>
       {{/if}}

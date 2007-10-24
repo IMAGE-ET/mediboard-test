@@ -5,7 +5,7 @@
   {{$date|date_format:"%A %d %B %Y"}}
   <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
   <script type="text/javascript">
-    regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_idx_planning&date=");
+    regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_idx_planning&date=");
   </script>
 </div>
 {{/if}}
@@ -127,7 +127,7 @@
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->libelle}}
                 <em>[{{$curr_op->libelle}}]</em>
                 <br />
@@ -148,13 +148,13 @@
             {{if $curr_op->annulee}}
             [ANNULEE]
             {{else}}
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->time_operation|date_format:"%Hh%M"}}
             </a>
             {{/if}}
           </td>
           <td style="text-align: center;">
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
+            <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>

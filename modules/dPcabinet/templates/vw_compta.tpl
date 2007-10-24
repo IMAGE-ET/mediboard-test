@@ -109,7 +109,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <form name="printFrm" action="./index.php" method="get" onSubmit="return checkRapport()">
+      <form name="printFrm" action="?" method="get" onSubmit="return checkRapport()">
       <input type="hidden" name="a" value="" />
       <input type="hidden" name="dialog" value="1" />
       <table class="form">
@@ -163,7 +163,7 @@ function pageMain() {
       {{if $tarif->tarif_id}}
         <tr>
           <td colspan="3">
-            <a class="buttonnew" href="index.php?m={{$m}}&amp;tarif_id=null">Créer un nouveau tarif</a>
+            <a class="buttonnew" href="?m={{$m}}&amp;tarif_id=null">Créer un nouveau tarif</a>
           </td>
         </tr>
       {{/if}}
@@ -191,13 +191,13 @@ function pageMain() {
               {{foreach from=$listeTarifsChir item=curr_tarif}}
               <tr>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
                 </td>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
                 </td>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
                 </td>
               </tr>
               {{/foreach}}
@@ -214,20 +214,20 @@ function pageMain() {
               {{foreach from=$listeTarifsSpe item=curr_tarif}}
               <tr>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
                 </td>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
                 </td>
                 <td>
-                  <a href="index.php?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
                 </td>
               </tr>
               {{/foreach}}
             </table>
           </td>
           <td>
-            <form name="editFrm" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_tarif_aed" />
             {{mb_field object=$tarif field="tarif_id" hidden=1 prop=""}}
             <input type="hidden" name="del" value="0" />

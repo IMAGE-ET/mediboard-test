@@ -1,5 +1,5 @@
 
-      <form action="index.php" name="selection" method="get">
+      <form action="?" name="selection" method="get">
       
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="op" value="0" />
@@ -29,6 +29,6 @@
       
       </form>
       <script type="text/javascript">
-      regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&op=0&date=");
+      regRedirectPopupCal("{{$date}}", "?m={{$m}}&op=0&date=");
 	  </script>      
       {{include file="inc_details_plages.tpl"}}

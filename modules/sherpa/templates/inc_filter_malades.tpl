@@ -1,4 +1,4 @@
-<form name="find" action="./index.php" method="get">
+<form name="find" action="?" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="new" value="1" />
@@ -56,7 +56,7 @@
     <th>{{mb_label object=$malade field="datnai"}}</th>
   </tr>
 
-  {{assign var="href" value="index.php?m=sherpa&tab=view_malades&sel_malnum="}}
+  {{assign var="href" value="?m=sherpa&tab=view_malades&sel_malnum="}}
   
   {{foreach from=$malades item=curr_malade}}
   <tr {{if $malade->_id == $curr_malade->_id}}class="selected"{{/if}}>

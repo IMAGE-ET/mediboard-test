@@ -1,6 +1,6 @@
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id=0">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id=0">
         Créer un nouveau type de repas
       </a>
       <table class="tbl">
@@ -12,17 +12,17 @@
         {{foreach from=$listTypeRepas item=curr_type}}
         <tr>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
               {{$curr_type->nom}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
               {{$curr_type->debut|date_format:"%Hh%M"}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
+            <a href="?m={{$m}}&amp;tab=vw_edit_plats&amp;typerepas_id={{$curr_type->typerepas_id}}" title="Modifier le type de plat">
               {{$curr_type->fin|date_format:"%Hh%M"}}
             </a>
           </td>
@@ -31,7 +31,7 @@
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editTypeRepas" action="./index.php?m={{$m}}&amp;tab=vw_edit_plats" method="post" onsubmit="return checkForm(this)">
+      <form name="editTypeRepas" action="?m={{$m}}&amp;tab=vw_edit_plats" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPrepas" />
       <input type="hidden" name="dosql" value="do_typerepas_aed" />
 	  <input type="hidden" name="typerepas_id" value="{{$typeRepas->typerepas_id}}" />

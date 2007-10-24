@@ -113,7 +113,7 @@ function pageMain() {
     </td>
     
     <td class="halfPane">
-      <form name="editFct" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <form name="editFct" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_functions_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="function_id" value="{{$fonction->function_id}}" />

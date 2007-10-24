@@ -142,7 +142,7 @@ function choosePreselection(oSelect) {
   <ul>
     {{foreach from=$doc->sentFiles item=curr_file}}
     <li>
-      Fichier <a href="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_path={{$curr_file.path}}">{{$curr_file.name}}</a>
+      Fichier <a href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_path={{$curr_file.path}}">{{$curr_file.name}}</a>
       envoyé le {{$curr_file.datetime|date_format:"%A %d %B %Y à %H:%M:%S"}}
     </li>
     {{foreachelse}}

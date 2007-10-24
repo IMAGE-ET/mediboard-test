@@ -1,4 +1,4 @@
-<form name="editPermMod" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editPermMod" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_perms_mod_aed" />
 <input type="hidden" name="del" value="0" />
@@ -73,7 +73,7 @@
       {{/if}}
     </td>
     <td class="button">
-      <form name="editPermMod{{$perm->perm_module_id}}" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editPermMod{{$perm->perm_module_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="dosql" value="do_perms_mod_aed" />
       <input type="hidden" name="del" value="0" />

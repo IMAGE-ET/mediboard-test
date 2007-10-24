@@ -1,7 +1,7 @@
 <table width="100%" bgcolor="#cccccc">
   <tr>
     <th align="center">
-      <form action="index.php" name="selection" method="get" >
+      <form action="?" name="selection" method="get" >
       {{include file="inc_select_lang.tpl"}}
 
       <input type="hidden" name="m" value="dPcim10" />
@@ -21,7 +21,7 @@
             <b>{{$curr_chapter.rom}}</b>
           </td>
           <td valign="top" align="left">
-            <a href="index.php?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_chapter.code}}"><b>{{$curr_chapter.text}}</b></a>
+            <a href="?m={{$m}}&amp;tab=vw_full_code&amp;code={{$curr_chapter.code}}"><b>{{$curr_chapter.text}}</b></a>
           </td>
         </tr>
         {{/foreach}}

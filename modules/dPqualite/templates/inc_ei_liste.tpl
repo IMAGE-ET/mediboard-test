@@ -33,12 +33,12 @@
   {{foreach from=$listeFiches item=currFiche}}
   <tr>
     <td class="text">
-      <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
+      <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
         {{$currFiche->date_incident|date_format:"%d %b %Y à %Hh%M"}}
       </a>
     </td>
     <td class="text">
-      <a href="index.php?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
+      <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
         {{$currFiche->_ref_user->_view}}
       </a>
     </td>

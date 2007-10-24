@@ -17,7 +17,7 @@ function pageMain() {
 </script>
 
 
-<form name="recherche" action="./index.php" method="get">
+<form name="recherche" action="?" method="get">
   <table class="main">
     <tr>  
       <td class="halfPane">

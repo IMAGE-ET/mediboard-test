@@ -66,12 +66,12 @@ class CConsultation extends CCodableCCAM {
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
 
-   // Foreign form fields : updated at loadRefs()
-   var $_ref_chir  = null; //pseudo RefFwd, get that in plageConsult
+   // Distant fields
+   var $_ref_chir  = null;
    var $_date      = null;
    var $_is_anesth = null; 
 
-   //Filter Fields
+   // Filter Fields
    var $_date_min	 	= null;
    var $_date_max 		= null;
    var $_prat_id 		= null;

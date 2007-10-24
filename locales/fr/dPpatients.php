@@ -1,5 +1,4 @@
 <?php
-$locales['CPatient-centre_gest-desc'] = 'Centre gestionnaire du régime de santé';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Addiction';
 $locales['CAddiction-addiction-court'] = 'Add';
@@ -176,6 +175,7 @@ $locales['CPatient-back-medecin_traitant'] = '';
 $locales['CPatient-caisse_gest'] = 'Caisse';
 $locales['CPatient-caisse_gest-desc'] = 'Caisse gestionnaire du régime de santé';
 $locales['CPatient-centre_gest'] = 'Centre';
+$locales['CPatient-centre_gest-desc'] = 'Centre gestionnaire du régime de santé';
 $locales['CPatient-cmu'] = 'CMU';
 $locales['CPatient-cmu-court'] = '';
 $locales['CPatient-cmu-desc'] = 'Accès du patient à la CMU';
@@ -382,6 +382,9 @@ $locales['CTraitement.none'] = '';
 $locales['CTraitement.object_class.CConsultAnesth'] = '';
 $locales['CTraitement.object_class.CPatient'] = '';
 $locales['CTraitement.one'] = '';
+$locales['Intermax.error.0'] = 'Exécution interrompue, aucun résultat.';
+$locales['Intermax.error.100'] = 'Le résultat est non accessible. Vérifiez que : \\n\\t1. LogicMax est bien lancé\\n\\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
+$locales['Intermax.error.-30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : \\n\\t1. Le code Adeli est bien paramétré dans Mediboard\\n\\t2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['mod-dPpatients-tab-vw_edit_patients'] = 'Edition d\'un dossier';
 $locales['mod-dPpatients-tab-vw_full_patients'] = 'Consulter un dossier';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';

@@ -9,7 +9,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <form name="bloc" action="index.php" method="get" onsubmit="return checkForm(this)">
+      <form name="bloc" action="?" method="get" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPstats" />
       <table class="form">
         <tr>

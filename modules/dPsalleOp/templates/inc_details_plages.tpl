@@ -1,7 +1,7 @@
       {{foreach from=$plages item=curr_plage}}
       <hr />
       
-      <form name="anesth{{$curr_plage->plageop_id}}" action="index.php" method="post">
+      <form name="anesth{{$curr_plage->plageop_id}}" action="?" method="post">
 
       <input type="hidden" name="m" value="dPbloc" />
       <input type="hidden" name="otherm" value="{{$m}}" />
@@ -91,7 +91,7 @@
             {{if $vueReduite}}
             <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})">{{tr}}Imprimer{{/tr}}</button>
             {{elseif 0==1}}
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
+            <a href="?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
               <img src="images/icons/anesth.png" alt="Anesth" />
             </a>
             {{/if}}
@@ -141,7 +141,7 @@
             {{if $vueReduite}}
             <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})">{{tr}}Imprimer{{/tr}}</button>
             {{elseif 0==1}}
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
+            <a href="?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
               <img src="images/icons/anesth.png" alt="Anesth" />
             </a>
             {{/if}}
@@ -194,12 +194,12 @@
           {{else}}
           <td class="text">
           {{/if}}
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+            <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_chir->_view}}
             </a>
           </td>
           <td>
-            <a href="index.php?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
+            <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
               {{$curr_operation->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>

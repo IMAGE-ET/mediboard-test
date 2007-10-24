@@ -1,4 +1,4 @@
-<form action="index.php?m={{$m}}" name="modlang" method="get">
+<form action="?m={{$m}}" name="modlang" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <table class="main">
@@ -17,7 +17,7 @@
 </table>
 </form>
 
-<form action="index.php?m={{$m}}" name="translate" method="post">
+<form action="?m={{$m}}" name="translate" method="post">
 
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />

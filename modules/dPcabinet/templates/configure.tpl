@@ -95,7 +95,7 @@
   </tr>
      <tr>
        <td class="halfPane">
-   <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;banque_id=0" class="buttonnew">
+   <a href="?m={{$m}}&amp;tab={{$tab}}&amp;banque_id=0" class="buttonnew">
      Créer une banque
    </a>
    <table class="tbl">

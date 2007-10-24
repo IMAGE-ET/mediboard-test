@@ -1,5 +1,29 @@
-<!-- Yoplet to write file -->
+<!-- Always load it for easier result handler redefinition -->
+{{mb_include_script path="includes/javascript/intermax.js"}}
 
+{{if $app->user_prefs.GestionFSE}}
+
+{{if !$app->user_prefs.InterMaxDir}}
+<div class="big-warning">
+  {{tr}}pref-InterMaxDir-undef{{/tr}}
+  <br />
+  Voir <strong>Preferences</strong> 
+  &gt; <strong>{{tr}}module-dPcabinet-long{{/tr}}</strong>
+  &gt; <strong>{{tr}}pref-InterMaxDir{{/tr}}</strong>.
+ 
+</div>
+{{/if}}
+<script type="text/javascript">
+
+Intermax.errors = {
+  "0"   : "{{tr}}Intermax.error.0{{/tr}}",
+  "100" : "{{tr}}Intermax.error.100{{/tr}}",
+  "-30" : "{{tr}}Intermax.error.30{{/tr}}"
+}
+</script>
+
+
+<!-- Yoplet to write Intermax file -->
 <applet 
   name="intermaxTrigger"
   code="org.yoplet.Yoplet.class" 
@@ -21,7 +45,7 @@
 </applet>
 
 
-<!-- Yoplet to read file -->
+<!-- Yoplet to read Intermax file -->
 <applet 
   name="intermaxResult"
   code="org.yoplet.Yoplet.class" 
@@ -40,3 +64,5 @@
   <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.OUT" />
   <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" />
 </applet>
+
+{{/if}}

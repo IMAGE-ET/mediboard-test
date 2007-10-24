@@ -27,7 +27,7 @@ function putArrivee(oForm) {
 }
 
 function pageMain() {
-  regRedirectPopupCal("{{$debut}}", "index.php?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
+  regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&plageconsult_id=0&debut="); 
   
   PairEffect.initGroup("functionEffect", { 
     bStoreInCookie: true,
@@ -40,15 +40,15 @@ function pageMain() {
 <table class="main">
   <tr>
     <th>
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$prec}}&amp;plageconsult_id=0">&lt;&lt;&lt;</a>
       Semaine du {{$debut|date_format:"%A %d %b %Y"}} au {{$fin|date_format:"%A %d %b %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$suiv}}&amp;plageconsult_id=0">&gt;&gt;&gt;</a>
       <br />
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;debut={{$today}}&amp;plageconsult_id=0">Aujourd'hui</a>
     </th>
     <td>
-      <form action="index.php" name="selection" method="get">
+      <form action="?" name="selection" method="get">
 
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
@@ -126,7 +126,7 @@ function pageMain() {
         {{/foreach}}
       </table>
     {{if $plageSel->plageconsult_id}}
-    <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
+    <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
     
 
@@ -250,7 +250,7 @@ function pageMain() {
           </form>
       
           {{if $plageSel->plageconsult_id}}
-	      <form name='removeFrm' action='./index.php?m=dPcabinet' method='post'>
+	      <form name='removeFrm' action='?m=dPcabinet' method='post'>
       	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
 	      <input type='hidden' name='del' value='1' />
 	      {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
@@ -283,7 +283,7 @@ function pageMain() {
     </td>
     <td>
       {{if $plageSel->plageconsult_id}}
-      <a class="buttonnew" href="index.php?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->plageconsult_id}}">Planifier une consultation dans cette plage</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plageSel->plageconsult_id}}">Planifier une consultation dans cette plage</a>
       {{/if}}
       <table class="tbl">
         <tr>
@@ -309,8 +309,8 @@ function pageMain() {
         {{foreach from=$plageSel->_ref_consultations item=curr_consult}}
         <tr>
           {{assign var="consult_id" value=$curr_consult->consultation_id}}
-          {{assign var="href_consult" value="index.php?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
-          {{assign var="href_planning" value="index.php?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
+          {{assign var="href_consult" value="?m=$m&tab=edit_consultation&selConsult=$consult_id"}}
+          {{assign var="href_planning" value="?m=$m&tab=edit_planning&consultation_id=$consult_id"}}
           {{if !$curr_consult->patient_id}}
             {{assign var="style" value="style='background: #ffa;'"}}          
           {{elseif $curr_consult->premiere}} 

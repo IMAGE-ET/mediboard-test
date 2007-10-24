@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id=0">
         Créer un nouveau stock
       </a>
       <table class="tbl">
@@ -14,7 +14,7 @@
         {{foreach from=$listStock item=curr_stock}}
         <tr {{if $curr_stock->_id == $stock->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Modifier le stock">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Modifier le stock">
               {{$curr_stock->_ref_materiel->nom}} ({{$curr_stock->_ref_materiel->_ref_category->category_name}})
               {{if $curr_stock->_ref_materiel->code_barre}}<br />{{$curr_stock->_ref_materiel->code_barre}}{{/if}}
               {{if $curr_stock->_ref_materiel->description}}<br />{{$curr_stock->_ref_materiel->description|nl2br}}{{/if}}
@@ -34,7 +34,7 @@
         
     </td>
     <td class="halfPane">
-      <form name="editStock" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editStock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />  
 	  <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="del" value="0" />  

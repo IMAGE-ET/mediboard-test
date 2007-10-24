@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <form name="patFrm" action="index.php" method="get">
+      <form name="patFrm" action="?" method="get">
       <table class="form">
         <tr>
           <th><label for="_view" title="Merci de choisir un patient pour voir ses résultats">Choix du patient</label></th>
@@ -28,7 +28,7 @@
       </form>
     </td>
     <td class="halfPane">
-      <form name="sejourFrm" action="index.php" method="get">
+      <form name="sejourFrm" action="?" method="get">
       <table class="form">
         <tr>
           <th><label for="_view" title="Merci de choisir un sejour pour voir ses résultats">Choix du sejour</label></th>

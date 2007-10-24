@@ -1,7 +1,7 @@
 <table class="main">
 <tr>
   <td class="halfPane">
-    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;prestation_id=0" class="buttonnew">
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;prestation_id=0" class="buttonnew">
       Créer une prestation
     </a>
     <table class="tbl">

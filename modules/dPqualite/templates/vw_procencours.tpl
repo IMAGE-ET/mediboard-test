@@ -10,7 +10,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id=0">
+      <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id=0">
         {{tr}}CDocGed.create{{/tr}}
       </a>
       
@@ -103,7 +103,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <input type="hidden" name="ged[doc_ged_id]" value="{{$currProc->doc_ged_id}}" />
             <input type="hidden" name="del" value="0" />
             {{assign var="date_proc" value=$currProc->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
-            <a class="buttonedit notext" href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}"></a>            {{if $currProc->_lastactif->doc_ged_suivi_id}}
+            <a class="buttonedit notext" href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}"></a>            {{if $currProc->_lastactif->doc_ged_suivi_id}}
               {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
             {{else}}
               {{tr}}_CDocGed_new{{/tr}}
@@ -111,7 +111,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </form>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_ref_group->text}}
             </a>
           </td>
@@ -142,17 +142,17 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{foreach from=$procEnCours item=currProc}}
         <tr>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->titre}}
             </a>
           </td>
           <td>
-            <a href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_reference_doc}}
             </a>
           </td>
           <td class="text">
-            <a href="index.php?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
               {{$currProc->_ref_group->text}}
             </a>
           </td>
@@ -300,7 +300,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <th>{{tr}}_CDocGed_lastfile{{/tr}}</th>
             <td>
               <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
-                <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
+                <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
             </td>
           </tr>
@@ -337,7 +337,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <br />{{tr}}_CDocGed_valid{{/tr}}
               <br />
               <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
-                <img src="index.php?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
+                <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
               <br />{{$docGed->_reference_doc}}
               <br />{{$docGed->_lastentry->date|date_format:"%d %B %Y - %Hh%M"}}

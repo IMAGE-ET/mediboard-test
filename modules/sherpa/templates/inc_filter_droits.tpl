@@ -1,4 +1,4 @@
-<form name="find" action="./index.php" method="get">
+<form name="find" action="?" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="new" value="1" />
@@ -29,7 +29,7 @@
     <th>{{mb_label object=$filter field="malnum"}}</th>
   </tr>
 
-  {{assign var="href" value="index.php?m=sherpa&tab=view_droits&sel_numdos="}}
+  {{assign var="href" value="?m=sherpa&tab=view_droits&sel_numdos="}}
   
   {{foreach from=$droits item=curr_droit}}
   <tr {{if $droit->_id == $curr_droit->_id}}class="selected"{{/if}}>

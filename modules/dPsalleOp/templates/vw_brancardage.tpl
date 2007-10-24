@@ -6,7 +6,7 @@ function pageMain() {
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_brancardage&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_brancardage&date=");
 }
 
 </script>

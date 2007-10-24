@@ -92,7 +92,7 @@ function pageMain() {
     <form name="filterFrm" action="?" method="get">
     
     <input type="hidden" name="m" value="{{$m}}" />
-    <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="buttonnew"><strong>Créer une aide à la saisie</strong></a>
+    <a href="?m={{$m}}&amp;tab={{$tab}}&amp;aide_id=0" class="buttonnew"><strong>Créer une aide à la saisie</strong></a>
     <table class="form">
       <tr>
         <th class="category" colspan="10">Filtrer les aides</th>

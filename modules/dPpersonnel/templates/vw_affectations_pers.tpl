@@ -102,7 +102,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td>
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;affect_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;affect_id=0" class="buttonnew">
 		Créer une affectation
 	  </a>
       <table class="form">
@@ -218,7 +218,7 @@ function pageMain() {
        </table>
     </td>
     <td>
-      <form name="editAffectation" action="index.php?m={{$m}}" method="post">
+      <form name="editAffectation" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />

@@ -158,7 +158,7 @@ function reloadAfterSaveDoc(){
   
   <tr>
     <td class="button" colspan="4">
-      <form name="actionPat" action="./index.php" method="get">
+      <form name="actionPat" action="?" method="get">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
@@ -186,19 +186,19 @@ function reloadAfterSaveDoc(){
     {{if !$app->user_prefs.simpleCabinet}}
     {{if $canPlanningOp->edit}}
     <td class="button">
-      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Intervention
       </a>
     </td>
     <td class="button">
-      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
       </a>
     </td>
     {{/if}}
     {{if $canPlanningOp->read}}
     <td class="button">
-      <a class="buttonnew" href="index.php?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
+      <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
       </a>
     </td>
@@ -208,7 +208,7 @@ function reloadAfterSaveDoc(){
     <td colspan="4" class="button">
     {{/if}}
       {{if $canCabinet->edit}}
-      <a class="buttonnew" href="index.php?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
+      <a class="buttonnew" href="?m=dPcabinet&amp;tab=edit_planning&amp;pat_id={{$patient->patient_id}}&amp;consultation_id=0">
         Consultation
       </a>
       {{/if}}
@@ -218,7 +218,7 @@ function reloadAfterSaveDoc(){
   <tr><th class="category" colspan="4">Consultation immédiate</th></tr>
   <tr>
     <td class="button" colspan="4">
-      <form name="addConsFrm" action="index.php?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+      <form name="addConsFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_consult_now" />

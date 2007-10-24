@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function pageMain() {
-  regRedirectPopupCal("{{$date_suivi}}", "index.php?m={{$m}}&tab={{$tab}}&date_suivi=");
+  regRedirectPopupCal("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
 }
 
 </script>

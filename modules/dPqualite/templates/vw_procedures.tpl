@@ -66,7 +66,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             </form>
             {{/if}}
             {{if $currProc->etat==$docGed|const:'TERMINE'}}
-            <button type="button" class="edit notext" style="float: left;" onclick="document.location = 'index.php?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}'" title="{{tr}}button-CDocGed-edit{{/tr}}">
+            <button type="button" class="edit notext" style="float: left;" onclick="document.location = '?m={{$m}}&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}'" title="{{tr}}button-CDocGed-edit{{/tr}}">
               {{tr}}button-CDocGed-edit{{/tr}}
             </button>
             {{/if}}

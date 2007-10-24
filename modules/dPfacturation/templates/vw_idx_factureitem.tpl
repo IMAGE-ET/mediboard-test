@@ -1,12 +1,12 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="selFacture" action="index.php" method="get">
+      <form name="selFacture" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
       	<tr>
       		<td>
- 				<a class="buttonnew" href="index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
+ 				<a class="buttonnew" href="?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$facture->facture_id}}&amp;factureitem_id=0">
         	Créer un nouvel élément
       			</a>     		
       		</td>

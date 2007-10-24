@@ -20,10 +20,10 @@ function pageMain() {
 <table class="main">
   <tr>
     <th class="title">
-      <a href="index.php?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
+      <a href="?m={{$m}}&amp;debut={{$prec}}">&lt;&lt;&lt;</a>
       semaine du {{$debut|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-      <a href="index.php?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
+      <a href="?m={{$m}}&amp;debut={{$suiv}}">&gt;&gt;&gt;</a>
     </th>
     <th class="title">Votre compte</th>
   </tr>
@@ -105,7 +105,7 @@ function pageMain() {
           {{foreach from=$compte.impayes.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
@@ -131,7 +131,7 @@ function pageMain() {
           {{foreach from=$compte.inf15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;
@@ -157,7 +157,7 @@ function pageMain() {
         {{foreach from=$compte.sup15.plages item=curr_plage}}
           <tr>
             <td colspan="2" class="text">
-              <a href="index.php?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
+              <a href="?m={{$m}}&amp;debut={{$curr_plage->date|date_format:"%Y-%m-%d"}}">
               {{$curr_plage->date|date_format:"%A %d %B %Y"}} &mdash;
               {{if $curr_plage->libelle}}
                 {{$curr_plage->libelle}} &mdash;

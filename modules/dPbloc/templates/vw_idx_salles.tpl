@@ -5,7 +5,7 @@
 <tr>
   <td class="halfPane">
 
-    <a class="buttonnew" href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id=0"><strong>Créer une salle</strong></a>
+    <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id=0"><strong>Créer une salle</strong></a>
 
     <table class="tbl">
       
@@ -16,7 +16,7 @@
     
     {{foreach from=$salles item=curr_salle}}
     <tr {{if $curr_salle->_id == $salleSel->_id}}class="selected"{{/if}}>
-      <td><a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->salle_id}}">{{$curr_salle->nom}}</a></td>
+      <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;salle_id={{$curr_salle->salle_id}}">{{$curr_salle->nom}}</a></td>
       <td>{{$curr_salle->_ref_group->text}}</td>
     </tr>
     {{/foreach}}

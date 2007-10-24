@@ -304,7 +304,7 @@ Septique
 <tr class="dates">
   <td class="text" colspan="2">
     {{if $can->edit}}
-    <form name="editChFrm{{$sejour->_id}}" action="index.php" method="post">
+    <form name="editChFrm{{$sejour->_id}}" action="?" method="post">
     <input type="hidden" name="m" value="{{$m}}" />
     <input type="hidden" name="dosql" value="do_edit_chambre" />
     <input type="hidden" name="id" value="{{$sejour->_id}}" />

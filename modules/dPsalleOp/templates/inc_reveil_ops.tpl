@@ -16,10 +16,10 @@ var checkPersonnel = function(oFormAffectation, oFormOperation){
 
 
 
-regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
+regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
 </script>
 
-      <form action="index.php" name="selection" method="get">
+      <form action="?" name="selection" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <table class="form">
         <tr>
@@ -48,7 +48,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
           <td>
             {{if $can->edit}}
-              <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
+              <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
                 <input type="hidden" name="m" value="dPplanningOp" />
                 <input type="hidden" name="dosql" value="do_planning_aed" />
                 <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
@@ -63,7 +63,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
           <td>
             {{if $can->edit || $modif_operation}}
              
-            <form name="selPersonnel{{$curr_op->_id}}" action="index.php?m={{$m}}" method="post">
+            <form name="selPersonnel{{$curr_op->_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPpersonnel" />
               <input type="hidden" name="dosql" value="do_affectation_aed" />
               <input type="hidden" name="del" value="0" />
@@ -79,7 +79,7 @@ regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab=vw_reveil&date=");
               </select>
             </form>
             
-            <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="index.php?m={{$m}}" method="post">
+            <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
               <input type="hidden" name="dosql" value="do_planning_aed" />
               <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />

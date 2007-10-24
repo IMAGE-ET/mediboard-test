@@ -9,7 +9,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="buttonnew">
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id=0" class="buttonnew">
         Créer un établissement
       </a>
       <table class="tbl">
@@ -20,12 +20,12 @@ function pageMain() {
         {{foreach from=$listGroups item=curr_group}}
         <tr {{if $curr_group->_id == $usergroup->_id}}class="selected"{{/if}}>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
               {{$curr_group->text}}
             </a>
           </td>
           <td>
-            <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;group_id={{$curr_group->group_id}}">
               {{$curr_group->_ref_functions|@count}}
             </a>
           </td>
@@ -34,7 +34,7 @@ function pageMain() {
       </table>
     </td>
     <td class="halfPane">
-      <form name="group" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="group" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_groups_aed" />
 	  <input type="hidden" name="group_id" value="{{$usergroup->group_id}}" />
       <input type="hidden" name="del" value="0" />
@@ -135,13 +135,17 @@ function pageMain() {
  		</tr>
         <tr>
           <td class="button" colspan="2">
-          {{if $usergroup->group_id}}
-            <button class="modify" type="submit">Valider</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+          {{if $usergroup->_id}}
+            <button class="modify" type="submit" name="modify">
+              {{tr}}Modify{{/tr}}
+            </button>
+            <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'établissement',objName:'{{$usergroup->text|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
             </button>
           {{else}}
-            <button class="submit" type="submit" name="btnFuseAction">Créer</button>
+            <button class="new" type="submit" name="create">
+              {{tr}}Create{{/tr}}
+            </button>
           {{/if}}
           </td>
         </tr>

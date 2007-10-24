@@ -16,7 +16,7 @@
 	{{foreach from=$facture->_ref_items item=_item}}
 	  <tr>
 	    <td class="text">
-	    	<a href="index.php?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$_item->facture_id}}&amp;factureitem_id={{$_item->factureitem_id}}" title="Modifier l'element">
+	    	<a href="?m=dPfacturation&amp;tab=vw_idx_factureitem&amp;facture_id={{$_item->facture_id}}&amp;factureitem_id={{$_item->factureitem_id}}" title="Modifier l'element">
               {{$_item->libelle}}
             </a>
         </td>

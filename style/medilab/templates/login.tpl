@@ -1,7 +1,7 @@
 {{include file="../../mediboard/templates/common.tpl"}}
 
 <div id="login">
-  <form name="loginFrm" action="./index.php" method="post" onsubmit="return checkForm(this)">
+  <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)">
   <input type="hidden" name="login" value="{{$time}}" />
   <input type="hidden" name="redirect" value="{{$redirect|smarty:nodefaults}}" />
   <input type="hidden" name="dialog" value="{{$dialog}}" />

@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id=0">
         Créer une nouvelle catégorie
       </a>
       <table class="tbl">
@@ -11,7 +11,7 @@
         {{foreach from=$listCategory item=curr_category}}
         <tr {{if $curr_category->_id == $category->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="Modifier le catégorie">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="Modifier le catégorie">
               {{$curr_category->category_name}}
             </a>
           </td>
@@ -20,7 +20,7 @@
       </table>  
     </td>
     <td class="halfPane">
-      <form name="editCat" action="./index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="editCat" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_category_aed" />
 	  <input type="hidden" name="category_id" value="{{$category->_id}}" />
       <input type="hidden" name="del" value="0" />

@@ -6,14 +6,12 @@
 
 <script type="text/javascript">
 
-//if (Intermax) {
-//	Intermax.ResultHandler["Lire Vitale"] = function() {
-//	  var url = new Url;
-//	  url.setModuleTab("dPpatients", "vw_edit_patients");
-//	  url.addParam("useVitale", 1);
-//	  url.redirect();
-//	}
-//}
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  var url = new Url;
+  url.setModuleTab("dPpatients", "vw_edit_patients");
+  url.addParam("useVitale", 1);
+  url.redirect();
+}
 
 var httpreq_running = false;
 function confirmCreation(oForm){

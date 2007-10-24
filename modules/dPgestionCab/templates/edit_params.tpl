@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td colspan="2">
-      <form name="employeSelector" action="index.php" method="get">
+      <form name="employeSelector" action="?" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <label for="employecab_id" title="Veuillez sélectionner l'utilisateur concerné">Employé Concerné</label>
       <select name="employecab_id" onchange="this.form.submit()">
@@ -17,7 +17,7 @@
   </tr>
   <tr>
     <td class="halfPane">
-      <form name="editEmploye" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <form name="editEmploye" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_employe_aed" />
       <input type="hidden" name="m" value="dPgestionCab" />
       <input type="hidden" name="employecab_id" value="{{$employe->employecab_id}}" />
@@ -65,7 +65,7 @@
     </td>
     <td class="halfPane">
       {{if $employe->employecab_id}}
-      <form name="params" action="./index.php?m={{$m}}" method="post" onSubmit="return checkForm(this)">
+      <form name="params" action="?m={{$m}}" method="post" onSubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_paramsPaie_aed" />
       <input type="hidden" name="m" value="dPgestionCab" />
       <input type="hidden" name="params_paie_id" value="{{$paramsPaie->params_paie_id}}" />

@@ -105,7 +105,7 @@ function pageMain() {
   {{if $modurgence}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
+       <a class="buttonnew" href="?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
          {{tr}}COperation.create_urgence{{/tr}}
        </a>
     </td>
@@ -113,7 +113,7 @@ function pageMain() {
   {{else}}
   <tr>
     <td colspan="2">
-       <a class="buttonnew" href="index.php?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
+       <a class="buttonnew" href="?m={{$m}}&amp;operation_id=0&amp;sejour_id=0">
          {{tr}}COperation.create{{/tr}}
        </a>
     </td>

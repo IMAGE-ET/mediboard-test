@@ -11,7 +11,7 @@ global $AppUI, $can;
 
 $can->needsRead();
 
-$intermax = mbGetValueFromPostOrSession("intermax", array());
+$intermax = mbGetAbsValueFromPostOrSession("intermax", array());
 
 $fonction = @$intermax["FONCTION"]["NOM"];
 

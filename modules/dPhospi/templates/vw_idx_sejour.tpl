@@ -40,7 +40,7 @@ function popEtatSejour(sejour_id) {
 }
 
 function pageMain() {
-  regRedirectPopupCal("{{$date}}", "index.php?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
 }
 
@@ -94,7 +94,7 @@ function pageMain() {
               </a>
               </td>
               <td>
-                <a style="float: right;" href="index.php?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
+                <a style="float: right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
                   <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
                 </a>
                 </td>

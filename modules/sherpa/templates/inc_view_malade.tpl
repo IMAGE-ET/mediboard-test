@@ -24,152 +24,187 @@
   </tr>
   <tr>
     <th>{{mb_label object=$malade field="malnom"}}</th>
-	<td>{{mb_value object=$malade field="malnom"}}</td>
+		<td>{{mb_value object=$malade field="malnom"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="malpre"}}</th>
-	<td>{{mb_value object=$malade field="malpre"}}</td>
+		<th>{{mb_label object=$malade field="malpre"}}</th>
+		<td>{{mb_value object=$malade field="malpre"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="datnai"}}</th>
-	<td>{{mb_value object=$malade field="datnai"}}</td>
+		<th>{{mb_label object=$malade field="datnai"}}</th>
+		<td>{{mb_value object=$malade field="datnai"}}</td>
   </tr>
-    <tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="rannai"}}</th>
-	<td>{{mb_value object=$malade field="rannai"}}</td>
+		<th>{{mb_label object=$malade field="rannai"}}</th>
+		<td>{{mb_value object=$malade field="rannai"}}</td>
   </tr>
-    <tr>
-	<th>{{mb_label object=$malade field="vilnai"}}</th>
-	<td>{{mb_value object=$malade field="vilnai"}}</td>
-  </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="malpat"}}</th>
-	<td>{{mb_value object=$malade field="malpat"}}</td>
+		<th>{{mb_label object=$malade field="vilnai"}}</th>
+		<td>{{mb_value object=$malade field="vilnai"}}</td>
   </tr>
-    <tr>
-	<th>{{mb_label object=$malade field="nation"}}</th>
-	<td>{{mb_value object=$malade field="nation"}}</td>
-  </tr>
-    <tr>
-	<th>{{mb_label object=$malade field="sexe"}}</th>
-	<td>{{mb_value object=$malade field="sexe"}}</td>
-  </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="malnss"}}</th>
-	<td>{{mb_value object=$malade field="malnss"}}</td>
+		<th>{{mb_label object=$malade field="malpat"}}</th>
+		<td>{{mb_value object=$malade field="malpat"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="clenss"}}</th>
-	<td>{{mb_value object=$malade field="clenss"}}</td>
+		<th>{{mb_label object=$malade field="nation"}}</th>
+		<td>{{mb_value object=$malade field="nation"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="parent"}}</th>
-	<td>{{mb_value object=$malade field="parent"}}</td>
+		<th>{{mb_label object=$malade field="sexe"}}</th>
+		<td>{{mb_value object=$malade field="sexe"}}</td>
+  </tr>
+
+  <tr>
+		<th>{{mb_label object=$malade field="malnss"}}</th>
+		<td>{{mb_value object=$malade field="malnss"}}</td>
+  </tr>
+
+  <tr>
+		<th>{{mb_label object=$malade field="clenss"}}</th>
+		<td>{{mb_value object=$malade field="clenss"}}</td>
+  </tr>
+
+  <tr>
+		<th>{{mb_label object=$malade field="parent"}}</th>
+		<td>{{mb_value object=$malade field="parent"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malru1"}}</th>
-	<td>{{mb_value object=$malade field="malru1"}}</td>
+		<th>{{mb_label object=$malade field="malru1"}}</th>
+		<td>{{mb_value object=$malade field="malru1"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malru2"}}</th>
-	<td>{{mb_value object=$malade field="malru2"}}</td>
+		<th>{{mb_label object=$malade field="malru2"}}</th>
+		<td>{{mb_value object=$malade field="malru2"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malpos"}}</th>
-	<td>{{mb_value object=$malade field="malpos"}}</td>
+		<th>{{mb_label object=$malade field="malpos"}}</th>
+		<td>{{mb_value object=$malade field="malpos"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malvil"}}</th>
-	<td>{{mb_value object=$malade field="malvil"}}</td>
+		<th>{{mb_label object=$malade field="malvil"}}</th>
+		<td>{{mb_value object=$malade field="malvil"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="maltel"}}</th>
-	<td>{{mb_value object=$malade field="maltel"}}</td>
+		<th>{{mb_label object=$malade field="maltel"}}</th>
+		<td>{{mb_value object=$malade field="maltel"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malpro"}}</th>
-	<td>{{mb_value object=$malade field="malpro"}}</td>
+		<th>{{mb_label object=$malade field="malpro"}}</th>
+		<td>{{mb_value object=$malade field="malpro"}}</td>
   </tr> 
+
   <tr>
-	<th>{{mb_label object=$malade field="perso1"}}</th>
-	<td>{{mb_value object=$malade field="perso1"}}</td>
+		<th>{{mb_label object=$malade field="perso1"}}</th>
+		<td>{{mb_value object=$malade field="perso1"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="prvad1"}}</th>
-	<td>{{mb_value object=$malade field="prvad1"}}</td>
+		<th>{{mb_label object=$malade field="prvad1"}}</th>
+		<td>{{mb_value object=$malade field="prvad1"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="prvil1"}}</th>
-	<td>{{mb_value object=$malade field="prvil1"}}</td>
+		<th>{{mb_label object=$malade field="prvil1"}}</th>
+		<td>{{mb_value object=$malade field="prvil1"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="prtel1"}}</th>
-	<td>{{mb_value object=$malade field="prtel1"}}</td>
+		<th>{{mb_label object=$malade field="prtel1"}}</th>
+		<td>{{mb_value object=$malade field="prtel1"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malie1"}}</th>
-	<td>{{mb_value object=$malade field="malie1"}}</td>
+		<th>{{mb_label object=$malade field="malie1"}}</th>
+		<td>{{mb_value object=$malade field="malie1"}}</td>
   </tr>  
-    <tr>
-	<th>{{mb_label object=$malade field="perso2"}}</th>
-	<td>{{mb_value object=$malade field="perso2"}}</td>
+
+  <tr>
+		<th>{{mb_label object=$malade field="perso2"}}</th>
+		<td>{{mb_value object=$malade field="perso2"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="prvad2"}}</th>
-	<td>{{mb_value object=$malade field="prvad2"}}</td>
+		<th>{{mb_label object=$malade field="prvad2"}}</th>
+		<td>{{mb_value object=$malade field="prvad2"}}</td>
   </tr>
+
   <tr>
-	<th>{{mb_label object=$malade field="prvil2"}}</th>
-	<td>{{mb_value object=$malade field="prvil2"}}</td>
+		<th>{{mb_label object=$malade field="prvil2"}}</th>
+		<td>{{mb_value object=$malade field="prvil2"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="prtel2"}}</th>
-	<td>{{mb_value object=$malade field="prtel2"}}</td>
+		<th>{{mb_label object=$malade field="prtel2"}}</th>
+		<td>{{mb_value object=$malade field="prtel2"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="malie2"}}</th>
-	<td>{{mb_value object=$malade field="malie2"}}</td>
+		<th>{{mb_label object=$malade field="malie2"}}</th>
+		<td>{{mb_value object=$malade field="malie2"}}</td>
   </tr>  
+
   <tr>
-	<th>{{mb_label object=$malade field="assnss"}}</th>
-	<td>{{mb_value object=$malade field="assnss"}}</td>
+		<th>{{mb_label object=$malade field="assnss"}}</th>
+		<td>{{mb_value object=$malade field="assnss"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="nsscle"}}</th>
-	<td>{{mb_value object=$malade field="nsscle"}}</td>
+		<th>{{mb_label object=$malade field="nsscle"}}</th>
+		<td>{{mb_value object=$malade field="nsscle"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="assnom"}}</th>
-	<td>{{mb_value object=$malade field="assnom"}}</td>
+		<th>{{mb_label object=$malade field="assnom"}}</th>
+		<td>{{mb_value object=$malade field="assnom"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="asspre"}}</th>
-	<td>{{mb_value object=$malade field="asspre"}}</td>
+		<th>{{mb_label object=$malade field="asspre"}}</th>
+		<td>{{mb_value object=$malade field="asspre"}}</td>
   </tr> 
-    <tr>
-	<th>{{mb_label object=$malade field="asspat"}}</th>
-	<td>{{mb_value object=$malade field="asspat"}}</td>
-  </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="assru1"}}</th>
-	<td>{{mb_value object=$malade field="assru1"}}</td>
+		<th>{{mb_label object=$malade field="asspat"}}</th>
+		<td>{{mb_value object=$malade field="asspat"}}</td>
+  </tr>    
+
+  <tr>
+		<th>{{mb_label object=$malade field="assru1"}}</th>
+		<td>{{mb_value object=$malade field="assru1"}}</td>
   </tr>  
+
   <tr>
-	<th>{{mb_label object=$malade field="assru2"}}</th>
-	<td>{{mb_value object=$malade field="assru2"}}</td>
+		<th>{{mb_label object=$malade field="assru2"}}</th>
+		<td>{{mb_value object=$malade field="assru2"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="asspos"}}</th>
-	<td>{{mb_value object=$malade field="asspos"}}</td>
+		<th>{{mb_label object=$malade field="asspos"}}</th>
+		<td>{{mb_value object=$malade field="asspos"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="assvil"}}</th>
-	<td>{{mb_value object=$malade field="assvil"}}</td>
+		<th>{{mb_label object=$malade field="assvil"}}</th>
+		<td>{{mb_value object=$malade field="assvil"}}</td>
   </tr>    
+
   <tr>
-	<th>{{mb_label object=$malade field="datmaj"}}</th>
-	<td>{{mb_value object=$malade field="datmaj"}}</td>
+		<th>{{mb_label object=$malade field="datmaj"}}</th>
+		<td>{{mb_value object=$malade field="datmaj"}}</td>
   </tr>
      
   {{if $can->edit}}
@@ -198,7 +233,7 @@
 	  {{if $id400->_id}}
     <td>{{mb_value object=$id400 field=last_update}}</td>
     <td>
-      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+      <a href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}">
         {{$patient->_view}}
       </a>
     </td>
@@ -206,7 +241,6 @@
     <td colspan="2"><em>Pas de correspondance</em></td>
     {{/if}}
   </tr>
-  <tr>
 </table>
 
 {{/if}}

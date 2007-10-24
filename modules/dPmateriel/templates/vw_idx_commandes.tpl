@@ -9,7 +9,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="index.php?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id=0">
+      <a class="buttonnew" href="?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id=0">
         Créer une nouvelle commande
       </a>
       <table class="tbl">
@@ -25,7 +25,7 @@ function pageMain() {
         {{foreach from=$listCommandesARecevoir item=curr_commande}}
         <tr {{if $curr_commande->_id == $commande->_id}}class="selected"{{/if}}>
           <td>
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">
               {{mb_value object=$curr_commande field="date"}}
             </a>
           </td>
@@ -48,7 +48,7 @@ function pageMain() {
         {{foreach from=$listCommandesRecu item=curr_commande}}
         <tr {{if $curr_commande->_id == $commande->_id}}class="selected"{{/if}}>
           <td>
-            <a href="index.php?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">
+            <a href="?m=dPmateriel&amp;tab=vw_idx_commandes&amp;commande_materiel_id={{$curr_commande->_id}}" title="Modifier la commande">
               {{mb_value object=$curr_commande field="date"}}
             </a>
           </td>

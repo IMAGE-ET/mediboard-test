@@ -46,7 +46,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td style="height: 16px;">
-      <form action="index.php" name="selection" method="get">
+      <form action="?" name="selection" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="tab" value="{{$tab}}" />
       <label for="selChir">Chirurgien</label>
@@ -65,9 +65,9 @@ function pageMain() {
   </tr>
   <tr>
     <th style="height: 16px;">
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$lastmonth}}">&lt;&lt;&lt;</a>
       {{$date|date_format:"%B %Y"}}
-      <a href="index.php?m={{$m}}&amp;tab={{$tab}}&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
+      <a href="?m={{$m}}&amp;tab={{$tab}}&amp;date={{$nextmonth}}">&gt;&gt;&gt;</a>
     </th>
   </tr>
   <tr>
@@ -98,7 +98,7 @@ function pageMain() {
         {{/foreach}}
         {{if $listUrgences|@count}}
         <tr>
-          <td align="right"><a href="index.php?m={{$m}}&amp;tab=vw_idx_planning&amp;urgences=1">Urgences</a></td>
+          <td align="right"><a href="?m={{$m}}&amp;tab=vw_idx_planning&amp;urgences=1">Urgences</a></td>
           <td align="center">-</td>
           <td align="center">{{$listUrgences|@count}}</td>
           <td align="center">-</td>
