@@ -54,11 +54,12 @@ class CMediusers extends CMbObject {
   // Other fields
   var $_view       = null;
   var $_shortview  = null;
-  var $_profile_id = null;
   var $_compte_banque = null;
   var $_compte_guichet = null;
   var $_compte_numero = null;
   var $_compte_cle = null;
+  var $_profile_id    = null;
+  
   
   // Object references
   var $_ref_banque     = null;
@@ -100,7 +101,8 @@ class CMediusers extends CMbObject {
       "_compte_banque"   => "num length|5 confidential",
       "_compte_guichet"  => "num length|5 confidential",
       "_compte_numero"   => "str length|11 confidential",
-      "_compte_cle"      => "num length|2 confidential"
+      "_compte_cle"      => "num length|2 confidential",
+      "_profile_id"      => "num"
       );
   }
 
@@ -157,6 +159,7 @@ class CMediusers extends CMbObject {
     $user->user_zip         = $this->_user_cp        ;
     $user->user_city        = $this->_user_ville     ;
     $user->template         = 0                      ;
+    $user->profile_id       = $this->_profile_id     ;
 
     return $user;
   }
@@ -177,6 +180,7 @@ class CMediusers extends CMbObject {
   }
 
   function updateFormFields() {
+   
     parent::updateFormFields();
     global $utypes;
     $user = new CUser();
@@ -193,6 +197,8 @@ class CMediusers extends CMbObject {
       $this->_user_ville      = $user->user_city;
       $this->_user_last_login = $user->user_last_login;
       $this->_user_template   = $user->template;
+      $this->_profile_id      = $user->profile_id;
+
       // Encrypt this datas
       $this->checkConfidential();
       $this->_view            = $this->_user_last_name." ".$this->_user_first_name;

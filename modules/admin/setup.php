@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.10";
+$config["mod_version"]     = "1.0.11";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -200,7 +200,12 @@ class CSetupadmin extends CSetup {
     $sql = "UPDATE `users` SET `template` = '1' WHERE `user_username` like '>>%';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.10";
+    $this->makeRevision("1.0.10");
+    $sql = "ALTER TABLE `users`
+            ADD `profile_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.11";
   }
 }
 ?>

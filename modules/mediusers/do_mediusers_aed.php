@@ -9,7 +9,6 @@
 
 global $AppUI, $m;
 
-
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");
@@ -34,11 +33,14 @@ class CDoMediuserAddEdit extends CDoObjectAddEdit {
       }
     } else {
       // Copy permissions
+
+      /*
       if ($profile_id = dPgetParam($_POST, "_profile_id")) {
         $user = new CUser;
         $user->load($this->_obj->user_id);
         $msg = $user->copyPermissionsFrom($profile_id, true);
       }
+      */
       
       // si modifDroit = 0, pas le droit de les modifier
       $modifDroit = mbGetAbsValueFromPostOrSession("modifDroit", "1");

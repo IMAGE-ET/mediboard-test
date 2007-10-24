@@ -62,22 +62,76 @@ class CPermModule extends CMbObject {
     $this->loadRefDBUser();
   }
   
-  // Those functions are statics
-  
-  function loadUserPerms($user_id = null) {
+  // Chargement des droits du user
+  function loadExactPerms($user_id = null){
     global $AppUI, $userPermsModules, $permissionSystemeDown;
-    if($permissionSystemeDown) {
-      return true;
-    }
+    
     $perm = new CPermModule;
     $listPermsModules = array();
     $where = array();
-    if($user_id !== null) {
-      $where["user_id"] = "= '$user_id'";
+    $where["user_id"] = "= '$user_id'";
+    return $listPermsModules = $perm->loadList($where);
+  }
+  
+  
+  // Those functions are statics
+  function loadUserPerms($user_id = null) {
+    
+    global $AppUI, $userPermsModules, $permissionSystemeDown;
+    
+    // Déclaration du user
+    $user = new CUser();
+    if($user_id !== null){
+      $user->load($user_id);
     } else {
-      $where["user_id"] = "= '$AppUI->user_id'";
+      $user->load($AppUI->user_id);
     }
-    $listPermsModules = $perm->loadList($where);
+    
+    $perm = new CPermModule;
+    
+    //Declaration des tableaux de droits 
+    $permsProfil = array();
+    $permsSelf = array();
+    $permsFinal = array();
+    
+    // Declaration des tableaux de droits
+    $tabModProfil = array();
+    $tabModSelf = array();
+    $tabModFinal = array();
+    
+    //Chargement des droits
+    $permsProfil = $perm->loadExactPerms($user->profile_id);
+    $permsSelf = $perm->loadExactPerms($user->user_id);
+    
+    // Creation du tableau de droit de permsSelf
+    foreach($permsSelf as $key => $value){
+      $tabModSelf["mod_".$value->mod_id] = $value;
+    }
+    
+    // Creation du tableau de droit de permsProfil
+    foreach($permsProfil as $key => $value){
+      $tabModProfil["mod_".$value->mod_id] = $value;
+    }
+    
+    // Fusion des deux tableaux de droits
+    $tabModFinal = array_merge($tabModProfil, $tabModSelf);
+    
+    
+    // Creation du tableau de fusion des droits
+    foreach($tabModFinal as $mod => $value){
+      $permsFinal[$value->perm_module_id] = $value;
+    }
+
+    // Tri du tableau de droit final en fonction des cle (perm_module_id)
+    ksort($permsFinal);
+    
+    if($permissionSystemeDown) {
+      return true;
+    }
+    
+    $listPermsModules = array();
+    
+    $listPermsModules = $permsFinal;
     if($user_id !== null) {
       $currPermsModules = array();
       foreach($listPermsModules as $perm_mod) {

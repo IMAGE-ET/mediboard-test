@@ -9,6 +9,7 @@
   <tr>
     <th colspan="4" class="title">Droits sur les modules</th>
   </tr>
+  {{if $type == "user"}}
   <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
@@ -49,6 +50,7 @@
       <button class="new" type="submit">Ajouter</button>
     </td>
   </tr>
+  {{/if}}
 </table>
 </form>
 <table class="tbl">
@@ -76,7 +78,7 @@
       <input type="hidden" name="dosql" value="do_perms_mod_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="perm_module_id" value="{{$perm->perm_module_id}}" />
-      <select name="permission">
+      <select name="permission" {{if $type != "user"}} disabled = "disabled"{{/if}}>
       {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
         <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
           {{$curr_perm}}
@@ -84,15 +86,17 @@
       {{/foreach}}
       </select>
       -
-      <select name="view">
+      <select name="view" {{if $type != "user"}} disabled = "disabled"{{/if}}>
       {{foreach from=$visibility|smarty:nodefaults key=key_view item=curr_view}}
         <option value="{{$key_view}}" {{if $key_view == $perm->view}}selected="selected"{{/if}}>
           {{$curr_view}}
         </option>
       {{/foreach}}
       </select>
+      {{if $type == "user"}}
       <button class="modify" type="submit">Valider</button>
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_module->mod_name|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+      {{/if}}
       </form>
     </td>
   </tr>

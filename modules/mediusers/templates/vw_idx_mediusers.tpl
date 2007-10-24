@@ -203,7 +203,7 @@ function pageMain() {
             <select name="_profile_id">
               <option value="">&mdash; Choisir un profil</option>
               {{foreach from=$profiles item=curr_profile}}
-              <option value="{{$curr_profile->user_id}}">{{$curr_profile->user_username}}</option>
+              <option value="{{$curr_profile->user_id}}" {{if $curr_profile->user_id == $mediuserSel->_profile_id}} selected="selected" {{/if}}>{{$curr_profile->user_username}}</option>
               {{/foreach}}
             </select>
           </td>

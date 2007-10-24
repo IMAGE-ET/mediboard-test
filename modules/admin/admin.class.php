@@ -49,6 +49,7 @@ class CUser extends CMbObject {
   var $user_signature   = null;
   var $user_last_login  = null;
   var $template         = null;
+  var $profile_id       = null;
 
   var $_user_password   = null;
 
@@ -88,7 +89,8 @@ class CUser extends CMbObject {
       "user_pic"        => "text",
       "user_signature"  => "text",
       "user_last_login" => "dateTime",
-      "template"        => "bool notNull default|0"
+      "template"        => "bool notNull default|0",
+      "profile_id"      => "ref class|CUser"
     );
   }
   
