@@ -179,15 +179,13 @@ $library = new CLibrary;
 
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-//$library->fileName = "scriptaculous-js-1.7.1_beta3.tar.gz";
-//$library->fileName = "scriptaculous-js-1.7.0.tar.gz";
-$library->fileName = "scriptaculous-js-1.6.0.tar.gz";
+$library->fileName = "scriptaculous-js-1.8.0_pre1.tar.gz";
+//$library->fileName = "scriptaculous-js-1.6.0.tar.gz";
 
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
 
-//$library->sourceDir = "scriptaculous-js-1.7.1_beta3";
-//$library->sourceDir = "scriptaculous-js-1.7.0";
-$library->sourceDir = "scriptaculous-js-1.6.0";
+$library->sourceDir = "scriptaculous-js-1.8.0_pre1";
+//$library->sourceDir = "scriptaculous-js-1.6.0";
 $library->targetDir = "scriptaculous";
 
 CLibrary::$all[$library->name] = $library;
