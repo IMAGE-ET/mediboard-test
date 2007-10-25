@@ -1,17 +1,5 @@
 <table class="main">
   <tr>
-    <td>
-    Type d'affichage
-      <form action="?m={{$m}}" method="post">
-        <select name="typeVue" onchange="form.submit()">
-          <option value="profil" {{if $typeVue == "profil"}}selected = "selected"{{/if}}>Profil</option>
-          <option value="user" {{if $typeVue == "user"}}selected = "selected"{{/if}}>Utilisateur</option>
-          <option value="resultat" {{if $typeVue == "resultat"}}selected = "selected"{{/if}}>Résultat</option>
-        </select>
-      </form>
-    </td>
-  </tr>
-  <tr>
     <td colspan="2">
       <table class="tbl">
         <tr>
@@ -27,24 +15,12 @@
       </table>
     </td>
   </tr>
-  {{if $typeVue=="user"}}
-    {{assign var="listPermsModules" value=$listPermsModulesUser}}
-    {{assign var="listPermsObjects" value=$listPermsObjectsUser}}
-  {{/if}}
-  {{if $typeVue=="profil"}}
-    {{assign var="listPermsModules" value=$listPermsModulesProfil}}
-    {{assign var="listPermsObjects" value=$listPermsObjectsProfil}}
-  {{/if}}
-  {{if $typeVue=="resultat"}}
-    {{assign var="listPermsModules" value=$listPermsModulesResultat}}
-    {{assign var="listPermsObjects" value=$listPermsObjectsResultat}}
-  {{/if}}
   <tr>
     <td class="halfPane">
-      {{include file="inc_perms_modules.tpl" type=$typeVue}}
+      {{include file="inc_perms_modules.tpl" listPermsModules=$listPermsModulesProfil type="profil"}}
     </td>
     <td class="halfPane">
-      {{include file="inc_perms_objects.tpl" type=$typeVue}}
+      {{include file="inc_perms_objects.tpl" listPermsObjects=$listPermsObjectsProfil type="profil"}}
     </td>
   </tr>
 </table>

@@ -22,7 +22,6 @@ function cancelObject(oObject) {
   <tr>
     <th colspan="4" class="title">Droits sur les objets</th>
   </tr>
-  {{if $type == "user"}}
   <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
@@ -71,7 +70,6 @@ function cancelObject(oObject) {
       <button class="new" type="submit">Ajouter</button>
     </td>
   </tr>
-  {{/if}}
 </table>
 </form>
 <table class="tbl">
@@ -81,39 +79,59 @@ function cancelObject(oObject) {
   <tr>
     <th>Classe</th>
     <th>Objet</th>
-    <th>Permission</th>
+    <th>Type</th>
+    <th colspan="2">Permission</th>
   </tr>
-  {{foreach from=$listPermsObjects item=perm}}
-  <tr>
-    <td>
-      {{tr}}{{$perm->object_class}}{{/tr}}
-    </td>
-    <td class="text">
-      {{if $perm->object_id}}
-        {{tr}}{{$perm->_ref_db_object->_view}}{{/tr}}
-      {{else}}
-        <strong>Droits généraux</strong>
+  
+  
+  {{foreach from=$listPermsObjectComplet item=object}}
+    <tbody class="hoverable">      
+    {{counter start=0 skip=1 assign="curr_counter"}}
+    {{foreach from=$object key="key" item="perm"}}
+    <tr>
+      {{if $curr_counter==0}}
+      <td class="text" rowspan="{{$object|@count}}"> 
+        {{tr}}{{$perm->object_class}}{{/tr}}
+      </td>
+      <td class="text" rowspan="{{$object|@count}}"> 
+        {{if $perm->object_id}}
+          {{tr}}{{$perm->_ref_db_object->_view}}{{/tr}}
+        {{else}}
+          <strong>Droits généraux</strong>
+        {{/if}}      
+      </td>
       {{/if}}
-    </td>
-    <td class="button">
-      <form name="editPermObj{{$perm->perm_object_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
-      <input type="hidden" name="dosql" value="do_perms_obj_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="perm_object_id" value="{{$perm->perm_object_id}}" />
-      <select name="permission" {{if $typeVue != "user"}} disabled = "disabled"{{/if}}>
-      {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
-        <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
+      <td>
+        {{if $key == "user"}}
+        Utilisateur
+        {{elseif $key == "profil"}}
+        Profil
+        {{/if}}
+      </td>     
+      <td>
+      <form name="editPermObj{{$perm->perm_object_id}}" action="index.php?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="dosql" value="do_perms_obj_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="perm_object_id" value="{{$perm->perm_object_id}}" />
+        <select name="permission" {{if $key != "user"}} disabled = "disabled"{{/if}}>
+          {{foreach from=$permission|smarty:nodefaults key=key_perm item=curr_perm}}
+          <option value="{{$key_perm}}" {{if $key_perm == $perm->permission}}selected="selected"{{/if}}>
           {{$curr_perm}}
-        </option>
-      {{/foreach}}
-      </select>
-      {{if $type == "user"}}
-      <button class="modify" type="submit">Valider</button>
-      <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
-      {{/if}}
+          </option>
+          {{/foreach}}
+        </select>
+        {{if $key == "profil" && $object|@count == "2"}}
+          <img src="images/icons/no.png" alt="Profil desactivé" />
+        {{/if}}
+        {{if $key == "user"}}
+          <button class="modify" type="submit">Valider</button>
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la permission sur',objName:'{{$perm->_ref_db_object->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+        {{/if}}
       </form>
     </td>
   </tr>
+  {{counter}}
+  {{/foreach}}
+  </tbody>
   {{/foreach}}
 </table>

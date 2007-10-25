@@ -12,7 +12,6 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
-$typeVue = mbGetValueFromPostOrSession("typeVue","resultat");
 
 if(!$user_id) {
   $AppUI->setMsg("Vous devez selectionner un utilisateur");
@@ -45,33 +44,54 @@ $whereProfil = array();
 $whereProfil["user_id"] = "= '$user->profile_id'";
 
 // DROITS SUR LES MODULES
+
+// Tabeau recapitulatif des droit sur les modules
+$listPermsModuleComplet = array();
+
 // Droits sur l'utilisateur
 $permModule = new CPermModule;
-$listPermsModulesUser = $permModule->loadList($whereUser, $order);
-foreach($listPermsModulesUser as $keyMod => $mod) {
-  if(!$listPermsModulesUser[$keyMod]->mod_id) {
-    $isAdminPermSet = true;
-  }
-  $listPermsModulesUser[$keyMod]->loadRefDBModule();
-  if(isset($modulesInstalled[$mod->_ref_db_module->mod_name])) {
-    unset($modulesInstalled[$mod->_ref_db_module->mod_name]);
-  }
-}
+
 
 // Droit du profil sur les modules
 $listPermsModulesProfil = $permModule->loadList($whereProfil, $order);
 foreach($listPermsModulesProfil as $keyMod => $mod) {
   $listPermsModulesProfil[$keyMod]->loadRefDBModule();
+  $listPermsModuleComplet[$mod->mod_id]["profil"] = $mod;
 }
 
+
+$listPermsModulesUser = $permModule->loadList($whereUser, $order);
+foreach($listPermsModulesUser as $keyMod => $mod) {  
+  if(!$listPermsModulesUser[$keyMod]->mod_id) {
+    $isAdminPermSet = true;
+  }
+  $listPermsModulesUser[$keyMod]->loadRefDBModule();
+  $listPermsModuleComplet[$mod->mod_id]["user"] = $mod;
+  
+  if(isset($modulesInstalled[$mod->_ref_db_module->mod_name])) {
+    unset($modulesInstalled[$mod->_ref_db_module->mod_name]);
+  }
+}
+
+// Creation du tableau de modules redefinis par l'utilisateur
+$tabModUser = array();
+foreach($listPermsModulesUser as $key => $value){
+  $tabModUser[$value->mod_id] = $value;
+}
+
+
+
 // Droits resultants de la fusion des droit precedents
+/*
 $listPermsModulesResultat = $permModule->loadUserPerms($user->_id);
 foreach($listPermsModulesResultat as $keyMod => $mod) {
   $listPermsModulesResultat[$keyMod]->loadRefDBModule();
 }
-
+*/
 
 // DROITS SUR LES OBJETS
+$listPermsObjectComplet = array();
+
 $listPermsObjectsUser = array();
 $listPermsObjectsProfil = array();
 $listPermsObjectsResultat = array();
@@ -79,17 +99,30 @@ $listPermsObjectsResultat = array();
 $order = "object_class";
 $permObject = new CPermObject;
 
-// Droit sur l'utilisateur
-$listPermsObjectsUser = $permObject->loadList($whereUser, $order);
-foreach($listPermsObjectsUser as $keyObj => $obj) {
-  $listPermsObjectsUser[$keyObj]->loadRefDBObject();
-}
 
 // Droit sur le profil
 $listPermsObjectsProfil = $permObject->loadList($whereProfil, $order);
 foreach($listPermsObjectsProfil as $keyObj => $obj) {
   $listPermsObjectsProfil[$keyObj]->loadRefDBObject();
+  $listPermsObjectComplet[$obj->object_id.$obj->object_class]["profil"] = $obj;
 }
+
+// Droit sur l'utilisateur
+$listPermsObjectsUser = $permObject->loadList($whereUser, $order);
+foreach($listPermsObjectsUser as $keyObj => $obj) {
+  $listPermsObjectsUser[$keyObj]->loadRefDBObject();
+  $listPermsObjectComplet[$obj->object_id.$obj->object_class]["user"] = $obj;
+}
+
+// Creation du tableau d'objets redefinis par l'utilisateur
+$tabObjUser = array();
+
+foreach($listPermsObjectsUser as $key => $value){
+  $tabObjUser[$value->object_id.$value->object_class] = $value;
+}
+
+
+
 
 
 // Droits resultants de la fusion des droit precedents
@@ -124,14 +157,15 @@ $smarty->assign("isAdminPermSet"           , $isAdminPermSet           );
 $smarty->assign("listClasses"              , $listClasses              );
 $smarty->assign("listPermsModulesUser"     , $listPermsModulesUser     );
 $smarty->assign("listPermsModulesProfil"   , $listPermsModulesProfil   );
-$smarty->assign("listPermsModulesResultat" ,$listPermsModulesResultat  );
 $smarty->assign("listPermsObjectsUser"     , $listPermsObjectsUser     );
 $smarty->assign("listPermsObjectsProfil"   , $listPermsObjectsProfil   );
-$smarty->assign("listPermsObjectsResultat" , $listPermsObjectsResultat );
+$smarty->assign("listPermsModuleComplet"   , $listPermsModuleComplet   );
+$smarty->assign("listPermsObjectComplet"    , $listPermsObjectComplet    );
 $smarty->assign("permission"               , $permission               );
 $smarty->assign("visibility"               , $visibility               );
-$smarty->assign("typeVue"                  , $typeVue                  );
 $smarty->assign("profile"                  , $profile                  );
+$smarty->assign("tabModUser"               ,$tabModUser                );
+$smarty->assign("tabObjUser"               ,$tabObjUser                );
 $smarty->display("edit_perms.tpl");
 
 ?>
