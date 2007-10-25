@@ -4,7 +4,7 @@
 var checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
   // si affectation renseignée, on submit les deux formulaires
-  if(oFormAffectation.personnel_id.value != ""){
+  if(if(oFormAffectation) && oFormAffectation.personnel_id.value != ""){
     submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} );
   }
   else {
@@ -59,7 +59,8 @@ regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
           </td>
           <td>
             {{if $can->edit || $modif_operation}}
-             
+            
+            {{if $personnels !== null}}
             <form name="selPersonnel{{$curr_op->_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPpersonnel" />
               <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -75,6 +76,7 @@ regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
               {{/foreach}}
               </select>
             </form>
+            {{/if}}
             
             <form name="editEntreeReveilFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
               <input type="hidden" name="m" value="dPplanningOp" />
@@ -84,7 +86,9 @@ regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
               <input type="hidden" name="entree_reveil" value="" /> 
               <button class="tick notext" type="button" onclick="checkPersonnel(document.selPersonnel{{$curr_op->_id}}, this.form);">{{tr}}Modify{{/tr}}</button>
             </form>
-            {{else}}-{{/if}}
+            {{else}}
+              -
+            {{/if}}
           </td>
         </tr>
         {{/foreach}}
