@@ -33,6 +33,10 @@ class CMbPath {
     return false;
   }
   
+  function remove($dir) {
+    return mbRemovePath($dir);
+  }
+  
   /**
    * @returns true if directory is empty
    */
