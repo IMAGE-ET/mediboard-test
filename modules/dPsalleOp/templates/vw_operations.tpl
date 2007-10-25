@@ -42,6 +42,8 @@ function pageMain() {
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.periodicalUpdate('listplages', { frequency: 90 });
+  
+  new Control.Tabs('main_tab_group');
 }
 </script>
 
@@ -60,19 +62,29 @@ function pageMain() {
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>
+        <tr>
+          <td colspan="2">
+            <ul id="main_tab_group" class="control_tabs">
+              <li><a href="#one">Timmings</a></li>
+              <li><a href="#two">Anesthésie</a></li>
+              <li><a href="#three">Codage</a></li>
+            </ul>
+          </td>
+        </tr>
           
         {{include file="inc_timings_anesth.tpl"}}
       
         <!-- <tbody id = "ccam"> -->
-        <tr>
-          <th class="category" style="vertical-align: middle">Actes<br /><br />
-          {{tr}}{{$selOp->_class_name}}{{/tr}}
-          {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
-          <br />
-          Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
-          <br />
-          ({{$selOp->temp_operation|date_format:"%Hh%M"}})
-          {{/if}}
+        <tr id="three">
+          <th class="category" style="vertical-align: middle">
+            Actes<br /><br />
+            {{tr}}{{$selOp->_class_name}}{{/tr}}
+            {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
+              <br />
+              Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
+              <br />
+              ({{$selOp->temp_operation|date_format:"%Hh%M"}})
+            {{/if}}
           </th>
           
           <td>

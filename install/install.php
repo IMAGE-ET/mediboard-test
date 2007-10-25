@@ -339,6 +339,14 @@ $library->renamer = $renamer;
 
 $libraries[$library->name] = $library;
 
+$library = new CLibrary;
+$library->name = "Livepipe control suite";
+$library->url = "http://livepipe.net/projects/control_suite/";
+$library->fileName = "control_suite.tar.gz";
+$library->description = "Six widgets de controle";
+
+$libraries[$library->name] = $library;
+
 ?>
 
 <?php showHeader(); ?>

@@ -586,6 +586,7 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/rico/rico.js",$modeReturn);
+  $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/ricoex.js",$modeReturn);

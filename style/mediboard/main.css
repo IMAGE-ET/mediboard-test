@@ -1659,6 +1659,46 @@ div.accordionTabContentBox table.form{
 div.accordionTabContentBox table[class="form"]{
   width:100%;
 }
+
+/* control tabs */
+
+ul.control_tabs {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+	clear: both;
+	height: 20px;
+	clear: both;
+}
+
+ul.control_tabs li {
+	float: left;
+	margin-right: 7px;
+	text-align: center;
+  border: 1px outset #458;
+}
+
+ul.control_tabs li a {
+	display: block;
+	height: 20px;
+	font-size: 14px;
+	padding: 0 6px 0 6px;
+	background-color: #6b79a5;
+	color: #ced7ef;
+	width: 80px;
+}
+
+ul.control_tabs li a:hover {
+	background-color: #636996;
+	color: #fff;
+}
+
+ul.control_tabs li a.active {
+	background-color: #636996;
+	color: #fff;
+}
+
+
   /* @import "./hospitalisation.css"; */
 
 /* Chambres */

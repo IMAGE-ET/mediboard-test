@@ -1,4 +1,4 @@
-       <tr>
+       <tr id="one">
           <th class="category" style="vertical-align: middle">Timming</th>
           <td>
             <div id="timing">
@@ -176,7 +176,7 @@
         </td>
         </tr>
      
-        <tr>
+        <tr id="two">
           <th class="category" style="vertical-align: middle">Anesthésie</th>
             <td>
          <div id="anesth">

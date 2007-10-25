@@ -13,9 +13,6 @@ var checkPersonnel = function(oFormAffectation, oFormOperation){
   }
 }
 
-
-
-
 regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_reveil&date=");
 </script>
 
