@@ -15,7 +15,7 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_addiction_aed" />
         {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
-        <button class="trash notext" type="button" onclick="Addiction.delete(this.form, reloadAntecedentsAnesth)">
+        <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadAntecedentsAnesth)">
         {{tr}}Delete{{/tr}}
         </button>
         {{$curr_addiction->addiction}}

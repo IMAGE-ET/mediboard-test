@@ -45,7 +45,7 @@
         <input type="hidden" name="dosql" value="do_antecedent_aed" />
         <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
         
-        <button class="trash notext" type="button" onclick="Antecedent.delete(this.form, reloadAntecedentsAnesth)">
+        <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadAntecedentsAnesth)">
          {{tr}}delete{{/tr}}
         </button>          
         {{if $curr_antecedent->date}}
@@ -72,7 +72,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     <input type="hidden" name="traitement_id" value="{{$curr_trmt->_id}}" />
-    <button class="trash notext" type="button" onclick="Traitement.delete(this.form, reloadAntecedentsAnesth)">
+    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadAntecedentsAnesth)">
         {{tr}}delete{{/tr}}
     </button>
     {{if $curr_trmt->fin}}
