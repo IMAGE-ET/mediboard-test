@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
-var Addiction = {
-  delete: function(oForm, onComplete) {
+Addiction = {
+  remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'cette addiction',
       ajax: 1,
@@ -36,7 +36,7 @@ var Addiction = {
         <input type="hidden" name="dosql" value="do_addiction_aed" />
         {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
 
-        <button class="trash notext" type="button" onclick="Addiction.delete(this.form, reloadAntecedents)">
+        <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadAntecedents)">
           {{tr}}Delete{{/tr}}        
         </button> 
         
