@@ -43,7 +43,9 @@ function pageMain() {
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.periodicalUpdate('listplages', { frequency: 90 });
   
+  {{if $selOp->operation_id}}
   new Control.Tabs('main_tab_group');
+  {{/if}}
 }
 </script>
 
