@@ -4,12 +4,16 @@
       <table class="tbl">
         <tr>
           <th class="title">
-            Utilisateur : {{$user->_view}} 
-            {{if $profile->_id}}
+          {{if $user->template}}
+            Profil utilisateur
+          {{else}}
+             Utilisateur : {{$user->_view}} 
+             {{if $profile->_id}}
               ({{$profile->user_username}})
-            {{else}}
+             {{else}}
               (Aucun profil)  
-            {{/if}}
+             {{/if}}
+           {{/if}}
           </th>
         </tr>
       </table>

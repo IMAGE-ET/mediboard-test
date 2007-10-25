@@ -1,5 +1,4 @@
 <?php
-$locales['CSpDossier-numdos'] = '';
 $locales['CAffectation._mode_sortie.deces'] = '';
 $locales['CAffectation._mode_sortie.normal'] = '';
 $locales['CAffectation._mode_sortie.transfert'] = '';
@@ -50,6 +49,7 @@ $locales['CPermObject.modify'] = '';
 $locales['CPermObject.more'] = '';
 $locales['CPermObject.none'] = '';
 $locales['CPermObject.one'] = '';
+$locales['CSpDossier-numdos'] = '';
 $locales['CUser'] = 'Users';
 $locales['CUser-back-'] = '';
 $locales['CUser-template'] = '';

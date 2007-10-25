@@ -9,10 +9,10 @@
 <table class="form">
   <tr>
     {{if $user->_id}}
-    <th class="title modify" colspan="4">
+    <th class="title modify" colspan="2">
       Utilisateur : {{$user->_view}}
     {{else}}
-    <th class="title" colspan="4">
+    <th class="title" colspan="2">
       Création d'utilisateur
     {{/if}}
     </th>
@@ -20,59 +20,81 @@
 
 
   <tr>
-    <th class="category" colspan="4">Informations de connexion</th>
+    <th class="category" colspan="2">Informations de connexion</th>
   </tr>
   
   <tr>
     <th>{{mb_label object=$user field="user_username"}}</th>
     <td>{{mb_field tabindex="101" object=$user field="user_username"}}</td>
-    <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
-    <td><input tabindex="110" type="password" name="_user_password" class="str sameAs|_user_password" value="" /></td>
   </tr>
   <tr>
     <th>{{mb_label object=$user field="template"}}</th>
-    <td>{{mb_field tabindex="101" object=$user field="template"}}</td>
-    <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
-    <td><input tabindex="111" type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
+    <td>{{mb_field tabindex="102" object=$user field="template"}}</td>
   </tr>
+  <tr>
+    <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
+    <td><input tabindex="103" type="password" name="_user_password" class="str sameAs|_user_password" value="" /></td>
+  </tr>
+  <tr>
+    <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
+    <td><input tabindex="104" type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
+  </tr>
+
 
   <tr>
     <th class="category" colspan="2">Identité</th>
-    <th class="category" colspan="2">Coordonnées</th>
   </tr>
 
   <tr>
     <th>{{mb_label object=$user field="user_last_name" }}</th>
-    <td>{{mb_field tabindex="102" object=$user field="user_last_name"}}</td>
-    <th>{{mb_label object=$user field="user_address1"}}</th>
-    <td>{{mb_field tabindex="106" object=$user field="user_address1"}}</td>
+    <td>{{mb_field tabindex="105" object=$user field="user_last_name"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$user field="user_first_name"}}</th>
-    <td>{{mb_field tabindex="103" object=$user field="user_first_name"}}</td>
-    <th>{{mb_label object=$user field="user_zip"}}</th>
-    <td>{{mb_field tabindex="107" object=$user field="user_zip"}}</td>
+    <td>{{mb_field tabindex="106" object=$user field="user_first_name"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$user field="user_type"}}</th>
     <td>
-      <select tabindex="104" name="user_type" class="{{$user->_props.user_type}}">
+      <select tabindex="107" name="user_type" class="{{$user->_props.user_type}}">
         {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
         <option value="{{$curr_key}}" {{if $curr_key == $user->user_type}}selected="selected"{{/if}}>{{$type}}</option>
         {{/foreach}}
       </select>
     </td>
-    <th>{{mb_label object=$user field="user_city"}}</th>
-    <td>{{mb_field tabindex="108" object=$user field="user_city" size="20"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$user field="user_email"}}</th>
+    <td>{{mb_field tabindex="108" object=$user field="user_email" size="20"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$user field="user_email"}}</th>
-    <td>{{mb_field tabindex="105" object=$user field="user_email" size="20"}}</td>
+    <th class="category" colspan="2">Coordonnées</th>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$user field="user_address1"}}</th>
+    <td>{{mb_field tabindex="109" object=$user field="user_address1"}}</td>
+  </tr>
+  
+
+  <tr>
+    <th>{{mb_label object=$user field="user_zip"}}</th>
+    <td>{{mb_field tabindex="110" object=$user field="user_zip"}}</td>
+  </tr>
+  
+
+  <tr>
+    <th>{{mb_label object=$user field="user_city"}}</th>
+    <td>{{mb_field tabindex="111" object=$user field="user_city" size="20"}}</td>
+  </tr>
+  
+
+  <tr>
     <th>{{mb_label object=$user field="user_phone"}}</th>
-    <td>{{mb_field tabindex="109" object=$user field="user_phone" size="20"}}</td>
+    <td>{{mb_field tabindex="112" object=$user field="user_phone" size="20"}}</td>
   </tr>
   <tr>
     <td class="button" colspan="4">

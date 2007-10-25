@@ -1,5 +1,4 @@
 <?php
-$locales['CSpDossier-numdos'] = 'Numéro de dossier';
 $locales['CAffectation._mode_sortie.deces'] = 'Décès ';
 $locales['CAffectation._mode_sortie.normal'] = 'Normal';
 $locales['CAffectation._mode_sortie.transfert'] = 'Transfert';
@@ -50,9 +49,10 @@ $locales['CPermObject.modify'] = '';
 $locales['CPermObject.more'] = '';
 $locales['CPermObject.none'] = '';
 $locales['CPermObject.one'] = '';
+$locales['CSpDossier-numdos'] = 'Numéro de dossier';
 $locales['CUser'] = 'Utilisateurs';
 $locales['CUser-back-'] = '';
-$locales['CUser-template'] = 'Modèle';
+$locales['CUser-template'] = 'Profil';
 $locales['CUser-template-court'] = '';
 $locales['CUser-template-desc'] = 'L\'utilisateur est-il utilisé comme modèle';
 $locales['CUser-user_address1'] = 'Adresse';
