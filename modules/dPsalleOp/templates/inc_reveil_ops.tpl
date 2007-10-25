@@ -4,7 +4,7 @@
 var checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
   // si affectation renseignée, on submit les deux formulaires
-  if(if(oFormAffectation) && oFormAffectation.personnel_id.value != ""){
+  if(oFormAffectation && oFormAffectation.personnel_id.value != ""){
     submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} );
   }
   else {
