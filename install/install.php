@@ -36,46 +36,36 @@ class CLibraryPatch {
   }
 }
 
-class CLibraryRenamer {
-  var $sourceDir = "";
-  var $targetDir = "";
-  
-  function apply() {
-    global $mbpath;
-    $libsDir = $mbpath."lib";
-    $sourceDir = "$libsDir/$this->sourceDir";
-    $targetDir = "$libsDir/$this->targetDir";
-    assert(is_dir($sourceDir));
-    return rename($sourceDir, $targetDir);
-  }
-}
-
 class CLibrary {
+  static $all = array();
+  
   var $name = "";
   var $url = "";
   var $fileName = "";
   var $extraDir = "";
   var $description = "";
   var $nbFiles = 0;
-  var $renamer = null;
+  var $sourceDir = null;
+  var $targetDir = null;
   var $patches = array();
   var $lib_ = null;
   
-  function clearLibraries($lib_,$librairies) {
+  function clearLibraries($libSel) {
     global $mbpath;
     $libsDir = $mbpath."lib";
     
-    if($lib_==""){
+    /// Clear out all libraries
+    if (!$libSel){
       foreach (glob("$libsDir/*") as $libDir) {  
-        mbRemovePath($libDir);
+        CMbPath::remove($libDir);
       }
+      return;
     } 
-    else {
-      foreach (glob("$libsDir/*") as $libDir) {
-        if($libDir==$mbpath."lib/".$librairies[$lib_]->renamer->targetDir){
-          mbRemovePath($libDir);  		
-        }
-      }
+
+    // Clear out selected lib
+    $library = self::$all[$libSel];
+    if ($targetDir = $library->targetDir) {
+      CMbPath::remove("$libsDir/$targetDir");
     }
   } 
     
@@ -104,37 +94,36 @@ class CLibrary {
     
     return CMbPath::extract($filePath, $libsDir);
   }
+  
+  function apply() {
+    global $mbpath;
+    $libsDir = $mbpath."lib";
+    $sourceDir = "$libsDir/$this->sourceDir";
+    $targetDir = "$libsDir/$this->targetDir";
+    assert(is_dir($sourceDir));
+    return rename($sourceDir, $targetDir);
+  }
 }
 
 $libSel = mbGetValueFromPost("libSel","");
-
-$libraries = array();
 
 $library = new CLibrary;
 $library->name = "Smarty";
 $library->url = "http://smarty.php.net/";
 $library->fileName = "Smarty-2.6.18.tar.gz";
 $library->description = "Moteur de templates PHP et framework de présentation";
+$library->sourceDir = "Smarty-2.6.18";
+$library->targetDir = "smarty";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "Smarty-2.6.18";
-$renamer->targetDir = "smarty";
-
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JPGraph";
 $library->url = "http://www.aditus.nu/jpgraph/";
 $library->fileName = "jpgraph-2.1.4.tar.gz";
 $library->description = "Composant PHP de génération de graphs aux formats d'image";
-
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "jpgraph-2.1.4";
-$renamer->targetDir = "jpgraph";
-
-$library->renamer = $renamer;
+$library->sourceDir = "jpgraph-2.1.4";
+$library->targetDir = "jpgraph";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "jpgraph";
@@ -143,54 +132,37 @@ $patch->targetDir = "src";
 
 $library->patches[] = $patch;
 
-$libraries[$library->name] = $library;
-
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "FPDF";
 $library->url = "http://www.fpdf.org/";
 $library->fileName = "fpdf153.tgz";
 $library->description = "Composant de génération de fichiers PDF";
+$library->sourceDir = "fpdf153";
+$library->targetDir = "fpdf";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "fpdf153";
-$renamer->targetDir = "fpdf";
-
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
-
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "TCPDF";
 $library->url = "http://sourceforge.net/projects/tcpdf/";
 $library->fileName = "tcpdf_1_53_0_TC034.zip";
 $library->description = "Composant de génération de fichiers PDF avec codes barres";
+$library->sourceDir = "tcpdf";
+$library->targetDir = "tcpdf";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "tcpdf";
-$renamer->targetDir = "tcpdf";
-
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
-
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "PHPMailer";
 $library->url = "http://phpmailer.sourceforge.net/";
 $library->fileName = "phpmailer-1.73.tar.gz";
 $library->description = "Composant PHP d'envoi d'email";
+$library->sourceDir = "phpmailer";
+$library->targetDir = "phpmailer";
 
-
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "phpmailer";
-$renamer->targetDir = "phpmailer";
-
-$library->renamer = $renamer;
-
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JSON-PHP";
@@ -198,15 +170,10 @@ $library->url = "http://mike.teczno.com/json.html";
 $library->fileName = "JSON.tar.gz";
 $library->extraDir = "json";
 $library->description = "Composant PHP de genération de données JSON. Bientôt en package PEAR";
+$library->sourceDir = "json";
+$library->targetDir = "json";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "json";
-$renamer->targetDir = "json";
-
-$library->renamer = $renamer;
-
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 
@@ -218,15 +185,12 @@ $library->fileName = "scriptaculous-js-1.6.0.tar.gz";
 
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
 
-$renamer = new CLibraryRenamer;
-//$renamer->sourceDir = "scriptaculous-js-1.7.1_beta3";
-//$renamer->sourceDir = "scriptaculous-js-1.7.0";
-$renamer->sourceDir = "scriptaculous-js-1.6.0";
-$renamer->targetDir = "scriptaculous";
+//$library->sourceDir = "scriptaculous-js-1.7.1_beta3";
+//$library->sourceDir = "scriptaculous-js-1.7.0";
+$library->sourceDir = "scriptaculous-js-1.6.0";
+$library->targetDir = "scriptaculous";
 
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 
@@ -234,36 +198,28 @@ $library->name = "Open Rico";
 $library->url = "http://openrico.org/";
 $library->fileName = "Rico-1.1.2.tar.gz";
 $library->description = "Composant Javascript d'effets spéciaux, utilisant le framework prototype.js";
+$library->sourceDir = "Rico-1.1.2";
+$library->targetDir = "rico";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "Rico-1.1.2";
-$renamer->targetDir = "rico";
-
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "JSCalendar";
 $library->url = "http://www.dynarch.com/projects/calendar/";
 $library->fileName = "jscalendar-1.0.zip";
 $library->description = "Composant Javascript de sélecteur de date/heure";
+$library->sourceDir = "jscalendar-1.0";
+$library->targetDir = "jscalendar";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "jscalendar-1.0";
-$renamer->targetDir = "jscalendar";
-
-$library->renamer = $renamer;
 
 $patch = new CLibraryPatch;
 $patch->dirName = "jscalendar";
 $patch->sourceName = "calendar-fr.js";
 $patch->targetDir = "lang";
 
-
 $library->patches[] = $patch;
 
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "phpThumb";
@@ -271,13 +227,8 @@ $library->url = "http://phpthumb.sourceforge.net/";
 $library->fileName = "phpThumb_1.7.5.zip";
 $library->description = "Composant de création de thumbnails";
 $library->extraDir = "phpThumb";
-
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "phpThumb";
-$renamer->targetDir = "phpThumb";
-
-$library->renamer = $renamer;
-
+$library->sourceDir = "phpThumb";
+$library->targetDir = "phpThumb";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "phpThumb";
@@ -286,19 +237,15 @@ $patch->targetDir = "";
 
 $library->patches[] = $patch;
 
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
 $library->fileName = "FCKeditor_2.3.2.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
-
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "FCKeditor";
-$renamer->targetDir = "fckeditor";
-
-$library->renamer = $renamer;
+$library->sourceDir = "FCKeditor";
+$library->targetDir = "fckeditor";
 
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
@@ -323,36 +270,27 @@ $patch->targetDir = "editor/css";
 
 $library->patches[] = $patch;
 
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "Dojo";
 $library->url = "http://www.dojotoolkit.org/";
 $library->fileName = "dojo-0.4.1-storage.tar.gz";
 $library->description = "Composant Javascript de sauvegarde de données";
+$library->sourceDir = "dojo-0.4.1-storage";
+$library->targetDir = "dojo";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "dojo-0.4.1-storage";
-$renamer->targetDir = "dojo";
-
-$library->renamer = $renamer;
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
 $library->name = "Livepipe control suite";
 $library->url = "http://livepipe.net/projects/control_suite/";
 $library->fileName = "control_suite.tar.gz";
 $library->description = "Six widgets de controle";
+$library->sourceDir = "control_suite";
+$library->targetDir = "control_suite";
 
-$renamer = new CLibraryRenamer;
-$renamer->sourceDir = "control_suite";
-$renamer->targetDir = "control_suite";
-
-$library->renamer = $renamer;
-
-
-$libraries[$library->name] = $library;
+CLibrary::$all[$library->name] = $library;
 
 ?>
 
@@ -380,7 +318,7 @@ $libraries[$library->name] = $library;
     <td class="button">
       <select name="libSel">
         <option value="">Toutes les bibliothèques</option>     
-        <?php foreach($libraries as $library) { ?>
+        <?php foreach(CLibrary::$all as $library) { ?>
         <option value="<?php echo $library->name ?>"><?php echo $library->name ?></option>
         <?php } ?>
       </select>
@@ -402,7 +340,7 @@ $libraries[$library->name] = $library;
 <?php 
 
  if (@$_POST["do"]) {
-  CLibrary::clearLibraries($libSel,$libraries);
+  CLibrary::clearLibraries($libSel);
 
 ?>
 
@@ -417,7 +355,7 @@ $libraries[$library->name] = $library;
   <th>Installation</th>
 </tr>
 
-<?php foreach($libraries as $library) { 
+<?php foreach(CLibrary::$all as $library) { 
         if($libSel == $library->name || $libSel == "") {
 
 ?>
@@ -438,31 +376,19 @@ $libraries[$library->name] = $library;
   </td>
 </tr>
 
-<?php if ($renamer = $library->renamer) { ?>
+<?php if ($library->sourceDir != $library->targetDir) { ?>
 <tr>
   <td />
   
 
-  <?php 
-  
-  if($renamer->sourceDir != $renamer->targetDir) {
-    echo "<td colspan='3'>";
-    echo "Renommage de la bibliothèque $renamer->sourceDir en $renamer->targetDir";
-    echo "</td>";
-  }
-  
-  ?>
+  <td colspan='3'>
+	  Renommage de la bibliothèque '<?php echo $library->sourceDir; ?>'
+	  en '<?php echo $library->targetDir; ?>'
+  </td>
   
   <td>
-    <?php if ($renamer->apply()) { ?>
-    <?php 
-
-    if($renamer->sourceDir != $renamer->targetDir) { 
-      echo "<div class='message'>Renommage effectué</div>";
-    }
-
-    ?>
-      
+    <?php if ($library->apply()) { ?>
+		<div class='message'>Renommage effectué</div>
     <?php } else { ?>
     <div class="<?php echo $prereq->mandatory ? "error" : "warning"; ?>">Erreur</div>
     <?php } ?>
