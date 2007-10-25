@@ -345,6 +345,13 @@ $library->url = "http://livepipe.net/projects/control_suite/";
 $library->fileName = "control_suite.tar.gz";
 $library->description = "Six widgets de controle";
 
+$renamer = new CLibraryRenamer;
+$renamer->sourceDir = "control_suite";
+$renamer->targetDir = "control_suite";
+
+$library->renamer = $renamer;
+
+
 $libraries[$library->name] = $library;
 
 ?>
