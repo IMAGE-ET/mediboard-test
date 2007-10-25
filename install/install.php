@@ -284,7 +284,7 @@ $library = new CLibrary;
 $library->name = "Livepipe control suite";
 $library->url = "http://livepipe.net/projects/control_suite/";
 $library->fileName = "control_suite.tar.gz";
-$library->description = "Six widgets de controle";
+$library->description = "Six widgets de controle, utilisant le framework prototype.js";
 $library->sourceDir = "control_suite";
 $library->targetDir = "control_suite";
 
