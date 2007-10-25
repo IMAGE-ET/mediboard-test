@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-var Prescriptions = {
+Prescriptions = {
   collapse: function() {
     Element.hide.apply(null, $$("tbody.prescriptionEffect"));
   },

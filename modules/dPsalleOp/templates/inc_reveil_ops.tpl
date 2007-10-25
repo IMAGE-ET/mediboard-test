@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 // faire le submit de formOperation dans le onComplete de l'ajax
-var checkPersonnel = function(oFormAffectation, oFormOperation){
+checkPersonnel = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = 'current';
   // si affectation renseignée, on submit les deux formulaires
   if(oFormAffectation && oFormAffectation.personnel_id.value != ""){

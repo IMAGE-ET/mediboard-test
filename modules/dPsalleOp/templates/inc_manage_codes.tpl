@@ -76,8 +76,8 @@
 {{if $ajax}}
 <script type="text/javascript">
 
-var oForm = document.manageCodes;
-prepareForm(oForm);
+oCodesManagerForm = document.manageCodes;
+prepareForm(oCodesManagerForm);
 
 </script>
 {{/if}}

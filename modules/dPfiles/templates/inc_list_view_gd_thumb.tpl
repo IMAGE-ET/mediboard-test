@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-var File = { 
+File = { 
   view: function (objectClass, objectId, elementClass, elementId, sfn) {
     file_preview = elementId;
     var url = new Url;
@@ -121,13 +121,13 @@ var File = {
 </div>
 <script language="Javascript" type="text/javascript">
 {{if $accordDossier}}
-var oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClass}}{{$selKey}}'), {
+oAccord{{$selClass}}{{$selKey}} = new Rico.Accordion( $('accordion{{$selClass}}{{$selKey}}'), {
   panelHeight: ViewPort.SetAccordHeight('accordion{{$selClass}}{{$selKey}}'),
   showDelay:50,
   showSteps:3
 });
 {{else}}
-var oAccord = new Rico.Accordion( $('accordionConsult'), {
+oAccord = new Rico.Accordion( $('accordionConsult'), {
   panelHeight: ViewPort.SetAccordHeight('accordionConsult',{ iBottomMargin : 12 } ),
   onShowTab: storeKeyCat,
   showDelay:50,

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-var oResponse = {
+oResponse = {
   "oAffectations"  : {{$aAffectation|@json}},
   "oSejours"       : {{$aSejours|@json}},
   "oPatients"      : {{$aPatients|@json}},

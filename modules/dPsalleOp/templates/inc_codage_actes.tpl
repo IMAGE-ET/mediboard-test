@@ -151,8 +151,8 @@
   {{if $ajax}}
   
   <script type="text/javascript">
-    var oElement = $('acte{{$key}}');
-    var oForm = getBoundingForm(oElement);
+    oElement = $('acte{{$key}}');
+    oForm = getBoundingForm(oElement);
     prepareForm(oForm);
   </script>
   

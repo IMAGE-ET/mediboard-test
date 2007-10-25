@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-var Antecedent = {
+Antecedent = {
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'cet antécédent',
@@ -16,7 +16,7 @@ var Antecedent = {
   }
 }
 
-var Traitement = {
+Traitement = {
   remove: function(oForm, onComplete) {
     var oOptions = {
       typeName: 'ce traitement',

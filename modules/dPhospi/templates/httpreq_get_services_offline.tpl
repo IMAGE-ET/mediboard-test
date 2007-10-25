@@ -1,5 +1,5 @@
 <script type="text/javascript">
-var oResponse = {
+oResponse = {
   "oEtablissements"  : {{$etablissements|@json}},
   "oServices"        : {{$services|@json}}
 };

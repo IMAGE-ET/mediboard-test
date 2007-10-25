@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
-var listCat = {{$listCat|@json}};
+listCat = {{$listCat|@json}};
 
-var reloadIcone = function(icone){
+reloadIcone = function(icone){
   $('iconeBackground').src = "./modules/dPcabinet/categories/"+listCat[icone];
 }
 

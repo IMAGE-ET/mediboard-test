@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-var CMU = {
+CMU = {
   del: function() {
     oForm = document.editFrm;
     oForm.cmu.value = "";
@@ -15,7 +15,7 @@ var CMU = {
   }
 }
 
-var Medecin = {
+Medecin = {
   pop : function(type) {
     var url = new Url();
     url.setModuleAction("dPpatients", "vw_medecins");

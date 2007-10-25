@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 
-var codageCCAM = function(operation_id){
+codageCCAM = function(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_codage_actes_reveil");
   url.addParam("operation_id", operation_id);
@@ -9,7 +9,7 @@ var codageCCAM = function(operation_id){
 }
 
 
-var submitReveil = function(oFormAffectation, oFormOperation){
+submitReveil = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = '';
   // s'il y a une affectation, on submit les deux formulaires
   if(oFormAffectation.affect_id.value != ""){

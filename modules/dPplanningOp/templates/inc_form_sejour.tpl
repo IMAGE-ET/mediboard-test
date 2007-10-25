@@ -474,8 +474,8 @@ function checkChambre(){
 <script type="text/javascript">
 // Explicit form preparation for Ajax loading
 prepareForm(document.editSejour);
-var datesOperations = {{$sejour->_dates_operations|@json}};
-var dates = {
+datesOperations = {{$sejour->_dates_operations|@json}};
+dates = {
   current: {
     start: "{{$sejour->_date_entree_prevue}}",
     stop: "{{$sejour->_date_sortie_prevue}}",
