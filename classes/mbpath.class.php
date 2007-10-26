@@ -33,10 +33,6 @@ class CMbPath {
     return false;
   }
   
-  function remove($dir) {
-    return mbRemovePath($dir);
-  }
-  
   /**
    * @returns true if directory is empty
    */
@@ -135,6 +131,44 @@ class CMbPath {
     
     return $nbFiles;
   }
+  
+	/**
+	 * Clears out any file or sub-directory from target path
+	 * @return boolean jobdone-value */
+	function emptyDir($dir) {
+	  if (!($dir = dir($dir))) {
+	    return false;
+	  }
+	  
+	  while (false !== $item = $dir->read()) {
+	    if ($item != '.' && $item != '..' && !CMbPath::remove($dir->path . DIRECTORY_SEPARATOR . $item)) {
+	      $dir->close();
+	      return false;
+	    }
+	  }
+	  
+	  $dir->close();
+	  return true;
+	}
+	
+	/**
+	 * Recursively removes target path
+	 * @return boolean jobdone-value */
+	function remove($path) {
+	  if (!$path) {
+	    trigger_error("Path undefined", E_USER_WARNING);
+	  }
+	  
+	  if (is_dir ($path)) {
+	    if (CMbPath::emptyDir($path)) {
+	      return rmdir ($path);
+	    }
+	    return false;
+	  }
+	  
+	  return unlink($path);
+	}
+  
 }
 
 ?>

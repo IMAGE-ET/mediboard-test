@@ -671,45 +671,6 @@ function mbArrayCreateRange($min, $max, $cleasvalue = false, $step = 1){
 }
 
 /**
- * Ensures a directory path exists. Creates it if needed.
- * @return boolean jobdone-value */
-function mbForceDirectory($dir, $mode = 0755) {
-  if (!$dir) {
-    return false;
-  }
-  
-  if (is_dir($dir) || $dir === "/") {
-    return true;
-  }
-  
-  if (mbForceDirectory(dirname($dir))){
-    return mkdir($dir, $mode);
-  }
-  
-  return false;
-}
-
-
-/**
- * Clears out any file or sub-directory from target path
- * @return boolean jobdone-value */
-function mbClearPath($dir) {
-  if (!($dir = dir($dir))) {
-    return false;
-  }
-  
-  while (false !== $item = $dir->read()) {
-    if ($item != '.' && $item != '..' && !mbRemovePath($dir->path . DIRECTORY_SEPARATOR . $item)) {
-      $dir->close();
-      return false;
-    }
-  }
-  
-  $dir->close();
-  return true;
-}
-
-/**
  * Recursively removes target path
  * @return boolean jobdone-value */
 function mbGetFileExtension($path) {
@@ -719,19 +680,6 @@ function mbGetFileExtension($path) {
   }
   
   return $fragments[count($fragments) - 1];
-}
-
-/**
- * Recursively removes target path
- * @return boolean jobdone-value */
-function mbRemovePath($dir) {
-  if (is_dir ($dir)) {
-    if (mbClearPath($dir)) {
-      return rmdir ($dir);
-    }
-    return false;
-  }
-  return unlink ($dir);
 }
 
 /**

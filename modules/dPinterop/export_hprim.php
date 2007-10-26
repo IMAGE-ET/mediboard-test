@@ -65,7 +65,7 @@ $sent_files = mbGetValueFromGet("sent_files");
 // Connexion FTP
 if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Compte le nombre de fichiers déjà générés
-  mbForceDirectory($doc->finalpath);
+  CMbPath::forceDir($doc->finalpath);
   $count = 0;
   $dir = dir($doc->finalpath);
   while (false !== ($entry = $dir->read())) {

@@ -122,7 +122,7 @@ function setClose(date) {
             <input type="radio" name="admission" value="aucune"{{if $operation_id}} checked="checked"{{/if}} />
           </td>
           <td>
-            <label for="admission_jour">Ne pas modifier</label>
+            <label for="admission_aucune">Ne pas modifier</label>
           </td>
         </tr>
         <tr>

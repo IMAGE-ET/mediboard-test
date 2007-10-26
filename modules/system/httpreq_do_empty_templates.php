@@ -15,11 +15,11 @@ $i = 0;
 
 foreach(glob("modules/*/templates_c/*.tpl.php") as $tplPath) {
   $i++;
-  mbRemovePath($tplPath);
+  CMbPath::remove($tplPath);
 }
 foreach(glob("style/*/templates_c/*.tpl.php") as $tplPath) {
   $i++;
-  mbRemovePath($tplPath);
+  CMbPath::remove($tplPath);
 }
 
 echo "<div class='message'>$i fichiers de cache supprimés</div>";

@@ -33,7 +33,7 @@ function saveSortie(oFormSortie, oFormAffectation){
     <td colspan="3">
       <table width="100%">
         <tr>
-          <td>
+          <td class="halfPane">
             <table class="tbl">
               <tr>
                 <th class="title" colspan="6">
@@ -108,7 +108,7 @@ function saveSortie(oFormSortie, oFormAffectation){
               {{/foreach}}
             </table>
           </td>
-          <td>
+          <td class="halfPane">
             <table class="tbl">
               <tr>
                 <th class="title" colspan="5">

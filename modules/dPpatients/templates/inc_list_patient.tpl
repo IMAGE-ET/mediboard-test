@@ -8,6 +8,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.addParam("useVitale", 1);
   url.redirect();
 }
+
 </script>
 
 <form name="find" action="?" method="get">

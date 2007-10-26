@@ -72,7 +72,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
   
   function saveFinalFile() {
     $this->documentfinalfilename = "$this->finalpath/$this->documentfinalprefix-$this->now.xml";
-    mbForceDirectory(dirname($this->documentfinalfilename));
+    CMbPath::forceDir(dirname($this->documentfinalfilename));
     parent::save($this->documentfinalfilename);
   }
   
