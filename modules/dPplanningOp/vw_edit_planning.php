@@ -98,6 +98,8 @@ if ($operation_id && $op->load($operation_id)) {
 }
 
 $sejour->makeDatesOperations();
+// Chargement du numero de dossier du sejour
+$sejour->loadNumDossier();
 
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;

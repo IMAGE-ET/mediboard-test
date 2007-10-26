@@ -38,6 +38,8 @@ if($sejour_id) {
 }
 
 $sejour->makeDatesOperations();
+$sejour->loadNumDossier();
+
 
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;

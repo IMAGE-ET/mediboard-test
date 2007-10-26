@@ -179,7 +179,9 @@ function reloadSejour(sejour_id) {
   if(document.editOp) {
     sejoursUrl.addParam("mode_operation", 1);
   }
-  sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null });
+  sejoursUrl.requestUpdate('inc_form_sejour', { waitingText : null ,
+	onComplete: initPuces
+  } );
 }
 
 function changePat() {

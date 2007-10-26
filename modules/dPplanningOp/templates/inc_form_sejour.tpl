@@ -106,7 +106,7 @@ function checkChambre(){
       <img src="images/icons/edit.png" alt="modifier" />
      </a>
     {{/if}}
-    {{tr}}msg-CSejour-informations{{/tr}}
+    {{tr}}msg-CSejour-informations{{/tr}} {{if $mode_operation && $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
   </th>
 </tr>
 
@@ -159,7 +159,7 @@ function checkChambre(){
     <select name="praticien_id" onchange="modifPrat()" class="{{$sejour->_props.praticien_id}}">
       <option value="">&mdash; Choisir un praticien</option>
       {{foreach from=$listPraticiens item=curr_praticien}}
-      <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $praticien->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
+      <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $sejour->praticien_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
         {{$curr_praticien->_view}}
       </option>
       {{/foreach}}
