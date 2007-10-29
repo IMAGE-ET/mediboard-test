@@ -52,7 +52,9 @@ function pageMain() {
     <tr>
       {{assign var="message_id" value=$curr_message->message_id}}
       {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
-      <td><strong><a href="{{$href}}">{{$curr_message->titre}}</a></strong></td>
+      <td {{if $curr_message->urgence == "urgent"}}class="highlight"{{/if}}>
+        <strong><a href="{{$href}}">{{$curr_message->titre}}</a></strong>
+      </td>
       <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}}</a></td>
       <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}}</a></td>
     </tr>
@@ -89,33 +91,28 @@ function pageMain() {
     </tr>
 
     <tr>
-      <th><label for="deb" title="Date de début de la publication, obligatoire">Début de publication</label></th>
-      <td class="date">
-        <div id="editFrm_deb_da">{{$message->deb|date_format:"%d/%m/%Y %H:%M"}}</div>
-        <input type="hidden" name="deb" class="{{$message->_props.deb}}" value="{{$message->deb}}" />
-        <img id="editFrm_deb_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début"/>
-      </td>
+      <th>{{mb_label object=$message field="deb"}}</th>
+      <td class="date">{{mb_field object=$message field="deb" form="editFrm"}}</td>
     </tr>
 
     <tr>
-      <th><label for="fin" title="Date de fin de la publication, obligatoire">Début de fin</label></th>
-      <td class="date">
-        <div id="editFrm_fin_da">{{$message->fin|date_format:"%d/%m/%Y %H:%M"}}</div>
-        <input type="hidden" name="fin" class="{{$message->_props.fin}}" value="{{$message->fin}}" />
-        <img id="editFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin"/>
-      </td>
+      <th>{{mb_label object=$message field="fin"}}</th>
+      <td class="date">{{mb_field object=$message field="fin" form="editFrm"}}</td>
     </tr>
 
     <tr>
-      <th><label for="titre" title="Titre du message, obligatoire.">Titre</label></th>
-      <td><input type="text" name="titre" class="{{$message->_props.titre}}" value="{{$message->titre}}" /></td>
+      <th>{{mb_label object=$message field="urgence"}}</th>
+      <td class="date">{{mb_field object=$message field="urgence"}}</td>
     </tr>
 
     <tr>
-      <th><label for="corps" title="Corps du message, obligatoire.">Corps</label></th>
-      <td>
-        <textarea style="width: 200px" rows="4" name="corps" class="{{$message->_props.corps}}">{{$message->corps}}</textarea>
-      </td>
+      <th>{{mb_label object=$message field="titre"}}</th>
+      <td>{{mb_field object=$message field="titre"}}</td>
+    </tr>
+
+    <tr>
+      <th>{{mb_label object=$message field="corps"}}</th>
+      <td>{{mb_field object=$message field="corps"}}</td>
     </tr>
 
     <tr>

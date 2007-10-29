@@ -4,7 +4,9 @@
 
 {{if !$offline}}
 {{foreach from=$messages item=currMsg}}
-  <div style='background: #aaa; color: #fff;'><strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}</div>
+  <div style='{{if $currMsg->urgence == "urgent"}}background: #eee; color: #f00;{{else}}background: #aaa; color: #fff;{{/if}}'>
+    <strong>{{$currMsg->titre}}</strong> : {{$currMsg->corps}}
+  </div>
 {{/foreach}}
 {{/if}}
 

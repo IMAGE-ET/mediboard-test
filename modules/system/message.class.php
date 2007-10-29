@@ -25,10 +25,11 @@ class CMessage extends CMbObject {
 	var $message_id = null;	
   
   // DB Fields
-  var $deb   = null;
-  var $fin   = null;
-  var $titre = null;
-  var $corps = null;
+  var $deb     = null;
+  var $fin     = null;
+  var $titre   = null;
+  var $corps   = null;
+  var $urgence = null;
   
 	function CMessage() {
 		$this->CMbObject("message", "message_id");
@@ -41,7 +42,8 @@ class CMessage extends CMbObject {
       "deb"   => "notNull dateTime",
       "fin"   => "notNull dateTime",
       "titre" => "notNull str maxLength|40",
-      "corps" => "text"
+      "corps" => "text",
+      "urgence" => "notNull enum list|normal|urgent default|normal"
     );
   }
 
