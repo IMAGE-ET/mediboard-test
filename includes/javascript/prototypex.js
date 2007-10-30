@@ -61,7 +61,7 @@ Element.extend = function(element) {
   if (!element) return;
   
   // The Hack line
-  if (element.nodeType == 3) return element; 
+  //if (element.nodeType == 3) return element; 
   
   if (!element._extended && element.tagName && element != window) {
     var methods = Element.Methods;
