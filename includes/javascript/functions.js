@@ -158,7 +158,7 @@ var SystemMessage = {
       
     // Ensure visible        
     oDiv.show();
-    oDiv.setOpacity(1);
+    //oDiv.setOpacity(1);
     
     // Only hide on type 'message'
     if (!this.autohide) {
