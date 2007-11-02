@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.77";
+$config["mod_version"]     = "0.78";
 $config["mod_type"]        = "user";
 
 
@@ -763,10 +763,53 @@ class CSetupdPcabinet extends CSetup {
     
     $this->makeRevision("0.76");
     $sql = "ALTER TABLE `consultation`
-            ADD `categorie_id` INT(11) UNSIGNED;";
+      ADD `categorie_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.77";
+    $this->makeRevision("0.77");
+    // Tranfert des addictions tabac vers la consultation d'anesthésie
+    $sql = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
+			SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'tabac', `tabac` 
+			FROM `consultation_anesth` 
+			WHERE `tabac` IS NOT NULL
+			AND `tabac` <> ''";
+    $this->addQuery($sql);
+
+    // Tranfert des addictions tabac vers le dossier patient
+    $sql = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
+			SELECT null,`patient_id`, 'CPatient', 'tabac', `tabac`
+			FROM `consultation_anesth`, `consultation`
+			WHERE `tabac` IS NOT NULL
+			AND `tabac` <> ''
+			AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
+    $this->addQuery($sql);
+
+    // Tranfert des addictions oenolisme vers la consultation d'anesthésie
+    $sql = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
+			SELECT null,`consultation_anesth_id`, 'CConsultAnesth', 'oenolisme', `oenolisme` 
+			FROM `consultation_anesth` 
+			WHERE `oenolisme` IS NOT NULL
+			AND `oenolisme` <> ''";
+    $this->addQuery($sql);
+
+    // Tranfert des addictions oenolisme vers le dossier patient
+    $sql = "INSERT INTO `addiction` ( `addiction_id` , `object_id` , `object_class` , `type` , `addiction` )
+			SELECT null,`patient_id`, 'CPatient', 'oenolisme', `oenolisme`
+			FROM `consultation_anesth`, `consultation`
+			WHERE `oenolisme` IS NOT NULL
+			AND `oenolisme` <> ''
+			AND `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id`";
+    $this->addQuery($sql);
+
+    // Transfert des aides à la saisie
+    $this->addDependency("dPcompteRendu", "0.31");
+    $sql = "UPDATE `aide_saisie`
+			SET `class`='CAddiction',`depend_value`=`field`, `field`='addiction'
+			WHERE `class` = 'CConsultAnesth'
+			AND `field` IN('oenolisme','tabac')";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.78";
   }
 }
 ?>
