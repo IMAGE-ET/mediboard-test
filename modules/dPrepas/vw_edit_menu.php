@@ -88,7 +88,7 @@ if($typeVue == 2){
     $listMenus[$key]->loadRefsFwd();
   }
   
-  $listRepeat = mbArrayCreateRange(1,5, true);
+  $listRepeat = CMbArray::createRange(1,5, true);
   $typePlats = new CPlat;
   
   $smarty->assign("typePlats"    , $typePlats);

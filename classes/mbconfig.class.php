@@ -42,7 +42,7 @@ class CMbConfig {
   }
 
   function load() {
-    $this->values = mbArrayMergeRecursive(
+    $this->values = CMbArray::mergeRecursive(
       $this->loadValuesFromPath($this->sourcePath),
       $this->loadValuesFromPath($this->targetPath));
     
@@ -55,7 +55,7 @@ class CMbConfig {
   function update($newValues = array(), $keepOld = true) {
     if ($keepOld) {
       $this->load();
-      $newValues = mbArrayMergeRecursive($this->values, $newValues);
+      $newValues = CMbArray::mergeRecursive($this->values, $newValues);
     }
     
     if (!count($newValues)) {

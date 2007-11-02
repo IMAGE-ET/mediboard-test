@@ -184,6 +184,22 @@ class CMouvement400 extends CRecordSante400 {
     $rec->query($query, $values);
   }
   
+  /**
+   * Initialisation du status à zéro si non existant
+   * @param int $rank
+   * @param int $value valeur à mettre, incrémente le rang si null 
+   */
+  function setStatus($rank) {
+    if (null === @$this->statuses[$rank]) {
+      $this->statuses[$rank] = 0;
+    }
+  }
+  
+  /**
+   * Changement de status sur un rang à une valeur donnée
+   * @param int $rank
+   * @param int $value valeur à mettre, incrémente le rang si null 
+   */
   function markStatus($rank, $value = null) {
     $this->statuses[$rank] = null === $value ? @$this->statuses[$rank] + 1 : $value;
   }
@@ -193,6 +209,11 @@ class CMouvement400 extends CRecordSante400 {
     $this->cached[$rank] = null === $value ? @$this->cached[$rank] + 1 : $value;
   }
 
+  /**
+   * Trace value with given title
+   * @param mixed $value
+   * @param string title
+   */
   function trace($value, $title) {
     if (self::$verbose) {
       mbTrace($value, $title);

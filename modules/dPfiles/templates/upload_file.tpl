@@ -24,7 +24,7 @@ if (window.opener.reloadAfterUploadFile) {
   </tr>
   <tr>
     <td class="button" colspan="4">
-      {{tr}}msg-CFile-maxsize{{/tr}} : {{$upload_max_size}}<br />
+      {{tr}}msg-CFile-maxsize{{/tr}} : {{$dPconfig.dPfiles.upload_max_filesize}}<br />
     </td>
   </tr>
   

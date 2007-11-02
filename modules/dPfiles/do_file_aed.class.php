@@ -36,14 +36,13 @@ class CFileAddEdit extends CDoObjectAddEdit {
   function doStore() {
     global $AppUI,$_POST;
     $upload     = null;
-    $multifiles = false;    
-    $msgs       = array("file_ok"=>0, "file_size_error"=>0, "file_upload_error"=>0);
+    $multifiles = false;
 
-    if(isset($_FILES["formfile"])){
+    if (isset($_FILES["formfile"])) {
       $aFiles = array();
       $upload =& $_FILES["formfile"];
       $_file_category_id = mbGetValueFromPost("_file_category_id");
-      if(is_array($upload["name"])){
+      if (is_array($upload["name"])) {
         // Plusieurs fichiers
         $multifiles = true;
         foreach($upload["error"] as $fileNumber=>$etatFile){
@@ -57,56 +56,62 @@ class CFileAddEdit extends CDoObjectAddEdit {
                             "object_id"   => $_POST["object_id"],
                             "object_class"       => $_POST["object_class"],);
         }
-      }else{
+      }
+      else{
         // 1 seul fichier
         $aFiles[] = $upload;
       }
       
-      foreach($aFiles as $file){
-        if($file["error"] == 0){
-          if($multifiles){
-            $this->_obj = new $this->_obj->_class_name;
-          }
-          $this->_obj->bind($file);
-          $this->_obj->file_name = $file["name"];
-          $this->_obj->file_type = $file["type"];
-          $this->_obj->file_size = $file["size"];
-          $this->_obj->file_date = unix2dateTime(time());
-          $this->_obj->file_real_filename = uniqid(rand());
-            
-          $res = $this->_obj->moveTemp($file); 
-          if(!$res){
-            $msgs["file_upload_error"]++;
-          }else{
-            if (!$this->_obj->file_id) {
-              $this->_obj->file_owner = $AppUI->user_id;
-            }
-            if ($msg = $this->_obj->store()) {
-              $msgs["file_upload_error"]++;
-            }else{
-              $msgs["file_ok"]++;
-            }
-          }
-        }elseif($file["error"] <=3){
-          $msgs["file_size_error"] ++;
+      foreach ($aFiles as $file) {
+        if ($file["error"] == UPLOAD_ERR_NO_FILE) {
+          continue;
         }
-      }
-      // Redaction du message et renvoi
-      $header = array();
-      if($msgs["file_ok"]){           $header[] = $msgs["file_ok"]." fichier(s) uploadé(s)";}
-      if($msgs["file_upload_error"]){ $header[] = $msgs["file_upload_error"]. " fichier(s) non envoyé(s)";}
-      if($msgs["file_size_error"]){   $header[] = $msgs["file_size_error"] . " fichier(s) trop volumineux";}
-      $msgNo = ($msgs["file_upload_error"] + $msgs["file_size_error"]) ? UI_MSG_ERROR : UI_MSG_OK;
-      $complete_msg = implode(" - ", $header);
-      $AppUI->setMsg($complete_msg, $msgNo);
+        
+        if ($file["error"] != 0) {
+          $AppUI->setMsg($AppUI->_("msg-CFile-upload-error-". $file["error"]), UI_MSG_ERROR);
+          continue;
+        }
+        
+        // Reinstanciate
+        if ($multifiles){
+          $this->_obj = new $this->_obj->_class_name;
+        }
+        
+        $this->_obj->bind($file);
+        $this->_obj->file_name = $file["name"];
+        $this->_obj->file_type = $file["type"];
+        $this->_obj->file_size = $file["size"];
+        $this->_obj->file_date = mbDateTime();
+        $this->_obj->file_real_filename = uniqid(rand());
+            
+        if (false == $res = $this->_obj->moveTemp($file)) {
+          $AppUI->setMsg("Fichier non envoyé", UI_MSG_ERROR);
+          continue;
+        } 
 
-      if ($msgs["file_ok"] && $this->redirectStore) {
+        // File owner on creation
+        if (!$this->_obj->file_id) {
+          $this->_obj->file_owner = $AppUI->user_id;
+        }
+
+        if ($msg = $this->_obj->store()) {
+          $AppUI->setMsg("Fichier non enregistré", UI_MSG_ERROR);
+          continue;
+        }
+
+        $AppUI->setMsg("Fichier enregistré", UI_MSG_OK);
+      }
+      
+      // Redaction du message et renvoi
+      if (@count($AppUI->messages[UI_MSG_OK]) && $this->redirectStore) {
         $this->redirect =& $this->redirectStore;
       }
-      if (!$msgs["file_ok"] && ($msgs["file_upload_error"] || $msgs["file_size_error"]) && $this->redirectError) {
+      
+      if (!@count($AppUI->messages[UI_MSG_OK]) && $this->redirectError) {
         $this->redirect =& $this->redirectError;
       }
-    }else{
+    }
+    else {
       parent::doStore();
     }
   }  

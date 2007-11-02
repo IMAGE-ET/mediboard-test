@@ -30,12 +30,12 @@ if($fct_selected && is_array($fct_selected)){
      unset($listPrat[$keyPrat]);
    } 
   }
-  $list_10 = mbArrayCreateRange(0,10, true);
+  $list_10 = CMbArray::createRange(0,10, true);
 }else{
-  $list_10 = mbArrayCreateRange(1,10, true);
+  $list_10 = CMbArray::createRange(1,10, true);
 }
 
-$list_50 = mbArrayCreateRange(1,50, true);
+$list_50 = CMbArray::createRange(1,50, true);
 
 // Création du template
 $smarty = new CSmartyDP();

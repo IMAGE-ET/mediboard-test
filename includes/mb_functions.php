@@ -389,30 +389,6 @@ function mbEcartType($array) {
   }
 }
 
-/**
- * 
- */
- 
-function array_neighbor($arr, $key){
-  $keys = array_keys($arr);
-  $keyIndexes = array_flip($keys);
-  
-  $return = array();
-  if (isset($keys[$keyIndexes[$key]-1])) {
-    $return["prev"] = $keys[$keyIndexes[$key]-1];
-  }else{
-    $return["prev"] = null;
-  }
-  
-  if(isset($keys[$keyIndexes[$key]+1])) {
-    $return["next"] = $keys[$keyIndexes[$key]+1];
-  }else{
-    $return["next"] = null;
-  }
-  
-  return $return;
-}
-
 if (!function_exists('array_diff_key')) {
   function array_diff_key() {
     $argCount  = func_num_args();
@@ -623,63 +599,6 @@ function mbRemoveAccents( $str ) {
   return strtr($str,
     "()!$'?: ,&+-/.ŠŒŽšœžŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏÐÑÒÓÔÕÖØÙÚÛÜÝßàáâãäåæçèéêëìíîïðñòóôõöøùúûüýÿ",
     "--------------SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
-}
-
-/**
- * Remove values in an array
- * @return void */
-function mbRemoveValuesInArray($needle, &$haystack) {
-  while(($key = array_search($needle,  $haystack)) !== false) {
-    unset($haystack[$key]);
-  }
-}
-
-function mbArrayMergeRecursive($paArray1, $paArray2) {
-  if (!is_array($paArray1) or !is_array($paArray2)) { 
-     return $paArray2;
-  }
-
-  foreach ($paArray2 AS $sKey2 => $sValue2) {
-    $paArray1[$sKey2] = mbArrayMergeRecursive(@$paArray1[$sKey2], $sValue2);
-  }
-   
-  return $paArray1;
-}
-
-function mbArrayFromString($str) {
-  $array = array();
-  for ($i = 0; $i < strlen($str); $i++) {
-    $array[] = $str[$i];
-  }
-  return $array;
-}
-
-function mbArrayCreateRange($min, $max, $cleasvalue = false, $step = 1){
-  if($min>=$max){
-    return false;
-  }
-  $aTemp = array();
-  while($min<=$max){
-    if($cleasvalue){
-      $aTemp[$min] = $min;
-    }else{
-      $aTemp[] = $min;
-    }
-    $min += $step;
-  }
-  return $aTemp;
-}
-
-/**
- * Recursively removes target path
- * @return boolean jobdone-value */
-function mbGetFileExtension($path) {
-  $fragments = explode(".", basename($path));
-  if (count($fragments) < 2) {
-    return "";
-  }
-  
-  return $fragments[count($fragments) - 1];
 }
 
 /**

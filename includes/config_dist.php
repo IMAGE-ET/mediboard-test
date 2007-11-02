@@ -87,14 +87,12 @@ $dPconfig["db"]["sherpa"] = array(
 );
   
 // you can add as much databases as you want by using
-//$dPconfig["logical_name"] = "physical_name";
-//$dPconfig["db"]["physical_name"] = array(
+//$dPconfig["db"]["dsn"] = array(
 //  "dbtype" => "dbtype",
 //  "dbhost" => "dbhost",
 //  "dbname" => "dbname",
 //  "dbuser" => "dbuser",
 //  "dbpass" => "dbpass",
-//  "dbport" => ""
 //);
 
 // Currency symbol (html entities allowed)
@@ -156,7 +154,7 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "hour_urgence_deb" => "0",
   "hour_urgence_fin" => "23",
   "min_intervalle"   => "15",
-  "locked"           => "0"
+  "locked"           => "0",
 );
 $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_deb"           => "0",
@@ -167,7 +165,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_sortie_ambu"   => "18",
   "heure_sortie_autre"  => "8",
   "locked"              => "0",
-  "tag_dossier"         => ""
+  "tag_dossier"         => "",
 );
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
@@ -175,18 +173,21 @@ $dPconfig["dPcabinet"]["addictions"] = 0;
 $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "hours_start"      => "8",
   "hours_stop"       => "20",
-  "minutes_interval" => "15"
+  "minutes_interval" => "15",
 );
 
 $dPconfig["dPbloc"]["CPlageOp"] = array (
   "hours_start"      => "8",
   "hours_stop"       => "20",
-  "minutes_interval" => "15"
+  "minutes_interval" => "15",
 );
     
 $dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
 
-$dPconfig["dPfiles"]["nb_upload_files"] = "1";
+$dPconfig["dPfiles"] = array (
+  "nb_upload_files" => "1",
+  "upload_max_filesize" => "2M"
+);
 
 $dPconfig["graph_engine"] = "jpgraph";
 

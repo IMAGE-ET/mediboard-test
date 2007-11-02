@@ -35,6 +35,7 @@ class CActeCCAM extends CMbMetaObject {
   var $_linked_actes      = null;
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
+  var $_adapt_object = false;
   
   // Object references
   var $_ref_executant = null;
@@ -71,6 +72,13 @@ class CActeCCAM extends CMbMetaObject {
   function check() {
     
     if ($msg = $this->getSiblings()) {
+      // Ajoute le code si besoins à l'objet
+      if ($this->_adapt_object) {
+        $this->_ref_object->_codes_ccam[] = $this->code_acte;
+        $this->_ref_object->store();
+        return;
+      }
+
       return $msg;
     }
     
@@ -81,7 +89,7 @@ class CActeCCAM extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
-    mbRemoveValuesInArray("", $this->_modificateurs);
+    CMbArray::removeValue("", $this->_modificateurs);
     $this->_view   = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_anesth = ($this->code_activite == 4) ? true : false;
   }
@@ -127,39 +135,38 @@ class CActeCCAM extends CMbMetaObject {
     return $this->_ref_object->getPerm($permType);
   }
   
-  function getSiblings(){
-    if ($this->object_class === null && $this->object_id === null){
+  function getSiblings() {
+    $this->loadTargetObject();
+    if (!$this->_ref_object || !$this->_ref_object->_id) {
       return;
     }
     
     $acte = new CActeCCAM();
     $where = array();
-    if($this->_id){
+    if ($this->_id) {
       // dans le cas de la modification
-      $where["acte_id"]       = "<> '$this->_id'";  
+      $where["acte_id"]     = "<> '$this->_id'";  
     }
-    $where["code_acte"]    = "= '$this->code_acte'";
+    $where["code_acte"]     = "= '$this->code_acte'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     $where["code_activite"] = "= '$this->code_activite'";
     $where["code_phase"]    = "= '$this->code_phase'";
     $this->_ref_siblings = $acte->loadList($where);
-    $siblings = count($this->_ref_siblings);
-    // retourne le nombre de code semblables
 
-    // recherche de la liste des codes dans l'operation
-    $object = new $this->object_class;
-    $object->load($this->object_id);
+    // retourne le nombre de code semblables
+    $siblings = count($this->_ref_siblings);
 
     // compteur d'acte prevue ayant le meme code_acte dans l'intervention
     $nbCode = 0;
-    foreach($object->_codes_ccam as $key => $code){
-      if($code == $this->code_acte){
+    foreach ($this->_ref_object->_codes_ccam as $key => $code) {
+      if ($code == $this->code_acte) {
         $nbCode++;
       }
     }
-    if ($siblings >= $nbCode){
-      return "Acte deja codé";
+
+    if ($siblings >= $nbCode) {
+      return "$this->_class_name-check-already-coded";
     }
   }
     

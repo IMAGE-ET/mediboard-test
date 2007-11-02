@@ -65,6 +65,7 @@
   /**
    * Tries to get an already bound object if id400 is not older than delay
    * @param int $delay hours number of cache duration, if null use module config
+   * @return CMbObject
    */
   function getCachedObject($delay = null) {
     // Get config cache duration
@@ -82,6 +83,24 @@
 
     // Check against cache duration
     if ($delay && mbDateTime($delay, $this->last_update) < mbDateTime()) {
+      $this->_ref_object = new $this->object_class;
+    }
+
+    return $this->_ref_object;
+  }
+  
+  /**
+   * Tries to get an already bound object if id400
+   * @return CMbObject
+   *    */
+  function getMbObject() {
+    // Look for object
+    $this->_id = null;
+    $this->loadMatchingObject("`last_update` DESC");
+    $this->loadRefsFwd();
+
+    // Always instanciate
+    if (!$this->_ref_object) {
       $this->_ref_object = new $this->object_class;
     }
 

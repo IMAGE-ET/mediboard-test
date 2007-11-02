@@ -129,7 +129,7 @@ if($popup==1){
     foreach($affichageFile as $keyCat => $currCat){
       $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["DocsAndFiles"]);
     }
-    $aFilePrevNext = array_neighbor($aAllFilesDocs, $keyFileSel);
+    $aFilePrevNext = CMbArray::getPrevNextKeys($aAllFilesDocs, $keyFileSel);
     foreach($aFilePrevNext as $key=>$value){
       if($value){
         $aFile =& $aAllFilesDocs[$aFilePrevNext[$key]];

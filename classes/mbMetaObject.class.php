@@ -41,11 +41,14 @@ class CMbMetaObject extends CMbObject{
   /**
    * Load target of meta object
    */
-  function loadRefsFwd() {	
-    parent::loadRefsFwd();
+  function loadTargetObject() {
+    if (!$this->object_class) {
+      return;
+    }
     
     if (!class_exists($this->object_class)) {
       trigger_error("Unable to create instance of '$this->object_class' class", E_USER_ERROR);
+      return;
     }
 
   	$this->_ref_object = new $this->object_class;
@@ -53,6 +56,11 @@ class CMbMetaObject extends CMbObject{
       $this->_ref_object->load(null);
       $this->_ref_object->_view = "Element supprimé";
     }
+  }
+    
+  function loadRefsFwd() {	
+    parent::loadRefsFwd();
+    $this->loadTargetObject();
   }  
 }
 

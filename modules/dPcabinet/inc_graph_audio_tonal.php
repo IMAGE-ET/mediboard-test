@@ -85,7 +85,7 @@ class AudiogrammeTonal extends Graph {
 
     // Empty plot case
     $datay = $values;
-    mbRemoveValuesInArray("", $datay);
+    CMbArray::removeValue("", $datay);
     if (!count($datay)) {
       return;
     }

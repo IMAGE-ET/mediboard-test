@@ -22,7 +22,8 @@ class CMouvSejourEcap extends CMouvement400 {
   public $naissance = null;
   
   protected $id400Sej = null;
-  protected $id400EtabECap = null;
+  protected $id400DHE = null;
+  protected $id400Etab = null;
   protected $id400Pat = null;
   protected $id400Prats = array();
   protected $id400Opers = array();
@@ -45,7 +46,7 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
-    $this->syncSejour();
+    $this->syncSej();
     $this->syncDHE();
     $this->syncOperations();
     $this->syncNaissance();
@@ -57,7 +58,7 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     $values = array (
-      $this->id400EtabECap->id400,
+      $this->id400Etab->id400,
       $table,
       $field,
       $id
@@ -78,11 +79,11 @@ class CMouvSejourEcap extends CMouvement400 {
   function syncEtablissement() {
     $CIDC = $this->consume("CIDC");
     
-    $this->id400EtabECap = new CIdSante400();
-    $this->id400EtabECap->id400 = $CIDC;
-    $this->id400EtabECap->object_class = "CGroups";
+    $this->id400Etab = new CIdSante400();
+    $this->id400Etab->id400 = $CIDC;
+    $this->id400Etab->object_class = "CGroups";
 
-    $this->etablissement = $this->id400EtabECap->getCachedObject();
+    $this->etablissement = $this->id400Etab->getCachedObject();
     if ($this->etablissement->_id) {
       $this->trace($this->etablissement->getProps(), "Etablissement depuis le cache");
       $this->markCache(self::STATUS_ETABLISSEMENT);
@@ -111,7 +112,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->trace($this->etablissement->getProps(), "Etablissement à enregistrer");
 
-    $this->id400EtabECap->bindObject($this->etablissement);
+    $this->id400Etab->bindObject($this->etablissement);
 
     $id400EtabSHS = new CIdSante400();
     $id400EtabSHS->loadLatestFor($this->etablissement, "SHS");
@@ -126,7 +127,7 @@ class CMouvSejourEcap extends CMouvement400 {
   
   function syncFonction() {
     $id400Func = new CIdSante400();
-    $id400Func->id400 = $this->id400EtabECap->id400;
+    $id400Func->id400 = $this->id400Etab->id400;
     $id400Func->object_class = "CFunctions";
 
     $this->fonction = $id400Func->getCachedObject();
@@ -155,7 +156,7 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     // Id400 pricipal
-    $tag = "CIDC:{$this->id400EtabECap->id400}";
+    $tag = "CIDC:{$this->id400Etab->id400}";
     $id400Prat = new CIdSante400();
     $id400Prat->object_class = "CMediusers";
     $id400Prat->id400 = $CPRT;
@@ -173,7 +174,7 @@ class CMouvSejourEcap extends CMouvement400 {
     // Gestion du praticien non renseigné
     if ($CPRT == "0") {
       $praticien->_user_type = 3; // Chirurgien
-      $praticien->_user_username = "pnr{$this->id400EtabECap->id400}";
+      $praticien->_user_username = "pnr{$this->id400Etab->id400}";
       $praticien->_user_last_name  = "Non renseigné";
       $praticien->_user_first_name = "Praticien";
 
@@ -184,7 +185,7 @@ class CMouvSejourEcap extends CMouvement400 {
           "\nWHERE PRCIDC = ? " .
           "\nAND PRCPRT = ?";
       $values = array (
-        $this->id400EtabECap->id400, 
+        $this->id400Etab->id400, 
         $CPRT,
       );
        
@@ -275,7 +276,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $DMED = $this->consume("DMED");
     
     // Gestion des id400
-    $tag = "CIDC:{$this->id400EtabECap->id400}";
+    $tag = "CIDC:{$this->id400Etab->id400}";
     $this->id400Pat = new CIdSante400();
     $this->id400Pat->object_class = "CPatient";
     $this->id400Pat->id400 = $DMED;
@@ -283,6 +284,7 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Gestion du cache
     $this->patient = $this->id400Pat->getCachedObject();
+    
     if ($this->patient->_id) {
       $this->trace($this->patient->getProps(), "Patient depuis le cache");
       $this->markCache(self::STATUS_PATIENT);
@@ -295,7 +297,7 @@ class CMouvSejourEcap extends CMouvement400 {
         "\nWHERE PACIDC = ? " .
         "\nAND PADMED = ?";
     $values = array (
-      $this->id400EtabECap->id400,
+      $this->id400Etab->id400,
       $DMED,
     );
     $pat400->query($query, $values);
@@ -328,34 +330,24 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->markStatus(self::STATUS_PATIENT);
   }
 
-  function syncDHE() {
-    $values = array (
-      $this->id400EtabECap->id400,
-      $this->id400Sej->id400,
-      $this->id400Pat->id400,
-    );
-    
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECATPF " .
-        "\nWHERE ATCIDC = ? " .
-        "\nAND ATNDOS = ? " .
-        "\nAND ATDMED = ?";
-
-    // Recherche de la DHE
-    $dheECap = new CRecordSante400();
-    $dheECap->query($query, $values);
+  /**
+   * Map une DHE eCap vers le séjour du mouvement
+   *
+   * @param string $NDOS
+   */
+  function mapDHE(CRecordSante400 $dheECap) {
     if (!$dheECap->data) {
       return;
     }
     
     $this->trace($dheECap->data, "DHE Trouvée");
-    $this->dheCIDC = $dheECap->consume("ATCINT");
+    $this->dheCIDC = $dheECap->consume("CINT");
 
-    $NSEJ = null;//$dheECap->consume("ATNSEJ");
-    $IDAT = $dheECap->consume("ATIDAT");
+    $NSEJ = null;//$dheECap->consume("NSEJ");
+    $IDAT = $dheECap->consume("IDAT");
     
     // Praticien de la DHE prioritaire
-    $CPRT = $dheECap->consume("ATCPRT");
+    $CPRT = $dheECap->consume("CPRT");
     $this->syncPraticien($CPRT);
     $this->sejour->praticien_id = $this->praticiens[$CPRT]->_id;
     
@@ -364,11 +356,11 @@ class CMouvSejourEcap extends CMouvement400 {
     $log->setObject($this->sejour);
     $log->user_id = $this->praticiens[$CPRT]->_id;
     $log->type = "create";
-    $log->date = mbDateTime($dheECap->consumeDate("ATDDHE"));
+    $log->date = mbDateTime($dheECap->consumeDate("DDHE"));
     $log->loadMatchingObject();
 
     // Motifs d'hospitalisations
-    if ("0" != $CMOT = $dheECap->consume("ATCMOT")) {
+    if ("0" != $CMOT = $dheECap->consume("CMOT")) {
       $query = "SELECT * FROM $this->base.ECMOPF " .
           "\nWHERE MOCMOT = ?";
           
@@ -383,8 +375,8 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     // Horodatage
-    $entree = $dheECap->consumeDateTime("ATDTEN", "ATHREN");
-    $duree = max(1, $dheECap->consume("ATDMSJ"));
+    $entree = $dheECap->consumeDateTime("DTEN", "HREN");
+    $duree = max(1, $dheECap->consume("DMSJ"));
     $sortie = mbDateTime("+$duree days", $entree);
     $this->sejour->entree_prevue = $entree;
     $this->sejour->sortie_prevue = $sortie;
@@ -403,25 +395,25 @@ class CMouvSejourEcap extends CMouvement400 {
       "5" => "psy"
     );
     
-    $TYHO = $dheECap->consume("ATTYHO");
+    $TYHO = $dheECap->consume("TYHO");
     $this->sejour->type = $typeHospi[$TYHO];
     
     // Hospitalisation
-    $this->sejour->chambre_seule      = $dheECap->consume("ATCHPA");
-    $this->sejour->hormone_croissance = $dheECap->consume("ATHOCR");
-    $this->sejour->lit_accompagnant   = $dheECap->consume("ATLIAC");
-    $this->sejour->isolement          = $dheECap->consume("ATISOL");
-    $this->sejour->television         = $dheECap->consume("ATTELE");
-    $this->sejour->repas_diabete      = $dheECap->consume("ATDIAB");
-    $this->sejour->repas_sans_sel     = $dheECap->consume("ATSASE");
-    $this->sejour->repas_sans_residu  = $dheECap->consume("ATSARE");
+    $this->sejour->chambre_seule      = $dheECap->consume("CHPA");
+    $this->sejour->hormone_croissance = $dheECap->consume("HOCR");
+    $this->sejour->lit_accompagnant   = $dheECap->consume("LIAC");
+    $this->sejour->isolement          = $dheECap->consume("ISOL");
+    $this->sejour->television         = $dheECap->consume("TELE");
+    $this->sejour->repas_diabete      = $dheECap->consume("DIAB");
+    $this->sejour->repas_sans_sel     = $dheECap->consume("SASE");
+    $this->sejour->repas_sans_residu  = $dheECap->consume("SARE");
     
     // Champs étendus
     $TXCL = "0$IDAT"; // La clé demande 10 chiffres
-    $OBSH = $this->loadExtensionField("ECATPF", "ATOBSH", $TXCL, $dheECap->consume("ATOBSH"));
-    $EXBI = $this->loadExtensionField("ECATPF", "ATEXBI", $TXCL, $dheECap->consume("ATEXBI"));
-    $TRPE = $this->loadExtensionField("ECATPF", "ATTRPE", $TXCL, $dheECap->consume("ATTRPE"));
-    $REM  = $this->loadExtensionField("ECATPF", "ATREM" , $TXCL, $dheECap->consume("ATREM" ));
+    $OBSH = $this->loadExtensionField("ECATPF", "ATOBSH", $TXCL, $dheECap->consume("OBSH"));
+    $EXBI = $this->loadExtensionField("ECATPF", "ATEXBI", $TXCL, $dheECap->consume("EXBI"));
+    $TRPE = $this->loadExtensionField("ECATPF", "ATTRPE", $TXCL, $dheECap->consume("TRPE"));
+    $REM  = $this->loadExtensionField("ECATPF", "ATREM" , $TXCL, $dheECap->consume("REM" ));
     
     $remarques = array (
       "Services: $OBSH",
@@ -431,19 +423,104 @@ class CMouvSejourEcap extends CMouvement400 {
     
     $this->sejour->rques = join($remarques, "\n");
 
+    // $TRPE et $EXBI à gérer
+    
+  }
+  
+  function syncDHE() {
+    $values = array (
+      $this->id400Etab->id400,
+      $this->id400Sej->id400,
+      $this->id400Pat->id400,
+    );
+    
     $tags[] = "DHE";
-    $tags[] = "CIDC:{$this->id400EtabECap->id400}";
-    $this->idDHECap = new CIdSante400();
-    $this->idDHECap->id400 = $IDAT;
-    $this->idDHECap->tag = join(" ", $tags);
+    $tags[] = "CIDC:{$this->id400Etab->id400}";
+    $this->id400DHE = new CIdSante400();
+    $this->id400DHE->id400 = $IDAT;
+    $this->id400DHE->tag = join(" ", $tags);
     
     $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
 
-    $this->idDHECap->bindObject($this->sejour);
+    $query = "SELECT * " .
+        "\nFROM $this->base.ECATPF " .
+        "\nWHERE ATCIDC = ? " .
+        "\nAND ATNDOS = ? " .
+        "\nAND ATDMED = ?";
 
-    // $TRPE et $EXBI à gérer
+    // Recherche de la DHE
+    $dheECap = new CRecordSante400();
+    $dheECap->valuePrefix = "AT";
+    $dheECap->query($query, $values);
     
+    $this->mapDHE($dheECap);
+
+    $this->id400DHE->bindObject($this->sejour);
+
     $this->markStatus(self::STATUS_SEJOUR);
+  }
+  
+  function mapBindOperation(CRecordSante400 $operECap) {
+    if (!$this->sejour->_id) {
+      return;
+    }
+    
+    $this->trace($operECap->data, "Opération trouvée"); 
+    
+    $operation = new COperation;
+    $operation->sejour_id = $this->sejour->_id;
+    $operation->chir_id = $this->sejour->praticien_id;
+    
+    // Côté indeterminé pour le moment
+    $operation->cote = "total";
+
+    // Entrée/sortie prévue/réelle
+    $entree_prevue = $operECap->consumeDateTime("DTEP", "HREP");
+    $sortie_prevue = $operECap->consumeDateTime("DTSP", "HRSP");
+    $entree_reelle = $operECap->consumeDateTime("DTER", "HREM");
+    $sortie_reelle = $operECap->consumeDateTime("DTSR", "HRSR");
+
+    $duree_prevue = $sortie_prevue > $entree_prevue ? 
+      mbTimeRelative($entree_prevue, $sortie_prevue) : 
+      "01:00:00"; 
+      
+    $operation->date = mbDate($entree_prevue);
+    $operation->time_operation = mbTime($entree_prevue);
+    $operation->temp_operation = $duree_prevue;
+    $operation->entree_salle = mbTime($entree_reelle);
+    $operation->sortie_salle = mbTime($sortie_reelle);
+    
+    // Anesthésiste
+    if ($CPRT = $operECap->consume("CPRT")) {
+      $this->syncPraticien($CPRT);
+      $operation->anesth_id = $this->praticiens[$CPRT]->_id;
+    }
+    
+    // Textes
+    $operation->libelle = $operECap->consume("CNAT");
+    $operation->rques   = $operECap->consume("CCOM");
+          
+    // Dossier d'anesthésie
+    $CASA = $operECap->consume("CASA"); // A mettre dans une CConsultAnesth
+    
+    // Gestion des id400
+    $CINT = $operECap->consume("CINT");
+    $tags = array (
+      "CINT",
+      "CIDC:{$this->id400Etab->id400}"
+    );
+    $id400Oper = new CIdSante400();
+    $id400Oper->id400 = $CINT;
+    $id400Oper->tag = join($tags, " ");
+
+    $this->trace($operation->getProps(), "Opération à enregistrer");
+
+    $id400Oper->bindObject($operation);
+    
+    $this->id400Opers[$CINT] = $id400Oper;      
+    
+    $this->operations[$CINT] = $operation;
+    $this->syncActes($CINT);
   }
   
   function syncOperations() {
@@ -453,7 +530,7 @@ class CMouvSejourEcap extends CMouvement400 {
         "\nAND ((INNDOS = ? AND INDMED = ?) OR INCINT = ?)";
 
     $values = array (
-      $this->id400EtabECap->id400,
+      $this->id400Etab->id400,
       $this->id400Sej->id400,
       $this->id400Pat->id400,
       $this->dheCIDC,
@@ -462,64 +539,8 @@ class CMouvSejourEcap extends CMouvement400 {
     // Recherche des opérations
     $opersECap = CRecordSante400::multipleLoad($query, $values);
     foreach ($opersECap as $operECap) {
-      $this->trace($operECap->data, "Opération trouvée"); 
-
       $operECap->valuePrefix = "IN";
-      
-      $operation = new COperation;
-      $operation->sejour_id = $this->sejour->_id;
-      $operation->chir_id = $this->sejour->praticien_id;
-      
-      // Côté indeterminé pour le moment
-      $operation->cote = "total";
-
-      // Entrée/sortie prévue/réelle
-      $entree_prevue = $operECap->consumeDateTime("DTEP", "HREP");
-      $sortie_prevue = $operECap->consumeDateTime("DTSP", "HRSP");
-      $entree_reelle = $operECap->consumeDateTime("DTER", "HREM");
-      $sortie_reelle = $operECap->consumeDateTime("DTSR", "HRSR");
-
-      $duree_prevue = $sortie_prevue > $entree_prevue ? 
-        mbTimeRelative($entree_prevue, $sortie_prevue) : 
-        "01:00:00"; 
-        
-      $operation->date = mbDate($entree_prevue);
-      $operation->time_operation = mbTime($entree_prevue);
-      $operation->temp_operation = $duree_prevue;
-      $operation->entree_salle = mbTime($entree_reelle);
-      $operation->sortie_salle = mbTime($sortie_reelle);
-      
-      // Anesthésiste
-      if ($CPRT = $operECap->consume("CPRT")) {
-        $this->syncPraticien($CPRT);
-        $operation->anesth_id = $this->praticiens[$CPRT]->_id;
-      }
-      
-      // Textes
-      $operation->libelle = $operECap->consume("CNAT");
-      $operation->rques   = $operECap->consume("CCOM");
-            
-      // Dossier d'anesthésie
-      $CASA = $operECap->consume("CASA"); // A mettre dans une CConsultAnesth
-      
-      // Gestion des id400
-      $CINT = $operECap->consume("CINT");
-      $tags = array (
-        "CINT",
-        "CIDC:{$this->id400EtabECap->id400}"
-      );
-      $id400Oper = new CIdSante400();
-      $id400Oper->id400 = $CINT;
-      $id400Oper->tag = join($tags, " ");
-
-      $this->trace($operation->getProps(), "Opération à enregistrer");
-
-      $id400Oper->bindObject($operation);
-      
-      $this->id400Opers[$CINT] = $id400Oper;      
-      
-      $this->operations[$CINT] = $operation;
-      $this->syncActes($CINT);
+      $this->mapBindOperation($operECap);
     }
 
     // Status
@@ -538,7 +559,7 @@ class CMouvSejourEcap extends CMouvement400 {
         "\nAND ACCINT = ? ";
 
     $values = array (
-      $this->id400EtabECap->id400,
+      $this->id400Etab->id400,
       $CINT,
     );
 
@@ -570,7 +591,7 @@ class CMouvSejourEcap extends CMouvement400 {
       
       // Gestion des id400
       $tags = array (
-        "CIDC:{$this->id400EtabECap->id400}",
+        "CIDC:{$this->id400Etab->id400}",
         "CINT:$CINT",
         "CPRT:$CPRT",
         "Acte:$acte->code_acte-$acte->code_activite-$acte->code_phase",
@@ -581,6 +602,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $id400acte->tag = join($tags, " ");
 
       $this->trace($acte->getProps(), "Acte à enregistrer");
+      $acte->_adapt_object = true;
       $id400acte->bindObject($acte);
             
       // Ajout du code dans l'opération
@@ -593,32 +615,25 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->markStatus(self::STATUS_ACTES, count($actesECap));
   }
 
-  function syncSejour() {
+  /**
+   * Map un séjour eCap en séjour Mediboard
+   * 
+   */
+  function mapSej(CRecordSante400 $sejECap) {
+    // Praticien
     $CPRT = $this->consume("CPRT");
     $this->syncPraticien($CPRT);
     
-    $NDOS = $this->consume("NDOS");
-
-    // Gestion des identifiants
-    $tags[] = "CIDC:{$this->id400EtabECap->id400}";
-    $tags[] = "DMED:{$this->id400Pat->id400}";
-    $this->id400Sej = new CIdSante400();
-    $this->id400Sej->id400 = $NDOS;
-    $this->id400Sej->object_class = "CSejour";
-    $this->id400Sej->tag = join(" ", $tags);
-    $this->sejour = $this->id400Sej->getCachedObject(0);
-
     // Références principales
     $this->sejour->group_id     = $this->etablissement->_id;
     $this->sejour->patient_id   = $this->patient->_id;
     $this->sejour->praticien_id = $this->praticiens[$CPRT]->_id;
 
-    $this->sejour->annule = $this->type == "S" ? 1 : 0;
-    
-    $entree = $this->consumeDateTime("DTEN", "HREN");
-    $sortie = $this->consumeDateTime("DTSO", "HRSO");
-        
-    switch ($this->consume("PRES")) {
+    $entree = $sejECap->consumeDateTime("DTEN", "HREN");
+    $sortie = $sejECap->consumeDateTime("DTSO", "HRSO");
+
+    // Dates prévues et réelles
+    switch ($sejECap->consume("PRES")) {
       case "0": // Prévu
       $this->sejour->entree_prevue = $entree;
       $this->sejour->sortie_prevue = mbGetValue($sortie, mbDateTime("+ 1 days", $this->sejour->entree_prevue));
@@ -642,12 +657,27 @@ class CMouvSejourEcap extends CMouvement400 {
     if (!$this->sejour->sortie_prevue) {
       $this->sejour->sortie_prevue = 
         $this->sejour->sortie_reelle > $this->sejour->entree_reelle ? 
-        $this->sejour->sortie_reelle : // Date de sortie fournie, on l'utilise 
+        $this->sejour->sortie_reelle : // Date de sortie fournie, on l'utilise  
         mbDateTime("+ 1 days", $this->sejour->entree_prevue); // On simule la date de sortie
     }
-    
-    $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
+  }
+  
+  function syncSej() {
+    $NDOS = $this->consume("NDOS");
 
+    // Gestion des identifiants
+    $tags[] = "NDOS";
+    $tags[] = "CIDC:{$this->id400Etab->id400}";
+    $this->id400Sej = new CIdSante400();
+    $this->id400Sej->id400 = $NDOS;
+    $this->id400Sej->object_class = "CSejour";
+    $this->id400Sej->tag = join(" ", $tags);
+    
+    // Mapping et binding
+    $this->sejour = $this->id400Sej->getCachedObject(0);
+    $this->sejour->annule = $this->type == "S" ? '1' : '0';
+    $this->mapSej($this);
+    $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
     $this->id400Sej->bindObject($this->sejour);
     
     $this->markStatus(self::STATUS_SEJOUR);

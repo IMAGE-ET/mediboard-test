@@ -98,11 +98,11 @@ $modules = CPermModule::getVisibleModules();
 
 // Chargement des languages
 $locales = $AppUI->readDirs("locales");
-mbRemoveValuesInArray(".svn", $locales);
+CMbArray::removeValue(".svn", $locales);
 
 // Chargement des styles
 $styles = $AppUI->readDirs("style");
-mbRemoveValuesInArray(".svn", $styles);
+CMbArray::removeValue(".svn", $styles);
 
 
 // Création du template

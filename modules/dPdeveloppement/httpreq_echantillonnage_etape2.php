@@ -40,11 +40,11 @@ if($group_id && $etablissement->load($group_id)){
   $services = $services->loadList($where, $order);
   
   if(count($listCab)){
-    $list_5 = mbArrayCreateRange(0,5, true);
+    $list_5 = CMbArray::createRange(0,5, true);
   }
 }else{
   $group_id = null;
-  $list_5 = mbArrayCreateRange(1,5, true); 
+  $list_5 = CMbArray::createRange(1,5, true); 
 }
 
 

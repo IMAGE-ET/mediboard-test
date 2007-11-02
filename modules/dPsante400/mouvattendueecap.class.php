@@ -22,7 +22,7 @@ class CMouvAttendueECap extends CMouvSejourEcap {
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
 //    $this->syncDHE();
-//    $this->syncSejour();
+//    $this->syncSej();
 //    $this->syncOperations();
 //    $this->syncNaissance();
   }
@@ -39,8 +39,8 @@ class CMouvAttendueECap extends CMouvSejourEcap {
     parent::syncActes($CINT);
   }
 
-  function syncSejour() {
-    parent::syncSejour();
+  function syncSej() {
+    parent::syncSej();
   }
 }
 ?>

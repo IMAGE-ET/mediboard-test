@@ -30,13 +30,13 @@ if($class_exist === false){
 
 // liste des dossiers modules + common et styles
 $modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
-mbRemoveValuesInArray(".svn", $modules);
+CMbArray::removeValue(".svn", $modules);
 ksort($modules);
 
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
-mbRemoveValuesInArray(".svn",$localesDirs);
-mbRemoveValuesInArray("en",$localesDirs);
+CMbArray::removeValue(".svn",$localesDirs);
+CMbArray::removeValue("en",$localesDirs);
 	
 $backSpecs = array();
 $backRefs = array();

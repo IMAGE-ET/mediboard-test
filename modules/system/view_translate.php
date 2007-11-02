@@ -17,12 +17,12 @@ $module = mbGetValueFromGetOrSession("module" , "admin");
 
 // liste des dossiers modules + common et styles
 $modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
-mbRemoveValuesInArray(".svn", $modules);
+CMbArray::removeValue(".svn", $modules);
 ksort($modules);
 
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
-mbRemoveValuesInArray(".svn",$localesDirs);
+CMbArray::removeValue(".svn",$localesDirs);
 
 // Récupération du fichier demandé pour toutes les langues
 $translateModule = new CMbConfig;

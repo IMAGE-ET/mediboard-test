@@ -43,6 +43,101 @@ class CMbArray {
     return $diff; 
   }
   
+	/**
+	 * Remove all occurences of given value in array
+	 * @param mixed $needle Value to remove
+	 * @param array $haystack Array to alter
+	 * @return int Occurences count
+	 **/
+	function removeValue($needle, &$haystack) {
+	  $count = 0;
+	  while (($key = array_search($needle,  $haystack)) !== false) {
+	    unset($haystack[$key]);
+	    $count++;
+	  }
+	  return $count;
+	}
+	
+  /**
+   * DEPRECATED ALIAS TO BUILT IN range() TO REMOVE
+   * 
+   * Build and array with ranged values
+   * @param str The string to split out
+   */
+	function createRange($min, $max, $cleasvalue = false, $step = 1){
+	  if($min>=$max) {
+	    return false;
+	  }
+	  $aTemp = array();
+	  while($min<=$max){
+	    if($cleasvalue){
+	      $aTemp[$min] = $min;
+	    }else{
+	      $aTemp[] = $min;
+	    }
+	    $min += $step;
+	  }
+	  return $aTemp;
+	}
+	
+	/**
+	 * Get the previous and next key 
+	 * @param $arr The array to seek in
+	 * @param $key The target key
+	 * @return array Previous and next key in an array, null if unavailable
+	 */
+	function getPrevNextKeys($arr, $key){
+	  $keys = array_keys($arr);
+	  $keyIndexes = array_flip($keys);
+	  
+	  $return = array();
+	  if (isset($keys[$keyIndexes[$key]-1])) {
+	    $return["prev"] = $keys[$keyIndexes[$key]-1];
+	  }else{
+	    $return["prev"] = null;
+	  }
+	  
+	  if(isset($keys[$keyIndexes[$key]+1])) {
+	    $return["next"] = $keys[$keyIndexes[$key]+1];
+	  }else{
+	    $return["next"] = null;
+	  }
+	  
+	  return $return;
+	}
+	
+	/**
+	 * Merge recursively two array
+	 * @param array $paArray1 First array
+	 * @param array $paArray2 The array to be merged
+	 * @return arrau The merge result
+	 */
+	function mergeRecursive($paArray1, $paArray2) {
+	  if (!is_array($paArray1) or !is_array($paArray2)) { 
+	     return $paArray2;
+	  }
+	
+	  foreach ($paArray2 AS $sKey2 => $sValue2) {
+	    $paArray1[$sKey2] = CMbArray::mergeRecursive(@$paArray1[$sKey2], $sValue2);
+	  }
+	   
+	  return $paArray1;
+	}
+  
+  /**
+   * DEPRECATED ALIAS TO BUILT IN str_split() TO REMOVE
+   * 
+   * Build and array with string chars as values
+   * @param str The string to split out
+   */
+	function fromString($str) {
+	  $array = array();
+	  for ($i = 0; $i < strlen($str); $i++) {
+	    $array[] = $str[$i];
+	  }
+	  return $array;
+	}
+  
   /**
    * Returns the value following the given one in cycle mode
    * @param Array $array
@@ -88,7 +183,7 @@ class CMbArray {
   
   /**
    * Give a default value to key if key is not set
-   * @param array $array the arary to alter
+   * @param array $array the array to alter
    * @param int|string $key The key to check
    * @param mixed $value The default value if key is not set
    */
@@ -100,7 +195,9 @@ class CMbArray {
   
   /**
    * Return a string of XML attributes based on given array key-value pairs 
-   */
+   * @param array $array The source array
+   * @return string String attributes  like 'key1="value1" ... keyN="valueN"'
+   **/
   function makeXmlAttributes(&$array) {
     $return = array();
     foreach ($array as $key => $value) {
@@ -111,7 +208,10 @@ class CMbArray {
   }
   
   /**
-   * Create an array of given size filled with given values
+   * Create an array of given size filled with given value
+   * @param mixed $value Value to fill in
+   * @param int $size Size of the built array
+   * @return array The built array
    */
   function fillValues($value, $size) {
     $array = array();
@@ -152,5 +252,7 @@ class CMbArray {
     
     return $values;    
   }
+  
+  
 }
 ?>

@@ -1,6 +1,5 @@
 <?php
-$locales['mod-dPfiles-tab-files_integrity'] = '';
-$locales['CFile'] = 'Fichiers';
+$locales['CFile'] = 'File';
 $locales['CFile-back-file_category_id'] = '';
 $locales['CFile-back-file_owner'] = '';
 $locales['CFile-back-object_id'] = '';
@@ -49,6 +48,8 @@ $locales['CFilesCategory.more'] = '';
 $locales['CFilesCategory.none'] = '';
 $locales['CFilesCategory.one'] = '';
 $locales['config-dPfiles-nb_upload_files'] = 'Nombre de fichiers à uploader';
+$locales['config-dPfiles-upload_max_filesize'] = 'Upload max file size';
+$locales['mod-dPfiles-tab-files_integrity'] = '';
 $locales['mod-dPfiles-tab-vw_category'] = '';
 $locales['mod-dPfiles-tab-vw_files'] = '';
 $locales['msg-CFile-loadimgmini'] = 'Chargement du miniature';

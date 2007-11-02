@@ -36,7 +36,7 @@ class CMbXPath extends DOMXPath {
     $node = $this->queryUniqueNode($query, $contextNode);
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = $node->textContent;
-      $text = str_replace(mbArrayFromString($purgeChars), "", $text);
+      $text = str_replace(CMbArray::fromString($purgeChars), "", $text);
       $text = trim($text);
     }
     
@@ -50,7 +50,7 @@ class CMbXPath extends DOMXPath {
       if (count($textLines) > 1) {
       }
       foreach ($textLines as &$textLine) {
-        $textLine = str_replace(mbArrayFromString($purgeChars), "", $textLine);
+        $textLine = str_replace(CMbArray::fromString($purgeChars), "", $textLine);
         $textLine = trim($textLine);
       }
       
