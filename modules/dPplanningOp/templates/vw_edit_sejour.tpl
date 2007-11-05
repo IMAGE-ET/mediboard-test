@@ -20,7 +20,7 @@ function pageMain() {
       </a>
     </td>
     <td>
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->sejour_id}}">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id=0&amp;sejour_id={{$sejour->_id}}">
         Programmer une nouvelle intervention dans ce séjour
       </a>
     </td>
@@ -28,12 +28,12 @@ function pageMain() {
   {{/if}}
 
   <tr>
-    {{if $sejour->sejour_id}}
+    {{if $sejour->_id}}
     <th colspan="2" class="title modify">
     
     <div class="idsante400" id="CSejour-{{$sejour->sejour_id}}"></div>
     
-    <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->sejour_id}})">
+    <a style="float:right;" href="#" onclick="view_log('CSejour',{{$sejour->_id}})">
       <img src="images/icons/history.gif" alt="historique" />
     </a>
     <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">

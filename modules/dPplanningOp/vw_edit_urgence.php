@@ -84,6 +84,8 @@ if ($operation_id) {
   $patient =& $sejour->_ref_patient;
 }
 
+$sejour->makeDatesOperations();
+
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
@@ -125,8 +127,6 @@ $config =& $dPconfig["dPplanningOp"]["COperation"];
 $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);
-
-
 
 $config =& $dPconfig["dPplanningOp"]["CSejour"];
 $heure_sortie_ambu   = $config["heure_sortie_ambu"];
