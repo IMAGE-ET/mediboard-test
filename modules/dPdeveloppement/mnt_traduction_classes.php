@@ -79,15 +79,9 @@ foreach($classes as $class) {
       $fwdClass = ($spec->class != "CMbObject") && has_default_constructor($spec->class) ? $spec->class : "CAccessLog";
       $fwdObject = new $fwdClass;
       
-      // Find corresponding back ref
-      $backSpec = null;
-      foreach ($fwdObject->_backSpecs as $_backSpec) {
-        $fwdObject->makeBackSpec($_backSpec);
-        if ($_backSpec->class == $spec->className && $_backSpec->field == $spec->fieldName) {
-          $backSpec = $_backSpec;
-        }
-      }
-      checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backSpec->name");
+      // Find corresponding back name
+      $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
+      checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backName");
     }
   }
 }
