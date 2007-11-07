@@ -107,6 +107,15 @@
                     {{/foreach}}
                     </optgroup>
                   </select>
+                  <br />
+                  <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$curr_op->_id}})">
+                    <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
+                    {{foreach from=$packList item=curr_pack}}
+                      <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
+                    {{foreachelse}}
+                      <option value="">{{tr}}pack-none{{/tr}}</option>
+                    {{/foreach}}
+                  </select>
                 </td>
               </tr>
             </table>
@@ -176,6 +185,15 @@
                     <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
                     {{/foreach}}
                     </optgroup>
+                  </select>
+                  <br />
+                  <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$curr_op->_id}})">
+                    <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
+                    {{foreach from=$packList item=curr_pack}}
+                      <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
+                    {{foreachelse}}
+                      <option value="">{{tr}}pack-none{{/tr}}</option>
+                    {{/foreach}}
                   </select>
                 </td>
               </tr>
