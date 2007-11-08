@@ -14,7 +14,6 @@ if ($chir_id = mbGetValueFromPost("chir_id")) {
   mbSetValueToSession("chir_id", $chir_id);
 }
 
-
 $do = new CDoObjectAddEdit("CConsultation", "consultation_id");
 $do->createMsg = "Consultation créée";
 $do->modifyMsg = "Consultation modifiée";

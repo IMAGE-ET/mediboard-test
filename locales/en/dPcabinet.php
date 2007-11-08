@@ -1,5 +1,5 @@
 <?php
-$locales['CAn'] = '';
+$locales['CConsultation-adresse-desc'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -7,6 +7,7 @@ $locales['CAddiction-type-desc'] = '';
 $locales['CAddiction.type.cannabis'] = '';
 $locales['CAddiction.type.oenolisme'] = '';
 $locales['CAddiction.type.tabac'] = '';
+$locales['CAn'] = '';
 $locales['CBanque-description'] = '';
 $locales['CBanque-nom'] = '';
 $locales['CConsultAnesth'] = '';
@@ -202,6 +203,7 @@ $locales['CConsultAnesth.rhesus.?'] = '?';
 $locales['CConsultAnesth.rhesus.NEG'] = 'NEG';
 $locales['CConsultAnesth.rhesus.POS'] = 'POS';
 $locales['CConsultation'] = '';
+$locales['CConsultation-adresse'] = '';
 $locales['CConsultation-annule'] = '';
 $locales['CConsultation-annule-court'] = '';
 $locales['CConsultation-annule-desc'] = '';

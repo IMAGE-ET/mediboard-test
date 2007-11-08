@@ -367,9 +367,6 @@ for($iDate=0; $iDate<=($duree-1); $iDate++){
       $plage = $listPlace[$keyPlace];
       $consults->renew();
       $premiere    = rand(0,3);
-      if($premiere==0){
-        $consults->setField("_check_premiere", 1);
-      }
       $tabFields = array("heure"           => $plage["heure"],
                           "patient_id"      => array("values"=>$patients->listObjects,"field"=>"_id"),
                           "plageconsult_id" => $plage["plage_id"],

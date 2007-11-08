@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.78";
+$config["mod_version"]     = "0.79";
 $config["mod_type"]        = "user";
 
 
@@ -809,7 +809,11 @@ class CSetupdPcabinet extends CSetup {
 			AND `field` IN('oenolisme','tabac')";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.78";
+    $this->makeRevision("0.78");
+    $sql = "ALTER TABLE `consultation` ADD `adresse` enum('0','1') NOT NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.79";
   }
 }
 ?>

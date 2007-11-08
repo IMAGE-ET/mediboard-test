@@ -38,6 +38,7 @@ class CConsultation extends CCodableCCAM {
   var $examen        = null;
   var $traitement    = null;
   var $premiere      = null;
+  var $adresse       = null; // Le patient a-t'il été adressé ?
   var $tarif         = null;
   var $type_tarif    = null;
   var $arrivee       = null;
@@ -48,7 +49,8 @@ class CConsultation extends CCodableCCAM {
   var $_etat           = null;
   var $_hour           = null;
   var $_min            = null;
-  var $_check_premiere = null; // CheckBox: must be present in all forms!
+  var $_check_premiere = null;
+  var $_check_adresse  = null;
   var $_somme          = null;
   var $_types_examen   = null;
 
@@ -111,6 +113,7 @@ class CConsultation extends CCodableCCAM {
     $specs["examen"]          = "text";
     $specs["traitement"]      = "text";
     $specs["premiere"]        = "bool";
+    $specs["adresse"]         = "bool";
     $specs["tarif"]           = "str";
     $specs["arrivee"]         = "dateTime";
     $specs["type_tarif"]      = "enum list|cheque|CB|especes|tiers|autre default|cheque";
@@ -165,6 +168,7 @@ class CConsultation extends CCodableCCAM {
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
     $this->_check_premiere = $this->premiere;
+    $this->_check_adresse = $this->adresse;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
   }
@@ -184,10 +188,6 @@ class CConsultation extends CCodableCCAM {
     if (($this->_somme !== null) && ($this->_somme != $this->secteur1 + $this->secteur2)){
       $this->secteur1 = 0;
       $this->secteur2 = $this->_somme;
-    }
-    
-    if ($this->_check_premiere !== null) {
-      $this->premiere = $this->_check_premiere ? 1 : 0;
     }
   }
 

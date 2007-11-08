@@ -1,5 +1,5 @@
 <?php
-$locales['CAn'] = '';
+$locales['CConsultation-adresse-desc'] = 'Patient adressé par un médecin';
 $locales['CAddiction-addiction'] = 'Addiction';
 $locales['CAddiction-addiction-desc'] = 'Description de l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -7,6 +7,7 @@ $locales['CAddiction-type-desc'] = 'Type d\'addiction';
 $locales['CAddiction.type.cannabis'] = 'Cannabis';
 $locales['CAddiction.type.oenolisme'] = 'Oenolisme';
 $locales['CAddiction.type.tabac'] = 'Tabac';
+$locales['CAn'] = '';
 $locales['CBanque-description'] = 'Description';
 $locales['CBanque-nom'] = 'Nom';
 $locales['CConsultAnesth'] = 'Consultation Anesthésique';
@@ -202,6 +203,7 @@ $locales['CConsultAnesth.rhesus.?'] = '?';
 $locales['CConsultAnesth.rhesus.NEG'] = 'NEG';
 $locales['CConsultAnesth.rhesus.POS'] = 'POS';
 $locales['CConsultation'] = 'Consultation';
+$locales['CConsultation-adresse'] = 'Patient adressé';
 $locales['CConsultation-annule'] = '';
 $locales['CConsultation-annule-court'] = '';
 $locales['CConsultation-annule-desc'] = '';

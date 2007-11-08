@@ -233,11 +233,24 @@ function printDocument(iDocument_id) {
         <tr>
           <th>{{mb_label object=$consult field="premiere"}}</th>
           <td>
-            <input type="checkbox" name="_check_premiere" value="1" {{if $consult->_check_premiere}} checked="checked" {{/if}} />
+            <input type="checkbox" name="_check_premiere" value="1"
+              {{if $consult->_check_premiere}} checked="checked" {{/if}}
+              onchange="if (this.checked) {this.form.premiere.value = 1;} else {this.form.premiere.value = 0;}" />
+            {{mb_field object=$consult field="premiere" hidden="hidden"}}
             {{mb_label object=$consult field="_check_premiere"}}
           </td>
-          <td rowspan="4" class="button">
+          <td rowspan="5" class="button">
             <button class="search" type="button" onclick="PlageConsultSelector.init()">choix de l'horaire</button>
+          </td>
+        </tr>
+
+        <tr>
+          <th>{{mb_label object=$consult field="adresse"}}</th>
+          <td>
+            <input type="checkbox" name="_check_adresse" value="1"
+              {{if $consult->_check_adresse}} checked="checked" {{/if}}
+              onchange="if (this.checked) {this.form.adresse.value = 1;} else {this.form.adresse.value = 0;}" />
+            {{mb_field object=$consult field="adresse" hidden="hidden"}}
           </td>
         </tr>
 

@@ -105,7 +105,6 @@ function reloadListTech() {
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
       {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
-      {{mb_field object=$consult field="_check_premiere" hidden=1 prop=""}}
       {{mb_label object=$consult field="rques"}}
       <select name="_helpers_rques" size="1" onchange="pasteHelperContent(this);this.form.rques.onchange();">
         <option value="">&mdash; Choisir une aide</option>

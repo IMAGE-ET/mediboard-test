@@ -85,7 +85,6 @@
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            <input type="hidden" name="_check_premiere" value="{{$curr_consult->_check_premiere}}" />
             {{if $curr_consult->paye}}
               <input type="hidden" name="paye" value="0" />
               <input type="hidden" name="date_paiement" value="" />

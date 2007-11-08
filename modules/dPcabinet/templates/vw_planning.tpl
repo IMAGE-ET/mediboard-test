@@ -362,7 +362,6 @@ function pageMain() {
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
-            {{mb_field object=$curr_consult field="_check_premiere" hidden=1 prop=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'PATIENT_ARRIVE'}}" />
             <input type="hidden" name="arrivee" value="" />
             </form>
@@ -371,7 +370,6 @@ function pageMain() {
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
-            {{mb_field object=$curr_consult field="_check_premiere" hidden=1 prop=""}}
             <input type="hidden" name="chrono" value="{{$curr_consult|const:'TERMINE'}}" />
             <input type="hidden" name="annule" value="1" />
             </form>
