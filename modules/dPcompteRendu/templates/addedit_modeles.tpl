@@ -6,11 +6,29 @@ function popFile(objectClass, objectId, elementClass, elementId, sfn){
 }
 
 function copie() {
-  var oForm = document.editFrm;
-  oForm.compte_rendu_id.value = 0;
-  oForm.chir_id.value = "{{$user_id}}";
-  oForm.nom.value = "Copie de "+oForm.nom.value;
-  oForm.submit();
+
+  {{if $droit}}
+    if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
+      var oForm = document.editFrm;
+      oForm.compte_rendu_id.value = 0;
+      
+      {{if $isPraticien}}
+      oForm.chir_id.value = "{{$user_id}}";
+      oForm.function_id.value = "";
+      {{/if}}
+      
+      oForm.nom.value = "Copie de "+oForm.nom.value;
+      oForm.submit(); 
+    }  
+  {{/if}}
+  
+  {{if !$droit}}
+    var oForm = document.editFrm;
+    oForm.compte_rendu_id.value = 0;
+    oForm.chir_id.value = "{{$user_id}}";
+    oForm.nom.value = "Copie de "+oForm.nom.value;
+    oForm.submit();
+  {{/if}}
 } 
 
 function nouveau() {
@@ -142,7 +160,7 @@ function pageMain() {
             <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''; ">
               <option value="">&mdash; Associer à un praticien &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $prat_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $user_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
               </option>
               {{/foreach}}
@@ -181,9 +199,9 @@ function pageMain() {
           </tr>
           
           <tr>
-            {{if $isPraticien}}
+            {{*if $isPraticien*}}
             {{if !$droit}}<td colspan="2">{{else}}<td>{{/if}}<button class="modify" onclick="copie(this.form)">Dupliquer</button></td>
-            {{/if}}
+            {{*/if*}}
             {{if $droit}}
             <td class="button" colspan="2">
             {{if $compte_rendu->compte_rendu_id}}
