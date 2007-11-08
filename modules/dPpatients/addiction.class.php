@@ -7,13 +7,14 @@
 * @author Sébastien Fillonneau
 */
 
-class CAddiction extends CMbMetaObject {
+class CAddiction extends CMbObject {
   // DB Table key
   var $addiction_id = null;
 
   // DB fields
   var $type      = null;
   var $addiction = null;
+  var $dossier_medical_id = null;
   
   function CAddiction() {
     $this->CMbObject("addiction", "addiction_id");
@@ -23,10 +24,9 @@ class CAddiction extends CMbMetaObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["object_id"   ] = "notNull ref class|CDossierMedical meta|object_class";
-    $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth";
     $specs["type"        ] = "notNull enum list|tabac|oenolisme|cannabis";
     $specs["addiction"   ] = "text";
+    $specs["dossier_medical_id"] = "ref class|CDossierMedical";
     return $specs;
   }
 

@@ -9,12 +9,10 @@
 
 global $AppUI;
 
-require_once($AppUI->getModuleClass("dPpatients", "dossierMedical"));
-
 /**
  * The CPatient Class
  */
-class CPatient extends CDossierMedical {
+class CPatient extends CMbObject {
   static $dossier_cabinet_prefix = array (
     "dPcabinet" => "?m=dPcabinet&tab=vw_dossier&patSel=",
     "dPpatients" => "?m=dPpatients&tab=vw_full_patients&patient_id="
@@ -167,7 +165,8 @@ class CPatient extends CDossierMedical {
   var $_ref_medecin1         = null;
   var $_ref_medecin2         = null;
   var $_ref_medecin3         = null;
-
+  var $_ref_dossier_medical  = null;
+  
 	function CPatient() {
 		$this->CMbObject("patients", "patient_id");    
     $this->loadRefModule(basename(dirname(__FILE__)));
@@ -553,6 +552,13 @@ class CPatient extends CDossierMedical {
       $leftjoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
       $this->_ref_consultations = $this->_ref_consultations->loadList($where, $order, null, null, $leftjoin);
     }
+  }
+  
+  function loadRefDossierMedical(){
+    $this->_ref_dossier_medical = new CDossierMedical();
+    $where["object_id"] = "= '$this->_id'";
+    $where["object_class"] = "= 'CPatient'";
+    $this->_ref_dossier_medical->loadObject($where);
   }
   
   function loadRefsAffectations() {

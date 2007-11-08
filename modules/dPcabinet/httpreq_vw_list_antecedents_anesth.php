@@ -11,18 +11,24 @@ global $AppUI, $can, $m;
   
 $can->needsEdit();
 
-$consultation_anesth_id = mbGetValueFromGetOrSession("consultation_anesth_id", 0);
+$sejour_id = mbGetValueFromGetOrSession("sejour_id", 0);
 
-$consult_anesth = new CConsultAnesth;
-$consult_anesth->load($consultation_anesth_id);
-$consult_anesth->loadRefsAntecedents();
-$consult_anesth->loadRefsTraitements();
-$consult_anesth->loadRefsAddictions();
+// Chargement du sejour
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+
+// Chargement du dossier medical
+$sejour->loadRefDossierMedical();
+
+// Chargement des antecedents, traitements et addictions
+$sejour->_ref_dossier_medical->loadRefsAntecedents();
+$sejour->_ref_dossier_medical->loadRefsTraitements();
+$sejour->_ref_dossier_medical->loadRefsAddictions();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("consult_anesth", $consult_anesth);
+$smarty->assign("sejour", $sejour);
 
 $smarty->display("inc_list_ant_anesth.tpl");
 

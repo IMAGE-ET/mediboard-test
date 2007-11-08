@@ -11,45 +11,34 @@ global $AppUI;
 
 $autoadd_default = isset($AppUI->user_prefs["AUTOADDSIGN"]) ? $AppUI->user_prefs["AUTOADDSIGN"] : 1 ;
 
-class CDoTraitementAddEdit extends CDoObjectAddEdit {
-  function CDoTraitementAddEdit() {
-    $this->CDoObjectAddEdit("CTraitement", "traitement_id");
-    
-    $this->createMsg = "Traitement créé";
-    $this->modifyMsg = "Traitement modifié";
-    $this->deleteMsg = "Traitement supprimé";
-  }
-  
-  function doIt() {
-    global $autoadd_default ;
-    $this->doBind();
-
-    if (intval(dPgetParam($_POST, 'del'))) {
-      $this->doDelete();
-    } else {
-      $this->doStore();
-    }
-    if(! (!$this->isNotNew && isset($_POST["consultation_anesth_id"]) && $this->_obj->object_class == "CPatient" && $autoadd_default == 1)){
-      $this->doRedirect();
-    }
-  }
+// Sejour
+// si on a un sejour et que l'option d'ajout automatique est activée
+if(isset($_POST["_sejour_id"]) && ($autoadd_default == 1) && ($_POST["_sejour_id"] != "")){
+ 
+  $doSejour = new CDoObjectAddEdit("CTraitement", "traitement_id");
+  $doSejour->createMsg = "Traitement créé";
+  $doSejour->modifyMsg = "Traitement modifié";
+  $doSejour->deleteMsg = "Traitement supprimé";
+ 
+  // Ajout du traitement dans le sejour
+  $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_sejour_id"],"CSejour");
+  $doSejour->redirectStore = null;
+  $doSejour->redirect = null;
+ 
+  $doSejour->doIt();
 }
 
-$do = new CDoTraitementAddEdit;
-$do->doIt();
+// Patient
+$doPatient = new CDoObjectAddEdit("CTraitement", "traitement_id");
+$doPatient->createMsg = "Traitement créé";
+$doPatient->modifyMsg = "Traitement modifié";
+$doPatient->deleteMsg = "Traitement supprimé";
 
-$_POST["object_class"] = "CConsultAnesth";
-$_POST["object_id"]    = $_POST["consultation_anesth_id"];
+if($_POST["del"] != 1){
+  $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_patient_id"],"CPatient");
+}
+$_POST["ajax"] = 1;
+  
+$doPatient->doIt();
 
-$copyDo = new CDoObjectAddEdit("CTraitement", "traitement_id");
-$copyDo->createMsg = "Traitement créé";
-$copyDo->modifyMsg = "Traitement modifié";
-$copyDo->deleteMsg = "Traitement supprimé";
-
-$copyDo->doBind();
-$copyDo->ajax            = $do->ajax;
-$copyDo->suppressHeaders = $do->suppressHeaders;
-$copyDo->callBack        = "reloadAntecedentsAnesth";
-$copyDo->doStore();
-$copyDo->doRedirect();
 ?>

@@ -21,8 +21,8 @@ Addiction = {
 <strong>Addictions du patient</strong>
 
 <ul>
-{{if $patient->_ref_addictions}}
-  {{foreach from=$patient->_ref_types_addiction key=curr_type item=list_addiction}}
+{{if $patient->_ref_dossier_medical->_ref_addictions}}
+  {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
   {{if $list_addiction|@count}}
   <li>
     {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}

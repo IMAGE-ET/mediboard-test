@@ -1,28 +1,25 @@
 <form name="frmCopyAntecedent" action="?m=dPcabinet" method="post">
-<input type="hidden" name="m" value="dPpatients" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_copy_antecedent" />
-<input type="hidden" name="antecedent_id" value="" />
-<input type="hidden" name="object_id" value="" />
-<input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_copy_antecedent" />
+  <input type="hidden" name="antecedent_id" value="" />
+  <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
 <form name="frmCopyAddiction" action="?m=dPcabinet" method="post">
-<input type="hidden" name="m" value="dPpatients" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_copy_addiction" />
-<input type="hidden" name="addiction_id" value="" />
-<input type="hidden" name="object_id" value="" />
-<input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="m" value="dPpatients" /> 
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_copy_addiction" />
+  <input type="hidden" name="addiction_id" value="" />
+  <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
 <form name="frmCopyTraitement" action="?m=dPcabinet" method="post">
-<input type="hidden" name="m" value="dPpatients" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_copy_traitement" />
-<input type="hidden" name="traitement_id" value="" />
-<input type="hidden" name="object_id" value="" />
-<input type="hidden" name="object_class" value="" />
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_copy_traitement" />
+  <input type="hidden" name="traitement_id" value="" />
+  <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
 {{if $dPconfig.dPcabinet.addictions}}
@@ -31,7 +28,7 @@
 
 <strong>Antécédents significatifs</strong>
 <ul>
-  {{foreach from=$consult_anesth->_ref_antecedents key=curr_type item=list_antecedent}}
+  {{foreach from=$sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   <li>
     {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -65,7 +62,7 @@
       
 <strong>Traitements significatifs</strong>
 <ul>
-  {{foreach from=$consult_anesth->_ref_traitements item=curr_trmt}}
+  {{foreach from=$sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
   <li>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
@@ -90,7 +87,7 @@
 
 <strong>Diagnostics significatifs de l'opération</strong>
 <ul>
-  {{foreach from=$consult_anesth->_codes_cim10 item=curr_code}}
+  {{foreach from=$sejour->_ref_dossier_medical->_codes_cim10 item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}

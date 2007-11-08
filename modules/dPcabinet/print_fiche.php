@@ -33,8 +33,11 @@ if ($consultation_id) {
 
   $praticien =& $consult->_ref_chir;
   $patient =& $consult->_ref_patient;
-  $patient->loadRefsAntecedents();
-  $patient->loadRefsTraitements();
+  $patient->loadRefDossierMedical();
+  $patient->_ref_dossier_medical->loadRefsAntecedents();
+  $patient->_ref_dossier_medical->loadRefsTraitements();
+  $patient->_ref_dossier_medical->loadRefsAddictions();
+
 }
 
 // Affichage des données

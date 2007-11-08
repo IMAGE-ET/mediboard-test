@@ -158,7 +158,7 @@ function pageMain() {
           <th>Diagnostics du patient</th>
           <td class="text" colspan="3">
             <ul>
-              {{foreach from=$patient->_codes_cim10 item=curr_code}}
+              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
               <li>
                 {{$curr_code->code}} : {{$curr_code->libelle}}
               </li>
@@ -172,7 +172,7 @@ function pageMain() {
           <th>Antécedents du patient</th>
           <td class="text" colspan="3">
             <ul>
-              {{foreach from=$patient->_ref_antecedents key=curr_type item=list_antecedent}}
+              {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
               {{if $list_antecedent|@count}}
 		        <li>
 		          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -196,7 +196,7 @@ function pageMain() {
           <th>Traitements du patient</th>
           <td class="text" colspan="3">
             <ul>
-              {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
                   Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}}

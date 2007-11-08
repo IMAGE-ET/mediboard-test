@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.50";
+$config["mod_version"]     = "0.51";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -381,8 +381,232 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients`
 						CHANGE `rang_beneficiaire` `rang_beneficiaire` ENUM('01','02','09','11','12','13','14','15','16','31');";
     $this->addQuery($sql);
+    
+    
+    // Creation de la table dossier medical
+    $this->makeRevision("0.50");
+    
+    set_time_limit(60);
+    
+    $this->addDependency("dPcabinet", "0.78");
+    
+    $sql = "CREATE TABLE `dossier_medical` (
+            `dossier_medical_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+            `listCim10` TEXT, 
+            `object_id` INT(11) UNSIGNED NOT NULL, 
+            `object_class` VARCHAR(25) NOT NULL, 
+            PRIMARY KEY (`dossier_medical_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.50";
+    
+    
+    // Insertion des patients dans la table dossier_medical
+    $sql = "INSERT INTO `dossier_medical`
+            SELECT '', patients.listCim10, patients.patient_id, 'CPatient' 
+            FROM `patients`;";
+    $this->addQuery($sql);
+    
+    
+    // Insertion des sejours dans la table dossier_medical
+    $sql = "INSERT INTO `dossier_medical`
+            SELECT '', GROUP_CONCAT(consultation_anesth.listCim10 SEPARATOR '|'), sejour.sejour_id, 'CSejour'
+            FROM `consultation_anesth`, `operations`,`sejour`   
+            WHERE consultation_anesth.operation_id = operations.operation_id
+            AND operations.sejour_id = sejour.sejour_id
+            GROUP BY sejour.sejour_id;";
+    $this->addQuery($sql);
+
+    
+    // Suppression des '|' en debut de liste
+    $sql = "UPDATE `dossier_medical` SET `listCim10` = TRIM(LEADING '|' FROM listCim10)
+            WHERE listCim10 LIKE '|%'";
+    $this->addquery($sql);
+
+   
+    // Ajout du champ dossier_medical_id aux tables addiction/antecedent/traitement
+    $sql = "ALTER TABLE `addiction`
+            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+  
+    $sql = "ALTER TABLE `addiction` ADD INDEX ( `dossier_medical_id` ) ;";
+    $this->addQuery($sql);
+    
+    
+    $sql = "ALTER TABLE `antecedent`
+            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `antecedent` ADD INDEX ( `dossier_medical_id` ) ;";
+    $this->addQuery($sql);
+    
+    
+    $sql = "ALTER TABLE `traitement`
+            ADD `dossier_medical_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `traitement` ADD INDEX ( `dossier_medical_id` ) ;";
+    $this->addQuery($sql);
+
+    
+    // Mise a jour du champ dossier_medical_id dans le cas du Patient
+    // Table addiction
+    $sql = "ALTER TABLE `addiction` ADD INDEX ( `object_id` ) ;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `addiction`, `dossier_medical` SET addiction.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE dossier_medical.object_class = 'CPatient'
+            AND dossier_medical.object_id = addiction.object_id
+            AND addiction.object_class = 'CPatient'";
+    $this->addQuery($sql);
+  
+    // Table antecedent
+    $sql = "UPDATE `antecedent`, `dossier_medical` SET antecedent.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE dossier_medical.object_class = 'CPatient'
+            AND dossier_medical.object_id = antecedent.object_id
+            AND antecedent.object_class = 'CPatient'";
+    $this->addQuery($sql);
+    
+    
+    // Table Traitement
+    $sql = "UPDATE `traitement`, `dossier_medical` SET traitement.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE dossier_medical.object_class = 'CPatient'
+            AND dossier_medical.object_id = traitement.object_id
+            AND traitement.object_class = 'CPatient'";
+    $this->addQuery($sql);
+    
+    
+    
+    // Mise a jour du champs dossier_medical_id dans le cas du Sejour
+    // Table addiction
+    $sql = "UPDATE `addiction`, `dossier_medical`, `consultation_anesth`, `sejour`, `operations` 
+            SET addiction.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE addiction.object_id = consultation_anesth.consultation_anesth_id
+            AND addiction.object_class = 'CConsultAnesth'
+            AND consultation_anesth.operation_id = operations.operation_id
+            AND operations.sejour_id = sejour.sejour_id
+            AND dossier_medical.object_class = 'CSejour' 
+            AND dossier_medical.object_id = sejour.sejour_id;";
+    $this->addQuery($sql);    
+
+    
+    // Table antecedent
+    $sql = "UPDATE `antecedent`, `dossier_medical`, `consultation_anesth`, `sejour`, `operations` 
+            SET antecedent.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE antecedent.object_id = consultation_anesth.consultation_anesth_id
+            AND antecedent.object_class = 'CConsultAnesth'
+            AND consultation_anesth.operation_id = operations.operation_id
+            AND operations.sejour_id = sejour.sejour_id
+            AND dossier_medical.object_class = 'CSejour' 
+            AND dossier_medical.object_id = sejour.sejour_id;";
+    $this->addQuery($sql);    
+    
+    
+    // Table traitement
+    $sql = "UPDATE `traitement`, `dossier_medical`, `consultation_anesth`, `sejour`, `operations` 
+            SET traitement.dossier_medical_id = dossier_medical.dossier_medical_id
+            WHERE traitement.object_id = consultation_anesth.consultation_anesth_id
+            AND traitement.object_class = 'CConsultAnesth'
+            AND consultation_anesth.operation_id = operations.operation_id
+            AND operations.sejour_id = sejour.sejour_id
+            AND dossier_medical.object_class = 'CSejour' 
+            AND dossier_medical.object_id = sejour.sejour_id;";
+    $this->addQuery($sql);    
+    
+    
+    // Mise a jour du champ examen de la consultation dans le cas d'antecendent sans operation_id
+    $sql = "CREATE TEMPORARY TABLE ligneAntecedent (
+             consultation_id INT( 11 ) ,
+             ligne_antecedent TEXT
+            ) AS 
+              SELECT consultation_anesth.consultation_id, CONCAT_WS(' - ', antecedent.type, antecedent.date, antecedent.rques ) AS ligne_antecedent
+              FROM `antecedent`, `consultation_anesth`
+              WHERE antecedent.object_id = consultation_anesth.consultation_anesth_id
+              AND antecedent.dossier_medical_id IS NULL;";
+    $this->addQuery($sql);    
+    
+    $sql = "CREATE TEMPORARY TABLE blocAntecedent (
+             consultation_id INT( 11 ) ,
+             bloc_antecedent TEXT
+            ) AS
+              SELECT consultation_id, GROUP_CONCAT(ligne_antecedent SEPARATOR '\n') AS bloc_antecedent
+              FROM `ligneAntecedent`
+              GROUP BY consultation_id;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`, `blocAntecedent`
+            SET consultation.examen = CONCAT_WS('\n', consultation.examen, blocAntecedent.bloc_antecedent)
+            WHERE consultation.consultation_id = blocAntecedent.consultation_id;";
+    $this->addQuery($sql);    
+    
+
+    // Mise a jour du champ examen de la consultation dans le cas d'une addiction sans operation_id
+    $sql = "CREATE TEMPORARY TABLE ligneAddiction (
+             consultation_id INT( 11 ) ,
+             ligne_addiction TEXT
+            ) AS 
+              SELECT consultation_anesth.consultation_id, CONCAT_WS(' - ', addiction.type, addiction.addiction ) AS ligne_addiction
+              FROM `addiction`, `consultation_anesth`
+              WHERE addiction.object_id = consultation_anesth.consultation_anesth_id
+              AND addiction.dossier_medical_id IS NULL;";
+    $this->addQuery($sql);
+            
+    $sql = "CREATE TEMPORARY TABLE blocAddiction (
+             consultation_id INT( 11 ) ,
+             bloc_addiction TEXT
+            ) AS
+              SELECT consultation_id, GROUP_CONCAT(ligne_addiction SEPARATOR '\n') AS bloc_addiction
+              FROM `ligneAddiction`
+              GROUP BY consultation_id;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`, `blocAddiction`
+            SET consultation.examen = CONCAT_WS('\n', consultation.examen, blocAddiction.bloc_addiction)
+            WHERE consultation.consultation_id = blocAddiction.consultation_id;";
+    $this->addQuery($sql);    
+
+  
+    // Mise a jour du champ examen de la consultation dans le cas d'un traitement sans operation_id
+    $sql = "CREATE TEMPORARY TABLE ligneTraitement (
+             consultation_id INT( 11 ) ,
+             ligne_traitement TEXT
+            ) AS 
+              SELECT consultation_anesth.consultation_id, CONCAT_WS(' - ', traitement.debut, traitement.fin, traitement.traitement ) AS ligne_traitement
+              FROM `traitement`, `consultation_anesth`
+              WHERE traitement.object_id = consultation_anesth.consultation_anesth_id
+              AND traitement.dossier_medical_id IS NULL;";
+    $this->addQuery($sql);
+    
+    
+    $sql = "CREATE TEMPORARY TABLE blocTraitement (
+             consultation_id INT( 11 ) ,
+             bloc_traitement TEXT
+            ) AS
+              SELECT consultation_id, GROUP_CONCAT(ligne_traitement SEPARATOR '\n') AS bloc_traitement
+              FROM `ligneTraitement`
+              GROUP BY consultation_id;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`, `blocTraitement`
+            SET consultation.examen = CONCAT_WS('\n', consultation.examen, blocTraitement.bloc_traitement)
+            WHERE consultation.consultation_id = blocTraitement.consultation_id;";
+    $this->addQuery($sql); 
+
+    $sql = "ALTER TABLE `addiction`
+            DROP `object_id`, 
+            DROP `object_class`;";
+    $this->addQuery($sql);
+        
+    $sql = "ALTER TABLE `antecedent`
+            DROP `object_id`, 
+            DROP `object_class`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `traitement`
+            DROP `object_id`, 
+            DROP `object_class`;";
+    $this->addQuery($sql);
+   
+    $this->mod_version = "0.51";
   }
 }
 

@@ -51,7 +51,11 @@ var oCimField = null;
 
 
 function pageMain() {
+
   updateList();
+  
+  // Chargement des antecedents, traitements, addictions, diagnostics du patients
+  reloadAntecedents();
   
   PairEffect.initGroup("acteEffect");
   
@@ -62,16 +66,22 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
   
+ 
+  
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
+    
     {{if $dPconfig.dPcabinet.addictions}}
-    Try.these(document.editAddictFrm.type.onchange);
+      Try.these(document.editAddictFrm.type.onchange);
     {{/if}}
+    
     oCimField = new TokenField(document.editDiagFrm.listCim10, { 
       confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
       onChange : updateTokenCim10
     } ); 
   } 
+  
+  
   {{if $consult->consultation_id}}
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
     panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),

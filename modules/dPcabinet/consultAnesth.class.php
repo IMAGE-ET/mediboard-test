@@ -8,9 +8,8 @@
 */
 
 global $AppUI;
-require_once($AppUI->getModuleClass("dPpatients", "dossierMedical"));
 
-class CConsultAnesth extends CDossierMedical {
+class CConsultAnesth extends CMbObject {
   // DB Table key
   var $consultation_anesth_id = null;
 
@@ -235,6 +234,13 @@ class CConsultAnesth extends CDossierMedical {
    $this->_ref_consultation->loadExamsComp();
    $this->_ref_consultation->loadRefsExamNyha();
    $this->_ref_consultation->loadRefsExamPossum();
+   $this->loadRefOperation();
+   $this->_ref_operation->loadRefSejour();
+   $this->_ref_operation->_ref_sejour->loadRefDossierMedical();
+   $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
+   $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefsAddictions();
+   $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
+   
    foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }

@@ -105,6 +105,9 @@ if($consult->consultation_id) {
     if($consult->_ref_consult_anesth->_ref_operation->operation_id) {
     	$consult->_ref_consult_anesth->_ref_operation->loadRefsCodesCCAM(1);
       $consult->_ref_consult_anesth->_ref_operation->loadAides($userSel->user_id);
+      $consult->_ref_consult_anesth->_ref_operation->loadRefs();
+      $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
+      $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
   $patient =& $consult->_ref_patient;
@@ -208,6 +211,12 @@ $examComp->loadAides($userSel->user_id);
 $consult->loadRefsActesCCAM();
 $consult->loadRefsCodesCCAM();
 $consult->loadPossibleActes();
+
+//Chargement du dossier medical du patient de la consultation
+if($consult->patient_id){
+  $consult->_ref_patient->loadRefDossierMedical();
+  $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

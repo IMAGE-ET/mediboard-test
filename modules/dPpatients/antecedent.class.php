@@ -7,14 +7,15 @@
 * @author Romain Ollivier
 */
 
-class CAntecedent extends CMbMetaObject {
+class CAntecedent extends CMbObject {
   // DB Table key
   var $antecedent_id = null;
 
   // DB fields
-  var $type  = null;
-  var $date  = null;
-  var $rques = null;
+  var $type               = null;
+  var $date               = null;
+  var $rques              = null;
+  var $dossier_medical_id = null;
   
   function CAntecedent() {
     $this->CMbObject("antecedent", "antecedent_id");
@@ -24,11 +25,10 @@ class CAntecedent extends CMbMetaObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["object_id"   ] = "notNull ref class|CDossierMedical meta|object_class";
-    $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth";
     $specs["type"        ] = "notNull enum list|med|alle|trans|obst|chir|fam|anesth|gyn";
     $specs["date"        ] = "date";
     $specs["rques"       ] = "text";
+    $specs["dossier_medical_id"] = "ref class|CDossierMedical";
     return $specs;
   }
   

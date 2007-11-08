@@ -7,14 +7,15 @@
 * @author Romain Ollivier
 */
 
-class CTraitement extends CMbMetaObject {
+class CTraitement extends CMbObject {
   // DB Table key
   var $traitement_id = null;
 
   // DB fields
-  var $debut      = null;
-  var $fin        = null;
-  var $traitement = null;
+  var $debut              = null;
+  var $fin                = null;
+  var $traitement         = null;
+  var $dossier_medical_id = null;
   
   function CTraitement() {
     $this->CMbObject("traitement", "traitement_id");
@@ -24,11 +25,10 @@ class CTraitement extends CMbMetaObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["object_id"   ] = "notNull ref class|CDossierMedical meta|object_class";
-    $specs["object_class"] = "notNull enum list|CPatient|CConsultAnesth";
     $specs["debut"       ] = "date";
     $specs["fin"         ] = "date moreEquals|debut";
     $specs["traitement"  ] = "text";
+    $specs["dossier_medical_id"] = "notNull ref class|CDossierMedical";
     return $specs;
   }
 

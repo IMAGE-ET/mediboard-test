@@ -108,7 +108,13 @@ class CDoObjectAddEdit {
 
   function doRedirect() {
     global $AppUI;
-
+  
+    if ($this->redirect === null) {
+      return;
+    }
+    
+    
+    // Cas ajax
     if ($this->ajax) {
       $idName = $this->objectKeyGetVarName;
       $idValue = $this->_obj->$idName;
@@ -120,20 +126,19 @@ class CDoObjectAddEdit {
       exit;
     }
 
-    if ($this->redirect !== null) {
-      $AppUI->redirect($this->redirect);
-    }
+    // Cas normal
+    $AppUI->redirect($this->redirect);
+    
   }
 
   function doIt() {
     $this->doBind();
-
+    
     if (intval(dPgetParam($this->refTab, 'del'))) {
       $this->doDelete();
     } else {
       $this->doStore();
     }
-
     $this->doRedirect();
   }
 

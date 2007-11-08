@@ -65,6 +65,11 @@ if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] =
 //Chargement de l'IPP
 $patient->loadIPP();
 
+// Chargement du dossier medical du patient
+$patient->loadRefDossierMedical();
+$patient->_ref_dossier_medical->loadRefsTraitements();
+$patient->_ref_dossier_medical->loadRefsAntecedents();
+$patient->_ref_dossier_medical->loadRefsAddictions();
 
 // Création du template
 $smarty = new CSmartyDP();

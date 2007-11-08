@@ -1,8 +1,8 @@
 <strong>Addictions significatifs</strong>
 
 <ul>
-{{if $consult_anesth->_ref_addictions}}
-  {{foreach from=$consult_anesth->_ref_types_addiction key=curr_type item=list_addiction}}
+{{if $sejour->_ref_dossier_medical->_ref_addictions}}
+  {{foreach from=$sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
   {{if $list_addiction|@count}}
   <li>
     {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}

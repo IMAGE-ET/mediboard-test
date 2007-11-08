@@ -26,8 +26,10 @@ if ($patient->patient_id) {
 	$patient->loadRefsFwd();
   $patient->loadRefsConsultations();
   $patient->loadRefsSejours();
-  $patient->loadRefsAntecedents();
-  $patient->loadRefsTraitements();
+  $patient->loadRefDossierMedical();
+  $patient->_ref_dossier_medical->updateFormFields();
+  $patient->_ref_dossier_medical->loadRefsAntecedents();
+  $patient->_ref_dossier_medical->loadRefsTraitements();
   $patient->loadRefsAffectations();
   
   //Affectation

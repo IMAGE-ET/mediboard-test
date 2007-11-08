@@ -40,8 +40,8 @@ Traitement = {
 
 <strong>Antécédents du patient</strong>
 <ul>
-{{if $patient->_ref_antecedents}}
-  {{foreach from=$patient->_ref_antecedents key=curr_type item=list_antecedent}}
+{{if $patient->_ref_dossier_medical->_ref_antecedents}}
+  {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   <li>
     {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -80,7 +80,7 @@ Traitement = {
 </ul>
 <strong>Traitements du patient</strong>
 <ul>
-  {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+  {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
   <li>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
@@ -109,7 +109,7 @@ Traitement = {
 </ul>
 <strong>Diagnostics du patient</strong>
 <ul>
-  {{foreach from=$patient->_codes_cim10 item=curr_code}}
+  {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}

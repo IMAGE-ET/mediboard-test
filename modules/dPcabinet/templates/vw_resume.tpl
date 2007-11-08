@@ -31,8 +31,8 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td class="text" valign="top">
       <ul>
-      {{if $patient->_ref_antecedents}}
-        {{foreach from=$patient->_ref_antecedents key=keyAnt item=currTypeAnt}}
+      {{if $patient->_ref_dossier_medical->_ref_antecedents}}
+        {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
         {{if $currTypeAnt}}
         <li>
           <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
@@ -73,7 +73,7 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td class="text" valign="top">
       <ul>
-        {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+        {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
         <li>
           {{if $curr_trmt->fin}}
             Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}

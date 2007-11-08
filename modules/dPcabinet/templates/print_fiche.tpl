@@ -143,14 +143,6 @@
                 <td colspan="2"></td>
               </tr>
               {{/if}}
-              <tr>
-                <th class="NotBold">Tabac</th>
-                <td colspan="3" class="Bold">{{$consult->_ref_consult_anesth->tabac|nl2br}}</td>
-              </tr>
-              <tr>
-                <th class="NotBold">Oenolisme</th>
-                <td colspan="3" class="text Bold">{{$consult->_ref_consult_anesth->oenolisme|nl2br}}</td>
-              </tr>
             </table>
           </td>
         </tr>
@@ -163,8 +155,30 @@
         </tr>
         <tr>
           <td>
-            {{if $patient->_ref_antecedents}}
-              {{foreach name=nameForeach from=$patient->_ref_antecedents key=keyAnt item=currTypeAnt}}
+
+          
+          {{if $patient->_ref_dossier_medical->_ref_addictions}}
+            {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
+              {{if $list_addiction|@count}}
+              
+              <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
+              {{foreach from=$list_addiction item=curr_addiction}}
+                <ul>
+                <li>
+                {{$curr_addiction->addiction}}
+                </li>
+                </ul>
+              {{/foreach}}
+              
+              {{/if}}
+              
+            {{/foreach}}
+          {{/if}}
+          
+							
+          
+            {{if $patient->_ref_dossier_medical->_ref_antecedents}}
+              {{foreach name=nameForeach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
               {{if !$smarty.foreach.nameForeach.first}}
               <br />
@@ -172,23 +186,28 @@
               <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong><br />
               
               {{foreach from=$currTypeAnt item=currAnt}}
-                <strong>&bull;</strong> 
+              <ul>
+                <li> 
                 {{if $currAnt->date|date_format:"%d/%m/%Y"}}
                 {{$currAnt->date|date_format:"%d/%m/%Y"}} :
                 {{/if}}
                 {{$currAnt->rques}} 
+                </li>
+              </ul>
               {{/foreach}}
               {{/if}}
               {{/foreach}}
             {{else}}
+            <ul>
             <li>Pas d'antécédents</li>
+            </ul>
             {{/if}}
 
             {{if $patient->_codes_cim10}}
-            <br />
+          
             <strong>Diagnostics du patient</strong>
             <ul>
-              {{foreach from=$patient->_codes_cim10 item=curr_code}}
+              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
               <li>
                 {{$curr_code->code}}: {{$curr_code->libelle}}
               </li>
@@ -211,7 +230,7 @@
         <tr>
           <td>
             <ul>
-              {{foreach from=$patient->_ref_traitements item=curr_trmt}}
+              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
                   Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :

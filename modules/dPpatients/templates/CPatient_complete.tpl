@@ -174,7 +174,7 @@
   
   <tr>
     <td class="text">
-      {{foreach from=$object->_ref_antecedents key=curr_type item=list_antecedent}}
+      {{foreach from=$object->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
       <strong>
         {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
       </strong>
@@ -191,8 +191,8 @@
       {{/foreach}}
     </td>
     <td class="text">
-      {{if $object->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ref_traitements item=curr_traitement}}
+      {{if $object->_ref_dossier_medical->_ref_traitements|@count}}<ul>{{/if}}
+      {{foreach from=$object->_ref_dossier_medical->_ref_traitements item=curr_traitement}}
         <li>
           {{if $curr_traitement->fin}}
             Du {{mb_value object=$curr_traitement field="debut"}}
@@ -205,11 +205,11 @@
       {{foreachelse}}
         <em>Pas de traitements</em>
       {{/foreach}}
-      {{if $object->_ref_traitements|@count}}</ul>{{/if}}
+      {{if $object->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
     </td>
     <td class="text">
-      {{if $object->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_codes_cim10 item=curr_code}}
+      {{if $object->_ref_dossier_medical->_ref_traitements|@count}}<ul>{{/if}}
+      {{foreach from=$object->_ref_dossier_medical->_codes_cim10 item=curr_code}}
         <li>
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
@@ -218,12 +218,12 @@
           <em>Pas de diagnostics</em>
         </li>
       {{/foreach}}
-      {{if $object->_ref_traitements|@count}}</ul>{{/if}}
+      {{if $object->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
     </td>
 
     {{if $dPconfig.dPcabinet.addictions}}
     <td class="text">
-      {{foreach from=$object->_ref_types_addiction key=curr_type item=list_addiction}}
+      {{foreach from=$object->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
       <strong>
         {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
       </strong>

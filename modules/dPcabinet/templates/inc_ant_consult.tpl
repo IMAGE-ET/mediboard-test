@@ -14,6 +14,7 @@ function reloadCim10(sCode){
   var oForm = document.addDiagFrm;
   
   oCimField.add(sCode);
+ 
   {{if $_is_anesth}}
   oCimAnesthField.add(sCode);
   {{/if}}
@@ -27,8 +28,12 @@ function updateTokenCim10() {
 }
 
 function updateTokenCim10Anesth(){
-  var oForm = document.editTabacFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedentsAnesth });
+  var oForm = document.editDiagAnesthFrm;
+  // si on a un object_id, on submit
+
+  if(oForm.object_id.value != ""){
+     submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedentsAnesth });
+  }
 }
 
 function dateAntecedent(){
@@ -108,9 +113,15 @@ function closeCIM10() {
 function reloadAntecedents() {
   var antUrl = new Url;
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
-  antUrl.addParam("patient_id", document.editDiagFrm.patient_id.value);
+  antUrl.addParam("patient_id", "{{$patient->_id}}");
   antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
   antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : closeCIM10 });
+  
+  {{if $_is_anesth}}
+  if (document.addOpFrm.sejour_id.value != ""){
+    reloadAntecedentsAnesth();
+  }
+  {{/if}}
 }
 
 function submitAnt(oForm) {
@@ -121,22 +132,18 @@ function submitAnt(oForm) {
 function reloadAntecedentsAnesth() {
   var antUrl = new Url;
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");
-  antUrl.addParam("consultation_anesth_id", "{{$consult_anesth->_id}}");
+  antUrl.addParam("sejour_id", document.addOpFrm.sejour_id.value);
   antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
 }
 
 function copyAntecedent(antecedent_id){
  var oForm = document.frmCopyAntecedent;
  oForm.antecedent_id.value = antecedent_id;
- oForm.object_class.value  = "CConsultAnesth";
- oForm.object_id.value     = "{{$consult_anesth->_id}}";
  submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
 }
 function copyTraitement(traitement_id){
  var oForm = document.frmCopyTraitement;
  oForm.traitement_id.value = traitement_id;
- oForm.object_class.value  = "CConsultAnesth";
- oForm.object_id.value     = "{{$consult_anesth->_id}}";
  submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
 }
 {{/if}}
@@ -147,11 +154,8 @@ function copyTraitement(traitement_id){
   <tr>
     <td class="text">
 
-      {{if $dPconfig.dPcabinet.addictions}}
-        {{include file="inc_consult_anesth/inc_addictions.tpl}}
-      {{elseif $_is_anesth}}
-        {{include file="inc_consult_anesth/inc_tabac_oenolisme.tpl}}      
-      {{/if}}
+   
+     {{include file="inc_consult_anesth/inc_addictions.tpl}}
 
       <hr />
       
@@ -160,10 +164,12 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
-      <input type="hidden" name="object_class" value="CPatient" />      
+      <input type="hidden" name="_patient_id" value="{{$patient->patient_id}}" />
+      
+      <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
       {{if $_is_anesth}}
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+      <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
+      <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
       {{/if}}
 
       <table class="form">
@@ -226,10 +232,11 @@ function copyTraitement(traitement_id){
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_traitement_aed" />
-      <input type="hidden" name="object_id" value="{{$patient->patient_id}}" />
-      <input type="hidden" name="object_class" value="CPatient" />
+      <input type="hidden" name="_patient_id" value="{{$patient->patient_id}}" />
+      
       {{if $_is_anesth}}
-      {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+      <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
+      <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
       {{/if}}
       
       <table class="form">
@@ -285,7 +292,7 @@ function copyTraitement(traitement_id){
       
       <hr />
       
-      <form name="addDiagFrm" action="?m={{$m}}" method="post">
+      <form name="addDiagFrm" action="?m=dPcabinet" method="post">
         <strong>Ajouter un diagnostic</strong>
 
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />
@@ -308,14 +315,22 @@ function copyTraitement(traitement_id){
         
       </form>
       
-      <form name="editDiagFrm" action="?m={{$m}}" method="post">
+      
+      <!-- Gestion des diagnostics pour le dossier medical du patient -->
+      <form name="editDiagFrm" action="?m=dPcabinet" method="post">
 
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="edit_consultation" />
       <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_patients_aed" />
-      {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
-      {{mb_field object=$patient field="listCim10" hidden=1 prop=""}}
+      <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+      <input type="hidden" name="object_id" value="{{$patient->_id}}" />
+      <input type="hidden" name="object_class" value="CPatient" />
+      
+      {{if $patient->_ref_dossier_medical->_id}}
+        <input type="hidden" name="listCim10" value="{{$patient->_ref_dossier_medical->listCim10}}" />
+      {{else}}
+        <input type="hidden" name="listCim10" value="" />
+      {{/if}}
       
       <table style="width: 100%">
       {{foreach from=$patient->_static_cim10 key=cat item=curr_cat}}
@@ -327,7 +342,7 @@ function copyTraitement(traitement_id){
           {{foreach from=$curr_cat item=curr_code}}
           <tr>
             <td class="text">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}');{{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}}">
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(document.addOpFrm &amp;&amp; document.addOpFrm.sejour_id.value != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
                 Ajouter
               </button>
               <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')">
@@ -340,7 +355,20 @@ function copyTraitement(traitement_id){
         </tbody>
       {{/foreach}}
       </table>
-      </form>      
+      </form>
+      
+      <!-- gestion des diagnostics pour le dossier medical du sejour -->
+      {{if $consult->_ref_consult_anesth->_id}}
+      <form name="editDiagAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this);">
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="tab" value="edit_consultation" />
+        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+        <input type="hidden" name="object_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
+        <input type="hidden" name="object_class" value="CSejour" />
+        <input type="hidden" name="listCim10" value="" />
+      </form>
+      {{/if}}
     </td>
 
     <td class="halfPane">
@@ -352,9 +380,10 @@ function copyTraitement(traitement_id){
         </tr>
         <tr>
           <td class="text" id="listAnt">
-            {{include file="inc_list_ant.tpl"}}
+            
           </td>
         </tr>
+        
         {{if $_is_anesth}}
         <tr>
           <th class="category">
@@ -363,7 +392,7 @@ function copyTraitement(traitement_id){
         </tr>
         <tr>
           <td class="text" id="listAntCAnesth">
-            {{include file="inc_list_ant_anesth.tpl"}}
+            
           </td>
         </tr>
         {{/if}}

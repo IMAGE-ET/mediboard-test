@@ -49,6 +49,8 @@ if ($selConsult) {
 
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
+    $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
+    $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
   }
 
  

@@ -26,8 +26,11 @@ $where = array();
 $where["plageconsult.chir_id"] = $ds->prepareIn(array_keys($listPrat));
 $patient->loadRefsConsultations($where);
 $patient->loadRefsSejours();
-$patient->loadRefsAntecedents();
-$patient->loadRefsTraitements();
+
+$patient->loadRefDossierMedical();
+
+$patient->_ref_dossier_medical->loadRefsAntecedents();
+$patient->_ref_dossier_medical->loadRefsTraitements();
 
 $consultations =& $patient->_ref_consultations;
 $sejours =& $patient->_ref_sejours;

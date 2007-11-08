@@ -16,9 +16,17 @@ $_is_anesth  = mbGetValueFromGetOrSession("_is_anesth", null);
 
 $patient = new CPatient;
 $patient->load($patient_id);
-$patient->loadRefsAntecedents();
-$patient->loadRefsTraitements();
-$patient->loadRefsAddictions();
+
+// Chargement du dossier medical du patient
+$patient->loadRefDossierMedical();
+
+// Chargements des antecedents, traitements et addictions du dossier_medical
+if($patient->_ref_dossier_medical->_id){
+  $patient->_ref_dossier_medical->loadRefsAntecedents();
+  $patient->_ref_dossier_medical->loadRefsTraitements();
+  $patient->_ref_dossier_medical->loadRefsAddictions();
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();

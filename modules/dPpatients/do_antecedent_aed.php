@@ -11,45 +11,34 @@ global $AppUI;
 
 $autoadd_default = isset($AppUI->user_prefs["AUTOADDSIGN"]) ? $AppUI->user_prefs["AUTOADDSIGN"] : 1 ;
 
-class CDoAntecedentAddEdit extends CDoObjectAddEdit {
-  function CDoAntecedentAddEdit() {
-    $this->CDoObjectAddEdit("CAntecedent", "antecedent_id");
-    
-    $this->createMsg = "Antecedent créé";
-    $this->modifyMsg = "Antecedent modifié";
-    $this->deleteMsg = "Antecedent supprimé";
-  }
-  
-  function doIt() {
-    global $autoadd_default ;
-    $this->doBind();
-
-    if (intval(dPgetParam($_POST, 'del'))) {
-      $this->doDelete();
-    } else {
-      $this->doStore();
-    }
-    if(! (!$this->isNotNew && isset($_POST["consultation_anesth_id"]) && $this->_obj->object_class == "CPatient" && $autoadd_default == 1)){
-      $this->doRedirect();
-    }
-  }
+// Sejour
+// si on a un sejour et que l'option d'ajout automatique est activée
+if(isset($_POST["_sejour_id"]) && ($autoadd_default == 1) && ($_POST["_sejour_id"] != "")){
+ 
+  $doSejour = new CDoObjectAddEdit("CAntecedent", "antecedent_id");
+  $doSejour->createMsg = "Antecedent créé";
+  $doSejour->modifyMsg = "Antecedent modifié";
+  $doSejour->deleteMsg = "Antecedent supprimé";
+ 
+  // Ajout de l'antecedent dans le sejour
+  $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_sejour_id"],"CSejour");
+  $doSejour->redirectStore = null;
+  $doSejour->redirect = null;
+ 
+  $doSejour->doIt();
 }
 
-$do = new CDoAntecedentAddEdit;
-$do->doIt();
+// Patient
+$doPatient = new CDoObjectAddEdit("CAntecedent", "antecedent_id");
+$doPatient->createMsg = "Antecedent créé";
+$doPatient->modifyMsg = "Antecedent modifié";
+$doPatient->deleteMsg = "Antecedent supprimé";
 
-$_POST["object_class"] = "CConsultAnesth";
-$_POST["object_id"]    = $_POST["consultation_anesth_id"];
+if($_POST["del"] != 1){
+  $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_patient_id"],"CPatient");
+}
+$_POST["ajax"] = 1;
+  
+$doPatient->doIt();
 
-$copyDo = new CDoObjectAddEdit("CAntecedent", "antecedent_id");
-$copyDo->createMsg = "Antecedent créé";
-$copyDo->modifyMsg = "Antecedent modifié";
-$copyDo->deleteMsg = "Antecedent supprimé";
-
-$copyDo->doBind();
-$copyDo->ajax            = $do->ajax;
-$copyDo->suppressHeaders = $do->suppressHeaders;
-$copyDo->callBack        = "reloadAntecedentsAnesth";
-$copyDo->doStore();
-$copyDo->doRedirect();
 ?>

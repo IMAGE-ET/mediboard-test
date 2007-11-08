@@ -12,8 +12,6 @@ function finAddiction(oForm){
   function copyAddiction(addiction_id){
    var oForm = document.frmCopyAddiction;
    oForm.addiction_id.value = addiction_id;
-   oForm.object_class.value  = "CConsultAnesth";
-   oForm.object_id.value     = "{{$consult_anesth->consultation_anesth_id}}";
    submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
   }
 {{/if}}
@@ -21,27 +19,19 @@ function finAddiction(oForm){
 
 <hr />
 
-<form name="editTabacFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-
-<input type="hidden" name="m" value="{{$m}}" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-{{if $consult->_is_anesth}}
-  {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-  {{mb_field object=$consult_anesth field="listCim10" hidden=1 prop=""}}
-{{/if}}
-</form>
-
 <form name="editAddictFrm" action="?m=dPcabinet" method="post">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_addiction_aed" />
+  <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 
-<input type="hidden" name="m" value="dPpatients" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="dosql" value="do_addiction_aed" />
-<input type="hidden" name="object_id" value="{{$patient->_id}}" />
-<input type="hidden" name="object_class" value="CPatient" />
-{{if $consult->_is_anesth}}
-{{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
-{{/if}}
+  {{if $consult->_ref_consult_anesth->_id}}
+  <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
+  <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
+  {{/if}}
+
+
+
 <table class="form">
 
   <tr>

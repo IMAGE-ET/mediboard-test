@@ -88,6 +88,7 @@ class CSejour extends CCodableCCAM {
   var $_ref_GHM               = array();
   var $_ref_group             = null;
   var $_ref_etabExterne       = null;
+  var $_ref_dossier_medical   = null;
   
   // Distant fields
   var $_dates_operations = null;
@@ -389,6 +390,14 @@ class CSejour extends CCodableCCAM {
   // Calcul des droits CMU pour la duree totale du sejour
   function getDroitsCMU () {
      $this->_couvert_cmu = $this->_date_sortie_prevue <= $this->_ref_patient->cmu;
+  }
+  
+  // Chargement du dossier medical du sejour
+  function loadRefDossierMedical(){
+    $this->_ref_dossier_medical = new CDossierMedical();
+    $where["object_id"] = "= '$this->_id'";
+    $where["object_class"] = "= 'CSejour'";
+    $this->_ref_dossier_medical->loadObject($where);
   }
   
   function loadRefEtabExterne(){
