@@ -198,6 +198,16 @@ function pageMain() {
           </td>
         </tr>
         <tr>
+        <th>{{mb_label object=$mediuserSel field="_user_type"}}</th>
+          <td>
+            <select name="_user_type" class="{{$mediuserSel->_props._user_type}}">
+            {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
+              <option value="{{$curr_key}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
+            {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$mediuserSel field="_profile_id"}}</th>
           <td>
             <select name="_profile_id">

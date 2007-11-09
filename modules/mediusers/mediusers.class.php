@@ -102,7 +102,8 @@ class CMediusers extends CMbObject {
       "_compte_guichet"  => "num length|5 confidential",
       "_compte_numero"   => "str length|11 confidential",
       "_compte_cle"      => "num length|2 confidential",
-      "_profile_id"      => "num"
+      "_profile_id"      => "num",
+      "_user_type"       => "notNull num minMax|0|20"
       );
   }
 
@@ -185,7 +186,7 @@ class CMediusers extends CMbObject {
     global $utypes;
     $user = new CUser();
     if($result = $user->load($this->user_id)) {
-      $this->_user_type       = $utypes[$user->user_type];
+      $this->_user_type       = $user->user_type;
       $this->_user_username   = $user->user_username;
       $this->_user_password   = $user->user_password;
       $this->_user_first_name = ucwords(strtolower($user->user_first_name));

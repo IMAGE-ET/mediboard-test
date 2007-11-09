@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $utypes;
 
 $can->needsRead();
 
@@ -51,6 +51,7 @@ $profiles = $profiles->loadList($where);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("utypes"       , $utypes       );
 $smarty->assign("banques"      , $banques      );
 $smarty->assign("mediuserSel"  , $mediuserSel  );
 $smarty->assign("profiles"     , $profiles     );
