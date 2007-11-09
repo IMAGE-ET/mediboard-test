@@ -144,7 +144,7 @@ class CGHM  extends CMbObject {
   // Liaison à un sejour
   function bindInfos() {
     // Infos patient
-    $adm = $this->_ref_sejour->entree_prevue;    
+    $adm = $this->_ref_sejour->_entree;    
     $anadm = substr($adm, 0, 4);
     $moisadm = substr($adm, 5, 2);
     $jouradm = substr($adm, 8, 2);
@@ -161,7 +161,7 @@ class CGHM  extends CMbObject {
     $this->_ref_patient->sexe == "m" ? $this->_sexe = "Masculin" : $this->_sexe = "Féminin";
     // Infos hospi
     $this->_type_hospi = $this->_ref_sejour->type;
-    $this->_duree = $this->_ref_sejour->_duree_prevue;
+    $this->_duree = $this->_ref_sejour->_duree;
     $this->_motif = "hospi";
     $this->_destination = "MCO";
     // Infos codage

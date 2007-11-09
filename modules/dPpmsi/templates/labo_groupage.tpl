@@ -12,8 +12,8 @@
         </tr>
         <tr>
           <td>
-          	Séjour du {{$sejour->entree_prevue|date_format:"%A %d %B %Y à %H:%M"}}
-            au {{$sejour->sortie_prevue|date_format:"%A %d %B %Y à %H:%M"}}
+          	Séjour du {{$sejour->_entree|date_format:"%A %d %B %Y à %Hh%M"}}
+            au {{$sejour->_sortie|date_format:"%A %d %B %Y à %Hh%M"}}
           </td>
         </tr>
         <tr>

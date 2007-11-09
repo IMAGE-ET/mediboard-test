@@ -64,6 +64,7 @@ class CSejour extends CCodableCCAM {
   var $_sortie             = null;
   var $_duree_prevue       = null;
   var $_duree_reelle       = null;
+  var $_duree              = null;
   var $_date_entree_prevue = null;
   var $_date_sortie_prevue = null;
   var $_hour_entree_prevue = null;
@@ -330,6 +331,7 @@ class CSejour extends CCodableCCAM {
     
     $this->_duree_prevue       = mbDaysRelative($this->entree_prevue, $this->sortie_prevue);
     $this->_duree_reelle       = mbDaysRelative($this->entree_reelle, $this->sortie_reelle);
+    $this->_duree              = mbDaysRelative($this->_entree, $this->_sortie);
 
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);

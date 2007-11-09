@@ -10,9 +10,9 @@
 /**
  * Dossier Médical liés aux notions d'antécédents, traitements, addictions et diagnostics
  */
-class CDossierMedical extends CMbObject {
+class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $listCim10 = null;
+  var $listCim10    = null;
   
   // Form Fields
   var $_codes_cim10 = null;
@@ -101,6 +101,16 @@ class CDossierMedical extends CMbObject {
     }
   }
   
+  function dossierMedicalId($object_id, $object_class) {
+    $dossier = new CDossierMedical();
+    $dossier->object_id    = $object_id;
+    $dossier->object_class = $object_class;
+    $dossier->loadMatchingObject();
+    if(!$dossier->_id) {
+      $dossier->store();
+    }
+    return $dossier->_id;
+  }
 
   function fillTemplate(&$template) {
     global $AppUI;

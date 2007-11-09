@@ -155,48 +155,174 @@ function pageMain() {
         </tr>
         <tbody class="effectSejour" id="sejour{{$curr_sejour->sejour_id}}">
         <tr>
-          <th>Diagnostics du patient</th>
-          <td class="text" colspan="3">
+          <th class="category" colspan="4">
+            <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+              <img src="images/icons/planning.png" alt="Planifier">
+            </a>
+            Groupage
+            <a href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
+              (Ajouter des diagnostics)
+            </a>
+          </th>
+        </tr>
+        <tr>
+          <td colspan="2">
+            <form name="editFrm" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+            Diagnostic principal :
+            <input type="text" name="DP" value="{{$curr_sejour->DP}}"/>
+            <button class="modify" type="submit">Valider</button>
+            </form>
+          </td>
+          <td colspan="2">
+            {{if $curr_sejour->_ref_GHM->_CM}}
+            <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
+            <br />
+            <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} €)
+            <br />
+            {{$GHM->_GHM_nom}}
+            <br />
+            <em>Appartenance aux groupes {{$GHM->_GHM_groupe}}</em>
+            <br />
+            <strong>Bornes d'hospitalisation</strong> :
+            de {{$GHM->_borne_basse}}
+            à {{$GHM->_borne_haute}} jours
+            {{else}}
+            <strong>{{$GHM->_GHM}}</strong>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>Diagnostics CIM</th>
+          <td class="text">
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
-              <li>
-                {{$curr_code->code}} : {{$curr_code->libelle}}
-              </li>
-              {{foreachelse}}
-              <li>Pas de diagnostic</li>
-              {{/foreach}}
+              <li>Du patient
+		            <ul>
+		              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+		              <li>
+		                {{$curr_code->code}} : {{$curr_code->libelle}}
+		              </li>
+		              {{foreachelse}}
+		              <li>Pas de diagnostic</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
+              <li>Significatifs du séjour
+		            <ul>
+		              {{foreach from=$curr_sejour->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+		              <li>
+		                {{$curr_code->code}} : {{$curr_code->libelle}}
+		              </li>
+		              {{foreachelse}}
+		              <li>Pas de diagnostic</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
+		        </ul>
+          </td>
+          <th>Addicitions</th>
+          <td class="text">
+            <ul>
+              <li>Du patient
+                <ul>
+	                {{foreach from=$patient->_ref_dossier_medical->_ref_addictions key=curr_type item=list_addiction}}
+	                {{if $list_addiction|@count}}
+					        <li>
+					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+					          {{foreach from=$list_addiction item=curr_addiction}}
+					          <ul>
+					            <li>
+			                  {{$curr_addiction->date|date_format:"%d %b %Y"}} -
+			                  <em>{{$curr_addiction->rques}}</em>
+			                </li>
+					          </ul>
+					          {{/foreach}}
+					        </li>
+					        {{/if}}
+			            {{foreachelse}}
+			            <li>Pas d'addiction</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
+              <li>Significatifs du séjour
+                <ul>
+	                {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_addictions key=curr_type item=list_addiction}}
+	                {{if $list_addiction|@count}}
+					        <li>
+					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+					          {{foreach from=$list_addiction item=curr_addiction}}
+					          <ul>
+					            <li>
+			                  {{$curr_addiction->date|date_format:"%d %b %Y"}} -
+			                  <em>{{$curr_addiction->rques}}</em>
+			                </li>
+					          </ul>
+					          {{/foreach}}
+					        </li>
+					        {{/if}}
+			            {{foreachelse}}
+			            <li>Pas d'addiction</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
             </ul>
           </td>
         </tr>
         <tr>
-          <th>Antécedents du patient</th>
-          <td class="text" colspan="3">
+          <th>Antécedents</th>
+          <td class="text">
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-              {{if $list_antecedent|@count}}
-		        <li>
-		          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-		          {{foreach from=$list_antecedent item=curr_antecedent}}
-		          <ul>
-		            <li>
-                      {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
-                        <em>{{$curr_antecedent->rques}}</em>
-                    </li>
-		          </ul>
-		          {{/foreach}}
-		        </li>
-		        {{/if}}
-              {{foreachelse}}
-              <li>Pas d'antécédents</li>
-              {{/foreach}}
+              <li>Du patient
+                <ul>
+			            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+			            {{if $list_antecedent|@count}}
+					        <li>
+					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+					          {{foreach from=$list_antecedent item=curr_antecedent}}
+					          <ul>
+					            <li>
+			                  {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+			                  <em>{{$curr_antecedent->rques}}</em>
+			                </li>
+					          </ul>
+					          {{/foreach}}
+					        </li>
+					        {{/if}}
+			            {{foreachelse}}
+			            <li>Pas d'antécédents</li>
+			            {{/foreach}}
+			          </ul>
+			        </li>
+              <li>Significatifs du séjour
+                <ul>
+			            {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+			            {{if $list_antecedent|@count}}
+					        <li>
+					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+					          {{foreach from=$list_antecedent item=curr_antecedent}}
+					          <ul>
+					            <li>
+			                  {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+			                  <em>{{$curr_antecedent->rques}}</em>
+			                </li>
+					          </ul>
+					          {{/foreach}}
+					        </li>
+					        {{/if}}
+			            {{foreachelse}}
+			            <li>Pas d'antécédents</li>
+			            {{/foreach}}
+			          </ul>
+			        </li>
             </ul>
           </td>
-        </tr>
-        <tr>
-          <th>Traitements du patient</th>
-          <td class="text" colspan="3">
+          <th>Traitements</th>
+          <td class="text">
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+              {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
                   Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}}
@@ -266,6 +392,49 @@ function pageMain() {
             <button class="print" onclick="printFeuilleBloc({{$curr_op->operation_id}})">
               Imprimer la feuille de bloc
             </button>
+            <br />
+            <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
+              Modifier les actes
+            </a>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4">
+            <table class="tbl">
+              <tr>
+                <th class="category">supprimer</th>
+                <th class="category">Code</th>
+                <th class="category">Activité</th>
+                <th class="category">Phase &mdash; Modifs.</th>
+                <th class="category">Association</th>
+              </tr>
+              {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
+              <tr>
+                <td class="button">
+                  <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                  <input type="hidden" name="m" value="dPsalleOp" />
+                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
+                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
+                    {{tr}}Delete{{/tr}}
+                  </button>
+                  </form>
+                </td>
+                <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
+                <td class="button">{{$curr_acte->code_activite}}</td>
+                <td class="button">
+                  {{$curr_acte->code_phase}}
+                  {{if $curr_acte->modificateurs}}
+                    &mdash; {{$curr_acte->modificateurs}}
+                  {{/if}}
+                </td>
+                <td>
+                  {{$curr_acte->_guess_association}}
+                </td>
+              </tr>
+              {{/foreach}}
+            </table>
           </td>
         </tr>
         <tr>
@@ -397,51 +566,9 @@ function pageMain() {
             </table>
           </td>
         </tr>
-        <tr>
-          <td colspan="4">
-            <table class="tbl">
-              <tr>
-                <th class="category">supprimer</th>
-                <th class="category">Code</th>
-                <th class="category">Activité</th>
-                <th class="category">Phase &mdash; Modifs.</th>
-                <th class="category">Association</th>
-              </tr>
-              {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
-              <tr>
-                <td class="button">
-                  <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-                  <input type="hidden" name="m" value="dPsalleOp" />
-                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
-                    {{tr}}Delete{{/tr}}
-                  </button>
-                  </form>
-                </td>
-                <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
-                <td class="button">{{$curr_acte->code_activite}}</td>
-                <td class="button">
-                  {{$curr_acte->code_phase}}
-                  {{if $curr_acte->modificateurs}}
-                    &mdash; {{$curr_acte->modificateurs}}
-                  {{/if}}
-                </td>
-                <td>
-                  {{$curr_acte->_guess_association}}
-                </td>
-              </tr>
-              {{/foreach}}
-            </table>
-          </td>
-        </tr>
 
         <tr>
           <td class="button" colspan="4">
-            <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}">
-              Modifier les actes
-            </a>
             <button class="tick" onclick="exporterDossier({{$curr_op->operation_id}})">Exporter vers S@nté.com</button>
           </td>
         </tr>
@@ -463,43 +590,6 @@ function pageMain() {
           </td>
         </tr>
         {{/foreach}}
-        <tr>
-          <th class="category" colspan="4">
-            Groupage
-            <a href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              (envoyer vers le labo)
-            </a>
-          </th>
-        </tr>
-        <tr>
-          <td colspan="4">
-            <form name="editFrm" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
-            Diagnostic principal :
-            <input type="text" name="DP" value="{{$curr_sejour->DP}}"/>
-            <button class="modify" type="submit">Valider</button>
-            </form>
-            {{if $curr_sejour->_ref_GHM->_CM}}
-            <br />
-            <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
-            <br />
-            <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} €)
-            <br />
-            {{$GHM->_GHM_nom}}
-            <br />
-            <em>Appartenance aux groupes {{$GHM->_GHM_groupe}}</em>
-            <br />
-            <strong>Bornes d'hospitalisation</strong> :
-            de {{$GHM->_borne_basse}}
-            à {{$GHM->_borne_haute}} jours
-            {{else}}
-            <strong>{{$GHM->_GHM}}</strong>
-            {{/if}}
-          </td>
-        </tr>
         </tbody>
         {{/foreach}}
 

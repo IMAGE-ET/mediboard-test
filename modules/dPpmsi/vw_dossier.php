@@ -24,13 +24,20 @@ $patient->load($pat_id);
 
 if ($patient->patient_id) {
 	$patient->loadRefsFwd();
-  $patient->loadRefsConsultations();
-  $patient->loadRefsSejours();
   $patient->loadRefDossierMedical();
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
   $patient->_ref_dossier_medical->loadRefsTraitements();
   $patient->loadRefsAffectations();
+  $patient->loadRefsConsultations();
+  $patient->loadRefsSejours();
+  foreach($patient->_ref_sejours as &$sejour) {
+    $sejour->loadRefDossierMedical();
+    $sejour->_ref_dossier_medical->updateFormFields();
+    $sejour->_ref_dossier_medical->loadRefsAntecedents();
+    $sejour->_ref_dossier_medical->loadRefsTraitements();
+    $sejour->loadRefsAffectations();
+  }
   
   //Affectation
   $affectation =& $patient->_ref_curr_affectation;
@@ -46,24 +53,20 @@ if ($patient->patient_id) {
     }
     
   // Consultation
-  foreach ($patient->_ref_consultations as $keyConsult => $valueConsult) {
-    $consult =& $patient->_ref_consultations[$keyConsult];
+  foreach ($patient->_ref_consultations as &$consult) {
     $consult->loadRefsFwd(); //loadRefs();
   }
 
   // Sejours
-  foreach ($patient->_ref_sejours as $keySejour => $valueSejour) {
-    $sejour =& $patient->_ref_sejours[$keySejour];
+  foreach ($patient->_ref_sejours as &$sejour) {
     $sejour->loadRefs();
     $sejour->loadRefGHM();
-    foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
-      $operation =& $sejour->_ref_operations[$keyOp];
+    foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
       
       $operation->getNumDocsAndFiles();
       $operation->loadRefsActesCCAM();
-      foreach ($operation->_ref_actes_ccam as $keyActe => $valueActe) {
-        $acte =& $operation->_ref_actes_ccam[$keyActe];
+      foreach ($operation->_ref_actes_ccam as &$acte) {
         $acte->loadRefsFwd();
         $acte->guessAssociation();
       }
