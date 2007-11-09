@@ -103,6 +103,8 @@
   
   <tr>
     <th>{{mb_label object=$patient field="rang_beneficiaire"}}</th>
-    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="168" onblur="oAccord.changeTabAndFocus(1, this.form.regime_sante);"}}</td>
+    <td>{{mb_field object=$patient field="rang_beneficiaire" tabindex="168" onblur="this.value == '01' ?
+           oAccord.changeTabAndFocus(1, this.form.regime_sante) :
+           oAccord.changeTabAndFocus(3, this.form.assure_nom);"}}</td>
   </tr>
 </table>
