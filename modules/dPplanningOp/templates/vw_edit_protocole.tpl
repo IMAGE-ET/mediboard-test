@@ -30,19 +30,7 @@ function refreshListCCAM() {
 
 function checkFormSejour() {
   var oForm = document.editFrm;
-  if (!checkForm(oForm)) {
-    return false;
-  }
-  if (!checkDuree()) {
-    return false;
-  }
-  if (!checkDureeHospi()) {
-    return false;
-  }
-  if(!checkCCAM()) {
-    return false
-  }
-  return true;
+  return checkForm(oForm) && checkDuree() && checkDureeHospi() && checkCCAM();
 }
 
 function checkCCAM() {
@@ -109,7 +97,7 @@ function checkDuree() {
       return false;
     }
   }
-  return true
+  return true;
 }
 
 

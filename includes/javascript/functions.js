@@ -1136,6 +1136,7 @@ TokenField.prototype.add = function(sValue,multiple) {
   }
   this.oElement.value = aToken.join("|");
   this.onComplete();
+  return true;
 }
 
 TokenField.prototype.remove = function(sValue) {
@@ -1147,6 +1148,7 @@ TokenField.prototype.remove = function(sValue) {
   aToken.removeByValue(sValue, true);
   this.oElement.value = aToken.join("|");
   this.onComplete();
+  return true;
 }
 
 function view_log(classe, id) {
