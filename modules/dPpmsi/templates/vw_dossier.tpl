@@ -284,7 +284,9 @@ function pageMain() {
 					          {{foreach from=$list_antecedent item=curr_antecedent}}
 					          <ul>
 					            <li>
-			                  {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+					              {{if $curr_antecedent->date}}
+			                    {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+			                  {{/if}}
 			                  <em>{{$curr_antecedent->rques}}</em>
 			                </li>
 					          </ul>
@@ -306,7 +308,7 @@ function pageMain() {
 					          <ul>
 					            <li>
 					              {{if $curr_antecedent->date}}
-			                  {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+			                    {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
 			                  {{/if}}
 			                  <em>{{$curr_antecedent->rques}}</em>
 			                </li>
@@ -345,11 +347,11 @@ function pageMain() {
 		              {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
 		              <li>
 		                {{if $curr_trmt->fin}}
-		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}}
-		                {{else}}
-		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}}
+		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}} :
+		                {{elseif $curr_trmt->debut}}
+		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}} :
 		                {{/if}}
-		                : <em>{{$curr_trmt->traitement}}</em>
+		                <em>{{$curr_trmt->traitement}}</em>
 		              </li>
 		              {{foreachelse}}
 		              <li>Pas de traitements</li>
