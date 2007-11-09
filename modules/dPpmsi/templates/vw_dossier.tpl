@@ -156,13 +156,13 @@ function pageMain() {
         <tbody class="effectSejour" id="sejour{{$curr_sejour->sejour_id}}">
         <tr>
           <th class="category" colspan="4">
-            <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
+            <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
               <img src="images/icons/planning.png" alt="Planifier">
             </a>
-            Groupage
-            <a href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              (Ajouter des diagnostics)
+            <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
+              <img src="images/icons/edit.png" alt="Planifier">
             </a>
+            Groupage
           </th>
         </tr>
         <tr>
@@ -305,7 +305,9 @@ function pageMain() {
 					          {{foreach from=$list_antecedent item=curr_antecedent}}
 					          <ul>
 					            <li>
+					              {{if $curr_antecedent->date}}
 			                  {{$curr_antecedent->date|date_format:"%d %b %Y"}} -
+			                  {{/if}}
 			                  <em>{{$curr_antecedent->rques}}</em>
 			                </li>
 					          </ul>
@@ -322,18 +324,38 @@ function pageMain() {
           <th>Traitements</th>
           <td class="text">
             <ul>
-              {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
-              <li>
-                {{if $curr_trmt->fin}}
-                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}}
-                {{else}}
-                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}}
-                {{/if}}
-                : <em>{{$curr_trmt->traitement}}</em>
-              </li>
-              {{foreachelse}}
-              <li>Pas de traitements</li>
-              {{/foreach}}
+              <li>Du patient
+                <ul>
+		              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+		              <li>
+		                {{if $curr_trmt->fin}}
+		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}} :
+		                {{elseif $curr_trmt->debut}}
+		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}} :
+		                {{/if}}
+		                <em>{{$curr_trmt->traitement}}</em>
+		              </li>
+		              {{foreachelse}}
+		              <li>Pas de traitements</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
+              <li>Significatifs du séjour
+                <ul>
+		              {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+		              <li>
+		                {{if $curr_trmt->fin}}
+		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}}
+		                {{else}}
+		                  Depuis le {{$curr_trmt->debut|date_format:"%d %b %Y"}}
+		                {{/if}}
+		                : <em>{{$curr_trmt->traitement}}</em>
+		              </li>
+		              {{foreachelse}}
+		              <li>Pas de traitements</li>
+		              {{/foreach}}
+		            </ul>
+		          </li>
             </ul>
           </td>
         </tr>
