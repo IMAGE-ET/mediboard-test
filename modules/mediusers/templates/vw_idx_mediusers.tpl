@@ -1,5 +1,19 @@
 <script type="text/javascript">
 
+function loadProfil(type){
+  var tabProfil = {{$tabProfil|@json}};
+
+  // Liste des profils dispo pour le type selectionné
+  var listProfil = tabProfil[type] || [];
+  
+  $A(document.mediuser._profile_id).each( function(input) {
+    input.disabled = !listProfil.include(input.value) && input.value;
+    input.selected = input.selected && !input.disabled;
+  });  
+}
+
+
+
 var Functions = {
   collapse: function() {
     Element.hide.apply(null, $$("tbody.functionEffect"));
@@ -26,6 +40,10 @@ function deldate(sField){
 }
 
 function pageMain() {
+{{if $mediuserSel->_id}}
+  loadProfil("{{$mediuserSel->_user_type}}");
+{{/if}}
+
   regFieldCalendar("mediuser", "deb_activite");
   regFieldCalendar("mediuser", "fin_activite");
 }
@@ -200,7 +218,7 @@ function pageMain() {
         <tr>
         <th>{{mb_label object=$mediuserSel field="_user_type"}}</th>
           <td>
-            <select name="_user_type" class="{{$mediuserSel->_props._user_type}}">
+            <select name="_user_type" class="{{$mediuserSel->_props._user_type}}" onChange="loadProfil(this.value)">
             {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
               <option value="{{$curr_key}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
             {{/foreach}}

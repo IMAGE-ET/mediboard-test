@@ -48,9 +48,16 @@ $where = array (
 $profiles = new CUser();
 $profiles = $profiles->loadList($where);
 
+// Creation du tableau de profil en fonction du type
+foreach($profiles as $key => $profil){
+  $tabProfil[$profil->user_type][] = $profil->_id;
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("tabProfil"    , $tabProfil    );
 $smarty->assign("utypes"       , $utypes       );
 $smarty->assign("banques"      , $banques      );
 $smarty->assign("mediuserSel"  , $mediuserSel  );
