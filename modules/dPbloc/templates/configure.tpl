@@ -44,8 +44,31 @@
       {{/foreach}}
       </select>
     </td>
-    
-  <tr>
+ </tr>
+ <tr>
+   <th class="category" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
+ </tr>
+ <tr>
+   <th class="category" colspan="2">Plages vides</th>
+   <th class="category" colspan="2">Libellés ccam</th>
+ </tr>
+ <tr>
+    {{assign var="var" value="plage_vide"}}
+    <td colspan="2">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>     
+    {{assign var="var" value="libelle_ccam"}}
+    <td colspan="2">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>      
+ </tr>
+ <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>

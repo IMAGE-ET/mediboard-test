@@ -82,25 +82,6 @@ function pageMain() {
            <th>{{mb_label object=$filter field="_date_max"}}</th>
            <td class="date">{{mb_field object=$filter field="_date_max" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_plage"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="_plage"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
-          <td><input type="text" name="_codes_ccam" size="10" value="" /></td>
-          <td class="button"><button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
-          <script type="text/javascript">
-          CCAMSelector.init = function(){
-            this.sForm  = "paramFrm";
-            this.sClass = "_class_name";
-            this.sChir  = "_chir";
-            this.sView  = "_codes_ccam";
-            this.pop();
-          }
-          </script>
-          </td>
-        </tr>
       </table>
 
     </td>
@@ -163,21 +144,61 @@ function pageMain() {
             {{mb_field object=$filterSejour field="type" canNull=true defaultOption="&mdash; Tous les types"}}
           </td>
         </tr>
-        <tr>
-          <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
-          <td>{{mb_field object=$filter field="_ccam_libelle"}}</td>
+           <tr>
+          <th>{{mb_label object=$filter field="_codes_ccam"}}</th>
+          <td><input type="text" name="_codes_ccam" size="10" value="" />
+          <button type="button" class="search" onclick="CCAMSelector.init()">sélectionner un code</button>
+          <script type="text/javascript">
+          CCAMSelector.init = function(){
+            this.sForm  = "paramFrm";
+            this.sClass = "_class_name";
+            this.sChir  = "_chir";
+            this.sView  = "_codes_ccam";
+            this.pop();
+          }
+          </script>
+          </td>
         </tr>
+
       </table>
 
     </td>
   </tr>
   <tr>
     <td colspan="2">
-
+      <table class="form">
+        <tr>
+          <th class="category" colspan="2">Paramètres d'affichage</th>
+        </tr>
+        {{assign var="class" value="CPlageOp"}}
+            
+        <tr>
+          <th style="width: 50%">{{mb_label object=$filter field="_plage"}}</th>
+          <td>  
+            {{assign var="var" value="plage_vide"}}
+      <label for="_plage">Oui</label>
+      <input type="radio" name="_plage" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="_plage">Non</label>
+      <input type="radio" name="_plage" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+          </td>
+        </tr>
+         <tr>
+          <th>{{mb_label object=$filter field="_ccam_libelle"}}</th>
+          <td>  
+            {{assign var="var" value="libelle_ccam"}}
+      <label for="_ccam_libelle">Oui</label>
+      <input type="radio" name="_ccam_libelle" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="_ccam_libelle">Non</label>
+      <input type="radio" name="_ccam_libelle" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
       <table class="form"><tr><td class="button"><button class="print" type="button" onclick="checkFormPrint()">Afficher</button></td></tr></table>
-
     </td>
   </tr>
 </table>
-
 </form>
