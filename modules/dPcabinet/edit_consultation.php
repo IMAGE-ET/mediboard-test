@@ -99,6 +99,8 @@ $codePraticienEc = null;
 if($consult->consultation_id) {
   $consult->loadRefs();
   $consult->loadAides($userSel->user_id);
+  
+  // Chargment de la consultation d'anesthésie
   $consult->_ref_consult_anesth->loadAides($userSel->user_id);
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
@@ -110,12 +112,19 @@ if($consult->consultation_id) {
       $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
+  
+  // Chargement du patient
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
+  $patient->loadIdVitale();
+  
+  // Chargement des ses consultations
   foreach($patient->_ref_consultations as $key => $curr_cons) {
     $patient->_ref_consultations[$key]->loadRefsFwd();
   }
+  
+  // Chargement des ses séjours
   foreach($patient->_ref_sejours as $key => $curr_sejour) {
     $patient->_ref_sejours[$key]->loadRefsFwd();
     $patient->_ref_sejours[$key]->loadRefsOperations();
@@ -125,6 +134,8 @@ if($consult->consultation_id) {
   }
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
+  
+  // Calcul des paramètres de DHE
   $patient->makeDHEUrl();
   if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
     $tmpEtab = array();
@@ -137,11 +148,13 @@ if($consult->consultation_id) {
     }
     $etablissements = $tmpEtab;
 
+    // ATTENTION LE TAG N'EST PAS DEFINI !
     $idExt = new CIdSante400;
     $idExt->loadLatestFor($patient);
     $patIdentEc = $idExt->id400;
     $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
 
+    // ATTENTION LE TAG N'EST PAS DEFINI !
     $idExt = new CIdSante400;
     $idExt->loadLatestFor($userSel);
     $codePraticienEc = $idExt->id400;

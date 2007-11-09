@@ -41,6 +41,7 @@ var Patient = {
   }
 }
 
+Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   var url = new Url;
   url.setModuleAction("dPpatients", "pat_selector");
@@ -56,12 +57,14 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 <form name="patientEdit" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="dosql" value="do_patients_aed" />
+<input type="hidden" name="_bind_vitale" value="do" />
+{{mb_field object=$patVitale field="patient_id" hidden="true"}}
 {{mb_field object=$patVitale field="patient_id" hidden="true"}}
 
 <table class="form">
 
 	<tr>
-	  <th class="category" colspan="2">Valeurs SESAM Vitale</th>
+	  <th class="category" colspan="4">Valeurs SESAM Vitale</th>
 	</tr>
 	
 	<tr>
@@ -69,6 +72,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 	  <td>
 	    {{mb_value object=$patVitale field="nom"}}
 	    {{mb_field object=$patVitale field="nom" hidden="true"}}
+	  </td>
+	  <th rowspan="2">{{mb_label object=$patVitale field="adresse"}}</th>
+	  <td rowspan="2">
+	    {{mb_value object=$patVitale field="adresse"}}
+	    {{mb_field object=$patVitale field="adresse" hidden="true"}}
 	  </td>
 	</tr>
 	
@@ -87,6 +95,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 	    {{mb_field object=$patVitale field="naissance" hidden="true"}}
 	    {{mb_field object=$patVitale field="rang_naissance" hidden="true"}}
 	  </td>
+	  <th>{{mb_label object=$patVitale field="cp"}}</th>
+	  <td>
+	    {{mb_value object=$patVitale field="cp"}}
+	    {{mb_field object=$patVitale field="cp" hidden="true"}}
+	  </td>
 	</tr>
 	
 	<tr>
@@ -96,6 +109,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 	    {{mb_field object=$patVitale field="matricule" hidden="true"}}
 	    {{mb_field object=$patVitale field="assure_matricule" hidden="true"}}
 	    {{mb_field object=$patVitale field="rang_beneficiaire" hidden="true"}}
+	  </td>
+	  <th>{{mb_label object=$patVitale field="ville"}}</th>
+	  <td>
+	    {{mb_value object=$patVitale field="ville"}}
+	    {{mb_field object=$patVitale field="ville" hidden="true"}}
 	  </td>
 	</tr>
 

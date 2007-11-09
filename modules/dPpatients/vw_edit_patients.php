@@ -24,6 +24,7 @@ $patient->loadRefsFwd();
 
 // Chargement de l'ipp
 $patient->loadIPP();
+$patient->loadIdVitale();
 
 if (!$patient_id) {
   $patient->nom    = $name;
@@ -31,8 +32,9 @@ if (!$patient_id) {
 }
 
 if (mbGetValueFromGet("useVitale")) {
-  $patient->getValuesFromVitaleEx();
+  $patient->getValuesFromVitale();
   $patient->updateFormFields();
+  $patient->_bind_vitale = "1";
 }
 
 

@@ -1,7 +1,7 @@
 <!-- $Id: vw_resume.tpl 1748 2007-03-20 18:58:41Z MyttO $ -->
 
 {{mb_include_script module="dpPatients" script="pat_selector"}}
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug="false"}}
 
 <script type="text/javascript">
 
@@ -19,17 +19,17 @@ Intermax.createResultMessages = function() {
   if (oParam.ERREUR_API) eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == undefined ? "message" : "error"))
 }
 
-Intermax.ResultHandler = {
-  "Lire Vitale": function() {
-    PatSelector.set = function(id, view) {
-      Console.debug(view, "Found and update patient");
-      Console.debug(id, "With ID");
-    }
-    
-    PatSelector.options.useVitale = 1;
-    PatSelector.pop();
+Intermax.ResultHandler["Consulter Vitale"] =
+Intermax.ResultHandler["Lire Vitale"] = function() {
+  PatSelector.set = function(id, view) {
+    Console.debug(view, "Found and update patient");
+    Console.debug(id, "With ID");
   }
+  
+  PatSelector.options.useVitale = 1;
+  PatSelector.pop();
 }
+
 </script>
 
 <table class="tbl">

@@ -75,9 +75,9 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$user field="compte"}}</th>
           <td>
-              {{mb_field object=$user field="_compte_banque" onkeyup="followUp(this, '_compte_guichet', 5)" }}
-              {{mb_field object=$user field="_compte_guichet" onkeyup="followUp(this, '_compte_numero', 5)" }}
-              {{mb_field object=$user field="_compte_numero" onkeyup="followUp(this, '_compte_cle', 11)" }}
+              {{mb_field object=$user field="_compte_banque" onkeyup="followUp(event)" }}
+              {{mb_field object=$user field="_compte_guichet" onkeyup="followUp(event)" }}
+              {{mb_field object=$user field="_compte_numero" onkeyup="followUp(event)" }}
               {{mb_field object=$user field="_compte_cle"}}
           </td>
         </tr>
@@ -149,20 +149,20 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$fonction field="tel" defaultFor="_tel1"}}</th>
           <td>
-            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$fonction->_tel1}}" class="num length|2" onkeyup="followUp(this, '_tel2', 2)" /> - 
-            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$fonction->_tel2}}" class="num length|2" onkeyup="followUp(this, '_tel3', 2)" /> -
-            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$fonction->_tel3}}" class="num length|2" onkeyup="followUp(this, '_tel4', 2)" /> -
-            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$fonction->_tel4}}" class="num length|2" onkeyup="followUp(this, '_tel5', 2)" /> -
-            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$fonction->_tel5}}" class="num length|2" onkeyup="followUp(this, '_fax1', 2)" />
+            <input type="text" name="_tel1" size="2" maxlength="2" value="{{$fonction->_tel1}}" class="num length|2" onkeyup="followUp(event)" /> - 
+            <input type="text" name="_tel2" size="2" maxlength="2" value="{{$fonction->_tel2}}" class="num length|2" onkeyup="followUp(event)" /> -
+            <input type="text" name="_tel3" size="2" maxlength="2" value="{{$fonction->_tel3}}" class="num length|2" onkeyup="followUp(event)" /> -
+            <input type="text" name="_tel4" size="2" maxlength="2" value="{{$fonction->_tel4}}" class="num length|2" onkeyup="followUp(event)" /> -
+            <input type="text" name="_tel5" size="2" maxlength="2" value="{{$fonction->_tel5}}" class="num length|2" onkeyup="followUp(event)" />
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$fonction field="fax" defaultFor="_fax1"}}</th>
           <td>
-            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$fonction->_fax1}}" class="num length|2" onkeyup="followUp(this, '_fax2', 2)" /> - 
-            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$fonction->_fax2}}" class="num length|2" onkeyup="followUp(this, '_fax3', 2)" /> -
-            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$fonction->_fax3}}" class="num length|2" onkeyup="followUp(this, '_fax4', 2)" /> -
-            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$fonction->_fax4}}" class="num length|2" onkeyup="followUp(this, '_fax5', 2)" /> -
+            <input type="text" name="_fax1" size="2" maxlength="2" value="{{$fonction->_fax1}}" class="num length|2" onkeyup="followUp(event)" /> - 
+            <input type="text" name="_fax2" size="2" maxlength="2" value="{{$fonction->_fax2}}" class="num length|2" onkeyup="followUp(event)" /> -
+            <input type="text" name="_fax3" size="2" maxlength="2" value="{{$fonction->_fax3}}" class="num length|2" onkeyup="followUp(event)" /> -
+            <input type="text" name="_fax4" size="2" maxlength="2" value="{{$fonction->_fax4}}" class="num length|2" onkeyup="followUp(event)" /> -
             <input type="text" name="_fax5" size="2" maxlength="2" value="{{$fonction->_fax5}}" class="num length|2" />
           </td>
         </tr>

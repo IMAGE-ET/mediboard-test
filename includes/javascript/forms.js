@@ -350,10 +350,14 @@ function insertAt(textarea, str) {
   }
 }
 
-function followUp(field, sFollowFieldName, iLength) {
-  if (field.value.length == iLength) {
-    fieldFollow = field.form.elements[sFollowFieldName];
-    fieldFollow.focus();
+function followUp(event) {
+	if (!String.fromCharCode(event.which).match(/[0-9]/)) {
+	  return;
+	}
+	
+  var field = event.target;
+  if (field.value.length == field.maxLength) {
+    field.next().focus();
   }  
 }
 

@@ -2,6 +2,7 @@
 
 <script type="text/javascript">
 
+Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   var url = new Url;
   url.setModuleTab("dPpatients", "vw_idx_patients");

@@ -6,6 +6,7 @@
 
 <script type="text/javascript">
 
+Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   var url = new Url;
   url.setModuleTab("dPpatients", "vw_edit_patients");
@@ -66,6 +67,10 @@ function pageMain() {
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return confirmCreation(this)">
       <input type="hidden" name="dosql" value="do_patients_aed" />
       <input type="hidden" name="del" value="0" />
+      {{if $patient->_bind_vitale}}
+      <input type="hidden" name="_bind_vitale" value="1" />
+      {{/if}}
+      
       {{mb_field object=$patient field="patient_id" hidden=1 prop=""}}
       {{if $dialog}}
       <input type="hidden" name="dialog" value="{{$dialog}}" />
@@ -74,11 +79,14 @@ function pageMain() {
       <table class="main">
 
       <tr>
-      {{if $patient->patient_id}}
+      {{if $patient->_id}}
         <th class="title modify" colspan="5">
           {{if $app->user_prefs.GestionFSE}}
 			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
 			        Lire Vitale
+			      </button>
+			      <button class="search" type="button" onclick="Intermax.trigger('Consulter Vitale', { PARAM: { AFFICHAGE:1 }, VIT: { VIT_NUMERO_LOGICMAX: '{{$patient->_idVitale}}'}});" style="float: left;">
+			        Consulter Vitale
 			      </button>
 			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
 			        Résultat Vitale
@@ -151,15 +159,25 @@ function pageMain() {
         <td class="button" colspan="5" style="text-align:center;" id="button">
           <div id="divSiblings" style="display:none;"></div>
           {{if $patient->patient_id}}
-            <button tabindex="400" type="submit" class="submit">Valider</button>
+            <button tabindex="400" type="submit" class="submit">
+              {{tr}}Modify{{/tr}}
+              {{if $patient->_bind_vitale}}
+              &amp; {{tr}}BindVitale{{/tr}}
+              {{/if}}
+            </button>
             <button type="button" class="print" onclick="printPatient({{$patient->patient_id}})">
-              Imprimer
+              {{tr}}Print{{/tr}}
             </button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le patient',objName:'{{$patient->_view|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
+              {{tr}}Delete{{/tr}}
             </button>
           {{else}}
-            <button tabindex="400" type="submit" class="submit">Créer</button>
+            <button tabindex="400" type="submit" class="submit">
+              {{tr}}Create{{/tr}}
+              {{if $patient->_bind_vitale}}
+              &amp; {{tr}}BindVitale{{/tr}}
+              {{/if}}
+            </button>
           {{/if}}
         </td>
       </tr>

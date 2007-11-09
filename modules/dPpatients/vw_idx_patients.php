@@ -48,7 +48,7 @@ $patient_naissance   = null;
 
 if (mbGetValueFromGet("useVitale")) {
   $patVitale = new CPatient;
-  $patVitale->getValuesFromVitaleEx();
+  $patVitale->getValuesFromVitale();
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;

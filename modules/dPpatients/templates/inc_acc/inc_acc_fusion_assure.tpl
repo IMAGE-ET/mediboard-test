@@ -79,8 +79,8 @@
       {{$patient2->_assure_naissance}}
     </td>
     <td>
-      <input tabindex="405" type="text" name="_assure_jour"  size="2" maxlength="2" value="{{if $finalPatient->_assure_jour != "00"}}{{$finalPatient->_assure_jour}}{{/if}}" onkeyup="followUp(this, '_assure_mois', 2)" /> -
-      <input tabindex="406" type="text" name="_assure_mois"  size="2" maxlength="2" value="{{if $finalPatient->_assure_mois != "00"}}{{$finalPatient->_assure_mois}}{{/if}}" onkeyup="followUp(this, '_assure_annee', 2)" /> -
+      <input tabindex="405" type="text" name="_assure_jour"  size="2" maxlength="2" value="{{if $finalPatient->_assure_jour != "00"}}{{$finalPatient->_assure_jour}}{{/if}}" onkeyup="followUp(event)" /> -
+      <input tabindex="406" type="text" name="_assure_mois"  size="2" maxlength="2" value="{{if $finalPatient->_assure_mois != "00"}}{{$finalPatient->_assure_mois}}{{/if}}" onkeyup="followUp(event)" /> -
       <input tabindex="407" type="text" name="_assure_annee" size="4" maxlength="4" value="{{if $finalPatient->_assure_annee != "0000"}}{{$finalPatient->_assure_annee}}{{/if}}" />
     </td>
   </tr>
@@ -202,10 +202,10 @@
       {{$patient2->assure_tel}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="_assure_tel1" tabindex="115" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel2', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel2" tabindex="116" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel3', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel3" tabindex="117" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel4', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel4" tabindex="118" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel5', 2)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel1" tabindex="115" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel2" tabindex="116" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel3" tabindex="117" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel4" tabindex="118" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
       {{mb_field object=$finalPatient field="_assure_tel5" tabindex="119" size="2" maxlength="2" prop="num length|2"}}
     </td>
   </tr>
@@ -224,10 +224,10 @@
       {{$patient2->assure_tel2}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="_assure_tel21" tabindex="420" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel22', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel22" tabindex="421" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel23', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel23" tabindex="422" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel24', 2)"}} -
-      {{mb_field object=$finalPatient field="_assure_tel24" tabindex="423" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_assure_tel25', 2)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel21" tabindex="420" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel22" tabindex="421" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel23" tabindex="422" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+      {{mb_field object=$finalPatient field="_assure_tel24" tabindex="423" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
       {{mb_field object=$finalPatient field="_assure_tel25" tabindex="424" size="2" maxlength="2" prop="num length|2"}}
     </td>
   </tr>

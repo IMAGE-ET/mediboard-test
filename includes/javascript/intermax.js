@@ -4,12 +4,12 @@ var Intermax = {
   newLine : "---",
   
   alert: function(sError) {
-    var sLogicMaxFonction = "LogicMax : " +  this.oContent.FONCTION.NOM + "\n\n";
+    var sLogicMaxFonction = this.oContent.FONCTION ? "LogicMax : " +  this.oContent.FONCTION.NOM : "Aucun appel LogicMax";
     var sLogicMaxError = sError.charAt(0) == "-" ? "\n\n[Erreur LogicMax "+sError+"]" : "";
-    alert(sLogicMaxFonction + Intermax.errors[sError] + sLogicMaxError);
+    alert(sLogicMaxFonction + "\n\n" + Intermax.errors[sError] + sLogicMaxError);
   },
   
-  bindContent: function(sContent) {
+  bindContent: function(sContent) {    
     var aContentLines = sContent.split(this.newLine);
     this.oContent = {}
     var sCurrentCategory = "";
@@ -68,11 +68,8 @@ var Intermax = {
   },
   
   handleContent: function() {
-    // Get result from Yoplet
-    var oAppletContent = document.intermaxResult.getContent();
-
     // Append with empty Js String will cast a Java string to a Js string
-    var sContent = oAppletContent + ""; 
+    var sContent = document.intermaxResult.getContent() + ""; 
     this.bindContent(sContent);
     if (!$H(this.oContent).values().length) {
 	    Intermax.alert("100");

@@ -77,20 +77,20 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$etabExterne field="_tel1" defaultFor="_tel1"}}</th>
 		    <td>
-		      {{mb_field object=$etabExterne field="_tel1" tabindex="6" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel2', 2)"}} -
-		      {{mb_field object=$etabExterne field="_tel2" tabindex="7" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel3', 2)"}} -
-		      {{mb_field object=$etabExterne field="_tel3" tabindex="8" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel4', 2)"}} -
-		      {{mb_field object=$etabExterne field="_tel4" tabindex="9" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_tel5', 2)"}} -
+		      {{mb_field object=$etabExterne field="_tel1" tabindex="6" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel2" tabindex="7" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel3" tabindex="8" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel4" tabindex="9" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
 		      {{mb_field object=$etabExterne field="_tel5" tabindex="10" size="2" maxlength="2" prop="num length|2"}}
 		    </td>
         </tr>
         <tr>
            <th>{{mb_label object=$etabExterne field="_fax1" defaultFor="_fax1"}}</th>
 		   <td>
-		      {{mb_field object=$etabExterne field="_fax1" tabindex="11" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax2', 2)"}} -
-		      {{mb_field object=$etabExterne field="_fax2" tabindex="12" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax3', 2)"}} -
-		      {{mb_field object=$etabExterne field="_fax3" tabindex="13" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax4', 2)"}} -
-		      {{mb_field object=$etabExterne field="_fax4" tabindex="14" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(this, '_fax5', 2)"}} -
+		      {{mb_field object=$etabExterne field="_fax1" tabindex="11" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_fax2" tabindex="12" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_fax3" tabindex="13" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_fax4" tabindex="14" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
 		      {{mb_field object=$etabExterne field="_fax5" tabindex="15" size="2" maxlength="2" prop="num length|2"}}
 		  </td>
         </tr>

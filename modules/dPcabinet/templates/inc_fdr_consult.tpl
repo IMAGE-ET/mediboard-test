@@ -2,8 +2,7 @@
 
 Intermax.ResultHandler["Formater FSE"] = function() {
   Console.trace("Pas d'erreur, on continue avec les données suivantes");
-	Console.trace(Intermax.oContent, "Content pour Formater FSE");
-
+	Console.debug(Intermax.oContent, "Content pour Formater FSE", { level : 2 });
 }
 
 function cancelTarif() {
@@ -424,7 +423,14 @@ function submitFdr(oForm) {
   </tr>
   <tr>
     <td id="yoplet-container">
-      <button class="search" type="button" onclick="Intermax.trigger('Formater FSE', { CPS: {CPS_NUMERO_CPS: '{{$consult->_ref_chir->adeli}}' } });">
+      <button class="search" type="button" onclick="Intermax.trigger('Formater FSE', { 
+      	CPS: {
+      	  CPS_NUMERO_CPS: '{{$consult->_ref_chir->adeli}}' 
+      	},
+      	VITALE: {
+      	  VIT_NUMERO_LOGICMAX: '{{$patient->_idVitale}}'
+      	} 
+      } );">
         Formater FSE
       </button>
     </td>

@@ -96,6 +96,7 @@ class CPatient extends CMbObject {
   var $_static_cim10 = null;
 
   // Form fields
+  var $_bind_vitale = null;
   var $_naissance   = null;
   var $_jour        = null;
   var $_mois        = null;
@@ -276,8 +277,45 @@ class CPatient extends CMbObject {
       "remarques" => null
     );
   }
-      
-  function getValuesFromVitaleEx() {
+  
+  function store() {
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    // Bind vitale
+    if ($this->_bind_vitale && $this->_id) {
+      return $this->bindVitale();
+    }
+  }
+       
+  function bindVitale() {
+    // Make id400
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+      return;
+    }
+    
+    $vitale = $intermax["VITALE"];
+    $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
+    $idVitale = new CIdSante400();
+    $idVitale->setObject($this);
+    $idVitale->id400 = $vitNumero;
+    $idVitale->tag = "LogicMax VitNumero";
+    $idVitale->loadMatchingObject();
+    $idVitale->last_update = mbDateTime();
+    return $idVitale->store();
+  }
+
+  function loadIdVitale() {
+    $idVitale = new CIdSante400();
+    $idVitale->setObject($this);
+    $idVitale->tag = "LogicMax VitNumero";
+    $idVitale->loadMatchingObject();
+    $this->_idVitale = $idVitale->id400;
+  }
+  
+  function getValuesFromVitale() {
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
     }
@@ -286,18 +324,23 @@ class CPatient extends CMbObject {
     $this->nom    = $vitale["VIT_NOM"];
     $this->prenom = $vitale["VIT_PRENOM"];
     $this->naissance = mbDateFromLocale($vitale["VIT_DATE_NAISSANCE"]);
+    
     $this->rang_naissance = $vitale["VIT_RANG_GEMELLAIRE"];
     
     // Adresse
-    if ($vitale["VIT_ADRESSE_1"]) {
-	    $this->adresse = join("\n", array(
-	      $vitale["VIT_ADRESSE_1"],
-	      $vitale["VIT_ADRESSE_2"],
-	      $vitale["VIT_ADRESSE_3"],
-	      $vitale["VIT_ADRESSE_4"],
-	      $vitale["VIT_ADRESSE_5"])
-	    );
-    }
+    $this->adresse = join("\n", array(
+      $vitale["VIT_ADRESSE_1"],
+      $vitale["VIT_ADRESSE_2"],
+      $vitale["VIT_ADRESSE_3"],
+      $vitale["VIT_ADRESSE_4"])
+    );
+    
+    $this->adresse = trim($this->adresse);     
+    
+    // CP et ville
+    $cpville = split(" ", $vitale["VIT_ADRESSE_5"], 2);
+    $this->cp = $cpville[0];
+    $this->ville = $cpville[1];
     
     // Matricules
     $this->assure_matricule = join("", array($vitale["VIT_NUMERO_SS"], $vitale["VIT_CLE_SS"]));

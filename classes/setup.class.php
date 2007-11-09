@@ -86,6 +86,8 @@ class CSetup {
     
   /**
    * Adds a revision dependency with another module
+   * @param string $module
+   * @param string $revision
    */
   function addDependency($module, $revision) {
     $dependency = new CObject;

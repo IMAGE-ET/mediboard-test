@@ -582,7 +582,7 @@ class CMbObject {
     }
     
     foreach ($mbObject->getProps() as $propName => $propValue) {
-      if ($propValue !== null) {
+      if ($propValue !== null and $propValue !== "") {
         $this->$propName = $propValue;
       }
     }
@@ -1181,14 +1181,16 @@ class CMbObject {
   
   
   /**
-   * Converts string back specifications to objet specifications
+   * Convert string back specifications to objet specifications
+   * @param string $backName The name of the back reference
+   * @return CMbBackSpec The back reference specification, null if undefined
    */
   function makeBackSpec($backName) {
     if (array_key_exists($backName, $this->_backSpecs)) {
       return;
     }
     
-    $this->_backSpecs[$backName] = new CMbBackSpec($backName, $this->_backRefs[$backName]);
+    return $this->_backSpecs[$backName] = new CMbBackSpec($backName, $this->_backRefs[$backName]);
   }
 
   /**

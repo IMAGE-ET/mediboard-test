@@ -126,8 +126,8 @@ function pageMain() {
     <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M (%A)"}}</td>
     <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
     <td>
-      {{foreach from=$curr_object->_fields|smarty:nodefaults item=curr_field}}
-      {{$curr_field}}<br />
+      {{foreach from=$curr_object->_fields item=curr_field}}
+      {{tr}}{{$curr_object->object_class}}-{{$curr_field}}{{/tr}}<br />
       {{/foreach}}
     </td>
   </tr>
