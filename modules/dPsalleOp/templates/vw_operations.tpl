@@ -90,9 +90,13 @@ function pageMain() {
           </th>
           
           <td>
+            <div id="cim">
+              {{assign var="sejour" value=$selOp->_ref_sejour}}
+              {{include file="inc_diagnostic_principal.tpl"}}
+            </div>
             <div id="ccam">
-            {{assign var="subject" value=$selOp}}
-            {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+              {{assign var="subject" value=$selOp}}
+              {{include file="inc_gestion_ccam.tpl"}}
             </div>
           </td>
         </tr>
