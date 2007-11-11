@@ -445,7 +445,7 @@ class CGHM  extends CMbObject {
     } else if($type == "Dest" && $cond == $this->_destination) {
       $n = 1;
     }
-    $this->chemin .= $n;
+    $this->_chemin .= $n;
     return $n;
   }
 
