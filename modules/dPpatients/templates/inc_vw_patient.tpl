@@ -111,7 +111,7 @@ function reloadAfterSaveDoc(){
   
   <tr>
     <th>{{mb_label object=$patient field="naissance"}}</th>
-    <td>{{mb_value object=$patient field="naissance"}}</td>
+    <td>{{$patient->_naissance}}</td>
     <th>{{mb_label object=$patient field="tel"}}</th>
     <td>{{mb_value object=$patient field="tel"}}</td>
   </tr>

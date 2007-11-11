@@ -8,6 +8,10 @@
 var is_gecko = /gecko/i.test(navigator.userAgent);
 var is_ie    = /MSIE/.test(navigator.userAgent);
 
+function setSelectionAll(input) {
+  setSelectionRangeInput(input, 0, input.value.length);
+};
+
 function setSelectionRangeInput(input, start, end) {
 	if (is_gecko) {
 		input.selectionStart = start;

@@ -741,10 +741,21 @@ function bindHashToObject($hash, &$object, $doStripSlashes = true) {
   }
 }
 
+/**
+ * Convert a date from ISO to locale format
+ * @param string $date Date in ISO format
+ * @return string Date in locale format
+ */
 function mbDateToLocale($date) {
   return preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $date);
 }
 
+
+/**
+ * Convert a date from locale to ISO format
+ * @param string $date Date in locale format
+ * @return string Date in ISO format
+ */
 function mbDateFromLocale($date) {
   return preg_replace("/(\d{2})\/(\d{2})\/(\d{4})/", "$3-$2-$1", $date);
 }

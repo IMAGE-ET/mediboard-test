@@ -1,53 +1,47 @@
-<?php /* $Id$ */
+<?php /* $Id: dateSpec.class.php 2269 2007-07-16 15:19:31Z rhum1 $ */
 
 /**
  *  @package Mediboard
  *  @subpackage classes
  *  @version $Revision: $
- *  @author Sébastien Fillonneau
+ *  @author Thomas Despoix
 */
 
 require_once("./classes/mbFieldSpec.class.php");
 
-class CDateSpec extends CMbFieldSpec {
+/**
+ * Susceptible de gérer les dates de naissance non grégorienne 
+ * au format pseudo ISO : YYYY-MM-DD mais avec potentiellement :
+ *  MM > 31
+ *  DD > 31
+ */
+class CBirthDateSpec extends CMbFieldSpec {
   
   function getValue($object, $smarty, $params = null) {
-    require_once $smarty->_get_plugin_filepath('modifier','date_format');
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    $format = mbGetValue(@$params["format"], "%d/%m/%Y");
-    return ($propValue && $propValue != "0000-00-00") ? 
-      smarty_modifier_date_format($propValue, $format) :
-      "-";
+    
+    if (!$propValue || $propValue == "0000-00-00") {
+      return "-";
+    }
+
+    return mbDateToLocale($propValue);
   }
   
   function getSpecType() {
-    return("date");
+    return("birthdate");
   }
   
   function checkProperty(&$object){
     $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue =& $object->$fieldName;
     
-    // Vérification du format
     $matches = array();
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
       return "format de date invalide";
     }
     
-    // Mois grégorien
-    $mois = intval($matches[2]);
-    if (!in_range($mois, 1, 12)) {
-      return "mois '$mois' non compris entre 1 et 12";
-    }
-      
-    // Jour grégorien
-    $mois = intval($matches[3]);
-    if (!in_range($mois, 1, 31)) {
-      return "mois '$mois' non compris entre 1 et 12";
-    }
-    
-      
+    $propValue = format("%04s-%02s-%02s", $matches[1], $matches[2], $matches[3]);
     return null;
   }
   
@@ -62,11 +56,14 @@ class CDateSpec extends CMbFieldSpec {
   }
   
   function getDBSpec(){
-    return "DATE";
+    return "CHAR(10)";
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    return $this->getFormElementDateTime($object, $params, $value, $className, "%d/%m/%Y");
+    $maxLength = 10;
+    CMbArray::defaultValue($params, "size", $maxLength);
+    CMbArray::defaultValue($params, "maxlength", $maxLength);
+    return $this->getFormElementText($object, $params, $value, $className);
   }
 }
 

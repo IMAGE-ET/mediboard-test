@@ -242,7 +242,7 @@ class CPatient extends CMbObject {
     $specs["assure_prenom"]            = "str";
     $specs["assure_nom_jeune_fille"]   = "str confidential";
     $specs["assure_sexe"]              = "enum list|m|f|j default|m";
-    $specs["assure_naissance"]         = "date confidential";
+    $specs["assure_naissance"]         = "birthdate confidential";
     $specs["assure_adresse"]           = "text confidential";
     $specs["assure_ville"]             = "str confidential";
     $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
@@ -255,12 +255,12 @@ class CPatient extends CMbObject {
     $specs["assure_rques"]             = "text";
     $specs["assure_matricule"]         = "code insee confidential";
     
-    $specs["_jour"]                    = "num length|2 min|01 max|31";
-    $specs["_mois"]                    = "num length|2 min|01 max|12";
-    $specs["_annee"]                   = "num length|4 min|1900";
-    $specs["_assure_jour"]             = "num length|2 min|01 max|31";
-    $specs["_assure_mois"]             = "num length|2 min|01 max|12";
-    $specs["_assure_annee"]            = "num length|4 min|1900";   
+    $specs["_jour"]                    = "num length|2 min|01 max|99";
+    $specs["_mois"]                    = "num length|2 min|01 max|99";
+    $specs["_annee"]                   = "num length|4 min|1850";
+    $specs["_assure_jour"]             = "num length|2 min|01 max|99";
+    $specs["_assure_mois"]             = "num length|2 min|01 max|99";
+    $specs["_assure_annee"]            = "num length|4 min|1850";   
     return $specs;
   }
   
@@ -388,19 +388,17 @@ class CPatient extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    global $dPconfig;
-
-//    mbExport($this->getProps());
+    // Noms
     $this->nom = strtoupper($this->nom);
     $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
     $this->prenom = ucwords(strtolower($this->prenom));
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom);
-    
-    if($this->naissance){
+
+    // Date de naissance et âge
+    if ($this->naissance) {
       $aNaissance = split("-", $this->naissance);
-    
       $this->_jour  = $aNaissance[2];
       $this->_mois  = $aNaissance[1];
       $this->_annee = $aNaissance[0];
@@ -408,24 +406,26 @@ class CPatient extends CMbObject {
       $this->_naissance = mbDateToLocale($this->naissance);
     }
     
-    $this->updateFormTel("tel", "_tel");
+    $this->evalAge();
+    
+    // Téléphones
+	  $this->updateFormTel("tel", "_tel");
     $this->updateFormTel("tel2", "_tel2");
     $this->updateFormTel("prevenir_tel", "_tel3");
     $this->updateFormTel("employeur_tel", "_tel4");
     
-    $this->evalAge();
     
     // Assuré
     if($this->assure_naissance) {
       $aNaissance = split("-", $this->assure_naissance);
-    
       $this->_assure_jour  = $aNaissance[2];
       $this->_assure_mois  = $aNaissance[1];
       $this->_assure_annee = $aNaissance[0];
     
-      $this->_assure_naissance = sprintf("%02d/%02d/%04d", $this->_assure_jour, $this->_assure_mois, $this->_assure_annee);
+      $this->_assure_naissance = mbDateToLocale($this->assure_naissance);
     }
-
+    
+    // Assuré téléphone
     $this->updateFormTel("assure_tel", "_assure_tel");  
     $this->updateFormTel("assure_tel2", "_assure_tel2");
     
@@ -445,37 +445,36 @@ class CPatient extends CMbObject {
     $this->_dossier_cabinet_url = self::$dossier_cabinet_prefix[$AppUI->user_prefs["DossierCabinet"]] . $this->_id;
   }
   
-  
+  /**
+   * Calcul l'âge du patient en années
+   */
   function evalAge($date = null){
-    if(!$date){
-      $anjour   = date("Y");
-      $moisjour = date("m");
-      $jourjour = date("d");
-    }else{
-      $anjour   = substr($date, 0, 4);
-      $moisjour = substr($date, 5, 2);
-      $jourjour = substr($date, 8, 2);      
-    }
+    $annee = $date ? substr($date, 0, 4) : date("Y");
+    $mois  = $date ? substr($date, 5, 2) : date("m");
+    $jour  = $date ? substr($date, 8, 2) : date("d");
     
-    if($this->naissance != "0000-00-00") {
-      $annais   = substr($this->naissance, 0, 4);
-      $moisnais = substr($this->naissance, 5, 2);
-      $journais = substr($this->naissance, 8, 2);
-      $this->_age = $anjour-$annais;
-      if($moisjour<$moisnais){$this->_age=$this->_age-1;}
-      if($jourjour<$journais && $moisjour==$moisnais){$this->_age=$this->_age-1;}
-    } else {
-      $this->_age = "??";
+    if ($this->naissance == "0000-00-00") {
+      return "??";
+    }
+
+    $this->_age = $annee - $this->_annee;
+
+    // Ajustement en fonction des mois et des jours
+    if ($mois < $this->_mois || ($jour < $this->_jour && $mois == $this->_mois)) {
+      $this->_age--;
     }
   }
   
+  /**
+   * Met à jour un champ de l'assuré qd l'assuré EST le bénéficiaire (rang = 01)
+   * @param string field Champ à mettre à jour
+   */
   function updateAssureField($field) {
     if ($this->rang_beneficiaire == "01") {
       $assure_field = "assure_$field";
       $this->$assure_field = $this->$field;
     }
   }
-  
     
   function updateDBFields() {
   	global $dPconfig;

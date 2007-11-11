@@ -22,7 +22,7 @@
 
   <tr>
     <th>Date de naissance / Sexe : </th>
-    <td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}} de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
+    <td>né(e) le {{$patient->_naissance}} ({{$patient->_age}} ans) de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
   </tr>
 
   <tr>

@@ -14,22 +14,26 @@ class CMbFieldSpecFact {
    
   function getSpec($object, $field, $propSpec = null){
     
-    static $aClass = array("ref"          => "CRefSpec",
-                             "str"          => "CStrSpec",
-                             "numchar"      => "CNumcharSpec",
-                             "num"          => "CNumSpec",
-                             "bool"         => "CBoolSpec",
-                             "enum"         => "CEnumSpec",
-                             "date"         => "CDateSpec",
-                             "time"         => "CTimeSpec",
-                             "dateTime"     => "CDateTimeSpec",
-                             "float"        => "CFloatSpec",
-                             "currency"     => "CCurrencySpec",
-                             "pct"          => "CPctSpec",
-                             "text"         => "CTextSpec",
-                             "html"         => "CHtmlSpec",
-                             "email"        => "CEmailSpec",
-                             "code"         => "CCodeSpec");
+    static $aClass = array(
+      "ref"          => "CRefSpec",
+      "str"          => "CStrSpec",
+      "numchar"      => "CNumcharSpec",
+      "num"          => "CNumSpec",
+      "bool"         => "CBoolSpec",
+      "enum"         => "CEnumSpec",
+      "date"         => "CDateSpec",
+      "time"         => "CTimeSpec",
+      "dateTime"     => "CDateTimeSpec",
+      "birthDate"    => "CBirthDate",
+      "float"        => "CFloatSpec",
+      "currency"     => "CCurrencySpec",
+      "pct"          => "CPctSpec",
+      "text"         => "CTextSpec",
+      "html"         => "CHtmlSpec",
+      "email"        => "CEmailSpec",
+      "code"         => "CCodeSpec"
+		);
+      
     $specObject     = null;
     $nameClass      = null;
     $aProperties    = array();

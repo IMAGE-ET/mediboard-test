@@ -358,6 +358,7 @@ function followUp(event) {
   var field = event.target;
   if (field.value.length == field.maxLength) {
     field.next().focus();
+    setSelectionAll(field.next());
   }  
 }
 

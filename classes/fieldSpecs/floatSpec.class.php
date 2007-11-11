@@ -93,7 +93,7 @@ class CFloatSpec extends CMbFieldSpec {
   
   function getFormHtmlElement($object, $params, $value, $className){
     $maxLength = 8;
-    CMbArray::defaultValue($params, "size", $maxLength + 2);
+    CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     return $this->getFormElementText($object, $params, $value, $className);
   }
