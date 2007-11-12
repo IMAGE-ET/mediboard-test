@@ -397,7 +397,7 @@ class CPatient extends CMbObject {
     $this->_prenoms = array($this->prenom);
 
     // Date de naissance et âge
-    if ($this->naissance) {
+    if ($this->naissance && $this->naissance != "0000-00-00") {
       $aNaissance = split("-", $this->naissance);
       $this->_jour  = $aNaissance[2];
       $this->_mois  = $aNaissance[1];
@@ -405,7 +405,7 @@ class CPatient extends CMbObject {
     
       $this->_naissance = mbDateToLocale($this->naissance);
     }
-    
+
     $this->evalAge();
     
     // Téléphones
@@ -416,7 +416,7 @@ class CPatient extends CMbObject {
     
     
     // Assuré
-    if($this->assure_naissance) {
+    if ($this->assure_naissance && $this->assure_naissance != "0000-00-00") {
       $aNaissance = split("-", $this->assure_naissance);
       $this->_assure_jour  = $aNaissance[2];
       $this->_assure_mois  = $aNaissance[1];
@@ -454,7 +454,8 @@ class CPatient extends CMbObject {
     $jour  = $date ? substr($date, 8, 2) : date("d");
     
     if ($this->naissance == "0000-00-00") {
-      return "??";
+      $this->_age = "??";
+      return;
     }
 
     $this->_age = $annee - $this->_annee;

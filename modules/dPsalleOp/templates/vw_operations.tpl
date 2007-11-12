@@ -55,12 +55,16 @@ function pageMain() {
     <td class="greedyPane">
       <table class="form">
         {{if $selOp->operation_id}}
+        {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
         <tr>
           <th class="title" colspan="2">
-            {{$selOp->_ref_sejour->_ref_patient->_view}} 
-            ({{$selOp->_ref_sejour->_ref_patient->_age}} ans 
-            {{if $selOp->_ref_sejour->_ref_patient->_age != "??"}}- 
-            {{$selOp->_ref_sejour->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{/if}})
+					  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+					    <img src="images/icons/edit.png" alt="modifier">
+					  </a>
+            {{$patient->_view}} 
+            ({{$patient->_age}} ans 
+            
+            {{if $patient->_age != "??"}}- {{$patient->_naissance}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>
