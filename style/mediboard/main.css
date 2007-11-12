@@ -193,9 +193,10 @@ a.buttondown {
   color: #000;
   text-decoration: none;
   cursor: default;
-  border: 1px black solid;
-  font-size: 12px;
+  border: 1px outset #444;
+  font-size: 11px;
   background-color: #ddd;
+  font-family: tahoma;
   margin: 0 2px;
   padding: 0px 2px;
   background-repeat: no-repeat;
