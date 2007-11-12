@@ -64,6 +64,7 @@ $smarty->assign("listCodes" , $listCodes );
 $smarty->assign("protSel"   , $protSel   );
 $smarty->assign("chir_id"   , $chir_id   );
 $smarty->assign("code_ccam" , $code_ccam );
+$smarty->assign("mediuser"  , $mediuser  );
 
 $smarty->display("vw_protocoles.tpl");
 

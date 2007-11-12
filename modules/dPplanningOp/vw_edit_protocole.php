@@ -56,6 +56,7 @@ $mins = range(0,59,$step);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("mediuser", $mediuser);
 $smarty->assign("protocole", $protocole);
 $smarty->assign("chir"     , $chir);
 

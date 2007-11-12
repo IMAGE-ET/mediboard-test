@@ -17,7 +17,9 @@ $do = new CDoObjectAddEdit("CProtocole", "protocole_id");
 $do->createMsg = "Protocole créé";
 $do->modifyMsg = "Protocole modifié";
 $do->deleteMsg = "Protocole supprimé";
-$do->redirectDelete = "m=$m&tab=vw_edit_protocole&protocole_id=0";
+
+//$do->redirectDelete = "m=$m&tab=vw_edit_protocole&protocole_id=0";
+
 $do->doIt();
 
 ?>

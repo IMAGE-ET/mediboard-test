@@ -6,6 +6,24 @@
 
 var oCcamField = null;
 
+function copier(){
+  var oForm = document.editFrm;
+  
+  oForm.chir_id.value = "{{$mediuser->user_id}}";
+  if(oForm.chir_id.value != "{{$mediuser->user_id}}") {
+    alert("Vous n\'êtes pas un praticien, vous ne pouvez pas dupliquer ce protocole");
+    return;
+  }
+  oForm.protocole_id.value = "";
+  if(oForm.libelle.value){
+    oForm.libelle.value = "Copie de "+oForm.libelle.value;
+  } else {
+    oForm.libelle.value = "Copie de "+ oForm.codes_ccam.value;
+  }
+  oForm.submit();
+}
+
+
 function refreshListCCAM() {
   oCcamNode = document.getElementById("listCodesCcam");
 
@@ -292,6 +310,7 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $protocole->protocole_id}}
+            <button class="submit" type="button" onclick="copier()" />Dupliquer</button>
             <button class="modify" type="submit">Modifier</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
