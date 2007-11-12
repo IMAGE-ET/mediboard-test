@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPpmsi-tab-vw_list_hospi'] = '';
+$locales['mod-dPpmsi-tab-form_print_planning'] = '';
 $locales['CGHM'] = 'Groupement Homogène de Malade';
 $locales['CGHM-back-sejour_id'] = '';
 $locales['CGHM-DADs'] = '';
@@ -22,4 +22,5 @@ $locales['CGHM.one'] = '';
 $locales['mod-dPpmsi-tab-edit_actes'] = '';
 $locales['mod-dPpmsi-tab-labo_groupage'] = '';
 $locales['mod-dPpmsi-tab-vw_dossier'] = '';
+$locales['mod-dPpmsi-tab-vw_list_hospi'] = '';
 ?>
