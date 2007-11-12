@@ -462,7 +462,8 @@ class CMediusers extends CMbObject {
 
   function isFromType($user_types) {
     // Warning: !== operator
-    return array_search($this->_user_type, $user_types) !== false;
+    global $utypes;
+    return array_search(@$utypes[$this->_user_type], $user_types) !== false;
   }
 
   function isPraticien () {
