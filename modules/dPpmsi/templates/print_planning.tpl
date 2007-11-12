@@ -86,7 +86,7 @@ function printAdmission(id) {
 		  </td>
 		  <td>
 		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
-		      {{$patient->_age}} ans
+		      {{$patient->_age}} ans ({{$patient->_naissance}})
 		    </a>
 		  </td>
       
