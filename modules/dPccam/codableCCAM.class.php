@@ -115,7 +115,7 @@ class CCodableCCAM extends CMbObject {
   	$order[] = "code_acte";
   	$order[] = "code_activite";
   	$order[] = "code_phase";
-  	$order[] = "acte_id";
+  	$order[] = "acte_id DESC";
   	
   	$this->_ref_actes_ccam = $acte->loadMatchingList($order);
   }
