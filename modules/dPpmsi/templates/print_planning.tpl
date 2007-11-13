@@ -137,6 +137,13 @@ function printAdmission(id) {
               &mdash; Modifs : {{$curr_acte->modificateurs}}
             {{/if}}
             &mdash; Asso : {{$curr_acte->_guess_association}}
+            {{if $curr_acte->montant_depassement}}
+              &mdash; {{$curr_acte->montant_depassement}} euros
+            {{/if}}
+            {{if $curr_acte->commentaire}}
+              <br />
+              {{$curr_acte->commentaire}}
+            {{/if}}
           </li>
         {{/foreach}}
         </ul>
