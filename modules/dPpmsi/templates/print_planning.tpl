@@ -34,13 +34,6 @@ function printAdmission(id) {
     {{if $curr_plageop->anesth_id}}
 	    - Anesthesiste : <strong>Dr. {{$curr_plageop->_ref_anesth->_view}}</strong>
 	  {{/if}}
-	  
-    {{if $curr_plageop->_ref_personnel}}
-      - Personnel : 
-      {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
-      {{$_personnel->_ref_personnel->_ref_user->_view}};
-      {{/foreach}}
-    {{/if}}
 	</td>
   </tr>
   <tr>

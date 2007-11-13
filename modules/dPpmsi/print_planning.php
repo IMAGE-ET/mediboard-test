@@ -75,11 +75,11 @@ foreach($plagesop as &$plage) {
   
   $order = "operations.rank";
 
-  $listOp = new COperation;
-  $listOp = $listOp->loadList($where, $order);
+  $tempOp = new COperation;
+  $plage->_ref_operations = $tempOp->loadList($where, $order);
 
   
-  foreach($listOp as $keyOp => &$operation) {
+  foreach($plage->_ref_operations as $keyOp => &$operation) {
     $operation->loadRefsFwd();
     $operation->loadRefsActesCCAM();
     foreach($operation->_ref_actes_ccam as &$curr_acte) {
@@ -88,7 +88,7 @@ foreach($plagesop as &$plage) {
     }
     $sejour =& $operation->_ref_sejour;
     if($filterSejour->type && $filterSejour->type != $sejour->type) {
-      unset($listOp[$keyOp]);
+      unset($plage->_ref_operations[$keyOp]);
     } else {
      $sejour->loadRefsFwd();   
      // On utilise la first_affectation pour contenir l'affectation courante du patient
@@ -100,16 +100,8 @@ foreach($plagesop as &$plage) {
      }
     }
   }
-  if ((sizeof($listOp) == 0) && !$filter->_plage) {
+  if ((sizeof($plage->_ref_operations) == 0) && !$filter->_plage) {
     unset($plagesop[$plage->_id]);
-  }
-  $plage->_ref_operations = $listOp;
-  $plage->loadPersonnel();
-  if (null !== $plage->_ref_personnel) {
-    foreach ($plage->_ref_personnel as $_personnel) {
-      $_personnel->loadPersonnel();
-      $_personnel->_ref_personnel->loadRefUser();
-    }
   }
 }
 
