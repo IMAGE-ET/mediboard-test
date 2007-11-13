@@ -190,7 +190,7 @@ class CActeCCAM extends CMbMetaObject {
     // Chargements initiaux
     $this->loadRefCodeCCAM();
     $this->getLinkedActes();
-    if(count($this->_linked_actes) >= 2) {
+    if(count($this->_linked_actes) > 3) {
       $this->_guess_association = "?";
       $this->_guess_regle_asso    = "?";
       return $this->_guess_association;
