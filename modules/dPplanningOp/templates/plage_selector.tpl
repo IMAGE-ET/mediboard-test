@@ -111,7 +111,7 @@ function setClose(date) {
             <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}}" />
           </td>
           <td>
-            <label for="admission_veille">La veille (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_jour}}h)</label>
+            <label for="admission_veille">La veille (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_veille}}h)</label>
           </td>
         </tr>
         <tr>
@@ -119,7 +119,7 @@ function setClose(date) {
             <input type="radio" name="admission" value="jour" />
           </td>
           <td>
-            <label for="admission_jour">Le jour même (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_veille}}h)</label>
+            <label for="admission_jour">Le jour même (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_jour}}h)</label>
           </td>
         </tr>
         <tr>
