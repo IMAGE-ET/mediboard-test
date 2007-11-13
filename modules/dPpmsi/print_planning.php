@@ -82,10 +82,10 @@ foreach($plagesop as &$plage) {
   foreach($plage->_ref_operations as $keyOp => &$operation) {
     $operation->loadRefsFwd();
     $operation->loadRefsActesCCAM();
-    foreach($operation->_ref_actes_ccam as &$curr_acte) {
-      $curr_acte->loadRefsFwd();
-      $curr_acte->guessAssociation();
-    }
+    //foreach($operation->_ref_actes_ccam as &$curr_acte) {
+    //  $curr_acte->loadRefsFwd();
+    //  $curr_acte->guessAssociation();
+    //}
     $sejour =& $operation->_ref_sejour;
     if($filterSejour->type && $filterSejour->type != $sejour->type) {
       unset($plage->_ref_operations[$keyOp]);
