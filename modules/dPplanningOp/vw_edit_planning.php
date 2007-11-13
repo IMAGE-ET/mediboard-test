@@ -143,6 +143,12 @@ $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
 
+$list_hours_voulu = range(0,23);
+$list_minutes_voulu = range(0,59);
+
+foreach($list_minutes_voulu as &$minute){
+  $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
+}
 
 $config =& $dPconfig["dPplanningOp"]["COperation"];
 $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
@@ -184,6 +190,9 @@ $smarty->assign("mins"         , $mins);
 $smarty->assign("hours_duree"  , $hours_duree);
 $smarty->assign("hours_urgence", $hours_urgence);
 $smarty->assign("mins_duree"   , $mins_duree);
+
+$smarty->assign("list_hours_voulu", $list_hours_voulu);
+$smarty->assign("list_minutes_voulu", $list_minutes_voulu);
 
 $smarty->assign("prestations", $prestations);
 

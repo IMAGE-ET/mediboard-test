@@ -123,6 +123,10 @@
 			Admission le {{$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
             <br />
 			Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+			{{if $curr_op->horaire_voulu}}
+			<br />
+			Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+			{{/if}}
 			{{if $listPlages|@count != '1'}}
 			<br />
 			<form name="changeSalle" action="?m={{$m}}" method="post">
@@ -212,6 +216,10 @@
 			Admission le {{$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
             <br />
 			Horaire : {{$curr_op->time_operation|date_format:"%Hh%M"}} - Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+			{{if $curr_op->horaire_voulu}}
+			<br />
+			Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+			{{/if}}
 			<br />
 			Pause : 
 			<select name="hour">

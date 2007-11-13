@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPplanningOp-tab-vw_edit_compta'] = '';
+$locales['config-dPplanningOp-COperation-horaire_voulu'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -495,6 +495,7 @@ $locales['CTypeAnesth.modify'] = '';
 $locales['CTypeAnesth.more'] = '';
 $locales['CTypeAnesth.none'] = '';
 $locales['CTypeAnesth.one'] = '';
+$locales['mod-dPplanningOp-tab-vw_edit_compta'] = '';
 $locales['mod-dPplanningOp-tab-vw_edit_planning'] = '';
 $locales['mod-dPplanningOp-tab-vw_edit_protocole'] = '';
 $locales['mod-dPplanningOp-tab-vw_edit_sejour'] = '';

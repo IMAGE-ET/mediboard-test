@@ -159,6 +159,10 @@
             {{else}}
             <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->time_operation|date_format:"%Hh%M"}}
+              {{if $curr_op->horaire_voulu}}
+              <br />
+              ({{$curr_op->horaire_voulu|date_format:"%Hh%M"}})
+              {{/if}}
             </a>
             {{/if}}
           </td>

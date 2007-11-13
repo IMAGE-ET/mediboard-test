@@ -59,7 +59,8 @@ class COperation extends CCodableCCAM {
   var $sortie_reveil  = null;
   var $induction_debut= null;
   var $induction_fin  = null;
-
+  var $horaire_voulu  = null;
+  
   // Form fields
   var $_hour_op        = null;
   var $_min_op         = null;
@@ -69,6 +70,8 @@ class COperation extends CCodableCCAM {
   var $_codes_ccam     = array();
   var $_duree_interv   = null;
   var $_presence_salle = null;
+  var $_hour_voulu     = null;
+  var $_min_voulu      = null;
 
   // Shortcut fields
   var $_datetime = null;
@@ -122,7 +125,7 @@ class COperation extends CCodableCCAM {
     $specs["code_uf"]        = "str length|3";
     $specs["libelle_uf"]     = "str maxLength|35";
     $specs["libelle"]        = "str confidential";
-    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total|inconnu";
+    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total|inconnu default|inconnu";
     $specs["temp_operation"] = "time";
     $specs["entree_salle"]   = "time";
     $specs["sortie_salle"]   = "time";
@@ -149,6 +152,7 @@ class COperation extends CCodableCCAM {
     $specs["entree_bloc"]    = "time";
     $specs["anapath"]        = "bool";
     $specs["labo"]           = "bool";
+    $specs["horaire_voulu"]  = "time";
     $specs["_date_min"]      = "date";
     $specs["_date_max"]      = "date moreEquals|_date_min";
     $specs["_plage"]         = "bool";
@@ -238,6 +242,12 @@ class COperation extends CCodableCCAM {
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
     $this->_hour_urgence = intval(substr($this->time_operation, 0, 2));
     $this->_min_urgence  = intval(substr($this->time_operation, 3, 2));
+    
+    if($this->horaire_voulu){
+      $this->_hour_voulu = intval(substr($this->horaire_voulu, 0, 2));
+      $this->_min_voulu  = intval(substr($this->horaire_voulu, 3, 2)); 
+    }
+      
     if ($this->type_anesth != null) {
       $anesth = new CTypeAnesth;
       $orderanesth = "name";
@@ -285,6 +295,11 @@ class COperation extends CCodableCCAM {
       $this->time_operation = 
         $this->_hour_urgence.":".
         $this->_min_urgence.":00";
+    }
+    if($this->_hour_voulu != null and $this->_min_voulu != null) {
+      $this->horaire_voulu = 
+        $this->_hour_voulu.":".
+        $this->_min_voulu.":00";
     }
   }
 

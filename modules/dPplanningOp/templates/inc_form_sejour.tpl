@@ -1,5 +1,16 @@
 <script type="text/javascript">
 
+function checkHeureSortie(){
+  var oForm = document.editSejour;
+  var heure_entree = parseInt(oForm._hour_entree_prevue.value, 10);
+  
+  if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
+    heure_entree = heure_entree + 1;
+    oForm._hour_sortie_prevue.value = heure_entree;
+  }
+}
+
+
 function loadTransfert(form, mode_sortie){
   // si Transfert, affichage du select
   if(mode_sortie=="transfert"){
@@ -40,15 +51,32 @@ function checkSejour() {
 
 function checkPresta(){
   var oForm = document.editSejour;
+  var oFormEasy = document.editOpEasy;
   if(oForm.prestation_id.value != ""){
     setRadioValue(oForm.chambre_seule, "1");
+    setRadioValue(oFormEasy.chambre_seule, "1");
   } 
 }
 
 
-function checkChambre(){
+function checkChambreSejour(){
   var oForm = document.editSejour;
+  var oFormEasy = document.editOpEasy;
   var valeur_chambre = getCheckedValue(oForm.chambre_seule);
+  setCheckedValue(oFormEasy.chambre_seule, valeur_chambre);
+  
+  if(valeur_chambre == "0"){
+    oForm.prestation_id.value = "";
+  }
+}
+
+
+function checkChambreSejourEasy(){
+  var oForm = document.editSejour;
+  var oFormEasy = document.editOpEasy;
+  var valeur_chambre = getCheckedValue(oFormEasy.chambre_seule);
+  setCheckedValue(oForm.chambre_seule, valeur_chambre);
+  
   if(valeur_chambre == "0"){
     oForm.prestation_id.value = "";
   }
@@ -222,7 +250,7 @@ function checkChambre(){
   </td>
   <td colspan="2">
     à
-    <select name="_hour_entree_prevue" onchange="updateHeureSortie()">
+    <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie();">
     {{foreach from=$hours|smarty:nodefaults item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == $heure_entree_jour)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
@@ -355,7 +383,7 @@ function checkChambre(){
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
   <td {{if $mode_operation}}colspan="3"{{/if}}>
-    {{mb_field object=$sejour field="chambre_seule" onchange="checkChambre();"}}
+    {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
   </td>
   
   {{if !$mode_operation}}

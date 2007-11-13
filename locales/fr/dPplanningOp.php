@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPplanningOp-tab-vw_edit_compta'] = 'Comptabilité';
+$locales['config-dPplanningOp-COperation-horaire_voulu'] = 'Affichage de l\'horaire souhaité';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -495,6 +495,7 @@ $locales['CTypeAnesth.modify'] = '';
 $locales['CTypeAnesth.more'] = '';
 $locales['CTypeAnesth.none'] = '';
 $locales['CTypeAnesth.one'] = 'le type d\\\'anesthésie';
+$locales['mod-dPplanningOp-tab-vw_edit_compta'] = 'Comptabilité';
 $locales['mod-dPplanningOp-tab-vw_edit_planning'] = 'Edition d\'interventions';
 $locales['mod-dPplanningOp-tab-vw_edit_protocole'] = 'Edition de protocoles';
 $locales['mod-dPplanningOp-tab-vw_edit_sejour'] = 'Edition de séjours';

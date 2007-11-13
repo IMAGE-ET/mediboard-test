@@ -1,6 +1,7 @@
 <script type="text/javascript">
 function setClose(date) {
   var form = document.frmSelector;
+  
   var list = form.list;
   if(date == '') {
     date = form.fmtdate.value;
@@ -28,8 +29,19 @@ function setClose(date) {
     
   window.opener.PlageOpSelector.set(key,val,adm,typeHospi);
   window.close();
-}
+}  
 
+function pageMain(){
+  var oFormSejour = window.opener.document.editSejour;
+  var form = document.frmSelector;   
+
+  if(oFormSejour.type.value == "comp"){
+    setCheckedValue(form.admission, "veille");
+  } 
+  if(oFormSejour.type.value == "ambu"){
+    setCheckedValue(form.admission, "jour");
+  }
+}
 </script>
 
 <form action="?" name="frmSelector" method="get">

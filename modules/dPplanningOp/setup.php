@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.76";
+$config["mod_version"]     = "0.77";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -705,7 +705,12 @@ class CSetupdPplanningOp extends CSetup {
             ADD `etablissement_transfert_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.76";
+    $this->makeRevision("0.76");
+    $sql = "ALTER TABLE `operations`
+            ADD `horaire_voulu` TIME;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.77";
   }
 }
 ?>

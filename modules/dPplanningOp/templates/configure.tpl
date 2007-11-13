@@ -233,7 +233,6 @@
   <tr>
     <th class="category" colspan="6">Blocage des objets</th>
   </tr>
-  <form>
 
   <tr>
     <th class="category" colspan="3">Blocage des operations</th>
@@ -275,10 +274,31 @@
     </td>
   </tr>
   
+  
+  
+   {{assign var="class" value="COperation"}}
+   {{assign var="var" value="horaire_voulu"}}
+  <tr>
+   <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+   </th>
+  </tr>
+  <tr>  
+    <td colspan="6" style="text-align: center">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
     </td>
+    
   </tr>
 </table>
 </form>

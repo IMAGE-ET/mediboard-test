@@ -51,7 +51,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="Value.synchronize(this); modifOp();"}}
+      {{mb_field object=$op field="cote" onchange="Value.synchronize(this); modifOp();"}}
     </td>
   </tr> 
 
@@ -115,7 +115,7 @@
     </td>
   </tr>
   {{/if}}
-  
+
   <!-- Selection du patient -->
   <tr>
    <th>
@@ -129,5 +129,34 @@
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
    </td>
   </tr>
+  
+  <!-- Selection du type de chambre -->
+  <tr>
+    <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
+    <td>
+      {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
+    </td>
+  </tr>
+  
+  {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+  <tr>
+    <th>Horaire souhaité</th>
+    <td>
+      <select name="_hour_voulu" onchange="Value.synchronize(this);">
+        <option value="">-</option>
+      {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
+        <option value="{{$hour}}" {{if $hour == $op->_hour_voulu}} selected="selected" {{/if}}>{{$hour}}</option>
+      {{/foreach}}
+      </select> h
+      <select name="_min_voulu" onchange="Value.synchronize(this);">
+      <option value="">-</option>
+      {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
+        <option value="{{$min}}" {{if $min == $op->_min_voulu}} selected="selected" {{/if}}>{{$min}}</option>
+      {{/foreach}}
+      </select> mn
+    </td>
+  </tr>
+  {{/if}}
+   
 </table>
 </form>

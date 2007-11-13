@@ -96,7 +96,7 @@
   <tr>
     <th>{{mb_label object=$op field="cote"}}</th>
     <td colspan="2">
-      {{mb_field object=$op field="cote" defaultOption="&mdash; Choisir un côté" onchange="Value.synchronize(this);"}}
+      {{mb_field object=$op field="cote" onchange="Value.synchronize(this);"}}
     </td>
   </tr> 
 
@@ -205,6 +205,27 @@
     </td>
     {{/if}}
   </tr>
+  
+  {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+  <tr>
+    <th>Horaire souhaité</th>
+    <td colspan="2">
+      <select name="_hour_voulu" onchange="Value.synchronize(this);">
+        <option value="">-</option>
+      {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
+        <option value="{{$hour}}" {{if $hour == $op->_hour_voulu}} selected="selected" {{/if}}>{{$hour}}</option>
+      {{/foreach}}
+      </select> h
+      <select name="_min_voulu" onchange="Value.synchronize(this);">
+      <option value="">-</option>
+      {{foreach from=$list_minutes_voulu|smarty:nodefaults item=min}}
+        <option value="{{$min}}" {{if $min == $op->_min_voulu}} selected="selected" {{/if}}>{{$min}}</option>
+      {{/foreach}}
+      </select> mn
+    </td>
+  </tr>
+   {{/if}}
+   
 
   <tr>
     <td class="text">{{mb_label object=$op field="examen"}}</td>
