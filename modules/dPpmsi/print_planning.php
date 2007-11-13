@@ -84,7 +84,7 @@ foreach($plagesop as &$plage) {
     $operation->loadRefsActesCCAM();
     foreach($operation->_ref_actes_ccam as &$curr_acte) {
       $curr_acte->loadRefsFwd();
-    //  $curr_acte->guessAssociation();
+      $curr_acte->guessAssociation();
     }
     $sejour =& $operation->_ref_sejour;
     if($filterSejour->type && $filterSejour->type != $sejour->type) {

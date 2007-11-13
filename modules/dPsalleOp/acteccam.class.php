@@ -190,6 +190,11 @@ class CActeCCAM extends CMbMetaObject {
     // Chargements initiaux
     $this->loadRefCodeCCAM();
     $this->getLinkedActes();
+    if(count($this->_linked_actes) >= 4) {
+      $this->_guess_association = "?";
+      $this->_guess_regle_asso    = "?";
+      return $this->_guess_association;
+    }
     foreach($this->_linked_actes as &$acte) {
       $acte->loadRefCodeCCAM();
     }
@@ -357,7 +362,7 @@ class CActeCCAM extends CMbMetaObject {
       // 1 acte + 1 supplément des chap. 19.02 (règle C)
       if($numChap1902 == 1) {
         $this->_guess_association = "1";
-      $this->_guess_regle_asso    = "C";
+        $this->_guess_regle_asso    = "C";
         return $this->_guess_association;
       }
     }
@@ -484,10 +489,10 @@ class CActeCCAM extends CMbMetaObject {
   
   
   function getTarif() {
-    $this->guessAssociation();
     if($this->code_association !== null) {
       $code_asso = $this->code_association;
     } else {
+      $this->guessAssociation();
       $code_asso = $this->_guess_association;
     }
     $this->_tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
