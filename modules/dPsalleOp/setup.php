@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.21";
+$config["mod_version"]     = "0.22";
 $config["mod_type"]        = "user";
 
 class CSetupdPsalleOp extends CSetup {
@@ -96,7 +96,17 @@ class CSetupdPsalleOp extends CSetup {
             ADD `regle` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.21";
+    $this->makerevision("0.21");
+    $sql = "ALTER TABLE `acte_ccam`
+              ADD INDEX ( `code_acte` ),
+              ADD INDEX ( `code_activite` ),
+              ADD INDEX ( `code_phase` ),
+              ADD INDEX ( `object_id` ),
+              ADD INDEX ( `executant_id` ),
+              ADD INDEX ( `object_class` )";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.22";
     
   }
 }
