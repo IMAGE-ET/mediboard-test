@@ -79,8 +79,13 @@ function setClose(date) {
             <div class="progressBar">
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text">
-                <label for="list_{{$curr_plage->plageop_id}}" {{if !$over}}ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')"{{/if}}>
-                  {{$curr_plage->date|date_format:"%a %d %b %Y"}} - {{$curr_plage->_ref_salle->nom}}
+                <label 
+                  for="list_{{$curr_plage->plageop_id}}" 
+                  title="Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}"
+                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')"{{/if}}
+                >
+                  {{$curr_plage->date|date_format:"%a %d"}} 
+                  en {{$curr_plage->_ref_salle->nom}}
                 </label>
               </div>
             </div>
@@ -106,7 +111,7 @@ function setClose(date) {
             <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}}" />
           </td>
           <td>
-            <label for="admission_veille">La veille</label>
+            <label for="admission_veille">La veille (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_jour}}h)</label>
           </td>
         </tr>
         <tr>
@@ -114,7 +119,7 @@ function setClose(date) {
             <input type="radio" name="admission" value="jour" />
           </td>
           <td>
-            <label for="admission_jour">Le jour même</label>
+            <label for="admission_jour">Le jour même (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_veille}}h)</label>
           </td>
         </tr>
         <tr>
@@ -123,11 +128,6 @@ function setClose(date) {
           </td>
           <td>
             <label for="admission_aucune">Ne pas modifier</label>
-          </td>
-        </tr>
-        <tr>
-          <td class="text" colspan="2">
-            <i>Par défaut, une admission la veille se fait à 17h et à 8h pour le jour même</i>
           </td>
         </tr>
         <tr>

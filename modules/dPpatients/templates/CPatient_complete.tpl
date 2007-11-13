@@ -214,9 +214,7 @@
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>
       {{foreachelse}}
-        <li>
-          <em>Pas de diagnostics</em>
-        </li>
+        <em>Pas de diagnostics</em>
       {{/foreach}}
       {{if $object->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
     </td>
