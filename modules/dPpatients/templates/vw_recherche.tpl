@@ -45,7 +45,7 @@ function pageMain() {
         <td><input type="text" name="traitement_patient" value="{{$traitement_patient|stripslashes}}" /></td>
       </tr>
       <tr>
-        <th>{{mb_label object=$pat_diag field="listCim10"}}</th>
+        <th>{{mb_label object=$dossierMedical field="listCim10"}}</th>
         <td colspan="4">
           <input type="text" name="diagnostic_patient" value="{{$diagnostic_patient|stripslashes}}" />
           <button class="search notext" type="button" onclick="CIM10Selector.init()">Rechercher</button>
@@ -164,32 +164,33 @@ function pageMain() {
         
         <div class="accordionMain" id="accordionResultats">
  
-          {{if $patients_diag}}
+          {{if $dossiersMed}}
           <div id="acc_diagnostic">
             <div  class="accordionTabTitleBar" id="IdentiteHeader">
-              Résultats par Diagnostics ({{$patients_diag|@count}})
+              Résultats par Diagnostics ({{$dossiersMed|@count}})
             </div>
             <div class="accordionTabContentBox" id="IdentiteContent"  >
               <table class="form">
                 <tr>
                  <td>
-                 {{foreach from=$patients_diag item=curr_patient}}
+                 {{foreach from=$dossiersMed item=curr_dossier}}
+                 {{assign var="patient" value=$curr_dossier->_ref_object}}
                  <tr>
                    <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_patient->_id}}">
-                      {{mb_value object=$curr_patient field="_view"}}
+                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                      {{mb_value object=$patient field="_view"}}
                    </a>
                    </td>
                    <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_patient->_id}}">
-                     {{mb_value object=$curr_patient field="naissance"}}
+                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                     {{mb_value object=$patient field="naissance"}}
                    </a>
                    </td>
                    <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_patient->_id}}">
-                     {{mb_value object=$curr_patient field="adresse"}}
-                     {{mb_value object=$curr_patient field="cp"}}
-                     {{mb_value object=$curr_patient field="ville"}}
+                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                     {{mb_value object=$patient field="adresse"}}
+                     {{mb_value object=$patient field="cp"}}
+                     {{mb_value object=$patient field="ville"}}
                    </a>
                    </td>
                  </tr>
@@ -212,22 +213,23 @@ function pageMain() {
                <tr>
                  <td>
                    {{foreach from=$traitements item=curr_traitement}}
+                   {{assign var="patient" value=$curr_traitement->_ref_dossier_medical->_ref_object}}
                     <tr>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_traitement->_ref_object->_id}}">
-                        {{mb_value object=$curr_traitement->_ref_object field="_view"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="_view"}}
                       </a>
                       </td>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_traitement->_ref_object->_id}}">
-                        {{mb_value object=$curr_traitement->_ref_object field="naissance"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="naissance"}}
                       </a>
                       </td>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_traitement->_ref_object->_id}}">
-                        {{mb_value object=$curr_traitement->_ref_object field="adresse"}}
-                        {{mb_value object=$curr_traitement->_ref_object field="cp"}}
-                        {{mb_value object=$curr_traitement->_ref_object field="ville"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="adresse"}}
+                        {{mb_value object=$patient field="cp"}}
+                        {{mb_value object=$patient field="ville"}}
                       </a>
                       </td>
                     </tr>
@@ -251,22 +253,23 @@ function pageMain() {
                <tr>
                  <td>
                    {{foreach from=$antecedents item=curr_antecedent}}
+                   {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
                     <tr>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_antecedent->_ref_object->_id}}">
-                        {{mb_value object=$curr_antecedent->_ref_object field="_view"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="_view"}}
                       </a>
                       </td>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_antecedent->_ref_object->_id}}">
-                        {{mb_value object=$curr_antecedent->_ref_object field="naissance"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="naissance"}}
                       </a>
                       </td>
                       <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_antecedent->_ref_object->_id}}">
-                        {{mb_value object=$curr_antecedent->_ref_object field="adresse"}}
-                        {{mb_value object=$curr_antecedent->_ref_object field="cp"}}
-                        {{mb_value object=$curr_antecedent->_ref_object field="ville"}}
+                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                        {{mb_value object=$patient field="adresse"}}
+                        {{mb_value object=$patient field="cp"}}
+                        {{mb_value object=$patient field="ville"}}
                       </a>
                       </td>
                     </tr>
@@ -394,7 +397,7 @@ function pageMain() {
          {{/if}}
           
           
-          {{if !$antecedents && !$traitements && !$patients_diag && !$consultations && !$sejours && !$interventions }}
+          {{if !$antecedents && !$traitements && !$dossiersMed && !$consultations && !$sejours && !$interventions }}
           <div id="acc_aucunResultat">
             <div  class="accordionTabTitleBar" id="IdentiteHeader">
               Aucun résultat pour la recherche

@@ -31,6 +31,13 @@ class CTraitement extends CMbObject {
     $specs["dossier_medical_id"] = "notNull ref class|CDossierMedical";
     return $specs;
   }
+  
+  function loadRefDossierMedical(){ 
+    $this->_ref_dossier_medical = new CDossierMedical();
+    $this->_ref_dossier_medical->load($this->dossier_medical_id);
+  }
+  
+  
 
   function getSeeks() {
     return array (

@@ -53,6 +53,14 @@ class CDossierMedical extends CMbMetaObject {
     $this->loadRefsAddictions();
   }
   
+  function loadRefObject(){  
+    $this->_ref_object = new $this->object_class;
+    $this->_ref_object->load($this->object_id);
+  }
+ 
+  
+  
+  
   function updateFormFields() {
     parent::updateFormFields();
     

@@ -71,12 +71,12 @@
     <td>
       <input type="radio" name="_choix_naissance" value="{{$patient1->naissance}}" checked="checked"
       onclick="setField(this.form._jour, '{{$patient1->_jour}}'); setField(this.form._mois, '{{$patient1->_mois}}'); setField(this.form._annee, '{{$patient1->_annee}}');" />
-      {{$patient1->_naissance}}
+      {{mb_value object=$patient1 field="naissance"}}
     </td>
     <td>
       <input type="radio" name="_choix_naissance" value="{{$patient2->naissance}}"
       onclick="setField(this.form._jour, '{{$patient2->_jour}}'); setField(this.form._mois, '{{$patient2->_mois}}'); setField(this.form._annee, '{{$patient2->_annee}}');" />
-      {{$patient2->_naissance}}
+      {{mb_value object=$patient2 field="naissance"}}
     </td>
     <td>
       <input tabindex="105" type="text" name="_jour"  size="2" maxlength="2" value="{{if $finalPatient->_jour != "00"}}{{$finalPatient->_jour}}{{/if}}" onkeyup="followUp(event)" /> -

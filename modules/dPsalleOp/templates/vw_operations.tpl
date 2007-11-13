@@ -63,8 +63,7 @@ function pageMain() {
 					  </a>
             {{$patient->_view}} 
             ({{$patient->_age}} ans 
-            
-            {{if $patient->_age != "??"}}- {{$patient->_naissance}}{{/if}})
+            {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
           </th>
         </tr>

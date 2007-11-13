@@ -210,7 +210,7 @@ class CPatient extends CMbObject {
     $specs["tel2"]              = "numchar length|10 confidential";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
-    $specs["naissance"]         = "date confidential";
+    $specs["naissance"]         = "birthDate confidential";
     $specs["rques"]             = "text";
     $specs["cmu"]               = "date";
     $specs["ald"]               = "text";
@@ -242,7 +242,7 @@ class CPatient extends CMbObject {
     $specs["assure_prenom"]            = "str";
     $specs["assure_nom_jeune_fille"]   = "str confidential";
     $specs["assure_sexe"]              = "enum list|m|f|j default|m";
-    $specs["assure_naissance"]         = "birthdate confidential";
+    $specs["assure_naissance"]         = "birthDate confidential";
     $specs["assure_adresse"]           = "text confidential";
     $specs["assure_ville"]             = "str confidential";
     $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
@@ -402,10 +402,9 @@ class CPatient extends CMbObject {
       $this->_jour  = $aNaissance[2];
       $this->_mois  = $aNaissance[1];
       $this->_annee = $aNaissance[0];
-    
-      $this->_naissance = mbDateToLocale($this->naissance);
+      //$this->_naissance = mbDateToLocale($this->naissance);
     }
-
+  
     $this->evalAge();
     
     // Téléphones
@@ -414,17 +413,17 @@ class CPatient extends CMbObject {
     $this->updateFormTel("prevenir_tel", "_tel3");
     $this->updateFormTel("employeur_tel", "_tel4");
     
-    
+  
     // Assuré
     if ($this->assure_naissance && $this->assure_naissance != "0000-00-00") {
       $aNaissance = split("-", $this->assure_naissance);
       $this->_assure_jour  = $aNaissance[2];
       $this->_assure_mois  = $aNaissance[1];
       $this->_assure_annee = $aNaissance[0];
-    
-      $this->_assure_naissance = mbDateToLocale($this->assure_naissance);
+      //$this->_assure_naissance = mbDateToLocale($this->assure_naissance);
     }
     
+
     // Assuré téléphone
     $this->updateFormTel("assure_tel", "_assure_tel");  
     $this->updateFormTel("assure_tel2", "_assure_tel2");

@@ -1,4 +1,5 @@
 <?php
+$locales['CDossierMedical-listCim10'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
@@ -58,10 +59,6 @@ $locales['CAntecedent.type.obst'] = '';
 $locales['CAntecedent.type.trans'] = '';
 $locales['CConsultation-_ext_codes_ccam'] = '';
 $locales['CConsultation-_ref_actes_ccam'] = '';
-$locales['IDossierMedical-back-'] = '';
-$locales['IDossierMedical-back-addictions'] = '';
-$locales['IDossierMedical-back-antecedents'] = '';
-$locales['IDossierMedical-back-traitements'] = '';
 $locales['CMedecin'] = '';
 $locales['CMedecin-adresse'] = '';
 $locales['CMedecin-adresse-court'] = '';
@@ -427,6 +424,10 @@ $locales['CTraitement.none'] = '';
 $locales['CTraitement.object_class.CConsultAnesth'] = '';
 $locales['CTraitement.object_class.CPatient'] = '';
 $locales['CTraitement.one'] = '';
+$locales['IDossierMedical-back-'] = '';
+$locales['IDossierMedical-back-addictions'] = '';
+$locales['IDossierMedical-back-antecedents'] = '';
+$locales['IDossierMedical-back-traitements'] = '';
 $locales['Intermax.error.0'] = 'Exécution interrompue, aucun résultat.';
 $locales['Intermax.error.30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : \\n\\t1. Le code Adeli est bien paramétré dans Mediboard\\n\\t2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['Intermax.error.35'] = 'La patient n\'est pas référencé dans la base LogicMax';

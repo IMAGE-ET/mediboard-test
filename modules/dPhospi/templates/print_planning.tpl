@@ -130,7 +130,7 @@ function printAdmission(id) {
           </td>
           <td>
             <a href="#" onclick="printAdmission({{$curr_sejour->_id}})">
-              {{$curr_sejour->_ref_patient->_naissance}} ({{$curr_sejour->_ref_patient->_age}} ans)
+              {{mb_value object=$curr_sejour->_ref_patient field="naissance"}} ({{$curr_sejour->_ref_patient->_age}} ans)
             </a>
           </td>
           <td class="text">

@@ -13,7 +13,7 @@
   {{assign var="rowspan" value=$nbConsults+$nbSejours+1}}
   <td rowspan="{{$rowspan}}">
     {{$_patient->_view}}</td>
-  <td>{{$_patient->_naissance}}</td>
+  <td>{{mb_value object=$_patient field="naissance"}}</td>
   
   {{if $patVitale}}
   <td>{{mb_value object=$_patient field="matricule"}}</td>

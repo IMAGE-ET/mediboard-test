@@ -50,22 +50,26 @@ $ant = new CAntecedent();
 $antecedents = array();
 $patients_ant = array();
 $where_ant = array();
+$ljoin["dossier_medical"] = "dossier_medical.object_id = antecedent.antecedent_id";
+
+
 if($antecedent_patient){
   $where_ant["rques"]   = "LIKE '%$antecedent_patient%'";
+  $where_ant["object_class"] = " = 'CPatient'";
 }
 $order_ant = "antecedent_id, rques";
 
 if ($where_ant) {
-  $antecedents = $ant->loadList($where_ant, $order_ant, "0, 30");
+  $antecedents = $ant->loadList($where_ant, $order_ant, "0, 30", null, $ljoin);
 }
 foreach($antecedents as $key=>$value){
-   if($value->object_class != "CPatient"){
-   	unset($antecedents[$key]);
-   }
-   $antecedents_[$key] = $value->object_id;
+   // Chargement du dossier medical du patient pour chaque antecedent
+   $value->loadRefDossierMedical();
+   
+   $value->_ref_dossier_medical->loadRefObject();
+   $antecedents_[$key] = $value->_ref_dossier_medical->object_id;
    $value->loadRefsFwd();
 }
-
 
 
 // Recherche sur les traitements
@@ -73,18 +77,20 @@ $trait = new CTraitement();
 $traitements = array();
 $patients_trait = array();
 $where_trait = array();
+$ljoin["dossier_medical"] = "dossier_medical.object_id = traitement.traitement_id";
+
 if($traitement_patient){ 
   $where_trait["traitement"] = "LIKE '%$traitement_patient%'";
+  $where_trait["object_class"] = " ='CPatient'";
 }
 $order_trait = "traitement_id, traitement";
 if($where_trait) {
-  $traitements = $trait->loadList($where_trait, $order_trait, "0, 30");
+  $traitements = $trait->loadList($where_trait, $order_trait, "0, 30", null, $ljoin);
 }
 foreach($traitements as $key=>$value){
-   if($value->object_class != "CPatient"){
-   	unset($traitements_[$key]);
-   }
-   $traitements_[$key] = $value->object_id;
+   $value->loadRefDossierMedical();
+   $value->_ref_dossier_medical->loadRefObject();
+   $traitements_[$key] = $value->_ref_dossier_medical->object_id;
    $value->loadRefsFwd();
 }
 
@@ -97,16 +103,38 @@ $where_examen = null;
 $where_traitement = null;
 $where_consult = null;
 
-$patients_diag = array();
+$dossiersMed = array();
 $where_diag = array();
+
+
 if($diagnostic_patient){
   $where_diag["listCim10"] = "LIKE '%$diagnostic_patient%'";
+  $where_diag["object_class"] = " = 'CPatient'";
 }
-$order_diag = "patient_id";
+$order_diag = "object_id";
+
+$dossierMedical = new CDossierMedical();
+
+
 $pat_diag = new CPatient();
 if($where_diag){
-  $patients_diag = $pat_diag->loadList($where_diag, $order_diag, "0, 30");
+  $dossiersMed = $dossierMedical->loadList($where_diag, $order_diag, "0, 30");
 }
+
+foreach($dossiersMed as $key=>$value){
+   $value->loadRefObject();
+   $value->loadRefsFwd();
+}
+
+
+
+
+
+
+
+
+
+
 
 
   // Recherche sur les Consultations
@@ -281,6 +309,8 @@ if($where_diag){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("dossierMedical", $dossierMedical);
+
 $smarty->assign("canCabinet"              , $canCabinet              );
 $smarty->assign("canPlanningOp"           , $canPlanningOp           );
 
@@ -322,7 +352,7 @@ $smarty->assign("recherche_intervention"  , $recherche_intervention  );
 
 $smarty->assign("patients_ant"            , $patients_ant            );
 $smarty->assign("patients_trait"          , $patients_trait          );
-$smarty->assign("patients_diag"           , $patients_diag           );
+$smarty->assign("dossiersMed"           , $dossiersMed           );
 $smarty->assign("patients_consult"        , $patients_consult        );
 $smarty->assign("patients_sejour"         , $patients_sejour         );
 $smarty->assign("patients_intervention"   , $patients_intervention   );

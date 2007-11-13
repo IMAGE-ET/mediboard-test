@@ -34,7 +34,7 @@
   <tr>
     <th>Date de naissance / Sexe </th>
     <td>
-      né(e) le {{$patient->_naissance}}
+      né(e) le {{mb_value object=$patient field="naissance"}}
       de sexe 
       {{if $patient->sexe == "m"}}masculin{{else}}féminin{{/if}}
     </td>

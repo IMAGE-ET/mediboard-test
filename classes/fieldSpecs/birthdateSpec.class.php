@@ -12,7 +12,7 @@ require_once("./classes/mbFieldSpec.class.php");
 /**
  * Susceptible de gérer les dates de naissance non grégorienne 
  * au format pseudo ISO : YYYY-MM-DD mais avec potentiellement :
- *  MM > 31
+ *  MM > 12
  *  DD > 31
  */
 class CBirthDateSpec extends CMbFieldSpec {
@@ -24,7 +24,6 @@ class CBirthDateSpec extends CMbFieldSpec {
     if (!$propValue || $propValue == "0000-00-00") {
       return "-";
     }
-
     return mbDateToLocale($propValue);
   }
   
@@ -40,8 +39,8 @@ class CBirthDateSpec extends CMbFieldSpec {
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
       return "format de date invalide";
     }
-    
-    $propValue = format("%04s-%02s-%02s", $matches[1], $matches[2], $matches[3]);
+  
+    //$propValue = format("%04s-%02s-%02s", $matches[1], $matches[2], $matches[3]);
     return null;
   }
   

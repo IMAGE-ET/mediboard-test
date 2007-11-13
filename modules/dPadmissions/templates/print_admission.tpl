@@ -22,7 +22,7 @@
 
   <tr>
     <th>Date de naissance / Sexe : </th>
-    <td>né(e) le {{$patient->_naissance}} ({{$patient->_age}} ans) de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
+    <td>né(e) le {{mb_value object=$patient field="naissance"}} ({{$patient->_age}} ans) de sexe {{tr}}CPatient.sexe.{{$patient->sexe}}{{/tr}}</td>
   </tr>
 
   <tr>

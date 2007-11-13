@@ -48,7 +48,7 @@
     <td>
       {{$curr_consult->_ref_patient->_age}} ans
       {{if $curr_consult->_ref_patient->_age != "??"}}
-        ({{$curr_consult->_ref_patient->_naissance}})
+        ({{mb_value object=$curr_consult->_ref_patient field="naissance"}})
       {{/if}}
     </td>
     <td class="text">

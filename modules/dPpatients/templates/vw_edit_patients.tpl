@@ -14,8 +14,40 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.redirect();
 }
 
+function checkNaissance(){
+  var oForm = document.editFrm;
+  
+  if(oForm._jour.value > 31 || oForm._mois.value > 12) {
+     if(!confirm('Le date de naissance ne correspond pas à une date du calendrier, souhaitez vous la sauvegarder ?')){
+       return false;
+     }
+   } 
+   return true;
+}
+
+function checkAssureNaissance(){
+  var oForm = document.editFrm;
+  
+  if(oForm._assure_jour.value > 31 || oForm._assure_mois.value > 12) {
+     if(!confirm('Le date de naissance de l\'assuré ne correspond pas à une date du calendrier, souhaitez vous la sauvegarder ?')){
+       return false;
+     }
+   } 
+   return true;
+}
+
+
 var httpreq_running = false;
 function confirmCreation(oForm){
+  
+  if(!checkNaissance()){
+    return false;
+  }
+  
+  if(!checkAssureNaissance()){
+    return false;
+  }
+  
   if(httpreq_running) {
     return false;
   }
