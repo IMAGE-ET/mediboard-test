@@ -121,7 +121,7 @@ class CPlageOp extends CMbObject {
     $this->makeView();
   }
   
-  function loadRefsBack($annulee = 1, $order = "rank") {
+  function loadRefsBack($annulee = 1, $order = "rank, horaire_voulu") {
     $where = array();
     $where["plageop_id"] = "= '$this->plageop_id'";
     if(!$annulee) {
