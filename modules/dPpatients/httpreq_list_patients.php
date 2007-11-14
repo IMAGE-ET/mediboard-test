@@ -93,6 +93,7 @@ $smarty->assign("naissance"      , $patient_naissance                         );
 $smarty->assign("ville"          , $patient_ville                             );
 $smarty->assign("cp"             , $patient_cp                                );
 $smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
+$smarty->assign("useVitale"      , null                                       );
 $smarty->assign("patients"       , $patients                                  );
 $smarty->assign("patientsCount"  , count($patients)                           );
 $smarty->assign("patientsSoundexCount", count($patientsSoundex)               );

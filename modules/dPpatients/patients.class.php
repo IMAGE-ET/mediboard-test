@@ -299,10 +299,20 @@ class CPatient extends CMbObject {
     $vitale = $intermax["VITALE"];
     $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
     $idVitale = new CIdSante400();
-    $idVitale->setObject($this);
+    $idVitale->object_class = $this->_class_name;
     $idVitale->id400 = $vitNumero;
     $idVitale->tag = "LogicMax VitNumero";
     $idVitale->loadMatchingObject();
+    
+    // Autre association ?
+    if ($idVitale->object_id && $idVitale->object_id != $this->_id) {
+      $idVitale->loadTargetObject();
+      $patOther =& $idVitale->_ref_object;
+      return "Bénéficiaire Vitale déjà associé au patient " . $patOther->_view .
+        " né le " . mbDateToLocale($patOther->naissance);
+    }
+    
+    $idVitale->object_id = $this->_id;
     $idVitale->last_update = mbDateTime();
     return $idVitale->store();
   }
@@ -339,8 +349,8 @@ class CPatient extends CMbObject {
     
     // CP et ville
     $cpville = split(" ", $vitale["VIT_ADRESSE_5"], 2);
-    $this->cp = $cpville[0];
-    $this->ville = $cpville[1];
+    $this->cp = @$cpville[0];
+    $this->ville = @$cpville[1];
     
     // Matricules
     $this->assure_matricule = join("", array($vitale["VIT_NUMERO_SS"], $vitale["VIT_CLE_SS"]));

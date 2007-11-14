@@ -32,7 +32,9 @@ if (!$patient_id) {
 }
 
 if (mbGetValueFromGet("useVitale")) {
-  $patient->getValuesFromVitale();
+  $patVitale = new CPatient();
+  $patVitale->getValuesFromVitale();
+  $patient->extendsWith($patVitale);
   $patient->updateFormFields();
   $patient->_bind_vitale = "1";
 }

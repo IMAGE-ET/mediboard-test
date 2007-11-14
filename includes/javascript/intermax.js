@@ -1,3 +1,6 @@
+/**
+ * Class for LogicMax browser based Integration
+ */
 var Intermax = {
   oContent : {},
   currentFunction : "unknown",
@@ -61,7 +64,8 @@ var Intermax = {
     document.intermaxTrigger.performWrite(sContent);
   },
   
-  result: function() {
+  result: function(sFunction) {
+    this.currentFunction = sFunction;
     document.intermaxResult.performRead();
     setTimeout(Intermax.handleContent.bind(Intermax), 100);
     
@@ -74,6 +78,10 @@ var Intermax = {
     if (!$H(this.oContent).values().length) {
 	    Intermax.alert("100");
       return;
+    }
+    
+    if (this.currentFunction &&  this.oContent.FONCTION.NOM != this.currentFunction) {
+	    Intermax.alert("110");
     }
     
 	  if (this.oContent.PARAM.EXECUTION == 'KO') {
@@ -105,5 +113,18 @@ var Intermax = {
   },
 
   ResultHandler : {
+  },
+  
+  Triggers : {
+    "Consulter Vitale" : function(iVitale) {
+			Intermax.trigger("Consulter Vitale", { 
+				PARAM: { 
+					AFFICHAGE: 1 
+				}, 
+				VIT: { 
+					VIT_NUMERO_LOGICMAX: iVitale
+				}
+			} );
+    }
   }
 }

@@ -18,6 +18,7 @@
 Intermax.errors = {
   "0"   : "{{tr}}Intermax.error.0{{/tr}}",
   "100" : "{{tr}}Intermax.error.100{{/tr}}",
+  "110" : "{{tr}}Intermax.error.110{{/tr}}",
   "-30" : "{{tr}}Intermax.error.30{{/tr}}",
   "-35" : "{{tr}}Intermax.error.35{{/tr}}",
   "other": "{{tr}}Intermax.error.other{{/tr}}"
@@ -64,7 +65,7 @@ Intermax.errors = {
   <param name="lineSeparator" value="---" />
   <param name="debug" value={{if $debug=="true"}}"true"{{else}}"false"{{/if}} />
   <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.OUT" />
-  <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" />
+<!-- <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" /> -->
 </applet>
 
 {{/if}}

@@ -479,6 +479,11 @@ abstract class CSQLDataSource {
       $tmp[] = "`$k`=$val";
     }
     
+    // No updates to make;
+    if (!count($tmp)) {
+      return true;
+    }
+    
     $values = implode(",", $tmp);
     $query = "UPDATE $table SET $values WHERE $where";
  

@@ -21,7 +21,6 @@ $orderBanque = "nom ASC";
 $banque = new CBanque();
 $banques = $banque->loadList(null,$orderBanque);
 
-
 $consult = new CConsultation();
 
 // Test compliqué afin de savoir quelle consultation charger
@@ -70,12 +69,17 @@ if ($selConsult) {
   $canConsult = $consult->canDo();
   $canConsult->needsEdit();
   
+  // Some Forward references
   $consult->loadRefsFwd();
   $consult->loadRefsDocs();
   $consult->loadRefsFiles();
   $consult->loadRefsExamAudio();
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
+  
+  // Patient
+  $patient =& $consult->_ref_patient;
+  $patient->loadIdVitale();
 }
 
 // Récupération des modèles
@@ -118,14 +122,12 @@ $where["function_id"] = "= '$userSel->function_id'";
 $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
+$_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste")) 
+  || $consult->_ref_consult_anesth->consultation_anesth_id;
+
 // Création du template
 $smarty = new CSmartyDP();
 
-if($consult->_ref_chir->isFromType(array("Anesthésiste")) || $consult->_ref_consult_anesth->consultation_anesth_id) {
-  $_is_anesth=true;	
-} else {
-  $_is_anesth=false;
-}
 $smarty->assign("_is_anesth", $_is_anesth);  
 
 $smarty->assign("banques"       , $banques);

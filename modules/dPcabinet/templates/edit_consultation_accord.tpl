@@ -53,10 +53,7 @@ var oCimField = null;
 function pageMain() {
 
   updateList();
-  
-  // Chargement des antecedents, traitements, addictions, diagnostics du patients
-  reloadAntecedents();
-  
+    
   PairEffect.initGroup("acteEffect");
   
   {{if $consult->consultation_id}}
@@ -83,10 +80,13 @@ function pageMain() {
   
   
   {{if $consult->consultation_id}}
+  // Chargement des antecedents, traitements, addictions, diagnostics du patients
+  reloadAntecedents();
+  
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
     panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
     showDelay:50, 
-    showSteps:3 
+    showSteps:5
   } );
   {{/if}}
   

@@ -432,6 +432,7 @@ $locales['Intermax.error.0'] = 'Exécution interrompue, aucun résultat.';
 $locales['Intermax.error.30'] = 'Le praticien de Mediboard ne correspond à aucune fiche praticien de LogicMax. Vérifiez que : \\n\\t1. Le code Adeli est bien paramétré dans Mediboard\\n\\t2. Le praticien est configuré dans LogicMax avec le même code Adeli';
 $locales['Intermax.error.35'] = 'La patient n\'est pas référencé dans la base LogicMax';
 $locales['Intermax.error.100'] = 'Le résultat est non accessible. Vérifiez que : \\n\\t1. LogicMax est bien lancé\\n\\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
+$locales['Intermax.error.110'] = 'Le résultat récupéré de correspond pas à la fonction demandée. \\nEssayez de relancer la fonction demandée';
 $locales['mod-dPpatients-tab-vw_edit_patients'] = 'Edition d\'un dossier';
 $locales['mod-dPpatients-tab-vw_full_patients'] = 'Consulter un dossier';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';

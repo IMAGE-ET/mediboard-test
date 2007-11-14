@@ -40,9 +40,10 @@ $textSiblings = null;
 if(count($siblings) != 0) {
 	$textSiblings = "Risque de doublons :";
   foreach($siblings as $key => $value) {
-    $textSiblings .= "\n>> ".$value->nom." ".$value->prenom.
-                     " né(e) le ".$value->naissance.
-                     " habitant ".$value->adresse." ".$value->cp." ".$value->ville;
+    $textSiblings .= "\n\t $value->nom $value->prenom" .
+      " né(e) le ". mbDateToLocale($value->naissance) .
+      "\n\t\thabitant ". strtr($value->adresse, "\n", "-") .
+      "- $value->cp $value->ville";
   }
   $textSiblings .= "\nVoulez-vous tout de même sauvegarder ?";
 }

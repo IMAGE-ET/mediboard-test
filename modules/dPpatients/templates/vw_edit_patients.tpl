@@ -117,9 +117,11 @@ function pageMain() {
 			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
 			        Lire Vitale
 			      </button>
-			      <button class="search" type="button" onclick="Intermax.trigger('Consulter Vitale', { PARAM: { AFFICHAGE:1 }, VIT: { VIT_NUMERO_LOGICMAX: '{{$patient->_idVitale}}'}});" style="float: left;">
+ 			      {{if $patient->_idVitale}}
+ 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_idVitale}});" style="float: left;">
 			        Consulter Vitale
 			      </button>
+			      {{/if}}
 			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
 			        Résultat Vitale
 			      </button>

@@ -1,9 +1,40 @@
+{{assign var=patient value=$consult->_ref_patient}}
+{{assign var=praticien value=$consult->_ref_chir}}
+
 <script type="text/javascript">
 
-Intermax.ResultHandler["Formater FSE"] = function() {
-  Console.trace("Pas d'erreur, on continue avec les données suivantes");
-	Console.debug(Intermax.oContent, "Content pour Formater FSE", { level : 2 });
-}
+Object.extend(Intermax.ResultHandler, {
+  "Lire Vitale": function() {
+    var oVitale = Intermax.oContent.VITALE;
+    
+    var msg = {{$patient->_idVitale|json}} ?
+    	"Vous êtes sur le point de mettre à jour le patient" :
+    	"Vous êtes sur le point d'associer le patient";
+    msg += printf("\n\t%s %s (%s)", 
+    	{{$patient->nom|json}}, 
+    	{{$patient->prenom|json}}, 
+    	'{{mb_value object=$patient field=naissance}}');
+    msg += "\nAvec le bénéficiaire Vitale";
+    msg += printf("\n\t%s %s (%s)", 
+    	oVitale.VIT_NOM, 
+    	oVitale.VIT_PRENOM, 
+    	oVitale.VIT_DATE_NAISSANCE);
+    msg += "\n\nVoulez-vous continuer ?";
+        
+    if (confirm(msg)) {
+      submitFdr(document.BindVitale);
+    }
+  },
+  
+
+  "Formater FSE": function() {
+    Console.trace("Pas d'erreur, on continue avec les données suivantes");
+    Console.debug(Intermax.oContent, "Content pour Formater FSE", { level : 2 });
+  }
+} );
+
+Intermax.ResultHandler["Consulter Vitale"] = Intermax.ResultHandler["Lire Vitale"];
+
 
 function cancelTarif() {
   var oForm = document.tarifFrm;
@@ -232,7 +263,7 @@ function submitFdr(oForm) {
       </button>
     </td>
 
-	<!-- Documents -->
+  <!-- Documents -->
 
     <td>
     <table class="form">
@@ -291,7 +322,7 @@ function submitFdr(oForm) {
     </td>
 
 
-    <!-- Règlements -->	
+    <!-- Règlements -->  
 
     {{if !$noReglement}}
     <td>
@@ -414,32 +445,106 @@ function submitFdr(oForm) {
     {{/if}}
   </tr>
   
-  
+  {{if !$noReglement}}
   <!-- Module FSE -->
-  
-  {{if $app->user_prefs.GestionFSE && $consult->tarif}}
+
+  {{if $app->user_prefs.GestionFSE}}
   <tr>
-    <th class="category" colspan="3">Feuille de Soins Electronique</th>
+    <th class="category">Patient Vitale</th>
+    <th class="category">Professionnel de santé</th>
+    <th class="category">Feuille de Soins</th>
   </tr>
+  
   <tr>
-    <td id="yoplet-container">
+    <!-- Patient Vitale -->
+    <td class="text">
+      <form name="BindVitale" action="?m={{$m}}" method="post">
+
+      <input type="hidden" name="m" value="dPpatients" />
+      <input type="hidden" name="dosql" value="do_patients_aed" />
+      <input type="hidden" name="_bind_vitale" value="1" />
+      {{mb_field object=$patient field="patient_id" hidden="1"}}
+      
+      </form>
+            
+      {{if !$patient->_idVitale}}
+      <div class="warning">
+        Patient non associé à un bénéficiaire Vitale. 
+        <br/>
+        Merci d'éffectuer une lecture de la carte pour permettre le formatage d'une FSE. 
+      </div>
+      {{else}}
+      <div class="message">
+        Patient correctement associé à un bénéficiaire Vitale. 
+        <br/>
+        Formatage des FSE disponible.
+      </div>
+      {{/if}}
+    </td>
+    
+    <!-- Professionnel de santé -->
+    <td class="text">
+      {{if !$patient->_idVitale}}
+      <div class="warning">
+        Patient non associé à une carte Vitale. 
+        <br/>
+        Merci d'éffectuer une lecture de la carte pour permettre le formatage d'une FSE. 
+      </div>
+      {{else}}
+      <div class="message">
+        Patient correctement associé à une carte Vitale. 
+        <br/>
+        Formatage des FSE disponible.
+      </div>
+      {{/if}}
+    </td>
+
+    <!-- Feuille de soins -->
+    <td class="text">
+    </td>
+  </tr>
+  
+  <tr>
+    <!-- Patient Vitale -->
+    <td class="button">
+      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+        Lire Vitale
+      </button>
+      {{if $patient->_idVitale}}
+      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_idVitale}});">
+        Consulter Vitale
+      </button>
+      {{/if}}
+      <button class="tick" type="button" onclick="Intermax.result();">
+        Résultat Vitale
+      </button>
+    </td>
+
+    <!-- Professionnel de santé -->
+    <td class="button">
+    </td>
+
+    <!-- Feuille de soins -->
+    <td class="button">
+      {{if !$patient->_idVitale}}
       <button class="search" type="button" onclick="Intermax.trigger('Formater FSE', { 
-      	CPS: {
-      	  CPS_NUMERO_CPS: '{{$consult->_ref_chir->adeli}}' 
-      	},
-      	VITALE: {
-      	  VIT_NUMERO_LOGICMAX: '{{$patient->_idVitale}}'
-      	} 
+        CPS: {
+          CPS_NUMERO_CPS: '{{$consult->_ref_chir->adeli}}' 
+        },
+        VITALE: {
+          VIT_NUMERO_LOGICMAX: '{{$patient->_idVitale}}'
+        } 
       } );">
         Formater FSE
       </button>
-    </td>
-    <td>
-      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+      <button class="tick" type="button" onclick="Intermax.result('Formater FSE');">
         Récupérer FSE
       </button>
+      {{/if}}
     </td>
+
   </tr>
+  {{/if}}
   {{/if}}
   
 </table>

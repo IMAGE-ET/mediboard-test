@@ -78,6 +78,7 @@ $consult->chrono = CConsultation::PATIENT_ARRIVE;
 $consult->motif = "Consultation immédiate";
 $consult->store();
 
+
 if($ref_chir->isFromType(array("Anesthésiste"))) {
   // Un Anesthesiste a été choisi 
   $consultAnesth = new CConsultAnesth;

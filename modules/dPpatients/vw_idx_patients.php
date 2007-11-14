@@ -46,7 +46,7 @@ $patient_month       = mbGetValueFromGet("Date_Month"  , "");
 $patient_year        = mbGetValueFromGet("Date_Year"   , "");
 $patient_naissance   = null;
 
-if (mbGetValueFromGet("useVitale")) {
+if ($useVitale = mbGetValueFromGet("useVitale")) {
   $patVitale = new CPatient;
   $patVitale->getValuesFromVitale();
   $patVitale->updateFormFields();
@@ -98,8 +98,8 @@ if ($patient_naissance == "on"){
   }
 }
 
-if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "LIKE '$patient_ville%'";
-if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
+if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "= '$patient_cp'";
 
 $patients        = array();
 $patientsSoundex = array();
@@ -153,22 +153,23 @@ $smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("nom"            , $patient_nom                               );
-$smarty->assign("prenom"         , $patient_prenom                            );
-$smarty->assign("jeuneFille"     , $patient_jeuneFille                        );
-$smarty->assign("soundex"        , $soundex                                   );
-$smarty->assign("naissance"      , $patient_naissance                         );
-$smarty->assign("ville"          , $patient_ville                             );
-$smarty->assign("cp"             , $patient_cp                                );
-$smarty->assign("patients"       , $patients                                  );
-$smarty->assign("patientsSoundex", $patientsSoundex                           );
-$smarty->assign("patientsCount"  , $patientsCount                             );
-$smarty->assign("patientsSoundexCount", $patientsSoundexCount                      );
-$smarty->assign("patient"        , $patient                                   );
-$smarty->assign("chir"           , $chir                                      );
-$smarty->assign("anesth"         , $anesth                                    );
-$smarty->assign("listPrat"       , $listPrat                                  );
-$smarty->assign("board"          , 0                                          );
+$smarty->assign("nom"            , $patient_nom              );
+$smarty->assign("prenom"         , $patient_prenom           );
+$smarty->assign("jeuneFille"     , $patient_jeuneFille       );
+$smarty->assign("soundex"        , $soundex                  );
+$smarty->assign("naissance"      , $patient_naissance        );
+$smarty->assign("ville"          , $patient_ville            );
+$smarty->assign("cp"             , $patient_cp               );
+$smarty->assign("useVitale"      , $useVitale                );
+$smarty->assign("patients"       , $patients                 );
+$smarty->assign("patientsSoundex", $patientsSoundex          );
+$smarty->assign("patientsCount"  , $patientsCount            );
+$smarty->assign("patientsSoundexCount", $patientsSoundexCount);
+$smarty->assign("patient"        , $patient                  );
+$smarty->assign("chir"           , $chir                     );
+$smarty->assign("anesth"         , $anesth                   );
+$smarty->assign("listPrat"       , $listPrat                 );
+$smarty->assign("board"          , 0                         );
 
 $smarty->display("vw_idx_patients.tpl");
 ?>

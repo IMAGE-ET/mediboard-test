@@ -10,6 +10,15 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.redirect();
 }
 
+var Patient = {
+  create : function() {
+    url = new Url;
+    url.setModuleTab("dPpatients", "vw_edit_patients");
+    url.addParam("patient_id", 0);
+    url.addParam("useVitale", {{$useVitale|json}});
+    url.redirect();
+  }
+}
 </script>
 
 <form name="find" action="?" method="get">
@@ -70,9 +79,13 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <tr>
     <td class="button" colspan="4">
       {{if $board}}
-      <button class="search" type="button" onclick="updateListPatients()">Rechercher</button>
+      <button class="search" type="button" onclick="updateListPatients()">
+        {{tr}}Search{{/tr}}
+      </button>
       {{else}}
-      <button class="search" type="submit">Rechercher</button>
+      <button class="search" type="submit">
+        {{tr}}Search{{/tr}}
+      </button>
       {{if $app->user_prefs.GestionFSE}}
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
@@ -81,6 +94,11 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
         Résultat Vitale
       </button>
       {{/if}}
+      
+      <button class="new" type="button" onclick="Patient.create();">
+        {{tr}}Create{{/tr}}
+      </button>
+      
       {{/if}}
     </td>
   </tr>

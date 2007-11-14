@@ -172,17 +172,17 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   
   <th><label for="naissance" title="Date de naissance">Date de naissance</label></th>
   <td>
-         {{html_select_date
-           time=$datePat
-           start_year=1900
-           field_order=DMY
-           day_empty="Jour"
-           month_empty="Mois"
-           year_empty="Année"
-           day_extra="tabindex='4'"
-           month_extra="tabindex='5'"
-           year_extra="tabindex='6'"
-           all_extra="style='display:inline;'"}}         
+    {{html_select_date
+      time=$datePat
+      start_year=1900
+      field_order=DMY
+      day_empty="Jour"
+      month_empty="Mois"
+      year_empty="Année"
+      day_extra="tabindex='4'"
+      month_extra="tabindex='5'"
+      year_extra="tabindex='6'"
+      all_extra="style='display:inline;'"}}         
     </td>
   <td><button class="search" type="submit">Rechercher</button></td>
 </tr>
