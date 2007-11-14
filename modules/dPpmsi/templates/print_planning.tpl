@@ -79,7 +79,7 @@ function printAdmission(id) {
 		  </td>
 		  <td>
 		    <a href="#" onclick="printAdmission({{$sejour->_id}})">
-		      {{$patient->_age}} ans ({{$patient->_naissance}})
+		      {{$patient->_naissance}}
 		    </a>
 		  </td>
       
@@ -118,7 +118,7 @@ function printAdmission(id) {
         {{/foreach}}
         </ul>
       </td>
-      <td>
+      <td class="text">
         <ul>
         {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
           <li>
@@ -126,15 +126,18 @@ function printAdmission(id) {
             <br />
             Act. : {{$curr_acte->code_activite}}
             &mdash; Phase : {{$curr_acte->code_phase}}
+            {{if $curr_acte->code_association}}
+              &mdash; Code asso : {{$curr_acte->code_association}}
+            {{/if}}
             {{if $curr_acte->modificateurs}}
               &mdash; Modifs : {{$curr_acte->modificateurs}}
             {{/if}}
             {{if $curr_acte->montant_depassement}}
-              &mdash; {{$curr_acte->montant_depassement}} euros
+              &mdash; DH : {{$curr_acte->montant_depassement}} €
             {{/if}}
             {{if $curr_acte->commentaire}}
               <br />
-              {{$curr_acte->commentaire}}
+              Rques : {{$curr_acte->commentaire|nl2br}}
             {{/if}}
           </li>
         {{/foreach}}
