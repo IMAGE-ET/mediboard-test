@@ -216,18 +216,24 @@ class CMbFieldSpec {
     return $this->getFormHtmlElement($object, $params, $value, $className);
   }
   
+  /**
+   * Produit le code HTML pour une label de champ de formulaire
+   * pour le champ de la spécification
+   *
+   * @param CMbObject $object Objet concerné
+   * @param array $params Extra parameters
+   *   - defaultFor : name of a radio option to associate label with
+   * @return string Rendered HTML
+   */
   function getLabelElement($object, $params){
     global $AppUI;
     
     $defaultFor = CMbArray::extract($params, "defaultFor");
-    if($defaultFor){
-      $selected = $this;
-    }else{
-      $selected = $this->getLabelForElement($object, $params);
-    }
+    $forName = $defaultFor ? $defaultFor : $this->getLabelForElement($object, $params);
+
     $extra  = CMbArray::makeXmlAttributes($params);
     
-    $sHtml  = "<label for=\"$selected\" title=\"".$AppUI->_($object->_class_name."-".$this->fieldName."-desc")."\" $extra>";
+    $sHtml  = "<label for=\"$forName\" title=\"".$AppUI->_($object->_class_name."-".$this->fieldName."-desc")."\" $extra>";
     $sHtml .= $AppUI->_($object->_class_name."-".$this->fieldName);
     $sHtml .= "</label>";
     

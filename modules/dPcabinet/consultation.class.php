@@ -233,6 +233,10 @@ class CConsultation extends CCodableCCAM {
   }
   
   function loadRefPlageConsult() {
+    if ($this->_ref_plageconsult) {
+      return; 
+    }
+
     $this->_ref_plageconsult = new CPlageconsult;
     $this->_ref_plageconsult->load($this->plageconsult_id);
     $this->_ref_plageconsult->loadRefsFwd();

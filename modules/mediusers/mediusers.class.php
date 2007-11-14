@@ -52,14 +52,17 @@ class CMediusers extends CMbObject {
   var $_user_template   = null;
 
   // Other fields
-  var $_view       = null;
-  var $_shortview  = null;
-  var $_compte_banque = null;
-  var $_compte_guichet = null;
-  var $_compte_numero = null;
-  var $_compte_cle = null;
-  var $_profile_id    = null;
-  
+  var $_view            = null;
+  var $_shortview       = null;
+  var $_compte_banque   = null;
+  var $_compte_guichet  = null;
+  var $_compte_numero   = null;
+  var $_compte_cle      = null;
+  var $_profile_id      = null;
+
+  // CPS
+  var $_bind_cps = null;
+  var $_id_cps   = null;
   
   // Object references
   var $_ref_banque     = null;
@@ -276,6 +279,62 @@ class CMediusers extends CMbObject {
     $this->_ref_protocoles = $protocoles->loadList($where, $order);
   }
 
+  /**
+   * Lie une numéro de lecture de CPS au Mediuser
+   * @return string Store-like message
+   */
+  function bindCPS() {
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+      return;
+    }
+    
+    // Make id400
+    $cps = $intermax["CPS"];
+    $cpsNumero = $cps["CPS_NUMERO_LOGICMAX"];
+    $id_cps = new CIdSante400();
+    $id_cps->object_class = $this->_class_name;
+    $id_cps->id400 = $cpsNumero;
+    $id_cps->tag = "LogicMax CPSNumero";
+    $id_cps->loadMatchingObject();
+    
+    // Autre association ?
+    if ($id_cps->object_id && $id_cps->object_id != $this->_id) {
+      $id_cps->loadTargetObject();
+      $medOther =& $id_cps->_ref_object;
+      return sprintf("CPS déjà associée à l'utilisateur %s (ADELI: '%s')",
+        $medOther->_view,
+        $medOther->adeli);
+    }
+    
+    $id_cps->object_id = $this->_id;
+    $id_cps->last_update = mbDateTime();
+    return $id_cps->store();
+  }
+
+  function loadIdCPS() {
+    $id_cps = new CIdSante400();
+    $id_cps->setObject($this);
+    $id_cps->tag = "LogicMax CPSNumero";
+    $id_cps->loadMatchingObject();
+    $this->_id_cps = $id_cps->id400;
+  }
+  
+  /**
+   * Map les valeurs venant d'une CPS
+   * @return void
+   */
+  function getValuesFromCPS() {
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+      return;
+    }
+    
+    $cps = $intermax["CPS"];
+    
+    $this->adeli = $cps["CPS_ADELI_NUMERO_CPS"];
+    $this->_user_first_name = $cps["CPS_PRENOM"];
+    $this->_user_last_name  = $cps["CPS_NOM"];
+  }
+         
   function store() {
     global $AppUI;
 
@@ -306,7 +365,14 @@ class CMediusers extends CMbObject {
       $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $this->_tbl_key);
     }
 
-    return $this->_spec->ds->error();
+    if ($msg = $this->_spec->ds->error()) {
+      return $msg;
+    }
+    
+    // Bind CPS
+    if ($this->_bind_cps && $this->_id) {
+      return $this->bindCPS();
+    }
   }
 
   function delFunctionPermission() {

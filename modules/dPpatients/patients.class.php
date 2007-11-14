@@ -96,7 +96,6 @@ class CPatient extends CMbObject {
   var $_static_cim10 = null;
 
   // Form fields
-  var $_bind_vitale = null;
   var $_naissance   = null;
   var $_jour        = null;
   var $_mois        = null;
@@ -122,6 +121,10 @@ class CPatient extends CMbObject {
   var $_tel44       = null;
   var $_tel45       = null;
   var $_age         = null;
+  
+  // Vitale
+  var $_bind_vitale = null;
+  var $_id_vitale   = null;
   
   // Assuré
   var $_assure_naissance   = null;
@@ -298,31 +301,31 @@ class CPatient extends CMbObject {
     
     $vitale = $intermax["VITALE"];
     $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
-    $idVitale = new CIdSante400();
-    $idVitale->object_class = $this->_class_name;
-    $idVitale->id400 = $vitNumero;
-    $idVitale->tag = "LogicMax VitNumero";
-    $idVitale->loadMatchingObject();
+    $id_vitale = new CIdSante400();
+    $id_vitale->object_class = $this->_class_name;
+    $id_vitale->id400 = $vitNumero;
+    $id_vitale->tag = "LogicMax VitNumero";
+    $id_vitale->loadMatchingObject();
     
     // Autre association ?
-    if ($idVitale->object_id && $idVitale->object_id != $this->_id) {
-      $idVitale->loadTargetObject();
-      $patOther =& $idVitale->_ref_object;
+    if ($id_vitale->object_id && $id_vitale->object_id != $this->_id) {
+      $id_vitale->loadTargetObject();
+      $patOther =& $id_vitale->_ref_object;
       return "Bénéficiaire Vitale déjà associé au patient " . $patOther->_view .
         " né le " . mbDateToLocale($patOther->naissance);
     }
     
-    $idVitale->object_id = $this->_id;
-    $idVitale->last_update = mbDateTime();
-    return $idVitale->store();
+    $id_vitale->object_id = $this->_id;
+    $id_vitale->last_update = mbDateTime();
+    return $id_vitale->store();
   }
 
   function loadIdVitale() {
-    $idVitale = new CIdSante400();
-    $idVitale->setObject($this);
-    $idVitale->tag = "LogicMax VitNumero";
-    $idVitale->loadMatchingObject();
-    $this->_idVitale = $idVitale->id400;
+    $id_vitale = new CIdSante400();
+    $id_vitale->setObject($this);
+    $id_vitale->tag = "LogicMax VitNumero";
+    $id_vitale->loadMatchingObject();
+    $this->_id_vitale = $id_vitale->id400;
   }
   
   function getValuesFromVitale() {

@@ -14,46 +14,49 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.redirect();
 }
 
-function checkNaissance(){
+function checkNaissance(fieldPrefix) {
   var oForm = document.editFrm;
-  
-  if(oForm._jour.value > 31 || oForm._mois.value > 12) {
-     if(!confirm('Le date de naissance ne correspond pas à une date du calendrier, souhaitez vous la sauvegarder ?')){
-       return false;
-     }
-   } 
-   return true;
-}
+  var oJour = oForm.elements[fieldPrefix + "_jour"];
+  var oMois = oForm.elements[fieldPrefix + "_mois"];
+  var oLabel = getLabelFor(oJour);
 
-function checkAssureNaissance(){
-  var oForm = document.editFrm;
-  
-  if(oForm._assure_jour.value > 31 || oForm._assure_mois.value > 12) {
-     if(!confirm('Le date de naissance de l\'assuré ne correspond pas à une date du calendrier, souhaitez vous la sauvegarder ?')){
-       return false;
-     }
-   } 
-   return true;
-}
+  if (oJour.value > 31 || oMois.value > 12) {
+  	var msg = printf("Le champ '%s' correspond est une date au format lunaire (jour '%s' et mois '%s')",
+  		oLabel.title,
+  		oJour.value,
+  		oMois.value
+  	);
+		
+		// Attention, un seul printf() ne fonctionne pas
+		msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
+		
+    if (!confirm(msg)) {
+      return false;
+    }
+  } 
 
+  return true;
+}
 
 var httpreq_running = false;
 function confirmCreation(oForm){
   
-  if(!checkNaissance()){
+  if (!checkNaissance("")) {
     return false;
   }
   
-  if(!checkAssureNaissance()){
+  if (!checkNaissance("_assure")) {
     return false;
   }
   
   if(httpreq_running) {
     return false;
   }
+  
   if(!checkForm(oForm)){
     return false;
   }
+  
   httpreq_running = true;
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_siblings");
@@ -117,8 +120,8 @@ function pageMain() {
 			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
 			        Lire Vitale
 			      </button>
- 			      {{if $patient->_idVitale}}
- 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_idVitale}});" style="float: left;">
+ 			      {{if $patient->_id_vitale}}
+ 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});" style="float: left;">
 			        Consulter Vitale
 			      </button>
 			      {{/if}}
@@ -132,7 +135,9 @@ function pageMain() {
           <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->_id}})">
             <img src="images/icons/history.gif" alt="historique" />
           </a>
-          Modification du dossier de {{$patient->_view}} {{if $patient->_IPP}} [{{$patient->_IPP}}] {{/if}}
+          Modification du dossier de {{$patient->_view}} 
+          {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
+          {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
         </th>
       {{else}}
         <th class="title" colspan="5">
@@ -144,7 +149,8 @@ function pageMain() {
 			        Résultat Vitale
 			      </button>
 					{{/if}}
-          Création d'un dossier
+					{{tr}}Create{{/tr}}
+          {{if $patient->_bind_vitale}}{{tr}}UseVitale{{/tr}}{{/if}}
         </th>
       {{/if}}
       </tr>
@@ -192,7 +198,7 @@ function pageMain() {
       <tr>
         <td class="button" colspan="5" style="text-align:center;" id="button">
           <div id="divSiblings" style="display:none;"></div>
-          {{if $patient->patient_id}}
+          {{if $patient->_id}}
             <button tabindex="400" type="submit" class="submit">
               {{tr}}Modify{{/tr}}
               {{if $patient->_bind_vitale}}

@@ -1,6 +1,7 @@
 <?php
 $locales['CDossierMedical-listCim10'] = 'Diagnostics';
-$locales['BindVitale'] = 'Lier à la carte Vitale';
+$locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
+$locales['UseVitale'] = 'à partir d\'un bénéficiaire Vitale';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Addiction';
 $locales['CAddiction-addiction-court'] = 'Add';

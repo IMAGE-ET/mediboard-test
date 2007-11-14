@@ -92,24 +92,27 @@ $anesth = new CTypeAnesth;
 $orderanesth = "name";
 $anesth = $anesth->loadList(null,$orderanesth);
 
+$consultAnesth =& $consult->_ref_consult_anesth;
+
 // Consultation courante
-$codePraticienEc = null;
 $consult->_ref_chir =& $userSel;
 $codePraticienEc = null;
-if($consult->consultation_id) {
+
+// Chargement de la consultation
+if ($consult->_id) {
   $consult->loadRefs();
   $consult->loadAides($userSel->user_id);
   
   // Chargment de la consultation d'anesthésie
-  $consult->_ref_consult_anesth->loadAides($userSel->user_id);
-  if($consult->_ref_consult_anesth->consultation_anesth_id) {
-    $consult->_ref_consult_anesth->loadRefs();
-    if($consult->_ref_consult_anesth->_ref_operation->operation_id) {
-    	$consult->_ref_consult_anesth->_ref_operation->loadRefsCodesCCAM(1);
-      $consult->_ref_consult_anesth->_ref_operation->loadAides($userSel->user_id);
-      $consult->_ref_consult_anesth->_ref_operation->loadRefs();
-      $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
-      $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
+  $consultAnesth->loadAides($userSel->user_id);
+  if($consultAnesth->consultation_anesth_id) {
+    $consultAnesth->loadRefs();
+    if($consultAnesth->_ref_operation->operation_id) {
+    	$consultAnesth->_ref_operation->loadRefsCodesCCAM(1);
+      $consultAnesth->_ref_operation->loadAides($userSel->user_id);
+      $consultAnesth->_ref_operation->loadRefs();
+      $consultAnesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
+      $consultAnesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
   
@@ -161,14 +164,16 @@ if($consult->consultation_id) {
     $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
   }
 } else {
-  $consult->_ref_consult_anesth->consultation_anesth_id = 0;
+  $consultAnesth->consultation_anesth_id = 0;
 }
 
+// Chargement du code CPS
+$consult->_ref_chir->loadIdCPS();
 
 // Récupération des modèles
 $whereCommon = array();
 $whereCommon["object_id"] = "IS NULL";
-if($consult->_ref_consult_anesth->consultation_anesth_id){
+if($consultAnesth->consultation_anesth_id){
   $whereCommon[] = "`object_class` = 'CConsultAnesth'";
 }else{
   $whereCommon[] = "`object_class` = 'CConsultation'";
@@ -230,7 +235,6 @@ if($consult->patient_id){
   $consult->_ref_patient->loadRefDossierMedical();
   $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
 }
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -259,18 +263,12 @@ $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("noReglement"    , 0);
 
 if($consult->_is_anesth) {
-  $secs = array();
-  for ($i = 0; $i < 60; $i++) {
-    $secs[] = $i;
-  }
-  $mins = array();
-  for ($i = 0; $i < 15; $i++) {
-    $mins[] = $i;
-  }
+  $secs = range(0, 60-1, 1);
+  $mins = range(0, 15-1, 1);
   
   $smarty->assign("secs"          , $secs);
   $smarty->assign("mins"          , $mins);
-  $smarty->assign("consult_anesth", $consult->_ref_consult_anesth);
+  $smarty->assign("consult_anesth", $consultAnesth);
   $smarty->display("edit_consultation_anesth.tpl");
 } else {
 	$vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;
