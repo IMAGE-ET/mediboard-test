@@ -64,6 +64,12 @@ function addCode(subject_id, chir_id) {
   }
 }
 
+function setAssociation(association, oForm, subject_id, chir_id) {
+  oForm.code_association.value = association;
+  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id, chir_id)} })
+  loadActes(subject_id, chir_id);
+}
+
 function loadActes(subject_id, chir_id) {
   PairEffect.initGroup("acteEffect");
 

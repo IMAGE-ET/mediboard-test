@@ -112,6 +112,7 @@ class CCodableCCAM extends CMbObject {
   	$acte->object_class = $this->_class_name;
   	
   	$order = array();
+  	$order[] = "code_association";
   	$order[] = "code_acte";
   	$order[] = "code_activite";
   	$order[] = "code_phase";

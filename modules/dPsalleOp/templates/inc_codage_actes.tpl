@@ -8,10 +8,11 @@
 <ul>
   {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
   <li>
-    <strong>{{$curr_code->libelleLong}}</strong> 
-    <em>(<a class="action" href="?m=dPccam&amp;tab=vw_full_code&amp;codeacte={{$curr_code->code}}">{{$curr_code->code}}</a>)</em>
+    <strong>{{$curr_code->code}} : {{$curr_code->libelleLong}}</strong> 
     {{if $can->edit || $modif_operation}}
-    <br />Codes associés :
+
+    <br />
+    Codes associés :
     <select name="asso" onchange="setCodeTemp(this.value)">
       <option value="">&mdash; choix</option>
       {{foreach from=$curr_code->assos item=curr_asso}}
@@ -25,22 +26,23 @@
     {{assign var="acte" value=$curr_phase->_connected_acte}}
     {{assign var="view" value=$acte->_view}}
     {{assign var="key" value="$curr_key$view"}}
+    
     <form name="formActe-{{$acte->_view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="dPsalleOp" />
     <input type="hidden" name="dosql" value="do_acteccam_aed" />
     <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="acte_id" value="{{$acte->acte_id}}" />
+    <input type="hidden" name="acte_id" value="{{$acte->_id}}" />
     <input type="hidden" name="object_id" class="{{$acte->_props.object_id}}" value="{{$subject->_id}}" />
     <input type="hidden" name="object_class" class="{{$acte->_props.object_class}}" value="{{$subject->_class_name}}" />
     <input type="hidden" name="code_acte" class="{{$acte->_props.code_acte}}" value="{{$acte->code_acte}}" />
     <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
     <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
-    <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
+    <input type="hidden" name="code_association" class="{{$acte->_props.code_association}}" value="{{$acte->code_association}}" />
 
     <table class="form">
       
       <tr id="acte{{$key}}-trigger">  
-        <td colspan="2">
+        <td colspan="2" style="{{if $acte->_id && $acte->code_association}}background-color: #9f9;{{else}}background-color: #f99;{{/if}}">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
           Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
         </td>
@@ -78,19 +80,6 @@
           {{else}}-{{/if}}
         </td>
       </tr>
-      {{if $acte->_id}}
-      <tr>
-        <th />
-        <td>
-          <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
-            <strong>
-              Code d'association : {{$acte->_guess_association}}
-              <!-- &mdash; {{$acte->_tarif|string_format:"%.2f"}} € -->
-            </strong>
-          </label>
-        </td>
-      </tr>
-      {{/if}}
       <tr class="{{$acte->_view}}">
         <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
         <td class="text">
@@ -107,7 +96,18 @@
           {{/foreach}}
         </td>
       </tr>
-        
+      
+      <tr class="{{$acte->_view}}">
+        <th><label for="montant_depassement" title="Dépassement d'honoraire">Dépassement</label></th>
+        <td class="text">
+          {{if $can->edit || $modif_operation}}
+            {{mb_field object=$acte field="montant_depassement"}}
+          {{elseif $acte->montant_depassement}}
+            {{mb_value object=$acte field="montant_depassement"}}
+          {{else}}-{{/if}}
+        </td>
+      </tr>
+
       <tr class="{{$acte->_view}}">
         <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
         <td class="text">
@@ -120,6 +120,37 @@
       </tr>
       
       </tbody>
+      
+      <tr>
+        <td colspan="2">
+          {{if $acte->_id}}
+          <select name="{{$view}}"
+          onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
+            <option value="">&mdash Choix</option>
+            <option value="1" {{if $acte->code_association == 1}}selected="selected"{{/if}}>1 (100%)</option>
+            <option value="2" {{if $acte->code_association == 2}}selected="selected"{{/if}}>2 (50%)</option>
+            <option value="3" {{if $acte->code_association == 3}}selected="selected"{{/if}}>3 (75%)</option>
+            <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
+            <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
+          </select>
+          {{if $acte->code_association}}
+            <strong>
+              association pour {{$curr_activite->type}}
+              &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
+            </strong>
+          {{else}}
+            <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+              <strong>
+                association pour {{$curr_activite->type}} ({{$acte->_guess_association}} conseillé)
+              </strong>
+            </label>
+          {{/if}}
+          {{if $acte->montant_depassement}}
+          &mdash dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
+          {{/if}}
+          {{/if}}
+        </td>
+      </tr>
       
       {{if $can->edit || $modif_operation}}
       <tr>

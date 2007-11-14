@@ -343,10 +343,16 @@ class CActeCCAM extends CMbMetaObject {
     /*
      * Application des règles
      */
+
+    if(!$this->_id) {
+      $this->_guess_association = "-";
+      $this->_guess_regle_asso  = "-";
+      return $this->_guess_association;
+    }
     
     // Cas d'un seul actes (règle A)
     if($numActes == 1) {
-      $this->_guess_association = "";
+      $this->_guess_association = "1";
       $this->_guess_regle_asso  = "A";
       return $this->_guess_association;
     }
@@ -355,8 +361,8 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 2) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
-        $this->_guess_association = "";
-      $this->_guess_regle_asso    = "B";
+        $this->_guess_association = "1";
+        $this->_guess_regle_asso    = "B";
         return $this->_guess_association;
       }
       // 1 acte + 1 supplément des chap. 19.02 (règle C)
@@ -491,6 +497,7 @@ class CActeCCAM extends CMbMetaObject {
   function getTarif() {
     if($this->code_association !== null) {
       $code_asso = $this->code_association;
+      $this->loadRefCodeCCAM();
     } else {
       $this->guessAssociation();
       $code_asso = $this->_guess_association;
