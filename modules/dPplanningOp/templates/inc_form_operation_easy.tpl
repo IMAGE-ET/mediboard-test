@@ -133,7 +133,7 @@
   <!-- Selection du type de chambre -->
   <tr>
     <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-    <td>
+    <td colspan="2">
       {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
     </td>
   </tr>
@@ -141,7 +141,7 @@
   {{if !$modurgence && $dPconfig.dPplanningOp.COperation.horaire_voulu}}
   <tr>
     <th>Horaire souhaité</th>
-    <td>
+    <td colspan="2">
       <select name="_hour_voulu" onchange="Value.synchronize(this);">
         <option value="">-</option>
       {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
