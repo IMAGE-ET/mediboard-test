@@ -158,10 +158,14 @@
             [ANNULEE]
             {{else}}
             <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
-              {{$curr_op->time_operation|date_format:"%Hh%M"}}
-              {{if $curr_op->horaire_voulu}}
+              {{if $curr_op->time_operation != "00:00:00"}}
+                Validé pour {{$curr_op->time_operation|date_format:"%Hh%M"}}
+              {{else}}
+                Non validé
+              {{/if}}
               <br />
-              ({{$curr_op->horaire_voulu|date_format:"%Hh%M"}})
+              {{if $curr_op->horaire_voulu}}
+              (souhaité pour {{$curr_op->horaire_voulu|date_format:"%Hh%M"}})
               {{/if}}
             </a>
             {{/if}}
