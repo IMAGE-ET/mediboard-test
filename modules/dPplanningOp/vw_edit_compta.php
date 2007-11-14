@@ -29,6 +29,8 @@ $month_fin  = mbDate("-1 day", $month_fin);
 
 // Chargement du filter permettant de faire la recherche
 $filter = new COperation();
+$filter->_date_min = $now;
+$filter->_date_max = $now;
 
 // Chargement du user courant
 $user = new CMediusers();

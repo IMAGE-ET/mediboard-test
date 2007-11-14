@@ -302,6 +302,14 @@ class COperation extends CCodableCCAM {
         $this->_min_voulu.":00";
     }
   }
+  
+  function check() {
+    $msg = null;
+    if ($this->codes_ccam && count(explode("|", $this->codes_ccam)) > 4) {
+      $msg = "Impossible d'associer plus de 4 actes CCAM";
+    }
+    return $msg . parent::check();
+  }
 
   function store($checkobject = true, $reorder = true) {
     if ($msg = parent::store()) {
