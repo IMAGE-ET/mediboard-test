@@ -68,14 +68,11 @@ function pageMain() {
           <th>{{mb_label object=$filter field="_date_min"}}</th>
           <td class="date">{{mb_field object=$filter field="_date_min" form="paramFrm" canNull="false" onchange="changeDateCal()"}} </td>
           <td rowspan="2">
+            <input type="radio" name="select_days" onclick="changeDate('{{$yesterday}}','{{$yesterday}}');" value="yesterday" /> 
+            <label for="select_days_yesterday">Jour précédent</label>
+            <br />
             <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
-              <label for="select_days_day">Jour courant</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$tomorrow}}','{{$tomorrow}}');" value="tomorrow" /> 
-              <label for="select_days_tomorrow">Lendemain</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
-              <label for="select_days_week">Semaine courante</label>
-            <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
-              <label for="select_days_month">Mois courant</label>
+            <label for="select_days_day">Jour courant</label>
           </td>
         </tr>
         <tr>
