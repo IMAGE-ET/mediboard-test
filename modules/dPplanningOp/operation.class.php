@@ -198,14 +198,15 @@ class COperation extends CCodableCCAM {
   }
   
   function check() {
-    // Data checking
-    $msg = null;
-    if(!$this->operation_id) {
-      if (!$this->chir_id) {
-        $msg .= "Praticien non valide";
-      }
-    }
 
+    $msg = null;
+    if(!$this->operation_id && !$this->chir_id) {
+      $msg .= "Praticien non valide ";
+    }
+    
+    if ($this->codes_ccam && count(explode("|", $this->codes_ccam)) > 4) {
+      $msg .= "Impossible d'associer plus de 4 actes CCAM ";
+    }
     
     $old = new COperation();
     $old->load($this->_id);
@@ -223,7 +224,7 @@ class COperation extends CCodableCCAM {
     $this->loadRefPlageOp();
     
     if (!in_range(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
-   	  $msg .= "Intervention en dehors du séjour";
+   	  $msg .= "Intervention en dehors du séjour ";
     }
 
     return $msg . parent::check();
@@ -301,14 +302,6 @@ class COperation extends CCodableCCAM {
         $this->_hour_voulu.":".
         $this->_min_voulu.":00";
     }
-  }
-  
-  function check() {
-    $msg = null;
-    if ($this->codes_ccam && count(explode("|", $this->codes_ccam)) > 4) {
-      $msg = "Impossible d'associer plus de 4 actes CCAM";
-    }
-    return $msg . parent::check();
   }
 
   function store($checkobject = true, $reorder = true) {
