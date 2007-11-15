@@ -1,6 +1,6 @@
 <script type="text/javascript">
 function submitAddiction(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAntecedents });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossiersMedicaux });
 }
 
 function finAddiction(oForm){
@@ -12,7 +12,7 @@ function finAddiction(oForm){
   function copyAddiction(addiction_id){
    var oForm = document.frmCopyAddiction;
    oForm.addiction_id.value = addiction_id;
-   submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadAntecedentsAnesth });
+   submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadDossierMedicalSejour });
   }
 {{/if}}
 </script>

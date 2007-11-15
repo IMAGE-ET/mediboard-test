@@ -47,13 +47,11 @@ function updateList() {
 
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
-var oCimField = null;
 
 
 function pageMain() {
-
   updateList();
-    
+  
   PairEffect.initGroup("acteEffect");
   
   {{if $consult->consultation_id}}
@@ -62,26 +60,19 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
-  
  
-  
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
     
     {{if $dPconfig.dPcabinet.addictions}}
       Try.these(document.editAddictFrm.type.onchange);
     {{/if}}
-    
-    oCimField = new TokenField(document.editDiagFrm.listCim10, { 
-      confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-      onChange : updateTokenCim10
-    } ); 
   } 
-  
-  
+   
   {{if $consult->consultation_id}}
+  
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
-  reloadAntecedents();
+  reloadDossierMedicalPatient();
   
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
     panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
@@ -89,7 +80,6 @@ function pageMain() {
     showSteps:5
   } );
   {{/if}}
-  
 }
 </script>
 

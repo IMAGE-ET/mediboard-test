@@ -1,4 +1,8 @@
 <script type="text/javascript">
+
+
+var tabSejour = {{$tabSejour|@json}};
+
 function verifNonEmpty(oElement){
   var notWhitespace = /\S/;
   if(notWhitespace.test(oElement.value)){
@@ -26,17 +30,7 @@ function submitForm(oForm) {
 
 function submitOpConsult() {
   var oForm = document.addOpFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : editSejourId}); 
-}
-
-
-// Fonction permettant de garder un champ sejour_id toujours a la bonne valeur
-// Le champs sejour_id mis à jour est dans le form addOpFrm dans intervention.tpl
-function editSejourId(){
-  var sejourUrl = new Url;
-  sejourUrl.setModuleAction("dPcabinet","httpreq_vw_sejour_anesth");
-  sejourUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  sejourUrl.requestUpdate('sejour_id', { waitingText:null, onComplete : reloadConsultAnesth});
+  submitFormAjax(oForm, 'systemMsg', { onComplete: reloadConsultAnesth } ); 
 }
 
 function submitAll() {
@@ -83,18 +77,13 @@ function updateList() {
 }
 
 function reloadConsultAnesth() {
-  
   // Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
-  document.editTrmtFrm._sejour_id.value = document.addOpFrm.sejour_id.value;
-  document.editAntFrm._sejour_id.value = document.addOpFrm.sejour_id.value;
-  document.editAddictFrm._sejour_id.value = document.addOpFrm.sejour_id.value;
-  document.editDiagAnesthFrm.object_id.value = document.addOpFrm.sejour_id.value;
-  
-  // Mise a jour du champ listCim10 du sejour
-  document.editDiagAnesthFrm.listCim10.value = document.addOpFrm.listCim10Sejour.value;
+  document.editTrmtFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
+  document.editAntFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
+  document.editAddictFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
   
   // refresh de la liste des antecedents du sejour
-  reloadAntecedentsAnesth();
+  reloadDossierMedicalSejour();
    
   // Reload Intervention
   var consultUrl = new Url;
@@ -106,30 +95,18 @@ function reloadConsultAnesth() {
   var infosAnesthUrl = new Url;
   infosAnesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  infosAnesthUrl.requestUpdate('InfoAnesthContent');
-  
+  infosAnesthUrl.requestUpdate('InfoAnesthContent');  
 }
 
 
-
-var oCimField = null;
-var oCimAnesthField = null;
-
 function pageMain() {
 
-  // Mise a jour du champ listCim10 du sejour
- 
-  document.editDiagAnesthFrm.listCim10.value = document.addOpFrm.listCim10Sejour.value;
-
- 
   //rafraichissement de la liste des consultations
   updateList();  
   
-  // Chargement des antecedents, traitements, addictions, diagnostics du sejour
-  {{if $_is_anesth}}
-  reloadAntecedentsAnesth();
-  {{/if}}
-
+  // Chargement pour le sejour
+  reloadDossierMedicalSejour();
+  
   PairEffect.initGroup("acteEffect");
   
   {{if $consult->consultation_id}}
@@ -139,29 +116,18 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
   
-    
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
-
     {{if $dPconfig.dPcabinet.addictions}}
     Try.these(document.editAddictFrm.type.onchange);
     {{/if}}
-    oCimField = new TokenField(document.editDiagFrm.listCim10, { 
-      confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-      onChange : updateTokenCim10
-    } );
-  
-    oCimAnesthField = new TokenField(document.editDiagAnesthFrm.listCim10, { 
-      confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
-      onChange : updateTokenCim10Anesth
-    } );
   }
   
- 
   // Accordeon
   {{if $consult->consultation_id}}
+
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
-  reloadAntecedents();
+  reloadDossierMedicalPatient();
 
   var oAccord = new Rico.Accordion( $('accordionConsult'), { 
     panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'finishBanner', iBottomMargin : 12, iMinHeight : 360 } ), 
@@ -169,10 +135,6 @@ function pageMain() {
     showSteps:5
   } );
   {{/if}}
-
-
-
-
 }
 
 </script>

@@ -7,6 +7,7 @@
 * @author Romain Ollivier
 */
 
+
 /**
  * Dossier Médical liés aux notions d'antécédents, traitements, addictions et diagnostics
  */
@@ -70,7 +71,7 @@ class CDossierMedical extends CMbMetaObject {
     if ($this->listCim10)
       $arrayCodes = explode("|", $this->listCim10);
     foreach ($arrayCodes as $value) {
-      $this->_codes_cim10[] = new CCodeCIM10($value, 1);
+      $this->_codes_cim10[$value] = new CCodeCIM10($value, 1);
     }
   }  
     

@@ -42,7 +42,7 @@
         <input type="hidden" name="dosql" value="do_antecedent_aed" />
         <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
         
-        <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadAntecedentsAnesth)">
+        <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadDossierMedicalSejour)">
          {{tr}}delete{{/tr}}
         </button>          
         {{if $curr_antecedent->date}}
@@ -69,7 +69,7 @@
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     <input type="hidden" name="traitement_id" value="{{$curr_trmt->_id}}" />
-    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadAntecedentsAnesth)">
+    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadDossierMedicalSejour)">
         {{tr}}delete{{/tr}}
     </button>
     {{if $curr_trmt->fin}}
@@ -98,3 +98,20 @@
   <li><em>Pas de diagnostic</em></li>
   {{/foreach}}
 </ul>
+
+<form name="editDiagAnesthFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this);">
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="tab" value="edit_consultation" />
+  <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+  <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+  <input type="hidden" name="object_class" value="CSejour" />
+  <input type="hidden" name="listCim10" value="{{$sejour->_ref_dossier_medical->listCim10}}" />
+</form>
+
+<script type="text/javascript">
+oCimAnesthField = new TokenField(document.editDiagAnesthFrm.listCim10, { 
+  confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
+  onChange : updateTokenCim10Anesth
+} );
+</script>

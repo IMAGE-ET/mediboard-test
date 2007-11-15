@@ -30,7 +30,9 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
-  
+
+$tabSejour = array();
+
 // Chargement des banques
 $orderBanque = "nom ASC";
 $banque = new CBanque();
@@ -133,8 +135,11 @@ if ($consult->_id) {
     $patient->_ref_sejours[$key]->loadRefsOperations();
     foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
       $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+      // Tableaux de correspondances operation_id => sejour_id
+      $tabSejour[$op->_id] = $patient->_ref_sejours[$key]->_id;
     }
   }
+  
   // Affecter la date de la consultation
   $date = $consult->_ref_plageconsult->date;
   
@@ -238,6 +243,7 @@ if($consult->patient_id){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
 $smarty->assign("listChirs"      , $listChirs);

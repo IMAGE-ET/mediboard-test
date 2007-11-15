@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-adresse-desc'] = 'Patient adressé par un médecin';
+$locales['msg-CIdDossierMedical-delete'] = 'Dossier Médical supprimé';
 $locales['CAddiction-addiction'] = 'Addiction';
 $locales['CAddiction-addiction-desc'] = 'Description de l\'addiction';
 $locales['CAddiction-type'] = 'Type';
@@ -204,6 +204,7 @@ $locales['CConsultAnesth.rhesus.NEG'] = 'NEG';
 $locales['CConsultAnesth.rhesus.POS'] = 'POS';
 $locales['CConsultation'] = 'Consultation';
 $locales['CConsultation-adresse'] = 'Patient adressé';
+$locales['CConsultation-adresse-desc'] = 'Patient adressé par un médecin';
 $locales['CConsultation-annule'] = '';
 $locales['CConsultation-annule-court'] = '';
 $locales['CConsultation-annule-desc'] = '';
@@ -693,6 +694,8 @@ $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';
 $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Semainier';
+$locales['msg-CIdDossierMedical-create'] = 'Dossier Médical créé';
+$locales['msg-CIdDossierMedical-modify'] = 'Dossier Médical modifié';
 $locales['pref-AFFCONSULT'] = 'Vue des Consultations par défaut';
 $locales['pref-AFFCONSULT-0'] = 'Tout afficher';
 $locales['pref-AFFCONSULT-1'] = 'Cacher les Terminées';

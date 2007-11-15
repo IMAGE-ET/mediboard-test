@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-adresse-desc'] = '';
+$locales['msg-CIdDossierMedical-delete'] = '';
 $locales['CAddiction-addiction'] = '';
 $locales['CAddiction-addiction-desc'] = '';
 $locales['CAddiction-type'] = '';
@@ -204,6 +204,7 @@ $locales['CConsultAnesth.rhesus.NEG'] = 'NEG';
 $locales['CConsultAnesth.rhesus.POS'] = 'POS';
 $locales['CConsultation'] = '';
 $locales['CConsultation-adresse'] = '';
+$locales['CConsultation-adresse-desc'] = '';
 $locales['CConsultation-annule'] = '';
 $locales['CConsultation-annule-court'] = '';
 $locales['CConsultation-annule-desc'] = '';
@@ -693,6 +694,8 @@ $locales['mod-dPcabinet-tab-vw_compta'] = '';
 $locales['mod-dPcabinet-tab-vw_dossier'] = '';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Weekly planning';
+$locales['msg-CIdDossierMedical-create'] = '';
+$locales['msg-CIdDossierMedical-modify'] = '';
 $locales['pref-AFFCONSULT'] = '';
 $locales['pref-AFFCONSULT-0'] = '';
 $locales['pref-AFFCONSULT-1'] = '';

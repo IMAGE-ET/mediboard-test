@@ -36,7 +36,7 @@ Addiction = {
         <input type="hidden" name="dosql" value="do_addiction_aed" />
         {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
 
-        <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadAntecedents)">
+        <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadDossierMedicalPatient)">
           {{tr}}Delete{{/tr}}        
         </button> 
         
