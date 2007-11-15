@@ -351,10 +351,6 @@ function insertAt(textarea, str) {
 }
 
 function followUp(event) {
-	if (!String.fromCharCode(event.which).match(/[0-9]/)) {
-	  return;
-	}
-	
   var field = event.target;
   if (field.value.length == field.maxLength) {
     field.next().focus();
