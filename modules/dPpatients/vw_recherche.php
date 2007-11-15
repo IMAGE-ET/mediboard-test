@@ -108,7 +108,7 @@ $where_diag = array();
 
 
 if($diagnostic_patient){
-  $where_diag["listCim10"] = "LIKE '%$diagnostic_patient%'";
+  $where_diag["codes_cim"] = "LIKE '%$diagnostic_patient%'";
   $where_diag["object_class"] = " = 'CPatient'";
 }
 $order_diag = "object_id";

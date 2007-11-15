@@ -59,11 +59,11 @@ class CTraitement extends CMbObject {
           $dossier_medical->load($this->dossier_medical_id);
           
           // si le code n'est pas deja present, on le rajoute
-          if(!array_key_exists($match, $dossier_medical->_codes_cim10)){
-            if($dossier_medical->listCim10 != ""){
-              $dossier_medical->listCim10 .= "|";
+          if(!array_key_exists($match, $dossier_medical->_ext_codes_cim)){
+            if($dossier_medical->codes_cim != ""){
+              $dossier_medical->codes_cim .= "|";
             }
-            $dossier_medical->listCim10 .= $match;
+            $dossier_medical->codes_cim .= $match;
             $dossier_medical->store();
           }
         }

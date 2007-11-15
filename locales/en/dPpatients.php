@@ -1,5 +1,5 @@
 <?php
-$locales['CDossierMedical-listCim10'] = '';
+$locales['CDossierMedical-codes_cim'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
@@ -212,9 +212,9 @@ $locales['CPatient-incapable_majeur-desc'] = '';
 $locales['CPatient-lieu_naissance'] = '';
 $locales['CPatient-lieu_naissance-court'] = '';
 $locales['CPatient-lieu_naissance-desc'] = '';
-$locales['CPatient-listCim10'] = '';
-$locales['CPatient-listCim10-court'] = '';
-$locales['CPatient-listCim10-desc'] = '';
+$locales['CPatient-codes_cim'] = '';
+$locales['CPatient-codes_cim-court'] = '';
+$locales['CPatient-codes_cim-desc'] = '';
 $locales['CPatient-matricule'] = '';
 $locales['CPatient-matricule-court'] = '';
 $locales['CPatient-matricule-desc'] = '';

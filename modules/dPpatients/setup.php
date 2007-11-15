@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.53";
+$config["mod_version"]     = "0.54";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -622,7 +622,11 @@ class CSetupdPpatients extends CSetup {
     $this->addQuery($sql);
 
     
-    $this->mod_version = "0.53";
+    $this->makeRevision("0.53");
+    $sql = "ALTER TABLE `dossier_medical` CHANGE `listCim10` `codes_cim` TEXT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.54";
   }
 }
 

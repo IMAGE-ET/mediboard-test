@@ -21,6 +21,5 @@ $module->registerTab("import_ami"         , "Import AMI"         , TAB_READ);
 
 //$module->registerTab("consult_anesth", "maj consult anesth", TAB_READ);
 //$module->registerTab("codes_ccam"    , "maj codes ccam"    , TAB_READ);
-//$module->registerTab("diag_patient"  , "maj diags patients", TAB_READ);
 
 ?>

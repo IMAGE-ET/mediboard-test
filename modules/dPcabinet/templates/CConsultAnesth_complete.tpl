@@ -400,7 +400,7 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td class="text">
       {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
         <li>
           <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
         </li>

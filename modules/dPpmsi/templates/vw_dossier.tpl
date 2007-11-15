@@ -201,7 +201,7 @@ function pageMain() {
             <ul>
               <li>Du patient
 		            <ul>
-		              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+		              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
 		              <li>
 		                {{$curr_code->code}} : {{$curr_code->libelle}}
 		              </li>
@@ -212,7 +212,7 @@ function pageMain() {
 		          </li>
               <li>Significatifs du séjour
 		            <ul>
-		              {{foreach from=$curr_sejour->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+		              {{foreach from=$curr_sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
 		              <li>
 		                {{$curr_code->code}} : {{$curr_code->libelle}}
 		              </li>

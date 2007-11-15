@@ -45,7 +45,7 @@ function pageMain() {
         <td><input type="text" name="traitement_patient" value="{{$traitement_patient|stripslashes}}" /></td>
       </tr>
       <tr>
-        <th>{{mb_label object=$dossierMedical field="listCim10"}}</th>
+        <th>{{mb_label object=$dossierMedical field="codes_cim"}}</th>
         <td colspan="4">
           <input type="text" name="diagnostic_patient" value="{{$diagnostic_patient|stripslashes}}" />
           <button class="search notext" type="button" onclick="CIM10Selector.init()">Rechercher</button>

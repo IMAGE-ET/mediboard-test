@@ -203,11 +203,11 @@
             </ul>
             {{/if}}
 
-            {{if $patient->_codes_cim10}}
+            {{if $patient->_ext_codes_cim}}
           
             <strong>Diagnostics du patient</strong>
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
               <li>
                 {{$curr_code->code}}: {{$curr_code->libelle}}
               </li>

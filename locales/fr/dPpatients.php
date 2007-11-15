@@ -1,5 +1,5 @@
 <?php
-$locales['CDossierMedical-listCim10'] = 'Diagnostics';
+$locales['CDossierMedical-codes_cim'] = 'Diagnostics';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['UseVitale'] = 'à partir d\'un bénéficiaire Vitale';
 $locales['CAddiction'] = '';
@@ -213,9 +213,9 @@ $locales['CPatient-incapable_majeur-desc'] = 'Etat d\'incapacité majeure du pati
 $locales['CPatient-lieu_naissance'] = 'Lieu de naissance';
 $locales['CPatient-lieu_naissance-court'] = '';
 $locales['CPatient-lieu_naissance-desc'] = 'Lieu de naissance du patient';
-$locales['CPatient-listCim10'] = 'Diagnostics';
-$locales['CPatient-listCim10-court'] = '';
-$locales['CPatient-listCim10-desc'] = 'Diagnostics associés';
+$locales['CPatient-codes_cim'] = 'Diagnostics';
+$locales['CPatient-codes_cim-court'] = '';
+$locales['CPatient-codes_cim-desc'] = 'Diagnostics associés';
 $locales['CPatient-matricule'] = 'N° SS';
 $locales['CPatient-matricule-court'] = '';
 $locales['CPatient-matricule-desc'] = 'Numéro de sécurité sociale du patient';

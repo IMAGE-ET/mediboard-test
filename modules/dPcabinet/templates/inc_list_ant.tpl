@@ -109,7 +109,7 @@ Traitement = {
 </ul>
 <strong>Diagnostics du patient</strong>
 <ul>
-  {{foreach from=$patient->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+  {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}
@@ -134,11 +134,11 @@ Traitement = {
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$patient->_id}}" />
   <input type="hidden" name="object_class" value="CPatient" />
-  <input type="hidden" name="listCim10" value="{{$patient->_ref_dossier_medical->listCim10}}" />
+  <input type="hidden" name="codes_cim" value="{{$patient->_ref_dossier_medical->codes_cim}}" />
 </form>
 
 <script type="text/javascript">
-oCimField = new TokenField(document.editDiagFrm.listCim10, { 
+oCimField = new TokenField(document.editDiagFrm.codes_cim, { 
   confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
   onChange : updateTokenCim10
 } ); 

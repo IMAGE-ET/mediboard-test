@@ -13,10 +13,11 @@
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $listCim10    = null;
+  var $codes_cim    = null;
   
   // Form Fields
-  var $_codes_cim10 = null;
+  var $_codes_cim = null;
+  var $_ext_codes_cim = null;
 
   // Back references
   var $_ref_antecedents = null;
@@ -35,7 +36,7 @@ class CDossierMedical extends CMbMetaObject {
   function getSpecs() {
     $specs = parent::getSpecs();
 
-    $specs["listCim10"]         = "text";
+    $specs["codes_cim"]         = "text";
     
     return $specs;
   }  
@@ -65,13 +66,19 @@ class CDossierMedical extends CMbMetaObject {
   function updateFormFields() {
     parent::updateFormFields();
     
+    $this->codes_cim = strtoupper($this->codes_cim);
+    $this->_codes_cim = array();
+    if($this->codes_cim){
+      $this->_codes_cim = explode("|", $this->codes_cim);
+    }
+  
     // Codes CIM10
-    $this->_codes_cim10 = array();
+    $this->_ext_codes_cim = array();
     $arrayCodes = array();
-    if ($this->listCim10)
-      $arrayCodes = explode("|", $this->listCim10);
+    if ($this->codes_cim)
+      $arrayCodes = explode("|", $this->codes_cim);
     foreach ($arrayCodes as $value) {
-      $this->_codes_cim10[$value] = new CCodeCIM10($value, 1);
+      $this->_ext_codes_cim[$value] = new CCodeCIM10($value, 1);
     }
   }  
     
@@ -182,8 +189,8 @@ class CDossierMedical extends CMbMetaObject {
     
     // Codes CIM10
     $aCim10 = array();
-    if ($this->_codes_cim10){
-      foreach ($this->_codes_cim10 as $curr_code){
+    if ($this->_ext_codes_cim){
+      foreach ($this->_ext_codes_cim as $curr_code){
         $aCim10[] = "$curr_code->code : $curr_code->libelle";
       }
     }

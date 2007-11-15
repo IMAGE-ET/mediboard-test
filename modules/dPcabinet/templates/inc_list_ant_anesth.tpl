@@ -87,7 +87,7 @@
 
 <strong>Diagnostics significatifs de l'opération</strong>
 <ul>
-  {{foreach from=$sejour->_ref_dossier_medical->_codes_cim10 item=curr_code}}
+  {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}
@@ -106,11 +106,11 @@
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="object_class" value="CSejour" />
-  <input type="hidden" name="listCim10" value="{{$sejour->_ref_dossier_medical->listCim10}}" />
+  <input type="hidden" name="codes_cim" value="{{$sejour->_ref_dossier_medical->codes_cim}}" />
 </form>
 
 <script type="text/javascript">
-oCimAnesthField = new TokenField(document.editDiagAnesthFrm.listCim10, { 
+oCimAnesthField = new TokenField(document.editDiagAnesthFrm.codes_cim, { 
   confirm  : 'Voulez-vous réellement supprimer ce diagnostic ?',
   onChange : updateTokenCim10Anesth
 } );
