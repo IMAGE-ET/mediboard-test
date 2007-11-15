@@ -79,8 +79,12 @@ if ($selConsult) {
   
   // Patient
   $patient =& $consult->_ref_patient;
-  $patient->loadIdVitale();
 }
+
+// Chargement des identifiants LogicMax
+$consult->loadIdsFSE();
+$consult->_ref_chir->loadIdCPS();
+$consult->_ref_patient->loadIdVitale();
 
 // Récupération des modèles
 $whereCommon = array();

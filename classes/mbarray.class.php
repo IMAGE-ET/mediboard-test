@@ -226,9 +226,9 @@ class CMbArray {
    * Pluck (collect) given key or attribute name of each value
    * whether the values are arrays or objects.
    * Preserves indexes
-   * @param array $array the array to pluck
-   * @param mixed $key the key or attribute name 
-   * @return an array with all plucked values
+   * @param object|array $array The array or object to pluck
+   * @param mixed $key The key or attribute name 
+   * @return array All plucked values
    */
   function pluck($array, $name) {
     $values = array(); 

@@ -1,5 +1,5 @@
 <?php
-$locales['CMessage.urgence.normal'] = 'Normal';
+$locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
 $locales['Abbreviation'] = 'Abréviation';
 $locales['active'] = 'Activé';
 $locales['added'] = 'ajouté';
@@ -49,6 +49,7 @@ $locales['CMessage.modify'] = '';
 $locales['CMessage.more'] = '';
 $locales['CMessage.none'] = '';
 $locales['CMessage.one'] = '';
+$locales['CMessage.urgence.normal'] = 'Normal';
 $locales['CMessage.urgence.urgent'] = 'Urgent';
 $locales['cn'] = 'Chinois';
 $locales['CNote'] = 'Note';

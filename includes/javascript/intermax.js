@@ -125,6 +125,17 @@ var Intermax = {
 					VIT_NUMERO_LOGICMAX: iVitale
 				}
 			} );
+    },
+
+    "Formater FSE" : function(iVitale, iCPS) {
+			Intermax.trigger("Formater FSE", { 
+        CPS: {
+          CPS_NUMERO_LOGICMAX: iVitale
+        },
+        VITALE: {
+          VIT_NUMERO_LOGICMAX: iCPS
+        } 
+			} );
     }
   }
 }

@@ -55,7 +55,8 @@ function newDHE(oForm) {
           </th>
           <th class="category">Correspondants</th>
           <th class="category">
-            <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->consultation_id}})">
+			      <div class="idsante400" id="{{$consult->_class_name}}-{{$consult->_id}}"></div>
+            <a style="float:right;" href="#" onclick="view_log('{{$consult->_class_name}}',{{$consult->_id}})">
               <img src="images/icons/history.gif" alt="historique" />
             </a>
             Historique

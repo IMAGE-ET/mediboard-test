@@ -57,6 +57,10 @@ class CConsultation extends CCodableCCAM {
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
+  
+  // FSE
+  var $_bind_fse = null;
+  var $_ids_fse = null;
 
   // Back References
   var $_ref_consult_anesth = null;
@@ -212,7 +216,59 @@ class CConsultation extends CCodableCCAM {
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
   }
+
+  /**
+   * Chargement des identifiants des FSE associées
+   */
+  function loadIdsFSE() {
+    $id_fse = new CIdSante400();
+    $id_fse->setObject($this);
+    $id_fse->tag = "LogicMax FSENumero";
+    $id_fse = $id_fse->loadMatchingList();
+    $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
+  }
   
+  function bindFSE() {
+    // Make id400
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+      return;
+    }
+    
+    $fse = $intermax["FSE"];
+    $fseNumero = $fse["FSE_NUMERO_FSE"];
+    $id_fse = new CIdSante400();
+    $id_fse->object_class = $this->_class_name;
+    $id_fse->id400 = $fseNumero;
+    $id_fse->tag = "LogicMax FSENumero";
+    $id_fse->loadMatchingObject();
+    
+    // Autre association ?
+    if ($id_fse->object_id && $id_fse->object_id != $this->_id) {
+      $id_fse->loadTargetObject();
+      $consOther =& $id_fse->_ref_object;
+      $consOther->loadRefsFwd();
+      return sprintf ("FSE déjà associée à la consultation du patient %s par le Dr. %s le %s",
+        $consOther->_ref_patient->_view,
+        $consOther->_ref_chir->_view,
+        mbDateToLocale($consOther->_date));
+    }
+    
+    $id_fse->object_id = $this->_id;
+    $id_fse->last_update = mbDateTime();
+    return $id_fse->store();
+  }
+
+  function store() {
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    // Bind FSE
+    if ($this->_bind_fse && $this->_id) {
+      return $this->bindFSE();
+    }
+  }
   
   function loadRefCategorie() {
     $this->_ref_categorie = new CConsultationCategorie();

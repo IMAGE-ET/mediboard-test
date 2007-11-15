@@ -122,7 +122,6 @@ if ($consult->_id) {
   $patient =& $consult->_ref_patient;
   $patient->loadRefs();
   $patient->loadStaticCIM10($userSel->user_id);
-  $patient->loadIdVitale();
   
   // Chargement des ses consultations
   foreach($patient->_ref_consultations as $key => $curr_cons) {
@@ -172,8 +171,10 @@ if ($consult->_id) {
   $consultAnesth->consultation_anesth_id = 0;
 }
 
-// Chargement du code CPS
+// Chargement des identifiants LogicMax
+$consult->loadIdsFSE();
 $consult->_ref_chir->loadIdCPS();
+$consult->_ref_patient->loadIdVitale();
 
 // Récupération des modèles
 $whereCommon = array();
