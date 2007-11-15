@@ -465,7 +465,7 @@ class CPatient extends CMbObject {
     $mois  = $date ? substr($date, 5, 2) : date("m");
     $jour  = $date ? substr($date, 8, 2) : date("d");
     
-    if ($this->naissance == "0000-00-00") {
+    if ($this->naissance == "0000-00-00" || !$this->naissance) {
       $this->_age = "??";
       return;
     }
