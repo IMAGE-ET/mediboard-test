@@ -34,15 +34,16 @@
           <th>fr</th>
           <th>Save</th>
         </tr>
+        
         {{foreach from=$backSpecs key=key item=_item}}
         <tr>
 	        <th colspan="3" class="category">
 	     		 {{$key}}
-	    	</th>
-	    	<th class="category">
-     		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
-    	  </th>
-    	</tr>
+		    	</th>
+		    	<th class="category">
+ 	    		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
+ 		   	  </th>
+    		</tr>
     	
         {{foreach from=$_item key=nom item=tabTrad}}
         <tbody class="hoverable">

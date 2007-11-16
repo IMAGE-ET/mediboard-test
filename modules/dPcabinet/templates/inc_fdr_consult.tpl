@@ -379,7 +379,9 @@ function submitFdr(oForm) {
 						<!-- Les FSE déjà associées -->
 		        <ul>
 		          {{foreach from=$consult->_ids_fse item=_id_fse}}
-		          <li>FSE numéro {{$_id_fse}}</li>
+		          <li>
+		            <label onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">FSE numéro {{$_id_fse}}</label>
+		          </li>
 		          {{foreachelse}}
 		          <li><em>Aucune FSE formatée</em></li>
 		          {{/foreach}}

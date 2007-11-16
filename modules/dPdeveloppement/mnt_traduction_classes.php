@@ -18,7 +18,7 @@ $module = mbGetValueFromGetOrSession("module" , "admin");
 $classes = mbGetClassByModule($module);
 
 // liste des dossiers modules + common et styles
-$modules = array_merge( array("common"=>"common", "styles"=>"styles") ,$AppUI->readDirs("modules"));
+$modules = $AppUI->readDirs("modules");
 CMbArray::removeValue(".svn", $modules);
 ksort($modules);
 
@@ -64,7 +64,6 @@ foreach($classes as $class) {
   checkTrans($backSpecs[$classname][$classname], "$classname.one");
   checkTrans($backSpecs[$classname][$classname], "$classname.more");
   checkTrans($backSpecs[$classname][$classname], "$classname.none");
-  checkTrans($backSpecs[$classname][$classname], "$classname.modify");
   
   foreach ($object->_specs as $prop => $spec) { 
     if (!$spec->prop) {
@@ -73,6 +72,12 @@ foreach($classes as $class) {
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
+    
+    if (is_a($spec, "CEnumSpec")) {
+      foreach (explode("|", $spec->list) as $value) {
+	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.$value");
+      }
+    }
     
     if (is_a($spec, "CRefSpec")) {
       // CAccessLog serves as dummy class when we need to instanciate anyhow

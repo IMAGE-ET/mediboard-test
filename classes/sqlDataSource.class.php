@@ -198,7 +198,7 @@ abstract class CSQLDataSource {
    **/
     function exec($query) {
     if (CSQLDataSource::$trace) {
-      trigger_error("Exécution SQL : $query", E_USER_NOTICE);
+      trigger_error("Exécution SQL sur DataSource '$this->dsn' : $query", E_USER_NOTICE);
     }
     
     $this->chrono->start();

@@ -561,6 +561,20 @@ class CAppUI {
     $user_prefs = $ds->loadHashList($sql);
     $this->user_prefs = array_merge($this->user_prefs, $user_prefs);
   }
+  
+  /**
+   * Attempt to make AppUI functions static for better use
+   */
+
+  /**
+   * Translate given statement
+   * @param string $str statement to translate
+   * @return string translated statement
+   */
+  static function tr($str) {
+    global $AppUI;
+    return $AppUI->_($str);
+  }
 }
 
 ?>
