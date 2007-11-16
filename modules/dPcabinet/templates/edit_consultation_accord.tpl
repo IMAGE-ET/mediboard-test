@@ -48,6 +48,21 @@ function updateList() {
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
+function refreshListActesNGAP(){
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
+  url.addParam("consultation_id", "{{$consult->_id}}");
+  url.requestUpdate('listActesNGAP');
+}
+
+function deleteActeNGAP(acte_ngap_id){
+  var oForm = document.editNGAP;
+  oForm.del.value = 1;
+  oForm.acte_ngap_id.value = acte_ngap_id;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: refreshListActesNGAP } );
+}
+
+
 
 function pageMain() {
   updateList();
@@ -60,7 +75,7 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
- 
+  
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
     
@@ -79,7 +94,10 @@ function pageMain() {
     showDelay:50, 
     showSteps:5
   } );
+  
+  new Control.Tabs('main_tab_group'); 
   {{/if}}
+ 
 }
 </script>
 

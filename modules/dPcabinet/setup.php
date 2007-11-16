@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.80";
+$config["mod_version"]     = "0.81";
 $config["mod_type"]        = "user";
 
 
@@ -818,7 +818,17 @@ class CSetupdPcabinet extends CSetup {
             DROP `listCim10`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.80";
+    $this->makeRevision("0.80");
+    $sql = "CREATE TABLE `acte_ngap` (
+            `acte_ngap_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+            `code` VARCHAR(3) NOT NULL, 
+            `quantite` INT(11) NOT NULL, 
+            `coefficient` FLOAT NOT NULL, 
+            `consultation_id` INT(11) UNSIGNED NOT NULL, 
+            PRIMARY KEY (`acte_ngap_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.81";
   }
 }
 ?>

@@ -29,11 +29,19 @@
   {{if $app->user_prefs.ccam == 1 }}
   <div id="Actes">
     <div id="ActesHeader" class="accordionTabTitleBar">
-      Actes CCAM
+      Gestion des actes
     </div>
     <div id="ActesContent"  class="accordionTabContentBox">
       <table class="tbl"> 
         <tr>
+          <td colspan="2">
+            <ul id="main_tab_group" class="control_tabs">
+              <li><a href="#one">Actes CCAM</a></li>
+              <li><a href="#two">Actes NGAP</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr id="one">
           <th>Actes<br /><br />
             {{tr}}{{$consult->_class_name}}{{/tr}}
             {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
@@ -49,6 +57,12 @@
               {{assign var="subject" value=$consult}}
               {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
             </div>
+          </td>
+        </tr>
+        <tr id="two">
+          <th>Actes NGAP</th>
+          <td>           
+            {{include file="inc_acte_ngap.tpl"}}
           </td>
         </tr>
       </table>

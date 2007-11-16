@@ -241,9 +241,21 @@ if($consult->patient_id){
   $consult->_ref_patient->loadRefDossierMedical();
   $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
 }
+
+// Chargement des actes ngap de la consultation
+$acte_ngap = new CActeNGAP();
+$listActesNGAP = array();  
+if($consult->_id){
+  $where = array();
+  $where["consultation_id"] = " = $consult->_id";
+  $listActesNGAP = $acte_ngap->loadList($where);
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("acte_ngap"      , $acte_ngap);
+$smarty->assign("listActesNGAP"  , $listActesNGAP);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
