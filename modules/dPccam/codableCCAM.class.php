@@ -79,9 +79,14 @@ class CCodableCCAM extends CMbObject {
 
 	  // Transformation du tableau de codes ccam
 	  foreach($oldObject->_codes_ccam as $key => $code){
+	    if(strlen($code) > 7){
+	      // si le code est de la forme code-activite-phase
+        $detailCode = explode("-", $code);
+        $code = $detailCode[0];
+	    }
 	    @$nb_codes_ccam[$code]++;
 	  }
-	    	   
+	  
 	  // Test entre les deux tableaux
 	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
 	    if($nb_code_minimal > @$nb_codes_ccam[$code]){

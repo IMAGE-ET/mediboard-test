@@ -70,7 +70,7 @@ function view_() {
       <small>(
       {{foreach from=$curr_code.codeccam->activites item=curr_activite}}
         {{foreach from=$curr_activite->phases item=curr_phase}}
-          {{$curr_activite->numero}}-{{$curr_phase->phase}}
+          <a href="#" onclick="setClose('{{$curr_code.codeccam->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">{{$curr_activite->numero}}-{{$curr_phase->phase}}</a>
         {{/foreach}}
       {{/foreach}}   
       )</small>

@@ -2,6 +2,12 @@
 
 <script type="text/javascript">
 
+function viewCodeComplet(){
+  var oForm = document.selection;
+  oForm.codeacte.value = "{{$code->code}}";
+  oForm.submit();
+}
+
 function selectCode(code,tarif) {
   window.opener.CCAMSelector.set(code,tarif);
   window.close();
@@ -49,6 +55,9 @@ function pageMain() {
                   <input tabindex="1" type="text" size="30" name="codeacte" class="code ccam" value="{{if $codeacte!="-"}}{{$codeacte|stripslashes}}{{/if}}" />
                   <div style="display: none;" class="autocomplete" id="codeacte_auto_complete"></div>                 
                   <button tabindex="2" class="search" type="submit">Afficher</button>
+                  {{if $codeComplet}}
+                  <button class="search" type="button" onclick="viewCodeComplet()">Code complet</button>
+                  {{/if}}
                 </td>
               </tr>
             </table>

@@ -35,7 +35,12 @@ class CCodeCCAM {
   // Variable calculées
   var $_code7 = null;
   
-  var $_default = null;
+  var $_default  = null;
+  
+  // Activités et phases recuperées depuis le code CCAM
+  var $_activite = null;
+  var $_phase    = null;
+  
   
   /**
    * Construction
@@ -50,10 +55,21 @@ class CCodeCCAM {
     }
     
     $this->_spec =& $spec;
-
-    $this->code = strtoupper($code);
+    
+    if(strlen($code) > 7){
+    // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
+      $detailCode = explode("-", $code);
+      $this->code = strtoupper($detailCode[0]);
+      $this->_activite = $detailCode[1];
+      if(count($detailCode) > 2){
+        $this->_phase = $detailCode[2];
+      }
+    } else {
+      $this->code = strtoupper($code);  
+    }
   }
   
+
   // Chargement des variables importantes
   function LoadLite() {
     $ds =& $this->_spec->ds;
@@ -74,6 +90,7 @@ class CCodeCCAM {
       $query1 .= $ds->prepare("CODEACTE = %", $this->code);
       $query1 .= " AND ACTIVITE = '4'";
       $result1 = $ds->exec($query1);
+      // Chargement des modificateurs
       if($ds->numRows($result1)) {
         $query2 = "SELECT * FROM modificateuracte WHERE ";
         $query2 .= $ds->prepare("CODEACTE = %", $this->code);
@@ -278,9 +295,17 @@ class CCodeCCAM {
       }
       
       // Extraction des activités
+      if($this->_activite){
+      // si une activite est inscrite dans le code
       $query = "SELECT ACTIVITE AS numero " .
           "\nFROM activiteacte " .
-          "\nWHERE CODEACTE = %";
+          "\nWHERE CODEACTE = %" .
+          "\nAND ACTIVITE = $this->_activite";
+      } else {
+      $query = "SELECT ACTIVITE AS numero " .
+          "\nFROM activiteacte " .
+          "\nWHERE CODEACTE = %;";  
+      }
       $query = $ds->prepare($query, $this->code);
       $result = $ds->exec($query);
       while($obj = $ds->fetchObject($result)) {
@@ -331,13 +356,25 @@ class CCodeCCAM {
         // Extraction des phases
         $activite->phases = array();
         $phases =& $activite->phases;
-        $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
+        if($this->_phase){
+          // si une phase est inscrite dans le code
+          $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
+            "\nFROM phaseacte " .
+            "\nWHERE CODEACTE = %1" .
+            "\nAND ACTIVITE = %2" .
+            "\nAND PHASE = %3" .
+            "\nGROUP BY PHASE" .
+            "\nORDER BY PHASE, DATE1 DESC";
+          $query = $ds->prepare($query, $this->code, $activite->numero, $this->_phase);
+        } else {
+          $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
             "\nFROM phaseacte " .
             "\nWHERE CODEACTE = %1" .
             "\nAND ACTIVITE = %2" .
             "\nGROUP BY PHASE" .
             "\nORDER BY PHASE, DATE1 DESC";
-        $query = $ds->prepare($query, $this->code, $activite->numero);
+          $query = $ds->prepare($query, $this->code, $activite->numero);  
+        }
         $result = $ds->exec($query);
               
         while($obj = $ds->fetchObject($result)) {

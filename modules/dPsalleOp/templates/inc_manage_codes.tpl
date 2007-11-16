@@ -40,7 +40,7 @@
           }
         </script>
         
-        <input type="text" size="7" name="_newCode" />
+        <input type="text" size="10" name="_newCode" />
         <button class="tick" type="button" onclick="addCode({{$subject->_id}},{{$subject->_praticien_id}})">Ajouter</button>        
       </td>
       

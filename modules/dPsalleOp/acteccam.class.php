@@ -147,6 +147,7 @@ class CActeCCAM extends CMbMetaObject {
       // dans le cas de la modification
       $where["acte_id"]     = "<> '$this->_id'";  
     }
+    
     $where["code_acte"]     = "= '$this->code_acte'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
@@ -156,15 +157,19 @@ class CActeCCAM extends CMbMetaObject {
 
     // retourne le nombre de code semblables
     $siblings = count($this->_ref_siblings);
-
+    
     // compteur d'acte prevue ayant le meme code_acte dans l'intervention
     $nbCode = 0;
     foreach ($this->_ref_object->_codes_ccam as $key => $code) {
+      // si le code est sous sa forme complete, garder seulement le code
+      if(strlen($code) > 7){
+        $detailCode = explode("-", $code);
+        $code = $detailCode[0];
+      }
       if ($code == $this->code_acte) {
         $nbCode++;
       }
     }
-
     if ($siblings >= $nbCode) {
       return "$this->_class_name-check-already-coded";
     }

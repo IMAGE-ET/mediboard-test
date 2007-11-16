@@ -17,6 +17,20 @@ $object_class = mbGetValueFromGet("object_class");
 $code = new CCodeCCAM($codeacte);
 $code->Load();
 
+// Variable permettant de savoir si l'affichage du code complet est necessaire
+$codeComplet = false;
+$codeacte = $code->code;
+
+if($code->_activite != ""){
+  $codeComplet = true;
+  $codeacte .= "-$code->_activite";  
+  if($code->_phase != ""){
+    $codeacte .= "-$code->_phase";
+  }
+}
+
+$codeacte = strtoupper($codeacte);
+
 $favoris = new CFavoriCCAM();
 
 // Création du template
@@ -24,11 +38,11 @@ $smarty = new CSmartyDP();
 
 
 // @todo : ne passer que $code. Adapter le template en conséquence
-if($code->activites && $code->activites["1"]->phases){
-  $smarty->assign("tarif"        , $code->activites["1"]->phases["0"]->tarif);
-}
+$smarty->assign("code", $code);
+$smarty->assign("codeComplet"  , $codeComplet);
+$smarty->assign("tarif"        , $code->_default);
 $smarty->assign("favoris"      , $favoris);
-$smarty->assign("codeacte"     , strtoupper($code->code));
+$smarty->assign("codeacte"     , $codeacte);
 $smarty->assign("libelle"      , $code->libelleLong);
 $smarty->assign("rq"           , $code->remarques);
 $smarty->assign("act"          , $code->activites);

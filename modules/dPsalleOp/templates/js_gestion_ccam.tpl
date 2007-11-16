@@ -9,17 +9,20 @@ function setCodeTemp(code){
 }
 
 
-function checkAddCode() {
-  var oForm = document.manageCodes;
-  var oField = null;
-  
-  if (oField = oForm._newCode) {
-    if (oField.value == 0) {
-      alert("Code manquant");
-      return false;
-    }
+
+function checkCode(oElement){
+  if(oElement.value == 0){
+    alert("Code manquant");
+    return false;
   }
-  return true;
+  // Test du code saisi
+  var regexp = "^[A-Z]{4}[0-9]{3}$";
+  var regexp2 ="^[A-Z]{4}[0-9]{3}-[0-9]-?[0-9]?$";
+  if (!oElement.value.match(regexp) && !oElement.value.match(regexp2)) {
+    alert("Le format du code CCAM saisi n'est pas valide");
+    return false;
+  }
+  return true
 }
 
 
@@ -48,9 +51,10 @@ function refreshFdr(consult_id) {
 
 
 
-function addCode(subject_id, chir_id) {
-  if(checkAddCode()){
-    var oForm = document.manageCodes;
+function addCode(subject_id, chir_id) {    
+  var oForm = document.manageCodes;
+  
+  if(checkCode(oForm._newCode)){ 
     var aCCAM = oForm.codes_ccam.value.split("|");
     // Si la chaine est vide, il crée un tableau à un élément vide donc :
     aCCAM.removeByValue("");
