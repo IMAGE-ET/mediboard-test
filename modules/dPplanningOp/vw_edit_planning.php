@@ -143,8 +143,8 @@ $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
 
-$list_hours_voulu = range(0,23);
-$list_minutes_voulu = range(0,59);
+$list_hours_voulu = range(7, 20);
+$list_minutes_voulu = range(0, 45, 15);
 
 foreach($list_minutes_voulu as &$minute){
   $minute = str_pad($minute, 2, '0', STR_PAD_LEFT);
