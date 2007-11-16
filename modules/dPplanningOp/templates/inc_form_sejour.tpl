@@ -506,7 +506,7 @@ datesOperations = {{$sejour->_dates_operations|@json}};
 dates = {
   current: {
     start: "{{$sejour->_date_entree_prevue}}",
-    stop: "{{$sejour->_date_sortie_prevue}}",
+    stop: "{{$sejour->_date_sortie_prevue}}"
   },
   spots: datesOperations
 }

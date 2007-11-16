@@ -351,13 +351,18 @@ function insertAt(textarea, str) {
 }
 
 function followUp(event) {
+	// IE won't have a event target if handler is defined as an HTML attribute
+	if (!event.target) {
+		return;
+	}
+	
+	// Redirect to next field
   var field = event.target;
   if (field.value.length == field.maxLength) {
     field.next().focus();
     setSelectionAll(field.next());
   }  
 }
-
 
 Object.extend(Form, {
   toObject: function (oForm) {

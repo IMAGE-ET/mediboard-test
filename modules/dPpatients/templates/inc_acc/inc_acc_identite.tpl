@@ -45,7 +45,7 @@
     <td>
       {{mb_field object=$patient field="_jour" tabindex="105" onkeyup="followUp(event)"}}
       {{mb_field object=$patient field="_mois" tabindex="106" onkeyup="followUp(event)"}}
-      {{mb_field object=$patient field="_annee" tabindex="107" onkeyup=""}}
+      {{mb_field object=$patient field="_annee" tabindex="107"}}
     </td>
     <th>{{mb_label object=$patient field="pays"}}</th>
     <td>

@@ -40,7 +40,6 @@ function checkNaissance(fieldPrefix) {
 
 var httpreq_running = false;
 function confirmCreation(oForm){
-  
   if (!checkNaissance("")) {
     return false;
   }
@@ -57,6 +56,8 @@ function confirmCreation(oForm){
     return false;
   }
   
+	Console.trace("Confirming ?");
+  
   httpreq_running = true;
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_siblings");
@@ -66,7 +67,7 @@ function confirmCreation(oForm){
   if(oForm._annee.value!="" && oForm._mois.value!="" && oForm._jour.value!=""){
     url.addParam("naissance", oForm._annee.value + "-" + oForm._mois.value + "-" + oForm._jour.value);
   }
-  url.requestUpdate('divSiblings', { evalScripts: true, waitingText: null });
+  url.requestUpdate('systemMsg', { waitingText: "Vérification des doublons" });
   return false;
 }
 
