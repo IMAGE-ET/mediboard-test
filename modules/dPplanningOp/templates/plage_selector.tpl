@@ -103,7 +103,7 @@ function pageMain(){
             </div>
           </td>
           <td>
-            {{if !$over}}
+            {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
             <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')" onclick="document.frmSelector.fmtdate.value='{{$curr_plage->date|date_format:"%d/%m/%Y"}}'"/>
             {{/if}}
           </td>
