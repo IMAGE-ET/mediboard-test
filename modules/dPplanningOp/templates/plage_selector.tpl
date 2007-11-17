@@ -22,12 +22,16 @@ function setClose(date) {
   }
   
   var typeHospi = "ambu";
+  var hour_entree = form.hour_jour.value;
+  var min_entree  = form.min_jour.value;
   // passage en hospi complete si admission == veille
   if(getCheckedValue(form.admission) == "veille"){
     typeHospi = "comp";
+    hour_entree = form.hour_veille.value;
+    min_entree  = form.min_veille.value;
   }
     
-  window.opener.PlageOpSelector.set(key,val,adm,typeHospi);
+  window.opener.PlageOpSelector.set(key,val,adm,typeHospi, hour_entree, min_entree);
   window.close();
 }  
 
@@ -114,7 +118,7 @@ function pageMain(){
     <td class="halfPane">
       <table class="form">
         <tr>
-          <th colspan="2" class="category">
+          <th colspan="3" class="category">
             Admission du patient
           </th>
         </tr>
@@ -123,7 +127,20 @@ function pageMain(){
             <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}}" />
           </td>
           <td>
-            <label for="admission_veille">La veille (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_veille}}h)</label>
+            <label for="admission_veille">La veille</label> à
+          </td>
+          <td>
+            <select name="hour_veille">
+              {{foreach from=$hours|smarty:nodefaults item=hour}}
+              <option value="{{$hour}}" {{if $heure_entree_veille == $hour}}selected="selected"{{/if}}>{{$hour}}</option>
+              {{/foreach}}
+            </select>
+            h
+            <select name="min_veille">
+              {{foreach from=$mins|smarty:nodefaults item=min}}
+              <option value="{{$min}}">{{$min}}</option>
+              {{/foreach}}
+            </select>
           </td>
         </tr>
         <tr>
@@ -131,19 +148,32 @@ function pageMain(){
             <input type="radio" name="admission" value="jour" />
           </td>
           <td>
-            <label for="admission_jour">Le jour même (par défaut à {{$dPconfig.dPplanningOp.CSejour.heure_entree_jour}}h)</label>
+            <label for="admission_jour">Le jour même</label> à
+          </td>
+          <td>
+            <select name="hour_jour">
+              {{foreach from=$hours|smarty:nodefaults item=hour}}
+              <option value="{{$hour}}" {{if $heure_entree_jour == $hour}}selected="selected"{{/if}}>{{$hour}}</option>
+              {{/foreach}}
+            </select>
+            h
+            <select name="min_jour">
+              {{foreach from=$mins|smarty:nodefaults item=min}}
+              <option value="{{$min}}">{{$min}}</option>
+              {{/foreach}}
+            </select>
           </td>
         </tr>
         <tr>
           <td>
             <input type="radio" name="admission" value="aucune"{{if $operation_id}} checked="checked"{{/if}} />
           </td>
-          <td>
+          <td colspan="2">
             <label for="admission_aucune">Ne pas modifier</label>
           </td>
         </tr>
         <tr>
-          <th class="category" colspan="2">
+          <th class="category" colspan="3">
             Légende
           </th>
         </tr>
@@ -153,7 +183,7 @@ function pageMain(){
               <div class="bar empty"></div>
             </div>
           </td>
-          <td>plage de spécialité</td>
+          <td colspan="2">plage de spécialité</td>
         </tr>
         <tr>
           <td style="width:10px;">
@@ -161,7 +191,7 @@ function pageMain(){
               <div class="bar full"></div>
             </div>
           </td>
-          <td>plage pleine</td>
+          <td colspan="2">plage pleine</td>
         </tr>
         <tr>
           <td style="width:10px;">
@@ -169,7 +199,7 @@ function pageMain(){
               <div class="bar booked"></div>
             </div>
           </td>
-          <td>plage presque pleine</td>
+          <td colspan="2">plage presque pleine</td>
         </tr>
         <tr>
           <td style="width:10px;">
@@ -177,10 +207,10 @@ function pageMain(){
               <div class="bar normal" style="width: 60%;"></div>
             </div>
           </td>
-          <td>taux de remplissage</td>
+          <td colspan="2">taux de remplissage</td>
         </tr>
         <tr>
-          <td colspan="2" class="button">
+          <td colspan="3" class="button">
             <button class="cancel" type="button" onclick="window.close()">{{tr}}cancel{{/tr}}</button>
             <button class="tick" type="button" onclick="setClose('')">{{tr}}Select{{/tr}}</button>          
           </td>

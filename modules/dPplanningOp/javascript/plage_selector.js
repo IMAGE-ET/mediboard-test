@@ -27,7 +27,7 @@ var PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, sDate, bAdm, typeHospi) {
+  set: function(plage_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
@@ -49,19 +49,15 @@ var PlageOpSelector = {
       }
      
       var dAdm = Date.fromLocaleDate(sDate);
-      oOpForm._date.value = dAdm.toDATE();;
+      oOpForm._date.value = dAdm.toDATE();
       // Initialize admission date according to operation date
-      switch(bAdm) {
-        case 0 :
-          dAdm.setHours(this.heure_entree_veille);
-          dAdm.setDate(dAdm.getDate()-1);
-          break;
-        case 1 :
-          dAdm.setHours(this.heure_entree_jour);
-          break;
+      if(bAdm == 0) {
+        dAdm.setDate(dAdm.getDate()-1);
       }
     
       if (bAdm != 2) {
+        dAdm.setHours(hour_entree);
+        dAdm.setMinutes(min_entree);
         oSejourForm[this.s_hour_entree_prevue].value = dAdm.getHours();
         oSejourForm[this.s_min_entree_prevue].value  = dAdm.getMinutes();
         oSejourForm[this.s_date_entree_prevue].value = dAdm.toDATE();

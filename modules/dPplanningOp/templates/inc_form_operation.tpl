@@ -193,8 +193,6 @@
         this.s_min_entree_prevue  = "_min_entree_prevue";
         this.s_date_entree_prevue = "_date_entree_prevue";
         
-        this.heure_entree_veille = "{{$heure_entree_veille}}";
-        this.heure_entree_jour   = "{{$heure_entree_jour}}";   
         this.pop(oOpForm.chir_id.value, oOpForm._hour_op.value,
                  oOpForm._min_op.value, oSejourForm.group_id.value,
                  oOpForm.operation_id.value);

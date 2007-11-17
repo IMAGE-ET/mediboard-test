@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
@@ -76,23 +76,35 @@ if(strlen($nmonth) == 1){
   $nmonth = "0".$nmonth;
 }
 
+// Heures d'admission
+$config              =& $dPconfig["dPplanningOp"]["CSejour"];
+$hours               = range($config["heure_deb"], $config["heure_fin"]);
+$mins                = range(0, 59, $config["min_intervalle"]);
+$heure_entree_veille = $config["heure_entree_veille"];
+$heure_entree_jour   = $config["heure_entree_jour"];
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("operation_id" , $operation_id);
-$smarty->assign("month"        , $month);
-$smarty->assign("nameMonth"    , $nameMonth);
-$smarty->assign("pmonth"       , $pmonth);
-$smarty->assign("nmonth"       , $nmonth);
-$smarty->assign("year"         , $year);
-$smarty->assign("pyear"        , $pyear);
-$smarty->assign("nyear"        , $nyear);
-$smarty->assign("chir"         , $chir);
-$smarty->assign("group_id"     , $group_id);
-$smarty->assign("curr_op_hour" , $curr_op_hour);
-$smarty->assign("curr_op_min"  , $curr_op_min);
-$smarty->assign("listPlages"   , $listPlages);
+$smarty->assign("operation_id", $operation_id);
+$smarty->assign("month"       , $month);
+$smarty->assign("nameMonth"   , $nameMonth);
+$smarty->assign("pmonth"      , $pmonth);
+$smarty->assign("nmonth"      , $nmonth);
+$smarty->assign("year"        , $year);
+$smarty->assign("pyear"       , $pyear);
+$smarty->assign("nyear"       , $nyear);
+$smarty->assign("chir"        , $chir);
+$smarty->assign("group_id"    , $group_id);
+$smarty->assign("curr_op_hour", $curr_op_hour);
+$smarty->assign("curr_op_min" , $curr_op_min);
+$smarty->assign("listPlages"  , $listPlages);
+
+$smarty->assign("hours"              , $hours);
+$smarty->assign("mins"               , $mins);
+$smarty->assign("heure_entree_veille", $heure_entree_veille);
+$smarty->assign("heure_entree_jour"  , $heure_entree_jour);
 
 $smarty->display("plage_selector.tpl");
 ?>
