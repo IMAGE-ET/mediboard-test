@@ -114,6 +114,12 @@ var WaitingMessage = {
     eMask.style.left = "0px";
     eMask.style.height = eDoc.scrollHeight + "px";
     eMask.style.width = eDoc.scrollWidth + "px";
+  },
+  
+  cover: function(element) {
+    var eDiv = $(document.createElement("div"));
+	  eDiv.className = "loading";
+    new Insertion(element, eDiv);
   }
 }
 

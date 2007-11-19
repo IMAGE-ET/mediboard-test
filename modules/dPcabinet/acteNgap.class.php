@@ -27,7 +27,7 @@ class CActeNGAP extends CMbObject {
   function getSpecs() {
     return array (
       "code"        => "notNull str maxLength|3",
-      "quantite"    => "notNull num",
+      "quantite"    => "notNull num maxLength|2",
       "coefficient" => "notNull float",
       "consultation_id" => "notNull ref class|CConsultation"
     );

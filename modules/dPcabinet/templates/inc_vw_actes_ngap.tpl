@@ -6,8 +6,6 @@
       <th>Action</th>
     </tr>
     
-
-
     <tr>
       <td>
         {{mb_field object=$acte_ngap field="quantite"}}
@@ -19,7 +17,7 @@
         {{mb_field object=$acte_ngap field="coefficient"}}  
       </td>
       <td>
-        <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: refreshListActesNGAP } )">Valider</button>
+        <button type="button" class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: ActesNGAP.refreshList } )">Valider</button>
       </td>     
     </tr>
 </table>

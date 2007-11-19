@@ -51,18 +51,16 @@
             ({{$consult->temp_operation|date_format:"%Hh%M"}})
             {{/if}}
           </th>
-          <td>    
-            <div id="ccam">
-              {{assign var="module" value="dPcabinet"}}
-              {{assign var="subject" value=$consult}}
-              {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
-            </div>
+          <td id="ccam">
+            {{assign var="module" value="dPcabinet"}}
+            {{assign var="subject" value=$consult}}
+            {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
           </td>
         </tr>
         
         <tr id="two">
           <th>Actes NGAP</th>
-          <td>           
+          <td id="listActesNGAP"> "1-C-1|2-ATA-3.5|etc." 
             {{include file="inc_acte_ngap.tpl"}}
           </td>
         </tr>

@@ -155,6 +155,7 @@ Class.extend(Url, {
   
     var oDefaultOptions = {
       waitingText: "Chargement",
+      coverTarget: false,
       urlBase: "",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
@@ -173,10 +174,13 @@ Class.extend(Url, {
 	    if (ioTarget == SystemMessage.id) {
 	      $(ioTarget).show();
 	    }
-
     }
-  
-    References.clean($(ioTarget));
+    
+    if (oDefaultOptions.coverTarget) {
+      WaitingMessage.cover(ioTarget);
+    }  
+  	
+//    References.clean($(ioTarget));
     new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);
   },
   
@@ -195,8 +199,8 @@ Class.extend(Url, {
     };
   
     Object.extend(oDefaultOptions, oOptions);
-  
-    References.clean(ioTarget);
+  		
+//    References.clean(ioTarget);
     this.requestUpdate(ioTarget, oDefaultOptions);
   },
   

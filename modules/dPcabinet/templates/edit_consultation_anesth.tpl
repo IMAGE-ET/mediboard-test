@@ -98,23 +98,6 @@ function reloadConsultAnesth() {
   infosAnesthUrl.requestUpdate('InfoAnesthContent');  
 }
 
-function deleteActeNGAP(acte_ngap_id){
-  var oForm = document.editNGAP;
-  oForm.del.value = 1;
-  oForm.acte_ngap_id.value = acte_ngap_id;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: refreshListActesNGAP } );
-}
-
-
-function refreshListActesNGAP(){
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
-  url.addParam("consultation_id", "{{$consult->_id}}");
-  url.requestUpdate('listActesNGAP');
-}
-
-
-
 function pageMain() {
 
   //rafraichissement de la liste des consultations

@@ -126,7 +126,7 @@
           {{if $acte->_id}}
           <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
-            <option value="">&mdash Choix</option>
+            <option value="">&mdash; Choix</option>
             <option value="1" {{if $acte->code_association == 1}}selected="selected"{{/if}}>1 (100%)</option>
             <option value="2" {{if $acte->code_association == 2}}selected="selected"{{/if}}>2 (50%)</option>
             <option value="3" {{if $acte->code_association == 3}}selected="selected"{{/if}}>3 (75%)</option>
