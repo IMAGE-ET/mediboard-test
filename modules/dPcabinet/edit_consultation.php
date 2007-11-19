@@ -171,10 +171,12 @@ if ($consult->_id) {
   $consultAnesth->consultation_anesth_id = 0;
 }
 
-// Chargement des identifiants LogicMax
-$consult->loadIdsFSE();
-$consult->_ref_chir->loadIdCPS();
-$consult->_ref_patient->loadIdVitale();
+if($consult->_id){
+  // Chargement des identifiants LogicMax
+  $consult->loadIdsFSE();
+  $consult->_ref_chir->loadIdCPS();
+  $consult->_ref_patient->loadIdVitale();
+}
 
 // Récupération des modèles
 $whereCommon = array();
