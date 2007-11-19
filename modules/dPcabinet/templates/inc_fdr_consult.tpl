@@ -83,6 +83,7 @@ function modifTotal(){
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
+  oForm._somme.value = Math.round(oForm._somme.value*100)/100;
 }
 
 
@@ -91,6 +92,7 @@ function modifSecteur2(){
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
+  oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
 function modifTarif() {
@@ -466,7 +468,7 @@ function submitFdr(oForm) {
         {{if $consult->paye == "0"}}
         <tr>
           <th>{{mb_label object=$consult field="secteur1"}}</th>
-          <td>{{mb_field object=$consult field="secteur1" readonly="readonly"}}</td>
+          <td>{{mb_field object=$consult field="secteur1" onchange="modifTotal()"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$consult field="secteur2"}}</th>
@@ -475,7 +477,7 @@ function submitFdr(oForm) {
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
-            <input type="text" size="4" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
+            <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
