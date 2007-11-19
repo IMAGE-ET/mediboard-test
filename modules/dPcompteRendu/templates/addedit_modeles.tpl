@@ -160,7 +160,7 @@ function pageMain() {
             <select {{if !$droit}}disabled='disabled'{{/if}} name="chir_id" class="{{$compte_rendu->_props.chir_id}}" onchange="this.form.function_id.value = ''; ">
               <option value="">&mdash; Associer à un praticien &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
-              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $user_id}} selected="selected" {{/if}}>
+              <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $curr_prat->user_id == $compte_rendu->chir_id}} selected="selected" {{/if}}>
               {{$curr_prat->_view}}
               </option>
               {{/foreach}}
