@@ -65,7 +65,7 @@ function pageMain() {
                 {{foreach from=$services item=curr_service}}
                 <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service->_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
                 {{/foreach}}
-                <option value="NP">Non placés</option>
+                <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
             </form>
           </td>
