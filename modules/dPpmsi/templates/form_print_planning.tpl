@@ -43,8 +43,6 @@ function changeDateCal(){
   var oForm = document.paramFrm;
   oForm.select_days[0].checked = false;
   oForm.select_days[1].checked = false;
-  oForm.select_days[2].checked = false;
-  oForm.select_days[3].checked = false;
 }
 function pageMain() {
   regFieldCalendar("paramFrm", "_date_min");
