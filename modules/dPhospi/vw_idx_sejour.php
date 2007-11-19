@@ -18,14 +18,13 @@ $service_id = mbGetValueFromGetOrSession("service_id");
 $sejour_id = mbGetValueFromGetOrSession("sejour_id",0);
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
-
-
+// A passer en variable de configuration
+$heureLimit = "16:00:00";
 
 // Récuperation du sejour sélectionné
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadRefs();
-
 
 // Récupération de la liste des services
 $where = array();
@@ -34,10 +33,59 @@ $services = new CService;
 $services = $services->loadListWithPerms(PERM_READ,$where);
 
 
-// Chargement du service selectionne
-$service = new CService; 
-$service->load($service_id);
-loadServiceComplet($service, $date, $mode);
+// Chargement des séjours à afficher
+$service = new CService;
+$groupSejourNonAffectes = array();
+if($service_id == "NP") {
+  
+	// Liste des patients à placer
+
+  $order = "entree_prevue ASC";
+	  
+  // Admissions de la veille
+  $dayBefore = mbDate("-1 days", $date);
+  $where = array(
+	  "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
+	  "type" => "!= 'exte'",
+	  "annule" => "= '0'"
+	);
+	  
+	$groupSejourNonAffectes["veille"] = loadSejourNonAffectes($where, $order);
+	  
+	// Admissions du matin
+	$where = array(
+	  "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+	  "type" => "!= 'exte'",
+	  "annule" => "= '0'"
+	);
+	  
+	$groupSejourNonAffectes["matin"] = loadSejourNonAffectes($where, $order);
+	  
+	// Admissions du soir
+	$where = array(
+	  "entree_prevue" => "BETWEEN '$date $heureLimit' AND '$date 23:59:59'",
+	  "type" => "!= 'exte'",
+	  "annule" => "= '0'"
+	);
+	  
+	$groupSejourNonAffectes["soir"] = loadSejourNonAffectes($where, $order);
+	  
+	// Admissions antérieures
+	$twoDaysBefore = mbDate("-2 days", $date);
+	$where = array(
+	  "entree_prevue" => "<= '$twoDaysBefore 23:59:59'",
+	  "sortie_prevue" => ">= '$date 00:00:00'",
+	  //"'$twoDaysBefore' BETWEEN entree_prevue AND sortie_prevue",
+	  "annule" => "= '0'",
+	  "type" => "!= 'exte'"
+  );
+	  
+	$groupSejourNonAffectes["avant"] = loadSejourNonAffectes($where, $order);
+  
+} else {
+  $service->load($service_id);
+  loadServiceComplet($service, $date, $mode);
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -50,6 +98,8 @@ $smarty->assign("date"                  , $date );
 $smarty->assign("demain"                , mbDate("+ 1 day", $date));
 $smarty->assign("services"              , $services);
 $smarty->assign("service"               , $service);
+$smarty->assign("service_id"            , $service_id);
+$smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
 $smarty->display("vw_idx_sejour.tpl");
 
 

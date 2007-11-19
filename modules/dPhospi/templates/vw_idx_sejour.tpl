@@ -63,14 +63,16 @@ function pageMain() {
               <select name="service_id" onChange="submit()">
                 <option value="">&mdash; Choix d'un service</option>
                 {{foreach from=$services item=curr_service}}
-	            <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service->_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
-              {{/foreach}}
+                <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service->_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
+                {{/foreach}}
+                <option value="NP">Non placés</option>
               </select>
             </form>
           </td>
         </tr>
         <tr>
           <td>
+            {{if $service->_id}}
             <table class="tbl">
             {{foreach from=$service->_ref_chambres item=curr_chambre}}
             
@@ -114,6 +116,47 @@ function pageMain() {
             
             {{/foreach}}
             </table>
+            {{elseif $service_id == "NP"}}
+            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
+            <table class="tbl">
+              <tr>
+                <th class="title" colspan="5">
+                  {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
+                </th>
+              </tr>
+              {{foreach from=$sejourNonAffectes item=curr_sejour}}
+              
+              {{if $curr_sejour->_id != ""}}
+              <tr>
+	              <td>
+	              <a href="#nothing" onclick="popEtatSejour({{$curr_sejour->_id}});">
+	                <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
+	              </a>
+	              </td>
+	              <td>
+	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); loadActes('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
+	                {{$curr_sejour->_ref_patient->_view}}
+	              </a>
+	              </td>
+	              <td>
+	                <a style="float: right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+	                  <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
+	                </a>
+	                </td>
+	                <td>
+	                <a style="float: right;" href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+	                  <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
+	                </a>                             
+	              </td>
+	              <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+	              {{$curr_sejour->_ref_praticien->_shortview}}
+	              </td>
+              </tr>
+              {{/if}}
+              {{/foreach}}
+            </table>
+            {{/foreach}}
+            {{/if}}
           </td>
         </tr>
       </table>
