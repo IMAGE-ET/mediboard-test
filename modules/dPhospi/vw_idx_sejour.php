@@ -30,7 +30,8 @@ $sejour->loadRefs();
 $where = array();
 $where["group_id"] = "= '$g'";
 $services = new CService;
-$services = $services->loadListWithPerms(PERM_READ,$where);
+$order = "nom";
+$services = $services->loadListWithPerms(PERM_READ, $where, $order);
 
 
 // Chargement des séjours à afficher
