@@ -12,14 +12,20 @@ $callback = mbGetValueFromGetOrSession("callback");
 $code = new CCodeCCAM($codeacte);
 
 // Chargement du code
-$code->LoadMedium();
+$code->load();
 
 if(!$code->code){
   $tarif = 0;
   $AppUI->stepAjax("$codeacte: code inconnu", UI_MSG_ERROR);
 }
 
-$tarif = $code->activites["1"]->phases["0"]->tarif;
+// si le code CCAM est complet (activite + phase), on selectionne le tarif correspondant
+if($code->_activite != "" && $code->_phase != ""){
+  $tarif = $code->activites[$code->_activite]->phases[$code->_phase]->tarif;
+} else {
+// sinon, on prend le tarif par default
+  $tarif = $code->_default;
+}
 $AppUI->callbackAjax($callback,$tarif);
 $AppUI->stepAjax("$codeacte: $tarif");
 

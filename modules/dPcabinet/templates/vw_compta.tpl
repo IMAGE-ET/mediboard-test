@@ -64,8 +64,8 @@ function pageMain() {
 
   // Creation du tokenField
   oCcamField = new TokenField(document.editFrm.codes_ccam, {   
-    onChange : updateTokenCcam,
-    sProps : "notNull code ccam"
+    onChange : updateTokenCcam
+    //sProps : "notNull code ccam"
   } );
   
   regFieldCalendar("printFrm", "_date_min");

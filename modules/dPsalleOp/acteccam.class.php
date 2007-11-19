@@ -41,6 +41,9 @@ class CActeCCAM extends CMbMetaObject {
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
 
+  var $_activite = null;
+  var $_phase = null;
+  
 	function CActeCCAM() {
 		$this->CMbObject( "acte_ccam", "acte_id" );
     
@@ -78,14 +81,36 @@ class CActeCCAM extends CMbMetaObject {
         $this->_ref_object->store();
         return;
       }
-
       return $msg;
     }
+    
+    if($this->code_activite !== null){
+      $this->loadRefExecutant();
+      // si c'est un acte chir et que le prat est un anesth => break
+      if($this->code_activite == 1 && $this->_ref_executant->isFromType(array("Anesthésiste"))){
+          return "$this->code_acte: Impossible de coder cet acte de chirurgie";
+      }
+      // si c'est un acte d'anesth et que le prat est un chir
+      if($this->code_activite == 4 && $this->_ref_executant->isFromType(array("Chirurgien"))){
+          return "$this->code_acte: Impossible de coder cet acte d'anesthésie";
+      }
+    }   
     
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération
   }
    
+  
+  function setCodeComplet($code){
+    $detailCode = explode("-", $code);
+    if(count($detailCode) == 3){
+      $this->code_acte = $detailCode[0];
+      $this->code_activite = $detailCode[1];
+      $this->code_phase = $detailCode[2];
+    }
+  }
+  
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);

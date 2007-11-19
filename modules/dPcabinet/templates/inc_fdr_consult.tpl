@@ -63,6 +63,9 @@ function cancelTarif() {
   var oForm = document.tarifFrm;
   oForm.secteur1.value = 0;
   oForm.secteur2.value = 0;
+  if(oForm._somme){
+    oForm._somme.value = 0;
+  }
   oForm.tarif.value = "";
   oForm.paye.value = "0";
   oForm.date_paiement.value = "";
@@ -75,6 +78,20 @@ function popFile(objectClass, objectId, elementClass, elementId) {
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
+function modifTotal(){
+  var oForm = document.tarifFrm;
+  var secteur1 = oForm.secteur1.value;
+  var secteur2 = oForm.secteur2.value;
+  oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
+}
+
+
+function modifSecteur2(){
+  var oForm = document.tarifFrm;
+  var secteur1 = oForm.secteur1.value;
+  var somme = oForm._somme.value;
+  oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
+}
 
 function modifTarif() {
   var oForm = document.tarifFrm;
@@ -165,10 +182,10 @@ function reloadFdr() {
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
   
-  {{if $app->user_prefs.ccam}}
+  {{if $app->user_prefs.ccam}} 
   // rafraichissement de la div ccam
   loadActes({{$consult->_id}}, {{$userSel->_id}});
-  {{/if}}
+  {{/if}} 
 }
 
 function reloadAfterSaveDoc(){
@@ -448,15 +465,21 @@ function submitFdr(oForm) {
         
         {{if $consult->paye == "0"}}
         <tr>
+          <th>{{mb_label object=$consult field="secteur1"}}</th>
+          <td>{{mb_field object=$consult field="secteur1" readonly="readonly"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$consult field="secteur2"}}</th>
+          <td>{{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}</td>
+        </tr>
+        <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
-            <input type="text" size="4" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" /> &euro;
-            {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
-            {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
+            <input type="text" size="4" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
-            
+            <input type="hidden" name="_precode_acte" value="1" />
            </td>
         </tr>
         <tr>

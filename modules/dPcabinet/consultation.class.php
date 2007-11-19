@@ -53,7 +53,8 @@ class CConsultation extends CCodableCCAM {
   var $_check_adresse  = null;
   var $_somme          = null;
   var $_types_examen   = null;
-
+  var $_precode_acte   = null;
+  
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
@@ -258,10 +259,37 @@ class CConsultation extends CCodableCCAM {
     return $id_fse->store();
   }
 
+  
+  function precodeActe(){
+    $this->loadRefPlageConsult();
+    foreach($this->_codes_ccam as $key => $code){
+      $acte = new CActeCCAM();
+      $acte->setCodeComplet($code);
+      
+      // si le code ccam est composé de 3 elements, on le precode
+      if($acte->code_activite != "" && $acte->code_phase != ""){
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class_name;
+        $acte->executant_id = $this->_ref_chir->_id;
+        $acte->execution = mbDateTime();
+        if($msg = $acte->store()){
+          return $msg;
+        }
+      }
+    }
+  }
+  
+  
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // Precodage des actes
+    if($this->_precode_acte && $this->_id){
+      return $this->precodeActe();
     }
     
     // Bind FSE
