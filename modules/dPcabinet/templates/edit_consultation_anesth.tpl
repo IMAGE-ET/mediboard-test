@@ -140,7 +140,7 @@ function pageMain() {
   }
   
   // Accordeon
-  {{if $consult->consultation_id}}
+  {{if $consult->_id}}
 
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   reloadDossierMedicalPatient();
@@ -150,8 +150,6 @@ function pageMain() {
     showDelay:50, 
     showSteps:5
   } );
-  
-  new Control.Tabs('main_tab_group'); 
   {{/if}}
 }
 

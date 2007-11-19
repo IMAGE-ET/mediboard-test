@@ -66,6 +66,7 @@
           </td>
         </tr>
       </table>
+      <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
     </div>
   </div>
   {{/if}}  

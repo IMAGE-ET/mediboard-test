@@ -593,15 +593,6 @@ function mbLoadScriptsStorage($modeReturn){
 }
 
 /**
- * Reomve accents and some strange characters
- * @return string: string w/o accents  */
-function mbRemoveAccents( $str ) {
-  return strtr($str,
-    "()!$'?: ,&+-/.ŠŒšœŸ¥µÀÁÂÃÄÅÆÇÈÉÊËÌÍÎÏĞÑÒÓÔÕÖØÙÚÛÜİßàáâãäåæçèéêëìíîïğñòóôõöøùúûüıÿ",
-    "--------------SOZsozYYuAAAAAAACEEEEIIIIDNOOOOOOUUUUYsaaaaaaaceeeeiiiionoooooouuuuyy");
-}
-
-/**
  * Converts an bytes number to the deca-binary equivalent
  * @return string Mediboard version */
 function mbConvertDecaBinary($number) {

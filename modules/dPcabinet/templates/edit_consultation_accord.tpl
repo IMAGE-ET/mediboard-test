@@ -69,7 +69,7 @@ function pageMain() {
   
   PairEffect.initGroup("acteEffect");
   
-  {{if $consult->consultation_id}}
+  {{if $consult->_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   regFieldCalendar("editAntFrm", "date");
   regFieldCalendar("editTrmtFrm", "debut");
@@ -84,7 +84,7 @@ function pageMain() {
     {{/if}}
   } 
    
-  {{if $consult->consultation_id}}
+  {{if $consult->_id}}
   
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   reloadDossierMedicalPatient();
@@ -94,8 +94,6 @@ function pageMain() {
     showDelay:50, 
     showSteps:5
   } );
-  
-  new Control.Tabs('main_tab_group'); 
   {{/if}}
  
 }

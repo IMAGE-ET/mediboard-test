@@ -11,11 +11,41 @@ function main() {
 	  WaitingMessage.init();
 	  initPuces();
 	  pageMain();
+	  Main.init();
 	}
 	catch (e) {
 		Console.debug(e);
 	}	
 }
+
+/**
+ * Main page initialisation scripts
+ */
+var Main = {
+  scripts: [],
+  initialized: false,
+  
+  /**
+   * Add a script to be lanuched after onload notification
+   * On the fly execution if already page already loaded
+   */
+  add: function(script) {
+    if (this.initialized) {
+      script();
+    }
+    else {
+      this.scripts.push(script);
+    }
+  },
+  
+  /**
+   * Call all Main functions
+   */
+  init: function() {
+    this.scripts.each(function(e) { e() } );
+    this.initialized = true;
+  }
+};
 
 /**
  * References manipulation

@@ -4,7 +4,6 @@
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
-
 <!-- div global de l'accordeon ==> accordionConsult -->
 <div class="accordionMain" id="accordionConsult">
     
@@ -67,7 +66,8 @@
             {{include file="inc_acte_ngap.tpl"}}
           </td>
         </tr>
-    </table>
+    	</table>
+      <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
     </div>
   </div>
   {{/if}}

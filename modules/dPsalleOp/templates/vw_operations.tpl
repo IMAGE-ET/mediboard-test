@@ -9,7 +9,6 @@
 
 <script type="text/javascript">
 
-
 function submitTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadTiming(oForm.operation_id.value) } });
 }
@@ -31,8 +30,6 @@ function reloadAnesth(operation_id){
   url.addParam("operation_id", operation_id);
   url.requestUpdate("anesth", "systemMsg", { onComplete: loadActes(operation_id,"{{$selOp->chir_id}}") });
 }
-
-
 
 function pageMain() {
   PairEffect.initGroup("acteEffect");
