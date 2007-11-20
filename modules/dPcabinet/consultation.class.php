@@ -54,7 +54,7 @@ class CConsultation extends CCodableCCAM {
   var $_somme          = null;
   var $_types_examen   = null;
   var $_precode_acte   = null;
-  
+  var $_store_ngap     = null;
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
@@ -77,6 +77,7 @@ class CConsultation extends CCodableCCAM {
    var $_ref_chir  = null;
    var $_date      = null;
    var $_is_anesth = null; 
+   var $_codes_ngap = null;
 
    // Filter Fields
    var $_date_min	 	= null;
@@ -196,6 +197,16 @@ class CConsultation extends CCodableCCAM {
     }
   }
 
+  function loadRefActesNGAP(){
+    $acte = new CActeNGAP();
+    $where["consultation_id"] = " = '$this->_id'";
+    $codesNGAP = $acte->loadList($where);
+    
+    foreach($codesNGAP as $key => $_ngap){
+      $this->_codes_ngap[] = $_ngap->quantite."-".$_ngap->code."-".$_ngap->coefficient; 
+    }
+  }
+  
   function check() {
     // Data checking
     $msg = null;
@@ -281,10 +292,36 @@ class CConsultation extends CCodableCCAM {
   
   
   
+  function storeCodeNGAP(){
+    $listCodesNGAP = array();
+    $listCodesNGAP = explode("|",$_POST["codes_ngap"]);
+    foreach($listCodesNGAP as $key => $code_ngap){
+      $detailCodeNGAP = explode("-", $code_ngap);
+      $acteNGAP = new CActeNGAP();
+      $where = array();
+      $where["quantite"] = " = '$detailCodeNGAP[0]'";
+      $where["code"] = " = '$detailCodeNGAP[1]'";
+      $where["coefficient"] = " = '$detailCodeNGAP[2]'";
+      $where["consultation_id"] = " = '$this->_id'";
+      if(!$acteNGAP->loadList($where)){
+        $acteNGAP->quantite = $detailCodeNGAP[0];
+        $acteNGAP->code = $detailCodeNGAP[1];
+        $acteNGAP->coefficient = $detailCodeNGAP[2];
+        $acteNGAP->consultation_id = $this->_id;
+        $acteNGAP->store();  
+      }
+    } 
+  }
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    // Store code NGAP
+    if($this->_store_ngap && $this->_id && $_POST["del"] == 0){
+      return $this->storeCodeNGAP();
     }
     
     // Precodage des actes

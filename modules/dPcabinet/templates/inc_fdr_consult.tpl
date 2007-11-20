@@ -70,6 +70,8 @@ function cancelTarif() {
   oForm.paye.value = "0";
   oForm.date_paiement.value = "";
  
+  synchroForm();
+  
   submitFdr(oForm);
 }
 
@@ -84,6 +86,8 @@ function modifTotal(){
   var secteur2 = oForm.secteur2.value;
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
+  
+  synchroForm();
 }
 
 
@@ -93,6 +97,8 @@ function modifSecteur2(){
   var somme = oForm._somme.value;
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
+  
+  synchroForm();
 }
 
 function modifTarif() {
@@ -105,14 +111,24 @@ function modifTarif() {
     var secteur1 = tarif_array[0];
     var secteur2 = tarif_array[1];
     var codes_ccam = tarif_array[2];
+    var codes_ngap = tarif_array[3];
   
     oForm.secteur1.value = tarif_array[0];
     oForm.secteur2.value = tarif_array[1];
     oForm._newCode.value = codes_ccam;
+    oForm._newCodeNGAP.value = codes_ngap;
   
     oForm._somme.value = parseFloat(tarif_array[0]) + parseFloat(tarif_array[1]); 
     
-  
+    var aNGAP = oForm.codes_ngap.value.split("|");
+    aNGAP.removeByValue("");
+    if(oForm._newCodeNGAP.value != ''){
+      aNGAP.push(oForm._newCodeNGAP.value);
+    }
+    aNGAP.sort();
+    oForm.codes_ngap.value = aNGAP.join("|");
+    
+    
     var aCCAM = oForm.codes_ccam.value.split("|");
     // Si la chaine est vide, il crée un tableau à un élément vide donc :
     aCCAM.removeByValue("");
@@ -134,8 +150,19 @@ function modifTarif() {
     oForm._somme.value = '';
     oForm.tarif.value = '';
   }
+  
+  synchroForm();
 }
 
+function synchroForm(){
+  var oFormConsultation = document.tarifFrm;
+  var oFormNouveauTarif = document.creerTarif;
+  
+  oFormNouveauTarif.secteur1.value = oFormConsultation.secteur1.value;
+  oFormNouveauTarif.secteur2.value = oFormConsultation.secteur2.value;
+  oFormNouveauTarif.codes_ccam.value = oFormConsultation.codes_ccam.value;
+
+}
 
 function effectuerReglement() {
   var oForm = document.tarifFrm;
@@ -187,6 +214,7 @@ function reloadFdr() {
   {{if $app->user_prefs.ccam}} 
   // rafraichissement de la div ccam
   loadActes({{$consult->_id}}, {{$userSel->_id}});
+  ActesNGAP.refreshList();
   {{/if}} 
 }
 
@@ -216,6 +244,7 @@ function confirmFileDeletion(oButton) {
 function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
+
 
 </script>
 
@@ -448,7 +477,7 @@ function submitFdr(oForm) {
               {{if $tarifsChir|@count}}
               <optgroup label="Tarifs praticien">
               {{foreach from=$tarifsChir item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->_view}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}} {{$curr_tarif->codes_ngap}}">{{$curr_tarif->_view}}</option>
                 
               {{/foreach}}
               </optgroup>
@@ -456,7 +485,7 @@ function submitFdr(oForm) {
               {{if $tarifsCab|@count}}
               <optgroup label="Tarifs cabinet">
               {{foreach from=$tarifsCab item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}}">{{$curr_tarif->_view}}</option>
+                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}} {{$curr_tarif->codes_ngap}}">{{$curr_tarif->_view}}</option>
               {{/foreach}}
               </optgroup>
               {{/if}}
@@ -466,27 +495,31 @@ function submitFdr(oForm) {
         {{/if}}
         
         {{if $consult->paye == "0"}}
-        <tr>
-          <th>{{mb_label object=$consult field="secteur1"}}</th>
-          <td>{{mb_field object=$consult field="secteur1" onchange="modifTotal()"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$consult field="secteur2"}}</th>
-          <td>{{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}</td>
-        </tr>
+       
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
-            <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
             <input type="hidden" name="_precode_acte" value="1" />
+       
+          {{mb_label object=$consult field="secteur1"}}
+          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
+          {{mb_label object=$consult field="secteur2"}}
+          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
+       =
+       <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
+            
            </td>
-        </tr>
-        <tr>
-          <td>{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}</td>
-          <td><input type="hidden" name="_newCode" /></td>
+
+          <td>{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}
+              <input type="hidden" name="codes_ngap" value="{{$listCodesNGAP}}" />
+              
+          </td>
+          <td><input type="hidden" name="_newCode" />
+          <input type="hidden" name="_newCodeNGAP" />
+          <input type="hidden" value="1" name="_store_ngap" /> </td>
         </tr>
         {{else}}
         <tr>
@@ -552,8 +585,34 @@ function submitFdr(oForm) {
       </table>
       
       </form>
+      
+      <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
+      <form name="creerTarif" action="?m={{$m}}&tab=vw_compta" method="post">
+        <input type="hidden" name="dosql" value="do_tarif_aed" />
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="_tab" value="vw_compta" />
+        <input type="hidden" name="del" value="0" />
+        <!-- Champs mis a jour lors de la selection d'un tarif -->
+        <input type="hidden" name="secteur1" value="" />
+        <input type="hidden" name="secteur2" value="" />
+        <input type="hidden" name="codes_ccam" value="{{$consult->codes_ccam}}" />
+        <!-- Codes NGAP de la consultation courante -->
+        <input type="hidden" name="codes_ngap" value="{{$listCodesNGAP}}" />
+        <!-- Id de l'utilisateur courant -->
+        <input type="hidden" name="chir_id" value="{{$consult->_ref_chir->_id}}" />
+        <input type="hidden" name="description" value="Consultation {{$listCodesNGAP}}" />
+        <table style="width: 100%">
+          <tr>
+            <td style="text-align: center">
+              <button class="submit" type="submit">Créer un nouveau tarif</button>
+            </td>
+          </tr>
+        </table>
+      </form>
+      
     </td>
-        
+   
+       
   </tr>
   
 

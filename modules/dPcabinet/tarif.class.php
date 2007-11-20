@@ -20,6 +20,7 @@ class CTarif extends CMbObject {
   var $secteur1    = null;
   var $secteur2    = null;
   var $codes_ccam  = null;
+  var $codes_ngap  = null;
   
   // Form fields
   var $_type = null;
@@ -41,7 +42,8 @@ class CTarif extends CMbObject {
       "description" => "notNull str confidential",
       "secteur1"    => "notNull currency min|0",
       "secteur2"    => "currency min|0",
-      "codes_ccam"  => "str"
+      "codes_ccam"  => "str",
+      "codes_ngap"  => "str"
     );
   }
   

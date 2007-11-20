@@ -253,9 +253,18 @@ if($consult->_id){
   $listActesNGAP = $acte_ngap->loadList($where);
 }
 
+$listCodesNGAP = "";
+if($consult->_id){
+  $consult->loadRefActesNGAP();
+
+  // Creartion de la liste des codes NGAP
+ if (count($consult->_codes_ngap)) {
+   $listCodesNGAP = join($consult->_codes_ngap, "|");
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("listActesNGAP"  , $listActesNGAP);
 $smarty->assign("tabSejour"      , $tabSejour);
@@ -282,6 +291,7 @@ $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);  
 $smarty->assign("noReglement"    , 0);
+$smarty->assign("listCodesNGAP", $listCodesNGAP);
 
 if($consult->_is_anesth) {
   $secs = range(0, 60-1, 1);

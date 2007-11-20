@@ -71,6 +71,20 @@ function pageMain() {
   regFieldCalendar("printFrm", "_date_min");
   regFieldCalendar("printFrm", "_date_max");
 
+
+
+  // Affichage des codes NGAP  
+  var oForm = document.editFrm;
+  var aNgap = oForm.codes_ngap.value.split("|");
+  aNgapNode = document.getElementById('listCodesNGAP');
+  var aCodeNodesNgap = new Array();
+  var iCodeNgap = 0;
+  while(sCodeNgap = aNgap[iCodeNgap++]){
+    aCodeNodesNgap.push(sCodeNgap);
+  }
+  aNgapNode.innerHTML = aCodeNodesNgap.join(" / ");
+ 
+ 
   function refreshListCCAM() {
     oCcamNode = document.getElementById("listCodesCcam");
     
@@ -285,7 +299,12 @@ function pageMain() {
                   <td colspan="2" class="text" id="listCodesCcam">
                   </td>
                 </tr>
-
+                <tr>
+                  <th>Liste des codes NGAP
+                  {{mb_field object=$tarif field="codes_ngap" hidden="1"}}</th>
+                  <td colspan="2" class="text" id="listCodesNGAP">
+                  </td>
+                </tr>
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
                 <td>{{mb_field object=$tarif field="secteur1" size="6"}}<input type="hidden" name="_tarif" /></td>

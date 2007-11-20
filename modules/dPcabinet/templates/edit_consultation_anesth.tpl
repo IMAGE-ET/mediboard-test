@@ -133,6 +133,7 @@ function pageMain() {
     showDelay:50, 
     showSteps:5
   } );
+  
   {{/if}}
 }
 

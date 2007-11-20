@@ -13,8 +13,8 @@ class CActeNGAP extends CMbObject {
   var $acte_ngap_id = null;
   
   // DB fields
-  var $code        = null;
   var $quantite    = null;
+  var $code        = null;
   var $coefficient = null;
   var $consultation_id = null;
   

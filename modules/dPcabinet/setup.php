@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.81";
+$config["mod_version"]     = "0.82";
 $config["mod_type"]        = "user";
 
 
@@ -828,7 +828,11 @@ class CSetupdPcabinet extends CSetup {
             PRIMARY KEY (`acte_ngap_id`)) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.81";
+    $this->makeRevision("0.81");
+    $sql = "ALTER TABLE `tarifs` ADD `codes_ngap` VARCHAR(255);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.82";
   }
 }
 ?>

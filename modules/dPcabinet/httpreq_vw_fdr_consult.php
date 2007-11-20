@@ -129,11 +129,21 @@ $tarifsCab = $tarifsCab->loadList($where, $order);
 $_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste")) 
   || $consult->_ref_consult_anesth->consultation_anesth_id;
 
+
+  $consult->loadRefActesNGAP();
+$listCodesNGAP = "";
+// Creartion de la liste des codes NGAP
+if (count($consult->_codes_ngap)) {
+  $listCodesNGAP = join($consult->_codes_ngap, "|");
+}
+
+    
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("_is_anesth", $_is_anesth);  
 
+$smarty->assign("listCodesNGAP" , $listCodesNGAP);
 $smarty->assign("banques"       , $banques);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
