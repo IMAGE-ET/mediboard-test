@@ -8,7 +8,9 @@ function setClose(code, type,tarif) {
   var oSelector = window.opener.CIM10Selector;
   }
   oSelector.set(code,tarif);
-  window.close();
+  if(oSelector.selfClose) {
+    window.close();
+  }
 }
 
 function createFavori() {

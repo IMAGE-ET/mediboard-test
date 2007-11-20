@@ -1,9 +1,11 @@
 // $Id: $
 
 var CIM10Selector = {
-  sForm : null,
-  sView : null,
-  sChir : null,
+  sForm     : null,
+  sView     : null,
+  sChir     : null,
+  oUrl      : null,
+  selfClose : true,
   options : {
     width : 600,
     height: 500
@@ -11,19 +13,23 @@ var CIM10Selector = {
 
   pop: function() {
     var oForm = document[this.sForm];
-    var url = new Url();
-    url.setModuleAction("dPplanningOp", "code_selector");
+    this.oUrl = new Url();
+    this.oUrl.setModuleAction("dPplanningOp", "code_selector");
     
-    url.addParam("chir", oForm[this.sChir].value);
-    url.addParam("type", "cim10");
+    this.oUrl.addParam("chir", oForm[this.sChir].value);
+    this.oUrl.addParam("type", "cim10");
     
-    url.popup(this.options.width, this.options.height, "CIM10 Selector");
+    this.oUrl.popup(this.options.width, this.options.height, "CIM10 Selector");
   },
   
   set: function(code) {
     var oForm = document[this.sForm];
     oForm[this.sView].value = code;
-  }
-   
+  },
   
+  // Peut être appelé sans contexte : ne pas utiliser this
+  close: function() {
+    CIM10Selector.oUrl.close();
+  }
+
 }

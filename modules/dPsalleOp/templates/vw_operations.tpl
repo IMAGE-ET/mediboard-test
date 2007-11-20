@@ -31,6 +31,13 @@ function reloadAnesth(operation_id){
   url.requestUpdate("anesth", "systemMsg", { onComplete: loadActes(operation_id,"{{$selOp->chir_id}}") });
 }
 
+function reloadDiagnostic(sejour_id) {
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("cim", { onComplete: CIM10Selector.close });
+}
+
 function pageMain() {
   PairEffect.initGroup("acteEffect");
   

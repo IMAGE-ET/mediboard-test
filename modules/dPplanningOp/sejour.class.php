@@ -91,6 +91,9 @@ class CSejour extends CCodableCCAM {
   var $_ref_etabExterne       = null;
   var $_ref_dossier_medical   = null;
   
+  // External objects
+  var $_ext_diagnostic_principal = null;
+  
   // Distant fields
   var $_dates_operations = null;
   
@@ -427,6 +430,12 @@ class CSejour extends CCodableCCAM {
     $this->_ref_praticien = new CMediusers;
     $this->_ref_praticien->load($this->praticien_id);
   }
+  
+  function loadRefDiagnosticPrincipal() {
+    if($this->DP) {
+      $this->_ext_diagnostic_principal = new CCodeCIM10($this->DP, 1);
+    }
+  }
 
   function loadRefPrestation() {
     $this->_ref_prestation = new CPrestation;
@@ -468,9 +477,7 @@ class CSejour extends CCodableCCAM {
       $acte_ccam->loadRefsFwd();
     } 
   }
-  
-  
-  
+
   function loadNumDossier(){
     global $dPconfig, $g;
     // Récuperation du tag de l'id Externe (ex: sherpa group:10)

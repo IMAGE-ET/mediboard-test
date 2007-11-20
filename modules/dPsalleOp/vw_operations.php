@@ -71,6 +71,8 @@ if($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
+  
+  $selOp->_ref_sejour->loadRefDiagnosticPrincipal();
 
   foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
     $selOp->_ext_codes_ccam[$keyCode]->Load();
