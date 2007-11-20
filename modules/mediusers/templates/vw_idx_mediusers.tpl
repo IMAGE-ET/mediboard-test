@@ -263,6 +263,7 @@ function pageMain() {
           {{foreach from=$banques item="banque"}}
             <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
           {{/foreach}}
+          </select>
           </td>
         </tr>
         <tr>
