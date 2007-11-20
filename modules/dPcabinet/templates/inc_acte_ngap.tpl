@@ -5,7 +5,10 @@ ActesNGAP = {
 	  var url = new Url;
 	  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("consultation_id", "{{$consult->_id}}");
-	  url.requestUpdate('listActesNGAP');
+	  url.requestUpdate('listActesNGAP', {
+	    waitingText: null,
+	    coverTarget: true
+	  } );
 	},
 
 	remove: function(acte_ngap_id){
@@ -18,7 +21,7 @@ ActesNGAP = {
 	submit: function() {
 	  var oForm = document.editNGAP;
 		submitFormAjax(oForm, 'systemMsg', { 
-			onComplete: ActesNGAP.refreshList 
+			onComplete: ActesNGAP.refreshList
 		} );
 	}
 }

@@ -15,7 +15,7 @@
       <td colspan="2" style="vertical-align:middle;">
         <select name="_selCode">
           <option value="0">&mdash; Choisir</option>
-          {{foreach from=$subject->_codes_ccam|smarty:nodefaults item=curr_code}}
+          {{foreach from=$subject->_codes_ccam item=curr_code}}
           <option value="{{$curr_code}}">{{$curr_code}}</option>
           {{/foreach}}
         </select>

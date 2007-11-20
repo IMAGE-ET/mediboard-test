@@ -60,7 +60,7 @@
         
         <tr id="two">
           <th>Actes NGAP</th>
-          <td id="listActesNGAP"> "1-C-1|2-ATA-3.5|etc." 
+          <td id="listActesNGAP"> 
             {{include file="inc_acte_ngap.tpl"}}
           </td>
         </tr>

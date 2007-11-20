@@ -118,8 +118,11 @@ var WaitingMessage = {
   
   cover: function(element) {
     var eDiv = $(document.createElement("div"));
-	  eDiv.className = "loading";
-    new Insertion(element, eDiv);
+    eDiv.absolutize();
+    eDiv.style.backgroundColor = "#000";
+    eDiv.setOpacity(0.1);
+    Position.clone(element, eDiv);
+    $(element).appendChild(eDiv);
   }
 }
 

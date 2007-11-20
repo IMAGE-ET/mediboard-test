@@ -162,7 +162,6 @@ Class.extend(Url, {
       asynchronous: true,
       evalScripts: true,
       onFailure: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur rencontre quelques problemes.</div>";}
-  //    onException: function(){$(ioTarget).innerHTML = "<div class='error'>Le serveur est injoignable.</div>";}
     };
   
     Object.extend(oDefaultOptions, oOptions);
