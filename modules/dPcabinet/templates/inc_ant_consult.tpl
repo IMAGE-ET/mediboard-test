@@ -113,6 +113,9 @@ function reloadDossierMedicalPatient(){
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
   antUrl.addParam("patient_id", "{{$patient->_id}}");
   antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
+  {{if $_is_anesth}}
+  antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
+  {{/if}}
   antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : closeCIM10 });
  
 }

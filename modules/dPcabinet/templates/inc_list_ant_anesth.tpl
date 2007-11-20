@@ -1,3 +1,4 @@
+{{if $sejour->_id}}
 <form name="frmCopyAntecedent" action="?m=dPcabinet" method="post">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
@@ -115,3 +116,6 @@ oCimAnesthField = new TokenField(document.editDiagAnesthFrm.codes_cim, {
   onChange : updateTokenCim10Anesth
 } );
 </script>
+{{else}}
+Aucun séjour sélectionné
+{{/if}}

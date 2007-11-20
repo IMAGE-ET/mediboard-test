@@ -84,6 +84,7 @@ function reloadConsultAnesth() {
   
   // refresh de la liste des antecedents du sejour
   reloadDossierMedicalSejour();
+  reloadDossierMedicalPatient();
    
   // Reload Intervention
   var consultUrl = new Url;

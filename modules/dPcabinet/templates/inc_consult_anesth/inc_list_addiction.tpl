@@ -40,7 +40,7 @@ Addiction = {
           {{tr}}Delete{{/tr}}        
         </button> 
         
-        {{if $_is_anesth}}
+        {{if $_is_anesth && $sejour->_id}}
         <button class="add notext" type="button" onclick="copyAddiction({{$curr_addiction->_id}})">
           {{tr}}Add{{/tr}}        
         </button>

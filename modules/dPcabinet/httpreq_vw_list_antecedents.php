@@ -13,6 +13,10 @@ $can->needsEdit();
 
 $patient_id  = mbGetValueFromGetOrSession("patient_id", 0);
 $_is_anesth  = mbGetValueFromGetOrSession("_is_anesth", null);
+$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+
+$sejour = new CSejour();
+$sejour->load($sejour_id);
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -31,6 +35,7 @@ if($patient->_ref_dossier_medical->_id){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("sejour" , $sejour);
 $smarty->assign("patient"    , $patient);
 $smarty->assign("_is_anesth" , $_is_anesth);
 
