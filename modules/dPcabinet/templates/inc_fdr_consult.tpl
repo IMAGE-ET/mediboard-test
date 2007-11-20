@@ -160,8 +160,9 @@ function synchroForm(){
   
   oFormNouveauTarif.secteur1.value = oFormConsultation.secteur1.value;
   oFormNouveauTarif.secteur2.value = oFormConsultation.secteur2.value;
-  oFormNouveauTarif.codes_ccam.value = oFormConsultation.codes_ccam.value;
-
+  if(oFormConsultation.codes_ccam){
+    oFormNouveauTarif.codes_ccam.value = oFormConsultation.codes_ccam.value;
+  }
 }
 
 function effectuerReglement() {
