@@ -116,7 +116,7 @@ function pageMain() {
               <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
                 <div class="progressBar">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                  <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total}}</div>
+                  <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total|string_format:"%.0f"}}</div>
                 </div>
               </a>
             </td>
@@ -227,6 +227,7 @@ function pageMain() {
                   <option value="15" {{if ($plageSel->_freq == "15") || (!$plageSel->plageconsult_id)}} selected="selected" {{/if}}>15</option>
                   <option value="20" {{if ($plageSel->_freq == "20")}} selected="selected" {{/if}}>20</option>
                   <option value="30" {{if ($plageSel->_freq == "30")}} selected="selected" {{/if}}>30</option>
+                  <option value="45" {{if ($plageSel->_freq == "45")}} selected="selected" {{/if}}>45</option>
                </select> minutes</td>
               <th>
                 <label for="_type_repeat" title="Espacement des plages">Type de répétition</label>

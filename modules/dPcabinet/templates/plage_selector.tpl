@@ -127,7 +127,7 @@ function pageMain() {
           {{$_plage->libelle}}
         </td>
         <td>
-          {{$_plage->_affected}} / {{$_plage->_total}}
+          {{$_plage->_affected}} / {{$_plage->_total|string_format:"%.0f"}}
         </td>
       </tr>
       {{/foreach}}
