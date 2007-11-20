@@ -6,8 +6,7 @@ ActesNGAP = {
 	  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
 	  url.addParam("consultation_id", "{{$consult->_id}}");
 	  url.requestUpdate('listActesNGAP', {
-	    waitingText: null,
-	    coverTarget: true
+	    waitingText: null
 	  } );
 	},
 

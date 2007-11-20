@@ -155,7 +155,6 @@ Class.extend(Url, {
   
     var oDefaultOptions = {
       waitingText: "Chargement",
-      coverTarget: false,
       urlBase: "",
       method: "get",
       parameters:  $H(this.oParams).toQueryString(), 
@@ -174,8 +173,7 @@ Class.extend(Url, {
 	      $(ioTarget).show();
 	    }
     }
-    
-    if (oDefaultOptions.coverTarget) {
+    else {
       WaitingMessage.cover(ioTarget);
     }  
   	

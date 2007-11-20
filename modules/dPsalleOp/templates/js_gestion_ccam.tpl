@@ -64,14 +64,12 @@ function addCode(subject_id, chir_id) {
     oForm.codes_ccam.value = aCCAM.join("|");
   
     submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadActes(subject_id, chir_id) } } );
-    
   }
 }
 
 function setAssociation(association, oForm, subject_id, chir_id) {
   oForm.code_association.value = association;
-  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){loadActes(subject_id, chir_id)} })
-//  loadActes(subject_id, chir_id);
+  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){ loadActes(subject_id, chir_id)} })
 }
 
 function loadActes(subject_id, chir_id) {
@@ -90,8 +88,7 @@ function loadActes(subject_id, chir_id) {
   url_actes.addParam("object_id", subject_id);
   url_actes.setModuleAction("dPsalleOp", "httpreq_ccam");
   url_actes.requestUpdate('ccam', {
-    waitingText: null,
-    coverTarget: true
+    waitingText: null
   });
 }
 
