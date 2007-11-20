@@ -38,6 +38,9 @@
     <input type="hidden" name="code_activite" class="{{$acte->_props.code_activite}}" value="{{$acte->code_activite}}" />
     <input type="hidden" name="code_phase" class="{{$acte->_props.code_phase}}" value="{{$acte->code_phase}}" />
     <input type="hidden" name="code_association" class="{{$acte->_props.code_association}}" value="{{$acte->code_association}}" />
+    {{if !$dPconfig.dPsalleOp.CActeCCAM.tarif}}
+    <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
+    {{/if}}
 
     <table class="form">
       
@@ -97,6 +100,7 @@
         </td>
       </tr>
       
+      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
       <tr class="{{$acte->_view}}">
         <th><label for="montant_depassement" title="Dépassement d'honoraire">Dépassement</label></th>
         <td class="text">
@@ -107,6 +111,7 @@
           {{else}}-{{/if}}
         </td>
       </tr>
+      {{/if}}
 
       <tr class="{{$acte->_view}}">
         <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
@@ -133,19 +138,19 @@
             <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
             <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
           </select>
-          {{if $acte->code_association}}
+          {{if $acte->code_association && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
             <strong>
               association pour {{$curr_activite->type}}
               &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
             </strong>
-          {{else}}
+          {{elseif !$acte->code_association}}
             <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
               <strong>
                 association pour {{$curr_activite->type}} ({{$acte->_guess_association}} conseillé)
               </strong>
             </label>
           {{/if}}
-          {{if $acte->montant_depassement}}
+          {{if $acte->montant_depassement && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
           &mdash dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
           {{/if}}
           {{/if}}

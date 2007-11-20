@@ -1,5 +1,5 @@
 <?php
-$locales['CActeCCAM-regle-association-Z'] = '';
+$locales['config-dPsalleOp-CActeCCAM-tarif'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-back-executant_id'] = '';
 $locales['CActeCCAM-back-object_id'] = '';
@@ -42,6 +42,7 @@ $locales['CActeCCAM-regle-association-F'] = '';
 $locales['CActeCCAM-regle-association-G'] = '';
 $locales['CActeCCAM-regle-association-H'] = '';
 $locales['CActeCCAM-regle-association-I'] = '';
+$locales['CActeCCAM-regle-association-Z'] = '';
 $locales['CActeCCAM.create'] = '';
 $locales['CActeCCAM.modify'] = '';
 $locales['CActeCCAM.more'] = '';

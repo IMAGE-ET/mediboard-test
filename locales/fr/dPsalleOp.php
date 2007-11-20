@@ -1,5 +1,5 @@
 <?php
-$locales['CActeCCAM-regle-association-Z'] = 'Règle classique d\'association de deux actes au plus';
+$locales['config-dPsalleOp-CActeCCAM-tarif'] = 'Affichage des informations de tarification';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-back-executant_id'] = '';
 $locales['CActeCCAM-back-object_id'] = '';
@@ -42,6 +42,7 @@ $locales['CActeCCAM-regle-association-F'] = '1 acte + 1 acte des chap. 02, 03, 0
 $locales['CActeCCAM-regle-association-G'] = '2 actes des chap. 01, 04, 11 ou 15';
 $locales['CActeCCAM-regle-association-H'] = '3 actes des chap. 01, 04 ou 11 à 16 pour lésions traumatiques multiples';
 $locales['CActeCCAM-regle-association-I'] = '3 actes par un ORL concernant la carcinologie et associant 1 exérèse, 1 curage et 1 reconstruction';
+$locales['CActeCCAM-regle-association-Z'] = 'Règle classique d\'association de deux actes au plus';
 $locales['CActeCCAM.create'] = '';
 $locales['CActeCCAM.modify'] = '';
 $locales['CActeCCAM.more'] = '';
