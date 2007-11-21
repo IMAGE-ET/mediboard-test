@@ -214,7 +214,7 @@ function reloadFdr() {
   
   {{if $app->user_prefs.ccam}} 
   // rafraichissement de la div ccam
-  loadActes({{$consult->_id}}, {{$userSel->_id}});
+  ActesCCAM.refreshList({{$consult->_id}}, {{$userSel->_id}});
   ActesNGAP.refreshList();
   {{/if}} 
 }

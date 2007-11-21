@@ -445,8 +445,8 @@ Object.extend(ElementChecker, {
   check_code: function() {
     // ccam
     if(this.aProperties["ccam"]){
-      if (!this.oElement.value.match(/^([a-z]){4}([0-9]){3}$/i)) {
-        return "Code CCAM incorrect, doit contenir 4 lettres et 3 chiffres";
+      if (!this.oElement.value.match(/^([A-Z]){4}[0-9]{3}(-[0-9](-[0-9])?)?$/i)) {
+        return "Code CCAM incorrect";
       }
     
     // cim10

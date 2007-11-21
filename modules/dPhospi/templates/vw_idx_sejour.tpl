@@ -91,7 +91,7 @@ function pageMain() {
               </a>
               </td>
               <td>
-              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadActes('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
+              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
               </a>
               </td>
@@ -134,7 +134,7 @@ function pageMain() {
 	              </a>
 	              </td>
 	              <td>
-	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); loadActes('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
+	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); ActesCCAM.refreshList('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
 	              </td>

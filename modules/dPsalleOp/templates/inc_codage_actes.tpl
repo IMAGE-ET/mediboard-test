@@ -162,16 +162,16 @@
         <td class="button" colspan="2">
           {{if $acte->acte_id}}
           
-          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
             Modifier cet acte
           </button>
           
-          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
             Supprimer cet acte
           </button>
           
           {{else}}
-          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){loadActes({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
             Coder cet acte
           </button>
           {{/if}}

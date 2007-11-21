@@ -28,7 +28,7 @@ function reloadAnesth(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", "systemMsg", { onComplete: loadActes(operation_id,"{{$selOp->chir_id}}") });
+  url.requestUpdate("anesth", "systemMsg", { onComplete: ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}") });
 }
 
 function reloadDiagnostic(sejour_id) {

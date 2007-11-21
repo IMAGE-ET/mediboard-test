@@ -28,14 +28,16 @@ class CCodeSpec extends CMbFieldSpec {
        
     // ccam
     if($this->ccam){
-      if (!preg_match ("/^([a-z0-9]){0,7}$/i", $propValue)) {
-        return "Code CCAM incorrect, doit contenir 4 lettres et trois chiffres";
+      //^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$
+      // ancienne expression reguliere ([a-z0-9]){0,7}
+      if (!preg_match ("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $propValue)) {
+        return "Code CCAM incorrect";
       }
     
     // cim10
     }elseif($this->cim10){
       if (!preg_match ("/^([a-z0-9]){0,5}$/i", $propValue)) {
-        return "Code CCAM incorrect, doit contenir 5 lettres maximum";
+        return "Code CIM incorrect, doit contenir 5 lettres maximum";
       }
       
     // adeli
