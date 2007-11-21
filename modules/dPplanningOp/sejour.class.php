@@ -476,6 +476,9 @@ class CSejour extends CCodableCCAM {
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     } 
+    
+    $this->loadNumDossier();
+    
   }
 
   function loadNumDossier(){

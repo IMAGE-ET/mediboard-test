@@ -32,18 +32,7 @@ $can->needsRead();
 $template = is_file($object->_view_template) ?
   $object->_view_template : 
   "system/templates/CMbObject_view.tpl";
-
-if($object->_class_name == "CSejour"){
-  $object->loadNumDossier();
-}
-if($object->_class_name == "CPatient"){
-  $object->loadIPP();
-  $object->loadRefDossierMedical();
-  $object->_ref_dossier_medical->loadRefsAntecedents();
-  $object->_ref_dossier_medical->loadRefsAddictions();
-  $object->_ref_dossier_medical->loadRefsTraitements();
-  
-}  
+ 
 // Création du template
 $smarty = new CSmartyDP();
 

@@ -753,7 +753,16 @@ class CPatient extends CMbObject {
 	    $this->_urlDHEParams["interDatePrevue"] = "";
     }
   }
-
+  
+  function loadComplete(){
+    parent::loadComplete();
+    $this->loadIPP();
+    $this->loadRefDossierMedical();
+    $this->_ref_dossier_medical->loadRefsAntecedents();
+    $this->_ref_dossier_medical->loadRefsAddictions();
+    $this->_ref_dossier_medical->loadRefsTraitements();  
+  }
+  
   function loadDossierComplet($permType = null) {
     $pat_id = $this->loadRefs();
     
