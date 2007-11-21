@@ -19,6 +19,7 @@ $ds = CSQLDataSource::get("std");
 $list = array();
 $list2 = array();
 $fusion = array();
+$fusionCim = array();
 
 $type = mbGetValueFromGet("type", 0 );
 $chir = mbGetValueFromGet("chir", 0 );
@@ -52,14 +53,52 @@ switch($type) {
 				where favoris_user = '$chir' or favoris_user = '$AppUI->user_id'
 				order by favoris_code";
 		$codes = $ds->loadlist($sql);
-    $i = 0;
+		
     foreach($codes as $key => $value) {
-      $list[$i] = new CCodeCIM10($value["favoris_code"]);
-      $list[$i]->loadLite();
-      $list[$i]->libelleLong = $list[$i]->libelle;
-      $i++;
+      $list[$value["favoris_code"]]["codecim"] = new CCodeCIM10($value["favoris_code"]);
+      $list[$value["favoris_code"]]["codecim"]->loadLite();
+      $list[$value["favoris_code"]]["codecim"]->occ = "0";
     }
     break;
+  }
+}
+    
+if($type=="cim10"){
+  // Chargement des codes cim les plus utilsé par le praticien $chir
+  $code = new CCodeCIM10();
+  
+  $sql = "SELECT DP, count(DP) as nb_code
+          FROM `sejour`
+          WHERE sejour.praticien_id = '$chir'
+          AND DP IS NOT NULL
+          AND DP != ''
+          GROUP BY DP
+          ORDER BY count(DP) DESC
+          LIMIT 10;";
+
+  $listCodes = $ds->loadList($sql);
+
+  $listCimStat = array();
+ 
+  foreach($listCodes as $key => $value) {
+    $listCimStat[$value["DP"]]["codecim"] = new CCodeCIM10($value["DP"]);
+    $listCimStat[$value["DP"]]["codecim"]->loadLite();
+    $listCimStat[$value["DP"]]["codecim"]->occ = $value["nb_code"];
+  }
+  
+  // Fusion des deux tableaux de favoris
+  $fusionCim = $listCimStat;
+ 
+  foreach($list as $keycode => $code){
+  	if(!array_key_exists($keycode, $fusionCim)) {
+  		$fusionCim[$keycode] = $code;
+  		continue;
+  	}
+  }
+  
+  // si tri par ordre alphabetique selectionne
+  if($view=="alpha") {
+    sort($fusionCim);
   }
 }
 
@@ -96,6 +135,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("view",$view);
 $smarty->assign("type", $type);
 $smarty->assign("list", $list);
+$smarty->assign("fusionCim", $fusionCim);
 $smarty->assign("fusion", $fusion);
 $smarty->assign("list2", $list2);
 $smarty->assign("object_class", $object_class);

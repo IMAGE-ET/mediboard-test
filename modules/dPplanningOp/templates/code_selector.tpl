@@ -40,6 +40,18 @@ function view_() {
   url.redirect();
 }
 
+function viewCim(){
+  var oForm = document.selViewCim;
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "code_selector");
+  url.addParam("type", "cim10"); 
+  url.addElement(oForm.view);
+  url.addElement(oForm.chir);  
+  url.addParam("dialog", 1);
+  url.redirect();
+}
+
+
 </script>
 
 
@@ -91,35 +103,44 @@ function view_() {
 </table>
 {{/if}}
 
-{{if $type=="cim10"}}
+{{if $type=="cim10"}}  
   <tr>
   	<th>Favoris disponibles</th>
-  </tr>
-  
-  {{if !$list}}
-  <tr>
-  	<td>{{tr}}CFavoriCCAM.none{{/tr}}</td>
-  </tr>
-  {{/if}}
-  <tr>
-  {{foreach from=$list item=curr_code key=curr_key}}
     <td>
-      <strong>{{$curr_code->code}}</strong>
+      <form name="selViewCim">
+      <input type="hidden" name="chir" value="{{$chir}}">
+      <select name="view" onchange="viewCim();">
+  	    <option>&mdash; Choisir un mode d'affichage</option>
+  	    <option value="alpha" {{if $view == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
+  	    <option value="taux" {{if $view == "taux"}} selected="selected" {{/if}}>Par utilisation</option>
+  	  </select>
+  	  </form>
+  	</td>
+  </tr>
+  <tr>
+  {{foreach from=$fusionCim item=curr_code key=curr_key name=fusion}}
+    <td>
+      <strong><span style="float:left">{{$curr_code.codecim->code}}</span>
+      {{if $curr_code.codecim->occ==0}}
+      <span style="float:right">Favoris</span>
+      {{else}}
+      <span style="float:right">{{$curr_code.codecim->occ}}</span>
+      {{/if}}
+      </strong><br />
+      {{$curr_code.codecim->libelle}}
       <br />
-      {{$curr_code->libelleLong}}
-      <br />
-      <button class="tick" type="button" onclick="setClose('{{$curr_code->code}}', '{{$type}}')">
+      <button class="tick" type="button" onclick="setClose('{{$curr_code.codecim->code}}', '{{$type}}' )">
         {{tr}}Select{{/tr}}
       </button>
-    </td>
-  {{if ($curr_key+1) is div by 3}}
+    </td>  
+  {{if $smarty.foreach.fusion.index % 3 == 2}}
   </tr><tr>
   {{/if}}
   {{/foreach}}
   </tr>
 </table>
-
 {{/if}}
+
 
 <table class="form">
   <tr>
