@@ -177,7 +177,7 @@ function pageMain() {
             <button class="modify" type="submit">Valider</button>
             </form>
           </td>
-          <td colspan="2">
+          <td colspan="2" class="text">
             {{if $curr_sejour->_ref_GHM->_CM}}
             <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
             <br />

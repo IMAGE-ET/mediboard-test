@@ -160,7 +160,20 @@
       {{if $can->edit || $modif_operation}}
       <tr>
         <td class="button" colspan="2">
-          {{if $acte->acte_id}}
+          {{if !$acte->acte_id}}
+          
+          <button class="submit" type="button" onclick="
+            {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
+            if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
+              document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
+              ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
+            }
+            {{/if}}
+            submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+            Coder cet acte
+          </button>
+          
+          {{else}}
           
           <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
             Modifier cet acte
@@ -170,10 +183,6 @@
             Supprimer cet acte
           </button>
           
-          {{else}}
-          <button class="submit" type="button" style="background-color: #faa" onclick="submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-            Coder cet acte
-          </button>
           {{/if}}
         </td>
       </tr>

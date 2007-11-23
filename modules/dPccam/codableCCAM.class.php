@@ -159,6 +159,7 @@ class CCodableCCAM extends CMbObject {
           $possible_acte->executant_id = $this->getExecutant_id($possible_acte->code_activite);
           $possible_acte->updateFormFields();
           $possible_acte->loadRefs();
+          $possible_acte->getAnesthAssocie();
                     
           // Affect a loaded acte if exists
           foreach ($this->_ref_actes_ccam as $curr_acte) {

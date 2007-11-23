@@ -21,19 +21,25 @@ ActesCCAM = {
     });
   },
   
-  add: function(subject_id, chir_id){
+  add: function(subject_id, chir_id, oOptions){
+    var oDefaultOptions = { 
+      onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) }
+    }
+    Object.extend(oDefaultOptions, oOptions);
     var oForm = document.manageCodes;
     var oCcamField = new TokenField(oForm.codes_ccam, {
       sProps : "notNull code ccam"
     } );
     if(oCcamField.add(oForm._newCode.value)){
-      submitFormAjax(oForm, 'systemMsg', { 
-        onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) } 
-      } );
+      submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },
   
-  remove: function(subject_id){
+  remove: function(subject_id, oOptions){
+    var oDefaultOptions = { 
+      onComplete: function() { ActesCCAM.refreshList(subject_id) } 
+    }
+    Object.extend(oDefaultOptions, oOptions);
     var oForm = document.manageCodes;
     var oCcamField = new TokenField(oForm.codes_ccam);
     if(oForm._selCode.value == 0){
@@ -41,9 +47,7 @@ ActesCCAM = {
       return false;
     }
     if(oCcamField.remove(oForm._selCode.value)){
-      submitFormAjax(oForm, 'systemMsg', {
-        onComplete: function() { ActesCCAM.refreshList(subject_id) } 
-      } );
+      submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   }
 }
@@ -53,9 +57,13 @@ function setCodeTemp(code){
   oForm._newCode.value = code; 
 }
 
-function setAssociation(association, oForm, subject_id, chir_id) {
+function setAssociation(association, oForm, subject_id, chir_id, oOptions) {
+  var oDefaultOptions = { 
+    onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) } 
+  }
+  Object.extend(oDefaultOptions, oOptions);
   oForm.code_association.value = association;
-  submitFormAjax(oForm, 'systemMsg', {onComplete: function(){ ActesCCAM.refreshList(subject_id, chir_id)} })
+  submitFormAjax(oForm, 'systemMsg', oDefaultOptions)
 }
 
 function refreshFdr(consult_id) {

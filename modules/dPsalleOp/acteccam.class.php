@@ -32,6 +32,7 @@ class CActeCCAM extends CMbMetaObject {
   // Form fields
   var $_modificateurs     = array();
   var $_anesth            = null;
+  var $_anesth_associe    = null;
   var $_linked_actes      = null;
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
@@ -139,6 +140,21 @@ class CActeCCAM extends CMbMetaObject {
 
     $this->loadRefExecutant();
     $this->loadRefCodeCCAM();
+  }
+  
+  function getAnesthAssocie() {
+    if(!$this->_ref_code_ccam) {
+      $this->loadRefsFwd();
+    }
+    if($this->code_activite != 4 && !isset($this->_ref_code_ccam->activites[4])) {
+      foreach($this->_ref_code_ccam->assos as $code_anesth) {
+        if(substr($code_anesth["code"], 0, 4) == "ZZLP") {
+          $this->_anesth_associe = $code_anesth["code"];
+          return $this->_anesth_associe;
+        }
+      }
+    }
+    return;
   }
   
   function getFavoris($chir,$class,$view) {
