@@ -177,7 +177,6 @@ Class.extend(Url, {
       WaitingMessage.cover(ioTarget);
     }  
   	
-//    References.clean($(ioTarget));
     new Ajax.Updater(ioTarget, oDefaultOptions["urlBase"] + "index.php", oDefaultOptions);
   },
   

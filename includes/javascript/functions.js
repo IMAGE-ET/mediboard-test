@@ -117,6 +117,13 @@ var WaitingMessage = {
   },
   
   cover: function(element) {
+    // Problems under Explorer : don't want to waste time
+    // - ugly rendering with no transparancy
+    // - triggers errors when used in popup callbacks
+    if (BrowserDetect.browser == "Explorer") {
+      return;
+    }
+    
     var eDiv = $(document.createElement("div"));
     eDiv.absolutize();
     eDiv.style.backgroundColor = "#000";
