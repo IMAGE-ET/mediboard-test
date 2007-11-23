@@ -8,7 +8,6 @@
  */
  
 require_once("Config.php");
-require_once("mbarray.class.php");
 
 class CMbConfig {
   var $options = array("name" => "dPconfig");
