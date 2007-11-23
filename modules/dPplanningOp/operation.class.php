@@ -223,10 +223,11 @@ class COperation extends CCodableCCAM {
     $this->loadRefSejour();
     $this->loadRefPlageOp();
     
-    if (!in_range(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
-   	  $msg .= "Intervention en dehors du séjour ";
+    if($this->plageop_id !== null){
+      if (!in_range(mbDate($this->_datetime), mbDate($this->_ref_sejour->entree_prevue), mbDate($this->_ref_sejour->sortie_prevue))) {
+   	    $msg .= "Intervention en dehors du séjour ";
+      }
     }
-
     return $msg . parent::check();
   }
   
