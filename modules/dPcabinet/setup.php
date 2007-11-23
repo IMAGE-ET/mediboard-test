@@ -813,7 +813,10 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `consultation` ADD `adresse` enum('0','1') NOT NULL DEFAULT '0'";
     $this->addQuery($sql);
     
+    
     $this->makeRevision("0.79");
+    // Ne pas supprimer le champs listCim10 de la consultAnesth afin d'avoir fait l'import dans dPpatient
+    $this->addDependency("dPpatients", "0.51");
     $sql = "ALTER TABLE `consultation_anesth`
             DROP `listCim10`;";
     $this->addQuery($sql);

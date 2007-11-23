@@ -13,7 +13,6 @@ $sql = "SHOW TABLE STATUS LIKE 'perm_module'";
 global $dPconfig;
 $permissionSystemeDown = !CSQLDataSource::get("std")->loadResult($sql);
 
-
 /**
  * The CPermModule class
  */
@@ -79,6 +78,11 @@ class CPermModule extends CMbObject {
     
     global $AppUI, $userPermsModules, $permissionSystemeDown;
     
+    if($permissionSystemeDown) {
+      return true;
+    }
+    
+    
     // Déclaration du user
     $user = new CUser();
     if($user_id !== null){
@@ -125,9 +129,6 @@ class CPermModule extends CMbObject {
     // Tri du tableau de droit final en fonction des cle (perm_module_id)
     ksort($permsFinal);
     
-    if($permissionSystemeDown) {
-      return true;
-    }
     
     $listPermsModules = array();
     
