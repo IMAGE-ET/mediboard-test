@@ -9,9 +9,11 @@ function showLegend() {
 }
 
 function printPlanning() {
+  var oForm = document.selType;
   url = new Url;
   url.setModuleAction("dPadmissions", "print_entrees");
   url.addParam("date", "{{$date}}");
+  url.addParam("type", oForm.type.value);
   url.popup(700, 550, "Entrees");
 }
 
@@ -29,12 +31,13 @@ function printDepassement(id) {
   url.popup(700, 550, "Depassement");
 }
 
-function reloadAdmission() {
+function reloadAdmission(type) {
   var admUrl = new Url;
   admUrl.setModuleAction("dPadmissions", "httpreq_vw_admissions");
   admUrl.addParam("selAdmis", "{{$selAdmis}}");
   admUrl.addParam("selSaisis", "{{$selSaisis}}");
   admUrl.addParam("date", "{{$date}}");
+  admUrl.addParam("type", type);
   admUrl.requestUpdate('listAdmissions', { waitingText : null });
 }
 
@@ -75,8 +78,11 @@ function pageMain() {
   <td>
     <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
   </td>
-  <td>
-    <a style="float: right;" href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
+  <td style="float: right">
+    <form action="?" name="selType">
+      {{mb_field object=$sejour field="type" defaultOption="Tous" onchange="reloadAdmission(this.value)"}}
+    </form>
+    <a href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
   </td>
 </tr>
   <tr>

@@ -13,6 +13,9 @@ $can->needsRead();
 
 // Initialisation de variables
 
+// Type d'admission
+$type = mbGetValueFromGet("type");
+
 $selAdmis  = mbGetValueFromGetOrSession("selAdmis", "0");
 $selSaisis = mbGetValueFromGetOrSession("selSaisis", "0");
 $order_col = mbGetValueFromGetOrSession("order_col", "_nomPatient");
@@ -41,6 +44,11 @@ $today = new CSejour;
 
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $ljoin["users"] = "sejour.praticien_id = users.user_id";
+
+if($type){ 
+  $where["type"] = " = '$type'";
+}
+
 $where["group_id"] = "= '$g'";
 $where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {
@@ -90,8 +98,8 @@ foreach ($today as $keySejour => $valueSejour) {
     $affectation->loadRefLit();
     $affectation->_ref_lit->loadCompleteView();
   }
- 
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();

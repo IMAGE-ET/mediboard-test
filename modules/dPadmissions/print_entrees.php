@@ -11,12 +11,18 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
+$listByPrat = array();
 $date = mbGetValueFromGet("date", mbDate());
-
+$type = mbGetValueFromGet("type");
 $sejour = new CSejour;
 $where = array();
 $where[] = "DATE(sejour.entree_prevue) = '". $date ."'";
 $where["sejour.annule"] = "= '0'";
+
+if($type){
+  $where["type"] = " = '$type'";  
+}
+
 $ljoin = array();
 $ljoin["users"] = "users.user_id = sejour.praticien_id";
 $order = "users.user_last_name, users.user_first_name, sejour.entree_prevue";

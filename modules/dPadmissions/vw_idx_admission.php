@@ -26,10 +26,11 @@ $date_demain = mbDateTime("00:00:00","+ 1 day");
 $hier = mbDate("- 1 day", $date);
 $demain = mbDate("+ 1 day", $date);
 
+$sejour = new CSejour();
 // Création du template
 $smarty = new CSmartyDP();
 
-
+$smarty->assign("sejour", $sejour);
 $smarty->assign("date_demain", $date_demain);
 $smarty->assign("date_actuelle", $date_actuelle);
 $smarty->assign("date"     , $date);
