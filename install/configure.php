@@ -10,6 +10,7 @@
 
 require_once("checkauth.php");
 require_once($mbpath."classes/mbconfig.class.php");
+require_once($mbpath."classes/mbarray.class.php");
 
 if(isset($_POST["username"])){
  unset($_POST["username"]); 
