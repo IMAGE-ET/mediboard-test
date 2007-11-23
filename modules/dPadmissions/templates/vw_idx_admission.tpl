@@ -80,7 +80,7 @@ function pageMain() {
   </td>
   <td style="float: right">
     <form action="?" name="selType">
-      {{mb_field object=$sejour field="type" defaultOption="Tous" onchange="reloadAdmission(this.value)"}}
+      {{mb_field object=$sejour field="type" defaultOption="&mdash; Toutes les admissions" onchange="reloadAdmission(this.value)"}}
     </form>
     <a href="#" onclick="printPlanning()" class="buttonprint">Imprimer</a>
   </td>
