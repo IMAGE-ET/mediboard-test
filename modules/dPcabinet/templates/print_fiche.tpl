@@ -203,7 +203,7 @@
             </ul>
             {{/if}}
 
-            {{if $patient->_ext_codes_cim}}
+            {{if $patient->_ref_dossier_medical->_ext_codes_cim}}
           
             <strong>Diagnostics du patient</strong>
             <ul>
