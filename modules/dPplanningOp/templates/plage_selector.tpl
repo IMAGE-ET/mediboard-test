@@ -108,7 +108,9 @@ function pageMain(){
           </td>
           <td>
             {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
+            {{if (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0))}}
             <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')" onclick="document.frmSelector.fmtdate.value='{{$curr_plage->date|date_format:"%d/%m/%Y"}}'"/>
+            {{/if}}
             {{/if}}
           </td>
         </tr>

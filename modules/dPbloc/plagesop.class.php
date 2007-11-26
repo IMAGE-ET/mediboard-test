@@ -27,10 +27,11 @@ class CPlageOp extends CMbObject {
   var $salle_id  = null;
 
   // DB fields
-  var $date           = null;
-  var $debut          = null;
-  var $fin            = null;
-  var $temps_inter_op = null;
+  var $date              = null;
+  var $debut             = null;
+  var $fin               = null;
+  var $temps_inter_op    = null;
+  var $max_intervention  = null;
     
   // Form Fields
   var $_day          = null;
@@ -66,14 +67,15 @@ class CPlageOp extends CMbObject {
   
   function getSpecs() {
     return array (
-      "chir_id"        => "ref xor|spec_id class|CMediusers",
-      "anesth_id"      => "ref class|CMediusers",
-      "spec_id"        => "ref xor|chir_id class|CFunctions",
-      "salle_id"       => "notNull ref class|CSalle",
-      "date"           => "notNull date",
-      "debut"          => "notNull time",
-      "fin"            => "notNull time",
-      "temps_inter_op" => "notNull time",
+      "chir_id"          => "ref xor|spec_id class|CMediusers",
+      "anesth_id"        => "ref class|CMediusers",
+      "spec_id"          => "ref xor|chir_id class|CFunctions",
+      "salle_id"         => "notNull ref class|CSalle",
+      "date"             => "notNull date",
+      "debut"            => "notNull time",
+      "fin"              => "notNull time",
+      "temps_inter_op"   => "notNull time",
+      "max_intervention" => "notNull num"
     );
   }
   

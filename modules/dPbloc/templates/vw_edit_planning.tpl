@@ -250,6 +250,14 @@ function popPlanning(debut) {
         </td>
       </tr>
       <tr>
+        <th>
+          {{mb_label object=$plagesel field="max_intervention"}}
+        </th>
+        <td>
+					{{mb_field object=$plagesel field="max_intervention" size="1"}}
+        </td>
+      </tr>
+      <tr>
         <td class="button" colspan="4">
         {{if $plagesel->plageop_id}}
           <button type="submit" class="modify">Modifier</button>

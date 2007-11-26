@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPbloc";
-$config["mod_version"]     = "0.20";
+$config["mod_version"]     = "0.21";
 $config["mod_type"]        = "user";
 
 
@@ -169,7 +169,12 @@ class CSetupdPbloc extends CSetup {
     $sql = "UPDATE `plagesop` SET `spec_id` = NULL WHERE `spec_id` = '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.20";
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `plagesop`
+            ADD `max_intervention` int(11) unsigned NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.21";
   }  
   
 }
