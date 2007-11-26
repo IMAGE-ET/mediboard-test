@@ -256,7 +256,9 @@ var Console = {
   trace: function(sContent, sClass, nIndent) {
     sClass = sClass || "label";
     
-    Element.show(this.id);
+    if(Preferences.INFOSYSTEM == 1) {
+      Element.show(this.id);
+    }
     var eDiv = document.createElement("div");
     eDiv.className = sClass;
     eDiv.innerHTML = sContent.toString().escapeHTML();
