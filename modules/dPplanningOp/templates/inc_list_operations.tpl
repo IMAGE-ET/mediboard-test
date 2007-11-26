@@ -207,6 +207,7 @@
               </tr>
             </table>
             </form>
+            <div id="document-{{$curr_op->_id}}">
             {{if $curr_op->_ref_documents|@count}}
             <table class="tbl">
               <tr id="operation{{$curr_op->_id}}-trigger">
@@ -225,7 +226,7 @@
                   {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
                   <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
                   </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterSaveDoc})" />
+                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'}, { onComplete: function() { updateListDocuments({{$curr_op->_id}}) } })" />
                   </form>
                 </td>
               </tr>
@@ -233,6 +234,7 @@
               </tbody>
             </table>
             {{/if}}
+            </div>
           </td>
           {{/if}}
         </tr>

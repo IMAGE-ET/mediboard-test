@@ -17,12 +17,8 @@ function refreshCR() {
   sourceUrl.requestUpdate('htmlarea');
 }
 
-if (window.opener.reloadAfterSaveDoc) {
-  window.opener.reloadAfterSaveDoc();
-}
-if (window.opener.updateListDocuments) {
-  window.opener.updateListDocuments();
-}
+window.opener.updateListDocuments({{$compte_rendu->object_id}});
+
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

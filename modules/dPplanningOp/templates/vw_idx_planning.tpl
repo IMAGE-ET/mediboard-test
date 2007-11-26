@@ -25,9 +25,11 @@ function editDocument(compte_rendu_id) {
   url.popup(700, 700, "Document");
 }
 
-function reloadAfterSaveDoc(){
-  oInput = $('currDateJSAccess');
-  updateListOperations(oInput.value);
+function updateListDocuments(operation_id){
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
+  url.addParam("operation_id" , operation_id);
+  url.requestUpdate('document-'+operation_id);
 }
 
 function updateListOperations(date, urgence) {
@@ -113,6 +115,8 @@ function pageMain() {
         </tr>
         {{/if}}
       </table>
+      
+      
     </td>
   </tr>
 </table>

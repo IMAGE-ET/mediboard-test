@@ -16,7 +16,7 @@
          {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
          <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">Edition du document
          </button>
-         <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete: function(){ updateListDocuments() } })">
+         <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete: function(){ updateListDocuments({{$selOp->_id}}) } })">
          Suppression du document
          </button>
          </form>
