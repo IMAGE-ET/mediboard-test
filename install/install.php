@@ -188,6 +188,13 @@ $library->sourceDir = "scriptaculous-js-1.8.0_pre1";
 //$library->sourceDir = "scriptaculous-js-1.6.0";
 $library->targetDir = "scriptaculous";
 
+$patch = new CLibraryPatch;
+$patch->dirName = "scriptaculous";
+$patch->sourceName = "scriptaculous.js";
+$patch->targetDir = "src";
+
+$library->patches[] = $patch;
+
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;
@@ -208,7 +215,6 @@ $library->fileName = "jscalendar-1.0.zip";
 $library->description = "Composant Javascript de sélecteur de date/heure";
 $library->sourceDir = "jscalendar-1.0";
 $library->targetDir = "jscalendar";
-
 
 $patch = new CLibraryPatch;
 $patch->dirName = "jscalendar";
