@@ -151,7 +151,7 @@ function updateListDocuments() {
          </th>
          <td class="text">
           
-          <table>
+          <table class="tbl">
            <tr>
            <td>
             <strong>Addictions significatifs</strong>
@@ -231,9 +231,6 @@ function updateListDocuments() {
 			     </td>
 			     <td>
 			     <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-            <table>
-            <tr>
-			     <td>
 				     <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$selOp->_id}})">
 	             <option value="">&mdash; Choisir un modèle</option>
 	             <optgroup label="Opération">
@@ -256,10 +253,7 @@ function updateListDocuments() {
 	               <option value="">{{tr}}pack-none{{/tr}}</option>
 	             {{/foreach}}
 	           </select>
-	         </td>
-         </tr>
-        </table>
-       </form>
+           </form>
        
        <!-- Affichage de la liste des documents de l'operation -->
        <div id="documents">

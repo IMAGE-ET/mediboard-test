@@ -1,7 +1,7 @@
 {{if $selOp->_ref_documents|@count}}
    <table class="tbl">
      <tr id="operation{{$selOp->_id}}-trigger">
-       <th colspan="2">{{$selOp->_ref_documents|@count}} document(s)</th>
+       <th class="category" colspan="2">{{$selOp->_ref_documents|@count}} document(s)</th>
      </tr>
      <tbody class="operationEffect" id="operation{{$selOp->_id}}" style="display:none;">
      {{foreach from=$selOp->_ref_documents item=document}}
