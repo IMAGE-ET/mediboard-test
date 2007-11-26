@@ -151,7 +151,7 @@ function updateListDocuments() {
          </th>
          <td class="text">
           
-          <table class="tbl">
+          <table>
            <tr>
            <td>
             <strong>Addictions significatifs</strong>
