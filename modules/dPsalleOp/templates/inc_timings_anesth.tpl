@@ -286,6 +286,12 @@
     {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
     <!-- Affichage d'information complementaire pour l'anestesie -->
     <tr>
+      <td class="button">
+        Vu par {{$consult_anesth->_ref_consultation->_ref_chir->_view}}
+      </td>
+    </tr>
+    
+    <tr>
      <td>
      <table style="width: 100%">
      

@@ -73,6 +73,8 @@ if($op) {
   $selOp->loadRefs();
   
   $selOp->_ref_sejour->loadRefDiagnosticPrincipal();
+  $selOp->_ref_sejour->loadRefDossierMedical();
+  $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
 
   foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
     $selOp->_ext_codes_ccam[$keyCode]->Load();
@@ -131,6 +133,22 @@ if($op) {
 
 	
 	$selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
+
+	// récupération des modèles de compte-rendu disponibles
+	$where                 = array();
+	$order                 = "nom";
+	$where["object_class"] = "= 'COperation'";
+	$where["chir_id"]      = "= '$selOp->chir_id'";
+	$crList                = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
+	$hospiList             = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
+	
+	// Packs d'hospitalisation
+	$packList         = array();
+	$where            = array();
+	$where["chir_id"] = "= '$selOp->chir_id'";
+	$pack             = new CPack;
+	$packList         = $pack->loadlist($where, $order);
+	
 }
 
 $listAnesthType = new CTypeAnesth;
@@ -152,7 +170,9 @@ $unites["tp"]         = array("nom"=>"TP","unit"=>"%");
 $unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
 $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
-								
+
+
+
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -162,7 +182,11 @@ $smarty->assign("unites",$unites);
 
 if($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
+  $smarty->assign("crList", $crList);
+  $smarty->assign("hospiList", $hospiList);
+  $smarty->assign("packList", $packList);
 }
+
 $smarty->assign("op"            , $op                      );
 $smarty->assign("vueReduite"    , false                    );
 $smarty->assign("salle"         , $salle                   );

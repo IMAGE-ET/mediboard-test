@@ -20,6 +20,9 @@ function refreshCR() {
 if (window.opener.reloadAfterSaveDoc) {
   window.opener.reloadAfterSaveDoc();
 }
+if (window.opener.updateListDocuments) {
+  window.opener.updateListDocuments();
+}
 </script>
 
 <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
