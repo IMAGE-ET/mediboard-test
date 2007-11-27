@@ -164,10 +164,10 @@ class COperation extends CCodableCCAM {
   }
   
   
-  function getExecutant_id($code) {
+  function getExecutantId($code_activite) {
     $this->loadRefChir();
     $this->loadRefPlageOp();
-    return ($code == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
+    return ($code_activite == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
   }
   
   

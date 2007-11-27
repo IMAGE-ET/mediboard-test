@@ -16,7 +16,6 @@ class CConsultation extends CCodableCCAM {
   const EN_COURS = 48;
   const TERMINE = 64;
  
-  
   // DB Table key
   var $consultation_id = null;
 
@@ -69,6 +68,7 @@ class CConsultation extends CCodableCCAM {
   var $_ref_examcomp       = null;
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
+  var $_ref_actes_ngap     = null;
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
@@ -78,7 +78,8 @@ class CConsultation extends CCodableCCAM {
    var $_date      = null;
    var $_is_anesth = null; 
    var $_codes_ngap = null;
-
+   var $_tokens_ngap = null; // Might be a DB field $codes_ngap as for CCAM
+   
    // Filter Fields
    var $_date_min	 	= null;
    var $_date_max 		= null;
@@ -93,13 +94,14 @@ class CConsultation extends CCodableCCAM {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-      $backRefs["examaudio"] = "CExamAudio consultation_id";
-      $backRefs["examcomp"] = "CExamComp consultation_id";
-      $backRefs["examnyha"] = "CExamNyha consultation_id";
-      $backRefs["exampossum"] = "CExamPossum consultation_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
+    $backRefs["examaudio"] = "CExamAudio consultation_id";
+    $backRefs["examcomp"] = "CExamComp consultation_id";
+    $backRefs["examnyha"] = "CExamNyha consultation_id";
+    $backRefs["exampossum"] = "CExamPossum consultation_id";
+    $backRefs["actes_ngap"] = "CActeNGAP consultation_id";
+    return $backRefs;
   }
   
   function getSpecs() {
@@ -178,9 +180,6 @@ class CConsultation extends CCodableCCAM {
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
   }
-  
-
-  
    
   function updateDBFields() {
   	if (($this->_hour !== null) && ($this->_min !== null)) {
@@ -197,14 +196,17 @@ class CConsultation extends CCodableCCAM {
     }
   }
 
-  function loadRefActesNGAP(){
-    $acte = new CActeNGAP();
-    $where["consultation_id"] = " = '$this->_id'";
-    $codesNGAP = $acte->loadList($where);
-    
-    foreach($codesNGAP as $key => $_ngap){
-      $this->_codes_ngap[] = $_ngap->quantite."-".$_ngap->code."-".$_ngap->coefficient; 
+  function loadRefsActesNGAP() {
+    if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
+      return;
     }
+    
+    $this->_codes_ngap = array();
+    foreach ($this->_ref_actes_ngap as $_actes_ngap){
+      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient; 
+    }
+
+    $this->_tokens_ngap = join($this->_codes_ngap, "|");
   }
   
   function check() {
@@ -240,7 +242,14 @@ class CConsultation extends CCodableCCAM {
     $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
   }
   
+  /**
+   * Bind a FSE to current consult
+   * Create corresponding acts
+   */
   function bindFSE() {
+    // Prevents recursion
+    $this->_bind_fse = false;
+    
     // Make id400
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
@@ -267,7 +276,66 @@ class CConsultation extends CCodableCCAM {
     
     $id_fse->object_id = $this->_id;
     $id_fse->last_update = mbDateTime();
-    return $id_fse->store();
+    
+    if ($msg = $id_fse->store()) {
+      return $msg;
+    }
+    
+    // Suppression des anciens actes CCAM
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_actes_ccam as $acte) { 
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    $this->codes_ccam = "";
+    $this->store();
+    
+    // Suppression des anciens actes NGAP
+    $this->loadRefsActesNGAP();
+    foreach ($this->_ref_actes_ngap as $acte) { 
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    
+    // Ajout des actes CCAM et NGAP récupérés
+    for ($iActe = 1; $fseActe = @$intermax["ACTE_$iActe"]; $iActe++) {
+      switch ($typeActe = $fseActe["PRE_ACTE_TYPE"]) {
+        case "0": 
+        $acte = new CActeNGAP();
+        $acte->code        = $fseActe["PRE_CODE"];
+        $acte->quantite    = $fseActe["PRE_QUANTITE"];
+        $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
+        $acte->consultation_id = $this->_id;
+        break;
+        
+        case "1": 
+        $acte = new CActeCCAM();
+        $acte->setObject($this);
+        $acte->_adapt_object = true;
+        $acte->executant_id  = $this->getExecutantId($acte->code_acte);
+        $acte->code_acte     = $fseActe["PRE_CODE_CCAM"];
+        $acte->code_activite = $fseActe["PRE_CODE_ACTIVITE"];
+        $acte->code_phase    = $fseActe["PRE_CODE_PHASE"];
+        $acte->execution     = $this->_acte_execution;
+        $acte->modificateurs = null;
+        for ($iModif = 1; $iModif <= 4; $iModif++) {
+          $acte->modificateurs .= $fseActe["PRE_MODIF_$iModif"];
+        }
+        $acte->montant_depassement = $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
+        $acte->code_association = $fseActe["PRE_ASSOCIATION"];
+        
+        break;
+        
+        default: 
+        return "Acte LogicMax de type inconnu (Numero = '$typeActe')";
+      }
+      
+      if ($msg = $acte->store()) {
+        return $msg;
+      }
+    }
   }
 
   
@@ -290,25 +358,18 @@ class CConsultation extends CCodableCCAM {
     }
   }
   
-  
-  
   function storeCodeNGAP(){
     $listCodesNGAP = array();
     $listCodesNGAP = explode("|",$_POST["codes_ngap"]);
     foreach($listCodesNGAP as $key => $code_ngap){
       $detailCodeNGAP = explode("-", $code_ngap);
-      $acteNGAP = new CActeNGAP();
-      $where = array();
-      $where["quantite"] = " = '$detailCodeNGAP[0]'";
-      $where["code"] = " = '$detailCodeNGAP[1]'";
-      $where["coefficient"] = " = '$detailCodeNGAP[2]'";
-      $where["consultation_id"] = " = '$this->_id'";
-      if(!$acteNGAP->loadList($where)){
-        $acteNGAP->quantite = $detailCodeNGAP[0];
-        $acteNGAP->code = $detailCodeNGAP[1];
-        $acteNGAP->coefficient = $detailCodeNGAP[2];
-        $acteNGAP->consultation_id = $this->_id;
-        $acteNGAP->store();  
+      $acte = new CActeNGAP();
+      $acte->quantite    = $detailCodeNGAP[0];
+      $acte->code        = $detailCodeNGAP[1];
+      $acte->coefficient = $detailCodeNGAP[2];
+      $acte->consultation_id = $this->_id;
+      if (!$acte->countMatchingList()) {
+        $acte->store();
       }
     } 
   }
@@ -320,7 +381,7 @@ class CConsultation extends CCodableCCAM {
     }
     
     // Store code NGAP
-    if($this->_store_ngap && $this->_id && $_POST["del"] == 0){
+    if ($this->_store_ngap && $this->_id && $_POST["del"] == 0){
       return $this->storeCodeNGAP();
     }
     
@@ -404,7 +465,7 @@ class CConsultation extends CCodableCCAM {
   }
 
   
-  function getExecutant_id($code) {
+  function getExecutantId($code_activite) {
   	$this->loadRefPlageConsult();
     return $this->_praticien_id;
   }
@@ -483,6 +544,7 @@ class CConsultation extends CCodableCCAM {
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
     $this->loadRefsActesCCAM();
+    $this->loadRefsActesNGAP();
   }
   
   function loadExamsComp(){

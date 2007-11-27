@@ -13,18 +13,18 @@ class CMySQLDataSource extends CSQLDataSource {
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "mysql_connect" )) {
       trigger_error( "FATAL ERROR: MySQL support not available.  Please check your configuration.", E_USER_ERROR );
-      die;
+      return;
     }
 	    
     if (null == $this->link = mysql_connect($host, $user, $pass)) { 
       trigger_error( "FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR );
-      die;
+      return;
     }
      
     if ($name) {
       if (!mysql_select_db($name, $this->link)) {
         trigger_error( "FATAL ERROR: Database not found ($name)", E_USER_ERROR );
-        die;
+        return;
       }
     }
 

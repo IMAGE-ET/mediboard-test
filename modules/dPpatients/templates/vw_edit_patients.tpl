@@ -55,9 +55,7 @@ function confirmCreation(oForm){
   if(!checkForm(oForm)){
     return false;
   }
-  
-	Console.trace("Confirming ?");
-  
+    
   httpreq_running = true;
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_siblings");
@@ -131,6 +129,12 @@ function pageMain() {
 			      </button>
 					{{/if}}
         
+					{{if $patient->_id_vitale}}
+		      <div style="float:right;" class="{{$patient->_id}}">
+			      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
+		      </div>
+		      {{/if}}
+		      
           <div class="idsante400" id="CPatient-{{$patient->_id}}"></div>
               
           <a style="float:right;" href="#" onclick="view_log('CPatient',{{$patient->_id}})">

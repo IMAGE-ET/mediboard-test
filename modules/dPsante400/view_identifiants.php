@@ -39,7 +39,7 @@ if ($dialog && $idSante400->_id) {
   $filter->id400        = $idSante400->id400;   
 }
 
-// Chargment de la cible si ojet unique
+// Chargment de la cible si oBjet unique
 $target = null;
 if ($filter->object_id && $filter->object_class) {
   $target = new $filter->object_class;

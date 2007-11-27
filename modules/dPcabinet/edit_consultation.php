@@ -238,35 +238,18 @@ $consult->loadRefsActesCCAM();
 $consult->loadRefsCodesCCAM();
 $consult->loadPossibleActes();
 
-//Chargement du dossier medical du patient de la consultation
+// Chargement du dossier medical du patient de la consultation
 if($consult->patient_id){
   $consult->_ref_patient->loadRefDossierMedical();
   $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
 }
 
-// Chargement des actes ngap de la consultation
-$acte_ngap = new CActeNGAP();
-$listActesNGAP = array();  
-if($consult->_id){
-  $where = array();
-  $where["consultation_id"] = " = $consult->_id";
-  $listActesNGAP = $acte_ngap->loadList($where);
-}
-
-$listCodesNGAP = "";
-if($consult->_id){
-  $consult->loadRefActesNGAP();
-
-  // Creartion de la liste des codes NGAP
- if (count($consult->_codes_ngap)) {
-   $listCodesNGAP = join($consult->_codes_ngap, "|");
-  }
-}
+// Chargement des actes NGAP
+$consult->loadRefsActesNGAP();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("acte_ngap"      , $acte_ngap);
-$smarty->assign("listActesNGAP"  , $listActesNGAP);
+$smarty->assign("acte_ngap"      , new CActeNGAP);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);
@@ -291,7 +274,6 @@ $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);  
 $smarty->assign("noReglement"    , 0);
-$smarty->assign("listCodesNGAP", $listCodesNGAP);
 
 if($consult->_is_anesth) {
   $secs = range(0, 60-1, 1);

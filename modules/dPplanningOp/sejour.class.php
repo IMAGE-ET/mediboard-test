@@ -508,7 +508,7 @@ class CSejour extends CCodableCCAM {
     }
   }
     
-  function getExecutant_id($code) {
+  function getExecutantId($code_activite) {
       return $this->praticien_id;
   }
   

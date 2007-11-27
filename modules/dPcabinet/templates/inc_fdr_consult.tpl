@@ -505,22 +505,22 @@ function submitFdr(oForm) {
             <input type="hidden" name="date_paiement" value="" />
             <input type="hidden" name="_precode_acte" value="1" />
        
-          {{mb_label object=$consult field="secteur1"}}
-          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
-          {{mb_label object=$consult field="secteur2"}}
-          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}}
-       =
-       <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
-            
+	          {{mb_label object=$consult field="secteur1"}}
+	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
+	          {{mb_label object=$consult field="secteur2"}}
+	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
+ 			      <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
            </td>
 
-          <td>{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}
-              <input type="hidden" name="codes_ngap" value="{{$listCodesNGAP}}" />
-              
+          <td>
+          	{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}
+            <input type="hidden" name="codes_ngap" value="{{$consult->_tokens_ngap}}" />
           </td>
-          <td><input type="hidden" name="_newCode" />
-          <input type="hidden" name="_newCodeNGAP" />
-          <input type="hidden" value="1" name="_store_ngap" /> </td>
+          <td>
+	          <input type="hidden" name="_newCode" />
+	          <input type="hidden" name="_newCodeNGAP" />
+	          <input type="hidden" value="1" name="_store_ngap" /> 
+          </td>
         </tr>
         {{else}}
         <tr>
@@ -588,7 +588,7 @@ function submitFdr(oForm) {
       </form>
       
       <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-      <form name="creerTarif" action="?m={{$m}}&tab=vw_compta" method="post" style="float: right;">
+      <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
         <input type="hidden" name="dosql" value="do_tarif_aed" />
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="_tab" value="vw_compta" />
@@ -598,10 +598,10 @@ function submitFdr(oForm) {
         <input type="hidden" name="secteur2" value="" />
         <input type="hidden" name="codes_ccam" value="{{$consult->codes_ccam}}" />
         <!-- Codes NGAP de la consultation courante -->
-        <input type="hidden" name="codes_ngap" value="{{$listCodesNGAP}}" />
+        <input type="hidden" name="codes_ngap" value="{{$consult->_tokens_ngap}}" />
         <!-- Id de l'utilisateur courant -->
         <input type="hidden" name="chir_id" value="{{$consult->_ref_chir->_id}}" />
-        <input type="hidden" name="description" value="Consultation {{$listCodesNGAP}}" />
+        <input type="hidden" name="description" value="Consultation {{$consult->_tokens_ngap}}" />
         <button class="submit" type="submit">Créer un nouveau tarif</button>
       </form>
       

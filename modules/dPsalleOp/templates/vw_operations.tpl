@@ -9,32 +9,48 @@
 <script type="text/javascript">
 
 function submitTiming(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadTiming(oForm.operation_id.value) } });
+  submitFormAjax(oForm, 'systemMsg', { 
+  	onComplete : function() { 
+  		reloadTiming(oForm.operation_id.value) 
+  	} 
+  });
 }
 
 function reloadTiming(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_vw_timing");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("timing", "systemMsg");
+  url.requestUpdate("timing", { waitingText: null } );
 }
 
 function submitAnesth(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAnesth(oForm.operation_id.value) } });
+  submitFormAjax(oForm, 'systemMsg', { 
+  	onComplete: function() { 
+  		reloadAnesth(oForm.operation_id.value) 
+  	}
+  });
 }
 
 function reloadAnesth(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_vw_anesth");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("anesth", "systemMsg", { onComplete: ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}") });
+  url.requestUpdate("anesth", { 
+  	waitingText: null,
+  	onComplete: function() { 
+  		ActesCCAM.refreshList(operation_id,"{{$selOp->chir_id}}"); 
+  	}
+  } );	
 }
 
 function reloadDiagnostic(sejour_id) {
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("cim", { onComplete: CIM10Selector.close });
+  url.requestUpdate("cim", { 
+		waitingText : null,
+  	onComplete: CIM10Selector.close 
+  } );
 }
 
 function pageMain() {

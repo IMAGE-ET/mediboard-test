@@ -14,22 +14,22 @@ class CIngresDataSource extends CSQLDataSource {
   function connect($host, $name, $user, $pass) {
     if (!function_exists( "ingres_connect" )) {
       trigger_error("FATAL ERROR: Ingres support not available.  Please check your configuration.", E_USER_ERROR);
-      die;
+      return;
     }
 	    
     if ("localhost" != $host) { 
       trigger_error("FATAL ERROR: Ingres server host has to be 'localhost'", E_USER_ERROR);
-      die;
+      return;
     }
     
     if (!$name) { 
       trigger_error("FATAL ERROR: Ingres driver has to select a specific database on 'localhost'", E_USER_ERROR);
-      die;
+      return;
     }
     
     if (null == $this->link = ingres_connect($name, $user, $pass)) { 
       trigger_error("FATAL ERROR: Connection to Ingres server failed", E_USER_ERROR);
-      die;
+      return;
     }
             
     return $this->link;

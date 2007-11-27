@@ -88,9 +88,10 @@ if ($patient_naissance == "on"){
   $year =($patient_year)?"$patient_year-":"%-";
   $month =($patient_month)?"$patient_month-":"%-";
   $day =($patient_day)?"$patient_day":"%";
-  if($day!="%"){
+  if ($day!="%") {
     $day = str_pad($day,2,"0",STR_PAD_LEFT);
   }
+  
   $naissance = $year.$month.$day;
   
   if($patient_year || $patient_month || $patient_day){
@@ -142,8 +143,9 @@ if ($patient->_id) {
   }
 }
 
-// Chargement de l'IPP du patient
+// Chargement des identifiants standards
 $patient->loadIPP();
+$patient->loadIdVitale();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -33,21 +33,25 @@ class CCodeSpec extends CMbFieldSpec {
       if (!preg_match ("/^[A-Z]{4}[0-9]{3}(-[0-9](-[0-9])?)?$/i", $propValue)) {
         return "Code CCAM incorrect";
       }
+    }
     
     // cim10
-    }elseif($this->cim10){
+    elseif ($this->cim10) {
       if (!preg_match ("/^([a-z0-9]){0,5}$/i", $propValue)) {
         return "Code CIM incorrect, doit contenir 5 lettres maximum";
       }
-      
-    // adeli
-    }elseif($this->adeli){
+    }
+    
+    // cim10
+    elseif($this->adeli) {
       if (!preg_match ("/^([0-9]){9}$/i", $propValue)) {
         return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
       }
 
+    }
+
     // RIB
-    }elseif($this->rib){
+    elseif($this->rib) {
       $compte_banque  = substr($propValue, 0, 5);
       $compte_guichet = substr($propValue, 5, 5);
       $compte_numero  = substr($propValue, 10, 11);
@@ -69,31 +73,22 @@ class CCodeSpec extends CMbFieldSpec {
         if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
         	return "Rib incorrect";
         }
-        
-    // insee
-    }elseif($this->insee){
-      $matches = null;
-      $matricule1 = null;
-      $matricule2 = null;
-      
-      if ((!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches))) {
-        $matricule1 =  "Matricule incorrect";
-      }
-      if((!preg_match ("/^([0-9]{7,8}[A-Z])$/i", $propValue))){
-        $matricule2 = "Matricule incorrect";
-      }
-
-      if(!$matricule1 && !$matricule2){
-      	return "Matricule incorrect";
-      }
-    
-     // Test dans le cas du matricule 1
-     if(!$matches){
-        return null;
-     }
+    }
      
-     $code = $matches[1];
-     $cle  = $matches[2];
+    // INSEE
+    elseif($this->insee){
+      
+      if (preg_match ("/^([0-9]{7,8}[A-Z])$/i", $propValue)) {
+        return;
+      }
+      
+      $matches = null;
+      if (!preg_match ("/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i", $propValue, $matches)) {
+        return "Matricule incorrect";
+      }
+ 
+      $code = $matches[1];
+      $cle  = $matches[2];
       
       // Use bcmod since standard modulus can't work on numbers exceedind the 2^32 limit
       if (function_exists("bcmod")) {
@@ -102,9 +97,12 @@ class CCodeSpec extends CMbFieldSpec {
         }
       }
       
-    }else{
+    }
+    
+    else {
       return "Spécification de code invalide";
     }
+    
     return null;
   }
   

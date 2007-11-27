@@ -28,7 +28,7 @@ class CCodeCCAM {
   // Incompatibilite
   var $incomps = array(); 
   // Associabilite
-  var $assos = null;
+  var $assos = array();
   // Procedure
   var $procedure = null; 
   

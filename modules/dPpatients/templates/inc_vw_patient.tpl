@@ -75,14 +75,22 @@ function reloadAfterSaveDoc(){
   <tr>
     <th class="category" colspan="2">
       
+			{{if $patient->_id_vitale}}
+      <div style="float:right;" class="{{$patient->_id}}">
+	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
+      </div>
+      {{/if}}
+
       <div class="idsante400" id="{{$patient->_class_name}}-{{$patient->_id}}"></div>
-           
-      <a style="float:right;" href="#" onclick="view_history_patient({{$patient->patient_id}})">
+
+      <a style="float:right;" href="#" onclick="view_history_patient({{$patient->_id}})">
         <img src="images/icons/history.gif" alt="historique" />
       </a>
+
       <div style="float:left;" class="noteDiv {{$patient->_class_name}}-{{$patient->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
+
       Identité {{if $patient->_IPP}}[{{$patient->_IPP}}]{{/if}}
     </th>
     <th class="category" colspan="2">Coordonnées</th>

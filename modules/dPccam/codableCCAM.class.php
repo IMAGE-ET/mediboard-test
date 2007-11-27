@@ -18,17 +18,32 @@ class CCodableCCAM extends CMbObject {
   	parent::updateFormFields();
     
     $this->codes_ccam = strtoupper($this->codes_ccam);
-    $this->_codes_ccam = array();
-    if($this->codes_ccam)
-      $this->_codes_ccam = explode("|", $this->codes_ccam);
+    $this->_codes_ccam = $this->codes_ccam ? 
+      explode("|", $this->codes_ccam) : 
+      array(); 
   }
-    
+  
+  function updateDBCodesCCAMField() {
+    if (null !== $this->_codes_ccam) {
+      $this->codes_ccam = implode("|", $this->_codes_ccam);
+    }
+  }
+  
+  function updateDBFields() {
+    // Should update codes CCAM. Very sensible, test a lot before uncommenting
+//    $this->updateDBCodesCCAMField();
+  }
+  
   function getSpecs() {
   	$specs["codes_ccam"] = "str";
   	return $specs;
   }
   
   function preparePossibleActes() {
+  }
+  
+  function getExecutantId($code_activite) {
+    return null;
   }
   
   function loadRefsCodesCCAM($full = 0) {
@@ -71,14 +86,14 @@ class CCodableCCAM extends CMbObject {
 	  foreach($codes_ccam_minimal as $key => $acte){
 	    $nb_codes_ccam_minimal[$key] = reset(max($acte));
 	  }
-	  foreach($nb_codes_ccam_minimal as $key => $acte){
+	  foreach($nb_codes_ccam_minimal as $key => $acte) {
 	    for($i = 0; $i < $acte; $i++){
 	      $oldObject->_codes_ccam_minimal[] = $key;
 	    }
 	  }
 
 	  // Transformation du tableau de codes ccam
-	  foreach($oldObject->_codes_ccam as $key => $code){
+	  foreach($oldObject->_codes_ccam as $key => $code) {
 	    if(strlen($code) > 7){
 	      // si le code est de la forme code-activite-phase
         $detailCode = explode("-", $code);
@@ -156,7 +171,7 @@ class CCodableCCAM extends CMbObject {
             $possible_acte->montant_depassement = $this->_acte_depassement;
           }
           
-          $possible_acte->executant_id = $this->getExecutant_id($possible_acte->code_activite);
+          $possible_acte->executant_id = $this->getExecutantId($possible_acte->code_activite);
           $possible_acte->updateFormFields();
           $possible_acte->loadRefs();
           $possible_acte->getAnesthAssocie();

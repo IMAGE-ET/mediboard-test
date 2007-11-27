@@ -156,11 +156,11 @@ function pageMain() {
         <tbody class="effectSejour" id="sejour{{$curr_sejour->sejour_id}}">
         <tr>
           <th class="category" colspan="4">
-            <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              <img src="images/icons/planning.png" alt="Planifier">
+            <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+              <img src="images/icons/planning.png" alt="Planifier" />
             </a>
-            <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
-              <img src="images/icons/edit.png" alt="Planifier">
+            <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->_id}}">
+              <img src="images/icons/edit.png" alt="Planifier" />
             </a>
             Groupage
           </th>

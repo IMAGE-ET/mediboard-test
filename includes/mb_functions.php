@@ -651,7 +651,7 @@ function getInstalledClasses($properties = array()) {
     	unset($listClasses[$key]);
     	continue;
     }
-        
+
     $object = @new $class;
     if($object->_spec->dsn != "std") {
       unset($listClasses[$key]);

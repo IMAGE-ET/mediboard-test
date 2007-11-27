@@ -12,6 +12,14 @@
  * interventions
  */
 class CActeCCAM extends CMbMetaObject {
+  static $coef_associations = array (
+    "1" => 100,
+    "2" => 50,
+    "3" => 75,
+    "4" => 100,
+    "5" => 100,
+  );
+  
   // DB Table key
 	var $acte_id = null;
 
@@ -73,19 +81,60 @@ class CActeCCAM extends CMbMetaObject {
     );
   }
   
+  /**
+   * Check the number of codes compared to the number of actes
+   * @return string check-like message
+   */
+  function checkEnoughCodes() {
+    $this->loadTargetObject();
+    if (!$this->_ref_object || !$this->_ref_object->_id) {
+      return;
+    }
+    
+    $acte = new CActeCCAM();
+    $where = array();
+    if ($this->_id) {
+      // dans le cas de la modification
+      $where["acte_id"]     = "<> '$this->_id'";  
+    }
+    
+    $where["code_acte"]     = "= '$this->code_acte'";
+    $where["object_class"]  = "= '$this->object_class'";
+    $where["object_id"]     = "= '$this->object_id'";
+    $where["code_activite"] = "= '$this->code_activite'";
+    $where["code_phase"]    = "= '$this->code_phase'";
+    $this->_ref_siblings = $acte->loadList($where);
+
+    // retourne le nombre de code semblables
+    $siblings = count($this->_ref_siblings);
+    
+    // compteur d'acte prevue ayant le meme code_acte dans l'intervention
+    $nbCode = 0;
+    foreach ($this->_ref_object->_codes_ccam as $key => $code) {
+      // si le code est sous sa forme complete, garder seulement le code
+      $code = substr($code, 0, 7);
+      if ($code == $this->code_acte) {
+        $nbCode++;
+      }
+    }
+    if ($siblings >= $nbCode) {
+      return "$this->_class_name-check-already-coded";
+    }
+  }
+    
   function check() {
     
-    if ($msg = $this->getSiblings()) {
+    if ($msg = $this->checkEnoughCodes()) {
       // Ajoute le code si besoins à l'objet
       if ($this->_adapt_object) {
         $this->_ref_object->_codes_ccam[] = $this->code_acte;
-        $this->_ref_object->store();
-        return;
+        $this->_ref_object->updateDBCodesCCAMField();
+        return $this->_ref_object->store();
       }
       return $msg;
     }
     
-    if($this->code_activite !== null){
+    if ($this->code_activite !== null){
       $this->loadRefExecutant();
       // si c'est un acte chir et que le prat est un anesth => break
       if($this->code_activite == 1 && $this->_ref_executant->isFromType(array("Anesthésiste"))){
@@ -176,46 +225,6 @@ class CActeCCAM extends CMbMetaObject {
     return $this->_ref_object->getPerm($permType);
   }
   
-  function getSiblings() {
-    $this->loadTargetObject();
-    if (!$this->_ref_object || !$this->_ref_object->_id) {
-      return;
-    }
-    
-    $acte = new CActeCCAM();
-    $where = array();
-    if ($this->_id) {
-      // dans le cas de la modification
-      $where["acte_id"]     = "<> '$this->_id'";  
-    }
-    
-    $where["code_acte"]     = "= '$this->code_acte'";
-    $where["object_class"]  = "= '$this->object_class'";
-    $where["object_id"]     = "= '$this->object_id'";
-    $where["code_activite"] = "= '$this->code_activite'";
-    $where["code_phase"]    = "= '$this->code_phase'";
-    $this->_ref_siblings = $acte->loadList($where);
-
-    // retourne le nombre de code semblables
-    $siblings = count($this->_ref_siblings);
-    
-    // compteur d'acte prevue ayant le meme code_acte dans l'intervention
-    $nbCode = 0;
-    foreach ($this->_ref_object->_codes_ccam as $key => $code) {
-      // si le code est sous sa forme complete, garder seulement le code
-      if(strlen($code) > 7){
-        $detailCode = explode("-", $code);
-        $code = $detailCode[0];
-      }
-      if ($code == $this->code_acte) {
-        $nbCode++;
-      }
-    }
-    if ($siblings >= $nbCode) {
-      return "$this->_class_name-check-already-coded";
-    }
-  }
-    
   function getLinkedActes() {
     $acte = new CActeCCAM();
     
@@ -238,7 +247,7 @@ class CActeCCAM extends CMbMetaObject {
     $this->getLinkedActes();
     if(count($this->_linked_actes) > 3) {
       $this->_guess_association = "?";
-      $this->_guess_regle_asso    = "?";
+      $this->_guess_regle_asso  = "?";
       return $this->_guess_association;
     }
     foreach($this->_linked_actes as &$acte) {

@@ -60,12 +60,20 @@ foreach($classes as $class) {
   $ref_modules = $object->_specs;
   $classname = $object->_class_name;
   
+  // Traductions au niveau classe
   checkTrans($backSpecs[$classname][$classname], "$classname");
   checkTrans($backSpecs[$classname][$classname], "$classname.one");
   checkTrans($backSpecs[$classname][$classname], "$classname.more");
   checkTrans($backSpecs[$classname][$classname], "$classname.none");
+    
+  // Traductions pour la clé 
+  $prop = $object->_tbl_key;
+  checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
+  checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
+  checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
   
-  foreach ($object->_specs as $prop => $spec) { 
+  // Traductions de chaque propriété
+	foreach ($object->_specs as $prop => $spec) { 
     if (!$spec->prop) {
       continue;
     }

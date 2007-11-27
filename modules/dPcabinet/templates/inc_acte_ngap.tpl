@@ -58,19 +58,19 @@ ActesNGAP = {
       </td>     
     </tr>
   
-    {{foreach from=$listActesNGAP item="_acteNGAP"}}
+    {{foreach from=$consult->_ref_actes_ngap item="_acte_ngap"}}
     <tr>
       <td>
-        {{mb_value object=$_acteNGAP field="quantite"}}
+        {{mb_value object=$_acte_ngap field="quantite"}}
       </td>
       <td>
-        {{mb_value object=$_acteNGAP field="code"}}
+        {{mb_value object=$_acte_ngap field="code"}}
       </td>
       <td>
-        {{mb_value object=$_acteNGAP field="coefficient"}}  
+        {{mb_value object=$_acte_ngap field="coefficient"}}  
       </td>
       <td>
-       	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acteNGAP->_id}})">
+       	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
           {{tr}}Delete{{/tr}}
 		 	</button>
       </td>
