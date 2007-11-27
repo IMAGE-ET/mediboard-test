@@ -7,8 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
-
+global $AppUI, $can, $m, $utypes;
 $can->needsEdit();
 
 //$deb = mbDate();
@@ -56,13 +55,12 @@ $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where);
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$listPrat = in_array($mediuser->_user_type, array("Administrator", "Secrétaire")) ?
+$listPrat = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
   $mediuser->loadPraticiens(PERM_READ) :
   array($mediuser->_id => $mediuser);
   
 // Création du template
 $smarty = new CSmartyDP();
-
 
 $smarty->assign("filter", $filter);
 $smarty->assign("mediuser", $mediuser);
