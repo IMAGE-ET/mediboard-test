@@ -16,6 +16,5 @@ $do = new CDoObjectAddEdit("CExamAudio", "examaudio_id");
 $do->createMsg = "Examen audio créé";
 $do->modifyMsg = "Examen audio modifié";
 $do->deleteMsg = "Examen audio supprimé";
-$do->redirect = null;
 $do->doIt();
 ?>
