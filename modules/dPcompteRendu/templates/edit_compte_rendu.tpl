@@ -17,7 +17,9 @@ function refreshCR() {
   sourceUrl.requestUpdate('htmlarea');
 }
 
-window.opener.updateListDocuments({{$compte_rendu->object_id}});
+if (window.opener.updateListDocuments) {
+  window.opener.updateListDocuments({{$compte_rendu->object_id}});
+}
 
 </script>
 
