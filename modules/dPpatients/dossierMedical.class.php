@@ -100,11 +100,6 @@ class CDossierMedical extends CMbMetaObject {
   }
   
   function loadRefsAddictions() {
-    global $dPconfig;
-    if (!$dPconfig["dPcabinet"]["addictions"]) {
-      return;
-    }
-     
     $order = "type ASC";
     if (null == $this->_ref_addictions = $this->loadBackRefs("addictions", $order)) {
       return;
