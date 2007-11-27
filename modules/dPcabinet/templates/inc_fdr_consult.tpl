@@ -401,7 +401,7 @@ function submitFdr(oForm) {
 	  {{if $gestionFSE}}
     <th class="category">Feuille de Soins</th>
 	  {{/if}}
-    <th class="category">Règlement</th>
+    <th {{if !$gestionFSE}}colspan="2"{{/if}} class="category">Règlement</th>
   </tr>
   
 	<tr>	
@@ -460,7 +460,7 @@ function submitFdr(oForm) {
 	  {{/if}}
 
     <!-- Règlements -->  
-    <td>
+    <td {{if !$gestionFSE}}colspan="2"{{/if}}>
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="{{$m}}" />
@@ -588,7 +588,7 @@ function submitFdr(oForm) {
       </form>
       
       <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-      <form name="creerTarif" action="?m={{$m}}&tab=vw_compta" method="post">
+      <form name="creerTarif" action="?m={{$m}}&tab=vw_compta" method="post" style="float: right;">
         <input type="hidden" name="dosql" value="do_tarif_aed" />
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="_tab" value="vw_compta" />
@@ -602,13 +602,7 @@ function submitFdr(oForm) {
         <!-- Id de l'utilisateur courant -->
         <input type="hidden" name="chir_id" value="{{$consult->_ref_chir->_id}}" />
         <input type="hidden" name="description" value="Consultation {{$listCodesNGAP}}" />
-        <table style="width: 100%">
-          <tr>
-            <td style="text-align: center">
-              <button class="submit" type="submit">Créer un nouveau tarif</button>
-            </td>
-          </tr>
-        </table>
+        <button class="submit" type="submit">Créer un nouveau tarif</button>
       </form>
       
     </td>
