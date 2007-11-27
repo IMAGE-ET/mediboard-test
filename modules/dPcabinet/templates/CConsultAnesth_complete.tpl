@@ -350,7 +350,7 @@ newExam = function(sAction, consultation_id) {
   
 <table class="form">
   <tr>
-    <th class="title" colspan="{{if $dPconfig.dPcabinet.addictions}}4{{else}}3{{/if}}">
+    <th class="title" colspan="4">
       Eléments significatifs
     </th>
   </tr>
@@ -358,9 +358,7 @@ newExam = function(sAction, consultation_id) {
     <th class="title">Antécédent(s)</th>
     <th class="title">Traitement(s)</th>
     <th class="title">Diagnostic(s)</th>
-    {{if $dPconfig.dPcabinet.addictions}}
     <th class="title">Addiction(s)</th>
-    {{/if}}
   </tr>
   
   <tr>
@@ -410,7 +408,6 @@ newExam = function(sAction, consultation_id) {
       {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
     </td>
     
-    {{if $dPconfig.dPcabinet.addictions}}
     <td class="text">
       {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
       <strong>
@@ -427,6 +424,5 @@ newExam = function(sAction, consultation_id) {
         <i>Pas d'addictions</i>
       {{/foreach}}
     </td>
-    {{/if}}
   </tr>
 </table>

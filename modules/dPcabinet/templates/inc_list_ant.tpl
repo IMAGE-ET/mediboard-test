@@ -34,9 +34,8 @@ Traitement = {
 
 </script>
 
-{{if $dPconfig.dPcabinet.addictions}}
+
   {{include file="inc_consult_anesth/inc_list_addiction.tpl}}    
-{{/if}}
 
 <strong>Antécédents du patient</strong>
 <ul>

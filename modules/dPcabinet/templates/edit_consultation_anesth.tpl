@@ -118,9 +118,7 @@ function pageMain() {
   
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
-    {{if $dPconfig.dPcabinet.addictions}}
     Try.these(document.editAddictFrm.type.onchange);
-    {{/if}}
   }
   
   // Accordeon

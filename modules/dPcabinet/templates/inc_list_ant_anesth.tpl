@@ -23,9 +23,8 @@
   <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
-{{if $dPconfig.dPcabinet.addictions}}
+
   {{include file="inc_consult_anesth/inc_list_addiction_anesth.tpl}}    
-{{/if}}
 
 <strong>Antécédents significatifs</strong>
 <ul>
