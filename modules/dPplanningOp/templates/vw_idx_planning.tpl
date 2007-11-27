@@ -25,7 +25,7 @@ function editDocument(compte_rendu_id) {
   url.popup(700, 700, "Document");
 }
 
-function updateListDocuments(operation_id){
+function reloadAfterSaveDoc(operation_id){
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
   url.addParam("operation_id" , operation_id);

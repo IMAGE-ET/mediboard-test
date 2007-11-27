@@ -51,7 +51,7 @@ function pageMain() {
   new Control.Tabs('main_tab_group');
   
   // Affichage de la liste des documents de l'operation
-  updateListDocuments();
+  reloadAfterSaveDoc();
   {{/if}}
 }
 
@@ -79,7 +79,7 @@ function editDocument(compte_rendu_id) {
   url.popup(700, 700, "Document");
 }
 
-function updateListDocuments() {
+function reloadAfterSaveDoc() {
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
   url.addParam("operation_id" , "{{$selOp->_id}}");
