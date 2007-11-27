@@ -647,11 +647,17 @@ function getInstalledClasses($properties = array()) {
   $AppUI->getAllClasses();
   $listClasses = getChildClasses("CMbObject", $properties);
   foreach ($listClasses as $key => $class) {
-    if(!has_default_constructor($class) || substr($class, 0, 3) == "CSp") {
+    if(!has_default_constructor($class)){
     	unset($listClasses[$key]);
     	continue;
     }
-    $object = new $class;
+        
+    $object = @new $class;
+    if($object->_spec->dsn != "std") {
+      unset($listClasses[$key]);
+    	continue;
+    }
+   
     if ($object->_ref_module === null) {
       unset($listClasses[$key]);
     }

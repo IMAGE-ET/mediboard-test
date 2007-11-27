@@ -35,13 +35,13 @@ abstract class CSQLDataSource {
   	if (!array_key_exists($dsn, self::$dataSources)) {
       global $dPconfig;
   	  if (null == $dbtype = @$dPconfig["db"][$dsn]["dbtype"]) {
-        trigger_error( "FATAL ERROR: Undefined type DSN type '$dsn'.", E_USER_ERROR );
-        die;
-      }
+        trigger_error( "FATAL ERROR: Undefined type DSN type '$dsn'.", E_USER_ERROR );        
+        return;
+  	  }
 
   	  if (null == $dsClass = @self::$engines[$dbtype]) {
         trigger_error( "FATAL ERROR: DSN type '$dbtype' unhandled.", E_USER_ERROR );
-        die;
+  	    return;
   	  }
 
   	  $dataSource = new $dsClass;
