@@ -1,4 +1,19 @@
 <script type="text/javascript">
+
+function checkHeureSortieSelector(){
+  var oForm = window.opener.document.editSejour;
+  var form = document.frmSelector;
+  
+  // heure d'entree selectionne dans le plage selector
+  var heure_entree = parseInt(form.hour_jour.value, 10);
+  
+  // on compare l'heure d'entree selectionne avec l'heure de sortie
+  if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
+    heure_entree = heure_entree + 1;
+    oForm._hour_sortie_prevue.value = heure_entree;
+  }
+}
+
 function setClose(date) {
   var form = document.frmSelector;
   
@@ -32,6 +47,10 @@ function setClose(date) {
   }
     
   window.opener.PlageOpSelector.set(key,val,adm,typeHospi, hour_entree, min_entree);
+  
+  if(getCheckedValue(form.admission) == "jour"){
+    checkHeureSortieSelector();
+  }
   window.close();
 }  
 
