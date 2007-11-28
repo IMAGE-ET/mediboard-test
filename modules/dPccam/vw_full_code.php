@@ -13,6 +13,7 @@ $can->needsRead();
 
 $codeacte     = mbGetValueFromGetOrSession("codeacte");
 $object_class = mbGetValueFromGet("object_class");
+$hideSelect   = mbGetValueFromGet("hideSelect", 0);
 
 $code = new CCodeCCAM($codeacte);
 $code->Load();
@@ -36,7 +37,6 @@ $favoris = new CFavoriCCAM();
 // Création du template
 $smarty = new CSmartyDP();
 
-
 // @todo : ne passer que $code. Adapter le template en conséquence
 $smarty->assign("code", $code);
 $smarty->assign("codeComplet"  , $codeComplet);
@@ -53,7 +53,7 @@ $smarty->assign("chap"         , $code->chapitres);
 $smarty->assign("asso"         , $code->assos);
 $smarty->assign("incomp"       , $code->incomps);
 $smarty->assign("object_class" , $object_class);
-
+$smarty->assign("hideSelect"   , $hideSelect);
 $smarty->display("vw_full_code.tpl");
 
 ?>

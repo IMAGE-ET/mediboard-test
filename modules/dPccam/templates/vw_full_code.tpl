@@ -95,7 +95,9 @@ function pageMain() {
                   {{/if}}
 
                   {{if $dialog}}
-                  <button class="tick" type="button" onclick="selectCode('{{$codeacte}}','{{$tarif}}')">Sélectionner ce code</button>
+                    {{if !$hideSelect}}
+                      <button class="tick" type="button" onclick="selectCode('{{$codeacte}}','{{$tarif}}')">Sélectionner ce code</button>
+                    {{/if}}
                   {{/if}}
                 </td>
               </tr>

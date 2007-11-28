@@ -1,4 +1,14 @@
 <script language="Javascript" type="text/javascript">
+
+function viewCode(code, class){
+  var url = new Url;
+  url.setModuleAction("dPccam", "vw_full_code");
+  url.addParam("codeacte", code);
+  url.addParam("object_class", class);
+  url.addParam("hideSelect", "1");
+  url.popup(700, 550, "Code CCAM");
+}
+
 	PairEffect.initGroup("acteEffect");
 </script>
 
@@ -8,9 +18,13 @@
 <ul>
   {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
   <li>
-    <strong>{{$curr_code->code}} : {{$curr_code->libelleLong}}</strong> 
+    <strong>
+      <a href="#" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
+      {{$curr_code->code}} : {{$curr_code->libelleLong}}
+      </a>
+    </strong> 
     {{if $can->edit || $modif_operation}}
-
+    
     <br />
     Codes associés :
     <select name="asso" onchange="setCodeTemp(this.value)">
