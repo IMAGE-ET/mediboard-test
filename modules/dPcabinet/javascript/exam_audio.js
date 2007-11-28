@@ -281,6 +281,11 @@ function pageMain() {
   new PairEffect("dataVocal");
 }
 
+function reloadAllGraphs() {
+  reloadGraphTonale();
+  reloadGraphTympan();
+}
+
 function reloadBilan(){
   var oForm = document.editFrm;
   var url = new Url;

@@ -293,7 +293,7 @@ if (window.opener.reloadFdr) {
       </tr>
       <tr>
         <td class="button radiointeractive">
-          <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">Valider</button>
+          <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: reloadAllGraphs })">Valider</button>
         </td>
       </tr>
     </table>
