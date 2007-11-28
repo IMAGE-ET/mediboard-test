@@ -3,13 +3,19 @@
 <script type="text/javascript">
 function checkPlage() {
   var form = document.editFrm;
+  var timeDebut = form._hour_deb.value + ":" +form._min_deb.value;
+  var timeFin   = form._hour_fin.value + ":" +form._min_fin.value;
+
+  if(timeDebut >= timeFin) {
+    alert("L'heure de fin doit être supérieure à l'heure de début de la plage de consultation");
+    return false;
+  }  
+
   if(!checkForm(form)){
     return false;
   }
   
   if(form.nbaffected.value!= 0 && form.nbaffected.value!=""){
-    var timeDebut = form._hour_deb.value + ":" +form._min_deb.value;
-    var timeFin   = form._hour_fin.value + ":" +form._min_fin.value;
     if(timeDebut > form._firstconsult_time.value || timeFin < form._lastconsult_time.value){
       if(!(confirm("Certaines consultations se trouvent en dehors de la plage de consultation.\n\nVoulez-vous appliquer les modifications ?"))){
         return false;
@@ -200,7 +206,7 @@ function pageMain() {
             <tr>
               <th>{{mb_label object=$plageSel field="_hour_fin"}}</th>
               <td>
-                <select name="_hour_fin" class="notNull num moreThan|_hour_deb">
+                <select name="_hour_fin" class="notNull num moreEquals|_hour_deb">
                   {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
                     <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                       {{$curr_hour|string_format:"%02d"}}
