@@ -652,12 +652,20 @@ function getInstalledClasses($properties = array()) {
     	continue;
     }
 
+    // Instanciation escapée
+    // au cas ou on ne peut pas le faire
     $object = @new $class;
+    // On test si on a réussi à l'instancier
+    if(!$object->_class_name) {
+      unset($listClasses[$key]);
+    	continue;
+    }
+    // On teste si son dns est standard
     if($object->_spec->dsn != "std") {
       unset($listClasses[$key]);
     	continue;
     }
-   
+   // On test si l'objet a bin un module de référence
     if ($object->_ref_module === null) {
       unset($listClasses[$key]);
     }
