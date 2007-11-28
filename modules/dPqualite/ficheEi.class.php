@@ -31,6 +31,7 @@ class CFicheEi extends CMbObject {
   var $mesures                    = null;
   var $descr_consequences         = null;
   var $gravite                    = null;
+  var $vraissemblance             = null;
   var $plainte                    = null;
   var $commission                 = null;
   var $deja_survenu               = null;
@@ -61,6 +62,7 @@ class CFicheEi extends CMbObject {
   var $_ref_evenement       = null;
   var $_ref_items           = null;
   var $_etat_actuel         = null;
+  var $_criticite           = null;
   
   function CFicheEi() {
     $this->CMbObject("fiches_ei", "fiche_ei_id");
@@ -87,7 +89,8 @@ class CFicheEi extends CMbObject {
       "deja_survenu"                 => "enum list|non|oui",
       //Prise en charge de la fiche
       "degre_urgence"                => "enum list|1|2|3|4",
-      "gravite"                      => "enum list|nul|mod|imp",
+      "gravite"                      => "enum list|1|2|3|4|5",
+      "vraissemblance"               => "enum list|1|2|3|4|5",
       "plainte"                      => "enum list|non|oui",
       "commission"                   => "enum list|non|oui",
       "annulee"                      => "bool",
@@ -154,6 +157,17 @@ class CFicheEi extends CMbObject {
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_VERIF");
     }elseif(!$this->qualite_date_controle){
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CTRL");
+    }
+    // Calcul de la criticité
+    if($this->gravite && $this->vraissemblance) {
+      $tabCriticite = array(
+        1 => array( 1 => 1, 2 => 1, 3 => 1, 4 => 2, 5 => 2),
+        2 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 2, 5 => 3),
+        3 => array( 1 => 1, 2 => 2, 3 => 2, 4 => 3, 5 => 3),
+        4 => array( 1 => 2, 2 => 2, 3 => 3, 4 => 3, 5 => 3),
+        5 => array( 1 => 3, 2 => 3, 3 => 3, 4 => 3, 5 => 3)
+      );
+      $this->_criticite = $tabCriticite[$this->gravite][$this->vraissemblance];
     }
     $this->_view = str_pad($this->fiche_ei_id, 3, "0", STR_PAD_LEFT). " - ".substr($this->date_fiche,8,2)."/".substr($this->date_fiche,5,2)."/".substr($this->date_fiche,0,4);
   }

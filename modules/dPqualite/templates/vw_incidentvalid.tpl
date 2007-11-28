@@ -82,122 +82,122 @@ function pageMain() {
         
         <div id="CSATraiter">
           <div id="CSATraiterHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})
-		  </div>
-		  <div id="CSATraiterContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})
+          </div>
+          <div id="CSATraiterContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CS}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		<div id="CSEnCours">
+          </div>
+        </div>
+        <div id="CSEnCours">
           <div id="CSEnCoursHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
-		  </div>
-		  <div id="CSEnCoursContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
+          </div>
+          <div id="CSEnCoursContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		
-		<div id="CSAllEI">
+          </div>
+        </div>
+    
+        <div id="CSAllEI">
           <div id="CSAllEIHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})
-		  </div>
-		  <div id="CSAllEIContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})
+          </div>
+          <div id="CSAllEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
+          </div>
+        </div>
         {{else}}
         
         <div id="QualNewFiches">
           <div id="QualNewFichesHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})
-		  </div>
-		  <div id="QualNewFichesContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})
+          </div>
+          <div id="QualNewFichesContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		<div id="QualAttCS">
+          </div>
+        </div>
+        <div id="QualAttCS">
           <div id="QualAttCSHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})
-		  </div>
-		  <div id="QualAttCSContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})
+          </div>
+          <div id="QualAttCSContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CS}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		<div id="QualValidMesures">
+          </div>
+        </div>
+        <div id="QualValidMesures">
           <div id="QualValidMesuresHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
-		  </div>
-		  <div id="QualValidMesuresContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
+          </div>
+          <div id="QualValidMesuresContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		<div id="QualVerif">
+          </div>
+        </div>
+        <div id="QualVerif">
           <div id="QualVerifHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})
-		  </div>
-		  <div id="QualVerifContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})
+          </div>
+          <div id="QualVerifContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		<div id="QualCtrl">
+          </div>
+        </div>
+        <div id="QualCtrl">
           <div id="QualCtrlHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})
-		  </div>
-		  <div id="QualCtrlContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})
+          </div>
+          <div id="QualCtrlContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		
-		<div id="QualAllEI">
+          </div>
+        </div>
+      
+        <div id="QualAllEI">
           <div id="QualAllEIHeader" class="accordionTabTitleBar">
-		    {{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
-		  </div>
-		  <div id="QualAllEIContent"  class="accordionTabContentBox">
+            {{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
+          </div>
+          <div id="QualAllEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
             {{assign var="voletAcc" value="ALL_TERM"}}
             {{include file="inc_ei_liste.tpl"}}
             {{assign var="voletAcc" value=""}}
-		  </div>
-		</div>
-		
-		<div id="QualAnnuleEI">
+          </div>
+        </div>
+      
+        <div id="QualAnnuleEI">
           <div id="QualAnnuleEIHeader" class="accordionTabTitleBar">
-		    {{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})
-		  </div>
-		  <div id="QualAnnuleEIContent"  class="accordionTabContentBox">
+            {{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})
+          </div>
+          <div id="QualAnnuleEIContent"  class="accordionTabContentBox">
             {{assign var="listeFiches" value=$listFiches.ANNULE}}
             {{include file="inc_ei_liste.tpl"}}
-		  </div>
-		</div>
-		
+          </div>
+        </div>
+      
         {{/if}}
-
+  
       </div>
-
+  
       {{/if}}
       <br />
       {{assign var="listeFichesTitle" value="Mes fiches d'EI"}}
       {{assign var="listeFiches" value=$listFiches.AUTHOR}}
       {{include file="inc_ei_liste.tpl"}}
-    </td>
 
-    <script language="Javascript" type="text/javascript">
-      var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-        panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'ei_liste' }),
-        showDelay:50,
-        onShowTab: storeVoletAcc,
-        showSteps:3,
-        onLoadShowTab: showTabAcc
-      } );
+      <script language="Javascript" type="text/javascript">
+        var oAccord = new Rico.Accordion( $('accordionConsult'), { 
+          panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'ei_liste' }),
+          showDelay:50,
+          onShowTab: storeVoletAcc,
+          showSteps:3,
+          onLoadShowTab: showTabAcc
+        } );
       </script>
+    </td>
 
     <td class="halfPane">
       {{if $fiche->fiche_ei_id}}
@@ -214,7 +214,7 @@ function pageMain() {
       <table class="form">
         {{include file="inc_incident_infos.tpl"}}
         
-      {{if $can->admin && !$fiche->date_validation &&!$fiche->annulee}}
+        {{if $can->admin && !$fiche->date_validation && !$fiche->annulee}}
         <tr>
           <th>{{mb_label object=$fiche field="degre_urgence"}}</th>
           <td>
@@ -230,6 +230,15 @@ function pageMain() {
             <select name="gravite" class="notNull {{$fiche->_props.gravite}}">
               <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.gravite selected=$fiche->gravite}}
+            </select>
+          </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$fiche field="vraissemblance"}}</th>
+          <td>
+            <select name="vraissemblance" class="notNull {{$fiche->_props.vraissemblance}}">
+              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+              {{html_options options=$fiche->_enumsTrans.vraissemblance selected=$fiche->vraissemblance}}
             </select>
           </td>
         </tr>
@@ -276,9 +285,9 @@ function pageMain() {
             </button>
           </td>
         </tr>
-      {{/if}}
+        {{/if}}
       
-      {{if $fiche->service_valid_user_id && $fiche->service_valid_user_id==$user && !$fiche->service_date_validation}}
+        {{if $fiche->service_valid_user_id && $fiche->service_valid_user_id==$user && !$fiche->service_date_validation}}
         <tr>
           <th colspan="2" class="category">
             {{tr}}_CFicheEi_validchefserv{{/tr}}
@@ -322,8 +331,8 @@ function pageMain() {
             </button>
           </td>
         </tr>
-      {{/if}}
-      {{if $can->admin && $fiche->service_date_validation}}
+        {{/if}}
+        {{if $can->admin && $fiche->service_date_validation}}
         {{if !$fiche->qualite_date_validation}}
         <tr>
           <td colspan="2" class="button">
@@ -376,9 +385,9 @@ function pageMain() {
         </tr>
         {{/if}}
         {{/if}}
-      {{/if}}
+        {{/if}}
       
-      {{if $can->admin && ($fiche->annulee || $fiche->date_validation)}}
+        {{if $can->admin && ($fiche->annulee || $fiche->date_validation)}}
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}
@@ -392,7 +401,7 @@ function pageMain() {
             {{/if}}
           </td>
         </tr>
-      {{/if}}
+        {{/if}}
 
       </table>
       </form>

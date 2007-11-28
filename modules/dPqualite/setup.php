@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.14";
+$config["mod_version"] = "0.15";
 $config["mod_type"]    = "user";
 
 class CSetupdPqualite extends CSetup {
@@ -202,7 +202,13 @@ class CSetupdPqualite extends CSetup {
                "\nCHANGE `nom` `nom` varchar(50) NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `fiches_ei`
+              CHANGE `gravite` `gravite` ENUM('1','2','3','4','5'), 
+              ADD `vraissemblance` ENUM('1','2','3','4','5');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
     
   }
 }

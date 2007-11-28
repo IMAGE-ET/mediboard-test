@@ -4,7 +4,7 @@
 <table class="form" id="ei_liste">
   {{if $listeFichesTitle}}
   <tr>
-    <th class="title" colspan="5">
+    <th class="title" colspan="6">
       {{$listeFichesTitle}}
     </th>
   </tr>
@@ -26,6 +26,7 @@
       {{/if}}
     </th>
     <th class="category">{{tr}}CFicheEi-degre_urgence-court{{/tr}}</th>
+    <th class="category">{{tr}}CFicheEi-_criticite-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-qualite_date_verification-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-qualite_date_controle-court{{/tr}}</th>
   </tr>
@@ -48,6 +49,11 @@
       {{else}}-{{/if}}
     </td>
     <td>
+      {{if $currFiche->_criticite}}
+      {{$currFiche->_criticite}}
+      {{else}}-{{/if}}
+    </td>
+    <td>
       {{if $currFiche->qualite_date_verification}}
       {{$currFiche->qualite_date_verification|date_format:"%d %b %Y"}}
       {{else}}-{{/if}}
@@ -62,7 +68,7 @@
   
   {{else}}
   <tr>
-    <td colspan="5">{{tr}}CFicheEi.none{{/tr}}</td>
+    <td colspan="6">{{tr}}CFicheEi.none{{/tr}}</td>
   </tr>
   {{/if}}
 </table>

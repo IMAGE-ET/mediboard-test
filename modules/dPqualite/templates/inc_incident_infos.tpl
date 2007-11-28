@@ -73,10 +73,24 @@
           <th>{{tr}}CFicheEi-descr_consequences{{/tr}}</th>
           <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
+        {{if $can->admin}}
         <tr>
           <th>{{tr}}CFicheEi-gravite{{/tr}}</th>
           <td>
             {{tr}}CFicheEi.gravite.{{$fiche->gravite}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{tr}}CFicheEi-vraissemblance{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.vraissemblance.{{$fiche->vraissemblance}}{{/tr}}
+          </td>
+        </tr>
+        {{/if}}
+        <tr>
+          <th>{{tr}}CFicheEi-_criticite{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi._criticite.{{$fiche->_criticite}}{{/tr}}
           </td>
         </tr>
         <tr>
