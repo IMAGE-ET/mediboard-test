@@ -146,11 +146,7 @@ if (window.opener.reloadFdr) {
   
         <tr>
           <td class="button" colspan="9">
-            {{if $exam_audio->examaudio_id}}
             <button class="submit" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadGraphTonale})">Valider</button>
-            {{else}}
-            <button class="submit" type="submit">Valider</button>
-            {{/if}}
           </td>
         </tr>
       </tbody>
