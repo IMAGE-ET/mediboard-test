@@ -20,60 +20,56 @@ function loadTransfert(form, mode_sortie){
   }
 }
 
-
-function reloadAmbu() {
-  var ambuUrl = new Url;
-  ambuUrl.setModuleAction("dPadmissions", "httpreq_vw_sorties_ambu");
-  ambuUrl.addParam("date", "{{$date}}");
-  ambuUrl.addParam("vue", "{{$vue}}");
-  ambuUrl.requestUpdate('sortiesAmbu', { waitingText : null });
+function reload(mode) {
+  var url = new Url;
+  url.setModuleAction("dPadmissions", "httpreq_vw_sorties");
+  url.addParam("date", "{{$date}}");
+  url.addParam("vue", "{{$vue}}");
+  url.addParam("mode", mode);
+  url.requestUpdate('sorties'+mode, { waitingText : null });
 }
 
-
-function submitAmbu(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAmbu });
+function submitSortie(oForm, mode) {
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reload(mode) } });
 }
 
-
-function reloadComp() {
-  var compUrl = new Url;
-  compUrl.setModuleAction("dPadmissions", "httpreq_vw_sorties_comp");
-  compUrl.addParam("date", "{{$date}}");
-  compUrl.addParam("vue", "{{$vue}}");
-  compUrl.requestUpdate('sortiesComp', { waitingText : null });
-}
-
-function submitComp(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadComp });
-}
-
-
-function confirmationComp(oForm){
+function confirmation(oForm, mode){
    if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
-     submitComp(oForm);
+     submitSortie(oForm, mode);
    }
 }
 
-function confirmationAmbu(oForm){
-   if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
-     submitAmbu(oForm);
-   }
+
+function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm, mode){
+  if(date_actuelle > sortie_prevue || date_demain < sortie_prevue) {
+    if(!confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
+     return false;
+    }
+  }
+  if(entree_reelle == '') {
+    if(!confirm('Le séjour ne possede pas de date d\'entree reelle, souhaitez vous confimer la sortie du patient ?')){
+     return false;
+    }
+  } 
+  submitSortie(oForm, mode);    
 }
+
 
 
 function pageMain() {
-  
   var ambuUpdater = new Url;
-  ambuUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties_ambu");
+  ambuUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties");
   ambuUpdater.addParam("date", "{{$date}}");
   ambuUpdater.addParam("vue", "{{$vue}}");
-  ambuUpdater.periodicalUpdate('sortiesAmbu', { frequency: 90 });
+  ambuUpdater.addParam("mode", "ambu");
+  ambuUpdater.periodicalUpdate('sortiesambu', { frequency: 90 });
   
   var compUpdater = new Url;
-  compUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties_comp");
+  compUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties");
   compUpdater.addParam("date", "{{$date}}");
   compUpdater.addParam("vue", "{{$vue}}");
-  compUpdater.periodicalUpdate('sortiesComp', { frequency: 90 });
+  compUpdater.addParam("mode", "comp");
+  compUpdater.periodicalUpdate('sortiescomp', { frequency: 90 });
 
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
@@ -103,9 +99,9 @@ function pageMain() {
     </td>
   </tr>
   <tr>
-    <td id="sortiesAmbu">
+    <td id="sortiesambu">
     </td>
-    <td id="sortiesComp">
+    <td id="sortiescomp">
     </td>
   </tr>
 </table>
