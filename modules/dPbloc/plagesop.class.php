@@ -248,18 +248,22 @@ class CPlageOp extends CMbObject {
     } else {
       $where["spec_id"] = "= '$this->spec_id'";
     }
-    $plages = $this->loadList($where);
-    $debut = $this->debut;
-    $fin = $this->fin;
-    $temps_inter_op = $this->temps_inter_op;
+    $plages           = $this->loadList($where);
+    $debut            = $this->debut;
+    $fin              = $this->fin;
+    $temps_inter_op   = $this->temps_inter_op;
+    $max_intervention = $this->max_intervention;
     $msg = null;
-    if(count($plages) > 0)
+    if(count($plages) > 0) {
       $msg = $this->load(reset($plages)->plageop_id);
-    else
+    }
+    else {
       $this->plageop_id = null;
-    $this->debut = $debut;
-    $this->fin = $fin;
-    $this->temps_inter_op = $temps_inter_op;
+    }
+    $this->debut            = $debut;
+    $this->fin              = $fin;
+    $this->temps_inter_op   = $temps_inter_op;
+    $this->max_intervention = $max_intervention;
     $this->updateFormFields();
     return $msg;
   }
