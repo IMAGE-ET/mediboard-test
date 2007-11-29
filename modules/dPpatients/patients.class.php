@@ -930,8 +930,9 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
     }
     
+    $this->loadRefDossierMedical();
     // Dossier médical
-    parent::fillTemplate($template);
+    $this->_ref_dossier_medical->fillTemplate($template);
   }
 }
 
