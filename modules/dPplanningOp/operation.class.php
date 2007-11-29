@@ -468,10 +468,9 @@ class COperation extends CCodableCCAM {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
 
-    $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $dateFormat));
-    $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->_ref_sejour->entree_prevue, $timeFormat));
-    $template->addProperty("Hospitalisation - Durée"          , $this->_ref_sejour->_duree_prevue);
-    $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->_ref_sejour->sortie_prevue, $dateFormat));
+    // Chargement du fillTemplate du sejour
+    $this->_ref_sejour->fillTemplate($template);
+    
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);

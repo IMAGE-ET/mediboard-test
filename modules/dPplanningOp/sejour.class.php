@@ -607,5 +607,20 @@ class CSejour extends CCodableCCAM {
       $this->_ref_GHM->getGHM();
     }
   }
+  
+  function fillTemplate(&$template) {
+    $dateFormat = "%d / %m / %Y";
+    $timeFormat = "%Hh%M";
+    
+    $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
+    $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
+    $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
+    $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->sortie_prevue, $dateFormat));
+    
+    $this->loadRefDossierMedical();
+    // Dossier médical
+    $this->_ref_dossier_medical->fillTemplate($template, "Sejour");
+  }
+  
 }
 ?>

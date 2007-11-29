@@ -123,7 +123,7 @@ class CDossierMedical extends CMbMetaObject {
     return $dossier->_id;
   }
 
-  function fillTemplate(&$template) {
+  function fillTemplate(&$template, $champ = "Patient") {
     global $AppUI;
     
     // Antécédents
@@ -146,9 +146,9 @@ class CDossierMedical extends CMbMetaObject {
           }
         }
       }
-      $template->addProperty("Patient - antécédents", $sAntecedents);
+      $template->addProperty("$champ - antécédents", $sAntecedents);
     }else{
-      $template->addProperty("Patient - antécédents");
+      $template->addProperty("$champ - antécédents");
     }
     
 
@@ -174,13 +174,31 @@ class CDossierMedical extends CMbMetaObject {
         }
         $sTrmt .= $curr_trmt->traitement;
       }
-      $template->addProperty("Patient - traitements", $sTrmt);
+      $template->addProperty("$champ - traitements", $sTrmt);
     }else{
-      $template->addProperty("Patient - traitements");
+      $template->addProperty("$champ - traitements");
     }
     
+    
     // Addictions
-    // @todo: Template pour les addictions
+    $this->loadRefsAddictions();
+    if(is_array($this->_ref_types_addiction)){
+      // Réécritude des addictions
+      $sAddictions = null;
+      foreach($this->_ref_types_addiction as $typeAdd=>$listAdd){
+        if($listAdd){
+          $sAddictions .= $AppUI->_("CAddiction.type.".$typeAdd)."\n";
+          foreach($listAdd as $key => $curr_add){
+            $sAddictions .= " &bull; ";
+            $sAddictions .= $curr_add->addiction;
+          }
+        }
+      }
+      $template->addProperty("$champ - addictions", $sAddictions);
+    }else{
+      $template->addProperty("$champ - addictions");
+    }
+    
     
     // Codes CIM10
     $aCim10 = array();
@@ -190,7 +208,7 @@ class CDossierMedical extends CMbMetaObject {
       }
     }
     
-    $template->addProperty("Patient - diagnostics", join("&bull;", $aCim10));
+    $template->addProperty("$champ - diagnostics", join("&bull;", $aCim10));
   }
 }
 
