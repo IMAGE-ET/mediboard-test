@@ -4,12 +4,6 @@
 
 var cim10url = new Url;
 
-function selectCim10(code) {
-  cim10url.setModuleAction("dPcim10", "code_finder");
-  cim10url.addParam("code", code);
-  cim10url.popup(800, 500, "CIM10");
-}
-
 function reloadCim10(sCode){
   var oForm = document.addDiagFrm;
   
@@ -104,9 +98,6 @@ function finTrmt() {
   oForm._helpers_traitement.value = "";
 }
 
-function closeCIM10() {
-  cim10url.close();
-}
 
 function reloadDossierMedicalPatient(){
   var antUrl = new Url;
@@ -116,8 +107,7 @@ function reloadDossierMedicalPatient(){
   {{if $_is_anesth}}
   antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
   {{/if}}
-  antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : closeCIM10 });
- 
+  antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : CIM10Selector.close });
 }
 
 function reloadDossiersMedicaux(){
@@ -317,16 +307,27 @@ function copyTraitement(traitement_id){
         </tr>
         <tbody id="category{{$cat}}">
           <tr class="script"><td><script type="text/javascript">new PairEffect("category{{$cat}}");</script></td></tr>
-          {{foreach from=$curr_cat item=curr_code}}
+          {{foreach from=$curr_cat item=curr_code key="key"}}
           <tr>
             <td class="text">
+            <form name="code_finder{{$curr_code->sid}}" action="">
               <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(document.addOpFrm &amp;&amp; document.addOpFrm.operation_id.value != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
                 Ajouter
               </button>
-              <button class="down notext" type="button" onclick="selectCim10('{{$curr_code->code}}')">
+              
+              <input type="hidden" name="codeCim" value="{{$curr_code->code}}" />
+              <button class="down notext" type="button" onclick="CIM10Selector.initfind{{$curr_code->sid}}()">
                 Parcourir
               </button>
+              <script type="text/javascript">   
+                CIM10Selector.initfind{{$curr_code->sid}} = function(){
+                  this.sForm = "code_finder{{$curr_code->sid}}";
+                  this.sCode = "codeCim";
+                  this.find();
+                }
+              </script> 
               {{$curr_code->code}}: {{$curr_code->libelle}}
+              </form>
             </td>
           </tr>
            {{/foreach}}

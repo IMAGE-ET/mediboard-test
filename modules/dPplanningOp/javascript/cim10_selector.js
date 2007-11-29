@@ -4,6 +4,7 @@ var CIM10Selector = {
   sForm     : null,
   sView     : null,
   sChir     : null,
+  sCode     : null,
   oUrl      : null,
   selfClose : true,
   options : {
@@ -20,6 +21,15 @@ var CIM10Selector = {
     this.oUrl.addParam("type", "cim10");
     
     this.oUrl.popup(this.options.width, this.options.height, "CIM10 Selector");
+  },
+  
+  // Code finder
+  find: function(){
+    var oForm = document[this.sForm];
+    this.oUrl = new Url();
+    this.oUrl.setModuleAction("dPcim10", "code_finder");
+    this.oUrl.addParam("code", oForm[this.sCode].value);
+    this.oUrl.popup(this.options.width, this.options.height, "CIM")
   },
   
   set: function(code) {

@@ -1,6 +1,5 @@
 <script type="text/javascript">
 function setClose(code) {
-  var oSelector = window.opener.CIM10Selector;
   window.opener.oCimField.add(code);
 }
 
