@@ -117,12 +117,6 @@
           <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
         <tr>
-          <th>{{tr}}CFicheEi-gravite{{/tr}}</th>
-          <td>
-            {{tr}}CFicheEi.gravite.{{$fiche->gravite}}{{/tr}}
-          </td>
-        </tr>
-        <tr>
           <th>{{tr}}CFicheEi-plainte{{/tr}}</th>
           <td class="greedyPane">
             {{tr}}CFicheEi.plainte.{{$fiche->plainte}}{{/tr}}
@@ -181,10 +175,33 @@
           </td>
         </tr>
         <tr>
-          <td colspan="2"></td>
+          <th>{{tr}}CFicheEi-gravite{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.gravite.{{$fiche->gravite}}{{/tr}}
+          </td>
           <th>{{tr}}_CFicheEi_sendTo{{/tr}}</th>
           <td class="text">
             {{$fiche->_ref_service_valid->_view}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{tr}}CFicheEi-vraissemblance{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.vraissemblance.{{$fiche->vraissemblance}}{{/tr}}
+          </td>
+          <th>{{tr}}CFicheEi-plainte{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.plainte.{{$fiche->plainte}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{tr}}CFicheEi-_criticite{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi._criticite.{{$fiche->_criticite}}{{/tr}}
+          </td>
+          <th>{{tr}}CFicheEi-commission{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.commission.{{$fiche->commission}}{{/tr}}
           </td>
         </tr>
       </table>
