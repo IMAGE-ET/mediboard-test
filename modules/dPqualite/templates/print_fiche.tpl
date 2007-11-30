@@ -117,18 +117,6 @@
           <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
         <tr>
-          <th>{{tr}}CFicheEi-plainte{{/tr}}</th>
-          <td class="greedyPane">
-            {{tr}}CFicheEi.plainte.{{$fiche->plainte}}{{/tr}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{tr}}CFicheEi-commission{{/tr}}</th>
-          <td>
-            {{tr}}CFicheEi.commission.{{$fiche->commission}}{{/tr}}
-          </td>
-        </tr>
-        <tr>
           <th>{{tr}}CFicheEi-suite_even{{/tr}}</th>
           <td class="text">
             {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
