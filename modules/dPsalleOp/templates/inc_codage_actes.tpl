@@ -143,7 +143,6 @@ function viewCode(code, class){
       <tr>
         <td colspan="2">
           {{if $acte->_id}}
-          formActe-{{$view}}
           <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
             <option value="">&mdash; Choix</option>
