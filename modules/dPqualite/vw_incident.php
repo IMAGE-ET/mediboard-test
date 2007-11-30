@@ -25,8 +25,8 @@ if($can->admin && $fiche_ei_id){
 // Chargement des Utilisateurs
 if($can->admin) {
   $listFct = CMediusers::loadFonctions(PERM_READ);
-  foreach($listFct as $key => $fct) {
-    $listFct[$key]->loadRefsBack();
+  foreach($listFct as &$fct) {
+    $fct->loadRefsBack();
   }
 }
 

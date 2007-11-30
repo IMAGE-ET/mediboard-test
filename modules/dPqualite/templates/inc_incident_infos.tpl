@@ -73,6 +73,29 @@
           <th>{{tr}}CFicheEi-descr_consequences{{/tr}}</th>
           <td class="text">{{$fiche->descr_consequences|nl2br}}</td>
         </tr>
+        <tr>
+          <th>{{tr}}CFicheEi-suite_even{{/tr}}</th>
+          <td class="text">
+            {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
+            {{if $fiche->suite_even=="autre"}}
+              <br />{{$fiche->suite_even_descr|nl2br}}
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <th>{{tr}}CFicheEi-deja_survenu-court{{/tr}}</th>
+          <td>
+            {{tr}}CFicheEi.deja_survenu.{{$fiche->deja_survenu}}{{/tr}}
+          </td>
+        </tr>
+        <tr>
+          <th colspan="2" class="category">{{tr}}_CFicheEi_validqualite{{/tr}}</th>
+        </tr>
+        {{if $fiche->date_validation}}
+        <tr>
+          <th>{{tr}}CFicheEi-degre_urgence{{/tr}}</th>
+          <td>{{tr}}CFicheEi.degre_urgence.{{$fiche->degre_urgence}}{{/tr}}</td>
+        </tr>
         {{if $can->admin}}
         <tr>
           <th>{{tr}}CFicheEi-gravite{{/tr}}</th>
@@ -104,29 +127,6 @@
           <td>
             {{tr}}CFicheEi.commission.{{$fiche->commission}}{{/tr}}
           </td>
-        </tr>
-        <tr>
-          <th>{{tr}}CFicheEi-suite_even{{/tr}}</th>
-          <td class="text">
-            {{tr}}CFicheEi.suite_even.{{$fiche->suite_even}}{{/tr}}
-            {{if $fiche->suite_even=="autre"}}
-              <br />{{$fiche->suite_even_descr|nl2br}}
-            {{/if}}
-          </td>
-        </tr>
-        <tr>
-          <th>{{tr}}CFicheEi-deja_survenu-court{{/tr}}</th>
-          <td>
-            {{tr}}CFicheEi.deja_survenu.{{$fiche->deja_survenu}}{{/tr}}
-          </td>
-        </tr>
-        <tr>
-          <th colspan="2" class="category">{{tr}}_CFicheEi_validqualite{{/tr}}</th>
-        </tr>
-        {{if $fiche->date_validation}}
-        <tr>
-          <th>{{tr}}CFicheEi-degre_urgence{{/tr}}</th>
-          <td>{{tr}}CFicheEi.degre_urgence.{{$fiche->degre_urgence}}{{/tr}}</td>
         </tr>
         <tr>
           <th>{{tr}}_CFicheEi_validBy{{/tr}}</th>
