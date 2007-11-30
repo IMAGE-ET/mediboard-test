@@ -165,7 +165,8 @@ class CActeCCAM extends CMbMetaObject {
     parent::updateFormFields();
     $this->_modificateurs = str_split($this->modificateurs);
     CMbArray::removeValue("", $this->_modificateurs);
-    $this->_view   = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
+    $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
+    $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4) ? true : false;
   }
   

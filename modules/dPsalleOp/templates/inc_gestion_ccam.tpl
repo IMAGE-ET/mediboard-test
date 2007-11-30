@@ -7,8 +7,8 @@
   </tr>
   <tr>
     <td class="text">
-    <!-- Codage des actes -->
-    {{include file="../../dPsalleOp/templates/inc_codage_actes.tpl"}}
+      <!-- Codage des actes -->
+      {{include file="../../dPsalleOp/templates/inc_codage_actes.tpl"}}
     </td>
   </tr>
 </table>

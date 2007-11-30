@@ -13,6 +13,8 @@ class CCodableCCAM extends CMbObject {
   var $temp_operation      = null;
   var $_ref_anesth         = null;
   var $_anesth             = null;
+  
+  var $_associationCodesActes = null;
 
   function updateFormFields() {
   	parent::updateFormFields();
@@ -21,6 +23,37 @@ class CCodableCCAM extends CMbObject {
     $this->_codes_ccam = $this->codes_ccam ? 
       explode("|", $this->codes_ccam) : 
       array(); 
+  }
+  
+  function getAssociationCodesActes() {
+    $this->updateFormFields();
+    $this->loadRefsActesCCAM();
+    $this->_associationCodesActes = array();
+    $listCodes = $this->_codes_ccam;
+    $listActes = $this->_ref_actes_ccam;
+    $i = 0;
+    foreach($listCodes as $curr_code) {
+      $code_complet = explode("-", $curr_code);
+      $ccam     = $code_complet[0];
+      $phase    = isset($code_complet[1]) ? $code_complet[1] : null;
+      $activite = isset($code_complet[2]) ? $code_complet[2] : null;
+      $this->_associationCodesActes[$i]["code"]    = $curr_code;
+      $this->_associationCodesActes[$i]["nbActes"] = 0;
+      $this->_associationCodesActes[$i]["ids"]     = "";
+      foreach($listActes as $key_acte => $curr_acte) {
+        $test = ($curr_acte->code_acte == $ccam);
+        $test = $test && ($phase === null || $curr_acte->code_phase == $phase);
+        $test = $test && ($activite === null || $curr_acte->code_activite == $activite);
+        $test = $test && (!isset($this->_associationCodesActes[$i]["actes"][$curr_acte->code_phase][$curr_acte->code_activite]));
+        if($test) {
+          $this->_associationCodesActes[$i]["actes"][$curr_acte->code_phase][$curr_acte->code_activite] = $curr_acte;
+          $this->_associationCodesActes[$i]["nbActes"]++;
+          $this->_associationCodesActes[$i]["ids"] .= "$curr_acte->_id|";
+          unset($listActes[$key_acte]);
+        }
+      }
+      $i++;
+    }
   }
   
   function updateDBCodesCCAMField() {

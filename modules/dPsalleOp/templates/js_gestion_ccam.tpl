@@ -41,6 +41,21 @@ ActesCCAM = {
     }
     Object.extend(oDefaultOptions, oOptions);
     var oForm = document.manageCodes;
+    var aListActes = null;
+    var oActeForm = null;
+    if(oForm._actes && oForm._actes.value != "") {
+      aListActes = oForm._actes.value.split("|");
+      aListActes.removeByValue("");
+      if(confirm('Des actes ont été validés pour ce code\nÊtes-vous sur de vouloir le supprimer ?')) {
+        aListActes.each(function(elem) {
+          oActeForm = document.forms['formActe-' + elem];
+          oActeForm.del.value = 1;
+          submitFormAjax(oActeForm, 'systemMsg');
+        });
+      } else {
+        return;
+      }
+    }
     var oCcamField = new TokenField(oForm.codes_ccam);
     if(oForm._selCode.value == 0){
       alert("Aucun code selectionné");

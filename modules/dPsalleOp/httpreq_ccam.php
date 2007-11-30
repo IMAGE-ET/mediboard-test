@@ -29,6 +29,8 @@ $object->load($object_id);
 $object->updateFormFields();
 $object->loadRefsActesCCAM();
 $object->loadRefsCodesCCAM();
+$object->getAssociationCodesActes();
+//mbTrace($object->_associationCodesActes);
 $object->loadPossibleActes();
 $object->loadRefPraticien();
 

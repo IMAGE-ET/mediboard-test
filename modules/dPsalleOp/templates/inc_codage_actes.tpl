@@ -38,10 +38,10 @@ function viewCode(code, class){
     {{foreach from=$curr_code->activites item=curr_activite}}
     {{foreach from=$curr_activite->phases item=curr_phase}}
     {{assign var="acte" value=$curr_phase->_connected_acte}}
-    {{assign var="view" value=$acte->_view}}
+    {{assign var="view" value=$acte->_viewUnique}}
     {{assign var="key" value="$curr_key$view"}}
     
-    <form name="formActe-{{$acte->_view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
+    <form name="formActe-{{$view}}" action="?m={{$module}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="dPsalleOp" />
     <input type="hidden" name="dosql" value="do_acteccam_aed" />
     <input type="hidden" name="del" value="0" />
@@ -97,7 +97,7 @@ function viewCode(code, class){
           {{else}}-{{/if}}
         </td>
       </tr>
-      <tr class="{{$acte->_view}}">
+      <tr class="{{$view}}">
         <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
         <td class="text">
           {{foreach from=$curr_phase->_modificateurs item=curr_mod}}
@@ -115,7 +115,7 @@ function viewCode(code, class){
       </tr>
       
       {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-      <tr class="{{$acte->_view}}">
+      <tr class="{{$view}}">
         <th><label for="montant_depassement" title="Dépassement d'honoraire">Dépassement</label></th>
         <td class="text">
           {{if $can->edit || $modif_operation}}
@@ -127,7 +127,7 @@ function viewCode(code, class){
       </tr>
       {{/if}}
 
-      <tr class="{{$acte->_view}}">
+      <tr>
         <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
         <td class="text">
           {{if $can->edit || $modif_operation}}
@@ -143,6 +143,7 @@ function viewCode(code, class){
       <tr>
         <td colspan="2">
           {{if $acte->_id}}
+          formActe-{{$view}}
           <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
             <option value="">&mdash; Choix</option>

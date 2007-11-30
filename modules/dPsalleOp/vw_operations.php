@@ -76,6 +76,8 @@ if($op) {
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
 
+  $selOp->getAssociationCodesActes();
+  
   foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
     $selOp->_ext_codes_ccam[$keyCode]->Load();
   }
