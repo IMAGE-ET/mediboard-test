@@ -11,7 +11,6 @@
     <tr>
       <td colspan="2" style="vertical-align:middle;">
         <input name="_actes" type="hidden" value="" />
-        <br />
         <select name="_selCode">
           <option value="0">&mdash; Choisir</option>
           {{foreach from=$subject->_associationCodesActes item=curr_code}}
