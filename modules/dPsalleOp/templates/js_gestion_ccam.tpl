@@ -30,7 +30,7 @@ ActesCCAM = {
     var oCcamField = new TokenField(oForm.codes_ccam, {
       sProps : "notNull code ccam"
     } );
-    if(oCcamField.add(oForm._newCode.value)){
+    if(oCcamField.add(oForm._newCode.value, true)){
       submitFormAjax(oForm, 'systemMsg', oDefaultOptions);
     }
   },
