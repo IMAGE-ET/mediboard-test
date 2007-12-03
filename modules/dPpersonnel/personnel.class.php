@@ -51,5 +51,16 @@ class CPersonnel extends CMbObject {
     $this->_view = "Personnel $this->user_id";
   }
   
+  function loadListPers($emplacement){
+    $listPers = array();
+    $personnel = new CPersonnel();
+    $personnel->emplacement = $emplacement;
+    $listPers  = $personnel->loadMatchingList();
+    foreach($listPers as $key => $pers){
+      $pers->loadRefUser();
+    }
+    return $listPers;
+  }
+  
 }
 ?>

@@ -16,6 +16,8 @@ $object_id = mbGetValueFromGetOrSession("object_id","");
 $object_class = mbGetValueFromGetOrSession("object_class","");
 $list = mbGetValueFromGetOrSession("list","");
 
+$listUsers = array();
+$listPers = array();
 
 // Recuperation du user selectionné
 $user_id = mbGetValueFromGetOrSession("user_id");

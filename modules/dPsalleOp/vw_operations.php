@@ -16,6 +16,12 @@ $op    = mbGetValueFromGetOrSession("op");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
+$tabPersonnel = array();
+$listPers = array();
+
+// Creation du tableau de timing pour les affectations  
+$timingAffect = array();
+  
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -24,6 +30,9 @@ $listAnesths = $listAnesths->loadAnesthesistes(PERM_DENY);
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens(PERM_READ);
 
+// Creation du tableau de timing pour les affectations  
+$timingAffect = array();
+  
 
 // Selection des salles
 $listSalles = new CSalle;
@@ -93,6 +102,7 @@ if($op) {
     }
   }*/
   $selOp->_ref_plageop->loadRefsFwd();
+  
   // Tableau des timings
   $timing["entree_salle"]    = array();
   $timing["pose_garrot"]     = array();
@@ -102,6 +112,7 @@ if($op) {
   $timing["sortie_salle"]    = array();
   $timing["induction_debut"] = array();
   $timing["induction_fin"]   = array();
+  
   foreach($timing as $key => $value) {
     for($i = -10; $i < 10 && $selOp->$key !== null; $i++) {
       $timing[$key][] = mbTime("$i minutes", $selOp->$key);
@@ -150,13 +161,70 @@ if($op) {
 	$where["chir_id"] = "= '$selOp->chir_id'";
 	$pack             = new CPack;
 	$packList         = $pack->loadlist($where, $order);
+
 	
+	
+	$selOp->_ref_plageop->loadPersonnel();
+	$tabPersonnel["plage"] = array();
+	foreach($selOp->_ref_plageop->_ref_personnel as $key => $affectation_personnel){
+	  // Chargement du personnel a partir des affectations      
+	  //  $tabPersonnel[$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;  
+	  $affectation = new CAffectationPersonnel();
+	  $affectation->object_class = "COperation";
+	  $affectation->object_id    = $selOp->_id;
+	  $affectation->personnel_id = $affectation_personnel->_ref_personnel->_id;
+	  $affectation->loadMatchingObject();
+	  $affectation->loadPersonnel();
+	  $affectation->_ref_personnel->loadRefUser();
+	  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation;
+	}
+	
+	// Chargement du personnel non present dans la plageop (rajouté dans l'operation)
+	$selOp->loadPersonnel();
+	$tabPersonnel["operation"] = array();
+	foreach($selOp->_ref_personnel as $key => $affectation_personnel){
+	// Si le personnel n'est pas deja present dans le tableau d'affectation, on le rajoute
+	  if(!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"])){
+	    $affectation_personnel->_ref_personnel->loadRefUser();
+	    $tabPersonnel["operation"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;  
+	  }
+	}
+	
+	// Chargement de la liste du personnel pour l'operation
+  $listPers = CPersonnel::loadListPers("op");
+  
+  // Suppression de la liste des personnels deja presents
+	foreach($listPers as $key => $pers){
+	  if(array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])){
+	    unset($listPers[$key]);
+	  }
+	}
+	
+	
+  // Initialisations des tableaux de timing
+  foreach($tabPersonnel as $key_type => $type_affectation){
+    foreach($type_affectation as $key => $affectation){
+      $timingAffect[$affectation->_id]["_debut"] = array();
+      $timingAffect[$affectation->_id]["_fin"] = array();
+    }
+  }
+
+  // Remplissage tu tableau de timing
+  foreach($tabPersonnel as $cle => $type_affectation){
+    foreach($type_affectation as $cle_type =>$affectation){
+      foreach($timingAffect[$affectation->_id] as $key => $value){
+        for($i = -10; $i < 10 && $affectation->$key !== null; $i++) {
+          $timingAffect[$affectation->_id][$key][] = mbTime("$i minutes", $affectation->$key);
+        }  
+      } 
+    }
+  }
+  
 }
 
 $listAnesthType = new CTypeAnesth;
 $orderanesth = "name";
 $listAnesthType = $listAnesthType->loadList(null,$orderanesth);
-
 
 //Tableau d'unités
 $unites = array();
@@ -174,8 +242,6 @@ $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 
 
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -189,20 +255,22 @@ if($selOp->_id){
   $smarty->assign("packList", $packList);
 }
 
-$smarty->assign("op"            , $op                      );
-$smarty->assign("vueReduite"    , false                    );
-$smarty->assign("salle"         , $salle                   );
-$smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesthType", $listAnesthType          );
-$smarty->assign("listAnesths"   , $listAnesths             );
-$smarty->assign("listChirs"     , $listChirs               );
-$smarty->assign("plages"        , $plages                  );
-$smarty->assign("urgences"      , $urgences                );
-$smarty->assign("selOp"         , $selOp                   );
-$smarty->assign("timing"        , $timing                  );
-$smarty->assign("date"          , $date                    );
-$smarty->assign("modif_operation", $modif_operation        );
-
+$smarty->assign("op"              , $op                      );
+$smarty->assign("vueReduite"      , false                    );
+$smarty->assign("salle"           , $salle                   );
+$smarty->assign("listSalles"      , $listSalles              );
+$smarty->assign("listAnesthType"  , $listAnesthType          );
+$smarty->assign("listAnesths"     , $listAnesths             );
+$smarty->assign("listChirs"       , $listChirs               );
+$smarty->assign("plages"          , $plages                  );
+$smarty->assign("urgences"        , $urgences                );
+$smarty->assign("selOp"           , $selOp                   );
+$smarty->assign("timing"          , $timing                  );
+$smarty->assign("date"            , $date                    );
+$smarty->assign("modif_operation" , $modif_operation         );
+$smarty->assign("tabPersonnel"    , $tabPersonnel            );
+$smarty->assign("listPers"        , $listPers                );
+$smarty->assign("timingAffect"    , $timingAffect);
 $smarty->display("vw_operations.tpl");
 
 ?>
