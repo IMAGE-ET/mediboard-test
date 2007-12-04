@@ -21,7 +21,7 @@ $prestations = $prestation->loadList();
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $sejour_id    = mbGetValueFromGetOrSession("sejour_id");
-$chir_id      = mbGetValueFromGet("chir_id");
+$chir_id      = mbGetValueFromGetOrSession("chir_id");
 $patient_id   = mbGetValueFromGet("pat_id");
 $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
@@ -39,8 +39,6 @@ if ($chir_id) {
   $chir->load($chir_id);
 }
 $prat = $chir;
-
-
 
 // Chargement du patient
 $patient = new CPatient;
@@ -70,9 +68,6 @@ if($sejour_id && !$operation_id) {
   $patient =& $sejour->_ref_patient;
 }
 
-
-
-
 // On récupère l'opération
 $op = new COperation;
 if ($operation_id && $op->load($operation_id)) {
@@ -96,6 +91,8 @@ if ($operation_id && $op->load($operation_id)) {
     $AppUI->redirect("m=$m&tab=$tab&operation_id=0");
   }
 }
+
+mbSetValueToSession("chir_id", $chir->_id);
 
 $sejour->makeDatesOperations();
 // Chargement du numero de dossier du sejour
