@@ -124,6 +124,7 @@
     
     // Object has not been found : never created or deleted since last binding
     if (!@$this->_ref_object->_id && $mbObjectDefault) {
+      $mbObjectDefault->nullifyEmptyFields();
       $mbObject->extendsWith($mbObjectDefault);
     }
     

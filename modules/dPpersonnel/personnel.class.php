@@ -52,11 +52,10 @@ class CPersonnel extends CMbObject {
   }
   
   function loadListPers($emplacement){
-    $listPers = array();
     $personnel = new CPersonnel();
     $personnel->emplacement = $emplacement;
-    $listPers  = $personnel->loadMatchingList();
-    foreach($listPers as $key => $pers){
+    $listPers = $personnel->loadMatchingList();
+    foreach($listPers as $pers){
       $pers->loadRefUser();
     }
     return $listPers;

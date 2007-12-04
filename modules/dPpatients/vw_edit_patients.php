@@ -34,6 +34,7 @@ if (!$patient_id) {
 if (mbGetValueFromGet("useVitale")) {
   $patVitale = new CPatient();
   $patVitale->getValuesFromVitale();
+  $patVitale->nullifyEmptyFields();
   $patient->extendsWith($patVitale);
   $patient->updateFormFields();
   $patient->_bind_vitale = "1";
