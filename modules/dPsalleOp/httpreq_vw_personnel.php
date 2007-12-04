@@ -9,24 +9,30 @@
 
 global $AppUI, $can, $m;
 
-// Chargement de la liste du personnel pour l'operation
-$listPers = CPersonnel::loadListPers("op");
+require_once($AppUI->getModuleFile("dPsalleOp", "inc_personnel"));
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 
-$tabPersonnel = array();
 // Chargement de l'operation selectionnee
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $selOp = new COperation();
 $selOp->load($operation_id);
 $selOp->loadRefPlageOp();
 
+// Chargement de la liste du personnel pour l'operation
+$listPers = CPersonnel::loadListPers("op");
+
+// Creation du tableau d'affectation de personnel
+$tabPersonnel = array();
+
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
   
-  
+// Chargement des affectations de personnel pour la plageop et l'intervention
+loadAffectations($selOp, $tabPersonnel, $listPers, $timingAffect);
+
 // Chargement du personnel de la plageop
 // Chargement des affectation du personne
 $selOp->_ref_plageop->loadPersonnel();
@@ -82,7 +88,8 @@ if ($selOp->_ref_plageop->_ref_personnel) {
 	  }
 	}
 }
-  
+
+
 // Création du template
 $smarty = new CSmartyDP();
 

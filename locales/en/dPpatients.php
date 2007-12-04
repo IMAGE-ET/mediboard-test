@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPpatients-CPatient-date_naissance'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
@@ -428,7 +429,7 @@ $locales['IDossierMedical-back-'] = '';
 $locales['IDossierMedical-back-addictions'] = '';
 $locales['IDossierMedical-back-antecedents'] = '';
 $locales['IDossierMedical-back-traitements'] = '';
-$locales['Intermax.error.140'] = 'Exécution interrompue, aucun résultat.';
+$locales['Intermax.error.0'] = '';
 $locales['Intermax.error.20'] = '';
 $locales['Intermax.error.21'] = '';
 $locales['Intermax.error.22'] = '';
@@ -461,6 +462,8 @@ $locales['Intermax.error.75'] = '';
 $locales['Intermax.error.76'] = '';
 $locales['Intermax.error.100'] = 'Le résultat est non accessible. Vérifiez que : \\n\\t1. LogicMax est bien lancé\\n\\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
 $locales['Intermax.error.110'] = '';
+$locales['Intermax.error.120'] = '';
+$locales['Intermax.error.140'] = 'Exécution interrompue, aucun résultat.';
 $locales['mod-dPpatients-tab-vw_edit_patients'] = '';
 $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';

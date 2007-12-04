@@ -213,7 +213,14 @@ class CPatient extends CMbObject {
     $specs["tel2"]              = "numchar length|10 confidential";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
-    $specs["naissance"]         = "birthDate confidential";
+    
+    
+    if($dPconfig["dPpatients"]["CPatient"]["date_naissance"]){
+      $specs["naissance"]         = "notNull birthDate confidential";
+    } else {
+      $specs["naissance"]         = "birthDate confidential";  
+    }
+    
     $specs["rques"]             = "text";
     $specs["cmu"]               = "date";
     $specs["ald"]               = "text";

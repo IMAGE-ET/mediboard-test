@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPpatients-CPatient-date_naissance'] = 'Date de naissance obligatoire';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = 'Addiction';

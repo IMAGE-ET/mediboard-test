@@ -826,6 +826,7 @@ table.form th.category {
   text-align: center;
   background-color: #aaa;
   border: #aaa 1px outset;
+  vertical-align: middle;
 }
 
 table.form th.mandatory {

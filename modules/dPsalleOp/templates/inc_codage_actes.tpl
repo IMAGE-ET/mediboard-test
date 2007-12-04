@@ -165,7 +165,7 @@ function viewCode(code, class){
             </label>
           {{/if}}
           {{if $acte->montant_depassement && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-          &mdash dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
+          &mdash; dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
           {{/if}}
           {{/if}}
         </td>

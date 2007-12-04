@@ -200,8 +200,12 @@ $dPconfig["graph_engine"] = "jpgraph";
 
 $dPconfig["graph_svg"] = "non";
 
-$dPconfig["dPpatients"]["CPatient"]["tag_ipp"] = '';
 
+$dPconfig["dPpatients"]["CPatient"] = array (
+  "tag_ipp" => "",
+  "date_naissance" => "0"
+);
+  
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",
   "mark_row" => "0",

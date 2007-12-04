@@ -9,6 +9,8 @@
 
 global $AppUI, $can, $m, $g;
 
+require_once($AppUI->getModuleFile("dPsalleOp", "inc_personnel"));
+
 $can->needsRead();
 
 $salle = mbGetValueFromGetOrSession("salle");
@@ -16,7 +18,11 @@ $op    = mbGetValueFromGetOrSession("op");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
+
+// Tableau d'affectations
 $tabPersonnel = array();
+
+// Liste du personnel
 $listPers = array();
 
 // Creation du tableau de timing pour les affectations  
@@ -161,8 +167,10 @@ if($op) {
 	$where["chir_id"] = "= '$selOp->chir_id'";
 	$pack             = new CPack;
 	$packList         = $pack->loadlist($where, $order);
-
-
+	
+	// Chargement des affectations de personnel pour la plageop et l'intervention
+  loadAffectations($selOp, $tabPersonnel, $listPers, $timingAffect);
+ 
 	// Chargement du personnel affectée à la plage opératoire  
 	$selOp->_ref_plageop->loadPersonnel();
 	if ($selOp->_ref_plageop->_ref_personnel) {

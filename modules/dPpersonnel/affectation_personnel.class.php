@@ -60,6 +60,38 @@ class CAffectationPersonnel extends CMbMetaObject {
     $this->_ref_object->load($this->object_id);
   }
  
+  
+  function check(){
+    if ($msg = parent::check()) {
+      return $msg;
+    }  
+    if (count($this->getSiblings())) {
+      return "Personnel déjà affecté";
+    }
+  }
+  
+  /**
+   * Trouve les affectations avec cible et personnel identique
+   * @return $array Liste des siblings
+   */
+  function getSiblings() {
+    // Version complete
+    $clone = new CAffectationPersonnel();
+    $clone->load($this->_id);
+    $clone->extendsWith($this);
+    
+    // Filtre exact
+    $sibling = new CAffectationPersonnel();
+    $sibling->object_class = $clone->object_class;
+    $sibling->object_id    = $clone->object_id;
+    $sibling->personnel_id = $clone->personnel_id;
+    
+    // Chargement des siblings
+    $siblings = $sibling->loadMatchingList();
+    unset($siblings[$this->_id]);
+    return $siblings;
+  }
+  
   function updateFormFields() {
     $this->_view = "Affectation de $this->personnel_id";
     $this->loadRefs();  
