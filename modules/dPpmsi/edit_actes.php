@@ -23,6 +23,7 @@ $selOp->_ref_sejour->loadRefsFwd();
 foreach($selOp->_ext_codes_ccam as $key => $value) {
   $selOp->_ext_codes_ccam[$key]->Load();
 }
+$selOp->getAssociationCodesActes();
 $selOp->loadPossibleActes();
 $selOp->_ref_plageop->loadRefsFwd();
 

@@ -236,6 +236,7 @@ $examComp->loadAides($userSel->user_id);
 
 $consult->loadRefsActesCCAM();
 $consult->loadRefsCodesCCAM();
+$consult->getAssociationCodesActes();
 $consult->loadPossibleActes();
 
 // Chargement du dossier medical du patient de la consultation
