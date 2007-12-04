@@ -36,7 +36,8 @@ class CActeCCAM extends CMbMetaObject {
   var $commentaire         = null;
   var $code_association    = null;
   var $regle               = null;
-
+  var $montant_base        = null;
+  
   // Form fields
   var $_modificateurs     = array();
   var $_anesth            = null;
@@ -44,8 +45,8 @@ class CActeCCAM extends CMbMetaObject {
   var $_linked_actes      = null;
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
-  var $_adapt_object = false;
-  
+  var $_adapt_object      = false;
+  var $_montant_facture   = null;
   // Object references
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
@@ -72,6 +73,7 @@ class CActeCCAM extends CMbMetaObject {
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
     $specs["regle"]               = "bool";
+    $specs["montant_base"]        = "currency";
     return $specs;
   }
   
@@ -168,6 +170,15 @@ class CActeCCAM extends CMbMetaObject {
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4) ? true : false;
+    $this->_montant_facture = $this->montant_base + $this->montant_depassement;
+  }
+  
+  
+  function store(){
+    //sauvegarde du montant de base 
+    $this->montant_base = $this->getTarif();  
+ 
+    parent::store();
   }
   
   function loadRefObject(){

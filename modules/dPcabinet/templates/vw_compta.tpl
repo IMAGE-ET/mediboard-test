@@ -43,8 +43,8 @@ var Tarif = {
     oForm.secteur1.value = parseFloat(oForm.secteur1.value) - parseFloat(value);
     round(oForm.secteur1.value,2);
     
-  },
-  
+  }
+  /*
   calcul: function(type,code){
     var oForm = document.editFrm;
     var url = new Url();
@@ -52,7 +52,8 @@ var Tarif = {
     url.addParam("code", code);
     url.addParam("callback", "Tarif."+type);
     url.requestUpdate('systemMsg');
-  }
+  }*/
+  
 }
 
 
@@ -99,7 +100,7 @@ function pageMain() {
     while (sCode = aCcam[iCode++]) {
     
       var sCodeNode = sCode;
-        sCodeNode += "<button class='cancel notext' type='button' onclick='Tarif.calcul(\"del\",\"" + sCode + "\"); oCcamField.remove(\"" + sCode + "\")'>";
+        sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
         sCodeNode += "<\/button>";
       aCodeNodes.push(sCodeNode);
       
@@ -274,7 +275,7 @@ function pageMain() {
                 </th>
                 <td>
                   <input type="text" name="_codeCCAM" size="10" value="" />
-                  <button class="tick notext" type="button" onclick="Tarif.calcul('add',document.editFrm._codeCCAM.value); oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
+                  <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
                   <input type="hidden" name="_codable_class" value="CConsultation" />
 			      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>             
                   <script type="text/javascript">

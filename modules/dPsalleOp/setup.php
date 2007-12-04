@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.22";
+$config["mod_version"]     = "0.23";
 $config["mod_type"]        = "user";
 
 class CSetupdPsalleOp extends CSetup {
@@ -106,7 +106,12 @@ class CSetupdPsalleOp extends CSetup {
               ADD INDEX ( `object_class` )";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `acte_ccam`
+            ADD `montant_base` FLOAT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.23";
     
   }
 }

@@ -39,6 +39,9 @@ ActesNGAP = {
       <th>{{mb_label object=$acte_ngap field="quantite"}}</th>
       <th>{{mb_label object=$acte_ngap field="code"}}</th>
       <th>{{mb_label object=$acte_ngap field="coefficient"}}</th>
+      <th>{{mb_label object=$acte_ngap field="montant_base"}}</th>
+      <th>{{mb_label object=$acte_ngap field="montant_depassement"}}</th>
+      
       <th>Action</th>
     </tr>
     <tr>
@@ -50,6 +53,12 @@ ActesNGAP = {
       </td>
       <td>
         {{mb_field object=$acte_ngap field="coefficient"}}  
+      </td>
+      <td>
+        {{mb_field object=$acte_ngap field="montant_base"}}
+      </td>
+      <td>
+        {{mb_field object=$acte_ngap field="montant_depassement"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
@@ -68,6 +77,12 @@ ActesNGAP = {
       </td>
       <td>
         {{mb_value object=$_acte_ngap field="coefficient"}}  
+      </td>
+      <td>
+        {{mb_value object=$_acte_ngap field="montant_base"}}
+      </td>
+      <td>
+        {{mb_value object=$_acte_ngap field="montant_depassement"}}
       </td>
       <td>
        	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">

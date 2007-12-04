@@ -59,7 +59,7 @@ function viewCode(code, class){
     <table class="form">
       
       <tr id="acte{{$key}}-trigger">  
-        <td colspan="2" style="{{if $acte->_id && $acte->code_association}}background-color: #9f9;{{else}}background-color: #f99;{{/if}}">
+        <td colspan="2" style="{{if $acte->_id && $acte->code_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
           Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
         </td>
