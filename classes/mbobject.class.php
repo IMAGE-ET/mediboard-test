@@ -666,6 +666,32 @@ class CMbObject {
   
   
   /**
+   * Aggregate a birthdate from date parts
+   *
+   * @param string $birthdateField
+   * @param string $partFieldPrefix
+   */
+  function updateDBBirthDate($birthdateField, $partFieldPrefix) {
+    $anneeField = $partFieldPrefix . "_annee";
+    $moisField  = $partFieldPrefix . "_mois";
+    $jourField  = $partFieldPrefix . "_jour";
+    
+    if ($this->$anneeField === null) return;
+    if ($this->$moisField  === null) return;
+    if ($this->$jourField  === null) return;
+
+    if ($this->$anneeField === "" && $this->$moisField === "" && $this->$jourField === "") {
+      $this->$birthdateField = "";
+      return;
+    }
+
+    $this->$birthdateField = 
+      $this->$anneeField . "-" .
+      $this->$moisField . "-" .
+      $this->$jourField;
+  }
+  
+  /**
    * Aggregate a tel number from tel parts
    *
    * @param string $telField

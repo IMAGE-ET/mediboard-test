@@ -53,10 +53,11 @@ Object.extend(Intermax.ResultHandler, {
   	var msg = printf("Vous venez d'associer la FSE %s à cette consultation",
   		oFSE.FSE_NUMERO_FSE);
     submitFdr(document.BindFSE);
-  }
+  }  
 } );
 
 Intermax.ResultHandler["Consulter Vitale"] = Intermax.ResultHandler["Lire Vitale"];
+Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"];
 
 
 function cancelTarif() {
@@ -246,7 +247,6 @@ function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
 
-
 </script>
 
 
@@ -428,29 +428,46 @@ function submitFdr(oForm) {
 			      {{mb_field object=$consult field="consultation_id" hidden="1"}}
 		      
 			      </form>
-						
-						<!-- Les FSE déjà associées -->
-		        <ul>
-		          {{foreach from=$consult->_ids_fse item=_id_fse}}
-		          <li>
-		            <label onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">FSE numéro {{$_id_fse}}</label>
-		          </li>
-		          {{foreachelse}}
-		          <li><em>Aucune FSE formatée</em></li>
-		          {{/foreach}}
-		        </ul>
-		      {{/if}}
-          </td>
-        </tr>
+			      {{/if}}
+				  </td>
+				</tr>
+				
+				<!-- Les FSE déjà associées -->
+        {{foreach from=$consult->_ids_fse item=_id_fse}}
+				<tr>
+				  <td>
+				  	<label onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">
+				  	  FSE numéro {{$_id_fse}}
+				  	</label>
+		      </td>
+		      <td class="button">
+			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
+			        Consulter 
+			      </button>
+			      <button class="print" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_id_fse}}');">
+			        Imprimer
+			      </button>
+			      <button class="cancel" type="button" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
+			        Anuuler
+			      </button>
+		      </td>
+		    </tr>
+        {{foreachelse}}
+				<tr>
+				  <td colspan="2">
+				    <em>Aucune FSE associée</em>
+		      </td>
+		    </tr>
+        {{/foreach}}
 
         <tr>
 		      {{if $patient->_id_vitale && $praticien->_id_cps}}
-          <td class="button">
+          <td colspan="2" class="button">
 			      <button class="new" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
 			        Formater FSE
 			      </button>
-			      <button class="tick" type="button" onclick="Intermax.result('Formater FSE');">
-			        Récupérer FSE
+			      <button class="tick" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
+			        Mettre à jour FSE
 			      </button>
           </td>
           {{/if}}
@@ -493,6 +510,11 @@ function submitFdr(oForm) {
             </select>
           </td>
         </tr>
+        {{else}}
+        <tr>
+          <th>{{mb_label object=$consult field=tarif}}</th>
+          <td>{{mb_value object=$consult field=tarif}}</td>
+				</td>        
         {{/if}}
         
         {{if $consult->paye == "0"}}
@@ -557,7 +579,7 @@ function submitFdr(oForm) {
            <select name="banque_id">
            <option value="">&mdash; Choix d'une banque</option> 
            {{foreach from=$banques item=banque}}
-             <option value="{{$banque->_id}}" {{if $consult->banque_id == $banque->_id}}selectd = "selected"{{/if}}>{{$banque->_view}}</option>
+             <option value="{{$banque->_id}}" {{if $consult->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
            {{/foreach}}
            </select>
           </td>

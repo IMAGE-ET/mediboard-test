@@ -2,14 +2,20 @@
  * Class for LogicMax browser based Integration
  */
 var Intermax = {
-  oContent : {},
-  currentFunction : "unknown",
-  newLine : "---",
+  oContent: {},
+  allowedFunctions: [],
+  newLine: "---",
   
-  alert: function(sError) {
-    var sLogicMaxFonction = this.oContent.FONCTION ? "LogicMax : " +  this.oContent.FONCTION.NOM : "Aucun appel LogicMax";
-    var sLogicMaxError = sError.charAt(0) == "-" ? "\n\n[Erreur LogicMax "+sError+"]" : "";
-    alert(sLogicMaxFonction + "\n\n" + Intermax.errors[sError] + sLogicMaxError);
+  alert: function(sError, sExtraInfo) {
+    sExtraInfo = sExtraInfo || "";
+    
+    // Error message preparing
+    var sLogicMaxFonction = this.oContent.FONCTION ? "Fonction LogicMax : " +  this.oContent.FONCTION.NOM : "Aucun appel à LogicMax";
+    var sLogicMaxError = sError != "0" ? "\n\n[Erreur LogicMax "+sError+"]" : "";
+
+    // Actual alert
+    sErrorMessage = Intermax.errors[sError] || "Description non traduite";
+    alert(sLogicMaxFonction + "\n\n" + sErrorMessage + sExtraInfo + sLogicMaxError);
   },
   
   bindContent: function(sContent) {    
@@ -46,8 +52,7 @@ var Intermax = {
   },
 
   trigger: function(sFunction, oCallContent) {
-    this.currentFunction = sFunction;
-    Console.debug(this.currentFunction, "Trigger InterMax function");
+    Console.debug(sFunction, "Trigger InterMax function");
     
     this.oContent = {
       FONCTION: {
@@ -64,11 +69,10 @@ var Intermax = {
     document.intermaxTrigger.performWrite(sContent);
   },
   
-  result: function(sFunction) {
-    this.currentFunction = sFunction;
+  result: function(aAllowedFunctions) {
+    this.aAllowedFunctions = aAllowedFunctions ? [aAllowedFunctions].flatten() : [];
     document.intermaxResult.performRead();
     setTimeout(Intermax.handleContent.bind(Intermax), 100);
-    
   },
   
   handleContent: function() {
@@ -79,9 +83,17 @@ var Intermax = {
 	    Intermax.alert("100");
       return;
     }
+
+		// Fonctions autorisées    
+    if (this.aAllowedFunctions.length && !this.aAllowedFunctions.include(this.oContent.FONCTION.NOM)) {
+	    Intermax.alert("110", this.aAllowedFunctions.join(", "));
+	    return;
+    }
     
-    if (this.currentFunction &&  this.oContent.FONCTION.NOM != this.currentFunction) {
-	    Intermax.alert("110");
+    // Fonction en cours d'execution
+    if (!this.oContent.PARAM.EXECUTION) {
+	    Intermax.alert("120");
+	    return;
     }
     
 	  if (this.oContent.PARAM.EXECUTION == 'KO') {
@@ -89,8 +101,6 @@ var Intermax = {
 	    return;
 	  }
     
-    // 
-    this.createResultMessages();
     this.sendContent();
   },
   
@@ -106,13 +116,14 @@ var Intermax = {
   handleResult: function(sFunction) {
     
 		// Activate function handler
-    var fResultHandler = this.ResultHandler[this.oContent.FONCTION.NOM] || function() { 
-      Console.debug(sFunction, "Unhandled InterMax function"); 
-    }
+    var fResultHandler = this.ResultHandler[this.oContent.FONCTION.NOM] || this.ResultHandler["all"];
     fResultHandler();
   },
 
   ResultHandler : {
+    "all": function() {
+	    Intermax.alert("0");
+    }
   },
   
   Triggers : {
@@ -136,6 +147,40 @@ var Intermax = {
           VIT_NUMERO_LOGICMAX: iCPS
         } 
 			} );
+    },
+
+    "Consulter FSE" : function(iFSE) {
+			Intermax.trigger("Consulter FSE", { 
+        PARAM: {
+          AFFICHAGE: 1
+        },
+        FSE: {
+          FSE_NUMERO_FSE: iFSE
+        } 
+			} );
+    },
+
+    "Editer FSE" : function(iFSE) {
+			Intermax.trigger("Editer FSE", { 
+        PARAM: {
+          AFFICHAGE: 1
+        },
+        FSE: {
+          FSE_NUMERO_FSE: iFSE
+        } 
+			} );
+    },
+
+    "Annuler FSE" : function(iFSE) {
+			Intermax.trigger("Annuler FSE", { 
+        PARAM: {
+          AFFICHAGE: 1
+        },
+        FSE: {
+          FSE_NUMERO_FSE: iFSE
+        } 
+			} );
     }
+
   }
 }

@@ -479,14 +479,24 @@ class CPatient extends CMbObject {
   }
   
   /**
-   * Met à jour un champ de l'assuré qd l'assuré EST le bénéficiaire (rang = 01)
+   * Copie un champ du bénéficiaire vers l'assuré
    * @param string field Champ à mettre à jour
    */
   function updateAssureField($field) {
-    if ($this->rang_beneficiaire == "01") {
-      $assure_field = "assure_$field";
-      $this->$assure_field = $this->$field;
+    $assure_field = "assure_$field";
+
+    // Champs non altéré
+    if (null === $this->$assure_field) {
+      return;
     }
+    
+    // Champ non vide
+    if (null != $this->$assure_field) {
+      return;
+    }
+    
+    // Copie des valeurs
+    $this->$assure_field = $this->$field;
   }
     
   function updateDBFields() {
@@ -517,11 +527,12 @@ class CPatient extends CMbObject {
       $this->cp = "";
     }
 
+    if ($this)
     if(($this->_annee === "") && ($this->_mois === "") && ($this->_jour === "")) {
       $this->naissance = "";
     }
     
-  	if(($this->_annee != null) && ($this->_mois != null) && ($this->_jour != null)) {
+  	if ($this->_annee && $this->_mois && $this->_jour) {
       $this->naissance = 
         $this->_annee . "-" .
         $this->_mois  . "-" .
@@ -567,19 +578,12 @@ class CPatient extends CMbObject {
       $this->assure_cp = "";
     }
 
-  	if(($this->_assure_annee != null) && ($this->_assure_mois != null) && ($this->_assure_jour != null)) {
+  	if ($this->_assure_annee && $this->_assure_mois && $this->_assure_jour) {
       $this->assure_naissance = 
         $this->_assure_annee . "-" .
         $this->_assure_mois  . "-" .
         $this->_assure_jour;
-  	}
-  	
-//  	mbExport($this->naissance, "Naissance");
-//  	mbExport($this->_annee, "Année");
-//  	mbExport($this->_mois, "Mois");
-//  	mbExport($this->_jour, "Jour");
-//  	die;
-  	
+  	}  	
   }
   
   // Backward references

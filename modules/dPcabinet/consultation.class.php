@@ -298,6 +298,9 @@ class CConsultation extends CCodableCCAM {
         return $msg;
       }
     }
+        
+    $secteur1 = 0.0;
+    $secteur2 = 0.0;
     
     // Ajout des actes CCAM et NGAP récupérés
     for ($iActe = 1; $fseActe = @$intermax["ACTE_$iActe"]; $iActe++) {
@@ -320,6 +323,7 @@ class CConsultation extends CCodableCCAM {
         $acte->code_phase    = $fseActe["PRE_CODE_PHASE"];
         $acte->execution     = $this->_acte_execution;
         $acte->modificateurs = null;
+        
         for ($iModif = 1; $iModif <= 4; $iModif++) {
           $acte->modificateurs .= $fseActe["PRE_MODIF_$iModif"];
         }
@@ -332,10 +336,25 @@ class CConsultation extends CCodableCCAM {
         return "Acte LogicMax de type inconnu (Numero = '$typeActe')";
       }
       
+      $secteur1 += $fseActe["PRE_MONTANT"];
+      $secteur2 += $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
+      
       if ($msg = $acte->store()) {
         return $msg;
       }
     }
+    
+    // Have to load cuz codes CCAM have been updated
+    $consult = new CConsultation();
+    $consult->load($this->_id);
+    $consult->secteur1 = $secteur1;
+    $consult->secteur2 = $secteur2;
+    $consult->_somme = null;
+    if (!$consult->tarif) {
+      $consult->tarif = "FSE LogicMax";
+    }
+    
+    return $consult->store();
   }
 
   
