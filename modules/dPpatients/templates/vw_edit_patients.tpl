@@ -14,6 +14,19 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.redirect();
 }
 
+function checkDateNaissance(){
+  var oForm = document.editFrm;
+  var oJour = oForm._jour.value;
+  var oMois = oForm._mois.value;
+  var oAnnee = oForm._annee.value;
+  
+  if(!oJour || !oMois || !oAnnee){
+    alert("La date de naissance est obligatoire, veuillez la renseigner");
+    return false;
+  }
+  return true;
+}
+
 function checkNaissance(fieldPrefix) {
   var oForm = document.editFrm;
   var oJour = oForm.elements[fieldPrefix + "_jour"];
@@ -40,6 +53,14 @@ function checkNaissance(fieldPrefix) {
 
 var httpreq_running = false;
 function confirmCreation(oForm){
+
+  // Si date de naissance obligatoire
+  {{if $dPconfig.dPpatients.CPatient.date_naissance}}
+  if(!checkDateNaissance()){
+    return false;
+  }
+  {{/if}}
+
   if (!checkNaissance("")) {
     return false;
   }
