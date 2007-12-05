@@ -6,6 +6,7 @@ function newOperation(chir_id, pat_id) {
   url.addParam("chir_id", chir_id);
   url.addParam("pat_id", pat_id);
   url.addParam("operation_id", 0);
+  url.addParam("sejour_id", 0);
   url.redirect();
 }
 
