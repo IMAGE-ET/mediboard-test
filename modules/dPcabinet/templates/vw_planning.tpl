@@ -83,34 +83,41 @@ function pageMain() {
     <td>
       <table id="weeklyPlanning">
         <tr>
+          <!-- Affichage du nom des jours -->
           <th></th>
-          {{foreach from=$plages|smarty:nodefaults key=curr_day item=plagesPerDay}}
+          {{foreach from=$listDays key=curr_day item=plagesPerDay}}
           <th>{{$curr_day|date_format:"%A %d"}}</th>
           {{/foreach}}
         </tr>       
-        {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+        <!-- foreach sur les heures -->
+        {{foreach from=$listHours item=curr_hour}}
         <tr>
           <th rowspan="4">{{$curr_hour}}h</th>
-          {{foreach from=$listMins|smarty:nodefaults item=curr_mins key=keyMins}}
+          <!-- foreach sur les minutes -->
+          {{foreach from=$listMins item=curr_mins key=keyMins}}   
           {{if $keyMins}}
           </tr><tr>
           {{/if}}
-          {{foreach from=$plages key=curr_day item=plagesPerDay}}
-          {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins"}}
-          
-          {{if is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "empty"}}
-            <td class="empty"></td>
-          {{elseif is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "hours"}}
+            {{foreach from=$listDays item=curr_day}}
+              {{assign var="keyAff" value="$curr_day $curr_hour:$curr_mins:00"}}
+              {{assign var="affichage" value=$affichages.$keyAff}}
+             
+              {{if $affichage === "empty"}}
+              <td class="empty"></td>
+              {{elseif $affichage == "hours"}}
             <td class="empty" rowspan="4"></td>
-          {{elseif is_string($arrayAffichage.$keyAff) &&  $arrayAffichage.$keyAff== "full"}}
-          
-          {{else}}
-            <td class="{{if $plageconsult_id == $arrayAffichage.$keyAff->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$arrayAffichage.$keyAff->_nbQuartHeure}}">
-              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" title="Voir le contenu de la plage">
-                {{if $arrayAffichage.$keyAff->libelle}}{{$arrayAffichage.$keyAff->libelle}}<br />{{/if}}
-                {{$arrayAffichage.$keyAff->debut|date_format:"%Hh%M"}} - {{$arrayAffichage.$keyAff->fin|date_format:"%Hh%M"}}
+              {{elseif $affichage === "full"}}
+              
+              {{else}}
+                {{assign var="_listPlages" value=$listPlages.$curr_day}}
+                {{assign var=plage value=$_listPlages.$affichage}}
+              
+              <td class="{{if $plageconsult_id == $plage->plageconsult_id}}selectedPlage{{else}}nonEmpty{{/if}}" rowspan="{{$plage->_nbQuartHeure}}">
+              <a href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Voir le contenu de la plage">
+                {{if $plage->libelle}}{{$plage->libelle}}<br />{{/if}}
+                {{$plage->debut|date_format:"%Hh%M"}} - {{$plage->fin|date_format:"%Hh%M"}}
               </a>
-              {{assign var="pct" value=$arrayAffichage.$keyAff->_fill_rate}}
+              {{assign var="pct" value=$plage->_fill_rate}}
               {{if $pct gt 100}}
               {{assign var="pct" value=100}}
               {{/if}}
@@ -119,23 +126,22 @@ function pageMain() {
               {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
               {{else}}{{assign var="backgroundClass" value="full"}}
               {{/if}} 
-              <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$arrayAffichage.$keyAff->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
+              <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id=0&amp;plageconsult_id={{$plage->plageconsult_id}}" title="Planifier une consultation dans cette plage"> 
                 <div class="progressBar">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
-                  <div class="text">{{$arrayAffichage.$keyAff->_affected}} / {{$arrayAffichage.$keyAff->_total|string_format:"%.0f"}}</div>
+                  <div class="text">{{$plage->_affected}} / {{$plage->_total|string_format:"%.0f"}}</div>
                 </div>
               </a>
-            </td>
-          {{/if}}
-          {{/foreach}}
-          {{/foreach}}
+              </td>
+              {{/if}}
+            {{/foreach}}
+          {{/foreach}}  
         {{/foreach}}
       </table>
+      
     {{if $plageSel->plageconsult_id}}
     <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;plageconsult_id=0">Créer une nouvelle plage</a>
     {{/if}}
-    
-
     <table class="form">
       <tr id="editplage-trigger">
         {{if !$plageSel->plageconsult_id}}
@@ -177,14 +183,14 @@ function pageMain() {
             <tr>
               <th>{{mb_label object=$plageSel field="_hour_deb"}}</th>
               <td><select name="_hour_deb" class="notNull num">
-                {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+                {{foreach from=$listHours item=curr_hour}}
                   <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_deb}} selected="selected" {{/if}}>
                     {{$curr_hour|string_format:"%02d"}}
                   </option>
                 {{/foreach}}
                 </select> h
                 <select name="_min_deb">
-                  {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
+                  {{foreach from=$listMins item=curr_min}}
                     <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_deb}} selected="selected" {{/if}}>
                       {{$curr_min|string_format:"%02d"}}
                     </option>
@@ -195,7 +201,7 @@ function pageMain() {
               <td>
                 <select name="date" class="{{$plageSel->_props.date}}">
                   <option value="">&mdash; Choisir le jour</option>
-                  {{foreach from=$listDays|smarty:nodefaults item=curr_day}}
+                  {{foreach from=$listDaysSelect item=curr_day}}
                   <option value="{{$curr_day}}" {{if $curr_day == $plageSel->date}} selected="selected" {{/if}}>
                     {{$curr_day|date_format:"%A"}}
                   </option>
@@ -207,14 +213,14 @@ function pageMain() {
               <th>{{mb_label object=$plageSel field="_hour_fin"}}</th>
               <td>
                 <select name="_hour_fin" class="notNull num moreEquals|_hour_deb">
-                  {{foreach from=$listHours|smarty:nodefaults item=curr_hour}}
+                  {{foreach from=$listHours item=curr_hour}}
                     <option value="{{$curr_hour|string_format:"%02d"}}" {{if $curr_hour == $plageSel->_hour_fin}} selected="selected" {{/if}}>
                       {{$curr_hour|string_format:"%02d"}}
                     </option>
                   {{/foreach}}
                 </select> h
                 <select name="_min_fin">
-                  {{foreach from=$listMins|smarty:nodefaults item=curr_min}}
+                  {{foreach from=$listMins item=curr_min}}
                     <option value="{{$curr_min|string_format:"%02d"}}" {{if $curr_min == $plageSel->_min_fin}} selected="selected" {{/if}}>
                       {{$curr_min|string_format:"%02d"}}
                     </option>
@@ -283,10 +289,6 @@ function pageMain() {
       </tr>
       </tbody>
     </table>
-
-
-
-
     </td>
     <td>
       {{if $plageSel->plageconsult_id}}

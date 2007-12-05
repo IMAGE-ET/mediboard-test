@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $dPconfig;
 
 $can->needsRead();
 
@@ -89,128 +89,94 @@ mbSetValueToSession("plageconsult_id", $plageconsult_id);
 $mediusers = new CMediusers();
 $listChirs = $mediusers->loadPraticiens(PERM_EDIT);
 
-// Sélection des plages
-$plage    = new CPlageconsult();
+
+
 $listDays = array();
-$where = array();
-$where["chir_id"] = "= '$chirSel'";
+$listDaysSelect = array();
 for($i = 0; $i < 7; $i++) {
-  $date = mbDate("+$i day", $debut);
-  $where["date"] = "= '$date'";
-  $plagesPerDay = $plage->loadList($where);
-  if(!(($i == 5 || $i == 6) && !count($plagesPerDay))) {
-    foreach($plagesPerDay as $key => $value) {
-      $plagesPerDay[$key]->loadFillRate();
-    }
-    $plages[$date] = $plagesPerDay;
-  }
-  $listDays[] = $date;
+  $dateArr = mbDate("+$i day", $debut);
+  $listDays[$dateArr] = $dateArr;
+  $listDaysSelect[$dateArr] = $dateArr;    
 }
 
-// Liste des heures et minutes
-$listHours = CPlageconsult::$hours;
-$listMins = CPlageconsult::$minutes;
+
 
 // Création du tableau de visualisation
-$arrayAffichage = array();
-foreach ($plages as $keyDate=>$valDate){
-  foreach ($listHours as $keyHours=>$valHours){
-    foreach ($listMins as $kayMins=>$valMins){
+$affichages = array();
+
+foreach ($listDays as $keyDate=>$valDate){
+  foreach (CPlageconsult::$hours as $keyHours=>$valHours){
+    foreach (CPlageconsult::$minutes as $keyMins=>$valMins){
       // Initialisation du tableau
-      $arrayAffichage["$keyDate $valHours:$valMins"] = "empty";
+      $affichages["$keyDate $valHours:$valMins:00"] = "empty";
     }
   }
 }
+	
+ $listPlages = array();
+ 
+// Variable permettant de compter les jours pour la suppression du samedi et du dimanche
+$i = 0;
 
-foreach ($plages as $keyPlages=>$valPlages){
-  foreach ($valPlages as $keyvalPlages=>$valvalPlages){
-    // Test validité des plages dans le semainier    
-    $heure_fin = $valvalPlages->_hour_fin;
-    $heure_deb = $valvalPlages->_hour_deb;
-    $min_deb   = $valvalPlages->_min_deb;
-    $min_fin   = $valvalPlages->_min_fin;
-    $outPlage = false;
-    foreach (array("min_deb","min_fin") as $minute){
-      $minute_trouve = array_search(${$minute},$listMins);
-      if ($minute_trouve===false){
-        $afterValue = 0;
-        foreach ($listMins as $valueMin){
-          if (${$minute} > $valueMin && $afterValue!==null){
-            $afterValue = $valueMin;
-          } elseif($afterValue!==null){
-            // Entre l'ancienne valeur et celle ci
-            $centerValue = $afterValue + ($valueMin-$afterValue)/2;
-            $afterValue = null;
-            if(${$minute}>$centerValue){
-              ${$minute} = $valueMin;
-            }else{
-              ${$minute} = $afterValue;
-            }
-          }
-        }
-        if($afterValue!==null){
-        	${$minute} = $afterValue;
-        }
-      } 
+// Extraction des plagesconsult par date
+foreach($listDays as $keyDate=>$valDate){
+  
+  // Récupération des plages par jour
+  $listPlage = new CPlageConsult();
+  $where = array();
+  $where["date"] = "= '$keyDate'";
+  $where["chir_id"] = " = '$chirSel'";
+  $order = "debut";
+  $listPlages[$keyDate] = $listPlage->loadList($where,$order);
+  
+  // suppression des jours sans plage de consult (Samedi et dimanche)
+  if(!$listPlages[$keyDate] && ($i == 5 || $i == 6)){
+    unset($listDays[$keyDate]);
+  }
+  
+  $i++;
+  
+  // Détermination des bornes du semainier
+  $min = CPlageconsult::$hours_start.":".reset(CPlageconsult::$minutes).":00";
+  $max = CPlageconsult::$hours_stop.":".end(CPlageconsult::$minutes).":00";
+  
+ 
+  // Détermination des bornes de chaque plage
+  foreach($listPlages[$keyDate] as $plage){
+     $plage->loadRefsBack();
+    $plage->fin = min($plage->fin, $max);
+    $plage->debut = max($plage->debut, $min);
+    $plage->updateFormFields();
+  
+    if($plage->debut >= $plage->fin){  
+      unset($listPlages[$keyDate][$plage->_id]);
     }
-    
-    if($heure_fin>CPlageconsult::$hours_stop && $heure_deb<=CPlageconsult::$hours_stop && $min_deb<end(CPlageconsult::$minutes)){
-      $heure_fin = CPlageconsult::$hours_stop;
-      $min_fin   = end(CPlageconsult::$minutes);
-    }elseif($heure_deb<CPlageconsult::$hours_start && $heure_fin>=CPlageconsult::$hours_start && $min_fin>0){
-      $heure_deb = CPlageconsult::$hours_start;
-      $min_deb   = reset(CPlageconsult::$minutes);;
-    }elseif($heure_fin>CPlageconsult::$hours_stop || $heure_deb<CPlageconsult::$hours_start){
-      // Plages Hors semainier
-      $outPlage = true;
-    }
-    
-    if(!$outPlage){
-      // Mémorisation des objets
-      $nbquartheure = ($heure_fin-$heure_deb)*count($listMins);
-      $nbquartheure = $nbquartheure - array_search($min_deb,$listMins) + array_search($min_fin,$listMins);
-      
-      $valvalPlages->_nbQuartHeure = $nbquartheure;
-      $arrayAffichage[$valvalPlages->date." ".$heure_deb.":".$min_deb] = $valvalPlages;
-
-      // Détermination des horaire non vides
-      $heure_encours = array_search($heure_deb,$listHours) + CPlageconsult::$hours_start;
-      $min_encours   = array_search($min_deb,$listMins);    
-      $dans_plage = true;
-      while($dans_plage == true){      
-        $min_encours ++;
-        if(!array_key_exists($min_encours,$listMins)){
-          $min_encours=0;
-          $heure_encours ++;
-          if(!in_array($heure_encours, $listHours)){
-            $heure_encours=CPlageconsult::$hours_start;
-          }
-        }        
-        if($heure_encours==$heure_fin && $listMins[$min_encours]==$min_fin){
-          $dans_plage = false;
-        }else{
-          $arrayAffichage[$valvalPlages->date." ".$heure_encours.":".$listMins[$min_encours]] = "full";	
-        }          
-      }
-    }
+  }
+  
+  foreach($listPlages[$keyDate] as $plage){
+    $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageconsult::$minutes_interval.":00");
+    for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
+      $affichages["$keyDate ".$time] = "full";
+    } 
+    $affichages["$keyDate ".$plage->debut] = $plage->_id;
   }
 }
 
 // Recherche d'heure completement vides
-foreach($plages as $keyDate=>$valDate){
-  foreach($listHours as $keyHours=>$valHours){
+foreach($listDays as $keyDate=>$valDate){
+  foreach(CPlageconsult::$hours as $keyHours=>$valHours){
     $heure_vide = 1;
-    foreach($listMins as $kayMins=>$valMins){
+    foreach(CPlageconsult::$minutes as $kayMins=>$valMins){
       // Vérification données
-      if(!is_string($arrayAffichage["$keyDate $valHours:$valMins"]) || (is_string($arrayAffichage["$keyDate $valHours:$valMins"]) && $arrayAffichage["$keyDate $valHours:$valMins"]!= "empty")){
+      if(!is_string($affichages["$keyDate $valHours:$valMins:00"]) || (is_string($affichages["$keyDate $valHours:$valMins:00"]) && $affichages["$keyDate $valHours:$valMins:00"]!= "empty")){
         $heure_vide = 0;
       }
     }
     if($heure_vide==1){
       $first = "hours";
-      foreach($listMins as $kayMins=>$valMins){
+      foreach(CPlageconsult::$minutes as $kayMins=>$valMins){
         // Mémorisation heure vide
-        $arrayAffichage["$keyDate $valHours:$valMins"] = $first;
+        $affichages["$keyDate $valHours:$valMins:00"] = $first;
         $first = "full";
       }
     }
@@ -221,23 +187,26 @@ foreach($plages as $keyDate=>$valDate){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("affichages", $affichages);  
+$smarty->assign("listPlages"        , $listPlages);
 $smarty->assign("_firstconsult_time", $_firstconsult_time);
 $smarty->assign("_lastconsult_time" , $_lastconsult_time);
-$smarty->assign("arrayAffichage"    , $arrayAffichage);
 $smarty->assign("plageconsult_id"   , $plageconsult_id);
 $smarty->assign("vue"               , $vue);
 $smarty->assign("chirSel"           , $chirSel);
 $smarty->assign("plageSel"          , $plageSel);
 $smarty->assign("listChirs"         , $listChirs);
 $smarty->assign("listDays"          , $listDays);
-$smarty->assign("plages"            , $plages);
+$smarty->assign("listDaysSelect"    , $listDaysSelect);
 $smarty->assign("today"             , $today);
 $smarty->assign("debut"             , $debut);
 $smarty->assign("fin"               , $fin);
 $smarty->assign("prec"              , $prec);
 $smarty->assign("suiv"              , $suiv);
-$smarty->assign("listHours"         , $listHours);
-$smarty->assign("listMins"          , $listMins);
+$smarty->assign("listHours"         , CPlageconsult::$hours);
+$smarty->assign("listMins"          , CPlageconsult::$minutes);
 
 $smarty->display("vw_planning.tpl");
+
+	
 ?>

@@ -12,6 +12,8 @@ class CPlageconsult extends CMbObject {
   static $hours = array();
   static $hours_start = null;  
   static $hours_stop = null;  
+  static $minutes_interval = null;
+  
   // DB Table key
   var $plageconsult_id = null;
 
@@ -245,8 +247,27 @@ class CPlageconsult extends CMbObject {
 global $dPconfig;
 $pcConfig =& $dPconfig["dPcabinet"]["CPlageconsult"];
 
+/*
 CPlageconsult::$hours_start = $pcConfig["hours_start"];
 CPlageconsult::$hours_stop  = $pcConfig["hours_stop"];
 CPlageconsult::$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
 CPlageconsult::$minutes = range(0, 59, $pcConfig["minutes_interval"]);
+*/
+
+CPlageconsult::$hours_start = str_pad(mbGetValue($pcConfig["hours_start"], "08"),2,"0",STR_PAD_LEFT);
+CPlageconsult::$hours_stop  = str_pad(mbGetValue($pcConfig["hours_stop"], "20"),2,"0",STR_PAD_LEFT);
+CPlageconsult::$minutes_interval = mbGetValue($pcConfig["minutes_interval"],"15");
+
+
+$hours = range($pcConfig["hours_start"], $pcConfig["hours_stop" ]);
+$mins  = range(0, 59, CPlageconsult::$minutes_interval);
+
+foreach($hours as $key => $hour){
+	CPlageconsult::$hours[$hour] = str_pad($hour, 2, "0", STR_PAD_LEFT);
+}
+
+foreach($mins as $key => $min){
+	CPlageconsult::$minutes[] = str_pad($min, 2, "0", STR_PAD_LEFT);
+}
+
 ?>
