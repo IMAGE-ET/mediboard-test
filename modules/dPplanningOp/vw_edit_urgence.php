@@ -20,8 +20,8 @@ $prestation = new CPrestation();
 $prestations = $prestation->loadList();
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
-$sejour_id    = mbGetValueFromGetOrSession("sejour_id");
-$chir_id      = mbGetValueFromGet("chir_id");
+$chir_id      = mbGetValueFromGetOrSession("chir_id");
+$sejour_id    = mbGetValueFromGet("sejour_id");
 $patient_id   = mbGetValueFromGet("pat_id");
 $today        = mbDate();
 $tomorow      = mbDate("+1 DAY");
