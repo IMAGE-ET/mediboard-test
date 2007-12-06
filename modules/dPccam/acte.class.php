@@ -140,8 +140,15 @@ class CCodeCCAM {
       $query = $ds->prepare($query, $this->code);
       $result = $ds->exec($query);
       while($obj = $ds->fetchObject($result)) {
-        $obj->libelle = "";
-        $this->activites[$obj->numero] = $obj;
+        // Test si l'activité 1 est virtuelle
+        $virtuelle = true;
+        $virtuelle &= $this->chapitres[0] == "18";
+        $virtuelle &= $this->chapitres[1] == "01";
+        $virtuelle &= $obj->numero == 1;
+        if(!$virtuelle) {
+          $obj->libelle = "";
+          $this->activites[$obj->numero] = $obj;
+        }
       }
       
       // Libellés des activités
@@ -309,8 +316,15 @@ class CCodeCCAM {
       $query = $ds->prepare($query, $this->code);
       $result = $ds->exec($query);
       while($obj = $ds->fetchObject($result)) {
-        $obj->libelle = "";
-        $this->activites[$obj->numero] = $obj;
+        // Test si l'activité 1 est virtuelle
+        $virtuelle = true;
+        $virtuelle &= $this->chapitres[0]["db"] == "000018";
+        $virtuelle &= $this->chapitres[1]["db"] == "000001";
+        $virtuelle &= $obj->numero == 1;
+        if(!$virtuelle) {
+          $obj->libelle = "";
+          $this->activites[$obj->numero] = $obj;
+        }
       }
       
       // Libellés des activités
@@ -472,7 +486,7 @@ class CCodeCCAM {
     $valeur = $row["COEFFICIENT"] / 10;
     return $valeur;
   }
-} 
+}
 
 
 
