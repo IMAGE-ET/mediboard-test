@@ -7,9 +7,13 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $dialog;
 
-$can->needsEdit();
+if($dialog) {
+  $can->needsRead();
+} else {
+  $can->needsEdit();
+}
 
 // L'utilisateur est-il chirurgien?
 $mediuser = new CMediusers;
