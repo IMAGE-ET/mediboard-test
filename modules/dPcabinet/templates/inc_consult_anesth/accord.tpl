@@ -31,7 +31,7 @@
       Gestion des actes
     </div>
     <div id="ActesContent"  class="accordionTabContentBox">
-      <table class="tbl"> 
+      <table class="tbl">
         <tr>
         <td colspan="2">
             <ul id="main_tab_group" class="control_tabs">

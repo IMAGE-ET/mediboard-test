@@ -28,7 +28,10 @@ class CTarif extends CMbObject {
   // Object References
   var $_ref_chir     = null;
   var $_ref_function = null;
-
+  
+  var $_bind_consult = null;
+  var $_consult_id  = null;
+  
   function CTarif() {
     $this->CMbObject("tarifs", "tarif_id");
     
@@ -74,6 +77,39 @@ class CTarif extends CMbObject {
         $this->chir_id = "";
   	}
   }
+  
+  
+  function bindConsultation(){
+    $this->_bind_consult = false;
+    
+    // Chargement de la consultation
+    $consult = new CConsultation();
+    $consult->load($this->_consult_id);
+    $consult->loadRefPlageConsult();
+    $consult->loadRefsActesNGAP();
+    
+    // Affectation des valeurs au tarif
+    $this->secteur1    = $consult->secteur1;
+    $this->secteur2    = $consult->secteur2;
+    $this->description = $consult->tarif;
+    $this->codes_ccam  = $consult->codes_ccam;
+    $this->codes_ngap  = $consult->_tokens_ngap;
+    $this->chir_id     = $consult->_ref_chir->_id;
+  }
+  
+  
+  function store(){ 
+    if ($this->_bind_consult){
+      if($msg = $this->bindConsultation()){
+        return $msg;
+      }
+    }
+    
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+  }
+  
   
   function loadRefsFwd() {
     $this->_ref_chir = new CMediusers();

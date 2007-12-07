@@ -53,6 +53,7 @@ class CActeCCAM extends CMbMetaObject {
 
   var $_activite = null;
   var $_phase = null;
+  var $_preserve_montant = null;
   
 	function CActeCCAM() {
 		$this->CMbObject( "acte_ccam", "acte_id" );
@@ -124,7 +125,48 @@ class CActeCCAM extends CMbMetaObject {
     }
   }
     
+    
+  function checkCoded(){
+    if($this->object_class == "CConsultation"){
+      $consult = new CConsultation();
+      $consult->load($this->object_id);
+      if($consult->_coded == "1"){
+        return "Consultation déjà validée";
+      }
+    }    
+  }
+  
+  function canDeleteEx(){
+    parent::canDeleteEx();
+   
+    // Test si la consultation est validée
+    if($msg = $this->checkCoded()){
+      return $msg;
+    }
+  }
+  
+  
+  function delete(){
+    if($msg = parent::delete()){
+      return $msg;
+    }
+    
+    if(!$this->_preserve_montant){
+	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
+	    if($this->object_class == "CConsultation"){
+	      $consult = new CConsultation();
+	      $consult->load($this->object_id);
+	      $consult->updateMontants();
+	    } 
+	  }
+  }
+  
   function check() {
+    
+    // Test si la consultation est validée
+    if($msg = $this->checkCoded()){
+      return $msg;
+    }
     
     if ($msg = $this->checkEnoughCodes()) {
       // Ajoute le code si besoins à l'objet
@@ -147,7 +189,7 @@ class CActeCCAM extends CMbMetaObject {
           return "$this->code_acte: Impossible de coder cet acte d'anesthésie";
       }
     }   
-    
+ 
     return parent::check(); 
     // datetime_execution: attention à rester dans la plage de l'opération
   }
@@ -178,14 +220,26 @@ class CActeCCAM extends CMbMetaObject {
     //sauvegarde du montant de base 
     $this->montant_base = $this->getTarif();  
  
-    parent::store();
+    // Standard store
+    if ($msg = parent::store()) {
+      return $msg;
+    }
+    
+    if(!$this->_preserve_montant){
+	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
+	    if($this->object_class == "CConsultation"){
+	      $consult = new CConsultation();
+	      $consult->load($this->object_id);
+	      $consult->updateMontants();
+	    }
+	  }
   }
   
   function loadRefObject(){
     $this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id); 
   }
- 
+
   function loadRefExecutant() {
     $this->_ref_executant = new CMediusers;
     $this->_ref_executant->load($this->executant_id);

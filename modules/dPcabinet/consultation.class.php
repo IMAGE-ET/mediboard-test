@@ -43,6 +43,7 @@ class CConsultation extends CCodableCCAM {
   var $arrivee       = null;
   var $banque_id     = null;
   var $categorie_id  = null;
+  var $valide        = null; // facture validée ?
 
   // Form fields
   var $_etat           = null;
@@ -62,6 +63,11 @@ class CConsultation extends CCodableCCAM {
   var $_bind_fse = null;
   var $_ids_fse = null;
 
+  // Tarif
+  var $_bind_tarif = null;
+  var $_tarif_id = null;
+  var $_delete_actes = null;
+  
   // Back References
   var $_ref_consult_anesth = null;
   var $_ref_examaudio      = null;
@@ -132,6 +138,8 @@ class CConsultation extends CCodableCCAM {
     $specs["_etat_paiement"]  = "enum list|paye|impaye default|paye";
     $specs["_type_affichage"] = "enum list|complete|totaux";
     $specs["_prat_id"]        = "text";
+    $specs["_somme"]          = "currency";
+    $specs["valide"]          = "bool";
     return $specs;
   }
   
@@ -179,6 +187,9 @@ class CConsultation extends CCodableCCAM {
     $this->_check_adresse = $this->adresse;
     $this->getEtat();
     $this->_view = "Consultation ".$this->_etat;
+    
+    // si _coded vaut 1 alors, impossible de modifier la consultation
+    $this->_coded = $this->valide;
   }
    
   function updateDBFields() {
@@ -188,11 +199,6 @@ class CConsultation extends CCodableCCAM {
     
     if ($this->date_paiement == "0000-00-00") {
       $this->date_paiement = null;
-    }
-
-    if (($this->_somme !== null) && ($this->_somme != $this->secteur1 + $this->secteur2)){
-      $this->secteur1 = 0;
-      $this->secteur2 = $this->_somme;
     }
   }
 
@@ -242,9 +248,79 @@ class CConsultation extends CCodableCCAM {
     $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
   }
   
+  
+  
+  // Fonction permettant de supprimer les actes CCAM et NGAP associés à une consultation
+  function deleteActes(){
+    $this->_delete_actes = false;
+    // Suppression des anciens actes CCAM
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_actes_ccam as $acte) {
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    $this->codes_ccam = "";
+    
+    // Suppression des anciens actes NGAP
+    $this->loadRefsActesNGAP();
+    foreach ($this->_ref_actes_ngap as $acte) { 
+      if ($msg = $acte->delete()) {
+        return $msg;
+      }
+    }
+    $this->_tokens_ngap = "";
+    
+    $this->secteur1 = "";
+    $this->secteur2 = "";
+    $this->tarif = "";
+    
+    if ($msg = $this->store()) {
+     return $msg;
+    }
+  }
+  
+  
+  
+ 
+  function bindTarif(){
+    $this->_bind_tarif = false;
+    
+    // Suppression des actes CCAM et NGAP associés a la consultation
+    $this->deleteActes();
+  
+    // Chargement du tarif
+    $tarif = new CTarif();
+    $tarif->load($this->_tarif_id);
+ 
+    // Copie des elements du tarif dans la consultation
+    $this->secteur1     = $tarif->secteur1;
+    $this->secteur2     = $tarif->secteur2;
+    $this->tarif        = $tarif->description;
+    $this->codes_ccam   = $tarif->codes_ccam;
+    $this->_tokens_ngap = $tarif->codes_ngap;
+    
+   
+    if ($msg = $this->store()) {
+      return $msg;
+    }
+
+     // Precodage des actes NGAP
+    if ($msg = $this->precodeNGAP()){
+      return $msg;
+    }  
+   
+    // Precodage des actes CCAM
+    if ($msg = $this->precodeCCAM()){
+      return $msg;
+    }  
+    
+  }
+  
+  
   /**
    * Bind a FSE to current consult
-   * Create corresponding acts
+   * @return string Store-like message
    */
   function bindFSE() {
     // Prevents recursion
@@ -349,19 +425,22 @@ class CConsultation extends CCodableCCAM {
     $consult->load($this->_id);
     $consult->secteur1 = $secteur1;
     $consult->secteur2 = $secteur2;
-    $consult->_somme = null;
+    
     if (!$consult->tarif) {
       $consult->tarif = "FSE LogicMax";
-    }
-    
+    }  
     return $consult->store();
   }
 
   
-  function precodeActe(){
+  
+  function precodeCCAM(){
+    //$this->_precode_acte = false;
     $this->loadRefPlageConsult();
-    foreach($this->_codes_ccam as $key => $code){
+    $listCodesCCAM = explode("|", $this->codes_ccam);
+    foreach($listCodesCCAM as $key => $code){
       $acte = new CActeCCAM();
+      $acte->_preserve_montant = true;
       $acte->setCodeComplet($code);
       
       // si le code ccam est composé de 3 elements, on le precode
@@ -377,42 +456,83 @@ class CConsultation extends CCodableCCAM {
     }
   }
   
-  function storeCodeNGAP(){
-    $listCodesNGAP = array();
-    $listCodesNGAP = explode("|",$_POST["codes_ngap"]);
+ 
+  
+  function precodeNGAP(){
+    $listCodesNGAP = explode("|",$this->_tokens_ngap);
     foreach($listCodesNGAP as $key => $code_ngap){
-      $detailCodeNGAP = explode("-", $code_ngap);
-      $acte = new CActeNGAP();
-      $acte->quantite    = $detailCodeNGAP[0];
-      $acte->code        = $detailCodeNGAP[1];
-      $acte->coefficient = $detailCodeNGAP[2];
-      $acte->consultation_id = $this->_id;
-      if (!$acte->countMatchingList()) {
-        $acte->store();
-      }
+      if($code_ngap) {
+	      $detailCodeNGAP = explode("-", $code_ngap);
+	      $acte = new CActeNGAP();
+	      $acte->_preserve_montant = true;
+	      $acte->quantite    = $detailCodeNGAP[0];
+	      $acte->code        = $detailCodeNGAP[1];
+	      $acte->coefficient = $detailCodeNGAP[2];
+	      $acte->consultation_id = $this->_id;
+	      if (!$acte->countMatchingList()) {
+	        $acte->store();
+	      }
+	    }
     } 
   }
   
+  function updateMontants(){
+    // Initialisation des montants
+    $secteur1_NGAP = 0;
+    $secteur1_CCAM = 0;
+    $secteur2_NGAP = 0;
+    $secteur2_CCAM = 0;
+    
+    // Chargement des actes NGAP
+    $this->loadRefsActesNGAP();
+    foreach ($this->_ref_actes_ngap as $acteNGAP) { 
+      $secteur1_NGAP += $acteNGAP->montant_base;
+      $secteur2_NGAP += $acteNGAP->montant_depassement;
+    }
+   
+    // Chargement des actes CCAM
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_actes_ccam as $acteCCAM) { 
+      $secteur1_CCAM += $acteCCAM->montant_base;
+      $secteur2_CCAM += $acteCCAM->montant_depassement;
+    }
+    
+    // Remplissage des montant de la consultation
+    $this->secteur1 = $secteur1_NGAP + $secteur1_CCAM;
+    $this->secteur2 = $secteur2_NGAP + $secteur2_CCAM;
+    
+    return $this->store();
+    
+  }
+  
+  
+  
   function store() {
+    // Mise a jour des montants secteur1 et secteur2
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
     
-    // Store code NGAP
-    if ($this->_store_ngap && $this->_id && $_POST["del"] == 0){
-      return $this->storeCodeNGAP();
+    // Gestion du tarif et precodage des actes
+    if ($this->_bind_tarif && $this->_id){
+      if($msg = $this->bindTarif()){
+        return $msg;
+      }
     }
     
-    // Precodage des actes
-    if($this->_precode_acte && $this->_id){
-      return $this->precodeActe();
+    if ($this->_delete_actes && $this->_id){
+      if($msg = $this->deleteActes()){
+        return $msg;    
+      }
     }
-    
+  
     // Bind FSE
     if ($this->_bind_fse && $this->_id) {
       return $this->bindFSE();
-    }
+    }  
+    
   }
   
   function loadRefCategorie() {

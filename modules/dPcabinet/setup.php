@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.83";
+$config["mod_version"]     = "0.84";
 $config["mod_type"]        = "user";
 
 
@@ -841,7 +841,17 @@ class CSetupdPcabinet extends CSetup {
             ADD `montant_base` FLOAT;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.83";
+    $this->makeRevision("0.83");
+    $sql = "ALTER TABLE `consultation`
+            ADD `valide` ENUM('0','1') NOT NULL DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`
+			      SET `valide` = '1'
+		     	  WHERE `tarif` IS NOT NULL;";
+    $this->addQuery($sql);
+     
+    $this->mod_version = "0.84";
   }
 }
 ?>

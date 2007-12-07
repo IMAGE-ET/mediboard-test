@@ -1,3 +1,4 @@
+<!-- Pas d'affichage de inc_manage_codes si la consultation est deja validée -->
 <form name="manageCodes" action="?m={{$module}}" method="post">
   <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
   <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />

@@ -60,21 +60,47 @@ Intermax.ResultHandler["Consulter Vitale"] = Intermax.ResultHandler["Lire Vitale
 Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"];
 
 
-function cancelTarif() {
+
+function cancelTarif(action) {
   var oForm = document.tarifFrm;
-  oForm.secteur1.value = 0;
-  oForm.secteur2.value = 0;
+  
+  if(action == "delActes"){
+    oForm._delete_actes.value = 1;  
+  }
+  
+  if(oForm.valide){
+    oForm.valide.value = 0;
+  }
+  
+  
+  
   if(oForm._somme){
     oForm._somme.value = 0;
   }
   oForm.tarif.value = "";
   oForm.paye.value = "0";
-  oForm.date_paiement.value = "";
- 
-  synchroForm();
   
+  oForm.date_paiement.value = "";  
   submitFdr(oForm);
 }
+
+
+function validTarif(){
+  var oForm = document.tarifFrm;
+  
+  if(oForm.tarif.value == ""){
+    oForm.tarif.value = "manuel";
+  }
+  if(oForm.codes_ccam.value){
+    oForm.tarif.value += " / "+oForm.codes_ccam.value;
+  }
+  if(oForm._tokens_ngap.value){
+    oForm.tarif.value += " / "+oForm._tokens_ngap.value;
+  }
+  submitFdr(oForm);
+}
+
+
 
 function popFile(objectClass, objectId, elementClass, elementId) {
   var url = new Url;
@@ -87,8 +113,6 @@ function modifTotal(){
   var secteur2 = oForm.secteur2.value;
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
-  
-  synchroForm();
 }
 
 
@@ -98,72 +122,6 @@ function modifSecteur2(){
   var somme = oForm._somme.value;
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
-  
-  synchroForm();
-}
-
-function modifTarif() {
-  var oForm = document.tarifFrm;
-  var choix = oForm.choix.value;
-  
-  // tarif_array: secteur1 secteur2 codes_ccam
-  if(choix != ''){
-    var tarif_array = choix.split(" ");
-    var secteur1 = tarif_array[0];
-    var secteur2 = tarif_array[1];
-    var codes_ccam = tarif_array[2];
-    var codes_ngap = tarif_array[3];
-  
-    oForm.secteur1.value = tarif_array[0];
-    oForm.secteur2.value = tarif_array[1];
-    oForm._newCode.value = codes_ccam;
-    oForm._newCodeNGAP.value = codes_ngap;
-  
-    oForm._somme.value = parseFloat(tarif_array[0]) + parseFloat(tarif_array[1]); 
-    
-    var aNGAP = oForm.codes_ngap.value.split("|");
-    aNGAP.removeByValue("");
-    if(oForm._newCodeNGAP.value != ''){
-      aNGAP.push(oForm._newCodeNGAP.value);
-    }
-    aNGAP.sort();
-    oForm.codes_ngap.value = aNGAP.join("|");
-    
-    
-    var aCCAM = oForm.codes_ccam.value.split("|");
-    // Si la chaine est vide, il crée un tableau à un élément vide donc :
-    aCCAM.removeByValue("");
-    if(oForm._newCode.value != ''){
-      aCCAM.push(oForm._newCode.value);
-    }
-    aCCAM.sort();
-    oForm.codes_ccam.value = aCCAM.join("|"); 
-    
-    
-    for (i = 0;i < oForm.choix.length;++i)
-      if(oForm.choix.options[i].selected == true)
-       oForm.tarif.value = oForm.choix.options[i].text;
-         
-  } 
-  else {
-    oForm.secteur1.value = 0;
-    oForm.secteur2.value = 0; 
-    oForm._somme.value = '';
-    oForm.tarif.value = '';
-  }
-  
-  synchroForm();
-}
-
-function synchroForm(){
-  var oFormConsultation = document.tarifFrm;
-  var oFormNouveauTarif = document.creerTarif;
-  
-  oFormNouveauTarif.secteur1.value = oFormConsultation.secteur1.value;
-  oFormNouveauTarif.secteur2.value = oFormConsultation.secteur2.value;
-  if(oFormConsultation.codes_ccam){
-    oFormNouveauTarif.codes_ccam.value = oFormConsultation.codes_ccam.value;
-  }
 }
 
 function effectuerReglement() {
@@ -478,45 +436,59 @@ function submitFdr(oForm) {
 
     <!-- Règlements -->  
     <td {{if !$gestionFSE}}colspan="2"{{/if}}>
+      
+      
+      <!-- Formulaire de selection de tarif -->
+      <form name="selectionTarif" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+	      <input type="hidden" name="m" value="{{$m}}" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="dosql" value="do_consultation_aed" />
+	      <input type="hidden" name="_bind_tarif" value="1" />
+	      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+	     
+	      <table class="form">
+	        {{if !$consult->tarif}}
+	        <tr>
+	          <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
+	          <td>
+	            <select name="_tarif_id"  class="notNull str" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadFdr } );">
+	              <option value="" selected="selected">&mdash; Choix du tarif</option>
+	              {{if $tarifsChir|@count}}
+	              <optgroup label="Tarifs praticien">
+	              {{foreach from=$tarifsChir item=curr_tarif}}
+	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}} / {{$curr_tarif->secteur1}}</option>
+	              {{/foreach}}
+	              </optgroup>
+	              {{/if}}
+	              {{if $tarifsCab|@count}}
+	              <optgroup label="Tarifs cabinet">
+	              {{foreach from=$tarifsCab item=curr_tarif}}
+	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}}</option>
+	              {{/foreach}}
+	              </optgroup>
+	              {{/if}}
+	            </select>
+	          </td>
+	        </tr>
+	        {{else}}
+	        <tr>
+	          <th>{{mb_label object=$consult field=tarif}}</th>
+	          <td>{{mb_value object=$consult field=tarif}}</td>    
+	        </tr>
+	        {{/if}}
+	      </table>
+      </form>
+      <hr />
+      
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
-     
-      <table class="form">
-        {{if !$consult->tarif}}
-        <tr>
-          <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
-          <td>
-            <select name="choix"  class="notNull str" onchange="modifTarif();">
-              <option value="" selected="selected">&mdash; Choix du tarif</option>
-              {{if $tarifsChir|@count}}
-              <optgroup label="Tarifs praticien">
-              {{foreach from=$tarifsChir item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}} {{$curr_tarif->codes_ngap}}">{{$curr_tarif->_view}}</option>
-                
-              {{/foreach}}
-              </optgroup>
-              {{/if}}
-              {{if $tarifsCab|@count}}
-              <optgroup label="Tarifs cabinet">
-              {{foreach from=$tarifsCab item=curr_tarif}}
-                <option value="{{$curr_tarif->secteur1}} {{$curr_tarif->secteur2}} {{$curr_tarif->codes_ccam}} {{$curr_tarif->codes_ngap}}">{{$curr_tarif->_view}}</option>
-              {{/foreach}}
-              </optgroup>
-              {{/if}}
-            </select>
-          </td>
-        </tr>
-        {{else}}
-        <tr>
-          <th>{{mb_label object=$consult field=tarif}}</th>
-          <td>{{mb_value object=$consult field=tarif}}</td>
-				</td>        
-        {{/if}}
-        
+     {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+      
+      <table width="100%">  
         {{if $consult->paye == "0"}}
        
         <tr>          
@@ -525,24 +497,38 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="paye" value="0" />
             <input type="hidden" name="date_paiement" value="" />
-            <input type="hidden" name="_precode_acte" value="1" />
        
+            {{if $consult->valide}}
 	          {{mb_label object=$consult field="secteur1"}}
+	          {{mb_value object=$consult field="secteur1" onchange="modifTotal()"}} +
+	          {{mb_label object=$consult field="secteur2"}}
+	          {{mb_value object=$consult field="secteur2" onchange="modifTotal()"}} =
+ 			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
+            {{else}}
+            {{mb_label object=$consult field="secteur1"}}
 	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
 	          {{mb_label object=$consult field="secteur2"}}
 	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
  			      <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
+            {{/if}}
            </td>
-
-          <td>
-          	{{mb_field object=$consult field="codes_ccam" hidden=1 prop=""}}
-            <input type="hidden" name="codes_ngap" value="{{$consult->_tokens_ngap}}" />
-          </td>
-          <td>
-	          <input type="hidden" name="_newCode" />
-	          <input type="hidden" name="_newCodeNGAP" />
-	          <input type="hidden" value="1" name="_store_ngap" /> 
-          </td>
+         </tr>
+         <tr>
+           <th colspan="2" class="category">{{mb_label object=$consult field="codes_ccam"}}</th>
+         </tr>
+         <tr>
+           <td colspan="2">{{mb_field object=$consult field="codes_ccam" readonly="readonly" hidden=1 prop=""}}
+           {{$consult->codes_ccam|replace:'|':' '}}
+           </td>
+         </tr>
+         <tr>
+           <th colspan="2" class="category">Codes NGAP</th>
+         </tr>
+         <tr>
+           <td colspan="2">{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
+           {{$consult->_tokens_ngap|replace:'|':'     '}}
+           </td>
+         </tr>
         </tr>
         {{else}}
         <tr>
@@ -556,13 +542,16 @@ function submitFdr(oForm) {
           </td>
         </tr>
         <tr>
+          <!-- Suppression des actes associées a la consultation -->
+          
           <td colspan="2" class="button">
+          <input type="hidden" name="valide" value="0" />
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
           </td>
         </tr>
         {{/if}}
         
-        {{if $consult->tarif && $consult->paye == "0"}}
+        {{if $consult->tarif && $consult->paye == "0" && $consult->valide == "1"}}
         <tr>
           <th>
             {{mb_label object=$consult field="type_tarif"}}
@@ -586,8 +575,9 @@ function submitFdr(oForm) {
         </tr>
         <tr>
           <td colspan="2" class="button">
+            <input type="hidden" name="valide" value="1" />
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
-            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
+            <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>
           </td>
         </tr>
         {{elseif $consult->paye == "0"}}
@@ -596,12 +586,14 @@ function submitFdr(oForm) {
           <td>
             <input type="checkbox" name="_tiers" onchange="putTiers()" />
             <input type="hidden" name="type_tarif" value="" />
+            <input type="hidden" name="valide" value="1" />
           </td>
         </tr>
         <tr>
           <td colspan="2" class="button">
-            <button class="submit" type="button" onclick="submitFdr(this.form)">Valider ce tarif</button>
-            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
+          <input type="hidden" name="_delete_actes" value="0" />
+            <button class="submit" type="button" onclick="validTarif();">Valider ce tarif</button>
+            <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler le tarif</button>
           </td>
         </tr>
         {{/if}}
@@ -609,23 +601,19 @@ function submitFdr(oForm) {
       
       </form>
       
+      
+      {{if $consult->valide}}
       <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
       <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
         <input type="hidden" name="dosql" value="do_tarif_aed" />
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="_tab" value="vw_compta" />
         <input type="hidden" name="del" value="0" />
-        <!-- Champs mis a jour lors de la selection d'un tarif -->
-        <input type="hidden" name="secteur1" value="" />
-        <input type="hidden" name="secteur2" value="" />
-        <input type="hidden" name="codes_ccam" value="{{$consult->codes_ccam}}" />
-        <!-- Codes NGAP de la consultation courante -->
-        <input type="hidden" name="codes_ngap" value="{{$consult->_tokens_ngap}}" />
-        <!-- Id de l'utilisateur courant -->
-        <input type="hidden" name="chir_id" value="{{$consult->_ref_chir->_id}}" />
-        <input type="hidden" name="description" value="Consultation {{$consult->_tokens_ngap}}" />
+        <input type="hidden" name="_bind_consult" value="1" />
+        <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
         <button class="submit" type="submit">Créer un nouveau tarif</button>
       </form>
+      {{/if}}
       
     </td>
    

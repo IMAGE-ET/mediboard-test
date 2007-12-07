@@ -1,5 +1,4 @@
 <?php
-$locales['CActeNGAP-montant_depassement-desc'] = '';
 $locales['CActeNGAP'] = '';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -16,6 +15,7 @@ $locales['CActeNGAP-consultation_id-desc'] = '';
 $locales['CActeNGAP-montant_base'] = '';
 $locales['CActeNGAP-montant_base-desc'] = '';
 $locales['CActeNGAP-montant_depassement'] = '';
+$locales['CActeNGAP-montant_depassement-desc'] = '';
 $locales['CActeNGAP-quantite'] = '';
 $locales['CActeNGAP-quantite-court'] = '';
 $locales['CActeNGAP-quantite-desc'] = '';
@@ -299,6 +299,7 @@ $locales['CConsultation-arrivee'] = '';
 $locales['CConsultation-arrivee-court'] = '';
 $locales['CConsultation-arrivee-desc'] = '';
 $locales['CConsultation-back-'] = '';
+$locales['CConsultation-back-actes_ngap'] = '';
 $locales['CConsultation-back-consult_anesth'] = 'Anesthesiology file';
 $locales['CConsultation-back-examaudio'] = '';
 $locales['CConsultation-back-examcomp'] = '';

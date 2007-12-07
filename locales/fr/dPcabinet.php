@@ -1,5 +1,4 @@
 <?php
-$locales['CActeNGAP-montant_depassement-desc'] = 'Dépassement';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -16,6 +15,7 @@ $locales['CActeNGAP-consultation_id-desc'] = '';
 $locales['CActeNGAP-montant_base'] = 'Montant de base';
 $locales['CActeNGAP-montant_base-desc'] = 'Montant de base de l\'acte';
 $locales['CActeNGAP-montant_depassement'] = 'Dépassement';
+$locales['CActeNGAP-montant_depassement-desc'] = 'Dépassement';
 $locales['CActeNGAP-quantite'] = 'Quantité';
 $locales['CActeNGAP-quantite-court'] = 'Qté';
 $locales['CActeNGAP-quantite-desc'] = 'Nombre d\'occurrence de l\'acte';
@@ -299,6 +299,7 @@ $locales['CConsultation-arrivee'] = 'Arrivée';
 $locales['CConsultation-arrivee-court'] = 'Arr.';
 $locales['CConsultation-arrivee-desc'] = 'Heure d\'arrivée du patient';
 $locales['CConsultation-back-'] = '';
+$locales['CConsultation-back-actes_ngap'] = '';
 $locales['CConsultation-back-consult_anesth'] = 'Dossier d\'anesthésie';
 $locales['CConsultation-back-examaudio'] = '';
 $locales['CConsultation-back-examcomp'] = '';
@@ -319,7 +320,7 @@ $locales['CConsultation-chrono.16'] = '';
 $locales['CConsultation-chrono.32'] = '';
 $locales['CConsultation-chrono.48'] = '';
 $locales['CConsultation-chrono.64'] = '';
-$locales['CConsultation-codes_ccam'] = '';
+$locales['CConsultation-codes_ccam'] = 'Codes CCAM';
 $locales['CConsultation-codes_ccam-court'] = '';
 $locales['CConsultation-codes_ccam-desc'] = '';
 $locales['CConsultation-consultation_id'] = '';
@@ -1027,5 +1028,4 @@ $locales['pref-simpleCabinet'] = 'Liaison hospitalisation';
 $locales['pref-simpleCabinet-0'] = 'avec hospitalisation';
 $locales['pref-simpleCabinet-1'] = 'sans hospitalisation';
 $locales['pref-simpleCabinet-desc'] = 'Affichage des informations concernant les hospitalisations';
-$locales['CConsultation-back-actes_ngap'] = '';
 ?>

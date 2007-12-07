@@ -19,6 +19,7 @@ class CActeNGAP extends CMbObject {
   var $consultation_id = null;
   var $montant_depassement = null;
   var $montant_base = null;
+  var $_preserve_montant = null;
   
   // Form Fields
   var $_montant_facture = null;
@@ -39,6 +40,60 @@ class CActeNGAP extends CMbObject {
       "montant_depassement" => "currency min|0",
       "montant_base"        => "currency"
     );
+  }
+ 
+  
+  function checkCoded(){
+    $consult = new CConsultation();
+    $consult->load($this->consultation_id);
+    if($consult->_coded == "1"){
+      return "Consultation déjà validée";
+    }    
+  }
+  
+  
+  function check(){
+    parent::check();
+
+    if($msg = $this->checkCoded()){
+      return $msg;
+    }
+    
+  }
+  
+  function store(){
+    if($msg = parent::store()){
+      return $msg;
+    }
+    
+    if(!$this->_preserve_montant){
+	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
+	    $consult = new CConsultation();
+	    $consult->load($this->consultation_id);
+	    $consult->updateMontants();  
+	  }
+  }
+  
+  
+  function canDeleteEx(){
+    parent::canDeleteEx();
+
+    if($msg = $this->checkCoded()){
+      return $msg;
+    }
+  }
+  
+  function delete(){
+    if($msg = parent::delete()){
+      return $msg;
+    }
+    
+    if(!$this->_preserve_montant){
+	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
+	    $consult = new CConsultation();
+	    $consult->load($this->consultation_id);
+	    $consult->updateMontants();   
+	  } 
   }
   
   function updateFormFields() {

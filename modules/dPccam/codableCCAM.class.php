@@ -13,7 +13,7 @@ class CCodableCCAM extends CMbObject {
   var $temp_operation      = null;
   var $_ref_anesth         = null;
   var $_anesth             = null;
-  
+  var $_coded              = null;
   var $_associationCodesActes = null;
 
   function updateFormFields() {
@@ -62,9 +62,14 @@ class CCodableCCAM extends CMbObject {
     }
   }
   
+  
+  function updateMontants(){
+    
+  }
+  
   function updateDBFields() {
     // Should update codes CCAM. Very sensible, test a lot before uncommenting
-//    $this->updateDBCodesCCAMField();
+    // $this->updateDBCodesCCAMField();
   }
   
   function getSpecs() {
@@ -134,6 +139,7 @@ class CCodableCCAM extends CMbObject {
 	    }
 	    @$nb_codes_ccam[$code]++;
 	  }
+	  
 	  
 	  // Test entre les deux tableaux
 	  foreach($nb_codes_ccam_minimal as $code => $nb_code_minimal){
