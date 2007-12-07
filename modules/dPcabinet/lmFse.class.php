@@ -16,6 +16,8 @@ require_once($AppUI->getModuleClass("dPcabinet", "lmObject"));
 class CLmFSE extends CLmObject {  
   // DB Table key
   var $S_FSE_NUMERO_FSE = null;
+  
+  var $_annulee = null;
 
   // DB Fields : see getSpecs();
   
@@ -26,6 +28,7 @@ class CLmFSE extends CLmObject {
 	function updateFormFields() {
 	  parent::updateFormFields();
 	  $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
+	  $this->_annulee = $this->S_FSE_ETAT == "3";
 	}
 	
   function getSpec() {

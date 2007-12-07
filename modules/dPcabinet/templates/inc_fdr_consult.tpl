@@ -11,8 +11,8 @@ Object.extend(Intermax.ResultHandler, {
     	"Vous êtes sur le point de mettre à jour le patient" :
     	"Vous êtes sur le point d'associer le patient";
     msg += printf("\n\t%s %s (%s)", 
-    	{{$patient->nom|json}}, 
-    	{{$patient->prenom|json}}, 
+    	'{{$patient->nom|smarty:nodefaults|JSAttribute}}', 
+    	'{{$patient->prenom|smarty:nodefaults|JSAttribute}}', 
     	'{{mb_value object=$patient field=naissance}}');
     msg += "\nAvec le bénéficiaire Vitale";
     msg += printf("\n\t%s %s (%s)", 
@@ -33,8 +33,8 @@ Object.extend(Intermax.ResultHandler, {
     	"Vous êtes sur le point de mettre à jour le praticien" :
     	"Vous êtes sur le point d'associer le pratcien";
     msg += printf("\n\t%s %s (%s)", 
-    	{{$praticien->_user_first_name|json}}, 
-    	{{$praticien->_user_last_name|json}},
+    	'{{$praticien->_user_first_name|smarty:nodefaults|JSAttribute}}', 
+    	'{{$praticien->_user_last_name|smarty:nodefaults|JSAttribute}}', 
     	'{{mb_value object=$praticien field=adeli}}');
     msg += "\nAvec la Carte Professionnelle de Santé de";
     msg += printf("\n\t%s %s (%s)", 
@@ -49,16 +49,19 @@ Object.extend(Intermax.ResultHandler, {
   },
 
   "Formater FSE": function() {
-    var oFSE = Intermax.oContent.FSE;
-  	var msg = printf("Vous venez d'associer la FSE %s à cette consultation",
-  		oFSE.FSE_NUMERO_FSE);
     submitFdr(document.BindFSE);
+  },
+
+  "Annuler FSE": function() {
+    reloadFdr();
   }  
 } );
 
 Intermax.ResultHandler["Consulter Vitale"] = Intermax.ResultHandler["Lire Vitale"];
 Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"];
 
+// Use single quotes or fails ?!!
+Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 
 
 function cancelTarif(action) {
@@ -382,6 +385,7 @@ function submitFdr(oForm) {
 			
 			      <input type="hidden" name="m" value="dPcabinet" />
 			      <input type="hidden" name="dosql" value="do_consultation_aed" />
+			      <input type="hidden" name="_delete_actes" value="1" />
 			      <input type="hidden" name="_bind_fse" value="1" />
 			      {{mb_field object=$consult field="consultation_id" hidden="1"}}
 		      
@@ -391,13 +395,18 @@ function submitFdr(oForm) {
 				</tr>
 				
 				<!-- Les FSE déjà associées -->
-        {{foreach from=$consult->_ids_fse item=_id_fse}}
+        {{foreach from=$consult->_ext_fses key=_id_fse item=_ext_fse}}
 				<tr>
 				  <td>
 				  	<label onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">
-				  	  FSE numéro {{$_id_fse}}
+				  	  {{$_ext_fse->_view}}
 				  	</label>
 		      </td>
+	        {{if $_ext_fse->_annulee}}
+	        <td class="cancelled">
+	          {{mb_value object=$_ext_fse field=S_FSE_ETAT}}
+	        </td>
+		      {{else}}
 		      <td class="button">
 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
 			        Consulter 
@@ -406,9 +415,10 @@ function submitFdr(oForm) {
 			        Imprimer
 			      </button>
 			      <button class="cancel" type="button" onclick="Intermax.Triggers['Annuler FSE']('{{$_id_fse}}');">
-			        Anuuler
+			        Annuler
 			      </button>
 		      </td>
+		      {{/if}}
 		    </tr>
         {{foreachelse}}
 				<tr>
@@ -421,9 +431,11 @@ function submitFdr(oForm) {
         <tr>
 		      {{if $patient->_id_vitale && $praticien->_id_cps}}
           <td colspan="2" class="button">
+            {{if !$consult->_current_fse}}
 			      <button class="new" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
 			        Formater FSE
 			      </button>
+			      {{/if}}
 			      <button class="tick" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
 			        Mettre à jour FSE
 			      </button>
@@ -444,6 +456,7 @@ function submitFdr(oForm) {
 	      <input type="hidden" name="m" value="{{$m}}" />
 	      <input type="hidden" name="del" value="0" />
 	      <input type="hidden" name="dosql" value="do_consultation_aed" />
+        <input type="hidden" name="_delete_actes" value="1" />
 	      <input type="hidden" name="_bind_tarif" value="1" />
 	      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
 	     

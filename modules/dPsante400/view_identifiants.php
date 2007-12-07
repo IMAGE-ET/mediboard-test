@@ -39,13 +39,14 @@ if ($dialog && $idSante400->_id) {
   $filter->id400        = $idSante400->id400;   
 }
 
-// Chargment de la cible si oBjet unique
+// Chargement de la cible si oBjet unique
 $target = null;
 if ($filter->object_id && $filter->object_class) {
   $target = new $filter->object_class;
   $target->load($filter->object_id);
 }
 
+// Requête du filtre
 $order = "last_update DESC";
 $limit = "0, 100";
 

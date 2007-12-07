@@ -128,6 +128,11 @@ var Patient = {
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     <td class="text">
+      {{if $curr_patient->_id == $patVitale->_id}}
+      <div style="float:right;">
+        <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
+      </div>
+      {{/if}}
       <a href="?m=dPpatients&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
         {{mb_value object=$curr_patient field="_view"}}
       </a>

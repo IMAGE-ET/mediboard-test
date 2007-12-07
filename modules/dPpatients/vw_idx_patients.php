@@ -46,17 +46,21 @@ $patient_month       = mbGetValueFromGet("Date_Month"  , "");
 $patient_year        = mbGetValueFromGet("Date_Year"   , "");
 $patient_naissance   = null;
 
+// Champs vitale
+$patVitale = new CPatient;
 if ($useVitale = mbGetValueFromGet("useVitale")) {
-  $patVitale = new CPatient;
   $patVitale->getValuesFromVitale();
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
   $patient_prenom = $patVitale->prenom;
+  mbSetValueToSession("nom", $patVitale->nom);
+  mbSetValueToSession("prenom", $patVitale->prenom);
 //  $patient_day    = $patVitale->_jour;
 //  $patient_month  = $patVitale->_mois;
 //  $patient_year   = $patVitale->_annee;
   $patient_naissance = "on";
   mbSetValueToSession("naissance", "on");
+  $patVitale->loadFromIdVitale();
 }
 
 $where        = array();
@@ -128,6 +132,13 @@ if (!$patient->_id and count($patients) == 1) {
   $patient = reset($patients);
 }
 
+// Patient vitale associé trouvé : prioritaire
+if ($patVitale->_id) {
+  $patient = $patVitale;
+  // Au cas où il n'aurait pas été trouvé grâce aux champs
+  $patients[$patient->_id] = $patient; 
+}
+
 // Liste des praticiens disponibles
 $listPrat = array();
 if ($patient->_id) {
@@ -163,6 +174,7 @@ $smarty->assign("naissance"      , $patient_naissance        );
 $smarty->assign("ville"          , $patient_ville            );
 $smarty->assign("cp"             , $patient_cp               );
 $smarty->assign("useVitale"      , $useVitale                );
+$smarty->assign("patVitale"      , $patVitale                );
 $smarty->assign("patients"       , $patients                 );
 $smarty->assign("patientsSoundex", $patientsSoundex          );
 $smarty->assign("patientsCount"  , $patientsCount            );

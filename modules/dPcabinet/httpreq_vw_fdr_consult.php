@@ -83,6 +83,7 @@ if ($selConsult) {
 
 // Chargement des identifiants LogicMax
 $consult->loadIdsFSE();
+$consult->makeFSE();
 $consult->_ref_chir->loadIdCPS();
 $consult->_ref_patient->loadIdVitale();
 

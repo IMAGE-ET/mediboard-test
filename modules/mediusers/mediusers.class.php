@@ -313,6 +313,10 @@ class CMediusers extends CMbObject {
 
   function loadIdCPS() {
     $id_cps = new CIdSante400();
+    if (!$id_cps->_ref_module) {
+      return;
+    }
+    
     $id_cps->setObject($this);
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();

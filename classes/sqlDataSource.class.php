@@ -495,9 +495,9 @@ abstract class CSQLDataSource {
    * Escapes up to nine values for SQL queries
    * => prepare("INSERT INTO table_name VALUES (%)", $value);
    * => prepare("INSERT INTO table_name VALUES (%1, %2)", $value1, $value2);
-   * @param $string $query
-   * @param $string Unlimited values
-   * @return strin The prepared query
+   * @param string $query
+   * @param params Unlimited values
+   * @return string The prepared query
    **/
   function prepare($query) {
     $values = func_get_args();

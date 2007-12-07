@@ -62,6 +62,9 @@ class CConsultation extends CCodableCCAM {
   // FSE
   var $_bind_fse = null;
   var $_ids_fse = null;
+  var $_ext_fses = null;
+  var $_current_fse = null;
+  var $_fse_intermax = null;
 
   // Tarif
   var $_bind_tarif = null;
@@ -239,6 +242,7 @@ class CConsultation extends CCodableCCAM {
 
   /**
    * Chargement des identifiants des FSE associées
+   * @return void
    */
   function loadIdsFSE() {
     $id_fse = new CIdSante400();
@@ -246,6 +250,20 @@ class CConsultation extends CCodableCCAM {
     $id_fse->tag = "LogicMax FSENumero";
     $id_fse = $id_fse->loadMatchingList();
     $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
+    
+    // Chargement des FSE externes
+    $fse = new CLmFSE();
+    $where = array();
+    $where["S_FSE_NUMERO_FSE"] = CSQLDataSource::prepareIn($this->_ids_fse);
+    $this->_ext_fses = $fse->loadList($where);
+    
+    // Last FSE
+    $this->_current_fse = null;
+    foreach ($this->_ext_fses as $_ext_fse) {
+      if (!$_ext_fse->_annulee) {
+        $this->_current_fse = $_ext_fse;
+      }
+    }
   }
   
   
@@ -278,17 +296,11 @@ class CConsultation extends CCodableCCAM {
     if ($msg = $this->store()) {
      return $msg;
     }
-  }
-  
-  
-  
+  }  
  
   function bindTarif(){
     $this->_bind_tarif = false;
     
-    // Suppression des actes CCAM et NGAP associés a la consultation
-    $this->deleteActes();
-  
     // Chargement du tarif
     $tarif = new CTarif();
     $tarif->load($this->_tarif_id);
@@ -319,6 +331,47 @@ class CConsultation extends CCodableCCAM {
   
   
   /**
+   * Create a LogicMaxFSE from the consult
+   * Conterpart to Bind FSE
+   * @return void
+   */
+  function makeFSE() {
+    $this->_fse_intermax = array();
+    
+    // Ajout des actes NGAP
+    $this->loadRefsActesNGAP();
+    foreach ($this->_ref_actes_ngap as $acte_ngap) {
+	    $acteNumber = count($this->_fse_intermax)+1;
+	    $this->_fse_intermax["ACTE_$acteNumber"] = array(
+	      "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
+	      "PRE_CODE"        => $acte_ngap->code,
+	      "PRE_COEFFICIENT" => $acte_ngap->coefficient,
+	      "PRE_QUANTITE"    => $acte_ngap->quantite,
+	    );
+    }
+    
+    // Ajout des actes CCAM
+    $this->loadRefsActesCCAM();
+    foreach ($this->_ref_actes_ccam as $acte_ccam) {
+	    $acteNumber = count($this->_fse_intermax)+1;
+	    $ACTE = array(
+	      "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
+	      "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
+	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
+	      "PRE_CODE_PHASE"    => $acte_ccam->code_phase,
+	      "PRE_ASSOCIATION"   => $acte_ccam->code_association,
+	    );
+	    
+	    // Ajout des modificateurs
+	    for ($i = 1; $i <= 4; $i++) {
+	      $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
+	    }
+	    
+	    $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
+    }
+  }
+  
+  /**
    * Bind a FSE to current consult
    * @return string Store-like message
    */
@@ -326,11 +379,11 @@ class CConsultation extends CCodableCCAM {
     // Prevents recursion
     $this->_bind_fse = false;
     
-    // Make id400
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
     }
     
+    // Make id externe
     $fse = $intermax["FSE"];
     $fseNumero = $fse["FSE_NUMERO_FSE"];
     $id_fse = new CIdSante400();
@@ -357,27 +410,6 @@ class CConsultation extends CCodableCCAM {
       return $msg;
     }
     
-    // Suppression des anciens actes CCAM
-    $this->loadRefsActesCCAM();
-    foreach ($this->_ref_actes_ccam as $acte) { 
-      if ($msg = $acte->delete()) {
-        return $msg;
-      }
-    }
-    $this->codes_ccam = "";
-    $this->store();
-    
-    // Suppression des anciens actes NGAP
-    $this->loadRefsActesNGAP();
-    foreach ($this->_ref_actes_ngap as $acte) { 
-      if ($msg = $acte->delete()) {
-        return $msg;
-      }
-    }
-        
-    $secteur1 = 0.0;
-    $secteur2 = 0.0;
-    
     // Ajout des actes CCAM et NGAP récupérés
     for ($iActe = 1; $fseActe = @$intermax["ACTE_$iActe"]; $iActe++) {
       switch ($typeActe = $fseActe["PRE_ACTE_TYPE"]) {
@@ -403,7 +435,7 @@ class CConsultation extends CCodableCCAM {
         for ($iModif = 1; $iModif <= 4; $iModif++) {
           $acte->modificateurs .= $fseActe["PRE_MODIF_$iModif"];
         }
-        $acte->montant_depassement = $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
+        
         $acte->code_association = $fseActe["PRE_ASSOCIATION"];
         
         break;
@@ -412,23 +444,21 @@ class CConsultation extends CCodableCCAM {
         return "Acte LogicMax de type inconnu (Numero = '$typeActe')";
       }
       
-      $secteur1 += $fseActe["PRE_MONTANT"];
-      $secteur2 += $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
-      
+      $acte->montant_base = $fseActe["PRE_BASE"];
+      $acte->montant_depassement = $fseActe["PRE_MONTANT"] - $fseActe["PRE_BASE"];
+
       if ($msg = $acte->store()) {
         return $msg;
       }
     }
     
-    // Have to load cuz codes CCAM have been updated
+    // Nom par défaut si non défini
     $consult = new CConsultation();
     $consult->load($this->_id);
-    $consult->secteur1 = $secteur1;
-    $consult->secteur2 = $secteur2;
-    
     if (!$consult->tarif) {
       $consult->tarif = "FSE LogicMax";
-    }  
+    }
+    
     return $consult->store();
   }
 
@@ -508,11 +538,15 @@ class CConsultation extends CCodableCCAM {
   
   
   function store() {
-    // Mise a jour des montants secteur1 et secteur2
-    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    if ($this->_delete_actes && $this->_id){
+      if($msg = $this->deleteActes()){
+        return $msg;    
+      }
     }
     
     // Gestion du tarif et precodage des actes
@@ -521,18 +555,11 @@ class CConsultation extends CCodableCCAM {
         return $msg;
       }
     }
-    
-    if ($this->_delete_actes && $this->_id){
-      if($msg = $this->deleteActes()){
-        return $msg;    
-      }
-    }
-  
+        
     // Bind FSE
     if ($this->_bind_fse && $this->_id) {
       return $this->bindFSE();
-    }  
-    
+    }
   }
   
   function loadRefCategorie() {
@@ -577,7 +604,6 @@ class CConsultation extends CCodableCCAM {
   function preparePossibleActes() {
   	$this->loadRefPlageConsult();
   }
-  
   
   function loadRefsFwd() {
     $this->loadRefPatient();

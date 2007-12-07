@@ -38,15 +38,6 @@ $orderBanque = "nom ASC";
 $banque = new CBanque();
 $banques = $banque->loadList(null,$orderBanque);
 
-/*  
-$consult->loadRefs();
-
-  foreach($consult->_ext_codes_ccam as $keyCode => $code) {
-    $consult->_ext_codes_ccam[$keyCode]->Load();
-  }
-*/
-  
-
 if(isset($_GET["date"])) {
   $selConsult = null;
   mbSetValueToSession("selConsult", null);
@@ -148,32 +139,39 @@ if ($consult->_id) {
     $tmpEtab = array();
     foreach($etablissements as $etab) {
       $idExt = new CIdSante400;
-      $idExt->loadLatestFor($etab);
-      if($idExt->id400) {
-        $tmpEtab[$idExt->id400] = $etab;
+      if ($idExt->_ref_module) {
+	      $idExt->loadLatestFor($etab);
+	      if($idExt->id400) {
+	        $tmpEtab[$idExt->id400] = $etab;
+	      }
       }
     }
     $etablissements = $tmpEtab;
 
     // ATTENTION LE TAG N'EST PAS DEFINI !
     $idExt = new CIdSante400;
-    $idExt->loadLatestFor($patient);
-    $patIdentEc = $idExt->id400;
-    $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
+    if ($idExt->_ref_module) {
+      $idExt->loadLatestFor($patient);
+	    $patIdentEc = $idExt->id400;
+	    $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
+    }
 
     // ATTENTION LE TAG N'EST PAS DEFINI !
     $idExt = new CIdSante400;
-    $idExt->loadLatestFor($userSel);
-    $codePraticienEc = $idExt->id400;
-    $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
+    if ($idExt->_ref_module) {
+	    $idExt->loadLatestFor($userSel);
+	    $codePraticienEc = $idExt->id400;
+	    $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
+    }
   }
 } else {
   $consultAnesth->consultation_anesth_id = 0;
 }
 
-if($consult->_id){
+if ($consult->_id){
   // Chargement des identifiants LogicMax
   $consult->loadIdsFSE();
+  $consult->makeFSE();
   $consult->_ref_chir->loadIdCPS();
   $consult->_ref_patient->loadIdVitale();
 }

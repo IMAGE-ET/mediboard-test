@@ -329,10 +329,38 @@ class CPatient extends CMbObject {
 
   function loadIdVitale() {
     $id_vitale = new CIdSante400();
+    if (!$id_vitale->_ref_module) {
+      return;
+    }
+    
     $id_vitale->setObject($this);
     $id_vitale->tag = "LogicMax VitNumero";
     $id_vitale->loadMatchingObject();
     $this->_id_vitale = $id_vitale->id400;
+  }
+  
+  /**
+   * Load exact patient associated with id vitale
+   */
+  function loadFromIdVitale() {
+    if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
+      return;
+    }
+    
+    $vitale = $intermax["VITALE"];
+    $vitNumero = $vitale["VIT_NUMERO_LOGICMAX"];
+    
+    // Make id vitale
+    $id_vitale = new CIdSante400();
+    $id_vitale->object_class = $this->_class_name;
+    $id_vitale->id400 = $vitNumero;
+    $id_vitale->tag = "LogicMax VitNumero";
+    $id_vitale->loadMatchingObject();
+    
+    // Load patient from found id vitale
+    if ($id_vitale->object_id) {
+      $this->load($id_vitale->object_id);
+    }
   }
   
   function getValuesFromVitale() {

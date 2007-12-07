@@ -77,7 +77,6 @@ foreach($plagesop as &$plage) {
   $listOp = new COperation;
   $listOp = $listOp->loadList($where, $order);
 
-  
   foreach($listOp as $keyOp => &$operation) {
     $operation->loadRefsFwd();
     $sejour =& $operation->_ref_sejour;

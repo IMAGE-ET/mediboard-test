@@ -21,7 +21,7 @@
     <td>
       <select name="object_class" class="str maxLength|25">
         <option value="">&mdash; Toutes les classes</option>
-        {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
+        {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $filter->object_class}}selected="selected"{{/if}}>
           {{$curr_class}}
         </option>
@@ -47,9 +47,9 @@
 
   <tr>
     <td>{{mb_label object=$filter field="id400"}}</td>
-    <td>{{mb_field object=$filter field="id400" canNull="true"}}</td>
+    <td>{{mb_field object=$filter field="id400" canNull=true}}</td>
     <td>{{mb_label object=$filter field="tag"}}</td>
-    <td>{{mb_field object=$filter field="tag" size="40"}}</td>
+    <td>{{mb_field object=$filter field="tag" size=30}}</td>
   </tr>
 
   <tr>

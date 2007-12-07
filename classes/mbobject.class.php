@@ -560,11 +560,11 @@ class CMbObject {
   }
 
   /**
-   * Nullify object properties that evaluate to false
+   * Nullify object properties that are empry strings
    */
   function nullifyEmptyFields() {
     foreach ($this->getProps() as $propName => $propValue) {
-      if (!$propValue) {
+      if ($propValue === "") {
         $this->$propName = null;
       }
     }
@@ -572,6 +572,7 @@ class CMbObject {
   
   /**
    * Extends object properties with target object (of the same class) properties
+   * @param CMbObject $mbObject object to extend with 
    */
   function extendsWith($mbObject) {
     $targetClass = get_class($mbObject);
@@ -582,7 +583,7 @@ class CMbObject {
     }
     
     foreach ($mbObject->getProps() as $propName => $propValue) {
-      if ($propValue !== null and $propValue !== "") {
+      if ($propValue !== null) {
         $this->$propName = $propValue;
       }
     }

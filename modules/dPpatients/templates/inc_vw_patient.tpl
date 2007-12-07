@@ -76,7 +76,7 @@ function reloadAfterSaveDoc(){
     <th class="category" colspan="2">
       
 			{{if $patient->_id_vitale}}
-      <div style="float:right;" class="{{$patient->_id}}">
+      <div style="float:right;">
 	      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à une carte Vitale" />
       </div>
       {{/if}}

@@ -11,7 +11,6 @@
  * Class CMbObjectHandler 
  * @abstract Event handler class for CMbObject
  */
-
 class CSpObjectHandler extends CMbObjectHandler {
   static $associations = array(
     "CPatient" => array ("CSpMalade"),

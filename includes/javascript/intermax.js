@@ -3,7 +3,7 @@
  */
 var Intermax = {
   oContent: {},
-  allowedFunctions: [],
+  aAllowedFunctions: [],
   newLine: "---",
   
   alert: function(sError, sExtraInfo) {
@@ -139,14 +139,17 @@ var Intermax = {
     },
 
     "Formater FSE" : function(iVitale, iCPS) {
-			Intermax.trigger("Formater FSE", { 
+      var oContent = { 
         CPS: {
           CPS_NUMERO_LOGICMAX: iVitale
         },
         VITALE: {
           VIT_NUMERO_LOGICMAX: iCPS
-        } 
-			} );
+        }
+      }
+      
+      Object.extend(oContent, Intermax.Triggers['Formater FSE'].aActes);
+			Intermax.trigger("Formater FSE", oContent );
     },
 
     "Consulter FSE" : function(iFSE) {
