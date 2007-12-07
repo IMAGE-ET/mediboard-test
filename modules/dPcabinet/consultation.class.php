@@ -252,7 +252,11 @@ class CConsultation extends CCodableCCAM {
     $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
     
     // Chargement des FSE externes
-    $fse = new CLmFSE();
+    
+    $fse = @new CLmFSE();
+    if(!$fse->_spec->ds){
+      return;
+    }
     $where = array();
     $where["S_FSE_NUMERO_FSE"] = CSQLDataSource::prepareIn($this->_ids_fse);
     $this->_ext_fses = $fse->loadList($where);

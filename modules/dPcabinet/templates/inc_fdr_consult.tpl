@@ -558,8 +558,8 @@ function submitFdr(oForm) {
           <!-- Suppression des actes associées a la consultation -->
           
           <td colspan="2" class="button">
-          <input type="hidden" name="valide" value="0" />
-            <button class="cancel" type="button" onclick="cancelTarif()">Annuler</button>
+            <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
+            <button class="cancel" type="button" onclick="cancelTarif()">Annuler le réglement</button>
           </td>
         </tr>
         {{/if}}
@@ -590,7 +590,9 @@ function submitFdr(oForm) {
           <td colspan="2" class="button">
             <input type="hidden" name="valide" value="1" />
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
+            {{if !$consult->_current_fse}}
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>
+            {{/if}}
           </td>
         </tr>
         {{elseif $consult->paye == "0"}}
