@@ -87,12 +87,13 @@ class CTarif extends CMbObject {
     $consult->load($this->_consult_id);
     $consult->loadRefPlageConsult();
     $consult->loadRefsActesNGAP();
+    $consult->loadRefsActesCCAM();
     
     // Affectation des valeurs au tarif
     $this->secteur1    = $consult->secteur1;
     $this->secteur2    = $consult->secteur2;
     $this->description = $consult->tarif;
-    $this->codes_ccam  = $consult->codes_ccam;
+    $this->codes_ccam  = $consult->_tokens_ccam;
     $this->codes_ngap  = $consult->_tokens_ngap;
     $this->chir_id     = $consult->_ref_chir->_id;
   }

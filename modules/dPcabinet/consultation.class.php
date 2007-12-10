@@ -252,7 +252,6 @@ class CConsultation extends CCodableCCAM {
     $this->_ids_fse = CMbArray::pluck($id_fse, "id400");
     
     // Chargement des FSE externes
-    
     $fse = @new CLmFSE();
     if(!$fse->_spec->ds){
       return;
@@ -316,12 +315,11 @@ class CConsultation extends CCodableCCAM {
     $this->codes_ccam   = $tarif->codes_ccam;
     $this->_tokens_ngap = $tarif->codes_ngap;
     
-   
     if ($msg = $this->store()) {
       return $msg;
     }
 
-     // Precodage des actes NGAP
+    // Precodage des actes NGAP
     if ($msg = $this->precodeNGAP()){
       return $msg;
     }  
@@ -330,7 +328,6 @@ class CConsultation extends CCodableCCAM {
     if ($msg = $this->precodeCCAM()){
       return $msg;
     }  
-    
   }
   
   
@@ -469,16 +466,20 @@ class CConsultation extends CCodableCCAM {
   
   
   function precodeCCAM(){
-    //$this->_precode_acte = false;
     $this->loadRefPlageConsult();
+    // Explode des codes_ccam du tarif
     $listCodesCCAM = explode("|", $this->codes_ccam);
     foreach($listCodesCCAM as $key => $code){
       $acte = new CActeCCAM();
+      $acte->_adapt_object = true;
+        
       $acte->_preserve_montant = true;
       $acte->setCodeComplet($code);
       
       // si le code ccam est composé de 3 elements, on le precode
       if($acte->code_activite != "" && $acte->code_phase != ""){
+        // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
+        
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class_name;
         $acte->executant_id = $this->_ref_chir->_id;

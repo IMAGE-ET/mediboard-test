@@ -152,18 +152,25 @@ function viewCode(code, class){
             <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
             <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
           </select>
-          {{if $acte->code_association && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-            <strong>
-              association pour {{$curr_activite->type}}
-              &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
-            </strong>
-          {{elseif !$acte->code_association}}
+          
+          <strong>
+          {{if $acte->code_association}}
+            association pour {{$curr_activite->type}}
+          {{/if}}
+          {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+            &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
+          {{/if}}
+          </strong>
+          {{if !$acte->code_association}}
             <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
               <strong>
                 association pour {{$curr_activite->type}} ({{$acte->_guess_association}} conseillé)
               </strong>
             </label>
           {{/if}}
+          
+          
+          
           {{if $acte->montant_depassement && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
           &mdash; dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
           {{/if}}

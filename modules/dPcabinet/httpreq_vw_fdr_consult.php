@@ -133,7 +133,6 @@ $_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste"))
 // Codes et actes NGAP
 $consult->loadRefsActesNGAP();
 
-    
 // Création du template
 $smarty = new CSmartyDP();
 

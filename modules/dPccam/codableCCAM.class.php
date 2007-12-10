@@ -4,6 +4,7 @@ class CCodableCCAM extends CMbObject {
 	
   var $codes_ccam          = null;
   var $_codes_ccam         = null;
+  var $_tokens_ccam        = array();
   var $_ref_actes_ccam     = null;
   var $_ext_codes_ccam     = null;
   var $_acte_execution     = null;
@@ -23,6 +24,7 @@ class CCodableCCAM extends CMbObject {
     $this->_codes_ccam = $this->codes_ccam ? 
       explode("|", $this->codes_ccam) : 
       array(); 
+ 
   }
   
   function getAssociationCodesActes() {
@@ -178,6 +180,13 @@ class CCodableCCAM extends CMbObject {
   	$order[] = "acte_id";
   	
   	$this->_ref_actes_ccam = $acte->loadMatchingList($order);
+  	  	
+    $this->_temp_ccam = array();
+    foreach ($this->_ref_actes_ccam as $_acte_ccam){
+      $this->_temp_ccam[] = $_acte_ccam->code_acte."-".$_acte_ccam->code_activite."-".$_acte_ccam->code_phase."-".$_acte_ccam->modificateurs; 
+    }
+
+    $this->_tokens_ccam = join($this->_temp_ccam, "|");
   }
   
   function loadPossibleActes () {

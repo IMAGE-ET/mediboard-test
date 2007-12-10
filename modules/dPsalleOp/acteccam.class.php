@@ -75,6 +75,7 @@ class CActeCCAM extends CMbMetaObject {
     $specs["code_association"]    = "num minMax|1|5";
     $specs["regle"]               = "bool";
     $specs["montant_base"]        = "currency";
+    $specs["_montant_facture"]    = "currency";
     return $specs;
   }
   
@@ -150,7 +151,6 @@ class CActeCCAM extends CMbMetaObject {
     if($msg = parent::delete()){
       return $msg;
     }
-    
     if(!$this->_preserve_montant){
 	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
 	    if($this->object_class == "CConsultation"){
@@ -197,10 +197,15 @@ class CActeCCAM extends CMbMetaObject {
   
   function setCodeComplet($code){
     $detailCode = explode("-", $code);
-    if(count($detailCode) == 3){
+    if(count($detailCode) >= 3){
       $this->code_acte = $detailCode[0];
       $this->code_activite = $detailCode[1];
       $this->code_phase = $detailCode[2];
+      // Modificateurs
+      if(count($detailCode) == 4){
+        $this->modificateurs = $detailCode[3];
+      } 
+ 
     }
   }
   

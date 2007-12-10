@@ -20,17 +20,19 @@
 	      {{if $acte->_id}}
 	        {{assign var="executant_id" value=$acte->executant_id}}
 	        {{assign var="executant" value=$listExecutants.$executant_id}}
-	      <td style="background-color: #{{$executant->_ref_function->color}};">
-	        {{$executant->_view}}
+	      <td> 
+	        <div class="mediuser" style="border-color: #{{$executant->_ref_function->color}};">
+          {{$executant->_view}}
+	        </div>
 	      </td>
 	      {{else}}
 	      <td></td>
 	      {{/if}}
 	      <td>{{$acte->modificateurs}}</td>
 	      <td>{{$acte->code_association}}</td>
-	      <td>{{$acte->montant_base}}</td>
-	      <td>{{$acte->montant_depassement}}</td>
-	      <td>{{$acte->_montant_facture}}</td>
+	      <td>{{mb_value object=$acte field="montant_base"}}</td>
+	      <td>{{mb_value object=$acte field="montant_depassement"}}</td>
+	      <td>{{mb_value object=$acte field="_montant_facture"}}</td>
 	    </tr> 
 	    {{/foreach}}
 	  {{/foreach}}

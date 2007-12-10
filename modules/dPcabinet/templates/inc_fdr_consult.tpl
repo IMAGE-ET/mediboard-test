@@ -94,8 +94,8 @@ function validTarif(){
   if(oForm.tarif.value == ""){
     oForm.tarif.value = "manuel";
   }
-  if(oForm.codes_ccam.value){
-    oForm.tarif.value += " / "+oForm.codes_ccam.value;
+  if(oForm._tokens_ccam.value){
+    oForm.tarif.value += " / "+oForm._tokens_ccam.value;
   }
   if(oForm._tokens_ngap.value){
     oForm.tarif.value += " / "+oForm._tokens_ngap.value;
@@ -470,7 +470,7 @@ function submitFdr(oForm) {
 	              {{if $tarifsChir|@count}}
 	              <optgroup label="Tarifs praticien">
 	              {{foreach from=$tarifsChir item=curr_tarif}}
-	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}} / {{$curr_tarif->secteur1}}</option>
+	                <option value="{{$curr_tarif->_id}}">{{$curr_tarif->_view}}</option>
 	              {{/foreach}}
 	              </optgroup>
 	              {{/if}}
@@ -512,10 +512,9 @@ function submitFdr(oForm) {
             <input type="hidden" name="date_paiement" value="" />
        
             {{if $consult->valide}}
-	          {{mb_label object=$consult field="secteur1"}}
-	          {{mb_value object=$consult field="secteur1" onchange="modifTotal()"}} +
-	          {{mb_label object=$consult field="secteur2"}}
-	          {{mb_value object=$consult field="secteur2" onchange="modifTotal()"}} =
+	          {{mb_value object=$consult field="secteur1" onchange="modifTotal()"}} (S1) +
+	          
+	          {{mb_value object=$consult field="secteur2" onchange="modifTotal()"}} (S2) =
  			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
             {{else}}
             {{mb_label object=$consult field="secteur1"}}
@@ -530,8 +529,8 @@ function submitFdr(oForm) {
            <th colspan="2" class="category">{{mb_label object=$consult field="codes_ccam"}}</th>
          </tr>
          <tr>
-           <td colspan="2">{{mb_field object=$consult field="codes_ccam" readonly="readonly" hidden=1 prop=""}}
-           {{$consult->codes_ccam|replace:'|':' '}}
+           <td colspan="2">{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
+           {{$consult->_tokens_ccam|replace:'|':' , '}}
            </td>
          </tr>
          <tr>
@@ -539,7 +538,7 @@ function submitFdr(oForm) {
          </tr>
          <tr>
            <td colspan="2">{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
-           {{$consult->_tokens_ngap|replace:'|':'     '}}
+           {{$consult->_tokens_ngap|replace:'|':' , '}}
            </td>
          </tr>
         </tr>
@@ -608,7 +607,9 @@ function submitFdr(oForm) {
           <td colspan="2" class="button">
           <input type="hidden" name="_delete_actes" value="0" />
             <button class="submit" type="button" onclick="validTarif();">Valider ce tarif</button>
+            {{if $consult->tarif}}
             <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler le tarif</button>
+            {{/if}}
           </td>
         </tr>
         {{/if}}
