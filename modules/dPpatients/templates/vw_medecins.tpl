@@ -193,10 +193,10 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$medecin field="tel" defaultFor="_tel1"}}</th>
           <td>
-            {{mb_field object=$medecin field="_tel1" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_tel2" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_tel3" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_tel4" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_tel1" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_tel2" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_tel3" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_tel4" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
             {{mb_field object=$medecin field="_tel5" size="2" maxlength="2" prop="num length|2"}}
           </td>
         </tr>
@@ -204,10 +204,10 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$medecin field="fax" defaultFor="_fax1"}}</th>
           <td>
-            {{mb_field object=$medecin field="_fax1" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_fax2" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_fax3" size="2" maxlength="2" prop="num length|2"}} -
-            {{mb_field object=$medecin field="_fax4" size="2" maxlength="2" prop="num length|2"}} -
+            {{mb_field object=$medecin field="_fax1" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_fax2" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_fax3" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
+            {{mb_field object=$medecin field="_fax4" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
             {{mb_field object=$medecin field="_fax5" size="2" maxlength="2" prop="num length|2"}}
           </td>
         </tr>
