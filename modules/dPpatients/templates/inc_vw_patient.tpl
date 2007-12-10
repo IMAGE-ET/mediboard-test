@@ -198,13 +198,13 @@ function reloadAfterSaveDoc(){
         Intervention
       </a>
     </td>
+    {{/if}}
+    {{if $canPlanningOp->read}}
     <td class="button">
       <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;pat_id={{$patient->patient_id}}&amp;operation_id=0&amp;sejour_id=0">
         Urgence
       </a>
     </td>
-    {{/if}}
-    {{if $canPlanningOp->read}}
     <td class="button">
       <a class="buttonnew" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;patient_id={{$patient->patient_id}}&amp;sejour_id=0">
         Séjour
