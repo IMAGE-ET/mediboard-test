@@ -59,7 +59,7 @@ function viewCode(code, class){
     <table class="form">
       
       <tr id="acte{{$key}}-trigger">  
-        <td colspan="2" style="{{if $acte->_id && $acte->code_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
+        <td colspan="2" style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
           Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
           Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
         </td>
@@ -145,7 +145,7 @@ function viewCode(code, class){
           {{if $acte->_id}}
           <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
-            <option value="">&mdash; Choix</option>
+            <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
             <option value="1" {{if $acte->code_association == 1}}selected="selected"{{/if}}>1 (100%)</option>
             <option value="2" {{if $acte->code_association == 2}}selected="selected"{{/if}}>2 (50%)</option>
             <option value="3" {{if $acte->code_association == 3}}selected="selected"{{/if}}>3 (75%)</option>
@@ -154,17 +154,20 @@ function viewCode(code, class){
           </select>
           
           <strong>
-          {{if $acte->code_association}}
-            association pour {{$curr_activite->type}}
-          {{/if}}
+          association pour {{$curr_activite->type}}
           {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
             &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
           {{/if}}
           </strong>
-          {{if !$acte->code_association}}
+          {{if $acte->code_association != $acte->_guess_association}}
             <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
               <strong>
-                association pour {{$curr_activite->type}} ({{$acte->_guess_association}} conseillé)
+                {{if $acte->_guess_association}}
+                  ({{$acte->_guess_association}}
+                {{else}}
+                  (Aucun
+                {{/if}}
+                conseillé)
               </strong>
             </label>
           {{/if}}

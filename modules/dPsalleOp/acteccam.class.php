@@ -478,7 +478,7 @@ class CActeCCAM extends CMbMetaObject {
     
     // Cas d'un seul actes (règle A)
     if($numActes == 1) {
-      $this->_guess_association = "1";
+      $this->_guess_association = "";
       $this->_guess_regle_asso  = "A";
       return $this->_guess_association;
     }
@@ -487,20 +487,27 @@ class CActeCCAM extends CMbMetaObject {
     if($numActes == 2) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
-        $this->_guess_association = "1";
+        $this->_guess_association = "";
         $this->_guess_regle_asso    = "B";
         return $this->_guess_association;
       }
-      // 1 acte + 1 supplément des chap. 19.02 (règle C)
+      // 1 acte + 1 supplément des chap. 19.02 (règle B)
       if($numChap1902 == 1) {
-        $this->_guess_association = "1";
-        $this->_guess_regle_asso    = "C";
+        $this->_guess_association = "";
+        $this->_guess_regle_asso    = "B";
         return $this->_guess_association;
       }
     }
     
-    // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle D)
+    // 1 acte + 1 ou pls geste complémentaire chap. 18 + 1 ou pls supplément des chap. 19.02 (règle C)
     if($numActes >= 3 && $numActes - ($numChap18 + $numChap1902) == 1 && $numChap18 && $numChap1902) {
+      $this->_guess_association = "1";
+      $this->_guess_regle_asso  = "C";
+      return $this->_guess_association;
+    }
+    
+    // 1 acte + pls supplément des chap. 19.02 (règle D)
+    if($numActes >= 3 && $numActes - $numChap1902 == 1) {
       $this->_guess_association = "1";
       $this->_guess_regle_asso  = "D";
       return $this->_guess_association;
@@ -621,15 +628,9 @@ class CActeCCAM extends CMbMetaObject {
   
   
   function getTarif() {
-    if($this->code_association !== null) {
-      $code_asso = $this->code_association;
-      $this->loadRefCodeCCAM();
-    } else {
-      $this->guessAssociation();
-      $code_asso = $this->_guess_association;
-    }
+    $this->loadRefCodeCCAM();
     $this->_tarif = $this->_ref_code_ccam->activites[$this->code_activite]->phases[$this->code_phase]->tarif;
-    $coeffAsso    = $this->_ref_code_ccam->getCoeffAsso($code_asso);
+    $coeffAsso    = $this->_ref_code_ccam->getCoeffAsso($this->code_association);
     $forfait     = 0;
     $coefficient = 100;
     foreach($this->_modificateurs as $modif) {

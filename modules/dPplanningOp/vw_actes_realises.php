@@ -67,7 +67,6 @@ if($typeVue == 1){
 	      if($acte_ccam->executant_id == $chir_id){
 	        $nbActes[$operation->_id]++;
 	        $tarif_operation += $acte_ccam->getTarif();
-	        $acte_ccam->getTarif();
 	      }
 	    }
 	    $tarifOperation[$operation->_id] = $tarif_operation;

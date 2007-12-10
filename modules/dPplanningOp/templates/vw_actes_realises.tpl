@@ -152,7 +152,7 @@ var reloadActeCCAM = function(acte_ccam_id){
           {{assign var=_tarif value=$_phase->tarif}}
           <td>{{$_tarif|string_format:"%.2f"}} &euro;</td>
           <td>{{$acte_ccam->modificateurs}}</td>
-          <td>{{$acte_ccam->_guess_association}}</td>
+          <td>{{$acte_ccam->code_association}}</td>
           <td>{{$acte_ccam->montant_depassement}}</td>
           <td>{{$acte_ccam->_tarif|string_format:"%.2f"}} &euro;</td>
           <td style="text-align: center">

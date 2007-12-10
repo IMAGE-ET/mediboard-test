@@ -237,6 +237,7 @@ class CCodableCCAM extends CMbObject {
             }
           }
           
+          $possible_acte->guessAssociation();
           $possible_acte->getTarif();
           
           $phase->_connected_acte = $possible_acte;
