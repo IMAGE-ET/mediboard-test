@@ -526,19 +526,19 @@ function submitFdr(oForm) {
            </td>
          </tr>
          <tr>
-           <th colspan="2" class="category">{{mb_label object=$consult field="codes_ccam"}}</th>
-         </tr>
-         <tr>
-           <td colspan="2">{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
-           {{$consult->_tokens_ccam|replace:'|':' , '}}
+           <th>Codes CCAM</th>
+           <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
+           {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
+             {{$acte_ccam->code_acte}}  
+           {{/foreach}}
            </td>
          </tr>
          <tr>
-           <th colspan="2" class="category">Codes NGAP</th>
-         </tr>
-         <tr>
-           <td colspan="2">{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
-           {{$consult->_tokens_ngap|replace:'|':' , '}}
+           <th>Codes NGAP</th>
+           <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
+           {{foreach from=$consult->_ref_actes_ngap item=acte_ngap}}
+             {{$acte_ngap->quantite}}-{{$acte_ngap->code}}-{{$acte_ngap->coefficient}}   
+           {{/foreach}}
            </td>
          </tr>
         </tr>

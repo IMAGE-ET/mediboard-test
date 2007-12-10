@@ -183,9 +183,13 @@ class CCodableCCAM extends CMbObject {
   	  	
     $this->_temp_ccam = array();
     foreach ($this->_ref_actes_ccam as $_acte_ccam){
-      $this->_temp_ccam[] = $_acte_ccam->code_acte."-".$_acte_ccam->code_activite."-".$_acte_ccam->code_phase."-".$_acte_ccam->modificateurs; 
+      if($_acte_ccam->montant_depassement < 0){
+        $_montant_depassement_temp = str_replace("-", "*", $_acte_ccam->montant_depassement);
+      } else {
+        $_montant_depassement_temp = $_acte_ccam->montant_depassement;
+      }
+      $this->_temp_ccam[] = $_acte_ccam->code_acte."-".$_acte_ccam->code_activite."-".$_acte_ccam->code_phase."-".$_acte_ccam->modificateurs."-".$_montant_depassement_temp; 
     }
-
     $this->_tokens_ccam = join($this->_temp_ccam, "|");
   }
   

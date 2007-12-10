@@ -69,7 +69,7 @@ class CActeCCAM extends CMbMetaObject {
     $specs["code_phase"]          = "notNull num minMax|0|99";
     $specs["execution"]           = "notNull dateTime";
     $specs["modificateurs"]       = "str maxLength|4";
-    $specs["montant_depassement"] = "currency min|0";
+    $specs["montant_depassement"] = "currency";
     $specs["commentaire"]         = "text";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
@@ -202,9 +202,12 @@ class CActeCCAM extends CMbMetaObject {
       $this->code_activite = $detailCode[1];
       $this->code_phase = $detailCode[2];
       // Modificateurs
-      if(count($detailCode) == 4){
+      if(count($detailCode) >= 4){
         $this->modificateurs = $detailCode[3];
       } 
+      if(count($detailCode) >= 5){
+        $this->montant_depassement = str_replace("*","-",$detailCode[4]);
+      }
  
     }
   }
@@ -222,9 +225,9 @@ class CActeCCAM extends CMbMetaObject {
   
   
   function store(){
-    //sauvegarde du montant de base 
+    //sauvegarde du montant de base     
     $this->montant_base = $this->getTarif();  
- 
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

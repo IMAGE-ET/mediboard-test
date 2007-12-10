@@ -203,7 +203,7 @@ class CConsultation extends CCodableCCAM {
     if ($this->date_paiement == "0000-00-00") {
       $this->date_paiement = null;
     }
-    
+
     // Liaison FSE prioritaire sur l'état    
     if ($this->_bind_fse) {
       $this->valide = 0;
@@ -217,7 +217,12 @@ class CConsultation extends CCodableCCAM {
     
     $this->_codes_ngap = array();
     foreach ($this->_ref_actes_ngap as $_actes_ngap){
-      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient; 
+      if($_actes_ngap->montant_depassement < 0){
+        $_montant_depassement_temp = str_replace("-", "*", $_actes_ngap->montant_depassement);
+      } else {
+        $_montant_depassement_temp = $_actes_ngap->montant_depassement;
+      }
+      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp; 
     }
 
     $this->_tokens_ngap = join($this->_codes_ngap, "|");
@@ -277,10 +282,10 @@ class CConsultation extends CCodableCCAM {
   
   /**
    * Détruit les actes CCAM et NGAP
-   */
-  function deleteActes() {
+   */  
+  function deleteActes(){
     $this->_delete_actes = false;
-    
+
     // Suppression des anciens actes CCAM
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $acte) {
@@ -352,7 +357,7 @@ class CConsultation extends CCodableCCAM {
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $this->_fse_intermax["ACTE_$acteNumber"] = array(
-	      "PRE_ACTE_TYPE"   => 0,
+          "PRE_ACTE_TYPE"   => 0,
 	      "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
 	      "PRE_CODE"        => $acte_ngap->code,
 	      "PRE_COEFFICIENT" => $acte_ngap->coefficient,
@@ -365,7 +370,7 @@ class CConsultation extends CCodableCCAM {
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $ACTE = array(
-	      "PRE_ACTE_TYPE"   => 1,
+          "PRE_ACTE_TYPE"   => 1,
 	      "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
 	      "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
 	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
@@ -511,9 +516,15 @@ class CConsultation extends CCodableCCAM {
 	      $detailCodeNGAP = explode("-", $code_ngap);
 	      $acte = new CActeNGAP();
 	      $acte->_preserve_montant = true;
-	      $acte->quantite    = $detailCodeNGAP[0];
-	      $acte->code        = $detailCodeNGAP[1];
-	      $acte->coefficient = $detailCodeNGAP[2];
+	      $acte->quantite            = $detailCodeNGAP[0];
+	      $acte->code                = $detailCodeNGAP[1];
+	      $acte->coefficient         = $detailCodeNGAP[2];
+	      if(count($detailCodeNGAP) >= 4){
+	        $acte->montant_base        = $detailCodeNGAP[3];
+	      }
+	      if(count($detailCodeNGAP) >= 5){
+	        $acte->montant_depassement = str_replace("*","-",$detailCodeNGAP[4]);
+	      }
 	      $acte->consultation_id = $this->_id;
 	      if (!$acte->countMatchingList()) {
 	        $acte->store();
