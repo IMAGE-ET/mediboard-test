@@ -16,16 +16,16 @@
 <script type="text/javascript">
 
 Intermax.errors = {
-	// Pas d'erreur
-  "0" : "{{tr}}Intermax.error.0{{/tr}}",
-	
   // Intégration Mediboard LogicMax
   "100" : "{{tr}}Intermax.error.100{{/tr}}",
   "110" : "{{tr}}Intermax.error.110{{/tr}}",
   "120" : "{{tr}}Intermax.error.120{{/tr}}",
-  "140" : "{{tr}}Intermax.error.140{{/tr}}",
+
+	// Pas d'erreur
+  "200" : "{{tr}}Intermax.error.200{{/tr}}",
 
   // Manipulation des FSE
+  "0" : "{{tr}}Intermax.error.0{{/tr}}",
   "-20" : "{{tr}}Intermax.error.20{{/tr}}",
   "-21" : "{{tr}}Intermax.error.21{{/tr}}",
   "-22" : "{{tr}}Intermax.error.22{{/tr}}",

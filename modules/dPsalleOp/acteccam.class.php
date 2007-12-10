@@ -131,8 +131,8 @@ class CActeCCAM extends CMbMetaObject {
     if($this->object_class == "CConsultation"){
       $consult = new CConsultation();
       $consult->load($this->object_id);
-      if($consult->_coded == "1"){
-        return "Consultation déjà validée";
+      if ($consult->_coded == "1") {
+        return "Consultation déjà validée : Impossible de coter un acte CCAM";
       }
     }    
   }

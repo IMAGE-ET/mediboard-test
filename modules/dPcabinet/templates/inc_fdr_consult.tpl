@@ -436,7 +436,7 @@ function submitFdr(oForm) {
 			        Formater FSE
 			      </button>
 			      {{/if}}
-			      <button class="tick" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
+			      <button class="change" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
 			        Mettre à jour FSE
 			      </button>
           </td>
@@ -617,7 +617,6 @@ function submitFdr(oForm) {
       
       </form>
       
-      
       {{if $consult->valide}}
       <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
       <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
@@ -632,8 +631,6 @@ function submitFdr(oForm) {
       {{/if}}
       
     </td>
-   
-       
   </tr>
   
 
@@ -707,7 +704,7 @@ function submitFdr(oForm) {
       <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
         Lire CPS
       </button>
-      <button class="tick" type="button" onclick="Intermax.result('Lire CPS');">
+      <button class="change" type="button" onclick="Intermax.result('Lire CPS');">
         Associer CPS
       </button>
     </td>
@@ -722,7 +719,7 @@ function submitFdr(oForm) {
         Consulter Vitale
       </button>
       {{/if}}
-      <button class="tick" type="button" onclick="Intermax.result();">
+      <button class="change" type="button" onclick="Intermax.result();">
         Associer Vitale
       </button>
     </td>

@@ -11,7 +11,7 @@ var Intermax = {
     
     // Error message preparing
     var sLogicMaxFonction = this.oContent.FONCTION ? "Fonction LogicMax : " +  this.oContent.FONCTION.NOM : "Aucun appel à LogicMax";
-    var sLogicMaxError = sError != "0" ? "\n\n[Erreur LogicMax "+sError+"]" : "";
+    var sLogicMaxError = sError != "0" ? "\n\n[Code LogicMax "+sError+"]" : "";
 
     // Actual alert
     sErrorMessage = Intermax.errors[sError] || "Description non traduite";
@@ -110,8 +110,6 @@ var Intermax = {
     url.addObjectParam("intermax", this.oContent);
     url.requestUpdate(SystemMessage.id, { method: "post" } );
   },
-  
-  createResultMessages: Prototype.emptyFunction,
    
   handleResult: function(sFunction) {
     
@@ -122,7 +120,7 @@ var Intermax = {
 
   ResultHandler : {
     "all": function() {
-	    Intermax.alert("0");
+	    Intermax.alert("200");
     }
   },
   

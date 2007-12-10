@@ -22,6 +22,7 @@ $patient_day   = mbGetValueFromGet("Date_Day"   );
 $patVitale = null;
 if (mbGetValueFromGet("useVitale")) {
   $patVitale = new CPatient;
+  $patVitale->loadFromIdVitale();
   $patVitale->getValuesFromVitale();
   
   $name = $patVitale->nom;

@@ -20,6 +20,10 @@ class CLmFSE extends CLmObject {
   var $_annulee = null;
 
   // DB Fields : see getSpecs();
+
+  // Filter Fields
+  var $_date_min = null;
+  var $_date_max = null;
   
 	function CLmFSE() {
 	  $this->CLmObject("s_f_fse", "S_FSE_NUMERO_FSE");
@@ -39,14 +43,20 @@ class CLmFSE extends CLmObject {
  	
   function getSpecs() {
     $specs = parent::getSpecs();
+    
+    // DB Fields
     $specs["S_FSE_ETAT"]              = "enum list|2|3|4|5|6|7|8|9|10";
     $specs["S_FSE_MODE_SECURISATION"] = "enum list|0|1|2|3|4|5";
-    $specs["S_FSE_DATE_FSE"]          = "date"            ;
-    $specs["S_FSE_NUM_LOT"]           = "num"             ;
-    $specs["S_FSE_TOTAL_FACTURE"]     = "currency"        ;
-    $specs["S_FSE_TOTAL_AMO"]         = "currency"        ;
-    $specs["S_FSE_TOTAL_ASSURE"]      = "currency"        ;
-    $specs["S_FSE_TOTAL_AMC"]         = "currency"        ;
+    $specs["S_FSE_DATE_FSE"]          = "date";
+    $specs["S_FSE_NUM_LOT"]           = "num";
+    $specs["S_FSE_TOTAL_FACTURE"]     = "currency";
+    $specs["S_FSE_TOTAL_AMO"]         = "currency";
+    $specs["S_FSE_TOTAL_ASSURE"]      = "currency";
+    $specs["S_FSE_TOTAL_AMC"]         = "currency";
+
+    // Filter Fields
+    $specs["_date_min"] = "date";
+    $specs["_date_max"] = "date moreThan|_date_min";
     
     return $specs;
   }

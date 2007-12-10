@@ -59,7 +59,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 <input type="hidden" name="dosql" value="do_patients_aed" />
 <input type="hidden" name="_bind_vitale" value="do" />
 {{mb_field object=$patVitale field="patient_id" hidden="true"}}
-{{mb_field object=$patVitale field="patient_id" hidden="true"}}
 
 <table class="form">
 
@@ -159,7 +158,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
       </button>
-      <button class="tick" type="button" onclick="Intermax.result();">
+      <button class="change" type="button" onclick="Intermax.result();">
         Résultat Vitale
       </button>
     {{/if}}

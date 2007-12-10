@@ -46,8 +46,8 @@ class CActeNGAP extends CMbObject {
   function checkCoded(){
     $consult = new CConsultation();
     $consult->load($this->consultation_id);
-    if($consult->_coded == "1"){
-      return "Consultation déjà validée";
+    if($consult->_coded == "1") {
+      return "Consultation déjà validée : Impossible de coter un acte NGAP,";
     }    
   }
   

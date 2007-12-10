@@ -145,7 +145,7 @@ function pageMain() {
 			        Consulter Vitale
 			      </button>
 			      {{/if}}
-			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+			      <button class="change" type="button" onclick="Intermax.result();" style="float: left;">
 			        Résultat Vitale
 			      </button>
 					{{/if}}
@@ -171,7 +171,7 @@ function pageMain() {
 			      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');" style="float: left;">
 			        Lire Vitale
 			      </button>
-			      <button class="tick" type="button" onclick="Intermax.result();" style="float: left;">
+			      <button class="change" type="button" onclick="Intermax.result();" style="float: left;">
 			        Résultat Vitale
 			      </button>
 					{{/if}}

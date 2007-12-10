@@ -46,7 +46,6 @@ if ($mediuser->isPraticien()) {
   $listeTarifsChir = $listeTarifsChir->loadList($where);
 }
 
-
 // Liste des tarifs de la spécialité
 $where = array();
 $where["chir_id"] = "IS NULL";

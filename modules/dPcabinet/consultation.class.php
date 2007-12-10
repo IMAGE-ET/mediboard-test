@@ -203,6 +203,11 @@ class CConsultation extends CCodableCCAM {
     if ($this->date_paiement == "0000-00-00") {
       $this->date_paiement = null;
     }
+    
+    // Liaison FSE prioritaire sur l'état    
+    if ($this->_bind_fse) {
+      $this->valide = 0;
+    }
   }
 
   function loadRefsActesNGAP() {
@@ -270,10 +275,12 @@ class CConsultation extends CCodableCCAM {
   }
   
   
-  
-  // Fonction permettant de supprimer les actes CCAM et NGAP associés à une consultation
-  function deleteActes(){
+  /**
+   * Détruit les actes CCAM et NGAP
+   */
+  function deleteActes() {
     $this->_delete_actes = false;
+    
     // Suppression des anciens actes CCAM
     $this->loadRefsActesCCAM();
     foreach ($this->_ref_actes_ccam as $acte) {
@@ -295,6 +302,7 @@ class CConsultation extends CCodableCCAM {
     $this->secteur1 = "";
     $this->secteur2 = "";
     $this->tarif = "";
+    $this->valide = "";
     
     if ($msg = $this->store()) {
      return $msg;
@@ -344,6 +352,7 @@ class CConsultation extends CCodableCCAM {
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $this->_fse_intermax["ACTE_$acteNumber"] = array(
+	      "PRE_ACTE_TYPE"   => 0,
 	      "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
 	      "PRE_CODE"        => $acte_ngap->code,
 	      "PRE_COEFFICIENT" => $acte_ngap->coefficient,
@@ -356,6 +365,7 @@ class CConsultation extends CCodableCCAM {
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $ACTE = array(
+	      "PRE_ACTE_TYPE"   => 1,
 	      "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
 	      "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
 	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
@@ -456,6 +466,7 @@ class CConsultation extends CCodableCCAM {
     // Nom par défaut si non défini
     $consult = new CConsultation();
     $consult->load($this->_id);
+    $consult->valide = '1';
     if (!$consult->tarif) {
       $consult->tarif = "FSE LogicMax";
     }

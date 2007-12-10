@@ -7,20 +7,30 @@
   {{assign var="trClass" value="selected"}}
   {{/if}}
 {{/if}}
+
 <tr class="{{$trClass}}">
   {{assign var="nbConsults" value=$_patient->_ref_consultations|@count}}
   {{assign var="nbSejours" value=$_patient->_ref_sejours|@count}}
   {{assign var="rowspan" value=$nbConsults+$nbSejours+1}}
   <td rowspan="{{$rowspan}}">
-    {{$_patient->_view}}</td>
+    {{if $patVitale && $_patient->_id == $patVitale->_id}}
+    <div style="float:right;">
+      <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
+    </div>
+    {{/if}}
+    {{$_patient->_view}}
+  </td>
   <td>{{mb_value object=$_patient field="naissance"}}</td>
   
   {{if $patVitale}}
   <td>{{mb_value object=$_patient field="matricule"}}</td>
   <td>{{mb_value object=$_patient field="adresse"}}</td>
   <td class="button" rowspan="{{$rowspan}}">
-    <button class="tick" type="button" onclick="Patient.selectAndUpdate({{$_patient->_id}})">
-      {{tr}}Update and select{{/tr}}
+    <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">
+      {{tr}}Update{{/tr}} avec Vitale
+    </button>
+    <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}')">
+      {{tr}}Select{{/tr}}
     </button>
   </td>
 

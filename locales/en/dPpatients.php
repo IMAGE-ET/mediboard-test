@@ -463,7 +463,6 @@ $locales['Intermax.error.76'] = '';
 $locales['Intermax.error.100'] = 'Le résultat est non accessible. Vérifiez que : \\n\\t1. LogicMax est bien lancé\\n\\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
 $locales['Intermax.error.110'] = '';
 $locales['Intermax.error.120'] = '';
-$locales['Intermax.error.140'] = 'Exécution interrompue, aucun résultat.';
 $locales['mod-dPpatients-tab-vw_edit_patients'] = '';
 $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';

@@ -1,19 +1,19 @@
-<script type="text/javascript">
-
-listCat = {{$listCat|@json}};
-
-reloadIcone = function(icone){
-  $('iconeBackground').src = "./modules/dPcabinet/categories/"+listCat[icone];
-}
-
-</script>
-
-
-
+<!-- $Id: $ -->
 
 <tr>
   <th>Catégorie</th>
     <td>
+
+		<script type="text/javascript">
+		
+		listCat = {{$listCat|@json}};
+		
+		reloadIcone = function(icone){
+		  $('iconeBackground').src = "./modules/dPcabinet/categories/"+listCat[icone];
+		}
+		
+		</script>
+    
 	  <select name="categorie_id" onchange="reloadIcone(this.value);">
 	    <option value="">&mdash; Choix d'une categorie</option>
 		{{foreach from=$categories item="categorie"}}

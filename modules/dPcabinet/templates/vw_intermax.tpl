@@ -5,20 +5,6 @@
 
 <script type="text/javascript">
 
-Intermax.createResultMessages = function() {
-  // Select div result handler      
-  var idFonction = this.oContent.FONCTION.NOM.replace(/ /g, "-");
-  var eResultHandler = $(idFonction);
-  eResultHandler.innerHTML = "";
-
-  // Create handler messages
-  oParam = this.oContent.PARAM;
-  eResultHandler.appendChild(Dom.createMessage("Appel : " + oParam.APPEL, oParam.APPEL == "OK" ? "message" : "error"))
-  eResultHandler.appendChild(Dom.createMessage("Exécution: " + oParam.EXECUTION, oParam.EXECUTION == "OK" ? "message" : "error"))
-  if (oParam.ERREUR) eResultHandler.appendChild(Dom.createMessage("Erreur : " + oParam.ERREUR, oParam.ERREUR == undefined  ? "message" : "error"))
-  if (oParam.ERREUR_API) eResultHandler.appendChild(Dom.createMessage("Erreur API : " + oParam.ERREUR_API, oParam.ERREUR_API == undefined ? "message" : "error"))
-}
-
 Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   PatSelector.set = function(id, view) {
@@ -34,37 +20,86 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
 
 <table class="tbl">
   <!-- Yoplets for InterMax -->
-  <tr class="intermax-yoplet">
-    <th>Déclenchement de fonctions</th>
-    <th>Lecture de résultat</th>
-  </tr>
-  
   <tr>
-    <th class="title">Fonctions disponibles</th>
     <th class="title">
-      <button class="tick result" onclick="Intermax.result();" style="float:right">
-        {{tr}}InterMax.Result{{/tr}}
+      <button class="change" onclick="Intermax.result();" style="float: right">
+        Intégrer résultat
       </button>
-      Résultats
+      Fonctions LogicMax disponibles
     </th>
   </tr>
 
   {{foreach from=$intermaxFunctions key=category item=_functions}}
   <tr>
-    <th colspan="10">{{$category}}</th>
+    <th>{{$category}}</th>
   </tr>
-  {{foreach from=$_functions item=_function}}
   <tr>
-    <td>
+    <td class="button">
+      {{foreach from=$_functions item=_function}}
       <button class="tick" onclick="Intermax.trigger('{{$_function}}');">
         {{$_function}}
       </button>
-    </td>
-    <td id="{{$_function|replace:" ":"-"}}">
-      <div class="handler">My Result</div>
+      {{/foreach}}
     </td>
   </tr>
   {{/foreach}}
-  {{/foreach}}
   
 </table>
+
+<script type="text/javascript">
+
+function checkBilanFSE() {
+  var oForm = document.BilanFSE;
+  
+  if (!checkForm(oForm)) {
+  	return;
+  }
+  
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "vw_bilan_fse");
+  $A(oForm.elements).each(url.addElement.bind(url));
+  url.popup("600", "400", "Bilan FSE");
+  return false;
+}
+
+function pageMain() {
+  regFieldCalendar("BilanFSE", "_date_min");
+  regFieldCalendar("BilanFSE", "_date_max");
+} 
+
+</script>
+
+<form name="BilanFSE" action="?" method="get" onsubmit="return checkBilanFSE()">
+
+<table class="form">
+  <tr>
+    <th class="title" colspan="2">
+      Requêter les FSE
+    </th>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$filter field=S_FSE_MODE_SECURISATION}}</th>
+    <td>{{mb_field object=$filter field=S_FSE_MODE_SECURISATION}}</td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$filter field=_date_min}}</th>
+    <td class="date">{{mb_field object=$filter field=_date_min form=BilanFSE}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$filter field=_date_max}}</th>
+    <td class="date">{{mb_field object=$filter field=_date_max form=BilanFSE}}</td>
+  </tr>
+
+  <tr>
+    <td colspan="2" class="button">
+      <button class="search">
+        {{tr}}Search{{/tr}}        
+      </button>
+    </td>
+  </tr>
+
+</table>
+
+</form>  
