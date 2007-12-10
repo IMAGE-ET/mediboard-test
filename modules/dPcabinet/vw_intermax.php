@@ -83,9 +83,12 @@ $mediuser->loadRefFunction();
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 global $utypes;
-$praticiens = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
+$prats = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
   $mediuser->loadPraticiens(PERM_READ) :
   array($mediuser->_id => $mediuser);
+foreach($prats as $_prat) {
+  $_prat->loadIdCPS();
+}
   
 // Chargement des FSE trouvées
 $filter = @new CLmFSE();
@@ -96,7 +99,7 @@ $filter->_date_max = mbDate("+ 1 day");
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("intermaxFunctions", $intermaxFunctions);
-$smarty->assign("praticiens", $praticiens);
+$smarty->assign("prats", $prats);
 $smarty->assign("filter", $filter);
 $smarty->display("vw_intermax.tpl");
 

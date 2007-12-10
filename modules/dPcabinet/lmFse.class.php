@@ -48,6 +48,8 @@ class CLmFSE extends CLmObject {
     $specs["S_FSE_ETAT"]              = "enum list|2|3|4|5|6|7|8|9|10";
     $specs["S_FSE_MODE_SECURISATION"] = "enum list|0|1|2|3|4|5";
     $specs["S_FSE_DATE_FSE"]          = "date";
+    $specs["S_FSE_CPS"]               = "num";
+    $specs["S_FSE_VIT"]               = "num";
     $specs["S_FSE_NUM_LOT"]           = "num";
     $specs["S_FSE_TOTAL_FACTURE"]     = "currency";
     $specs["S_FSE_TOTAL_AMO"]         = "currency";

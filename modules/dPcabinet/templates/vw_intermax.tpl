@@ -52,20 +52,20 @@ function checkBilanFSE() {
   var oForm = document.BilanFSE;
   
   if (!checkForm(oForm)) {
-  	return;
+  	return false;
   }
   
   var url = new Url;
-  url.setModuleAction("dPcabinet", "vw_bilan_fse");
-  $A(oForm.elements).each(url.addElement.bind(url));
+  url.setModuleAction("dPcabinet", "print_bilan_fse");
+  $H(Form.toObject(oForm)).each(function (pair) { url.addParam(pair.key, pair.value) } );
   url.popup("600", "400", "Bilan FSE");
   return false;
 }
 
-function pageMain() {
+Main.add(function() {
   regFieldCalendar("BilanFSE", "_date_min");
   regFieldCalendar("BilanFSE", "_date_max");
-} 
+} );
 
 </script>
 
@@ -79,8 +79,25 @@ function pageMain() {
   </tr>
 
   <tr>
-    <th>{{mb_label object=$filter field=S_FSE_MODE_SECURISATION}}</th>
-    <td>{{mb_field object=$filter field=S_FSE_MODE_SECURISATION defaultOption="&mdash; Tous les types"}}</td>
+    <th>{{mb_label object=$filter field="S_FSE_CPS"}}</th>
+    <td>
+      <select name="S_FSE_CPS" class="notNull ref">
+        <option value="">&mdash; Tous</option>
+        {{foreach from=$prats item=_prat}}
+        {{if $_prat->_id_cps}}
+        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id_cps}}">
+          {{$_prat->_view}}
+          [CPS #{{$_prat->_id_cps}}]
+        </option>
+        {{/if}}
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
+
+  <tr>
+    <th>{{mb_label object=$filter field=S_FSE_ETAT}}</th>
+    <td>{{mb_field object=$filter field=S_FSE_ETAT defaultOption="&mdash; Tous les types"}}</td>
   </tr>
 
   <tr>
@@ -96,7 +113,7 @@ function pageMain() {
 		{{if $filter->_spec->ds}}
     <td colspan="2" class="button">
       <button class="search">
-        {{tr}}Search{{/tr}}        
+        {{tr}}Search{{/tr}}
       </button>
     </td>
     {{else}}

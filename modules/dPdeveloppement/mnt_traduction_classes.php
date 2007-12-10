@@ -106,7 +106,7 @@ $smarty->assign("locales"  		, $localesDirs);
 $smarty->assign("modules"  		, $modules);
 $smarty->assign("module"   		, $module);
 $smarty->assign("trans"    		, $trans);
-$smarty->assign("backSpecs"    	, $backSpecs);
+$smarty->assign("backSpecs"   , $backSpecs);
 
 $smarty->display("mnt_traduction_classes.tpl");
 ?>

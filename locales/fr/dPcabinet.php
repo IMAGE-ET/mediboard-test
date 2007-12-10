@@ -1,4 +1,5 @@
 <?php
+$locales['CLmFSE.S_FSE_ETAT.'] = 'Tous les états';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -848,6 +849,8 @@ $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
 $locales['CFunctions-back-'] = '';
 $locales['CFunctions-back-tarifs'] = '';
 $locales['CLmFSE'] = 'FSE LogicMax';
+$locales['CLmFSE-S_FSE_CPS'] = 'Numéro CPS';
+$locales['CLmFSE-S_FSE_CPS-desc'] = 'Numéro LogicMax de lecture de CPS';
 $locales['CLmFSE-S_FSE_DATE_FSE'] = 'Date de formatage';
 $locales['CLmFSE-S_FSE_DATE_FSE-court'] = 'Date';
 $locales['CLmFSE-S_FSE_DATE_FSE-desc'] = 'Date de formatage de la FSE';
@@ -875,6 +878,11 @@ $locales['CLmFSE-S_FSE_TOTAL_ASSURE-desc'] = 'Part du montant pris en charge par
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE'] = 'Montant total';
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE-court'] = 'Facturé';
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE-desc'] = 'Montant total de la facturation';
+$locales['CLmFSE-S_FSE_VIT'] = 'Numéro Vitale';
+$locales['CLmFSE-S_FSE_VIT-desc'] = 'Numéro LogicMax du bénéficiaire de santé Vitale';
+$locales['CLmFSE-_date_max'] = 'Jusqu\'au';
+$locales['CLmFSE-_date_min'] = 'Depuis le';
+$locales['CLmFSE-_date_min-desc'] = 'Filtrer les FSE depuis le';
 $locales['CLmFSE.modify'] = '';
 $locales['CLmFSE.more'] = 'Des FSE LogicMax';
 $locales['CLmFSE.none'] = 'Aucune FSE LogicMax';

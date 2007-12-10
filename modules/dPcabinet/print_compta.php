@@ -13,7 +13,7 @@ global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("std");
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
+$filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
 $etat = $filter->_etat_paiement = 1;
 $type = $filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
 if($type == null) {

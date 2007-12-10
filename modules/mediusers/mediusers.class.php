@@ -323,6 +323,20 @@ class CMediusers extends CMbObject {
     $this->_id_cps = $id_cps->id400;
   }
   
+  function loadFromIdCPS($numero_cps) {
+    // Make id vitale
+    $id_cps = new CIdSante400();
+    $id_cps->object_class = $this->_class_name;
+    $id_cps->id400 = $numero_cps;
+    $id_cps->tag = "LogicMax CPSNumero";
+    $id_cps->loadMatchingObject();
+    
+    // Load patient from found id vitale
+    if ($id_cps->object_id) {
+      $this->load($id_cps->object_id);
+    }
+  }
+  
   /**
    * Map les valeurs venant d'une CPS
    * @return void

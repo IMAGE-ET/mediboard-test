@@ -1,4 +1,5 @@
 <?php
+$locales['CLmFSE.S_FSE_ETAT.'] = '';
 $locales['CActeNGAP'] = '';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -848,6 +849,8 @@ $locales['CExamPossum.uree.sup15.1'] = '4 &mdash; >= 15.1 mmol/L';
 $locales['CFunctions-back-'] = '';
 $locales['CFunctions-back-tarifs'] = '';
 $locales['CLmFSE'] = '';
+$locales['CLmFSE-S_FSE_CPS'] = '';
+$locales['CLmFSE-S_FSE_CPS-desc'] = '';
 $locales['CLmFSE-S_FSE_DATE_FSE'] = '';
 $locales['CLmFSE-S_FSE_DATE_FSE-court'] = '';
 $locales['CLmFSE-S_FSE_DATE_FSE-desc'] = '';
@@ -875,6 +878,11 @@ $locales['CLmFSE-S_FSE_TOTAL_ASSURE-desc'] = '';
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE'] = '';
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE-court'] = '';
 $locales['CLmFSE-S_FSE_TOTAL_FACTURE-desc'] = '';
+$locales['CLmFSE-S_FSE_VIT'] = '';
+$locales['CLmFSE-S_FSE_VIT-desc'] = '';
+$locales['CLmFSE-_date_max'] = '';
+$locales['CLmFSE-_date_min'] = '';
+$locales['CLmFSE-_date_min-desc'] = '';
 $locales['CLmFSE.modify'] = '';
 $locales['CLmFSE.more'] = '';
 $locales['CLmFSE.none'] = '';
