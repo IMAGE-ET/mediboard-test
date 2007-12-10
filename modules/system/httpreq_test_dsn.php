@@ -18,4 +18,9 @@ if (null == $dsn = mbGetValueFromGet("dsn")) {
 }
 
 $ds = CSQLDataSource::get($dsn);
+
+if (!$ds->link) {
+  $AppUI->stepAjax("Connexion vers la DSN '$dsn' échouée", UI_MSG_ERROR);
+}
+
 $AppUI->stepAjax("Connexion vers la DSN '$dsn' réussie");
