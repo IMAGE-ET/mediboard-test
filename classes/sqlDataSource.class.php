@@ -35,7 +35,7 @@ abstract class CSQLDataSource {
   	if (!array_key_exists($dsn, self::$dataSources)) {
       global $dPconfig;
   	  if (null == $dbtype = @$dPconfig["db"][$dsn]["dbtype"]) {
-        trigger_error( "FATAL ERROR: Undefined type DSN type '$dsn'.", E_USER_ERROR );        
+        trigger_error( "FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR );        
         return;
   	  }
 
@@ -46,7 +46,7 @@ abstract class CSQLDataSource {
 
   	  $dataSource = new $dsClass;
   	  $dataSource->init($dsn);
-  	  self::$dataSources[$dsn] = $dataSource;
+  	  self::$dataSources[$dsn] = $dataSource->link ? $dataSource : null;
   	}
   	return self::$dataSources[$dsn];
   }

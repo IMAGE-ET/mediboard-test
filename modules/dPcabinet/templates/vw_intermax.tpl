@@ -74,13 +74,13 @@ function pageMain() {
 <table class="form">
   <tr>
     <th class="title" colspan="2">
-      Requêter les FSE
+      Etat des FSE
     </th>
   </tr>
 
   <tr>
     <th>{{mb_label object=$filter field=S_FSE_MODE_SECURISATION}}</th>
-    <td>{{mb_field object=$filter field=S_FSE_MODE_SECURISATION}}</td>
+    <td>{{mb_field object=$filter field=S_FSE_MODE_SECURISATION defaultOption="&mdash; Tous les types"}}</td>
   </tr>
 
   <tr>
@@ -93,11 +93,21 @@ function pageMain() {
   </tr>
 
   <tr>
+		{{if $filter->_spec->ds}}
     <td colspan="2" class="button">
       <button class="search">
         {{tr}}Search{{/tr}}        
       </button>
     </td>
+    {{else}}
+    <td colspan="2">
+      <div class="big-error">
+	      Base de données LogicMax injoignable.
+	      <br/>
+	      Merci de vérifier la configuration du module LogicMax. 
+      </div>
+    </td>
+    {{/if}}
   </tr>
 
 </table>

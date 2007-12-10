@@ -93,8 +93,6 @@ $filter->S_FSE_MODE_SECURISATION = mbGetValueFromGet("S_FSE_MODE_SECURISATION");
 $filter->_date_min = mbDate();
 $filter->_date_max = mbDate("+ 1 day");
 
-mbDump($filter->_spec);
-
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("intermaxFunctions", $intermaxFunctions);

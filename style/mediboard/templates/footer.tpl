@@ -14,9 +14,11 @@
   <br />
   Requêtes SQL : 
   {{foreach from=$dataSources item=ds}}
+  {{if $ds}}
   &ndash; {{$ds->chrono->nbSteps}} 
   sur '{{$ds->dsn}}'
   en {{$ds->chrono->total|string_format:"%.3f"}} secondes
+  {{/if}}
   {{/foreach}}
 </div>
 {{/if}}
