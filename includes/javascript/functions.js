@@ -683,8 +683,35 @@ var ViewPort = {
     fDivAccordHeightFinal = Math.max(fDivAccordHeightFinal, oDefaultOptions.iMinHeight);
     
     return fDivAccordHeightFinal;
+  },
+  
+  
+  SetFrameHeight: function(oFrame, oOptions){
+	  var oDefaultOptions = {
+	    iBottomMargin : 15
+	  }
+	    
+	  var fYFramePos        = 0;
+	  var fNavHeight        = 0;
+	  var fFrameHeight      = 0;
+	  var fFrameHeightFinal = 0;
+	  
+	  // Calcul de la position top de la frame
+	  fYFramePos = Position.cumulativeOffset(oFrame)[1];  
+	  
+	  // hauteur de la fenetre
+	  fNavHeight = window.getInnerDimensions().y;
+	  
+	  // Calcul de la hauteur de la div
+	  fFrameHeight = fNavHeight - fYFramePos;
+	
+	  // Ajustement de la hauteur
+	  fFrameHeightFinal = fFrameHeight - oDefaultOptions.iBottomMargin
+	  
+	  oFrame.setAttribute("height", fFrameHeightFinal);
   }
 }
+
 
 /**
  * Unique Id generator helper

@@ -33,9 +33,12 @@ var IMeds = {
 }
 
 function pageMain() {
-  ViewPort.SetAvlHeight("resultats-internes", 0.5);
-  ViewPort.SetAvlHeight("resultats-externes", 1);
-  IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
+  {{if $prescription->_id}}
+    ViewPort.SetAvlHeight("resultats-internes", 0.5);
+    ViewPort.SetAvlHeight("resultats-externes", 1);
+  
+    IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
+  {{/if}}
 }
 
 </script>
@@ -99,9 +102,7 @@ function pageMain() {
           </td>
         </tr>
       </table>
-      
       </form>
-
     </td>
     {{/if}}
   </tr>
