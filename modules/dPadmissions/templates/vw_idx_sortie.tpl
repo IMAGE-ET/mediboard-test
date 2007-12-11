@@ -34,6 +34,9 @@ function submitSortie(oForm, mode) {
 }
 
 function confirmation(oForm, mode){
+   if(!checkForm(oForm)){
+     return false;
+   }
    if(confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
      submitSortie(oForm, mode);
    }

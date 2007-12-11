@@ -49,7 +49,7 @@
       {{else}}
       <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
       <input type="hidden" name="_modifier_sortie" value="1" />
-      
+      <input type="hidden" name="entree_reelle" value="{{$curr_sortie->entree_reelle}}" />
       <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$curr_sortie->sortie_prevue}}', '{{$curr_sortie->entree_reelle}}', this.form, '{{$mode}}');">
         Effectuer la sortie
       </button>
