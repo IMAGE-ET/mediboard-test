@@ -75,7 +75,7 @@ class CPlageOp extends CMbObject {
       "debut"            => "notNull time",
       "fin"              => "notNull time",
       "temps_inter_op"   => "notNull time",
-      "max_intervention" => "notNull num"
+      "max_intervention" => "num"
     );
   }
   
