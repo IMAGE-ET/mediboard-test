@@ -90,6 +90,7 @@ class CSejour extends CCodableCCAM {
   var $_ref_group             = null;
   var $_ref_etabExterne       = null;
   var $_ref_dossier_medical   = null;
+  var $_ref_rpu               = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -128,9 +129,10 @@ class CSejour extends CCodableCCAM {
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
       $backRefs["affectations"] = "CAffectation sejour_id";
-      $backRefs["factures"] = "CFacture sejour_id";
-      $backRefs["GHM"] = "CGHM sejour_id";
-      $backRefs["operations"] = "COperation sejour_id";
+      $backRefs["factures"]     = "CFacture sejour_id";
+      $backRefs["GHM"]          = "CGHM sejour_id";
+      $backRefs["operations"]   = "COperation sejour_id";
+      $backRefs["rpu"]          = "CRPU sejour_id";
      return $backRefs;
   }
 
@@ -139,7 +141,7 @@ class CSejour extends CCodableCCAM {
     $specs["patient_id"]          = "notNull ref class|CPatient";
     $specs["praticien_id"]        = "notNull ref class|CMediusers";
     $specs["group_id"]            = "notNull ref class|CGroups";
-    $specs["type"]                = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
+    $specs["type"]                = "notNull enum list|comp|ambu|exte|seances|ssr|psy|urg default|ambu";
     $specs["modalite"]            = "notNull enum list|office|libre|tiers default|libre";
     $specs["annule"]              = "bool";
     $specs["chambre_seule"]       = "bool";
@@ -446,6 +448,12 @@ class CSejour extends CCodableCCAM {
     // Chargement de l'établissement correspondant
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
+  }
+  
+  function loadRefRPU(){
+    if (null == $this->_ref_rpu = reset($this->loadBackRefs("rpu"))) {
+      return;
+    }
   }
   
   function loadRefsFwd() {

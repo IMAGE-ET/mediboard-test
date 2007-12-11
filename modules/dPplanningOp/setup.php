@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.77";
+$config["mod_version"]     = "0.78";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -710,7 +710,12 @@ class CSetupdPplanningOp extends CSetup {
             ADD `horaire_voulu` TIME;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.77";
+    $this->makeRevision("0.77");
+    $sql = "ALTER TABLE `sejour`
+            CHANGE `type` `type` ENUM('comp','ambu','exte','seances','ssr','psy','urg') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.78";
   }
 }
 ?>

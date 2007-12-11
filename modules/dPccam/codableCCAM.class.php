@@ -11,7 +11,6 @@ class CCodableCCAM extends CMbObject {
   var $_acte_depassement   = null;
   var $_datetime           = null;
   var $_praticien_id       = null;
-  var $temp_operation      = null;
   var $_ref_anesth         = null;
   var $_anesth             = null;
   var $_coded              = null;
