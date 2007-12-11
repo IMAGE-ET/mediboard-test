@@ -16,7 +16,7 @@
 	      {{assign var="view" value=$acte->_viewUnique}}
 	      {{assign var="key" value="$curr_key$view"}}
 	      {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
-	      <td style="text-align: center; {{if $acte->_id && $acte->code_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">{{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}</td>
+	      <td style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">{{$curr_code->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}</td>
 	      {{if $acte->_id}}
 	        {{assign var="executant_id" value=$acte->executant_id}}
 	        {{assign var="executant" value=$listExecutants.$executant_id}}

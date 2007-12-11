@@ -120,7 +120,7 @@ class CConsultation extends CCodableCCAM {
     $specs["heure"]           = "notNull time";
     $specs["duree"]           = "numchar maxLength|1";
     $specs["secteur1"]        = "currency min|0";
-    $specs["secteur2"]        = "currency min|0";
+    $specs["secteur2"]        = "currency";
     $specs["chrono"]          = "notNull enum list|16|32|48|64";
     $specs["annule"]          = "bool";
     $specs["paye"]            = "bool";

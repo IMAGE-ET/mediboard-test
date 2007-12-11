@@ -45,7 +45,7 @@ class CTarif extends CMbObject {
       "function_id" => "ref class|CFunctions",
       "description" => "notNull str confidential",
       "secteur1"    => "notNull currency min|0",
-      "secteur2"    => "currency min|0",
+      "secteur2"    => "currency",
       "codes_ccam"  => "str",
       "codes_ngap"  => "str",
       "_somme"      => "currency"
