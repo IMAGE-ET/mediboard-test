@@ -1,5 +1,7 @@
 <!-- $Id: print_compta.tpl 2031 2007-06-08 09:13:23Z lryo $ -->
 
+{{include file="../../dPpatients/templates/inc_intermax.tpl" debug="false"}}
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -48,7 +50,10 @@
         </tr>
         {{foreach from=$_fses item=_fse}}
         <tr>
-          <td>{{mb_value object=$_fse field=S_FSE_NUMERO_FSE}}</td>
+          <td>
+            <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
+			        {{mb_value object=$_fse field=S_FSE_NUMERO_FSE}} 
+			      </button>
           <td>{{mb_value object=$_fse field=S_FSE_MODE_SECURISATION}}</td>
           {{if $_fse->_annulee}}
           <td colspan="2" class="cancelled">{{mb_value object=$_fse field=S_FSE_ETAT}}</td>

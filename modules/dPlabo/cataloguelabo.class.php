@@ -27,6 +27,8 @@ class CCatalogueLabo extends CMbObject {
   
   // Distant references
   var $_ref_prescription_items = null;
+  var $_count_examens_labo = null;
+  var $_total_examens_labo = null;
   
   // Form fields
   var $_level = null;
@@ -137,26 +139,33 @@ class CCatalogueLabo extends CMbObject {
   function loadRefsFwd() {
     $this->loadParent();
   }
+
+  function loadSections() {
+    $this->_ref_catalogues_labo = $this->loadBackRefs("catalogues_labo", "libelle");
+  }
+  
+  function loadExamens() {
+    $this->_ref_examens_labo = $this->loadBackRefs("examens_labo");
+  }
   
   function loadRefsBack() {
     parent::loadRefsBack();
     
-    $examen = new CExamenLabo;
-    $where = array("catalogue_labo_id" => "= $this->catalogue_labo_id");
-    $order = "libelle";
-    $this->_ref_examens_labo = $examen->loadList($where, $order);
-
-    $catalogue = new CCatalogueLabo;
-    $where = array("pere_id" => "= $this->catalogue_labo_id");
-    $order = "libelle";
-    $this->_ref_catalogues_labo = $catalogue->loadList($where, $order);
+    $this->loadSections();
+    $this->loadExamens();
   }
   
   function loadRefsDeep($n = 0) {
     $this->_level = $n;
-    $this->loadRefs();
-    foreach($this->_ref_catalogues_labo as $key => $curr_catalogue) {
-      $this->_ref_catalogues_labo[$key]->loadRefsDeep($this->_level + 1);
+    $this->loadParent();
+    $this->_count_examens_labo = $this->countBackRefs("examens_labo");
+    $this->_total_examens_labo = $this->_count_examens_labo;
+    $this->loadSections();
+
+    foreach ($this->_ref_catalogues_labo as &$_catalogue) {
+      $_catalogue->_ref_pere =& $this;
+      $_catalogue->loadRefsDeep($this->_level + 1);
+      $this->_total_examens_labo += $_catalogue->_total_examens_labo;
     }
   }
 }
