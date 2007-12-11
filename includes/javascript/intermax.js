@@ -52,7 +52,6 @@ var Intermax = {
   },
 
   trigger: function(sFunction, oCallContent) {
-    Console.debug(sFunction, "Trigger InterMax function");
     
     this.oContent = {
       FONCTION: {
