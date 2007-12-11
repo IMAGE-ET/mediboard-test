@@ -35,12 +35,19 @@
 
       <input type="hidden" name="dosql" value="do_pack_aed" />
       <input type="hidden" name="pack_examens_labo_id" value="{{$pack->_id}}" />
+      <input type="hidden" name="_locked" value="{{$pack->_locked}}" />
       <input type="hidden" name="del" value="0" />
 
       <table class="form">
         <tr>
           {{if $pack->_id}}
-          <th class="title modify" colspan="2">Modification du pack {{$pack->_view}}</th>
+          <th class="title modify" colspan="2">
+          <div class="idsante400" id="{{$pack->_class_name}}-{{$pack->_id}}" ></div>
+            <a style="float:right;" href="#nothing" onclick="view_log('{{$pack->_class_name}}', {{$pack->_id}})">
+              <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
+            </a>
+            Modification du pack {{$pack->_view}}
+          </th>
           {{else}}
           <th class="title" colspan="2">Création d'un pack</th>
           {{/if}}

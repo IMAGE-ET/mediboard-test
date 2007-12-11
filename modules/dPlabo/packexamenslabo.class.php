@@ -29,6 +29,8 @@ class CPackExamensLabo extends CMbObject {
     $this->CMbObject("pack_examens_labo", "pack_examens_labo_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
+    
+    $this->_locked =& $this->_external;
   }
   
   function getSpecs() {
