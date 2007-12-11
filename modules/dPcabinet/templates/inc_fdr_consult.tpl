@@ -114,6 +114,12 @@ function modifTotal(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
+  if(secteur1 == ""){
+    secteur1 = 0;
+  }
+  if(secteur2 == ""){
+    secteur2 = 0;
+  }
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
 }
@@ -123,6 +129,12 @@ function modifSecteur2(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
+  if(somme == ""){
+    somme = 0;
+  }
+  if(secteur1 == ""){
+    secteur = 0;
+  }
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
@@ -512,9 +524,9 @@ function submitFdr(oForm) {
             <input type="hidden" name="date_paiement" value="" />
        
             {{if $consult->valide}}
-	          {{mb_value object=$consult field="secteur1" onchange="modifTotal()"}} (S1) +
+	          {{mb_value object=$consult field="secteur1"}} (S1) +
 	          
-	          {{mb_value object=$consult field="secteur2" onchange="modifTotal()"}} (S2) =
+	          {{mb_value object=$consult field="secteur2"}} (S2) =
  			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
             {{else}}
             {{mb_label object=$consult field="secteur1"}}

@@ -57,35 +57,67 @@ var Tarif = {
 }
 
 
+// Permet d'ajouter un code NGAP au tokenField
+function addCodeNgap(){
+  var oForm = document.editFrm;
+  var _quantite_ngap    = oForm._quantite_ngap.value;
+  var _code_ngap        = oForm._code_ngap.value;
+  var _coefficient_ngap = oForm._coefficient_ngap.value;
+  var code_ngap = _quantite_ngap+"-"+_code_ngap+"-"+_coefficient_ngap;
+  
+  oNgapField.add(code_ngap);
+}
+
+function refreshTotal(){
+  var oForm = document.editFrm;
+  var secteur1 = oForm.secteur1.value;
+  var secteur2 = oForm.secteur2.value;
+  if(secteur1 == ""){
+    secteur1 = 0;
+  }
+  if(secteur2 == ""){
+    secteur2 = 0;
+  }
+  oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
+  oForm._somme.value = Math.round(oForm._somme.value*100)/100;
+}
+
+function modifSecteur2(){
+  var oForm = document.editFrm;
+  var secteur1 = oForm.secteur1.value;
+  var somme = oForm._somme.value;
+  if(somme == ""){
+    somme = 0;
+  }
+  if(secteur1 == ""){
+    secteur = 0;
+  }
+  oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
+  oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
+}
 
 var oCcamField = null;
 
 function pageMain() {
-  refreshListCCAM();
+  refreshTotal();
 
-  // Creation du tokenField
-  oCcamField = new TokenField(document.editFrm.codes_ccam, {   
-    onChange : updateTokenCcam
-    //sProps : "notNull code ccam"
-  } );
-  
+  refreshListCCAM();
+  refreshListNGAP();
+
   regFieldCalendar("printFrm", "_date_min");
   regFieldCalendar("printFrm", "_date_max");
 
 
-
-  // Affichage des codes NGAP  
-  var oForm = document.editFrm;
-  var aNgap = oForm.codes_ngap.value.split("|");
-  aNgapNode = document.getElementById('listCodesNGAP');
-  var aCodeNodesNgap = new Array();
-  var iCodeNgap = 0;
-  while(sCodeNgap = aNgap[iCodeNgap++]){
-    aCodeNodesNgap.push(sCodeNgap);
-  }
-  aNgapNode.innerHTML = aCodeNodesNgap.join(" / ");
- 
- 
+  // Creation du tokenField
+  oCcamField = new TokenField(document.editFrm.codes_ccam, {   
+    onChange : updateTokenCcam
+  } );
+  
+  oNgapField = new TokenField(document.editFrm.codes_ngap, {
+    onChange : updateTokenNgap
+  } );
+  
+  
   function refreshListCCAM() {
     oCcamNode = document.getElementById("listCodesCcam");
     
@@ -94,28 +126,53 @@ function pageMain() {
   
     // Si la chaine est vide, il crée un tableau à un élément vide donc :
     aCcam.removeByValue("");
-  
+    
     var aCodeNodes = new Array();
     var iCode = 0;
     while (sCode = aCcam[iCode++]) {
-    
-      var sCodeNode = sCode;
+      var sCodeNode = sCode.substr(0,11);
         sCodeNode += "<button class='cancel notext' type='button' onclick='oCcamField.remove(\"" + sCode + "\")'>";
         sCodeNode += "<\/button>";
-      aCodeNodes.push(sCodeNode);
-      
+      aCodeNodes.push(sCodeNode);  
     }
     oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
-    //periodicalTimeUpdater.currentlyExecuting = false;
   }
 
 
+  function refreshListNGAP(){
+    var oForm = document.editFrm;
+    var aNgap = oForm.codes_ngap.value.split("|");
+    aNgapNode = document.getElementById('listCodesNGAP');
+    var aCodeNodesNgap = new Array();
+    var iCodeNgap = 0;
+    while(sCode = aNgap[iCodeNgap++]){
+      var explodeCode = sCode.split("-");
+      var _quantite = explodeCode[0];
+      var _code = explodeCode[1];
+      var _coefficient = explodeCode[2];
+      var sCode_ = _quantite+"-"+_code+"-"+_coefficient;
+      var sCodeNode = sCode_;
+          sCodeNode += "<button class='cancel notext' type='button' onclick='oNgapField.remove(\"" + sCode + "\")'>";
+          sCodeNode += "<\/button>";
+      aCodeNodesNgap.push(sCodeNode);
+    }
+    aNgapNode.innerHTML = aCodeNodesNgap.join(" / ");
+  }
+  
+  
+  
   function updateTokenCcam(){
     refreshListCCAM();    
-    
-    document.editFrm._codeCCAM.value="";
+    document.editFrm._codeCCAM.value = "";
   }
-
+  
+  function updateTokenNgap(){
+    refreshListNGAP();
+    document.editFrm._quantite_ngap.value = "";
+    document.editFrm._code_ngap.value = "";
+    document.editFrm._coefficient_ngap.value = "";
+  }
+ 
 }
 
 </script>
@@ -250,7 +307,7 @@ function pageMain() {
             {{mb_field object=$mediuser field="function_id" hidden=1 prop=""}}
             <table class="form">
               {{if $tarif->tarif_id}}
-              <tr><th class="category" colspan="2">Editer ce tarif</th></tr>
+              <tr><th class="category" colspan="2">Modifier ce tarif</th></tr>
               {{else}}
               <tr><th class="category" colspan="2">Créer un nouveau tarif</th></tr>
               {{/if}}
@@ -277,21 +334,19 @@ function pageMain() {
                   <input type="text" name="_codeCCAM" size="10" value="" />
                   <button class="tick notext" type="button" onclick="oCcamField.add(this.form._codeCCAM.value,true)">{{tr}}Add{{/tr}}</button>
                   <input type="hidden" name="_codable_class" value="CConsultation" />
-			      <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>             
+			            <button type="button" class="search notext" onclick="CCAMSelector.init()">{{tr}}button-CCodeCCAM-choix{{/tr}}</button>             
                   <script type="text/javascript">
-			        CCAMSelector.init = function(){
-			        this.sForm  = "editFrm";
-			        this.sView  = "_codeCCAM";
-			        //this.sTarif = "_tarif";
-			        this.sChir  = "chir_id";
-			        this.sClass = "_codable_class";
-			        this.pop();
-			      }
-			      </script>
-                
-                
+			              CCAMSelector.init = function(){
+			                this.sForm  = "editFrm";
+			                this.sView  = "_codeCCAM";
+			                //this.sTarif = "_tarif";
+			                this.sChir  = "chir_id";
+			                this.sClass = "_codable_class";
+			                this.pop();
+			              }
+			            </script>
                 </td>
-     
+                </tr>
                 <tr>
                   <th>
                     Liste des codes CCAM
@@ -301,19 +356,36 @@ function pageMain() {
                   </td>
                 </tr>
                 <tr>
-                  <th>Liste des codes NGAP
-                  {{mb_field object=$tarif field="codes_ngap" hidden="1"}}</th>
+                  <th>
+                    Ajout d'un code NGAP
+                    {{mb_field object=$tarif field="codes_ngap" hidden="1"}}
+                  </th>
+                  <td>
+                      Quantite:<input name="_quantite_ngap" type="text" size="3" /> 
+                      Code:<input name="_code_ngap" type="text" size="3" />
+                      Coefficient:<input name="_coefficient_ngap" type="text" size="3" />
+                      <button class="tick notext" type="button" onclick="addCodeNgap()" />
+                  </td>
+                </tr>
+                <tr>
+                  <th>Liste des codes NGAP</th>
                   <td colspan="2" class="text" id="listCodesNGAP">
                   </td>
                 </tr>
               <tr>
                 <th>{{mb_label object=$tarif field="secteur1"}}</th>
-                <td>{{mb_field object=$tarif field="secteur1" size="6"}}<input type="hidden" name="_tarif" /></td>
+                <td>{{mb_field object=$tarif field="secteur1" size="6" onChange="refreshTotal();"}}<input type="hidden" name="_tarif" /></td>
               </tr>
               
               <tr>
                 <th>{{mb_label object=$tarif field="secteur2"}}</th>
-                <td>{{mb_field object=$tarif field="secteur2" size="6"}}</td>
+                <td>{{mb_field object=$tarif field="secteur2" size="6" onChange="refreshTotal();"}}</td>
+              </tr>
+              <tr>
+                <th>Somme</th>
+                <td>
+                  {{mb_field object=$tarif field="_somme" value=$tarif->secteur1+$tarif->secteur2 onchange="modifSecteur2()"}}
+                </td>
               </tr>
               <tr>
                 <td class="button" colspan="2">

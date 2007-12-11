@@ -24,6 +24,7 @@ class CTarif extends CMbObject {
   
   // Form fields
   var $_type = null;
+  var $_somme = null;
 
   // Object References
   var $_ref_chir     = null;
@@ -46,7 +47,8 @@ class CTarif extends CMbObject {
       "secteur1"    => "notNull currency min|0",
       "secteur2"    => "currency min|0",
       "codes_ccam"  => "str",
-      "codes_ngap"  => "str"
+      "codes_ngap"  => "str",
+      "_somme"      => "currency"
     );
   }
   
