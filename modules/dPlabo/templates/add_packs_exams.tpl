@@ -97,6 +97,7 @@ var oDragOptions = {
   }       
 }
 
+
 function pageMain() {
   Pack.select();
   Catalogue.select();
@@ -105,6 +106,16 @@ function pageMain() {
   ViewPort.SetAvlHeight('CataloguesView'       , 0.4);
   ViewPort.SetAvlHeight('CataloguesExamensView', 1);
 }
+
+// Recherche des analyses
+function search(){
+  var oForm = document.frmRecherche;
+  var url = new Url();
+  url.setModuleAction("dPlabo", "httpreq_search_exam");
+  url.addParam("recherche", oForm.search.value);
+  url.requestUpdate("CataloguesExamensView", { waitingText: null });
+} 
+
 
 </script>
 

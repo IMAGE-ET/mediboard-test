@@ -1,11 +1,23 @@
-{{if $catalogue->_id}}
+{{if $catalogue->_id || $search}}
 <table class="tbl">
   <tr>
     <th class="title" colspan="6">
+      <div style="float: left">
+        <form name="frmRecherche">
+          <input type="text" name="search" />
+        </form>
+          <button class="search notext" onclick="search()">Recherche</button>
+      </div>
       <a style="float:right;" href="#nothing" onclick="view_log('{{$catalogue->_class_name}}', {{$catalogue->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
-      {{$catalogue->_view}}
+      {{if $search}}
+        {{$listExams|@count}}
+        {{if $listExams|@count != $countExams}}/{{$countExams}}{{/if}} 
+        Résultats pour la recherche ({{$recherche}})
+      {{else}}
+        {{$catalogue->_view}}
+      {{/if}}
     </th>
   </tr>
 
@@ -15,7 +27,13 @@
     <th>Références</th>
   </tr>
 
-  {{foreach from=$catalogue->_ref_examens_labo item="curr_examen"}}
+  {{if !$search}}
+    {{assign var="listExams" value=$catalogue->_ref_examens_labo}}
+  {{else}}
+    {{assign var="listExams" value=$listExams}}
+  {{/if}}
+  
+  {{foreach from=$listExams item="curr_examen"}}
   <tr>
     <td>
       <div class="draggable" id="examenCat-{{$curr_examen->_id}}">

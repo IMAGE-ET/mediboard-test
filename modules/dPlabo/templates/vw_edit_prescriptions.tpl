@@ -205,10 +205,8 @@ var Prescription = {
       oFormBase.prescription_labo_id.value = prescription_id;
       submitFormAjax(oFormBase, 'systemMsg', { onComplete: Prescription.select });
       return true;
-    }    
-    
+    }
   }
-  
 }
 
 var Resultat = {
@@ -240,6 +238,16 @@ var oDragOptions = {
   }
 }
 
+// Recherche des analyses
+function search(){
+  var oForm = document.frmRecherche;
+  var url = new Url();
+  url.setModuleAction("dPlabo", "httpreq_search_exam");
+  url.addParam("recherche", oForm.search.value);
+  url.requestUpdate("bottomRightDiv", { waitingText: null });
+} 
+    
+    
 function pageMain() {
   ViewPort.SetAvlHeight('topRightDiv'      , 0.4);
   ViewPort.SetAvlHeight('bottomRightDiv'   , 1);
@@ -268,7 +276,9 @@ function pageMain() {
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()"/>
             <input type="hidden" name="prescription_labo_id" value="" />
+            <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$patient->_id}} } })">
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
+            </a>
             <button class="search" type="button" onclick="PatSelector.pop();">Chercher</button>
             {{if $patient->_id}}
             <button class="new" type="button" onclick="Prescription.edit();">

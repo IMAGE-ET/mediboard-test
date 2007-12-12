@@ -21,6 +21,7 @@ $catalogue->loadRefs();
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("search", 0);
 $smarty->assign("catalogue"     , $catalogue    );
 
 $smarty->display("inc_vw_examens_catalogues.tpl");
