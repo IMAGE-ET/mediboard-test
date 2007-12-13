@@ -41,6 +41,7 @@
           <td>{{$total.autre.nombre}}</td>
           {{/if}}
         </tr>
+        
         <tr><th>Valeur totale :</th><td>{{$total.tarif}} €</td>
           {{if $etat != 0}}
           <td>{{$total.cheque.valeur}} €</td>
@@ -50,6 +51,26 @@
           <td>{{$total.autre.valeur}} €</td>
           {{/if}}
         </tr>
+        {{if $etat == "-1"}}
+        <tr>
+          <th>Non réglées:</th>
+          <td>{{$total.nb_non_regle}} ({{$total.somme_non_regle}} &euro;)</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        <tr>
+          <th>Non acquittées:</th>
+          <td>{{$total.nb_non_acquitte}} ({{$total.somme_non_acquitte}} &euro;)</td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+          <td></td>
+        </tr>
+        {{/if}}
       </table>
     </td>
   </tr>
@@ -81,6 +102,7 @@
             {{$curr_consult->_somme}} &euro;
           </td>
           <td>
+            {{if $curr_consult->_somme != "0"}}
             <form name="tarifFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
@@ -97,11 +119,13 @@
               <button type="submit" class="tick">Acquitter</button>
             {{/if}}
             </form>
+            {{/if}}
           </td>
           <td>
             {{$curr_consult->a_regler}} &euro;
           </td>
           <td>
+          {{if $curr_consult->a_regler != "0"}}
             <form name="tarifFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
@@ -110,6 +134,7 @@
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
             {{if $curr_consult->patient_regle}}
               <input type="hidden" name="patient_regle" value="0" />
+              <input type="hidden" name="facture_acquittee" value="0" />
               <input type="hidden" name="date_paiement" value="" />
               <button class="cancel notext" type="submit"></button>
               Réglée
@@ -126,6 +151,7 @@
               <button type="submit" class="tick">Valider</button>
             {{/if}}
             </form>
+            {{/if}}
           </td>
         </tr>
         {{/foreach}}
@@ -133,7 +159,8 @@
           <td colspan="3" style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
-          <td style="font-weight:bold;">{{$curr_plage->total1+$curr_plage->total2}}</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
           <td />
         </tr>
       </table>

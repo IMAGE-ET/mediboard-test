@@ -223,6 +223,24 @@ class CConsultation extends CCodableCCAM {
     }
     
     
+    // Gestion du tarif
+    // Suppression de l'acquittement si on supprime le reglement patient
+    if($this->patient_regle !== null && $this->patient_regle == 0){
+      $this->facture_acquittee = 0;
+    }
+    
+    // Acquittement à 1 si secteur1 + secteur2 = a_regler
+    if($this->secteur1 !== null && $this->secteur2 !== null && $this->a_regler !== null){
+      if(($this->secteur1 + $this->secteur2 == $this->a_regler) && ($this->patient_regle == 1)){
+        $this->facture_acquittee = 1;
+      }
+    }
+    
+    // Si rien a regler
+    if($this->a_regler !== null && $this->a_regler == 0 && $this->valide){
+      $this->patient_regle = 1;
+      $this->facture_acquittee = 1;
+    }
   }
 
   function loadRefsActesNGAP() {
@@ -342,7 +360,7 @@ class CConsultation extends CCodableCCAM {
     // Copie des elements du tarif dans la consultation
     $this->secteur1     = $tarif->secteur1;
     $this->secteur2     = $tarif->secteur2;
-    $this->total_assure = $tarif->secteur1 + $tarif->secteur2;
+    $this->a_regler     = $tarif->secteur1 + $tarif->secteur2;
     $this->tarif        = $tarif->description;
     $this->codes_ccam   = $tarif->codes_ccam;
     $this->_tokens_ngap = $tarif->codes_ngap;

@@ -92,12 +92,12 @@ function validTarif(){
   
   if(oForm.tarif.value == ""){
     oForm.tarif.value = "manuel";
-  }
-  if(oForm._tokens_ccam.value){
-    oForm.tarif.value += " / "+oForm._tokens_ccam.value;
-  }
-  if(oForm._tokens_ngap.value){
-    oForm.tarif.value += " / "+oForm._tokens_ngap.value;
+    if(oForm._tokens_ccam.value){
+      oForm.tarif.value += " / "+oForm._tokens_ccam.value;
+    }
+    if(oForm._tokens_ngap.value){
+      oForm.tarif.value += " / "+oForm._tokens_ngap.value;
+    }
   }
   submitFdr(oForm);
 }
@@ -146,16 +146,18 @@ function effectuerReglement() {
   var oForm = document.tarifFrm;
   oForm.patient_regle.value = "1";
   oForm.date_paiement.value = new Date().toDATE();
-  
+  /*
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
   var somme = parseFloat(secteur1) + parseFloat(secteur2);
   var a_regler = oForm.a_regler.value;
-  
+  */
   // Si le total de la facture est egal au reglement patient, facture acquitte
+  /*
   if(somme == a_regler){
     oForm.facture_acquittee.value = "1";
   }
+  */
   submitFdr(oForm);
 }
 
@@ -578,7 +580,7 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="a_regler" hidden=1 prop=""}}
             {{mb_field object=$consult field="patient_regle" hidden=1 prop=""}}
             {{mb_field object=$consult field="date_paiement" hidden=1 prop=""}}
-            <strong>{{$consult->a_regler}} &euro; ont été réglés par le patient: {{$consult->mode_reglement}}</strong>
+            <strong>{{$consult->a_regler}} &euro; ont été réglés par le patient: {{mb_value object=$consult field="mode_reglement"}}</strong>
           </td>
         </tr>
         <tr>
@@ -627,7 +629,9 @@ function submitFdr(oForm) {
             <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
             <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
             <input type="hidden" name="a_regler" value="{{$consult->a_regler}}" />
+            <!-- 
             <input type="hidden" name="facture_acquittee" value="" />
+             -->
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             {{if !$consult->_current_fse}}
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>

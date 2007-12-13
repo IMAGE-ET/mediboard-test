@@ -40,16 +40,15 @@ $chir = mbGetValueFromGetOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
 
-
 // Requète sur les plages de consultation considérées
 $where = array();
 $where[] = "date >= '$filter->_date_min'";
 $where[] = "date <= '$filter->_date_max'";
 
+// Chargement des plages
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
-
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, chir_id");
 
@@ -68,9 +67,14 @@ $total["secteur1"]          = 0;
 $total["secteur2"]          = 0;
 $total["tarif"]             = 0;
 $total["nombre"]            = 0;
+$total["a_regler"]          = 0;
+$total["nb_non_regle"]      = 0;
+$total["nb_non_acquitte"]   = 0;
+$total["somme_non_regle"]   = 0;
+$total["somme_non_acquitte"]= 0;
+
 foreach($listPlage as $key => $value) {
   $listPlage[$key]->loadRefsFwd();
-  //unset($listPlage[$key]->_ref_consultations);
   $where = array();
   $where["plageconsult_id"] = "= '".$value->plageconsult_id."'";
   $where["chrono"] = ">= '".CConsultation::TERMINE."'";
@@ -90,9 +94,11 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]->total2 = 0;
   foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
     $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
+    
+     
     if($etat == -1 && $listPlage[$key]->_ref_consultations[$key2]->patient_regle){
-      $listPlage[$key]->total1 += $value2->secteur1;
-      $listPlage[$key]->total2 += $value2->secteur2;
+      //$listPlage[$key]->total1 += $value2->secteur1;
+      //$listPlage[$key]->total2 += $value2->secteur2;
       if(isset($total[$value2->mode_reglement]["valeur"]))
         $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
       else
@@ -103,8 +109,8 @@ foreach($listPlage as $key => $value) {
         $total[$value2->mode_reglement]["nombre"] = 1;
     }
     elseif($etat != -1){
-      $listPlage[$key]->total1 += $value2->secteur1;
-      $listPlage[$key]->total2 += $value2->secteur2;
+      //$listPlage[$key]->total1 += $value2->secteur1;
+      //$listPlage[$key]->total2 += $value2->secteur2;
       if($value2->mode_reglement) {
         if(isset($total[$value2->mode_reglement]["valeur"]))
           $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
@@ -116,14 +122,37 @@ foreach($listPlage as $key => $value) {
           $total[$value2->mode_reglement]["nombre"] = 1;
       }
     }
+    
+    $listPlage[$key]->total1 += $value2->secteur1;
+    $listPlage[$key]->total2 += $value2->secteur2;
+    $listPlage[$key]->a_regler += $value2->a_regler;  
+    
+    if(!$value2->patient_regle){
+      $total["nb_non_regle"]++;
+      $total["somme_non_regle"] += $value2->a_regler ;
+    }
+    if(!$value2->facture_acquittee){  
+      $total["nb_non_acquitte"]++;
+      $total["somme_non_acquitte"] += $value2->_somme;
+    }
+     
   }
+  
+  // Total des secteur1
   $total["secteur1"] += $listPlage[$key]->total1;
+  
+  // Total des secteur2
   $total["secteur2"] += $listPlage[$key]->total2;
+  
+  // Total Facturé
   $total["tarif"]    += $listPlage[$key]->total1 + $listPlage[$key]->total2;
+  
+  // Nombre de consultations
   $total["nombre"]   += count($listPlage[$key]->_ref_consultations);
   if(!count($listPlage[$key]->_ref_consultations))
     unset($listPlage[$key]);
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();
