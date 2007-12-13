@@ -98,7 +98,7 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->type = "urg";
     $this->_ref_sejour->entree_prevue = $this->_entree;
     $this->_ref_sejour->entree_reelle = $this->_entree;
-    $this->_ref_sejour->sortie_prevue = mbDateTime("+ 1 year", $this->_entree);
+    $this->_ref_sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
     if($msg = $this->_ref_sejour->store()) {
       return $msg;
     }
