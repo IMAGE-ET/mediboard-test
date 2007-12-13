@@ -95,14 +95,14 @@ foreach ($consults as $consult) {
     $consultation->secteur2 = $consult->secteur2;
     $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
     $consultation->annule = 0;
-    $consultation->paye = strftime("%Y-%m-%d") > $consult->date ? 1 : 0;
+    $consultation->patient_regle = strftime("%Y-%m-%d") > $consult->date ? 1 : 0;
     $consultation->motif = $consult->motif;
     $consultation->rques = $consult->rques;
     $consultation->examen = $consult->examen;
     $consultation->traitement = $consult->traitement;
     $consultation->premiere = $consult->premiere;
     $consultation->tarif = $consult->tarif;
-    $consultation->type_tarif = $consult->type_tarif;
+    $consultation->mode_reglement = $consult->mode_reglement;
 
     $consultation->store();
     $nbConsultationsCreees++;

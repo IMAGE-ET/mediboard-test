@@ -21,11 +21,11 @@ function newExam(sAction, consultation_id) {
 
 <table class="tbl">
   <tr>
-    <th colspan="3" class="title">{{$patient->_view}}</th>
+    <th colspan="4" class="title">{{$patient->_view}}</th>
   </tr>
   <tr>
     <th>Antécédents</th>
-    <th colspan="2">Documents</th>
+    <th colspan="3">Documents</th>
   </tr>
   
   <tr>
@@ -54,7 +54,7 @@ function newExam(sAction, consultation_id) {
       {{/if}}
       </ul>
     </td>
-    <td rowspan="3" colspan="2"valign="top">
+    <td rowspan="3" colspan="3"valign="top">
       {{foreach from=$patient->_ref_documents item=curr_doc}}
       <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
@@ -90,12 +90,12 @@ function newExam(sAction, consultation_id) {
   </tr>
   
   <tr>
-    <th colspan="3" class="title">Consultations</th>
+    <th colspan="4" class="title">Consultations</th>
   </tr>
   <tr>
     <th>Résumé</th>
     <th>Documents</th>
-    <th>Regl.</th>
+    <th>Facture</th>
   </tr>
   
   <!-- Consultations -->
@@ -144,8 +144,15 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
     </td>
     {{if $curr_consult->tarif}}
-    <td {{if !$curr_consult->date_paiement}} style="color: #f00;"{{/if}}>
+    <td>
+      <div style="display: inline; {{if $curr_consult->facture_acquittee != '1'}} color: #f00;{{/if}}">
       {{$curr_consult->_somme}}&euro;
+      </div>
+      {{if $curr_consult->_somme != $curr_consult->a_regler}}
+        <div style="display: inline; {{if $curr_consult->patient_regle != '1'}} color: #f00; {{/if}}">
+        ({{$curr_consult->a_regler}}&euro;)
+        </div>
+      {{/if}}
     </td>
     {{/if}}
   </tr>
@@ -153,11 +160,11 @@ function newExam(sAction, consultation_id) {
   
   <!-- Interventions -->
   <tr>
-    <th colspan="3" class="title">Interventions</th>
+    <th colspan="4" class="title">Interventions</th>
   </tr>
   <tr>
     <th>Résumé</th>
-    <th colspan="2">Documents</th>
+    <th colspan="3">Documents</th>
   </tr>
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>

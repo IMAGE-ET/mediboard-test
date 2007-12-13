@@ -24,7 +24,7 @@ if($filter->_etat_paiement == null) {
 } elseif ($filter->_etat_paiement == "paye") {
 	$etat = 1;
 }
-$type = $filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+$type = $filter->mode_reglement = mbGetValueFromGetOrSession("mode_reglement", 0);
 if($type == null) {
 	$type = 0;
 }
@@ -77,12 +77,12 @@ foreach($listPlage as $key => $value) {
   $where["annule"] = "= '0'";
   $where[] = "tarif IS NOT NULL AND tarif <> ''";
   if($etat != -1)
-    $where["paye"] = "= '$etat'";
+    $where["facture_acquittee"] = "= '$etat'";
   if($etat == 0)
     $where[] = "(secteur1 + secteur2) != 0";
   $where["secteur1"] = "IS NOT NULL";
   if($type)
-    $where["type_tarif"] = "= '$type'";
+    $where["mode_reglement"] = "= '$type'";
   $listConsult = new CConsultation;
   $listConsult = $listConsult->loadList($where, "heure");
   $listPlage[$key]->_ref_consultations = $listConsult;
@@ -90,30 +90,30 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]->total2 = 0;
   foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
     $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
-    if($etat == -1 && $listPlage[$key]->_ref_consultations[$key2]->paye){
+    if($etat == -1 && $listPlage[$key]->_ref_consultations[$key2]->patient_regle){
       $listPlage[$key]->total1 += $value2->secteur1;
       $listPlage[$key]->total2 += $value2->secteur2;
-      if(isset($total[$value2->type_tarif]["valeur"]))
-        $total[$value2->type_tarif]["valeur"] += $value2->secteur1 + $value2->secteur2;
+      if(isset($total[$value2->mode_reglement]["valeur"]))
+        $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
       else
-        $total[$value2->type_tarif]["valeur"] = $value2->secteur1 + $value2->secteur2;
-      if(isset($total[$value2->type_tarif]["nombre"]))
-        $total[$value2->type_tarif]["nombre"]++;
+        $total[$value2->mode_reglement]["valeur"] = $value2->secteur1 + $value2->secteur2;
+      if(isset($total[$value2->mode_reglement]["nombre"]))
+        $total[$value2->mode_reglement]["nombre"]++;
       else
-        $total[$value2->type_tarif]["nombre"] = 1;
+        $total[$value2->mode_reglement]["nombre"] = 1;
     }
     elseif($etat != -1){
       $listPlage[$key]->total1 += $value2->secteur1;
       $listPlage[$key]->total2 += $value2->secteur2;
-      if($value2->type_tarif) {
-        if(isset($total[$value2->type_tarif]["valeur"]))
-          $total[$value2->type_tarif]["valeur"] += $value2->secteur1 + $value2->secteur2;
+      if($value2->mode_reglement) {
+        if(isset($total[$value2->mode_reglement]["valeur"]))
+          $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
         else
-          $total[$value2->type_tarif]["valeur"] += $value2->secteur1 + $value2->secteur2;
-        if(isset($total[$value2->type_tarif]["nombre"]))
-          $total[$value2->type_tarif]["nombre"]++;
+          $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
+        if(isset($total[$value2->mode_reglement]["nombre"]))
+          $total[$value2->mode_reglement]["nombre"]++;
         else
-          $total[$value2->type_tarif]["nombre"] = 1;
+          $total[$value2->mode_reglement]["nombre"] = 1;
       }
     }
   }

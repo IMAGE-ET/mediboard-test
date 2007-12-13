@@ -19,7 +19,7 @@ $filter->_date_min = mbDate();
 $filter->_date_max = mbDate("+ 0 day");
 
 $filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
-$filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+$filter->mode_reglement = mbGetValueFromGetOrSession("mode_reglement", 0);
 $filter->_type_affichage = mbGetValueFromGetOrSession("_type_affichage", 0);
 
 // Edite t'on un tarif ?

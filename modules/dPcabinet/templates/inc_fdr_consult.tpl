@@ -68,20 +68,19 @@ function cancelTarif(action) {
   var oForm = document.tarifFrm;
   
   if(action == "delActes"){
-    oForm._delete_actes.value = 1;  
+    oForm._delete_actes.value = 1; 
+    oForm.tarif.value = "";
   }
   
   if(oForm.valide){
     oForm.valide.value = 0;
   }
   
-  
-  
   if(oForm._somme){
     oForm._somme.value = 0;
   }
-  oForm.tarif.value = "";
-  oForm.paye.value = "0";
+  
+  oForm.patient_regle.value = "0";
   
   oForm.date_paiement.value = "";  
   submitFdr(oForm);
@@ -122,6 +121,7 @@ function modifTotal(){
   }
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
+  oForm.a_regler.value = oForm._somme.value; 
 }
 
 
@@ -129,26 +129,39 @@ function modifSecteur2(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
+  
   if(somme == ""){
     somme = 0;
   }
   if(secteur1 == ""){
     secteur = 0;
   }
+  oForm.a_regler.value = somme;
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
 function effectuerReglement() {
+  // passage de patient_regle a 1
   var oForm = document.tarifFrm;
-  oForm.paye.value = "1";
+  oForm.patient_regle.value = "1";
   oForm.date_paiement.value = new Date().toDATE();
+  
+  var secteur1 = oForm.secteur1.value;
+  var secteur2 = oForm.secteur2.value;
+  var somme = parseFloat(secteur1) + parseFloat(secteur2);
+  var a_regler = oForm.a_regler.value;
+  
+  // Si le total de la facture est egal au reglement patient, facture acquitte
+  if(somme == a_regler){
+    oForm.facture_acquittee.value = "1";
+  }
   submitFdr(oForm);
 }
 
 function putTiers() {
   var form = document.tarifFrm;
-  form.type_tarif.value = form._tiers.checked ? "tiers" : "";
+  form.mode_reglement.value = "tiers";
 }
 
 function editDocument(compte_rendu_id) {
@@ -219,6 +232,8 @@ function confirmFileDeletion(oButton) {
 function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
+
+
 
 </script>
 
@@ -514,13 +529,13 @@ function submitFdr(oForm) {
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       
       <table width="100%">  
-        {{if $consult->paye == "0"}}
+        {{if $consult->patient_regle == "0"}}
        
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            <input type="hidden" name="paye" value="0" />
+            <input type="hidden" name="patient_regle" value="0" />
             <input type="hidden" name="date_paiement" value="" />
        
             {{if $consult->valide}}
@@ -560,28 +575,37 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
             {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            {{mb_field object=$consult field="paye" hidden=1 prop=""}}
+            {{mb_field object=$consult field="a_regler" hidden=1 prop=""}}
+            {{mb_field object=$consult field="patient_regle" hidden=1 prop=""}}
             {{mb_field object=$consult field="date_paiement" hidden=1 prop=""}}
-            <strong>{{$consult->secteur1+$consult->secteur2}} &euro; ont été réglés : {{$consult->type_tarif}}</strong>
+            <strong>{{$consult->a_regler}} &euro; ont été réglés par le patient: {{$consult->mode_reglement}}</strong>
           </td>
         </tr>
         <tr>
           <!-- Suppression des actes associées a la consultation -->
-          
           <td colspan="2" class="button">
             <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
+            <input type="hidden" name="facture_acquittee" value="0" />
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler le réglement</button>
           </td>
         </tr>
         {{/if}}
         
-        {{if $consult->tarif && $consult->paye == "0" && $consult->valide == "1"}}
+        {{if $consult->tarif && $consult->patient_regle == "0" && $consult->valide == "1"}}
         <tr>
           <th>
-            {{mb_label object=$consult field="type_tarif"}}
+            {{mb_label object=$consult field="mode_reglement"}}
           </th>
           <td>
-            {{mb_field object=$consult field="type_tarif"}}
+            {{mb_field object=$consult field="mode_reglement"}}
+          </td>
+        </tr>
+        <tr>
+          <th>
+            {{mb_label object=$consult field="a_regler"}}
+          </th>
+          <td>
+            {{mb_value object=$consult field="a_regler"}}
           </td>
         </tr>
         <tr>
@@ -600,18 +624,23 @@ function submitFdr(oForm) {
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="valide" value="1" />
+            <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
+            <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
+            <input type="hidden" name="a_regler" value="{{$consult->a_regler}}" />
+            <input type="hidden" name="facture_acquittee" value="" />
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             {{if !$consult->_current_fse}}
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>
             {{/if}}
           </td>
         </tr>
-        {{elseif $consult->paye == "0"}}
+        {{elseif $consult->patient_regle == "0"}}
         <tr>
-          <th><label for="_tiers" title="Le règlement s'effectue par tiers-payant">Tiers-payant ?</label></th>
+          <th>{{mb_label object=$consult field="a_regler"}}</th>
           <td>
-            <input type="checkbox" name="_tiers" onchange="putTiers()" />
-            <input type="hidden" name="type_tarif" value="" />
+            {{mb_field object=$consult field="a_regler"}}
+            <button type="button" class="tick" onclick="putTiers(); this.form.a_regler.value = 0">Tiers-payant total</button>   
+            <input type="hidden" name="mode_reglement" value="" />
             <input type="hidden" name="valide" value="1" />
           </td>
         </tr>
@@ -619,9 +648,7 @@ function submitFdr(oForm) {
           <td colspan="2" class="button">
           <input type="hidden" name="_delete_actes" value="0" />
             <button class="submit" type="button" onclick="validTarif();">Valider ce tarif</button>
-            {{if $consult->tarif}}
             <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler le tarif</button>
-            {{/if}}
           </td>
         </tr>
         {{/if}}

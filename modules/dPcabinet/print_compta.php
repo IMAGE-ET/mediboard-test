@@ -15,7 +15,7 @@ $ds = CSQLDataSource::get("std");
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
 $filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
 $etat = $filter->_etat_paiement = 1;
-$type = $filter->type_tarif = mbGetValueFromGetOrSession("type_tarif", 0);
+$type = $filter->mode_reglement = mbGetValueFromGetOrSession("mode_reglement", 0);
 if($type == null) {
 	$type = 0;
 }
@@ -76,12 +76,12 @@ foreach($listPlage as $key => $value) {
   $where["chrono"] = ">= '".CConsultation::TERMINE."'";
   $where["annule"] = "= '0'";
   if($etat != -1)
-    $where["paye"] = "= '$etat'";
+    $where["patient_regle"] = "= '$etat'";
   if($etat == 0)
     $where[] = "(secteur1 + secteur2) != 0";
   $where["secteur1"] = "IS NOT NULL";
   if($type)
-    $where["type_tarif"] = "= '$type'";
+    $where["mode_reglement"] = "= '$type'";
   $ljoin = array();
   $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
   $listConsult = new CConsultation;
@@ -91,18 +91,18 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]["total2"] = 0;
   foreach($listPlage[$key]["_ref_consultations"] as $key2 => $value2) {
     $listPlage[$key]["_ref_consultations"][$key2]->loadRefPatient();
-    if($etat == -1 && $listPlage[$key]["_ref_consultations"][$key2]->paye){
+    if($etat == -1 && $listPlage[$key]["_ref_consultations"][$key2]->patient_regle){
       $listPlage[$key]["total1"] += $value2->secteur1;
       $listPlage[$key]["total2"] += $value2->secteur2;
-      $total[$value2->type_tarif]["valeur"] += $value2->secteur1 + $value2->secteur2;
-      $total[$value2->type_tarif]["nombre"]++;
+      $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
+      $total[$value2->mode_reglement]["nombre"]++;
     }
     elseif($etat != -1){
       $listPlage[$key]["total1"] += $value2->secteur1;
       $listPlage[$key]["total2"] += $value2->secteur2;
-      if($value2->type_tarif) {
-        $total[$value2->type_tarif]["valeur"] += $value2->secteur1 + $value2->secteur2;
-        $total[$value2->type_tarif]["nombre"]++;
+      if($value2->mode_reglement) {
+        $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
+        $total[$value2->mode_reglement]["nombre"]++;
       }
     }
   }

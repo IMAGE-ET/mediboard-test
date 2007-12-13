@@ -62,22 +62,24 @@
     <td colspan="2">
       <table class="tbl">
         <tr>
-          <th width="16%">Patient</th>
-          <th width="14%">Type</th>
-          <th width="14%">Code</th>
-          <th width="14%">Secteur 1</th>
-          <th width="14%">Secteur 2</th>
-          <th width="14%">Total</th>
-          <th width="14%">Paiement</th>
+          <th>Patient</th>
+          <th>Type</th>
+          <th>Code</th>
+          <th>Secteur 1</th>
+          <th>Secteur 2</th>
+          <th colspan="2">Total Facturé</th>
+          <th colspan="2">Réglement du patient</th>
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
         <tr>
           <td><a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a></td>
-          <td>{{$curr_consult->type_tarif}}</td>
+          <td>{{$curr_consult->mode_reglement}}</td>
           <td>{{$curr_consult->tarif}}</td>
-          <td>{{$curr_consult->secteur1}} €</td>
-          <td>{{$curr_consult->secteur2}} €</td>
-          <td>{{if $etat == -1 && !$curr_consult->paye}}0{{else}}{{$curr_consult->secteur1+$curr_consult->secteur2}}{{/if}} €</td>
+          <td>{{$curr_consult->secteur1}}€</td>
+          <td>{{$curr_consult->secteur2}}€</td>
+          <td>
+            {{$curr_consult->_somme}} &euro;
+          </td>
           <td>
             <form name="tarifFrm" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
@@ -85,21 +87,43 @@
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->paye}}
-              <input type="hidden" name="paye" value="0" />
+            {{if $curr_consult->facture_acquittee}}
+              <input type="hidden" name="facture_acquittee" value="0" />
               <input type="hidden" name="date_paiement" value="" />
-              <button class="cancel" type="submit">Annuler</button>
+              <button class="cancel notext" type="submit"></button>
+              Acquittée
             {{else}}
-              <input type="hidden" name="paye" value="1" />
+              <input type="hidden" name="facture_acquittee" value="1" />
+              <button type="submit" class="tick">Acquitter</button>
+            {{/if}}
+            </form>
+          </td>
+          <td>
+            {{$curr_consult->a_regler}} &euro;
+          </td>
+          <td>
+            <form name="tarifFrm" action="?m=dPcabinet" method="post">
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="_dialog" value="print_rapport" />
+            <input type="hidden" name="dosql" value="do_consultation_aed" />
+            <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
+            {{if $curr_consult->patient_regle}}
+              <input type="hidden" name="patient_regle" value="0" />
+              <input type="hidden" name="date_paiement" value="" />
+              <button class="cancel notext" type="submit"></button>
+              Réglée
+            {{else}}
+              <input type="hidden" name="patient_regle" value="1" />
               <input type="hidden" name="date_paiement" value="{{$today}}" />
-              <select name="type_tarif">
-                <option value="cheque"  {{if $curr_consult->type_tarif == "cheque" }}selected="selected"{{/if}}>Chèques     </option>
-                <option value="CB"      {{if $curr_consult->type_tarif == "CB"     }}selected="selected"{{/if}}>CB          </option>
-                <option value="especes" {{if $curr_consult->type_tarif == "especes"}}selected="selected"{{/if}}>Espèces     </option>
-                <option value="tiers"   {{if $curr_consult->type_tarif == "tiers"  }}selected="selected"{{/if}}>Tiers-payant</option>
-                <option value="autre"   {{if $curr_consult->type_tarif == "autre"  }}selected="selected"{{/if}}>Autre       </option>
+              <select name="mode_reglement">
+                <option value="cheque"  {{if $curr_consult->mode_reglement == "cheque" }}selected="selected"{{/if}}>Chèques     </option>
+                <option value="CB"      {{if $curr_consult->mode_reglement == "CB"     }}selected="selected"{{/if}}>CB          </option>
+                <option value="especes" {{if $curr_consult->mode_reglement == "especes"}}selected="selected"{{/if}}>Espèces     </option>
+                <option value="tiers"   {{if $curr_consult->mode_reglement == "tiers"  }}selected="selected"{{/if}}>Tiers-payant</option>
+                <option value="autre"   {{if $curr_consult->mode_reglement == "autre"  }}selected="selected"{{/if}}>Autre       </option>
               </select>
-              <button type="submit" class="tick notext">{{tr}}Save{{/tr}}</button>
+              <button type="submit" class="tick">Valider</button>
             {{/if}}
             </form>
           </td>
@@ -109,7 +133,7 @@
           <td colspan="3" style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
-          <td style="font-weight:bold;">{{$curr_plage->total1+$curr_plage->total2}} €</td>
+          <td style="font-weight:bold;">{{$curr_plage->total1+$curr_plage->total2}}</td>
           <td />
         </tr>
       </table>

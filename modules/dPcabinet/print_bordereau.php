@@ -31,8 +31,8 @@ $compte_cle     = substr($praticien->compte, 21, 2);
 
 $consult = new CConsultation();
 
-$whereConsult["type_tarif"] = " = 'cheque' ";
-$whereConsult["paye"] = " = '1' ";
+$whereConsult["mode_reglement"] = " = 'cheque' ";
+$whereConsult["patient_regle"] = " = '1' ";
 $whereConsult["date_paiement"] = " BETWEEN '$date_min' AND '$date_max' ";
 
 // Nombre de cheques remis

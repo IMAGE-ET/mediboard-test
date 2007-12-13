@@ -30,7 +30,7 @@ class CConsultation extends CCodableCCAM {
   var $secteur2      = null;
   var $chrono        = null;
   var $annule        = null;
-  var $paye          = null;
+  
   var $date_paiement = null;
   var $motif         = null;
   var $rques         = null;
@@ -39,12 +39,20 @@ class CConsultation extends CCodableCCAM {
   var $premiere      = null;
   var $adresse       = null; // Le patient a-t'il été adressé ?
   var $tarif         = null;
-  var $type_tarif    = null;
+  var $mode_reglement= null;
   var $arrivee       = null;
   var $banque_id     = null;
   var $categorie_id  = null;
   var $valide        = null; // facture validée ?
-
+ 
+  var $total_assure      = null;
+  var $total_amc         = null; 
+  var $total_amo         = null;
+  var $facture_acquittee = null; // true si total_facture == a_regler
+  var $a_regler          = null;     // somme que le patient doit régler a la fn
+  var $patient_regle     = null;     // paye devient patient_regle
+  
+  
   // Form fields
   var $_etat           = null;
   var $_hour           = null;
@@ -115,34 +123,39 @@ class CConsultation extends CCodableCCAM {
   
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["plageconsult_id"] = "notNull ref class|CPlageconsult";
-    $specs["patient_id"]      = "ref class|CPatient";
-    $specs["heure"]           = "notNull time";
-    $specs["duree"]           = "numchar maxLength|1";
-    $specs["secteur1"]        = "currency min|0";
-    $specs["secteur2"]        = "currency";
-    $specs["chrono"]          = "notNull enum list|16|32|48|64";
-    $specs["annule"]          = "bool";
-    $specs["paye"]            = "bool";
-    $specs["date_paiement"]   = "date";
-    $specs["motif"]           = "text";
-    $specs["rques"]           = "text";
-    $specs["examen"]          = "text";
-    $specs["traitement"]      = "text";
-    $specs["premiere"]        = "bool";
-    $specs["adresse"]         = "bool";
-    $specs["tarif"]           = "str";
-    $specs["arrivee"]         = "dateTime";
-    $specs["type_tarif"]      = "enum list|cheque|CB|especes|tiers|autre default|cheque";
-    $specs["banque_id"]       = "ref class|CBanque";
-    $specs["categorie_id"]    = "ref class|CConsultationCategorie";
-    $specs["_date_min"]       = "date";
-    $specs["_date_max"] 	  = "date moreEquals|_date_min";
-    $specs["_etat_paiement"]  = "enum list|paye|impaye default|paye";
-    $specs["_type_affichage"] = "enum list|complete|totaux";
-    $specs["_prat_id"]        = "text";
-    $specs["_somme"]          = "currency";
-    $specs["valide"]          = "bool";
+    $specs["plageconsult_id"]   = "notNull ref class|CPlageconsult";
+    $specs["patient_id"]        = "ref class|CPatient";
+    $specs["heure"]             = "notNull time";
+    $specs["duree"]             = "numchar maxLength|1";
+    $specs["secteur1"]          = "currency min|0";
+    $specs["secteur2"]          = "currency";
+    $specs["chrono"]            = "notNull enum list|16|32|48|64";
+    $specs["annule"]            = "bool";
+    $specs["date_paiement"]     = "date";
+    $specs["motif"]             = "text";
+    $specs["rques"]             = "text";
+    $specs["examen"]            = "text";
+    $specs["traitement"]        = "text";
+    $specs["premiere"]          = "bool";
+    $specs["adresse"]           = "bool";
+    $specs["tarif"]             = "str";
+    $specs["arrivee"]           = "dateTime";
+    $specs["mode_reglement"]    = "enum list|cheque|CB|especes|tiers|autre default|cheque";
+    $specs["banque_id"]         = "ref class|CBanque";
+    $specs["categorie_id"]      = "ref class|CConsultationCategorie";
+    $specs["_date_min"]         = "date";
+    $specs["_date_max"] 	      = "date moreEquals|_date_min";
+    $specs["_etat_paiement"]    = "enum list|paye|impaye default|paye";
+    $specs["_type_affichage"]   = "enum list|complete|totaux";
+    $specs["_prat_id"]          = "text";
+    $specs["_somme"]            = "currency";
+    $specs["valide"]            = "bool";
+    $specs["total_amo"]         = "currency";
+    $specs["total_amc"]         = "currency";
+    $specs["total_assure"]      = "currency";
+    $specs["facture_acquittee"] = "bool";
+    $specs["a_regler"]          = "currency";
+    $specs["patient_regle"]     = "bool";
     return $specs;
   }
   
@@ -208,6 +221,8 @@ class CConsultation extends CCodableCCAM {
     if ($this->_bind_fse) {
       $this->valide = 0;
     }
+    
+    
   }
 
   function loadRefsActesNGAP() {
@@ -306,8 +321,11 @@ class CConsultation extends CCodableCCAM {
     
     $this->secteur1 = "";
     $this->secteur2 = "";
-    $this->tarif = "";
     $this->valide = "";
+    $this->total_assure = 0.0;
+    $this->total_amc = 0.0;
+    $this->total_amo = 0.0;
+    $this->a_regler = 0.0;
     
     if ($msg = $this->store()) {
      return $msg;
@@ -324,6 +342,7 @@ class CConsultation extends CCodableCCAM {
     // Copie des elements du tarif dans la consultation
     $this->secteur1     = $tarif->secteur1;
     $this->secteur2     = $tarif->secteur2;
+    $this->total_assure = $tarif->secteur1 + $tarif->secteur2;
     $this->tarif        = $tarif->description;
     $this->codes_ccam   = $tarif->codes_ccam;
     $this->_tokens_ngap = $tarif->codes_ngap;
@@ -471,6 +490,21 @@ class CConsultation extends CCodableCCAM {
     // Nom par défaut si non défini
     $consult = new CConsultation();
     $consult->load($this->_id);
+    
+    // Sauvegarde des tarifs de la consultation
+    $consult->total_assure = $fse["FSE_TOTAL_ASSURE"];
+    $consult->total_amo    = $fse["FSE_TOTAL_AMO"];
+    $consult->total_amc    = $fse["FSE_TOTAL_AMC"];
+    
+    $consult->a_regler = $consult->total_assure;
+    
+    if($fse["FSE_TIERS_PAYANT"] == 0){
+      $consult->a_regler += $consult->total_amo;
+    }
+    if($fse["FSE_TIERS_PAYANT_COMP"] == 0){
+      $consult->a_regler += $consult->total_amc;
+    }
+    
     $consult->valide = '1';
     if (!$consult->tarif) {
       $consult->tarif = "FSE LogicMax";

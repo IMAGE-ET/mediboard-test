@@ -18,7 +18,7 @@ function checkRapport(){
   url.addElement(form._date_max);
   url.addElement(form.chir);
   url.addElement(form._etat_paiement);
-  url.addElement(form.type_tarif);
+  url.addElement(form.mode_reglement);
   url.addElement(form._type_affichage);
   url.popup(700, 550, "Rapport");
   
@@ -213,8 +213,8 @@ function pageMain() {
           <td>{{mb_field object=$filter field="_etat_paiement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="type_tarif"}}</td>
-          <td>{{mb_field object=$filter field="type_tarif" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
+          <td>{{mb_label object=$filter field="mode_reglement"}}</td>
+          <td>{{mb_field object=$filter field="mode_reglement" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_type_affichage"}}</td>

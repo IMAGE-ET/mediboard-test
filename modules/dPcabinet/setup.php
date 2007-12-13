@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.84";
+$config["mod_version"]     = "0.85";
 $config["mod_type"]        = "user";
 
 
@@ -851,7 +851,39 @@ class CSetupdPcabinet extends CSetup {
 		     	  WHERE `tarif` IS NOT NULL;";
     $this->addQuery($sql);
      
-    $this->mod_version = "0.84";
+    
+    $this->makeRevision("0.84");
+    $sql = "ALTER TABLE `consultation`
+            CHANGE `type_tarif` `mode_reglement` ENUM( 'cheque', 'CB', 'especes', 'tiers', 'autre' ),
+            CHANGE `paye` `patient_regle` ENUM('0','1');";
+    $this->addQuery($sql);
+         
+    $sql = "ALTER TABLE `consultation`
+            ADD `total_amc` FLOAT,
+            ADD `total_amo` FLOAT,
+            ADD `total_assure` FLOAT,
+            ADD `facture_acquittee` ENUM('0','1'), 
+            ADD `a_regler` FLOAT DEFAULT '0.0';"; 
+    $this->addQuery($sql); 
+       
+    $sql = "UPDATE `consultation`
+            SET `a_regler` = `secteur1` + `secteur2`
+            WHERE `mode_reglement` <> 'tiers'
+						OR `mode_reglement` IS NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`
+            SET `patient_regle` = '1'
+            WHERE `mode_reglement` = 'tiers';";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`
+            SET `facture_acquittee` = '1'
+            WHERE `a_regler` = `secteur1` + `secteur2`
+            AND `patient_regle` = '1';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.85";
   }
 }
 ?>
