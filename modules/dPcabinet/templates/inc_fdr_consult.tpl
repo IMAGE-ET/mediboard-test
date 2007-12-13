@@ -531,7 +531,7 @@ function submitFdr(oForm) {
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       
       <table width="100%">  
-        {{if $consult->patient_regle == "0"}}
+        {{if !$consult->patient_regle}}
        
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
@@ -638,7 +638,7 @@ function submitFdr(oForm) {
             {{/if}}
           </td>
         </tr>
-        {{elseif $consult->patient_regle == "0"}}
+        {{elseif !$consult->patient_regle}}
         <tr>
           <th>{{mb_label object=$consult field="a_regler"}}</th>
           <td>

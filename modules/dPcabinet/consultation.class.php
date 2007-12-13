@@ -238,6 +238,7 @@ class CConsultation extends CCodableCCAM {
     
     // Si rien a regler
     if($this->a_regler !== null && $this->a_regler == 0 && $this->valide){
+      $this->mode_reglement = "tiers";
       $this->patient_regle = 1;
       $this->facture_acquittee = 1;
     }
