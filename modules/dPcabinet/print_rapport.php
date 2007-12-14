@@ -73,6 +73,12 @@ $total["nb_non_acquitte"]   = 0;
 $total["somme_non_regle"]   = 0;
 $total["somme_non_acquitte"]= 0;
 
+$total["cheque"]["reglement"]  = 0;
+$total["CB"]["reglement"]      = 0;
+$total["especes"]["reglement"] = 0;
+$total["tiers"]["reglement"]   = 0;
+$total["autre"]["reglement"]   = 0;
+
 foreach($listPlage as $key => $value) {
   $listPlage[$key]->loadRefsFwd();
   $where = array();
@@ -97,35 +103,46 @@ foreach($listPlage as $key => $value) {
     
      
     if($etat == -1 && $listPlage[$key]->_ref_consultations[$key2]->patient_regle){
-      //$listPlage[$key]->total1 += $value2->secteur1;
-      //$listPlage[$key]->total2 += $value2->secteur2;
-      if(isset($total[$value2->mode_reglement]["valeur"]))
+      if(isset($total[$value2->mode_reglement]["valeur"])){
         $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
+        $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+      }
       else
         $total[$value2->mode_reglement]["valeur"] = $value2->secteur1 + $value2->secteur2;
-      if(isset($total[$value2->mode_reglement]["nombre"]))
+      if(isset($total[$value2->mode_reglement]["nombre"])){
         $total[$value2->mode_reglement]["nombre"]++;
-      else
+        //$total["a_regler"] += $value2->a_regler;
+      }
+      else {
         $total[$value2->mode_reglement]["nombre"] = 1;
+        $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+      }
     }
     elseif($etat != -1){
-      //$listPlage[$key]->total1 += $value2->secteur1;
-      //$listPlage[$key]->total2 += $value2->secteur2;
       if($value2->mode_reglement) {
-        if(isset($total[$value2->mode_reglement]["valeur"]))
+        if(isset($total[$value2->mode_reglement]["valeur"])){
           $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
-        else
+          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+        }
+        else {
           $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
-        if(isset($total[$value2->mode_reglement]["nombre"]))
+          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+        }
+        if(isset($total[$value2->mode_reglement]["nombre"])){
           $total[$value2->mode_reglement]["nombre"]++;
-        else
+          //$total["a_regler"] += $value2->a_regler;
+        }
+        else{
           $total[$value2->mode_reglement]["nombre"] = 1;
+          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+        }
       }
     }
     
     $listPlage[$key]->total1 += $value2->secteur1;
     $listPlage[$key]->total2 += $value2->secteur2;
     $listPlage[$key]->a_regler += $value2->a_regler;  
+    
     
     if(!$value2->patient_regle){
       $total["nb_non_regle"]++;
@@ -136,6 +153,8 @@ foreach($listPlage as $key => $value) {
       $total["somme_non_acquitte"] += $value2->_somme;
     }
      
+    $total["a_regler"] += $value2->a_regler;
+    
   }
   
   // Total des secteur1

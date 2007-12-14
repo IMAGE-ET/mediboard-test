@@ -19,58 +19,64 @@
         <tr><td>Paiments pris en compte : {{if $type}}{{$type}}{{else}}tous{{/if}}</td></tr>
       </table>
     </td>
+    
     <td class="halfPane">
-      <table class="form">
-        <tr><th class="category" colspan="2">Récapitulatif</th></tr>
-        <tr><th>Secteur 1 :</th><td>{{$total.secteur1}} €</td></tr>
-        <tr><th>Secteur 2 :</th><td>{{$total.secteur2}} €</td>
-          {{if $etat != 0}}
+     
+      <table class="tbl">
+        <tr>
+          <th class="category" colspan="8">Réglement des patients</th>
+        </tr>
+        <tr>
+          <th class="category">Type réglement</th>
+          <th class="category">Total</th>
           <th class="category">Chèque</th>
           <th class="category">CB</th>
           <th class="category">Espèces</th>
           <th class="category">Tiers</th>
           <th class="category">Autre</th>
-          {{/if}}
+          <th class="category">Non réglé</th>
         </tr>
-        <tr><th>Nombre de consultations :</th><td>{{$total.nombre}}</td>
-          {{if $etat != 0}}
+        <tr>
+          <th class="category">Nb consultations</th>
+          <td>{{$total.nombre}}</td>
           <td>{{$total.cheque.nombre}}</td>
           <td>{{$total.CB.nombre}}</td>
           <td>{{$total.especes.nombre}}</td>
           <td>{{$total.tiers.nombre}}</td>
           <td>{{$total.autre.nombre}}</td>
-          {{/if}}
-        </tr>
-        
-        <tr><th>Valeur totale :</th><td>{{$total.tarif}} €</td>
-          {{if $etat != 0}}
-          <td>{{$total.cheque.valeur}} €</td>
-          <td>{{$total.CB.valeur}} €</td>
-          <td>{{$total.especes.valeur}} €</td>
-          <td>{{$total.tiers.valeur}} €</td>
-          <td>{{$total.autre.valeur}} €</td>
-          {{/if}}
-        </tr>
-        {{if $etat == "-1"}}
-        <tr>
-          <th>Non réglées:</th>
-          <td>{{$total.nb_non_regle}} ({{$total.somme_non_regle}} &euro;)</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <td>{{$total.nombre-$total.cheque.nombre-$total.CB.nombre-$total.especes.nombre-$total.tiers.nombre-$total.autre.nombre}}</td>
         </tr>
         <tr>
-          <th>Non acquittées:</th>
-          <td>{{$total.nb_non_acquitte}} ({{$total.somme_non_acquitte}} &euro;)</td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
-          <td></td>
+          <th class="category">Total réglement patient</th>
+          <td>{{$total.a_regler}}</td>
+          <td>{{$total.cheque.reglement}} €</td>
+          <td>{{$total.CB.reglement}} €</td>
+          <td>{{$total.especes.reglement}} €</td>
+          <td>{{$total.tiers.reglement}} €</td>
+          <td>{{$total.autre.reglement}} €</td>
+          <td>{{$total.somme_non_regle}} &euro;</td>
         </tr>
-        {{/if}}
+      </table>
+       <table class="tbl">
+        <tr>
+          <th class="category" colspan="2">Récapitulatif des factures</th>
+        </tr>
+        <tr>
+          <th class="category" width="10%">Total secteur 1</th>
+          <td>{{$total.secteur1}} &euro;</td>
+        </tr>
+        <tr>
+          <th class="category">Total secteur 2</th>
+          <td>{{$total.secteur2}} &euro;</td>
+        </tr>
+        <tr>
+          <th class="category">Total non acquittée</th>
+          <td>{{$total.somme_non_acquitte}} &euro;</td>
+        </tr>
+        <tr>
+          <th class="category">Total facture</th>
+          <td>{{$total.secteur1+$total.secteur2}} &euro;</td>
+        </tr>
       </table>
     </td>
   </tr>
