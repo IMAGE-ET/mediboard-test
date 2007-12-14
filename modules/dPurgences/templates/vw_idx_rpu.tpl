@@ -29,7 +29,7 @@
         {{$curr_sejour->_ref_praticien->_view}}
       </a>
     </td>
-    <td>
+    <td class="text">
       <a href="?m=dPurgences&tab=vw_aed_rpu&rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         {{$curr_sejour->_ref_rpu->diag_infirmier|nl2br}}
       </a>
