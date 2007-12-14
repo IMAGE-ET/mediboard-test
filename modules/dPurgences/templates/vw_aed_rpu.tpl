@@ -24,7 +24,19 @@ function pageMain() {
     {{else}}
     <th class="title" colspan="3">Création d'une urgence</th>
     {{/if}}
-  </tr>   
+  </tr>
+  <tr>
+    <th>{{mb_label object=$rpu field="_responsable_id"}}</th>
+    <td colspan="2">
+      <select>
+        {{foreach from=$listResponsables item=curr_user}}
+        <option value="{{$curr_user->_id}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
+          {{$curr_user->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
+  </tr>
   <tr>
     <th>{{mb_label object=$rpu field="_entree"}}</th>
     <td class="date" colspan="2">{{mb_field object=$rpu field="_entree" form="editRpu"}}</td>

@@ -1,8 +1,9 @@
 <?php
-$locales['CEtabExterne-ape-desc'] = 'Code APE de l\'établissement';
+$locales['CGroups-service_urgences_id-desc'] = 'Service d\'urgences de l\'établissement';
 $locales['CEtabExterne-adresse'] = 'Adresse';
 $locales['CEtabExterne-adresse-desc'] = 'Adresse de l\'établissement';
 $locales['CEtabExterne-ape'] = 'Code APE';
+$locales['CEtabExterne-ape-desc'] = 'Code APE de l\'établissement';
 $locales['CEtabExterne-cp'] = 'Code Postal';
 $locales['CEtabExterne-cp-desc'] = 'Code Postal de l\'établissement';
 $locales['CEtabExterne-finess'] = 'N° FINESS';
@@ -44,6 +45,7 @@ $locales['CGroups-mail-desc'] = 'Veuillez saisir une adresse e-mail';
 $locales['CGroups-raison_sociale'] = 'Raison Sociale';
 $locales['CGroups-raison_sociale-court'] = '';
 $locales['CGroups-raison_sociale-desc'] = 'Veuillez saisir la raison sociale de l\'établissement';
+$locales['CGroups-service_urgences_id'] = 'Service d\'urgences';
 $locales['CGroups-siret'] = 'N° SIRET';
 $locales['CGroups-siret-court'] = '';
 $locales['CGroups-siret-desc'] = 'Veuillez saisir le n° siret de l\'établissement';

@@ -37,6 +37,7 @@ class CRPU extends CMbObject {
   var $_ville      = null;
   var $_naissance  = null;
   // Sejour
+  var $_responsable_id = null;
   var $_entree         = null;
   var $_DP             = null;
   var $_DAS            = null;
@@ -61,6 +62,7 @@ class CRPU extends CMbObject {
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "notNull enum list|1|2|3|4|5|P|D",
+      "_responsable_id" => "notNull ref class|CMediusers",
       "_entree"         => "dateTime",
       "sortie"          => "dateTime",
       "mode_sortie"     => "enum list|6|7|8|9",
@@ -78,8 +80,9 @@ class CRPU extends CMbObject {
     $this->_ville      = $this->_ref_sejour->_ref_patient->ville;
     $this->_naissance  = $this->_ref_sejour->_ref_patient->naissance;
     
-    $this->_entree     = $this->_ref_sejour->_entree;
-    $this->_DP         = $this->_ref_sejour->DP;
+    $this->_responsable_id = $this->_ref_sejour->praticien_id;
+    $this->_entree         = $this->_ref_sejour->_entree;
+    $this->_DP             = $this->_ref_sejour->DP;
   }
   
   function loadRefsFwd() {
@@ -94,7 +97,7 @@ class CRPU extends CMbObject {
     $this->loadRefsFwd();
     $this->_ref_sejour->patient_id = $this->_patient_id;
     $this->_ref_sejour->group_id = $g;
-    $this->_ref_sejour->praticien_id = 11;
+    $this->_ref_sejour->praticien_id = $this->_responsable_id;
     $this->_ref_sejour->type = "urg";
     $this->_ref_sejour->entree_prevue = $this->_entree;
     $this->_ref_sejour->entree_reelle = $this->_entree;

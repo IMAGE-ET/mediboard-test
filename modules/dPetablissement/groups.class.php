@@ -15,20 +15,21 @@ class CGroups extends CMbObject {
 	var $group_id       = null;	
 
   // DB Fields
-	var $text           = null;
-  var $raison_sociale = null;
-  var $adresse        = null;
-  var $cp             = null;
-  var $ville          = null;
-  var $tel            = null;
-  var $fax            = null;
-  var $mail           = null;
-  var $web            = null;
-  var $directeur      = null;
-  var $domiciliation  = null;
-  var $siret          = null;
-  var $ape            = null;
-  var $tel_anesth     = null;
+	var $text                = null;
+  var $raison_sociale      = null;
+  var $adresse             = null;
+  var $cp                  = null;
+  var $ville               = null;
+  var $tel                 = null;
+  var $fax                 = null;
+  var $mail                = null;
+  var $web                 = null;
+  var $directeur           = null;
+  var $domiciliation       = null;
+  var $siret               = null;
+  var $ape                 = null;
+  var $tel_anesth          = null;
+  var $service_urgences_id = null;
 
   // Object References
   var $_ref_functions = null;
@@ -61,33 +62,34 @@ class CGroups extends CMbObject {
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
       $backRefs["documents_ged"] = "CDocGed group_id";
-      $backRefs["functions"] = "CFunctions group_id";
-      $backRefs["menus"] = "CMenu group_id";
-      $backRefs["plats"] = "CPlat group_id";
-      $backRefs["salles"] = "CSalle group_id";
-      $backRefs["sejours"] = "CSejour group_id";
-      $backRefs["services"] = "CService group_id";
-      $backRefs["stocks"] = "CStock group_id";
-      $backRefs["type_repas"] = "CTypeRepas group_id";
+      $backRefs["functions"]     = "CFunctions group_id";
+      $backRefs["menus"]         = "CMenu group_id";
+      $backRefs["plats"]         = "CPlat group_id";
+      $backRefs["salles"]        = "CSalle group_id";
+      $backRefs["sejours"]       = "CSejour group_id";
+      $backRefs["services"]      = "CService group_id";
+      $backRefs["stocks"]        = "CStock group_id";
+      $backRefs["type_repas"]    = "CTypeRepas group_id";
      return $backRefs;
   }
   
   function getSpecs() {
     return array (
-      "text"           => "notNull str confidential",
-      "raison_sociale" => "str maxLength|50",
-      "adresse"        => "text confidential",
-      "cp"             => "numchar length|5",
-      "ville"          => "str maxLength|50 confidential",
-      "tel"            => "numchar length|10",
-      "tel_anesth"     => "numchar length|10",
-      "directeur"      => "str maxLength|50",
-      "domiciliation"  => "str maxLength|9",
-      "siret"          => "str length|14",
-      "ape"            => "str length|4",
-      "mail"           => "email",
-      "fax"            => "numchar length|10",
-      "web"            => "str"
+      "text"                => "notNull str confidential",
+      "raison_sociale"      => "str maxLength|50",
+      "adresse"             => "text confidential",
+      "cp"                  => "numchar length|5",
+      "ville"               => "str maxLength|50 confidential",
+      "tel"                 => "numchar length|10",
+      "service_urgences_id" => "ref class|CFunctions",
+      "tel_anesth"          => "numchar length|10",
+      "directeur"           => "str maxLength|50",
+      "domiciliation"       => "str maxLength|9",
+      "siret"               => "str length|14",
+      "ape"                 => "str length|4",
+      "mail"                => "email",
+      "fax"                 => "numchar length|10",
+      "web"                 => "str"
     );
   }
   

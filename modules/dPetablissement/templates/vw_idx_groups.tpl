@@ -72,13 +72,27 @@ function pageMain() {
             <div style="display:none;" class="autocomplete" id="cp_auto_complete"></div>
           </td>
         </tr>
-        
         <tr>
           <th>{{mb_label object=$usergroup field="ville"}}</th>
           <td>{{mb_field object=$usergroup field="ville"}}
         	 <div style="display:none;" class="autocomplete" id="ville_auto_complete"></div>
           </td>
         </tr>
+        {{if $usergroup->_id}}
+        <tr>
+          <th>{{mb_label object=$usergroup field="service_urgences_id"}}</th>
+          <td>
+            <select name="service_urgences_id">
+              <option value="">&mdash Choisir le service d'urgences</option>
+              {{foreach from=$usergroup->_ref_functions item="curr_fct"}}
+              <option value="{{$curr_fct->_id}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
+                {{$curr_fct->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        {{/if}}
         <tr>
           <th>{{mb_label object=$usergroup field="_tel1" defaultFor="_tel1"}}</th>
 		    <td>

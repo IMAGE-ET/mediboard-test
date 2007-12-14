@@ -22,6 +22,7 @@ foreach($listGroups as $key => $value) {
 // Récupération du groupe selectionné
 $usergroup = new CGroups;
 $usergroup->load(mbGetValueFromGetOrSession("group_id", 0));
+$usergroup->loadRefs();
 
 // Création du template
 $smarty = new CSmartyDP();

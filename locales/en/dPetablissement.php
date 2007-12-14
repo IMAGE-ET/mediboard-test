@@ -1,8 +1,9 @@
 <?php
-$locales['CEtabExterne-ape-desc'] = '';
+$locales['CGroups-service_urgences_id-desc'] = '';
 $locales['CEtabExterne-adresse'] = '';
 $locales['CEtabExterne-adresse-desc'] = '';
 $locales['CEtabExterne-ape'] = '';
+$locales['CEtabExterne-ape-desc'] = '';
 $locales['CEtabExterne-cp'] = '';
 $locales['CEtabExterne-cp-desc'] = '';
 $locales['CEtabExterne-finess'] = '';
@@ -44,6 +45,7 @@ $locales['CGroups-mail-desc'] = '';
 $locales['CGroups-raison_sociale'] = '';
 $locales['CGroups-raison_sociale-court'] = '';
 $locales['CGroups-raison_sociale-desc'] = '';
+$locales['CGroups-service_urgences_id'] = '';
 $locales['CGroups-siret'] = '';
 $locales['CGroups-siret-court'] = '';
 $locales['CGroups-siret-desc'] = '';

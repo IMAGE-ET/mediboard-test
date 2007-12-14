@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.17";
+$config["mod_version"]     = "0.18";
 $config["mod_type"]        = "core";
 
 class CSetupdPetablissement extends CSetup {
@@ -83,7 +83,12 @@ class CSetupdPetablissement extends CSetup {
             ADD `ape` CHAR(4);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.17";
+    $this->makeRevision("0.17");
+    $sql = "ALTER TABLE `groups_mediboard`
+            ADD `service_urgences_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.18";
     
   } 
   

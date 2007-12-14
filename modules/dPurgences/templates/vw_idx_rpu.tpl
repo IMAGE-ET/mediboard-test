@@ -1,9 +1,9 @@
 <table class="tbl">
   <tr>
-    <th>Patient</th>
-    <th>Arrivée</th>
-    <th>Degré d'urgence</th>
-    <th>Diagnostic infirmier</th>
+    <th>{{tr}}CRPU-_patient_id{{/tr}}</th>
+    <th>{{tr}}CRPU-_entree{{/tr}}</th>
+    <th>{{tr}}CRPU-ccmu{{/tr}}</th>
+    <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
