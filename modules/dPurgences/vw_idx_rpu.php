@@ -7,11 +7,16 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
 $today = mbDate(mbGetValueFromGetOrSession("date", mbDate()));
+
+$group = new CGroups();
+$group->load($g);
+$user = new CMediusers();
+$listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $sejour = new CSejour;
 $where = array();
@@ -27,6 +32,7 @@ foreach($listSejours as &$curr_sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("listPrats"  , $listPrats);
 $smarty->assign("listSejours", $listSejours);
 
 $smarty->display("vw_idx_rpu.tpl");

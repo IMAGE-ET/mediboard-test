@@ -20,7 +20,7 @@ function pageMain() {
 <table class="form">
   <tr>
     {{if $rpu->_id}}
-    <th class="title modify" colspan="3">Modification de l'urgence {{$rpu->_view}}</th>
+    <th class="title modify" colspan="3">Modification de l'urgence de {{$rpu->_view}}</th>
     {{else}}
     <th class="title" colspan="3">Création d'une urgence</th>
     {{/if}}

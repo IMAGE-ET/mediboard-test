@@ -83,6 +83,8 @@ class CRPU extends CMbObject {
     $this->_responsable_id = $this->_ref_sejour->praticien_id;
     $this->_entree         = $this->_ref_sejour->_entree;
     $this->_DP             = $this->_ref_sejour->DP;
+    
+    $this->_view = $this->_ref_sejour->_ref_patient->_view;
   }
   
   function loadRefsFwd() {
