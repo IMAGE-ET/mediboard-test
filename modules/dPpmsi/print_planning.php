@@ -104,7 +104,10 @@ foreach($plagesop as &$plage) {
 	  $where["operation_id"] = $ds->prepareNotIn($listUrgencesTraitees);
 	  $order = "date, chir_id";
 	  $plage->_ref_operations = $tempOp->loadList($where, $order);
-	  mbTrace($where);
+	  if(!count($plage->_ref_operations)) {
+	    unset($plagesop["urgences"]);
+	    continue;
+	  }
   }
   
   foreach($plage->_ref_operations as $keyOp => &$operation) {
