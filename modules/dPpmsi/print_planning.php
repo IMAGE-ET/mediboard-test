@@ -56,28 +56,56 @@ $whereSalle["group_id"] = "= '$g'";
 $where["salle_id"] = $ds->prepareIn(array_keys($salle->loadListWithPerms(PERM_READ, $whereSalle)), $filter->salle_id);
 
 $plagesop = $plagesop->loadList($where, $order);
+$plagesop["urgences"] = new CPlageOp();
 
 // Operations de chaque plage
+$listUrgencesTraitees = array();
 foreach($plagesop as &$plage) {
-  $plage->loadRefsFwd();
-  
   $where = array();
-  $where["plageop_id"] = "= '$plage->_id'";
-  $where["annulee"] = "= '0'";
-  switch ($filter->_intervention) {
-    case "1" : $where["rank"] = "!= '0'"; break;
-    case "2" : $where["rank"] = "= '0'"; break;
-  }
-  
-  if ($filter->_codes_ccam) {
-    $where["codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
-  }
-  
-  $order = "operations.rank";
-
   $tempOp = new COperation;
-  $plage->_ref_operations = $tempOp->loadList($where, $order);
-
+  
+  // Cas des plages normales
+  if($plage->_id) {
+	  
+	  $plage->loadRefsFwd();
+	
+	  // Opérations normale
+	  $where["plageop_id"] = "= '$plage->_id'";
+	  $where["annulee"] = "= '0'";
+	  switch ($filter->_intervention) {
+	    case "1" : $where["rank"] = "!= '0'"; break;
+	    case "2" : $where["rank"] = "= '0'"; break;
+	  }
+	  
+	  if ($filter->_codes_ccam) {
+	    $where["codes_ccam"] = "LIKE '%$filter->_codes_ccam%'";
+	  }
+	  
+	  $order = "operations.rank";
+	  
+	  $listOperations = $tempOp->loadList($where, $order);
+	  
+	  // Urgences
+	  $where["plageop_id"]   = "IS NULL";
+	  $where["salle_id"]     = "= '$plage->salle_id'";
+	  $where["chir_id"]      = "= '$plage->chir_id'";
+	  $where["date"]         = "= '$plage->date'";
+	  $where["operation_id"] = $plage->_spec->ds->prepareNotIn($listUrgencesTraitees);
+	  $listUrgences = $tempOp->loadList($where);
+	  $listUrgencesTraitees = array_merge($listUrgencesTraitees, array_keys($listUrgences));
+	  
+	  // On compile les interventions
+	  $plage->_ref_operations = array_merge($listOperations, $listUrgences);
+  }
+  else {
+  // Cas des urgences restantes
+	  $where["plageop_id"]   = "IS NULL";
+	  $where["date"]         = $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
+	  $where["operation_id"] = $ds->prepareNotIn($listUrgencesTraitees);
+	  $order = "date, chir_id";
+	  $plage->_ref_operations = $tempOp->loadList($where, $order);
+	  mbTrace($where);
+  }
   
   foreach($plage->_ref_operations as $keyOp => &$operation) {
     $operation->loadRefsFwd();

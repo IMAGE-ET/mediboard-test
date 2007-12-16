@@ -534,5 +534,25 @@ abstract class CSQLDataSource {
     $str = join($values, ", ");
     return "IN ($str)";
   }
+
+  /**
+   * Prepares an NOT IN where clause with a given array of values
+   * Prepares a standard where clause when alternate value is supplied
+   * @param array $values
+   * @param string $alternate
+   * @return string The prepared where clause
+   **/
+  function prepareNotIn($values, $alternate = null) {
+    if ($alternate) {
+      return "<> '$alternate'";
+    }
+    
+    if (!count($values)) {
+      return "IS NOT NULL AND 1";
+    }
+    
+    $str = join($values, ", ");
+    return "NOT IN ($str)";
+  }
 }
 ?>

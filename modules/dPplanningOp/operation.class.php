@@ -48,18 +48,18 @@ class COperation extends CCodableCCAM {
   var $annulee        = null;
   
   //timings enregistrés
-  var $entree_bloc    = null;
-  var $entree_salle   = null;
-  var $pose_garrot    = null;
-  var $debut_op       = null;
-  var $fin_op         = null;
-  var $retrait_garrot = null;
-  var $sortie_salle   = null;
-  var $entree_reveil  = null;
-  var $sortie_reveil  = null;
-  var $induction_debut= null;
-  var $induction_fin  = null;
-  var $horaire_voulu  = null;
+  var $entree_bloc     = null;
+  var $entree_salle    = null;
+  var $pose_garrot     = null;
+  var $debut_op        = null;
+  var $fin_op          = null;
+  var $retrait_garrot  = null;
+  var $sortie_salle    = null;
+  var $entree_reveil   = null;
+  var $sortie_reveil   = null;
+  var $induction_debut = null;
+  var $induction_fin   = null;
+  var $horaire_voulu   = null;
   
   // Form fields
   var $_hour_op        = null;
