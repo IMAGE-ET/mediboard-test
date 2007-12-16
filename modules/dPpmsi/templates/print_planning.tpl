@@ -66,7 +66,7 @@ function printAdmission(id) {
           
           <!-- Patient -->
           <th>Nom - Prénom</th>
-          <th>Date de naissance</th>
+          <th>Naissance</th>
 
           <!-- Sejour -->
           <th>Entree</th>
@@ -88,10 +88,10 @@ function printAdmission(id) {
           {{if !$curr_plageop->_id}}
           <!-- Cas des urgences -->
           <td>{{$curr_op->date|date_format:"%d/%m/%Y"}}</td>
-          <td>{{$curr_op->_ref_chir->_view}}</td>
+          <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
           {{/if}}
           <!-- Patient -->
-          <td>
+          <td class="text">
             <a href="#" onclick="printAdmission({{$sejour->_id}})">
               {{$patient->_view}}
             </a>
@@ -103,10 +103,10 @@ function printAdmission(id) {
           </td>
       
           <!-- Sejour -->
-          <td>
+          <td class="text">
             {{mb_value object=$sejour field=_entree}}
           </td>
-          <td>
+          <td class="text">
             {{mb_value object=$sejour field=_sortie}}
           </td>
           <td class="text">
