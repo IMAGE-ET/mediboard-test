@@ -14,11 +14,12 @@ function submitRPU(){
   <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
 	<table class="form"> 
 	  <tr>
-	    <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
-	    <td>{{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU();"}}</td>
-	    
-	    <th>{{mb_label object=$rpu field="motif"}}</th>
-	    <td>{{mb_field object=$rpu field="motif" onchange="submitRPU();"}}</td>
+	    <td colspan="2">{{mb_label object=$rpu field="diag_infirmier"}}</td>
+	    <td colspan="2">{{mb_label object=$rpu field="motif"}}</td>
+	  </tr>
+	  <tr>
+	    <td colspan="2">{{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU();"}}</td>
+	    <td colspan="2">{{mb_field object=$rpu field="motif" onchange="submitRPU();"}}</td>
 	  </tr>
 	  
 	  <tr>
