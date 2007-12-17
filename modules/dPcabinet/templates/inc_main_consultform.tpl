@@ -1,5 +1,5 @@
 <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-<input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}

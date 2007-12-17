@@ -1,0 +1,1 @@
+{{$attente|date_format:"%Hh%M"}}

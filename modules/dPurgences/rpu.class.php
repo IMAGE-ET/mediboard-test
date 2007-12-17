@@ -31,6 +31,8 @@ class CRPU extends CMbObject {
   
   
   // Distant Fields
+  var $_count_consultations = null;
+
   // Patient
   var $_patient_id = null;
   var $_cp         = null;
@@ -45,6 +47,10 @@ class CRPU extends CMbObject {
   
   // Object References
   var $_ref_sejour = null;
+  var $_ref_consult = null;
+  
+  // Bind
+  var $_bind_sejour = null;
 
   function CRPU() {
     $this->CMbObject("rpu", "rpu_id");
@@ -89,13 +95,29 @@ class CRPU extends CMbObject {
   
   function loadRefsFwd() {
     parent::loadRefsFwd();
+    $this->loadRefSejour();
+  }
+  
+  function loadRefSejour(){
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefsFwd();
+    $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
+    
+    if($this->_count_consultations){
+      if(null == $this->_ref_consult = reset($this->_ref_sejour->loadBackRefs("consultations"))){
+        return;
+      }
+      $this->_ref_consult->loadRefPlageConsult();
+    }
   }
   
-  function store() {
+  
+  function bindSejour(){
     global $g;
+    
+    $this->_bind_sejour = false;
+    
     $this->loadRefsFwd();
     $this->_ref_sejour->patient_id = $this->_patient_id;
     $this->_ref_sejour->group_id = $g;
@@ -107,9 +129,20 @@ class CRPU extends CMbObject {
     if($msg = $this->_ref_sejour->store()) {
       return $msg;
     }
+    // Affectation du sejour_id au RPU
     $this->sejour_id = $this->_ref_sejour->_id;
-    $msg = parent::store();
-    return $msg;
+  }
+  
+  function store() {
+    // Bind Sejour
+    if($this->_bind_sejour){
+      $this->bindSejour(); 
+    }
+    
+    // Standard Store
+    if($msg = parent::store()){
+      return $msg;
+    }
   }
   
   function delete() {

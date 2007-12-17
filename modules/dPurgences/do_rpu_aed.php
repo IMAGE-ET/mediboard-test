@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit("CRpu", "rpu_id");
+$do = new CDoObjectAddEdit("CRPU", "rpu_id");
 $do->createMsg = "Urgence créée";
 $do->modifyMsg = "Urgence modifiée";
 $do->deleteMsg = "Urgence supprimée";

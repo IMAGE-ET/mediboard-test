@@ -8,7 +8,9 @@
 */
 
 global $AppUI, $can, $m;
-  
+ 
+$current_m = mbGetValueFromGet("current_m", $m);
+
 $can->needsEdit();
 $ds = CSQLDataSource::get("std");
 $date      = mbGetValueFromGetOrSession("date", mbDate());
@@ -101,7 +103,7 @@ $smarty->assign("userSel"  , $userSel);
 $smarty->assign("listPlage", $listPlage);
 $smarty->assign("consult"  , $consult);
 $smarty->assign("canCabinet"  , CModule::getCanDo("dPcabinet"));
-
+$smarty->assign("current_m", $current_m);
 
 $smarty->display("inc_list_consult.tpl");
 

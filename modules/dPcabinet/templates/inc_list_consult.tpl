@@ -1,11 +1,11 @@
 {{if !$board}}
 {{if $canCabinet->view}}
 <script type="text/javascript">
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  regRedirectPopupCal("{{$date}}", "?m={{$current_m}}&tab={{$tab}}&date=");
 </script>
 {{/if}}
 <form name="changeView" action="?" method="get">
-  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="m" value="{{$current_m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <table class="form">
     <tr>
@@ -70,7 +70,7 @@
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2">
       {{if !$boardItem}}
       {{if $canCabinet->view}}
-      <a href="?m={{$m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
+      <a href="?m={{$current_m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
       {{else}}
       <a href="#nowhere" title="Impossible de modifier le RDV">
@@ -79,7 +79,7 @@
       {{/if}}
       {{if $curr_consult->patient_id}}
       {{if $canCabinet->view}}
-        <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}" style="margin-bottom: 4px;">
+        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}" style="margin-bottom: 4px;">
       {{else}}
        <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}
@@ -95,7 +95,7 @@
     <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
       {{if $canCabinet->view}}
-      <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
+      <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
       {{else}}
       <a href=#nowhere title="Impossible de modifier le RDV">
       {{/if}}
@@ -118,7 +118,7 @@
     <td style="{{$style|smarty:nodefaults}}{{$font|smarty:nodefaults}}">
       {{if $curr_consult->patient_id}}
       {{if $canCabinet->view}}
-        <a href="?m={{$m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
+        <a href="?m={{$current_m}}&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}">
       {{else}}
       <a href="#nowhere" title="Impossible de modifier le RDV">
       {{/if}}

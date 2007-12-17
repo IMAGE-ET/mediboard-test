@@ -116,6 +116,11 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
   
+  {{if $current_m == "dPurgences" && $consult->_id}}
+    regFieldCalendar("editRPU", "sortie", true);
+  {{/if}}
+  
+  
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
     Try.these(document.editAddictFrm.type.onchange);
@@ -147,10 +152,10 @@ function pageMain() {
     
     {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
-      {{include file="inc_consult_anesth/patient_infos.tpl"}}      
-      {{include file="inc_consult_anesth/accord.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}      
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
       <div id="finishBanner">
-      {{include file="inc_finish_banner.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
       </div>
     {{/if}}
 

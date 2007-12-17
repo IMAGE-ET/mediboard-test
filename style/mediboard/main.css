@@ -2611,3 +2611,37 @@ table.tbl td.highlight{
 td.highlight{
   background-color: #ff5;
 }
+
+.ccmu {
+	border-left: 4px solid transparent; 
+  padding-left: 4px; 
+  margin-left: 0px;
+}
+
+.ccmu-1{
+  border-color: #0F0;
+}
+
+.ccmu-2{
+  border-color: #9F0;
+}
+
+.ccmu-3{
+  border-color: #FF0;
+}
+
+.ccmu-4{
+  border-color: #FFCD00;
+}
+
+.ccmu-5{ 
+  border-color: #F60;
+}
+
+.ccmu-D{
+  border-color: #F00;
+}
+
+.ccmu-P{
+  border-color: #0F0;
+}

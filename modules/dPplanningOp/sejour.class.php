@@ -98,6 +98,7 @@ class CSejour extends CCodableCCAM {
   // Distant fields
   var $_dates_operations = null;
   
+  
   // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
@@ -133,6 +134,7 @@ class CSejour extends CCodableCCAM {
       $backRefs["GHM"]          = "CGHM sejour_id";
       $backRefs["operations"]   = "COperation sejour_id";
       $backRefs["rpu"]          = "CRPU sejour_id";
+      $backRefs["consultations"]= "CConsultation sejour_id";
      return $backRefs;
   }
 
@@ -564,6 +566,7 @@ class CSejour extends CCodableCCAM {
     }
   }
   
+ 
   function loadRefsOperations($where = array()) {
     $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";

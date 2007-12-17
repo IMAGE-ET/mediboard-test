@@ -51,6 +51,7 @@ class CConsultation extends CCodableCCAM {
   var $facture_acquittee = null; // true si total_facture == a_regler
   var $a_regler          = null;     // somme que le patient doit régler a la fn
   var $patient_regle     = null;     // paye devient patient_regle
+  var $sejour_id         = null;
   
   
   // Form fields
@@ -156,6 +157,7 @@ class CConsultation extends CCodableCCAM {
     $specs["facture_acquittee"] = "bool";
     $specs["a_regler"]          = "currency";
     $specs["patient_regle"]     = "bool";
+    $specs["sejour_id"]         = "ref class|CSejour";
     return $specs;
   }
   
@@ -659,6 +661,15 @@ class CConsultation extends CCodableCCAM {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
   }
+  
+  
+  // Chargement du sejour et du RPU dans le cas d'une urgence
+  function loadRefSejour(){
+    $this->_ref_sejour = new CSejour();
+    $this->_ref_sejour->load($this->sejour_id);
+    $this->_ref_sejour->loadRefRPU();
+  }
+  
   
   function loadRefPlageConsult() {
     if ($this->_ref_plageconsult) {

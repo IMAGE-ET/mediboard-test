@@ -6,13 +6,25 @@
 
 <!-- div global de l'accordeon ==> accordionConsult -->
 <div class="accordionMain" id="accordionConsult">
-    
+  
+  {{if $current_m == "dPurgences"}}
+  {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
+  <div id="rpuConsult">
+    <div id="rpuHeader" class="accordionTabTitleBar">
+      RPU
+    </div>
+    <div id="rpuContent"  class="accordionTabContentBox">
+     {{include file="inc_vw_rpu.tpl"}}
+    </div>
+  </div>
+  {{/if}}
+  
   <div id="AntTrait">
     <div id="AntTraitHeader" class="accordionTabTitleBar">
       Antécédents / Traitements
     </div>
     <div id="AntTraitContent"  class="accordionTabContentBox">
-      {{include file="inc_ant_consult.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
     </div>
   </div>
   
@@ -21,7 +33,7 @@
       Examens Clinique
     </div>
     <div id="ExamsContent"  class="accordionTabContentBox">
-      {{include file="inc_consult_anesth/acc_examens_clinique.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}
     </div>
   </div>
   
@@ -61,7 +73,7 @@
         <tr id="two">
           <th>Actes NGAP</th>
           <td id="listActesNGAP"> 
-            {{include file="inc_acte_ngap.tpl"}}
+            {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
           </td>
         </tr>
     	</table>
@@ -75,7 +87,7 @@
       Examens Complémentaires
     </div>
     <div id="ExamsCompContent"  class="accordionTabContentBox">
-      {{include file="inc_consult_anesth/acc_examens_complementaire.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_complementaire.tpl"}}
     </div>
   </div>
  
@@ -84,7 +96,7 @@
       Informations Anesthésie
     </div>
     <div id="InfoAnesthContent"  class="accordionTabContentBox">
-      {{include file="inc_consult_anesth/acc_infos_anesth.tpl"}}      
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}      
     </div>
   </div>
   
@@ -93,7 +105,7 @@
       Documents et Réglements
     </div>
     <div id="fdrConsultContent"  class="accordionTabContentBox">
-    {{include file="inc_fdr_consult.tpl"}}
+    {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
     </div>
   </div>
   

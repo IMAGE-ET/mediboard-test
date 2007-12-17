@@ -150,7 +150,7 @@ function copyTraitement(traitement_id){
 <table class="form">
   <tr>
     <td class="text">
-     {{include file="inc_consult_anesth/inc_addictions.tpl}}
+     {{include file="../../dPcabinet/templates/inc_consult_anesth/inc_addictions.tpl}}
       <hr />
       <form name="editAntFrm" action="?m=dPcabinet" method="post">
       

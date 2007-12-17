@@ -19,6 +19,10 @@ $vue          = mbGetValueFromGetOrSession("vue2", $vue2_default);
 $today        = mbDate();
 $hour         = mbTime(null);
 
+if(!isset($current_m)){
+  $current_m = mbGetValueFromGet("current_m", $m);
+}
+
 $prat_id      = mbGetValueFromGetOrSession("chirSel", $AppUI->user_id);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
 
@@ -30,6 +34,13 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $consult = new CConsultation();
+
+if($current_m == "dPurgences"){
+  if (!$selConsult) {
+    $AppUI->setMsg("Vous devez selectionner une consultation", UI_MSG_ALERT);
+    $AppUI->redirect("m=dPurgences&tab=0");
+  }
+}
 
 $tabSejour = array();
 
@@ -74,7 +85,7 @@ $canUserSel = $userSel->canDo();
 // Vérification des droits sur les praticiens
 $listChir = $userSel->loadPraticiens(PERM_EDIT);
 
-if (!$userSel->isPraticien()) {
+if ((!$userSel->isPraticien()) && ($current_m != "dPurgences")) {
   $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
   $AppUI->redirect("m=dPcabinet&tab=0");
 }
@@ -246,6 +257,12 @@ if($consult->patient_id){
 // Chargement des actes NGAP
 $consult->loadRefsActesNGAP();
 
+// Chargement du sejour dans le cas d'une urgence
+if($current_m == "dPurgences"){
+  $consult->loadRefSejour();
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("acte_ngap"      , new CActeNGAP);
@@ -273,21 +290,22 @@ $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);  
 $smarty->assign("noReglement"    , 0);
+$smarty->assign("current_m"      ,  $current_m);
 
 if($consult->_is_anesth) {
-  $secs = range(0, 60-1, 1);
-  $mins = range(0, 15-1, 1);
-  
-  $smarty->assign("secs"          , $secs);
-  $smarty->assign("mins"          , $mins);
-  $smarty->assign("consult_anesth", $consultAnesth);
-  $smarty->display("edit_consultation_anesth.tpl");
+	$secs = range(0, 60-1, 1);
+	$mins = range(0, 15-1, 1);
+	  
+	$smarty->assign("secs"          , $secs);
+	$smarty->assign("mins"          , $mins);
+	$smarty->assign("consult_anesth", $consultAnesth);
+	$smarty->display("../../dPcabinet/templates/edit_consultation_anesth.tpl");  
 } else {
-	$vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;
+    $vue_accord = isset($AppUI->user_prefs["MODCONSULT"]) ? $AppUI->user_prefs["MODCONSULT"] : 0 ;
   if($vue_accord){
-    $smarty->display("edit_consultation_accord.tpl");
-  }else{  
-    $smarty->display("edit_consultation_classique.tpl");
+    $smarty->display("../../dPcabinet/templates/edit_consultation_accord.tpl");
+  } else{  
+    $smarty->display("../../dPcabinet/templates/edit_consultation_classique.tpl");
   }
 }
 ?>

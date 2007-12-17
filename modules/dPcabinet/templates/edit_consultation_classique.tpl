@@ -60,21 +60,21 @@ function pageMain() {
       {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
       <div id="finishBanner">
-      {{include file="inc_finish_banner.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
       </div>
 
       <div id="Infos">
         <div id="InfosContent"  class="accordionTabContentBox">
-          {{include file="inc_patient_infos_accord_consult.tpl"}}
+          {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
         </div>
       </div>
 
       <div id="mainConsult">
-      {{include file="inc_main_consultform.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
       </div>
 
       <div id="fdrConsultContent">
-      {{include file="inc_fdr_consult.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
       </div>
 
       {{/if}}

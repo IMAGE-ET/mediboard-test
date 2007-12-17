@@ -44,6 +44,7 @@ function updateList() {
   url.addParam("prat_id", "{{$userSel->user_id}}");
   url.addParam("date", "{{$date}}");
   url.addParam("vue2", "{{$vue}}");
+  url.addParam("current_m", "{{$current_m}}");
 
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
@@ -58,6 +59,10 @@ function pageMain() {
   regFieldCalendar("editAntFrm", "date");
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
+  {{/if}}
+  
+  {{if $current_m == "dPurgences" && $consult->_id}}
+    regFieldCalendar("editRPU", "sortie", true);
   {{/if}}
   
   if (document.editAntFrm){
@@ -76,9 +81,8 @@ function pageMain() {
     showSteps:5
   } );
   
-  
   {{/if}}
- 
+
 }
 </script>
 
@@ -91,10 +95,10 @@ function pageMain() {
       {{if $consult->_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
       <div id="finishBanner">
-      {{include file="inc_finish_banner.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
       </div>
-      {{include file="inc_patient_infos_accord_consult.tpl"}}
-      {{include file="acc_consultation.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
+      {{include file="../../dPcabinet/templates/acc_consultation.tpl"}}
       {{/if}}
     </td>
   </tr>

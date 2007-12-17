@@ -74,13 +74,13 @@ function newDHE(oForm) {
   
   <tr>
     <td class="text">
-      {{include file="inc_patient_infos.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_patient_infos.tpl"}}
     </td>
     <td class="text">
-      {{include file="inc_patient_medecins.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_patient_medecins.tpl"}}
     </td>
     <td class="text">
-      {{include file="inc_patient_history.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_patient_history.tpl"}}
     </td>
     <td class="button">
       <form name="newAction" action="" method="get">

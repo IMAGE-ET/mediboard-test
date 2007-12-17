@@ -9,6 +9,7 @@
 
 global $AppUI, $m;
 
+
 $module = CModule::getInstalled($m);
 $canModule = $module->canDo();
 
@@ -31,6 +32,7 @@ $where["date"]    = "= '$day_now'";
 $where["debut"]   = "<= '$hour_now'";
 $where["fin"]     = "> '$hour_now'";
 $plage->loadObject($where);
+
 if(!$plage->plageconsult_id) {
   // Cas ou on a des plage en collision
 	$where = array();
@@ -71,6 +73,9 @@ $ref_chir = $plage->_ref_chir;
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
 $consult->patient_id = $_POST["patient_id"];
+if(isset($_POST["sejour_id"])){
+  $consult->sejour_id = $_POST["sejour_id"];
+}
 $consult->heure = $hour_now;
 $consult->arrivee = $day_now." ".$hour_now;
 $consult->duree = 1;
@@ -90,7 +95,13 @@ if($ref_chir->isFromType(array("Anesthésiste"))) {
   $consultAnesth->store();
 }
 
+// Si module d'urgencen changement de redirect
+if(isset($_POST["sejour_id"])){
+  $current_m = "dPurgences";  
+} else {
+  $current_m = "dPcabinet";
+}
 
-$AppUI->redirect("m=dPcabinet&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
+$AppUI->redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
 
 ?>

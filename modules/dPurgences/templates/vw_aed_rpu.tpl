@@ -16,7 +16,10 @@ function pageMain() {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
 <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-
+<input type="hidden" name="_bind_sejour" value="1" />
+<a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+  Ajouter un patient
+</a>
 <table class="form">
   <tr>
     {{if $rpu->_id}}
@@ -69,6 +72,23 @@ function pageMain() {
     <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
     <td colspan="2">{{mb_field object=$rpu field="diag_infirmier"}}</td>
   </tr>
+  <tr>
+    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
+    <td colspan="2">{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$rpu field="provenance"}}</th>
+    <td colspan="2">{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$rpu field="transport"}}</th>
+    <td colspan="2">{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport"}}</td>
+  </tr>
+  <tr>
+    <th>{{mb_label object=$rpu field="prise_en_charge"}}</th>
+    <td colspan="2">{{mb_field object=$rpu field="prise_en_charge" defaultOption="&mdash; Prise en charge"}}</td>
+  </tr>
+  
   <tr>
 		<td class="button" colspan="3">
 		  {{if $rpu->_id}}
