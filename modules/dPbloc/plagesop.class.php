@@ -253,6 +253,7 @@ class CPlageOp extends CMbObject {
     $fin              = $this->fin;
     $temps_inter_op   = $this->temps_inter_op;
     $max_intervention = $this->max_intervention;
+    $anesth_id    = $this->anesth_id;
     $msg = null;
     if(count($plages) > 0) {
       $msg = $this->load(reset($plages)->plageop_id);
@@ -264,6 +265,7 @@ class CPlageOp extends CMbObject {
     $this->fin              = $fin;
     $this->temps_inter_op   = $temps_inter_op;
     $this->max_intervention = $max_intervention;
+    $this->anesth_id        = $anesth_id;
     $this->updateFormFields();
     return $msg;
   }
