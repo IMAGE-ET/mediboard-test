@@ -36,6 +36,23 @@ if ($new = mbGetValueFromGet("new")) {
   $patient->load($patient_id);
 }
 
+// Champs vitale
+$patVitale = new CPatient;
+if ($useVitale = mbGetValueFromGet("useVitale")) {
+  $patVitale->getValuesFromVitale();
+  $patVitale->updateFormFields();
+  $patient_nom    = $patVitale->nom;
+  $patient_prenom = $patVitale->prenom;
+  mbSetValueToSession("nom", $patVitale->nom);
+  mbSetValueToSession("prenom", $patVitale->prenom);
+//  $patient_day    = $patVitale->_jour;
+//  $patient_month  = $patVitale->_mois;
+//  $patient_year   = $patVitale->_annee;
+  $patient_naissance = "on";
+  mbSetValueToSession("naissance", "on");
+  $patVitale->loadFromIdVitale();
+}
+
 $where        = array();
 $whereSoundex = array();
 $soundexObj   = new soundex2();
@@ -93,7 +110,8 @@ $smarty->assign("naissance"      , $patient_naissance                         );
 $smarty->assign("ville"          , $patient_ville                             );
 $smarty->assign("cp"             , $patient_cp                                );
 $smarty->assign("datePat"        , "$patient_year-$patient_month-$patient_day");
-$smarty->assign("useVitale"      , null                                       );
+$smarty->assign("useVitale"      , $useVitale                                 );
+$smarty->assign("patVitale"      , $patVitale                                 );
 $smarty->assign("patients"       , $patients                                  );
 $smarty->assign("patientsCount"  , count($patients)                           );
 $smarty->assign("patientsSoundexCount", count($patientsSoundex)               );
