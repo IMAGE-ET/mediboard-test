@@ -36,6 +36,7 @@ $operation->loadRefPraticien();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("modif_operation"  , $modif_operation);
 $smarty->assign("listAnesths"      , $listAnesths );
 $smarty->assign("listChirs"        , $listChirs   );
 $smarty->assign("operation"        , $operation   );
