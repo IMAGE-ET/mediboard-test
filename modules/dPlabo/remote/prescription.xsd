@@ -105,7 +105,8 @@
 
 	<xs:simpleType name="typeCode9">
 		<xs:restriction base="xs:string">
-			<xs:length value="9"></xs:length>
+			<xs:minLength value="1"></xs:minLength>
+			<xs:maxLength value="9"></xs:maxLength>
 		</xs:restriction>
 	</xs:simpleType>
 </xs:schema>

@@ -7,7 +7,7 @@
  *  @author Alexis Granger
  */
 
-global $dPconfig;
+global $dPconfig, $g, $uistyle;
 
 // Recuperation de l'id de la prescription
 $prescription_id = mbGetValueFromGet("prescription_id");
@@ -26,12 +26,15 @@ $tab_pack_prescription = array();
 // Creation d'un nouveau fichier pdf
 $pdf = new CPrescriptionPdf("P", "mm", "A4", true); 
 
-
+// Chargement de l'etablissement
+$etab = new CGroups();
+$etab->load($g);
 
 // Affichage de l'entete du document
-$image = "logo.jpg";
+// Impossible d'utiliser mbNormal.gif ==> format gif non supporté
+$image = "../../style/$uistyle/images/pictures/logo.jpg";
 $taille = "75";
-$texte = "Av. des Sciences 1B\nCase postale 961\n1401 Yverdon-les-Bains\nTel:  024 424 80 50\nFax: 024 424 80 51";
+$texte = "$etab->_view\n$etab->adresse\n$etab->cp $etab->ville\nTel: $etab->tel";
 $pdf->SetHeaderData($image, $taille, "", $texte);
 
 // Définition des marges de la pages
