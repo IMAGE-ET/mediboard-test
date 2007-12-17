@@ -33,6 +33,12 @@ $etab->load($g);
 // Affichage de l'entete du document
 // Impossible d'utiliser mbNormal.gif ==> format gif non supporté
 $image = "../../style/$uistyle/images/pictures/logo.jpg";
+
+// Si le style ne possede pas de logo, on applique le logo par defaut de mediboard
+if(!is_file("./style/$uistyle/images/pictures/logo.jpg")){
+  $image = "logo.jpg";
+}
+
 $taille = "75";
 $texte = "$etab->_view\n$etab->adresse\n$etab->cp $etab->ville\nTel: $etab->tel";
 $pdf->SetHeaderData($image, $taille, "", $texte);
