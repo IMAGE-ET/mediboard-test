@@ -70,7 +70,7 @@ function pageMain() {
       </td>
     {{else}}
       <td style="background-color:#cfc; text-align: center">
-      Consultation à {{$curr_sejour->_ref_rpu->_ref_consult->heure|date_format:"%Hh%M%"}}
+      Consultation à {{$curr_sejour->_ref_rpu->_ref_consult->heure|date_format:"%Hh%M"}}
       </td>
     {{/if}}
     {{/if}}
