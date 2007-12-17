@@ -129,6 +129,10 @@ function reloadAfterSaveDoc() {
             ({{$patient->_age}} ans 
             {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
+            {{if $selOp->libelle}}
+              <br />
+              {{$selOp->libelle}}
+            {{/if}}
           </th>
         </tr>
         <tr>
