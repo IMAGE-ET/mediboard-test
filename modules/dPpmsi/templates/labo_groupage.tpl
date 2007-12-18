@@ -74,7 +74,7 @@
         </tr>
         <tr>
           <td>{{$GHM->_type_hospi}}</td>
-          <td>{{$GHM->_duree}} jours</td>
+          <td>{{$GHM->_duree}} nuits</td>
           <td>{{if $GHM->_seances}}{{$GHM->_seances}}{{else}}-{{/if}}</td>
           <td>{{$GHM->_motif}}</td>
           <td>{{$GHM->_destination}}</td>

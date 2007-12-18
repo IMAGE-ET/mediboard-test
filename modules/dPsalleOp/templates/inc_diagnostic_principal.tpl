@@ -1,19 +1,20 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
-<form name="editSejour" action="?m={{$m}}" method="post">
-
-<input type="hidden" name="m" value="dPplanningOp" />
-<input type="hidden" name="dosql" value="do_sejour_aed" />
-<input type="hidden" name="del" value="0" />
-<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-<input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
-
 <table class="form">
   <tr>
     <td class="button halfPane">{{mb_label object=$sejour field="DP"}}</td>
+    <td class="button halfPane">Diagnostics associés</td>
   </tr>
   <tr>
     <td class="button">
+
+      <form name="editSejour" action="?m={{$m}}" method="post">
+
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
       <button type="button" class="search" onclick="CIM10Selector.init()">
         {{tr}}button-CCodeCIM10-choix{{/tr}}
       </button>
@@ -25,25 +26,69 @@
           this.selfClose = false;
           this.pop();
         }
-        CIM10Selector.set = function(code){
-          var oForm = document[this.sForm];
-          oForm[this.sView].value = code;
-          submitFormAjax(oForm, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } });
-        }
       </script>
       <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
         onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })" />
       <button class="tick" type="button">{{tr}}Valider{{/tr}}</button>
+      </form>
+    </td>
+    <td class="text" rowspan="2">
+      <ul>
+      {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
+        <li>
+          {{$curr_cim->code}} : {{$curr_cim->libelle}}
+          
+          <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="object_class" value="CSejour" />
+            <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+            <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
+            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })">
+              {{tr}}Delete{{/tr}}
+            </button>
+          </form>
+        </li>
+      {{/foreach}}
+      </ul>
+      <form name="editDossierMedical" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="object_class" value="CSejour" />
+        <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+        <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
+          Chercher un diagnostic
+        </button>
+        <input type="text" name="_added_code_cim" size="5" />
+        <button class="tick notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })">
+          Valider
+        </button>
+        <script type="text/javascript">   
+          CIM10Selector.initAsso = function(){
+            this.sForm = "editDossierMedical";
+            this.sView = "_added_code_cim";
+            this.sChir = "praticien_id";
+            this.pop();
+          }
+        </script> 
+      </form>
     </td>
   </tr>
-  {{if $sejour->_ext_diagnostic_principal}}
   <tr>
     <td class="text button">
+      {{if $sejour->_ext_diagnostic_principal}}
       {{$sejour->_ext_diagnostic_principal->libelle}}
+      {{/if}}
     </td>
   </tr>
-  {{/if}}
 </table>
+<script>
+CIM10Selector.set = function(code){
+  var oForm = document[this.sForm];
+  oForm[this.sView].value = code;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } });
+}
+</script>
 <hr />
-
-</form>

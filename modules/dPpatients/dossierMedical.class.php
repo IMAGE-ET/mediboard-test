@@ -13,11 +13,14 @@
  */
 class CDossierMedical extends CMbMetaObject {
   // DB Fields
-  var $codes_cim    = null;
+  var $dossier_medical_id = null;
+  var $codes_cim          = null;
   
   // Form Fields
-  var $_codes_cim = null;
-  var $_ext_codes_cim = null;
+  var $_added_code_cim   = null;
+  var $_deleted_code_cim = null;
+  var $_codes_cim        = null;
+  var $_ext_codes_cim    = null;
 
   // Back references
   var $_ref_antecedents = null;
@@ -80,7 +83,28 @@ class CDossierMedical extends CMbMetaObject {
     foreach ($arrayCodes as $value) {
       $this->_ext_codes_cim[$value] = new CCodeCIM10($value, 1);
     }
-  }  
+  }
+
+  function updateDBFields() {
+    parent::updateDBFields();
+    if(!$listCodesCim = $this->codes_cim) {
+      $oldDossier = new CDossierMedical();
+      $oldDossier->load($this->_id);
+      $listCodesCim = $oldDossier->codes_cim;
+    }
+    if($this->_added_code_cim) {
+      if($listCodesCim) {
+        $this->codes_cim = "$listCodesCim|$this->_added_code_cim";
+      } else {
+        $this->codes_cim = $this->_added_code_cim;
+      }
+    }
+    if($this->_deleted_code_cim) {
+      $arrayCodesCim = explode("|", $listCodesCim);
+      CMbArray::removeValue($this->_deleted_code_cim, $arrayCodesCim);
+      $this->codes_cim = implode("|", $arrayCodesCim);
+    }
+  }
     
   function loadRefsAntecedents() {
     $order = "type ASC";

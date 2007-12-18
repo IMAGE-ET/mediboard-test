@@ -166,7 +166,7 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <td colspan="2">
+          <td class="text" colspan="2">
             <form name="editFrm" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -176,6 +176,8 @@ function pageMain() {
             <input type="text" name="DP" value="{{$curr_sejour->DP}}"/>
             <button class="modify" type="submit">Valider</button>
             </form>
+            <br />
+            <strong>{{$curr_sejour->_ext_diagnostic_principal->libelle}}</strong>
           </td>
           <td colspan="2" class="text">
             {{if $curr_sejour->_ref_GHM->_CM}}

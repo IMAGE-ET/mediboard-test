@@ -129,7 +129,7 @@
 
   <tr>
     <th>Durée prévue d'hospitalisation </th>
-    <td>{{$operation->_ref_sejour->_duree_prevue}} jours</td>
+    <td>{{$operation->_ref_sejour->_duree_prevue}} nuits</td>
   </tr>
   
   {{if $operation->forfait}}

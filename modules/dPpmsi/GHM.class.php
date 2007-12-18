@@ -337,7 +337,7 @@ class CGHM  extends CMbObject {
       $sql = "SELECT * FROM diagcm WHERE diag = '$this->_DP'";
       $result = $this->_dsghm->exec($sql);
       if($this->_dsghm->numRows($result) == 0) {
-        $this->_CM = 100;
+        $this->_CM = null;
       } else {
         $row = $this->_spec->ds->fetchArray($result);
         $this->_CM = $row["CM_id"];
@@ -466,7 +466,10 @@ class CGHM  extends CMbObject {
       }
     }
     if(!$this->_CM) {
-      $this->getCM();
+      if(!$this->getCM()){
+        $this->_GHM = "Aucune catégorie majeur trouvée";
+        return;
+      }
     }
     $sql = "SELECT * FROM arbre WHERE CM_id = '$this->_CM'";
     $listeBranches = $this->_dsghm->loadList($sql);

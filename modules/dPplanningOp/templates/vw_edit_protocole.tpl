@@ -284,7 +284,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
-          <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} jours</td>
+          <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>
         </tr>
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>

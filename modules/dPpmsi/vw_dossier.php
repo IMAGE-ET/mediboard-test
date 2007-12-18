@@ -59,6 +59,7 @@ if ($patient->patient_id) {
 
   // Sejours
   foreach ($patient->_ref_sejours as &$sejour) {
+    $sejour->loadRefDiagnosticPrincipal();
     $sejour->loadRefs();
     $sejour->loadRefGHM();
     foreach ($sejour->_ref_operations as &$operation) {

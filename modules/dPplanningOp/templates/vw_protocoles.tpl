@@ -242,7 +242,7 @@ function setClose(protocole_id) {
 	
 	        <tr>
 	          <th>Durée d'hospitalisation:</th>
-	          <td>{{$protSel->duree_hospi}} jours</td>
+	          <td>{{$protSel->duree_hospi}} nuits</td>
 	        </tr>
 	  
 	        {{if $protSel->rques_sejour}}
