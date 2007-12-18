@@ -44,7 +44,7 @@
       Gestion des actes
     </div>
     <div id="ActesContent"  class="accordionTabContentBox">
-      <table class="tbl">
+      <table class="form">
         <tr>
           <td colspan="2">
             <ul id="main_tab_group" class="control_tabs">
@@ -54,7 +54,7 @@
           </td>
         </tr>
         <tr id="one">
-          <th>Actes<br /><br />
+          <th class="category">Actes<br /><br />
             {{tr}}{{$consult->_class_name}}{{/tr}}
             {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
             <br />
@@ -63,14 +63,22 @@
             ({{$consult->temp_operation|date_format:"%Hh%M"}})
             {{/if}}
           </th>
-          <td id="ccam">
+          <td>
+          {{if $current_m == "dPurgences"}}
+          <div id="cim">
+              {{assign var="sejour" value=$consult->_ref_sejour}}
+              {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="0"}}
+          </div>
+          {{/if}}
+          <div id="ccam">
             {{assign var="module" value="dPcabinet"}}
             {{assign var="subject" value=$consult}}
             {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+          </div>
           </td>
         </tr>
         <tr id="two">
-          <th>Actes NGAP</th>
+          <th class="category">Actes NGAP</th>
           <td id="listActesNGAP">
             {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
           </td>

@@ -46,13 +46,13 @@ ActesNGAP = {
     </tr> 
     {{/if}}
     <tr>
-      <th>{{mb_label object=$acte_ngap field="quantite"}}</th>
-      <th>{{mb_label object=$acte_ngap field="code"}}</th>
-      <th>{{mb_label object=$acte_ngap field="coefficient"}}</th>
-      <th>{{mb_label object=$acte_ngap field="montant_base"}}</th>
-      <th>{{mb_label object=$acte_ngap field="montant_depassement"}}</th>
+      <th class="category">{{mb_label object=$acte_ngap field="quantite"}}</th>
+      <th class="category">{{mb_label object=$acte_ngap field="code"}}</th>
+      <th class="category">{{mb_label object=$acte_ngap field="coefficient"}}</th>
+      <th class="category">{{mb_label object=$acte_ngap field="montant_base"}}</th>
+      <th class="category">{{mb_label object=$acte_ngap field="montant_depassement"}}</th>
       {{if !$consult->_coded}}
-      <th>Action</th>
+      <th class="category">Action</th>
       {{/if}}
     </tr>
     {{if !$consult->_coded}}

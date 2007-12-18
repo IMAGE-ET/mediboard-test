@@ -260,6 +260,7 @@ $consult->loadRefsActesNGAP();
 // Chargement du sejour dans le cas d'une urgence
 if($current_m == "dPurgences"){
   $consult->loadRefSejour();
+  $consult->_ref_sejour->loadRefDossierMedical();
 }
 
 
