@@ -87,6 +87,7 @@ class CGHM  extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     if($this->ghm_id) {
+      /**
       if($this->DASs) {
         $this->_DASs = explode("|", $this->DASs);
       } else {
@@ -97,6 +98,7 @@ class CGHM  extends CMbObject {
       } else {
         $this->_DADs = array();
       }
+      **/
       $this->loadRefsFwd();
       $this->bindInfos();
       $this->getGHM();
@@ -104,18 +106,21 @@ class CGHM  extends CMbObject {
   }
   
   function updateDBFields() {
+    parent::updateDBFields();
+    /**
     $this->_DASs = array_unique($this->_DASs);
-        foreach($this->_DASs as $key => $DAS) {
-          if($DAS == "")
-            unset($this->_DASs[$key]);
-        }
+    foreach($this->_DASs as $key => $DAS) {
+      if($DAS == "")
+        unset($this->_DASs[$key]);
+    }
     $this->DASs = implode("|", $this->_DASs);
     $this->_DADs = array_unique($this->_DADs);
-        foreach($this->_DADs as $key => $DAD) {
-          if($DAD == "")
-            unset($this->_DADs[$key]);
-        }
+    foreach($this->_DADs as $key => $DAD) {
+      if($DAD == "")
+        unset($this->_DADs[$key]);
+    }
     $this->DADs = implode("|", $this->_DADs);
+    **/
   }
   
   function loadRefSejour() {
@@ -126,6 +131,11 @@ class CGHM  extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefSejour();
     $this->_ref_sejour->loadRefs();
+    $this->_ref_sejour->loadRefDossierMedical();
+    $this->_DASs = array(); 
+    foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
+      $this->_DASs[] = $code;
+    }
     $this->_ref_actes_ccam = array();
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
       $this->_ref_sejour->_ref_operations[$keyOp]->loadRefsActesCCAM();
