@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m, $g, $dPconfig;
 
 require_once($AppUI->getModuleFile("dPsalleOp", "inc_personnel"));
 
@@ -274,7 +274,7 @@ $smarty->assign("listAnesths"     , $listAnesths             );
 $smarty->assign("listChirs"       , $listChirs               );
 $smarty->assign("plages"          , $plages                  );
 $smarty->assign("urgences"        , $urgences                );
-$smarty->assign("modeDAS"         , 1                        );
+$smarty->assign("modeDAS"         , $dPconfig["dPsalleOp"]["CDossierMedical"]["DAS"]);
 $smarty->assign("selOp"           , $selOp                   );
 $smarty->assign("timing"          , $timing                  );
 $smarty->assign("date"            , $date                    );

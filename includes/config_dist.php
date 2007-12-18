@@ -171,6 +171,9 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 $dPconfig["dPsalleOp"]["CActeCCAM"] = array (
   "tarif" => "0",
 );
+$dPconfig["dPsalleOp"]["CDossierMedical"] = array (
+  "DAS" => "0",
+);
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
