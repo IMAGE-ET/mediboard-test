@@ -224,7 +224,6 @@ class CConsultation extends CCodableCCAM {
       $this->valide = 0;
     }
     
-    
     // Gestion du tarif
     // Suppression de l'acquittement si on supprime le reglement patient
     if($this->patient_regle !== null && $this->patient_regle == 0){
@@ -232,8 +231,9 @@ class CConsultation extends CCodableCCAM {
     }
     
     // Acquittement à 1 si secteur1 + secteur2 = a_regler
+    // Multiplication par 100 a cause des erreurs de PHP avec les float
     if($this->secteur1 !== null && $this->secteur2 !== null && $this->a_regler !== null){
-      if(($this->secteur1 + $this->secteur2 == $this->a_regler) && ($this->patient_regle == 1)){
+       if(intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100) && ($this->patient_regle == 1)){       
         $this->facture_acquittee = 1;
       }
     }
