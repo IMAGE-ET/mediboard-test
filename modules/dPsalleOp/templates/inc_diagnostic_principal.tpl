@@ -44,7 +44,7 @@
           Chercher un diagnostic
         </button>
         <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })" />
-        <button class="tick notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })">
+        <button class="tick notext" type="button">
           Valider
         </button>
         <script type="text/javascript">   
