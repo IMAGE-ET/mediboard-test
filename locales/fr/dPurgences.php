@@ -1,4 +1,5 @@
 <?php
+$locales['CRPU-_prise_en_charge'] = 'Prise en charge';
 $locales['CRPU-ccmu'] = 'Degré d\'urgence';
 $locales['CRPU-ccmu-desc'] = 'Degré d\'urgence CCMU estimé';
 $locales['CRPU-destination'] = 'Destination';
@@ -78,6 +79,7 @@ $locales['CRPU.transport.vsab'] = 'VSAB';
 $locales['mod-dPurgences-tab-edit_consultation'] = 'Consultation';
 $locales['mod-dPurgences-tab-vw_aed_rpu'] = 'Ajouter un patient';
 $locales['mod-dPurgences-tab-vw_idx_rpu'] = 'Main courante';
+$locales['mod-dPurgences-tab-vw_sortie_rpu'] = 'Sortie des patients';
 $locales['module-dPurgences-court'] = 'Urgences';
 $locales['module-dPurgences-long'] = 'Service d\'urgences';
 ?>

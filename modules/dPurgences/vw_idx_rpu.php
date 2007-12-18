@@ -16,7 +16,7 @@ $selAffichage = mbGetValueFromPostOrSession("selAffichage","tous");
 
 // Parametre de tri
 $order_way = mbGetValueFromGetOrSession("order_way", "DESC");
-$order_col = mbGetValueFromGetOrSession("order_col", "entree_reelle");
+$order_col = mbGetValueFromGetOrSession("order_col", "_entree");
 
 // Selection de la date
 $date = mbGetValueFromGetOrSession("date", mbDate());
@@ -39,6 +39,10 @@ if($selAffichage == "prendre_en_charge"){
   $where["consultation.consultation_id"] = "IS NULL";
 }
 
+
+if($order_col != "_entree" && $order_col != "ccmu"){
+  $order_col = "_entree";  
+}
 
 if($order_col == "_entree"){
   $order = "entree_reelle $order_way, rpu.ccmu $order_way";

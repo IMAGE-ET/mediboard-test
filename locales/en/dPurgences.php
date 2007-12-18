@@ -1,4 +1,5 @@
 <?php
+$locales['CRPU-_prise_en_charge'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';
 $locales['CRPU-destination'] = '';
@@ -78,6 +79,7 @@ $locales['CRPU.transport.vsab'] = '';
 $locales['mod-dPurgences-tab-edit_consultation'] = '';
 $locales['mod-dPurgences-tab-vw_aed_rpu'] = '';
 $locales['mod-dPurgences-tab-vw_idx_rpu'] = '';
+$locales['mod-dPurgences-tab-vw_sortie_rpu'] = '';
 $locales['module-dPurgences-court'] = '';
 $locales['module-dPurgences-long'] = '';
 ?>

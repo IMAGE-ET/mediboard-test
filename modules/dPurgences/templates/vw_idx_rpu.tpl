@@ -36,7 +36,7 @@ function pageMain() {
   <tr>
     <td style="text-align: right">
      Type d'affichage
-     <form name="selView" action="?m=dPurgences&tab=vw_idx_rpu" method="post">
+     <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
 	      <select name="selAffichage" onchange="submit();">
 	        <option value="tous" {{if $selAffichage == "tous"}}selected = "selected"{{/if}}>Tous</option>
 	        <option value="prendre_en_charge" {{if $selAffichage == "prendre_en_charge"}} selected = "selected" {{/if}}>A prendre en charge</option>
@@ -52,8 +52,8 @@ function pageMain() {
     <th>Temps d'attente</th>
     {{/if}}
     <th>{{tr}}CRPU-_patient_id{{/tr}}</th>
-    <th>{{mb_colonne class="CRPU" field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_rpu"}}</th>
-    <th>{{mb_colonne class="CRPU" field="ccmu" order_col=$order_col order_way=$order_way url="?m=$m&tab=vw_idx_rpu"}}</th>
+    <th>{{mb_colonne class="CRPU" field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    <th>{{mb_colonne class="CRPU" field="ccmu" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
     <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
     <th>Prise en charge</th>
