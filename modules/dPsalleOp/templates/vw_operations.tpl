@@ -43,10 +43,11 @@ function reloadAnesth(operation_id){
   } );	
 }
 
-function reloadDiagnostic(sejour_id) {
+function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
   url.addParam("sejour_id", sejour_id);
+  url.addParam("modeDAS", modeDAS);
   url.requestUpdate("cim", { 
 		waitingText : null,
   	onComplete: CIM10Selector.close 

@@ -274,6 +274,7 @@ $smarty->assign("listAnesths"     , $listAnesths             );
 $smarty->assign("listChirs"       , $listChirs               );
 $smarty->assign("plages"          , $plages                  );
 $smarty->assign("urgences"        , $urgences                );
+$smarty->assign("modeDAS"         , 1                        );
 $smarty->assign("selOp"           , $selOp                   );
 $smarty->assign("timing"          , $timing                  );
 $smarty->assign("date"            , $date                    );

@@ -3,7 +3,9 @@
 <table class="form">
   <tr>
     <td class="button">{{mb_label object=$sejour field="DP"}}</td>
+    {{if $modeDAS}}
     <td class="button">Diagnostics associés({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})</td>
+    {{/if}}
   </tr>
   <tr>
     <td class="button">
@@ -28,10 +30,11 @@
         }
       </script>
       <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
-        onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })" />
+        onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
       <button class="tick" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
     </td>
+    {{if $modeDAS}}
     <td class="text" rowspan="2">
       <form name="editDossierMedical" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPpatients" />
@@ -43,7 +46,7 @@
         <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
           Chercher un diagnostic
         </button>
-        <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })" />
+        <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
         <button class="tick notext" type="button">
           Valider
         </button>
@@ -66,7 +69,7 @@
             <input type="hidden" name="object_class" value="CSejour" />
             <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
             <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
-            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}) } })">
+            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })">
               {{tr}}Delete{{/tr}}
             </button>
           </form>
@@ -74,6 +77,7 @@
           <br />
       {{/foreach}}
     </td>
+    {{/if}}
   </tr>
   <tr>
     <td class="text button">
