@@ -23,10 +23,15 @@ class CFTP {
   }
   
   function sendFile($source_file, $destination_file, $mode = FTP_BINARY) {
+    if(!function_exists("ftp_connect")) {
+      $this->logError("Fonctions FTP non disponibles");
+      return false;
+    }
+    
     $source_base = basename($source_file);
     
     // Set up basic connection
-    $conn_id = ftp_connect($this->hostname);
+    $conn_id = ftp_connect($this->hostname, 21, 90);
     if (!$conn_id) {
       $this->logError("Impossible de se connecter au serveur $this->hostname");
       return false;
