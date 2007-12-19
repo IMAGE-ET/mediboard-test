@@ -199,6 +199,12 @@ if($ftp->hostname){
   $file = "tmp/dPlabo/export_prescription.xml";
   // Transfert en mode FTP_ASCII obligatoire pour les AS400
   $ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII);
+  if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
+    foreach($ftp->logs as $log) {
+      $AppUI->setMsg($log, UI_MSG_ERROR );
+    }
+    redirect();
+  }
   $AppUI->setMsg("Document envoyé", UI_MSG_OK );
   redirect();
 }
