@@ -28,36 +28,9 @@ var Action = {
 
 <table class="form">
 
-  <!-- CCatalogueLabo -->  
-  {{assign var="class" value="CCatalogueLabo"}}
-    
   <tr>
-    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
-  </tr>
-  
-  {{assign var="var" value="remote_name"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="notNull str maxLength|8" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>  
-    
-  {{assign var="var" value="remote_url"}}
-  <tr>
-    <th>
-      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
-        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
-      </label>  
-    </th>
-    <td>
-      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
-    </td>
-  </tr>  
+    <th class="category" colspan="100">Liaisons FTP et web service</th>
+  </tr> 
 
   <!-- prescription -->  
   {{assign var="class" value="CPrescriptionLabo"}}
@@ -124,9 +97,44 @@ var Action = {
       <input type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
+
+  <tr>
+    <td class="button" colspan="100">
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    </td>
+  </tr>
+
+  <!-- CCatalogueLabo -->  
+  {{assign var="class" value="CCatalogueLabo"}}
+    
+  <tr>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
   
-  
-  
+  {{assign var="var" value="remote_name"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="notNull str maxLength|8" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>  
+    
+  {{assign var="var" value="remote_url"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
