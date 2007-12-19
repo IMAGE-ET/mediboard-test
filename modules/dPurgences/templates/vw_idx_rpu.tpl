@@ -126,7 +126,7 @@ function pageMain() {
          <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
        </form>
        {{else}}
-         <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir consultation</a>
+         <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir prise en charge</a>
          Patient déjà pris en charge par {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
        {{/if}}
     </td>
