@@ -70,7 +70,7 @@ var Action = {
       </label>  
     </th>
     <td>
-      <input class="url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
   

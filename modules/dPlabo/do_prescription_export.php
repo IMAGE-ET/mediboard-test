@@ -176,13 +176,38 @@ if (!$doc->schemaValidate()) {
 }
 
 // Créer le document joint
-if ($msg = $doc->addFile($mbPrescription)) {
+if ($msg = $doc->addFile($mbPrescription)) {  
   $AppUI->setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
   redirect();
 }
 
+// Envoi de la prescription par sur un seveurFTP
+// Config du FTP
+$FTPConfig = $dPconfig["dPlabo"]["CPrescriptionLabo"];
 
-$AppUI->setMsg("Document envoyé", UI_MSG_OK );
-redirect();
+// Creation du FTP
+$ftp = new CFTP;
+
+$ftp->hostname = $FTPConfig["url_ftp_prescription"];
+$ftp->username = $FTPConfig["login_ftp_prescription"];
+$ftp->userpass = $FTPConfig["pass_ftp_prescription"];
+
+// Connexion FTP
+if($ftp->hostname){
+  // Transfert
+  $destination_basename = "Prescription-".$mbPrescription->_id;
+  $file = "tmp/dPlabo/export_prescription.xml";
+  // Transfert en mode FTP_ASCII obligatoire pour les AS400
+  $ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII);
+  $AppUI->setMsg("Document envoyé", UI_MSG_OK );
+  redirect();
+}
+
+if(!$ftp->hostname){
+  $AppUI->setMsg("Le document n'a pas pu être envoyé, configuration FTP manquante", UI_MSG_ERROR );
+  redirect();
+}
+
+
 
 ?>
