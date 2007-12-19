@@ -8,6 +8,33 @@
   <input type="submit" disabled="disabled" style="display:none;"/>
   <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
   <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
+      
+  {{if $can->edit || $modif_operation}}
+  {{if ($subject->_class_name=="COperation")}}
+  <table class="form">
+    <tr>
+     
+      <th style="vertical-align:middle; text-align: right">
+        <label for="anapath_1" title="Examen anatomie pathologique">Anapath :</label>
+      </th>
+      <td style="vertical-align:middle;">      
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="1" {{if $subject->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_1">Oui</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="0" {{if !$subject->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_0">Non</label>
+      </td>
+     
+      <th style="vertical-align:middle; text-align: right">
+        <label for="labo_1" title="Analyse biologique">Labo :</label>
+      </th>
+      <td style="vertical-align:middle;">      
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="1" {{if $subject->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_1">Oui</label>
+        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="0" {{if !$subject->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_0">Non</label>
+      </td>
+     
+    </tr>
+  </table>
+  <hr />
+  {{/if}}
+  {{/if}}
   <table class="form">
     <tr>
       <td colspan="2" style="vertical-align:middle;">
@@ -52,30 +79,6 @@
       </td>
       {{/if}}
     </tr>
-      
-    {{if $can->edit || $modif_operation}}
-    {{if ($subject->_class_name=="COperation")}}
-    <tr>
-     
-      <th style="vertical-align:middle; text-align: right">
-        <label for="anapath_1" title="Examen anatomie pathologique">Anapath :</label>
-      </th>
-      <td style="vertical-align:middle;">      
-        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="1" {{if $subject->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_1">Oui</label>
-        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="anapath" value="0" {{if !$subject->anapath}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="anapath_0">Non</label>
-      </td>
-     
-      <th style="vertical-align:middle; text-align: right">
-        <label for="labo_1" title="Analyse biologique">Labo :</label>
-      </th>
-      <td style="vertical-align:middle;">      
-        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="1" {{if $subject->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_1">Oui</label>
-        <input type="radio" onChange="submitFormAjax(this.form, 'systemMsg');" name="labo" value="0" {{if !$subject->labo}}checked="checked"{{/if}} style="vertical-align:middle;" /><label for="labo_0">Non</label>
-      </td>
-     
-    </tr>
-    {{/if}}
-    {{/if}}
   </table>
 </form>
 
