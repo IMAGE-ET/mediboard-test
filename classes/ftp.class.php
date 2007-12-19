@@ -11,6 +11,8 @@ class CFTP {
   var $hostname = null;
   var $username = null;
   var $userpass = null;
+  var $port     = 21;
+  var $timeout  = 90;
   var $logs     = null;
   
   
@@ -22,6 +24,13 @@ class CFTP {
     $this->logs[] = "Etape : $log";
   }
   
+  function testSocket() {
+    $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
+    if (!$fp) {
+      $this->logError("$errstr ($errno)");
+    }
+  }
+  
   function sendFile($source_file, $destination_file, $mode = FTP_BINARY) {
     if(!function_exists("ftp_connect")) {
       $this->logError("Fonctions FTP non disponibles");
@@ -31,7 +40,7 @@ class CFTP {
     $source_base = basename($source_file);
     
     // Set up basic connection
-    $conn_id = ftp_connect($this->hostname, 21, 90);
+    $conn_id = ftp_connect($this->hostname, $this->port, $this->timeout);
     if (!$conn_id) {
       $this->logError("Impossible de se connecter au serveur $this->hostname");
       return false;
