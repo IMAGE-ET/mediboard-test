@@ -27,7 +27,7 @@ class CFTP {
   function testSocket() {
     $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
-      $this->logError("$errstr ($errno)");
+      $this->logError("$this->hostname, $this->port = $errstr ($errno)");
     }
   }
   
