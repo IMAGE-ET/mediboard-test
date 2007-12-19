@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPlabo-CCatalogueLabo-pass_ws_id_prescription-desc'] = '';
 $locales['CCatalogueLabo'] = '';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sub-catalog';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Medical test';
@@ -149,10 +150,19 @@ $locales['CExamenLabo.type_prelevement.urine'] = '';
 $locales['CFunctions-back-pack_examens'] = '';
 $locales['CMediusers-back-examens'] = '';
 $locales['CMediusers-back-prescriptions_labo'] = '';
+$locales['config-dPlabo-CCatalogueLabo-login_ftp_prescription'] = '';
+$locales['config-dPlabo-CCatalogueLabo-login_ftp_prescription-desc'] = '';
+$locales['config-dPlabo-CCatalogueLabo-pass_ftp_prescription'] = '';
+$locales['config-dPlabo-CCatalogueLabo-pass_ftp_prescription-desc'] = '';
+$locales['config-dPlabo-CCatalogueLabo-pass_ws_id_prescription'] = '';
 $locales['config-dPlabo-CCatalogueLabo-remote_name'] = 'Remote catalogue name';
 $locales['config-dPlabo-CCatalogueLabo-remote_name-desc'] = 'Remote catalogue name, used as identifier';
 $locales['config-dPlabo-CCatalogueLabo-remote_url'] = 'Catalog URL';
 $locales['config-dPlabo-CCatalogueLabo-remote_url-desc'] = 'Remote catalogue URL';
+$locales['config-dPlabo-CCatalogueLabo-url_ftp_prescription'] = '';
+$locales['config-dPlabo-CCatalogueLabo-url_ftp_prescription-desc'] = '';
+$locales['config-dPlabo-CCatalogueLabo-url_ws_id_prescription'] = '';
+$locales['config-dPlabo-CCatalogueLabo-url_ws_id_prescription-desc'] = '';
 $locales['config-dPlabo-CPackExamensLabo-remote_url'] = '';
 $locales['CPackExamensLabo'] = '';
 $locales['CPackExamensLabo-back-function_id'] = '';

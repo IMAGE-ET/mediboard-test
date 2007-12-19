@@ -223,6 +223,11 @@ $dPconfig["dPlabo"] = array (
   "CCatalogueLabo" => array (
     "remote_name" => "LABO",
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/catalogue.xml",
+    "url_ftp_prescription" => "",
+    "url_ws_id_prescription" => "",
+    "pass_ws_id_prescription" => "",
+    "login_ftp_prescription" => "",
+    "pass_ftp_prescription" => "",
   ),
   "CPackExamensLabo" => array (
     "remote_url" => "http://localhost/mediboard/modules/dPlabo/remote/pack.xml",

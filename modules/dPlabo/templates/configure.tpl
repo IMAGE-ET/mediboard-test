@@ -58,7 +58,72 @@ var Action = {
       <input class="notNull url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
+
+  {{assign var="var" value="url_ftp_prescription"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>  
+  
+  {{assign var="var" value="login_ftp_prescription"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  
+  
+  {{assign var="var" value="pass_ftp_prescription"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  
+  
     
+  {{assign var="var" value="url_ws_id_prescription"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input class="url" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>  
+
+  {{assign var="var" value="pass_ws_id_prescription"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  
+  
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
