@@ -1,5 +1,4 @@
 <?php
-$locales['CRPU-_prise_en_charge'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';
 $locales['CRPU-destination'] = '';
@@ -26,6 +25,7 @@ $locales['CRPU-_entree'] = '';
 $locales['CRPU-_entree-desc'] = '';
 $locales['CRPU-_patient_id'] = '';
 $locales['CRPU-_patient_id-desc'] = '';
+$locales['CRPU-_prise_en_charge'] = '';
 $locales['CRPU-_responsable_id'] = '';
 $locales['CRPU-_responsable_id-desc'] = '';
 $locales['CRPU.ccmu.1'] = '';
