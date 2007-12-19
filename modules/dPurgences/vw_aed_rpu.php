@@ -19,6 +19,10 @@ $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
 $rpu_id = mbGetValueFromGetOrSession("rpu_id");
 $rpu    = new CRPU;
 $rpu->load($rpu_id);
+
+// Chargement des aides a la saisie
+$rpu->loadAides($AppUI->user_id);
+
 if($rpu->_id) {
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
@@ -28,6 +32,7 @@ if($rpu->_id) {
   $sejour               = new CSejour;
   $patient              = new CPatient;
 }
+
 
 // Création du template
 $smarty = new CSmartyDP();

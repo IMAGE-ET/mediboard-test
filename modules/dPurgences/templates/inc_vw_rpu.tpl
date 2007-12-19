@@ -22,8 +22,25 @@ function submitRPU(){
 	    <td colspan="2">{{mb_label object=$rpu field="motif"}}</td>
 	  </tr>
 	  <tr>
-	    <td colspan="2">{{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU();"}}</td>
-	    <td colspan="2">{{mb_field object=$rpu field="motif" onchange="submitRPU();"}}</td>
+	    <td colspan="2">
+	      <!-- Aide a la saisie -->
+        <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);">
+          <option value="">&mdash; Choisir une aide</option>
+          {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
+        </select>
+        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
+        {{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU();"}}
+      </td>
+	    
+	    <td colspan="2">
+	      <!-- Aide a la saisie -->
+        <select name="_helpers_motif" size="1" onchange="pasteHelperContent(this);">
+          <option value="">&mdash; Choisir une aide</option>
+          {{html_options options=$rpu->_aides.motif.no_enum}}
+        </select>
+        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.motif)">{{tr}}New{{/tr}}</button><br />      
+	      {{mb_field object=$rpu field="motif" onchange="submitRPU();"}}
+	    </td>
 	  </tr>
 	  
 	  <tr>

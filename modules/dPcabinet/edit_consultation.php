@@ -262,6 +262,7 @@ if($current_m == "dPurgences"){
   $consult->loadRefSejour();
   $consult->_ref_sejour->loadRefDiagnosticPrincipal();
   $consult->_ref_sejour->loadRefDossierMedical();
+  $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
 }
 
 

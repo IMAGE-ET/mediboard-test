@@ -2612,36 +2612,37 @@ td.highlight{
   background-color: #ff5;
 }
 
+/*
 .ccmu {
 	border-left: 4px solid transparent; 
   padding-left: 4px; 
   margin-left: 0px;
 }
-
-.ccmu-1{
-  border-color: #0F0;
+*/
+table.tbl td.ccmu-1{
+  background-color: #0F0;
 }
 
-.ccmu-2{
-  border-color: #9F0;
+table.tbl td.ccmu-2{
+  background-color: #9F0;
 }
 
-.ccmu-3{
-  border-color: #FF0;
+table.tbl td.ccmu-3{
+  background-color: #FF0;
 }
 
-.ccmu-4{
-  border-color: #FFCD00;
+table.tbl td.ccmu-4{
+  background-color: #FFCD00;
 }
 
-.ccmu-5{ 
-  border-color: #F60;
+table.tbl td.ccmu-5{ 
+  background-color: #F60;
 }
 
-.ccmu-D{
-  border-color: #F00;
+table.tbl td.ccmu-D{
+  background-color: #F00;
 }
 
-.ccmu-P{
-  border-color: #0F0;
+table.tbl td.ccmu-P{
+  background-color: #0F0;
 }

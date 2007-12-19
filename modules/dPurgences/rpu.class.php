@@ -98,6 +98,14 @@ class CRPU extends CMbObject {
     $this->loadRefSejour();
   }
   
+  function getHelpedFields(){
+    return array(
+      "motif"          => null,
+      "diag_infirmier" => null
+    );
+  }
+  
+  
   function loadRefSejour(){
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);

@@ -16,7 +16,7 @@ $selAffichage = mbGetValueFromPostOrSession("selAffichage","tous");
 
 // Parametre de tri
 $order_way = mbGetValueFromGetOrSession("order_way", "DESC");
-$order_col = mbGetValueFromGetOrSession("order_col", "_entree");
+$order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
 
 // Selection de la date
 $date = mbGetValueFromGetOrSession("date", mbDate());
@@ -30,7 +30,7 @@ $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 $sejour = new CSejour;
 $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
-
+$ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["entree_reelle"] = "LIKE '$date%'";
 $where["type"] = "= 'urg'";
 
@@ -40,16 +40,22 @@ if($selAffichage == "prendre_en_charge"){
 }
 
 
-if($order_col != "_entree" && $order_col != "ccmu"){
-  $order_col = "_entree";  
+if($order_col != "_entree" && $order_col != "ccmu" && $order_col != "_patient_id"){
+  $order_col = "ccmu";  
 }
 
 if($order_col == "_entree"){
   $order = "entree_reelle $order_way, rpu.ccmu $order_way";
 }
-else {
+
+if($order_col == "ccmu"){
   $order = "rpu.ccmu $order_way, entree_reelle $order_way";
 }
+
+if($order_col == "_patient_id"){
+  $order = "patients.nom $order_way, ccmu $order_way";
+}
+
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
@@ -61,6 +67,7 @@ foreach($listSejours as &$curr_sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("userCourant", $AppUI->user_id);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
 $smarty->assign("listPrats"  , $listPrats);

@@ -15,7 +15,7 @@ function newHospitalisation(chir_id, pat_id) {
   url.setModuleTab("dPplanningOp", "vw_edit_sejour");
   url.addParam("praticien_id", chir_id);
   url.addParam("patient_id", pat_id);
-  url.addParam("hospitalisation_id", 0);
+  url.addParam("sejour_id", 0);
   url.redirect();
 }
 

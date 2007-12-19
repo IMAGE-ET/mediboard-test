@@ -85,7 +85,15 @@ function pageMain() {
   </tr>
   <tr>
     <th>{{mb_label object=$rpu field="diag_infirmier"}}</th>
-    <td colspan="3">{{mb_field object=$rpu field="diag_infirmier"}}</td>
+    <td colspan="3">
+      <!-- Aide a la saisie -->
+      <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);">
+        <option value="">&mdash; Choisir une aide</option>
+        {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
+      </select>
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
+      {{mb_field object=$rpu field="diag_infirmier"}}
+      </td>
   </tr>
   
   

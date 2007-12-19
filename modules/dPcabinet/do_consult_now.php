@@ -73,14 +73,24 @@ $ref_chir = $plage->_ref_chir;
 $consult = new CConsultation;
 $consult->plageconsult_id = $plage->plageconsult_id;
 $consult->patient_id = $_POST["patient_id"];
+
+// Sejour_id dans le cas d'une urgence
 if(isset($_POST["sejour_id"])){
   $consult->sejour_id = $_POST["sejour_id"];
 }
+
 $consult->heure = $hour_now;
 $consult->arrivee = $day_now." ".$hour_now;
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
-$consult->motif = "Consultation immédiate";
+
+// Motif de la consultation
+if(isset($_POST["sejour_id"])){
+  $consult->motif = "Passage aux urgences";
+} else {
+  $consult->motif = "Consultation immédiate";
+}
+
 $consult->store();
 
 
