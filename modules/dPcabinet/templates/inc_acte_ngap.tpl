@@ -30,7 +30,7 @@ ActesNGAP = {
 
 <form name="editNGAP" method="post" action=""> 
   <input type="hidden" name="acte_ngap_id" value="" />
-  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
