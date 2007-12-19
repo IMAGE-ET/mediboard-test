@@ -175,11 +175,6 @@ if (!$doc->schemaValidate()) {
   redirect();
 }
 
-// Créer le document joint
-if ($msg = $doc->addFile($mbPrescription)) {  
-  $AppUI->setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
-  redirect();
-}
 
 // Envoi de la prescription par sur un seveurFTP
 // Config du FTP
@@ -204,6 +199,12 @@ if($ftp->hostname){
     redirect();
   }
   $AppUI->setMsg("Document envoyé", UI_MSG_OK );
+  
+  // Créer le document joint
+  if ($msg = $doc->addFile($mbPrescription)) {  
+    $AppUI->setMsg("Document non attaché à la prescription: $msg", UI_MSG_ERROR );
+    //redirect();
+  }
   redirect();
 }
 
