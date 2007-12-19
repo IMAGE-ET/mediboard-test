@@ -56,7 +56,7 @@ function submitRPU(oForm){
       </a>
     </td>
     <td>
-       <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir consultation</a><br />
+       <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir prise en charge</a><br />
        Praticien: {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
     </td>
     <td>
