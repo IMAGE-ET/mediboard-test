@@ -12,7 +12,11 @@ function submitRPU(){
   <input type="hidden" name="m" value="dPurgences" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-	<table class="form"> 
+	<table class="form">
+	  <tr>
+	    <th class="category" colspan="2">Prise en charge infirmier</th>
+	    <th class="category" colspan="2">Prise en charge praticien</th>
+	  </tr> 
 	  <tr>
 	    <td colspan="2">{{mb_label object=$rpu field="diag_infirmier"}}</td>
 	    <td colspan="2">{{mb_label object=$rpu field="motif"}}</td>
@@ -58,16 +62,24 @@ function submitRPU(){
 	    <th>{{mb_label object=$rpu field="transport"}}</th>
 	    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" onchange="submitRPU();"}}</td>
 	    
-	    <th></th>
-	    <td></td>  
+	    <td colspan="2" />
 	  </tr>
 	
 	  <tr>
 	    <th>{{mb_label object=$rpu field="prise_en_charge"}}</th>
 	    <td>{{mb_field object=$rpu field="prise_en_charge" defaultOption="&mdash; Prise en charge" onchange="submitRPU();"}}</td>
 	 
-	    <th></th>
-	    <td></td>  
+	    <td colspan="2" />  
+	  </tr>
+	  <tr>
+	    <td class="button" colspan="4">
+	      <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">
+          Reconvoquer
+        </button>
+        <button class="new" type="button" onclick="newHospitalisation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}})">
+          Hospitaliser
+        </button>
+	    </td>
 	  </tr>
   </table>
 </form>
