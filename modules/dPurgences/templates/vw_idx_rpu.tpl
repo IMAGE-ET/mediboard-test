@@ -27,13 +27,18 @@ function pageMain() {
 
 <table style="width:100%">
   <tr>
+  <td>
+  <a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+  Ajouter un patient
+</a>
+  
+  </td>
   <th>
    le
    {{$date|date_format:"%A %d %B %Y"}}
    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
   </th>
-  </tr>
-  <tr>
+
     <td style="text-align: right">
      Type d'affichage
      <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
