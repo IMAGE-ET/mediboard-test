@@ -59,6 +59,9 @@ var Action = {
     </td>
   </tr>  
 
+  <!-- prescription -->  
+  {{assign var="class" value="CPrescriptionLabo"}}
+  
   {{assign var="var" value="url_ftp_prescription"}}
   <tr>
     <th>
