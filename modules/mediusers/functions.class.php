@@ -137,16 +137,7 @@ class CFunctions extends CMbObject {
     $where["type"] = "= 'cabinet'";
     $where["group_id"] = "= '$g'";
     $order = "text";
-    $specs = $this->loadList($where, $order);
-  
-    // Filter with permissions
-    if ($perm_type) {
-      foreach ($specs as $keySpec => $spec) {
-        if (!$spec->canRead()) {
-          unset($specs[$keySpec]);
-        }          
-      }
-    }
+    $specs = $this->loadListWithPerms($perm_type, $where, $order);
     
     return $specs;
   }

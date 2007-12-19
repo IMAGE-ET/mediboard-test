@@ -1,4 +1,5 @@
 <?php
+$locales['CRPU'] = 'Résumé de passage aux urgences';
 $locales['CRPU-ccmu'] = 'Degré d\'urgence';
 $locales['CRPU-ccmu-desc'] = 'Degré d\'urgence CCMU estimé';
 $locales['CRPU-destination'] = 'Destination';

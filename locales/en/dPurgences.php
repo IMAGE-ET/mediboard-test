@@ -1,4 +1,5 @@
 <?php
+$locales['CRPU'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';
 $locales['CRPU-destination'] = '';
