@@ -1,7 +1,6 @@
 <?php
-$locales['config-dPpatients-CPatient-date_naissance'] = 'Date de naissance obligatoire';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
-$locales['CAddiction'] = '';
+$locales['CAddiction'] = 'Addiction';
 $locales['CAddiction-addiction'] = 'Addiction';
 $locales['CAddiction-addiction-court'] = 'Add';
 $locales['CAddiction-addiction-desc'] = 'Description de l\'addication';
@@ -108,6 +107,7 @@ $locales['CMedecin.modify'] = '';
 $locales['CMedecin.more'] = '';
 $locales['CMedecin.none'] = '';
 $locales['CMedecin.one'] = '';
+$locales['config-dPpatients-CPatient-date_naissance'] = 'Date de naissance obligatoire';
 $locales['config-dPpatients-CPatient-tag_ipp'] = 'Tag IPP';
 $locales['CPatient'] = 'Patient';
 $locales['CPatient-adresse'] = 'Adresse';

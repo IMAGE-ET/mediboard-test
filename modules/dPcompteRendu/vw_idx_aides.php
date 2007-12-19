@@ -78,7 +78,7 @@ if ($filter_class) {
   $where["class"] = "= '$filter_class'";
 }
 
-$order = array("user_id", "class", "field", "name");
+$order = array("user_id", "class", "depend_value", "field", "name");
 
 // Liste des aides pour le praticien
 $aidesPrat = array();

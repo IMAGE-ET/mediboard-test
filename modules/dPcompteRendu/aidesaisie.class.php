@@ -42,10 +42,11 @@ class CAideSaisie extends CMbObject {
     }else{
       $where["function_id"] = $this->_spec->ds->prepare("= %",$this->function_id);
     }
-    $where["class"]   = $this->_spec->ds->prepare("= %",$this->class);
-    $where["field"]   = $this->_spec->ds->prepare("= %",$this->field);
-    $where["text"]    = $this->_spec->ds->prepare("= %",$this->text);
-    $where["aide_id"] = $this->_spec->ds->prepare("!= %",$this->aide_id);
+    $where["class"]        = $this->_spec->ds->prepare("= %",$this->class);
+    $where["field"]        = $this->_spec->ds->prepare("= %",$this->field);
+    $where["depend_value"] = $this->_spec->ds->prepare("= %",$this->depend_value);
+    $where["text"]         = $this->_spec->ds->prepare("= %",$this->text);
+    $where["aide_id"]      = $this->_spec->ds->prepare("!= %",$this->aide_id);
     
     $sql = new CRequest();
     $sql->addSelect("count(aide_id)");

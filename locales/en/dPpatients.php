@@ -1,5 +1,4 @@
 <?php
-$locales['config-dPpatients-CPatient-date_naissance'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
@@ -108,6 +107,7 @@ $locales['CMedecin.modify'] = '';
 $locales['CMedecin.more'] = '';
 $locales['CMedecin.none'] = '';
 $locales['CMedecin.one'] = '';
+$locales['config-dPpatients-CPatient-date_naissance'] = '';
 $locales['config-dPpatients-CPatient-tag_ipp'] = '';
 $locales['CPatient'] = 'Patient';
 $locales['CPatient-adresse'] = 'Adress';
@@ -463,6 +463,7 @@ $locales['Intermax.error.76'] = '';
 $locales['Intermax.error.100'] = 'Le résultat est non accessible. Vérifiez que : \\n\\t1. LogicMax est bien lancé\\n\\t2. Une fonction LogicMax a bien été déclenchée depuis la dernière récupération de résultats';
 $locales['Intermax.error.110'] = '';
 $locales['Intermax.error.120'] = '';
+$locales['Intermax.error.200'] = '';
 $locales['mod-dPpatients-tab-vw_edit_patients'] = '';
 $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';

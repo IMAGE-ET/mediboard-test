@@ -154,9 +154,11 @@ function pageMain() {
       <td>
         <a href="{{$href}}">
         {{if $curr_aide->_ref_abstat_object->_helped_fields.$field}}
-          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}}
+          {{$curr_aide->_ref_abstat_object->_helped_fields.$field}} :
           {{if $curr_aide->depend_value}}
-          : {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+            {{tr}}{{$className}}.{{$curr_aide->_ref_abstat_object->_helped_fields.$field}}.{{$curr_aide->depend_value}}{{/tr}}
+          {{else}}
+            Aucune
           {{/if}}
         {{else}}&mdash;{{/if}}
         </a>
