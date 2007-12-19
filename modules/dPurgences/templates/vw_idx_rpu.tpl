@@ -92,6 +92,10 @@ function pageMain() {
     {{else}}
       <td style="background-color:#cfc; text-align: center">
       Consultation à {{$curr_sejour->_ref_rpu->_ref_consult->heure|date_format:"%Hh%M"}}
+      
+      {{assign var="sejour_id" value=$curr_sejour->_id}}
+      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
+      
       </td>
     {{/if}}
     {{/if}}

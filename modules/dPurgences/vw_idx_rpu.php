@@ -64,9 +64,24 @@ foreach($listSejours as &$curr_sejour) {
   $curr_sejour->loadRefRPU();
 }
 
+
+// Calcul du temps d'attente pour les patients deja pris en charge
+$tps_attente = array();
+foreach($listSejours as &$curr_sejour) {
+  if($curr_sejour->_ref_rpu->_count_consultations){
+  // Calcul du temps d'attente
+  $entree = mbTime($curr_sejour->_entree);
+ 
+  $consult = mbTime($curr_sejour->_ref_rpu->_ref_consult->heure);
+  $tps_attente[$curr_sejour->_id] = mbSubTime($entree,$consult);
+  }
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("tps_attente", $tps_attente);
 $smarty->assign("userCourant", $AppUI->user_id);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);
