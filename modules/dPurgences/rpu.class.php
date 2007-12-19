@@ -67,7 +67,7 @@ class CRPU extends CMbObject {
       "transport"       => "enum list|perso|ambu|vsab|smur|heli|fo",
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
-      "ccmu"            => "notNull enum list|1|2|3|4|5|P|D",
+      "ccmu"            => "notNull enum list|1|P|2|3|4|5|D",
       "_responsable_id" => "notNull ref class|CMediusers",
       "_entree"         => "dateTime",
       "sortie"          => "dateTime",
