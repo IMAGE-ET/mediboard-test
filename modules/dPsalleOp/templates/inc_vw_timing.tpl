@@ -58,7 +58,7 @@
       </td>
       <td class="button">
         {{if $selOp->debut_op}}
-        Début opération:
+        Début intervention:
         {{if $can->edit}}
         <input name="debut_op" size="5" type="text" value="{{$selOp->debut_op|date_format:"%H:%M"}}" />
         <button type="button" class="tick notext" onclick="submitTiming(this.form);">{{tr}}Save{{/tr}}</button>
@@ -138,7 +138,7 @@
       </td>
       <td class="button">
         {{if $selOp->fin_op}}
-        Fin opération:
+        Fin intervention:
         {{if $can->edit}}
         <input name="fin_op" size="5" type="text" value="{{$selOp->fin_op|date_format:"%H:%M"}}" />
         <button type="button" class="tick notext" onclick="submitTiming(this.form);">{{tr}}Save{{/tr}}</button>
