@@ -177,7 +177,9 @@ function pageMain() {
             <button class="modify" type="submit">Valider</button>
             </form>
             <br />
+            {{if $curr_sejour->_ext_diagnostic_principal}}
             <strong>{{$curr_sejour->_ext_diagnostic_principal->libelle}}</strong>
+            {{/if}}
           </td>
           <td colspan="2" class="text">
             {{if $curr_sejour->_ref_GHM->_CM}}

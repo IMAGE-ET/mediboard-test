@@ -132,9 +132,12 @@ class CGHM  extends CMbObject {
     $this->loadRefSejour();
     $this->_ref_sejour->loadRefs();
     $this->_ref_sejour->loadRefDossierMedical();
+    
     $this->_DASs = array(); 
-    foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
-      $this->_DASs[] = $code;
+    if($this->_ref_sejour->_ref_dossier_medical->_id){
+      foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
+        $this->_DASs[] = $code;
+      }
     }
     $this->_ref_actes_ccam = array();
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
