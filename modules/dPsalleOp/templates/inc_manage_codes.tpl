@@ -55,7 +55,6 @@
       
     {{if $can->edit || $modif_operation}}
     {{if ($subject->_class_name=="COperation")}}
-    <!-- Pour l'instant, on ne l'affiche plus
     <tr>
      
       <th style="vertical-align:middle; text-align: right">
@@ -75,7 +74,6 @@
       </td>
      
     </tr>
-    -->
     {{/if}}
     {{/if}}
   </table>
