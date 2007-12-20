@@ -27,8 +27,10 @@ class CFTP {
   function testSocket() {
     $fp = fsockopen($this->hostname, $this->port, $errno, $errstr, $this->timeout);
     if (!$fp) {
-      $this->logError("$this->hostname, $this->port = $errstr ($errno)");
+      $this->logError("hote : $this->hostname, port : $this->port > $errstr ($errno)");
+      return false;
     }
+    return true;
   }
   
   function sendFile($source_file, $destination_file, $mode = FTP_BINARY) {
