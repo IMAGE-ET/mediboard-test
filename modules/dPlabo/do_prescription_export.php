@@ -193,8 +193,10 @@ if($ftp->hostname){
   $destination_basename = "Prescription-".$mbPrescription->_id;
   $file = "tmp/dPlabo/export_prescription.xml";
   if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
-    foreach($ftp->logs as $log) {
-      $AppUI->setMsg($log, UI_MSG_ERROR );
+    if($ftp->logs) {
+      foreach($ftp->logs as $log) {
+        $AppUI->setMsg($log, UI_MSG_ERROR );
+      }
     }
     redirect();
   }
