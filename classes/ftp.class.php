@@ -48,9 +48,9 @@ class CFTP {
       return false;
     }
     if($passif_mode) {
-      $passif = ftp_pasv($conn_id, true);
+      $passif = ftp_pasv($conn_id, false);
       if (!$passif) {
-        $this->logError("Impossible de passer en mode passif");
+        $this->logError("Impossible de passer en mode actif");
         return false;
       }
     }
