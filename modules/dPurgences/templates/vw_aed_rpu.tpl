@@ -77,27 +77,30 @@ function pageMain() {
   </tr>
   
   <tr>
+  {{if $can->edit}}
     <th>{{mb_label object=$rpu field="ccmu"}}</th>
-    <td>{{mb_field object=$rpu field="ccmu"}}</td>
-    
+    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence"}}</td>
+  {{/if}}
     <th>{{mb_label object=$rpu field="prise_en_charge"}}</th>
     <td>{{mb_field object=$rpu field="prise_en_charge" defaultOption="&mdash; Prise en charge"}}</td>
   </tr>
+  
+  {{if $can->edit}}
   <tr>
-    <th>{{mb_label object=$rpu field="diag_infirmier"}} </th>
-   
-    <td colspan="3">
-       <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);">
+    <th>{{mb_label object=$rpu field="diag_infirmier"}} <br />
+     <select name="_helpers_diag_infirmier" size="1" onchange="pasteHelperContent(this);">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
+     </select><br />
+     <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />
+      </th> 
+    <td colspan="3">
    
       <!-- Aide a la saisie -->
      {{mb_field object=$rpu field="diag_infirmier"}}
       </td>
   </tr>
-  
+  {{/if}}
   
   <tr>
 		<td class="button" colspan="4">

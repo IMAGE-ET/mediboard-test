@@ -65,9 +65,11 @@ function pageMain() {
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
-    <td class="ccmu-{{$curr_sejour->_ref_rpu->ccmu}}">
+    <td {{if $curr_sejour->_ref_rpu->ccmu}}class="ccmu-{{$curr_sejour->_ref_rpu->ccmu}}"{{else}}style='background-color: #fff'{{/if}} ">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
-        {{tr}}CRPU.ccmu.{{$curr_sejour->_ref_rpu->ccmu}}{{/tr}}
+        {{if $curr_sejour->_ref_rpu->ccmu}}
+          {{tr}}CRPU.ccmu.{{$curr_sejour->_ref_rpu->ccmu}}{{/tr}}
+        {{/if}}
       </a>
     </td>
     <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
@@ -116,6 +118,7 @@ function pageMain() {
     <td class="button" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
       <!-- ici c'est comme pour une consult immédiate -->
       {{if $curr_sejour->_ref_rpu->_count_consultations < 1}}
+        {{if $can->edit}}
        <form name="createConsult{{$curr_sejour->_ref_rpu->_id}}" method="post" action="?">
          <input type="hidden" name="dosql" value="do_consult_now" />
          <input type="hidden" name="m" value="dPcabinet" />
@@ -133,8 +136,13 @@ function pageMain() {
          <br />
          <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
        </form>
+         {{else}}
+          - 
+         {{/if}}
        {{else}}
+         {{if $can->edit}}
          <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir prise en charge</a>
+         {{/if}}
          Patient déjà pris en charge par {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
        {{/if}}
     </td>
