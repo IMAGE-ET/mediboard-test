@@ -33,7 +33,7 @@ class CFTP {
     return true;
   }
   
-  function sendFile($source_file, $destination_file, $mode = FTP_BINARY, $passif = false) {
+  function sendFile($source_file, $destination_file, $mode = FTP_BINARY, $passif_mode = false) {
     if(!function_exists("ftp_connect")) {
       $this->logError("Fonctions FTP non disponibles");
       return false;
@@ -47,10 +47,12 @@ class CFTP {
       $this->logError("Impossible de se connecter au serveur $this->hostname");
       return false;
     }
-    $passif = ftp_pasv($conn_id, $passif);
-    if (!$passif) {
-      $this->logError("Impossible de passer en mode passif");
-      return false;
+    if($passif_mode) {
+      $passif = ftp_pasv($conn_id, true);
+      if (!$passif) {
+        $this->logError("Impossible de passer en mode passif");
+        return false;
+      }
     }
     
     $this->logStep("Connecté au serveur $this->hostname");
