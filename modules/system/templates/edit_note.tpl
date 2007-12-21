@@ -41,7 +41,7 @@ function submitNote(){
   <tr>
     <th>{{mb_label object=$note field="date"}}</th>
     <td>
-      {{$note->date|date_format:"%A %d %B %Y à %H:%M"}}
+      {{$note->date|date_format:"%A %d %B %Y à %Hh%M"}}
       {{mb_field object=$note field="date" hidden=1}}
     </td>
   </tr>

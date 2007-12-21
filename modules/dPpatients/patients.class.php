@@ -860,6 +860,10 @@ class CPatient extends CMbObject {
         $operation->canRead();
         $operation->canEdit();
       }
+      $sejour->loadRefRPU();
+      if($sejour->_ref_rpu && $sejour->_ref_rpu->_id) {
+        $sejour->_ref_rpu->getNumDocsAndFiles($permType);
+      }
     }
   }
   

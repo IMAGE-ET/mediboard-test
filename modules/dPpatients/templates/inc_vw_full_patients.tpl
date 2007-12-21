@@ -119,6 +119,28 @@ function popEtatSejour(sejour_id) {
   </td>
 </tr>
 
+{{if $curr_sejour->_ref_rpu && $curr_sejour->_ref_rpu->_id}}
+{{assign var=rpu value=$curr_sejour->_ref_rpu}}
+<tr>
+  <td style="padding-left: 20px;" colspan="2">
+    Passage aux urgences
+  </td>
+  <td style="text-align:right;">
+  {{if $rpu->_canRead}}
+    <a href="#" onclick="setObject( {
+      objClass: 'CRPU', 
+      keywords: '', 
+      id: {{$rpu->_id|smarty:nodefaults|JSAttribute}}, 
+      view:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'} )"
+      title="{{$rpu->_nb_files_docs}} doc(s)">
+      {{$rpu->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$rpu->_nb_files_docs}}_red{{/if}}.png" title="{{$rpu->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+    </a>
+    {{/if}} 
+  </td>
+</tr>
+{{/if}}
+
 {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
 <tr>
   <td style="padding-left: 20px;">

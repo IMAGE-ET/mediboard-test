@@ -5,7 +5,7 @@
       {{$curr_note->_ref_user->_view}}
       ({{$curr_note->_ref_user->_ref_function->_view}})
       <br />
-      {{$curr_note->date|date_format:"%d/%m/%Y %H:%M"}}
+      {{$curr_note->date|date_format:"%d/%m/%Y %Hh%M"}}
       <br /> 
     </th>
   </tr>

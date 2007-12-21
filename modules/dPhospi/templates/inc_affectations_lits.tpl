@@ -93,7 +93,7 @@
     </a>
     {{/if}}
     <em>Du</em>:
-    {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+    {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
     ({{$curr_affectation->_entree_relative}} jours)
   </td>
   <td class="action">
@@ -112,7 +112,7 @@
   <tr class="dates">
   <td class="text">
     <em>Au</em>:
-    {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+    {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
     ({{$curr_affectation->_sortie_relative}} jours)
   </td>
   <td class="action">
@@ -154,11 +154,11 @@
     {{/if}}
     {{if $aff_prev->_id}}
       <em>Déplacé</em> (chambre: {{$aff_prev->_ref_lit->_ref_chambre->nom}}):
-      {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+      {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
       ({{$curr_affectation->_entree_relative}} jours)
     {{else}}
       <em>Entrée</em>:
-      {{$curr_affectation->entree|date_format:"%A %d %B %H:%M"}}
+      {{$curr_affectation->entree|date_format:"%A %d %B %Hh%M"}}
       ({{$curr_affectation->_entree_relative}} jours)
     {{/if}}
   </td>
@@ -182,7 +182,7 @@
   <td class="text">
     {{if $aff_next->_id}}
       <em>Déplacé</em> (chambre: {{$aff_next->_ref_lit->_ref_chambre->nom}}):
-      {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+      {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
       ({{$curr_affectation->_sortie_relative}} jours)
     {{else}}
       {{if $can->edit}}
@@ -201,7 +201,7 @@
         </a>
       {{/if}}
       <em>Sortie</em>:
-      {{$curr_affectation->sortie|date_format:"%A %d %B %H:%M"}}
+      {{$curr_affectation->sortie|date_format:"%A %d %B %Hh%M"}}
       ({{$curr_affectation->_sortie_relative}} jours)
     {{/if}}
   </td>
@@ -332,7 +332,7 @@ Septique
   <td class="text" colspan="2">
   depuis:
   {{if $curr_lit->_ref_last_dispo && $curr_lit->_ref_last_dispo->_id}}
-  {{$curr_lit->_ref_last_dispo->sortie|date_format:"%A %d %B %H:%M"}} 
+  {{$curr_lit->_ref_last_dispo->sortie|date_format:"%A %d %B %Hh%M"}} 
   ({{$curr_lit->_ref_last_dispo->_sortie_relative}} jours)
   {{else}}
   Toujours
@@ -343,7 +343,7 @@ Septique
   <td class="text" colspan="2">
   jusque: 
   {{if $curr_lit->_ref_next_dispo && $curr_lit->_ref_next_dispo->_id}}
-  {{$curr_lit->_ref_next_dispo->entree|date_format:"%A %d %B %H:%M"}}
+  {{$curr_lit->_ref_next_dispo->entree|date_format:"%A %d %B %Hh%M"}}
   ({{$curr_lit->_ref_next_dispo->_entree_relative}} jours)
   {{else}}
   Toujours

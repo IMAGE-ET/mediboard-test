@@ -38,10 +38,10 @@
         </td>
       </tr> 
       <tr>
-        <td class="date" colspan="2"><em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %H:%M"}}</td>
+        <td class="date" colspan="2"><em>Entrée</em> : {{$curr_sejour->entree_prevue|date_format:"%A %d %B %Hh%M"}}</td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Sortie</em> : {{$curr_sejour->sortie_prevue|date_format:"%A %d %B %H:%M"}}</td>
+        <td class="date" colspan="2"><em>Sortie</em> : {{$curr_sejour->sortie_prevue|date_format:"%A %d %B %Hh%M"}}</td>
       </tr>
       <tr>
         <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans

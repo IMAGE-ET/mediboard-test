@@ -55,8 +55,8 @@ function pageMain() {
       <td {{if $curr_message->urgence == "urgent"}}class="highlight"{{/if}}>
         <strong><a href="{{$href}}">{{$curr_message->titre}}</a></strong>
       </td>
-      <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %H:%M"}}</a></td>
-      <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %H:%M"}}</a></td>
+      <td><a href="{{$href}}">{{$curr_message->deb|date_format:"%d/%m/%Y %Hh%M"}}</a></td>
+      <td><a href="{{$href}}">{{$curr_message->fin|date_format:"%d/%m/%Y %Hh%M"}}</a></td>
     </tr>
     <tr>
       <td class="text" colspan="10">{{$curr_message->corps|nl2br}}</td>

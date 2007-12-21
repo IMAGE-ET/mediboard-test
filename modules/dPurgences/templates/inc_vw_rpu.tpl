@@ -49,7 +49,7 @@ function submitRPU(){
 	  
 	  <tr>
 	    <th>{{mb_label object=$rpu field="_entree"}}</th>
-	    <td>{{$rpu->_entree|date_format:"%d %b %Y à %H:%M"}}</td>
+	    <td>{{$rpu->_entree|date_format:"%d %b %Y à %Hh%M"}}</td>
 	 
 	    <th>{{mb_label object=$rpu field="sortie"}}</th>
 	    <td class="date">{{mb_field object=$rpu field="sortie" form="editRPU" onchange="submitRPU();"}}</td> 
