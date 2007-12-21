@@ -2612,13 +2612,10 @@ td.highlight{
   background-color: #ff5;
 }
 
-/*
-.ccmu {
-	border-left: 4px solid transparent; 
-  padding-left: 4px; 
-  margin-left: 0px;
+div.effectue{
+  text-decoration: line-through;	
 }
-*/
+
 table.tbl td.ccmu-1{
   background-color: #0F0;
 }

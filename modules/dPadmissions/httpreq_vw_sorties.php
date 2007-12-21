@@ -47,9 +47,9 @@ $where["type"] = " = '$mode'";
 $where["group_id"] = "= '$g'";
 $where["annule"] = " = '0'";
 
+// Afficher seulement les sorties non effectuées (sejour sans date de sortie reelle)
 if($vue) {
-  $ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-  $where["effectue"] = "= '0'";
+  $where["sortie_reelle"] = "IS NULL";
 }
 
 if($order_col != "_nomPatient" && $order_col != "sortie_prevue" && $order_col != "_nomPraticien"){
@@ -72,17 +72,17 @@ $listSejour = $listSejour->loadList($where, $order, null, null, $ljoin);
 foreach($listSejour as $key => $sejour){
   $sejour->loadRefPatient();
   $sejour->loadRefPraticien();
-  $sejour->loadRefsAffectations();
+  $sejour->loadRefsAffectations("sortie ASC");
   $sejour->loadRefEtabExterne();
   $sejour->loadNumDossier();
   $affectation =& $sejour->_ref_last_affectation;
   
-  if($affectation->affectation_id){
-  	$affectation->loadReflit();
-  	$affectation->_ref_lit->loadCompleteView();
+  foreach($sejour->_ref_affectations as $key => $affect){
+    $affect->loadRefLit();
+    $affect->_ref_lit->loadCompleteView();
   }
- 
 }
+
 
 
 // Création du template

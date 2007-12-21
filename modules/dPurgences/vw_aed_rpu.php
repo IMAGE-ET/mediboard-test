@@ -26,6 +26,8 @@ $rpu->loadAides($AppUI->user_id);
 if($rpu->_id) {
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
+  $patient->loadStaticCIM10($AppUI->user_id);
+  
 } else {
   $rpu->_responsable_id = $AppUI->user_id;
   $rpu->_entree         = mbDateTime();
@@ -34,9 +36,28 @@ if($rpu->_id) {
 }
 
 
+// Gestion des addictions, traitements, antecedents, diagnostics
+$addiction = new CAddiction();
+$addiction->loadAides($AppUI->user_id);
+
+$traitement = new CTraitement();
+$traitement->loadAides($AppUI->user_id);
+
+$antecedent = new CAntecedent();
+$antecedent->loadAides($AppUI->user_id);
+
+// Chargement du praticien courant
+$userSel = new CMediusers();
+$userSel->load($AppUI->user_id);
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("userSel", $userSel);
+$smarty->assign("today", mbDate());
+$smarty->assign("addiction", $addiction);
+$smarty->assign("traitement", $traitement);
+$smarty->assign("antecedent", $antecedent);
 $smarty->assign("rpu"             , $rpu);
 $smarty->assign("sejour"          , $sejour);
 $smarty->assign("patient"         , $patient);

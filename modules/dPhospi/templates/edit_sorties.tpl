@@ -37,11 +37,11 @@ function saveSortie(oFormSortie, oFormAffectation){
             <table class="tbl">
               <tr>
                 <th class="title" colspan="6">
-                  Confirmation des déplacements ({{$deplacements|@count}})
+                  Effectuer des déplacements ({{$deplacements|@count}})
                 </th>
               </tr>
               <tr>
-                <th>Confirmation</th>
+                <th>Effectuer</th>
                 <th>{{mb_colonne class="CAffectation" field="_patient_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_praticien_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_chambre_dep" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
@@ -57,22 +57,21 @@ function saveSortie(oFormSortie, oFormAffectation){
                 <input type="hidden" name="dosql" value="do_affectation_aed" />
                 <input type="hidden" name="affectation_id" value="{{$curr_sortie->affectation_id}}" />
                 <input type="hidden" name="sortie" value="{{$curr_sortie->sortie}}" />
-                {{if $curr_sortie->confirme}}
-                <input type="hidden" name="confirme" value="0" />
+                {{if $curr_sortie->effectue}}
+               
                 <input type="hidden" name="effectue" value="0" />
                 <button type="submit" class="cancel">
                 Annuler le déplacement
                 </button>
                 {{else}}
-                <input type="hidden" name="confirme" value="1" />
                 <input type="hidden" name="effectue" value="1" />
                 <button type="submit" class="tick">
-                Confirmer le déplacement
+                Effectuer le déplacement
                 </button>
                 {{/if}}
                 </form>
                 </td>
-                {{if $curr_sortie->confirme}}
+                {{if $curr_sortie->effectue}}
                 <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
                 {{else}}
                 <td class="text">
@@ -89,7 +88,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                   {{$curr_sortie->_ref_next->_ref_lit->_view}}
                 </td>
                 <td>
-                {{if $curr_sortie->confirme}}
+                {{if $curr_sortie->effectue}}
                   {{$curr_sortie->sortie|date_format:"%H h %M"}}
                 {{else}}
                 <form name="editSortie{{$curr_sortie->affectation_id}}" action="">
@@ -112,11 +111,11 @@ function saveSortie(oFormSortie, oFormAffectation){
             <table class="tbl">
               <tr>
                 <th class="title" colspan="5">
-                  Confirmation des sorties ({{$sortiesComp|@count}} hospis - {{$sortiesAmbu|@count}} ambus)
+                  Autoriser des sorties ({{$sortiesComp|@count}} hospis - {{$sortiesAmbu|@count}} ambus)
                 </th>
               </tr>
               <tr>
-                <th>Confirmation</th>
+                <th>Autoriser</th>
                 <th>{{mb_colonne class="CAffectation" field="_patient" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_praticien" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
                 <th>{{mb_colonne class="CAffectation" field="_chambre" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=$tab"}}</th>
@@ -139,7 +138,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 {{else}}
                 <input type="hidden" name="confirme" value="1" />
                 <button type="submit" class="tick">
-                Confirmer la sortie
+                Autoriser la sortie
                 </button>
                 {{/if}}
                 </form>
@@ -185,7 +184,7 @@ function saveSortie(oFormSortie, oFormAffectation){
                 {{else}}
                 <input type="hidden" name="confirme" value="1" />
                 <button type="submit" class="tick">
-                Confirmer la sortie
+                Autoriser la sortie
                 </button>
                 {{/if}}
                 </form>

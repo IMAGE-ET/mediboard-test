@@ -20,6 +20,8 @@ $order_col = mbGetValueFromGetOrSession("order_col", "_patient");
 
 // Liste des services
 $services = new CService;
+$whereDeplacement = array();
+$whereSortie = array();
 $where = array();
 $where["group_id"] = "= '$g'";
 $order = "nom";
@@ -43,9 +45,16 @@ $where["sortie"]   = "BETWEEN '$limit1' AND '$limit2'";
 $where["type"]     = "!= 'exte'";
 $where["service.group_id"] = "= '$g'";
 //$where["service.service_id"] = $ds->prepareIn(array_keys($services));
+
+$whereDeplacement = $where;
+$whereSortie = $where;
+
 if ($vue) {
-  $where["confirme"] = "= '0'";
+  $whereDeplacement["effectue"] = "= '0'";
+  $whereSortie["confirme"] = " = '0'";
 }
+
+
 
 /*
 if($order_col != "_patient_deplacement" && $order_col != "_praticien_deplacement"  && $order_col != "_chambre_deplacement"){
@@ -72,7 +81,7 @@ if($order_col == "_sortie_dep"){
 
 // Récupération des déplacements du jour
 $deplacements = new CAffectation;
-$deplacements = $deplacements->loadList($where, $orderDep, null, null, $ljoin);
+$deplacements = $deplacements->loadList($whereDeplacement, $orderDep, null, null, $ljoin);
 foreach($deplacements as $key => $value) {
   $deplacements[$key]->loadRefsFwd();
     
@@ -126,9 +135,9 @@ if($order_col == "_chambre"){
 
 
 // Récupération des sorties ambu du jour
-$where["type"] = "= 'ambu'";
+$whereSortie["type"] = "= 'ambu'";
 $sortiesAmbu = new CAffectation;
-$sortiesAmbu = $sortiesAmbu->loadList($where, $order, null, null, $ljoin);
+$sortiesAmbu = $sortiesAmbu->loadList($whereSortie, $order, null, null, $ljoin);
 foreach($sortiesAmbu as $key => $value) {
   $sortiesAmbu[$key]->loadRefsFwd();
   if($sortiesAmbu[$key]->_ref_next->affectation_id) {
@@ -148,9 +157,9 @@ foreach($sortiesAmbu as $key => $value) {
 }
 
 // Récupération des sorties hospi complete du jour
-$where["type"] = "= 'comp'";
+$whereSortie["type"] = "= 'comp'";
 $sortiesComp = new CAffectation;
-$sortiesComp = $sortiesComp->loadList($where, $order, null, null, $ljoin);
+$sortiesComp = $sortiesComp->loadList($whereSortie, $order, null, null, $ljoin);
 foreach($sortiesComp as $key => $value) {
   $sortiesComp[$key]->loadRefsFwd();
   if($sortiesComp[$key]->_ref_next->affectation_id) {

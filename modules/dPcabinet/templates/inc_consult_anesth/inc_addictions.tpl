@@ -25,11 +25,12 @@ function finAddiction(oForm){
   <input type="hidden" name="dosql" value="do_addiction_aed" />
   <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 
+  {{if $current_m != "dPurgences"}}
   {{if $consult->_ref_consult_anesth->_id}}
   <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
   <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
   {{/if}}
-
+  {{/if}}
 
 
 <table class="form">

@@ -300,8 +300,8 @@ class CSejour extends CCodableCCAM {
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
     if($this->mode_sortie){
       $this->_ref_last_affectation->effectue = 1;
-        $this->_ref_last_affectation->store();  
-    } 
+      $this->_ref_last_affectation->store();  
+    }
     
     if($this->mode_sortie === ""){
       $this->_ref_last_affectation->effectue = 0;
@@ -552,9 +552,8 @@ class CSejour extends CCodableCCAM {
     return $curr_affectation;
   }
   
-  function loadRefsAffectations() {
+  function loadRefsAffectations($order = "sortie DESC") {
     $where = array("sejour_id" => "= '$this->sejour_id'");
-    $order = "sortie DESC";
     $this->_ref_affectations = new CAffectation();
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
     if(count($this->_ref_affectations) > 0) {

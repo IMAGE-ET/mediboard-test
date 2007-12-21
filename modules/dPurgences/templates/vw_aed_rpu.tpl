@@ -2,8 +2,24 @@
 
 <script type="text/javascript">
 
+function verifNonEmpty(oElement){
+  var notWhitespace = /\S/;
+  if(notWhitespace.test(oElement.value)){
+    return true;
+  }
+  return false;
+}
+
 function pageMain() {
   regFieldCalendar("editRpu", "_entree", true);
+  
+  reloadDossierMedicalPatient();
+  
+  if (document.editAntFrm){
+    document.editAntFrm.type.onchange();
+    Try.these(document.editAddictFrm.type.onchange);
+  } 
+  
 
 }
 
@@ -115,5 +131,30 @@ function pageMain() {
   </td>
   </tr>
 </table>
-
 </form>
+
+<!-- Dossier Médical du patient -->
+{{if $rpu->_id}}
+<table width="100%" class="form">
+  <tr id="ant-trigger">
+    <th colspan="6" class="category">
+     Dossier Médical du patient
+    </th>
+  </tr>
+  <tbody id="ant">
+    <tr class="script">
+      <td>
+        <script type="text/javascript">new PairEffect("ant");</script>
+      </td>
+    </tr>
+    <tr>
+      <td>
+        {{assign var="current_m" value="dPurgences"}}
+        {{assign var="_is_anesth" value="0"}}
+        {{assign var="consult" value=$rpu->_ref_consult}}
+        {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
+      </td>
+    </tr>
+  </tbody>
+</table>
+{{/if}}
