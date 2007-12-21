@@ -134,7 +134,7 @@ function pageMain() {
 </form>
 
 <!-- Dossier Médical du patient -->
-{{if $rpu->_id}}
+{{if $rpu->_id && $can->edit}}
 <table width="100%" class="form">
   <tr id="ant-trigger">
     <th colspan="6" class="category">

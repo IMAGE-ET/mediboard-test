@@ -34,7 +34,9 @@ Addiction = {
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_addiction_aed" />
-        {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
+        
+          {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}         
+            
 
         <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadDossierMedicalPatient)">
           {{tr}}Delete{{/tr}}        
@@ -45,9 +47,13 @@ Addiction = {
           {{tr}}Add{{/tr}}        
         </button>
         {{/if}}
-        {{$curr_addiction->addiction}}
-
-         </form>
+        
+        <!-- Ajout d'un affichage d'historique de la creation de l'addiction -->
+        <a href="#" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
+          {{$curr_addiction->addiction}}
+        </a>
+            
+        </form>
       </li>
     </ul>
     {{/foreach}}

@@ -807,7 +807,7 @@ Class.extend(ObjectTooltip, {
   addHandlers: function() {
     var eDiv     = $(this.sDiv);
     var eTrigger = $(this.sTrigger);
-    if(this.oOptions.mode == "objectView" || this.oOptions.mode == "translate") {
+    if(this.oOptions.mode == "objectView" || this.oOptions.mode == "translate" || this.oOptions.mode == "objectViewHistory") {
       Event.observe(eTrigger, "mouseout", this.hide.bind(this));
     }
     if(this.oOptions.mode == "objectNotes") {
@@ -849,6 +849,13 @@ Object.extend(ObjectTooltip, {
       sClass: "tooltip",
       width: 600,
       height: 500
+    },
+    objectViewHistory: {
+      module: "system",
+      action: "httpreq_vw_object_history",
+      sClass: "tooltip",
+      width: 300,
+      height: 150
     },
     objectView: {
       module: "system",
