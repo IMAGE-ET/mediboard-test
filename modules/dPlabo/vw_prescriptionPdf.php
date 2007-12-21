@@ -72,8 +72,9 @@ $pdf->writeHTML(utf8_encode("<b>Analyses demandées:</b>"));
 	
 $pdf->SetFillColor(246,246,246);
 $pdf->Cell(25,7,utf8_encode("Identifiant"),1,0,'C',1);
-$pdf->Cell(125,7,utf8_encode("Libellé de l'analyse"),1,0,'C',1);
+$pdf->Cell(105,7,utf8_encode("Libellé de l'analyse"),1,0,'C',1);
 $pdf->Cell(30,7,utf8_encode("Type"),1,0,'C',1);
+$pdf->Cell(20,7,utf8_encode("Loc."),1,0,'C',1);
 $pdf->Ln();
 
 
@@ -131,8 +132,13 @@ foreach($tab_pack_prescription as $key => $pack){
     $examen_labo =& $_item->_ref_examen_labo;
   	//$pdf->SetFillColor(230,245,255);
 	  $pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
-    $pdf->Cell(125,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
+    $pdf->Cell(105,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
 	  $pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
+	  if($examen_labo->_external) {
+  	  $pdf->Cell(20,7,"Externe",1,0,'L',0);
+	  } else {
+	    $pdf->Cell(20,7,"Interne",1,0,'L',0);
+	  }
     $pdf->Ln();
     
     // si on atteint y max de contenu de la page, on change de page
