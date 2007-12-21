@@ -77,6 +77,11 @@ foreach($listSejour as $key => $sejour){
   $sejour->loadNumDossier();
   $affectation =& $sejour->_ref_last_affectation;
   
+  if($affectation->affectation_id){
+  	$affectation->loadReflit();
+  	$affectation->_ref_lit->loadCompleteView();
+  }
+
   foreach($sejour->_ref_affectations as $key => $affect){
     $affect->loadRefLit();
     $affect->_ref_lit->loadCompleteView();

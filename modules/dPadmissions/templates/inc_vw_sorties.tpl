@@ -75,15 +75,15 @@
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       {{$curr_sortie->sortie_prevue|date_format:"%Hh%M"}}
+      {{if $curr_sortie->_ref_last_affectation->confirme}}
+        <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
+      {{/if}}
+        
     </td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr. {{$curr_sortie->_ref_praticien->_view}}</td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       
       {{foreach from=$curr_sortie->_ref_affectations item="affectation"}}
-        {{if $affectation->confirme}}
-          <img src="images/icons/tick.png" alt="Sortie confirmée par le praticien" />
-        {{/if}}
-        
         {{if $affectation->effectue}}
           <div style="display: inline;" class="effectue">{{$affectation->_ref_lit->_view}}</div>
         {{else}}
