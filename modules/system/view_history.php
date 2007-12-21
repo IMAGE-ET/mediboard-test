@@ -44,7 +44,7 @@ if ($filter->object_id   ) $where["object_id"   ] = "= '$filter->object_id'";
 if ($filter->object_class) $where["object_class"] = "= '$filter->object_class'";
 if ($filter->type        ) $where["type"        ] = "= '$filter->type'";
 
-if (isset($_GET["_date_min"]) && isset($_GET["_date_max"])) {
+if ($filter->_date_min && $filter->_date_max) {
   $where["date"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
 }
 

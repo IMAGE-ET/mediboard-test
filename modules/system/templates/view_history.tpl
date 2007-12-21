@@ -52,7 +52,7 @@ function pageMain() {
     </td>
 
     <th>{{mb_label object=$filter field="_date_min"}}</td>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" canNull=false}} </td>
+    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" onchange=""}} </td>
 
   </tr>
   <tr>
@@ -83,7 +83,7 @@ function pageMain() {
    </td>
 
     <th>{{mb_label object=$filter field="_date_max"}}</td>
-    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" canNull=false}} </td>
+    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" onchange=""}} </td>
   </tr>
 
   <tr>
