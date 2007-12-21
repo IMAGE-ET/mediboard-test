@@ -39,7 +39,7 @@
     {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
       {{$curr_sortie->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
     {{else}}
-      {{$curr_sortie->sortie_reelle|date_format:"%H h %M"}}
+      {{$curr_sortie->sortie_reelle|date_format:"%Hh%M"}}
     {{/if}}
       / 
       {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
@@ -74,7 +74,7 @@
 
     </td>
     <td style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
-      {{$curr_sortie->sortie_prevue|date_format:"%H h %M"}}
+      {{$curr_sortie->sortie_prevue|date_format:"%Hh%M"}}
     </td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr. {{$curr_sortie->_ref_praticien->_view}}</td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">

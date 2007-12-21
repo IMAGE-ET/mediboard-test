@@ -61,7 +61,7 @@
           </td>
           <td class="text">
             <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_urgence->operation_id}}">
-            {{$curr_urgence->_datetime|date_format:"%H h %M"}}
+            {{$curr_urgence->_datetime|date_format:"%Hh%M"}}
             </a>
           </td>
           <td class="text">

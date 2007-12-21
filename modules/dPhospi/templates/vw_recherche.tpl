@@ -58,7 +58,7 @@ function pageMain() {
         {{if $typeVue == 0}}
         <tr>
           <th class="title" colspan="4">
-            {{$date_recherche|date_format:"%A %d %B %Y à %H h %M"}} : {{$libre|@count}} lit(s) disponible(s)
+            {{$date_recherche|date_format:"%A %d %B %Y à %Hh%M"}} : {{$libre|@count}} lit(s) disponible(s)
           </th>
         </tr>
         <tr>
@@ -72,7 +72,7 @@ function pageMain() {
           <td class="text">{{$curr_lit.service}}</td>
           <td class="text">{{$curr_lit.chambre}}</td>
           <td class="text">{{$curr_lit.lit}}</td>
-          <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %H h %M"}}
+          <td class="text">{{$curr_lit.limite|date_format:"%A %d %B %Y à %Hh%M"}}
         </tr>
         {{/foreach}}
         {{else}}
