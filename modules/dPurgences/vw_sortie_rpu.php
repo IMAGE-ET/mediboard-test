@@ -51,6 +51,9 @@ $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 foreach($listSejours as &$curr_sejour) {
   $curr_sejour->loadRefsFwd();
   $curr_sejour->loadRefRPU();
+  $curr_sejour->loadNumDossier();
+  // Chargement de l'IPP
+  $curr_sejour->_ref_patient->loadIPP();
 }
 
 // Création du template

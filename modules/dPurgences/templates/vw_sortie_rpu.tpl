@@ -47,7 +47,12 @@ function submitRPU(oForm){
   <tr>
     <td>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+        <strong>
         {{$curr_sejour->_ref_patient->_view}}
+        {{if $curr_sejour->_ref_patient->_IPP}}
+          [{{$curr_sejour->_ref_patient->_IPP}}]
+        {{/if}}
+        </strong>
       </a>
     </td>
     <td>
@@ -70,6 +75,10 @@ function submitRPU(oForm){
 			  {{if $rpu->sortie}}
 			   <tr>
 			     <td>
+			      {{if $curr_sejour->_num_dossier}}
+              [{{$curr_sejour->_num_dossier}}]
+              <br />
+            {{/if}}
 			       <input type="hidden" name="mode_sortie" value="" />
 			       <input type="hidden" name="destination" value="" />
 			       <input type="hidden" name="orientation" value="" />
@@ -83,6 +92,10 @@ function submitRPU(oForm){
 			  {{else}}
 			   <tr>
 			     <td class="text">
+			      {{if $curr_sejour->_num_dossier}}
+              [{{$curr_sejour->_num_dossier}}]
+              <br />
+            {{/if}}
 			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie"}}
 			      {{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination"}} 
 			      {{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation"}}
