@@ -49,10 +49,17 @@ function saveObjectInfos(oObject){
   url.requestUpdate('systemMsg', { waitingText : null });
 }
 
-function view_labo() {
+function view_labo_patient() {
   var url = new Url;
   url.setModuleAction("dPImeds", "httpreq_vw_patient_results");
   url.addParam("patient_id", "{{$patient->_id}}");
+  url.requestUpdate('listView', { waitingText : null });
+}
+
+function view_labo_sejour(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+  url.addParam("sejour_id", sejour_id);
   url.requestUpdate('listView', { waitingText : null });
 }
 

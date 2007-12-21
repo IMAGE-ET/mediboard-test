@@ -44,6 +44,11 @@ function confirmation(oForm, mode){
 
 
 function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm, mode){
+  if(entree_reelle == ""){
+    if(!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')){
+     return false;
+    }
+  }
   if(date_actuelle > sortie_prevue || date_demain < sortie_prevue) {
     if(!confirm('La date enregistrée de sortie est différente de la date prévue, souhaitez vous confimer la sortie du patient ?')){
      return false;
