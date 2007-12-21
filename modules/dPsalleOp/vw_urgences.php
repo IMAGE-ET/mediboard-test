@@ -43,6 +43,6 @@ $smarty->assign("urgences"  , $urgences);
 $smarty->assign("listSalles", $listSalles);
 $smarty->assign("date",$date);
 
-$smarty->display("vw_urgences.tpl");
+$smarty->display("../../dPsalleOp/templates/vw_urgences.tpl");
 
 ?>

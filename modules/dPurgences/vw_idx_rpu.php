@@ -60,8 +60,13 @@ if($order_col == "_patient_id"){
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 foreach($listSejours as &$curr_sejour) {
+  // Chargement du numero de dossier
+  $curr_sejour->loadNumDossier();
   $curr_sejour->loadRefsFwd();
   $curr_sejour->loadRefRPU();
+  
+  // Chargement de l'IPP
+  $curr_sejour->_ref_patient->loadIPP();
 }
 
 

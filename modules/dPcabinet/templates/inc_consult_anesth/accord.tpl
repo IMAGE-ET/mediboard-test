@@ -11,7 +11,10 @@
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   <div id="rpuConsult">
     <div id="rpuHeader" class="accordionTabTitleBar">
-      RPU
+      RPU 
+      {{if $consult->_ref_sejour->_num_dossier}}
+        [{{$consult->_ref_sejour->_num_dossier}}]
+      {{/if}}
     </div>
     <div id="rpuContent"  class="accordionTabContentBox">
      {{include file="inc_vw_rpu.tpl"}}

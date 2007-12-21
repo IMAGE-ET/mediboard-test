@@ -28,6 +28,11 @@ if($rpu->_id) {
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($AppUI->user_id);
   
+  // Chargement de l'IPP ($_IPP)
+  $patient->loadIPP();
+  // Chargement du numero de dossier ($_num_dossier)
+  $sejour->loadNumDossier();
+  
 } else {
   $rpu->_responsable_id = $AppUI->user_id;
   $rpu->_entree         = mbDateTime();

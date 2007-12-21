@@ -13,7 +13,9 @@ function verifNonEmpty(oElement){
 function pageMain() {
   regFieldCalendar("editRpu", "_entree", true);
   
-  reloadDossierMedicalPatient();
+  {{if $rpu->_id && $can->edit}}
+    reloadDossierMedicalPatient();
+  {{/if}}
   
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
@@ -39,7 +41,15 @@ function pageMain() {
 <table class="form">
   <tr>
     {{if $rpu->_id}}
-    <th class="title modify" colspan="4">Modification de l'urgence de {{$rpu->_view}}</th>
+    <th class="title modify" colspan="4">
+    <a style="float:right;" href="#" onclick="view_log('CRPU',{{$rpu->_id}})">
+      <img src="images/icons/history.gif" alt="historique" />
+    </a>
+    Modification de l'urgence de {{$rpu->_view}}
+    {{if $rpu->_ref_sejour->_num_dossier}}
+      [{{$rpu->_ref_sejour->_num_dossier}}]
+    {{/if}}
+    </th>
     {{else}}
     <th class="title" colspan="4">Création d'une urgence</th>
     {{/if}}

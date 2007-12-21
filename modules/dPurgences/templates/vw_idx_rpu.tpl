@@ -77,13 +77,23 @@ function pageMain() {
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+        <strong>
         {{$curr_sejour->_ref_patient->_view}}
+        {{if $curr_sejour->_ref_patient->_IPP}}
+          [{{$curr_sejour->_ref_patient->_IPP}}]
+        {{/if}}
+        </strong>
       </a>
       
     </td>
     <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
+        <strong>
+        {{if $curr_sejour->_num_dossier}}
+          [{{$curr_sejour->_num_dossier}}]
+        {{/if}}
+        </strong>
       </a>
     </td>
     

@@ -1,1 +1,0 @@
-{{include file="../../dPsalleOp/templates/vw_urgences.tpl"}}
