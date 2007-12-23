@@ -35,7 +35,10 @@ $dsConfig["dbuser"] = mbGetValueFromGet("master_user");
 $dsConfig["dbpass"] = mbGetValueFromGet("master_pass");
 $dsConfig["dbname"] = "";
 
-$ds = CSQLDataSource::get($dsn);
+if (null == $ds = CSQLDataSource::get($dsn)) {
+  $AppUI->stepAjax("Connexion vers la DSN '$dsn' échouée", UI_MSG_ERROR);
+}
+
 $AppUI->stepAjax("Connexion vers la DSN '$dsn' réussie");
 
 foreach ($ds->queriesForDSN($user, $pass, $name) as $key => $query) {
