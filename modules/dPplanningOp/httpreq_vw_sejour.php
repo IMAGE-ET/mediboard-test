@@ -65,6 +65,7 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));
 $smarty->assign("heure_sortie_ambu",   $heure_sortie_ambu);
 $smarty->assign("heure_sortie_autre",  $heure_sortie_autre);
 $smarty->assign("heure_entree_veille", $heure_entree_veille);

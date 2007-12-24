@@ -340,7 +340,18 @@ function checkChambreSejourEasy(){
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
-    {{mb_field object=$sejour field="type" onchange="changeTypeHospi(this.value)"}}
+    <select name="type" onchange="changeTypeHospi(this.value)">
+    {{foreach from=$sejour->_enumsTrans.type item="curr_type" key="key"}}
+     {{if $key == 'urg'}}
+       {{if $urgInstalled}}
+         <option value="{{$key}}">{{$curr_type}}</option>
+       {{/if}}
+     {{else}}
+       <option value="{{$key}}">{{$curr_type}}</option>
+     {{/if}}
+    {{/foreach}}
+    </select>
+  
   </td>
   <td colspan="2">
     <div id="showFor-comp" {{if !$sejour->_id || $sejour->type != "comp"}} style="display: none;" {{/if}}>

@@ -18,6 +18,16 @@ function checkPraticien(oForm){
   return true;
 }
 
+ 
+function printMainCourante() {
+  var url = new Url;
+  url.setModuleAction("dPurgences", "print_main_courante");
+  url.addParam("date", "{{$date}}");
+  url.popup(800, 600, "Impression main courante");
+}
+
+
+
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
@@ -27,18 +37,16 @@ function pageMain() {
 
 <table style="width:100%">
   <tr>
-  <td>
-  <a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
-  Ajouter un patient
-</a>
-  
-  </td>
-  <th>
-   le
-   {{$date|date_format:"%A %d %B %Y"}}
-   <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
-  </th>
-
+    <td>
+      <a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
+        Ajouter un patient
+      </a> 
+    </td>
+    <th>
+     le
+     {{$date|date_format:"%A %d %B %Y"}}
+     <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
+    </th>
     <td style="text-align: right">
      Type d'affichage
      <form name="selView" action="?m=dPurgences&amp;tab=vw_idx_rpu" method="post">
@@ -47,6 +55,8 @@ function pageMain() {
 	        <option value="prendre_en_charge" {{if $selAffichage == "prendre_en_charge"}} selected = "selected" {{/if}}>A prendre en charge</option>
 	      </select>
 	    </form>
+      <a href="#" onclick="printMainCourante()" class="buttonprint">Main courante</a>
+    
     </td>
   </tr>
 </table>
@@ -65,7 +75,7 @@ function pageMain() {
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
-    <td {{if $curr_sejour->_ref_rpu->ccmu}}class="ccmu-{{$curr_sejour->_ref_rpu->ccmu}}"{{else}}style='background-color: #fff'{{/if}} ">
+    <td {{if $curr_sejour->_ref_rpu->ccmu}}class="ccmu-{{$curr_sejour->_ref_rpu->ccmu}}"{{else}}style="background-color: #fff"{{/if}}>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         {{if $curr_sejour->_ref_rpu->ccmu}}
           {{tr}}CRPU.ccmu.{{$curr_sejour->_ref_rpu->ccmu}}{{/tr}}
@@ -73,7 +83,7 @@ function pageMain() {
       </a>
     </td>
     <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}">
+      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
         <img src="images/icons/edit.png" alt="modifier" />
       </a>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
@@ -150,10 +160,17 @@ function pageMain() {
           - 
          {{/if}}
        {{else}}
-         {{if $can->edit}}
-         <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir prise en charge</a>
-         {{/if}}
          Patient déjà pris en charge par {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
+         {{if $can->edit}}
+         <br />
+         <a style="display: inline" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">
+           Voir prise en charge 
+         </a>
+         <a style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+           <img src="images/icons/planning.png" alt="Planifier"/>
+         </a>
+         {{/if}}
+         
        {{/if}}
     </td>
   </tr>

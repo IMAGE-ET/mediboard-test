@@ -157,6 +157,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 
+$smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));
 
 $smarty->assign("heure_sortie_ambu",   $heure_sortie_ambu);
 $smarty->assign("heure_sortie_autre",  $heure_sortie_autre);
