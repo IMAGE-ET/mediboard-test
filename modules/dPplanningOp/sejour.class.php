@@ -453,8 +453,10 @@ class CSejour extends CCodableCCAM {
   }
   
   function loadRefRPU(){
-    if (null == $this->_ref_rpu = reset($this->loadBackRefs("rpu"))) {
+    if (null == $ref_rpu = $this->loadBackRefs("rpu")) {
       return;
+    } else {
+      $this->_ref_rpu = reset($ref_rpu);
     }
   }
   
