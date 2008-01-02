@@ -152,8 +152,29 @@ $atelephoner      = $doc->addElement($dossier,"atelephoner", "");
  
 // Prescription --> Analyse
 $analyse          = $doc->addElement($prescription, "Analyse"); 
-foreach ($mbPrescription->_ref_examens as $curr_analyse) {
-  $code = $doc->addElement($analyse,"code", $curr_analyse->identifiant);
+
+
+// Tableau d'analyses
+$tab_prescription = array();
+
+// Parcours des analyses
+foreach($mbPrescription->_ref_prescription_items as $key => $item){
+  // Si l'analyse fait parti d'un pack, on stocke le code du pack
+  if($item->_ref_pack->_id){
+    $tab_prescription[$item->_ref_pack->_id] = $item->_ref_pack->code;  
+  }
+  // Sinon, on stocke l'identifiant de l'analyse si elle est externe
+  else {
+    $examen =& $item->_ref_examen_labo;
+    if($examen->_external){
+      $tab_prescription[] = $examen->identifiant;    
+    }
+  }
+}
+
+// Ajout des codes dans le fichier xml
+foreach($tab_prescription as $curr_analyse){
+  $code = $doc->addElement($analyse,"code", $curr_analyse);
 }
 
 
