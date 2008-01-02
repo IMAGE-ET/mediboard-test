@@ -65,6 +65,7 @@ function pageMain() {
        {{assign var="vue" value="0"}}
        {{assign var="userSel" value=$curr_day.anesthesiste}}
        {{assign var="consult" value=$consult}}
+       {{assign var="current_m" value="dPcabinet"}}
        {{include file="../../dPcabinet/templates/inc_list_consult.tpl"}}
      </td>
      {{/foreach}}
