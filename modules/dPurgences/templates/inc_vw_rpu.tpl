@@ -57,7 +57,7 @@ function submitRPU(){
 	  
 	  <tr>
 	    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-	    <td>{{mb_field object=$rpu field="ccmu" onchange="submitRPU();"}}</td>
+	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="submitRPU();"}}</td>
 	    
 	    <th>{{mb_label object=$rpu field="mode_sortie"}}</th>
 	    <td>{{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="submitRPU();"}}</td>

@@ -2,6 +2,17 @@
 
 <script type="text/javascript">
 
+function submitRadio(oForm){
+  submitFormAjax(oForm, 'systemMsg', {onComplete: function() { reloadRadio(oForm) } }); 
+}
+
+function reloadRadio(oForm){
+  var url = new Url;
+  url.setModuleAction("dPurgences", "httpreq_vw_radio");
+  url.addParam("rpu_id", oForm.rpu_id.value);
+  url.requestUpdate('radio', { waitingText: null } );
+}
+
 function verifNonEmpty(oElement){
   var notWhitespace = /\S/;
   if(notWhitespace.test(oElement.value)){
@@ -146,25 +157,44 @@ function pageMain() {
 <!-- Dossier Médical du patient -->
 {{if $rpu->_id && $can->edit}}
 <table width="100%" class="form">
-  <tr id="ant-trigger">
-    <th colspan="6" class="category">
-     Dossier Médical du patient
-    </th>
-  </tr>
-  <tbody id="ant">
-    <tr class="script">
-      <td>
-        <script type="text/javascript">new PairEffect("ant");</script>
-      </td>
-    </tr>
-    <tr>
-      <td>
-        {{assign var="current_m" value="dPurgences"}}
-        {{assign var="_is_anesth" value="0"}}
-        {{assign var="consult" value=$rpu->_ref_consult}}
-        {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
-      </td>
-    </tr>
-  </tbody>
-</table>
+  <tr>
+     <td>
+      <table width="100%">
+      <tr id="ant-trigger">
+        <th colspan="6" class="category">
+         Dossier Médical du patient
+        </th>
+      </tr>
+      <tbody id="ant">
+        <tr class="script">
+          <td>
+           <script type="text/javascript">new PairEffect("ant");</script>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            {{assign var="current_m" value="dPurgences"}}
+            {{assign var="_is_anesth" value="0"}}
+            {{assign var="consult" value=$rpu->_ref_consult}}
+            {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
+          </td>
+           
+        </tr>
+      </tbody>
+     </table>
+     </td>
+     <td style="width: 100px">
+       <table class="form">
+         <tr>
+           <th colspan="2" class="category">Autres informations</th>
+         </tr>
+         <tr>
+           <td id="radio">
+             Radio:
+             {{include file="inc_vw_radio.tpl"}}
+           </td>
+         </tr>
+       </table>
+     </td>
+   </table>
 {{/if}}

@@ -28,7 +28,8 @@ class CRPU extends CMbObject {
   var $mode_sortie     = null;
   var $destination     = null;
   var $orientation     = null;
-  
+  var $radio_debut     = null;
+  var $radio_fin       = null;
   
   // Distant Fields
   var $_count_consultations = null;
@@ -73,8 +74,10 @@ class CRPU extends CMbObject {
       "sortie"          => "dateTime",
       "mode_sortie"     => "enum list|6|7|8|9",
       "destination"     => "enum list|1|2|3|4|6|7",
-      "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO"
-    );
+      "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
+      "radio_debut"     => "dateTime",
+      "radio_fin"       => "dateTime"
+     );
   }
   
   function updateFormFields() {
