@@ -108,7 +108,7 @@ $num = $numPrat.$id400Presc;
 
 // Initialisation du code barre, => utilisation par default du codage C128B
 // L'affichage du code barre est realisee dans la fonction redefinie Footer dans la classe CPrescriptionPdf
-$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, $prescription->_ref_patient->_view, $prescription->_ref_patient->sexe,mbTranformTime($prescription->_ref_patient->naissance,null,"%d-%m-%y"), mbTranformTime($prescription->date,null,"%d-%m-%y %H:%M"));
+$pdf->SetBarcode($num, $prescription->_ref_praticien->_user_last_name, substr($prescription->_ref_patient->_view, 0, 20), $prescription->_ref_patient->sexe,mbTranformTime($prescription->_ref_patient->naissance,null,"%d-%m-%y"), mbTranformTime($prescription->date,null,"%d-%m-%y %H:%M"));
 
 
 
@@ -157,9 +157,15 @@ foreach($tab_prescription as $key => $_item){
   $examen_labo =& $_item->_ref_examen_labo;
   //$pdf->SetFillColor(230,245,255);
 	$pdf->Cell(25,7,utf8_encode($examen_labo->identifiant),1,0,'L',0);
-  $pdf->Cell(125,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
+  $pdf->Cell(105,7,utf8_encode($examen_labo->libelle),1,0,'L',0);
 	$pdf->Cell(30,7,utf8_encode($examen_labo->type_prelevement),1,0,'L',0);
-  $pdf->Ln();
+  if($examen_labo->_external) {
+    $pdf->Cell(20,7,"Externe",1,0,'L',0);
+	} else {
+	  $pdf->Cell(20,7,"Interne",1,0,'L',0);
+	}
+	$pdf->Ln();
+	
   if($pdf->getY() > 200){
     $pdf->AddPage();
   }
