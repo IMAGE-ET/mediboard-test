@@ -132,7 +132,7 @@
       {{/if}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-desctination{{/tr}}:</strong>
+      <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
       {{if $rpu->destination}}
       {{mb_value object=$rpu field=destination}}
       {{/if}}
