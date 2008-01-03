@@ -84,9 +84,16 @@ $consult->arrivee = $day_now." ".$hour_now;
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 
-// Motif de la consultation
+
 if(isset($_POST["sejour_id"])){
+  // Motif de la consultation
   $consult->motif = "Passage aux urgences";
+  
+  // Changement de praticien pour le sejour
+  $sejour = new CSejour();
+  $sejour->load($_POST["sejour_id"]);
+  $sejour->praticien_id = $_POST["prat_id"];
+  $sejour->store();
 } else {
   $consult->motif = "Consultation immédiate";
 }
