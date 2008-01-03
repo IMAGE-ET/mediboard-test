@@ -177,7 +177,8 @@ function popEtatSejour(sejour_id) {
      </div>
   </td>
   <td style="text-align:right;">
-  {{if $curr_consult->_canRead}}
+ 
+  {{if $curr_sejour->_canRead}}
     <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
       onclick="setObject( {
         objClass: 'CConsultation', 
@@ -187,7 +188,7 @@ function popEtatSejour(sejour_id) {
       {{$curr_consult->_nb_files_docs}}
       <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
     </a>
-    {{/if}}
+   {{/if}}
   </td>
 </tr>
 

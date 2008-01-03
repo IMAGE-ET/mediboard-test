@@ -122,6 +122,7 @@ class CRPU extends CMbObject {
       
       $this->_ref_consult->loadRefPlageConsult();
       $this->_ref_consult->_ref_plageconsult->_ref_chir->loadRefFunction();
+      $this->_ref_consult->getNumDocsAndFiles();
     }
   }
   
