@@ -240,5 +240,7 @@
 
 </table>
 
-{{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
-{{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
+{{if !$object->_ref_rpu->_id}}
+  {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
+  {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
+{{/if}}
