@@ -119,7 +119,9 @@ class CRPU extends CMbObject {
       if(null == $this->_ref_consult = reset($this->_ref_sejour->loadBackRefs("consultations"))){
         return;
       }
+      
       $this->_ref_consult->loadRefPlageConsult();
+      $this->_ref_consult->_ref_plageconsult->_ref_chir->loadRefFunction();
     }
   }
   

@@ -453,6 +453,7 @@ class CSejour extends CCodableCCAM {
   }
   
   function loadRefRPU(){
+    $this->_ref_rpu = new CRPU();
     if (null == $ref_rpu = $this->loadBackRefs("rpu")) {
       return;
     } else {
@@ -488,6 +489,10 @@ class CSejour extends CCodableCCAM {
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     } 
+    
+    
+    $this->loadRefRPU();
+    $this->_ref_rpu->loadRefSejour();
     
     $this->loadNumDossier();
     

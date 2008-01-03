@@ -71,6 +71,14 @@ $patient->_ref_dossier_medical->loadRefsTraitements();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsAddictions();
 
+// Suppression des consultations d'urgences
+foreach($patient->_ref_consultations as $keyConsult => $consult){
+  if($consult->motif == "Passage aux urgences"){
+    unset($patient->_ref_consultations[$keyConsult]);
+  }
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
 

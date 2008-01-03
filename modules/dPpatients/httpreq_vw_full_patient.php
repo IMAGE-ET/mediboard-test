@@ -60,6 +60,13 @@ if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] =
   $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
 }
 
+// Suppression des consultations d'urgences
+foreach($patient->_ref_consultations as $keyConsult => $consult){
+  if($consult->motif == "Passage aux urgences"){
+    unset($patient->_ref_consultations[$keyConsult]);
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 

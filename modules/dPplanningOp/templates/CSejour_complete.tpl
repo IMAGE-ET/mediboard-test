@@ -95,6 +95,75 @@
   </tr>
   {{/if}}
 
+  {{if $object->_ref_rpu->_id}}
+  <tr>
+    <th class="category" colspan="2">Résumé de passage aux urgences</th>
+  </tr>
+  <tr>
+  {{assign var="rpu" value=$object->_ref_rpu}}
+    <td>
+      <strong>{{tr}}CRPU-_entree{{/tr}}:</strong>
+      {{mb_value object=$rpu field=_entree}}
+    </td>
+    <td>
+      <strong>{{tr}}CRPU-sortie{{/tr}}:</strong>
+      {{mb_value object=$rpu field=sortie}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>{{tr}}CRPU-ccmu{{/tr}}:</strong>
+      {{if $rpu->ccmu}}
+      {{mb_value object=$rpu field=ccmu}}
+      {{/if}}
+    </td>
+    <td>
+      <strong>{{tr}}CRPU-mode_sortie{{/tr}}:</strong>
+      {{if $rpu->mode_sortie}}
+      {{mb_value object=$rpu field=mode_sortie}}
+      {{/if}}
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <strong>{{tr}}CRPU-provenance{{/tr}}:</strong>
+      {{if $rpu->provenance}}
+      {{mb_value object=$rpu field=provenance}}
+      {{/if}}
+    </td>
+    <td>
+      <strong>{{tr}}CRPU-desctination{{/tr}}:</strong>
+      {{if $rpu->destination}}
+      {{mb_value object=$rpu field=destination}}
+      {{/if}}
+    </td>
+  </tr>
+    <tr>
+    <td>
+      <strong>{{tr}}CRPU-transport{{/tr}}:</strong>
+      {{if $rpu->transport}}
+      {{mb_value object=$rpu field=transport}}
+      {{/if}}
+    </td>
+    <td>
+      <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
+      {{if $rpu->orientation}}
+      {{mb_value object=$rpu field=orientation}}
+      {{/if}}
+    </td>
+  </tr>
+    <tr>
+    <td>
+      <strong>{{tr}}CRPU-prise_en_charge{{/tr}}:</strong>
+      {{if $rpu->prise_en_charge}}
+      {{mb_value object=$rpu field=prise_en_charge}}
+      {{/if}}
+    </td>
+    <td>
+     
+    </td>
+  </tr>
+  {{else}}
   <tr>
     <th class="category" colspan="2">{{tr}}msg-CSejour-hospi{{/tr}}</th>
   </tr>
@@ -160,7 +229,7 @@
       {{mb_value object=$sejour field="repas_sans_residu"}}
     </td>
   </tr>
-  
+  {{/if}}
   
   <table class="form">
   {{assign var="vue" value="complete"}}

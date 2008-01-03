@@ -86,6 +86,8 @@ function printPatient(id) {
 
 function pageMain() {
   
+  ViewFullPatient.main();
+  
   if("{{$consultation_id}}" != '0'){
     viewCompleteItem('CConsultation', "{{$consultation_id}}");
   }
@@ -97,9 +99,6 @@ function pageMain() {
   if("{{$sejour_id}}" != '0'){
     viewCompleteItem('CSejour', "{{$sejour_id}}");
   }
-  
-  ViewFullPatient.main();
-  
   
   initNotes();
 }

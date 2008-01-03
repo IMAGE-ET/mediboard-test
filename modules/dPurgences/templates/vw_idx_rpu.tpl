@@ -83,9 +83,6 @@ function pageMain() {
       </a>
     </td>
     <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
-        <img src="images/icons/edit.png" alt="modifier" />
-      </a>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         <strong>
         {{$curr_sejour->_ref_patient->_view}}
@@ -163,9 +160,17 @@ function pageMain() {
          Patient déjà pris en charge par {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
          {{if $can->edit}}
          <br />
+         <!-- 
          <a style="display: inline" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">
            Voir prise en charge 
          </a>
+          -->
+          
+         <a class="action" style="display: inline" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}&amp;sejour_id={{$curr_sejour->_id}}">
+           Voir prise en charge
+         </a>
+      
+      
          <a style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
            <img src="images/icons/planning.png" alt="Planifier"/>
          </a>

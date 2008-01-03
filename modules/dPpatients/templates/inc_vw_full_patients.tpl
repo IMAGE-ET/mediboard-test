@@ -144,6 +144,55 @@ function popEtatSejour(sejour_id) {
 </tr>
 {{/if}}
 
+<!-- Si le sejour a un RPU et une consultation associée-->
+{{if $curr_sejour->_ref_rpu && $curr_sejour->_ref_rpu->_id && $curr_sejour->_ref_rpu->_ref_consult->_id}}
+{{assign var="curr_consult" value=$curr_sejour->_ref_rpu->_ref_consult}}
+<tr>
+  <td>
+    {{if $curr_consult->annule}}
+    [ANNULE]<br />
+    {{else}}
+    <a href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->consultation_id}}">
+      <img src="images/icons/planning.png" alt="modifier" title="rendez-vous" />
+    </a>
+    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->consultation_id}}">
+      <img src="images/icons/edit.png" alt="modifier" title="modifier" />
+    </a>
+    {{/if}}
+    
+
+      {{assign var="object_id" value=$curr_consult->_id}}
+      {{assign var="object_class" value="CConsultation"}}
+    
+    <a href="#"
+      onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$object_class}}', object_id: {{$object_id}} } })"
+      onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
+      Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+    </a>
+  </td>
+  <td>
+     {{assign var=praticien value=$curr_consult->_ref_plageconsult->_ref_chir}}
+     <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+       {{$praticien->_view}}
+     </div>
+  </td>
+  <td style="text-align:right;">
+  {{if $curr_consult->_canRead}}
+    <a href="#" title="{{$curr_consult->_nb_files_docs}} doc(s)"
+      onclick="setObject( {
+        objClass: 'CConsultation', 
+        keywords: '', 
+        id: {{$curr_consult->consultation_id}}, 
+        view: '{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
+      {{$curr_consult->_nb_files_docs}}
+      <img align="top" src="images/icons/next{{if !$curr_consult->_nb_files_docs}}_red{{/if}}.png" title="{{$curr_consult->_nb_files_docs}} doc(s)" alt="Afficher les documents"  />
+    </a>
+    {{/if}}
+  </td>
+</tr>
+
+{{/if}}
+
 {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
 <tr>
   <td style="padding-left: 20px;">
