@@ -20,9 +20,9 @@
 {{foreach from=$objects item=_object}}
   <td>
 	{{foreach from=$_object->_back.$backName item=backRef}}
-    <div onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$backRef->_class_name}}', object_id: '{{$backRef->_id}}' } })">
+    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$backRef->_class_name}}', object_id: '{{$backRef->_id}}' } })">
       {{$backRef->_view}}
-    </div>
+    </span>
 	{{foreachelse}}
 	<em>Aucun objet</em>
 	{{/foreach}}

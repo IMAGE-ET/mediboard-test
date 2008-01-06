@@ -329,28 +329,6 @@ function submitFdr(oForm) {
     <!-- Documents -->
 
     <td>
-    <table class="form">
-      {{foreach from=$consult->_ref_documents item=document}}
-      <tr>
-        <th>{{$document->nom}}</th>
-        <td class="button">
-          <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPcompteRendu" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_modele_aed" />
-          {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
-          <input type="hidden" name="object_id" value="{{$consult->_ref_consult_anesth->consultation_anesth_id}}" />
-          {{else}}
-          <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
-          {{/if}}          
-          {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-          <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
-          <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" >{{tr}}Delete{{/tr}}</button>
-          </form>
-        </td>
-      </tr>
-      {{/foreach}}
-    </table>
     
     <form name="newDocumentFrm" action="?m={{$m}}" method="post">
     <table class="form">
@@ -381,6 +359,29 @@ function submitFdr(oForm) {
       </tr>
     </table>
     </form>
+    
+    <ul>
+      {{foreach from=$consult->_ref_documents item=document}}
+      <li>
+        <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPcompteRendu" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_modele_aed" />
+        {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
+        <input type="hidden" name="object_id" value="{{$consult->_ref_consult_anesth->consultation_anesth_id}}" />
+        {{else}}
+        <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
+        {{/if}}          
+        {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
+        <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
+        <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" >{{tr}}Delete{{/tr}}</button>
+        </form>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">
+          {{$document->nom}}
+        </span>
+      </li>
+      {{/foreach}}
+    </ul>
     
     </td>
 	</tr>
@@ -427,9 +428,9 @@ function submitFdr(oForm) {
         {{foreach from=$consult->_ext_fses key=_id_fse item=_ext_fse}}
 				<tr>
 				  <td>
-				  	<label onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_id_fse}}' } })">
 				  	  {{$_ext_fse->_view}}
-				  	</label>
+				  	</span>
 		      </td>
 	        {{if $_ext_fse->_annulee}}
 	        <td class="cancelled">

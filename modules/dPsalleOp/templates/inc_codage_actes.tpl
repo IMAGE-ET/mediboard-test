@@ -160,7 +160,7 @@ function viewCode(code, class){
           {{/if}}
           </strong>
           {{if $acte->code_association != $acte->_guess_association}}
-            <label onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
               <strong>
                 {{if $acte->_guess_association}}
                   ({{$acte->_guess_association}}
@@ -169,7 +169,7 @@ function viewCode(code, class){
                 {{/if}}
                 conseillé)
               </strong>
-            </label>
+            </span>
           {{/if}}
           
           

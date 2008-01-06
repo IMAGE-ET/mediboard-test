@@ -69,8 +69,11 @@
             </a>
           </td>
           <td class="{{cycle name=celltxt values="dark, light"}} text" style="vertical-align: middle;">
-            <span onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
               {{$curr_file->_view}}
+            </span>
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: '{{$curr_file->_class_name}}', object_id: {{$curr_file->_id}} } });">
+              <em>(historique)</em>
             </span>
             <hr />
 
@@ -94,17 +97,29 @@
             {{/if}}
 
             {{if $canFile->edit && !$accordDossier}}
+              <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+                {{tr}}Edit{{/tr}}
+              </button>
+              <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(
+                this.form, {
+                  typeName:'{{$confirmDeleteType}}',
+                  objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
+                  ajax:1,
+                  target:'systemMsg'
+                },{
+                  onComplete:reloadAfterDeleteFile
+                } );">
+                Supprimer
+              </button>
+              
               <select name="file_category_id" onchange="submitFileChangt(this.form)">
-                <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
+                <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
                 {{foreach from=$listCategory item=curr_cat}}
                 <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
                   {{$curr_cat->nom}}
                 </option>
                 {{/foreach}}
               </select>
-              <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(this.form, {typeName:'{{$confirmDeleteType}}',objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterDeleteFile})">
-                Supprimer
-              </button>
             </form>
             {{/if}}
 

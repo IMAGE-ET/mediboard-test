@@ -49,9 +49,9 @@ Addiction = {
         {{/if}}
         
         <!-- Ajout d'un affichage d'historique de la creation de l'addiction -->
-        <a href="#" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
           {{$curr_addiction->addiction}}
-        </a>
+        </span>
             
         </form>
       </li>

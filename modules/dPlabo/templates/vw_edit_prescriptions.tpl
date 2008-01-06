@@ -276,9 +276,9 @@ function pageMain() {
             <input type="hidden" name="m" value="dPlabo" />
             <input type="hidden" name="patient_id" value="{{$patient->_id}}" onchange="this.form.submit()"/>
             <input type="hidden" name="prescription_labo_id" value="" />
-            <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$patient->_id}} } })">
+            <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$patient->_id}} } })">
             <input type="text" readonly="readonly" name="patNom" value="{{$patient->_view}}" />
-            </a>
+            </span>
             <button class="search" type="button" onclick="PatSelector.pop();">Chercher</button>
             {{if $patient->_id}}
             <button class="new" type="button" onclick="Prescription.edit();">

@@ -87,19 +87,30 @@ File = {
           </a>
           <br />  
             
-          {{if $canFile->edit && !$accordDossier}}  
-            Dï¿½placer vers 
-            <select name="file_category_id" onchange="submitFileChangt(this.form)">
-              <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
-              {{foreach from=$listCategory item=curr_cat}}
-                <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
-                  {{$curr_cat->nom}}
-                </option>
-              {{/foreach}}
-            </select>
-            <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(this.form, {typeName:'{{$confirmDeleteType}}',objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadAfterDeleteFile})">
+          {{if $canFile->edit && !$accordDossier}}
+            <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+              {{tr}}Edit{{/tr}}
+            </button>
+            <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(
+              this.form, {
+                typeName:'{{$confirmDeleteType}}',
+                objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
+                ajax:1,
+                target:'systemMsg'
+              },{
+                onComplete:reloadAfterDeleteFile
+              } );">
               Supprimer
             </button>
+            
+            <select name="file_category_id" onchange="submitFileChangt(this.form)">
+              <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
+              {{foreach from=$listCategory item=curr_cat}}
+              <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
+                {{$curr_cat->nom}}
+              </option>
+              {{/foreach}}
+            </select>
           {{/if}}
           </form>
         </td>

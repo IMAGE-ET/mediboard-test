@@ -9,17 +9,25 @@
   <tr>
     <td>
       <strong>Date de création :</strong>
-	  {{$file->file_date|date_format:"%d %B %Y à %H:%M:%S"}}
-	  <br />
+	    {{$file->file_date|date_format:"%d %B %Y à %H:%M:%S"}}
+	  </td>
+	</tr>
+	<tr>
+	  <td>
       <strong>Propriétaire :</strong>
-	  {{$file->_ref_file_owner->_view}}
-	  <br />
+	    {{$file->_ref_file_owner->_view}}
+	  </td>
+	</tr>
+	<tr>
+	  <td>
       <strong>Poids :</strong>
-	  {{$file->_file_size}}
-	  <br />
+	    {{$file->_file_size}}
+	  </td>
+	</tr>
+	<tr>
+	  <td class="text">
       <strong>Associé à :</strong>
-	  {{$file->_ref_object->_view}}
-	  <br />
+	    {{$file->_ref_object->_view}}
     </td>
   </tr>
 </table>

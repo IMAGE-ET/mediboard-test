@@ -1075,6 +1075,10 @@ div.big-error {
 
   /* @import "./tooltip.css   */
 
+span.tooltip-trigger {
+  cursor: pointer;
+}
+
 div.tooltip {
   padding: 0px;
   margin-left: 20px;

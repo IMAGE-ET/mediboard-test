@@ -109,4 +109,11 @@ function reloadAfterSaveDoc() {
   reloadAfterUploadFile(); 
 }
 
+function editDocument(compte_rendu_id) {
+  var url = new Url;
+  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("compte_rendu_id", compte_rendu_id);
+  url.popup(700, 700, "Document");
+}
+
 </script>

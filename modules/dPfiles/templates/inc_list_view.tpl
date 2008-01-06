@@ -60,17 +60,11 @@
             {{/if}}
             
             {{if $canFile->edit && !$accordDossier}}
-              <label for="file_category_id" title="Déplacer le fichier dans une autre catégorie">Déplacer</label>
-              <select name="file_category_id" onchange="submitFileChangt(this.form)">
-                <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune</option>
-                {{foreach from=$listCategory item=curr_cat}}
-                <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
-                  {{$curr_cat->nom}}
-                </option>
-                {{/foreach}}
-              </select>
+              <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+                {{tr}}Edit{{/tr}}
+              </button>
               <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(
-              	this.form, {
+                this.form, {
                   typeName:'{{$confirmDeleteType}}',
                   objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
                   ajax:1,
@@ -80,6 +74,15 @@
                 } );">
                 Supprimer
               </button>
+              
+              <select name="file_category_id" onchange="submitFileChangt(this.form)">
+                <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
+                {{foreach from=$listCategory item=curr_cat}}
+                <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
+                  {{$curr_cat->nom}}
+                </option>
+                {{/foreach}}
+              </select>
             </form>
             {{/if}}
           </td>

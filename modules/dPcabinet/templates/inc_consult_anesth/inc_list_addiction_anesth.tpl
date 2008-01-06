@@ -18,9 +18,9 @@
         <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadDossierMedicalSejour)">
         {{tr}}Delete{{/tr}}
         </button>
-         <a href="#" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
+         <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
            {{$curr_addiction->addiction}}
-         </a>
+         </span>
        </form>
       </li>
     </ul>

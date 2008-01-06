@@ -91,12 +91,12 @@ function popEtatSejour(sejour_id) {
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
 
-    <a href="#"
+    <span class="tooltip-trigger"
       onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CSejour', object_id: {{$curr_sejour->_id}} } })"
       onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
-    </a>
+    </span>
   </td>
   <td>
      {{assign var=praticien value=$curr_sejour->_ref_praticien}}
@@ -201,11 +201,11 @@ function popEtatSejour(sejour_id) {
       <img src="images/icons/edit.png" alt="Planifier"/>
     </a>
   
-    <a href="#"
+    <span class="tooltip-trigger"
       onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
       onclick="viewCompleteItem('COperation', {{$curr_op->_id}}); ViewFullPatient.select(this)">
       Intervention du {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
-    </a>
+    </span>
   </td>
   <td>
      {{assign var=praticien value=$curr_op->_ref_chir}}
@@ -244,11 +244,11 @@ function popEtatSejour(sejour_id) {
     </a>
     {{/if}}
     <img src="images/icons/anesth.png" alt="Consultation d'anesthésie" title="Consultation d'anesthésie" />
-    <a href="#"
+    <span class="tooltip-trigger"
       onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultAnesth', object_id: {{$consult_anesth->_id}} } })"
       onclick="viewCompleteItem('CConsultAnesth', {{$consult_anesth->_id}}); ViewFullPatient.select(this)">
       {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-    </a>
+    </span>
   </td>
   <td>
      {{assign var=praticien value=$curr_consult->_ref_chir}}
@@ -312,11 +312,11 @@ function popEtatSejour(sejour_id) {
       {{assign var="object_class" value="CConsultation"}}
     {{/if}}
     
-    <a href="#"
+    <span class="tooltip-trigger"
       onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$object_class}}', object_id: {{$object_id}} } })"
       onclick="viewCompleteItem('{{$object_class}}', {{$object_id}}); ViewFullPatient.select(this)">
       {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-    </a>
+    </span>
   </td>
   <td>
      {{assign var=praticien value=$curr_consult->_ref_chir}}
