@@ -114,7 +114,7 @@ class CRPU extends CMbObject {
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefsFwd();
     $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
-    
+    $this->_ref_consult = new CConsultation();
     if($this->_count_consultations){
       if(null == $this->_ref_consult = reset($this->_ref_sejour->loadBackRefs("consultations"))){
         return;
