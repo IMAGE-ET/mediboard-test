@@ -57,6 +57,11 @@ function popEtatSejour(sejour_id) {
   <th class="title">
     {{if $patient->_canRead}}
     <div style="float:right;">
+      {{if $diagnosticsInstall}}
+      <a href="#" onclick="view_labo_patient()">
+        <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
+      </a>
+      {{/if}}
       <a href="#" 
         onclick="setObject( {
           objClass: 'CPatient', 
@@ -106,9 +111,11 @@ function popEtatSejour(sejour_id) {
   </td>
   <td style="text-align:right;">
   {{if $curr_sejour->_canRead}}
+    {{if $diagnosticsInstall}}
     <a href="#" onclick="view_labo_sejour({{$curr_sejour->_id}})">
       <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
     </a>
+    {{/if}}
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 
       keywords: '', 
@@ -343,16 +350,6 @@ function popEtatSejour(sejour_id) {
 {{/foreach}}
 
 </tbody>
-
-{{if $diagnosticsInstall}}
-<tr>
-  <th colspan="4" class="title">
-    <a href="#" onclick="view_labo_patient()">
-      Laboratoires
-    </a>
-  </th>
-</tr>
-{{/if}}
 
 </table>
   
