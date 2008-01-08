@@ -43,9 +43,11 @@ function supprimer() {
   form.del.value = 1;
   form.submit();
 }
-{{if !$compte_rendu->_id}}
+{{*if !$compte_rendu->_id*}}
+// Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
 
+// Creation du tableau de traduction
 var aTraducClass = new Array();
 {{foreach from=$listObjectAffichage key=key item=currClass}}
 aTraducClass["{{$key}}"] = "{{$currClass}}";
@@ -88,11 +90,13 @@ function loadCategory(value){
 }
 
 function pageMain() {
+  {{if !$compte_rendu->_id}}
   loadObjectClass('{{$compte_rendu->object_class}}');
+  {{/if}}
   loadCategory('{{$compte_rendu->file_category_id}}');
 }
 
-{{/if}}
+{{*/if*}}
 </script>
 
 
@@ -107,12 +111,10 @@ function pageMain() {
       {{mb_field object=$compte_rendu field="compte_rendu_id" hidden=1 prop=""}}
       {{mb_field object=$compte_rendu field="object_id" hidden=1 prop=""}}
       {{if $compte_rendu->compte_rendu_id}}
-    
       <button class="new" type="button" onclick="nouveau()">
         Créer un modèle
       </button>
-      
-      {{/if}}  
+      {{/if}}
       <table class="form">
         <tr>
           <th class="category" colspan="2">
@@ -184,17 +186,9 @@ function pageMain() {
           <tr>
             <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
             <td>
-              {{if !$compte_rendu->compte_rendu_id}}
               <select name="file_category_id" class="{{$compte_rendu->_props.file_category_id}}">
               <option value="">&mdash; Aucune Catégorie</option>
               </select>
-              {{else}}
-              {{if $compte_rendu->_ref_category->file_category_id}}
-              {{$compte_rendu->_ref_category->nom}}
-              {{else}}
-              Aucune Catégorie
-              {{/if}}
-              {{/if}}
             </td>
           </tr>
           
