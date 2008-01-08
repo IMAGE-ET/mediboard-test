@@ -152,7 +152,7 @@ class CSejour extends CCodableCCAM {
     $specs["entree_prevue"]       = "notNull dateTime";
     $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";
-    $specs["sortie_reelle"]       = "dateTime moreThan|entree_reelle";
+    $specs["sortie_reelle"]       = "dateTime moreEquals|entree_reelle";
     $specs["venue_SHS"]           = "numchar length|8 confidential";
     $specs["saisi_SHS"]           = "bool";
     $specs["modif_SHS"]           = "bool";
