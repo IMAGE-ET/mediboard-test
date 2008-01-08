@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.31";
+$config["mod_version"]     = "0.33";
 $config["mod_type"]        = "user";
 
 class CSetupdPcompteRendu extends CSetup {
@@ -238,7 +238,17 @@ class CSetupdPcompteRendu extends CSetup {
     $sql = "ALTER TABLE `aide_saisie` ADD `depend_value` varchar(255) DEFAULT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $this->setTimeLimit(1800);
+    $sql = "ALTER TABLE `compte_rendu` CHANGE `object_class` `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.32");
+    $sql = "ALTER TABLE `pack`
+            ADD `object_class` ENUM('CPatient','CConsultAnesth','COperation','CConsultation','CSejour') NOT NULL DEFAULT 'COperation';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.33";
   }
 }
 ?>

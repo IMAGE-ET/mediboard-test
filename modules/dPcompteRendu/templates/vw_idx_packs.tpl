@@ -1,5 +1,27 @@
 <!--  $Id$ -->
 
+<script type="text/javascript">
+
+function reloadListModele(object_class){
+  url = new Url;
+  url.setModuleAction("dPcompteRendu","httpreq_vw_list_modeles");
+  url.addParam("object_class", object_class);
+  url.addParam("user_id", "{{$user_id}}");
+  url.addParam("pack_id", "{{$pack->_id}}");
+  url.requestUpdate("listModeles", { waitingText: null } );
+}
+
+function pageMain(){
+  if("{{$pack->_id}}" != ""){
+    reloadListModele("{{$pack->object_class}}");
+  }
+}
+
+
+</script>
+
+
+
 <table class="main">
 
 <tr>
@@ -40,6 +62,7 @@
       <th>Utilisateur</th>
       <th>Nom</th>
       <th>modeles</th>
+      <th>Type</th>
     </tr>
 
     {{foreach from=$packs item=curr_pack}}
@@ -49,6 +72,7 @@
       <td><a href="{{$href}}">{{$curr_pack->_ref_chir->_view}}</a></td>
       <td><a href="{{$href}}">{{$curr_pack->nom}}</a></td>
       <td><a href="{{$href}}">{{$curr_pack->_modeles|@count}}</a></td>
+      <td><a href="{{$href}}">{{$curr_pack->object_class}}</a></td>
     </tr>
     {{/foreach}}
       
@@ -96,6 +120,17 @@
       <th>{{mb_label object=$pack field="nom"}}</th>
       <td>{{mb_field object=$pack field="nom"}}</td>
     </tr>
+    <tr>
+      <th>{{mb_label object=$pack field="object_class"}}</th>
+      <td>
+        <select name="object_class" {{if $pack->_id}}onchange="reloadListModele(this.value);"{{/if}}>
+          <option value="">&mdash; Choix d'une classe</option>
+          {{foreach from=$pack->_enumsTrans.object_class item="curr_type" key="key"}}
+            <option value="{{$key}}" {{if $key == $pack->object_class}}selected = "selected"{{/if}}>{{$curr_type}}</option>
+          {{/foreach}}
+        </select>
+      </td>
+    </tr>
 
     <tr>
       <td class="button" colspan="2">
@@ -138,34 +173,13 @@
       {{/foreach}}
       {{/if}}
       <tr><th class="category" colspan="2">Ajouter un modèle</th></tr>
-      <tr><td colspan="2">
-        <form name="addFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="dosql" value="do_pack_aed" />
-        {{mb_field object=$pack field="pack_id" hidden=1 prop=""}}
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="modeles" value="{{$pack->modeles|smarty:nodefaults|JSAttribute}}" />
-        <label for="_new" title="Veuillez choisir un modèle" />
-        <select name="_new" class="notNull ref">
-          <option value="">&mdash; Choisir un modèle</option>
-          <optgroup label="Modèles du praticien">
-            {{foreach from=$listModelePrat item=curr_modele}}
-            <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-            {{/foreach}}
-          </optgroup>
-          <optgroup label="Modèles du cabinet">
-            {{foreach from=$listModeleFunc item=curr_modele}}
-            <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-            {{/foreach}}
-          </optgroup>
-        </select>
-        <button type="submit" class="tick notext">{{tr}}Select{{/tr}}</button>
-        </form>
-      </td></tr>
+      <tr>
+        <td colspan="2" id="listModeles">
+         
+        </td>
+     </tr>
     </table>
     {{/if}}
-
   </td>
-  
 </tr>
-
 </table>

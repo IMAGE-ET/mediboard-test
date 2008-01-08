@@ -458,7 +458,6 @@ class COperation extends CCodableCCAM {
     $this->loadRefsFwd();
     $this->_ref_sejour->loadRefsFwd();
     $this->_ref_chir->fillTemplate($template);
-    $this->_ref_sejour->_ref_patient->fillTemplate($template);
     $this->fillLimitedTemplate($template);
   }
   

@@ -88,10 +88,12 @@ if($service_id == "NP") {
   loadServiceComplet($service, $date, $mode);
 }
 
+// Chargement des documents du sejour
+$sejour->loadRefsDocs();
+
 // Création du template
 $smarty = new CSmartyDP();
 
-//$smarty->assign("sejour", $sejour);
 $smarty->assign("object"                , $sejour);
 $smarty->assign("mode"                  , $mode);
 $smarty->assign("totalLits"             , $totalLits);

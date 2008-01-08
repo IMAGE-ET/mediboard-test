@@ -17,6 +17,7 @@ class CPack extends CMbObject {
   // DB fields
   var $nom           = null;
   var $modeles       = null;
+  var $object_class  = null;
   
   // Form fields
   var $_modeles      = null;
@@ -38,7 +39,8 @@ class CPack extends CMbObject {
     return array (
       "chir_id" => "notNull ref class|CMediusers",
       "nom"     => "notNull str confidential",
-      "modeles" => "text"
+      "modeles" => "text",
+      "object_class" => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation"
     );
   }
   

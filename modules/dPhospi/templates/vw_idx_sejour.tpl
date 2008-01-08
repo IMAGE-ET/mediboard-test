@@ -3,7 +3,39 @@
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
 <script language="Javascript" type="text/javascript">
+     
+function reloadAfterSaveDoc(sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_vw_documents");
+  url.addParam("sejour_id" , sejour_id);
+  url.requestUpdate('documents', { waitingText: null } );
+}
 
+
+function createDocument(modele_id, sejour_id) {
+  var url = new Url();
+  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("modele_id", modele_id);
+  url.addParam("object_id", sejour_id);
+  url.popup(700, 700, "Document");
+}
+
+function createPack(pack_id, sejour_id) {
+  var url = new Url();
+  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("pack_id", pack_id);
+  url.addParam("object_id", sejour_id);
+  url.popup(700, 700, "Document");
+}
+ 
+ 
+function editDocument(compte_rendu_id) {
+  var url = new Url();
+  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+  url.addParam("compte_rendu_id", compte_rendu_id);
+  url.popup(700, 700, "Document");
+}
+   
    
    
 var oCookie = new CJL_CookieUtil("EIAccordion");
@@ -21,6 +53,12 @@ function storeVoletAcc(objAcc){
     }
   }
 }
+
+
+function loadDocuments(sejour_id){
+  reloadAfterSaveDoc(sejour_id);
+}
+
 
 function loadSejour(sejour_id) {
   url_sejour = new Url;
@@ -91,7 +129,7 @@ function pageMain() {
               </a>
               </td>
               <td>
-              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
+              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadDocuments({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
               </a>
               </td>
@@ -191,11 +229,21 @@ function pageMain() {
          </tr>
        </table>
      </div>
+     
     </div>
-  
-  </div>
 
-
+   <div id="Docs">
+      <div id="DocsHeader" class="accordionTabTitleBar">
+        Documents
+      </div>
+      <div id="DocsContent"  class="accordionTabContentBox">
+         <div id="documents">
+         </div>
+      </div>
+     </div>
+     
+     </div>
+     
     </td>
   </tr>
 </table>
@@ -210,4 +258,6 @@ var oAccord = new Rico.Accordion( $('accordionConsult'), {
   onLoadShowTab: showTabAcc
 } );
 
+
+        
 </script>  

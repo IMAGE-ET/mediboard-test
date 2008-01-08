@@ -72,6 +72,7 @@ $hospiList             = CCompteRendu::loadModeleByCat("Hospitalisation", $where
 // Packs d'hospitalisation
 $packList         = array();
 $where            = array();
+$where["object_class"] = " = 'COperation'";
 $where["chir_id"] = "= '$userSel->user_id'";
 $pack             = new CPack;
 $packList         = $pack->loadlist($where, $order);

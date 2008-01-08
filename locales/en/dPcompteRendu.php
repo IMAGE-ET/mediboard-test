@@ -1,4 +1,5 @@
 <?php
+$locales['CPack.object_class.CPatient'] = '';
 $locales['CAideSaisie'] = '';
 $locales['CAideSaisie-back-function_id'] = '';
 $locales['CAideSaisie-back-user_id'] = '';
@@ -102,9 +103,14 @@ $locales['CPack-modeles-desc'] = '';
 $locales['CPack-nom'] = '';
 $locales['CPack-nom-court'] = '';
 $locales['CPack-nom-desc'] = '';
+$locales['CPack-object_class'] = '';
 $locales['CPack.create'] = '';
 $locales['CPack.modify'] = '';
 $locales['CPack.more'] = '';
 $locales['CPack.none'] = '';
+$locales['CPack.object_class.CConsultAnesth'] = '';
+$locales['CPack.object_class.CConsultation'] = '';
+$locales['CPack.object_class.COperation'] = '';
+$locales['CPack.object_class.CSejour'] = '';
 $locales['CPack.one'] = '';
 ?>

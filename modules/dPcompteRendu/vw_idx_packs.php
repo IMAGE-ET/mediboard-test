@@ -41,7 +41,6 @@ foreach($packs as $key => $value) {
 $whereCommon = array();
 $whereCommon = array();
 $whereCommon["object_id"] = "IS NULL";
-$whereCommon["object_class"] = "= 'COperation'";
 $order = "nom";
 
 // Modèles de l'utilisateur
@@ -81,7 +80,7 @@ $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("packs"         , $packs);
 $smarty->assign("pack"          , $pack);
-
+$smarty->assign("pack_id" ,  $pack_id);
 $smarty->display("vw_idx_packs.tpl");
 
 ?>

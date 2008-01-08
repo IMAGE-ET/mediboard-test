@@ -164,6 +164,7 @@ if($op) {
 	// Packs d'hospitalisation
 	$packList         = array();
 	$where            = array();
+	$where["object_class"] = " = 'COperation'";
 	$where["chir_id"] = "= '$selOp->chir_id'";
 	$pack             = new CPack;
 	$packList         = $pack->loadlist($where, $order);

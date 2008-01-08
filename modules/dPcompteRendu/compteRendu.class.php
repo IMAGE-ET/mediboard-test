@@ -47,7 +47,7 @@ class CCompteRendu extends CMbMetaObject {
     $specs["chir_id"]          = "ref xor|function_id|object_id class|CMediusers";
     $specs["function_id"]      = "ref xor|chir_id|object_id class|CFunctions";
     $specs["object_id"]        = "ref xor|function_id|chir_id class|CMbObject meta|object_class";
-    $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation";
+    $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour";
     $specs["nom"]              = "notNull str";
     $specs["source"]           = "html";
     $specs["file_category_id"] = "ref class|CFilesCategory";

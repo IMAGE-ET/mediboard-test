@@ -629,6 +629,11 @@ class CSejour extends CCodableCCAM {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
     
+    $this->loadRefsFwd();
+    
+    // Ajout d'un fillTemplate du patient
+    $this->_ref_patient->fillTemplate($template);
+    
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);

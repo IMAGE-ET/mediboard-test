@@ -33,7 +33,8 @@ if($compte_rendu_id) {
     $pack = new CPack;
     $pack->load($pack_id);
     $compte_rendu->nom = $pack->nom;
-    $compte_rendu->object_class = $pack->_object_class;
+    $compte_rendu->object_class = $pack->object_class;
+    //$compte_rendu->object_class = $pack->_object_class;
     $compte_rendu->source = $pack->_source;
   }
   $compte_rendu->updateFormFields();
