@@ -167,7 +167,6 @@
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
-          <td />
         </tr>
       </table>
     </td>
