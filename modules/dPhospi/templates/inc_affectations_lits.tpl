@@ -223,7 +223,7 @@
 </tr>
 
 <tr class="dates">
-  <td colspan="2"><em>Age</em>: {{$patient->_age}} ans ({{$patient->naissance}})</td>
+  <td colspan="2"><em>Age</em>: {{$patient->_age}} ans ({{$patient->naissance|date_format:"%d/%m/%Y"}})</td>
 </tr>
 <tr class="dates">
   <td class="text" colspan="2"><em>Dr. {{$sejour->_ref_praticien->_view}}</em></td>
