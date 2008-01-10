@@ -462,22 +462,24 @@ Object.extend(ElementChecker, {
       }
       
     // insee
-    }else if(this.aProperties["insee"]){
-      aMatches = this.oElement.value.match(/^([1-2][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i);
-      bMatches = this.oElement.value.match(/^([0-9]{7,8}[A-Z])$/i);
-      
-      if (!aMatches && !bMatches) {
-        return "Matricule incorrect";
-      }
-      
-      
-      
-      nCode = parseInt(aMatches[1], 10);
-      nCle  = parseInt(aMatches[2], 10);
-      if (97 - (nCode % 97) != nCle) {
-        return "Matricule incorrect, la clé n'est pas valide";
-      }
+    }else if(this.aProperties["insee"]) {
     
+    	if (this.oElement.value.match(/^([0-9]{7,8}[A-Z])$/i)) {
+    	  return null;
+    	}
+    	
+      if (aMatches = this.oElement.value.match(/^([1278][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
+	      nCode = parseInt(aMatches[1], 10);
+	      nCle  = parseInt(aMatches[2], 10);
+	      if (97 - (nCode % 97) != nCle) {
+	        return "Matricule incorrect, la clé n'est pas valide";
+	      }
+	      
+	      return null;
+      }
+
+			return "Matricule incorrect";
+      
     // Aucune Specification
     }else{
       return "Spécification de code invalide";
