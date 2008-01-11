@@ -12,12 +12,12 @@ function checkFormPrint() {
 
 function popPlages() {
   var form = document.paramFrm;
-
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_plages");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addElement(form.chir);
+  url.addParam("_coordonnees",getCheckedValue(form._coordonnees));
   url.popup(700, 550, "Planning");
 }
 
@@ -86,6 +86,10 @@ function pageMain() {
 	            <option class="mediuser" style="border-color: #{{$curr_chir->_ref_function->color}};" value="{{$curr_chir->user_id}}">{{$curr_chir->_view}}</option>
             {{/foreach}}
           </select></td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$filter field="_coordonnees"}}</th>
+          <td>{{mb_field object=$filter field="_coordonnees"}}</td>
         </tr>
       </table>
 

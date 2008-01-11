@@ -16,6 +16,7 @@ $now       = mbDate();
 $filter = new CConsultation;
 $filter->_date_min = mbGetValueFromGet("_date_min"    , "$now");
 $filter->_date_max = mbGetValueFromGet("_date_max"    , "$now");
+$filter->_coordonnees = mbGetValueFromGet("_coordonnees");
 
 $chir = mbGetValueFromGetOrSession("chir");
 
@@ -55,8 +56,9 @@ foreach($listPlage as $keyPlage => $plage) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("filter", $filter);
-$smarty->assign("listPlage", $listPlage);
+$smarty->assign("coordonnees", $filter->_coordonnees);
+$smarty->assign("filter"     , $filter);
+$smarty->assign("listPlage"  , $listPlage);
 
 $smarty->display("print_plages.tpl");
 

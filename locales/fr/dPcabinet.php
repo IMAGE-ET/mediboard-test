@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-_etat_acquittement-desc'] = 'Acquittement';
+$locales['CConsultation-_coordonnees-desc'] = 'Affichage des coordonnées des patients';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -383,6 +383,7 @@ $locales['CConsultation-traitement-court'] = '';
 $locales['CConsultation-traitement-desc'] = 'Traitements';
 $locales['CConsultation-_check_premiere'] = 'Première consultation';
 $locales['CConsultation-_check_premiere-desc'] = 'Première consultation de ce patient avec le praticien';
+$locales['CConsultation-_coordonnees'] = 'Coordonnées';
 $locales['CConsultation-_date_max'] = 'Jusqu\'au';
 $locales['CConsultation-_date_max-court'] = '';
 $locales['CConsultation-_date_max-desc'] = 'Date de fin de la recherche.';
@@ -390,6 +391,7 @@ $locales['CConsultation-_date_min'] = 'Depuis le';
 $locales['CConsultation-_date_min-court'] = '';
 $locales['CConsultation-_date_min-desc'] = 'Date de debut de la recherche.';
 $locales['CConsultation-_etat_acquittement'] = 'Acquittement';
+$locales['CConsultation-_etat_acquittement-desc'] = 'Acquittement';
 $locales['CConsultation-_etat_paiement'] = 'Etat des paiements';
 $locales['CConsultation-_etat_paiement-court'] = '';
 $locales['CConsultation-_etat_paiement-desc'] = 'Etat des paiements';

@@ -102,6 +102,7 @@ class CConsultation extends CCodable {
    var $_etat_reglement    = null;
    var $_etat_acquittement = null;
    var $_type_affichage    = null;
+   var $_coordonnees       = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -146,6 +147,7 @@ class CConsultation extends CCodable {
     $specs["_etat_reglement"]   = "enum list|reglee|non_reglee";
     $specs["_etat_acquittement"]= "enum list|acquittee|non_acquittee";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
+    $specs["_coordonnees"]      = "bool default|0";
     $specs["_prat_id"]          = "text";
     $specs["_somme"]            = "currency";
     $specs["valide"]            = "bool";

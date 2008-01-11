@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-_etat_acquittement-desc'] = '';
+$locales['CConsultation-_coordonnees-desc'] = '';
 $locales['CActeNGAP'] = '';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -383,6 +383,7 @@ $locales['CConsultation-traitement-court'] = '';
 $locales['CConsultation-traitement-desc'] = '';
 $locales['CConsultation-_check_premiere'] = '';
 $locales['CConsultation-_check_premiere-desc'] = '';
+$locales['CConsultation-_coordonnees'] = '';
 $locales['CConsultation-_date_max'] = '';
 $locales['CConsultation-_date_max-court'] = '';
 $locales['CConsultation-_date_max-desc'] = '';
@@ -390,6 +391,7 @@ $locales['CConsultation-_date_min'] = '';
 $locales['CConsultation-_date_min-court'] = '';
 $locales['CConsultation-_date_min-desc'] = '';
 $locales['CConsultation-_etat_acquittement'] = '';
+$locales['CConsultation-_etat_acquittement-desc'] = '';
 $locales['CConsultation-_etat_paiement'] = '';
 $locales['CConsultation-_etat_paiement-court'] = '';
 $locales['CConsultation-_etat_paiement-desc'] = '';

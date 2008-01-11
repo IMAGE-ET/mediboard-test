@@ -19,11 +19,15 @@
   </tr>
   <tr>
     <th rowspan="2"><b>Heure</b></th>
-    <th colspan="2"><b>Patient</b></th>
+    <th {{if $coordonnees}}colspan="4"{{else}}colspan="2"{{/if}}><b>Patient</b></th>
     <th colspan="3"><b>Consultation</b></th>
   </tr>
   <tr>
     <th>Nom / Prénom</th>
+    {{if $coordonnees}}
+    <th>Adresse</th>
+    <th>Tel</th>
+    {{/if}}
     <th>Age</th>
     <th>Motif</th>
     <th>Remarques</th>
@@ -45,6 +49,10 @@
       </div>
     </td>
     <td>{{$curr_consult->_ref_patient->_view}}</td>
+    {{if $coordonnees}}
+    <td>{{$curr_consult->_ref_patient->adresse}}<br />{{$curr_consult->_ref_patient->cp}} {{$curr_consult->_ref_patient->ville}}</td>
+    <td>{{$curr_consult->_ref_patient->tel}}</td>
+    {{/if}}
     <td>
       {{$curr_consult->_ref_patient->_age}} ans
       {{if $curr_consult->_ref_patient->_age != "??"}}
