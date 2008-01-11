@@ -43,12 +43,12 @@ function viewItem(oTd, sClassName, id, date) {
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
     url.addParam("date"           , date);
-    url.addParam("chirSel"        , "{{$app->user_id}}");
+    url.addParam("chirSel"        , "{{$pratSel->_id}}");
     url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
   }else if(sClassName == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-    url.addParam("chirSel" , "{{$app->user_id}}");
+    url.addParam("chirSel" , "{{$pratSel->_id}}");
     url.addParam("date"    , date);
     url.addParam("urgences", "0");
   }else{
@@ -126,7 +126,7 @@ function updateListConsults() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
 
-  url.addParam("chirSel"   , "{{$app->user_id}}");
+  url.addParam("chirSel"   , "{{$pratSel->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
@@ -139,7 +139,7 @@ function updateListOperations() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
 
-  url.addParam("chirSel" , "{{$app->user_id}}");
+  url.addParam("chirSel" , "{{$pratSel->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
@@ -169,7 +169,7 @@ function updateListHospi() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_vw_hospi");
 
-  url.addParam("chirSel" , "{{$app->user_id}}");
+  url.addParam("chirSel" , "{{$pratSel->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
@@ -180,7 +180,7 @@ function updateSemainier() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_semainier");
 
-  url.addParam("chirSel" , "{{$app->user_id}}");
+  url.addParam("chirSel" , "{{$pratSel->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
@@ -193,10 +193,12 @@ function pageMain() {
     hideIcon("operations");
     hideIcon("hospi");
     hideIcon("patients");
+    {{if $prat}}
     updateListConsults();
     updateListOperations();
     updateListPatients();
     updateListHospi();
+    {{/if}}
     ViewPort.SetAvlHeight("consultations", 0.5);
     ViewPort.SetAvlHeight("operations", 0.5);
   	ViewPort.SetAvlHeight("patients", 1);
@@ -211,6 +213,18 @@ function pageMain() {
 </script>
 
 <table class="main">
+  {{if $secretaire || $admin}}
+  <tr>
+    <form name="praticien" method="post">
+	    <select name="praticien_id" onchange="form.submit()">
+	    <option value="">&mdash; Choix d'un praticien</option>
+	    {{foreach from=$listPraticiens item="praticien"}}
+	      <option value="{{$praticien->_id}}" class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};" {{if $praticien_id == $praticien->_id}}selected = "selected"{{/if}}>{{$praticien->_view}}</option>
+	    {{/foreach}}
+	    </select>
+	  </form>
+  </tr>
+  {{/if}}
   <tr>
     <th class="halfPane">
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">

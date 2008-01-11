@@ -12,7 +12,7 @@
  * interventions
  */
 
-global $AppUI;
+//global $AppUI;
 
 require_once($AppUI->getModuleClass("dPccam", "acte"));
 
