@@ -93,6 +93,10 @@ function pageMain(){
         {{foreach from=$listPlages item=curr_plage}}
         <tr>
           <td>
+            <img src="images/icons/search.png" style="float: left;"
+              onmouseover="$('plage-{{$curr_plage->_id}}').show();"
+              onmouseout="$('plage-{{$curr_plage->_id}}').hide();"
+            />
             {{assign var="pct" value=$curr_plage->_fill_rate}}
             {{if $pct > 100}}
               {{assign var="over" value=1}}
@@ -115,7 +119,7 @@ function pageMain(){
               <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
               <div class="text">
                 <label 
-                  for="list_{{$curr_plage->plageop_id}}" 
+                  for="list_{{$curr_plage->_id}}" 
                   title="Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}"
                   {{if !$over}}ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')"{{/if}}
                 >
@@ -123,6 +127,25 @@ function pageMain(){
                   en {{$curr_plage->_ref_salle->nom}}
                 </label>
               </div>
+            </div>
+            <div id="plage-{{$curr_plage->_id}}" class="tooltip" style="display: none; width: 200px;">
+              <table class="tbl">
+                {{foreach from=$curr_plage->_ref_operations item=curr_op}}
+                <tr>
+                  <td class="text">
+                    {{if $curr_op->libelle}}
+                      {{$curr_op->libelle}}
+                    {{else}}
+                      {{$curr_op->_text_codes_ccam}}
+                    {{/if}}
+                  </td>
+                </tr>
+                {{foreachelse}}
+                <tr>
+                  <td>Aucune intervention</td>
+                </tr>
+                {{/foreach}}
+              </table>
             </div>
           </td>
           <td>

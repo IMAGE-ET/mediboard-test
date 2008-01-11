@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPpatients-tab-vw_siblings'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';

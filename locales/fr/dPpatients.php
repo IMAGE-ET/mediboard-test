@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPpatients-tab-vw_siblings'] = 'Identito-vigilence';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['CAddiction'] = 'Addiction';
 $locales['CAddiction-addiction'] = 'Addiction';

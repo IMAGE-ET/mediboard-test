@@ -3,6 +3,7 @@
 class CCodable extends CMbObject {
 	
   var $codes_ccam          = null;
+  var $_text_codes_ccam    = null;
   var $_codes_ccam         = null;
   var $_tokens_ccam        = array();
   var $_ref_actes_ccam     = null;
@@ -30,6 +31,7 @@ class CCodable extends CMbObject {
   	parent::updateFormFields();
     
     $this->codes_ccam = strtoupper($this->codes_ccam);
+    $this->_text_codes_ccam = str_replace("|", ", ", $this->codes_ccam);
     $this->_codes_ccam = $this->codes_ccam ? 
       explode("|", $this->codes_ccam) : 
       array(); 

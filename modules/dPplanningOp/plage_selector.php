@@ -26,7 +26,7 @@ $monthList    = array("Janvier", "Février", "Mars", "Avril", "Mai", "Juin",
                        "Décembre");
 $nameMonth    = $monthList[$month-1];
  
- // Chargemetn du chirurgien
+ // Chargement du chirurgien
 $mediChir = new CMediusers();
 $mediChir->load($chir);
 
@@ -52,6 +52,7 @@ $nb_secondes = $curr_op_hour*3600 + $curr_op_min*60;
 foreach($listPlages as $keyPlage=>&$plageop){
   $plageop->loadRefSalle();
   $plageop->getNbOperations($nb_secondes, false);
+  $plageop->loadRefsBack(0);
 }
 
 // Calcul des mois et années pour navigation
