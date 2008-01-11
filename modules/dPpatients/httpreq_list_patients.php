@@ -19,6 +19,7 @@ $patient_id = mbGetValueFromGetOrSession("patient_id");
 $patient_nom       = mbGetValueFromGetOrSession("nom"       , ""       );
 $patient_prenom    = mbGetValueFromGetOrSession("prenom"    , ""       );
 $patient_jeuneFille= mbGetValueFromGetOrSession("jeuneFille"  , ""       );
+
 $patient_naissance = mbGetValueFromGetOrSession("naissance" , "off"    );
 $patient_ville     = mbGetValueFromGetOrSession("ville"     , ""       );
 $patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
@@ -82,12 +83,24 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	$soundexObj   = new soundex2();
 	
 	if ($patient_nom) {
+	  $patient_nom = trim($patient_nom);
 	  $where["nom"]                 = "LIKE '$patient_nom%'";
 	  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
 	}
 	if ($patient_prenom) {
+	  $patient_prenom = trim($patient_prenom);
 	  $where["prenom"]                 = "LIKE '$patient_prenom%'";
 	  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
+	}
+	if ($patient_jeuneFille) {
+	  $patient_jeuneFille = trim($patient_jeuneFille);
+	  $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
+	  $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
+	}
+	
+	
+	if(($patient_year) || ($patient_month) || ($patient_day)){
+		$patient_naissance = "on";
 	}
 	
 	if ($patient_naissance == "on"){
