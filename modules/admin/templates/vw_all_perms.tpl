@@ -13,11 +13,14 @@
   {{foreach from=$curr_func->_ref_users item=curr_user}}
   {{assign var=user_id value=$curr_user->_id}}
   <tr>
-    <td>{{$curr_user->_view}}</td>
+    <td class="text">{{$curr_user->_view}}</td>
     {{foreach from=$listModules item=curr_mod}}
     {{assign var=mod_id value=$curr_mod->_id}}
-    <td class="button">
-      {{$matrice.$user_id.$mod_id|nl2br}}
+    <td style="text-align: center;">
+      <img src="images/icons/{{$matrice.$user_id.$mod_id.permIcon}}" alt="{{$matrice.$user_id.$mod_id.permIcon}}" />
+      <img src="images/icons/{{$matrice.$user_id.$mod_id.viewIcon}}" alt="{{$matrice.$user_id.$mod_id.viewIcon}}" />
+      <br />
+      {{*$matrice.$user_id.$mod_id.text|nl2br*}}
     </td>
     {{/foreach}}
   </tr>

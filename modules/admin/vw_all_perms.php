@@ -23,13 +23,17 @@ foreach($listFunctions as &$curr_function) {
 }
 
 // Matrice des droits
-$permission = array(PERM_DENY => "interdit",
-                    PERM_READ => "lecture",
-                    PERM_EDIT => "ecriture");
+$perms = array(PERM_DENY => "interdit",
+              PERM_READ => "lecture",
+              PERM_EDIT => "ecriture");
 
-$visibility = array(PERM_DENY => "caché",
-                    PERM_READ => "vue",
-                    PERM_EDIT => "administration");
+$views = array(PERM_DENY => "caché",
+              PERM_READ => "vue",
+              PERM_EDIT => "administration");
+              
+$icons = array(PERM_DENY => "note_red.png",
+               PERM_READ => "note_blue.png",
+               PERM_EDIT => "note_green.png");
 
 $where = array();
 $whereGeneral = array("mod_id" => "IS NULL");
@@ -50,13 +54,19 @@ foreach($listFunctions as $curr_func) {
       $permGeneralView       = PERM_DENY;
     }
     foreach($listModules as $curr_mod) {
-      $matrice[$curr_user->_id][$curr_mod->_id] = $permission[$permGeneralPermission]."/".$visibility[$permGeneralView]."\n(général)";
+      $matrice[$curr_user->_id][$curr_mod->_id]["text"]     = $perms[$permGeneralPermission]."/".$views[$permGeneralView]." (général)";
+      $matrice[$curr_user->_id][$curr_mod->_id]["permIcon"] = $icons[$permGeneralPermission];
+      $matrice[$curr_user->_id][$curr_mod->_id]["viewIcon"] = $icons[$permGeneralView];
     }
     foreach($listPermsModulesProfil as $curr_perm) {
-      $matrice[$curr_user->_id][$curr_perm->mod_id] = $permission[$curr_perm->permission]."/".$visibility[$curr_perm->view]."\n(profil)";
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["text"]     = $perms[$curr_perm->permission]."/".$views[$curr_perm->view]." (profil)";
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["permIcon"] = $icons[$curr_perm->permission];
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["viewIcon"] = $icons[$curr_perm->view];
     }
     foreach($listPermsModules as $curr_perm) {
-      $matrice[$curr_user->_id][$curr_perm->mod_id] = $permission[$curr_perm->permission]."/".$visibility[$curr_perm->view]."\n(spécifique)";
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["text"]     = $perms[$curr_perm->permission]."/".$views[$curr_perm->view]." (spécifique)";
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["permIcon"] = $icons[$curr_perm->permission];
+      $matrice[$curr_user->_id][$curr_perm->mod_id]["viewIcon"] = $icons[$curr_perm->view];
     }
   }
 }
