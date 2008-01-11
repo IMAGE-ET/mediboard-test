@@ -17,18 +17,19 @@
     {{foreach from=$listModules item=curr_mod}}
     {{assign var=mod_id value=$curr_mod->_id}}
     <td style="text-align: center;">
-      {{if $matrice.$user_id.$mod_id.permIcon}}
-      <img src="images/icons/{{$matrice.$user_id.$mod_id.permIcon}}" alt="{{$matrice.$user_id.$mod_id.permIcon}}" />
-      {{else}}
-      -
-      {{/if}}
-      {{if $matrice.$user_id.$mod_id.viewIcon}}
-      <img src="images/icons/{{$matrice.$user_id.$mod_id.viewIcon}}" alt="{{$matrice.$user_id.$mod_id.viewIcon}}" />
-      {{else}}
-      -
-      {{/if}}
-      <br />
-      {{*$matrice.$user_id.$mod_id.text|nl2br*}}
+      <span title="{{$matrice.$user_id.$mod_id.text}}">
+        {{if $matrice.$user_id.$mod_id.permIcon}}
+        <img src="images/icons/{{$matrice.$user_id.$mod_id.permIcon}}" alt="{{$matrice.$user_id.$mod_id.permIcon}}" />
+        {{else}}
+        -
+        {{/if}}
+        {{if $matrice.$user_id.$mod_id.viewIcon}}
+        <img src="images/icons/{{$matrice.$user_id.$mod_id.viewIcon}}" alt="{{$matrice.$user_id.$mod_id.viewIcon}}" />
+        {{else}}
+        -
+        {{/if}}
+        <br />
+      </span>
     </td>
     {{/foreach}}
   </tr>
