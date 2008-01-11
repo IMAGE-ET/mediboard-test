@@ -35,8 +35,11 @@ $whereGeneral = array("mod_id" => "IS NULL");
 foreach($listFunctions as $curr_func) {
   foreach($curr_func->_ref_users as $curr_user) {
     $permModule = new CPermModule();
-    $whereGeneral["user_id"] = $where["user_id"] = "= '$curr_user->user_id'";
-    $listPermsModules = $permModule->loadList($where);
+    $whereGeneral["user_id"] = "= '$curr_user->user_id'";
+    $where["user_id"]        = "= '$curr_user->user_id'";
+    $listPermsModules        = $permModule->loadList($where);
+    $where["user_id"]        = "= '$curr_user->_profile_id'";
+    $listPermsModulesProfil  = $permModule->loadList($where);
     $permModule->loadObject($whereGeneral);
     if($permModule->_id) {
       $permGeneralPermission = $permModule->permission;
@@ -46,10 +49,13 @@ foreach($listFunctions as $curr_func) {
       $permGeneralView       = PERM_DENY;
     }
     foreach($listModules as $curr_mod) {
-      $matrice[$curr_user->_id][$curr_mod->_id] = $permission[$permGeneralPermission]." / ".$visibility[$permGeneralView];
+      $matrice[$curr_user->_id][$curr_mod->_id] = $permission[$permGeneralPermission]."/".$visibility[$permGeneralView]."\n(général)";
+    }
+    foreach($listPermsModulesProfil as $curr_perm) {
+      $matrice[$curr_user->_id][$curr_perm->mod_id] = $permission[$curr_perm->permission]."/".$visibility[$curr_perm->view]."\n(profil)";
     }
     foreach($listPermsModules as $curr_perm) {
-      $matrice[$curr_user->_id][$curr_perm->mod_id] = $permission[$curr_perm->permission]." / ".$visibility[$curr_perm->view];
+      $matrice[$curr_user->_id][$curr_perm->mod_id] = $permission[$curr_perm->permission]."/".$visibility[$curr_perm->view]."\n(spécifique)";
     }
   }
 }

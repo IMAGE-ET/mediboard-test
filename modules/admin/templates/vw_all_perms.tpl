@@ -17,7 +17,7 @@
     {{foreach from=$listModules item=curr_mod}}
     {{assign var=mod_id value=$curr_mod->_id}}
     <td class="button">
-      {{$matrice.$user_id.$mod_id}}
+      {{$matrice.$user_id.$mod_id|nl2br}}
     </td>
     {{/foreach}}
   </tr>
