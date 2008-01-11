@@ -16,7 +16,7 @@ class CMySQLDataSource extends CSQLDataSource {
       return;
     }
 	    
-    if (null == $this->link = mysql_connect($host, $user, $pass)) { 
+    if (null == $this->link = mysql_connect($host, $user, $pass, true)) { 
       trigger_error( "FATAL ERROR: Connection to MySQL server failed", E_USER_ERROR );
       return;
     }
@@ -54,6 +54,7 @@ class CMySQLDataSource extends CSQLDataSource {
   }
 
   function query($query) {
+//    mysql_select_db($this->config["dbname"], $this->link);
     return mysql_query($query, $this->link);
   }
 
