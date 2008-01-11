@@ -7,6 +7,8 @@
 * @author Alexis Granger
 */
 
+global $AppUI;
+
 require_once($AppUI->getModuleClass("dPccam", "acte"));
 
 class CActeNGAP extends CActe {
