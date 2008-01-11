@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $g, $m, $utypes;
 
 $can->needsAdmin();
 
@@ -16,7 +16,8 @@ $listModules = CModule::getActive();
 
 // Liste des utilisateurs
 $function = new CFunctions();
-$listFunctions = $function->loadListWithPerms(PERM_READ, null, "text");
+$where = array("group_id" => "= '$g'");
+$listFunctions = $function->loadListWithPerms(PERM_READ, $where, "text");
 foreach($listFunctions as &$curr_function) {
   $curr_function->loadRefsUsers();
 }
