@@ -156,12 +156,12 @@ class CPermModule extends CMbObject {
     }
   }
   
-  function getPermModule($mod_id, $permType) {
-    return(CPermModule::getInfoModule("permission", $mod_id, $permType));
+  function getPermModule($mod_id, $permType, $user_id = null) {
+    return(CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id));
   }
   
-  function getViewModule($mod_id, $permType) {
-    return(CPermModule::getInfoModule("view", $mod_id, $permType));
+  function getViewModule($mod_id, $permType, $user_id = null) {
+    return(CPermModule::getInfoModule("view", $mod_id, $permType, $user_id));
   }
   
   function getInfoModule($field, $mod_id, $permType, $user_id = null) {

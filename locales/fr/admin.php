@@ -1,4 +1,5 @@
 <?php
+$locales['mod-admin-tab-vw_all_perms'] = 'Grille des droits';
 $locales['CAffectation._mode_sortie.deces'] = 'Décès ';
 $locales['CAffectation._mode_sortie.normal'] = 'Normal';
 $locales['CAffectation._mode_sortie.transfert'] = 'Transfert';

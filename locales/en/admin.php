@@ -1,4 +1,5 @@
 <?php
+$locales['mod-admin-tab-vw_all_perms'] = '';
 $locales['CAffectation._mode_sortie.deces'] = '';
 $locales['CAffectation._mode_sortie.normal'] = '';
 $locales['CAffectation._mode_sortie.transfert'] = '';
