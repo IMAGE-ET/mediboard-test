@@ -8,9 +8,9 @@
 */
 
 global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
+require_once($AppUI->getModuleClass("dPccam", "codable"));
 
-class COperation extends CCodableCCAM {
+class COperation extends CCodable {
   // DB Table key
   var $operation_id  = null;
 
@@ -440,6 +440,7 @@ class COperation extends CCodableCCAM {
   function loadRefsBack() {
     $this->loadRefsFiles();
     $this->loadRefsActesCCAM();
+    $this->loadRefsActesNGAP();
     $this->loadRefsDocs();
   }
   

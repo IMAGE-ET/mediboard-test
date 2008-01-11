@@ -8,13 +8,13 @@
  */
 
 global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
+require_once($AppUI->getModuleClass("dPccam", "codable"));
 
 /**
  * Classe CSejour. 
  * @abstract Gère les séjours en établissement
  */
-class CSejour extends CCodableCCAM {
+class CSejour extends CCodable {
   // DB Table key
   var $sejour_id = null;
   

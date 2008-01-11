@@ -11,10 +11,13 @@
 
 global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("std");
+
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
 $filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
-$etat = $filter->_etat_paiement = 1;
+$filter->_etat_reglement = mbGetValueFromGetOrSession("_etat_reglement");
+$filter->_etat_acquittement = mbGetValueFromGetOrSession("_etat_acquittement");
+
 $type = $filter->mode_reglement = mbGetValueFromGetOrSession("mode_reglement", 0);
 if($type == null) {
 	$type = 0;
@@ -32,7 +35,7 @@ $chirSel = new CMediusers;
 $chirSel->load($chir);
 
 // Récupération des plages de dates de paiement
-$sql = "SELECT consultation.date_paiement AS date," .
+$sql = "SELECT consultation.date_reglement AS date," .
 		"\n plageconsult.chir_id AS chir_id" .
 		"\n FROM consultation" .
 		"\n LEFT JOIN plageconsult" .
@@ -44,13 +47,15 @@ else {
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $sql .= "\n WHERE chir_id ".$ds->prepareIn(array_keys($listPrat));
 }
-$sql .= "\n AND date_paiement >= '$filter->_date_min'";
-$sql .= "\n AND date_paiement <= '$filter->_date_max'";
-$sql .= "\n GROUP BY date_paiement";
-$sql .= "\n ORDER BY date_paiement";
+$sql .= "\n AND date_reglement >= '$filter->_date_min'";
+$sql .= "\n AND date_reglement <= '$filter->_date_max'";
+$sql .= "\n GROUP BY date_reglement";
+$sql .= "\n ORDER BY date_reglement";
 
 $listPlage = $ds->loadlist($sql);
 
+mbTrace($listPlage);
+mbTrace("toto");
 // On charge les références des consultations qui nous interessent
 $total["cheque"]["valeur"] = 0;
 $total["CB"]["valeur"] = 0;
@@ -72,16 +77,38 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]["_ref_chir"] = $curr_chir;
   $where = array();
   $where["chir_id"] = "= '$curr_chir->user_id'";
-  $where["date_paiement"] = "= '".$value["date"]."'";
+  $where["date_reglement"] = "= '".$value["date"]."'";
   $where["chrono"] = ">= '".CConsultation::TERMINE."'";
   $where["annule"] = "= '0'";
-  if($etat != -1)
+  
+  // Facture réglée par le patient
+  if($filter->_etat_reglement == "non_reglee"){
+    $where["date_reglement"] = " IS NULL";
+  }
+  // Facture non réglée par le patient
+  if($filter->_etat_reglement == "reglee"){
+    $where["date_reglement"] = " IS NOT NULL";
+  }
+  
+  // Facture non acquittee
+  if($filter->_etat_acquittement == "non_acquittee"){
+    $where["facture_acquittee"] = " = '0'";
+  }
+  // Facture acquittee
+  if($filter->_etat_acquittement == "acquittee"){
+    $where["facture_acquittee"] = " = '1'";
+  }
+  
+  /*if($etat != -1)
     $where["patient_regle"] = "= '$etat'";
   if($etat == 0)
     $where[] = "(secteur1 + secteur2) != 0";
   $where["secteur1"] = "IS NOT NULL";
-  if($type)
-    $where["mode_reglement"] = "= '$type'";
+*/
+  
+if($type){
+  $where["mode_reglement"] = "= '$type'";
+}
   $ljoin = array();
   $ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
   $listConsult = new CConsultation;
@@ -91,20 +118,22 @@ foreach($listPlage as $key => $value) {
   $listPlage[$key]["total2"] = 0;
   foreach($listPlage[$key]["_ref_consultations"] as $key2 => $value2) {
     $listPlage[$key]["_ref_consultations"][$key2]->loadRefPatient();
-    if($etat == -1 && $listPlage[$key]["_ref_consultations"][$key2]->patient_regle){
+    /*
+    if($etat == -1 && $listPlage[$key]["_ref_consultations"][$key2]->date_reglement){
       $listPlage[$key]["total1"] += $value2->secteur1;
       $listPlage[$key]["total2"] += $value2->secteur2;
       $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
       $total[$value2->mode_reglement]["nombre"]++;
     }
-    elseif($etat != -1){
+    */
+    //elseif($etat != -1){
       $listPlage[$key]["total1"] += $value2->secteur1;
       $listPlage[$key]["total2"] += $value2->secteur2;
       if($value2->mode_reglement) {
         $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
         $total[$value2->mode_reglement]["nombre"]++;
       }
-    }
+    //}
   }
   $total["secteur1"] += $listPlage[$key]["total1"];
   $total["secteur2"] += $listPlage[$key]["total2"];
@@ -114,13 +143,15 @@ foreach($listPlage as $key => $value) {
     unset($listPlage[$key]);
 }
 
+mbTrace("toto");
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->debugging = false;
 $smarty->assign("filter"   , $filter);
 $smarty->assign("aff"      , $aff);
-$smarty->assign("etat"     , $etat);
+$smarty->assign("_etat_reglement"     , $filter->_etat_reglement);
+$smarty->assign("_etat_acquittement"     , $filter->_etat_acquittement);
 $smarty->assign("type"     , $type);
 $smarty->assign("chirSel"  , $chirSel);
 $smarty->assign("listPlage", $listPlage);

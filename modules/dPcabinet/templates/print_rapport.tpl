@@ -15,7 +15,16 @@
           </th>
         </tr>
         {{if $chirSel->user_id}}<tr><th>Dr. {{$chirSel->_view}}</th></tr>{{/if}}
-        <tr><td>affichage {{if $etat == -1}}de tous les montants{{elseif $etat}}des montants réglés{{else}}des impayés{{/if}}</td></tr>
+        <tr>
+          <td>
+            Reglement: {{if $_etat_reglement}}{{tr}}CConsultation._etat_reglement.{{$_etat_reglement}}{{/tr}}{{else}}Tous{{/if}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            Acquittement: {{if $_etat_acquittement}}{{tr}}CConsultation._etat_acquittement.{{$_etat_acquittement}}{{/tr}}{{else}}Tous{{/if}}
+          </td>  
+        </tr>
         <tr><td>Paiments pris en compte : {{if $type}}{{$type}}{{else}}tous{{/if}}</td></tr>
       </table>
     </td>
@@ -48,7 +57,7 @@
         </tr>
         <tr>
           <th class="category">Total réglement patient</th>
-          <td>{{$total.a_regler}}</td>
+          <td>{{$total.a_regler}} &euro;</td>
           <td>{{$total.cheque.reglement}} €</td>
           <td>{{$total.CB.reglement}} €</td>
           <td>{{$total.especes.reglement}} €</td>
@@ -83,7 +92,7 @@
   {{if $aff}}
   {{foreach from=$listPlage item=curr_plage}}
   <tr>
-    <td coslpan="2"><b>{{$curr_plage->date|date_format:"%a %d %b %Y"}} - Dr. {{$curr_plage->_ref_chir->_view}}</b></td>
+    <td colspan="2"><b>{{$curr_plage->date|date_format:"%a %d %b %Y"}} de {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}} - Dr. {{$curr_plage->_ref_chir->_view}}</b></td>
   </tr>
   <tr>
     <td colspan="2">
@@ -94,8 +103,8 @@
           <th>Code</th>
           <th>Secteur 1</th>
           <th>Secteur 2</th>
-          <th colspan="2">Total Facturé</th>
           <th colspan="2">Réglement du patient</th>
+          <th colspan="2">Total Facturé</th>
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
         <tr>
@@ -105,48 +114,38 @@
           <td>{{$curr_consult->secteur1}}€</td>
           <td>{{$curr_consult->secteur2}}€</td>
           <td>
-            {{$curr_consult->_somme}} &euro;
-          </td>
-          <td>
-            {{if $curr_consult->_somme != "0"}}
-            <form name="tarifFrm" action="?m=dPcabinet" method="post">
-            <input type="hidden" name="m" value="dPcabinet" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="_dialog" value="print_rapport" />
-            <input type="hidden" name="dosql" value="do_consultation_aed" />
-            <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->facture_acquittee}}
-              <input type="hidden" name="facture_acquittee" value="0" />
-              <input type="hidden" name="date_paiement" value="" />
-              <button class="cancel notext" type="submit"></button>
-              Acquittée
-            {{else}}
-              <input type="hidden" name="facture_acquittee" value="1" />
-              <button type="submit" class="tick">Acquitter</button>
-            {{/if}}
-            </form>
-            {{/if}}
-          </td>
-          <td>
             {{$curr_consult->a_regler}} &euro;
           </td>
+          
           <td>
           {{if $curr_consult->a_regler != "0"}}
-            <form name="tarifFrm" action="?m=dPcabinet" method="post">
+            <form name="tarifFrm-{{$curr_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
+            <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
+            <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
+            <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
+            
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->patient_regle}}
-              <input type="hidden" name="patient_regle" value="0" />
-              <input type="hidden" name="facture_acquittee" value="0" />
-              <input type="hidden" name="date_paiement" value="" />
-              <button class="cancel notext" type="submit"></button>
+            {{if $curr_consult->date_reglement}}
+            <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
+            <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
+            <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
+            <input type="hidden" name="facture_acquittee" value="0" />
+            <input type="hidden" name="mode_reglement" value="" />
+            <input type="hidden" name="date_reglement" value="" />
+            {{if $compta == "0"}}
+            <button class="cancel notext" type="submit">Annuler</button>
               Réglée
+            {{/if}}
             {{else}}
-              <input type="hidden" name="patient_regle" value="1" />
-              <input type="hidden" name="date_paiement" value="{{$today}}" />
+              {{if $compta == "0"}}
+              <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
+              <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
+              <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
+              <input type="hidden" name="date_reglement" value="{{$today}}" />
               <select name="mode_reglement">
                 <option value="cheque"  {{if $curr_consult->mode_reglement == "cheque" }}selected="selected"{{/if}}>Chèques     </option>
                 <option value="CB"      {{if $curr_consult->mode_reglement == "CB"     }}selected="selected"{{/if}}>CB          </option>
@@ -155,18 +154,46 @@
                 <option value="autre"   {{if $curr_consult->mode_reglement == "autre"  }}selected="selected"{{/if}}>Autre       </option>
               </select>
               <button type="submit" class="tick">Valider</button>
+              {{/if}}
             {{/if}}
             </form>
             {{/if}}
           </td>
+          <td>
+            {{$curr_consult->_somme}} &euro;
+          </td>
+          {{if $compta == "0"}}
+          <td>
+            {{if $curr_consult->_somme != $curr_consult->a_regler}}
+            {{if $curr_consult->_somme != "0"}}
+            <form name="tarifFrm_{{$curr_consult->_id}}" action="?m=dPcabinet" method="post">
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="_dialog" value="print_rapport" />
+            <input type="hidden" name="dosql" value="do_consultation_aed" />
+            <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
+            {{if $curr_consult->facture_acquittee}}
+              <input type="hidden" name="facture_acquittee" value="0" />
+              <input type="hidden" name="date_reglement" value="" />
+              <button class="cancel notext" type="submit">Annuler</button>
+              Acquittée
+            {{else}}
+              <input type="hidden" name="facture_acquittee" value="1" />
+              <button type="submit" class="tick">Acquitter</button>
+            {{/if}}
+            </form>
+            {{/if}}
+            {{/if}}
+          </td>
+          {{/if}}
         </tr>
         {{/foreach}}
         <tr>
           <td colspan="3" style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
-          <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
         </tr>
       </table>
     </td>

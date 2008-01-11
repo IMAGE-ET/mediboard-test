@@ -4,13 +4,21 @@
 
 <script language="Javascript" type="text/javascript">
      
+function loadActesNGAP(sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
+  url.addParam("object_id", sejour_id);
+  url.addParam("object_class", "CSejour");
+  url.requestUpdate('listActesNGAP', { waitingText: null } );
+}
+
+
 function reloadAfterSaveDoc(sejour_id){
   var url = new Url;
   url.setModuleAction("dPhospi", "httpreq_vw_documents");
   url.addParam("sejour_id" , sejour_id);
   url.requestUpdate('documents', { waitingText: null } );
 }
-
 
 function createDocument(modele_id, sejour_id) {
   var url = new Url();
@@ -28,16 +36,13 @@ function createPack(pack_id, sejour_id) {
   url.popup(700, 700, "Document");
 }
  
- 
 function editDocument(compte_rendu_id) {
   var url = new Url();
   url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
   url.addParam("compte_rendu_id", compte_rendu_id);
   url.popup(700, 700, "Document");
 }
-   
-   
-   
+     
 var oCookie = new CJL_CookieUtil("EIAccordion");
 var showTabAcc = 0;
 
@@ -54,11 +59,9 @@ function storeVoletAcc(objAcc){
   }
 }
 
-
 function loadDocuments(sejour_id){
   reloadAfterSaveDoc(sejour_id);
 }
-
 
 function loadSejour(sejour_id) {
   url_sejour = new Url;
@@ -129,7 +132,7 @@ function pageMain() {
               </a>
               </td>
               <td>
-              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadDocuments({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
+              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadDocuments({{$curr_affectation->_ref_sejour->_id}}); loadActesNGAP({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
               </a>
               </td>
@@ -172,7 +175,7 @@ function pageMain() {
 	              </a>
 	              </td>
 	              <td>
-	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); ActesCCAM.refreshList('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
+	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); loadDocuments({{$curr_sejour->_id}}); loadActesNGAP({{$curr_sejour->_id}}); ActesCCAM.refreshList('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
 	              </td>
@@ -213,25 +216,39 @@ function pageMain() {
       </div>
      </div>
   
-    <div id="Actes">
-     <div id="ActesHeader" class="accordionTabTitleBar">
-         Actes CCAM
-     </div>
-     <div id="ActesContent"  class="accordionTabContentBox">
-       <table class="tbl">
-         <tr>
-           <th>Actes<br /><br />
-             Séjour
-           </th>
-           <td>
-             <div id="ccam"></div>
-           </td>
-         </tr>
-       </table>
-     </div>
-     
+   {{if $app->user_prefs.ccam == 1 }}
+   <div id="Actes">
+    <div id="ActesHeader" class="accordionTabTitleBar">
+      Gestion des actes
     </div>
-
+    <div id="ActesContent"  class="accordionTabContentBox">
+      <table class="form">
+        <tr>
+          <td colspan="2">
+            <ul id="main_tab_group" class="control_tabs">
+              <li><a href="#one">Actes CCAM</a></li>
+              <li><a href="#two">Actes NGAP</a></li>
+            </ul>
+          </td>
+        </tr>
+        <tr id="one">
+          <td>
+            <div id="ccam">
+            </div>
+          </td>
+        </tr>
+        <tr id="two">
+          <td>
+            <div id="listActesNGAP">
+            </div>
+          </td>
+        </tr>
+      </table>
+      <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
+    </div>
+  </div>
+  {{/if}}
+  
    <div id="Docs">
       <div id="DocsHeader" class="accordionTabTitleBar">
         Documents
@@ -241,8 +258,7 @@ function pageMain() {
          </div>
       </div>
      </div>
-     
-     </div>
+    </div>
      
     </td>
   </tr>

@@ -4,24 +4,36 @@
 
 <script type="text/javascript">
 function checkRapport(){
-  var form = document.printFrm;
+  var oForm = document.printFrm;
+  // Mode comptabilite
+  var compta = 0;
   
-  if(!(checkForm(form))){
+  if(!(checkForm(oForm))){
     return false;
   }
-
   var url = new Url();
-  url.setModuleAction("dPcabinet", form.a.value);
-  url.addElement(form._date_min);
-  url.addElement(form.a);
-  url.addElement(form._date_min);
-  url.addElement(form._date_max);
-  url.addElement(form.chir);
-  url.addElement(form._etat_paiement);
-  url.addElement(form.mode_reglement);
-  url.addElement(form._type_affichage);
-  url.popup(700, 550, "Rapport");
-  
+  if(oForm.a.value == "print_compta"){
+    // Declenchement du mode comptabilite
+    oForm.a.value = "print_rapport";
+    var compta = 1;
+  }
+  url.setModuleAction("dPcabinet", oForm.a.value);
+  url.addParam("compta", compta);
+  url.addElement(oForm._date_min);
+  url.addElement(oForm.a);
+  url.addElement(oForm._date_min);
+  url.addElement(oForm._date_max);
+  url.addElement(oForm.chir);
+  url.addElement(oForm._etat_reglement);
+  url.addElement(oForm._etat_acquittement);
+  url.addElement(oForm.mode_reglement);
+  url.addElement(oForm._type_affichage);
+  url.addParam("cs", getCheckedValue(oForm.cs));
+  if(compta == 1){
+    url.popup(700, 550, "Rapport Comptabilité");
+  } else {
+    url.popup(700, 550, "Rapport");
+  }
   return false;
 }
 
@@ -96,6 +108,17 @@ function modifSecteur2(){
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
+
+function changeDate(sDebut, sFin){ 
+  var oForm = document.printFrm;
+  oForm._date_min.value = sDebut;
+  oForm._date_max.value = sFin;
+  $('printFrm__date_min_da').innerHTML = Date.fromDATE(sDebut).toLocaleDate();
+  $('printFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
+}
+  
+  
+  
 var oCcamField = null;
 
 function pageMain() {
@@ -172,6 +195,7 @@ function pageMain() {
     document.editFrm._code_ngap.value = "";
     document.editFrm._coefficient_ngap.value = "";
   }
+  
  
 }
 
@@ -188,13 +212,28 @@ function pageMain() {
         <tr><th class="title" colspan="2">Edition de rapports</th></tr>
         <tr><th class="category" colspan="2">Choix de la periode</th></tr>
         <tr>
-           <td>{{mb_label object=$filter field="_date_min"}}</td>
-           <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false"}} </td>
-        </tr>
-        <tr>
-          <td>{{mb_label object=$filter field="_date_max"}}</td>
-           <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false"}} </td>
-        </tr>
+          <td>
+            <table>
+              <tr>
+                <td>{{mb_label object=$filter field="_date_min"}}</td>
+                <td class="date">{{mb_field object=$filter field="_date_min" form="printFrm" canNull="false"}}</td>
+             </tr>
+             <tr>
+               <td>{{mb_label object=$filter field="_date_max"}}</td>
+               <td class="date">{{mb_field object=$filter field="_date_max" form="printFrm" canNull="false"}} </td>
+             </tr>
+            </table>
+           </td>
+           <td style="padding-left: 100px">
+           <input type="radio" name="select_days" onclick="changeDate('{{$now}}','{{$now}}');"  value="day" checked="checked" /> 
+              <label for="select_days_day">Jour courant</label>
+              <br /><input type="radio" name="select_days" onclick="changeDate('{{$week_deb}}','{{$week_fin}}');" value="week" /> 
+              <label for="select_days_week">Semaine courante</label>
+              <br /><input type="radio" name="select_days" onclick="changeDate('{{$month_deb}}','{{$month_fin}}');" value="month" /> 
+              <label for="select_days_month">Mois courant</label>
+           </td>
+        </tr> 
+        
         <tr>
           <th class="category" colspan="2">Critères d'affichage</th>
         </tr>
@@ -209,8 +248,12 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <td>{{mb_label object=$filter field="_etat_paiement"}}</td>
-          <td>{{mb_field object=$filter field="_etat_paiement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_label object=$filter field="_etat_reglement"}}</td>
+          <td>{{mb_field object=$filter field="_etat_reglement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+        </tr>
+        <tr>
+          <td>{{mb_label object=$filter field="_etat_acquittement"}}</td>
+          <td>{{mb_field object=$filter field="_etat_acquittement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="mode_reglement"}}</td>
@@ -219,6 +262,13 @@ function pageMain() {
         <tr>
           <td>{{mb_label object=$filter field="_type_affichage"}}</td>
           <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>     
+        </tr>
+        <tr>
+          <td>Consultations gratuites</td>
+          <td>
+            Oui<input type="radio" name="cs" value="1" checked="checked"/>
+            Non<input type="radio" name="cs" value="0" />
+          </td>
         </tr>
         <tr>
           <td class="button" colspan="2">
@@ -364,7 +414,7 @@ function pageMain() {
                       Quantite:<input name="_quantite_ngap" type="text" size="3" /> 
                       Code:<input name="_code_ngap" type="text" size="3" />
                       Coefficient:<input name="_coefficient_ngap" type="text" size="3" />
-                      <button class="tick notext" type="button" onclick="addCodeNgap()" />
+                      <button class="tick notext" type="button" onclick="addCodeNgap()">Ajouter Code NGAP</button>
                   </td>
                 </tr>
                 <tr>
@@ -384,7 +434,7 @@ function pageMain() {
               <tr>
                 <th>Somme</th>
                 <td>
-                  {{mb_field object=$tarif field="_somme" value=$tarif->secteur1+$tarif->secteur2 onchange="modifSecteur2()"}}
+                  {{mb_field object=$tarif field="_somme" onchange="modifSecteur2()"}}
                 </td>
               </tr>
               <tr>

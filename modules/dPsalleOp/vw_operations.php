@@ -86,7 +86,7 @@ if($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
-  
+
   $selOp->_ref_sejour->loadRefDiagnosticPrincipal();
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
@@ -266,6 +266,7 @@ if($selOp->_id){
   $smarty->assign("packList", $packList);
 }
 
+$smarty->assign("acte_ngap"       , new CActeNGAP()          );
 $smarty->assign("op"              , $op                      );
 $smarty->assign("vueReduite"      , false                    );
 $smarty->assign("salle"           , $salle                   );

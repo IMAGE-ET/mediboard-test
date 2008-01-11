@@ -84,6 +84,7 @@
         <tr id="two">
           <th class="category">Actes NGAP</th>
           <td id="listActesNGAP"> 
+            {{assign var="_object_class" value="CConsultation"}}
             {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
           </td>
         </tr>

@@ -2,12 +2,20 @@
 
 ActesNGAP = {
 	refreshList: function() {
+	  
+	  //(refreshFdr || Prototype.emptyFunction)("{{$object->_id}}");
+	  //refreshFdr("{{$object->_id}}") || Prototype.emptyFunction;
+	  
+	  {{if $object->_class_name == "CConsultation"}}
+	    refreshFdr("{{$object->_id}}");
+	  {{/if}}
+	  
 	  var url = new Url;
 	  url.setModuleAction("dPcabinet", "httpreq_vw_actes_ngap");
-	  url.addParam("consultation_id", "{{$consult->_id}}");
+	  url.addParam("object_id", "{{$object->_id}}");
+	  url.addParam("object_class", "{{$object->_class_name}}");
 	  url.requestUpdate('listActesNGAP', {
-	    waitingText: null,
-	    onComplete: refreshFdr("{{$consult->_id}}")
+	    waitingText: null
 	  } );
 	},
 
@@ -33,9 +41,10 @@ ActesNGAP = {
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="dosql" value="do_acte_ngap_aed" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
+  <input type="hidden" name="object_id" value="{{$object->_id}}" />
+  <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
   <table class="form">
-  {{if $consult->_coded}}
+  {{if $object->_coded}}
     <tr>
       <td colspan="5">
         <div class="big-info">
@@ -46,16 +55,16 @@ ActesNGAP = {
     </tr> 
     {{/if}}
     <tr>
-      <th class="category">{{mb_label object=$acte_ngap field="quantite"}}</th>
-      <th class="category">{{mb_label object=$acte_ngap field="code"}}</th>
-      <th class="category">{{mb_label object=$acte_ngap field="coefficient"}}</th>
-      <th class="category">{{mb_label object=$acte_ngap field="montant_base"}}</th>
-      <th class="category">{{mb_label object=$acte_ngap field="montant_depassement"}}</th>
-      {{if !$consult->_coded}}
+      <th class="category">{{tr}}CActeNGAP-quantite{{/tr}}</th>
+      <th class="category">{{tr}}CActeNGAP-code{{/tr}}</th>
+      <th class="category">{{tr}}CActeNGAP-coefficient{{/tr}}</th>
+      <th class="category">{{tr}}CActeNGAP-montant_base{{/tr}}</th>
+      <th class="category">{{tr}}CActeNGAP-montant_depassement{{/tr}}</th>
+      {{if !$object->_coded}}
       <th class="category">Action</th>
       {{/if}}
     </tr>
-    {{if !$consult->_coded}}
+    {{if !$object->_coded}}
     <tr>
       <td>
         {{mb_field object=$acte_ngap field="quantite"}}
@@ -79,7 +88,7 @@ ActesNGAP = {
       </td>     
     </tr>
     {{/if}}
-    {{foreach from=$consult->_ref_actes_ngap item="_acte_ngap"}}
+    {{foreach from=$object->_ref_actes_ngap item="_acte_ngap"}}
     <tr>
       <td>
         {{mb_value object=$_acte_ngap field="quantite"}}
@@ -96,7 +105,7 @@ ActesNGAP = {
       <td>
         {{mb_value object=$_acte_ngap field="montant_depassement"}}
       </td>
-      {{if !$consult->_coded}}
+      {{if !$object->_coded}}
       <td>
        	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">
           {{tr}}Delete{{/tr}}

@@ -50,11 +50,11 @@ $listChirs = $listChirs->loadPraticiens();
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("selOp"      , $selOp      );
-$smarty->assign("timing"     , $timing     );
-$smarty->assign("listAnesths", $listAnesths);
-$smarty->assign("listChirs"  , $listChirs  );
+$smarty->assign("acte_ngap"  , new CActeNGAP() );
+$smarty->assign("selOp"      , $selOp          );
+$smarty->assign("timing"     , $timing         );
+$smarty->assign("listAnesths", $listAnesths    );
+$smarty->assign("listChirs"  , $listChirs      );
 
 $smarty->display("edit_actes.tpl");
 

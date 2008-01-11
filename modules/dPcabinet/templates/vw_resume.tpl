@@ -95,7 +95,7 @@ function newExam(sAction, consultation_id) {
   <tr>
     <th>Résumé</th>
     <th>Documents</th>
-    <th>Facture</th>
+    <th>Facture<br />(Réglement)</th>
   </tr>
   
   <!-- Consultations -->
@@ -144,12 +144,12 @@ function newExam(sAction, consultation_id) {
       {{/foreach}}
     </td>
     {{if $curr_consult->tarif}}
-    <td>
+    <td style="text-align: center">
       <div style="display: inline; {{if $curr_consult->facture_acquittee != '1'}} color: #f00;{{/if}}">
       {{$curr_consult->_somme}}&euro;
       </div>
       {{if $curr_consult->_somme != $curr_consult->a_regler}}
-        <div style="display: inline; {{if $curr_consult->patient_regle != '1'}} color: #f00; {{/if}}">
+        <div style="display: inline; {{if $curr_consult->date_reglement == ''}} color: #f00; {{/if}}">
         ({{$curr_consult->a_regler}}&euro;)
         </div>
       {{/if}}

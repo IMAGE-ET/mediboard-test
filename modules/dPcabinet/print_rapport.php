@@ -8,22 +8,19 @@
 */
 
 // !! Attention, régression importante si ajout de type de paiement
-
 global $AppUI, $can, $m;
+
 $ds = CSQLDataSource::get("std");
 $today = mbDate();
+$compta = mbGetValueFromGet("compta", '0');
+$cs = mbGetValueFromGetOrSession("cs");
+
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
 $filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
-$filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
-//Traduction pour le passage d'un enum en bool pour les requetes sur la base de donnee
-if($filter->_etat_paiement == null) {
-	$etat = -1;
-} elseif ($filter->_etat_paiement == "impaye") {
-	$etat = 0;
-} elseif ($filter->_etat_paiement == "paye") {
-	$etat = 1;
-}
+$filter->_etat_reglement = mbGetValueFromGetOrSession("_etat_reglement");
+$filter->_etat_acquittement = mbGetValueFromGetOrSession("_etat_acquittement");
+
 $type = $filter->mode_reglement = mbGetValueFromGetOrSession("mode_reglement", 0);
 if($type == null) {
 	$type = 0;
@@ -50,7 +47,7 @@ $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 $listPlage = new CPlageconsult;
-$listPlage = $listPlage->loadList($where, "date, chir_id");
+$listPlage = $listPlage->loadList($where, "date, debut, chir_id");
 
 // On charge les références des consultations qui nous interessent
 $total["cheque"]["valeur"]  = 0;
@@ -80,110 +77,104 @@ $total["tiers"]["reglement"]   = 0;
 $total["autre"]["reglement"]   = 0;
 
 foreach($listPlage as $key => $value) {
+  
   $listPlage[$key]->loadRefsFwd();
   $where = array();
   $where["plageconsult_id"] = "= '".$value->plageconsult_id."'";
   $where["chrono"] = ">= '".CConsultation::TERMINE."'";
   $where["annule"] = "= '0'";
   $where[] = "tarif IS NOT NULL AND tarif <> ''";
-  if($etat != -1)
-    $where["facture_acquittee"] = "= '$etat'";
-  if($etat == 0)
-    $where[] = "(secteur1 + secteur2) != 0";
-  $where["secteur1"] = "IS NOT NULL";
-  if($type)
+  
+  // Facture réglée par le patient
+  if($filter->_etat_reglement == "non_reglee"){
+    $where["date_reglement"] = " IS NULL";
+  }
+  // Facture non réglée par le patient
+  if($filter->_etat_reglement == "reglee"){
+    $where["date_reglement"] = " IS NOT NULL";
+  }
+  
+  // Facture non acquittee
+  if($filter->_etat_acquittement == "non_acquittee"){
+    $where[] = "`facture_acquittee` IS NULL OR `facture_acquittee` = '0'";
+  }
+  // Facture acquittee
+  if($filter->_etat_acquittement == "acquittee"){
+    $where["facture_acquittee"] = " = '1'";
+  }
+  
+  if($type){
     $where["mode_reglement"] = "= '$type'";
+  }
+  
   $listConsult = new CConsultation;
   $listConsult = $listConsult->loadList($where, "heure");
   $listPlage[$key]->_ref_consultations = $listConsult;
   $listPlage[$key]->total1 = 0;
   $listPlage[$key]->total2 = 0;
+  
   foreach($listPlage[$key]->_ref_consultations as $key2 => $value2) {
-    $listPlage[$key]->_ref_consultations[$key2]->loadRefPatient();
-    
+    if($cs == "0" && $value2->_somme == 0){
+      unset($listPlage[$key]->_ref_consultations[$key2]);
+    }
+    $value2->loadRefPatient();
      
-    if($etat == -1 && $listPlage[$key]->_ref_consultations[$key2]->patient_regle){
-      if(isset($total[$value2->mode_reglement]["valeur"])){
-        $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
-        $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
-      }
-      else
-        $total[$value2->mode_reglement]["valeur"] = $value2->secteur1 + $value2->secteur2;
-      if(isset($total[$value2->mode_reglement]["nombre"])){
-        $total[$value2->mode_reglement]["nombre"]++;
-        //$total["a_regler"] += $value2->a_regler;
-      }
-      else {
-        $total[$value2->mode_reglement]["nombre"] = 1;
-        $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
-      }
+    if(isset($total[$value2->mode_reglement]["valeur"])){
+      $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
+      $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
     }
-    elseif($etat != -1){
-      if($value2->mode_reglement) {
-        if(isset($total[$value2->mode_reglement]["valeur"])){
-          $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
-          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
-        }
-        else {
-          $total[$value2->mode_reglement]["valeur"] += $value2->secteur1 + $value2->secteur2;
-          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
-        }
-        if(isset($total[$value2->mode_reglement]["nombre"])){
-          $total[$value2->mode_reglement]["nombre"]++;
-          //$total["a_regler"] += $value2->a_regler;
-        }
-        else{
-          $total[$value2->mode_reglement]["nombre"] = 1;
-          $total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
-        }
-      }
+    else
+      $total[$value2->mode_reglement]["valeur"] = $value2->secteur1 + $value2->secteur2;
+    if(isset($total[$value2->mode_reglement]["nombre"])){
+      $total[$value2->mode_reglement]["nombre"]++;
     }
-    
+    else {
+      $total[$value2->mode_reglement]["nombre"] = 1;
+      
+      @$total[$value2->mode_reglement]["reglement"] += $value2->a_regler;
+    }
+      
     $listPlage[$key]->total1 += $value2->secteur1;
     $listPlage[$key]->total2 += $value2->secteur2;
     $listPlage[$key]->a_regler += $value2->a_regler;  
     
-    
-    if(!$value2->patient_regle){
+    if(!$value2->date_reglement){
       $total["nb_non_regle"]++;
       $total["somme_non_regle"] += $value2->a_regler ;
     }
     if(!$value2->facture_acquittee){  
       $total["nb_non_acquitte"]++;
       $total["somme_non_acquitte"] += $value2->_somme;
-    }
-     
+    }    
     $total["a_regler"] += $value2->a_regler;
-    
   }
-  
   // Total des secteur1
   $total["secteur1"] += $listPlage[$key]->total1;
-  
   // Total des secteur2
   $total["secteur2"] += $listPlage[$key]->total2;
-  
   // Total Facturé
   $total["tarif"]    += $listPlage[$key]->total1 + $listPlage[$key]->total2;
-  
   // Nombre de consultations
   $total["nombre"]   += count($listPlage[$key]->_ref_consultations);
-  if(!count($listPlage[$key]->_ref_consultations))
+  if(!count($listPlage[$key]->_ref_consultations)){
     unset($listPlage[$key]);
+  }
 }
 
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$smarty->assign("today"    , $today);
-$smarty->assign("filter"   , $filter);
-$smarty->assign("aff"      , $aff);
-$smarty->assign("etat"     , $etat);
-$smarty->assign("type"     , $type);
-$smarty->assign("chirSel"  , $chirSel);
-$smarty->assign("listPlage", $listPlage);
-$smarty->assign("total"    , $total);
+$smarty->assign("cs"                 , $cs);
+$smarty->assign("compta"             , $compta);
+$smarty->assign("today"              , $today);
+$smarty->assign("filter"             , $filter);
+$smarty->assign("aff"                , $aff);
+$smarty->assign("_etat_reglement"    , $filter->_etat_reglement);
+$smarty->assign("_etat_acquittement" , $filter->_etat_acquittement);
+$smarty->assign("type"               , $type);
+$smarty->assign("chirSel"            , $chirSel);
+$smarty->assign("listPlage"          , $listPlage);
+$smarty->assign("total"              , $total);
 
 $smarty->display("print_rapport.tpl");
 

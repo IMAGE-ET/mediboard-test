@@ -21,11 +21,19 @@ function pageMain() {
   </tr>
 
   <tr>
-
-  <th>Patient</th>
-  <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
+    <th>Patient</th>
+    <td>{{$selOp->_ref_sejour->_ref_patient->_view}} &mdash; {{$selOp->_ref_sejour->_ref_patient->_age}} ans</td>
   </tr>
+  
   <tr>
+    <td colspan="2">
+      <ul id="main_tab_group" class="control_tabs">
+        <li><a href="#one">CCAM</a></li>
+        <li><a href="#two">NGAP</a></li>
+      </ul>
+    </td>
+  </tr>       
+  <tr id="one">
     <th>Actes<br /><br />
       {{tr}}{{$selOp->_class_name}}{{/tr}}
       {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
@@ -43,4 +51,14 @@ function pageMain() {
       </div>
     </td> 
   </tr>
+  <tr id="two">
+    <th class="category" style="vertical-align: middle">
+      Actes <br />NGAP
+    </th>
+    <td id="listActesNGAP">
+      {{assign var="object" value=$selOp}}
+      {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+    </td>
+  </tr>
 </table>
+ <script type="text/javascript">new Control.Tabs('main_tab_group');</script>

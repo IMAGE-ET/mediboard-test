@@ -78,7 +78,7 @@
           <td>{{$curr_consult->tarif}}</td>
           <td>{{$curr_consult->secteur1}} €</td>
           <td>{{$curr_consult->secteur2}} €</td>
-          <td>{{if $etat == -1 && !$curr_consult->patient_regle}}0{{else}}{{$curr_consult->secteur1+$curr_consult->secteur2}}{{/if}} €</td>
+          <td>{{if $etat == -1 && !$curr_consult->date_reglement}}0{{else}}{{$curr_consult->secteur1+$curr_consult->secteur2}}{{/if}} €</td>
         </tr>
         {{/foreach}}
         <tr>

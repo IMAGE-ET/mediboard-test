@@ -11,7 +11,11 @@
  * Classe servant à gérer les enregistrements des actes CCAM pendant les
  * interventions
  */
-class CActeCCAM extends CMbMetaObject {
+
+require_once($AppUI->getModuleClass("dPccam", "acte"));
+
+
+class CActeCCAM extends CActe {
   static $coef_associations = array (
     "1" => 100,
     "2" => 50,
@@ -32,11 +36,9 @@ class CActeCCAM extends CMbMetaObject {
   var $code_phase          = null;
   var $execution           = null;
   var $modificateurs       = null;
-  var $montant_depassement = null;
   var $commentaire         = null;
   var $code_association    = null;
   var $regle               = null;
-  var $montant_base        = null;
   
   // Form fields
   var $_modificateurs     = array();
@@ -46,14 +48,13 @@ class CActeCCAM extends CMbMetaObject {
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
   var $_adapt_object      = false;
-  var $_montant_facture   = null;
+  
   // Object references
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
 
   var $_activite = null;
   var $_phase = null;
-  var $_preserve_montant = null;
   
 	function CActeCCAM() {
 		$this->CMbObject( "acte_ccam", "acte_id" );
@@ -63,18 +64,15 @@ class CActeCCAM extends CMbMetaObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["object_class"]        = "notNull enum list|COperation|CSejour|CConsultation";
     $specs["code_acte"]           = "notNull code ccam";
     $specs["code_activite"]       = "notNull num minMax|0|99";
     $specs["code_phase"]          = "notNull num minMax|0|99";
     $specs["execution"]           = "notNull dateTime";
     $specs["modificateurs"]       = "str maxLength|4";
-    $specs["montant_depassement"] = "currency";
     $specs["commentaire"]         = "text";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
     $specs["regle"]               = "bool";
-    $specs["montant_base"]        = "currency";
     $specs["_montant_facture"]    = "currency";
     return $specs;
   }
@@ -125,18 +123,7 @@ class CActeCCAM extends CMbMetaObject {
       return "$this->_class_name-check-already-coded";
     }
   }
-    
-    
-  function checkCoded(){
-    if($this->object_class == "CConsultation"){
-      $consult = new CConsultation();
-      $consult->load($this->object_id);
-      if ($consult->_coded == "1") {
-        return "Consultation déjà validée : Impossible de coter un acte CCAM";
-      }
-    }    
-  }
-  
+
   function canDeleteEx(){
     parent::canDeleteEx();
    
@@ -145,22 +132,7 @@ class CActeCCAM extends CMbMetaObject {
       return $msg;
     }
   }
-  
-  
-  function delete(){
-    if($msg = parent::delete()){
-      return $msg;
-    }
-    if(!$this->_preserve_montant){
-	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
-	    if($this->object_class == "CConsultation"){
-	      $consult = new CConsultation();
-	      $consult->load($this->object_id);
-	      $consult->updateMontants();
-	    } 
-	  }
-  }
-  
+
   function check() {
     
     // Test si la consultation est validée
@@ -220,7 +192,6 @@ class CActeCCAM extends CMbMetaObject {
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4) ? true : false;
-    $this->_montant_facture = $this->montant_base + $this->montant_depassement;
   }
   
   
@@ -232,15 +203,6 @@ class CActeCCAM extends CMbMetaObject {
     if ($msg = parent::store()) {
       return $msg;
     }
-    
-    if(!$this->_preserve_montant){
-	    // Lancement du store de la consult pour mettre a jour secteur1 et secteur2
-	    if($this->object_class == "CConsultation"){
-	      $consult = new CConsultation();
-	      $consult->load($this->object_id);
-	      $consult->updateMontants();
-	    }
-	  }
   }
   
   function loadRefObject(){

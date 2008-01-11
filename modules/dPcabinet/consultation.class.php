@@ -8,9 +8,9 @@
 */
 
 global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codableCCAM"));
+require_once($AppUI->getModuleClass("dPccam", "codable"));
 
-class CConsultation extends CCodableCCAM {
+class CConsultation extends CCodable {
   const PLANIFIE = 16;
   const PATIENT_ARRIVE = 32;
   const EN_COURS = 48;
@@ -31,7 +31,7 @@ class CConsultation extends CCodableCCAM {
   var $chrono        = null;
   var $annule        = null;
   
-  var $date_paiement = null;
+  var $date_reglement= null;
   var $motif         = null;
   var $rques         = null;
   var $examen        = null;
@@ -50,7 +50,7 @@ class CConsultation extends CCodableCCAM {
   var $total_amo         = null;
   var $facture_acquittee = null; // true si total_facture == a_regler
   var $a_regler          = null;     // somme que le patient doit régler a la fn
-  var $patient_regle     = null;     // paye devient patient_regle
+  //var $patient_regle     = null;     // paye devient patient_regle
   var $sejour_id         = null;
   
   
@@ -63,7 +63,7 @@ class CConsultation extends CCodableCCAM {
   var $_somme          = null;
   var $_types_examen   = null;
   var $_precode_acte   = null;
-  var $_store_ngap     = null;
+  
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
@@ -86,7 +86,6 @@ class CConsultation extends CCodableCCAM {
   var $_ref_examcomp       = null;
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
-  var $_ref_actes_ngap     = null;
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
@@ -95,15 +94,14 @@ class CConsultation extends CCodableCCAM {
    var $_ref_chir  = null;
    var $_date      = null;
    var $_is_anesth = null; 
-   var $_codes_ngap = null;
-   var $_tokens_ngap = null; // Might be a DB field $codes_ngap as for CCAM
    
    // Filter Fields
-   var $_date_min	 	= null;
-   var $_date_max 		= null;
-   var $_prat_id 		= null;
-   var $_etat_paiement  = null;
-   var $_type_affichage = null;
+   var $_date_min	 	       = null;
+   var $_date_max 		     = null;
+   var $_prat_id 		       = null;
+   var $_etat_reglement    = null;
+   var $_etat_acquittement = null;
+   var $_type_affichage    = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -118,7 +116,6 @@ class CConsultation extends CCodableCCAM {
     $backRefs["examcomp"] = "CExamComp consultation_id";
     $backRefs["examnyha"] = "CExamNyha consultation_id";
     $backRefs["exampossum"] = "CExamPossum consultation_id";
-    $backRefs["actes_ngap"] = "CActeNGAP consultation_id";
     return $backRefs;
   }
   
@@ -132,7 +129,7 @@ class CConsultation extends CCodableCCAM {
     $specs["secteur2"]          = "currency";
     $specs["chrono"]            = "notNull enum list|16|32|48|64";
     $specs["annule"]            = "bool";
-    $specs["date_paiement"]     = "date";
+    $specs["date_reglement"]    = "date";
     $specs["motif"]             = "text";
     $specs["rques"]             = "text";
     $specs["examen"]            = "text";
@@ -146,7 +143,8 @@ class CConsultation extends CCodableCCAM {
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
-    $specs["_etat_paiement"]    = "enum list|paye|impaye default|paye";
+    $specs["_etat_reglement"]   = "enum list|reglee|non_reglee";
+    $specs["_etat_acquittement"]= "enum list|acquittee|non_acquittee";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_prat_id"]          = "text";
     $specs["_somme"]            = "currency";
@@ -156,7 +154,7 @@ class CConsultation extends CCodableCCAM {
     $specs["total_assure"]      = "currency";
     $specs["facture_acquittee"] = "bool";
     $specs["a_regler"]          = "currency";
-    $specs["patient_regle"]     = "bool";
+    //$specs["patient_regle"]     = "bool";
     $specs["sejour_id"]         = "ref class|CSejour";
     return $specs;
   }
@@ -197,8 +195,8 @@ class CConsultation extends CCodableCCAM {
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;
-    if($this->date_paiement == "0000-00-00")
-      $this->date_paiement = null;
+    if($this->date_reglement == "0000-00-00")
+      $this->date_reglement = null;
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
     $this->_check_premiere = $this->premiere;
@@ -215,8 +213,8 @@ class CConsultation extends CCodableCCAM {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
-    if ($this->date_paiement == "0000-00-00") {
-      $this->date_paiement = null;
+    if ($this->date_reglement == "0000-00-00") {
+      $this->date_reglement = null;
     }
 
     // Liaison FSE prioritaire sur l'état    
@@ -226,14 +224,14 @@ class CConsultation extends CCodableCCAM {
     
     // Gestion du tarif
     // Suppression de l'acquittement si on supprime le reglement patient
-    if($this->patient_regle !== null && $this->patient_regle == 0){
+    if($this->date_reglement !== null && $this->date_reglement == ""){
       $this->facture_acquittee = 0;
     }
     
     // Acquittement à 1 si secteur1 + secteur2 = a_regler
     // Multiplication par 100 a cause des erreurs de PHP avec les float
     if($this->secteur1 !== null && $this->secteur2 !== null && $this->a_regler !== null){
-       if(intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100) && ($this->patient_regle == 1)){       
+       if(intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100) && ($this->date_reglement)){       
         $this->facture_acquittee = 1;
       }
     }
@@ -241,29 +239,12 @@ class CConsultation extends CCodableCCAM {
     // Si rien a regler
     if($this->a_regler !== null && $this->a_regler == 0 && $this->valide){
       $this->mode_reglement = "tiers";
-      $this->patient_regle = 1;
       $this->facture_acquittee = 0;
+      $this->date_reglement = mbDate();
     }
   }
 
-  function loadRefsActesNGAP() {
-    if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
-      return;
-    }
-    
-    $this->_codes_ngap = array();
-    foreach ($this->_ref_actes_ngap as $_actes_ngap){
-      if($_actes_ngap->montant_depassement < 0){
-        $_montant_depassement_temp = str_replace("-", "*", $_actes_ngap->montant_depassement);
-      } else {
-        $_montant_depassement_temp = $_actes_ngap->montant_depassement;
-      }
-      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp; 
-    }
 
-    $this->_tokens_ngap = join($this->_codes_ngap, "|");
-  }
-  
   function check() {
     // Data checking
     $msg = null;
@@ -474,7 +455,8 @@ class CConsultation extends CCodableCCAM {
         $acte->code        = $fseActe["PRE_CODE"];
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
-        $acte->consultation_id = $this->_id;
+        $acte->object_id = $this->_id;
+        $acte->object_class = $this->_class_name;
         break;
         
         case "1": 
@@ -580,7 +562,8 @@ class CConsultation extends CCodableCCAM {
 	      if(count($detailCodeNGAP) >= 5){
 	        $acte->montant_depassement = str_replace("*","-",$detailCodeNGAP[4]);
 	      }
-	      $acte->consultation_id = $this->_id;
+	      $acte->object_id = $this->_id;
+	      $acte->object_class = $this->_class_name;
 	      if (!$acte->countMatchingList()) {
 	        $acte->store();
 	      }
@@ -588,7 +571,7 @@ class CConsultation extends CCodableCCAM {
     } 
   }
   
-  function updateMontants(){
+  function doUpdateMontants(){
     // Initialisation des montants
     $secteur1_NGAP = 0;
     $secteur1_CCAM = 0;

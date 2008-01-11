@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.86";
+$config["mod_version"]     = "0.89";
 $config["mod_type"]        = "user";
 
 
@@ -888,7 +888,47 @@ class CSetupdPcabinet extends CSetup {
             ADD `sejour_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.86";
+    $this->makeRevision("0.86");
+    $this->setTimeLimit(300);
+    $sql = "UPDATE `consultation`
+            SET `patient_regle` = '1'
+            WHERE ROUND(`a_regler`,2) = ROUND(0,2);";
+    $this->addQuery($sql);
+     
+    $sql = "UPDATE `consultation`
+            SET `facture_acquittee` = '1'
+            WHERE ROUND(`a_regler`,2) = ROUND(`secteur1` + `secteur2`, 2)
+            AND `patient_regle` = '1'
+            AND (`facture_acquittee` <> '1'
+                  OR `facture_acquittee` IS NULL);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`, `plageconsult`
+            SET `date_paiement` = `plageconsult`.`date`  
+            WHERE `patient_regle` = '1'
+            AND `date_paiement` IS NULL
+            AND `consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`
+            SET date_paiement = NULL
+            WHERE date_paiement IS NOT NULL
+            AND patient_regle <> '1';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.87");
+    $sql = "ALTER TABLE `consultation` 
+            CHANGE `date_paiement` `date_reglement` DATE,
+            DROP `patient_regle`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.88");
+    $sql = "ALTER TABLE `acte_ngap`
+            CHANGE `consultation_id` `object_id` INT(11) UNSIGNED NOT NULL, 
+            ADD `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL default 'CConsultation';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.89";
     
   }
 }

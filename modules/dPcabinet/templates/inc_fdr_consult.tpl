@@ -80,9 +80,7 @@ function cancelTarif(action) {
     oForm._somme.value = 0;
   }
   
-  oForm.patient_regle.value = "0";
-  
-  oForm.date_paiement.value = "";  
+  oForm.date_reglement.value = "";  
   submitFdr(oForm);
 }
 
@@ -144,20 +142,7 @@ function modifSecteur2(){
 function effectuerReglement() {
   // passage de patient_regle a 1
   var oForm = document.tarifFrm;
-  oForm.patient_regle.value = "1";
-  oForm.date_paiement.value = new Date().toDATE();
-  /*
-  var secteur1 = oForm.secteur1.value;
-  var secteur2 = oForm.secteur2.value;
-  var somme = parseFloat(secteur1) + parseFloat(secteur2);
-  var a_regler = oForm.a_regler.value;
-  */
-  // Si le total de la facture est egal au reglement patient, facture acquitte
-  /*
-  if(somme == a_regler){
-    oForm.facture_acquittee.value = "1";
-  }
-  */
+  oForm.date_reglement.value = new Date().toDATE();
   submitFdr(oForm);
 }
 
@@ -532,14 +517,13 @@ function submitFdr(oForm) {
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       
       <table width="100%">  
-        {{if !$consult->patient_regle}}
+        {{if !$consult->date_reglement}}
        
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            <input type="hidden" name="patient_regle" value="0" />
-            <input type="hidden" name="date_paiement" value="" />
+            <input type="hidden" name="date_reglement" value="" />
        
             {{if $consult->valide}}
 	          {{mb_value object=$consult field="secteur1"}} (S1) +
@@ -579,8 +563,7 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             {{mb_field object=$consult field="a_regler" hidden=1 prop=""}}
-            {{mb_field object=$consult field="patient_regle" hidden=1 prop=""}}
-            {{mb_field object=$consult field="date_paiement" hidden=1 prop=""}}
+            {{mb_field object=$consult field="date_reglement" hidden=1 prop=""}}
             <strong>{{$consult->a_regler}} &euro; ont été réglés par le patient: {{mb_value object=$consult field="mode_reglement"}}</strong>
           </td>
         </tr>
@@ -594,7 +577,7 @@ function submitFdr(oForm) {
         </tr>
         {{/if}}
         
-        {{if $consult->tarif && $consult->patient_regle == "0" && $consult->valide == "1"}}
+        {{if $consult->tarif && $consult->date_reglement == "" && $consult->valide == "1"}}
         <tr>
           <th>
             {{mb_label object=$consult field="mode_reglement"}}
@@ -639,7 +622,7 @@ function submitFdr(oForm) {
             {{/if}}
           </td>
         </tr>
-        {{elseif !$consult->patient_regle}}
+        {{elseif !$consult->date_reglement}}
         <tr>
           <th>{{mb_label object=$consult field="a_regler"}}</th>
           <td>

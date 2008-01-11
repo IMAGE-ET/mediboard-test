@@ -141,8 +141,9 @@ function reloadAfterSaveDoc() {
             <ul id="main_tab_group" class="control_tabs">
               <li><a href="#one">Timmings</a></li>
               <li><a href="#two">Anesthésie</a></li>
-              <li><a href="#three">Codage</a></li>
-              <li><a href="#four">Dossier</a></li>
+              <li><a href="#three">CCAM</a></li>
+              <li><a href="#four">NGAP</a></li>
+              <li><a href="#five">Dossier</a></li>
             </ul>
           </td>
         </tr>
@@ -212,9 +213,25 @@ function reloadAfterSaveDoc() {
         <!-- Fin du troisieme onglet -->
         
         
-		    <!-- Quatrième onglet => Dossier Medical -->
-			  {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
+        
+        <!-- Quatrième onglet => Codage acte NGAP -->
         <tr id="four">
+          <th class="category" style="vertical-align: middle">
+            Actes NGAP
+          </th>
+          <td id="listActesNGAP">
+            {{assign var="object" value=$selOp}}
+            {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+          </td>
+        </tr>
+        <!-- Fin du quatrieme onglet -->
+        
+        
+        
+        
+		    <!-- Cinquieme onglet => Dossier Medical -->
+			  {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
+        <tr id="five">
           <th class="category" style="vertical-align: middle">
             Séjour
           </th>
@@ -222,7 +239,7 @@ function reloadAfterSaveDoc() {
            {{include file="inc_vw_dossier.tpl"}}
           </td>
         </tr>
-        <!-- Fin du quatrieme onglet -->
+        <!-- Fin du cinquieme onglet -->
         
         
         

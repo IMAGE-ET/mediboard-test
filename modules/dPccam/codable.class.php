@@ -1,6 +1,6 @@
 <?php
 
-class CCodableCCAM extends CMbObject {
+class CCodable extends CMbObject {
 	
   var $codes_ccam          = null;
   var $_codes_ccam         = null;
@@ -13,9 +13,19 @@ class CCodableCCAM extends CMbObject {
   var $_praticien_id       = null;
   var $_ref_anesth         = null;
   var $_anesth             = null;
-  var $_coded              = null;
+  var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
   var $_associationCodesActes = null;
-
+  
+  // Actes GNAP
+  var $_store_ngap     = null;
+  var $_ref_actes_ngap = null;
+  var $_codes_ngap     = null;
+  var $_tokens_ngap    = null;
+  
+  var $_ref_actes      = null;
+  
+  
+  
   function updateFormFields() {
   	parent::updateFormFields();
     
@@ -25,6 +35,16 @@ class CCodableCCAM extends CMbObject {
       array(); 
  
   }
+  
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["actes_ngap"] = "CActeNGAP object_id";
+    $backRefs["actes_ccam"] = "CActeCCAM object_id";
+    return $backRefs;
+  }
+  
+  
   
   function getAssociationCodesActes() {
     $this->updateFormFields();
@@ -64,7 +84,7 @@ class CCodableCCAM extends CMbObject {
   }
   
   
-  function updateMontants(){
+  function doUpdateMontants(){
     
   }
   
@@ -84,6 +104,37 @@ class CCodableCCAM extends CMbObject {
   function getExecutantId($code_activite) {
     return null;
   }
+  
+  
+  function loadRefsActes(){
+    $this->loadRefsActesCCAM();
+    $this->loadRefsActesNGAP();  
+    
+    foreach($this->_ref_actes_ccam as $key => $acte_ccam){
+      $this->_ref_actes[] = $acte_ccam;
+    }
+    foreach($this->_ref_actes_ngap as $key => $acte_ngap){
+      $this->_ref_actes[] = $acte_ngap;
+    }
+  }
+  
+  
+  function loadRefsActesNGAP() {
+    if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
+      return;
+    }
+    $this->_codes_ngap = array();
+    foreach ($this->_ref_actes_ngap as $_actes_ngap){
+      if($_actes_ngap->montant_depassement < 0){
+        $_montant_depassement_temp = str_replace("-", "*", $_actes_ngap->montant_depassement);
+      } else {
+        $_montant_depassement_temp = $_actes_ngap->montant_depassement;
+      }
+      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp; 
+    }
+    $this->_tokens_ngap = join($this->_codes_ngap, "|");
+  }
+  
   
   function loadRefsCodesCCAM($full = 0) {
     $this->_ext_codes_ccam = array();
@@ -166,11 +217,8 @@ class CCodableCCAM extends CMbObject {
     return parent::check();
   }
   
+  
   function loadRefsActesCCAM() {
-  	$acte = new CActeCCAM();
-  	$acte->object_id = $this->_id;
-  	$acte->object_class = $this->_class_name;
-  	
   	$order = array();
   	$order[] = "code_association";
   	$order[] = "code_acte";
@@ -178,8 +226,10 @@ class CCodableCCAM extends CMbObject {
   	$order[] = "code_phase";
   	$order[] = "acte_id";
   	
-  	$this->_ref_actes_ccam = $acte->loadMatchingList($order);
-  	  	
+    if (null === $this->_ref_actes_ccam = $this->loadBackRefs("actes_ccam", $order)) {
+      return;
+    }
+  	
     $this->_temp_ccam = array();
     foreach ($this->_ref_actes_ccam as $_acte_ccam){
       if($_acte_ccam->montant_depassement < 0){

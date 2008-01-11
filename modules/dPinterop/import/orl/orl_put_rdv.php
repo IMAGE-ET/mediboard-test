@@ -86,7 +86,7 @@ foreach ($rdv as $consult) {
     $consultation->duree = @$freqs[$consult->freq] or 1;
     $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
     $consultation->annule = 0;
-    $consultation->patient_regle = strftime("%Y-%m-%d") > $consult->date ? 1 : 0;
+    $consultation->date_reglement = strftime("%Y-%m-%d") > $consult->date ? $consult->date : "";
     $consultation->motif = $consult->libelle;
     $consultation->premiere = ($consult->libelle == "CS 1ère fois");
 
