@@ -49,7 +49,14 @@ var Patient = {
   <tr>
     <th><label for="jeuneFille" title="Nom de naissance">Nom de naissance</label></th>
     <td><input tabindex="3" type="text" name="jeuneFille" value="{{$jeuneFille|stripslashes}}" /></td>
+    {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
+    <th>IPP</th>
+    <td>
+      <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
+    </td>
+    {{else}}
     <td colspan="2" />
+    {{/if}}
   </tr>
   
   
@@ -68,11 +75,10 @@ var Patient = {
            day_empty="Jour"
            month_empty="Mois"
            year_empty="Année"
-           day_extra="tabindex='6'"
-           month_extra="tabindex='7'"
-           year_extra="tabindex='8'"
-           all_extra="style='display:inline;'"}}
-           
+           day_extra="tabindex='7'"
+           month_extra="tabindex='8'"
+           year_extra="tabindex='9'"
+           all_extra="style='display:inline;'"}}   
     </td>
   </tr>
   

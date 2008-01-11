@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsRead();
 
@@ -25,6 +25,10 @@ $patient_cp        = mbGetValueFromGetOrSession("cp"        , ""       );
 $patient_day       = mbGetValueFromGetOrSession("Date_Day"  , date("d"));
 $patient_month     = mbGetValueFromGetOrSession("Date_Month", date("m"));
 $patient_year      = mbGetValueFromGetOrSession("Date_Year" , date("Y"));
+$patient_ipp       = mbGetValueFromGet("patient_ipp");
+$useVitale         = mbGetValueFromGet("useVitale");
+
+$patVitale = new CPatient;
 
 $patient = new CPatient;
 if ($new = mbGetValueFromGet("new")) {
@@ -37,8 +41,7 @@ if ($new = mbGetValueFromGet("new")) {
 }
 
 // Champs vitale
-$patVitale = new CPatient;
-if ($useVitale = mbGetValueFromGet("useVitale")) {
+if ($useVitale) {
   $patVitale->getValuesFromVitale();
   $patVitale->updateFormFields();
   $patient_nom    = $patVitale->nom;
@@ -53,56 +56,95 @@ if ($useVitale = mbGetValueFromGet("useVitale")) {
   $patVitale->loadFromIdVitale();
 }
 
-$where        = array();
-$whereSoundex = array();
-$soundexObj   = new soundex2();
 
-if ($patient_nom) {
-  $where["nom"]                 = "LIKE '$patient_nom%'";
-  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
-}
-if ($patient_prenom) {
-  $where["prenom"]                 = "LIKE '$patient_prenom%'";
-  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
-}
-if ($patient_naissance == "on") $where["naissance"] = $whereSoundex["naissance"] = "= '$patient_year-$patient_month-$patient_day'";
-if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
-if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
-
-$patients        = array();
-$patientsSoundex = array();
-
-if (!function_exists('array_diff_key')) {
-  function array_diff_key() {
-    $argCount  = func_num_args();
-    $argValues  = func_get_args();
-    $valuesDiff = array();
-    if ($argCount < 2) return false;
-    foreach ($argValues as $argParam) {
-      if (!is_array($argParam)) return false;
-    }
-    foreach ($argValues[0] as $valueKey => $valueData) {
-      for ($i = 1; $i < $argCount; $i++) {
-        if (isset($argValues[$i][$valueKey])) continue 2;
-      }
-      $valuesDiff[$valueKey] = $valueData;
-    }
-    return $valuesDiff;
+// Recherhche par IPP
+if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
+  // Initialisation dans le cas d'une recherche par IPP
+  $patients = array();
+  $patientsSoundex = array();
+  $patientsCount = 0;
+  $patientsSoundexCount = 0;
+  
+  $idsante = new CIdSante400();
+  $idsante->tag = str_replace('$g',$g, $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]);
+  $idsante->id400 = $patient_ipp;
+  $idsante->object_class = "CPatient";
+  $idsante->loadMatchingObject();
+  
+  if($idsante->object_id){
+   $patient = new CPatient();
+   $patient->load($idsante->object_id);
+   $patients[$patient->_id] = $patient; 
   }
+} else {
+	$where        = array();
+	$whereSoundex = array();
+	$soundexObj   = new soundex2();
+	
+	if ($patient_nom) {
+	  $where["nom"]                 = "LIKE '$patient_nom%'";
+	  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
+	}
+	if ($patient_prenom) {
+	  $where["prenom"]                 = "LIKE '$patient_prenom%'";
+	  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
+	}
+	
+	if ($patient_naissance == "on"){
+	  $year =($patient_year)?"$patient_year-":"%-";
+	  $month =($patient_month)?"$patient_month-":"%-";
+	  $day =($patient_day)?"$patient_day":"%";
+	  if ($day!="%") {
+	    $day = str_pad($day,2,"0",STR_PAD_LEFT);
+	  }
+	  $naissance = $year.$month.$day;
+	}
+	  
+	if($patient_year || $patient_month || $patient_day){
+	  $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
+	}
+	
+	if ($patient_ville)             $where["ville"]     = $whereSoundex["ville"]     = "= '$patient_ville'";
+	if ($patient_cp)                $where["cp"]        = $whereSoundex["cp"]        = "= '$patient_cp'";
+	
+	$patients        = array();
+	$patientsSoundex = array();
+	
+	if (!function_exists('array_diff_key')) {
+	  function array_diff_key() {
+	    $argCount  = func_num_args();
+	    $argValues  = func_get_args();
+	    $valuesDiff = array();
+	    if ($argCount < 2) return false;
+	    foreach ($argValues as $argParam) {
+	      if (!is_array($argParam)) return false;
+	    }
+	    foreach ($argValues[0] as $valueKey => $valueData) {
+	      for ($i = 1; $i < $argCount; $i++) {
+	        if (isset($argValues[$i][$valueKey])) continue 2;
+	      }
+	      $valuesDiff[$valueKey] = $valueData;
+	    }
+	    return $valuesDiff;
+	  }
+	}
+
+	$pat = new CPatient();
+	if ($where) {
+	  $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
+	}
+	if($whereSoundex && ($nbExact = (100 - count($patients)))) {
+	  $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
+	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
+	}
 }
 
-$pat = new CPatient();
-if ($where) {
-  $patients = $pat->loadList($where, "nom, prenom, naissance", "0, 100");
-}
-if($whereSoundex && ($nbExact = (100 - count($patients)))) {
-  $patientsSoundex = $pat->loadList($whereSoundex, "nom, prenom, naissance", "0, $nbExact");
-  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
-}
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
+$smarty->assign("patient_ipp"    , $patient_ipp                               );
 $smarty->assign("board"          , $board                                     );
 $smarty->assign("nom"            , $patient_nom                               );
 $smarty->assign("prenom"         , $patient_prenom                            );
