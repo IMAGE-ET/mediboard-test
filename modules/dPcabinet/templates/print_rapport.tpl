@@ -99,6 +99,9 @@
       <table class="tbl">
         <tr>
           <th>Patient</th>
+          {{if !$compta}}
+          <th>Tel</th>
+          {{/if}}
           <th>Type</th>
           <th>Code</th>
           <th>Secteur 1</th>
@@ -109,6 +112,9 @@
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
         <tr>
           <td><a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a></td>
+          {{if !$compta}}
+          <td>{{$curr_consult->_ref_patient->tel}}</td>
+          {{/if}}
           <td>{{$curr_consult->mode_reglement}}</td>
           <td>{{$curr_consult->tarif}}</td>
           <td>{{$curr_consult->secteur1}}€</td>
