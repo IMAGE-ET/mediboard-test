@@ -31,7 +31,7 @@ $views = array(PERM_DENY => "caché",
               PERM_READ => "vue",
               PERM_EDIT => "administration");
               
-$icons = array(PERM_DENY => "note_red.png",
+$icons = array(PERM_DENY => "",
                PERM_READ => "note_blue.png",
                PERM_EDIT => "note_green.png");
 
