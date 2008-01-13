@@ -52,4 +52,37 @@ $nbPlagesCreees = 0;
 $nbPlagesChargees = 0;
 $nbConsultationsCreees = 0;
 $nbConsultationsChargees = 0;
+
+foreach ($consults as $consult) {
+  // vérification de l'existence de la plage
+  $plage = new CPlageconsult();
+  $where = array(
+    "chir_id" => "= '$consult->prat_mb_id'",
+    "date"    => "= '$consult->date'");
+  $plage->loadObject($where);
+
+  if ($plage->plageconsult_id == null) {
+    $plage->chir_id = $consult->prat_mb_id;
+    $plage->date    = $consult->date;
+    $plage->freq    = $freq;
+    $plage->debut   = "09:00:00";
+    $plage->fin     = "20:00:00";
+    $plage->libelle = "Import Cobalys";
+    //$plage->store();
+    $nbPlagesCreees++;
+  } else {
+    $nbPlagesChargees++;
+  }
+   
+}
+
+mbTrace($limitConsult, "limit start");
+mbTrace($nbPlagesCreees, "nbPlagesCreees");
+mbTrace($nbPlagesChargees, "nbPlagesChargees");
+mbTrace($nbConsultationsCreees, "nbConsultationsCreees");
+mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
+
+//$limitConsult = count($consults) ? $limitConsult + 1000 : -1;
+//mbSetValueToSession("limitConsult", $limitConsult);
+//header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
 ?>
