@@ -9,9 +9,8 @@
 
 global $AppUI, $can, $m;
 
-mbTrace("ok"); die;
-
 $limit = mbGetValueFromGetOrSession("limit", 0);
+mbTrace($limit); die;
 $ds = CSQLDataSource::get("std");
 if ($limit == -1) {
   return;	
