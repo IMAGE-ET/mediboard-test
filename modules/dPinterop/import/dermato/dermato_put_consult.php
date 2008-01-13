@@ -9,6 +9,8 @@
 
 global $AppUI, $can, $m;
 
+mbTrace("ok"); die;
+
 $limit = mbGetValueFromGetOrSession("limit", 0);
 $ds = CSQLDataSource::get("std");
 if ($limit == -1) {
@@ -18,8 +20,6 @@ if ($limit == -1) {
 $can->needsRead();
 
 set_time_limit( 1800 );
-
-mbTrace("ok"); die;
 
 // Paramètres
 $freq = "00:15:00";
