@@ -10,7 +10,6 @@
 global $AppUI, $can, $m;
 
 $limitConsult = mbGetValueFromGetOrSession("limitConsult", 0);
-mbTrace($limitConsult); die;
 $ds = CSQLDataSource::get("std");
 if ($limitConsult == -1) {
   return;	
