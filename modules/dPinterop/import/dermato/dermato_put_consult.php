@@ -19,6 +19,8 @@ $can->needsRead();
 
 set_time_limit( 1800 );
 
+mbTrace("ok"); die;
+
 // Paramètres
 $freq = "00:15:00";
 $freqs = array (
@@ -47,8 +49,6 @@ $consults = array();
 while ($row = $ds->fetchObject($res)) {
   $consults[] = $row;
 }
-
-mbTrace($consults); die;
 
 $nbPlagesCreees = 0;
 $nbPlagesChargees = 0;
