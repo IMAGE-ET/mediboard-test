@@ -18,12 +18,30 @@ function doAction(sAction) {
   </li>
   <li>Pour chaque import, placer le fichier TXT correspondant dans la racine du module dPinterop.
     <ul>
-      <li><a href="#" onclick="doAction('dermato_patients')">Import des patients</a> : PATIENT.TXT, (le concaténer avec PATIENT_RDV.TXT)</li>
-      <li><a href="#" onclick="doAction('dermato_praticiens')">Import des praticiens</a> : PRATICIEN.TXT</li>
-      <li><a href="#" onclick="doAction('dermato_medecins')">Import des médecins traitants</a> : MED_TRAITANT.TXT</li>
-      <li><a href="#" onclick="doAction('dermato_consult1')">Import des consultations (horaire)</a> : PLAGE CS.TXT</li>
-      <li><a href="#" onclick="doAction('dermato_consult2')">Import des consultations (examen)</a> : CONSULTATIONS.TXT</li>
-      <li><a href="#" onclick="doAction('dermato_rdv');">Import RDV à venir</a> : RDV.TXT</li>
+      <li>
+        <a href="#" onclick="doAction('dermato_patients')">Import des patients</a> :
+        PATIENT.TXT, (le concaténer avec PATIENT_RDV.TXT)
+      </li>
+      <li>
+        <a href="#" onclick="doAction('dermato_praticiens')">Import des praticiens</a> :
+        PRATICIEN.TXT
+      </li>
+      <li>
+        <a href="#" onclick="doAction('dermato_medecins')">Import des médecins traitants</a> :
+        MED_TRAITANT.TXT
+      </li>
+      <li>
+        <a href="#" onclick="doAction('dermato_consult1')">Import des consultations (horaire)</a> :
+        PLAGE CS.TXT
+      </li>
+      <li>
+        <a href="#" onclick="doAction('dermato_consult2')">Import des consultations (examen)</a> :
+        CONSULTATIONS.TXT
+      </li>
+      <li>
+        <a href="#" onclick="doAction('dermato_rdv');">Import RDV à venir</a> :
+        RDV.TXT
+      </li>
     </ul>
   </li>
   <li>
@@ -37,7 +55,7 @@ function doAction(sAction) {
       <li><a href="#" onclick="doAction('dermato_put_praticiens')">Envoie des praticiens vers Mediboard</a> (!! Attention, il faut le faire à la main !!)</li>
       <li><a href="#" onclick="doAction('dermato_put_medecins')">Envoie des medecins vers Mediboard</a></li>
       <li><a href="#" onclick="doAction('dermato_put_patients')">Envoie des patients vers Mediboard</a></li>
-      <li><a href="#" onclick="doAction('dermato_put_consult')">Envoie des consultations vers Mediboard</a></li>
+      <li><a href="#" onclick="doAction('dermato_put_consult')">Envoie des consultations vers Mediboard</a> (!! Attention, vérifier la liste des praticiens pris en compte !!)</li>
       <li><a href="#" onclick="doAction('dermato_put_rdv')">Envoie des rdv à venir vers Mediboard</a></li>
     </ul>
   </li>

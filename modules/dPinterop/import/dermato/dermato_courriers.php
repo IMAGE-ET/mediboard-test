@@ -13,6 +13,6 @@ $can->needsRead();
 
 set_time_limit( 1800 );
 
-mbInsertCSV("modules/dPinterop/chemin_courrier.txt", "dermato_import_courriers", true);
+mbInsertCSV("modules/dPinterop/chemin.txt", "dermato_import_courriers", true);
 
 ?>

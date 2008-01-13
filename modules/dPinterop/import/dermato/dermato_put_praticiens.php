@@ -21,35 +21,35 @@ $link = 0;
 
 foreach($listImport as $key => $value) {
   $sql = "SELECT * FROM users, users_mediboard" .
-  		"\nWHERE users.user_id = users_mediboard.user_id" .
-  		"\nAND users.user_first_name = '".trim($value["prenom"])."'" .
-  		"\nAND users.user_last_name = '".trim($value["nom"])."'";
+          "\nWHERE users.user_id = users_mediboard.user_id" .
+          "\nAND users.user_first_name = '".trim($value["prenom"])."'" .
+          "\nAND users.user_last_name = '".trim($value["nom"])."'";
   $match = $ds->loadlist($sql);
   if(!count($match)) {
-  	$user = new CMediusers;
-  	// DB Table key
-  	$user->user_id = '';
-  	// DB Fields
+      $user = new CMediusers;
+      // DB Table key
+      $user->user_id = '';
+      // DB Fields
     $user->remote = 0;
     // DB References
-    // On prend la fonction ORL
-	$user->function_id = 11;
+    // On prend la fonction DERMATO
+    $user->function_id = 13;
     // dotProject user fields
     $user->_user_type = 3;
-	$user->_user_username = trim($value["nom"]);
-	$user->_user_password = "nevousconnectezpassvp";
-	$user->_user_first_name = trim($value["prenom"]);
-	$user->_user_last_name  = trim($value["nom"]);
-	$user->store();
-	$sql = "UPDATE dermato_import_praticiens" .
-    		"\nSET mb_id = '".$user->user_id."'" .
-    		"\nWHERE praticien_id = '".$value["praticien_id"]."'";
+    $user->_user_username = trim($value["nom"]);
+    $user->_user_password = "nevousconnectezpassvp";
+    $user->_user_first_name = trim($value["prenom"]);
+    $user->_user_last_name  = trim($value["nom"]);
+    $user->store();
+    $sql = "UPDATE dermato_import_praticiens" .
+            "\nSET mb_id = '".$user->user_id."'" .
+            "\nWHERE praticien_id = '".$value["praticien_id"]."'";
     $ds->exec($sql);
     $new++;
   } else {
     $sql = "UPDATE dermato_import_praticiens" .
-    		"\nSET mb_id = '".$match[0]["user_id"]."'" .
-    		"\nWHERE praticien_id = '".$value["praticien_id"]."'";
+            "\nSET mb_id = '".$match[0]["user_id"]."'" .
+            "\nWHERE praticien_id = '".$value["praticien_id"]."'";
     $ds->exec($sql);
     $link++;
   }

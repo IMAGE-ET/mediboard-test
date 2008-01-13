@@ -13,7 +13,7 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 set_time_limit( 1800 );
 
-$step = 100;
+$step = 5000;
 
 $current = mbGetValueFromGet("current", 0);
 $new = mbGetValueFromGet("new", 0);
@@ -106,8 +106,8 @@ foreach($listImport as $key => $value) {
       $med = $ds->loadlist($sql);
       $pat->medecin3 = $med[0]["mb_id"];
     }
-    $pat->incapable_majeur = $value["incapable_majeur"];
-    $pat->ATNC = $value["ATNC"];
+    $pat->incapable_majeur = $value["incapable_majeur"] == 'o' ? 1 : 0;
+    $pat->ATNC = $value["ATNC"] == 'o' ? 1 : 0;
     $pat->matricule = $value["matricule"];
     $pat->SHS = null;
     $pat->rques = $value["rques"];
@@ -129,20 +129,20 @@ foreach($listImport as $key => $value) {
 $current++;
 
 echo '<p>Opération terminée.</p>';
-echo '<p>'.$new.' éléments créés, '.$link.' éléments liés.</p><hr>';
+echo '<p>'.$new.' éléments créés, '.$link.' éléments liés.</p><hr />';
 
 if(count($listImport) == $step) {
-  echo '<a onclick="javascript:next();">'.(count($listImport)).' suivant >>></a>';
+  echo '<a href="#" class="tooltip-trigger" onclick="javascript:nextStep();">'.(count($listImport)).' suivant >>></a>';
   ?>
-  <script language="JavaScript" type="text/javascript">
-    function next() {
-      var url = "index.php?m=dPinterop&dialog=1&a=dermato_put_patients";
+  <script type="text/javascript">
+    function nextStep() {
+      var url = "index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_patients";
       url += "&current=<?php echo $current; ?>";
       url += "&new=<?php echo $new; ?>";
       url += "&link=<?php echo $link; ?>";
       window.location.href = url;
     }
-    next();
+    nextStep();
   </script>
   <?php
 

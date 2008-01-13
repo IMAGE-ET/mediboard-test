@@ -23,10 +23,11 @@ class CFile extends CMbMetaObject {
   var $file_size          = null;
 
   // Form fields
-  var $_file_size = null;
-  var $_sub_dir   = null;
-  var $_file_path = null;
-  var $_nb_pages  = null;
+  var $_file_size    = null;
+  var $_sub_dir      = null;
+  var $_absolute_dir = null;
+  var $_file_path    = null;
+  var $_nb_pages     = null;
   
   // References
   var $_ref_file_owner = null;
@@ -75,6 +76,8 @@ class CFile extends CMbMetaObject {
       // Computes complete file path
       $this->_sub_dir = "$this->object_class";
       $this->_sub_dir .= "/".intval($this->object_id / 1000);
+      
+      $this->_absolute_dir = "$filesDir/$this->_sub_dir/$this->object_id";
 
       $this->_file_path = "$filesDir/$this->_sub_dir/$this->object_id/$this->file_real_filename";
     }

@@ -40,6 +40,7 @@ $sql = "SELECT " .
     "\nWHERE dermato_import_consultations1.chir_id = dermato_import_praticiens.praticien_id" .
     "\nAND dermato_import_consultations1.consultation1_id = dermato_import_consultations2.plageconsult_id" .
     "\nAND dermato_import_consultations2.patient_id = dermato_import_patients.patient_id" .
+    "\nAND dermato_import_praticiens.praticien_id IN ('9', '10'')" . // Liste des praticiens à prendre en compte
     "\nLIMIT $limit, 1000";
 $res = $ds->exec($sql);
 $consults = array();
@@ -102,7 +103,7 @@ foreach ($consults as $consult) {
     $consultation->traitement = $consult->traitement;
     $consultation->premiere = $consult->premiere;
     $consultation->tarif = $consult->tarif;
-    $consultation->mode_reglement = $consult->mode_reglement;
+    $consultation->mode_reglement = "";
 
     $consultation->store();
     $nbConsultationsCreees++;
@@ -120,5 +121,5 @@ mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
 
 $limit = count($consults) ? $limit + 1000 : -1;
 mbSetValueToSession("limit", $limit);
-header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&a=dermato_put_consult' );
+header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
 ?>

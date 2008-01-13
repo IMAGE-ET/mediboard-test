@@ -417,6 +417,7 @@ if (!function_exists('array_diff_key')) {
 
 function mbInsertCSV( $fileName, $tableName, $oldid = false )
 {
+    $ds = CSQLDataSource::get("std");
     $file = fopen( $fileName, 'rw' );
     if(! $file) {
       echo "Fichier non trouvé<br>";
@@ -436,7 +437,7 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
         $line = str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
         $size = strlen($line)-3;
         $test1 = $line[$size] != "\"";
-        if(($fileName != "modules/dPinterop/doc_recus.txt") && ($fileName != "modules/dPinterop/chemin_courrier.txt"))
+        if(($fileName != "modules/dPinterop/doc_recus.txt") && ($fileName != "modules/dPinterop/chemin.txt"))
           $test2 = $line[$size-1] == "\\";
         else
           $test2 = 0;
@@ -457,13 +458,14 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
         if ( strlen( $line ) > 2 )
         {
             $line = addslashes( $line );
-            $line = str_replace ( "\\\";\\\"", "', '", $line );
-            $line = str_replace ( "\\\"", "", $line );
+            $line = str_replace("\\\";\\\"", "', '", $line);
+            $line = str_replace("\\\"", "", $line);
+            $line = str_replace("'NULL'", "NULL", $line);
             if($oldid)
               $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\', \'\' ) ';
             else
               $requete = 'INSERT INTO '.$tableName.' VALUES ( \''.$line.'\' ) ';
-            if ( ! $this->_spec->ds->exec ( $requete ) ) {
+            if ( ! $ds->exec ( $requete ) ) {
                 echo 'Erreur Ligne '.$k.' : '.mysql_error().'<br>'.$requete.'<br>';
                 $echec++;
             }  else {

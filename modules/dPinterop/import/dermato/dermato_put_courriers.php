@@ -65,24 +65,27 @@ foreach($listImport as $key => $value) {
         "\nAND dermato_import_patients.patient_id = '".$value["pat_id"]."'" .
         "\nAND consultation.plageconsult_id = plageconsult.plageconsult_id" .
         "\nAND plageconsult.chir_id = users_mediboard.user_id" .
-        "\nAND users_mediboard.function_id = '13'" .
+        "\nAND users_mediboard.user_id IN ('244', '245')" . // Liste des praticiens à prendre en compte
         "\nORDER by plageconsult.date DESC, plageconsult.debut DESC";
     $result = $ds->loadlist($sql);
     if(!count($result))
       $noconsult++;
     elseif(!file_exists("modules/dPinterop/courriers/".$file->file_name)) {
       $nofile++;
-      echo "modules/dPinterop/courriers/".$file->file_name."<br>";
+      //echo "modules/dPinterop/courriers/".$file->file_name."<br>";
     }
     else {
       $consult = $result[0];
-      $file->file_consultation = $consult["consultation_id"];
+      $file->object_id = $consult["consultation_id"];
+      $file->object_class = "CConsultation";
+      $file->updateFormFields();
       $file->file_size = filesize("modules/dPinterop/courriers/".$file->file_name);
       $totalSize += $file->file_size;
-      if(!file_exists("files/consultations/".$file->file_consultation))
-        mkdir("files/consultations/".$file->file_consultation, 0777);
-      copy("modules/dPinterop/courriers/".$file->file_name, "files/consultations/".$file->file_consultation."/".$file->file_real_filename);
-      chmod ("files/consultations/".$file->file_consultation."/".$file->file_real_filename, 0777); 
+      if(!file_exists($file->_absolute_dir)) {
+        mkdir($file->_absolute_dir, 0777, true);
+      }
+      copy("modules/dPinterop/courriers/".$file->file_name, $file->_file_path);
+      chmod ($file->_file_path, 0777); 
       $file->store();
       $sql = "UPDATE dermato_import_courriers" .
             "\nSET mb_id = '".$file->file_id."'" .
@@ -133,7 +136,7 @@ $totalSizePrint = "$value $unit";
 
 mbTrace($chrono, "Chrono :");
 
-echo '<p>Opération terminée (step '.$current.'/'.ceil(72500/$step).').</p>';
+echo '<p>Opération terminée (step '.$current.').</p>';
 echo '<p>'.$total.' ligne lues</p>';
 echo '<p>'.$new.' éléments créés ('.$totalSizePrint.'), ';
 echo $link.' éléments liés, ';
@@ -141,11 +144,11 @@ echo $nofile.' fichiers non trouvés, ';
 echo $noconsult.' consultations non trouvés</p><hr>';
 
 if(count($listImport) == $step) {
-  echo '<a onclick="javascript:next();">'.(count($listImport)).' suivant >>></a>';
+  echo '<span class="tooltip-trigger" onclick="nextStep();">'.(count($listImport)).' suivant >>></span>';
   ?>
-  <script language="JavaScript" type="text/javascript">
-    function next() {
-      var url = "index.php?m=dPinterop&dialog=1&a=dermato_put_courriers";
+  <script type="text/javascript">
+    function nextStep() {
+      var url = "index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_courriers";
       url += "&current=<?php echo $current; ?>";
       url += "&new=<?php echo $new; ?>";
       url += "&link=<?php echo $link; ?>";
@@ -155,7 +158,7 @@ if(count($listImport) == $step) {
       url += "&total=<?php echo $total; ?>";
       window.location.href = url;
     }
-    next();
+    nextStep();
   </script>
   <?php
 }
