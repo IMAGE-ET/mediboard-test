@@ -89,6 +89,11 @@ foreach ($consults as $consult) {
   if ($consultation->consultation_id == null) {
     $consultation->plageconsult_id = $plage->plageconsult_id;
     $consultation->patient_id = $consult->patient_mb_id;
+    
+    $consultation->heure = $consult->debut;
+    $consultation->duree = @$freqs[$consult->freq] or 1;
+    $consultation->secteur1 = $consult->secteur1;
+    $consultation->secteur2 = $consult->secteur2;
   }
    
 }
