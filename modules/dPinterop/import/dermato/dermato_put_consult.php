@@ -83,11 +83,11 @@ foreach ($consults as $consult) {
         AND plageconsult.date = '$consult->date'
         AND plageconsult.chir_id = '$consult->prat_mb_id'";
   $result = $ds->loadlist($sql);
+  mbtrace(1);
   if(count($result))
     $consultation->load($result[0]["consultation_id"]);
   
   if ($consultation->consultation_id == null) {
-    mbtrace(1);
     $consultation->plageconsult_id = $plage->plageconsult_id;
     $consultation->patient_id = $consult->patient_mb_id;
     
@@ -105,10 +105,8 @@ foreach ($consults as $consult) {
     $consultation->premiere = $consult->premiere;
     $consultation->tarif = $consult->tarif;
     $consultation->mode_reglement = "";
-    mbtrace(2);
 
     $consultation->store();
-    mbtrace(3);
     $nbConsultationsCreees++;
   } else {
     $nbConsultationsChargees++;
