@@ -48,8 +48,6 @@ while ($row = $ds->fetchObject($res)) {
   $consults[] = $row;
 }
 
-mbTrace($consults); die;
-
 $nbPlagesCreees = 0;
 $nbPlagesChargees = 0;
 $nbConsultationsCreees = 0;
@@ -121,7 +119,7 @@ mbTrace($nbPlagesChargees, "nbPlagesChargees");
 mbTrace($nbConsultationsCreees, "nbConsultationsCreees");
 mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
 
-$limitConsult = count($consults) ? $limitConsult + 1000 : -1;
-mbSetValueToSession("limitConsult", $limitConsult);
-header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
+//$limitConsult = count($consults) ? $limitConsult + 1000 : -1;
+//mbSetValueToSession("limitConsult", $limitConsult);
+//header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
 ?>
