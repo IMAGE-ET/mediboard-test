@@ -73,6 +73,18 @@ foreach ($consults as $consult) {
   } else {
     $nbPlagesChargees++;
   }
+  
+  // Création de la consultation
+  $consultation = new CConsultation;
+  $sql = "SELECT consultation.*, plageconsult.*
+        FROM consultation, plageconsult
+        WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
+        AND consultation.patient_id = '$consult->patient_mb_id'
+        AND plageconsult.date = '$consult->date'
+        AND plageconsult.chir_id = '$consult->prat_mb_id'";
+  $result = $ds->loadlist($sql);
+  if(count($result))
+    $consultation->load($result[0]["consultation_id"]);
    
 }
 
