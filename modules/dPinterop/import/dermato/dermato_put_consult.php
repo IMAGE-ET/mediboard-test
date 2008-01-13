@@ -59,7 +59,9 @@ foreach ($consults as $consult) {
   $where = array(
     "chir_id" => "= '$consult->prat_mb_id'",
     "date"    => "= '$consult->date'");
+  mbtrace(1);
   $plage->loadObject($where);
+  mbtrace(2);
 
   if ($plage->plageconsult_id == null) {
     $plage->chir_id = $consult->prat_mb_id;
@@ -73,6 +75,7 @@ foreach ($consults as $consult) {
   } else {
     $nbPlagesChargees++;
   }
+  mbtrace(3);
   
   // Création de la consultation
   $consultation = new CConsultation;
@@ -83,7 +86,6 @@ foreach ($consults as $consult) {
         AND plageconsult.date = '$consult->date'
         AND plageconsult.chir_id = '$consult->prat_mb_id'";
   $result = $ds->loadlist($sql);
-  mbtrace(1);
   if(count($result))
     $consultation->load($result[0]["consultation_id"]);
   
