@@ -105,7 +105,7 @@ foreach ($consults as $consult) {
     $consultation->tarif = $consult->tarif;
     $consultation->mode_reglement = "";
 
-    //$consultation->store();
+    $consultation->store();
     $nbConsultationsCreees++;
   } else {
     $nbConsultationsChargees++;
