@@ -48,6 +48,8 @@ while ($row = $ds->fetchObject($res)) {
   $consults[] = $row;
 }
 
+mbTrace($consults); die;
+
 $nbPlagesCreees = 0;
 $nbPlagesChargees = 0;
 $nbConsultationsCreees = 0;
