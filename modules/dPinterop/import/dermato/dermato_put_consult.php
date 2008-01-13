@@ -40,7 +40,7 @@ $sql = "SELECT " .
     "\nWHERE dermato_import_consultations1.chir_id = dermato_import_praticiens.praticien_id" .
     "\nAND dermato_import_consultations1.consultation1_id = dermato_import_consultations2.plageconsult_id" .
     "\nAND dermato_import_consultations2.patient_id = dermato_import_patients.patient_id" .
-    "\nAND dermato_import_praticiens.praticien_id IN ('9', '10'')" . // Liste des praticiens à prendre en compte
+    "\nAND dermato_import_praticiens.praticien_id IN ('9', '10')" . // Liste des praticiens à prendre en compte
     "\nLIMIT $limit, 1000";
 $res = $ds->exec($sql);
 $consults = array();
