@@ -68,7 +68,7 @@ foreach ($consults as $consult) {
     $plage->debut   = "09:00:00";
     $plage->fin     = "20:00:00";
     $plage->libelle = "Import Cobalys";
-    //$plage->store();
+    $plage->store();
     $nbPlagesCreees++;
   } else {
     $nbPlagesChargees++;
