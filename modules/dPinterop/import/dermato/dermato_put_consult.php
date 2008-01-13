@@ -10,6 +10,7 @@
 global $AppUI, $can, $m;
 
 $limitConsult = mbGetValueFromGetOrSession("limitConsult", 0);
+  mbtrace($limitConsult, "limit");
 $ds = CSQLDataSource::get("std");
 if ($limitConsult == -1) {
   return;	
@@ -42,7 +43,9 @@ $sql = "SELECT " .
     "\nAND dermato_import_consultations2.patient_id = dermato_import_patients.patient_id" .
     "\nAND dermato_import_praticiens.praticien_id IN ('9', '10')" . // Liste des praticiens à prendre en compte
     "\nLIMIT $limitConsult, 1000";
+  mbtrace(1);
 $res = $ds->exec($sql);
+  mbtrace(2);
 $consults = array();
 while ($row = $ds->fetchObject($res)) {
   $consults[] = $row;
@@ -59,9 +62,7 @@ foreach ($consults as $consult) {
   $where = array(
     "chir_id" => "= '$consult->prat_mb_id'",
     "date"    => "= '$consult->date'");
-  mbtrace(1);
   $plage->loadObject($where);
-  mbtrace(2);
 
   if ($plage->plageconsult_id == null) {
     $plage->chir_id = $consult->prat_mb_id;
@@ -75,7 +76,6 @@ foreach ($consults as $consult) {
   } else {
     $nbPlagesChargees++;
   }
-  mbtrace(3);
   
   // Création de la consultation
   $consultation = new CConsultation;
