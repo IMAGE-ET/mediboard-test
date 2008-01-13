@@ -90,6 +90,10 @@ foreach ($consults as $consult) {
     $consultation->plageconsult_id = $plage->plageconsult_id;
     $consultation->patient_id = $consult->patient_mb_id;
     
+    $consultation->heure = $consult->debut;
+    $consultation->duree = 1;
+    $consultation->secteur1 = $consult->secteur1;
+    $consultation->secteur2 = $consult->secteur2;
     $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
     $consultation->annule = 0;
     $consultation->date_reglement = strftime("%Y-%m-%d") > $consult->date ? $consult->date : "";
