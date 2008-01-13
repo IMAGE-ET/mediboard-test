@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
+$locales['mod-system-tab-view_ressources_logs'] = 'Logs ressources';
 $locales['Abbreviation'] = 'Abréviation';
 $locales['active'] = 'Activé';
 $locales['added'] = 'ajouté';
@@ -166,6 +166,13 @@ $locales['Locales file saved'] = 'Fichier de langage sauvé';
 $locales['Menu Icon'] = 'Menu icones';
 $locales['Menu Status'] = 'Menu Etat';
 $locales['Menu Text'] = 'Menu Texte';
+$locales['mod-dPcabinet-tab-vw_banques'] = 'Banques';
+$locales['mod-system-tab-view_access_logs'] = 'Logs d\'accès';
+$locales['mod-system-tab-view_history'] = 'Historique';
+$locales['mod-system-tab-view_install'] = 'Installation';
+$locales['mod-system-tab-view_messages'] = 'Messagerie';
+$locales['mod-system-tab-view_modules'] = 'Modules';
+$locales['mod-system-tab-view_translate'] = 'Traduction';
 $locales['Module'] = 'Module';
 $locales['Module configuration failed'] = 'La configuration du module a échoué';
 $locales['Module configured'] = 'Module configuré';

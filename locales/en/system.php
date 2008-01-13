@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPcabinet-tab-vw_banques'] = '';
+$locales['mod-system-tab-view_ressources_logs'] = '';
 $locales['Abbreviation'] = '';
 $locales['active'] = '';
 $locales['added'] = '';
@@ -166,6 +166,13 @@ $locales['Locales file saved'] = '';
 $locales['Menu Icon'] = '';
 $locales['Menu Status'] = '';
 $locales['Menu Text'] = '';
+$locales['mod-dPcabinet-tab-vw_banques'] = '';
+$locales['mod-system-tab-view_access_logs'] = '';
+$locales['mod-system-tab-view_history'] = '';
+$locales['mod-system-tab-view_install'] = '';
+$locales['mod-system-tab-view_messages'] = '';
+$locales['mod-system-tab-view_modules'] = '';
+$locales['mod-system-tab-view_translate'] = '';
 $locales['Module'] = '';
 $locales['Module configuration failed'] = '';
 $locales['Module configured'] = '';
