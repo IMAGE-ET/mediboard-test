@@ -68,47 +68,10 @@ foreach ($consults as $consult) {
     $plage->debut   = "09:00:00";
     $plage->fin     = "20:00:00";
     $plage->libelle = "Import Cobalys";
-    //$plage->store();
+    $plage->store();
     $nbPlagesCreees++;
   } else {
     $nbPlagesChargees++;
-  }
-  
-  // Création de la consultation
-  $consultation = new CConsultation;
-  $sql = "SELECT consultation.*, plageconsult.*
-        FROM consultation, plageconsult
-        WHERE consultation.plageconsult_id = plageconsult.plageconsult_id
-        AND consultation.patient_id = '$consult->patient_mb_id'
-        AND plageconsult.date = '$consult->date'
-        AND plageconsult.chir_id = '$consult->prat_mb_id'";
-  $result = $ds->loadlist($sql);
-  if(count($result))
-    $consultation->load($result[0]["consultation_id"]);
-  
-  if ($consultation->consultation_id == null) {
-    $consultation->plageconsult_id = $plage->plageconsult_id;
-    $consultation->patient_id = $consult->patient_mb_id;
-    
-    $consultation->heure = $consult->debut;
-    $consultation->duree = @$freqs[$consult->freq] or 1;
-    $consultation->secteur1 = $consult->secteur1;
-    $consultation->secteur2 = $consult->secteur2;
-    $consultation->chrono = strftime("%Y-%m-%d") > $consult->date ? CConsultation::TERMINE : CConsultation::PLANIFIE;
-    $consultation->annule = 0;
-    $consultation->date_reglement = strftime("%Y-%m-%d") > $consult->date ? $consult->date : "";
-    $consultation->motif = $consult->motif;
-    $consultation->rques = $consult->rques;
-    $consultation->examen = $consult->examen;
-    $consultation->traitement = $consult->traitement;
-    $consultation->premiere = $consult->premiere;
-    $consultation->tarif = $consult->tarif;
-    $consultation->mode_reglement = "";
-
-    //$consultation->store();
-    $nbConsultationsCreees++;
-  } else {
-    $nbConsultationsChargees++;
   }
    
 }
