@@ -9,10 +9,10 @@
 
 global $AppUI, $can, $m;
 
-$limit = mbGetValueFromGetOrSession("limit", 0);
-mbTrace($limit); die;
+$limitConsult = mbGetValueFromGetOrSession("limitConsult", 0);
+mbTrace($limitConsult); die;
 $ds = CSQLDataSource::get("std");
-if ($limit == -1) {
+if ($limitConsult == -1) {
   return;	
 }
 
@@ -42,7 +42,7 @@ $sql = "SELECT " .
     "\nAND dermato_import_consultations1.consultation1_id = dermato_import_consultations2.plageconsult_id" .
     "\nAND dermato_import_consultations2.patient_id = dermato_import_patients.patient_id" .
     "\nAND dermato_import_praticiens.praticien_id IN ('9', '10')" . // Liste des praticiens à prendre en compte
-    "\nLIMIT $limit, 1000";
+    "\nLIMIT $limitConsult, 1000";
 $res = $ds->exec($sql);
 $consults = array();
 while ($row = $ds->fetchObject($res)) {
@@ -114,13 +114,13 @@ foreach ($consults as $consult) {
    
 }
 
-mbTrace($limit, "limit start");
+mbTrace($limitConsult, "limit start");
 mbTrace($nbPlagesCreees, "nbPlagesCreees");
 mbTrace($nbPlagesChargees, "nbPlagesChargees");
 mbTrace($nbConsultationsCreees, "nbConsultationsCreees");
 mbTrace($nbConsultationsChargees, "nbConsultationsChargees");
 
-$limit = count($consults) ? $limit + 1000 : -1;
-mbSetValueToSession("limit", $limit);
+$limitConsult = count($consults) ? $limitConsult + 1000 : -1;
+mbSetValueToSession("limitConsult", $limitConsult);
 header( 'refresh: 0; url=index.php?m=dPinterop&dialog=1&u=import/dermato&a=dermato_put_consult' );
 ?>
