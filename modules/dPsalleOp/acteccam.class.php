@@ -54,6 +54,8 @@ class CActeCCAM extends CActe {
   // Object references
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
+  
+  var $_calcul_montant_base = 0;
 
   var $_activite = null;
   var $_phase = null;
@@ -199,8 +201,10 @@ class CActeCCAM extends CActe {
   
   function store(){
     //sauvegarde du montant de base     
-    $this->montant_base = $this->getTarif();  
-
+    if($this->_calcul_montant_base){
+      $this->montant_base = $this->getTarif();  
+    }
+    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

@@ -45,18 +45,22 @@ class CActe extends CMbMetaObject {
       $object = new $this->object_class;
       $object->load($this->object_id);
       // Permet de mettre a jour le montant dans le cas d'un consultation
-      $object->doUpdateMontants();
+      return $object->doUpdateMontants();
     }
   }
   
   function store(){
-    parent::store();
-    $this->updateMontant();
+    if($msg = parent::store()){
+      return $msg;
+    }
+    return $this->updateMontant();
   }
   
   function delete(){
-    parent::delete();
-    $this->updateMontant();
+    if($msg = parent::delete()){
+      return $msg;
+    }
+    return $this->updateMontant();
   }
 }
 
