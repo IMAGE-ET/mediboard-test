@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.89";
+$config["mod_version"]     = "0.90";
 $config["mod_type"]        = "user";
 
 
@@ -928,8 +928,14 @@ class CSetupdPcabinet extends CSetup {
             ADD `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL default 'CConsultation';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.89";
+    $this->makeRevision("0.89");
+    $sql = "UPDATE `consultation`
+            SET `date_reglement` = NULL, `facture_acquittee` = NULL
+            WHERE `a_regler` = '0'
+            AND (`mode_reglement` IS NULL OR `mode_reglement` = '');";
+    $this->addQuery($sql);
     
+    $this->mod_version = "0.90";
   }
 }
 ?>
