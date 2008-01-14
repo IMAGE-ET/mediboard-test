@@ -195,7 +195,7 @@
         </tr>
         {{/foreach}}
         <tr>
-          <td colspan="3" style="text-align:right;font-weight:bold;">Total</td>
+          <td {{if $compta}}colspan="3"{{else}}colspan="4"{{/if}} style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
