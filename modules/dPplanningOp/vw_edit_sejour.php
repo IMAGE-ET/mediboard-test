@@ -54,7 +54,8 @@ foreach($listPraticiens as $keyPrat =>$prat){
 $sejour = new CSejour;
 if ($sejour_id) {
   $sejour->load($sejour_id);
-
+  $sejour->loadRefs();
+  
   // On vérifie que l'utilisateur a les droits sur le sejour
   /*if (!$sejour->canEdit()) {
     $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
@@ -62,11 +63,10 @@ if ($sejour_id) {
   }*/
   // Ancienne methode
   if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
+    $AppUI->setMsg("Vous n'avez pas accés aux séjours du Dr. {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }
 
-  $sejour->loadRefs();
   
   foreach ($sejour->_ref_operations as &$operation) {
     $operation->loadRefsFwd();
@@ -101,7 +101,7 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 // Préparation de l'alerte dans le cas d'annulation d'un sejour avec opération
 $msg_alert = "";
 if($sejour->_ref_operations){
-  foreach($sejour->_ref_operations as $keyOp => $dataOp){
+  foreach($sejour->_ref_operations as $keyOp => $dataOp ){
     if($dataOp->annulee == 0){
       $msg_alert .= "\n".$dataOp->_view." le ".substr($dataOp->_datetime, 8, 2)."/".substr($dataOp->_datetime, 5, 2)."/".substr($dataOp->_datetime, 0, 4);
     }

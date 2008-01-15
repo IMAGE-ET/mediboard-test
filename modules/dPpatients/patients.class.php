@@ -450,7 +450,7 @@ class CPatient extends CMbObject {
       $this->_jour  = $aNaissance[2];
       $this->_mois  = $aNaissance[1];
       $this->_annee = $aNaissance[0];
-      //$this->_naissance = mbDateToLocale($this->naissance);
+      $this->_naissance = mbDateToLocale($this->naissance);
     }
   
     $this->evalAge();

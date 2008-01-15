@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPdeveloppement-tab-launch_tests'] = '';
 $locales['mod-dPdeveloppement-tab-echantillonnage'] = '';
 $locales['mod-dPdeveloppement-tab-mnt_backref_classes'] = '';
 $locales['mod-dPdeveloppement-tab-mnt_table_classes'] = '';

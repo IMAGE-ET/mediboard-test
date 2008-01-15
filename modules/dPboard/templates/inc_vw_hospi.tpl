@@ -9,13 +9,14 @@ PairEffect.initGroup("functionEffect", {
 {{if $board}}
 <table class="tbl">
   <tr>
-    <th class="title" colspan="4">Hospitalisations</th>
+    <th class="title" colspan="10">Hospitalisations</th>
   </tr>
   <tr>
     <th>Entree</th>
     <th>Sortie</th>
     <th>Patient</th>
     <th>Chambre</th>
+    <th>Bornes GHM</th>
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   <tr>
@@ -33,12 +34,28 @@ PairEffect.initGroup("functionEffect", {
     {{/if}}
       {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y %Hh%M"}}
     </td>
-    <td>{{$curr_sejour->_ref_patient->_view}}</td>
+    <td>
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+      	{{$curr_sejour->_ref_patient->_view}}
+      </a>
+    </td>
     <td>
       {{foreach from=$curr_sejour->_curr_affectations item=curr_aff}}
         {{$curr_aff->_ref_lit->_view}}<br />
       {{/foreach}}
     </td>
+		<td>
+      {{assign var=GHM value=$curr_sejour->_ref_GHM}}
+      {{if $GHM->_DP}}
+        <div class={{if $GHM->_borne_basse > $GHM->_duree || $GHM->_borne_haute < $GHM->_duree}}"warning"{{else}}"message"{{/if}}>
+	        De {{$GHM->_borne_basse}}
+	        à {{$GHM->_borne_haute}} jours
+	        ({{$GHM->_duree}})
+        </div>
+      {{else}}
+      -
+      {{/if}}
+		</td>
   </tr>
   {{/foreach}}        
 </table>

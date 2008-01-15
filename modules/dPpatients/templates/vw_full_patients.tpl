@@ -88,17 +88,17 @@ function pageMain() {
   
   ViewFullPatient.main();
   
-  if("{{$consultation_id}}" != '0'){
-    viewCompleteItem('CConsultation', "{{$consultation_id}}");
-  }
+  {{if $consultation_id}}
+  viewCompleteItem('CConsultation', "{{$consultation_id}}");
+  {{/if}}
   
-  if("{{$operation_id}}" != '0'){
-    viewCompleteItem('COperation', "{{$operation_id}}");
-  }
+  {{if $operation_id}}
+  viewCompleteItem('COperation', "{{$operation_id}}");
+  {{/if}}
   
-  if("{{$sejour_id}}" != '0'){
-    viewCompleteItem('CSejour', "{{$sejour_id}}");
-  }
+  {{if $sejour_id}}
+  viewCompleteItem('CSejour', "{{$sejour_id}}");
+  {{/if}}
   
   initNotes();
 }

@@ -82,25 +82,23 @@ function pageMain() {
         {{/if}}
       </a>
     </td>
-    <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
+    <td class="text" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         <strong>
         {{$curr_sejour->_ref_patient->_view}}
+        </strong>
         {{if $curr_sejour->_ref_patient->_IPP}}
           [{{$curr_sejour->_ref_patient->_IPP}}]
         {{/if}}
-        </strong>
       </a>
       
     </td>
-    <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
+    <td class="text" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
         {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
-        <strong>
         {{if $curr_sejour->_num_dossier}}
           [{{$curr_sejour->_num_dossier}}]
         {{/if}}
-        </strong>
       </a>
     </td>
     
@@ -113,7 +111,7 @@ function pageMain() {
         </script>
       </td>
     {{else}}
-      <td style="background-color:#cfc; text-align: center">
+      <td class="text" style="background-color:#cfc; text-align: center">
       Consultation à {{$curr_sejour->_ref_rpu->_ref_consult->heure|date_format:"%Hh%M"}}
       
       {{assign var="sejour_id" value=$curr_sejour->_id}}

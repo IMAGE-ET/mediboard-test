@@ -1,6 +1,6 @@
 <!-- $Id: print_compta.tpl 2031 2007-06-08 09:13:23Z lryo $ -->
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug="false"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
 <table class="main">
   <tr>

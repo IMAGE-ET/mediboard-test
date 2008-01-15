@@ -1,6 +1,6 @@
 {{* $Id$ *}}
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
 <script type="text/javascript">
 

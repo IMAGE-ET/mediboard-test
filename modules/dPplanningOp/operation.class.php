@@ -73,8 +73,9 @@ class COperation extends CCodable {
   var $_hour_voulu     = null;
   var $_min_voulu      = null;
 
-  // Shortcut fields
+  // Distant fields
   var $_datetime = null;
+  var $_datetime_reel = null;
   
   // Links
   var $_link_editor = null;
@@ -387,13 +388,15 @@ class COperation extends CCodable {
       if(!$this->anesth_id) {
         $this->_ref_anesth =& $this->_ref_plageop->_ref_anesth;
       }
-      $this->_datetime = $this->_ref_plageop->date;
+      $date = $this->_ref_plageop->date;
     } else {
-      $this->_datetime = $this->date;
+      $date = $this->date;
       $this->_ref_salle = new CSalle;
       $this->_ref_salle->load($this->salle_id);
     }
-    $this->_datetime .= " ".$this->time_operation;
+    
+    $this->_datetime_reel = "$date $this->debut_op";
+    $this->_datetime = "$date $this->time_operation";
     $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
   }
   

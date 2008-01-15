@@ -169,6 +169,9 @@
     </th>
     <td class="readonly">
       <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      {{if $op->_ref_salle->_id}}
+      en {{$plage->_ref_salle->_view}}
+      {{/if}}
     </td>
     <td class="button">
       <button type="button" class="search" onclick="PlageOpSelector.init()">Choisir une date</button>

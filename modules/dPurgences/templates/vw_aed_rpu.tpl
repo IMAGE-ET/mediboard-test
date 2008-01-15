@@ -71,7 +71,7 @@ function pageMain() {
     <td>
       <select name="_responsable_id">
         {{foreach from=$listResponsables item=curr_user}}
-        <option value="{{$curr_user->_id}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
+        <option value="{{$curr_user->_id}}" class="mediuser" style="border-color: #{{$curr_user->_ref_function->color}}" {{if $curr_user->_id == $rpu->_responsable_id}}selected="selected"{{/if}}>
           {{$curr_user->_view}}
         </option>
         {{/foreach}}

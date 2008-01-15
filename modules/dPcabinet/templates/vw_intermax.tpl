@@ -1,7 +1,7 @@
 <!-- $Id: vw_resume.tpl 1748 2007-03-20 18:58:41Z MyttO $ -->
 
 {{mb_include_script module="dpPatients" script="pat_selector"}}
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug="false"}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
 <script type="text/javascript">
 
@@ -85,7 +85,7 @@ Main.add(function() {
         <option value="">&mdash; Tous</option>
         {{foreach from=$prats item=_prat}}
         {{if $_prat->_id_cps}}
-        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id_cps}}">
+        <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id_cps}}" {{if $app->user_id == $_prat->_id}}selected="selected"{{/if}}>
           {{$_prat->_view}}
           [CPS #{{$_prat->_id_cps}}]
         </option>

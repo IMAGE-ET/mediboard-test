@@ -1,6 +1,7 @@
 /**
  * Class for LogicMax browser based Integration
  */
+ 
 var Intermax = {
   oContent: {},
   aAllowedFunctions: [],
@@ -61,9 +62,8 @@ var Intermax = {
         AFFICHAGE: 1
       }
     }
-    
     Object.extend(this.oContent, oCallContent);
-    
+        
     var sContent = this.makeContent();
     document.intermaxTrigger.performWrite(sContent);
   },
@@ -145,8 +145,13 @@ var Intermax = {
         }
       }
       
+      // Won't extend properly with an array
+      if (Intermax.Triggers['Formater FSE'].aActes.length == 0) {
+      	Intermax.Triggers['Formater FSE'].aActes = {};
+      }
+      
       Object.extend(oContent, Intermax.Triggers['Formater FSE'].aActes);
-			Intermax.trigger("Formater FSE", oContent );
+			Intermax.trigger("Formater FSE", oContent);
     },
 
     "Consulter FSE" : function(iFSE) {

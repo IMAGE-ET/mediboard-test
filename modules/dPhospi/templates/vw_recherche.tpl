@@ -42,7 +42,7 @@ function pageMain() {
       <select name="selPrat" onchange="submit()">
       <option value="">&mdash; Tous les praticiens</option>
       {{foreach from=$listPrat item=curr_prat}}
-        <option value="{{$curr_prat->user_id}}" {{if $selPrat == $curr_prat->user_id}}selected="selected"{{/if}}>
+        <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" {{if $selPrat == $curr_prat->user_id}}selected="selected"{{/if}}>
           {{$curr_prat->_view}}
         </option>
       {{/foreach}}
@@ -111,7 +111,11 @@ function pageMain() {
             {{/if}}
             {{$patient->_view}}
           </td>
-          <td class="text">{{$praticien->_view}}</td>
+          <td class="text">
+            <div class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};">
+              {{$praticien->_view}}
+            </div>
+          </td>
           <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->_ref_service->nom}}</td>
           <td class="text">{{$curr_aff->_ref_lit->_ref_chambre->nom}}</td>
           <td class="text">{{$curr_aff->_ref_lit->nom}}</td>
@@ -131,13 +135,12 @@ function pageMain() {
               à {{$GHM->_borne_haute}} jours
               <br />
               {{if $GHM->_borne_basse > $GHM->_duree}}
+              <div class="warning">Séjour trop court</div>
               <img src="images/icons/cross.png" alt="alerte" />
-              Séjour trop court
               {{elseif $GHM->_borne_haute < $GHM->_duree}}
-              <img src="images/icons/cross.png" alt="alerte" />
-              Séjour trop long
+              <div class="warning">Séjour trop long</div>
               {{else}}
-              <img src="images/icons/tick.png" alt="ok" />
+              <div class="message">Dans les bornes</div>
               {{/if}}
             {{else}}
             -

@@ -15,7 +15,8 @@ class CSpObjectHandler extends CMbObjectHandler {
   static $associations = array(
     "CPatient" => array ("CSpMalade"),
     "CSejour" => array("CSpSejMed", "CSpDossier", "CSpOuvDro"),
-  );
+    "COperation" => array("CSpEntCCAM"),
+    );
     
   function isHandled(CMbObject &$mbObject) {
     return array_key_exists($mbObject->_class_name, self::$associations);
@@ -79,8 +80,16 @@ class CSpObjectHandler extends CMbObjectHandler {
         "AND `object_class` = '$id400->object_class'";
       $latestId = $ds->loadResult($query);
       $newId = $latestId+1;
-      return str_pad($newId, 6, "0", STR_PAD_LEFT);    
-        
+      return str_pad($newId, 6, "0", STR_PAD_LEFT);
+      
+      case "COperation" :
+      $query = "SELECT MAX(`id400`) ".
+        "FROM `id_sante400`".
+        "WHERE `tag` = '$id400->tag'".
+        "AND `object_class` = '$id400->object_class'";
+      $latestId = $ds->loadResult($query);
+      $newId = $latestId+1;
+      return $newId;
     }
   }
   

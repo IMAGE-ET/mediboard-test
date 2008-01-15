@@ -1,5 +1,7 @@
 <table class="main">
   <tr>
+
+  	<!-- Praticiens -->
     <td class="halfPane">
       <table class="form">
         <tr>
@@ -29,8 +31,37 @@
       </table>
     </td>
 
+  	<!-- Salles et Services -->
     <td class="halfPane">
       <table class="form">
+
+      	<!-- Salles -->
+        <tr>
+          <th colspan="2" class="title">
+            Salles d'opérations
+          </th>
+        </tr>
+        {{foreach from=$salles item=_salle}}
+        <tr>
+          <th>{{$_salle->_view}}</th>
+          <td>
+            <form name="editFrmSalle-{{$_salle->_id}}" action="?m={{$m}}" method="post" onsubmit="checkForm(this)">
+              <input type="hidden" name="m" value="dPsante400" />
+              <input type="hidden" name="dosql" value="do_idsante400_aed" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="id_sante400_id" value="{{$_salle->_ref_last_id400->_id}}" />
+              <input type="hidden" name="object_class" value="{{$_salle->_class_name}}" />
+              <input type="hidden" name="object_id" value="{{$_salle->_id}}" />
+              <input type="hidden" name="tag" value="{{$tag}}" />
+              <input type="hidden" name="last_update" value="{{$today}}" />
+              {{mb_field object=$_salle->_ref_last_id400 field="id400"}}
+              <button type="submit" class="notext submit">{{tr}}Submit{{/tr}}</button>
+            </form>
+          </td>
+        </tr>
+        {{/foreach}}
+
+      	<!-- Services -->
         <tr>
           <th colspan="2" class="title">
             Services
@@ -65,6 +96,7 @@
       </table>
     </td>
 
+  	<!-- Etablissements externes -->
     <td class="halfPane">
       <table class="form">
         <tr>

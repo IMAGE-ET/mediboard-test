@@ -50,10 +50,6 @@
 </table>
 
 </form>
-
-<hr />
-
-{{include file="../../system/templates/configure_dsn.tpl" dsn=sherpa}}
   
 <hr />
 

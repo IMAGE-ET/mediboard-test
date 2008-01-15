@@ -49,7 +49,14 @@ function storeTemps(action) {
         <tr>
           <td class="button">
             <button type="button" class="submit" onclick="storeTemps('httpreq_temps_op')">
-              Mémoriser les temps opératoires
+              Mémoriser les temps opératoires Old
+            </button>
+          </td>
+        </tr>
+        <tr>
+          <td class="button">
+            <button type="button" class="submit" onclick="storeTemps('httpreq_temps_op_new')">
+              Mémoriser les temps opératoires new
             </button>
           </td>
         </tr>

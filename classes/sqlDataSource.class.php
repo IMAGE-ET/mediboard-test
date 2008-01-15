@@ -13,12 +13,18 @@ abstract class CSQLDataSource {
     "mysql" => "CMySQLDataSource",
     "ingres" => "CIngresDataSource",
   );
+  
 	static $dataSources = array();
 	static $trace = false;
     
   public $dsn       = null;
   public $link      = null;
   public $chrono    = null;
+
+  // Columns to be never quoted: hack for some SQLDataSources unable to cast implicitly
+  public $unquotable = array(
+    "table" => array("column"),
+	);
   
   public $config = array();
 
@@ -29,7 +35,7 @@ abstract class CSQLDataSource {
   /**
    * Get the data source with given name.
    * Create it if necessary
-   * @return CSQLDataSource
+   * @return CSQLDataSource, null if unhandled type
    */
   static function get($dsn) {  	
   	if (!array_key_exists($dsn, self::$dataSources)) {
@@ -417,8 +423,14 @@ abstract class CSQLDataSource {
         continue;
       }
       
-      $fields[] = "`$k`";
-      $values[] = "'" . $this->escape($v) . "'";
+      $v = $this->escape($v);
+
+      // Quote everything
+      $this->quote($table, $k, $v);
+      
+      // Build array
+      $fields[] = $k;
+      $values[] = $v;
     }
     
     $fields = implode(",", $fields);
@@ -437,6 +449,17 @@ abstract class CSQLDataSource {
     }
     
     return true;
+  }
+  
+  /**
+   * Quote columns and values 
+   * @param $table
+   * @param $k in/out column name
+   * @param $v in/out column value
+   */
+  function quote($table, &$k, &$v) {
+    $v = !@in_array($k, $this->unquotable[$table]) ? "'$v'" : $v;
+    $k = "`$k`";
   }
   
   /**
@@ -471,12 +494,15 @@ abstract class CSQLDataSource {
         continue;
       }
 
-      $v = trim($v);
+      $v = $this->escape(trim($v));
+      
+      // Quote everything
+      $this->quote($table, $k, $v);
 
       // Nullify empty values or escape
-      $val = ($nullifyEmptyStrings && $v === "") ? "NULL" : "'" . $this->escape($v) . "'";
+      $v = ($nullifyEmptyStrings && $v === "''") ? "NULL" : $v;
         
-      $tmp[] = "`$k`=$val";
+      $tmp[] = "$k=$v";
     }
     
     // No updates to make;

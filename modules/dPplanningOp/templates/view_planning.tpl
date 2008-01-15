@@ -112,7 +112,7 @@
   {{/if}}
 
   <tr>
-    <th>Actes médicaux </th>
+    <th>Actes</th>
     <td class="text">
       {{foreach from=$operation->_ext_codes_ccam item=ext_code_ccam}}
       {{if $ext_code_ccam->code != "-"}}

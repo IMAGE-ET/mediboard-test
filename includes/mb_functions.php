@@ -335,8 +335,8 @@ function mbDaysRelative($from, $to) {
 }
 
 /**
- * Returns the difference between two dates in days
- * @return int: number of days
+ * Returns the time difference between two times in hours
+ * @return string hh:mm:ss diff duration
  **/
 function mbTimeRelative($from, $to) {
   $diff = strtotime($to) - strtotime($from); 
@@ -764,7 +764,7 @@ function mbDateToLocale($date) {
  * @return string Date in ISO format
  */
 function mbDateFromLocale($date) {
-  return preg_replace("/(\d{2})\/(\d{2})\/(\d{4})/", "$3-$2-$1", $date);
+  return preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$3-$2-$1", $date);
 }
 
 function in_range($value, $min, $max) {

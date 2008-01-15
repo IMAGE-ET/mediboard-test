@@ -41,13 +41,13 @@ $max = min($max, $count);
 $AppUI->stepAjax("Import de $max sur $count objets de type '$spClass' à partir de l'ID '$idMin'", UI_MSG_OK);
 
 // Time limit
-$seconds = max($max / 20, 10);
+$seconds = max($max / 20, 60);
 $AppUI->stepAjax("Limite de temps du script positionné à '$seconds' secondes", UI_MSG_OK);
 set_time_limit($seconds);
 
 // Import réel
 $errors = 0;
-$spObjects = $spObject->loadList($where, null, "0, $max");
+$spObjects = $spObject->loadList($where, $spObject->_tbl_key, "0, $max");
 foreach ($spObjects as $_spObject) {
   $mbObject = $_spObject->mapTo();
 

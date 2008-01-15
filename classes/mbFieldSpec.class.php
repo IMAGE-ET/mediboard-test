@@ -240,6 +240,27 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
+  /**
+   * Produit le code HTML pour un titre de colonne
+   * pour le champ de la spécification
+   *
+   * @param CMbObject $object Objet concerné
+   * @param array $params Extra parameters
+   * @return string Rendered HTML
+   */
+  function getTitleElement($object, $params) {
+    $title = CAppUI::tr($object->_class_name."-".$this->fieldName."-court");
+    $desc  = CAppUI::tr($object->_class_name."-".$this->fieldName."-desc");
+
+    $sHtml  = "<label title=\"$desc\" >";
+    $sHtml .= $title;
+    $sHtml .= "</label>";
+    
+    return $sHtml;
+  }
+  
+  
+  
   function getLabelForElement($object, $params){
     return $this->fieldName;
   }

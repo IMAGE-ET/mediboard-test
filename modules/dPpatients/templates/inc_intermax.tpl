@@ -1,6 +1,6 @@
 <!-- Always load it for easier result handler redefinition -->
 {{mb_include_script path="includes/javascript/intermax.js"}}
-
+{{assign var=debug value="false"}}
 {{if $app->user_prefs.GestionFSE}}
 
 {{if !$app->user_prefs.InterMaxDir}}

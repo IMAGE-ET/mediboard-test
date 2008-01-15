@@ -103,7 +103,7 @@ function pageMain() {
   <tr>
     <td id="listConsult" style="width: 200px; vertical-align: top;" />
     <td class="greedyPane">
-			{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=true}}
+			{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 			
       {{if $consult->_id}}
       {{assign var="patient" value=$consult->_ref_patient}}

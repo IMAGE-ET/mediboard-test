@@ -11,10 +11,17 @@ global $can;
 
 $can->needsAdmin();
 
+$spClasses = array(
+  "CSpMalade", 
+  "CSpSejMed",
+  "CSpEntCCAM",
+  "CSpDetCCAM",
+);
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("spClasses", array("CSpMalade", "CSpSejMed"));
+$smarty->assign("spClasses", $spClasses);
 $smarty->display("configure.tpl");
 
 ?>

@@ -27,19 +27,20 @@ $sejour = new CSejour();
 $listSejours = $sejour->loadList($where, $order);
 
 $affectation = new CAffectation();
-foreach($listSejours as $key => $curr_sejour) {
-  $listSejours[$key]->loadRefsFwd();
+foreach($listSejours as &$_sejour) {
+  $_sejour->loadRefsFwd();
+  $_sejour->loadRefGHM();
   $where = array();
-  $where["sejour_id"] = "= '$curr_sejour->_id'";
+  $where["sejour_id"] = "= '$_sejour->_id'";
   $where["entree"] = "<= '$date 00:00:00'";
   $where["sortie"] = ">= '$date 23:59:59'";
   
   $order = "`entree` DESC";
   
-  $listSejours[$key]->_curr_affectations = $affectation->loadList($where, $order);
-  foreach($listSejours[$key]->_curr_affectations as $keyAff => $curr_aff) {
-    $listSejours[$key]->_curr_affectations[$keyAff]->loadRefLit();
-    $listSejours[$key]->_curr_affectations[$keyAff]->_ref_lit->loadCompleteView();
+  $_sejour->_curr_affectations = $affectation->loadList($where, $order);
+  foreach($_sejour->_curr_affectations as &$_aff) {
+    $_aff->loadRefLit();
+    $_aff->_ref_lit->loadCompleteView();
   }
 }
 

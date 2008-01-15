@@ -1,9 +1,9 @@
 {{if !$board}}
+
 {{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
-{{/if}}
+
 <script type="text/javascript">
 
-{{if !$board}}
 Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   var url = new Url;
@@ -21,8 +21,8 @@ var Patient = {
     url.redirect();
   }
 }
-{{/if}}
 </script>
+{{/if}}
 
 <form name="find" action="?" method="get">
 

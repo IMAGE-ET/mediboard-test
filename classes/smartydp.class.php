@@ -162,14 +162,24 @@ function smarty_function_mb_value($params, &$smarty) {
  * - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
  */
 function smarty_function_mb_label($params, &$smarty) {
-  global $AppUI;
-  
   $object     = CMbArray::extract($params, "object", null, true);
   $field      = CMbArray::extract($params, "field" , null, true);
   
   return $object->_specs[$field]->getLabelElement($object, $params);
 }
 
+/**
+ * Fonction d'écriture  des labels de titre
+ * @param array params tableau des parametres
+ * - object      : Objet
+ * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
+ */
+function smarty_function_mb_title($params, &$smarty) {
+  $object     = CMbArray::extract($params, "object", null, true);
+  $field      = CMbArray::extract($params, "field" , null, true);
+
+  return $object->_specs[$field]->getTitleElement($object, $params);
+}
 
 /**
  * Fonction d'écriture  des labels
@@ -290,6 +300,7 @@ class CSmartyDP extends Smarty {
     $this->register_function("mb_field"          , "smarty_function_mb_field");
     $this->register_function("mb_value"          , "smarty_function_mb_value");
     $this->register_function("mb_label"          , "smarty_function_mb_label");
+    $this->register_function("mb_title"          , "smarty_function_mb_title");
     $this->register_function("mb_ternary"        , "smarty_function_mb_ternary");
     $this->register_function("mb_colonne"        , "smarty_function_mb_colonne");
     $this->register_function("mb_include_script" , "smarty_function_mb_include_script");

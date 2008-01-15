@@ -478,10 +478,10 @@ function submitFdr(oForm) {
 	      <table class="form">
 	        {{if !$consult->tarif}}
 	        <tr>
-	          <th><label for="choix" title="Type de tarif pour la consultation. Obligatoire.">Choix du tarif</label></th>
+	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
 	          <td>
 	            <select name="_tarif_id"  class="notNull str" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadFdr } );">
-	              <option value="" selected="selected">&mdash; Choix du tarif</option>
+	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
 	              {{if $tarifsChir|@count}}
 	              <optgroup label="Tarifs praticien">
 	              {{foreach from=$tarifsChir item=curr_tarif}}
@@ -635,8 +635,8 @@ function submitFdr(oForm) {
         <tr>
           <td colspan="2" class="button">
           <input type="hidden" name="_delete_actes" value="0" />
-            <button class="submit" type="button" onclick="validTarif();">Valider ce tarif</button>
-            <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler le tarif</button>
+            <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
+            <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
           </td>
         </tr>
         {{/if}}

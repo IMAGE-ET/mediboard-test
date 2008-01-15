@@ -49,14 +49,15 @@ class CActeCCAM extends CActe {
   var $_linked_actes      = null;
   var $_guess_association = null;
   var $_guess_regle_asso  = null;
-  var $_adapt_object      = false;
+  
+  // Behaviour fields
+  var $_adapt_object = false;
+  var $_calcul_montant_base = false;
   
   // Object references
   var $_ref_executant = null;
   var $_ref_code_ccam = null;
   
-  var $_calcul_montant_base = 0;
-
   var $_activite = null;
   var $_phase = null;
   
@@ -199,12 +200,12 @@ class CActeCCAM extends CActe {
   }
   
   
-  function store(){
-    //sauvegarde du montant de base     
-    if($this->_calcul_montant_base){
+  function store() {
+    //sauvegarde du montant de base
+    if ($this->_calcul_montant_base) {
       $this->montant_base = $this->getTarif();  
     }
-    
+
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

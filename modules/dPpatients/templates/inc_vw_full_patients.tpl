@@ -66,7 +66,7 @@ function popEtatSejour(sejour_id) {
         onclick="setObject( {
           objClass: 'CPatient', 
           keywords: '', 
-          id: {{$patient->patient_id|smarty:nodefaults|JSAttribute}}, 
+          id: {{$patient->patient_id}}, 
           view: '{{$patient->_view|smarty:nodefaults|JSAttribute}}' })"
         title="{{$patient->_nb_files_docs}} doc(s)">
         {{$patient->_nb_files_docs}}
@@ -119,7 +119,7 @@ function popEtatSejour(sejour_id) {
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 
       keywords: '', 
-      id: {{$curr_sejour->_id|smarty:nodefaults|JSAttribute}}, 
+      id: {{$curr_sejour->_id}}, 
       view:'{{$curr_sejour->_view|smarty:nodefaults|JSAttribute}}'} )"
       title="{{$curr_sejour->_nb_files_docs}} doc(s)">
       {{$curr_sejour->_nb_files_docs}}
@@ -140,7 +140,7 @@ function popEtatSejour(sejour_id) {
     <a href="#" onclick="setObject( {
       objClass: 'CRPU', 
       keywords: '', 
-      id: {{$rpu->_id|smarty:nodefaults|JSAttribute}}, 
+      id: {{$rpu->_id}}, 
       view:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'} )"
       title="{{$rpu->_nb_files_docs}} doc(s)">
       {{$rpu->_nb_files_docs}}
@@ -225,7 +225,7 @@ function popEtatSejour(sejour_id) {
     <a href="#" onclick="setObject( {
       objClass: 'COperation', 
       keywords: '', 
-      id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
+      id: {{$curr_op->operation_id}}, 
       view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )"
       title="{{$curr_op->_nb_files_docs}} doc(s)">
       {{$curr_op->_nb_files_docs}}

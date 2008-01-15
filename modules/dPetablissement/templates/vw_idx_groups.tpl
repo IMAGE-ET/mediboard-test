@@ -85,7 +85,7 @@ function pageMain() {
             <select name="service_urgences_id">
               <option value="">&mdash Choisir le service d'urgences</option>
               {{foreach from=$usergroup->_ref_functions item="curr_fct"}}
-              <option value="{{$curr_fct->_id}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
+              <option value="{{$curr_fct->_id}}" class="mediuser" style="border-color: #{{$curr_fct->color}}" {{if $curr_fct->_id == $usergroup->service_urgences_id}}selected="selected"{{/if}}>
                 {{$curr_fct->_view}}
               </option>
               {{/foreach}}

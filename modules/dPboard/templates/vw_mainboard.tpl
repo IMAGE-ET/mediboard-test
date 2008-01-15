@@ -214,6 +214,9 @@ function pageMain() {
 
 </script>
 
+<!-- Script won't be evaled in Ajax inclusion. Need to force it -->
+{{mb_include_script path="includes/javascript/intermax.js"}}
+
 <table class="main">
   {{if $secretaire || $admin}}
   <tr>
@@ -255,7 +258,7 @@ function pageMain() {
     <td class="viewport" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
       <div style="position:absolute" id="icon-consultations">
         <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
-          <img src="images/modules/dPcabinet.png" height="24px" width="24px" />
+          <img src="images/modules/dPcabinet.png" height="24" width="24" />
         </a>
       </div>
       <div id="consultations">
@@ -266,7 +269,7 @@ function pageMain() {
     <td class="viewport" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
         <a href="?m=dPplanningOp&amp;tab=vw_idx_patients">
-          <img src="images/modules/dPplanningOp.png" height="24px" width="24px" />
+          <img src="images/modules/dPplanningOp.png" height="24" width="24" />
         </a>
       </div>
       <div id="operations">
@@ -279,7 +282,7 @@ function pageMain() {
     <td class="viewport" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
       <div style="position:absolute" id="icon-patients">
         <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
-          <img src="images/modules/dPpatients.png" height="24px" width="24px" />
+          <img src="images/modules/dPpatients.png" height="24" width="24" />
         </a>
       </div>
       <div id="patients" style="overflow: auto">
@@ -289,7 +292,7 @@ function pageMain() {
     <!-- Patients hospitalisés -->
     <td class="viewport" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
       <div style="position:absolute" id="icon-hospi">
-        <img src="images/modules/dPhospi.png" height="24px" width="24px" />
+        <img src="images/modules/dPhospi.png" height="24" width="24" />
       </div>
       <div id="hospi" style="overflow: auto">
       </div>

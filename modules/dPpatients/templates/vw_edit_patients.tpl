@@ -2,7 +2,7 @@
 
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
+{{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
 <script type="text/javascript">
 

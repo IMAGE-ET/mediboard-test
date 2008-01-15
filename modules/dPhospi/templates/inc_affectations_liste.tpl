@@ -44,7 +44,7 @@
         <td class="date" colspan="2"><em>Sortie</em> : {{$curr_sejour->sortie_prevue|date_format:"%A %d %B %Hh%M"}}</td>
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans ({{$curr_sejour->_ref_patient->naissance|date_format:"%d/%m/%Y"}})</td>
+        <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans ({{$curr_sejour->_ref_patient->_naissance}})
       </tr>
       <tr>
         <td class="date" colspan="2"><em>Dr. {{$curr_sejour->_ref_praticien->_view}}</em></td>

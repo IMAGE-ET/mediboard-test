@@ -1,4 +1,5 @@
 <?php
+$locales['mod-dPdeveloppement-tab-launch_tests'] = 'Tests fonctionnels';
 $locales['mod-dPdeveloppement-tab-echantillonnage'] = 'Echantillonnage';
 $locales['mod-dPdeveloppement-tab-mnt_backref_classes'] = 'Maintenance Classes';
 $locales['mod-dPdeveloppement-tab-mnt_table_classes'] = 'Maintenance Table';

@@ -36,6 +36,13 @@ class CSpObject extends CMbObject {
   function changeDSN($g) {
     $this->_spec->dsn = "sherpa-$g";
     $this->_spec->init();
+    
+    // Declare unquotable columns
+    if ($ds =& $this->_spec->ds) {
+      $ds->unquotable = array(
+        "es_entccam" => array("idinterv")
+			);
+    }
   }
   
   /**
@@ -132,6 +139,7 @@ class CSpObject extends CMbObject {
    * @return string
    */
   function makeString($string, $length) {
+//    $string = str_replace("\r\n", " - ", $string);
     return $string ? strtoupper(substr($string, 0, $length)) : "";
   }
 

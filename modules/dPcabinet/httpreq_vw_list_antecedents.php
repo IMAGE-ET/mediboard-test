@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-  
-$can->needsEdit();
+global $can;
+
+$canPatient = CModule::getCanDo("dPpatients");
+$canPatient->needsEdit();
 
 $patient_id  = mbGetValueFromGetOrSession("patient_id", 0);
 $_is_anesth  = mbGetValueFromGetOrSession("_is_anesth", null);

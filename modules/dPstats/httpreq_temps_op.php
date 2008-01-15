@@ -1,4 +1,4 @@
-<?php /* $Id: $ */
+n<?php /* $Id: $ */
 
 /**
 * @package Mediboard
@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-if(function_exists("date_default_timezone_set")) {
+if (function_exists("date_default_timezone_set")) {
   date_default_timezone_set("UTC");
 }
 
@@ -17,7 +17,17 @@ $intervalle = mbGetValueFromGet("intervalle", "none");
 
 // Vide la table contenant les données
 $ds = CSQLDataSource::get("std");
-$ds->exec("TRUNCATE `temps_op`"); $ds->error();
+$ds->exec("TRUNCATE `temps_op`");
+
+switch ($intervalle) {
+  case "month" : $deb = mbDate("-1 month");
+  case "6month": $deb = mbDate("-6 month");
+  case "year"  : $deb = mbDate("-1  year");
+  default      : $deb = mbDate("-10 year");
+}
+
+$fin = mbDate();
+
 
 $sql = "SELECT operations.chir_id, " .
        "\nCOUNT(operations.operation_id) AS total," .
@@ -27,8 +37,8 @@ $sql = "SELECT operations.chir_id, " .
        "\nSEC_TO_TIME(STD(TIME_TO_SEC(operations.fin_op)-TIME_TO_SEC(operations.debut_op))) as ecart_operation," .
        "\nSEC_TO_TIME(AVG(TIME_TO_SEC(operations.temp_operation))) AS estimation,";
 
-$sql .= "\noperations.codes_ccam AS ccam";
-$sql .="\nFROM operations" .
+$sql.= "\noperations.codes_ccam AS ccam";
+$sql.= "\nFROM operations" .
        "\nLEFT JOIN users" .
        "\nON operations.chir_id = users.user_id" .
        "\nLEFT JOIN plagesop" .
@@ -41,30 +51,19 @@ $sql .="\nFROM operations" .
        "\nAND operations.entree_salle < operations.debut_op";
        "\nAND operations.debut_op < operations.fin_op";
        "\nAND operations.fin_op < operations.sortie_salle";
+       "\nAND ((plagesop.date BETWEEN '$deb' AND '$fin') OR (plagesop.date BETWEEN '$deb' AND '$fin'))";
 
-switch($intervalle) {
-  case "month":
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 month")."' AND '".mbDate()."'";
-    break;
-  case "6month":
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-6 month")."' AND '".mbDate()."'";
-    break;
-  case "year":
-    $sql .= "\nAND plagesop.date BETWEEN '".mbDate("-1 year")."' AND '".mbDate()."'";
-    break;
-}
-
-$sql .= "\nGROUP BY operations.chir_id, ccam" .
-        "\nORDER BY ccam";
+$sql.= "\nGROUP BY operations.chir_id, ccam" .
+       "\nORDER BY ccam";
        
 $listOps = $ds->loadList($sql);       
 
 // Mémorisation des données dans MySQL
-foreach($listOps as $keylistOps => $curr_listOps){
+foreach ($listOps as $keylistOps => $curr_listOps) {
   // Mémorisation des données dans MySQL
   $sql = "INSERT INTO `temps_op` (`temps_op_id`, `chir_id`, `ccam`, `nb_intervention`, `estimation`, `occup_moy`, `occup_ecart`, `duree_moy`, `duree_ecart`)
           VALUES (NULL, 
-                  '".$curr_listOps["chir_id"]."',
+                '".$curr_listOps["chir_id"]."',
             	  '".$curr_listOps["ccam"]."',
             	  '".$curr_listOps["total"]."',
             	  '".$curr_listOps["estimation"]."',
@@ -76,4 +75,5 @@ foreach($listOps as $keylistOps => $curr_listOps){
 }
 
 echo "Liste des temps opératoire mise à jour (".count($listOps)." lignes trouvées)";
+
 ?>

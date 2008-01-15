@@ -107,12 +107,15 @@ if ($typeVue == 1) {
 		"\nORDER BY service.nom, chambre.nom, lit.nom";
   $listAff = new CAffectation;
   $listAff = $listAff->loadQueryList($sql);
-  foreach($listAff as $key => $currAff) {
-    $listAff[$key]->loadRefs();
-    $listAff[$key]->_ref_sejour->loadRefsFwd();
-    $listAff[$key]->_ref_sejour->loadRefGHM();
-    $listAff[$key]->_ref_lit->loadRefsFwd();
-    $listAff[$key]->_ref_lit->_ref_chambre->loadRefsFwd();
+  foreach($listAff as &$aff) {
+    $aff->loadRefs();
+    
+    $aff->_ref_sejour->loadRefsFwd();
+    $aff->_ref_sejour->_ref_praticien =& $listPrat[$aff->_ref_sejour->praticien_id] ;
+    $aff->_ref_sejour->loadRefGHM();
+
+    $aff->_ref_lit->loadRefsFwd();
+    $aff->_ref_lit->_ref_chambre->loadRefsFwd();
   }
 
   $libre = null;

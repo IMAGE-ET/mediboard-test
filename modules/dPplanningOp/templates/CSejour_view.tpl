@@ -17,6 +17,9 @@
 
   <tr>
     <td>
+      <strong>{{mb_label object=$sejour field=type}}:</strong>
+      <i>{{mb_value object=$sejour field=type}}</i>
+      <br />
       <strong>{{tr}}CSejour-entree_prevue-court{{/tr}}:</strong>
       <i>le {{$sejour->entree_prevue|date_format:"%d %B %Y à %Hh%M"}}</i>
       <br />

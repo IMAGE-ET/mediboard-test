@@ -1,4 +1,5 @@
 <?php
+$locales['CSejour.type.urg'] = '';
 $locales['CRPU'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';

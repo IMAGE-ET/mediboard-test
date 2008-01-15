@@ -26,7 +26,7 @@
         </tr>
         <tr>
           <th>Patient</th>
-          <th>Actes médicaux</th>
+          <th>Actes</th>
           <th>Heure prévue</th>
           <th>Durée</th>
           {{if !$boardItem}}
