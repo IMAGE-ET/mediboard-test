@@ -17,15 +17,20 @@ class CCodable extends CMbObject {
   var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
   var $_associationCodesActes = null;
   
-  // Actes GNAP
+  // Actes NGAP
   var $_store_ngap     = null;
   var $_ref_actes_ngap = null;
   var $_codes_ngap     = null;
   var $_tokens_ngap    = null;
+
+  // Back references
+  var $_ref_actes = null;
   
-  var $_ref_actes      = null;
+  // Distant references
+  var $_ref_sejour = null;
   
-  
+  function loadRefSejour() {
+  }
   
   function updateFormFields() {
   	parent::updateFormFields();

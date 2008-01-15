@@ -98,7 +98,6 @@ class CSejour extends CCodable {
   // Distant fields
   var $_dates_operations = null;
   
-  
   // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
@@ -401,6 +400,10 @@ class CSejour extends CCodable {
      $this->_couvert_cmu = $this->_date_sortie_prevue <= $this->_ref_patient->cmu;
   }
   
+  function loadRefSejour() {
+    $this->_ref_sejour =& $this;
+  }
+  
   // Chargement du dossier medical du sejour
   function loadRefDossierMedical(){
     $this->_ref_dossier_medical = new CDossierMedical();
@@ -415,12 +418,11 @@ class CSejour extends CCodable {
   }
   
   function loadRefPatient() {
-    $where = array (
-      "patient_id" => "= '$this->patient_id'"
-    );
+    if (!$this->_ref_patient) {
+	    $this->_ref_patient = new CPatient;
+	    $this->_ref_patient->load($this->patient_id);
+    }
     
-    $this->_ref_patient = new CPatient;
-    $this->_ref_patient->loadObject($where);
     $this->getDroitsCMU();
     $this->_view = "Séjour de ";
     $this->_view .= $this->_ref_patient->_view;

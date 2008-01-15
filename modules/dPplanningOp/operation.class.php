@@ -86,7 +86,6 @@ class COperation extends CCodable {
   var $_ref_plageop        = null;
   var $_ref_salle          = null;
   var $_ref_anesth         = null;
-  var $_ref_sejour         = null;
   var $_ref_consult_anesth = null;
   var $_ref_actes_ccam     = array();
 
@@ -197,7 +196,7 @@ class COperation extends CCodable {
       "rques"         => null
     );
   }
-  
+    
   function check() {
 
     $msg = null;
@@ -413,10 +412,18 @@ class COperation extends CCodable {
   }
   
   function loadRefSejour() {
-    $this->_ref_sejour = new CSejour();
-    $this->_ref_sejour->load($this->sejour_id);
+    if (!$this->_ref_sejour) {
+	    $this->_ref_sejour = new CSejour();
+	    $this->_ref_sejour->load($this->sejour_id);
+    }
   }
   
+  function loadRefPatient() {
+    $this->loadRefSejour();
+    $this->_ref_sejour->loadRefPatient();
+    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+  }
+    
   function loadRefPersonnelReveil() {
   	$this->_ref_affectation_personnel = new CAffectationPersonnel();
   	$where["object_id"] = "= '$this->_id'";

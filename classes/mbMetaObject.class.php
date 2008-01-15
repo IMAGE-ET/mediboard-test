@@ -42,6 +42,10 @@ class CMbMetaObject extends CMbObject{
    * Load target of meta object
    */
   function loadTargetObject() {
+    if ($this->_ref_object) {
+      return;
+    }
+    
     if (!$this->object_class) {
       return;
     }

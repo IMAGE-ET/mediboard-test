@@ -30,35 +30,24 @@ Main.add(function() {
     
   </tr>
 
-	{{foreach from=$sejours item=_sejour}}
+	{{foreach from=$sejours key=sejour_id item=_sejour}}
   <tr>
-    <th colspan="10">
+    <th class="title" colspan="9">
     {{$_sejour->_view}}
     <strong>[{{$_sejour->_num_dossier}}]</strong>
 	    &mdash; Dr. {{$_sejour->_ref_praticien->_view}}
     
     </th>
+    <td>
+      <div class="warning">
+        Suppression de {{$deletions.$sejour_id}} actes pour ce séjour 
+      </div>
+    </td>
   </tr>
   
   <!-- Actes du séjour -->
   {{foreach from=$_sejour->_ref_actes_ccam item=_acte_ccam}}
-  <tr>
-    <td>{{$_acte_ccam->_ref_executant->_view}}</td>
-    <td>{{mb_value object=$_acte_ccam field=execution}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_acte}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_activite}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_phase}}</td>
-    <td>{{mb_value object=$_acte_ccam field=modificateurs}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_association}}</td>
-    <td>{{mb_value object=$_acte_ccam field=montant_base}}</td>
-    <td>{{mb_value object=$_acte_ccam field=montant_depassement}}</td>
-    <td>
-      {{assign var=acte_id value=$_acte_ccam->_id}}
-      {{if $exports.$acte_id === null}}
-      <div class="warning">Acte non exporté</div>
-      {{/if}}
-    </td>
-  </tr>
+	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
   <tr>
     <td colspan="10"><em>Pas d'acte d'hospitalisation</em></td>
@@ -76,17 +65,7 @@ Main.add(function() {
     </th>
   </tr>
   {{foreach from=$_operation->_ref_actes_ccam item=_acte_ccam}}
-  <tr>
-    <td>{{$_acte_ccam->_ref_executant->_view}}</td>
-    <td>{{mb_value object=$_acte_ccam field=execution}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_acte}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_activite}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_phase}}</td>
-    <td>{{mb_value object=$_acte_ccam field=modificateurs}}</td>
-    <td>{{mb_value object=$_acte_ccam field=code_association}}</td>
-    <td>{{mb_value object=$_acte_ccam field=montant_base}}</td>
-    <td>{{mb_value object=$_acte_ccam field=montant_depassement}}</td>
-  </tr>
+	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
   <tr>
     <td colspan="10"><em>Pas d'acte d'intervention</em></td>

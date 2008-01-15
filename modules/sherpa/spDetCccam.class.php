@@ -32,17 +32,17 @@ class CSpDetCCAM extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
-    $specs["idinterv"] = "numchar length|6"; /* Numéro de dossier            */
+    $specs["idinterv"] = "num";            /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */
     $specs["malnum"] = "numchar length|6"; /* Numéro de malade             */
     $specs["codpra"] = "str length|3";     /* Code du praticien            */
     $specs["codact"] = "str length|7";     /* Code CCAM                    */
     $specs["activ"] = "num length|1";      /* Activité                     */
     $specs["phase"] = "num length|1";      /* Phase                        */
-    $specs["modt1"] = "num length|1";      /* Modificateur 1               */
-    $specs["modt2"] = "num length|1";      /* Modificateur 2               */
-    $specs["modt3"] = "num length|1";      /* Modificateur 3               */
-    $specs["modt4"] = "num length|1";      /* Modificateur 4               */
+    $specs["modt1"] = "str length|1";      /* Modificateur 1               */
+    $specs["modt2"] = "str length|1";      /* Modificateur 2               */
+    $specs["modt3"] = "str length|1";      /* Modificateur 3               */
+    $specs["modt4"] = "str length|1";      /* Modificateur 4               */
     $specs["assoc"] = "num length|1";      /* Code d'association           */
     
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
@@ -54,11 +54,24 @@ class CSpDetCCAM extends CSpObject {
     $this->_view = "$this->_id (Malade: $this->malnum, Dossier: $this->numdos)";
   }
   
+  /**
+   * Delete actes pour le dossier
+   */
+  function deleteForDossier($numdos) {
+    $ds =& $this->_spec->ds;
+
+    $query = "SELECT COUNT(*) FROM $this->_tbl WHERE numdos = '$numdos'";
+    $count = $ds->loadResult($query);
+
+    $query = "DELETE FROM $this->_tbl WHERE numdos = '$numdos'";
+    $ds->exec($query);
+
+    return $count;
+  }
+  
   function mapTo() {
     $acte = new CActeCCAM();
     $acte->_adapt_object = true;
-    
-//    mbDump($this->getProps(), $this->_class_name);
     
     // Opération
     $operation = CSpObjectHandler::getMbObjectFor("COperation", $this->idinterv);
@@ -77,11 +90,8 @@ class CSpDetCCAM extends CSpObject {
     $acte->code_activite = $this->activ;
     $acte->code_phase    = $this->phase;
     $acte->modificateurs = trim("$this->modt1$this->modt2$this->modt3$this->modt4");
-    
     $acte->code_association = $this->assoc;
 
-//    mbDump($acte->getProps(), $acte->_class_name);
-    
     return $acte;
   }
   
@@ -92,13 +102,50 @@ class CSpDetCCAM extends CSpObject {
     }
     
     $acte = $mbObject;
-    $acte->loadRefsFwd();
     
+//    mbDump($acte->getProps(), $acte->_class_name);
+
+    // Intervention
+    $acte->loadTargetObject();
+    $this->idinterv = "0"; // Mandatory value in table schema
+    if ($acte->object_class == "COperation") {
+      $idOperation = CSpObjectHandler::getId400For($acte->_ref_object);
+      $this->idinterv = $idOperation->id400;
+    }
+    
+    // Sejour
+    $acte->loadRefSejour();
+    if ($sejour =& $acte->_ref_sejour) {
+      $idSejour = CSpObjectHandler::getId400For($sejour);
+      $this->numdos = $idSejour->id400;
+    }
+    
+    // Patient
+    $acte->loadRefPatient();
+    $patient =& $acte->_ref_patient;
+    $idPatient = CSpObjectHandler::getId400For($patient);
+    $this->malnum = $idPatient->id400;
+    
+    // Exécutant
+    $acte->loadRefExecutant();
+    $executant =& $acte->_ref_executant;
+    $idExecutant = CSpObjectHandler::getId400For($executant);
+    $this->codpra = $idExecutant->id400;  
+    
+    // Contenu
+    $this->codact = $acte->code_acte;
+    $this->activ  = $acte->code_activite;
+    $this->phase  = $acte->code_phase;
+    $this->assoc  = $acte->code_association;
+    $this->modt1 = @$acte->_modificateurs[0];
+    $this->modt2 = @$acte->_modificateurs[1];
+    $this->modt3 = @$acte->_modificateurs[2];
+    $this->modt4 = @$acte->_modificateurs[3];    
+        
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
 
-    
-    mbDump($this->getProps());
+//    mbDump($this->getProps(), $this->_class_name);
   }
 }
 

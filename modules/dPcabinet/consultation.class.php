@@ -22,7 +22,8 @@ class CConsultation extends CCodable {
   // DB References
   var $plageconsult_id = null;
   var $patient_id      = null;
-
+  var $sejour_id       = null;
+  
   // DB fields
   var $heure         = null;
   var $duree         = null;
@@ -51,7 +52,6 @@ class CConsultation extends CCodable {
   var $facture_acquittee = null; // true si total_facture == a_regler
   var $a_regler          = null;     // somme que le patient doit régler a la fn
   //var $patient_regle     = null;     // paye devient patient_regle
-  var $sejour_id         = null;
   
   
   // Form fields
@@ -67,6 +67,7 @@ class CConsultation extends CCodable {
   // Fwd References
   var $_ref_patient      = null;
   var $_ref_plageconsult = null;
+  var $_ref_sejour       = null;
   
   // FSE
   var $_bind_fse = null;
@@ -646,7 +647,6 @@ class CConsultation extends CCodable {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
   }
-  
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
   function loadRefSejour(){

@@ -3,7 +3,7 @@
 /**
  * @package Mediboard
  * @subpackage dPccam
- * @version $Revision: $
+ * @version $Revision$
  * @author Alexis Granger
  */
 
@@ -18,9 +18,25 @@ class CActe extends CMbMetaObject {
   var $_preserve_montant   = null; 
   var $_montant_facture    = null;
   
+  // Distant object
+  var $_ref_sejour = null;
+  var $_ref_patient = null;
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_montant_facture = $this->montant_base + $this->montant_depassement;
+  }
+  
+  function loadRefSejour() {
+    $this->loadTargetObject();
+    $this->_ref_object->loadRefSejour();
+    $this->_ref_sejour =& $this->_ref_object->_ref_sejour;
+  }
+  
+  function loadRefPatient() {
+    $this->loadTargetObject();
+    $this->_ref_object->loadRefPatient();
+    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
   }
   
   function getSpecs() {
@@ -50,14 +66,14 @@ class CActe extends CMbMetaObject {
   }
   
   function store(){
-    if($msg = parent::store()){
+    if ($msg = parent::store()){
       return $msg;
     }
     return $this->updateMontant();
   }
   
   function delete(){
-    if($msg = parent::delete()){
+    if ($msg = parent::delete()){
       return $msg;
     }
     return $this->updateMontant();

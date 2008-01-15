@@ -53,7 +53,8 @@ class CSpObjectHandler extends CMbObjectHandler {
     $ds =& $id400->_spec->ds;
     
     switch ($mbObject->_class_name) {
-      case "CSejour" : 
+      // Sejour
+      case "CSejour": 
 	    $year = substr($mbObject->entree_prevue, 3, 1);
 	    
 	    $min = "00001";
@@ -73,7 +74,8 @@ class CSpObjectHandler extends CMbObjectHandler {
 	    $newId = $latestId ? $latestId+1 : $idMin;
 	    return str_pad($newId, 6, "0", STR_PAD_LEFT);    
       
-      case "CPatient" :
+      // Patient
+	    case "CPatient":
       $query = "SELECT MAX(`id400`) ".
         "FROM `id_sante400`".
         "WHERE `tag` = '$id400->tag'".
@@ -82,12 +84,24 @@ class CSpObjectHandler extends CMbObjectHandler {
       $newId = $latestId+1;
       return str_pad($newId, 6, "0", STR_PAD_LEFT);
       
-      case "COperation" :
+      // Opération
+      case "COperation":
       $query = "SELECT MAX(`id400`) ".
         "FROM `id_sante400`".
         "WHERE `tag` = '$id400->tag'".
         "AND `object_class` = '$id400->object_class'";
       $latestId = $ds->loadResult($query);
+      $newId = $latestId+1;
+      return $newId;
+      
+      // Acte CCAM
+      case "CActeCCAM":
+      $detCCAM = new CSpDetCCAM;
+      $detCCAM->changeDSN($g);
+      $dsSherpa = CSQLDataSource::get("sherpa-$g");
+      $query = "SELECT MAX(`idacte`) ".
+        "FROM es_detccam";
+      $latestId = $dsSherpa->loadResult($query);
       $newId = $latestId+1;
       return $newId;
     }
