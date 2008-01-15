@@ -91,6 +91,7 @@ class CSejour extends CCodable {
   var $_ref_etabExterne       = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
+  var $_ref_consultations     = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -463,6 +464,12 @@ class CSejour extends CCodable {
     }
   }
   
+  function loadRefsConsultations(){
+    if(null == $this->_ref_consultations = loadBackRefs("consultations")){
+      return;  
+    }
+  }
+  
   function loadRefsFwd() {
     $this->loadRefPatient();
     $this->loadRefPraticien();
@@ -633,8 +640,10 @@ class CSejour extends CCodable {
     
     $this->loadRefsFwd();
     
-    // Ajout d'un fillTemplate du patient
-    $this->_ref_patient->fillTemplate($template);
+    if($this->_ref_patient->_id){
+      // Ajout d'un fillTemplate du patient
+      $this->_ref_patient->fillTemplate($template);
+    }
     
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
