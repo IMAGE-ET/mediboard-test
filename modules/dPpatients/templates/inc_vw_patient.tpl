@@ -387,7 +387,7 @@ function reloadAfterSaveDoc(){
       {{else}}
       <a class="actionPat" title="Accès la consultation non autorisé">
       {{/if}}
-        Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} - {{$curr_consult->_etat}}
+        Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}
       </a>
     </td>
     <td>
