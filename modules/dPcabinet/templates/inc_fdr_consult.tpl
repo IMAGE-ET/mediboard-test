@@ -190,7 +190,7 @@ function reloadFdr() {
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   url.requestUpdate('fdrConsultContent', { waitingText : null });
   
-  {{if $app->user_prefs.ccam}} 
+  {{if $app->user_prefs.ccam_consultation}} 
   // rafraichissement de la div ccam
   ActesCCAM.refreshList({{$consult->_id}}, {{$userSel->_id}});
   ActesNGAP.refreshList();

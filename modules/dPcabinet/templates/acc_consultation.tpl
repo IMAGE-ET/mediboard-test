@@ -41,7 +41,7 @@
     </div>
   </div>
   
-  {{if $app->user_prefs.ccam == 1 }}
+  {{if $app->user_prefs.ccam_consultation == 1 }}
   <div id="Actes">
     <div id="ActesHeader" class="accordionTabTitleBar">
       Gestion des actes

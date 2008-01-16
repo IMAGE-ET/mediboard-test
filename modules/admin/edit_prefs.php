@@ -70,10 +70,13 @@ $array_list_module_pref = array (
     "DefaultPeriod",
     "DossierCabinet",
     "simpleCabinet",
-    "ccam",
+    "ccam_consultation",
   ),
   "dPplanningOp" => array (
     "mode_dhe",
+  ),
+  "dPhospi" => array (
+    "ccam_sejour",
   ),
   "system" => array (
     "INFOSYSTEM",

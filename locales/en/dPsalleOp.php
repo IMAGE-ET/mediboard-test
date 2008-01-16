@@ -51,6 +51,8 @@ $locales['CActeCCAM.object_class.CConsultation'] = '';
 $locales['CActeCCAM.object_class.COperation'] = '';
 $locales['CActeCCAM.object_class.CSejour'] = '';
 $locales['CActeCCAM.one'] = '';
-$locales['pref-ccam-0'] = '';
-$locales['pref-ccam-1'] = '';
+$locales['pref-ccam_consultation-0'] = '';
+$locales['pref-ccam_consultation-1'] = '';
+$locales['pref-ccam_sejour-0'] = '';
+$locales['pref-ccam_sejour-1'] = '';
 ?>

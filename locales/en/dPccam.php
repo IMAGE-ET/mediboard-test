@@ -25,5 +25,6 @@ $locales['CFavoriCCAM.one'] = '';
 $locales['mod-dPccam-tab-vw_find_code'] = '';
 $locales['mod-dPccam-tab-vw_full_code'] = '';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = '';
-$locales['pref-ccam'] = '';
+$locales['pref-ccam_consultation'] = '';
+$locales['pref-ccam_sejour'] = '';
 ?>

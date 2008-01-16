@@ -83,6 +83,12 @@ function popEtatSejour(sejour_id) {
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
+  {{if $object->_id}}
+    loadSejour({{$object->_id}});
+    loadDocuments({{$object->_id}});
+    loadActesNGAP({{$object->_id}});
+    ActesCCAM.refreshList('{{$object->_id}}', '{{$object->praticien_id}}');
+  {{/if}}
 }
 
 </script>
@@ -216,7 +222,7 @@ function pageMain() {
       </div>
      </div>
   
-   {{if $app->user_prefs.ccam == 1 }}
+   {{if $app->user_prefs.ccam_sejour == 1 }}
    <div id="Actes">
     <div id="ActesHeader" class="accordionTabTitleBar">
       Gestion des actes
