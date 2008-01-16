@@ -49,7 +49,7 @@ class CConsultation extends CCodable {
   var $total_assure      = null;
   var $total_amc         = null; 
   var $total_amo         = null;
-  var $facture_acquittee = null; // true si total_facture == a_regler
+  var $reglement_AM      = null; // true si reglement effectue par AM
   var $a_regler          = null;     // somme que le patient doit régler a la fn
   //var $patient_regle     = null;     // paye devient patient_regle
   
@@ -155,7 +155,7 @@ class CConsultation extends CCodable {
     $specs["total_amo"]         = "currency";
     $specs["total_amc"]         = "currency";
     $specs["total_assure"]      = "currency";
-    $specs["facture_acquittee"] = "bool";
+    $specs["reglement_AM"]      = "bool";
     $specs["a_regler"]          = "currency";
     //$specs["patient_regle"]     = "bool";
     $specs["sejour_id"]         = "ref class|CSejour";
@@ -225,24 +225,17 @@ class CConsultation extends CCodable {
       $this->valide = 0;
     }
     
-    // Gestion du tarif
-    // Suppression de l'acquittement si on supprime le reglement patient
-    if($this->date_reglement !== null && $this->date_reglement == ""){
-      $this->facture_acquittee = 0;
-    }
-    
     // Acquittement à 1 si secteur1 + secteur2 = a_regler
     // Multiplication par 100 a cause des erreurs de PHP avec les float
     if($this->secteur1 !== null && $this->secteur2 !== null && $this->a_regler !== null){
-       if(intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100) && ($this->date_reglement)){       
-        $this->facture_acquittee = 1;
+       if((intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100)) && $this->valide == 1){       
+        $this->reglement_AM = 1;
       }
     }
     
     // Si rien a regler
     if($this->a_regler !== null && $this->a_regler == 0 && $this->valide){
       $this->mode_reglement = "tiers";
-      $this->facture_acquittee = 0;
       $this->date_reglement = mbDate();
     }
   }

@@ -18,6 +18,9 @@ class CActe extends CMbMetaObject {
   var $_preserve_montant   = null; 
   var $_montant_facture    = null;
   
+  // Behaviour fields
+  var $_check_coded  = true;
+  
   // Distant object
   var $_ref_sejour = null;
   var $_ref_patient = null;
@@ -49,11 +52,14 @@ class CActe extends CMbMetaObject {
   }
   
   function checkCoded(){
+    if(!$this->_check_coded){
+        return;
+    }
     $object = new $this->object_class;
     $object->load($this->object_id);
     if($object->_coded == "1") {
       return "$object->_class_name déjà validée : Impossible de coter l\'acte";
-    }    
+    }
   }
 
   function updateMontant(){

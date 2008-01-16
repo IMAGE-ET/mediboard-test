@@ -70,7 +70,8 @@ if($sejour_id && !$operation_id) {
 
 // On récupère l'opération
 $op = new COperation;
-if ($operation_id && $op->load($operation_id)) {
+$op->load($operation_id);
+if($op->_id){
   $op->loadRefs();
   $sejour =& $op->_ref_sejour;
   $sejour->loadRefsFwd();

@@ -69,6 +69,8 @@ $total["nb_non_regle"]      = 0;
 $total["nb_non_acquitte"]   = 0;
 $total["somme_non_regle"]   = 0;
 $total["somme_non_acquitte"]= 0;
+$total["a_regler_caisse"]   = 0;
+$total["somme_non_regle_caisse"] = 0;
 
 $total["cheque"]["reglement"]  = 0;
 $total["CB"]["reglement"]      = 0;
@@ -96,16 +98,19 @@ foreach($listPlage as $key => $value) {
   
   // Facture non acquittee
   if($filter->_etat_acquittement == "non_acquittee"){
-    $where[] = "`facture_acquittee` IS NULL OR `facture_acquittee` = '0'";
+    $where[] = "`reglement_AM` IS NULL OR `reglement_AM` = '0'";
   }
   // Facture acquittee
   if($filter->_etat_acquittement == "acquittee"){
-    $where["facture_acquittee"] = " = '1'";
+    $where["reglement_AM"] = " = '1'";
   }
   
   if($type){
     $where["mode_reglement"] = "= '$type'";
   }
+  
+  // Ne pas prendre en compte les prises en charge aux urgences
+  $where["sejour_id"] = "IS NULL";
   
   $listConsult = new CConsultation;
   $listConsult = $listConsult->loadList($where, "heure");
@@ -138,13 +143,15 @@ foreach($listPlage as $key => $value) {
     $listPlage[$key]->total2 += $value2->secteur2;
     $listPlage[$key]->a_regler += $value2->a_regler;  
     
+    
     if(!$value2->date_reglement){
       $total["nb_non_regle"]++;
       $total["somme_non_regle"] += $value2->a_regler ;
     }
-    if(!$value2->facture_acquittee){  
+    if(!$value2->reglement_AM){  
       $total["nb_non_acquitte"]++;
       $total["somme_non_acquitte"] += $value2->_somme;
+      $total["somme_non_regle_caisse"] += $value2->_somme - $value2->a_regler;
     }    
     $total["a_regler"] += $value2->a_regler;
   }

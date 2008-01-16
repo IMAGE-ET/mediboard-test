@@ -17,12 +17,12 @@
         {{if $chirSel->user_id}}<tr><th>Dr. {{$chirSel->_view}}</th></tr>{{/if}}
         <tr>
           <td>
-            Reglement: {{if $_etat_reglement}}{{tr}}CConsultation._etat_reglement.{{$_etat_reglement}}{{/tr}}{{else}}Tous{{/if}}
+            Reglement Patient: {{if $_etat_reglement}}{{tr}}CConsultation._etat_reglement.{{$_etat_reglement}}{{/tr}}{{else}}Tous{{/if}}
           </td>
         </tr>
         <tr>
           <td>
-            Acquittement: {{if $_etat_acquittement}}{{tr}}CConsultation._etat_acquittement.{{$_etat_acquittement}}{{/tr}}{{else}}Tous{{/if}}
+            Réglement Assurance Maladie: {{if $_etat_acquittement}}{{tr}}CConsultation._etat_acquittement.{{$_etat_acquittement}}{{/tr}}{{else}}Tous{{/if}}
           </td>  
         </tr>
         <tr><td>Paiments pris en compte : {{if $type}}{{$type}}{{else}}tous{{/if}}</td></tr>
@@ -79,8 +79,11 @@
           <td>{{$total.secteur2}} &euro;</td>
         </tr>
         <tr>
-          <th class="category">Total non acquittée</th>
-          <td>{{$total.somme_non_acquitte}} &euro;</td>
+          <th class="category">Total non réglée (Patient)</th>
+          <td>{{$total.somme_non_regle}} &euro;</td>
+        <tr>
+          <th class="category">Total non réglée (AMO/AMC)</th>
+          <td>{{$total.somme_non_regle_caisse}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total facture</th>
@@ -107,6 +110,7 @@
           <th>Secteur 1</th>
           <th>Secteur 2</th>
           <th colspan="2">Réglement du patient</th>
+          <th colspan="2">Assurance Maladie</th>
           <th colspan="2">Total Facturé</th>
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
@@ -139,7 +143,6 @@
             <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
             <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
             <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
-            <input type="hidden" name="facture_acquittee" value="0" />
             <input type="hidden" name="mode_reglement" value="" />
             <input type="hidden" name="date_reglement" value="" />
             {{if $compta == "0"}}
@@ -166,7 +169,8 @@
             {{/if}}
           </td>
           <td>
-            {{$curr_consult->_somme}} &euro;
+          <!-- Total de l'assurance maladie -->
+          {{$curr_consult->_somme-$curr_consult->a_regler}} &euro;
           </td>
           {{if $compta == "0"}}
           <td>
@@ -178,27 +182,31 @@
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->facture_acquittee}}
-              <input type="hidden" name="facture_acquittee" value="0" />
-              <input type="hidden" name="date_reglement" value="" />
+            {{if $curr_consult->reglement_AM}}
+              <input type="hidden" name="reglement_AM" value="0" />
               <button class="cancel notext" type="submit">Annuler</button>
-              Acquittée
+              Régler
             {{else}}
-              <input type="hidden" name="facture_acquittee" value="1" />
-              <button type="submit" class="tick">Acquitter</button>
+              <input type="hidden" name="reglement_AM" value="1" />
+              <button type="submit" class="tick">Régler</button>
             {{/if}}
             </form>
             {{/if}}
             {{/if}}
           </td>
           {{/if}}
-        </tr>
+          <td>
+            {{$curr_consult->_somme}} &euro;
+          </td>
+           </tr>
         {{/foreach}}
         <tr>
           <td {{if $compta}}colspan="3"{{else}}colspan="4"{{/if}} style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
           <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
+          {{assign var="total_plage" value=$curr_plage->total1+$curr_plage->total2}}
+          <td style="font-weight:bold;" colspan="2">{{$total_plage-$curr_plage->a_regler|string_format:"%.2f"}} &euro;</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
         </tr>
       </table>

@@ -76,6 +76,10 @@ function cancelTarif(action) {
     oForm.valide.value = 0;
   }
   
+  if(oForm.reglement_AM){
+    oForm.reglement_AM.value = 0;
+  }
+  
   if(oForm._somme){
     oForm._somme.value = 0;
   }
@@ -571,13 +575,13 @@ function submitFdr(oForm) {
           <!-- Suppression des actes associées a la consultation -->
           <td colspan="2" class="button">
             <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
-            <input type="hidden" name="facture_acquittee" value="0" />
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler le réglement</button>
           </td>
         </tr>
         {{/if}}
         
         {{if $consult->tarif && $consult->date_reglement == "" && $consult->valide == "1"}}
+        {{if !$consult->sejour_id}}
         <tr>
           <th>
             {{mb_label object=$consult field="mode_reglement"}}
@@ -607,34 +611,40 @@ function submitFdr(oForm) {
            </select>
           </td>
         </tr>
+        {{/if}}
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="valide" value="1" />
             <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
             <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
             <input type="hidden" name="a_regler" value="{{$consult->a_regler}}" />
-            <!-- 
-            <input type="hidden" name="facture_acquittee" value="" />
-             -->
+            <input type="hidden" name="reglement_AM" value="{{$consult->reglement_AM}}" />
+            
+            {{if !$consult->sejour_id}}
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
+            {{/if}}
             {{if !$consult->_current_fse}}
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>
+           
             {{/if}}
           </td>
         </tr>
         {{elseif !$consult->date_reglement}}
+        {{if !$consult->sejour_id}}
         <tr>
           <th>{{mb_label object=$consult field="a_regler"}}</th>
           <td>
             {{mb_field object=$consult field="a_regler"}}
             <button type="button" class="tick" onclick="putTiers(); this.form.a_regler.value = 0">Tiers-payant total</button>   
             <input type="hidden" name="mode_reglement" value="" />
-            <input type="hidden" name="valide" value="1" />
           </td>
         </tr>
+        {{/if}}
         <tr>
           <td colspan="2" class="button">
-          <input type="hidden" name="_delete_actes" value="0" />
+            <input type="hidden" name="_delete_actes" value="0" />
+            <input type="hidden" name="valide" value="1" />
+            
             <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
             <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
           </td>

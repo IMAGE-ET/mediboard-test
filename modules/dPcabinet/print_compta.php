@@ -92,11 +92,11 @@ foreach($listPlage as $key => $value) {
   
   // Facture non acquittee
   if($filter->_etat_acquittement == "non_acquittee"){
-    $where["facture_acquittee"] = " = '0'";
+    $where["reglement_AM"] = " = '0'";
   }
   // Facture acquittee
   if($filter->_etat_acquittement == "acquittee"){
-    $where["facture_acquittee"] = " = '1'";
+    $where["reglement_AM"] = " = '1'";
   }
   
   /*if($etat != -1)

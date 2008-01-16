@@ -169,7 +169,7 @@
     </th>
     <td class="readonly">
       <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
-      {{if $op->_ref_salle->_id}}
+      {{if $op->_ref_salle}}
       en {{$plage->_ref_salle->_view}}
       {{/if}}
     </td>

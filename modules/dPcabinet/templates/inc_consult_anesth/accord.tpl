@@ -7,7 +7,7 @@
 <!-- div global de l'accordeon ==> accordionConsult -->
 <div class="accordionMain" id="accordionConsult">
   
-  {{if $current_m == "dPurgences"}}
+  {{if $current_m == "dPurgences" && $consult->_ref_sejour->_ref_rpu->_id}}
   {{assign var="rpu" value=$consult->_ref_sejour->_ref_rpu}}
   <div id="rpuConsult">
     <div id="rpuHeader" class="accordionTabTitleBar">
@@ -67,7 +67,7 @@
             {{/if}}
           </th>
           <td>
-	          {{if $current_m == "dPurgences"}}
+	          {{if $current_m == "dPurgences" && $consult->_ref_sejour->_ref_rpu->_id}}
 	          <div id="cim">
 	              {{assign var="sejour" value=$consult->_ref_sejour}}
 	              {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="0"}}

@@ -7,177 +7,145 @@
  * @author Alexis Granger
  */
 
-
 set_time_limit(180);
 
 $_date_min = mbGetValueFromGetOrSession("_date_min");
 $_date_max = mbGetValueFromGetOrSession("_date_max");
 $chir_id = mbGetValueFromGetOrSession("chir_id");
 $typeVue = mbGetValueFromGetOrSession("typeVue");
+$etatReglement = mbGetValueFromGetOrSession("etatReglement");
 
-// Declaration des variables
-$tarifPlage = array();
-$tarifOperation = array();
-$listOperations = array();
 $nbActes = array();
+$montantSejour = array();
+$tabSejours = array();
 
-// Initialisation des variables
-$tarifTotal = 0;
-$nbActeCCAM = 0;
-$nbOperation = 0;
+$praticien = new CMediusers();
+$praticien->load($chir_id);
 
-// Test pour savoir si le user recherché est un chir ou un anesth
-$mediuser = new CMediusers();
-$mediuser->load($chir_id);
-if($mediuser->isFromType(array("Anesthésiste"))){
-  $type="anesth_id";// anesthesiste
-}
-if($mediuser->isFromType(array("Chirurgien"))){
-  $type="chir_id";
-}
+// Parcours des actes CCAM
+$acte_ccam = new CActeCCAM();
+$order = "execution ASC";
+$where = array();
+$where["executant_id"] = " = '$chir_id'";
+$where["execution"] = "BETWEEN '$_date_min' AND '$_date_max'";
 
+//$where[] = "(object_class <> 'CConsultation' OR consultation.sejour_id IS NOT NULL AND consultation.consultation_id = object_id)"; 
+$actes_ccam = $acte_ccam->loadList($where, $order);
 
-// Vue complete
-if($typeVue == 1){
-	// Recherche sur les plages op a l'aide des criteres fournis par l'utilisateur
-	$plageop = new CPlageOp();
-	$where["date"] = "BETWEEN '$_date_min' AND '$_date_max'";
-	$where[$type] = " = '$chir_id'";
-	$plagesop = $plageop->loadList($where);
-	
-	
-	// recuperation de la liste des operations a partir des plagesop
-	foreach($plagesop as $key => $plage){
-	  // Initialisation
-	  $tarifPlage[$plage->_id] = 0;
-	  // parametre 0 pour ne pas selectionner les operations annulees
-	  $plage->loadRefsBack(0);
-	  $plage->loadRefSalle();
-	  $listOperations[$plage->date][$plage->_id] = $plage;
-	  // Parcours des operations de la plage
-	  foreach($plage->_ref_operations as $key => $operation){
-	    $nbOperation++;
-	    $operation->loadRefSejour();
-	    $operation->_ref_sejour->loadRefPatient();
-	    $operation->loadRefPlageOp();
-	    $operation->loadRefsActesCCAM();
-	    $tarif_operation = 0;
-	    $nbActes[$operation->_id] = 0;
-	    foreach($operation->_ref_actes_ccam as $key => $acte_ccam){
-	      if($acte_ccam->executant_id == $chir_id){
-	        $nbActes[$operation->_id]++;
-	        $tarif_operation += $acte_ccam->getTarif();
-	      }
-	    }
-	    $tarifOperation[$operation->_id] = $tarif_operation;
-	    $tarifPlage[$plage->_id] += $tarif_operation;   
-	  }
-	}
-	
-	
-	// recuperation de la liste des operations en urgence
-	$urgence = new COperation();
-	$whereUrgence["date"] = "BETWEEN '$_date_min' AND '$_date_max'";
-	$whereUrgence[$type] = "= '$chir_id'";
-	$urgences = $urgence->loadList($whereUrgence);
-	foreach($urgences as $key => $_urgence){
-	  $nbOperation++;
-	  $tarifPlage[$_urgence->_id] = 0;
-	  $_urgence->loadRefSejour();
-	  $_urgence->_ref_sejour->loadRefPatient();
-	  $_urgence->loadRefsActesCCAM();
-	  $tarif_operation = 0;
-	  $nbActes[$_urgence->_id] = 0;
-	  foreach($_urgence->_ref_actes_ccam as $key => $acte_ccam){
-	    if($acte_ccam->executant_id == $chir_id){
-	      $nbActes[$_urgence->_id]++;
-	      $tarif_operation += $acte_ccam->getTarif();
-	      $acte_ccam->getTarif();
-	    }
-	  }
-	  $listOperations[$_urgence->date]["urgence"][$_urgence->_id] = $_urgence;
-	  $tarifOperation[$_urgence->_id] = $tarif_operation;
-	  $tarifPlage[$_urgence->_id] += $tarif_operation; 
-	}
-	
-	// Calcul du total
-	foreach($tarifPlage as $key => $value){
-	  $tarifTotal += $value;
-	}
-	
-	foreach($nbActes as $key => $value){
-	  $nbActeCCAM += $value;
-	}
-	
-	// Tri par date des plagesop et operations en urgence
-	if($listOperations){
-	  ksort($listOperations);
-	}
+// Initialisation du tableau de codables
+$codables = array("COperation" => array(), "CSejour" => array(), "CConsultation" => array() );
+
+// Parcours des actes ccam
+foreach($actes_ccam as $key => $acte_ccam){
+  $acte_ccam->loadRefCodeCCAM();
+  $acte_ccam->getTarif();
+  if(!array_key_exists($acte_ccam->object_id,$codables[$acte_ccam->object_class])){
+    $codable = new $acte_ccam->object_class;
+    $codable->load($acte_ccam->object_id);
+  }
+  $codables[$acte_ccam->object_class][$acte_ccam->object_id] = $codable;
+  $codables[$acte_ccam->object_class][$acte_ccam->object_id]->_ref_actes_ccam[$acte_ccam->_id] = $acte_ccam;
 }
 
-
-
-// Vue des totaux
-if($typeVue == 2){
-  //Recherche des plagesop
-  $plageop = new CPlageOp();
-	$where["date"] = "BETWEEN '$_date_min' AND '$_date_max'";
-	$where[$type] = " = '$chir_id'";
-	$plagesop = $plageop->loadList($where);
-
-	// Operations dans les plagesop
-	foreach($plagesop as $key => $plage){
-	  $plage->loadRefsBack(0);
-	  foreach($plage->_ref_operations as $key => $operation){
-      $nbOperation++;
-	    $operation->loadRefsActesCCAM();
-	    foreach($operation->_ref_actes_ccam as $key => $acte_ccam){
-	      if($acte_ccam->executant_id == $chir_id){
-	        $nbActeCCAM++;
-	        $tarifTotal += $acte_ccam->getTarif();
-	      }
-	    }
-	  }
-	}
-	
-	// Operations en urgences (en dehors des plagesop)
-	$urgence = new COperation();
-	$whereUrgence["date"] = "BETWEEN '$_date_min' AND '$_date_max'";
-	$whereUrgence[$type] = "= '$chir_id'";
-	$urgences = $urgence->loadList($whereUrgence);
-	foreach($urgences as $key => $_urgence){
-	  $nbOperation++;
-    $_urgence->loadRefsActesCCAM();
-	  foreach($_urgence->_ref_actes_ccam as $key => $acte_ccam){
-	    if($acte_ccam->executant_id == $chir_id){
-	      $nbActeCCAM++;
-	      $tarifTotal += $acte_ccam->getTarif();
-	    }
-	  }
-	}
+// Parcours des operations
+foreach($codables["COperation"] as $key => $operation){
+  $operation->loadRefPlageOp();
+  // si le sejour_id n'est pas présent dans le tableau de sejour, on le crée
+  if(!array_key_exists($operation->sejour_id, $codables["CSejour"])){
+    $sejour = new CSejour();
+    $sejour->load($operation->sejour_id);
+    $sejour->_ref_operations = array();
+    $sejour->_ref_operations[$operation->_id] = $operation; 
+    $codables["CSejour"][$operation->sejour_id] = $sejour;
+  } else {
+  // sinon, on rajouter directement l'operation dans le sejour
+    $codables["CSejour"][$operation->sejour_id]->_ref_operations[$operation->_id] = $operation;
+  }
 }
 
+// Suppression des consultations qui n'ont pas de sejour_id
+foreach($codables["CConsultation"] as $key => $consultation){
+  if(!$consultation->sejour_id){
+    unset($codables["CConsultation"][$key]);
+  }
+}
+
+// Parcours des consultations
+foreach($codables["CConsultation"] as $key => $consultation){  
+  if(!array_key_exists($consultation->sejour_id, $codables["CSejour"])){
+    $consultation->loadRefSejour();
+    $sejour = new CSejour();
+    $sejour = $consultation->_ref_sejour;
+    $sejour->_ref_consultations[$consultation->_id] = $consultation;
+    $codables["CSejour"][$consultation->sejour_id] = $sejour;  
+  } else {
+    $codables["CSejour"][$consultation->sejour_id]->_ref_consultations[$consultation->_id] = $consultation;
+  }
+}
+
+$sejours =& $codables["CSejour"];
+
+// Tri par sortie reelle et chargement des patients
+foreach($sejours as $key => $sejour){
+  if($sejour->sortie_reelle){    
+    
+    $sejour->loadRefPatient();
+    $tabSejours[mbDate($sejour->sortie_reelle)][$sejour->_id] = $sejour;
+    
+    // Calcul du nombre d'actes par sejour
+    if($sejour->_ref_actes_ccam){
+      foreach($sejour->_ref_actes_ccam as $acte){
+        @$nbActes[$sejour->_id]++;
+        @$montantSejour[$sejour->_id] += $acte->_tarif; 
+      }
+    }
+    if($sejour->_ref_operations){
+      foreach($sejour->_ref_operations as $operation){
+        foreach($operation->_ref_actes_ccam as $acte){
+          @$nbActes[$sejour->_id]++;
+          @$montantSejour[$sejour->_id] += $acte->_tarif;
+        }
+      }
+    }
+    if($sejour->_ref_consultations){
+      foreach($sejour->_ref_consultations as $consult){
+        foreach($consult->_ref_actes_ccam as $acte){
+          @$nbActes[$sejour->_id]++;
+          @$montantSejour[$sejour->_id] += $acte->_tarif;
+        }
+      }
+    }
+  }
+}
+
+$totalActes = 0;
+$montantTotalActes = 0;
+
+// Calcul du nombre total d'actes
+foreach($nbActes as $key => $nb_acte_sejour){
+  $totalActes += $nb_acte_sejour;
+}
+
+// Calcul du montant total des actes realises
+foreach($montantSejour as $key => $montant_sejour){
+  $montantTotalActes += $montant_sejour;
+}
+
+// Tri par date du tableau de sejours
+ksort($tabSejours);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-// Vue complete
-if($typeVue == 1){
-  $smarty->assign("listOperations" , $listOperations );
-  $smarty->assign("tarifOperation" , $tarifOperation );
-  $smarty->assign("tarifPlage"     , $tarifPlage     );
-  $smarty->assign("tarifTotal"     , $tarifTotal     );
-  $smarty->assign("chir_id"        , $chir_id        );
-  $smarty->assign("nbActes"        , $nbActes        );
-}
-$smarty->assign("praticien"     , $mediuser          );
-$smarty->assign("debut"         , $_date_min         );
-$smarty->assign("fin"           , $_date_max         );
-$smarty->assign("typeVue"       , $typeVue           );
-$smarty->assign("nbActeCCAM"    , $nbActeCCAM        );
-$smarty->assign("nbOperation"   , $nbOperation       );
-$smarty->assign("tarifTotal"    , $tarifTotal        );
-
+$smarty->assign("montantTotalActes", $montantTotalActes);
+$smarty->assign("totalActes",$totalActes);
+$smarty->assign("nbActes",$nbActes);
+$smarty->assign("sejours", $tabSejours);
+$smarty->assign("montantSejour", $montantSejour);
+$smarty->assign("praticien", $praticien);
+$smarty->assign("_date_min", $_date_min);
+$smarty->assign("_date_max", $_date_max);
+$smarty->assign("typeVue",$typeVue);
 
 $smarty->display("vw_actes_realises.tpl");
 

@@ -9,6 +9,7 @@ function viewActes(){
   url.addElement(form._date_max);
   url.addElement(form.chir_id);
   url.addElement(form.typeVue);
+  url.addElement(form.etatReglement);
   url.popup(700, 550, "Rapport des actes réalisés");
   
   return false;
