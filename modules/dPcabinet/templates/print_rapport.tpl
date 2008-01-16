@@ -168,7 +168,7 @@
             </form>
             {{/if}}
           </td>
-          <td>
+          <td {{if $compta}}colspan="2"{{/if}}>
           <!-- Total de l'assurance maladie -->
           {{$curr_consult->_somme-$curr_consult->a_regler}} &euro;
           </td>
