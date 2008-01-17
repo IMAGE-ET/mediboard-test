@@ -139,7 +139,7 @@ function reloadAfterSaveDoc() {
         <tr>
           <td colspan="2">
             <ul id="main_tab_group" class="control_tabs">
-              <li><a href="#one">Timmings</a></li>
+              <li><a href="#one">Timings</a></li>
               <li><a href="#two">Anesthésie</a></li>
               <li><a href="#three">CCAM</a></li>
               <li><a href="#four">NGAP</a></li>
