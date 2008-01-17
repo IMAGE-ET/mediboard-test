@@ -44,7 +44,7 @@ function updateListOperations(date, urgence) {
     url.addParam("urgences", urgence);
   }
 
-  url.requestUpdate('operations');
+  url.requestUpdate('operations', { waitingText:null } );
 }
 
 function pageMain() {
@@ -70,7 +70,10 @@ function pageMain() {
       </select>
       </form>
     </td>
-    <td rowspan="3" id="operations" class="greedyPane" style="vertical-align:top;">
+    <td rowspan="3" class="greedyPane" style="vertical-align:top;">
+      <div id="operations">
+      
+      </div>
     </td>
   </tr>
   <tr>
