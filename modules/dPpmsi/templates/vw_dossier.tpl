@@ -5,6 +5,22 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
+  
+CIM10Selector.initDP = function(sejour_id){
+  this.sForm = "editDP-"+sejour_id;
+  this.sView = "DP";
+  this.sChir = "_praticien_id";
+  this.selfClose = true;
+  this.pop();
+}
+
+CIM10Selector.initDAS = function(sejour_id){
+  this.sForm = "editDossierMedical-"+sejour_id;
+  this.sView = "_added_code_cim";
+  this.sChir = "_praticien_id";
+  this.selfClose = true;
+  this.pop();
+}
 
 function choosePreselection(oSelect) {
   if (!oSelect.value) { 
@@ -197,18 +213,9 @@ function pageMain() {
             <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
               Valider
             </button>
-            <button class="search notext" type="button" onclick="CIM10Selector.init()">
+            <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$curr_sejour->_id}})">
               Chercher un diagnostic
             </button>
-            <script type="text/javascript">   
-              CIM10Selector.init = function(){
-                this.sForm = "editDP-{{$curr_sejour->_id}}";
-                this.sView = "DP";
-                this.sChir = "_praticien_id";
-                this.selfClose = false;
-                this.pop();
-              }
-            </script> 
             </form>
             <br />
             {{if $curr_sejour->_ext_diagnostic_principal}}
@@ -227,18 +234,9 @@ function pageMain() {
 		        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })"">
 		          Valider
 		        </button>
-		        <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
+		        <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$curr_sejour->_id}})">
 		          Chercher un diagnostic
 		        </button>
-		        <script type="text/javascript">   
-		          CIM10Selector.initAsso = function(){
-		            this.sForm = "editDossierMedical-{{$curr_sejour->_id}}";
-		            this.sView = "_added_code_cim";
-		            this.sChir = "_praticien_id";
-		            this.selfClose = false;
-		            this.pop();
-		          }
-		        </script> 
 		        </form>
 		        <br />
 		        {{foreach from=$curr_sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
