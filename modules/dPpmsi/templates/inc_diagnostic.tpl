@@ -5,7 +5,7 @@
 <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
 <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
 <label for="DP" title="Diagnostic principal">DP</label>
-<input type="text" name="DP" value="{{$sejour->DP}}" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
+<input type="text" name="DP" value="{{$sejour->DP}}" size="5" />
 <button class="modify notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
   Valider
 </button>
@@ -26,7 +26,7 @@
 <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
 <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
 <label for="_added_code_cim" title="Diagnostics associés significatifs">DAS</label>
-<input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
+<input type="text" name="_added_code_cim" size="5" />
 <button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
   Valider
 </button>

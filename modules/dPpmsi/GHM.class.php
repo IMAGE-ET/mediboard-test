@@ -137,10 +137,16 @@ class CGHM  extends CMbObject {
     $this->_DASs = array(); 
     if($this->_ref_sejour->_ref_dossier_medical->_id){
       foreach($this->_ref_sejour->_ref_dossier_medical->_codes_cim as $code) {
-        $this->_DASs[] = $code;
+        if(strlen($code) < 4) {
+          $this->_DASs[] = $code;
+        } else {
+          $this->_DASs[] = substr($code, 0, 3).".".substr($code, 3);
+        }
       }
     }
     $this->_ref_actes_ccam = array();
+    $this->_ref_sejour->loadRefsActesCCAM();
+    $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_actes_ccam);
     foreach($this->_ref_sejour->_ref_operations as $keyOp => $op) {
       $this->_ref_sejour->_ref_operations[$keyOp]->loadRefsActesCCAM();
       $this->_ref_actes_ccam = array_merge($this->_ref_actes_ccam, $this->_ref_sejour->_ref_operations[$keyOp]->_ref_actes_ccam);
@@ -179,10 +185,14 @@ class CGHM  extends CMbObject {
     $this->_motif = "hospi";
     $this->_destination = "MCO";
     // Infos codage
-    if(strlen($this->_ref_sejour->DP) > 3)
+    // DP
+    if(strlen($this->_ref_sejour->DP) > 3) {
       $this->_DP = substr($this->_ref_sejour->DP, 0, 3).".".substr($this->_ref_sejour->DP, 3);
-    else
+    }
+    else {
       $this->_DP = $this->_ref_sejour->DP;
+    }
+    // CCAM
     $this->_actes = array();
     foreach($this->_ref_actes_ccam as $acte) {
       $this->_actes[] = array(

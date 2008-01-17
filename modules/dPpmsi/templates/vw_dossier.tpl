@@ -205,13 +205,13 @@ function pageMain() {
           </th>
         </tr>
         <tr>
-          <td class="text" colspan="2">
+          <td class="text halfPane" colspan="2">
             <div id="cim-{{$curr_sejour->_id}}">
             {{assign var="sejour" value=$curr_sejour}}
             {{include file="inc_diagnostic.tpl"}}
             </div>
           </td>
-          <td colspan="2" class="text">
+          <td class="text halfPane" colspan="2">
             <div id="GHM-{{$curr_sejour->_id}}">
             {{include file="inc_vw_GHM.tpl"}}
             </div>
