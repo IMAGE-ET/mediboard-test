@@ -1,7 +1,7 @@
 <ul>
   <li>Du patient
   <ul>
-    {{foreach from=$sejour->_ref_patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
+    {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
     <li>
         <form name="addCim-{{$sejour->_id}}-{{$curr_code->code}}" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPpatients" />

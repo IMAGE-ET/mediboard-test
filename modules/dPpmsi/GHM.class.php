@@ -51,6 +51,7 @@ class CGHM  extends CMbObject {
   var $_tarif_2006  = null;
   var $_EXH         = null;
   var $_chemin      = null;
+  var $_notes       = array();
   
   // Forward references
   var $_ref_sejour = null;
@@ -409,7 +410,10 @@ class CGHM  extends CMbObject {
       $n = $this->isFromList("DP", $cond);
     } else if($type == "1DAS") {
       $n = $this->isFromList("DAS", $cond);
-    } else if($type == "DR") {
+      if(!$n) {
+        $this->_notes[] = "DAS en CMA possible ($cond)";
+      }
+     } else if($type == "DR") {
       $n = $this->isFromList("DR", $cond);
     } else if($type == "Age") {
       preg_match("`^([<>])([[:digit:]]+)([[:alpha:]])`", $cond, $ageTest);

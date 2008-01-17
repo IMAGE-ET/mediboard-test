@@ -124,6 +124,12 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlListDiag.requestUpdate("cim-list-"+sejour_id, { 
 		waitingText : null
   } );
+  var urlGHM = new Url();
+  urlGHM.setModuleAction("dPpmsi", "httpreq_vw_GHM");
+  urlGHM.addParam("sejour_id", sejour_id);
+  urlGHM.requestUpdate("GHM-"+sejour_id, { 
+		waitingText : null
+  } );
 }
 
 function pageMain() {
@@ -179,7 +185,6 @@ function pageMain() {
           <th colspan="4" class="title">Liste des séjours</th>
         </tr>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-        {{assign var="GHM" value=$curr_sejour->_ref_GHM}}
         <tr id="sejour{{$curr_sejour->sejour_id}}-trigger">
           <td colspan="4" style="background-color:#aaf;">
           	Dr. {{$curr_sejour->_ref_praticien->_view}} -
@@ -196,127 +201,33 @@ function pageMain() {
             <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->_id}}">
               <img src="images/icons/edit.png" alt="Planifier" />
             </a>
-            Groupage
+            {{$curr_sejour->_view}}
           </th>
         </tr>
         <tr>
           <td class="text" colspan="2">
             <div id="cim-{{$curr_sejour->_id}}">
-            <form name="editDP-{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="del" value="0" />
-		        <input type="hidden" name="_praticien_id" value="{{$curr_sejour->praticien_id}}" />
-            <input type="hidden" name="sejour_id" value="{{$curr_sejour->_id}}" />
-            Diagnostic principal :
-            <input type="text" name="DP" value="{{$curr_sejour->DP}}" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })" />
-            <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
-              Valider
-            </button>
-            <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$curr_sejour->_id}})">
-              Chercher un diagnostic
-            </button>
-            </form>
-            <br />
-            {{if $curr_sejour->_ext_diagnostic_principal}}
-            <strong>{{$curr_sejour->_ext_diagnostic_principal->libelle}}</strong>
-            {{/if}}
-            <br />
-            Diagnostics signicatifs :
-		        <form name="editDossierMedical-{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
-		        <input type="hidden" name="m" value="dPpatients" />
-		        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
-		        <input type="hidden" name="del" value="0" />
-		        <input type="hidden" name="object_class" value="CSejour" />
-		        <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
-		        <input type="hidden" name="_praticien_id" value="{{$curr_sejour->praticien_id}}" />
-		        <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })" />
-		        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })"">
-		          Valider
-		        </button>
-		        <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$curr_sejour->_id}})">
-		          Chercher un diagnostic
-		        </button>
-		        </form>
-		        <br />
-		        {{foreach from=$curr_sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
-            <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="object_class" value="CSejour" />
-            <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
-            <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
-            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
-              {{tr}}Delete{{/tr}}
-            </button>
-            </form>
-            {{$curr_cim->code}} : {{$curr_cim->libelle}}
-            <br />
-            {{/foreach}}
+            {{assign var="sejour" value=$curr_sejour}}
+            {{include file="inc_diagnostic.tpl"}}
             </div>
           </td>
           <td colspan="2" class="text">
-            {{if $curr_sejour->_ref_GHM->_CM}}
-            <strong>Catégorie majeure CM{{$GHM->_CM}}</strong> : {{$GHM->_CM_nom}}
-            <br />
-            <strong>GHM</strong> : {{$GHM->_GHM}} ({{$GHM->_tarif_2006}} €)
-            <br />
-            {{$GHM->_GHM_nom}}
-            <br />
-            <em>Appartenance aux groupes {{$GHM->_GHM_groupe}}</em>
-            <br />
-            <strong>Bornes d'hospitalisation</strong> :
-            de {{$GHM->_borne_basse}}
-            à {{$GHM->_borne_haute}} jours
-            {{else}}
-            <strong>{{$GHM->_GHM}}</strong>
-            {{/if}}
+            <div id="GHM-{{$curr_sejour->_id}}">
+            {{include file="inc_vw_GHM.tpl"}}
+            </div>
           </td>
         </tr>
         <tr>
-          <th>Diagnostics CIM</th>
-          <td class="text">
+          <th class="category" colspan="2">Diagnostics CIM</th>
+          <th class="category" colspan="2">Addicitions</th>
+        </tr>
+        <tr>
+          <td class="text" colspan="2">
             <div id="cim-list-{{$curr_sejour->_id}}">
-            <ul>
-              <li>Du patient
-		            <ul>
-		              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
-		              <li>
-                    <form name="addCim-{{$curr_sejour->_id}}-{{$curr_code->code}}" action="?m={{$m}}" method="post">
-                    <input type="hidden" name="m" value="dPpatients" />
-                    <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
-                    <input type="hidden" name="del" value="0" />
-                    <input type="hidden" name="object_class" value="CSejour" />
-                    <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
-                    <input type="hidden" name="_added_code_cim" value="{{$curr_code->code}}" />
-                    <button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
-                      {{tr}}Ajouter{{/tr}}
-                    </button>
-                    </form>
-		                {{$curr_code->code}} : {{$curr_code->libelle}}
-		              </li>
-		              {{foreachelse}}
-		              <li>Pas de diagnostic</li>
-		              {{/foreach}}
-		            </ul>
-		          </li>
-              <li>Significatifs du séjour
-		            <ul>
-		              {{foreach from=$curr_sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
-		              <li>
-		                {{$curr_code->code}} : {{$curr_code->libelle}}
-		              </li>
-		              {{foreachelse}}
-		              <li>Pas de diagnostic</li>
-		              {{/foreach}}
-		            </ul>
-		          </li>
-		        </ul>
+              {{include file="inc_list_diags.tpl"}}
 		        </div>
           </td>
-          <th>Addicitions</th>
-          <td class="text">
+          <td class="text" colspan="2">
             <ul>
               <li>Du patient
                 <ul>
@@ -364,8 +275,11 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Antécedents</th>
-          <td class="text">
+          <th class="category" colspan="2">Antécedents</th>
+          <th class="category" colspan="2">Traitements</th>
+        </tr>
+        <tr>
+          <td class="text" colspan="2">
             <ul>
               <li>Du patient
                 <ul>
@@ -415,8 +329,7 @@ function pageMain() {
 			        </li>
             </ul>
           </td>
-          <th>Traitements</th>
-          <td class="text">
+          <td class="text" colspan="2">
             <ul>
               <li>Du patient
                 <ul>
@@ -456,7 +369,7 @@ function pageMain() {
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <tr>
           <th class="category" colspan="4">
-            Dr. {{$curr_op->_ref_chir->_view}}
+            Intervention par le Dr. {{$curr_op->_ref_chir->_view}}
             &mdash; {{$curr_op->_datetime|date_format:"%A %d %B %Y"}}
             &mdash; {{$curr_op->_ref_salle->nom}}
           </th>
@@ -474,14 +387,7 @@ function pageMain() {
         {{/foreach}}
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
         <tr>
-          <th class="category" colspan="4">
-            Consultation pré-anesthésique
-          </th>
-        </tr>
-        <tr>
-          <th>Consultation</th>
-          <td class="text" colspan="3">
-            Le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
+          <td class="button" colspan="4">Consultation de pré-anesthésie le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
             avec le Dr. {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
           </td>
         </tr>
@@ -498,11 +404,6 @@ function pageMain() {
           <td class="button">{{$curr_op->_ref_consult_anesth->tasys}}/{{$curr_op->_ref_consult_anesth->tadias}}</td>
         </tr>
         {{/if}}
-        <tr>
-          <th class="category" colspan="4">
-            Intervention
-          </th>
-        </tr>
         <tr>
           <td class="button" colspan="4">
             <button class="print" onclick="printFeuilleBloc({{$curr_op->operation_id}})">

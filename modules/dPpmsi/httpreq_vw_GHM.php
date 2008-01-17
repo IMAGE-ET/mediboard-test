@@ -14,15 +14,13 @@ $modeDAS   = mbGetValueFromGetOrSession("modeDAS", 1);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
-$sejour->loadRefDiagnosticPrincipal();
-$sejour->loadRefDossierMedical();
+$sejour->loadRefGHM();
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("sejour" , $sejour);
-$smarty->assign("modeDAS", $modeDAS);
 
-$smarty->display("inc_diagnostic.tpl");
+$smarty->display("inc_vw_GHM.tpl");
 
 ?>

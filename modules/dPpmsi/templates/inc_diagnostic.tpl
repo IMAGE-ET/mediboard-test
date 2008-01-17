@@ -4,9 +4,9 @@
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
 <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
-Diagnostic principal :
+<label for="DP" title="Diagnostic principal">DP</label>
 <input type="text" name="DP" value="{{$sejour->DP}}" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
-<button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
+<button class="modify notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
   Valider
 </button>
 <button class="search notext" type="button" onclick="CIM10Selector.initDP({{$sejour->_id}})">
@@ -18,7 +18,6 @@ Diagnostic principal :
 <strong>{{$sejour->_ext_diagnostic_principal->libelle}}</strong>
 {{/if}}
 <br />
-Diagnostics signicatifs :
 <form name="editDossierMedical-{{$sejour->_id}}" action="?m={{$m}}" method="post">
 <input type="hidden" name="m" value="dPpatients" />
 <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
@@ -26,8 +25,9 @@ Diagnostics signicatifs :
 <input type="hidden" name="object_class" value="CSejour" />
 <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
 <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
+<label for="_added_code_cim" title="Diagnostics associés significatifs">DAS</label>
 <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
-<button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
+<button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
   Valider
 </button>
 <button class="search notext" type="button" onclick="CIM10Selector.initDAS({{$sejour->_id}})">

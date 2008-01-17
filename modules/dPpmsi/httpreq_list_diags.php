@@ -25,7 +25,8 @@ $patient->_ref_dossier_medical->updateFormFields();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour", $sejour);
+$smarty->assign("patient", $sejour->_ref_patient);
+$smarty->assign("sejour" , $sejour);
 
 $smarty->display("inc_list_diags.tpl");
 
