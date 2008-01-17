@@ -107,8 +107,8 @@ function viewCim(){
   <tr>
   	<th>Favoris disponibles</th>
     <td>
-      <form name="selViewCim">
-      <input type="hidden" name="chir" value="{{$chir}}">
+      <form name="selViewCim" action="?">
+      <input type="hidden" name="chir" value="{{$chir}}" />
       <select name="view" onchange="viewCim();">
   	    <option>&mdash; Choisir un mode d'affichage</option>
   	    <option value="alpha" {{if $view == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>

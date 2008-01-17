@@ -2,6 +2,7 @@
 
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 {{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
 
@@ -92,6 +93,23 @@ function printFeuilleBloc(oper_id) {
   url.popup(700, 600, 'FeuilleBloc');
 }
 
+function reloadDiagnostic(sejour_id, modeDAS) {
+  var urlDiag = new Url();
+  urlDiag.setModuleAction("dPpmsi", "httpreq_diagnostic");
+  urlDiag.addParam("sejour_id", sejour_id);
+  urlDiag.addParam("modeDAS", modeDAS);
+  urlDiag.requestUpdate("cim-"+sejour_id, { 
+		waitingText : null,
+  	onComplete: CIM10Selector.close 
+  } );
+  var urlListDiag = new Url();
+  urlListDiag.setModuleAction("dPpmsi", "httpreq_list_diags");
+  urlListDiag.addParam("sejour_id", sejour_id);
+  urlListDiag.requestUpdate("cim-list-"+sejour_id, { 
+		waitingText : null
+  } );
+}
+
 function pageMain() {
   PairEffect.initGroup("effectSejour");
 }
@@ -167,7 +185,8 @@ function pageMain() {
         </tr>
         <tr>
           <td class="text" colspan="2">
-            <form name="editFrm" action="?m={{$m}}" method="post">
+            <div id="cim-{{$curr_sejour->_id}}">
+            <form name="editDP-{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="dosql" value="do_sejour_aed" />
             <input type="hidden" name="del" value="0" />
@@ -180,6 +199,49 @@ function pageMain() {
             {{if $curr_sejour->_ext_diagnostic_principal}}
             <strong>{{$curr_sejour->_ext_diagnostic_principal->libelle}}</strong>
             {{/if}}
+            <br />
+            Diagnostics signicatifs :
+		        <form name="editDossierMedical-{{$curr_sejour->_id}}" action="?m={{$m}}" method="post">
+		        <input type="hidden" name="m" value="dPpatients" />
+		        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+		        <input type="hidden" name="del" value="0" />
+		        <input type="hidden" name="object_class" value="CSejour" />
+		        <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
+		        <input type="hidden" name="_praticien_id" value="{{$curr_sejour->praticien_id}}" />
+		        <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
+		          Chercher un diagnostic
+		        </button>
+		        <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })" />
+		        <button class="tick notext" type="button">
+		          Valider
+		        </button>
+		        <script type="text/javascript">   
+		          CIM10Selector.initAsso = function(){
+		            this.sForm = "editDossierMedical-{{$curr_sejour->_id}}";
+		            this.sView = "_added_code_cim";
+		            this.sChir = "_praticien_id";
+		            this.selfClose = false;
+		            this.pop();
+		          }
+		        </script> 
+		        </form>
+		        <br />
+		        {{foreach from=$curr_sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
+            <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="object_class" value="CSejour" />
+            <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
+            <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
+            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
+              {{tr}}Delete{{/tr}}
+            </button>
+            </form>
+            {{$curr_cim->code}} : {{$curr_cim->libelle}}
+            <br />
+            {{/foreach}}
+            </div>
           </td>
           <td colspan="2" class="text">
             {{if $curr_sejour->_ref_GHM->_CM}}
@@ -202,11 +264,23 @@ function pageMain() {
         <tr>
           <th>Diagnostics CIM</th>
           <td class="text">
+            <div id="cim-list-{{$curr_sejour->_id}}">
             <ul>
               <li>Du patient
 		            <ul>
 		              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
 		              <li>
+                    <form name="addCim-{{$curr_sejour->_id}}-{{$curr_code->code}}" action="?m={{$m}}" method="post">
+                    <input type="hidden" name="m" value="dPpatients" />
+                    <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+                    <input type="hidden" name="del" value="0" />
+                    <input type="hidden" name="object_class" value="CSejour" />
+                    <input type="hidden" name="object_id" value="{{$curr_sejour->_id}}" />
+                    <input type="hidden" name="_added_code_cim" value="{{$curr_code->code}}" />
+                    <button class="add notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$curr_sejour->_id}}, 1) } })">
+                      {{tr}}Ajouter{{/tr}}
+                    </button>
+                    </form>
 		                {{$curr_code->code}} : {{$curr_code->libelle}}
 		              </li>
 		              {{foreachelse}}
@@ -226,6 +300,7 @@ function pageMain() {
 		            </ul>
 		          </li>
 		        </ul>
+		        </div>
           </td>
           <th>Addicitions</th>
           <td class="text">
@@ -445,7 +520,7 @@ function pageMain() {
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
                   <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
-                    {{tr}}Delete{{/tr}}
+                    {{tr}}Ajouter{{/tr}}
                   </button>
                   </form>
                 </td>
