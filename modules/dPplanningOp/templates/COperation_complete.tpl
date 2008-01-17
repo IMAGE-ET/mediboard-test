@@ -91,11 +91,15 @@
     </td>
   </tr>
   {{/if}}
-  
+</table>
+
+<table class="tbl">
   {{assign var="vue" value="complete"}}
   {{assign var="subject" value=$object}}
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
-  
+</table>
+
+<table class="form">
   <tr>
     <th class="category" colspan="2">{{tr}}msg-COperation-horodatage{{/tr}}</th>
   </tr>

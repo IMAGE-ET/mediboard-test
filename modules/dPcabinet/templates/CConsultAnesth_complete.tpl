@@ -341,7 +341,7 @@ newExam = function(sAction, consultation_id) {
   </tr>  
 </table>
 
-<table class="form">
+<table class="tbl">
   {{assign var="vue" value="complete"}}
   {{assign var="subject" value=$object->_ref_consultation}}
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}

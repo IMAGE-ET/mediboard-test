@@ -231,14 +231,12 @@
     </td>
   </tr>
   {{/if}}
+</table>
   
-  <table class="tbl">
+<table class="tbl">
   {{assign var="vue" value="complete"}}
   {{assign var="subject" value=$sejour}}
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
-  </table>
-
-
 </table>
 
 {{if !$object->_ref_rpu->_id}}

@@ -10,8 +10,7 @@ viewCode = function(code, class){
 }
 
 </script>
-
-
+   
 <!-- S'il y a deja des actes codés, affichage seulement des actes codes -->
 {{if $subject->_ref_actes_ccam && $vue == "complete"}}
 	<tr>
@@ -21,12 +20,12 @@ viewCode = function(code, class){
 	{{if $smarty.foreach.acte.first}}
 	<tr>
 	  <th>{{mb_title object=$curr_acte field="code_acte"}}</th>
-	  <th>{{mb_title object=$curr_acte field="code_activite"}}</td>
-	  <th>{{mb_title object=$curr_acte field="code_phase"}}</td>
-	  <th>{{mb_title object=$curr_acte field="modificateurs"}}</td>
-	  <th>{{mb_title object=$curr_acte field="code_association"}}</td>
-	  <th>{{mb_title object=$curr_acte field="executant_id"}}</td>
-	  <th>{{mb_title object=$curr_acte field="commentaire"}}</td>
+	  <th>{{mb_title object=$curr_acte field="code_activite"}}</th>
+	  <th>{{mb_title object=$curr_acte field="code_phase"}}</th>
+	  <th>{{mb_title object=$curr_acte field="modificateurs"}}</th>
+	  <th>{{mb_title object=$curr_acte field="code_association"}}</th>
+	  <th>{{mb_title object=$curr_acte field="executant_id"}}</th>
+	  <th>{{mb_title object=$curr_acte field="commentaire"}}</th>
 	</tr>
 	{{/if}}
 	
