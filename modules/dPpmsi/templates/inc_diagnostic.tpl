@@ -3,9 +3,24 @@
 <input type="hidden" name="dosql" value="do_sejour_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="sejour_id" value="{{$sejour->sejour_id}}" />
+<input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
 Diagnostic principal :
-<input type="text" name="DP" value="{{$sejour->DP}}"/>
-<button class="modify" type="submit">Valider</button>
+<input type="text" name="DP" value="{{$sejour->DP}}" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
+<button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
+  Valider
+</button>
+<button class="search notext" type="button" onclick="CIM10Selector.init()">
+  Chercher un diagnostic
+</button>
+<script type="text/javascript">   
+  CIM10Selector.init = function(){
+    this.sForm = "editDP-{{$sejour->sejour_id}}";
+    this.sView = "DP";
+    this.sChir = "_praticien_id";
+    this.selfClose = false;
+    this.pop();
+  }
+</script> 
 </form>
 <br />
 {{if $sejour->_ext_diagnostic_principal}}
@@ -20,16 +35,16 @@ Diagnostics signicatifs :
 <input type="hidden" name="object_class" value="CSejour" />
 <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
 <input type="hidden" name="_praticien_id" value="{{$sejour->praticien_id}}" />
+<input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
+<button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })">
+  Valider
+</button>
 <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
   Chercher un diagnostic
 </button>
-<input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, 1) } })" />
-<button class="tick notext" type="button">
-  Valider
-</button>
 <script type="text/javascript">   
   CIM10Selector.initAsso = function(){
-    this.sForm = "editDossierMedical-{{$curr_sejour->_id}}";
+    this.sForm = "editDossierMedical-{{$sejour->_id}}";
     this.sView = "_added_code_cim";
     this.sChir = "_praticien_id";
     this.selfClose = false;
