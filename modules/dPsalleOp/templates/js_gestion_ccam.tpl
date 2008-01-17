@@ -9,6 +9,9 @@ ActesCCAM = {
     if("{{$module}}" == "dPcabinet"){
       refreshFdr(subject_id);
     }
+    if($('viewSejourHospi')){
+      loadSejour(subject_id);
+    }
     url_actes = new Url;
     url_actes.addParam("chir_id", chir_id);  
     url_actes.addParam("module","{{$module}}");

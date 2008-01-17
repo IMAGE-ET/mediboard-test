@@ -12,7 +12,6 @@ function loadActesNGAP(sejour_id){
   url.requestUpdate('listActesNGAP', { waitingText: null } );
 }
 
-
 function reloadAfterSaveDoc(sejour_id){
   var url = new Url;
   url.setModuleAction("dPhospi", "httpreq_vw_documents");
@@ -68,7 +67,8 @@ function loadSejour(sejour_id) {
   url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
   url_sejour.addParam("object_class","CSejour");
   url_sejour.addParam("object_id",sejour_id);
-  url_sejour.requestUpdate('sejour', {
+  url_sejour.requestUpdate('viewSejourHospi', {
+  waitingText: null,
 	onComplete: initPuces
   } );
 }
@@ -80,14 +80,23 @@ function popEtatSejour(sejour_id) {
   url.pop(1000, 550, 'Etat du Séjour');
 }
 
+
+function loadViewSejour(sejour_id, praticien_id){
+  loadSejour(sejour_id); 
+  loadDocuments(sejour_id); 
+  if($('listActesNGAP')){
+    loadActesNGAP(sejour_id);
+  }
+  if($('ccam')){
+    ActesCCAM.refreshList(sejour_id, praticien_id);
+  }
+}
+
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
   {{if $object->_id}}
-    loadSejour({{$object->_id}});
-    loadDocuments({{$object->_id}});
-    loadActesNGAP({{$object->_id}});
-    ActesCCAM.refreshList('{{$object->_id}}', '{{$object->praticien_id}}');
+    loadViewSejour({{$object->_id}});
   {{/if}}
 }
 
@@ -138,7 +147,7 @@ function pageMain() {
               </a>
               </td>
               <td>
-              <a href="#nothing" onclick="loadSejour({{$curr_affectation->_ref_sejour->_id}}); loadDocuments({{$curr_affectation->_ref_sejour->_id}}); loadActesNGAP({{$curr_affectation->_ref_sejour->_id}}); ActesCCAM.refreshList('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->praticien_id}}');">
+              <a href="#nothing" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
               </a>
               </td>
@@ -181,7 +190,7 @@ function pageMain() {
 	              </a>
 	              </td>
 	              <td>
-	              <a href="#nothing" onclick="loadSejour({{$curr_sejour->_id}}); loadDocuments({{$curr_sejour->_id}}); loadActesNGAP({{$curr_sejour->_id}}); ActesCCAM.refreshList('{{$curr_sejour->_id}}', '{{$curr_sejour->praticien_id}}');">
+	              <a href="#nothing" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}})">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
 	              </td>
@@ -217,7 +226,7 @@ function pageMain() {
         Sejour
       </div>
       <div id="AntTraitContent"  class="accordionTabContentBox">
-         <div id="sejour">
+         <div id="viewSejourHospi">
          </div>
       </div>
      </div>

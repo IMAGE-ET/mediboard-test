@@ -1,3 +1,4 @@
+
 {{assign var="sejour" value=$object}}
 
 <table class="form">
@@ -181,7 +182,7 @@
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-{{/tr}} :</strong>
+      <strong>{{tr}}CSejour-ATNC{{/tr}} :</strong>
       {{mb_value object=$sejour field="ATNC"}}
     </td>
     <td>
@@ -231,7 +232,7 @@
   </tr>
   {{/if}}
   
-  <table class="form">
+  <table class="tbl">
   {{assign var="vue" value="complete"}}
   {{assign var="subject" value=$sejour}}
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}

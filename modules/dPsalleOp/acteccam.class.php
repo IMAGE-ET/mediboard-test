@@ -220,6 +220,7 @@ class CActeCCAM extends CActe {
   function loadRefExecutant() {
     $this->_ref_executant = new CMediusers;
     $this->_ref_executant->load($this->executant_id);
+    $this->_ref_executant->loadRefFunction();
   }
   
   function loadRefCodeCCAM() {
