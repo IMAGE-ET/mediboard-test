@@ -1,5 +1,4 @@
 <?php
-$locales['msg-CConsultation-title-modify'] = '';
 $locales['CActeNGAP'] = '';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -1026,6 +1025,7 @@ $locales['mod-dPcabinet-tab-vw_dossier'] = '';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Weekly planning';
 $locales['msg-CActeNGAP-title-modify'] = '';
+$locales['msg-CConsultation-title-modify'] = '';
 $locales['msg-CIdDossierMedical-create'] = '';
 $locales['msg-CIdDossierMedical-delete'] = '';
 $locales['msg-CIdDossierMedical-modify'] = '';

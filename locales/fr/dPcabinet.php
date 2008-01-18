@@ -1,5 +1,4 @@
 <?php
-$locales['msg-CConsultation-title-modify'] = 'Modification de la consultation';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -335,7 +334,7 @@ $locales['CConsultation-date_reglement-desc'] = '';
 $locales['CConsultation-duree'] = 'Durée';
 $locales['CConsultation-duree-court'] = 'Durée';
 $locales['CConsultation-duree-desc'] = 'Durée prévue de la consultation';
-$locales['CConsultation-examen'] = 'Examens';
+$locales['CConsultation-examen'] = 'Examen';
 $locales['CConsultation-examen-court'] = '';
 $locales['CConsultation-examen-desc'] = 'Bilan de l\'examen clinique';
 $locales['CConsultation-heure'] = 'Heure';
@@ -1026,6 +1025,7 @@ $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Semainier';
 $locales['msg-CActeNGAP-title-modify'] = 'Modification Acte NGAP';
+$locales['msg-CConsultation-title-modify'] = 'Modification de la consultation';
 $locales['msg-CIdDossierMedical-create'] = 'Dossier Médical créé';
 $locales['msg-CIdDossierMedical-delete'] = 'Dossier Médical supprimé';
 $locales['msg-CIdDossierMedical-modify'] = 'Dossier Médical modifié';
