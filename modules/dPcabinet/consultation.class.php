@@ -238,6 +238,11 @@ class CConsultation extends CCodable {
       $this->mode_reglement = "tiers";
       $this->date_reglement = mbDate();
     }
+    
+    // Si la consultation est une urgence
+    if($this->sejour_id){
+      $this->a_regler = 0;
+    }
   }
 
 

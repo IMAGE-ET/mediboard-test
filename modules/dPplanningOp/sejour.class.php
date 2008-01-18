@@ -236,36 +236,38 @@ class CSejour extends CCodable {
       }
     }
 
-    // Test de colision avec un autre sejour
-    $patient = new CPatient;
-    if($this->patient_id) {
-      $patient->load($this->patient_id);
-    } elseif($oldSejour->patient_id) {
-      $patient->load($oldSejour->patient_id);
-    }
-    
-    if($patient->_id) {
-      $where["annule"] = " = '0'";
-      $where["type"] = " != 'urg'";
-      $patient->loadRefsSejours($where);
-
-      // suppression de la liste des sejours le sejour courant
-      $listSejour = array();
-      foreach($patient->_ref_sejours as $key => $sejour){
-        $listSejour[$key] = $sejour;
-        if($key == $this->_id){
-          unset($listSejour[$key]);
-        }
-      }
-      
-      foreach($listSejour as $key => $sejour){
-        //Test sur les entree prevues du sejour
-        if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
-          or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
-          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
-          $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
-        }     
-      }
+    if(!$this->annule){
+	    // Test de colision avec un autre sejour
+	    $patient = new CPatient;
+	    if($this->patient_id) {
+	      $patient->load($this->patient_id);
+	    } elseif($oldSejour->patient_id) {
+	      $patient->load($oldSejour->patient_id);
+	    }
+	    
+	    if($patient->_id) {
+	      $where["annule"] = " = '0'";
+	      $where["type"] = " != 'urg'";
+	      $patient->loadRefsSejours($where);
+	
+	      // suppression de la liste des sejours le sejour courant
+	      $listSejour = array();
+	      foreach($patient->_ref_sejours as $key => $sejour){
+	        $listSejour[$key] = $sejour;
+	        if($key == $this->_id){
+	          unset($listSejour[$key]);
+	        }
+	      }
+	      
+	      foreach($listSejour as $key => $sejour){
+	        //Test sur les entree prevues du sejour
+	        if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
+	          or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
+	          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
+	          $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
+	        }     
+	      }
+	    }
     }
 
     return $msg . parent::check();

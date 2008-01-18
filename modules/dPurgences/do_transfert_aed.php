@@ -7,17 +7,15 @@
 * @author Alexis Granger
 */
 
-function viewMsg($msg, $action, $redirect = ""){
+function viewMsg($msg, $action, $txt = ""){
   global $AppUI, $m, $tab;
+  $action = $AppUI->_($action);
   if($msg){
-    $AppUI->setMsg("$action : $msg", UI_MSG_ERROR );
+    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
     $AppUI->redirect("m=$m&tab=$tab");
     return;
   }
-  $AppUI->setMsg($action, UI_MSG_OK );
-  if($redirect){
-    $AppUI->redirect($redirect);
-  }
+  $AppUI->setMsg("$action $txt", UI_MSG_OK );
 }
 
 
@@ -38,7 +36,7 @@ viewMsg($msg, "msg-CRPU-title-close");
 $rpu->loadRefSejour();
 $rpu->_ref_sejour->sortie_reelle = mbDateTime();
 $msg = $rpu->_ref_sejour->store();
-viewMsg($msg, "msg-CSejour-title-close");
+viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");
 
 // Creation du nouveau sejour et pre-remplissage des champs
 $sejour = new CSejour();
@@ -77,6 +75,10 @@ foreach($actes_ccam as $key => $_acteCCAM){
 
 // Si le transfert des actes CCAM est reussi, suppression de codes_ccam de l'ancienne consult
 $rpu->_ref_consult->codes_ccam = "";
+$rpu->_ref_consult->tarif = "Transfert Séjour";
+$rpu->_ref_consult->a_regler = 0;
+$rpu->_ref_consult->secteur1 = 0;
+$rpu->_ref_consult->secteur2 = 0;
 $msg = $rpu->_ref_consult->store();
 viewMsg($msg, "msg-CConsultation-title-modify");
 
