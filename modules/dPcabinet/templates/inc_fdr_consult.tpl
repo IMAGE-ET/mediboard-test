@@ -541,24 +541,23 @@ function submitFdr(oForm) {
 	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
  			      <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
             {{/if}}
-           </td>
-         </tr>
-         <tr>
-           <th>Codes CCAM</th>
-           <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
-           {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
-             {{$acte_ccam->code_acte}}  
-           {{/foreach}}
-           </td>
-         </tr>
-         <tr>
-           <th>Codes NGAP</th>
-           <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
-           {{foreach from=$consult->_ref_actes_ngap item=acte_ngap}}
-             {{$acte_ngap->quantite}}-{{$acte_ngap->code}}-{{$acte_ngap->coefficient}}   
-           {{/foreach}}
-           </td>
-         </tr>
+          </td>
+        </tr>
+        <tr>
+          <th>Codes CCAM</th>
+          <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
+            {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
+              {{$acte_ccam->code_acte}}  
+            {{/foreach}}
+          </td>
+        </tr>
+        <tr>
+          <th>Codes NGAP</th>
+          <td>{{mb_field object=$consult field="_tokens_ngap" readonly="readonly" hidden=1 prop=""}}
+          {{foreach from=$consult->_ref_actes_ngap item=acte_ngap}}
+            {{$acte_ngap->quantite}}-{{$acte_ngap->code}}-{{$acte_ngap->coefficient}}   
+          {{/foreach}}
+          </td>
         </tr>
         {{else}}
         <tr>
