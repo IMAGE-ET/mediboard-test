@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPpatients-tab-vw_siblings'] = 'Identito-vigilence';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['CAddiction'] = 'Addiction';
 $locales['CAddiction-addiction'] = 'Addiction';
@@ -470,6 +469,7 @@ $locales['mod-dPpatients-tab-vw_full_patients'] = 'Consulter un dossier';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = 'Chercher un dossier';
 $locales['mod-dPpatients-tab-vw_medecins'] = 'Médecins correspondants';
 $locales['mod-dPpatients-tab-vw_recherche'] = 'Recherche dossiers cliniques';
+$locales['mod-dPpatients-tab-vw_siblings'] = 'Identito-vigilance';
 $locales['msg-CMedecin-create'] = 'Médecin créé';
 $locales['msg-CMedecin-delete'] = 'Médecin supprimé';
 $locales['msg-CMedecin-modify'] = 'Médecin modifié';

@@ -1,5 +1,4 @@
 <?php
-$locales['mod-dPpatients-tab-vw_siblings'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';
@@ -470,6 +469,7 @@ $locales['mod-dPpatients-tab-vw_full_patients'] = '';
 $locales['mod-dPpatients-tab-vw_idx_patients'] = '';
 $locales['mod-dPpatients-tab-vw_medecins'] = '';
 $locales['mod-dPpatients-tab-vw_recherche'] = '';
+$locales['mod-dPpatients-tab-vw_siblings'] = '';
 $locales['msg-CMedecin-create'] = '';
 $locales['msg-CMedecin-delete'] = '';
 $locales['msg-CMedecin-modify'] = '';
