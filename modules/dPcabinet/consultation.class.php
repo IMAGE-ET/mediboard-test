@@ -233,8 +233,8 @@ class CConsultation extends CCodable {
       }
     }
     
-    // Si rien a regler
-    if($this->a_regler !== null && $this->a_regler == 0 && $this->valide){
+    // Si rien a regler (sauf dans le cas d'une urgence => pas de notion de reglement)
+    if($this->a_regler !== null && $this->a_regler == 0 && $this->valide && !$this->sejour_id){
       $this->mode_reglement = "tiers";
       $this->date_reglement = mbDate();
     }
