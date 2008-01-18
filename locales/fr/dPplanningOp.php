@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-COperation-horaire_voulu'] = 'Affichage de l\'horaire souhaité';
+$locales['msg-CSejour-title-create'] = 'Création du séjour';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -41,6 +41,7 @@ $locales['CNaissance.none'] = '';
 $locales['CNaissance.one'] = '';
 $locales['config-dPplanningOp-COperation-duree_deb'] = 'Temps minimal d\'invervention';
 $locales['config-dPplanningOp-COperation-duree_fin'] = 'Temps maximal d\'intervention';
+$locales['config-dPplanningOp-COperation-horaire_voulu'] = 'Affichage de l\'horaire souhaité';
 $locales['config-dPplanningOp-COperation-hour_urgence_deb'] = 'Heure début d\'urgence';
 $locales['config-dPplanningOp-COperation-hour_urgence_fin'] = 'Heure fin d\'urgence';
 $locales['config-dPplanningOp-COperation-min_intervalle'] = 'Subdivision des heures';
@@ -510,6 +511,7 @@ $locales['msg-COperation-title-create'] = 'Création d\'une intervention';
 $locales['msg-COperation-title-create-urgence'] = 'Création d\'une urgence';
 $locales['msg-COperation-title-modify'] = 'Modification de l\'intervention de';
 $locales['msg-COperation-title-modify-urgence'] = 'Modification de l\'urgence de';
+$locales['msg-CSejour-title-close'] = 'Fermeture du séjour';
 $locales['msg-CSejour-hospi'] = 'Hospitalisation';
 $locales['msg-CSejour-infoHospi'] = 'Informations sur les affectations d\'hospitalisation';
 $locales['msg-CSejour-infoOper'] = 'Informations sur les opérations pendant le séjour';

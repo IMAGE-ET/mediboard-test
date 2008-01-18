@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour.type.urg'] = '';
+$locales['msg-CRPU-title-close'] = '';
 $locales['CRPU'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';
@@ -78,6 +78,7 @@ $locales['CRPU.transport.heli'] = '';
 $locales['CRPU.transport.perso'] = '';
 $locales['CRPU.transport.smur'] = '';
 $locales['CRPU.transport.vsab'] = '';
+$locales['CSejour.type.urg'] = '';
 $locales['mod-dPurgences-tab-edit_consultation'] = '';
 $locales['mod-dPurgences-tab-vw_aed_rpu'] = '';
 $locales['mod-dPurgences-tab-vw_idx_rpu'] = '';

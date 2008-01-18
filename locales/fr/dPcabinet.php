@@ -1,5 +1,5 @@
 <?php
-$locales['CConsultation-_coordonnees-desc'] = 'Affichage des coordonnées des patients';
+$locales['msg-CConsultation-title-modify'] = 'Modification de la consultation';
 $locales['CActeNGAP'] = 'Acte NGAP';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -384,6 +384,7 @@ $locales['CConsultation-traitement-desc'] = 'Traitements';
 $locales['CConsultation-_check_premiere'] = 'Première consultation';
 $locales['CConsultation-_check_premiere-desc'] = 'Première consultation de ce patient avec le praticien';
 $locales['CConsultation-_coordonnees'] = 'Coordonnées';
+$locales['CConsultation-_coordonnees-desc'] = 'Affichage des coordonnées des patients';
 $locales['CConsultation-_date_max'] = 'Jusqu\'au';
 $locales['CConsultation-_date_max-court'] = '';
 $locales['CConsultation-_date_max-desc'] = 'Date de fin de la recherche.';
@@ -1024,6 +1025,7 @@ $locales['mod-dPcabinet-tab-vw_compta'] = 'Comptabilité';
 $locales['mod-dPcabinet-tab-vw_dossier'] = 'Dossiers';
 $locales['mod-dPcabinet-tab-vw_intermax'] = 'LogicMax FSE';
 $locales['mod-dPcabinet-tab-vw_planning'] = 'Semainier';
+$locales['msg-CActeNGAP-title-modify'] = 'Modification Acte NGAP';
 $locales['msg-CIdDossierMedical-create'] = 'Dossier Médical créé';
 $locales['msg-CIdDossierMedical-delete'] = 'Dossier Médical supprimé';
 $locales['msg-CIdDossierMedical-modify'] = 'Dossier Médical modifié';

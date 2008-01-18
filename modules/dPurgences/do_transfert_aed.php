@@ -1,0 +1,100 @@
+<?php 
+
+/**
+* @package Mediboard
+* @subpackage dPurgences
+* @version $Revision:  $
+* @author Alexis Granger
+*/
+
+function viewMsg($msg, $action, $redirect = ""){
+  global $AppUI, $m, $tab;
+  if($msg){
+    $AppUI->setMsg("$action : $msg", UI_MSG_ERROR );
+    $AppUI->redirect("m=$m&tab=$tab");
+    return;
+  }
+  $AppUI->setMsg($action, UI_MSG_OK );
+  if($redirect){
+    $AppUI->redirect($redirect);
+  }
+}
+
+
+global $AppUI;
+
+// Récupération du rpu
+$rpu_id = $_POST["rpu_id"];
+
+// Sauvegarde du RPU
+$rpu = new CRPU();
+$rpu->load($rpu_id);
+$rpu->orientation = "HO";
+$rpu->sortie = mbDateTime();
+$msg = $rpu->store();
+viewMsg($msg, "msg-CRPU-title-close");
+
+// Sauvegarde du sejour
+$rpu->loadRefSejour();
+$rpu->_ref_sejour->sortie_reelle = mbDateTime();
+$msg = $rpu->_ref_sejour->store();
+viewMsg($msg, "msg-CSejour-title-close");
+
+// Creation du nouveau sejour et pre-remplissage des champs
+$sejour = new CSejour();
+$sejour->patient_id = $rpu->_ref_sejour->patient_id;
+$sejour->praticien_id = $rpu->_ref_sejour->praticien_id;
+$sejour->group_id = $rpu->_ref_sejour->group_id;
+$sejour->entree_prevue = mbDateTime();
+$sejour->sortie_prevue = mbDateTime("+ 1 day");
+$sejour->entree_reelle = mbDateTime();
+$sejour->type = "comp";
+$sejour->DP = $rpu->_ref_sejour->DP;
+if($rpu->diag_infirmier){ 
+  $sejour->rques = "Diagnostic infirmier: $rpu->diag_infirmier\n";
+}
+if($rpu->motif){
+  $sejour->rques .= "Motif de recours aux urgences: $rpu->motif";
+}
+$msg = $sejour->store();
+viewMsg($msg, "msg-CSejour-title-create");
+
+// Chargement des actes de la prise en charge aux urgences
+$actes_ccam = array();
+$acte_ccam = new CActeCCAM();
+$acte_ccam->object_id = $rpu->_ref_consult->_id;
+$acte_ccam->object_class = "CConsultation";
+$actes_ccam = $acte_ccam->loadMatchingList();
+
+// Transfert des actes CCAM sur le sejour
+foreach($actes_ccam as $key => $_acteCCAM){
+  $_acteCCAM->object_class = "CSejour";
+  $_acteCCAM->object_id = $sejour->_id;
+  $_acteCCAM->_adapt_object = 1;
+  $msg = $_acteCCAM->store();
+  viewMsg($msg, "msg-CActeCCAM-title-modify");
+}
+
+// Si le transfert des actes CCAM est reussi, suppression de codes_ccam de l'ancienne consult
+$rpu->_ref_consult->codes_ccam = "";
+$msg = $rpu->_ref_consult->store();
+viewMsg($msg, "msg-CConsultation-title-modify");
+
+// Chargement des actes NGAP de la prise en charge
+$actes_ngap = array();
+$acte_ngap = new CActeNGAP();
+$acte_ngap->object_id = $rpu->_ref_consult->_id;
+$acte_ngap->object_class = "CConsultation";
+$actes_ngap = $acte_ngap->loadMatchingList();
+
+// Transfert des actes NGAP sur le sejour
+foreach($actes_ngap as $key => $_acteNGAP){
+  $_acteNGAP->object_class = "CSejour";
+  $_acteNGAP->object_id = $sejour->_id;
+  $msg = $_acteNGAP->store();
+  viewMsg($msg, "msg-CActeNGAP-title-modify");
+}
+
+$AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
+
+?>

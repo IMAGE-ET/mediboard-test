@@ -16,7 +16,8 @@ $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $praticienSel = new CMediusers();
 $praticienSel->load($praticien_id);
 
-
+// Recuperation de l'id de la consultation du passage en urgence
+$consult_urgence_id = mbGetValueFromGet("consult_urgence_id");
 
 $consult = new CConsultation();
 $chir = new CMediusers;
@@ -87,9 +88,6 @@ if(!$consultation_id) {
 	}
 }
 
-
-
-
 $categorie = new CConsultationCategorie();
 $whereCategorie["function_id"] = " = '$praticienSel->function_id'";
 $orderCategorie = "nom_categorie ASC";
@@ -100,6 +98,17 @@ $categories = $categorie->loadList($whereCategorie,$orderCategorie);
 $listCat = array();
 foreach($categories as $key => $cat){
   $listCat[$cat->_id] = $cat->nom_icone;
+}
+
+
+// Ajout du motif de la consultation passé en parametre
+if(!$consult->_id && $consult_urgence_id){
+  // Chargement de la consultation de passage aux urgences
+  $consultUrgence = new CConsultation();
+  $consultUrgence->load($consult_urgence_id);
+  $consultUrgence->loadRefSejour();
+  $consultUrgence->_ref_sejour->loadRefRPU();
+  $consult->motif = "Reconvocation suite à un passage aux urgences, {$consultUrgence->_ref_sejour->_ref_rpu->motif}";
 }
 
 // Création du template
@@ -113,8 +122,8 @@ $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
 $smarty->assign("praticien_id"      , $praticien_id      );
-$smarty->assign("listModelePrat"		, $listModelePrat);
-$smarty->assign("listModeleFunc"		, $listModeleFunc);
+$smarty->assign("listModelePrat"		, $listModelePrat    );
+$smarty->assign("listModeleFunc"		, $listModeleFunc    );
 
 $smarty->display("addedit_planning.tpl");
 

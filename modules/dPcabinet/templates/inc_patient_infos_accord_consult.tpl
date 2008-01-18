@@ -19,11 +19,12 @@ function newHospitalisation(chir_id, pat_id) {
   url.redirect();
 }
 
-function newConsultation(chir_id, pat_id) {
+function newConsultation(chir_id, pat_id, consult_urgence_id) {
   var url = new Url;
   url.setModuleTab("dPcabinet", "edit_planning");
   url.addParam("chir_id", chir_id);
   url.addParam("pat_id", pat_id);
+  url.addParam("consult_urgence_id", consult_urgence_id);
   url.addParam("consultation_id", 0);
   url.redirect();
 }

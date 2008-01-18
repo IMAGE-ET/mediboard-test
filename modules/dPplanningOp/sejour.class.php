@@ -245,7 +245,8 @@ class CSejour extends CCodable {
     }
     
     if($patient->_id) {
-      $where = array("annule" => "= '0'");
+      $where["annule"] = " = '0'";
+      $where["type"] = " != 'urg'";
       $patient->loadRefsSejours($where);
 
       // suppression de la liste des sejours le sejour courant
@@ -256,7 +257,7 @@ class CSejour extends CCodable {
           unset($listSejour[$key]);
         }
       }
-    
+      
       foreach($listSejour as $key => $sejour){
         //Test sur les entree prevues du sejour
         if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))

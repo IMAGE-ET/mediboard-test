@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-COperation-horaire_voulu'] = '';
+$locales['msg-CSejour-title-create'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -41,6 +41,7 @@ $locales['CNaissance.none'] = '';
 $locales['CNaissance.one'] = '';
 $locales['config-dPplanningOp-COperation-duree_deb'] = '';
 $locales['config-dPplanningOp-COperation-duree_fin'] = '';
+$locales['config-dPplanningOp-COperation-horaire_voulu'] = '';
 $locales['config-dPplanningOp-COperation-hour_urgence_deb'] = '';
 $locales['config-dPplanningOp-COperation-hour_urgence_fin'] = '';
 $locales['config-dPplanningOp-COperation-min_intervalle'] = '';
@@ -510,6 +511,7 @@ $locales['msg-COperation-title-create'] = '';
 $locales['msg-COperation-title-create-urgence'] = '';
 $locales['msg-COperation-title-modify'] = '';
 $locales['msg-COperation-title-modify-urgence'] = '';
+$locales['msg-CSejour-title-close'] = '';
 $locales['msg-CSejour-hospi'] = '';
 $locales['msg-CSejour-infoHospi'] = '';
 $locales['msg-CSejour-infoOper'] = '';

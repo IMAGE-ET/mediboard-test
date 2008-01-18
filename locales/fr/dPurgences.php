@@ -1,5 +1,5 @@
 <?php
-$locales['CSejour.type.urg'] = 'Passage aux urgences';
+$locales['msg-CRPU-title-close'] = 'Fermeture du RPU';
 $locales['CRPU'] = 'Résumé de passage aux urgences';
 $locales['CRPU-ccmu'] = 'Degré d\'urgence';
 $locales['CRPU-ccmu-desc'] = 'Degré d\'urgence CCMU estimé';
@@ -78,6 +78,7 @@ $locales['CRPU.transport.heli'] = 'Hélicoptère';
 $locales['CRPU.transport.perso'] = 'Moyens personnels';
 $locales['CRPU.transport.smur'] = 'SMUR';
 $locales['CRPU.transport.vsab'] = 'VSAB';
+$locales['CSejour.type.urg'] = 'Passage aux urgences';
 $locales['mod-dPurgences-tab-edit_consultation'] = 'Consultation';
 $locales['mod-dPurgences-tab-vw_aed_rpu'] = 'Admettre un patient';
 $locales['mod-dPurgences-tab-vw_idx_rpu'] = 'Main courante';

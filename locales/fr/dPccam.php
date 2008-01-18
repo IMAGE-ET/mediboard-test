@@ -25,7 +25,7 @@ $locales['CFavoriCCAM.one'] = '';
 $locales['mod-dPccam-tab-vw_find_code'] = 'Rechercher un code';
 $locales['mod-dPccam-tab-vw_full_code'] = 'Affichage d\'un code';
 $locales['mod-dPccam-tab-vw_idx_favoris'] = 'Mes favoris';
+$locales['msg-CActeCCAM-title-modify'] = 'Modification Acte CCAM';
 $locales['pref-ccam_consultation'] = 'Gestion des actes CCAM des consultations';
 $locales['pref-ccam_sejour'] = 'Gestion des actes CCAM des séjours';
-
 ?>

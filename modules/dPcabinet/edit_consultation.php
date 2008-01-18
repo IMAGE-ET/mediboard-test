@@ -258,15 +258,14 @@ if($consult->patient_id){
 $consult->loadRefsActesNGAP();
 
 // Chargement du sejour dans le cas d'une urgence
-if($current_m == "dPurgences"){
-  if($consult->_id){
-    $consult->loadRefSejour();
-    $consult->_ref_sejour->loadRefDiagnosticPrincipal();
-    $consult->_ref_sejour->loadRefDossierMedical();
-    $consult->_ref_sejour->loadNumDossier();
-    $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
-  }
+if($consult->_id && $consult->sejour_id){
+  $consult->loadRefSejour();
+  $consult->_ref_sejour->loadRefDiagnosticPrincipal();
+  $consult->_ref_sejour->loadRefDossierMedical();
+  $consult->_ref_sejour->loadNumDossier();
+  $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
 }
+
 
 
 // Création du template
