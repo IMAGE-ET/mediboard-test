@@ -734,7 +734,21 @@ class CPatient extends CMbObject {
       $order = "favoris_code";
       $favoris = $favoris->loadList($where, $order);
       foreach($favoris as $key => $value) {
-        $this->_static_cim10["favoris"][] = new CCodeCIM10($value->favoris_code, 1);
+        $this->_static_cim10["favoris"][$value->favoris_code] = new CCodeCIM10($value->favoris_code, 1);
+      }
+      $ds = CSQLDataSource::get("std");
+      $sql = "SELECT DP, count(DP) as nb_code
+        FROM `sejour`
+        WHERE sejour.praticien_id = '$user'
+        AND DP IS NOT NULL
+        AND DP != ''
+        GROUP BY DP
+        ORDER BY count(DP) DESC
+        LIMIT 10;";
+      $cimStat = $ds->loadlist($sql);
+      foreach($cimStat as $key => $value) {
+        $this->_static_cim10["favoris"][$value["DP"]] = new CCodeCIM10($value["DP"], 1);
+        
       }
     }
     

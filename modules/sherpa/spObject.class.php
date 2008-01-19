@@ -141,7 +141,7 @@ class CSpObject extends CMbObject {
    */
   function makeString($string, $length) {
 //    $string = str_replace("\r\n", " - ", $string);
-    return $string ? strtoupper(substr($string, 0, $length)) : "";
+    return $string ? strtoupper(removeAccent(substr($string, 0, $length))) : "";
   }
 
   /**

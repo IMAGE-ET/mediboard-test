@@ -409,6 +409,17 @@ if (!function_exists('array_diff_key')) {
 }
 
 /**
+ * Remove accents from a string
+ **/
+
+function removeAccent($string) {
+  $string = htmlentities($string);
+  $string = preg_replace("/&(.)(acute|cedil|circ|ring|tilde|uml|grave);/", "$1", $string);
+  $string = html_entity_decode($string);
+  return $string;
+}
+
+/**
  * Inserts a CSV file into a mysql table 
  * Not a generic function : used for import of specials files
  * in dPinterop
