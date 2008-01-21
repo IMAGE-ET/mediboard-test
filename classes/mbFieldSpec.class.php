@@ -309,9 +309,7 @@ class CMbFieldSpec {
     $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
     
     if (!$this->notNull) {
-      //$aHtml[] = '<button class="cancel notext" type="button" onclick="this.form.'.$field.'.value = new String; this.form.'.$field.'.onchange(); $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';
-       $aHtml[] = '<button class="cancel notext" type="button" onclick="this.form.'.$field.'.value = new String; $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';
-   
+      $aHtml[] = '<button class="cancel notext" type="button" onclick="Form.Element.setValue('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';  
     }
     
     // Can't be handeld here cauz preporeForms has to be done

@@ -257,6 +257,8 @@ if($consult->patient_id){
 // Chargement des actes NGAP
 $consult->loadRefsActesNGAP();
 
+$listEtab = array();
+
 // Chargement du sejour dans le cas d'une urgence
 if($consult->_id && $consult->sejour_id){
   $consult->loadRefSejour();
@@ -264,12 +266,18 @@ if($consult->_id && $consult->sejour_id){
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();
   $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
+
+  // Chargement des etablissements externes
+  $order = "nom";
+  $etab = new CEtabExterne();
+  $listEtab = $etab->loadList(null, $order);
 }
 
 
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("listEtab"       , $listEtab);
 $smarty->assign("acte_ngap"      , new CActeNGAP);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);

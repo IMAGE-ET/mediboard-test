@@ -4,8 +4,39 @@ function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
-function submitRPU(oForm){
+function submitRPU(oForm, action){
   oForm.submit();
+  var sejour_id = oForm.sejour_id.value;
+  var oFormSejour = document.forms["formSejour-" + sejour_id]; 
+  
+  if(action == "annuler"){
+    // Suppression de l'etablissement_transfert_id du sejour
+    oFormSejour.etablissement_transfert_id.value = "";
+  }
+  
+  // Submit en ajax du formulaire de sejour
+  submitFormAjax(oFormSejour, 'systemMsg');
+}
+
+
+function submitFormSejour(etablissement_transfert_id, sejour_id){
+  var oForm = document.forms["formSejour-" + sejour_id]; 
+  oForm.etablissement_transfert_id.value = etablissement_transfert_id;
+}
+
+
+function loadTransfert(mode_sortie, sejour_id){
+  // si Transfert, affichage du select
+  if(mode_sortie=="7"){
+    var url = new Url();
+    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
+    url.requestUpdate('listEtabs-'+sejour_id, { waitingText: null } );
+  } else {
+    // sinon, on vide le contenu de la div et l'etablissement de transfert du sejour
+    $('listEtabs-'+sejour_id).innerHTML = "";
+    var oForm = document.forms["formSejour-" + sejour_id]; 
+    oForm.etablissement_transfert_id.value = "";
+  }
 }
 
 </script>
@@ -70,6 +101,9 @@ function submitRPU(oForm){
 			  <input type="hidden" name="m" value="dPurgences" />
 			  <input type="hidden" name="del" value="0" />
 			  <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
+			  
+			  <input type="hidden" name="sejour_id" value="{{$rpu->_ref_sejour->_id}}" />
+			  
 			  <table>
 				 <!-- Annulation de la sortie -->
 			  {{if $rpu->sortie}}
@@ -83,7 +117,7 @@ function submitRPU(oForm){
 			       <input type="hidden" name="destination" value="" />
 			       <input type="hidden" name="orientation" value="" />
 			       <input type="hidden" name="sortie" value="" />
-			       <button class="cancel" type="button" onclick="submitRPU(this.form)">
+			       <button class="cancel" type="button" onclick="submitRPU(this.form, 'annuler')">
 			         Annuler la sortie
 			        </button>
 			      </td>
@@ -96,14 +130,26 @@ function submitRPU(oForm){
               [{{$curr_sejour->_num_dossier}}]
               <br />
             {{/if}}
-			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie"}}
+            {{assign var="sejour_id" value=$rpu->_ref_sejour->_id}}
+			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="loadTransfert(this.value, $sejour_id);"}}
 			      {{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination"}} 
 			      {{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation"}}
 			      <input type="hidden" name="sortie" value="current" />
-			      <button class="tick" type="button" onclick="submitRPU(this.form);">
+			      <button class="tick" type="button" onclick="submitRPU(this.form, 'effectuer');">
 			        Effectuer la sortie
 			      </button>
 			     </td>
+			   </tr>
+			   <tr>
+			    <td>
+			     <div id="listEtabs-{{$rpu->_ref_sejour->_id}}">
+	           {{if $rpu->mode_sortie == "7"}}
+	             {{assign var="_transfert_id" value=$rpu->_ref_sejour->etablissement_transfert_id}}
+	             {{assign var="modeSortieRPU" value="1"}}
+	             {{include file="../../dPurgences/templates/inc_vw_etab_externes.tpl"}}
+	           {{/if}}
+	         </div>
+	        </td>
 			   </tr>
 			  {{/if}}
 			  </table>
@@ -112,3 +158,22 @@ function submitRPU(oForm){
   </tr>
   {{/foreach}}
 </table>
+
+
+{{foreach from=$listSejours item=curr_sejour}}
+	{{assign var="rpu" value=$curr_sejour->_ref_rpu}} 
+	<table>
+	  <tr>
+	    <td>
+			 <!-- Formulaire permettant de sauvegarder l'etablissement de transfert du RPU -->
+	     <form name="formSejour-{{$rpu->_ref_sejour->_id}}" action="?" method="post">
+	       <input type="hidden" name="dosql" value="do_sejour_aed" />
+	       <input type="hidden" name="m" value="dPplanningOp" />
+	       <input type="hidden" name="del" value="0" />
+	       <input type="hidden" name="sejour_id" value="{{$rpu->_ref_sejour->_id}}" />
+	       <input type="hidden" name="etablissement_transfert_id" value="" />
+	       </form>
+		  </td>
+	  </tr>
+	</table>
+{{/foreach}}

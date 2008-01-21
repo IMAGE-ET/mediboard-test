@@ -56,9 +56,16 @@ foreach($listSejours as &$curr_sejour) {
   $curr_sejour->_ref_patient->loadIPP();
 }
 
+// Chargement des etablissements externes
+$order = "nom";
+$etab = new CEtabExterne();
+$listEtab = $etab->loadList(null, $order);
+
+  
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("listEtab", $listEtab);
 $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);
 $smarty->assign("listSejours", $listSejours);

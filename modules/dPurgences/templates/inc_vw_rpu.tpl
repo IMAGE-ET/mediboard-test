@@ -5,6 +5,28 @@ function submitRPU(){
   submitFormAjax(oForm, 'systemMsg');
 }
 
+function submitFormSejour(etablissement_transfert_id){
+  var oForm = document.formSejour;
+  oForm.etablissement_transfert_id.value = etablissement_transfert_id;
+  submitFormAjax(oForm, 'systemMsg');
+}
+
+
+function loadTransfert(mode_sortie){
+  // si Transfert, affichage du select
+  if(mode_sortie=="7"){
+    var url = new Url();
+    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
+    url.requestUpdate('listEtabs', { waitingText: null } );
+  } else {
+    // sinon, on vide le contenu de la div
+    $("listEtabs").innerHTML = "";
+    // On vide etablissement_transfert_id
+    submitFormSejour("");
+  }
+}
+
+
 </script>
 
 <form name="editRPU" action="?" method="post">
@@ -53,7 +75,16 @@ function submitRPU(){
 	    <th>{{mb_label object=$rpu field="ccmu"}}</th>
 	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="submitRPU();"}}</td>
 	    <th>{{mb_label object=$rpu field="mode_sortie"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="submitRPU();"}}</td>
+	    <td>
+	      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="submitRPU(); loadTransfert(this.value);"}}
+	      <div id="listEtabs">
+	        {{if $rpu->mode_sortie == "7"}}
+	          {{assign var="_transfert_id" value=$rpu->_ref_sejour->etablissement_transfert_id}}
+	          {{assign var="sejour_id" value=$rpu->_ref_sejour->_id}}
+	          {{include file="../../dPurgences/templates/inc_vw_etab_externes.tpl"}}
+	        {{/if}}
+	      </div>
+	    </td>
 	  </tr>
 	  <tr> 
 	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
@@ -78,6 +109,15 @@ function submitRPU(){
 	    <td colspan="2" />  
 	  </tr>
   </table>
+</form>
+
+<!-- Formulaire permettant de sauvegarder l'etablissement de transfert du RPU -->
+<form name="formSejour" action="?" method="post">
+  <input type="hidden" name="dosql" value="do_sejour_aed" />
+  <input type="hidden" name="m" value="dPplanningOp" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="sejour_id" value="{{$rpu->_ref_sejour->_id}}" />
+  <input type="hidden" name="etablissement_transfert_id" value="" />
 </form>
 
 <table class="form">    
