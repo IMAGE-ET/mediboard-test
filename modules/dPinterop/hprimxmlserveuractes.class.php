@@ -7,19 +7,18 @@
 * @author Thomas Despoix
 */
 
-global $AppUI;
+global $AppUI, $m, $g;
+
 require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
 
 if (!class_exists("CHPrimXMLDocument")) {
   return;
 }
 
-global $AppUI, $m;
-
 class CHPrimXMLServeurActes extends CHPrimXMLDocument {
   function __construct() {
     parent::__construct("serveurActes");
-    global $AppUI;
+    global $AppUI, $g;
         
     $evenementsServeurActes = $this->addElement($this, "evenementsServeurActes", null, "http://www.hprim.org/hprimXML");
     $this->addAttribute($evenementsServeurActes, "version", "1.01");
@@ -32,13 +31,15 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-    $this->addAgent($agents, "système", "CMCA", "Centre Médico-Chir. de l'Atlantique");
+    $group = new CGroups();
+    $group->load($g);
+    $this->addAgent($agents, "système", $group->text, $group->text);
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
     $this->addAgent($agents, "application", "SANTEcom", "Siemens Health Services: S@NTE.com");
-    $this->addAgent($agents, "système", "CMCA", "Centre Médico-Chir. de l'Atlantique");
+    $this->addAgent($agents, "système", $group->text, $group->text);
   }
   
   function generateFromOperation($mbOp) {

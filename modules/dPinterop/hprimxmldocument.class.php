@@ -154,7 +154,9 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addElement($acteCCAM, "codeActe", $mbActeCCAM->code_acte);
     $this->addElement($acteCCAM, "codeActivite", $mbActeCCAM->code_activite);
     $this->addElement($acteCCAM, "codePhase", $mbActeCCAM->code_phase);
-
+    if($mbActeCCAM->code_association) {
+      $this->addElement($acteCCAM, "codeAssociationNonPrevue", $mbActeCCAM->code_association);
+    }
     $mbOpDebut = mbGetValue(
       $mbOp->debut_op, 
       $mbOp->entree_salle, 
