@@ -544,6 +544,10 @@ class CMediusers extends CMbObject {
     return $this->loadListFromType(array("Chirurgien", "Anesthésiste", "Médecin"), $permType, $function_id, $name);
   }
 
+  function loadPersonnels($permType = PERM_READ, $function_id = null, $name = null) {
+    return $this->loadListFromType(array("Personnel"), $permType, $function_id, $name);
+  }
+
   function isFromType($user_types) {
     // Warning: !== operator
     global $utypes;

@@ -6,7 +6,7 @@
 
 <table class="form">
   <tr>
-    <th class="title" colspan="3">Recherche d'un entête CCAM</th>
+    <th class="title" colspan="3">Recherche d'un {{tr}}{{$filter->_class_name}}{{/tr}}</th>
   </tr>
   <tr>
     <th>{{mb_label object=$filter field="idinterv"}}</th>
@@ -59,9 +59,9 @@
   {{assign var="href" value="?m=sherpa&tab=view_entccam&sel_idinterv="}}
   
   {{foreach from=$entsccam item=_entccam}}
-  <tr {{if $entccam->_id == $_entccam->_id}}class="selected"{{/if}}>
+  <tr {{if $entccam->_id == $_entccam->_id && $entccam->numdos == $_entccam->numdos}}class="selected"{{/if}}>
     <td class="text">
-      <a href="{{$href}}{{$_entccam->idinterv}}">
+      <a href="{{$href}}{{$_entccam->idinterv}}{{if $_entccam->idinterv == '0'}}&amp;sel_numdos={{$_entccam->numdos}}{{/if}}">
         {{mb_value object=$_entccam field="idinterv"}}
       </a>
     <td>

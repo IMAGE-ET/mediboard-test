@@ -6,7 +6,7 @@
 
 <table class="form">
   <tr>
-    {{if $entccam->_id}}
+    {{if $entccam->_id != ''}}
     <th class="title modify" colspan="2">
  		  Informations de l'entête CCAM {{$entccam->_view}}
     </th>
@@ -16,7 +16,7 @@
     </th>
     {{/if}}
   </tr>
-  {{if $entccam->_id}}
+  {{if $entccam->_id != ''}}
   
   <tr>
 		<th>{{mb_label object=$entccam field="numdos"}}</th>

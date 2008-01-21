@@ -29,6 +29,13 @@ class CSpDetCCAM extends CSpObject {
     return $spec;
   }
  	
+  function makeId() {
+    $ds = $this->getCurrentDataSource();
+    $query = "SELECT MAX(`$this->_tbl_key`) FROM $this->_tbl";
+    $latestId = $ds->loadResult($query);
+    $this->_id = $latestId+1;
+  }
+
   function getSpecs() {
     $specs = parent::getSpecs();
     
@@ -55,11 +62,11 @@ class CSpDetCCAM extends CSpObject {
   }
   
   /**
-   * Delete actes pour le dossier
+   * Supprimer détails ccam pour le dossier
    */
   function deleteForDossier($numdos) {
-    $ds =& $this->_spec->ds;
-
+    $ds = $this->getCurrentDataSource();
+    
     $query = "SELECT COUNT(*) FROM $this->_tbl WHERE numdos = '$numdos'";
     $count = $ds->loadResult($query);
 
@@ -104,14 +111,6 @@ class CSpDetCCAM extends CSpObject {
     $acte = $mbObject;
     
 //    mbDump($acte->getProps(), $acte->_class_name);
-
-    // Intervention
-    $acte->loadTargetObject();
-    $this->idinterv = "0"; // Mandatory value in table schema
-    if ($acte->object_class == "COperation") {
-      $idOperation = CSpObjectHandler::getId400For($acte->_ref_object);
-      $this->idinterv = $idOperation->id400;
-    }
     
     // Sejour
     $acte->loadRefSejour();

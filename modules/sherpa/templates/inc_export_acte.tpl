@@ -10,10 +10,12 @@
   <td>{{mb_value object=$_acte_ccam field=montant_depassement}}</td>
   <td>
     {{assign var=acte_id value=$_acte_ccam->_id}}
-    {{if $exports.$acte_id}}
-    <div class="error">{{$exports.$acte_id}}</div>
+    {{if $detCCAM.$acte_id}}
+    <div class="error">{{$detCCAM.$acte_id}}</div>
     {{else}}
-    <div class="message">Acte correctement exporté</div>
+    <div class="message">
+      Détail CCAM correctement exporté
+    </div>
     {{/if}}
   </td>
 </tr>

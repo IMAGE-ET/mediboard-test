@@ -2,20 +2,27 @@
 
 class CCodable extends CMbObject {
 	
+  // DB Fields
   var $codes_ccam          = null;
+  
+  // Form fields
+  var $_acte_execution     = null;
+  var $_acte_depassement   = null;
+  var $_ref_anesth         = null;
+  var $_anesth             = null;
+  var $_associationCodesActes = null;
+  
+  // Abstract fields
+  var $_praticien_id       = null;
+  var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
+  var $_datetime           = null;
+  
+  // Actes CCAM
   var $_text_codes_ccam    = null;
   var $_codes_ccam         = null;
   var $_tokens_ccam        = array();
   var $_ref_actes_ccam     = null;
   var $_ext_codes_ccam     = null;
-  var $_acte_execution     = null;
-  var $_acte_depassement   = null;
-  var $_datetime           = null;
-  var $_praticien_id       = null;
-  var $_ref_anesth         = null;
-  var $_anesth             = null;
-  var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
-  var $_associationCodesActes = null;
   
   // Actes NGAP
   var $_store_ngap     = null;
@@ -28,8 +35,13 @@ class CCodable extends CMbObject {
   
   // Distant references
   var $_ref_sejour = null;
+  var $_ref_patient = null;
+  var $_ref_praticien = null;
   
   function loadRefSejour() {
+  }
+  
+  function loadRefPatient() {
   }
   
   function updateFormFields() {
@@ -43,15 +55,12 @@ class CCodable extends CMbObject {
  
   }
   
-  
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["actes_ngap"] = "CActeNGAP object_id";
     $backRefs["actes_ccam"] = "CActeCCAM object_id";
     return $backRefs;
   }
-  
-  
   
   function getAssociationCodesActes() {
     $this->updateFormFields();

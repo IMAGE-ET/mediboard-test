@@ -79,7 +79,7 @@ class CSejour extends CCodable {
   var $_curr_op_date       = null;
   
   // Object References
-  var $_ref_patient           = null;
+  var $_ref_patient           = null; // Declared in CCodable
   var $_ref_praticien         = null;
   var $_ref_operations        = null;
   var $_ref_last_operation    = null;

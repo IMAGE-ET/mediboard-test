@@ -30,6 +30,16 @@ class CSpObject extends CMbObject {
   }
   
   /**
+   * Fournit la data source pour l'établissement courant
+   * @return CSQLDataSource
+   */
+  function getCurrentDataSource() {
+    global $g;
+    $this->changeDSN($g);
+    return $this->_spec->ds;
+  }
+  
+  /**
    * Change the data source
    * @param int $g group_id
    */

@@ -7,14 +7,7 @@
 * @author Thomas Despoix
 **/
 
-global $AppUI;
-
 $do = new CDoObjectAddEdit("CIdSante400", "id_sante400_id");
-$do->createMsg = $AppUI->_("msg-CIdSante400-create"); //ID Santé 400 créé
-$do->modifyMsg = $AppUI->_("msg-CIdSante400-modify"); //"ID Santé 400 modifié";
-$do->deleteMsg = $AppUI->_("msg-CIdSante400-delete"); //"ID Santé 400 supprimé";
-$do->redirect = null;
 $do->doIt();
-
 
 ?>

@@ -25,7 +25,7 @@ class CSpEntCCAM extends CSpObject {
   
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "COperation";
+    $spec->mbClass = "CCodable";
     return $spec;
   }
  	
@@ -42,21 +42,12 @@ class CSpEntCCAM extends CSpObject {
     $specs["codane"] = "str length|3";     /* Code de l'anesthésiste       */
     $specs["codsal"] = "str length|2";     /* Code de la salle d'op        */
 
-//    $specs["aidop1"] text(3) default ' ',
-//    $specs["dhaid1"] date default ' ',
-//    $specs["fhaid1"] date default ' ',
+    for ($i = 1; $i <= 3; $i++) {
+	    $specs["aidop$i"] = "str length|3";    /* Code aide opératoire        */
+	    $specs["dhaid$i"] = "str length|19";   /* Début aide opératoire        */
+	    $specs["fhaid$i"] = "str length|19";   /* Aide aide opératoire        */
+    }
 
-//    $specs["aidop2"] text(3) default ' ',
-//    $specs["dhaid2"] date default ' ',
-//    $specs["fhaid2"] date default ' ',
-
-//    $specs["aidop3"] text(3) default ' ',
-//    $specs["dhaid3"] date default ' ',
-//    $specs["fhaid3"] date default ' ',
-
-//    $specs["codpan"] text(3) default ' ',
-//    $specs["valigs"] integer default 0,
-//    $specs["flag"] smallint default 0,
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
     
 		return $specs;
@@ -64,6 +55,33 @@ class CSpEntCCAM extends CSpObject {
   
   function updateFormFields() {
     $this->_view = "$this->_id (Malade: $this->malnum, Dossier: $this->numdos)";
+  }
+  
+  function makeId(CCodable $codable) {
+    if (is_a($codable,  "CSejour")) {
+      $this->_id = "0";
+      return;
+    }
+      
+    $ds = $this->getCurrentDataSource();
+    $query = "SELECT MAX(`$this->_tbl_key`) FROM $this->_tbl";
+    $latestId = $ds->loadResult($query);
+    $this->_id = $latestId+1;
+  }
+
+  /**
+   * Supprime entêtes CCAM pour le dossier
+   */
+  function deleteForDossier($numdos) {
+    $ds = $this->getCurrentDataSource();
+
+    $query = "SELECT COUNT(*) FROM $this->_tbl WHERE numdos = '$numdos'";
+    $count = $ds->loadResult($query);
+
+    $query = "DELETE FROM $this->_tbl WHERE numdos = '$numdos'";
+    $ds->exec($query);
+
+    return $count;
   }
   
   function mapTo() {
@@ -103,45 +121,82 @@ class CSpEntCCAM extends CSpObject {
       trigger_error("mapping object should be a '$mbClass'");
     }
     
-    $operation = $mbObject;
+    $codable = $mbObject;
     
     // Sejour
-    $operation->loadRefSejour();
-    $sejour =& $operation->_ref_sejour;
-    $idSejour = CSpObjectHandler::getId400For($sejour);
+    $codable->loadRefSejour();
+    $idSejour = CSpObjectHandler::getId400For($codable->_ref_sejour);
     $this->numdos = $idSejour->id400;
     
     // Patient
-    $sejour->loadRefPatient();
-    $idPatient = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    $codable->loadRefPatient();
+    $idPatient = CSpObjectHandler::getId400For($codable->_ref_patient);
     $this->malnum = $idPatient->id400;
     
     // Dates
-    $operation->loadRefPlageOp();
-    $date = mbDate($operation->_datetime);
-    $deb_op = mbGetValue($operation->debut_op, "00:00:00");
-    $fin_op = mbGetValue($operation->fin_op  , "00:00:00");
-    $this->debint = mbDateToLocale("$date $deb_op");
-    $this->finint = mbDateToLocale("$date $fin_op");
+    switch ($mbObject->_class_name) {
+      case "COperation":
+      $operation =& $mbObject;
+	    $operation->loadRefPlageOp();
+	    $date = mbDate($operation->_datetime);
+	    $deb_op = mbGetValue($operation->debut_op, "00:00:00");
+	    $fin_op = mbGetValue($operation->fin_op  , "00:00:00");
+	    $this->debint = mbDateToLocale("$date $deb_op");
+	    $this->finint = mbDateToLocale("$date $fin_op");
+      break;
+    }
     
     // Chirurgien
-    $operation->loadRefChir();
-    $idChir = CSpObjectHandler::getId400For($operation->_ref_chir);
-    $this->pracod = $idChir->id400;
-    
+    $mbObject->loadRefPraticien();
+    $idPrat = CSpObjectHandler::getId400For($mbObject->_ref_praticien);
+    $this->pracod = $idPrat->id400;
+	    
     // Anesthésiste 
-    // Déjà chargé par la plage op
-    if ($operation->anesth_id) {
-	    $idAnesth = CSpObjectHandler::getId400For($operation->_ref_anesth);
-	    $this->codane = $idAnesth->id400;
+    switch ($mbObject->_class_name) {
+      case "COperation":
+      $operation =& $mbObject;
+
+      // Déjà chargé par la plage op
+	    if ($operation->anesth_id) {
+		    $idAnesth = CSpObjectHandler::getId400For($operation->_ref_anesth);
+		    $this->codane = $idAnesth->id400;
+	    }
+	    
+      break;
     }
-    
+	    
     // Salle de l'intervention
-    if ($operation->_ref_salle->_id) {
-	    $idSalle = CSpObjectHandler::getId400For($operation->_ref_salle);
-	    $this->pracod = $idChir->id400;
-	    $this->codsal = $idSalle->id400;
+    switch ($mbObject->_class_name) {
+      case "COperation":
+      $operation =& $mbObject;
+	    if ($operation->_ref_salle->_id) {
+		    $idSalle = CSpObjectHandler::getId400For($operation->_ref_salle);
+		    $this->codsal = $idSalle->id400;
+	    }
+	    
+      break;
     }
+	    
+    // Aides opératoire
+    $mbObject->loadPersonnel();
+    $aidopNumber = 0;
+    foreach ($mbObject->_ref_personnel as $affectationPersonnel) {
+      if (++$aidopNumber <=  3) {
+        $affectationPersonnel->loadPersonnel();
+        $personnel = $affectationPersonnel->_ref_personnel;
+        $personnel->loadRefUser();
+        
+        $idAidop = CSpObjectHandler::getId400For($personnel->_ref_user);
+        $aidopField = "aidop$aidopNumber";
+        $dhaidField = "dhaid$aidopNumber";
+        $fhaidField = "fhaid$aidopNumber";
+        $this->$aidopField = $idAidop->id400;
+        $this->$dhaidField = mbDateToLocale($affectationPersonnel->debut);
+        $this->$fhaidField = mbDateToLocale($affectationPersonnel->fin);
+      }
+    }
+
+    mbDump($this->getProps(), "Entête");
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());

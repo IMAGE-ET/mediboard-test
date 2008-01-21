@@ -44,13 +44,13 @@ class CConsultation extends CCodable {
   var $arrivee       = null;
   var $banque_id     = null;
   var $categorie_id  = null;
-  var $valide        = null; // facture validée ?
+  var $valide        = null; // Cotation validée
  
   var $total_assure      = null;
   var $total_amc         = null; 
   var $total_amo         = null;
   var $reglement_AM      = null; // true si reglement effectue par AM
-  var $a_regler          = null;     // somme que le patient doit régler a la fn
+  var $a_regler          = null; // somme que le patient doit régler a la fn
   //var $patient_regle     = null;     // paye devient patient_regle
   
   
@@ -65,9 +65,9 @@ class CConsultation extends CCodable {
   var $_precode_acte   = null;
   
   // Fwd References
-  var $_ref_patient      = null;
+  var $_ref_patient      = null; // Declared in CCodable
   var $_ref_plageconsult = null;
-  var $_ref_sejour       = null;
+  var $_ref_sejour       = null; // Declared in CCodable
   
   // FSE
   var $_bind_fse = null;
@@ -673,6 +673,7 @@ class CConsultation extends CCodable {
   
   function loadRefPraticien(){
   	$this->loadRefPlageConsult();
+    $this->_ref_praticien =& $this->_ref_chir;
   }
   
   function preparePossibleActes() {

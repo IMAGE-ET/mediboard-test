@@ -40,8 +40,12 @@ Main.add(function() {
     </th>
     <td>
       <div class="warning">
-        Suppression de {{$deletions.$sejour_id}} actes pour ce séjour 
+        {{tr}}CSpEntCCAM{{/tr}} : {{$delEntCCAM.$sejour_id}} suppressions pour ce séjour 
       </div>
+      <div class="warning">
+        {{tr}}CSpDetCCAM{{/tr}} : {{$delDetCCAM.$sejour_id}} suppressions pour ce séjour 
+      </div>
+			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
     </td>
   </tr>
   
@@ -56,13 +60,16 @@ Main.add(function() {
 
   {{foreach from=$_sejour->_ref_operations item=_operation}}
   <tr>
-    <th colspan="10">
+    <th colspan="9">
 	    Opération du {{$_operation->_datetime}} 
 	    {{if $_operation->libelle}}
 	    <em>[{{$_operation->libelle}}]</em>
 	    {{/if}}
 	    &mdash; Dr. {{$_operation->_ref_chir->_view}}
     </th>
+    <td>
+			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
+		</td>    
   </tr>
   {{foreach from=$_operation->_ref_actes_ccam item=_acte_ccam}}
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}

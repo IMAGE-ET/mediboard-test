@@ -1,8 +1,8 @@
 <?php
-$locales['mod-sherpa-tab-export_actes'] = 'Export d\'acte';
 $locales['CGroups-back-'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = 'Activer le gestionnaire Sherpa';
 $locales['config-sherpa-import_segment'] = 'Longueur du segment d\'import';
+$locales['CSpDetCCAM'] = 'Détail CCAM';
 $locales['CSpDossier'] = 'Dossier Sherpa';
 $locales['CSpDossier-anndos'] = 'Annulation';
 $locales['CSpDossier-anndos-court'] = '';
@@ -22,7 +22,7 @@ $locales['CSpDossier-topfac-desc'] = '';
 $locales['CSpDossier.more'] = '';
 $locales['CSpDossier.none'] = '';
 $locales['CSpDossier.one'] = '';
-$locales['CSpEntCCAM'] = 'Entêtes CCAM';
+$locales['CSpEntCCAM'] = 'Entête CCAM';
 $locales['CSpEntCCAM-codane'] = 'Code d\'anesthésiste';
 $locales['CSpEntCCAM-codane-court'] = 'CODANE';
 $locales['CSpEntCCAM-codane-desc'] = '';
@@ -273,6 +273,7 @@ $locales['CSpSejMed.depart.T'] = '';
 $locales['CSpSejMed.more'] = '';
 $locales['CSpSejMed.none'] = '';
 $locales['CSpSejMed.one'] = '';
+$locales['mod-sherpa-tab-export_actes'] = 'Export d\'acte';
 $locales['mod-sherpa-tab-view_dossiers'] = 'Dossiers';
 $locales['mod-sherpa-tab-view_droits'] = 'Ouverture de droits';
 $locales['mod-sherpa-tab-view_entccam'] = 'Entêtes CCAM';

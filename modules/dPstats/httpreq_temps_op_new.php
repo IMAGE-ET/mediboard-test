@@ -68,7 +68,6 @@ function buildPartialTables($tableName, $tableFields, $queryFields, $querySelect
     "\nGROUP BY operations.chir_id, ccam" .
     "\nORDER BY ccam;";
     
-  mbTrace($query);
   $ds->exec($query);
   CAppUI::stepAjax("Nombre de valeurs pour la table '$tableName': " . $ds->affectedRows(), UI_MSG_OK);
   

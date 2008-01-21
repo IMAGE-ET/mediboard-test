@@ -16,10 +16,23 @@ $tag = "sherpa group:$g";
 $today = mbDateTime();
 
 // Chargement des praticiens de l'établissement
-$praticien = new CMediusers();
-$praticiens = $praticien->loadPraticiens();
-foreach($praticiens as &$curr_prat) {
+$mediuser = new CMediusers();
+$praticiens = $mediuser->loadPraticiens();
+foreach ($praticiens as &$curr_prat) {
   $curr_prat->loadLastId400($tag);
+}
+
+// Chargement des praticiens de l'établissement
+$personnel = new CPersonnel();
+$personnel->emplacement = "op";
+$personnels = $personnel->loadMatchingList();
+
+$persusers = array();
+foreach ($personnels as &$curr_pers) {
+  $curr_pers->loadRefUser();
+  $persuser =& $curr_pers->_ref_user;
+  $persuser->loadLastId400($tag);
+  $persusers[$persuser->_id] =& $persuser;
 }
 
 // Chargement de services
@@ -31,7 +44,6 @@ $salles = $salle->loadMatchingList($order);
 foreach ($salles as &$_salle) {
 	$_salle->loadLastId400($tag);
 }
-
 
 // Chargement de services
 $service = new CService();
@@ -64,6 +76,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("tag"       , $tag);
 $smarty->assign("today"     , $today);
 $smarty->assign("praticiens", $praticiens);
+$smarty->assign("persusers" , $persusers);
 $smarty->assign("services"  , $services);
 $smarty->assign("salles"    , $salles);
 $smarty->assign("listEtabExternes", $listEtabExternes);

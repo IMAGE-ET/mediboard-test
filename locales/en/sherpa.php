@@ -1,8 +1,8 @@
 <?php
-$locales['mod-sherpa-tab-export_actes'] = '';
 $locales['CGroups-back-'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
 $locales['config-sherpa-import_segment'] = '';
+$locales['CSpDetCCAM'] = '';
 $locales['CSpDossier'] = '';
 $locales['CSpDossier-anndos'] = '';
 $locales['CSpDossier-anndos-court'] = '';
@@ -273,6 +273,7 @@ $locales['CSpSejMed.depart.T'] = '';
 $locales['CSpSejMed.more'] = '';
 $locales['CSpSejMed.none'] = '';
 $locales['CSpSejMed.one'] = '';
+$locales['mod-sherpa-tab-export_actes'] = '';
 $locales['mod-sherpa-tab-view_dossiers'] = '';
 $locales['mod-sherpa-tab-view_droits'] = '';
 $locales['mod-sherpa-tab-view_entccam'] = '';

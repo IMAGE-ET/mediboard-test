@@ -374,6 +374,7 @@ class COperation extends CCodable {
   
   function loadRefPraticien(){
     $this->loadRefChir();
+    $this->_ref_praticien =& $this->_ref_chir;
   }
   
   function loadRefPlageOp() {

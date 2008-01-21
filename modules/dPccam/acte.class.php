@@ -39,7 +39,7 @@ class CActe extends CMbMetaObject {
   function loadRefPatient() {
     $this->loadTargetObject();
     $this->_ref_object->loadRefPatient();
-    $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
+    $this->_ref_patient =& $this->_ref_object->_ref_patient;
   }
   
   function getSpecs() {

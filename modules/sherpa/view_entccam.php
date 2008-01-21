@@ -13,7 +13,11 @@ $can->needsRead();
 
 // Chargement du sejour sélectionné
 $entccam = new CSpEntCCAM();
-$entccam->load(mbGetValueFromGetOrSession("sel_idinterv"));
+if ("0" == $entccam->idinterv = mbGetValueFromGetOrSession("sel_idinterv")) {
+  $entccam->numdos = mbGetValueFromGetOrSession("sel_numdos");
+}
+
+$entccam->loadMatchingObject();
 
 // Récuperation des identifiants pour les filtres
 $filter = new CSpEntCCAM();
