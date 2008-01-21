@@ -277,6 +277,7 @@ class CActeCCAM extends CActe {
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
     $where["code_activite"] = "= '$this->code_activite'";
+    $where["executant_id"]  = "= '$this->executant_id'";
     
     $this->_linked_actes = $acte->loadList($where);
   }
