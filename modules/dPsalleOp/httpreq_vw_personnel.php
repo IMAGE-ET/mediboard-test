@@ -35,6 +35,7 @@ loadAffectations($selOp, $tabPersonnel, $listPers, $timingAffect);
 
 // Chargement du personnel de la plageop
 // Chargement des affectation du personne
+
 $selOp->_ref_plageop->loadPersonnel();
 if ($selOp->_ref_plageop->_ref_personnel) {
 	$tabPersonnel["plage"] = array();
@@ -50,7 +51,7 @@ if ($selOp->_ref_plageop->_ref_personnel) {
 	  $affectation->_ref_personnel->loadRefUser();
 	  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation;
 	}
-	
+}	
 	// Chargement du personnel non present dans la plageop (rajouté dans l'operation)
 	$selOp->loadPersonnel();
 	$tabPersonnel["operation"] = array();
@@ -87,7 +88,6 @@ if ($selOp->_ref_plageop->_ref_personnel) {
 	    } 
 	  }
 	}
-}
 
 
 // Création du template

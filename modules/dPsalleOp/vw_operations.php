@@ -172,6 +172,9 @@ if($op) {
 	// Chargement des affectations de personnel pour la plageop et l'intervention
   loadAffectations($selOp, $tabPersonnel, $listPers, $timingAffect);
  
+  // Chargement de la liste du personnel pour l'operation
+	$listPers = CPersonnel::loadListPers("op");
+	    
 	// Chargement du personnel affectée à la plage opératoire  
 	$selOp->_ref_plageop->loadPersonnel();
 	if ($selOp->_ref_plageop->_ref_personnel) {
@@ -188,7 +191,7 @@ if($op) {
 		  $affectation->_ref_personnel->loadRefUser();
 		  $tabPersonnel["plage"][$affectation_personnel->_ref_personnel->_id] = $affectation;
 		}
-		
+	}
 		// Chargement du personnel non present dans la plageop (rajouté dans l'operation)
 		$selOp->loadPersonnel();
 		$tabPersonnel["operation"] = array();
@@ -200,9 +203,7 @@ if($op) {
 		  }
 		}
 		
-		// Chargement de la liste du personnel pour l'operation
-	  $listPers = CPersonnel::loadListPers("op");
-	  
+		
 	  // Suppression de la liste des personnels deja presents
 		foreach($listPers as $key => $pers){
 		  if(array_key_exists($pers->_id, $tabPersonnel["plage"]) || array_key_exists($pers->_id, $tabPersonnel["operation"])){
@@ -229,8 +230,6 @@ if($op) {
 	      } 
 	    }
 	  }
-	  
-	}  
 }
 
 $listAnesthType = new CTypeAnesth;
@@ -252,6 +251,10 @@ $unites["tca"]        = array("nom"=>"TCA","unit"=>"s");
 $unites["tsivy"]      = array("nom"=>"TS Ivy","unit"=>"");
 $unites["ecbu"]       = array("nom"=>"ECBU","unit"=>"");
 
+// Initialisation d'un acte NGAP
+$acte_ngap = new CActeNGAP();
+$acte_ngap->quantite = 1;
+$acte_ngap->coefficient = 1;
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -266,7 +269,7 @@ if($selOp->_id){
   $smarty->assign("packList", $packList);
 }
 
-$smarty->assign("acte_ngap"       , new CActeNGAP()          );
+$smarty->assign("acte_ngap"       , $acte_ngap               );
 $smarty->assign("op"              , $op                      );
 $smarty->assign("vueReduite"      , false                    );
 $smarty->assign("salle"           , $salle                   );
