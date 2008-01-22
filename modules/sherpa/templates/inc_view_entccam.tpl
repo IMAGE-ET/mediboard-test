@@ -39,6 +39,16 @@
   </tr>  
   
   <tr>
+		<th>{{mb_label object=$entccam field="datope"}}</th>
+		<td>{{mb_value object=$entccam field="datope"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="finope"}}</th>
+		<td>{{mb_value object=$entccam field="finope"}}</td>
+  </tr>  
+
+  <tr>
 		<th>{{mb_label object=$entccam field="pracod"}}</th>
 		<td>{{mb_value object=$entccam field="pracod"}}</td>
   </tr>  
