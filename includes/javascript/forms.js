@@ -164,7 +164,28 @@ function getBoundingForm(oElement) {
 
 var bGiveFormFocus = true;
 
+var FormObserver = {
+  changes        : 0,
+  fckEditor      : null,
+  checkChanges : function() {
+    if(this.changes) {
+      return false;
+    } else {
+      return true;
+    }
+  },
+  elementChanged : function() {
+    this.changes++;
+  }
+}
+
 function prepareForm(oForm) {
+  oForm = $(oForm);
+  // Event Observer
+  if(oForm.classNames().include("watched")) {
+    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
+  }
+  // Form preparation
   var sFormName = oForm.getAttribute("name");
   oForm.locked = (oForm._locked && oForm._locked.value) == "1"; 
 

@@ -80,8 +80,12 @@ var References = {
 var WaitingMessage = {
 	init: function() {
 		window.onbeforeunload = function () {
-		  WaitingMessage.show();
-    }
+		  if(FormObserver.checkChanges()) {
+  		  WaitingMessage.show();
+  		} else {
+  		  return false;
+  		}
+    };
 
 		// Autoload loading image cuz the browser won't try on before unload
     var eDiv = $(document.createElement("div"));

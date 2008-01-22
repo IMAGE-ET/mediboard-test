@@ -541,6 +541,6 @@ function checkForm(oForm) {
     }
     return false;
   }
-  
+  FormObserver.changes = 0;
   return true;
 }

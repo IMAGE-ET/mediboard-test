@@ -75,19 +75,6 @@ function annuleConsult(oForm, etat) {
   }
 }
 
-function pageMain() {
-  var oForm = document.editFrm;
-
-  {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
-  oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
-  oForm.chir_id.value = {{$plageConsult->chir_id}};
-  
-  PlageConsultSelector.init();
-  {{/if}}
-}
-
-
-
 function checkFormRDV(oForm){
   if(!oForm._pause.checked && oForm.patient_id.value == ""){
     alert("Veuillez Selectionner un Patient");
@@ -120,9 +107,20 @@ function printDocument(iDocument_id) {
   return false;
 }
 
+function pageMain() {
+  var oForm = document.editFrm;
+
+  {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
+  oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
+  oForm.chir_id.value = {{$plageConsult->chir_id}};
+  
+  PlageConsultSelector.init();
+  {{/if}}
+}
+
 </script>
 
-<form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkFormRDV(this)">
+<form name="editFrm" class="watched" action="?m={{$m}}" method="post" onsubmit="return checkFormRDV(this)">
 
 <input type="hidden" name="dosql" value="do_consultation_aed" />
 <input type="hidden" name="del" value="0" />
