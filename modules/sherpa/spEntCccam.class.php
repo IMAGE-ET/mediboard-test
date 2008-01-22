@@ -36,8 +36,8 @@ class CSpEntCCAM extends CSpObject {
     $specs["malnum"] = "numchar length|6"; /* Numéro de malade             */
     $specs["debint"] = "str length|19";    /* Début intervention           */
     $specs["finint"] = "str length|19";    /* Fin intervention             */
-//    $specs["datope"] = "str length|19";    /* Début intervention            */
-//    $specs["finope"] = "str length|19";    /* Fin intervention              */
+    $specs["datope"] = "str length|19";    /* Entrée en salle              */
+    $specs["finope"] = "str length|19";    /* Sortie de salle              */
     $specs["pracod"] = "str length|3";     /* Code du chirugien            */
     $specs["codane"] = "str length|3";     /* Code de l'anesthésiste       */
     $specs["codsal"] = "str length|2";     /* Code de la salle d'op        */
@@ -139,11 +139,19 @@ class CSpEntCCAM extends CSpObject {
       $operation =& $mbObject;
 	    $operation->loadRefPlageOp();
 	    $date = mbDate($operation->_datetime);
+	    
+	    // Opération
 	    $deb_op = mbGetValue($operation->debut_op, "00:00:00");
 	    $fin_op = mbGetValue($operation->fin_op  , "00:00:00");
-	    $this->debint = mbDateToLocale("$date $deb_op");
-	    $this->finint = mbDateToLocale("$date $fin_op");
-      break;
+	    $this->datope = mbDateToLocale("$date $deb_op");
+	    $this->finope = mbDateToLocale("$date $fin_op");
+	    
+	    // Intervention = salle
+	    $deb_int = mbGetValue($operation->entree_salle, "00:00:00");
+	    $fin_int = mbGetValue($operation->sortie_salle, "00:00:00");
+	    $this->debint = mbDateToLocale("$date $deb_int");
+	    $this->finint = mbDateToLocale("$date $fin_int");
+	    break;
     }
     
     // Chirurgien
