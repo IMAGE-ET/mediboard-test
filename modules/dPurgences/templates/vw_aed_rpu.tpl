@@ -2,6 +2,32 @@
 
 <script type="text/javascript">
 
+function modeEntreeProv(mode_entree){
+  // Recuperation du tableau de contrainte modeEntree/Provenance en JSON
+  var contrainteProvenance = {{$contrainteProvenance|@json}}
+  
+  if(mode_entree == ""){
+    $A(document.editRpu.provenance).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteProvenance[mode_entree]){
+    $A(document.editRpu.provenance).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+ 
+  var _contrainteProvenance = contrainteProvenance[mode_entree];
+  
+  $A(document.editRpu.provenance).each( function(input) {
+    input.disabled = !_contrainteProvenance.include(input.value);
+  });
+}
+
+
 function submitRadio(oForm){
   submitFormAjax(oForm, 'systemMsg', {onComplete: function() { reloadRadio(oForm) } }); 
 }
@@ -79,7 +105,7 @@ function pageMain() {
     </td>
     
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée"}}</td>
+    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="modeEntreeProv(this.value)"}}</td>
   </tr>
   
   <tr>
@@ -198,3 +224,12 @@ function pageMain() {
      </td>
    </table>
 {{/if}}
+
+<script type="text/javascript">
+
+// Lancement des fonctions de contraintes entre les champs
+{{if $rpu->mode_entree}}
+modeEntreeProv("{{$rpu->mode_entree}}");
+{{/if}}
+
+</script>

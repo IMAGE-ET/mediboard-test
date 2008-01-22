@@ -55,9 +55,16 @@ $antecedent->loadAides($AppUI->user_id);
 $userSel = new CMediusers();
 $userSel->load($AppUI->user_id);
 
+// Contraintes sur le mode d'entree / provenance
+$contrainteProvenance[6] = array("", 1, 2, 3, 4);
+$contrainteProvenance[7] = array("", 1, 2, 3, 4);
+$contrainteProvenance[8] = array("", 5, 8);
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("contrainteProvenance", $contrainteProvenance);
 $smarty->assign("userSel", $userSel);
 $smarty->assign("today", mbDate());
 $smarty->assign("addiction", $addiction);
