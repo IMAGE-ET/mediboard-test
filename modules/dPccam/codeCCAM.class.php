@@ -110,7 +110,7 @@ class CCodeCCAM {
       $query3 .= " ORDER BY DATEEFFET DESC";
       $result3 = $ds->exec($query3);
       $row3 = $ds->fetchArray($result3);
-      $this->remboursement = $row["REMBOURSEMENT"];
+      $this->remboursement = $row3["REMBOURSEMENT"];
     }
   }
   
