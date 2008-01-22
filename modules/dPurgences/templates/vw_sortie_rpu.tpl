@@ -4,6 +4,60 @@ function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
+function modeSortieDest(mode_sortie, rpu_id){
+  var oFormRPU = document.forms["editRPU-" + rpu_id]; 
+  
+  // Recuperation du tableau de contrainte modeSortie/Destination en JSON
+  var contrainteDestination = {{$contrainteDestination|@json}}
+ 
+  if(mode_sortie == ""){
+    $A(oFormRPU.destination).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteDestination[mode_sortie]){
+    $A(oFormRPU.destination).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+  
+  var _contrainteDestination = contrainteDestination[mode_sortie];
+  $A(oFormRPU.destination).each( function(input) {
+    input.disabled = !_contrainteDestination.include(input.value);
+  });
+}
+
+
+function modeSortieOrient(mode_sortie, rpu_id){
+  var oFormRPU = document.forms["editRPU-" + rpu_id]; 
+  
+  // Recuperation du tableau de contrainte modeSortie/Orientation en JSON
+  var contrainteOrientation = {{$contrainteOrientation|@json}}
+  
+  if(mode_sortie == ""){
+    $A(oFormRPU.orientation).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteOrientation[mode_sortie]){
+    $A(oFormRPU.orientation).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+  
+  var _contrainteOrientation = contrainteOrientation[mode_sortie];
+  $A(oFormRPU.orientation).each( function(input) {
+    input.disabled = !_contrainteOrientation.include(input.value);
+  });
+}
+
+
 function submitRPU(oForm, action){
   oForm.submit();
   var sejour_id = oForm.sejour_id.value;
@@ -131,7 +185,7 @@ function loadTransfert(mode_sortie, sejour_id){
               <br />
             {{/if}}
             {{assign var="sejour_id" value=$rpu->_ref_sejour->_id}}
-			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="loadTransfert(this.value, $sejour_id);"}}
+			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="this.form.destination.value = ''; this.form.orientation.value = ''; modeSortieDest(this.value, this.form.rpu_id.value); modeSortieOrient(this.value, this.form.rpu_id.value); loadTransfert(this.value, $sejour_id);"}}
 			      {{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination"}} 
 			      {{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation"}}
 			      <input type="hidden" name="sortie" value="current" />

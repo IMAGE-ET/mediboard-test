@@ -72,7 +72,7 @@ class CRPU extends CMbObject {
       "_responsable_id" => "notNull ref class|CMediusers",
       "_entree"         => "dateTime",
       "sortie"          => "dateTime",
-      "mode_sortie"     => "enum list|6|7|8|9",
+      "mode_sortie"     => "enum list|6|7|8|9 default|8",
       "destination"     => "enum list|1|2|3|4|6|7",
       "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
       "radio_debut"     => "dateTime",

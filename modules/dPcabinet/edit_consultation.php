@@ -278,8 +278,29 @@ $acte_ngap = new CActeNGAP();
 $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
 
+
+// Tableau de contraintes pour les champs du RPU
+// Contraintes sur le mode d'entree / provenance
+$contrainteProvenance[6] = array("", 1, 2, 3, 4);
+$contrainteProvenance[7] = array("", 1, 2, 3, 4);
+$contrainteProvenance[8] = array("", 5, 8);
+
+// Contraintes sur le mode de sortie / destination
+$contrainteDestination[6] = array("", 1, 2, 3, 4);
+$contrainteDestination[7] = array("", 1, 2, 3, 4);
+$contrainteDestination[8] = array("", 6, 7);
+
+// Contraintes sur le mode de sortie / orientation
+$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation[7] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation[8] = array("", "FUGUE", "SCAM", "PSA", "REO");
+
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("contrainteProvenance"  , $contrainteProvenance  );
+$smarty->assign("contrainteDestination" , $contrainteDestination );
+$smarty->assign("contrainteOrientation" , $contrainteOrientation );
 $smarty->assign("listEtab"       , $listEtab);
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);

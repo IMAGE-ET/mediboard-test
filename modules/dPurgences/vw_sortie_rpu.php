@@ -61,10 +61,22 @@ $order = "nom";
 $etab = new CEtabExterne();
 $listEtab = $etab->loadList(null, $order);
 
+// Contraintes sur le mode de sortie / destination
+$contrainteDestination[6] = array("", 1, 2, 3, 4);
+$contrainteDestination[7] = array("", 1, 2, 3, 4);
+$contrainteDestination[8] = array("", 6, 7);
+
+// Contraintes sur le mode de sortie / orientation
+$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation[7] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation[8] = array("", "FUGUE", "SCAM", "PSA", "REO");
+
+
   
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("contrainteDestination", $contrainteDestination);
+$smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("listEtab", $listEtab);
 $smarty->assign("order_col" , $order_col);
 $smarty->assign("order_way" , $order_way);

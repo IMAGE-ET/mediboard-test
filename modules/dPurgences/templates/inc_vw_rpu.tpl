@@ -1,5 +1,80 @@
 <script type="text/javascript">
 
+function modeEntreeProv(mode_entree){
+  // Recuperation du tableau de contrainte modeEntree/Provenance en JSON
+  var contrainteProvenance = {{$contrainteProvenance|@json}}
+  
+  if(mode_entree == ""){
+    $A(document.editRPU.provenance).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteProvenance[mode_entree]){
+    $A(document.editRPU.provenance).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+ 
+  var _contrainteProvenance = contrainteProvenance[mode_entree];
+  
+  $A(document.editRPU.provenance).each( function(input) {
+    input.disabled = !_contrainteProvenance.include(input.value);
+  });
+}
+
+function modeSortieDest(mode_sortie){
+  // Recuperation du tableau de contrainte modeSortie/Destination en JSON
+  var contrainteDestination = {{$contrainteDestination|@json}}
+ 
+  if(mode_sortie == ""){
+    $A(document.editRPU.destination).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteDestination[mode_sortie]){
+    $A(document.editRPU.destination).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+ 
+  var _contrainteDestination = contrainteDestination[mode_sortie];
+  $A(document.editRPU.destination).each( function(input) {
+    input.disabled = !_contrainteDestination.include(input.value);
+  });
+}
+
+
+function modeSortieOrient(mode_sortie){
+  // Recuperation du tableau de contrainte modeSortie/Orientation en JSON
+  var contrainteOrientation = {{$contrainteOrientation|@json}}
+  
+  if(mode_sortie == ""){
+    $A(document.editRPU.orientation).each( function(input) {
+      input.disabled = false;
+    });
+    return;
+  }
+  
+  if(!contrainteOrientation[mode_sortie]){
+    $A(document.editRPU.orientation).each( function(input) {
+      input.disabled = true;
+    });
+    return;
+  }
+  
+  var _contrainteOrientation = contrainteOrientation[mode_sortie];
+  $A(document.editRPU.orientation).each( function(input) {
+    input.disabled = !_contrainteOrientation.include(input.value);
+  });
+}
+
+
 function submitRPU(){
   var oForm = document.editRPU;
   submitFormAjax(oForm, 'systemMsg');
@@ -25,8 +100,6 @@ function loadTransfert(mode_sortie){
     submitFormSejour("");
   }
 }
-
-
 </script>
 
 <form name="editRPU" action="?" method="post">
@@ -76,7 +149,7 @@ function loadTransfert(mode_sortie){
 	    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="submitRPU();"}}</td>
 	    <th>{{mb_label object=$rpu field="mode_sortie"}}</th>
 	    <td>
-	      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="submitRPU(); loadTransfert(this.value);"}}
+	      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="this.form.destination.value = ''; this.form.orientation.value = ''; modeSortieDest(this.value); modeSortieOrient(this.value); submitRPU(); loadTransfert(this.value);"}}
 	      <div id="listEtabs">
 	        {{if $rpu->mode_sortie == "7"}}
 	          {{assign var="_transfert_id" value=$rpu->_ref_sejour->etablissement_transfert_id}}
@@ -88,7 +161,7 @@ function loadTransfert(mode_sortie){
 	  </tr>
 	  <tr> 
 	    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="submitRPU();"}}</td>
+	    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="this.form.provenance.value = ''; modeEntreeProv(this.value); submitRPU();"}}</td>
       <th>{{mb_label object=$rpu field="destination"}}</th>
 	    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="submitRPU();"}}</td> 
 	  </tr>	  
@@ -139,3 +212,17 @@ function loadTransfert(mode_sortie){
 	  </td>
 	</tr>
 </table>
+
+<script type="text/javascript">
+
+// Lancement des fonctions de contraintes entre les champs
+{{if $rpu->mode_entree}}
+modeEntreeProv("{{$rpu->mode_entree}}");
+{{/if}}
+
+{{if $rpu->mode_sortie}}
+modeSortieDest("{{$rpu->mode_sortie}}");
+modeSortieOrient("{{$rpu->mode_sortie}}");
+{{/if}}
+
+</script>
