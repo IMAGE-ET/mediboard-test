@@ -105,7 +105,7 @@ function pageMain() {
     </td>
     
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="modeEntreeProv(this.value)"}}</td>
+    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="this.form.provenance.value = ''; modeEntreeProv(this.value)"}}</td>
   </tr>
   
   <tr>
