@@ -273,12 +273,15 @@ if($consult->_id && $consult->sejour_id){
   $listEtab = $etab->loadList(null, $order);
 }
 
-
+// Initialisation d'un acte NGAP
+$acte_ngap = new CActeNGAP();
+$acte_ngap->quantite = 1;
+$acte_ngap->coefficient = 1;
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listEtab"       , $listEtab);
-$smarty->assign("acte_ngap"      , new CActeNGAP);
+$smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
 $smarty->assign("listAnesths"    , $listAnesths);

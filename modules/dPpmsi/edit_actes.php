@@ -48,9 +48,14 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
+//Initialisation d'un acte NGAP
+$acte_ngap = new CActeNGAP();
+$acte_ngap->quantite = 1;
+$acte_ngap->coefficient = 1;
+
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("acte_ngap"  , new CActeNGAP() );
+$smarty->assign("acte_ngap"  , $acte_ngap      );
 $smarty->assign("selOp"      , $selOp          );
 $smarty->assign("timing"     , $timing         );
 $smarty->assign("listAnesths", $listAnesths    );

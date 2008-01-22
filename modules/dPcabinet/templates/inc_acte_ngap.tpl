@@ -1,5 +1,15 @@
 <script type="text/javascript">
-
+  
+refreshTarif = function(){
+  var oForm = document.editNGAP;
+  url = new Url;
+  url.setModuleAction("dPcabinet", "httpreq_vw_tarif_code_ngap");
+  url.addParam("quantite", oForm.quantite.value);
+  url.addParam("coefficient", oForm.coefficient.value);
+  url.addParam("code", oForm.code.value);
+  url.requestUpdate('tarifActe', { waitingText: null } );
+}
+  
 ActesNGAP = {
 	refreshList: function() {
 	  
@@ -67,16 +77,18 @@ ActesNGAP = {
     {{if !$object->_coded}}
     <tr>
       <td>
-        {{mb_field object=$acte_ngap field="quantite"}}
+        {{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="code"}}
+        {{mb_field object=$acte_ngap field="code" style="width: 200px;" onchange="refreshTarif()"}}
+        <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="coefficient"}}  
+        {{mb_field object=$acte_ngap field="coefficient" onchange="refreshTarif()"}}  
       </td>
-      <td>
-        {{mb_field object=$acte_ngap field="montant_base"}}
+      <td id="tarifActe">
+        {{assign var="tarif" value=0}}
+        {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl"}}
       </td>
       <td>
         {{mb_field object=$acte_ngap field="montant_depassement"}}
@@ -116,3 +128,30 @@ ActesNGAP = {
    {{/foreach}}
  </table>
 </form>
+
+<script type="text/javascript">
+
+// Preparation du formulaire
+prepareForm(document.editNGAP);
+
+// UpdateFields de l'autocomplete
+function updateFields(selected) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  $('editNGAP_code').value = dn[0].firstChild.nodeValue;  
+  var oForm = document.editNGAP;
+  oForm.code.onchange();
+}
+
+// Autocomplete
+new Ajax.Autocompleter(
+  'editNGAP_code',
+  'code_auto_complete',
+  '?m=dPcabinet&ajax=1&suppressHeaders=1&a=httpreq_do_ngap_autocomplete&object_id={{$object->_id}}&object_class={{$object->_class_name}}',{
+    minChars: 1,
+    frequency: 0.15,
+    updateElement: updateFields
+  }
+);
+  
+</script>
