@@ -231,3 +231,16 @@ function loadTransfert(mode_sortie, sejour_id){
 	  </tr>
 	</table>
 {{/foreach}}
+
+
+<script type="text/javascript">
+
+{{foreach from=$listSejours item=curr_sejour}}
+  {{assign var="rpu" value=$curr_sejour->_ref_rpu}}
+  
+  {{if $rpu->mode_sortie}}
+    modeSortieDest("{{$rpu->mode_sortie}}", "{{$rpu->_id}}");
+    modeSortieOrient("{{$rpu->mode_sortie}}", "{{$rpu->_id}}");
+  {{/if}}
+{{/foreach}}
+</script>
