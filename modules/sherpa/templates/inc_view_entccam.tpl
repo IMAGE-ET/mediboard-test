@@ -54,6 +54,51 @@
   </tr>  
   
   <tr>
+		<th>{{mb_label object=$entccam field="aidop1"}}</th>
+		<td>{{mb_value object=$entccam field="aidop1"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="dhaid1"}}</th>
+		<td>{{mb_value object=$entccam field="dhaid1"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="fhaid1"}}</th>
+		<td>{{mb_value object=$entccam field="fhaid1"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="aidop2"}}</th>
+		<td>{{mb_value object=$entccam field="aidop2"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="dhaid2"}}</th>
+		<td>{{mb_value object=$entccam field="dhaid2"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="fhaid2"}}</th>
+		<td>{{mb_value object=$entccam field="fhaid2"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="aidop3"}}</th>
+		<td>{{mb_value object=$entccam field="aidop3"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="dhaid3"}}</th>
+		<td>{{mb_value object=$entccam field="dhaid3"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$entccam field="fhaid3"}}</th>
+		<td>{{mb_value object=$entccam field="fhaid3"}}</td>
+  </tr>  
+  
+  <tr>
 		<th>{{mb_label object=$entccam field="datmaj"}}</th>
 		<td>{{mb_value object=$entccam field="datmaj"}}</td>
   </tr>  
@@ -81,16 +126,11 @@
     <th>{{mb_label object=$id400 field=object_id}}</th>
   </tr>
 
-	{{assign var=operation value=$id400->_ref_object}}
+	{{assign var=codable value=$id400->_ref_object}}
   <tr>
 	  {{if $id400->_id}}
     <td>{{mb_value object=$id400 field=last_update}}</td>
-    <td>
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation={{$operation->_id}}">
-        {{$operation->_view}}
-      </a>
-    </td>
-    
+    <td>{{$codable->_view}}</td>
     {{else}}
     <td colspan="2"><em>Pas de correspondance</em></td>
     {{/if}}

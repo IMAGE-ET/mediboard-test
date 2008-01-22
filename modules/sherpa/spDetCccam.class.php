@@ -110,8 +110,6 @@ class CSpDetCCAM extends CSpObject {
     
     $acte = $mbObject;
     
-//    mbDump($acte->getProps(), $acte->_class_name);
-    
     // Sejour
     $acte->loadRefSejour();
     if ($sejour =& $acte->_ref_sejour) {

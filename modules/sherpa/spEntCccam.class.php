@@ -196,8 +196,6 @@ class CSpEntCCAM extends CSpObject {
       }
     }
 
-    mbDump($this->getProps(), "Entête");
-    
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

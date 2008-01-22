@@ -1,4 +1,5 @@
 <?php
+$locales['mod-sherpa-tab-view_detccam'] = 'Détails CCAM';
 $locales['CGroups-back-'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = 'Activer le gestionnaire Sherpa';
 $locales['config-sherpa-import_segment'] = 'Longueur du segment d\'import';
@@ -285,4 +286,84 @@ $locales['module-sherpa-court'] = 'Sherpa';
 $locales['module-sherpa-long'] = 'Integration de e-Sherpa';
 $locales['sherpa-import-class'] = 'Import de la table';
 $locales['sherpa-import-classes'] = 'Import des tables';
+$locales['CSpDetCCAM-activ'] = 'Activité';
+$locales['CSpDetCCAM-activ-court'] = 'ACTIV';
+$locales['CSpDetCCAM-activ-desc'] = '';
+$locales['CSpDetCCAM-assoc'] = 'Code association';
+$locales['CSpDetCCAM-assoc-court'] = 'ASSOC';
+$locales['CSpDetCCAM-assoc-desc'] = '';
+$locales['CSpDetCCAM-codact'] = 'Code CCAM';
+$locales['CSpDetCCAM-codact-court'] = 'CODACT';
+$locales['CSpDetCCAM-codact-desc'] = '';
+$locales['CSpDetCCAM-codpra'] = 'Code du praticien';
+$locales['CSpDetCCAM-codpra-court'] = 'CODPRA';
+$locales['CSpDetCCAM-codpra-desc'] = '';
+$locales['CSpDetCCAM-datmaj'] = 'Dernière mise à jour';
+$locales['CSpDetCCAM-datmaj-court'] = 'DATMAJ';
+$locales['CSpDetCCAM-datmaj-desc'] = '';
+$locales['CSpDetCCAM-idacte'] = 'Indentifiant de l\'acte';
+$locales['CSpDetCCAM-idacte-court'] = 'IDACTE';
+$locales['CSpDetCCAM-idacte-desc'] = '';
+$locales['CSpDetCCAM-idinterv'] = 'Indentifiant de l\'interventin';
+$locales['CSpDetCCAM-idinterv-court'] = 'IDINTERV';
+$locales['CSpDetCCAM-idinterv-desc'] = '';
+$locales['CSpDetCCAM-malnum'] = 'Numéro de malade';
+$locales['CSpDetCCAM-malnum-court'] = 'MANLUM';
+$locales['CSpDetCCAM-malnum-desc'] = '';
+$locales['CSpDetCCAM-modt1'] = 'Modificateur 1';
+$locales['CSpDetCCAM-modt1-court'] = 'MOD1';
+$locales['CSpDetCCAM-modt1-desc'] = '';
+$locales['CSpDetCCAM-modt2'] = 'Modificateur 2';
+$locales['CSpDetCCAM-modt2-court'] = 'MOD2';
+$locales['CSpDetCCAM-modt2-desc'] = '';
+$locales['CSpDetCCAM-modt3'] = 'Modificateur 3';
+$locales['CSpDetCCAM-modt3-court'] = 'MOD3';
+$locales['CSpDetCCAM-modt3-desc'] = '';
+$locales['CSpDetCCAM-modt4'] = 'Modificateur 4';
+$locales['CSpDetCCAM-modt4-court'] = 'MOD4';
+$locales['CSpDetCCAM-modt4-desc'] = '';
+$locales['CSpDetCCAM-numdos'] = 'Numéro de dossier';
+$locales['CSpDetCCAM-numdos-court'] = 'NUMDOS';
+$locales['CSpDetCCAM-numdos-desc'] = '';
+$locales['CSpDetCCAM-phase'] = 'Phase';
+$locales['CSpDetCCAM-phase-court'] = 'PHASE';
+$locales['CSpDetCCAM-phase-desc'] = '';
+$locales['CSpDetCCAM.more'] = 'Des détails CCAM';
+$locales['CSpDetCCAM.none'] = 'Pas de détails CCAM';
+$locales['CSpDetCCAM.one'] = 'Un détail CCAM';
+$locales['CSpEntCCAM-aidop1'] = 'Aide op1';
+$locales['CSpEntCCAM-aidop1-court'] = 'AIDOP1';
+$locales['CSpEntCCAM-aidop1-desc'] = 'Code de l\'aide opératoire 1';
+
+$locales['CSpEntCCAM-aidop2'] = 'Aide op2';
+$locales['CSpEntCCAM-aidop2-court'] = 'AIDOP2';
+$locales['CSpEntCCAM-aidop2-desc'] = 'Code de l\'aide opératoire 2';
+
+$locales['CSpEntCCAM-aidop3'] = 'Aide op3';
+$locales['CSpEntCCAM-aidop3-court'] = 'AIDOP3';
+$locales['CSpEntCCAM-aidop3-desc'] = 'Code de l\'aide opératoire 3';
+
+$locales['CSpEntCCAM-dhaid1'] = 'Début Aide op 1';
+$locales['CSpEntCCAM-dhaid1-court'] = 'DHAID1';
+$locales['CSpEntCCAM-dhaid1-desc'] = 'Début de l\'aide opératoire 1';
+
+$locales['CSpEntCCAM-dhaid2'] = 'Début Aide op 2';
+$locales['CSpEntCCAM-dhaid2-court'] = 'DHAID2';
+$locales['CSpEntCCAM-dhaid2-desc'] = 'Début de l\'aide opératoire 2';
+
+$locales['CSpEntCCAM-dhaid3'] = 'Début Aide op 3';
+$locales['CSpEntCCAM-dhaid3-court'] = 'DHAID3';
+$locales['CSpEntCCAM-dhaid3-desc'] = 'Début de l\'aide opératoire 3';
+
+$locales['CSpEntCCAM-fhaid1'] = 'Fin Aide op 1';
+$locales['CSpEntCCAM-fhaid1-court'] = 'FHAID1';
+$locales['CSpEntCCAM-fhaid1-desc'] = 'Fin de l\'aide opératoire 1';
+
+$locales['CSpEntCCAM-fhaid2'] = 'Fin Aide op 2';
+$locales['CSpEntCCAM-fhaid2-court'] = 'FHAID2';
+$locales['CSpEntCCAM-fhaid2-desc'] = 'Fin de l\'aide opératoire 2';
+
+$locales['CSpEntCCAM-fhaid3'] = 'Fin Aide op 3';
+$locales['CSpEntCCAM-fhaid3-court'] = 'FHAID3';
+$locales['CSpEntCCAM-fhaid3-desc'] = 'Fin de l\'aide opératoire 3';
 ?>

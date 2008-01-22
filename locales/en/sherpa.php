@@ -1,4 +1,5 @@
 <?php
+$locales['mod-sherpa-tab-view_detccam'] = '';
 $locales['CGroups-back-'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
 $locales['config-sherpa-import_segment'] = '';
