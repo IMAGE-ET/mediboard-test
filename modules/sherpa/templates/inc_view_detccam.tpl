@@ -76,6 +76,26 @@
   </tr>  
   
   <tr>
+		<th>{{mb_label object=$detccam field="dephon"}}</th>
+		<td>{{mb_value object=$detccam field="dephon"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$detccam field="datact"}}</th>
+		<td>{{mb_value object=$detccam field="datact"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$detccam field="extdoc"}}</th>
+		<td>{{mb_value object=$detccam field="extdoc"}}</td>
+  </tr>  
+  
+  <tr>
+		<th>{{mb_label object=$detccam field="rembex"}}</th>
+		<td>{{mb_value object=$detccam field="rembex"}}</td>
+  </tr>  
+  
+  <tr>
 		<th>{{mb_label object=$detccam field="datmaj"}}</th>
 		<td>{{mb_value object=$detccam field="datmaj"}}</td>
   </tr>  

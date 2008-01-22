@@ -334,36 +334,43 @@ $locales['CSpDetCCAM.one'] = 'Un détail CCAM';
 $locales['CSpEntCCAM-aidop1'] = 'Aide op1';
 $locales['CSpEntCCAM-aidop1-court'] = 'AIDOP1';
 $locales['CSpEntCCAM-aidop1-desc'] = 'Code de l\'aide opératoire 1';
-
 $locales['CSpEntCCAM-aidop2'] = 'Aide op2';
 $locales['CSpEntCCAM-aidop2-court'] = 'AIDOP2';
 $locales['CSpEntCCAM-aidop2-desc'] = 'Code de l\'aide opératoire 2';
-
 $locales['CSpEntCCAM-aidop3'] = 'Aide op3';
 $locales['CSpEntCCAM-aidop3-court'] = 'AIDOP3';
 $locales['CSpEntCCAM-aidop3-desc'] = 'Code de l\'aide opératoire 3';
-
 $locales['CSpEntCCAM-dhaid1'] = 'Début Aide op 1';
 $locales['CSpEntCCAM-dhaid1-court'] = 'DHAID1';
 $locales['CSpEntCCAM-dhaid1-desc'] = 'Début de l\'aide opératoire 1';
-
 $locales['CSpEntCCAM-dhaid2'] = 'Début Aide op 2';
 $locales['CSpEntCCAM-dhaid2-court'] = 'DHAID2';
 $locales['CSpEntCCAM-dhaid2-desc'] = 'Début de l\'aide opératoire 2';
-
 $locales['CSpEntCCAM-dhaid3'] = 'Début Aide op 3';
 $locales['CSpEntCCAM-dhaid3-court'] = 'DHAID3';
 $locales['CSpEntCCAM-dhaid3-desc'] = 'Début de l\'aide opératoire 3';
-
 $locales['CSpEntCCAM-fhaid1'] = 'Fin Aide op 1';
 $locales['CSpEntCCAM-fhaid1-court'] = 'FHAID1';
 $locales['CSpEntCCAM-fhaid1-desc'] = 'Fin de l\'aide opératoire 1';
-
 $locales['CSpEntCCAM-fhaid2'] = 'Fin Aide op 2';
 $locales['CSpEntCCAM-fhaid2-court'] = 'FHAID2';
 $locales['CSpEntCCAM-fhaid2-desc'] = 'Fin de l\'aide opératoire 2';
-
 $locales['CSpEntCCAM-fhaid3'] = 'Fin Aide op 3';
 $locales['CSpEntCCAM-fhaid3-court'] = 'FHAID3';
 $locales['CSpEntCCAM-fhaid3-desc'] = 'Fin de l\'aide opératoire 3';
+$locales['CSpDetCCAM-codsig'] = 'Code de signature';
+$locales['CSpDetCCAM-codsig-court'] = 'CODSIG';
+$locales['CSpDetCCAM-codsig-desc'] = '';
+$locales['CSpDetCCAM-datact'] = 'Date de l\'acte';
+$locales['CSpDetCCAM-datact-court'] = 'DATACT';
+$locales['CSpDetCCAM-datact-desc'] = '';
+$locales['CSpDetCCAM-dephon'] = 'Dépassement d\'honoraire';
+$locales['CSpDetCCAM-dephon-court'] = 'DEPHON';
+$locales['CSpDetCCAM-dephon-desc'] = '';
+$locales['CSpDetCCAM-extdoc'] = 'Extension documentaire';
+$locales['CSpDetCCAM-extdoc-court'] = 'EXTDOC';
+$locales['CSpDetCCAM-extdoc-desc'] = '';
+$locales['CSpDetCCAM-rembex'] = 'Remboursement exceptionnel';
+$locales['CSpDetCCAM-rembex-court'] = 'REMBEX';
+$locales['CSpDetCCAM-rembex-desc'] = '';
 ?>

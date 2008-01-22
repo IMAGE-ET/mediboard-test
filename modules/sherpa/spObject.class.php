@@ -51,7 +51,7 @@ class CSpObject extends CMbObject {
     if ($ds =& $this->_spec->ds) {
       $ds->unquotable = array(
         "es_entccam" => array("idinterv"),
-        "es_detccam" => array("idinterv", "idacte"),
+        "es_detccam" => array("idinterv", "idacte", "dephon"),
 			);
     }
   }

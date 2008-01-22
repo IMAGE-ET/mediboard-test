@@ -51,6 +51,11 @@ class CSpDetCCAM extends CSpObject {
     $specs["modt3"] = "str length|1";      /* Modificateur 3               */
     $specs["modt4"] = "str length|1";      /* Modificateur 4               */
     $specs["assoc"] = "num length|1";      /* Code d'association           */
+    $specs["dephon"] = "currency";         /* Dépassement honoraire        */
+    $specs["datact"] = "str length|19";    /* Date heure de l'acte         */
+    $specs["extdoc"] = "str length|1";     /* Extension doc. anesthésie    */
+    $specs["rembex"] = "str length|1";     /* Remboursement exceptionnel   */
+    $specs["codsig"] = "bool";             /* Date heure de l'acte         */
     
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
     
@@ -137,8 +142,10 @@ class CSpDetCCAM extends CSpObject {
     $this->modt1 = @$acte->_modificateurs[0];
     $this->modt2 = @$acte->_modificateurs[1];
     $this->modt3 = @$acte->_modificateurs[2];
-    $this->modt4 = @$acte->_modificateurs[3];    
-        
+    $this->modt4 = @$acte->_modificateurs[3];   
+    $this->datact = mbDateToLocale($acte->execution);
+    $this->dephon = mbDateToLocale($acte->montant_depassement);
+    
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
 
