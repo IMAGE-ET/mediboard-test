@@ -1,5 +1,8 @@
 <?php
+$locales['CCodeCCAM.remboursement.3'] = 'Remboursement exceptionnel';
 $locales['CCodeCCAM'] = 'Code CCAM';
+$locales['CCodeCCAM.remboursement.1'] = 'Remboursable';
+$locales['CCodeCCAM.remboursement.2'] = 'Non remboursable';
 $locales['CFavoriCCAM'] = 'Favoris CCAM';
 $locales['CFavoriCCAM-back-favoris_user'] = '';
 $locales['CFavoriCCAM-favoris_code'] = '';

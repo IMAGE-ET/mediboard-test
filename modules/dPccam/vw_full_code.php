@@ -48,6 +48,7 @@ $smarty->assign("rq"           , $code->remarques);
 $smarty->assign("act"          , $code->activites);
 $smarty->assign("codeproc"     , $code->procedure["code"]);
 $smarty->assign("textproc"     , $code->procedure["texte"]);
+$smarty->assign("remboursement", $code->remboursement);
 $smarty->assign("place"        , $code->place);
 $smarty->assign("chap"         , $code->chapitres);
 $smarty->assign("asso"         , $code->assos);

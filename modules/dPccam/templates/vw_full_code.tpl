@@ -160,6 +160,14 @@ function pageMain() {
             {{$textproc}}
           </td>
         </tr>
+        
+        <tr>
+          <td><strong>Remboursement</strong></td>
+        </tr>
+        
+        <tr>
+          <td>{{tr}}CCodeCCAM.remboursement.{{$remboursement}}{{/tr}}</td>
+        </tr>
       </table>
 
     </td>

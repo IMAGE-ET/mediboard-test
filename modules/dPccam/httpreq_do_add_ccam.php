@@ -51,6 +51,7 @@ $listTables = array(
               "arborescence"        => "TB091.txt",
               "associabilite"       => "TB220.txt",
               "association"         => "TB002.txt",
+              "infotarif"           => "TB110.txt",
               "incompatibilite"     => "TB130.txt",
               "modificateur"        => "TB083.txt",
               "modificateuracte"    => "TBCCAM06.txt",

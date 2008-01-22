@@ -30,7 +30,9 @@ class CCodeCCAM {
   // Associabilite
   var $assos = array();
   // Procedure
-  var $procedure = null; 
+  var $procedure = null;
+  // Remboursement
+  var $remboursement = null;
   
   // Variable calculées
   var $_code7 = null;
@@ -99,8 +101,16 @@ class CCodeCCAM {
         $query2 .= " GROUP BY MODIFICATEUR";
         $result2 = $ds->exec($query2);
         $this->_code7 = $ds->numRows($result2);
-      } else
+      } else {
         $this->_code7 = 1;
+      }
+      // Chargement des informations de tarification
+      $query3 = "SELECT * FROM infotarif WHERE ";
+      $query3 .= $ds->prepare("CODEACTE = %", $this->code);
+      $query3 .= " ORDER BY DATEEFFET DESC";
+      $result3 = $ds->exec($query3);
+      $row3 = $ds->fetchArray($result3);
+      $this->remboursement = $row["REMBOURSEMENT"];
     }
   }
   
@@ -190,6 +200,14 @@ class CCodeCCAM {
           $query = $ds->prepare($query, $row["MODIFICATEUR"]);
           $modificateurs[] = $ds->fetchObject($ds->exec($query));
         }
+        
+        // Chargement des informations de tarification
+        $query3 = "SELECT * FROM infotarif WHERE ";
+        $query3 .= $ds->prepare("CODEACTE = %", $this->code);
+        $query3 .= " ORDER BY DATEEFFET DESC";
+        $result3 = $ds->exec($query3);
+        $row3 = $ds->fetchArray($result3);
+        $this->remboursement = $row3["REMBOURSEMENT"];
   
         // Extraction des phases
         $activite->phases = array();
@@ -366,6 +384,14 @@ class CCodeCCAM {
           $query = $ds->prepare($query, $row["MODIFICATEUR"]);
           $modificateurs[] = $ds->fetchObject($ds->exec($query));
         }
+        
+        // Chargement des informations de tarification
+        $query3 = "SELECT * FROM infotarif WHERE ";
+        $query3 .= $ds->prepare("CODEACTE = %", $this->code);
+        $query3 .= " ORDER BY DATEEFFET DESC";
+        $result3 = $ds->exec($query3);
+        $row3 = $ds->fetchArray($result3);
+        $this->remboursement = $row3["REMBOURSEMENT"];
   
         // Extraction des phases
         $activite->phases = array();
