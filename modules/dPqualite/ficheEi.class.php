@@ -248,7 +248,7 @@ class CFicheEi extends CMbObject {
     $listFiches = new CFicheEi;
     $listFiches = $listFiches->loadList($where,$order,$limit);
     foreach($listFiches as $key=>$value){
-      $listFiches[$key]->loadRefsAuthor();
+      $listFiches[$key]->loadRefsFwd();
     }
     return $listFiches;
   }

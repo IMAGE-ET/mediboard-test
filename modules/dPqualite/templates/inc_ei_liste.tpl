@@ -25,6 +25,7 @@
         {{tr}}CFicheEi-user_id-court{{/tr}}
       {{/if}}
     </th>
+    <th class="category">{{tr}}CFicheEi-service_valid_user_id-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-degre_urgence-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-_criticite-court{{/tr}}</th>
     <th class="category">{{tr}}CFicheEi-qualite_date_verification-court{{/tr}}</th>
@@ -35,12 +36,17 @@
   <tr>
     <td class="text">
       <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
-        {{$currFiche->date_incident|date_format:"%d %b %Y à %Hh%M"}}
+        {{$currFiche->date_incident|date_format:"%d/%m/%Y %Hh%M"}}
       </a>
     </td>
     <td class="text">
       <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
         {{$currFiche->_ref_user->_view}}
+      </a>
+    </td>
+    <td class="text">
+      <a href="?m=dPqualite&amp;tab=vw_incidentvalid&amp;fiche_ei_id={{$currFiche->fiche_ei_id}}">
+        {{$currFiche->_ref_service_valid->_view}}
       </a>
     </td>
     <td>
@@ -55,12 +61,12 @@
     </td>
     <td>
       {{if $currFiche->qualite_date_verification}}
-      {{$currFiche->qualite_date_verification|date_format:"%d %b %Y"}}
+      {{$currFiche->qualite_date_verification|date_format:"%d/%m/%Y"}}
       {{else}}-{{/if}}
     </td>
     <td>
       {{if $currFiche->qualite_date_controle}}
-      {{$currFiche->qualite_date_controle|date_format:"%d %b %Y"}}
+      {{$currFiche->qualite_date_controle|date_format:"%d/%m/%Y"}}
       {{else}}-{{/if}}
     </td>
   </tr>
