@@ -41,6 +41,7 @@ class CActeCCAM extends CActe {
   var $commentaire         = null;
   var $code_association    = null;
   var $regle               = null;
+  var $signe               = null;
   
   // Form fields
   var $_modificateurs     = array();
@@ -79,6 +80,7 @@ class CActeCCAM extends CActe {
     $specs["code_association"]    = "num minMax|1|5";
     $specs["regle"]               = "bool";
     $specs["_montant_facture"]    = "currency";
+    $specs["signe"]               = "bool default|0";
     return $specs;
   }
   
@@ -205,7 +207,26 @@ class CActeCCAM extends CActe {
     if ($this->_calcul_montant_base) {
       $this->montant_base = $this->getTarif();  
     }
-
+    
+    // En cas d'une modification autre que signe, on met signe à 0
+    if(!$this->signe){
+      // Chargement du oldObject
+      $oldObject = new CActeCCAM();
+      $oldObject->load($this->_id);
+    
+      // Parcours des objets pour detecter les modifications
+      $_modif = 0;
+      foreach($oldObject->getProps() as $propName => $propValue) {
+      	if (($this->$propName !== null) && ($propValue != $this->$propName)) {
+          $_modif++;
+        }
+      }
+      if($_modif){
+        $this->signe = 0;
+      }
+    }
+    
+    //mbTrace($)
     // Standard store
     if ($msg = parent::store()) {
       return $msg;

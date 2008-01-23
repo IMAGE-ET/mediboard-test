@@ -170,6 +170,7 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 );
 $dPconfig["dPsalleOp"]["CActeCCAM"] = array (
   "tarif" => "0",
+  "signature" => "0",
 );
 $dPconfig["dPsalleOp"]["CDossierMedical"] = array (
   "DAS" => "0",

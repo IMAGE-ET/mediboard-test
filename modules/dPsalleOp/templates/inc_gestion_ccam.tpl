@@ -1,3 +1,15 @@
+<script type="text/javascript">
+
+function signerActes(object_id, object_class){
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "httpreq_vw_signature_actes");
+  url.addParam("object_id", object_id);
+  url.addParam("object_class", object_class);
+  url.popup(625, 600, 'Signature des actes');
+}
+
+</script>
+
 <table class="form">
   {{if $subject->_coded}}
   <tr>
@@ -27,4 +39,12 @@
       {{/if}}
     </td>
   </tr>
+  <tr>
+  {{if $module == "dPsalleOp" && $dPconfig.dPsalleOp.CActeCCAM.signature}}
+  <td style="float: right">
+    <button class="new" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">Signer les actes</button>
+  </td>
+  {{/if}}
+  </tr>
+  
 </table>
