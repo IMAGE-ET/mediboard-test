@@ -337,11 +337,15 @@ function pageMain() {
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="qualite_user_id" value="{{$user_id}}" />
+            <input type="hidden" name="qualite_date_controle" value="" />
             <button class="modify" type="submit">
               {{tr}}button-CFicheEi-valid{{/tr}}
             </button>
             <button class="cancel" type="button" onclick="refusMesures(this.form);">
               {{tr}}button-CFicheEi-refus{{/tr}}
+            </button>
+            <button class="tick" type="button" onclick="this.form.qualite_date_controle.value = '{{$today|date_format:"%Y-%m-%d"}}'; this.form.submit()">
+              {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
           </td>
         </tr>
@@ -356,13 +360,16 @@ function pageMain() {
           </td>
         </tr>
         {{else}}
-        {{if !$fiche->qualite_date_verification}}
+        {{if !$fiche->qualite_date_verification && !$fiche->qualite_date_controle}}
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
           <td class="date">
             <div id="ProcEditFrm_qualite_date_verification_da">{{$today|date_format:"%d/%m/%Y"}}</div>
             <input type="hidden" name="qualite_date_verification" value="{{$today|date_format:"%Y-%m-%d"}}" />
             <img id="ProcEditFrm_qualite_date_verification_trigger" src="./images/icons/calendar.gif" alt="calendar" title="{{tr}}CFicheEi-qualite_date_verification-desc{{/tr}}" />
+            <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
+              {{tr}}button-CFicheEi-classer{{/tr}}
+            </button>
           </td>
         </tr>
         {{elseif !$fiche->qualite_date_controle}}

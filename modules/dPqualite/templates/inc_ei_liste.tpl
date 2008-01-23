@@ -4,7 +4,7 @@
 <table class="form" id="ei_liste">
   {{if $listeFichesTitle}}
   <tr>
-    <th class="title" colspan="6">
+    <th class="title" colspan="7">
       {{$listeFichesTitle}}
     </th>
   </tr>
@@ -74,7 +74,7 @@
   
   {{else}}
   <tr>
-    <td colspan="6">{{tr}}CFicheEi.none{{/tr}}</td>
+    <td colspan="7">{{tr}}CFicheEi.none{{/tr}}</td>
   </tr>
   {{/if}}
 </table>

@@ -1,4 +1,5 @@
 <?php
+$locales['button-CFicheEi-classer'] = 'Classer';
 $locales['button-CDocGed-accept'] = 'Accepter la demande';
 $locales['button-CDocGed-cancel'] = 'Annuler la Procédure';
 $locales['button-CDocGed-edit'] = 'Editer la procédure';
@@ -399,18 +400,18 @@ $locales['_CDocGed_accepte'] = 'Accepté';
 $locales['_CDocGed_attente'] = 'Procédure En attente';
 $locales['_CDocGed_attente_demande'] = 'Prodécure demandée en Attente';
 $locales['_CDocGed_cancel'] = 'Prodécure Annulées';
-$locales['_CDocGed_DEMANDE'] = 'Procédure Demandée';
 $locales['_CDocGed_demande'] = 'Demande formulée';
+$locales['_CDocGed_DEMANDE'] = 'Procédure Demandée';
 $locales['_CDocGed_lastcomm'] = 'Dernier commentaire';
 $locales['_CDocGed_lastfile'] = 'Dernier Fichier lié';
 $locales['_CDocGed_new'] = 'Nouvelle Procédure';
-$locales['_CDocGed_REDAC'] = 'Procédure en cours de rédaction';
 $locales['_CDocGed_Redac'] = 'La procédure est en cours de rédaction. Vous ne pouvez pas y apporter de modification.';
+$locales['_CDocGed_REDAC'] = 'Procédure en cours de rédaction';
 $locales['_CDocGed_refuse'] = 'Refusé';
 $locales['_CDocGed_revision'] = 'Révision de la procédure';
 $locales['_CDocGed_TERMINE'] = 'Procédure Terminée';
-$locales['_CDocGed_VALID'] = 'Validation du Document';
 $locales['_CDocGed_valid'] = 'Le document suivant est en cours de validation auprès du service Qualité. Vous ne pouvez pas y apporter de modification.';
+$locales['_CDocGed_VALID'] = 'Validation du Document';
 $locales['_CDocGed_validBy'] = 'Visé par';
 $locales['_CEiItem_allcategorie'] = 'Toute les Catégories';
 $locales['_CFicheEi-infoscompl'] = 'Informations complémentaires';

@@ -222,6 +222,7 @@ class CFicheEi extends CMbObject {
       case "ATT_VERIF":
         $where["qualite_date_validation"]   = " IS NOT NULL";
         $where["qualite_date_verification"] = " IS NULL";
+        $where["qualite_date_controle"]     = " IS NULL";
         break;
       case "ATT_CTRL":
         $where["qualite_date_verification"] = " IS NOT NULL";
