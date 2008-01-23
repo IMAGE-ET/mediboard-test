@@ -1,5 +1,11 @@
 <script type="text/javascript">
 
+function showLegend() {
+  url = new Url;
+  url.setModuleAction("dPurgences", "vw_legende");
+  url.popup(300, 320, "Legende");
+}
+
 // Fonction de refresh du temps d'attente
 function updateAttente(sejour_id){
   var url = new Url;
@@ -56,7 +62,7 @@ function pageMain() {
 	      </select>
 	    </form>
       <a href="#" onclick="printMainCourante()" class="buttonprint">Main courante</a>
-    
+      <a href="#" onclick="showLegend()" class="buttonsearch">Légende</a>
     </td>
   </tr>
 </table>

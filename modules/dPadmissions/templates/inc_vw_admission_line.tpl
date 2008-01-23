@@ -2,6 +2,7 @@
 {{elseif $curr_adm->type == 'ambu'}} {{assign var=background value="#faa"}}
 {{elseif $curr_adm->type == 'comp'}} {{assign var=background value="#fff"}}
 {{elseif $curr_adm->type == 'exte'}} {{assign var=background value="#afa"}}
+{{elseif $curr_adm->type == 'urg'}} {{assign var=background value="#ff6"}}
 {{else}}
 {{assign var=background value="#ccc"}}
 {{/if}}

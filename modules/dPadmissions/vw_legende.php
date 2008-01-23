@@ -26,4 +26,8 @@
     <td style="background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;"></td>
     <td class="text">Non Facturable</td>
   </tr>
+  <tr>
+    <td style="background-color:#ff6"></td>
+    <td class="text">Urgences</td>
+  </tr>
 </table>

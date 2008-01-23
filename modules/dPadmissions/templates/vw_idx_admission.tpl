@@ -5,7 +5,7 @@
 function showLegend() {
   url = new Url;
   url.setModuleAction("dPadmissions", "vw_legende");
-  url.popup(300, 150, "Legende");
+  url.popup(300, 170, "Legende");
 }
 
 function printPlanning() {
