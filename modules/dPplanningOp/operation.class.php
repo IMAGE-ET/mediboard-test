@@ -427,11 +427,19 @@ class COperation extends CCodable {
     
   function loadRefPersonnelReveil() {
   	$this->_ref_affectation_personnel = new CAffectationPersonnel();
-  	$where["object_id"] = "= '$this->_id'";
-  	$where["object_class"] = "= '$this->_class_name'";
-    $this->_ref_affectation_personnel->loadObject($where);
-    $this->_ref_affectation_personnel->loadPersonnel();
-    $this->_ref_affectation_personnel->_ref_personnel->loadRefUser();
+    $affectations = array();
+    $affectation = new CAffectationPersonnel();
+  	$affectation->object_id = $this->_id;
+  	$affectation->object_class = $this->_class_name;
+  	$affectations = $affectation->loadMatchingList();
+  	
+  	foreach($affectations as $key => $affectation){
+  	  $affectation->loadPersonnel();
+  	  if($affectation->_ref_personnel->emplacement == "reveil"){
+  	    $affectation->_ref_personnel->loadRefUser();
+  	    $this->_ref_affectation_personnel = $affectation;
+  	  }
+  	}
   }
   
   function loadRefsFwd() {
