@@ -357,9 +357,13 @@ function checkChambreSejourEasy(){
     <div id="showFor-comp" {{if !$sejour->_id || $sejour->type != "comp"}} style="display: none;" {{/if}}>
       {{mb_label object=$sejour field="reanimation"}}{{mb_field object=$sejour field="reanimation"}}
     </div>
-    <div id="showFor-ambu" {{if $sejour->_id && $sejour->type != "ambu"}} style="display: none;" {{/if}}>
-      {{mb_label object=$sejour field="zt"}}{{mb_field object=$sejour field="zt"}}
-    </div>
+  </td>
+</tr>
+
+<tr>
+  <th>{{mb_label object=$sejour field="zt"}}</th>
+  <td colspan="3">
+    {{mb_field object=$sejour field="zt"}}
   </td>
 </tr>
 
@@ -369,7 +373,6 @@ function checkChambreSejourEasy(){
   {{mb_field object=$sejour field="facturable"}}
   </td>
 </tr>
-
 
 <tr {{if $mode_operation}}style="display: none;"{{/if}}>
   <th>{{mb_label object=$sejour field="modalite" typeEnum="radio"}}</th>

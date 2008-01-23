@@ -82,15 +82,15 @@ function modifSejour() {
 }
 
 function changeTypeHospi(value) {
+  var oForm = document.editSejour;
   if(value == "ambu") {
-    $('showFor-ambu').show();
     $('showFor-comp').hide();
+    setCheckedValue(oForm.reanimation, 0);
   } else if(value == "comp") {
     $('showFor-comp').show();
-    $('showFor-ambu').hide();
   } else {
     $('showFor-comp').hide();
-    $('showFor-ambu').hide();
+    setCheckedValue(oForm.reanimation, 0);
   }
 }
 
