@@ -197,7 +197,7 @@ if($op) {
 		$tabPersonnel["operation"] = array();
 		foreach($selOp->_ref_personnel as $key => $affectation_personnel){
 		// Si le personnel n'est pas deja present dans le tableau d'affectation, on le rajoute
-		  if(!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"])){
+		  if((!array_key_exists($affectation_personnel->_ref_personnel->_id, $tabPersonnel["plage"])) && $affectation_personnel->_ref_personnel->emplacement == "op"){
 		    $affectation_personnel->_ref_personnel->loadRefUser();
 		    $tabPersonnel["operation"][$affectation_personnel->_ref_personnel->_id] = $affectation_personnel;  
 		  }

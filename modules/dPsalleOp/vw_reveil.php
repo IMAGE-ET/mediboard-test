@@ -99,7 +99,6 @@ foreach($listOut as $key => $value) {
   }
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
 

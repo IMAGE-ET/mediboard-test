@@ -65,9 +65,12 @@ class CAffectationPersonnel extends CMbMetaObject {
     if ($msg = parent::check()) {
       return $msg;
     }  
+    /*
     if (count($this->getSiblings())) {
       return "Personnel déjà affecté";
     }
+    */
+
   }
   
   /**
