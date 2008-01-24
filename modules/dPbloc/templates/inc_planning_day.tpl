@@ -35,12 +35,12 @@
               {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
               {{else}}{{assign var="backgroundClass" value="full"}}
               {{/if}}
-              <td nowrap="nowrap" style="vertical-align: top; text-align: center;white-space: normal;background-color:#{{$colorCell}};" colspan="{{$plage->_nbQuartHeure}}" title="{{$plage->_fill_rate}} % du temps occupé">
-                <div class="progressBar" style="height: 3px;">
+              <td nowrap="nowrap" style="vertical-align: top; text-align: center; white-space: normal; background-color:#{{$colorCell}};" colspan="{{$plage->_nbQuartHeure}}">
+                <div class="progressBar" style="height: 3px;" title="{{$plage->_fill_rate}} % du temps occupé">
                   <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;height: 3px;border-right: 2px solid #000;">
                   </div>
                 </div>
-                <strong>
+                <strong title="{{$plage->_fill_rate}} % du temps occupé">
                 <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}" title="Agencer les interventions">
                   {{$plage->_view}}
                 </a> ({{$plage->_nb_operations_placees}}/{{$plage->_nb_operations}})
@@ -49,7 +49,44 @@
                   <img src="images/icons/edit.png" alt="Editer la plage" title="Editer la plage" border="0" height="16" width="16" />
                 </a>
                 {{if ($plage->_ref_affectations_personnel.op|@count) || ($plage->_ref_affectations_personnel.op_panseuse|@count)}}
-                  <img src="images/icons/personnel.png" alt="personnel" title="Liste du personnel prévu" border="0" height="16" width="16" />
+                  <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$plage->plageop_id}}">
+                  <img src="images/icons/personnel.png" border="0" height="16" width="16"
+                    alt="personnel"
+                    onmouseover="$('plage-{{$plage->_id}}').show();"
+                    onmouseout="$('plage-{{$plage->_id}}').hide();" />
+                  </a>
+                  <div id="plage-{{$plage->_id}}" class="tooltip" style="display: none; width: 200px;">
+                    <table class="tbl">
+                      <tr>
+                        <th>Aides opératoires</th>
+                      </tr>
+                      {{foreach from=$plage->_ref_affectations_personnel.op item=curr_aff}}
+                      <tr>
+                        <td class="text">
+                          {{$curr_aff->_ref_personnel->_ref_user->_view}}
+                        </td>
+                      </tr>
+                      {{foreachelse}}
+                      <tr>
+                        <td>Pas d'aide opératoire</td>
+                      </tr>
+                      {{/foreach}}
+                      <tr>
+                        <th>Panseuses</th>
+                      </tr>
+                      {{foreach from=$plage->_ref_affectations_personnel.op_panseuse item=curr_aff}}
+                      <tr>
+                        <td class="text">
+                          {{$curr_aff->_ref_personnel->_ref_user->_view}}
+                        </td>
+                      </tr>
+                      {{foreachelse}}
+                      <tr>
+                        <td>Pas de panseuse</td>
+                      </tr>
+                      {{/foreach}}
+                    </table>
+                  </div>
                 {{/if}}
               </td>
             {{/if}}

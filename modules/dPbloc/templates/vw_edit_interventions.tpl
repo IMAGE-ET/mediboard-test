@@ -14,7 +14,7 @@
   </tr>
   <tr>
     <td>
-      <table>
+      <table class="form">
         <tr>
           <td>
             <!-- liste déroulante de choix de l'anesthesiste  et du personnel de bloc -->
@@ -27,7 +27,7 @@
             <input type="hidden" name="_type_repeat" value="1" />
           
             <select name="anesth_id">
-            <option value="">&mdash; Anesthésistes &mdash;</option>
+            <option value="">&mdash; Anesthésiste</option>
             {{foreach from=$listAnesth item=_anesth}}
             <option value="{{$_anesth->_id}}" {{if $plage->anesth_id == $_anesth->_id}} selected="selected" {{/if}}>{{$_anesth->_view}}</option>
             {{/foreach}}
@@ -50,7 +50,7 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id">
-              <option value="">&mdash; Choix aide-opératoire &mdash;</option>
+              <option value="">&mdash; Aide opératoire</option>
               {{foreach from=$listPersAideOp item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
@@ -71,12 +71,11 @@
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
             <select name="personnel_id">
-              <option value="">&mdash; Choix panseuse &mdash;</option>
+              <option value="">&mdash; Panseuse</option>
               {{foreach from=$listPersPanseuse item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
             </select>
-            
             <button class="submit" type="submit">Ajouter personnel en salle</button>
             </form>
           </td>
@@ -89,7 +88,7 @@
     <td>
       <table class="tbl">
         <tr>
-          <th>Anesthésiste : </th>
+          <th>Anesthésiste</th>
           {{if $plage->_ref_anesth->_view}}
             <td>{{$plage->_ref_anesth->_view}}</td>
           {{else}}
@@ -99,7 +98,7 @@
         
         {{if $affectations_plage.op}}
         <tr>
-          <th>Aide-operatoires</th>
+          <th>Aide operatoire(s)</th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
             {{foreach from=$affectations_plage.op item=_affectation}}
@@ -116,7 +115,7 @@
         {{/if}}
         {{if $affectations_plage.op_panseuse}}
         <tr>
-          <th>Panseuses</th>
+          <th>Panseuse(s)</th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
             {{foreach from=$affectations_plage.op_panseuse item=_affectation}}
