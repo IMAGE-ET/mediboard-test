@@ -446,7 +446,7 @@ class CCodeCCAM {
       }
       
       //On rentre les actes associés
-      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO", $this->code);
+      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
       $result = $ds->exec($query);
       $i = 0;
       while($row = $ds->fetchArray($result)) {
@@ -459,7 +459,7 @@ class CCodeCCAM {
       }
       
       //On rentre les actes incompatibles
-      $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE", $this->code);
+      $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
       $result = $ds->exec($query);
       $i = 0;
       while($row = $ds->fetchArray($result)) {
