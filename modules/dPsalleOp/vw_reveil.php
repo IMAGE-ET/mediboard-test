@@ -84,7 +84,7 @@ foreach($listOut as $key => $value) {
   $listOut[$key]->loadAffectationsPersonnel();
   $listOut[$key]->_ref_affectation_reveil = reset($listOut[$key]->_ref_affectations_personnel["reveil"]);
   if(!$listOut[$key]->_ref_affectation_reveil){
-    $listOut->_ref_affectation_reveil = new CAffectationPersonnel();
+    $listOut[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
   }
   if($listOut[$key]->_ref_sejour->type == "exte"){
     unset($listOut[$key]);

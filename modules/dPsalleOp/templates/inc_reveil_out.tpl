@@ -55,7 +55,7 @@
       {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
       {{/if}}
       
-      {{if $curr_op->_ref_affectation_reveil}}
+      {{if $curr_op->_ref_affectation_reveil->_id}}
       <br />{{$curr_op->_ref_affectation_reveil->_ref_personnel->_ref_user->_view}}
       {{/if}}
       
