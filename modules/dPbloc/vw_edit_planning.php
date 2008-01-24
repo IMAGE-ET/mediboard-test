@@ -48,11 +48,11 @@ $_temps_inter_op = range(0,59,15);
 
 
 // Récupération des plages pour le jour demandé
-$listPlages = new CPlageOp();
+$listPlage = new CPlageOp();
 $where = array();
 $where["date"] = "= '$date'";
 $order = "debut";
-$listPlages = $listPlages->loadList($where,$order);
+$listPlages[$date] = $listPlage->loadList($where,$order);
 
 // Détermination des bornes du semainier
 $min = CPlageOp::$hours_start.":".reset(CPlageOp::$minutes).":00";
@@ -60,10 +60,11 @@ $max = CPlageOp::$hours_stop.":".end(CPlageOp::$minutes).":00";
 
 
 // Détermination des bornes de chaque plage
-foreach($listPlages as &$plage){
+foreach($listPlages[$date] as &$plage){
   $plage->loadRefsFwd();
   $plage->_ref_chir->loadRefsFwd();
   $plage->getNbOperations();
+  $plage->loadPersonnel();
   
   $plage->fin = min($plage->fin, $max);
   $plage->debut = max($plage->debut, $min);
@@ -72,7 +73,7 @@ foreach($listPlages as &$plage){
   $plage->makeView();
   
   if($plage->debut >= $plage->fin){  
-    unset($listPlages[$plage->_id]);
+    unset($listPlages[$date][$plage->_id]);
   }  
 }
 
@@ -82,18 +83,18 @@ foreach($listSalles as $keySalle=>$valSalle){
   foreach(CPlageOp::$hours as $keyHours=>$valHours){
     foreach(CPlageOp::$minutes as $keyMins=>$valMins){
       // Initialisation du tableau
-      $affichages["$keySalle-$valHours:$valMins:00"] = "empty";
+      $affichages["$date-s$keySalle-$valHours:$valMins:00"] = "empty";
     }
   }
 }
 
 // Remplissage du tableau de visualisation
-foreach($listPlages as &$plage){
+foreach($listPlages[$date] as &$plage){
     $plage->_nbQuartHeure = mbTimeCountIntervals($plage->debut, $plage->fin, "00:".CPlageOp::$minutes_interval.":00");
     for($time = $plage->debut; $time < $plage->fin; $time = mbTime("+15 minutes", $time) ){
-      $affichages[$plage->salle_id."-".$time] = "full";
+      $affichages[$date."-s".$plage->salle_id."-".$time] = "full";
     } 
-    $affichages[$plage->salle_id."-".$plage->debut] = $plage->_id;
+    $affichages[$date."-s".$plage->salle_id."-".$plage->debut] = $plage->_id;
 }
 
 // Liste des Spécialités
@@ -103,12 +104,12 @@ $listSpec = $listSpec->loadSpecialites();
 //Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listPlages"     ,$listPlages);
+$smarty->assign("listPlages"     , $listPlages        );
 $smarty->assign("_temps_inter_op", $_temps_inter_op   );
 $smarty->assign("listSalles"     , $listSalles        );
 $smarty->assign("listHours"      , CPlageOp::$hours   );
 $smarty->assign("listMins"       , CPlageOp::$minutes );
-$smarty->assign("affichages"     , $affichages    );
+$smarty->assign("affichages"     , $affichages        );
 $smarty->assign("date"           , $date              );
 $smarty->assign("listSpec"       , $listSpec          );
 $smarty->assign("plagesel"       , $plagesel          );
