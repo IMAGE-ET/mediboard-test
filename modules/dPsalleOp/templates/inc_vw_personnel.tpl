@@ -15,23 +15,42 @@ function submitPersonnel(oForm){
 <tr>
   <th class="category">Personnel prévu</th>
   <th class="category">Personnel ajouté<br />
-      <form name="affectationPers" action="?m={{$m}}" method="post">
-    <input type="hidden" name="m" value="dPpersonnel" />
-    <input type="hidden" name="dosql" value="do_affectation_aed" />
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="affect_id" value="" />
+    <form name="affectationPers" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="" />
     
-    <input type="hidden" name="object_class" value="COperation" />
-    <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
-    <input type="hidden" name="realise" value="0" />
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
     
-    <select name="personnel_id" onchange="submitPersonnel(this.form)">
-      <option value="">&mdash; Choix du personnel</option>
-    {{foreach from=$listPers item="pers"}}
-      <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
-    {{/foreach}}
-    </select>
+      <select name="personnel_id" onchange="submitPersonnel(this.form)">
+        <option value="">&mdash; Choix aide-opératoire</option>
+        {{foreach from=$listPersAideOp item="pers"}}
+        <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
     </form>
+    
+    <form name="affectationPers" action="?m={{$m}}" method="post">
+      <input type="hidden" name="m" value="dPpersonnel" />
+      <input type="hidden" name="dosql" value="do_affectation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="affect_id" value="" />
+    
+      <input type="hidden" name="object_class" value="COperation" />
+      <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
+      <input type="hidden" name="realise" value="0" />
+    
+      <select name="personnel_id" onchange="submitPersonnel(this.form)">
+        <option value="">&mdash; Choix panseuse</option>
+        {{foreach from=$listPersPanseuse item="pers"}}
+        <option value="{{$pers->_id}}">{{$pers->_ref_user->_view}}</option>
+        {{/foreach}}
+      </select>
+    </form>
+    
   </th>
 </tr>
 
@@ -52,7 +71,8 @@ function submitPersonnel(oForm){
     <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="realise" value="0" />
     
-    {{$affectation->_ref_personnel->_ref_user->_view}}
+    {{$affectation->_ref_personnel->_ref_user->_view}} /
+    {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
     <br />
     {{if $affectation->_debut}}
      {{if $can->edit}}
@@ -132,7 +152,8 @@ function submitPersonnel(oForm){
     <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="realise" value="0" />
     
-    {{$affectation->_ref_personnel->_ref_user->_view}}
+    {{$affectation->_ref_personnel->_ref_user->_view}} / 
+    {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
     <br />
     {{if $affectation->_debut}}
      {{if $can->edit}}

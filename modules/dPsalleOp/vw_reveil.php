@@ -24,7 +24,6 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
-
 // Selection des salles
 $listSalles = new CSalle;
 $listSalles = $listSalles->loadList();
@@ -46,7 +45,12 @@ $order = "entree_reveil";
 $listReveil = $listReveil->loadList($where, $order);
 foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
-  $listReveil[$key]->loadRefPersonnelReveil();
+  $listReveil[$key]->loadAffectationsPersonnel();
+  //_ref_affectation_reveil permet de stocker l'affectation qui a pour emplacement reveil
+  $listReveil[$key]->_ref_affectation_reveil = reset($listReveil[$key]->_ref_affectations_personnel["reveil"]);
+  if(!$listReveil[$key]->_ref_affectation_reveil){
+    $listReveil[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
+  }
   if($listReveil[$key]->_ref_sejour->type == "exte"){
     unset($listReveil[$key]);
     continue;
@@ -77,7 +81,11 @@ $order = "sortie_reveil DESC";
 $listOut = $listOut->loadList($where, $order);
 foreach($listOut as $key => $value) {
   $listOut[$key]->loadRefsFwd();
-  $listOut[$key]->loadRefPersonnelReveil();
+  $listOut[$key]->loadAffectationsPersonnel();
+  $listOut[$key]->_ref_affectation_reveil = reset($listOut[$key]->_ref_affectations_personnel["reveil"]);
+  if(!$listOut[$key]->_ref_affectation_reveil){
+    $listOut->_ref_affectation_reveil = new CAffectationPersonnel();
+  }
   if($listOut[$key]->_ref_sejour->type == "exte"){
     unset($listOut[$key]);
     continue;
@@ -113,7 +121,6 @@ $smarty->assign("timing"        , $timing      );
 $smarty->assign("date"          , $date        );
 $smarty->assign("hour"          , $hour        );
 $smarty->assign("modif_operation", $modif_operation);
-
 $smarty->display("vw_reveil.tpl");
 
 ?>

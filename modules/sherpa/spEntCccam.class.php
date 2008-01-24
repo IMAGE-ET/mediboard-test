@@ -185,12 +185,23 @@ class CSpEntCCAM extends CSpObject {
       break;
     }
 	    
-    // Aides opératoire
-    $mbObject->loadPersonnel();
+    // Aides opératoire et panseuse
+    $mbObject->loadAffectationsPersonnel();
+    $affectations_op = $mbObject->_ref_affectations_personnel["op"];
+		$affectations_panseuse = $mbObject->_ref_affectation_personnel["panseuse"];
+		if(!$affectations_op){
+		  $affectations_op = array();
+		}
+    if(!$affectations_panseuse){
+		  $affectations_panseuse = array();
+		}
+		// Fusion des deux tableaux d'affectations
+		$affectations = array_merge($affectations_op, $affectations_panseuse);
+	
     $aidopNumber = 0;
-    foreach ($mbObject->_ref_personnel as $affectationPersonnel) {
+    foreach ($affectations as $affectationPersonnel) {
       if (++$aidopNumber <=  3) {
-        $affectationPersonnel->loadPersonnel();
+        $affectationPersonnel->loadRefPersonnel();
         $personnel = $affectationPersonnel->_ref_personnel;
         $personnel->loadRefUser();
         

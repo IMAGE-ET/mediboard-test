@@ -1,5 +1,16 @@
 <tr>
-  <th>{{$mbobject->_view}}</th>
+  <th>{{$mbobject->_view}}
+  {{if $infoPersonnel}}
+    {{assign var="pers_id" value=$mbobject->_id}}
+    ({{if @$persusersType.$pers_id.op}}
+      Aide opératoire
+    {{/if}}
+    {{if @$persusersType.$pers_id.op && @$persusersType.$pers_id.op_panseuse}} / {{/if}}
+    {{if @$persusersType.$pers_id.op_panseuse}}
+      Panseuse
+    {{/if}})
+    {{/if}}
+  </th>
   <td>
     <form name="editFrm-{{$mbobject->_class_name}}-{{$mbobject->_id}}" action="?" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPsante400" />

@@ -32,6 +32,8 @@ $filterSejour->type = mbGetValueFromGet("type");
 
 $plagesop = new CPlageOp;
 
+$affectations_plage = array();
+
 $where = array();
 $where["date"] =  $ds->prepare("BETWEEN %1 AND %2", $filter->_date_min, $filter->_date_max);
 
@@ -97,18 +99,24 @@ foreach($plagesop as &$plage) {
     unset($plagesop[$plage->_id]);
   }
   $plage->_ref_operations = $listOp;
-  $plage->loadPersonnel();
-  if (null !== $plage->_ref_personnel) {
-    foreach ($plage->_ref_personnel as $_personnel) {
-      $_personnel->loadPersonnel();
-      $_personnel->_ref_personnel->loadRefUser();
-    }
+  
+  // Chargement des affectation de la plage
+  $plage->loadAffectationsPersonnel();
+  
+  // Initialisation des tableaux de stockage des affectation pour les op et les panseuses
+  $affectations_plage[$plage->_id]["op"] = array();
+  $affectations_plage[$plage->_id]["op_panseuse"] = array();
+  
+  if (null !== $plage->_ref_affectations_personnel) {
+    $affectations_plage[$plage->_id]["op"] = $plage->_ref_affectations_personnel["op"];
+    $affectations_plage[$plage->_id]["op_panseuse"] = $plage->_ref_affectations_personnel["op_panseuse"];
   }
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("affectations_plage", $affectations_plage);
 $smarty->assign("filter"  , $filter);
 $smarty->assign("plagesop", $plagesop);
 

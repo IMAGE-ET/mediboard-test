@@ -91,7 +91,7 @@ if ($object_id || $object_class || $list) {
 }
 
 foreach($affectations as $key => $_affectation){
-  $_affectation->loadPersonnel();
+  $_affectation->loadRefPersonnel();
   $_affectation->_ref_personnel->loadRefUser();
   $_affectation->loadRefObject();
   $_affectation->_ref_object->loadRefsFwd();

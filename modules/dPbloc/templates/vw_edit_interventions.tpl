@@ -38,10 +38,10 @@
           </td>
         </tr>
 
-			  {{if $plage->_ref_personnel !== null}}
+			  {{if $listPersAideOp}}
         <tr>
           <td>
-            <form name="editAffectation" action="?m={{$m}}" method="post">
+            <form name="editAffectationAideOp" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPpersonnel" />
             <input type="hidden" name="dosql" value="do_affectation_aed" />
             
@@ -49,15 +49,35 @@
             <input type="hidden" name="object_id" value="{{$plage->_id}}" />
             <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
             <input type="hidden" name="realise" value="0" />
-		    
             <select name="personnel_id">
-              <option value="">&mdash; Personnel de bloc &mdash;</option>
-              {{foreach from=$personnels item=_personnelBloc}}
+              <option value="">&mdash; Choix aide-opératoire &mdash;</option>
+              {{foreach from=$listPersAideOp item=_personnelBloc}}
+              <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
+              {{/foreach}}
+            </select>
+            <button class="submit" type="submit">Ajouter personnel en salle</button>
+            </form>
+          </td>
+        </tr>
+        {{/if}}
+        {{if $listPersPanseuse}}
+        <tr>
+          <td>
+            <form name="editAffectationPanseuse" action="?m={{$m}}" method="post">
+            <input type="hidden" name="m" value="dPpersonnel" />
+            <input type="hidden" name="dosql" value="do_affectation_aed" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="object_id" value="{{$plage->_id}}" />
+            <input type="hidden" name="object_class" value="{{$plage->_class_name}}" />
+            <input type="hidden" name="realise" value="0" />
+            <select name="personnel_id">
+              <option value="">&mdash; Choix panseuse &mdash;</option>
+              {{foreach from=$listPersPanseuse item=_personnelBloc}}
               <option value="{{$_personnelBloc->_id}}">{{$_personnelBloc->_ref_user->_view}}</option>
               {{/foreach}}
             </select>
             
-            <button class="submit" type="submit">Ajouter en salle</button>
+            <button class="submit" type="submit">Ajouter personnel en salle</button>
             </form>
           </td>
         </tr>
@@ -77,20 +97,36 @@
           {{/if}}
         </tr>
         
-        {{if $plage->_ref_personnel !== null}}
+        {{if $affectations_plage.op}}
         <tr>
-          <th>Personnel : </th>
+          <th>Aide-operatoires</th>
           <td class="text">
             <!-- div qui affiche le personnel de bloc -->
-            {{foreach from=$plage->_ref_personnel item=_affectation}}
-            <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
-              <input type="hidden" name="m" value="dPpersonnel" />
-              <input type="hidden" name="dosql" value="do_affectation_aed" />
-              <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
-              <input type="hidden" name="del" value="1" />
-              <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
-            </form>
-            
+            {{foreach from=$affectations_plage.op item=_affectation}}
+              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
+                <input type="hidden" name="m" value="dPpersonnel" />
+                <input type="hidden" name="dosql" value="do_affectation_aed" />
+                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
+                <input type="hidden" name="del" value="1" />
+                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+              </form>
+            {{/foreach}}
+          </td>
+        </tr>
+        {{/if}}
+        {{if $affectations_plage.op_panseuse}}
+        <tr>
+          <th>Panseuses</th>
+          <td class="text">
+            <!-- div qui affiche le personnel de bloc -->
+            {{foreach from=$affectations_plage.op_panseuse item=_affectation}}
+              <form name="supAffectation-{{$_affectation->_id}}" action="?m={{$m}}" method="post">
+                <input type="hidden" name="m" value="dPpersonnel" />
+                <input type="hidden" name="dosql" value="do_affectation_aed" />
+                <input type="hidden" name="affect_id" value="{{$_affectation->_id}}" />
+                <input type="hidden" name="del" value="1" />
+                <button class='cancel' type='submit'>{{$_affectation->_ref_personnel->_ref_user->_view}}</button>
+              </form>
             {{/foreach}}
           </td>
         </tr>

@@ -424,23 +424,6 @@ class COperation extends CCodable {
     $this->_ref_sejour->loadRefPatient();
     $this->_ref_patient =& $this->_ref_sejour->_ref_patient;
   }
-    
-  function loadRefPersonnelReveil() {
-  	$this->_ref_affectation_personnel = new CAffectationPersonnel();
-    $affectations = array();
-    $affectation = new CAffectationPersonnel();
-  	$affectation->object_id = $this->_id;
-  	$affectation->object_class = $this->_class_name;
-  	$affectations = $affectation->loadMatchingList();
-  	
-  	foreach($affectations as $key => $affectation){
-  	  $affectation->loadPersonnel();
-  	  if($affectation->_ref_personnel->emplacement == "reveil"){
-  	    $affectation->_ref_personnel->loadRefUser();
-  	    $this->_ref_affectation_personnel = $affectation;
-  	  }
-  	}
-  }
   
   function loadRefsFwd() {
     $this->loadRefsConsultAnesth();

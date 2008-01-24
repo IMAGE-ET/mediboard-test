@@ -9,7 +9,7 @@
             Praticiens
           </th>
         </tr>
-        
+        {{assign var="infoPersonnel" value="0"}}
         {{foreach from=$praticiens item=curr_prat}}
         {{include file=inc_idsherpa.tpl mbobject=$curr_prat}}
         {{/foreach}}
@@ -19,8 +19,8 @@
             Personnels
           </th>
         </tr>
-        {{foreach from=$persusers item=curr_pers}}
-        {{include file=inc_idsherpa.tpl mbobject=$curr_pers}}
+        {{foreach from=$persusers item=curr_pers}}  
+        {{include file=inc_idsherpa.tpl mbobject=$curr_pers infoPersonnel="1"}}
         {{/foreach}}
 
       </table>

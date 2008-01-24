@@ -1,5 +1,4 @@
 <?php
-$locales['CPersonnel.emplacement.service'] = 'Service';
 $locales['base_url'] = 'http://localhost\\';
 $locales['CAffectationPersonnel-debut'] = 'Début';
 $locales['CAffectationPersonnel-fin'] = 'Fin';
@@ -12,8 +11,10 @@ $locales['CPersonnel-emplacement'] = 'Emplacement';
 $locales['CPersonnel-user_id'] = 'Personnel';
 $locales['CPersonnel-_user_first_name'] = 'Prénom';
 $locales['CPersonnel-_user_last_name'] = 'Nom';
-$locales['CPersonnel.emplacement.op'] = 'Salle d\'op';
+$locales['CPersonnel.emplacement.op'] = 'Aide opératoire';
+$locales['CPersonnel.emplacement.op_panseuse'] = 'Panseuse';
 $locales['CPersonnel.emplacement.reveil'] = 'Reveil';
+$locales['CPersonnel.emplacement.service'] = 'Service';
 $locales['mod-dPpersonnel-tab-vw_affectations_pers'] = 'Gestion des affectations';
 $locales['mod-dPpersonnel-tab-vw_edit_personnel'] = 'Gestion du personnel';
 $locales['module-dPpersonnel-court'] = 'Personnel';

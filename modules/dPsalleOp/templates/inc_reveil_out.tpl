@@ -54,9 +54,11 @@
       {{else}}
       {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
       {{/if}}
-      {{if $curr_op->_ref_affectation_personnel->_id}}
-      <br />{{$curr_op->_ref_affectation_personnel->_ref_personnel->_ref_user->_view}}
+      
+      {{if $curr_op->_ref_affectation_reveil}}
+      <br />{{$curr_op->_ref_affectation_reveil->_ref_personnel->_ref_user->_view}}
       {{/if}}
+      
     </td>
     <td class="button">
       <form name="editSortieReveilFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">

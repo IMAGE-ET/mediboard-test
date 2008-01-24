@@ -1,5 +1,4 @@
 <?php
-$locales['CPersonnel.emplacement.service'] = '';
 $locales['base_url'] = 'http://localhost\\';
 $locales['CAffectationPersonnel-debut'] = '';
 $locales['CAffectationPersonnel-fin'] = '';
@@ -13,7 +12,9 @@ $locales['CPersonnel-user_id'] = '';
 $locales['CPersonnel-_user_first_name'] = '';
 $locales['CPersonnel-_user_last_name'] = '';
 $locales['CPersonnel.emplacement.op'] = '';
+$locales['CPersonnel.emplacement.op_panseuse'] = '';
 $locales['CPersonnel.emplacement.reveil'] = '';
+$locales['CPersonnel.emplacement.service'] = '';
 $locales['mod-dPpersonnel-tab-vw_affectations_pers'] = '';
 $locales['mod-dPpersonnel-tab-vw_edit_personnel'] = '';
 $locales['module-dPpersonnel-court'] = '';

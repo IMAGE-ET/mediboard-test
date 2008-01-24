@@ -35,13 +35,21 @@ function printAdmission(id) {
 	    - Anesthesiste : <strong>Dr. {{$curr_plageop->_ref_anesth->_view}}</strong>
 	  {{/if}}
 	  
-    {{if $curr_plageop->_ref_personnel}}
-      - Personnel : 
-      {{foreach from=$curr_plageop->_ref_personnel item=_personnel}}
+	  {{assign var="plageOp_id" value=$curr_plageop->_id}}
+	  {{if $affectations_plage.$plageOp_id.op}}
+	  -Aide-opératoires:
+	    {{foreach from=$affectations_plage.$plageOp_id.op item=_personnel}}
       {{$_personnel->_ref_personnel->_ref_user->_view}};
       {{/foreach}}
-    {{/if}}
-	</td>
+	  {{/if}}
+	  
+	  {{if $affectations_plage.$plageOp_id.op_panseuse}}
+	  -Panseuses:
+	    {{foreach from=$affectations_plage.$plageOp_id.op_panseuse item=_personnel}}
+      {{$_personnel->_ref_personnel->_ref_user->_view}};
+      {{/foreach}}	  
+	  {{/if}}
+		</td>
   </tr>
   <tr>
     <td>

@@ -71,7 +71,7 @@ class CMbObject {
   var $_ref_notes      = array(); // Notes
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
-  var $_ref_personnel  = null; 
+  var $_ref_affectations_personnel  = null; 
   
   /**
    * Constructor
@@ -1195,7 +1195,7 @@ class CMbObject {
       "documents"    => "CCompteRendu object_id",
       "permissions"  => "CPermObject object_id",
       "logs"         => "CUserLog object_id",
-      "personnel"    => "CAffectationPersonnel object_id",
+      "affectations_personnel"    => "CAffectationPersonnel object_id",
     );
   }
   
@@ -1421,9 +1421,20 @@ class CMbObject {
     $this->_ref_last_log  = end($this->_ref_logs);
   }
 
-  function loadPersonnel() {
-    if (null == $this->_ref_personnel = $this->loadBackRefs("personnel")) {
+  function loadAffectationsPersonnel() {
+    if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
       return;
+    }
+    // Initialisation
+    $this->_ref_affectations_personnel["op"] = array();
+    $this->_ref_affectations_personnel["op_panseuse"] = array();
+    $this->_ref_affectations_personnel["reveil"] = array();
+    $this->_ref_affectations_personnel["service"] = array();
+    
+    foreach($affectations as $key => $affectation){
+      $affectation->loadRefPersonnel();
+      $affectation->_ref_personnel->loadRefUser();
+      $this->_ref_affectations_personnel[$affectation->_ref_personnel->emplacement][$affectation->_id] = $affectation;
     }
   }
 

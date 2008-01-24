@@ -12,6 +12,7 @@ codageCCAM = function(operation_id){
 submitReveil = function(oFormAffectation, oFormOperation){
   oFormOperation.entree_reveil.value = '';
   // s'il y a une affectation, on submit les deux formulaires
+
   if(oFormAffectation.affect_id.value != ""){
     submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} ); 
   }
@@ -86,7 +87,7 @@ submitReveil = function(oFormAffectation, oFormOperation){
         <input type="hidden" name="m" value="dPpersonnel" />
         <input type="hidden" name="dosql" value="do_affectation_aed" />
         <input type="hidden" name="del" value="1" />
-        <input type="hidden" name="affect_id" value="{{$curr_op->_ref_affectation_personnel->_id}}" />
+        <input type="hidden" name="affect_id" value="{{$curr_op->_ref_affectation_reveil->_id}}" />
       </form>
       
       
@@ -116,8 +117,9 @@ submitReveil = function(oFormAffectation, oFormOperation){
         {{/if}}
       </form>
        
-      {{if $curr_op->_ref_affectation_personnel->_id}}
-      <br />{{$curr_op->_ref_affectation_personnel->_ref_personnel->_ref_user->_view}}
+      
+      {{if $curr_op->_ref_affectation_reveil->_id}}
+      <br />{{$curr_op->_ref_affectation_reveil->_ref_personnel->_ref_user->_view}}
       {{/if}}
       
     </td>

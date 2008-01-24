@@ -33,7 +33,7 @@ class CPersonnel extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["user_id"] = "notNull ref class|CMediusers";
-    $specs["emplacement"] = "notNull enum list|op|reveil|service default|op";
+    $specs["emplacement"] = "notNull enum list|op|op_panseuse|reveil|service default|op";
     return $specs;
   }
   
@@ -54,7 +54,9 @@ class CPersonnel extends CMbObject {
   function loadListPers($emplacement){
     $personnel = new CPersonnel();
     $personnel->emplacement = $emplacement;
-    $listPers = $personnel->loadMatchingList();
+    $ljoin["users"] = "personnel.user_id = users.user_id";
+    $order = "users.user_last_name";
+    $listPers = $personnel->loadMatchingList($order, null, null, $ljoin);
     foreach($listPers as $pers){
       $pers->loadRefUser();
     }

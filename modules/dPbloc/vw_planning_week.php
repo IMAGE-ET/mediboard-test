@@ -63,7 +63,7 @@ foreach($listDays as $keyDate=>$valDate){
     $plage->loadRefsFwd();
     $plage->_ref_chir->loadRefsFwd();
     $plage->getNbOperations();
-    $plage->loadPersonnel();
+    $plage->loadAffectationsPersonnel();
   
     $plage->fin = min($plage->fin, $max);
     $plage->debut = max($plage->debut, $min);

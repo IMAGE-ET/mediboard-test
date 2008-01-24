@@ -158,7 +158,8 @@ function pageMain() {
                 <tr>
                 <td></td>
                  <td>
-                    <input class="tag" type="checkbox" name="list[op]" disabled="disabled" value="" /><label for="filterFrm_list[op]" title="Salle d'opération">Salle d'opération</label><br />
+                    <input class="tag" type="checkbox" name="list[op]" disabled="disabled" value="" /><label for="filterFrm_list[op]" title="Aide operatoire">Aide opératoire</label><br />
+                    <input class="tag" type="checkbox" name="list[op_panseuse]" disabled="disabled" value="" /><label for="filterFrm_list[op_panseuse]" title="Panseuse">Panseuse</label><br />
                     <input class="tag" type="checkbox" name="list[reveil]" disabled="disabled" value="" /><label for="filterFrm_list[reveil]" title="Reveil">Réveil</label><br />
                     <input class="tag" type="checkbox" name="list[service]" disabled="disabled" value="" /><label for="filterFrm_list[service]" title="Service">Service</label>
                   </td>
@@ -285,7 +286,8 @@ function pageMain() {
       <tr>
         <td></td>
         <td colspan="2">
-          <input type="radio" name="_tag" value="op" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_op" title="">Salle d'opération</label><br />
+          <input type="radio" name="_tag" value="op" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_op" title="">Aide opératoire</label><br />
+          <input type="radio" name="_tag" value="op_panseuse" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_op_panseuse" title="">Panseuse</label><br />
           <input type="radio" name="_tag" value="reveil" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_reveil" title="">Réveil</label><br />
           <input type="radio" name="_tag" value="service" onclick="savePersonnel(this.form.user_id.value, this.value)" /><label for="editAffectation__tag_service" title="">Service</label>
           <input type="hidden" name="personnel_id" value="{{$affectation->personnel_id}}" />

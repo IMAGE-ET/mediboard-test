@@ -23,17 +23,26 @@ foreach ($praticiens as &$curr_prat) {
 }
 
 // Chargement des praticiens de l'établissement
-$personnel = new CPersonnel();
-$personnel->emplacement = "op";
-$personnels = $personnel->loadMatchingList();
-
+$personnelsAidesOp = CPersonnel::loadListPers("op");
+$personnelsPanseuses = CPersonnel::loadListPers("op_panseuse");
 $persusers = array();
-foreach ($personnels as &$curr_pers) {
+
+foreach($personnelsAidesOp as &$curr_pers){
   $curr_pers->loadRefUser();
-  $persuser =& $curr_pers->_ref_user;
-  $persuser->loadLastId400($tag);
-  $persusers[$persuser->_id] =& $persuser;
+  $curr_pers->_ref_user->loadLastId400($tag);
+  $persusersAidesOp["user-".$curr_pers->_ref_user->_id] = $curr_pers->_ref_user;
+  $persusersType[$curr_pers->_ref_user->_id]["op"] = 1;
 }
+
+foreach($personnelsPanseuses as &$curr_pers){
+  $curr_pers->loadRefUser();
+  $curr_pers->_ref_user->loadLastId400($tag);
+  $persusersPanseuses["user-".$curr_pers->_ref_user->_id] = $curr_pers->_ref_user;
+  $persusersType[$curr_pers->_ref_user->_id]["op_panseuse"] = 1;
+}
+
+$persusers = array_merge($persusersAidesOp, $persusersPanseuses);
+
 
 // Chargement de services
 $salle = new CSalle();
@@ -73,13 +82,14 @@ foreach($listEtabExternes as &$etabExterne){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("tag"       , $tag);
-$smarty->assign("today"     , $today);
-$smarty->assign("praticiens", $praticiens);
-$smarty->assign("persusers" , $persusers);
-$smarty->assign("services"  , $services);
-$smarty->assign("salles"    , $salles);
-$smarty->assign("listEtabExternes", $listEtabExternes);
+$smarty->assign("persusersType"    , $persusersType);
+$smarty->assign("tag"              , $tag);
+$smarty->assign("today"            , $today);
+$smarty->assign("praticiens"       , $praticiens);
+$smarty->assign("persusers"        , $persusers);
+$smarty->assign("services"         , $services);
+$smarty->assign("salles"           , $salles);
+$smarty->assign("listEtabExternes" , $listEtabExternes);
 
 $smarty->display("view_idsherpa.tpl");
 ?>

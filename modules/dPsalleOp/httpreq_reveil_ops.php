@@ -63,17 +63,10 @@ foreach($listOps as $key => $value) {
 }
 
 // Chargement de la liste du personnel pour le reveil
-$personnels = null;
+$personnels = array();
 if(Cmodule::getActive("dPpersonnel")) {
   $personnel  = new CPersonnel();
-  $wherePers = array();
-  $wherePers["emplacement"] = " = 'reveil'";
-  $ljoinPers["users"] = "personnel.user_id = users.user_id";
-  $orderPers = "users.user_last_name";   
-  $personnels = $personnel->loadList($wherePers, $orderPers, null, null, $ljoinPers);
-  foreach($personnels as $key => $_personnel){
-    $_personnel->loadRefUser();
-  }
+  $personnels = $personnel->loadListPers("reveil");
 }
 
 // Création du template
