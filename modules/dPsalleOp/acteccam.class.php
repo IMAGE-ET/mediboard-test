@@ -278,7 +278,7 @@ class CActeCCAM extends CActe {
             where $condition
             group by code_acte
             order by nb_acte DESC
-            limit 10";
+            limit 20";
   	$codes = $this->_spec->ds->loadlist($sql);
   	return $codes;
   }
