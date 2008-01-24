@@ -41,8 +41,11 @@ function signerActes(object_id, object_class){
   </tr>
   <tr>
   {{if $module == "dPsalleOp" && $dPconfig.dPsalleOp.CActeCCAM.signature}}
-  <td style="float: right">
-    <button class="new" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">Signer les actes</button>
+  <td class="button">
+    <hr />
+    <button class="tick" onclick="signerActes('{{$subject->_id}}', '{{$subject->_class_name}}')">
+      Signer les actes
+    </button>
   </td>
   {{/if}}
   </tr>

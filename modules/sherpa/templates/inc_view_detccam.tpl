@@ -76,6 +76,11 @@
   </tr>  
   
   <tr>
+		<th>{{mb_label object=$detccam field="assoc"}}</th>
+		<td>{{mb_value object=$detccam field="assoc"}}</td>
+  </tr>  
+  
+  <tr>
 		<th>{{mb_label object=$detccam field="dephon"}}</th>
 		<td>{{mb_value object=$detccam field="dephon"}}</td>
   </tr>  
