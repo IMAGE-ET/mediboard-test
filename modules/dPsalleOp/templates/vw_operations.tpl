@@ -152,7 +152,7 @@ function reloadAfterSaveDoc() {
         <!-- Premier onglet => Timings -->
       	<tbody id="one">
           <tr>
-            <th class="category" style="vertical-align: middle">Timming</th>
+            <th class="category" style="vertical-align: middle">Timing</th>
             <td>
               <div id="timing">
                 {{include file="inc_vw_timing.tpl"}}

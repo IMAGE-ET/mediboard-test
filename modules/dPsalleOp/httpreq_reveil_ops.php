@@ -52,7 +52,7 @@ foreach($listOps as $key => $value) {
   }
   $listOps[$key]->_ref_plageop->loadRefsFwd();
   $listOps[$key]->_ref_sejour->loadRefsFwd();
-  //Tableau des timmings
+  //Tableau des timings
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
   foreach($timing[$key] as $key2 => $value2) {

@@ -43,7 +43,7 @@ foreach($listReveil as $key => $value) {
     $listReveil[$key]->_ref_sejour->_ref_first_affectation->_ref_lit->loadCompleteView();
   }
   $listReveil[$key]->_ref_plageop->loadRefsFwd();
-  //Tableau des timmings
+  //Tableau des timings
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
   foreach($timing[$key] as $key2 => $value2) {
