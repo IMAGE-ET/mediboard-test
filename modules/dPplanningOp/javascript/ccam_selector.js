@@ -6,6 +6,7 @@ var CCAMSelector = {
   sTarif    : null,
   sClass    : null,
   sChir     : null,
+  sAnesth   : null,
   oUrl      : null,
   selfClose : true,
   options : {
@@ -18,6 +19,9 @@ var CCAMSelector = {
     this.oUrl = new Url();
     this.oUrl.setModuleAction("dPplanningOp", "code_selector");
     
+    if(this.sAnesth) {
+      this.oUrl.addParam("anesth"    , oForm[this.sAnesth].value);
+    }
     this.oUrl.addParam("chir"        , oForm[this.sChir].value);
     this.oUrl.addParam("object_class", oForm[this.sClass].value);
     this.oUrl.addParam("type"        , "ccam");

@@ -7,6 +7,9 @@
   <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
   <input type="submit" disabled="disabled" style="display:none;"/>
   <input type="hidden" name="_chir" value="{{$subject->_praticien_id}}" />
+  {{if ($subject->_class_name=="COperation")}}
+  <input type="hidden" name="_anesth" value="{{$subject->_ref_plageop->anesth_id}}" />
+  {{/if}}
   <input type="hidden" name="_class_name" value="{{$subject->_class_name}}" />
       
   {{if $can->edit || $modif_operation}}
@@ -66,6 +69,9 @@
             this.sForm = "manageCodes";
             this.sClass = "_class_name";
             this.sChir = "_chir";
+            {{if ($subject->_class_name=="COperation")}}
+            this.sAnesth = "_anesth";
+            {{/if}}
             this.sView = "_newCode";
           this.pop();
           }

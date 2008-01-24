@@ -16,21 +16,27 @@ $ds = CSQLDataSource::get("std");
 // @ todo : pourquoi on arrive pas à y accéder dès que le module n'est pas visible ???
 //$can->needsRead();
 
-$list = array();
-$list2 = array();
-$fusion = array();
-$fusionCim = array();
+$list         = array();
+$list2        = array();
+$listAnesth   = array();
+$list2Anesth  = array();
+$fusion       = array();
+$fusionAnesth = array();
+$fusionCim    = array();
 
-$type = mbGetValueFromGet("type", 0 );
-$chir = mbGetValueFromGet("chir", 0 );
+$type         = mbGetValueFromGet("type", 0 );
+$chir         = mbGetValueFromGet("chir", 0 );
+$anesth       = mbGetValueFromGet("anesth", 0 );
 $object_class = mbGetValueFromGet("object_class", 0 );
-$view = mbGetValueFromGet("view", "alpha");
+$view         = mbGetValueFromGet("view", "alpha");
 
 switch($type) {
 	case "ccam" :
   case "ccam2":
-  	$condition=($object_class=="")?"favoris_user = '$chir' or favoris_user = '$AppUI->user_id'":
-  	"(favoris_user = '$chir' or favoris_user = '$AppUI->user_id') and object_class = '$object_class'";
+  	$condition = "(favoris_user = '$chir' OR favoris_user = '$AppUI->user_id')";
+  	if($object_class != "") { 
+  	  $condition .= " AND object_class = '$object_class'";
+  	}
 		$sql = "select favoris_code
 				from ccamfavoris
 				where $condition
@@ -42,6 +48,25 @@ switch($type) {
       $list[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
       $list[$value["favoris_code"]]["codeccam"]->loadMedium();
       $list[$value["favoris_code"]]["codeccam"]->occ = "0";
+    }
+    
+    if($anesth) {
+	  	$condition = "favoris_user = '$anesth'";
+	  	if($object_class != "") { 
+	  	  $condition .= " AND object_class = '$object_class'";
+	  	}
+			$sql = "select favoris_code
+					from ccamfavoris
+					where $condition
+					group by favoris_code
+					order by favoris_code";
+			$codes = $ds->loadlist($sql);
+	
+	    foreach($codes as $key => $value) {
+	      $listAnesth[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
+	      $listAnesth[$value["favoris_code"]]["codeccam"]->loadMedium();
+	      $listAnesth[$value["favoris_code"]]["codeccam"]->occ = "0";
+      }
     }
   
     break;
@@ -128,18 +153,49 @@ if($type=="ccam"){
   if($view=="alpha") {
     sort($fusion);
   }
+  
+  if($anesth) {
+	  //Appel de la fonction listant les codes les plus utilisés pour un praticien 
+	  $actes = new CActeCCAM();
+	  $codes = $actes->getFavoris($anesth, $object_class, $view);
+	
+	  foreach($codes as $key => $value) {
+	    $list2Anesth[$value["code_acte"]]["codeccam"] = new CCodeCCAM($value["code_acte"]);
+	    $list2Anesth[$value["code_acte"]]["codeccam"]->loadMedium();
+	    $list2Anesth[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
+	  }
+	
+	  // Fusion des 2 tableaux
+	  $fusionAnesth = $list2Anesth;
+	 
+	  foreach($listAnesth as $keycode => $code){
+	  	if(!array_key_exists($keycode, $fusionAnesth)) {
+	  		$fusionAnesth[$keycode] = $code;
+	  		continue;
+	  	}
+	  }
+	 
+	  // si tri par ordre alphabetique selectionne
+	  if($view=="alpha") {
+	    sort($fusionAnesth);
+	  }
+  }
 }
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("view",$view);
-$smarty->assign("type", $type);
-$smarty->assign("list", $list);
-$smarty->assign("fusionCim", $fusionCim);
-$smarty->assign("fusion", $fusion);
-$smarty->assign("list2", $list2);
+$smarty->assign("view"        ,$view);
+$smarty->assign("type"        , $type);
+$smarty->assign("list"        , $list);
+$smarty->assign("list2"       , $list2);
+$smarty->assign("listAnesth"  , $listAnesth);
+$smarty->assign("list2Anesth" , $list2Anesth);
+$smarty->assign("fusion"      , $fusion);
+$smarty->assign("fusionAnesth", $fusionAnesth);
+$smarty->assign("fusionCim"   , $fusionCim);
 $smarty->assign("object_class", $object_class);
-$smarty->assign("chir" , $chir);
+$smarty->assign("chir"        , $chir);
+$smarty->assign("anesth"      , $anesth);
 $smarty->display("code_selector.tpl");
 
 ?>

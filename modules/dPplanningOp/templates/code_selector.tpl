@@ -35,6 +35,7 @@ function view_() {
   url.addParam("type", "ccam"); 
   url.addElement(oForm.view);
   url.addElement(oForm.chir);
+  url.addElement(oForm.anesth);
   url.addElement(oForm.object_class);  
   url.addParam("dialog", 1);
   url.redirect();
@@ -51,18 +52,25 @@ function viewCim(){
   url.redirect();
 }
 
+function pageMain() {
+  {{if $fusionAnesth|@count}}
+  new Control.Tabs('main_tab_group');
+  {{/if}}
+}
 
 </script>
 
 
 <table class="selectCode">
-{{if $type=="ccam"}}  
+{{if $type=="ccam"}} 
+  <tbody> 
   <tr>
   	<th>Favoris disponibles</th>
     <td>
-      <form name="selView">
-      <input type="hidden" name="chir" value="{{$chir}}">
-  	  <input type="hidden" name="object_class" value="{{$object_class}}">
+      <form name="selView" action="?">
+      <input type="hidden" name="chir" value="{{$chir}}" />
+      <input type="hidden" name="anesth" value="{{$anesth}}" />
+  	  <input type="hidden" name="object_class" value="{{$object_class}}" />
       <select name="view" onchange="view_();">
   	    <option>&mdash; Choisir un mode d'affichage</option>
   	    <option value="alpha" {{if $view == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
@@ -70,7 +78,17 @@ function viewCim(){
   	  </select>
   	  </form>
   	</td>
+  	<th>
+  	  {{if $fusionAnesth|@count}}
+  	  <ul id="main_tab_group" class="control_tabs">
+        <li><a class="" href="#Chir">Chir</a></li>
+        <li><a class="" href="#Anesth">Anesth</a></li>
+      </ul>
+      {{/if}}
+  	</th>
   </tr>
+  </tbody>
+  <tbody id="Chir">
   <tr>
   {{foreach from=$fusion item=curr_code key=curr_key name=fusion}}
     <td>
@@ -100,6 +118,40 @@ function viewCim(){
   {{/if}}
   {{/foreach}}
   </tr>
+  </tbody>
+  {{if $fusionAnesth|@count}}
+  <tbody id="Anesth">
+  <tr>
+  {{foreach from=$fusionAnesth item=curr_code key=curr_key name=fusion}}
+    <td>
+      <strong><span style="float:left">{{$curr_code.codeccam->code}}</span>
+      {{if $curr_code.codeccam->occ==0}}
+      <span style="float:right">Favoris</span>
+      {{else}}
+      <span style="float:right">{{$curr_code.codeccam->occ}} acte(s)</span>
+      {{/if}}
+      </strong><br />
+      <small>(
+      {{foreach from=$curr_code.codeccam->activites item=curr_activite}}
+        {{foreach from=$curr_activite->phases item=curr_phase}}
+          <a href="#" onclick="setClose('{{$curr_code.codeccam->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">{{$curr_activite->numero}}-{{$curr_phase->phase}}</a>
+        {{/foreach}}
+      {{/foreach}}   
+      )</small>
+      <br />
+      {{$curr_code.codeccam->libelleLong}}
+      <br />
+      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">
+        {{tr}}Select{{/tr}}
+      </button>
+    </td>  
+  {{if $smarty.foreach.fusion.index % 3 == 2}}
+  </tr><tr>
+  {{/if}}
+  {{/foreach}}
+  </tr>
+  </tbody>
+  {{/if}}
 </table>
 {{/if}}
 

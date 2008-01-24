@@ -87,7 +87,7 @@
     </td>
   </tr>
 </table>
-<script>
+<script type="text/javascript">
 CIM10Selector.set = function(code){
   var oForm = document[this.sForm];
   oForm[this.sView].value = code;
