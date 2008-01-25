@@ -166,7 +166,7 @@
   <tr><td class="info" colspan="2"><b>Pour votre hospitalisation, prière de vous munir de :</b>
   <ul>
     <li>
-      Carte Vitale ou, à défaut, attestation de sécurité sociale, 
+      Carte Vitale et attestation de sécurité sociale, 
       carte de mutuelle accompagnée de la prise en charge le cas échéant.
     </li>
     <li>Tous examens en votre possession (analyse, radio, carte de groupe sanguin...).</li>
