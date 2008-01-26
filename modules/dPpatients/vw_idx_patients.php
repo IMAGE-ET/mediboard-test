@@ -39,7 +39,6 @@ if ($new = mbGetValueFromGet("new")) {
 $patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
 $patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
 $patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
-$soundex             = mbGetValueFromGetOrSession("soundex"     , "off"    );
 $patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
 $patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
 $patient_day         = mbGetValueFromGet("Date_Day"    , "");
@@ -139,19 +138,21 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	$pat = new CPatient();
 	
 	// Patient counts
-	$patientsCount = $where ? $pat->countList($where) : 0;
-	$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
-	$patientsSoundexCount -= $patientsCount;
+	//$patientsCount = $where ? $pat->countList($where) : 0;
+	//$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
+	//$patientsSoundexCount -= $patientsCount;
 	
 	// Chargement des patients
-	if ($where && ($soundex == "off")) {
+	if ($where) {
 	  $patients = $pat->loadList($where, $order, "0, $showCount");
 	}
+	$patientsCount = $where ? count($patients) : 0;
 	
 	if ($whereSoundex) {
 	  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $showCount");
 	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
 	}
+	$patientsSoundexCount = $whereSoundex ? count($patientsSoundex) : 0;
 	
 	// Sélection du premier de la liste si aucun n'est déjà sélectionné
 	if (!$patient->_id and count($patients) == 1) {
@@ -189,15 +190,14 @@ $patient->loadIdVitale();
 $smarty = new CSmartyDP();
 
 $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
-$smarty->assign("canPatients"  , CModule::getCanDo("dPpatients"));
-$smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
-$smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
-$smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
+$smarty->assign("canPatients"     , CModule::getCanDo("dPpatients")    );
+$smarty->assign("canAdmissions"   , CModule::getCanDo("dPadmissions")  );
+$smarty->assign("canPlanningOp"   , CModule::getCanDo("dPplanningOp")  );
+$smarty->assign("canCabinet"      , CModule::getCanDo("dPcabinet")     );
 
 $smarty->assign("nom"                 , $patient_nom              );
 $smarty->assign("prenom"              , $patient_prenom           );
 $smarty->assign("jeuneFille"          , $patient_jeuneFille       );
-$smarty->assign("soundex"             , $soundex                  );
 $smarty->assign("naissance"           , $patient_naissance        );
 $smarty->assign("ville"               , $patient_ville            );
 $smarty->assign("cp"                  , $patient_cp               );
@@ -206,7 +206,7 @@ $smarty->assign("useVitale"           , $useVitale                );
 $smarty->assign("patVitale"           , $patVitale                );
 $smarty->assign("patients"            , $patients                 );
 $smarty->assign("patientsSoundex"     , $patientsSoundex          );
-$smarty->assign("patientsCount"       , $patientsCount            );  
+$smarty->assign("patientsCount"       , $patientsCount            );
 $smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
 
 
