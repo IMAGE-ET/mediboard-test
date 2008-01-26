@@ -2030,7 +2030,9 @@ tr.triggerHide td {
 }
 
 tr.triggerShow td,
+td.triggerShow,
 tr.triggerHide td,
+td.triggerHide,
 tr.triggerShow th,
 tr.triggerHide th,
 div.triggerShow,
@@ -2043,12 +2045,14 @@ div.triggerHide {
 
 tr.triggerHide td,
 tr.triggerHide th,
+td.triggerHide,
 div.triggerHide {
   background-image: url(../../images/icons/expand.gif);
 }
 
 tr.triggerShow td,
 tr.triggerShow th,
+td.triggerShow,
 div.triggerShow {
   background-image: url(../../images/icons/collapse.gif);
 }

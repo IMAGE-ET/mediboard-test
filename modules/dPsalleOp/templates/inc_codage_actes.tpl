@@ -56,12 +56,20 @@ function viewCode(code, class){
 
   <table class="form">
     
-    <tr id="acte{{$key}}-trigger">  
-      <td colspan="2" style="{{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
-
-    {{if $can->edit || $modif_operation}}
+    <tr id="acte{{$key}}-trigger">
+      <td colspan="3" style="width: 100%; {{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
+        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
+        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+      </td>
+      {{if 0}}
+      <td id="acte{{$key}}-trigger" colspan="2" style="width: 100%; {{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
+        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
+        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+      </td>
+      <td style="width: 1%; background-image: none; padding: 0px;">
+      {{if $can->edit || $modif_operation}}
         {{if !$acte->acte_id}}
-        <button class="new" type="button" style="float:right" onclick="
+        <button class="new" type="button" onclick="
           {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
           if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
             document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
@@ -74,35 +82,38 @@ function viewCode(code, class){
 
         {{else}}
         
-        <button class="modify" type="button" style="float:right" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
           {{tr}}Modify{{/tr}}
         </button>
-        
-        <button class="trash" type="button" style="float:right" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
           {{tr}}Delete{{/tr}}
         </button>
         
         {{/if}}
-    {{/if}}
-
-        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+      {{/if}}
       </td>
+      {{/if}}
     </tr>
   
     <tbody class="acteEffect" id="acte{{$key}}" style="display: none;">
     
     <tr style="display: none;">
       <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
-      <td>
+      <td colspan="2">
         <input type="text" name="execution" class="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
         <button class="tick" onclick="this.form.execution.value = new Date().toDATETIME());">Maintenant</button><br />
       </td>
     </tr>
     
     <tr class="{{$key}}">
+      <td style="width: 1%;" />
+      <td style="width: 100%;" />
+      <td style="width: 100%;" />
+    </tr>
+    
+    <tr class="{{$key}}">
       <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
-      <td>
+      <td colspan="2">
       
       {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
      
@@ -124,7 +135,7 @@ function viewCode(code, class){
     </tr>
     <tr class="{{$view}}">
       <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
-      <td class="text">
+      <td class="text" colspan="2">
         {{foreach from=$curr_phase->_modificateurs item=curr_mod}}
           {{if $can->edit || $modif_operation}}
           <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
@@ -142,7 +153,7 @@ function viewCode(code, class){
     {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
     <tr class="{{$view}}">
       <th><label for="montant_depassement" title="Dépassement d'honoraire">Dépassement</label></th>
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit || $modif_operation}}
           {{mb_field object=$acte field="montant_depassement"}}
         {{elseif $acte->montant_depassement}}
@@ -154,7 +165,7 @@ function viewCode(code, class){
 
     <tr>
       <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
-      <td class="text">
+      <td class="text" colspan="2">
         {{if $can->edit || $modif_operation}}
         <textarea name="commentaire" class="{{$acte->_props.commentaire}}">{{$acte->commentaire}}</textarea>
         {{elseif $acte->commentaire}}
@@ -166,7 +177,7 @@ function viewCode(code, class){
     </tbody>
     
     <tr>
-      <td colspan="2">
+      <td colspan="3" class="text">
         {{if $acte->_id}}
         <select name="{{$view}}"
         onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
@@ -179,7 +190,7 @@ function viewCode(code, class){
         </select>
         
         <strong>
-        association pour {{$curr_activite->type}}
+        asso. pour {{$curr_activite->type}}
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
           &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
         {{/if}}
@@ -202,6 +213,34 @@ function viewCode(code, class){
         &mdash; dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
         {{/if}}
         {{/if}}
+      </td>
+    </tr>
+    <tr>
+      <td class="button" colspan="3">
+      {{if $can->edit || $modif_operation}}
+        {{if !$acte->acte_id}}
+        <button class="new" type="button" onclick="
+          {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
+          if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
+            document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
+            ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
+          }
+          {{/if}}
+          submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} });">
+          Coder cet acte
+        </button>
+
+        {{else}}
+        
+        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          {{tr}}Modify{{/tr}}
+        </button>
+        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          {{tr}}Delete{{/tr}}
+        </button>
+        
+        {{/if}}
+      {{/if}}
       </td>
     </tr>
     

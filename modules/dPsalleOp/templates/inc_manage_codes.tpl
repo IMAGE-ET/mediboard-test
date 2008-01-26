@@ -47,9 +47,6 @@
           {{foreach from=$subject->_associationCodesActes item=curr_code}}
           <option value="{{$curr_code.code}}" onclick="this.form._actes.value = '{{$curr_code.ids}}'">
             {{$curr_code.code|truncate:7:""|capitalize}}
-            {{if $curr_code.nbActes}}
-              ({{$curr_code.nbActes}} actes)
-            {{/if}}
           </option>
           {{/foreach}}
         </select>
