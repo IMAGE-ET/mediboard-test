@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-CActeCCAM-signature'] = '';
+$locales['mod-dPsalleOp-tab-vw_urgences'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = '';
 $locales['CActeCCAM-acte_id-court'] = '';
@@ -68,7 +68,11 @@ $locales['CActeCCAM.object_class.CSejour'] = '';
 $locales['CActeCCAM.one'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = '';
+$locales['config-dPsalleOp-CActeCCAM-signature'] = '';
 $locales['config-dPsalleOp-CActeCCAM-tarif'] = '';
+$locales['config-dPsalleOp-CDossierMedical-DAS'] = '';
+$locales['mod-dPsalleOp-tab-vw_operations'] = '';
+$locales['mod-dPsalleOp-tab-vw_reveil'] = '';
 $locales['pref-ccam_consultation-0'] = '';
 $locales['pref-ccam_consultation-1'] = '';
 $locales['pref-ccam_sejour-0'] = '';

@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-CActeCCAM-signature'] = 'Affichage des signatures';
+$locales['mod-dPsalleOp-tab-vw_urgences'] = 'Liste des urgences';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';
 $locales['CActeCCAM-acte_id-court'] = 'Id';
@@ -68,7 +68,11 @@ $locales['CActeCCAM.object_class.CSejour'] = 'Séjour';
 $locales['CActeCCAM.one'] = 'Un acte CCAM';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = 'Actes exécutés';
+$locales['config-dPsalleOp-CActeCCAM-signature'] = 'Affichage des signatures';
 $locales['config-dPsalleOp-CActeCCAM-tarif'] = 'Affichage des informations de tarification';
+$locales['config-dPsalleOp-CDossierMedical-DAS'] = 'Affichage des diagnostics associés';
+$locales['mod-dPsalleOp-tab-vw_operations'] = 'Salle d\'opération';
+$locales['mod-dPsalleOp-tab-vw_reveil'] = 'Salle de reveil';
 $locales['pref-ccam_consultation-0'] = 'Cacher';
 $locales['pref-ccam_consultation-1'] = 'Visible';
 $locales['pref-ccam_sejour-0'] = 'Cacher';

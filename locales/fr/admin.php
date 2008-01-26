@@ -1,5 +1,4 @@
 <?php
-$locales['mod-admin-tab-vw_all_perms'] = 'Grille des droits';
 $locales['CAffectation._mode_sortie.deces'] = 'Décès ';
 $locales['CAffectation._mode_sortie.normal'] = 'Normal';
 $locales['CAffectation._mode_sortie.transfert'] = 'Transfert';
@@ -114,6 +113,7 @@ $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Afficher/masquer les icônes dans le menu';
 $locales['mod-admin-tab-edit_perms'] = 'Gestion des droits';
 $locales['mod-admin-tab-edit_prefs'] = 'Préférences utilisateur';
+$locales['mod-admin-tab-vw_all_perms'] = 'Grille des droits';
 $locales['mod-admin-tab-vw_edit_users'] = 'Utilisateurs';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = 'Planning des Repas';
 $locales['msg-CPermModule-create'] = 'Permission créée';

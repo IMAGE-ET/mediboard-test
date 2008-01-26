@@ -1,5 +1,4 @@
 <?php
-$locales['mod-admin-tab-vw_all_perms'] = '';
 $locales['CAffectation._mode_sortie.deces'] = '';
 $locales['CAffectation._mode_sortie.normal'] = '';
 $locales['CAffectation._mode_sortie.transfert'] = '';
@@ -114,6 +113,7 @@ $locales['CUser.one'] = '';
 $locales['menu-toggleIcons'] = 'Toggle icons in menu';
 $locales['mod-admin-tab-edit_perms'] = '';
 $locales['mod-admin-tab-edit_prefs'] = 'User preferences';
+$locales['mod-admin-tab-vw_all_perms'] = '';
 $locales['mod-admin-tab-vw_edit_users'] = '';
 $locales['mod-dPrepas-tab-vw_planning_repas'] = '';
 $locales['msg-CPermModule-create'] = '';
