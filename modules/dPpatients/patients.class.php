@@ -121,6 +121,7 @@ class CPatient extends CMbObject {
   var $_tel44       = null;
   var $_tel45       = null;
   var $_age         = null;
+  var $_article     = null;
   
   // Vitale
   var $_bind_vitale = null;
@@ -476,14 +477,24 @@ class CPatient extends CMbObject {
     $this->updateFormTel("assure_tel", "_assure_tel");  
     $this->updateFormTel("assure_tel2", "_assure_tel2");
     
-    if ($this->_age != "??" && $this->_age <= 15)
+    if ($this->_age != "??" && $this->_age <= 15){
       $this->_shortview = "Enf.";
-    elseif($this->sexe == "m")
+      if($this->sexe == "m"){
+        $this->_article = "le jeune";
+      }
+      if($this->sexe == "j"){
+        $this->_article = "la jeune";
+      }
+    } elseif($this->sexe == "m"){
       $this->_shortview = "M.";
-    elseif($this->sexe == "f")
+      $this->_article = "Monsieur";
+    } elseif($this->sexe == "f"){
       $this->_shortview = "Mme.";
-    else
+      $this->_article = "Madame";
+    } else { 
       $this->_shortview = "Mlle.";
+      $this->_article = "Mademoiselle";
+    }  
       
     $this->_view = $this->_shortview." $this->nom $this->prenom";
     
@@ -948,7 +959,8 @@ class CPatient extends CMbObject {
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
 
-    $template->addProperty("Patient - article"           , $this->_shortview );
+    $template->addProperty("Patient - article court"     , $this->_shortview );
+    $template->addProperty("Patient - article long"      , $this->_article   );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
     $template->addProperty("Patient - adresse"           , $this->adresse    );

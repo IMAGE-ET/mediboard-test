@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPpatients-CPatient-merge_only_admin'] = '';
 $locales['BindVitale'] = '';
 $locales['CAddiction'] = '';
 $locales['CAddiction-addiction'] = '';

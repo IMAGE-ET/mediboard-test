@@ -99,8 +99,8 @@ function popEtatSejour(sejour_id) {
     <span class="tooltip-trigger"
       onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CSejour', object_id: {{$curr_sejour->_id}} } })"
       onclick="viewCompleteItem('CSejour', {{$curr_sejour->_id}}); ViewFullPatient.select(this)">
-      Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
-      au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
+      Du {{$curr_sejour->_entree|date_format:"%d/%m/%Y"}}
+      au {{$curr_sejour->_sortie|date_format:"%d/%m/%Y"}}
     </span>
   </td>
   <td>

@@ -119,7 +119,11 @@ var Patient = {
 <input type="hidden" name="a" value="fusion_pat" />
 <table class="tbl">
   <tr>
-    <th><button type="submit" class="search">{{tr}}Merge{{/tr}}</button></th>
+    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
+    <th>
+    <button type="submit" class="search">{{tr}}Merge{{/tr}}</button>
+    </th>
+    {{/if}}
     <th>
       Patient
       ({{$patientsCount}} {{tr}}found{{/tr}})
@@ -134,7 +138,9 @@ var Patient = {
   
   {{foreach from=$patients item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
+    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
+    {{/if}}
     <td class="text">
       {{if $curr_patient->_id == $patVitale->_id}}
       <div style="float:right;">
@@ -174,7 +180,9 @@ var Patient = {
   {{/if}}
   {{foreach from=$patientsSoundex item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
+    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
+    {{/if}}
     <td class="text">
       <a href="?m=dPpatients&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
         {{mb_value object=$curr_patient field="_view"}}

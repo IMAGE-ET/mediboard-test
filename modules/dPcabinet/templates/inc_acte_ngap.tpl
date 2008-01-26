@@ -70,6 +70,7 @@ ActesNGAP = {
       <th class="category">{{tr}}CActeNGAP-coefficient{{/tr}}</th>
       <th class="category">{{tr}}CActeNGAP-montant_base{{/tr}}</th>
       <th class="category">{{tr}}CActeNGAP-montant_depassement{{/tr}}</th>
+      <th class="category">{{tr}}CActeNGAP-demi{{/tr}}</th>
       {{if !$object->_coded}}
       <th class="category">Action</th>
       {{/if}}
@@ -92,6 +93,9 @@ ActesNGAP = {
       </td>
       <td>
         {{mb_field object=$acte_ngap field="montant_depassement"}}
+      </td>
+      <td>
+        {{mb_field object=$acte_ngap field="demi"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
@@ -117,6 +121,10 @@ ActesNGAP = {
       <td>
         {{mb_value object=$_acte_ngap field="montant_depassement"}}
       </td>
+      <td>
+        {{mb_value object=$_acte_ngap field="demi"}}
+      </td>
+      
       {{if !$object->_coded}}
       <td>
        	<button type="button" class="trash" onclick="ActesNGAP.remove({{$_acte_ngap->_id}})">

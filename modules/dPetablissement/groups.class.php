@@ -147,5 +147,14 @@ class CGroups extends CMbObject {
     
     return $groups;    
   }
+  
+  function fillLimitedTemplate(&$template) {
+    $template->addProperty("Etablissement - Nom"       , $this->text );
+    $template->addProperty("Etablissement - Adresse"   , "$this->adresse $this->cp $this->ville");
+    $template->addProperty("Etablissement - Téléphone" , $this->tel        );
+    $template->addProperty("Etablissement - Fax"       , $this->fax       );
+  }
+  
+  
 }
 ?>

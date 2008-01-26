@@ -46,9 +46,12 @@ $chir_id = mbGetValueFromGet("chir");
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 
-// En fonction du praticien
-if($filter->_prat_id) {
-  $where["chir_id"] = $ds->prepare("= %", $filter->_prat_id);
+// Filtre par specialite
+if ($filter->_specialite or $filter->_prat_id) {
+  $chir = new CMediusers;
+  // Chargement de la liste des chirs qui ont la specialite selectionnee
+  $chirs = $chir->loadList(array ("function_id" => "= '$filter->_specialite '"));
+  $where["chir_id"] = $ds->prepareIn(array_keys($chirs), $filter->_prat_id);
 }
 
 // En fonction de la salle

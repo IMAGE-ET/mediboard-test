@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.92";
+$config["mod_version"]     = "0.93";
 $config["mod_type"]        = "user";
 
 
@@ -952,7 +952,12 @@ class CSetupdPcabinet extends CSetup {
             WHERE `pref_name` = 'ccam'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.92";
+    $this->makeRevision("0.92");
+    $sql = "ALTER TABLE `acte_ngap` 
+            ADD `demi` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.93";
   }
 }
 ?>

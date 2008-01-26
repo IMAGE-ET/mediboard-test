@@ -648,10 +648,17 @@ class CSejour extends CCodable {
       $this->_ref_patient->fillTemplate($template);
     }
     
+    // Chargement du diagnostic Principal
+    $this->loadRefDiagnosticPrincipal();
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->sortie_prevue, $dateFormat));
+    if($this->DP){
+      $template->addProperty("Sejour - Diagnostic Principal"    , "$this->DP: {$this->_ext_diagnostic_principal->libelle}");
+    } else {
+      $template->addProperty("Sejour - Diagnostic Principal"    , $this->DP);  
+    }
     
     $this->loadRefDossierMedical();
     // Dossier médical

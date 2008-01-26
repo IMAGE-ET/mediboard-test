@@ -13,11 +13,12 @@
  */
 class CTypeAnesth extends CMbObject {
   // DB Table key
-  var $type_anesth_id = null;
+  var $type_anesth_id         = null;
 
   // DB Fields
-  var $name           = null;
-
+  var $name                   = null;
+  var $ext_doc = null;
+  
   function CTypeAnesth() {
     $this->CMbObject("type_anesth", "type_anesth_id");
     
@@ -32,7 +33,8 @@ class CTypeAnesth extends CMbObject {
   
   function getSpecs() {
     return array (
-      "name" => "notNull str"
+      "name" => "notNull str",
+      "ext_doc" => "enum list|1|2|3|4|5|6"
     );
   }
   

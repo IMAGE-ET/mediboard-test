@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPpatients-CPatient-merge_only_admin'] = 'Fusion uniquement pour les admins';
 $locales['BindVitale'] = 'Lier à un bénéficiaire Vitale';
 $locales['CAddiction'] = 'Addiction';
 $locales['CAddiction-addiction'] = 'Addiction';

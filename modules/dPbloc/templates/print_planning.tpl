@@ -102,7 +102,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
-            <select name="_prat_id">
+            <select name="_prat_id" onchange="this.form._specialite.value = '0';">
               <option value="0">&mdash; Tous les praticiens &mdash;</option>
               {{foreach from=$listPrat item=curr_prat}}
                 <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}" >
@@ -115,7 +115,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$filter field="_specialite"}}</th>
           <td>
-            <select name="_specialite">
+            <select name="_specialite" onchange="this.form._prat_id.value = '0';">
               <option value="0">&mdash; Toutes les spécialités &mdash;</option>
               {{foreach from=$listSpec item=curr_spec}}
                 <option value="{{$curr_spec->function_id}}" class="mediuser" style="border-color: #{{$curr_spec->color}};">

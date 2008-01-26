@@ -1,12 +1,13 @@
 <table class="main">
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" colspan="2">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id=0">
         {{tr}}CTypeAnesth.create{{/tr}}
       </a>
       <table class="tbl">
         <tr>
           <th>{{tr}}CTypeAnesth-name-court{{/tr}}</th>
+          <th>{{tr}}CTypeAnesth-ext_doc{{/tr}}</th>
         </tr>
         {{foreach from=$listTypeAnesth item=curr_TypeAnesth}}
         <tr>
@@ -14,6 +15,13 @@
             <a href="?m={{$m}}&amp;tab=vw_edit_typeanesth&amp;type_anesth_id={{$curr_TypeAnesth->type_anesth_id}}" title="{{tr}}CTypeAnesth-modify{{/tr}}">
               {{$curr_TypeAnesth->name}}
             </a>
+          </td>
+          <td>
+          {{if $curr_TypeAnesth->ext_doc}}
+          {{tr}}CTypeAnesth.ext_doc.{{$curr_TypeAnesth->ext_doc}}{{/tr}}
+          {{else}}
+          Aucune extension documentaire
+          {{/if}}
           </td>
         </tr>
         {{/foreach}}        
@@ -36,6 +44,10 @@
         <tr>
           <th>{{mb_label object=$type_anesth field="name"}}</th>
           <td>{{mb_field object=$type_anesth field="name"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$type_anesth field="ext_doc"}}</th>
+          <td>{{mb_field object=$type_anesth field="ext_doc" defaultOption="&mdash; Sélection d'une extension"}}</td>
         </tr>  
         <tr>
           <td class="button" colspan="2">

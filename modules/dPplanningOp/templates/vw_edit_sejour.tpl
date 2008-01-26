@@ -55,7 +55,9 @@ function pageMain() {
       {{include file="inc_form_sejour.tpl"}}
     </td>
     <td>
+      {{if $can->edit}}
       {{include file="inc_infos_operation.tpl"}}
+      {{/if}}
       {{include file="inc_infos_hospitalisation.tpl"}}
     </td>
   </tr>

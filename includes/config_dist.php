@@ -207,7 +207,8 @@ $dPconfig["graph_svg"] = "non";
 
 $dPconfig["dPpatients"]["CPatient"] = array (
   "tag_ipp" => "",
-  "date_naissance" => "0"
+  "date_naissance" => "0",
+  "merge_only_admin" => "0"
 );
   
 $dPconfig["dPsante400"] = array (
