@@ -637,16 +637,9 @@ class CSejour extends CCodable {
     }
   }
   
-  function fillTemplate(&$template) {
+  function fillLimitedTemplate(&$template) {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
-    
-    $this->loadRefsFwd();
-    
-    if($this->_ref_patient->_id){
-      // Ajout d'un fillTemplate du patient
-      $this->_ref_patient->fillTemplate($template);
-    }
     
     // Chargement du diagnostic Principal
     $this->loadRefDiagnosticPrincipal();
@@ -659,6 +652,16 @@ class CSejour extends CCodable {
     } else {
       $template->addProperty("Sejour - Diagnostic Principal"    , $this->DP);  
     }
+  }
+  
+  function fillTemplate(&$template) {
+    
+    $this->loadRefsFwd();
+    
+    // Ajout d'un fillTemplate du patient
+    $this->_ref_patient->fillTemplate($template);
+    
+    $this->fillLimitedTemplate($template);
     
     $this->loadRefDossierMedical();
     // Dossier médical

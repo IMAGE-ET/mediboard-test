@@ -956,7 +956,7 @@ class CPatient extends CMbObject {
     return $siblings;
   }
   
-  function fillTemplate(&$template) {
+  function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
 
     $template->addProperty("Patient - article court"     , $this->_shortview );
@@ -999,6 +999,10 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
     }
     
+  }
+  
+  function fillTemplate(&$template) {
+    $this->fillLimitedTemplate($template);
     $this->loadRefDossierMedical();
     // Dossier médical
     $this->_ref_dossier_medical->fillTemplate($template);

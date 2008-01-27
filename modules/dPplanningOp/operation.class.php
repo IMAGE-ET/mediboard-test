@@ -460,7 +460,14 @@ class COperation extends CCodable {
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_sejour->loadRefsFwd();
+    
+    // Chargement du fillTemplate du praticien
     $this->_ref_chir->fillTemplate($template);
+
+    // Chargement du fillTemplate du sejour
+    $this->_ref_sejour->fillTemplate($template);
+    
+    // Chargement du fillTemplate de l'opération 
     $this->fillLimitedTemplate($template);
   }
   
@@ -469,9 +476,6 @@ class COperation extends CCodable {
 
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
-
-    // Chargement du fillTemplate du sejour
-    $this->_ref_sejour->fillTemplate($template);
     
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);

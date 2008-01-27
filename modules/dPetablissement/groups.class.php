@@ -155,6 +155,10 @@ class CGroups extends CMbObject {
     $template->addProperty("Etablissement - Fax"       , $this->fax       );
   }
   
+  function fillTemplate(&$template) {
+    $this->fillLimitedTemplate($template);
+  }
+  
   
 }
 ?>
