@@ -116,6 +116,7 @@ function pageMain() {
         </tr>
         {{/foreach}}
  
+        {{if $act|@count}}
         <tr>
           <td><strong>Activités associées</strong></td>
         </tr>
@@ -148,7 +149,9 @@ function pageMain() {
           </td>
         </tr>
         {{/foreach}}
+        {{/if}}
         
+        {{if $codeproc}}
         <tr>
           <td><strong>Procédure associée</strong></td>
         </tr>
@@ -160,7 +163,9 @@ function pageMain() {
             {{$textproc}}
           </td>
         </tr>
+        {{/if}}
         
+        {{if $remboursement !== null}}
         <tr>
           <td><strong>Remboursement</strong></td>
         </tr>
@@ -168,6 +173,7 @@ function pageMain() {
         <tr>
           <td>{{tr}}CCodeCCAM.remboursement.{{$remboursement}}{{/tr}}</td>
         </tr>
+        {{/if}}
       </table>
 
     </td>
