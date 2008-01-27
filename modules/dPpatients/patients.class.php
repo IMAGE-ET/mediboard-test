@@ -754,8 +754,8 @@ class CPatient extends CMbObject {
         AND DP IS NOT NULL
         AND DP != ''
         GROUP BY DP
-        ORDER BY count(DP) DESC
-        LIMIT 10;";
+        ORDER BY nb_code DESC
+        LIMIT 20;";
       $cimStat = $ds->loadlist($sql);
       foreach($cimStat as $key => $value) {
         $this->_static_cim10["favoris"][$value["DP"]] = new CCodeCIM10($value["DP"], 1);
