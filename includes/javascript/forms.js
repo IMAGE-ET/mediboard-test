@@ -166,6 +166,7 @@ var bGiveFormFocus = true;
 
 var FormObserver = {
   changes        : 0,
+  lastFCKChange  : 0,
   fckEditor      : null,
   checkChanges : function() {
     if(this.changes) {
@@ -176,6 +177,12 @@ var FormObserver = {
   },
   elementChanged : function() {
     this.changes++;
+  },
+  FCKChanged : function(timmer) {
+    if(this.lastFCKChange < timmer) {
+      this.elementChanged();
+    }
+    this.lastFCKChange = timmer;
   }
 }
 

@@ -16,5 +16,15 @@ function initFCKEditor() {
 	oFCKeditor.ReplaceTextarea() ;
 }
 
+// Surveillance de modification de l'éditeur de texte
+function FCKeditor_OnComplete(editorInstance) {
+  editorInstance.Events.AttachEvent('OnSelectionChange', FCKeventChanger );
+}
+  
+function FCKeventChanger(editorInstance) {
+  if(editorInstance.LastOnChangeTimer) {
+    FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
+  }
+}
 </script>
 {{/if}}
