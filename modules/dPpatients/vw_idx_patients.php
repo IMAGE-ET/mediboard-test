@@ -50,7 +50,7 @@ $useVitale           = mbGetValueFromGet("useVitale", 0);
 
 $patVitale = new CPatient();
   
-// Recherhche par IPP
+// Recherche par IPP
 if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   // Initialisation dans le cas d'une recherche par IPP
   $patients = array();

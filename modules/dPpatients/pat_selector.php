@@ -21,6 +21,8 @@ $patient_ipp   = mbGetValueFromGet("patient_ipp");
 $useVitale     = mbGetValueFromGet("useVitale"  ); 
 
 $patVitale = null;
+
+$showCount = 50;
   
 // Recherhche par IPP
 if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
@@ -91,7 +93,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	  }
 	}
 	
-	$limit = "0, 100";
+	$limit = "0, $showCount";
 	$order = "patients.nom, patients.prenom";
 	
 	$pat             = new CPatient();
