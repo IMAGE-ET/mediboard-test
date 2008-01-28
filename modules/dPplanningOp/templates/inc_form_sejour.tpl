@@ -297,7 +297,7 @@ function checkChambreSejourEasy(){
 <tr>
   <th>{{mb_label object=$sejour field=entree_reelle}}</th>
   <td class="date" colspan="3">
-    {{if $can->admin}}
+    {{if $can->edit}}
     {{mb_field object=$sejour field=entree_reelle form=editSejour}}
     {{else}}
 		{{mb_value object=$sejour field=entree_reelle}}
@@ -308,7 +308,7 @@ function checkChambreSejourEasy(){
 <tr>
   <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
   <td class="date" colspan="3">
-    {{if $can->view}}
+    {{if $can->edit}}
     {{mb_field object=$sejour field=sortie_reelle form=editSejour}}
     {{else}}
 		{{mb_value object=$sejour field=sortie_reelle}}
