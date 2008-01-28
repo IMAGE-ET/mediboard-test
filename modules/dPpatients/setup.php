@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.54";
+$config["mod_version"]     = "0.55";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -626,7 +626,15 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `dossier_medical` CHANGE `listCim10` `codes_cim` TEXT;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.54";
+    $this->makeRevision("0.54");
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `nom_soundex2` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `prenom_soundex2` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `patients` ADD INDEX ( `naissance` );";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.55";
   }
 }
 
