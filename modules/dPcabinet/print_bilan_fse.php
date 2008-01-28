@@ -36,6 +36,7 @@ $base = array(
 $cumuls = array();
 $total = $base;
 
+$days = array();
 foreach ($fses as $fse) {
   $days[$fse->S_FSE_DATE_FSE][$fse->_id] = $fse;
   

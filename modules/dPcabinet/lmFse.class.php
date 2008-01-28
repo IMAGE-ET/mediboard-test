@@ -26,7 +26,7 @@ class CLmFSE extends CLmObject {
   var $_date_max = null;
   
 	function CLmFSE() {
-	  $this->CLmObject("s_f_fse", "S_FSE_NUMERO_FSE");
+	  $this->CLmObject("S_F_FSE", "S_FSE_NUMERO_FSE");
 	}
   
 	function updateFormFields() {
