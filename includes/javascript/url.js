@@ -143,6 +143,35 @@ Class.extend(Url, {
     this.oWindow.focus();
   },
   
+  autoComplete: function(idInput, idPopulate, oUserOptions) {
+    var oOptions = {
+	    minChars: 3,
+	    frequency: 0.15,
+	    
+	    // Allows bigger width than input
+			onShow: function(element, update) { 
+        if(!update.style.position || update.style.position=='absolute') {
+          update.style.position = 'absolute';
+          Position.clone(element, update, {
+            setWidth: false,
+            setHeight: false, 
+            offsetTop: element.offsetHeight
+          });
+        }
+        Effect.Appear(update,{duration:0.15});
+      }
+          
+    };
+    
+    Object.extend(oOptions, oUserOptions);
+    
+    // Autocomplete
+    this.addParam("ajax", "1");
+    this.addParam("suppressHeaders", "1");
+    
+		new Ajax.Autocompleter(idInput, idPopulate, this.make(), oOptions);
+  },
+  
   close: function() {
     if(this.oWindow) {
       this.oWindow.close();

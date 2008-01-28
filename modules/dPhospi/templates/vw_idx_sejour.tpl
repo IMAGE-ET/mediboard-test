@@ -113,8 +113,12 @@ function pageMain() {
           </th>
         </tr>
         <tr>
+          {{include file="inc_mode_hospi.tpl"}}
+        </tr>
+        <tr>
           <td>
             <form name="selService" action="?m={{$m}}" method="get">
+              <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
               <select name="service_id" onChange="submit()">
                 <option value="">&mdash; Choix d'un service</option>

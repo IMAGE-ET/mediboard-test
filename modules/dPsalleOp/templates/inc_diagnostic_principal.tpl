@@ -3,37 +3,69 @@
 <table class="form">
   <tr>
     <td class="button">{{mb_label object=$sejour field="DP"}}</td>
+    <td class="button">{{mb_label object=$sejour field="DR"}}</td>
     {{if $modeDAS}}
     <td class="button">Diagnostics associés({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})</td>
     {{/if}}
   </tr>
   <tr>
+		<!-- Diagnostic Principal -->
     <td class="button">
 
-      <form name="editSejour" action="?m={{$m}}" method="post">
+      <form name="editSejourDP" action="?m={{$m}}" method="post">
 
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
       <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
-      <button type="button" class="search" onclick="CIM10Selector.init()">
+      <button type="button" class="search notext" onclick="CIM10Selector.initDP()">
         {{tr}}button-CCodeCIM10-choix{{/tr}}
       </button>
       <script type="text/javascript">
-        CIM10Selector.init = function(){
-          this.sForm     = "editSejour";
+        CIM10Selector.initDP = function() {
+          this.sForm     = "editSejourDP";
           this.sView     = "DP";
           this.sChir     = "praticien_id";
           this.selfClose = false;
           this.pop();
         }
       </script>
-      <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
+      <input type="text notext" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
         onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
-      <button class="tick" type="button">{{tr}}Valider{{/tr}}</button>
+      <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
     </td>
+    
+		<!-- Diagnostic Relié -->
+    <td class="button">
+
+      <form name="editSejourDR" action="?m={{$m}}" method="post">
+
+      <input type="hidden" name="m" value="dPplanningOp" />
+      <input type="hidden" name="dosql" value="do_sejour_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+      <input type="hidden" name="praticien_id" value="{{$sejour->praticien_id}}" />
+      <button type="button" class="search notext" onclick="CIM10Selector.initDR()">
+        {{tr}}button-CCodeCIM10-choix{{/tr}}
+      </button>
+      <script type="text/javascript">
+        CIM10Selector.initDR = function() {
+          this.sForm     = "editSejourDR";
+          this.sView     = "DR";
+          this.sChir     = "praticien_id";
+          this.selfClose = false;
+          this.pop();
+        }
+      </script>
+      <input type="text" name="DR" value="{{$sejour->DR}}" class="code cim10" size="10"
+        onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
+      <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
+      </form>
+    </td>
+
+    
     {{if $modeDAS}}
     <td class="text" rowspan="2">
       <form name="editDossierMedical" action="?m={{$m}}" method="post">
@@ -83,6 +115,11 @@
     <td class="text button">
       {{if $sejour->_ext_diagnostic_principal}}
       {{$sejour->_ext_diagnostic_principal->libelle}}
+      {{/if}}
+    </td>
+    <td class="text button">
+      {{if $sejour->_ext_diagnostic_relie}}
+      {{$sejour->_ext_diagnostic_relie->libelle}}
       {{/if}}
     </td>
   </tr>

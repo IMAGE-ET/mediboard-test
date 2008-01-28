@@ -48,6 +48,7 @@ $sejour->sortie_prevue = mbDateTime("+ 1 day");
 $sejour->entree_reelle = mbDateTime();
 $sejour->type = "comp";
 $sejour->DP = $rpu->_ref_sejour->DP;
+$sejour->DR = $rpu->_ref_sejour->DR;
 if($rpu->diag_infirmier){ 
   $sejour->rques = "Diagnostic infirmier: $rpu->diag_infirmier\n";
 }

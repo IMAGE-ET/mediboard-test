@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.79";
+$config["mod_version"]     = "0.80";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -720,7 +720,13 @@ class CSetupdPplanningOp extends CSetup {
             ADD `ext_doc` ENUM('1','2','3','4','5','6');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.79";
+    $this->makeRevision("0.79");
+    $sql = "ALTER TABLE `sejour` " . 
+      "ADD `DR` VARCHAR(5), " .
+			"CHANGE `pathologie` `pathologie` CHAR(3)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.80";
   }
 }
 ?>

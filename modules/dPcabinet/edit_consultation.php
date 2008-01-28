@@ -262,7 +262,7 @@ $listEtab = array();
 // Chargement du sejour dans le cas d'une urgence
 if($consult->_id && $consult->sejour_id){
   $consult->loadRefSejour();
-  $consult->_ref_sejour->loadRefDiagnosticPrincipal();
+  $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();
   $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);

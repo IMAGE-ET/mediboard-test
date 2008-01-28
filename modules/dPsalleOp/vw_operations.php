@@ -90,7 +90,7 @@ if($op) {
   
   $selOp->loadRefs();
 
-  $selOp->_ref_sejour->loadRefDiagnosticPrincipal();
+  $selOp->_ref_sejour->loadExtDiagnostics();
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
 

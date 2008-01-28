@@ -14,7 +14,7 @@ $modeDAS   = mbGetValueFromGetOrSession("modeDAS", 1);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
-$sejour->loadRefDiagnosticPrincipal();
+$sejour->loadExtDiagnostics();
 $sejour->loadRefDossierMedical();
 
 // Création du template

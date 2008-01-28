@@ -41,7 +41,8 @@ class CSejour extends CCodable {
   var $saisi_SHS          = null; // remplace $op->saisie
   var $modif_SHS          = null; // remplace $op->modifiee
 
-  var $DP                 = null; // remplace $operation->CIM10_code
+  var $DP                 = null; 
+  var $DR                 = null;
   var $pathologie         = null; // remplace $operation->pathologie
   var $septique           = null; // remplace $operation->septique
   var $convalescence      = null; // remplace $operation->convalescence
@@ -95,6 +96,7 @@ class CSejour extends CCodable {
   
   // External objects
   var $_ext_diagnostic_principal = null;
+  var $_ext_diagnostic_relie     = null;
   
   // Distant fields
   var $_dates_operations = null;
@@ -157,6 +159,7 @@ class CSejour extends CCodable {
     $specs["saisi_SHS"]           = "bool";
     $specs["modif_SHS"]           = "bool";
     $specs["DP"]                  = "code cim10";
+    $specs["DR"]                  = "code cim10";
     $specs["pathologie"]          = "str length|3";
     $specs["septique"]            = "bool";
     $specs["convalescence"]       = "text confidential";
@@ -326,6 +329,7 @@ class CSejour extends CCodable {
     }
     return null;
   }
+  
   function cancelOperations(){
     $this->loadRefsOperations();
     foreach($this->_ref_operations as $key => $value) {
@@ -441,12 +445,11 @@ class CSejour extends CCodable {
     $this->_ref_praticien->load($this->praticien_id);
   }
   
-  function loadRefDiagnosticPrincipal() {
-    if($this->DP) {
-      $this->_ext_diagnostic_principal = new CCodeCIM10($this->DP, 1);
-    }
+  function loadExtDiagnostics() {
+    $this->_ext_diagnostic_principal = $this->DP ? new CCodeCIM10($this->DP, 1) : null;
+    $this->_ext_diagnostic_relie     = $this->DR ? new CCodeCIM10($this->DR, 1) : null;
   }
-
+  
   function loadRefPrestation() {
     $this->_ref_prestation = new CPrestation;
     $this->_ref_prestation->load($this->prestation_id);
@@ -641,17 +644,17 @@ class CSejour extends CCodable {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
     
-    // Chargement du diagnostic Principal
-    $this->loadRefDiagnosticPrincipal();
     $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
     $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->sortie_prevue, $dateFormat));
-    if($this->DP){
-      $template->addProperty("Sejour - Diagnostic Principal"    , "$this->DP: {$this->_ext_diagnostic_principal->libelle}");
-    } else {
-      $template->addProperty("Sejour - Diagnostic Principal"    , $this->DP);  
-    }
+    
+    // Diagnostics
+    $this->loadExtDiagnostics();
+    $diag = $this->DP ? "$this->DP: {$this->_ext_diagnostic_principal->libelle}" : null;
+    $template->addProperty("Sejour - Diagnostic Principal"    , $diag);
+    $diag = $this->DR ? "$this->DR: {$this->_ext_diagnostic_relie->libelle}" : null;
+    $template->addProperty("Sejour - Diagnostic Relié"        , $diag);
   }
   
   function fillTemplate(&$template) {

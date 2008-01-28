@@ -82,18 +82,17 @@ ActesNGAP = {
         {{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="code" style="width: 200px;" onchange="refreshTarif()"}}
-        <div style="display:none;" class="autocomplete" id="code_auto_complete"></div>
+        {{mb_field object=$acte_ngap field="code" onchange="refreshTarif()"}}
+        <div style="display: none; width: 300px;" class="autocomplete" id="code_auto_complete"></div>
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="coefficient" onchange="refreshTarif()"}}  
+        {{mb_field object=$acte_ngap field="coefficient" size="3" onchange="refreshTarif()"}}  
       </td>
       <td>
         {{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()"}}
       </td>
       <td id="tarifActe">
-        {{assign var="tarif" value=0}}
-        {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl"}}
+        {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
       </td>
       <td>
         {{mb_field object=$acte_ngap field="montant_depassement"}}
@@ -155,15 +154,14 @@ function updateFields(selected) {
 }
 
 // Autocomplete
-new Ajax.Autocompleter(
-  'editNGAP_code',
-  'code_auto_complete',
-  '?m=dPcabinet&ajax=1&suppressHeaders=1&a=httpreq_do_ngap_autocomplete&object_id={{$object->_id}}&object_class={{$object->_class_name}}',{
+url = new Url();
+url.setModuleAction("dPcabinet", "httpreq_do_ngap_autocomplete");
+url.addParam("object_id", "{{$object->_id}}");
+url.addParam("object_class", "{{$object->_class_name}}");
+url.autoComplete('editNGAP_code', 'code_auto_complete', {
     minChars: 1,
-    frequency: 0.15,
     updateElement: updateFields
-  }
-);
+} );
 
 {{/if}}
   
