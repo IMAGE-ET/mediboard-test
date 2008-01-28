@@ -25,6 +25,19 @@
       </select>
     </td>
   </tr>
+  
+  <tr>
+  
+    {{assign var="var" value="reverse_proxy"}}
+    <th>
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+    </td>
+  </tr>
     
   <tr>
     <td class="button" colspan="2">
