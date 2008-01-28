@@ -47,10 +47,12 @@ foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefsFwd();
   $listReveil[$key]->loadAffectationsPersonnel();
   //_ref_affectation_reveil permet de stocker l'affectation qui a pour emplacement reveil
-  $listReveil[$key]->_ref_affectation_reveil = reset($listReveil[$key]->_ref_affectations_personnel["reveil"]);
-  if(!$listReveil[$key]->_ref_affectation_reveil){
-    $listReveil[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
+  $listReveil[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
+  
+  if($listReveil[$key]->_ref_affectations_personnel["reveil"]){
+    $listReveil[$key]->_ref_affectation_reveil = reset($listReveil[$key]->_ref_affectations_personnel["reveil"]);
   }
+
   if($listReveil[$key]->_ref_sejour->type == "exte"){
     unset($listReveil[$key]);
     continue;
@@ -82,9 +84,9 @@ $listOut = $listOut->loadList($where, $order);
 foreach($listOut as $key => $value) {
   $listOut[$key]->loadRefsFwd();
   $listOut[$key]->loadAffectationsPersonnel();
-  $listOut[$key]->_ref_affectation_reveil = reset($listOut[$key]->_ref_affectations_personnel["reveil"]);
-  if(!$listOut[$key]->_ref_affectation_reveil){
-    $listOut[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
+  $listOut[$key]->_ref_affectation_reveil = new CAffectationPersonnel();
+  if($listOut[$key]->_ref_affectations_personnel["reveil"]){
+    $listOut[$key]->_ref_affectation_reveil = reset($listOut[$key]->_ref_affectations_personnel["reveil"]);
   }
   if($listOut[$key]->_ref_sejour->type == "exte"){
     unset($listOut[$key]);
