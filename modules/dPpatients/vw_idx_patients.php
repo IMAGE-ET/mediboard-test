@@ -138,21 +138,19 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	$pat = new CPatient();
 	
 	// Patient counts
-	//$patientsCount = $where ? $pat->countList($where) : 0;
-	//$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
-	//$patientsSoundexCount -= $patientsCount;
+	$patientsCount = $where ? $pat->countList($where) : 0;
+	$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
+	$patientsSoundexCount -= $patientsCount;
 	
 	// Chargement des patients
 	if ($where) {
 	  $patients = $pat->loadList($where, $order, "0, $showCount");
 	}
-	$patientsCount = $where ? count($patients) : 0;
 	
 	if ($whereSoundex) {
 	  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $showCount");
 	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
 	}
-	$patientsSoundexCount = $whereSoundex ? count($patientsSoundex) : 0;
 	
 	// Sélection du premier de la liste si aucun n'est déjà sélectionné
 	if (!$patient->_id and count($patients) == 1) {
