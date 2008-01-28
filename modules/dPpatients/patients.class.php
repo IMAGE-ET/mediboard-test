@@ -959,7 +959,7 @@ class CPatient extends CMbObject {
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
 
-    $template->addProperty("Patient - article court"     , $this->_shortview );
+    $template->addProperty("Patient - article"           , $this->_shortview );
     $template->addProperty("Patient - article long"      , $this->_article   );
     $template->addProperty("Patient - nom"               , $this->nom        );
     $template->addProperty("Patient - prénom"            , $this->prenom     );
