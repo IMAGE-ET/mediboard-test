@@ -102,7 +102,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	
 	if($where){
 	$patients = $pat->loadList($where, $order, $limit);
-	if ($nbExact = (100 - count($patients))) {
+	if ($nbExact = (50 - count($patients))) {
 	  $limit = "0, $nbExact";
 	  $patientsSoundex = $pat->loadList($whereSoundex, $order, $limit);
 	  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
