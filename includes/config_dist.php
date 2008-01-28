@@ -238,7 +238,10 @@ $dPconfig["dPlabo"] = array (
   ),
 );
 
-$dPconfig["system"]["type_telephone"] = "france";
+$dPconfig["system"] = array(
+  "type_telephone" => "france",
+  "reverse_proxy"  => "0.0.0.0",
+);
 
 $dPconfig["sherpa"] = array (
   "import_segment" => "100",
