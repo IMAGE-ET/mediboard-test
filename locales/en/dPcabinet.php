@@ -1,5 +1,4 @@
 <?php
-$locales['CConsultation-AT-desc'] = '';
 $locales['CActeNGAP'] = '';
 $locales['CActeNGAP-acte_ngap_id'] = '';
 $locales['CActeNGAP-acte_ngap_id-court'] = '';
@@ -14,9 +13,13 @@ $locales['CActeNGAP-consultation_id'] = '';
 $locales['CActeNGAP-consultation_id-court'] = '';
 $locales['CActeNGAP-consultation_id-desc'] = '';
 $locales['CActeNGAP-demi'] = '';
+$locales['CActeNGAP-demi-court'] = '';
+$locales['CActeNGAP-demi-desc'] = '';
 $locales['CActeNGAP-montant_base'] = '';
+$locales['CActeNGAP-montant_base-court'] = '';
 $locales['CActeNGAP-montant_base-desc'] = '';
 $locales['CActeNGAP-montant_depassement'] = '';
+$locales['CActeNGAP-montant_depassement-court'] = '';
 $locales['CActeNGAP-montant_depassement-desc'] = '';
 $locales['CActeNGAP-quantite'] = '';
 $locales['CActeNGAP-quantite-court'] = '';
@@ -303,6 +306,7 @@ $locales['CConsultation-arrivee'] = '';
 $locales['CConsultation-arrivee-court'] = '';
 $locales['CConsultation-arrivee-desc'] = '';
 $locales['CConsultation-AT'] = '';
+$locales['CConsultation-AT-desc'] = '';
 $locales['CConsultation-a_regler'] = '';
 $locales['CConsultation-a_regler-desc'] = '';
 $locales['CConsultation-back-'] = '';

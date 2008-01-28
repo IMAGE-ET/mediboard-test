@@ -12,6 +12,7 @@ $ds = CSQLDataSource::get("ccamV2");
 
 $quantite = mbGetValueFromGetOrSession("quantite");
 $coefficient = mbGetValueFromGetOrSession("coefficient");
+$demi = mbGetValueFromGetOrSession("demi", 0);
 
 if($quantite == ""){
   $quantite = 1;
@@ -28,6 +29,9 @@ $tarif = $ds->loadList($sql, null);
 $tarif = reset($tarif);
 
 $tarif = $tarif["tarif"] * $quantite * $coefficient; 
+if($demi == 1){
+  $tarif = $tarif / 2;
+}
 
 // Création du template
 $smarty = new CSmartyDP();

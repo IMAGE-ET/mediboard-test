@@ -1,11 +1,12 @@
 <script type="text/javascript">
-  
+
 refreshTarif = function(){
   var oForm = document.editNGAP;
   url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_tarif_code_ngap");
   url.addParam("quantite", oForm.quantite.value);
   url.addParam("coefficient", oForm.coefficient.value);
+  url.addParam("demi", oForm.demi.value);
   url.addParam("code", oForm.code.value);
   url.requestUpdate('tarifActe', { waitingText: null } );
 }
@@ -65,12 +66,12 @@ ActesNGAP = {
     </tr> 
     {{/if}}
     <tr>
-      <th class="category">{{tr}}CActeNGAP-quantite{{/tr}}</th>
-      <th class="category">{{tr}}CActeNGAP-code{{/tr}}</th>
-      <th class="category">{{tr}}CActeNGAP-coefficient{{/tr}}</th>
-      <th class="category">{{tr}}CActeNGAP-montant_base{{/tr}}</th>
-      <th class="category">{{tr}}CActeNGAP-montant_depassement{{/tr}}</th>
-      <th class="category">{{tr}}CActeNGAP-demi{{/tr}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=quantite}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=code}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=coefficient}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=demi}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
       {{if !$object->_coded}}
       <th class="category">Action</th>
       {{/if}}
@@ -87,15 +88,15 @@ ActesNGAP = {
       <td>
         {{mb_field object=$acte_ngap field="coefficient" onchange="refreshTarif()"}}  
       </td>
+      <td>
+        {{mb_field object=$acte_ngap field="demi" onchange="refreshTarif()"}}
+      </td>
       <td id="tarifActe">
         {{assign var="tarif" value=0}}
         {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl"}}
       </td>
       <td>
         {{mb_field object=$acte_ngap field="montant_depassement"}}
-      </td>
-      <td>
-        {{mb_field object=$acte_ngap field="demi"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
@@ -116,13 +117,13 @@ ActesNGAP = {
         {{mb_value object=$_acte_ngap field="coefficient"}}  
       </td>
       <td>
+        {{mb_value object=$_acte_ngap field="demi"}}
+      </td>
+      <td>
         {{mb_value object=$_acte_ngap field="montant_base"}}
       </td>
       <td>
         {{mb_value object=$_acte_ngap field="montant_depassement"}}
-      </td>
-      <td>
-        {{mb_value object=$_acte_ngap field="demi"}}
       </td>
       
       {{if !$object->_coded}}
@@ -138,6 +139,8 @@ ActesNGAP = {
 </form>
 
 <script type="text/javascript">
+
+{{if !$object->_coded}}
 
 // Preparation du formulaire
 prepareForm(document.editNGAP);
@@ -161,5 +164,7 @@ new Ajax.Autocompleter(
     updateElement: updateFields
   }
 );
+
+{{/if}}
   
 </script>
