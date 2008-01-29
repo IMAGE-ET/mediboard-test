@@ -248,14 +248,6 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <td>{{mb_label object=$filter field="_etat_reglement"}}</td>
-          <td>{{mb_field object=$filter field="_etat_reglement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
-        </tr>
-        <tr>
-          <td>{{mb_label object=$filter field="_etat_acquittement"}}</td>
-          <td>{{mb_field object=$filter field="_etat_acquittement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
-        </tr>
-        <tr>
           <td>{{mb_label object=$filter field="mode_reglement"}}</td>
           <td>{{mb_field object=$filter field="mode_reglement" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
@@ -272,9 +264,26 @@ function pageMain() {
         </tr>
         <tr>
           <td class="button" colspan="2">
-            <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_compta';">Impression compta</button>
             <button class="print" type="submit" onclick="document.printFrm.a.value='print_bordereau';">Impression bordereau</button>
+          </td>
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <hr />
+          </td>
+        </tr>
+        <tr>
+          <td>{{mb_label object=$filter field="_etat_reglement"}}</td>
+          <td>{{mb_field object=$filter field="_etat_reglement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+        </tr>
+        <tr>
+          <td>{{mb_label object=$filter field="_etat_acquittement"}}</td>
+          <td>{{mb_field object=$filter field="_etat_acquittement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+        </tr>
+        <tr>
+          <td class="button" colspan="2">
+            <button class="search" type="submit" onclick="document.printFrm.a.value='print_rapport';">Validation paiements</button>
           </td>
         </tr>
       </table>

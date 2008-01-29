@@ -43,7 +43,9 @@
           <th class="category">Espèces</th>
           <th class="category">Tiers</th>
           <th class="category">Autre</th>
+          {{if !$compta}}
           <th class="category">Non réglé</th>
+          {{/if}}
         </tr>
         <tr>
           <th class="category">Nb consultations</th>
@@ -53,17 +55,21 @@
           <td>{{$total.especes.nombre}}</td>
           <td>{{$total.tiers.nombre}}</td>
           <td>{{$total.autre.nombre}}</td>
+          {{if !$compta}}
           <td>{{$total.nombre-$total.cheque.nombre-$total.CB.nombre-$total.especes.nombre-$total.tiers.nombre-$total.autre.nombre}}</td>
+          {{/if}}
         </tr>
         <tr>
           <th class="category">Total réglement patient</th>
-          <td>{{$total.a_regler}} &euro;</td>
-          <td>{{$total.cheque.reglement}} €</td>
-          <td>{{$total.CB.reglement}} €</td>
-          <td>{{$total.especes.reglement}} €</td>
-          <td>{{$total.tiers.reglement}} €</td>
-          <td>{{$total.autre.reglement}} €</td>
-          <td>{{$total.somme_non_regle}} &euro;</td>
+          <td>{{$total.a_regler|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.cheque.reglement|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.CB.reglement|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.especes.reglement|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.tiers.reglement|string_format:"%.2f"}} &euro;</td>
+          <td>{{$total.autre.reglement|string_format:"%.2f"}} &euro;</td>
+          {{if !$compta}}
+          <td>{{$total.somme_non_regle|string_format:"%.2f"}} &euro;</td>
+          {{/if}}
         </tr>
       </table>
        <table class="tbl">
@@ -72,22 +78,25 @@
         </tr>
         <tr>
           <th class="category" width="10%">Total secteur 1</th>
-          <td>{{$total.secteur1}} &euro;</td>
+          <td>{{$total.secteur1|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td>{{$total.secteur2}} &euro;</td>
+          <td>{{$total.secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
+        {{if !$compta}}
         <tr>
           <th class="category">Total non réglée (Patient)</th>
-          <td>{{$total.somme_non_regle}} &euro;</td>
+          <td>{{$total.somme_non_regle|string_format:"%.2f"}} &euro;</td>
+        </tr>
+        {{/if}}
         <tr>
           <th class="category">Total non réglée (AMO/AMC)</th>
-          <td>{{$total.somme_non_regle_caisse}} &euro;</td>
+          <td>{{$total.somme_non_regle_caisse|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total facture</th>
-          <td>{{$total.secteur1+$total.secteur2}} &euro;</td>
+          <td>{{$total.secteur1+$total.secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>
     </td>
@@ -104,6 +113,8 @@
           <th>Patient</th>
           {{if !$compta}}
           <th>Tel</th>
+          {{else}}
+          <th>Date</th>
           {{/if}}
           <th>Type</th>
           <th>Code</th>
@@ -118,13 +129,15 @@
           <td><a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a></td>
           {{if !$compta}}
           <td>{{$curr_consult->_ref_patient->tel}}</td>
+          {{else}}
+          <td>{{$curr_consult->date_reglement|date_format:"%d/%m/%Y"}}</td>
           {{/if}}
           <td>{{$curr_consult->mode_reglement}}</td>
           <td>{{$curr_consult->tarif}}</td>
-          <td>{{$curr_consult->secteur1}}€</td>
-          <td>{{$curr_consult->secteur2}}€</td>
+          <td>{{$curr_consult->secteur1|string_format:"%.2f"}} &euro;</td>
+          <td>{{$curr_consult->secteur2|string_format:"%.2f"}} &euro;</td>
           <td>
-            {{$curr_consult->a_regler}} &euro;
+            {{$curr_consult->a_regler|string_format:"%.2f"}} &euro;
           </td>
           
           <td>
@@ -170,7 +183,7 @@
           </td>
           <td {{if $compta}}colspan="2"{{/if}}>
           <!-- Total de l'assurance maladie -->
-          {{$curr_consult->_somme-$curr_consult->a_regler}} &euro;
+          {{$curr_consult->_somme-$curr_consult->a_regler|string_format:"%.2f"}} &euro;
           </td>
           {{if $compta == "0"}}
           <td>
@@ -196,18 +209,18 @@
           </td>
           {{/if}}
           <td>
-            {{$curr_consult->_somme}} &euro;
+            {{$curr_consult->_somme|string_format:"%.2f"}} &euro;
           </td>
            </tr>
         {{/foreach}}
         <tr>
-          <td {{if $compta}}colspan="3"{{else}}colspan="4"{{/if}} style="text-align:right;font-weight:bold;">Total</td>
-          <td style="font-weight:bold;">{{$curr_plage->total1}} €</td>
-          <td style="font-weight:bold;">{{$curr_plage->total2}} €</td>
-          <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler}} &euro;</td>
+          <td colspan="4" style="text-align:right;font-weight:bold;">Total</td>
+          <td style="font-weight:bold;">{{$curr_plage->total1|string_format:"%.2f"}} &euro;</td>
+          <td style="font-weight:bold;">{{$curr_plage->total2|string_format:"%.2f"}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler|string_format:"%.2f"}} &euro;</td>
           {{assign var="total_plage" value=$curr_plage->total1+$curr_plage->total2}}
           <td style="font-weight:bold;" colspan="2">{{$total_plage-$curr_plage->a_regler|string_format:"%.2f"}} &euro;</td>
-          <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>
     </td>

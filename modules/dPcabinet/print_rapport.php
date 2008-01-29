@@ -17,7 +17,7 @@ $cs = mbGetValueFromGetOrSession("cs");
 
 // Récupération des paramètres
 $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate());
-$filter->_date_max =mbGetValueFromGetOrSession("_date_max", mbDate());
+$filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
 $filter->_etat_reglement = mbGetValueFromGetOrSession("_etat_reglement");
 $filter->_etat_acquittement = mbGetValueFromGetOrSession("_etat_acquittement");
 
@@ -39,15 +39,24 @@ $chirSel->load($chir);
 
 // Requète sur les plages de consultation considérées
 $where = array();
-$where[] = "date >= '$filter->_date_min'";
-$where[] = "date <= '$filter->_date_max'";
+$ljoin = array();
+if($compta) {
+  $filter->_etat_reglement = "reglee";
+  $filter->_etat_acquittement = "";
+  $where[] = "consultation.date_reglement >= '$filter->_date_min'";
+  $where[] = "consultation.date_reglement <= '$filter->_date_max'";
+  $ljoin["consultation"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+} else {
+  $where[] = "date >= '$filter->_date_min'";
+  $where[] = "date <= '$filter->_date_max'";
+}
 
 // Chargement des plages
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 $listPlage = new CPlageconsult;
-$listPlage = $listPlage->loadList($where, "date, debut, chir_id");
+$listPlage = $listPlage->loadList($where, "date, debut, chir_id", null, null, $ljoin);
 
 // On charge les références des consultations qui nous interessent
 $total["cheque"]["valeur"]  = 0;
