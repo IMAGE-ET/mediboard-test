@@ -86,6 +86,15 @@ $dPconfig["db"]["sherpa"] = array(
   "dbpass" => "AdminCPT",
 );
   
+// BCB
+$dPconfig["db"]["bcb"] = array(
+  "dbtype" => "mysql",
+  "dbhost" => "localhost",
+  "dbname" => "bcb",
+  "dbuser" => "",
+  "dbpass" => "",
+);
+
 // you can add as much databases as you want by using
 //$dPconfig["db"]["dsn"] = array(
 //  "dbtype" => "dbtype",
