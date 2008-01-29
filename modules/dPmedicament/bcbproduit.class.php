@@ -9,8 +9,7 @@
 
 require_once("bcbObject.class.php");
 
-
-class CProduit extends CBcbObject {
+class CBcbProduit extends CBcbObject {
 
   // Générale
   var $distObj               = null;
@@ -29,9 +28,12 @@ class CProduit extends CBcbObject {
   // Objects references
   var $_ref_DCI              = null;
   var $_ref_UCD              = null;
+  var $_ref_monographie      = null;
+  var $_ref_composition      = null;
+  var $_ref_economique       = null;
   
   // Constructeur
-  function CProduit(){
+  function CBcbProduit(){
     $this->initBCBConnection();
     // Creation de la connexion
     $this->distObj = new BCBProduit();
@@ -81,12 +83,25 @@ class CProduit extends CBcbObject {
     $this->distObj->Search($text, 0, 50, $position_text);
   }
   
+  
   // Chargement de la monographie d'un produit
   function loadRefMonographie(){
-    $this->_ref_monographie = new CMonographie();
+    $this->_ref_monographie = new CBcbMonographie();
     $this->_ref_monographie->load($this->code_cip);
   }
   
   
+  // Chargement de la composition
+  function loadRefComposition(){
+    $this->_ref_composition = new CBcbComposition();
+    $this->_ref_composition->load($this->code_cip);
+   
+  }
+  
+  // Chargement des donnees technico-reglementaires
+  function loadRefEconomique(){
+    $this->_ref_economique = new CBcbEconomique();
+    $this->_ref_economique->load($this->code_cip);
+  }
   
 }

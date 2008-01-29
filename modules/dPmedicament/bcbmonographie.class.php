@@ -9,7 +9,7 @@
 
 require_once("bcbObject.class.php");
 
-class CMonographie extends CBcbObject {
+class CBcbMonographie extends CBcbObject {
 
   // Générale
   var $distObj               = null;
@@ -42,7 +42,7 @@ class CMonographie extends CBcbObject {
   var $_ref_produit              = null;
   
   // Constructeur
-  function CMonographie(){
+  function CBcbMonographie(){
     $this->initBCBConnection();
     // Creation de la connexion
     $this->distObj = new BCBMonographie();

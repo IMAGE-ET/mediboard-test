@@ -16,7 +16,7 @@ $supprime = mbGetValueFromPost("supprime", 0);
 $position_text = mbGetValueFromPost("position_text", "debut");
 
 // Recherche par nom de produit
-$mbProduit = new CProduit();
+$mbProduit = new CBcbProduit();
 $mbProduit->searchProduit($produit, $supprime, $position_text);
 
 

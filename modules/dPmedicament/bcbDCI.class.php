@@ -9,8 +9,7 @@
 
 require_once("bcbObject.class.php");
 
-
-class CDCI extends CBcbObject {
+class CBcbDCI extends CBcbObject {
 
   // Générale
   var $distObj        = null;
@@ -28,7 +27,7 @@ class CDCI extends CBcbObject {
   
   
   // Constructeur
-  function CDCI(){
+  function CBcbDCI(){
     $this->initBCBConnection();
     // Creation de la connexion
     $this->distObj = new BCBDci();

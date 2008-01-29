@@ -34,6 +34,53 @@ function pageMain(){
             </div>
             <div id="IdentiteContent"  class="accordionTabContentBox">
               <!-- Affichage de la composition du medicaments -->
+              <table class="tbl">
+                <tr>
+                  <th colspan="3" class="title">Principes actifs</th>
+                </tr>
+                <tr>
+                  <th>Libelle</th>
+                  <th>Commentaire</th>
+                  <th>Quantite</th>
+                </tr>
+                {{foreach from=$mbProduit->_ref_composition->principes_actifs item=PA}}
+                <tr>
+                  <td>{{$PA->Libelle}}</td>
+                  <td>{{$PA->Commentaire}}</td>
+                  <td>{{$PA->Quantite}}{{$PA->Unite}}</td>
+                </tr>
+                {{/foreach}} 
+              </table>
+              <table class="tbl">
+                <tr>
+                  <th class="title">Commentaires sur le composition</th>
+                </tr>
+                <td>
+                 {{$mbProduit->_ref_composition->exprime_par|smarty:nodefaults}}
+                </td>
+              </table>
+              <table class="tbl">
+                <tr>
+                  <th colspan="2" class="title">Excipients</th>
+                </tr>
+                <tr>
+                  <th>Libelle</th>
+                  <th>Commentaire</th>
+                </tr>
+                {{foreach from=$mbProduit->_ref_composition->excipients item=excipient}}
+                <tr>
+                  <td {{if $excipient->Notoire == -1}}style="color: red;"{{/if}}>
+                    {{if $excipient->Is_Info}}<strong>{{/if}}
+                    {{$excipient->Libelle}} 
+                    {{if $excipient->Is_Info}}</strong>{{/if}}
+                    {{if $excipient->Notoire == -1}}
+                      (Excipient à effet notoire)
+                    {{/if}}
+                  </td>
+                  <td>{{$excipient->Commentaire}}</td>
+                </tr>
+                {{/foreach}} 
+              </table>
             </div>
           </div>
           <div id="Medical">
@@ -135,37 +182,37 @@ function pageMain(){
   <tbody id="three">
     <tr>
       <td>
-        <div class="accordionMain" id="accordionPharma">
+        <div class="accordionMain" id="accordionPharmaco">
           <div id="Identite">
             <div id="IdentiteHeader" class="accordionTabTitleBar">
-              
+              Classification thérapeutique  
             </div>
             <div id="IdentiteContent"  class="accordionTabContentBox">
-              <!-- Affichage de la composition du medicaments -->
+              
             </div>
           </div>
           <div id="Medical">
             <div id="MedicalHeader" class="accordionTabTitleBar">
-              Aspect
+              Propriétés pharmacodynamiques
             </div>
             <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->aspect_forme|smarty:nodefaults}}
+              {{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}
             </div>
           </div>
           <div id="Medical">
             <div id="MedicalHeader" class="accordionTabTitleBar">
-              Aspect
+              Propriétés pharmacocinétiques
             </div>
             <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->aspect_forme|smarty:nodefaults}}
+              {{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}
             </div>
           </div>
           <div id="Medical">
             <div id="MedicalHeader" class="accordionTabTitleBar">
-              Aspect
+              Données de sécurité précliniques
             </div>
             <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->aspect_forme|smarty:nodefaults}}
+              {{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}
             </div>
           </div>
         </div>
@@ -173,18 +220,81 @@ function pageMain(){
     </tr>
   </tbody>
 
+  <!-- Données pharmaceutiques -->
   <tbody id="four">
     <tr>
       <td>
-      Données pharmaceutiques
+        <div class="accordionMain" id="accordionPharma">
+          <div id="Identite">
+            <div id="IdentiteHeader" class="accordionTabTitleBar">
+              Incompatibilités 
+            </div>
+            <div id="IdentiteContent"  class="accordionTabContentBox">
+               {{$mbProduit->_ref_monographie->incompatibilite|smarty:nodefaults}}
+              <!-- Affichage de la composition du medicaments -->
+            </div>
+          </div>
+          <div id="Medical">
+            <div id="MedicalHeader" class="accordionTabTitleBar">
+              Durée et précautions particulières de conservation
+            </div>
+            <div id="MedicalContent"  class="accordionTabContentBox">
+              {{$mbProduit->_ref_monographie->conservation|smarty:nodefaults}}
+            </div>
+          </div>
+          <div id="Medical">
+            <div id="MedicalHeader" class="accordionTabTitleBar">
+              Nature et contenu de l'emballage extérieur
+            </div>
+            <div id="MedicalContent"  class="accordionTabContentBox">
+              {{$mbProduit->_ref_monographie->emballage_ext|smarty:nodefaults}}
+            </div>
+          </div>
+          <div id="Medical">
+            <div id="MedicalHeader" class="accordionTabTitleBar">
+              Instructions pour l'utilisation, la manipulation et l'élimination
+            </div>
+            <div id="MedicalContent"  class="accordionTabContentBox">
+              {{$mbProduit->_ref_monographie->instruction_manipulation|smarty:nodefaults}}
+            </div>
+          </div>
+        </div>
       </td>
     </tr>
   </tbody>
-
+  
   <tbody id="five">
     <tr>
       <td>
-      Données technico-réglementaires
+        <table class="tbl">
+          <tr>
+            <th colspan="2">Données technico-réglementaires</th>
+          </tr>
+          <tr>
+            <td>Titulaire de l'AMM</th>
+            <td>{{$mbProduit->_ref_economique->laboratoire}}</td>
+          </tr>
+          <tr>
+            <td>Laboratoire exploitant</th>
+            <td>{{$mbProduit->_ref_economique->labo_exploitant}}</td>
+          </tr>
+          <tr>
+            <td>Prix de vente TTC</th>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Taux de TVA</th>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Code AMM</th>
+            <td></td>
+          </tr>
+          <tr>
+            <td>Code UCD</th>
+            <td></td>
+          </tr>
+          
       </td>
     </tr>
   </tbody>
@@ -199,6 +309,12 @@ var oAccordComposition = new Rico.Accordion( $('accordionComposition'), {
 } );
 
 var oAccordClinique = new Rico.Accordion( $('accordionClinique'), { 
+  panelHeight: 400,
+  showDelay: 50, 
+  showSteps: 3 
+} );
+
+var oAccordPharmaco = new Rico.Accordion( $('accordionPharmaco'), { 
   panelHeight: 400,
   showDelay: 50, 
   showSteps: 3 
