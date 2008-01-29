@@ -12,9 +12,9 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 // Chargement du praticien selectionne
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$praticienSel = new CMediusers();
-$praticienSel->load($praticien_id);
+//$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+//$praticienSel = new CMediusers();
+//$praticienSel->load($praticien_id);
 
 // Recuperation de l'id de la consultation du passage en urgence
 $consult_urgence_id = mbGetValueFromGet("consult_urgence_id");
@@ -89,7 +89,7 @@ if(!$consultation_id) {
 }
 
 $categorie = new CConsultationCategorie();
-$whereCategorie["function_id"] = " = '$praticienSel->function_id'";
+$whereCategorie["function_id"] = " = '$chir->function_id'";
 $orderCategorie = "nom_categorie ASC";
 $categories = $categorie->loadList($whereCategorie,$orderCategorie);
 
@@ -121,7 +121,7 @@ $smarty->assign("consult"           , $consult           );
 $smarty->assign("chir"              , $chir              );
 $smarty->assign("pat"               , $pat               );
 $smarty->assign("listPraticiens"    , $listPraticiens    );
-$smarty->assign("praticien_id"      , $praticien_id      );
+//$smarty->assign("praticien_id"      , $praticien_id      );
 $smarty->assign("listModelePrat"		, $listModelePrat    );
 $smarty->assign("listModeleFunc"		, $listModeleFunc    );
 

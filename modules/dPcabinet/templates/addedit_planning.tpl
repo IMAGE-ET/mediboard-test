@@ -113,7 +113,7 @@ function pageMain() {
   {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
   oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
   oForm.chir_id.value = {{$plageConsult->chir_id}};
-  
+  refreshListCategorie({{$plageConsult->chir_id}});
   PlageConsultSelector.init();
   {{/if}}
 }
@@ -291,12 +291,12 @@ function pageMain() {
         
           <tbody id="listCategorie">
           
-          {{if $consult->_id || $praticien_id}}
+          {{if $consult->_id || $chir->_id}}
           {{assign var="categorie_id" value=$consult->categorie_id}}
           {{assign var="categories" value=$categories}}
           {{assign var="listCat" value=$listCat}}
           {{include file="httpreq_view_list_categorie.tpl"}}
-          {{elseif $praticien_id}}
+          {{elseif $chir->_id}}
           {{assign var="categorie_id" value=""}}
           {{assign var="categories" value=$categories}}
           {{assign var="listCat" value=$listCat}}
