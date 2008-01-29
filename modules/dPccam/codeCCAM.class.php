@@ -98,6 +98,7 @@ class CCodeCCAM {
         $query2 .= $ds->prepare("CODEACTE = %", $this->code);
         $query2 .= " AND CODEACTIVITE = '4'";
         $query2 .= " AND MODIFICATEUR = '7'";
+        $query2 .= " AND DATEEFFET = '20071228'";
         $query2 .= " GROUP BY MODIFICATEUR";
         $result2 = $ds->exec($query2);
         $this->_code7 = $ds->numRows($result2);
@@ -188,6 +189,7 @@ class CCodeCCAM {
         $query = "SELECT * FROM modificateuracte " .
             "\nWHERE CODEACTE = %1" .
             "\nAND CODEACTIVITE = %2" .
+            "\nAND DATEEFFET = '20071228'" .
             "\nGROUP BY MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
@@ -372,6 +374,7 @@ class CCodeCCAM {
         $query = "SELECT * FROM modificateuracte " .
             "\nWHERE CODEACTE = %1" .
             "\nAND CODEACTIVITE = %2" .
+            "\nAND DATEEFFET = '20071228'" .
             "\nGROUP BY MODIFICATEUR";
         $query = $ds->prepare($query, $this->code, $activite->numero);
         $result = $ds->exec($query);
