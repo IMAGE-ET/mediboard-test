@@ -12,17 +12,17 @@
 global $AppUI, $can, $m;
 
 // Par default, recherche par nom
-$type_recherche = mbGetValueFromPost("type_recherche", "nom");
+$type_recherche = mbGetValueFromGet("type_recherche", "nom");
 
 // Texte recherché (nom, cip, ucd)
-$produit  = mbGetValueFromPost("produit");
-
+$produit  = mbGetValueFromGet("produit");
+$dialog = mbGetValueFromGet("dialog");
 // Recherche des elements supprimés
-$supprime = mbGetValueFromPost("supprime", 0);
+$supprime = mbGetValueFromGet("supprime", 0);
 
 // Parametres de recherche
 if($type_recherche == "nom") {
-  $param_recherche = mbGetValueFromPost("position_text", "debut");
+  $param_recherche = mbGetValueFromGet("position_text", "debut");
 }
 if($type_recherche == "cip") {
   $param_recherche = "1";
@@ -41,7 +41,7 @@ $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche);
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("dialog", $dialog);
 $smarty->assign("supprime", $supprime);
 $smarty->assign("type_recherche", $type_recherche);
 $smarty->assign("mbProduit", $mbProduit);

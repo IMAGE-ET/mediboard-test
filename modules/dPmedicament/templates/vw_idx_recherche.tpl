@@ -1,5 +1,15 @@
 <script type="text/javascript">
 
+
+function setClose(libelle) {
+  var oSelector = window.opener.MedSelector;
+  oSelector.set(libelle);
+  if(oSelector.selfClose) {
+    window.close();
+  }
+}
+
+
 function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
@@ -19,6 +29,14 @@ function changeFormSearch(){
   }
 }
 
+function produitSelector(){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "vw_idx_recherche");
+  url.addParam("dialog", "1");
+  url.popup(400, 400, "Recherche Medicament");
+}
+
+
 function pageMain(){
   changeFormSearch();
 }
@@ -27,8 +45,21 @@ function pageMain(){
 
 <table class="main">
   <tr>
+    <td><button type="button" class="search" onclick="produitSelector();" /></td>
+  </tr>
+  <tr>
     <td>Recherche par
-      <form name="formSearch" action="?m=dPmedicament&tab=vw_idx_recherche" method="post">
+      <form name="formSearch" action="?" method="get">
+     {{if $dialog}}
+      <input type="hidden" name="dialog" value="1" />
+      <input type="hidden" name="m" value="dPmedicament" />
+      <input type="hidden" name="a" value="vw_idx_recherche" />
+      
+      {{else}}
+      <input type="hidden" name="m" value="dPmedicament" />
+      <input type="hidden" name="tab" value="vw_idx_recherche" />
+      
+      {{/if}}
         <select name="type_recherche" onchange="changeFormSearch(this.value);">
           <option value="nom" {{if $type_recherche == 'nom'}}selected = "selected"{{/if}}>Nom</option>
           <option value="cip" {{if $type_recherche == 'cip'}}selected = "selected"{{/if}}>CIP</option>
@@ -50,15 +81,16 @@ function pageMain(){
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="2">{{$produits|@count}} Résultat(s)</th>
-        </tr>
-        <tr>
           <th>CIP</th>
           <th>Produit</th>
         </tr>
         {{foreach from=$produits item="produit"}}
         <tr>
           <td>
+            {{if $dialog}}
+            <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />
+            {{/if}}
+           
             {{$produit->code_cip}}
             {{if $produit->hospitalier}}
             <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
