@@ -7,20 +7,42 @@ function viewProduit(cip){
   url.popup(700, 620, "Descriptif produit");
 }
 
+function changeFormSearch(){
+  var oForm = document.formSearch;
+  var type_recherche = oForm.type_recherche.value;
+  if(type_recherche != "nom"){
+    oForm.position_text.checked = false;
+    oForm.position_text.disabled = true;
+  }
+  if(type_recherche == "nom"){
+    oForm.position_text.disabled = false;
+  }
+}
+
+function pageMain(){
+  changeFormSearch();
+}
+
 </script>
 
 <table class="main">
   <tr>
-    <td>
+    <td>Recherche par
       <form name="formSearch" action="?m=dPmedicament&tab=vw_idx_recherche" method="post">
+        <select name="type_recherche" onchange="changeFormSearch(this.value);">
+          <option value="nom" {{if $type_recherche == 'nom'}}selected = "selected"{{/if}}>Nom</option>
+          <option value="cip" {{if $type_recherche == 'cip'}}selected = "selected"{{/if}}>CIP</option>
+          <option value="ucd" {{if $type_recherche == 'ucd'}}selected = "selected"{{/if}}>UCD</option>
+        </select>
+        <br />
         <input type="text" name="produit" value="{{$produit}}"/>
         <button type="button" class="search" onclick="submit();">Rechercher</button>
         <br />
-        Afficher les produits supprimés
         <input type="checkbox" name="supprime" value="1" {{if $supprime == 1}}checked = "checked"{{/if}} />
+        Afficher les produits supprimés
         <br />
+        <input type="checkbox" name="position_text" value="partout" {{if $type_recherche == 'partout'}}checked = "checked"{{/if}} />
         Rechercher n'importe où dans le nom du produit
-        <input type="checkbox" name="position_text" value="partout" {{if $position_text == 'partout'}}checked = "checked"{{/if}} />
       </form>
     </td>
   </tr>
@@ -28,22 +50,28 @@ function viewProduit(cip){
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="2">{{$mbProduit->distObj->TabProduit|@count}} Résultat(s)</th>
+          <th colspan="2">{{$produits|@count}} Résultat(s)</th>
         </tr>
         <tr>
           <th>CIP</th>
           <th>Produit</th>
         </tr>
-        {{foreach from=$mbProduit->distObj->TabProduit item="produit"}}
+        {{foreach from=$produits item="produit"}}
         <tr>
           <td>
-            {{$produit->CodeCIP}}
-            {{if $produit->Hospitalier}}
+            {{$produit->code_cip}}
+            {{if $produit->hospitalier}}
             <img src="./images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+            {{/if}}
+            {{if $produit->_generique}}
+            <img src="./images/icons/generiques.gif" alt="Produit Générique" title="Produit Générique" />
+            {{/if}}
+            {{if $produit->_referent}}
+            <img src="./images/icons/referents.gif" alt="Produit Référent" title="Produit Référent" />
             {{/if}}
           </td>
           <td>
-            <a href="#produit{{$produit->CodeCIP}}" onclick="viewProduit({{$produit->CodeCIP}})" {{if $produit->DateSupp}}style="color: red"{{/if}}>{{$produit->Libelle}}</a>
+            <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_suppression}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
           </td>
         </tr>
         {{/foreach}}

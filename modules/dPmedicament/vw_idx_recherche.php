@@ -11,21 +11,41 @@
 
 global $AppUI, $can, $m;
 
-$produit  = mbGetValueFromPost("produit");
-$supprime = mbGetValueFromPost("supprime", 0);
-$position_text = mbGetValueFromPost("position_text", "debut");
+// Par default, recherche par nom
+$type_recherche = mbGetValueFromPost("type_recherche", "nom");
 
-// Recherche par nom de produit
+// Texte recherché (nom, cip, ucd)
+$produit  = mbGetValueFromPost("produit");
+
+// Recherche des elements supprimés
+$supprime = mbGetValueFromPost("supprime", 0);
+
+// Parametres de recherche
+if($type_recherche == "nom") {
+  $param_recherche = mbGetValueFromPost("position_text", "debut");
+}
+if($type_recherche == "cip") {
+  $param_recherche = "1";
+}
+if($type_recherche == "ucd") {
+  $param_recherche = "2";
+}
+
+$produits = array();
+
+// Recherche du produit
 $mbProduit = new CBcbProduit();
-$mbProduit->searchProduit($produit, $supprime, $position_text);
+
+$produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche);
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("supprime", $supprime);
-$smarty->assign("position_text", $position_text);
+$smarty->assign("type_recherche", $type_recherche);
 $smarty->assign("mbProduit", $mbProduit);
+$smarty->assign("produits", $produits);
 $smarty->assign("produit", $produit);
 $smarty->display("vw_idx_recherche.tpl");
 

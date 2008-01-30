@@ -31,6 +31,11 @@ class CBcbProduit extends CBcbObject {
   var $date_AMM              = null;
   var $agrement              = null;
   
+  // Others Fields
+  var $_referent             = null;
+  var $_generique            = null;
+  var $_suppression          = null;
+  
   // Objects references
   var $_ref_DCI              = null;
   var $_ref_UCD              = null;
@@ -64,13 +69,29 @@ class CBcbProduit extends CBcbObject {
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
     // Chargement du statut du produit
-    $this->getStatut();
-    
+    $this->getStatut();  
     // Chargement de l'agrement
     $this->getAgrement();
+    // Produit générique ?
+    $this->getGenerique();
+    /// Produit référent ?
+    $this->getReferent();
+    $this->getSuppression();
   }
   
+  // Permet de savoir si le produit est un générique 
+  function getGenerique(){
+    $this->_generique = $this->distObj->IsGenerique($this->code_cip);
+  }
   
+  // Permet de savoir si le produit est un referent
+  function getReferent(){
+    $this->_referent = $this->distObj->IsReferent($this->code_cip);
+  }
+  
+  function getSuppression(){
+    $this->_suppression = $this->distObj->IsSupprime($this->code_cip);
+  }
   
   function getStatut(){
     $this->distObj->SearchStatut($this->code_cip);
@@ -84,14 +105,12 @@ class CBcbProduit extends CBcbObject {
   function getAgrement(){
     $this->agrement = $this->distObj->GetStatut(15);
   }
- 
   
-  
-  // Recherche d'un produit
-  // $text: texte a rechercher
-  // $lexico: 0: recherche sur le debut, lexico = 256: n'importe ou dans la chaine
-  function searchProduit($text, $supprime = 1, $position_text = "debut", $specialite = 1){
-    // Parametres supplementaires pour la recherche
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1){   
+    // Type_recherche
+    // 0 ou 256 => recherche par nom
+    // 1: recherche par CIP
+    // 2: recherche par UCD
     
     // Affichage des produits supprimes
     if($supprime == "" || $supprime == 0){
@@ -101,16 +120,32 @@ class CBcbProduit extends CBcbObject {
     }
     
     // Position de la recherche
-    if($position_text == "partout"){
-      $position_text = 256;
-    } else {
-      $position_text = 0;
+    if($type_recherche == "partout"){
+      $type_recherche = 256;
+    } 
+    if($type_recherche == "debut"){
+      $type_recherche = 0;
     }
 
     $this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = $supprime;  
+    $this->distObj->Search($text, 0, 50, $type_recherche);
     
-    $this->distObj->Search($text, 0, 50, $position_text);
+    $produits = array();
+    // Parcours des produits
+    foreach($this->distObj->TabProduit as $key => $prod){
+      $produit = new CBcbProduit();
+      $produit->load($prod->CodeCIP);
+      $produits[$prod->CodeCIP] = $produit; 
+    }  
+    return $produits;
+  }
+  
+  
+  // Chargement des posologies disponibles pour le produit
+  function loadRefsPosologies(){
+    $mbPosologie = new CBcbPosologie();  
+    $this->_refs_posologies = $mbPosologie->load($this->code_cip);
   }
   
   

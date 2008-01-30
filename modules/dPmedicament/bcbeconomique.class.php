@@ -40,7 +40,7 @@ class CBcbEconomique extends CBcbObject {
   function load($CIP){
     $this->distObj->Search($CIP);
     $this->code_cip = $CIP;
-    $this->prix_vente = $this->distObj->DataEco->Prix_Vente;
+    $this->prix_vente = number_format($this->distObj->GetDaTa(2), 2, ",", " ");
     $this->prix_achat_ht = $this->distObj->DataEco->Prix_AchatHT;
     $this->base_remboursement_ss = $this->distObj->DataEco->Base_RemboursementSS;
     $this->tips = $this->distObj->DataEco->Tips;

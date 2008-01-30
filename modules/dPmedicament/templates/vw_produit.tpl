@@ -345,13 +345,17 @@ function pageMain(){
             <td>Prix de vente TTC</th>
             <td>
             {{if $mbProduit->_ref_economique->prix_vente != "0000000"}}
-            {{$mbProduit->_ref_economique->prix_vente}} &euro;
+              {{$mbProduit->_ref_economique->prix_vente}} &euro;
             {{/if}}
             </td>
           </tr>
           <tr>
             <td>Taux de TVA</th>
             <td>{{$mbProduit->_ref_economique->taux_tva}} %</td>
+          </tr>
+          <tr>
+            <td>Taux de remboursement SS</td>
+            <td>{{$mbProduit->_ref_economique->taux_ss}} %</td>
           </tr>
           <tr>
             <td>Code AMM</th>
