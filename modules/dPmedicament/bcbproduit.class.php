@@ -44,7 +44,7 @@ class CBcbProduit extends CBcbObject {
   var $_ref_economique       = null;
   var $_ref_classes_ATC      = null;
   var $_ref_classes_thera    = null;
-  
+ 
   // Constructeur
   function CBcbProduit(){
     $this->initBCBConnection();
@@ -141,13 +141,20 @@ class CBcbProduit extends CBcbObject {
     return $produits;
   }
   
-  
-  // Chargement des posologies disponibles pour le produit
-  function loadRefsPosologies(){
-    $mbPosologie = new CBcbPosologie();  
-    $this->_refs_posologies = $mbPosologie->load($this->code_cip);
+  // Chargement de toutes les posologies d'un produit
+  function loadListPosologies(){
+    $ds = CSQLDataSource::get("bcb");
+    $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
+    $posologies = $ds->loadList($query);
+    
+    // Chargement de chaque posologie
+    foreach($posologies as $key => $posologie){
+      $mbposologie = new CBcbPosologie();
+      $mbposologie->load($posologie["CODE_CIP"], $posologie["NO_POSO"]);
+      $listPosologie[] = $mbposologie; 
+    }
+    return $listPosologie;
   }
-  
   
   // Chargement de la monographie d'un produit
   function loadRefMonographie(){

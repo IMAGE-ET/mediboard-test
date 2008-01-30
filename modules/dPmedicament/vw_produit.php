@@ -29,10 +29,6 @@ $mbProduit->loadClasseATC();
 // Chargement des classes therapeutiques du produit
 $mbProduit->loadClasseTherapeutique();
 
-
-$mbProduit->loadRefsPosologies();
-mbTrace($mbProduits);
-
 $tabEspace = array();
 for($i=0; $i<=13; $i++){
   @$tabEspace[$i] = $tabEspace[$i-1]."&nbsp;";
