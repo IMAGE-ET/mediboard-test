@@ -32,6 +32,7 @@ class CCodable extends CMbObject {
 
   // Back references
   var $_ref_actes = null;
+  var $_ref_prescriptions = null;
   
   // Distant references
   var $_ref_sejour = null;
@@ -121,6 +122,11 @@ class CCodable extends CMbObject {
     return null;
   }
   
+  function loadRefsPrescriptions() {
+    $prescription = new CPrescription();
+    $where = array("object_class" => "= '$this->_class_name'", "object_id" => "= $this->_id");
+    $this->_ref_prescriptions = $prescription->loadList($where);
+  }
   
   function loadRefsActes(){
     $this->loadRefsActesCCAM();
