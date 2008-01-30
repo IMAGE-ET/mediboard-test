@@ -6,8 +6,8 @@ var MedSelector = {
   oUrl      : null,
   selfClose : true,
   options : {
-    width : 700,
-    height: 500
+    width : 300,
+    height: 400
   },
 
   pop: function() {

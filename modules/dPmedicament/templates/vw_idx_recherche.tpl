@@ -29,14 +29,6 @@ function changeFormSearch(){
   }
 }
 
-function produitSelector(){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_idx_recherche");
-  url.addParam("dialog", "1");
-  url.popup(400, 400, "Recherche Medicament");
-}
-
-
 function pageMain(){
   changeFormSearch();
 }
@@ -44,9 +36,6 @@ function pageMain(){
 </script>
 
 <table class="main">
-  <tr>
-    <td><button type="button" class="search" onclick="produitSelector();" /></td>
-  </tr>
   <tr>
     <td>Recherche par
       <form name="formSearch" action="?" method="get">
