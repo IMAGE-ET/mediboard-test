@@ -14,6 +14,7 @@ class CBcbEconomique extends CBcbObject {
   // Générale
   var $distObj               = null;
  
+  var $code_cip              = null;
   var $prix_vente            = null;
   var $prix_achat_ht         = null;
   var $base_remboursement_ss = null;
@@ -38,6 +39,7 @@ class CBcbEconomique extends CBcbObject {
   // Chargement
   function load($CIP){
     $this->distObj->Search($CIP);
+    $this->code_cip = $CIP;
     $this->prix_vente = $this->distObj->DataEco->Prix_Vente;
     $this->prix_achat_ht = $this->distObj->DataEco->Prix_AchatHT;
     $this->base_remboursement_ss = $this->distObj->DataEco->Base_RemboursementSS;

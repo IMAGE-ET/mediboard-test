@@ -25,12 +25,20 @@ class CBcbProduit extends CBcbObject {
   var $hospitalier           = null;
   var $nom_laboratoire       = null;
   
+  var $code_statut           = null;
+  var $libelle_statut        = null;
+  var $numero_AMM            = null;
+  var $date_AMM              = null;
+  var $agrement              = null;
+  
   // Objects references
   var $_ref_DCI              = null;
   var $_ref_UCD              = null;
   var $_ref_monographie      = null;
   var $_ref_composition      = null;
   var $_ref_economique       = null;
+  var $_ref_classes_ATC      = null;
+  var $_ref_classes_thera    = null;
   
   // Constructeur
   function CBcbProduit(){
@@ -55,7 +63,29 @@ class CBcbProduit extends CBcbObject {
       $this->hospitalier     = $infoProduit->Hospitalier;
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
+    // Chargement du statut du produit
+    $this->getStatut();
+    
+    // Chargement de l'agrement
+    $this->getAgrement();
   }
+  
+  
+  
+  function getStatut(){
+    $this->distObj->SearchStatut($this->code_cip);
+    $this->code_statut = $this->distObj->GetStatut(2);
+    $this->libelle_statut = $this->distObj->GetStatut(3);
+    $this->numero_AMM = $this->distObj->GetStatut(4);
+    $this->date_AMM = $this->distObj->GetStatut(5);
+  }
+  
+  
+  function getAgrement(){
+    $this->agrement = $this->distObj->GetStatut(15);
+  }
+ 
+  
   
   // Recherche d'un produit
   // $text: texte a rechercher
@@ -102,6 +132,18 @@ class CBcbProduit extends CBcbObject {
   function loadRefEconomique(){
     $this->_ref_economique = new CBcbEconomique();
     $this->_ref_economique->load($this->code_cip);
+  }
+  
+  // Recherche des classes ATC d'un produit
+  function loadClasseATC(){
+    $classeATC = new CBcbClasseATC();
+    $this->_ref_classes_ATC = $classeATC->searchATCProduit($this->code_cip);  
+  }
+  
+  // Recherche des classes Therapeutique d'un produit
+  function loadClasseTherapeutique(){
+    $classeThera = new CBcbClasseTherapeutique();
+    $this->_ref_classes_thera = $classeThera->searchTheraProduit($this->code_cip); 
   }
   
 }

@@ -9,7 +9,9 @@ function pageMain(){
 </script>
 
 <table class="main">
-
+  <tr>
+    <th class="title">{{$mbProduit->libelle}}</th>
+  </tr>
   <!-- Menu de la monographie du medicament -->
   <tr>
     <td colspan="2">
@@ -55,7 +57,7 @@ function pageMain(){
                 <tr>
                   <th class="title">Commentaires sur le composition</th>
                 </tr>
-                <td>
+                <td class="text">
                  {{$mbProduit->_ref_composition->exprime_par|smarty:nodefaults}}
                 </td>
               </table>
@@ -188,7 +190,68 @@ function pageMain(){
               Classification thérapeutique  
             </div>
             <div id="IdentiteContent"  class="accordionTabContentBox">
-              
+              <table class="tbl">
+                <tr>
+                  <th>Classification ATC</th>
+                </tr>
+                <!-- Parcours des classes ATC du produit -->
+                {{foreach from=$mbProduit->_ref_classes_ATC item=classeATC name=classesATC}}
+                
+                  <!-- Initialisation du compteur -->
+                  {{counter start=0 skip=2 assign="compteur"}}
+                  {{foreach from=$classeATC->classes item=classe}}
+                    {{if $classe.libelle}}
+                    <tr>
+                      <td>
+                        {{$tabEspace.$compteur|smarty:nodefaults}}
+                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                        {{$classe.libelle}} ({{$classe.code}})
+                      </td>
+                    </tr>
+                    {{/if}}
+                    {{counter}}
+                  {{/foreach}}
+                  
+									{{if !$smarty.foreach.classesATC.last}}
+									<tr>
+									<td>
+									&nbsp;
+									</td>
+									</tr>
+									{{/if}}
+                {{/foreach}}
+                
+                <tr>
+                  <th>Classification BCB</th>
+                </tr>
+                <!-- Parcours des classes ATC du produit -->
+                {{foreach from=$mbProduit->_ref_classes_thera item=classeThera name=classesThera}}
+                
+                  <!-- Initialisation du compteur -->
+                  {{counter start=0 skip=2 assign="compteur"}}
+                  {{foreach from=$classeThera->classes item=classe}}
+                    {{if $classe.libelle}}
+                    <tr>
+                      <td>
+                        {{$tabEspace.$compteur|smarty:nodefaults}} 
+                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                        {{$classe.libelle}} ({{$classe.code}})
+                      </td>
+                    </tr>
+                    {{/if}}
+                    {{counter}}
+                  {{/foreach}}
+                  
+									{{if !$smarty.foreach.classesThera.last}}
+									<tr>
+									<td>
+									&nbsp;
+									</td>
+									</tr>
+									{{/if}}
+                {{/foreach}}
+                
+              </table>
             </div>
           </div>
           <div id="Medical">
@@ -280,21 +343,51 @@ function pageMain(){
           </tr>
           <tr>
             <td>Prix de vente TTC</th>
-            <td></td>
+            <td>
+            {{if $mbProduit->_ref_economique->prix_vente != "0000000"}}
+            {{$mbProduit->_ref_economique->prix_vente}} &euro;
+            {{/if}}
+            </td>
           </tr>
           <tr>
             <td>Taux de TVA</th>
-            <td></td>
+            <td>{{$mbProduit->_ref_economique->taux_tva}} %</td>
           </tr>
           <tr>
             <td>Code AMM</th>
-            <td></td>
+            <td>{{$mbProduit->numero_AMM}}</td>
           </tr>
           <tr>
             <td>Code UCD</th>
-            <td></td>
+            <td>{{$mbProduit->_ref_economique->code_ucd}}</td>
           </tr>
-          
+          <tr>
+            <th colspan="2">Statut</th>
+          </tr>
+          <tr>
+            <td colspan="2">
+              {{if $mbProduit->libelle_statut}}
+                {{$mbProduit->libelle_statut}} du {{$mbProduit->date_AMM}}  
+              {{/if}}
+            </td>
+          </tr>
+          <tr>  
+            <td colspan="2">
+              <strong>Agrément collectivités : </strong>
+              {{if $mbProduit->agrement}}
+                Oui
+              {{else}}
+                Non
+              {{/if}}        
+            </td>
+          </tr>
+          <tr>
+            <th colspan="2">Conditions de prescription et de délivrance</th>
+          </tr>
+          <tr>
+            <td colspan="2">{{$mbProduit->_ref_monographie->condition_delivrance|smarty:nodefaults}}</td>
+          </tr>
+        </table>
       </td>
     </tr>
   </tbody>
@@ -303,25 +396,25 @@ function pageMain(){
 
 <script language="Javascript" type="text/javascript">
 var oAccordComposition = new Rico.Accordion( $('accordionComposition'), { 
-  panelHeight: 400,
+  panelHeight: 380,
   showDelay: 50, 
   showSteps: 3 
 } );
 
 var oAccordClinique = new Rico.Accordion( $('accordionClinique'), { 
-  panelHeight: 400,
+  panelHeight: 380,
   showDelay: 50, 
   showSteps: 3 
 } );
 
 var oAccordPharmaco = new Rico.Accordion( $('accordionPharmaco'), { 
-  panelHeight: 400,
+  panelHeight: 380,
   showDelay: 50, 
   showSteps: 3 
 } );
 
 var oAccordPharma = new Rico.Accordion( $('accordionPharma'), { 
-  panelHeight: 400,
+  panelHeight: 380,
   showDelay: 50, 
   showSteps: 3 
 } );

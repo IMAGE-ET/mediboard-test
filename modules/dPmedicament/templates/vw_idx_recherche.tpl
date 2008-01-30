@@ -4,7 +4,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(700, 700, "Descriptif produit");
+  url.popup(700, 620, "Descriptif produit");
 }
 
 </script>
