@@ -131,30 +131,29 @@ class CSetupdPcompteRendu extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `compte_rendu` ADD `file_category_id` INT(11) DEFAULT 0;";
     $this->addQuery($sql);
-    function setup_category(){
-      $ds = CSQLDataSource::get("std");
-      $aConversion = array();
-      $aConversion["operation"]       = array("class"=>"COperation",    "nom"=>"Opération");
-      $aConversion["hospitalisation"] = array("class"=>"COperation",    "nom"=>"Hospitalisation");
-      $aConversion["consultation"]    = array("class"=>"CConsultation", "nom"=>null);
-      $aConversion["consultAnesth"]   = array("class"=>"CConsultAnesth","nom"=>null);
-      $aConversion["patient"]         = array("class"=>"CPatient",      "nom"=>null);
-      foreach($aConversion as $sKey=>$aValue){
-        $category = new CFilesCategory();
-        if($aValue["nom"]){
-          $category->nom    = $aValue["nom"];
-          $category->class = $aValue["class"];
-          $category->store();
-        }else{
-          $category->file_category_id = 0;
-        }
-        $sql = "UPDATE `compte_rendu` SET `file_category_id`='".$category->file_category_id."', 
-               `object_class`='".$aValue["class"]."' WHERE `object_class`='$sKey'";
-        $ds->exec($sql); $ds->error();          
+
+    $aConversion = array (
+      "operation"       => array("class"=>"COperation",    "nom"=>"Opération"),
+      "hospitalisation" => array("class"=>"COperation",    "nom"=>"Hospitalisation"),
+      "consultation"    => array("class"=>"CConsultation", "nom"=>null),
+      "consultAnesth"   => array("class"=>"CConsultAnesth","nom"=>null),
+      "patient"         => array("class"=>"CPatient",      "nom"=>null),
+    );
+    
+    foreach ($aConversion as $sKey=>$aValue) {
+      $sClass = $aValue["class"];
+      
+      // Création de nouvelle catégories
+      if ($sNom = $aValue["nom"]) {
+       $sql = "INSERT INTO files_category (`nom`,`class`) VALUES ('$sNom','$sClass')";
+       $this->addQuery($sql);
       }
-      return true;
+      
+      // Passage des types aux classes
+      $sql = "UPDATE `compte_rendu` SET `object_class`='$sClass' WHERE `object_class`='$sKey'";
+      $this->addQuery($sql);
     }
-    $this->addFunctions("setup_category");
+      
     
     $this->makeRevision("0.24");
     $sql = "ALTER TABLE `aide_saisie` ADD `function_id` int(10) unsigned NULL AFTER `user_id` ;";
