@@ -231,16 +231,13 @@ function pageMain() {
             <ul>
               <li>Du patient
                 <ul>
-	                {{foreach from=$patient->_ref_dossier_medical->_ref_addictions key=curr_type item=list_addiction}}
+	                {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
 	                {{if $list_addiction|@count}}
 					        <li>
-					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+					          {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
 					          {{foreach from=$list_addiction item=curr_addiction}}
 					          <ul>
-					            <li>
-			                  {{$curr_addiction->date|date_format:"%d %b %Y"}} -
-			                  <em>{{$curr_addiction->rques}}</em>
-			                </li>
+					            <li>{{$curr_addiction->addiction}}</li>
 					          </ul>
 					          {{/foreach}}
 					        </li>
@@ -252,16 +249,13 @@ function pageMain() {
 		          </li>
               <li>Significatifs du séjour
                 <ul>
-	                {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_addictions key=curr_type item=list_addiction}}
+	                {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
 	                {{if $list_addiction|@count}}
 					        <li>
 					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
 					          {{foreach from=$list_addiction item=curr_addiction}}
 					          <ul>
-					            <li>
-			                  {{$curr_addiction->date|date_format:"%d %b %Y"}} -
-			                  <em>{{$curr_addiction->rques}}</em>
-			                </li>
+					            <li>{{$curr_addiction->addiction}}</li>
 					          </ul>
 					          {{/foreach}}
 					        </li>

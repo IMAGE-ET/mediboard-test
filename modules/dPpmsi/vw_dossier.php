@@ -28,6 +28,7 @@ if ($patient->patient_id) {
   $patient->_ref_dossier_medical->updateFormFields();
   $patient->_ref_dossier_medical->loadRefsAntecedents();
   $patient->_ref_dossier_medical->loadRefsTraitements();
+  $patient->_ref_dossier_medical->loadRefsAddictions();
   $patient->loadRefsAffectations();
   $patient->loadRefsConsultations();
   $patient->loadRefsSejours();
@@ -36,6 +37,7 @@ if ($patient->patient_id) {
     $sejour->_ref_dossier_medical->updateFormFields();
     $sejour->_ref_dossier_medical->loadRefsAntecedents();
     $sejour->_ref_dossier_medical->loadRefsTraitements();
+    $sejour->_ref_dossier_medical->loadRefsAddictions();
     $sejour->loadRefsAffectations();
   }
   
