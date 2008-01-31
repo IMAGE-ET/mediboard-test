@@ -15,8 +15,9 @@ class CPrescription extends CMbObject {
   var $prescription_id = null;
   
   // DB Fields
-  var $object_class   = null;
-  var $object_id     = null;
+  var $praticien_id = null;
+  var $object_class = null;
+  var $object_id    = null;
   
   // Object References
   var $_ref_object = null;
@@ -38,6 +39,7 @@ class CPrescription extends CMbObject {
   
   function getSpecs() {
     return array (
+      "praticien_id"  => "notNull ref class|CMediusers",
       "object_id"     => "ref class|CCodable meta|object_class",
       "object_class"  => "notNull enum list|CSejour|CConsultation",
     );
@@ -51,11 +53,13 @@ class CPrescription extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = "Prescription ".$this->_ref_object->_view;
+    $this->_view = "Prescription du Dr. ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
   }
   
   function loadRefsFwd() {
-    $this->_ref_object = new $this->object_class;
+    $this->_ref_praticien = new CMediusers();
+    $this->_ref_praticien->load($this->praticien_id);
+    $this->_ref_object = new $this->object_class();
     $this->_ref_object->load($this->object_id);
   }
   

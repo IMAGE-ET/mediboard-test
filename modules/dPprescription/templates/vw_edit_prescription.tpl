@@ -69,7 +69,7 @@ function updateFields(selected) {
     </td>
     <td rowspan="3" class="greedyPane">
       <div id="prescription">
-      {{include file="inc_vw_prescription.tpl"}}
+        {{include file="inc_vw_prescription.tpl"}}
       </div>
     </td>
   </tr>

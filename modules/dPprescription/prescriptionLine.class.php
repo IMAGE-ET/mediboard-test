@@ -17,6 +17,7 @@ class CPrescriptionLine extends CMbObject {
   // DB Fields
   var $prescription_id = null;
   var $code_cip        = null;
+  var $no_poso         = null;
   
   // Object References
   var $_ref_prescription = null;
@@ -31,7 +32,8 @@ class CPrescriptionLine extends CMbObject {
   function getSpecs() {
     return array (
       "prescription_id" => "notNull ref class|CPrescription",
-      "code_cip"    => "notNull ref class|CBcbProduit unlink",
+      "code_cip"        => "notNull numchar|7",
+      "no_poso"         => "num max|128",
     );
   }
   
@@ -43,7 +45,7 @@ class CPrescriptionLine extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = "Traitement : ".$this->_ref_produit->libelle;
+    $this->_view = $this->_ref_produit->libelle;
   }
   
   function loadRefsFwd() {

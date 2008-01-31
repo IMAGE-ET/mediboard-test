@@ -27,14 +27,22 @@ if(!$prescription->_id) {
 if($prescription->object_id) {
   $prescription->loadRefsFwd();
   $prescription->loadRefsLines();
+  foreach($prescription->_ref_prescription_lines as &$line) {
+    $line->_ref_produit->loadRefPosologies();
+  }
   $prescription->_ref_object->loadRefSejour();
   $prescription->_ref_object->loadRefPatient();
 }
+
+// Liste des praticiens
+$user = new CMediusers();
+$listPrats = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("prescription", $prescription);
+$smarty->assign("listPrats", $listPrats);
 
 $smarty->display("inc_vw_prescription.tpl");
 

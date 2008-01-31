@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 
 
@@ -41,7 +41,19 @@ class CSetupdPprescription extends CSetup {
           ) TYPE=MyISAM COMMENT='Table des lignes de médicament des prescriptions';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.10";
+    $this->makeRevision("0.10");
+    
+    $sql = "ALTER TABLE `prescription_line` ADD `no_poso` SMALLINT(6) ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line` ADD INDEX (`no_poso`) ;" ;
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `prescription` ADD `praticien_id` INT(11) NOT NULL AFTER `prescription_id` ;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription` ADD INDEX (`praticien_id`) ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.11";
   }  
 }
 

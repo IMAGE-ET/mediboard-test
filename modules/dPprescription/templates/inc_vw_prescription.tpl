@@ -9,7 +9,7 @@
       </form>
       <table class="form">
         <tr>
-          <th class="title">Prescription</th>
+          <th class="title">{{$prescription->_view}}</th>
         </tr>
         <tr>
           <td>
@@ -45,6 +45,22 @@
             </button>
             {{$curr_line->_view}}
           </td>
+          <td>
+            <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="dosql" value="do_prescription_line_aed" />
+              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
+              <input type="hidden" name="del" value="0" />
+              <select name="no_poso" onchange="submitFormAjax(this.form, 'systemMsg')">
+                {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
+                <option value="{{$curr_poso->code_posologie}}"
+                  {{if $curr_poso->code_posologie == $curr_line->no_poso}}selected="selected"{{/if}}>
+                  {{$curr_poso->_view}}
+                </option>
+                {{/foreach}}
+              </select>
+            </form>
+          </td>
         </tr>
         {{/foreach}}
       </table>
@@ -68,6 +84,13 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="object_class" value="{{$prescription->object_class}}"/>
         <input type="hidden" name="object_id" value="{{$prescription->object_id}}"/>
+        <select name="praticien_id">
+          {{foreach from=$listPrats item=curr_prat}}
+          <option value="{{$curr_prat->_id}}">
+            {{$curr_prat->_view}}
+          </option>
+          {{/foreach}}
+        </select>
         <button type="submit" class="new">Créer une prescription</button>
       </form>
       {{/if}}

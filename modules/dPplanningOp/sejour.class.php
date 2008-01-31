@@ -361,7 +361,7 @@ class CSejour extends CCodable {
     $this->_venue_SHS_guess .="xxxxx";
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
-    $this->_view = "Séjour de ";
+    $this->_view = "Séjour du ";
     $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";
     $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");

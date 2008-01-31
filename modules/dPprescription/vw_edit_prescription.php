@@ -30,12 +30,20 @@ if($prescription->object_id) {
 }
 if($prescription->_id) {
   $prescription->loadRefsLines();
+  foreach($prescription->_ref_prescription_lines as &$line) {
+    $line->_ref_produit->loadRefPosologies();
+  }
 }
+
+// Liste des praticiens
+$user = new CMediusers();
+$listPrats = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("prescription", $prescription);
+$smarty->assign("listPrats", $listPrats);
 
 $smarty->display("vw_edit_prescription.tpl");
 
