@@ -19,7 +19,7 @@
 			  {{foreach from=$arbreATC item=elementATC}}
 			  <tr>
 			    <td>{{$elementATC->Code}}</td>
-			    <td><a href="#" onclick="loadArbreATC('{{$elementATC->Code}}', '{{$dialog}}')">{{$elementATC->Libelle}}</a></td>
+			    <td class="text"><a href="#" onclick="loadArbreATC('{{$elementATC->Code}}', '{{$dialog}}')">{{$elementATC->Libelle}}</a></td>
 			  </tr>
 			  {{/foreach}}
 			</table>
@@ -39,7 +39,7 @@
            <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->Libelle}}', '{{$produit->CodeCIP}}')" alt="Ajouter à la prescription" title="Ajouter à la prescription" />
           {{/if}}
 			    {{$produit->CodeClasse}}</td>
-			    <td><a href="" onclick="viewProduit({{$produit->CodeCIP}}); return false;">{{$produit->Libelle}}</a></td>
+			    <td class="text"><a href="" onclick="viewProduit({{$produit->CodeCIP}}); return false;">{{$produit->Libelle}}</a></td>
 			  </tr>
 			  {{/foreach}}
 			  {{/if}}

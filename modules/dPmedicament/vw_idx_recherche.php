@@ -52,6 +52,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("tabDCI", "");
 $smarty->assign("DC_search", "");
 $smarty->assign("DCI_code", "");
+$smarty->assign("tabViewProduit", "");
 
 $smarty->assign("composant", "");
 $smarty->assign("code", "");

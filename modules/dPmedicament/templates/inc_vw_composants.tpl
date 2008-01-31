@@ -16,7 +16,7 @@ loadComposants = function(composant, code, libelle, dialog){
 <table class="form">
   <tr>
     <td>
-      <form name="rechercheComposant" action="?" method="get">
+      <form name="rechercheComposant" action="?" method="get" onsubmit="return false;">
         Composant recherché
         <input type="text" name="composant" value="{{$composant}}" />
         <button type="button" class="search" onclick="loadComposants(this.form.composant.value, '', '', '{{$dialog}}')">Rechercher</button>

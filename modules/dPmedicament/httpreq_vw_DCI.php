@@ -11,11 +11,13 @@
 $DC_search = mbGetValueFromGet("DC_search", "");
 $DCI_code = mbGetValueFromGet("DCI_code", "");
 $dialog = mbGetValueFromGet("dialog");
-
+$forme = mbGetValueFromGet("forme");
+$dosage = mbGetValueFromGet("dosage");
 
 $DCI = new CBcbDCI();
 $tabDCI = array();
 $tabProduit = array();
+$tabViewProduit = array();
 
 if($DC_search){
   $tabDCI = $DCI->searchDCI($DC_search);
@@ -30,14 +32,17 @@ if($DCI_code){
     // Tri par forme et dosage
     $tabProduit[$_produit->Dosage][$_produit->Forme][] = $_produit;
   }
+  if($forme && $dosage){
+    $tabViewProduit = $tabProduit[$dosage][$forme];
+  }
 }
-
 
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("tabViewProduit", $tabViewProduit);
 $smarty->assign("dialog", $dialog);
 $smarty->assign("tabProduit", $tabProduit);
 $smarty->assign("tabDCI", $tabDCI);
