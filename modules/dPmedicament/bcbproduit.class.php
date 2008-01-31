@@ -10,11 +10,7 @@
 require_once("bcbObject.class.php");
 
 class CBcbProduit extends CBcbObject {
-
-  // Générale
-  var $distObj               = null;
- 
-  // Spéciale Produit
+  
   var $code_cip              = null;
   var $code_ucd              = null;
   var $libelle_produit       = null;
@@ -47,10 +43,8 @@ class CBcbProduit extends CBcbObject {
  
   // Constructeur
   function CBcbProduit(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBProduit();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
+    $this->distClass = "BCBProduit";
+    parent::__construct();
   }
 
   // Chargement d'un produit
