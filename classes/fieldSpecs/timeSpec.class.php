@@ -45,7 +45,9 @@ class CTimeSpec extends CMbFieldSpec {
     return "TIME";
   }
   
-  function getFormHtmlElement($object, $params, $value, $className){
+  function getFormHtmlElement($object, $params, $value, $className) {
+    CMbArray::defaultValue($params, "size", 5);
+    CMbArray::defaultValue($params, "maxLength", 9);
     return $this->getFormElementText($object, $params, $value, $className);
   }
 }

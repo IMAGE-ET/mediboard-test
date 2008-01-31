@@ -1,4 +1,8 @@
-<table>
+<table class="form">
+<tr>
+	<th class="category" colspan="10">Dossier médical</th>
+</tr>
+
 <tr>
  <td class="text">
   <strong>Addictions significatifs</strong>

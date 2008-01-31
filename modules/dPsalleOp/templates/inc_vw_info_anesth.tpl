@@ -1,4 +1,5 @@
 {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
+<table class="form">
   <!-- Affichage d'information complementaire pour l'anestesie -->
   <tr>
     <td class="button">
@@ -187,3 +188,5 @@
   </table>
   </td>
   </tr>
+  
+</table>

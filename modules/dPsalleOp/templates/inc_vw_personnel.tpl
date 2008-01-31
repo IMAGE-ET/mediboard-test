@@ -15,7 +15,7 @@ function submitPersonnel(oForm){
 <tr>
   <th class="category">Personnel prévu</th>
   <th class="category">Personnel ajouté<br />
-    <form name="affectationPers" action="?m={{$m}}" method="post">
+    <form name="affectationPers-aideop" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />
@@ -33,7 +33,7 @@ function submitPersonnel(oForm){
       </select>
     </form>
     <br />
-    <form name="affectationPers" action="?m={{$m}}" method="post">
+    <form name="affectationPers-penseuse" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
       <input type="hidden" name="del" value="0" />

@@ -13,18 +13,16 @@ function viewCode(code, class){
 </script>
 
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
-<hr />
-  <strong>
-    <a href="#" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
-    {{$curr_code->code}} : {{$curr_code->libelleLong}}
-    </a>
-  </strong> 
+  <a href="#" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
+    <strong>{{$curr_code->code}} :</strong> 
+    {{$curr_code->libelleLong}}
+  </a>
+  
   {{if $can->edit || $modif_operation}}
   
   <br />
-  Codes associés :
   <select name="asso" onchange="setCodeTemp(this.value)">
-    <option value="">&mdash; choix</option>
+    <option value="">&mdash; Choisir un code associé</option>
     {{foreach from=$curr_code->assos item=curr_asso}}
     <option value="{{$curr_asso.code}}">{{$curr_asso.code}}({{$curr_asso.texte|truncate:40:"...":true}})</option>
     {{/foreach}}
@@ -65,7 +63,7 @@ function viewCode(code, class){
 
 			{{assign var=newButtons value=true}}
       {{if $newButtons}}
-<!--  <div style="float: right;"> -->
+<!--  <div style="float: right;">-->
       <div style="position: absolute; right: 10px;">
       {{if $can->edit || $modif_operation}}
         {{if !$acte->acte_id}}
@@ -95,7 +93,8 @@ function viewCode(code, class){
     <tr id="acte{{$key}}-trigger">
       <td colspan="3" style="width: 100%; background-color: #{{$bg_color}}">
         Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+        Phase {{$curr_phase->phase}} 
+        <!-- {{$curr_phase->libelle}} -->
       </td>
     </tr>
   
@@ -276,7 +275,8 @@ function viewCode(code, class){
 {{/if}}
 
 {{/foreach}}
+<hr/>
+
 {{foreachelse}}
 <em>Pas d'acte à coder</em>
 {{/foreach}}
-

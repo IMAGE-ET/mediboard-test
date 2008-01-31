@@ -2,11 +2,8 @@
 
 <table class="form">
   <tr>
-    <td class="button">{{mb_label object=$sejour field="DP"}}</td>
-    <td class="button">{{mb_label object=$sejour field="DR"}}</td>
-    {{if $modeDAS}}
-    <td class="button">Diagnostics associés({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})</td>
-    {{/if}}
+    <th class="category" style="width: 50%">{{mb_label object=$sejour field="DP"}}</th>
+    <th class="category" style="width: 50%">{{mb_label object=$sejour field="DR"}}</th>
   </tr>
   <tr>
 		<!-- Diagnostic Principal -->
@@ -31,7 +28,7 @@
           this.pop();
         }
       </script>
-      <input type="text notext" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
+      <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
         onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
       <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
@@ -64,10 +61,29 @@
       <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
     </td>
+  </tr>
+  
+  <tr>
+    <td class="text button">
+      {{if $sejour->_ext_diagnostic_principal}}
+      <strong>{{$sejour->_ext_diagnostic_principal->libelle}}</strong>
+      {{/if}}
+    </td>
+    <td class="text button">
+      {{if $sejour->_ext_diagnostic_relie}}
+      <strong>{{$sejour->_ext_diagnostic_relie->libelle}}</strong>
+      {{/if}}
+    </td>
+  </tr>
 
-    
-    {{if $modeDAS}}
-    <td class="text" rowspan="2">
+  {{if $modeDAS}}
+  <tr>
+    <th class="category" colspan="2">
+      Diagnostics associés({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})
+    </th>
+  </tr>
+  <tr>
+    <td class="button" colspan="2">
       <form name="editDossierMedical" action="?m={{$m}}" method="post">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
@@ -92,7 +108,10 @@
           }
         </script> 
       </form>
-      <br />
+    </td>
+  </tr>
+  <tr>
+    <td class="text" colspan="2">
       {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
           <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post">
             <input type="hidden" name="m" value="dPpatients" />
@@ -109,20 +128,9 @@
           <br />
       {{/foreach}}
     </td>
-    {{/if}}
   </tr>
-  <tr>
-    <td class="text button">
-      {{if $sejour->_ext_diagnostic_principal}}
-      {{$sejour->_ext_diagnostic_principal->libelle}}
-      {{/if}}
-    </td>
-    <td class="text button">
-      {{if $sejour->_ext_diagnostic_relie}}
-      {{$sejour->_ext_diagnostic_relie->libelle}}
-      {{/if}}
-    </td>
-  </tr>
+  {{/if}}
+
 </table>
 <script type="text/javascript">
 CIM10Selector.set = function(code){
@@ -131,4 +139,3 @@ CIM10Selector.set = function(code){
   oForm[this.sView].onchange();
 }
 </script>
-<hr />

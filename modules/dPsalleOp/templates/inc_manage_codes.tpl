@@ -43,7 +43,7 @@
       <td colspan="2" style="vertical-align:middle;">
         <input name="_actes" type="hidden" value="" />
         <select name="_selCode">
-          <option value="0">&mdash; Choisir</option>
+          <option value="0">&mdash; Choisir un code à supprimer</option>
           {{foreach from=$subject->_associationCodesActes item=curr_code}}
           <option value="{{$curr_code.code}}" onclick="this.form._actes.value = '{{$curr_code.ids}}'">
             {{$curr_code.code|truncate:7:""|capitalize}}
@@ -56,10 +56,13 @@
         </button>
         {{/if}}
       </td>
-      
+    </tr>
+    <tr>
       {{if $can->edit || $modif_operation}}
       <td colspan="2" style="vertical-align:middle;">
-        <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>
+        <button class="search" type="button" onclick="CCAMSelector.init()">
+          Rechercher un code à ajouter
+        </button>
      
         <script type="text/javascript">   
           CCAMSelector.init = function(){

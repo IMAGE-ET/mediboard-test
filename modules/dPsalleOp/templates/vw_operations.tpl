@@ -112,14 +112,17 @@ function reloadAfterSaveDoc() {
   url.addParam("operation_id" , "{{$selOp->_id}}");
   url.requestUpdate('documents');
 }
+
 </script>
 
 <table class="main">
   <tr>
-    <td style="width: 200px;" id="listplages"></td>
+    <td style="width: 180px;" id="listplages"></td>
     <td class="greedyPane">
       <table class="form">
-        {{if $selOp->operation_id}}
+        {{if $selOp->_id}}
+
+				<!-- Informations générales sur l'intervention et le patient -->
         {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
         <tr>
           <th class="title" colspan="2">
@@ -130,142 +133,100 @@ function reloadAfterSaveDoc() {
             ({{$patient->_age}} ans 
             {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
-            {{if $selOp->libelle}}
-              <br />
-              {{$selOp->libelle}}
-            {{/if}}
+            <br />
+            {{if $selOp->libelle}}{{$selOp->libelle}}{{/if}}
+						&mdash; {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
+						&mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
+            
           </th>
         </tr>
-        <tr>
-          <td colspan="2">
+        
+        <!-- Mise en avant du matériel et remarques -->
+			  {{if $selOp->materiel}}
+			  <tr>
+			    <td>
+			      <strong>{{mb_label object=$selOp field=materiel}} :</strong> 
+			      {{mb_value object=$selOp field=materiel}}
+			    </td>
+			  </tr>
+			  {{/if}}
+			  {{if $selOp->rques}}
+			  <tr>
+			    <td>
+			      <strong>{{mb_label object=$selOp field=rques}} :</strong> 
+			      {{mb_value object=$selOp field=rques}}
+			    </td>
+			  </tr>
+			  {{/if}}
+			</table>
+
+				<!-- Tabulations -->
             <ul id="main_tab_group" class="control_tabs">
               <li><a href="#one">Timings</a></li>
               <li><a href="#two">Anesthésie</a></li>
+              <li><a href="#threebis">Diagnostics</a></li>
               <li><a href="#three">CCAM</a></li>
               <li><a href="#four">NGAP</a></li>
               <li><a href="#five">Dossier</a></li>
             </ul>
-          </td>
-        </tr>
           
-      
-        <!-- Premier onglet => Timings -->
-      	<tbody id="one">
-          <tr>
-            <th class="category" style="vertical-align: middle">Timing</th>
-            <td>
-              <div id="timing">
-                {{include file="inc_vw_timing.tpl"}}
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <th class="category">Personnel</th>
-            <td>
-              <div id="listPersonnel">        
-              {{include file="inc_vw_personnel.tpl"}}
-              </div>
-            </td>
-          </tr>
-        </tbody>
-        <!-- Fin du premier onglet -->
-     
+        <!-- Premier onglet => Timings + Personnel -->
+        <div id="one">
+	      	<div id="timing">
+	      	  {{include file="inc_vw_timing.tpl"}}
+	      	</div>
+	      	<div id="listPersonnel">
+	      	  {{include file="inc_vw_personnel.tpl"}}
+	      	</div>
+	      </div>
      
         <!-- Deuxieme onglet => Anesthesie -->
-        <tbody id="two">
-          <tr>
-            <th rowspan="20" class="category" style="vertical-align: middle">Anesthésie</th>
-            <td>
-              <div id="anesth">
-    			      {{include file="inc_vw_anesth.tpl"}}
-    			    </div>
-			      </td>
-			   </tr>
-			  {{include file="inc_vw_info_anesth.tpl"}}
-			  </tbody>
-			  <!-- Fin du deuxieme onglet -->
-			 
-			 
-			 
+        <div id="two">
+          <div id="anesth">
+  			    {{include file="inc_vw_anesth.tpl"}}
+			    </div>
+
+				  {{include file="inc_vw_info_anesth.tpl"}}
+			  </div>
+	
+        <!-- Troisieme onglet bis: codage diagnostics CIM -->
+        <div id="threebis">
+          <div id="cim">
+            {{assign var="sejour" value=$selOp->_ref_sejour}}
+            {{include file="inc_diagnostic_principal.tpl"}}
+          </div>
+        </div>
+
         <!-- Troisieme onglet: codage acte ccam -->
-        <tr id="three">
-          <th class="category" style="vertical-align: middle">
-            Actes<br /><br />
-            {{tr}}{{$selOp->_class_name}}{{/tr}}
-            {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
-              <br />
-              Côté {{tr}}COperation.cote.{{$selOp->cote}}{{/tr}}
-              <br />
-              ({{$selOp->temp_operation|date_format:"%Hh%M"}})
-            {{/if}}
-          </th>  
-          <td>
-            <div id="cim">
-              {{assign var="sejour" value=$selOp->_ref_sejour}}
-              {{include file="inc_diagnostic_principal.tpl"}}
-            </div>
-            <div id="ccam">
-              {{assign var="subject" value=$selOp}}
-              {{include file="inc_gestion_ccam.tpl"}}
-            </div>
-          </td>
-        </tr>
+        <div id="three">
+          <div id="ccam">
+            {{assign var="subject" value=$selOp}}
+            {{include file="inc_gestion_ccam.tpl"}}
+          </div>
+        </div>
         <!-- Fin du troisieme onglet -->
         
-        
-        
         <!-- Quatrième onglet => Codage acte NGAP -->
-        <tr id="four">
-          <th class="category" style="vertical-align: middle">
-            Actes NGAP
-          </th>
-          <td id="listActesNGAP">
+        <div id="four">
+          <div id="listActesNGAP">
             {{assign var="object" value=$selOp}}
             {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
-          </td>
-        </tr>
-        <!-- Fin du quatrieme onglet -->
-        
-        
-        
+          </div>
+        </div>
         
 		    <!-- Cinquieme onglet => Dossier Medical -->
 			  {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
-        <tr id="five">
-          <th class="category" style="vertical-align: middle">
-            Séjour
-          </th>
-          <td class="text">
+        <div id="five">
+          <div class="text">
            {{include file="inc_vw_dossier.tpl"}}
-          </td>
-        </tr>
-        <!-- Fin du cinquieme onglet -->
+          </div>
+        </div>
         
-        
-        
-     
-			
-		
-        {{if $selOp->materiel}}
-        <tr>
-          <th class="category">Matériel</th>
-          <td><strong>{{$selOp->materiel|nl2br}}</strong></td>
-        </tr>
-        {{/if}}
-        {{if $selOp->rques}}
-        <tr>
-          <th class="category">Remarques</th>
-          <td>{{$selOp->rques|nl2br}}</td>
-        </tr>
-        {{/if}}
         {{else}}
-        <tr>
-          <th class="title">
-            Sélectionnez une opération
-          </th>
-        </tr>
+        <div>
+          <em>Sélectionnez une opération</em>
+        </div>
         {{/if}}
-      </table>
     </td>
   </tr>      
 </table>

@@ -1679,7 +1679,9 @@ ul.control_tabs {
 	padding: 0;
 	clear: both;
 	height: 20px;
-	clear: both;
+	padding-bottom: 3px;
+	padding-left: 6px;
+	border-bottom: 2px outset #458;
 }
 
 ul.control_tabs li {
@@ -1687,16 +1689,16 @@ ul.control_tabs li {
 	margin-right: 7px;
 	text-align: center;
   border: 1px outset #458;
+	border-bottom: none;
 }
 
 ul.control_tabs li a {
 	display: block;
 	height: 20px;
 	font-size: 14px;
-	padding: 0 6px 0 6px;
+	padding: 2px 8px 0px 8px;
 	background-color: #6b79a5;
 	color: #ced7ef;
-	width: 80px;
 }
 
 ul.control_tabs li a:hover {
@@ -1707,6 +1709,7 @@ ul.control_tabs li a:hover {
 ul.control_tabs li a.active {
 	background-color: #636996;
 	color: #fff;
+	font-weight: bold
 }
 
 

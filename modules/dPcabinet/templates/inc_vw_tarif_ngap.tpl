@@ -1,1 +1,1 @@
-<input type="text" name="montant_base" value="{{if $tarif}}{{$tarif}}{{/if}}" size="6"/> &euro;
+<input type="text" class="currency" name="montant_base" value="{{if $tarif}}{{$tarif}}{{/if}}" size="4" /> &euro;

@@ -55,6 +55,9 @@ ActesNGAP = {
   <input type="hidden" name="object_id" value="{{$object->_id}}" />
   <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
   <table class="form">
+    <tr>
+      <th class="category" colspan="10">Actes NGAP</th>
+    </tr>
   {{if $object->_coded}}
     <tr>
       <td colspan="5">
