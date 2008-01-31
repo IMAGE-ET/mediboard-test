@@ -18,6 +18,10 @@ class CBcbComposition extends CBcbObject {
   var $principes_actifs = null;
 
   
+  // Object reference
+  var $_ref_composants = null;
+  var $_ref_produits = null;
+  
   // Constructeur
   function CBcbComposition(){
     $this->distClass = "BCBComposition";
@@ -31,5 +35,17 @@ class CBcbComposition extends CBcbObject {
     $this->real_exprime_par = $this->distObj->DataCompo->RealExprimePar;
     $this->excipients = $this->distObj->DataCompo->Excipients;
     $this->principes_actifs = $this->distObj->DataCompo->PA;
+  }
+  
+  
+  function searchComposant($search){
+    $this->distObj->SearchComposant($search, 1);
+	  $this->_ref_composants = $this->distObj->TabComposant;
+  }
+  
+  
+  function searchProduits($composant_id){
+    $this->distObj->Produits($composant_id);
+    $this->_ref_produits = $this->distObj->TabProduit;
   }
 }

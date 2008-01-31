@@ -49,6 +49,9 @@ $niveauCodeBCB = "";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("composant", "");
+$smarty->assign("code", "");
+
 $smarty->assign("niveauCodeATC", $niveauCodeATC);
 $smarty->assign("niveauCodeBCB", $niveauCodeBCB);
 $smarty->assign("arbreATC", $arbreATC);

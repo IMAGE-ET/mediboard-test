@@ -1,7 +1,5 @@
 <script type="text/javascript">
 
-
-
 function loadArbreATC(codeATC, dialog){
   var url = new Url;
   url.setModuleAction("dPmedicament", "httpreq_vw_arbre_ATC");
@@ -178,6 +176,9 @@ function pageMain(){
   <tbody id="three">
   <tr>
     <td>
+      <div id="composant">
+        {{include file="inc_vw_composants.tpl"}}
+      </div>
     </td>
   </tr>
   </tbody>
