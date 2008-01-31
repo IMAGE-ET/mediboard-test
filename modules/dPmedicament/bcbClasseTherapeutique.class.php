@@ -38,6 +38,38 @@ class CBcbClasseTherapeutique extends CBcbObject {
   }
   
   
+
+  
+  // Fonction qui retourne l'arborescence
+  function loadArbre($classeBCB = ""){
+    $this->distObj->Arbre($classeBCB);
+    return $this->distObj->tabClasseTherapeutique;
+  }
+  
+  // Fonction qui retourne les produits d'une classe ATC en fonction du code de la classe
+  function loadRefsProduits($codeBCB = ""){
+    $this->distObj->Produits($codeBCB);
+    $this->_refs_produits = $this->distObj->tabProduit;
+  }
+  
+  
+  // Fonction qui retourne le niveau du code dans l'arbre
+  function getNiveau($codeBCB){
+    return strlen($codeBCB);
+  }
+  
+  function getCodeNiveauSup($codeBCB){
+    if(strlen($codeBCB)==0){
+      return;
+    }
+    $code = substr($codeBCB, 0, strlen($codeBCB)-1); 
+    $libelle = $this->getLibelle($code);
+    if($libelle == ""){
+      return $this->getCodeNiveauSup($code); 
+    }
+    return $code;
+  }
+  
   // Fonction permettant d'obtenir le libelle d'une classe Therapeutique
   function getLibelle($codeThera){
     $classeThera = new CBcbClasseTherapeutique();

@@ -247,6 +247,15 @@ $dPconfig["dPlabo"] = array (
   ),
 );
 
+$dPconfig["dPmedicament"] = array (
+  "CBcbClasseATC" => array (
+    "niveauATC" => "2",
+  ),
+  "CBcbClasseTherapeutique" => array (
+    "niveauBCB" => "2",
+  ),
+);
+
 $dPconfig["system"] = array(
   "type_telephone" => "france",
   "reverse_proxy"  => "0.0.0.0",

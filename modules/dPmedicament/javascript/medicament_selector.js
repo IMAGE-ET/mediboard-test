@@ -7,7 +7,7 @@ var MedSelector = {
   oUrl      : null,
   selfClose : true,
   options : {
-    width : 300,
+    width : 700,
     height: 400
   },
 

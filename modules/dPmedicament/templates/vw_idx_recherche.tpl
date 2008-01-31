@@ -1,6 +1,34 @@
 <script type="text/javascript">
 
 
+
+function loadArbreATC(codeATC, dialog){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "httpreq_vw_arbre_ATC");
+  url.addParam("codeATC", codeATC);
+  url.addParam("dialog", dialog);
+  url.requestUpdate("ATC", { waitingText: null } );
+}
+
+function loadArbreBCB(codeBCB, dialog){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "httpreq_vw_arbre_BCB");
+  url.addParam("codeBCB", codeBCB);
+  url.addParam("dialog", dialog);
+  url.requestUpdate("BCB", { waitingText: null } );
+}
+
+function viewATC(){
+  $('ATC').show();
+  $('BCB').hide();
+}
+
+function viewBCB(){
+  $('BCB').show();
+  $('ATC').hide();
+}
+
+
 function setClose(libelle, code) {
   var oSelector = window.opener.MedSelector;
   oSelector.set(libelle, code);
@@ -8,7 +36,6 @@ function setClose(libelle, code) {
     window.close();
   }
 }
-
 
 function viewProduit(cip){
   var url = new Url;
@@ -31,11 +58,29 @@ function changeFormSearch(){
 
 function pageMain(){
   changeFormSearch();
+  new Control.Tabs('main_tab_group');
+  
+  // Au chargement, vue des classes ATC
+  viewATC();  
 }
-
 </script>
 
 <table class="main">
+
+  <tr>
+    <td colspan="2">
+      <ul id="main_tab_group" class="control_tabs">
+        <li><a href="#one">Produits</a></li>
+        <li><a href="#two">Classes</a></li>
+        <li><a href="#three">Composants</a></li>
+        <li><a href="#four">DCI</a></li>
+        
+      </ul>
+    </td>
+  </tr>
+  
+  
+  <tbody id="one">
   <tr>
     <td>Recherche par
       <form name="formSearch" action="?" method="get">
@@ -99,6 +144,53 @@ function pageMain(){
       </table>
     </td>
   </tr>
+  </tbody>
+  
+  <tbody id="two">
+  <tr>
+    <td>
+    <input type="radio" name="type_classe" value="atc" checked="checked" onchange="viewATC();" />
+    Classes ATC
+    <input type="radio" name="type_classe" value="bcb" onchange="viewBCB();"/>
+    CLasses BCB
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <div id="ATC">
+      {{include file="inc_vw_arbre_ATC.tpl"}}
+      </div>
+    </td>
+  </tr>
+  
+  <tr>
+    <td>
+      <div id="BCB">
+      {{include file="inc_vw_arbre_BCB.tpl"}}
+      </div>
+    </td>
+  </tr>
+  
+  
+  </tbody>
+  
+  <tbody id="three">
+  <tr>
+    <td>
+    </td>
+  </tr>
+  </tbody>
+  
+  
+  <tbody id="four">
+  <tr>
+    <td>
+    </td>
+  </tr>
+  </tbody>
+  
+  
 </table>
   
   
