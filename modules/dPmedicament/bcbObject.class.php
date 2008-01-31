@@ -12,7 +12,7 @@
  */
   
 
-class CBcbObject extends CMbObject {  
+class CBcbObject {  
   static $objDatabase = null;
   static $TypeDatabase = null;
   
@@ -25,23 +25,11 @@ class CBcbObject extends CMbObject {
     }
   }
   
-  function CBcbObject($table, $key) {
-    foreach (array_keys($this->getSpecs()) as $prop) {
-      $this->$prop = null;
-    }
-        
-    $this->loadRefModule(basename(dirname(__FILE__)));
-    if($this->_ref_module) {
-      $this->CMbObject($table, $key);
-    }
+  function CBcbObject() {
   }
   
-  function store(){
-    return;  
-  }
-  
-  function delete(){
-    return;
+  function load() {
+    return false;
   }
 }
 

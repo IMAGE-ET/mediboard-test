@@ -52,7 +52,7 @@ class CBcbProduit extends CBcbObject {
     $this->distObj = new BCBProduit();
     $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
   }
- 
+
   // Chargement d'un produit
   function load($code_cip){
     $this->distObj->SearchInfo($code_cip);
@@ -142,18 +142,19 @@ class CBcbProduit extends CBcbObject {
   }
   
   // Chargement de toutes les posologies d'un produit
-  function loadListPosologies(){
+  function loadRefPosologies(){
     $ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
     $posologies = $ds->loadList($query);
     
     // Chargement de chaque posologie
+    $this->_ref_posologies = array();
     foreach($posologies as $key => $posologie){
       $mbposologie = new CBcbPosologie();
       $mbposologie->load($posologie["CODE_CIP"], $posologie["NO_POSO"]);
-      $listPosologie[] = $mbposologie; 
+      $this->_ref_posologies[] = $mbposologie;
     }
-    return $listPosologie;
+    return $this->_ref_posologies;
   }
   
   // Chargement de la monographie d'un produit
