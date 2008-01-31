@@ -648,6 +648,10 @@ class CConsultation extends CCodable {
   
   // Chargement du sejour et du RPU dans le cas d'une urgence
   function loadRefSejour(){
+    if ($this->_ref_sejour) {
+      return;
+    }
+    
     $this->_ref_sejour = new CSejour();
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefRPU();

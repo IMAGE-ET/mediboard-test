@@ -426,12 +426,15 @@ class CSejour extends CCodable {
   }
   
   function loadRefPatient() {
-    if (!$this->_ref_patient) {
-	    $this->_ref_patient = new CPatient;
-	    $this->_ref_patient->load($this->patient_id);
+    if ($this->_ref_patient) {
+      return;
     }
     
+    $this->_ref_patient = new CPatient;
+    $this->_ref_patient->load($this->patient_id);
     $this->getDroitsCMU();
+
+    // View
     $this->_view = "Séjour de ";
     $this->_view .= $this->_ref_patient->_view;
     $this->_view .= " du ";

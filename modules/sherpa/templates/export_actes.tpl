@@ -45,11 +45,15 @@ Main.add(function() {
       <div class="warning">
         {{tr}}CSpDetCCAM{{/tr}} : {{$delDetCCAM.$sejour_id}} suppressions pour ce séjour 
       </div>
+      <div class="warning">
+        {{tr}}CSpDetCIM{{/tr}} : {{$delDetCIM.$sejour_id}} suppressions pour ce séjour 
+      </div>
 			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
     </td>
   </tr>
   
   <!-- Actes du séjour -->
+  {{include file="inc_export_detcim.tpl" _codable=$_sejour}}
   {{foreach from=$_sejour->_ref_actes_ccam item=_acte_ccam}}
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
@@ -71,6 +75,8 @@ Main.add(function() {
 			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
 		</td>    
   </tr>
+
+  {{include file="inc_export_detcim.tpl" _codable=$_operation}}
   {{foreach from=$_operation->_ref_actes_ccam item=_acte_ccam}}
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}

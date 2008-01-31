@@ -413,10 +413,12 @@ class COperation extends CCodable {
   }
   
   function loadRefSejour() {
-    if (!$this->_ref_sejour) {
-	    $this->_ref_sejour = new CSejour();
-	    $this->_ref_sejour->load($this->sejour_id);
+    if ($this->_ref_sejour) {
+      return;
     }
+
+    $this->_ref_sejour = new CSejour();
+	  $this->_ref_sejour->load($this->sejour_id);
   }
   
   function loadRefPatient() {

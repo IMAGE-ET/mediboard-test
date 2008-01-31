@@ -52,7 +52,8 @@ class CSpObject extends CMbObject {
       $ds->unquotable = array(
         "es_entccam" => array("idinterv"),
         "es_detccam" => array("idinterv", "idacte", "dephon"),
-			);
+        "es_detcim" => array("idinterv", "iddiag"),
+      );
     }
   }
   

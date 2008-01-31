@@ -187,8 +187,9 @@ class CSpEntCCAM extends CSpObject {
 	    
     // Aides opératoire et panseuse
     $mbObject->loadAffectationsPersonnel();
-    $affectations_op = $mbObject->_ref_affectations_personnel["op"];
-		$affectations_panseuse = $mbObject->_ref_affectation_personnel["panseuse"];
+    $affectations_op       = mbGetValue($mbObject->_ref_affectations_personnel["op"], array());
+		$affectations_panseuse = mbGetValue($mbObject->_ref_affectations_personnel["op_panseuse"], array());
+		
 		if(!$affectations_op){
 		  $affectations_op = array();
 		}

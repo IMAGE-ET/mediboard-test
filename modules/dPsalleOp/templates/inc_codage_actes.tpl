@@ -54,22 +54,22 @@ function viewCode(code, class){
   <input type="hidden" name="montant_depassement" class="{{$acte->_props.montant_depassement}}" value="{{$acte->montant_depassement}}" />
   {{/if}}
 
-  <table class="form">
-    
-    <tr id="acte{{$key}}-trigger">
-      <td colspan="3" style="width: 100%; {{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
-        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
-      </td>
-      {{if 0}}
-      <td id="acte{{$key}}-trigger" colspan="2" style="width: 100%; {{if $acte->_id && $acte->code_association == $acte->_guess_association}}background-color: #9f9;{{elseif $acte->_id}}background-color: #fc9;{{else}}background-color: #f99;{{/if}}">
-        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
-        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
-      </td>
-      <td style="width: 1%; background-image: none; padding: 0px;">
+	<!-- Couleur de l'acte -->
+  {{if $acte->_id && $acte->code_association == $acte->_guess_association}}
+  {{assign var=bg_color value=9f9}}
+  {{elseif $acte->_id}}
+  {{assign var=bg_color value=fc9}}
+  {{else}}
+  {{assign var=bg_color value=f99}}
+  {{/if}}
+
+			{{assign var=newButtons value=true}}
+      {{if $newButtons}}
+<!--  <div style="float: right;"> -->
+      <div style="position: absolute; right: 10px;">
       {{if $can->edit || $modif_operation}}
         {{if !$acte->acte_id}}
-        <button class="new" type="button" onclick="
+        <button class="add" type="button" onclick="
           {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
           if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
             document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
@@ -82,17 +82,21 @@ function viewCode(code, class){
 
         {{else}}
         
-        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-          {{tr}}Modify{{/tr}}
+        <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          {{tr}}Delete{{/tr}} cet acte
         </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-          {{tr}}Delete{{/tr}}
-        </button>
-        
         {{/if}}
       {{/if}}
-      </td>
+      </div>
       {{/if}}
+
+  <table class="form">
+    
+    <tr id="acte{{$key}}-trigger">
+      <td colspan="3" style="width: 100%; background-color: #{{$bg_color}}">
+        Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
+        Phase {{$curr_phase->phase}} : {{$curr_phase->libelle}}
+      </td>
     </tr>
   
     <tbody class="acteEffect" id="acte{{$key}}" style="display: none;">
@@ -173,12 +177,23 @@ function viewCode(code, class){
         {{else}}-{{/if}}
       </td>
     </tr>
+
+    {{if $newButtons && $acte->_id}}
+    <tr>
+      <td class="button" colspan="3">
+        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+          {{tr}}Modify{{/tr}} cet acte
+        </button>
+      </td>
+		</tr>
+    {{/if}}
     
     </tbody>
     
     <tr>
       <td colspan="3" class="text">
         {{if $acte->_id}}
+        
         <select name="{{$view}}"
         onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
           <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
@@ -215,6 +230,7 @@ function viewCode(code, class){
         {{/if}}
       </td>
     </tr>
+    {{if !$newButtons}}
     <tr>
       <td class="button" colspan="3">
       {{if $can->edit || $modif_operation}}
@@ -243,6 +259,7 @@ function viewCode(code, class){
       {{/if}}
       </td>
     </tr>
+    {{/if}}
     
   </table>
 </form>

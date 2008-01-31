@@ -1,6 +1,6 @@
 <table>
 <tr>
- <td>
+ <td class="text">
   <strong>Addictions significatifs</strong>
 <ul>
 {{if $dossier_medical->_ref_addictions}}

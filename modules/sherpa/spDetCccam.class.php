@@ -11,7 +11,7 @@ global $AppUI;
 require_once($AppUI->getModuleClass("sherpa", "spObject"));
 
 /**
- * Entête CCAM pour Sherpa, correspond à une intervention Mediboard
+ * Détail CCAM pour Sherpa, correspond à un acte CCAM Mediboard
  */
 class CSpDetCCAM extends CSpObject {  
   // DB Table key
