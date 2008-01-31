@@ -9,7 +9,12 @@
       </form>
       <table class="form">
         <tr>
-          <th class="title">{{$prescription->_view}}</th>
+          <th class="title">
+            <button type="button" class="cancel" onclick="Prescription.close()" style="float: left">
+              Fermer
+            </button>
+            {{$prescription->_view}}
+          </th>
         </tr>
         <tr>
           <td>
@@ -73,6 +78,7 @@
               <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
               <input type="hidden" name="del" value="0" />
               <select name="no_poso" onchange="submitFormAjax(this.form, 'systemMsg')">
+                <option value="">&mdash; Choisir une posologie</option>
                 {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
                 <option value="{{$curr_poso->code_posologie}}"
                   {{if $curr_poso->code_posologie == $curr_line->no_poso}}selected="selected"{{/if}}>

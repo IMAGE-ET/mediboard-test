@@ -11,8 +11,6 @@ var Prescription = {
     url.addParam("object_id", {{$prescription->object_id}});
     url.redirect();
   },
-  search: function(produit) {
-  },
   addLine: function(code) {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
@@ -54,24 +52,97 @@ function updateFields(selected) {
 
 <table class="main">
 {{if $prescription->object_id}}
-  {{if $prescription->_id}}
-  <tr>
-    <td />
-    <td>
-      <button type="button" class="cancel" onclick="Prescription.close()">
-        Fermer
-      </button>
-    </td>
-  </tr>
-  {{/if}}
   <tr>
     <td>
+      {{if $prescription->_id}}
+      <div id="alertes">
+      {{include file="inc_alertes_icons.tpl"}}
+      </div>
+      {{/if}}
       <table class="tbl">
         <tr>
-          <th>Patient</th>
+          <th class="title">{{$prescription->_ref_object->_ref_patient->_view}}</th>
         </tr>
         <tr>
-          <td>{{$prescription->_ref_object->_ref_patient->_view}}</td>
+          <td class="text">
+            {{assign var=dossier value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical}}
+            <strong>Addictions</strong>
+						<ul>
+						{{if $dossier->_ref_addictions}}
+						  {{foreach from=$dossier->_ref_types_addiction key=curr_type item=list_addiction}}
+						  {{if $list_addiction|@count}}
+						  <li>
+						    {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
+						    {{foreach from=$list_addiction item=curr_addiction}}
+						    <ul>
+						      <li>
+						        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAddiction', object_id: {{$curr_addiction->_id}} } })">
+						          {{$curr_addiction->addiction}}
+						        </span>
+						      </li>
+						    </ul>
+						    {{/foreach}}
+						  </li>
+						  {{/if}}
+						  {{/foreach}}
+						  {{else}}
+						  <li><em>Pas d'addictions</em></li>
+						  {{/if}}
+						</ul>
+						<strong>Antécédents</strong>
+						<ul>
+						{{if $dossier->_ref_antecedents}}
+						  {{foreach from=$dossier->_ref_antecedents key=curr_type item=list_antecedent}}
+						  {{if $list_antecedent|@count}}
+						  <li>
+						    {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
+						    {{foreach from=$list_antecedent item=curr_antecedent}}
+						    <ul>
+						      <li>
+						        {{if $curr_antecedent->date}}
+						          {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+						        {{/if}}
+						        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
+						          {{$curr_antecedent->rques}}
+						        </span>
+						      </li>
+						    </ul>
+						    {{/foreach}}
+						  </li>
+						  {{/if}}
+						  {{/foreach}}
+						{{else}}
+						  <li><em>Pas d'antécédents</em></li>
+						{{/if}}
+						</ul>
+						<strong>Traitements</strong>
+						<ul>
+						  {{foreach from=$dossier->_ref_traitements item=curr_trmt}}
+						  <li>
+						    {{if $curr_trmt->fin}}
+						      Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+						    {{elseif $curr_trmt->debut}}
+						      Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
+						    {{/if}}
+						    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CTraitement', object_id: {{$curr_trmt->_id}} } })">
+						      {{$curr_trmt->traitement}}
+						    </span>
+						  </li>
+						  {{foreachelse}}
+						  <li><em>Pas de traitements</em></li>
+						  {{/foreach}}
+						</ul>
+						<strong>Diagnostics</strong>
+						<ul>
+						  {{foreach from=$dossier->_ext_codes_cim item=curr_code}}
+						  <li>
+						    {{$curr_code->code}}: {{$curr_code->libelle}}
+						  </li>
+						  {{foreachelse}}
+						  <li><em>Pas de diagnostic</em></li>
+						  {{/foreach}}
+						</ul>
+          </td>
         </tr>
       </table>
       <table class="tbl">
