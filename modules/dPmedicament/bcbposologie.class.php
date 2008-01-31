@@ -143,6 +143,7 @@ class CBcbPosologie extends CBcbObject {
 		  $this->code_par           = $posologie["CODE_PAR"];
 		  $this->commentaire        = $posologie["COMMENTAIRE"];
     }
+    $this->updateFormFields();
   }
   
  
@@ -171,5 +172,43 @@ class CBcbPosologie extends CBcbObject {
     }  
   }
   
-  
+  function updateFormFields() {
+    parent::updateFormFields();
+    $this->_view = $this->quantite1;
+    if($this->quantite2) {
+      $this->_view .= " à $this->quantite2";
+    }
+    $this->_view .= " ".$this->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
+    if($this->code_moment) {
+      $this->_view .= " $this->_code_moment";
+    }
+    if($this->code_duree1) {
+      if($this->combien1) {
+        $this->_view .= " $this->combien1";
+        if($this->combien2) {
+          $this->_view .= " à $this->combien2";
+        }
+        $this->_view .= " fois";
+      }
+      if($this->tous_les <= 1) {
+        $this->_view .= " par";
+      } elseif($this->tous_les > 1) {
+        $this->_view .= " tous les $this->tous_les";
+      }
+      $this->_view .= " $this->_code_duree1";
+    }
+    if($this->code_prise1) {
+      $this->_view .= " $this->_code_prise1";
+    }
+    if($this->code_duree2) {
+      if($this->pendant1) {
+        $this->_view .= " pendant $this->pendant1";
+      }
+      if($this->pendant2) {
+        $this->_view .= " à $this->pendant2";
+      }
+      $this->_view .= " $this->_code_duree2";
+    }
+  }
+
 }

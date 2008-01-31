@@ -16,8 +16,9 @@ class CBcbObject {
   static $objDatabase = null;
   static $TypeDatabase = null;
   
-  var $distObj;
-  var $distClass;
+  var $distObj   = null;
+  var $distClass = null;
+  var $_view     = null;
   
   function initBCBConnection() {
     if(!self::$objDatabase) {
@@ -36,7 +37,11 @@ class CBcbObject {
   }
   
   function load() {
-    return false;
+    $this->_updateFormFields();
+  }
+  
+  function updateFormFields() {
+    $this->_view = "Object ".$this->distClass;
   }
 }
 
