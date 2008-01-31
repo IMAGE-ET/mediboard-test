@@ -25,7 +25,7 @@ loadComposants = function(composant, code, libelle, dialog){
   </tr>
 </table>
 
-{{if $composant}}
+{{if $composant && $composition}}
 <table class="tbl">
   <tr>
     <th>{{$composition->_ref_composants|@count}} compositions trouvées</th>

@@ -7,7 +7,6 @@
 * @author Alexis Granger
 */
 
-
 $composant = mbGetValueFromGet("composant", "");
 $code = mbGetValueFromGet("code", "");
 $libelle = mbGetValueFromGet("libelle", "");

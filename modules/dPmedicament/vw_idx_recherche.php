@@ -16,11 +16,26 @@ $modes_recherche = array("produit"   => "one",
                          "classe"    => "two",
                          "composant" => "three",
                          "DC_search" => "four");
-$onglet_recherche = $modes_recherche[mbGetValueFromGet("onglet_recherche", "produits")];
+$onglet_recherche = $modes_recherche[mbGetValueFromGet("onglet_recherche", "produit")];
+
 
 $produit   = mbGetValueFromGet("produit");
 $composant = mbGetValueFromGet("composant");
+$composition = new CBcbComposition();
+
+
+if($composant){
+  $composition->searchComposant($composant);
+}
+
+$DCI = new CBcbDCI();
 $DC_search = mbGetValueFromGet("DC_search");
+$tabDCI = array();
+
+if($DC_search){
+  $tabDCI = $DCI->searchDCI($DC_search);
+}
+
 
 // --- RECHERCHE PRODUITS ---
 // Par default, recherche par nom
@@ -61,7 +76,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("onglet_recherche", $onglet_recherche);
 
-$smarty->assign("tabDCI", "");
+$smarty->assign("composition", $composition);
+$smarty->assign("tabDCI", $tabDCI);
 $smarty->assign("DC_search", $DC_search);
 $smarty->assign("DCI_code", "");
 $smarty->assign("tabViewProduit", "");
@@ -86,6 +102,7 @@ $smarty->assign("type_recherche", $type_recherche);
 $smarty->assign("mbProduit", $mbProduit);
 $smarty->assign("produits", $produits);
 $smarty->assign("produit", $produit);
+
 $smarty->display("vw_idx_recherche.tpl");
 
 ?>

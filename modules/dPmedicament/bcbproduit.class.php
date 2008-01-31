@@ -62,6 +62,7 @@ class CBcbProduit extends CBcbObject {
       $this->hospitalier     = $infoProduit->Hospitalier;
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
+    $this->getSuppression();
     // Chargement du statut du produit
     $this->getStatut();  
     // Chargement de l'agrement
@@ -70,7 +71,7 @@ class CBcbProduit extends CBcbObject {
     $this->getGenerique();
     /// Produit référent ?
     $this->getReferent();
-    $this->getSuppression();
+    
   }
   
   // Permet de savoir si le produit est un générique 
@@ -78,14 +79,16 @@ class CBcbProduit extends CBcbObject {
     $this->_generique = $this->distObj->IsGenerique($this->code_cip);
   }
   
+  function getSuppression(){
+    $this->_suppression = $this->distObj->IsSupprime($this->code_cip);
+  }
+  
+  
   // Permet de savoir si le produit est un referent
   function getReferent(){
     $this->_referent = $this->distObj->IsReferent($this->code_cip);
   }
   
-  function getSuppression(){
-    $this->_suppression = $this->distObj->IsSupprime($this->code_cip);
-  }
   
   function getStatut(){
     $this->distObj->SearchStatut($this->code_cip);

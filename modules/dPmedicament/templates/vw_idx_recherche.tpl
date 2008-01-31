@@ -136,7 +136,9 @@ function pageMain(){
             {{/if}}
           </td>
           <td>
-            <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_suppression}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
+            <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_suppression}}style="color: red"{{/if}}>{{$produit->libelle}}
+            {{if $produit->_suppression}}Supprime{{/if}}
+            </a>
           </td>
         </tr>
         {{/foreach}}
