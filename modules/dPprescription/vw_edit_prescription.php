@@ -12,10 +12,8 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
-//$object_class    = mbGetValueFromGetOrSession("object_class");
-//$object_id       = mbGetValueFromGetOrSession("object_id");
-$object_class = "CSejour";
-$object_id = 35976;
+$object_class    = mbGetValueFromGetOrSession("object_class");
+$object_id       = mbGetValueFromGetOrSession("object_id");
 
 // Chargement de la catégorie demandé
 $prescription = new CPrescription();

@@ -24,7 +24,12 @@
       <table class="tbl">
         {{foreach from=$prescription->_ref_prescription_lines item=curr_line}}
         <tr>
-          <td>{{$curr_line->_view}}</td>
+          <td>
+            <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{$curr_line->_view}}
+          </td>
         </tr>
         {{/foreach}}
       </table>

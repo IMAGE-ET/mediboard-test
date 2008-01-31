@@ -12,9 +12,15 @@ var Prescription = {
   search: function(produit) {
     alert("Recherche de "+ produit);
   },
-  add: function(code) {
+  addLine: function(code) {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
+    submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
+  },
+  delLine: function(line_id) {
+    var oForm = document.addLine;
+    oForm.prescription_line_id.value = line_id;
+    oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
   },
   reload: function() {
@@ -31,7 +37,7 @@ var Prescription = {
 function updateFields(selected) {
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
-  Prescription.add(dn[0].firstChild.nodeValue);
+  Prescription.addLine(dn[0].firstChild.nodeValue);
   $('searchProd_produit').value = "";
 }
 
@@ -87,7 +93,9 @@ function updateFields(selected) {
         {{foreach from=$prescription->_ref_object->_ref_prescriptions item=curr_prescription}}
         <tr>
           <td>
-            {{$curr_prescription->_view}}
+            <a href="?m={{$m}}&tab={{$tab}}&prescription_id={{$curr_prescription->_id}}" >
+              {{$curr_prescription->_view}}
+            </a>
           </td>
         </tr>
         {{/foreach}}
@@ -96,7 +104,7 @@ function updateFields(selected) {
   </tr>
 {{else}}
   <tr>
-    <td>Veuillez choisir un séjour ou une consultation (au moyen d'obect_class / object_id en get)</td>
+    <td>Veuillez choisir un séjour ou une consultation (&object_class=CSejour&object_id=35976)</td>
   </tr>
 {{/if}}
 </table>
