@@ -1,3 +1,5 @@
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+
 <script type="text/javascript">
 
 var Prescription = {
@@ -10,7 +12,6 @@ var Prescription = {
     url.redirect();
   },
   search: function(produit) {
-    alert("Recherche de "+ produit);
   },
   addLine: function(code) {
     var oForm = document.addLine;
@@ -93,7 +94,7 @@ function updateFields(selected) {
         {{foreach from=$prescription->_ref_object->_ref_prescriptions item=curr_prescription}}
         <tr>
           <td>
-            <a href="?m={{$m}}&tab={{$tab}}&prescription_id={{$curr_prescription->_id}}" >
+            <a href="?m={{$m}}&amp;tab={{$tab}}&amp;prescription_id={{$curr_prescription->_id}}" >
               {{$curr_prescription->_view}}
             </a>
           </td>

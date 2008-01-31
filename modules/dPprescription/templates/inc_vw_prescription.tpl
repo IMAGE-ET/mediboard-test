@@ -16,7 +16,22 @@
             <form action="?" method="get" name="searchProd" onsubmit="return false;">
               <input type="text" name="produit" value=""/>
               <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-              <button type="button" class="search" onclick="Prescription.search(this.form.produit.value);">Rechercher</button>
+              <button type="button" class="search" onclick="MedSelector.init();">Rechercher</button>
+              <script type="text/javascript">
+                if(MedSelector.oUrl) {
+                  MedSelector.close();
+                }
+                MedSelector.init = function(){
+                  this.sForm = "searchProd";
+                  this.sView = "produit";
+                  this.sSearch = document.searchProd.produit.value;
+                  this.selfClose = false;
+                  this.pop();
+                }
+                MedSelector.set = function(nom, code){
+                  Prescription.addLine(code);
+                }
+              </script>
             </form>
           </td>
         </tr>
@@ -33,17 +48,17 @@
         </tr>
         {{/foreach}}
       </table>
-      <script>
-      // Preparation du formulaire
-      prepareForm(document.addLine);
-      prepareForm(document.searchProd);
-      // Autocomplete
-      urlAuto = new Url();
-      urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-      urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
-          minChars: 3,
-          updateElement: updateFields
-      } );
+      <script type="text/javascript">
+        // Preparation du formulaire
+        prepareForm(document.addLine);
+        prepareForm(document.searchProd);
+        // Autocomplete
+        urlAuto = new Url();
+        urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+        urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+            minChars: 3,
+            updateElement: updateFields
+        } );
       </script>
       {{else}}
       <form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">

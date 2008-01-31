@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
 
-function setClose(libelle) {
+function setClose(libelle, code) {
   var oSelector = window.opener.MedSelector;
-  oSelector.set(libelle);
+  oSelector.set(libelle, code);
   if(oSelector.selfClose) {
     window.close();
   }
@@ -77,7 +77,7 @@ function pageMain(){
         <tr>
           <td>
             {{if $dialog}}
-            <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />
+            <img src="./images/icons/plus.gif" onclick="setClose('{{$produit->libelle}}', '{{$produit->code_cip}}')" alt="Produit Hospitalier" title="Produit Hospitalier" />
             {{/if}}
            
             {{$produit->code_cip}}
