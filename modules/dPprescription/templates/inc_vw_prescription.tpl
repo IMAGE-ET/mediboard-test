@@ -51,7 +51,7 @@
       </table>
       <table class="tbl">
         <tr>
-          <th>Produit</th>
+          <th colspan="2">Produit</th>
           <th>Posologie</th>
         </tr>
         {{foreach from=$prescription->_ref_prescription_lines item=curr_line}}
@@ -60,7 +60,11 @@
             <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
               {{tr}}Delete{{/tr}}
             </button>
-            {{$curr_line->_view}}
+          </td>
+          <td>
+            <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
+              {{$curr_line->_view}}
+            </a>
           </td>
           <td>
             <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
