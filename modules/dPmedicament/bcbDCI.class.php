@@ -11,9 +11,6 @@ require_once("bcbObject.class.php");
 
 class CBcbDCI extends CBcbObject {
 
-  // Générale
-  var $distObj        = null;
- 
   // Spéciale DCI
   var $code_classe        = null;
   var $libelle_classe     = null;
@@ -28,10 +25,8 @@ class CBcbDCI extends CBcbObject {
   
   // Constructeur
   function CBcbDCI(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBDci();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase); 
+    $this->distClass = "BCBDci";
+    parent::__construct();
   }
  
   // Chargement d'un DCI a partir de son code

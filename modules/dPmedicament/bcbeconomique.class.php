@@ -11,9 +11,6 @@ require_once("bcbObject.class.php");
 
 class CBcbEconomique extends CBcbObject {
 
-  // Générale
-  var $distObj               = null;
- 
   var $code_cip              = null;
   var $prix_vente            = null;
   var $prix_achat_ht         = null;
@@ -30,10 +27,8 @@ class CBcbEconomique extends CBcbObject {
   
   // Constructeur
   function CBcbEconomique(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBEconomique();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase); 
+    $this->distClass = "BCBEconomique";
+    parent::__construct();
   }
  
   // Chargement

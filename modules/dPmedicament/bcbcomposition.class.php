@@ -11,9 +11,6 @@ require_once("bcbObject.class.php");
 
 class CBcbComposition extends CBcbObject {
 
-  // Générale
-  var $distObj          = null;
- 
   // Spéciale composition
   var $exprime_par      = null;
   var $real_exprime_par = null;
@@ -23,10 +20,8 @@ class CBcbComposition extends CBcbObject {
   
   // Constructeur
   function CBcbComposition(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBComposition();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase); 
+    $this->distClass = "BCBComposition";
+    parent::__construct();
   }
  
   // Chargement d'une composition a partir d'un code CIP

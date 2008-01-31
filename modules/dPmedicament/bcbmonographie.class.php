@@ -11,9 +11,6 @@ require_once("bcbObject.class.php");
 
 class CBcbMonographie extends CBcbObject {
 
-  // Générale
-  var $distObj               = null;
- 
   // Spéciale Monographie
   var $code_cip                 = null;
   var $indications              = null;
@@ -43,10 +40,8 @@ class CBcbMonographie extends CBcbObject {
   
   // Constructeur
   function CBcbMonographie(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBMonographie();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
+    $this->distClass = "BCBMonographie";
+    parent::__construct();
   }
  
 

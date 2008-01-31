@@ -10,18 +10,14 @@
 require_once("bcbObject.class.php");
 
 class CBcbClasseATC extends CBcbObject {
-  // Générale
-  var $distObj               = null;
  
   // Object references
   var $_refs_produits = null;
   
   // Constructeur
   function CBcbClasseATC(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBClasseATC();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
+    $this->distClass = "BCBClasseATC";
+    parent::__construct();
   }
  
   // Fonction qui retourne les classes ATC du produit

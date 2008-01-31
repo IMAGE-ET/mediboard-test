@@ -10,15 +10,11 @@
 require_once("bcbObject.class.php");
 
 class CBcbClasseTherapeutique extends CBcbObject {
-  // Générale
-  var $distObj               = null;
  
   // Constructeur
   function CBcbClasseTherapeutique(){
-    $this->initBCBConnection();
-    // Creation de la connexion
-    $this->distObj = new BCBClasseTherapeutique();
-    $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
+    $this->distClass = "BCBClasseTherapeutique";
+    parent::__construct();
   }
  
   // Fonction qui retourne les classes Therapeutiques du produit
