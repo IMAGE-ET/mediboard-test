@@ -56,7 +56,8 @@ function changeFormSearch(){
 
 function pageMain(){
   changeFormSearch();
-  new Control.Tabs('main_tab_group');
+  searchTabs = new Control.Tabs('main_tab_group');
+  searchTabs.setActiveTab('{{$onglet_recherche}}');
   
   // Au chargement, vue des classes ATC
   viewATC();  

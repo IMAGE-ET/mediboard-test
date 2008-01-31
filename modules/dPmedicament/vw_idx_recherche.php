@@ -11,11 +11,21 @@
 
 global $AppUI, $can, $m;
 
+// Onglet ouvert par défaut
+$modes_recherche = array("produit"   => "one",
+                         "classe"    => "two",
+                         "composant" => "three",
+                         "DC_search" => "four");
+$onglet_recherche = $modes_recherche[mbGetValueFromGet("onglet_recherche", "produits")];
+
+$produit   = mbGetValueFromGet("produit");
+$composant = mbGetValueFromGet("composant");
+$DC_search = mbGetValueFromGet("DC_search");
+
 // --- RECHERCHE PRODUITS ---
 // Par default, recherche par nom
 $type_recherche = mbGetValueFromGet("type_recherche", "nom");
 // Texte recherché (nom, cip, ucd)
-$produit  = mbGetValueFromGet("produit");
 $dialog = mbGetValueFromGet("dialog");
 // Recherche des elements supprimés
 $supprime = mbGetValueFromGet("supprime", 0);
@@ -49,12 +59,14 @@ $niveauCodeBCB = "";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("onglet_recherche", $onglet_recherche);
+
 $smarty->assign("tabDCI", "");
-$smarty->assign("DC_search", "");
+$smarty->assign("DC_search", $DC_search);
 $smarty->assign("DCI_code", "");
 $smarty->assign("tabViewProduit", "");
 
-$smarty->assign("composant", "");
+$smarty->assign("composant", $composant);
 $smarty->assign("code", "");
 
 $smarty->assign("niveauCodeATC", $niveauCodeATC);

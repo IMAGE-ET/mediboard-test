@@ -14,7 +14,7 @@
         <tr>
           <td>
             <form action="?" method="get" name="searchProd" onsubmit="return false;">
-              <select name="favoris" style="float: right" onchange="Prescription.addLine(this.value); this.value = '';">
+              <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
                 <option value="">&mdash; produits les plus utilisés</option>
                 {{foreach from=$listProduits item=curr_prod}}
                 <option value="{{$curr_prod->code_cip}}">
@@ -22,17 +22,22 @@
                 </option>
                 {{/foreach}}
               </select>
+              <br />
               <input type="text" name="produit" value=""/>
               <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-              <button type="button" class="search" onclick="MedSelector.init();">Rechercher</button>
+              <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>
+              <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
+              <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
+              <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
               <script type="text/javascript">
                 if(MedSelector.oUrl) {
                   MedSelector.close();
                 }
-                MedSelector.init = function(){
+                MedSelector.init = function(onglet){
                   this.sForm = "searchProd";
                   this.sView = "produit";
                   this.sSearch = document.searchProd.produit.value;
+                  this.sOnglet = onglet;
                   this.selfClose = false;
                   this.pop();
                 }

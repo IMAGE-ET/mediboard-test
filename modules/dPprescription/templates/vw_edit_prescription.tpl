@@ -50,7 +50,7 @@ function updateFields(selected) {
   <tr>
     <td />
     <td>
-      <button type="button" class="trash" onclick="Prescription.close()">
+      <button type="button" class="cancel" onclick="Prescription.close()">
         Fermer
       </button>
     </td>
@@ -76,11 +76,16 @@ function updateFields(selected) {
       </table>
       <table class="tbl">
         <tr>
-          <th>Liste des ordonnances</th>
+          <th colspan="2">Liste des ordonnances</th>
         </tr>
         {{foreach from=$prescription->_ref_object->_ref_prescriptions item=curr_prescription}}
         <tr>
           <td>
+            <button class="trash notext" onclick="alert('non fonctionnel')">
+              {{tr}}Delete{{/tr}}
+            </button>
+          </td>
+          <td class="text">
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;prescription_id={{$curr_prescription->_id}}" >
               {{$curr_prescription->_view}}
             </a>

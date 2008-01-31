@@ -4,6 +4,7 @@ var MedSelector = {
   sForm     : null,
   sView     : null,
   sSearch   : null,
+  sOnglet   : null,
   oUrl      : null,
   selfClose : true,
   options : {
@@ -15,8 +16,9 @@ var MedSelector = {
     var oForm = document[this.sForm];
     this.oUrl = new Url();
     if(this.sSearch) {
-      this.oUrl.addParam("produit", this.sSearch);
+      this.oUrl.addParam(this.sOnglet, this.sSearch);
     }
+    this.oUrl.addParam("onglet_recherche", this.sOnglet);
     this.oUrl.setModuleAction("dPmedicament", "vw_idx_recherche");
     
     this.oUrl.popup(this.options.width, this.options.height, "Medicament Selector");
