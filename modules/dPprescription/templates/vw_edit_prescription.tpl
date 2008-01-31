@@ -50,9 +50,9 @@ function updateFields(selected) {
   <tr>
     <td />
     <td>
-        <button type="button" class="trash" onclick="Prescription.close()">
-          Fermer
-        </button>
+      <button type="button" class="trash" onclick="Prescription.close()">
+        Fermer
+      </button>
     </td>
   </tr>
   {{/if}}
@@ -66,15 +66,6 @@ function updateFields(selected) {
           <td>{{$prescription->_ref_object->_ref_patient->_view}}</td>
         </tr>
       </table>
-    </td>
-    <td rowspan="3" class="greedyPane">
-      <div id="prescription">
-        {{include file="inc_vw_prescription.tpl"}}
-      </div>
-    </td>
-  </tr>
-  <tr>
-    <td>
       <table class="tbl">
         <tr>
           <th>Sejour</th>
@@ -83,10 +74,6 @@ function updateFields(selected) {
           <td>{{$prescription->_ref_object->_ref_sejour->_view}}</td>
         </tr>
       </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
       <table class="tbl">
         <tr>
           <th>Liste des ordonnances</th>
@@ -101,6 +88,11 @@ function updateFields(selected) {
         </tr>
         {{/foreach}}
       </table>
+    </td>
+    <td class="greedyPane">
+      <div id="prescription">
+        {{include file="inc_vw_prescription.tpl"}}
+      </div>
     </td>
   </tr>
 {{else}}

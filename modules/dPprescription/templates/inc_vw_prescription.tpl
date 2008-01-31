@@ -14,6 +14,14 @@
         <tr>
           <td>
             <form action="?" method="get" name="searchProd" onsubmit="return false;">
+              <select name="favoris" style="float: right" onchange="Prescription.addLine(this.value); this.value = '';">
+                <option value="">&mdash; produits les plus utilisés</option>
+                {{foreach from=$listProduits item=curr_prod}}
+                <option value="{{$curr_prod->code_cip}}">
+                  {{$curr_prod->libelle}}
+                </option>
+                {{/foreach}}
+              </select>
               <input type="text" name="produit" value=""/>
               <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
               <button type="button" class="search" onclick="MedSelector.init();">Rechercher</button>
@@ -37,6 +45,10 @@
         </tr>
       </table>
       <table class="tbl">
+        <tr>
+          <th>Produit</th>
+          <th>Posologie</th>
+        </tr>
         {{foreach from=$prescription->_ref_prescription_lines item=curr_line}}
         <tr>
           <td>

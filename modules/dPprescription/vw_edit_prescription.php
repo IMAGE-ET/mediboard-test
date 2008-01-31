@@ -18,6 +18,7 @@ $object_id       = mbGetValueFromGetOrSession("object_id");
 // Chargement de la catégorie demandé
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
+$listProduits = array();
 if(!$prescription->_id) {
   $prescription->object_class = $object_class;
   $prescription->object_id    = $object_id;
@@ -33,17 +34,26 @@ if($prescription->_id) {
   foreach($prescription->_ref_prescription_lines as &$line) {
     $line->_ref_produit->loadRefPosologies();
   }
+  // Liste des produits les plus prescrits
+  $favoris = CBcbProduit::getFavoris($prescription->praticien_id);
+  foreach($favoris as $curr_fav) {
+    $produit = new CBcbProduit();
+    $produit->load($curr_fav["code_cip"]);
+    $listProduits[] = $produit;
+  }
 }
 
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
 
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("prescription", $prescription);
 $smarty->assign("listPrats", $listPrats);
+$smarty->assign("listProduits", $listProduits);
 
 $smarty->display("vw_edit_prescription.tpl");
 

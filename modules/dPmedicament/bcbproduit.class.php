@@ -13,7 +13,7 @@ class CBcbProduit extends CBcbObject {
   
   var $code_cip              = null;
   var $code_ucd              = null;
-  var $libelle_produit       = null;
+  var $libelle               = null;
   var $nom_commercial        = null;
   var $forme                 = null;
   var $formes                = null;
@@ -181,6 +181,19 @@ class CBcbProduit extends CBcbObject {
   function loadClasseTherapeutique(){
     $classeThera = new CBcbClasseTherapeutique();
     $this->_ref_classes_thera = $classeThera->searchTheraProduit($this->code_cip); 
+  }
+  
+  function getFavoris($praticien_id) {
+    $ds = CSQLDataSource::get("std");
+    $sql = "SELECT prescription_line.code_cip, COUNT(*) AS total
+            FROM prescription_line, prescription
+            WHERE prescription_line.prescription_id = prescription.prescription_id
+            AND prescription.praticien_id = $praticien_id
+            AND prescription.object_id IS NOT NULL
+            GROUP BY prescription_line.code_cip
+            ORDER BY total DESC
+            LIMIT 0, 20";
+    return $ds->loadlist($sql);
   }
   
 }
