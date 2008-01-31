@@ -187,6 +187,9 @@ function pageMain(){
   <tbody id="four">
   <tr>
     <td>
+      <div id="DCI">
+        {{include file="inc_vw_DCI.tpl"}}
+      </div>
     </td>
   </tr>
   </tbody>

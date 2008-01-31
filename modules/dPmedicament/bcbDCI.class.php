@@ -43,6 +43,17 @@ class CBcbDCI extends CBcbObject {
     }
   }
   
+  // Fonction qui retourne la liste des DCI qui comment par $search
+  function searchDCI($search, $limit = 100){
+    $this->distObj->Search($search, 0, $limit, 1);
+    return $this->distObj->gtabDCI;
+  }
+  
+  
+  function searchProduitsByType(){
+    $this->distObj->SearchMedicamentType($this->libelle_classe, 0);
+    $this->_ref_produits = $this->distObj->gTabPdtType;
+  }
   
   // Chargement des produits de la DCI
   function loadRefsProduits(){
