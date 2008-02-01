@@ -161,15 +161,17 @@ function reloadAfterSaveDoc() {
 			</table>
 
 				<!-- Tabulations -->
-            <ul id="main_tab_group" class="control_tabs">
-              <li><a href="#one">Timings</a></li>
-              <li><a href="#two">Anesthésie</a></li>
-              <li><a href="#threebis">Diagnostics</a></li>
-              <li><a href="#three">CCAM</a></li>
-              <li><a href="#four">NGAP</a></li>
-              <li><a href="#five">Dossier</a></li>
-            </ul>
+        <ul id="main_tab_group" class="control_tabs">
+          <li><a href="#one">Timings</a></li>
+          <li><a href="#two">Anesthésie</a></li>
+          <li><a href="#threebis">Diagnostics</a></li>
+          <li><a href="#three">CCAM</a></li>
+          <li><a href="#four">NGAP</a></li>
+          <li><a href="#five">Dossier</a></li>
+        </ul>
           
+        <hr class="control_tabs" />
+        
         <!-- Premier onglet => Timings + Personnel -->
         <div id="one">
 	      	<div id="timing">
