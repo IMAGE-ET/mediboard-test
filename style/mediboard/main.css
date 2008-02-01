@@ -1704,6 +1704,7 @@ ul.control_tabs li a {
 	padding: 2px 8px 0px 8px;
 	background-color: #6b79a5;
 	color: #ced7ef;
+	font-weight: bold;
 }
 
 ul.control_tabs li a:hover {
@@ -1714,7 +1715,6 @@ ul.control_tabs li a:hover {
 ul.control_tabs li a.active {
 	background-color: #636996;
 	color: #fff;
-	font-weight: bold
 }
 
 
