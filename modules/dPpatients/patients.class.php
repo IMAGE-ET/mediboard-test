@@ -525,6 +525,26 @@ class CPatient extends CMbObject {
   }
   
   /**
+   * Calcul l'âge du patient en mois
+   */
+  function evalAgeMois($date = null){
+    $annee = $date ? substr($date, 0, 4) : date("Y");
+    $mois  = $date ? substr($date, 5, 2) : date("m");
+    $jour  = $date ? substr($date, 8, 2) : date("d");
+    
+    if ($this->naissance == "0000-00-00" || !$this->naissance) {
+      return 0;
+    }
+
+    $nbMois = 12*($annee - $this->_annee);
+    $nbMois += $mois - $this->_mois;
+    if($jour < $this->_jour && $mois == $this->_mois) {
+      $nbMois--;
+    }
+    return $nbMois;
+  }
+  
+  /**
    * Copie un champ du bénéficiaire vers l'assuré
    * @param string field Champ à mettre à jour
    */

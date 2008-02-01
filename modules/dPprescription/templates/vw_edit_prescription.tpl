@@ -28,6 +28,10 @@ var Prescription = {
     urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
     urlPrescription.addParam("prescription_id", {{$prescription->_id}});
     urlPrescription.requestUpdate("prescription", { waitingText : null });
+    {{/if}}
+  },
+  reloadAlertes: function() {
+    {{if $prescription->_id}}
     var urlAlertes = new Url;
     urlAlertes.setModuleAction("dPprescription", "httpreq_alertes_icons");
     urlAlertes.addParam("prescription_id", {{$prescription->_id}});
@@ -43,7 +47,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(700, 620, "Descriptif produit");
+  url.popup(840, 640, "Descriptif produit");
 }
 
 // UpdateFields de l'autocomplete
@@ -67,7 +71,11 @@ function updateFields(selected) {
       {{/if}}
       <table class="tbl">
         <tr>
-          <th class="title">{{$prescription->_ref_object->_ref_patient->_view}}</th>
+          <th class="title">
+            {{$prescription->_ref_object->_ref_patient->_view}} -
+            {{$prescription->_ref_object->_ref_patient->_naissance}}
+            ({{$prescription->_ref_object->_ref_patient->_age}} ans)
+          </th>
         </tr>
         <tr>
           <td class="text">
@@ -180,6 +188,7 @@ function updateFields(selected) {
       </table>
     </td>
     <td class="greedyPane">
+      {{assign var=httpreq value=0}}
       <div id="prescription">
         {{include file="inc_vw_prescription.tpl"}}
       </div>

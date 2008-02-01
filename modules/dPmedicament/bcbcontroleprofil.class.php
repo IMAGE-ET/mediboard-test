@@ -42,15 +42,16 @@ class CBcbControleProfil extends CBcbObject {
       } else {
         $sexe = "F";
       }
-      if($this->_ref_patient->_age <= 15) {
-        $age = $this->_ref_patient->_age;
-      } else {
-        $age = 0;
-      }
-      return $this->distObj->Test($age, 0, 0, 0, $sexe);
+      $nbMois = $this->_ref_patient->evalAgeMois();
+      return $this->distObj->Test($nbMois, 0, 0, 0, $sexe);
     } else {
       return false;
     }
+  }
+  
+  function getProfil() {
+    $this->testProfil();
+    return $this->distObj->gTabCIProfil;
   }
   
 }

@@ -109,7 +109,7 @@ class CBcbProduit extends CBcbObject {
     $this->agrement = $this->distObj->GetStatut(15);
   }
   
-  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1){   
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
     // 1: recherche par CIP
@@ -132,7 +132,7 @@ class CBcbProduit extends CBcbObject {
 
     $this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = $supprime;  
-    $this->distObj->Search($text, 0, 50, $type_recherche);
+    $this->distObj->Search($text, 0, $max, $type_recherche);
     
     $produits = array();
     // Parcours des produits

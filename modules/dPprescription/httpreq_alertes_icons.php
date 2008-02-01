@@ -18,10 +18,10 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
 // Liste des alertes
-$alertesAllergies    = 0;
-$alertesInteractions = 0;
-$alertesIPC          = 0;
-$alertesProfil       = 0;
+$alertesAllergies    = array();
+$alertesInteractions = array();
+$alertesIPC          = array();
+$alertesProfil       = array();
 
 if($prescription->_id) {
   $prescription->loadRefsFwd();
@@ -50,9 +50,9 @@ if($prescription->_id) {
   }
   // Calcul du nombre d'alertes
   $alertesAllergies    = $allergies->getAllergies();
-  $alertesInteractions = $interactions->testInteractions();
-  $alertesIPC          = $IPC->testIPC();
-  $alertesProfil       = $profil->testProfil();
+  $alertesInteractions = $interactions->getInteractions();
+  $alertesIPC          = $IPC->getIPC();
+  $alertesProfil       = $profil->getProfil();
 }
 
 // Liste des praticiens

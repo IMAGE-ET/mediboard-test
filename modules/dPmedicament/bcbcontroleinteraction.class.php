@@ -25,4 +25,9 @@ class CBcbControleInteraction extends CBcbObject {
     return $this->distObj->Test();
   }
   
+  function getInteractions() {
+    $this->testInteractions();
+    return $this->distObj->gtabInter;
+  }
+  
 }

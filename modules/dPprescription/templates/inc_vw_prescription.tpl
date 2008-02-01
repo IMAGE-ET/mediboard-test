@@ -1,3 +1,9 @@
+      {{if $httpreq}}
+      <script type="text/javascript">
+        Prescription.reloadAlertes();
+      </script>
+      {{/if}}
+
       {{if $prescription->_id}}
       <form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
@@ -69,11 +75,22 @@
           </td>
           <td>
             <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
-              {{$curr_line->_view}}
+              <strong>{{$curr_line->_view}}</strong>
             </a>
           </td>
-          <td>
-            ALERTES
+          <td class="text">
+            {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}
+              {{if $curr_type|@count}}
+                <ul>
+                {{foreach from=$curr_type item=curr_alerte}}
+                  <li>
+                    <strong>{{tr}}CPrescriptionLine-alerte-{{$type}}-court{{/tr}} :</strong>
+                    {{$curr_alerte}}
+                  </li>
+                {{/foreach}}
+                </ul>
+              {{/if}}
+            {{/foreach}}
           </td>
         </tr>
         <tr>
@@ -105,6 +122,7 @@
         // Autocomplete
         urlAuto = new Url();
         urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+        urlAuto.addParam("produit_max", 10);
         urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
             minChars: 3,
             updateElement: updateFields

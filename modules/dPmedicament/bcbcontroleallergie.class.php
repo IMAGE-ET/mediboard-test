@@ -33,7 +33,6 @@ class CBcbControleAllergie extends CBcbObject {
     $this->addAllergie(1);
     $this->addAllergie(8);
     $this->testAllergies();
-    $allergies = array();
     return $this->distObj->gTabAllergie;
   }
 }

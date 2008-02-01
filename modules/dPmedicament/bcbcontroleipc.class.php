@@ -27,4 +27,9 @@ class CBcbControleIPC extends CBcbObject {
     return $this->distObj->Controle($this->listCIP);
   }
   
+  function getIPC() {
+    $this->testIPC();
+    return $this->distObj->gTabIPCControle;
+  }
+  
 }

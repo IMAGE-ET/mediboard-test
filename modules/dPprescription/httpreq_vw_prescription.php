@@ -14,8 +14,12 @@ $can->needsRead();
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $object_class    = mbGetValueFromGetOrSession("object_class");
 $object_id       = mbGetValueFromGetOrSession("object_id");
-//$object_class = "CSejour";
-//$object_id = 35976;
+
+// Liste des alertes
+$alertesAllergies    = array();
+$alertesInteractions = array();
+$alertesIPC          = array();
+$alertesProfil       = array();
 
 // Chargement de la catégorie demandé
 $prescription = new CPrescription();
@@ -35,12 +39,35 @@ if(!$prescription->_id) {
 }
 if($prescription->object_id) {
   $prescription->loadRefsFwd();
-  $prescription->loadRefsLines();
-  foreach($prescription->_ref_prescription_lines as &$line) {
-    $line->_ref_produit->loadRefPosologies();
-  }
   $prescription->_ref_object->loadRefSejour();
   $prescription->_ref_object->loadRefPatient();
+  $prescription->loadRefsLines();
+  
+  // Calcul des alertes
+  $allergies    = new CBcbControleAllergie();
+  $interactions = new CBcbControleInteraction();
+  $IPC          = new CBcbControleIPC();
+  $profil       = new CBcbControleProfil();
+  $profil->setPatient($prescription->_ref_object->_ref_patient);
+  foreach($prescription->_ref_prescription_lines as &$line) {
+    // Chargement de la posologie
+    $line->_ref_produit->loadRefPosologies();
+    // Ajout des produits pour les alertes
+    $allergies->addProduit($line->code_cip);
+    $interactions->addProduit($line->code_cip);
+    $IPC->addProduit($line->code_cip);
+    $profil->addProduit($line->code_cip);
+  }
+  $alertesAllergies    = $allergies->getAllergies();
+  $alertesInteractions = $interactions->getInteractions();
+  $alertesIPC          = $IPC->getIPC();
+  $alertesProfil       = $profil->getProfil();
+  foreach($prescription->_ref_prescription_lines as &$line) {
+    $line->checkAllergies($alertesAllergies);
+    $line->checkInteractions($alertesInteractions);
+    $line->checkIPC($alertesIPC);
+    $line->checkProfil($alertesProfil);
+  }
 }
 
 // Liste des praticiens
@@ -49,6 +76,13 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("httpreq", 1);
+
+$smarty->assign("alertesAllergies"   , $alertesAllergies);
+$smarty->assign("alertesInteractions", $alertesInteractions);
+$smarty->assign("alertesIPC"         , $alertesIPC);
+$smarty->assign("alertesProfil"      , $alertesProfil);
 
 $smarty->assign("prescription", $prescription);
 $smarty->assign("listPrats", $listPrats);

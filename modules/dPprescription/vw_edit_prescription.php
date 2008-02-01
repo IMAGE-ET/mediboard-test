@@ -36,31 +36,40 @@ if($prescription->object_id) {
 }
 
 // Liste des alertes
-$alertesAllergies    = 0;
-$alertesInteractions = 0;
-$alertesIPC          = 0;
-$alertesProfil       = 0;
+$alertesAllergies    = array();
+$alertesInteractions = array();
+$alertesIPC          = array();
+$alertesProfil       = array();
 if($prescription->_id) {
   // Chargement des lignes
   $prescription->loadRefsLines();
+  
+  // Gestion des alertes
   $allergies    = new CBcbControleAllergie();
   $interactions = new CBcbControleInteraction();
   $IPC          = new CBcbControleIPC();
   $profil       = new CBcbControleProfil();
   $profil->setPatient($prescription->_ref_object->_ref_patient);
   foreach($prescription->_ref_prescription_lines as &$line) {
+    // Chargement de la posologie
     $line->_ref_produit->loadRefPosologies();
-    // Prise en compte pour les alertes
+    // Ajout des produits pour les alertes
     $allergies->addProduit($line->code_cip);
     $interactions->addProduit($line->code_cip);
     $IPC->addProduit($line->code_cip);
     $profil->addProduit($line->code_cip);
   }
-  // Calcul du nombre d'alertes
   $alertesAllergies    = $allergies->getAllergies();
-  $alertesInteractions = $interactions->testInteractions();
-  $alertesIPC          = $IPC->testIPC();
-  $alertesProfil       = $profil->testProfil();
+  $alertesInteractions = $interactions->getInteractions();
+  $alertesIPC          = $IPC->getIPC();
+  $alertesProfil       = $profil->getProfil();
+  foreach($prescription->_ref_prescription_lines as &$line) {
+    $line->checkAllergies($alertesAllergies);
+    $line->checkInteractions($alertesInteractions);
+    $line->checkIPC($alertesIPC);
+    $line->checkProfil($alertesProfil);
+  }
+
   // Liste des produits les plus prescrits
   $favoris = CBcbProduit::getFavoris($prescription->praticien_id);
   foreach($favoris as $curr_fav) {
@@ -77,7 +86,6 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 
 // Création du template
 $smarty = new CSmartyDP();
-
 
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);

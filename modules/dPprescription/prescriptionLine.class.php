@@ -23,6 +23,10 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   
+  // Alertes
+var $_ref_alertes = null;
+var $_ref_alertes_text = null;
+  
   function CPrescriptionLine() {
     $this->CMbObject("prescription_line", "prescription_line_id");
     
@@ -53,6 +57,41 @@ class CPrescriptionLine extends CMbObject {
     $this->_ref_prescription->load($this->prescription_id);
     $this->_ref_produit = new CBcbProduit();
     $this->_ref_produit->load($this->code_cip);
+  }
+  
+  function checkAllergies($listAllergies) {
+    $this->_ref_alertes["allergie"] = array();
+    foreach($listAllergies as $key => $all) {
+      if($all->CIP == $this->code_cip) {
+        $this->_ref_alertes["allergie"][$key]      = $all;
+        $this->_ref_alertes_text["allergie"][$key] = $all->LibelleAllergie;
+      }
+    }
+  }
+  
+  function checkInteractions($listInteractions) {
+    $this->_ref_alertes["interaction"] = array();
+    foreach($listInteractions as $key => $int) {
+      if($int->CIP1 == $this->code_cip) {
+        $this->_ref_alertes["interaction"][$key]      = $int;
+        $this->_ref_alertes_text["interaction"][$key] = $int->Type;
+      }
+    }
+  }
+  
+  function checkIPC($listIPC) {
+    $this->_ref_alertes["IPC"]      = array();
+    $this->_ref_alertes_text["IPC"] = array();
+  }
+  
+  function checkProfil($listProfil) {
+    $this->_ref_alertes["profil"] = array();
+    foreach($listProfil as $key => $pro) {
+      if($pro->CIP == $this->code_cip) {
+        $this->_ref_alertes["profil"][$key]      = $pro;
+        $this->_ref_alertes_text["profil"][$key] = $pro->LibelleMot;
+      }
+    }
   }
   
 }

@@ -4,14 +4,14 @@
         </tr>
         <tr>
           <td>
-            {{if $alertesInteractions}}
+            {{if $alertesInteractions|@count}}
               <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
             {{else}}
               <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
             {{/if}}
           </td>
           <td>
-            <strong>{{$alertesInteractions}}</strong>
+            <strong>{{$alertesInteractions|@count}}</strong>
             interactions
           </td>
           <td>
@@ -28,27 +28,27 @@
         </tr>
         <tr>
           <td>
-            {{if $alertesProfil}}
+            {{if $alertesProfil|@count}}
               <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
             {{else}}
               <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
             {{/if}}
           </td>
           <td colspan="3">
-            <strong>{{$alertesProfil}}</strong>
+            <strong>{{$alertesProfil|@count}}</strong>
             contre-indication(s) / précaution(s) d'emploi
           </td>
         </tr>
         <tr>
           <td>
-            {{if $alertesIPC}}
+            {{if $alertesIPC|@count}}
               <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
             {{else}}
               <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
             {{/if}}
           </td>
           <td colspan="3">
-            <strong>{{$alertesIPC}}</strong>
+            <strong>{{$alertesIPC|@count}}</strong>
             incompatibilité(s) physico-chimique(s)
           </td>
         </tr>
