@@ -63,7 +63,6 @@ function viewCode(code, class){
 
 			{{assign var=newButtons value=true}}
       {{if $newButtons}}
-<!--  <div style="float: right;">-->
       <div style="position: absolute; right: 10px;">
       {{if $can->edit || $modif_operation}}
         {{if !$acte->acte_id}}
@@ -110,7 +109,6 @@ function viewCode(code, class){
     
     <tr class="{{$key}}">
       <td style="width: 1%;" />
-      <td style="width: 100%;" />
       <td style="width: 100%;" />
     </tr>
     

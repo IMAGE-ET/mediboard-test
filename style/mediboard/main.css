@@ -1691,7 +1691,7 @@ ul.control_tabs {
 
 ul.control_tabs li {
 	float: left;
-	margin: 2px 5px 0px 4px;
+	margin: 2px 3px 0px 3px;
 	text-align: center;
   border: 1px outset #458;
 	border-bottom: none;

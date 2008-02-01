@@ -54,13 +54,12 @@ function submitPersonnel(oForm){
   </th>
 </tr>
 
-
-
+{{assign var=submit value=submitPersonnel}}
 
 <tr>
+  <!-- Personnel prévu dans la plage op -->
   <td>
-
- {{foreach from=$tabPersonnel.plage item=affectation}}
+    {{foreach from=$tabPersonnel.plage item=affectation}}
     <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="m" value="dPpersonnel" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -71,69 +70,32 @@ function submitPersonnel(oForm){
     <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="realise" value="0" />
     
+    {{assign var="affectation_id" value=$affectation->_id}}
+    {{assign var="timing" value=$timingAffect.$affectation_id}}
+    
     {{$affectation->_ref_personnel->_ref_user->_view}} /
     {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
-    <br />
-    {{if $affectation->_debut}}
-     {{if $can->edit}}
-     <input name="_debut" type="text" size="5"  value="{{$affectation->_debut|date_format:'%H:%M'}}" />
-     <button type="button" class="tick notext" onclick="submitPersonnel(this.form)">{{tr}}Save{{/tr}}</button>
-     <button type="button" class="cancel notext" onclick="this.form._debut.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{elseif $modif_operation}}
-       <select name="_debut" onchange="submitPersonnel(this.form);">
-       <option value="">-</option>
-       {{assign var="affectation_id" value=$affectation->_id}}
-       {{assign var="timing" value=$timingAffect.$affectation_id}}
-      {{foreach from=$timing._debut|smarty:nodefaults item=curr_time}}
-       <option value="{{$curr_time}}" {{if $curr_time == $affectation->_debut}}selected="selected"{{/if}}>
-         {{$curr_time|date_format:"%Hh%M"}}
-       </option>
-       {{/foreach}}
-       </select>
-       <button type="button" class="cancel notext" onclick="this.form._debut.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{else}}
-       {{$affectation->_debut|date_format:"%Hh%M"}}
-     {{/if}}
-   {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="_debut" value="" />
-      <button type="button" onclick="this.form._debut.value = 'current'; submitPersonnel(this.form)" class="submit">Début</button>
-    {{else}}-{{/if}}
-    {{if $affectation->_fin}}
-     {{if $can->edit}}
-     <input name="_fin" type="text" size="5"  value="{{$affectation->_fin|date_format:'%H:%M'}}" />
-     <button type="button" class="tick notext" onclick="submitPersonnel(this.form)">{{tr}}Save{{/tr}}</button>
-     <button type="button" class="cancel notext" onclick="this.form._fin.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{elseif $modif_operation}}
-       <select name="_fin" onchange="submitPersonnel(this.form);">
-       <option value="">-</option>
-    
-       {{assign var="affectation_id" value=$affectation->_id}}
-       {{assign var="timing" value=$timingAffect.$affectation_id}}
-       {{foreach from=$timing._fin|smarty:nodefaults item=curr_time}}
-       <option value="{{$curr_time}}" {{if $curr_time == $affectation->_fin}}selected="selected"{{/if}}>
-         {{$curr_time|date_format:"%Hh%M"}}
-       </option>
-       {{/foreach}}
-       </select>
-       <button type="button" class="cancel notext" onclick="this.form._fin.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{else}}
-       {{$affectation->_fin|date_format:"%Hh%M"}}
-     {{/if}}
-   {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="_fin" value="" />
-      <button type="button" onclick="this.form._fin.value = 'current'; submitPersonnel(this.form)" class="submit">Fin</button>
-    {{else}}-{{/if}}
+
+    <table class="form">
+      <tr>
+		    {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
+		    {{include file=inc_field_timing.tpl object=$affectation field=_fin  }}
+      </tr>
+    </table>
+
    </form>
 
- <hr />   
-{{/foreach}}
+  <hr />
+  {{/foreach}}
   </td>
   
+  <!-- Personnel ajouté pour l'intervention -->
   <td>
-   {{foreach from=$tabPersonnel.operation item=affectation}}
-     {{if $can->edit || $modif_operation}}
+    {{foreach from=$tabPersonnel.operation item=affectation}}
+
+    {{if $can->edit || $modif_operation}}
     <div style="float: right">
-    <form name="cancelAffectation" action="?m={{$m}}" method="post">
+    <form name="cancelAffectation-{{$affectation->_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
       <input type="hidden" name="m" value="dPpersonnel" />
       <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -142,6 +104,7 @@ function submitPersonnel(oForm){
     </form>
     </div>
     {{/if}}
+
     <form name="affectationPersonnel-{{$affectation->_id}}" action="?m={{$m}}" method="post">
     <input type="hidden" name="m" value="dPpersonnel" />
     <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -154,56 +117,12 @@ function submitPersonnel(oForm){
     
     {{$affectation->_ref_personnel->_ref_user->_view}} / 
     {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
-    <br />
-    {{if $affectation->_debut}}
-     {{if $can->edit}}
-     <input name="_debut" type="text" size="5"  value="{{$affectation->_debut|date_format:'%H:%M'}}" />
-     <button type="button" class="tick notext" onclick="submitPersonnel(this.form)">{{tr}}Save{{/tr}}</button>
-     <button type="button" class="cancel notext" onclick="this.form._debut.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{elseif $modif_operation}}
-       <select name="_debut" onchange="submitPersonnel(this.form);">
-       <option value="">-</option>
-       {{assign var="affectation_id" value=$affectation->_id}}
-       {{assign var="timing" value=$timingAffect.$affectation_id}}
-      {{foreach from=$timing._debut|smarty:nodefaults item=curr_time}}
-       <option value="{{$curr_time}}" {{if $curr_time == $affectation->_debut}}selected="selected"{{/if}}>
-         {{$curr_time|date_format:"%Hh%M"}}
-       </option>
-       {{/foreach}}
-       </select>
-       <button type="button" class="cancel notext" onclick="this.form._debut.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{else}}
-       {{$affectation->_debut|date_format:"%Hh%M"}}
-     {{/if}}
-   {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="_debut" value="" />
-      <button type="button" onclick="this.form._debut.value = 'current'; submitPersonnel(this.form)" class="submit">Début</button>
-    {{else}}-{{/if}}
-    {{if $affectation->_fin}}
-     {{if $can->edit}}
-     <input name="_fin" type="text" size="5"  value="{{$affectation->_fin|date_format:'%H:%M'}}" />
-     <button type="button" class="tick notext" onclick="submitPersonnel(this.form)">{{tr}}Save{{/tr}}</button>
-     <button type="button" class="cancel notext" onclick="this.form._fin.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{elseif $modif_operation}}
-       <select name="_fin" onchange="submitPersonnel(this.form);">
-       <option value="">-</option>
-    
-       {{assign var="affectation_id" value=$affectation->_id}}
-       {{assign var="timing" value=$timingAffect.$affectation_id}}
-       {{foreach from=$timing._fin|smarty:nodefaults item=curr_time}}
-       <option value="{{$curr_time}}" {{if $curr_time == $affectation->_fin}}selected="selected"{{/if}}>
-         {{$curr_time|date_format:"%Hh%M"}}
-       </option>
-       {{/foreach}}
-       </select>
-       <button type="button" class="cancel notext" onclick="this.form._fin.value = ''; submitPersonnel(this.form);">{{tr}}Cancel{{/tr}}</button>
-     {{else}}
-       {{$affectation->_fin|date_format:"%Hh%M"}}
-     {{/if}}
-   {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="_fin" value="" />
-      <button type="button" onclick="this.form._fin.value = 'current'; submitPersonnel(this.form)" class="submit">Fin</button>
-    {{else}}-{{/if}}
+    <table class="form">
+      <tr>
+		    {{include file=inc_field_timing.tpl object=$affectation field=_debut}}
+		    {{include file=inc_field_timing.tpl object=$affectation field=_fin  }}
+      </tr>
+    </table>
    </form>
 
  <hr />   

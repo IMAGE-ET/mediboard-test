@@ -56,105 +56,14 @@
 </form>
 
  <table class="tbl">
-  <tr>
-    <th>Heure</th>
-    <th>Patient</th>
-    {{if !$vueReduite}}
-    <th>Actes</th>
-    <th>Coté</th>
-    <th>Durée</th>
-    {{/if}}
-  </tr>
-  {{foreach from=$curr_plage->_ref_operations item=curr_operation}}
-  <tr {{if $curr_operation->_id == $operation_id}}class="selected"{{/if}}>
-    {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
-    <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
-    {{elseif $curr_operation->entree_salle}}
-    <td style="background-color:#cfc">
-    {{elseif $curr_operation->sortie_salle}}
-    <td style="background-color:#fcc">
-    {{elseif $curr_operation->entree_bloc}}
-    <td style="background-color:#ffa">
-    {{else}}
-    <td>
-    {{/if}}
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        {{$curr_operation->time_operation|date_format:"%Hh%M"}}
-      </a>
-    </td>
-    
-    <td class="text">
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        {{$curr_operation->_ref_sejour->_ref_patient->_view}}
-      </a>
-    {{if $vueReduite}}
-      <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})">{{tr}}Imprimer{{/tr}}</button>
-    {{/if}}
-    </td>
-    
-    {{if !$vueReduite}}
-    <td>
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">
-        {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-        {{$curr_code->code}}<br />
-        {{/foreach}}
-      </a>
-    </td>
-    <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
-    <td>{{$curr_operation->temp_operation|date_format:"%Hh%M"}}</td>
-    {{/if}}
-  </tr>
-  {{/foreach}}
+  {{include file=inc_liste_operations.tpl operations=$curr_plage->_ref_operations}}
+
   {{if $curr_plage->_unordered_operations}}
   <tr>
-    <th colspan="6">Non placées</th>
+    <th colspan="10">Non placées</th>
   </tr>
+  {{include file=inc_liste_operations.tpl operations=$curr_plage->_unordered_operations}}
   {{/if}}
-  {{foreach from=$curr_plage->_unordered_operations item=curr_operation}}
-  <tr {{if $curr_operation->_id == $operation_id}}class="selected"{{/if}}>
-    {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
-    <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
-    {{elseif $curr_operation->entree_salle}}
-    <td style="background-color:#cfc">
-    {{elseif $curr_operation->sortie_salle}}
-    <td style="background-color:#fcc">
-    {{elseif $curr_operation->entree_bloc}}
-    <td style="background-color:#ffa">
-    {{else}}
-    <td>
-    {{/if}}
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        NP
-      </a>
-    </td>
-    <td class="text">
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        {{$curr_operation->_ref_sejour->_ref_patient->_view}}
-      </a>
-    </td>
-    <td>
-      {{if $vueReduite}}
-      <button class="print notext" onclick="printFeuilleBloc({{$curr_operation->operation_id}})">{{tr}}Imprimer{{/tr}}</button>
-      {{elseif 0==1}}
-      <a href="?m=dPsalleOp&amp;tab=vw_anesthesie&amp;salle={{$salle}}&amp;op={{$curr_operation->operation_id}}" title="dossier d'anesthésie">
-        <img src="images/icons/anesth.png" alt="Anesth" />
-      </a>
-      {{/if}}
-    </td>
-    
-    {{if !$vueReduite}}
-    <td>
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">
-        {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-        {{$curr_code->code}}<br />
-        {{/foreach}}
-      </a>
-    </td>
-    <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
-    <td>{{$curr_operation->temp_operation|date_format:"%Hh%M"}}</td>
-    {{/if}}
-  </tr>
-  {{/foreach}}
 </table>
 {{/foreach}}
 
@@ -170,45 +79,6 @@
   </tr>        
 </table>
 <table class="tbl">
-  <tr>
-    <th>praticien</th>
-    <th>Patient</th>
-    {{if !$vueReduite}}
-    <th>Intervention</th>
-    <th>Coté</th>
-    {{/if}}
-  </tr>
-  {{foreach from=$urgences item=curr_operation}}
-  <tr {{if $curr_operation->_id == $operation_id}}class="selected"{{/if}}>
-    {{if $curr_operation->entree_salle && $curr_operation->sortie_salle}}
-    <td class="text" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
-    {{elseif $curr_operation->entree_salle}}
-    <td class="text" style="background-color:#cfc">
-    {{elseif $curr_operation->sortie_salle}}
-    <td class="text" style="background-color:#fcc">
-    {{else}}
-    <td class="text">
-    {{/if}}
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        {{$curr_operation->_ref_chir->_view}}
-      </a>
-    </td>
-    <td>
-      <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$curr_operation->operation_id}}" title="Coder l'intervention">
-        {{$curr_operation->_ref_sejour->_ref_patient->_view}}
-      </a>
-    </td>
-    {{if !$vueReduite}}
-    <td>
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}" title="Modifier l'intervention">
-        {{foreach from=$curr_operation->_ext_codes_ccam item=curr_code}}
-        {{$curr_code->code}}<br />
-        {{/foreach}}
-      </a>
-    </td>
-    <td>{{tr}}COperation.cote.{{$curr_operation->cote}}{{/tr}}</td>
-    {{/if}}
-  </tr>
-  {{/foreach}}
+  {{include file=inc_liste_operations.tpl urgence=1 operations=$urgences}}
 </table>
 {{/if}}

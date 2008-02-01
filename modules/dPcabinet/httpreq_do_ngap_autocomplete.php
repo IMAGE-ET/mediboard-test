@@ -7,7 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
 $ds = CSQLDataSource::get("ccamV2");
 
 $object_id = mbGetValueFromGet("object_id");
@@ -33,15 +32,13 @@ if($code && !$object->_ref_actes_ngap){
 
 $result = $ds->loadList($sql, null);
 
-if ($can->read) {
-  // Création du template
-  $smarty = new CSmartyDP();
-  $smarty->debugging = false;
+// Création du template
+$smarty = new CSmartyDP();
+$smarty->debugging = false;
 
-  $smarty->assign("code"      , $code);
-  $smarty->assign("result"    , $result);
+$smarty->assign("code"      , $code);
+$smarty->assign("result"    , $result);
 
-  $smarty->display("httpreq_do_ngap_autocomplete.tpl");
-}
+$smarty->display("httpreq_do_ngap_autocomplete.tpl");
 
 ?>

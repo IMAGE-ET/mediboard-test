@@ -42,60 +42,10 @@
         {{$typeChir->_view}}
       {{else}}-{{/if}}
     </td>
-    <td>
-      {{if $selOp->induction_debut}}
-      Début d'induction:
-      {{if $can->edit}}
-      <input name="induction_debut" size="5" type="text" value="{{$selOp->induction_debut|date_format:"%H:%M"}}" />
-      <button type="button" class="tick notext" onclick="submitAnesth(this.form);">{{tr}}Save{{/tr}}</button>
-      <button type="button" class="cancel notext" onclick="this.form.induction_debut.value = ''; submitAnesth(this.form);">{{tr}}Cancel{{/tr}}</button>
-      {{elseif $modif_operation}}
-      <select name="induction_debut" onchange="submitAnesth(this.form);">
-        <option value="">-</option>
-        {{foreach from=$timing.induction_debut|smarty:nodefaults item=curr_time}}
-        <option value="{{$curr_time}}" {{if $curr_time == $selOp->induction_debut}}selected="selected"{{/if}}>
-          {{$curr_time|date_format:"%Hh%M"}}
-        </option>
-        {{/foreach}}
-      </select>
-      <button type="button" class="cancel notext" onclick="this.form.induction_debut.value = ''; submitAnesth(this.form);">{{tr}}Cancel{{/tr}}</button>
-      {{else}}
-        {{$selOp->induction_debut|date_format:"%Hh%M"}}
-      {{/if}}
-
-      {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="induction_debut" value="" />
-      <button type="button" class="submit" onclick="this.form.induction_debut.value = 'current'; submitAnesth(this.form);">Début d'induction</button>
-      {{else}}-{{/if}}
-    </td>
+    {{include file=inc_field_timing.tpl object=$selOp field=induction_debut submit=submitAnesth}}
   </tr>
   <tr>
-    <td>
-      {{if $selOp->induction_fin}}
-      Fin d'induction:
-      {{if $can->edit}}
-      <input name="induction_fin" size="5" type="text" value="{{$selOp->induction_fin|date_format:"%H:%M"}}" />
-      <button type="button" class="tick notext" onclick="submitAnesth(this.form);">{{tr}}Save{{/tr}}</button>
-      <button type="button" class="cancel notext" onclick="this.form.induction_fin.value = ''; submitAnesth(this.form);">{{tr}}Cancel{{/tr}}</button>
-      {{elseif $modif_operation}}
-      <select name="induction_fin" onchange="submitAnesth(this.form);">
-        <option value="">-</option>
-        {{foreach from=$timing.induction_fin|smarty:nodefaults item=curr_time}}
-        <option value="{{$curr_time}}" {{if $curr_time == $selOp->induction_fin}}selected="selected"{{/if}}>
-          {{$curr_time|date_format:"%Hh%M"}}
-        </option>
-        {{/foreach}}
-      </select>
-      <button type="button" class="cancel notext" onclick="this.form.induction_fin.value = ''; submitAnesth(this.form);">{{tr}}Cancel{{/tr}}</button>
-      {{else}}
-        {{$selOp->induction_fin|date_format:"%Hh%M"}}
-      {{/if}}
-
-      {{elseif $can->edit || $modif_operation}}
-      <input type="hidden" name="induction_fin" value="" />
-      <button type="button" class="submit" onclick="this.form.induction_fin.value = 'current'; submitAnesth(this.form);">Fin d'induction</button>
-      {{else}}-{{/if}}
-    </td>
+    {{include file=inc_field_timing.tpl object=$selOp field=induction_debut submit=submitAnesth}}
   </tr>
 </table>
   
