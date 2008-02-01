@@ -23,11 +23,17 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
   },
   reload: function() {
-    var url = new Url;
     {{if $prescription->_id}}
-    url.setModuleAction("dPprescription", "httpreq_vw_prescription");
-    url.addParam("prescription_id", {{$prescription->_id}});
-    url.requestUpdate("prescription", { waitingText : null });
+    var urlPrescription = new Url;
+    urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
+    urlPrescription.addParam("prescription_id", {{$prescription->_id}});
+    urlPrescription.requestUpdate("prescription", { waitingText : null });
+    var urlAlertes = new Url;
+    urlAlertes.setModuleAction("dPprescription", "httpreq_alertes_icons");
+    urlAlertes.addParam("prescription_id", {{$prescription->_id}});
+    urlAlertes.requestUpdate("alertes", { waitingText : null });
+    {{else}}
+    alert('Pas de prescription en cours');
     {{/if}}
   }
 };

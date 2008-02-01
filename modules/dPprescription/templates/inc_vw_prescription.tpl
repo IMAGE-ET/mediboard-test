@@ -57,11 +57,12 @@
       <table class="tbl">
         <tr>
           <th colspan="2">Produit</th>
-          <th>Posologie</th>
+          <th>Alertes</th>
         </tr>
         {{foreach from=$prescription->_ref_prescription_lines item=curr_line}}
+        <tbody class="hoverable">
         <tr>
-          <td>
+          <td rowspan="2">
             <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
               {{tr}}Delete{{/tr}}
             </button>
@@ -72,6 +73,11 @@
             </a>
           </td>
           <td>
+            ALERTES
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2">
             <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="dosql" value="do_prescription_line_aed" />
@@ -89,6 +95,7 @@
             </form>
           </td>
         </tr>
+        </tbody>
         {{/foreach}}
       </table>
       <script type="text/javascript">

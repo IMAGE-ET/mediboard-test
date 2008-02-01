@@ -4,28 +4,52 @@
         </tr>
         <tr>
           <td>
-            <img src="images/icons/note_grey.png" title="aucune" alt="aucune" />
+            {{if $alertesInteractions}}
+              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            {{else}}
+              <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
+            {{/if}}
           </td>
-          <td>Contre-indications</td>
           <td>
-            <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            <strong>{{$alertesInteractions}}</strong>
+            interactions
           </td>
-          <td>Interactions</td>
+          <td>
+            {{if $alertesAllergies|@count}}
+              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            {{else}}
+              <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
+            {{/if}}
+          </td>
+          <td>
+            <strong>{{$alertesAllergies|@count}}</strong>
+            hypersensibilité(s)
+          </td>
         </tr>
         <tr>
           <td>
-            <img src="images/icons/note_grey.png" title="aucune" alt="aucune" />
+            {{if $alertesProfil}}
+              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            {{else}}
+              <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
+            {{/if}}
           </td>
-          <td>Précautions d'emploi</td>
-          <td>
-            <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+          <td colspan="3">
+            <strong>{{$alertesProfil}}</strong>
+            contre-indication(s) / précaution(s) d'emploi
           </td>
-          <td>Hypersensibilités</td>
         </tr>
         <tr>
           <td>
-            <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            {{if $alertesIPC}}
+              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+            {{else}}
+              <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
+            {{/if}}
           </td>
-          <td colspan="3">Incompatibilités physico-chimiques</td>
+          <td colspan="3">
+            <strong>{{$alertesIPC}}</strong>
+            incompatibilité(s) physico-chimique(s)
+          </td>
         </tr>
       </table>

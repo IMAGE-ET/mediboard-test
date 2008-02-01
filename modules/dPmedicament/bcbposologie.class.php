@@ -80,8 +80,8 @@ class CBcbPosologie extends CBcbObject {
     }
     
     if($posologie){
-      $this->quantite1          = $posologie["QUANTITE1"];
-      $this->quantite2          = $posologie["QUANTITE2"];
+      $this->quantite1 = $posologie["QUANTITE1"];
+      $this->quantite2 = $posologie["QUANTITE2"];
      
       $this->code_prise1 = $posologie["CODE_PRISE1"];	  
       $this->getValeur($this->code_prise1, "_code_prise1", "LIBELLE_SPECIF", "CODE_SPECIF",  "poso_specif_prise");
@@ -95,10 +95,10 @@ class CBcbPosologie extends CBcbObject {
       $this->code_indication = $posologie["CODE_NATURE"];
       $this->getValeur($this->code_nature, "_code_nature", "LIBELLE_NATURE", "CODE_NATURE", "poso_natures");
       
-      $this->code_voie       = $posologie["CODE_VOIE"];
+      $this->code_voie = $posologie["CODE_VOIE"];
       $this->getValeur($this->code_voie, "_code_voie", "LIBELLE_VOIE", "CODE_VOIE", "poso_voies");
       
-      $this->code_profil     = $posologie["CODE_PROFIL"];
+      $this->code_profil = $posologie["CODE_PROFIL"];
       $this->getValeur($this->code_profil, "_code_profil", "LIBELLE_PROFIL", "CODE_PROFIL", "poso_profils");
       
       $this->code_unite_prise = $posologie["CODE_UNITE_DE_PRISE"];
@@ -113,10 +113,10 @@ class CBcbPosologie extends CBcbObject {
       $this->code_duree3 = $posologie["CODE_DUREE3"];
       $this->getValeur($this->code_duree3, "_code_duree3", "LIBELLE_DUREE", "CODE_DUREE", "poso_durees");
       
-      $this->code_moment        = $posologie["CODE_MOMENT"];
+      $this->code_moment = $posologie["CODE_MOMENT"];
 		  $this->getValeur($this->code_moment, "_code_moment", "LIBELLE_MOMENT", "CODE_MOMENT", "poso_moments");
      
-		  $this->code_terrain       = $posologie["CODE_TERRAIN"];
+		  $this->code_terrain = $posologie["CODE_TERRAIN"];
 		  $this->getValeur($this->code_terrain, "_code_terrain", "TERRAIN,AGE1,AGE2,CAGE1,CAGE2,POIDS1,POIDS2", "CODE_TERRAIN", "poso_produits_terrain");
       
 		  $this->code_age1 = $this->_code_terrain["CAGE1"].$this->_code_terrain["AGE1"];
