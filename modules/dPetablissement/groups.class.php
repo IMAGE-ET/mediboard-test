@@ -33,7 +33,8 @@ class CGroups extends CMbObject {
 
   // Object References
   var $_ref_functions = null;
-
+  var $_ref_produits_livret = null;
+  
   // Form fields
   var $_tel1        = null;
   var $_tel2        = null;
@@ -118,6 +119,12 @@ class CGroups extends CMbObject {
     $this->updateDBTel("fax", "_fax");
   }
   
+  function loadRefLivretTherapeutique(){
+    $this->_ref_produits_livret = array();
+    $produit_livret = new CProduitLivretTherapeutique();
+    $produit_livret->group_id = $this->_id;
+    $this->_ref_produits_livret = $produit_livret->loadMatchingList();
+  }
 
   /**
    * Load functions with given permission

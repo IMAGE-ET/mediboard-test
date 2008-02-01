@@ -1,15 +1,13 @@
-<?php /* $Id: $ */
+<?php
 
 /**
- *	@package Mediboard
- *	@subpackage dPmedicament
- *	@version $Revision: $
- *  @author Alexis Granger
- */
+* @package Mediboard
+* @subpackage dPmedicament
+* @version $Revision: $
+* @author Alexis Granger
+*/
 
-
-
-global $AppUI, $can, $m, $g;
+global $g;
 
 // Chargement de l'etablissement courant
 $etablissement = new CGroups();
@@ -30,6 +28,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("produits_livret", $etablissement->_ref_produits_livret);
 
-$smarty->display("vw_idx_livret.tpl");
+$smarty->display("inc_vw_livret.tpl");
+
 
 ?>

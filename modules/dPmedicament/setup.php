@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPmedicament";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 
 
@@ -25,7 +25,22 @@ class CSetupdPmedicament extends CSetup {
        
     $this->makeRevision("all");
     
-    $this->mod_version = "0.1";
+    $this->makeRevision("0.1");
+    
+    $sql = "CREATE TABLE `produit_livret_therapeutique` (
+            `produit_livret_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+            `group_id` INT(11) UNSIGNED NOT NULL, 
+            `code_cip` INT(11) NOT NULL, 
+            `prix_hopital` FLOAT, 
+            `prix_ville` FLOAT, 
+            `date_prix_hopital` DATE, 
+            `date_prix_ville` DATE,  
+            `code_interne` INT(11), 
+            `commentaire` TEXT, 
+            PRIMARY KEY (`produit_livret_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.11";
   }  
 }
 
