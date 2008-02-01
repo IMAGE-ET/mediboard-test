@@ -96,6 +96,7 @@ $smarty->assign("chapitreBCB", "");
 $smarty->assign("codeATC", "");
 $smarty->assign("codeBCB", "");
 
+$smarty->assign("param_recherche", $param_recherche);
 $smarty->assign("dialog", $dialog);
 $smarty->assign("supprime", $supprime);
 $smarty->assign("type_recherche", $type_recherche);

@@ -39,7 +39,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(700, 620, "Descriptif produit");
+  url.popup(760, 620, "Descriptif produit");
 }
 
 function changeFormSearch(){
@@ -73,8 +73,8 @@ function pageMain(){
         <li><a href="#two">Classes</a></li>
         <li><a href="#three">Composants</a></li>
         <li><a href="#four">DCI</a></li>
-        
       </ul>
+      <hr class="control_tabs" />
     </td>
   </tr>
   
@@ -105,7 +105,7 @@ function pageMain(){
         <input type="checkbox" name="supprime" value="1" {{if $supprime == 1}}checked = "checked"{{/if}} />
         Afficher les produits supprimés
         <br />
-        <input type="checkbox" name="position_text" value="partout" {{if $type_recherche == 'partout'}}checked = "checked"{{/if}} />
+        <input type="checkbox" name="position_text" value="partout" {{if $param_recherche == 'partout'}}checked = "checked"{{/if}} />
         Rechercher n'importe où dans le nom du produit
       </form>
     </td>
@@ -136,9 +136,7 @@ function pageMain(){
             {{/if}}
           </td>
           <td>
-            <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_suppression}}style="color: red"{{/if}}>{{$produit->libelle}}
-            {{if $produit->_suppression}}Supprime{{/if}}
-            </a>
+            <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
           </td>
         </tr>
         {{/foreach}}

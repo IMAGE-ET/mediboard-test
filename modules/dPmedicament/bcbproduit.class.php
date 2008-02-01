@@ -30,7 +30,7 @@ class CBcbProduit extends CBcbObject {
   // Others Fields
   var $_referent             = null;
   var $_generique            = null;
-  var $_suppression          = null;
+  var $_supprime             = null;
   
   // Objects references
   var $_ref_DCI              = null;
@@ -51,6 +51,7 @@ class CBcbProduit extends CBcbObject {
   function load($code_cip){
     $this->distObj->SearchInfo($code_cip);
     $infoProduit = $this->distObj->DataInfo;  
+ 
     if($infoProduit->Charge == 1){
       $this->code_cip        = $infoProduit->Code_CIP;
       $this->code_ucd        = $infoProduit->Code_Ucd;
@@ -62,7 +63,8 @@ class CBcbProduit extends CBcbObject {
       $this->hospitalier     = $infoProduit->Hospitalier;
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
-    $this->getSuppression();
+    // Chargement de la monographie (permet d'obtenir la date de suppression) 
+    $this->loadRefMonographie();
     // Chargement du statut du produit
     $this->getStatut();  
     // Chargement de l'agrement
@@ -71,7 +73,8 @@ class CBcbProduit extends CBcbObject {
     $this->getGenerique();
     /// Produit référent ?
     $this->getReferent();
-    
+    // Produit supprime ?
+    $this->getSuppression();
   }
   
   // Permet de savoir si le produit est un générique 
@@ -79,8 +82,11 @@ class CBcbProduit extends CBcbObject {
     $this->_generique = $this->distObj->IsGenerique($this->code_cip);
   }
   
+  
   function getSuppression(){
-    $this->_suppression = $this->distObj->IsSupprime($this->code_cip);
+    if($this->_ref_monographie->date_suppression){
+      $this->_supprime = 1;
+    }
   }
   
   

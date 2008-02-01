@@ -22,8 +22,15 @@ class CBcbObject {
   
   function initBCBConnection() {
     if(!self::$objDatabase) {
+      
       include_once("lib/bcb/packageBCB.php");
-      include_once("lib/bcb/bd_config.inc.php");
+      
+      global $dPconfig;
+      $objDatabase = new BCBConnexion();
+      $TypeDatabase=2;
+      $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", $dPconfig["db"]["bcb"]["dbhost"], $dPconfig["db"]["bcb"]["dbname"], $dPconfig["db"]["bcb"]["dbuser"], $dPconfig["db"]["bcb"]["dbpass"], $TypeDatabase);
+      if ($Result < 1) die("Erreur base " . $Result . " :" . $objDatabase->GetLastError());
+      
       self::$objDatabase = $objDatabase;
       self::$TypeDatabase = $TypeDatabase;
     }

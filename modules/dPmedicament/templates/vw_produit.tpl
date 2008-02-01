@@ -22,7 +22,9 @@ function pageMain(){
         <li><a href="#four" style="height: 35px; width:120px">Données pharmaceutiques</a></li>
         <li><a href="#five" style="height: 35px; width:150px">Données technico-réglementaires</a></li>
       </ul>
+      <hr class="control_tabs" />    
     </td>
+    
   </tr>
   
   <!-- Commposition et aspect -->
