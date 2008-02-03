@@ -48,26 +48,40 @@ class CBoolSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
-    global $AppUI;
     $sHtml        = "";
     $field        = htmlspecialchars($this->fieldName);
     $separator    = CMbArray::extract($params, "separator");
+    $disabled     = CMbArray::extract($params, "disabled");
+    $default      = CMbArray::extract($params, "default", $this->default);
     $extra        = CMbArray::makeXmlAttributes($params);
     
-    for($i=1; $i>=0; $i--){
-      $selected = ""; 
-      if(($value !== null && $value === "$i") || ($value === null && "$i" === "$this->default")){
-        $selected = "checked=\"checked\"";
-      }
-      $sHtml .= "<input type=\"radio\" name=\"$field\" value=\"$i\" $selected";
-      if($i == 1) {
-        $sHtml .= " class=\"".htmlspecialchars(trim($className." ".$this->prop))."\"";
-      }elseif($className){
-        $sHtml .= " class=\"".htmlspecialchars(trim($className))."\"";
-      }
-      $sHtml .= " $extra/><label for=\"".$field."_$i\">".$AppUI->_("bool.$i")."</label> ";
-      if($i==1 && $separator){
-        $sHtml .= $separator;
+
+    // Attributes for all inputs
+    $attributes = array(
+      "type" => "radio",
+      "name" => $field,
+    );
+    
+    if (null === $value) {
+      $value = "$default";
+    }
+    
+    for ($i = 1; $i >= 0; $i--) {
+      $attributes["value"] = "$i"; 
+      $attributes["checked"] = $value === "$i" ? "checked" : null; 
+      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
+      $attributes["class"] = $i == 1 ? $this->prop : null;
+      $attributes["class"].= $className ? $className : null;
+      
+      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
+      
+      $sHtml .= "\n<input $xmlAttributes $extra />";
+      
+      $sTr = CAppUI::tr("bool.$i");
+      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
+      
+      if ($i != 0 && $separator){
+        $sHtml .= "\n$separator";
       }
     }
     return $sHtml;

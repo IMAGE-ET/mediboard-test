@@ -40,6 +40,7 @@ class CActeCCAM extends CActe {
   var $modificateurs       = null;
   var $commentaire         = null;
   var $code_association    = null;
+  var $rembourse           = null;
   var $regle               = null;
   var $signe               = null;
   
@@ -78,6 +79,7 @@ class CActeCCAM extends CActe {
     $specs["commentaire"]         = "text";
     $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
+    $specs["rembourse"]           = "bool default|1";
     $specs["regle"]               = "bool";
     $specs["_montant_facture"]    = "currency";
     $specs["signe"]               = "bool default|0";

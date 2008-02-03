@@ -210,7 +210,7 @@ class CMbFieldSpec {
       $params["readonly"] = "readonly";
     }
     $value     = $object->{$this->fieldName};
-    if($hidden){
+    if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }
     return $this->getFormHtmlElement($object, $params, $value, $className);

@@ -35,10 +35,12 @@
      
     </tr>
   </table>
-  <hr />
   {{/if}}
   {{/if}}
   <table class="form">
+    <tr>
+      <th class="category">Ajout et suppression de codes</th>
+    </tr>
     <tr>
       <td colspan="2" style="vertical-align:middle;">
         <input name="_actes" type="hidden" value="" />

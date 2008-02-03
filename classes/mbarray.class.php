@@ -198,11 +198,13 @@ class CMbArray {
    * @param array $array The source array
    * @return string String attributes  like 'key1="value1" ... keyN="valueN"'
    **/
-  function makeXmlAttributes(&$array) {
+  function makeXmlAttributes($array) {
     $return = array();
     foreach ($array as $key => $value) {
-      $value = htmlspecialchars($value);
+      if ($value !== null) {
+      $value = trim(htmlspecialchars($value));
       $return[] = "$key=\"$value\"";
+      }
     }
     return join($return, " ");
   }

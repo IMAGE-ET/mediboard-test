@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.24";
+$config["mod_version"]     = "0.25";
 $config["mod_type"]        = "user";
 
 class CSetupdPsalleOp extends CSetup {
@@ -116,8 +116,13 @@ class CSetupdPsalleOp extends CSetup {
             ADD `signe` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "ALTER TABLE `acte_ccam`
+						ADD `rembourse` ENUM('0','1'), 
+						CHANGE `object_class` `object_class` ENUM('COperation','CSejour','CConsultation') NOT NULL;";
+    $this->addQuery($sql);
     
+    $this->mod_version = "0.25";
   }
 }
 ?>

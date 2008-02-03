@@ -13,22 +13,28 @@ function viewCode(code, class){
 </script>
 
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
+	<!-- Codes d'associations -->
+  {{if count($curr_code->assos) < 15}}
+  {{if $can->edit || $modif_operation}}
+  <select style="float:right" name="asso" onchange="setCodeTemp(this.value)">
+    <option value="">&mdash; Choisir un code associé</option>
+    {{foreach from=$curr_code->assos item=curr_asso}}
+    <option value="{{$curr_asso.code}}">
+	    {{$curr_asso.code}}
+	    ({{$curr_asso.texte|truncate:35:"...":true}})
+    </option>
+    {{/foreach}}
+  </select>
+  {{/if}}
+  {{/if}}
+
   <a href="#" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
     <strong>{{$curr_code->code}} :</strong> 
     {{$curr_code->libelleLong}}
   </a>
-  
-  {{if $can->edit || $modif_operation}}
-  
-  <br />
-  <select name="asso" onchange="setCodeTemp(this.value)">
-    <option value="">&mdash; Choisir un code associé</option>
-    {{foreach from=$curr_code->assos item=curr_asso}}
-    <option value="{{$curr_asso.code}}">{{$curr_asso.code}}({{$curr_asso.texte|truncate:40:"...":true}})</option>
-    {{/foreach}}
-  </select>
-  {{/if}}
-  
+    
+	<br style="clear: both;" />
+
   {{foreach from=$curr_code->activites item=curr_activite}}
   {{foreach from=$curr_activite->phases item=curr_phase}}
   {{assign var="acte" value=$curr_phase->_connected_acte}}
@@ -60,32 +66,32 @@ function viewCode(code, class){
   {{else}}
   {{assign var=bg_color value=f99}}
   {{/if}}
-
-			{{assign var=newButtons value=true}}
-      {{if $newButtons}}
-      <div style="position: absolute; right: 10px;">
-      {{if $can->edit || $modif_operation}}
-        {{if !$acte->acte_id}}
-        <button class="add" type="button" onclick="
-          {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
-          if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
-            document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
-            ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
-          }
-          {{/if}}
-          submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} });">
-          Coder cet acte
-        </button>
-
-        {{else}}
-        
-        <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-          {{tr}}Delete{{/tr}} cet acte
-        </button>
-        {{/if}}
+	
+	{{assign var=newButtons value=true}}
+  {{if $newButtons}}
+  <div style="position: absolute; right: 10px;">
+  {{if $can->edit || $modif_operation}}
+    {{if !$acte->_id}}
+    <button class="add" type="button" onclick="
+      {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
+      if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
+        document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
+        ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
+      }
       {{/if}}
-      </div>
-      {{/if}}
+      submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} });">
+      Coder cet acte
+    </button>
+
+    {{else}}
+    
+    <button class="remove" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+      {{tr}}Delete{{/tr}} cet acte
+    </button>
+    {{/if}}
+  {{/if}}
+  </div>
+  {{/if}}
 
   <table class="form">
     
@@ -99,6 +105,14 @@ function viewCode(code, class){
   
     <tbody class="acteEffect" id="acte{{$key}}" style="display: none;">
     
+    <!-- Ligne cosmétique -->
+    <tr class="{{$key}}">
+      <td style="width: 1%;" />
+      <td style="width: 20%;" />
+      <td style="width: 100%;" />
+    </tr>
+    
+    <!-- Execution -->
     <tr style="display: none;">
       <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
       <td colspan="2">
@@ -107,11 +121,7 @@ function viewCode(code, class){
       </td>
     </tr>
     
-    <tr class="{{$key}}">
-      <td style="width: 1%;" />
-      <td style="width: 100%;" />
-    </tr>
-    
+    <!-- Exécutant -->
     <tr class="{{$key}}">
       <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
       <td colspan="2">
@@ -134,6 +144,8 @@ function viewCode(code, class){
         {{else}}-{{/if}}
       </td>
     </tr>
+    
+		<!-- Modificateurs -->    
     <tr class="{{$view}}">
       <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
       <td class="text" colspan="2">
@@ -147,34 +159,62 @@ function viewCode(code, class){
           {{elseif $curr_mod->_value}}
             {{$curr_mod->code}} : {{$curr_mod->libelle}}
           {{/if}}
+        {{foreachelse}}
+        <em>Pas de modificateurs pour cette activité</em>
         {{/foreach}}
       </td>
     </tr>
     
+    <!-- Remboursable -->
+    <tr class="{{$view}}">
+      <th>{{mb_label object=$acte field=rembourse}}</th>
+      <td class="text">
+        {{assign var=disabled value=""}}
+        {{if $curr_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
+        {{if $curr_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
+
+        {{assign var=default value="1"}}
+        {{if $curr_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
+        {{if $curr_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
+        
+        {{if $can->edit || $modif_operation}}
+          {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
+        {{else}}
+          {{mb_value object=$acte field=rembourse}}
+        {{/if}}
+      </td>
+      <td>  
+        <em>({{tr}}CCodeCCAM.remboursement.{{$curr_code->remboursement}}{{/tr}})</em>
+      </td>
+    </tr>
+
+    <!-- Montant dépassement -->
     {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
     <tr class="{{$view}}">
-      <th><label for="montant_depassement" title="Dépassement d'honoraire">Dépassement</label></th>
+      <th>{{mb_label object=$acte field=montant_depassement}}</th>
       <td class="text" colspan="2">
         {{if $can->edit || $modif_operation}}
-          {{mb_field object=$acte field="montant_depassement"}}
-        {{elseif $acte->montant_depassement}}
-          {{mb_value object=$acte field="montant_depassement"}}
-        {{else}}-{{/if}}
+          {{mb_field object=$acte field=montant_depassement}}
+        {{else}}
+          {{mb_value object=$acte field=montant_depassement}}
+        {{/if}}
       </td>
     </tr>
     {{/if}}
-
-    <tr>
-      <th><label for="commentaire" title="Commentaires sur l'acte">Commentaire</label></th>
+		
+		<!-- Commentaire -->
+    <tr class="{{$view}}">
+      <th>{{mb_label object=$acte field=commentaire}}</th>
       <td class="text" colspan="2">
         {{if $can->edit || $modif_operation}}
-        <textarea name="commentaire" class="{{$acte->_props.commentaire}}">{{$acte->commentaire}}</textarea>
-        {{elseif $acte->commentaire}}
-          {{$acte->commentaire|nl2br}}
-        {{else}}-{{/if}}
+          {{mb_field object=$acte field=commentaire}}
+        {{else}}
+          {{mb_value object=$acte field=commentaire}}
+        {{/if}}
       </td>
     </tr>
-
+    
+    <!-- Buttons -->
     {{if $newButtons && $acte->_id}}
     <tr>
       <td class="button" colspan="3">
@@ -187,9 +227,12 @@ function viewCode(code, class){
     
     </tbody>
     
+    <!-- Code d'association -->
     <tr>
-      <td colspan="3" class="text">
+      <td colspan="3" class="text" style="text-align: right">
         {{if $acte->_id}}
+        
+        Association pour le Dr. {{$acte->_ref_executant->_view}}
         
         <select name="{{$view}}"
         onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
@@ -202,22 +245,22 @@ function viewCode(code, class){
         </select>
         
         <strong>
-        asso. pour {{$curr_activite->type}}
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
           &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
         {{/if}}
         </strong>
+
         {{if $acte->code_association != $acte->_guess_association}}
-          <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
-            <strong>
-              {{if $acte->_guess_association}}
-                ({{$acte->_guess_association}}
-              {{else}}
-                (Aucun
-              {{/if}}
-              conseillé)
-            </strong>
-          </span>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'translate', params: { text: 'CActeCCAM-regle-association-{{$acte->_guess_regle_asso}}' } })">
+          <strong>
+            {{if $acte->_guess_association}}
+              ({{$acte->_guess_association}}
+            {{else}}
+              (Aucun
+            {{/if}}
+            conseillé)
+          </strong>
+        </span>
         {{/if}}
         
         
@@ -227,11 +270,13 @@ function viewCode(code, class){
         {{/if}}
       </td>
     </tr>
+    
+    <!-- Anciens boutons -->
     {{if !$newButtons}}
     <tr>
       <td class="button" colspan="3">
       {{if $can->edit || $modif_operation}}
-        {{if !$acte->acte_id}}
+        {{if !$acte->_id}}
         <button class="new" type="button" onclick="
           {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
           if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
