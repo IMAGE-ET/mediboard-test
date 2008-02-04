@@ -70,3 +70,5 @@ class CBcbMonographie extends CBcbObject {
 	  $this->emballage_ext            = $this->distObj->Text($cip, 21);
   }
 }
+
+?>

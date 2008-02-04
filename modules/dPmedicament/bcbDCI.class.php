@@ -20,7 +20,6 @@ class CBcbDCI extends CBcbObject {
   
   // Objects references
   var $_refs_produits = null;
-  var $_refs_DCI      = null;
   
   
   // Constructeur
@@ -69,3 +68,5 @@ class CBcbDCI extends CBcbObject {
   }
   
 }
+
+?>

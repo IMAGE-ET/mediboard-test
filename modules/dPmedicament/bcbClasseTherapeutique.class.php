@@ -73,3 +73,5 @@ class CBcbClasseTherapeutique extends CBcbObject {
   }
   
 }
+
+?>

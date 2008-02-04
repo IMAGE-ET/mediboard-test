@@ -212,3 +212,5 @@ class CBcbPosologie extends CBcbObject {
   }
 
 }
+
+?>

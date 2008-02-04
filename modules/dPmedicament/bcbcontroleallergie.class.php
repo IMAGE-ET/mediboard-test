@@ -36,3 +36,5 @@ class CBcbControleAllergie extends CBcbObject {
     return $this->distObj->gTabAllergie;
   }
 }
+
+?>

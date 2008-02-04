@@ -48,3 +48,5 @@ class CBcbEconomique extends CBcbObject {
     $this->labo_exploitant = $this->distObj->DataEco->Labo_Exploitant;
   }
 }
+
+?>

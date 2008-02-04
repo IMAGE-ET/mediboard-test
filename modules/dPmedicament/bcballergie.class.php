@@ -32,3 +32,5 @@ class CBcbAllergie extends CBcbObject {
   }
   
 }
+
+?>

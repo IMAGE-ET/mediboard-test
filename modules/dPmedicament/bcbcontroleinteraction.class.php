@@ -31,3 +31,4 @@ class CBcbControleInteraction extends CBcbObject {
   }
   
 }
+?>

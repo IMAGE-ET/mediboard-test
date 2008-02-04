@@ -49,3 +49,5 @@ class CBcbComposition extends CBcbObject {
     $this->_ref_produits = $this->distObj->TabProduit;
   }
 }
+
+?>

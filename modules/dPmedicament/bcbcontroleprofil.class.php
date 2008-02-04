@@ -55,3 +55,5 @@ class CBcbControleProfil extends CBcbObject {
   }
   
 }
+
+?>
