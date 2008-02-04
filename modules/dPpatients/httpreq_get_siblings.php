@@ -22,7 +22,7 @@ if($patient_id) {
   $oldPat->load($patient_id);
   if(!$oldPat->checkSimilar($nom, $prenom)) {
     $textDifferent = "Le nom et/ou le prénom sont très différents de" .
-        "\n>> $oldPat->_view" .
+        "\n\t$oldPat->_view" .
         "\nVoulez-vous tout de même sauvegarder ?";
   }
 }
@@ -47,7 +47,6 @@ if(count($siblings) != 0) {
   }
   $textSiblings .= "\nVoulez-vous tout de même sauvegarder ?";
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

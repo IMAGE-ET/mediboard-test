@@ -951,31 +951,18 @@ class CPatient extends CMbObject {
   function getSiblings() {
   	$where = array();
     
-    if($this->patient_id) {
-      $where["patient_id"] = "!= '$this->patient_id'";
+    $wherePairs[] = "(nom = %1 AND prenom = %2)";
+    if ($this->naissance != "0000-00-00") {
+      $wherePairs[] = "(nom = %1 AND naissance = %3)";
+      $wherePairs[] = "(prenom = %2 AND naissance = %3)";
     }
     
-    $where[] = $this->_spec->ds->prepare("((nom = %1 AND prenom = %2) " .
-                            "OR (nom = %1 AND naissance = %3 AND naissance != '0000-00-00') " .
-                            "OR (prenom = %2 AND naissance = %3 AND naissance != '0000-00-00'))",
-                          $this->nom, $this->prenom, $this->naissance);
-
-    $siblings = new CPatient;
-    $siblings = $siblings->loadList($where);
+    $where[] = $this->_spec->ds->prepare(join(" OR ", $wherePairs), $this->nom, $this->prenom, $this->naissance);
+    $siblings = $this->loadList($where);
+    unset($siblings[$this->_id]);
     return $siblings;
   }
 
-  function getExactSiblings() {
-    $sql = "SELECT patient_id, nom, prenom, naissance, adresse, ville, CP " .
-      		"FROM patients WHERE " .
-      		"patient_id != '$this->patient_id' " .
-      		"AND nom    = '".addslashes($this->nom)."'" .
-      		"AND prenom = '".addslashes($this->prenom)."'" .
-      		"AND naissance = '$this->naissance'";
-    $siblings = $this->_spec->ds->loadlist($sql);
-    return $siblings;
-  }
-  
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
 
