@@ -39,7 +39,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(760, 620, "Descriptif produit");
+  url.popup(815, 620, "Descriptif produit");
 }
 
 function changeFormSearch(){
@@ -115,7 +115,9 @@ function pageMain(){
       <table class="tbl">
         <tr>
           <th>CIP</th>
+          <th>UCD</th>
           <th>Produit</th>
+          <th>Laboratoire</th>
         </tr>
         {{foreach from=$produits item="produit"}}
         <tr>
@@ -136,7 +138,13 @@ function pageMain(){
             {{/if}}
           </td>
           <td>
+            {{$produit->code_ucd}}
+          </td>
+          <td>
             <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})" {{if $produit->_supprime}}style="color: red"{{/if}}>{{$produit->libelle}}</a>
+          </td>
+          <td>
+            {{$produit->nom_laboratoire}}
           </td>
         </tr>
         {{/foreach}}

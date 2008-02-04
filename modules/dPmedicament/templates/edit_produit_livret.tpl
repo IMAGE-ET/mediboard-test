@@ -1,8 +1,13 @@
 <script type="text/javascript">
 
-function submitProduitLivret(){
+function submitProduitLivret(lettre, codeATC, code_cip){
   var oForm = document.editProduitLivret;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : window.opener.Livret.reload });
+  submitFormAjax(oForm, 'systemMsg', { 
+    onComplete : function(){ 
+      window.opener.Livret.reloadAlpha(lettre, code_cip); 
+      window.opener.Livret.reloadATC(codeATC, code_cip)  
+    } 
+  });
 }
 
 function pageMain() {
@@ -72,7 +77,7 @@ function pageMain() {
 		</tr>
 		<tr>
 		  <td colspan="2" style="text-align: center">
-		    <button type="button" class="submit" onclick="submitProduitLivret();">Enregistrer</button>
+		    <button type="button" class="submit" onclick="submitProduitLivret('{{$lettre}}','{{$codeATC}}','{{$code_cip}}');">Enregistrer</button>
 		  </td>
 		</tr>
 	</table>

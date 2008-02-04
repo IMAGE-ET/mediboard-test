@@ -43,6 +43,12 @@ class CBcbClasseATC extends CBcbObject {
     $this->_refs_produits = $this->distObj->tabProduit;
   }
   
+  function loadRefsProduisLivretThera($codeATC = ""){
+    $this->_refs_produits = "";
+    
+    
+  }
+  
   function getCodeNiveauSup($codeATC){
     if(strlen($codeATC)==0){
       return;

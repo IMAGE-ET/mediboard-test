@@ -18,6 +18,7 @@ class CProduitLivretTherapeutique extends CMbObject {
   
   // DB Fields
   var $group_id           = null;
+  var $libelle            = null;
   var $code_cip           = null;
   var $prix_hopital       = null;
   var $prix_ville         = null;
@@ -38,6 +39,7 @@ class CProduitLivretTherapeutique extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["group_id"]          = "notNull ref class|CGroups";
+    $specs["libelle"]           = "text";
     $specs["code_cip"]          = "notNull num";
     $specs["prix_hopital"]      = "currency";
     $specs["prix_ville"]        = "currency";

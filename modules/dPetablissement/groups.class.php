@@ -119,11 +119,15 @@ class CGroups extends CMbObject {
     $this->updateDBTel("fax", "_fax");
   }
   
-  function loadRefLivretTherapeutique(){
+  function loadRefLivretTherapeutique($lettre = null){
     $this->_ref_produits_livret = array();
     $produit_livret = new CProduitLivretTherapeutique();
-    $produit_livret->group_id = $this->_id;
-    $this->_ref_produits_livret = $produit_livret->loadMatchingList();
+    if($lettre){
+      $where["libelle"] = "LIKE '$lettre%'";
+    }
+    $where["group_id"] = " = '$this->_id'";
+    $order = "libelle ASC";
+    $this->_ref_produits_livret = $produit_livret->loadList($where, $order);
   }
 
   /**
