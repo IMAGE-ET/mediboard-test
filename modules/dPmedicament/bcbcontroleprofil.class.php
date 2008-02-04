@@ -37,6 +37,11 @@ class CBcbControleProfil extends CBcbObject {
   
   function testProfil() {
     if($this->_ref_patient) {
+      if($this->_ref_patient->_ref_dossier_medical) {
+        foreach($this->_ref_patient->_ref_dossier_medical->_codes_cim as $code) {
+          $this->addCIM(CCodeCIM10::addPoint($code));
+        }
+      }
       if($this->_ref_patient->sexe == "m") {
         $sexe = "M";
       } else {

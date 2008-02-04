@@ -12,7 +12,7 @@
           </td>
           <td>
             <strong>{{$alertesInteractions|@count}}</strong>
-            interactions
+            interaction(s)
           </td>
           <td>
             {{if $alertesAllergies|@count}}
