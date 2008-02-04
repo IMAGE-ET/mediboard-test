@@ -102,7 +102,12 @@ foreach($listPlage as $key => $value) {
   }
   // Facture non réglée par le patient
   if($filter->_etat_reglement == "reglee"){
-    $where["date_reglement"] = " IS NOT NULL";
+    if($compta) {
+      $where[] = "date_reglement >= '$filter->_date_min'";
+      $where[] = "date_reglement <= '$filter->_date_max'";
+    } else {
+      $where["date_reglement"] = " IS NOT NULL";
+    }
   }
   
   // Facture non acquittee
