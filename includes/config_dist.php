@@ -166,6 +166,7 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
   "locked"           => "0",
   "horaire_voulu"    => "0"
 );
+  
 $dPconfig["dPplanningOp"]["CSejour"] = array (
   "heure_deb"           => "0",
   "heure_fin"           => "23",
@@ -177,13 +178,20 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "locked"              => "0",
   "tag_dossier"         => "",
 );
-$dPconfig["dPsalleOp"]["CActeCCAM"] = array (
-  "tarif" => "0",
-  "signature" => "0",
+
+$dPconfig["dPsalleOp"] = array( 
+  "CActeCCAM" => array(
+	  "tarif" => "0",
+	  "signature" => "0",
+	  "modifs_compacts" => "0",
+	  "commentaire" => "1",
+	),
+
+	"CDossierMedical" => array (
+    "DAS" => "0",
+  ),
 );
-$dPconfig["dPsalleOp"]["CDossierMedical"] = array (
-  "DAS" => "0",
-);
+	 
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPcabinet"]["addictions"] = 0;

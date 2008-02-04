@@ -9,7 +9,14 @@ function viewCode(code, class){
   url.popup(700, 550, "Code CCAM");
 }
 
-	PairEffect.initGroup("acteEffect");
+function setToNow(element) {
+  var dNow = new Date();
+  element.value = dNow.toDATETIME();
+  $(element.id + "_da").innerHTML = dNow.toLocaleDateTime();
+  
+}
+
+PairEffect.initGroup("acteEffect");
 </script>
 
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
@@ -113,11 +120,13 @@ function viewCode(code, class){
     </tr>
     
     <!-- Execution -->
-    <tr style="display: none;">
-      <th><label for="execution" title="Date et heure d'exécution de l'acte">Exécution</label></th>
-      <td colspan="2">
-        <input type="text" name="execution" class="{{$acte->_props.execution}}" readonly="readonly" value="{{$acte->execution}}" />
-        <button class="tick" onclick="this.form.execution.value = new Date().toDATETIME());">Maintenant</button><br />
+    <tr {{if !$can->admin}}style="display: none;"{{/if}}>
+      <th>{{mb_label object=$acte field=execution}}</th>
+      <td class="date" colspan="2">
+	      {{mb_field object=$acte field=execution form="formActe-$view"}}
+        <button type="button" class="tick" onclick="setToNow(this.form.execution);">
+          Maintenant
+        </button>
       </td>
     </tr>
     
@@ -145,20 +154,23 @@ function viewCode(code, class){
       </td>
     </tr>
     
-		<!-- Modificateurs -->    
+		<!-- Modificateurs -->
+		{{assign var=modifs_compacts value=$dPconfig.dPsalleOp.CActeCCAM.modifs_compacts}}  
     <tr class="{{$view}}">
-      <th><label for="modificateurs" title="Modificateurs associés à l'acte">Modificateur(s)</label></th>
+      <th>{{mb_label object=$acte field=modificateurs}}</th>
       <td class="text" colspan="2">
-        {{foreach from=$curr_phase->_modificateurs item=curr_mod}}
+        {{foreach from=$curr_phase->_modificateurs item=curr_mod name=modificateurs}}
           {{if $can->edit || $modif_operation}}
           <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
           <label for="modificateur_{{$curr_mod->code}}" title="{{$curr_mod->libelle}}">
-            {{$curr_mod->code}} : {{$curr_mod->libelle}}
+            {{$curr_mod->code}} 
+            {{if !$modifs_compacts}} : {{$curr_mod->libelle}}{{/if}}
           </label>
-          <br />
           {{elseif $curr_mod->_value}}
-            {{$curr_mod->code}} : {{$curr_mod->libelle}}
+            {{$curr_mod->code}}
+            {{if !$modifs_compacts}} : {{$curr_mod->libelle}}{{/if}}
           {{/if}}
+          {{if !$modifs_compacts}}<br />{{/if}}          
         {{foreachelse}}
         <em>Pas de modificateurs pour cette activité</em>
         {{/foreach}}
@@ -168,7 +180,7 @@ function viewCode(code, class){
     <!-- Remboursable -->
     <tr class="{{$view}}">
       <th>{{mb_label object=$acte field=rembourse}}</th>
-      <td class="text">
+      <td>
         {{assign var=disabled value=""}}
         {{if $curr_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
         {{if $curr_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
@@ -203,6 +215,7 @@ function viewCode(code, class){
     {{/if}}
 		
 		<!-- Commentaire -->
+    {{if $dPconfig.dPsalleOp.CActeCCAM.commentaire}}
     <tr class="{{$view}}">
       <th>{{mb_label object=$acte field=commentaire}}</th>
       <td class="text" colspan="2">
@@ -213,6 +226,7 @@ function viewCode(code, class){
         {{/if}}
       </td>
     </tr>
+    {{/if}}
     
     <!-- Buttons -->
     {{if $newButtons && $acte->_id}}
@@ -313,6 +327,7 @@ function viewCode(code, class){
   oElement = $('acte{{$key}}');
   oForm = getBoundingForm(oElement);
   prepareForm(oForm);
+	Calendar.regField("formActe-{{$view}}", "execution", true)
 </script>
 
 {{/if}}
