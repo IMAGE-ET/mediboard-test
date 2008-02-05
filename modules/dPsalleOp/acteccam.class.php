@@ -207,9 +207,11 @@ class CActeCCAM extends CActe {
   function store() {
     // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
+      $this->updateFormFields();
       $this->montant_base = $this->getTarif();  
     }
-    
+   
+   
     // En cas d'une modification autre que signe, on met signe à 0
     if(!$this->signe){
       // Chargement du oldObject
