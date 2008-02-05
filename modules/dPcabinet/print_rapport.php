@@ -45,6 +45,10 @@ if($compta) {
   $filter->_etat_acquittement = "";
   $where[] = "consultation.date_reglement >= '$filter->_date_min'";
   $where[] = "consultation.date_reglement <= '$filter->_date_max'";
+  $where[] = "(consultation.a_regler > 0) OR (consultation.reglement_AM = '1')";
+  if($type){
+    $where["consultation.mode_reglement"] = "= '$type'";
+  }
   $ljoin["consultation"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 } else {
   $where[] = "date >= '$filter->_date_min'";
@@ -118,6 +122,12 @@ foreach($listPlage as $key => $value) {
   if($filter->_etat_acquittement == "acquittee"){
     $where["reglement_AM"] = " = '1'";
   }
+  
+  // Cas du rapport compta
+  if($compta) {
+    $where[] = "(a_regler > 0) OR (reglement_AM = '1')";
+  }
+
   
   if($type){
     $where["mode_reglement"] = "= '$type'";
