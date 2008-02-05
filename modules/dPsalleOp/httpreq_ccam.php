@@ -1,8 +1,5 @@
 <?php
 
-global $AppUI, $can, $m, $g;
-
-
 $object_class    = mbGetValueFromGetOrSession("object_class");
 $object_id       = mbGetValueFromGetOrSession("object_id");
 $module          = mbGetValueFromGetOrSession("module");
@@ -14,7 +11,7 @@ $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 
 
-//Chargement de la liste des praticiens
+// Chargement de la liste des praticiens
 $listChirs = new CMediusers;
 $listChirs = $listChirs->loadPraticiens();
 
@@ -22,22 +19,28 @@ $listChirs = $listChirs->loadPraticiens();
 $listAnesths = new CMediusers;
 $listAnesths = $listAnesths->loadAnesthesistes();
 
+$codable = new $object_class;
+$codable->load($object_id);
 
-$object = new $object_class;
-$object->load($object_id);
+$codable->updateFormFields();
+$codable->loadRefPatient();
+$codable->loadRefPraticien();
 
-$object->updateFormFields();
-$object->loadRefsActesCCAM();
-$object->loadRefsCodesCCAM();
-$object->getAssociationCodesActes();
-$object->loadPossibleActes();
-$object->loadRefPraticien();
+// Chargement des actes et exécutants
+$codable->loadRefsActesCCAM();
+foreach ($codable->_ref_actes_ccam as &$acte_ccam) {
+  $acte_ccam->loadRefExecutant();
+}
+
+$codable->loadExtCodesCCAM();
+$codable->loadPossibleActes();
+$codable->getAssociationCodesActes();
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("listAnesths"      , $listAnesths);
 $smarty->assign("listChirs"        , $listChirs);
-$smarty->assign("subject"          , $object);
+$smarty->assign("subject"          , $codable);
 $smarty->assign("module"           , $module);
 $smarty->assign("do_subject_aed"   , $do_subject_aed);
 $smarty->assign("chir_id"          , $chir_id); 

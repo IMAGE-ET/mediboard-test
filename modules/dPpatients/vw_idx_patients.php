@@ -14,7 +14,7 @@ $can->needsRead();
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
 
-$showCount = 50;
+$showCount = 30;
 
 // L'utilisateur est-il un chirurgien
 $chir = $mediuser->isFromType(array("Chirurgien")) ? $mediuser : null;

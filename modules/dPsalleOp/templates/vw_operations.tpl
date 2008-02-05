@@ -160,7 +160,7 @@ function reloadAfterSaveDoc() {
 			  {{/if}}
 			</table>
 
-		<!-- Tabulations -->
+		  <!-- Tabulations -->
       <ul id="main_tab_group" class="control_tabs">
         <li><a href="#one">Timings</a></li>
         <li><a href="#two">Anesthésie</a></li>
@@ -174,22 +174,22 @@ function reloadAfterSaveDoc() {
       
       <!-- Premier onglet => Timings + Personnel -->
       <div id="one">
-     	<div id="timing">
-     	  {{include file="inc_vw_timing.tpl"}}
-     	</div>
-     	<div id="listPersonnel">
-     	  {{include file="inc_vw_personnel.tpl"}}
-     	</div>
-     </div>
+       	<div id="timing">
+     	    {{include file="inc_vw_timing.tpl"}}
+     	  </div>
+     	  <div id="listPersonnel">
+     	    {{include file="inc_vw_personnel.tpl"}}
+     	  </div>
+      </div>
    
       <!-- Deuxieme onglet => Anesthesie -->
       <div id="two">
         <div id="anesth">
 			    {{include file="inc_vw_anesth.tpl"}}
-	    </div>
+	      </div>
 
-		  {{include file="inc_vw_info_anesth.tpl"}}
-	  </div>
+		    {{include file="inc_vw_info_anesth.tpl"}}
+      </div>
 
       <!-- Troisieme onglet bis: codage diagnostics CIM -->
       <div id="threebis">

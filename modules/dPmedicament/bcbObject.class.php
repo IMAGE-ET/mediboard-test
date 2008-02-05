@@ -10,7 +10,6 @@
 /**
  * Abstract class for bcb objects
  */
-  
 
 class CBcbObject {  
   static $objDatabase = null;
@@ -23,12 +22,19 @@ class CBcbObject {
   function initBCBConnection() {
     if(!self::$objDatabase) {
       
-      include_once("lib/bcb/packageBCB.php");
+      include_once("lib/bcb/PackageBCB.php");
       
       global $dPconfig;
       $objDatabase = new BCBConnexion();
       $TypeDatabase=2;
-      $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", $dPconfig["db"]["bcb"]["dbhost"], $dPconfig["db"]["bcb"]["dbname"], $dPconfig["db"]["bcb"]["dbuser"], $dPconfig["db"]["bcb"]["dbpass"], $TypeDatabase);
+      $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", 
+        $dPconfig["db"]["bcb"]["dbhost"], 
+        $dPconfig["db"]["bcb"]["dbname"], 
+        $dPconfig["db"]["bcb"]["dbuser"], 
+        $dPconfig["db"]["bcb"]["dbpass"], 
+        $TypeDatabase
+      );
+      
       if ($Result < 1) die("Erreur base " . $Result . " :" . $objDatabase->GetLastError());
       
       self::$objDatabase = $objDatabase;

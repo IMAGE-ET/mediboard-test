@@ -29,7 +29,7 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 
 $operation->updateFormFields();
 $operation->loadRefsActesCCAM();
-$operation->loadRefsCodesCCAM();
+$operation->loadExtCodesCCAM();
 $operation->getAssociationCodesActes();
 $operation->loadPossibleActes();
 $operation->loadRefPraticien();

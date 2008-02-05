@@ -112,7 +112,7 @@ if ($consult->_id) {
   if($consultAnesth->consultation_anesth_id) {
     $consultAnesth->loadRefs();
     if($consultAnesth->_ref_operation->operation_id) {
-    	$consultAnesth->_ref_operation->loadRefsCodesCCAM(1);
+    	$consultAnesth->_ref_operation->loadExtCodesCCAM(1);
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
@@ -244,7 +244,7 @@ $examComp = new CExamComp();
 $examComp->loadAides($userSel->user_id);
 
 $consult->loadRefsActesCCAM();
-$consult->loadRefsCodesCCAM();
+$consult->loadExtCodesCCAM();
 $consult->getAssociationCodesActes();
 $consult->loadPossibleActes();
 

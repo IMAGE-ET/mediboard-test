@@ -82,6 +82,10 @@ foreach($classes as $class) {
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
     
     if (is_a($spec, "CEnumSpec")) {
+      if (!$spec->notNull) {
+	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.");        
+      }
+      
       foreach (explode("|", $spec->list) as $value) {
 	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.$value");
       }

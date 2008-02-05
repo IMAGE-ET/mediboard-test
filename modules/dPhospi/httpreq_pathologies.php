@@ -25,7 +25,7 @@ $sejour->loadRefPatient();
     
 $sejour->loadRefsOperations();
 foreach($sejour->_ref_operations as &$operation) {
-  $operation->loadRefsCodesCCAM();
+  $operation->loadExtCodesCCAM();
 }
 
 

@@ -1,4 +1,4 @@
-<script language="Javascript" type="text/javascript">
+<script type="text/javascript">
 
 function viewCode(code, class){
   var url = new Url;
@@ -76,7 +76,7 @@ PairEffect.initGroup("acteEffect");
 	
 	{{assign var=newButtons value=true}}
   {{if $newButtons}}
-  <div style="position: absolute; right: 10px;">
+  <div style="float:right;">
   {{if $can->edit || $modif_operation}}
     {{if !$acte->_id}}
     <button class="add" type="button" onclick="
@@ -115,7 +115,7 @@ PairEffect.initGroup("acteEffect");
     <!-- Ligne cosmétique -->
     <tr class="{{$key}}">
       <td style="width: 1%;" />
-      <td style="width: 20%;" />
+      <td style="width: 1%;" />
       <td style="width: 100%;" />
     </tr>
     
@@ -132,11 +132,10 @@ PairEffect.initGroup("acteEffect");
     
     <!-- Exécutant -->
     <tr class="{{$key}}">
-      <th><label for="executant_id" title="Professionnel de santé exécutant l'acte">Exécutant</label></th>
+      <th>{{mb_label object=$acte field=executant_id}}</th>
       <td colspan="2">
       
-      {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
-     
+        {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
         {{if $can->edit || $modif_operation}}
         <select name="executant_id" class="{{$acte->_props.executant_id}}">
           <option value="">&mdash; Choisir un professionnel de santé</option>
@@ -147,9 +146,7 @@ PairEffect.initGroup("acteEffect");
           {{/foreach}}
         </select>
         {{elseif $acte->executant_id}}
-          {{assign var="keyActe" value=$acte->executant_id}}
-          {{assign var="selActe" value=$listExecutants.$keyActe}}
-          {{$selActe->_view}}
+          {{$acte->_ref_exucutant->_view}}
         {{else}}-{{/if}}
       </td>
     </tr>
@@ -232,7 +229,11 @@ PairEffect.initGroup("acteEffect");
     {{if $newButtons && $acte->_id}}
     <tr>
       <td class="button" colspan="3">
-        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
+        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
+        		onComplete: function() {
+        	    ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})
+        	} 
+        })">
           {{tr}}Modify{{/tr}} cet acte
         </button>
       </td>
@@ -243,10 +244,8 @@ PairEffect.initGroup("acteEffect");
     
     <!-- Code d'association -->
     <tr>
-      <td colspan="3" class="text" style="text-align: right">
+      <td colspan="3" class="text">
         {{if $acte->_id}}
-        
-        Association pour le Dr. {{$acte->_ref_executant->_view}}
         
         <select name="{{$view}}"
         onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
@@ -257,6 +256,8 @@ PairEffect.initGroup("acteEffect");
           <option value="4" {{if $acte->code_association == 4}}selected="selected"{{/if}}>4 (100%)</option>
           <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
         </select>
+        
+        Association pour le Dr. {{$acte->_ref_executant->_view}}
         
         <strong>
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
@@ -327,7 +328,7 @@ PairEffect.initGroup("acteEffect");
   oElement = $('acte{{$key}}');
   oForm = getBoundingForm(oElement);
   prepareForm(oForm);
-	Calendar.regField("formActe-{{$view}}", "execution", true)
+	Calendar.regField("formActe-{{$view}}", "execution", true);
 </script>
 
 {{/if}}

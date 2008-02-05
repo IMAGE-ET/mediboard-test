@@ -22,7 +22,7 @@ $useVitale     = mbGetValueFromGet("useVitale"  );
 
 $patVitale = null;
 
-$showCount = 50;
+$showCount = 30;
   
 // Recherhche par IPP
 if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){

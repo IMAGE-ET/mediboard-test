@@ -7,26 +7,27 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsAdmin();
 
 $type_anesth_id = mbGetValueFromGetOrSession("type_anesth_id");
 
 // Chargement du type d'anesthésie demandé
-$type_anesth=new CTypeAnesth;
+$type_anesth = new CTypeAnesth;
 $type_anesth->load($type_anesth_id);
 
 // Liste des Type d'anesthésie
-$listTypeAnesth = new CTypeAnesth;
-$listTypeAnesth = $listTypeAnesth->loadList(null, "name");
-
+$types_anesth = $type_anesth->loadList(null, "name");
+foreach ($types_anesth as &$_type_anesth) {
+  $_type_anesth->countOperations();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listTypeAnesth", $listTypeAnesth);
-$smarty->assign("type_anesth"   , $type_anesth   );
+$smarty->assign("types_anesth", $types_anesth);
+$smarty->assign("type_anesth" , $type_anesth );
 
 $smarty->display("vw_edit_typeanesth.tpl");
 

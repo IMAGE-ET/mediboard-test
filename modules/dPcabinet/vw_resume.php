@@ -51,7 +51,7 @@ foreach ($patient->_ref_sejours as &$sejour) {
     $operation->loadRefChir();
     $operation->loadRefsFiles();
     $operation->loadRefsDocs();
-    $operation->loadRefsCodesCCAM();
+    $operation->loadExtCodesCCAM();
   }
 }
 

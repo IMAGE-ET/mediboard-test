@@ -39,25 +39,25 @@ class CSpDetCCAM extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
-    $specs["idinterv"] = "num";            /* Numéro d'intervention        */
-    $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */
-    $specs["malnum"] = "numchar length|6"; /* Numéro de malade             */
-    $specs["codpra"] = "str length|3";     /* Code du praticien            */
-    $specs["codact"] = "str length|7";     /* Code CCAM                    */
-    $specs["activ"] = "num length|1";      /* Activité                     */
-    $specs["phase"] = "num length|1";      /* Phase                        */
-    $specs["modt1"] = "str length|1";      /* Modificateur 1               */
-    $specs["modt2"] = "str length|1";      /* Modificateur 2               */
-    $specs["modt3"] = "str length|1";      /* Modificateur 3               */
-    $specs["modt4"] = "str length|1";      /* Modificateur 4               */
-    $specs["assoc"] = "num length|1";      /* Code d'association           */
-    $specs["dephon"] = "currency";         /* Dépassement honoraire        */
-    $specs["datact"] = "str length|19";    /* Date heure de l'acte         */
-    $specs["extdoc"] = "str length|1";     /* Extension doc. anesthésie    */
-    $specs["rembex"] = "str length|1";     /* Remboursement exceptionnel   */
-    $specs["codsig"] = "bool";             /* Date heure de l'acte         */
+    $specs["idinterv"] = "num";                /* Numéro d'intervention        */
+    $specs["numdos"] = "numchar length|6";     /* Numéro de dossier            */
+    $specs["malnum"] = "numchar length|6";     /* Numéro de malade             */
+    $specs["codpra"] = "str length|3";         /* Code du praticien            */
+    $specs["codact"] = "str length|7";         /* Code CCAM                    */
+    $specs["activ" ] = "num length|1";         /* Activité                     */
+    $specs["phase" ] = "num length|1";         /* Phase                        */
+    $specs["modt1" ] = "str length|1";         /* Modificateur 1               */
+    $specs["modt2" ] = "str length|1";         /* Modificateur 2               */
+    $specs["modt3" ] = "str length|1";         /* Modificateur 3               */
+    $specs["modt4" ] = "str length|1";         /* Modificateur 4               */
+    $specs["assoc" ] = "num length|1";         /* Code d'association           */
+    $specs["dephon"] = "currency";             /* Dépassement honoraire        */
+    $specs["datact"] = "str length|19";        /* Date heure de l'acte         */
+    $specs["extdoc"] = "enum list|1|2|3|4|5|6";/* Extension doc. anesthésie    */
+    $specs["rembex"] = "bool";                 /* Remboursement exceptionnel   */
+    $specs["codsig"] = "bool";                 /* Signature de l'acte          */
     
-    $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
+    $specs["datmaj"] = "str length|19"; /* Date de derniere mise a jour */
     
 		return $specs;
   }
@@ -134,6 +134,11 @@ class CSpDetCCAM extends CSpObject {
     $idExecutant = CSpObjectHandler::getId400For($executant);
     $this->codpra = $idExecutant->id400;  
     
+    // Extension documentatire
+    if ($acte->code_activite && is_a($operation =& $acte->_ref_object, "COperation")) {
+      $this->extdoc = $operation->_ref_type_anesth->ext_doc;
+    }
+    
     // Contenu
     $this->codact = $acte->code_acte;
     $this->activ  = $acte->code_activite;
@@ -145,6 +150,8 @@ class CSpDetCCAM extends CSpObject {
     $this->modt4 = @$acte->_modificateurs[3];   
     $this->datact = mbDateToLocale($acte->execution);
     $this->dephon = mbDateToLocale($acte->montant_depassement);
+    $this->codsig = $acte->signe;
+    $this->rembex = $acte->rembourse;
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());

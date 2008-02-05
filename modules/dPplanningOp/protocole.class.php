@@ -129,20 +129,18 @@ class CProtocole extends CMbObject {
     $this->_ref_chir->load($this->chir_id);
   }
   
-  function loadRefsCodesCCAM() {
+  function loadExtCodesCCAM() {
     $this->_ext_codes_ccam = array();
     foreach ($this->_codes_ccam as $code) {
       $ext_code_ccam = new CCodeCCAM($code);
       $ext_code_ccam->LoadLite();
       $this->_ext_codes_ccam[] = $ext_code_ccam;
     }
-    //$ext_code_ccam =& $this->_ext_codes_ccam[0];
-    //$code_ccam = @$this->_codes_ccam[0];
   }
   
   function loadRefsFwd() {
     $this->loadRefChir();
-    $this->loadRefsCodesCCAM();
+    $this->loadExtCodesCCAM();
     $this->_view = "Protocole du Dr. {$this->_ref_chir->_view}";
     if($this->libelle) {
       $this->_view .= " - $this->libelle";

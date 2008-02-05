@@ -689,7 +689,7 @@ class CConsultation extends CCodable {
     $this->loadRefPlageConsult();
     $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
-    $this->loadRefsCodesCCAM();
+    $this->loadExtCodesCCAM();
   }
 
   function loadRefsDocs() {

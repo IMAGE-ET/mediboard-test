@@ -41,53 +41,42 @@
     </div>
   </div>
   
-  {{if $app->user_prefs.ccam_consultation == 1 }}
+  {{if $app->user_prefs.ccam_consultation == 1}}
   <div id="Actes">
     <div id="ActesHeader" class="accordionTabTitleBar">
       Gestion des actes
     </div>
     <div id="ActesContent"  class="accordionTabContentBox">
-      <table class="form">
-        <tr>
-          <td colspan="2">
-            <ul id="main_tab_group" class="control_tabs">
-              <li><a href="#one">Actes CCAM</a></li>
-              <li><a href="#two">Actes NGAP</a></li>
-            </ul>
-          </td>
-        </tr>
-        <tr id="one">
-          <th class="category">Actes<br /><br />
-            {{tr}}{{$consult->_class_name}}{{/tr}}
-            {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
-            <br />
-            Côté {{tr}}COperation.cote.{{$consult->cote}}{{/tr}}
-            <br />
-            ({{$consult->temp_operation|date_format:"%Hh%M"}})
-            {{/if}}
-          </th>
-          <td>
-          {{if $consult->sejour_id}}
-          <div id="cim">
-              {{assign var="sejour" value=$consult->_ref_sejour}}
-              {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="0"}}
-          </div>
-          {{/if}}
-          <div id="ccam">
-            {{assign var="module" value="dPcabinet"}}
-            {{assign var="subject" value=$consult}}
-            {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
-          </div>
-          </td>
-        </tr>
-        <tr id="two">
-          <th class="category">Actes NGAP</th>
-          <td id="listActesNGAP">
-            {{assign var="_object_class" value="CConsultation"}}
-            {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
-          </td>
-        </tr>
-      </table>
+
+      <ul id="main_tab_group" class="control_tabs">
+        <li><a href="#ccam">Actes CCAM</a></li>
+        <li><a href="#ngap">Actes NGAP</a></li>
+        {{if $consult->sejour_id}}
+        <li><a href="#cim">Diagnostics</a></li>
+        {{/if}}
+      </ul>
+
+			<hr class="control_tabs"/>
+      <div id="ccam">
+        {{assign var="module" value="dPcabinet"}}
+        {{assign var="subject" value=$consult}}
+        {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
+      </div>
+
+      {{if $consult->sejour_id}}
+      <div id="cim">
+          {{assign var="sejour" value=$consult->_ref_sejour}}
+          {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl"}}
+      </div>
+      {{/if}}
+
+      <div id="ngap">
+        <div id="listActesNGAP">
+          {{assign var="_object_class" value="CConsultation"}}
+          {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
+        </div>
+      </div>
+
       <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
     </div>
   </div>

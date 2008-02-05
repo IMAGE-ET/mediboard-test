@@ -42,74 +42,23 @@ $listChirs = $listChirs->loadPraticiens(PERM_READ);
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
   
-
-// Selection des salles
-$listSalles = new CSalle;
-$where = array("group_id"=>"= '$g'");
-$listSalles = $listSalles->loadList($where);
-
-// Selection des plages opératoires de la journée
-$plages = new CPlageOp;
-$where = array();
-$where["date"] = "= '$date'";
-$where["salle_id"] = "= '$salle'";
-$order = "debut";
-$plages = $plages->loadList($where, $order);
-foreach($plages as $key => $value) {
-  $plages[$key]->loadRefs(0);
-  foreach($plages[$key]->_ref_operations as $key2 => $value) {
-    if($plages[$key]->_ref_operations[$key2]->rank == 0) {
-      unset($plages[$key]->_ref_operations[$key2]);
-    }
-    else {
-      $plages[$key]->_ref_operations[$key2]->loadRefSejour();
-      $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-      $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
-    }
-  }
-}
-
-$urgences = new COperation;
-$where = array();
-$where["date"]     = "= '$date'";
-$where["salle_id"] = "= '$salle'";
-$order = "chir_id";
-$urgences = $urgences->loadList($where);
-foreach($urgences as $keyOp => $curr_op) {
-  $urgences[$keyOp]->loadRefChir();
-  $urgences[$keyOp]->loadRefSejour();
-  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-  $urgences[$keyOp]->loadRefsCodesCCAM();
-}
-
 // Opération selectionnée
 $selOp = new COperation;
 $timing = array();
-if($op) {
+if ($op) {
   $selOp->load($op);
   
   $selOp->loadRefs();
+//  $actesup = $selOp->_ref_actes_ccam->_ref_exec
 
   $selOp->_ref_sejour->loadExtDiagnostics();
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
 
   $selOp->getAssociationCodesActes();
-  
-  foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
-    $selOp->_ext_codes_ccam[$keyCode]->Load();
-  }
+  $selOp->loadExtCodesCCAM();
   $selOp->loadPossibleActes();
-  /* Loading des comptes-rendus
-  foreach($selOp->_ext_codes_ccam as $keyCode => $code) {
-    foreach($code->activites as $keyActivite => $activite) {
-      foreach($activite->phases as $keyPhase => $phase) {
-        if($phase->_connected_acte->acte_id) {
-          
-        }
-      }
-    }
-  }*/
+  
   $selOp->_ref_plageop->loadRefsFwd();
   
   // Tableau des timings
@@ -205,7 +154,7 @@ $smarty = new CSmartyDP();
 $smarty->debugging = false;
 $smarty->assign("unites",$unites);
 
-if($selOp->_id){
+if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
   $smarty->assign("crList", $crList);
   $smarty->assign("hospiList", $hospiList);
@@ -214,14 +163,10 @@ if($selOp->_id){
 
 $smarty->assign("acte_ngap"       , $acte_ngap               );
 $smarty->assign("op"              , $op                      );
-$smarty->assign("vueReduite"      , false                    );
 $smarty->assign("salle"           , $salle                   );
-$smarty->assign("listSalles"      , $listSalles              );
 $smarty->assign("listAnesthType"  , $listAnesthType          );
 $smarty->assign("listAnesths"     , $listAnesths             );
 $smarty->assign("listChirs"       , $listChirs               );
-$smarty->assign("plages"          , $plages                  );
-$smarty->assign("urgences"        , $urgences                );
 $smarty->assign("modeDAS"         , $dPconfig["dPsalleOp"]["CDossierMedical"]["DAS"]);
 $smarty->assign("selOp"           , $selOp                   );
 $smarty->assign("timing"          , $timing                  );

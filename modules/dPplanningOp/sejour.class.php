@@ -484,7 +484,7 @@ class CSejour extends CCodable {
     $this->loadRefPraticien();
     $this->loadRefEtablissement();
     $this->loadRefEtabExterne();
-    $this->loadRefsCodesCCAM();
+    $this->loadExtCodesCCAM();
   }
   
   

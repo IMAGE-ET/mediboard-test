@@ -45,7 +45,7 @@ foreach($listSalles as $keySalle=>$currSalle){
     foreach($plages[$key]->_ref_operations as $key2 => $value) {
       $plages[$key]->_ref_operations[$key2]->loadRefSejour();
       $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-      $plages[$key]->_ref_operations[$key2]->loadRefsCodesCCAM();
+      $plages[$key]->_ref_operations[$key2]->loadExtCodesCCAM();
       if($plages[$key]->_ref_operations[$key2]->rank == 0) {
         $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
         unset($plages[$key]->_ref_operations[$key2]);
@@ -64,7 +64,7 @@ foreach($listSalles as $keySalle=>$currSalle){
     $urgences[$keyOp]->loadRefChir();
     $urgences[$keyOp]->loadRefSejour();
     $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-    $urgences[$keyOp]->loadRefsCodesCCAM();
+    $urgences[$keyOp]->loadExtCodesCCAM();
   }
   $salle["urgences"] = $urgences;
 }

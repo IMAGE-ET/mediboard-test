@@ -54,6 +54,7 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
     $spDetCIM->makeId();
     $spDetCIM->typdia = "R";
     $spDetCIM->coddia = $sejour->DR;
+    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
     $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
   }
   
@@ -63,6 +64,7 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
     $spDetCIM->makeId();
     $spDetCIM->typdia = "S";
     $spDetCIM->coddia = $code_cim;
+    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
     $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
   }
 }

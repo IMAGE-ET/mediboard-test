@@ -16,8 +16,8 @@ class COperation extends CCodable {
 
   // DB References
   var $sejour_id  = null;
-  var $chir_id    = null; // dupliqué en $sejour->praticien_id
-  var $anesth_id  = null; // dupliqué en $plageop->anesth_id
+  var $chir_id    = null;
+  var $anesth_id  = null;
   var $plageop_id = null;
 
   // DB Fields S@nté.com communication
@@ -86,6 +86,7 @@ class COperation extends CCodable {
   var $_ref_plageop        = null;
   var $_ref_salle          = null;
   var $_ref_anesth         = null;
+  var $_ref_type_anesth    = null;
   var $_ref_consult_anesth = null;
   var $_ref_actes_ccam     = array();
 
@@ -251,10 +252,9 @@ class COperation extends CCodable {
     }
       
     if ($this->type_anesth != null) {
-      $anesth = new CTypeAnesth;
-      $orderanesth = "name";
-      $anesth->load($this->type_anesth);;
-      $this->_lu_type_anesth = $anesth->name;
+      $this->_ref_type_anesth = new CTypeAnesth;
+      $this->_ref_type_anesth->load($this->type_anesth);;
+      $this->_lu_type_anesth = $this->_ref_type_anesth->name;
     }
     
     if($this->debut_op && $this->fin_op && $this->fin_op>$this->debut_op){
@@ -435,7 +435,7 @@ class COperation extends CCodable {
     $this->_ref_consult_anesth->_ref_consultation->canEdit();
     $this->loadRefChir();
     $this->loadRefPlageOp();
-    $this->loadRefsCodesCCAM();
+    $this->loadExtCodesCCAM();
     $this->loadRefSejour();
     $this->_ref_sejour->loadRefsFwd();
     $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr. {$this->_ref_chir->_view}";

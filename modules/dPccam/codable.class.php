@@ -132,10 +132,10 @@ class CCodable extends CMbObject {
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
     
-    foreach($this->_ref_actes_ccam as $key => $acte_ccam){
+    foreach($this->_ref_actes_ccam as $acte_ccam){
       $this->_ref_actes[] = $acte_ccam;
     }
-    foreach($this->_ref_actes_ngap as $key => $acte_ngap){
+    foreach($this->_ref_actes_ngap as $acte_ngap){
       $this->_ref_actes[] = $acte_ngap;
     }
   }
@@ -157,8 +157,10 @@ class CCodable extends CMbObject {
     $this->_tokens_ngap = join($this->_codes_ngap, "|");
   }
   
-  
-  function loadRefsCodesCCAM($full = 0) {
+  /**
+   * Charge les codes CCAM en tant qu'objets externes
+   */
+  function loadExtCodesCCAM($full = 0) {
     $this->_ext_codes_ccam = array();
     if($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
@@ -239,7 +241,9 @@ class CCodable extends CMbObject {
     return parent::check();
   }
   
-  
+  /**
+   * Charge les actes CCAM codés
+   */
   function loadRefsActesCCAM() {
   	$order = array();
   	$order[] = "code_association";
@@ -264,6 +268,9 @@ class CCodable extends CMbObject {
     $this->_tokens_ccam = join($this->_temp_ccam, "|");
   }
   
+  /**
+   * Charge les actes CCAM codables en fonction des code CCAM fournis
+   */
   function loadPossibleActes () {
   	$this->preparePossibleActes();
     $depassement_affecte = false;
@@ -315,6 +322,7 @@ class CCodable extends CMbObject {
           $possible_acte->guessAssociation();
           $possible_acte->getTarif();
           
+          // Keep references !
           $phase->_connected_acte = $possible_acte;
           
           foreach ($phase->_modificateurs as $modificateurKey => $modificateurValue) {

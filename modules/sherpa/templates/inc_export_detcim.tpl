@@ -8,7 +8,13 @@
     {{if $_sejour->DR}}
     {{mb_label object=$_sejour field=DR}} : {{$_sejour->DR}}<br />
     {{/if}}
-    
+
+    {{assign var=dossier_medical value=$_sejour->_ref_dossier_medical}}
+    {{if $dossier_medical}}
+	    {{foreach from=$dossier_medical->_codes_cim item=code_cim}}
+	    Diagnostic associé : {{$code_cim}}<br />
+	    {{/foreach}}
+    {{/if}}
   </td>
   <td>
 		{{foreach from=$detCIM.$codable_class.$codable_id item=msg}}
@@ -17,7 +23,6 @@
 		{{else}}
 		<div class="message">Détail CIM correctement exporté</div>
 		{{/if}}
-		<br />
 		{{/foreach}}
   </td>
 </tr>
