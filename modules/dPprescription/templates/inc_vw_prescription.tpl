@@ -75,7 +75,9 @@
           </td>
           <td>
             <div style="float: right;">
-               <button type="button" class="search" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">Equivalents</button>
+               <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
+                 Equivalents
+               </button>
               <script type="text/javascript">
                 if(EquivSelector.oUrl) {
                   EquivSelector.close();
