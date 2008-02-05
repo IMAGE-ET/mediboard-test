@@ -135,7 +135,7 @@ class CSpDetCCAM extends CSpObject {
     $this->codpra = $idExecutant->id400;  
     
     // Extension documentatire
-    if ($acte->code_activite = "4" && is_a($operation =& $acte->_ref_object, "COperation")) {
+    if ($acte->code_activite == "4" && is_a($operation =& $acte->_ref_object, "COperation")) {
       $this->extdoc = $operation->_ref_type_anesth->ext_doc;
     }
     
