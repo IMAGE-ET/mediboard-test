@@ -259,6 +259,10 @@ function pageMain() {
   PatSelector.sForm = "patFrm";
   PatSelector.sId   = "patient_id";
   PatSelector.sView = "patNom";
+
+  // Debugage du scroll de la div de la liste des prescriptions
+  Position.includeScrollOffsets = true;
+  Event.observe('listPrescriptions', 'scroll', function(event) { Position.prepare(); });
 }
 
 </script>
