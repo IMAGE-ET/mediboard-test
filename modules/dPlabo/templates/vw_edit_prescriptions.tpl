@@ -263,6 +263,9 @@ function pageMain() {
   // Debugage du scroll de la div de la liste des prescriptions
   Position.includeScrollOffsets = true;
   Event.observe('listPrescriptions', 'scroll', function(event) { Position.prepare(); });
+  
+  // Pour éviter de dropper en dessous du tableau de la liste des analyses
+  Droppables.add('viewport-listExamens', oDragOptions );
 }
 
 </script>
@@ -326,7 +329,7 @@ function pageMain() {
   </tr>
   <tbody class="viewported">
   <tr>
-    <td class="viewport">
+    <td class="viewport" id="viewport-listPrescriptions">
       <div id="listPrescriptions"></div>
     </td>
     <td class="viewport">
@@ -334,7 +337,7 @@ function pageMain() {
     </td>
   </tr>
   <tr>
-    <td class="viewport">
+    <td class="viewport" id="viewport-listExamens">
       <div id="listExamens"></div>
     </td>
     <td class="viewport">

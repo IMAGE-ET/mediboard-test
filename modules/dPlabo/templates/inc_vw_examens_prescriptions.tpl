@@ -70,18 +70,16 @@ Object.extend(Droppables, {
  {{/foreach}}
  
  
- <!-- Affichage des autres analyses -->
+  <!-- Affichage des autres analyses -->
   {{if $tab_pack_prescription && $tab_prescription}}
   <tr>
     <th colspan="6">Autres analyses</th>
   </tr>
-  <tbody>
   {{/if}}
   {{foreach from=$tab_prescription item="_item" key="key"}}
     {{assign var="curr_examen" value=$_item->_ref_examen_labo}}
-    {{include file="inc_view_analyse.tpl"}}   
-  </tbody>
-   {{/foreach}}  
+    {{include file="inc_view_analyse.tpl"}}  
+  {{/foreach}} 
    
 </table>
 {{/if}}
