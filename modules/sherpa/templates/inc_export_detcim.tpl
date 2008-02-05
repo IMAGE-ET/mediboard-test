@@ -4,9 +4,9 @@
 <tr>
   <th>Diagnostics</th>
   <td colspan="8">
-    {{mb_label object=$_sejour field=DP}} : {{$_sejour->DP}}<br />
+    Diagnostic Principal : {{$_sejour->DP}}<br />
     {{if $_sejour->DR}}
-    {{mb_label object=$_sejour field=DR}} : {{$_sejour->DR}}<br />
+    Diagnostic Relié : {{$_sejour->DR}}<br />
     {{/if}}
 
     {{assign var=dossier_medical value=$_sejour->_ref_dossier_medical}}
