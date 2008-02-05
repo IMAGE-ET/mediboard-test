@@ -1,4 +1,4 @@
-{{if $codable->_ref_actes_ccam|@count}}
+{{if $_codable->_ref_actes_ccam|@count}}
 {{assign var=codable_id value=$_codable->_id}}
 {{assign var=codable_class value=$_codable->_class_name}}
 {{assign var=_sejour value=$_codable->_ref_sejour}}
