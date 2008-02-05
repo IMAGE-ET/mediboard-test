@@ -40,7 +40,8 @@ class CBcbProduit extends CBcbObject {
   var $_ref_economique       = null;
   var $_ref_classes_ATC      = null;
   var $_ref_classes_thera    = null;
- 
+  var $_ref_equivalents      = null;
+  
   // Constructeur
   function CBcbProduit(){
     $this->distClass = "BCBProduit";
@@ -89,12 +90,10 @@ class CBcbProduit extends CBcbObject {
     }
   }
   
-  
   // Permet de savoir si le produit est un referent
   function getReferent(){
     $this->_referent = $this->distObj->IsReferent($this->code_cip);
   }
-  
   
   function getStatut(){
     $this->distObj->SearchStatut($this->code_cip);
@@ -104,9 +103,15 @@ class CBcbProduit extends CBcbObject {
     $this->date_AMM = $this->distObj->GetStatut(5);
   }
   
-  
   function getAgrement(){
     $this->agrement = $this->distObj->GetStatut(15);
+  }
+  
+  
+  // Fonction qui retourne les equivalents d'un produit
+  function loadRefsEquivalents(){
+    $produitEquivalent = new CBcbEquivalent();
+    $this->_ref_equivalents = $produitEquivalent->searchEquivalents($this->code_cip);
   }
   
   function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50){   

@@ -74,9 +74,29 @@
             </button>
           </td>
           <td>
+            <div style="float: right;">
+               <button type="button" class="search" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">Equivalents</button>
+              <script type="text/javascript">
+                if(EquivSelector.oUrl) {
+                  EquivSelector.close();
+                }
+                EquivSelector.init = function(line_id, code_cip){
+                  this.sForm = "searchProd";
+                  this.sView = "produit";
+                  this.sCodeCIP = code_cip
+                  this.sLine = line_id;
+                  this.selfClose = false;
+                  this.pop();
+                }
+                EquivSelector.set = function(code, line_id){
+                  Prescription.addEquivalent(code, line_id);
+                }
+              </script>
+              </div>
             <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
               <strong>{{$curr_line->_view}}</strong>
             </a>
+           
           </td>
           <td class="text">
             {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}

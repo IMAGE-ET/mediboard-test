@@ -1,8 +1,19 @@
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 
 <script type="text/javascript">
 
 var Prescription = {
+
+  addEquivalent: function(code, line_id){
+    Prescription.delLineWithoutRefresh(line_id);
+    // Suppression des champs de addLine
+    var oForm = document.addLine;
+    oForm.prescription_line_id.value = "";
+    oForm.del.value = "";
+    Prescription.addLine(code);
+  },
+
   close : function() {
     var url = new Url;
     url.setModuleTab("{{$m}}", "{{$tab}}");
@@ -16,11 +27,23 @@ var Prescription = {
     oForm.code_cip.value = code;
     submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
   },
+  
+  
+  delLineWithoutRefresh: function(line_id) {
+    var oForm = document.addLine;
+    oForm.prescription_line_id.value = line_id;
+    oForm.del.value = 1;
+    submitFormAjax(oForm, 'systemMsg');
+  },
+  
+  
   delLine: function(line_id) {
     var oForm = document.addLine;
     oForm.prescription_line_id.value = line_id;
     oForm.del.value = 1;
-    submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
+    submitFormAjax(oForm, 'systemMsg', { 
+      onComplete : Prescription.reload 
+    });
   },
   reload: function() {
     {{if $prescription->_id}}

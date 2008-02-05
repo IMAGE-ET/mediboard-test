@@ -1,6 +1,5 @@
 <script type="text/javascript">
 
-
 function pageMain(){
   // Initialisation des onglets du menu
   new Control.Tabs('main_tab_group');
@@ -17,6 +16,7 @@ function pageMain(){
     Produit supprimé depuis le {{$mbProduit->_ref_monographie->date_suppression|date_format:"%d %b %Y"}}
     {{/if}}
     </th>
+    
   </tr>
   <!-- Menu de la monographie du medicament -->
   <tr>
