@@ -23,7 +23,7 @@ class CBcbEquivalent extends CBcbObject {
   // Fonction qui retourne les equivalent d'un produit
   function searchEquivalents($search){
     $this->distObj->Search($search);
-    
+    $equivalents = array();
     // Chargement des produits equivalents
     foreach($this->distObj->gTabEqui as $key => $equivalent){
       $produit = new CBcbProduit();
