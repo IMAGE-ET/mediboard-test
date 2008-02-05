@@ -195,7 +195,7 @@ function reloadAfterSaveDoc() {
       <div id="threebis">
         <div id="cim">
           {{assign var="sejour" value=$selOp->_ref_sejour}}
-          {{include file="inc_diagnostic_principal.tpl"}}
+          {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
         </div>
       </div>
 
@@ -217,7 +217,7 @@ function reloadAfterSaveDoc() {
       </div>
       
     <!-- Cinquieme onglet => Dossier Medical -->
-	  {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
+	    {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
       <div id="five">
         <div class="text">
          {{include file="inc_vw_dossier.tpl"}}
