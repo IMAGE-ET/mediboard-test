@@ -2,35 +2,37 @@
 
 	{{foreach from=$actes_ccam item=curr_praticien key=praticien_id}}
 	<tr> 
-	  {{assign var="praticien" value=$praticiens.$praticien_id}}
-	  <th {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}colspan="9"{{else}}colspan="6"{{/if}}>{{$praticien->_view}}</th>
+	  {{assign var=praticien value=$praticiens.$praticien_id}}
+	  <th colspan="10">{{$praticien->_view}}</th>
 	</tr>      
 	{{foreach from=$curr_praticien name=acte item="curr_acte"}}
 	{{if $smarty.foreach.acte.first}}
 	<tr>
-	  <th>Code</th>
-	  <th>Activite</th>
-	  <th>Phase</th>
-	  <th>Modificateurs</th>
-	  <th>Association</th>
+	  <th>{{mb_title object=$curr_acte field=code_acte}}</th>
+	  <th>{{mb_title object=$curr_acte field=code_activite}}</th>
+	  <th>{{mb_title object=$curr_acte field=code_phase}}</th>
+	  <th>{{mb_title object=$curr_acte field=modificateurs}}</th>
+	  <th>{{mb_title object=$curr_acte field=code_association}}</th>
 	  {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-	  <th>Montant de base</th>
-	  <th>Dépassement</th>
-	  <th>Montant total</th>
+	  <th>{{mb_title object=$curr_acte field=rembourse}}</th>
+	  <th>{{mb_title object=$curr_acte field=montant_base}}</th>
+	  <th>{{mb_title object=$curr_acte field=montant_depassement}}</th>
+	  <th>{{mb_title object=$curr_acte field=_montant_facture}}</th>
 	  {{/if}}
-	  <th>Signature</th>
+	  <th>{{mb_title object=$curr_acte field=signe}}</th>
 	</tr>
 	{{/if}}
 	<tr>
-	  <td>{{$curr_acte->code_acte}}</td> 
-	  <td>{{$curr_acte->code_activite}}</td>
-	  <td>{{$curr_acte->code_phase}}</td>
-	  <td>{{$curr_acte->modificateurs}}</td>
-	  <td>{{$curr_acte->code_association}}</td>
+	  <td>{{mb_value object=$curr_acte field=code_acte}}</td>
+	  <td>{{mb_value object=$curr_acte field=code_activite}}</td>
+	  <td>{{mb_value object=$curr_acte field=code_phase}}</td>
+	  <td>{{mb_value object=$curr_acte field=modificateurs}}</td>
+	  <td>{{mb_value object=$curr_acte field=code_association}}</td>
 	  {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-	  <td>{{$curr_acte->montant_base|string_format:"%.2f"}} &euro;</td>
-	  <td>{{$curr_acte->montant_depassement|string_format:"%.2f"}} &euro;</td>
-	  <td>{{$curr_acte->_tarif|string_format:"%.2f"}} &euro;</td>
+	  <td>{{mb_value object=$curr_acte field=rembourse}}</th>
+	  <td>{{mb_value object=$curr_acte field=montant_base}}</th>
+	  <td>{{mb_value object=$curr_acte field=montant_depassement}}</th>
+	  <td>{{mb_value object=$curr_acte field=_montant_facture}}</th>
 	  {{/if}}
     <td style="text-align: center">
     {{if $curr_acte->signe}}

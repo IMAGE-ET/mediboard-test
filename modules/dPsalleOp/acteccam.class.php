@@ -205,7 +205,7 @@ class CActeCCAM extends CActe {
   
   
   function store() {
-    //sauvegarde du montant de base
+    // Sauvegarde du montant de base
     if ($this->_calcul_montant_base) {
       $this->montant_base = $this->getTarif();  
     }
