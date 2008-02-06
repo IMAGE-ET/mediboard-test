@@ -23,9 +23,11 @@ Main.add(function() {
     <td>{{mb_title object=$acte_ccam field=code_activite}}</td>
     <td>{{mb_title object=$acte_ccam field=code_phase}}</td>
     <td>{{mb_title object=$acte_ccam field=modificateurs}}</td>
+    <td>{{mb_title object=$acte_ccam field=rembourse}}</td>
     <td>{{mb_title object=$acte_ccam field=code_association}}</td>
     <td>{{mb_title object=$acte_ccam field=montant_base}}</td>
     <td>{{mb_title object=$acte_ccam field=montant_depassement}}</td>
+    <td>{{mb_title object=$acte_ccam field=signe}}</td>
     <td>Statut de l'envoi</td>
     
   </tr>

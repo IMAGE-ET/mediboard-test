@@ -5,9 +5,11 @@
   <td>{{mb_value object=$_acte_ccam field=code_activite}}</td>
   <td>{{mb_value object=$_acte_ccam field=code_phase}}</td>
   <td>{{mb_value object=$_acte_ccam field=modificateurs}}</td>
+  <td>{{mb_value object=$_acte_ccam field=rembourse}}</td>
   <td>{{mb_value object=$_acte_ccam field=code_association}}</td>
   <td>{{mb_value object=$_acte_ccam field=montant_base}}</td>
   <td>{{mb_value object=$_acte_ccam field=montant_depassement}}</td>
+  <td>{{mb_value object=$_acte_ccam field=signe}}</td>
   <td>
     {{assign var=acte_id value=$_acte_ccam->_id}}
     {{if $detCCAM.$acte_id}}

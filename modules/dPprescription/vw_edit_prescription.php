@@ -7,23 +7,26 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
-$object_class    = mbGetValueFromGetOrSession("object_class");
-$object_id       = mbGetValueFromGetOrSession("object_id");
+$filter = new CPrescription();
+$filter->prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$filter->object_class    = mbGetValueFromGetOrSession("object_class", "CSejour");
+$filter->object_id       = mbGetValueFromGetOrSession("object_id");
+$filter->loadRefsFwd();
+$filter->_ref_object->loadRefsFwd();
 
 // Chargement de la prescription demandé
 $prescription = new CPrescription();
-$prescription->load($prescription_id);
-$listProduits = array();
-if(!$prescription->_id) {
-  $prescription->object_class = $object_class;
-  $prescription->object_id    = $object_id;
+$prescription->load($filter->_id);
+
+if (!$prescription->_id) {
+  $prescription->object_class = $filter->object_class;
+  $prescription->object_id    = $filter->object_id;
 }
-if($prescription->object_id) {
+
+if ($prescription->object_id) {
   $prescription->loadRefsFwd();
   $prescription->_ref_object->loadRefSejour();
   $prescription->_ref_object->loadRefPatient();
@@ -36,11 +39,12 @@ if($prescription->object_id) {
 }
 
 // Liste des alertes
+$listProduits = array();
 $alertesAllergies    = array();
 $alertesInteractions = array();
 $alertesIPC          = array();
 $alertesProfil       = array();
-if($prescription->_id) {
+if ($prescription->_id) {
   // Chargement des lignes
   $prescription->loadRefsLines();
   
@@ -50,7 +54,7 @@ if($prescription->_id) {
   $IPC          = new CBcbControleIPC();
   $profil       = new CBcbControleProfil();
   $profil->setPatient($prescription->_ref_object->_ref_patient);
-  foreach($prescription->_ref_prescription_lines as &$line) {
+  foreach ($prescription->_ref_prescription_lines as &$line) {
     // Chargement de la posologie
     $line->_ref_produit->loadRefPosologies();
     // Ajout des produits pour les alertes
@@ -63,7 +67,7 @@ if($prescription->_id) {
   $alertesInteractions = $interactions->getInteractions();
   $alertesIPC          = $IPC->getIPC();
   $alertesProfil       = $profil->getProfil();
-  foreach($prescription->_ref_prescription_lines as &$line) {
+  foreach ($prescription->_ref_prescription_lines as &$line) {
     $line->checkAllergies($alertesAllergies);
     $line->checkInteractions($alertesInteractions);
     $line->checkIPC($alertesIPC);
@@ -72,7 +76,7 @@ if($prescription->_id) {
 
   // Liste des produits les plus prescrits
   $favoris = CBcbProduit::getFavoris($prescription->praticien_id);
-  foreach($favoris as $curr_fav) {
+  foreach ($favoris as $curr_fav) {
     $produit = new CBcbProduit();
     $produit->load($curr_fav["code_cip"]);
     $listProduits[] = $produit;
@@ -93,6 +97,7 @@ $smarty->assign("alertesIPC"         , $alertesIPC);
 $smarty->assign("alertesProfil"      , $alertesProfil);
 
 $smarty->assign("prescription", $prescription);
+$smarty->assign("filter", $filter);
 $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listProduits", $listProduits);
 

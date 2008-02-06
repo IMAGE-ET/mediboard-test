@@ -39,7 +39,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(815, 620, "Descriptif produit");
+  url.popup(900, 620, "Descriptif produit");
 }
 
 function changeFormSearch(){

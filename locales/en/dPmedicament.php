@@ -1,5 +1,6 @@
 <?php
-$locales['CProduitLivretTherapeutique-prix_ville-desc'] = '';
+$locales['config-dPmedicament-niveauBCB'] = '';
+$locales['config-dPmedicament-niveauATC'] = '';
 $locales['CProduitLivretTherapeutique-code_interne'] = '';
 $locales['CProduitLivretTherapeutique-code_interne-desc'] = '';
 $locales['CProduitLivretTherapeutique-commentaire'] = '';
@@ -11,6 +12,7 @@ $locales['CProduitLivretTherapeutique-date_prix_ville-desc'] = '';
 $locales['CProduitLivretTherapeutique-prix_hopital'] = '';
 $locales['CProduitLivretTherapeutique-prix_hopital-desc'] = '';
 $locales['CProduitLivretTherapeutique-prix_ville'] = '';
+$locales['CProduitLivretTherapeutique-prix_ville-desc'] = '';
 $locales['mod-dPmedicament-tab-vw_idx_livret'] = '';
 $locales['mod-dPmedicament-tab-vw_idx_recherche'] = '';
 $locales['module-dPmedicament-court'] = '';

@@ -20,11 +20,11 @@
     </th>
     <td colspan="3">
       <select name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-1{{/tr}}</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-2{{/tr}}</option>
-        <option value="3" {{if 3 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-3{{/tr}}</option>
-        <option value="4" {{if 4 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-4{{/tr}}</option>
-        <option value="5" {{if 5 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-5{{/tr}}</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>2</option>
+        <option value="3" {{if 3 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>3</option>
+        <option value="4" {{if 4 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>4</option>
+        <option value="5" {{if 5 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>5</option>
       </select>
     </td>
   </tr>
@@ -43,11 +43,11 @@
     </th>
     <td colspan="3">
       <select name="{{$m}}[{{$class}}][{{$var}}]">
-        <option value="1" {{if 1 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-1{{/tr}}</option>
-        <option value="2" {{if 2 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-2{{/tr}}</option>
-        <option value="3" {{if 3 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-3{{/tr}}</option>
-        <option value="4" {{if 4 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-4{{/tr}}</option>
-        <option value="5" {{if 5 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-5{{/tr}}</option>
+        <option value="1" {{if 1 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>1</option>
+        <option value="2" {{if 2 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>2</option>
+        <option value="3" {{if 3 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>3</option>
+        <option value="4" {{if 4 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>4</option>
+        <option value="5" {{if 5 == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>5</option>
       </select>
     </td>
   </tr>

@@ -18,8 +18,8 @@ var Prescription = {
     var url = new Url;
     url.setModuleTab("{{$m}}", "{{$tab}}");
     url.addParam("prescription_id", 0);
-    url.addParam("object_class", "{{$prescription->object_class}}");
-    url.addParam("object_id", {{$prescription->object_id}});
+    url.addParam("object_class", {{$prescription->object_class|json}});
+    url.addParam("object_id", {{$prescription->object_id|json}});
     url.redirect();
   },
   addLine: function(code) {
@@ -70,7 +70,7 @@ function viewProduit(cip){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_produit");
   url.addParam("CIP", cip);
-  url.popup(840, 640, "Descriptif produit");
+  url.popup(900, 640, "Descriptif produit");
 }
 
 // UpdateFields de l'autocomplete
@@ -84,6 +84,43 @@ function updateFields(selected) {
 </script>
 
 <table class="main">
+  <tr>
+    <td colspan="2">
+      <form name="FilterFrm" action="?" method="get" onsubmit="return checkForm(this);">
+      
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
+
+      <table class="form">
+        <tr>
+          <td  class="readonly">
+          	{{mb_label object=$filter field=object_class}}
+          	{{mb_field object=$filter field=object_class}}
+          </td>
+          <td class="readonly">
+          	{{mb_label object=$filter field=object_id}}
+          	{{mb_field object=$filter field=object_id hidden="1" onchange="this.form.submit()"}}
+						{{mb_include_script module=system script=object_selector}}
+            <input type="text" size="80" name="_view" readonly="readonly" value="{{$filter->_ref_object->_view}}" />
+            <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
+            <script type="text/javascript">
+              ObjectSelector.init = function() {
+                this.sForm     = "FilterFrm";
+                this.sView     = "_view";
+                this.sId       = "object_id";
+                this.sClass    = "object_class";
+                this.onlyclass = "true"; 
+                this.pop();
+              }
+            </script>
+          </td>
+        </tr>
+      </table>
+      
+      </form>
+    </td>
+  </tr>
+
 {{if $prescription->object_id}}
   <tr>
     <td>
@@ -219,7 +256,11 @@ function updateFields(selected) {
   </tr>
 {{else}}
   <tr>
-    <td>Veuillez choisir un séjour ou une consultation (&object_class=CSejour&object_id=35976)</td>
+    <td>
+      <div class="big-info">
+        Veuillez choisir un contexte (séjour ou consultation) pour la prescription
+      </div>
+    </td>
   </tr>
 {{/if}}
 </table>
