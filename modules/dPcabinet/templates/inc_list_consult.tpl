@@ -68,13 +68,11 @@
   <tbody class="hoverable">
   <tr {{if $curr_consult->_id == $consult->_id}}class="selected"{{/if}}>
     <td style="width: 42px; {{if $curr_consult->_id != $consult->_id}}{{$style|smarty:nodefaults}}{{/if}}{{$font|smarty:nodefaults}}" rowspan="2">
-      {{if !$boardItem}}
       {{if $canCabinet->view}}
       <a href="?m={{$current_m}}&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}" title="Modifier le RDV" style="float: right;">
         <img src="images/icons/planning.png" alt="modifier" />
       {{else}}
       <a href="#nowhere" title="Impossible de modifier le RDV">
-      {{/if}}
       </a>
       {{/if}}
       {{if $curr_consult->patient_id}}

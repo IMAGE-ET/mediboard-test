@@ -159,7 +159,7 @@ function pageMain() {
       <tr>
         <td>
           <form name='editFrm' action='?m=dPcabinet' method='post' onsubmit='return checkPlage()'>
-          <input type='hidden' name='dosql' value='do_plageconsult_aed' />
+          <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
           <input type='hidden' name='del' value='0' />
           {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
           <input type='hidden' name='nbaffected' value='{{$plageSel->_affected}}' />

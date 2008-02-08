@@ -3,17 +3,30 @@
 {{assign var="redirect" value="?m=dPcabinet&a=plage_selector&dialog=1&chir_id=$chir_id&period=$period&hour=$hour&hide_finished=$hide_finished"}}
 
 <script type="text/javascript">
-{{if $plage->plageconsult_id}}
-function setClose(time) {
-  window.opener.PlageConsultSelector.set(time,
-    "{{$plage->plageconsult_id}}",
-    "{{$plage->date|date_format:"%A %d/%m/%Y"}}",
-    "{{$plage->freq}}",
-    "{{$plage->chir_id}}",
-    "{{$plage->_ref_chir->_view|smarty:nodefaults|escape:"javascript"}}");
-  window.close();
+
+var PlageConsult = {
+  currPlage: {{$plage->_id}},
+  setClose: function(time) {
+      alert("Veuillez choisir une plage");
+    },
+  changePlage: function(plage_id) {
+      if(this.currPlage) {
+        Element.classNames($("plage-"+this.currPlage)).remove("selected");
+      }
+      this.currPlage = plage_id;
+      Element.classNames($("plage-"+this.currPlage)).add("selected");
+      this.refreshPlage();
+    },
+  refreshPlage: function() {
+      var url = new Url;
+      url.setModuleAction("dPcabinet", "httpreq_list_places");
+      url.addParam("plageconsult_id", this.currPlage);
+      url.requestUpdate("listPlaces", { waitingText: null });
+  },
+  addPlaceBefore: function(plage_id) {
+      alert("Veuillez choisir une plage");
+  }
 }
-{{/if}}
 
 function pageMain() {
   regRedirectPopupCal("{{$date}}", "{{$redirect|smarty:nodefaults}}&date=");  
@@ -107,12 +120,12 @@ function pageMain() {
       {{elseif $pct lt 100}}{{assign var="backgroundClass" value="booked"}}
       {{else}}{{assign var="backgroundClass" value="full"}}
       {{/if}} 
-      <tr {{if $_plage->plageconsult_id == $plageconsult_id}}class="selected"{{/if}}>
+      <tr {{if $_plage->_id == $plageconsult_id}}class="selected"{{/if}} id="plage-{{$_plage->_id}}">
         <td>
           <div class="progressBar">
             <div class="bar {{$backgroundClass}}" style="width: {{$pct}}%;"></div>
             <div class="text">
-              <a href="{{$redirect}}&amp;plageconsult_id={{$_plage->_id}}">
+              <a href="#nowhere" onclick="PlageConsult.changePlage({{$_plage->_id}})">
                 {{$_plage->date|date_format:"%A %d"}}
               </a>
             </div>
@@ -134,76 +147,9 @@ function pageMain() {
     </table>
   </td>
   <td>
-    <table class="tbl">
-      {{if $plage->_id}}
-      <tr>
-        <th colspan="3">
-          Dr. {{$plage->_ref_chir->_view}}
-          <br />
-          Plage du {{$plage->date|date_format:"%A %d %B %Y"}}
-        </th>
-      </tr>
-      <tr>
-        <th>Heure</th>
-        <th>Patient</th>
-        <th>Durée</th>
-      </tr>
-      {{else}}
-      <tr>
-        <th colspan="3">Pas de plage le {{$date|date_format:"%A %d %B %Y"}}</th>
-      </tr>
-      {{/if}}
-      {{foreach from=$listPlace item=_place}}
-      <tr>
-        <td>
-          <div style="float:left">
-          <button type="button" class="tick" onclick="setClose('{{$_place.time|date_format:"%H:%M"}}')">{{$_place.time|date_format:"%Hh%M"}}</button>
-          </div>
-          <div style="float:right">
-          {{foreach from=$_place.consultations item=_consultation}}
-            <img src="./modules/dPcabinet/categories/{{$_consultation->_ref_categorie->nom_icone}}" alt="{{$_consultation->_ref_categorie->nom_categorie}}" title="{{$_consultation->_ref_categorie->nom_categorie}}" />
-          {{/foreach}}
-          </div>
-        </td>
-        <td class="text">
-          {{foreach from=$_place.consultations item=_consultation}}
-          
-          {{if !$_consultation->patient_id}}
-            {{assign var="style" value="style='background: #ffa;'"}}
-          {{elseif $_consultation->premiere}}
-            {{assign var="style" value="style='background: #faa;'"}}
-          {{else}} 
-            {{assign var="style" value=""}}
-          {{/if}}
-          <div {{$style|smarty:nodefaults}}>
-            {{if !$_consultation->patient_id}}
-              [PAUSE]
-            {{else}}
-              {{$_consultation->_ref_patient->_view}}
-              {{if $_consultation->motif}}
-              ({{$_consultation->motif|truncate:"20"}})
-              {{/if}}
-            {{/if}}
-          </div>
-          {{/foreach}}
-        </td>
-        <td>
-          {{foreach from=$_place.consultations item=_consultation}}
-            {{if !$_consultation->patient_id}}
-              {{assign var="style" value="style='background: #ffa;'"}}
-            {{elseif $_consultation->premiere}}
-              {{assign var="style" value="style='background: #faa;'"}}
-            {{else}} 
-              {{assign var="style" value=""}}
-            {{/if}}
-            <div {{$style|smarty:nodefaults}}>
-              {{$_consultation->duree}}
-            </div>
-          {{/foreach}}
-        </td>
-      </tr>
-      {{/foreach}}
-    </table>
+    <div id="listPlaces">
+      {{include file="inc_list_places.tpl"}}
+    </div>
   </td>
 </tr>
 
