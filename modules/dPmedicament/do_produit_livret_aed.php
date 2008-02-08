@@ -43,7 +43,9 @@ if($del == 1){
 	  $livret->distObj->DatePrixVille = $date_prix_ville;
 	  $livret->distObj->Commentaire = $commentaire;
 	  $livret->distObj->CodeInterne = $code_interne;
-    
+
+	  $livret->updateDBFields();
+
 	  if($livret->distObj->Update() < 0){
       // Affichage de l'erreur
       $AppUI->setMsg("Produit modifié".$livret->distObj->GetLastError(), UI_MSG_ERROR );

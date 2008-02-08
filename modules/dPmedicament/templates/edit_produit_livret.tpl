@@ -15,7 +15,6 @@ function pageMain() {
   regFieldCalendar("editProduitLivret", "date_prix_ville");
 }
 
-
 </script>
 
 <form name="editProduitLivret" action="?" method="post">

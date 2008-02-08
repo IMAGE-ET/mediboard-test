@@ -18,6 +18,7 @@ $produit_livret = new CBcbProduitLivretTherapeutique();
 $produit_livret->load($code_cip);
 $produit_livret->loadRefProduit();
 
+$produit_livret->updateFormFields();
 
 // Création du template
 $smarty = new CSmartyDP();

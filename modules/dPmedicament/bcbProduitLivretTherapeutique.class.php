@@ -54,6 +54,18 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     return false;
   }
   
+  
+  function updateFormFields(){
+    $this->date_prix_hopital = preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_hopital);
+    $this->date_prix_ville = preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$1-$2-$3", $this->date_prix_ville);
+  }
+  
+  
+  function updateDBFields(){
+    $this->distObj->DatePrixHopital = preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixHopital);
+	  $this->distObj->DatePrixVille = preg_replace("/(\d{4})-(\d{2})-(\d{2})/", "$3/$2/$1", $this->distObj->DatePrixVille);
+  }
+    
   function loadRefProduit(){
     $this->_ref_produit = new CBcbProduit();
     if($this->code_cip){
