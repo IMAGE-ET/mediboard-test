@@ -11,19 +11,23 @@ $composant = mbGetValueFromGet("composant", "");
 $code = mbGetValueFromGet("code", "");
 $libelle = mbGetValueFromGet("libelle", "");
 
+$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
+
 // Chargement des compositions qui contienne le composant recherche
 $composition = new CBcbComposition();
 
 if($composant){
   $composition->searchComposant($composant);
 }
+
 if($code){
-  $composition->searchProduits($code);
+  $composition->searchProduits($code, $rechercheLivretComposant);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("rechercheLivretComposant", $rechercheLivretComposant);
 $smarty->assign("libelle", $libelle);
 $smarty->assign("code", $code);
 $smarty->assign("composant", $composant);

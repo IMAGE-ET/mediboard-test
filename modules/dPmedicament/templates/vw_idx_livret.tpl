@@ -18,10 +18,9 @@ function loadLivretArbreATC(codeATC){
 
 var Livret = {
   // Ajout d'un produit dans le livret
-  addProduit: function(nom, code_cip) {
+  addProduit: function(code_cip) {
     // Submit du formulaire d'ajout de produit
     var oForm = document.addProduit;
-    oForm.libelle.value = nom;
     oForm.code_cip.value = code_cip;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){
@@ -32,10 +31,10 @@ var Livret = {
   },
   
   // Suppression d'un produit du livret
-  delProduit: function(produit_id, lettre, codeATC, code_cip) {
+  delProduit: function(code_cip, lettre, codeATC) {
     // Submit du formulaire de suppression du produit
     var oForm = document.addProduit;
-    oForm.produit_livret_id.value = produit_id;
+    oForm.code_cip.value = code_cip;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function() {
@@ -45,13 +44,12 @@ var Livret = {
     });
   },
   
-  editProduit: function(produit_id, lettre, codeATC, code_cip) {
+  editProduit: function(code_cip, lettre, codeATC) {
     this.urlEditProd = new Url;
     this.urlEditProd.setModuleAction("dPmedicament", "edit_produit_livret");
-    this.urlEditProd.addParam("produit_id", produit_id);
+    this.urlEditProd.addParam("code_cip", code_cip);
     this.urlEditProd.addParam("lettre", lettre);
     this.urlEditProd.addParam("codeATC", codeATC);
-    this.urlEditProd.addParam("code_cip", code_cip);
     this.urlEditProd.popup(385, 230, "Modification d'un élément");
   },
   
@@ -125,8 +123,8 @@ function printLivret(){
             this.selfClose = false;
             this.pop();
           }
-          MedSelector.set = function(nom, code){
-            Livret.addProduit(nom, code);
+          MedSelector.set = function(nom, code_cip){
+            Livret.addProduit(code_cip);
           }
         </script>
       </form>
@@ -152,7 +150,7 @@ function printLivret(){
 
 
 <!-- Affichage des produits du livret en fonction de la classe ATC -->
-<div id="two"> 
+<div id="two" style="display: none"> 
   <div id="ATC">
 	{{include file="inc_vw_livret_arbre_ATC.tpl"}}
 	</div>

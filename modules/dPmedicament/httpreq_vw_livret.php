@@ -29,11 +29,6 @@ $etablissement->load($g);
 // Chargement des produits du livret therapeutique
 $etablissement->loadRefLivretTherapeutique($lettre);
 
-// Chargement du produit
-foreach($etablissement->_ref_produits_livret as $key => $produit_livret){
-  $produit_livret->loadRefProduit();
-}
-
 $tabLettre = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Z");
 
 

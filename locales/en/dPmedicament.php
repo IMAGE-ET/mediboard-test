@@ -1,6 +1,7 @@
 <?php
-$locales['config-dPmedicament-niveauBCB'] = '';
 $locales['config-dPmedicament-niveauATC'] = '';
+$locales['config-dPmedicament-niveauBCB'] = '';
+$locales['config-dPmedicament-rechercheLivret'] = '';
 $locales['CProduitLivretTherapeutique-code_interne'] = '';
 $locales['CProduitLivretTherapeutique-code_interne-desc'] = '';
 $locales['CProduitLivretTherapeutique-commentaire'] = '';

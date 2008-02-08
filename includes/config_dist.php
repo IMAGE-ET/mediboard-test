@@ -95,6 +95,15 @@ $dPconfig["db"]["bcb"] = array(
   "dbpass" => "",
 );
 
+// BCBGES
+$dPconfig["db"]["bcbges"] = array(
+  "dbtype" => "mysql",
+  "dbhost" => "localhost",
+  "dbname" => "bcbges",
+  "dbuser" => "",
+  "dbpass" => "",
+);
+
 // you can add as much databases as you want by using
 //$dPconfig["db"]["dsn"] = array(
 //  "dbtype" => "dbtype",

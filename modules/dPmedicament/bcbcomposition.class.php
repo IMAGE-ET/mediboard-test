@@ -44,7 +44,12 @@ class CBcbComposition extends CBcbObject {
   }
   
   
-  function searchProduits($composant_id){
+  // livretTherapeutique = 1 permet une recherche dans le livret therapeutique
+  function searchProduits($composant_id, $livretTherapeutique = null){
+    if($livretTherapeutique){
+      global $g;
+      $this->distObj->LivretTherapeutique = $g;
+    }
     $this->distObj->Produits($composant_id);
     $this->_ref_produits = $this->distObj->TabProduit;
   }

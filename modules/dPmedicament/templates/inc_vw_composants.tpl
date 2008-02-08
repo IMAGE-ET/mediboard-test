@@ -1,12 +1,15 @@
 <script type="text/javascript">
  
 loadComposants = function(composant, code, libelle, dialog){
+  var oForm = document.rechercheComposant;
+  
   var url = new Url;
   url.setModuleAction("dPmedicament", "httpreq_vw_composants");
   url.addParam("composant", composant);
   url.addParam("code", code);
   url.addParam("libelle", libelle);
   url.addParam("dialog", dialog);
+  url.addParam("rechercheLivretComposant", getCheckedValue(oForm.rechercheLivretComposant));
   url.requestUpdate("composant", { waitingText: null } );
 }
 
@@ -20,6 +23,10 @@ loadComposants = function(composant, code, libelle, dialog){
         Composant recherché
         <input type="text" name="composant" value="{{$composant}}" />
         <button type="button" class="search" onclick="loadComposants(this.form.composant.value, '', '', '{{$dialog}}')">Rechercher</button>
+        <br />
+        <br />
+        <input type="checkbox" name="rechercheLivretComposant" value="1" {{if $rechercheLivretComposant == 1}}checked = "checked"{{/if}} />
+        Rechercher uniquement dans le livret thérapeutique
       </form>
     </td>
   </tr>

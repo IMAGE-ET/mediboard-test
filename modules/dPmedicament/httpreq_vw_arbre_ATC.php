@@ -7,7 +7,6 @@
 * @author Alexis Granger
 */
 
-
 $codeATC = mbGetValueFromGet("codeATC");
 $dialog = mbGetValueFromGet("dialog");
 $classeATC = new CBcbClasseATC();
@@ -17,6 +16,7 @@ $chapitreATC = $classeATC->getLibelle($codeATC);
 
 // Chargements des sous chapitres
 $arbreATC = $classeATC->loadArbre($codeATC);
+
 // Chargement des produits
 $classeATC->loadRefsProduits($codeATC);
 
@@ -25,7 +25,6 @@ $niveauCodeATC = $classeATC->getNiveau($codeATC);
 
 // Calcul du code de niveau superieur
 $codeNiveauSup = $classeATC->getCodeNiveauSup($codeATC);
-
 
 
 // Création du template

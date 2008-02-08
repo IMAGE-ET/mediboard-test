@@ -1,6 +1,7 @@
 <script type="text/javascript">
  
 loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
+  var oForm = document.rechercheDCI;  
   url = new Url;
   url.setModuleAction("dPmedicament", "httpreq_vw_DCI");
   url.addParam("DC_search", DC_search);
@@ -8,6 +9,7 @@ loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   url.addParam("dialog", dialog);
   url.addParam("forme", forme);
   url.addParam("dosage", dosage);
+  url.addParam("rechercheLivretDCI", getCheckedValue(oForm.rechercheLivretDCI));
   url.requestUpdate("DCI", { waitingText: null } );
 }
 
@@ -21,6 +23,10 @@ loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
         Dénomination commune
         <input type="text" name="DCI" value="{{$DC_search}}" />
         <button type="button" class="search" onclick="loadDCI(this.form.DCI.value, '', '{{$dialog}}');">Rechercher</button>
+        <br />
+        <br />
+        <input type="checkbox" name="rechercheLivretDCI" value="1" {{if $rechercheLivretDCI == 1}}checked = "checked"{{/if}} />
+        Rechercher uniquement dans le livret thérapeutique
       </form>
     </td>
   </tr>

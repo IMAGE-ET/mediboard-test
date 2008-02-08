@@ -13,6 +13,8 @@ $DCI_code = mbGetValueFromGet("DCI_code", "");
 $dialog = mbGetValueFromGet("dialog");
 $forme = mbGetValueFromGet("forme");
 $dosage = mbGetValueFromGet("dosage");
+$rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
+
 
 $DCI = new CBcbDCI();
 $tabDCI = array();
@@ -27,7 +29,7 @@ if($DCI_code){
   // Chargement de la DCI
   $DCI->load($DCI_code);
   // Chargement des produits de la DCI
-  $DCI->searchProduitsByType();
+  $DCI->searchProduitsByType($rechercheLivretDCI);
   foreach($DCI->_ref_produits as $key => $_produit){
     // Tri par forme et dosage
     $tabProduit[$_produit->Dosage][$_produit->Forme][] = $_produit;
@@ -38,10 +40,10 @@ if($DCI_code){
 }
 
 
-
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("rechercheLivretDCI", $rechercheLivretDCI);
 $smarty->assign("tabViewProduit", $tabViewProduit);
 $smarty->assign("dialog", $dialog);
 $smarty->assign("tabProduit", $tabProduit);
@@ -51,6 +53,5 @@ $smarty->assign("DCI_code", $DCI_code);
 $smarty->assign("DCI", $DCI);
 
 $smarty->display("inc_vw_DCI.tpl");
-
 
 ?>

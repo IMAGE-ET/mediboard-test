@@ -51,8 +51,9 @@ class CBcbProduit extends CBcbObject {
   // Chargement d'un produit
   function load($code_cip){
     $this->distObj->SearchInfo($code_cip);
+    
     $infoProduit = $this->distObj->DataInfo;  
- 
+
     if($infoProduit->Charge == 1){
       $this->code_cip        = $infoProduit->Code_CIP;
       $this->code_ucd        = $infoProduit->Code_Ucd;
@@ -64,25 +65,34 @@ class CBcbProduit extends CBcbObject {
       $this->hospitalier     = $infoProduit->Hospitalier;
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
+    
     // Chargement de la monographie (permet d'obtenir la date de suppression) 
     $this->loadRefMonographie();
+
     // Chargement du statut du produit
     $this->getStatut();  
+    
     // Chargement de l'agrement
     $this->getAgrement();
+    
     // Produit générique ?
     $this->getGenerique();
-    /// Produit référent ?
+    
+    // Produit référent ?
     $this->getReferent();
+
     // Produit supprime ?
     $this->getSuppression();
+
+    // Chargement de la composition du produit
+    $this->loadRefComposition();
+
   }
   
   // Permet de savoir si le produit est un générique 
   function getGenerique(){
     $this->_generique = $this->distObj->IsGenerique($this->code_cip);
   }
-  
   
   function getSuppression(){
     if($this->_ref_monographie->date_suppression){
@@ -107,14 +117,14 @@ class CBcbProduit extends CBcbObject {
     $this->agrement = $this->distObj->GetStatut(15);
   }
   
-  
   // Fonction qui retourne les equivalents d'un produit
   function loadRefsEquivalents(){
     $produitEquivalent = new CBcbEquivalent();
     $this->_ref_equivalents = $produitEquivalent->searchEquivalents($this->code_cip);
   }
   
-  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50){   
+  // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique
+  function searchProduit($text, $supprime = 1, $type_recherche = "debut", $specialite = 1, $max = 50, $livretTherapeutique = 0){   
     // Type_recherche
     // 0 ou 256 => recherche par nom
     // 1: recherche par CIP
@@ -135,6 +145,7 @@ class CBcbProduit extends CBcbObject {
       $type_recherche = 0;
     }
 
+    $this->distObj->LivretTherapeutique = $livretTherapeutique;
     $this->distObj->Specialite = $specialite;
     $this->distObj->Supprime = $supprime;  
     $this->distObj->Search($text, 0, $max, $type_recherche);
@@ -142,12 +153,15 @@ class CBcbProduit extends CBcbObject {
     $produits = array();
     // Parcours des produits
     foreach($this->distObj->TabProduit as $key => $prod){
+      // Chargement du produit
       $produit = new CBcbProduit();
       $produit->load($prod->CodeCIP);
+      
       $produits[$prod->CodeCIP] = $produit; 
     }  
     return $produits;
   }
+  
   
   // Chargement de toutes les posologies d'un produit
   function loadRefPosologies(){
@@ -173,11 +187,11 @@ class CBcbProduit extends CBcbObject {
   
   
   // Chargement de la composition
-  function loadRefComposition(){
+  function loadRefComposition(){    
     $this->_ref_composition = new CBcbComposition();
-    $this->_ref_composition->load($this->code_cip);
-   
+    $this->_ref_composition->load($this->code_cip); 
   }
+  
   
   // Chargement des donnees technico-reglementaires
   function loadRefEconomique(){

@@ -1,6 +1,7 @@
 <?php
-$locales['config-dPmedicament-niveauBCB'] = 'Liste BCB à partir de';
 $locales['config-dPmedicament-niveauATC'] = 'Liste ATC à partir de';
+$locales['config-dPmedicament-niveauBCB'] = 'Liste BCB à partir de';
+$locales['config-dPmedicament-rechercheLivret'] = 'Autocomplétion à partir des produits du livret';
 $locales['CProduitLivretTherapeutique-code_interne'] = 'Code interne';
 $locales['CProduitLivretTherapeutique-code_interne-desc'] = 'Code interne du produit';
 $locales['CProduitLivretTherapeutique-commentaire'] = 'Commentaire';

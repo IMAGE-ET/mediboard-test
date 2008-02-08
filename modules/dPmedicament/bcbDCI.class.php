@@ -49,7 +49,11 @@ class CBcbDCI extends CBcbObject {
   }
   
   
-  function searchProduitsByType(){
+  function searchProduitsByType($livretTherapeutique){
+    global $g;
+    if($livretTherapeutique){
+      $this->distObj->LivretTherapeutique = $g;
+    }
     $this->distObj->SearchMedicamentType($this->libelle_classe, 0);
     $this->_ref_produits = $this->distObj->gTabPdtType;
   }
@@ -60,7 +64,6 @@ class CBcbDCI extends CBcbObject {
     $query = "SELECT * FROM `classes_therapeutiques_produits` WHERE `CODE_CLASSE` = '$this->code_classe';";
     $result = $ds->loadList($query);
     foreach($result as $key => $produit){
-      // A faire: chargement du produit (des que la classe )
       $prod = new CProduit();
       $prod->load($produit["CODE_CIP"]);
       $this->_refs_produits[$produit["CODE_CIP"]] = $prod;

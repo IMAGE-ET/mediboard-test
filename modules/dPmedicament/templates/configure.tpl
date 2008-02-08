@@ -1,3 +1,15 @@
+<script type="text/javascript">
+
+function startBCBGES(){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "httpreq_do_add_bcbges");
+  url.requestUpdate("bcbges");
+}
+
+</script>
+
+
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="system" />
@@ -61,4 +73,19 @@
 </form>
 
 {{include file="../../system/templates/configure_dsn.tpl" dsn=bcb}}
+{{include file="../../system/templates/configure_dsn.tpl" dsn=bcbges}}
+
+<h2>Import de la base de données BCBGES</h2>
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="startBCBGES()" >Importer la base de données BCB GESTION</button></td>
+    <td id="bcbges"></td>
+  </tr>
+</table>
+
 

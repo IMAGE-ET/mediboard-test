@@ -8,8 +8,12 @@
  */
 
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g, $dPconfig;
 
+// A voir
+$rechercheLivret = mbGetValueFromGet("rechercheLivret", 0);
+$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
+$rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
 // Onglet ouvert par défaut
 $modes_recherche = array("produit"   => "one",
                          "classe"    => "two",
@@ -20,6 +24,7 @@ $onglet_recherche = $modes_recherche[mbGetValueFromGet("onglet_recherche", "prod
 
 $produit   = mbGetValueFromGet("produit");
 $composant = mbGetValueFromGet("composant");
+
 $composition = new CBcbComposition();
 
 
@@ -55,9 +60,16 @@ if($type_recherche == "ucd") {
 }
 $produits = array();
 
-// Recherche du produit
+// Recherche de produits dans la BCB
 $mbProduit = new CBcbProduit();
-$produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche);
+if(!$rechercheLivret){
+  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche);
+}
+
+// Recherche de produits dans le livret Therapeutique
+if($rechercheLivret){
+  $produits = $mbProduit->searchProduit($produit, $supprime, $param_recherche, $specialite = 0, $max = 50, $livretTherapeutique = $g);  
+}
 
 
 // --- RECHERCHE PAR CLASSES ---
@@ -76,6 +88,9 @@ $niveauCodeBCB = "";
 $smarty = new CSmartyDP();
 
 $smarty->assign("onglet_recherche", $onglet_recherche);
+$smarty->assign("rechercheLivret" , $rechercheLivret );
+$smarty->assign("rechercheLivretComposant", $rechercheLivretComposant);
+$smarty->assign("rechercheLivretDCI", $rechercheLivretDCI);
 
 $smarty->assign("composition"     , $composition     );
 $smarty->assign("tabDCI"          , $tabDCI          );

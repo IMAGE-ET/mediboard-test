@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPmedicament";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.13";
 $config["mod_type"]        = "user";
 
 
@@ -46,7 +46,13 @@ class CSetupdPmedicament extends CSetup {
             ADD `libelle` TEXT;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    
+    $sql = "ALTER TABLE `produit_livret_therapeutique`
+            DROP `libelle`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.13";
   }  
 }
 

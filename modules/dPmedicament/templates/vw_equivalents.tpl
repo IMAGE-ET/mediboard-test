@@ -50,6 +50,10 @@ function viewProduit(cip){
       {{$produit->nom_laboratoire}}
     </td>
   </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="4">Aucun équivalent trouvé</td>
+  </tr>
   {{/foreach}}
 </table>
    

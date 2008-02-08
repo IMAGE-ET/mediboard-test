@@ -10,12 +10,14 @@ if(MedSelector.oUrl) {
 	
 </script>
 
+
+{{if !$codeATC}}
+<div class="big-info">
+  Veuillez sélectionner la classe ATC dans laquelle vous désirez rechercher des produits
+</div>
+{{/if}}
+  
 <table class="main">
-  {{if !$codeATC}}
-  <div class="big-info">
-	  Veuillez sélectionner la classe ATC dans laquelle vous désirez rechercher des produits
-	</div>
-  {{/if}}
   <tr>
     <td>
       <!-- Affichage du nom du chapitre et de son code -->
@@ -48,8 +50,7 @@ if(MedSelector.oUrl) {
 <table class="tbl">
   <tr>
     <th colspan="10">{{$listProduits|@count}} produits dans le livret</th>
-  </tr>
-  
+  </tr>  
   <tr>
     <th>Actions</th>
     <th>Libelle</th>
@@ -62,49 +63,49 @@ if(MedSelector.oUrl) {
     <th>Code Interne</th>
     <th>Commentaire</th>
   </tr>
-  {{foreach from=$listProduits item=produit_livret}}
+  {{foreach from=$listProduits item=produit}}
   <tr>
     <td>
-      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit_livret->_id}}','','{{$codeATC}}')">
+      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit->code_cip}}','','{{$codeATC}}')">
         {{tr}}Delete{{/tr}}
       </button>
-      <button type="button" class="edit notext" onclick="Livret.editProduit('{{$produit_livret->_id}}','','{{$codeATC}}')">
+      <button type="button" class="edit notext" onclick="Livret.editProduit('{{$produit->code_cip}}','','{{$codeATC}}')">
         {{tr}}Modify{{/tr}} 
       </button>
     </td>  
     <td>
-      <a href="#produit{{$produit_livret->_id}}" onclick="viewProduit({{$produit_livret->code_cip}})">
-        {{$produit_livret->libelle}}
+      <a href="#produit{{$produit->code_cip}}" onclick="viewProduit({{$produit->code_cip}})">
+        {{$produit->_ref_produit->libelle}}
       </a>
     </td>
     <td>
-      {{$produit_livret->code_cip}}
+      {{$produit->code_cip}}
     </td>
     <td>
-      {{$produit_livret->_ref_produit->code_ucd}}
+      {{$produit->_ref_produit->code_ucd}}
     </td>
     <td>
-      {{if $produit_livret->prix_hopital}}
-        {{$produit_livret->prix_hopital}}&euro;
+      {{if $produit->prix_hopital}}
+        {{$produit->prix_hopital}}&euro;
       {{/if}}
     </td>
     <td>
-      {{if $produit_livret->prix_ville}}
-        {{$produit_livret->prix_ville}}&euro;
+      {{if $produit->prix_ville}}
+        {{$produit->prix_ville}}&euro;
       {{/if}}
     </td>
     <td>
-      {{$produit_livret->date_prix_hopital|date_format:"%d/%m/%Y"}}
+      {{$produit->date_prix_hopital|date_format:"%d/%m/%Y"}}
     </td>
     <td>
-      {{$produit_livret->date_prix_ville|date_format:"%d/%m/%Y"}}
+      {{$produit->date_prix_ville|date_format:"%d/%m/%Y"}}
     </td>
     <td>
-      {{$produit_livret->code_interne}}
+      {{$produit->code_interne}}
     </td> 
     <td>
-      {{$produit_livret->commentaire}}
-    </td> 
+      {{$produit->commentaire}}
+    </td>   
   </tr>
   {{/foreach}}
 </table>

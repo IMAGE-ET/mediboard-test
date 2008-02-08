@@ -9,16 +9,13 @@
 
 global $g;
 
-$produit_livret_id = mbGetValueFromGet("produit_id");
-
 $lettre = mbGetValueFromGet("lettre");
 $codeATC = mbGetValueFromGet("codeATC");
 $code_cip = mbGetValueFromGet("code_cip");
 
 // Chargement du produit
-$produit_livret = new CProduitLivretTherapeutique();
-$produit_livret->produit_livret_id = $produit_livret_id;
-$produit_livret->loadMatchingObject();
+$produit_livret = new CBcbProduitLivretTherapeutique();
+$produit_livret->load($code_cip);
 $produit_livret->loadRefProduit();
 
 

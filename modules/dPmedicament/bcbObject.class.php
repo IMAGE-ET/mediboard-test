@@ -14,17 +14,21 @@
 class CBcbObject {  
   static $objDatabase = null;
   static $TypeDatabase = null;
+  static $objDatabaseGestion = null;
+  static $TypeDatabaseGestion = null;
   
   var $distObj   = null;
   var $distClass = null;
   var $_view     = null;
   
   function initBCBConnection() {
-    if(!self::$objDatabase) {
-      
-      include_once("lib/bcb/PackageBCB.php");
-      
-      global $dPconfig;
+    
+    global $dPconfig;
+    include_once("lib/bcb/PackageBCB.php");
+    
+    // Connexion a la base BCB
+    if(!self::$objDatabase) {  
+      // Connexion a la base BCB
       $objDatabase = new BCBConnexion();
       $TypeDatabase=2;
       $Result = $objDatabase->ConnectDatabase("org.gjt.mm.mysql.Driver", 
@@ -34,11 +38,32 @@ class CBcbObject {
         $dPconfig["db"]["bcb"]["dbpass"], 
         $TypeDatabase
       );
-      
       if ($Result < 1) die("Erreur base " . $Result . " :" . $objDatabase->GetLastError());
-      
       self::$objDatabase = $objDatabase;
       self::$TypeDatabase = $TypeDatabase;
+    }  
+
+    // Connexion a la base BCB Gestion
+    if(!self::$objDatabaseGestion) { 
+      global $AppUI;
+      // Test de connexion a bcbges
+      if (!CSQLDataSource::get("bcbges")) {
+        $AppUI->stepAjax("Connexion vers la DSN bcbges échouée", UI_MSG_ERROR);
+      }
+      
+      // Connexion a la base BCB Gestion
+      $objDatabaseGestion = new BCBConnexionGestion();
+      $TypeDatabaseGestion=2;
+      $Result = $objDatabaseGestion->ConnectDatabase("org.gjt.mm.mysql.Driver",
+        $dPconfig["db"]["bcbges"]["dbhost"], 
+        $dPconfig["db"]["bcbges"]["dbname"],
+        $dPconfig["db"]["bcbges"]["dbuser"],
+        $dPconfig["db"]["bcbges"]["dbpass"],
+        $TypeDatabaseGestion
+      );
+      if ($Result < 1) die("Erreur base gestion " . $Result . " :" . $objDatabaseGestion->GetLastError());
+      self::$objDatabaseGestion = $objDatabaseGestion;
+      self::$TypeDatabaseGestion = $TypeDatabaseGestion;   
     }
   }
   
@@ -48,7 +73,7 @@ class CBcbObject {
     $this->distObj = new $this->distClass;
     $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
   }
-  
+   
   function load() {
     $this->_updateFormFields();
   }

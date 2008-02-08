@@ -119,15 +119,21 @@ class CGroups extends CMbObject {
     $this->updateDBTel("fax", "_fax");
   }
   
-  function loadRefLivretTherapeutique($lettre = null){
-    $this->_ref_produits_livret = array();
-    $produit_livret = new CProduitLivretTherapeutique();
-    if($lettre){
-      $where["libelle"] = "LIKE '$lettre%'";
+  
+  function loadRefLivretTherapeutique($lettre = "%"){
+    global $g;
+    $produit = new CBcbProduit();
+    
+    $produits = array();
+    // Chargement des produits du livret Therapeutique en fonction d'une lettre
+    $produits = $produit->searchProduit($lettre, 1, "debut", 0, 50, $g);
+    
+    foreach($produits as $key => $prod){
+      $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();
+      $produitLivretTherapeutique->load($prod->code_cip);
+      $produitLivretTherapeutique->_ref_produit = $prod;
+      $this->_ref_produits_livret[] = $produitLivretTherapeutique;
     }
-    $where["group_id"] = " = '$this->_id'";
-    $order = "libelle ASC";
-    $this->_ref_produits_livret = $produit_livret->loadList($where, $order);
   }
 
   /**

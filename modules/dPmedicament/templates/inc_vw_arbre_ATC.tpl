@@ -26,13 +26,13 @@
     </td>
     <td class="halfPane">
 			<!-- Affichage des produits -->
-			{{if $classeATC->_refs_produits|@count}}
+			{{if $classeATC->_ref_produits|@count}}
 			<table class="tbl">
 			  <tr>
-			    <th colspan="2">{{$classeATC->_refs_produits|@count}} produits trouvés (niveau {{$niveauCodeATC}})</th>
+			    <th colspan="2">{{$classeATC->_ref_produits|@count}} produits trouvés (niveau {{$niveauCodeATC}})</th>
 			  </tr>
 			  {{if $niveauCodeATC >= $dPconfig.dPmedicament.CBcbClasseATC.niveauATC}}
-			  {{foreach from=$classeATC->_refs_produits item=produit}}
+			  {{foreach from=$classeATC->_ref_produits item=produit}}
 			  <tr>
 			    <td>
 			    {{if $dialog}}

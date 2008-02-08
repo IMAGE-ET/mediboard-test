@@ -12,7 +12,7 @@ require_once("bcbObject.class.php");
 class CBcbClasseATC extends CBcbObject {
  
   // Object references
-  var $_refs_produits = null;
+  var $_ref_produits = null;
   
   // Constructeur
   function CBcbClasseATC(){
@@ -35,19 +35,29 @@ class CBcbClasseATC extends CBcbObject {
     return $this->distObj->tabClasseATC;
   }
   
+ 
   // Fonction qui retourne les produits d'une classe ATC en fonction du code de la classe
   function loadRefsProduits($codeATC = ""){
-    $this->_refs_produits = "";
+    $this->_ref_produits = "";
     $this->distObj->Produits($codeATC);
-    
-    $this->_refs_produits = $this->distObj->tabProduit;
+    $this->_ref_produits = $this->distObj->tabProduit;    
   }
   
-  function loadRefsProduisLivretThera($codeATC = ""){
-    $this->_refs_produits = "";
-    
-    
+
+  // Fonction qui retourne les produits du livret en fonction d'un code ATC
+  function loadRefProduitsLivret($codeATC = ""){
+    global $g;
+    $produits = array();
+    $this->distObj->ProduitClasse($codeATC, $g);
+    foreach($this->distObj->tabProduit as $key => $prod){
+      $produitLivret = new CBcbProduitLivretTherapeutique();
+      $produitLivret->load($prod->CodeCIP);
+      $produitLivret->loadRefProduit();
+      $produits[] = $produitLivret;
+    }
+    return $produits;
   }
+
   
   function getCodeNiveauSup($codeATC){
     if(strlen($codeATC)==0){

@@ -1,17 +1,9 @@
 <script type="text/javascript">
-	/*
-	if(MedSelector.oUrl) {
-	  MedSelector.close();
-	}
-	if(Livret.urlEditProd) {
-	  Livret.urlEditProd.close();
-	}
-	*/
 	// UpdateFields de l'autocomplete
 	function updateFields(selected) {
 	  Element.cleanWhitespace(selected);
 	  dn = selected.childNodes;
-	  Livret.addProduit(dn[1].firstChild.nodeValue, dn[0].firstChild.nodeValue);
+	  Livret.addProduit(dn[0].firstChild.nodeValue);
 	  $('searchProd_produit').value = "";
 	}
 </script>
@@ -21,11 +13,10 @@
 <form action="?m=dPmedicament" method="post" name="addProduit" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPmedicament" />
   <input type="hidden" name="dosql" value="do_produit_livret_aed" />
-  <input type="hidden" name="produit_livret_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="group_id" value="{{$g}}"/>
   <input type="hidden" name="code_cip" value=""/>
-  <input type="hidden" name="libelle" value="" />
+  
 </form>
 
 <div style="font-size: 1.1em; text-align: center">
@@ -58,20 +49,20 @@
   {{foreach from=$produits_livret item=produit_livret}}
   <tr>
     <td>
-      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit_livret->_id}}','{{$lettre}}','')">
+      <button type="button" class="trash notext" onclick="Livret.delProduit('{{$produit_livret->code_cip}}','{{$lettre}}','')">
         {{tr}}Delete{{/tr}}
       </button>
-      <button type="button" class="edit notext" onclick="Livret.editProduit('{{$produit_livret->_id}}','{{$lettre}}','')">
+      <button type="button" class="edit notext" onclick="Livret.editProduit('{{$produit_livret->code_cip}}','{{$lettre}}','')">
         {{tr}}Modify{{/tr}} 
       </button>
     </td>  
     <td>
-      <a href="#produit{{$produit_livret->_id}}" onclick="viewProduit({{$produit_livret->code_cip}})">
-        {{$produit_livret->libelle}}
+      <a href="#produit{{$produit_livret->code_cip}}" onclick="viewProduit({{$produit_livret->code_cip}})">
+        {{$produit_livret->_ref_produit->libelle}}
       </a>
     </td>
     <td>
-      {{$produit_livret->code_cip}}
+      {{$produit_livret->_ref_produit->code_cip}}
     </td>
     <td>
       {{$produit_livret->_ref_produit->code_ucd}}

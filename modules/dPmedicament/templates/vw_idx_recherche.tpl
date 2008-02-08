@@ -27,9 +27,9 @@ function viewBCB(){
 }
 
 
-function setClose(libelle, code) {
+function setClose(libelle, code_cip) {
   var oSelector = window.opener.MedSelector;
-  oSelector.set(libelle, code);
+  oSelector.set(libelle, code_cip);
   if(oSelector.selfClose) {
     window.close();
   }
@@ -107,6 +107,9 @@ function pageMain(){
         <br />
         <input type="checkbox" name="position_text" value="partout" {{if $param_recherche == 'partout'}}checked = "checked"{{/if}} />
         Rechercher n'importe où dans le nom du produit
+        <br />
+        <input type="checkbox" name="rechercheLivret" value="1" {{if $rechercheLivret == 1}}checked = "checked"{{/if}} />
+        Rechercher uniquement dans le livret thérapeutique
       </form>
     </td>
   </tr>
