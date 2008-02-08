@@ -193,7 +193,8 @@ function pageMain() {
       {{if $liste->_valeurs|@count}}
       <tr><th class="category" colspan="2">Choix diponibles</th></tr>
       {{foreach from=$liste->_valeurs|smarty:nodefaults item=curr_valeur}}
-      <tr><td>{{$curr_valeur}}</td>
+      <tr>
+        <td class="text">{{$curr_valeur}}</td>
         <td>
           <form name="delFrm{{$liste->liste_choix_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm()">
           <input type="hidden" name="dosql" value="do_liste_aed" />
