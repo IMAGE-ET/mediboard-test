@@ -76,7 +76,7 @@ PairEffect.initGroup("acteEffect");
 	
 	{{assign var=newButtons value=true}}
   {{if $newButtons}}
-  <div style="position: fixed; right: 10px;">
+  <div style="position: absolute; right: 10px;">
   {{if $can->edit || $modif_operation}}
     {{if !$acte->_id}}
     <button class="add" type="button" onclick="
