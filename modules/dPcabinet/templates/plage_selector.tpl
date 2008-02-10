@@ -5,7 +5,7 @@
 <script type="text/javascript">
 
 var PlageConsult = {
-  currPlage: {{$plage->_id}},
+  currPlage: {{if $plage->_id}}{{$plage->_id}}{{else}}0{{/if}},
   setClose: function(time) {
       alert("Veuillez choisir une plage");
     },

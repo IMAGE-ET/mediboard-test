@@ -41,7 +41,7 @@
       <input type="hidden" name="_repeat" value="1" />
     </form>
 
-    <table class="tbl" style="display: fixed">
+    <table class="tbl">
       {{if $plage->_id}}
       <tr>
         <th colspan="3">
