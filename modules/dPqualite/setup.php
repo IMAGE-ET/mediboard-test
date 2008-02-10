@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.15";
+$config["mod_version"] = "0.16";
 $config["mod_type"]    = "user";
 
 class CSetupdPqualite extends CSetup {
@@ -67,11 +67,11 @@ class CSetupdPqualite extends CSetup {
                PRIMARY KEY ( doc_categorie_id )
                ) TYPE = MYISAM COMMENT = 'Table des categories pour les procedures';";
     $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');";  $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (2, 'Procédure', 'B');";       $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (3, 'Protocole', 'C');";       $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (4, 'Enregistement', 'D');";   $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (5, 'Données', 'E');";         $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');"; $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (2, 'Procédure',      'B');"; $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (3, 'Protocole',      'C');"; $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (4, 'Enregistement',  'D');"; $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (5, 'Données',        'E');"; $this->addQuery($sql);
     $sql = "CREATE TABLE `ei_categories` (
                 `ei_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,
                 `nom` VARCHAR( 50 ) DEFAULT NULL ,
@@ -208,7 +208,13 @@ class CSetupdPqualite extends CSetup {
               ADD `vraissemblance` ENUM('1','2','3','4','5');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `doc_chapitres`
+              ADD `pere_id` INT(11) UNSIGNED
+              AFTER `doc_chapitre_id`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
     
   }
 }

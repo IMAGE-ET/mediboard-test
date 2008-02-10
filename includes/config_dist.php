@@ -281,4 +281,14 @@ $dPconfig["system"] = array(
 $dPconfig["sherpa"] = array (
   "import_segment" => "100",
 );
+
+$dPconfig["dPqualite"] = array (
+  "CDocGed" => array(
+    "_reference_doc" => 0,
+  ),
+  "CChapitreDoc" => array(
+    "profondeur" => 1,
+  ),
+);
+
 ?>

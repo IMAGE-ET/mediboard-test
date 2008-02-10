@@ -15,12 +15,40 @@
       </a>
       <table class="tbl">
         <tr>
-          <th>{{tr}}CChapitreDoc-nom{{/tr}}</th>
+          <th colspan="4">
+            {{$nav_chapitre->_path}}
+          </th>
+        </tr>
+        <tr>
+          <th colspan="3">{{tr}}CChapitreDoc-nom{{/tr}}</th>
           <th>{{tr}}CChapitreDoc-code{{/tr}}</th>
         </tr>
+        {{if $nav_chapitre->_id}}
+        <tr>
+          <td>
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$nav_chapitre->_ref_pere->_id}}" title="Retour">
+              retour
+            </a>
+          </td>
+          <td colspan="2" class="greedyPane">
+            {{$nav_chapitre->nom}}
+          </td>
+          <td>
+            {{$nav_chapitre->code}}
+          </td>
+        </tr>
+        {{/if}}
         {{foreach from=$listChapitres item=curr_chapitre}}
         <tr>
-          <td class="text">
+          <td />
+          <td>
+            {{if $nav_chapitre->_level < $maxDeep}}
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$curr_chapitre->_id}}" title="Voir">
+              voir
+            </a>
+            {{/if}}
+          </td>
+          <td class="text greedyPane">
             <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id={{$curr_chapitre->doc_chapitre_id}}" title="{{tr}}CChapitreDoc.modify{{/tr}}">
               {{$curr_chapitre->nom}}
             </a>
@@ -46,7 +74,26 @@
           {{else}}
           <th class="title" colspan="2">{{tr}}msg-CChapitreDoc-title-create{{/tr}}</th>
           {{/if}}
-        </tr>   
+        </tr>
+        <tr>
+          <th>{{mb_label object=$chapitre field="pere_id"}}</th>
+          <td>
+            {{if $chapitre->_id}}
+            {{if $chapitre->pere_id}}
+              {{$chapitre->_ref_pere->_view}}
+            {{else}}
+              Aucun
+            {{/if}}
+            {{else}}
+            <input type="hidden" name="pere_id" value="{{$nav_chapitre->_id}}">
+            {{if $nav_chapitre->_id}}
+              {{$nav_chapitre->_view}}
+            {{else}}
+              Aucun
+            {{/if}}
+            {{/if}}
+          </td>
+        </tr>  
         <tr>
           <th>{{mb_label object=$chapitre field="nom"}}</th>
           <td>{{mb_field object=$chapitre field="nom"}}</td>

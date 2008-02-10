@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
  */
  
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $dPconfig;
 
 $can->needsAdmin();
 
@@ -33,17 +33,35 @@ if($typeVue){
   $smarty->assign("listThemes" , $listThemes);
   $smarty->display("vw_edit_themes.tpl");
 }else{
-  // Liste des Chapitres
-  $doc_chapitre_id = mbGetValueFromGetOrSession("doc_chapitre_id", null);
+  $maxDeep = $dPconfig["dPqualite"]["CChapitreDoc"]["profondeur"] - 2;
   // Chargement du chapitre demandé
-  $chapitre=new CChapitreDoc;
+  $doc_chapitre_id = mbGetValueFromGetOrSession("doc_chapitre_id", null);
+  $chapitre = new CChapitreDoc;
   $chapitre->load($doc_chapitre_id);
+  $chapitre->loadParent();
+  // Chargement du chapitre de navigation
+  $nav_chapitre_id = mbGetValueFromGetOrSession("nav_chapitre_id", null);
+  $nav_chapitre = new CChapitreDoc;
+  $nav_chapitre->load($nav_chapitre_id);
+  if($nav_chapitre->_id) {
+    $nav_chapitre->computeLevel();
+    $nav_chapitre->computePath();
+  } else {
+    $nav_chapitre->_level = -1;
+  }
   // Liste des Chapitres
   $listChapitres = new CChapitreDoc;
-  $listChapitres = $listChapitres->loadList();
+  if($nav_chapitre->_id) {
+    $where = array("pere_id" => "= $nav_chapitre->_id");
+  } else {
+    $where = array("pere_id" => "IS NULL");
+  }
+  $listChapitres = $listChapitres->loadList($where);
   
   // Création du Template
-  $smarty->assign("chapitre"      , $chapitre      );
+  $smarty->assign("maxDeep"       , $maxDeep      );
+  $smarty->assign("chapitre"      , $chapitre     );
+  $smarty->assign("nav_chapitre"  , $nav_chapitre );
   $smarty->assign("listChapitres" , $listChapitres);
   $smarty->display("vw_edit_chapitres.tpl"); 
 }

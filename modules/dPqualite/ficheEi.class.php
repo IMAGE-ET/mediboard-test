@@ -147,15 +147,17 @@ class CFicheEi extends CMbObject {
       $this->_ref_evenement = explode("|", $this->evenements);
     }
     
-    if(!$this->service_date_validation && $this->service_valid_user_id){
+    if($this->qualite_date_controle) {
+      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-CTRL_OK");
+    } elseif(!$this->service_date_validation && $this->service_valid_user_id){
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CS_adm");
-    }elseif(!$this->qualite_user_id){
+    } elseif(!$this->qualite_user_id){
     	$this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
-    }elseif(!$this->qualite_date_validation){
+    } elseif(!$this->qualite_date_validation){
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
-    }elseif(!$this->qualite_date_verification){
+    } elseif(!$this->qualite_date_verification){
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_VERIF");
-    }elseif(!$this->qualite_date_controle){
+    } else {
       $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CTRL");
     }
     // Calcul de la criticité

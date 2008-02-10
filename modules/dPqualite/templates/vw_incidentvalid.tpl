@@ -394,7 +394,7 @@ function pageMain() {
         {{/if}}
         {{/if}}
       
-        {{if $can->admin && ($fiche->annulee || $fiche->date_validation)}}
+        {{if $can->edit && ($fiche->annulee || $fiche->date_validation)}}
         <tr>
           <td colspan="2" class="button">
             {{if $fiche->annulee}}

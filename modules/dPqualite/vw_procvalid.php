@@ -72,7 +72,12 @@ $listThemes = $listThemes->loadlist(null,"nom");
 
 // Liste des Chapitres
 $listChapitres = new CChapitreDoc;
-$listChapitres = $listChapitres->loadlist(null,$order);
+$where = array("pere_id" => "IS NULL");
+$listChapitres = $listChapitres->loadlist($where,$order);
+foreach($listChapitres as &$_chapitre) {
+  $_chapitre->loadChapsDeep(); 
+}
+//mbTrace($listChapitres);
 
 $versionDoc = array();
 if($docGed->version){

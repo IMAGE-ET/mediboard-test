@@ -105,24 +105,31 @@ class CDocGed extends CMbObject {
   }
     
   function loadRefsBack() {
+    global $dPconfig;
+    
     // Forward references
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
     
     $this->_ref_chapitre = new CChapitreDoc;
-    if($this->doc_chapitre_id)
+    if($this->doc_chapitre_id) {
       $this->_ref_chapitre->load($this->doc_chapitre_id);
-      
+      $this->_ref_chapitre->computePath();
+    }
     $this->_ref_theme = new CThemeDoc;
-    if ($this->doc_theme_id)
+    if ($this->doc_theme_id) {
       $this->_ref_theme->load($this->doc_theme_id);
-      
+    }
     $this->_ref_categorie = new CCategorieDoc;
-    if ($this->doc_categorie_id)
+    if ($this->doc_categorie_id) {
       $this->_ref_categorie->load($this->doc_categorie_id);
-    
-    if($this->doc_chapitre_id && $this->doc_categorie_id){
-      $this->_reference_doc = $this->_ref_chapitre->code . "-" . $this->_ref_categorie->code . "-" . str_pad($this->num_ref, 3, "0", STR_PAD_LEFT);
+    }
+    if($this->doc_chapitre_id && $this->doc_categorie_id) {
+      if($dPconfig["dPqualite"]["CDocGed"]["_reference_doc"]) {
+        $this->_reference_doc = $this->_ref_categorie->code . "-" . $this->_ref_chapitre->_path . str_pad($this->num_ref, 3, "0", STR_PAD_LEFT);
+      } else {
+        $this->_reference_doc = $this->_ref_chapitre->_path . $this->_ref_categorie->code . "-" . str_pad($this->num_ref, 3, "0", STR_PAD_LEFT);
+      }
     }
   }
   
