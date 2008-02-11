@@ -78,8 +78,8 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Transfert réel
   $destination_basename = sprintf("%s%02d", $fileprefix, $counter);
   // Transfert en mode FTP_ASCII obligatoire pour les AS400
-  if ($ftp->sendFile($doc->documentfilename, "$destination_basename.xml", FTP_ASCII, true)) {
-    $ftp->sendFile($doc->documentfilename, "$destination_basename.ok", FTP_ASCII, true);
+  if ($ftp->sendFile($doc->documentfilename, "$destination_basename.xml", FTP_ASCII)) {
+    $ftp->sendFile($doc->documentfilename, "$destination_basename.ok", FTP_ASCII);
 
     $doc->saveFinalFile();
     $documentFinalBaseName = basename($doc->documentfinalfilename);
