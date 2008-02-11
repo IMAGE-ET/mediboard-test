@@ -66,8 +66,8 @@ class CFTP {
     
     $this->logStep("Authentifié en tant que $this->username");
     
-    $this->logError("Phase de test, document non envoyé");
-    return false;
+    //$this->logError("Phase de test, document non envoyé");
+    //return false;
     
     // Upload the file
     $upload = ftp_put($conn_id, $destination_file, $source_file, $mode);
