@@ -43,7 +43,7 @@ class CFavoriCCAM extends CMbObject {
   function loadRefsFwd() {
     $this->_ref_code = new CCodeCCAM($this->favoris_code);
     $this->_ref_code->loadLite();
-    $this->_ref_code->loadChaps();
+    $this->_ref_code->getChaps();
   }
   
   function getOrdered($user_id = 0,$class) {

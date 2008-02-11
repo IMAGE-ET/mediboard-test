@@ -10,33 +10,21 @@
 
 
 class CCodeCCAM {
-  // Code de l'acte
-  var $code = null; 
-  // Chapitres de la CCAM concernes
-  var $chapitres = null;
-  // Libelles
-  var $libelleCourt = null;
-  var $libelleLong = null;
-  // Place dans la CCAM
-  var $place = null;
-  // Remarques sur le code
-  var $remarques = null;
-  // Activites correspondantes
-  var $activites = array();
-  // Nombre de phases par activités
-  var $phases = array();
-  // Incompatibilite
-  var $incomps = array(); 
-  // Associabilite
-  var $assos = array();
-  // Procedure
-  var $procedure = null;
-  // Remboursement
-  var $remboursement = null;
+  var $code          = null; // Code de l'acte 
+  var $chapitres     = null; // Chapitres de la CCAM concernes
+  var $libelleCourt  = null; // Libelles
+  var $libelleLong   = null;
+  var $place         = null; // Place dans la CCAM
+  var $remarques     = null; // Remarques sur le code
+  var $activites     = array(); // Activites correspondantes
+  var $phases        = array(); // Nombre de phases par activités
+  var $incomps       = array(); // Incompatibilite
+  var $assos         = array(); // Associabilite
+  var $procedure     = null; // Procedure
+  var $remboursement = null; // Remboursement
   
   // Variable calculées
-  var $_code7 = null;
-  
+  var $_code7 = null; // Possibilité d'ajouter le modificateur 7 (0 : non, 1 : oui)
   var $_default  = null;
   
   // Activités et phases recuperées depuis le code CCAM
@@ -45,7 +33,7 @@ class CCodeCCAM {
   
   
   /**
-   * Construction
+   * Constructeur à partir du code CCAM
    */
   function CCodeCCAM($code) {
     // Static initialisation
@@ -67,13 +55,42 @@ class CCodeCCAM {
         $this->_phase = $detailCode[2];
       }
     } else {
-      $this->code = strtoupper($code);  
+      $this->code = strtoupper($code);
+    }
+  }
+
+  // Chargement des variables obligatoires
+  function LoadLite() {
+    if($this->getLibelles()) {
+      $this->getActivite7();
+      $this->getTarification();
+    }
+  }
+
+  // Chargement des variables importantes
+  function LoadMedium() {
+    if($this->getLibelles()) {
+      $this->getTarification();
+      $this->getChaps();
+      $this->getRemarques();
+      $this->getActivites();
+    }
+  }
+   
+  // Chargement de toutes les variables
+  function Load() {
+    if($this->getLibelles()) {
+      $this->getTarification();
+      $this->getChaps();
+      $this->getRemarques();
+      $this->getActivites();
+      $this->getActesAsso();
+      $this->getActesIncomp();
+      $this->getProcedure();
     }
   }
   
-
-  // Chargement des variables importantes
-  function LoadLite() {
+  function getLibelles() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
@@ -83,180 +100,51 @@ class CCodeCCAM {
       $this->libelleCourt = "Acte inconnu ou supprimé";
       $this->libelleLong = "Acte inconnu ou supprimé";
       $this->_code7 = 1;
+      return false;
     } else {
       $row = $ds->fetchArray($result);
       //On rentre les champs de la table actes
       $this->libelleCourt = $row["LIBELLECOURT"];
       $this->libelleLong = $row["LIBELLELONG"];
-      $query1 = "SELECT * FROM activiteacte WHERE ";
-      $query1 .= $ds->prepare("CODEACTE = %", $this->code);
-      $query1 .= " AND ACTIVITE = '4'";
-      $result1 = $ds->exec($query1);
-      // Chargement des modificateurs
-      if($ds->numRows($result1)) {
-        $query2 = "SELECT * FROM modificateuracte WHERE ";
-        $query2 .= $ds->prepare("CODEACTE = %", $this->code);
-        $query2 .= " AND CODEACTIVITE = '4'";
-        $query2 .= " AND MODIFICATEUR = '7'";
-        //$query2 .= " AND DATEEFFET = '20071228'";
-        $query2 .= " GROUP BY MODIFICATEUR";
-        $result2 = $ds->exec($query2);
-        $this->_code7 = $ds->numRows($result2);
-      } else {
-        $this->_code7 = 1;
-      }
-      // Chargement des informations de tarification
-      $query3 = "SELECT * FROM infotarif WHERE ";
-      $query3 .= $ds->prepare("CODEACTE = %", $this->code);
-      $query3 .= " ORDER BY DATEEFFET DESC";
-      $result3 = $ds->exec($query3);
-      $row3 = $ds->fetchArray($result3);
-      $this->remboursement = $row3["REMBOURSEMENT"];
+      return true;
     }
   }
   
-  
-  // Chargement des variables
-  function LoadMedium() {
+  function getActivite7() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
-    $result = $ds->exec($query);
-    if($ds->numRows($result) == 0) {
-      $this->code = "";
-      //On rentre les champs de la table actes
-      $this->libelleCourt = "Acte inconnu ou supprimé";
-      $this->libelleLong = "Acte inconnu ou supprimé";
+    // recherche de la dernière date d'effet
+    $query1 = "SELECT MAX(DATEEFFET) as LASTDATE FROM modificateuracte WHERE ";
+    $query1 .= $ds->prepare("CODEACTE = %", $this->code);
+    $query1 .= " AND CODEACTIVITE = '4'";
+    $query1 .= " GROUP BY CODEACTE";
+    $result1 = $ds->exec($query1);
+    // Chargement des modificateurs
+    if($ds->numRows($result1)) {
+      $row = $ds->fetchArray($result1);
+      $lastDate = $row["LASTDATE"];
+      $query2 = "SELECT * FROM modificateuracte WHERE ";
+      $query2 .= $ds->prepare("CODEACTE = %", $this->code);
+      $query2 .= " AND CODEACTIVITE = '4'";
+      $query2 .= " AND MODIFICATEUR = '7'";
+      $query2 .= " AND DATEEFFET = '$lastDate'";
+      $result2 = $ds->exec($query2);
+      $this->_code7 = $ds->numRows($result2);
     } else {
-      $row = $ds->fetchArray($result);
-    
-      //On rentre les champs de la table actes
-      $this->libelleCourt = $row["LIBELLECOURT"];
-      $this->libelleLong = $row["LIBELLELONG"];
-    
-      //On rentre les caracteristiques des chapitres
-      $this->loadChaps();
-      
-      // Extraction des remarques
-      $this->remarques = array();
-      $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
-      $result = $ds->exec($query);
-      while ($row = $ds->fetchArray($result)) {
-        $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
-      }
-      
-      // Extraction des activités
-      $query = "SELECT ACTIVITE AS numero " .
-          "\nFROM activiteacte " .
-          "\nWHERE CODEACTE = %";
-      $query = $ds->prepare($query, $this->code);
-      $result = $ds->exec($query);
-      while($obj = $ds->fetchObject($result)) {
-        // Test si l'activité 1 est virtuelle
-        $virtuelle = true;
-        $virtuelle &= $this->chapitres[0] == "18";
-        $virtuelle &= $this->chapitres[1] == "01";
-        $virtuelle &= $obj->numero == 1;
-        if(!$virtuelle) {
-          $obj->libelle = "";
-          $this->activites[$obj->numero] = $obj;
-        }
-      }
-      
-      // Libellés des activités
-      foreach($this->remarques as $remarque) {
-        $match = null;
-        if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
-          $this->activites[$match[1]]->libelle = $match[2];
-        }
-      }
-     
-      // Détail des activités
-      foreach($this->activites as $key => $value) {
-        $activite =& $this->activites[$key];
-  
-        // Type de l'activité
-        $query = "SELECT LIBELLE AS `type`" .
-            "\nFROM activite " .
-            "\nWHERE CODE = %";
-        $query = $ds->prepare($query, $activite->numero);
-        $result = $ds->exec($query);
-        $obj = $ds->fetchObject($result);
-        $activite->type = $obj->type;
-  
-        // Extraction des modificateurs
-        $activite->modificateurs = array();
-        $modificateurs =& $activite->modificateurs;
-        $query = "SELECT * FROM modificateuracte " .
-            "\nWHERE CODEACTE = %1" .
-            "\nAND CODEACTIVITE = %2" .
-            //"\nAND DATEEFFET = '20071228'" .
-            "\nGROUP BY MODIFICATEUR";
-        $query = $ds->prepare($query, $this->code, $activite->numero);
-        $result = $ds->exec($query);
-        
-        while($row = $ds->fetchArray($result)) {
-          $query = "SELECT CODE AS code, LIBELLE AS libelle" .
-              "\nFROM modificateur " .
-              "\nWHERE CODE = %" .
-              "\nORDER BY CODE";
-          $query = $ds->prepare($query, $row["MODIFICATEUR"]);
-          $modificateurs[] = $ds->fetchObject($ds->exec($query));
-        }
-        
-        // Chargement des informations de tarification
-        $query3 = "SELECT * FROM infotarif WHERE ";
-        $query3 .= $ds->prepare("CODEACTE = %", $this->code);
-        $query3 .= " ORDER BY DATEEFFET DESC";
-        $result3 = $ds->exec($query3);
-        $row3 = $ds->fetchArray($result3);
-        $this->remboursement = $row3["REMBOURSEMENT"];
-  
-        // Extraction des phases
-        $activite->phases = array();
-        $phases =& $activite->phases;
-        $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
-            "\nFROM phaseacte " .
-            "\nWHERE CODEACTE = %1" .
-            "\nAND ACTIVITE = %2" .
-            "\nGROUP BY PHASE" .
-            "\nORDER BY PHASE, DATE1 DESC";
-        $query = $ds->prepare($query, $this->code, $activite->numero);
-        $result = $ds->exec($query);
-              
-        while($obj = $ds->fetchObject($result)) {
-          $phases[$obj->phase] = $obj;
-          $phase =& $phases[$obj->phase];
-          $phase->tarif = floatval($obj->tarif)/100;
-          $phase->libelle = "Phase Principale";
-          
-          // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
-          $phase->_modificateurs = $modificateurs;
-        }
-        
-        // Libellés des phases
-        foreach($this->remarques as $remarque) {
-          if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
-            if (isset($phases[$match[1]])) {
-              $phases[$match[1]]->libelle = $match[2];
-            }
-          }
-        }
-      }
-      $this->_default = reset($this->activites);
-      if($this->_default->phases){
-        $this->_default = $this->_default->phases[0]->tarif;
-      }
-      else {
-      	$this->_default = 0;
-      }
+      $this->_code7 = 1;
     }
   }
   
-    
+  function getTarification() {
+    $ds =& $this->_spec->ds;
+    $query = "SELECT * FROM infotarif WHERE ";
+    $query .= $ds->prepare("CODEACTE = %", $this->code);
+    $query .= " ORDER BY DATEEFFET DESC";
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+    $this->remboursement = $row["REMBOURSEMENT"];
+  }  
   
-  
-  
-  function loadChaps() {
+  function getChaps() {
     $ds =& $this->_spec->ds;
     $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
     $result = $ds->exec($query);
@@ -292,202 +180,176 @@ class CCodeCCAM {
     }
     $this->place = $this->chapitres[3]["rang"];
   }
-   
-  // Chargement des variables
-  function Load() {
+  
+  function getRemarques() {
     $ds =& $this->_spec->ds;
-    $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->code);
+    $this->remarques = array();
+    $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
     $result = $ds->exec($query);
-    if($ds->numRows($result) == 0) {
-      $this->code = "";
-      //On rentre les champs de la table actes
-      $this->libelleCourt = "Acte inconnu ou supprimé";
-      $this->libelleLong = "Acte inconnu ou supprimé";
+    while ($row = $ds->fetchArray($result)) {
+      $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
+    }
+  }
+  
+  function getActivites() {
+    $ds =& $this->_spec->ds;
+    // Extraction des activités
+    $query = "SELECT ACTIVITE AS numero " .
+        "\nFROM activiteacte " .
+        "\nWHERE CODEACTE = %";
+    $query = $ds->prepare($query, $this->code);
+    $result = $ds->exec($query);
+    while($obj = $ds->fetchObject($result)) {
+      // Test si l'activité 1 est virtuelle
+      $virtuelle = true;
+      $virtuelle &= $this->chapitres[0] == "18";
+      $virtuelle &= $this->chapitres[1] == "01";
+      $virtuelle &= $obj->numero == 1;
+      if(!$virtuelle) {
+        $obj->libelle = "";
+        $this->activites[$obj->numero] = $obj;
+      }
+    }
+    // Libellés des activités
+    foreach($this->remarques as $remarque) {
+      $match = null;
+      if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
+        $this->activites[$match[1]]->libelle = $match[2];
+      }
+    }
+    // Détail des activités
+    foreach($this->activites as &$activite) {
+      // Type de l'activité
+      $query = "SELECT LIBELLE AS `type`" .
+          "\nFROM activite " .
+          "\nWHERE CODE = %";
+      $query = $ds->prepare($query, $activite->numero);
+      $result = $ds->exec($query);
+      $obj = $ds->fetchObject($result);
+      $activite->type = $obj->type;
+      // Modificateurs de l'activite
+      $this->getModificateursFromActivite($activite);
+      $this->getPhasesFromActivite($activite);
+    }
+    $this->_default = reset($this->activites);
+    if($this->_default->phases){
+      $this->_default = $this->_default->phases[0]->tarif;
     } else {
-      $row = $ds->fetchArray($result);
+    	$this->_default = 0;
+    }
+  }
+  
+  function getModificateursFromActivite(&$activite) {
+    $ds =& $this->_spec->ds;
+    // recherche de la dernière date d'effet
+    $query = "SELECT MAX(DATEEFFET) AS LASTDATE".
+        "\nFROM modificateuracte" .
+        "\nWHERE CODEACTE = %1" .
+        "\nAND CODEACTIVITE = %2" .
+        "\nGROUP BY CODEACTE";
+    $query = $ds->prepare($query, $this->code, $activite->numero);
+    $result = $ds->exec($query);
+    $row = $ds->fetchArray($result);
+    $lastDate = $row["LASTDATE"];
+    // Extraction des modificateurs
+    $activite->modificateurs = array();
+    $modificateurs =& $activite->modificateurs;
+    $query = "SELECT * FROM modificateuracte " .
+        "\nWHERE CODEACTE = %1" .
+        "\nAND CODEACTIVITE = %2" .
+        "\nAND DATEEFFET = '$lastDate'" .
+        "\nGROUP BY MODIFICATEUR";
+    $query = $ds->prepare($query, $this->code, $activite->numero);
+    $result = $ds->exec($query);
     
-      //On rentre les champs de la table actes
-      $this->libelleCourt = $row["LIBELLECOURT"];
-      $this->libelleLong = $row["LIBELLELONG"];
-    
-      //On rentre les caracteristiques des chapitres
-      $this->loadChaps();
-      
-      // Extraction des remarques
-      $this->remarques = array();
-      $query = $ds->prepare("SELECT * FROM notes WHERE CODEACTE = %", $this->code);
-      $result = $ds->exec($query);
-      while ($row = $ds->fetchArray($result)) {
-        $this->remarques[] = str_replace("¶", "\n", $row["TEXTE"]);
-      }
-      
-      // Extraction des activités
-      if($this->_activite){
-      // si une activite est inscrite dans le code
-      $query = "SELECT ACTIVITE AS numero " .
-          "\nFROM activiteacte " .
-          "\nWHERE CODEACTE = %" .
-          "\nAND ACTIVITE = $this->_activite";
-      } else {
-      $query = "SELECT ACTIVITE AS numero " .
-          "\nFROM activiteacte " .
-          "\nWHERE CODEACTE = %;";  
-      }
-      $query = $ds->prepare($query, $this->code);
-      $result = $ds->exec($query);
-      while($obj = $ds->fetchObject($result)) {
-        // Test si l'activité 1 est virtuelle
-        $virtuelle = true;
-        $virtuelle &= $this->chapitres[0]["db"] == "000018";
-        $virtuelle &= $this->chapitres[1]["db"] == "000001";
-        $virtuelle &= $obj->numero == 1;
-        if(!$virtuelle) {
-          $obj->libelle = "";
-          $this->activites[$obj->numero] = $obj;
-        }
-      }
-      
-      // Libellés des activités
-      foreach($this->remarques as $remarque) {
-        $match = null;
-        if (preg_match("/Activité (\d) : (.*)/i", $remarque, $match)) {
-          $this->activites[$match[1]]->libelle = $match[2];
-        }
-      }
-      
-      // Détail des activités
-      foreach($this->activites as $key => $value) {
-        $activite =& $this->activites[$key];
+    while($row = $ds->fetchArray($result)) {
+      $query = "SELECT CODE AS code, LIBELLE AS libelle" .
+          "\nFROM modificateur " .
+          "\nWHERE CODE = %" .
+          "\nORDER BY CODE";
+      $query = $ds->prepare($query, $row["MODIFICATEUR"]);
+      $modificateurs[] = $ds->fetchObject($ds->exec($query));
+    }
+  }
   
-        // Type de l'activité
-        $query = "SELECT LIBELLE AS `type`" .
-            "\nFROM activite " .
-            "\nWHERE CODE = %";
-        $query = $ds->prepare($query, $activite->numero);
-        $result = $ds->exec($query);
-        $obj = $ds->fetchObject($result);
-        $activite->type = $obj->type;
-  
-        // Extraction des modificateurs
-        $activite->modificateurs = array();
-        $modificateurs =& $activite->modificateurs;
-        $query = "SELECT * FROM modificateuracte " .
-            "\nWHERE CODEACTE = %1" .
-            "\nAND CODEACTIVITE = %2" .
-            //"\nAND DATEEFFET = '20071228'" .
-            "\nGROUP BY MODIFICATEUR";
-        $query = $ds->prepare($query, $this->code, $activite->numero);
-        $result = $ds->exec($query);
-        
-        while($row = $ds->fetchArray($result)) {
-          $query = "SELECT CODE AS code, LIBELLE AS libelle" .
-              "\nFROM modificateur " .
-              "\nWHERE CODE = %" .
-              "\nORDER BY CODE";
-          $query = $ds->prepare($query, $row["MODIFICATEUR"]);
-          $modificateurs[] = $ds->fetchObject($ds->exec($query));
-        }
-        
-        // Chargement des informations de tarification
-        $query3 = "SELECT * FROM infotarif WHERE ";
-        $query3 .= $ds->prepare("CODEACTE = %", $this->code);
-        $query3 .= " ORDER BY DATEEFFET DESC";
-        $result3 = $ds->exec($query3);
-        $row3 = $ds->fetchArray($result3);
-        $this->remboursement = $row3["REMBOURSEMENT"];
-  
-        // Extraction des phases
-        $activite->phases = array();
-        $phases =& $activite->phases;
-        if($this->_phase){
-          // si une phase est inscrite dans le code
-          $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
-            "\nFROM phaseacte " .
-            "\nWHERE CODEACTE = %1" .
-            "\nAND ACTIVITE = %2" .
-            "\nAND PHASE = %3" .
-            "\nGROUP BY PHASE" .
-            "\nORDER BY PHASE, DATE1 DESC";
-          $query = $ds->prepare($query, $this->code, $activite->numero, $this->_phase);
-        } else {
-          $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
-            "\nFROM phaseacte " .
-            "\nWHERE CODEACTE = %1" .
-            "\nAND ACTIVITE = %2" .
-            "\nGROUP BY PHASE" .
-            "\nORDER BY PHASE, DATE1 DESC";
-          $query = $ds->prepare($query, $this->code, $activite->numero);  
-        }
-        $result = $ds->exec($query);
-              
-        while($obj = $ds->fetchObject($result)) {
-          $phases[$obj->phase] = $obj;
-          $phase =& $phases[$obj->phase];
-          $phase->tarif = floatval($obj->tarif)/100;
-          $phase->libelle = "Phase Principale";
+  function getPhasesFromActivite(&$activite) {
+    $ds =& $this->_spec->ds;
+    // Extraction des phases
+    $activite->phases = array();
+    $phases =& $activite->phases;
+    $query = "SELECT PHASE AS phase, PRIXUNITAIRE AS tarif" .
+        "\nFROM phaseacte " .
+        "\nWHERE CODEACTE = %1" .
+        "\nAND ACTIVITE = %2" .
+        "\nGROUP BY PHASE" .
+        "\nORDER BY PHASE, DATE1 DESC";
+    $query = $ds->prepare($query, $this->code, $activite->numero);
+    $result = $ds->exec($query);
           
-          // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
-          $phase->_modificateurs = $modificateurs;
-        }
-        
-        // Libellés des phases
-        foreach($this->remarques as $remarque) {
-          if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
-            if (isset($phases[$match[1]])) {
-              $phases[$match[1]]->libelle = $match[2];
-            }
-          }
-        }
-       
-        $this->_default = reset($this->activites);
-        if($this->_default->phases){
-          $this->_default = $this->_default->phases[0]->tarif;
-        }
-        else {
-        	$this->_default = 0;
-        }
-      }
+    while($obj = $ds->fetchObject($result)) {
+      $phases[$obj->phase] = $obj;
+      $phase =& $phases[$obj->phase];
+      $phase->tarif = floatval($obj->tarif)/100;
+      $phase->libelle = "Phase Principale";
       
-      //On rentre les actes associés
-      $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
-      $result = $ds->exec($query);
-      $i = 0;
-      while($row = $ds->fetchArray($result)) {
-        $this->assos[$i]["code"] = $row["ACTEASSO"];
-        $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["ACTEASSO"]);
-        $result2 = $ds->exec($query);
-        $row2 = $ds->fetchArray($result2);
-        $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
-        $i++;
+      // Copie des modificateurs pour chaque phase. Utile pour dPsalleOp
+      $phase->_modificateurs = $activite->modificateurs;
+    }
+    
+    // Libellés des phases
+    foreach($this->remarques as $remarque) {
+      if (preg_match("/Phase (\d) : (.*)/i", $remarque, $match)) {
+        if (isset($phases[$match[1]])) {
+          $phases[$match[1]]->libelle = $match[2];
+        }
       }
-      
-      //On rentre les actes incompatibles
-      $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
-      $result = $ds->exec($query);
-      $i = 0;
-      while($row = $ds->fetchArray($result)) {
-        $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
-        $query = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
-        $result2 = $ds->exec($query);
-        $row2 = $ds->fetchArray($result2);
-        $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
-        $i++;
-      }
-      
-      //On rentre la procédure associée
-      $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
-      $result = $ds->exec($query);
-      if($ds->numRows($result) > 0) {
-        $row = $ds->fetchArray($result);
-        $this->procedure["code"] = $row["CODEPROCEDURE"];
-        $query = $ds->prepare("SELECT LIBELLELONG FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->procedure["code"]);
-        $result = $ds->exec($query);
-        $row = $ds->fetchArray($result);
-        $this->procedure["texte"] = $row["LIBELLELONG"];
-      } else {
-        $this->procedure["code"] = "aucune";
-        $this->procedure["texte"] = "";
-      }
+    }
+  }
+  
+  function getActesAsso() {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM associabilite WHERE CODEACTE = % GROUP BY ACTEASSO LIMIT 0, 15", $this->code);
+    $result = $ds->exec($query);
+    $i = 0;
+    while($row = $ds->fetchArray($result)) {
+      $this->assos[$i]["code"] = $row["ACTEASSO"];
+      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["ACTEASSO"]);
+      $result2 = $ds->exec($query2);
+      $row2 = $ds->fetchArray($result2);
+      $this->assos[$i]["texte"] = $row2["LIBELLELONG"];
+      $i++;
+    }
+  }
+  
+  function getActesIncomp() {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM incompatibilite WHERE CODEACTE = % GROUP BY INCOMPATIBLE LIMIT 0, 15", $this->code);
+    $result = $ds->exec($query);
+    $i = 0;
+    while($row = $ds->fetchArray($result)) {
+      $this->incomps[$i]["code"] = $row["INCOMPATIBLE"];
+      $query2 = $ds->prepare("SELECT * FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $row["INCOMPATIBLE"]);
+      $result2 = $ds->exec($query2);
+      $row2 = $ds->fetchArray($result2);
+      $this->incomps[$i]["texte"] = $row2["LIBELLELONG"];
+      $i++;
+    }
+  }
+  
+  function getProcedure() {
+    $ds =& $this->_spec->ds;
+    $query = $ds->prepare("SELECT * FROM procedures WHERE CODEACTE = % GROUP BY CODEACTE ORDER BY DATEEFFET DESC", $this->code);
+    $result = $ds->exec($query);
+    if($ds->numRows($result) > 0) {
+      $row = $ds->fetchArray($result);
+      $this->procedure["code"] = $row["CODEPROCEDURE"];
+      $query2 = $ds->prepare("SELECT LIBELLELONG FROM actes WHERE CODE = % AND DATEFIN = '00000000'", $this->procedure["code"]);
+      $result2 = $ds->exec($query2);
+      $row2 = $ds->fetchArray($result2);
+      $this->procedure["texte"] = $row2["LIBELLELONG"];
+    } else {
+      $this->procedure["code"] = "aucune";
+      $this->procedure["texte"] = "";
     }
   }
   

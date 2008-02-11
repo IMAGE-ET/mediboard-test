@@ -27,7 +27,7 @@ $codesByChap = CFavoriCCAM::getOrdered($user,$class);
 foreach($codes as $key => $value) {	
   $code = new CCodeCCAM($value["code_acte"]);
   $code->loadLite();
-  $code->loadChaps();
+  $code->getChaps();
   $code->favoris_id = 0;
   $code->occ = $value["nb_acte"];
   $code->class = $value["object_class"];
