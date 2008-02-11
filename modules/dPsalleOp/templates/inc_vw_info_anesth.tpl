@@ -115,7 +115,6 @@
     </tr>
     {{/foreach}}
    
-    
     {{if $consult_anesth->_ref_consultation->_ref_exampossum->_id}}
       <tr>
         <th>Score Possum</th>
@@ -130,6 +129,13 @@
       <tr>
         <th>Clasification NYHA</th>
         <td>{{mb_value object=$consult_anesth->_ref_consultation->_ref_examnyha field="_classeNyha"}}</td>
+      </tr>   
+    {{/if}}
+    
+    {{if $consult_anesth->_ref_consultation->_ref_examigs->_id}}
+      <tr>
+        <th>Score IGS</th>
+        <td>{{mb_value object=$consult_anesth->_ref_consultation->_ref_examigs field="scoreIGS"}}</td>
       </tr>   
     {{/if}}
     
