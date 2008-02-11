@@ -160,9 +160,10 @@ $dPconfig["ft"] = array(
 
 // HPRIM export FTP settings
 $dPconfig["dPinterop"]["hprim_export"] = array (
-  "hostname" => "",
-  "username" => "",
-  "userpass" => "",
+  "validation" => 1,
+  "hostname"   => "",
+  "username"   => "",
+  "userpass"   => "",
   "fileprefix" => "",
 );
 
