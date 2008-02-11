@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.93";
+$config["mod_version"]     = "0.94";
 $config["mod_type"]        = "user";
 
 
@@ -956,8 +956,31 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `acte_ngap` 
             ADD `demi` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.93");
+    $sql = "CREATE TABLE `examigs` (
+					 `examigs_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+					 `consultation_id` INT(11) UNSIGNED NOT NULL, 
+					 `age` ENUM('0','7','12','15','16','18'), 
+					 `FC` ENUM('11','2','0','4','7'), 
+					 `TA` ENUM('13','5','0','2'), 
+					 `temperature` ENUM('0','3'), 
+					 `PAO2_FIO2` ENUM('11','9','6'), 
+					 `diurese` ENUM('12','4','0'), 
+					 `uree` ENUM('0','6','10'), 
+					 `globules_blancs` ENUM('12','0','3'), 
+					 `kaliemie` ENUM('3a','0','3b'), 
+					 `natremie` ENUM('5','0','1'), 
+					 `HCO3` ENUM('6','3','0'), 
+					 `billirubine` ENUM('0','4','9'), 
+					 `glascow` ENUM('26','13','7','5','0'), 
+					 `maladies_chroniques` ENUM('9','10','17'), 
+					 `admission` ENUM('0','6','8'), 
+					 `scoreIGS` INT(11), 
+ 					  PRIMARY KEY (`examigs_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.93";
+    $this->mod_version = "0.94";
   }
 }
 ?>

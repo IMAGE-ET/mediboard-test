@@ -87,6 +87,7 @@ class CConsultation extends CCodable {
   var $_ref_examcomp       = null;
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
+  var $_ref_examigs        = null;
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
@@ -777,6 +778,13 @@ class CConsultation extends CCodable {
     $this->_ref_exampossum->loadObject($where);
   }
   
+  function loadRefsExamIgs(){
+    $this->_ref_examigs = new CExamIgs;
+    $where = array();
+    $where["consultation_id"] = "= '$this->consultation_id'";
+    $this->_ref_examigs->loadObject($where);  
+  }
+  
   function loadRefsBack() {
     // Backward references
     $this->loadRefsFilesAndDocs();
@@ -787,6 +795,7 @@ class CConsultation extends CCodable {
     $this->loadExamsComp();
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
+    $this->loadRefsExamIgs();
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();
   }

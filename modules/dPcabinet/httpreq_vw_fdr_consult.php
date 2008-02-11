@@ -76,6 +76,7 @@ if ($selConsult) {
   $consult->loadRefsExamAudio();
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
+  $consult->loadRefsExamIgs();
   
   // Patient
   $patient =& $consult->_ref_patient;

@@ -26,7 +26,8 @@ if ($consultation_id) {
   $consult->loadExamsComp();
   $consult->loadRefsExamNyha();
   $consult->loadRefsExamPossum();
-
+  $consult->loadRefsExamIgs();
+  
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
   }

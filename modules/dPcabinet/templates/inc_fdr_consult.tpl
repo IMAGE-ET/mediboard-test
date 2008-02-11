@@ -247,6 +247,7 @@ function submitFdr(oForm) {
         {{if $_is_anesth}}
           <option value="exam_possum">Score Possum</option>
           <option value="exam_nyha">Classification NYHA</option>
+          <option value="exam_igs">Score IGS</option>
         {{else}}
           <option value="exam_audio">Audiogramme</option>          
         {{/if}}
@@ -255,7 +256,7 @@ function submitFdr(oForm) {
       </form>
 
       <ul>
-        {{if !$consult->_ref_examaudio->_id && !$consult->_ref_examnyha->_id && !$consult->_ref_exampossum->_id}}
+        {{if !$consult->_ref_examaudio->_id && !$consult->_ref_examnyha->_id && !$consult->_ref_exampossum->_id && !$consult->_ref_examigs}}
         <li>
           Aucun examen
         </li>
@@ -286,6 +287,13 @@ function submitFdr(oForm) {
         <li>
           <a href="#nothing" onclick="loadExam('exam_nyha');">
             {{$consult->_ref_examnyha->_view}}
+          </a>
+        </li>
+        {{/if}}
+        {{if $consult->_ref_examigs->_id}}
+        <li>
+          <a href="#nothing" onclick="loadExam('exam_igs');">
+            {{$consult->_ref_examigs->_view}}
           </a>
         </li>
         {{/if}}

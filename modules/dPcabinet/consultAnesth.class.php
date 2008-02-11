@@ -234,6 +234,7 @@ class CConsultAnesth extends CMbObject {
    $this->_ref_consultation->loadExamsComp();
    $this->_ref_consultation->loadRefsExamNyha();
    $this->_ref_consultation->loadRefsExamPossum();
+   $this->_ref_consultation->loadRefsExamIgs();
    $this->loadRefOperation();
    $this->_ref_operation->loadRefSejour();
    $this->_ref_operation->_ref_sejour->loadRefDossierMedical();
