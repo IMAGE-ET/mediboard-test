@@ -68,13 +68,8 @@ class CFTP {
     
     // Upload the file
     //$upload = ftp_put($conn_id, $destination_file, $source_file, $mode);
-    $upload = ftp_nb_put($conn_id, $destination_file, $source_file, $mode);
-    
-    while ($upload == FTP_MOREDATA) {
-      // Faites ce que vous voulez...
-      $upload = ftp_nb_continue($my_connection);
-    }
-    if ($upload != FTP_FINISHED) {
+    $upload = ftp_put($conn_id, $destination_file, $source_file, $mode);
+    if (!$upload) {
       $this->logError("Impossible de copier le fichier source $source_base en fichier cible $destination_file");
       return false;
     } 
