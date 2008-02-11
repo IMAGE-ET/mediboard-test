@@ -13,7 +13,7 @@
   <button type="button" class="tick notext" onclick="{{$submit}}(this.form);">{{tr}}Save{{/tr}}</button>
   <button type="button" class="cancel notext" onclick="this.form.{{$field}}.value = ''; {{$submit}}(this.form);">{{tr}}Cancel{{/tr}}</button>
   {{elseif $modif_operation}}
-  <select name="{{$field}}" onchange="{{$submit}}(this.form));">
+  <select name="{{$field}}" onchange="{{$submit}}(this.form);">
     <option value="">-</option>
     {{foreach from=$timing.$field item=curr_time}}
     <option value="{{$curr_time}}" {{if $curr_time == $object->$field}}selected="selected"{{/if}}>
