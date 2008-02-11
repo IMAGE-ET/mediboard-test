@@ -103,7 +103,7 @@ PairEffect.initGroup("acteEffect");
   <table class="form">
     
     <tr id="acte{{$key}}-trigger">
-      <td colspan="3" style="width: 100%; background-color: #{{$bg_color}}">
+      <td colspan="4" style="width: 100%; background-color: #{{$bg_color}}">
         Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
         Phase {{$curr_phase->phase}} 
         <!-- {{$curr_phase->libelle}} -->
@@ -116,13 +116,14 @@ PairEffect.initGroup("acteEffect");
     <tr class="{{$key}}">
       <td style="width: 1%;" />
       <td style="width: 1%;" />
+      <td style="width: 1%;" />
       <td style="width: 100%;" />
     </tr>
     
     <!-- Execution -->
     <tr {{if !$can->admin}}style="display: none;"{{/if}}>
       <th>{{mb_label object=$acte field=execution}}</th>
-      <td class="date" colspan="2">
+      <td class="date" colspan="3">
 	      {{mb_field object=$acte field=execution form="formActe-$view"}}
         <button type="button" class="tick" onclick="setToNow(this.form.execution);">
           Maintenant
@@ -133,7 +134,7 @@ PairEffect.initGroup("acteEffect");
     <!-- Exécutant -->
     <tr class="{{$key}}">
       <th>{{mb_label object=$acte field=executant_id}}</th>
-      <td colspan="2">
+      <td colspan="3">
       
         {{mb_ternary var=listExecutants test=$acte->_anesth value=$listAnesths other=$listChirs}}
         {{if $can->edit || $modif_operation}}
@@ -145,8 +146,9 @@ PairEffect.initGroup("acteEffect");
           </option>
           {{/foreach}}
         </select>
+        
         {{elseif $acte->executant_id}}
-          {{$acte->_ref_exucutant->_view}}
+          {{$acte->_ref_executant->_view}}
         {{else}}-{{/if}}
       </td>
     </tr>
@@ -155,7 +157,7 @@ PairEffect.initGroup("acteEffect");
 		{{assign var=modifs_compacts value=$dPconfig.dPsalleOp.CActeCCAM.modifs_compacts}}  
     <tr class="{{$view}}">
       <th>{{mb_label object=$acte field=modificateurs}}</th>
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         {{foreach from=$curr_phase->_modificateurs item=curr_mod name=modificateurs}}
           {{if $can->edit || $modif_operation}}
           <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
@@ -176,7 +178,10 @@ PairEffect.initGroup("acteEffect");
     
     <!-- Remboursable -->
     <tr class="{{$view}}">
-      <th>{{mb_label object=$acte field=rembourse}}</th>
+      <th>
+        {{mb_label object=$acte field=rembourse}}<br />
+        <small><em>({{tr}}CCodeCCAM.remboursement.{{$curr_code->remboursement}}{{/tr}})</em></small>
+      </th>
       <td>
         {{assign var=disabled value=""}}
         {{if $curr_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
@@ -192,30 +197,27 @@ PairEffect.initGroup("acteEffect");
           {{mb_value object=$acte field=rembourse}}
         {{/if}}
       </td>
-      <td>  
-        <em>({{tr}}CCodeCCAM.remboursement.{{$curr_code->remboursement}}{{/tr}})</em>
-      </td>
-    </tr>
 
-    <!-- Montant dépassement -->
-    {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-    <tr class="{{$view}}">
+      {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
       <th>{{mb_label object=$acte field=montant_depassement}}</th>
-      <td class="text" colspan="2">
+      <td>
         {{if $can->edit || $modif_operation}}
           {{mb_field object=$acte field=montant_depassement}}
         {{else}}
           {{mb_value object=$acte field=montant_depassement}}
         {{/if}}
       </td>
+      {{/if}}
+
     </tr>
-    {{/if}}
+
+    <!-- Montant dépassement -->
 		
 		<!-- Commentaire -->
     {{if $dPconfig.dPsalleOp.CActeCCAM.commentaire}}
     <tr class="{{$view}}">
       <th>{{mb_label object=$acte field=commentaire}}</th>
-      <td class="text" colspan="2">
+      <td class="text" colspan="3">
         {{if $can->edit || $modif_operation}}
           {{mb_field object=$acte field=commentaire}}
         {{else}}
@@ -228,7 +230,7 @@ PairEffect.initGroup("acteEffect");
     <!-- Buttons -->
     {{if $newButtons && $acte->_id}}
     <tr>
-      <td class="button" colspan="3">
+      <td class="button" colspan="4">
         <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
         		onComplete: function() {
         	    ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})
@@ -248,7 +250,7 @@ PairEffect.initGroup("acteEffect");
         {{if $acte->_id}}
         
         <select name="{{$view}}"
-        onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
+          onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
           <option value="" {{if !$acte->code_association}}selected="selected"{{/if}}>Aucun (100%)</option>
           <option value="1" {{if $acte->code_association == 1}}selected="selected"{{/if}}>1 (100%)</option>
           <option value="2" {{if $acte->code_association == 2}}selected="selected"{{/if}}>2 (50%)</option>
@@ -277,7 +279,6 @@ PairEffect.initGroup("acteEffect");
           </strong>
         </span>
         {{/if}}
-        
         
         {{if $acte->montant_depassement && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
         &mdash; dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €

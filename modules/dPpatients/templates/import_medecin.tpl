@@ -1,42 +1,53 @@
-{{if $end_of_process}}
-<script language="JavaScript" type="text/javascript">
-function pageMain() {
-  window.opener.endProcess();
-  window.close();
-}
-</script>
-{{else}}
+{{if $verbose}}
+<table class="form">
+  <tr>
+    <th class="category" colspan="2">Bilan</th>
+  </tr>
 
-<script language="JavaScript" type="text/javascript">
-function pageMainOld() {
-  window.opener.endStep(
-    {{$from}},
-    {{$to}}, 
-    {{$medecins|@count}}, 
-    {{$chrono->total|string_format:"%.3f"}}, 
-    {{$parse_errors}},
-    {{$sibling_errors}},
-    {{$stores}}
+  <tr>
+    <th>Etape #</th>
+	 	<td>{{$step}}</td>
+  </tr>
+	<tr>
+    <th>Médecins</th>
+	 	<td>{{$medecins|@count}}</td>
+  </tr>
+	<tr>
+    <th>Temps pris</th>
+	 	<td>{{$chrono->total}}</td>
+  </tr>
+	<tr>
+    <th>Mise à jours</th>
+	 	<td>{{$updates}}</td>
+  </tr>
+	<tr>
+    <th>Erreurs</th>
+	 	<td>{{$errors}}</td>
+  </tr>
+</table>
+{{/if}}
+
+{{if !$verbose}}
+<script type="text/javascript">
+  Process.updateTotal(
+    {{$medecins|@count}},
+    {{$chrono->total}},
+    {{$updates}},
+    {{$errors}}
   );
-  window.close();
-}
-
+{{if count($medecins)}}
+  Process.doStep();
+{{else}}
+	Process.stop();
+{{/if}}
 </script>
+{{/if}}
 
+{{if $verbose}}
 <table class="tbl">
-  <tr>
-   	<th class="title" colspan="12">Résultat de l'étape #{{$step}}</th>
-  </tr>
-
-  <tr>
-   	<th colspan="12">{{$medecins|@count}} médecins trouvés</th>
-  </tr>
-
-  {{if $long_display}}
   <tr>
   	<th>Nom</th>
     <th>Prénom</th>
-    <th>Doublons ?</th>
     <th>Nom de jeune fille</th>
   	<th>Adresse</th>
   	<th>Ville</th>
@@ -49,25 +60,21 @@ function pageMainOld() {
     <th>Orientations</th>
   </tr>
   
-  {{foreach from=$medecins item=curr_medecin}}
+  {{foreach from=$medecins item=_medecin}}
   <tr>
-  	<td {{if $curr_medecin->_has_siblings}}style="background: #eef"{{/if}}>{{$curr_medecin->nom}}</td>
-    <td>{{$curr_medecin->prenom}}</td>
-    <td>{{$curr_medecin->_has_siblings}}</td>
-    <td>{{$curr_medecin->jeunefille}}</td>
-  	<td>{{$curr_medecin->adresse|nl2br}}</td>
-  	<td>{{$curr_medecin->ville}}</td>
-  	<td>{{$curr_medecin->cp}}</td>
-  	<td>{{$curr_medecin->tel}}</td>
-  	<td>{{$curr_medecin->fax}}</td>
-  	<td>{{$curr_medecin->email}}</td>
-    <td>{{$curr_medecin->disciplines|nl2br}}</td>
-    <td>{{$curr_medecin->complementaires|nl2br}}</td>
-    <td>{{$curr_medecin->orientations|nl2br}}</td>
+  	<td {{if $_medecin->_has_siblings}}style="background: #eef"{{/if}}>{{$_medecin->nom}}</td>
+    <td>{{$_medecin->prenom}}</td>
+    <td>{{$_medecin->jeunefille}}</td>
+  	<td>{{$_medecin->adresse|nl2br}}</td>
+  	<td>{{$_medecin->ville}}</td>
+  	<td>{{$_medecin->cp}}</td>
+  	<td>{{$_medecin->tel}}</td>
+  	<td>{{$_medecin->fax}}</td>
+  	<td>{{$_medecin->email}}</td>
+    <td>{{$_medecin->disciplines|nl2br}}</td>
+    <td>{{$_medecin->complementaires|nl2br}}</td>
+    <td>{{$_medecin->orientations|nl2br}}</td>
   </tr>
   {{/foreach}}
-{{/if}}
-
 </table>
-
 {{/if}}

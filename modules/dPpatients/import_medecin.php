@@ -9,7 +9,7 @@
 
 global $AppUI, $m;
 
-//set_time_limit(300);
+set_time_limit(100);
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
@@ -31,77 +31,40 @@ class CMbXPath extends DOMXPath {
     return $nodeList->item(0);
   } 
   
-  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "") {
-    $text = null;
-    $node = $this->queryUniqueNode($query, $contextNode);
-    if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $text = $node->textContent;
-      $text = str_replace(CMbArray::fromString($purgeChars), "", $text);
-      $text = trim($text);
+  function queryNumcharNode($query, DOMNode $contextNode, $length) {
+    if (null == $text = $this->queryTextNode($query, $contextNode, " /-.")) {
+      return;
     }
     
+    $text = substr($text, 0, $length);
+    $text = str_pad($text, $length, "0", STR_PAD_LEFT);
+    $text = strtr($text, "O", "0"); // Usual trick
+    return $text;
+  }
+  
+  function queryTextNode($query, DOMNode $contextNode, $purgeChars = "") {
+    $text = null;
+    if ($node = $this->queryUniqueNode($query, $contextNode)) {
+      $text = utf8_decode($node->textContent);
+      $text = str_replace(CMbArray::fromString($purgeChars), "", $text);
+      $text = trim($text);
+      $text = addslashes($text);
+    }
+
     return $text;
   } 
 
-  function queryMultilineTextNode($query, DOMNode $contextNode, $purgeChars = "") {
+  function queryMultilineTextNode($query, DOMNode $contextNode, $prefix = "") {
     $text = null;
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
-      $textLines = explode("\n", utf8_decode($node->textContent));
-      if (count($textLines) > 1) {
+      $text = utf8_decode($node->textContent);
+      if ($prefix) {
+				$text = str_replace($prefix, "", $text);
       }
-      foreach ($textLines as &$textLine) {
-        $textLine = str_replace(CMbArray::fromString($purgeChars), "", $textLine);
-        $textLine = trim($textLine);
-      }
-      
-      $text = implode($textLines, "\n");
     } 
     
     return $text;
   }
-}
-
-// Make data XML compliant
-function purgeHTML($str) {
-  // Remove some HTML Entities (compatibility with XML Tree)
-  $str = str_replace(
-    array('&eacute;', '&nbsp;', '&ecirc;'),
-    array('é', ' ', 'ê'),
-    $str);
-    
-  // Remove doctype 
-  $str = preg_replace("/<!DOCTYPE[^>]*>/i", "", $str);
-  
-  // Turn non-entity & to &amp;
-  $str = preg_replace("/&(\w*)(?![;\w])/i", "&amp;$1", $str);
-  
-  // Enquote all attributes
-  $str = preg_replace("/ ([^=]+)=([^ |^>|^'|^\"]+)/i", " $1='$2'", $str);
-  
-  // Self-close HTML empty elements
-  $str = preg_replace("/<(img|area|input|br|link|meta)([^>]*)>/i", "<$1$2 />", $str);
-  
-  // Remove extra-closures
-  $str = preg_replace("/<\/tr>([^<>]*)<\/tr>/i", "</tr>$1", $str);
-  
-  // Remove all attributes
-  $str = preg_replace("/ [\w-]*='[^']*'/i", "", $str);
-  $str = preg_replace("/ [\w-]*=\"[^\"]*\"/i", "", $str);
-
-  // Turn <br /> into \n. Mendatory for nodeValue properties
-  $str = str_replace("<br />", "\n", $str);
-  
-  
-  
-  return $str;
-}
-
-$parse_errors = 0;
-
-function logParseError($str) {
-  global $parse_errors;
-  $parse_errors++;
-  trigger_error($str, E_USER_WARNING);
 }
 
 // Chrono start
@@ -110,16 +73,19 @@ $chrono->start();
 
 $path = $AppUI->getTmpPath("medecin.htm");
 $segment = 1000;
-$step = @$_GET["step"];
-$from = $step ? 100 + $segment * ($step -1) : 0;
-$to = $step ? 100 + $step * $segment : 100;
+$step = mbGetValueFromGet("step", 1);
+$from = $step > 1 ? 100 + $segment * ($step-2) : 0;
+$to = $step > 1 ? 100 + ($step-1) * $segment : 100;
 
-if (mbGetValueFromGet("curl", 1)) {
-  
+$padded = str_pad($step, "3", "0", STR_PAD_LEFT);
+$path = "tmp/ordre/medecin$padded.htm";
+CMbPath::forceDir(dirname($path));
+
+if (mbGetValueFromGet("curl", "0")) {
   // Emulates an HTTP request
   $cookiepath = $AppUI->getTmpPath("cookie.txt");
   $baseurl = "http://www.conseil-national.medecin.fr/";
-  $fileurl = $step ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
+  $fileurl = $step > 1 ? "index.php?url=annuaire/result.php&from=$from&to=$to" : "annuaire.php?cp=";
   $url = $baseurl . $fileurl;
   
   $ch = curl_init();
@@ -132,7 +98,6 @@ if (mbGetValueFromGet("curl", 1)) {
   $result = curl_exec ($ch);
   curl_close($ch);
   
-  $path = $AppUI->getTmpPath("medecin.htm");
   file_put_contents($path, $result);
   
   // -- Step: Get data from html file
@@ -149,34 +114,39 @@ if (mbGetValueFromGet("curl", 1)) {
   $str = file_get_contents($path);
 }
  
-$str = purgeHTML($str); 
+// Purge HTML
+if (null == $html = file_get_contents($path)) {
+  $AppUI->stepAjax("Fichier '$path' non disponible", UI_MSG_ERROR);
+}
 
-// Step: Save data on another file
-$purged = $AppUI->getTmpPath("medecin_purged.htm");
-$bytes = file_put_contents($purged, $str);
+// Small adjustments for line delimitation:  <br/> to \n
+$html = str_replace("<br>", "\n", $html);
 
-// Step: Parse XML Tree
-$doc = new DOMDocument();
-$doc->loadHTML($str);
+// Prepare the document
+$doc = @DOMDocument::loadHTML($html);
+file_put_contents("$path.xml", $doc->saveXML());
+
+$xpath = new CMbXPath($doc);
 
 $query = "/html/body/table/tr[3]/td/table/tr/td[2]/table/tr[7]/td/table/*";
-$xpath = new CMbXPath($doc);
+$medecins = array();
 foreach ($xpath->query($query) as $key => $nodeMainTr) {
   if ($nodeMainTr->nodeName != "tr") {
     logParseError("Not a main <tr>");
     continue;
   }
-    
+  
   $ndx = intval($key / 3);
   $mod = intval($key % 3);
-    
-  if (!isset($medecins[$ndx])) {
+  
+  // Création du médecin
+  if (!array_key_exists($ndx, $medecins)) {
     $medecins[$ndx] = new CMedecin;
   }
-  
-  $xpath2 = new CMbXPath($doc);
  
   $medecin =& $medecins[$ndx];
+  
+  $xpath2 = new CMbXPath($doc);
   switch ($mod) {
     case 0:
     // Nom du médecin
@@ -196,15 +166,15 @@ foreach ($xpath->query($query) as $key => $nodeMainTr) {
     case 1:
     // Disciplines qualifiantes
     $query = "td[1]/table/tr[2]/td";
-    $medecin->disciplines = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "-");
+    $medecin->disciplines = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
 
     // Mentions et orientations
     $query = "td[1]/table/tr[4]/td";
-    $medecin->orientations = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "-");
+    $medecin->orientations = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
 
     // Disciplines complémentaires
     $query = "td[2]/table/tr[2]/td";
-    $medecin->complementaires = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "-");
+    $medecin->complementaires = $xpath2->queryMultilineTextNode($query, $nodeMainTr, "- ");
     
     break;
     
@@ -217,36 +187,42 @@ foreach ($xpath->query($query) as $key => $nodeMainTr) {
     // Ville
     $query = "td[1]/table/tr[3]/td";
     $ville = $xpath2->queryMultilineTextNode($query, $nodeMainTr);
-    $medecin->ville = substr($ville, 6);
-    $medecin->cp    = substr($ville, 0, 5);
+    $medecin->ville = trim(substr($ville, 6));
+    $medecin->cp    = trim(substr($ville, 0, 5));
+    
+    // Hack,: le trop de fonctionne pas sur certains cp de la forme 'NN '.
+    if (strlen($medecin->cp) < 5 ) {
+      $medecin->cp = substr($medecin->cp, 0, -1);
+    }
 
     // Contact
     $query = "td[2]/table/tr[1]/td[3]";
-    $medecin->tel = $xpath2->queryTextNode($query, $nodeMainTr, " /-.");
+    $medecin->tel = $xpath2->queryNumcharNode($query, $nodeMainTr, 10);
 
     $query = "td[2]/table/tr[2]/td[3]";
-    $medecin->fax = $xpath2->queryTextNode($query, $nodeMainTr, " /-.");
+    $medecin->fax = $xpath2->queryNumcharNode($query, $nodeMainTr, 10);
 
     $query = "td[2]/table/tr[3]/td[3]";
     $medecin->email = $xpath2->queryTextNode($query, $nodeMainTr);
 
     break;
-  }
+  } 
 }
 
-$stores = 0;
-$sibling_errors = 0;
+$errors = 0;
+$updates = 0;
 
 foreach ($medecins as &$medecin) {
-  $medecin->_has_siblings = count($medecin->getExactSiblings());
-  if ($medecin->_has_siblings) {
-    $sibling_errors++;
-    continue;
+  $siblings = $medecin->loadExactSiblings();
+  if ($medecin->_has_siblings = count($siblings)) {
+    $sibling = reset($siblings);
+    $medecin->_id = $sibling->_id;
+    $updates++;
   } 
   
-  if (null != $msg = $medecin->store()) {
-    $stores++;
-    mbTrace($msg);
+  if ($msg = $medecin->check()) {
+    trigger_error("Error storing $medecin->nom $medecin->prenom ($medecin->cp) : $msg", E_USER_WARNING);
+    $errors++;
   }
   
   $medecin->updateFormFields();  
@@ -254,11 +230,12 @@ foreach ($medecins as &$medecin) {
 
 $chrono->stop();
 
+$AppUI->stepAjax("Etape $step \n$errors erreurs d'enregistrements", $errors ? UI_MSG_OK : UI_MSG_ALERT);
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->debugging = false;
-$smarty->assign("long_display", false);
+$smarty->assign("verbose", mbGetValueFromGet("verbose"));
 
 $smarty->assign("end_of_process", false);
 $smarty->assign("step"          , $step);
@@ -266,9 +243,8 @@ $smarty->assign("from"          , $from);
 $smarty->assign("to"            , $to);
 $smarty->assign("medecins"      , $medecins);
 $smarty->assign("chrono"        , $chrono);
-$smarty->assign("parse_errors"  , $parse_errors);
-$smarty->assign("stores"        , $stores);
-$smarty->assign("sibling_errors", $sibling_errors);
+$smarty->assign("updates"       , $updates);
+$smarty->assign("errors"        , $errors);
 
 $smarty->display("import_medecin.tpl");
 ?>

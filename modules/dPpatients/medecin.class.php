@@ -103,16 +103,14 @@ class CMedecin extends CMbObject {
     $this->_ref_patients = $obj->loadList("medecin_traitant = '$this->medecin_id'");
   }
   
-  function getExactSiblings() {
-  	$where = array();
-  	$where["medecin_id"] = $this->_spec->ds->prepare("!= %", $this->medecin_id);
-  	$where["nom"]        = $this->_spec->ds->prepare("= %", $this->nom);
-  	$where["prenom"]     = $this->_spec->ds->prepare("= %", $this->prenom);
-    $where["cp"] = $this->cp == null ? "IS NULL" : $this->_spec->ds->prepare("= %", $this->cp);
-      
-  	$siblings = new CMedecin;
-  	$siblings = $siblings->loadList($where);
-  	return $siblings;
+  function loadExactSiblings() {
+    $medecin = new CMedecin();
+    $medecin->nom    = $this->nom;
+    $medecin->prenom = $this->prenom;
+    $medecin->cp     = $this->cp;
+    $siblings = $medecin->loadMatchingList();
+    unset($siblings[$this->_id]);
+    return $siblings;
   }
 }
 ?>

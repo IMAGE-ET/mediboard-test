@@ -84,7 +84,6 @@ Class.extend(Url, {
       iLeft += (iWidth + 8) * this.oPrefixed[sPrefix].length;
     }
     
-  
     var aFeatures = new Array;
     aFeatures.push("left=" + iLeft);
     aFeatures.push("top=50");

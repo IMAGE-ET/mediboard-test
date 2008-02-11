@@ -15,7 +15,7 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 
 // Chargement des séjours concernés
 $where = array();
-$where["type"] = "NOT IN ('exte', 'urg')";
+$where["type"] = "NOT IN ('exte')";
 $where["sortie_reelle"] = "LIKE '$date%'";
 $order = "entree_reelle, sortie_reelle";
 $sejour = new CSejour();
@@ -74,10 +74,6 @@ global $entCCAM; $entCCAM = array();
 // Associations entre codable Mediboard et les entêtes CCAM Sherpa
 function exportEntCCAM(CCodable &$codable) {
   global $entCCAM;
-  
-  if (!count($codable->_ref_actes)) {
-    return;
-  }
   
   $spEntCCAM = new CSpEntCCAM();
   $spEntCCAM->makeId($codable);

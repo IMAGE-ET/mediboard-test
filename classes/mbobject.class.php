@@ -380,7 +380,7 @@ class CMbObject {
 
     $this->updateDBFields();
     foreach($this->getProps() as $key => $value) {
-      if ($value !== null) {
+      if ($value !== null) {        
         $request->addWhereClause($key, "= '$value'");
       }
     }
