@@ -176,7 +176,7 @@ PairEffect.initGroup("acteEffect");
       </td>
     </tr>
     
-    <!-- Remboursable -->
+    <!-- Remboursable + Dépassement -->
     <tr class="{{$view}}">
       <th>
         {{mb_label object=$acte field=rembourse}}<br />
@@ -210,8 +210,6 @@ PairEffect.initGroup("acteEffect");
       {{/if}}
 
     </tr>
-
-    <!-- Montant dépassement -->
 		
 		<!-- Commentaire -->
     {{if $dPconfig.dPsalleOp.CActeCCAM.commentaire}}
@@ -246,7 +244,7 @@ PairEffect.initGroup("acteEffect");
     
     <!-- Code d'association -->
     <tr>
-      <td colspan="3" class="text">
+      <td colspan="10" class="text">
         {{if $acte->_id}}
         
         <select name="{{$view}}"

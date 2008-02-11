@@ -405,11 +405,14 @@ class COperation extends CCodable {
   }
   
   function loadRefsConsultAnesth() {
-    $this->_ref_consult_anesth = new CConsultAnesth();
-    $where = array();
-    $where["operation_id"] = "= '$this->operation_id'";
+    if ($this->_ref_consult_anesth) {
+      return;
+    }
+    
     $order = "consultation_anesth_id ASC";
-    $this->_ref_consult_anesth->loadObject($where, $order);
+    $this->_ref_consult_anesth = new CConsultAnesth();
+    $this->_ref_consult_anesth->operation_id = $this->_id;
+    $this->_ref_consult_anesth->loadMatchingObject($order);
   }
   
   function loadRefSejour() {

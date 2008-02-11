@@ -74,7 +74,7 @@ Main.add(function() {
 	    &mdash; Dr. {{$_operation->_ref_chir->_view}}
     </th>
     <td>
-			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
+			{{include file="inc_export_entccam.tpl" _codable=$_operation}}
 		</td>    
   </tr>
 

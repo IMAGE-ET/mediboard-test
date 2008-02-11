@@ -50,7 +50,7 @@ class CSpObject extends CMbObject {
     // Declare unquotable columns
     if ($ds =& $this->_spec->ds) {
       $ds->unquotable = array(
-        "es_entccam" => array("idinterv"),
+        "es_entccam" => array("idinterv", "valigs"),
         "es_detccam" => array("idinterv", "idacte", "dephon", "codsig"),
         "es_detcim" => array("idinterv", "iddiag"),
       );

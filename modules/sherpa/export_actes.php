@@ -79,7 +79,7 @@ function exportEntCCAM(CCodable &$codable) {
   $spEntCCAM->makeId($codable);
   $spEntCCAM->mapFrom($codable);
   $spEntCCAM->getCurrentDataSource();
-  $entCCAM[$codable->_id] = $spEntCCAM->store();
+  $entCCAM[$codable->_class_name][$codable->_id] = $spEntCCAM->store();
   
   foreach ($codable->_ref_actes_ccam as &$acte_ccam) {
     exportDetCCAM($acte_ccam, $spEntCCAM->_id);

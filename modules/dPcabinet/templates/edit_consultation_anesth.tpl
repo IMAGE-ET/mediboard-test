@@ -11,9 +11,6 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   } );
 }
 
-
-
-
 var tabSejour = {{$tabSejour|@json}};
 
 function verifNonEmpty(oElement){

@@ -44,10 +44,11 @@ class CSpEntCCAM extends CSpObject {
 
     for ($i = 1; $i <= 3; $i++) {
 	    $specs["aidop$i"] = "str length|3";    /* Code aide opératoire        */
-	    $specs["dhaid$i"] = "str length|19";   /* Début aide opératoire        */
+	    $specs["dhaid$i"] = "str length|19";   /* Début aide opératoire       */
 	    $specs["fhaid$i"] = "str length|19";   /* Aide aide opératoire        */
     }
 
+    $specs["valigs"] = "num"             ; /* Score IGS                    */
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */
     
 		return $specs;
@@ -215,7 +216,22 @@ class CSpEntCCAM extends CSpObject {
         $this->$fhaidField = mbDateToLocale($affectationPersonnel->fin);
       }
     }
-
+        
+    // IGS
+    $this->valigs = 0;
+    switch ($mbObject->_class_name) {
+      case "COperation":
+      $operation =& $mbObject;
+      $operation->loadRefsConsultAnesth();
+      $consult_anesth =& $operation->_ref_consult_anesth;
+      $consult_anesth->loadRefConsultation();
+      $consult =& $consult_anesth->_ref_consultation;
+      $consult->loadRefsExamIgs();
+      $examigs =& $consult->_ref_examigs;
+      $this->valigs = $examigs->scoreIGS;
+      break;
+    }
+        
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

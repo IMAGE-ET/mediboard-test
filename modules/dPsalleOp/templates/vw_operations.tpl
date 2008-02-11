@@ -75,7 +75,8 @@ function pageMain() {
   {{if $selOp->_id}}
   // Initialisation des onglets
   new Control.Tabs('main_tab_group');
-  
+  // Effet sur le programme
+  new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
   // Affichage de la liste des documents de l'operation
   reloadAfterSaveDoc();
 
@@ -126,6 +127,9 @@ function reloadAfterSaveDoc() {
         {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
         <tr>
           <th class="title" colspan="2">
+			      <button class="hslip" id="listplages-trigger" type="button" style="float:left">
+			        {{tr}}Programme{{/tr}}
+			      </button>
 					  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
 					    <img src="images/icons/edit.png" alt="modifier" />
 					  </a>

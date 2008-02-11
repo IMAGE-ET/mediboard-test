@@ -109,6 +109,11 @@
   </tr>  
   
   <tr>
+		<th>{{mb_label object=$entccam field="valigs"}}</th>
+		<td>{{mb_value object=$entccam field="valigs"}}</td>
+  </tr>  
+
+  <tr>
 		<th>{{mb_label object=$entccam field="datmaj"}}</th>
 		<td>{{mb_value object=$entccam field="datmaj"}}</td>
   </tr>  
