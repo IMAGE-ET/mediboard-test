@@ -202,8 +202,7 @@ class CCodeCCAM {
     while($obj = $ds->fetchObject($result)) {
       // Test si l'activité 1 est virtuelle
       $virtuelle = true;
-      $virtuelle &= $this->chapitres[0] == "18";
-      $virtuelle &= $this->chapitres[1] == "01";
+      $virtuelle &= $this->chapitres[1]["rang"] == "18.01.";
       $virtuelle &= $obj->numero == 1;
       if(!$virtuelle) {
         $obj->libelle = "";
