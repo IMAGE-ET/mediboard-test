@@ -99,8 +99,6 @@ function startINSEE() {
 
 </table>
 
-{{$pass}}
-
 <script type="text/javascript">
 
 var Process = {

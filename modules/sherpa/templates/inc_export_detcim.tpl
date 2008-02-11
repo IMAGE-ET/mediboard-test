@@ -1,10 +1,9 @@
-{{if $_codable->_ref_actes_ccam|@count}}
 {{assign var=codable_id value=$_codable->_id}}
 {{assign var=codable_class value=$_codable->_class_name}}
 {{assign var=_sejour value=$_codable->_ref_sejour}}
 <tr>
   <th>Diagnostics</th>
-  <td colspan="8">
+  <td colspan="10">
     Diagnostic Principal : {{$_sejour->DP}}<br />
     {{if $_sejour->DR}}
     Diagnostic Relié : {{$_sejour->DR}}<br />
@@ -27,4 +26,3 @@
 		{{/foreach}}
   </td>
 </tr>
-{{/if}}

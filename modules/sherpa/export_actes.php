@@ -81,8 +81,6 @@ function exportEntCCAM(CCodable &$codable) {
   $spEntCCAM->getCurrentDataSource();
   $entCCAM[$codable->_id] = $spEntCCAM->store();
   
-  exportDetsCIM($codable, $spEntCCAM->_id);
-  
   foreach ($codable->_ref_actes_ccam as &$acte_ccam) {
     exportDetCCAM($acte_ccam, $spEntCCAM->_id);
   }
@@ -115,6 +113,7 @@ foreach ($sejours as &$sejour) {
   // Actes du séjour
   $sejour->loadRefsActes();
   exportEntCCAM($sejour);
+  exportDetsCIM($sejour, "0");
   
   // Opérations
   $sejour->loadRefsOperations();

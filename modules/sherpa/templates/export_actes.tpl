@@ -9,7 +9,7 @@ Main.add(function() {
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="10">
+    <th class="title" colspan="12">
       Envoi d'actes pour les séjours sortis le : 
       {{$date|date_format:"%A %d %B %Y"}}
 			<img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
@@ -34,7 +34,7 @@ Main.add(function() {
 
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
   <tr>
-    <th class="title" colspan="9">
+    <th class="title" colspan="11">
     {{$_sejour->_view}}
     <strong>[{{$_sejour->_num_dossier}}]</strong>
 	    &mdash; Dr. {{$_sejour->_ref_praticien->_view}}
@@ -60,13 +60,13 @@ Main.add(function() {
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
   <tr>
-    <td colspan="10"><em>Pas d'acte d'hospitalisation</em></td>
+    <td colspan="12"><em>Pas d'acte d'hospitalisation</em></td>
   </tr>
   {{/foreach}}
 
   {{foreach from=$_sejour->_ref_operations item=_operation}}
   <tr>
-    <th colspan="9">
+    <th colspan="11">
 	    Opération du {{$_operation->_datetime}} 
 	    {{if $_operation->libelle}}
 	    <em>[{{$_operation->libelle}}]</em>
@@ -78,7 +78,6 @@ Main.add(function() {
 		</td>    
   </tr>
 
-  {{include file="inc_export_detcim.tpl" _codable=$_operation}}
   {{foreach from=$_operation->_ref_actes_ccam item=_acte_ccam}}
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
