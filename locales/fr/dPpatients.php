@@ -399,7 +399,6 @@ $locales['CPaysInsee.modify'] = '';
 $locales['CPaysInsee.more'] = '';
 $locales['CPaysInsee.none'] = '';
 $locales['CPaysInsee.one'] = '';
-$locales['CSejour-mode_sortie'] = 'Mode de sortie';
 $locales['CSejour-_ext_codes_ccam'] = 'Actes prévus';
 $locales['CSejour-_ref_actes_ccam'] = 'Actes codés';
 $locales['CTraitement'] = 'Traitement';
