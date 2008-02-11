@@ -9,11 +9,20 @@
 
 global $AppUI, $m;
 
-set_time_limit(100);
+set_time_limit(150);
 
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
   return;
+}
+
+if (null == $pass = mbGetValueFromGet("pass")) {
+  $AppUI->stepAjax("Fonctionnalité désactivée car trop instable.", UI_MSG_WARNING);
+  return;
+}
+
+if (md5($pass) != "aa450aff6d0f4974711ff4c5536ed4cb") {
+  $AppUI->stepAjax("Mot de passe incorrect.\nAttention, fonctionnalité à utiliser avec une extrême prudence", UI_MSG_ERROR);
 }
 
 class CMbXPath extends DOMXPath {
@@ -72,7 +81,7 @@ $chrono = new Chronometer;
 $chrono->start();
 
 $path = $AppUI->getTmpPath("medecin.htm");
-$segment = 1000;
+$segment = 2000;
 $step = mbGetValueFromGet("step", 1);
 $from = $step > 1 ? 100 + $segment * ($step-2) : 0;
 $to = $step > 1 ? 100 + ($step-1) * $segment : 100;

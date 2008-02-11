@@ -7,13 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("pass", mbGetValueFromGet("pass"));
 $smarty->display("configure.tpl");
 
 ?>

@@ -99,12 +99,15 @@ function startINSEE() {
 
 </table>
 
+{{$pass}}
+
 <script type="text/javascript">
 
 var Process = {
   running: false,
   curl: 0,
 	step: 0,
+	pass: {{$pass|json}},
 
 	setRunning: function(value) {
 	  this.running = value;
@@ -138,6 +141,7 @@ var Process = {
 	  url.setModuleAction("dPpatients", "import_medecin");
 	  url.addParam("step", ++this.step);
 	  url.addParam("curl", this.curl);
+	  url.addParam("pass", this.pass);
 	  url.requestUpdate("process");
 	},
 	
@@ -165,8 +169,7 @@ function startINSEE() {
 
 </script>
 
-<h2>Import de la base données de l'ordre des médecin</h2>
-
+<h2>Import de la base données de médecins</h2>
 
 <table class="tbl">
 	<tr>
@@ -209,5 +212,3 @@ function startINSEE() {
     <td id="total-errors" />
   </tr>
 </table>
-
-$
