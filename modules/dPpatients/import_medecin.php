@@ -81,7 +81,7 @@ $chrono = new Chronometer;
 $chrono->start();
 
 $path = $AppUI->getTmpPath("medecin.htm");
-$segment = 2000;
+$segment = mbGetValueFromGet("segment", 1000);
 $step = mbGetValueFromGet("step", 1);
 $from = $step > 1 ? 100 + $segment * ($step-2) : 0;
 $to = $step > 1 ? 100 + ($step-1) * $segment : 100;
@@ -140,13 +140,13 @@ $xpath = new CMbXPath($doc);
 $query = "/html/body/table/tr[3]/td/table/tr/td[2]/table/tr[7]/td/table/*";
 $medecins = array();
 foreach ($xpath->query($query) as $key => $nodeMainTr) {
-  if ($nodeMainTr->nodeName != "tr") {
-    logParseError("Not a main <tr>");
-    continue;
-  }
-  
   $ndx = intval($key / 3);
   $mod = intval($key % 3);
+  
+  if ($nodeMainTr->nodeName != "tr") {
+    trigger_error("Not a main <tr>", E_USER_WARNING);
+    continue;
+  }
   
   // Création du médecin
   if (!array_key_exists($ndx, $medecins)) {
