@@ -67,7 +67,8 @@ class CFTP {
     $this->logStep("Authentifié en tant que $this->username");
     
     // Upload the file
-    $upload = ftp_put($conn_id, $destination_file, $source_file, $mode);
+    //$upload = ftp_put($conn_id, $destination_file, $source_file, $mode);
+    $upload = ftp_nb_put($conn_id, $destination_file, $source_file, $mode);
     if (!$upload) {
       $this->logError("Impossible de copier le fichier source $source_base en fichier cible $destination_file");
       return false;
