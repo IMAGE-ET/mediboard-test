@@ -43,6 +43,14 @@ function reloadAnesth(operation_id){
   } );	
 }
 
+{{if $selOp->_id}}
+function reloadInfoAnesth(){
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "httpreq_vw_info_anesth");
+  url.addParam("operation_id", "{{$selOp->_id}}");
+  url.requestUpdate("info_anesth", { waitingText: null } );
+}
+{{/if}}
 function reloadDiagnostic(sejour_id, modeDAS) {
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
@@ -191,8 +199,9 @@ function reloadAfterSaveDoc() {
         <div id="anesth">
 			    {{include file="inc_vw_anesth.tpl"}}
 	      </div>
-
-		    {{include file="inc_vw_info_anesth.tpl"}}
+        <div id="info_anesth">
+		      {{include file="inc_vw_info_anesth.tpl"}}
+        </div>
       </div>
 
       <!-- Troisieme onglet bis: codage diagnostics CIM -->

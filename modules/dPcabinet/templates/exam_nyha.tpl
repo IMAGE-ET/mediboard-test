@@ -1,9 +1,10 @@
 {{mb_include_script module=$m script="exam_nyha"}}
 
 <script type="text/javascript">
-if (window.opener.reloadFdr) {
-  window.opener.reloadFdr();
-}
+
+// Lancement du callback
+window.opener.ExamDialog.callback();
+
 </script>
 <form name="editFrmNyha" action="?m=dPcabinet&amp;a=exam_nyha&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
 

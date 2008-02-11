@@ -1,7 +1,9 @@
 <script type="text/javascript">
-if (window.opener.reloadFdr) {
-  window.opener.reloadFdr();
-}
+
+// Lancement du callback
+window.opener.ExamDialog.callback();
+
+
 var listScorePhysio = {{$exam_possum->_score_possum_physio|@json}};
 var listScoreOper   = {{$exam_possum->_score_possum_oper|@json}};
 var scorePhysio = {{$exam_possum->_score_physio}};

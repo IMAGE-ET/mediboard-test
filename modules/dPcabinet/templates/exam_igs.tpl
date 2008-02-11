@@ -15,9 +15,8 @@ function checkSelect(){
 	oForm.scoreIGS.value = valigs;
 }
 
-if (window.opener.reloadFdr) {
-  window.opener.reloadFdr();
-}
+// Lancement du callback
+window.opener.ExamDialog.callback();
 
 function pageMain(){
   // Lancement du calcul avec les valeurs selectionnees
@@ -35,7 +34,7 @@ function pageMain(){
   
   <table class="main">
   <tr>
-    <th colspan="7" class="title">Calcul de la valeur IGS</th>
+    <th colspan="7" class="title">Indice de Gravité Simplifié</th>
   </tr>
   <tr>
     <td>
@@ -43,6 +42,7 @@ function pageMain(){
 				<tr>
 				  <th style="width: 50px;">
 				    {{mb_label object=$exam_igs field="age"}}
+				    {{mb_value object=$exam_igs field="age"}}
 				  </th>
 				  <td>
 				    {{mb_field object=$exam_igs field="age" separator="</td><td>" typeEnum="radio" onclick="checkSelect();"}}
@@ -191,4 +191,3 @@ function pageMain(){
    </tr>
  </table> 
 </form>
-

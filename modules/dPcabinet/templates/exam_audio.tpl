@@ -1,11 +1,12 @@
 {{mb_include_script module=$m script="exam_audio"}}
 
-
 <script type="text/javascript">
-if (window.opener.reloadFdr) {
-  window.opener.reloadFdr();
-}
+
+// Lancement du callback
+window.opener.ExamDialog.callback();
+
 </script>
+
 <form name="editFrm" action="?m=dPcabinet&amp;a=exam_audio&amp;dialog=1" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPcabinet" />

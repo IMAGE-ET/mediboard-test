@@ -115,30 +115,12 @@
     </tr>
     {{/foreach}}
    
-    {{if $consult_anesth->_ref_consultation->_ref_exampossum->_id}}
-      <tr>
-        <th>Score Possum</th>
-        <td>
-          Morbidité : {{mb_value object=$consult_anesth->_ref_consultation->_ref_exampossum field="_morbidite"}}%<br />
-          Mortalité : {{mb_value object=$consult_anesth->_ref_consultation->_ref_exampossum field="_mortalite"}}%
-        </td>
-      </tr>
-    {{/if}}
-    
-    {{if $consult_anesth->_ref_consultation->_ref_examnyha->_id}}
-      <tr>
-        <th>Clasification NYHA</th>
-        <td>{{mb_value object=$consult_anesth->_ref_consultation->_ref_examnyha field="_classeNyha"}}</td>
-      </tr>   
-    {{/if}}
-    
-    {{if $consult_anesth->_ref_consultation->_ref_examigs->_id}}
-      <tr>
-        <th>Score IGS</th>
-        <td>{{mb_value object=$consult_anesth->_ref_consultation->_ref_examigs field="scoreIGS"}}</td>
-      </tr>   
-    {{/if}}
-    
+    <tr>
+      <td colspan="2">
+        {{include file="../../dPcabinet/templates/inc_examens_comp.tpl" _is_anesth=1 consult=$consult_anesth->_ref_consultation callback="reloadInfoAnesth"}}
+      </td>
+    </tr>
+      
     {{if $consult_anesth->_ref_consultation->rques}}
       <tr>
         <th>
