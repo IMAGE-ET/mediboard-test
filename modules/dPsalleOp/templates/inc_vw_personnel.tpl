@@ -115,6 +115,9 @@ function submitPersonnel(oForm){
     <input type="hidden" name="object_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="realise" value="0" />
     
+    {{assign var="affectation_id" value=$affectation->_id}}
+    {{assign var="timing" value=$timingAffect.$affectation_id}}
+
     {{$affectation->_ref_personnel->_ref_user->_view}} / 
     {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
     <table class="form">
