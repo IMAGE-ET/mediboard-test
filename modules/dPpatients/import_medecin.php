@@ -33,7 +33,7 @@ class CMbXPath extends DOMXPath {
   function queryUniqueNode($query, DOMNode $contextNode) {
     $nodeList = parent::query($query, $contextNode);
     if ($nodeList->length > 1) {
-    	logParseError("queried node is not unique, found $nodeList->length occurence(s) for '$query'");
+    	trigger_error("queried node is not unique, found $nodeList->length occurence(s) for '$query'", E_USER_WARNING);
       return null;
     }
     
