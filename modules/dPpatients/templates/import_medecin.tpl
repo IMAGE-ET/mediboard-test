@@ -29,12 +29,16 @@
 
 {{if !$verbose}}
 <script type="text/javascript">
+{{if $xpath_screwed}}
+  Process.updateScrewed();
+{{else}}
   Process.updateTotal(
     {{$medecins|@count}},
     {{$chrono->total}},
     {{$updates}},
     {{$errors}}
   );
+{{/if}}
 {{if count($medecins)}}
   Process.doStep();
 {{else}}

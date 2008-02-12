@@ -127,11 +127,11 @@ var Process = {
 	
 	stop: function() {
 		this.setRunning(false);
-		this.step = 0;
 	},
 	
 	doStep: function() {
 	  if (!this.running) {
+	    this.step = 0;
 	    return;
 	  }
 	  		
@@ -143,6 +143,13 @@ var Process = {
 	  url.requestUpdate("process");
 	},
 	
+	updateScrewed: function(medecins, time, updates, errors) {
+		var tr = document.createElement("tr");
+	  td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
+	  td = document.createElement("td"); td.textContent = "XPAth Screwed, try again"; tr.appendChild(td);
+	  $("results").appendChild(tr);
+	},
+	
 	updateTotal: function(medecins, time, updates, errors) {
 	  var tr = document.createElement("tr");
 	  td = document.createElement("td"); td.textContent = this.step; tr.appendChild(td);
@@ -150,6 +157,10 @@ var Process = {
 	  td = document.createElement("td"); td.textContent = time     ; tr.appendChild(td);
 	  td = document.createElement("td"); td.textContent = updates  ; tr.appendChild(td);
 	  td = document.createElement("td"); td.textContent = errors   ; tr.appendChild(td);
+	  
+	  var node = { tr: { td : [this.step, medecins, time, updates, errors] } };
+
+		
 	  $("results").appendChild(tr);
 	  
 	  $("total-medecins").innerHTML = this.total.medecins += medecins;

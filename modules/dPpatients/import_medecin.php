@@ -139,13 +139,15 @@ $xpath = new CMbXPath($doc);
 
 $query = "/html/body/table/tr[3]/td/table/tr/td[2]/table/tr[7]/td/table/*";
 $medecins = array();
+$xpath_screwed = false;
 foreach ($xpath->query($query) as $key => $nodeMainTr) {
   $ndx = intval($key / 3);
   $mod = intval($key % 3);
   
-  if ($nodeMainTr->nodeName != "tr") {
-    trigger_error("Not a main <tr>", E_USER_WARNING);
-    continue;
+  if ($nodeMainTr->nodeName != "ta") {
+    trigger_error("Not a main &lt;tr&gt; DOM Node", E_USER_WARNING);
+    $xpath_screwed = true;
+    break;
   }
   
   // Création du médecin
@@ -229,7 +231,7 @@ foreach ($medecins as &$medecin) {
     $updates++;
   } 
   
-  if ($msg = $medecin->check()) {
+  if ($msg = $medecin->store()) {
     trigger_error("Error storing $medecin->nom $medecin->prenom ($medecin->cp) : $msg", E_USER_WARNING);
     $errors++;
   }
@@ -246,7 +248,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("verbose", mbGetValueFromGet("verbose"));
 
-$smarty->assign("end_of_process", false);
+$smarty->assign("xpath_screwed" , $xpath_screwed);
 $smarty->assign("step"          , $step);
 $smarty->assign("from"          , $from);
 $smarty->assign("to"            , $to);
