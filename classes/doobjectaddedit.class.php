@@ -38,9 +38,9 @@ class CDoObjectAddEdit {
     $this->redirectError       = null;
     $this->redirectDelete      = null;
 
-    $this->createMsg           = $AppUI->_("msg-".$className."-create");
-    $this->modifyMsg           = $AppUI->_("msg-".$className."-modify");
-    $this->deleteMsg           = $AppUI->_("msg-".$className."-delete");
+    $this->createMsg           = CAppUI::tr("msg-$className-create");
+    $this->modifyMsg           = CAppUI::tr("msg-$className-modify");
+    $this->deleteMsg           = CAppUI::tr("msg-$className-delete");
     
     $this->refTab              =& $_POST;
 
@@ -52,12 +52,9 @@ class CDoObjectAddEdit {
   function doBind() {
     global $AppUI;
 
-    $this->ajax = mbGetValueFromPost("ajax");
-    $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
-    $this->callBack = mbGetValueFromPost("callback");
-    unset($this->refTab["ajax"]);
-    unset($this->refTab["suppressHeaders"]);
-    unset($this->refTab["callback"]);
+    $this->ajax            = CMbArray::extract($_POST, "ajax");
+    $this->suppressHeaders = CMbArray::extract($_POST, "suppressHeaders");
+    $this->callBack        = CMbArray::extract($_POST, "callback");
 
     // Object binding
     if (!$this->_obj->bind( $this->refTab )) {
