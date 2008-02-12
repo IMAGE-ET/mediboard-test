@@ -1377,5 +1377,12 @@ Dom = {
         } 
       }
     }
+  },
+  
+  build: function(json, root) {
+    
+    for(key in json) {
+    }
+    
   }
 }
