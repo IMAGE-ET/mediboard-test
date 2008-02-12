@@ -14,12 +14,8 @@ class CPreferences {
 		// empty constructor
 	}
 
-	function bind( $hash ) {
-		if (!is_array( $hash )) {
-			return "CPreferences::bind failed";
-		} 
-		
-		bindHashToObject($hash, $this);
+	function bind($hash) {
+		bindHashToObject(stripslashes_deep($hash), $this);
 	}
 
 	function check() {

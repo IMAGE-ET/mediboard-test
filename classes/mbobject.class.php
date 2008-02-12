@@ -312,7 +312,7 @@ class CMbObject {
    */
 
   function bind($hash, $doStripSlashes = true) {
-    bindHashToObject($hash, $this, $doStripSlashes);
+    bindHashToObject($doStripSlashes ? stripslashes_deep($hash) : $hash, $this);
     return true;
   }
   
@@ -480,7 +480,7 @@ class CMbObject {
   function loadQueryList($sql) {
     $cur = $this->_spec->ds->exec($sql);
     $list = array();
-    while ($row = $this->_spec->ds->fetchArray($cur)) {
+    while ($row = $this->_spec->ds->fetchAssoc($cur)) {
       $newObject = new $this->_class_name;
       $newObject->bind($row, false);
       $newObject->checkConfidential();

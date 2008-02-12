@@ -732,11 +732,10 @@ function mbGetClassByModule($module) {
   	return $tabClass;
 }
 
-
 /**
  * Strip slashes recursively if value is an array
  * @param mixed $value
- * @param mixed stripped value
+ * @param return stripped value
  **/
 function stripslashes_deep($value) {
   return is_array($value) ?
@@ -749,14 +748,11 @@ function stripslashes_deep($value) {
  * only existing properties of object are filled. when defined in hash
  * @param array $hash the input array
  * @param object $object to fill of any class
- * @param boolean $doStripSlashes
  **/
-function bindHashToObject($hash, &$object, $doStripSlashes = true) {
-  foreach (get_object_vars($object) as $k => $v) {
-    if (isset($hash[$k])) {
-      $object->$k = $doStripSlashes ? stripslashes_deep($hash[$k]) : $hash[$k];
-    } 
-  }
+function bindHashToObject($hash, &$object) {
+  foreach ($hash as $k => $v) {
+    $object->$k = $hash[$k];
+  } 
 }
 
 /**

@@ -297,7 +297,7 @@ abstract class CSQLDataSource {
         return false;
       }
       
-      bindHashToObject($hash, $object, false);
+      bindHashToObject($hash, $object);
       return true;
     } else {
       $cur = $this->exec($sql);
