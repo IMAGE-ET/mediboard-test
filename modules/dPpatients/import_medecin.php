@@ -144,7 +144,7 @@ foreach ($xpath->query($query) as $key => $nodeMainTr) {
   $ndx = intval($key / 3);
   $mod = intval($key % 3);
   
-  if ($nodeMainTr->nodeName != "ta") {
+  if ($nodeMainTr->nodeName != "tr") {
     trigger_error("Not a main &lt;tr&gt; DOM Node", E_USER_WARNING);
     $xpath_screwed = true;
     break;
