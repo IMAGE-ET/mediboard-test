@@ -15,8 +15,8 @@ function checkSelect(){
 	oForm.scoreIGS.value = valigs;
 }
 
-// Lancement du callback
-window.opener.ExamDialog.callback();
+// Lancement du reload
+window.opener.ExamDialog.reload();
 
 function pageMain(){
   // Lancement du calcul avec les valeurs selectionnees
@@ -177,7 +177,7 @@ function pageMain(){
 				    {{mb_label object=$exam_igs field="scoreIGS"}}
 				  </th>
 				  <td colspan="6" style="text-align: center">
-				    {{mb_field object=$exam_igs field="scoreIGS"}}
+				    {{mb_field object=$exam_igs field="scoreIGS" readonly="readonly"}}
 			      {{if $exam_igs->_id}}
               <button type="submit" class="modify">{{tr}}Modify{{/tr}}</button>
               <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'cet examen IGS',target:'systemMsg'})">{{tr}}Delete{{/tr}}</button>

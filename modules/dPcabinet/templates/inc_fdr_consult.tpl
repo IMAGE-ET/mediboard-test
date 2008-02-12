@@ -223,7 +223,9 @@ function submitFdr(oForm) {
     <!-- Files -->
 
     <td class="text">
-      {{include file="inc_examens_comp.tpl" callback="reloadFdr"}}
+      <div id="exam_comp">
+      {{include file="inc_examens_comp.tpl"}}
+      </div>
       
       <strong>Fichiers</strong>
 			<ul>

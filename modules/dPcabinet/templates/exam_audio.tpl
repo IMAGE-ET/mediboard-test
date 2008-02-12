@@ -2,8 +2,8 @@
 
 <script type="text/javascript">
 
-// Lancement du callback
-window.opener.ExamDialog.callback();
+// Lancement du reload
+window.opener.ExamDialog.reload();
 
 </script>
 

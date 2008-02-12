@@ -4,7 +4,6 @@
 			            
 <label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Fiches d'examens</strong></label>
 <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
-<input type="hidden" name="callback" value="{{$callback}}" />
 
 <select name="type_examen" onchange="ExamDialog.init(this.value)">
   <option value="">&mdash; Choisir un type d'examen</option>
@@ -20,7 +19,6 @@
    ExamDialog.init = function(type_exam){
      this.sForm      = "newExamen";
      this.sConsultId = "consultation_id";
-     this.sCallback  = "callback";
      this.pop(type_exam);
 	 }
 </script>
