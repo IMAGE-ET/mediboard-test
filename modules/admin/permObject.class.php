@@ -73,7 +73,7 @@ class CPermObject extends CMbObject {
   }
   
   // Those functions are statics
-  function loadUserPerms($user_id = null) {
+  static function loadUserPerms($user_id = null) {
     global $AppUI, $userPermsObjects, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
@@ -135,7 +135,7 @@ class CPermObject extends CMbObject {
     return $userPermsObjects;
   }
   
-  function getPermObject($object, $permType) {
+  static function getPermObject($object, $permType) {
     global $AppUI, $userPermsObjects, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;

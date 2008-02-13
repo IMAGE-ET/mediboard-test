@@ -47,7 +47,7 @@
    */
   function loadLatestFor($mbObject, $tag = null) {
     $object_class = get_class($mbObject);
-    if (!is_a($mbObject, "CMbObject")) {
+    if (!$mbObject instanceof CMbObject) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
         
@@ -113,7 +113,7 @@
    */
   function bindObject(&$mbObject, $mbObjectDefault = null) {
     $object_class = get_class($mbObject);
-    if (!is_a($mbObject, "CMbObject")) {
+    if (!$mbObject instanceof CMbObject) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
 
@@ -147,7 +147,7 @@
   
   function setObject($mbObject) {
     $object_class = get_class($mbObject);
-    if (!is_a($mbObject, "CMbObject")) {
+    if (!$mbObject instanceof CMbObject) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
     

@@ -69,7 +69,7 @@ foreach($classSelected as $selected) {
 	}
   $backRefs[$selected]=$object->_backRefs;  
   foreach ($object->_specs as $objetRefSpec) {
-    if (is_a($objetRefSpec, 'CRefSpec')) {
+    if ($objetRefSpec instanceof CRefSpec) {
         $spec = array();
         $spec[] = $objetRefSpec->className;
         $spec[] = $objetRefSpec->fieldName;

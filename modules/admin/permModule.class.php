@@ -73,8 +73,7 @@ class CPermModule extends CMbObject {
   }
   
   
-  // Those functions are statics
-  function loadUserPerms($user_id = null) {
+  static function loadUserPerms($user_id = null) {
     
     global $AppUI, $userPermsModules, $permissionSystemeDown;
     
@@ -156,22 +155,22 @@ class CPermModule extends CMbObject {
     }
   }
   
-  function getPermModule($mod_id, $permType, $user_id = null) {
-    return(CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id));
+  static function getPermModule($mod_id, $permType, $user_id = null) {
+    return (CPermModule::getInfoModule("permission", $mod_id, $permType, $user_id));
   }
   
-  function getViewModule($mod_id, $permType, $user_id = null) {
+  static function getViewModule($mod_id, $permType, $user_id = null) {
     return(CPermModule::getInfoModule("view", $mod_id, $permType, $user_id));
   }
   
-  function getInfoModule($field, $mod_id, $permType, $user_id = null) {
+  static function getInfoModule($field, $mod_id, $permType, $user_id = null) {
     global $userPermsModules, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }
     $result = PERM_DENY;
     if($user_id !== null) {
-      $perms =& CPermModule::loadUserPerms($user_id);
+      $perms = CPermModule::loadUserPerms($user_id);
     } else {
       $perms =& $userPermsModules;
     }
@@ -191,7 +190,7 @@ class CPermModule extends CMbObject {
   /**
    *  Return the first visible module
    */
-  function getFirstVisibleModule() {
+  static function getFirstVisibleModule() {
     $listModules = CModule::getVisible();
     foreach ($listModules as $module) {
       if (CPermModule::getViewModule($module->mod_id, PERM_READ)) {
@@ -204,7 +203,7 @@ class CPermModule extends CMbObject {
   /**
    *  Return all the visible modules
    */
-  function getVisibleModules() {
+  static function getVisibleModules() {
     $listReadable = array();
     $listModules = CModule::getVisible();
     foreach($listModules as $module) {

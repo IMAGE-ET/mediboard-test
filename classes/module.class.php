@@ -127,7 +127,7 @@ class CModule extends CMbObject {
     $registeredModules[$this->name] = $this;
   }
 
-  function loadModules() {
+  static function loadModules() {
     $modules = new CModule;
     $order = "mod_ui_order";
     $modules = $modules->loadList(null, $order);
@@ -226,9 +226,9 @@ class CModule extends CMbObject {
   /**
    * Returns all or a named installed module
    */
-  function getInstalled($moduleName = null) {
+  static function getInstalled($moduleName = null) {
     if ($moduleName) {
-      return @self::$installed[$moduleName];
+      return isset(self::$installed[$moduleName]) ? self::$installed[$moduleName] : null;
     }
 
     return self::$installed;
@@ -237,9 +237,9 @@ class CModule extends CMbObject {
   /**
    * Returns all or a named active module
    */
-  function getActive($moduleName = null) {
+  static function getActive($moduleName = null) {
     if ($moduleName) {
-      return @self::$active[$moduleName];
+      return isset(self::$active[$moduleName]) ? self::$active[$moduleName] : null;
     }
 
     return self::$active;
@@ -248,9 +248,9 @@ class CModule extends CMbObject {
   /**
    * Returns all or a named visible module
    */
-  function getVisible($moduleName = null) {
+  static function getVisible($moduleName = null) {
     if ($moduleName) {
-      return @self::$visible[$moduleName];
+      return isset(self::$visible[$moduleName]) ? self::$visible[$moduleName] : null;
     }
 
     return self::$visible;

@@ -7,6 +7,11 @@
  * @author Thomas Despoix
  */
 
+/*
+ * TODO Ajouter le type d'erreur E_STRICT sinon elles ne sont pas affichées
+ */ 
+
+
 global $performance, $dPconfig;
 $performance["error"] = 0;
 $performance["warning"] = 0;
@@ -23,6 +28,7 @@ $divClasses = array (
   E_ERROR => "big-error",
   E_WARNING => "big-warning",
   E_NOTICE => "big-info",
+  E_STRICT => "big-info",
   E_PARSE => "big-info",
   E_CORE_ERROR => "big-error",
   E_CORE_WARNING => "big-warning",
@@ -37,6 +43,7 @@ $errorTypes = array (
   E_ERROR => "Error",
   E_WARNING => "Warning",
   E_NOTICE => "Notice",
+  E_STRICT => "Strict",
   E_PARSE => "Parse",
   E_CORE_ERROR => "Core error",
   E_CORE_WARNING => "Core warning",
@@ -51,6 +58,7 @@ $errorCategories = array (
   E_ERROR => "error",
   E_WARNING => "warning",
   E_NOTICE => "notice",
+  E_STRICT => "notice",
   E_PARSE => "error",
   E_CORE_ERROR => "error",
   E_CORE_WARNING => "warning",
@@ -139,11 +147,14 @@ function mbExport($var, $label = null, $log = false) {
 function errorHandler($errno, $errstr, $errfile, $errline) {
   global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
   
+// See ALL errors
+//  echo "<br />[$errno] : $errstr, $errfile : $errline";
+  
   // Handles the @ case
   if (!error_reporting()) {
     return;
   }
-   
+  
   if (!array_key_exists($errno, $divClasses)) {
     return;
   }
@@ -155,7 +166,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $log = "\n\n<div class='$divClass'>";
   
-  if ($AppUI->user_id){
+  if ($AppUI && $AppUI->user_id){
     $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
   }
   
@@ -166,7 +177,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   $log .= "\n<strong>Time: </strong>$errorTime";
   $log .= "\n<strong>Type: </strong>$errorType";
   $log .= "\n<strong>Text: </strong>$errstr";
-  $log .= "\n<strong>File: </strong>" . mbRelativePath($errfile);
+  $log .= "\n<strong>File: </strong>" . str_replace("/", " :: ", mbRelativePath($context["file"]));
   $log .= "\n<strong>Line: </strong>$errline";
   $log .= "<hr />";
   
@@ -178,7 +189,8 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
       $log .= "\n<strong>Class: </strong>" . $context["class"];
     }
     if (isset($context["file"])) {
-      $log .= "\n<strong>File: </strong>" . mbRelativePath($context["file"]);
+      $log .= "\n<strong>File: </strong>" . str_replace("/", " :: ", mbRelativePath($context["file"]));
+      
     }
     if (isset($context["line"])) {
       $log .= "\n<strong>Line: </strong>" . $context["line"];
@@ -202,7 +214,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 set_error_handler("errorHandler");
 
 // Initialize custom error handler
-if (!@filesize($logPath)) {
+if (!is_file($logPath)) {
   $initTime = date("Y-m-d H:i:s");
   $logInit = "<h2>Log de Mediboard ré-initialisé depuis $initTime</h2>";
   file_put_contents($logPath, $logInit);

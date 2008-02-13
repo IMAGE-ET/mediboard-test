@@ -17,6 +17,10 @@ if (!is_file("./includes/config.php")) {
   die("Redirection vers l'assistant d'installation");
 }
 
+// PHP Configuration
+ini_set("memory_limit", "64M");
+date_default_timezone_set("Europe/Paris");
+
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
 require_once("./includes/version.php");
@@ -39,9 +43,6 @@ require_once("./includes/errors.php");
 require_once("./classes/chrono.class.php");
 $phpChrono = new Chronometer;
 $phpChrono->start();
-
-// PHP Configuration
-ini_set("memory_limit", "64M");
 
 // Load AppUI from session
 require_once("./classes/ui.class.php");

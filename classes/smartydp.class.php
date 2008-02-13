@@ -91,19 +91,6 @@ function smarty_modifier_stripslashes($string){
   return stripslashes($string);
 }
 
-function smarty_function_mb_field_spec($obj, $field, $propSpec = null){
-  if($propSpec != null){
-    $specs = $obj->getSpecsObj(array($field => $propSpec));
-  }else{
-    $specs = $obj->_specs;
-  }
-  if($specs[$field]){
-    return $specs[$field]->checkFieldType();
-  }else{
-    return null;
-  }
-}
-
 /**
  * @param array params tableau des parametres
  * - object          : Objet

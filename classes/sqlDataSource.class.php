@@ -458,7 +458,9 @@ abstract class CSQLDataSource {
    * @param $v in/out column value
    */
   function quote($table, &$k, &$v) {
-    $v = !@in_array($k, $this->unquotable[$table]) ? "'$v'" : $v;
+    if (!isset($this->unquotable[$table]) || !in_array($k, $this->unquotable[$table])) {
+      $v = "'$v'";
+    }
     $k = "`$k`";
   }
   
@@ -548,7 +550,7 @@ abstract class CSQLDataSource {
    * @param string $alternate
    * @return string The prepared where clause
    **/
-  function prepareIn($values, $alternate = null) {
+  static function prepareIn($values, $alternate = null) {
     if ($alternate) {
       return "= '$alternate'";
     }
@@ -568,7 +570,7 @@ abstract class CSQLDataSource {
    * @param string $alternate
    * @return string The prepared where clause
    **/
-  function prepareNotIn($values, $alternate = null) {
+  static function prepareNotIn($values, $alternate = null) {
     if ($alternate) {
       return "<> '$alternate'";
     }

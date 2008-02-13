@@ -59,7 +59,7 @@ class CSpEntCCAM extends CSpObject {
   }
   
   function makeId(CCodable $codable) {
-    if (is_a($codable,  "CSejour")) {
+    if ($codable instanceof CSejour) {
       $this->_id = "0";
       return;
     }
@@ -118,7 +118,7 @@ class CSpEntCCAM extends CSpObject {
   
   function mapFrom(CMbObject &$mbObject) {
     $mbClass = $this->_spec->mbClass;
-    if (!is_a($mbObject, $mbClass)) {
+    if (!$mbObject instanceof $mbClass) {
       trigger_error("mapping object should be a '$mbClass'");
     }
     

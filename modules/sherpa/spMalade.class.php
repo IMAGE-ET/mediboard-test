@@ -161,7 +161,7 @@ class CSpMalade extends CSpObject {
   function mapFrom(CMbObject &$mbObject) {
     global $AppUI;
     $mbClass = $this->_spec->mbClass;
-    if (!is_a($mbObject, $mbClass)) {
+    if (!$mbObject instanceof $mbClass) {
       trigger_error("mapping object should be a '$mbClass'");
     }
     

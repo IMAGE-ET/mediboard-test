@@ -298,13 +298,14 @@ class CAppUI {
 * @param int Option to change the case of the string
 * @return string
 */
-  function _($str, $case=0) {
+  function _($str) {
     $str = trim($str);
     if (empty($str)) {
       return "";
     }
-    if ( $found = @$GLOBALS["translate"][$str]) {
-      return $found;
+    
+    if (isset($GLOBALS["translate"][$str])) {
+      return $GLOBALS["translate"][$str];
     }
     return sprintf($this->locale_mask, $str);
   }

@@ -75,7 +75,7 @@ class CUserLog extends CMbMetaObject {
    * Initializes id and class for given CMbObject
    */
   function setObject($mbObject) {
-    assert(is_a($mbObject, "CMbObject"));
+    assert($mbObject instanceof CMbObject);
     $this->object_id = $mbObject->_id;
     $this->object_class = get_class($mbObject);
   }

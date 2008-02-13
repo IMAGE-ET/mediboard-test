@@ -488,7 +488,7 @@ class CMediusers extends CMbObject {
   }
 
   
-  function loadEtablissements($permType = PERM_READ){
+  static function loadEtablissements($permType = PERM_READ) {
     // Liste de Tous les établissements
     $group = new CGroups;
     $order = "text";

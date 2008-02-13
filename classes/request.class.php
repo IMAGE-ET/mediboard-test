@@ -130,7 +130,7 @@ class CRequest {
     // MbObject binding
     if ($obj) {
     // Removed for performance tests
-    //  if (!is_a($obj, "CMbObject")) {
+    //  if (!$obj instanceof CMbObject)) {
     //    trigger_error("Object must be an instance of MbObject", E_USER_ERROR);
     //  }
       if (count($this->select)) {

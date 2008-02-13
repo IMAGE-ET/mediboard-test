@@ -60,9 +60,9 @@ class CTemplateManager {
   }
   
   function applyTemplate($template) {
-    assert(is_a($template, "CCompteRendu") || is_a($template, "CPack"));
+    assert($template instanceof CCompteRendu || $template instanceof CPack);
     
-    if(is_a($template, "CCompteRendu")) {
+    if($template instanceof CCompteRendu) {
     
       if (!$this->valueMode) {
         $this->setFields($template->object_class, $template->chir_id);

@@ -34,8 +34,7 @@ $listModeleFct = $modele->loadlist($where, $order);
 unset($where["function_id"]);
 
 // Liste des Category pour les fichiers
-$listCategory = new CFilesCategory;
-$listCategory = $listCategory->listCatClass("CPatient");
+$listCategory = CFilesCategory::listCatClass("CPatient");
 
 // L'utilisateur est-il un chirurgien
 $mediuser = new CMediusers;

@@ -9,10 +9,7 @@
 
 class CMbFieldSpecFact {
   
-  function CMbFieldSpecFact() {
-  }
-   
-  function getSpec($object, $field, $propSpec = null){
+  static function getSpec($object, $field, $propSpec = null){
     
     static $aClass = array(
       "ref"          => "CRefSpec",
@@ -67,6 +64,53 @@ class CMbFieldSpecFact {
     }
     return $specObject;
   }
+}
+// Nouvelle implémentation
+class CMbFieldSpecFactNew {
+  
+  static $classes = array(
+    "ref"          => "CRefSpec",
+    "str"          => "CStrSpec",
+    "numchar"      => "CNumcharSpec",
+    "num"          => "CNumSpec",
+    "bool"         => "CBoolSpec",
+    "enum"         => "CEnumSpec",
+    "date"         => "CDateSpec",
+    "time"         => "CTimeSpec",
+    "dateTime"     => "CDateTimeSpec",
+    "birthDate"    => "CBirthDateSpec",
+    "float"        => "CFloatSpec",
+    "currency"     => "CCurrencySpec",
+    "pct"          => "CPctSpec",
+    "text"         => "CTextSpec",
+    "html"         => "CHtmlSpec",
+    "email"        => "CEmailSpec",
+    "code"         => "CCodeSpec"
+	);
+   
+  static function getSpec($className, $fieldName, $strSpec = null) {
+    $specFragments = explode(" ", $strSpec);
+    $specName = CMbArray::extract($specFragments, 0, true);
+    $specClassName = CMbArray::get(self::$classes, $specName, "CMbObjectSpec");
+    
+    $specOptions = array();
+    foreach ($specFragments as $specFragment) {
+      $options = explode("|", $specFragment);
+      $optionName = CMbArray::extract($options, 0, null, true);
+
+      // La class n'est pas forcément en premier
+      // @TODO A changer dans les specs
+      if (isset(self::$classes[$optionName])) {
+        $specClassName = self::$classes[$optionName];
+        continue;
+      }
+
+      $specOptions[$optionName] = count($options) ? implode("|", $options) : true;
+    }
+
+    return new $specClassName($className, $fieldName, $strSpec, $specOptions);
+  }
+  
 }
 
 ?>

@@ -58,10 +58,6 @@ if ($userSel->user_id) {
   $listModeleFunc = $listModeleFunc->loadlist($where, $order);
 }
 
-
-
-
-
 // Création du template
 $smarty = new CSmartyDP();
 

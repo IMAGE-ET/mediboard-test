@@ -248,8 +248,7 @@ class CFile extends CMbMetaObject {
     $key = $object->_tbl_key;
     
     // Liste des Category pour les fichiers de cet objet
-    $listCategory = new CFilesCategory;
-    $listCategory = $listCategory->listCatClass(get_class($object));
+    $listCategory = CFilesCategory::listCatClass(get_class($object));
     
     // Création du tableau de catégorie initialisé à 0
     $affichageNbFile = array();
@@ -312,7 +311,7 @@ class CFile extends CMbMetaObject {
     }
   }
   
-  function loadFilesAndDocsByObject($object){
+  static function loadFilesAndDocsByObject($object) {
     $listCategory = CFilesCategory::listCatClass($object->_class_name);
     
     if(!$object->_ref_files){

@@ -55,13 +55,13 @@ class CExamPossum extends CMbObject {
     
     static $score_possum_physio = null;
     if (!$score_possum_physio) {
-      $score_possum_physio =& $this->getScorePhysio();
+      $score_possum_physio = $this->getScorePhysio();
     }
     $this->_score_possum_physio =& $score_possum_physio;
     
     static $score_possum_oper = null;
     if (!$score_possum_oper) {
-      $score_possum_oper =& $this->getScoreOper();
+      $score_possum_oper = $this->getScoreOper();
     }
     $this->_score_possum_oper =& $score_possum_oper;
   }

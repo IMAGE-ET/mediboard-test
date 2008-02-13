@@ -52,10 +52,10 @@ class CDoObjectAddEdit {
   function doBind() {
     global $AppUI;
 
-    $this->ajax            = CMbArray::extract($_POST, "ajax");
-    $this->suppressHeaders = CMbArray::extract($_POST, "suppressHeaders");
-    $this->callBack        = CMbArray::extract($_POST, "callback");
-
+    $this->ajax            = CMbArray::extract($this->refTab, "ajax");
+    $this->suppressHeaders = CMbArray::extract($this->refTab, "suppressHeaders");
+    $this->callBack        = CMbArray::extract($this->refTab, "callback");
+    
     // Object binding
     if (!$this->_obj->bind( $this->refTab )) {
       $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );

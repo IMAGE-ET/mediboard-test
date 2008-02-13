@@ -15,7 +15,7 @@ class CMbArray {
    *   "absent_from_array2"
    *   "different_values"  
    */
-  function compareKeys($array1, $array2) {
+  static function compareKeys($array1, $array2) {
     $diff = array();
 
     foreach ($array1 as $key => $value) {
@@ -49,7 +49,7 @@ class CMbArray {
 	 * @param array $haystack Array to alter
 	 * @return int Occurences count
 	 **/
-	function removeValue($needle, &$haystack) {
+	static function removeValue($needle, &$haystack) {
 	  $count = 0;
 	  while (($key = array_search($needle,  $haystack)) !== false) {
 	    unset($haystack[$key]);
@@ -64,7 +64,7 @@ class CMbArray {
    * Build and array with ranged values
    * @param str The string to split out
    */
-	function createRange($min, $max, $cleasvalue = false, $step = 1){
+	static function createRange($min, $max, $cleasvalue = false, $step = 1){
 	  if($min>=$max) {
 	    return false;
 	  }
@@ -86,7 +86,7 @@ class CMbArray {
 	 * @param $key The target key
 	 * @return array Previous and next key in an array, null if unavailable
 	 */
-	function getPrevNextKeys($arr, $key){
+	static function getPrevNextKeys($arr, $key){
 	  $keys = array_keys($arr);
 	  $keyIndexes = array_flip($keys);
 	  
@@ -112,7 +112,7 @@ class CMbArray {
 	 * @param array $paArray2 The array to be merged
 	 * @return arrau The merge result
 	 */
-	function mergeRecursive($paArray1, $paArray2) {
+	static function mergeRecursive($paArray1, $paArray2) {
 	  if (!is_array($paArray1) or !is_array($paArray2)) { 
 	     return $paArray2;
 	  }
@@ -130,7 +130,7 @@ class CMbArray {
    * Build and array with string chars as values
    * @param str The string to split out
    */
-	function fromString($str) {
+	static function fromString($str) {
 	  $array = array();
 	  for ($i = 0; $i < strlen($str); $i++) {
 	    $array[] = $str[$i];
@@ -144,7 +144,7 @@ class CMbArray {
    * @param mixed $value
    * @return mixed Next value, false if $value does not exist
    */
-  function cycleValue($array, $value) {
+  static function cycleValue($array, $value) {
     $array = array_unique($array);
     while ($value !== current($array)) {
       next($array);
@@ -168,8 +168,19 @@ class CMbArray {
    * @param mixed $default The default value is $key is not found
    * @param bool $mandatory will trigger an warning if value is null 
    */
-  function extract(&$array, $key, $default = null, $mandatory = false) {
-    if (!array_key_exists($key, $array)) {
+  static function get($array, $key, $default = null) {
+    return isset($array[$key]) ? $array[$key] : $default;
+  }
+  
+  /**
+   * Extract a key from an array, returning the value if exists
+   * @param array $array The array to explore
+   * @param string $name Name of the key to extract
+   * @param mixed $default The default value is $key is not found
+   * @param bool $mandatory will trigger an warning if value is null 
+   */
+  static function extract(&$array, $key, $default = null, $mandatory = false) {
+    if (!isset($array[$key])) {
       if ($mandatory) {
         trigger_error("Could not extract '$key' index in array", E_USER_WARNING);
       }
@@ -187,8 +198,8 @@ class CMbArray {
    * @param int|string $key The key to check
    * @param mixed $value The default value if key is not set
    */
-  function defaultValue(&$array, $key, $value) {
-    if (!array_key_exists($key, $array)) {
+  static function defaultValue(&$array, $key, $value) {
+    if (!isset($array[$key])) {
       $array[$key] = $value;
     }
   }
@@ -198,7 +209,7 @@ class CMbArray {
    * @param array $array The source array
    * @return string String attributes  like 'key1="value1" ... keyN="valueN"'
    **/
-  function makeXmlAttributes($array) {
+  static function makeXmlAttributes($array) {
     $return = array();
     foreach ($array as $key => $value) {
       if ($value !== null) {
@@ -215,7 +226,7 @@ class CMbArray {
    * @param int $size Size of the built array
    * @return array The built array
    */
-  function fillValues($value, $size) {
+  static function fillValues($value, $size) {
     $array = array();
     for ($i = 0; $i < $size; ++$i) {
       $array[] = $value;
@@ -232,7 +243,7 @@ class CMbArray {
    * @param mixed $key The key or attribute name 
    * @return array All plucked values
    */
-  function pluck($array, $name) {
+  static function pluck($array, $name) {
     $values = array(); 
     foreach ($array as $index => $value) {
       if (is_object($value)) {

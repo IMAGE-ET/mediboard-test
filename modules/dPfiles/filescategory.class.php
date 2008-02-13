@@ -44,9 +44,10 @@ class CFilesCategory extends CMbObject {
     );
   }
     
-  function listCatClass($paramclass = null){
+  static function listCatClass($paramclass = null) {
+    $instance = new CFilesCategory;
     $where = array();
-    $where[] = $this->_spec->ds->prepare("`class` IS NULL OR `class` = %", $paramclass);
+    $where[] = $instance->_spec->ds->prepare("`class` IS NULL OR `class` = %", $paramclass);
     
     $listCat = new CFilesCategory;
     return $listCat->loadList($where);

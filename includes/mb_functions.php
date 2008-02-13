@@ -745,13 +745,15 @@ function stripslashes_deep($value) {
 
 /**
  * Copy the hash array content into the object as properties
- * only existing properties of object are filled. when defined in hash
+ * only existing properties of object are filled, when defined in hash
  * @param array $hash the input array
  * @param object $object to fill of any class
  **/
 function bindHashToObject($hash, &$object) {
   foreach ($hash as $k => $v) {
-    $object->$k = $hash[$k];
+    if (property_exists($object, $k)) {
+      $object->$k = $hash[$k];
+    }
   } 
 }
 

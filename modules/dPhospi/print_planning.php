@@ -13,6 +13,7 @@ require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
+$filter = new CSejour();
 $filter->_date_min     = mbGetValueFromGet("_date_min", date("Y-m-d")." 06:00:00");
 $filter->_date_max     = mbGetValueFromGet("_date_max", date("Y-m-d")." 21:00:00");
 $filter->_service      = mbGetValueFromGet("_service", 0);

@@ -20,7 +20,7 @@ $can->needsAdmin();
 function purgeObjects($className, $fakeClassName = null) {
   global $AppUI;
   $object = new $className;
-  if (!is_a($object, "CMbObject")) {
+  if ($object instanceof CMbObject) {
     $AppUI->stepAjax("Impossible de purger des objets de la classe '$className'", UI_MSG_ERROR);
   }
     

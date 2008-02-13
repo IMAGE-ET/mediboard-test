@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
 
-require_once ("Archive/Tar.php");
+@require_once ("Archive/Tar.php");
 require_once ("Archive/Zip.php");
 
 class CMbPath {
@@ -16,7 +16,7 @@ class CMbPath {
    * @param string $dir directory path
    * @return boolean job done
    */
-  function forceDir($dir, $mode = 0755) {
+  static function forceDir($dir, $mode = 0755) {
     if (!$dir) {
       trigger_error("Directory is null", E_USER_WARNING);
       return false;
@@ -36,7 +36,7 @@ class CMbPath {
   /**
    * @returns true if directory is empty
    */
-  function isEmptyDir($dir) {
+  static function isEmptyDir($dir) {
     if (false === $dh = opendir($dir)) {
       trigger_error("Passed argument is not a valid directory or couldn't be opened'", E_USER_WARNING);
       return false;
@@ -55,7 +55,7 @@ class CMbPath {
    * Removes all empty sub-directories of a given directory
    * @return integer removed directories count
    */
-  function purgeEmptySubdirs($dir) {
+  static function purgeEmptySubdirs($dir) {
     $removedDirsCount = 0;
     
     if (false === $dh = opendir($dir)) {
@@ -81,7 +81,7 @@ class CMbPath {
     return $removedDirsCount;
   }
   
-  function getExtension($path) {
+  static function getExtension($path) {
     $fragments = explode(".", basename($path));
     if (count($fragments) < 2) {
       return "";
@@ -94,7 +94,7 @@ class CMbPath {
    * Extracts an archive into a destination directory
    * @return the number of extracted files or false if failed
    */
-  function extract($archivePath, $destinationDir) {
+  static function extract($archivePath, $destinationDir) {
     if (!is_file($archivePath)) {
       trigger_error("Archive could not be found", E_USER_WARNING);
       return false;
@@ -135,7 +135,7 @@ class CMbPath {
 	/**
 	 * Clears out any file or sub-directory from target path
 	 * @return boolean jobdone-value */
-	function emptyDir($dir) {
+	static function emptyDir($dir) {
 	  if (!($dir = dir($dir))) {
 	    return false;
 	  }
@@ -154,7 +154,7 @@ class CMbPath {
 	/**
 	 * Recursively removes target path
 	 * @return boolean jobdone-value */
-	function remove($path) {
+	static function remove($path) {
 	  if (!$path) {
 	    trigger_error("Path undefined", E_USER_WARNING);
 	  }

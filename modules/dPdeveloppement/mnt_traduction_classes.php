@@ -81,7 +81,7 @@ foreach($classes as $class) {
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
     
-    if (is_a($spec, "CEnumSpec")) {
+    if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
 	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.");        
       }
@@ -91,7 +91,7 @@ foreach($classes as $class) {
       }
     }
     
-    if (is_a($spec, "CRefSpec")) {
+    if ($spec instanceof CRefSpec) {
       // CAccessLog serves as dummy class when we need to instanciate anyhow
       $fwdClass = ($spec->class != "CMbObject") && has_default_constructor($spec->class) ? $spec->class : "CAccessLog";
       $fwdObject = new $fwdClass;

@@ -416,7 +416,7 @@ class CMbObject {
     $request->addGroup($group);
     $request->addOrder($order);
     $request->setLimit("0,1");
-    $list =& $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+    $list = $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
 
     foreach ($list as $object) {
       foreach($object->getProps() as $key => $value) {
@@ -1222,18 +1222,15 @@ class CMbObject {
 
   /**
    * Converts string specifications to objet specifications
+   * @todo Ref: should parse props instead of object_vars 
    */
-  function getSpecsObj($props = null){
-    if($props == null){
-      $specs =& $this->_props;
-      $props = get_object_vars($this);
-    }else{
-      $specs = $props;
-    }
+  function getSpecsObj() {
+    $specs =& $this->_props;
+    $props = get_object_vars($this);
     
     $spec = array();
-    foreach($props as $k => $v){
-      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, @$specs[$k]);
+    foreach ($props as $k => $v) {
+      $spec[$k] = CMbFieldSpecFact::getSpec($this, $k, array_key_exists($k, $specs) ? $specs[$k] : null);
     }
     return $spec;
   }
