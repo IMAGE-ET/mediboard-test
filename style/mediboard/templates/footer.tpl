@@ -20,6 +20,8 @@
   en {{$ds->chrono->total|string_format:"%.3f"}} secondes
   {{/if}}
   {{/foreach}}
+  <br />
+  Adresse IP : {{$userIP}}
 </div>
 {{/if}}
 

@@ -288,6 +288,7 @@ if (!$suppressHeaders) {
   $smartyFooter->assign("offline"       , false);
   $smartyFooter->assign("debugMode"     , @$AppUI->user_prefs["INFOSYSTEM"]);
   $smartyFooter->assign("performance"   , $performance);
+  $smartyFooter->assign("userIP"        , $_SERVER["REMOTE_ADDR"]);
   $smartyFooter->assign("errorMessage"  , $AppUI->getMsg());
   $smartyFooter->assign("demoVersion"   , $dPconfig["demo_version"]);
   $smartyFooter->display("footer.tpl");
