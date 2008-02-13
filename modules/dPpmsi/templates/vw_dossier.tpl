@@ -487,6 +487,8 @@ function pageMain() {
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+            <input type="hidden" name="entree_prevue" value="{{$curr_sejour->entree_prevue}}" />
+            <input type="hidden" name="sortie_prevue" value="{{$curr_sejour->sortie_prevue}}" />
  
             <table class="form">
               <tr>
