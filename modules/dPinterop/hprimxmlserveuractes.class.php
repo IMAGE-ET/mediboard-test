@@ -114,7 +114,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addCodeLibelle($medecin, "identification", "prat$mbPraticien->user_id", $mbPraticien->_user_username);
     
     // Sortie de séjour
-    $mbSortie =& mbGetValue($mbSejour->sortie_reelle, $mbSejour->sortie_prevue);
+    $mbSortie = mbGetValue($mbSejour->sortie_reelle, $mbSejour->sortie_prevue);
     $sortie = $this->addElement($venue, "sortie");
     $dateHeureOptionnelle = $this->addElement($sortie, "dateHeureOptionnelle");
     $this->addDateHeure($dateHeureOptionnelle, $mbSortie);
