@@ -52,7 +52,9 @@ $doc->saveTempFile();
 // HPRIM export FTP settings
 $HPrimConfig = $dPconfig["dPinterop"]["hprim_export"];
 
-$fileprefix = dPgetParam($_POST, "fileprefix", $HPrimConfig["fileprefix"]);
+$fileprefix    = dPgetParam($_POST, "fileprefix", $HPrimConfig["fileprefix"]);
+$filenbroll    = dPgetParam($_POST, "filenbroll", $HPrimConfig["filenbroll"]);
+$fileextension = dPgetParam($_POST, "fileextension", $HPrimConfig["fileextension"]);
 
 $ftp = new CFTP;
 $ftp->hostname = dPgetParam($_POST, "hostname", $HPrimConfig["hostname"]);
@@ -73,12 +75,12 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   }
   $dir->close();
   $count -= 2; // Exclure . et ..
-  $counter = $count % 100;
+  $counter = $count % pow(10, $filenbroll);
   
   // Transfert réel
-  $destination_basename = sprintf("%s%02d", $fileprefix, $counter);
+  $destination_basename = sprintf("%s%0".$filenbroll."d", $fileprefix, $counter);
   // Transfert en mode FTP_ASCII obligatoire pour les AS400
-  if ($ftp->sendFile($doc->documentfilename, "$destination_basename.xml", FTP_ASCII)) {
+  if ($ftp->sendFile($doc->documentfilename, "$destination_basename.$fileextension", FTP_ASCII)) {
     $ftp->sendFile($doc->documentfilename, "$destination_basename.ok", FTP_ASCII);
 
     $doc->saveFinalFile();

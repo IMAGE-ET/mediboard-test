@@ -66,7 +66,7 @@ function doAction(sAction) {
       </label>  
     </th>
     <td>
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
     
@@ -78,7 +78,7 @@ function doAction(sAction) {
       </label>  
     </th>
     <td>
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
     
@@ -90,7 +90,7 @@ function doAction(sAction) {
       </label>  
     </th>
     <td>
-      <input class="str" type="password" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="password" class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>  
 
@@ -106,7 +106,36 @@ function doAction(sAction) {
       </label>  
     </th>
     <td>
-      <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+      <input type="text" class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  
+  {{assign var="var" value="fileextension"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <input type="text" class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  
+  {{assign var="var" value="filenbroll"}}
+  <tr>
+    <th>
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-desc{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td>
+      <select name="{{$m}}[{{$class}}][{{$var}}]">
+        <option value="1" {{if $dPconfig.$m.$class.$var == 1}}selected="selected"{{/if}}>1</option>
+        <option value="2" {{if $dPconfig.$m.$class.$var == 2}}selected="selected"{{/if}}>2</option>
+        <option value="3" {{if $dPconfig.$m.$class.$var == 3}}selected="selected"{{/if}}>3</option>
+        <option value="4" {{if $dPconfig.$m.$class.$var == 4}}selected="selected"{{/if}}>4</option>
+      </select>
     </td>
   </tr>  
 
