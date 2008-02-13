@@ -791,7 +791,7 @@ class CMbObject {
    *  @param boolean $checkobject check values before storing if true (default)
    *  @return null|string null if successful otherwise returns and error message
    */
-  function store($checkobject = true) {
+  function store() {
     global $dPconfig;
   	global $AppUI;
     
@@ -802,12 +802,10 @@ class CMbObject {
     $objBefore = new $this->_class_name();
     $objBefore->load($this->_id);
     
-    if ($checkobject) {
-      if ($msg = $this->check()) {
-        return $AppUI->_(get_class($this)) . 
-          $AppUI->_("::store-check failed:") .
-          $AppUI->_($msg);
-      }
+    if ($msg = $this->check()) {
+      return $AppUI->_(get_class($this)) . 
+        $AppUI->_("::store-check failed:") .
+        $AppUI->_($msg);
     }
 
     // DB query
@@ -1030,17 +1028,12 @@ class CMbObject {
    * Default delete method
    * @return null|string null if successful otherwise returns and error message
    */
-  function delete($oid = null) {
+  function delete() {
     global $dPconfig;
     
     // Chargement de _objBefore 
     $objBefore = new $this->_class_name;
     $objBefore->load($this->_id);
-    
-    
-    if ($oid) {
-      $this->_id = intval($oid);
-    }
     
     if ($msg = $this->canDeleteEx()) {
       return $msg;

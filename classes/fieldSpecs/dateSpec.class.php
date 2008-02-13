@@ -25,7 +25,7 @@ class CDateSpec extends CMbFieldSpec {
     return("date");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     

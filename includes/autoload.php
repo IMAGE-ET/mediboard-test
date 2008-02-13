@@ -17,7 +17,7 @@ if ($shm->isReady()) {
   if (null == $classPaths = $shm->get("class-paths")) {
     $AppUI->getAllClasses();
     $classNames = getChildClasses(null);
-    foreach($classNames as $className) {
+    foreach ($classNames as $className) {
       $class = new ReflectionClass($className);
       $classPaths[$className] = $class->getFileName();
     }
@@ -31,7 +31,7 @@ if ($shm->isReady()) {
     // Recherche dans les classes de mediboard
     if (array_key_exists($className, $classPaths)) {
       $performance["autoload"]++;
-      require_once($classPaths[$className]);
+      require($classPaths[$className]);
       return;
     } 
     

@@ -305,7 +305,7 @@ class COperation extends CCodable {
     }
   }
 
-  function store($checkobject = true, $reorder = true) {
+  function store($reorder = true) {
     if ($msg = parent::store()) {
       return $msg;
     }

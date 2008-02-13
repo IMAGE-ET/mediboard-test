@@ -48,7 +48,7 @@ class CTempsHospi extends CMbObject {
     $this->_ref_praticien->load($this->praticien_id);
   }
   
-  function getTime($praticien_id = 0, $ccam = null, $type = null){
+  static function getTime($praticien_id = 0, $ccam = null, $type = null){
     $time = 0;
     $where = array();
     $total = array();

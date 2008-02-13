@@ -277,7 +277,7 @@ class CMbFieldSpec {
     return $sHtml;
   }
   
-  function getFormElementText($object, &$params, $value, $className){
+  function getFormElementText($object, $params, $value, $className){
     $field        = htmlspecialchars($this->fieldName);
     $extra        = CMbArray::makeXmlAttributes($params);
     $sHtml        = "<input type=\"text\" name=\"$field\" value=\"".htmlspecialchars($value)."\"";    
@@ -319,7 +319,7 @@ class CMbFieldSpec {
     return join("\n", $aHtml);
   }
     
-  function getFormHtmlElement($object, &$params, $value, $className){
+  function getFormHtmlElement($object, $params, $value, $className){
     return $this->getFormElementText($object, $params, $value, $className);
   }
   
@@ -327,9 +327,15 @@ class CMbFieldSpec {
     return("mbField");
   }
   
-  function checkProperty(){
+  /**
+   * Check whether property value bound to objects is compliant to the specification
+   * @param $object object bound to property
+   * @return string Store-like message
+   */
+  function checkProperty($object) {
+    return;
   }
-  
+    
   // Return a sample value.
   //If consistent, the random value stay the same for a given initial value
   function sample(&$object, $consistent = true){

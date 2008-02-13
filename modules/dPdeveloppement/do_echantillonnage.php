@@ -166,7 +166,7 @@ foreach($aCabinet as $title => $value){
       $fonctions->setManyFields($tabFields);
       $fonctions->store();
       $fonctions->setField("text", $title." ".$fonctions->object->_id);
-      $fonctions->store(false);
+      $fonctions->store();
       if($_nb_prat){
         for($iPrat=1; $iPrat<=$_nb_prat; $iPrat++){
           $praticiens->renew();
@@ -214,7 +214,7 @@ if($_nb_salles){
     $salles->setManyFields($tabFields);
     $salles->store();
     $salles->setField("nom", "Salle ".$salles->object->_id);
-    $salles->store(false);
+    $salles->store();
   }
 }
 if(count($salles_selected)){
@@ -238,7 +238,7 @@ if($_nb_services){
     $services->setManyFields($tabFields);
     if(!$services->store()){
       $services->setField("nom", "Service ".$services->object->_id);
-      $services->store(false);
+      $services->store();
       for($iChambre=1; $iChambre<=$_nb_chambre; $iChambre++){
         $chambres->renew();
         $tabFields = array("service_id"       => $services->object->_id,

@@ -716,11 +716,12 @@ class CConsultation extends CCodable {
   }
   
   
-  function getNumDocsAndFiles(){
-  	if(!$this->_nb_files_docs){
-      parent::getNumDocsAndFiles();
+  function getNumDocsAndFiles($permType = null){
+  	if (!$this->_nb_files_docs) {
+      parent::getNumDocsAndFiles($permType);
     }
-    if($this->_nb_files_docs) {
+    
+    if ($this->_nb_files_docs) {
       $this->getEtat();
       $this->_etat .= " ($this->_nb_files_docs Doc)";
     }

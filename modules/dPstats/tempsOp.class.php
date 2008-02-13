@@ -53,7 +53,7 @@ class CTempsOp extends CMbObject {
     $this->_ref_praticien->load($this->chir_id);
   }
   
-  function getTime($chir_id = 0, $ccam = null){
+  static function getTime($chir_id = 0, $ccam = null){
     $time = 0;
     $where = array();
     $total = array();

@@ -7,7 +7,8 @@
  *  @version $Revision: 1414 $
  */
  
-require_once("Config.php");
+// Throws some E_STRICT errors
+@require_once("Config.php");
 
 class CMbConfig {
   var $options = array("name" => "dPconfig");
@@ -67,7 +68,7 @@ class CMbConfig {
     
     $this->values = $newValues;
     
-    $config = new Config;
+    $config = @new Config;
     $config->parseConfig($this->values, $this->configType, $this->options);
     $config->writeConfig($this->targetPath, $this->configType, $this->options);
   }

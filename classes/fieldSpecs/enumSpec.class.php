@@ -113,8 +113,8 @@ class CEnumSpec extends CMbFieldSpec {
     trigger_error("mb_field: Type d'enumeration '$typeEnum' non pris en charge", E_USER_WARNING);
   }
   
-  function getLabelForElement($object, &$params){
-    $typeEnum  = CMbArray::extract($params, "typeEnum", "select");
+  function getLabelForElement($object, $params){
+    $typeEnum  = CMbArray::get($params, "typeEnum", "select");
     
     if($typeEnum == "select"){
       return $this->fieldName;

@@ -121,12 +121,13 @@ class CCompteRendu extends CMbMetaObject {
       $this->_ref_function->load($this->function_id);
   }
   
-  function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
+  static function loadModeleByCat($catName, $where1 = null, $order = "nom", $horsCat = null){
+    $ds = CSQLDataSource::get("std");
     $where = array();
     if(is_array($catName)) {
       $where = array_merge($where, $catName);
     }elseif(is_string($catName)){
-      $where["nom"] = $this->_spec->ds->prepare("= %", $catName);
+      $where["nom"] = $ds->prepare("= %", $catName);
     }
     $category = new CFilesCategory;
     $resultCategory = $category->loadList($where);
@@ -136,9 +137,9 @@ class CCompteRendu extends CMbMetaObject {
       $where = array();
     	if($horsCat){
         $resultCategory[0] = "";
-    	  $where[] = "file_category_id IS NULL OR file_category_id ".$this->_spec->ds->prepareIn(array_keys($resultCategory));
+    	  $where[] = "file_category_id IS NULL OR file_category_id ".$ds->prepareIn(array_keys($resultCategory));
       } else {
-        $where["file_category_id"] = $this->_spec->ds->prepareIn(array_keys($resultCategory));
+        $where["file_category_id"] = $ds->prepareIn(array_keys($resultCategory));
       }
       $where["object_id"] = " IS NULL";
       if($where1){

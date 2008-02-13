@@ -169,8 +169,6 @@ class CMediusers extends CMbObject {
   }
 
   function delete() {
-    // @todo delete Favoris CCAM et CIM en cascade
-
     $msg = null;
     // Delete corresponding dP user first
     if (!$msg = $this->canDeleteEx()) {
@@ -506,8 +504,11 @@ class CMediusers extends CMbObject {
 
   /**
    * Load functions with permissions for given group, current group by default
+   * @param $permType perm_constant Level of permission
+   * @param $group_id ref|CGroup filter on group
+   * @return array<CFunctions> Found functions
    */
-  function loadFonctions($permType = PERM_READ, $group_id = null) {
+  static function loadFonctions($permType = PERM_READ, $group_id = null) {
     global $g;
     $functions = new CFunctions;
     $functions->group_id = mbGetValue($group_id, $g);

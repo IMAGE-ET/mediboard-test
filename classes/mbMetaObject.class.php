@@ -32,7 +32,7 @@ class CMbMetaObject extends CMbObject{
     return $specs;
   }
     
-  function setObject(CMbObject $object) {
+  function setObject($object) {
     $this->_ref_object = $object;
     $this->object_id = $object->_id;
     $this->object_class = $object->_class_name;

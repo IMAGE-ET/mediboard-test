@@ -283,10 +283,10 @@ class CSetupdPpatients extends CSetup {
       $limit = "0,1000";
       $pat = new CPatient;
       $listPat = $pat->loadList($where, null, $limit);
-      while(count($listPat)) {
-        foreach($listPat as $key => $pat) {
-          if($msg = $listPat[$key]->store(false)) {
-            trigger_error("Erreur store [".$listPat[$key]->_id."] : ".$msg);
+      while (count($listPat)) {
+        foreach ($listPat as &$pat) {
+          if ($msg = $pat->store()) {
+            trigger_error("Erreur store [$pat->_id] : $msg");
             return false;
           }
         }

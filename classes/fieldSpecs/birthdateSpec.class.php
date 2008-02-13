@@ -31,9 +31,9 @@ class CBirthDateSpec extends CMbFieldSpec {
     return("birthdate");
   }
   
-  function checkProperty(&$object){
+  function checkProperty($object){
     $fieldName = $this->fieldName;
-    $propValue =& $object->$fieldName;
+    $propValue = $object->$fieldName;
     
     $matches = array();
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {

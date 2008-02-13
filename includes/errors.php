@@ -18,7 +18,7 @@ $performance["warning"] = 0;
 $performance["notice"] = 0;
 $logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
 
-error_reporting( E_ALL );
+error_reporting(E_STRICT);
 ini_set("error_log", $logPath);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
@@ -81,7 +81,7 @@ function mbRelativePath($absPath) {
   
   $relPath = strpos($absPath, $mbPath) === 0 ? 
     substr($absPath, strlen($mbPath) + 1) :
-    $mbPath;
+    $absPath;
     
   return $relPath;
 }
@@ -174,27 +174,34 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $log .= "<br />";
   
+  // Erreur générale
+  $errfile = mbRelativePath($errfile);
   $log .= "\n<strong>Time: </strong>$errorTime";
   $log .= "\n<strong>Type: </strong>$errorType";
   $log .= "\n<strong>Text: </strong>$errstr";
-  $log .= "\n<strong>File: </strong>" . str_replace("/", "::", mbRelativePath($context["file"]));
+  $log .= "\n<strong>File: </strong>$errfile";
   $log .= "\n<strong>Line: </strong>$errline";
   $log .= "<hr />";
   
+  // Contextes 
   $contexts = debug_backtrace();
   array_shift($contexts);
   foreach($contexts as $context) {
     $log .= "\n<strong>Function: </strong>" . $context["function"];
+    
     if (isset($context["class"])) {
       $log .= "\n<strong>Class: </strong>" . $context["class"];
     }
+
     if (isset($context["file"])) {
-      $log .= "\n<strong>File: </strong>" . str_replace("/", " :: ", mbRelativePath($context["file"]));
-      
+      $context["file"] = mbRelativePath($context["file"]);
+      $log .= "\n<strong>File: </strong>" . $context["file"];      
     }
+    
     if (isset($context["line"])) {
       $log .= "\n<strong>Line: </strong>" . $context["line"];
     }
+    
     $log .= "<br />";
   }
   
@@ -211,6 +218,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   }
 } 
 
+// @TODO Should be set to E_STRICT
 set_error_handler("errorHandler");
 
 // Initialize custom error handler
