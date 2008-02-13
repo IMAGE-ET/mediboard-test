@@ -177,7 +177,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   $log .= "\n<strong>Time: </strong>$errorTime";
   $log .= "\n<strong>Type: </strong>$errorType";
   $log .= "\n<strong>Text: </strong>$errstr";
-  $log .= "\n<strong>File: </strong>" . str_replace("/", " :: ", mbRelativePath($context["file"]));
+  $log .= "\n<strong>File: </strong>" . str_replace("/", "::", mbRelativePath($context["file"]));
   $log .= "\n<strong>Line: </strong>$errline";
   $log .= "<hr />";
   

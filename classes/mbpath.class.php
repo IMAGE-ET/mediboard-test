@@ -7,7 +7,8 @@
  * @author Thomas Despoix
  */
 
-@require_once ("Archive/Tar.php");
+// PEAR Throws 
+require_once ("Archive/Tar.php");
 require_once ("Archive/Zip.php");
 
 class CMbPath {

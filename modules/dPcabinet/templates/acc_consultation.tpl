@@ -57,6 +57,7 @@
       </ul>
 
 			<hr class="control_tabs"/>
+			
       <div id="ccam">
         {{assign var="module" value="dPcabinet"}}
         {{assign var="subject" value=$consult}}
