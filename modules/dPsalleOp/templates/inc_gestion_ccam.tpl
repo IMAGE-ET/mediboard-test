@@ -2,7 +2,7 @@
 
 function signerActes(object_id, object_class){
   var url = new Url;
-  url.setModuleAction("dPsalleOp", "httpreq_vw_signature_actes");
+  url.setModuleAction("dPsalleOp", "vw_signature_actes");
   url.addParam("object_id", object_id);
   url.addParam("object_class", object_class);
   url.popup(625, 600, 'Signature des actes');

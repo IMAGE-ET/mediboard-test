@@ -22,12 +22,18 @@ function viewMsg($msg, $action, $redirect = "", $txt = ""){
 
 global $AppUI, $m;
 
+$date = mbGetValueFromPost("date");
+$dialog = mbGetValueFromPost("dialog");
 $praticien_id = mbGetValueFromPost("praticien_id");
 $object_id = mbGetValueFromPost("object_id");
 $object_class = mbGetValueFromPost("object_class");
 $password = mbGetValueFromPost("password");
 
-$redirectUrl = "m=dPsalleOp&a=httpreq_vw_signature_actes&object_id=$object_id&object_class=$object_class&dialog=1";
+if($dialog){
+  $redirectUrl = "m=dPsalleOp&a=vw_signature_actes&object_id=$object_id&object_class=$object_class&dialog=1";
+} else {
+  $redirectUrl = "m=dPsalleOp&tab=vw_signature_actes&date=$date";
+}
 
 // Chargement du praticien
 $praticien = new CMediusers();
@@ -63,6 +69,6 @@ foreach($actes_ccam as $key => $_acte_ccam){
   viewMsg($msg, "msg-CActeCCAM-title-modify", $redirectUrl);
 }
 
-$AppUI->redirect("m=dPsalleOp&a=httpreq_vw_signature_actes&object_id=$object_id&object_class=$object_class&dialog=1");
+$AppUI->redirect($redirectUrl);
 
 ?>
