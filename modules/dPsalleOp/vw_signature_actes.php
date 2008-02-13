@@ -35,7 +35,10 @@ $object_class = mbGetValueFromGet("object_class");
 
 $salle = new CSalle();
 $salle->group_id = $g;
-$salles = $salle->loadMatchingList();
+$listSalle = $salle->loadMatchingList();
+
+$praticien = new CMediusers();
+$listPraticien = $praticien->loadPraticiens();
 
 // Signature des actes en definissant un objet
 if($dialog){
@@ -110,9 +113,10 @@ $smarty->assign("nonSigne", $nonSigne);
 $smarty->assign("redirectUrl", $a);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("dialog", $dialog);
-$smarty->assign("salles", $salles);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("salle_id", $salle_id);
+$smarty->assign("listSalle", $listSalle);
+$smarty->assign("listPraticien", $listPraticien);
 
 if($dialog){
   $smarty->assign("object", $object);

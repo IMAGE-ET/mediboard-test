@@ -15,20 +15,21 @@ function pageMain(){
   <tr>
     <th>
     <div style="float: right">
+      Filtres
       <form name="typeAffichage" action="?" method="get">
         <input type="hidden" name="m" value="dPsalleOp" />
         <input type="hidden" name="tab" value="vw_signature_actes" />
         <input type="hidden" name="date" value="{{$date}}" />
 		    <select name="praticien_id" onchange="this.form.salle_id.value = ''; submit();">
-		    <option value="">&mdash; Sélection d'un praticien</option>
-		    {{foreach from=$praticiens item=praticien}}
+		    <option value="">&mdash; Tous les praticiens</option>
+		    {{foreach from=$listPraticien item=praticien}}
 		      <option value="{{$praticien->_id}}" {{if $praticien_id == $praticien->_id}}selected="selected"{{/if}}>{{$praticien->_view}}</option>
 		    {{/foreach}}
 		    </select>
 		    
 		    <select name="salle_id" onchange="this.form.praticien_id.value = ''; submit();">
-		    <option value="">&mdash; Sélection d'une salle</option>
-		    {{foreach from=$salles item=salle}}
+		    <option value="">&mdash; Toutes les salles</option>
+		    {{foreach from=$listSalle item=salle}}
 		      <option value="{{$salle->_id}}" {{if $salle_id == $salle->_id}}selected="selected"{{/if}}>{{$salle->_view}}</option>
 		    {{/foreach}}
 		    </select>
@@ -107,7 +108,7 @@ function pageMain(){
 				        </td>
 				        <td colspan="2" style="text-align: right">
 				        {{$_praticien->_view}}
-				          <form name="signature_acte-{{$_praticien->_id}}" action="?" method="post">
+				          <form name="signature_acte-{{$_praticien->_id}}-{{$_operation->_id}}" action="?" method="post">
 							      <input type="hidden" name="dosql" value="do_signature_actes_aed" />
 							      <input type="hidden" name="m" value="dPsalleOp" />
 							      <input type="hidden" name="del" value="0" />
@@ -124,8 +125,16 @@ function pageMain(){
 				    {{/if}}
 				    {{/foreach}}
 				  {{/foreach}}
+				{{foreachelse}}
+				<tr>
+				  <td>
+				   <div class="big-info">
+				     Aucune intervention
+			   	 </div>
+			  
+				 </td>
+			  </tr>
 				{{/foreach}}
-				
 		</table>
     </td>
   </tr>
