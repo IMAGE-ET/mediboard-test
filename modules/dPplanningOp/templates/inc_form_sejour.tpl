@@ -107,7 +107,7 @@ var Sejour = {
 		  var sortie_prevue = sejour_collision[sejour_id]["sortie_prevue"];
 		  if ((entree_prevue <= date_plage) && (sortie_prevue >= date_plage)) {
 		    if (sejour_courant_id != sejour_id){
-		      var msg = printf("Voulez-vous place une intervention le %s. Il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
+		      var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
 		                Date.fromDATE(date_plage).toLocaleDate(), 
 		                Date.fromDATE(entree_prevue).toLocaleDate(),
 		                Date.fromDATE(sortie_prevue).toLocaleDate());
