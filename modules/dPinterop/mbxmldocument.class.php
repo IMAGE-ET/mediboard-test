@@ -25,8 +25,8 @@ class CMbXMLDocument extends DOMDocument {
     $this->formatOutput = true;
   }
   
-  function setDocument($doxumentfilename) {
-    $this->documentfilename = $doxumentfilename;
+  function setDocument($documentfilename) {
+    $this->documentfilename = $documentfilename;
   }
   
   function setSchema($schemapath, $schemaname) {

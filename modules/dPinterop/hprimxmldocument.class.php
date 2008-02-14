@@ -77,7 +77,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     foreach(glob($pattern) as $sentFile) {
       $baseName = basename($sentFile);
       $matches = null;
-      preg_match("`^op[[:digit:]]{6}-([[:digit:]]*)\.xml$`", $baseName, $matches);
+      preg_match("`^[[:alpha:]]{2,3}[[:digit:]]{6}-([[:digit:]]*)\.xml$`", $baseName, $matches);
       $timeStamp = $matches[1];
       $this->sentFiles[] = array (
         "name" => $baseName,
@@ -92,7 +92,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return $this->addElement($elParent, $elName, $elValue);
   }
   
-  function addDateHeure($elParent, $dateTime) {
+  function addDateHeure($elParent, $dateTime = null) {
     $this->addElement($elParent, "date", mbDate(null, $dateTime));
     $this->addElement($elParent, "heure", mbTime(null, $dateTime));
   }

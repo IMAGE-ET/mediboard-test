@@ -20,7 +20,7 @@ function doAction(sAction) {
 
 <tr>
   <td onclick="doAction('extractFiles');">
-  	<button class="tick">Installer le schema HPRIM 'ServeurActes'</button>
+  	<button class="tick">Installation HPRIM 'ServeurActes' et 'EvenementPmsi'</button>
   </td>
   <td class="text" id="extractFiles" />
 </tr>

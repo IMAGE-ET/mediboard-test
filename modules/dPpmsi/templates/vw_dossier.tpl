@@ -53,7 +53,7 @@ function submitSHSLink() {
   submitFormAjax(oOpForm, 'systemMsg');
 }
 
-function exporterDossier(operation_id, oOptions) {
+function exporterHPRIM(object_id, typeObject, oOptions) {
   oDefaultOptions = {
   	onlySentFiles : false
   };
@@ -62,7 +62,8 @@ function exporterDossier(operation_id, oOptions) {
   
   var url = new Url();
   url.setModuleAction("dPinterop", "export_hprim");
-  url.addParam("operation_id", operation_id);
+  url.addParam("object_id", object_id);
+  url.addParam("typeObject", typeObject);
   url.addParam("sent_files", oDefaultOptions.onlySentFiles ? 1 : 0);
   
   oRequestOptions = {
@@ -71,18 +72,18 @@ function exporterDossier(operation_id, oOptions) {
   	  "Export H'XML vers Sa@nté.com"
   }
   
-  url.requestUpdate("hprim_export" + operation_id, oRequestOptions); 
+  url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
 }
 
-function submitPatForm(operation_id) {
-  var oForm = document.forms["editPatFrm" + operation_id];
-  var iTarget = "updatePat" + operation_id;
+function submitPatForm() {
+  var oForm = document.forms.editPatFrm;
+  var iTarget = "updatePat";
   submitFormAjax(oForm, iTarget);
 }
 
-function submitSejourForm(operation_id) {
-  var oForm = document.forms["editSejourFrm" + operation_id];
-  var iTarget = "updateSejour" + operation_id;
+function submitSejourForm(sejour_id) {
+  var oForm = document.forms["editSejourFrm" + sejour_id];
+  var iTarget = "updateSejour" + sejour_id;
   submitFormAjax(oForm, iTarget);
 }
 
@@ -182,6 +183,37 @@ function pageMain() {
     <td>
       <table class="form">
         <tr>
+          <td colspan="4">
+            <form name="editPatFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+            <input type="hidden" name="dosql" value="do_patients_aed" />
+            <input type="hidden" name="m" value="dPpatients" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
+ 
+            <table class="form">
+              <tr>
+                <th class="category" colspan="3">
+                  <em>Lien S@nté.com</em> : Patient 
+                  <button class="submit" type="button" onclick="submitPatForm()">Valider</button>
+                </th>
+              </tr>
+
+              <tr>
+                <th>
+                  <label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
+                </th>
+                <td>
+                  <input type="text" class="notNull {{$patient->_props.SHS}}" name="SHS" value="{{$patient->SHS}}" size="8" maxlength="8" />
+                </td>
+                <td id="updatePat" />
+              </tr>
+            </table>
+ 
+            </form>
+          </td>
+        </tr>
+        <tr>
           <th colspan="4" class="title">Liste des séjours</th>
         </tr>
         {{foreach from=$patient->_ref_sejours item=curr_sejour}}
@@ -193,6 +225,46 @@ function pageMain() {
           </td>
         </tr>
         <tbody class="effectSejour" id="sejour{{$curr_sejour->sejour_id}}">
+        <tr>
+          <td colspan="4">
+            <form name="editSejourFrm{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            
+            <input type="hidden" name="dosql" value="do_sejour_aed" />
+            <input type="hidden" name="m" value="dPplanningOp" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
+            <input type="hidden" name="entree_prevue" value="{{$curr_sejour->entree_prevue}}" />
+            <input type="hidden" name="sortie_prevue" value="{{$curr_sejour->sortie_prevue}}" />
+ 
+            <table class="form">
+              <tr>
+                <th class="category" colspan="3">
+                  <em>Lien S@nté.com</em> : Séjour
+                  <button class="submit" type="button" onclick="submitSejourForm({{$curr_sejour->sejour_id}})">Valider</button>
+                </th>
+              </tr>
+              <tr>
+                <th>
+                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label>
+                </th>
+                <td>
+                  <input type="text" class="notNull {{$curr_sejour->_props.venue_SHS}}" name="venue_SHS" value="{{$curr_sejour->venue_SHS}}" size="8" maxlength="8" />
+                </td>
+                <td rowspan="2" id="updateSejour{{$curr_sejour->sejour_id}}" />
+              </tr>
+              <tr>
+                <th>
+                  Suggestion
+                </th>
+                <td>
+                  {{$curr_sejour->_venue_SHS_guess}}
+                </td>
+              </tr>
+            </table>
+
+            </form>
+          </td>
+        </tr>
         <tr>
           <th class="category" colspan="4">
             <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
@@ -215,6 +287,10 @@ function pageMain() {
             <div id="GHM-{{$curr_sejour->_id}}">
             {{include file="inc_vw_GHM.tpl"}}
             </div>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" id="hprim_export_sej{{$sejour->_id}}">
           </td>
         </tr>
         <tr>
@@ -450,72 +526,6 @@ function pageMain() {
         </tr>
         <tr>
           <td colspan="4">
-            <form name="editPatFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
-            <input type="hidden" name="dosql" value="do_patients_aed" />
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
- 
-            <table class="form">
-              <tr>
-                <th class="category" colspan="2">
-                  <em>Lien S@nté.com</em> : Patient 
-                  <button class="submit" type="button" onclick="submitPatForm({{$curr_op->operation_id}})">Valider</button>
-                </th>
-              </tr>
-
-              <tr>
-                <th>
-                  <label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
-                </th>
-                <td>
-                  <input type="text" class="notNull {{$patient->_props.SHS}}" name="SHS" value="{{$patient->SHS}}" size="8" maxlength="8" />
-                </td>
-              </tr>
-
-              <tr>
-                <td colspan="2" id="updatePat{{$curr_op->operation_id}}" />
-              </tr>
-            </table>
- 
-            </form>
- 
-            <form name="editSejourFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-            
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
-            <input type="hidden" name="entree_prevue" value="{{$curr_sejour->entree_prevue}}" />
-            <input type="hidden" name="sortie_prevue" value="{{$curr_sejour->sortie_prevue}}" />
- 
-            <table class="form">
-              <tr>
-                <th class="category" colspan="2">
-                  <em>Lien S@nté.com</em> : Séjour
-                  <button class="submit" type="button" onclick="submitSejourForm({{$curr_op->operation_id}})">Valider</button>
-                </th>
-              </tr>
-
-              <tr>
-                <th>
-                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label>
-                  <br />Suggestion :
-                </th>
-                <td>
-                  <input type="text" class="notNull {{$curr_sejour->_props.venue_SHS}}" name="venue_SHS" value="{{$curr_sejour->venue_SHS}}" size="8" maxlength="8" />
-                  <br />{{$curr_sejour->_venue_SHS_guess}}
-                </td>
-              </tr>
-
-              <tr>
-                <td colspan="2" id="updateSejour{{$curr_op->operation_id}}" />
-              </tr>
-            </table>
-
-            </form>
-            
             <form name="editOpFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
@@ -573,7 +583,7 @@ function pageMain() {
             <table class="form">
               <tr>
                 <td class="button">
-                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->operation_id}})" >Tout valider</button>
+                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}})" >Tout valider</button>
                 </td>
               </tr>
             </table>
@@ -582,17 +592,19 @@ function pageMain() {
 
         <tr>
           <td class="button" colspan="4">
-            <button class="tick" onclick="exporterDossier({{$curr_op->operation_id}})">Exporter vers S@nté.com</button>
+            <button class="tick" onclick="exporterHPRIM({{$curr_op->_id}}, 'op')">Exporter vers S@nté.com</button>
           </td>
         </tr>
         <tr>
-          <td class="text" id="hprim_export{{$curr_op->operation_id}}" colspan="4">
+          <td class="text" id="hprim_export_op{{$curr_op->_id}}" colspan="4">
           </td>
         </tr>
         
         <tr>
-          <th>Documents attachés :</th>
-          <td colspan="3" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
+          <td colspan="4">Documents attachés :</th>
+        </tr>
+        <tr>
+          <td colspan="4" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">
             <a href="#" onclick="setObject( {
               objClass: '{{$curr_op->_class_name}}', 
               keywords: '', 
