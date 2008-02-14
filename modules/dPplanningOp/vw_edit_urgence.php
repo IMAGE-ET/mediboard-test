@@ -89,6 +89,17 @@ $sejour->makeDatesOperations();
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
+// Creation d'un tableau permettant d'anticiper les collisions entre sejours
+$sejour_collision = array();
+if($sejours){
+	foreach($sejours as $key => $_sejour){
+	  $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
+	  $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
+  }
+}
+
+
+
 // Récupération des modèles
 
 // Modèles de l'utilisateur
@@ -138,6 +149,8 @@ $heure_entree_jour   = $config["heure_entree_jour"];
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("sejour_collision", $sejour_collision);
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));

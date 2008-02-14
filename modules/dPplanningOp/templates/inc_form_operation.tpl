@@ -127,13 +127,13 @@
     </th>
     <td>
       <input type="hidden" name="plageop_id" value="" />
-      <input type="hidden" name="_date" value="" />
-      <input type="hidden" name="_datestr" value="" />
+      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime}}{{else}}{{$today}}{{/if}}" />
+     
       <select name="date" onchange="
         {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
         Value.synchronize(this);
         document.editSejour._curr_op_date.value = this.value;
-        modifSejour();">
+        modifSejour(); Form.Element.setValue(this.form._date, this.value);">
         {{if $op->operation_id}}
         <option value="{{$op->_datetime|date_format:"%Y-%m-%d"}}" selected="selected">
           {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)
@@ -162,13 +162,20 @@
     </td>
     {{else}}
     <th>
-      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
+      <input type="hidden" name="plageop_id" class="notNull {{$op->_props.plageop_id}}" onchange="Value.synchronize(this);" ondblclick="PlageOpSelector.init()" value="{{$plage->plageop_id}}" />
       {{mb_label object=$op field="plageop_id"}}
       <input type="hidden" name="date" value="" />
-      <input type="hidden" name="_date" value="{{$plage->date}}" />
+      <input type="hidden" name="_date" value="{{$plage->date}}" 
+      onchange="Value.synchronize(this); 
+                if(this.value){ 
+                  this.form._locale_date.value = Date.fromDATE(this.value).toLocaleDate() 
+                } else { 
+                  this.form._locale_date.value = '' 
+                }; 
+                preselectSejour(this.value);" />
     </th>
     <td class="readonly">
-      <input type="text" name="_datestr" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}" />
+      <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
       {{if $op->_ref_salle}}
       en {{$plage->_ref_salle->_view}}
       {{/if}}
@@ -187,9 +194,7 @@
         var oSejourForm = document.editSejour;
         
         this.sPlage_id      = "plageop_id";
-        this.sPlage_id_easy = "plageop_id";
-        this.sDate         = "_datestr";
-        this.sDate_easy    = "_datestr";
+        this.sDate         = "_date";
         this.sType         = "type";
         
         this.s_hour_entree_prevue = "_hour_entree_prevue";

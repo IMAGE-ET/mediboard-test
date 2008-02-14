@@ -44,10 +44,9 @@ function removePlageOp(bIgnoreGroup){
   if(oFormOp){
     if((oFormOp._group_id.value != oFormSejour.group_id.value) || bIgnoreGroup){
       oFormOp._group_id.value = oFormSejour.group_id.value;
-      oFormOp._datestr.value = "";
       Form.Element.setValue(oFormOp.plageop_id, "");
-      oFormOp._date.value = "";
-      oFormOp.date.value = "";
+      Form.Element.setValue(oFormOp._date, "");
+      Form.Element.setValue(oFormOp.date, "");  
     }
   }
 }
@@ -102,17 +101,26 @@ function updateSortiePrevue() {
   }
   
   var sDate = oForm._date_entree_prevue.value;
-  if (sDate) {
-    // Add days
-    var dDate = Date.fromDATE(sDate);
+  if (!sDate) {
+    return;
+  }
+  
+  
+  // Add days
+  var dDate = Date.fromDATE(sDate);
+  var nDuree = parseInt(oForm._duree_prevue.value, 10);
     
-    dDate.addDays(parseInt(oForm._duree_prevue.value, 10));
+  dDate.addDays(nDuree);
 		
-		// Update fields
-		Form.Element.setValue(oForm._date_sortie_prevue, dDate.toDATE());
-    oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
-    oDiv.innerHTML = dDate.toLocaleDate();
-    updateHeureSortie();
+  // Update fields
+	Form.Element.setValue(oForm._date_sortie_prevue, dDate.toDATE());
+  oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
+  oDiv.innerHTML = dDate.toLocaleDate();
+  updateHeureSortie();
+  
+  // Si meme jour, sortie apres entree
+  if (nDuree == 0){
+    oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, oForm._hour_entree_prevue.value + 1);
   }
 }
 
@@ -143,6 +151,7 @@ function checkSejoursToReload() {
   if(!$("selectSejours")) {
     return;
   }
+  
   var oForm = document.editSejour;
   if(bChangePat) {
     bChangePat = 0;

@@ -96,11 +96,22 @@ if($op->_id){
 mbSetValueToSession("chir_id", $chir->_id);
 
 $sejour->makeDatesOperations();
+
 // Chargement du numero de dossier du sejour
 $sejour->loadNumDossier();
 
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
+
+
+// Creation d'un tableau permettant d'anticiper les collisions entre sejours
+$sejour_collision = array();
+if($sejours){
+	foreach($sejours as $key => $_sejour){
+	  $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
+	  $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
+  }
+}
 
 // Récupération des modèles
 
@@ -155,6 +166,8 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+$smarty->assign("sejour_collision", $sejour_collision);
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 

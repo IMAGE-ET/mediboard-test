@@ -1,56 +1,33 @@
 <script type="text/javascript">
 
-function checkHeureSortieSelector(){
-  var oForm = window.opener.document.editSejour;
-  var form = document.frmSelector;
-  
-  // heure d'entree selectionne dans le plage selector
-  var heure_entree = parseInt(form.hour_jour.value, 10);
-  
-  // on compare l'heure d'entree selectionne avec l'heure de sortie
-  if (oForm._hour_sortie_prevue.value < heure_entree + 1) {
-    heure_entree = heure_entree + 1;
-    oForm._hour_sortie_prevue.value = heure_entree;
-  }
-}
-
 function setClose(date) {
   var form = document.frmSelector;
   
   var list = form.list;
   if(date == '') {
-    date = form.fmtdate.value;
+    date = form._date.value;
   }
-  var key = 0;
-  key = getCheckedValue(list);
-  var val = date;
+  var plage_id = 0;
+  plage_id = getCheckedValue(list);
+  var sDate = date;
   
-  if (key == 0) {
+  if (plage_id == 0) {
     alert('choisissez une plage non pleine');
   	return;
   }
-  var adm = 0;
-  if(form.admission[1].checked) {
-    adm = 1;
-  } else if(form.admission[2].checked) {
-    adm = 2;
-  }
-  
+   
+  var adm = getCheckedValue(form.admission);
   var typeHospi = "ambu";
   var hour_entree = form.hour_jour.value;
   var min_entree  = form.min_jour.value;
   // passage en hospi complete si admission == veille
-  if(getCheckedValue(form.admission) == "veille"){
+  if(adm == "veille"){
     typeHospi = "comp";
     hour_entree = form.hour_veille.value;
     min_entree  = form.min_veille.value;
   }
     
-  window.opener.PlageOpSelector.set(key,val,adm,typeHospi, hour_entree, min_entree);
-  
-  if(getCheckedValue(form.admission) == "jour"){
-    checkHeureSortieSelector();
-  }
+  window.opener.PlageOpSelector.set(plage_id,sDate,adm,typeHospi, hour_entree, min_entree);  
   window.close();
 }  
 
@@ -71,7 +48,7 @@ function pageMain(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="a" value="plage_selector" />
 <input type="hidden" name="dialog" value="1" />
-<input type="hidden" name="fmtdate" value="" />
+<input type="hidden" name="_date" value="" />
 
 <table class="main">
   <tr>
@@ -121,7 +98,7 @@ function pageMain(){
                 <label 
                   for="list_{{$curr_plage->_id}}" 
                   title="Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}"
-                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')"{{/if}}
+                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}')"{{/if}}
                 >
                   {{$curr_plage->date|date_format:"%a %d"}} 
                   en {{$curr_plage->_ref_salle->nom}}
@@ -151,7 +128,7 @@ function pageMain(){
           <td>
             {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
             {{if (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))}}
-            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date|date_format:"%d/%m/%Y"}}')" onclick="document.frmSelector.fmtdate.value='{{$curr_plage->date|date_format:"%d/%m/%Y"}}'"/>
+            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date}}')" onclick="document.frmSelector._date.value='{{$curr_plage->date}}'"/>
             {{/if}}
             {{/if}}
           </td>

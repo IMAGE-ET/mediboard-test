@@ -9,6 +9,14 @@ var PlageOpSelector = {
   s_hour_entree_prevue: null,
   s_min_entree_prevue : null,
   s_date_entree_prevue: null,
+  
+  prepared: {
+    plage_id: null,
+    sDate: null,
+    bAdm: null,
+    dAdm : null
+  },
+  
   options : {
     width : 450,
     height: 450
@@ -28,50 +36,63 @@ var PlageOpSelector = {
   },
 
   set: function(plage_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
+    // Declaration de formulaires
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
-
+    
     if(!oSejourForm._duree_prevue.value) {
       oSejourForm._duree_prevue.value = 0;
     }
-
+    
     if (plage_id) {
       if(oOpForm.plageop_id.value != plage_id) {
         oOpForm.rank.value = 0;
       }
-      
-      Form.Element.setValue(oOpForm[this.sPlage_id], plage_id);
-      Form.Element.setValue(oOpForm[this.sDate]    , sDate);
-      if(oOpFormEasy) {
-        Form.Element.setValue(oOpFormEasy[this.sPlage_id_easy], plage_id);
-        Form.Element.setValue(oOpFormEasy[this.sDate_easy]    , sDate);
-      }
-     
-      var dAdm = Date.fromLocaleDate(sDate);
-      oOpForm._date.value = dAdm.toDATE();
+           
+      var dAdm = Date.fromDATE(sDate);
       // Initialize admission date according to operation date
-      if(bAdm == 0) {
-        dAdm.setDate(dAdm.getDate()-1);
+      if (bAdm == "veille") {
+        dAdm.addDays(-1);
       }
     
-      if (bAdm != 2) {
+      if (bAdm != "aucune") {
         dAdm.setHours(hour_entree);
         dAdm.setMinutes(min_entree);
-        oSejourForm[this.s_hour_entree_prevue].value = dAdm.getHours();
-        oSejourForm[this.s_min_entree_prevue].value  = dAdm.getMinutes();
-        oSejourForm[this.s_date_entree_prevue].value = dAdm.toDATE();
+    
         var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
         div_rdv_adm.innerHTML = dAdm.toLocaleDate();
       }
       
-      oSejourForm._curr_op_date.value = Date.fromLocaleDate(sDate).toDATE();
-      
-      oSejourForm[this.s_date_entree_prevue].onchange();
-      
+      oSejourForm._curr_op_date.value = sDate;
+        
       if(typeHospi == "comp" && oSejourForm[this.sType].value=="ambu"){
         oSejourForm[this.sType].value = "comp";
       }
+    }  
+    
+    // Sauvegarde des valeurs dans l'objet prepared
+    this.prepared.dAdm = dAdm;
+    this.prepared.plage_id = plage_id;
+    this.prepared.sDate = sDate;
+    this.prepared.bAdm = bAdm;
+    
+    // Lancement de l'execution du set
+    window.setTimeout( window.PlageOpSelector.doSet , 1);
+  },
+  
+  
+  doSet: function(){
+    var oOpForm     = document.editOp;
+    var oSejourForm = document.editSejour;
+   
+    Form.Element.setValue(oOpForm[PlageOpSelector.sPlage_id] , PlageOpSelector.prepared.plage_id);
+    Form.Element.setValue(oOpForm[PlageOpSelector.sDate]     , PlageOpSelector.prepared.sDate);
+   
+    if(PlageOpSelector.prepared.bAdm != "aucune"){ 
+      Form.Element.setValue(oSejourForm[PlageOpSelector.s_hour_entree_prevue], PlageOpSelector.prepared.dAdm.getHours());
+      Form.Element.setValue(oSejourForm[PlageOpSelector.s_min_entree_prevue], PlageOpSelector.prepared.dAdm.getMinutes());
+      Form.Element.setValue(oSejourForm[PlageOpSelector.s_date_entree_prevue], PlageOpSelector.prepared.dAdm.toDATE());
     }
   }
 }

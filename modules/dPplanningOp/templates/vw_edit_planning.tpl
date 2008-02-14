@@ -170,9 +170,10 @@ function pageMain() {
       {{include file="inc_form_operation.tpl"}}
     </td>
     
-    <td id="inc_form_sejour">
-      {{assign var="mode_operation" value=true}}
-      {{include file="inc_form_sejour.tpl"}}
+    <td>
+      <div id="inc_form_sejour"> 
+        {{include file="inc_form_sejour.tpl" mode_operation=true}}
+      </div>
     </td>
   </tr>
   </tbody>
