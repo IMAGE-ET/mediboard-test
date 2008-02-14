@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
 Main.add( function(){
-  sejour_collision = {{$sejour_collision|@json}};
   var oForm = document.editOp;
-  preselectSejour(oForm._date.value, sejour_collision);
+  Sejour.sejour_collision = {{$sejour_collision|@json}};
+  Sejour.preselectSejour(oForm._date.value);
 } );
 
 </script>

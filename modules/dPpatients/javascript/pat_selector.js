@@ -12,7 +12,10 @@ var PatSelector = {
     height: 500,
     useVitale: 0
   },
-    
+  prepared : {
+    id: null,
+    view : null
+  },
   pop: function() {
     var url = new Url();
     url.setModuleAction("dPpatients", "pat_selector");
@@ -21,13 +24,23 @@ var PatSelector = {
   },
   
   set: function(id, view) {
-    var oForm     = document[this.sForm];
-    var oFormEasy = document[this.sFormEasy];
-    Form.Element.setValue(oForm[this.sId]           , id);
-    Form.Element.setValue(oForm[this.sView]         , view);
+    this.prepared.id = id;
+    this.prepared.view = view;
+    
+    // Lancement de l'execution du set
+    window.setTimeout( window.PatSelector.doSet , 1);
+  },
+    
+  doSet: function(){
+    var oForm     = document[PatSelector.sForm];
+    var oFormEasy = document[PatSelector.sFormEasy];
+    
+    Form.Element.setValue(oForm[PatSelector.sId]           , PatSelector.prepared.id);
+    Form.Element.setValue(oForm[PatSelector.sView]         , PatSelector.prepared.view);
     if(oFormEasy) {
-      Form.Element.setValue(oFormEasy[this.sId_easy]  , id);
-      Form.Element.setValue(oFormEasy[this.sView_easy], view);
+      Form.Element.setValue(oFormEasy[PatSelector.sId_easy]  , PatSelector.prepared.id);
+      Form.Element.setValue(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);
     }
   }
+  
 }

@@ -81,48 +81,55 @@ function checkChambreSejourEasy(){
   }
 }
 
+{{if $mode_operation}}
 
-/* 
+// Declaration d'un objet Sejour
+var Sejour = {
+  sejour_collision: [],
+  
+  /* 
    Fonction permettant de preselectionner un sejour existant
    en fonction de la date d'intervention choisie
-*/
-{{if $mode_operation}}
-function preselectSejour(date_plage, sejour_collision){
-  if(!date_plage){
-    return;
-  }
-  
-  // Recuperation de la liste des sejour
-  if(!sejour_collision){
-	  sejour_collision = {{$sejour_collision|@json}};
-  }
-  
-  var oForm = document.editSejour;
-  var sejour_courant_id = oForm.sejour_id.value;
-  	
-	// Liste des sejours
-	for (sejour_id in sejour_collision){
-	  var entree_prevue = sejour_collision[sejour_id]["entree_prevue"];
-	  var sortie_prevue = sejour_collision[sejour_id]["sortie_prevue"];
-	  if ((entree_prevue <= date_plage) && (sortie_prevue >= date_plage)) {
-	    if (sejour_courant_id != sejour_id){
-	      var msg = printf("Voulez-vous place une intervention le %s. Il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
-	                Date.fromDATE(date_plage).toLocaleDate(), 
-	                Date.fromDATE(entree_prevue).toLocaleDate(),
-	                Date.fromDATE(sortie_prevue).toLocaleDate());
-	      
-	      if (confirm(msg)){
-	        Form.Element.setValue(oForm.sejour_id, sejour_id);
-	      }
-	    }
+  */
+  preselectSejour: function(date_plage){
+	  if(!date_plage){
+	    return;
 	  }
-	}
+	  
+	  var sejour_collision = this.sejour_collision;
+
+	  var oForm = document.editSejour;
+	  var sejour_courant_id = oForm.sejour_id.value;
+	  	
+		// Liste des sejours
+		for (sejour_id in sejour_collision){
+		  var entree_prevue = sejour_collision[sejour_id]["entree_prevue"];
+		  var sortie_prevue = sejour_collision[sejour_id]["sortie_prevue"];
+		  if ((entree_prevue <= date_plage) && (sortie_prevue >= date_plage)) {
+		    if (sejour_courant_id != sejour_id){
+		      var msg = printf("Voulez-vous place une intervention le %s. Il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
+		                Date.fromDATE(date_plage).toLocaleDate(), 
+		                Date.fromDATE(entree_prevue).toLocaleDate(),
+		                Date.fromDATE(sortie_prevue).toLocaleDate());
+		      
+		      if (confirm(msg)){
+		        Form.Element.setValue(oForm.sejour_id, sejour_id);
+		      }
+		    }
+		  }
+		}
+  }
+  
+  
 }
 
+
 Main.add( function(){
+  Sejour.sejour_collision = {{$sejour_collision|@json}};
   var oForm = document.editOp;
-  preselectSejour(oForm._date.value);
+  Sejour.preselectSejour(oForm._date.value);
 } );
+
 {{/if}}
 </script>
 
@@ -158,7 +165,7 @@ Main.add( function(){
 {{/if}}
 
 
-<table class="form" onmousemove="checkSejoursToReload()">
+<table class="form">
 
 <tr>
   <th class="category" colspan="4">
@@ -239,7 +246,7 @@ Main.add( function(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat(); checkSejoursToReload();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">

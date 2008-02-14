@@ -172,7 +172,7 @@
                 } else { 
                   this.form._locale_date.value = '' 
                 }; 
-                preselectSejour(this.value);" />
+                Sejour.preselectSejour(this.value);" />
     </th>
     <td class="readonly">
       <input type="text" name="_locale_date" readonly="readonly" size="10" ondblclick="PlageOpSelector.init()" value="{{$plage->date|date_format:"%d/%m/%Y"}}"  />
