@@ -84,10 +84,14 @@ class CMbXMLDocument extends DOMDocument {
   
   function schemaValidate($filename = null) {
     global $dPconfig;
-    if(!$dPconfig["dPinterop"]["hprim_export"]["validation"]) {
+    if (!$dPconfig["dPinterop"]["hprim_export"]["validation"]) {
       return true;
     }
-    if(!$filename) $filename = $this->schemafilename;
+    
+    if (!$filename) {
+      $filename = $this->schemafilename;
+    }
+    
     // PHP < 5.1.x
     if (!function_exists("libxml_use_internal_errors")) {
       return parent::schemaValidate($filename);

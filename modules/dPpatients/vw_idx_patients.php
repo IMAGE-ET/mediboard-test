@@ -64,14 +64,14 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $idsante->object_class = "CPatient";
   $idsante->loadMatchingObject();
   
-  if($idsante->object_id){
+  if ($idsante->object_id){
    $patient = new CPatient();
    $patient->load($idsante->object_id);
    mbSetValueToSession("patient_id", $patient->_id);
    $patients[$patient->_id] = $patient; 
   }
-} else {
-	 
+} 
+else {
 	// Champs vitale
 	if ($useVitale) {
 	  $patVitale->getValuesFromVitale();

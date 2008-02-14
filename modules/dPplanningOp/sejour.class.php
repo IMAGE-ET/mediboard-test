@@ -75,7 +75,6 @@ class CSejour extends CCodable {
   var $_venue_SHS_guess    = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
-  var $_num_dossier        = null;
   var $_curr_op_id         = null;
   var $_curr_op_date       = null;
   
@@ -100,10 +99,12 @@ class CSejour extends CCodable {
   
   // Distant fields
   var $_dates_operations = null;
+  var $_num_dossier      = null;
   
   // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
+  var $_date_sortie     = null;
   var $_admission 			= null;
   var $_service 				= null;
   var $_type_admission  = null;
@@ -179,6 +180,7 @@ class CSejour extends CCodable {
     
     $specs["_entree"]         = "dateTime";
     $specs["_sortie"] 		    = "dateTime";
+    $specs["_date_sortie"] 		= "date";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
     $specs["_admission"] 		  = "text";
@@ -188,6 +190,7 @@ class CSejour extends CCodable {
     $specs["_date_min_stat"]  = "date";
     $specs["_date_max_stat"]  = "date moreEquals|_date_min_stat";
     $specs["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy";
+    $specs["_num_dossier"]    = "str";
     $specs["_ccam_libelle"]   = "bool default|1";
     return $specs;
   }
@@ -541,6 +544,25 @@ class CSejour extends CCodable {
     if(!$this->_num_dossier){
       $this->_num_dossier = "-";
     }
+  }
+  
+  function loadFromNumDossier($num_dossier) {
+    global $dPconfig, $g;
+    $tag_dossier = $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"];
+    if (null == $tag_dossier = str_replace('$g',$g, $tag_dossier)) {
+      return;
+    }
+    
+    $idDossier = new CIdSante400();
+	  $idDossier->id400 = $num_dossier;
+    $idDossier->tag = $tag_dossier;
+	  $idDossier->object_class = $this->_class_name;
+	  $idDossier->loadMatchingObject();
+	  
+	  if ($idDossier->_id) {
+	    $this->load($idDossier->object_id);
+	    $this->_num_dossier = $idDossier->id400;
+	  }
   }
     
   function getExecutantId($code_activite) {

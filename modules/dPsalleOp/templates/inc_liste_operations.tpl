@@ -1,6 +1,12 @@
+{{** 
+  * $urgence bool Urgence mode
+  * $vueReduite bool Affichage compact
+  * $operations array|COperation opérations à afficher
+  *}}
+
 <!-- Entêtes -->
 <tr>
-  {{if @$urgence}}
+  {{if $urgence}}
   <th>Praticien</th>
   {{else}}
   <th>Heure</th>
@@ -50,7 +56,8 @@
   
   {{if !$vueReduite}}
   <td>
-    <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}" title="Modifier l'intervention">
+		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
+    <a href="?m=dPplanningOp&amp;tab={{$direction}}&amp;operation_id={{$_operation->_id}}" title="Modifier l'intervention">
       {{foreach from=$_operation->_ext_codes_ccam item=curr_code}}
       {{$curr_code->code}}<br />
       {{/foreach}}

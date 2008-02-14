@@ -62,26 +62,18 @@ class CDossierMedical extends CMbMetaObject {
     $this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id);
   }
- 
-  
-  
   
   function updateFormFields() {
     parent::updateFormFields();
     
+    // Tokens CIM
     $this->codes_cim = strtoupper($this->codes_cim);
-    $this->_codes_cim = array();
-    if($this->codes_cim){
-      $this->_codes_cim = explode("|", $this->codes_cim);
-    }
+    $this->_codes_cim = $this->codes_cim ? explode("|", $this->codes_cim) : array();
   
-    // Codes CIM10
+    // Objets CIM
     $this->_ext_codes_cim = array();
-    $arrayCodes = array();
-    if ($this->codes_cim)
-      $arrayCodes = explode("|", $this->codes_cim);
-    foreach ($arrayCodes as $value) {
-      $this->_ext_codes_cim[$value] = new CCodeCIM10($value, 1);
+    foreach ($this->_codes_cim as $code_cim) {
+      $this->_ext_codes_cim[$code_cim] = new CCodeCIM10($code_cim, 1);
     }
   }
 
@@ -136,7 +128,14 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
   
-  function dossierMedicalId($object_id, $object_class) {
+  /**
+   * Identifiant de dossier médical lié à l'objet fourni. 
+   * Crée le dossier médical si nécessaire
+   * @param $object_id ref Identifiant de l'objet
+   * @param $object_class str Classe de l'objet
+   * @return ref|CDossierMedical
+   */
+  static function dossierMedicalId($object_id, $object_class) {
     $dossier = new CDossierMedical();
     $dossier->object_id    = $object_id;
     $dossier->object_class = $object_class;

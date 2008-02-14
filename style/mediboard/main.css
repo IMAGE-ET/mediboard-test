@@ -97,13 +97,12 @@ dl {
 
 dt {
   margin-top: 5px;
-  color: #009;
   font-weight: bold;
 }
 
 dd {
   margin-bottom: 0px; 
-  margin-left: 12px;
+  margin-left: 20px;
 }
 
 a:link {

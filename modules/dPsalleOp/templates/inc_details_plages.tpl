@@ -56,13 +56,13 @@
 </form>
 
  <table class="tbl">
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" operations=$curr_plage->_ref_operations}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$curr_plage->_ref_operations}}
 
   {{if $curr_plage->_unordered_operations}}
   <tr>
     <th colspan="10">Non placées</th>
   </tr>
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" operations=$curr_plage->_unordered_operations}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$curr_plage->_unordered_operations}}
   {{/if}}
 </table>
 {{/foreach}}
@@ -79,6 +79,6 @@
   </tr>        
 </table>
 <table class="tbl">
-  {{include file=inc_liste_operations.tpl urgence=1 operations=$urgences}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$urgences}}
 </table>
 {{/if}}

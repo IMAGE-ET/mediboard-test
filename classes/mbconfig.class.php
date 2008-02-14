@@ -68,9 +68,10 @@ class CMbConfig {
     
     $this->values = $newValues;
     
+    // Throws many E_STRICT errors
     $config = @new Config;
-    $config->parseConfig($this->values, $this->configType, $this->options);
-    $config->writeConfig($this->targetPath, $this->configType, $this->options);
+    @$config->parseConfig($this->values, $this->configType, $this->options);
+    @$config->writeConfig($this->targetPath, $this->configType, $this->options);
   }
 }
 

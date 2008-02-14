@@ -52,10 +52,6 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     return true;
   }
   
-  function schemaValidate() {
-    return parent::schemaValidate($this->schemafilename);
-  }
-  
   function addElement($elParent, $elName, $elValue = null, $elNS = "http://www.hprim.org/hprimXML") {
     return parent::addElement($elParent, $elName, $elValue, $elNS);
 	}

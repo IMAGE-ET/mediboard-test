@@ -130,7 +130,7 @@ class CSpObjectHandler extends CMbObjectHandler {
    * @param CMbObject $mbObject
    * @return CIdSante400
    */
-  function getId400For(CMbObject &$mbObject) {
+  static function getId400For(CMbObject &$mbObject) {
     global $g;
     $id400 = new CIdSante400;
     $id400->loadLatestFor($mbObject, "sherpa group:$g");

@@ -177,7 +177,7 @@ function reloadAfterSaveDoc() {
       <hr class="control_tabs" />
       
       <!-- Premier onglet => Timings + Personnel -->
-      <div id="one">
+      <div id="one" style="display:none">
        	<div id="timing">
      	    {{include file="inc_vw_timing.tpl"}}
      	  </div>
@@ -187,7 +187,7 @@ function reloadAfterSaveDoc() {
       </div>
    
       <!-- Deuxieme onglet => Anesthesie -->
-      <div id="two">
+      <div id="two" style="display:none">
         <div id="anesth">
 			    {{include file="inc_vw_anesth.tpl"}}
 	      </div>
@@ -197,7 +197,7 @@ function reloadAfterSaveDoc() {
       </div>
 
       <!-- Troisieme onglet bis: codage diagnostics CIM -->
-      <div id="threebis">
+      <div id="threebis" style="display:none">
         <div id="cim">
           {{assign var="sejour" value=$selOp->_ref_sejour}}
           {{include file="inc_diagnostic_principal.tpl" modeDAS=true}}
@@ -205,7 +205,7 @@ function reloadAfterSaveDoc() {
       </div>
 
       <!-- Troisieme onglet: codage acte ccam -->
-      <div id="three">
+      <div id="three" style="display:none">
         <div id="ccam">
           {{assign var="subject" value=$selOp}}
           {{include file="inc_gestion_ccam.tpl"}}
@@ -214,7 +214,7 @@ function reloadAfterSaveDoc() {
       <!-- Fin du troisieme onglet -->
       
       <!-- Quatrième onglet => Codage acte NGAP -->
-      <div id="four">
+      <div id="four" style="display:none">
         <div id="listActesNGAP">
           {{assign var="object" value=$selOp}}
           {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
@@ -223,7 +223,7 @@ function reloadAfterSaveDoc() {
       
     <!-- Cinquieme onglet => Dossier Medical -->
 	    {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
-      <div id="five">
+      <div id="five" style="display:none">
         <div class="text">
          {{include file="inc_vw_dossier.tpl"}}
         </div>

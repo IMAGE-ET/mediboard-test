@@ -72,10 +72,6 @@ class CEGateXMLDocument extends CMbXMLDocument {
     $elValue = utf8_encode($elValue);
     return $elParent->appendChild(new DOMElement($elName, $elValue, $elNS));
   }
-  
-  function schemaValidate() {
-    return parent::schemaValidate($this->schemafilename);
-  }
 
   function saveTempFile() {
     parent::save($this->documentfilename);

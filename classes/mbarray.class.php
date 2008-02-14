@@ -180,7 +180,8 @@ class CMbArray {
    * @param bool $mandatory will trigger an warning if value is null 
    */
   static function extract(&$array, $key, $default = null, $mandatory = false) {
-    if (!isset($array[$key])) {
+    // Should not use isset
+    if (!array_key_exists($key, $array)) {
       if ($mandatory) {
         trigger_error("Could not extract '$key' index in array", E_USER_WARNING);
       }
@@ -199,7 +200,8 @@ class CMbArray {
    * @param mixed $value The default value if key is not set
    */
   static function defaultValue(&$array, $key, $value) {
-    if (!isset($array[$key])) {
+    // Should not use isset
+    if (!array_key_exists($key, $array)) {
       $array[$key] = $value;
     }
   }

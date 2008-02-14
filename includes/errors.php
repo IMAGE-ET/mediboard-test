@@ -7,18 +7,14 @@
  * @author Thomas Despoix
  */
 
-/*
- * TODO Ajouter le type d'erreur E_STRICT sinon elles ne sont pas affichées
- */ 
-
-
 global $performance, $dPconfig;
 $performance["error"] = 0;
 $performance["warning"] = 0;
 $performance["notice"] = 0;
 $logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
 
-error_reporting(E_STRICT);
+// @TODO Should be set to E_STRICT
+error_reporting(E_ALL);
 ini_set("error_log", $logPath);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
@@ -138,8 +134,6 @@ function mbExport($var, $label = null, $log = false) {
   
 }
 
-
-
 /**
  * Custom herror handler with backtrace
  * @return null
@@ -161,8 +155,8 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $errorTime = date("Y-m-d H:i:s");
   
-  $divClass = @$divClasses[$errno];
-  $errorType = @$errorTypes[$errno];
+  $divClass = CMbArray::get($divClasses, $errno);
+  $errorType = CMbArray::get($errorTypes, $errno);
   
   $log = "\n\n<div class='$divClass'>";
   

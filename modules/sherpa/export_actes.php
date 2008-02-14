@@ -11,15 +11,29 @@ global $can;
 
 $can->needsRead();
 
-$date = mbGetValueFromGetOrSession("date", mbDate());
+// Filter sur les dossiers
+$filter = new CSejour();
+$filter->_num_dossier = mbGetValueFromGet("_num_dossier");
+$filter->_date_sortie = !$filter->_num_dossier ? mbGetValueFromGet("_date_sortie", mbDate()) : null;
 
 // Chargement des séjours concernés
-$where = array();
-$where["type"] = "NOT IN ('exte')";
-$where["sortie_reelle"] = "LIKE '$date%'";
-$order = "entree_reelle, sortie_reelle";
 $sejour = new CSejour();
-$sejours = $sejour->loadList($where, $order);
+$sejours = array();
+if ($do = mbGetValueFromGet("do")) {
+	if ($filter->_num_dossier) {
+	  $sejour->loadFromNumDossier($filter->_num_dossier);
+	  if ($sejour->_id) {
+	    $sejours[$sejour->_id] = $sejour;
+	  }
+	}
+	else {
+		$where = array();
+		$where["type"] = "NOT IN ('exte')";
+		$where["sortie_reelle"] = "LIKE '$filter->_date_sortie%'";
+	  $order = "entree_reelle, sortie_reelle";
+	  $sejours = $sejour->loadList($where, $order);
+	}
+}
 
 // Associations entre actes CCAM Mediboard et les détails CCAM Sherpa
 global $detCCAM; $detCCAM = array();
@@ -60,12 +74,14 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
   
   // Diagnostics associés
   $sejour->loadRefDossierMedical();
-  foreach ($sejour->_ref_dossier_medical->_codes_cim as $code_cim) {
-    $spDetCIM->makeId();
-    $spDetCIM->typdia = "S";
-    $spDetCIM->coddia = $code_cim;
-    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
-    $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
+  if ($sejour->_ref_dossier_medical->_codes_cim) {
+	  foreach ($sejour->_ref_dossier_medical->_codes_cim as $code_cim) {
+	    $spDetCIM->makeId();
+	    $spDetCIM->typdia = "S";
+	    $spDetCIM->coddia = $code_cim;
+	    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
+	    $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
+	  }
   }
 }
 
@@ -128,7 +144,8 @@ foreach ($sejours as &$sejour) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("date", $date);
+$smarty->assign("do", $do);
+$smarty->assign("filter", $filter);
 $smarty->assign("acte_ccam", new CActeCCAM());
 $smarty->assign("sejours", $sejours);
 $smarty->assign("delDetCIM" , $delDetCIM );
