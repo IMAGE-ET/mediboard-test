@@ -41,7 +41,7 @@ class CSpDetCIM extends CSpObject {
     
     $specs["idinterv"] = "num";            /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */
-    $specs["coddia"] = "code cim10";       /* code CIM du diagnostic       */
+    $specs["coddia"] = "str maxLength|7";  /* code CIM du diagnostic       */
     $specs["typdia"] = "enum list|P|R|S";  /* type de diagnostic           */
     
     $specs["datmaj"] = "str length|19"   ; /* Date de derniere mise a jour */

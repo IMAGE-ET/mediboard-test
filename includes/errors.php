@@ -13,8 +13,10 @@ $performance["warning"] = 0;
 $performance["notice"] = 0;
 $logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
 
-// @TODO Should be set to E_STRICT
-error_reporting(E_STRICT);
+// Do not set to E_STRICT as it hides fatal errors to our error handler
+// Strict warning will still be handle by our handler anyway
+
+error_reporting(E_ALL);
 ini_set("error_log", $logPath);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);

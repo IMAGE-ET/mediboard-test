@@ -11,10 +11,6 @@ global $can, $m;
 
 $can->needsRead();
 
-// Chargement du sejour sélectionné
-$detccam = new CSpDetCCAM();
-$detccam->load(mbGetValueFromGetOrSession("sel_idacte"));
-
 // Récuperation des identifiants pour les filtres
 $filter = new CSpDetCCAM();
 $filter->idacte = mbGetValueFromGetOrSession("idacte");
@@ -57,9 +53,13 @@ $order = "idacte";
 
 $detsccam = $filter->loadList($where, $order, "0,30");
 
+// Chargement du sejour sélectionné
+$detccam = new CSpDetCCAM();
+$detccam->load(mbGetValueFromGetOrSession("sel_idacte"));
+
 // Désélection si l'entête n'est pas dans la recherche
 if (count($where) && !array_key_exists($detccam->_id, $detsccam)) {
-  $detccam = new CSpSejMed();
+  $detccam = new CSpDetCCAM();
 }
 
 // Sélection du premier de la liste si aucun n'est déjà sélectionné

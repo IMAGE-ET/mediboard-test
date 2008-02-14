@@ -9,6 +9,7 @@ Main.add(function() {
 
 <input type="hidden" name="do" value="1" />
 <input type="hidden" name="m" value="{{$m}}" />
+<input type="hidden" name="tab" value="{{$tab}}" />
 
 <table class="form">
   <tr>

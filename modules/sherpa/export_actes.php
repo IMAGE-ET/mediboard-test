@@ -85,9 +85,31 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
   }
 }
 
+function exportInfoCIM(COperation &$operation, $idinterv, $key) {
+  if (!$operation->$key) {
+    return;
+  }
+  
+  global $detCIM;
+  
+  $spDetCIM = new CSpDetCIM();
+  $spDetCIM->makeId();
+  $spDetCIM->mapFrom($operation);
+  $spDetCIM->idinterv = $idinterv;
+  $spDetCIM->getCurrentDataSource();
+  $spDetCIM->typdia = "S";
+  $spDetCIM->coddia = strtoupper($key);
+
+  $detCIM[$operation->_class_name][$operation->_id][] = $spDetCIM->store();
+}
+
+
 global $entCCAM; $entCCAM = array();
 
-// Associations entre codable Mediboard et les entêtes CCAM Sherpa
+/**
+ * Associations entre codable Mediboard et les entêtes CCAM Sherpa
+ * @return idinterv
+ */
 function exportEntCCAM(CCodable &$codable) {
   global $entCCAM;
   
@@ -101,6 +123,7 @@ function exportEntCCAM(CCodable &$codable) {
     exportDetCCAM($acte_ccam, $spEntCCAM->_id);
   }
   
+  return $spEntCCAM->_id;
 }
 
 $delDetCCAM = array();
@@ -137,7 +160,9 @@ foreach ($sejours as &$sejour) {
     $operation->_ref_sejour =& $sejour;
     $operation->loadRefChir();
     $operation->loadRefsActes();
-    exportEntCCAM($operation);
+    $idinterv = exportEntCCAM($operation);
+    exportInfoCIM($operation, $idinterv, "anapath");
+    exportInfoCIM($operation, $idinterv, "labo");
   }
 }
 
