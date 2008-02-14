@@ -74,8 +74,8 @@ class CBcbObject {
     $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
   }
    
-  function load() {
-    $this->_updateFormFields();
+  function load($code = null) {
+    $this->updateFormFields();
   }
   
   function updateFormFields() {
