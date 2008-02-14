@@ -18,7 +18,6 @@ $can->needsRead();
 
 $typeObject = mbGetValueFromGet("typeObject");
 
-
 // HPRIM export FTP settings
 $HPrimConfig = $dPconfig["dPinterop"]["hprim_export"];
 $fileprefix    = dPgetParam($_POST, "fileprefix", $HPrimConfig["fileprefix"]);
@@ -61,7 +60,7 @@ switch($typeObject) {
   case "sej" :
 		$mbObject = new CSejour();
 		$doc = new CHPrimXMLEvenementPmsi();
-		
+				
 		// Chargement du séjour et génération du document
 		$mb_sejour_id = dPgetParam($_POST, "mb_sejour_id", mbGetValueFromGetOrSession("object_id"));
 		if ($mbObject->load($mb_sejour_id)) {
@@ -79,7 +78,7 @@ switch($typeObject) {
 }
 
 // Nécessaire pour la validation avec XML Spy
-//$doc->addNameSpaces();
+$doc->addNameSpaces();
 $doc->saveTempFile();
 
 // Connexion FTP

@@ -41,6 +41,7 @@ class CHPrimXMLDocument extends CMbXMLDocument {
       return false;
     }
     
+    
     if (!is_file($this->schemafilename)) {
       $schema = new CHPrimXMLSchema();
       $schema->importSchemaPackage($this->schemapath);
