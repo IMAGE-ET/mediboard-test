@@ -78,7 +78,7 @@ switch($typeObject) {
 }
 
 // Nécessaire pour la validation avec XML Spy
-$doc->addNameSpaces();
+//$doc->addNameSpaces();
 $doc->saveTempFile();
 
 // Connexion FTP
@@ -97,12 +97,14 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Transfert réel
   $destination_basename = sprintf("%s%0".$filenbroll."d", $fileprefix, $counter);
   // Transfert en mode FTP_ASCII obligatoire pour les AS400
-  if ($ftp->sendFile($doc->documentfilename, "$destination_basename.$fileextension", FTP_ASCII)) {
+  if($ftp->connect()) {
+    $ftp->sendFile($doc->documentfilename, "$destination_basename.$fileextension", FTP_ASCII);
     $ftp->sendFile($doc->documentfilename, "$destination_basename.ok", FTP_ASCII);
 
     $doc->saveFinalFile();
     $documentFinalBaseName = basename($doc->documentfinalfilename);
     $ftp->logStep("Archivage du fichier envoyé sur le serveur Mediboard sous le nom $documentFinalBaseName");
+    $ftp->close();
   }
 }
 

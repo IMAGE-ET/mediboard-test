@@ -213,7 +213,8 @@ if($ftp->hostname){
   // Transfert
   $destination_basename = "Prescription-".$mbPrescription->_id;
   $file = "tmp/dPlabo/export_prescription.xml";
-  if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
+  $envoi = $ftp->connect();
+  if(!$ftp->connect()) {
     if($ftp->logs) {
       foreach($ftp->logs as $log) {
         $AppUI->setMsg($log, UI_MSG_ERROR );
@@ -221,6 +222,16 @@ if($ftp->hostname){
     }
     redirect();
   }
+  if(!$ftp->sendFile($file, "$destination_basename.xml", FTP_ASCII)) {
+    $ftp->close();
+    if($ftp->logs) {
+      foreach($ftp->logs as $log) {
+        $AppUI->setMsg($log, UI_MSG_ERROR );
+      }
+    }
+    redirect();
+  }
+  $ftp->close();
   $AppUI->setMsg("Document envoyé", UI_MSG_OK );
   
   // Créer le document joint
