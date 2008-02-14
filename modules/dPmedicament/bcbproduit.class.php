@@ -211,7 +211,7 @@ class CBcbProduit extends CBcbObject {
     $this->_ref_classes_thera = $classeThera->searchTheraProduit($this->code_cip); 
   }
   
-  function getFavoris($praticien_id) {
+  static function getFavoris($praticien_id) {
     $ds = CSQLDataSource::get("std");
     $sql = "SELECT prescription_line.code_cip, COUNT(*) AS total
             FROM prescription_line, prescription

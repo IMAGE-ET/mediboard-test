@@ -73,13 +73,14 @@ class CBcbPosologie extends CBcbObject {
       $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$cip' ORDER BY `NO_POSO` ASC;";
     }
     
-    $posologie = reset($ds->loadList($query));
+    $posologies = $ds->loadList($query);
+    $posologie = reset($posologies);
     
-    if(!$posologie){
+    if (!$posologie){
       return;
     }
     
-    if($posologie){
+    if ($posologie){
       $this->quantite1 = $posologie["QUANTITE1"];
       $this->quantite2 = $posologie["QUANTITE2"];
      

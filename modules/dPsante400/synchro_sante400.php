@@ -33,7 +33,7 @@ if ($rec = mbGetValueFromGet("rec")) {
     trigger_error("Mouvement with id '$rec'has been deleted : " . $e->getMessage(), E_USER_ERROR);
   }
 } else {
-  $mouvs = $mouv->multipleLoad($marked, $max);
+  $mouvs = $mouv->loadList($marked, $max);
 }
 
 // Proceed mouvements

@@ -47,7 +47,13 @@ class CMouvement400 extends CRecordSante400 {
     $this->valuePrefix = $this->type == "S" ? "B_": "A_";
   }
   
-  function multipleLoad($marked = false, $max = 100) {
+  /**
+   * Load List of mouvements
+   * @param $marked bool Will load only marked (already processed)
+   * @param $max int maximum number of mouvements
+   * @return array|CMouvement400
+   */
+  function loadList($marked = false, $max = 100) {
     global $dPconfig;
     $idConfig = $dPconfig["dPsante400"];
 

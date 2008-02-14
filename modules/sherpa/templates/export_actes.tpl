@@ -43,9 +43,9 @@ Main.add(function() {
   Il est nécessaire de valider l'export pour le réaliser.
   Merci de cliquer sur <strong>Exporter les actes</strong> après avoir choisi :
   <dl>
-    <dt>une <em>date</em></dt>
+    <dt>soit une <em>date</em></dt>
     <dd>Pour exporter les actes de tous les séjours ayant une sortie réelle ce jour.</dd>
-    <dt>un <em>numéro de dossier</em></dt>
+    <dt>soit un <em>numéro de dossier</em></dt>
     <dd>Pour exporter les actes spécifiques à un séjour en particulier.</dd>
   </dl>
 </div>

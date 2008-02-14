@@ -14,7 +14,7 @@ $performance["notice"] = 0;
 $logPath = $dPconfig["root_dir"]."/tmp/mb-log.html";
 
 // @TODO Should be set to E_STRICT
-error_reporting(E_ALL);
+error_reporting(E_STRICT);
 ini_set("error_log", $logPath);
 ini_set("log_errors_max_len", "4M");
 ini_set("log_errors", true);
@@ -212,7 +212,6 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   }
 } 
 
-// @TODO Should be set to E_STRICT
 set_error_handler("errorHandler");
 
 // Initialize custom error handler

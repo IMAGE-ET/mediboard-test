@@ -345,7 +345,7 @@ class CCodeCIM10 {
     return($master);
   }
   
-  function addPoint($code) {
+  static function addPoint($code) {
     if(!strpos($code, ".") && strlen($code) >= 4) {
       $code = substr($code, 0, 3).".".substr($code, 3);
     }

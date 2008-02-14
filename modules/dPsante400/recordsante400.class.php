@@ -43,7 +43,7 @@ class CRecordSante400 {
     self::$chrono->stop("connection");
   }
 
-  function multipleLoad($sql, $values = array(), $max = 100, $class = "CRecordSante400") {
+  static function multipleLoad($sql, $values = array(), $max = 100, $class = "CRecordSante400") {
     if (!new $class instanceof CRecordSante400) {
       trigger_error("instances of '$class' are not instances of 'CRecordSante400'", E_USER_WARNING);
     }

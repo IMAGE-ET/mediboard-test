@@ -74,10 +74,6 @@ class CBcbObject {
     $result = $this->distObj->InitConnexion(CBcbObject::$objDatabase->LinkDB, CBcbObject::$TypeDatabase);
   }
    
-  function load() {
-    $this->updateFormFields();
-  }
-  
   function updateFormFields() {
     $this->_view = "Object ".$this->distClass;
   }
