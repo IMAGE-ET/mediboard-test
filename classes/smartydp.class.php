@@ -122,9 +122,7 @@ function smarty_function_mb_field($params, &$smarty) {
     $tabSpec = split(" ",$spec->prop);
     CMbArray::extract($tabSpec, "0");
     $spec->prop = join($tabSpec, " ");
-    mbDump($canNull,"can null");
   }
-  
   
   if ($canNull === false) {
     $spec->notNull = 1;

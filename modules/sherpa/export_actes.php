@@ -67,7 +67,7 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
   if ($sejour->DR) {
     $spDetCIM->makeId();
     $spDetCIM->typdia = "R";
-    $spDetCIM->coddia = $sejour->DR;
+    $spDetCIM->coddia = CSpObject::makeString($sejour->DR);
     $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
     $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
   }
@@ -78,7 +78,7 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
 	  foreach ($sejour->_ref_dossier_medical->_codes_cim as $code_cim) {
 	    $spDetCIM->makeId();
 	    $spDetCIM->typdia = "S";
-	    $spDetCIM->coddia = $code_cim;
+	    $spDetCIM->coddia = CSpObject::makeString($code_cim);
 	    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
 	    $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
 	  }
@@ -98,7 +98,7 @@ function exportInfoCIM(COperation &$operation, $idinterv, $key) {
   $spDetCIM->idinterv = $idinterv;
   $spDetCIM->getCurrentDataSource();
   $spDetCIM->typdia = "S";
-  $spDetCIM->coddia = strtoupper($key);
+  $spDetCIM->coddia = CSpObject::makeString($key);
 
   $detCIM[$operation->_class_name][$operation->_id][] = $spDetCIM->store();
 }

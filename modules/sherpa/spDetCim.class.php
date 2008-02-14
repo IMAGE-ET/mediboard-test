@@ -90,7 +90,7 @@ class CSpDetCIM extends CSpObject {
     $this->numdos = $idSejour->id400;
         
     // Contenu
-    $this->coddia = $sejour->DP;
+    $this->coddia = CSpObject::makeString($sejour->DP);
     $this->typdia = "P";
     
     // Mise à jour

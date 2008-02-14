@@ -459,7 +459,7 @@ Main.add( function(){
 
 {{if $prestations}}
 <tr>
-<th>{{mb_label object=$sejour field="prestation_id"}}</th>
+<th>{{mb_label object=$sejour field=prestation_id}}</th>
   <td>
   <select name="prestation_id" onchange="checkPresta();">
   <option value="">&mdash; Choix d'une prestation</option>

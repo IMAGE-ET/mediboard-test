@@ -80,7 +80,6 @@ $locales['CLit.one'] = '';
 $locales['CPrestation-description'] = 'Description';
 $locales['CPrestation-group_id'] = 'Etablissement';
 $locales['CPrestation-nom'] = 'Niveau de prestation';
-$locales['CSejour-prestation_id'] = 'Prestation';
 $locales['CSejour.groupe.avant'] = 'Admissions antérieures';
 $locales['CSejour.groupe.matin'] = 'Admissions du matin';
 $locales['CSejour.groupe.soir'] = 'Admissions du soir';

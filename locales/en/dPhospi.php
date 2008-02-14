@@ -80,7 +80,6 @@ $locales['CLit.one'] = '';
 $locales['CPrestation-description'] = '';
 $locales['CPrestation-group_id'] = '';
 $locales['CPrestation-nom'] = '';
-$locales['CSejour-prestation_id'] = '';
 $locales['CSejour.groupe.avant'] = '';
 $locales['CSejour.groupe.matin'] = '';
 $locales['CSejour.groupe.soir'] = '';

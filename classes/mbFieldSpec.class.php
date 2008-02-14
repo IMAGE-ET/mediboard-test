@@ -261,7 +261,7 @@ class CMbFieldSpec {
   
   
   
-  function getLabelForElement($object, $params){
+  function getLabelForElement($object, &$params){
     return $this->fieldName;
   }
   

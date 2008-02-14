@@ -136,7 +136,7 @@ class CSpObject extends CMbObject {
    * @param date YYYY-MM-DD
    * @return string DD/MM/YYYY
    */
-  function makeDate($date) {
+  static function makeDate($date) {
     if ("0000-00-00" == $date) {
       return "00/00/0000";
     }
@@ -150,7 +150,7 @@ class CSpObject extends CMbObject {
    * @param int $length to truncate to
    * @return string
    */
-  function makeString($string, $length) {
+  static function makeString($string, $length = 200) {
 //    $string = str_replace("\r\n", " - ", $string);
     return $string ? strtoupper(removeAccent(substr($string, 0, $length))) : "";
   }
@@ -160,7 +160,7 @@ class CSpObject extends CMbObject {
    * @param string $string to convert
    * @return string
    */
-  function makePhone($tel) {
+  static function makePhone($tel) {
     return preg_replace("/(\d\d)(\d\d)(\d\d)(\d\d)(\d\d)/", "$1.$2.$3.$4.$5", $tel);
   }
 

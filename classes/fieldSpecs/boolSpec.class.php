@@ -87,7 +87,7 @@ class CBoolSpec extends CMbFieldSpec {
     return $sHtml;
   }
   
-  function getLabelForElement($object, $params){
+  function getLabelForElement($object, &$params){
     return $this->fieldName."_1";
   }
   
