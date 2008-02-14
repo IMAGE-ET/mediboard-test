@@ -2,12 +2,11 @@
 var aMbCombos = new Array();
 var bAutoSelectSpans = {{if $templateManager->valueMode}} false {{else}} true {{/if}};
 
-
 // FCK editor general configuration
 sMbPath = "../../../";
 sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
 FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$version.build}}";
-FCKConfig.Debug = false;
+FCKConfig.Debug = true;
 
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
@@ -34,17 +33,21 @@ var aOptions = new Array();
 oMbCombo.options = aOptions;
 aMbCombos.push(oMbCombo);
 
-{{foreach from=$templateManager->properties item=property}}
+{{foreach from=$templateManager->sections key=title item=section}}
+  aOptions.push({view: "<b>{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</b>" ,item: ""});
+{{foreach from=$section item=property}}
   aOptions.push( {
-    view: "{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
+    view: '<span style="padding-left: 1em;">{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}' ,
     item: 
-      {{if $templateManager->valueMode}} 
+      {{if $templateManager->valueMode}}
         "{{$property.value|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 
       {{else}} 
         "[{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}]" 
       {{/if}}
     });
 {{/foreach}}
+{{/foreach}}
+
 
 {{if !$templateManager->valueMode}}
 // Add name lists Combo
@@ -64,23 +67,6 @@ aMbCombos.push(oMbCombo);
     });
 {{/foreach}}
 {{/if}}
-
-// Add helpers Combo
-var oMbCombo = new Object();
-oMbCombo.commandName = "MbHelpers";
-oMbCombo.spanClass = "helper";
-oMbCombo.commandLabel = "Aides &agrave; la saisie";
-
-var aOptions = new Array();
-oMbCombo.options = aOptions;
-aMbCombos.push(oMbCombo);
-
-{{foreach from=$templateManager->helpers key=helperName item=helperText}}
-  aOptions.push( { 
-    view: "{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
-    item: "{{$helperText|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}"
-    });
-{{/foreach}}
 
 
 aToolbarSet = FCKConfig.ToolbarSets["Default"];

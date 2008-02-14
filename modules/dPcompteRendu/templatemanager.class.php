@@ -7,10 +7,11 @@
 * @author Thomas Despoix
 */
 
+
 class CTemplateManager {
   var $editor = "fckeditor2.3.2";
   
-  var $properties = array();
+  var $sections = array();
   var $helpers = array();
   var $lists = array();
   
@@ -19,7 +20,7 @@ class CTemplateManager {
   var $usedLists = array();
   
   var $valueMode = true; // @todo : changer en applyMode
-
+  
   function CTemplateManager() {
     $this->addProperty("Général - date du jour"  , mbTranformTime(null, null, "%d/%m/%Y"));
     $this->addProperty("Général - heure courante", mbTranformTime(null, null, "%Hh%M"));
@@ -37,14 +38,24 @@ class CTemplateManager {
   }
   
   function addProperty($field, $value = null) {
-    $this->properties[$field] = array (
-      "field" => $field,
-      "value" => $value,
-      // @todo : passer en regexp
-      //"fieldHTML" => $this->makeSpan("field", "[{$field}]"),
-      //"valueHTML" => $this->makeSpan("value", "{$value}"));
-      "fieldHTML" => htmlentities("[{$field}]"),
-      "valueHTML" => $value);
+  	$sec = split(' - ', $field, 2);
+  	if (count($sec) > 1) {
+  		$section = $sec[0];
+  		$item = $sec[1];
+  	} else {
+  		$section = ' ';
+  		$item = $sec;
+  	}
+  	
+  	if (!array_key_exists($section, $this->sections)) {
+  		$this->sections[$section] = array();
+  	}
+  	$this->sections[$section][$field] = array (
+		"field" => $item,
+		"value" => $value,
+		"fieldHTML" => htmlentities("[{$field}]"),
+		"valueHTML" => $value
+  	);
   }
 
   function addList($name, $choice = null) {
@@ -141,10 +152,13 @@ class CTemplateManager {
   }
   
   function renderDocument($source) {
-    
-    foreach($this->properties as $property) {
-      $fields[] = $property["fieldHTML"];
-      $values[] = nl2br($property["valueHTML"]);
+    $fields = array();
+    $values = array();
+    foreach($this->sections as $properties) {
+    	foreach($properties as $property) {
+	        $fields[] = $property["fieldHTML"];
+	        $values[] = nl2br($property["valueHTML"]);
+    	}
     }
     
     if(count($fields)) {
