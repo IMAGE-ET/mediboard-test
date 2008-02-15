@@ -37,7 +37,7 @@ aMbCombos.push(oMbCombo);
   aOptions.push({view: "<b>{{$title|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</b>" ,item: ""});
 {{foreach from=$section item=property}}
   aOptions.push( {
-    view: '<span style="padding-left: 1em;">{{$property.field|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}' ,
+    view: '<span style="padding-left: 1em;">{{$property.view|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}' ,
     item: 
       {{if $templateManager->valueMode}}
         "{{$property.value|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}" 

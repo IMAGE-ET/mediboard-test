@@ -51,7 +51,8 @@ class CTemplateManager {
   		$this->sections[$section] = array();
   	}
   	$this->sections[$section][$field] = array (
-		"field" => $item,
+  		"view" => $item,
+		"field" => $field,
 		"value" => $value,
 		"fieldHTML" => htmlentities("[{$field}]"),
 		"valueHTML" => $value
