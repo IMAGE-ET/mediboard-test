@@ -131,7 +131,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $this->addDateHeure($dateHeureOptionnelle);
     // Identifiant (on utilise le séjour)
     $identifiant = $this->addElement($saisie, "identifiant");
-    $this->addElement($identifiant, "emetteur", "sj$mbSej->_id");
+    $this->addElement($identifiant, "emetteur", "diag$mbSej->_id");
     $this->addElement($identifiant, "recepteur", $mbSej->venue_SHS);
     // Unité médicale : vide pour l'instant car présent dans l'opération :
     // à passer dans le séjour (code_uf, libell_uf dans this->addUniteFonctionnelle())
