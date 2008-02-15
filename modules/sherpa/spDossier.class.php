@@ -66,14 +66,14 @@ class CSpDossier extends CSpObject {
         
     $sejour = $mbObject;
     $sejour->loadRefPatient();
-    $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);
     
     $this->topfac = "N";
     $this->anndos = "";
     if ($sejour->annule) $this->anndos = "SH";
     if (!$sejour->facturable) $this->anndos = "NF";
       
-    $this->malnum = $idMalde->id400;
+    $this->malnum = $idMalade->id400;
     $this->datmaj = mbDateToLocale(mbDateTime());
   }
 }

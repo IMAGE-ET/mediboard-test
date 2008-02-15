@@ -17,11 +17,11 @@ class CSpObjectHandler extends CMbObjectHandler {
     "CSejour" => array("CSpSejMed", "CSpDossier", "CSpOuvDro"),
   );
     
-  function isHandled(CMbObject &$mbObject) {
+  static function isHandled(CMbObject &$mbObject) {
     return array_key_exists($mbObject->_class_name, self::$associations);
   }
   
-  function createSpInstances($mbObject) {
+  static function createSpInstances($mbObject) {
     $spInstances = array();
     foreach(self::$associations[$mbObject->_class_name] as $spClass) {
       $spInstances[] = new $spClass;
@@ -32,7 +32,7 @@ class CSpObjectHandler extends CMbObjectHandler {
   /**
    * Check id for object
    */
-  function checkId(CMbObject &$mbObject, $id) {
+  static function checkId(CMbObject &$mbObject, $id) {
     switch ($mbObject->_class_name) {
       case "CSejour" : 
 	    $yearWanted = substr($mbObject->entree_prevue, 3, 1);
@@ -44,16 +44,20 @@ class CSpObjectHandler extends CMbObjectHandler {
     }
   }
       
-  function makeId(CMbObject &$mbObject) {
+  /**
+   * Generate a Sherpa DSN unique identifier for a given Mesiboard object
+   * @param $mbObject CMbObject The Mediboard object
+   * @return numchar The generated identifier
+   */
+  static function makeId(CMbObject &$mbObject) {
     global $g;
     $id400 = new CIdSante400();
     $id400->tag = "sherpa group:$g";
     $id400->object_class = $mbObject->_class_name;
     $ds =& $id400->_spec->ds;
     
-    switch ($mbObject->_class_name) {
-      // Sejour
-      case "CSejour": 
+    // Sejour
+    if ($mbObject instanceof CSejour) {
 	    $year = substr($mbObject->entree_prevue, 3, 1);
 	    
 	    $min = "00001";
@@ -72,9 +76,10 @@ class CSpObjectHandler extends CMbObjectHandler {
 	    $latestId = $ds->loadResult($query);
 	    $newId = $latestId ? $latestId+1 : $idMin;
 	    return str_pad($newId, 6, "0", STR_PAD_LEFT);    
-      
-      // Patient
-	    case "CPatient":
+    }
+    
+    // Patient
+    if ($mbObject instanceof CPatient) {
       $query = "SELECT MAX(`id400`) ".
         "FROM `id_sante400`".
         "WHERE `tag` = '$id400->tag'".
@@ -83,38 +88,34 @@ class CSpObjectHandler extends CMbObjectHandler {
       $newId = $latestId+1;
       return str_pad($newId, 6, "0", STR_PAD_LEFT);
     }
+    
+    // Operation
+    if ($mbObject instanceof COperation) {
+    	$spInstance = new CSpEntCCAM();
+    	$spInstance->getCurrentDataSource();
+    	$spInstance->makeId($mbObject);
+    	return $spInstance->_id;
+    }
   }
   
   /**
    * Get all Id400 for given object among all groups
+   * Will create one for current group if necessary
    * @param CMbObject $mbObject
-   * @return array of CIdSante400
+   * @return array|CIdSante400
    */
-  function getIds400For(CMbObject &$mbObject) {
+  static function getIds400For(CMbObject &$mbObject) {
     global $g, $m;
     
     // Instance for current group
     $id400 = new CIdSante400;
     $id400->loadLatestFor($mbObject, "sherpa group:$g");
     if (!$id400->_id) {
-      $id400->id400 = $this->makeId($mbObject);
-      // Update id400;
+      $id400->id400 = self::makeId($mbObject);
       $id400->last_update = mbDateTime();
       if ($msg = $id400->store()) {
         trigger_error("Error updating '$mbObject->_view' : $msg", E_USER_WARNING);
         return;
-      }
-      
-      foreach ($this->createSpInstances($mbObject) as $spInstance) {
-        // Store sherpa object
-        $spInstance->changeDSN($g);
-        $spInstance->_id = $id400->id400;
-        $spInstance->mapFrom($mbObject);
-	      
-	      if ($msg = $spInstance->store()) {
-	        trigger_error("Error mapping object '$mbObject->_view' : $msg", E_USER_WARNING);
-	        return;
-	      }
       }
     }
       
@@ -144,11 +145,11 @@ class CSpObjectHandler extends CMbObjectHandler {
   }
 
   /**
-   * Get MbObject for Id400
+   * Get MbObject for a Sherpa Id400
    * @param mbClass $mbObject
    * @return int $id
    */
-  function getMbObjectFor($mbClass, $id) {
+  static function getMbObjectFor($mbClass, $id) {
     global $g;
     $order = "last_update DESC";
     $id400 = new CIdSante400;
@@ -195,11 +196,15 @@ class CSpObjectHandler extends CMbObjectHandler {
 	      $spInstance->_id = $id400->id400;
         $spInstance->mapFrom($mbObject);
         
+//        mbDump($id400->getProps(), "SpInstance being stored");
+//        mbDump($spInstance->getProps(), "SpInstance being stored");
+//        mbDump($spInstance->_spec, "SpInstance spec");
+        
 	      // Propagated object
 	      if ($msg = $spInstance->store()) {
 	        trigger_error("Error propagating object '$spInstance->_class_name ($spInstance->_id)' : $msg", E_USER_WARNING);
 	        continue;
-	      }	      
+	      }
       }
     }
   }

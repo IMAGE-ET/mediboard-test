@@ -26,7 +26,7 @@ $divClasses = array (
   E_ERROR => "big-error",
   E_WARNING => "big-warning",
   E_NOTICE => "big-info",
-//  E_STRICT => "big-info",
+  E_STRICT => "big-info",
   E_PARSE => "big-info",
   E_CORE_ERROR => "big-error",
   E_CORE_WARNING => "big-warning",
@@ -36,6 +36,10 @@ $divClasses = array (
   E_USER_WARNING => "big-warning",
   E_USER_NOTICE => "big-info",
 );
+
+if (!$dPconfig["debug"]) {
+  unset($divClasses[E_STRICT]);
+}
 
 $errorTypes = array (
   E_ERROR => "Error",
@@ -90,7 +94,7 @@ function mbRelativePath($absPath) {
  **/
 function mbDump($var, $label = null) {
   $errorTime = date("Y-m-d H:i:s");
-  $msg = "<pre>[$errorTime] $label</pre>";
+  $msg = "<tt>[$errorTime] $label:</tt>";
   echo $msg;
   var_dump($var);
 }

@@ -50,13 +50,13 @@ function exportDetCCAM(CActeCCAM &$acte_ccam, $idinterv) {
 
 // Associations diagnostics CIM Mediboard et les détails CIM Sherpa
 global $detCIM; $detCIM = array();
-function exportDetsCIM(CCodable &$codable, $idinterv) {
+function exportDetsCIM(CCodable &$codable) {
   global $detCIM;
   
   $spDetCIM = new CSpDetCIM();
   $spDetCIM->makeId();
   $spDetCIM->mapFrom($codable);
-  $spDetCIM->idinterv = $idinterv;
+  $spDetCIM->idinterv = $codable->_idinterv;
   $spDetCIM->getCurrentDataSource();
 
   $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
@@ -85,7 +85,7 @@ function exportDetsCIM(CCodable &$codable, $idinterv) {
   }
 }
 
-function exportInfoCIM(COperation &$operation, $idinterv, $key) {
+function exportInfoCIM(COperation &$operation, $key) {
   if (!$operation->$key) {
     return;
   }
@@ -95,7 +95,7 @@ function exportInfoCIM(COperation &$operation, $idinterv, $key) {
   $spDetCIM = new CSpDetCIM();
   $spDetCIM->makeId();
   $spDetCIM->mapFrom($operation);
-  $spDetCIM->idinterv = $idinterv;
+  $spDetCIM->idinterv = $operation->_idinterv;
   $spDetCIM->getCurrentDataSource();
   $spDetCIM->typdia = "S";
   $spDetCIM->coddia = CSpObject::makeString($key);
@@ -108,10 +108,10 @@ global $entCCAM; $entCCAM = array();
 
 /**
  * Associations entre codable Mediboard et les entêtes CCAM Sherpa
- * @return idinterv
  */
 function exportEntCCAM(CCodable &$codable) {
   global $entCCAM;
+
   
   $spEntCCAM = new CSpEntCCAM();
   $spEntCCAM->makeId($codable);
@@ -123,7 +123,7 @@ function exportEntCCAM(CCodable &$codable) {
     exportDetCCAM($acte_ccam, $spEntCCAM->_id);
   }
   
-  return $spEntCCAM->_id;
+  $codable->_idinterv = $spEntCCAM->_id;
 }
 
 $delDetCCAM = array();
@@ -160,9 +160,20 @@ foreach ($sejours as &$sejour) {
     $operation->_ref_sejour =& $sejour;
     $operation->loadRefChir();
     $operation->loadRefsActes();
-    $idinterv = exportEntCCAM($operation);
-    exportInfoCIM($operation, $idinterv, "anapath");
-    exportInfoCIM($operation, $idinterv, "labo");
+    exportEntCCAM($operation);
+    exportInfoCIM($operation, "anapath");
+    exportInfoCIM($operation, "labo");
+
+    // Association d'un id400
+    $idOperation = CSpObjectHandler::getId400For($operation);
+    if (!$idOperation->_id) {
+      $idOperation->id400 = $$operation->_idinterv;
+      $idOperation->last_update = mbDateTime();
+      if ($msg = $idOperation->store()) {
+        trigger_error("Impossible de créer un idenfiant externe pour l'opération: $msg", E_USER_WARNING);
+        break;
+      }
+    }
   }
 }
 

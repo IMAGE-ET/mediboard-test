@@ -28,7 +28,7 @@
       {{else}}
       <select name="object_class" class="{{$idSante400->_props.object_class}}">
         <option value="">&mdash; Choisir une classe</option>
-        {{foreach from=$listClasses|smarty:nodefaults item=curr_class}}
+        {{foreach from=$listClasses item=curr_class}}
         <option value="{{$curr_class}}" {{if $curr_class == $idSante400->object_class}}selected="selected"{{/if}}>
           {{$curr_class}}
         </option>

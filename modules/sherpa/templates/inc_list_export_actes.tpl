@@ -30,7 +30,7 @@
     <th class="title" colspan="11">
     {{$_sejour->_view}}
     <strong>[{{$_sejour->_num_dossier}}]</strong>
-	    &mdash; Dr. {{$_sejour->_ref_praticien->_view}}
+    <br />Dr. {{$_sejour->_ref_praticien->_view}}
     
     </th>
     <td>
@@ -64,7 +64,8 @@
 	    {{if $_operation->libelle}}
 	    <em>[{{$_operation->libelle}}]</em>
 	    {{/if}}
-	    &mdash; Dr. {{$_operation->_ref_chir->_view}}
+	    <br />Dr. {{$_operation->_ref_chir->_view}}
+	    &mdash; [IDINTERV = {{$_operation->_idinterv}}]
     </th>
     <td>
 			{{include file="inc_export_entccam.tpl" _codable=$_operation}}
@@ -76,7 +77,7 @@
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
   {{foreachelse}}
   <tr>
-    <td colspan="10"><em>Pas d'acte d'intervention</em></td>
+    <td colspan="11"><em>Pas d'acte d'intervention</em></td>
   </tr>
   {{/foreach}}
   {{/foreach}}
