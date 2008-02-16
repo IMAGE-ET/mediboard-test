@@ -154,6 +154,7 @@ class COperation extends CCodable {
     $specs["anapath"]        = "bool";
     $specs["labo"]           = "bool";
     $specs["horaire_voulu"]  = "time";
+
     $specs["_date_min"]      = "date";
     $specs["_date_max"]      = "date moreEquals|_date_min";
     $specs["_plage"]         = "bool";
@@ -161,6 +162,8 @@ class COperation extends CCodable {
     $specs["_prat_id"]       = "text";
     $specs["_specialite"]    = "text";
     $specs["_ccam_libelle"]  = "bool default|1";
+
+    $specs["_datetime"]  = "dateTime";
     return $specs;
   }
   

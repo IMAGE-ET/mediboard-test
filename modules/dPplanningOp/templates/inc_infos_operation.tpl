@@ -1,5 +1,9 @@
 <!-- $Id: $ -->
 
+{{if !$can->edit}}
+<div class="big-info">Vous n'avez pas accès au détail des interventions.</div>
+{{/if}}
+
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
@@ -13,28 +17,32 @@
     <th>{{tr}}COperation-_ext_codes_ccam{{/tr}}</th>
   </tr>
 
-  {{foreach from=$sejour->_ref_operations item=curr_operation}}
+  {{foreach from=$sejour->_ref_operations item=_operation name=operation}}
   <tr>
     <td>
-      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}">{{$curr_operation->_ref_chir->_view}}</a>
+      <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$_operation->_id}}">
+        {{$_operation->_ref_chir->_view}}
+      </a>
     </td>
-    <td>{{$curr_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
-    {{if $curr_operation->annulee}}
+    <td>{{$_operation->_datetime|date_format:"%a %d %b %Y"}}</td>
+    {{if $_operation->annulee}}
     <th class="category cancelled">
       <strong>{{tr}}COperation-annulee{{/tr}}</strong>
-	</th>
+		</th>
     {{else}}
+    {{if $can->edit}}
     <td class="text">
-      {{if $curr_operation->libelle}}
-      <em>[{{$curr_operation->libelle}}]</em>
+      {{if $_operation->libelle}}
+      <em>[{{$_operation->libelle}}]</em>
       <br />
       {{/if}}
-      {{foreach from=$curr_operation->_ext_codes_ccam item=curr_ext_code}}
+      {{foreach from=$_operation->_ext_codes_ccam item=curr_ext_code}}
       <strong>{{$curr_ext_code->code}}</strong> :
       {{$curr_ext_code->libelleLong}}
        <br />
       {{/foreach}}
     </td>
+    {{/if}}
     {{/if}}
   </tr>
   {{/foreach}}

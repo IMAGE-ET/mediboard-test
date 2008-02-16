@@ -227,6 +227,7 @@ PairEffect.initGroup("acteEffect");
     
     <!-- Buttons -->
     {{if $newButtons && $acte->_id}}
+    {{if $can->edit || $modif_operation}}
     <tr>
       <td class="button" colspan="4">
         <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
@@ -238,6 +239,7 @@ PairEffect.initGroup("acteEffect");
         </button>
       </td>
 		</tr>
+    {{/if}}
     {{/if}}
     
     </tbody>
@@ -293,7 +295,7 @@ PairEffect.initGroup("acteEffect");
         {{if !$acte->_id}}
         <button class="new" type="button" onclick="
           {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
-          if(confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
+          if (confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
             document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
             ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
           }

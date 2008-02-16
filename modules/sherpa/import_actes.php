@@ -34,12 +34,14 @@ foreach ($_GET["actes"] as $idinterv => $actes) {
 	  continue;
 	}
 	
-	$sejour->_ref_operations[$operation->_id] =& $operation;
+	$operation->loadRefPlageOp();
+	
+	$sejour->_ref_operations[$operation->_id] = $operation;
 	
 	// Ajout des actes à importer
   foreach ($actes as $tokenCCAM) {
-//    $spDetCCAM = CSpDetCCAM::fromToken($token);
-//    $acteCCAM = $spDetCCAM->mapTo();
+    $acte = CSpDetCCAM::mapFromToken($operation, $tokenCCAM);
+    $operation->_ref_actes_ccam[] = $acte;
   }
   
 }

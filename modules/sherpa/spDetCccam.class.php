@@ -160,8 +160,27 @@ class CSpDetCCAM extends CSpObject {
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
+  }
+  
+  /**
+   * Unserialize acte from token with format
+   * CODPRA|CODACT|ACTIV|PHASE|MOD1|MOD2|MOD3|MOD4|ASSOC|DEPHON|DATEACT|EXTDOC|REMBEX|CODSIG
+   * @param $token string Token
+   * @return CActeCCAM 
+   */
+  static function mapFromToken(CCodable $codable, $token) {
+    $acte = new CActeCCAM();
+    $acte->setObject($codable);
+    
+    list ($CODPRA, $CODACT, $ACTIV, $PHASE, $MOD1, $MOD2, $MOD3, $MOD4, $ASSOC, $DEPHON, $DATEACT, $EXTDOC, $REMBEX, $CODSIG) = 
+      explode("|", $token);
+      
+    $acte->code_acte = $CODACT;
+    $acte->code_activite = $ACTIV;
+    $acte->code_phase = $PHASE;
 
-//    mbDump($this->getProps(), $this->_class_name);
+    $acte->executant_id = CSpObjectHandler::getMbObjectFor("CMediusers", $CODPRA);
+    return $acte;
   }
 }
 

@@ -1010,40 +1010,42 @@ div.loading {
   padding-left: 20px;
 }
 
-div.big-warning {
+div.big-success,
+div.big-info,
+div.big-warning,
+div.big-error{
   margin: 10px 50px;
   min-height: 50px;
-  background: #ffd url(images/icons/warning.png) no-repeat 5px center ;
-  border: 1px solid #da0;
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  border-width: 1px;
+  border-style: solid;
   padding: 5px;
   padding-left: 60px;
+}
+
+div.big-warning {
+  background-image: url(images/icons/warning.png);
+  background-color: #ffd;
+  border-color: #da0;
 }
 
 div.big-success {
-  margin: 10px 50px;
-  min-height: 50px;
-  background: #efe url(images/icons/success.png) no-repeat 5px center ;
-  border: 1px solid #5a5;
-  padding: 5px;
-  padding-left: 60px;
+  background-image: url(images/icons/success.png);
+ 	background-color: #efe;
+  border-color: #5a5;
 }
 
 div.big-info {
-  margin: 10px 50px;
-  min-height: 50px;
-  background: #eef url(images/icons/info.png) no-repeat 5px center ;
-  border: 1px solid #55a;
-  padding: 5px;
-  padding-left: 60px;
+  background-image: url(images/icons/info.png);
+ 	background-color: #eef;
+  border-color: #55a;
 }
 
 div.big-error {
-  margin: 10px 50px;
-  min-height: 50px;
-  background: #fee url(images/icons/error.png) no-repeat 5px center ;
-  border: 1px solid #a55;
-  padding: 5px;
-  padding-left: 60px;
+  background-image: url(images/icons/error.png);
+ 	background-color: #fee;
+  border-color: #a55;
 }
 
 #goUp {

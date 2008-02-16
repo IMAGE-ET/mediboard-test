@@ -1,6 +1,4 @@
 <!-- $Id: vw_addedit_planning.tpl 117 2006-06-13 12:54:06Z Rhum1 $ -->
-
-          
           
 <script type="text/javascript">
 
@@ -12,7 +10,7 @@ function pageMain() {
   
 <table class="main">
 
-  {{if $sejour->sejour_id}}
+  {{if $sejour->_id}}
   <tr>
     <td>
       <a class="buttonnew" href="?m={{$m}}&amp;tab={{$tab}}&amp;sejour_id=0">
@@ -39,7 +37,8 @@ function pageMain() {
     <div style="float:left;" class="noteDiv {{$sejour->_class_name}}-{{$sejour->_id}}">
       <img alt="Ecrire une note" src="images/icons/note_grey.png" />
     </div>
-      Modification du séjour {{$sejour->_view}} {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
+      Modification du séjour {{$sejour->_view}} 
+      {{if $sejour->_num_dossier}}[{{$sejour->_num_dossier}}]{{/if}}
     </th>
     {{else}}
     <th colspan="2" class="title">      
@@ -55,9 +54,7 @@ function pageMain() {
       {{include file="inc_form_sejour.tpl"}}
     </td>
     <td>
-      {{if $can->edit}}
       {{include file="inc_infos_operation.tpl"}}
-      {{/if}}
       {{include file="inc_infos_hospitalisation.tpl"}}
     </td>
   </tr>
