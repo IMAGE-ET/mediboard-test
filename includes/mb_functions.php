@@ -751,7 +751,8 @@ function stripslashes_deep($value) {
  **/
 function bindHashToObject($hash, &$object) {
   foreach ($hash as $k => $v) {
-    if (property_exists($object, $k)) {
+    //if (property_exists($object, $k)) {
+    if(array_key_exists($k,get_object_vars($object))) {
       $object->$k = $hash[$k];
     }
   } 
