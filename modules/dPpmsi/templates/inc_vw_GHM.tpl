@@ -21,7 +21,7 @@
     </ul>
   {{/if}}
   <br />
-  <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Exporter vers S@nté.com</button>
+  <!-- <button class="tick" onclick="exporterHPRIM({{$sejour->_id}}, 'sej')">Exporter vers S@nté.com</button> -->
 {{else}}
   <strong>{{$GHM->_GHM}}</strong>
 {{/if}}
