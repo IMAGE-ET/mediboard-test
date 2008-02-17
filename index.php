@@ -19,7 +19,9 @@ if (!is_file("./includes/config.php")) {
 
 // PHP Configuration
 ini_set("memory_limit", "64M");
-date_default_timezone_set("Europe/Paris");
+if(function_exists(date_default_timezone_set)) {
+  date_default_timezone_set("Europe/Paris");
+}
 
 require_once("./includes/config_dist.php");
 require_once("./includes/config.php");
