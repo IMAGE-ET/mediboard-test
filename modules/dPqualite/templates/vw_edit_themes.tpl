@@ -8,8 +8,20 @@
         <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>{{tr}}_CChapitreDoc_classification_chap{{/tr}}</option>
         <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>{{tr}}_CThemeDoc_classification_theme{{/tr}}</option>
       </select>
-      </form><br />
-    
+      <br />
+      <label for="etablissement">Etablissement</label>
+      <select name="etablissement" onchange="this.form.submit();">
+        <option value="0" {{if $etablissement == 0}}selected="selected"{{/if}}>
+          Tous
+        </option>
+        {{foreach from=$etablissements item=curr_etab}}
+        <option value="{{$curr_etab->_id}}" {{if $etablissement == $curr_etab->_id}}selected="selected"{{/if}}>
+          {{$curr_etab->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+      </form>
+      <br />
       <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_theme_id=0">
         {{tr}}CThemeDoc.create{{/tr}}
       </a>
@@ -31,15 +43,34 @@
     <td class="halfPane">
       <form name="editThème" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_theme_aed" />
-	  <input type="hidden" name="doc_theme_id" value="{{$theme->doc_theme_id}}" />
+	  <input type="hidden" name="doc_theme_id" value="{{$theme->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
-          {{if $theme->doc_theme_id}}
+          {{if $theme->_id}}
           <th class="title modify" colspan="2">{{tr}}msg-CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
           {{else}}
           <th class="title" colspan="2">{{tr}}msg-CThemeDoc-title-create{{/tr}}</th>
           {{/if}}
+        </tr>
+        <tr>
+          <th>{{mb_label object=$theme field="group_id"}}</th>
+          <td>
+            {{if $theme->_id}}
+            {{$theme->_ref_group->_view}}
+            {{else}}
+            <select name="group_id">
+              <option value="">
+                Tous
+              </option>
+              {{foreach from=$etablissements item=curr_etab}}
+              <option value="{{$curr_etab->_id}}" {{if $etablissement == $curr_etab->_id}}selected="selected"{{/if}}>
+                {{$curr_etab->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+            {{/if}}
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$theme field="nom"}}</th>

@@ -25,16 +25,53 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   <tr>
     <td class="halfPane">
       
-      <form name="FrmThemeVue" action="?m={{$m}}" method="get">
+      <form name="FrmClassifVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
       <label for="selTheme" title="{{tr}}CDocGed-doc_theme_id-desc{{/tr}}">{{tr}}CDocGed-doc_theme_id{{/tr}}</label>
       <select name="selTheme" onchange="this.form.submit();">
         <option value="0">&mdash; {{tr}}_CThemeDoc_alltheme{{/tr}}</option>
         {{foreach from=$listThemes item=currTheme}}
-        <option value="{{$currTheme->doc_theme_id}}" {{if $selTheme==$currTheme->doc_theme_id}}selected="selected"{{/if}}>{{$currTheme->nom}}</option>
+        <option value="{{$currTheme->doc_theme_id}}" {{if $selTheme == $currTheme->doc_theme_id}}selected="selected"{{/if}}>
+          {{$currTheme->nom}}
+        </option>
         {{/foreach}}
       </select>
-      </form><br />
+      <br />
+      <label for="selChapitre" title="{{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}">{{tr}}CDocGed-doc_chapitre_id{{/tr}}</label>
+      <select name="selChapitre" onchange="this.form.submit();">
+        <option value="0">&mdash; {{tr}}_CChapitreDoc_allchapitres{{/tr}}</option>
+        {{*1er niveau*}}
+        {{foreach from=$listChapitres item=curr_chapitre}}
+        <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $selChapitre == $curr_chapitre->doc_chapitre_id}}selected="selected"{{/if}} >
+          {{$curr_chapitre->_view}}
+        </option>
+        {{*2ème niveau*}}
+        {{foreach from=$curr_chapitre->_ref_chapitres_doc item=curr_chapitre2}}
+        <option value="{{$curr_chapitre2->doc_chapitre_id}}" {{if $selChapitre == $curr_chapitre2->doc_chapitre_id}}selected="selected"{{/if}} >
+          |&mdash;{{$curr_chapitre2->_view}}
+        </option>
+        {{*3ème niveau*}}
+        {{foreach from=$curr_chapitre2->_ref_chapitres_doc item=curr_chapitre3}}
+        <option value="{{$curr_chapitre3->doc_chapitre_id}}" {{if $selChapitre == $curr_chapitre3->doc_chapitre_id}}selected="selected"{{/if}} >
+          |&mdash;|&mdash;{{$curr_chapitre3->_view}}
+        </option>
+        {{*4ème niveau*}}
+        {{foreach from=$curr_chapitre3->_ref_chapitres_doc item=curr_chapitre4}}
+        <option value="{{$curr_chapitre4->doc_chapitre_id}}" {{if $selChapitre == $curr_chapitre4->doc_chapitre_id}}selected="selected"{{/if}} >
+          |&mdash;|&mdash;|&mdash;{{$curr_chapitre4->_view}}
+        </option>
+        {{*5ème niveau*}}
+        {{foreach from=$curr_chapitre4->_ref_chapitres_doc item=curr_chapitre5}}
+        <option value="{{$curr_chapitre5->doc_chapitre_id}}" {{if $selChapitre == $curr_chapitre5->doc_chapitre_id}}selected="selected"{{/if}} >
+          |&mdash;|&mdash;|&mdash;|&mdash;{{$curr_chapitre5->_view}}
+        </option>
+        {{/foreach}}
+        {{/foreach}}
+        {{/foreach}}
+        {{/foreach}}
+        {{/foreach}}
+      </select>
+      </form>
       
       <table class="tbl">
         <tr>
@@ -56,7 +93,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               <input type="hidden" name="del" value="0" />
               <input type="hidden" name="_validation" value="1" />
               <input type="hidden" name="ged[doc_ged_id]" value="{{$currProc->doc_ged_id}}" />  
-              <input type="hidden" name="ged[user_id]" value="{{$currProc->user_id}}" />
+              <input type="hidden" name="ged[user_id]" value="{{$app->user_id}}" />
               <input type="hidden" name="ged[group_id]" value="{{$currProc->group_id}}" />
               <input type="hidden" name="ged[annule]" value="1" />
               <input type="hidden" name="ged[etat]" value="{{$currProc->etat}}" />
@@ -72,9 +109,11 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             {{/if}}
           </td>
           {{/if}}
-          <td>
+          <td class="text">
             <a href="#" onclick="ZoomAjax('{{$currProc->_class_name}}','{{$currProc->_id}}','CFile','{{$currProc->_lastactif->file_id}}', 0);">
-              {{$currProc->_reference_doc}} ({{tr}}CDocGed-version-court{{/tr}} : {{$currProc->version}})
+              {{$currProc->_reference_doc}}
+              <br />
+              {{tr}}CDocGed-version-court{{/tr}} {{$currProc->version}}
             </a>
           </td>
           <td class="text">
@@ -83,7 +122,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             </a>
           </td>
           <td>
-            {{$currProc->_lastactif->date|date_format:"%d %b %Y à %Hh%M"}}
+            {{$currProc->_lastactif->date|date_format:"%d/%m/%Y"}}
           </td>
         </tr>
         {{foreachelse}}

@@ -83,27 +83,27 @@
         <option value="">&mdash; {{tr}}CDocGed-doc_chapitre_id-desc{{/tr}}</option>
         {{*1er niveau*}}
         {{foreach from=$listChapitres item=curr_chapitre}}
-        <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre->doc_chapitre_id}} selected="selected" {{/if}} >
+        <option value="{{$curr_chapitre->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre->doc_chapitre_id}}selected="selected"{{/if}} >
           {{$curr_chapitre->_view}}
         </option>
         {{*2ème niveau*}}
         {{foreach from=$curr_chapitre->_ref_chapitres_doc item=curr_chapitre2}}
-        <option value="{{$curr_chapitre2->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre2->doc_chapitre_id}} selected="selected" {{/if}} >
+        <option value="{{$curr_chapitre2->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre2->doc_chapitre_id}}selected="selected"{{/if}} >
           |&mdash;{{$curr_chapitre2->_view}}
         </option>
         {{*3ème niveau*}}
         {{foreach from=$curr_chapitre2->_ref_chapitres_doc item=curr_chapitre3}}
-        <option value="{{$curr_chapitre3->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre3->doc_chapitre_id}} selected="selected" {{/if}} >
+        <option value="{{$curr_chapitre3->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre3->doc_chapitre_id}}selected="selected"{{/if}} >
           |&mdash;|&mdash;{{$curr_chapitre3->_view}}
         </option>
         {{*4ème niveau*}}
         {{foreach from=$curr_chapitre3->_ref_chapitres_doc item=curr_chapitre4}}
-        <option value="{{$curr_chapitre4->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre4->doc_chapitre_id}} selected="selected" {{/if}} >
+        <option value="{{$curr_chapitre4->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre4->doc_chapitre_id}}selected="selected"{{/if}} >
           |&mdash;|&mdash;|&mdash;{{$curr_chapitre4->_view}}
         </option>
         {{*5ème niveau*}}
         {{foreach from=$curr_chapitre4->_ref_chapitres_doc item=curr_chapitre5}}
-        <option value="{{$curr_chapitre5->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre5->doc_chapitre_id}} selected="selected" {{/if}} >
+        <option value="{{$curr_chapitre5->doc_chapitre_id}}" {{if $docGed->doc_chapitre_id == $curr_chapitre5->doc_chapitre_id}}selected="selected"{{/if}} >
           |&mdash;|&mdash;|&mdash;|&mdash;{{$curr_chapitre5->_view}}
         </option>
         {{/foreach}}
@@ -131,7 +131,26 @@
       </select>
     </td>
   </tr>
-  {{/if}}
+  <tr>
+    <th>
+      <label for="ged[num_ref]" title="{{tr}}CDocGed-num_ref-desc{{/tr}}">
+        {{tr}}CDocGed-num_ref{{/tr}}
+      </label>
+    </th>
+    <td>
+      <input type="text" name="ged[num_ref]" class="{{$docGed->_props.num_ref}}" />
+    </td>
+  </tr>
+  {{/if}}     
+  <tr>
+    <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
+    <td>
+      <input type="hidden" name="object_class" value="CDocGed" />
+      <input type="hidden" name="object_id" value="{{$docGed->doc_ged_id}}" />
+      <input type="hidden" name="file_category_id" value="" />
+      <input type="file" name="formfile" size="0" class="str" />
+    </td>
+  </tr>
   <tr>
     <th><label for="suivi[remarques]" title="{{tr}}CDocGed-remarques-desc{{/tr}}">{{tr}}CDocGed-remarques{{/tr}}</label></th>
     <td>

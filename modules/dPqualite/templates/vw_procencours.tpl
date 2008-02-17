@@ -33,7 +33,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
         {{foreach from=$procTermine item=currProc}}
         <tr>
           <td class="text">
-            {{$currProc->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
+            {{$currProc->_lastentry->date|date_format:"%d/%m/%Y à %Hh%M"}}
           </td>
           <td class="text">
             {{if $currProc->_lastactif->doc_ged_suivi_id}}
@@ -84,13 +84,14 @@ function popFile(objectClass, objectId, elementClass, elementId){
       {{if $procDemande|@count}}
       <table class="form">
         <tr>
-          <th class="category" colspan="4">
+          <th class="category" colspan="5">
             {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
         <tr>
           <th class="category">{{tr}}_CDocGed_demande{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-user_id{{/tr}}</th>
           <th class="category">{{tr}}Date{{/tr}}</th>
           <th class="category">{{tr}}CDocGedSuivi-remarques{{/tr}}</th>
         </tr>
@@ -103,20 +104,27 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <input type="hidden" name="ged[doc_ged_id]" value="{{$currProc->doc_ged_id}}" />
             <input type="hidden" name="del" value="0" />
             {{assign var="date_proc" value=$currProc->_lastentry->date|date_format:"%d %b %Y à %Hh%M"}}
-            <a class="buttonedit notext" href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}"></a>            {{if $currProc->_lastactif->doc_ged_suivi_id}}
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+            {{if $currProc->_lastactif->doc_ged_suivi_id}}
               {{tr}}_CDocGed_revision{{/tr}} {{$currProc->_reference_doc}}
             {{else}}
               {{tr}}_CDocGed_new{{/tr}}
             {{/if}}
+            </a>
             </form>
           </td>
           <td class="text">
             <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
-              {{$currProc->_ref_group->text}}
+              {{$currProc->_ref_group->_view}}
             </a>
           </td>
           <td class="text">
-            {{$currProc->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}
+            <a href="?m=dPqualite&amp;tab=vw_procencours&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+              {{$currProc->_ref_user->_view}}
+            </a>
+          </td>
+          <td class="text">
+            {{$currProc->_lastentry->date|date_format:"%d/%m/%Y à %Hh%M"}}
           </td>
           <td class="text">
             {{$currProc->_lastentry->remarques|nl2br}}
@@ -247,8 +255,11 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </th>
             <td colspan="2">
               <select class="{{$docGed->_props.group_id}}" name="ged[group_id]">
+                <option value="">Tous</option>
               {{foreach from=$etablissements item=curr_etab}}
-                <option value="{{$curr_etab->group_id}}" {{if ($docGed->doc_ged_id && $docGed->group_id==$curr_etab->group_id) || (!$docGed->doc_ged_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>{{$curr_etab->text}}</option>
+                <option value="{{$curr_etab->group_id}}" {{if ($docGed->doc_ged_id && $docGed->group_id==$curr_etab->group_id) || (!$docGed->doc_ged_id && $g==$curr_etab->group_id)}} selected="selected"{{/if}}>
+                  {{$curr_etab->text}}
+                </option>
               {{/foreach}}
               </select>
             </td>

@@ -195,7 +195,7 @@ class CFicheEi extends CMbObject {
     return $AppUI->_("msg-CFicheEi-canDelete");
   }
   
-  function loadFichesEtat($etat,$user_id = null, $where_termine = null, $annule = 0){
+  function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0){
     $where = array();
     $where["annulee"] = "= '$annule'";
     $limit = null;

@@ -3,13 +3,26 @@
     <td class="halfPane" rowspan="3">
       <form name="FrmTypeVue" action="?m={{$m}}" method="get">
       <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="nav_chapitre_id" value="0" />
       <label for="typeVue">{{tr}}_classification{{/tr}}</label>
       <select name="typeVue" onchange="this.form.submit();">
         <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>{{tr}}_CChapitreDoc_classification_chap{{/tr}}</option>
         <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>{{tr}}_CThemeDoc_classification_theme{{/tr}}</option>
       </select>
-      </form><br />
-
+      <br />
+      <label for="etablissement">Etablissement</label>
+      <select name="etablissement" onchange="this.form.submit();">
+        <option value="0" {{if $etablissement == 0}}selected="selected"{{/if}}>
+          Tous
+        </option>
+        {{foreach from=$etablissements item=curr_etab}}
+        <option value="{{$curr_etab->_id}}" {{if $etablissement == $curr_etab->_id}}selected="selected"{{/if}}>
+          {{$curr_etab->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+      </form>
+      <br />
       <a class="buttonnew" href="?m=dPqualite&amp;tab=vw_edit_classification&amp;doc_chapitre_id=0">
         {{tr}}CChapitreDoc.create{{/tr}}
       </a>
@@ -27,7 +40,7 @@
         <tr>
           <td>
             <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$nav_chapitre->_ref_pere->_id}}" title="Retour">
-              retour
+              <img src="images/icons/uparrow.png" title="Retour" />
             </a>
           </td>
           <td colspan="2" class="greedyPane">
@@ -43,8 +56,8 @@
           <td />
           <td>
             {{if $nav_chapitre->_level < $maxDeep}}
-            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$curr_chapitre->_id}}" title="Voir">
-              voir
+            <a href="?m=dPqualite&amp;tab=vw_edit_classification&amp;nav_chapitre_id={{$curr_chapitre->_id}}" title="Ouvrir">
+              <img src="images/icons/downarrow.png" title="Ouvrir" />
             </a>
             {{/if}}
           </td>
@@ -76,20 +89,49 @@
           {{/if}}
         </tr>
         <tr>
+          <th>{{mb_label object=$chapitre field="group_id"}}</th>
+          <td>
+            {{if $chapitre->_id && $chapitre->group_id}}
+            {{$chapitre->_ref_group->_view}}
+            <input name="group_id" type="hidden" value="{{$chapitre->pere_id}}" />
+            {{elseif $chapitre->_id}}
+            Tous
+            <input name="group_id" type="hidden" value="" />
+            {{elseif $nav_chapitre->_id && $nav_chapitre->group_id}}
+            {{$nav_chapitre->_ref_group->_view}}
+            <input name="group_id" type="hidden" value="{{$nav_chapitre->group_id}}" />
+            {{elseif $nav_chapitre->_id}}
+            Tous
+            <input name="group_id" type="hidden" value="" />
+            {{else}}
+            <select name="group_id">
+              <option value="">
+                Tous
+              </option>
+              {{foreach from=$etablissements item=curr_etab}}
+              <option value="{{$curr_etab->_id}}" {{if $etablissement == $curr_etab->_id}}selected="selected"{{/if}}>
+                {{$curr_etab->_view}}
+              </option>
+              {{/foreach}}
+            </select>
+            {{/if}}
+          </td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$chapitre field="pere_id"}}</th>
           <td>
             {{if $chapitre->_id}}
             {{if $chapitre->pere_id}}
               {{$chapitre->_ref_pere->_view}}
             {{else}}
-              Aucun
+              Tous
             {{/if}}
             {{else}}
             <input type="hidden" name="pere_id" value="{{$nav_chapitre->_id}}">
             {{if $nav_chapitre->_id}}
               {{$nav_chapitre->_view}}
             {{else}}
-              Aucun
+              Tous
             {{/if}}
             {{/if}}
           </td>

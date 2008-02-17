@@ -1,4 +1,4 @@
-{{if $fileSel}}
+{{if $fileSel->_id}}
   <strong>{{$fileSel->_view}}</strong><br />
   {{if $fileSel->_class_name=="CFile"}}
     {{$fileSel->file_date|date_format:"%d/%m/%Y à %Hh%M"}}<br />

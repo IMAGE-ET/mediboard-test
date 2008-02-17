@@ -61,13 +61,14 @@ function redactionDoc(oForm){
       {{if $procDemande|@count}}
       <table class="form">
         <tr>
-          <th class="category" colspan="4">
+          <th class="category" colspan="5">
             {{tr}}_CDocGed_attente_demande{{/tr}}
           </th>
         </tr>
         <tr>
           <th class="category">{{tr}}_CDocGed_demande{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-user_id{{/tr}}</th>
           <th class="category">{{tr}}Date{{/tr}}</th>
           <th class="category">{{tr}}CDocGedSuivi-remarques{{/tr}}</th>
         </tr>
@@ -84,12 +85,17 @@ function redactionDoc(oForm){
           </td>
           <td class="text">
             <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
-              {{$currProc->_ref_group->text}}
+              {{$currProc->_ref_group->_view}}
             </a>
           </td>
           <td class="text">
             <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
-              {{$currProc->_lastentry->date|date_format:"%A %d %B %Y à %Hh%M"}}
+              {{$currProc->_ref_user->_view}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+              {{$currProc->_lastentry->date|date_format:"%d/%m/%Y à %Hh%M"}}
             </a>
           </td>
           {{if $currProc->annule}}
@@ -104,12 +110,13 @@ function redactionDoc(oForm){
       
       <table class="form">
         <tr>
-          <th class="category" colspan="5">{{tr}}_CDocGed_attente{{/tr}}</th>
+          <th class="category" colspan="6">{{tr}}_CDocGed_attente{{/tr}}</th>
         </tr>
         <tr>
           <th class="category">{{tr}}CDocGed-titre{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-_reference_doc{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-group_id{{/tr}}</th>
+          <th class="category">{{tr}}CDocGed-user_id{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-doc_theme_id{{/tr}}</th>
           <th class="category">{{tr}}CDocGed-etat{{/tr}}</th>
         </tr>
@@ -127,7 +134,12 @@ function redactionDoc(oForm){
           </td>
           <td class="text">
             <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
-              {{$currProc->_ref_group->text}}
+              {{$currProc->_ref_group->_view}}
+            </a>
+          </td>
+          <td class="text">
+            <a href="?m=dPqualite&amp;tab=vw_procvalid&amp;doc_ged_id={{$currProc->doc_ged_id}}">
+              {{$currProc->_ref_user->_view}}
             </a>
           </td>
           <td class="text">{{$currProc->_ref_theme->nom}}</td>
@@ -220,7 +232,7 @@ function redactionDoc(oForm){
     </td>
     <td class="halfPane">      
       {{if $docGed->doc_ged_id}}
-      <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="ProcEditFrm" action="?m={{$m}}" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_docged_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="del" value="0" />

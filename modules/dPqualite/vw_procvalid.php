@@ -17,6 +17,9 @@ $procAnnuleVisible = mbGetValueFromGetOrSession("procAnnuleVisible" , 0);
 $lastactif         = mbGetvalueFromGet("lastactif", 0);
 
 $docGed = new CDocGed;
+$listCategories = array();
+$listThemes     = array();
+$listChapitres  = array();
 if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   // Ce document n'est pas valide
   $doc_ged_id = null;
@@ -24,7 +27,35 @@ if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   $docGed = new CDocGed;
 }else{
   $docGed->loadLastActif();
-  $docGed->loadRefsBack();
+  $docGed->loadRefs();
+
+  // Liste des Catégories
+  $categorie = new CCategorieDoc;
+  $listCategories = $categorie->loadlist(null,"code");
+  
+  // Liste des Thèmes
+  $theme = new CThemeDoc;
+  $where = array();
+  if($docGed->group_id) {
+    $where [] = "group_id = '$docGed->group_id' OR group_id IS NULL";
+  } else {
+    $where ["group_id"] = "IS NULL";
+  }
+  $listThemes = $theme->loadlist($where,"group_id, nom");
+  
+  // Liste des Chapitres
+  $chapitre = new CChapitreDoc;
+  $where = array();
+  $where ["pere_id"]  = "IS NULL";
+  if($docGed->group_id) {
+    $where [] = "group_id = '$docGed->group_id' OR group_id IS NULL";
+  } else {
+    $where ["group_id"] = "IS NULL";
+  }
+  $listChapitres = $chapitre->loadlist($where,"group_id, code");
+  foreach($listChapitres as &$_chapitre) {
+    $_chapitre->loadChapsDeep(); 
+  }
 }
 
 $docGed->loadLastEntry();
@@ -33,7 +64,7 @@ $docGed->loadLastEntry();
 $procDemande = new CDocGed;
 $procDemande = $procDemande->loadProcDemande();
 foreach($procDemande as $keyProc => $currProc){
-  $procDemande[$keyProc]->loadRefsBack();
+  $procDemande[$keyProc]->loadRefs();
   $procDemande[$keyProc]->getEtatRedac();
   $procDemande[$keyProc]->loadLastActif();
   $procDemande[$keyProc]->loadLastEntry();
@@ -43,7 +74,7 @@ foreach($procDemande as $keyProc => $currProc){
 $procEnCours = new CDocGed;
 $procEnCours = $procEnCours->loadProcRedacAndValid();
 foreach($procEnCours as $keyProc => $currProc){
-  $procEnCours[$keyProc]->loadRefsBack();
+  $procEnCours[$keyProc]->loadRefs();
   $procEnCours[$keyProc]->getEtatValid();
   $procEnCours[$keyProc]->loadLastEntry();
 }
@@ -55,29 +86,11 @@ $where["annule"] = "= '1'";
 $procTermine = $procTermine->loadList($where);
 if($procAnnuleVisible){
   foreach($procTermine as $keyProc => $currProc){
-    $procTermine[$keyProc]->loadRefsBack();
+    $procTermine[$keyProc]->loadRefs();
     $procTermine[$keyProc]->getEtatValid();
     $procTermine[$keyProc]->loadLastEntry();
   }
 }
-
-$order = "code";
-// Liste des Catégories
-$listCategories = new CCategorieDoc;
-$listCategories = $listCategories->loadlist(null,$order);
-
-// Liste des Thèmes
-$listThemes = new CThemeDoc;
-$listThemes = $listThemes->loadlist(null,"nom");
-
-// Liste des Chapitres
-$listChapitres = new CChapitreDoc;
-$where = array("pere_id" => "IS NULL");
-$listChapitres = $listChapitres->loadlist($where,$order);
-foreach($listChapitres as &$_chapitre) {
-  $_chapitre->loadChapsDeep(); 
-}
-//mbTrace($listChapitres);
 
 $versionDoc = array();
 if($docGed->version){

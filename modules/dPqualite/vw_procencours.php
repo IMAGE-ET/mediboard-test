@@ -22,7 +22,7 @@ if(!$docGed->load($doc_ged_id) || $docGed->etat==0){
   $docGed = new CDocGed;
 }else{
   $docGed->loadLastActif();
-  $docGed->loadRefsBack();
+  $docGed->loadRefs();
 }
 $docGed->loadLastEntry();
 $docGed->_lastentry->loadFile();
@@ -35,7 +35,7 @@ if($docGed->etat==CDocGed::TERMINE){
 $procTermine = new CDocGed;
 $procTermine = $procTermine->loadProcTermineOuRefuse($AppUI->user_id);
 foreach($procTermine as $keyProc => $currProc){
-  $procTermine[$keyProc]->loadRefsBack();
+  $procTermine[$keyProc]->loadRefs();
   $procTermine[$keyProc]->getEtatRedac();
   $procTermine[$keyProc]->loadLastActif();
   $procTermine[$keyProc]->loadLastEntry();
@@ -47,7 +47,7 @@ foreach($procTermine as $keyProc => $currProc){
 $procDemande = new CDocGed;
 $procDemande = $procDemande->loadProcDemande($AppUI->user_id);
 foreach($procDemande as $keyProc => $currProc){
-  $procDemande[$keyProc]->loadRefsBack();
+  $procDemande[$keyProc]->loadRefs();
   $procDemande[$keyProc]->getEtatRedac();
   $procDemande[$keyProc]->loadLastActif();
   $procDemande[$keyProc]->loadLastEntry();
@@ -57,7 +57,7 @@ foreach($procDemande as $keyProc => $currProc){
 $procEnCours = new CDocGed;
 $procEnCours = $procEnCours->loadProcRedacAndValid($AppUI->user_id);
 foreach($procEnCours as $keyProc => $currProc){
-	$procEnCours[$keyProc]->loadRefsBack();
+	$procEnCours[$keyProc]->loadRefs();
   $procEnCours[$keyProc]->getEtatRedac();
   $procEnCours[$keyProc]->loadLastEntry();
 }

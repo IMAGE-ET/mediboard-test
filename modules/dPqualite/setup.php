@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.16";
+$config["mod_version"] = "0.18";
 $config["mod_type"]    = "user";
 
 class CSetupdPqualite extends CSetup {
@@ -214,7 +214,22 @@ class CSetupdPqualite extends CSetup {
               AFTER `doc_chapitre_id`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `doc_chapitres`
+              ADD `group_id` INT(11) UNSIGNED
+              AFTER `pere_id`;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `doc_themes`
+              ADD `group_id` INT(11) UNSIGNED
+              AFTER `doc_theme_id`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.17");
+    $sql = "ALTER TABLE `doc_ged`
+              CHANGE `group_id` `group_id` int(11) UNSIGNED DEFAULT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.18";
     
   }
 }

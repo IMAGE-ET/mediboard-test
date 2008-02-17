@@ -39,7 +39,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
             {{if $can->admin}}
             <a href="?m={{$m}}&amp;tab=vw_modeles&amp;doc_ged_id={{$currModele->doc_ged_id}}">
             {{else}}
-            <a href="#" onclick="ZoomAjax('{{$currModele->_class_name}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->_id}}', 0);">
+            <a href="#" onclick="ZoomAjax('{{$currModele->_class_name}}','{{$currModele->_id}}','CFile','{{$currModele->_lastentry->file_id}}', 0);">
             {{/if}}
             {{$currModele->titre}}
             </a>

@@ -46,7 +46,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
     // Recherche du fichier/document demandé et Vérification droit Read
     if($elementClass == "CFile"){
     	$type = "_ref_files";
-        $nameFile = "file_name";
+      $nameFile = "file_name";
     }elseif($elementClass == "CCompteRendu"){
       $type = "_ref_documents";
       $nameFile = "nom";

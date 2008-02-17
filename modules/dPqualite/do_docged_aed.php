@@ -47,7 +47,8 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     if($this->_obj->doc_ged_id){
       // Procédure Existante --> Verification
 
-      if($this->_objBefore->etat == CDocGed::REDAC && $_validation===null){
+      //if($this->_objBefore->etat == CDocGed::REDAC && $_validation === null){
+      if(isset($_FILES["formfile"])){
         // Test d'upload du fichier
         $objFile = new CFileAddEdit;
         $objFile->redirect = null;
@@ -63,26 +64,45 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         }
       }      
     }
+    
+    $demande_redac = $this->_objBefore->etat == CDocGed::DEMANDE && $this->_obj->etat == CDocGed::REDAC;
 
-    if($this->_objBefore->etat == CDocGed::DEMANDE && $this->_obj->etat == CDocGed::REDAC && !$this->_objBefore->num_ref){
-      // Pas de numéro : Nouvelle Procédure --> Récup n° dernier doc dans meme chapitre et catégorie
+    if($demande_redac && !$this->_objBefore->num_ref){
+      // Nouvelle Procédure
       $this->_obj->version = 1;
-        
-      $sql = "SELECT num_ref FROM doc_ged WHERE num_ref IS NOT NULL";
-      $where = array();
-      $where["num_ref"]          = "IS NOT NULL";
-      $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
-      $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
-      $order = "num_ref DESC";
-      $lastNumRef = new CDocGed;
-      $lastNumRef->loadObject($where,$order);
-      if(!$lastNumRef->doc_ged_id){
-        $this->_obj->num_ref = 1;
-      }else{
-        $this->_obj->num_ref = intval($lastNumRef->num_ref) + 1;
+      if($this->_obj->num_ref) {
+        $this->_obj->num_ref = intval($this->_obj->num_ref);
+        // Numérotée manuellement
+        $where = array();
+        $where["num_ref"]          = "IS NOT NULL";
+        $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
+        $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
+        $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
+        $where["num_ref"]          = "= '".$this->_obj->num_ref."'";
+        $sameNumRef = new CDocGed;
+        $sameNumRef->loadObject($where,$order);
+        if($sameNumRef->_id) {
+          $this->_obj->num_ref = null;
+        }
+      }
+      if(!$this->_obj->num_ref) {
+        // Pas de numéro : Récup n° dernier doc dans meme chapitre et catégorie
+        $where = array();
+        $where["num_ref"]          = "IS NOT NULL";
+        $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
+        $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
+        $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
+        $order = "num_ref DESC";
+        $lastNumRef = new CDocGed;
+        $lastNumRef->loadObject($where,$order);
+        if(!$lastNumRef->doc_ged_id){
+          $this->_obj->num_ref = 1;
+        }else{
+          $this->_obj->num_ref = intval($lastNumRef->num_ref) + 1;
+        }
       }
     }
-    
+
     if(!($this->_objBefore->etat == CDocGed::VALID && $this->_obj->etat == CDocGed::TERMINE)){
       // Annulation changement de version
       $this->_obj->version = $this->_objBefore->version;

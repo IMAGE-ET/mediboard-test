@@ -46,6 +46,7 @@ class CDocGed extends CMbObject {
   var $_ref_categorie   = null;
   var $_ref_history     = null;
   var $_ref_group       = null;
+  var $_ref_user        = null;
   
   function CDocGed() {
     $this->CMbObject("doc_ged", "doc_ged_id");
@@ -61,7 +62,7 @@ class CDocGed extends CMbObject {
   
   function getSpecs() {
     return array (
-      "group_id"         => "notNull ref class|CGroups",
+      "group_id"         => "ref class|CGroups",
       "user_id"          => "ref class|CMediusers",
       "doc_chapitre_id"  => "ref class|CChapitreDoc",
       "doc_theme_id"     => "ref class|CThemeDoc",
@@ -104,10 +105,12 @@ class CDocGed extends CMbObject {
       $this->_etat_actuel = $etat[$this->etat];
   }
     
-  function loadRefsBack() {
+  function loadRefsFwd() {
     global $dPconfig;
     
-    // Forward references
+    $this->_ref_user = new CMediusers();
+    $this->_ref_user->load($this->user_id);
+    
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);
     

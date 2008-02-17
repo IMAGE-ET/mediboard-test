@@ -44,6 +44,15 @@
         {{/foreach}}
       </select>
     </td>
+  </tr>     
+  <tr>
+    <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
+    <td>
+      <input type="hidden" name="object_class" value="CDocGed" />
+      <input type="hidden" name="object_id" value="{{$docGed->doc_ged_id}}" />
+      <input type="hidden" name="file_category_id" value="" />
+      <input type="file" name="formfile" size="0" class="str" />
+    </td>
   </tr>
   <tr>
     <th><label for="suivi[remarques]" title="{{tr}}CDocGedSuivi-remarques-desc{{/tr}}">{{tr}}CDocGedSuivi-remarques{{/tr}}</label></th>

@@ -7,16 +7,23 @@
  *  @author Sébastien Fillonneau
  */
  
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m, $dPconfig, $g;
 
 $can->needsAdmin();
 
-$typeVue = mbGetValueFromGetOrSession("typeVue", 0);
+$typeVue       = mbGetValueFromGetOrSession("typeVue"      , 0);
+$etablissement = mbGetValueFromGetOrSession("etablissement", $g);
+
+// Liste des établissements
+$etablissements = new CMediusers();
+$etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
-$smarty->assign("typeVue"  , $typeVue  );
+$smarty->assign("etablissements", $etablissements);
+$smarty->assign("etablissement" , $etablissement );
+$smarty->assign("typeVue"       , $typeVue       );
 
 if($typeVue){
   // Liste des Themes
@@ -24,9 +31,16 @@ if($typeVue){
   // Chargement du theme demandé
   $theme=new CThemeDoc;
   $theme->load($doc_theme_id);
+  $theme->loadRefsFwd();
   // Liste des Themes
   $listThemes = new CThemeDoc;
-  $listThemes = $listThemes->loadList();
+  $where = array();
+  if($etablissement) {
+    $where["group_id"] = "= '$etablissement'";
+  } else {
+    $where["group_id"] = "IS NULL";
+  }
+  $listThemes = $listThemes->loadList($where);
   
   // Création du Template
   $smarty->assign("theme"      , $theme      );
@@ -38,11 +52,12 @@ if($typeVue){
   $doc_chapitre_id = mbGetValueFromGetOrSession("doc_chapitre_id", null);
   $chapitre = new CChapitreDoc;
   $chapitre->load($doc_chapitre_id);
-  $chapitre->loadParent();
+  $chapitre->loadRefsFwd();
   // Chargement du chapitre de navigation
   $nav_chapitre_id = mbGetValueFromGetOrSession("nav_chapitre_id", null);
   $nav_chapitre = new CChapitreDoc;
   $nav_chapitre->load($nav_chapitre_id);
+  $nav_chapitre->loadRefsFwd();
   if($nav_chapitre->_id) {
     $nav_chapitre->computeLevel();
     $nav_chapitre->computePath();
@@ -51,10 +66,16 @@ if($typeVue){
   }
   // Liste des Chapitres
   $listChapitres = new CChapitreDoc;
-  if($nav_chapitre->_id) {
-    $where = array("pere_id" => "= $nav_chapitre->_id");
+  $where = array();
+  if($etablissement) {
+    $where["group_id"] = "= '$etablissement'";
   } else {
-    $where = array("pere_id" => "IS NULL");
+    $where["group_id"] = "IS NULL";
+  }
+  if($nav_chapitre->_id) {
+    $where["pere_id"] = "= $nav_chapitre->_id";
+  } else {
+    $where["pere_id"] = "IS NULL";
   }
   $listChapitres = $listChapitres->loadList($where);
   

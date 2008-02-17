@@ -15,12 +15,14 @@ class CChapitreDoc extends CMbObject {
   var $doc_chapitre_id = null;
     
   // DB Fields
-  var $pere_id = null;
-  var $nom     = null;
-  var $code    = null;
+  var $pere_id  = null;
+  var $group_id = null;
+  var $nom      = null;
+  var $code     = null;
   
   // Fwd refs
-  var $_ref_pere = null;
+  var $_ref_pere  = null;
+  var $_ref_group = null;
   
   // Back Refs
   var $_ref_chapitres_doc = null;
@@ -44,9 +46,10 @@ class CChapitreDoc extends CMbObject {
   
   function getSpecs() {
     return array (
-      "pere_id" => "ref class|CChapitreDoc",
-      "nom"     => "notNull str maxLength|50",
-      "code"    => "notNull str maxLength|10"
+      "pere_id"  => "ref class|CChapitreDoc",
+      "group_id" => "ref class|CGroups",
+      "nom"      => "notNull str maxLength|50",
+      "code"     => "notNull str maxLength|10"
     );
   }
   
@@ -63,8 +66,16 @@ class CChapitreDoc extends CMbObject {
     }
   }
   
+  function loadRefGroup() {
+    if (!$this->_ref_group) {
+      $this->_ref_group = new CGroups();
+      $this->_ref_group->load($this->group_id);
+    }
+  }
+  
   function loadRefsFwd() {
     $this->loadParent();
+    $this->loadRefGroup();
   }
   
   function computeLevel() {
