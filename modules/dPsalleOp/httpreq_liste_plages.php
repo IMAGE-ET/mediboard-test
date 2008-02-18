@@ -25,37 +25,42 @@ $where = array("group_id"=>"= '$g'");
 $listSalles = $listSalles->loadList($where);
 
 // Selection des plages opératoires de la journée
-$plages = new CPlageOp;
-$where = array();
-$where["date"] = "= '$date'";
-$where["salle_id"] = "= '$salle'";
-$order = "debut";
-$plages = $plages->loadList($where, $order);
-foreach($plages as $key => $value) {
-  $plages[$key]->loadRefs(0);
-  $plages[$key]->_unordered_operations = array();
-  foreach($plages[$key]->_ref_operations as $key2 => $value) {
-    $plages[$key]->_ref_operations[$key2]->loadRefSejour();
-    $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-    $plages[$key]->_ref_operations[$key2]->loadExtCodesCCAM();
-    if($plages[$key]->_ref_operations[$key2]->rank == 0) {
-      $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
-      unset($plages[$key]->_ref_operations[$key2]);
-    }
-  }
-}
-
-$urgences = new COperation;
-$where = array();
-$where["date"]     = "= '$date'";
-$where["salle_id"] = "= '$salle'";
-$order = "chir_id";
-$urgences = $urgences->loadList($where);
-foreach($urgences as $keyOp => $curr_op) {
-  $urgences[$keyOp]->loadRefChir();
-  $urgences[$keyOp]->loadRefSejour();
-  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-  $urgences[$keyOp]->loadExtCodesCCAM();
+if($salle) {
+	$plages = new CPlageOp;
+	$where = array();
+	$where["date"] = "= '$date'";
+	$where["salle_id"] = "= '$salle'";
+	$order = "debut";
+	$plages = $plages->loadList($where, $order);
+	foreach($plages as $key => $value) {
+	  $plages[$key]->loadRefs(0);
+	  $plages[$key]->_unordered_operations = array();
+	  foreach($plages[$key]->_ref_operations as $key2 => $value) {
+	    $plages[$key]->_ref_operations[$key2]->loadRefSejour();
+	    $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
+	    $plages[$key]->_ref_operations[$key2]->loadExtCodesCCAM();
+	    if($plages[$key]->_ref_operations[$key2]->rank == 0) {
+	      $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
+	      unset($plages[$key]->_ref_operations[$key2]);
+	    }
+	  }
+	}
+	
+	$urgences = new COperation;
+	$where = array();
+	$where["date"]     = "= '$date'";
+	$where["salle_id"] = "= '$salle'";
+	$order = "chir_id";
+	$urgences = $urgences->loadList($where);
+	foreach($urgences as $keyOp => $curr_op) {
+	  $urgences[$keyOp]->loadRefChir();
+	  $urgences[$keyOp]->loadRefSejour();
+	  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
+	  $urgences[$keyOp]->loadExtCodesCCAM();
+	}
+} else {
+  $plages   = array();
+  $urgences = array();
 }
 
 // Création du template
