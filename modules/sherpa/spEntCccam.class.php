@@ -42,7 +42,7 @@ class CSpEntCCAM extends CSpObject {
     $specs["codane"] = "str length|3";     /* Code de l'anesthésiste       */
     $specs["codsal"] = "str length|2";     /* Code de la salle d'op        */
 
-	  $specs["codepan"]   = "str length|3";  /* Code panseuse                */
+	  $specs["codpan"]   = "str length|3";  /* Code panseuse                */
     for ($i = 1; $i <= 3; $i++) {
 	    $specs["aidop$i"] = "str length|3";  /* Code aide opératoire         */
 	    $specs["dhaid$i"] = "str length|19"; /* Début aide opératoire        */
@@ -206,7 +206,7 @@ class CSpEntCCAM extends CSpObject {
       $personnel->loadRefUser();
       
       $idPans = CSpObjectHandler::getId400For($personnel->_ref_user);
-      $this->codepan = $idPans->id400;
+      $this->codpan = $idPans->id400;
     }
 		
 		// Aides opératoires
