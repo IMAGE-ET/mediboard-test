@@ -20,7 +20,7 @@ function reloadTiming(operation_id){
   var url = new Url();
   url.setModuleAction("dPsalleOp", "httpreq_vw_timing");
   url.addParam("operation_id", operation_id);
-  url.requestUpdate("timing", { waitingText: null } );
+  url.requestUpdate("timing", { waitingText: null, onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}}) } } );
 }
 
 function submitAnesth(oForm) {

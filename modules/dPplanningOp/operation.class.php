@@ -76,6 +76,7 @@ class COperation extends CCodable {
   // Distant fields
   var $_datetime = null;
   var $_datetime_reel = null;
+  var $_datetime_reel_fin = null;
   
   // Links
   var $_link_editor = null;
@@ -398,9 +399,19 @@ class COperation extends CCodable {
       $this->_ref_salle->load($this->salle_id);
     }
     
-    $this->_datetime_reel = "$date $this->debut_op";
-    $this->_datetime = "$date $this->time_operation";
-    $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
+    $this->_datetime          = "$date $this->time_operation";
+    $this->_datetime_reel     = "$date $this->debut_op";
+    $this->_datetime_reel_fin = "$date $this->fin_op";
+    if($this->fin_op) {
+      $this->_acte_execution = $this->_datetime_reel_fin;
+    } elseif($this->debut_op) {
+      $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime_reel);
+    } elseif($this->time_operation != "00:00:00") {
+      $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
+    } else {
+      $this->_acte_execution = mbDateTime();
+    }
+    
   }
   
   function preparePossibleActes() {
