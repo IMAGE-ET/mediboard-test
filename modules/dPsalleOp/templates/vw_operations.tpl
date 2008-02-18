@@ -18,9 +18,11 @@ function submitTiming(oForm) {
 
 function reloadTiming(operation_id){
   var url = new Url();
+  {{if $object->_id}}
   url.setModuleAction("dPsalleOp", "httpreq_vw_timing");
   url.addParam("operation_id", operation_id);
   url.requestUpdate("timing", { waitingText: null, onComplete: function() { ActesCCAM.refreshList({{$object->_id}},{{$object->_praticien_id}}) } } );
+  {{/if}}
 }
 
 function submitAnesth(oForm) {
