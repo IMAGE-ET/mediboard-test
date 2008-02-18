@@ -93,9 +93,9 @@ function submitOpForm(operation_id) {
   submitFormAjax(oForm, iTarget);
 }
 
-function submitAllForms(operation_id) {
-  submitPatForm(operation_id);
-  submitSejourForm(operation_id);
+function submitAllForms(operation_id, sejour_id) {
+  submitPatForm();
+  submitSejourForm(sejour_id);
   submitOpForm(operation_id);
 }
 
@@ -583,7 +583,7 @@ function pageMain() {
             <table class="form">
               <tr>
                 <td class="button">
-                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}})" >Tout valider</button>
+                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}}, {{$curr_sejour->_id}})" >Tout valider</button>
                 </td>
               </tr>
             </table>
