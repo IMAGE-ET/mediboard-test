@@ -517,7 +517,7 @@ function pageMain() {
                   {{/if}}
                 </td>
                 <td>
-                  {{$curr_acte->_guess_association}}
+                  {{$curr_acte->code_association}}
                 </td>
               </tr>
               {{/foreach}}
