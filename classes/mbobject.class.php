@@ -628,15 +628,17 @@ class CMbObject {
     $properties = get_object_vars($this);
     
     foreach($this->_props as $propName => $propSpec) {
-      if(!array_key_exists($propName, $properties)) {
-        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
-      } else {
-        $propValue =& $this->$propName;
-        if(($propValue !== null) || (!$this->_id)) {
-          $msgProp = $this->checkProperty($propName);
+      if(substr($propName, 0, 1) != "_" ) {
+        if(!array_key_exists($propName, $properties)) {
+          trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
+        } else {
+          $propValue =& $this->$propName;
+          if(($propValue !== null) || (!$this->_id)) {
+            $msgProp = $this->checkProperty($propName);
           
-          $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";
-          $msg .= $msgProp ? "<br/> => $propName : $msgProp $debugInfo" : null;
+            $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";
+            $msg .= $msgProp ? "<br/> => $propName : $msgProp $debugInfo" : null;
+          }
         }
       }
     }
