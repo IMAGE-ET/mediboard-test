@@ -164,13 +164,7 @@ class CCodable extends CMbObject {
     $this->_ext_codes_ccam = array();
     if($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
-        $ext_code_ccam = new CCodeCCAM($code);
-        if($full) {
-        	$ext_code_ccam->Load();
-        } else {
-          $ext_code_ccam->LoadLite();
-        }
-        $this->_ext_codes_ccam[] = $ext_code_ccam;
+        $this->_ext_codes_ccam[] = CCodeCCAM::get($code, $full?(CCodeCCAM::FULL):(CCodeCCAM::LITE));
       }
     }
   }
@@ -198,8 +192,7 @@ class CCodable extends CMbObject {
 	    @$codes_ccam_minimal[$acte->code_acte][$acte->code_activite][$acte->code_phase]++;
 	  }
 	  foreach($codes_ccam_minimal as $key => $acte){
-	    $max = max($acte);
-	    $nb_codes_ccam_minimal[$key] = reset($max);
+	    $nb_codes_ccam_minimal[$key] = reset(max($acte));
 	  }
 	  foreach($nb_codes_ccam_minimal as $key => $acte) {
 	    for($i = 0; $i < $acte; $i++){
@@ -277,9 +270,8 @@ class CCodable extends CMbObject {
     $depassement_affecte = false;
     // existing acts may only be affected once to possible acts
     $used_actes = array();
-    foreach ($this->_ext_codes_ccam as $codeKey => $codeValue) {
-      $code =& $this->_ext_codes_ccam[$codeKey];
-      $code->load($code->code);
+    foreach ($this->_ext_codes_ccam as $code) {
+      $code = CCodeCCAM::get($code->code, CCodeCCAM::FULL);
      
       foreach ($code->activites as $activiteKey => $activiteValue) {
         $activite =& $code->activites[$activiteKey];

@@ -154,8 +154,7 @@ class CSpDetCCAM extends CSpObject {
     $this->codsig = $acte->signe;
     
     // Remboursement exceptionnel
-    $code = new CCodeCCAM($acte->code_acte);
-    $code->LoadLite();
+    $code = CCodeCCAM::get($acte->code_acte, CCodeCCAM::LITE);
     $this->rembex = $acte->rembourse && $code->remboursement == 3 ? '1' : '0';
     
     // Mise à jour

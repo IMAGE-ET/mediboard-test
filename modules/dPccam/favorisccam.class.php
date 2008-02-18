@@ -41,8 +41,7 @@ class CFavoriCCAM extends CMbObject {
   }
   
   function loadRefsFwd() {
-    $this->_ref_code = new CCodeCCAM($this->favoris_code);
-    $this->_ref_code->loadLite();
+    $this->_ref_code = CCodeCCAM::get($this->favoris_code, CCodeCCAM::LITE);
     $this->_ref_code->getChaps();
   }
   
@@ -58,9 +57,9 @@ class CFavoriCCAM extends CMbObject {
       $listFav = $fav->loadList($where, $order);
    
       foreach($listFav as $key => $curr_fav) {
-        $code = new CCodeCCAM($curr_fav->favoris_code);
-        $code->loadLite();  
-        $code->loadChaps();
+        $code = CCodeCCAM::get($curr_fav->favoris_code, CCodeCCAM::LITE);
+        $code->getChaps();
+        
         $code->class = $curr_fav->object_class;
         $code->favoris_id = $curr_fav->favoris_id;
         $code->occ = 0;

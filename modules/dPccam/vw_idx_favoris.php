@@ -25,9 +25,9 @@ $i = 0;
 $codesByChap = CFavoriCCAM::getOrdered($user,$class);
 
 foreach($codes as $key => $value) {	
-  $code = new CCodeCCAM($value["code_acte"]);
-  $code->loadLite();
+  $code = CCodeCCAM::get($value["code_acte"], CCodeCCAM::LITE);
   $code->getChaps();
+  
   $code->favoris_id = 0;
   $code->occ = $value["nb_acte"];
   $code->class = $value["object_class"];
@@ -35,7 +35,6 @@ foreach($codes as $key => $value) {
   $list[$chapitre["code"]]["nom"] = $chapitre["nom"];
   $list[$chapitre["code"]]["codes"][$value["code_acte"]]= $code;
 }
-
 
 $fusion = $list;
 

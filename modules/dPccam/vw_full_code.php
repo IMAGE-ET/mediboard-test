@@ -15,8 +15,7 @@ $codeacte     = mbGetValueFromGetOrSession("codeacte");
 $object_class = mbGetValueFromGet("object_class");
 $hideSelect   = mbGetValueFromGet("hideSelect", 0);
 
-$code = new CCodeCCAM($codeacte);
-$code->Load();
+$code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
 
 // Variable permettant de savoir si l'affichage du code complet est necessaire
 $codeComplet = false;
@@ -56,5 +55,10 @@ $smarty->assign("incomp"       , $code->incomps);
 $smarty->assign("object_class" , $object_class);
 $smarty->assign("hideSelect"   , $hideSelect);
 $smarty->display("vw_full_code.tpl");
+
+mbTrace(CCodeCCAM::$loadCount);
+mbTrace(CCodeCCAM::$cacheCallCount);
+mbTrace(CCodeCCAM::$loadedCodes);
+mbTrace(CCodeCCAM::$loadLevel);
 
 ?>

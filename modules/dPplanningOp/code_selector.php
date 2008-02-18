@@ -45,8 +45,7 @@ switch($type) {
 		$codes = $ds->loadlist($sql);
 
     foreach($codes as $key => $value) {
-      $list[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
-      $list[$value["favoris_code"]]["codeccam"]->loadMedium();
+      $list[$value["favoris_code"]]["codeccam"] = CCodeCCAM::get($value["favoris_code"], CCodeCCAM::MEDIUM);
       $list[$value["favoris_code"]]["codeccam"]->occ = "0";
     }
     
@@ -63,8 +62,7 @@ switch($type) {
 			$codes = $ds->loadlist($sql);
 	
 	    foreach($codes as $key => $value) {
-	      $listAnesth[$value["favoris_code"]]["codeccam"] = new CCodeCCAM($value["favoris_code"]);
-	      $listAnesth[$value["favoris_code"]]["codeccam"]->loadMedium();
+	      $listAnesth[$value["favoris_code"]]["codeccam"] = CCodeCCAM::get($value["favoris_code"], CCodeCCAM::MEDIUM);
 	      $listAnesth[$value["favoris_code"]]["codeccam"]->occ = "0";
       }
     }
@@ -134,9 +132,8 @@ if($type=="ccam"){
   $codes = $actes->getFavoris($chir,$object_class, $view);
 
   foreach($codes as $key => $value) {
-    $list2[$value["code_acte"]]["codeccam"] = new CCodeCCAM($value["code_acte"]);
-    $list2[$value["code_acte"]]["codeccam"]->loadMedium();
-    $list2[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
+    $list2[$value["code_acte"]]["codeccam"] = CCodeCCAM::get($value["code_acte"], CCodeCCAM::MEDIUM);
+    $list2[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];
   }
 
   // Fusion des 2 tableaux
@@ -160,9 +157,8 @@ if($type=="ccam"){
 	  $codes = $actes->getFavoris($anesth, $object_class, $view);
 	
 	  foreach($codes as $key => $value) {
-	    $list2Anesth[$value["code_acte"]]["codeccam"] = new CCodeCCAM($value["code_acte"]);
-	    $list2Anesth[$value["code_acte"]]["codeccam"]->loadMedium();
-	    $list2Anesth[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];;
+	    $list2Anesth[$value["code_acte"]]["codeccam"] = CCodeCCAM::get($value["code_acte"], CCodeCCAM::MEDIUM);
+	    $list2Anesth[$value["code_acte"]]["codeccam"]->occ = $value["nb_acte"];
 	  }
 	
 	  // Fusion des 2 tableaux

@@ -31,6 +31,16 @@ class CCodeCCAM {
   var $_activite = null;
   var $_phase    = null;
   
+	// table de chargement
+	static $loadLevel = array();
+	static $loadedCodes = array();
+	static $loadCount = array(0,0,0);
+	static $cacheCallCount = 0;
+	
+	// niveaux de chargement
+	const LITE   = 1;
+	const MEDIUM = 2;
+	const FULL   = 3;
   
   /**
    * Constructeur à partir du code CCAM
@@ -58,9 +68,57 @@ class CCodeCCAM {
       $this->code = strtoupper($code);
     }
   }
+  
+	// Chargement optimisé des codes
+	static function get($code, $niv = self::MEDIUM) {
+			
+		// Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
+		if (!isset(self::$loadedCodes[$code])) {
+			$newCode = new CCodeCCAM($code);
+			if ($newCode) self::$loadLevel[$code] = null;
+		} else {
+			$newCode = self::$loadedCodes[$code];
+		}
+
+		if ($newCode) {
+			// Si le niveau demandé est inférieur au niveau courant, on retourne le Code 
+			if ($niv <= self::$loadLevel[$code]) {
+				self::$cacheCallCount++;
+				return $newCode;
+			}
+	
+			// Chargement
+			if($newCode->getLibelles()) {
+				if ($niv == self::LITE) {
+					$newCode->getActivite7();
+				}
+	
+				if ($niv >= self::LITE) {
+					$newCode->getTarification();
+				}
+	
+				if ($niv >= self::MEDIUM) {
+					$newCode->getChaps();
+					$newCode->getRemarques();
+					$newCode->getActivites();
+				}
+	
+				if ($niv == self::FULL) {
+					$newCode->getActesAsso();
+					$newCode->getActesIncomp();
+					$newCode->getProcedure();
+				}
+	
+				self::$loadLevel[$code] = $niv;
+			}
+			self::$loadCount[$niv-1]++;
+			self::$loadedCodes[$code] = $newCode;
+		}
+		return $newCode;
+	}
 
   // Chargement des variables obligatoires
-  function LoadLite() {
+  /*function LoadLite() {
     if($this->getLibelles()) {
       $this->getActivite7();
       $this->getTarification();
@@ -88,7 +146,7 @@ class CCodeCCAM {
       $this->getActesIncomp();
       $this->getProcedure();
     }
-  }
+  }*/
   
   function getLibelles() {
     $ds =& $this->_spec->ds;

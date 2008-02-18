@@ -9,10 +9,9 @@
 
 $codeacte = mbGetValueFromGetOrSession("code");
 $callback = mbGetValueFromGetOrSession("callback");
-$code = new CCodeCCAM($codeacte);
 
 // Chargement du code
-$code->load();
+$code = CCodeCCAM::get($codeacte, CCodeCCAM::FULL);
 
 if(!$code->code){
   $tarif = 0;

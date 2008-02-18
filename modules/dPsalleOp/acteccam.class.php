@@ -249,8 +249,7 @@ class CActeCCAM extends CActe {
   }
   
   function loadRefCodeCCAM() {
-    $this->_ref_code_ccam = new CCodeCCAM($this->code_acte);
-    $this->_ref_code_ccam->load();
+    $this->_ref_code_ccam = CCodeCCAM::get($this->code_acte, CCodeCCAM::FULL);
   }
    
   function loadRefsFwd() {
