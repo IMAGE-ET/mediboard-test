@@ -42,10 +42,11 @@ class CSpEntCCAM extends CSpObject {
     $specs["codane"] = "str length|3";     /* Code de l'anesthésiste       */
     $specs["codsal"] = "str length|2";     /* Code de la salle d'op        */
 
+	  $specs["codepans"]   = "str length|3"; /* Code panseuse                */
     for ($i = 1; $i <= 3; $i++) {
-	    $specs["aidop$i"] = "str length|3";    /* Code aide opératoire        */
-	    $specs["dhaid$i"] = "str length|19";   /* Début aide opératoire       */
-	    $specs["fhaid$i"] = "str length|19";   /* Aide aide opératoire        */
+	    $specs["aidop$i"] = "str length|3";  /* Code aide opératoire         */
+	    $specs["dhaid$i"] = "str length|19"; /* Début aide opératoire        */
+	    $specs["fhaid$i"] = "str length|19"; /* Fin aide opératoire          */
     }
 
     $specs["valigs"] = "num"             ; /* Score IGS                    */
@@ -197,11 +198,21 @@ class CSpEntCCAM extends CSpObject {
     if(!$affectations_panseuse){
 		  $affectations_panseuse = array();
 		}
-		// Fusion des deux tableaux d'affectations
-		$affectations = array_merge($affectations_op, $affectations_panseuse);
+		
+		// Panseuse
+    if($affectationPanseuse = reset($affectations_panseuse)) {
+      $affectationPanseuse->loadRefPersonnel();
+      $personnel = $affectationPanseuse->_ref_personnel;
+      $personnel->loadRefUser();
+      
+      $idPans = CSpObjectHandler::getId400For($personnel->_ref_user);
+      $this->codepans = $idPans->id400;
+    }
+		
+		// Aides opératoires
 	
     $aidopNumber = 0;
-    foreach ($affectations as $affectationPersonnel) {
+    foreach ($affectations_op as $affectationPersonnel) {
       if (++$aidopNumber <=  3) {
         $affectationPersonnel->loadRefPersonnel();
         $personnel = $affectationPersonnel->_ref_personnel;
