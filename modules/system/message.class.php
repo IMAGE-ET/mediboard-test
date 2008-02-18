@@ -30,20 +30,23 @@ class CMessage extends CMbObject {
   var $titre   = null;
   var $corps   = null;
   var $urgence = null;
+  var $module_id = null;
+  
+  var $_ref_module;
   
 	function CMessage() {
 		$this->CMbObject("message", "message_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+		$this->loadRefModule(basename(dirname(__FILE__)));
 	}
 
   function getSpecs() {
     return array (
-      "deb"   => "notNull dateTime",
-      "fin"   => "notNull dateTime",
-      "titre" => "notNull str maxLength|40",
-      "corps" => "text",
-      "urgence" => "notNull enum list|normal|urgent default|normal"
+      "deb"       => "notNull dateTime",
+      "fin"       => "notNull dateTime",
+      "titre"     => "notNull str maxLength|40",
+      "module_id" => "ref class|CModule",
+      "corps"     => "text",
+      "urgence"   => "notNull enum list|normal|urgent default|normal"
     );
   }
 
@@ -70,8 +73,17 @@ class CMessage extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->titre;
+    $this->loadRefsFwd();
+    $this->_view = (($this->module_id)?'['.$this->_ref_module->_view.'] - ':''). $this->titre;
   }
+  
+    function loadRefsFwd() {
+    	parent::loadRefsFwd();
+    	if ($this->module_id) {
+	    	$this->_ref_module = new CModule();
+	        $this->_ref_module->load($this->module_id);
+    	}
+    }
   
 }
 ?>

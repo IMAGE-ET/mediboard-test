@@ -42,6 +42,7 @@ function pageMain() {
     </tr>
     
     <tr>
+      <th>Module concerné</th>
       <th>Titre</th>
       <th>Début de publication</th>
       <th>Fin de publication</th>
@@ -50,6 +51,13 @@ function pageMain() {
     {{foreach from=$messages item=curr_message}}
     <tbody class="hoverable">
     <tr>
+      <td>
+      {{if $curr_message->module_id}}
+        {{$curr_message->_ref_module->_view}}
+      {{else}}
+      	Tous
+      {{/if}}
+      </td>
       {{assign var="message_id" value=$curr_message->message_id}}
       {{assign var="href" value="?m=$m&tab=$tab&message_id=$message_id"}}
       <td {{if $curr_message->urgence == "urgent"}}class="highlight"{{/if}}>
@@ -99,10 +107,21 @@ function pageMain() {
       <th>{{mb_label object=$message field="fin"}}</th>
       <td class="date">{{mb_field object=$message field="fin" form="editFrm"}}</td>
     </tr>
+    
+    <tr>
+      <th>{{mb_label object=$message field="module_id"}}</th>
+      <td>
+      <select name="module_id">
+         <option value=""> -- Tous -- </option>
+         {{foreach from=$modules item=mod}}
+         <option value="{{$mod->mod_id}}" {{if $mod->mod_id == $message->module_id}}selected="selected"{{/if}}>{{$mod->_view}}</option>
+         {{/foreach}}
+      </select>
+    </tr>
 
     <tr>
       <th>{{mb_label object=$message field="urgence"}}</th>
-      <td class="date">{{mb_field object=$message field="urgence"}}</td>
+      <td>{{mb_field object=$message field="urgence"}}</td>
     </tr>
 
     <tr>

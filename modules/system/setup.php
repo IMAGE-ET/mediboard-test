@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.9";
+$config["mod_version"]     = "1.0.10";
 $config["mod_type"]        = "core";
 
 class CSetupsystem extends CSetup {
@@ -112,7 +112,12 @@ class CSetupsystem extends CSetup {
             ADD `urgence` ENUM('normal','urgent') DEFAULT 'normal' NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.9";
+    $this->makeRevision("1.0.9");
+    $sql = "ALTER TABLE `message`
+            ADD `module_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.10";
   }
 }
 ?>
