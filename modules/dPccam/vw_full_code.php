@@ -56,9 +56,4 @@ $smarty->assign("object_class" , $object_class);
 $smarty->assign("hideSelect"   , $hideSelect);
 $smarty->display("vw_full_code.tpl");
 
-mbTrace(CCodeCCAM::$loadCount);
-mbTrace(CCodeCCAM::$cacheCallCount);
-mbTrace(CCodeCCAM::$loadedCodes);
-mbTrace(CCodeCCAM::$loadLevel);
-
 ?>
