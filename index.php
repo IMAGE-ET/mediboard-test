@@ -226,6 +226,18 @@ if (!$suppressHeaders) {
   // Message
   $messages = new CMessage();
   $messages = $messages->loadPublications("present");
+
+  foreach($messages as $message_id => $curr_message) {
+  	if ($curr_message->module_id) {
+  		$curr_message->loadRefsFwd();
+
+  		if ($curr_message->_ref_module->mod_name != $m) {
+  			unset($messages[$message_id]);
+  		}
+  	}
+  }
+
+  
   
   // Creation du Template
   $smartyHeader = new CSmartyDP();
