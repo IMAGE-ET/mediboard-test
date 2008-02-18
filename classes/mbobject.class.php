@@ -170,9 +170,10 @@ class CMbObject {
    * Chargement des notes sur l'objet
    */
   function loadRefsNotes($perm = PERM_READ) {
-    $this->_ref_notes = new CNote();
+    $this->_ref_notes = array();
+    $notes = new CNote();
     if($this->_id){
-      $this->_ref_notes = $this->_ref_notes->loadNotesForObject($this, $perm);
+      $this->_ref_notes = $notes->loadNotesForObject($this, $perm);
       return count($this->_ref_notes);
     }else {
       return 0;
