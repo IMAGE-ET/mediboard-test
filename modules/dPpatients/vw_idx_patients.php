@@ -165,16 +165,12 @@ else {
 	}
 }
 
-// Liste des praticiens disponibles
 $listPrat = array();
 if ($patient->_id) {
+  // Liste des praticiens disponibles
   $listPrat = new CMediusers();
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
   $patient->loadDossierComplet();
-  
-}
-
-if ($patient->_id) {
   foreach($patient->_ref_sejours as $key=>$sejour){
   	$sejour->loadNumDossier();
   }

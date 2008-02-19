@@ -84,23 +84,6 @@ class CExamAudio extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
 
-    // Special initialisations
-    $this->gauche_aerien = "|||||||";
-    $this->gauche_osseux = "|||||||";
-    $this->gauche_conlat = "|||||||";
-    $this->gauche_ipslat = "|||||||";
-    $this->gauche_pasrep = "|||||||";
-    $this->gauche_tympan = "|||||||";
-    $this->gauche_vocale = "|||||||";
-    
-    $this->droite_aerien = "|||||||";
-    $this->droite_osseux = "|||||||";
-    $this->droite_conlat = "|||||||";
-    $this->droite_ipslat = "|||||||";
-    $this->droite_pasrep = "|||||||";
-    $this->droite_tympan = "|||||||";
-    $this->droite_vocale = "|||||||";
-
     $this->updateFormFields();
   }
   
@@ -163,6 +146,37 @@ class CExamAudio extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+
+    // Initialisations
+    if(!$this->gauche_aerien)
+    $this->gauche_aerien = "|||||||";
+    if(!$this->gauche_osseux)
+    $this->gauche_osseux = "|||||||";
+    if(!$this->gauche_conlat)
+    $this->gauche_conlat = "|||||||";
+    if(!$this->gauche_ipslat)
+    $this->gauche_ipslat = "|||||||";
+    if(!$this->gauche_pasrep)
+    $this->gauche_pasrep = "|||||||";
+    if(!$this->gauche_tympan)
+    $this->gauche_tympan = "|||||||";
+    if(!$this->gauche_vocale)
+    $this->gauche_vocale = "|||||||";
+    
+    if(!$this->droite_aerien)
+    $this->droite_aerien = "|||||||";
+    if(!$this->droite_osseux)
+    $this->droite_osseux = "|||||||";
+    if(!$this->droite_conlat)
+    $this->droite_conlat = "|||||||";
+    if(!$this->droite_ipslat)
+    $this->droite_ipslat = "|||||||";
+    if(!$this->droite_pasrep)
+    $this->droite_pasrep = "|||||||";
+    if(!$this->droite_tympan)
+    $this->droite_tympan = "|||||||";
+    if(!$this->droite_vocale)
+    $this->droite_vocale = "|||||||";
 
     $this->_gauche_aerien = explode("|", $this->gauche_aerien);
     $this->_gauche_osseux = explode("|", $this->gauche_osseux);

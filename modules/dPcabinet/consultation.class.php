@@ -763,7 +763,7 @@ class CConsultation extends CCodable {
   }
   
   function loadRefsExamAudio(){
-  	 $this->_ref_examaudio = new CExamAudio;
+  	$this->_ref_examaudio = new CExamAudio;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examaudio->loadObject($where);

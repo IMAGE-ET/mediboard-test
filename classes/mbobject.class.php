@@ -419,7 +419,7 @@ class CMbObject {
     $request->setLimit("0,1");
     $list = $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
 
-    foreach ($list as $object) {
+    foreach($list as $object) {
       foreach($object->getProps() as $key => $value) {
         $this->$key = $value;
       }
