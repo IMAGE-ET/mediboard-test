@@ -96,6 +96,7 @@ class CSejour extends CCodable {
   // External objects
   var $_ext_diagnostic_principal = null;
   var $_ext_diagnostic_relie     = null;
+  var $_ref_hprim_files          = null;
   
   // Distant fields
   var $_dates_operations = null;
@@ -663,6 +664,13 @@ class CSejour extends CCodable {
       $this->_ref_GHM->bindInfos();
       $this->_ref_GHM->getGHM();
     }
+  }
+  
+  function loadHprimFiles() {
+    $hprimFile = new CHPrimXMLEvenementPmsi();
+    $hprimFile->setFinalPrefix($this);
+    $hprimFile->getSentFiles();
+    $this->_ref_hprim_files = $hprimFile->sentFiles;
   }
   
   function fillLimitedTemplate(&$template) {

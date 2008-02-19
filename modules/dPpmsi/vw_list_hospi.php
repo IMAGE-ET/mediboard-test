@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
@@ -18,6 +18,7 @@ $sejour = new CSejour;
 $where = array();
 $where["entree_prevue"] = "< '$next'";
 $where["sortie_prevue"] = "> '$date'";
+$where["group_id"]      = "= '$g'";
 $order = array();
 $order[] = "sortie_prevue";
 $order[] = "entree_prevue";
@@ -26,13 +27,9 @@ $listSejours = $sejour->loadList($where, $order);
 
 foreach ($listSejours as $keySejour => $valueSejour) {
   $sejour =& $listSejours[$keySejour];
-  $sejour->loadRefs();
+  $sejour->loadRefsFwd();
   $sejour->loadRefGHM();
-  foreach ($sejour->_ref_operations as $keyOp => $valueOp) {
-    $operation =& $sejour->_ref_operations[$keyOp];
-    $operation->loadRefChir();
-    $operation->loadRefPlageOp();
-  }
+  $sejour->loadHprimFiles();
 }
 
 // Création du template

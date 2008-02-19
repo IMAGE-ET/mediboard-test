@@ -42,8 +42,12 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $this->addAgent($agents, "système", $group->text, $group->text);
   }
   
+  function setFinalPrefix($mbSej) {
+    $this->documentfinalprefix = "sej" . sprintf("%06d", $mbSej->_id); 
+  }
+  
   function generateFromSejour($mbSej) {
-    $this->documentfinalprefix = "sej" . sprintf("%06d", $mbSej->_id);    
+    $this->setFinalPrefix($mbSej);
 
     $evenementsPMSI = $this->documentElement;
 

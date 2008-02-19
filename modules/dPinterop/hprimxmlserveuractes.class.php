@@ -42,8 +42,12 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addAgent($agents, "système", $group->text, $group->text);
   }
   
+  function setFinalPrefix($mbOp) {
+    $this->documentfinalprefix = "op" . sprintf("%06d", $mbOp->operation_id);
+  }
+  
   function generateFromOperation($mbOp) {
-    $this->documentfinalprefix = "op" . sprintf("%06d", $mbOp->operation_id);    
+    $this->setFinalPrefix($mbOp);
 
     $evenementsServeurActes = $this->documentElement;
 

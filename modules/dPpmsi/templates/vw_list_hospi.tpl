@@ -9,27 +9,34 @@ function pageMain() {
 <table class="tbl">
   <tr>
     <th class="title" colspan="8">
-      Liste {{$listSejours|@count}} personnes hospitalisée(s) au {{$date|date_format:"%A %d %B %Y"}}
+      Liste des {{$listSejours|@count}} personne(s) hospitalisée(s) au {{$date|date_format:"%A %d %B %Y"}}
       <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
     </th>
   </tr>
   <tr>
+    <th>Traité</th>
     <th>Praticien</th>
     <th>Patient</th>
     <th>Entrée</th>
     <th>Sortie</th>
-    <th>Intervention(s)</th>
     <th>GHM</th>
     <th>Bornes</th>
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   {{assign var="GHM" value=$curr_sejour->_ref_GHM}}
   <tr>
+    <td>
+      {{if $curr_sejour->_ref_hprim_files|@count}}
+       <img src="images/icons/tick.png" alt="ok" />
+      {{else}}
+      <img src="images/icons/cross.png" alt="alerte" />
+      {{/if}}
+    </td>
     <td class="text">
-      {{$curr_sejour->_ref_praticien->_view}}
+      Dr. {{$curr_sejour->_ref_praticien->_view}}
     </td>
 
-    <td class="text" {{if !$GHM->_DP}} style="background-color:#fdd" {{/if}}>
+    <td class="text">
       <a title="Voir le dossier PMSI" href="?m=dPpmsi&amp;tab=vw_dossier&amp;pat_id={{$curr_sejour->patient_id}}">
         {{$curr_sejour->_ref_patient->_view}}
       </a>
@@ -42,21 +49,10 @@ function pageMain() {
     <td class="text">
       {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y à %Hh%M"}}
     </td>
-
-    <td class="text">
-      {{foreach from=$curr_sejour->_ref_operations item=curr_operation}}
-      <a title="Voir la feuille d'admission" href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_operation->operation_id}}">
-        Le {{$curr_operation->_datetime|date_format:"%d/%m/%Y"}}
-        par le Dr. {{$curr_operation->_ref_chir->_view}}
-      </a>
-      {{/foreach}}
-    </td>
     
-    <td class="text" {{if !$GHM->ghm_id}} style="background-color:#fdd" {{/if}}>
-      <a title="Labo de groupage pour l'intervention" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->sejour_id}}">
-      	{{$GHM->_GHM}}
-        {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
-      </a>
+    <td class="text" {{if !$GHM->_CM}}style="background-color:#fdd"{{/if}}>
+      {{$GHM->_GHM}}
+      {{if $GHM->_DP}}: {{$GHM->_GHM_nom}}{{/if}}
     </td>
   
     <td class="text">

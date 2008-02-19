@@ -33,7 +33,9 @@ function choosePreselection(oSelect) {
 
   var oForm = oSelect.form;
   oForm.code_uf.value = sCode;
+  oForm.code_uf.onchange();
   oForm.libelle_uf.value = sLibelle;
+  oForm.libelle_uf.onchange();
   
   oSelect.value = "";
 }
@@ -43,14 +45,6 @@ function imprimerDocument(doc_id) {
   url.setModuleAction("dPcompteRendu", "print_cr");
   url.addParam("compte_rendu_id", doc_id);
   url.popup(700, 600, "Compte-rendu");
-}
-
-function submitSHSLink() {
-  var oPatForm = document.editPatFrm;
-  //debugObject(oPatForm);
-  var oOpForm = document.editOpFrm;
-  //submitFormAjax(oPatForm, 'systemMsg');
-  submitFormAjax(oOpForm, 'systemMsg');
 }
 
 function exporterHPRIM(object_id, typeObject, oOptions) {
@@ -490,10 +484,13 @@ function pageMain() {
             <table class="tbl">
               <tr>
                 <th class="category">supprimer</th>
+                <th class="category">Praticien</th>
                 <th class="category">Code</th>
                 <th class="category">Activité</th>
-                <th class="category">Phase &mdash; Modifs.</th>
-                <th class="category">Association</th>
+                <th class="category">Phase</th>
+                <th class="category">Modifs</th>
+                <th class="category">Asso</th>
+                <th class="category">DH</th>
               </tr>
               {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
               <tr>
@@ -508,16 +505,16 @@ function pageMain() {
                   </button>
                   </form>
                 </td>
-                <td class="text">{{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}</td>
+                <td class="text">{{$curr_acte->_ref_executant->_view}}</td>
+                <td class="button">{{$curr_acte->code_acte}}</td>
                 <td class="button">{{$curr_acte->code_activite}}</td>
+                <td class="button">{{$curr_acte->code_phase}}</td>
+                <td class="button">{{$curr_acte->modificateurs}}</td>
+                <td class="button">{{$curr_acte->code_association}}</td>
                 <td class="button">
-                  {{$curr_acte->code_phase}}
-                  {{if $curr_acte->modificateurs}}
-                    &mdash; {{$curr_acte->modificateurs}}
+                  {{if $curr_acte->montant_depassement}}
+                    {{$curr_acte->montant_depassement}}&euro;
                   {{/if}}
-                </td>
-                <td>
-                  {{$curr_acte->code_association}}
                 </td>
               </tr>
               {{/foreach}}

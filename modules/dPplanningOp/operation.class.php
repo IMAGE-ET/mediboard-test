@@ -90,6 +90,7 @@ class COperation extends CCodable {
   var $_ref_type_anesth    = null;
   var $_ref_consult_anesth = null;
   var $_ref_actes_ccam     = array();
+  var $_ref_hprim_files    = null;
 
   // External references
   var $_ext_codes_ccam = null;
@@ -463,6 +464,13 @@ class COperation extends CCodable {
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();
     $this->loadRefsDocs();
+  }
+  
+  function loadHprimFiles() {
+    $hprimFile = new CHPrimXMLServeurActes();
+    $hprimFile->setFinalPrefix($this);
+    $hprimFile->getSentFiles();
+    $this->_ref_hprim_files = $hprimFile->sentFiles;
   }
   
   function getPerm($permType) {

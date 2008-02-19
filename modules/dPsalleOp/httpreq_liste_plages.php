@@ -24,6 +24,9 @@ $listSalles = new CSalle;
 $where = array("group_id"=>"= '$g'");
 $listSalles = $listSalles->loadList($where);
 
+$plages   = array();
+$urgences = array();
+
 // Selection des plages opératoires de la journée
 if($salle) {
 	$plages = new CPlageOp;
@@ -32,16 +35,16 @@ if($salle) {
 	$where["salle_id"] = "= '$salle'";
 	$order = "debut";
 	$plages = $plages->loadList($where, $order);
-	foreach($plages as $key => $value) {
-	  $plages[$key]->loadRefs(0);
-	  $plages[$key]->_unordered_operations = array();
-	  foreach($plages[$key]->_ref_operations as $key2 => $value) {
-	    $plages[$key]->_ref_operations[$key2]->loadRefSejour();
-	    $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-	    $plages[$key]->_ref_operations[$key2]->loadExtCodesCCAM();
-	    if($plages[$key]->_ref_operations[$key2]->rank == 0) {
-	      $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
-	      unset($plages[$key]->_ref_operations[$key2]);
+	foreach($plages as &$curr_plage) {
+	  $curr_plage->loadRefs(0);
+	  $curr_plage->_unordered_operations = array();
+	  foreach($curr_plage->_ref_operations as $key => &$curr_op) {
+	    $curr_op->loadRefSejour();
+	    $curr_op->_ref_sejour->loadRefPatient();
+	    $curr_op->loadExtCodesCCAM();
+	    if($curr_op->rank == 0) {
+	      $curr_plage->_unordered_operations[$key] = $curr_op;
+	      unset($curr_op);
 	    }
 	  }
 	}
@@ -52,15 +55,12 @@ if($salle) {
 	$where["salle_id"] = "= '$salle'";
 	$order = "chir_id";
 	$urgences = $urgences->loadList($where);
-	foreach($urgences as $keyOp => $curr_op) {
-	  $urgences[$keyOp]->loadRefChir();
-	  $urgences[$keyOp]->loadRefSejour();
-	  $urgences[$keyOp]->_ref_sejour->loadRefPatient();
-	  $urgences[$keyOp]->loadExtCodesCCAM();
+	foreach($urgences as &$curr_op) {
+	  $curr_op->loadRefChir();
+	  $curr_op->loadRefSejour();
+	  $curr_op->_ref_sejour->loadRefPatient();
+	  $curr_op->loadExtCodesCCAM();
 	}
-} else {
-  $plages   = array();
-  $urgences = array();
 }
 
 // Création du template
