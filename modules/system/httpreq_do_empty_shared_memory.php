@@ -45,4 +45,4 @@ if (!$shm->rem("class-paths")) {
   return;
 }
 
-echo "<div class='message'>Table des classes suppprimée</div>";
+echo "<div class='message'>Table des classes supprimée</div>";
