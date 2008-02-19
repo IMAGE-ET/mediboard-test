@@ -69,7 +69,7 @@ if ($plageSel->_affected) {
 
 // Détails sur les consultation affichées
 foreach ($plageSel->_ref_consultations as $keyConsult => &$consultation) {
-  if ($vue && $consultation->date_reglement) {
+  if ($vue && $consultation->patient_date_reglement) {
     unset($plageSel->_ref_consultations[$keyConsult]);
     continue;
   }

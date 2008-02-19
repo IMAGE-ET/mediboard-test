@@ -26,15 +26,10 @@ $codable->updateFormFields();
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
 
-// Chargement des actes et exécutants
-$codable->loadRefsActesCCAM();
-foreach ($codable->_ref_actes_ccam as &$acte_ccam) {
-  $acte_ccam->loadRefExecutant();
-}
-
 $codable->loadExtCodesCCAM();
-$codable->loadPossibleActes();
 $codable->getAssociationCodesActes();
+$codable->loadPossibleActes();
+
 
 // Création du template
 $smarty = new CSmartyDP();

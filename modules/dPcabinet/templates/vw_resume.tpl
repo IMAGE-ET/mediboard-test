@@ -148,20 +148,21 @@ function newExam(sAction, consultation_id) {
     {{if $curr_consult->tarif}}
     
     <td style="text-align: center">
+    <!-- Montant total de la consultation -->
     {{$curr_consult->_somme}}&euro;
     <br />
-    {{if !$curr_consult->date_reglement || !$curr_consult->reglement_AM}}
-      {{if $curr_consult->a_regler}}
-      <div style="display: inline; {{if !$curr_consult->date_reglement}} color: #f00;{{/if}}">
-      {{$curr_consult->a_regler}}&euro;
+    {{if !$curr_consult->patient_date_reglement || !$curr_consult->tiers_date_reglement}}
+      {{if $curr_consult->du_patient}}
+      <div style="display: inline; {{if !$curr_consult->patient_date_reglement}} color: #f00;{{/if}}">
+      {{$curr_consult->du_patient}}&euro;
       </div>
       {{else}}
       -
       {{/if}}
       /
-      {{if $curr_consult->_somme-$curr_consult->a_regler != 0}}
-      <div style="display: inline; {{if $curr_consult->reglement_AM != '1'}} color: #f00;{{/if}}">
-      {{$curr_consult->_somme-$curr_consult->a_regler}}&euro;
+      {{if $curr_consult->du_tiers != 0}}
+      <div style="display: inline; {{if !$curr_consult->tiers_date_reglement}} color: #f00;{{/if}}">
+      {{$curr_consult->du_tiers}}&euro;
       </div>
       {{else}}
       -

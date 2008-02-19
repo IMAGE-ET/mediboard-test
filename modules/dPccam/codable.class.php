@@ -66,6 +66,11 @@ class CCodable extends CMbObject {
   function getAssociationCodesActes() {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
+    if($this->_ref_actes_ccam){
+      foreach ($this->_ref_actes_ccam as &$acte_ccam) {
+        $acte_ccam->loadRefExecutant();
+      }
+    }
     $this->_associationCodesActes = array();
     $listCodes = $this->_codes_ccam;
     $listActes = $this->_ref_actes_ccam;

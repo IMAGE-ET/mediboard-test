@@ -36,7 +36,7 @@
   <tr>
     <td colspan="3">{{$consult->_ref_patient->_view}}</td>
     <td colspan="3">{{$consult->_ref_banque->_view}}</td>
-    <td>{{$consult->_somme}} &euro;</td>
+    <td>{{$consult->du_patient}} &euro;</td>
   </tr>
   {{/foreach}}
   

@@ -74,11 +74,11 @@
         {{foreach from=$curr_plage._ref_consultations item=curr_consult}}
         <tr>
           <td><a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a></td>
-          <td>{{$curr_consult->mode_reglement}}</td>
+          <td>{{$curr_consult->patient_mode_reglement}}</td>
           <td>{{$curr_consult->tarif}}</td>
           <td>{{$curr_consult->secteur1}} €</td>
           <td>{{$curr_consult->secteur2}} €</td>
-          <td>{{if $etat == -1 && !$curr_consult->date_reglement}}0{{else}}{{$curr_consult->secteur1+$curr_consult->secteur2}}{{/if}} €</td>
+          <td>{{if $etat == -1 && !$curr_consult->patient_date_reglement}}0{{else}}{{$curr_consult->secteur1+$curr_consult->secteur2}}{{/if}} €</td>
         </tr>
         {{/foreach}}
         <tr>

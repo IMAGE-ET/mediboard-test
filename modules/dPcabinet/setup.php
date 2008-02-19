@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.94";
+$config["mod_version"]     = "0.95";
 $config["mod_type"]        = "user";
 
 
@@ -980,7 +980,84 @@ class CSetupdPcabinet extends CSetup {
  					  PRIMARY KEY (`examigs_id`)) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.94";
+    
+    
+    $this->makeRevision("0.94");
+    set_time_limit(180);
+    
+    // Ajout de du_tiers
+    $sql = "ALTER TABLE `consultation`
+            ADD `du_tiers` FLOAT DEFAULT 0.0";
+    $this->addQuery($sql);
+    
+    // Calcul de du_tiers
+    $sql = "UPDATE `consultation`
+            SET `du_tiers` = ROUND(`secteur1` + `secteur2` - `a_regler`, 2);";
+    $this->addQuery($sql);
+    
+    // mode_reglement à NULL quand mode_reglement = tiers
+    $sql = "UPDATE `consultation`
+            SET `mode_reglement` = ''
+            WHERE `mode_reglement` = 'tiers';";
+    $this->addQuery($sql);
+    
+    // Modification de l'enum de mode_reglement
+    $sql = "ALTER TABLE `consultation`
+            CHANGE `mode_reglement` `mode_reglement` ENUM('cheque','CB','especes','virement','autre');";
+    $this->addQuery($sql);
+    
+    // date_reglement => patient_date_reglement
+    $sql = "ALTER TABLE `consultation` 
+            CHANGE `date_reglement` `patient_date_reglement` DATE;";
+    $this->addQuery($sql);
+    
+    // mode_reglement => patient_mode_reglement
+    $sql = "ALTER TABLE `consultation` 
+            CHANGE `mode_reglement` `patient_mode_reglement` ENUM('cheque','CB','especes','virement','autre');";
+    $this->addQuery($sql);
+    
+    // a_regler => du_patient
+    $sql = "ALTER TABLE `consultation`
+            CHANGE `a_regler` `du_patient` FLOAT DEFAULT '0.0';";
+    $this->addQuery($sql);
+    
+    // Creation d'un tiers_mode_reglement
+    $sql = "ALTER TABLE `consultation`
+            ADD `tiers_mode_reglement` ENUM('cheque','CB','especes','virement','autre');";
+    $this->addQuery($sql);
+    
+    // Creation d'un tiers_date_reglement
+    $sql = "ALTER TABLE `consultation`
+            ADD `tiers_date_reglement` DATE;";
+    $this->addQuery($sql);
+     
+    // On considere que toutes les anciennes consultations ont reglement_AM à 1
+    $sql = "UPDATE `consultation`, `plageconsult`
+            SET `reglement_AM` = '1'  
+            WHERE `consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`
+            AND `plageconsult`.`date` < '2007-12-01';";
+    $this->addQuery($sql);
+         
+    // On met à jour reglement_AM (reglement_AM à 0 si pas de du_tiers)
+    $sql = "UPDATE `consultation`
+            SET `reglement_AM` = '0'
+            WHERE ROUND(`du_tiers`,2)  = ROUND(0,2);";
+    $this->addQuery($sql);
+    
+    // Mise à jour des reglements AM à 1
+    $sql = "UPDATE `consultation`, `plageconsult`
+            SET `tiers_mode_reglement` = 'virement',
+                `tiers_date_reglement` = `plageconsult`.`date`
+            WHERE `consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`
+            AND `consultation`.`reglement_AM` = '1';";
+    $this->addQuery($sql);
+   
+    // Suppression du champ reglement_AM
+    $sql = "ALTER TABLE `consultation`
+            DROP `reglement_AM`;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.95";
   }
 }
 ?>

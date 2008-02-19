@@ -24,9 +24,9 @@ function checkRapport(){
   url.addElement(oForm._date_min);
   url.addElement(oForm._date_max);
   url.addElement(oForm.chir);
-  url.addElement(oForm._etat_reglement);
-  url.addElement(oForm._etat_acquittement);
-  url.addElement(oForm.mode_reglement);
+  url.addElement(oForm._etat_reglement_patient);
+  url.addElement(oForm._etat_reglement_tiers);
+  url.addElement(oForm.patient_mode_reglement);
   url.addElement(oForm._type_affichage);
   url.addParam("cs", getCheckedValue(oForm.cs));
   if(compta == 1){
@@ -248,8 +248,8 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <td>{{mb_label object=$filter field="mode_reglement"}}</td>
-          <td>{{mb_field object=$filter field="mode_reglement" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
+          <td>{{mb_label object=$filter field="patient_mode_reglement"}}</td>
+          <td>{{mb_field object=$filter field="patient_mode_reglement" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
         <tr>
           <td>{{mb_label object=$filter field="_type_affichage"}}</td>
@@ -274,12 +274,12 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_etat_reglement"}}</td>
-          <td>{{mb_field object=$filter field="_etat_reglement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_label object=$filter field="_etat_reglement_patient"}}</td>
+          <td>{{mb_field object=$filter field="_etat_reglement_patient" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
-          <td>{{mb_label object=$filter field="_etat_acquittement"}}</td>
-          <td>{{mb_field object=$filter field="_etat_acquittement" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_label object=$filter field="_etat_reglement_tiers"}}</td>
+          <td>{{mb_field object=$filter field="_etat_reglement_tiers" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
           <td class="button" colspan="2">

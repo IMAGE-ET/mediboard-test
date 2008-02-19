@@ -88,15 +88,15 @@ newExam = function(sAction, consultation_id) {
   <tr>
     <td>
       <strong>Date de paiement :</strong>
-      {{if $object->date_reglement}}
-      <i>{{$object->date_reglement|date_format:"%d/%m/%Y"}}</i>
+      {{if $object->patient_date_reglement}}
+      <i>{{$object->patient_date_reglement|date_format:"%d/%m/%Y"}}</i>
       {{else}}
       <i>Non payé</i>
       {{/if}}
     </td>
     <td>
       <strong>Mode de paiement :</strong>
-      <i>{{tr}}{{$object->mode_reglement}}{{/tr}}</i>
+      <i>{{tr}}{{$object->patient_mode_reglement}}{{/tr}}</i>
     </td>
   </tr>
   <tr>

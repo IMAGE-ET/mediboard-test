@@ -31,8 +31,8 @@ $compte_cle     = substr($praticien->compte, 21, 2);
 
 $consult = new CConsultation();
 
-$whereConsult["mode_reglement"] = " = 'cheque' ";
-$whereConsult["date_reglement"] = " BETWEEN '$date_min' AND '$date_max' ";
+$whereConsult["patient_mode_reglement"] = " = 'cheque' ";
+$whereConsult["patient_date_reglement"] = " BETWEEN '$date_min' AND '$date_max' ";
 
 // Nombre de cheques remis
 $nbRemise = 0;
@@ -55,7 +55,7 @@ foreach($consults as $key=>$consult){
 	$consult->loadRefBanque();
 	$listConsult[$key] = $consult;
 	$nbRemise++;
-	$montantTotal += $consult->_somme;
+	$montantTotal += $consult->du_patient;
 }
 
 // Création du template

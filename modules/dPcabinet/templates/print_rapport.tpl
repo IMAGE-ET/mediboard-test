@@ -8,8 +8,8 @@
           <th>
             <a href="#" onclick="window.print()">
               Rapport du {{$filter->_date_min|date_format:"%d/%m/%Y"}}
-              {{if $filter->_date_min != $filter->_date_min}}
-              au {{$filter->_date_min|date_format:"%d/%m/%Y"}}
+              {{if $filter->_date_max != $filter->_date_min}}
+              au {{$filter->_date_max|date_format:"%d/%m/%Y"}}
               {{/if}}
             </a>
           </th>
@@ -17,12 +17,12 @@
         {{if $chirSel->user_id}}<tr><th>Dr. {{$chirSel->_view}}</th></tr>{{/if}}
         <tr>
           <td>
-            Reglement Patient: {{if $_etat_reglement}}{{tr}}CConsultation._etat_reglement.{{$_etat_reglement}}{{/tr}}{{else}}Tous{{/if}}
+            Reglement Patient: {{if $_etat_reglement_patient}}{{tr}}CConsultation._etat_reglement_patient.{{$_etat_reglement_patient}}{{/tr}}{{else}}Tous{{/if}}
           </td>
         </tr>
         <tr>
           <td>
-            Réglement Assurance Maladie: {{if $_etat_acquittement}}{{tr}}CConsultation._etat_acquittement.{{$_etat_acquittement}}{{/tr}}{{else}}Tous{{/if}}
+            Réglement Tiers: {{if $_etat_reglement_tiers}}{{tr}}CConsultation._etat_reglement_tiers.{{$_etat_reglement_tiers}}{{/tr}}{{else}}Tous{{/if}}
           </td>  
         </tr>
         <tr><td>Paiments pris en compte : {{if $type}}{{$type}}{{else}}tous{{/if}}</td></tr>
@@ -33,7 +33,7 @@
      
       <table class="tbl">
         <tr>
-          <th class="category" colspan="8">Réglement des patients</th>
+          <th class="category" colspan="8">Réglement Patients</th>
         </tr>
         <tr>
           <th class="category">Type réglement</th>
@@ -41,7 +41,7 @@
           <th class="category">Chèque</th>
           <th class="category">CB</th>
           <th class="category">Espèces</th>
-          <th class="category">Tiers</th>
+          <th class="category">Virement</th>
           <th class="category">Autre</th>
           {{if !$compta}}
           <th class="category">Non réglé</th>
@@ -49,54 +49,92 @@
         </tr>
         <tr>
           <th class="category">Nb consultations</th>
-          <td>{{$total.nombre}}</td>
-          <td>{{$total.cheque.nombre}}</td>
-          <td>{{$total.CB.nombre}}</td>
-          <td>{{$total.especes.nombre}}</td>
-          <td>{{$total.tiers.nombre}}</td>
-          <td>{{$total.autre.nombre}}</td>
+          <td>{{$recapitulatif.nb_patient}}</td>
+          <td>{{$reglement.cheque.nb_reglement_patient}}</td>
+          <td>{{$reglement.CB.nb_reglement_patient}}</td>
+          <td>{{$reglement.especes.nb_reglement_patient}}</td>
+          <td>{{$reglement.virement.nb_reglement_patient}}</td>
+          <td>{{$reglement.autre.nb_reglement_patient}}</td>
           {{if !$compta}}
-          <td>{{$total.nombre-$total.cheque.nombre-$total.CB.nombre-$total.especes.nombre-$total.tiers.nombre-$total.autre.nombre}}</td>
+          <td>{{$recapitulatif.nb_non_reglee_patient}}</td>
           {{/if}}
         </tr>
         <tr>
           <th class="category">Total réglement patient</th>
-          <td>{{$total.a_regler|string_format:"%.2f"}} &euro;</td>
-          <td>{{$total.cheque.reglement|string_format:"%.2f"}} &euro;</td>
-          <td>{{$total.CB.reglement|string_format:"%.2f"}} &euro;</td>
-          <td>{{$total.especes.reglement|string_format:"%.2f"}} &euro;</td>
-          <td>{{$total.tiers.reglement|string_format:"%.2f"}} &euro;</td>
-          <td>{{$total.autre.reglement|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.somme_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.cheque.du_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.CB.du_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.especes.du_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.virement.du_patient|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.autre.du_patient|string_format:"%.2f"}} &euro;</td>
           {{if !$compta}}
-          <td>{{$total.somme_non_regle|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
           {{/if}}
         </tr>
-      </table>
+            <tr>
+          <th class="category" colspan="8">Réglement Tiers</th>
+        </tr>
+        <tr>
+          <th class="category">Type réglement</th>
+          <th class="category">Total</th>
+          <th class="category">Chèque</th>
+          <th class="category">CB</th>
+          <th class="category">Espèces</th>
+          <th class="category">Virement</th>
+          <th class="category">Autre</th>
+          {{if !$compta}}
+          <th class="category">Non réglé</th>
+          {{/if}}
+        </tr>
+        <tr>
+          <th class="category">Nb consultations</th>
+          <td>{{$recapitulatif.nb_tiers}}</td>
+          <td>{{$reglement.cheque.nb_reglement_tiers}}</td>
+          <td>{{$reglement.CB.nb_reglement_tiers}}</td>
+          <td>{{$reglement.especes.nb_reglement_tiers}}</td>
+          <td>{{$reglement.virement.nb_reglement_tiers}}</td>
+          <td>{{$reglement.autre.nb_reglement_tiers}}</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.nb_non_reglee_tiers}}</td>
+          {{/if}}
+        </tr>
+        <tr>
+          <th class="category">Total réglement Tiers</th>
+          <td>{{$recapitulatif.somme_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.cheque.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.CB.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.especes.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.virement.du_tiers|string_format:"%.2f"}} &euro;</td>
+          <td>{{$reglement.autre.du_tiers|string_format:"%.2f"}} &euro;</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
+          {{/if}}
+        </tr>  </table>
        <table class="tbl">
         <tr>
           <th class="category" colspan="2">Récapitulatif des factures</th>
         </tr>
         <tr>
           <th class="category" width="10%">Total secteur 1</th>
-          <td>{{$total.secteur1|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.total_secteur1|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td>{{$total.secteur2|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{if !$compta}}
         <tr>
           <th class="category">Total non réglée (Patient)</th>
-          <td>{{$total.somme_non_regle|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{/if}}
         <tr>
           <th class="category">Total non réglée (AMO/AMC)</th>
-          <td>{{$total.somme_non_regle_caisse|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total facture</th>
-          <td>{{$total.secteur1+$total.secteur2|string_format:"%.2f"}} &euro;</td>
+          <td>{{$recapitulatif.total_secteur1+$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>
     </td>
@@ -120,8 +158,8 @@
           <th>Code</th>
           <th>Secteur 1</th>
           <th>Secteur 2</th>
-          <th colspan="2">Réglement du patient</th>
-          <th colspan="2">Assurance Maladie</th>
+          <th colspan="2">Réglement Patient</th>
+          <th colspan="2">Réglement Tiers</th>
           <th colspan="2">Total Facturé</th>
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
@@ -130,51 +168,53 @@
           {{if !$compta}}
           <td>{{$curr_consult->_ref_patient->tel}}</td>
           {{else}}
-          <td>{{$curr_consult->date_reglement|date_format:"%d/%m/%Y"}}</td>
+          <td>
+          {{if $curr_consult->patient_date_reglement && $curr_consult->du_patient}}
+          {{$curr_consult->patient_date_reglement|date_format:"%d/%m/%Y"}}
           {{/if}}
-          <td>{{$curr_consult->mode_reglement}}</td>
+          {{if $curr_consult->tiers_date_reglement && $curr_consult->du_tiers}}
+          {{$curr_consult->tiers_date_reglement|date_format:"%d/%m/%Y"}}
+          {{/if}}
+          </td>
+          {{/if}}
+          <td>
+          {{if $curr_consult->patient_date_reglement}}
+            {{$curr_consult->patient_mode_reglement}}
+          {{/if}}
+          {{if $curr_consult->tiers_date_reglement}}
+            {{$curr_consult->tiers_mode_reglement}}
+          {{/if}}
+          </td>
           <td>{{$curr_consult->tarif}}</td>
           <td>{{$curr_consult->secteur1|string_format:"%.2f"}} &euro;</td>
           <td>{{$curr_consult->secteur2|string_format:"%.2f"}} &euro;</td>
           <td>
-            {{$curr_consult->a_regler|string_format:"%.2f"}} &euro;
+            {{$curr_consult->du_patient|string_format:"%.2f"}} &euro;
           </td>
           
           <td>
-          {{if $curr_consult->a_regler != "0"}}
+          {{if $curr_consult->du_patient != "0"}}
             <form name="tarifFrm-{{$curr_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
-            <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
-            <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
-            <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
+            <input type="hidden" name="du_patient" value="{{$curr_consult->du_patient}}" />
             
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->date_reglement}}
-            <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
-            <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
-            <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
-            <input type="hidden" name="mode_reglement" value="" />
-            <input type="hidden" name="date_reglement" value="" />
+            {{if $curr_consult->patient_date_reglement}}
+            <input type="hidden" name="du_patient" value="{{$curr_consult->du_patient}}" />
+            <input type="hidden" name="patient_mode_reglement" value="" />
+            <input type="hidden" name="patient_date_reglement" value="" />
             {{if $compta == "0"}}
             <button class="cancel notext" type="submit">Annuler</button>
               Réglée
             {{/if}}
             {{else}}
               {{if $compta == "0"}}
-              <input type="hidden" name="secteur1" value="{{$curr_consult->secteur1}}" />
-              <input type="hidden" name="secteur2" value="{{$curr_consult->secteur2}}" />
-              <input type="hidden" name="a_regler" value="{{$curr_consult->a_regler}}" />
-              <input type="hidden" name="date_reglement" value="{{$today}}" />
-              <select name="mode_reglement">
-                <option value="cheque"  {{if $curr_consult->mode_reglement == "cheque" }}selected="selected"{{/if}}>Chèques     </option>
-                <option value="CB"      {{if $curr_consult->mode_reglement == "CB"     }}selected="selected"{{/if}}>CB          </option>
-                <option value="especes" {{if $curr_consult->mode_reglement == "especes"}}selected="selected"{{/if}}>Espèces     </option>
-                <option value="tiers"   {{if $curr_consult->mode_reglement == "tiers"  }}selected="selected"{{/if}}>Tiers-payant</option>
-                <option value="autre"   {{if $curr_consult->mode_reglement == "autre"  }}selected="selected"{{/if}}>Autre       </option>
-              </select>
+              <input type="hidden" name="du_patient" value="{{$curr_consult->du_patient}}" />
+              <input type="hidden" name="patient_date_reglement" value="{{$today}}" />
+              {{mb_field object=$curr_consult field=patient_mode_reglement}}
               <button type="submit" class="tick">Valider</button>
               {{/if}}
             {{/if}}
@@ -183,28 +223,30 @@
           </td>
           <td {{if $compta}}colspan="2"{{/if}}>
           <!-- Total de l'assurance maladie -->
-          {{$curr_consult->_somme-$curr_consult->a_regler|string_format:"%.2f"}} &euro;
+          {{$curr_consult->du_tiers|string_format:"%.2f"}} &euro;
           </td>
           {{if $compta == "0"}}
           <td>
-            {{if $curr_consult->_somme != $curr_consult->a_regler}}
-            {{if $curr_consult->_somme != "0"}}
+            {{if $curr_consult->du_tiers}}
             <form name="tarifFrm_{{$curr_consult->_id}}" action="?m=dPcabinet" method="post">
             <input type="hidden" name="m" value="dPcabinet" />
             <input type="hidden" name="del" value="0" />
             <input type="hidden" name="_dialog" value="print_rapport" />
             <input type="hidden" name="dosql" value="do_consultation_aed" />
             <input type="hidden" name="consultation_id" value="{{$curr_consult->consultation_id}}" />
-            {{if $curr_consult->reglement_AM}}
-              <input type="hidden" name="reglement_AM" value="0" />
+            {{if $curr_consult->tiers_date_reglement}}
+              <input type="hidden" name="tiers_date_reglement" value="" />
+              <input type="hidden" name="tiers_mode_reglement" value="" />
               <button class="cancel notext" type="submit">Annuler</button>
-              Régler
+              Réglée
+              
             {{else}}
-              <input type="hidden" name="reglement_AM" value="1" />
-              <button type="submit" class="tick">Régler</button>
+              <input type="hidden" name="tiers_date_reglement" value="{{$today}}" />
+              {{mb_field object=$curr_consult field=tiers_mode_reglement}}
+              <button type="submit" class="tick">Valider</button>
             {{/if}}
             </form>
-            {{/if}}
+            
             {{/if}}
           </td>
           {{/if}}
@@ -217,9 +259,8 @@
           <td colspan="4" style="text-align:right;font-weight:bold;">Total</td>
           <td style="font-weight:bold;">{{$curr_plage->total1|string_format:"%.2f"}} &euro;</td>
           <td style="font-weight:bold;">{{$curr_plage->total2|string_format:"%.2f"}} &euro;</td>
-          <td style="font-weight:bold;" colspan="2">{{$curr_plage->a_regler|string_format:"%.2f"}} &euro;</td>
-          {{assign var="total_plage" value=$curr_plage->total1+$curr_plage->total2}}
-          <td style="font-weight:bold;" colspan="2">{{$total_plage-$curr_plage->a_regler|string_format:"%.2f"}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->du_patient|string_format:"%.2f"}} &euro;</td>
+          <td style="font-weight:bold;" colspan="2">{{$curr_plage->du_tiers|string_format:"%.2f"}} &euro;</td>
           <td style="font-weight:bold;" colspan="2">{{$curr_plage->total1+$curr_plage->total2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>

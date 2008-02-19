@@ -77,7 +77,7 @@ foreach($actes_ccam as $key => $_acteCCAM){
 // Si le transfert des actes CCAM est reussi, suppression de codes_ccam de l'ancienne consult
 $rpu->_ref_consult->codes_ccam = "";
 $rpu->_ref_consult->tarif = "Transfert Séjour";
-$rpu->_ref_consult->a_regler = 0;
+$rpu->_ref_consult->du_patient = 0;
 $rpu->_ref_consult->secteur1 = 0;
 $rpu->_ref_consult->secteur2 = 0;
 $msg = $rpu->_ref_consult->store();

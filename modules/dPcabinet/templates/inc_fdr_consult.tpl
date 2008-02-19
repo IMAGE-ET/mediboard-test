@@ -10,7 +10,7 @@ Object.extend(Intermax.ResultHandler, {
     var msg = {{$patient->_id_vitale|json}} ?
     	"Vous êtes sur le point de mettre à jour le patient" :
     	"Vous êtes sur le point d'associer le patient";
-    msg += printf("\n\t%s %s (%s)", 
+    msg += printf("\n\t%s %s (%s)",
     	'{{$patient->nom|smarty:nodefaults|JSAttribute}}', 
     	'{{$patient->prenom|smarty:nodefaults|JSAttribute}}', 
     	'{{mb_value object=$patient field=naissance}}');
@@ -64,6 +64,9 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 
 
+
+
+
 function cancelTarif(action) {
   var oForm = document.tarifFrm;
   
@@ -76,21 +79,31 @@ function cancelTarif(action) {
     oForm.valide.value = 0;
   }
   
-  if(oForm.reglement_AM){
-    oForm.reglement_AM.value = 0;
-  }
-  
   if(oForm._somme){
     oForm._somme.value = 0;
   }
   
-  oForm.date_reglement.value = "";  
+  // On met à 0 les valeurs de tiers 
+  if(oForm.tiers_date_reglement){
+    oForm.tiers_date_reglement.value = "";
+    oForm.tiers_mode_reglement.value = "";
+  }
+ 
+  if(oForm.patient_mode_reglement){
+    oForm.patient_mode_reglement.value = "";
+  }
+  oForm.patient_date_reglement.value = "";
+  
   submitFdr(oForm);
 }
 
 
 function validTarif(){
   var oForm = document.tarifFrm;
+  
+  if(oForm.du_tiers){
+    oForm.du_tiers.value = oForm._somme.value - oForm.du_patient.value;
+  }
   
   if(oForm.tarif.value == ""){
     oForm.tarif.value = "manuel";
@@ -123,7 +136,7 @@ function modifTotal(){
   }
   oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
   oForm._somme.value = Math.round(oForm._somme.value*100)/100;
-  oForm.a_regler.value = oForm._somme.value; 
+  oForm.du_patient.value = oForm._somme.value; 
 }
 
 
@@ -138,21 +151,20 @@ function modifSecteur2(){
   if(secteur1 == ""){
     secteur = 0;
   }
-  oForm.a_regler.value = somme;
+  oForm.du_patient.value = somme;
   oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
 function effectuerReglement() {
-  // passage de patient_regle a 1
   var oForm = document.tarifFrm;
-  oForm.date_reglement.value = new Date().toDATE();
+  oForm.patient_date_reglement.value = new Date().toDATE();
   submitFdr(oForm);
 }
 
 function putTiers() {
-  var form = document.tarifFrm;
-  form.mode_reglement.value = "tiers";
+  var oForm = document.tarifFrm;
+  oForm.du_patient.value = 0;
 }
 
 function editDocument(compte_rendu_id) {
@@ -224,7 +236,7 @@ function submitFdr(oForm) {
 
     <td class="text">
       <div id="exam_comp">
-      {{include file="inc_examens_comp.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_examens_comp.tpl"}}
       </div>
       
       <strong>Fichiers</strong>
@@ -456,15 +468,15 @@ function submitFdr(oForm) {
       <input type="hidden" name="dosql" value="do_consultation_aed" />
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
       
+      
+      <!-- Formulaire de reglement -->
       <table width="100%">  
-        {{if !$consult->date_reglement}}
-       
+        {{if !$consult->patient_date_reglement}}   
         <tr>          
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            <input type="hidden" name="date_reglement" value="" />
-       
+            <input type="hidden" name="patient_date_reglement" value="" />
             {{if $consult->valide}}
 	          {{mb_value object=$consult field="secteur1"}} (S1) +
 	          
@@ -501,9 +513,12 @@ function submitFdr(oForm) {
             {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
             {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            {{mb_field object=$consult field="a_regler" hidden=1 prop=""}}
-            {{mb_field object=$consult field="date_reglement" hidden=1 prop=""}}
-            <strong>{{$consult->a_regler}} &euro; ont été réglés par le patient: {{mb_value object=$consult field="mode_reglement"}}</strong>
+            {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}
+            {{mb_field object=$consult field="du_tiers" hidden=1 prop=""}}
+            
+            {{mb_field object=$consult field="patient_date_reglement" hidden=1 prop=""}}
+            {{mb_field object=$consult field="patient_mode_reglement" hidden=1 prop=""}}
+            <strong>{{$consult->du_patient}} &euro; ont été réglés par le patient: {{mb_value object=$consult field="patient_mode_reglement"}}</strong>
           </td>
         </tr>
         <tr>
@@ -514,23 +529,30 @@ function submitFdr(oForm) {
           </td>
         </tr>
         {{/if}}
+        <!-- Fin du formulaire de reglement -->
         
-        {{if $consult->tarif && $consult->date_reglement == "" && $consult->valide == "1"}}
+        
+        
+        
+        
+        {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
         {{if !$consult->sejour_id}}
+        
+        {{if $consult->du_patient}}
         <tr>
           <th>
-            {{mb_label object=$consult field="mode_reglement"}}
+            {{mb_label object=$consult field="patient_mode_reglement"}}
           </th>
           <td>
-            {{mb_field object=$consult field="mode_reglement"}}
+            {{mb_field object=$consult field="patient_mode_reglement" defaultOption="&mdash;Veuillez Choisir &mdash;"}}
           </td>
         </tr>
         <tr>
           <th>
-            {{mb_label object=$consult field="a_regler"}}
+            {{mb_label object=$consult field="du_patient"}}
           </th>
           <td>
-            {{mb_value object=$consult field="a_regler"}}
+            {{mb_value object=$consult field="du_patient"}}
           </td>
         </tr>
         <tr>
@@ -547,31 +569,33 @@ function submitFdr(oForm) {
           </td>
         </tr>
         {{/if}}
+        {{/if}}
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="valide" value="1" />
             <input type="hidden" name="secteur1" value="{{$consult->secteur1}}" />
             <input type="hidden" name="secteur2" value="{{$consult->secteur2}}" />
-            <input type="hidden" name="a_regler" value="{{$consult->a_regler}}" />
-            <input type="hidden" name="reglement_AM" value="{{$consult->reglement_AM}}" />
+            <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
+            <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
             
-            {{if !$consult->sejour_id}}
+            <input type="hidden" name="tiers_date_reglement" value="{{$consult->tiers_date_reglement}}" />
+            <input type="hidden" name="tiers_mode_reglement" value="{{$consult->tiers_mode_reglement}}" />
+            {{if !$consult->sejour_id && $consult->du_patient}}
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             {{/if}}
             {{if !$consult->_current_fse}}
-            <button class="cancel" type="button" onclick="cancelTarif()">Annuler la validation</button>
-           
+            <button class="cancel" type="button" onclick="this.form.du_tiers.value = 0; this.form.du_patient.value = 0; cancelTarif()">Annuler la validation</button>
             {{/if}}
           </td>
         </tr>
-        {{elseif !$consult->date_reglement}}
+        {{elseif !$consult->patient_date_reglement}}
         {{if !$consult->sejour_id}}
         <tr>
-          <th>{{mb_label object=$consult field="a_regler"}}</th>
+          <th>{{mb_label object=$consult field="du_patient"}}</th>
           <td>
-            {{mb_field object=$consult field="a_regler"}}
-            <button type="button" class="tick" onclick="putTiers(); this.form.a_regler.value = 0">Tiers-payant total</button>   
-            <input type="hidden" name="mode_reglement" value="" />
+            {{mb_field object=$consult field="du_patient"}}
+            {{mb_field object=$consult field="du_tiers" hidden="1"}}
+            <button type="button" class="tick" onclick="putTiers();">Tiers-payant total</button>   
           </td>
         </tr>
         {{/if}}
@@ -579,7 +603,7 @@ function submitFdr(oForm) {
           <td colspan="2" class="button">
             <input type="hidden" name="_delete_actes" value="0" />
             <input type="hidden" name="valide" value="1" />
-            
+          
             <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
             <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
           </td>

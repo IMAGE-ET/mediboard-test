@@ -32,7 +32,10 @@ class CConsultation extends CCodable {
   var $chrono        = null;
   var $annule        = null;
   
-  var $date_reglement= null;
+  
+  var $patient_date_reglement = null;
+  var $tiers_date_reglement = null;
+  
   var $motif         = null;
   var $rques         = null;
   var $examen        = null;
@@ -40,7 +43,10 @@ class CConsultation extends CCodable {
   var $premiere      = null;
   var $adresse       = null; // Le patient a-t'il été adressé ?
   var $tarif         = null;
-  var $mode_reglement= null;
+  
+  var $patient_mode_reglement = null;
+  var $tiers_mode_reglement   = null;
+  
   var $arrivee       = null;
   var $banque_id     = null;
   var $categorie_id  = null;
@@ -49,10 +55,9 @@ class CConsultation extends CCodable {
   var $total_assure      = null;
   var $total_amc         = null; 
   var $total_amo         = null;
-  var $reglement_AM      = null; // true si reglement effectue par AM
-  var $a_regler          = null; // somme que le patient doit régler a la fn
-  //var $patient_regle     = null;     // paye devient patient_regle
-  
+
+  var $du_patient          = null; // somme que le patient doit régler a la fn
+  var $du_tiers = null;
   
   // Form fields
   var $_etat           = null;
@@ -101,8 +106,8 @@ class CConsultation extends CCodable {
    var $_date_min	 	       = null;
    var $_date_max 		     = null;
    var $_prat_id 		       = null;
-   var $_etat_reglement    = null;
-   var $_etat_acquittement = null;
+   var $_etat_reglement_patient    = null;
+   var $_etat_reglement_tiers = null;
    var $_type_affichage    = null;
    var $_coordonnees       = null;
 
@@ -132,7 +137,7 @@ class CConsultation extends CCodable {
     $specs["secteur2"]          = "currency";
     $specs["chrono"]            = "notNull enum list|16|32|48|64";
     $specs["annule"]            = "bool";
-    $specs["date_reglement"]    = "date";
+    
     $specs["motif"]             = "text";
     $specs["rques"]             = "text";
     $specs["examen"]            = "text";
@@ -141,13 +146,20 @@ class CConsultation extends CCodable {
     $specs["adresse"]           = "bool";
     $specs["tarif"]             = "str";
     $specs["arrivee"]           = "dateTime";
-    $specs["mode_reglement"]    = "enum list|cheque|CB|especes|tiers|autre default|cheque";
+    
+    $specs["patient_date_reglement"] = "date";
+    $specs["tiers_date_reglement"]   = "date";
+    $specs["patient_mode_reglement"] = "enum list|cheque|CB|especes|virement|autre default|cheque";
+    $specs["tiers_mode_reglement"]   = "enum list|cheque|CB|especes|virement|autre default|cheque";
+    $specs["du_patient"]          = "currency";
+    $specs["du_tiers"]            = "currency";
+    
     $specs["banque_id"]         = "ref class|CBanque";
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
-    $specs["_etat_reglement"]   = "enum list|reglee|non_reglee";
-    $specs["_etat_acquittement"]= "enum list|acquittee|non_acquittee";
+    $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";
+    $specs["_etat_reglement_tiers"]= "enum list|reglee|non_reglee";
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_prat_id"]          = "text";
@@ -156,9 +168,7 @@ class CConsultation extends CCodable {
     $specs["total_amo"]         = "currency";
     $specs["total_amc"]         = "currency";
     $specs["total_assure"]      = "currency";
-    $specs["reglement_AM"]      = "bool";
-    $specs["a_regler"]          = "currency";
-    //$specs["patient_regle"]     = "bool";
+    
     $specs["sejour_id"]         = "ref class|CSejour";
     return $specs;
   }
@@ -199,8 +209,8 @@ class CConsultation extends CCodable {
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;
-    if($this->date_reglement == "0000-00-00")
-      $this->date_reglement = null;
+    if($this->patient_date_reglement == "0000-00-00")
+      $this->patient_date_reglement = null;
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
     $this->_check_premiere = $this->premiere;
@@ -217,32 +227,25 @@ class CConsultation extends CCodable {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
-    if ($this->date_reglement == "0000-00-00") {
-      $this->date_reglement = null;
+    if ($this->patient_date_reglement == "0000-00-00") {
+      $this->patient_date_reglement = null;
     }
 
     // Liaison FSE prioritaire sur l'état    
     if ($this->_bind_fse) {
       $this->valide = 0;
     }
+   
     
-    // Acquittement à 1 si secteur1 + secteur2 = a_regler
-    // Multiplication par 100 a cause des erreurs de PHP avec les float
-    if($this->secteur1 !== null && $this->secteur2 !== null && $this->a_regler !== null){
-       if((intval(($this->secteur1+$this->secteur2)*100) == intval($this->a_regler*100)) && $this->valide == 1){       
-        $this->reglement_AM = 1;
-      }
+    // Si pas de mode de paiement defini => autre
+    if($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
+      $this->patient_mode_reglement = "autre";
     }
     
-    // Si rien a regler (sauf dans le cas d'une urgence => pas de notion de reglement)
-    if($this->a_regler !== null && $this->a_regler == 0 && $this->valide && !$this->sejour_id){
-      $this->mode_reglement = "tiers";
-      $this->date_reglement = mbDate();
-    }
     
     // Si la consultation est une urgence
     if($this->sejour_id){
-      $this->a_regler = 0;
+      $this->du_patient = 0;
     }
   }
 
@@ -329,7 +332,7 @@ class CConsultation extends CCodable {
     $this->total_assure = 0.0;
     $this->total_amc = 0.0;
     $this->total_amo = 0.0;
-    $this->a_regler = 0.0;
+    $this->du_patient = 0.0;
     
     if ($msg = $this->store()) {
      return $msg;
@@ -346,7 +349,7 @@ class CConsultation extends CCodable {
     // Copie des elements du tarif dans la consultation
     $this->secteur1     = $tarif->secteur1;
     $this->secteur2     = $tarif->secteur2;
-    $this->a_regler     = $tarif->secteur1 + $tarif->secteur2;
+    $this->du_patient     = $tarif->secteur1 + $tarif->secteur2;
     $this->tarif        = $tarif->description;
     $this->codes_ccam   = $tarif->codes_ccam;
     $this->_tokens_ngap = $tarif->codes_ngap;
@@ -501,13 +504,13 @@ class CConsultation extends CCodable {
     $consult->total_amo    = $fse["FSE_TOTAL_AMO"];
     $consult->total_amc    = $fse["FSE_TOTAL_AMC"];
     
-    $consult->a_regler = $consult->total_assure;
+    $consult->du_patient = $consult->total_assure;
     
     if($fse["FSE_TIERS_PAYANT"] == 0){
-      $consult->a_regler += $consult->total_amo;
+      $consult->du_patient += $consult->total_amo;
     }
     if($fse["FSE_TIERS_PAYANT_COMP"] == 0){
-      $consult->a_regler += $consult->total_amc;
+      $consult->du_patient += $consult->total_amc;
     }
     
     $consult->valide = '1';
