@@ -29,16 +29,8 @@ $idImeds["csdv"] = $id400->id400;
 $id400 = new CIdSante400;
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
-if($sejour_id) {
-  if(isset($patient->_ref_sejours[$sejour_id])) {
-    $sejour =& $patient->_ref_sejours[$sejour_id];
-  } else {
-    mbSetValueToSession("sejour_id");
-    $sejour = new CSejour;
-  }
-} else {
-  $sejour = new CSejour;
-}
+$sejour = new CSejour;
+$sejour->load($sejour_id);
 $sejour->loadNumDossier();
 
 // Création du template
