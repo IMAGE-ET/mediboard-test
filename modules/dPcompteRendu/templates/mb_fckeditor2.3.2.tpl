@@ -68,6 +68,22 @@ aMbCombos.push(oMbCombo);
 {{/foreach}}
 {{/if}}
 
+// Add helpers Combo
+var oMbCombo = new Object();
+oMbCombo.commandName = "MbHelpers";
+oMbCombo.spanClass = "helper";
+oMbCombo.commandLabel = "Aides &agrave; la saisie";
+
+var aOptions = new Array();
+oMbCombo.options = aOptions;
+aMbCombos.push(oMbCombo);
+
+{{foreach from=$templateManager->helpers key=helperName item=helperText}}
+  aOptions.push( { 
+    view: "{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
+    item: "{{$helperText|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}"
+    });
+{{/foreach}}
 
 aToolbarSet = FCKConfig.ToolbarSets["Default"];
 
