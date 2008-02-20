@@ -19,7 +19,7 @@ $etablissement->load($g);
 
 $idImeds = array();
 
-
+// Chargement des id externes
 $id400 = new CIdSante400;
 $id400->loadLatestFor($etablissement, "Imeds cidc");
 $idImeds["cidc"] = $id400->id400;
@@ -29,6 +29,19 @@ $idImeds["cdiv"] = $id400->id400;
 $id400 = new CIdSante400;
 $id400->loadLatestFor($etablissement, "Imeds csdv");
 $idImeds["csdv"] = $id400->id400;
+
+// Chargement de l'utilisateur courant
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+
+// Chargement des id externes du user courant
+$id400 = new CIdSante400();
+$id400->loadLatestFor($mediuser, "Imeds_login");
+$idImeds["login"] = $id400->id400;
+$id400 = new CIdSante400();
+$id400->loadLatestFor($mediuser, "Imeds_password");
+$idImeds["password"] = md5($id400->id400);
+
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $patient = new CPatient;
