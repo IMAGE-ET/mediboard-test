@@ -22,10 +22,13 @@ class CPrescriptionLine extends CMbObject {
   // Object References
   var $_ref_prescription = null;
   var $_ref_produit      = null;
+  var $_ref_posologie    = null;
   
   // Alertes
-var $_ref_alertes = null;
-var $_ref_alertes_text = null;
+  var $_ref_alertes      = null;
+  var $_ref_alertes_text = null;
+  var $_nb_alertes       = null;
+
   
   function CPrescriptionLine() {
     $this->CMbObject("prescription_line", "prescription_line_id");
@@ -49,6 +52,7 @@ var $_ref_alertes_text = null;
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
+    $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
   }
   
@@ -57,12 +61,22 @@ var $_ref_alertes_text = null;
     $this->_ref_prescription->load($this->prescription_id);
     $this->_ref_produit = new CBcbProduit();
     $this->_ref_produit->load($this->code_cip);
+    $this->loadPosologie();
+  }
+  
+  function loadPosologie() {
+    $posologie = new CBcbPosologie();
+    if($this->_ref_produit->code_cip && $this->no_poso) {
+      $posologie->load($this->_ref_produit->code_cip, $this->no_poso);
+    }
+    $this->_ref_posologie = $posologie;
   }
   
   function checkAllergies($listAllergies) {
     $this->_ref_alertes["allergie"] = array();
     foreach($listAllergies as $key => $all) {
       if($all->CIP == $this->code_cip) {
+        $this->_nb_alertes++;
         $this->_ref_alertes["allergie"][$key]      = $all;
         $this->_ref_alertes_text["allergie"][$key] = $all->LibelleAllergie;
       }
@@ -73,6 +87,7 @@ var $_ref_alertes_text = null;
     $this->_ref_alertes["interaction"] = array();
     foreach($listInteractions as $key => $int) {
       if($int->CIP1 == $this->code_cip) {
+        $this->_nb_alertes++;
         $this->_ref_alertes["interaction"][$key]      = $int;
         $this->_ref_alertes_text["interaction"][$key] = $int->Type;
       }
@@ -88,6 +103,7 @@ var $_ref_alertes_text = null;
     $this->_ref_alertes["profil"] = array();
     foreach($listProfil as $key => $pro) {
       if($pro->CIP == $this->code_cip) {
+        $this->_nb_alertes++;
         $this->_ref_alertes["profil"][$key]      = $pro;
         $this->_ref_alertes_text["profil"][$key] = $pro->LibelleMot;
       }

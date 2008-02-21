@@ -4,7 +4,6 @@
 <script type="text/javascript">
 
 var Prescription = {
-
   addEquivalent: function(code, line_id){
     Prescription.delLineWithoutRefresh(line_id);
     // Suppression des champs de addLine
@@ -13,7 +12,16 @@ var Prescription = {
     oForm.del.value = "";
     Prescription.addLine(code);
   },
-
+  popup : function() {
+    if({{$prescription->_id}}) {
+    var url = new Url;
+    url.setModuleAction("dPprescription", "vw_edit_prescription");
+    url.addParam("prescription_id", {{$prescription->_id}});
+    url.popup(750, 600, "prescription");
+    } else {
+      alert("vous devez ouvrir une prescription");
+    }
+  },
   close : function() {
     var url = new Url;
     url.setModuleTab("{{$m}}", "{{$tab}}");
@@ -22,21 +30,26 @@ var Prescription = {
     url.addParam("object_id", {{$prescription->object_id|json}});
     url.redirect();
   },
+  addProtocole: function(code) {
+    //var oForm = document.addProtocole;
+    //oForm.protocole_id.value = code;
+    //submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
+    alert("Protocole selectionné");
+  },
+  addOther: function(code) {
+    alert("Element selectionné");
+  },
   addLine: function(code) {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
     submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
   },
-  
-  
   delLineWithoutRefresh: function(line_id) {
     var oForm = document.addLine;
     oForm.prescription_line_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg');
   },
-  
-  
   delLine: function(line_id) {
     var oForm = document.addLine;
     oForm.prescription_line_id.value = line_id;
@@ -62,6 +75,12 @@ var Prescription = {
     {{else}}
     alert('Pas de prescription en cours');
     {{/if}}
+  },
+  print: function() {
+    var url = new Url;
+    url.setModuleAction("dPprescription", "print_prescription");
+    url.addParam("prescription_id", {{$prescription->_id}});
+    url.popup(700, 600, "print_prescription");
   }
 };
 
@@ -101,7 +120,7 @@ function updateFields(selected) {
           	{{mb_label object=$filter field=object_id}}
           	{{mb_field object=$filter field=object_id hidden="1" onchange="this.form.submit()"}}
 						{{mb_include_script module=system script=object_selector}}
-            <input type="text" size="80" name="_view" readonly="readonly" value="{{$filter->_ref_object->_view}}" />
+            <input type="text" size="60" name="_view" readonly="readonly" value="{{$filter->_ref_object->_view}}" />
             <button type="button" onclick="ObjectSelector.init()" class="search">Rechercher</button>
             <script type="text/javascript">
               ObjectSelector.init = function() {
@@ -121,7 +140,7 @@ function updateFields(selected) {
     </td>
   </tr>
 
-{{if $prescription->object_id}}
+  {{if $prescription->object_id}}
   <tr>
     <td>
       {{if $prescription->_id}}
@@ -254,7 +273,7 @@ function updateFields(selected) {
       </div>
     </td>
   </tr>
-{{else}}
+  {{else}}
   <tr>
     <td>
       <div class="big-info">
@@ -262,5 +281,5 @@ function updateFields(selected) {
       </div>
     </td>
   </tr>
-{{/if}}
+  {{/if}}
 </table>

@@ -283,12 +283,12 @@ class CCodable extends CMbObject {
         foreach ($activite->phases as $phaseKey => $phaseValue) {
           $phase =& $activite->phases[$phaseKey];     
           $possible_acte = new CActeCCAM;
-          $possible_acte->montant_depassement = 0;
+          $possible_acte->montant_depassement = "";
           $possible_acte->code_acte = $code->code;
           $_code = $possible_acte->code_activite = $activite->numero;
           
           
-          $possible_acte->_anesth= ( $activite->numero == 4 ) ? true : false;
+          $possible_acte->_anesth = ( $activite->numero == 4 ) ? true : false;
           
           
           $possible_acte->code_phase = $phase->phase;

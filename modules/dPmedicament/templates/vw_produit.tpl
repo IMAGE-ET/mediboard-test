@@ -305,7 +305,7 @@ function pageMain(){
             </th>
           </tr>
           <tr>
-            <td>
+            <td class="text">
               {{$mbProduit->_ref_monographie->conservation|smarty:nodefaults}}
             </td>
           </tr>
@@ -313,7 +313,7 @@ function pageMain(){
             <th>Nature et contenu de l'emballage extérieur</th>
           </tr>
           <tr>
-            <td>
+            <td class="text">
               {{$mbProduit->_ref_monographie->emballage_ext|smarty:nodefaults}}
             </td>
           </tr>
@@ -393,7 +393,7 @@ function pageMain(){
             <th colspan="2">Conditions de prescription et de délivrance</th>
           </tr>
           <tr>
-            <td colspan="2">{{$mbProduit->_ref_monographie->condition_delivrance|smarty:nodefaults}}</td>
+            <td colspan="2" class="text">{{$mbProduit->_ref_monographie->condition_delivrance|smarty:nodefaults}}</td>
           </tr>
         </table>
       </td>

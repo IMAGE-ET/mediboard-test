@@ -41,6 +41,7 @@ class CBcbProduit extends CBcbObject {
   var $_ref_classes_ATC      = null;
   var $_ref_classes_thera    = null;
   var $_ref_equivalents      = null;
+  var $_ref_posologies       = null;
   
   // Constructeur
   function CBcbProduit(){

@@ -58,6 +58,8 @@ class CBcbPosologie extends CBcbObject {
   var $_code_age1         = null;
   var $_code_age2         = null;
   
+  var $_view              = null;
+  
   // Constructeur
   function CBcbPosologie(){
   

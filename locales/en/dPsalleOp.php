@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPsalleOp-tab-vw_signature_actes'] = '';
+$locales['config-dPsalleOp-CActeCCAM-openline'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = '';
 $locales['CActeCCAM-acte_id-court'] = '';
@@ -75,11 +75,18 @@ $locales['CActeCCAM.one'] = '';
 $locales['CCodable-back-'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = '';
+$locales['config-dPsalleOp-CActeCCAM'] = '';
+$locales['config-dPsalleOp-CActeCCAM-commentaire'] = '';
+$locales['config-dPsalleOp-CActeCCAM-modifs_compacts'] = '';
 $locales['config-dPsalleOp-CActeCCAM-signature'] = '';
 $locales['config-dPsalleOp-CActeCCAM-tarif'] = '';
+$locales['config-dPsalleOp-CDossierMedical'] = '';
 $locales['config-dPsalleOp-CDossierMedical-DAS'] = '';
+$locales['config-dPsalleOp-COperation'] = '';
+$locales['config-dPsalleOp-COperation-mode'] = '';
 $locales['mod-dPsalleOp-tab-vw_operations'] = '';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = '';
+$locales['mod-dPsalleOp-tab-vw_signature_actes'] = '';
 $locales['mod-dPsalleOp-tab-vw_urgences'] = '';
 $locales['pref-ccam_consultation-0'] = '';
 $locales['pref-ccam_consultation-1'] = '';

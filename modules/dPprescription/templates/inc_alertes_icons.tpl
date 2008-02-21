@@ -1,6 +1,11 @@
       <table class="tbl">
         <tr>
-          <th colspan="4"class="title">Alertes</th>
+          <th colspan="4"class="title">
+            <button type="button" class="print" onclick="Prescription.popup()" style="float: right">
+              popup
+            </button>
+            Alertes
+          </th>
         </tr>
         <tr>
           <td>

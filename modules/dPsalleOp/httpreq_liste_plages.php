@@ -2,7 +2,7 @@
 
 /**
 * @package Mediboard
-* @subpackage dPsaleOp
+* @subpackage dPsalleOp
 * @version $Revision: $
 * @author Sébastien Fillonneau
 */
@@ -44,7 +44,7 @@ if($salle) {
 	    $curr_op->loadExtCodesCCAM();
 	    if($curr_op->rank == 0) {
 	      $curr_plage->_unordered_operations[$key] = $curr_op;
-	      unset($curr_op);
+	      unset($curr_plage->_ref_operations[$key]);
 	    }
 	  }
 	}
@@ -54,7 +54,7 @@ if($salle) {
 	$where["date"]     = "= '$date'";
 	$where["salle_id"] = "= '$salle'";
 	$order = "chir_id";
-	$urgences = $urgences->loadList($where);
+	$urgences = $urgences->loadList($where, $order);
 	foreach($urgences as &$curr_op) {
 	  $curr_op->loadRefChir();
 	  $curr_op->loadRefSejour();

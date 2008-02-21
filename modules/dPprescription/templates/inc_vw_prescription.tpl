@@ -1,3 +1,12 @@
+<script type="text/javascript">
+function viewFullAlertes() {
+  var url = new Url;
+  url.setModuleAction("dPprescription", "vw_full_alertes");
+  url.addParam("prescription_id", {{$prescription->_id}});
+  url.popup(700, 550, "Alertes");
+}
+</script>
+
 {{if $httpreq}}
 <script type="text/javascript">
   Prescription.reloadAlertes();
@@ -19,11 +28,22 @@
       <button type="button" class="cancel" onclick="Prescription.close()" style="float: left">
         Fermer
       </button>
+      <button type="button" class="print notext" onclick="Prescription.print()" style="float: right">
+        Print
+      </button>
       {{$prescription->_view}}
     </th>
   </tr>
   <tr>
     <td>
+      <!-- Tabulations -->
+      <ul id="main_tab_group" class="control_tabs">
+        <li><a href="#produits">Produits</a></li>
+        <li><a href="#autre">Autre</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      
+      <div id="produits" style="display:none">
       <form action="?" method="get" name="searchProd" onsubmit="return false;">
         <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
           <option value="">&mdash; produits les plus utilisés</option>
@@ -57,27 +77,82 @@
           }
         </script>
       </form>
+      </div>
+      <div id="autre" style="display:none">
+      <form action="?" method="get" name="searchAutre" onsubmit="return false;">
+        <select name="favoris" onchange="Prescription.addOther(this.value); this.value = '';">
+          <option value="">&mdash; elements les plus utilisés</option>
+          <option value="1">
+            Examen cardiologique
+          </option>
+          <option value="2">
+            Radio du genou face profil
+          </option>
+          <option value="3">
+            Rééducation kiné
+          </option>
+          <option value="4">
+            Bilan sanguin
+          </option>
+        </select>
+        <br />
+        <input type="text" name="autre" value=""/>
+        <button type="button" class="search">Recherche</button>
+      </form>
+      </div>
     </td>
   </tr>
 </table>
 <table class="tbl">
   <tr>
-    <th colspan="2">Produit</th>
-    <th>Alertes</th>
+    <th colspan="3">
+      <select name="favoris" onchange="Prescription.addProtocole(this.value); this.value = '';" style="float: left;">
+        <option value="">&mdash; protocoles</option>
+        <option value="1">
+          Sortie arthroscopie
+        </option>
+        <option value="2">
+          Sortie PTG
+        </option>
+        <option value="3">
+          Sortie PTH
+        </option>
+      </select>
+      Produit
+    </th>
   </tr>
   {{foreach from=$prescription->_ref_prescription_lines item=curr_line}}
   <tbody class="hoverable">
   <tr>
-    <td rowspan="2">
+    <td>
       <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
         {{tr}}Delete{{/tr}}
       </button>
     </td>
     <td>
+      {{if $curr_line->_nb_alertes}}
+      <img src="images/icons/note_red.png" title="aucune" alt="aucune" onclick="viewFullAlertes()" />
+      {{/if}}
+      <div style="display : none;">
+      {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}
+        {{if $curr_type|@count}}
+          <ul>
+          {{foreach from=$curr_type item=curr_alerte}}
+            <li>
+              <strong>{{tr}}CPrescriptionLine-alerte-{{$type}}-court{{/tr}} :</strong>
+              {{$curr_alerte}}
+            </li>
+          {{/foreach}}
+          </ul>
+        {{/if}}
+      {{/foreach}}
+      </div>
+    </td>
+    <td>
       <div style="float: right;">
-         <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
-           Equivalents
-         </button>
+        <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
+          Equivalents
+        </button>
         <script type="text/javascript">
           if(EquivSelector.oUrl) {
             EquivSelector.close();
@@ -94,29 +169,10 @@
             Prescription.addEquivalent(code, line_id);
           }
         </script>
-        </div>
+      </div>
       <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
         <strong>{{$curr_line->_view}}</strong>
       </a>
-     
-    </td>
-    <td class="text">
-      {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}
-        {{if $curr_type|@count}}
-          <ul>
-          {{foreach from=$curr_type item=curr_alerte}}
-            <li>
-              <strong>{{tr}}CPrescriptionLine-alerte-{{$type}}-court{{/tr}} :</strong>
-              {{$curr_alerte}}
-            </li>
-          {{/foreach}}
-          </ul>
-        {{/if}}
-      {{/foreach}}
-    </td>
-  </tr>
-  <tr>
-    <td colspan="2">
       <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_aed" />
@@ -132,77 +188,12 @@
           {{/foreach}}
         </select>
       </form>
+     
     </td>
   </tr>
   </tbody>
   {{/foreach}}
 </table>
-{{if $alertesInteractions|@count}}
-<table class="tbl">
-  <tr>
-    <th colspan="5">{{$alertesInteractions|@count}} interaction(s)</th>
-  </tr>
-  <tr>
-    <th>Produit</th>
-    <th>Interéagit avec</th>
-    <th>Gravité</th>
-    <th>Mécanisme</th>
-    <th>Conduite à tenir</th>
-  </tr>
-  {{foreach from=$alertesInteractions item=curr_alerte}}
-  <tr>
-    <td class="text">{{$curr_alerte->Nom1}} ({{$curr_alerte->strClasse1}})</td>
-    <td class="text">{{$curr_alerte->Nom2}} ({{$curr_alerte->strClasse2}})</td>
-    <td class="text">{{$curr_alerte->Niveau}}</td>
-    <td class="text">{{$curr_alerte->Type}} : {{$curr_alerte->Message}}</td>
-    <td class="text">{{$curr_alerte->strConduite}}</td>
-  </tr>
-  {{/foreach}}
-</table>
-{{/if}}
-{{if $alertesProfil|@count}}
-<table class="tbl">
-  <tr>
-    <th colspan="3">{{$alertesProfil|@count}} contre-indication(s) / précaution(s) d'emploi</th>
-  </tr>
-  <tr>
-    <th>Niveau</th>
-    <th>Produit</th>
-    <th>CI/PE</th>
-  </tr>
-  {{foreach from=$alertesProfil item=curr_alerte}}
-  <tr>
-    <td class="text">{{$curr_alerte->Niveau}}</td>
-    <td class="text">{{$curr_alerte->Libelle}}</td>
-    <td class="text">{{$curr_alerte->LibelleMot}}</td>
-  </tr>
-  {{/foreach}}
-</table>
-{{/if}}
-{{if $alertesIPC|@count}}
-<table class="tbl">
-  <tr>
-    <th>{{$alertesIPC|@count}} incompatibilités pysico-chimiques</th>
-  </tr>
-</table>
-{{/if}}
-{{if $alertesAllergies|@count}}
-<table class="tbl">
-  <tr>
-    <th colspan="2">{{$alertesAllergies|@count}} hypersensibilités</th>
-  </tr>
-  <tr>
-    <th>Produit</th>
-    <th>Allergie</th>
-  </tr>
-  {{foreach from=$alertesAllergies item=curr_alerte}}
-  <tr>
-    <td class="text">{{$curr_alerte->Libelle}}</td>
-    <td class="text">{{$curr_alerte->LibelleAllergie}}</td>
-  </tr>
-  {{/foreach}}
-</table>
-{{/if}}
 <script type="text/javascript">
   // Preparation du formulaire
   prepareForm(document.addLine);
@@ -215,6 +206,7 @@
       minChars: 3,
       updateElement: updateFields
   } );
+  new Control.Tabs('main_tab_group');
 </script>
 {{else}}
 <form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">

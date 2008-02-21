@@ -20,7 +20,7 @@ class CLmObject extends CMbObject {
     }
     
     $this->loadRefModule(basename(dirname(__FILE__)));
-    if ($this->_ref_module) {
+    if ($this->_ref_module && false) {
       $this->CMbObject($table, $key);
     }
     

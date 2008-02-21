@@ -1,5 +1,5 @@
 <?php
-$locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';
+$locales['config-dPsalleOp-CActeCCAM-openline'] = 'Laisser ouvert le détail des actes';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';
 $locales['CActeCCAM-acte_id-court'] = 'Id';
@@ -75,11 +75,18 @@ $locales['CActeCCAM.one'] = 'Un acte CCAM';
 $locales['CCodable-back-'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = 'Actes exécutés';
+$locales['config-dPsalleOp-CActeCCAM'] = 'Affichage des actes';
+$locales['config-dPsalleOp-CActeCCAM-commentaire'] = 'Affichage des commentaires';
+$locales['config-dPsalleOp-CActeCCAM-modifs_compacts'] = 'Mode compact pour les modificateurs';
 $locales['config-dPsalleOp-CActeCCAM-signature'] = 'Affichage des signatures';
 $locales['config-dPsalleOp-CActeCCAM-tarif'] = 'Affichage des informations de tarification';
+$locales['config-dPsalleOp-CDossierMedical'] = 'Affichage des diagnostics';
 $locales['config-dPsalleOp-CDossierMedical-DAS'] = 'Affichage des diagnostics associés';
+$locales['config-dPsalleOp-COperation'] = 'Interventions';
+$locales['config-dPsalleOp-COperation-mode'] = 'Affichage des interventions par';
 $locales['mod-dPsalleOp-tab-vw_operations'] = 'Salle d\'opération';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = 'Salle de reveil';
+$locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';
 $locales['mod-dPsalleOp-tab-vw_urgences'] = 'Liste des urgences';
 $locales['pref-ccam_consultation-0'] = 'Cacher';
 $locales['pref-ccam_consultation-1'] = 'Visible';

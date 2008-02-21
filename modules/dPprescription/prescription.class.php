@@ -20,7 +20,8 @@ class CPrescription extends CMbObject {
   var $object_id    = null;
   
   // Object References
-  var $_ref_object = null;
+  var $_ref_object  = null;
+  var $_ref_patient = null;
   
   // BackRefs
   var $_ref_prescription_lines = null;
@@ -61,6 +62,8 @@ class CPrescription extends CMbObject {
     $this->_ref_praticien->load($this->praticien_id);
     $this->_ref_object = new $this->object_class();
     $this->_ref_object->load($this->object_id);
+    $this->_ref_patient = new CPatient();
+    $this->_ref_patient->load($this->_ref_object->patient_id);
   }
   
   function loadRefsLines() {

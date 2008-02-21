@@ -91,7 +91,7 @@ $smarty->assign("alertesIPC"         , $alertesIPC);
 $smarty->assign("alertesProfil"      , $alertesProfil);
 
 $smarty->assign("prescription", $prescription);
-$smarty->assign("listPrats", $listPrats);
+$smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listProduits", $listProduits);
 
 $smarty->display("inc_vw_prescription.tpl");

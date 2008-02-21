@@ -7,26 +7,23 @@
  *  @author Romain Ollivier
  */
 
-global $can, $dialog;
+global $AppUI, $can, $m;
+
 $can->needsRead();
 
-$filter = new CPrescription();
-$filter->prescription_id = mbGetValueFromGetOrSession("prescription_id");
-$filter->object_class    = mbGetValueFromGetOrSession("object_class", "CSejour");
-$filter->object_id       = mbGetValueFromGetOrSession("object_id");
-$filter->loadRefsFwd();
-$filter->_ref_object->loadRefsFwd();
+$prescription_id = mbGetValueFromGetOrSession("prescription_id");
 
-// Chargement de la prescription demandé
+// Liste des alertes
+$alertesAllergies    = array();
+$alertesInteractions = array();
+$alertesIPC          = array();
+$alertesProfil       = array();
+
+// Chargement de la catégorie demandé
 $prescription = new CPrescription();
-$prescription->load($filter->_id);
+$prescription->load($prescription_id);
 
-if (!$prescription->_id) {
-  $prescription->object_class = $filter->object_class;
-  $prescription->object_id    = $filter->object_id;
-}
-
-if ($prescription->object_id) {
+if($prescription->object_id) {
   $prescription->loadRefsFwd();
   $prescription->_ref_object->loadRefSejour();
   $prescription->_ref_object->loadRefPatient();
@@ -36,25 +33,15 @@ if ($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
   $prescription->_ref_object->loadRefsPrescriptions();
-}
-
-// Liste des alertes
-$listProduits = array();
-$alertesAllergies    = array();
-$alertesInteractions = array();
-$alertesIPC          = array();
-$alertesProfil       = array();
-if ($prescription->_id) {
-  // Chargement des lignes
   $prescription->loadRefsLines();
   
-  // Gestion des alertes
+  // Calcul des alertes
   $allergies    = new CBcbControleAllergie();
   $interactions = new CBcbControleInteraction();
   $IPC          = new CBcbControleIPC();
   $profil       = new CBcbControleProfil();
   $profil->setPatient($prescription->_ref_object->_ref_patient);
-  foreach ($prescription->_ref_prescription_lines as &$line) {
+  foreach($prescription->_ref_prescription_lines as &$line) {
     // Chargement de la posologie
     $line->_ref_produit->loadRefPosologies();
     // Ajout des produits pour les alertes
@@ -67,26 +54,7 @@ if ($prescription->_id) {
   $alertesInteractions = $interactions->getInteractions();
   $alertesIPC          = $IPC->getIPC();
   $alertesProfil       = $profil->getProfil();
-  foreach ($prescription->_ref_prescription_lines as &$line) {
-    $line->checkAllergies($alertesAllergies);
-    $line->checkInteractions($alertesInteractions);
-    $line->checkIPC($alertesIPC);
-    $line->checkProfil($alertesProfil);
-  }
-
-  // Liste des produits les plus prescrits
-  $favoris = CBcbProduit::getFavoris($prescription->praticien_id);
-  foreach ($favoris as $curr_fav) {
-    $produit = new CBcbProduit();
-    $produit->load($curr_fav["code_cip"]);
-    $listProduits[] = $produit;
-  }
 }
-
-// Liste des praticiens
-$user = new CMediusers();
-$listPrats = $user->loadPraticiens(PERM_EDIT);
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -96,16 +64,6 @@ $smarty->assign("alertesInteractions", $alertesInteractions);
 $smarty->assign("alertesIPC"         , $alertesIPC);
 $smarty->assign("alertesProfil"      , $alertesProfil);
 
-$smarty->assign("prescription", $prescription);
-$smarty->assign("filter"      , $filter);
-$smarty->assign("listPrats"   , $listPrats);
-$smarty->assign("listProduits", $listProduits);
-
-if($dialog == 1) {
-  $smarty->display("vw_edit_prescription_popup.tpl");
-} else {
-  $smarty->display("vw_edit_prescription.tpl");
-  
-}
+$smarty->display("vw_full_alertes.tpl");
 
 ?>

@@ -191,14 +191,17 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
   "tag_dossier"         => "",
 );
 
-$dPconfig["dPsalleOp"] = array( 
+$dPconfig["dPsalleOp"] = array(
+  "COperation" => array(
+	  "mode" => "0",
+	),
   "CActeCCAM" => array(
 	  "tarif" => "0",
 	  "signature" => "0",
+	  "openline" => "0",
 	  "modifs_compacts" => "0",
 	  "commentaire" => "1",
 	),
-
 	"CDossierMedical" => array (
     "DAS" => "0",
   ),

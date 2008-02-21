@@ -66,10 +66,17 @@ function reloadPersonnel(operation_id){
 }
 
 function pageMain() {
+
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
   PairEffect.initGroup("acteEffect");
+  {{/if}}
   
   var url = new Url;
+  {{if $dPconfig.dPsalleOp.COperation.mode}}
+  url.setModuleAction("dPsalleOp", "httpreq_liste_op_prat");
+  {{else}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_plages");
+  {{/if}}
   url.addParam("date", "{{$date}}");
   url.addParam("operation_id", "{{$selOp->_id}}");
   url.periodicalUpdate('listplages', { frequency: 90 });
@@ -129,7 +136,7 @@ function reloadAfterSaveDoc() {
         {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
         <tr>
           <th class="title" colspan="2">
-			      <button class="hslip" id="listplages-trigger" type="button" style="float:left">
+			      <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
 			        {{tr}}Programme{{/tr}}
 			      </button>
 					  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">

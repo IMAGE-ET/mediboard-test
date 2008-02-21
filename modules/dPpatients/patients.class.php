@@ -122,6 +122,7 @@ class CPatient extends CMbObject {
   var $_tel45       = null;
   var $_age         = null;
   var $_article     = null;
+  var $_longview    = null;
   
   // Vitale
   var $_bind_vitale = null;
@@ -217,9 +218,9 @@ class CPatient extends CMbObject {
     
     
     if($dPconfig["dPpatients"]["CPatient"]["date_naissance"]){
-      $specs["naissance"]         = "notNull birthDate confidential";
+      $specs["naissance"]         = "notNull birthDate";
     } else {
-      $specs["naissance"]         = "birthDate confidential";  
+      $specs["naissance"]         = "birthDate";  
     }
     
     $specs["rques"]             = "text";
@@ -496,7 +497,8 @@ class CPatient extends CMbObject {
       $this->_article = "Mademoiselle";
     }  
       
-    $this->_view = $this->_shortview." $this->nom $this->prenom";
+    $this->_view     = $this->_shortview." $this->nom $this->prenom";
+    $this->_longview = $this->_article." $this->nom $this->prenom";
     
     // Navigation fields
     global $AppUI;

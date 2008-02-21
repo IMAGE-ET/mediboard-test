@@ -5,6 +5,27 @@
 
 <table class="form">
 
+  {{assign var="class" value="COperation"}}
+  
+  <tr>
+    <th class="category" colspan="6">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+  </tr>
+  
+  {{assign var="var" value="mode"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]_1">Praticien</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]_0">Salle</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+
   {{assign var="class" value="CActeCCAM"}}
   
   <tr>
@@ -12,6 +33,21 @@
   </tr>
   
   {{assign var="var" value="tarif"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]_1">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]_0">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+  
+  {{assign var="var" value="openline"}}
   <tr>
     <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">

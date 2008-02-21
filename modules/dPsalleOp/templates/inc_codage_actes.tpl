@@ -16,7 +16,10 @@ function setToNow(element) {
   
 }
 
+{{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
 PairEffect.initGroup("acteEffect");
+{{/if}}
+
 </script>
 
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
@@ -110,7 +113,7 @@ PairEffect.initGroup("acteEffect");
       </td>
     </tr>
   
-    <tbody class="acteEffect" id="acte{{$key}}" style="display: none;">
+    <tbody class="acteEffect" id="acte{{$key}}" {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}style="display: none;"{{/if}}>
     
     <!-- Ligne cosmétique -->
     <tr class="{{$key}}">
@@ -226,7 +229,7 @@ PairEffect.initGroup("acteEffect");
     {{/if}}
     
     <!-- Buttons -->
-    {{if $newButtons && $acte->_id}}
+    {{if $newButtons && $acte->_id && !$dPconfig.dPsalleOp.CActeCCAM.openline}}
     {{if $can->edit || $modif_operation}}
     <tr>
       <td class="button" colspan="4">
@@ -248,6 +251,19 @@ PairEffect.initGroup("acteEffect");
     <tr>
       <td colspan="10" class="text">
         {{if $acte->_id}}
+        {{if $newButtons && $dPconfig.dPsalleOp.CActeCCAM.openline}}
+        {{if $can->edit || $modif_operation}}
+        <div style="float: right;">
+        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {
+        		onComplete: function() {
+        	    ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})
+        	} 
+        })">
+          {{tr}}Modify{{/tr}} cet acte
+        </button>
+        </div>
+        {{/if}}
+        {{/if}}
         
         <select name="{{$view}}"
           onchange="setAssociation(this.value, document.forms['formActe-{{$view}}'], {{$subject->_id}}, {{$subject->_praticien_id}})">
@@ -263,7 +279,7 @@ PairEffect.initGroup("acteEffect");
         
         <strong>
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-          &mdash; {{$acte->_tarif|string_format:"%.2f"}} €
+          &mdash; {{$acte->_tarif|string_format:"%.2f"}} &euro;
         {{/if}}
         </strong>
 

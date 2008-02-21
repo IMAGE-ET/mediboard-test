@@ -258,14 +258,8 @@ class CCodeCCAM {
     $query = $ds->prepare($query, $this->code);
     $result = $ds->exec($query);
     while($obj = $ds->fetchObject($result)) {
-      // Test si l'activité 1 est virtuelle
-      $virtuelle = true;
-      $virtuelle &= $this->chapitres[1]["rang"] == "18.01.";
-      $virtuelle &= $obj->numero == 1;
-      if(!$virtuelle) {
-        $obj->libelle = "";
-        $this->activites[$obj->numero] = $obj;
-      }
+      $obj->libelle = "";
+      $this->activites[$obj->numero] = $obj;
     }
     // Libellés des activités
     foreach($this->remarques as $remarque) {
@@ -288,8 +282,19 @@ class CCodeCCAM {
       $this->getModificateursFromActivite($activite);
       $this->getPhasesFromActivite($activite);
     }
+    // Test de la présence d'activité virtuelle
+    if(isset($this->activites[1]) && isset($this->activites[4])) {
+      if(isset($this->activites[1]->phases[0]) && isset($this->activites[4]->phases[0])) {
+        if($this->activites[1]->phases[0]->tarif && !$this->activites[4]->phases[0]->tarif) {
+          unset($this->activites[4]);
+        }
+        if(!$this->activites[1]->phases[0]->tarif && $this->activites[4]->phases[0]->tarif) {
+          unset($this->activites[1]);
+        }
+      }
+    }
     $this->_default = reset($this->activites);
-    if($this->_default->phases){
+    if(isset($this->_default->phases[0])){
       $this->_default = $this->_default->phases[0]->tarif;
     } else {
     	$this->_default = 0;

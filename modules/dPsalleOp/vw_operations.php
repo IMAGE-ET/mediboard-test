@@ -16,10 +16,11 @@ $can->needsRead();
 $listPersAideOp = array();
 $listPersPanseuse = array();
 
-$salle = mbGetValueFromGetOrSession("salle");
-$op    = mbGetValueFromGetOrSession("op");
-$date  = mbGetValueFromGetOrSession("date", mbDate());
-$date_now = mbDate();
+$ptaticien_id = mbGetValueFromGetOrSession("praticien_id");
+$salle        = mbGetValueFromGetOrSession("salle");
+$op           = mbGetValueFromGetOrSession("op");
+$date         = mbGetValueFromGetOrSession("date", mbDate());
+$date_now     = mbDate();
 $modif_operation = $date>=$date_now;
 
 // Tableau d'affectations
