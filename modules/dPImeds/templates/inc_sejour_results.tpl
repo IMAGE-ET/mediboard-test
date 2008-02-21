@@ -1,5 +1,18 @@
+<script type="text/javascript">
+
+Main.add(function() {
+  var oForm = document.Imeds_sejour_form;
+  oForm.submit();
+} );
+
+</script>
+
+<form target="Imeds-sejour" name="Imeds_sejour_form" action="{{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$sejour->_num_dossier}}" method="post">
+  <input type="hidden" name="login" value="{{$idImeds.login}}" />
+  <input type="hidden" name="password" value="{{$idImeds.password}}" />
+</form>
+
 <iframe 
-  src="{{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$sejour->_num_dossier}}&amp;login={{$idImeds.login}}&amp;password={{$idImeds.password}}" 
   id="Imeds-sejour" 
   name="Imeds-sejour" 
   onload="ViewPort.SetFrameHeight(this)"
