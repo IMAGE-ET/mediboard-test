@@ -116,8 +116,9 @@ function pageMain() {
   
   // Chargement pour le sejour
   reloadDossierMedicalSejour();
-  
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
   PairEffect.initGroup("acteEffect");
+  {{/if}}
   
   {{if $consult->consultation_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });

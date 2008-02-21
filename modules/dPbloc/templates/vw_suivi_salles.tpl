@@ -2,7 +2,9 @@
 
 function pageMain() {
   regRedirectPopupCal("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
   PairEffect.initGroup("acteEffect");
+  {{/if}}
 }
 
 function printFeuilleBloc(oper_id) {

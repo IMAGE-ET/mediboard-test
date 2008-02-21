@@ -6,7 +6,9 @@
 
 <script type="text/javascript">
 function pageMain() {
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
   PairEffect.initGroup("acteEffect");
+  {{/if}}
 }
 </script>
 

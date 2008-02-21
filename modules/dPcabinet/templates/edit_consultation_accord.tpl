@@ -64,8 +64,9 @@ function updateList() {
 
 function pageMain() {
   updateList();
-  
+  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
   PairEffect.initGroup("acteEffect");
+  {{/if}}
   
   {{if $consult->_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
