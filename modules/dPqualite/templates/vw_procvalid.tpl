@@ -26,6 +26,15 @@ function validDoc(oForm){
   }
 }
 
+function validDocDirect(oForm){
+  if(oForm.elements["formfile"].value == ""){
+    alert("Veuillez selectionner un fichier");
+    oForm.elements["formfile"].focus();
+  }else{
+    validDoc(oForm);
+  }
+}
+
 function refuseDoc(oForm){
   if(oForm.elements["suivi[remarques]"].value == ""){
     alert("{{tr}}msg-CDocGed-refusdoc{{/tr}}");

@@ -65,9 +65,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       }      
     }
     
-    $demande_redac = $this->_objBefore->etat == CDocGed::DEMANDE && $this->_obj->etat == CDocGed::REDAC;
-
-    if($demande_redac && !$this->_objBefore->num_ref){
+    if($this->_objBefore->group_id && $this->_obj->doc_chapitre_id && $this->_obj->doc_categorie_id && !$this->_objBefore->num_ref){
       // Nouvelle Procédure
       $this->_obj->version = 1;
       if($this->_obj->num_ref) {

@@ -165,6 +165,10 @@
       <button class="trash" type="button" onclick="confirmDeletion(this.form, {typeName:'{{tr escape="javascript"}}CDocGed.one{{/tr}}',objName:'{{$info_proc|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}
       </button>
+      <br />
+      <button class="tick" type="button" onclick="validDocDirect(this.form);">
+        {{tr}}button-CDocGed-valid{{/tr}}
+      </button>
     </td>
   </tr>
 </table>

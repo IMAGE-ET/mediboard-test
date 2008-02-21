@@ -738,7 +738,6 @@ class CMbObject {
   
   function log($objBefore) {
   	global $AppUI;
-
     // Si object non loggable
     if (!$this->_spec->loggable){
       return;
@@ -754,7 +753,6 @@ class CMbObject {
         }
       }
     }
-    
     $object_id = $this->_id;
     
     $type = "store";
@@ -773,7 +771,8 @@ class CMbObject {
       return;
     }
     
-    if(CModule::getInstalled("system")->mod_version < "1.0.4"){
+    $system_version = explode(".", CModule::getInstalled("system")->mod_version);
+    if($system_version[0] == 1 && $system_version[1] == 0 && $system_version[2] < 4){
       return;	
     }
     
