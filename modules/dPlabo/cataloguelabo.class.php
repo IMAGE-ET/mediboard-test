@@ -17,6 +17,7 @@ class CCatalogueLabo extends CMbObject {
   // DB fields
   var $identifiant = null;
   var $libelle     = null;
+  var $function_id = null;
   
   // Fwd References
   var $_ref_pere = null;
@@ -103,7 +104,8 @@ class CCatalogueLabo extends CMbObject {
     return array (
       "pere_id"     => "ref class|CCatalogueLabo",
       "identifiant" => "str maxLength|10 notNull",
-      "libelle"     => "str notNull"
+      "libelle"     => "str notNull",
+      "function_id" => "ref class|CFunctions"
     );
   }
   
