@@ -131,25 +131,45 @@ class CTemplateManager {
     }
   }
   
+  
   function loadHelpers($user_id, $modeleType) {
-    if ($modeleType){
-      $object = new $modeleType;
+    global $dPconfig;
+    $compte_rendu = new CCompteRendu();
+  	
+    // Chargement de l'utilisateur courant
+    $currUser = new CMediusers();
+    $currUser->load($user_id);
+    
+    $aidesUser = array();
+    $aidesFunc = array();
+    
+    $order = "name";
+    // Where user_id
+    $whereUser = array();
+    $whereUser["user_id"] = $compte_rendu->_spec->ds->prepare("= %", $user_id);
+    $whereUser["class"]   = $compte_rendu->_spec->ds->prepare("= %", $compte_rendu->_class_name);
+    // Where function_id
+    $whereFunc = array();
+    $whereFunc["function_id"] = $compte_rendu->_spec->ds->prepare("= %", $currUser->function_id);
+    $whereFunc["class"]       = $compte_rendu->_spec->ds->prepare("= %", $compte_rendu->_class_name);
+    
+    $aide = new CAideSaisie();
+    // Chargement des aides
+    $aidesUser = $aide->loadList($whereUser,$order);
+    $aidesFunc = $aide->loadList($whereFunc,$order);
+    
+    $this->helpers["Aide de l'utilisateur"] = "";
+    foreach($aidesUser as $aideUser){
+    	if($aideUser->depend_value == $modeleType){
+    	  $this->helpers[$aideUser->name] = $aideUser->text;
+    	}
     }
-    if(isset($object)) {
-      $object->loadAides($user_id);
-      if(is_array($helpers = @$object->_aides["compte_rendu"]["no_enum"])) {
-        // Caution, keys and values have to been flipped out
-        $valuesHelpers = array();
-        foreach($helpers as $listHelpers){
-          if(is_array($listHelpers)){
-            $valuesHelpers = array_merge($valuesHelpers,$listHelpers);
-          }
-        }
-        $this->helpers = array_flip($valuesHelpers);
-      }
-    } else {
-      $this->helpers = array();
-    }
+    $this->helpers["Aide de la fonction"] = "";
+    foreach($aidesFunc as $aideFunc){
+    	if($aideFunc->depend_value == $modeleType){
+    	  $this->helpers[$aideFunc->name] = $aideFunc->text;
+    	} 
+   }
   }
   
   function renderDocument($source) {

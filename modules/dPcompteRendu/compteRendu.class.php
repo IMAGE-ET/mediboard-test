@@ -55,6 +55,12 @@ class CCompteRendu extends CMbMetaObject {
     return $specs;
   }
 
+  function getHelpedFields(){
+    return array(
+      "source" => "object_class"
+    );
+  }
+  
   function loadModeles($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!isset($where["object_id"])) {
       $where["object_id"] = "IS NULL";

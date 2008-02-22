@@ -79,10 +79,18 @@ oMbCombo.options = aOptions;
 aMbCombos.push(oMbCombo);
 
 {{foreach from=$templateManager->helpers key=helperName item=helperText}}
+  {{if $helperText == ""}}
   aOptions.push( { 
-    view: "{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}" ,
+    view: "<b>{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</b>" ,
+    item: ""
+    });
+  {{else}}  
+  
+  aOptions.push( { 
+    view: "<span style='padding-left: 1em;'>{{$helperName|smarty:nodefaults|escape:"htmlall"|escape:"javascript"}}</span>" ,
     item: "{{$helperText|smarty:nodefaults|escape:"htmlall"|nl2br|escape:"javascript"}}"
     });
+  {{/if}}
 {{/foreach}}
 
 aToolbarSet = FCKConfig.ToolbarSets["Default"];
