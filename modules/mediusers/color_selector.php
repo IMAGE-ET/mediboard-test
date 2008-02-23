@@ -14,8 +14,8 @@ $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 		<td valign="top">
 			<strong><?php echo $AppUI->_('Color Selector');?></strong>
 		</td>
-	<form>
 		<td align="right" valign="bottom">
+		<form>
 		<!-- CUSTOMISE THE FOLLOWING COLOURS AND PRESET NAMES FOR YOUR ORGANISATIONAL NEEDS -->
 			<select name="" class="text" onchange="javascript:setClose(this.options[this.selectedIndex].value)">
 				<option value="0">- - <?php echo $AppUI->_('Preset');?> - -</option>
@@ -26,8 +26,8 @@ $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 				<option value="FF0000" />Research</option>
 				<option value="33FF00" />Testing</option>
 			</select>
+		</form>
 		</td>
-	</form>
 	</tr>
 	<tr>
 		<td colspan="2">
@@ -37,9 +37,7 @@ $callback = isset( $_GET['callback'] ) ? $_GET['callback'] : 0;
 		</td>
 	</tr>
 	<tr>
-		<td colspan="2" align="left"><font size="1" face="trebuchetms,verdana,arial">
-			<?php echo $AppUI->_('colorLegend');?></p>
-		</td>
+		<td colspan="2" align="left"><?php echo $AppUI->_('colorLegend');?></td>
 	</tr>
 </table>
 <map name="map_webpal">

@@ -196,7 +196,7 @@ $dPconfig = $mbConfig->values;
 
   <tr>
     <th><label for="hide_confidential" title="Brouiller les données confidentielles. Utiles pour le monde de démonstration">Brouiller les données confidentielles ?</label></th>
-    <td><input type="hide_confidential" size="40" name="hide_confidential" value="<?php echo $dPconfig['hide_confidential'] ?>" /></td>
+    <td><input type="text" size="40" name="hide_confidential" value="<?php echo $dPconfig['hide_confidential'] ?>" /></td>
   </tr>
 
   <tr>

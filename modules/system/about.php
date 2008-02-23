@@ -34,7 +34,7 @@ function pageMain() {
 <div class="about" id="div1">
   <div class="text">
     <h2>Présentation</h2>
-    <a href="http://www.mediboard.org/" title="Site du projet Mediboard" targer="_blank">Mediboard</a>
+    <a href="http://www.mediboard.org/" title="Site du projet Mediboard" target="_blank">Mediboard</a>
     est un <strong>système web open source de gestion d'établissement de santé</strong>.
     Il se définit plus précisément comme un <strong>SIH</strong> (Système d'Information Hospitalier)
     c'est-à-dire un PGI (Progiciel de Gestion Integré) adapté aux <strong>établissements de santé de toute taille</strong>,
