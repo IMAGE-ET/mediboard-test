@@ -20,7 +20,8 @@ class CCatalogueLabo extends CMbObject {
   var $function_id = null;
   
   // Fwd References
-  var $_ref_pere = null;
+  var $_ref_pere     = null;
+  var $_ref_function = null;
   
   // Back references
   var $_ref_examens_labo = null;
@@ -103,9 +104,9 @@ class CCatalogueLabo extends CMbObject {
   function getSpecs() {
     return array (
       "pere_id"     => "ref class|CCatalogueLabo",
+      "function_id" => "ref class|CFunctions",
       "identifiant" => "str maxLength|10 notNull",
-      "libelle"     => "str notNull",
-      "function_id" => "ref class|CFunctions"
+      "libelle"     => "str notNull"
     );
   }
   
@@ -137,9 +138,17 @@ class CCatalogueLabo extends CMbObject {
       $this->_ref_pere->load($this->pere_id);
     }
   }
+  
+  function loadRefFunction() {
+    if(!$this->_ref_function) {
+      $this->_ref_function = new CFunctions();
+      $this->_ref_function->load($this->function_id);
+    }
+  }
 
   function loadRefsFwd() {
     $this->loadParent();
+    $this->loadRefFunction();
   }
 
   function loadSections() {
@@ -160,6 +169,7 @@ class CCatalogueLabo extends CMbObject {
   function loadRefsDeep($n = 0) {
     $this->_level = $n;
     $this->loadParent();
+    $this->loadExternal();
     $this->_count_examens_labo = $this->countBackRefs("examens_labo");
     $this->_total_examens_labo = $this->_count_examens_labo;
     $this->loadSections();
@@ -168,6 +178,18 @@ class CCatalogueLabo extends CMbObject {
       $_catalogue->_ref_pere =& $this;
       $_catalogue->loadRefsDeep($this->_level + 1);
       $this->_total_examens_labo += $_catalogue->_total_examens_labo;
+    }
+  }
+  
+  function getPerm($perm_type) {
+    if($this->function_id && !$this->pere_id) {
+      $this->loadRefFunction();
+      return $this->_ref_function->getPerm($perm_type);
+    } elseif($this->pere_id) {
+      $this->loadParent();
+      return $this->_ref_pere->getPerm($perm_type);
+    } else {
+      return true;
     }
   }
 }

@@ -14,13 +14,20 @@ $can->needsRead();
 $catalogue_labo_id = mbGetValueFromGetOrSession("catalogue_labo_id");
 $typeListe  = mbGetValueFromGetOrSession("typeListe");
 
+// Liste des fonctions disponibles
+$functions = new CFunctions();
+$order = "text";
+$functions = $functions->loadListWithPerms(PERM_EDIT, null, $order);
+
 // Chargement du catalogue demandé
 $catalogue = new CCatalogueLabo;
 $catalogue->load($catalogue_labo_id);
 $catalogue->loadRefs();
 
 // Chargement de tous les catalogues
-$where = array("pere_id" => "IS NULL");
+$where = array();
+$where["pere_id"] = "IS NULL";
+$where[] = "function_id IS NULL OR function_id ".$catalogue->_spec->ds->prepareIn(array_keys($functions));
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
 foreach($listCatalogues as &$_catalogue) {

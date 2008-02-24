@@ -39,13 +39,24 @@ $catalogue->loadRefs();
 $groups = CGroups::loadGroups();
 foreach ($groups as &$group) {
   $group->loadFunctions(null);
-  foreach ($group->_ref_functions as $function) {
-    $function->loadRefsUsers();
+  foreach ($group->_ref_functions as $keyFunc => &$function) {
+    if($function->getPerm(PERM_EDIT)) {
+      $function->loadRefsUsers();
+    } else {
+      unset($group->_ref_functions[$keyFunc]);
+    }
   }
 }
 
+// Liste des fonctions disponibles
+$functions = new CFunctions();
+$order = "text";
+$functions = $functions->loadListWithPerms(PERM_EDIT, null, $order);
+
 // Chargement de tous les catalogues
-$where = array("pere_id" => "IS NULL");
+$where = array();
+$where["pere_id"] = "IS NULL";
+$where[] = "function_id IS NULL OR function_id ".$catalogue->_spec->ds->prepareIn(array_keys($functions));
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
 foreach($listCatalogues as &$_catalogue) {

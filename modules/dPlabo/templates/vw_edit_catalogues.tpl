@@ -9,6 +9,18 @@ var Catalogue = {
   }
 };
 
+function checkRefFunction(pere) {
+  oForm = document.editCatalogue;
+  if(pere) {
+    oForm.function_id.value = "";
+    oForm.function_id.disabled = "disabled";
+    oForm.function_id.hide();
+  } else {
+    oForm.function_id.disabled = "";
+    oForm.function_id.show();
+  }
+}
+
 function pageMain() {
   PairEffect.initGroup('tree-content');
 }
@@ -53,19 +65,37 @@ function pageMain() {
           {{/if}}
         </tr>
 
+        {{if !$catalogue->_locked}}
         <tr>
-          <th>{{mb_label object=$catalogue field="pere_id"}}</th>
+          <th>{{mb_label object=$catalogue field="function_id"}}</th>
           <td>
-            <select name="pere_id">
-              <option value="">&mdash; Catalogue racine</option>
-              {{assign var="selected_id" value=$catalogue->pere_id}}
-              {{assign var="exclude_id" value=$catalogue->_id}}
-              {{foreach from=$listCatalogues item="_catalogue"}}
-              {{include file="options_catalogues.tpl"}}
+            <select name="function_id" {{if $catalogue->pere_id}}disabled="disabled" style="display: none;"{{/if}}>
+              <option value="">&mdash; Toutes</option>
+              {{foreach from=$functions item="_function"}}
+              <option value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected="selected"{{/if}}>
+                {{$_function->_view}}
+                </option>
               {{/foreach}}
             </select>
           </td>
         </tr>
+
+        <tr>
+          <th>{{mb_label object=$catalogue field="pere_id"}}</th>
+          <td>
+            <select name="pere_id" onchange="checkRefFunction(this.value);">
+              <option value="">&mdash; Catalogue racine</option>
+              {{assign var="selected_id" value=$catalogue->pere_id}}
+              {{assign var="exclude_id" value=$catalogue->_id}}
+              {{foreach from=$listCatalogues item="_catalogue"}}
+              {{if !$_catalogue->_locked}}
+              {{include file="options_catalogues.tpl"}}
+              {{/if}}
+              {{/foreach}}
+            </select>
+          </td>
+        </tr>
+        {{/if}}
 
         <tr>
           <th>{{mb_label object=$catalogue field="identifiant"}}</th>
