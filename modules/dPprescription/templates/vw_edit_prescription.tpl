@@ -13,14 +13,14 @@ var Prescription = {
     Prescription.addLine(code);
   },
   popup : function() {
-    if({{$prescription->_id}}) {
+    {{if $prescription->_id}}
     var url = new Url;
     url.setModuleAction("dPprescription", "vw_edit_prescription");
     url.addParam("prescription_id", {{$prescription->_id}});
     url.popup(750, 600, "prescription");
-    } else {
-      alert("vous devez ouvrir une prescription");
-    }
+    {{else}}
+    alert("vous devez ouvrir une prescription");
+    {{/if}}
   },
   close : function() {
     var url = new Url;
@@ -77,10 +77,12 @@ var Prescription = {
     {{/if}}
   },
   print: function() {
+    {{if $prescription->_id}}
     var url = new Url;
     url.setModuleAction("dPprescription", "print_prescription");
     url.addParam("prescription_id", {{$prescription->_id}});
     url.popup(700, 600, "print_prescription");
+    {{/if}}
   }
 };
 

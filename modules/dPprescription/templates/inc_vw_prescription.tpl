@@ -1,9 +1,11 @@
 <script type="text/javascript">
 function viewFullAlertes() {
+  {{if $prescription->_id}}
   var url = new Url;
   url.setModuleAction("dPprescription", "vw_full_alertes");
   url.addParam("prescription_id", {{$prescription->_id}});
   url.popup(700, 550, "Alertes");
+  {{/if}}
 }
 </script>
 
