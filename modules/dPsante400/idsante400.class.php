@@ -146,13 +146,12 @@
   }
   
   function setObject($mbObject) {
-    $object_class = get_class($mbObject);
     if (!$mbObject instanceof CMbObject) {
       trigger_error("Impossible d'associer un identifiant Santé 400 à un objet de classe '$object_class'");
     }
     
-    $this->object_class = $object_class;
-    $this->object_id = $mbObject->_id;
+    $this->object_class = $mbObject->_class_name;
+    $this->object_id    = $mbObject->_id;
   }
 }
 

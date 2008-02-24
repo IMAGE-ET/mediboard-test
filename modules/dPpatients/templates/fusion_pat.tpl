@@ -14,6 +14,7 @@ function setField(oField, sValue) {
 
 <input type="hidden" name="dosql" value="do_patients_fusion" />
 <input type="hidden" name="del" value="0" />
+<input type="hidden" name="_merging" value="1" />
 <input type="hidden" name="patient1_id" value="{{$patient1->_id}}" />
 <input type="hidden" name="patient2_id" value="{{$patient2->_id}}" />
 

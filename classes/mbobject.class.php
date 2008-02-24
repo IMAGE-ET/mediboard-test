@@ -73,6 +73,9 @@ class CMbObject {
   var $_ref_files      = array(); // Fichiers
   var $_ref_affectations_personnel  = null; 
   
+  // Behaviour fields
+  var $_merging = null;
+  
   /**
    * Constructor
    */
@@ -840,6 +843,17 @@ class CMbObject {
     return null;
   }
 
+  /**
+   * Dummy function triggering onMerge event for handlers
+   * @return void
+   */
+  function merge() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onMerge($this);
+    }
+  }
   
   /**
    * Count number back refreferecing object

@@ -144,7 +144,6 @@ class CPatient extends CMbObject {
   var $_assure_tel24       = null;
   var $_assure_tel25       = null;
   
-  
   // Navigation Fields
   var $_dossier_cabinet_url = null;
 
@@ -915,29 +914,38 @@ class CPatient extends CMbObject {
   }
   
   
-  function loadIPP(){
-  	global $dPconfig, $g;
-  	// Récuperation du tag de l'id Externe (ex: sherpa group:10)
+  function loadIPP() {
+    // Prevent loading twice
+    if ($this->_IPP) {
+      return;
+    }
     
-  	// si pas de fichier de config ==> IPP = id mediboard
-  	if(!$dPconfig["dPpatients"]["CPatient"]["tag_ipp"]){
+  	global $dPconfig, $g;
+  	$tag_ipp = $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]; 
+
+  	// Pas de tag IPP => pas d'affichage d'IPP
+  	if(!$tag_ipp) {
   		$this->_IPP = "";
     	return;
     }
-    
-    // sinon, $_IPP = valeur id400
-    // creation du tag de l'id Externe
-  	$tag = str_replace('$g',$g, $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]);
 
+    // Permettre des IPP en fonction de l'établissement
+  	$tag_ipp = str_replace('$g',$g, $tag_ipp);
+
+    // Récupération du premier IPP créé, utile pour la gestion des doublons
+    $order = "id400 ASC";
+  	
   	// Recuperation de la valeur de l'id400
   	$id400 = new CIdSante400();
-    $id400->loadLatestFor($this, $tag);
+  	$id400->setObject($this);
+  	$id400->tag = $tag_ipp;
+  	$id400->loadMatchingObject($order);
   	
     // Stockage de la valeur de l'id400
     $this->_IPP = $id400->id400;
     
     // Si pas d'id400 correspondant, on stocke "_"
-    if(!$this->_IPP){
+    if (!$this->_IPP){
     	$this->_IPP = "-";
     }
   }

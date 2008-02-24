@@ -16,6 +16,8 @@ abstract class CMbObjectHandler {
   
   function onStore(CMbObject &$mbObject) {}
   
+  function onMerge(CMbObject &$mbObject) {}
+  
   function onDelete(CMbObject &$mbObject) {}
 }
 

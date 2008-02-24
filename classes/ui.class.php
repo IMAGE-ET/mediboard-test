@@ -304,9 +304,11 @@ class CAppUI {
       return "";
     }
     
-    if (isset($GLOBALS["translate"][$str])) {
+    // Defined and not empty
+    if (isset($GLOBALS["translate"][$str]) && $GLOBALS["translate"][$str] != "") {
       return $GLOBALS["translate"][$str];
     }
+    
     return sprintf($this->locale_mask, $str);
   }
 

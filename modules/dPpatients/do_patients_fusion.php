@@ -39,25 +39,14 @@ class CDoPatientMerge extends CDoObjectAddEdit {
     
     if ($isNew) {
       $this->redirectStore .= "&patient_id=$patient_id&created=$patient_id";
-    } elseif($dialog) {
+    } 
+    elseif($dialog) {
       $this->redirectStore .= "&name=".$this->_obj->nom."&firstname=".$this->_obj->prenom;
-    }
-  }
-  
-  function doDelete() {
-    parent::doDelete();
-    
-    $dialog = dPgetParam($_POST, "dialog");
-    if($dialog) {
-      $this->redirectDelete .= "&name=".$this->_obj->nom."&firstName=".$this->_obj->prenom."&id=0";
     }
   }
 }
 
-
 $do = new CDoPatientMerge;
-
-// Test sur les Patient
 
 // Erreur sur les ID du patient
 $patient1 = new CPatient;
@@ -74,7 +63,7 @@ $do->doBind();
 
 // Création du nouveau patient
 if (intval(dPgetParam($_POST, "del"))) {
-  $do->errorRedirect("Fusion impossible");
+  $do->errorRedirect("Fusion en mode suppression impossible");
 }
 
 $do->doStore();
@@ -89,6 +78,8 @@ if ($msg = $newPatient->transferBackRefsFrom($patient1)) {
 if ($msg = $newPatient->transferBackRefsFrom($patient2)) {
   $do->errorRedirect($msg);
 }
+
+$newPatient->merge();
 
 // Suppression des anciens objets
 if ($msg = $patient1->delete()) {

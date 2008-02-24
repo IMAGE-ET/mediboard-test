@@ -103,17 +103,6 @@ function affNaissance() {
   }
 }
 
-function chgSoundex() {
-  var oForm      = document.find;
-  var oCheckSoundex = oForm.check_soundex;
-  var oSoundex = oForm.soundex;
-  if (oCheckSoundex.checked) {
-    oSoundex.value     = "on";
-  } else {
-    oSoundex.value     = "off";
-  }
-}
-
 function hideIcon(frame) {
   $("icon-" + frame).hide();
 }

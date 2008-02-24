@@ -80,6 +80,10 @@ class CSpObjectHandler extends CMbObjectHandler {
     
     // Patient
     if ($mbObject instanceof CPatient) {
+      if ($mbObject->_merging) {
+        return;
+      }
+      
       $query = "SELECT MAX(`id400`) ".
         "FROM `id_sante400`".
         "WHERE `tag` = '$id400->tag'".
@@ -111,11 +115,13 @@ class CSpObjectHandler extends CMbObjectHandler {
     $id400 = new CIdSante400;
     $id400->loadLatestFor($mbObject, "sherpa group:$g");
     if (!$id400->_id) {
-      $id400->id400 = self::makeId($mbObject);
-      $id400->last_update = mbDateTime();
-      if ($msg = $id400->store()) {
-        trigger_error("Error updating '$mbObject->_view' : $msg", E_USER_WARNING);
-        return;
+      // May not create if id should not be built (e.g. when merging)
+      if ($id400->id400 = self::makeId($mbObject)) {
+        $id400->last_update = mbDateTime();
+	      if ($msg = $id400->store()) {
+	        trigger_error("Error updating '$mbObject->_view' : $msg", E_USER_WARNING);
+	        return;
+	      }
       }
     }
       
@@ -133,9 +139,15 @@ class CSpObjectHandler extends CMbObjectHandler {
    */
   static function getId400For(CMbObject &$mbObject) {
     global $g;
+//    $id400 = new CIdSante400;
+//    $id400->loadLatestFor($mbObject, "sherpa group:$g");
+    $order = "id400 ASC";
     $id400 = new CIdSante400;
-    $id400->loadLatestFor($mbObject, "sherpa group:$g");
-    
+    $id400->tag = "sherpa group:$g";
+    $id400->object_class = $mbObject->_class_name;
+    $id400->object_id    = $mbObject->_class_id;
+    $id400->loadMatchingObject($order);
+
     // Necessary to empty values
     if ($id400->id400 === null) {
       $id400->id400 = "";
@@ -151,12 +163,12 @@ class CSpObjectHandler extends CMbObjectHandler {
    */
   static function getMbObjectFor($mbClass, $id) {
     global $g;
-    $order = "last_update DESC";
+    $order = "id400 ASC";
     $id400 = new CIdSante400;
     $id400->tag = "sherpa group:$g";
     $id400->object_class = $mbClass;
     $id400->id400 = $id;
-    $id400->loadMatchingObject();
+    $id400->loadMatchingObject($order);
     $id400->loadRefsFwd();
     return $id400->_ref_object;
   }
@@ -196,10 +208,6 @@ class CSpObjectHandler extends CMbObjectHandler {
 	      $spInstance->_id = $id400->id400;
         $spInstance->mapFrom($mbObject);
         
-//        mbDump($id400->getProps(), "SpInstance being stored");
-//        mbDump($spInstance->getProps(), "SpInstance being stored");
-//        mbDump($spInstance->_spec, "SpInstance spec");
-        
 	      // Propagated object
 	      if ($msg = $spInstance->store()) {
 	        trigger_error("Error propagating object '$spInstance->_class_name ($spInstance->_id)' : $msg", E_USER_WARNING);
@@ -209,7 +217,12 @@ class CSpObjectHandler extends CMbObjectHandler {
     }
   }
   
-  function onDelete(CMbObject &$mbObject) {}
+  function onMerge(CMbObject &$mbObject) {
+    $this->onStore($mbObject);
+  }
+  
+  function onDelete(CMbObject &$mbObject) {
+  }
 }
 
 ?>

@@ -172,7 +172,7 @@ class CSpMalade extends CSpObject {
     );
     
     $patient = $mbObject;
-        
+            
     $this->malfla = "A";
     $this->malnom = $this->makeString($patient->nom, 50);
     $this->malpre = $this->makeString($patient->prenom, 30);
@@ -223,6 +223,12 @@ class CSpMalade extends CSpObject {
     $this->asscom = $this->makeString(@$parts[2], 25);
     $this->asspos = $patient->assure_cp;
     $this->assvil = $this->makeString($patient->assure_ville, 25);
+    
+    // Information sur doublons
+    $patient->loadIPP();
+    if ($patient->_IPP != $this->_id) {
+      $this->maltel = "DOUBLON-$patient->_IPP";  
+    }
     
     $this->datmaj = mbDateToLocale(mbDateTime());    
   }

@@ -1,13 +1,4 @@
-<!-- $Id$ -->
-
-<script type="text/javascript">
-
-function chgSoundex() {
-  var oForm = document.find;
-  oForm.soundex.value = oForm.check_soundex.value ? "on" : "off";
-}
-
-</script>
+{{* $Id$ *}}
 
 <table class="main">
   <tr>

@@ -7,10 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m;
-
-$dialog = mbGetValueFromGet("dialog");
-
+global $can;
 $can->needsRead();
 
 $canSante400 = CModule::getCanDo("dPsante400");
@@ -32,11 +29,10 @@ $filter->id400        = mbGetValueFromGet("id400");
 $filter->nullifyEmptyFields();
 
 // Rester sur le même filtre en mode dialogue
+$dialog = mbGetValueFromGet("dialog");
 if ($dialog && $idSante400->_id) {
   $filter->object_class = $idSante400->object_class;
   $filter->object_id    = $idSante400->object_id   ;
-  $filter->tag          = $idSante400->tag;
-  $filter->id400        = $idSante400->id400;   
 }
 
 // Chargement de la cible si oBjet unique

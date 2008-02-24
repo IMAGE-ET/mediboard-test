@@ -18,6 +18,8 @@ var Patient = {
     url.setModuleTab("dPpatients", "vw_edit_patients");
     url.addParam("patient_id", 0);
     url.addParam("useVitale", {{$useVitale|json}});
+    url.addParam("name", {{$nom|json}});
+    url.addParam("firstName", {{$prenom|json}});
     url.redirect();
   }
 }
