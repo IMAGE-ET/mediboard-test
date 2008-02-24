@@ -145,7 +145,7 @@ class CSpObjectHandler extends CMbObjectHandler {
     $id400 = new CIdSante400;
     $id400->tag = "sherpa group:$g";
     $id400->object_class = $mbObject->_class_name;
-    $id400->object_id    = $mbObject->_class_id;
+    $id400->object_id    = $mbObject->_id;
     $id400->loadMatchingObject($order);
 
     // Necessary to empty values
