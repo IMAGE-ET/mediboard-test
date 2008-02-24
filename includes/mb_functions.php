@@ -665,9 +665,8 @@ function getInstalledClasses($properties = array()) {
     	continue;
     }
 
-    // Instanciation escapée
-    // au cas ou on ne peut pas le faire
-    $object = new $class;
+    // Instanciation escapée au cas où cela génère des erreurs liées au DSN
+    $object = @new $class;
     // On test si on a réussi à l'instancier
     if(!$object->_class_name) {
       unset($listClasses[$key]);
