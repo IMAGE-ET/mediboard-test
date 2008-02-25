@@ -110,8 +110,7 @@
   {{/if}}
   
   {{assign var="module" value="dPcabinet"}}
-  <!-- Préférences pour le module {{$module}} -->
-  {{if $prefsUser.$module}}  
+  {{if $prefsUser.$module}}
   
   {{assign var="var" value="AFFCONSULT"}}
   <tr>
@@ -220,8 +219,10 @@
       </select>
     </td>
   </tr>
+  {{/if}}
   
   {{assign var="module" value="dPhospi"}}
+  {{if $prefsUser.$module}}
   <tr>
     <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
   </tr>
@@ -237,8 +238,10 @@
       </select>
     </td>
   </tr>
-
+  {{/if}}
+  
   {{assign var="module" value="dPcabinet"}}
+  {{if $prefsUser.$module}}
   
   <tr>
     <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}} - Anesth</th>
@@ -259,7 +262,6 @@
   {{/if}}
 
   {{assign var="module" value="system"}}
-  <!-- Préférences pour le module {{$module}} -->
   {{if $prefsUser.$module}}  
   <tr>
     <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
@@ -280,7 +282,6 @@
   {{/if}}
   
   {{assign var="module" value="dPplanningOp"}}
-  <!-- Préférences pour le module {{$module}} -->
   {{if $prefsUser.$module}}  
   <tr>
     <th class="category" colspan="2">{{tr}}module-{{$module}}-long{{/tr}}</th>
