@@ -143,12 +143,14 @@ foreach($listDays as $keyDate=>$valDate){
  
   // Détermination des bornes de chaque plage
   foreach($listPlages[$keyDate] as $plage){
-     $plage->loadRefsBack();
+    $plage->loadRefsBack();
+    $plage->debut = mbTimeGetNearestMinsWithInterval($plage->debut, CPlageconsult::$minutes_interval);
+    $plage->fin   = mbTimeGetNearestMinsWithInterval($plage->fin  , CPlageconsult::$minutes_interval);
     $plage->fin = min($plage->fin, $max);
     $plage->debut = max($plage->debut, $min);
     $plage->updateFormFields();
   
-    if($plage->debut >= $plage->fin){  
+    if($plage->debut >= $plage->fin){
       unset($listPlages[$keyDate][$plage->_id]);
     }
   }

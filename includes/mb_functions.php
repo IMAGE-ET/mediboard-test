@@ -290,6 +290,20 @@ function mbTimeCountIntervals($reference, $relative, $interval) {
   
 }
 
+function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
+  $min_reference = mbTranformTime(null, $reference, "%M");
+  $div = intval($min_reference / $mins_interval);
+  $borne_inf = $mins_interval * $div;
+  $borne_sup = $mins_interval * ($div + 1);
+  $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? $borne_inf : $borne_sup;
+  if($mins_replace == 60) {
+    $reference = str_pad(mbTranformTime(null, $reference, "%H")+1, 2, "0").":00:00";
+  } else {
+    $reference = str_pad(mbTranformTime(null, $reference, "%H"), 2, "0").":".str_pad($mins_replace, 2, "0").":00";
+  }
+  return $reference;
+}
+
 /**
  * Adds a relative time to a reference time
  * @return string: the resulting time */

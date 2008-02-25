@@ -28,14 +28,14 @@ class CPlageconsult extends CMbObject {
   var $libelle = null;
 
   // Form fields
-  var $_hour_deb = null;
-  var $_min_deb  = null;
-  var $_hour_fin = null;
-  var $_min_fin  = null;
-  var $_freq     = null;
-  var $_affected = null;
-  var $_total    = null;
-  var $_fill_rate= null;
+  var $_hour_deb  = null;
+  var $_min_deb   = null;
+  var $_hour_fin  = null;
+  var $_min_fin   = null;
+  var $_freq      = null;
+  var $_affected  = null;
+  var $_total     = null;
+  var $_fill_rate = null;
 
   // Object References
   var $_ref_chir          = null;
