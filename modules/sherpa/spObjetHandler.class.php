@@ -162,6 +162,10 @@ class CSpObjectHandler extends CMbObjectHandler {
    * @return int $id
    */
   static function getMbObjectFor($mbClass, $id) {
+    if (!$id) {
+      return new $mbClass;
+    }
+    
     global $g;
     $order = "id400 ASC";
     $id400 = new CIdSante400;

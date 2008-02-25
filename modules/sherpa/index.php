@@ -18,6 +18,7 @@ $module->registerTab("view_entccam" , null, TAB_READ);
 $module->registerTab("view_detccam" , null, TAB_READ);
 $module->registerTab("view_detcim"  , null, TAB_READ);
 $module->registerTab("export_actes" , null, TAB_EDIT);
+$module->registerTab("import_actes" , null, TAB_EDIT);
 $module->registerTab("view_idsherpa", null, TAB_EDIT);
 
 ?>

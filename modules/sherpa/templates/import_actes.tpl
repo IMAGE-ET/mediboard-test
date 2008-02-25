@@ -6,6 +6,19 @@
   <pre>CODPRA|CODACT|ACTIV|PHASE|MOD1|MOD2|MOD3|MOD4|ASSOC|DEPHON|DATEACT|EXTDOC|REMBEX|CODSIG</pre>
 </div>
 
+<div class="big-info">
+  Exemple complet de passage de paramètres à la requête HTTP GET :
+  <pre>
+m=sherpa
+a=import_actes
+numdos=800008
+actes[60268][]=214|NFKA007|1|0|K|J|7||0|56.6|2008-02-14T10:10:10||1|1
+actes[60268][]=301|NFKA007|4|0|K|J|||1|10.0|2008-02-14T11:11:11||0|0
+actes[60269][]=214|BFGA004|1|0||||0|0.0|1|2008-02-14T12:12:12||1|1
+	</pre>
+</div>
+
+{{if $sejour->_id}}
 <table class="tbl">
   <tr>
     <th class="category" colspan="10">{{$sejour->_view}}</th>
@@ -41,5 +54,10 @@
     </td>
   </tr>
   {{/foreach}}
-  
 </table>
+
+{{else}}
+<div class="big-warning">
+  Aucun séjour sélectionné
+</div>
+{{/if}}

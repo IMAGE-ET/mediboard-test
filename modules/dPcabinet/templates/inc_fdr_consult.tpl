@@ -258,7 +258,7 @@ function submitFdr(oForm) {
     <!-- Documents -->
 
     <td>
-    
+			
     <form name="newDocumentFrm" action="?m={{$m}}" method="post">
     <table class="form">
       <tr>

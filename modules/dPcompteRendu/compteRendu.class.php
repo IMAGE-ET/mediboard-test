@@ -159,7 +159,39 @@ class CCompteRendu extends CMbMetaObject {
       $documents = $resultDoc->loadList($where,$order);
     }
     return $documents;
-  }  
+  }
+  
+  /**
+   * Charge les modèles pour une classe d'objets associés à un utilisateur
+   * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
+   * @param $prat_id ref|CMediuser L'utilisateur concerné
+   * @return array<CCompteRendu>
+   */
+  static function loadModelesForPrat($object_class, $prat_id) {
+    $modele = new CCompteRendu();
+    $where = array();
+    $where["object_id"] = "IS NULL";
+		$where["object_class"] = "= '$object_class'";
+    $where["chir_id"] = "= '$prat_id'";
+		$order = "nom";
+    return $modele->loadlist($where, $order);
+  }
+  
+  /**
+   * Charge les modèles pour une classe d'objets associés à une fonction
+   * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
+   * @param $function_id ref|CFonction L'utilisateur concerné
+   * @return array<CCompteRendu>
+   */
+  static function loadModelesForFunc($object_class, $function_id) {
+    $modele = new CCompteRendu();
+    $where = array();
+    $where["object_id"] = "IS NULL";
+		$where["object_class"] = "= '$object_class'";
+    $where["function_id"] = "= '$function_id'";
+		$order = "nom";
+    return $modele->loadlist($where, $order);
+  }
   
   function getPerm($permType) {
     if(!($this->_ref_chir || $this->_ref_function) || !$this->_ref_object) {

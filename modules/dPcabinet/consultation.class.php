@@ -189,7 +189,7 @@ class CConsultation extends CCodable {
       "motif"         => null,
       "rques"         => null,
       "examen"        => null,
-      "traitement"    => null
+      "traitement"    => null,
     );
   }
   
@@ -288,7 +288,6 @@ class CConsultation extends CCodable {
     if(!isset($fse->_spec->ds)){
       return;
     }
-    
     $where = array();
     $where["S_FSE_NUMERO_FSE"] = CSQLDataSource::prepareIn($this->_ids_fse);
     $this->_ext_fses = $fse->loadList($where);
@@ -713,17 +712,6 @@ class CConsultation extends CCodable {
     return $docs_valid;
   }
 
-  
-  function getTemplateClasses(){
-    $this->loadRefsFwd();
-    $tab = array();
-    
-    // Stockage des objects liés à l'opération
-    $tab["CConsultation"] = $this->_id;
-    $tab["CPatient"] = $this->_ref_patient->_id;
-    
-    return $tab;
-  }
   
   function getExecutantId($code_activite) {
   	$this->loadRefPlageConsult();

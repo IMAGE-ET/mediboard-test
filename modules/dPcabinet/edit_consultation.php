@@ -11,7 +11,6 @@
 global $AppUI, $can, $m, $dPconfig;
 
 $can->needsEdit();
-$ds = CSQLDataSource::get("std");
 $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
 
 $date         = mbGetValueFromGetOrSession("date", mbDate());
@@ -187,33 +186,13 @@ if ($consult->_id){
   $consult->_ref_patient->loadIdVitale();
 }
 
-// Récupération des modèles
-$whereCommon = array();
-$whereCommon["object_id"] = "IS NULL";
-if($consultAnesth->consultation_anesth_id){
-  $whereCommon[] = "`object_class` = 'CConsultAnesth'";
-}else{
-  $whereCommon[] = "`object_class` = 'CConsultation'";
-}
-
-$order = "nom";
-
 // Modèles de l'utilisateur
 $listModelePrat = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
-}
-
-// Modèles de la fonction
 $listModeleFunc = array();
+$object_class = $consult->_is_anesth ? "CConsultAnesth" : "CConsultation";
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
+  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $userSel->user_id);
+  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $userSel->function_id);
 }
 
 // Récupération des tarifs

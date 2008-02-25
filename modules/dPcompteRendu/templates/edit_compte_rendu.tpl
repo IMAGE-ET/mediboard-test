@@ -1,5 +1,10 @@
 <script type="text/javascript">
 
+/**
+ * @TODO Nettoyer ces deux fonctions qui semblent ne pas être appelées
+ * @TODO Vérifier également les http_req qui ne sont pas appelées non plus
+ */
+
 function submitCR() {
   return true;
 }

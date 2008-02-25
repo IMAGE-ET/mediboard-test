@@ -1,6 +1,5 @@
 <?php
-$locales['mod-sherpa-tab-view_detcim'] = '';
-$locales['CGroups-back-'] = '';
+$locales['mod-sherpa-tab-import_actes'] = '';
 $locales['config-object_handlers-CSpObjectHandler'] = '';
 $locales['config-sherpa-import_segment'] = '';
 $locales['CSpDetCCAM'] = '';
@@ -129,6 +128,9 @@ $locales['CSpEntCCAM-aidop3-desc'] = '';
 $locales['CSpEntCCAM-codane'] = '';
 $locales['CSpEntCCAM-codane-court'] = '';
 $locales['CSpEntCCAM-codane-desc'] = '';
+$locales['CSpEntCCAM-codpan'] = '';
+$locales['CSpEntCCAM-codpan-court'] = '';
+$locales['CSpEntCCAM-codpan-desc'] = '';
 $locales['CSpEntCCAM-codsal'] = '';
 $locales['CSpEntCCAM-codsal-court'] = '';
 $locales['CSpEntCCAM-codsal-desc'] = '';
@@ -408,6 +410,7 @@ $locales['CSpSejMed.none'] = '';
 $locales['CSpSejMed.one'] = '';
 $locales['mod-sherpa-tab-export_actes'] = '';
 $locales['mod-sherpa-tab-view_detccam'] = '';
+$locales['mod-sherpa-tab-view_detcim'] = '';
 $locales['mod-sherpa-tab-view_dossiers'] = '';
 $locales['mod-sherpa-tab-view_droits'] = '';
 $locales['mod-sherpa-tab-view_entccam'] = '';

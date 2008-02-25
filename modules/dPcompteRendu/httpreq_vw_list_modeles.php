@@ -5,11 +5,10 @@
 * @subpackage dPcompteRendu
 * @version $Revision:  $
 * @author Alexis Granger
+* @abstract Permet de choisir des modèles pour constituer des packs
 */
 
 global $AppUI, $can, $m;
-
-$ds = CSQLDataSource::get("std");
 
 $object_class = mbGetValueFromGetOrSession("object_class");
 $user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
@@ -27,26 +26,13 @@ $userSel = new CMediusers;
 $userSel->load($user_id);
 $userSel->loadRefs();
 
-$whereCommon["object_id"] = "IS NULL";
-$whereCommon["object_class"] = "= '$object_class'";
-$order = "nom";
-
 // Modèles de l'utilisateur
 $listModelePrat = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
-}
-
-// Modèles de la fonction
 $listModeleFunc = array();
 if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
+  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $userSel->user_id);
+  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $userSel->function_id);
+  
 }
 
 // Création du template
