@@ -6,6 +6,9 @@
 {{assign var="object" value=$selOp}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
+{{mb_include_script module="dPcompteRendu" script="document"}}
+
+
 <script type="text/javascript">
 
 function submitTiming(oForm) {
@@ -90,30 +93,6 @@ function pageMain() {
   reloadAfterSaveDoc();
 
   {{/if}}
-}
-
-// Gestion des dossiers
-function createDocument(modele_id, operation_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("modele_id", modele_id);
-  url.addParam("object_id", operation_id);
-  url.popup(700, 700, "Document");
-}
-
-function createPack(pack_id, operation_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("pack_id", pack_id);
-  url.addParam("object_id", operation_id);
-  url.popup(700, 700, "Document");
-}
-
-function editDocument(compte_rendu_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
 }
 
 function reloadAfterSaveDoc() {

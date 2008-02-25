@@ -2,7 +2,7 @@
 <table>
   <tr>
     <td>
-      <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$sejour->_id}})" class="notNull ref">
+      <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$sejour->_id}})" class="notNull ref">
         <option value="">&mdash; Choisir un modèle</option>
         <optgroup label="Modèles du praticien">
         {{foreach from=$listModelePrat item=curr_modele}}
@@ -15,8 +15,8 @@
         {{/foreach}}
         </optgroup>
       </select>
-      <br />
-      <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$sejour->_id}})">
+      
+      <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$sejour->_id}})">
         <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
         {{foreach from=$packList item=curr_pack}}
           <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
@@ -45,7 +45,7 @@
       <input type="hidden" name="dosql" value="do_modele_aed" />
       <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
       {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-      <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
+      <button class="edit notext" type="button" onclick="Document.edit({{$document->compte_rendu_id}})">
       </button>
       <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'}, { onComplete: function() { reloadAfterSaveDoc({{$sejour->_id}}) } })" />
       </form>

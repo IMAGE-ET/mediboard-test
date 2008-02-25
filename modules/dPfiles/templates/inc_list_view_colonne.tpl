@@ -20,7 +20,7 @@
              <tr>
                <td>
                  <div style="float: right">
-                 <select name="_choix_modele" onchange="createDocument(this, {{$selKey}})">           
+                 <select name="_choix_modele" onchange="Document.create(this.value, {{$selKey}})">           
                    <option value="">&mdash; Choisir un modèle</option>
                    {{if $listModelePrat|@count}}
                    <optgroup label="Modèles du praticien">
@@ -97,7 +97,7 @@
             {{/if}}
 
             {{if $canFile->edit && !$accordDossier}}
-              <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+              <button class="edit" type="button" onclick="Document.edit({{$elementId}})">
                 {{tr}}Edit{{/tr}}
               </button>
               <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(

@@ -18,7 +18,7 @@ function refreshCR() {
 }
 
 if (window.opener.reloadAfterSaveDoc) {
-  window.opener.reloadAfterSaveDoc({{$compte_rendu->object_id}});
+  window.opener.reloadAfterSaveDoc('{{$compte_rendu->object_id}}','{{$compte_rendu->object_class}}');
 }
 
 </script>

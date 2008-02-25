@@ -409,6 +409,18 @@ class CSejour extends CCodable {
     
   }
   
+  
+  function getTemplateClasses(){
+    $this->loadRefsFwd();
+    $tab = array();
+    
+    // Stockage des objects liés au séjour
+    $tab["CSejour"] = $this->_id;
+    $tab["CPatient"] = $this->_ref_patient->_id;
+    
+    return $tab;
+  }
+  
   // Calcul des droits CMU pour la duree totale du sejour
   function getDroitsCMU () {
      $this->_couvert_cmu = $this->_date_sortie_prevue <= $this->_ref_patient->cmu;

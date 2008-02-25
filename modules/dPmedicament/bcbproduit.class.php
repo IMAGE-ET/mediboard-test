@@ -167,7 +167,7 @@ class CBcbProduit extends CBcbObject {
   // Chargement de toutes les posologies d'un produit
   function loadRefPosologies(){
     $ds = CSQLDataSource::get("bcb");
-    $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
+    $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip' ORDER BY `NO_POSO` ASC;";
     $posologies = $ds->loadList($query);
     
     // Chargement de chaque posologie

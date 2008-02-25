@@ -70,9 +70,9 @@ class CBcbPosologie extends CBcbObject {
     // Chargement des posologies du produit
     $ds = CSQLDataSource::get("bcb");
     if($numPoso){
-      $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$cip' AND `NO_POSO` = '$numPoso';";  
+      $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' AND `NO_POSO` = '$numPoso';";  
     } else {
-      $query = "SELECT * FROM `poso_produits` WHERE `CODE_CIP` = '$cip' ORDER BY `NO_POSO` ASC;";
+      $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' ORDER BY `NO_POSO` ASC;";
     }
     
     $posologies = $ds->loadList($query);
@@ -87,46 +87,46 @@ class CBcbPosologie extends CBcbObject {
       $this->quantite2 = $posologie["QUANTITE2"];
      
       $this->code_prise1 = $posologie["CODE_PRISE1"];	  
-      $this->getValeur($this->code_prise1, "_code_prise1", "LIBELLE_SPECIF", "CODE_SPECIF",  "poso_specif_prise");
+      $this->getValeur($this->code_prise1, "_code_prise1", "LIBELLE_SPECIF", "CODE_SPECIF",  "POSO_SPECIF_PRISE");
   
       $this->code_prise2 = $posologie["CODE_PRISE2"];	  
-      $this->getValeur($this->code_prise2, "_code_prise2", "LIBELLE_SPECIF", "CODE_SPECIF", "poso_specif_prise");
+      $this->getValeur($this->code_prise2, "_code_prise2", "LIBELLE_SPECIF", "CODE_SPECIF", "POSO_SPECIF_PRISE");
  
       $this->code_indication = $posologie["CODE_INDICATION"];
-      $this->getValeur($this->code_indication, "_code_indication", "LIBELLE_INDICATION", "CODE_INDICATION", "poso_indications");
+      $this->getValeur($this->code_indication, "_code_indication", "LIBELLE_INDICATION", "CODE_INDICATION", "POSO_INDICATIONS");
 
       $this->code_indication = $posologie["CODE_NATURE"];
-      $this->getValeur($this->code_nature, "_code_nature", "LIBELLE_NATURE", "CODE_NATURE", "poso_natures");
+      $this->getValeur($this->code_nature, "_code_nature", "LIBELLE_NATURE", "CODE_NATURE", "POSO_NATURES");
       
       $this->code_voie = $posologie["CODE_VOIE"];
-      $this->getValeur($this->code_voie, "_code_voie", "LIBELLE_VOIE", "CODE_VOIE", "poso_voies");
+      $this->getValeur($this->code_voie, "_code_voie", "LIBELLE_VOIE", "CODE_VOIE", "POSO_VOIES");
       
       $this->code_profil = $posologie["CODE_PROFIL"];
-      $this->getValeur($this->code_profil, "_code_profil", "LIBELLE_PROFIL", "CODE_PROFIL", "poso_profils");
+      $this->getValeur($this->code_profil, "_code_profil", "LIBELLE_PROFIL", "CODE_PROFIL", "POSO_PROFILS");
       
       $this->code_unite_prise = $posologie["CODE_UNITE_DE_PRISE"];
-      $this->getValeur($this->code_unite_prise, "_code_unite_prise", "LIBELLE_UNITE_DE_PRISE,LIBELLE_UNITE_DE_PRISE_PLURIEL", "CODE_UNITE_DE_PRISE", "poso_unites_prise");
+      $this->getValeur($this->code_unite_prise, "_code_unite_prise", "LIBELLE_UNITE_DE_PRISE,LIBELLE_UNITE_DE_PRISE_PLURIEL", "CODE_UNITE_DE_PRISE", "POSO_UNITES_PRISE");
       
       $this->code_duree1 = $posologie["CODE_DUREE1"];
-      $this->getValeur($this->code_duree1, "_code_duree1", "LIBELLE_DUREE", "CODE_DUREE", "poso_durees");
+      $this->getValeur($this->code_duree1, "_code_duree1", "LIBELLE_DUREE", "CODE_DUREE", "POSO_DUREES");
       
       $this->code_duree2 = $posologie["CODE_DUREE2"];
-      $this->getValeur($this->code_duree2, "_code_duree2", "LIBELLE_DUREE", "CODE_DUREE", "poso_durees");
+      $this->getValeur($this->code_duree2, "_code_duree2", "LIBELLE_DUREE", "CODE_DUREE", "POSO_DUREES");
       
       $this->code_duree3 = $posologie["CODE_DUREE3"];
-      $this->getValeur($this->code_duree3, "_code_duree3", "LIBELLE_DUREE", "CODE_DUREE", "poso_durees");
+      $this->getValeur($this->code_duree3, "_code_duree3", "LIBELLE_DUREE", "CODE_DUREE", "POSO_DUREES");
       
       $this->code_moment = $posologie["CODE_MOMENT"];
-		  $this->getValeur($this->code_moment, "_code_moment", "LIBELLE_MOMENT", "CODE_MOMENT", "poso_moments");
+		  $this->getValeur($this->code_moment, "_code_moment", "LIBELLE_MOMENT", "CODE_MOMENT", "POSO_MOMENTS");
      
 		  $this->code_terrain = $posologie["CODE_TERRAIN"];
-		  $this->getValeur($this->code_terrain, "_code_terrain", "TERRAIN,AGE1,AGE2,CAGE1,CAGE2,POIDS1,POIDS2", "CODE_TERRAIN", "poso_produits_terrain");
+		  $this->getValeur($this->code_terrain, "_code_terrain", "TERRAIN,AGE1,AGE2,CAGE1,CAGE2,POIDS1,POIDS2", "CODE_TERRAIN", "POSO_PRODUITS_TERRAIN");
       
 		  $this->code_age1 = $this->_code_terrain["CAGE1"].$this->_code_terrain["AGE1"];
-		  $this->getValeur($this->code_age1, "_code_age1", "POIDS_G,POIDS_F,TAILLE_G,TAILLE_F,SURFACE_G,SURFACE_F", "CODE_AGE", "poso_tableau");
+		  $this->getValeur($this->code_age1, "_code_age1", "POIDS_G,POIDS_F,TAILLE_G,TAILLE_F,SURFACE_G,SURFACE_F", "CODE_AGE", "POSO_TABLEAU");
       
 		  $this->code_age2 = $this->_code_terrain["CAGE2"].$this->_code_terrain["AGE2"];
-		  $this->getValeur($this->code_age2, "_code_age2", "POIDS_G,POIDS_F,TAILLE_G,TAILLE_F,SURFACE_G,SURFACE_F", "CODE_AGE", "poso_tableau");
+		  $this->getValeur($this->code_age2, "_code_age2", "POIDS_G,POIDS_F,TAILLE_G,TAILLE_F,SURFACE_G,SURFACE_F", "CODE_AGE", "POSO_TABLEAU");
       
       $this->p_kg               = $posologie["P_KG"];
 		  $this->adequation_up1_up2 = $posologie["ADEQUATION_UP1_UP2"];

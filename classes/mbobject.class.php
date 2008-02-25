@@ -1295,6 +1295,11 @@ class CMbObject {
       }
     }
   }
+
+  
+  function getTemplateClasses(){
+    
+  }
   
   /**
    * Functions to check the object's properties
@@ -1349,12 +1354,12 @@ class CMbObject {
       $this->_aides[$field]["no_enum"] = null;
       
       if($prop){
-        $entryEnums = $this->_enumsTrans[$prop];
-        // Création des entrées pour les enums
+      	$entryEnums = $this->_enumsTrans[$prop];
+      	// Création des entrées pour les enums
         $this->_aides[$field]["no_enum"] = null;
         foreach($entryEnums as $valueEnum){
           $this->_aides[$field][$valueEnum] = null;
-         }
+        }
       }
     }
     

@@ -1,4 +1,5 @@
 <!-- $Id$ -->
+{{mb_include_script module="dPcompteRendu" script="document"}}
 
 <script type="text/javascript">
 function view_history_patient(id){
@@ -34,23 +35,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
 }
 
-function editDocument(compte_rendu_id) {
-  var url = new Url;
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
-}
 
-function createDocument(oSelect, patient_id) {
-  if (modele_id = oSelect.value) {
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-    url.addParam("modele_id", modele_id);
-    url.addParam("object_id", patient_id);
-    url.popup(700, 700, "Document");
-  }
-  oSelect.value = "";
-}
 
 function printIntervention(id) {
   var url = new Url;

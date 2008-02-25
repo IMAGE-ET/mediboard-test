@@ -202,9 +202,20 @@ class COperation extends CCodable {
       "rques"         => null
     );
   }
-    
-  function check() {
 
+  function getTemplateClasses(){
+    $this->loadRefsFwd();
+    $tab = array();
+    
+    // Stockage des objects liés à l'opération
+    $tab["COperation"] = $this->_id;
+    $tab["CSejour"] = $this->_ref_sejour->_id;
+    $tab["CPatient"] = $this->_ref_sejour->_ref_patient->_id;
+    
+    return $tab;
+  }
+  
+  function check() {
     $msg = null;
     if(!$this->operation_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";

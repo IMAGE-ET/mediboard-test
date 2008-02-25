@@ -161,8 +161,14 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $errorTime = date("Y-m-d H:i:s");
   
+  /*
   $divClass = CMbArray::get($divClasses, $errno);
   $errorType = CMbArray::get($errorTypes, $errno);
+  */
+  // CMbArray non chargé
+  $divClass = isset($divClasses[$errno]) ? $divClasses[$errno] : null;
+  $errorType = isset($errorTypes[$errno]) ? $errorTypes[$errno] : null;
+  
   
   $log = "\n\n<div class='$divClass'>";
   

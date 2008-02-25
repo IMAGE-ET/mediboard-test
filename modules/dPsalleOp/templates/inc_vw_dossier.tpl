@@ -81,7 +81,7 @@
   </td>
   <td>
   <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-   <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$selOp->_id}})">
+   <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$selOp->_id}})">
         <option value="">&mdash; Choisir un modèle</option>
         <optgroup label="Opération">
         {{foreach from=$crList item=curr_cr}}
@@ -95,7 +95,7 @@
         </optgroup>
       </select>
       <br />
-      <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$selOp->_id}})">
+      <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$selOp->_id}})">
         <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
         {{foreach from=$packList item=curr_pack}}
           <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>

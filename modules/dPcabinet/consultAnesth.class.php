@@ -314,6 +314,23 @@ class CConsultAnesth extends CMbObject {
     $this->loadRefsTechniques();
   }
   
+  
+  function getTemplateClasses(){
+    $this->loadRefsFwd();
+    $tab = array();
+    
+    // Stockage des objects liés à l'opération
+    $tab["CConsultAnesth"] = $this->_id;
+    $tab["CConsultation"] = $this->_ref_consultation->_id;
+    $tab["CPatient"] = $this->_ref_consultation->_ref_patient->_id;
+    $tab["COperation"] = $this->_ref_operation->_id;
+    $tab["CSejour"] = $this->_operation->_ref_sejour->_id;
+    
+    return $tab;
+  }
+  
+  
+  
   function getPerm($permType) {
     if(!$this->_ref_consultation){
       $this->loadRefConsultation();

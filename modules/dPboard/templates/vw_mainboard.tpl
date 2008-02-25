@@ -1,3 +1,6 @@
+{{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+
 <script type="text/javascript">
 var notWhitespace   = /\S/;
 
@@ -61,21 +64,6 @@ function viewItem(oTd, sClassName, id, date) {
 function hideItem(sClassName, id) {
   oElement = $(sClassName+id);
   oElement.hide();
-}
-
-function editDocument(compte_rendu_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
-}
-
-function createDocument(modele_id, operation_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("modele_id", modele_id);
-  url.addParam("object_id", operation_id);
-  url.popup(700, 700, "Document");
 }
 
 function reloadAfterSaveDoc(){

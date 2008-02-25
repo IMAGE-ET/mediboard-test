@@ -104,7 +104,7 @@ PairEffect.initGroup("functionEffect", {
             <input type="hidden" name="dosql" value="do_modele_aed" />
             <input type="hidden" name="object_id" value="{{$curr_oper->operation_id}}" />
             <input type="hidden" name="compte_rendu_id" value="{{$curr_oper_doc->compte_rendu_id}}" />
-            <button class="edit notext" type="button" onclick="editDocument({{$curr_oper_doc->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
+            <button class="edit notext" type="button" onclick="Document.edit({{$curr_oper_doc->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
             <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$curr_oper_doc->nom|smarty:nodefaults|JSAttribute}}'})" >{{tr}}Delete{{/tr}}</button>
             <button class="trash notext" type="button" onclick="this.form.del.value = 1; this.form.submit()">{{tr}}Delete{{/tr}}</button>
             </form>
@@ -116,7 +116,7 @@ PairEffect.initGroup("functionEffect", {
       <table>
         <tr>
           <td>
-            <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_oper->operation_id}})">
+            <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$curr_oper->operation_id}})">
               <option value="">&mdash; Choisir un modèle</option>
               <optgroup label="CRO">
               {{foreach from=$crList item=curr_cr}}

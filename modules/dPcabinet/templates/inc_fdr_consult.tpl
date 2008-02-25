@@ -167,14 +167,6 @@ function putTiers() {
   oForm.du_patient.value = 0;
 }
 
-function editDocument(compte_rendu_id) {
-  var url = new Url;
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
-}
-
-
 function reloadFdr() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
@@ -272,9 +264,9 @@ function submitFdr(oForm) {
       <tr>
         <td>
           {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
-          <select name="_choix_modele" onchange="createDocument(this, {{$consult->_ref_consult_anesth->consultation_anesth_id}})">
+          <select name="_choix_modele" onchange="Document.create(this.value, {{$consult->_ref_consult_anesth->consultation_anesth_id}})">
           {{else}}
-          <select name="_choix_modele" onchange="createDocument(this, {{$consult->consultation_id}})">
+          <select name="_choix_modele" onchange="Document.create(this.value, {{$consult->consultation_id}})">
           {{/if}}           
             <option value="">&mdash; Choisir un modèle</option>
             {{if $listModelePrat|@count}}
@@ -292,6 +284,18 @@ function submitFdr(oForm) {
             </optgroup>
             {{/if}}
           </select>
+          <button type="button" class="search" onclick="ModeleSelector.init('{{$consult->_id}}','{{$consult->_class_name}}','{{$consult->_praticien_id}}')">Modèle</button>
+				    <input type="hidden" name="_modele_id" />
+				    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$consult->_id}}','{{$consult->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
+				    <script type="text/javascript">
+				      ModeleSelector.init = function(object_id, object_class, praticien_id){
+				        this.sForm  = "newDocumentFrm";
+				        this.sModele_id = "_modele_id";
+				        this.sObject_id = "_object_id";
+				        this.pop(object_id, object_class,praticien_id);
+				      }
+				    </script>
+				    
         </td>
       </tr>
     </table>
@@ -310,7 +314,7 @@ function submitFdr(oForm) {
         <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
         {{/if}}          
         {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-        <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
+        <button class="edit notext" type="button" onclick="Document.edit({{$document->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
         <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" >{{tr}}Delete{{/tr}}</button>
         </form>
         <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">

@@ -1,4 +1,3 @@
-<!-- $Id: vw_addedit_planning.tpl 110 2006-06-11 20:19:38Z Rhum1 $ -->
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 

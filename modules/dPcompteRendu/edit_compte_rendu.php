@@ -11,6 +11,9 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
+$target_id = mbGetValueFromGet("target_id");
+$target_class = mbGetValueFromGet("target_class");
+
 $compte_rendu_id = mbGetValueFromGet("compte_rendu_id"   , 0);
 $modele_id       = mbGetValueFromGet("modele_id"         , 0);
 $praticien_id    = mbGetValueFromGet("praticien_id"      , 0);
@@ -29,6 +32,10 @@ if($compte_rendu_id) {
   $compte_rendu->chir_id = $praticien_id;
   $compte_rendu->function_id = null;
   $compte_rendu->object_id = $object_id;
+  if($target_id && $target_class){
+    $compte_rendu->object_id = $target_id;
+    $compte_rendu->object_class = $target_class;
+  }
   if($pack_id) {
     $pack = new CPack;
     $pack->load($pack_id);
@@ -39,6 +46,7 @@ if($compte_rendu_id) {
   }
   $compte_rendu->updateFormFields();
 }
+
 $compte_rendu->loadRefsFwd();
 $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;

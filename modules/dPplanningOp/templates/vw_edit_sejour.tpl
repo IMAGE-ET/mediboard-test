@@ -1,5 +1,3 @@
-<!-- $Id: vw_addedit_planning.tpl 117 2006-06-13 12:54:06Z Rhum1 $ -->
-          
 <script type="text/javascript">
 
 function pageMain() {

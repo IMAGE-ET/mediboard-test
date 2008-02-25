@@ -1,5 +1,4 @@
 <input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
-
 {{if !$board}}
 <div style="font-weight:bold; height:20px; text-align:center;">
   {{$date|date_format:"%A %d %B %Y"}}
@@ -71,30 +70,12 @@
             </a>
           </td>
           <td>
-            <table>
-            {{foreach from=$curr_op->_ref_documents item=document}}
-              <tr>
-                <th>{{$document->nom}}</th>
-                <td class="button">
-                  <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-                  <input type="hidden" name="m" value="dPcompteRendu" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->_id}}" />
-                  {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-                  <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-                  </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}'})" />
-                  </form>
-                </td>
-              </tr>
-            {{/foreach}}
-            </table>
+          
             <form name="newDocumentFrm" action="?m={{$m}}" method="post">
             <table>
               <tr>
                 <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->_id}})">
+                  <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
                     <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}
@@ -108,7 +89,7 @@
                     </optgroup>
                   </select>
                   <br />
-                  <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$curr_op->_id}})">
+                  <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
                     {{foreach from=$packList item=curr_pack}}
                       <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
@@ -120,6 +101,11 @@
               </tr>
             </table>
             </form>
+            
+            <div id="document-{{$curr_op->_id}}">
+              {{include file="../../dPsalleOp/templates/inc_vw_list_documents.tpl" selOp=$curr_op}}
+            </div>
+            
           </td>
         </tr>
         {{/foreach}}
@@ -177,11 +163,11 @@
           </td>
           {{if !$boardItem}}
           <td>
-            <form name="newDocumentFrm" action="?m={{$m}}" method="post">
+            <form name="newDocumentFrm-{{$curr_op->_id}}" action="?m={{$m}}" method="post">
             <table>
               <tr>
                 <td>
-                  <select name="_choix_modele" onchange="if (this.value) createDocument(this.value, {{$curr_op->_id}})">
+                  <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; Choisir un modèle</option>
                     <optgroup label="Opération">
                     {{foreach from=$crList item=curr_cr}}
@@ -195,7 +181,7 @@
                     </optgroup>
                   </select>
                   <br />
-                  <select name="_choix_pack" onchange="if (this.value) createPack(this.value, {{$curr_op->_id}})">
+                  <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$curr_op->_id}})">
                     <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
                     {{foreach from=$packList item=curr_pack}}
                       <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
@@ -203,37 +189,23 @@
                       <option value="">{{tr}}pack-none{{/tr}}</option>
                     {{/foreach}}
                   </select>
+                  <button type="button" class="search" onclick="ModeleSelector.init('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}')">Modèle</button>
+							    <input type="hidden" name="_modele_id" />
+							    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$curr_op->_id}}','{{$curr_op->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
+							    <script type="text/javascript">
+							      ModeleSelector.init = function(object_id, object_class, praticien_id){
+							        this.sForm  = "newDocumentFrm-{{$curr_op->_id}}";
+							        this.sModele_id = "_modele_id";
+							        this.sObject_id = "_object_id";
+							        this.pop(object_id, object_class,praticien_id);
+							      }
+							    </script> 
                 </td>
               </tr>
             </table>
             </form>
             <div id="document-{{$curr_op->_id}}">
-            {{if $curr_op->_ref_documents|@count}}
-            <table class="tbl">
-              <tr id="operation{{$curr_op->_id}}-trigger">
-                <th colspan="2">{{$curr_op->_ref_documents|@count}} document(s)</th>
-              </tr>
-              <tbody class="operationEffect" id="operation{{$curr_op->_id}}" style="display:none;">
-              {{foreach from=$curr_op->_ref_documents item=document}}
-              <tr>
-                <td>{{$document->nom}}</td>
-                <td class="button">
-                  <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-                  <input type="hidden" name="m" value="dPcompteRendu" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="dosql" value="do_modele_aed" />
-                  <input type="hidden" name="object_id" value="{{$curr_op->_id}}" />
-                  {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-                  <button class="edit notext" type="button" onclick="editDocument({{$document->compte_rendu_id}})">
-                  </button>
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'}, { onComplete: function() { reloadAfterSaveDoc({{$curr_op->_id}}) } })" />
-                  </form>
-                </td>
-              </tr>
-              {{/foreach}}
-              </tbody>
-            </table>
-            {{/if}}
+              {{include file="../../dPsalleOp/templates/inc_vw_list_documents.tpl" selOp=$curr_op}}
             </div>
           </td>
           {{/if}}

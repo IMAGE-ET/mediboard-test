@@ -82,13 +82,13 @@ File = {
             <br />
             {{$curr_file->_view}}
             {{if $curr_file->_class_name=="CFile"}}
-              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y ï¿½ %Hh%M"}}
+              <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
             {{/if}}
           </a>
           <br />  
             
           {{if $canFile->edit && !$accordDossier}}
-            <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+            <button class="edit" type="button" onclick="Document.edit({{$elementId}})">
               {{tr}}Edit{{/tr}}
             </button>
             <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(

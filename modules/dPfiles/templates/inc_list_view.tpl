@@ -60,7 +60,7 @@
             {{/if}}
             
             {{if $canFile->edit && !$accordDossier}}
-              <button class="edit" type="button" onclick="editDocument({{$elementId}})">
+              <button class="edit" type="button" onclick="Document.edit({{$elementId}})">
                 {{tr}}Edit{{/tr}}
               </button>
               <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(

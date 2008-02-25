@@ -36,7 +36,7 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
   function load($code_cip){
     global $g;
     $ds = CSQLDataSource::get("bcb");
-    $query = "SELECT * FROM `livrettherapeutique` WHERE `CODEETABLISSEMENT` = '$g' AND `CODECIP` = '$code_cip';";
+    $query = "SELECT * FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g' AND `CODECIP` = '$code_cip';";
     $result = reset($ds->loadList($query));
     if($result){
       $this->group_id          = $result["CODEETABLISSEMENT"];

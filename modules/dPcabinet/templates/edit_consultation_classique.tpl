@@ -1,3 +1,6 @@
+{{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+
 <script type="text/javascript">
 function printAllDocs() {
   var url = new Url;

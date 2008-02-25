@@ -1,35 +1,14 @@
 <!-- $Id$ -->
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcompteRendu" script="document"}}
 
 <script type="text/javascript">
-
-function createDocument(modele_id, operation_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("modele_id", modele_id);
-  url.addParam("object_id", operation_id);
-  url.popup(700, 700, "Document");
-}
-
-function createPack(pack_id, operation_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("pack_id", pack_id);
-  url.addParam("object_id", operation_id);
-  url.popup(700, 700, "Document");
-}
-
-function editDocument(compte_rendu_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
-}
 
 function reloadAfterSaveDoc(operation_id){
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
   url.addParam("operation_id" , operation_id);
-  url.requestUpdate('document-'+operation_id);
+  url.requestUpdate('document-'+operation_id, { waitingText: null } );
 }
 
 function updateListOperations(date, urgence) {

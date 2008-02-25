@@ -1,3 +1,5 @@
+{{mb_include_script module="dPcompteRendu" script="document"}}
+
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
@@ -17,29 +19,6 @@ function reloadAfterSaveDoc(sejour_id){
   url.setModuleAction("dPhospi", "httpreq_vw_documents");
   url.addParam("sejour_id" , sejour_id);
   url.requestUpdate('documents', { waitingText: null } );
-}
-
-function createDocument(modele_id, sejour_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("modele_id", modele_id);
-  url.addParam("object_id", sejour_id);
-  url.popup(700, 700, "Document");
-}
-
-function createPack(pack_id, sejour_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("pack_id", pack_id);
-  url.addParam("object_id", sejour_id);
-  url.popup(700, 700, "Document");
-}
- 
-function editDocument(compte_rendu_id) {
-  var url = new Url();
-  url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
-  url.addParam("compte_rendu_id", compte_rendu_id);
-  url.popup(700, 700, "Document");
 }
      
 var oCookie = new CJL_CookieUtil("EIAccordion");
