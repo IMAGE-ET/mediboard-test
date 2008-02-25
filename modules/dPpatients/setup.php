@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.56";
+$config["mod_version"]     = "0.57";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -639,7 +639,13 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` ADD INDEX ( `nom_jeune_fille` );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.56";
+    $this->makeRevision("0.56");
+    $sql = "ALTER TABLE `dossier_medical` ADD INDEX ( `object_id` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `dossier_medical` ADD INDEX ( `object_class` );";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.57";
   }
 }
 
