@@ -64,7 +64,7 @@
     </th>
     <td>
       <input type="hidden" name="plageop_id" value="" />
-       <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime}}{{else}}{{$today}}{{/if}}" />
+      <input type="hidden" name="_date" value="{{if $op->_datetime}}{{$op->_datetime}}{{else}}{{$today}}{{/if}}" />
      
       <select name="date" onchange="
         {{if !$op->operation_id}}updateEntreePrevue();{{/if}}

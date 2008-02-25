@@ -25,7 +25,7 @@ $dPconfig["dbtype"] = "mysql";   // ONLY MySQL is supported at present
 // Standard database config
 $dPconfig["db"]["std"] = array(
   "dbtype" => "mysql",      // Change to use another dbms
-  "dbhost" => "localhost",    // Change to connect to a distant Database
+  "dbhost" => "localhost",  // Change to connect to a distant Database
   "dbname" => "mediboard",  // Change to match your Mediboard Database Name
   "dbuser" => "mbadmin",    // Change to match your Username
   "dbpass" => "adminmb",    // Change to match your Password
@@ -193,7 +193,8 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 
 $dPconfig["dPsalleOp"] = array(
   "COperation" => array(
-	  "mode" => "0",
+	  "mode"        => "0",
+	  "modif_salle" => "0",
 	),
   "CActeCCAM" => array(
 	  "tarif" => "0",

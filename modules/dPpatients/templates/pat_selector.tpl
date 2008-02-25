@@ -185,7 +185,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
     </td>
   <td><button class="search" type="submit">Rechercher</button></td>
 </tr>
-<tr>
 {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
   
 <tr>

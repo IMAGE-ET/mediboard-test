@@ -3,8 +3,10 @@
 var PlageOpSelector = {
   sForm               : null,  // Ici, on ne se sert pas de ce formulaire
   sPlage_id           : null,  // Identifiant de la plage
+  sSalle_id           : null,  // Identifiant de la salle
   sDate               : null,  // Date de la plage
   sPlage_id_easy      : null,
+  sSalle_id_easy      : null,
   sDateEasy           : null,
   s_hour_entree_prevue: null,
   s_min_entree_prevue : null,
@@ -35,7 +37,7 @@ var PlageOpSelector = {
     }
   },
 
-  set: function(plage_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
+  set: function(plage_id, salle_id, sDate, bAdm, typeHospi, hour_entree, min_entree) {
     // Declaration de formulaires
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
@@ -74,6 +76,7 @@ var PlageOpSelector = {
     // Sauvegarde des valeurs dans l'objet prepared
     this.prepared.dAdm = dAdm;
     this.prepared.plage_id = plage_id;
+    this.prepared.salle_id = salle_id;
     this.prepared.sDate = sDate;
     this.prepared.bAdm = bAdm;
     
@@ -87,6 +90,7 @@ var PlageOpSelector = {
     var oSejourForm = document.editSejour;
    
     Form.Element.setValue(oOpForm[PlageOpSelector.sPlage_id] , PlageOpSelector.prepared.plage_id);
+    Form.Element.setValue(oOpForm[PlageOpSelector.sSalle_id] , PlageOpSelector.prepared.salle_id);
     Form.Element.setValue(oOpForm[PlageOpSelector.sDate]     , PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 

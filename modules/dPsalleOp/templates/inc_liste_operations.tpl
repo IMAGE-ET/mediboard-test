@@ -6,7 +6,7 @@
 
 <!-- Entêtes -->
 <tr>
-  {{if $urgence}}
+  {{if $urgence && $salle}}
   <th>Praticien</th>
   {{else}}
   <th>Heure</th>
@@ -20,26 +20,32 @@
 </tr>
 
 {{foreach from=$operations item=_operation}}
+{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+  {{assign var="rowspan" value=2}}
+{{else}}
+  {{assign var="rowspan" value=1}}
+{{/if}}
+<tbody class="hoverable">
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
   {{if $_operation->entree_salle && $_operation->sortie_salle}}
-  <td style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
+  <td class="text" rowspan="{{$rowspan}}" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
   {{elseif $_operation->entree_salle}}
-  <td style="background-color:#cfc">
+  <td class="text" rowspan="{{$rowspan}}" style="background-color:#cfc">
   {{elseif $_operation->sortie_salle}}
-  <td style="background-color:#fcc">
+  <td class="text" rowspan="{{$rowspan}}" style="background-color:#fcc">
   {{elseif $_operation->entree_bloc}}
-  <td style="background-color:#ffa">
+  <td class="text" rowspan="{{$rowspan}}" style="background-color:#ffa">
   {{else}}
-  <td class="text">
+  <td class="text" rowspan="{{$rowspan}}">
   {{/if}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-		  {{if @$urgence}}
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+		  {{if $urgence && $salle}}
 		  {{$_operation->_ref_chir->_view}}
 		  {{else}}
 	      {{if $_operation->time_operation != "00:00:00"}}
-	      {{$_operation->time_operation|date_format:"%Hh%M"}}
+	        {{$_operation->time_operation|date_format:"%Hh%M"}}
 	      {{else}}
-	      NP
+	        NP
 	      {{/if}}
 	    {{/if}}
     </a>
@@ -67,4 +73,24 @@
   <td>{{$_operation->temp_operation|date_format:"%Hh%M"}}</td>
   {{/if}}
 </tr>
+{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+<tr>
+  <td colspan="5">
+    <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">
+    <input type="hidden" name="dosql" value="do_planning_aed" />
+    <input type="hidden" name="m" value="dPplanningOp" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="operation_id" value="{{$_operation->_id}}" />
+    <select name="salle_id" onchange="this.form.submit();">
+      {{foreach from=$listSalles item=curr_salle}}
+      <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $_operation->salle_id}}selected="selected"{{/if}}>
+        {{$curr_salle->_view}}
+      </option>
+      {{/foreach}}
+    </select>
+    </form>
+  </td>
+</tr>
+{{/if}}
+</tbody>
 {{/foreach}}

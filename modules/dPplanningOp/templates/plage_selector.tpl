@@ -1,11 +1,14 @@
 <script type="text/javascript">
 
-function setClose(date) {
+function setClose(date, salle_id) {
   var form = document.frmSelector;
   
   var list = form.list;
   if(date == '') {
     date = form._date.value;
+  }
+  if(salle_id == '') {
+    salle_id = form._salle_id.value;
   }
   var plage_id = 0;
   plage_id = getCheckedValue(list);
@@ -27,7 +30,7 @@ function setClose(date) {
     min_entree  = form.min_veille.value;
   }
     
-  window.opener.PlageOpSelector.set(plage_id,sDate,adm,typeHospi, hour_entree, min_entree);  
+  window.opener.PlageOpSelector.set(plage_id, salle_id, sDate, adm, typeHospi, hour_entree, min_entree);  
   window.close();
 }  
 
@@ -48,6 +51,7 @@ function pageMain(){
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="a" value="plage_selector" />
 <input type="hidden" name="dialog" value="1" />
+<input type="hidden" name="_salle_id" value="" />
 <input type="hidden" name="_date" value="" />
 
 <table class="main">
@@ -98,7 +102,7 @@ function pageMain(){
                 <label 
                   for="list_{{$curr_plage->_id}}" 
                   title="Plage de {{$curr_plage->debut|date_format:'%Hh%M'}}-{{$curr_plage->fin|date_format:'%Hh%M'}}"
-                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}')"{{/if}}
+                  {{if !$over}}ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"{{/if}}
                 >
                   {{$curr_plage->date|date_format:"%a %d"}} 
                   en {{$curr_plage->_ref_salle->nom}}
@@ -128,7 +132,9 @@ function pageMain(){
           <td>
             {{if !$over || !$dPconfig.dPbloc.CPlageOp.locked}}
             {{if (($curr_plage->_nb_operations < $curr_plage->max_intervention) || ($curr_plage->max_intervention == 0) || ($curr_plage->max_intervention == ""))}}
-            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}" ondblclick="setClose('{{$curr_plage->date}}')" onclick="document.frmSelector._date.value='{{$curr_plage->date}}'"/>
+            <input type="radio" name="list" value="{{$curr_plage->plageop_id}}"
+               ondblclick="setClose('{{$curr_plage->date}}', '{{$curr_plage->salle_id}}')"
+               onclick="document.frmSelector._date.value='{{$curr_plage->date}}'; document.frmSelector._salle_id.value='{{$curr_plage->salle_id}}';"/>
             {{/if}}
             {{/if}}
           </td>
@@ -145,7 +151,7 @@ function pageMain(){
         </tr>
         <tr>
           <td>
-            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}}" />
+            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}} />
           </td>
           <td>
             <label for="admission_veille">La veille</label> à
@@ -233,7 +239,7 @@ function pageMain(){
         <tr>
           <td colspan="3" class="button">
             <button class="cancel" type="button" onclick="window.close()">{{tr}}cancel{{/tr}}</button>
-            <button class="tick" type="button" onclick="setClose('')">{{tr}}Select{{/tr}}</button>          
+            <button class="tick" type="button" onclick="setClose('', '')">{{tr}}Select{{/tr}}</button>          
           </td>
         </tr>
       </table>

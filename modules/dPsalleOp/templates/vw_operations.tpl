@@ -114,20 +114,20 @@ function reloadAfterSaveDoc() {
 				<!-- Informations générales sur l'intervention et le patient -->
         {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
         <tr>
-          <th class="title" colspan="2">
+          <th class="title text" colspan="2">
 			      <button class="hslip notext" id="listplages-trigger" type="button" style="float:left">
 			        {{tr}}Programme{{/tr}}
 			      </button>
 					  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
 					    <img src="images/icons/edit.png" alt="modifier" />
 					  </a>
-            {{$patient->_view}} 
-            ({{$patient->_age}} ans 
+            {{$patient->_view}}
+            ({{$patient->_age}} ans
             {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
             &mdash; Dr. {{$selOp->_ref_chir->_view}}
             <br />
-            {{if $selOp->libelle}}{{$selOp->libelle}}{{/if}}
-						&mdash; {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
+            {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
+						{{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}
 						&mdash; {{mb_label object=$selOp field=temp_operation}} : {{mb_value object=$selOp field=temp_operation}}
             
           </th>

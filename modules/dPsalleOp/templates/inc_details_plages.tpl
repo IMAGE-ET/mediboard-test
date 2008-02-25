@@ -56,7 +56,9 @@
 </form>
 
  <table class="tbl">
+  {{if $curr_plage->_ref_operations}}
   {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$curr_plage->_ref_operations}}
+  {{/if}}
 
   {{if $curr_plage->_unordered_operations}}
   <tr>
@@ -66,6 +68,22 @@
   {{/if}}
 </table>
 {{/foreach}}
+
+{{if $deplacees|@count}}
+
+<hr />
+
+<table class="form">
+  <tr>
+    <th class="category" colspan="2">
+      Déplacées
+    </th>
+  </tr>
+</table>
+<table class="tbl">
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$deplacees}}
+</table>
+{{/if}}
 
 {{if $urgences|@count}}
 

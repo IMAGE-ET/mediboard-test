@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-CActeCCAM-openline'] = 'Laisser ouvert le détail des actes';
+$locales['config-dPsalleOp-COperation-modif_salle'] = 'Permettre le changement de salle';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';
 $locales['CActeCCAM-acte_id-court'] = 'Id';
@@ -78,6 +78,7 @@ $locales['CMediusers-back-actes_CCAM'] = 'Actes exécutés';
 $locales['config-dPsalleOp-CActeCCAM'] = 'Affichage des actes';
 $locales['config-dPsalleOp-CActeCCAM-commentaire'] = 'Affichage des commentaires';
 $locales['config-dPsalleOp-CActeCCAM-modifs_compacts'] = 'Mode compact pour les modificateurs';
+$locales['config-dPsalleOp-CActeCCAM-openline'] = 'Laisser ouvert le détail des actes';
 $locales['config-dPsalleOp-CActeCCAM-signature'] = 'Affichage des signatures';
 $locales['config-dPsalleOp-CActeCCAM-tarif'] = 'Affichage des informations de tarification';
 $locales['config-dPsalleOp-CDossierMedical'] = 'Affichage des diagnostics';

@@ -197,14 +197,25 @@ class CPlageOp extends CMbObject {
     if ($msg = $this->hasCollisions()) {
       return $msg;
     }
-    // Erreur si on change de praticien alors qu'il y a déjà des interventions
-    if (null !== $this->chir_id && $this->_id) {
-      $oldPlage = new CPlageOp;
+    $oldPlage = new CPlageOp;
+    if($this->_id) {
       $oldPlage->load($this->_id);
       $oldPlage->loadRefsBack();
+    }
+    // Erreur si on change de praticien alors qu'il y a déjà des interventions
+    if (null !== $this->chir_id && $this->_id) {
       if(count($oldPlage->_ref_operations) && $oldPlage->chir_id && ($oldPlage->chir_id != $this->chir_id)) {
         $msg = "Impossible de changer le praticien : ".count($oldPlage->_ref_operations)." intervention(s) déjà présentes";
         return $msg;
+      }
+    }
+    // Modification du salle_id de la plage -> repercussion sur les interventions
+    if($this->_id && $this->salle_id && $this->salle_id != $oldPlage->salle_id) {
+      foreach($oldPlage->_ref_operations as &$_operation) {
+        if($_operation->salle_id == $oldPlage->salle_id) {
+          $_operation->salle_id = $this->salle_id;
+          $_operation->store();
+        }
       }
     }
     return parent::store();

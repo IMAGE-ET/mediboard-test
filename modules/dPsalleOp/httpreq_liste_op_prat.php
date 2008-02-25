@@ -15,10 +15,15 @@ $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 
+// Liste des salles
+$listSalles = new CSalle;
+$where = array("group_id"=>"= '$g'");
+$listSalles = $listSalles->loadList($where);
+
 // Chargement des chirurgiens
 $listPermPrats = new CMediusers;
 $listPermPrats = $listPermPrats->loadPraticiens(PERM_READ);
-$listPrats = array();
+$listPrats  = array();
 $plagesJour = new CPlageOp();
 $where = array();
 $where["date"] = "= '$date'";
@@ -29,24 +34,23 @@ foreach($plagesJour as $curr_plage) {
     $listPrats[$curr_plage->chir_id] = $listPermPrats[$curr_plage->chir_id];
   }
 }
-
-$urgencesJour = new COperation();
+$opsJour = new COperation();
 $where = array();
-$where["date"]     = "= '$date'";
-$where["chir_id"] = "= '$praticien_id'";
+$where["date"] = "= '$date'";
 $groupby = "chir_id";
-$urgencesJour = $urgencesJour->loadList($where, null, null, $groupby);
-foreach($urgencesJour as $curr_op) {
+$opsJour = $opsJour->loadList($where, null, null, $groupby);
+foreach($opsJour as $curr_op) {
   if(key_exists($curr_op->chir_id, $listPermPrats)) {
     $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];
   }
 }
 
-$plages   = array();
-$urgences = array();
+$plages    = array();
+$deplacees = array();
+$urgences  = array();
 
-// Selection des plages opératoires de la journée
 if($praticien_id) {
+  // Selection des plages opératoires de la journée
 	$plages = new CPlageOp;
 	$where = array();
 	$where["date"] = "= '$date'";
@@ -57,6 +61,10 @@ if($praticien_id) {
 	  $curr_plage->loadRefs(0);
 	  $curr_plage->_unordered_operations = array();
 	  foreach($curr_plage->_ref_operations as $key => &$curr_op) {
+	    if($curr_op->salle_id != $curr_plage->salle_id) {
+	      unset($curr_plage->_ref_operations[$key]);
+	      continue;
+	    }
 	    $curr_op->loadRefSejour();
 	    $curr_op->_ref_sejour->loadRefPatient();
 	    $curr_op->loadExtCodesCCAM();
@@ -67,10 +75,30 @@ if($praticien_id) {
 	  }
 	}
 	
+	// Interventions déplacés
+	$deplacees = new COperation;
+	$ljoin = array();
+	$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+	$where = array();
+	$where["operations.plageop_id"] = "IS NOT NULL";
+	$where["operations.salle_id"]   = "!= plagesop.salle_id";
+	$where["plagesop.date"]         = "= '$date'";
+	$where["plagesop.chir_id"]      = "= '$praticien_id'";
+	$order = "operations.time_operation";
+	$deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
+	foreach($deplacees as &$curr_op) {
+	  $curr_op->loadRefChir();
+	  $curr_op->loadRefSejour();
+	  $curr_op->_ref_sejour->loadRefPatient();
+	  $curr_op->loadExtCodesCCAM();
+	}
+	
+	// Urgences
 	$urgences = new COperation;
 	$where = array();
-	$where["date"]     = "= '$date'";
-	$where["chir_id"] = "= '$praticien_id'";
+	$where["plageop_id"] = "IS NULL";
+	$where["date"]       = "= '$date'";
+	$where["chir_id"]    = "= '$praticien_id'";
 	$order = "time_operation";
 	$urgences = $urgences->loadList($where, $order);
 	foreach($urgences as &$curr_op) {
@@ -86,8 +114,11 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"    , false        );
 $smarty->assign("praticien_id"  , $praticien_id);
+$smarty->assign("salle"         , null         );
+$smarty->assign("listSalles"    , $listSalles  );
 $smarty->assign("listPrats"     , $listPrats   );
 $smarty->assign("plages"        , $plages      );
+$smarty->assign("deplacees"     , $deplacees   );
 $smarty->assign("urgences"      , $urgences    );
 $smarty->assign("date"          , $date        );
 $smarty->assign("operation_id"  , $operation_id);

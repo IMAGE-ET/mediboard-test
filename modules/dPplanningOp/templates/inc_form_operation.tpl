@@ -12,6 +12,7 @@
 {{mb_field object=$op field="commande_mat" hidden=1 prop=""}}
 {{mb_field object=$op field="rank" hidden=1 prop=""}}
 <input type="hidden" name="annulee" value="{{$op->annulee|default:"0"}}" />
+<input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
 <input type="hidden" name="_class_name" value="COperation" />
 
@@ -193,9 +194,10 @@
         var oOpForm     = document.editOp;
         var oSejourForm = document.editSejour;
         
-        this.sPlage_id      = "plageop_id";
-        this.sDate         = "_date";
-        this.sType         = "type";
+        this.sPlage_id = "plageop_id";
+        this.sSalle_id = "salle_id";
+        this.sDate     = "_date";
+        this.sType     = "type";
         
         this.s_hour_entree_prevue = "_hour_entree_prevue";
         this.s_min_entree_prevue  = "_min_entree_prevue";
