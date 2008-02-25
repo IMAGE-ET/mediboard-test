@@ -206,6 +206,18 @@ class CConsultation extends CCodable {
     }
   }
   
+  function getTemplateClasses(){
+    $this->loadRefsFwd();
+    $tab = array();
+    
+    // Stockage des objects liés à l'opération
+    $tab["CConsultation"] = $this->_id;
+    $tab["CPatient"] = $this->_ref_patient->_id;
+    
+    return $tab;
+  }
+  
+  
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;

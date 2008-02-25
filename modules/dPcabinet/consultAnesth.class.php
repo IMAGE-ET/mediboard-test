@@ -324,7 +324,7 @@ class CConsultAnesth extends CMbObject {
     $tab["CConsultation"] = $this->_ref_consultation->_id;
     $tab["CPatient"] = $this->_ref_consultation->_ref_patient->_id;
     $tab["COperation"] = $this->_ref_operation->_id;
-    $tab["CSejour"] = $this->_operation->_ref_sejour->_id;
+    $tab["CSejour"] = $this->_ref_operation->_ref_sejour->_id;
     
     return $tab;
   }

@@ -284,9 +284,14 @@ function submitFdr(oForm) {
             </optgroup>
             {{/if}}
           </select>
-          <button type="button" class="search" onclick="ModeleSelector.init('{{$consult->_id}}','{{$consult->_class_name}}','{{$consult->_praticien_id}}')">Modèle</button>
+          {{if $consult->_is_anesth}}
+            {{assign var=object value=$consult->_ref_consult_anesth}}
+          {{else}}
+            {{assign var=object value=$consult}}
+          {{/if}}
+          <button type="button" class="search" onclick="ModeleSelector.init('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}')">Modèle</button>
 				    <input type="hidden" name="_modele_id" />
-				    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$consult->_id}}','{{$consult->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
+				    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$object->_id}}','{{$object->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
 				    <script type="text/javascript">
 				      ModeleSelector.init = function(object_id, object_class, praticien_id){
 				        this.sForm  = "newDocumentFrm";
@@ -295,7 +300,6 @@ function submitFdr(oForm) {
 				        this.pop(object_id, object_class,praticien_id);
 				      }
 				    </script>
-				    
         </td>
       </tr>
     </table>
