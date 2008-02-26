@@ -22,7 +22,7 @@ PairEffect.initGroup("acteEffect");
 
 </script>
 
-<table>
+<table class="main">
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
   <tr>
   <td class="text" style="border: outset 3px #000; background-color: #444">
