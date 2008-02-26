@@ -14,6 +14,7 @@ class CPackExamensLabo extends CMbObject {
   // DB references
   var $function_id  = null;
   var $code         = null;
+  var $obsolete     = null;
   
   // DB fields
   var $libelle = null;
@@ -37,7 +38,8 @@ class CPackExamensLabo extends CMbObject {
     return array (
       "code"         => "num",
       "function_id"  => "ref class|CFunctions",
-      "libelle"      => "str notNull"
+      "libelle"      => "str notNull",
+      "obsolete"     => "bool"
     );
   }
   
@@ -62,13 +64,19 @@ class CPackExamensLabo extends CMbObject {
     $this->_ref_function->load($this->function_id);
   }
   
+  function loadRefsItemExamenLabo(){
+  	$item = new CPackItemExamenLabo;
+  	$ljoin["examen_labo"] = "pack_item_examen_labo.examen_labo_id = examen_labo.examen_labo_id";
+  	$where = array("pack_examens_labo_id" => "= '$this->pack_examens_labo_id'");
+  	// Permet d'afficher dans le pack seulement les analyses non obsolètes
+  	$where["examen_labo.obsolete"] = " = '0'";
+    $this->_ref_items_examen_labo = $item->loadList($where, null, null, null, $ljoin);
+  }
+  
   function loadRefsBack() {
     parent::loadRefsBack();
-    $item = new CPackItemExamenLabo;
-    
-    $where = array("pack_examens_labo_id" => "= $this->pack_examens_labo_id");
-    $this->_ref_items_examen_labo = $item->loadList($where);
-    $this->_ref_examens_labo = array();
+    $this->loadRefsItemExamenLabo();
+  	$this->_ref_examens_labo = array();
     foreach ($this->_ref_items_examen_labo as &$_item) {
       $_item->loadRefExamen();
       $_item->_ref_pack_examens_labo =& $this;

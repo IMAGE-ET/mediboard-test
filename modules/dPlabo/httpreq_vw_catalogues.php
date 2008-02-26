@@ -28,6 +28,7 @@ $catalogue->loadRefs();
 $where = array();
 $where["pere_id"] = "IS NULL";
 $where[] = "function_id IS NULL OR function_id ".$catalogue->_spec->ds->prepareIn(array_keys($functions));
+$where["obsolete"] = " = '0'";
 $order = "identifiant";
 $listCatalogues = $catalogue->loadList($where, $order);
 foreach($listCatalogues as &$_catalogue) {

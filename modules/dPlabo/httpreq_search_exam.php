@@ -16,6 +16,7 @@ $recherche = mbGetValueFromGet("recherche");
 $exam = new CExamenLabo();
 $limit = "30";
 $where["libelle"] = "LIKE '%$recherche%' ";
+$where["obsolete"] = " = '0'";
 $listExams = $exam->loadList($where, null, $limit);
 $countExams = $exam->countList($where);
 

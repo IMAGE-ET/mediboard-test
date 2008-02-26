@@ -18,6 +18,7 @@ class CCatalogueLabo extends CMbObject {
   var $identifiant = null;
   var $libelle     = null;
   var $function_id = null;
+  var $obsolete    = null;
   
   // Fwd References
   var $_ref_pere     = null;
@@ -106,7 +107,8 @@ class CCatalogueLabo extends CMbObject {
       "pere_id"     => "ref class|CCatalogueLabo",
       "function_id" => "ref class|CFunctions",
       "identifiant" => "str maxLength|10 notNull",
-      "libelle"     => "str notNull"
+      "libelle"     => "str notNull",
+      "obsolete"    => "bool"
     );
   }
   
@@ -155,15 +157,30 @@ class CCatalogueLabo extends CMbObject {
     $this->_ref_catalogues_labo = $this->loadBackRefs("catalogues_labo", "libelle");
   }
   
-  function loadExamens() {
-    $this->_ref_examens_labo = $this->loadBackRefs("examens_labo");
+  function loadExamens($withObsolete = false) {
+    $this->_ref_examens_labo = $this->loadBackRefs("examens_labo");	
+  }
+  
+  function loadSectionsWithoutObsolete(){
+    $catalogueLabo = new CCatalogueLabo();
+    $catalogueLabo->pere_id = $this->_id;
+    $catalogueLabo->obsolete = 0;
+    $this->_ref_catalogues_labo = $catalogueLabo->loadMatchingList();
+  }
+  
+  
+  function loadExamensWithoutObsolete(){
+  	$examenLabo = new CExamenLabo();
+  	$examenLabo->catalogue_labo_id = $this->_id;
+  	$examenLabo->obsolete = 0;
+  	$this->_ref_examens_labo = $examenLabo->loadMatchingList();
   }
   
   function loadRefsBack() {
     parent::loadRefsBack();
     
-    $this->loadSections();
-    $this->loadExamens();
+    $this->loadSectionsWithoutObsolete();
+    $this->loadExamensWithoutObsolete();
   }
   
   function loadRefsDeep($n = 0) {
@@ -172,8 +189,9 @@ class CCatalogueLabo extends CMbObject {
     $this->loadExternal();
     $this->_count_examens_labo = $this->countBackRefs("examens_labo");
     $this->_total_examens_labo = $this->_count_examens_labo;
-    $this->loadSections();
-
+    
+    $this->loadSectionsWithoutObsolete();
+    
     foreach ($this->_ref_catalogues_labo as &$_catalogue) {
       $_catalogue->_ref_pere =& $this;
       $_catalogue->loadRefsDeep($this->_level + 1);

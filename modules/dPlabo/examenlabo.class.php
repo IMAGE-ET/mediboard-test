@@ -49,6 +49,7 @@ class CExamenLabo extends CMbObject {
   var $technique       = null;
   var $materiel        = null;
   var $remarques       = null;
+  var $obsolete        = null;
   
   // Fwd References
   var $_ref_catalogue_labo = null;
@@ -103,6 +104,7 @@ class CExamenLabo extends CMbObject {
       "execution_dim"        => "bool",
       "duree_execution"      => "num",
       "remarques"            => "text",
+      "obsolete"             => "bool"
     );
   }
   

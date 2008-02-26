@@ -7,7 +7,7 @@
  *  @author Alexis Granger
  */
  
-global $can, $m, $AppUI, $dPconfig;
+global $can, $m, $AppUI, $dPconfig, $remote_name;
 
 $can->needsAdmin();
 
@@ -15,8 +15,46 @@ $can->needsAdmin();
  * Packs import
  */
 function importPacks($packs){
-	global $AppUI, $m, $dPconfig;
+	global $AppUI, $m, $dPconfig, $remote_name;
 	
+	// Chargement des identifiants externes des packs
+  $idPackExamen = new CIdSante400();
+  $idPackExamen->tag = $remote_name;
+  $idPackExamen->object_class = "CPackExamensLabo";
+  $idPackExamens = $idPackExamen->loadMatchingList();
+  
+  // Parcours des identifiants externes des Packs d'examens
+  foreach($idPackExamens as $key => $_id_pack_examen){
+  	$packExamen = new CPackExamensLabo();
+  	$packExamen->load($_id_pack_examen->object_id);
+    
+  	// Chargement des items de packs
+    $packExamen->loadRefsItemExamenLabo();
+    
+  	// On vide chaque pack
+  	foreach($packExamen->_ref_items_examen_labo as $key => $_packItemExamen){
+  		// Chargement de l'examen labo pour obtenir l'identifiant necessaire pour supprime l'id externe
+  		$_packItemExamen->loadRefExamen();
+  		
+      // Suppression de l'id400 du packItem
+  	  $_id_pack_examen = new CIdSante400();
+  	  $_id_pack_examen->tag = $remote_name;
+  	  $_id_pack_examen->object_class = $_packItemExamen->_class_name;
+  	  $_id_pack_examen->object_id = $_packItemExamen->_id;
+  	  $_id_pack_examen->loadMatchingObject();
+  	 
+  	  if($_id_pack_examen->_id){
+  	    $_id_pack_examen->delete();
+  	  }
+  	  // Suppression du pack item
+      $_packItemExamen->delete();
+  	}
+  	if($packExamen->_id){
+  	  $packExamen->obsolete = 1;
+  	  $packExamen->store();
+  	}
+  }
+ 
 	// Nombre de packs et d'analyses
 	$nb["packs"] = 0;
 	$nb["analysesOK"] = 0;
@@ -33,18 +71,19 @@ function importPacks($packs){
 		$pack->libelle = utf8_decode((string) $_pack->libelle);
 		$pack->code = (int) $_pack->code;
 		
-        // Sauvegarde du pack
-        $idPack = new CIdSante400();
-        // tag des id externe des packs => nom du laboatoire ==> LABO
-        $idPack->tag = "LABO";
-        $idPack->id400 = (int) $_pack->code;
-      
-        $idPack->bindObject($pack);
-		
+    // Sauvegarde du pack
+    $idPack = new CIdSante400();
+    // tag des id externe des packs => nom du laboatoire ==> LABO
+    $idPack->tag = $remote_name;
+    $idPack->id400 = (int) $_pack->code;
+    
+    $pack->obsolete = 0;
+    $idPack->bindObject($pack);
+
 		// On crée les analyses correspondantes
 		foreach($_pack->analyses->cana as $_analyse){
 		  // Creation de l'analyse
-	      $analyse = new CPackItemExamenLabo();
+	    $analyse = new CPackItemExamenLabo();
 		  
 		  // Chargement de l'analyse
 		  $examLabo = new CExamenLabo();
@@ -52,21 +91,21 @@ function importPacks($packs){
 		  $whereExam['identifiant'] = (string) " = '$_analyse'";
 		  $examLabo->loadObject($whereExam);
 		
-  	      if($examLabo->_id){
+      if($examLabo->_id){
 		    $analyse->pack_examens_labo_id = $pack->_id;
 		    $analyse->examen_labo_id = $examLabo->examen_labo_id;
 
 		    // Sauvegarde de l'analyse et de son id400
 		    $idExamen = new CIdSante400();
-		    $idExamen->tag = "LABO";
+		    $idExamen->tag = $remote_name;
 		    $idExamen->id400 = (string) $_analyse;
 		    
 		    $idExamen->bindObject($analyse);
 		    $nb["analysesOK"]++;
-  	      } else {
-  	      	$erreurs[][(string) $_pack->libelle] = (string) $_analyse;
-  	      	$nb["analysesKO"]++;
-  	      }
+      } else {
+       	$erreurs[][(string) $_pack->libelle] = (string) $_analyse;
+       	$nb["analysesKO"]++;
+      }
 		}
 		$nb["packs"]++;
 	}
@@ -74,17 +113,21 @@ function importPacks($packs){
 	// Recapitulatif des importations
 	$AppUI->stepAjax("Packs Importés: ".$nb["packs"], UI_MSG_OK);	
 	$AppUI->stepAjax("Analyses Importées: ".$nb["analysesOK"], UI_MSG_OK);	
-    $AppUI->stepAjax("Analyses non importées: ".$nb["analysesKO"], UI_MSG_WARNING);	
+  $AppUI->stepAjax("Analyses non importées: ".$nb["analysesKO"], UI_MSG_WARNING);	
 	foreach($erreurs as $key=>$erreur){
 	  foreach($erreur as $_key=>$_erreur){
 	    $AppUI->stepAjax("Analyse non trouvée: ".$_erreur." dans le pack ".utf8_decode($_key), UI_MSG_WARNING);
 	  }
-	}    
+	}
 }
 
 
 // Check import configuration
 $config = $dPconfig[$m]["CPackExamensLabo"];
+
+if (null == $remote_name = $dPconfig[$m]["CCatalogueLabo"]["remote_name"]) {
+  $AppUI->stepAjax("Remote name not configured", UI_MSG_ERROR);
+}
 
 if (null == $remote_url = $config["remote_url"]) {
   $AppUI->stepAjax("Remote URL not configured", UI_MSG_ERROR);

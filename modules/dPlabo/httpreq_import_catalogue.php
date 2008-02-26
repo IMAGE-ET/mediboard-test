@@ -14,16 +14,45 @@ $can->needsAdmin();
 /**
  * Catalogue import
  */
-function importCatalogue($cat, $parent_id = null) {  
+function importCatalogue($cat, $parent_id = null) { 
   global $AppUI, $remote_name;
  
   set_time_limit(180);
+  
+  // On rend toutes les analyses du catalogue obsoletes
+  $idAnalyse = new CIdSante400();
+  $idAnalyse->tag = $remote_name;
+  $idAnalyse->object_class = "CExamenLabo";
+  $idAnalyses = $idAnalyse->loadMatchingList();
+  foreach($idAnalyses as $key => $_id_analyse){
+  	$examenLabo = new CExamenLabo();
+  	$examenLabo->identifiant = $_id_analyse->id400;
+  	$examenLabo->loadMatchingObject();
+  	if($examenLabo->_id){
+  	  $examenLabo->obsolete = 1; 
+      $examenLabo->store();
+  	}
+  }
+  
+  $idCatalogue = new CIdSante400();
+  $idCatalogue->tag = $remote_name;
+  $idCatalogue->object_class = "CCatalogueLabo";
+  $idCatalogues = $idCatalogue->loadMatchingList();
+  foreach($idCatalogues as $key => $_id_catalogue){
+  	$catalogueLabo = new CCatalogueLabo();
+  	$catalogueLabo->identifiant = $_id_catalogue->id400;
+  	$catalogueLabo->loadMatchingObject();
+  	if($catalogueLabo->_id){
+  	  $catalogueLabo->obsolete = 1;
+  	  $catalogueLabo->store();
+  	}
+  }
+ 
   
   $compteur["analyses"] = 0;
   $compteur["chapitres"] = 0;
   $compteur["sousChapitre"] = 0; 
   
- 
   $catalogues = array();
   // Creation du catalogue global LABO
   $catal = new CCatalogueLabo();
@@ -38,6 +67,7 @@ function importCatalogue($cat, $parent_id = null) {
   $idCat->tag = $remote_name;
   $idCat->id400 = $remote_name;
   
+  $catal->obsolete = 0;
   $idCat->bindObject($catal);
   //$AppUI->stepAjax("Catalogue '$catal->libelle' importé", UI_MSG_OK);
   
@@ -68,6 +98,7 @@ function importCatalogue($cat, $parent_id = null) {
       $idCatChapitre->tag = $remote_name;
       $idCatChapitre->id400 = substr(hash('md5',$chapitre), 0, 4);
       
+      $catChapitre->obsolete = 0;
       $idCatChapitre->bindObject($catChapitre);
 
       //$AppUI->stepAjax("Catalogue '$catChapitre->libelle' importé", UI_MSG_OK);
@@ -100,7 +131,9 @@ function importCatalogue($cat, $parent_id = null) {
         $idCatssChapitre->tag = $remote_name;
         $idCatssChapitre->id400 = substr(hash('md5', $sschapitre), 0, 4);
         
+        $catssChapitre->obsolete = 0;
         $idCatssChapitre->bindObject($catssChapitre);
+        
         //$AppUI->stepAjax("Sous Catalogue '$catssChapitre->libelle' importé", UI_MSG_OK);
         $compteur["sousChapitre"]++; 
         //on met à jour les catalogues
@@ -153,6 +186,7 @@ function importCatalogue($cat, $parent_id = null) {
     $analyse->catalogue_labo_id = $catalogue->_id;
     $analyse->type = "num";
   	
+    $analyse->obsolete = 0;
     $idAnalyse->bindObject($analyse);
     //$AppUI->stepAjax("Analyse '$analyse->identifiant' importée", UI_MSG_OK);
     $compteur["analyses"]++;

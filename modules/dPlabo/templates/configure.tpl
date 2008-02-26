@@ -158,6 +158,11 @@ var Action = {
 
 </table>
 
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
 <table class="form">
 
   <!-- CPack -->  
@@ -187,7 +192,7 @@ var Action = {
   
 </table>
 
-
+</form>
 
 <table class="tbl">
 

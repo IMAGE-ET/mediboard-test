@@ -11,7 +11,7 @@ global $AppUI;
 
 $config = array();
 $config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.27";
+$config["mod_version"]     = "0.28";
 $config["mod_type"]        = "user";
 
 class CSetupdPlabo extends CSetup {
@@ -193,7 +193,21 @@ class CSetupdPlabo extends CSetup {
             ADD `function_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `examen_labo`
+            ADD `obsolete` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `catalogue_labo`
+            CHANGE `identifiant` `identifiant` VARCHAR(10) NOT NULL, 
+            ADD `obsolete` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `pack_examens_labo`  
+            ADD `obsolete` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.28";
   }
 }
 ?>

@@ -29,6 +29,8 @@ $pack->loadRefs();
 
 //Chargement de tous les packs
 $where = array("function_id IS NULL OR function_id ".$ds->prepareIn(array_keys($listFunctions)));
+$where["obsolete"] = " = '0'";
+
 $order = "libelle";
 $listPacks = $pack->loadList($where, $order);
 foreach($listPacks as $key => $curr_pack) {
