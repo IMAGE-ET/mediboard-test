@@ -22,7 +22,10 @@ PairEffect.initGroup("acteEffect");
 
 </script>
 
+<table>
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
+  <tr>
+  <td class="text" style="border: outset 3px #000; background-color: #444">
 	<!-- Codes d'associations -->
   {{if count($curr_code->assos) < 15}}
   {{if $can->edit || $modif_operation}}
@@ -38,12 +41,15 @@ PairEffect.initGroup("acteEffect");
   {{/if}}
   {{/if}}
 
-  <a href="#" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
+  <a href="#" style="color: #fff;" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
     <strong>{{$curr_code->code}} :</strong> 
     {{$curr_code->libelleLong}}
   </a>
-    
-	<br style="clear: both;" />
+  
+  </td>
+  </tr>
+  <tr>
+  <td class="text">
 
   {{foreach from=$curr_code->activites item=curr_activite}}
   {{foreach from=$curr_activite->phases item=curr_phase}}
@@ -380,8 +386,14 @@ PairEffect.initGroup("acteEffect");
 {{/if}}
 
 {{/foreach}}
-<hr style="height: 5px; background-color: #000" />
+</td>
+</tr>
 
 {{foreachelse}}
+<tr>
+<td>
 <em>Pas d'acte à coder</em>
+</td>
+</tr>
 {{/foreach}}
+</table>
