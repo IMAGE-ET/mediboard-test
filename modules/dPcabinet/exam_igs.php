@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsEdit();
+//$can->needsEdit();
 
 $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 
