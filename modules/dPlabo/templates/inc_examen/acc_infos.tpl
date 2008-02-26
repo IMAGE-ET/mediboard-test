@@ -1,5 +1,5 @@
 <table class="form">  <tr>    <th>{{mb_label object=$examen field="catalogue_labo_id"}}</th>    <td>      <select name="catalogue_labo_id">        {{assign var="selected_id" value=$examen->catalogue_labo_id}}        {{assign var="exclude_id" value=""}}        {{foreach from=$listCatalogues item="_catalogue"}}
-          {{if !$_catalogue->_locked}}            {{include file="options_catalogues.tpl"}}          {{/if}}
+          {{if !$_catalogue->_locked || $examen->_locked}}            {{include file="options_catalogues.tpl"}}          {{/if}}
         {{/foreach}}      </select>    </td>  </tr>
   <tr>    <th>{{mb_label object=$examen field="identifiant"}}</th>    <td>{{mb_field object=$examen field="identifiant"}}</td>  </tr>
   <tr>    <th>{{mb_label object=$examen field="libelle"}}</th>    <td>{{mb_field object=$examen field="libelle"}}</td>  </tr>

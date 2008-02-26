@@ -17,7 +17,11 @@ $examen_labo_id = mbGetValueFromGetOrSession("examen_labo_id");
 $examen = new CExamenLabo;
 
 // Chargement du catalogue demandé
-if ($examen_labo_id && !mbGetValueFromGet("catalogue_labo_id")) {
+if(mbGetValueFromGet("catalogue_labo_id")) {
+  $examen_labo_id = null;
+  mbSetValueToSession("examen_labo_id");
+}
+if($examen_labo_id) {
   $examen->load($examen_labo_id);
   $examen->loadRefs();
   $examen->getSiblings();

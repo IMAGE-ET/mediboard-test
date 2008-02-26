@@ -63,6 +63,7 @@ class CPackExamensLabo extends CMbObject {
   }
   
   function loadRefsBack() {
+    parent::loadRefsBack();
     $item = new CPackItemExamenLabo;
     
     $where = array("pack_examens_labo_id" => "= $this->pack_examens_labo_id");
