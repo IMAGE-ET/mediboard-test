@@ -106,7 +106,7 @@ PairEffect.initGroup("acteEffect");
   <table class="form">
     
     <tr id="acte{{$key}}-trigger">
-      <td colspan="4" style="width: 100%; background-color: #{{$bg_color}}">
+      <td colspan="4" style="width: 100%; background-color: #{{$bg_color}}; border: outset 4px {{if $curr_activite->numero == 4}}#44f{{else}}#ff0{{/if}};">
         Activité {{$curr_activite->numero}} ({{$curr_activite->type}}) &mdash; 
         Phase {{$curr_phase->phase}} 
         <!-- {{$curr_phase->libelle}} -->
@@ -160,7 +160,7 @@ PairEffect.initGroup("acteEffect");
 		{{assign var=modifs_compacts value=$dPconfig.dPsalleOp.CActeCCAM.modifs_compacts}}  
     <tr class="{{$view}}">
       <th>{{mb_label object=$acte field=modificateurs}}</th>
-      <td class="text" colspan="3">
+      <td{{if !$modifs_compacts}} class="text" colspan="3"{{/if}}>
         {{foreach from=$curr_phase->_modificateurs item=curr_mod name=modificateurs}}
           {{if $can->edit || $modif_operation}}
           <input type="checkbox" name="modificateur_{{$curr_mod->code}}" {{if $curr_mod->_value}}checked="checked"{{/if}} />
@@ -177,8 +177,37 @@ PairEffect.initGroup("acteEffect");
         <em>Pas de modificateurs pour cette activité</em>
         {{/foreach}}
       </td>
+      {{if $modifs_compacts}}
+      <td>
+        {{mb_label object=$acte field=rembourse}}
+        {{assign var=disabled value=""}}
+        {{if $curr_code->remboursement == 1}}{{assign var=disabled value=0}}{{/if}}
+        {{if $curr_code->remboursement == 2}}{{assign var=disabled value=1}}{{/if}}
+
+        {{assign var=default value="1"}}
+        {{if $curr_code->remboursement == 1}}{{assign var=default value=1}}{{/if}}
+        {{if $curr_code->remboursement == 2}}{{assign var=default value=0}}{{/if}}
+        
+        {{if $can->edit || $modif_operation}}
+          {{mb_field object=$acte field=rembourse disabled=$disabled default=$default}}
+        {{else}}
+          {{mb_value object=$acte field=rembourse}}
+        {{/if}}
+      </td>
+      <td>
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+        {{mb_label object=$acte field=montant_depassement}}
+        {{if $can->edit || $modif_operation}}
+          {{mb_field object=$acte field=montant_depassement}}
+        {{else}}
+          {{mb_value object=$acte field=montant_depassement}}
+        {{/if}}
+        {{/if}}
+      </td>
+      {{/if}}
     </tr>
     
+    {{if !$modifs_compacts}}
     <!-- Remboursable + Dépassement -->
     <tr class="{{$view}}">
       <th>
@@ -211,8 +240,8 @@ PairEffect.initGroup("acteEffect");
         {{/if}}
       </td>
       {{/if}}
-
     </tr>
+    {{/if}}
 		
 		<!-- Commentaire -->
     {{if $dPconfig.dPsalleOp.CActeCCAM.commentaire}}
@@ -351,7 +380,7 @@ PairEffect.initGroup("acteEffect");
 {{/if}}
 
 {{/foreach}}
-<hr/>
+<hr style="height: 5px; background-color: #000" />
 
 {{foreachelse}}
 <em>Pas d'acte à coder</em>
