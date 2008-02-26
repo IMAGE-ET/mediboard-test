@@ -105,6 +105,13 @@ function pageMain() {
   ViewPort.SetAvlHeight('PacksExamensView'     , 1);
   ViewPort.SetAvlHeight('CataloguesView'       , 0.4);
   ViewPort.SetAvlHeight('CataloguesExamensView', 1);
+
+  // Debugage du scroll de la div de la liste des prescriptions
+  Position.includeScrollOffsets = true;
+  Event.observe('PacksView', 'scroll', function(event) { Position.prepare(); });
+  
+  // Pour éviter de dropper en dessous du tableau de la liste des analyses
+  Droppables.add('viewport-PacksExamensView', oDragOptions );
 }
 
 // Recherche des analyses
@@ -130,7 +137,7 @@ function search(){
   </tr>
   <tbody class="viewported">
   <tr>
-    <td class="viewport">
+    <td class="viewport" id="viewport-PacksView">
       <div id="PacksView"></div>
     </td>
     <td class="viewport">
@@ -138,7 +145,7 @@ function search(){
     </td>
   </tr>
   <tr>
-    <td class="viewport">
+    <td class="viewport" id="viewport-PacksExamensView">
       <div id="PacksExamensView"></div>
     </td>
     <td class="viewport">
