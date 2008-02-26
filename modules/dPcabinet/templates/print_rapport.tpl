@@ -71,7 +71,7 @@
           <td>{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
           {{/if}}
         </tr>
-            <tr>
+        <tr>
           <th class="category" colspan="8">Réglement Tiers</th>
         </tr>
         <tr>
@@ -109,32 +109,31 @@
           {{if !$compta}}
           <td>{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
           {{/if}}
-        </tr>  </table>
-       <table class="tbl">
-        <tr>
-          <th class="category" colspan="2">Récapitulatif des factures</th>
         </tr>
         <tr>
-          <th class="category" width="10%">Total secteur 1</th>
-          <td>{{$recapitulatif.total_secteur1|string_format:"%.2f"}} &euro;</td>
+          <th class="category" colspan="8">Récapitulatif des factures</th>
+        </tr>
+        <tr>
+          <th class="category">Total secteur 1</th>
+          <td colspan="7">{{$recapitulatif.total_secteur1|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td>{{$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
+          <td colspan="7">{{$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{if !$compta}}
         <tr>
           <th class="category">Total non réglée (Patient)</th>
-          <td>{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
+          <td colspan="7">{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{/if}}
         <tr>
           <th class="category">Total non réglée (AMO/AMC)</th>
-          <td>{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
+          <td colspan="7">{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total facture</th>
-          <td>{{$recapitulatif.total_secteur1+$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
+          <td colspan="7">{{$recapitulatif.total_secteur1+$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>
     </td>
@@ -164,7 +163,9 @@
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
         <tr>
-          <td><a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a></td>
+          <td class="text">
+            <a name="consultation{{$curr_consult->consultation_id}}">{{$curr_consult->_ref_patient->_view}}</a>
+          </td>
           {{if !$compta}}
           <td>{{$curr_consult->_ref_patient->tel}}</td>
           {{else}}
@@ -185,7 +186,7 @@
             {{$curr_consult->tiers_mode_reglement}}
           {{/if}}
           </td>
-          <td>{{$curr_consult->tarif}}</td>
+          <td class="text">{{$curr_consult->tarif}}</td>
           <td>{{$curr_consult->secteur1|string_format:"%.2f"}} &euro;</td>
           <td>{{$curr_consult->secteur2|string_format:"%.2f"}} &euro;</td>
           <td>

@@ -145,16 +145,12 @@ foreach($listPlage as $key => $value) {
     // Chargement du patient de la consultation
     $consult->loadRefPatient();
      
-   if($consult->du_patient){
-     @$reglement[$consult->patient_mode_reglement]["du_patient"] += $consult->du_patient; 
-   }
-   if($consult->du_tiers){
-     @$reglement[$consult->tiers_mode_reglement]["du_tiers"]     += $consult->du_tiers;
-   }
-   if($consult->patient_mode_reglement && $consult->du_patient){
+   if($consult->du_patient && $consult->patient_mode_reglement){
+     $reglement[$consult->patient_mode_reglement]["du_patient"] += $consult->du_patient;
      $reglement[$consult->patient_mode_reglement]["nb_reglement_patient"]++;
    }
-   if($consult->tiers_mode_reglement && $consult->du_tiers){
+   if($consult->du_tiers && $consult->tiers_mode_reglement){
+     $reglement[$consult->tiers_mode_reglement]["du_tiers"] += $consult->du_tiers;
      $reglement[$consult->tiers_mode_reglement]["nb_reglement_tiers"]++;
    }
  

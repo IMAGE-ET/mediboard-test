@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.95";
+$config["mod_version"]     = "0.96";
 $config["mod_type"]        = "user";
 
 
@@ -1056,8 +1056,14 @@ class CSetupdPcabinet extends CSetup {
     $sql = "ALTER TABLE `consultation`
             DROP `reglement_AM`;";
     $this->addQuery($sql);
+    
+    $this->makeRevision("0.95");
+    $sql = "UPDATE consultation
+            SET patient_date_reglement = NULL, patient_mode_reglement = NULL
+            WHERE du_patient = 0;";
+    $this->addQuery($sql);
 
-    $this->mod_version = "0.95";
+    $this->mod_version = "0.96";
   }
 }
 ?>

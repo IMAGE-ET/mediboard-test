@@ -325,10 +325,10 @@ function pageMain() {
                   <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
                 </td>
                 <td>
-                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} &euro;</a>
                 </td>
                 <td>
-                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} &euro;</a>
                 </td>
               </tr>
               {{/foreach}}
@@ -348,10 +348,10 @@ function pageMain() {
                   <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
                 </td>
                 <td>
-                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} &euro;</a>
                 </td>
                 <td>
-                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} €</a>
+                  <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} &euro;</a>
                 </td>
               </tr>
               {{/foreach}}

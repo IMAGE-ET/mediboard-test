@@ -221,8 +221,11 @@ class CConsultation extends CCodable {
   function updateFormFields() {
     parent::updateFormFields();
   	$this->_somme = $this->secteur1 + $this->secteur2;
-    if($this->patient_date_reglement == "0000-00-00")
+    if($this->patient_date_reglement == "0000-00-00") {
       $this->patient_date_reglement = null;
+    }
+    $this->du_patient = round($this->du_patient, 2);
+    $this->du_tiers   = round($this->du_tiers  , 2);
     $this->_hour = intval(substr($this->heure, 0, 2));
     $this->_min  = intval(substr($this->heure, 3, 2));
     $this->_check_premiere = $this->premiere;
