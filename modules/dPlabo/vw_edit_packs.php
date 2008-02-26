@@ -24,7 +24,7 @@ $pack->load(mbGetValueFromGetOrSession("pack_examens_labo_id"));
 if($pack->_id && $pack->getPerm(PERM_EDIT)) {
   $pack->loadRefs();
 } else {
-  $pack = new CCatalogueLabo;
+  $pack = new CPackExamensLabo;
 }
 
 //Chargement de tous les packs
