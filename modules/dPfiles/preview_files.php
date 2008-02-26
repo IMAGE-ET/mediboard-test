@@ -47,13 +47,12 @@ if($objectClass && $objectId && $elementClass && $elementId){
     if($elementClass == "CFile"){
     	$type = "_ref_files";
       $nameFile = "file_name";
-    }elseif($elementClass == "CCompteRendu"){
+    }elseif($elementClass == "CCompteRendu") {
       $type = "_ref_documents";
       $nameFile = "nom";
     }
-    $aKeys = array_keys($object->$type);
-    $trouve_fileSel = array_search($elementId , $aKeys);
-    if($trouve_fileSel!== false){
+    
+    if (array_key_exists($elementId, $object->$type)) {
       $listFile =& $object->$type;
       $listFile[$elementId]->canRead();
       $acces_denied = !$listFile[$elementId]->_canRead;
@@ -69,7 +68,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
       }
     }
     
-  }else{
+  }else {
   	// Objet Inexistant
     $object = null;
   }
@@ -129,6 +128,7 @@ if($popup==1){
     foreach($affichageFile as $keyCat => $currCat){
       $aAllFilesDocs = array_merge($aAllFilesDocs,$affichageFile[$keyCat]["DocsAndFiles"]);
     }
+        
     $aFilePrevNext = CMbArray::getPrevNextKeys($aAllFilesDocs, $keyFileSel);
     foreach($aFilePrevNext as $key=>$value){
       if($value){

@@ -51,7 +51,7 @@ function reloadVwPatient(){
   mainUrl.requestUpdate('vwPatient', { waitingText : null });
 }
 
-function reloadAfterSaveDoc(){
+Document.refreshList = function(){
   reloadVwPatient();
 }
 </script>

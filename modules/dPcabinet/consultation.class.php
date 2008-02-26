@@ -711,7 +711,8 @@ class CConsultation extends CCodable {
     $this->loadExtCodesCCAM();
   }
 
-  function loadRefsDocs() {
+  
+  function loadRefsDocsOld() {
   	$this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
       $this->_ref_documents = new CCompteRendu();
@@ -727,6 +728,20 @@ class CConsultation extends CCodable {
     return $docs_valid;
   }
 
+  function loadRefsDocs() {
+    parent::loadRefsDocs();
+    
+    // On ajoute les documents de la consultation d'anesthésie
+  	$this->loadRefConsultAnesth();
+  	$consult_anesth =& $this->_ref_consult_anesth;
+    if ($consult_anesth->_id) {
+      $consult_anesth->loadRefsDocs();
+      $this->_ref_documents = CMbArray::mergeKeys($this->_ref_documents, $consult_anesth->_ref_documents);
+    }
+
+    return count($this->_ref_documents);
+  }
+  
   
   function getExecutantId($code_activite) {
   	$this->loadRefPlageConsult();
@@ -770,6 +785,9 @@ class CConsultation extends CCodable {
   }
   
   function loadRefConsultAnesth() {
+    if ($this->_ref_consult_anesth) {
+      return;
+    }
    
   	$this->_ref_consult_anesth = new CConsultAnesth;
     $where = array();

@@ -66,7 +66,7 @@ function hideItem(sClassName, id) {
   oElement.hide();
 }
 
-function reloadAfterSaveDoc(){
+Document.refreshList = function(){
   updateListOperations();
   updateListHospi("sortie");
 }

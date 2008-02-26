@@ -14,7 +14,7 @@ function loadActesNGAP(sejour_id){
   url.requestUpdate('listActesNGAP', { waitingText: null } );
 }
 
-function reloadAfterSaveDoc(sejour_id){
+Document.refreshList = function(sejour_id){
   var url = new Url;
   url.setModuleAction("dPhospi", "httpreq_vw_documents");
   url.addParam("sejour_id" , sejour_id);
@@ -35,10 +35,6 @@ function storeVoletAcc(objAcc){
       oCookie.setSubValue("showTab", i.toString());
     }
   }
-}
-
-function loadDocuments(sejour_id){
-  reloadAfterSaveDoc(sejour_id);
 }
 
 function loadSejour(sejour_id) {
@@ -62,7 +58,7 @@ function popEtatSejour(sejour_id) {
 
 function loadViewSejour(sejour_id, praticien_id){
   loadSejour(sejour_id); 
-  loadDocuments(sejour_id); 
+  Document.refreshList(sejour_id); 
   if($('listActesNGAP')){
     loadActesNGAP(sejour_id);
   }

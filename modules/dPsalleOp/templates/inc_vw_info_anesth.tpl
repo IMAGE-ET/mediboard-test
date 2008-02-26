@@ -117,9 +117,7 @@
    
     <tr>
       <td colspan="2">
-        <div id="exam_comp">
-          {{include file="../../dPcabinet/templates/inc_examens_comp.tpl" _is_anesth=1 consult=$consult_anesth->_ref_consultation}}
-        </div>
+        {{include file="../../dPcabinet/templates/inc_examens_comp.tpl" _is_anesth=1 consult=$consult_anesth->_ref_consultation}}
       </td>
     </tr>
       

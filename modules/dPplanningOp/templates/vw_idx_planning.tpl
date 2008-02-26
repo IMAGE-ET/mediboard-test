@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 
-function reloadAfterSaveDoc(operation_id){
+Document.refreshList = function(operation_id) {
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
   url.addParam("operation_id" , operation_id);

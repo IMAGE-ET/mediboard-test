@@ -176,17 +176,13 @@ function reloadFdr() {
   {{/if}}
 
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  url.requestUpdate('fdrConsultContent', { waitingText : null });
+	  url.requestUpdate('fdrConsultContent', { waitingText : null });
   
   {{if $app->user_prefs.ccam_consultation}} 
   // rafraichissement de la div ccam
   ActesCCAM.refreshList({{$consult->_id}}, {{$userSel->_id}});
   ActesNGAP.refreshList();
   {{/if}} 
-}
-
-function reloadAfterSaveDoc(){
-  reloadFdr();
 }
 
 function reloadAfterUploadFile(){
@@ -212,10 +208,7 @@ function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
 
-
-
 </script>
-
 
 <table class="form">
   <tr>
@@ -227,9 +220,7 @@ function submitFdr(oForm) {
     <!-- Files -->
 
     <td class="text">
-      <div id="exam_comp">
       {{include file="../../dPcabinet/templates/inc_examens_comp.tpl"}}
-      </div>
       
       <strong>Fichiers</strong>
 			<ul>
@@ -255,79 +246,11 @@ function submitFdr(oForm) {
       </button>
     </td>
 
-    <!-- Documents -->
+    <!-- Documents FDR -->
 
-    <td>
-			
-    <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-    <table class="form">
-      <tr>
-        <td>
-          {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
-          <select name="_choix_modele" onchange="Document.create(this.value, {{$consult->_ref_consult_anesth->consultation_anesth_id}})">
-          {{else}}
-          <select name="_choix_modele" onchange="Document.create(this.value, {{$consult->consultation_id}})">
-          {{/if}}           
-            <option value="">&mdash; Choisir un modèle</option>
-            {{if $listModelePrat|@count}}
-            <optgroup label="Modèles du praticien">
-              {{foreach from=$listModelePrat item=curr_modele}}
-              <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{/foreach}}
-            </optgroup>
-            {{/if}}
-            {{if $listModeleFunc|@count}}
-            <optgroup label="Modèles du cabinet">
-              {{foreach from=$listModeleFunc item=curr_modele}}
-              <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{/foreach}}
-            </optgroup>
-            {{/if}}
-          </select>
-          {{if $consult->_is_anesth}}
-            {{assign var=object value=$consult->_ref_consult_anesth}}
-          {{else}}
-            {{assign var=object value=$consult}}
-          {{/if}}
-          <button type="button" class="search" onclick="ModeleSelector.init('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}')">Modèle</button>
-				    <input type="hidden" name="_modele_id" />
-				    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$object->_id}}','{{$object->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
-				    <script type="text/javascript">
-				      ModeleSelector.init = function(object_id, object_class, praticien_id){
-				        this.sForm  = "newDocumentFrm";
-				        this.sModele_id = "_modele_id";
-				        this.sObject_id = "_object_id";
-				        this.pop(object_id, object_class,praticien_id);
-				      }
-				    </script>
-        </td>
-      </tr>
-    </table>
-    </form>
-    
-    <ul>
-      {{foreach from=$consult->_ref_documents item=document}}
-      <li>
-        <form name="editDocumentFrm{{$document->compte_rendu_id}}" action="?m={{$m}}" method="post">
-        <input type="hidden" name="m" value="dPcompteRendu" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_modele_aed" />
-        {{if $consult->_ref_consult_anesth->consultation_anesth_id}}
-        <input type="hidden" name="object_id" value="{{$consult->_ref_consult_anesth->consultation_anesth_id}}" />
-        {{else}}
-        <input type="hidden" name="object_id" value="{{$consult->consultation_id}}" />
-        {{/if}}          
-        {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-        <button class="edit notext" type="button" onclick="Document.edit({{$document->compte_rendu_id}})">{{tr}}Edit{{/tr}}</button>
-        <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'},{onComplete:reloadFdr})" >{{tr}}Delete{{/tr}}</button>
-        </form>
-        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">
-          {{$document->nom}}
-        </span>
-      </li>
-      {{/foreach}}
-    </ul>
-    
+    <td> 
+      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+      {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=fdr}}
     </td>
 	</tr>
 

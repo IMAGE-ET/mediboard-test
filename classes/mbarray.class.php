@@ -110,7 +110,7 @@ class CMbArray {
 	 * Merge recursively two array
 	 * @param array $paArray1 First array
 	 * @param array $paArray2 The array to be merged
-	 * @return arrau The merge result
+	 * @return array The merge result
 	 */
 	static function mergeRecursive($paArray1, $paArray2) {
 	  if (!is_array($paArray1) or !is_array($paArray2)) { 
@@ -123,6 +123,23 @@ class CMbArray {
 	   
 	  return $paArray1;
 	}
+
+
+	/**
+	 * Alternative to array_merge that always preserves keys
+	 * @param array ... Any number of arrays to merge
+	 * @return array The merge result
+	 */
+	static function mergeKeys(){
+    $args = func_get_args();
+    $result = array();
+    foreach($args as $array){
+      foreach($array as $key=>$value){
+        $result[$key] = $value;
+      }
+    }
+    return $result;
+  }
   
   /**
    * DEPRECATED ALIAS TO BUILT IN str_split() TO REMOVE

@@ -90,12 +90,12 @@ function pageMain() {
   // Effet sur le programme
   new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
   // Affichage de la liste des documents de l'operation
-  reloadAfterSaveDoc();
+  Document.refreshList();
 
   {{/if}}
 }
 
-function reloadAfterSaveDoc() {
+Document.refreshList = function() {
   var url = new Url;
   url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
   url.addParam("operation_id" , "{{$selOp->_id}}");

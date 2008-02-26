@@ -101,8 +101,23 @@ function reloadListExamComp() {
     </td>
     <td class="text" id="listExamComp" rowspan="2">
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
+      
+      <table class="form">
+			  <!-- Documents ExamComp -->
+			  <tr>
+			    <th class="category">Documents</th>
+			  </tr>
+			  <tr>
+			    <td>
+			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+			      {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=exam}}
+			    </td>
+			  </tr>
+
+      </table>
     </td>
   </tr>
+  
   <tr>
     <td>
       <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

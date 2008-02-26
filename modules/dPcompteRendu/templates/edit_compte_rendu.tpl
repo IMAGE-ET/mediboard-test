@@ -22,9 +22,9 @@ function refreshCR() {
   sourceUrl.requestUpdate('htmlarea');
 }
 
-if (window.opener.reloadAfterSaveDoc) {
-  window.opener.reloadAfterSaveDoc('{{$compte_rendu->object_id}}','{{$compte_rendu->object_class}}');
-}
+{{if $compte_rendu->_id}}
+window.opener.Document.refreshList('{{$compte_rendu->object_id}}','{{$compte_rendu->object_class}}');
+{{/if}}
 
 </script>
 

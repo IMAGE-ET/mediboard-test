@@ -47,7 +47,7 @@
       {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
       <button class="edit notext" type="button" onclick="Document.edit({{$document->compte_rendu_id}})">
       </button>
-      <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'}, { onComplete: function() { reloadAfterSaveDoc({{$sejour->_id}}) } })" />
+      <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'le document',objName:'{{$document->nom|smarty:nodefaults|JSAttribute}}',ajax:1,target:'systemMsg'}, { onComplete: function() { Document.refreshList({{$sejour->_id}}) } })" />
       </form>
     </td>
   </tr>

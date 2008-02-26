@@ -1,4 +1,5 @@
 {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+<div id="exam_comp">
 
 <form name="newExamen" action="?m=dPcabinet">
 			            
@@ -67,3 +68,5 @@
   </li>
   {{/if}}
 </ul>
+
+</div>

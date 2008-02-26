@@ -227,7 +227,7 @@ $consult->getAssociationCodesActes();
 $consult->loadPossibleActes();
 
 // Chargement du dossier medical du patient de la consultation
-if($consult->patient_id){
+if ($consult->patient_id){
   $consult->_ref_patient->loadRefDossierMedical();
   $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
 }
@@ -272,7 +272,6 @@ $contrainteDestination[8] = array("", 6, 7);
 $contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation[7] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation[8] = array("", "FUGUE", "SCAM", "PSA", "REO");
-
 
 // Création du template
 $smarty = new CSmartyDP();
