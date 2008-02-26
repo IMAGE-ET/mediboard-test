@@ -25,7 +25,7 @@ PairEffect.initGroup("acteEffect");
 <table class="main">
 {{foreach from=$subject->_ext_codes_ccam item=curr_code key=curr_key}}
   <tr>
-  <td class="text" style="border: outset 3px #000; background-color: #444">
+  <td class="text" {{if $dPconfig.dPsalleOp.CActeCCAM.contraste}}style="border: outset 3px #000; background-color: #444"{{/if}}>
 	<!-- Codes d'associations -->
   {{if count($curr_code->assos) < 15}}
   {{if $can->edit || $modif_operation}}
@@ -41,7 +41,7 @@ PairEffect.initGroup("acteEffect");
   {{/if}}
   {{/if}}
 
-  <a href="#" style="color: #fff;" onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
+  <a href="#" {{if $dPconfig.dPsalleOp.CActeCCAM.contraste}}style="color: #fff;"{{/if}} onclick="viewCode('{{$curr_code->code}}', '{{$subject->_class_name}}')">
     <strong>{{$curr_code->code}} :</strong> 
     {{$curr_code->libelleLong}}
   </a>

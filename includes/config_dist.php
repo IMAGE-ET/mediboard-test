@@ -197,12 +197,13 @@ $dPconfig["dPsalleOp"] = array(
 	  "modif_salle" => "0",
 	),
   "CActeCCAM" => array(
-	  "alerte_asso" => "1",
-	  "tarif" => "0",
-	  "signature" => "0",
-	  "openline" => "0",
+	  "contraste"       => "0",
+	  "alerte_asso"     => "1",
+	  "tarif"           => "0",
+	  "signature"       => "0",
+	  "openline"        => "0",
 	  "modifs_compacts" => "0",
-	  "commentaire" => "1",
+	  "commentaire"     => "1",
 	),
 	"CDossierMedical" => array (
     "DAS" => "0",

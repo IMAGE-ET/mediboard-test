@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = '';
+$locales['config-dPsalleOp-CActeCCAM-contraste'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = '';
 $locales['CActeCCAM-acte_id-court'] = '';
@@ -76,6 +76,7 @@ $locales['CCodable-back-'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = '';
 $locales['config-dPsalleOp-CActeCCAM'] = '';
+$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = '';
 $locales['config-dPsalleOp-CActeCCAM-commentaire'] = '';
 $locales['config-dPsalleOp-CActeCCAM-modifs_compacts'] = '';
 $locales['config-dPsalleOp-CActeCCAM-openline'] = '';

@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = 'Alerter des associations douteuses';
+$locales['config-dPsalleOp-CActeCCAM-contraste'] = 'Affichage contrasté';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';
 $locales['CActeCCAM-acte_id-court'] = 'Id';
@@ -76,6 +76,7 @@ $locales['CCodable-back-'] = '';
 $locales['CMbObject-back-'] = '';
 $locales['CMediusers-back-actes_CCAM'] = 'Actes exécutés';
 $locales['config-dPsalleOp-CActeCCAM'] = 'Affichage des actes';
+$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = 'Alerter des associations douteuses';
 $locales['config-dPsalleOp-CActeCCAM-commentaire'] = 'Affichage des commentaires';
 $locales['config-dPsalleOp-CActeCCAM-modifs_compacts'] = 'Mode compact pour les modificateurs';
 $locales['config-dPsalleOp-CActeCCAM-openline'] = 'Laisser ouvert le détail des actes';
