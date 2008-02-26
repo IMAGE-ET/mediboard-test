@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-COperation-modif_salle'] = '';
+$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = '';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = '';
 $locales['CActeCCAM-acte_id-court'] = '';
@@ -85,6 +85,7 @@ $locales['config-dPsalleOp-CDossierMedical'] = '';
 $locales['config-dPsalleOp-CDossierMedical-DAS'] = '';
 $locales['config-dPsalleOp-COperation'] = '';
 $locales['config-dPsalleOp-COperation-mode'] = '';
+$locales['config-dPsalleOp-COperation-modif_salle'] = '';
 $locales['mod-dPsalleOp-tab-vw_operations'] = '';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = '';
 $locales['mod-dPsalleOp-tab-vw_signature_actes'] = '';

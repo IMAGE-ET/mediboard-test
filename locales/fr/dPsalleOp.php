@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPsalleOp-COperation-modif_salle'] = 'Permettre le changement de salle';
+$locales['config-dPsalleOp-CActeCCAM-alerte_asso'] = 'Alerter des associations douteuses';
 $locales['CActeCCAM'] = 'Actes CCAM';
 $locales['CActeCCAM-acte_id'] = 'Identifiant';
 $locales['CActeCCAM-acte_id-court'] = 'Id';
@@ -85,6 +85,7 @@ $locales['config-dPsalleOp-CDossierMedical'] = 'Affichage des diagnostics';
 $locales['config-dPsalleOp-CDossierMedical-DAS'] = 'Affichage des diagnostics associés';
 $locales['config-dPsalleOp-COperation'] = 'Interventions';
 $locales['config-dPsalleOp-COperation-mode'] = 'Affichage des interventions par';
+$locales['config-dPsalleOp-COperation-modif_salle'] = 'Permettre le changement de salle';
 $locales['mod-dPsalleOp-tab-vw_operations'] = 'Salle d\'opération';
 $locales['mod-dPsalleOp-tab-vw_reveil'] = 'Salle de reveil';
 $locales['mod-dPsalleOp-tab-vw_signature_actes'] = 'Bilan des actes';

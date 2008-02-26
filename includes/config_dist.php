@@ -197,6 +197,7 @@ $dPconfig["dPsalleOp"] = array(
 	  "modif_salle" => "0",
 	),
   "CActeCCAM" => array(
+	  "alerte_asso" => "1",
 	  "tarif" => "0",
 	  "signature" => "0",
 	  "openline" => "0",
