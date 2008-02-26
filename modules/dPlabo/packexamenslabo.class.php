@@ -54,6 +54,10 @@ class CPackExamensLabo extends CMbObject {
   }
   
   function loadRefsFwd() {
+    $this->loadRefFunction();
+  }
+  
+  function loadRefFunction() {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
   }
@@ -68,6 +72,15 @@ class CPackExamensLabo extends CMbObject {
       $_item->loadRefExamen();
       $_item->_ref_pack_examens_labo =& $this;
       $this->_ref_examens_labo[$_item->examen_labo_id] = $_item->_ref_examen_labo;
+    }
+  }
+  
+  function getPerm($perm_type) {
+    if($this->function_id) {
+      $this->loadRefFunction();
+      return $this->_ref_function->getPerm($perm_type);
+    } else {
+      return true;
     }
   }
 }

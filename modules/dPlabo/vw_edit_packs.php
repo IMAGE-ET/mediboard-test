@@ -14,16 +14,18 @@ $ds = CSQLDataSource::get("std");
 $user = new CMediusers;
 $user->load($AppUI->user_id);
 
-$pack_examens_labo_id = mbGetValueFromGetOrSession("pack_examens_labo_id");
-
 // Chargement des fontions
 $function = new CFunctions;
 $listFunctions = $function->loadListWithPerms(PERM_EDIT);
 
 // Chargement du pack demandé
 $pack = new CPackExamensLabo;
-$pack->load($pack_examens_labo_id);
-$pack->loadRefs();
+$pack->load(mbGetValueFromGetOrSession("pack_examens_labo_id"));
+if($pack->_id && $pack->getPerm(PERM_EDIT)) {
+  $pack->loadRefs();
+} else {
+  $pack = new CCatalogueLabo;
+}
 
 //Chargement de tous les packs
 $where = array("function_id IS NULL OR function_id ".$ds->prepareIn(array_keys($listFunctions)));
