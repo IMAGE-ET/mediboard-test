@@ -81,6 +81,7 @@ class CMouvSejourEcap extends CMouvement400 {
     
     $this->id400Etab = new CIdSante400();
     $this->id400Etab->id400 = $CIDC;
+    $this->tag = "eCap";
     $this->id400Etab->object_class = "CGroups";
 
     $this->etablissement = $this->id400Etab->getCachedObject();
@@ -115,7 +116,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Etab->bindObject($this->etablissement);
 
     $id400EtabSHS = new CIdSante400();
-    $id400EtabSHS->loadLatestFor($this->etablissement, "SHS");
+    $id400EtabSHS->loadLatestFor($this->etablissement, "eCap SHS");
     $id400EtabSHS->last_update = mbDateTime();
     $id400EtabSHS->id400 =  $etab400->consume("CSHS");
     $id400EtabSHS->store();
@@ -156,7 +157,7 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     // Id400 pricipal
-    $tag = "CIDC:{$this->id400Etab->id400}";
+    $tag = "eCap CIDC:{$this->id400Etab->id400}";
     $id400Prat = new CIdSante400();
     $id400Prat->object_class = "CMediusers";
     $id400Prat->id400 = $CPRT;
@@ -252,7 +253,7 @@ class CMouvSejourEcap extends CMouvement400 {
     // Id400 secondaire    
     if ($CPRT != "0") {
       $id400PratSHS = new CIdSante400();
-      $id400PratSHS->loadLatestFor($praticien, "SHS $tag");
+      $id400PratSHS->loadLatestFor($praticien, "$tag SHS");
       $id400PratSHS->last_update = mbDateTime();
       $id400PratSHS->id400 =  $prat400->consume("SIH");
       $id400PratSHS->store();
@@ -276,7 +277,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $DMED = $this->consume("DMED");
     
     // Gestion des id400
-    $tag = "CIDC:{$this->id400Etab->id400}";
+    $tag = "eCap CIDC:{$this->id400Etab->id400}";
     $this->id400Pat = new CIdSante400();
     $this->id400Pat->object_class = "CPatient";
     $this->id400Pat->id400 = $DMED;
@@ -434,11 +435,10 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->id400Pat->id400,
     );
     
-    $tags[] = "DHE";
-    $tags[] = "CIDC:{$this->id400Etab->id400}";
+    $tag = "eCap DHE CIDC:{$this->id400Etab->id400}";
     $this->id400DHE = new CIdSante400();
     $this->id400DHE->id400 = $IDAT;
-    $this->id400DHE->tag = join(" ", $tags);
+    $this->id400DHE->tag = $tag;
     
     $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
 
@@ -505,13 +505,10 @@ class CMouvSejourEcap extends CMouvement400 {
     
     // Gestion des id400
     $CINT = $operECap->consume("CINT");
-    $tags = array (
-      "CINT",
-      "CIDC:{$this->id400Etab->id400}"
-    );
+    $tag = "eCap CINT CIDC:{$this->id400Etab->id400}";
     $id400Oper = new CIdSante400();
     $id400Oper->id400 = $CINT;
-    $id400Oper->tag = join($tags, " ");
+    $id400Oper->tag = $tag;
 
     $this->trace($operation->getProps(), "Opération à enregistrer");
 
@@ -591,6 +588,7 @@ class CMouvSejourEcap extends CMouvement400 {
       
       // Gestion des id400
       $tags = array (
+        "eCap",
         "CIDC:{$this->id400Etab->id400}",
         "CINT:$CINT",
         "CPRT:$CPRT",
@@ -599,7 +597,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
       $id400acte = new CIdSante400();
       $id400acte->id400 = $CINT;
-      $id400acte->tag = join($tags, " ");
+      $id400acte->tag = join(" ", $tags);
 
       $this->trace($acte->getProps(), "Acte à enregistrer");
       $acte->_adapt_object = true;
@@ -666,6 +664,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $NDOS = $this->consume("NDOS");
 
     // Gestion des identifiants
+    $tags[] = "eCap";
     $tags[] = "NDOS";
     $tags[] = "CIDC:{$this->id400Etab->id400}";
     $this->id400Sej = new CIdSante400();

@@ -8,11 +8,11 @@
 <table class="form">
   <tr>
     <th class="category" colspan="6">
-      {{if $list_idSante400|@count == 100}}
-      Plus de 100 identifiants, seuls les 100 plus récents sont affichés
-      {{else}}
-      {{$list_idSante400|@count}} identifiants trouvés
+      {{$list_idSante400|@count}} identifiants 
+      {{if $list_idSante400|@count != $count_idSante400}}
+      sur {{$count_idSante400}}
       {{/if}}
+      trouvés
     </th>
   </tr>
 

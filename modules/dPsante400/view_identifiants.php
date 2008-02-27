@@ -44,14 +44,21 @@ if ($filter->object_id && $filter->object_class) {
 
 // Requête du filtre
 $order = "last_update DESC";
-$limit = "0, 100";
+$max = mbGetValueFromGet("max", 30);
+$limit = "0, $max";
 
 $list_idSante400 = $filter->loadMatchingList($order, $limit);
-foreach ($list_idSante400 as $curr_idSante400) {
-  $curr_idSante400->loadRefs();
+$count_idSante400 = $filter->countMatchingList();
+foreach ($list_idSante400 as &$_idSante400) {
+  $_idSante400->loadRefs();
 }
 
 $filter->last_update = mbGetValue($idSante400->last_update, mbDateTime());
+
+// Prendre exemple sur le fitre pour la création
+if (!$idSante400->_id) {
+  $idSante400 = $filter;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -60,6 +67,7 @@ $smarty->assign("target", $target);
 $smarty->assign("filter", $filter);
 $smarty->assign("idSante400", $idSante400);
 $smarty->assign("list_idSante400", $list_idSante400);
+$smarty->assign("count_idSante400", $count_idSante400);
 $smarty->assign("canSante400", $canSante400);
 $smarty->display("view_identifiants.tpl");
 

@@ -130,7 +130,6 @@ class CDoObjectAddEdit {
 
   function doIt() {
     $this->doBind();
-    
     if (intval(dPgetParam($this->refTab, 'del'))) {
       $this->doDelete();
     } else {

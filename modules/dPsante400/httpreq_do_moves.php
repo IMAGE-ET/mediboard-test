@@ -16,6 +16,7 @@ $marked = mbGetValueFromGet("marked");
 
 switch (mbGetValueFromGet("action")) {
 	case "count";
+	
 	$count = $mouv->count($marked);
 	$AppUI->stepAjax("$count mouvements disponibles", UI_MSG_OK);
 	break;

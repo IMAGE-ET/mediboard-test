@@ -16,7 +16,7 @@ class CRecordSante400 {
   function __construct() {
   }
 
-  function connect() {
+  static function connect() {
     
     if (self::$dbh) {
       return;

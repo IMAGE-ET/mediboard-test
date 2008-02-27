@@ -8,6 +8,9 @@
 **/
 
 $do = new CDoObjectAddEdit("CIdSante400", "id_sante400_id");
+
+// Indispensable pour ne pas écraser les paramètes dans action
+$do->redirect = null;
 $do->doIt();
 
 ?>

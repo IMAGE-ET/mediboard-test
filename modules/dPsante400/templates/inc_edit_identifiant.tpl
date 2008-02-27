@@ -65,18 +65,18 @@
   </tr>
 
   <tr>
-    <td>{{mb_label object=$filter field="id400" }}</td>
-    <td>{{mb_field object=$filter field="id400" canNull="false"}}</td>
+    <td>{{mb_label object=$idSante400 field="id400" }}</td>
+    <td>{{mb_field object=$idSante400 field="id400" canNull="false"}}</td>
   </tr>
 
   <tr>
-    <td>{{mb_label object=$filter field="tag"}}</td>
-    <td>{{mb_field object=$filter field="tag" size="40"}}</td>
+    <td>{{mb_label object=$idSante400 field="tag"}}</td>
+    <td>{{mb_field object=$idSante400 field="tag" size="40"}}</td>
   </tr>
 
   <tr>
-    <td>{{mb_label object=$filter field="last_update"}}</td>
-    <td class="date">{{mb_field object=$filter field="last_update" form="editFrm" canNull="false"}} </td>
+    <td>{{mb_label object=$idSante400 field="last_update"}}</td>
+    <td class="date">{{mb_field object=$idSante400 field="last_update" form="editFrm" canNull="false"}} </td>
   </tr>
 
         
