@@ -105,6 +105,7 @@ class CPrescriptionLabo extends CMbObject {
     $idExterne->loadLatestFor($this, "iMeds");
     if(!$idExterne->_id) {
       // Afactoriser : assez complexe (concatenation du code 4 praticien et du code 4 prescription)
+      $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
       $this->loadRefsFwd();
       $prat =& $this->_ref_praticien;
 
