@@ -16,9 +16,9 @@
     <td>
       <select name="praticien_id" onchange="this.form.submit()">
         <option value="">&mdash; Aucun praticien</option>
-        {{foreach from=$listPrats item=curr_prat}}
-        <option value="{{$curr_prat->_id}}" {{if $curr_prat->_id == $praticien_id}} selected="selected" {{/if}}>
-          {{$curr_prat->_view}}
+        {{foreach from=$listPrats key=key_prat item=curr_prat}}
+        <option value="{{$key_prat}}" {{if $key_prat == $praticien_id}} selected="selected" {{/if}}>
+          {{$curr_prat}}
         </option>
         {{/foreach}}
       </select>

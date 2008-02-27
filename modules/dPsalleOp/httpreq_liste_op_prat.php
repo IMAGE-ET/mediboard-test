@@ -44,6 +44,8 @@ foreach($opsJour as $curr_op) {
     $listPrats[$curr_op->chir_id] = $listPermPrats[$curr_op->chir_id];
   }
 }
+$listPrats = CMbArray::pluck($listPrats, "_view");
+asort($listPrats);
 
 $plages    = array();
 $deplacees = array();
