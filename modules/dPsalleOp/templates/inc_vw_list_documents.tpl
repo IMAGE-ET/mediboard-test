@@ -3,7 +3,7 @@
      <tr id="operation{{$selOp->_id}}-trigger">
        <th class="category" colspan="2">{{$selOp->_ref_documents|@count}} document(s)</th>
      </tr>
-     <tbody class="operationEffect" id="operation{{$selOp->_id}}" style="display:none;">
+     <tbody class="operationEffect{{$selOp->_id}}" id="operation{{$selOp->_id}}" style="display:none;">
      {{foreach from=$selOp->_ref_documents item=document}}
      <tr>
        <td>{{$document->nom}}</td>
@@ -28,9 +28,8 @@
  {{/if}}
  
  <script type="text/javascript">
-      
-        PairEffect.initGroup("operationEffect", { 
-          bStoreInCookie: true
-        });
-      </script>
+   PairEffect.initGroup("operationEffect{{$selOp->_id}}", { 
+     bStoreInCookie: true
+   });
+ </script>
  

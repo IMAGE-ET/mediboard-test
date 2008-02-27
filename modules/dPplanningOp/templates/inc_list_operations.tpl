@@ -214,10 +214,3 @@
         {{/foreach}}
         {{/if}}
       </table>
-      
-      <script type="text/javascript">
-      
-        PairEffect.initGroup("operationEffect", { 
-          bStoreInCookie: true
-        });
-      </script>
