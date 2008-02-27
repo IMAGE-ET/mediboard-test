@@ -112,15 +112,14 @@ class CPrescriptionLabo extends CMbObject {
       $tagCode4 = "labo code4";
       $idSantePratCode4 = new CIdSante400();
       $idSantePratCode4->loadLatestFor($prat, $tagCode4);
-      mbTrace($idSantePratCode4->id400, "Prat");
 	
       $idPresc = new CIdSante400();
       $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
       $idPresc->object_class = "CPrescriptionLabo";
       $idPresc->loadMatchingObject("id400 DESC");
-      mbTrace($idPresc->id400, "Presc");
       
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
+      mbTrace($numprovisoire, "Numprovisoire");
 
       // Fin de la partie à factoriser
       $client = new SoapClient($dPconfig["dPlabo"]["CPrescriptionLabo"]["url_ws_id_prescription"], array('exceptions' => 0));
