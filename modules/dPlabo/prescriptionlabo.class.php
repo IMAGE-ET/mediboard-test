@@ -103,7 +103,6 @@ class CPrescriptionLabo extends CMbObject {
     $idExterne = new CIdSante400();
     // Chargement de l'id externe de la prescription (tag: Imeds)
     $idExterne->loadLatestFor($this, "iMeds");
-    mbTrace($idExterne);
     if(!$idExterne->_id) {
       // Afactoriser : assez complexe (concatenation du code 4 praticien et du code 4 prescription)
       $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
