@@ -131,6 +131,7 @@ class CPrescriptionLabo extends CMbObject {
       $idExterne->id400 = $result->NDOSLABResult;
       $idExterne->last_update = mbDateTime();
       $idExterne->store();
+      mbTrace($idExterne, $numprovisoire);
     }
     return $idExterne;
   }
