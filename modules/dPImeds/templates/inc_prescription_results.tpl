@@ -18,5 +18,5 @@ Main.add(function() {
   onload="ViewPort.SetFrameHeight(this)"
   width="100%" 
   >
-  Serveur de résultats indisponible pour le séjour '{{$sejour->_view}}'
+  Serveur de résultats indisponible pour la prescription '{{$prescription->_view}}'
 </iframe>
