@@ -101,10 +101,9 @@ class CPrescriptionLabo extends CMbObject {
   function getIdExterne() {
     global $dPconfig;
     $idExterne = new CIdSante400();
+    // Chargement de l'id externe de la prescription (tag: Imeds)
     $idExterne->loadLatestFor($this, "iMeds");
-    if($idExterne) {
-      return $idExterne;
-    } else {
+    if(!$idExterne->_id) {
       $client = new SoapClient($dPconfig["dPlabo"]["CPrescriptionLabo"]["url_ws_id_prescription"], array('exceptions' => 0));
       $result = $client->NDOSLAB(array("NumMedi" => $this->_id, "pwd" => $dPconfig["dPlabo"]["CPrescriptionLabo"]["pass_ws_id_prescription"]));
       if (is_soap_fault($result)) {
@@ -114,9 +113,10 @@ class CPrescriptionLabo extends CMbObject {
       $idExterne->object_class = "CPrescriptionLabo";
       $idExterne->object_id = $this->_id;
       $idExterne->id400 = $result->NDOSLABResult;
+      $idExterne->last_update = mbDateTime();
       $idExterne->store();
-      return $idExterne;
     }
+    return $idExterne;
   }
   
   function loadRefsFwd() {
