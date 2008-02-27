@@ -117,7 +117,8 @@ class CPrescriptionLabo extends CMbObject {
       $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
       $idPresc->object_class = "CPrescriptionLabo";
       $idPresc->loadMatchingObject("id400 DESC");
-      
+      mbTrace(str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT), "prat");
+      mbTrace(str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT), "presc");
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
       mbTrace($numprovisoire, "Numprovisoire");
 
