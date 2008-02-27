@@ -44,6 +44,7 @@ $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $prescription = new CPrescriptionLabo();
 $prescription->load($prescription_id);
 $idPresc = $prescription->getIdExterne();
+mbTrace($idPresc);
 
 // Création du template
 $smarty = new CSmartyDP();
