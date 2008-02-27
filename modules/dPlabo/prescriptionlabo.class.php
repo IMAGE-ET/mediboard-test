@@ -103,6 +103,7 @@ class CPrescriptionLabo extends CMbObject {
     $idExterne = new CIdSante400();
     // Chargement de l'id externe de la prescription (tag: Imeds)
     $idExterne->loadLatestFor($this, "iMeds");
+    mbTrace($idExterne);
     if(!$idExterne->_id) {
       // Afactoriser : assez complexe (concatenation du code 4 praticien et du code 4 prescription)
       $tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
@@ -117,10 +118,7 @@ class CPrescriptionLabo extends CMbObject {
       $idPresc->tag = "$tagCatalogue Prat:".str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT); // tag LABO Prat: 0017
       $idPresc->object_class = "CPrescriptionLabo";
       $idPresc->loadMatchingObject("id400 DESC");
-      mbTrace(str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT), "prat");
-      mbTrace(str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT), "presc");
       $numprovisoire = str_pad($idSantePratCode4->id400, 4, '0', STR_PAD_LEFT).str_pad($idPresc->id400, 4, '0', STR_PAD_LEFT);
-      mbTrace($numprovisoire, "Numprovisoire");
 
       // Fin de la partie à factoriser
       $client = new SoapClient($dPconfig["dPlabo"]["CPrescriptionLabo"]["url_ws_id_prescription"], array('exceptions' => 0));
