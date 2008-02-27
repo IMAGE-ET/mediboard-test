@@ -300,4 +300,10 @@ $dPconfig["dPqualite"] = array (
   ),
 );
 
+$dPconfig["admin"] = array (
+  "CUser" => array(
+    "strong_password" => "0",
+  ),
+);
+
 ?>

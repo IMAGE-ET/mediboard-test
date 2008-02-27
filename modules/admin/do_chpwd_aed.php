@@ -1,11 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage admin
-* @version $Revision: $
-* @author Sébastien Fillonneau
-*/
+ * @package Mediboard
+ * @subpackage admin
+ * @version $Revision: $
+ * @author Sébastien Fillonneau
+ */
 
 global $AppUI;
 $ds = CSQLDataSource::get("std");
@@ -26,7 +26,9 @@ if($user->_id){
   // Mot de passe actuel correct
   if($new_pwd1 == $new_pwd2){
     $user->_user_password = $new_pwd1;
-    $user->store();
+    if ($msg = $user->store()) {
+      return $AppUI->setMsg($msg);
+    }
     $AppUI->setMsg("chgpwUpdated", UI_MSG_OK);
   }else{
     // Nouveaux mot de passe différents

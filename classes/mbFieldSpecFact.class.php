@@ -28,8 +28,9 @@ class CMbFieldSpecFact {
       "text"         => "CTextSpec",
       "html"         => "CHtmlSpec",
       "email"        => "CEmailSpec",
-      "code"         => "CCodeSpec"
-		);
+      "code"         => "CCodeSpec",
+      "password"     => "CPasswordSpec"
+	);
       
     $specObject     = null;
     $nameClass      = null;
@@ -85,8 +86,9 @@ class CMbFieldSpecFactNew {
     "text"         => "CTextSpec",
     "html"         => "CHtmlSpec",
     "email"        => "CEmailSpec",
-    "code"         => "CCodeSpec"
-	);
+    "code"         => "CCodeSpec",
+    "password"     => "CPasswordSpec"
+  );
    
   static function getSpec($className, $fieldName, $strSpec = null) {
     $specFragments = explode(" ", $strSpec);

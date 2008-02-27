@@ -22,7 +22,7 @@ $user_last_name  = mbGetValueFromGetOrSession("user_last_name" , "");
 $user_first_name = mbGetValueFromGetOrSession("user_first_name", "");
 $user_username   = mbGetValueFromGetOrSession("user_username"  , "");
 $user_type       = mbGetValueFromGetOrSession("user_type"      , 0);
-$template     = mbGetValueFromGetOrSession("template"    , "");
+$template        = mbGetValueFromGetOrSession("template"       , "");
 
 $where = null;
 if ($user_last_name ) $where["user_last_name"]  = "LIKE '".addslashes($user_last_name )."%'";
@@ -40,7 +40,7 @@ if ($where) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("template"       , $template    );
+$smarty->assign("template"       , $template       );
 $smarty->assign("user_last_name" , $user_last_name );
 $smarty->assign("user_first_name", $user_first_name);
 $smarty->assign("user_username"  , $user_username  );
@@ -48,6 +48,7 @@ $smarty->assign("user_type"      , $user_type      );
 $smarty->assign("utypes"         , $utypes         );
 $smarty->assign("users"          , $users          );
 $smarty->assign("user"           , $user           );
+$smarty->assign("specs"          , $user->getSpecs());
 
 $smarty->display("vw_edit_users.tpl");
 ?>

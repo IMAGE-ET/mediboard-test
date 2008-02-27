@@ -7,7 +7,7 @@ var ElementChecker = {
   aSpecTypes     : Array("ref", "str", "numchar", "num", 
                       "bool", "enum", "date", "time",
                       "dateTime", "float", "currency", "pct",
-                      "text", "html", "email", "url", "code"),
+                      "text", "html", "email", "url", "code", "password"),
   
   prepare : function(oElement){
     //Initialisation
@@ -116,7 +116,7 @@ var ElementChecker = {
         return message;
       }
       if (iNbElements != 1){
-        return printf("Vous devez choisir une et une seule de valeur entre '%s'", sListElements);  
+        return printf("Vous devez choisir une et une seule de valeur entre '%s", sListElements);  
       }
     }
     
@@ -162,6 +162,29 @@ var ElementChecker = {
       }
     }
     
+    // notContaining
+    if (sTargetElement = this.aProperties["notContaining"]) {
+    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
+    		return sParamMsg;
+    	}
+    	
+      if (this.oCompare.source.match(this.oCompare.target)) {
+        var oTargetLabel = getLabelFor(this.oTargetElement);
+        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
+        return printf("Ne doit pas contenir %s", sTargetLabel);
+      }
+    }
+    
+    // alphaAndNum
+   	if(this.aProperties["alphaAndNum"]){
+	  if (!this.oElement.value.match(/[a-z]/)) {
+	    return "Doit contenir au moins une lettre";
+	  }
+	  if (!this.oElement.value.match(/\d+/)) {
+		return "Doit contenir au moins un chiffre";
+	  }
+	}
+    
     return null;
   }
 }
@@ -192,7 +215,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length != iLength) {
-        return printf("N'a pas la bonne longueur (longueur souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength);
       }
     }
     
@@ -203,7 +226,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur minimale invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length < iLength) {
-        return printf("N'a pas la bonne longueur (longueur minimale souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
       }
     }
     
@@ -214,7 +237,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur maximale invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length > iLength) {
-        return printf("N'a pas la bonne longueur (longueur maximale souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur maximale souhaitée : %s)", iLength);
       }
     }
     return null;
@@ -267,7 +290,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length != iLength) {
-        return printf("N'a pas la bonne longueur (longueur souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength);
       }
     }
     
@@ -278,7 +301,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur minimale invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length < iLength) {
-        return printf("N'a pas la bonne longueur (longueur minimale souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
       }
     }
     
@@ -289,7 +312,7 @@ Object.extend(ElementChecker, {
         return printf("Spécification de longueur maximale invalide (longueur = %s)", iLength);
       }
       if (this.oElement.value.length > iLength) {
-        return printf("N'a pas la bonne longueur (longueur maximale souhaité : %s)'", iLength);
+        return printf("N'a pas la bonne longueur (longueur maximale souhaitée : %s)", iLength);
       }
     }
     
@@ -485,6 +508,20 @@ Object.extend(ElementChecker, {
       return "Spécification de code invalide";
     }
     return null;
+  },
+  
+    // password
+  check_password: function() {
+  	// TODO: Factoriser le minLength et les autres
+    if(this.aProperties["minLength"]){
+    	iLength = parseInt(this.aProperties["minLength"]);
+    	
+	    // length
+	    if (this.oElement.value.length < iLength) {
+	    	return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
+	    }
+	}
+    return null;
   }
 } );
 
@@ -505,7 +542,7 @@ function checkForm(oForm) {
       var oLabel = getLabelFor(oElement);
       
       if (sMsg = ElementChecker.checkElement()) {
-        aMsg.push("\n=> " + sMsg);
+        aMsg.push("\n    - " + sMsg);
       }
       
       if (aMsg.length != 0) {
@@ -543,4 +580,33 @@ function checkForm(oForm) {
   }
   FormObserver.changes = 0;
   return true;
+}
+
+/** Validation d'un element de formulaire. 
+  * Est utile pour la validation lors de la saisie du formulaire.
+  */
+function checkFormElement(oElement) {
+	ElementChecker.prepare(oElement);
+	
+	// Recuperation de l'element HTML qui accueillera le message.
+	var oMsg = $(oElement.name+'_message');
+	
+	if (ElementChecker.sTypeSpec) {
+		switch (ElementChecker.sTypeSpec) {
+		case 'password':
+			if (oMsg) {
+				if (ElementChecker.checkElement()) {
+					oMsg.innerHTML = 'Sécurité trop faible';
+					oMsg.style.backgroundColor = '#FF7A7A';
+				} else {
+					oMsg.innerHTML = 'Sécurité correcte';
+					oMsg.style.backgroundColor = '#33FF66';
+				}
+			}
+			break;
+			
+		default:
+		}
+	}
+	return true;
 }

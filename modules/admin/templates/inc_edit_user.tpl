@@ -33,7 +33,8 @@
   </tr>
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
-    <td><input tabindex="103" type="password" name="_user_password" class="str sameAs|_user_password" value="" /></td>
+    <td>{{mb_field tabindex="103" object=$user field="_user_password" onkeyup="checkFormElement(this)"}}
+    </td>
   </tr>
   <tr>
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>

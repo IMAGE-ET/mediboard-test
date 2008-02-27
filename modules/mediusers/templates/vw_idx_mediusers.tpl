@@ -111,8 +111,7 @@ function pageMain() {
         Administrer cet utilisateur
       </a>
       {{/if}}
-
-      <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="mediuser" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 
       <input type="hidden" name="dosql" value="do_mediusers_aed" />
       <input type="hidden" name="user_id" value="{{$mediuserSel->_id}}" />
@@ -143,11 +142,14 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_password"}}</th>
-          <td><input type="password" name="_user_password" class="{{$mediuserSel->_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" value="" /></td>
+          <td>
+	          <input type="password" name="_user_password" class="{{$mediuserSel->_props._user_password}}{{if !$mediuserSel->user_id}} notNull{{/if}}" onkeyup="checkFormElement(this);" value="" />
+	          <span id="_user_password_message"></span>
+          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_password2"}}</th>
-          <td><input type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
+          <td><input type="password" name="_user_password2" class="password sameAs|_user_password" value="" /></td>
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="actif"}}</th>

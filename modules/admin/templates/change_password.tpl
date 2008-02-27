@@ -24,7 +24,9 @@
       </label>
     </td>
     <td>
-      <input class="notNull str minLength|4" type="password" name="new_pwd1" />
+      <input type="hidden" name="user_username" value="{{$user->user_username}}" />
+      <input class="{{$specs._user_password}}" type="password" name="new_pwd1" onkeyup="checkFormElement(this);" />
+      <div id="new_pwd1_message"></div>
     </td>
   </tr>
   <tr>
@@ -34,7 +36,7 @@
       </label>
     </td>
     <td>
-      <input class="notNull str sameAs|new_pwd1" type="password" name="new_pwd2" />
+      <input class="notNull password sameAs|new_pwd1" type="password" name="new_pwd2" />
     </td>
   </tr>
   <tr>

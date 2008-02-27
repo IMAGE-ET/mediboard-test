@@ -30,7 +30,7 @@ class CMediusers extends CMbObject {
   var $fin_activite  = null;
   var $compte        = null;
   var $banque_id     = null;
-  
+
   // DB References
   var $function_id   = null;
   var $discipline_id = null;
@@ -63,7 +63,7 @@ class CMediusers extends CMbObject {
   // CPS
   var $_bind_cps = null;
   var $_id_cps   = null;
-  
+
   // Object references
   var $_ref_banque     = null;
   var $_ref_function   = null;
@@ -78,7 +78,9 @@ class CMediusers extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    global $dPconfig;
+     
+    $specs = array (
       "remote"        => "bool",
       "adeli"         => "numchar length|9 confidential",
       "function_id"   => "notNull ref class|CFunctions",
@@ -92,8 +94,7 @@ class CMediusers extends CMbObject {
       "compte"        => "code rib confidential",
       "banque_id"     => "ref class|CBanque",
       "_user_username"   => "notNull str minLength|4",
-      "_user_password"   => "str minLength|4",
-      "_user_password2"  => "str sameAs|_user_password",
+      "_user_password2"  => "password sameAs|_user_password",
       "_user_first_name" => "str",
       "_user_last_name"  => "notNull str confidential",
       "_user_email"      => "str confidential",
@@ -108,6 +109,15 @@ class CMediusers extends CMbObject {
       "_profile_id"      => "num",
       "_user_type"       => "notNull num minMax|0|20"
       );
+
+      $specs['_user_password'] = 'password minLength|';
+
+      if ($dPconfig['admin']['CUser']['strong_password'] == '1')
+      $specs['_user_password'] .= '6 notContaining|_user_username alphaAndNum';
+      else
+      $specs['_user_password'] .= 4;
+       
+      return $specs;
   }
 
   function getSeeks() {
@@ -117,53 +127,53 @@ class CMediusers extends CMbObject {
   }
 
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["actes_CCAM"] = "CActeCCAM executant_id";
-      $backRefs["aides_saisi"] = "CAideSaisie user_id";
-      $backRefs["modeles"] = "CCompteRendu chir_id";
-      $backRefs["documents_ged"] = "CDocGed user_id";
-      $backRefs["suivi_documents_ged"] = "CDocGedSuivi user_id";
-      $backRefs["examens"] = "CExamenLabo realisateur";
-      $backRefs["users"] = "CFicheEi user_id";
-      $backRefs["valid_users"] = "CFicheEi valid_user_id";
-      $backRefs["service_valid_users"] = "CFicheEi service_valid_user_id";
-      $backRefs["qualite_users"] = "CFicheEi qualite_user_id";
-      $backRefs["files"] = "CFile file_owner";
-      $backRefs["listes_choix"] = "CListeChoix chir_id";
-      $backRefs["notes"] = "CNote user_id";
-      $backRefs["operations_chir"] = "COperation chir_id";
-      $backRefs["operations_anesth"] = "COperation anesth_id";
-      $backRefs["packs"] = "CPack chir_id";
-      $backRefs["plages_op_chir"] = "CPlageOp chir_id";
-      $backRefs["plages_op_anesth"] = "CPlageOp anesth_id";
-      $backRefs["plages_consult"] = "CPlageconsult chir_id";
-      $backRefs["plages_ressource"] = "CPlageressource prat_id";
-      $backRefs["prescriptions_labo"] = "CPrescriptionLabo praticien_id";
-      $backRefs["protocoles"] = "CProtocole chir_id";
-      $backRefs["sejours"] = "CSejour praticien_id";
-      $backRefs["tarifs"] = "CTarif chir_id";
-      $backRefs["temps_hospi"] = "CTempsHospi praticien_id";
-      $backRefs["temps_chir"] = "CTempsOp chir_id";
-      $backRefs["temps_prepa"] = "CTempsPrepa chir_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["actes_CCAM"]          = "CActeCCAM executant_id";
+    $backRefs["aides_saisi"]         = "CAideSaisie user_id";
+    $backRefs["modeles"]             = "CCompteRendu chir_id";
+    $backRefs["documents_ged"]       = "CDocGed user_id";
+    $backRefs["suivi_documents_ged"] = "CDocGedSuivi user_id";
+    $backRefs["examens"]             = "CExamenLabo realisateur";
+    $backRefs["users"]               = "CFicheEi user_id";
+    $backRefs["valid_users"]         = "CFicheEi valid_user_id";
+    $backRefs["service_valid_users"] = "CFicheEi service_valid_user_id";
+    $backRefs["qualite_users"]       = "CFicheEi qualite_user_id";
+    $backRefs["files"]               = "CFile file_owner";
+    $backRefs["listes_choix"]        = "CListeChoix chir_id";
+    $backRefs["notes"]               = "CNote user_id";
+    $backRefs["operations_chir"]     = "COperation chir_id";
+    $backRefs["operations_anesth"]   = "COperation anesth_id";
+    $backRefs["packs"]               = "CPack chir_id";
+    $backRefs["plages_op_chir"]      = "CPlageOp chir_id";
+    $backRefs["plages_op_anesth"]    = "CPlageOp anesth_id";
+    $backRefs["plages_consult"]      = "CPlageconsult chir_id";
+    $backRefs["plages_ressource"]    = "CPlageressource prat_id";
+    $backRefs["prescriptions_labo"]  = "CPrescriptionLabo praticien_id";
+    $backRefs["protocoles"]          = "CProtocole chir_id";
+    $backRefs["sejours"]             = "CSejour praticien_id";
+    $backRefs["tarifs"]              = "CTarif chir_id";
+    $backRefs["temps_hospi"]         = "CTempsHospi praticien_id";
+    $backRefs["temps_chir"]          = "CTempsOp chir_id";
+    $backRefs["temps_prepa"]         = "CTempsPrepa chir_id";
+    return $backRefs;
   }
    
   function createUser() {
     $user = new CUser();
     $user->user_id = $this->user_id;
 
-    $user->user_type        = $this->_user_type      ;
-    $user->user_username    = $this->_user_username  ;
-    $user->_user_password   = $this->_user_password  ;
+    $user->user_type        = $this->_user_type;
+    $user->user_username    = $this->_user_username;
+    $user->_user_password   = $this->_user_password;
     $user->user_first_name  = $this->_user_first_name;
-    $user->user_last_name   = $this->_user_last_name ;
-    $user->user_email       = $this->_user_email     ;
-    $user->user_phone       = $this->_user_phone     ;
-    $user->user_address1    = $this->_user_adresse   ;
-    $user->user_zip         = $this->_user_cp        ;
-    $user->user_city        = $this->_user_ville     ;
-    $user->template         = 0                      ;
-    $user->profile_id       = $this->_profile_id     ;
+    $user->user_last_name   = $this->_user_last_name;
+    $user->user_email       = $this->_user_email;
+    $user->user_phone       = $this->_user_phone;
+    $user->user_address1    = $this->_user_adresse;
+    $user->user_zip         = $this->_user_cp;
+    $user->user_city        = $this->_user_ville;
+    $user->template         = 0;
+    $user->profile_id       = $this->_profile_id;
 
     return $user;
   }
@@ -182,7 +192,7 @@ class CMediusers extends CMbObject {
   }
 
   function updateFormFields() {
-   
+     
     parent::updateFormFields();
     global $utypes;
     $user = new CUser();
@@ -216,39 +226,38 @@ class CMediusers extends CMbObject {
         $this->_shortview .=  strtoupper($value[0]);
       }
     }
-    
+
     $this->_compte_banque  = substr($this->compte, 0, 5);
     $this->_compte_guichet = substr($this->compte, 5, 5);
     $this->_compte_numero  = substr($this->compte, 10, 11);
     $this->_compte_cle     = substr($this->compte, 21, 2);
   }
-  
+
   function updateDBFields() {
-  	if(($this->_compte_banque !== null) && ($this->_compte_guichet !== null) && ($this->_compte_numero !== null) && ($this->_compte_cle !== null)) {
-      $this->compte = 
-        $this->_compte_banque .
-        $this->_compte_guichet .
-        $this->_compte_numero .
-        $this->_compte_cle;
+    if(($this->_compte_banque !== null) && ($this->_compte_guichet !== null) && ($this->_compte_numero !== null) && ($this->_compte_cle !== null)) {
+      $this->compte =
+      $this->_compte_banque .
+      $this->_compte_guichet .
+      $this->_compte_numero .
+      $this->_compte_cle;
     }
   }
 
   function loadRefBanque(){
-  	$this->_ref_banque = new CBanque();
-  	$this->_ref_banque->load($this->banque_id);	
+    $this->_ref_banque = new CBanque();
+    $this->_ref_banque->load($this->banque_id);
   }
-  
-  
+
   function loadRefFunction() {
     $this->_ref_function = new CFunctions;
     $this->_ref_function->load($this->function_id);
   }
-  
+
   function loadRefDiscipline() {
     $this->_ref_discipline = new CDiscipline;
     $this->_ref_discipline->load($this->discipline_id);
   }
-  
+
   function loadRefsFwd() {
     // Forward references
     $this->loadRefFunction();
@@ -258,8 +267,8 @@ class CMediusers extends CMbObject {
   function loadRefsBack() {
     $where = array(
       "chir_id" => "= '$this->user_id'");
-      $this->_ref_packs = new CPack;
-      $this->_ref_packs = $this->_ref_packs->loadList($where);
+    $this->_ref_packs = new CPack;
+    $this->_ref_packs = $this->_ref_packs->loadList($where);
   }
 
   function getPerm($permType) {
@@ -285,7 +294,7 @@ class CMediusers extends CMbObject {
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
     }
-    
+
     // Make id400
     $cps = $intermax["CPS"];
     $cpsNumero = $cps["CPS_NUMERO_LOGICMAX"];
@@ -294,16 +303,16 @@ class CMediusers extends CMbObject {
     $id_cps->id400 = $cpsNumero;
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();
-    
+
     // Autre association ?
     if ($id_cps->object_id && $id_cps->object_id != $this->_id) {
       $id_cps->loadTargetObject();
       $medOther =& $id_cps->_ref_object;
       return sprintf("CPS déjà associée à l'utilisateur %s (ADELI: '%s')",
-        $medOther->_view,
-        $medOther->adeli);
+      $medOther->_view,
+      $medOther->adeli);
     }
-    
+
     $id_cps->object_id = $this->_id;
     $id_cps->last_update = mbDateTime();
     return $id_cps->store();
@@ -314,13 +323,13 @@ class CMediusers extends CMbObject {
     if (!$id_cps->_ref_module) {
       return;
     }
-    
+
     $id_cps->setObject($this);
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();
     $this->_id_cps = $id_cps->id400;
   }
-  
+
   function loadFromIdCPS($numero_cps) {
     // Make id vitale
     $id_cps = new CIdSante400();
@@ -328,13 +337,13 @@ class CMediusers extends CMbObject {
     $id_cps->id400 = $numero_cps;
     $id_cps->tag = "LogicMax CPSNumero";
     $id_cps->loadMatchingObject();
-    
+
     // Load patient from found id vitale
     if ($id_cps->object_id) {
       $this->load($id_cps->object_id);
     }
   }
-  
+
   /**
    * Map les valeurs venant d'une CPS
    * @return void
@@ -343,19 +352,57 @@ class CMediusers extends CMbObject {
     if (null == $intermax = mbGetAbsValueFromPostOrSession("intermax")) {
       return;
     }
-    
+
     $cps = $intermax["CPS"];
-    
+
     $this->adeli = $cps["CPS_ADELI_NUMERO_CPS"];
     $this->_user_first_name = $cps["CPS_PRENOM"];
     $this->_user_last_name  = $cps["CPS_NOM"];
   }
-         
+
+  function check() {
+    // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
+    // Chargement des specs des attributs du mediuser
+    $specsObj = $this->getSpecsObj();
+
+    // On se concentre dur le mot de passe (_user_password)
+    $pwdSpecs = $specsObj['_user_password'];
+    mbTrace($pwdSpecs);
+    $pwd = $this->_user_password;
+
+    // S'il a été défini, on le contrôle
+    if ($pwd) {
+
+      // minLength
+      if ($pwdSpecs->minLength > strlen($pwd)) {
+        return "Mot de passe trop court (minimum {$pwdSpecs->minLength})";
+      }
+
+      // notContaining
+      if($pwdSpecs->notContaining) {
+        $target = $pwdSpecs->notContaining;
+        if ($field = $this->$target)
+     			if (stristr($pwd, $field))
+     			return "Le mot de passe ne doit pas contenir '$field'";
+      }
+       
+      // alphaAndNum
+      if($pwdSpecs->alphaAndNum) {
+        if (!preg_match("/[a-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+          return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
+        }
+      }
+    } else {
+      $this->_user_password = null;
+    }
+    return parent::check();
+  }
+   
   function store() {
     global $AppUI;
 
     $this->updateDBFields();
-    
+
     if ($msg = $this->check()) {
       return $AppUI->_(get_class( $this )) .
       $AppUI->_("::store-check failed:") .
@@ -367,12 +414,12 @@ class CMediusers extends CMbObject {
     if ($msg = $dPuser->store()) {
       return $msg;
     }
-    
+
     // User might have been re-created
     if ($this->user_id != $dPuser->user_id) {
       $this->user_id = null;
     }
-    
+
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {
       $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
@@ -384,7 +431,7 @@ class CMediusers extends CMbObject {
     if ($msg = $this->_spec->ds->error()) {
       return $msg;
     }
-    
+
     // Bind CPS
     if ($this->_bind_cps && $this->_id) {
       return $this->bindCPS();
@@ -476,7 +523,7 @@ class CMediusers extends CMbObject {
     // Get all users
     $mediuser = new CMediusers;
     $mediusers = $mediuser->loadList($where, $order, null, null, $ljoin);
-  
+
     // Associate already loaded function
     foreach ($mediusers as $keyUser => $mediuser) {
       $mediuser->_ref_function =& $functions[$mediuser->function_id];
@@ -485,7 +532,6 @@ class CMediusers extends CMbObject {
     return $mediusers;
   }
 
-  
   static function loadEtablissements($permType = PERM_READ) {
     // Liste de Tous les établissements
     $group = new CGroups;
