@@ -95,7 +95,7 @@ class CUser extends CMbObject {
       "profile_id"      => "ref class|CUser"
       );
 
-      $specs["_user_password"] = 'notNull password minLength|';
+      $specs["_user_password"] = 'password minLength|';
 
       if ($dPconfig['admin']['CUser']['strong_password'] == '1')
       $specs['_user_password'] .= '6 notContaining|user_username alphaAndNum';

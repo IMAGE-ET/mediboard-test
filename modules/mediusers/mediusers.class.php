@@ -367,7 +367,7 @@ class CMediusers extends CMbObject {
 
     // On se concentre dur le mot de passe (_user_password)
     $pwdSpecs = $specsObj['_user_password'];
-    mbTrace($pwdSpecs);
+
     $pwd = $this->_user_password;
 
     // S'il a été défini, on le contrôle

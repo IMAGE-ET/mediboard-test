@@ -33,12 +33,13 @@
   </tr>
   <tr>
     <th><label for="_user_password" title="Saisir le mot de passe. Obligatoire">Mot de passe</label></th>
-    <td>{{mb_field tabindex="103" object=$user field="_user_password" onkeyup="checkFormElement(this)"}}
+    <td><input tabindex="103" type="password" name="_user_password" class="{{$specs._user_password}}{{if !$user->user_id}} notNull{{/if}}" value="" onkeyup="checkFormElement(this)" />
+		<span id="_user_password_message"></span>
     </td>
   </tr>
   <tr>
     <th><label for="_user_password2" title="Re-saisir le mot de passe pour confimer. Obligatoire">Mot de passe (bis)</label></th>
-    <td><input tabindex="104" type="password" name="_user_password2" class="str sameAs|_user_password" value="" /></td>
+    <td><input tabindex="104" type="password" name="_user_password2" class="password sameAs|_user_password" value="" /></td>
   </tr>
 
 
