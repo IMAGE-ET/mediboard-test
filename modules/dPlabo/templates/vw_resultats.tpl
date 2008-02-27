@@ -24,10 +24,10 @@ var IMeds = {
     url.requestUpdate(div, { waitingText : null });
   },
   
-  viewSejour: function(sejour_id, div) {
+  viewPrescription: function(prescription_id, div) {
     var url = new Url;
-    url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
-    url.addParam("sejour_id", sejour_id);
+    url.setModuleAction("dPImeds", "httpreq_vw_prescription_results");
+    url.addParam("prescription_id", prescription_id);
     url.requestUpdate(div, { waitingText : null });
   }
 }
@@ -37,7 +37,7 @@ function pageMain() {
     ViewPort.SetAvlHeight("resultats-internes", 0.5);
     ViewPort.SetAvlHeight("resultats-externes", 1);
   
-    IMeds.viewSejour({{$patient->_id}}, "resultats-externes");
+    IMeds.viewPrescription({{$prescription->_id}}, "resultats-externes");
   {{/if}}
 }
 
