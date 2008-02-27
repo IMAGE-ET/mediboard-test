@@ -608,5 +608,9 @@ function checkFormElement(oElement) {
 		default:
 		}
 	}
+	if (oElement.value == '') {
+		oMsg.innerHTML = '';
+		oMsg.style.background = 'none';
+	}
 	return true;
 }
