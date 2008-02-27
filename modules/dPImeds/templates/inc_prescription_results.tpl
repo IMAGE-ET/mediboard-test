@@ -6,7 +6,7 @@ Main.add(function() {
 } );
 
 </script>
-Url appellée : {{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$numPresc}}
+
 <form target="Imeds-prescription" name="Imeds_prescription_form" action="{{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$numPresc}}" method="post">
   <input type="hidden" name="login" value="{{$idImeds.login}}" />
   <input type="hidden" name="password" value="{{$idImeds.password}}" />
