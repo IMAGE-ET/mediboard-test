@@ -228,6 +228,7 @@ class CSpMalade extends CSpObject {
     $patient->loadIPP();
     if ($patient->_IPP != $this->_id) {
       $this->maltel = "DOUBLON-$patient->_IPP";  
+      $this->malfla = "D";  
     }
     
     $this->datmaj = mbDateToLocale(mbDateTime());    
