@@ -157,9 +157,9 @@
           <th>Code</th>
           <th>Secteur 1</th>
           <th>Secteur 2</th>
-          <th colspan="2">Réglement Patient</th>
-          <th colspan="2">Réglement Tiers</th>
-          <th colspan="2">Total Facturé</th>
+          <th colspan="2">Réglement<br />Patient</th>
+          <th colspan="2">Réglement<br />Tiers</th>
+          <th colspan="2">Total<br />Facturé</th>
         </tr>
         {{foreach from=$curr_plage->_ref_consultations item=curr_consult}}
         <tr>
