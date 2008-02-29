@@ -264,7 +264,7 @@ if (!$suppressHeaders) {
     "help" => mbPortalURL($m),
     "tracker" => mbPortalURL("tracker"),
   ));
-
+  $smartyHeader->assign("on_load_events"        , $AppUI->on_load_events);
   $smartyHeader->display("header.tpl");
 }
 

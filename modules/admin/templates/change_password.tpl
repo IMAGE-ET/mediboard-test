@@ -5,7 +5,9 @@
 <input type="hidden" name="dosql" value="do_chpwd_aed" />
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dialog" value="1" />
-
+{{if $message}}
+  <div class="error">{{$message|smarty:nodefaults}}</div>
+{{/if}}
 <table class="form">
   <tr>
     <td>

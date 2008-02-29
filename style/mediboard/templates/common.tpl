@@ -7,7 +7,7 @@
     &mdash; {{tr}}module-{{$m}}-court{{/tr}}
   </title>
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
-  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santé" />
+  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santï¿½" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{$mediboardCommonStyle|smarty:nodefaults}}
@@ -22,6 +22,15 @@
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
+    
+    {{if $on_load_events|@count}}
+    {{foreach from=$on_load_events item=notif}}
+    	Main.add(function() {
+			{{$notif|smarty:nodefaults}}
+		});
+    {{/foreach}}
+    {{/if}}
+    
   </script>
 </head>
 

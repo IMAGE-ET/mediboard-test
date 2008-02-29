@@ -57,6 +57,8 @@ class CAppUI {
 
   var $messages = array();
   
+  var $on_load_events = array();
+  
 /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
@@ -473,6 +475,44 @@ class CAppUI {
     $user->user_username = trim(mbGetValueFromPost("username"));
     $user->_user_password = trim(mbGetValueFromPost("password"));
     
+    $specsObj = $user->getSpecsObj();
+    //mbTrace($specsObj);
+    $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
+    $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
+
+    $weakPwd = false;
+    // minLength
+    if ($pwdSpecs->minLength > strlen($pwd)) {
+      $weakPwd = true;
+    }
+
+    // notContaining
+    if($pwdSpecs->notContaining) {
+      $target = $pwdSpecs->notContaining;
+        if ($field = $user->$target)
+          if (stristr($pwd, $field))
+            $weakPwd = true;
+    }
+
+    // alphaAndNum
+    if($pwdSpecs->alphaAndNum) {
+      if (!preg_match("/[a-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+        $weakPwd = true;
+      }
+    }
+    
+    
+    if ($weakPwd) {
+      $this->addOnLoadEvents(
+      'if (window.opener == null) {
+      var url = new Url;
+      url.setModuleAction("admin", "chpwd");
+      url.addParam("showMessage", "1");
+      url.popup(600, 300, "ChangePassword");
+    }');
+    }
+      //$this->setMsg('dsbfjsdbfhsdfhdbj', UI_MSG_WARNING);
+      
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
       if ($this->user_type != 1) {
@@ -579,6 +619,10 @@ class CAppUI {
   static function tr($str) {
     global $AppUI;
     return $AppUI->_($str);
+  }
+  
+  function addOnLoadEvents($code) {
+    $this->on_load_events[] = $code;
   }
 }
 

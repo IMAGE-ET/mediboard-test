@@ -5,16 +5,16 @@
  *	@subpackage dPhospi
  *	@version $Revision$
  *  @author Thomas Despoix
-*/
+ */
 
 /**
- * Classe CAffectation. 
+ * Classe CAffectation.
  * @abstract Gère les affectation des séjours dans des lits
  */
 class CAffectation extends CMbObject {
   // DB Table key
-	var $affectation_id = null;
-  
+  var $affectation_id = null;
+
   // DB References
   var $lit_id    = null;
   var $sejour_id = null;
@@ -25,13 +25,13 @@ class CAffectation extends CMbObject {
   var $confirme = null;
   var $effectue = null;
   var $rques    = null;
-  
+
   // Form Fields
   var $_entree_relative;
   var $_sortie_relative;
   var $_mode_sortie;
   var $_duree;
-  
+
   // Object references
   var $_ref_lit    = null;
   var $_ref_sejour = null;
@@ -40,18 +40,17 @@ class CAffectation extends CMbObject {
   var $_no_synchro = null;
   var $_list_repas = null;
 
-	function CAffectation() {
-		$this->CMbObject("affectation", "affectation_id");
-    
+  function CAffectation() {
+    $this->CMbObject("affectation", "affectation_id");
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-  
+
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["repas"] = "CRepas affectation_id";
-     return $backRefs;
-  } 
- 
+    $backRefs = parent::getBackRefs();
+    $backRefs["repas"] = "CRepas affectation_id";
+    return $backRefs;
+  }
+
   function getSpecs() {
     return array (
       "lit_id"       => "notNull ref class|CLit",
@@ -62,18 +61,18 @@ class CAffectation extends CMbObject {
       "confirme"     => "bool",
       "effectue"     => "bool",
       "rques"        => "text"
-    );
+      );
   }
 
-	function loadView() {
-  	$this->loadRefLit();
+  function loadView() {
+    $this->loadRefLit();
     $this->_ref_lit->loadCompleteView();
   }
-  
+
   function updateFormFields() {
     $this->_duree = mbDaysRelative($this->entree, $this->sortie);
   }
-  
+
   function check() {
     if($msg = parent::check()) {
       return $msg;
@@ -81,35 +80,35 @@ class CAffectation extends CMbObject {
     if(!$this->affectation_id) {
       return null;
     }
-  	$obj = new CAffectation();
-  	$obj->load($this->affectation_id);
-  	$obj->loadRefsFwd();
-  	
-  	$obj->_mode_sortie = $this->_mode_sortie;
-  	
-  	if(!$this->entree && $obj->affectation_id)
-  	  $this->entree = $obj->entree;
-  	if(!$this->sortie && $obj->affectation_id)
-  	  $this->sortie = $obj->sortie;
+    $obj = new CAffectation();
+    $obj->load($this->affectation_id);
+    $obj->loadRefsFwd();
+     
+    $obj->_mode_sortie = $this->_mode_sortie;
+     
+    if(!$this->entree && $obj->affectation_id)
+    $this->entree = $obj->entree;
+    if(!$this->sortie && $obj->affectation_id)
+    $this->sortie = $obj->sortie;
     if ($this->sortie <= $this->entree) {
       return "La date de sortie doit être supérieure à la date d'entrée";
     }
     return null;
   }
-  
+
   function deleteOne() {
     return parent::delete();
   }
-  
+
   function delete() {
-  	$this->load();
+    $this->load();
     if($this->sejour_id){
       $this->loadRefSejour();
       return $this->_ref_sejour->delAffectations();
     }
     return $this->deleteOne();
   }
-  
+
   function store() {
     $oldAff = new CAffectation();
     if($this->_id) {
@@ -121,7 +120,7 @@ class CAffectation extends CMbObject {
     }
     // Modification de la date d'admission et de la durée de l'hospi
     $this->load($this->affectation_id);
-    
+
     $this->loadRefSejour();
     if($oldAff->_id) {
       $this->_ref_prev = $oldAff->_ref_prev;
@@ -176,7 +175,7 @@ class CAffectation extends CMbObject {
     }
     return $msg;
   }
-  
+
   function loadRefLit() {
     $where = array (
       "lit_id" => "= '$this->lit_id'"
@@ -185,44 +184,44 @@ class CAffectation extends CMbObject {
     $this->_ref_lit = new CLit;
     $this->_ref_lit->loadObject($where);
   }
-  
+
   function loadRefSejour() {
     $where = array (
       "sejour_id" => "= '$this->sejour_id'"
     );
-    
+
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->loadObject($where);
-    
+
   }
-  
+
   function loadRefsFwd() {
     $this->loadRefLit();
     $this->loadRefSejour();
     $this->loadRefsAffectations();
   }
-  
+
   function loadRefsAffectations() {
-    
+
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
       "sejour_id" => "= '$this->sejour_id'",
       "sortie" => "= '$this->entree'"
     );
-    
+
     $this->_ref_prev = new CAffectation;
     $this->_ref_prev->loadObject($where);
-    
+
     $where = array (
       "affectation_id" => "!= '$this->affectation_id'",
       "sejour_id" => "= '$this->sejour_id'",
       "entree" => "= '$this->sortie'"
     );
-    
+
     $this->_ref_next = new CAffectation;
     $this->_ref_next->loadObject($where);
   }
-  
+
   function getPerm($permType) {
     if(!$this->_ref_lit) {
       $this->loadRefLit();
@@ -232,22 +231,22 @@ class CAffectation extends CMbObject {
     }
     return ($this->_ref_lit->getPerm($permType) && $this->_ref_sejour->getPerm($permType));
   }
-  
+
   function checkDaysRelative($date) {
     if ($this->entree and $this->sortie) {
       $this->_entree_relative = mbDaysRelative($date." 10:00:00", $this->entree);
       $this->_sortie_relative = mbDaysRelative($date." 10:00:00", $this->sortie);
     }
   }
-  
+
   function colide($aff) {
-  	if (($aff->entree < $this->sortie and $aff->sortie > $this->sortie)
-     or ($aff->entree < $this->entree and $aff->sortie > $this->entree)
-     or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
-      return true;
+    if (($aff->entree < $this->sortie and $aff->sortie > $this->sortie)
+    or ($aff->entree < $this->entree and $aff->sortie > $this->entree)
+    or ($aff->entree >= $this->entree and $aff->sortie <= $this->sortie))
+    return true;
     return false;
   }
-  
+
   function loadMenu($date, $listTypeRepas = null){
     $this->_list_repas[$date] = array();
     $repas =& $this->_list_repas[$date];
@@ -256,7 +255,7 @@ class CAffectation extends CMbObject {
       $order = "debut, fin, nom";
       $listTypeRepas = $listTypeRepas->loadList(null,$order);
     }
-    
+
     $where                   = array();
     $where["date"]           = $this->_spec->ds->prepare(" = %", $date);
     $where["affectation_id"] = $this->_spec->ds->prepare(" = %", $this->affectation_id);
@@ -266,8 +265,8 @@ class CAffectation extends CMbObject {
       $repasDuJour->loadObject($where);
       $repas[$keyType] = $repasDuJour;
     }
-    
-    
+
+
   }
 }
 ?>
