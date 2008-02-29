@@ -265,6 +265,10 @@ if (!$suppressHeaders) {
     "tracker" => mbPortalURL("tracker"),
   ));
   $smartyHeader->assign("on_load_events"        , $AppUI->on_load_events);
+  
+  // Pour eviter que la popup s'ouvre à toutes les pages apres la connexion
+  $AppUI->on_load_events = array();
+  
   $smartyHeader->display("header.tpl");
 }
 
