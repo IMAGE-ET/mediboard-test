@@ -32,17 +32,30 @@ $order = "nom";
 
 $wherePrat = array();
 $whereFunc = array();
+
 // Chargement des modeles pour chaque classe, pour les praticiens et leur fonction
 foreach($templateClasses as $class => $id) {
-  // Pour le praticien
-  $wherePrat["chir_id"] = "= '$praticien->_id'";
-  $wherePrat["object_class"] = "= '$class'";
-	$modeles[$class]['prat'] = CCompteRendu::loadModeleByCat(null, $wherePrat, $order, true);
-
-	// Pour la fonction du praticien
-  $whereFunc["function_id"] = "= '$praticien->function_id'";
-	$whereFunc["object_class"] = "= '$class'";
-	$modeles[$class]['func'] = CCompteRendu::loadModeleByCat(null, $whereFunc, $order, true);
+  if ($id) {
+    // Pour le praticien
+    $wherePrat["chir_id"] = "= '$praticien->_id'";
+    $wherePrat["object_class"] = "= '$class'";
+    $modelesCompat[$class]['prat'] = CCompteRendu::loadModeleByCat(null, $wherePrat, $order, true);
+  
+    // Pour la fonction du praticien
+    $whereFunc["function_id"] = "= '$praticien->function_id'";
+    $whereFunc["object_class"] = "= '$class'";
+    $modelesCompat[$class]['func'] = CCompteRendu::loadModeleByCat(null, $whereFunc, $order, true);
+  } else {
+    // Pour le praticien
+    $wherePrat["chir_id"] = "= '$praticien->_id'";
+    $wherePrat["object_class"] = "= '$class'";
+    $modelesNonCompat[$class]['prat'] = CCompteRendu::loadModeleByCat(null, $wherePrat, $order, true);
+  
+    // Pour la fonction du praticien
+    $whereFunc["function_id"] = "= '$praticien->function_id'";
+    $whereFunc["object_class"] = "= '$class'";
+    $modelesNonCompat[$class]['func'] = CCompteRendu::loadModeleByCat(null, $whereFunc, $order, true);
+  }
 }
 
 
@@ -51,8 +64,10 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("target_id", $object->_id);
 $smarty->assign("target_class", $object->_class_name);
-$smarty->assign("templateClasses", $templateClasses);
-$smarty->assign("modeles", $modeles);
+
+$smarty->assign("modelesCompat", $modelesCompat);
+$smarty->assign("modelesNonCompat", $modelesNonCompat);
+$smarty->assign("modelesId", $templateClasses);
 
 $smarty->display("modele_selector.tpl");
 
