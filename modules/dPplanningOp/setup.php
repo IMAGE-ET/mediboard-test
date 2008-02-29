@@ -740,6 +740,8 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `operations`
             CHANGE `salle_id` `salle_id` INT( 11 ) UNSIGNED DEFAULT NULL;";
     $this->addQuery($sql);
+    $sql = "UPDATE `operations` SET salle_id = NULL WHERE salle_id = 0;";
+    $this->addQuery($sql);
     
     $this->mod_version = "0.82";
   }
