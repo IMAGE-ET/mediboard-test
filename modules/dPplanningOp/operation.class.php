@@ -123,7 +123,7 @@ class COperation extends CCodable {
     $specs["anesth_id"]      = "ref class|CMediusers";
     $specs["plageop_id"]     = "ref class|CPlageOp";
     $specs["pause"]          = "time";
-    $specs["salle_id"]       = "notNull ref class|CSalle";
+    $specs["salle_id"]       = "ref class|CSalle";
     $specs["date"]           = "date";
     $specs["code_uf"]        = "str length|3";
     $specs["libelle_uf"]     = "str maxLength|35";
