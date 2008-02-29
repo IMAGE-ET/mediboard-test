@@ -13,15 +13,28 @@ function setClose(modele_id, object_id) {
 </script>
 
 <ul id="main_tab_group" class="control_tabs">
-{{foreach from=$templateClasses key=class item=id}}
-  {{if $modeles.$class.prat|@count || $modeles.$class.func|@count}}<li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>{{/if}}
+{{foreach from=$modelesCompat key=class item=modeles}}
+  {{if $modeles.prat|@count || $modeles.func|@count}}
+    <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
+  {{/if}}
+{{/foreach}}
+<li class="separator"></li>
+{{foreach from=$modelesNonCompat key=class item=modeles}}
+  {{if $modeles.prat|@count || $modeles.func|@count}}
+    <li><a href="#{{$class}}" class="minor">{{tr}}{{$class}}{{/tr}}</a></li>
+  {{/if}}
 {{/foreach}}
 </ul>
-<hr class="control_tabs" />    
+<hr class="control_tabs" />
 
-{{foreach from=$templateClasses key=class item=id}}
-  {{include file="inc_vw_list_models.tpl" 
-	  object_id=$id
-	  object_class=$class
-	  list_modeles=$modeles.$class}}
+{{foreach from=$modelesCompat key=class item=modeles}}
+  {{if $modeles.prat|@count || $modeles.func|@count}}
+    {{include file="inc_vw_list_models.tpl"}}
+  {{/if}}
+{{/foreach}}
+
+{{foreach from=$modelesNonCompat key=class item=modeles}}
+  {{if $modeles.prat|@count || $modeles.func|@count}}
+    {{include file="inc_vw_list_models.tpl"}}
+  {{/if}}
 {{/foreach}}

@@ -1718,6 +1718,26 @@ ul.control_tabs li a.active {
 	color: #fff;
 }
 
+ul.control_tabs li a.minor {
+  background-color: #CCCCCC;
+  color: #333333;
+}
+
+ul.control_tabs li a.minor:hover {
+  background-color: #BBBBBB;
+  color: #000000;
+}
+
+ul.control_tabs li a.minor.active {
+  background-color: #999999;
+  color: #000000;
+}
+
+ul.control_tabs .separator {
+  padding: 0 10px; 
+  border: none;
+}
+
 
   /* @import "./hospitalisation.css"; */
 

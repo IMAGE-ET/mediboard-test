@@ -25,39 +25,39 @@ class CConsultation extends CCodable {
   var $sejour_id       = null;
   
   // DB fields
-  var $heure         = null;
-  var $duree         = null;
-  var $secteur1      = null;
-  var $secteur2      = null;
-  var $chrono        = null;
-  var $annule        = null;
+  var $heure           = null;
+  var $duree           = null;
+  var $secteur1        = null;
+  var $secteur2        = null;
+  var $chrono          = null;
+  var $annule          = null;
   
   
   var $patient_date_reglement = null;
-  var $tiers_date_reglement = null;
+  var $tiers_date_reglement   = null;
   
-  var $motif         = null;
-  var $rques         = null;
-  var $examen        = null;
-  var $traitement    = null;
-  var $premiere      = null;
-  var $adresse       = null; // Le patient a-t'il été adressé ?
-  var $tarif         = null;
+  var $motif           = null;
+  var $rques           = null;
+  var $examen          = null;
+  var $traitement      = null;
+  var $premiere        = null;
+  var $adresse         = null; // Le patient a-t'il été adressé ?
+  var $tarif           = null;
   
   var $patient_mode_reglement = null;
   var $tiers_mode_reglement   = null;
   
-  var $arrivee       = null;
-  var $banque_id     = null;
-  var $categorie_id  = null;
-  var $valide        = null; // Cotation validée
+  var $arrivee         = null;
+  var $banque_id       = null;
+  var $categorie_id    = null;
+  var $valide          = null; // Cotation validée
  
-  var $total_assure      = null;
-  var $total_amc         = null; 
-  var $total_amo         = null;
+  var $total_assure    = null;
+  var $total_amc       = null; 
+  var $total_amo       = null;
 
-  var $du_patient          = null; // somme que le patient doit régler a la fn
-  var $du_tiers = null;
+  var $du_patient      = null; // somme que le patient doit régler a la fn
+  var $du_tiers        = null;
   
   // Form fields
   var $_etat           = null;
@@ -75,16 +75,16 @@ class CConsultation extends CCodable {
   var $_ref_sejour       = null; // Declared in CCodable
   
   // FSE
-  var $_bind_fse = null;
-  var $_ids_fse = null;
-  var $_ext_fses = null;
-  var $_current_fse = null;
-  var $_fse_intermax = null;
+  var $_bind_fse       = null;
+  var $_ids_fse        = null;
+  var $_ext_fses       = null;
+  var $_current_fse    = null;
+  var $_fse_intermax   = null;
 
   // Tarif
-  var $_bind_tarif = null;
-  var $_tarif_id = null;
-  var $_delete_actes = null;
+  var $_bind_tarif     = null;
+  var $_tarif_id       = null;
+  var $_delete_actes   = null;
   
   // Back References
   var $_ref_consult_anesth = null;
@@ -96,20 +96,20 @@ class CConsultation extends CCodable {
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
-
-   // Distant fields
-   var $_ref_chir  = null;
-   var $_date      = null;
-   var $_is_anesth = null; 
-   
-   // Filter Fields
-   var $_date_min	 	       = null;
-   var $_date_max 		     = null;
-   var $_prat_id 		       = null;
-   var $_etat_reglement_patient    = null;
-   var $_etat_reglement_tiers = null;
-   var $_type_affichage    = null;
-   var $_coordonnees       = null;
+  
+  // Distant fields
+  var $_ref_chir  = null;
+  var $_date      = null;
+  var $_is_anesth = null; 
+  
+  // Filter Fields
+  var $_date_min	 	   = null;
+  var $_date_max 		   = null;
+  var $_prat_id 		   = null;
+  var $_etat_reglement_patient = null;
+  var $_etat_reglement_tiers   = null;
+  var $_type_affichage     = null;
+  var $_coordonnees        = null;
 
   function CConsultation() {
     $this->CMbObject("consultation", "consultation_id");
@@ -208,15 +208,19 @@ class CConsultation extends CCodable {
   
   function getTemplateClasses(){
     $this->loadRefsFwd();
+    
     $tab = array();
     
     // Stockage des objects liés à l'opération
-    $tab["CConsultation"] = $this->_id;
-    $tab["CPatient"] = $this->_ref_patient->_id;
+    $tab['CConsultation'] = $this->_id;
+    $tab['CPatient'] = $this->_ref_patient->_id;
+    
+    $tab['CConsultAnesth'] = 0;
+    $tab['COperation'] = 0;
+    $tab['CSejour'] = 0;
     
     return $tab;
   }
-  
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -264,7 +268,6 @@ class CConsultation extends CCodable {
     }
   }
 
-
   function check() {
     // Data checking
     $msg = null;
@@ -278,7 +281,6 @@ class CConsultation extends CCodable {
     }
     return $msg . parent::check();
   }
-  
   
   function loadView() {
   	$this->loadRefPlageConsult();
@@ -315,7 +317,6 @@ class CConsultation extends CCodable {
       }
     }
   }
-  
   
   /**
    * Détruit les actes CCAM et NGAP
@@ -383,7 +384,6 @@ class CConsultation extends CCodable {
       return $msg;
     }  
   }
-  
   
   /**
    * Create a LogicMaxFSE from the consult
@@ -536,8 +536,6 @@ class CConsultation extends CCodable {
     return $consult->store();
   }
 
-  
-  
   function precodeCCAM(){
     $this->loadRefPlageConsult();
     // Explode des codes_ccam du tarif
@@ -563,8 +561,6 @@ class CConsultation extends CCodable {
       }
     }
   }
-  
- 
   
   function precodeNGAP(){
     $listCodesNGAP = explode("|",$this->_tokens_ngap);
@@ -620,8 +616,6 @@ class CConsultation extends CCodable {
     
   }
   
-  
-  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
@@ -659,7 +653,6 @@ class CConsultation extends CCodable {
     }
   }
   
-  
   function loadRefPatient() {
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
@@ -675,7 +668,6 @@ class CConsultation extends CCodable {
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefRPU();
   }
-  
   
   function loadRefPlageConsult() {
     if ($this->_ref_plageconsult) {
@@ -711,7 +703,6 @@ class CConsultation extends CCodable {
     $this->loadExtCodesCCAM();
   }
 
-  
   function loadRefsDocsOld() {
   	$this->loadRefConsultAnesth();
     if($this->_ref_consult_anesth->consultation_anesth_id) {
@@ -742,12 +733,10 @@ class CConsultation extends CCodable {
     return count($this->_ref_documents);
   }
   
-  
   function getExecutantId($code_activite) {
   	$this->loadRefPlageConsult();
     return $this->_praticien_id;
   }
-  
   
   function getNumDocsAndFiles($permType = null){
   	if (!$this->_nb_files_docs) {
@@ -808,6 +797,8 @@ class CConsultation extends CCodable {
     $where["consultation_id"] = "= '$this->consultation_id'";
     $this->_ref_examnyha->loadObject($where);
   }
+  
+  
   function loadRefsExamPossum(){
     $this->_ref_exampossum = new CExamPossum;
     $where = array();

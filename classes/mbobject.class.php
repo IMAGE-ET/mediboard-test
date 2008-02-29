@@ -1235,6 +1235,16 @@ class CMbObject {
     return array();
   }
   
+  function getTemplateClasses(){
+    //$this->loadRefsFwd();
+    
+    $tab = array();
+
+    $tab[$this->_class_name] = $this->_id;
+
+    return $tab;
+  }
+  
   
   /**
    * Convert string back specifications to objet specifications
@@ -1316,10 +1326,6 @@ class CMbObject {
     }
   }
 
-  
-  function getTemplateClasses(){
-    
-  }
   
   /**
    * Functions to check the object's properties

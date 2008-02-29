@@ -172,10 +172,10 @@ class CPatient extends CMbObject {
   var $_ref_medecin3         = null;
   var $_ref_dossier_medical  = null;
   
-	function CPatient() {
-		$this->CMbObject("patients", "patient_id");    
+  function CPatient() {
+    $this->CMbObject("patients", "patient_id");    
     $this->loadRefModule(basename(dirname(__FILE__)));
- 	}
+  }
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
@@ -432,7 +432,6 @@ class CPatient extends CMbObject {
     
     $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
   }
-  
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -915,7 +914,6 @@ class CPatient extends CMbObject {
     }
   }
   
-  
   function loadIPP() {
     // Prevent loading twice
     if ($this->_IPP) {
@@ -951,7 +949,6 @@ class CPatient extends CMbObject {
     	$this->_IPP = "-";
     }
   }
-  
   
   function checkSimilar($nom, $prenom) {
     $soundex2 = new soundex2;

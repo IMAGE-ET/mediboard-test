@@ -169,13 +169,11 @@ class COperation extends CCodable {
     return $specs;
   }
   
-  
   function getExecutantId($code_activite) {
     $this->loadRefChir();
     $this->loadRefPlageOp();
     return ($code_activite == 4 ? $this->_ref_anesth->user_id: $this->chir_id);
   }
-  
   
   function getSeeks() {
     return array (
@@ -205,12 +203,16 @@ class COperation extends CCodable {
 
   function getTemplateClasses(){
     $this->loadRefsFwd();
+    
     $tab = array();
     
     // Stockage des objects liés à l'opération
-    $tab["COperation"] = $this->_id;
-    $tab["CSejour"] = $this->_ref_sejour->_id;
-    $tab["CPatient"] = $this->_ref_sejour->_ref_patient->_id;
+    $tab['COperation'] = $this->_id;
+    $tab['CSejour'] = $this->_ref_sejour->_id;
+    $tab['CPatient'] = $this->_ref_sejour->_ref_patient->_id;
+    
+    $tab['CConsultation'] = 0;
+    $tab['CConsultAnesth'] = 0;
     
     return $tab;
   }
@@ -493,8 +495,6 @@ class COperation extends CCodable {
     return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
   }
 
- 
-  
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_sejour->loadRefsFwd();

@@ -121,7 +121,7 @@ class CSejour extends CCodable {
   // BackRef
   var $etablissement_transfert_id = null;
     
-	function CSejour() {
+  function CSejour() {
     global $dPconfig;
     
     $this->CMbObject("sejour", "sejour_id");
@@ -129,7 +129,7 @@ class CSejour extends CCodable {
     $this->loadRefModule(basename(dirname(__FILE__)));
     
     $this->_locked = $dPconfig["dPplanningOp"]["CSejour"]["locked"];
-	}
+  }
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
@@ -411,15 +411,19 @@ class CSejour extends CCodable {
     }
     
   }
-  
-  
+
   function getTemplateClasses(){
     $this->loadRefsFwd();
+    
     $tab = array();
     
     // Stockage des objects liés au séjour
-    $tab["CSejour"] = $this->_id;
-    $tab["CPatient"] = $this->_ref_patient->_id;
+    $tab['CSejour'] = $this->_id;
+    $tab['CPatient'] = $this->_ref_patient->_id;
+    
+    $tab['CConsultation'] = 0;
+    $tab['CConsultAnesth'] = 0;
+    $tab['COperation'] = 0;
     
     return $tab;
   }
@@ -508,12 +512,10 @@ class CSejour extends CCodable {
     $this->loadExtCodesCCAM();
   }
   
-  
   function loadView() {
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
   }
-  
   
   function loadComplete() {
     parent::loadComplete();
@@ -587,7 +589,6 @@ class CSejour extends CCodable {
       return $this->praticien_id;
   }
   
-  
   function getPerm($permType) {
     if(!$this->_ref_praticien) {
       $this->loadRefPraticien();
@@ -630,7 +631,6 @@ class CSejour extends CCodable {
     }
   }
   
- 
   function loadRefsOperations($where = array()) {
     $where["sejour_id"] = "= '$this->_id'";
     $order = "date ASC";
@@ -662,7 +662,6 @@ class CSejour extends CCodable {
       $this->_dates_operations[] = mbDate($operation->_datetime);
     }
   }
-  
   
   function loadRefsBack() {
     $this->loadRefsFiles();
