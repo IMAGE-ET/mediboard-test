@@ -83,7 +83,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <th>Type</th>
   <th>Marque</th>
   <th>Etablissement</th>
-  <th>Cabinet</th>
+  <th>Cabinet<br/>Salle</th>
   <th>Chirurgien</th>
   <th>Patient</th>
   <th>Sejour</th>
@@ -116,7 +116,7 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   <td>
     {{if $status !== null}}
     <div class="message">
-      synchro:&nbsp;{{$status}}
+      synch:&nbsp;{{$status}}
       {{if $cache}}
       <br />cache:&nbsp;{{$cache}}
       {{/if}}
@@ -130,7 +130,9 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
 
   {{if !$dialog}}
   <td>
-    <button class="search" onclick="explain({{$curr_mouv->rec}})">Explications</button>
+    <button class="search" onclick="explain({{$curr_mouv->rec}})">
+      Explications
+    </button>
   </td>
   {{/if}}
 

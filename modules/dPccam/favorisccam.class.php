@@ -45,7 +45,7 @@ class CFavoriCCAM extends CMbObject {
     $this->_ref_code->getChaps();
   }
   
-  function getOrdered($user_id = 0,$class) {
+  static function getOrdered($user_id = 0,$class) {
     $listOrdered = array();
     if($user_id) {
       $where["favoris_user"] = "= '$user_id'";

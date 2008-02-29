@@ -5,7 +5,7 @@ require_once $AppUI->getModuleClass("dPsante400", "mouvement400");
 
 class CMouvSejourEcap extends CMouvement400 {  
   const STATUS_ETABLISSEMENT = 0;
-  const STATUS_FONCTION      = 1;
+  const STATUS_FONCSALL      = 1;
   const STATUS_PRATICIEN     = 2;
   const STATUS_PATIENT       = 3;
   const STATUS_SEJOUR        = 4;
@@ -13,10 +13,11 @@ class CMouvSejourEcap extends CMouvement400 {
   const STATUS_ACTES         = 6;
   const STATUS_NAISSANCE     = 7;
   
-  public $sejour = null;
+  public $sejour        = null;
   public $etablissement = null;
-  public $fonction = null;
-  public $patient = null;
+  public $fonction      = null;
+  public $salle         = null;
+  public $patient       = null;
   public $praticiens = array();
   public $operations = array();
   public $naissance = null;
@@ -29,7 +30,7 @@ class CMouvSejourEcap extends CMouvement400 {
   protected $id400Opers = array();
   
   // Identifiant unique d'intervention stocké en dur dand la DHE
-  protected $dheCIDC = null;
+  protected $dheCINT = null;
   
   function __construct() {
     $this->base = "ECAPFILE";
@@ -43,6 +44,7 @@ class CMouvSejourEcap extends CMouvement400 {
   function synchronize() {
     $this->syncEtablissement();
     $this->syncFonction();
+    $this->syncSalle();
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
@@ -81,7 +83,7 @@ class CMouvSejourEcap extends CMouvement400 {
     
     $this->id400Etab = new CIdSante400();
     $this->id400Etab->id400 = $CIDC;
-    $this->tag = "eCap";
+    $this->id400Etab->tag = "eCap";
     $this->id400Etab->object_class = "CGroups";
 
     $this->etablissement = $this->id400Etab->getCachedObject();
@@ -129,16 +131,17 @@ class CMouvSejourEcap extends CMouvement400 {
   function syncFonction() {
     $id400Func = new CIdSante400();
     $id400Func->id400 = $this->id400Etab->id400;
+    $id400Func->tag = "eCap";
     $id400Func->object_class = "CFunctions";
 
     $this->fonction = $id400Func->getCachedObject();
     if ($this->fonction->_id) {
       $this->trace($this->fonction->getProps(), "Cabinet depuis le cache");
-      $this->markCache(self::STATUS_FONCTION);
+      $this->markCache(self::STATUS_FONCSALL);
       return;    
     } 
 
-    $this->fonction->group_id = $this->etablissement->group_id;
+    $this->fonction->group_id = $this->etablissement->_id;
     $this->fonction->loadMatchingObject();
     $this->fonction->type = "cabinet";
     $this->fonction->text = "Import eCap";
@@ -148,9 +151,33 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $id400Func->bindObject($this->fonction);
     
-    $this->markStatus(self::STATUS_FONCTION);
+    $this->markStatus(self::STATUS_FONCSALL);
   }
-   
+  
+  function syncSalle() {
+    $id400Salle = new CIdSante400();
+    $id400Salle->id400 = $this->id400Etab->id400;
+    $id400Salle->tag = "eCap";
+    $id400Salle->object_class = "CSalle";
+
+    $this->salle = $id400Salle->getCachedObject();
+    if ($this->salle->_id) {
+      $this->trace($this->salle->getProps(), "Salle depuis le cache");
+      $this->markCache(self::STATUS_FONCSALL);
+      return;
+    } 
+
+    $this->salle->group_id = $this->etablissement->_id;
+    $this->salle->nom = "Import eCap";
+    $this->salle->stats = "0";
+    
+    $this->trace($this->salle->getProps(), "Salle à enregistrer");
+
+    $id400Salle->bindObject($this->salle);
+    
+    $this->markStatus(self::STATUS_FONCSALL);
+  }
+  
   function syncPraticien($CPRT) {
     if (array_key_exists($CPRT, $this->praticiens)) {
       return;
@@ -342,7 +369,7 @@ class CMouvSejourEcap extends CMouvement400 {
     }
     
     $this->trace($dheECap->data, "DHE Trouvée");
-    $this->dheCIDC = $dheECap->consume("CINT");
+    $this->dheCINT = $dheECap->consume("CINT");
 
     $NSEJ = null;//$dheECap->consume("NSEJ");
     $IDAT = $dheECap->consume("IDAT");
@@ -425,7 +452,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->sejour->rques = join($remarques, "\n");
 
     // $TRPE et $EXBI à gérer
-    
+
+    return $IDAT;
   }
   
   function syncDHE() {
@@ -434,12 +462,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->id400Sej->id400,
       $this->id400Pat->id400,
     );
-    
-    $tag = "eCap DHE CIDC:{$this->id400Etab->id400}";
-    $this->id400DHE = new CIdSante400();
-    $this->id400DHE->id400 = $IDAT;
-    $this->id400DHE->tag = $tag;
-    
+        
     $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
 
     $query = "SELECT * " .
@@ -453,7 +476,14 @@ class CMouvSejourEcap extends CMouvement400 {
     $dheECap->valuePrefix = "AT";
     $dheECap->query($query, $values);
     
-    $this->mapDHE($dheECap);
+    $IDAT = $this->mapDHE($dheECap);
+    
+    $tag = "eCap DHE CIDC:{$this->id400Etab->id400}";
+    $this->id400DHE = new CIdSante400();
+    $this->id400DHE->id400 = $IDAT;
+    $this->id400DHE->tag = $tag;
+        
+    
 
     $this->id400DHE->bindObject($this->sejour);
 
@@ -469,7 +499,8 @@ class CMouvSejourEcap extends CMouvement400 {
     
     $operation = new COperation;
     $operation->sejour_id = $this->sejour->_id;
-    $operation->chir_id = $this->sejour->praticien_id;
+    $operation->chir_id   = $this->sejour->praticien_id;
+    $operation->salle_id  = $this->salle->_id;
     
     // Côté indeterminé pour le moment
     $operation->cote = "total";
@@ -530,7 +561,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->id400Etab->id400,
       $this->id400Sej->id400,
       $this->id400Pat->id400,
-      $this->dheCIDC,
+      $this->dheCINT,
     );
     
     // Recherche des opérations
@@ -576,8 +607,15 @@ class CMouvSejourEcap extends CMouvement400 {
       
       // Praticien exécutant
       $CPRT = $acteECap->consume("CPRT");
+      
+      // Acte non validé
+      if ($CPRT == "0") {
+        continue;
+      }
+      
       $this->syncPraticien($CPRT);
       $acte->executant_id = $this->praticiens[$CPRT]->_id;
+      
       
       // Codage
       $acte->code_acte     = $acteECap->consume("CDAC");
@@ -671,11 +709,21 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400Sej->id400 = $NDOS;
     $this->id400Sej->object_class = "CSejour";
     $this->id400Sej->tag = join(" ", $tags);
-    
+        
     // Mapping et binding
     $this->sejour = $this->id400Sej->getCachedObject(0);
     $this->sejour->annule = $this->type == "S" ? '1' : '0';
     $this->mapSej($this);
+    
+    // En cas de collision, on a affaire au même séjour
+    $collisions = $this->sejour->getCollisions();
+    if (count($collisions)) {
+      $collision = reset($collisions);
+      mbDump($collision->getProps());
+      trigger_error("Collisions !!!!!");
+//      $this->sejour->_id = $collision->_id;
+    }
+            
     $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
     $this->id400Sej->bindObject($this->sejour);
     

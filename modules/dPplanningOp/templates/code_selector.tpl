@@ -20,7 +20,7 @@ function createFavori() {
 
   var url = new Url;
   url.setModuleAction(sModule, "vw_find_code");
-  if(sModule=="dPccam"){
+  if(sModule == "dPccam"){
     url.addParam("object_class", oForm.object_class.value);
   }
   url.addParam("dialog", 1);
@@ -29,11 +29,17 @@ function createFavori() {
 
 
 function view_() {
+  {{if $type == "ccam" }}viewCCAM();{{/if}}
+  {{if $type == "cim10"}}viewCim ();{{/if}}
+}
+
+function viewCCAM() {
   var oForm = document.selView;
   var url = new Url;
   url.setModuleAction("dPplanningOp", "code_selector");
   url.addParam("type", "ccam"); 
-  url.addElement(oForm.view);
+  url.addElement(oForm.order);
+  url.addElement(oForm.mode);
   url.addElement(oForm.chir);
   url.addElement(oForm.anesth);
   url.addElement(oForm.object_class);  
@@ -46,159 +52,89 @@ function viewCim(){
   var url = new Url;
   url.setModuleAction("dPplanningOp", "code_selector");
   url.addParam("type", "cim10"); 
-  url.addElement(oForm.view);
+  url.addElement(oForm.order);
+  url.addElement(oForm.mode);
   url.addElement(oForm.chir);  
   url.addParam("dialog", 1);
   url.redirect();
 }
 
 function pageMain() {
-  {{if $fusionAnesth|@count}}
   new Control.Tabs('main_tab_group');
-  {{/if}}
 }
 
 </script>
 
-
-<table class="selectCode">
-{{if $type=="ccam"}} 
-  <tbody> 
-  <tr>
-  	<th>Favoris disponibles</th>
-    <td>
-      <form name="selView" action="?">
-      <input type="hidden" name="chir" value="{{$chir}}" />
-      <input type="hidden" name="anesth" value="{{$anesth}}" />
-  	  <input type="hidden" name="object_class" value="{{$object_class}}" />
-      <select name="view" onchange="view_();">
-  	    <option>&mdash; Choisir un mode d'affichage</option>
-  	    <option value="alpha" {{if $view == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
-  	    <option value="taux" {{if $view == "taux"}} selected="selected" {{/if}}>Par utilisation</option>
-  	  </select>
-  	  </form>
-  	</td>
-  	<th>
-  	  {{if $fusionAnesth|@count}}
-  	  <ul id="main_tab_group" class="control_tabs">
-        <li><a class="" href="#Chir">Chir</a></li>
-        <li><a class="" href="#Anesth">Anesth</a></li>
-      </ul>
-      {{/if}}
-  	</th>
-  </tr>
-  </tbody>
-  <tbody id="Chir">
-  <tr>
-  {{foreach from=$fusion item=curr_code key=curr_key name=fusion}}
-    <td>
-      <strong><span style="float:left">{{$curr_code.codeccam->code}}</span>
-      {{if $curr_code.codeccam->occ==0}}
-      <span style="float:right">Favoris</span>
-      {{else}}
-      <span style="float:right">{{$curr_code.codeccam->occ}} acte(s)</span>
-      {{/if}}
-      </strong><br />
-      <small>(
-      {{foreach from=$curr_code.codeccam->activites item=curr_activite}}
-        {{foreach from=$curr_activite->phases item=curr_phase}}
-          <a href="#" onclick="setClose('{{$curr_code.codeccam->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">{{$curr_activite->numero}}-{{$curr_phase->phase}}</a>
-        {{/foreach}}
-      {{/foreach}}   
-      )</small>
-      <br />
-      {{$curr_code.codeccam->libelleLong}}
-      <br />
-      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">
-        {{tr}}Select{{/tr}}
-      </button>
-    </td>  
-  {{if $smarty.foreach.fusion.index % 3 == 2}}
-  </tr><tr>
-  {{/if}}
-  {{/foreach}}
-  </tr>
-  </tbody>
-  {{if $fusionAnesth|@count}}
-  <tbody id="Anesth">
-  <tr>
-  {{foreach from=$fusionAnesth item=curr_code key=curr_key name=fusion}}
-    <td>
-      <strong><span style="float:left">{{$curr_code.codeccam->code}}</span>
-      {{if $curr_code.codeccam->occ==0}}
-      <span style="float:right">Favoris</span>
-      {{else}}
-      <span style="float:right">{{$curr_code.codeccam->occ}} acte(s)</span>
-      {{/if}}
-      </strong><br />
-      <small>(
-      {{foreach from=$curr_code.codeccam->activites item=curr_activite}}
-        {{foreach from=$curr_activite->phases item=curr_phase}}
-          <a href="#" onclick="setClose('{{$curr_code.codeccam->code}}-{{$curr_activite->numero}}-{{$curr_phase->phase}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">{{$curr_activite->numero}}-{{$curr_phase->phase}}</a>
-        {{/foreach}}
-      {{/foreach}}   
-      )</small>
-      <br />
-      {{$curr_code.codeccam->libelleLong}}
-      <br />
-      <button class="tick" type="button" onclick="setClose('{{$curr_code.codeccam->code}}', '{{$type}}','{{$curr_code.codeccam->_default}}' )">
-        {{tr}}Select{{/tr}}
-      </button>
-    </td>  
-  {{if $smarty.foreach.fusion.index % 3 == 2}}
-  </tr><tr>
-  {{/if}}
-  {{/foreach}}
-  </tr>
-  </tbody>
-  {{/if}}
-</table>
-{{/if}}
-
-{{if $type=="cim10"}}  
-  <tr>
-  	<th>Favoris disponibles</th>
-    <td>
-      <form name="selViewCim" action="?">
-      <input type="hidden" name="chir" value="{{$chir}}" />
-      <select name="view" onchange="viewCim();">
-  	    <option>&mdash; Choisir un mode d'affichage</option>
-  	    <option value="alpha" {{if $view == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
-  	    <option value="taux" {{if $view == "taux"}} selected="selected" {{/if}}>Par utilisation</option>
-  	  </select>
-  	  </form>
-  	</td>
-  </tr>
-  <tr>
-  {{foreach from=$fusionCim item=curr_code key=curr_key name=fusion}}
-    <td>
-      <strong><span style="float:left">{{$curr_code.codecim->code}}</span>
-      {{if $curr_code.codecim->occ==0}}
-      <span style="float:right">Favoris</span>
-      {{else}}
-      <span style="float:right">{{$curr_code.codecim->occ}}</span>
-      {{/if}}
-      </strong><br />
-      {{$curr_code.codecim->libelle}}
-      <br />
-      <button class="tick" type="button" onclick="setClose('{{$curr_code.codecim->code}}', '{{$type}}' )">
-        {{tr}}Select{{/tr}}
-      </button>
-    </td>  
-  {{if $smarty.foreach.fusion.index % 3 == 2}}
-  </tr><tr>
-  {{/if}}
-  {{/foreach}}
-  </tr>
-</table>
-{{/if}}
-
+<!-- Filtre principal -->
+<form name="selView" action="?">
+<input type="hidden" name="chir" value="{{$chir}}" />
+<input type="hidden" name="anesth" value="{{$anesth}}" />
+<input type="hidden" name="object_class" value="{{$object_class}}" />
 
 <table class="form">
   <tr>
-    <td class="button" colspan="3">
+    <th>Mode</th>
+    <td>
+      <select name="mode" onchange="view_();">
+  	    <option>&mdash; Choisir un mode</option>
+  	    <option value="favoris" {{if $mode == "favoris"}} selected="selected" {{/if}}>Favoris</option>
+  	    <option value="stats"   {{if $mode == "stats"  }} selected="selected" {{/if}}>Statistiques</option>
+  	  </select>
+    </td>
+      
+  	<th>Tri</th>
+    <td>
+      {{if $mode == "favoris"}}
+      Par ordre alphabétique
+      {{else}}
+      <select name="order" onchange="view_();">
+  	    <option>&mdash; Choisir un tri</option>
+  	    <option value="alpha" {{if $order == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
+  	    <option value="taux"  {{if $order == "taux" }} selected="selected" {{/if}}>Par utilisation</option>
+  	  </select>
+			{{/if}}
+  	</td>
+  </tr>
+
+  <tr>
+    <td class="button" colspan="4">
       <button class="cancel" type="button" onclick="window.close();">{{tr}}Cancel{{/tr}}</button>
       <button class="search" type="button" onclick="createFavori();">{{tr}}button-CCodeCCAM-searchAnother{{/tr}}</button>
     </td>
   </tr>
 </table>
+
+</form>
+
+<!-- Favoris par utilisateur -->
+<ul id="main_tab_group" class="control_tabs">
+{{foreach from=$listByProfile key=profile item=list}}
+  {{assign var=user value=$users.$profile}}
+  <li>
+    <a href="#{{$profile}}">
+    	{{tr}}Profile.{{$profile}}{{/tr}} 
+    	{{$user->_view}}
+    </a>
+  </li>
+{{/foreach}}
+</ul>
+<hr class="control_tabs" />
+
+<table class="selectCode">
+
+{{foreach from=$listByProfile key=profile item=list}}
+<tbody id="{{$profile}}">
+{{if $type=="ccam"}} 
+  {{include file=inc_ccam_selector.tpl fusion=$list}}
+{{/if}}
+
+{{if $type=="cim10"}}
+  {{include file=inc_cim_selector.tpl fusion=$list}}
+{{/if}}
+
+</tbody>
+{{/foreach}}
+
+
+</table>
+

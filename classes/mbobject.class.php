@@ -254,6 +254,26 @@ class CMbObject {
     return count($this->_ref_files) + count($this->_ref_documents);
   }
   
+  /**
+   * Complete field with base value if missing
+   * @param field string Field name
+   */
+  function completeField($field) {
+    // Field is valued
+    if ($this->$field === null) {
+      return;
+    }
+    
+    // Nothing in base
+    if (!$this->_id) {
+      return;
+    }
+    
+  	$old = new $this->_class_name;
+  	$this->$field = $old->$field;
+  }
+  
+  
   /*
    * Chargement du dernier identifiant id400
    * @param : $tag = nom du tag à utiliser

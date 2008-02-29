@@ -607,13 +607,7 @@ class CPatient extends CMbObject {
   	}
   	
   	// Assuré
-
-    // Assuré = patient ssi rang du bénéficiaire vaut 1
     $this->updateAssureField("nom");
-    $this->updateAssureField("nom_jeune_fille");
-    $this->updateAssureField("prenom");
-    $this->updateAssureField("naissance");
-    $this->updateAssureField("sexe");
     $this->updateAssureField("adresse");
     $this->updateAssureField("ville");
     $this->updateAssureField("cp");
@@ -621,10 +615,18 @@ class CPatient extends CMbObject {
     $this->updateAssureField("tel2");
     $this->updateAssureField("pays");
     $this->updateAssureField("nationalite");
-    $this->updateAssureField("lieu_naissance");
-    $this->updateAssureField("profession");
-    $this->updateAssureField("rques");
-    $this->updateAssureField("matricule");
+    
+    if ($this->rang_beneficiaire == "01") {
+	    $this->updateAssureField("nom_jeune_fille");
+	    $this->updateAssureField("prenom");
+	    $this->updateAssureField("naissance");
+	    $this->updateAssureField("sexe");
+      $this->updateAssureField("matricule");
+      $this->updateAssureField("lieu_naissance");
+      $this->updateAssureField("profession");
+      $this->updateAssureField("rques");
+    }
+
 
     if ($this->assure_nom) {
   	  $this->assure_nom = strtoupper($this->assure_nom);
@@ -656,7 +658,7 @@ class CPatient extends CMbObject {
   // Backward references
   function loadRefsSejours($where = null) {
     $sejour = new CSejour;
-    if($this->patient_id){
+    if ($this->patient_id){
       if ($where === null) {
         $where = array();
       }

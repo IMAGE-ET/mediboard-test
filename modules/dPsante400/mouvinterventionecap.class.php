@@ -18,6 +18,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
   function synchronize() {
     $this->syncEtablissement();
     $this->syncFonction();
+    $this->syncSalle();
     
     // Praticien du séjour si aucune DHE
     $this->syncPatient();
@@ -111,6 +112,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $dheECap->valuePrefix = "AT";
     $dheECap->query($query, $values);
     
+    
     // Si l'enregistrement existe toujours
     if ($dheECap->data) {
       $this->mapDHE($dheECap);
@@ -175,11 +177,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     // Annulation de l'operation si mouvement de suppression
     $operation = reset($this->operations);
-    mbExport($operation->annulee, "Opération annulation before for $this->rec");
     $operation->annulee = $this->type == "S" ? '1' : '0';
-    mbExport($operation->annulee, "Opération annulation after for $this->rec");
-//    mbExport($operation, "opération");
-//    $operation->store();
     $this->trace("Opération annulée", "Mouvement de suppression");
   }
 

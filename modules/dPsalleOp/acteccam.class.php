@@ -274,8 +274,8 @@ class CActeCCAM extends CActe {
     return;
   }
   
-  function getFavoris($chir,$class,$view) {
-  	$condition = ( $class == "" ) ? "executant_id = '$chir'" : "executant_id = '$chir' AND object_class = '$class'";
+  function getFavoris($user_id, $class) {
+  	$condition = ( $class == "" ) ? "executant_id = '$user_id'" : "executant_id = '$user_id' AND object_class = '$class'";
   	$sql = "select code_acte, object_class, count(code_acte) as nb_acte
             from acte_ccam
             where $condition

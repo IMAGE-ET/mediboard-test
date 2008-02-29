@@ -21,6 +21,9 @@
     <th>{{tr}}CIdSante400-id400-court{{/tr}}</th> 
     <th>{{tr}}CIdSante400-tag{{/tr}}</th>
   </tr>
+  
+  {{assign var=href value="?m=dPsante400&$actionType=$action&dialog=$dialog"}}
+  
   {{foreach from=$list_idSante400 item=_idSante400}}
   <tr {{if $_idSante400->_id == $idSante400->_id}}class="selected"{{/if}}>
     {{if !$dialog}}
@@ -29,16 +32,18 @@
     <td>
       {{assign var="object" value=$_idSante400->_ref_object}}
       {{if $object->_id}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_idSante400->object_class}}', object_id: {{$_idSante400->object_id}} } })">
+      <a href="{{$href}}&amp;object_class={{$object->_class_name}}&amp;object_id={{$object->_id}}">
+      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$object->_class_name}}', object_id: {{$object->_id}} } })">
         {{$object->_view}}
       </span>
+      </a>
       {{else}}
       <div class="warning">Objet supprimé</div>
       {{/if}}
     </td>
     {{/if}}
     <td>
-      <a href="?m=dPsante400&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;id_sante400_id={{$_idSante400->_id}}" >
+      <a href="{{$href}}&amp;id_sante400_id={{$_idSante400->_id}}" >
         {{$_idSante400->last_update|date_format:"%d/%m/%Y à %Hh%M"}}
       </a>
     </td>

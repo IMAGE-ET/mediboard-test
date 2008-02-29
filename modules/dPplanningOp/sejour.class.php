@@ -207,11 +207,6 @@ class CSejour extends CCodable {
   function check() {
     $msg    = null;
     $pathos = new CDiscipline();
-
-    $oldSejour = new CSejour();
-    if($this->_id) {
-      $oldSejour->load($this->_id);
-    }
     
     // Test de la pathologies
     if ($this->pathologie != null && (!in_array($this->pathologie, $pathos->_enums["categorie"]))) {
@@ -219,67 +214,75 @@ class CSejour extends CCodable {
     }
     
     // Test de coherence de date avec les interventions
-    if($this->entree_prevue === null && $this->sortie_prevue === null) {
-      $entree = $oldSejour->entree_prevue;
-      $sortie = $oldSejour->sortie_prevue;
-    } else {
-      $entree = $this->entree_prevue;
-      $sortie = $this->sortie_prevue;
-    }
+    $this->completeField("entree_prevue");
+    $this->completeField("sortie_prevue");
+    $entree = $this->entree_prevue;
+    $sortie = $this->sortie_prevue;
 
-    if($entree !== null && $sortie !== null) {
+    if ($entree !== null && $sortie !== null) {
       $this->loadRefsOperations();
       foreach($this->_ref_operations as $key => $operation){
         $operation->loadRefPlageop();
         $isCurrOp = $this->_curr_op_id == $operation->_id;
-        if($isCurrOp) {
+        if ($isCurrOp) {
           $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
-        } else {
-           $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
+        } 
+        else {
+          $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
         }
-        if(!$opInBounds){
+        if (!$opInBounds) {
            $msg.= "Interventions en dehors des nouvelles dates du sejour";  
         }
       }
     }
 
-    if(!$this->annule){
-	    // Test de colision avec un autre sejour
-	    $patient = new CPatient;
-	    if($this->patient_id) {
-	      $patient->load($this->patient_id);
-	    } elseif($oldSejour->patient_id) {
-	      $patient->load($oldSejour->patient_id);
-	    }
-	    
-	    if($patient->_id) {
-	      $where["annule"] = " = '0'";
-	      $where["type"] = " != 'urg'";
-	      $patient->loadRefsSejours($where);
-	
-	      // suppression de la liste des sejours le sejour courant
-	      $listSejour = array();
-	      foreach($patient->_ref_sejours as $key => $sejour){
-	        $listSejour[$key] = $sejour;
-	        if($key == $this->_id){
-	          unset($listSejour[$key]);
-	        }
-	      }
-	      
-	      foreach($listSejour as $key => $sejour){
-	        //Test sur les entree prevues du sejour
-	        if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
-	          or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
-	          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
-	          $msg .= "Collision avec le sejour du $sejour->entree_prevue au $sejour->sortie_prevue<br />";
-	        }     
-	      }
-	    }
+    foreach ($this->getCollisions() as $collision) {
+      $msg .= "Collision avec le sejour du $collision->entree_prevue au $collision->sortie_prevue<br />"; 
     }
-
+    
     return $msg . parent::check();
   }
+
+  /**
+   * Cherche les différentes collisions au séjour courant
+   * @return array|CSejour
+   */
+  function getCollisions() {
+    $collisions = array();
     
+    // Ne concerne pas les annulés
+    if ($this->annule) {
+      return $collisions;
+    }
+    
+    // Test de colision avec un autre sejour
+    $this->completeField("patient_id");
+    $patient = new CPatient;
+    $patient->load($this->patient_id);
+    if (!$patient->_id) {
+      return $collisions;
+    }
+    
+    $where["annule"] = " = '0'";
+    $where["type"] = " != 'urg'";
+    $patient->loadRefsSejours($where);
+
+    // suppression de la liste des sejours le sejour courant
+    $sejours = $patient->_ref_sejours;
+    unset($sejours[$this->_id]);
+    
+    foreach($sejours as $key => $sejour) {
+      // Test sur les entree prevues du sejour
+      if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
+        or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
+        or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
+        $collisions[$sejour->_id] = $sejour;
+      }
+    }
+    
+    return $collisions;
+  }
+  
   function store() {
     if ($msg = parent::store()) {
       return $msg;
