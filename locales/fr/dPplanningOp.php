@@ -1,5 +1,4 @@
 <?php
-$locales[' Profile.user'] = 'Utilisateur';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -590,6 +589,7 @@ $locales['pref-mode_dhe-0'] = 'Mode simple';
 $locales['pref-mode_dhe-1'] = 'Mode expert';
 $locales['pref-mode_dhe-desc'] = 'Sélection du mode de création d\'interventions';
 $locales['Profile.anesth'] = 'Anesthésiste';
-$locales['Profile.chir'] = 'Chirurgien';
+$locales['Profile.chir'] = 'Praticien';
+$locales['Profile.user'] = 'Utilisateur';
 $locales['type_adm'] = 'Admission en';
 ?>

@@ -1,5 +1,4 @@
 <?php
-$locales[' Profile.user'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -591,5 +590,6 @@ $locales['pref-mode_dhe-1'] = '';
 $locales['pref-mode_dhe-desc'] = '';
 $locales['Profile.anesth'] = '';
 $locales['Profile.chir'] = '';
+$locales['Profile.user'] = '';
 $locales['type_adm'] = '';
 ?>

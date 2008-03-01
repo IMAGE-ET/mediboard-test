@@ -490,68 +490,15 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->markStatus(self::STATUS_SEJOUR);
   }
   
-  function mapBindOperation(CRecordSante400 $operECap) {
-    if (!$this->sejour->_id) {
-      return;
-    }
-    
-    $this->trace($operECap->data, "Opération trouvée"); 
-    
-    $operation = new COperation;
-    $operation->sejour_id = $this->sejour->_id;
-    $operation->chir_id   = $this->sejour->praticien_id;
-    $operation->salle_id  = $this->salle->_id;
-    
-    // Côté indeterminé pour le moment
-    $operation->cote = "total";
-
-    // Entrée/sortie prévue/réelle
-    $entree_prevue = $operECap->consumeDateTime("DTEP", "HREP");
-    $sortie_prevue = $operECap->consumeDateTime("DTSP", "HRSP");
-    $entree_reelle = $operECap->consumeDateTime("DTER", "HREM");
-    $sortie_reelle = $operECap->consumeDateTime("DTSR", "HRSR");
-
-    $duree_prevue = $sortie_prevue > $entree_prevue ? 
-      mbTimeRelative($entree_prevue, $sortie_prevue) : 
-      "01:00:00"; 
-      
-    $operation->date = mbDate($entree_prevue);
-    $operation->time_operation = mbTime($entree_prevue);
-    $operation->temp_operation = $duree_prevue;
-    $operation->entree_salle = mbTime($entree_reelle);
-    $operation->sortie_salle = mbTime($sortie_reelle);
-    
-    // Anesthésiste
-    if ($CPRT = $operECap->consume("CPRT")) {
-      $this->syncPraticien($CPRT);
-      $operation->anesth_id = $this->praticiens[$CPRT]->_id;
-    }
-    
-    // Textes
-    $operation->libelle = $operECap->consume("CNAT");
-    $operation->rques   = $operECap->consume("CCOM");
-          
-    // Dossier d'anesthésie
-    $CASA = $operECap->consume("CASA"); // A mettre dans une CConsultAnesth
-    
-    // Gestion des id400
-    $CINT = $operECap->consume("CINT");
-    $tag = "eCap CINT CIDC:{$this->id400Etab->id400}";
-    $id400Oper = new CIdSante400();
-    $id400Oper->id400 = $CINT;
-    $id400Oper->tag = $tag;
-
-    $this->trace($operation->getProps(), "Opération à enregistrer");
-
-    $id400Oper->bindObject($operation);
-    
-    $this->id400Opers[$CINT] = $id400Oper;      
-    
-    $this->operations[$CINT] = $operation;
-    $this->syncActes($CINT);
+  function syncOperations() {
+    $this->starStatus(self::STATUS_OPERATION);
+    $this->starStatus(self::STATUS_ACTES);
   }
   
-  function syncOperations() {
+  function syncOperationsOld() {
+    // On ne mappe plus les interventions
+    return;
+
     $query = "SELECT * " .
         "\nFROM $this->base.ECINPF " .
         "\nWHERE INCIDC = ? " .
@@ -578,78 +525,6 @@ class CMouvSejourEcap extends CMouvement400 {
     }
   }
 
-  function syncActes($CINT) {
-    $operation = $this->operations[$CINT];
-    
-    $query = "SELECT * " .
-        "\nFROM $this->base.ECACPF " .
-        "\nWHERE ACCIDC = ? " .
-        "\nAND ACCINT = ? ";
-
-    $values = array (
-      $this->id400Etab->id400,
-      $CINT,
-    );
-
-    $actesECap = CRecordSante400::multipleLoad($query, $values);
-    
-    foreach ($actesECap as $acteECap) {
-      $this->trace($acteECap->data, "Acte trouvé");
-      
-      $acteECap->valuePrefix = "AC";
-      
-      $acte = new CActeCCAM;
-
-      // Champs issus de l'opération
-      $acte->object_id = $operation->_id;
-      $acte->object_class = $operation->_class_name;
-      $acte->execution = mbDateTime($operation->sortie_salle, $operation->date);
-      
-      // Praticien exécutant
-      $CPRT = $acteECap->consume("CPRT");
-      
-      // Acte non validé
-      if ($CPRT == "0") {
-        continue;
-      }
-      
-      $this->syncPraticien($CPRT);
-      $acte->executant_id = $this->praticiens[$CPRT]->_id;
-      
-      
-      // Codage
-      $acte->code_acte     = $acteECap->consume("CDAC");
-      $acte->code_activite = mbGetValue($acteECap->consume("CACT"), 1);
-      $acte->code_phase    = $acteECap->consume("CPHA");
-      $acte->modificateurs = $acteECap->consume("CMOD");
-      $acte->montant_depassement = $acteECap->consume("MDEP");
-      
-      // Gestion des id400
-      $tags = array (
-        "eCap",
-        "CIDC:{$this->id400Etab->id400}",
-        "CINT:$CINT",
-        "CPRT:$CPRT",
-        "Acte:$acte->code_acte-$acte->code_activite-$acte->code_phase",
-      );
-
-      $id400acte = new CIdSante400();
-      $id400acte->id400 = $CINT;
-      $id400acte->tag = join(" ", $tags);
-
-      $this->trace($acte->getProps(), "Acte à enregistrer");
-      $acte->_adapt_object = true;
-      $id400acte->bindObject($acte);
-            
-      // Ajout du code dans l'opération
-      if (!in_array($acte->code_acte, $operation->_codes_ccam)) {
-        $operation->_codes_ccam[] = $acte->code_acte;
-        $operation->store();
-      }
-    }
-
-    $this->markStatus(self::STATUS_ACTES, count($actesECap));
-  }
 
   /**
    * Map un séjour eCap en séjour Mediboard
@@ -719,9 +594,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $collisions = $this->sejour->getCollisions();
     if (count($collisions)) {
       $collision = reset($collisions);
-      mbDump($collision->getProps());
-      trigger_error("Collisions !!!!!");
-//      $this->sejour->_id = $collision->_id;
+      $this->sejour->_id = $collision->_id;
     }
             
     $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
@@ -731,7 +604,7 @@ class CMouvSejourEcap extends CMouvement400 {
   }
   
   function syncNaissance() {
-    $this->markStatus(self::STATUS_NAISSANCE, 0);
+    $this->starStatus(self::STATUS_NAISSANCE);
   }
 }
 ?>

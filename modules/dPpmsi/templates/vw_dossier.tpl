@@ -10,7 +10,6 @@ CIM10Selector.initDP = function(sejour_id){
   this.sForm = "editDP-"+sejour_id;
   this.sView = "DP";
   this.sChir = "_praticien_id";
-  this.selfClose = true;
   this.pop();
 }
 
@@ -18,7 +17,6 @@ CIM10Selector.initDAS = function(sejour_id){
   this.sForm = "editDossierMedical-"+sejour_id;
   this.sView = "_added_code_cim";
   this.sChir = "_praticien_id";
-  this.selfClose = true;
   this.pop();
 }
 
@@ -109,10 +107,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlDiag.setModuleAction("dPpmsi", "httpreq_diagnostic");
   urlDiag.addParam("sejour_id", sejour_id);
   urlDiag.addParam("modeDAS", modeDAS);
-  urlDiag.requestUpdate("cim-"+sejour_id, { 
-		waitingText : null,
-  	onComplete: CIM10Selector.close 
-  } );
+  urlDiag.requestUpdate("cim-"+sejour_id, { aitingText : null } );
   var urlListDiag = new Url();
   urlListDiag.setModuleAction("dPpmsi", "httpreq_list_diags");
   urlListDiag.addParam("sejour_id", sejour_id);

@@ -6,7 +6,11 @@ var CIM10Selector = {
   sChir     : null,
   sCode     : null,
   oUrl      : null,
-  selfClose : true,
+  
+	prepared : {
+	  code : null
+	},
+	
   options : {
     width : 600,
     height: 500
@@ -33,13 +37,12 @@ var CIM10Selector = {
   },
   
   set: function(code) {
-    var oForm = document[this.sForm];
-    oForm[this.sView].value = code;
+    this.prepared.code = code;
+    window.setTimeout(window.CIM10Selector.doSet, 1);
   },
   
-  // Peut être appelé sans contexte : ne pas utiliser this
-  close: function() {
-    CIM10Selector.oUrl.close();
+  doSet: function(){
+    var oForm = document[CIM10Selector.sForm];
+    Form.Element.setValue(oForm[CIM10Selector.sView], CIM10Selector.prepared.code);
   }
-
 }

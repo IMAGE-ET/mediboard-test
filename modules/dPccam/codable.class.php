@@ -197,7 +197,8 @@ class CCodable extends CMbObject {
 	    @$codes_ccam_minimal[$acte->code_acte][$acte->code_activite][$acte->code_phase]++;
 	  }
 	  foreach($codes_ccam_minimal as $key => $acte){
-	    $nb_codes_ccam_minimal[$key] = reset(max($acte));
+	    $max = max($acte);
+	    $nb_codes_ccam_minimal[$key] = reset($max);
 	  }
 	  foreach($nb_codes_ccam_minimal as $key => $acte) {
 	    for($i = 0; $i < $acte; $i++){

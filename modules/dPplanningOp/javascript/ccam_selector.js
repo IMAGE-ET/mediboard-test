@@ -8,7 +8,12 @@ var CCAMSelector = {
   sChir     : null,
   sAnesth   : null,
   oUrl      : null,
-  selfClose : true,
+  
+  prepared : {
+	  code : null,
+	  tarif : null
+	},
+  
   options : {
     width : 800,
     height: 600
@@ -29,17 +34,19 @@ var CCAMSelector = {
     this.oUrl.popup(this.options.width, this.options.height, "CCAM Selector");
   },
   
-  set: function(code,tarif) {
-    var oForm = document[this.sForm];
-    oForm[this.sView].value = code;
-    if(this.sTarif != null){
-      oForm[this.sTarif].value = tarif;
-    }
+  set: function(code, tarif) {
+    this.prepared.code  = code;
+    this.prepared.tarif = tarif;
+    
+    window.setTimeout(window.CCAMSelector.doSet , 1);
   },
   
-  // Peut être appelé sans contexte : ne pas utiliser this
-  close: function() {
-    CCAMSelector.oUrl.close();
+  doSet: function(){
+    var oForm = document[CCAMSelector.sForm];
+
+    Form.Element.setValue(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
+    if (this.sTarif) {
+	    Form.Element.setValue(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
+    }
   }
-  
 }

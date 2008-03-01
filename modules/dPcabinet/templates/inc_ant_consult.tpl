@@ -107,7 +107,7 @@ function reloadDossierMedicalPatient(){
   {{if $_is_anesth}}
   antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
   {{/if}}
-  antUrl.requestUpdate('listAnt', { waitingText : null, onComplete : CIM10Selector.close });
+  antUrl.requestUpdate('listAnt', { waitingText : null } );
 }
 
 function reloadDossiersMedicaux(){

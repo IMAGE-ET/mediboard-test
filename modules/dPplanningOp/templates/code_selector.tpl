@@ -1,16 +1,16 @@
 <script type="text/javascript">
 
-function setClose(code, type,tarif) {
-  if(type=="ccam"){
-  var oSelector = window.opener.CCAMSelector;
+function setClose(code, type, tarif) {
+  if (type == "ccam" ) {
+  	var oSelector = window.opener.CCAMSelector;
   }
-  if(type=="cim10"){
-  var oSelector = window.opener.CIM10Selector;
+  
+  if (type == "cim10") {
+  	var oSelector = window.opener.CIM10Selector;
   }
-  oSelector.set(code,tarif);
-  if(oSelector.selfClose) {
-    window.close();
-  }
+
+  oSelector.set(code, tarif);
+  window.close();
 }
 
 function createFavori() {
@@ -20,7 +20,7 @@ function createFavori() {
 
   var url = new Url;
   url.setModuleAction(sModule, "vw_find_code");
-  if(sModule == "dPccam"){
+  if (sModule == "dPccam") {
     url.addParam("object_class", oForm.object_class.value);
   }
   url.addParam("dialog", 1);
@@ -28,7 +28,7 @@ function createFavori() {
 }
 
 
-function view_() {
+function viewCode() {
   {{if $type == "ccam" }}viewCCAM();{{/if}}
   {{if $type == "cim10"}}viewCim ();{{/if}}
 }
@@ -75,7 +75,7 @@ function pageMain() {
   <tr>
     <th>Mode</th>
     <td>
-      <select name="mode" onchange="view_();">
+      <select name="mode" onchange="viewCode();">
   	    <option>&mdash; Choisir un mode</option>
   	    <option value="favoris" {{if $mode == "favoris"}} selected="selected" {{/if}}>Favoris</option>
   	    <option value="stats"   {{if $mode == "stats"  }} selected="selected" {{/if}}>Statistiques</option>
@@ -87,7 +87,7 @@ function pageMain() {
       {{if $mode == "favoris"}}
       Par ordre alphabétique
       {{else}}
-      <select name="order" onchange="view_();">
+      <select name="order" onchange="viewCode();">
   	    <option>&mdash; Choisir un tri</option>
   	    <option value="alpha" {{if $order == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
   	    <option value="taux"  {{if $order == "taux" }} selected="selected" {{/if}}>Par utilisation</option>

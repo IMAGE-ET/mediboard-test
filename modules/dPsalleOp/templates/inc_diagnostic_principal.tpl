@@ -24,7 +24,6 @@
           this.sForm     = "editSejourDP";
           this.sView     = "DP";
           this.sChir     = "praticien_id";
-          this.selfClose = false;
           this.pop();
         }
       </script>
@@ -103,7 +102,6 @@
             this.sForm = "editDossierMedical";
             this.sView = "_added_code_cim";
             this.sChir = "_praticien_id";
-            this.selfClose = false;
             this.pop();
           }
         </script> 
@@ -132,10 +130,3 @@
   {{/if}}
 
 </table>
-<script type="text/javascript">
-CIM10Selector.set = function(code){
-  var oForm = document[this.sForm];
-  oForm[this.sView].value = code;
-  oForm[this.sView].onchange();
-}
-</script>

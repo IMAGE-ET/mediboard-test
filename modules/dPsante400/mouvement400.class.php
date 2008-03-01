@@ -162,7 +162,7 @@ class CMouvement400 extends CRecordSante400 {
       $rec->query($query, $values);
     }
   }
-    
+  
   function markRow() {
     global $dPconfig;
     if (!$dPconfig["dPsante400"]["mark_row"]) {
@@ -175,7 +175,12 @@ class CMouvement400 extends CRecordSante400 {
     
     $this->status = "";
     foreach ($this->statuses as $status) {
-      $this->status .= null !== $status ? chr($status + ord("0")) : "-";    
+      $char = "?";
+      if (null === $status) $char = "-";
+      if ("*"  === $status) $char = "*";
+      if (is_int($status))  $char = chr($status + ord("0"));
+      
+      $this->status .= $status;
     }
 
     $query = 
@@ -210,11 +215,23 @@ class CMouvement400 extends CRecordSante400 {
     $this->statuses[$rank] = null === $value ? @$this->statuses[$rank] + 1 : $value;
   }
 
-  function markCache($rank, $value = null) {
+  /**
+   * Analogie à markStatus(), mais compte les objets récupérés du cache
+   * @param int $rank
+   * @param int $value valeur à mettre, incrémente le rang si null 
+   */
+    function markCache($rank, $value = null) {
     $this->markStatus($rank, $value);
     $this->cached[$rank] = null === $value ? @$this->cached[$rank] + 1 : $value;
   }
 
+  /**
+   * Permet de notifier le fait qu'on passe une action
+   */
+  function starStatus($rank) {
+    $this->markStatus($rank, "*");
+  }
+  
   /**
    * Trace value with given title
    * @param mixed $value

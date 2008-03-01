@@ -114,15 +114,17 @@ Merci de vérifier les paramètres de la configuration ODBC pour la source 'sante4
   {{foreach from=$curr_mouv->statuses key="index" item="status"}}
   {{assign var="cache" value=$curr_mouv->cached[$index]}}
   <td>
-    {{if $status !== null}}
+    {{if $status === null}}
+    <div class="warning">Failed</div>
+    {{elseif $status === "*"}}
+    <div class="message">Skipped</div>
+    {{else}}
     <div class="message">
       synch:&nbsp;{{$status}}
       {{if $cache}}
-      <br />cache:&nbsp;{{$cache}}
+      <br />Cache:&nbsp;{{$cache}}
       {{/if}}
     </div>
-    {{else}}
-    <div class="warning">Echec</div>
     {{/if}}
   </td>
   {{/foreach}}

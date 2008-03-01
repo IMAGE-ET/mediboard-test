@@ -7,10 +7,12 @@
 * @author Romain Ollivier
 */
 
+mbDump($_POST, "POST");
+$user = new CMediusers;
+$user->load($_POST["favoris_user"]);
+mbDump($user->_view, "Utilisateur");
+
 $do = new CDoObjectAddEdit("CFavoricim10", "favoris_id");
-$do->createMsg = "Favori créé";
-$do->modifyMsg = "Favori modifié";
-$do->deleteMsg = "Favori supprimé";
 $do->redirect = null;
 $do->doIt();
 
