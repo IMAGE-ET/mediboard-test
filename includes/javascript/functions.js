@@ -87,12 +87,14 @@ var WaitingMessage = {
   		}
     };
 
-		// Autoload loading image cuz the browser won't try on before unload
-    var eDiv = $(document.createElement("div"));
-	  eDiv.className = "loading";
-    var sStyle = eDiv.getStyle("background-image");
-    var sImg = sStyle.match(/url\((.*)\)/);
-    (new Image).src = sImg;
+// Preload seem not to be necessary and is broken anyway 
+//  (generates File not found 403 HTTP responses)
+//		// Autoload loading image cuz the browser won't try on before unload
+//    var eDiv = $(document.createElement("div"));
+//	  eDiv.className = "loading";
+//    var sStyle = eDiv.getStyle("background-image");
+//    var sImg = sStyle.match(/url\((.*)\)/);
+//    (new Image).src = sImg;
 	},
 	
   show: function() {
