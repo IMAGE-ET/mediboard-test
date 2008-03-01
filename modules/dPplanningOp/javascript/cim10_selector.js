@@ -12,7 +12,7 @@ var CIM10Selector = {
 	},
 	
   options : {
-    width : 600,
+    width : 800,
     height: 500
   },
 
