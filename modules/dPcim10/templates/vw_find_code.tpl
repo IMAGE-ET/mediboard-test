@@ -24,11 +24,26 @@
 
 <table class="form">
   <tr>
-    <th><label for="keys" title="Un ou plusieurs mots clés, séparés par des espaces. Obligatoire">Mots clefs</label></th>
-    <td><input type="text" class="str" name="keys" value="{{$keys|stripslashes}}" /></td>
+    <th><label for="code" title="Début du code">Code partiel</label></th>
+    <td><input type="text" class="str" name="code" value="{{$code}}" onchange="this.form.level1.value = '';" /></td>
+    <th><label for="level1" title="Chapitre">Chapitre</label></th>
+    <td>
+      <select name="level1" onchange="this.form.code.value = ''; this.form.keys.value = ''; this.form.submit();">
+        <option value="">&mdash; Recherche par chapitres</option>
+        {{foreach from=$sommaire item=curr_chap}}
+        <option value="{{$curr_chap.code}}" {{if $level1 == $curr_chap.code}}selected="selected"{{/if}}>
+          {{$curr_chap.text}}
+        </option>
+        {{/foreach}}
+      </select>
+    </td>
   </tr>
   <tr>
-    <td class="button" colspan="2">
+    <th><label for="keys" title="Un ou plusieurs mots clés, séparés par des espaces">Mots clefs</label></th>
+    <td colspan="3"><input type="text" class="str" name="keys" value="{{$keys|stripslashes}}" onchange="this.form.level1.value = '';" /></td>
+  </tr>
+  <tr>
+    <td class="button" colspan="4">
       <button class="search" type="submit">Rechercher</button>
     </td>
   </tr>

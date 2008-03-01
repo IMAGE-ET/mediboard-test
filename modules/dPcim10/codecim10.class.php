@@ -108,7 +108,6 @@ class CCodeCIM10 {
   	if (!$this->loadLite($lang, 0)){
   		return false;
   	}
-
     $ds =& $this->_spec->ds;
     //descr
     $this->descr = array();
@@ -292,7 +291,7 @@ class CCodeCIM10 {
 }
   
   // Sommaire
-  function getSommaire($lang = self::LANG_FR) {
+  function getSommaire($lang = self::LANG_FR, $level = 0) {
     $ds =& $this->_spec->ds;
     $this->_lang = $lang;
 
@@ -316,33 +315,55 @@ class CCodeCIM10 {
   }
   
   // Recherche de codes
-  function findCodes($keys, $lang = self::LANG_FR) {
+  function findCodes($code, $keys, $lang = self::LANG_FR) {
     $ds =& $this->_spec->ds;
     $this->_lang = $lang;
   
-    $query = "SELECT * FROM libelle WHERE 0";
+    $query = "SELECT libelle.$this->_lang AS $this->_lang, master.abbrev AS abbrev
+              FROM libelle, master
+              WHERE libelle.SID = master.SID";
+    $hasWhere = false;
     $keywords = explode(" ", $keys);
     if($keys != "") {
-      $query .= " OR (1";
+      $listLike = array();
       foreach($keywords as $key => $value) {
-        $query .= " AND $lang LIKE '%".addslashes($value)."%'";
+        $listLike[] = "libelle.$lang LIKE '%".addslashes($value)."%'";
       }
-      $query .= ")";
+      $query .= " AND ".implode(" AND ", $listLike);
+      $hasWhere = true;
     }
-    $query .= " ORDER BY SID LIMIT 0 , 100";
+    if($code) {
+      $query .= " AND master.abbrev LIKE '$code%'";
+      $hasWhere = true;
+    }
+    if(!$hasWhere) {
+      $query .= " AND 0";
+    }
+    $query .= " ORDER BY master.SID LIMIT 0 , 100";
     $result = $ds->exec($query);
     $master = array();
     $i = 0;
     while($row = $ds->fetchArray($result)) {
       $master[$i]["text"] = $row[$this->_lang];
-      $query = "SELECT * FROM master WHERE SID = '".$row["SID"]."'";
-      $result2 =$ds->exec($query);
-      $row2 = $ds->fetchArray($result2);
-      $master[$i]["code"] = $row2["abbrev"];
+      $master[$i]["code"] = $row["abbrev"];
       $i++;
     }
   
     return($master);
+  }
+  
+  function getSubCodes($code) {
+    $codeCim = new CCodeCIM10($code);
+    $codeCim->load();
+    $codeCim->loadRefs();
+    $master = array();
+    $i = 0;
+    foreach($codeCim->_levelsInf as $curr_code) {
+      $master[$i]["text"] = $curr_code->libelle;
+      $master[$i]["code"] = $curr_code->code;
+      $i++;
+    }
+    return $master;
   }
   
   static function addPoint($code) {
