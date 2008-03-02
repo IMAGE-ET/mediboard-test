@@ -260,7 +260,7 @@ class CMbObject {
    */
   function completeField($field) {
     // Field is valued
-    if ($this->$field === null) {
+    if ($this->$field !== null) {
       return;
     }
     
