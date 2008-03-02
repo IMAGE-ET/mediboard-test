@@ -12,7 +12,8 @@ var CIM10Selector = {
 	},
 	
   options : {
-    width : 800,
+    mode: "stats",
+    width: 800,
     height: 500
   },
 
@@ -23,6 +24,7 @@ var CIM10Selector = {
     
     this.oUrl.addParam("chir", oForm[this.sChir].value);
     this.oUrl.addParam("type", "cim10");
+    this.oUrl.addParam("mode", this.options.mode);
     
     this.oUrl.popup(this.options.width, this.options.height, "CIM10 Selector");
   },

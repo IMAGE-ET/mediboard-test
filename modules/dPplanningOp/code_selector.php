@@ -15,7 +15,7 @@ $ds = CSQLDataSource::get("std");
 
 $type         = mbGetValueFromGet("type");
 $mode         = mbGetValueFromGet("mode", "stats");
-$order        = mbGetValueFromGet("order", "alpha");
+$order        = mbGetValueFromGet("order", "taux");
 $chir         = mbGetValueFromGet("chir");
 $anesth       = mbGetValueFromGet("anesth");
 $object_class = mbGetValueFromGet("object_class");

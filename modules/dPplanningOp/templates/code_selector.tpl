@@ -29,32 +29,15 @@ function createFavori() {
 
 
 function viewCode() {
-  {{if $type == "ccam" }}viewCCAM();{{/if}}
-  {{if $type == "cim10"}}viewCim ();{{/if}}
-}
-
-function viewCCAM() {
   var oForm = document.selView;
   var url = new Url;
   url.setModuleAction("dPplanningOp", "code_selector");
-  url.addParam("type", "ccam"); 
-  url.addElement(oForm.order);
-  url.addElement(oForm.mode);
+  url.addElement(oForm.type);
   url.addElement(oForm.chir);
   url.addElement(oForm.anesth);
   url.addElement(oForm.object_class);  
-  url.addParam("dialog", 1);
-  url.redirect();
-}
-
-function viewCim(){
-  var oForm = document.selViewCim;
-  var url = new Url;
-  url.setModuleAction("dPplanningOp", "code_selector");
-  url.addParam("type", "cim10"); 
-  url.addElement(oForm.order);
-  url.addElement(oForm.mode);
-  url.addElement(oForm.chir);  
+  url.addParam("mode" , getCheckedValue(oForm.mode ));
+  url.addParam("order", getCheckedValue(oForm.order));
   url.addParam("dialog", 1);
   url.redirect();
 }
@@ -67,6 +50,7 @@ function pageMain() {
 
 <!-- Filtre principal -->
 <form name="selView" action="?">
+<input type="hidden" name="type" value="{{$type}}" />
 <input type="hidden" name="chir" value="{{$chir}}" />
 <input type="hidden" name="anesth" value="{{$anesth}}" />
 <input type="hidden" name="object_class" value="{{$object_class}}" />
@@ -75,11 +59,10 @@ function pageMain() {
   <tr>
     <th>Mode</th>
     <td>
-      <select name="mode" onchange="viewCode();">
-  	    <option>&mdash; Choisir un mode</option>
-  	    <option value="favoris" {{if $mode == "favoris"}} selected="selected" {{/if}}>Favoris</option>
-  	    <option value="stats"   {{if $mode == "stats"  }} selected="selected" {{/if}}>Statistiques</option>
-  	  </select>
+      <input name="mode" value="favoris" type="radio" {{if $mode == "favoris"}}checked="checked"{{/if}} onchange="viewCode();" />
+			<label for="mode_favoris">Favoris</label> 
+      <input name="mode" value="stats"   type="radio" {{if $mode == "stats"  }}checked="checked"{{/if}} onchange="viewCode();" />
+			<label for="mode_stats">Statistiques</label> 
     </td>
       
   	<th>Tri</th>
@@ -87,11 +70,10 @@ function pageMain() {
       {{if $mode == "favoris"}}
       Par ordre alphabétique
       {{else}}
-      <select name="order" onchange="viewCode();">
-  	    <option>&mdash; Choisir un tri</option>
-  	    <option value="alpha" {{if $order == "alpha"}} selected="selected" {{/if}}>Par ordre alphabetique</option>
-  	    <option value="taux"  {{if $order == "taux" }} selected="selected" {{/if}}>Par utilisation</option>
-  	  </select>
+      <input name="order" value="alpha" type="radio" {{if $order == "alpha"}}checked="checked"{{/if}} onchange="viewCode();" />
+			<label for="order_alpha">Par ordre alphabetique</label> 
+      <input name="order" value="taux"  type="radio" {{if $order == "taux"  }}checked="checked"{{/if}} onchange="viewCode();" />
+			<label for="order_taux">Par utilisation</label>
 			{{/if}}
   	</td>
   </tr>

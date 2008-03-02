@@ -65,7 +65,10 @@ foreach($classes as $class) {
   checkTrans($backSpecs[$classname][$classname], "$classname.one");
   checkTrans($backSpecs[$classname][$classname], "$classname.more");
   checkTrans($backSpecs[$classname][$classname], "$classname.none");
-    
+  checkTrans($backSpecs[$classname][$classname], "msg-$classname-create");
+  checkTrans($backSpecs[$classname][$classname], "msg-$classname-modify");
+  checkTrans($backSpecs[$classname][$classname], "msg-$classname-delete");
+  
   // Traductions pour la clé 
   $prop = $object->_tbl_key;
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop");

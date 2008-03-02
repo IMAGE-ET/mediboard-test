@@ -295,6 +295,7 @@ function copyTraitement(traitement_id){
             this.sForm = "addDiagFrm";
             this.sView = "code_diag";
             this.sChir = "chir";
+            this.options.mode = "favoris";
             this.pop();
           }
         </script> 
