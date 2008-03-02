@@ -1,4 +1,8 @@
-<h1>Configuration de {{$m}}</h1>
+<h1>Configuration du module {{tr}}{{$m}}{{/tr}}</h1>
+
+{{include file="../../system/templates/configure_dsn.tpl" dsn=sherpa-$g}}
+
+<hr />
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
@@ -40,6 +44,29 @@
 	  </td>
 	</tr>
 	
+	<tr>
+	  {{assign var="var" value="import_id_min"}}
+	  <th>
+	    <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	      {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	    </label>  
+	  </th>
+	  <td>
+	    <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	  </td>
+	</tr>
+
+	<tr>
+	  {{assign var="var" value="import_id_max"}}
+	  <th>
+	    <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+	      {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+	    </label>  
+	  </th>
+	  <td>
+	    <input class="numchar" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}" />
+	  </td>
+	</tr>
     
   <tr>
     <td class="button" colspan="2">
@@ -51,10 +78,6 @@
 
 </form>
   
-<hr />
-
-{{include file="../../system/templates/configure_dsn.tpl" dsn=sherpa-$g}}
-
 <hr />
 
 <!-- Import des tables -->

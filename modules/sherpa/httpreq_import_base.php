@@ -33,8 +33,19 @@ $idMins = array(
 $idMin = mbGetValue(@$idMins[$action], "000000");
 mbSetValueToSession("idRetry", $idMin);
 
-// Comptage
+// Requêtes
+$where = array();
 $where[$spObject->_tbl_key] = "> '$idMin'";
+
+// Bornes
+if ($import_id_min = $dPconfig["sherpa"]["import_id_min"]) {
+  $where[] = "$spObject->_tbl_key >= '$import_id_min'";
+}
+if ($import_id_max = $dPconfig["sherpa"]["import_id_max"]) {
+  $where[] = "$spObject->_tbl_key <= '$import_id_max'";
+}
+
+// Comptage
 $count = $spObject->countList($where);
 $max = $dPconfig["sherpa"]["import_segment"];
 $max = min($max, $count);

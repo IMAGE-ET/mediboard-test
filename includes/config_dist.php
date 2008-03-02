@@ -289,6 +289,8 @@ $dPconfig["system"] = array(
 
 $dPconfig["sherpa"] = array (
   "import_segment" => "100",
+  "import_id_min" => "",
+  "import_id_max" => "",
 );
 
 $dPconfig["dPqualite"] = array (
