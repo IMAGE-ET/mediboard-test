@@ -143,6 +143,7 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("redirect"             , $redirect);
     $smartyLogin->assign("uistyle"              , $uistyle);
     $smartyLogin->assign("offline"              , false);
+    $smartyLogin->assign("on_load_events"       , array());
     $smartyLogin->display("login.tpl");
   }
   
