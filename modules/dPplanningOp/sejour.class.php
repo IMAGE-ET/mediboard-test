@@ -392,7 +392,7 @@ class CSejour extends CCodable {
       $this->sortie_prevue.= ":".str_pad($this->_min_sortie_prevue, 2, "0", STR_PAD_LEFT); 
       $this->sortie_prevue.= ":00";
     }
-    
+        
     // Synchro durée d'hospi / type d'hospi
     $this->_at_midnight = (mbDate(null, $this->entree_prevue) != mbDate(null, $this->sortie_prevue));
     if($this->_at_midnight && $this->type == "ambu") {
@@ -408,8 +408,7 @@ class CSejour extends CCodable {
     
     if($this->_modifier_sortie === '0'){
       $this->sortie_reelle = "";
-    }
-    
+    }    
   }
 
   function getTemplateClasses(){
