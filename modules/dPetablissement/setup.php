@@ -9,7 +9,7 @@
 
 $config = array();
 $config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.18";
+$config["mod_version"]     = "0.19";
 $config["mod_type"]        = "core";
 
 class CSetupdPetablissement extends CSetup {
@@ -88,7 +88,15 @@ class CSetupdPetablissement extends CSetup {
             ADD `service_urgences_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    $sql = "ALTER TABLE `etab_externe`
+            CHANGE `ape` `ape` VARCHAR(6);";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `groups_mediboard`
+            CHANGE `ape` `ape` VARCHAR(6);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.19";
     
   } 
   

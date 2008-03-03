@@ -62,7 +62,7 @@ class CEtabExterne extends CMbObject {
       "fax"            => "numchar length|10",
       "finess"         => "numchar length|9",
       "siret"          => "str length|14",
-      "ape"            => "str length|4"
+      "ape"            => "str maxLength|6 confidential"
     );
   }
   

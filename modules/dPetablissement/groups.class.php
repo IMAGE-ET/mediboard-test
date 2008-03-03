@@ -87,7 +87,7 @@ class CGroups extends CMbObject {
       "directeur"           => "str maxLength|50",
       "domiciliation"       => "str maxLength|9",
       "siret"               => "str length|14",
-      "ape"                 => "str length|4",
+      "ape"                 => "str maxLength|6 confidential",
       "mail"                => "email",
       "fax"                 => "numchar length|10",
       "web"                 => "str"

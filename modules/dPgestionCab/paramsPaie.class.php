@@ -87,7 +87,7 @@ class CParamsPaie extends CMbObject {
       "cp"            => "numchar length|5 confidential",
       "ville"         => "str confidential",
       "siret"         => "numchar length|14 confidential",
-      "ape"           => "str length|4 confidential",
+      "ape"           => "str maxLength|6 confidential",
       "matricule"     => "code insee confidential"
     );
   }
