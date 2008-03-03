@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.57";
+$config["mod_version"]     = "0.58";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -645,7 +645,14 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `dossier_medical` ADD INDEX ( `object_class` );";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.57";
+    $this->makeRevision("0.57");
+    $sql = "ALTER TABLE `antecedent`
+            CHANGE `type` `type`
+            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino')
+            NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.58";
   }
 }
 

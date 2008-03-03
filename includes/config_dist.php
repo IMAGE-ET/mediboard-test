@@ -243,7 +243,10 @@ $dPconfig["graph_svg"] = "non";
 $dPconfig["dPpatients"]["CPatient"] = array (
   "tag_ipp" => "",
   "date_naissance" => "0",
-  "merge_only_admin" => "0"
+  "merge_only_admin" => "0",
+);
+$dPconfig["dPpatients"]["CAntecedent"] = array(
+  "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
 );
   
 $dPconfig["dPsante400"] = array (
