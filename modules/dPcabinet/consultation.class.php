@@ -344,7 +344,7 @@ class CConsultation extends CCodable {
     
     $this->secteur1 = "";
     $this->secteur2 = "";
-    $this->valide = "";
+    $this->valide = 0;
     $this->total_assure = 0.0;
     $this->total_amc = 0.0;
     $this->total_amo = 0.0;

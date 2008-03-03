@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.96";
+$config["mod_version"]     = "0.97";
 $config["mod_type"]        = "user";
 
 
@@ -1063,7 +1063,13 @@ class CSetupdPcabinet extends CSetup {
             WHERE du_patient = 0;";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.96";
+    $this->makeRevision("0.96");
+    $sql = "UPDATE consultation 
+            SET valide = '0' 
+            WHERE valide = '';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.97";
   }
 }
 ?>
