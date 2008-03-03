@@ -34,7 +34,6 @@ $selConsult = mbGetValueFromGetOrSession("selConsult", 0);
 // Consultation courante
 $consult = new CConsultation();
 $consult->_ref_chir = $userSel;
-$consult->_ref_consult_anesth->consultation_anesth_id = 0;
 
 if ($selConsult) {
   $consult->load($selConsult);
@@ -47,7 +46,7 @@ if ($selConsult) {
   $consult->loadRefConsultAnesth();
   //$consult->loadRefs();
 
-  if($consult->_ref_consult_anesth->consultation_anesth_id) {
+  if($consult->_ref_consult_anesth->_id) {
     $consult->_ref_consult_anesth->loadRefs();
     $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
     $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
@@ -62,10 +61,12 @@ if ($selConsult) {
       $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
     }
   }
-
-  $consult_anesth =& $consult->_ref_consult_anesth;
-  
+} else {
+  $consult->_ref_consult_anesth = new CConsultAnesth();
 }
+
+$consult_anesth =& $consult->_ref_consult_anesth;
+
 // Création du template
 $smarty = new CSmartyDP();
 
