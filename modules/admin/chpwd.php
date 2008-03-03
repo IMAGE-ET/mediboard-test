@@ -11,6 +11,9 @@ $user->loadObject($where);
 
 $specs = $user->getSpecs();
 
+$showMessage = dPgetParam($_REQUEST, "showMessage");
+
+if ($showMessage) {
 $message = 'Votre mot de passe ne correspond pas aux critères
     de sécurité de Mediboard. Nous vous serions gré de bien vouloir
     changer celui-ci afin qu\'il respecte ces critères. <br />
@@ -19,15 +22,14 @@ $message = 'Votre mot de passe ne correspond pas aux critères
     <a href="http://mediboard.org/public/tiki-index.php?page=Recommandations+de+la+CNIL" target="_blank">
     recommandations de la CNIL</a>.<br />
 	Merci';
-
-$showMessage = dPgetParam($_REQUEST, "showMessage");
+} else {
+  $message = null;
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("user"    , $user    );
 $smarty->assign("specs"   , $specs   );
-if ($showMessage) {
-  $smarty->assign("message" , $message );
-}
+$smarty->assign("message" , $message );
 $smarty->display("change_password.tpl");
 ?>
