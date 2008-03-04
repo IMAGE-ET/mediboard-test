@@ -1,3 +1,5 @@
+{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="dPprescription" script="prescription_editor"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 

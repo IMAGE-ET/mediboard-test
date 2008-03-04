@@ -104,6 +104,12 @@ $codePraticienEc = null;
 // Chargement de la consultation
 if ($consult->_id) {
   $consult->loadRefs();
+  
+  $consult->loadRefPrescription();
+  if($consult->_ref_prescription->_id){
+    $consult->_ref_prescription->loadRefsLines();
+    $consult->_ref_prescription->loadRefsLinesElementByCat();
+  }
   $consult->loadAides($userSel->user_id);
   
   // Chargment de la consultation d'anesthésie

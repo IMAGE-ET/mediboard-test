@@ -20,6 +20,7 @@ $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
 $prescription->_ref_praticien->loadRefsFwd();
 $prescription->loadRefsLines();
+$prescription->loadRefsLinesElementByCat();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -63,7 +63,7 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
-
+$smarty->assign("prescription"       , $prescription);
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);
 $smarty->assign("alertesIPC"         , $alertesIPC);

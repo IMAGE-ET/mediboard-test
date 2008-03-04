@@ -74,6 +74,7 @@ class CConsultation extends CCodable {
   var $_ref_plageconsult = null;
   var $_ref_sejour       = null; // Declared in CCodable
   
+  
   // FSE
   var $_bind_fse       = null;
   var $_ids_fse        = null;
@@ -93,6 +94,8 @@ class CConsultation extends CCodable {
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
   var $_ref_examigs        = null;
+  var $_ref_prescription   = null;
+  
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
@@ -383,6 +386,13 @@ class CConsultation extends CCodable {
     if ($msg = $this->precodeCCAM()){
       return $msg;
     }  
+  }
+  
+  function loadRefPrescription(){
+  	$this->_ref_prescription = new CPrescription();
+  	$this->_ref_prescription->object_id = $this->_id;
+  	$this->_ref_prescription->object_class = "CConsultation";
+  	$this->_ref_prescription->loadMatchingObject();
   }
   
   /**

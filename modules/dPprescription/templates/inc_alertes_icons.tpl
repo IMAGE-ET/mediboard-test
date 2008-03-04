@@ -1,9 +1,6 @@
       <table class="tbl">
         <tr>
           <th colspan="4"class="title">
-            <button type="button" class="print" onclick="Prescription.popup()" style="float: right">
-              popup
-            </button>
             Alertes
           </th>
         </tr>
@@ -34,7 +31,7 @@
         <tr>
           <td>
             {{if $alertesProfil|@count}}
-              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+              <img src="images/icons/note_orange.png" title="aucune" alt="aucune" />
             {{else}}
               <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
             {{/if}}
@@ -47,7 +44,7 @@
         <tr>
           <td>
             {{if $alertesIPC|@count}}
-              <img src="images/icons/note_red.png" title="aucune" alt="aucune" />
+              <img src="images/icons/note_orange.png" title="aucune" alt="aucune" />
             {{else}}
               <img src="images/icons/note_green.png" title="aucune" alt="aucune" />
             {{/if}}

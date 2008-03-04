@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.11";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 
 
@@ -53,7 +53,42 @@ class CSetupdPprescription extends CSetup {
     $sql = "ALTER TABLE `prescription` ADD INDEX (`praticien_id`) ;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.11";
+    $this->makeRevision("0.11");
+    $sql = "CREATE TABLE `category_prescription` (
+           `category_prescription_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `chapitre` ENUM('dmi','labo','imagerie','consult','kine','soin') NOT NULL, 
+           `nom` VARCHAR(255) NOT NULL, 
+           `description` TEXT,  
+            PRIMARY KEY (`category_prescription_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `element_prescription` (
+           `element_prescription_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `category_prescription_id` INT(11) UNSIGNED NOT NULL, 
+           `libelle` VARCHAR(255) NOT NULL, 
+           `description` TEXT, 
+           PRIMARY KEY (`element_prescription_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `prescription_line_element` (
+           `prescription_line_element_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `element_prescription_id` INT(11) UNSIGNED NOT NULL, 
+           `prescription_id` INT(11) UNSIGNED NOT NULL,
+           `commentaire` VARCHAR(255),
+           PRIMARY KEY (`prescription_line_element_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.12");
+    $sql = "ALTER TABLE `prescription_line`
+            ADD `commentaire` VARCHAR(255);";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `prescription`
+            ADD `libelle` VARCHAR(255);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }  
 }
 
