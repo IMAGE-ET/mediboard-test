@@ -13,7 +13,7 @@ function viewFullAlertes() {
 
 
 {{if !$prescription->_id && $mode_protocole}}
-<form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return checkForm(this);">	
+<form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return addProtocole();">	
    <input type="hidden" name="m" value="dPprescription" />
    <input type="hidden" name="dosql" value="do_prescription_aed" />
    <input type="hidden" name="prescription_id" value="" />
@@ -47,7 +47,7 @@ function viewFullAlertes() {
 	  </tr>
 	  <tr>
 	   <td colspan="2" style="text-align: center">
-			  <button type="button" onclick="addProtocole();" class="new">Créer une protocole</button>
+			  <button type="button" onclick="this.form.onsubmit()" class="new">Créer une protocole</button>
 	   </td>  
 	  </tr>
   </table>

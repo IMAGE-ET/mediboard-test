@@ -11,10 +11,11 @@ function addProtocole(){
   var oFormPrat = document.selPrat;
   var oForm = document.addProtocolePresc;
   oForm.praticien_id.value = oFormPrat.praticien_id.value;
-  submitFormAjax(oForm, 'systemMsg', {
+  return onSubmitFormAjax(oForm, {
     onComplete: function() { 
       reloadProtocoles(oFormPrat.praticien_id.value);
-    } } );
+    } 
+  } );
 }
 
 function delProtocole(oForm){

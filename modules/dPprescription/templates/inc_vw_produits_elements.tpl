@@ -318,12 +318,12 @@ if($('alertes')){
           }
         </script>
       </div>
-    <form name="addComment-{{$curr_line->_id}}" method="post">
+    <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="submitFormAjax(this.form, 'systemMsg')" />
+        <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
     
     </td>
@@ -350,12 +350,12 @@ if($('alertes')){
      {{$curr_line_element->_ref_element_prescription->_view}}
     </td>
     <td>
-      <form name="addComment-{{$curr_line_element->_ref_element_prescription->_id}}" method="post">
+      <form name="addCommentElement-{{$curr_line_element->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_line_element_id" value="{{$curr_line_element->_id}}" />
-        <input type="text" name="commentaire" value="{{$curr_line_element->commentaire}}" onchange="submitFormAjax(this.form, 'systemMsg')" />
+        <input type="text" name="commentaire" value="{{$curr_line_element->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
     </td>
   </tr>
