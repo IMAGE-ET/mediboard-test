@@ -60,15 +60,15 @@ foreach($salles as $salle) {
     "\nDATE_FORMAT(plagesop.date, '$date_format') AS jour," .
     "\nDATE_FORMAT(plagesop.date, '%d') AS orderitem," .
     "\nsallesbloc.nom AS nom" .
-    "\nFROM plagesop" .
+    "\nFROM operations" .
     "\nINNER JOIN sallesbloc" .
-    "\nON plagesop.salle_id = sallesbloc.salle_id" .
-    "\nINNER JOIN operations" .
+    "\nON operations.salle_id = sallesbloc.salle_id" .
+    "\nINNER JOIN plagesop" .
     "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nAND operations.annulee = '0'" .
     "\nINNER JOIN users_mediboard" .
     "\nON operations.chir_id = users_mediboard.user_id" .
-    "\nWHERE plagesop.date BETWEEN '$startx' AND '$endx'";
+    "\nWHERE plagesop.date BETWEEN '$startx' AND '$endx'" .
+    "\nAND operations.annulee = '0'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
   if($discipline_id)

@@ -12,10 +12,10 @@ global $AppUI, $can, $m;
 require_once($AppUI->getSystemClass("mbGraph"));
 
 
-$debut    = mbGetValueFromGet("debut"   , mbDate("-1 YEAR"));
-$fin      = mbGetValueFromGet("fin"     , mbDate()         );
-$prat_id  = mbGetValueFromGet("prat_id" , 0                );
-$salle_id = mbGetValueFromGet("salle_id", 0                );
+$debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
+$fin        = mbGetValueFromGet("fin"       , mbDate()         );
+$prat_id    = mbGetValueFromGet("prat_id"   , 0                );
+$salle_id   = mbGetValueFromGet("salle_id"  , 0                );
 $codes_ccam = mbGetValueFromGet("codes_ccam", ""               );
 
 $pratSel = new CMediusers;
@@ -39,20 +39,20 @@ $op = array();
 $sql = "SELECT COUNT(operations.operation_id) AS total," .
   "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
   "\nDATE_FORMAT(plagesop.date, '%Y-%m-01') AS orderitem" .
-  "\nFROM plagesop" .
+  "\nFROM operations" .
   "\nINNER JOIN sallesbloc" .
-  "\nON plagesop.salle_id = sallesbloc.salle_id" .
-  "\nLEFT JOIN operations" .
+  "\nON operations.salle_id = sallesbloc.salle_id" .
+  "\nLEFT JOIN plagesop" .
   "\nON operations.plageop_id = plagesop.plageop_id" .
-  "\nAND operations.annulee = '0'" .
   "\nWHERE sallesbloc.stats = '1'" .
-  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'";
+  "\nAND plagesop.date BETWEEN '$debut' AND '$fin'" .
+  "\nAND operations.annulee = '0'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
   if($codes_ccam)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
   if($salle_id)
-    $sql .= "\nAND plagesop.salle_id = '$salle_id'";
+    $sql .= "\nAND sallesbloc.salle_id = '$salle_id'";
 $sql .= "\nGROUP BY mois" .
     "\nORDER BY orderitem";
 $result = $ds->loadlist($sql);
