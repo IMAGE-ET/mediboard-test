@@ -14,6 +14,8 @@ $module->registerTab("vw_reveil"    , null, TAB_READ);
 //$module->registerTab("vw_brancardage", "Brancardage"       , TAB_READ);
 $module->registerTab("vw_urgences"  , null , TAB_READ);
 //$module->registerTab("vw_anesthesie" , "Anesthésie"        , TAB_READ);
-$module->registerTab("vw_signature_actes", null, TAB_READ);
+if($dPconfig['dPsalleOp']['CActeCCAM']['signature']){
+  $module->registerTab("vw_signature_actes", null, TAB_READ);
+}
 
 ?>

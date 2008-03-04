@@ -20,17 +20,10 @@ function pageMain(){
         <input type="hidden" name="m" value="dPsalleOp" />
         <input type="hidden" name="tab" value="vw_signature_actes" />
         <input type="hidden" name="date" value="{{$date}}" />
-		    <select name="praticien_id" onchange="this.form.salle_id.value = ''; submit();">
+		    <select name="praticien_id" onchange="submit();">
 		    <option value="">&mdash; Tous les praticiens</option>
 		    {{foreach from=$listPraticien item=praticien}}
 		      <option value="{{$praticien->_id}}" {{if $praticien_id == $praticien->_id}}selected="selected"{{/if}}>{{$praticien->_view}}</option>
-		    {{/foreach}}
-		    </select>
-		    
-		    <select name="salle_id" onchange="this.form.praticien_id.value = ''; submit();">
-		    <option value="">&mdash; Toutes les salles</option>
-		    {{foreach from=$listSalle item=salle}}
-		      <option value="{{$salle->_id}}" {{if $salle_id == $salle->_id}}selected="selected"{{/if}}>{{$salle->_view}}</option>
 		    {{/foreach}}
 		    </select>
 		  </form>
@@ -43,25 +36,16 @@ function pageMain(){
   <tr>
     <td>
 			<table class="tbl">
-				<!-- Parcours des salles -->
-				{{foreach from=$actes_ccam item=operations key=salle}}
-				  <tr>
-				    <th colspan="10">{{$salle}}</th>
-				  </tr>
+			
 				  <!-- Parcours des operations -->
-				  
-				  {{foreach from=$operations item=operation key=operation_id}}
-				    {{assign var=_operation value=$tabOp.$operation_id}}
+				  {{foreach from=$tabOperations item=operation key=operation_id}}
+				    {{assign var=_operation value=$operations.$operation_id}}
 				    <tr>
 				      <th colspan="10">{{$_operation->_view}}</th>
 				    </tr>
 				    {{foreach from=$operation item=praticien key=praticien_id}}
 				      {{assign var=_praticien value=$praticiens.$praticien_id}}
-				      <!-- 
-				      <tr>
-				        <th colspan="10">{{*$_praticien->_view*}}</th>
-				      </tr>
-				       -->
+				      
 				      {{foreach from=$praticien item=curr_acte name="acte"}}
 				      
 								{{if $smarty.foreach.acte.first}}
@@ -123,18 +107,8 @@ function pageMain(){
 				        </td>
 				      </tr>
 				    {{/if}}
-				    {{/foreach}}
 				  {{/foreach}}
-				{{foreachelse}}
-				<tr>
-				  <td>
-				   <div class="big-info">
-				     Aucune intervention
-			   	 </div>
-			  
-				 </td>
-			  </tr>
-				{{/foreach}}
+		    {{/foreach}}
 		</table>
     </td>
   </tr>

@@ -7,12 +7,13 @@
 * @author Alexis Granger
 */
 
+
 global $AppUI, $a, $can, $m, $g;
 
-
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
-$salle_id = mbGetValueFromGetOrSession("salle_id");
-
+$date = mbGetValueFromGetOrSession("date", mbDate());
+$dialog = mbGetValueFromGet("dialog");
+$tabOperations = array();
 $tabOp = array();
 
 $actes_ccam = array();
@@ -20,9 +21,7 @@ $actes_ccam = array();
 $praticiens = array();
 // Tableau qui stocke le nombre d'acte non signé par praticien
 $nonSigne = array();
-
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$dialog = mbGetValueFromGet("dialog");
+$operations = array();
 
 // Si mode dialog, on efface les variables de tri
 if($dialog){
@@ -46,30 +45,36 @@ if($dialog){
 	// Chargement de l'objet
 	$object = new $object_class;
 	$object->load($object_id);
-	$operations[] = $object;
+	$object->loadView();
+	$operations[$object->_id] = $object;
 } else {
- // Signature des actes en definissant une date
-	$operation = new COperation();
-	$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
-	$where[] = "plagesop.date = '$date'";
 	
-	// Tri par salle
-	if($salle_id){
-	  $where["plagesop.salle_id"] = " = '$salle_id'";
+	// On parcourt les actes ccam
+  $acte_ccam = new CActeCCAM();
+  $where = array();
+  
+  if($praticien_id){
+	  $where["executant_id"] = " = '$praticien_id'";
+  }
+  $where["execution"] = "LIKE '$date%'";
+  $where["object_class"] = " = 'COperation'";
+	$actes = $acte_ccam->loadList($where);
+	
+	foreach($actes as $key => $_acte){
+		// Si l'operation n'est pas deja stockée, on la charge et on la stocke
+		if(!array_key_exists($_acte->object_id, $operations)){
+		  $_acte->loadRefObject();
+		  $operations[$_acte->object_id] = $_acte->_ref_object;
+	  }
+	  // Sinon, on stocke directement l'acte dans l'operation
+	  $operations[$_acte->object_id]->_ref_actes_ccam[$_acte->_id] = $_acte;
+	  $operations[$_acte->object_id]->loadRefsFwd();
 	}
-	$operations = $operation->loadList($where, null, null, null, $ljoin);
 }
 
 
 // Parcours du tableau d'operations, et stockage dans un tableau de salle
 foreach($operations as $key => $op){
-  // Chargement de la plage op de l'operation
-  $op->loadRefPlageOp();
-  $op->loadView();
-  // Chargement des actes CCAM de l'operation
-  $op->loadRefsActesCCAM();
-  // Tableau de stockage des operations
-  $tabOp[$op->_id] = $op;
 	// Classement des actes par executant
 	foreach($op->_ref_actes_ccam as $key => $acte_ccam){
 	  // Mise a jour de la liste des praticiens
@@ -86,23 +91,15 @@ foreach($operations as $key => $op){
 	  // Chargement du tarif
 	  $acte_ccam->getTarif();
 	  
-	  // Si tri par praticien
-	  if($praticien_id){
-      if($acte_ccam->executant_id == $praticien_id){
-	      $actes_ccam[$op->_ref_salle->nom][$op->_id][$acte_ccam->executant_id][] = $acte_ccam;
-	    }
-	  } else {
-	      $actes_ccam[$op->_ref_salle->nom][$op->_id][$acte_ccam->executant_id][] = $acte_ccam;
-	  }
-	  //$actes_ccam[$acte_ccam->executant_id][] = $acte_ccam;
+	  @$tabOperations[$op->_id][$acte_ccam->executant_id][$acte_ccam->_id] = $acte_ccam;
+	  
 	  if(!$acte_ccam->signe){
 	    @$nonSigne[$op->_id][$acte_ccam->executant_id]++;
 	  }
 	}
 }
 
-// Tri par salle
-ksort($actes_ccam);
+ksort($tabOperations);
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -114,10 +111,9 @@ $smarty->assign("redirectUrl", $a);
 $smarty->assign("praticiens", $praticiens);
 $smarty->assign("dialog", $dialog);
 $smarty->assign("praticien_id", $praticien_id);
-$smarty->assign("salle_id", $salle_id);
-$smarty->assign("listSalle", $listSalle);
+$smarty->assign("operations", $operations);
 $smarty->assign("listPraticien", $listPraticien);
-
+$smarty->assign("tabOperations", $tabOperations);
 if($dialog){
   $smarty->assign("object", $object);
 }
