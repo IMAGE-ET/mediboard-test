@@ -43,7 +43,7 @@ $anesth = $anesth->loadList(null,$orderanesth);
 // Consultation courante
 $consult = new CConsultation();
 $consult->_ref_chir = $userSel;
-$consult->_ref_consult_anesth->consultation_anesth_id = 0;
+
 if ($selConsult) {
   $consult->load($selConsult);
   
@@ -64,7 +64,11 @@ if ($selConsult) {
 
   $consult_anesth =& $consult->_ref_consult_anesth;
   
+} else {
+  $consult->_ref_consult_anesth = new CConsultAnesth();
 }
+
+$consult_anesth =& $consult->_ref_consult_anesth;
 
 $techniquesComp = new CTechniqueComp();
 $techniquesComp->loadAides($userSel->user_id);

@@ -44,7 +44,6 @@ if ($selConsult) {
   
   $consult->loadRefsFwd();
   $consult->loadRefConsultAnesth();
-  //$consult->loadRefs();
 
   if($consult->_ref_consult_anesth->_id) {
     $consult->_ref_consult_anesth->loadRefs();
