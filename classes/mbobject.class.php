@@ -977,11 +977,21 @@ class CMbObject {
         $backObject = new $backSpec->class;
 		    $backField = $backSpec->field;
 		    $fwdSpec =& $backObject->_specs[$backField];
+		    $backMeta = $fwdSpec->meta;      
 	      
         // Change back field and store back objects
 	      foreach ($backObjects as $backObject) {
-          $backObject->$backField = $this->_id;
-          if ($msg = $backObject->store()) {
+	        // Use a dummy tranferer object to prevent checks on all values
+	        $transferer = new $backObject->_class_name;
+	        $transferer->_id = $backObject->_id;
+          $transferer->$backField = $this->_id;
+          
+          // Cas des meta objects
+			    if ($backMeta) {
+			      $transferer->$backMeta = $this->_class_name;
+			    }
+          
+          if ($msg = $transferer->store()) {
             return $msg;
           }
         }

@@ -13,7 +13,7 @@ $object_class = mbGetValueFromGet("object_class");
 $object_ids = mbGetValueFromGet("object_ids");
 
 // Load compared Object
-$max = 1;
+$max = 10;
 foreach ($object_ids as $object_id) {
   $object = new $object_class;
   $object->load($object_id);

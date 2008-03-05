@@ -24,7 +24,7 @@ function setField(oField, sValue) {
     <th width="30%" class="category">2ème medecin</th>
     <th width="30%" class="category">Résultat</th>
   <tr>
-    <th><label for="nom" title="Nom du medecin. Obligatoire">Nom</label></th>
+    <th>{{mb_label object=$finalMedecin field=nom}}</th>
     <td>
       <input type="radio" name="_choix_nom" value="{{$medecin1->nom}}" checked="checked" onclick="setField(this.form.nom, '{{$medecin1->nom|smarty:nodefaults|JSAttribute}}')" />
       {{$medecin1->nom}}
@@ -34,7 +34,7 @@ function setField(oField, sValue) {
       {{$medecin2->nom}}
     </td>
     <td>
-      <input tabindex="1" type="text" name="nom" value="{{$finalMedecin->nom}}" class="{{$finalMedecin->_props.nom}}" />
+			{{mb_field object=$finalMedecin field=nom tabindex=10}}
      </td>
   </tr>
   <tr>
@@ -48,7 +48,7 @@ function setField(oField, sValue) {
       {{$medecin2->prenom}}
     </td>
     <td>
-      <input tabindex="2" type="text" name="prenom" value="{{$finalMedecin->prenom}}" class="{{$finalMedecin->_props.prenom}}" /></td>
+			{{mb_field object=$finalMedecin field=prenom tabindex=20}}
   </tr>
   <tr>
     <th><label for="adresse" title="Adresse du medecin">Adresse</label></th>
@@ -61,7 +61,7 @@ function setField(oField, sValue) {
       {{$medecin2->adresse}}
     </td>
     <td>
-      <textarea tabindex="8" name="adresse" class="{{$finalMedecin->_props.adresse}}" rows="1">{{$finalMedecin->adresse}}</textarea>
+			{{mb_field object=$finalMedecin field=adresse tabindex=30}}
     </td>
   </tr>
   <tr>
@@ -75,7 +75,7 @@ function setField(oField, sValue) {
       {{$medecin2->cp}}
     </td>
     <td>
-      <input tabindex="9" type="text" name="cp" value="{{$finalMedecin->cp}}" class="{{$finalMedecin->_props.cp}}" onclick="setField(this.form.cp, '{{$medecin2->cp|smarty:nodefaults|JSAttribute}}')" />
+			{{mb_field object=$finalMedecin field=cp tabindex=40}}
     </td>
   </tr>
   <tr>
@@ -89,51 +89,67 @@ function setField(oField, sValue) {
       {{$medecin2->ville}}
     </td>
     <td>
-      <input tabindex="10" type="text" name="ville" value="{{$finalMedecin->ville}}" class="{{$finalMedecin->_props.ville}}" />
+			{{mb_field object=$finalMedecin field=ville tabindex=50}}
     </td>
   </tr>
   <tr>
     <th><label for="_tel1" title="Numéro de téléphone">Téléphone</label></th>
     <td>
       <input type="radio" name="_choix_tel" value="{{$medecin1->tel}}" checked="checked"
-      onclick="setField(this.form._tel1, '{{$medecin1->_tel1}}'); setField(this.form._tel2, '{{$medecin1->_tel2}}');
-      setField(this.form._tel3, '{{$medecin1->_tel3}}'); setField(this.form._tel4, '{{$medecin1->_tel4}}'); setField(this.form._tel5, '{{$medecin1->_tel5}}');" />
+      onclick="
+      	setField(this.form._tel1, '{{$medecin1->_tel1}}'); 
+      	setField(this.form._tel2, '{{$medecin1->_tel2}}');
+      	setField(this.form._tel3, '{{$medecin1->_tel3}}'); 
+      	setField(this.form._tel4, '{{$medecin1->_tel4}}'); 
+      	setField(this.form._tel5, '{{$medecin1->_tel5}}');" />
       {{$medecin1->tel}}
     </td>
     <td>
       <input type="radio" name="_choix_tel" value="{{$medecin2->tel}}"
-      onclick="setField(this.form._tel1, '{{$medecin2->_tel1}}'); setField(this.form._tel2, '{{$medecin2->_tel2}}');
-      setField(this.form._tel3, '{{$medecin2->_tel3}}'); setField(this.form._tel4, '{{$medecin2->_tel4}}'); setField(this.form._tel5, '{{$medecin2->_tel5}}');" />
+      onclick="
+      	setField(this.form._tel1, '{{$medecin2->_tel1}}'); 
+      	setField(this.form._tel2, '{{$medecin2->_tel2}}');
+      	setField(this.form._tel3, '{{$medecin2->_tel3}}'); 
+      	setField(this.form._tel4, '{{$medecin2->_tel4}}'); 
+      	setField(this.form._tel5, '{{$medecin2->_tel5}}');" />
       {{$medecin2->tel}}
     </td>
     <td>
-      <input type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" class="num length|2" onkeyup="followUp(event)" /> - 
-      <input type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" class="num length|2" onkeyup="followUp(event)" />
+      <input tabindex="61" type="text" name="_tel1" size="2" maxlength="2" value="{{$finalMedecin->_tel1}}" class="num length|2" onkeyup="followUp(event)" /> - 
+      <input tabindex="62" type="text" name="_tel2" size="2" maxlength="2" value="{{$finalMedecin->_tel2}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="63" type="text" name="_tel3" size="2" maxlength="2" value="{{$finalMedecin->_tel3}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="64" type="text" name="_tel4" size="2" maxlength="2" value="{{$finalMedecin->_tel4}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="65" type="text" name="_tel5" size="2" maxlength="2" value="{{$finalMedecin->_tel5}}" class="num length|2" onkeyup="followUp(event)" />
     </td>
   </tr>
   <tr>
     <th><label for="_fax1" title="Numéro de fax">Fax</label></th>
     <td>
       <input type="radio" name="_choix_fax" value="{{$medecin1->fax}}" checked="checked"
-      onclick="setField(this.form._fax1, '{{$medecin1->_fax1}}'); setField(this.form._fax2, '{{$medecin1->_fax2}}');
-      setField(this.form._fax3, '{{$medecin1->_fax3}}'); setField(this.form._fax4, '{{$medecin1->_fax4}}'); setField(this.form._fax5, '{{$medecin1->_fax5}}');" />
+      onclick="
+      	setField(this.form._fax1, '{{$medecin1->_fax1}}'); 
+      	setField(this.form._fax2, '{{$medecin1->_fax2}}');
+      	setField(this.form._fax3, '{{$medecin1->_fax3}}'); 
+      	setField(this.form._fax4, '{{$medecin1->_fax4}}'); 
+      	setField(this.form._fax5, '{{$medecin1->_fax5}}');" />
       {{$medecin1->fax}}
     </td>
     <td>
       <input type="radio" name="_choix_fax" value="{{$medecin2->fax}}"
-      onclick="setField(this.form._fax1, '{{$medecin2->_fax1}}'); setField(this.form._fax2, '{{$medecin2->_fax2}}');
-      setField(this.form._fax3, '{{$medecin2->_fax3}}'); setField(this.form._fax4, '{{$medecin2->_fax4}}'); setField(this.form._fax5, '{{$medecin2->_fax5}}');" />
+      onclick="
+      	setField(this.form._fax1, '{{$medecin2->_fax1}}'); 
+      	setField(this.form._fax2, '{{$medecin2->_fax2}}');
+      	setField(this.form._fax3, '{{$medecin2->_fax3}}'); 
+      	setField(this.form._fax4, '{{$medecin2->_fax4}}'); 
+      	setField(this.form._fax5, '{{$medecin2->_fax5}}');" />
       {{$medecin2->fax}}
     </td>
     <td>
-      <input type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" class="num length|2" onkeyup="followUp(event)" /> - 
-      <input type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" class="num length|2" onkeyup="followUp(event)" /> -
-      <input type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" class="num length|2" />
+      <input tabindex="61" type="text" name="_fax1" size="2" maxlength="2" value="{{$finalMedecin->_fax1}}" class="num length|2" onkeyup="followUp(event)" /> - 
+      <input tabindex="62" type="text" name="_fax2" size="2" maxlength="2" value="{{$finalMedecin->_fax2}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="63" type="text" name="_fax3" size="2" maxlength="2" value="{{$finalMedecin->_fax3}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="64" type="text" name="_fax4" size="2" maxlength="2" value="{{$finalMedecin->_fax4}}" class="num length|2" onkeyup="followUp(event)" /> -
+      <input tabindex="65" type="text" name="_fax5" size="2" maxlength="2" value="{{$finalMedecin->_fax5}}" class="num length|2" />
     </td>
   </tr>
   <tr>
@@ -147,7 +163,7 @@ function setField(oField, sValue) {
       {{$medecin2->disciplines|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" class="{{$finalMedecin->_props.disciplines}}" name="disciplines">{{$finalMedecin->disciplines|nl2br}}</textarea>
+			{{mb_field object=$finalMedecin field=disciplines tabindex=70}}
     </td>
   </tr>
   <tr>
@@ -161,7 +177,7 @@ function setField(oField, sValue) {
       {{$medecin2->orientations|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" class="{{$finalMedecin->_props.orientations}}" name="orientations">{{$finalMedecin->orientations|nl2br}}</textarea>
+			{{mb_field object=$finalMedecin field=orientations tabindex=80}}
     </td>
   </tr>
   <tr>
@@ -175,7 +191,7 @@ function setField(oField, sValue) {
       {{$medecin2->complementaires|nl2br}}
     </td>
     <td class="text">
-      <textarea rows="3" class="{{$finalMedecin->_props.complementaires}}" name="complementaires">{{$finalMedecin->complementaires|nl2br}}</textarea>
+			{{mb_field object=$finalMedecin field=complementaires tabindex=90}}
     </td>
   </tr>
   <tr>

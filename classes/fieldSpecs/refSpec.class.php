@@ -48,7 +48,7 @@ class CRefSpec extends CMbFieldSpec {
     }
     
     if (!class_inherits_from($class, "CMbObject")) {
-      return "La type '$class' n'est pas un type d'objet métier";
+      return "La classe '$class' n'est pas une classe d'objet métier";
     }
     
     $ref = new $class;
