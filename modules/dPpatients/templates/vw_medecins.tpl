@@ -234,7 +234,7 @@ function pageMain() {
 
         <tr>
           <td class="button" colspan="4">
-            {{if $medecin->medecin_id}}
+            {{if $medecin->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
             <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le médecin',objName:'{{$medecin->_view|smarty:nodefaults|JSAttribute}}'})">
               {{tr}}Delete{{/tr}}
@@ -246,6 +246,32 @@ function pageMain() {
         </tr>
       </table>
       </form>
+      
+      <!-- Patients liés -->
+      {{if $medecin->_id}}
+      <table class="form">
+        <tr>
+          <th class="category" colspan="2">Patients liés</th>
+        </tr>
+        <tr>
+          <th>{{tr}}CMedecin-back-patients_traites{{/tr}}</th>
+          <td>{{$medecin->_count_patients_traites}}</td>
+        </tr>
+        <tr>
+          <th>{{tr}}CMedecin-back-patients1{{/tr}}</th>
+          <td>{{$medecin->_count_patients1}}</td>
+        </tr>
+        <tr>
+          <th>{{tr}}CMedecin-back-patients2{{/tr}}</th>
+          <td>{{$medecin->_count_patients2}}</td>
+        </tr>
+        <tr>
+          <th>{{tr}}CMedecin-back-patients3{{/tr}}</th>
+          <td>{{$medecin->_count_patients3}}</td>
+        </tr>
+      </table>
+      {{/if}}
+      
     </td>
     {{/if}}
   </tr>

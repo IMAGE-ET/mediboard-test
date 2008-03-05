@@ -50,12 +50,12 @@ class CMedecin extends CMbObject {
   }
 	
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["patients_traites"] = "CPatient medecin_traitant";
-      $backRefs["patients1"] = "CPatient medecin1";
-      $backRefs["patients2"] = "CPatient medecin2";
-      $backRefs["patients3"] = "CPatient medecin3";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["patients_traites"] = "CPatient medecin_traitant";
+    $backRefs["patients1"] = "CPatient medecin1";
+    $backRefs["patients2"] = "CPatient medecin2";
+    $backRefs["patients3"] = "CPatient medecin3";
+    return $backRefs;
   }
     
   function getSpecs() {
@@ -82,6 +82,13 @@ class CMedecin extends CMbObject {
       "ville"       => "like",
       "disciplines" => "like"
     );
+  }
+  
+  function countPatients() {
+    $this->_count_patients_traites = $this->countBackRefs("patients_traites");
+    $this->_count_patients1 = $this->countBackRefs("patients1");
+    $this->_count_patients2 = $this->countBackRefs("patients2");
+    $this->_count_patients3 = $this->countBackRefs("patients3");
   }
   
   function updateFormFields() {

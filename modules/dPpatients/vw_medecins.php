@@ -23,6 +23,7 @@ if(mbGetValueFromGet("new", 0)) {
 }
 else {
   $medecin->load($medecin_id);
+  $medecin->countPatients();
 }
 
 $code_default = str_pad(@$AppUI->user_prefs["DEPARTEMENT"], 2, "0", STR_PAD_LEFT);
