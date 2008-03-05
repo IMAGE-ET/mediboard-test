@@ -67,7 +67,7 @@
       {{if $consult->sejour_id}}
       <div id="cim">
           {{assign var="sejour" value=$consult->_ref_sejour}}
-          {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl"}}
+          {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}
       </div>
       {{/if}}
 
