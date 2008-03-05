@@ -59,7 +59,7 @@ if($order_col == "_patient_id"){
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-foreach($listSejours as &$curr_sejour) {
+foreach ($listSejours as &$curr_sejour) {
   // Chargement du numero de dossier
   $curr_sejour->loadNumDossier();
   $curr_sejour->loadRefsFwd();
@@ -72,13 +72,11 @@ foreach($listSejours as &$curr_sejour) {
 
 // Calcul du temps d'attente pour les patients deja pris en charge
 $tps_attente = array();
-foreach($listSejours as &$curr_sejour) {
-  if($curr_sejour->_ref_rpu->_count_consultations){
-  // Calcul du temps d'attente
-  $entree = mbTime($curr_sejour->_entree);
- 
-  $consult = mbTime($curr_sejour->_ref_rpu->_ref_consult->heure);
-  $tps_attente[$curr_sejour->_id] = mbSubTime($entree,$consult);
+foreach ($listSejours as &$curr_sejour) {
+  if ($curr_sejour->_ref_rpu->_count_consultations) {
+	  $entree = mbTime($curr_sejour->_entree);
+	  $consult = mbTime($curr_sejour->_ref_rpu->_ref_consult->heure);
+	  $tps_attente[$curr_sejour->_id] = mbSubTime($entree,$consult);
   }
 }
 

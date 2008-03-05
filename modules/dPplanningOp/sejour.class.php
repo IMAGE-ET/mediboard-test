@@ -488,19 +488,12 @@ class CSejour extends CCodable {
     $this->_ref_group->load($this->group_id);
   }
   
-  function loadRefRPU(){
-    $this->_ref_rpu = new CRPU();
-    if (null == $ref_rpu = $this->loadBackRefs("rpu")) {
-      return;
-    } else {
-      $this->_ref_rpu = reset($ref_rpu);
-    }
+  function loadRefRPU() {
+    $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
-  function loadRefsConsultations(){
-    if(null == $this->_ref_consultations = loadBackRefs("consultations")){
-      return;  
-    }
+  function loadRefsConsultations() {
+    $this->_ref_consultations = $this->loadBackRefs("consultations");
   }
   
   function loadRefsFwd() {

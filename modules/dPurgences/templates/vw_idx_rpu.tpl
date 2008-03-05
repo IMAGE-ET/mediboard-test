@@ -72,35 +72,39 @@ function pageMain() {
     <th>{{mb_colonne class="CRPU" field="ccmu" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{mb_colonne class="CRPU" field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>{{mb_colonne class="CRPU" field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    {{if $date == $today}}
     <th>Temps d'attente</th>
-    {{/if}}
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
     <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
     <th>Prise en charge</th>
   </tr>
-  {{foreach from=$listSejours item=curr_sejour}}
+  {{foreach from=$listSejours item=curr_sejour key=sejour_id}}
+  {{assign var=rpu value=$curr_sejour->_ref_rpu}}
+  {{assign var=patient value=$curr_sejour->_ref_patient}}
+  {{assign var=consult value=$rpu->_ref_consult}}
+  {{mb_ternary var=background test=$consult->_id value=#cfc other=none}}
+  
   <tr>
-    <td {{if $curr_sejour->_ref_rpu->ccmu}}class="ccmu-{{$curr_sejour->_ref_rpu->ccmu}}"{{else}}style="background-color: #fff"{{/if}}>
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
-        {{if $curr_sejour->_ref_rpu->ccmu}}
-          {{tr}}CRPU.ccmu.{{$curr_sejour->_ref_rpu->ccmu}}{{/tr}}
+    <td class="ccmu-{{$rpu->ccmu}}">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
+        {{if $rpu->ccmu}}
+          {{tr}}CRPU.ccmu.{{$rpu->ccmu}}{{/tr}}
         {{/if}}
       </a>
     </td>
-    <td class="text" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+
+    <td class="text" style="background-color: {{$background}};">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         <strong>
-        {{$curr_sejour->_ref_patient->_view}}
+        {{$patient->_view}}
         </strong>
-        {{if $curr_sejour->_ref_patient->_IPP}}
-          [{{$curr_sejour->_ref_patient->_IPP}}]
+        {{if $patient->_IPP}}
+          [{{$patient->_IPP}}]
         {{/if}}
       </a>
-      
     </td>
-    <td class="text" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+
+    <td class="text" style="background-color: {{$background}};">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
         {{if $curr_sejour->_num_dossier}}
           [{{$curr_sejour->_num_dossier}}]
@@ -108,48 +112,51 @@ function pageMain() {
       </a>
     </td>
     
-    {{if $date == $today}}
-    {{if $curr_sejour->_ref_rpu->_count_consultations < 1}}
-      <td id="attente-{{$curr_sejour->_id}}" style="text-align: center">
-        <!-- Affichage du temps d'attente de chaque patient -->
-        <script type="text/javascript">
-          updateAttente("{{$curr_sejour->_id}}");
-        </script>
+    {{if $consult->_id}}
+	    <td style="background-color: {{$background}};">
+	      Consultation à {{$consult->heure|date_format:"%Hh%M"}}
+	      {{if $date != $consult->_ref_plageconsult->date}}
+	      le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+	      {{/if}}
+	      <br />
+	      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
       </td>
     {{else}}
-      <td class="text" style="background-color:#cfc; text-align: center">
-      Consultation à {{$curr_sejour->_ref_rpu->_ref_consult->heure|date_format:"%Hh%M"}}
-      
-      {{assign var="sejour_id" value=$curr_sejour->_id}}
-      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
-      
+      <td id="attente-{{$sejour_id}}" style="text-align: center">
+        <!-- Affichage du temps d'attente de chaque patient -->
+        <script type="text/javascript">
+          updateAttente("{{$sejour_id}}");
+        </script>
       </td>
     {{/if}}
-    {{/if}}
-    <td style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+    
+    <td class="text" style="background-color: {{$background}};">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$curr_sejour->_ref_praticien->_view}}
       </a>
     </td>
-    <td class="text" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
-        {{$curr_sejour->_ref_rpu->diag_infirmier|nl2br}}
+
+    <td class="text" style="background-color: {{$background}};">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
+        {{$rpu->diag_infirmier|nl2br}}
       </a>
     </td>
-    <td class="button" style="{{if $curr_sejour->_ref_rpu->_count_consultations != 0}}background-color:#cfc;{{/if}}">
+
+    <td class="button" style="background-color: {{$background}};">
       <!-- ici c'est comme pour une consult immédiate -->
-      {{if $curr_sejour->_ref_rpu->_count_consultations < 1}}
+      {{if !$consult->_id}}
         {{if $can->edit}}
-       <form name="createConsult{{$curr_sejour->_ref_rpu->_id}}" method="post" action="?">
+       <form name="createConsult{{$rpu->_id}}" method="post" action="?">
          <input type="hidden" name="dosql" value="do_consult_now" />
          <input type="hidden" name="m" value="dPcabinet" />
          <input type="hidden" name="del" value="0" />
-         <input type="hidden" name="sejour_id" value="{{$curr_sejour->_id}}" />   
+         <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />   
          <input type="hidden" name="patient_id" value="{{$curr_sejour->patient_id}}" />    
          <select name="prat_id">
            <option value="">&mdash; Choisir un praticien</option>
            {{foreach from=$listPrats item="curr_prat"}}
-           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}" {{if $userCourant == $curr_prat->_id}}selected = "selected"{{/if}}>
+           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}"
+						 {{if $userCourant == $curr_prat->_id}} selected = "selected" {{/if}}>
              {{$curr_prat->_view}}
            </option>
            {{/foreach}}
@@ -161,21 +168,21 @@ function pageMain() {
           - 
          {{/if}}
        {{else}}
-         Patient déjà pris en charge par {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
+         Patient déjà pris en charge par {{$consult->_ref_plageconsult->_ref_chir->_view}}
          {{if $can->edit}}
          <br />
          <!-- 
-         <a style="display: inline" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">
+         <a style="display: inline" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
            Voir prise en charge 
          </a>
           -->
           
-         <a class="action" style="display: inline" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}&amp;sejour_id={{$curr_sejour->_id}}">
+         <a class="action" style="display: inline" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
            Voir prise en charge
          </a>
       
       
-         <a style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+         <a style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
            <img src="images/icons/planning.png" alt="Planifier"/>
          </a>
          {{/if}}

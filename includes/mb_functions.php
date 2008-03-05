@@ -326,7 +326,7 @@ function mbAddDateTime($relative, $ref = null) {
   return mbDateTime("+$hours hours $minutes minutes $seconds seconds", $ref);
 }
 
-function mbSubTime($relative, $ref = null) {
+function mbSubTime($relative, $ref = null) {  
   $fragments = explode(":", $relative);
   $hours = @$fragments[0];
   $minutes = @$fragments[1];

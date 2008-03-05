@@ -914,7 +914,7 @@ class CMbObject {
    * @param $limit string Limit DB query option
    * @return array[CMbObject] the collection
    */
-  function loadBackRefs($backName = null, $order = null, $limit = null) {
+  function loadBackRefs($backName, $order = null, $limit = null) {
     // Empty object
     if (!$this->_id) {
       return;
@@ -943,6 +943,26 @@ class CMbObject {
     }
     
     return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit);
+  }
+  
+  /**
+   * Load the unique back reference for given collection name
+   * Will check for uniqueness
+   * @param string $backName The collection name
+   * @return CMbObject Unique back reference if exist, concrete type empty object otherwise 
+   */
+  function loadUniqueBackRef($backName) {
+    $backRefs = $this->loadBackRefs($backName);
+    if (count($backRefs) > 1) {
+      trigger_error("'$backName' back reference should be unique for object of class 'this->_view'", E_USER_WARNING);
+    }
+    
+    if (!count($backRefs)) {
+      $backSpec = $this->_backSpecs[$backName];
+      return new $backSpec->class;
+    }
+    
+    return reset($backRefs);
   }
   
   /**

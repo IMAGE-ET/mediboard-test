@@ -109,19 +109,15 @@ class CRPU extends CMbObject {
   }
   
   
-  function loadRefSejour(){
+  function loadRefSejour() {
     $this->_ref_sejour = new CSejour;
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_sejour->loadRefsFwd();
-    $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
-    $this->_ref_consult = new CConsultation();
 
-    if ($this->_count_consultations) {
-      $consultations = $this->_ref_sejour->loadBackRefs("consultations");
-      if (null == $this->_ref_consult = reset($consultations)) {
-        return;
-      }
-      
+    // Chargement de la consultation ATU
+    $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
+    $this->_ref_consult = $this->_ref_sejour->loadUniqueBackRef("consultations");
+    if ($this->_ref_consult->_id) {
       $this->_ref_consult->loadRefPlageConsult();
       $this->_ref_consult->_ref_plageconsult->_ref_chir->loadRefFunction();
       $this->_ref_consult->getNumDocsAndFiles();
