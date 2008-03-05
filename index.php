@@ -301,7 +301,7 @@ $performance["cache"]   = CMbObject::$cacheCount;
 $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 $performance["ccam"]    = array (
   "cacheCount" => CCodeCCAM::$cacheCount,
-  "loadCount" => CCodeCCAM::$loadCount
+  "useCount"   => CCodeCCAM::$useCount
 );
 
 // Inclusion du footer

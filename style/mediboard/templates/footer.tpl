@@ -1,7 +1,7 @@
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : 
-  	{{$performance.genere}} secondes &ndash;
+  	{{$performance.genere}} sec. &ndash;
   	Poids de la page : {{$performance.size}} &ndash;
   	Mémoire {{$performance.memoire}}
   <br />
@@ -22,17 +22,16 @@
   {{foreach from=$dataSources item=ds}}
 	  {{if $ds}}
 	  &ndash; {{$ds->chrono->nbSteps}} 
+	  en {{$ds->chrono->total|string_format:"%.3f"}} sec.
 	  sur '{{$ds->dsn}}'
-	  en {{$ds->chrono->total|string_format:"%.3f"}} secondes
 	  {{/if}}
   {{/foreach}}
   <br />
 
-  CCAM : 
-  	Chargments 
-  	{{$performance.ccam.loadCount.1}} light , 
-  	{{$performance.ccam.loadCount.2}} medium,
-  	{{$performance.ccam.loadCount.3}} full  &ndash;
+  Utilisation CCAM : 
+  	{{$performance.ccam.useCount.1}} light , 
+  	{{$performance.ccam.useCount.2}} medium,
+  	{{$performance.ccam.useCount.3}} full  &ndash;
   	{{$performance.ccam.cacheCount}} Appels au cache
   <br />
   Adresse IP : {{$userIP}}
@@ -42,7 +41,6 @@
     </td>
   </tr>
 </table>
-
 
 {{if $demoVersion && !$offline}}
 <div style="margin: 10px; float:right">

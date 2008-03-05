@@ -23,10 +23,9 @@ function modifClass(){
   <tr>
     <th style="text-align: center;" colspan="2">
       Codes Favoris
-      <span style="text-align: right;"
     </th>
     <td>
-    <form name="selClass" >
+    <form name="selClass" action="?">
     {{mb_field object=$favoris field="filter_class" selected=$favoris->object_class defaultOption="&mdash; Tous" onchange="modifClass()"}}
     </form>
     </td>
@@ -61,10 +60,10 @@ function modifClass(){
       <br /><br />
 
       {{$curr_code->libelleLong}}
-      {{if $curr_code->favoris_id != 0}}
+      {{if $curr_code->favoris_id}}
       {{if $can->edit}}
       <br />
-      <form name="delFavoris" action="?m={{$m}}" method="post">
+      <form name="FavorisDel-{{$curr_code->favoris_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="dosql" value="do_favoris_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="favoris_id" value="{{$curr_code->favoris_id}}" />

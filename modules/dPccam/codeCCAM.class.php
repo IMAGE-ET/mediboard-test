@@ -41,7 +41,7 @@ class CCodeCCAM {
 	static $loadLevel = array();
 	static $loadedCodes = array();
 	static $cacheCount = 0;
-	static $loadCount = array(
+	static $useCount = array(
 	  CCodeCCAM::LITE   => 0,
 		CCodeCCAM::MEDIUM => 0,
 	  CCodeCCAM::FULL   => 0,
@@ -60,7 +60,7 @@ class CCodeCCAM {
       self::$spec->init();
     }
     
-    $this->_spec =& self::$spec;
+    $this->_spec = self::$spec;
     
     if (strlen($code) > 7){
     // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
@@ -77,34 +77,31 @@ class CCodeCCAM {
   
 	// Chargement optimisé des codes
 	static function get($code, $niv = self::MEDIUM) {
+		self::$useCount[$niv]++;
+		
 //	  $codeCCAM = new CCodeCCAM($code);
 //	  $codeCCAM->load($niv);
 //	  return $codeCCAM;
 	  
 		// Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
 		if (!isset(self::$loadedCodes[$code])) {
-			$newCode = new CCodeCCAM($code);
+			self::$loadedCodes[$code] = new CCodeCCAM($code);
 		  self::$loadLevel[$code] = null;
-		} else {
-			$newCode = self::$loadedCodes[$code];
+		} 
+		
+  	$code_ccam =& self::$loadedCodes[$code];
+
+  	// Si le niveau demandé est inférieur au niveau courant, on retourne le code 
+   	if ($niv <= self::$loadLevel[$code]) {
+			self::$cacheCount++;
+			return $code_ccam->copy();
 		}
 
-		if ($newCode) {
-			// Si le niveau demandé est inférieur au niveau courant, on retourne le Code 
-			if ($niv <= self::$loadLevel[$code]) {
-				self::$cacheCount++;
-				return $newCode->copy();
-			}
-	
-			$newCode->load($niv);
-			
-			// Chargement
-			self::$loadLevel[$code] = $niv;
-			self::$loadCount[$niv]++;
-			self::$loadedCodes[$code] = $newCode;
-		}
+		// Chargement
+		$code_ccam->load($niv);
+		self::$loadLevel[$code] = $niv;
 
-    return $newCode->copy();
+    return $code_ccam->copy();
 	}
 	
 	/**
@@ -112,13 +109,15 @@ class CCodeCCAM {
 	 * But a bit complicated to implement
 	 */
 	function copy() {
-	  return unserialize(serialize($this));
+	  $obj = unserialize(serialize($this));
+	  $obj->_spec = self::$spec;
+	  return $obj;
 	  
 	}
 	
 	function load($niv) {
 		if ($this->getLibelles()) {
-			if ($niv == self::LITE) {
+		  if ($niv == self::LITE) {
 				$this->getActivite7();
 			}
 
