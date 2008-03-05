@@ -145,7 +145,6 @@ class CCodable extends CMbObject {
     }
   }
   
-  
   function loadRefsActesNGAP() {
     if (null === $this->_ref_actes_ngap = $this->loadBackRefs("actes_ngap")) {
       return;
@@ -167,14 +166,12 @@ class CCodable extends CMbObject {
    */
   function loadExtCodesCCAM($full = 0) {
     $this->_ext_codes_ccam = array();
-    if($this->_codes_ccam !== null) {
+    if ($this->_codes_ccam !== null) {
       foreach ($this->_codes_ccam as $code) {
         $this->_ext_codes_ccam[] = CCodeCCAM::get($code, $full?(CCodeCCAM::FULL):(CCodeCCAM::LITE));
       }
     }
   }
-
-  
 
   function getMaxCodagesActes() {
     if(!$this->_id || $this->codes_ccam === null) {
@@ -193,7 +190,7 @@ class CCodable extends CMbObject {
 	  $oldObject->loadRefsActesCCAM();
 	    
 	  // Creation du tableau minimal de codes ccam
-	  foreach($oldObject->_ref_actes_ccam as $key => $acte){
+	  foreach($oldObject->_ref_actes_ccam as $key => $acte) {
 	    @$codes_ccam_minimal[$acte->code_acte][$acte->code_activite][$acte->code_phase]++;
 	  }
 	  foreach($codes_ccam_minimal as $key => $acte){
@@ -245,6 +242,10 @@ class CCodable extends CMbObject {
    * Charge les actes CCAM codés
    */
   function loadRefsActesCCAM() {
+    if ($this->_ref_actes_ccam) {
+      return;
+    }
+
   	$order = array();
   	$order[] = "code_association";
   	$order[] = "code_acte";
@@ -257,7 +258,7 @@ class CCodable extends CMbObject {
     }
   	
     $this->_temp_ccam = array();
-    foreach ($this->_ref_actes_ccam as $_acte_ccam){
+    foreach ($this->_ref_actes_ccam as $_acte_ccam) {
       if($_acte_ccam->montant_depassement < 0){
         $_montant_depassement_temp = str_replace("-", "*", $_acte_ccam->montant_depassement);
       } else {
@@ -272,29 +273,27 @@ class CCodable extends CMbObject {
    * Charge les actes CCAM codables en fonction des code CCAM fournis
    */
   function loadPossibleActes () {
-  	$this->preparePossibleActes();
+    $this->preparePossibleActes();
     $depassement_affecte = false;
     // existing acts may only be affected once to possible acts
     $used_actes = array();
-    foreach ($this->_ext_codes_ccam as $code) {
-      $code = CCodeCCAM::get($code->code, CCodeCCAM::FULL);
+    
+    $this->loadExtCodesCCAM(1);
+    foreach ($this->_ext_codes_ccam as $code_ccam) {
      
-      foreach ($code->activites as $activiteKey => $activiteValue) {
-        $activite =& $code->activites[$activiteKey];
-        foreach ($activite->phases as $phaseKey => $phaseValue) {
-          $phase =& $activite->phases[$phaseKey];     
+      foreach ($code_ccam->activites as &$activite) {
+        foreach ($activite->phases as &$phase) {
           $possible_acte = new CActeCCAM;
           $possible_acte->montant_depassement = "";
-          $possible_acte->code_acte = $code->code;
-          $_code = $possible_acte->code_activite = $activite->numero;
-          
+          $possible_acte->code_acte = $code_ccam->code;
+          $possible_acte->code_activite = $activite->numero;
           
           $possible_acte->_anesth = ( $activite->numero == 4 ) ? true : false;
-          
           
           $possible_acte->code_phase = $phase->phase;
           $possible_acte->execution = $this->_acte_execution;
           
+          // Affectation du dépassement au premier acte de chirugie
           if (!$depassement_affecte and $possible_acte->code_activite == 1) {
             $depassement_affecte = true;     	
             $possible_acte->montant_depassement = $this->_acte_depassement;
@@ -307,9 +306,9 @@ class CCodable extends CMbObject {
                     
           // Affect a loaded acte if exists
           foreach ($this->_ref_actes_ccam as $curr_acte) {
-            if ($curr_acte->code_acte == $possible_acte->code_acte 
-            and $curr_acte->code_activite == $possible_acte->code_activite 
-            and $curr_acte->code_phase == $possible_acte->code_phase) {
+            if ($curr_acte->code_acte     == $possible_acte->code_acte 
+             && $curr_acte->code_activite == $possible_acte->code_activite 
+             && $curr_acte->code_phase    == $possible_acte->code_phase) {
               if (!isset($used_actes[$curr_acte->acte_id])) {
                 $possible_acte = $curr_acte;
                 $used_actes[$curr_acte->acte_id] = true;
@@ -324,8 +323,7 @@ class CCodable extends CMbObject {
           // Keep references !
           $phase->_connected_acte = $possible_acte;
           
-          foreach ($phase->_modificateurs as $modificateurKey => $modificateurValue) {
-            $modificateur =& $phase->_modificateurs[$modificateurKey];
+          foreach ($phase->_modificateurs as &$modificateur) {
             if (strpos($phase->_connected_acte->modificateurs, $modificateur->code) !== false) {
               $modificateur->_value = $modificateur->code;
             } else {

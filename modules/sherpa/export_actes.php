@@ -131,8 +131,15 @@ $delDetCIM  = array();
 $delEntCCAM = array();
 
 foreach ($sejours as &$sejour) {
+  $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
+  
   // Suppression des actes
   $sejour->loadNumDossier();
+  if ($sejour->_num_dossier == "-") {
+    break;
+  }
+  
   
   // Suppression des anciens détails CCAM
   $spDetCCAM = new CSpDetCCAM();
@@ -145,10 +152,7 @@ foreach ($sejours as &$sejour) {
   // Suppression des anciens entêtes
   $spEntCCAM = new CSpEntCCAM();
   $delEntCCAM[$sejour->_id] = $spEntCCAM->deleteForDossier($sejour->_num_dossier);
-    
-  $sejour->loadRefPatient();
-  $sejour->loadRefPraticien();
-  
+      
   // Actes du séjour
   $sejour->loadRefsActes();
   exportEntCCAM($sejour);
@@ -167,7 +171,7 @@ foreach ($sejours as &$sejour) {
     // Association d'un id400
     $idOperation = CSpObjectHandler::getId400For($operation);
     if (!$idOperation->_id) {
-      $idOperation->id400 = $$operation->_idinterv;
+      $idOperation->id400 = $operation->_idinterv;
       $idOperation->last_update = mbDateTime();
       if ($msg = $idOperation->store()) {
         trigger_error("Impossible de créer un idenfiant externe pour l'opération: $msg", E_USER_WARNING);

@@ -94,8 +94,9 @@ class CConsultation extends CCodable {
   var $_ref_examnyha       = null;
   var $_ref_exampossum     = null;
   var $_ref_examigs        = null;
-  var $_ref_prescription   = null;
-  
+  var $_count_fiches_examen = null;
+
+  var $_ref_prescription   = null; 
   
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
@@ -123,10 +124,11 @@ class CConsultation extends CCodable {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backRefs["examaudio"] = "CExamAudio consultation_id";
-    $backRefs["examcomp"] = "CExamComp consultation_id";
-    $backRefs["examnyha"] = "CExamNyha consultation_id";
+    $backRefs["examaudio" ] = "CExamAudio consultation_id";
+    $backRefs["examcomp"  ] = "CExamComp consultation_id";
+    $backRefs["examnyha"  ] = "CExamNyha consultation_id";
     $backRefs["exampossum"] = "CExamPossum consultation_id";
+    $backRefs["examigs"   ] = "CExamIgs consultation_id";
     return $backRefs;
   }
   
@@ -287,7 +289,7 @@ class CConsultation extends CCodable {
   
   function loadView() {
   	$this->loadRefPlageConsult();
-    $this->loadRefsExamAudio(); 
+    $this->loadRefsFichesExamen(); 
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
   }
@@ -823,17 +825,28 @@ class CConsultation extends CCodable {
     $this->_ref_examigs->loadObject($where);  
   }
   
+  function loadRefsFichesExamen() {
+    $this->loadRefsExamAudio();
+    $this->loadRefsExamNyha();
+    $this->loadRefsExamPossum();
+    $this->loadRefsExamIgs();
+    
+    $this->_count_fiches_examen = 0;
+    $this->_count_fiches_examen += $this->_ref_examaudio ->_id ? 1 : 0; 
+    $this->_count_fiches_examen += $this->_ref_examnyha  ->_id ? 1 : 0; 
+    $this->_count_fiches_examen += $this->_ref_exampossum->_id ? 1 : 0; 
+    $this->_count_fiches_examen += $this->_ref_examigs   ->_id ? 1 : 0; 
+  }
+
   function loadRefsBack() {
     // Backward references
     $this->loadRefsFilesAndDocs();
     $this->getNumDocsAndFiles();
     $this->loadRefConsultAnesth();
     
-    $this->loadRefsExamAudio();
     $this->loadExamsComp();
-    $this->loadRefsExamNyha();
-    $this->loadRefsExamPossum();
-    $this->loadRefsExamIgs();
+    
+    $this->loadRefsFichesExamen();
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();
   }

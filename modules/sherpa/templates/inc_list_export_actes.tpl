@@ -28,12 +28,18 @@
 	{{foreach from=$sejours key=sejour_id item=_sejour}}
   <tr>
     <th class="title" colspan="11">
-    {{$_sejour->_view}}
-    <strong>[{{$_sejour->_num_dossier}}]</strong>
-    <br />Dr. {{$_sejour->_ref_praticien->_view}}
-    
+	    {{$_sejour->_view}}
+	    <strong>[{{$_sejour->_num_dossier}}]</strong>
+	    <br />Dr. {{$_sejour->_ref_praticien->_view}}
     </th>
+
     <td>
+    	{{if $_sejour->_num_dossier == "-"}}
+    	<div class="error">
+        Le séjour #{{$_sejour->_id}} n'a pas de numéro de dossier
+        <br />Exécution interrompue. 
+      </div>
+			{{else}}
       <div class="warning">
         {{tr}}CSpEntCCAM{{/tr}} : {{$delEntCCAM.$sejour_id}} suppressions pour ce séjour 
       </div>
@@ -44,10 +50,12 @@
         {{tr}}CSpDetCIM{{/tr}} : {{$delDetCIM.$sejour_id}} suppressions pour ce séjour 
       </div>
 			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
+			{{/if}}
     </td>
   </tr>
   
   <!-- Actes du séjour -->
+ 	{{if $_sejour->_num_dossier != "-"}}
   {{include file="inc_export_detcim.tpl" _codable=$_sejour}}
   {{foreach from=$_sejour->_ref_actes_ccam item=_acte_ccam}}
 	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
@@ -81,7 +89,7 @@
   </tr>
   {{/foreach}}
   {{/foreach}}
-
+  {{/if}}
 
 	{{/foreach}}
 </table>

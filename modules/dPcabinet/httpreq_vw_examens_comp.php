@@ -16,8 +16,8 @@ $consultation_id = mbGetValueFromGetOrSession("consultation_id");
 // Chargement de la consultation
 $consult = new CConsultation();
 $consult->load($consultation_id);
-$consult->loadView();
-$consult->loadRefsBack();
+$consult->loadRefPlageConsult();
+$consult->loadRefsFichesExamen();
 
 $consult->_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste"));
 

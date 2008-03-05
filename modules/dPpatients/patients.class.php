@@ -879,7 +879,7 @@ class CPatient extends CMbObject {
       $consult =& $this->_ref_consultations[$keyConsult];
       
       $consult->loadRefConsultAnesth();
-      $consult->loadRefsExamAudio();
+      $consult->loadRefsFichesExamen();
       $consult->loadExamsComp();
       $consult->getNumDocsAndFiles($permType);
       

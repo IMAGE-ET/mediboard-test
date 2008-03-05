@@ -21,6 +21,6 @@
     {{include file=inc_field_timing.tpl object=$selOp field=retrait_garrot}}
     {{include file=inc_field_timing.tpl object=$selOp field=fin_op        }}
   </tr>
-  </tr>
 </table>
+
 </form>

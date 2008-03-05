@@ -1,5 +1,16 @@
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
+<script type="text/javascript">
+
+function onSubmitDiag(oForm) {
+	return onSubmitFormAjax(oForm, { 
+		onComplete: function() { 
+			reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) 
+		} 
+	} );
+}
+</script>
+
 <table class="form">
   <tr>
     <th class="category" style="width: 50%">{{mb_label object=$sejour field="DP"}}</th>
@@ -9,7 +20,7 @@
 		<!-- Diagnostic Principal -->
     <td class="button">
 
-      <form name="editSejourDP" action="?m={{$m}}" method="post">
+      <form name="editSejourDP" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
 
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -27,8 +38,7 @@
           this.pop();
         }
       </script>
-      <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10"
-        onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
+      <input type="text" name="DP" value="{{$sejour->DP}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
       <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
     </td>
@@ -36,7 +46,7 @@
 		<!-- Diagnostic Relié -->
     <td class="button">
 
-      <form name="editSejourDR" action="?m={{$m}}" method="post">
+      <form name="editSejourDR" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
 
       <input type="hidden" name="m" value="dPplanningOp" />
       <input type="hidden" name="dosql" value="do_sejour_aed" />
@@ -51,12 +61,10 @@
           this.sForm     = "editSejourDR";
           this.sView     = "DR";
           this.sChir     = "praticien_id";
-          this.selfClose = false;
           this.pop();
         }
       </script>
-      <input type="text" name="DR" value="{{$sejour->DR}}" class="code cim10" size="10"
-        onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
+      <input type="text" name="DR" value="{{$sejour->DR}}" class="code cim10" size="10" onchange="this.form.onsubmit()" />
       <button class="tick notext" type="button">{{tr}}Valider{{/tr}}</button>
       </form>
     </td>
@@ -78,12 +86,12 @@
   {{if $modeDAS}}
   <tr>
     <th class="category" colspan="2">
-      Diagnostics associés({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})
+      Diagnostics associés ({{$sejour->_ref_dossier_medical->_ext_codes_cim|@count}})
     </th>
   </tr>
   <tr>
     <td class="button" colspan="2">
-      <form name="editDossierMedical" action="?m={{$m}}" method="post">
+      <form name="editDossierMedical" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
         <input type="hidden" name="m" value="dPpatients" />
         <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
         <input type="hidden" name="del" value="0" />
@@ -93,7 +101,7 @@
         <button class="search notext" type="button" onclick="CIM10Selector.initAsso()">
           Chercher un diagnostic
         </button>
-        <input type="text" name="_added_code_cim" size="5" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })" />
+        <input type="text" name="_added_code_cim" size="5" onchange="this.form.onsubmit()" />
         <button class="tick notext" type="button">
           Valider
         </button>
@@ -111,19 +119,19 @@
   <tr>
     <td class="text" colspan="2">
       {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item="curr_cim"}}
-          <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="object_class" value="CSejour" />
-            <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
-            <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
-            <button class="trash notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) } })">
-              {{tr}}Delete{{/tr}}
-            </button>
-          </form>
-          {{$curr_cim->code}} : {{$curr_cim->libelle}}
-          <br />
+      <form name="delCodeAsso-{{$curr_cim->code}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitDiag(this);">
+        <input type="hidden" name="m" value="dPpatients" />
+        <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="object_class" value="CSejour" />
+        <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
+        <input type="hidden" name="_deleted_code_cim" value="{{$curr_cim->code}}" />
+        <button class="trash notext" type="button" onclick="this.form.onsubmit()">
+          {{tr}}Delete{{/tr}}
+        </button>
+      </form>
+      {{$curr_cim->code}} : {{$curr_cim->libelle}}
+      <br />
       {{/foreach}}
     </td>
   </tr>

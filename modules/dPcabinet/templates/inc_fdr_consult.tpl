@@ -212,16 +212,19 @@ function submitFdr(oForm) {
 
 <table class="form">
   <tr>
-    <th class="category">Fichiers liés</th>
+    <th class="category">Fiches et fichiers liés</th>
     <th class="category">Documents</th>
   </tr>
   <tr>
 
     <!-- Files -->
 
-    <td class="text">
+    <td class="text" style="width:50%">
       {{include file="../../dPcabinet/templates/inc_examens_comp.tpl"}}
-      
+      <hr />
+      <button class="new" type="button" style="float:right" onclick="uploadFile('CConsultation', {{$consult->consultation_id}}, '')" >
+        Ajouter un fichier
+      </button>
       <strong>Fichiers</strong>
 			<ul>
 			  {{foreach from=$consult->_ref_files item=curr_file}}
@@ -234,21 +237,20 @@ function submitFdr(oForm) {
 			      <input type="hidden" name="del" value="1" />
 			      {{mb_field object=$curr_file field="file_id" hidden=1 prop=""}}
 			      {{mb_field object=$curr_file field="_view" hidden=1 prop=""}}
-			      <button class="trash notext" type="button" onclick="confirmFileDeletion(this)">{{tr}}Delete{{/tr}}</button>
+			      <button class="trash notext" type="button" onclick="confirmFileDeletion(this)">
+			        {{tr}}Delete{{/tr}}
+			      </button>
 			    </form>
 			  </li>
 			  {{foreachelse}}
-			    <li>Aucun fichier disponible</li>
+			    <li><em>Aucun fichier disponible</em></li>
 			  {{/foreach}}
-			</ul>    
-      <button class="new" type="button" onclick="uploadFile('CConsultation', {{$consult->consultation_id}}, '')">
-        Ajouter un fichier
-      </button>
+			</ul>
     </td>
 
     <!-- Documents FDR -->
 
-    <td> 
+    <td style="width:50%"> 
       {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
       {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=fdr}}
     
@@ -464,10 +466,6 @@ function submitFdr(oForm) {
         </tr>
         {{/if}}
         <!-- Fin du formulaire de reglement -->
-        
-        
-        
-        
         
         {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
         {{if !$consult->sejour_id}}

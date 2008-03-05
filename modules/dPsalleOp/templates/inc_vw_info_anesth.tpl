@@ -106,11 +106,11 @@
           </ul>
         </td>
       </tr>
-     {{/if}}
-     {{foreachelse}}
-     <tr>
+    {{/if}}
+    {{foreachelse}}
+    <tr>
       <td>
-        Pas d'examen complémentaire
+        <em>Pas d'examen complémentaire</em>
       </td>
     </tr>
     {{/foreach}}
@@ -122,14 +122,14 @@
     </tr>
       
     {{if $consult_anesth->_ref_consultation->rques}}
-      <tr>
-        <th>
-          Remarques
-        </th>
-        <td>
-          {{$consult_anesth->_ref_consultation->rques|nl2br}}
-        </td>
-      </tr>
+    <tr>
+      <th>
+        Remarques
+      </th>
+      <td>
+        {{$consult_anesth->_ref_consultation->rques|nl2br}}
+      </td>
+    </tr>
     {{/if}}
   
     <tr>

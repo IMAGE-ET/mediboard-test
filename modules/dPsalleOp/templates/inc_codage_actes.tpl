@@ -16,10 +16,6 @@ function setToNow(element) {
   
 }
 
-{{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
-PairEffect.initGroup("acteEffect");
-{{/if}}
-
 </script>
 
 <table class="main">
@@ -336,40 +332,7 @@ PairEffect.initGroup("acteEffect");
         {{/if}}
         {{/if}}
       </td>
-    </tr>
-    
-    <!-- Anciens boutons -->
-    {{if !$newButtons}}
-    <tr>
-      <td class="button" colspan="3">
-      {{if $can->edit || $modif_operation}}
-        {{if !$acte->_id}}
-        <button class="new" type="button" onclick="
-          {{if $acte->_anesth_associe && $subject->_class_name == "COperation"}}
-          if (confirm('Cet acte ne comporte pas l\'activité d\'anesthésie.\nVoulez-vous ajouter le code d\'anesthésie complémentaire {{$acte->_anesth_associe}} ?')) {
-            document.manageCodes._newCode.value = '{{$acte->_anesth_associe}}';
-            ActesCCAM.add({{$subject->_id}}, {{$subject->_praticien_id}}, { onComplete: null });
-          }
-          {{/if}}
-          submitFormAjax(this.form, 'systemMsg',{onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} });">
-          Coder cet acte
-        </button>
-
-        {{else}}
-        
-        <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-          {{tr}}Modify{{/tr}}
-        </button>
-        <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'acte',objName:'{{$acte->_view|smarty:nodefaults|JSAttribute}}',ajax:'1'}, {onComplete: function(){ActesCCAM.refreshList({{$subject->_id}},{{$subject->_praticien_id}})} })">
-          {{tr}}Delete{{/tr}}
-        </button>
-        
-        {{/if}}
-      {{/if}}
-      </td>
-    </tr>
-    {{/if}}
-    
+    </tr>    
   </table>
 </form>
 {{/foreach}}
@@ -397,3 +360,9 @@ PairEffect.initGroup("acteEffect");
 </tr>
 {{/foreach}}
 </table>
+
+{{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
+<script type="text/javascript">
+PairEffect.initGroup("acteEffect");
+</script>
+{{/if}}

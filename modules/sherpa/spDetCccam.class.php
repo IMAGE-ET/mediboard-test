@@ -134,10 +134,13 @@ class CSpDetCCAM extends CSpObject {
     $idExecutant = CSpObjectHandler::getId400For($executant);
     $this->codpra = $idExecutant->id400;  
     
-    // Extension documentatire
+    // Extension documentataire
     if ($acte->code_activite == "4" && $acte->_ref_object instanceof COperation) {
       $operation =& $acte->_ref_object;
-      $this->extdoc = $operation->_ref_type_anesth->ext_doc;
+      
+      if ($type_anesth = $operation->_ref_type_anesth) {
+        $this->extdoc = $type_anesth->ext_doc;
+      }
     }
     
     // Contenu

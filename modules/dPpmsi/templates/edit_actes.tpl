@@ -4,14 +4,6 @@
 {{assign var="object" value=$selOp}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
-<script type="text/javascript">
-function pageMain() {
-  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
-  PairEffect.initGroup("acteEffect");
-  {{/if}}
-}
-</script>
-
 <table class="tbl">
   <tr>
     <th class="title" colspan="2">

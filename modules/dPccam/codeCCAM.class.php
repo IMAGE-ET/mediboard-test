@@ -31,32 +31,38 @@ class CCodeCCAM {
   var $_activite = null;
   var $_phase    = null;
   
-	// table de chargement
-	static $loadLevel = array();
-	static $loadedCodes = array();
-	static $loadCount = array(0,0,0);
-	static $cacheCallCount = 0;
-	
 	// niveaux de chargement
 	const LITE   = 1;
 	const MEDIUM = 2;
 	const FULL   = 3;
   
+  
+  // table de chargement
+	static $loadLevel = array();
+	static $loadedCodes = array();
+	static $cacheCount = 0;
+	static $loadCount = array(
+	  CCodeCCAM::LITE   => 0,
+		CCodeCCAM::MEDIUM => 0,
+	  CCodeCCAM::FULL   => 0,
+	);
+	
+  static $spec = null;
+	  
   /**
    * Constructeur à partir du code CCAM
    */
   function CCodeCCAM($code) {
     // Static initialisation
-    static $spec = null;
-    if (!$spec) {
-      $spec = new CMbObjectSpec();
-      $spec->dsn = "ccamV2";
-      $spec->init();
+    if (!self::$spec) {
+      self::$spec = new CMbObjectSpec();
+      self::$spec->dsn = "ccamV2";
+      self::$spec->init();
     }
     
-    $this->_spec =& $spec;
+    $this->_spec =& self::$spec;
     
-    if(strlen($code) > 7){
+    if (strlen($code) > 7){
     // Cas ou l'activite et la phase sont indiquées dans le code (ex: BFGA004-1-0)
       $detailCode = explode("-", $code);
       $this->code = strtoupper($detailCode[0]);
@@ -71,11 +77,14 @@ class CCodeCCAM {
   
 	// Chargement optimisé des codes
 	static function get($code, $niv = self::MEDIUM) {
-			
+//	  $codeCCAM = new CCodeCCAM($code);
+//	  $codeCCAM->load($niv);
+//	  return $codeCCAM;
+	  
 		// Si le code n'a encore jamais été chargé, on instancie et on met son niveau de chargement à zéro
 		if (!isset(self::$loadedCodes[$code])) {
 			$newCode = new CCodeCCAM($code);
-			if ($newCode) self::$loadLevel[$code] = null;
+		  self::$loadLevel[$code] = null;
 		} else {
 			$newCode = self::$loadedCodes[$code];
 		}
@@ -83,70 +92,53 @@ class CCodeCCAM {
 		if ($newCode) {
 			// Si le niveau demandé est inférieur au niveau courant, on retourne le Code 
 			if ($niv <= self::$loadLevel[$code]) {
-				self::$cacheCallCount++;
-				return $newCode;
+				self::$cacheCount++;
+				return $newCode->copy();
 			}
 	
+			$newCode->load($niv);
+			
 			// Chargement
-			if($newCode->getLibelles()) {
-				if ($niv == self::LITE) {
-					$newCode->getActivite7();
-				}
-	
-				if ($niv >= self::LITE) {
-					$newCode->getTarification();
-				}
-	
-				if ($niv >= self::MEDIUM) {
-					$newCode->getChaps();
-					$newCode->getRemarques();
-					$newCode->getActivites();
-				}
-	
-				if ($niv == self::FULL) {
-					$newCode->getActesAsso();
-					$newCode->getActesIncomp();
-					$newCode->getProcedure();
-				}
-	
-				self::$loadLevel[$code] = $niv;
-			}
-			self::$loadCount[$niv-1]++;
+			self::$loadLevel[$code] = $niv;
+			self::$loadCount[$niv]++;
 			self::$loadedCodes[$code] = $newCode;
 		}
-		return $newCode;
+
+    return $newCode->copy();
 	}
+	
+	/**
+	 * Should use clone with appropriate behaviour
+	 * But a bit complicated to implement
+	 */
+	function copy() {
+	  return unserialize(serialize($this));
+	  
+	}
+	
+	function load($niv) {
+		if ($this->getLibelles()) {
+			if ($niv == self::LITE) {
+				$this->getActivite7();
+			}
 
-  // Chargement des variables obligatoires
-  /*function LoadLite() {
-    if($this->getLibelles()) {
-      $this->getActivite7();
-      $this->getTarification();
-    }
-  }
+			if ($niv >= self::LITE) {
+				$this->getTarification();
+			}
 
-  // Chargement des variables importantes
-  function LoadMedium() {
-    if($this->getLibelles()) {
-      $this->getTarification();
-      $this->getChaps();
-      $this->getRemarques();
-      $this->getActivites();
-    }
-  }
-   
-  // Chargement de toutes les variables
-  function Load() {
-    if($this->getLibelles()) {
-      $this->getTarification();
-      $this->getChaps();
-      $this->getRemarques();
-      $this->getActivites();
-      $this->getActesAsso();
-      $this->getActesIncomp();
-      $this->getProcedure();
-    }
-  }*/
+			if ($niv >= self::MEDIUM) {
+				$this->getChaps();
+				$this->getRemarques();
+				$this->getActivites();
+			}
+
+			if ($niv == self::FULL) {
+				$this->getActesAsso();
+				$this->getActesIncomp();
+				$this->getProcedure();
+			}
+		}
+	}
   
   function getLibelles() {
     $ds =& $this->_spec->ds;

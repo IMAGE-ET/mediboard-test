@@ -22,12 +22,10 @@ $listAnesths = $listAnesths->loadAnesthesistes();
 $codable = new $object_class;
 $codable->load($object_id);
 
-$codable->updateFormFields();
 $codable->loadRefPatient();
 $codable->loadRefPraticien();
-
-$codable->loadExtCodesCCAM();
 $codable->getAssociationCodesActes();
+$codable->loadExtCodesCCAM();
 $codable->loadPossibleActes();
 
 

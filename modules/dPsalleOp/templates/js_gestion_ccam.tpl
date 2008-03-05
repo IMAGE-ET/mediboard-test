@@ -4,10 +4,7 @@
 
 ActesCCAM = {
   refreshList: function(subject_id, chir_id){
-    {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
-    PairEffect.initGroup("acteEffect");
-    {{/if}}
-    //rafraichissement du inc_fdr
+    // Rafraichissement du inc_fdr
     if("{{$module}}" == "dPcabinet"){
       refreshFdr(subject_id);
     }

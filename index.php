@@ -299,7 +299,11 @@ $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
 $performance["objets"]  = CMbObject::$objectCount;
 $performance["cache"]   = CMbObject::$cacheCount;
 $performance["size"]    = mbConvertDecaBinary(ob_get_length());
-  
+$performance["ccam"]    = array (
+  "cacheCount" => CCodeCCAM::$cacheCount,
+  "loadCount" => CCodeCCAM::$loadCount
+);
+
 // Inclusion du footer
 if (!$suppressHeaders) {
   

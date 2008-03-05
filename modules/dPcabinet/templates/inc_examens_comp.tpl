@@ -3,10 +3,7 @@
 
 <form name="newExamen" action="?m=dPcabinet">
 			            
-<label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Fiches d'examens</strong></label>
-<input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
-
-<select name="type_examen" onchange="ExamDialog.init(this.value)">
+<select name="type_examen" onchange="ExamDialog.init(this.value)" style="float:right">
   <option value="">&mdash; Choisir un type d'examen</option>
   {{if $_is_anesth}}
     <option value="exam_possum">Score Possum</option>
@@ -16,6 +13,10 @@
     <option value="exam_audio">Audiogramme</option>          
   {{/if}}
 </select>
+
+<label for="type_examen" title="Type d'examen complémentaire à effectuer"><strong>Fiches d'examens</strong></label>
+<input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
+
 <script type="text/javascript">
    ExamDialog.init = function(type_exam){
      this.sForm      = "newExamen";
@@ -26,14 +27,16 @@
 </form>
 
 <ul>
-  {{if !$consult->_ref_examaudio->_id && !$consult->_ref_examnyha->_id && !$consult->_ref_exampossum->_id && !$consult->_ref_examigs}}
+  {{if !$consult->_count_fiches_examen}}
   <li>
-    Aucun examen
+    <em>Aucune fiche complémentaire</em>
   </li>
   {{/if}}
   {{if $consult->_ref_examaudio->_id}}
   <li>    
-    <a href="#nothing" onclick="ExamDialog.init('exam_audio');">Audiogramme</a>
+    <a href="#nothing" onclick="ExamDialog.init('exam_audio');">
+      Audiogramme
+    </a>
     <form name="delFrm{{$consult->_ref_examaudio->_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_exam_audio_aed" />
@@ -48,7 +51,7 @@
   {{/if}}
   {{if $consult->_ref_exampossum->_id}}
   <li>   
-    <a href="#nothing" onclick="ExamDialog.init('exam_possum');" />
+    <a href="#nothing" onclick="ExamDialog.init('exam_possum');">
       {{$consult->_ref_exampossum->_view}}
     </a>
   </li>

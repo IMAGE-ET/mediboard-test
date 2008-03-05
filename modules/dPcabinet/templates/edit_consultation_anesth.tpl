@@ -102,13 +102,13 @@ function reloadConsultAnesth() {
   var consultUrl = new Url;
   consultUrl.setModuleAction("dPcabinet", "httpreq_vw_consult_anesth");
   consultUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  consultUrl.requestUpdate('consultAnesth');
+  consultUrl.requestUpdate('consultAnesth', { waitingText: null } );
   
   // Reload Infos Anesth
   var infosAnesthUrl = new Url;
   infosAnesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  infosAnesthUrl.requestUpdate('InfoAnesthContent');  
+  infosAnesthUrl.requestUpdate('InfoAnesthContent', { waitingText: null } );
 }
 
 function pageMain() {
@@ -118,9 +118,6 @@ function pageMain() {
   
   // Chargement pour le sejour
   reloadDossierMedicalSejour();
-  {{if !$dPconfig.dPsalleOp.CActeCCAM.openline}}
-  PairEffect.initGroup("acteEffect");
-  {{/if}}
   
   {{if $consult->consultation_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });

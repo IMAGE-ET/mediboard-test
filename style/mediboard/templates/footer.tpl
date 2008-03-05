@@ -1,25 +1,39 @@
 {{if $debugMode && !$offline}}
 <div id="performance">
-  PHP : {{$performance.genere}} secondes &ndash;
-  Poids de la page : {{$performance.size}} &ndash;
-  Mémoire {{$performance.memoire}}
+  PHP : 
+  	{{$performance.genere}} secondes &ndash;
+  	Poids de la page : {{$performance.size}} &ndash;
+  	Mémoire {{$performance.memoire}}
   <br />
-  Erreurs : {{$performance.error}} &ndash;
-  Alertes : {{$performance.warning}} &ndash;
-  Notices : {{$performance.notice}}
+  
+  Journal :
+	  {{$performance.error}}   erreurs &ndash;
+	  {{$performance.warning}} alertes &ndash;
+	  {{$performance.notice}}  notices 
   <br />
-  Objets métier : {{$performance.objets}} &ndash;
-  Objets en cache : {{$performance.cache}} &ndash;
-  Classes auto-chargées : {{$performance.autoload}}
+  
+  Objets métier : 
+    {{$performance.objets}} chargements &ndash;
+  	{{$performance.cache}} en cache &ndash;
+		{{$performance.autoload}} classes auto-chargées
   <br />
+  
   Requêtes SQL : 
   {{foreach from=$dataSources item=ds}}
-  {{if $ds}}
-  &ndash; {{$ds->chrono->nbSteps}} 
-  sur '{{$ds->dsn}}'
-  en {{$ds->chrono->total|string_format:"%.3f"}} secondes
-  {{/if}}
+	  {{if $ds}}
+	  &ndash; {{$ds->chrono->nbSteps}} 
+	  sur '{{$ds->dsn}}'
+	  en {{$ds->chrono->total|string_format:"%.3f"}} secondes
+	  {{/if}}
   {{/foreach}}
+  <br />
+
+  CCAM : 
+  	Chargments 
+  	{{$performance.ccam.loadCount.1}} light , 
+  	{{$performance.ccam.loadCount.2}} medium,
+  	{{$performance.ccam.loadCount.3}} full  &ndash;
+  	{{$performance.ccam.cacheCount}} Appels au cache
   <br />
   Adresse IP : {{$userIP}}
 </div>

@@ -73,10 +73,7 @@ if ($selConsult) {
   $consult->loadRefsFwd();
   $consult->loadRefsDocs();
   $consult->loadRefsFiles();
-  $consult->loadRefsExamAudio();
-  $consult->loadRefsExamNyha();
-  $consult->loadRefsExamPossum();
-  $consult->loadRefsExamIgs();
+  $consult->loadRefsFichesExamen();
   
   // Patient
   $patient =& $consult->_ref_patient;
