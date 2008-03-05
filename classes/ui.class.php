@@ -200,6 +200,7 @@ class CAppUI {
   }
 
 /**
+ * Deprecated, see self::conf();
  * Retrieves a configuration setting.
  * @param string The name of a configuration setting
  * @return The value of the setting, otherwise null if the key is not found in the configuration array
@@ -620,7 +621,20 @@ class CAppUI {
     global $AppUI;
     return $AppUI->_($str);
   }
-  
+  /**
+   * Return the configuration setting for a given path
+   * @param $path string Tokenized path, eg "module class var";
+   * @return mixed scalar or array of values depending on the path
+   */
+  static function conf($path = "") {
+    global $dPconfig;
+    $conf = $dPconfig;
+    foreach (explode(" ", $path) as $part) {
+    	$conf = $conf[$part];
+    }
+    return $conf;
+  }
+    
   function addOnLoadEvents($code) {
     $this->on_load_events[] = $code;
   }

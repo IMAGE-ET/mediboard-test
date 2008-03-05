@@ -311,4 +311,10 @@ $dPconfig["admin"] = array (
   ),
 );
 
+$dPconfig["dPccam"] = array (
+  "CCodeCCAM" => array(
+    "use_cache" => "1",
+  ),
+);
+
 ?>

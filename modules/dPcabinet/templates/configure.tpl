@@ -80,7 +80,8 @@
       {{/foreach}}
       </select>
     </td>
-  </tr>    
+  </tr>
+  
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

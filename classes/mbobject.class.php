@@ -62,7 +62,8 @@ class CMbObject {
    * References
    */
   
-  var $_back           = null; // All back references
+  var $_back           = null; // Back references collections
+  var $_count          = null; // Back references counts
   var $_ref_module     = null; // Parent module
   var $_ref_logs       = null; // history of the object
   var $_ref_first_log  = null;
@@ -881,8 +882,6 @@ class CMbObject {
    * @return int the count null if back references module is not installed
    */
   function countBackRefs($backName) {
-  	global $dPconfig;
-    
     $backRef = $this->_backRefs[$backName];
     $backRefParts = split(" ", $backRef);
     $backClass = $backRefParts[0];
@@ -906,13 +905,14 @@ class CMbObject {
     }
     
     // Comptage des backrefs
-    return $this->_spec->ds->loadResult($query);	
-    
+    return $this->_count[$backName] = $this->_spec->ds->loadResult($query); 
   }
 
   /**
-   * Load named back references
-   * @return null
+   * Load named back reference collection
+   * @param $order string|array Order for DB query
+   * @param $limit string Limit DB query option
+   * @return array[CMbObject] the collection
    */
   function loadBackRefs($backName = null, $order = null, $limit = null) {
     // Empty object
@@ -942,16 +942,18 @@ class CMbObject {
       $backObject->$backMeta = $this->_class_name;
     }
     
-    return $this->_back[$backSpec->name] = $backObject->loadMatchingList($order, $limit);
+    return $this->_back[$backName] = $backObject->loadMatchingList($order, $limit);
   }
   
   /**
-   * Load all back references
-   * @return null
+   * Load and count all back references collections 
+   * @param $limit string Limit DB query option
+   * @return void
    */
-  function loadAllBackRefs() {
+  function loadAllBackRefs($limit = null) {
     foreach ($this->_backRefs as $backName => $backRef) {
-      $this->loadBackRefs($backName);
+      $this->loadBackRefs($backName, null, $limit);
+      $this->countBackRefs($backName);
     }
   }
 

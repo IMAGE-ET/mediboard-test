@@ -14,7 +14,46 @@ function startNGAP(){
 
 </script>
 
+<form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
+
+<input type="hidden" name="m" value="system" />
+<input type="hidden" name="dosql" value="do_configure" />
+
+<table class="form">
+
+	<!-- CCodeCCAM -->  
+	{{assign var=class value=CCodeCCAM}}
+	  
+	<tr>
+	  <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+	</tr>
+	
+	<tr>
+	  {{assign var=var value=use_cache}}
+	  <th>
+	    <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+	      {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+	    </label>  
+	  </th>
+	  <td>
+	    <select class="bool" name="{{$m}}[{{$class}}][{{$var}}]">
+	      <option value="0" {{if "0" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.0{{/tr}}</option>
+	      <option value="1" {{if "1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}bool.1{{/tr}}</option>
+	    </select>
+	  </td>
+	</tr>
+	
+  <tr>
+    <td class="button" colspan="6">
+      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+    </td>
+  </tr>
+</table>
+
+</form>
+
 <h2>Import de la base de données CCAM</h2>
+
 <table class="tbl">
   <tr>
     <th>Action</th>
