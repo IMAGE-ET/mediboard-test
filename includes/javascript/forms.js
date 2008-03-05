@@ -291,6 +291,43 @@ function submitFormAjax(oForm, ioTarget, oOptions) {
   url.requestUpdate(ioTarget, oDefaultOptions);
 }
 
+/**
+ * Submit a form in Ajax mode
+ * New version to plage in onsubmit event of the form
+ * @param oForm Form element
+ * @return false to prevent page reloading
+ */
+function onSubmitFormAjax(oForm, oUserOptions) {
+  var oOptions = {
+    method : oForm.method,
+    check : checkForm
+  };
+  
+  Object.extend(oOptions, oUserOptions);
+  
+  // Check the form
+  if (!oOptions.check(oForm)) {
+    return false;;
+  }
+
+	// Build url
+  var url = new Url;
+  var iElement = 0;
+  var oElement = null;
+  while (oElement = oForm.elements[iElement++]) {
+    if ((oElement.type != "radio" && oElement.type != "checkbox") || oElement.checked) {
+      url.addParam(oElement.name, oElement.value);
+    }
+  }
+
+	// Launch
+  url.requestUpdate(SystemMessage.id, oOptions);
+  
+  // return
+  return false;
+}
+
+
 function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
   if (oForm.attributes.onsubmit) {
     if (oForm.attributes.onsubmit.nodeValue) {        // this second test is only for IE
