@@ -56,7 +56,6 @@ if($order_col == "_patient_id"){
   $order = "patients.nom $order_way, ccmu $order_way";
 }
 
-
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
 foreach ($listSejours as &$curr_sejour) {

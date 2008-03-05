@@ -17,20 +17,23 @@
 		    <th>Diagnostic Infirmier</th>
 		    <th>Prise en charge</th>
 		  </tr>
-		  {{foreach from=$listSejours item="sejour"}}
+		  {{foreach from=$listSejours item=sejour}}
+		  {{assign var=rpu value=$sejour->_ref_rpu}}
+		  {{assign var=patient value=$sejour->_ref_patient}}
+		  {{assign var=consult value=$rpu->_ref_consult}}
 		  <tr>
 		    <td>
-		    {{if $sejour->_ref_rpu->ccmu}}
-		      {{tr}}CRPU.ccmu.{{$sejour->_ref_rpu->ccmu}}{{/tr}}
+		    {{if $rpu->ccmu}}
+		      {{tr}}CRPU.ccmu.{{$rpu->ccmu}}{{/tr}}
 		    {{/if}}
 		    </td>
 		    <td>{{$sejour->_ref_patient->_view}}</td>
 		    <td>{{$sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}</td>
 		    <td>{{$sejour->_ref_praticien->_view}}</td>
-		    <td>{{$sejour->_ref_rpu->diag_infirmier|nl2br}}</td>
-		    <td>
-		    {{if $sejour->_ref_rpu->_count_consultations > 0}}
-		    {{$sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
+		    <td>{{$rpu->diag_infirmier|nl2br}}</td>
+		    <td>({{$rpu->_count_consultations}})
+		    {{if $consult->_id}}
+		    {{$consult->_ref_plageconsult->_ref_chir->_view}}
 		    {{/if}}
 		    </td>
 		  </tr>

@@ -262,15 +262,15 @@ class CConsultation extends CCodable {
    
     
     // Si pas de mode de paiement defini => autre
-    if($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
+    if ($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
       $this->patient_mode_reglement = "autre";
     }
     
-    
-    // Si la consultation est une urgence
-    if($this->sejour_id){
-      $this->du_patient = 0;
-    }
+// POSE DES PROBLEMES DE LOADMATCHING LIST
+//    // Si la consultation est une urgence
+//    if (null !== $this->sejour_id && $this->sejour_id) {
+//      $this->du_patient = 0;
+//    }
   }
 
   function check() {

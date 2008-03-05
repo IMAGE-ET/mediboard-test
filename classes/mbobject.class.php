@@ -409,6 +409,7 @@ class CMbObject {
         $request->addWhereClause($key, "= '$value'");
       }
     }
+    
     return $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
   }
   

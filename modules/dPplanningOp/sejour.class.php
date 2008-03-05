@@ -482,7 +482,7 @@ class CSejour extends CCodable {
     $this->_ref_prestation->load($this->prestation_id);
   }
   
-  function loadRefEtablissement(){
+  function loadRefEtablissement() {
     // Chargement de l'établissement correspondant
     $this->_ref_group = new CGroups;
     $this->_ref_group->load($this->group_id);

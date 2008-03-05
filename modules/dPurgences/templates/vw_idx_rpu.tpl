@@ -104,6 +104,12 @@ function pageMain() {
     </td>
 
     <td class="text" style="background-color: {{$background}};">
+      {{if $can->edit}}
+      <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
+         <img src="images/icons/planning.png" alt="Planifier"/>
+      </a>
+      {{/if}}
+
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
         {{if $curr_sejour->_num_dossier}}
@@ -113,21 +119,22 @@ function pageMain() {
     </td>
     
     {{if $consult->_id}}
-	    <td style="background-color: {{$background}};">
+	  <td style="background-color: {{$background}};">
+	    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
 	      Consultation à {{$consult->heure|date_format:"%Hh%M"}}
 	      {{if $date != $consult->_ref_plageconsult->date}}
-	      le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
+	      <br/>le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
 	      {{/if}}
-	      <br />
-	      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
-      </td>
+	    </a>
+	    ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
+    </td>
     {{else}}
-      <td id="attente-{{$sejour_id}}" style="text-align: center">
-        <!-- Affichage du temps d'attente de chaque patient -->
-        <script type="text/javascript">
-          updateAttente("{{$sejour_id}}");
-        </script>
-      </td>
+    <td id="attente-{{$sejour_id}}" style="text-align: center">
+      <!-- Affichage du temps d'attente de chaque patient -->
+      <script type="text/javascript">
+        updateAttente("{{$sejour_id}}");
+      </script>
+    </td>
     {{/if}}
     
     <td class="text" style="background-color: {{$background}};">
@@ -168,22 +175,11 @@ function pageMain() {
           - 
          {{/if}}
        {{else}}
-         Patient déjà pris en charge par {{$consult->_ref_plageconsult->_ref_chir->_view}}
+         par {{$consult->_ref_plageconsult->_ref_chir->_view}}
          {{if $can->edit}}
          <br />
-         <!-- 
-         <a style="display: inline" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-           Voir prise en charge 
-         </a>
-          -->
-          
-         <a class="action" style="display: inline" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
+         <a class="action" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
            Voir prise en charge
-         </a>
-      
-      
-         <a style="display: inline" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
-           <img src="images/icons/planning.png" alt="Planifier"/>
          </a>
          {{/if}}
          
