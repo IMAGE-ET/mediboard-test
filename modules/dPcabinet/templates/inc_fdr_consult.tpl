@@ -254,8 +254,10 @@ function submitFdr(oForm) {
       {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
       {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=fdr}}
     
+      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
       <hr />
       {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$consult->_ref_prescription object_id=$consult->_id object_class="CConsultation" praticien_id=$consult->_praticien_id}}
+      {{/if}}
     </td>
 	</tr>
 

@@ -7,7 +7,6 @@ var Prescription = {
     oForm.del.value = "";
     Prescription.addLine(code);
   },
-  
   close : function(object_id, object_class) {
     var url = new Url;
     url.setModuleTab("dPprescription", "vw_edit_prescription");
@@ -16,28 +15,13 @@ var Prescription = {
     url.addParam("object_class", object_class);
     url.redirect();
   },
-  
-  
   applyProtocole: function(prescription_id, protocole_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_add_protocole_lines");
     url.addParam("prescription_id", prescription_id)
     url.addParam("protocole_id", protocole_id);
     urlPrescription.requestUpdate("produits_elements", { waitingText : null });
-  },
-  
-  /*
-  addProtocole: function(code) {
-    //var oForm = document.addProtocole;
-    //oForm.protocole_id.value = code;
-    //submitFormAjax(oForm, 'systemMsg', { onComplete : Prescription.reload });
-    //alert("Protocole selectionné");
-  },
-  */
-  
-  addOther: function(code) {
-    //alert("Element selectionné");
-  },
+  }, 
   addLine: function(code) {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
@@ -77,7 +61,6 @@ var Prescription = {
       onComplete : function(){ Prescription.reload(oForm.prescription_id.value) } 
     });
   },
-  
   reload: function(prescription_id, element_id, mode_protocole) {
       if(window.opener){
       window.opener.PrescriptionEditor.refresh(prescription_id);
@@ -93,8 +76,12 @@ var Prescription = {
         urlPrescription.requestUpdate("produits_elements", { waitingText : null });
       }
   },
-  reloadProt: function(protocole_id) {
-    this.reload(protocole_id, '', '1');
+  reloadAddProt: function(protocole_id) {
+    Prescription.reload(protocole_id, '', '1');
+    Protocole.refreshList('',protocole_id);
+  },
+  reloadDelProt: function(){
+    Prescription.reload('', '', '1');
   },
   reloadAlertes: function(prescription_id) {
     if(prescription_id){
@@ -113,5 +100,11 @@ var Prescription = {
       url.addParam("prescription_id", prescription_id);
       url.popup(700, 600, "print_prescription");
     }
+  },
+  viewFullAlertes: function(prescription_id) {
+    var url = new Url;
+    url.setModuleAction("dPprescription", "vw_full_alertes");
+    url.addParam("prescription_id", prescription_id);
+    url.popup(700, 550, "Alertes");
   }
 };

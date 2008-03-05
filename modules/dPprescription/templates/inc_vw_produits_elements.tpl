@@ -1,16 +1,19 @@
 <script type="text/javascript">
 
- 
+// Initialisation des onglets
 Main.add( function(){
   menuTabs = new Control.Tabs('main_tab_group');
   menuTabs.setActiveTab("div_{{$category}}");
 } );
 
+// Initialisation des alertes
 if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});
 }
+
 </script>
 
+<!-- Formulaire d'ajout de ligne dans la prescription -->
 <form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_aed" />
@@ -20,6 +23,7 @@ if($('alertes')){
   <input type="hidden" name="code_cip" value=""/>
 </form>
 
+<!-- Formulaire d'ajout de ligne d'element dans la prescription -->
 <form action="?m=dPprescription" method="post" name="addLineElement" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
@@ -29,6 +33,7 @@ if($('alertes')){
   <input type="hidden" name="element_prescription_id" value=""/>
 </form>
 
+<!-- Affichage des div des medicaments et autres produits -->
 <div id="div_medicament">
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
@@ -65,174 +70,13 @@ if($('alertes')){
  </form>
 </div>
    
-<div id="div_dmi" style="display:none">
-  <form action="?" method="get" name="searchDmi" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.dmi item=curr_dmi}}
-      <option value="{{$curr_dmi->_id}}">
-        {{$curr_dmi->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-   <br />
-   <input type="text" name="dmi" value="" />
-   <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-   <div style="display:none;" class="autocomplete" id="dmi_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.initDmi('dmi')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.initDmi = function(type){
-       this.sForm = "searchDmi";
-       this.sLibelle = "dmi";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>    
- </form>
-</div>
-   
-<div id="div_labo" style="display:none">      
-	<form action="?" method="get" name="searchLabo" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.labo item=curr_labo}}
-      <option value="{{$curr_labo->_id}}">
-        {{$curr_labo->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-	   <br />
-	  <input type="text" name="labo" value="" />
-	  <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-	  <div style="display:none;" class="autocomplete" id="labo_auto_complete"></div>
-	  <button class="search" type="button" onclick="ElementSelector.initLabo('labo')">Rechercher</button>
-    <script type="text/javascript">   
-     ElementSelector.initLabo = function(type){
-       this.sForm = "searchLabo";
-       this.sLibelle = "labo";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.pop();
-     }
-   </script>
-	</form>
-</div>
+{{include file="inc_div_element.tpl" element="dmi"}}
+{{include file="inc_div_element.tpl" element="labo"}}
+{{include file="inc_div_element.tpl" element="imagerie"}}
+{{include file="inc_div_element.tpl" element="consult"}}
+{{include file="inc_div_element.tpl" element="kine"}}
+{{include file="inc_div_element.tpl" element="soin"}}
 
-   
-<div id="div_imagerie" style="display:none">
- <form action="?" method="get" name="searchImagerie" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.imagerie item=curr_imagerie}}
-      <option value="{{$curr_imagerie->_id}}">
-        {{$curr_imagerie->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-   <br />
-   <input type="text" name="imagerie" value="" />
-   <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-   <div style="display:none;" class="autocomplete" id="imagerie_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.initImagerie('imagerie')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.initImagerie = function(type){
-       this.sForm = "searchImagerie";
-       this.sLibelle = "imagerie";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>
- </form>
-</div>
-   
-<div id="div_consult" style="display:none">
-  <form action="?" method="get" name="searchConsult" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.consult item=curr_consult}}
-      <option value="{{$curr_consult->_id}}">
-        {{$curr_consult->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-   <br />
-   <input type="text" name="consult" value="" />
-   <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-   <div style="display:none;" class="autocomplete" id="consult_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.initCons('consult')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.initCons = function(type){
-       this.sForm = "searchConsult";
-       this.sLibelle = "consult"; 
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>
- </form>
-</div>
-   
-<div id="div_kine" style="display:none">
-  <form action="?" method="get" name="searchKine" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.kine item=curr_kine}}
-      <option value="{{$curr_kine->_id}}">
-        {{$curr_kine->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-   <br />
-   <input type="text" name="kine" value="" />
-   <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-   <div style="display:none;" class="autocomplete" id="kine_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.initKine('kine')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.initKine = function(type){
-       this.sForm = "searchKine";
-       this.sLibelle = "kine";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>
- </form>
-</div>
-   
-<div id="div_soin" style="display:none">
-  <form action="?" method="get" name="searchSoin" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.soin item=curr_soin}}
-      <option value="{{$curr_soin->_id}}">
-        {{$curr_soin->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-    <br />
-    <input type="text" name="soin" value="" />
-    <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value);" />
-    <div style="display:none;" class="autocomplete" id="soin_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.initSoin('soin')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.initSoin = function(type){
-       this.sForm = "searchSoin";
-       this.sLibelle = "soin";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>
-  </form>
-</div>  
-	    
 <table class="tbl">
 {{if $prescription->_ref_prescription_lines|@count}}
   <tr>
@@ -248,18 +92,22 @@ if($('alertes')){
       </button>
     </td>
     <td>
+    {{assign var="color" value=#ccc}}
       {{if $curr_line->_nb_alertes}}
-      
-      {{if $curr_line->_ref_alertes.IPC || $curr_line->_ref_alertes.profil}}
-        {{assign var="image" value="note_orange.png"}}
-      {{/if}}  
-      {{if $curr_line->_ref_alertes.allergie || $curr_line->_ref_alertes.interaction}}
-        {{assign var="image" value="note_red.png"}}
-      {{/if}}  
-      <img src="images/icons/{{$image}}" title="aucune" alt="aucune" onclick="viewFullAlertes()" />
-      
+        
+        {{if $curr_line->_ref_alertes.IPC || $curr_line->_ref_alertes.profil}}
+          {{assign var="image" value="note_orange.png"}}
+          {{assign var="color" value=#fff288}}
+        {{/if}}  
+        {{if $curr_line->_ref_alertes.allergie || $curr_line->_ref_alertes.interaction}}
+          {{assign var="image" value="note_red.png"}}
+          {{assign var="color" value=#ff7474}}
+        {{/if}}  
+        <img src="images/icons/{{$image}}" title="" alt="" 
+             onmouseover="$('line-{{$curr_line->_id}}').show();"
+             onmouseout="$('line-{{$curr_line->_id}}').hide();" />
       {{/if}}
-      <div style="display : none;">
+      <div id="line-{{$curr_line->_id}}" class="tooltip" style="display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
       {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}
         {{if $curr_type|@count}}
           <ul>
@@ -278,7 +126,6 @@ if($('alertes')){
       <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
         <strong>{{$curr_line->_view}}</strong>
       </a>
-      
       <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_aed" />
@@ -294,10 +141,9 @@ if($('alertes')){
           {{/foreach}}
         </select>
       </form>
-      
     </td>
     <td>
-    <div style="float: right;">
+      <div style="float: right;">
         <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
           Equivalents
         </button>
@@ -318,16 +164,15 @@ if($('alertes')){
           }
         </script>
       </div>
-    <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
         <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
-    
     </td>
-  </tr>
+   </tr>
   </tbody>
   {{/foreach}}
   
@@ -350,7 +195,7 @@ if($('alertes')){
      {{$curr_line_element->_ref_element_prescription->_view}}
     </td>
     <td>
-      <form name="addCommentElement-{{$curr_line_element->_id}}" method="post" onsubmit="return onSubmitFormAjax(this)">
+      <form name="addCommentElement-{{$curr_line_element->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
         <input type="hidden" name="del" value="0" />
@@ -367,7 +212,7 @@ if($('alertes')){
 <script type="text/javascript">
 	    
   // UpdateFields de l'autocompete de medicaments
-	function updateFieldsProduit(selected) {
+	updateFieldsProduit = function(selected) {
 	  Element.cleanWhitespace(selected);
 	  dn = selected.childNodes;
 	  Prescription.addLine(dn[0].firstChild.nodeValue);
@@ -375,7 +220,7 @@ if($('alertes')){
 	}
 	
 	// UpdateFields de l'autocomplete des elements
-	function updateFieldsElement(selected, formElement, element) {
+	updateFieldsElement = function(selected, formElement, element) {
 	  Element.cleanWhitespace(selected);
 	  dn = selected.childNodes;
 	  Prescription.addLineElement(dn[0].firstChild.nodeValue);
@@ -385,13 +230,7 @@ if($('alertes')){
   // Preparation des formulaire
   prepareForm(document.addLine);
   prepareForm(document.searchProd);
-  prepareForm(document.searchDmi);
-  prepareForm(document.searchLabo);
-  prepareForm(document.searchImagerie);
-  prepareForm(document.searchConsult);
-  prepareForm(document.searchKine);
-  prepareForm(document.searchSoin);
-  
+ 
   // Autocomplete des medicaments
   urlAuto = new Url();
   urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
@@ -400,63 +239,5 @@ if($('alertes')){
       minChars: 3,
       updateElement: updateFieldsProduit
   } );
-  
-  // Autocomplete Dmi
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("category", "dmi");
-  url.autoComplete("searchDmi_dmi", "dmi_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchDmi', 'dmi') }
-  } );
-  
-  // Autocomplete Laboratoire
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("category", "labo");
-  url.autoComplete("searchLabo_labo", "labo_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchLabo', 'labo') }
-  } );
-    
-  // Autocomplete Imagerie
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("category", "imagerie");
-  url.autoComplete("searchImagerie_imagerie", "imagerie_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchImagerie', 'imagerie') }
-  } );
-  
-  // Autocomplete consultation
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("categroy", "consult");
-  url.autoComplete("searchConsult_consult", "consult_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchConsult', 'consult') }
-  } );
-  
-  // Autocomplete kine
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("category", "kine");
-  url.autoComplete("searchKine_kine", "kine_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchKine', 'kine') }
-  } );
-
-  // Autocomplete soin
-  url = new Url();
-  url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-  url.addParam("category", "soin");
-  url.autoComplete("searchSoin_soin", "soin_auto_complete", {
-      minChars: 3,
-      updateElement: function(element) { updateFieldsElement(element, 'searchSoin', 'soin') }
-  } );
-	    
-  
-  
+     
 </script>
-
-	    

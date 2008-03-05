@@ -6,6 +6,7 @@
       </a>
       <table class="tbl">
         {{foreach from=$categories key=chapitre item=_categories}}
+          {{if $_categories}}
           <tr>
             <th colspan="1">
               {{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}
@@ -20,6 +21,7 @@
             </td>
           </tr>
           {{/foreach}}
+          {{/if}}
         {{/foreach}}
       </table>
     </td>

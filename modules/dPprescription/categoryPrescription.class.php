@@ -48,6 +48,13 @@ class CCategoryPrescription extends CMbObject {
   	if($chap){
   		$where["chapitre"] = " = '$chap'";
   	}
+  	$_categories["dmi"] = array();
+  	$_categories["labo"] = array();
+  	$_categories["imagerie"] = array();
+  	$_categories["consult"] = array();
+  	$_categories["kine"] = array();
+  	$_categories["soin"] = array();
+  	
   	$categories = $category->loadList($where);
   	foreach($categories as $_cat){
   		$_categories[$_cat->chapitre][$_cat->_id] = $_cat;

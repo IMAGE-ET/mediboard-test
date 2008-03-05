@@ -51,6 +51,7 @@ $smarty->assign("praticien"  , $praticien);
 $smarty->assign("protocoles" , $protocoles);
 $smarty->assign("protocole"  , $protocole);
 $smarty->assign("listFavoris", $listFavoris);
+$smarty->assign("protocoleSel_id", "");
 
 $smarty->display("vw_edit_protocole.tpl");
 

@@ -18,6 +18,7 @@ $filter->loadRefsFwd();
 $filter->_ref_object->loadRefsFwd();
 
 $popup = mbGetValueFromGet("popup");
+$categories = array();
 
 if(!$filter->prescription_id && $popup){
 	$new_prescription = new CPrescription();
@@ -112,7 +113,13 @@ if ($prescription->_id) {
   
   // Chargement du praticien
   $praticien->load($prescription->praticien_id);
+
+
+  // Chargement des categories pour chaque chapitre
+  $category = new CCategoryPrescription();
+  $categories = $category->loadCategoriesByChap();
 }
+
 
 // Liste des praticiens
 $user = new CMediusers();
@@ -121,6 +128,7 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("categories"         , $categories);
 $smarty->assign("category"           , "medicament");
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);
@@ -133,6 +141,7 @@ $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listFavoris", $listFavoris);
 $smarty->assign("protocoles", $protocoles);
 $smarty->assign("praticien", $praticien);
+
 if($dialog == 1) {
   $smarty->display("vw_edit_prescription_popup.tpl");
 } else {

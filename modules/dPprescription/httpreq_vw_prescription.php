@@ -20,6 +20,8 @@ $mode_protocole = mbGetValueFromGetOrSession("mode_protocole");
 $listFavoris = array();
 $element_id = mbGetValueFromGetOrSession("element_id");
 $category = null;
+
+
 if($element_id){
   $element = new CElementPrescription();
   $element->load($element_id);
@@ -88,6 +90,11 @@ if($prescription->object_id) {
   }
 }
 
+// Chargement des categories pour chaque chapitre
+$categoryPresc = new CCategoryPrescription();
+$categories = $categoryPresc->loadCategoriesByChap();
+
+ 
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -107,6 +114,7 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listFavoris" , $listFavoris);
 $smarty->assign("category"    , $category);
+$smarty->assign("categories"  , $categories);
 
 if($mode_protocole){
 	$smarty->assign("mode_protocole", "1");

@@ -168,7 +168,7 @@ function viewProduit(cip){
           <th colspan="2">Liste des ordonnances</th>
         </tr>
         {{foreach from=$prescription->_ref_object->_ref_prescriptions item=curr_prescription}}
-        <tr>
+        <tr {{if $curr_prescription->_id == $prescription->_id}}class="selected"{{/if}}>
           <td>
             <button class="trash notext" onclick="alert('non fonctionnel')">
               {{tr}}Delete{{/tr}}

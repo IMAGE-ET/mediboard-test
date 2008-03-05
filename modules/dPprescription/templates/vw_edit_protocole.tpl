@@ -2,45 +2,8 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="dPprescription" script="protocole"}}
 
-
-<script type="text/javascript">
-
-// Ajout d'un protocole
-function addProtocole(){
-  var oFormPrat = document.selPrat;
-  var oForm = document.addProtocolePresc;
-  oForm.praticien_id.value = oFormPrat.praticien_id.value;
-  return onSubmitFormAjax(oForm, {
-    onComplete: function() { 
-      reloadProtocoles(oFormPrat.praticien_id.value);
-    } 
-  } );
-}
-
-function delProtocole(oForm){
-  var oFormPrat = document.selPrat;
-  submitFormAjax(oForm, 'systemMsg', {
-    onComplete: function(){
-      reloadProtocoles(oFormPrat.praticien_id.value);
-      //$("vw_protocole").innerHTML = "&nbsp";
-  } } );
-}
-
-
-// Rafraichissement de la liste des protocoles
-function reloadProtocoles(praticien_id){
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_list_protocoles");
-  url.addParam("praticien_id", praticien_id);
-  url.requestUpdate("protocoles", { waitingText: null } );
-}
-
-function viewProtocole(protocole_id){
-  Prescription.reload(protocole_id, "", "1");
-}
-
-</script>
 
 <table class="main">
   <tr>

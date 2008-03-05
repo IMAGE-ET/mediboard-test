@@ -1,7 +1,7 @@
 <div id="prescription">
   <!-- Pas de prescription -->
   {{if !$prescription->_id}}
-  <button type="button" class="search" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')" style="float: right">
+  <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
     Créer une prescription
   </button>
   {{else}}
@@ -9,7 +9,7 @@
   <a href="#{{$prescription->_id}}" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
     {{$prescription->_view}}
   </a>
-  <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')" style="float: right">
+  <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')">
     Imprimer
   </button>
   <br />

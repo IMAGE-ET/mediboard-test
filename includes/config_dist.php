@@ -219,6 +219,10 @@ $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "minutes_interval" => "15",
 );
 
+$dPconfig["dPcabinet"]["CPrescription"] = array (
+  "view_prescription" => "0"
+);
+
 $dPconfig["dPbloc"]["CPlageOp"] = array (
   "hours_start"      => "8",
   "hours_stop"       => "20",

@@ -8,9 +8,16 @@
  */
 
 $praticien_id = mbGetValueFromGet("praticien_id");
+$protocoleSel_id = mbGetValueFromGet("protocoleSel_id");
 $protocoles = array();
 
 $protocole = new CPrescription();
+
+if(!$praticien_id && $protocoleSel_id){
+  $protocole->load($protocoleSel_id);
+  $praticien_id = $protocole->praticien_id;	
+}
+
 $where["praticien_id"] = " = '$praticien_id'";
 $where["object_id"] = "IS NULL";
 $tabProtocoles = $protocole->loadList($where);
@@ -21,6 +28,7 @@ foreach($tabProtocoles as $_protocole){
 $smarty = new CSmartyDP();
 
 $smarty->assign("protocoles", $protocoles);
+$smarty->assign("protocoleSel_id", $protocoleSel_id);
 
 $smarty->display("inc_vw_list_protocoles.tpl");
 

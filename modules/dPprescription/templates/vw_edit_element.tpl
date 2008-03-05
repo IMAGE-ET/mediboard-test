@@ -8,11 +8,13 @@
         <select name="category_id" onchange="this.form.submit()">
          <option value="">&mdash; Sélection d'une catégorie</option>
          {{foreach from=$categories key=chapitre item=categories}}
+         {{if $categories}}
          <optgroup label="{{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}">
            {{foreach from=$categories item=_category}}
            <option value="{{$_category->_id}}" {{if $category_id == $_category->_id}}selected="selected"{{/if}}>{{$_category->nom}}</option>
            {{/foreach}}
          </optgroup>
+         {{/if}}
          {{/foreach}}
        </select>
       </form>
@@ -84,7 +86,7 @@
 		           <button class="modify" type="submit" name="modify">
 		             {{tr}}Modify{{/tr}}
 		           </button>
-		           <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'element',objName:'{{$element_presription->libelle|smarty:nodefaults|JSAttribute}}'})">
+		           <button class="trash" type="button" name="delete" onclick="confirmDeletion(this.form,{typeName:'l\'element',objName:'{{$element_prescription->libelle|smarty:nodefaults|JSAttribute}}'})">
 		             {{tr}}Delete{{/tr}}
 		           </button>
 		         {{else}}
