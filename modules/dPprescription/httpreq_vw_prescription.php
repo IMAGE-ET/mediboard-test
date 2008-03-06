@@ -49,6 +49,9 @@ if(!$prescription->_id) {
 
 if($prescription->_id){
 	$prescription->loadRefsLines();
+	foreach($prescription->_ref_prescription_lines as &$line){
+		$line->_ref_produit->loadRefPosologies();
+	}
   $prescription->loadRefsLinesElementByCat();  
 }
 
