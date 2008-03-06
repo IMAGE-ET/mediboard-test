@@ -1,4 +1,6 @@
 var Prescription = {
+	// Multiples occurences de la même widget
+  suffixes: [],
   addEquivalent: function(code, line_id){
     Prescription.delLineWithoutRefresh(line_id);
     // Suppression des champs de addLine

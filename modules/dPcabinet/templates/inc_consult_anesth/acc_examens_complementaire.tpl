@@ -99,8 +99,10 @@ function reloadListExamComp() {
       </table>      
       </form>
     </td>
-    <td class="text" id="listExamComp" rowspan="2">
+    <td class="text" rowspan="2">
+      <div id="listExamComp">
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
+      </div>
       
       <table class="form">
 			  <!-- Documents ExamComp -->
@@ -111,13 +113,17 @@ function reloadListExamComp() {
 			    <td>
 			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
 			      {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=exam}}
+			    
+			      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
+            <hr />
+            {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$consult->_ref_prescription object_id=$consult->_id object_class="CConsultation" praticien_id=$consult->_praticien_id suffixe=exam}}
+            {{/if}}
 			    </td>
 			  </tr>
-
       </table>
+      
     </td>
   </tr>
-  
   <tr>
     <td>
       <form name="editExamCompFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

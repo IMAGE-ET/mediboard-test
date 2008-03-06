@@ -1,4 +1,13 @@
-<div id="prescription">
+{{if !@$suffixe}}{{assign var=suffixe value="std"}}{{/if}}
+  
+<script type="text/javascript">
+
+Prescription.suffixes.push("{{$suffixe}}");
+Prescription.suffixes = Prescription.suffixes.uniq();
+
+</script>
+
+<div id="prescription-{{$suffixe}}">
   <!-- Pas de prescription -->
   {{if !$prescription->_id}}
   <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">

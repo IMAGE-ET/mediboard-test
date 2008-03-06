@@ -17,9 +17,16 @@ var PrescriptionEditor = {
       url.popup(this.options.width, this.options.height, "Prescription");
   },
   refresh: function(prescription){
+
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_widget_prescription");
     url.addParam("prescription_id", prescription);
-    url.requestUpdate("prescription", { waitingText: null } );
+    
+    Prescription.suffixes.each( function(suffixe) {
+	    url.addParam("suffixe", suffixe);
+	    url.make();
+	    url.requestUpdate("prescription-" + suffixe, { waitingText : null } );
+    } );
+  
   } 
 }
