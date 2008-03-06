@@ -1298,9 +1298,9 @@ class CMbObject {
 
   /**
    * Converts string specifications to objet specifications
-   * @todo Ref: should parse props instead of object_vars 
+   * @TODO Ref: should parse props instead of object_vars 
    */
-  function getSpecsObj() {
+  function getSpecsObjNew() {
     $specs =& $this->_props;
     $props = get_object_vars($this);
     
@@ -1310,7 +1310,19 @@ class CMbObject {
     }
     return $spec;
   }
-
+  
+  /**
+   * Converts string specifications to objet specifications
+   * Optimized version
+   */
+    function getSpecsObj() {
+    $spec = array();
+    foreach ($this->_props as $propName => $propSpec) {
+      $spec[$propName] = CMbFieldSpecFact::getSpec($this, $propName, $propSpec);
+    }
+    return $spec;
+  }
+  
   /**
    * Build Enums variant returning values
    */  

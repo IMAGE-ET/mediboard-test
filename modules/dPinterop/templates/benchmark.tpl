@@ -98,7 +98,7 @@ var Benchmark = {
   </tr>
   <tr>
     <td>{{tr}}module-{{$module}}-court{{/tr}}</td>
-    <td>{{tr}}action-{{$action}}{{/tr}}</td>
+    <td>{{tr}}mod-{{$module}}-tab-{{$action}}{{/tr}}</td>
     <td>
       <select name="frequency" onchange="Benchmark.sendEvery(this.value)">
         <option value="0">&mdash; Arrêt</option>

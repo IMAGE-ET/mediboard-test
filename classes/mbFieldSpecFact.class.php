@@ -66,8 +66,12 @@ class CMbFieldSpecFact {
     return $specObject;
   }
 }
-// Nouvelle implémentation
-class CMbFieldSpecFactNew {
+
+/**
+ * Nouvelle implémentation simplifiée 
+ * Non encore opérationnelle, cf. plus bas
+ */
+class CMbFieldSpecFactEx {
   
   static $classes = array(
     "ref"          => "CRefSpec",
