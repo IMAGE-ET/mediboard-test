@@ -75,9 +75,10 @@ if ($selConsult) {
   $consult->loadRefsFiles();
   $consult->loadRefsFichesExamen();
   $consult->loadRefPrescription();
-  $consult->_ref_prescription->loadRefsLines();
-  $consult->_ref_prescription->loadRefsLinesElementByCat();  
-  
+  if($consult->_ref_prescription->_id){
+    $consult->_ref_prescription->loadRefsLines();
+    $consult->_ref_prescription->loadRefsLinesElementByCat();  
+  }
   // Patient
   $patient =& $consult->_ref_patient;
 }
