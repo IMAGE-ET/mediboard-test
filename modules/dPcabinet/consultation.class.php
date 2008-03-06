@@ -58,6 +58,7 @@ class CConsultation extends CCodable {
 
   var $du_patient      = null; // somme que le patient doit régler a la fn
   var $du_tiers        = null;
+  var $accident_travail = null;
   
   // Form fields
   var $_etat           = null;
@@ -175,6 +176,7 @@ class CConsultation extends CCodable {
     $specs["total_assure"]      = "currency";
     
     $specs["sejour_id"]         = "ref class|CSejour";
+    $specs["accident_travail"]  = "bool default|0";
     return $specs;
   }
   
@@ -561,8 +563,10 @@ class CConsultation extends CCodable {
       
       // si le code ccam est composé de 3 elements, on le precode
       if($acte->code_activite != "" && $acte->code_phase != ""){
+      	// Permet de sauvegarder le montant de base de l'acte CCAM
+      	$acte->_calcul_montant_base = 1;
+      	
         // Mise a jour de codes_ccam suivant les _tokens_ccam du tarif
-        
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class_name;
         $acte->executant_id = $this->_ref_chir->_id;
@@ -589,6 +593,9 @@ class CConsultation extends CCodable {
 	      }
 	      if(count($detailCodeNGAP) >= 5){
 	        $acte->montant_depassement = str_replace("*","-",$detailCodeNGAP[4]);
+	      }
+	      if(count($detailCodeNGAP) >= 6){
+	      	$acte->demi = $detailCodeNGAP[5];
 	      }
 	      $acte->object_id = $this->_id;
 	      $acte->object_class = $this->_class_name;

@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPcabinet-CPrescription-view_prescription'] = "";
+$locales['CConsultation-accident_travail-desc'] = "";
 $locales['CActeNGAP'] = "";
 $locales['CActeNGAP-acte_ngap_id'] = "";
 $locales['CActeNGAP-acte_ngap_id-court'] = "";
@@ -314,6 +314,7 @@ $locales['CConsultAnesth.rhesus.?'] = "?";
 $locales['CConsultAnesth.rhesus.NEG'] = "NEG";
 $locales['CConsultAnesth.rhesus.POS'] = "POS";
 $locales['CConsultation'] = "";
+$locales['CConsultation-accident_travail'] = "";
 $locales['CConsultation-adresse'] = "";
 $locales['CConsultation-adresse-court'] = "";
 $locales['CConsultation-adresse-desc'] = "";
@@ -1136,6 +1137,7 @@ $locales['config-dPcabinet-addictions-1'] = "Item list";
 $locales['config-dPcabinet-CPlageconsult-hours_start'] = "Start hour";
 $locales['config-dPcabinet-CPlageconsult-hours_stop'] = "Stop hour";
 $locales['config-dPcabinet-CPlageconsult-minutes_interval'] = "Intervals in minutes";
+$locales['config-dPcabinet-CPrescription-view_prescription'] = "";
 $locales['COperation-back-dossiers_anesthesie'] = "";
 $locales['COperation-type_anesth'] = "";
 $locales['COperation-type_anesth-desc'] = "";

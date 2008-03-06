@@ -156,7 +156,7 @@ class CCodable extends CMbObject {
       } else {
         $_montant_depassement_temp = $_actes_ngap->montant_depassement;
       }
-      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp; 
+      $this->_codes_ngap[] = $_actes_ngap->quantite."-".$_actes_ngap->code."-".$_actes_ngap->coefficient."-".$_actes_ngap->montant_base."-".$_montant_depassement_temp."-".$_actes_ngap->demi; 
     }
     $this->_tokens_ngap = join($this->_codes_ngap, "|");
   }

@@ -353,6 +353,23 @@ function submitFdr(oForm) {
 
     <!-- Règlements -->  
     <td {{if !$gestionFSE}}colspan="2"{{/if}}>
+    
+    <form name="accidentTravail" action="" method="post">
+      <input type="hidden" name="m" value="dPcabinet" />
+      <input type="hidden" name="dosql" value="do_consultation_aed" />
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="consultation_id" value="{{$consult->_id}}" />
+      <table class="form">
+        <tr>
+          <th>
+           {{mb_label object=$consult field="accident_travail"}}
+         </th>
+         <td>
+           {{mb_field object=$consult field="accident_travail" onchange="submitFormAjax(this.form,'systemMsg');"}}
+         </td>
+       </tr>
+      </table>  
+    </form>
       
       
       <!-- Formulaire de selection de tarif -->
