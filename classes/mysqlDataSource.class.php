@@ -31,11 +31,21 @@ class CMySQLDataSource extends CSQLDataSource {
     return $this->link;
   }  
     
+  function renameTable($old, $new) {
+    $query = "RENAME TABLE `$old` TO `$new`";
+    return $this->exec($query);
+  }
+  
   function loadTable($table) {
     $query = $this->prepare("SHOW TABLES LIKE %", $table);
     return $this->loadResult($query);
   }
 
+  function loadTables($table = "") {
+    $query = $this->prepare("SHOW TABLES LIKE %", "$table%");
+    return $this->loadColumn($query);
+  }
+  
   function loadField($table, $field) {
     $query = $this->prepare("SHOW COLUMNS FROM `$table` LIKE %", $field);
     return $this->loadResult($query);

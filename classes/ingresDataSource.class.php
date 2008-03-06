@@ -35,6 +35,11 @@ class CIngresDataSource extends CSQLDataSource {
     return $this->link;
   }  
     
+  function renameTable($old, $new) {
+    // No known implementation yet
+    return false;
+  }
+  
   function loadTable($table) {
     $query = "SELECT * FROM iitables".
       "\nWHERE table_name = %";
@@ -46,6 +51,17 @@ class CIngresDataSource extends CSQLDataSource {
     return $this->loadResult($this->prepare($query, $values));
   }
 
+
+  function loadTables($table = null) {
+    $query = "SELECT * FROM iitables".
+      "\nWHERE table_name = %";
+            
+    $values = array (
+      "$table%",
+    );
+    
+    return $this->loadColumn($this->prepare($query, $values));
+  }
   function loadField($table, $field) {
     $query = "SELECT column_name FROM iiocolumns".
       "\nWHERE table_name = %".

@@ -3,8 +3,15 @@
 function startBCBGES(){
   var url = new Url;
   url.setModuleAction("dPmedicament", "httpreq_do_add_bcbges");
-  url.requestUpdate("bcbges");
+  url.requestUpdate("do_add_bcbges");
 }
+
+function startUncaseBCBTables(){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "httpreq_do_uncase_bcb_tables");
+  url.requestUpdate("uncase_bcb_tables");
+}
+
 
 </script>
 
@@ -72,8 +79,9 @@ function startBCBGES(){
 
 </form>
 
+<hr />
+
 {{include file="../../system/templates/configure_dsn.tpl" dsn=bcb}}
-{{include file="../../system/templates/configure_dsn.tpl" dsn=bcbges}}
 
 <h2>Import de la base de données BCBGES</h2>
 <table class="tbl">
@@ -83,9 +91,30 @@ function startBCBGES(){
   </tr>
   
   <tr>
-    <td><button class="tick" onclick="startBCBGES()" >Importer la base de données BCB GESTION</button></td>
-    <td id="bcbges"></td>
+    <td><button class="tick" onclick="startUncaseBCBTables()">Mettre les tables BCB en majuscules</button></td>
+    <td id="uncase_bcb_tables">
+      <div class="big-info">
+      	Cette action n'est pas nécessaire (et ne fonctionnera pas) sur les serveurs MS Windows.
+      	<br />
+      	Ces derniers ne sont pas sensibles à la casse pour les noms de table 
+      </div>
+    </td>
   </tr>
 </table>
 
+<hr />
 
+{{include file="../../system/templates/configure_dsn.tpl" dsn=bcbges}}
+
+<h2>Traitement sur la base de données BCB</h2>
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="startBCBGES()" >Importer la base de données BCB GESTION</button></td>
+    <td id="do_add_bcbges"></td>
+  </tr>
+</table>

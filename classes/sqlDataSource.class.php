@@ -75,11 +75,25 @@ abstract class CSQLDataSource {
   abstract function query($query);
   
   /**
+   * Rename a table
+   * @param string $old Old naame
+   * @param string $nex New name
+   * @return bool job done 
+   */
+  abstract function renameTable($old, $new);
+  
+  /**
    * Get the first table like given name
    * @param string $table 
    */
   abstract function loadTable($table);
 
+  /**
+   * Get all tables with given prefix
+   * @param array[string] Table names 
+   */
+  abstract function loadTables($table = null);
+  
   /**
    * Get the first field like given name in table
    * @param string $table
@@ -264,7 +278,7 @@ abstract class CSQLDataSource {
   }
 
   /**
-   * This global function loads the first field of the first row returned by the query.
+   * Loads the first field of the first row returned by the query.
    * @param string The SQL query
    * @param strong The db identifier
    * @return The value returned in the query or null if the query failed.
@@ -283,7 +297,7 @@ abstract class CSQLDataSource {
 
   
   /**
-   * This global function loads the first row of a query into an object 
+   * Loads the first row of a query into an object 
    *
    * If an object is passed to this function, the returned row is bound to the existing elements of <var>object</var>.
    * If <var>object</var> has a value of null, then all of the returned query fields returned in the object. 

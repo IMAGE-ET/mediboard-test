@@ -429,7 +429,7 @@ class CAppUI {
   * @param string $msg : the message
   * @param enum $msgType : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
   */
-  function stepAjax($msg, $msgType = UI_MSG_OK) {
+  static function stepAjax($msg, $msgType = UI_MSG_OK) {
     switch($msgType) {
       case UI_MSG_OK      : $class = "message"; break;
       case UI_MSG_WARNING : $class = "warning"; break;
@@ -451,7 +451,7 @@ class CAppUI {
   * @param string $callback : name of the javascript function 
   * @param string $value : value paramater for javascript function
   */
-  function callbackAjax($callback, $value) {
+  static function callbackAjax($callback, $value) {
     $value = smarty_modifier_json($value);
     echo "\n<script type='text/javascript'>$callback($value);</script>";
   }

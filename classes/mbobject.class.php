@@ -916,12 +916,12 @@ class CMbObject {
    * @return array[CMbObject] the collection
    */
   function loadBackRefs($backName, $order = null, $limit = null) {
+    $this->makeBackSpec($backName);
+    
     // Empty object
     if (!$this->_id) {
-      return;
+      return array();
     }
-    
-    $this->makeBackSpec($backName);
     
     // Spécifications
     $backSpec = $this->_backSpecs[$backName];
@@ -953,9 +953,12 @@ class CMbObject {
    * @return CMbObject Unique back reference if exist, concrete type empty object otherwise 
    */
   function loadUniqueBackRef($backName) {
-    $backRefs = $this->loadBackRefs($backName);
+    if (null === $backRefs = $this->loadBackRefs($backName)) {
+      return null;
+    }
+
     if (count($backRefs) > 1) {
-      trigger_error("'$backName' back reference should be unique for object of class 'this->_view'", E_USER_WARNING);
+      trigger_error("'$backName' back reference should be unique for object of class '$this->_view'", E_USER_WARNING);
     }
     
     if (!count($backRefs)) {
