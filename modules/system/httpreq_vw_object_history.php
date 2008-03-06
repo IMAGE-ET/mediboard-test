@@ -28,10 +28,6 @@ $user->template = "0";
 $order = "user_last_name, user_first_name";
 $listUsers = $user->loadMatchingList($order);
 
-// Récupération des types disponibles
-$userLog = new CUserLog;
-$userLog->buildEnums();
-
 // Récupération des logs correspondants
 $logs = array();
 

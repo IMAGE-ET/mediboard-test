@@ -635,7 +635,8 @@ class CMbObject {
       $propValue =& $this->$propName;
       if ($propValue !== null) {
         if ($msg = $this->checkProperty($propName)) {
-          if (!$this->lookupSpec("notNull", $propSpec)) {
+          $spec = $this->_specs[$propName];
+          if (!$spec->notNull) {
             $propValue = "";
           }
         }
@@ -1339,54 +1340,13 @@ class CMbObject {
       }
       asort($enumsTrans[$propName]);
     }
-    
+        
     return $enumsTrans;
   }
-  
-  function buildEnums() {
-    global $AppUI;
-    foreach ($this->_props as $propName => $propSpec) {
-      $specEnum = $this->lookupSpec("enum", $propSpec);
-      $specFragments = $this->lookupSpec("list", $propSpec);
-      if($specEnum && $specFragments){
-        $this->_enums[$propName] = $specFragments;
-        $this->_enumsTrans[$propName] = array_flip($specFragments);
-        foreach($this->_enumsTrans[$propName] as $key => $item) {
-          $this->_enumsTrans[$propName][$key] = $AppUI->_($key);
-        }
-        asort($this->_enumsTrans[$propName]);
-      }
-    }
-  }
-
-  
-  /**
-   * Functions to check the object's properties
-   */
-  function lookupSpec($specFragment, $propSpec){
-    $aSpecFragments = explode(" ", $propSpec);
-    foreach($aSpecFragments as $spec){
-      $aFrag = explode("|", $spec);
-      $fragmentPosition = array_search($specFragment,$aFrag);
-      if($fragmentPosition !== false){
-        array_splice($aFrag, $fragmentPosition, 1);
-        if(count($aFrag)){
-          return $aFrag;
-        }else{
-          return true;
-        }
-      }
-    }
-    return false;
-  }
-  
+      
   function checkProperty($propName) {
-    $specObj = $this->_specs[$propName];
-    $msg = null;
-    if($msgError = $specObj->checkPropertyValue($this)){
-      $msg .= $msgError;
-    }
-    return $msg;
+    $spec = $this->_specs[$propName];
+    return $spec->checkPropertyValue($this);
   }
   
   function checkConfidential($specs = null) {

@@ -33,10 +33,6 @@ $user->template = "0";
 $order = "user_last_name, user_first_name";
 $listUsers = $user->loadMatchingList($order);
 
-// Récupération des types disponibles
-$userLog = new CUserLog;
-$userLog->buildEnums();
-
 // Récupération des logs correspondants
 $where = array();
 if ($filter->user_id     ) $where["user_id"     ] = "= '$filter->user_id'";
@@ -65,7 +61,6 @@ $smarty->assign("dialog"      , $dialog      );
 $smarty->assign("filter"      , $filter      );
 $smarty->assign("listClasses" , $listClasses );
 $smarty->assign("listUsers"   , $listUsers   );
-$smarty->assign("userLog"     , $userLog     );
 $smarty->assign("item"        , $item        );
 $smarty->assign("list"        , $list        );
 

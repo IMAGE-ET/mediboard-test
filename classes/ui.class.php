@@ -86,11 +86,6 @@ class CAppUI {
     // set up the default preferences
     $this->user_locale = $this->base_locale;
     $this->user_prefs = array();
-
-    // choose to alert for missing translation or not
-    $locale_warn = self::conf("locale_warn") ;
-    $locale_alert = self::conf("locale_alert");
-    self::$locale_mask = $locale_warn ? "$locale_warn%s$locale_warn" : "%s";
   }
   
   function getAllClasses() {
@@ -617,7 +612,7 @@ class CAppUI {
     if (isset($GLOBALS["translate"][$str]) && $GLOBALS["translate"][$str] != "") {
       return $GLOBALS["translate"][$str];
     }
-    
+
     return sprintf(self::$locale_mask, $str);
   }
 
@@ -640,4 +635,8 @@ class CAppUI {
   }
 }
 
+// choose to alert for missing translation or not
+$locale_warn = CAppUI::conf("locale_warn") ;
+$locale_alert = CAppUI::conf("locale_alert");
+CAppUI::$locale_mask = $locale_warn ? "$locale_warn%s$locale_warn" : "%s";
 ?>

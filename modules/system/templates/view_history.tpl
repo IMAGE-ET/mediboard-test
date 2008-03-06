@@ -58,10 +58,7 @@ function pageMain() {
   <tr>
     <th>{{mb_label object=$filter field=type}}</th>
     <td>
-      <select name="type" class="enum list|0|create|store|delete">
-        <option value="0">&mdash; Tous les types</option>
-        {{html_options options=$userLog->_enumsTrans.type selected=$filter->type}}
-      </select>
+			{{mb_field object=$filter field=type canNull=true defaultOption="&mdash; Choisir un type"}}
     </td>
 
     <th>{{mb_label object=$filter field=object_id}}</th>
