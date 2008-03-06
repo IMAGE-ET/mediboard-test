@@ -626,7 +626,7 @@ class CMbObject {
 
   function repair() {
     $properties = get_object_vars($this);
-    foreach($this->_props as $propName => $propSpec) {
+    foreach ($this->_props as $propName => $propSpec) {
       if (!array_key_exists($propName, $properties)) {
         trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
         continue;
@@ -1312,20 +1312,18 @@ class CMbObject {
 
   /**
    * Build Enums variant returning values
-   */
+   */  
   function getEnums() {
-    global $AppUI;
     $enums = array();
-    foreach ($this->_props as $propName => $propSpec) {
-      $specEnum = $this->lookupSpec("enum", $propSpec);
-      $specFragments = $this->lookupSpec("list", $propSpec);
-      if($specEnum && $specFragments){
-        $enums[$propName] = $specFragments;
-      }elseif($this->lookupSpec("bool", $propSpec)){
-        $enums[$propName][] = 0;
-        $enums[$propName][] = 1;
+    foreach ($this->_specs as $propName => $spec) {
+      if ($spec instanceof CEnumSpec) {
+      	$enums[$propName] = explode("|", $spec->list);
+      }
+      if ($spec instanceof CBoolSpec) {
+        $enums[$propName] = array(0,1);
       }
     }
+    
     return $enums;
   }
   
@@ -1333,12 +1331,11 @@ class CMbObject {
    * Build Enums variant returning values
    */
   function getEnumsTrans() {
-    global $AppUI;
     $enumsTrans = array();
     foreach ($this->_enums as $propName => $enumValues) {
       $enumsTrans[$propName] = array_flip($enumValues);
       foreach($enumsTrans[$propName] as $key => $item) {
-        $enumsTrans[$propName][$key] = $AppUI->_(get_class($this).".$propName.$key");
+        $enumsTrans[$propName][$key] = CAppUI::tr("$this->_class_name.$propName.$key");
       }
       asort($enumsTrans[$propName]);
     }

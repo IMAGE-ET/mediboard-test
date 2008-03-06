@@ -12,18 +12,26 @@
  * @abstract Event handler class for CMbObject
  */
 class CSpObjectHandler extends CMbObjectHandler {
-  static $associations = array(
-    "CPatient" => array("CSpMalade"),
-    "CSejour" => array("CSpSejMed", "CSpDossier", "CSpOuvDro"),
+  static $handled = array (
+    "CPatient" => array ("CSpMalade"),
+    "CSejour" => array ("CSpSejMed", "CSpDossier", "CSpOuvDro"),
   );
-    
+  
+  static $queriable = array (
+    "CPatient", 
+    "CSejour", 
+    "COperation",
+    "CMediusers"
+	);
+  
+  
   static function isHandled(CMbObject &$mbObject) {
-    return array_key_exists($mbObject->_class_name, self::$associations);
+    return array_key_exists($mbObject->_class_name, self::$handled);
   }
   
   static function createSpInstances($mbObject) {
     $spInstances = array();
-    foreach(self::$associations[$mbObject->_class_name] as $spClass) {
+    foreach(self::$handled[$mbObject->_class_name] as $spClass) {
       $spInstances[] = new $spClass;
     }
     return $spInstances;

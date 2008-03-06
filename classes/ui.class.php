@@ -53,7 +53,7 @@ class CAppUI {
 /** @var string */
   var $base_locale = "en"; // do not change - the base "keys" will always be in english
 /** @var string langage alert mask */
-  var $locale_mask = "";
+  static $locale_mask = "";
 
   var $messages = array();
   
@@ -88,11 +88,9 @@ class CAppUI {
     $this->user_prefs = array();
 
     // choose to alert for missing translation or not
-    if ($dPconfig["locale_warn"]) {
-      $this->locale_mask = @$dPconfig["locale_alert"]."%s".@$dPconfig["locale_alert"];
-    } else {
-      $this->locale_mask = "%s";
-    }
+    $locale_warn = self::conf("locale_warn") ;
+    $locale_alert = self::conf("locale_alert");
+    self::$locale_mask = $locale_warn ? "$locale_warn%s$locale_warn" : "%s";
   }
   
   function getAllClasses() {
@@ -288,20 +286,12 @@ class CAppUI {
   }
 
 /**
-* Translate string to the local language [same form as the gettext abbreviation]
-*
-* This is the order of precedence:
-* <ul>
-* <li>If the key exists in the lang array, return the value of the key
-* <li>If no key exists and the base lang is the same as the local lang, just return the string
-* <li>If this is not the base lang, then return string with a red star appended to show
-* that a translation is required.
-* </ul>
-* @param string The string to translate
-* @param int Option to change the case of the string
-* @return string
-*/
-  function _($str) {
+ * DEPRECATED SEE CAppUI::tr()
+ * Translate string to the local language [same form as the gettext abbreviation]
+ * @param string The string to translate
+ * @return string
+ */
+  static function _($str) {
     $str = trim($str);
     if (empty($str)) {
       return "";
@@ -312,7 +302,7 @@ class CAppUI {
       return $GLOBALS["translate"][$str];
     }
     
-    return sprintf($this->locale_mask, $str);
+    return sprintf(self::$locale_mask, $str);
   }
 
 /**
@@ -618,9 +608,19 @@ class CAppUI {
    * @return string translated statement
    */
   static function tr($str) {
-    global $AppUI;
-    return $AppUI->_($str);
+    $str = trim($str);
+    if (empty($str)) {
+      return "";
+    }
+    
+    // Defined and not empty
+    if (isset($GLOBALS["translate"][$str]) && $GLOBALS["translate"][$str] != "") {
+      return $GLOBALS["translate"][$str];
+    }
+    
+    return sprintf(self::$locale_mask, $str);
   }
+
   /**
    * Return the configuration setting for a given path
    * @param $path string Tokenized path, eg "module class var";

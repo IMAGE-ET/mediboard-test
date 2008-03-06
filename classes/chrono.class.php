@@ -27,11 +27,11 @@ class Chronometer {
   
   function start() {
     $this->nbSteps++;
-    $this->step = $this->microtimeFloat();
+    $this->step = microtime(true); //$this->microtimeFloat();
   }
   
   function stop($key = "") {
-    $this->step = $this->microtimeFloat() - $this->step;
+    $this->step = microtime(true) - $this->step;
     $this->total += $this->step;
     $this->maxStep = max($this->maxStep, $this->step);
     $this->avgStep = $this->total/$this->nbSteps;
