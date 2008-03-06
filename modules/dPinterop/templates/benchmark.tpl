@@ -1,6 +1,3 @@
-{{assign var="module" value="mediusers"}}
-{{assign var="action" value="vw_idx_mediusers"}}
-
 <script type="text/javascript">
 
 var Chronometer = Class.create();
@@ -84,9 +81,6 @@ var Benchmark = {
   },
 }
 
-function pageMain() {
-}
-
 </script>
 
 <h2>Analyse de performance du serveur</h2>
@@ -120,7 +114,7 @@ function pageMain() {
       </select>
     </td>
     <td>
-      <button type="tick" onclick="Benchmark.send()">Send</button>
+      <button class="tick" onclick="Benchmark.send()">Send</button>
     </td>
     <td id="requestCount"></td>
     <td id="responseCount"></td>

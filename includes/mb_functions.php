@@ -10,13 +10,14 @@
 /**
  * Utility function to return a value from a named array or a specified default
  */
-function dPgetParam( &$arr, $name, $def=null ) {
-  return isset( $arr[$name] ) ? $arr[$name] : $def;
+function dPgetParam($arr, $name, $def=null ) {
+  return isset($arr[$name]) ? $arr[$name] : $def;
 }
 
 
 /**
- * Returns the first arguments that do not evaluate to false (0, null, "")
+ * Returns the first arguments that do not evaluate to null (0, null, "")
+ * @return mixed 
  */
 function mbGetValue() {
   foreach(func_get_args() as $arg) {
@@ -763,9 +764,13 @@ function stripslashes_deep($value) {
  * @param object $object to fill of any class
  **/
 function bindHashToObject($hash, &$object) {
+
+  // @TODO use property_exists() which is a bit faster
+  // BUT requires PHP >= 5.1   
+  
+  $vars = get_object_vars($object);
   foreach ($hash as $k => $v) {
-    //if (property_exists($object, $k)) {
-    if(array_key_exists($k,get_object_vars($object))) {
+    if (array_key_exists($k, $vars)) {
       $object->$k = $hash[$k];
     }
   } 

@@ -11,6 +11,6 @@ global $AppUI, $can, $m;
 
 // Création du template
 $smarty = new CSmartyDP();
-
-$cr = new CCompteRendu;
+$smarty->assign("module", "dPdeveloppement");
+$smarty->assign("action", "view_logs");
 $smarty->display("benchmark.tpl");
