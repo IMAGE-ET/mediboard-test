@@ -31,7 +31,7 @@
      Impossible de rajouter des éléments de prescription car cette section ne possède pas de catégorie
     </div>
     {{else}}
-    <form name="add{{$element}}" method="post" action="">
+    <form name="add{{$element}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_element_prescription_aed" />
       <input type="hidden" name="del" value="0" />
@@ -43,7 +43,7 @@
         {{/foreach}}
       </select>
       <input name="libelle" type="text" size="80" />
-      <button class="submit notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg');">Ajouter</button>
+      <button class="submit notext" type="button" onclick="this.form.onsubmit()">Ajouter</button>
     </form>
     {{/if}}
  </div>
