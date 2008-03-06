@@ -4,6 +4,16 @@
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPprescription" script="protocole"}}
 
+<script type="text/javascript">
+
+function viewProduit(cip){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "vw_produit");
+  url.addParam("CIP", cip);
+  url.popup(900, 640, "Descriptif produit");
+}
+
+</script>
 
 <table class="main">
   <tr>
