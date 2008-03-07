@@ -12,10 +12,7 @@ function startUncaseBCBTables(){
   url.requestUpdate("uncase_bcb_tables");
 }
 
-
 </script>
-
-
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 

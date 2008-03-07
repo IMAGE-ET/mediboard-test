@@ -54,14 +54,25 @@ class CPlageconsult extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpec();
+    return array_merge($specs, array (
       "chir_id" => "notNull ref class|CMediusers",
       "date"    => "notNull date",
       "freq"    => "notNull time",
       "debut"   => "notNull time",
       "fin"     => "notNull time",
-      "libelle" => "str"
-    );
+      "libelle" => "str",
+
+      // Form fields
+      "_hour_deb"  => "",
+      "_min_deb"   => "",
+      "_hour_fin"  => "",
+      "_min_fin"   => "",
+      "_freq"      => "",
+      "_affected"  => "",
+      "_total"     => "",
+      "_fill_rate" => "",
+    ));
   }
   
   function getSeeks() {
