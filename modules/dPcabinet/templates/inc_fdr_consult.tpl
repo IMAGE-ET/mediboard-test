@@ -208,6 +208,12 @@ function submitFdr(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
 }
 
+// Mise a jour de du_patient
+var oForm = document.tarifFrm;
+if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
+  oForm.du_patient.value = oForm._somme.value;
+}
+
 </script>
 
 <table class="form">
