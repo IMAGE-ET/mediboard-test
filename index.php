@@ -297,7 +297,7 @@ if( !function_exists("memory_get_usage") ) {
 $performance["genere"]  = number_format($phpChrono->total, 3);
 $performance["memoire"] = mbConvertDecaBinary(memory_get_usage());
 $performance["objets"]  = CMbObject::$objectCount;
-$performance["cache"]   = CMbObject::$cacheCount;
+$performance["cachableCount"]   = CMbObject::$cachableCount;
 $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 $performance["ccam"]    = array (
   "cacheCount" => CCodeCCAM::$cacheCount,

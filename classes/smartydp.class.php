@@ -82,9 +82,10 @@ function JSAttribute($string){
 function smarty_modifier_cleanField($string){
   if (!is_scalar($string)) {
     return $string;
-  }else {
-    return htmlspecialchars($string,ENT_QUOTES);
   }
+
+  return htmlspecialchars($string,ENT_QUOTES);
+
 }
 
 function smarty_modifier_stripslashes($string){

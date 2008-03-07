@@ -22,10 +22,11 @@ if (in_array($class, CSpObjectHandler::$queriable)) {
 
 $id400 = mbGetValueFromGet("id400");
 $object = CSpObjectHandler::getMbObjectFor($class, $id);
+mbTrace($object->getProps());  
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour", $sejour);
+$smarty->assign("object", $object);
 $smarty->display("object_properties.tpl");
 ?>

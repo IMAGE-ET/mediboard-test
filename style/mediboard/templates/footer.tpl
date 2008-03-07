@@ -14,7 +14,7 @@
   
   Objets métier : 
     {{$performance.objets}} chargements &ndash;
-  	{{$performance.cache}} en cache &ndash;
+  	{{$performance.cachableCount}} cachable &ndash;
 		{{$performance.autoload}} classes auto-chargées
   <br />
   

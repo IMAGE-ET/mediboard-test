@@ -17,14 +17,13 @@ require_once("./classes/mbObjectSpec.class.php");
  */
 class CMbObject {
   static $objectCount = 0;
-  static $cacheCount = 0;
+  static $objectCache = array();
+  static $cachableCount = 0;
   static $handlers = null;
   
   /**
    * Global properties
    */
-  
-  var $_objectsTable = null; // list of loaded objects
   
   var $_class_name    = null; // class name of the object
   var $_tbl           = null; // table name
@@ -107,7 +106,6 @@ class CMbObject {
       
       $class = get_class($this);
       $this->_class_name =& $class;
-      $this->_objectsTable =& $objectsTable;
       $props = $this->getSpecs();
       $this->_props =& $props;
       $backRefs = $this->getBackRefs();
@@ -128,7 +126,6 @@ class CMbObject {
     
     $this->_spec          =& $spec;
     $this->_class_name    =& $class;
-    $this->_objectsTable  =& $objectsTable;
     $this->_props         =& $props;
     $this->_backRefs      =& $backRefs;
     $this->_backSpecs     =& $backSpecs;
@@ -365,10 +362,16 @@ class CMbObject {
       $this->_id = null;
       return false;
     }
-
-    //$this->_objectsTable[$oid] = $this;
+        
     $this->checkConfidential();
     $this->updateFormFields();
+    
+    // Statistiques sur cache d'object
+    if (isset(self::$objectCache[$this->_class_name][$this->_id])) {
+      self::$cachableCount++;
+    }
+    self::$objectCache[$this->_class_name][$this->_id] = true;
+    
     return $this;
   }
   
@@ -851,7 +854,6 @@ class CMbObject {
     
 
     // Load the object to get all properties
-    unset($this->_objectsTable[$this->_id]);
     $this->load();
     
     //Creation du log une fois le store terminé
