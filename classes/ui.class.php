@@ -638,5 +638,5 @@ class CAppUI {
 // choose to alert for missing translation or not
 $locale_warn = CAppUI::conf("locale_warn") ;
 $locale_alert = CAppUI::conf("locale_alert");
-CAppUI::$locale_mask = $locale_warn ? "$locale_warn%s$locale_warn" : "%s";
+CAppUI::$locale_mask = $locale_warn ? "$locale_alert%s$locale_alert" : "%s";
 ?>

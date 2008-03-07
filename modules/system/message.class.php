@@ -40,7 +40,8 @@ class CMessage extends CMbObject {
 	}
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "deb"       => "notNull dateTime",
       "fin"       => "notNull dateTime",
       "titre"     => "notNull str maxLength|40",
@@ -48,6 +49,7 @@ class CMessage extends CMbObject {
       "corps"     => "text",
       "urgence"   => "notNull enum list|normal|urgent default|normal"
     );
+    return array_merge($specsParent, $specs);
   }
 
   // Loads messages from a publication date perspective : all, past, present, future

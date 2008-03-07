@@ -40,7 +40,8 @@ class CTarif extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chir_id"     => "ref class|CMediusers",
       "function_id" => "ref class|CFunctions",
       "description" => "notNull str confidential",
@@ -51,6 +52,7 @@ class CTarif extends CMbObject {
       "_somme"      => "currency",
       "_type"       => "",
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

@@ -29,7 +29,8 @@ class CAccessLog extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "module"   => "str",
       "action"   => "str",
       "period"   => "dateTime",
@@ -37,6 +38,7 @@ class CAccessLog extends CMbObject {
       "duration" => "float",
       "request"  => "float"
     );
+    return array_merge($specsParent, $specs);
   }
   
   

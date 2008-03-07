@@ -34,10 +34,12 @@ class CThemeDoc extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "group_id" => "ref class|CGroups",
       "nom"      => "notNull str maxLength|50"
     );
+    return array_merge($specsParent, $specs);
   }
 
   function updateFormFields() {

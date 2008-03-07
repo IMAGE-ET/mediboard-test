@@ -73,7 +73,8 @@ class CExamenLabo extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "catalogue_labo_id"    => "ref class|CCatalogueLabo notNull",
       "identifiant"          => "str maxLength|10 notNull",
       "libelle"              => "str notNull",
@@ -106,6 +107,7 @@ class CExamenLabo extends CMbObject {
       "remarques"            => "text",
       "obsolete"             => "bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function check() {

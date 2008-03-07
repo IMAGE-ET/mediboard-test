@@ -22,10 +22,12 @@ class CFavoricim10 extends CMbObject {
 	}
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "favoris_user" => "notNull ref class|CUser",
       "favoris_code" => "notNull str maxLength|16"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

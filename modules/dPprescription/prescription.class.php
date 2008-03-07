@@ -42,12 +42,14 @@ class CPrescription extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "praticien_id"  => "notNull ref class|CMediusers",
       "object_id"     => "ref class|CCodable meta|object_class",
       "object_class"  => "notNull enum list|CSejour|CConsultation",
       "libelle"       => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

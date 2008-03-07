@@ -60,7 +60,8 @@ class CRPU extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "sejour_id"       => "notNull ref class|CSejour",
       "diag_infirmier"  => "text",
       "mode_entree"     => "enum list|6|7|8",
@@ -78,6 +79,7 @@ class CRPU extends CMbObject {
       "radio_debut"     => "dateTime",
       "radio_fin"       => "dateTime"
      );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

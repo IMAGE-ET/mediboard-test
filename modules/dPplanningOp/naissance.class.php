@@ -31,7 +31,8 @@ class CNaissance extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "operation_id"    => "notNull ref class|COperation",
       "nom_enfant"      => "notNull str confidential",
       "prenom_enfant"   => "str",
@@ -39,6 +40,7 @@ class CNaissance extends CMbObject {
       "date_reelle"     => "dateTime",
       "debut_grossesse" => "date",
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

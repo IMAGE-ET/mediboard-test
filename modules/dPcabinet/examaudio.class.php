@@ -88,7 +88,8 @@ class CExamAudio extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "consultation_id" => "notNull ref class|CConsultation",
       "remarques"       => "text",
       "gauche_aerien"   => "str maxLength|64",
@@ -106,6 +107,7 @@ class CExamAudio extends CMbObject {
       "droite_tympan"   => "str maxLength|64",
       "droite_vocale"   => "str maxLength|64"
     );
+    return array_merge($specsParent, $specs);
   }
 
   function getHelpedFields(){

@@ -103,13 +103,15 @@ class CCatalogueLabo extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "pere_id"     => "ref class|CCatalogueLabo",
       "function_id" => "ref class|CFunctions",
       "identifiant" => "str maxLength|10 notNull",
       "libelle"     => "str notNull",
       "obsolete"    => "bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getBackRefs() {

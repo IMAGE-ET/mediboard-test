@@ -60,13 +60,15 @@ class CModule extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "mod_name"      => "notNull str maxLength|20",
       "mod_type"      => "notNull enum list|core|user",
       "mod_version"   => "notNull str maxLength|6",
       "mod_ui_active" => "num length|1", // should be "bool"
       "mod_ui_order"  => "num"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

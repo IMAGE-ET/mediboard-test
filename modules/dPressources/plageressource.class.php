@@ -51,7 +51,8 @@ class CPlageressource extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "prat_id" 		=> "ref class|CMediusers",
       "date"    		=> "notNull date",
       "debut"   		=> "notNull time",
@@ -62,6 +63,7 @@ class CPlageressource extends CMbObject {
       "_date_min" 		=> "date",
       "_date_max" 		=> "date moreEquals|_date_min"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

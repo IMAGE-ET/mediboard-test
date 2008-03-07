@@ -40,7 +40,8 @@ class CGestionCab extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "function_id"      => "notNull ref class|CFunctions",
       "libelle"          => "notNull str",
       "date"             => "notNull date",
@@ -52,6 +53,7 @@ class CGestionCab extends CMbObject {
       "_date_min" 		 => "date",
       "_date_max" 		 => "date moreThan|_date_min"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

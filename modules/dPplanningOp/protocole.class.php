@@ -52,7 +52,8 @@ class CProtocole extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chir_id"         => "notNull ref class|CMediusers",
       "type"            => "enum list|comp|ambu|exte|seances|ssr|psy default|comp",
       "DP"              => "code cim10",
@@ -73,6 +74,7 @@ class CProtocole extends CMbObject {
       "hour_op" => "", 
       "min_op" => "", 
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

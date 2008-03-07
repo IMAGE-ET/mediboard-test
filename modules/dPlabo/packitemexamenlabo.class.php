@@ -44,10 +44,12 @@ class CPackItemExamenLabo extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "pack_examens_labo_id" => "ref class|CPackExamensLabo notNull",
       "examen_labo_id"       => "ref class|CExamenLabo notNull"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

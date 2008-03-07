@@ -66,7 +66,8 @@ class CFunctions extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "group_id" => "notNull ref class|CGroups",
       "type"     => "notNull enum list|administratif|cabinet",
       "text"     => "notNull str confidential",
@@ -78,6 +79,7 @@ class CFunctions extends CMbObject {
       "fax"      => "numchar length|10",
       "soustitre"=> "text"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

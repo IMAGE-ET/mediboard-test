@@ -63,7 +63,8 @@ class CAideSaisie extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "user_id"      => "ref xor|function_id class|CMediusers",
       "function_id"  => "ref xor|user_id class|CFunctions",
       "class"        => "notNull str",
@@ -72,6 +73,7 @@ class CAideSaisie extends CMbObject {
       "text"         => "notNull text",
       "depend_value" => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefsFwd() {

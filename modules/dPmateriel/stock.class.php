@@ -34,12 +34,14 @@ class CStock extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "materiel_id" => "notNull ref class|CMateriel",
       "group_id"    => "notNull ref class|CGroups",
       "seuil_cmd"   => "notNull num pos",
       "quantite"    => "num min|0"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

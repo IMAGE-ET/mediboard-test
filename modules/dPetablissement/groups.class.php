@@ -75,7 +75,8 @@ class CGroups extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "text"                => "notNull str confidential",
       "raison_sociale"      => "str maxLength|50",
       "adresse"             => "text confidential",
@@ -92,6 +93,7 @@ class CGroups extends CMbObject {
       "fax"                 => "numchar length|10",
       "web"                 => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

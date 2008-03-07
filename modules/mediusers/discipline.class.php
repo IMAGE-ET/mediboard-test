@@ -87,10 +87,12 @@ class CDiscipline extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "text"      => "notNull str",
       "categorie" => "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

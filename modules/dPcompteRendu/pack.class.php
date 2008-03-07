@@ -36,12 +36,14 @@ class CPack extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chir_id" => "notNull ref class|CMediusers",
       "nom"     => "notNull str confidential",
       "modeles" => "text",
       "object_class" => "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour default|COperation"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefsFwd() {

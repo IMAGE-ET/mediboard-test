@@ -54,8 +54,8 @@ class CPlageconsult extends CMbObject {
   }
 
   function getSpecs() {
-    $specs = parent::getSpec();
-    return array_merge($specs, array (
+    $parentSpecs = parent::getSpecs();
+    $specs = array (
       "chir_id" => "notNull ref class|CMediusers",
       "date"    => "notNull date",
       "freq"    => "notNull time",
@@ -72,7 +72,8 @@ class CPlageconsult extends CMbObject {
       "_affected"  => "",
       "_total"     => "",
       "_fill_rate" => "",
-    ));
+    );
+    return array_merge($parentSpecs, $specs);
   }
   
   function getSeeks() {

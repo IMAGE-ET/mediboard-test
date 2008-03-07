@@ -35,7 +35,8 @@ class CExamNyha extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "consultation_id" => "notNull ref class|CConsultation",
       "q1"              => "bool",
       "q2a"             => "bool",
@@ -46,6 +47,7 @@ class CExamNyha extends CMbObject {
       
       "_classeNyha" => "",
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

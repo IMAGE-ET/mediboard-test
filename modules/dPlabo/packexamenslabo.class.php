@@ -35,12 +35,14 @@ class CPackExamensLabo extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "code"         => "num",
       "function_id"  => "ref class|CFunctions",
       "libelle"      => "str notNull",
       "obsolete"     => "bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getBackRefs() {

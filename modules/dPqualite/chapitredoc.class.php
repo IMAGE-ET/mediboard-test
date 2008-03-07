@@ -45,12 +45,14 @@ class CChapitreDoc extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "pere_id"  => "ref class|CChapitreDoc",
       "group_id" => "ref class|CGroups",
       "nom"      => "notNull str maxLength|50",
       "code"     => "notNull str maxLength|10"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

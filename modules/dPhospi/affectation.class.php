@@ -52,7 +52,8 @@ class CAffectation extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "lit_id"       => "notNull ref class|CLit",
       "sejour_id"    => "ref class|CSejour cascade",
       "entree"       => "notNull dateTime",
@@ -61,7 +62,8 @@ class CAffectation extends CMbObject {
       "confirme"     => "bool",
       "effectue"     => "bool",
       "rques"        => "text"
-      );
+    );
+    return array_merge($specsParent, $specs);
   }
 
   function loadView() {

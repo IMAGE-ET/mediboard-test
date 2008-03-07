@@ -29,11 +29,13 @@ class CElementPrescription extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "category_prescription_id" => "notNull ref class|CCategoryPrescription",
       "libelle"      => "notNull str",
       "description"  => "text"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields(){

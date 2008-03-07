@@ -63,7 +63,8 @@ class CParamsPaie extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "employecab_id" => "notNull ref class|CEmployeCab",
       "smic"          => "notNull currency|min|0",
       "csgds"         => "notNull pct",
@@ -90,6 +91,7 @@ class CParamsPaie extends CMbObject {
       "ape"           => "str maxLength|6 confidential",
       "matricule"     => "code insee confidential"
     );
+    return array_merge($specsParent, $specs);
   }
 
   // Forward references

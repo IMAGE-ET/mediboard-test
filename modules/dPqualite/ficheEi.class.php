@@ -71,7 +71,8 @@ class CFicheEi extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "user_id"                      => "notNull ref class|CMediusers",    
       "date_fiche"                   => "notNull dateTime",
       "date_incident"                => "notNull dateTime",
@@ -109,6 +110,7 @@ class CFicheEi extends CMbObject {
       "qualite_date_verification"    => "date",
       "qualite_date_controle"        => "date"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefsAuthor(){

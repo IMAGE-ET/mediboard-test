@@ -34,7 +34,8 @@ class CPrescriptionLaboExamen extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "prescription_labo_id" => "ref class|CPrescriptionLabo notNull",
       "examen_labo_id"       => "ref class|CExamenLabo notNull",
       "pack_examens_labo_id" => "ref class|CPackExamensLabo",
@@ -42,6 +43,7 @@ class CPrescriptionLaboExamen extends CMbObject {
       "date"                 => "date",
       "commentaire"          => "text"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getHelpedFields() {

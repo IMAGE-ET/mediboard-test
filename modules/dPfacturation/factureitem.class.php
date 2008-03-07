@@ -31,13 +31,15 @@ class CFactureItem extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "facture_id"  => "notNull ref class|CFacture",
       "libelle"     => "notNull text",
       "prix_ht"     => "notNull currency",
       "taxe"        => "notNull pct",
       "_ttc"		=> "currency",
     );
+    return array_merge($specsParent, $specs);
   }
 
   function getHelpedFields() {

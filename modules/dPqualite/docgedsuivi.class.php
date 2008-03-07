@@ -35,7 +35,8 @@ class CDocGedSuivi extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "user_id"          => "notNull ref class|CMediusers",
       "doc_ged_id"       => "notNull ref class|CDocGed",
       "file_id"          => "ref class|CFile",
@@ -44,6 +45,7 @@ class CDocGedSuivi extends CMbObject {
       "date"             => "dateTime",
       "actif"            => "bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefsFwd() {

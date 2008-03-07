@@ -34,10 +34,12 @@ class CSpecCPAM extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "text"  => "notNull str",
       "actes" => "notNull str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

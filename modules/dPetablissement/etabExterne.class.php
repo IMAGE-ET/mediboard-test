@@ -52,7 +52,8 @@ class CEtabExterne extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "nom"            => "notNull str confidential",
       "raison_sociale" => "str maxLength|50",
       "adresse"        => "text confidential",
@@ -64,6 +65,7 @@ class CEtabExterne extends CMbObject {
       "siret"          => "str length|14",
       "ape"            => "str maxLength|6 confidential"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

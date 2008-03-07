@@ -29,11 +29,13 @@ class CCategoryPrescription extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chapitre" => "notNull enum list|dmi|labo|imagerie|consult|kine|soin",
       "nom"      => "notNull str",
       "description" => "text"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields(){

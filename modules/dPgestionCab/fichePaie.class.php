@@ -68,7 +68,8 @@ class CFichePaie extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "params_paie_id" => "notNull ref class|CParamsPaie",
       "debut"          => "notNull date",
       "fin"            => "notNull date moreEquals|debut",
@@ -81,6 +82,7 @@ class CFichePaie extends CMbObject {
       "conges_payes"   => "notNull pct",
       "prime_speciale" => "notNull currency min|0"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

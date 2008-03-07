@@ -38,12 +38,14 @@ class CPrescriptionLine extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "prescription_id" => "notNull ref class|CPrescription cascade",
       "code_cip"        => "notNull numchar|7",
       "no_poso"         => "num max|128",
       "commentaire"     => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

@@ -42,11 +42,13 @@ class CService extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "group_id"    => "notNull ref class|CGroups",
       "nom"         => "notNull str",
       "description" => "text confidential"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

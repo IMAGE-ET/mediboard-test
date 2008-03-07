@@ -33,9 +33,11 @@ class CEiCategorie extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "nom" => "notNull str maxLength|50"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefsBack() {

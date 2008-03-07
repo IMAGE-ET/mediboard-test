@@ -49,7 +49,8 @@ class CMenu extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "nom"         => "notNull str",
       "group_id"    => "notNull ref class|CGroups",
       "typerepas"   => "notNull ref class|CTypeRepas",
@@ -68,6 +69,7 @@ class CMenu extends CMbObject {
       "repetition"  => "notNull num pos",
       "nb_repet"    => "notNull num pos"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadByDate($date, $typerepas_id = null){

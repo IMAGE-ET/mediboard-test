@@ -73,6 +73,8 @@ class CUser extends CMbObject {
 
   function getSpecs() {
     global $dPconfig;
+    
+  	$specsParent = parent::getSpecs();
      
     $specs = array (
       "user_username"   => "notNull str maxLength|20",
@@ -101,8 +103,8 @@ class CUser extends CMbObject {
       $specs['_user_password'] .= '6 notContaining|user_username alphaAndNum';
       else
       $specs['_user_password'] .= 4;
-       
-      return $specs;
+
+      return array_merge($specsParent, $specs);
   }
 
   function getSeeks() {

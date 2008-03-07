@@ -49,11 +49,13 @@ class CChambre extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "service_id"       => "notNull ref class|CService",
       "nom"              => "notNull str",
       "caracteristiques" => "text confidential"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

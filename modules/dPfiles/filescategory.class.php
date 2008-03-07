@@ -32,10 +32,12 @@ class CFilesCategory extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
-      "nom"               => "notNull str",
-      "class"             => "str"
+  	$specsParent = parent::getSpecs();
+    $specs = array (
+      "nom"   => "notNull str",
+      "class" => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

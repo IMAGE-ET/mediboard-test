@@ -61,7 +61,8 @@ class CDocGed extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "group_id"         => "ref class|CGroups",
       "user_id"          => "ref class|CMediusers",
       "doc_chapitre_id"  => "ref class|CChapitreDoc",
@@ -73,6 +74,7 @@ class CDocGed extends CMbObject {
       "annule"           => "bool",
       "num_ref"          => "num"
     );
+    return array_merge($specsParent, $specs);
   }
 
   function getEtatRedac() {

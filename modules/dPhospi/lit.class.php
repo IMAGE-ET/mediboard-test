@@ -43,10 +43,12 @@ class CLit extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chambre_id" => "notNull ref class|CChambre",
       "nom"        => "notNull str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

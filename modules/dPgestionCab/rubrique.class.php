@@ -34,10 +34,12 @@ class CRubrique extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "function_id" => "ref class|CFunctions",
       "nom"         => "notNull str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

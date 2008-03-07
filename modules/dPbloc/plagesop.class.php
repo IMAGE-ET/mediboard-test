@@ -66,7 +66,8 @@ class CPlageOp extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chir_id"          => "ref xor|spec_id class|CMediusers",
       "anesth_id"        => "ref class|CMediusers",
       "spec_id"          => "ref xor|chir_id class|CFunctions",
@@ -77,6 +78,7 @@ class CPlageOp extends CMbObject {
       "temps_inter_op"   => "notNull time",
       "max_intervention" => "num"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefs($annulee = 1) {

@@ -38,12 +38,14 @@ class CFacture extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "date"         => "notNull date",
-      "prix"		 => "currency",
+      "prix"         => "currency",
       "sejour_id"    => "notNull ref class|CSejour",
-      "_total"		 => "currency",
+      "_total"       => "currency",
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

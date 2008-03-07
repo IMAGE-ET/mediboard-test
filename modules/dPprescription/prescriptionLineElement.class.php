@@ -28,11 +28,13 @@ class CPrescriptionLineElement extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "element_prescription_id" => "notNull ref class|CElementPrescription cascade",
       "prescription_id"         => "notNull ref class|CPrescription",
       "commentaire"             => "str"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function loadRefElement(){

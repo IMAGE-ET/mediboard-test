@@ -32,10 +32,12 @@ class CCategorieDoc extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "nom"  => "notNull str maxLength|50",
       "code" => "notNull str maxLength|1"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

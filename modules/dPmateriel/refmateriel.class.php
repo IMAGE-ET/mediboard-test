@@ -40,12 +40,14 @@ class CRefMateriel extends CMbObject {
  }
  
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "fournisseur_id" => "notNull ref class|CFournisseur",
       "materiel_id"    => "notNull ref class|CMateriel",
       "quantite"       => "notNull num pos",
       "prix"           => "notNull float"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

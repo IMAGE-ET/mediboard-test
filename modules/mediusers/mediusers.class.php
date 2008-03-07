@@ -80,9 +80,9 @@ class CMediusers extends CMbObject {
   function getSpecs() {
     global $dPconfig;
      
-    $specs = parent::getSpecs();
+    $parentSpecs = parent::getSpecs();
     
-    $specs2 = array (
+    $specs = array (
       "remote"        => "bool",
       "adeli"         => "numchar length|9 confidential",
       "function_id"   => "notNull ref class|CFunctions",
@@ -113,16 +113,15 @@ class CMediusers extends CMbObject {
     );
       
     // @TODO refactor with only $spec["propName"] = "propSpec" syntax
-    $specs = array_merge($specs, $specs2);
 
-    $specs['_user_password'] = 'password minLength|';
+    $specs["_user_password"] = "password minLength|";
 
-    if ($dPconfig['admin']['CUser']['strong_password'] == '1')
-    $specs['_user_password'] .= '6 notContaining|_user_username alphaAndNum';
+    if ($dPconfig["admin"]["CUser"]["strong_password"] == "1")
+      $specs["_user_password"] .= "6 notContaining|_user_username alphaAndNum";
     else
-    $specs['_user_password'] .= 4;
-     
-    return $specs;
+      $specs["_user_password"] .= 4;
+
+    return array_merge($parentSpecs, $specs);
   }
 
   function getSeeks() {

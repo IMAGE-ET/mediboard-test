@@ -52,7 +52,8 @@ class CPrescriptionLabo extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "patient_id"   => "ref class|CPatient notNull",
       "praticien_id" => "ref class|CMediusers notNull",
       "date"         => "dateTime",
@@ -60,6 +61,7 @@ class CPrescriptionLabo extends CMbObject {
       "validee"      => "bool",
       "urgence"      => "bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getBackRefs() {

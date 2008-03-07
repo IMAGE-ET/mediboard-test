@@ -186,9 +186,9 @@ class CPatient extends CMbObject {
   }
  
   function getSpecs() {
+    global $dPconfig;
   	
     $specs = parent::getSpecs();
-    global $dPconfig;
     
     $specs["nom"]               = "notNull str confidential";
     $specs["prenom"]            = "notNull str";

@@ -37,11 +37,13 @@ class CSalle extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "group_id" => "notNull ref class|CGroups",
       "nom"      => "notNull str",
       "stats"    => "notNull bool"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

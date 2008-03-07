@@ -32,13 +32,15 @@ class CTempsPrepa extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "chir_id"        => "ref class|CMediusers",
       "nb_plages"      => "num pos",
       "nb_prepa"       => "num pos",
       "duree_moy"      => "time",
       "duree_ecart"    => "time"
     );
+    return array_merge($specsParent, $specs);
   }  	
   
   function loadRefsFwd(){ 

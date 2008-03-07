@@ -41,7 +41,8 @@ class CEmployeCab extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "function_id" => "notNull ref class|CFunctions",
       "nom"         => "notNull str",
       "prenom"      => "notNull str",
@@ -50,6 +51,7 @@ class CEmployeCab extends CMbObject {
       "ville"       => "str",
       "cp"          => "numchar length|5 confidential"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function getSeeks() {

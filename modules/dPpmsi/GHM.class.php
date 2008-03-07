@@ -77,12 +77,14 @@ class CGHM  extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "sejour_id" => "notNull ref class|CSejour",
       "DR"        => "str maxLength|10",
       "DASs"      => "text",
       "DADs"      => "text"
     );
+    return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {

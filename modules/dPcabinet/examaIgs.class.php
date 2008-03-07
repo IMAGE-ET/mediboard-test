@@ -44,7 +44,8 @@ class CExamIgs extends CMbObject {
   
   
   function getSpecs() {
-    return array (
+  	$specsParent = parent::getSpecs();
+    $specs = array (
       "consultation_id"     => "notNull ref class|CConsultation",
       "age"                 => "enum list|0|7|12|15|16|18",
       "FC"                  => "enum list|11|2|0|4|7",
@@ -63,6 +64,7 @@ class CExamIgs extends CMbObject {
       "admission"           => "enum list|0|6|8",
       "scoreIGS"            => "num"
     );
+    return array_merge($specsParent, $specs);
   }
 
   function loadRefsFwd() {
