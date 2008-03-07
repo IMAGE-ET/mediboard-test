@@ -1248,6 +1248,7 @@ class CMbObject {
   function getSpecs() {
     return array(
       "_view" => "str",
+      "$this->_tbl_key" => "ref class|$this->_class_name"
     );
   }
   
