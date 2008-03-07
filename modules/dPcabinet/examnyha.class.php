@@ -42,7 +42,9 @@ class CExamNyha extends CMbObject {
       "q2b"             => "bool",
       "q3a"             => "bool",
       "q3b"             => "bool",
-      "hesitation"      => "notNull bool"
+      "hesitation"      => "notNull bool",
+      
+      "_classeNyha" => "",
     );
   }
   

@@ -63,19 +63,19 @@ class CConsultAnesth extends CMbObject {
   var $_min_tsivy    = null;
   var $_sec_tca      = null;
   var $_min_tca      = null;
-
+  var $_intub_difficile = null;
+  var $_clairance       = null;
+  var $_imc             = null;
+  var $_imc_valeur      = null;
+  var $_vst             = null;
+  var $_psa             = null;
+  
   // Object References
   var $_ref_consultation       = null;
   var $_ref_techniques         = null;
   var $_ref_last_consultanesth = null;
   var $_ref_operation          = null;
   var $_ref_plageconsult       = null;
-  var $_intub_difficile        = null;
-  var $_clairance              = null;
-  var $_imc                    = null;
-  var $_imc_valeur             = null;
-  var $_vst                    = null;
-  var $_psa                    = null;
 
   function CConsultAnesth() {
     $this->CMbObject("consultation_anesth", "consultation_anesth_id");
@@ -137,6 +137,14 @@ class CConsultAnesth extends CMbObject {
     $specs["etatBucco"]        = "text";
     $specs["conclusion"]       = "text";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
+    
+    // Champs dérivés
+    $specs["_intub_difficile"] = "";
+    $specs["_clairance"]       = "";
+    $specs["_imc"]             = "";
+    $specs["_imc_valeur"]      = "";
+    $specs["_vst"]             = "";
+    $specs["_psa"]             = "";
 
     return $specs;
   }

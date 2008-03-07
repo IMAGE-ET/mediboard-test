@@ -169,6 +169,8 @@ class CConsultation extends CCodable {
     $specs["_type_affichage"]   = "enum list|complete|totaux";
     $specs["_coordonnees"]      = "bool default|0";
     $specs["_prat_id"]          = "text";
+    $specs["_check_premiere"]   = "";
+    $specs["_check_adresse"]    = "";
     $specs["_somme"]            = "currency";
     $specs["valide"]            = "bool";
     $specs["total_amo"]         = "currency";

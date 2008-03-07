@@ -59,7 +59,8 @@ class CMedecin extends CMbObject {
   }
     
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       "nom"             => "notNull str confidential",
       "prenom"          => "notNull str confidential",
       "jeunefille"      => "str confidential",
@@ -72,7 +73,7 @@ class CMedecin extends CMbObject {
       "disciplines"     => "text confidential",
       "orientations"    => "text confidential",
       "complementaires" => "text confidential"
-    );
+    ));
   }
   
   function getSeeks() {

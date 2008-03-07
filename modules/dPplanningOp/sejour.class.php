@@ -193,6 +193,9 @@ class CSejour extends CCodable {
     $specs["_filter_type"]    = "enum list|comp|ambu|exte|seances|ssr|psy";
     $specs["_num_dossier"]    = "str";
     $specs["_ccam_libelle"]   = "bool default|1";
+    $specs["_duree_prevue"]   = "num";
+    $specs["_date_entree_prevue"]  = "date";
+    $specs["_date_sortie_prevue"]  = "date";
     return $specs;
   }
   

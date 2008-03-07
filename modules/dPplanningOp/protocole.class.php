@@ -69,7 +69,9 @@ class CProtocole extends CMbObject {
       "pathologie"      => "str length|3",
       "septique"        => "bool",
       "codes_ccam"      => "str",
-      "temp_operation"  => "time"
+      "temp_operation"  => "time",
+      "hour_op" => "", 
+      "min_op" => "", 
     );
   }
   

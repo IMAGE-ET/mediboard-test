@@ -9,9 +9,10 @@
 
 /**
  * Utility function to return a value from a named array or a specified default
+ * array should always be passed by reference
  */
-function dPgetParam($arr, $name, $def=null ) {
-  return isset($arr[$name]) ? $arr[$name] : $def;
+function dPgetParam(&$arr, $name, $def = null) {
+  return isset( $arr[$name] ) ? $arr[$name] : $def;
 }
 
 

@@ -164,7 +164,9 @@ class COperation extends CCodable {
     $specs["_prat_id"]       = "text";
     $specs["_specialite"]    = "text";
     $specs["_ccam_libelle"]  = "bool default|1";
-
+    $specs["_hour_op"]       = "";
+    $specs["_min_op"]        = "";
+    
     $specs["_datetime"]  = "dateTime";
     return $specs;
   }

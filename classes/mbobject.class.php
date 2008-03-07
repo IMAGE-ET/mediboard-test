@@ -1246,7 +1246,9 @@ class CMbObject {
    * Get seek specifications
    */
   function getSpecs() {
-    return array();
+    return array(
+      "_view" => "str",
+    );
   }
   
   /**

@@ -48,7 +48,8 @@ class CTarif extends CMbObject {
       "secteur2"    => "currency",
       "codes_ccam"  => "str",
       "codes_ngap"  => "str",
-      "_somme"      => "currency"
+      "_somme"      => "currency",
+      "_type"       => "",
     );
   }
   
@@ -62,10 +63,10 @@ class CTarif extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->description; 	 
     
-    if($this->chir_id == null)
-      $_type = "chir";
+    if ($this->chir_id == null)
+      $this->_type = "chir";
     else
-      $_type = "function";
+      $this->_type = "function";
   }
   
   function updateDBFields() {

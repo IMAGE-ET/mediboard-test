@@ -67,7 +67,8 @@ class CExamPossum extends CMbObject {
   }
   
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       "consultation_id"      => "notNull ref class|CConsultation",
       "age"                  => "enum list|inf60|61|sup71",
       "ouverture_yeux"       => "enum list|spontane|bruit|douleur|jamais",
@@ -88,8 +89,17 @@ class CExamPossum extends CMbObject {
       "pertes_sanguines"     => "enum list|inf100|101|501|sup1000",
       "contam_peritoneale"   => "enum list|aucune|mineure|purulente|diffusion",
       "cancer"               => "enum list|absense|tumeur|ganglion|metastases",
-      "circonstances_interv" => "enum list|reglee|urg|prgm|sansdelai"
-    );
+      "circonstances_interv" => "enum list|reglee|urg|prgm|sansdelai",
+      
+      // Form Fields
+      "_glasgow"             => "",
+      "_score_physio"        => "",
+      "_score_oper"          => "",
+      "_morbidite"           => "",
+      "_mortalite"           => "",
+      "_score_possum_oper"   => "",
+      "_score_possum_physio" => "",
+    ));
   }
   
   function getScorePhysio(){
