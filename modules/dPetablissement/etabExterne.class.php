@@ -63,7 +63,19 @@ class CEtabExterne extends CMbObject {
       "fax"            => "numchar length|10",
       "finess"         => "numchar length|9",
       "siret"          => "str length|14",
-      "ape"            => "str maxLength|6 confidential"
+      "ape"            => "str maxLength|6 confidential",
+      
+      "_tel1" => "num length|2",
+      "_tel2" => "num length|2",
+      "_tel3" => "num length|2",
+      "_tel4" => "num length|2",
+      "_tel5" => "num length|2",
+      
+      "_fax1" => "num length|2",
+      "_fax2" => "num length|2",
+      "_fax3" => "num length|2",
+      "_fax4" => "num length|2",
+      "_fax5" => "num length|2",
     );
     return array_merge($specsParent, $specs);
   }

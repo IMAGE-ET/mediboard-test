@@ -91,7 +91,25 @@ class CGroups extends CMbObject {
       "ape"                 => "str maxLength|6 confidential",
       "mail"                => "email",
       "fax"                 => "numchar length|10",
-      "web"                 => "str"
+      "web"                 => "str",
+      
+      "_tel_anesth1" => "num length|2",
+      "_tel_anesth2" => "num length|2",
+      "_tel_anesth3" => "num length|2",
+      "_tel_anesth4" => "num length|2",
+      "_tel_anesth5" => "num length|2",
+      
+      "_tel1" => "num length|2",
+      "_tel2" => "num length|2",
+      "_tel3" => "num length|2",
+      "_tel4" => "num length|2",
+      "_tel5" => "num length|2",
+      
+      "_fax1" => "num length|2",
+      "_fax2" => "num length|2",
+      "_fax3" => "num length|2",
+      "_fax4" => "num length|2",
+      "_fax5" => "num length|2",
     );
     return array_merge($specsParent, $specs);
   }

@@ -77,11 +77,11 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$etabExterne field="_tel1" defaultFor="_tel1"}}</th>
 		    <td>
-		      {{mb_field object=$etabExterne field="_tel1" tabindex="6" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel2" tabindex="7" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel3" tabindex="8" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel4" tabindex="9" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel5" tabindex="10" size="2" maxlength="2" prop="num length|2"}}
+		      {{mb_field object=$etabExterne field="_tel1" tabindex="6" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel2" tabindex="7" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel3" tabindex="8" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel4" tabindex="9" onkeyup="followUp(event)"}} -
+		      {{mb_field object=$etabExterne field="_tel5" tabindex="10"}}
 		    </td>
         </tr>
         <tr>
