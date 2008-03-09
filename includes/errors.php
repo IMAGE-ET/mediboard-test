@@ -193,7 +193,7 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   $contexts = debug_backtrace();
   array_shift($contexts);
   foreach($contexts as $context) {
-    $function = isset($context["class"]) ? $context["class"] . "::" : "";
+    $function = isset($context["class"]) ? $context["class"] . ":" : "";
     $function.= $context["function"] . "()";
     
     $log .= "\n<strong>Function: </strong>" . $function;

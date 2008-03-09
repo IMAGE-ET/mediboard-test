@@ -393,14 +393,7 @@ class CConsultation extends CCodable {
       return $msg;
     }  
   }
-  
-  function loadRefPrescription(){
-  	$this->_ref_prescription = new CPrescription();
-  	$this->_ref_prescription->object_id = $this->_id;
-  	$this->_ref_prescription->object_class = "CConsultation";
-  	$this->_ref_prescription->loadMatchingObject();
-  }
-  
+    
   /**
    * Create a LogicMaxFSE from the consult
    * Conterpart to Bind FSE

@@ -52,15 +52,20 @@ class CCodable extends CMbObject {
     $this->_text_codes_ccam = str_replace("|", ", ", $this->codes_ccam);
     $this->_codes_ccam = $this->codes_ccam ? 
       explode("|", $this->codes_ccam) : 
-      array(); 
- 
+      array();
   }
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["actes_ngap"] = "CActeNGAP object_id";
     $backRefs["actes_ccam"] = "CActeCCAM object_id";
+    $backRefs["prescriptions"] = "CPrescription object_id";
+    
     return $backRefs;
+  }
+
+  function loadRefPrescription() {
+  	$this->_ref_prescription = $this->loadUniqueBackRef("prescriptions");
   }
   
   function getAssociationCodesActes() {

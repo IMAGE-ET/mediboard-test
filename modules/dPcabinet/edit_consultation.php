@@ -106,9 +106,11 @@ if ($consult->_id) {
   $consult->loadRefs();
   
   $consult->loadRefPrescription();
-  if($consult->_ref_prescription->_id){
-    $consult->_ref_prescription->loadRefsLines();
-    $consult->_ref_prescription->loadRefsLinesElementByCat();
+  if ($prescription =& $consult->_ref_prescription) {
+	  if ($prescription->_id){
+	    $prescription->loadRefsLines();
+	    $prescription->loadRefsLinesElementByCat();
+	  }
   }
   $consult->loadAides($userSel->user_id);
   

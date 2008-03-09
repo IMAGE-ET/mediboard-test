@@ -9,10 +9,15 @@
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $prescription = new CPrescription();
+if (!$prescription->_ref_module) {
+  CAppUI::stepAjax("Module Prescriptions non installé", UI_MSG_WARNING);
+  return;
+}
+
 $prescription->load($prescription_id);
 
 // Chargement des lignes de prescriptions
-if($prescription->_id){
+if ($prescription->_id){
   $prescription->loadRefsLines();
   $prescription->loadRefsLinesElementByCat();
 }

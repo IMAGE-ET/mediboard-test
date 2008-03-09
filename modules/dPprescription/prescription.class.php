@@ -92,7 +92,7 @@ class CPrescription extends CMbObject {
     $where = array("prescription_id" => "= $this->_id");
     $order = "prescription_line_element_id";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order);
-    foreach($this->_ref_prescription_lines_element as &$line_element){
+    foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
     }
   }

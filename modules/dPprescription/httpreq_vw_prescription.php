@@ -22,7 +22,7 @@ $element_id = mbGetValueFromGetOrSession("element_id");
 $category = null;
 
 
-if($element_id){
+if ($element_id){
   $element = new CElementPrescription();
   $element->load($element_id);
   $element->loadRefCategory();

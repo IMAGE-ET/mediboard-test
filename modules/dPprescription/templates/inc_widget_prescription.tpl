@@ -7,6 +7,7 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 
 </script>
 
+{{if $prescription}}
 <div id="prescription-{{$suffixe}}">
   <!-- Pas de prescription -->
   {{if !$prescription->_id}}
@@ -34,3 +35,10 @@ Prescription.suffixes = Prescription.suffixes.uniq();
   </ul>
   {{/if}}
 </div>
+
+{{else}}
+<div class="warning">
+  Module Prescriptions non installé
+</div>
+{{/if}}
+

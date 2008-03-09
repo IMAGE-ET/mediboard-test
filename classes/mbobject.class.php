@@ -960,11 +960,12 @@ class CMbObject {
       return null;
     }
 
-    if (count($backRefs) > 1) {
-      trigger_error("'$backName' back reference should be unique for object of class '$this->_view'", E_USER_WARNING);
+    $count = count($backRefs);
+    if ($count > 1) {
+      trigger_error("'$backName' back reference should be unique (actually $count) for object of class '$this->_view'", E_USER_WARNING);
     }
     
-    if (!count($backRefs)) {
+    if (!$count) {
       $backSpec = $this->_backSpecs[$backName];
       return new $backSpec->class;
     }

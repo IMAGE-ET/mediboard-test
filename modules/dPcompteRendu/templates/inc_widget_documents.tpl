@@ -95,6 +95,8 @@ Document.refreshList = function() {
       {{$document->nom}}
     </span>
   </li>
+  {{foreachelse}}
+  <li><em>Aucun document</em></li>
   {{/foreach}}
 </ul>
 
