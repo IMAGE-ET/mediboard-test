@@ -250,10 +250,16 @@ Main.add( function(){
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
-  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
+  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" readonly="readonly"
+  	  {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
+  	    ondblclick="PatSelector.init()"
+  	  {{/if}}
+  	/>
   </td>
   <td colspan="2" class="button">
+    {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
   	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+  	{{/if}}
     <script type="text/javascript">
       PatSelector.init = function(){
         bOldPat = document.editSejour.patient_id.value;

@@ -180,6 +180,7 @@ $dPconfig["dPplanningOp"]["COperation"] = array (
 );
   
 $dPconfig["dPplanningOp"]["CSejour"] = array (
+  "patient_id"          => "1",
   "modif_SHS"           => "1",
   "heure_deb"           => "0",
   "heure_fin"           => "23",

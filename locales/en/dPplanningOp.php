@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-CSejour-modif_SHS'] = '';
+$locales['config-dPplanningOp-CSejour-patient_id'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';
@@ -52,6 +52,7 @@ $locales['config-dPplanningOp-COperation-min_intervalle'] = '';
 $locales['config-dPplanningOp-CSejour-heure_deb'] = '';
 $locales['config-dPplanningOp-CSejour-heure_fin'] = '';
 $locales['config-dPplanningOp-CSejour-min_intervalle'] = '';
+$locales['config-dPplanningOp-CSejour-modif_SHS'] = '';
 $locales['config-dPplanningOp-CSejour-tag_dossier'] = '';
 $locales['COperation'] = '';
 $locales['COperation-anapath'] = '';

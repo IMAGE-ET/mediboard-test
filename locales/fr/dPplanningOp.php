@@ -1,5 +1,5 @@
 <?php
-$locales['config-dPplanningOp-CSejour-modif_SHS'] = 'Dépréparation des dossiers';
+$locales['config-dPplanningOp-CSejour-patient_id'] = 'Possibilité de modifier le patient d\'un séjour';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';
@@ -52,6 +52,7 @@ $locales['config-dPplanningOp-COperation-min_intervalle'] = 'Subdivision des heu
 $locales['config-dPplanningOp-CSejour-heure_deb'] = 'Heure début de séjour';
 $locales['config-dPplanningOp-CSejour-heure_fin'] = 'Heure fin de séjour';
 $locales['config-dPplanningOp-CSejour-min_intervalle'] = 'Subdivision des heures';
+$locales['config-dPplanningOp-CSejour-modif_SHS'] = 'Dépréparation des dossiers';
 $locales['config-dPplanningOp-CSejour-tag_dossier'] = 'Tag numéro de dossier';
 $locales['COperation'] = 'Opération';
 $locales['COperation-anapath'] = '';

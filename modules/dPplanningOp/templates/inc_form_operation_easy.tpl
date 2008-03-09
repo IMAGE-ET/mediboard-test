@@ -125,16 +125,22 @@
 
   <!-- Selection du patient -->
   <tr>
-   <th>
-    <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
-    {{mb_label object=$sejour field="patient_id"}}
-   </th>
-  <td class="readonly">
-  	<input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
-  </td>
-  <td colspan="2" class="button">
-  	<button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-   </td>
+    <th>
+      <input type="hidden" name="patient_id" class="notNull {{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat()" />
+      {{mb_label object=$sejour field="patient_id"}}
+    </th>
+    <td class="readonly">
+  	  <input type="text" name="_patient_view" size="30" value="{{$patient->_view}}" readonly="readonly"
+  	    {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
+  	      ondblclick="PatSelector.init()"
+  	    {{/if}}
+  	  />
+    </td>
+    <td colspan="2" class="button">
+      {{if $dPconfig.dPplanningOp.CSejour.patient_id || !$sejour->_id || $app->user_type == 1}}
+      <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+      {{/if}}
+    </td>
   </tr>
   
   <!-- Selection du type de chambre -->
