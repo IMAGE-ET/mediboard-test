@@ -255,39 +255,49 @@ function pageMain() {
               {{mb_field object=$mediuserSel field="_compte_cle"}}
           </td>
         </tr>
+        
+        {{if $banques}}
+        <!-- Choix de la banque quand disponible -->
         <tr>
-          <th>
-            {{mb_label object=$mediuserSel field="banque_id"}}
-          </th>
+          <th>{{mb_label object=$mediuserSel field="banque_id"}}</th>
           <td>
-          <select name="banque_id">
-          <option value="">&mdash; Choix d'une banque</option>
-          {{foreach from=$banques item="banque"}}
-            <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
-          {{/foreach}}
-          </select>
+	          <select name="banque_id">
+		          <option value="">&mdash; Choix d'une banque</option>
+		          {{foreach from=$banques item="banque"}}
+	            <option value="{{$banque->_id}}" {{if $mediuserSel->banque_id == $banque->_id}}selected = "selected"{{/if}}>
+	            	{{$banque->_view}}
+	            </option>
+		          {{/foreach}}
+	          </select>
           </td>
         </tr>
+        {{/if}}
+
         <tr>
           <th>{{mb_label object=$mediuserSel field="adeli"}}</th>
           <td>{{mb_field object=$mediuserSel field="adeli"}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$mediuserSel field="titres"}}</th>
           <td>{{mb_field object=$mediuserSel field="titres"}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_email"}}</th>
           <td>{{mb_field object=$mediuserSel field="_user_email"}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$mediuserSel field="_user_phone"}}</th>
           <td>{{mb_field object=$mediuserSel field="_user_phone"}}</td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$mediuserSel field="commentaires"}}</th>
           <td>{{mb_field object=$mediuserSel field="commentaires"}}</td>
         </tr>
+        
         <tr>
           <td class="button" colspan="2">
             {{if $mediuserSel->user_id}}

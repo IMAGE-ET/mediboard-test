@@ -16,19 +16,19 @@ $mediuserSel = new CMediusers;
 $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 
 // Chargement des banques
-$orderBanque = "nom ASC";
+$order = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, $order);
 
 // Récupération des fonctions
 $groups = new CGroups;
 $order = "text";
 $groups = $groups->loadList(null, $order);
-foreach ($groups as $key => $group) {
-  $groups[$key]->loadRefsBack();
-  foreach($groups[$key]->_ref_functions as $keyFct => $function){
+foreach ($groups as &$group) {
+  $group->loadRefsBack();
+  foreach ($group->_ref_functions as &$function){
     // Récuperation des utilisateurs
-    $groups[$key]->_ref_functions[$keyFct]->loadRefs();
+    $function->loadRefs();
   }
 }
 
@@ -42,7 +42,6 @@ $spec_cpam = $spec_cpam->loadList();
   
 // Récupération des profils
 $where = array (
-  //"user_username" => "LIKE '>> %'"
     "template" => "= '1'"
 );
 $profiles = new CUser();

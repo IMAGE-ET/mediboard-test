@@ -18,9 +18,9 @@ $disciplines = new CDiscipline;
 $disciplines = $disciplines->loadList();
 
 // Chargement des banques
-$orderBanque = "nom ASC";
+$order = "nom ASC";
 $banque = new CBanque();
-$banques = $banque->loadList(null,$orderBanque);
+$banques = $banque->loadList(null, $order);
 
 
 // Récupération des spécialités CPAM

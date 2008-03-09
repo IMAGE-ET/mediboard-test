@@ -344,8 +344,6 @@ class CMbObject {
 
   // One object by ID
   function load($oid = null, $strip = true) {
-    global $dPconfig;
-    
   	if ($oid) {
       $this->_id = $oid;
     }
@@ -392,8 +390,6 @@ class CMbObject {
     }
     
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
-  
-  
   }
   
   /**
@@ -461,7 +457,9 @@ class CMbObject {
    * Object list by a request constructor
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    global $dPconfig;
+    if (!$this->_ref_module) {
+      return null;
+    }
     
   	$request = new CRequest();
     $request->addLJoin($leftjoin);
@@ -479,7 +477,9 @@ class CMbObject {
    * Object count of a list by a request constructor
    */
   function countList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
-    global $dPconfig;
+    if (!$this->_ref_module) {
+      return null;
+    }
     
   	$request = new CRequest();
     $request->addLJoin($leftjoin);
@@ -495,8 +495,6 @@ class CMbObject {
   }
   
   function loadListByReq($request) {
-    global $dPconfig;
-
     $result = $this->loadQueryList($request->getRequest($this));
   	return $result;
   }
@@ -657,6 +655,8 @@ class CMbObject {
 
   function check() {
     global $dPconfig;
+    $debug = $dPconfig["debug"];
+    
     $msg = null;
     $properties = get_object_vars($this);
     
@@ -669,7 +669,7 @@ class CMbObject {
           if(($propValue !== null) || (!$this->_id)) {
             $msgProp = $this->checkProperty($propName);
           
-            $debugInfo = $dPconfig["debug"] ? "(val:'$propValue', spec:'$propSpec')" : "";
+            $debugInfo = $debug ? "(val:'$propValue', spec:'$propSpec')" : "";
             $msg .= $msgProp ? "<br/> => $propName : $msgProp $debugInfo" : null;
           }
         }
@@ -826,7 +826,6 @@ class CMbObject {
    *  @return null|string null if successful otherwise returns and error message
    */
   function store() {
-    global $dPconfig;
   	global $AppUI;
     
     // Properties checking
@@ -923,12 +922,7 @@ class CMbObject {
    */
   function loadBackRefs($backName, $order = null, $limit = null) {
     $this->makeBackSpec($backName);
-    
-    // Empty object
-    if (!$this->_id) {
-      return array();
-    }
-    
+        
     // Spécifications
     $backSpec = $this->_backSpecs[$backName];
     $backObject = new $backSpec->class;
@@ -939,6 +933,11 @@ class CMbObject {
     // Cas du module non installé
     if (!$backObject->_ref_module) {
       return;
+    }
+    
+    // Empty object
+    if (!$this->_id) {
+      return array();
     }
     
     // Vérification de la possibilité de supprimer chaque backref
@@ -1108,8 +1107,6 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete() {
-    global $dPconfig;
-    
     // Chargement de _objBefore 
     $objBefore = new $this->_class_name;
     $objBefore->load($this->_id);
@@ -1372,8 +1369,7 @@ class CMbObject {
   
   function checkConfidential($specs = null) {
     global $dPconfig;
-    
-    if($dPconfig["hide_confidential"]) {
+    if ($dPconfig["hide_confidential"]) {
       if($specs == null){
         $specs = $this->_specs;
       }
@@ -1387,8 +1383,6 @@ class CMbObject {
   }
 
   function loadAides($user_id) {
-    global $dPconfig;
-    
   	foreach ($this->_helped_fields as $field => $prop) {
       $this->_aides[$field] = array();
       $this->_aides[$field]["no_enum"] = null;

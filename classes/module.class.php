@@ -51,6 +51,9 @@ class CModule extends CMbObject {
 
   function CModule() {
     $this->CMbObject("modules", "mod_id");
+   
+    // Hack to simulate the activeness of the class which has no real module 
+    $this->_ref_module = true;
   }
   
   function getBackRefs() {

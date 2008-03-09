@@ -81,18 +81,22 @@ function pageMain() {
               {{mb_field object=$user field="_compte_cle"}}
           </td>
         </tr>
+        
+        {{if $banques}}
+        <!-- Choix de la banque quand disponible -->
         <tr>
-          <th>
-            {{mb_label object=$user field="banque_id"}}
-          </th>
+          <th>{{mb_label object=$user field="banque_id"}}</th>
           <td>
-          <select name="banque_id">
-          <option value="">&mdash; Choix d'une banque</option>
-          {{foreach from=$banques item="banque"}}
-            <option value="{{$banque->_id}}" {{if $user->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
-          {{/foreach}}
+	          <select name="banque_id">
+		          <option value="">&mdash; Choix d'une banque</option>
+		          {{foreach from=$banques item="banque"}}
+	            <option value="{{$banque->_id}}" {{if $user->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
+	  	        {{/foreach}}
+	          </select>
           </td>
         </tr>
+        {{/if}}
+                
         <tr>
           <th>{{mb_label object=$user field="_user_email"}}</th>
           <td>{{mb_field object=$user field="_user_email"}}</td>
