@@ -39,6 +39,7 @@ function showLegend() {
         </tr>
       </table>
       {{assign var="plages" value=$listInfosSalles.$keySalle.plages}}
+      {{assign var="deplacees" value=$listInfosSalles.$keySalle.deplacees}}
       {{assign var="urgences" value=$listInfosSalles.$keySalle.urgences}}
       {{assign var="salle" value=$keySalle}}     
       {{include file="../../dPsalleOp/templates/inc_details_plages.tpl"}}

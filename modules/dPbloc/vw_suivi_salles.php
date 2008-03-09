@@ -38,22 +38,46 @@ foreach($listSalles as $keySalle=>$currSalle){
   $where["date"] = "= '$date_suivi'";
   $where["salle_id"] = "= '$keySalle'";
   $order = "debut";
-  $plages = $plages->loadList($where, $order);
-  foreach($plages as $key => $value) {
-    $plages[$key]->loadRefs(0);
-    $plages[$key]->_unordered_operations = array();
-    foreach($plages[$key]->_ref_operations as $key2 => $value) {
-      $plages[$key]->_ref_operations[$key2]->loadRefSejour();
-      $plages[$key]->_ref_operations[$key2]->_ref_sejour->loadRefPatient();
-      $plages[$key]->_ref_operations[$key2]->loadExtCodesCCAM();
-      if($plages[$key]->_ref_operations[$key2]->rank == 0) {
-        $plages[$key]->_unordered_operations[$key2] = $plages[$key]->_ref_operations[$key2];
-        unset($plages[$key]->_ref_operations[$key2]);
-      }
-    }
-  }
+	$plages = $plages->loadList($where, $order);
+	foreach($plages as &$curr_plage) {
+	  $curr_plage->loadRefs(0);
+	  $curr_plage->_unordered_operations = array();
+	  foreach($curr_plage->_ref_operations as $key => &$curr_op) {
+	    if($curr_op->salle_id != $curr_plage->salle_id) {
+	      unset($curr_plage->_ref_operations[$key]);
+	      continue;
+	    }
+	    $curr_op->loadRefSejour();
+	    $curr_op->_ref_sejour->loadRefPatient();
+	    $curr_op->loadExtCodesCCAM();
+	    if($curr_op->rank == 0) {
+	      $curr_plage->_unordered_operations[$key] = $curr_op;
+	      unset($curr_plage->_ref_operations[$key]);
+	    }
+	  }
+	}
   $salle["plages"] = $plages;
+	
+	// Interventions déplacés
+	$deplacees = new COperation;
+	$ljoin = array();
+	$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+	$where = array();
+	$where["operations.plageop_id"] = "IS NOT NULL";
+	$where["plagesop.salle_id"]     = "!= operations.salle_id";
+	$where["plagesop.date"]         = "= '$date_suivi'";
+	$where["operations.salle_id"]   = "= '$keySalle'";
+	$order = "operations.time_operation";
+	$deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
+	foreach($deplacees as &$curr_op) {
+	  $curr_op->loadRefChir();
+	  $curr_op->loadRefSejour();
+	  $curr_op->_ref_sejour->loadRefPatient();
+	  $curr_op->loadExtCodesCCAM();
+	}
+	$salle["deplacees"] = $deplacees;
   
+	// Urgences
   $urgences = new COperation;
   $where = array();
   $where["date"]     = "= '$date_suivi'";
@@ -68,10 +92,6 @@ foreach($listSalles as $keySalle=>$currSalle){
   }
   $salle["urgences"] = $urgences;
 }
-
-
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
