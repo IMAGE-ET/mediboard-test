@@ -264,7 +264,7 @@ function pageMain() {
       
           {{if $plageSel->plageconsult_id}}
 	      <form name='removeFrm' action='?m=dPcabinet' method='post'>
-      	  <input type='hidden' name='dosql' value='do_plageconsult_aed' />
+      	  <input type='hidden' name='dosql' value='do_plageconsult_multi_aed' />
 	      <input type='hidden' name='del' value='1' />
 	      {{mb_field object=$plageSel field="plageconsult_id" hidden=1 prop=""}}
           <table class="form">
