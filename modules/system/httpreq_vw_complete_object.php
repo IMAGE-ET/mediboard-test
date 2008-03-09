@@ -28,11 +28,6 @@ $canModule = CModule::getCanDo($object->_ref_module->mod_name);
 $can->read = $canModule->read && $object->canRead();
 $can->needsRead();
 
-// If no template is defined, use generic
-$template = is_file($object->_view_template) ?
-  $object->_view_template : 
-  "system/templates/CMbObject_view.tpl";
- 
 // Création du template
 $smarty = new CSmartyDP();
 
