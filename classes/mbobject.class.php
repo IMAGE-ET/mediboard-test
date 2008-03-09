@@ -543,8 +543,11 @@ class CMbObject {
   function updateFormFields() {
     $this->_view = "$this->_class_name#$this->_id";
     $this->_shortview = "#$this->_id";
-    $this->_view_template     = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_view.tpl";
-    $this->_complete_view_template = "{$this->_ref_module->mod_name}/templates/{$this->_class_name}_complete.tpl";
+    if ($module = $this->_ref_module) {
+      $path = "$module->mod_name/templates/$this->_class_name";
+	    $this->_view_template          = "{$path}_view.tpl";
+	    $this->_complete_view_template = "{$path}_complete.tpl";
+    }
   }
   
   /**
