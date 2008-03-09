@@ -118,6 +118,7 @@ class CCodable extends CMbObject {
   function getSpecs() {
   	$specs = parent::getSpecs();
   	$specs["codes_ccam"] = "str";
+  	$specs["_codes_ccam"] = "";
   	return $specs;
   }
   
