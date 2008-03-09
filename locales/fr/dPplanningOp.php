@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPplanningOp-CSejour-modif_SHS'] = 'Dépréparation des dossiers';
 $locales['button-CCodeCCAM-choix'] = 'Choisir un code';
 $locales['button-CCodeCCAM-searchAnother'] = 'Rechercher un autre code';
 $locales['button-CCodeCIM10-choix'] = 'Choisir un code';

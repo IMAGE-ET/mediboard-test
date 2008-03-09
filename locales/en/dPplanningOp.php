@@ -1,4 +1,5 @@
 <?php
+$locales['config-dPplanningOp-CSejour-modif_SHS'] = '';
 $locales['button-CCodeCCAM-choix'] = '';
 $locales['button-CCodeCCAM-searchAnother'] = '';
 $locales['button-CCodeCIM10-choix'] = '';

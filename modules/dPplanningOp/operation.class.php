@@ -225,6 +225,7 @@ class COperation extends CCodable {
       $msg .= "Praticien non valide ";
     }
     
+    // Nombre max d'actes CCAM
     //if ($this->codes_ccam && count(explode("|", $this->codes_ccam)) > 4) {
     //  $msg .= "Impossible d'associer plus de 4 actes CCAM ";
     //}
