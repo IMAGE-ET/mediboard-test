@@ -28,7 +28,7 @@ class CProductOrder extends CMbObject {
 
   // Form fields
   var $_total           = null;
-  var $_date_received   = null; //TODO: update form fields
+  var $_received        = null;
 
   function CProductOrder() {
     $this->CMbObject('product_order', 'order_id');
@@ -49,6 +49,7 @@ class CProductOrder extends CMbObject {
       'received'     => 'notNull bool',
       'locked'       => 'notNull bool',
       'order_number' => 'str',
+      '_partial'     => 'boolean',
     );
   }
 
@@ -66,13 +67,17 @@ class CProductOrder extends CMbObject {
     $this->loadRefsBack();
 
     $this->_total = 0;
+    $this->_received = 0;
     if ($this->_ref_order_items) {
       foreach ($this->_ref_order_items as $item) {
         $item->updateFormFields();
         $this->_total += $item->_price;
+        if ($item->date_received) {
+          $this->_received++;
+        }
       }
     }
-
+    
     $count = count($this->_ref_order_items);
     $this->_view = /*mbDateTime(null, $this->date_ordered).*/' ['.$count.' article'.(($count>1)?'s':'').', total = '.$this->_total.']';
   }
@@ -83,12 +88,7 @@ class CProductOrder extends CMbObject {
   }
 
   function loadRefsBack(){
-    $where = array();
-    $where['order_id'] = " = '$this->order_id'";
-
-    // Loading order items references
-    $item = new CProductOrderItem();
-    $this->_ref_order_items = $item->loadList($where);
+    $this->_ref_order_items = $this->loadBackRefs('order_items');
   }
   
   function loadRefsFwd(){

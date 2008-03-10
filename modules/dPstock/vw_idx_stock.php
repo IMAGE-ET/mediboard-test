@@ -52,10 +52,13 @@ if ($category) {
 $group = new CGroups();
 $list_groups = $group->loadList();
 
+$colors = array('#F00', '#FC3', '#1D6', '#06F');
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('stock',           $stock);
+$smarty->assign('colors',          $colors);
 $smarty->assign('category',        $category);
 $smarty->assign('list_groups',     $list_groups);
 $smarty->assign('list_categories', $list_categories);

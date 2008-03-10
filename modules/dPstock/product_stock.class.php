@@ -35,6 +35,12 @@ class CProductStock extends CMbObject {
     $this->CMbObject('product_stock', 'stock_id');
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs['stock_outs'] = 'CProductStockOut stock_id';
+    return $backRefs;
+  }
 
   function getSpecs() {
     return array (
@@ -64,12 +70,7 @@ class CProductStock extends CMbObject {
   }
 
   function loadRefsBack(){
-    $where = array();
-    $where['stock_id'] = "= '$this->stock_id'";
-
-    // Loading stock outs references
-    $this->_ref_stock_outs = new CProductStockOut();
-    $this->_ref_stock_outs = $this->_ref_stock_outs->loadList($where);
+    $this->_ref_stock_outs = $this->loadBackRefs('stock_outs');
   }
   
   function getPerm($permType) {

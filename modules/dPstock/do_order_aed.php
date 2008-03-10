@@ -9,6 +9,13 @@
 
 global $AppUI;
 
+// Current DateTime
+if(isset($_POST['date_ordered'])){
+  if($_POST['date_ordered'] == 'now'){
+    $_POST['date_ordered'] = mbDateTime();
+  }
+}
+
 $do = new CDoObjectAddEdit('CProductOrder', 'order_id');
 $do->createMsg = 'Commande créée';
 $do->modifyMsg = 'Commande modifiée';

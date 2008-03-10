@@ -1,3 +1,30 @@
+<script type="text/javascript">
+function pageMain() {
+  regFieldCalendar("edit_order", "date");
+  PairEffect.initGroup("productToggle", { bStartVisible: true });
+  refreshListOrders("waiting");
+  refreshListOrders("pending");
+  refreshListOrders("old");
+}
+
+function refreshListOrders(type) {
+  url = new Url;
+  url.setModuleAction("dPstock","httpreq_vw_list_orders");
+  url.addParam("type", type);
+  url.requestUpdate("orders["+type+"]", { waitingText: null } );
+}
+
+function submitOrder (oForm, refreshList) {
+  submitFormAjax(oForm, 'systemMsg',{
+    onComplete: function() {
+      refreshListOrders("waiting");
+      refreshListOrders("pending");
+      refreshListOrders("old");
+    } 
+  });
+}
+</script>
+
 <table class="main">
   <tr>
     <td class="halfPane">
@@ -5,7 +32,7 @@
         Nouvelle commande
       </a>
       <h3>Commandes en attente</h3>
-      <table class="tbl" id="waiting_orders">
+      <table class="tbl">
         <tr>
           <th>Intitulé</th>
           <th>Fournisseur</th>
@@ -14,58 +41,24 @@
           <th>Bloquée</th>
           <th>Actions</th>
         </tr>
-        <tbody>
-        {{foreach from=$waiting_orders item=curr_order}}
-          <tr id="order-{{$curr_order->_id}}">
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
-            <td>{{$curr_order->_ref_societe->_view}}</td>
-            <td>{{$curr_order->_ref_order_items|@count}}</td>
-            <td>{{$curr_order->_total|string_format:"%.2f"}}</td>
-            <td>{{$curr_order->locked}}</td>
-            <td>mod lock send</td>
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="8">Aucune commande</td>
-          </tr>
-        {{/foreach}}
-        </tbody>
+        <tbody id="orders[waiting]"></tbody>
       </table>
       
-      
       <h3>Commandes en attente de réception</h3>
-      <table class="tbl" id="pending_orders">
+      <table class="tbl">
         <tr>
           <th>Intitulé</th>
           <th>Fournisseur</th>
-          <th>Pièces</th>
+          <th>Pièces/Reçues</th>
           <th>Passée le</th>
-          <th>Partielle</th>
           <th>Total</th>
           <th>Actions</th>
         </tr>
-        <tbody>
-        {{foreach from=$pending_orders item=curr_order}}
-          <tr id="order-{{$curr_order->_id}}">
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
-            <td>{{$curr_order->_ref_societe->_view}}</td>
-            <td>{{$curr_order->_ref_order_items|@count}}</td>
-            <td>{{$curr_order->date_ordered|date_format:"%d/%m/%Y"}}</td>
-            <td>O/N</td>
-            <td>{{$curr_order->_total|string_format:"%.2f"}}</td>
-            <td>reçue</td>
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="8">Aucune commande</td>
-          </tr>
-        {{/foreach}}
-        </tbody>
+        <tbody id="orders[pending]"></tbody>
       </table>
       
-      
       <h3>Anciennes commandes</h3>
-      <table class="tbl" id="old_orders">
+      <table class="tbl">
         <tr>
           <th>Intitulé</th>
           <th>Fournisseur</th>
@@ -75,23 +68,7 @@
           <th>Total</th>
           <th>Actions</th>
         </tr>
-        <tbody>
-        {{foreach from=$old_orders item=curr_order}}
-          <tr id="order-{{$curr_order->_id}}">
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
-            <td>{{$curr_order->_ref_societe->_view}}</td>
-            <td>{{$curr_order->_ref_order_items|@count}}</td>
-            <td>{{$curr_order->date_ordered|date_format:"%d/%m/%Y"}}</td>
-            <td>{{$curr_order->_date_received|date_format:"%d/%m/%Y"}}</td>
-            <td>{{$curr_order->_total|string_format:"%.2f"}}</td>
-            <td>redo del</td>
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="8">Aucune commande</td>
-          </tr>
-        {{/foreach}}
-        </tbody>
+        <tbody id="orders[old]"></tbody>
       </table>
     </td>
     
@@ -138,7 +115,7 @@
             {{if $order->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la commande',objName:'{{$order->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{if !$order->locked}}
-              <a class="buttonedit" href="?m={{$m}}&amp;tab=vw_idx_order&amp;order_id={{$order->_id}}">Peupler</a>
+              <a class="buttonedit" href="?m={{$m}}&amp;tab=vw_aed_order&amp;order_id={{$order->_id}}">Peupler</a>
             {{/if}}
             {{/if}}
           </td>
@@ -148,5 +125,3 @@
     </td>
   </tr>
 </table>
-
-

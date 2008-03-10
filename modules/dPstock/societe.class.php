@@ -66,14 +66,8 @@ class CSociete extends CMbObject {
   }
 
   function loadRefsBack() {
-    $where = array();
-    $where['societe_id'] = "= '$this->societe_id'";
-    
-    $this->_ref_product_references = new CProductReference();
-    $this->_ref_product_references = $this->_ref_product_references->loadList($where);
-    
-    $this->_ref_products = new CProduct();
-    $this->_ref_products = $this->_ref_products->loadList($where);
+    $this->_ref_product_references = $this->loadBackRefs('product_references');
+    $this->_ref_products = $this->loadBackRefs('products');
   }
 
 }

@@ -43,7 +43,7 @@ PRIMARY KEY (`category_id`)) TYPE=MYISAM;';
     $sql = 'CREATE TABLE `product_delivery` (
  `delivery_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `product_id` INT(11) UNSIGNED NOT NULL, 
- `date` DATE NOT NULL, 
+ `date` DATETIME NOT NULL, 
  `target_class` VARCHAR(25) NOT NULL, 
  `target_id` INT(11) UNSIGNED NOT NULL, 
  `description` TEXT, 
@@ -53,7 +53,7 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
     $sql = 'CREATE TABLE `product_order` (
  `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `name` VARCHAR(64),
- `date_ordered` DATE, 
+ `date_ordered` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
  `received` BOOL NOT NULL DEFAULT \'0\',
@@ -66,7 +66,7 @@ PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
  `order_id` INT(11) UNSIGNED NOT NULL, 
  `quantity` INT(11) UNSIGNED NOT NULL, 
  `unit_price` FLOAT, 
- `date_received` DATE, 
+ `date_received` DATETIME, 
  `order_number` VARCHAR(255), 
 PRIMARY KEY (`order_item_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);

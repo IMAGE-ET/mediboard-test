@@ -50,11 +50,6 @@ class CProductOrderItem extends CMbObject {
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
   }
-  
-  function updateDBFields() {
-    parent::updateDBFields();
-    //$this->date_received = mbDateTime();
-  }
 
   function loadRefsFwd() {
     $this->_ref_reference = new CProductReference();
@@ -64,20 +59,30 @@ class CProductOrderItem extends CMbObject {
     $this->_ref_order->load($this->order_id);
   }
 
-/*  function check() {
+  function store() {
     if($this->order_id && $this->reference_id) {
       $where['order_id']     = "= '$this->order_id'";
       $where['reference_id'] = "= '$this->reference_id'";
 
-      $VerifDuplicateKey = new CProductOrderItem();
-      $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);
-
-      if(count($ListVerifDuplicateKey) != 0) {
-        return 'Erreur : La référence produit existe déjà dans cette commande';
+      $duplicateKey = new CProductOrderItem();
+      $this->loadRefsFwd();
+      
+      if($duplicateKey->loadObject($where)) {
+        $duplicateKey->loadRefsFwd();
+        $this->_id = $duplicateKey->_id;
+        $this->quantity = $duplicateKey->quantity+1;
+        $this->unit_price = $duplicateKey->unit_price;
+        $this->date_received = $duplicateKey->date_received;
       } else {
-        return null;
+        $this->unit_price = $this->_ref_reference->price;
+        $this->quantity = 1;
       }
     }
+    return parent::store();
+  }
+  
+  /*function store() {
+    
   }*/
 }
 ?>

@@ -25,7 +25,7 @@ class CProductCategory extends CMbObject {
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs['product'] = 'CProduct category_id';
+    $backRefs['products'] = 'CProduct category_id';
     return $backRefs;
   }
 
@@ -48,11 +48,7 @@ class CProductCategory extends CMbObject {
   }
 
   function loadRefsBack() {
-    $where = array();
-    $where['category_id'] = "= '$this->category_id'";
-    
-    $this->_ref_products = new CProduct;
-    $this->_ref_products = $this->_ref_products->loadList($where);
+    $this->_ref_products = $this->loadBackRefs('products');
   }
 }
 ?>

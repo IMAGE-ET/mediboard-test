@@ -7,7 +7,6 @@
     <th>PU</th>
     <th>Quantité</th>
     <th>Prix</th>
-    <th></th>
   </tr>
   <tbody>
   {{foreach from=$order->_ref_order_items item=curr_item}}
