@@ -41,13 +41,6 @@ if ($file_path) {
   }
 }
 
-// Permission d'affichage du fichier a revoir. droit dPfiles mais si visu depuis consult pb !
-//$moduleFiles = CModule::getInstalled("dPfiles");
-//$canRead = $moduleFiles->canRead();
-//if (!$canRead) {
-//  $AppUI->redirect("m=system&a=access_denied");
-//}
-
 if($file_id = mbGetValueFromGet("file_id")) {
   $file = new CFile();
   $file->load($file_id);

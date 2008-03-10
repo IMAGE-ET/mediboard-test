@@ -14,19 +14,39 @@ $can->needsAdmin();
 
 $response = array();
 
-$class = mbGetValueFromGet("class");
-if (in_array($class, CSpObjectHandler::$queriable)) {
-  trigger_error("Object of class 'class' is not queriable", E_USER_WARNING);
-  return;
-}
+$filter = new CIdSante400();
+$filter->id400        = mbGetValueFromGet("id400");
+$filter->object_class = mbGetValueFromGet("object_class");
 
-$id400 = mbGetValueFromGet("id400");
-$object = CSpObjectHandler::getMbObjectFor($class, $id);
-mbTrace($object->getProps());  
+try {
+  if (null == $class = $filter->object_class) {
+    throw new Exception("No object class to query", 1);
+  }
+  
+	if (!in_array($class, CSpObjectHandler::$queriable)) {
+    throw new Exception("Object of class '$class' is not queriable", 2);
+	}
+    
+  $object = CSpObjectHandler::getMbObjectFor($class, $filter->id400);
+  if (!$object->_id) {
+    throw new Exception("Object of class '$class' could not be found with id400 '$filter->id400'", 3);
+  }
+  
+  foreach (array_keys($object->_specs) as $propName) {
+    $response[$propName] = $object->$propName;
+  }
+}
+catch (Exception $e) {
+  $response["error_code"   ] = $e->getCode();
+  $response["error_message"] = $e->getMessage();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object", $object);
+$smarty->assign("filter"   , $filter);
+$smarty->assign("response" , $response);
+$smarty->assign("queriable", CSpObjectHandler::$queriable);
+
 $smarty->display("object_properties.tpl");
 ?>

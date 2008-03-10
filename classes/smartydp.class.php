@@ -262,7 +262,7 @@ class CSmartyDP extends Smarty {
    * Standard data assignment
    */
   function CSmartyDP($rootDir = null, $useDataSources = 1) {
-    global $AppUI, $version, $dPconfig, $canRead, $can, $canEdit, $canAdmin, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax;
+    global $AppUI, $version, $dPconfig, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
 
     $root = $dPconfig["root_dir"];
 
@@ -311,9 +311,7 @@ class CSmartyDP extends Smarty {
     $this->assign("dPconfig", $dPconfig);
     $this->assign("user", $AppUI->user_id); // shouldn't be necessary
     $this->assign("version", $version); 
-    $this->assign("canEdit", $canEdit);
-    $this->assign("canRead", $canRead);
-    $this->assign("canAdmin", $canAdmin);
+    $this->assign("suppressHeaders", $suppressHeaders);
     $this->assign("can", $can);
     $this->assign("m", $m);
     $this->assign("a", $a);

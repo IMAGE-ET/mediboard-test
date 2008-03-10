@@ -7,7 +7,7 @@
  *  @version $Revision: 1706 $
  */
 
-global $AppUI, $canRead, $canEdit, $m;
+global $AppUI, $m;
 
 class CDoObjectAddEdit {
   var $className           = null;

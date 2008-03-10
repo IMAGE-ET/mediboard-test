@@ -1,4 +1,5 @@
 <?php
+$locales['mod-sherpa-tab-object_properties'] = "Propriétés d'objets";
 $locales['mod-sherpa-tab-import_actes'] = "Import d'actes";
 $locales['config-object_handlers-CSpObjectHandler'] = "Activer le gestionnaire Sherpa";
 $locales['config-sherpa-import_segment'] = "Longueur du segment d'import";
