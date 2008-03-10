@@ -1,4 +1,3 @@
-
 {{assign var="sejour" value=$object}}
 
 <table class="form">
@@ -96,12 +95,13 @@
   </tr>
   {{/if}}
 
-  {{if $object->_ref_rpu->_id}}
+ 
+  {{assign var=rpu value=$object->_ref_rpu}}
+  {{if $rpu && $rpu->_id}}
   <tr>
     <th class="category" colspan="2">Résumé de passage aux urgences</th>
   </tr>
   <tr>
-  {{assign var="rpu" value=$object->_ref_rpu}}
     <td>
       <strong>{{tr}}CRPU-_entree{{/tr}}:</strong>
       {{mb_value object=$rpu field=_entree}}
@@ -239,7 +239,7 @@
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
 </table>
 
-{{if !$object->_ref_rpu->_id}}
+{{if !$rpu || $$rpu->_id}}
   {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
   {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
 {{/if}}
