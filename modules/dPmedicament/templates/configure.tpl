@@ -76,11 +76,10 @@ function startUncaseBCBTables(){
 
 </form>
 
-<hr />
+<h2>Base de données BCB</h2>
 
 {{include file="../../system/templates/configure_dsn.tpl" dsn=bcb}}
 
-<h2>Import de la base de données BCBGES</h2>
 <table class="tbl">
   <tr>
     <th>Action</th>
@@ -99,11 +98,10 @@ function startUncaseBCBTables(){
   </tr>
 </table>
 
-<hr />
+<h2>Base de données BCBGES</h2>
 
 {{include file="../../system/templates/configure_dsn.tpl" dsn=bcbges}}
 
-<h2>Traitement sur la base de données BCB</h2>
 <table class="tbl">
   <tr>
     <th>Action</th>
