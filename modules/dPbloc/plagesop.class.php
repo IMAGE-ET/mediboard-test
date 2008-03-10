@@ -76,7 +76,10 @@ class CPlageOp extends CMbObject {
       "debut"            => "notNull time",
       "fin"              => "notNull time",
       "temps_inter_op"   => "notNull time",
-      "max_intervention" => "num"
+      "max_intervention" => "num",
+      "_heuredeb"       => "num",
+      "_heurefin"       => "num",
+      "_min_inter_op"    => "num max|60"
     );
     return array_merge($specsParent, $specs);
   }
