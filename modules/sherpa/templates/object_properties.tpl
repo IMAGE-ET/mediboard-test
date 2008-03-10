@@ -50,9 +50,10 @@
     {{/foreach}} 
   </ul>
   
-  Pour obtenir une version fichier, sans balises HTML, il faut rajouter le paramètre HTTP
+  Pour obtenir une version fichier, sans balises HTML, il faut rajouter les paramètre HTTP
   <ul>
     <li><tt>suppressHeaders=1</tt></li>
+    <li><tt>a=object_properties</tt> à la place de <tt>tab=object_properties</tt></li>
   </ul>
 </div>
 
