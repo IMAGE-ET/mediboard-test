@@ -239,7 +239,7 @@
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
 </table>
 
-{{if !$rpu || $rpu->_id}}
+{{if !$rpu || !$rpu->_id}}
   {{include file="../../dPplanningOp/templates/inc_infos_operation.tpl"}}
   {{include file="../../dPplanningOp/templates/inc_infos_hospitalisation.tpl"}}
 {{/if}}
