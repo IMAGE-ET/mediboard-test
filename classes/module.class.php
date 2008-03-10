@@ -49,17 +49,39 @@ class CModule extends CMbObject {
   // Static Collections
   var $_registered = array();
 
+	/**
+	 * Get all classes for a given module
+	 * @param $module string Module name
+	 * @return array[string] Class names
+	 **/
+	function getClassesFor($module) {
+		// Liste des Class
+		$listClass = getInstalledClasses();
+		
+		$tabClass = array();
+		foreach ($listClass as $class) {
+	  		$object = new $class;
+	  		if (!$object->_ref_module) {
+	  			continue;
+	  		}
+	  		if ($object->_ref_module->mod_name == $module) {
+	  			$tabClass[] = $object->_class_name;
+	  		}
+	  	}
+	  	return $tabClass;
+	}
+	  
   function CModule() {
     $this->CMbObject("modules", "mod_id");
    
     // Hack to simulate the activeness of the class which has no real module 
-    $this->_ref_module = true;
+    $this->_ref_module = $this;
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["permissions"] = "CPermModule mod_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["permissions"] = "CPermModule mod_id";
+    return $backRefs;
   }
   
   function getSpecs() {

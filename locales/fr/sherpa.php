@@ -422,4 +422,12 @@ $locales['module-sherpa-court'] = 'Sherpa';
 $locales['module-sherpa-long'] = 'Integration de e-Sherpa';
 $locales['sherpa-import-class'] = 'Import de la table';
 $locales['sherpa-import-classes'] = 'Import des tables';
+$locales['CGroups-back-'] = '';
+$locales['CSpEtablissement-_view'] = '';
+$locales['CSpEtablissement-_view-court'] = '';
+$locales['CSpEtablissement-_view-desc'] = '';
+$locales['CSpEtablissement-back-'] = '';
+$locales['msg-CSpEtablissement-create'] = '';
+$locales['msg-CSpEtablissement-delete'] = '';
+$locales['msg-CSpEtablissement-modify'] = '';
 ?>

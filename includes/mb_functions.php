@@ -726,28 +726,6 @@ function has_default_constructor($classname) {
 }
 
 /**
- * Retourne un tableau des classes du module
- * @param
- * @return array 
- **/
-function mbGetClassByModule($module) {
-	// Liste des Class
-	$listClass = getInstalledClasses();
-	
-	$tabClass = array();
-	foreach($listClass as $class) {
-  		$object = new $class;
-  		if(!$object->_ref_module) {
-  			continue;
-  		}
-  		if($object->_ref_module->mod_name == $module) {
-  			$tabClass[] = $object->_class_name;
-  		}
-  	}
-  	return $tabClass;
-}
-
-/**
  * Strip slashes recursively if value is an array
  * @param mixed $value
  * @param return stripped value

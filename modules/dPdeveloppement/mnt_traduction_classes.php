@@ -14,8 +14,7 @@ $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
 $module = mbGetValueFromGetOrSession("module" , "admin");
-
-$classes = mbGetClassByModule($module);
+$classes = CModule::getClassesFor($module);
 
 // liste des dossiers modules + common et styles
 $modules = $AppUI->readDirs("modules");

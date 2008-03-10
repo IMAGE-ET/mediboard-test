@@ -3,9 +3,7 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPprescription" script="prescription_editor"}}
-
-
-
+ 
 <script type="text/javascript">
 
 // Visualisation du produit
@@ -73,6 +71,7 @@ function viewProduit(cip){
             ({{$prescription->_ref_object->_ref_patient->_age}} ans)
           </th>
         </tr>
+        
         <tr>
           <td class="text">
             {{assign var=dossier value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical}}
@@ -99,6 +98,7 @@ function viewProduit(cip){
 						  <li><em>Pas d'addictions</em></li>
 						  {{/if}}
 						</ul>
+						
 						<strong>Antécédents</strong>
 						<ul>
 						{{if $dossier->_ref_antecedents}}
@@ -125,6 +125,8 @@ function viewProduit(cip){
 						  <li><em>Pas d'antécédents</em></li>
 						{{/if}}
 						</ul>
+						
+						
 						<strong>Traitements</strong>
 						<ul>
 						  {{foreach from=$dossier->_ref_traitements item=curr_trmt}}
