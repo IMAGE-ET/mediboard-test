@@ -153,6 +153,11 @@ function smarty_function_mb_label($params, &$smarty) {
   $object     = CMbArray::extract($params, "object", null, true);
   $field      = CMbArray::extract($params, "field" , null, true);
   
+  if (!array_key_exists($field, $object->_specs)) {
+     $object->_specs[$field] = CMbFieldSpecFact::getSpec($object, $field, "");
+     trigger_error("Spec missing for class '$object->_class_name' field '$field'", E_USER_WARNING);
+  }
+
   return $object->_specs[$field]->getLabelElement($object, $params);
 }
 
