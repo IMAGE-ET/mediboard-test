@@ -19,8 +19,8 @@ $mode_protocole = mbGetValueFromGetOrSession("mode_protocole");
 
 $listFavoris = array();
 $element_id = mbGetValueFromGetOrSession("element_id");
+$category_name = mbGetValueFromGetOrSession("category_name");
 $category = null;
-
 
 if ($element_id){
   $element = new CElementPrescription();
@@ -28,6 +28,11 @@ if ($element_id){
   $element->loadRefCategory();
   $category = $element->_ref_category_prescription->chapitre;
 }
+
+if(!$element_id && $category_name){
+  $category = $category_name;
+}
+
 // Liste des alertes
 $alertesAllergies    = array();
 $alertesInteractions = array();
@@ -48,11 +53,13 @@ if(!$prescription->_id) {
 }
 
 if($prescription->_id){
-	$prescription->loadRefsLines();
-	foreach($prescription->_ref_prescription_lines as &$line){
-		$line->_ref_produit->loadRefPosologies();
-	}
-  $prescription->loadRefsLinesElementByCat();  
+	// Chargement des medicaments et commentaire
+  $prescription->loadRefsLinesMedComments();
+  foreach($prescription->_ref_lines_med_comments["med"] as &$med){
+  	$med->_ref_produit->loadRefPosologies();
+  }
+  // Chargement des elements et commentaires
+  $prescription->loadRefsLinesElementsComments();
 }
 
 if($prescription->object_id) {

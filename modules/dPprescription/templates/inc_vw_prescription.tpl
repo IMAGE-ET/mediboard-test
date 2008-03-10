@@ -121,21 +121,6 @@
     </td>
   </tr>
   {{/if}}
-  <tr>
-    <td>
-      <!-- Tabulations -->
-      <ul id="main_tab_group" class="control_tabs">
-        <li><a href="#div_medicament">Médicaments</a></li>
-        <li><a href="#div_dmi">DMI</a></li>
-        <li><a href="#div_labo">Labo</a></li>
-        <li><a href="#div_imagerie">Imagerie</a></li>
-        <li><a href="#div_consult">Consult</a></li>
-        <li><a href="#div_kine">Kiné</a></li>
-        <li><a href="#div_soin">Soin</a></li>
-      </ul>
-      <hr class="control_tabs" />
-    </td>
-  </tr>
 </table>
 
 <!-- Affichage des elements de la prescription -->

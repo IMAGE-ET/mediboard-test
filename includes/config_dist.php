@@ -291,6 +291,13 @@ $dPconfig["dPmedicament"] = array (
   ),
 );
 
+
+$dPconfig["dPprescription"] = array (
+  "CPrescription" => array (
+    "add_element_category" => "0"
+  )
+);
+
 $dPconfig["system"] = array(
   "type_telephone" => "france",
   "reverse_proxy"  => "0.0.0.0",

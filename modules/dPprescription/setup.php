@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.15";
 $config["mod_type"]        = "user";
 
 
@@ -56,7 +56,7 @@ class CSetupdPprescription extends CSetup {
     $this->makeRevision("0.11");
     $sql = "CREATE TABLE `category_prescription` (
            `category_prescription_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
-           `chapitre` ENUM('dmi','labo','imagerie','consult','kine','soin') NOT NULL, 
+           `chapitre` ENUM('dmi','anapath','biologie','imagerie','consult','kine','soin') NOT NULL, 
            `nom` VARCHAR(255) NOT NULL, 
            `description` TEXT,  
             PRIMARY KEY (`category_prescription_id`)) TYPE=MYISAM;";
@@ -88,7 +88,16 @@ class CSetupdPprescription extends CSetup {
             ADD `libelle` VARCHAR(255);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.14");
+    $sql = "CREATE TABLE `prescription_line_comment` (
+           `prescription_line_comment_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `prescription_id` INT(11) UNSIGNED NOT NULL, 
+           `commentaire` TEXT, 
+           `chapitre` ENUM('medicament','dmi','anapath','biologie','imagerie','consult','kine','soin') NOT NULL, 
+            PRIMARY KEY (`prescription_line_comment_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.15";
   }  
 }
 

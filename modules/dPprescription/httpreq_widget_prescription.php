@@ -18,8 +18,8 @@ $prescription->load($prescription_id);
 
 // Chargement des lignes de prescriptions
 if ($prescription->_id){
-  $prescription->loadRefsLines();
-  $prescription->loadRefsLinesElementByCat();
+	$prescription->loadRefsLinesMedComments();  
+	$prescription->loadRefsLinesElementsComments();
 }
 
 // Création du template

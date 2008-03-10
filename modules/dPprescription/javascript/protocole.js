@@ -25,7 +25,7 @@ var Protocole = {
   },
   // Edition d'un protocole
   edit : function(protocole_id, praticien_id) {
-    Prescription.reload(protocole_id, "", "1");
+    Prescription.reload(protocole_id,"","","1");
     Protocole.refreshList(praticien_id, protocole_id);
   }
 }

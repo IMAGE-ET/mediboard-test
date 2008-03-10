@@ -77,9 +77,13 @@ $alertesInteractions = array();
 $alertesIPC          = array();
 $alertesProfil       = array();
 if ($prescription->_id) {
-  // Chargement des lignes
-  $prescription->loadRefsLines();
-  $prescription->loadRefsLinesElementByCat();
+  
+  // Chargement des medicaments et commentaire
+  $prescription->loadRefsLinesMedComments();
+  
+  // Chargement des elements et commentaires
+  $prescription->loadRefsLinesElementsComments();
+  
   
   // Gestion des alertes
   $allergies    = new CBcbControleAllergie();

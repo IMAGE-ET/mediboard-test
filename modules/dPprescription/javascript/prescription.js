@@ -34,11 +34,11 @@ var Prescription = {
          } 
     });
   },
-  addLineElement: function(element_id){
+  addLineElement: function(element_id, category_name){
     var oForm = document.addLineElement;
     oForm.element_prescription_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete: function(){ Prescription.reload(oForm.prescription_id.value, element_id) } 
+      onComplete: function(){ Prescription.reload(oForm.prescription_id.value, element_id, category_name) } 
     });
   },
   delLineWithoutRefresh: function(line_id) {
@@ -55,15 +55,15 @@ var Prescription = {
       onComplete : function(){ Prescription.reload(oForm.prescription_id.value) } 
     });
   },
-  delLineElement: function(line_id) {
+  delLineElement: function(line_id, category_name) {
     var oForm = document.addLineElement;
     oForm.prescription_line_element_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete : function(){ Prescription.reload(oForm.prescription_id.value) } 
+      onComplete : function(){ Prescription.reload(oForm.prescription_id.value, null, category_name) } 
     });
   },
-  reload: function(prescription_id, element_id, mode_protocole) {
+  reload: function(prescription_id, element_id, category_name, mode_protocole) {
       if(window.opener){
       window.opener.PrescriptionEditor.refresh(prescription_id);
       }
@@ -71,6 +71,7 @@ var Prescription = {
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
       urlPrescription.addParam("element_id", element_id);
+      urlPrescription.addParam("category_name", category_name);
       urlPrescription.addParam("mode_protocole", mode_protocole);
       if(mode_protocole){
         urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
@@ -79,11 +80,11 @@ var Prescription = {
       }
   },
   reloadAddProt: function(protocole_id) {
-    Prescription.reload(protocole_id, '', '1');
+    Prescription.reload(protocole_id, '','', '1');
     Protocole.refreshList('',protocole_id);
   },
   reloadDelProt: function(){
-    Prescription.reload('', '', '1');
+    Prescription.reload('', '','', '1');
   },
   reloadAlertes: function(prescription_id) {
     if(prescription_id){
@@ -108,5 +109,12 @@ var Prescription = {
     url.setModuleAction("dPprescription", "vw_full_alertes");
     url.addParam("prescription_id", prescription_id);
     url.popup(700, 550, "Alertes");
+  },
+  onSubmitCommentaire: function(oForm, prescription_id, category_name){
+    return onSubmitFormAjax(oForm, { 
+      onComplete: function() { 
+        Prescription.reload(prescription_id, null, category_name)
+      } 
+    } );
   }
 };

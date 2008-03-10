@@ -24,12 +24,36 @@ Prescription.suffixes = Prescription.suffixes.uniq();
   </button>
   <br />
   <ul>
-  {{if $prescription->_ref_prescription_lines|@count}}
-    <li>{{$prescription->_ref_prescription_lines|@count}} médicaments</li>
-  {{/if}}
-  {{foreach from=$prescription->_ref_prescription_lines_element_by_cat key=name item=cat}}
-    {{if $cat|@count}}
-      <li>{{$cat|@count}} {{$name}}</li>
+  {{assign var=med_element value=$prescription->_ref_lines_med_comments.med|@count}}
+  {{assign var=med_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
+    
+    {{if $med_element || $med_comment}}
+    <li>
+      <strong>Médicaments: </strong>
+      {{if $med_element}}
+        {{$med_element}} ligne(s) de prescription
+      {{/if}}
+      {{if $med_element && $med_comment}}/{{/if}}
+      {{if $med_comment}}
+        {{$med_comment}} ligne(s) de commentaire
+      {{/if}}
+    </li>  
+    {{/if}}
+   
+   {{foreach from=$prescription->_ref_lines_elements_comments key=name item=cat}}
+    {{assign var=line_element value=$cat.element|@count}}
+    {{assign var=line_comment value=$cat.comment|@count}}
+    {{if $line_element || $line_comment}}
+    <li>
+      <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}: </strong>
+      {{if $line_element}}
+        {{$line_element}} ligne(s) de prescription
+      {{/if}}
+      {{if $line_element && $line_comment}}/{{/if}}
+      {{if $line_comment}}
+        {{$line_comment}} ligne(s) de commentaire
+      {{/if}}
+    </li>  
     {{/if}}
   {{/foreach}}
   </ul>

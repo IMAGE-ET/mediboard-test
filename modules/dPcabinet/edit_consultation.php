@@ -108,8 +108,8 @@ if ($consult->_id) {
   $consult->loadRefPrescription();
   if ($prescription =& $consult->_ref_prescription) {
 	  if ($prescription->_id){
-	    $prescription->loadRefsLines();
-	    $prescription->loadRefsLinesElementByCat();
+	    $prescription->loadRefsLinesMedComments();  
+	    $prescription->loadRefsLinesElementsComments();
 	  }
   }
   $consult->loadAides($userSel->user_id);
