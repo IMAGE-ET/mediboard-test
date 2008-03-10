@@ -1,5 +1,4 @@
 <?php
-$locales['base_url'] = 'http://localhost\\';
 $locales['CAffectationPersonnel-debut'] = '';
 $locales['CAffectationPersonnel-fin'] = '';
 $locales['CAffectationPersonnel-object_class'] = '';
@@ -19,6 +18,4 @@ $locales['mod-dPpersonnel-tab-vw_affectations_pers'] = '';
 $locales['mod-dPpersonnel-tab-vw_edit_personnel'] = '';
 $locales['module-dPpersonnel-court'] = '';
 $locales['module-dPpersonnel-long'] = '';
-$locales['root_dir'] = 'C:/workspace/mediboard';
-$locales['site_domain'] = 'localhost';
 ?>

@@ -1,5 +1,4 @@
 <?php
-$locales['base_url'] = 'http://localhost\\';
 $locales['CAffectationPersonnel-debut'] = 'Début';
 $locales['CAffectationPersonnel-fin'] = 'Fin';
 $locales['CAffectationPersonnel-object_class'] = 'Type';
@@ -19,8 +18,6 @@ $locales['mod-dPpersonnel-tab-vw_affectations_pers'] = 'Gestion des affectations
 $locales['mod-dPpersonnel-tab-vw_edit_personnel'] = 'Gestion du personnel';
 $locales['module-dPpersonnel-court'] = 'Personnel';
 $locales['module-dPpersonnel-long'] = 'Affectation du personnel';
-$locales['root_dir'] = 'C:/workspace/mediboard';
-$locales['site_domain'] = 'localhost';
 $locales['CAffectationPersonnel'] = 'Affectation personnel';
 $locales['CAffectationPersonnel-_debut'] = 'Début';
 $locales['CAffectationPersonnel-_debut-court'] = 'Déb';

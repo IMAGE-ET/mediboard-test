@@ -1,13 +1,10 @@
 <?php
 $locales['mod-dPstock-tab-vw_idx_reference'] = "Références produits";
-$locales['base_url'] = "http://192.168.0.6/~fabien";
 $locales['mod-dPstock-tab-vw_idx_category'] = "Catégories";
 $locales['mod-dPstock-tab-vw_idx_order'] = "Commandes";
 $locales['mod-dPstock-tab-vw_idx_product'] = "Produits";
 $locales['mod-dPstock-tab-vw_idx_societe'] = "Sociétés";
 $locales['mod-dPstock-tab-vw_idx_stock'] = "Gestion des stocks";
-$locales['root_dir'] = "/home/fabien/www/mediboard";
-$locales['site_domain'] = "192.168.0.6";
 $locales['CGroups-back-'] = "";
 $locales['CMbObject-back-'] = "";
 $locales['CProduct'] = "";
