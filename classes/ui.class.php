@@ -462,7 +462,6 @@ class CAppUI {
     $user->_user_password = trim(mbGetValueFromPost("password"));
     
     $specsObj = $user->getSpecsObj();
-    //mbTrace($specsObj);
     $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
     $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
 

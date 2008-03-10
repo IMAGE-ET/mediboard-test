@@ -109,7 +109,7 @@ function smarty_function_mb_field($params, &$smarty) {
   global $AppUI;
   
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
-  //mbTrace($params);
+
   $object  = CMbArray::extract($params, "object", null, true);
   $field   = CMbArray::extract($params, "field" , null, true);
   $propKey = array_key_exists("prop", $params);

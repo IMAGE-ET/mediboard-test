@@ -157,12 +157,9 @@ class CModule extends CMbObject {
   static function loadModules() {
     $modules = new CModule;
     $order = "mod_ui_order";
-    $modules = $modules->loadList(null, $order);
-        
-    foreach($modules as $keyModule => $valModule) {
-      $module =& $modules[$keyModule];
-        
-      self::$installed[$module->mod_name] = $module;
+    $modules = $modules->loadList(null, $order);    
+    foreach ($modules as &$module) {
+      self::$installed[$module->mod_name] =& $module;
       
       if($module->mod_active == 1) {
         self::$active[$module->mod_name] =& $module;
@@ -172,6 +169,7 @@ class CModule extends CMbObject {
         self::$visible[$module->mod_name] =& $module;
       }
     }
+    
   }
   
   function registerTab($file, $name, $permType) {

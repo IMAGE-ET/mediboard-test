@@ -976,7 +976,8 @@ table.dialog #systemMsg,
 
 div#systemMsg {
   cursor: pointer;
-  float: right;
+  position: absolute;
+  right: 10px;
 }
 
 div.warning {

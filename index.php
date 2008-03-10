@@ -184,9 +184,11 @@ $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
 $indexGroup = new CGroups;
 $indexGroup->load($g);
-if (!$indexGroup->canRead()) {
-  mbSetAbsValueToSession("g", $AppUI->user_group);
-  $g = $AppUI->user_group;
+if ($indexGroup->_id) {
+	if (!$indexGroup->canRead()) {
+	  mbSetAbsValueToSession("g", $AppUI->user_group);
+	  $g = $AppUI->user_group;
+	}
 }
 
 // do some db work if dosql is set

@@ -56,7 +56,7 @@ class CGroups extends CMbObject {
   
   function CGroups() {
     $this->CMbObject("groups_mediboard", "group_id");
-    
+
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   

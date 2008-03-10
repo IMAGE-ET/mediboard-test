@@ -49,6 +49,7 @@ function pageMain() {
   <tr>
     <th colspan="2">{{tr}}Module{{/tr}}</th>
     <th>{{tr}}Status{{/tr}}</th>
+    <th>{{tr}}upgrade{{/tr}} ?</th>
     <th>{{tr}}Type{{/tr}}</th>
     <th>{{tr}}Version{{/tr}}</th>
     <th>{{tr}}Menu Text{{/tr}}</th>
@@ -68,40 +69,48 @@ function pageMain() {
     </td>
     <td width="1%" nowrap="nowrap">{{$module.mod_name}}</td>
     <td>
-      {{if $module.mod_active}}
-        {{assign var="src" value="./images/icons/dotgreen.gif"}}
+    	<!-- Actif -->
+      {{mb_ternary var=dot test=$module.mod_active value=dotgreen other=dotyellowanim}}
+      {{mb_ternary var=active test=$module.mod_active value=active other=disabled}}
+      <img alt="dot" src="./images/icons/{{$dot}}.gif" width="12" height="12" />
+      {{if $module.mod_type == "core"}}
+      <strong>{{tr}}{{$active}}{{/tr}}</strong>
       {{else}}
-        {{assign var="src" value="./images/icons/dotyellowanim.gif"}}
+      <a class="action" {{if $can->edit}}href="{{$module.href}}&amp;cmd=toggle"{{/if}}>
+	      {{tr}}{{$active}}{{/tr}}
+      </a>
       {{/if}}
-      <img alt="dot" src="{{$src}}" width="12" height="12" />
-      {{if $can->edit}}
-        <a class="action" href="{{$module.href}}&amp;cmd=toggle">
+
+      <!-- Suppression -->
+      {{if $module.mod_type != "core"}}
+      |
+      <a class="action"
+        {{if $can->edit}}
+        href="{{$module.href}}&amp;cmd=remove"
+      	onclick="return window.confirm('{{tr}}Delete Module Confirmation{{/tr}}\n\n{{tr}}Are you sure?{{/tr}}\n')"
+      	{{/if}}
+      >
+        {{tr}}remove{{/tr}}
+      </a>
       {{/if}}
-      {{if $module.mod_active}}
-        {{tr}}active{{/tr}}
+      
+      {{if $module.is_config}}
+      |
+      <a class="action" href="{{$module.href}}&amp;cmd=configure">
+        {{tr}}configure{{/tr}}
+      </a>
+      {{/if}}
+    </td>
+
+    <!-- Mise à jour -->
+    <td>
+      {{if $module.is_setup && !$module.is_upToDate}}
+      <a class="action" href="{{$module.href}}&amp;cmd=upgrade"
+      onclick="return window.confirm('{{tr}}Are you sure?{{/tr}}')">
+        {{tr}}upgrade{{/tr}}
+      </a>
       {{else}}
-        {{tr}}disabled{{/tr}}
-      {{/if}}
-      {{if $can->edit}}
-        </a>
-        |
-        <a class="action" href="{{$module.href}}&amp;cmd=remove"
-        onclick="return window.confirm('{{tr}}This will delete all data associated with the module!{{/tr}}\n\n{{tr}}Are you sure?{{/tr}}\n')">
-          {{tr}}remove{{/tr}}
-        </a>
-        {{if $module.is_setup && !$module.is_upToDate}}
-        |
-        <a class="action" href="{{$module.href}}&amp;cmd=upgrade"
-        onclick="return window.confirm('{{tr}}Are you sure?{{/tr}}')">
-          {{tr}}upgrade{{/tr}}
-        </a>
-        {{/if}}
-        {{if $module.is_config}}
-        |
-        <a class="action" href="{{$module.href}}&amp;cmd=configure">
-          {{tr}}configure{{/tr}}
-        </a>
-        {{/if}}
+      {{tr}}Uptodate{{/tr}}
       {{/if}}
     </td>
     <td>{{$module.mod_type}}</td>

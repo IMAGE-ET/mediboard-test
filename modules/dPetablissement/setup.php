@@ -37,7 +37,10 @@ class CSetupdPetablissement extends CSetup {
             "\nADD `domiciliation` VARCHAR( 9 ) ," .
             "\nADD `siret` VARCHAR( 14 );";
     $this->addQuery($sql);
-    
+    $sql = "INSERT INTO `groups_mediboard` ( `group_id` , `text` )
+						VALUES (NULL , 'Etablissement');";
+    $this->addQuery($sql);
+
     $this->makeRevision("0.11");
     $sql = "ALTER TABLE `groups_mediboard` ADD `ape` VARCHAR( 4 ) DEFAULT NULL;";
     $this->addQuery($sql);

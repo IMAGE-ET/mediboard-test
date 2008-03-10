@@ -65,6 +65,8 @@ class CPermission extends CMbObject {
   
   function CPermission() {
     $this->CMbObject("permissions", "permission_id");
+    
+    $this->loadRefModule("admin");
   }
   
   function updateFormFields() {
