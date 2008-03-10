@@ -4,10 +4,7 @@
 if(Livret.urlEditProd) {
   Livret.urlEditProd.close();
 }
-if(MedSelector.oUrl) {
-  MedSelector.close();
-}
-	
+
 </script>
 
 

@@ -3,6 +3,7 @@
 var MedSelector = {
   sForm     : null,
   sView     : null,
+  sCode     : null,
   sSearch   : null,
   sOnglet   : null,
   oUrl      : null,
@@ -10,6 +11,10 @@ var MedSelector = {
   options : {
     width : 700,
     height: 400
+  },
+  prepared : {
+    code: null,
+    nom:null
   },
 
   pop: function() {
@@ -25,13 +30,20 @@ var MedSelector = {
   },
   
   set: function(nom, code) {
-    var oForm = document[this.sForm];
-    oForm[this.sView].value = nom;
+    this.prepared.nom = nom;
+    this.prepared.code = code;  
+  
+    // Lancement de l'execution du set
+    window.setTimeout( window.MedSelector.doSet , 1);
   },
   
+  doSet: function(){
+    var oForm = document[MedSelector.sForm];
+    Form.Element.setValue(oForm[MedSelector.sCode], MedSelector.prepared.code);
+  },
+      
   // Peut être appelé sans contexte : ne pas utiliser this
   close: function() {
     MedSelector.oUrl.close();
   }
-  
 }

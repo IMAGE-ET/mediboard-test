@@ -30,9 +30,7 @@ function viewBCB(){
 function setClose(libelle, code_cip) {
   var oSelector = window.opener.MedSelector;
   oSelector.set(libelle, code_cip);
-  if(oSelector.selfClose) {
-    window.close();
-  }
+  window.close();
 }
 
 function viewProduit(cip){

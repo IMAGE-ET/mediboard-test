@@ -114,18 +114,23 @@ function printLivret(){
          <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
          <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
          <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
+         <input type="hidden" name="code_cip" onchange="Livret.addProduit(this.value);" />
          <script type="text/javascript">
           MedSelector.init = function(onglet){
             this.sForm = "searchProd";
             this.sView = "produit";
+            this.sCode = "code_cip";
             this.sSearch = document.searchProd.produit.value;
             this.sOnglet = onglet;
             this.selfClose = false;
             this.pop();
           }
-          MedSelector.set = function(nom, code_cip){
-            Livret.addProduit(code_cip);
-          }
+          /*
+       	  MedSelector.doSet = function(){
+            var oForm = document[MedSelector.sForm];
+            Form.Element.setValue(oForm[MedSelector.sView], MedSelector.prepared.nom);
+            Livret.addProduit(MedSelector.prepared.code);
+          }*/
         </script>
       </form>
     </td>

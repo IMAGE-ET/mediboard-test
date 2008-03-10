@@ -26,20 +26,16 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 	  <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
 	  <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
 	  <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
+	  <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 	  <script type="text/javascript">
-		  if (MedSelector.oUrl) {
-		    MedSelector.close();
-		  }
 		  MedSelector.init = function(onglet){
 		    this.sForm = "searchProd";
 		    this.sView = "produit";
+		    this.sCode = "code_cip";
 		    this.sSearch = document.searchProd.produit.value;
 		    this.sOnglet = onglet;
 		    this.selfClose = false;
 		    this.pop();
-		  }
-		  MedSelector.set = function(nom, code){
-		    Prescription.addLine(code);
 		  }
 	</script>
   </form>
