@@ -9,7 +9,7 @@
     </form>
     {{$curr_item->_view}}
   </td>
-  <td>{{$curr_item->unit_price|string_format:"%.2f"}}</td>
+  <td>{{mb_value object=$curr_item field=unit_price}}</td>
   <td>
     <form name="form-item-dec-{{$curr_item->_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPstock" />
@@ -27,5 +27,5 @@
       <button type="button" class="add notext" onclick="submitOrderItem(this.form, {{$order->_id}})"></button>
     </form>
   </td>
-  <td>{{$curr_item->_price|string_format:"%.2f"}}</td>
+  <td>{{mb_value object=$curr_item field=_price}}</td>
 </tr>

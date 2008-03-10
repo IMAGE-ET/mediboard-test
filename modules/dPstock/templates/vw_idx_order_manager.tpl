@@ -32,44 +32,13 @@ function submitOrder (oForm, refreshList) {
         Nouvelle commande
       </a>
       <h3>Commandes en attente</h3>
-      <table class="tbl">
-        <tr>
-          <th>Intitulé</th>
-          <th>Fournisseur</th>
-          <th>Pièces</th>
-          <th>Total</th>
-          <th>Bloquée</th>
-          <th>Actions</th>
-        </tr>
-        <tbody id="orders[waiting]"></tbody>
-      </table>
+      <div id="orders[waiting]"></div>
       
       <h3>Commandes en attente de réception</h3>
-      <table class="tbl">
-        <tr>
-          <th>Intitulé</th>
-          <th>Fournisseur</th>
-          <th>Pièces/Reçues</th>
-          <th>Passée le</th>
-          <th>Total</th>
-          <th>Actions</th>
-        </tr>
-        <tbody id="orders[pending]"></tbody>
-      </table>
+      <div id="orders[pending]"></div>
       
       <h3>Anciennes commandes</h3>
-      <table class="tbl">
-        <tr>
-          <th>Intitulé</th>
-          <th>Fournisseur</th>
-          <th>Pièces</th>
-          <th>Passée le</th>
-          <th>Reçue le</th>
-          <th>Total</th>
-          <th>Actions</th>
-        </tr>
-        <tbody id="orders[old]"></tbody>
-      </table>
+      <div id="orders[old]"></div>
     </td>
     
     <td class="halfPane">

@@ -14,6 +14,7 @@ class CProductOrder extends CMbObject {
   // DB Fields
   var $name             = null;
   var $date_ordered     = null;
+  var $date_received    = null;
   var $societe_id       = null;
   var $received         = null;
   var $locked           = null;
@@ -28,7 +29,7 @@ class CProductOrder extends CMbObject {
 
   // Form fields
   var $_total           = null;
-  var $_received        = null;
+  var $_count_received  = null;
 
   function CProductOrder() {
     $this->CMbObject('product_order', 'order_id');
@@ -43,13 +44,15 @@ class CProductOrder extends CMbObject {
 
   function getSpecs() {
     return array (
-      'name'         => 'str maxLength|64',
-      'date_ordered' => 'dateTime',
-      'societe_id'   => 'notNull ref class|CSociete',
-      'received'     => 'notNull bool',
-      'locked'       => 'notNull bool',
-      'order_number' => 'str',
-      '_partial'     => 'boolean',
+      'name'            => 'str maxLength|64',
+      'date_ordered'    => 'dateTime',
+      'date_received'   => 'dateTime',
+      'societe_id'      => 'notNull ref class|CSociete',
+      'received'        => 'notNull bool',
+      'locked'          => 'notNull bool',
+      'order_number'    => 'str',
+      '_total'          => 'currency',
+      '_count_received' => 'num pos',
     );
   }
 
@@ -67,13 +70,13 @@ class CProductOrder extends CMbObject {
     $this->loadRefsBack();
 
     $this->_total = 0;
-    $this->_received = 0;
+    $this->_count_received = 0;
     if ($this->_ref_order_items) {
       foreach ($this->_ref_order_items as $item) {
         $item->updateFormFields();
         $this->_total += $item->_price;
         if ($item->date_received) {
-          $this->_received++;
+          $this->_count_received++;
         }
       }
     }

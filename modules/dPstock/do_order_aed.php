@@ -16,6 +16,12 @@ if(isset($_POST['date_ordered'])){
   }
 }
 
+if(isset($_POST['date_received'])){
+  if($_POST['date_received'] == 'now'){
+    $_POST['date_received'] = mbDateTime();
+  }
+}
+
 $do = new CDoObjectAddEdit('CProductOrder', 'order_id');
 $do->createMsg = 'Commande créée';
 $do->modifyMsg = 'Commande modifiée';

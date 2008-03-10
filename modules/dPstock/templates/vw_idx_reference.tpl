@@ -7,7 +7,7 @@ function pageMain() {
   <tr>
     <td class="halfPane" rowspan="3">
       <form action="?" name="selection" method="get">
-        <input type="hidden" name="m" value="dPreference" />
+        <input type="hidden" name="m" value="dPstock" />
         <input type="hidden" name="tab" value="vw_idx_reference" />
         <label for="category_id" title="Choisissez une catégorie">Catégorie</label>
         <select name="category_id" onchange="this.form.submit()">

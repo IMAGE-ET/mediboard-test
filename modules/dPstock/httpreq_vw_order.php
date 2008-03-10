@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$order_id  = mbGetValueFromGet('order_id');
+$order_id = mbGetValueFromGet('order_id');
 
 // Loads the expected Order
 $order = new CProductOrder();

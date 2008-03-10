@@ -54,6 +54,7 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
  `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `name` VARCHAR(64),
  `date_ordered` DATETIME, 
+ `date_received` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
  `received` BOOL NOT NULL DEFAULT \'0\',

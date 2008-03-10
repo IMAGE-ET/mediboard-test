@@ -28,9 +28,6 @@ class CProductStock extends CMbObject {
   //    Multiple
   var $_ref_stock_outs          = null;
 
-  // Form fields
-  var $_rupture                 = null;
-
   function CProductStock() {
     $this->CMbObject('product_stock', 'stock_id');
     $this->loadRefModule(basename(dirname(__FILE__)));
@@ -58,7 +55,16 @@ class CProductStock extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->_ref_product->_view . " (x$this->quantity)";
-    $this->_rupture = $this->quantity <= $this->order_threshold_min; // TODO: gestion des autres seuils
+  }
+  
+  function updateDBFields() {
+    /*if (!$this->order_threshold_critical) {
+    	$this->order_threshold_critical = $this->order_threshold_min;
+    }
+    if (!$this->order_threshold_optimum) {
+      $this->order_threshold_optimum = round(($this->order_threshold_min+$this->order_threshold_max)/2);
+    }*/
+    //mbTrace($this);
   }
 
   function loadRefsFwd(){

@@ -39,12 +39,14 @@ class CProductOrderItem extends CMbObject {
       'quantity'      => 'notNull num pos',
       'unit_price'    => 'currency',
       'date_received' => 'dateTime',
+	    '_price'        => 'currency',
+	    '_received'     => 'bool',
     );
   }
 
   function updateFormFields() {
     parent::updateFormFields();
-    //$this->loadRefsFwd();
+
     $this->_ref_reference = new CProductReference();
     $this->_ref_reference->load($this->reference_id);
     $this->_view = $this->_ref_reference->_view;

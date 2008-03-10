@@ -17,19 +17,22 @@ $where = array();
 $order = new CProductOrder();
 
 switch ($type) {
-  case 'waiting' :// Waiting orders (not sent)
+	// Waiting orders (not sent)
+  case 'waiting' :
     $where['date_ordered'] = 'IS NULL';
     $where['received'] = " = '0'";
     $tpl_file = 'waiting';
     break;
 
-  case 'pending':// Pending orders (not received yet)
+  // Pending orders (not received yet)
+  case 'pending':
     $where['date_ordered'] = 'IS NOT NULL';
     $tpl_file = 'pending';
     break;
 
   default:
-  case 'old':// Old orders (received)
+  // Old orders (received)
+  case 'old':
     $where['received'] = " = '1'";
     $tpl_file = 'old';
     break;
