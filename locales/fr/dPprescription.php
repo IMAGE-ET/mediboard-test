@@ -1,5 +1,4 @@
 <?php
-$locales['config-dPprescription-CPrescription-add_element_category'] = "Ajout d\'élément de catégorie dans la prescription";
 $locales['CCategoryPrescription'] = "";
 $locales['CCategoryPrescription-back-'] = "";
 $locales['CCategoryPrescription-back-element_prescription'] = "";
@@ -18,7 +17,7 @@ $locales['CCategoryPrescription-nom-desc'] = "Nom";
 $locales['CCategoryPrescription-_view'] = "";
 $locales['CCategoryPrescription-_view-court'] = "";
 $locales['CCategoryPrescription-_view-desc'] = "";
-$locales['CCategoryPrescription.chapitre.anapath'] = "Anapth";
+$locales['CCategoryPrescription.chapitre.anapath'] = "Anapath";
 $locales['CCategoryPrescription.chapitre.biologie'] = "Biologie";
 $locales['CCategoryPrescription.chapitre.consult'] = "Consultation spécialisée";
 $locales['CCategoryPrescription.chapitre.dmi'] = "DMI";
@@ -54,6 +53,7 @@ $locales['CElementPrescription.more'] = "";
 $locales['CElementPrescription.none'] = "";
 $locales['CElementPrescription.one'] = "";
 $locales['CMediusers-back-'] = "";
+$locales['config-dPprescription-CPrescription-add_element_category'] = "Ajout d\'élément de catégorie dans la prescription";
 $locales['CPrescription'] = "";
 $locales['CPrescription-back-'] = "";
 $locales['CPrescription-back-prescription_line'] = "";

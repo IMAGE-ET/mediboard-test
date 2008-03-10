@@ -1,5 +1,4 @@
 <?php
-$locales['config-dPprescription-CPrescription-add_element_category'] = "";
 $locales['CCategoryPrescription'] = "";
 $locales['CCategoryPrescription-back-'] = "";
 $locales['CCategoryPrescription-back-element_prescription'] = "";
@@ -54,6 +53,7 @@ $locales['CElementPrescription.more'] = "";
 $locales['CElementPrescription.none'] = "";
 $locales['CElementPrescription.one'] = "";
 $locales['CMediusers-back-'] = "";
+$locales['config-dPprescription-CPrescription-add_element_category'] = "";
 $locales['CPrescription'] = "";
 $locales['CPrescription-back-'] = "";
 $locales['CPrescription-back-prescription_line'] = "";
