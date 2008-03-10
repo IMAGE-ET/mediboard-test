@@ -1,0 +1,39 @@
+<?php /* $Id: $ */
+
+/**
+ *	@package Mediboard
+ *	@subpackage dPstock
+ *	@version $Revision: $
+ *  @author Fabien Ménager
+ */
+ 
+global $AppUI, $can, $m;
+
+$can->needsRead();
+
+$societe_id = mbGetValueFromGetOrSession('societe_id');
+
+// Loads the expected Societe
+$societe = new CSociete();
+$societe->load($societe_id);
+$societe->loadRefsBack();
+
+foreach($societe->_ref_product_references as $key => $value) {
+  $value->loadRefsFwd();
+}
+
+foreach($societe->_ref_products as $key => $value) {
+  $value->loadRefsFwd();
+}
+
+// Loads the Societes list
+$list_societes = $societe->loadList(null, 'name');
+
+// Smarty template
+$smarty = new CSmartyDP();
+
+$smarty->assign('societe',       $societe);
+$smarty->assign('list_societes', $list_societes);
+
+$smarty->display('vw_idx_societe.tpl');
+?>
