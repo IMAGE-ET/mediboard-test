@@ -108,7 +108,10 @@ class CFicheEi extends CMbObject {
       "qualite_user_id"              => "ref class|CMediusers",
       "qualite_date_validation"      => "dateTime",
       "qualite_date_verification"    => "date",
-      "qualite_date_controle"        => "date"
+      "qualite_date_controle"        => "date",
+      // Form fields
+      "_incident_heure"              => "num",
+      "_incident_min"                => "num"
     );
     return array_merge($specsParent, $specs);
   }
