@@ -526,9 +526,11 @@ class CSejour extends CCodable {
       $acte_ccam->loadRefsFwd();
     } 
     
-    
+    // Chargement du RPU dans le cas des urgences
     $this->loadRefRPU();
-    $this->_ref_rpu->loadRefSejour();
+    if ($this->_ref_rpu) {
+      $this->_ref_rpu->loadRefSejour();
+    }
     
     $this->loadNumDossier();
     
