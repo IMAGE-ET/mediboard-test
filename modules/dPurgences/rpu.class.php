@@ -70,14 +70,17 @@ class CRPU extends CMbObject {
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "enum list|1|P|2|3|4|5|D",
-      "_responsable_id" => "notNull ref class|CMediusers",
-      "_entree"         => "dateTime",
       "sortie"          => "dateTime",
       "mode_sortie"     => "enum list|6|7|8|9 default|8",
       "destination"     => "enum list|1|2|3|4|6|7",
       "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
       "radio_debut"     => "dateTime",
-      "radio_fin"       => "dateTime"
+      "radio_fin"       => "dateTime",
+      
+      "_patient_id"     => "notNull ref class|CPatient",
+      "_responsable_id" => "notNull ref class|CMediusers",
+      "_entree"         => "dateTime",
+      
      );
     return array_merge($specsParent, $specs);
   }
@@ -86,16 +89,19 @@ class CRPU extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     
-    $this->_patient_id = $this->_ref_sejour->_ref_patient->_id;
-    $this->_cp         = $this->_ref_sejour->_ref_patient->cp;
-    $this->_ville      = $this->_ref_sejour->_ref_patient->ville;
-    $this->_naissance  = $this->_ref_sejour->_ref_patient->naissance;
+    $sejour =& $this->_ref_sejour;
+
+    $this->_responsable_id = $sejour->praticien_id;
+    $this->_entree         = $sejour->_entree;
+    $this->_DP             = $sejour->DP;
     
-    $this->_responsable_id = $this->_ref_sejour->praticien_id;
-    $this->_entree         = $this->_ref_sejour->_entree;
-    $this->_DP             = $this->_ref_sejour->DP;
+    $patient =& $sejour->_ref_patient;
     
-    $this->_view = $this->_ref_sejour->_ref_patient->_view;
+    $this->_patient_id = $patient->_id;
+    $this->_cp         = $patient->cp;
+    $this->_ville      = $patient->ville;
+    $this->_naissance  = $patient->naissance;
+    $this->_view       = $patient->_view;
   }
   
   function loadRefsFwd() {

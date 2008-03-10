@@ -33,7 +33,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("banques"     , $banques                );
 $smarty->assign("disciplines" , $disciplines            );
 $smarty->assign("spec_cpam"   , $spec_cpam              );
-$smarty->assign("user"        ,$mediuser                );
+$smarty->assign("user"        , $mediuser               );
 $smarty->assign("fonction"    , $mediuser->_ref_function);
 
 $smarty->display("edit_infos.tpl");

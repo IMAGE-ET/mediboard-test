@@ -141,7 +141,7 @@ function popPlanning(debut) {
         <th>{{mb_label object=$plagesel field="_heuredeb"}}</th>
         <td>
           <select name="_heuredeb" class="notNull num">
-          {{foreach from=$listHours|smarty:nodefaults item=heure}}
+          {{foreach from=$listHours item=heure}}
             <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heuredeb == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
             </option>
@@ -149,7 +149,7 @@ function popPlanning(debut) {
           </select>
           :
           <select name="_minutedeb">
-          {{foreach from=$listMins|smarty:nodefaults item=minute}}
+          {{foreach from=$listMins item=minute}}
             <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutedeb == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
             </option>
@@ -168,7 +168,7 @@ function popPlanning(debut) {
     	  <th>{{mb_label object=$plagesel field="_heurefin"}}</th>
         <td>
           <select name="_heurefin" class="notNull num">
-            {{foreach from=$listHours|smarty:nodefaults item=heure}}
+            {{foreach from=$listHours item=heure}}
             <option value="{{$heure|string_format:"%02d"}}" {{if $plagesel->_heurefin == $heure}} selected="selected" {{/if}} >
               {{$heure|string_format:"%02d"}}
             </option>
@@ -176,7 +176,7 @@ function popPlanning(debut) {
           </select>
           :
           <select name="_minutefin">
-            {{foreach from=$listMins|smarty:nodefaults item=minute}}
+            {{foreach from=$listMins item=minute}}
             <option value="{{$minute|string_format:"%02d"}}" {{if $plagesel->_minutefin == $minute}} selected="selected" {{/if}} >
               {{$minute|string_format:"%02d"}}
             </option>
