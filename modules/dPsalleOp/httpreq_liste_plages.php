@@ -72,6 +72,7 @@ if($salle) {
 	  $curr_op->loadExtCodesCCAM();
 	}
 	
+	// Urgences
 	$urgences = new COperation;
 	$where = array();
 	$where["date"]     = "= '$date'";

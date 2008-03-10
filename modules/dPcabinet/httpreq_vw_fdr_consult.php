@@ -75,7 +75,7 @@ if ($selConsult) {
   $consult->loadRefsFiles();
   $consult->loadRefsFichesExamen();
   $consult->loadRefPrescription();
-  if($consult->_ref_prescription->_id){
+  if($consult->_ref_prescription && $consult->_ref_prescription->_id){
     $consult->_ref_prescription->loadRefsLines();
     $consult->_ref_prescription->loadRefsLinesElementByCat();  
   }
