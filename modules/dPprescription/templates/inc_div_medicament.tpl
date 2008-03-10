@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+{{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
+{{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
+{{assign var=nb_total value=$nb_med+$nb_comment}}
+
+Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
+
+</script>
+
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">

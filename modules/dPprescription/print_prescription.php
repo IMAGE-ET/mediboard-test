@@ -19,9 +19,10 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
 $prescription->_ref_praticien->loadRefsFwd();
-$prescription->loadRefsLines();
-$prescription->loadRefsLinesElementByCat();
 
+$prescription->loadRefsLinesMedComments();
+$prescription->loadRefsLinesElementsComments();
+     
 // Création du template
 $smarty = new CSmartyDP();
 

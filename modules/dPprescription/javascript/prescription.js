@@ -116,5 +116,20 @@ var Prescription = {
         Prescription.reload(prescription_id, null, category_name)
       } 
     } );
+  },
+  refreshTabHeader: function(tabName, lineCount){
+    // On cible le bon a href
+    tab = $$("ul li a[href=#"+tabName+"]");
+    
+    // On recupere le nom de l'onglet
+    tabSplit = tab[0].innerHTML.split(" ");
+    name_tab = tabSplit[0];
+    
+    // Si le nombre de ligne est > 0
+    if(lineCount > 0){
+    tab[0].innerHTML = name_tab+" ("+lineCount+")";
+    } else {
+      tab[0].innerHTML = name_tab;
+    }
   }
 };

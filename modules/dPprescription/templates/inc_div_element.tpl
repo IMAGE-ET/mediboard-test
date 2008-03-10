@@ -1,3 +1,14 @@
+{{assign var=_prescription value=$prescription->_ref_lines_elements_comments}}
+{{assign var=lines_element value=$_prescription.$element}}
+
+{{assign var=nb_elt_element value=$lines_element.element|@count}}
+{{assign var=nb_elt_comment value=$lines_element.comment|@count}}
+{{assign var=nb_elt_total value=$nb_elt_element+$nb_elt_comment}}
+<script type="text/javascript">
+
+Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
+
+</script>
 
   <form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';">
@@ -72,9 +83,6 @@
     </form>
  </div>
 
-
-{{assign var=_prescription value=$prescription->_ref_lines_elements_comments}}
-{{assign var=lines_element value=$_prescription.$element}}
 
 {{if $lines_element.element || $lines_element.comment}}
 
