@@ -93,6 +93,9 @@ function pageMain() {
     </td>
 
     <td class="text" style="background-color: {{$background}};">
+      <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
+        <img src="images/icons/search.png" alt="Dossier patient"/>
+      </a>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         <strong>
         {{$patient->_view}}
@@ -106,7 +109,7 @@ function pageMain() {
     <td class="text" style="background-color: {{$background}};">
       {{if $can->edit}}
       <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
-         <img src="images/icons/planning.png" alt="Planifier"/>
+        <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
       {{/if}}
 
@@ -181,7 +184,7 @@ function pageMain() {
          par {{$consult->_ref_plageconsult->_ref_chir->_view}}
          {{if $can->edit}}
          <br />
-         <a class="action" title="Prise en charge" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
+         <a class="action" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
            Voir prise en charge
          </a>
          {{/if}}
