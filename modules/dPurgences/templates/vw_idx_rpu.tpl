@@ -115,6 +115,9 @@ function pageMain() {
         {{if $curr_sejour->_num_dossier}}
           [{{$curr_sejour->_num_dossier}}]
         {{/if}}
+        {{if $rpu->radio_debut && !$rpu->radio_fin}}
+        <br />en radiologie
+        {{/if}}
       </a>
     </td>
     
