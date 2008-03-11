@@ -8,14 +8,18 @@ function calculImcVst(){
      fVst = {{if $patient->sexe=="m"}}70{{else}}65{{/if}}*parseFloat(oForm.poid.value);
      if(oForm.taille.value && !isNaN(parseInt(oForm.taille.value)) && parseInt(oForm.taille.value)>0){
        fImc = round(parseFloat(oForm.poid.value) / (parseInt(oForm.taille.value) * parseInt(oForm.taille.value) * 0.0001),2);
-       if(fImc < {{if $patient->sexe=="m"}}20{{else}}19{{/if}}){
+       if(fImc < 15){
+         sImcValeur = "Inanition";
+       }else if(fImc < 18.5){
          sImcValeur = "Maigreur";
-       }else if(fImc > {{if $patient->sexe=="m"}}25{{else}}24{{/if}} && fImc <=30){
-         sImcValeur = "Surpoids";
-       }else if(fImc > 30 && fImc <=40){
-         sImcValeur = "Obésité";
        }else if(fImc > 40){
          sImcValeur = "Obésité morbide";
+       }else if(fImc > 35){
+         sImcValeur = "Obésité sévère";
+       }else if(fImc > 30){
+         sImcValeur = "Obésité modérée";
+       }else if(fImc > 25){
+         sImcValeur = "Surpoid";
        }
      }
    }
