@@ -957,9 +957,14 @@ class CPatient extends CMbObject {
     return($testNom && $testPrenom);
   }
   
-  function getSiblings() {
+  /**
+   * DEPRECATED, TO BE REMOVED 
+   * @return array[CPatient] Array of siblings
+   */
+  function getSiblingsOld() {
   	$where = array();
     
+  	CSQLDataSource::$trace = true;
     $wherePairs[] = "(nom = %1 AND prenom = %2)";
     if ($this->naissance != "0000-00-00") {
       $wherePairs[] = "(nom = %1 AND naissance = %3)";
@@ -968,10 +973,47 @@ class CPatient extends CMbObject {
     
     $where[] = $this->_spec->ds->prepare(join(" OR ", $wherePairs), $this->nom, $this->prenom, $this->naissance);
     $siblings = $this->loadList($where);
+
+    CSQLDataSource::$trace = false;
     unset($siblings[$this->_id]);
     return $siblings;
   }
 
+  /**
+   * Finds patient siblings with at least two exact matching traits out of 
+   * nom, prenom, naissance
+   * Optimized version with split queries for index usage forcing
+   * @return array[CPatient] Array of siblings
+   */
+  function getSiblings() {
+    $ds =& $this->_spec->ds;
+
+    $where = array (
+      "nom"    => $ds->prepare(" = %", $this->nom   ),
+      "prenom" => $ds->prepare(" = %", $this->prenom),
+      "patient_id" => "!= '$this->_id'",
+    );
+	  $siblings = $this->loadList($where);
+    
+    if ($this->naissance != "0000-00-00") {
+	    $where = array (
+	      "nom"       => $ds->prepare(" = %", $this->nom      ),
+	      "naissance" => $ds->prepare(" = %", $this->naissance),
+        "patient_id" => "!= '$this->_id'",
+      );
+	    $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+
+	    $where = array (
+	      "prenom"    => $ds->prepare(" = %", $this->prenom   ),
+	      "naissance" => $ds->prepare(" = %", $this->naissance),
+        "patient_id" => "!= '$this->_id'",
+	    );
+	    $siblings = CMbArray::mergeKeys($siblings, $this->loadList($where));
+    }
+    
+    return $siblings;
+  }
+  
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
 

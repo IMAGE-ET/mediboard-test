@@ -306,6 +306,14 @@ $performance["ccam"]    = array (
   "useCount"   => CCodeCCAM::$useCount
 );
 
+foreach(CSQLDataSource::$dataSources as $dataSource) {
+  $chrono = $dataSource->chrono;
+  $performance["dataSources"][$dataSource->dsn] = array(
+    "count" => $chrono->nbSteps,
+    "time" => $chrono->total,
+  );
+}
+
 // Inclusion du footer
 if (!$suppressHeaders) {
   

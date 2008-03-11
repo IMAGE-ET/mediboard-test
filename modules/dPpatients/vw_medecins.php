@@ -45,7 +45,7 @@ if ($medecin_prenom) $where[] = "prenom LIKE '$medecin_prenom%'";
 if ($medecin_dept != "00") $where[] = "cp LIKE '".$medecin_dept."___'";
 
 $medecins = new CMedecin();
-$medecins = $medecins->loadList($where, "nom, prenom", "0, 100");
+$medecins = $medecins->loadList($where, "nom, prenom", "0, 50");
 
 // Création du template
 $smarty = new CSmartyDP();

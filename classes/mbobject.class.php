@@ -904,6 +904,11 @@ class CMbObject {
     if (!$backObject->_ref_module) {
       return;
     }
+
+    // Empty object
+    if (!$this->_id) {
+      return 0;
+    }
     
     $query = "SELECT COUNT($backObject->_tbl_key) " .
       "\nFROM `$backObject->_tbl` " .
