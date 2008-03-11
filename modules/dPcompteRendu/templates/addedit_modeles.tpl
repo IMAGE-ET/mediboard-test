@@ -10,7 +10,7 @@ function copie() {
   {{if $droit}}
     if(confirm('Vous avez deja accès à ce modèle, souhaitez-vous confirmer la copie de ce modèle ?')){
       var oForm = document.editFrm;
-      oForm.compte_rendu_id.value = 0;
+      oForm.compte_rendu_id.value = "";
       
       {{if $isPraticien}}
       oForm.chir_id.value = "{{$user_id}}";
