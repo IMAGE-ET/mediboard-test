@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.15";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 
 
@@ -97,7 +97,20 @@ class CSetupdPprescription extends CSetup {
             PRIMARY KEY (`prescription_line_comment_id`)) TYPE=MYISAM;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.15";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `ald` ENUM('0','1');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `ald` ENUM('0','1');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line`
+            ADD `ald` ENUM('0','1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
   }  
 }
 

@@ -10,12 +10,12 @@
 /**
  * The CPrescription class
  */
-class CPrescriptionLine extends CMbObject {
+class CPrescriptionLineMedicament extends CPrescriptionLine {
   // DB Table key
   var $prescription_line_id = null;
   
   // DB Fields
-  var $prescription_id = null;
+  //var $prescription_id = null;
   var $code_cip        = null;
   var $no_poso         = null;
   var $commentaire     = null;
@@ -31,7 +31,7 @@ class CPrescriptionLine extends CMbObject {
   var $_nb_alertes       = null;
 
   
-  function CPrescriptionLine() {
+  function CPrescriptionLineMedicament() {
     $this->CMbObject("prescription_line", "prescription_line_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
@@ -40,7 +40,6 @@ class CPrescriptionLine extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "prescription_id" => "notNull ref class|CPrescription cascade",
       "code_cip"        => "notNull numchar|7",
       "no_poso"         => "num max|128",
       "commentaire"     => "str"

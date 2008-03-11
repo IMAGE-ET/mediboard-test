@@ -50,45 +50,74 @@ class CBoolSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     $sHtml        = "";
     $field        = htmlspecialchars($this->fieldName);
+    $typeEnum     = CMbArray::extract($params, "typeEnum", "radio");
     $separator    = CMbArray::extract($params, "separator");
     $disabled     = CMbArray::extract($params, "disabled");
     $default      = CMbArray::extract($params, "default", $this->default);
     $extra        = CMbArray::makeXmlAttributes($params);
     
-
-    // Attributes for all inputs
-    $attributes = array(
-      "type" => "radio",
-      "name" => $field,
-    );
+    if ($typeEnum == "radio") {
+	    // Attributes for all inputs
+	    $attributes = array(
+	      "type" => "radio",
+	      "name" => $field,
+	    );
+	    
+	    if (null === $value) {
+	      $value = "$default";
+	    }
+	    
+	    for ($i = 1; $i >= 0; $i--) {
+	      $attributes["value"] = "$i"; 
+	      $attributes["checked"] = $value === "$i" ? "checked" : null; 
+	      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
+	      $attributes["class"] = $i == 1 ? $this->prop : null;
+	      $attributes["class"].= $className ? $className : null;
+	      
+	      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
+	      
+	      $sHtml .= "\n<input $xmlAttributes $extra />";
+	      
+	      $sTr = CAppUI::tr("bool.$i");
+	      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
+	      
+	      if ($i != 0 && $separator){
+	        $sHtml .= "\n$separator";
+	      }
+	    }
+	    return $sHtml;
+    } 
     
-    if (null === $value) {
-      $value = "$default";
-    }
-    
-    for ($i = 1; $i >= 0; $i--) {
-      $attributes["value"] = "$i"; 
-      $attributes["checked"] = $value === "$i" ? "checked" : null; 
-      $attributes["disabled"] = $disabled === "$i" ? "disabled" : null; 
-      $attributes["class"] = $i == 1 ? $this->prop : null;
-      $attributes["class"].= $className ? $className : null;
-      
-      $xmlAttributes = CMbArray::makeXmlAttributes($attributes);
-      
-      $sHtml .= "\n<input $xmlAttributes $extra />";
-      
-      $sTr = CAppUI::tr("bool.$i");
-      $sHtml .= "\n<label for=\"{$field}_$i\">$sTr</label> ";
-      
-      if ($i != 0 && $separator){
-        $sHtml .= "\n$separator";
+    if($typeEnum == "checkbox"){
+    	if(($value !== null && $value === "1")){
+        $checked = " checked=\"checked\""; 
+      }else{
+        $checked = "";
       }
-    }
-    return $sHtml;
+    	$sHtml = "<input type=\"checkbox\" name=\"__$field\" 
+        onclick=\"
+          if(getCheckedValue(this.form)=='on'){ 
+            Form.Element.setValue($field, 1);            
+          }
+          else {
+            Form.Element.setValue($field, 0);
+          }\"
+          $checked  />";
+    	$sHtml .= "<input type=hidden name=\"$field\" $extra value=\"$value\"/>";
+    
+    	return $sHtml;
+    } 
   }
   
   function getLabelForElement($object, &$params){
-    return $this->fieldName."_1";
+  	$typeEnum  = CMbArray::extract($params, "typeEnum", "radio");
+    
+  	if($typeEnum == "radio"){
+      return $this->fieldName."_1";
+  	}
+  	if($typeEnum == "checkbox"){
+  		return "__".$this->fieldName;
+  	}
   }
   
   function sample(&$object, $consistent = true){

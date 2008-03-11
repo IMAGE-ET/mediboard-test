@@ -89,7 +89,7 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
 <table class="tbl">    
   <!-- Si il y a des elements de type element dans la prescription -->
   <tr>
-    <th colspan="4">
+    <th colspan="5">
       {{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}
     </th>
   </tr>
@@ -114,6 +114,16 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
         <input type="text" name="commentaire" value="{{$_line_element->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
     </td>
+    <td>
+      <form name="addALD-{{$_line_element->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
+        {{mb_field object=$_line_element field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+        {{mb_label object=$_line_element field="ald" typeEnum="checkbox"}}
+      </form>
+    </td>
   </tr>
   </tbody>
   {{/foreach}}
@@ -135,6 +145,16 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
       </td>
       <td colspan="3">
         {{$_line_comment->commentaire}}
+      </td>
+      <td style="width: 25px">
+        <form name="lineCommentALD{{$element}}-{{$_line_comment->_id}}" action="" method="post">
+          <input type="hidden" name="m" value="dPprescription" />
+          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+          {{mb_field object=$_line_comment field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+          {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
+        </form>
       </td>
     </tr>
   </tbody>

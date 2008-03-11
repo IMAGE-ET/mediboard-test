@@ -10,12 +10,12 @@
 /**
  * The CPrescription class
  */
-class CPrescriptionLineComment extends CMbObject {
+class CPrescriptionLineComment extends CPrescriptionLine {
   // DB Table key
   var $prescription_line_comment_id = null;
   
   // DB Fields
-  var $prescription_id         = null;
+  //var $prescription_id         = null;
   var $commentaire             = null;
   var $chapitre                = null;
   
@@ -30,7 +30,6 @@ class CPrescriptionLineComment extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "prescription_id" => "notNull ref class|CPrescription",
       "chapitre"        => "notNull enum list|medicament|dmi|anapath|biologie|imagerie|consult|kine|soin",
       "commentaire"     => "text"
     );

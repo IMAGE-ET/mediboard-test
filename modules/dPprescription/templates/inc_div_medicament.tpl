@@ -55,11 +55,11 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
     </form>
  </div> 
 
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.med}}
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
 <table class="tbl">
   {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}} 
   <tr>
-    <th colspan="4">Médicaments</th>
+    <th colspan="5">Médicaments</th>
   </tr>
   {{/if}}
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
@@ -93,7 +93,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           <ul>
           {{foreach from=$curr_type item=curr_alerte}}
             <li>
-              <strong>{{tr}}CPrescriptionLine-alerte-{{$type}}-court{{/tr}} :</strong>
+              <strong>{{tr}}CPrescriptionLineMedicament-alerte-{{$type}}-court{{/tr}} :</strong>
               {{$curr_alerte}}
             </li>
           {{/foreach}}
@@ -108,7 +108,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </a>
       <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_aed" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
         <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
         <input type="hidden" name="del" value="0" />
         <select name="no_poso" onchange="submitFormAjax(this.form, 'systemMsg')">
@@ -120,6 +120,16 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           </option>
           {{/foreach}}
         </select>
+      </form>
+    </td>
+
+    <td>
+      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+        <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
     </td>
     <td>
@@ -144,12 +154,14 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           }
         </script>
       </div>
-      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
+      <form action="?" method="post" name="editLineALD-{{$curr_line->_id}}">
         <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_aed" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
         <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
+        
+        {{mb_field object=$curr_line field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+        {{mb_label object=$curr_line field="ald" typeEnum="checkbox"}}
       </form>
     </td>
    </tr>
@@ -173,6 +185,16 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </td>
       <td colspan="3">
         {{$_line_comment->commentaire}}
+      </td>
+      <td>
+	      <form action="?" method="post" name="editLineCommentALD-{{$_line_comment->_id}}">
+	        <input type="hidden" name="m" value="dPprescription" />
+	        <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	        <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}"/>
+	        <input type="hidden" name="del" value="0" />
+	        {{mb_field object=$_line_comment field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	        {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
+	      </form>
       </td>
     </tr>
   </tbody>

@@ -16,7 +16,7 @@ if($('alertes')){
 <!-- Formulaire d'ajout de ligne dans la prescription -->
 <form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_prescription_line_aed" />
+  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
   <input type="hidden" name="prescription_line_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>

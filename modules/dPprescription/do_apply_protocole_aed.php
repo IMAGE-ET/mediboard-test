@@ -21,7 +21,7 @@ $protocole->loadRefsLines();
 $protocole->loadRefsLinesElement();
 
 foreach($protocole->_ref_prescription_lines as $line){
-  $new_line = new CPrescriptionLine();
+  $new_line = new CPrescriptionLineMedicament();
   $new_line = $line;
   $new_line->_id = "";
   $new_line->prescription_id = $prescription_id;

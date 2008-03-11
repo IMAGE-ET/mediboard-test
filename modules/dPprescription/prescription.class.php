@@ -38,7 +38,7 @@ class CPrescription extends CMbObject {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["prescription_line"] = "CPrescriptionLine prescription_id";
+    $backRefs["prescription_line_medicament"] = "CPrescriptionLineMedicament prescription_id";
     return $backRefs;
   }
   
@@ -77,7 +77,7 @@ class CPrescription extends CMbObject {
   
   // Chargement des lignes de prescription
   function loadRefsLines() {
-    $line = new CPrescriptionLine();
+    $line = new CPrescriptionLineMedicament();
     $where = array("prescription_id" => "= $this->_id");
     $order = "prescription_line_id";
     $this->_ref_prescription_lines = $line->loadList($where, $order);

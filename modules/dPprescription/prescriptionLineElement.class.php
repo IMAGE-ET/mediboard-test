@@ -10,13 +10,13 @@
 /**
  * The CPrescription class
  */
-class CPrescriptionLineElement extends CMbObject {
+class CPrescriptionLineElement extends CPrescriptionLine {
   // DB Table key
   var $prescription_line_element_id = null;
   
   // DB Fields
   var $element_prescription_id = null;
-  var $prescription_id         = null;
+  //var $prescription_id         = null;
   var $commentaire             = null;
   
   var $_ref_element_prescription = null;
@@ -31,7 +31,6 @@ class CPrescriptionLineElement extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "element_prescription_id" => "notNull ref class|CElementPrescription cascade",
-      "prescription_id"         => "notNull ref class|CPrescription",
       "commentaire"             => "str"
     );
     return array_merge($specsParent, $specs);
