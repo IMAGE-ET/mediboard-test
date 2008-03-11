@@ -41,7 +41,7 @@ foreach($localesDirs as $locale){
   //Ecriture du fichier
   $translateModule->options = array("name" => "locales");
   $translateModule->targetPath = "locales/$locale/$module.php";
-  $translateModule->update($translation, false);  
+  $translateModule->update($translation, true);
 }
 
 $AppUI->setMsg( "Locales file saved", UI_MSG_OK );
