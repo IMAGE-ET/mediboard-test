@@ -15,7 +15,7 @@
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
 	    <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-	    <td>{{mb_value object=$curr_order field=date_received}}</td>
+	    <td>{{*mb_value object=$curr_order field=date_received*}}</td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
 	    <td>redo del</td>
 	  </tr>

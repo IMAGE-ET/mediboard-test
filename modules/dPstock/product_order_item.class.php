@@ -40,7 +40,6 @@ class CProductOrderItem extends CMbObject {
       'unit_price'    => 'currency',
       'date_received' => 'dateTime',
 	    '_price'        => 'currency',
-	    '_received'     => 'bool',
     );
   }
 
@@ -52,6 +51,16 @@ class CProductOrderItem extends CMbObject {
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
   }
+  
+  function updateDBFields() {
+    if ($this->_received) {
+    	$this->loadRefsFwd();
+    	$this->_ref_order->updateFormFields();
+      if ($this->_ref_order->_count_received == count($this->_ref_order->_ref_order_items)) {
+      	$this->_ref_order->received = 1;
+      }
+    }
+  }
 
   function loadRefsFwd() {
     $this->_ref_reference = new CProductReference();
@@ -62,7 +71,7 @@ class CProductOrderItem extends CMbObject {
   }
 
   function store() {
-    if($this->order_id && $this->reference_id) {
+    if($this->order_id && $this->reference_id && !$this->_id) {
       $where['order_id']     = "= '$this->order_id'";
       $where['reference_id'] = "= '$this->reference_id'";
 
@@ -82,9 +91,5 @@ class CProductOrderItem extends CMbObject {
     }
     return parent::store();
   }
-  
-  /*function store() {
-    
-  }*/
 }
 ?>

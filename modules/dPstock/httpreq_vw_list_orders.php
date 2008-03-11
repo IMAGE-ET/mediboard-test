@@ -27,6 +27,7 @@ switch ($type) {
   // Pending orders (not received yet)
   case 'pending':
     $where['date_ordered'] = 'IS NOT NULL';
+    $where['received'] = " = '0'";
     $tpl_file = 'pending';
     break;
 

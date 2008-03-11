@@ -14,7 +14,6 @@ class CProductOrder extends CMbObject {
   // DB Fields
   var $name             = null;
   var $date_ordered     = null;
-  var $date_received    = null;
   var $societe_id       = null;
   var $received         = null;
   var $locked           = null;
@@ -30,6 +29,7 @@ class CProductOrder extends CMbObject {
   // Form fields
   var $_total           = null;
   var $_count_received  = null;
+  var $_received        = null;
 
   function CProductOrder() {
     $this->CMbObject('product_order', 'order_id');
@@ -46,13 +46,13 @@ class CProductOrder extends CMbObject {
     return array (
       'name'            => 'str maxLength|64',
       'date_ordered'    => 'dateTime',
-      'date_received'   => 'dateTime',
       'societe_id'      => 'notNull ref class|CSociete',
       'received'        => 'notNull bool',
       'locked'          => 'notNull bool',
       'order_number'    => 'str',
       '_total'          => 'currency',
       '_count_received' => 'num pos',
+      '_received'       => 'bool', // mark all the items as received
     );
   }
 
@@ -82,11 +82,20 @@ class CProductOrder extends CMbObject {
     }
     
     $count = count($this->_ref_order_items);
-    $this->_view = /*mbDateTime(null, $this->date_ordered).*/' ['.$count.' article'.(($count>1)?'s':'').', total = '.$this->_total.']';
+    $this->_view = $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
   }
   
   function updateDBFields() {
-    parent::updateDBFields();
+    if ($this->_received) {
+    	$this->loadRefsBack();
+    	foreach ($this->_ref_order_items as $item) {
+    		echo $item->date_received;
+    		if ($item->date_received == null) {
+    		  $item->date_received = mbDateTime();
+    		}
+    		$item->store();
+    	}
+    }
     //$this->date_ordered = mbDateTime();
   }
 

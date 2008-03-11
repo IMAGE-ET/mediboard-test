@@ -55,5 +55,5 @@ $smarty->assign('societe',         $societe);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
 
-$smarty->display('vw_aed_order.tpl');
+$smarty->display('vw_aed_order_fill.tpl');
 ?>

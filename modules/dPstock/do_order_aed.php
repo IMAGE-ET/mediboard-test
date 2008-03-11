@@ -16,10 +16,10 @@ if(isset($_POST['date_ordered'])){
   }
 }
 
-if(isset($_POST['date_received'])){
-  if($_POST['date_received'] == 'now'){
-    $_POST['date_received'] = mbDateTime();
-  }
+if((isset($_POST['date_received']) && $_POST['date_received'] == 'now') ||
+   (isset($_POST['_received']) && $_POST['_received'] == 1)) {
+  $_POST['date_received'] = mbDateTime();
+  $_POST['received'] = 1;
 }
 
 $do = new CDoObjectAddEdit('CProductOrder', 'order_id');

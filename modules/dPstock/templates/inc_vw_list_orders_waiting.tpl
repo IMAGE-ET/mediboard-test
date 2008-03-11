@@ -13,7 +13,7 @@
 	    <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>
-	      <a class="buttonedit" href="?m={{$m}}&tab=vw_aed_order&order_id={{$curr_order->_id}}">
+	      <a class="buttonedit" href="?m={{$m}}&tab=vw_aed_order_fill&order_id={{$curr_order->_id}}">
 	        {{$curr_order->_ref_order_items|@count}}
 	      </a>
 	    </td>

@@ -2,9 +2,6 @@
 function pageMain() {
   regFieldCalendar("edit_order", "date");
   PairEffect.initGroup("productToggle", { bStartVisible: true });
-  if({{$order->_id}}){
-    refreshOrder({{$order->_id}});
-  }
 }
 
 function refreshOrder(order_id) {
@@ -24,7 +21,7 @@ function submitOrderItem (oForm, order_id) {
     <td class="halfPane">
       <form action="?" name="selection" method="get">
         <input type="hidden" name="m" value="dPstock" />
-        <input type="hidden" name="tab" value="vw_aed_order" />
+        <input type="hidden" name="tab" value="vw_aed_order_fill" />
         
         <label for="category_id" title="Choisissez une catégorie">Catégorie</label>
         <select name="category_id" onchange="this.form.submit()">
@@ -103,7 +100,9 @@ function submitOrderItem (oForm, order_id) {
     </td>
 
     <td class="halfPane"><h3>Commandes</h3>
-      <div id="orders_list"></div>
+      <div id="orders_list">
+      {{include file="inc_vw_order.tpl"}}
+      </div>
     </td>
   </tr>
 </table>

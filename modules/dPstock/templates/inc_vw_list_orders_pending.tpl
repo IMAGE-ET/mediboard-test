@@ -15,7 +15,7 @@
 	    <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
 	    <td>{{mb_value object=$curr_order field=date_ordered}}</td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
-	    <td>actions</td>
+	    <td><a class="buttontick" href="?m={{$m}}&amp;tab=vw_aed_order_reception&amp;order_id={{$curr_order->_id}}">Recevoir</a></td>
 	  </tr>
 	{{foreachelse}}
 	  <tr>

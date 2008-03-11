@@ -84,7 +84,7 @@ function submitOrder (oForm, refreshList) {
             {{if $order->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la commande',objName:'{{$order->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
             {{if !$order->locked}}
-              <a class="buttonedit" href="?m={{$m}}&amp;tab=vw_aed_order&amp;order_id={{$order->_id}}">Peupler</a>
+              <a class="buttonedit" href="?m={{$m}}&amp;tab=vw_aed_order_fill&amp;order_id={{$order->_id}}">Peupler</a>
             {{/if}}
             {{/if}}
           </td>

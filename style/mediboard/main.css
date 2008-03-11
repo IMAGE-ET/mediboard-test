@@ -2681,3 +2681,27 @@ table.tbl td.ccmu-D{
 table.tbl td.ccmu-P{
   background-color: #0F0;
 }
+
+.bargraph {
+  overflow: hidden;
+  background: #FFF;
+  height: 0.8em; 
+  min-width: 5em;
+}
+
+.bargraph .value {
+  height: 55%;
+}
+
+.bargraph .threshold {
+  height: 55%;
+  opacity: .4;
+}
+
+.bargraph .value div, .bargraph .threshold div {
+  height: 100%;
+}
+
+.bargraph .threshold div {
+  float:left; 
+}
