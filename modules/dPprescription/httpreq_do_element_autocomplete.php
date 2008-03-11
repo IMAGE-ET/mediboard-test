@@ -24,7 +24,9 @@ $where = array();
 $where["category_prescription_id"] = $ds->prepareIn(array_keys($categories));
 $where["libelle"] = "LIKE '$libelle%'";
 $elements = $element_prescription->loadList($where);
-
+foreach($elements as &$element){
+	$element->loadRefCategory();
+}
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("elements", $elements);

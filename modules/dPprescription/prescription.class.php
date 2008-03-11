@@ -115,6 +115,7 @@ class CPrescription extends CMbObject {
     $this->_ref_prescription_lines_element = $line->loadList($where, $order);
     foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
+    	$line_element->_ref_element_prescription->loadRefCategory();
     }
   }
   

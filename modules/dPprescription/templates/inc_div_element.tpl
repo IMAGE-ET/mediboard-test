@@ -89,7 +89,7 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
 <table class="tbl">    
   <!-- Si il y a des elements de type element dans la prescription -->
   <tr>
-    <th colspan="5">
+    <th colspan="6">
       {{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}
     </th>
   </tr>
@@ -113,6 +113,9 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
         <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
         <input type="text" name="commentaire" value="{{$_line_element->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
+    </td>
+    <td>
+      {{$_line_element->_ref_element_prescription->_ref_category_prescription->_view}}
     </td>
     <td>
       <form name="addALD-{{$_line_element->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
@@ -143,7 +146,7 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
           </button>
         </form>
       </td>
-      <td colspan="3">
+      <td colspan="4">
         {{$_line_comment->commentaire}}
       </td>
       <td style="width: 25px">

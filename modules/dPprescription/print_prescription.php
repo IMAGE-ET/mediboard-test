@@ -68,6 +68,7 @@ foreach($prescription->_ref_lines_med_comments["comment"] as $key => $comment){
 // Recherche de produits ALD
 foreach($prescription->_ref_lines_elements_comments as $nom_chap => $chapitre){
 	foreach($chapitre["element"] as &$element){
+		$element->_ref_element_prescription->loadRefCategory();
 		if($element->ald){
 		  $lines[$nom_chap]["element"]["ald"][] = $element;
 		} else {
@@ -75,7 +76,7 @@ foreach($prescription->_ref_lines_elements_comments as $nom_chap => $chapitre){
 		}
 	}
 	foreach($chapitre["comment"] as &$comment){
-	  if($comment->ald){
+		if($comment->ald){
 		  $lines[$nom_chap]["comment"]["ald"][] = $comment;
 		} else {
 			$lines[$nom_chap]["comment"]["no_ald"][] = $comment;

@@ -61,10 +61,12 @@
   <tr>
    <th colspan="2" class="title">Médicaments</th>
   </tr>
+  {{if !@$lines.medicament.element.ald && !@$lines.medicament.comment.ald}}
   <tr>
     <th>Produit</th>
     <th>Posologie</th>
   </tr>
+  {{/if}}
   <!-- AFFICHAGE SUIVANT ALD -->
   {{if @$lines.medicament.element.ald || @$lines.medicament.comment.ald}}
     <tr>
@@ -72,6 +74,10 @@
       Prescriptions relatives au traitement de l'affection de longue durée
       </th>
     </tr>
+    <tr>
+    <th>Produit</th>
+    <th>Posologie</th>
+  </tr>
     <!-- Parcours des ald -->
     {{foreach from=$lines.medicament.element.ald item="elt_ald"}}
     <tr>
@@ -95,10 +101,14 @@
   <div class="middle"></div>
   <table class="tbl">
   <tr>
-    <th colspan="2">  
+    <th colspan="3">  
       Prescriptions SANS RAPPORT avec l'affection de longue durée
     </th>
-      </tr>
+  </tr>
+    <tr>
+    <th>Produit</th>
+    <th>Posologie</th>
+  </tr>
       {{if !$lines.medicament.element.no_ald && !$lines.medicament.comment.no_ald}}
         <tr>
           <td colspan="2">Aucun élément de prescription</td>
@@ -141,11 +151,14 @@
       </td>
     </tr>
   {{/foreach}}
-
 {{/if}}
 </table>
 </div>
 {{/if}}
+
+
+
+
 
 <!-- Parcours des chapitres -->
 {{foreach from=$prescription->_ref_lines_elements_comments key=chap item=curr_chap name=Presc}}
@@ -157,22 +170,29 @@
 {{/if}}
 <table class="tbl">
 		<tr>
-		  <th colspan="2" class="title">
+		  <th colspan="3" class="title">
 		    {{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}
 		  </th>
 		</tr>
+		{{if !@$lines.$chap.element.ald && !@$lines.$chap.comment.ald}}
 		<tr>
 		  <th>Libelle</th>
 		  <th>Commentaire</th>
+		  <th>Catégorie</th>
 		</tr>
-		
+		{{/if}}
   <!-- Affichage sous forme d'ALD -->
   {{if @$lines.$chap.element.ald || @$lines.$chap.comment.ald}}
     <tr>
-      <th colspan="2">
+      <th colspan="3">
       Prescriptions relatives au traitement de l'affection de longue durée
       </th>
     </tr>
+    <tr>
+		  <th>Libelle</th>
+		  <th>Commentaire</th>
+		  <th>Catégorie</th>
+		</tr>
     <!-- Parcours des ald -->
     {{foreach from=$lines.$chap.element.ald item="_elt_ald"}}
     <tr>
@@ -181,6 +201,9 @@
       </td>
       <td>
        {{$_elt_ald->commentaire}}
+     </td>
+     <td>
+       {{$_elt_ald->_ref_element_prescription->_ref_category_prescription->_view}}
      </td>
     </tr>
     {{/foreach}}  
@@ -195,13 +218,18 @@
   <div class="middle"></div>
   <table class="tbl">
     <tr>
-    <th colspan="2">  
+    <th colspan="3">  
       Prescriptions SANS RAPPORT avec l'affection de longue durée
     </th>
     </tr>
+    <tr>
+		  <th>Libelle</th>
+		  <th>Commentaire</th>
+		  <th>Catégorie</th>
+		</tr>
     {{if !$lines.$chap.element.no_ald && !$lines.$chap.comment.no_ald}}
     <tr>
-      <td colspan="2">Aucun élément de prescription</td>
+      <td colspan="3">Aucun élément de prescription</td>
     </tr>
     {{/if}}
       
@@ -213,6 +241,9 @@
         </td>
         <td>
           {{$_elt_no_ald->commentaire}}
+        </td>
+        <td>
+          {{$_elt_no_ald->_ref_element_prescription->_ref_category_prescription->_view}}
         </td>
       </tr>
       {{/foreach}}  
@@ -235,11 +266,14 @@
 		  <td>
 		    {{$curr_line_element->commentaire}}
 		  </td>
+		  <td>
+         {{$curr_line_element->_ref_element_prescription->_ref_category_prescription->_view}}
+      </td>
 		</tr>
 		{{/foreach}}
 	  {{foreach from=$curr_chap.comment item=curr_line_comment}}
 		<tr>
-		  <td colspan="2">
+		  <td colspan="3">
 		    {{$curr_line_comment->commentaire}}
 		  </td>
 		</tr>
