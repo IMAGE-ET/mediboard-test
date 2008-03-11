@@ -10,7 +10,7 @@
  */
 
 global $can;
-$can->needsAdmin();
+$can->needsRead();
 
 $response = array();
 
