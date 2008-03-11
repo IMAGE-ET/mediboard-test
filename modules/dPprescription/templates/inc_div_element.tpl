@@ -19,6 +19,14 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
       </option>
       {{/foreach}}
     </select>
+    
+    {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
+    <button class="add" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
+    {{/if}}
+  
+  
+    <button class="add" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
+   <br />
    <input type="text" name="{{$element}}" value="" />
    <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
    <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
@@ -36,12 +44,6 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
   </form>
   
   
-  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-  <button class="add" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
-  {{/if}}
-  
-  
-  <button class="add" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
   <br />
   {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
   <div id="add_{{$element}}" style="display: none">
