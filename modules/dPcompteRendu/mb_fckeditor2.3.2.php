@@ -40,7 +40,7 @@ $templateManager =& $_SESSION[$m]["templateManager"];
 // Création du template
 require_once($AppUI->getSystemClass("smartydp"));
 
-$smarty = new CSmartyDP($dPconfig["root_dir"]."/modules/$m", 0);
+$smarty = new CSmartyDP($dPconfig["root_dir"]."/modules/$m");
 
 $smarty->assign("templateManager" , $templateManager);
 

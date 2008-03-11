@@ -306,7 +306,11 @@ $performance["ccam"]    = array (
   "useCount"   => CCodeCCAM::$useCount
 );
 
-foreach(CSQLDataSource::$dataSources as $dataSource) {
+foreach (CSQLDataSource::$dataSources as $dsn => $dataSource) {
+  if (!$dataSource) {
+    continue;
+  }
+  
   $chrono = $dataSource->chrono;
   $performance["dataSources"][$dataSource->dsn] = array(
     "count" => $chrono->nbSteps,

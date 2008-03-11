@@ -19,12 +19,10 @@
   <br />
   
   Requêtes SQL : 
-  {{foreach from=$dataSources item=ds}}
-	  {{if $ds}}
-	  &ndash; {{$ds->chrono->nbSteps}} 
-	  en {{$ds->chrono->total|string_format:"%.3f"}} sec.
-	  sur '{{$ds->dsn}}'
-	  {{/if}}
+  {{foreach from=$performance.dataSources key=dsn item=dataSource}}
+	  &ndash; {{$dataSource.count}} 
+	  en {{$dataSource.time|string_format:"%.3f"}} sec.
+	  sur '{{$dsn}}'
   {{/foreach}}
   <br />
 
