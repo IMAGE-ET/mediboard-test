@@ -159,6 +159,16 @@ var Value = {
   }
 }
 
+function setMinVoulu(oForm) {
+  if(oForm._hour_voulu.value && !oForm._min_voulu.value) {
+    oForm._min_voulu.value = "00";
+    oForm._min_voulu.onchange();
+  } else if(!oForm._hour_voulu.value) {
+    oForm._min_voulu.value = "";
+    oForm._min_voulu.onchange();
+  }
+}
+
 function synchroPrat() {
   var oOpForm = document.editOp;
   var oSejourForm = document.editSejour;

@@ -1,12 +1,54 @@
 <table class="main">
   <tr>
     <th colspan=2>
-	  Dr. {{$plage->_ref_chir->_view}}
-	  <br />
-	  {{$plage->date|date_format:"%A %d %B %Y"}}
-	  <br />
-	  {{$plage->_ref_salle->nom}} : {{$plage->debut|date_format:"%Hh%M"}} - {{$plage->fin|date_format:"%Hh%M"}}
-	</th>
+      <form name="editPlageTiming" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+        <input type="hidden" name="m" value="dPbloc" />
+        <input type="hidden" name="dosql" value="do_plagesop_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
+        <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
+        <input type="hidden" name="_repeat" value="1" />
+        <input type="hidden" name="_type_repeat" value="1" />
+	      Dr. {{$plage->_ref_chir->_view}}
+	      <br />
+	      {{$plage->date|date_format:"%A %d %B %Y"}}
+	      <br />
+	      {{$plage->_ref_salle->nom}}
+	      :
+        <select name="_heuredeb" class="notNull num">
+        {{foreach from=$listHours item=heure}}
+          <option value="{{$heure|string_format:"%02d"}}" {{if $plage->_heuredeb == $heure}} selected="selected" {{/if}} >
+            {{$heure|string_format:"%02d"}}
+          </option>
+        {{/foreach}}
+        </select>
+        h
+        <select name="_minutedeb">
+        {{foreach from=$listMins item=minute}}
+          <option value="{{$minute|string_format:"%02d"}}" {{if $plage->_minutedeb == $minute}} selected="selected" {{/if}} >
+            {{$minute|string_format:"%02d"}}
+          </option>
+        {{/foreach}}
+        </select>
+	      à
+        <select name="_heurefin" class="notNull num">
+        {{foreach from=$listHours item=heure}}
+          <option value="{{$heure|string_format:"%02d"}}" {{if $plage->_heurefin == $heure}} selected="selected" {{/if}} >
+            {{$heure|string_format:"%02d"}}
+          </option>
+        {{/foreach}}
+        </select>
+        h
+        <select name="_minutefin">
+        {{foreach from=$listMins item=minute}}
+          <option value="{{$minute|string_format:"%02d"}}" {{if $plage->_minutefin == $minute}} selected="selected" {{/if}} >
+          {{$minute|string_format:"%02d"}}
+          </option>
+        {{/foreach}}
+        </select>
+        <button type="submit" class="tick notext">{{tr}}Save{{/tr}}</button>
+	    </form>
+    </th>
   </tr>
   
   <tr>
@@ -140,6 +182,15 @@
 	  <table class="tbl">
 	    <tr>
 		  <th colspan=3>
+		    {{if $dPconfig.dPplanningOp.COperation.horaire_voulu}}
+        <form name="editOrderVoulu" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPbloc" />
+          <input type="hidden" name="dosql" value="do_order_voulu_op" />
+          <input type="hidden" name="plageop_id" value="{{$plage->_id}}" />
+          <input type="hidden" name="del" value="0" />
+		      <button type="submit" class="tick" style="float: right;">Utiliser les horaires souhaités</button>
+		    </form>
+		    {{/if}}
 		    Patients à placer
 		  </th>
 		</tr>
@@ -147,78 +198,79 @@
 		<tr>
 		  <td width="50%">
 		    <a style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
+          <img src="images/icons/history.gif" alt="historique" />
+        </a>
 		    <strong>
 		    <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
 		    </a>
 		    </strong>
-			<br />
-			Admission le {{$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
-            <br />
-			Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
-			{{if $curr_op->horaire_voulu}}
-			<br />
-			Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
-			{{/if}}
-			{{if $listPlages|@count != '1'}}
-			<br />
-			<form name="changeSalle" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="dosql" value="do_planning_aed" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="rank" value="0" />
-            <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
-            Changement de salle
-			<select name="plageop_id" onchange="this.form.submit()">
-			{{foreach from=$listPlages item="_plage"}}
-			  <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>{{$_plage->_ref_salle->nom}}
-			  / {{$_plage->debut|date_format:"%Hh%M"}} à {{$plage->fin|date_format:"%Hh%M"}}</option>
-			{{/foreach}}
-			</select>
-			</form>
-			{{/if}}
+			  <br />
+			  Admission le {{$curr_op->_ref_sejour->entree_prevue|date_format:"%a %d %b à %Hh%M"}} ({{$curr_op->_ref_sejour->type|truncate:1:""|capitalize}})
+        <br />
+			  Durée : {{$curr_op->temp_operation|date_format:"%Hh%M"}}
+			  {{if $curr_op->horaire_voulu}}
+			  <br />
+			  Horaire souhaité: {{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
+			  {{/if}}
+			  {{if $listPlages|@count != '1'}}
+			  <br />
+			  <form name="changeSalle" action="?m={{$m}}" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="rank" value="0" />
+          <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
+          Changement de salle
+			    <select name="plageop_id" onchange="this.form.submit()">
+			      {{foreach from=$listPlages item="_plage"}}
+			      <option value="{{$_plage->_id}}" {{if $plage->_id == $_plage->_id}} selected = "selected"{{/if}}>
+			      {{$_plage->_ref_salle->nom}} / {{$_plage->debut|date_format:"%Hh%M"}} à {{$plage->fin|date_format:"%Hh%M"}}
+			      </option>
+			      {{/foreach}}
+			    </select>
+			  </form>
+			  {{/if}}
 		  </td>
 		  <td class="text">
 		    <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->operation_id}}">
-            {{if $curr_op->libelle}}
-              <em>[{{$curr_op->libelle}}]</em>
-              <br />
-            {{/if}}
-            {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
-              <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
+          {{if $curr_op->libelle}}
+            <em>[{{$curr_op->libelle}}]</em>
+            <br />
+          {{/if}}
+          {{foreach from=$curr_op->_ext_codes_ccam item=curr_code}}
+            <strong>{{$curr_code->code}}</strong> : {{$curr_code->libelleLong}}<br />
+          {{/foreach}}
+        </a>
+        {{if $curr_op->rques}}
+          Remarques: {{$curr_op->rques|nl2br}}
+          <br />
+        {{/if}}
+        Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
+        <br />
+        <form name="editFrmAnesth{{$curr_op->operation_id}}" action="?" method="get">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="a" value="do_order_op" />
+          <input type="hidden" name="cmd" value="setanesth" />
+          <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
+          <select name="type" onchange="this.form.submit()">
+            <option value="">&mdash; Anesthésie &mdash;</option>
+            {{foreach from=$anesth item=curr_anesth}}
+            <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
+              {{$curr_anesth->name}}
+            </option>
             {{/foreach}}
-            </a>
-            {{if $curr_op->rques}}
-            Remarques: {{$curr_op->rques|nl2br}}
-            <br />
-            {{/if}}
-            Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
-            <br />
-            <form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="a" value="do_order_op" />
-            <input type="hidden" name="cmd" value="setanesth" />
-            <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
-            <select name="type" onchange="this.form.submit()">
-              <option value="">&mdash; Anesthésie &mdash;</option>
-              {{foreach from=$anesth item=curr_anesth}}
-              <option value="{{$curr_anesth->type_anesth_id}}" {{if $curr_op->type_anesth == $curr_anesth->type_anesth_id}} selected="selected" {{/if}} >
-                {{$curr_anesth->name}}
-              </option>
-              {{/foreach}}
-            </select>
-            </form>
+          </select>
+        </form>
 		  </td>
 		  <td>
 		    {{if $curr_op->annulee}}
 		    <img src="images/icons/cross.png" width="12" height="12" alt="annulée" border="0" />
 		    {{else}}
 		    <a href="?m={{$m}}&amp;a=do_order_op&amp;cmd=insert&amp;id={{$curr_op->operation_id}}">
-		    <img src="images/icons/tick.png" width="12" height="12" alt="ajouter" border="0" />
-			</a>
-			{{/if}}
+		      <img src="images/icons/tick.png" width="12" height="12" alt="ajouter" border="0" />
+			  </a>
+			  {{/if}}
 		  </td>
 		</tr>
 		{{/foreach}}
@@ -234,14 +286,14 @@
 		{{foreach from=$list2 item=curr_op}}
 		<tr>
 		  <td width="50%">
-		    <a name="{{$curr_op->operation_id}}" style="float:right;" href="#" onclick="view_log('COperation',{{$curr_op->operation_id}})">
-              <img src="images/icons/history.gif" alt="historique" />
-            </a>
-			<form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="a" value="do_order_op" />
-            <input type="hidden" name="cmd" value="sethour" />
-            <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
+		    <a id="op{{$curr_op->operation_id}}" style="float:right;" href="#nothing" onclick="view_log('COperation',{{$curr_op->operation_id}})">
+          <img src="images/icons/history.gif" alt="historique" />
+        </a>
+			<form name="editFrmOrder{{$curr_op->operation_id}}" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="a" value="do_order_op" />
+        <input type="hidden" name="cmd" value="sethour" />
+        <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
 		    <strong>
 		    <a href="?m=dPpatients&amp;tab=vw_idx_patients&amp;patient_id={{$curr_op->_ref_sejour->_ref_patient->patient_id}}">
 		    {{$curr_op->_ref_sejour->_ref_patient->_view}} ({{$curr_op->_ref_sejour->_ref_patient->_age}} ans)
@@ -292,7 +344,7 @@
             {{/if}}
             Côté : {{tr}}COperation.cote.{{$curr_op->cote}}{{/tr}}
             <br />
-            <form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
+            <form name="editAnesth{{$curr_op->operation_id}}" action="?" method="get">
             <input type="hidden" name="m" value="{{$m}}" />
             <input type="hidden" name="a" value="do_order_op" />
             <input type="hidden" name="cmd" value="setanesth" />

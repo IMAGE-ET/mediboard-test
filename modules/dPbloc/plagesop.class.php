@@ -201,7 +201,7 @@ class CPlageOp extends CMbObject {
     return $msg . parent::check();
   }
   
-  function store () {
+  function store() {
     $this->updateDBFields();
     if ($msg = $this->hasCollisions()) {
       return $msg;
@@ -281,6 +281,8 @@ class CPlageOp extends CMbObject {
     else {
       $this->plageop_id = null;
     }
+    if(!$this->chir_id) $this->chir_id = "";
+    if(!$this->spec_id) $this->spec_id = "";
     $this->debut            = $debut;
     $this->fin              = $fin;
     $this->temps_inter_op   = $temps_inter_op;

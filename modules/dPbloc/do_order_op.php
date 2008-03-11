@@ -10,15 +10,13 @@
 global $AppUI, $m;
 $ds = CSQLDataSource::get("std");
 
-$cmd = dPgetParam( $_GET, "cmd", "0" );
-$id  = dPgetParam( $_GET, "id",  "0" );
+$cmd = mbGetValueFromGet("cmd", "0");
+$id  = mbGetValueFromGet("id",  "0");
 
-$sql = "SELECT operations.plageop_id, operations.rank
-        FROM operations
-        WHERE operations.operation_id = '$id'";
-$result = $ds->loadlist($sql);
-$plageop = $result[0]["plageop_id"];
-$rank = $result[0]["rank"];
+$operation = new COperation();
+$operation->load($id);
+$plageop = $operation->plageop_id;
+$rank    = $operation->rank;
 
 switch($cmd)
 {
@@ -182,5 +180,5 @@ function changeAffect($id, $cmd = null) {
   }
 }
 
-$AppUI->redirect("m=$m#$id");
+$AppUI->redirect("m=$m#op$id");
 ?>

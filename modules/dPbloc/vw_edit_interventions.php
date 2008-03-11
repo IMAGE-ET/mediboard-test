@@ -55,7 +55,7 @@ $listPlages = new CPlageOp();
 $listSalle = array();
 $where = array();
 
-$where["date"] = "= '$plage->date'";
+$where["date"]    = "= '$plage->date'";
 $where["chir_id"] = "= '$plage->chir_id'";
 $listPlages = $listPlages->loadList($where);
 foreach($listPlages as $keyPlages=>$valPlages){
@@ -107,15 +107,17 @@ foreach($affectations_plage["op_panseuse"] as $key => $affectation){
 $smarty = new CSmartyDP();
 
 $smarty->assign("affectations_plage", $affectations_plage);
-$smarty->assign("listPersAideOp"    , $listPersAideOp);
-$smarty->assign("listPersPanseuse"  , $listPersPanseuse);
-$smarty->assign("listAnesth"        , $listAnesth);
-$smarty->assign("listPlages"        , $listPlages);
-$smarty->assign("plage"             , $plage);
-$smarty->assign("anesth"            , $anesth);
-$smarty->assign("list1"             , $list1);
-$smarty->assign("list2"             , $list2);
-$smarty->assign("max"               , sizeof($list2));
+$smarty->assign("listPersAideOp"    , $listPersAideOp    );
+$smarty->assign("listPersPanseuse"  , $listPersPanseuse  );
+$smarty->assign("listAnesth"        , $listAnesth        );
+$smarty->assign("listPlages"        , $listPlages        );
+$smarty->assign("listHours"         , CPlageOp::$hours   );
+$smarty->assign("listMins"          , CPlageOp::$minutes );
+$smarty->assign("plage"             , $plage             );
+$smarty->assign("anesth"            , $anesth            );
+$smarty->assign("list1"             , $list1             );
+$smarty->assign("list2"             , $list2             );
+$smarty->assign("max"               , sizeof($list2)     );
 
 $smarty->display("vw_edit_interventions.tpl");
 

@@ -14,9 +14,9 @@ if (!$obj->bind( $_POST )) {
 	$AppUI->redirect();
 }
 
-$del         = dPgetParam( $_POST, "del", 0 );
-$repeat      = dPgetParam( $_POST, "_repeat", 0 );
-$type_repeat = dPgetParam( $_POST, "_type_repeat", 1 );
+$del         = dPgetParam( $_POST, "del", 0);
+$repeat      = dPgetParam( $_POST, "_repeat", 0);
+$type_repeat = dPgetParam( $_POST, "_type_repeat", 1);
 
 
 // si l'id de l'objet est nul => creation

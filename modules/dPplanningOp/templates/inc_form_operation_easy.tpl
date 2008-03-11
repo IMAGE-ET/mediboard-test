@@ -155,7 +155,7 @@
   <tr>
     <th>Horaire souhaité</th>
     <td colspan="2">
-      <select name="_hour_voulu" onchange="Value.synchronize(this);">
+      <select name="_hour_voulu" onchange="setMinVoulu(this.form); Value.synchronize(this);">
         <option value="">-</option>
       {{foreach from=$list_hours_voulu|smarty:nodefaults item=hour}}
         <option value="{{$hour}}" {{if $hour == $op->_hour_voulu}} selected="selected" {{/if}}>{{$hour}}</option>
