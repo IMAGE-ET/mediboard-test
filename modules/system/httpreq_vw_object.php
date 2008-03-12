@@ -24,9 +24,10 @@ if (!$object->_id) {
 
 $object->loadView();
 
-$canModule = CModule::getCanDo($object->_ref_module->mod_name);
-$can->read = $canModule->read && $object->canRead();
-$can->needsRead();
+//$canModule = CModule::getCanDo($object->_ref_module->mod_name);
+//$can->read = $canModule->read && $object->canRead();
+//$can->needsRead();
+$can = CModule::getCanDo($object->_ref_module->mod_name);
 
 // If no template is defined, use generic
 $template = is_file("modules/$object->_view_template") ?

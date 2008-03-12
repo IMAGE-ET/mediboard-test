@@ -22,9 +22,9 @@
         Imprimer
       </button>
       {{if $can->edit}}
-        <button type="button" class="modify" onclick="editPatient()">
-          Modifier
-        </button>
+      <button type="button" class="modify" onclick="editPatient()">
+        Modifier
+      </button>
       {{/if}}
       </form>
     </th>

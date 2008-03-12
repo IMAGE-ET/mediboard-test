@@ -105,10 +105,12 @@ var Patient = {
       </button>
       {{/if}}
       
+      {{if $can->edit}}
       <button class="new" type="button" onclick="Patient.create();">
         {{tr}}Create{{/tr}}
         {{if $useVitale}}avec Vitale{{/if}}
       </button>
+      {{/if}}
       
       {{/if}}
     </td>
@@ -121,7 +123,7 @@ var Patient = {
 <input type="hidden" name="a" value="fusion_pat" />
 <table class="tbl">
   <tr>
-    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
+    {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
     <th>
     <button type="submit" class="search">{{tr}}Merge{{/tr}}</button>
     </th>
@@ -140,7 +142,7 @@ var Patient = {
   
   {{foreach from=$patients item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
+    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
@@ -182,7 +184,7 @@ var Patient = {
   {{/if}}
   {{foreach from=$patientsSoundex item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if !$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin}}
+    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">

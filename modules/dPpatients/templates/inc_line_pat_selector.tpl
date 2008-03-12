@@ -26,9 +26,11 @@
   <td>{{mb_value object=$_patient field="matricule"}}</td>
   <td>{{mb_value object=$_patient field="adresse"}}</td>
   <td class="button" rowspan="{{$rowspan}}">
+    {{if $can->edit}}
     <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">
       {{tr}}Update{{/tr}} avec Vitale
     </button>
+    {{/if}}
     <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}')">
       {{tr}}Select{{/tr}}
     </button>
@@ -38,9 +40,11 @@
   <td>{{$_patient->tel}}</td>
   <td>{{$_patient->tel2}}</td>
   <td class="button" rowspan="{{$rowspan}}">
+    {{if $can->edit}}
     <button class="edit" type="button" onclick="Patient.edit({{$_patient->_id}})">
       {{tr}}Edit{{/tr}}
     </button>
+    {{/if}}
     <button class="tick" type="button" onclick="Patient.select({{$_patient->_id}}, '{{$_patient->_view|smarty:nodefaults|JSAttribute}}')">
       {{tr}}Select{{/tr}}
     </button>

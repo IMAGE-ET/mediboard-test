@@ -233,7 +233,9 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   {{/foreach}}
   <tr>
     <td class="button" colspan="5">
+      {{if $can->edit}}
       <button class="submit" type="button" onclick="Patient.create()">Créer un patient</button>
+      {{/if}}
       <button class="cancel" type="button" onclick="window.close()">Annuler</button>
     </td>
   </tr>
