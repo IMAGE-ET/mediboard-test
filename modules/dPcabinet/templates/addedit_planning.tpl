@@ -109,6 +109,8 @@ function printDocument(iDocument_id) {
 
 function pageMain() {
   var oForm = document.editFrm;
+  
+  requestInfoPat();
 
   {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
   oForm.plageconsult_id.value = {{$plageConsult->plageconsult_id}};
@@ -181,7 +183,7 @@ function pageMain() {
 
         <tr id="viewPatient" {{if $consult->consultation_id && $consult->patient_id==0}}style="display:none;"{{/if}}>
           <th>
-            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()"}}
+            {{mb_field object=$pat field="patient_id" hidden=1 prop="" ondblclick="PatSelector.init()" onchange="requestInfoPat()"}}
             {{mb_label object=$consult field="patient_id"}}
           </th>
           <td class="readonly"><input type="text" name="_pat_name" size="20" value="{{$pat->_view}}" readonly="readonly"  ondblclick="PatSelector.init()" /></td>
@@ -306,24 +308,6 @@ function pageMain() {
           </tbody>
         
       </table>
-      
-      <table class="form">
-        <tr>
-          <th id="clickPat" class="category" onclick="requestInfoPat()">
-          {{if $pat->patient_id}}
-            ++ Infos patient (cliquez pour afficher) ++
-          {{else}}
-            Infos patient (indisponibles)
-          {{/if}}
-          </th>
-        </tr>
-        <tr>
-          <td id="infoPat" class="text"></td>
-        </tr>
-        <tr>
-          <td id="infoPat2" class="text"></td>
-        </tr>
-      </table>
     
     </td>
   </tr>
@@ -369,6 +353,20 @@ function pageMain() {
         </tr>
       </table>
     
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <table class="form">
+        <tr>
+          <th id="clickPat" class="category">
+            Infos patient
+          </th>
+        </tr>
+        <tr>
+          <td id="infoPat" class="text"></td>
+        </tr>
+      </table>
     </td>
   </tr>
 
