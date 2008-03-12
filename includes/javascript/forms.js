@@ -194,7 +194,7 @@ function prepareForm(oForm) {
   }
   // Form preparation
   var sFormName = oForm.getAttribute("name");
-  oForm.__locked = (oForm._locked && oForm._locked.value) == "1"; 
+  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
 
   // Build label targets
   var aLabels = oForm.getElementsByTagName("label");
@@ -217,7 +217,7 @@ function prepareForm(oForm) {
   var aSpecFragments = null;
   while (oElement = oForm.elements[iElement++]) {
   	// Locked object
-  	if (oForm.__locked) {
+  	if (oForm.lockAllFields) {
   		oElement.disabled = true;
   	}
   	

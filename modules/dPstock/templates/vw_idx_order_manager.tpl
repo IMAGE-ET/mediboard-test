@@ -71,12 +71,8 @@ function submitOrder (oForm, refreshList) {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$order field="received"}}</th>
-          <td>{{mb_field object=$order field="received"}}</td>
-        </tr>
-        <tr>
           <th>{{mb_label object=$order field="locked"}}</th>
-          <td>{{mb_field object=$order field="locked"}}</td>
+          <td>{{mb_field object=$order field="locked" typeEnum="checkbox"}}</td>
         </tr>
         <tr>
           <td class="button" colspan="2">

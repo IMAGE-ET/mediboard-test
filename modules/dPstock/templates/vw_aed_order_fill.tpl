@@ -19,17 +19,10 @@ function submitOrderItem (oForm, order_id) {
 <table class="main">
   <tr>
     <td class="halfPane">
-      <form action="?" name="selection" method="get">
+      {{include file="inc_vw_category_selector.tpl"}}
+      <form action="?" name="supplier-selection" method="get">
         <input type="hidden" name="m" value="dPstock" />
         <input type="hidden" name="tab" value="vw_aed_order_fill" />
-        
-        <label for="category_id" title="Choisissez une catégorie">Catégorie</label>
-        <select name="category_id" onchange="this.form.submit()">
-          <option value="-1" >&mdash; Choisir une catégorie &mdash;</option>
-        {{foreach from=$list_categories item=curr_category}} 
-          <option value="{{$curr_category->category_id}}" {{if $curr_category->category_id == $category->category_id}}selected="selected"{{/if}}>{{$curr_category->_view}}</option>
-        {{/foreach}}
-        </select>
         
         <label for="societe_id" title="Choisissez un fournisseur">Fournisseur</label>
         <select name="societe_id" onchange="this.form.submit()">

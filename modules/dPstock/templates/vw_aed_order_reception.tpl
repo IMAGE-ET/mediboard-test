@@ -25,7 +25,7 @@ function submitOrder (oForm, order_id) {
 <table class="main">
   <tr>
     <td class="halfPane">
-    {{if !$order->received}}
+    {{if !$order->_received}}
     <form name="form-order-{{$order->_id}}" action="?m={{$m}}" method="post">
       <input type="hidden" name="m" value="dPstock" />
       <input type="hidden" name="dosql" value="do_order_aed" />

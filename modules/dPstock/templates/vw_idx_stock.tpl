@@ -1,3 +1,4 @@
+{{mb_include_script module="dPstock" script="product_selector"}}
 <script type="text/javascript">
 function pageMain() {
   PairEffect.initGroup("productToggle", { bStartVisible: false });
@@ -6,17 +7,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form action="?" name="selection" method="get">
-        <input type="hidden" name="m" value="dPstock" />
-        <input type="hidden" name="tab" value="vw_idx_stock" />
-        <label for="category_id" title="Choisissez une catégorie">Catégorie</label>
-        <select name="category_id" onchange="this.form.submit()">
-          <option value="-1" >&mdash; Choisir une catégorie &mdash;</option>
-        {{foreach from=$list_categories item=curr_category}} 
-          <option value="{{$curr_category->category_id}}" {{if $curr_category->category_id == $category->category_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
-        {{/foreach}}
-        </select>
-      </form>
+      {{include file="inc_vw_category_selector.tpl"}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">
         Nouveau stock
       </a>
@@ -97,10 +88,17 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$stock field="product_id"}}</th>
           <td>
-            <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$stock->_ref_product->_id}}" title="Voir ou modifier le produit">
-              <b>{{$stock->_ref_product->_view}}</b>
-            </a><br />
-            {{$stock->_ref_product->description|nl2br}}
+            <input type="hidden" name="product_id" value="{{$stock->product_id}}" />
+            <input type="text" size="40" readonly="readonly" ondblclick="ProductSelector.init()" name="product_name" value="{{$stock->_ref_product->_view}}" />
+            <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
+            <script type="text/javascript">
+            ProductSelector.init = function(){
+              this.sForm = "edit_stock";
+              this.sId   = "product_id";
+              this.sView = "product_name";
+              this.pop();
+            }
+            </script>
           </td>
         </tr>
         <tr>

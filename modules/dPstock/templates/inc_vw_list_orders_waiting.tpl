@@ -19,7 +19,7 @@
 	    </td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
-	      <form name="order-lock-{{$curr_item->_id}}" action="?m={{$m}}" method="post">
+	      <form name="order-lock-{{$curr_order->_id}}" action="?m={{$m}}" method="post">
 	        <input type="hidden" name="m" value="dPstock" />
 	        <input type="hidden" name="dosql" value="do_order_aed" />
 	        <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
@@ -30,13 +30,15 @@
 	      </form>
 	    </td>
 	    <td>
-	      <form name="order-order-{{$curr_item->_id}}" action="?m={{$m}}" method="post">
+      {{if $curr_order->_ref_order_items|@count > 0}}
+	      <form name="order-order-{{$curr_order->_id}}" action="?m={{$m}}" method="post">
 	        <input type="hidden" name="m" value="dPstock" />
 	        <input type="hidden" name="dosql" value="do_order_aed" />
 	        <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
 	        <input type="hidden" name="date_ordered" value="now" />
 	        <button type="button" class="tick" onclick="submitOrder(this.form)">Commander</button>
 	      </form>
+        {{/if}}
 	  </td>
 	  </tr>
 	{{foreachelse}}

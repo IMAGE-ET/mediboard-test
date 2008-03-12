@@ -54,7 +54,6 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
  `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `name` VARCHAR(64),
  `date_ordered` DATETIME, 
- `date_received` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
  `received` BOOL NOT NULL DEFAULT \'0\',
@@ -104,6 +103,16 @@ PRIMARY KEY (`stock_id`)) TYPE=MYISAM;';
  `contact_name` VARCHAR(50), 
  `contact_surname` VARCHAR(50), 
 PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';
+    $this->addQuery($sql);
+    
+    $sql = 'CREATE TABLE `product_stock_out` (
+ `stock_out_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+ `stock_id` INT(11) UNSIGNED NOT NULL, 
+ `date` DATETIME NOT NULL, 
+ `quantity` INT(11) UNSIGNED, 
+ `product_code` VARCHAR(255), 
+ `function_id` INT(11) UNSIGNED, 
+PRIMARY KEY (`stock_out_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
     
     $this->mod_version = '0.1';

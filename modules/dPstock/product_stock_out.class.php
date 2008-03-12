@@ -23,7 +23,7 @@ class CProductStockOut extends CMbObject {
   var $_ref_stock    = null;
   var $_ref_function = null;
 
-  function CProductStock() {
+  function CProductStockOut() {
     $this->CMbObject('product_stock_out', 'stock_out_id');
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
@@ -33,7 +33,7 @@ class CProductStockOut extends CMbObject {
       'stock_id'     => 'notNull ref class|CProductStock',
       'date'         => 'notNull dateTime',
       'quantity'     => 'num pos',
-      'product_code' => 'num pos',
+      'product_code' => 'str',
       'function_id'  => 'ref class|CFunctions',
     );
   }

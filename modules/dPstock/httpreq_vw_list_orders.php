@@ -16,39 +16,32 @@ $type = mbGetValueFromGetOrSession('type');
 $where = array();
 $order = new CProductOrder();
 
-switch ($type) {
-	// Waiting orders (not sent)
-  case 'waiting' :
-    $where['date_ordered'] = 'IS NULL';
-    $where['received'] = " = '0'";
-    $tpl_file = 'waiting';
-    break;
-
-  // Pending orders (not received yet)
-  case 'pending':
-    $where['date_ordered'] = 'IS NOT NULL';
-    $where['received'] = " = '0'";
-    $tpl_file = 'pending';
-    break;
-
-  default:
-  // Old orders (received)
-  case 'old':
-    $where['received'] = " = '1'";
-    $tpl_file = 'old';
-    break;
+if ($type != 'waiting' && 
+    $type != 'pending' && 
+    $type != 'old') {
+	$type = 'waiting';
 }
 
+$where['date_ordered'] = 'IS '.(($type == 'waiting')?'':'NOT ').'NULL';
+
 $orders = $order->loadList($where, 'date_ordered DESC');
+$orders_filtered = array();
+
 foreach($orders as $ord) {
   $ord->loadRefsFwd();
   $ord->updateFormFields();
+  
+  if ($type == 'waiting' ||
+      $type == 'pending' && !$ord->_received ||
+      $type == 'old'     &&  $ord->_received)	{
+  	$orders_filtered[] = $ord;
+  }
 }
 
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('orders', $orders);
+$smarty->assign('orders', $orders_filtered);
 
-$smarty->display("inc_vw_list_orders_{$tpl_file}.tpl");
+$smarty->display("inc_vw_list_orders_{$type}.tpl");
 ?>
