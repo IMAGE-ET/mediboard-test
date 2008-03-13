@@ -128,8 +128,7 @@ foreach($listPlage as $key => $value) {
   if($type){
     $where["patient_mode_reglement"] = "= '$type'";
   }
-  // Ne pas prendre en compte les prises en charge aux urgences
-  $where["sejour_id"] = "IS NULL";
+  
   $listConsult = new CConsultation;
   
   $listConsult = $listConsult->loadList($where, "heure");

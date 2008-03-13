@@ -269,12 +269,6 @@ class CConsultation extends CCodable {
     if ($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
       $this->patient_mode_reglement = "autre";
     }
-    
-// POSE DES PROBLEMES DE LOADMATCHING LIST
-//    // Si la consultation est une urgence
-//    if (null !== $this->sejour_id && $this->sejour_id) {
-//      $this->du_patient = 0;
-//    }
   }
 
   function check() {
@@ -358,6 +352,7 @@ class CConsultation extends CCodable {
     $this->total_amc = 0.0;
     $this->total_amo = 0.0;
     $this->du_patient = 0.0;
+    $this->du_tiers = 0.0;
     
     if ($msg = $this->store()) {
      return $msg;
@@ -631,6 +626,13 @@ class CConsultation extends CCodable {
   }
   
   function store() {
+    // Dans le cas d'une urgence
+    // Ne pas mettre dans l'updateDBFields sinon effet de bord sur loadMatching
+  	if($this->sejour_id !== null && $this->sejour_id){
+  		$this->du_tiers = $this->secteur1 + $this->secteur2;
+  		$this->du_patient = 0;
+  	}
+  	
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
