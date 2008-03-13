@@ -61,6 +61,7 @@ if($salle) {
 	$where = array();
 	$where["operations.plageop_id"] = "IS NOT NULL";
 	$where["plagesop.salle_id"]     = "!= operations.salle_id";
+	$where["operations.annulee"]    = "= '0'";
 	$where["plagesop.date"]         = "= '$date'";
 	$where["operations.salle_id"]   = "= '$salle'";
 	$order = "operations.time_operation";
@@ -77,6 +78,7 @@ if($salle) {
 	$where = array();
 	$where["date"]     = "= '$date'";
 	$where["salle_id"] = "= '$salle'";
+	$where["annulee"]  = "= '0'";
 	$order = "chir_id";
 	$urgences = $urgences->loadList($where, $order);
 	foreach($urgences as &$curr_op) {
