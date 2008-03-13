@@ -571,7 +571,8 @@ Main.add( function(){
 <script type="text/javascript">
 // Explicit form preparation for Ajax loading
 prepareForm(document.editSejour);
-datesOperations = {{$sejour->_dates_operations|@json}};
+datesOperations = $H({{$sejour->_dates_operations|@json}}).values();
+
 dates = {
   current: {
     start: "{{$sejour->_date_entree_prevue}}",

@@ -223,20 +223,19 @@ class CSejour extends CCodable {
     $sortie = $this->sortie_prevue;
 
     if ($entree !== null && $sortie !== null) {
-      $this->loadRefsOperations();
-      foreach($this->_ref_operations as $key => $operation){
-        $operation->loadRefPlageop();
-        $isCurrOp = $this->_curr_op_id == $operation->_id;
+    	$this->makeDatesOperations();
+    	foreach($this->_dates_operations as $operation_id => $date_operation){
+    	  $isCurrOp = $this->_curr_op_id == $operation_id;
         if ($isCurrOp) {
           $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
         } 
         else {
-          $opInBounds = mbDate($operation->_datetime) >= mbDate($entree) && mbDate($operation->_datetime) <= mbDate($sortie);
+          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
         }
         if (!$opInBounds) {
            $msg.= "Interventions en dehors des nouvelles dates du sejour";  
-        }
-      }
+        }	
+    	}
     }
 
     foreach ($this->getCollisions() as $collision) {
@@ -651,12 +650,15 @@ class CSejour extends CCodable {
     }
     
     foreach ($this->_ref_operations as &$operation) {
+    	if($operation->annulee){
+    		continue;
+    	}
       // On s'assure d'avoir les plages op
       if (!$operation->_ref_plageop) {
         $operation->loadRefPlageOp();
       }
 
-      $this->_dates_operations[] = mbDate($operation->_datetime);
+      $this->_dates_operations[$operation->_id] = mbDate($operation->_datetime);
     }
   }
   
