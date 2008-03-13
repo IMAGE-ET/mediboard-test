@@ -11,4 +11,10 @@ $locales['CSejour.mode_sortie.transfert'] = "";
 $locales['mod-dPadmissions-tab-vw_idx_admission'] = "";
 $locales['mod-dPadmissions-tab-vw_idx_consult'] = "";
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = "";
+$locales['CSejour._type_admission.ambu'] = "";
+$locales['CSejour._type_admission.comp'] = "";
+$locales['CSejour._type_admission.exte'] = "";
+$locales['CSejour._type_admission.psy'] = "";
+$locales['CSejour._type_admission.seances'] = "";
+$locales['CSejour._type_admission.ssr'] = "";
 ?>

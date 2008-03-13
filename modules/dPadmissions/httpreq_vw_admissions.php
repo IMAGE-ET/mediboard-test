@@ -47,8 +47,9 @@ $ljoin["users"] = "sejour.praticien_id = users.user_id";
 
 if($type){ 
   $where["type"] = " = '$type'";
+} else {
+  $where["type"] = "!= 'urg'";
 }
-
 $where["group_id"] = "= '$g'";
 $where["entree_prevue"] = "BETWEEN '$date' AND '$next'";
 if($selAdmis != "0") {

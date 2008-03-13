@@ -28,6 +28,7 @@ $demain = mbDate("+ 1 day", $date);
 $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entree_prevue`, '%Y-%m-%d') AS `date`" .
     "\nFROM `sejour`" .
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
+    "\nAND `sejour`.`type` != 'urg'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list1 = $ds->loadlist($sql);
@@ -38,6 +39,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`entree_reelle` IS NULL" .
     "\nAND `sejour`.`annule` = '0'" .
+    "\nAND `sejour`.`type` != 'urg'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list2 = $ds->loadlist($sql);
@@ -48,6 +50,7 @@ $sql = "SELECT COUNT(`sejour`.`sejour_id`) AS `num`, DATE_FORMAT(`sejour`.`entre
     "\nWHERE `sejour`.`entree_prevue` LIKE '$month' AND `sejour`.`group_id` = '$g'" .
     "\nAND `sejour`.`saisi_SHS` = '0'" .
     "\nAND `sejour`.`annule` = '0'" .
+    "\nAND `sejour`.`type` != 'urg'" .
     "\nGROUP BY `date`" .
     "\nORDER BY `date`";
 $list3 = $ds->loadlist($sql);

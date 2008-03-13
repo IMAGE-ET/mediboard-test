@@ -36,6 +36,9 @@ $sejourReq->addLJoinClause("users", "users.user_id = sejour.praticien_id");
 $sejourReq->addWhereClause("sejour.entree_prevue", "BETWEEN '$filter->_date_min' AND '$filter->_date_max'");
 $sejourReq->addWhereClause("sejour.group_id", "= '$g'");
 $sejourReq->addWhereClause("sejour.annule", "= '0'");
+// On supprime les sejours d'urgence
+$sejourReq->addWhereClause("sejour.type", "!= 'urg'");
+
 
 // Clause de filtre par spécialité / chir
 if ($filter->_specialite or $filter->praticien_id) {

@@ -8,4 +8,10 @@ $locales['CSejour-_nomPraticien-desc'] = "Tri par praticien";
 $locales['mod-dPadmissions-tab-vw_idx_admission'] = "Consultation des admissions";
 $locales['mod-dPadmissions-tab-vw_idx_consult'] = "Consultation des anesthésistes";
 $locales['mod-dPadmissions-tab-vw_idx_sortie'] = "Validation des sorties";
+$locales['CSejour._type_admission.ambu'] = "Ambulatoire";
+$locales['CSejour._type_admission.comp'] = "Hospitalisation Complète";
+$locales['CSejour._type_admission.exte'] = "Externe";
+$locales['CSejour._type_admission.psy'] = "Psychiatrie";
+$locales['CSejour._type_admission.seances'] = "Séance(s)";
+$locales['CSejour._type_admission.ssr'] = "SSR";
 ?>
