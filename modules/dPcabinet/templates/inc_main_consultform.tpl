@@ -39,7 +39,7 @@
     <th class="category">
       {{mb_label object=$consult field="examen"}}
     </th>
-    <th>
+    <th {{if !$app->user_prefs.view_traitement}}colspan="3"{{/if}}>
       <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen.no_enum}}
@@ -47,8 +47,9 @@
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">
         Nouveau
       </button>
-      
     </th>
+    
+    {{if $app->user_prefs.view_traitement}}
     <th class="category">
       {{mb_label object=$consult field="traitement"}}
     </th>
@@ -62,10 +63,15 @@
       </button>
     </th>
   </tr>
+  {{/if}}
+  
   <tr>
-    <td class="text" colspan="2">{{mb_field object=$consult field="examen" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
+    <td class="text" {{if $app->user_prefs.view_traitement}}colspan="2"{{else}}colspan="4"{{/if}}>{{mb_field object=$consult field="examen" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
+    {{if $app->user_prefs.view_traitement}}
     <td class="text" colspan="2">{{mb_field object=$consult field="traitement" rows="5" onchange="submitFormAjax(this.form, 'systemMsg');"}}</td>
+    {{/if}}
   </tr>
+  
   <tr>
     <td class="button" colspan="4">
       <button class="modify" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">

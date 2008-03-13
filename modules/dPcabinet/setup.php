@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.98";
+$config["mod_version"]     = "0.99";
 $config["mod_type"]        = "user";
 
 
@@ -1074,7 +1074,12 @@ class CSetupdPcabinet extends CSetup {
             ADD `accident_travail` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.98";
+    $this->makeRevision("0.98");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
+        "\nVALUES ('0', 'view_traitement', '1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.99";
   }
 }
 ?>

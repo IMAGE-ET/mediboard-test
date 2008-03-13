@@ -71,6 +71,7 @@ $array_list_module_pref = array (
     "DossierCabinet",
     "simpleCabinet",
     "ccam_consultation",
+    "view_traitement",
   ),
   "dPplanningOp" => array (
     "mode_dhe",

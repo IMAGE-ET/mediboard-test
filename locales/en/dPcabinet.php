@@ -1270,4 +1270,8 @@ $locales['pref-simpleCabinet'] = "";
 $locales['pref-simpleCabinet-0'] = "";
 $locales['pref-simpleCabinet-1'] = "";
 $locales['pref-simpleCabinet-desc'] = "";
+$locales['pref-view_traitement'] = "";
+$locales['pref-view_traitement-0'] = "";
+$locales['pref-view_traitement-1'] = "";
+$locales['pref-view_traitement-desc'] = "";
 ?>

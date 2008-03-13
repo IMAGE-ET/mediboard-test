@@ -1270,4 +1270,8 @@ $locales['pref-simpleCabinet'] = "Liaison hospitalisation";
 $locales['pref-simpleCabinet-0'] = "avec hospitalisation";
 $locales['pref-simpleCabinet-1'] = "sans hospitalisation";
 $locales['pref-simpleCabinet-desc'] = "Affichage des informations concernant les hospitalisations";
+$locales['pref-view_traitement'] = "Affichage des traitements";
+$locales['pref-view_traitement-0'] = "Cacher";
+$locales['pref-view_traitement-1'] = "Visible";
+$locales['pref-view_traitement-desc'] = "Affichage des traitemens";
 ?>
