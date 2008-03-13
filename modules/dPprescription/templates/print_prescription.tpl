@@ -6,7 +6,24 @@
 
 <style type="text/css">
 
+span.signature {
+  display: block;
+  position: fixed;
+  left: 20px;
+  bottom: 30px;
+  }
+
 @media print {
+  div#goUp {
+    display: none;
+  }
+  span, ul, table {
+    font-size: 12pt;
+  }
+  ul {
+    padding-top: 10px;
+    padding-bottom: 10px;
+  }
   div.body {
     page-break-after: always;
     padding-top: 5cm;
@@ -25,9 +42,9 @@
   }
 }
 
-
 </style>
 
+<span class="signature">Dr. {{$prescription->_ref_praticien->_view}}</span>
 
 <div class="header">
 	<table class="main">
@@ -59,106 +76,77 @@
 <div class="body">
 <table class="tbl">
   <tr>
-   <th colspan="2" class="title">Médicaments</th>
+   <th class="title">Médicaments</th>
   </tr>
-  {{if !@$lines.medicament.element.ald && !@$lines.medicament.comment.ald}}
-  <tr>
-    <th>Produit</th>
-    <th>Posologie</th>
-  </tr>
-  {{/if}}
-  <!-- AFFICHAGE SUIVANT ALD -->
+<!-- AFFICHAGE SUIVANT ALD -->
   {{if @$lines.medicament.element.ald || @$lines.medicament.comment.ald}}
-    <tr>
-      <th colspan="2">
-      Prescriptions relatives au traitement de l'affection de longue durée
-      </th>
-    </tr>
-    <tr>
-    <th>Produit</th>
-    <th>Posologie</th>
-  </tr>
-    <!-- Parcours des ald -->
-    {{foreach from=$lines.medicament.element.ald item="elt_ald"}}
-    <tr>
-      <td>
-        {{$elt_ald->_ref_produit->libelle}}
-      </td>
-      <td>
-       {{$elt_ald->_ref_posologie->_view}}
-     </td>
-    </tr>
-    {{/foreach}}  
-    {{foreach from=$lines.medicament.comment.ald item="comment_ald"}}
-     <tr>
-      <td colspan="3">
-      {{$comment_ald->commentaire}}
-     </td>
-    </tr> 
-    {{/foreach}}
-    <tr>
-  </table>
-  <div class="middle"></div>
-  <table class="tbl">
   <tr>
-    <th colspan="3">  
+    <th>
+      Prescriptions relatives au traitement de l'affection de longue durée
+    </th>
+  </tr>
+</table>
+
+<!-- Parcours des ald -->
+<ul>
+  {{foreach from=$lines.medicament.element.ald item="elt_ald"}}
+  <li>
+    <strong>{{$elt_ald->_ref_produit->libelle}}</strong>
+    : {{$elt_ald->_ref_posologie->_view}} <em>{{$elt_ald->commentaire}}</em>
+  </li>
+  {{/foreach}}  
+  {{foreach from=$lines.medicament.comment.ald item="comment_ald"}}
+  <li>
+    {{$comment_ald->commentaire}}
+  </li>
+  {{/foreach}}
+</ul>
+<div class="middle"></div>
+<table class="tbl">
+  <tr>
+    <th>  
       Prescriptions SANS RAPPORT avec l'affection de longue durée
     </th>
   </tr>
-    <tr>
-    <th>Produit</th>
-    <th>Posologie</th>
-  </tr>
-      {{if !$lines.medicament.element.no_ald && !$lines.medicament.comment.no_ald}}
-        <tr>
-          <td colspan="2">Aucun élément de prescription</td>
-        </tr>
-      {{/if}}
-      <!-- Parcours des non ald -->
-      {{foreach from=$lines.medicament.element.no_ald item="elt_no_ald"}}
-       <tr>
-         <td>
-           {{$elt_no_ald->_ref_produit->libelle}}
-        </td>
-        <td>
-          {{$elt_no_ald->_ref_posologie->_view}}
-        </td>
-      </tr>
-      {{/foreach}}  
-      {{foreach from=$lines.medicament.comment.no_ald item="comment_no_ald"}}
-      <tr>
-        <td colspan="3">
-         {{$comment_no_ald->commentaire}}
-        </td>
-      </tr>
-     {{/foreach}}  
+</table>
+<!-- Parcours des non ald -->
+<ul>
+  {{if !$lines.medicament.element.no_ald && !$lines.medicament.comment.no_ald}}
+  <li>Aucun élément de prescription</li>
+  {{/if}}
+  {{foreach from=$lines.medicament.element.no_ald item="elt_no_ald"}}
+  <li>
+    <strong>{{$elt_no_ald->_ref_produit->libelle}}</strong>
+    : {{$elt_no_ald->_ref_posologie->_view}} <em>{{$elt_no_ald->commentaire}}</em>
+  </li>
+  {{/foreach}}  
+  {{foreach from=$lines.medicament.comment.no_ald item="comment_no_ald"}}
+  <li>
+    {{$comment_no_ald->commentaire}}
+  </li>
+  {{/foreach}}  
+  </ul>
+  
   {{else}}
-  <!-- AFFICHAGE NORMAL -->
-  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-  <tr>
-    <td>
-      {{$curr_line->_ref_produit->libelle}}
-    </td>
-    <td>
-      {{$curr_line->_ref_posologie->_view}}
-    </td>
   </tr>
+</table>
+<!-- AFFICHAGE NORMAL -->
+<ul>
+  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+  <li>
+    <strong>{{$curr_line->_ref_produit->libelle}}</strong>
+    : {{$curr_line->_ref_posologie->_view}} <em>{{$curr_line->commentaire}}</em>
+  </li>
   {{/foreach}}
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-    <tr>
-      <td colspan="3">
-        {{$_line_comment->commentaire}}
-      </td>
-    </tr>
+  <li>
+    {{$_line_comment->commentaire}}
+  </li>
   {{/foreach}}
+</ul>
 {{/if}}
-</table>
 </div>
 {{/if}}
-
-
-
-
 
 <!-- Parcours des chapitres -->
 {{foreach from=$prescription->_ref_lines_elements_comments key=chap item=curr_chap name=Presc}}
@@ -169,119 +157,81 @@
 <div class="print_decalage">
 {{/if}}
 <table class="tbl">
-		<tr>
-		  <th colspan="3" class="title">
-		    {{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}
-		  </th>
-		</tr>
-		{{if !@$lines.$chap.element.ald && !@$lines.$chap.comment.ald}}
-		<tr>
-		  <th>Libelle</th>
-		  <th>Commentaire</th>
-		  <th>Catégorie</th>
-		</tr>
-		{{/if}}
+  <tr>
+	  <th class="title">
+		  {{tr}}CCategoryPrescription.chapitre.{{$chap}}{{/tr}}
+		</th>
+  </tr>
   <!-- Affichage sous forme d'ALD -->
   {{if @$lines.$chap.element.ald || @$lines.$chap.comment.ald}}
-    <tr>
-      <th colspan="3">
+  <tr>
+    <th>
       Prescriptions relatives au traitement de l'affection de longue durée
-      </th>
-    </tr>
-    <tr>
-		  <th>Libelle</th>
-		  <th>Commentaire</th>
-		  <th>Catégorie</th>
-		</tr>
-    <!-- Parcours des ald -->
-    {{foreach from=$lines.$chap.element.ald item="_elt_ald"}}
-    <tr>
-      <td>
-        {{$_elt_ald->_ref_element_prescription->_view}}
-      </td>
-      <td>
-       {{$_elt_ald->commentaire}}
-     </td>
-     <td>
-       {{$_elt_ald->_ref_element_prescription->_ref_category_prescription->_view}}
-     </td>
-    </tr>
-    {{/foreach}}  
-    {{foreach from=$lines.$chap.comment.ald item="_comment_ald"}}
-     <tr>
-      <td colspan="3">
-      {{$_comment_ald->commentaire}}
-     </td>
-    </tr> 
-    {{/foreach}}
-  </table>
-  <div class="middle"></div>
-  <table class="tbl">
-    <tr>
-    <th colspan="3">  
+    </th>
+  </tr>
+</table>
+<!-- Parcours des ald -->
+<ul>
+  {{foreach from=$lines.$chap.element.ald item="_elt_ald"}}
+  <li>
+    <strong>{{$_elt_ald->_ref_element_prescription->_view}}</strong>
+    ({{$_elt_ald->_ref_element_prescription->_ref_category_prescription->_view}})
+    <em>{{$_elt_ald->commentaire}}</em>
+  </li>
+  {{/foreach}}  
+  {{foreach from=$lines.$chap.comment.ald item="_comment_ald"}}
+  <li>
+    {{$_comment_ald->commentaire}}
+  </li> 
+  {{/foreach}}
+</ul>
+<div class="middle"></div>
+<table class="tbl">
+  <tr>
+    <th>  
       Prescriptions SANS RAPPORT avec l'affection de longue durée
     </th>
-    </tr>
-    <tr>
-		  <th>Libelle</th>
-		  <th>Commentaire</th>
-		  <th>Catégorie</th>
-		</tr>
-    {{if !$lines.$chap.element.no_ald && !$lines.$chap.comment.no_ald}}
-    <tr>
-      <td colspan="3">Aucun élément de prescription</td>
-    </tr>
-    {{/if}}
-      
-      <!-- Parcours des non ald -->
-      {{foreach from=$lines.$chap.element.no_ald item="_elt_no_ald"}}
-       <tr>
-         <td>
-           {{$_elt_no_ald->_ref_element_prescription->_view}}
-        </td>
-        <td>
-          {{$_elt_no_ald->commentaire}}
-        </td>
-        <td>
-          {{$_elt_no_ald->_ref_element_prescription->_ref_category_prescription->_view}}
-        </td>
-      </tr>
-      {{/foreach}}  
-      {{foreach from=$lines.$chap.comment.no_ald item="_comment_no_ald"}}
-      <tr>
-        <td colspan="3">
-         {{$_comment_no_ald->commentaire}}
-        </td>
-      </tr>
-     {{/foreach}}
-      
-  {{else}}
-  <!-- Affichage normal -->
-	
-		{{foreach from=$curr_chap.element item=curr_line_element}}
-		<tr>
-		  <td>
-		   {{$curr_line_element->_ref_element_prescription->_view}}
-		  </td>
-		  <td>
-		    {{$curr_line_element->commentaire}}
-		  </td>
-		  <td>
-         {{$curr_line_element->_ref_element_prescription->_ref_category_prescription->_view}}
-      </td>
-		</tr>
-		{{/foreach}}
-	  {{foreach from=$curr_chap.comment item=curr_line_comment}}
-		<tr>
-		  <td colspan="3">
-		    {{$curr_line_comment->commentaire}}
-		  </td>
-		</tr>
-		{{/foreach}}
-	
-  {{/if}}
+  </tr>
 </table>
-
+<ul>
+  {{if !$lines.$chap.element.no_ald && !$lines.$chap.comment.no_ald}}
+  <li>
+    Aucun élément de prescription
+  </li>
+  {{/if}}
+  <!-- Parcours des non ald -->
+  {{foreach from=$lines.$chap.element.no_ald item="_elt_no_ald"}}
+  <li>
+    <strong>{{$_elt_no_ald->_ref_element_prescription->_view}}</strong>
+    ({{$_elt_no_ald->_ref_element_prescription->_ref_category_prescription->_view}})
+    <em>{{$_elt_no_ald->commentaire}}</em>
+  </li>
+  {{/foreach}}  
+  {{foreach from=$lines.$chap.comment.no_ald item="_comment_no_ald"}}
+  <li>
+    {{$_comment_no_ald->commentaire}}
+  </li>
+  {{/foreach}}
+</ul>  
+  {{else}}
+  </tr>
+</table>
+<!-- Affichage normal -->
+<ul>
+  {{foreach from=$curr_chap.element item=curr_line_element}}
+  <li>
+    <strong>{{$curr_line_element->_ref_element_prescription->_view}}</strong>
+		({{$curr_line_element->_ref_element_prescription->_ref_category_prescription->_view}})
+		<em>{{$curr_line_element->commentaire}}</em>
+  </li>
+  {{/foreach}}
+	{{foreach from=$curr_chap.comment item=curr_line_comment}}
+  <li>
+    {{$curr_line_comment->commentaire}}
+  </li>
+  {{/foreach}}
+</ul>
+{{/if}}
 </div>
 {{/if}}
 {{/foreach}}
