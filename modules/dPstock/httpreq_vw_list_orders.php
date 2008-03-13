@@ -42,6 +42,7 @@ foreach($orders as $ord) {
 $smarty = new CSmartyDP();
 
 $smarty->assign('orders', $orders_filtered);
+$smarty->assign('type',   $type);
 
-$smarty->display("inc_vw_list_orders_{$type}.tpl");
+$smarty->display('inc_vw_list_orders.tpl');
 ?>

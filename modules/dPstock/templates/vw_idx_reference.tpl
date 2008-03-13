@@ -1,3 +1,5 @@
+{{mb_include_script module="dPstock" script="product_selector"}}
+
 <script type="text/javascript">
 function pageMain() {
   PairEffect.initGroup("productToggle", { bStartVisible: true });
@@ -37,9 +39,9 @@ function pageMain() {
         {{foreach from=$curr_product->_ref_references item=curr_reference}}
           <tr {{if $curr_reference->_id == $reference->_id}}class="selected"{{/if}}>
             <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_reference->_ref_societe->_view}}</a></td>
-            <td>{{$curr_reference->quantity}}</td>
-            <td>{{$curr_reference->price|string_format:"%.2f"}}</td>
-            <td>{{$curr_reference->_unit_price|string_format:"%.2f"}}</td>
+            <td>{{mb_value object=$curr_reference field=quantity}}</td>
+            <td>{{mb_value object=$curr_reference field=price}}</td>
+            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
           </tr>
         {{foreachelse}}
           <tr>
@@ -61,9 +63,7 @@ function pageMain() {
       {{if $can->edit && $reference->product_id || $reference->societe_id}}
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_reference_aed" />
-	  <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
-      {{if $reference->product_id}}<input type="hidden" name="product_id" value="{{$reference->product_id}}" />{{/if}}
-      {{if $reference->societe_id}}<input type="hidden" name="societe_id" value="{{$reference->societe_id}}" />{{/if}}
+	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -88,10 +88,17 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$reference field="product_id"}}</th>
           <td>
-            <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$reference->_ref_product->_id}}" title="Voir ou modifier le produit">
-              <b>{{$reference->_ref_product->_view}}</b>
-            </a><br />
-            {{$reference->_ref_product->description|nl2br}}
+            <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
+            <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
+            <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
+            <script type="text/javascript">
+            ProductSelector.init = function(){
+              this.sForm = "edit_reference";
+              this.sId   = "product_id";
+              this.sView = "product_name";
+              this.pop({{$reference->product_id}});
+            }
+            </script>
           </td>
         </tr>
         <tr>

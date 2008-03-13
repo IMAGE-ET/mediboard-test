@@ -15,5 +15,6 @@ $module->registerTab('vw_idx_product',       null, TAB_READ);
 $module->registerTab('vw_idx_category',      null, TAB_READ);
 $module->registerTab('vw_idx_societe',       null, TAB_READ);
 $module->registerTab('vw_idx_reference',     null, TAB_READ);
+$module->registerTab('vw_idx_stock_out',     null, TAB_READ);
 
 ?>

@@ -20,18 +20,6 @@ function submitOrderItem (oForm, order_id) {
   <tr>
     <td class="halfPane">
       {{include file="inc_vw_category_selector.tpl"}}
-      <form action="?" name="supplier-selection" method="get">
-        <input type="hidden" name="m" value="dPstock" />
-        <input type="hidden" name="tab" value="vw_aed_order_fill" />
-        
-        <label for="societe_id" title="Choisissez un fournisseur">Fournisseur</label>
-        <select name="societe_id" onchange="this.form.submit()">
-          <option value="0" >&mdash; Tous les founisseurs &mdash;</option>
-        {{foreach from=$list_societes item=curr_societe}} 
-          <option value="{{$curr_societe->societe_id}}" {{if $curr_societe->societe_id == $societe->societe_id}}selected="selected"{{/if}}>{{$curr_societe->_view}}</option>
-        {{/foreach}}
-        </select>
-      </form>
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
         Nouvelle commande
       </a>
@@ -40,7 +28,7 @@ function submitOrderItem (oForm, order_id) {
     <h3>{{$category->_view}}</h3>
       <table class="tbl">
         <tr>
-          <th>Fournisseur</th>
+          <th>{{if $unique_societe}}Produit{{else}}Fournisseur{{/if}}</th>
           <th>Quantité</th>
           <th>Prix</th>
           <th>P.U.</th>
@@ -49,17 +37,20 @@ function submitOrderItem (oForm, order_id) {
         
         <!-- Products list -->
         {{foreach from=$category->_ref_products item=curr_product}}
+        {{if !$unique_societe}}
         <tr id="product-{{$curr_product->_id}}-trigger">
           <td colspan="5">
             {{$curr_product->_view}} ({{$curr_product->_ref_references|@count}} références)
           </td>
         </tr>
         <tbody class="productToggle" id="product-{{$curr_product->_id}}">
+        {{/if}}
         
         <!-- Références list of this Product -->
         {{foreach from=$curr_product->_ref_references item=curr_reference}}
+          {{if $curr_reference->societe_id == $order->societe_id}}
           <tr {{if $curr_reference->_id == $order->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_order&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_reference->_ref_societe->_view}}</a></td>
+            <td><a href="?m={{$m}}&amp;tab=vw_idx_order&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{if $unique_societe}}{{$curr_product->_view}}{{else}}{{$curr_reference->_ref_societe->_view}}{{/if}}</a></td>
             <td>{{$curr_reference->quantity}}</td>
             <td>{{$curr_reference->price|string_format:"%.2f"}}</td>
             <td>{{$curr_reference->_unit_price|string_format:"%.2f"}}</td>
@@ -77,12 +68,15 @@ function submitOrderItem (oForm, order_id) {
             </form>
             </td>
           </tr>
+          {{/if}}
         {{foreachelse}}
           <tr>
             <td colspan="5">Aucune réference pour ce produit</td>
           </tr>
         {{/foreach}}
+        {{if !$unique_societe}}
         </tbody>
+        {{/if}}
       {{foreachelse}}
         <tr>
           <td colspan="5">Aucun produit dans cette catégorie</td>

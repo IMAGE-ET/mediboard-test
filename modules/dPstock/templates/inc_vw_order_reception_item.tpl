@@ -25,10 +25,10 @@
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       {{if $curr_item->date_received}}
-      <input type="hidden" name="_received" value="0" />
+      <input type="hidden" name="_receive" value="0" />
       <button type="button" class="tick" onclick="submitOrderItem(this.form, {{$curr_item->_id}})">Annuler</button>
       {{else}}
-      <input type="hidden" name="_received" value="1" />
+      <input type="hidden" name="_receive" value="1" />
       <button type="button" class="cancel" onclick="submitOrderItem(this.form, {{$curr_item->_id}})">Recevoir</button>
       {{/if}}
     </form>

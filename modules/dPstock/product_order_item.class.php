@@ -25,7 +25,7 @@ class CProductOrderItem extends CMbObject {
 
   // Form fields
   var $_price         = null;
-  var $_received      = null;
+  var $_receive       = null;
 
   function CProductOrderItem() {
     $this->CMbObject('product_order_item', 'order_item_id');
@@ -43,6 +43,21 @@ class CProductOrderItem extends CMbObject {
     );
   }
 
+  function receive() {
+    if (!$this->date_received) {
+      $this->loadRefsFwd();
+      $this->_ref_order->updateFormFields();
+      if ($this->_ref_order->_count_received == count($this->_ref_order->_ref_order_items)) {
+        $this->_ref_order->received = 1;
+      }
+      $this->date_received = mbDateTime();
+      //$this->
+      return true;
+    } else {
+      return false;
+    }
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
 
@@ -53,12 +68,8 @@ class CProductOrderItem extends CMbObject {
   }
   
   function updateDBFields() {
-    if ($this->_received) {
-    	$this->loadRefsFwd();
-    	$this->_ref_order->updateFormFields();
-      if ($this->_ref_order->_count_received == count($this->_ref_order->_ref_order_items)) {
-      	$this->_ref_order->received = 1;
-      }
+    if ($this->_receive) {
+    	$this->receive();
     }
   }
 

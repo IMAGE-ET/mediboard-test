@@ -32,10 +32,11 @@ class CProductReference extends CMbObject {
 
   function getSpecs() {
     return array (
-      'product_id' => 'notNull ref class|CProduct',
-      'societe_id' => 'notNull ref class|CSociete',
-      'quantity'   => 'notNull num pos',
-      'price'      => 'notNull currency',
+      'product_id'  => 'notNull ref class|CProduct',
+      'societe_id'  => 'notNull ref class|CSociete',
+      'quantity'    => 'notNull num pos',
+      'price'       => 'notNull currency',
+      '_unit_price' => 'notNull currency',
     );
   }
 
@@ -58,9 +59,12 @@ class CProductReference extends CMbObject {
   }
   
   function check() {
+  	// checks if the product reference doesn't exist yet :
+  	// no other reference can have the same product_id AND societe_id
     if($this->product_id && $this->societe_id) {
       $where['product_id'] = "= '$this->product_id'";
       $where['societe_id'] = "= '$this->societe_id'";
+      $where['reference_id'] = "!= '$this->reference_id'";
       
       $VerifDuplicateKey = new CProductReference();
       $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);

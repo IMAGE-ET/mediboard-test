@@ -29,7 +29,12 @@ class CProductOrder extends CMbObject {
 	var $_total           = null;
 	var $_count_received  = null;
 	var $_received        = null;
-	var $_partial         = null;
+  var $_partial         = null;
+  
+  // actions
+	var $_order           = null;
+	var $_receive         = null;
+
 
 	function CProductOrder() {
 		$this->CMbObject('product_order', 'order_id');
@@ -84,9 +89,8 @@ class CProductOrder extends CMbObject {
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
-			echo $item->date_received;
 			if ($item->date_received == null) {
-				$item->date_received = mbDateTime();
+				$item->_receive = true;
 			}
 			$item->store();
 		}
@@ -112,17 +116,25 @@ class CProductOrder extends CMbObject {
 		$count = count($this->_ref_order_items);
 		$this->_view = $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
 	}
-
+	
 	function updateDBFields() {
 		$this->loadRefsBack();
 
-		// If the flag _received is true, and if not every item has been received, we mark all them as received
-		if ($this->_received && $this->countReceivedItems() != count($this->_ref_order_items)) {
+		// If the flag _receive is true, and if not every item has been received, we mark all them as received
+		if ($this->_receive && $this->countReceivedItems() != count($this->_ref_order_items)) {
 			$this->receiveAllItems();
 		}
 
-		if ($this->date_ordered && (count($this->_ref_order_items) == 0)) {
-			$this->date_ordered = null;
+		if ($this->_order && !$this->date_ordered) {
+			if (count($this->_ref_order_items) == 0) {
+				$this->_order = null;
+			} else {
+				$this->date_ordered = mbDateTime();
+				
+				// make the real order here !!!
+				
+				
+			}
 		}
 	}
 

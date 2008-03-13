@@ -18,10 +18,12 @@ $societe = new CSociete();
 $societe->load($societe_id);
 $societe->loadRefsBack();
 
+// Loads every reference supplied by this societe
 foreach($societe->_ref_product_references as $key => $value) {
   $value->loadRefsFwd();
 }
 
+// Loads every product made by this societe
 foreach($societe->_ref_products as $key => $value) {
   $value->loadRefsFwd();
 }

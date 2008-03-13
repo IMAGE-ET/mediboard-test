@@ -1,4 +1,5 @@
 {{mb_include_script module="dPstock" script="product_selector"}}
+
 <script type="text/javascript">
 function pageMain() {
   PairEffect.initGroup("productToggle", { bStartVisible: false });
@@ -38,7 +39,10 @@ function pageMain() {
           <tr {{if $curr_stock->_id == $stock->_id}}class="selected"{{/if}}>
             <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
             <td>{{$curr_stock->quantity}}</td>
-            <td>{{include file="inc_vw_bargraph.tpl" stock=$curr_stock}}</td>
+            <td>
+              {{assign var=id value=$curr_stock->_id}}
+              {{include file="inc_vw_bargraph.tpl" stock=$curr_stock}}
+            </td>
           </tr>
         {{foreachelse}}
           <tr>
@@ -59,7 +63,6 @@ function pageMain() {
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-      {{if !$stock->_id}}<input type="hidden" name="product_id" value="{{$stock->product_id}}" />{{/if}}
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -88,15 +91,15 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$stock field="product_id"}}</th>
           <td>
-            <input type="hidden" name="product_id" value="{{$stock->product_id}}" />
-            <input type="text" size="40" readonly="readonly" ondblclick="ProductSelector.init()" name="product_name" value="{{$stock->_ref_product->_view}}" />
+            <input type="hidden" name="product_id" value="{{$stock->product_id}}" class="{{$stock->_props.product_id}}" />
+            <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
             <script type="text/javascript">
             ProductSelector.init = function(){
               this.sForm = "edit_stock";
               this.sId   = "product_id";
               this.sView = "product_name";
-              this.pop();
+              this.pop({{$stock->product_id}});
             }
             </script>
           </td>

@@ -43,15 +43,14 @@ if ($category) {
 
 // Suppliers list
 $societe = new CSociete();
-$societe->load($societe_id);
 $list_societes = $societe->loadList();
 
 // Smarty template
 $smarty = new CSmartyDP();
 
+$smarty->assign('unique_societe', true);
 $smarty->assign('order',           $order);
 $smarty->assign('category',        $category);
-$smarty->assign('societe',         $societe);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
 

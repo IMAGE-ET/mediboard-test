@@ -19,16 +19,22 @@ $product_id   = mbGetValueFromGetOrSession('product_id');
 // Loads the expected Reference
 $reference = new CProductReference();
 
+// If a reference ID has been provided, 
+// we load it and its associated product
 if ($reference_id) {
   $reference->reference_id = $reference_id;
   $reference->loadMatchingObject();
   $reference->loadRefsFwd();
   $reference->_ref_product->loadRefsFwd();
+
+// else, if a product_id has been provided, 
+// we load it and its associated reference
 } else if($product_id) {
   $reference->product_id = $product_id;
   $product = new CProduct();
   $product->load($product_id);
   $reference->_ref_product = $product;
+
 } else {
   // If a supplier ID is provided, we make a corresponding reference
   if ($societe_id) {
@@ -46,21 +52,20 @@ $reference->loadRefsFwd();
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
-if (!$category_id) {
-  $category = $reference->_ref_product->_ref_category;
+// if a category is provided, we load it
+if ($category_id) {
+  $category->load($category_id);
+  
+// else, we load the category assiociated to the reference's product
 } else {
-  $category->category_id = $category_id;
-  $category->loadMatchingObject();
+  $category = $reference->_ref_product->_ref_category;
 }
 
-if ($category) {
-  $category->loadRefs();
-  
-  // Loads the products list
-  foreach($category->_ref_products as $prod) {
-    $prod->loadRefs();
-  }
-} else $category = new CProductCategory();
+$category->loadRefs();
+// Loads the products list
+foreach($category->_ref_products as $prod) {
+  $prod->loadRefs();
+}
 
 // Suppliers list
 $societe = new CSociete();

@@ -27,6 +27,16 @@ class CProductStock extends CMbObject {
 
   //    Multiple
   var $_ref_stock_outs          = null;
+  
+  // Stock percentages 
+  var $_quantity                = null;
+  var $_critical                = null;
+  var $_min                     = null;
+  var $_optmimum                = null;
+  var $_max                     = null;
+  // In which part of the graph the quantity is
+  var $_zone                    = null;
+  
 
   function CProductStock() {
     $this->CMbObject('product_stock', 'stock_id');
@@ -43,11 +53,17 @@ class CProductStock extends CMbObject {
     return array (
       'product_id'               => 'notNull ref class|CProduct',
       'group_id'                 => 'notNull ref class|CGroups',
-      'quantity'                 => 'notNull num pos',
+      'quantity'                 => 'num pos notNull',
       'order_threshold_critical' => 'num pos',
-      'order_threshold_min'      => 'notNull num pos moreEquals|order_threshold_critical',
+      'order_threshold_min'      => 'num pos notNull moreEquals|order_threshold_critical',
       'order_threshold_optimum'  => 'num pos moreEquals|order_threshold_min',
-      'order_threshold_max'      => 'notNull num pos moreEquals|order_threshold_optimum',
+      'order_threshold_max'      => 'num pos notNull moreEquals|order_threshold_optimum',
+      '_quantity'                => 'pct',
+      '_critical'                => 'pct',
+      '_min'                     => 'pct',
+      '_optimum'                 => 'pct',
+      '_max'                     => 'pct',
+      '_zone'                    => 'num',
     );
   }
 
@@ -55,6 +71,27 @@ class CProductStock extends CMbObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->_ref_product->_view . " (x$this->quantity)";
+    
+    $max = max(array($this->quantity, $this->order_threshold_max)) / 100;
+    
+    $this->_quantity = $this->quantity                 / $max;
+    $this->_critical = $this->order_threshold_critical / $max;
+    $this->_min      = $this->order_threshold_min      / $max - $this->_critical;
+    $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
+    $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
+      
+    if ($this->_quantity       <= $this->_critical) {
+      $this->_zone = 0;
+      
+    } elseif ($this->_quantity <= $this->_min) {
+      $this->_zone = 1;
+      
+    } elseif ($this->quantity  <= $this->_optimum) {
+      $this->_zone = 2;
+      
+    } else {
+      $this->_zone = 3;
+    }
   }
   
   function updateDBFields() {
@@ -90,6 +127,7 @@ class CProductStock extends CMbObject {
     if($this->product_id && $this->group_id) {
       $where['product_id'] = "= '$this->product_id'";
       $where['group_id']   = "= '$this->group_id'";
+      $where['stock_id']   = " != '$this->stock_id'";
       
       $VerifDuplicateKey = new CProductStock();
       $ListVerifDuplicateKey = $VerifDuplicateKey->loadList($where);
