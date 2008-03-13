@@ -525,11 +525,11 @@ class CConsultation extends CCodable {
     
     $consult->du_patient = $consult->total_assure;
 
-    if (in_array($fse["FSE_TIERS_PAYANT"], array("2", "3"))) {
+    if (!in_array($fse["FSE_TIERS_PAYANT"], array("2", "3"))) {
       $consult->du_patient += $consult->total_amo;
     }
     
-    if (in_array($fse["FSE_TIERS_PAYANT"], array("3", "4"))) {
+    if (!in_array($fse["FSE_TIERS_PAYANT"], array("3", "4"))) {
       $consult->du_patient += $consult->total_amc;
     }
     
