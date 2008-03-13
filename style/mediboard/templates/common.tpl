@@ -1,5 +1,5 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
 
 <head>
   <title>
@@ -7,7 +7,7 @@
     &mdash; {{tr}}module-{{$m}}-court{{/tr}}
   </title>
   <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
-  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissement de Santï¿½" />
+  <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}
   {{$mediboardCommonStyle|smarty:nodefaults}}
