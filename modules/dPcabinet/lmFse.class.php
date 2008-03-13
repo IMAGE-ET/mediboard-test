@@ -45,6 +45,7 @@ class CLmFSE extends CLmObject {
     $specs = parent::getSpecs();
     
     // DB Fields
+    $specs["S_FSE_NUMERO_FSE"]        = "ref class|CLmFSE";
     $specs["S_FSE_ETAT"]              = "enum list|2|3|4|5|6|7|8|9|10";
     $specs["S_FSE_MODE_SECURISATION"] = "enum list|0|1|2|3|4|5";
     $specs["S_FSE_DATE_FSE"]          = "date";

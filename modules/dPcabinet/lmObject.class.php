@@ -41,7 +41,7 @@ class CLmObject extends CMbObject {
     return array();
   }
  
-  function getspecs() {
+  function getSpecs() {
     return array();
   }
    

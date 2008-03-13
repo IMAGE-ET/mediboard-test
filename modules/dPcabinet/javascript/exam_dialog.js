@@ -4,7 +4,7 @@ var ExamDialog = {
   sForm            : null,
   sConsultId       : null,
   options : {
-    width : 800,
+    width : 900,
     height: 600
   },
 
