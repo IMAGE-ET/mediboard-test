@@ -28,6 +28,9 @@ $object->loadView();
 //$can->read = $canModule->read && $object->canRead();
 //$can->needsRead();
 $can = CModule::getCanDo($object->_ref_module->mod_name);
+$can->read = $can->read && $object->canRead();
+$can->edit = $can->edit && $object->canEdit();
+$can->needsRead();
 
 // If no template is defined, use generic
 $template = is_file("modules/$object->_view_template") ?
