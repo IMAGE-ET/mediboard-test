@@ -11,9 +11,9 @@ global $AppUI;
 require_once($AppUI->getModuleClass("sherpa", "spObject"));
 
 /**
- * Classe du malade sherpa
+ * Classe du dossier Sherpa UPATOU
  */
-class CSpDossier extends CSpObject {  
+class CSpUrgDos extends CSpObject {  
   // DB Table key
   var $numdos = null;
 
