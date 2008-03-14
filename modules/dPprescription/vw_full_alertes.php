@@ -37,6 +37,7 @@ if($prescription->object_id) {
   
   // Calcul des alertes
   $allergies    = new CBcbControleAllergie();
+  $allergies->setPatient($prescription->_ref_object->_ref_patient);
   $interactions = new CBcbControleInteraction();
   $IPC          = new CBcbControleIPC();
   $profil       = new CBcbControleProfil();

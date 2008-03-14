@@ -87,11 +87,12 @@ if ($prescription->_id) {
   
   // Gestion des alertes
   $allergies    = new CBcbControleAllergie();
+  $allergies->setPatient($prescription->_ref_object->_ref_patient);
   $interactions = new CBcbControleInteraction();
   $IPC          = new CBcbControleIPC();
   $profil       = new CBcbControleProfil();
-  
   $profil->setPatient($prescription->_ref_object->_ref_patient);
+  
   foreach ($prescription->_ref_prescription_lines as &$line) {
     // Chargement de la posologie
     $line->_ref_produit->loadRefPosologies();
