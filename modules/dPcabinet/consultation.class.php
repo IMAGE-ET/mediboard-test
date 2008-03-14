@@ -178,7 +178,7 @@ class CConsultation extends CCodable {
     $specs["total_assure"]      = "currency";
     
     $specs["sejour_id"]         = "ref class|CSejour";
-    $specs["accident_travail"]  = "bool default|0";
+    $specs["accident_travail"]  = "date";
     return $specs;
   }
   

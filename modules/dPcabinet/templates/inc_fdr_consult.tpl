@@ -214,6 +214,9 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
   oForm.du_patient.value = oForm._somme.value;
 }
 
+
+
+
 </script>
 
 <table class="form">
@@ -370,8 +373,8 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
           <th>
            {{mb_label object=$consult field="accident_travail"}}
          </th>
-         <td>
-           {{mb_field object=$consult field="accident_travail" onchange="submitFormAjax(this.form,'systemMsg');"}}
+         <td class="date">
+           {{mb_field object=$consult field="accident_travail" form="accidentTravail" onchange="submitFormAjax(this.form,'systemMsg');"}}
          </td>
        </tr>
       </table>  
@@ -682,4 +685,15 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
   {{/if}}
   
 </table>
+
+<script type="text/javascript">
+
+// Preparation du formulaire
+prepareForm(document.accidentTravail);
+
+Main.add( function(){
+    regFieldCalendar('accidentTravail', "accident_travail");
+} );
+
+</script>
           

@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "0.99";
+$config["mod_version"]     = "1.00";
 $config["mod_type"]        = "user";
 
 
@@ -1079,7 +1079,32 @@ class CSetupdPcabinet extends CSetup {
         "\nVALUES ('0', 'view_traitement', '1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.99";
+    $this->makeRevision("0.99");
+    // Table temporaire contenant les consultation_id des accident_travail à 1
+    $sql = "CREATE TEMPORARY TABLE tbl_accident_travail (
+             consultation_id INT( 11 )
+            ) AS 
+              SELECT consultation_id
+              FROM `consultation`
+              WHERE accident_travail = '1';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `consultation`
+            CHANGE `accident_travail` `accident_travail` DATE DEFAULT NULL";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`, `plageconsult`, `tbl_accident_travail`
+            SET `consultation`.`accident_travail` = `plageconsult`.`date`
+            WHERE `consultation`.`plageconsult_id` = `plageconsult`.`plageconsult_id`
+            AND `consultation`.`consultation_id` = `tbl_accident_travail`.`consultation_id`;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `consultation`
+            SET accident_travail = NULL
+            WHERE accident_travail = '0000-00-00';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.00";
   }
 }
 ?>
