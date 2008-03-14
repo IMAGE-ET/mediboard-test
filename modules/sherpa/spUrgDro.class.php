@@ -19,8 +19,8 @@ class CSpUrgDro extends CSpObject {
 
   // DB Fields : see getSpecs();
   
-	function CSpOuvDro() {
-	  $this->CSpObject("t_urgdro", "numdos");    
+	function CSpUrgDro() {
+	  $this->CSpObject("ox_urgdro", "numdos");    
 	}
   
   function getSpec() {
@@ -33,7 +33,6 @@ class CSpUrgDro extends CSpObject {
     $specs = parent::getSpecs();
         
     $specs["urgfla"]  = "str length|1"    ; /* Flag                             */
-    $specs["referan"] = "str length|9"    ; /* Annee de Reference (AAA Annnnn)  */
     $specs["numdos"]  = "numchar length|6"; /* No de dossier (Annnnn)           */
     $specs["malnum"]  = "numchar length|6"; /* No de malade                     */
     $specs["datarr"]  = "str length|19"   ; /* Date et Heure Arrivee            */

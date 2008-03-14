@@ -19,8 +19,8 @@ class CSpUrgDos extends CSpObject {
 
   // DB Fields : see getSpecs();
   
-	function CSpDossier() {
-	  $this->CSpObject("t_urgdos", "numdos");    
+	function CSpUrgDos() {
+	  $this->CSpObject("ox_urgdos", "numdos");    
 	}
   
   function getSpec() {
