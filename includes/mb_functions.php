@@ -777,6 +777,13 @@ function mbDateFromLocale($date) {
   return preg_replace("/(\d{2})\/(\d{2})\/(\d{2,4})/", "$3-$2-$1", $date);
 }
 
+/**
+ * Check if given value is in given range or equals to limit
+ * @param $value mixed The value to check
+ * @param $min mixed The lesser limit
+ * @param $max mixed The upper limit
+ * @return bool 
+ */
 function in_range($value, $min, $max) {
   return $value <= $max && $value >= $min;
 }

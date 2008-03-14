@@ -14,14 +14,14 @@
 class CSpObjectHandler extends CMbObjectHandler {
   static $handled = array (
     "CPatient" => array ("CSpMalade"),
-    "CSejour" => array ("CSpSejMed", "CSpDossier", "CSpOuvDro"),
+    "CSejour" => array ("CSpSejMed", "CSpDossier", "CSpOuvDro", "CSpUrgDos", "CSpUrgDro"),
   );
   
   static $queriable = array (
     "CPatient", 
     "CSejour", 
     "COperation",
-    "CMediusers"
+    "CMediusers",
 	);
   
   
@@ -41,15 +41,25 @@ class CSpObjectHandler extends CMbObjectHandler {
    * Check id for object
    */
   static function checkId(CMbObject &$mbObject, $id) {
-    switch ($mbObject->_class_name) {
-      case "CSejour" : 
-	    $yearWanted = substr($mbObject->entree_prevue, 3, 1);
+    if ($mbObject instanceof CSejour) {
+      // Vérification de l'année
+      $yearWanted = substr($mbObject->entree_prevue, 3, 1);
 	    $yearGiven = substr($id, 0, 1);
-	    return $yearGiven == $yearWanted;
+	    if ($yearGiven != $yearWanted) {
+	      return false;
+	    }
 	    
-      default:
-      return true;    
+	    $counter = substr($id, 1, 1);
+	    if ($mbObject->type == "urg" && !in_range($counter, "5", "9")) {
+	      return false;
+	    }
+	    
+	    if ($mbObject->type != "urg" && !in_range($counter, "0", "2")) {
+	      return false;
+	    }
     }
+
+    return true;    
   }
       
   /**
@@ -68,8 +78,14 @@ class CSpObjectHandler extends CMbObjectHandler {
     if ($mbObject instanceof CSejour) {
 	    $year = substr($mbObject->entree_prevue, 3, 1);
 	    
+      // Hospitalisation standard
 	    $min = "00001";
 			$max = "29999";
+			
+			if ($mbObject->type == "urg") {
+				$min = "50001";
+			  $max = "99999";
+			}
 	    
 			$idMin = "$year$min";
 			$idMax = "$year$max";
@@ -218,8 +234,12 @@ class CSpObjectHandler extends CMbObjectHandler {
       foreach ($this->createSpInstances($mbObject) as $spInstance) {
         $spInstance->changeDSN($group_id);
 	      $spInstance->_id = $id400->id400;
-        $spInstance->mapFrom($mbObject);
-        
+	      if (!$spInstance->isConcernedBy($mbObject)) {
+	        continue;
+	      }
+
+	      $spInstance->mapFrom($mbObject);
+	      
 	      // Propagated object
 	      if ($msg = $spInstance->store()) {
 	        trigger_error("Error propagating object '$spInstance->_class_name ($spInstance->_id)' : $msg", E_USER_WARNING);

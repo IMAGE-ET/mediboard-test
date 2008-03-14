@@ -37,9 +37,9 @@ class CSpUrgDro extends CSpObject {
     $specs["malnum"]  = "numchar length|6"; /* No de malade                     */
     $specs["datarr"]  = "str length|19"   ; /* Date et Heure Arrivee            */
     $specs["datdep"]  = "str length|19"   ; /* Date et Heure Départ             */
-    $specs["urprov"]  = "str length|2"    ; /* Provenance                       */
-    $specs["urmtra"]  = "str length|1"    ; /* Mode de transport (arrivee)      */
-
+    $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
+    
+    
 //    $specs["accide"]  = "bool"            ; /* Accident  O/N                    */
 //    $specs["acctie"]  = "bool"            ; /*          Cause par 1 Tiers O/N   */
 //    $specs["acctra"]  = "bool"            ; /*          Du Travail        O/N   */
@@ -65,16 +65,99 @@ class CSpUrgDro extends CSpObject {
 //    $specs["vilemp"]  = "str maxLength|30"; /* Code postal et ville employeur   */
 //    $specs["matemp"]  = "str maxLength|9" ; /* No matricule employeur           */
 //    $specs["telemp"]  = "str maxLength|14"; /* Forfait gouvernemental  O/N      */
-
-    $specs["urdest"]  = "str length|1"    ; /* Destination                      */
-    $specs["urmuta"]  = "str length|1"    ; /* Cause Transfert   (Depart)       */
-    $specs["urtype"]  = "str length|1"    ; /* Type d'Urgence                   */
-    $specs["urtrau"]  = "str length|1"    ; /* Urgence Traumato                 */
-    $specs["urgems"]  = "str length|1"    ; /* Code GEMSA                       */
-    $specs["urccmu"]  = "str length|1"    ; /* Code CCMU                        */
 //    $specs["exoatu"]  = "str length|1"    ; /* Exoneration Forfait ATU          */
     
-    $specs["datmaj"]  = "str length|19"   ; /* DateTime de derniere mise a jour */
+
+    /* Provenance                       */
+    $urprov = array (
+      "AM", // Ambulance
+      "AT", // Accident du travail
+      "DO", // Domicile
+      "EC", // Ecole
+      "MT", // Médecin Traitant
+      "OT", // Autre établissement
+      "RA", // Radio
+      "RC", // Reconvocation
+      "SP", // Sport
+      "VP", // Voie public
+    );
+    
+    $urprov = implode("|", $urprov);
+    $specs["urprov"]  = "enum list|$urprov"; 
+    
+    /* Code GEMSA                       */
+    $urgems = array (
+      "1", // Décédé à l'arrivée avant réanimation
+      "2", // Pas de reconvocation
+      "3", // Convocation pour soins
+      "4", // Hospitalisation non attendue dans service
+      "5", // Hospitalisation attendue dans service
+      "6", // Traiement immédiat important
+    );
+
+    $urgems = implode("|", $urgems);
+    $specs["urgems"]  = "enum list|$urgems";
+    
+    /* Code CCMU                        */
+    $specs["urccmu"]  = "str enum list|1|2|3|4|5";
+    
+    /* Mode de transport (arrivee)      */
+    $urmtra = array (
+      "1", // Propres moyens
+      "2", // VSL
+      "3", // Ambulance
+      "4", // Police
+      "5", // Pompiers
+      "6", // SAMU
+      "7", // Taxi
+    );
+    
+    $urmtra = implode("|", $urmtra);
+    $specs["urmtra"]  = "enum list|$urmtra";
+    
+    /* Destination                      */
+    $urdest = array (
+      "D", // Décès
+      "M", // Mutation
+      "S", // Sortie
+    );
+    
+    $urdest = implode("|", $urdest);
+    $specs["urdest"]  = "enum list|$urdest";
+
+    /* Cause Transfert   (Depart)       */
+    $urmuta = array (
+      "A", // Absence moyen spécifique
+      "D", // Demande du patient
+      "M", // Mutation
+      "P", // Pas de lits (plus de place)
+      "X", // Sans tranfert
+    );
+    
+    $urmuta = implode("|", $urmuta);
+    $specs["urmuta"]  = "enum list|$urmuta";
+
+    /* Type d'Urgence                   */
+    $urtype = array (
+      "C", // Chirurgical
+      "E", // Pédiatrique
+      "M", // Médical
+      "P", // Psychatrique
+      "T", // Traumato
+    );
+    
+    $urtype = implode("|", $urtype);
+    $specs["urtype"]  = "enum list|$urtype";    
+    
+    /* Urgence Traumato                 */
+    $urtrau = array (
+      "I", // Immobilisation
+      "S", // Suture
+      "T", // Traitement médical
+    );
+    
+    $urtrau = implode("|", $urtrau);
+    $specs["urtrau"]  = "enum list|$urtrau";    
     
     return $specs;
   }
@@ -94,6 +177,16 @@ class CSpUrgDro extends CSpObject {
     $sejour = new CSejour();
     $sejour->patient_id = $patient->_id;
     return $sejour;
+  }
+  
+  function isConcernedBy(CMbObject &$mbObject) {
+    $mbClass = $this->_spec->mbClass;
+    if (!$mbObject instanceof $mbClass) {
+      trigger_error("mapping object should be a '$mbClass'");
+      return false;
+    }
+    
+    return $mbObject->type == "urg";
   }
   
   function mapFrom(CMbObject &$mbObject) {

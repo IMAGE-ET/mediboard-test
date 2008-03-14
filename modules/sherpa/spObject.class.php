@@ -66,6 +66,16 @@ class CSpObject extends CMbObject {
   }
   
   /**
+   * Check if the SpObject is really concerned by the MbObject
+   * according to its state
+   * @param CMbObject $mbObject
+   * @return bool
+   */
+  function isConcernedBy(CMbObject &$mbObject) {
+    return true;
+  }
+  
+  /**
    * Map this from a Mediboard object
    * @param CMbObject $mbObject
    * @return null

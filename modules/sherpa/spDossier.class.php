@@ -58,6 +58,16 @@ class CSpDossier extends CSpObject {
     return $sejour;
   }
   
+  function isConcernedBy(CMbObject &$mbObject) {
+    $mbClass = $this->_spec->mbClass;
+    if (!$mbObject instanceof $mbClass) {
+      trigger_error("mapping object should be a '$mbClass'");
+      return false;
+    }
+    
+    return $mbObject->type != "urg";
+  }
+  
   function mapFrom(CMbObject &$mbObject) {
     $mbClass = $this->_spec->mbClass;
     if (!$mbObject instanceof $mbClass) {

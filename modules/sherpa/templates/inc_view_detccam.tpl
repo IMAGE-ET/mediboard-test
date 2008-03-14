@@ -1,7 +1,7 @@
 <form name="editDetCCAM" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_detccam_aed" />
-<input type="hidden" name="idinterv" value="{{$detccam->_id}}" />
+<input type="hidden" name="idacte" value="{{$detccam->_id}}" />
 <input type="hidden" name="del" value="0" />
 
 <table class="form">

@@ -1,7 +1,7 @@
 <form name="editSejour" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_SpSejMed_aed" />
-<input type="hidden" name="malnum" value="{{$sejour->_id}}" />
+<input type="hidden" name="numdos" value="{{$sejour->_id}}" />
 <input type="hidden" name="del" value="0" />
 
 <table class="form">
