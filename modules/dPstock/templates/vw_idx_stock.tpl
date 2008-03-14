@@ -1,10 +1,5 @@
 {{mb_include_script module="dPstock" script="product_selector"}}
 
-<script type="text/javascript">
-function pageMain() {
-  PairEffect.initGroup("productToggle", { bStartVisible: false });
-}
-</script>
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
@@ -17,39 +12,30 @@ function pageMain() {
     <h3>{{$category->_view}}</h3>
       <table class="tbl">
         <tr>
-          <th>Groupe</th>
+          <th>Produit</th>
           <th>En stock</th>
           <th>Seuils</th>
         </tr>
         
-        <!-- Products list -->
-        {{foreach from=$category->_ref_products item=curr_product}}
-        <tr id="product-{{$curr_product->_id}}-trigger">
-          <td colspan="3">
-            <a style="display: inline; float: right; font-weight: normal;" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$curr_product->_id}}">
-              Nouveau stock
-            </a>
-            {{$curr_product->_view}}
-          </td>
-        </tr>
-        <tbody class="productToggle" id="product-{{$curr_product->_id}}">
-        
-        <!-- Stocks list of this Product -->
-        {{foreach from=$curr_product->_ref_stocks item=curr_stock}}
-          <tr {{if $curr_stock->_id == $stock->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
-            <td>{{$curr_stock->quantity}}</td>
+      <!-- Products list -->
+      {{foreach from=$category->_ref_products item=curr_product}}
+        {{if $curr_product->_ref_stock_group}}
+          <tr {{if $curr_product->_ref_stock_group->_id == $stock->_id}}class="selected"{{/if}}>
+            <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_product->_ref_stock_group->_id}}" title="Voir ou modifier le stock">{{$curr_product->_view}}</a></td>
+            <td>{{$curr_product->_ref_stock_group->quantity}}</td>
+            <td>{{include file="inc_vw_bargraph.tpl" stock=$curr_product->_ref_stock_group}}</td>
+          </tr>
+        {{else}}
+          <tr>
+            <td>{{$curr_product->_view}}</td>
+            <td>Aucun stock pour ce produit</td>
             <td>
-              {{assign var=id value=$curr_stock->_id}}
-              {{include file="inc_vw_bargraph.tpl" stock=$curr_stock}}
+              <a style="display: inline; float: right; font-weight: normal;" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$curr_product->_id}}">
+                Nouveau stock
+              </a>
             </td>
           </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="3">Aucun stock pour ce produit</td>
-          </tr>
-        {{/foreach}}
-        </tbody>
+        {{/if}}
       {{foreachelse}}
         <tr>
           <td colspan="3">Aucun produit dans cette catégorie</td>
@@ -63,6 +49,7 @@ function pageMain() {
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
+      <input type="hidden" name="group_id" value="{{$g}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -71,18 +58,6 @@ function pageMain() {
           {{else}}
           <th class="title" colspan="2">Nouveau stock</th>
           {{/if}}
-        </tr>
-        <tr>
-          <th>{{mb_label object=$stock field="group_id"}}</th>
-          <td><select name="group_id" class="{{$stock->_props.group_id}}">
-            <option value="">&mdash; Choisir un groupe</option>
-            {{foreach from=$list_groups item=curr_group}}
-              <option value="{{$curr_group->_id}}" {{if $stock->group_id == $curr_group->_id || ($curr_group->_id == $g && $stock->group_id != $curr_group->_id)}} selected="selected" {{/if}} >
-              {{$curr_group->_view}}
-              </option>
-            {{/foreach}}
-            </select>
-          </td>
         </tr>
         <tr>
           <th>{{mb_label object=$stock field="quantity"}}</th>

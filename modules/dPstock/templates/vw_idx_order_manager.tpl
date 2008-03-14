@@ -44,7 +44,8 @@ function submitOrder (oForm, refreshList) {
     <td class="halfPane">
     <form name="edit_order" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_order_aed" />
-	  <input type="hidden" name="order_id" value="{{$order->_id}}" />
+	    <input type="hidden" name="order_id" value="{{$order->_id}}" />
+      <input type="hidden" name="group_id" value="{{$g}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>

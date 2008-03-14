@@ -9,10 +9,10 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit('CProductStock', 'stock_id');
-$do->createMsg = 'Stock créé';
-$do->modifyMsg = 'Stock modifié';
-$do->deleteMsg = 'Stock supprimé';
+$do = new CDoObjectAddEdit('CProductStockOut', 'stock_out_id');
+$do->createMsg = 'Déstockage créé';
+$do->modifyMsg = 'Déstockage modifié';
+$do->deleteMsg = 'Déstockage supprimé';
 $do->doIt();
 
 ?>

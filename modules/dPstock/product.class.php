@@ -30,6 +30,9 @@ class CProduct extends CMbObject {
   // Filter Fields
   var $_date_min         = null;
   var $_date_max         = null;
+  
+  // This group's stock id
+  var $_ref_stock_group  = null;
 
   function CProduct() {
     $this->CMbObject('product', 'product_id');
@@ -65,17 +68,26 @@ class CProduct extends CMbObject {
     $this->_view = $this->name;
   }
 
-  function loadRefsBack(){
+  function loadRefsBack() {
+  	global $g;
+  	
     $where = array();
     $where['product_id'] = "= '$this->product_id'";
 
-    // Loading stocks references
-    $this->_ref_stocks = new CProductStock;
+    // Loads stocks references
+    $this->_ref_stocks = new CProductStock();
     $this->_ref_stocks = $this->_ref_stocks->loadList($where);
 
-    // Loading suppliers references
+    // Loads suppliers references
     $this->_ref_references = new CProductReference;
     $this->_ref_references = $this->_ref_references->loadList($where);
+    
+    // Loads the stock associated to the current group
+    $where['group_id'] = "= $g";
+    $this->_ref_stock_group = new CProductStock();
+    if (!$this->_ref_stock_group->loadObject($where)) {
+    	$this->_ref_stock_group = null;
+    }
   }
 
   function loadRefsFwd(){

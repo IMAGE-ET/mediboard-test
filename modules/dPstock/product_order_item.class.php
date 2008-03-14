@@ -40,21 +40,31 @@ class CProductOrderItem extends CMbObject {
       'unit_price'    => 'currency',
       'date_received' => 'dateTime',
 	    '_price'        => 'currency',
+      '_receive'      => 'bool',
     );
+  }
+  
+  function getStock() {
+  	
   }
 
   function receive() {
     if (!$this->date_received) {
+    	$this->load();
       $this->loadRefsFwd();
-      $this->_ref_order->updateFormFields();
-      if ($this->_ref_order->_count_received == count($this->_ref_order->_ref_order_items)) {
-        $this->_ref_order->received = 1;
-      }
+
+      $stock = new CProductStock();
+      $where = array();
+      $where['group_id']   = "= '{$this->_ref_order->group_id}'";
+      $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
+
       $this->date_received = mbDateTime();
-      //$this->
-      return true;
-    } else {
-      return false;
+      
+      if ($stock->loadObject($where)) {
+        $stock->quantity += $this->quantity * $this->_ref_reference->quantity;
+        $stock->store();
+      }
+      $this->store();
     }
   }
   

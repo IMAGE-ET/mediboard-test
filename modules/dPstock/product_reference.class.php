@@ -64,6 +64,7 @@ class CProductReference extends CMbObject {
     if($this->product_id && $this->societe_id) {
       $where['product_id'] = "= '$this->product_id'";
       $where['societe_id'] = "= '$this->societe_id'";
+      $where['quantity']   = "= '$this->quantity'";
       $where['reference_id'] = "!= '$this->reference_id'";
       
       $VerifDuplicateKey = new CProductReference();

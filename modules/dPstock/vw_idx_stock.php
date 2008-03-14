@@ -24,15 +24,18 @@ if ($stock_id) {
   $stock->loadMatchingObject();
   $stock->loadRefsFwd();
   $stock->_ref_product->loadRefsFwd();
-  
+
 // else, if a product_id has been provided, we load the associated stock
 } else if($product_id) {
-  $stock->product_id = $product_id;
-  $product = new CProduct();
+	$product = new CProduct();
   $product->load($product_id);
+  
+  $stock->product_id = $product_id;
   $stock->_ref_product = $product;
-  $stock->updateFormFields();
-} else $stock->loadRefsFwd();
+} else {
+  $stock->loadRefsFwd();
+}
+$stock->updateFormFields();
 
 // Loads the required Category and the complete list
 $category = new CProductCategory();
@@ -44,19 +47,18 @@ if (!$category_id) {
   $category->loadMatchingObject();
 }
 
-$category->loadRefs();
-
-// Loads the products list
-foreach($category->_ref_products as $prod) {
-  $prod->loadRefs();
+if ($category) {
+	$category->loadRefs();
+	
+	// Loads the products list
+	foreach($category->_ref_products as $prod) {
+	  $prod->loadRefs();
+	}
+} else {
+	$category = new CProductCategory();
 }
 
-// Retrieving the Groups list
-$group = new CGroups();
-$list_groups = $group->loadList();
-
-$colors = array('#F00', '#FC3', '#1D6', '#06F');
-
+$colors = array('#F00', '#FC3', '#1D6', '#06F', '#000');
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -64,7 +66,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('stock',           $stock);
 $smarty->assign('colors',          $colors);
 $smarty->assign('category',        $category);
-$smarty->assign('list_groups',     $list_groups);
 $smarty->assign('list_categories', $list_categories);
 
 $smarty->display('vw_idx_stock.tpl');

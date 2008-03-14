@@ -55,6 +55,7 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
  `name` VARCHAR(64),
  `date_ordered` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
+ `group_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
  `received` BOOL NOT NULL DEFAULT \'0\',
 PRIMARY KEY (`order_id`)) TYPE=MYISAM;';

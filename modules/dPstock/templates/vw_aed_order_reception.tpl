@@ -11,13 +11,13 @@ function submitOrderItem (oForm, item_id) {
   submitFormAjax(oForm, 'systemMsg',{onComplete: function() {refreshOrderItem(item_id)} });
 }
 
-function submitOrder (oForm, order_id) {
+function submitOrder (oForm) {
   submitFormAjax(oForm, 'systemMsg',{
     onComplete: function() {
     {{foreach from=$order->_ref_order_items item=curr_item}}
       refreshOrderItem({{$curr_item->_id}});
     {{/foreach}}
-    } 
+    }
   });
 }
 
@@ -27,29 +27,12 @@ function submitOrder (oForm, order_id) {
     <td class="halfPane">
     {{if !$order->_received}}
     <form name="form-order-{{$order->_id}}" action="?" method="post">
-      <input type="hidden" name="m" value="dPstock" />
+      <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_aed" />
       <input type="hidden" name="order_id" value="{{$order->_id}}" />
       <input type="hidden" name="_receive" value="1" />
-      <button type="button" class="cancel" onclick="submitOrder(this.form, {{$order->_id}})">Recevoir entièrement</button>
-    </form>
-    
-    {{assign var=groupok value="0"}}
-    <form action="?" name="selection" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
-      <label for="group_id" title="Choisissez un groupe">Groupe</label>
-      <select name="group_id" onchange="this.form.submit()">
-        <option value="-1" >&mdash; Choisir un groupe &mdash;</option>
-      {{foreach from=$list_groups item=curr_group}} 
-        <option value="{{$curr_group->group_id}}" {{if $curr_group->group_id == $group->group_id}}{{assign var=groupok value="1"}}selected="selected"{{/if}}>{{$curr_group->_view}}</option>
-      {{/foreach}}
-      </select>
-    </form>
-    {{if !$groupok}}
-    <div class="big-info">Veuillez choisir un groupe pour lequel vous allez recevoir les articles</div>
-    {{/if}}
-    
+      <button type="button" class="tick" onclick="submitOrder(this.form)">Recevoir entièrement</button>
+    </form>    
     {{/if}}
       <h3>{{$order->_ref_societe->_view}} - {{$order->_view}}</h3>
       <table class="tbl" id="order-{{$order->_id}}">

@@ -36,7 +36,6 @@ class CProductStock extends CMbObject {
   var $_max                     = null;
   // In which part of the graph the quantity is
   var $_zone                    = null;
-  
 
   function CProductStock() {
     $this->CMbObject('product_stock', 'stock_id');
@@ -70,39 +69,41 @@ class CProductStock extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = $this->_ref_product->_view . " (x$this->quantity)";
+    $this->_view = $this->_ref_product->_view;
     
     $max = max(array($this->quantity, $this->order_threshold_max)) / 100;
     
-    $this->_quantity = $this->quantity                 / $max;
-    $this->_critical = $this->order_threshold_critical / $max;
-    $this->_min      = $this->order_threshold_min      / $max - $this->_critical;
-    $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
-    $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
-      
-    if ($this->_quantity       <= $this->_critical) {
-      $this->_zone = 0;
-      
-    } elseif ($this->_quantity <= $this->_min) {
-      $this->_zone = 1;
-      
-    } elseif ($this->quantity  <= $this->_optimum) {
-      $this->_zone = 2;
-      
-    } else {
-      $this->_zone = 3;
-    }
+    if ($max > 0) {
+	    $this->_quantity = $this->quantity                 / $max;
+	    $this->_critical = $this->order_threshold_critical / $max;
+	    $this->_min      = $this->order_threshold_min      / $max - $this->_critical;
+	    $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
+	    $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
+	      
+	          if ($this->_quantity <= $this->_critical) {
+	      $this->_zone = 0;
+	      
+	    } elseif ($this->_quantity <= $this->_min) {
+	      $this->_zone = 1;
+	      
+	    } elseif ($this->quantity  <= $this->_optimum) {
+	      $this->_zone = 2;
+	      
+	    } else {
+	      $this->_zone = 3;
+	    }
+	  }
   }
   
-  function updateDBFields() {
-    /*if (!$this->order_threshold_critical) {
+  /*function updateDBFields() {
+    if (!$this->order_threshold_critical) {
     	$this->order_threshold_critical = $this->order_threshold_min;
     }
     if (!$this->order_threshold_optimum) {
       $this->order_threshold_optimum = round(($this->order_threshold_min+$this->order_threshold_max)/2);
-    }*/
+    }
     //mbTrace($this);
-  }
+  }*/
 
   function loadRefsFwd(){
     $this->_ref_group = new CGroups;

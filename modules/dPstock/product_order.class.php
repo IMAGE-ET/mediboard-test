@@ -15,6 +15,7 @@ class CProductOrder extends CMbObject {
 	var $name             = null;
 	var $date_ordered     = null;
 	var $societe_id       = null;
+  var $group_id         = null;
 	var $locked           = null;
 	var $order_number     = null;
 
@@ -24,6 +25,7 @@ class CProductOrder extends CMbObject {
 
 	//    Single
 	var $_ref_societe     = null;
+	var $_ref_group       = null;
 
 	// Form fields
 	var $_total           = null;
@@ -52,6 +54,7 @@ class CProductOrder extends CMbObject {
       'name'            => 'str maxLength|64',
       'date_ordered'    => 'dateTime',
       'societe_id'      => 'notNull ref class|CSociete',
+		  'group_id'        => 'notNull ref class|CGroups',
       'locked'          => 'notNull bool',
       'order_number'    => 'str',
       '_total'          => 'currency',
@@ -84,15 +87,12 @@ class CProductOrder extends CMbObject {
 	}
 
 	/** Marks every product's items as received */
-	function receiveAllItems() {
+	function receive() {
 		$this->loadRefsBack();
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
-			if ($item->date_received == null) {
-				$item->_receive = true;
-			}
-			$item->store();
+		  $item->receive();
 		}
 	}
 
@@ -122,7 +122,7 @@ class CProductOrder extends CMbObject {
 
 		// If the flag _receive is true, and if not every item has been received, we mark all them as received
 		if ($this->_receive && $this->countReceivedItems() != count($this->_ref_order_items)) {
-			$this->receiveAllItems();
+			$this->receive();
 		}
 
 		if ($this->_order && !$this->date_ordered) {
@@ -143,8 +143,11 @@ class CProductOrder extends CMbObject {
 	}
 
 	function loadRefsFwd(){
-		$this->_ref_societe = new CSociete;
+		$this->_ref_societe = new CSociete();
 		$this->_ref_societe->load($this->societe_id);
+		
+		$this->_ref_group = new CGroups();
+    $this->_ref_group->load($this->group_id);
 	}
 
 	function getPerm($permType) {

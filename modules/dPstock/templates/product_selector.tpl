@@ -11,8 +11,8 @@ function setClose(oField) {
       var oSelector = window.opener.ProductSelector;
       oSelector.set(oField.value, name);
     }
-    //Console.debug(oField.value + ' - ' + name);
   }
+  window.close();
 }
 
 function refreshProductsList(category_id, search_string) {
@@ -60,7 +60,7 @@ function refreshProductInfo(product_id) {
   </tr>
   <tr>
     <td id="categories" rowspan="2" style="width: 0;"></td>
-    <td id="products"   rowspan="2"></td>
+    <td id="products"   rowspan="2" style="width: 0;"></td>
     <td id="product_info" style="vertical-align: top;"></td>
   </tr>
   <tr height="1">
