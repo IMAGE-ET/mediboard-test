@@ -7,16 +7,13 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $dPconfig;
-
 if (!class_exists("DOMDocument")) {
   trigger_error("sorry, DOMDocument is needed");
   return;
 }
 
+global $can, $m, $dPconfig;
 $can->needsRead();
-
-$typeObject = mbGetValueFromGet("typeObject");
 
 // HPRIM export FTP settings
 $HPrimConfig = $dPconfig["dPinterop"]["hprim_export"];
@@ -30,9 +27,13 @@ $ftp->username = dPgetParam($_POST, "username", $HPrimConfig["username"]);
 $ftp->userpass = dPgetParam($_POST, "userpass", $HPrimConfig["userpass"]);
 
 $ajax = mbGetValueFromGet("ajax");
-$sent_files = mbGetValueFromGet("sent_files");
 
-switch($typeObject) {
+if (null == $typeObject = mbGetValueFromGet("typeObject")) {
+  CAppUI::stepMessage(UI_MSG_WARNING, "$tab-msg-mode-missing");
+  return;
+}
+
+switch ($typeObject) {
   case "op" :
 		$mbObject = new COperation();
 		$doc = new CHPrimXMLServeurActes();
@@ -77,11 +78,12 @@ switch($typeObject) {
     break;
 }
 
-// Nécessaire pour la validation avec XML Spy
-//$doc->addNameSpaces();
+// Traitement sur le document HPRIM produit
+//$doc->addNameSpaces(); 	// Nécessaire pour la validation avec XML Spy
 $doc->saveTempFile();
 
 // Connexion FTP
+ $sent_files = mbGetValueFromGet("sent_files");
 if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   // Compte le nombre de fichiers déjà générés
   CMbPath::forceDir($doc->finalpath);
@@ -108,6 +110,7 @@ if (isset($_POST["hostname"]) or ($ajax and $doc_valid and !$sent_files)) {
   }
 }
 
+// Récupération de tous les fichiers produits
 $doc->getSentFiles();
 		
 // Création du template

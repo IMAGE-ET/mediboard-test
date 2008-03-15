@@ -407,10 +407,26 @@ class CAppUI {
     return $return;
   }
 
-
+ /**
+  * Display an message step after translation
+  * @param enum $msgType Type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
+  * @param string $msg The message
+  */
+  static function stepMessage($msgType, $msg) {
+    switch ($msgType) {
+      case UI_MSG_OK      : $class = "big-message"; break;
+      case UI_MSG_WARNING : $class = "big-warning"; break;
+      case UI_MSG_ERROR   : $class = "big-error" ; break;
+      default: $class = "big-message"; break;
+    }
+    
+    $msg = nl2br(self::tr($msg));
+    echo "\n<div class='$class'>$msg</div>";
+  }
   
  /**
   * Display an ajax step, and exit on error messages
+  * @TODO Switch parameter order, like stepMessage()
   * @param string $msg : the message
   * @param enum $msgType : type of message [UI_MSG_OK|UI_MSG_WARNING|UI_MSG_ERROR]
   */

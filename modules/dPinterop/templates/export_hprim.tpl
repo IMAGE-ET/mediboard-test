@@ -21,8 +21,9 @@ function choosePreselection(oSelect) {
 }
 
 </script>
+
 {{if !$ajax}}
-  <h2>Génération d'un fichier H'XML pour {{$mbObject->_view}}</h2>
+<h2>Génération d'un fichier H'XML pour {{$mbObject->_view}}</h2>
 {{/if}}
 
 <table class="main">

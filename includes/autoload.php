@@ -29,7 +29,7 @@ if ($shm->isReady()) {
     global $classPaths, $performance;
       
     // Recherche dans les classes de mediboard
-    if (array_key_exists($className, $classPaths)) {
+    if (isset($classPaths[$className])) {
       $performance["autoload"]++;
       require($classPaths[$className]);
       return;
