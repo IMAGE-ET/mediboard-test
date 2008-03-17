@@ -13,7 +13,18 @@ require_once($AppUI->getModuleClass("sherpa", "spObject"));
 /**
  * Classe de l'ouverture des droits Sherpa UPATOU
  */
-class CSpUrgDro extends CSpObject {  
+class CSpUrgDro extends CSpObject {
+  static $transCCMU = array (
+    ""  => "",
+    "1" => "1",
+    "P" => "1",
+    "2" => "2",
+    "3" => "3",
+    "4" => "4",
+    "5" => "5",
+    "D" => "5",
+  );
+  
   // DB Table key
   var $numdos = null;
 
@@ -189,6 +200,13 @@ class CSpUrgDro extends CSpObject {
     return $mbObject->type == "urg";
   }
   
+  function store() {
+//    CSQLDataSource::$trace = true;
+    $msg = parent::store();
+//    CSQLDataSource::$trace = false;
+    return $msg;
+  }
+  
   function mapFrom(CMbObject &$mbObject) {
     $mbClass = $this->_spec->mbClass;
     if (!$mbObject instanceof $mbClass) {
@@ -207,6 +225,12 @@ class CSpUrgDro extends CSpObject {
     // Horodatage
     $this->datarr = mbDateToLocale($sejour->entree_reelle);
     $this->datdep = mbDateToLocale($sejour->sortie_reelle);
+    
+    $sejour->loadRefRPU();
+    $rpu = $sejour->_ref_rpu;
+    
+    // CCMU
+    $this->urccmu = self::$transCCMU[$rpu->ccmu];
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
