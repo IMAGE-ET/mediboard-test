@@ -8,7 +8,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_vw_category_selector.tpl"}}
+      {{include file="inc_category_selector.tpl"}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
         Nouvelle réference
       </a>

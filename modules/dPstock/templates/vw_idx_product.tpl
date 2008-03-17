@@ -1,7 +1,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_vw_category_selector.tpl"}}
+      {{include file="inc_category_selector.tpl"}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">
         Créer un nouveau produit
       </a>
@@ -105,7 +105,7 @@
         <tr>
           <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
           <td>{{$curr_stock->quantity}}</td>
-          <td>{{include file="inc_vw_bargraph.tpl" stock=$curr_stock}}</td>
+          <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
         </tr>
         {{foreachelse}}
         <tr>

@@ -19,7 +19,7 @@ function submitOrderItem (oForm, order_id) {
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{include file="inc_vw_category_selector.tpl"}}
+      {{include file="inc_category_selector.tpl"}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
         Nouvelle commande
       </a>
@@ -88,7 +88,7 @@ function submitOrderItem (oForm, order_id) {
 
     <td class="halfPane"><h3>Commandes</h3>
       <div id="orders_list">
-      {{include file="inc_vw_order.tpl"}}
+      {{include file="inc_order.tpl"}}
       </div>
     </td>
   </tr>

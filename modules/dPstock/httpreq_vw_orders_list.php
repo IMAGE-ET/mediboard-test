@@ -44,5 +44,5 @@ $smarty = new CSmartyDP();
 $smarty->assign('orders', $orders_filtered);
 $smarty->assign('type',   $type);
 
-$smarty->display('inc_vw_list_orders.tpl');
+$smarty->display('inc_orders_list.tpl');
 ?>

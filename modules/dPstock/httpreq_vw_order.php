@@ -23,5 +23,5 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('order', $order);
 
-$smarty->display('inc_vw_order.tpl');
+$smarty->display('inc_order.tpl');
 ?>

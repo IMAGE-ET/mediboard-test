@@ -3,7 +3,7 @@
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_vw_category_selector.tpl"}}
+      {{include file="inc_category_selector.tpl"}}
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">
         Nouveau stock
       </a>
@@ -23,7 +23,7 @@
           <tr {{if $curr_product->_ref_stock_group->_id == $stock->_id}}class="selected"{{/if}}>
             <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_product->_ref_stock_group->_id}}" title="Voir ou modifier le stock">{{$curr_product->_view}}</a></td>
             <td>{{$curr_product->_ref_stock_group->quantity}}</td>
-            <td>{{include file="inc_vw_bargraph.tpl" stock=$curr_product->_ref_stock_group}}</td>
+            <td>{{include file="inc_bargraph.tpl" stock=$curr_product->_ref_stock_group}}</td>
           </tr>
         {{else}}
           <tr>

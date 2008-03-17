@@ -37,6 +37,6 @@ $smarty->assign('category_id', $category_id);
 $smarty->assign('count', $count);
 $smarty->assign('total', $total);
 
-$smarty->display('inc_product_selector_list_categories.tpl');
+$smarty->display('inc_product_selector_categories_list.tpl');
 
 ?>

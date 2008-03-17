@@ -11,5 +11,5 @@
   </select>
 </form>
 {{if !$catok}}
-<div class="big-info">Veuillez choisir une catégorie</div>
+<div class="big-info">Veuillez choisir une catégorie de produits</div>
 {{/if}}

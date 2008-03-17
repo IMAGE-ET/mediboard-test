@@ -9,7 +9,7 @@ function pageMain() {
 
 function refreshListOrders(type) {
   url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_list_orders");
+  url.setModuleAction("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
   url.requestUpdate("orders["+type+"]", { waitingText: null } );
 }
@@ -37,7 +37,7 @@ function submitOrder (oForm, refreshList) {
       <h3>Commandes en attente de réception</h3>
       <div id="orders[pending]"></div>
       
-      <h3>Anciennes commandes</h3>
+      <h3>Commandes reçues</h3>
       <div id="orders[old]"></div>
     </td>
     

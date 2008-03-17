@@ -44,5 +44,5 @@ $smarty->assign('list_products', $list_products);
 $smarty->assign('count', $count);
 $smarty->assign('total', $total);
 
-$smarty->display('inc_product_selector_list_products.tpl');
+$smarty->display('inc_product_selector_products_list.tpl');
 ?>

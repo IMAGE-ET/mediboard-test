@@ -10,7 +10,7 @@
   </tr>
   <tbody>
   {{foreach from=$order->_ref_order_items item=curr_item}}
-    {{include file="inc_vw_order_item.tpl"}}
+    {{include file="inc_order_item.tpl"}}
   {{/foreach}}
   </tbody>
   <tr>

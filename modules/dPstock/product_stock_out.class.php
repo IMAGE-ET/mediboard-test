@@ -22,6 +22,8 @@ class CProductStockOut extends CMbObject {
   //    Single
   var $_ref_stock    = null;
   var $_ref_function = null;
+  
+  var $_do_stock_out = null;
 
   function CProductStockOut() {
     $this->CMbObject('product_stock_out', 'stock_out_id');
@@ -43,8 +45,36 @@ class CProductStockOut extends CMbObject {
     $this->loadRefsFwd();
     $this->_view = $this->_ref_stock->_view.($this->function_id?" (pour le service <i>{$this->_ref_function->_view}</i>)":'');
   }
+  
+  function store() {
+    if ($msg = $this->check()) {
+      return $msg;
+    }
+    if (!$this->_id && $this->_do_stock_out && $this->date) {
+      $this->_ref_stock = new CProductStock();
+      $this->_ref_stock->load($this->stock_id);
+      $this->_ref_stock->quantity -= $this->quantity;
+      $this->_ref_stock->store();
+    }
+    return parent::store();
+  }
+  
+  function check() {
+  	if ($msg = parent::check()) {
+  	  return $msg;
+  	}
+  	if (!$this->_id && $this->_do_stock_out && $this->date) {
+	  	$count = $this->quantity;
+	  	if (!$this->_ref_stock) {
+	  		$this->loadRefsFwd();
+	  	}
+	    if ($count <= 0 || $this->_ref_stock->quantity < $count) {
+        return 'Erreur : Impossible de déstocker ce nombre d\'articles';
+	    }
+  	}
+  }
 
-  function loadRefsFwd(){
+  function loadRefsFwd() {
     $this->_ref_stock = new CProductStock();
     $this->_ref_stock->load($this->stock_id);
 

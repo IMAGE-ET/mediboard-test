@@ -1,9 +1,9 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPstock
- *	@version $Revision: $
+ *  @package Mediboard
+ *  @subpackage dPstock
+ *  @version $Revision: $
  *  @author Fabien Ménager
  */
 
@@ -36,10 +36,9 @@ $list_functions = $function->loadList();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('category',        $category);
-$smarty->assign('list_categories', $list_categories);
+$smarty->assign('category', $category);
 $smarty->assign('list_functions',  $list_functions);
 
-$smarty->display('vw_idx_stock_out.tpl');
+$smarty->display('inc_aed_stock_out_stocks_list.tpl');
 
 ?>

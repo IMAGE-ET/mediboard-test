@@ -18,7 +18,7 @@ function setClose(oField) {
 function refreshProductsList(category_id, search_string) {
   if (!search_string || search_string.length >= 2) {
     url = new Url;
-    url.setModuleAction("dPstock","httpreq_product_selector_list_products");
+    url.setModuleAction("dPstock","httpreq_product_selector_products_list");
     url.addParam("category_id", category_id);
     url.addParam("search_string", search_string);
     url.requestUpdate("products", { waitingText: null } );
@@ -28,7 +28,7 @@ function refreshProductsList(category_id, search_string) {
 function refreshCategoriesList(search_string) {
   if (!search_string || search_string.length >= 2) {
     url = new Url;
-    url.setModuleAction("dPstock","httpreq_product_selector_list_categories");
+    url.setModuleAction("dPstock","httpreq_product_selector_categories_list");
     url.addParam("search_string", search_string);
     url.requestUpdate("categories", { waitingText: null } );
   }

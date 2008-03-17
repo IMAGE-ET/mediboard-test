@@ -9,6 +9,6 @@
   </tr>
   <tr>
     <th>En stock</th>
-    <td>{{$product->_ref_stock_group->quantity}} {{include file="inc_vw_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
+    <td>{{$product->_ref_stock_group->quantity}} {{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
   </tr>
 </table>

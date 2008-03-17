@@ -45,7 +45,7 @@ function submitOrder (oForm) {
         </tr>
         {{foreach from=$order->_ref_order_items item=curr_item}}
         <tbody id="item-{{$curr_item->_id}}">
-          {{include file="inc_vw_order_reception_item.tpl"}}
+          {{include file="inc_order_reception_item.tpl"}}
         </tbody>
         {{/foreach}}
         <tr>

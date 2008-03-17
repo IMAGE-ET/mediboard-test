@@ -85,6 +85,7 @@ class CProduct extends CMbObject {
     // Loads the stock associated to the current group
     $where['group_id'] = "= $g";
     $this->_ref_stock_group = new CProductStock();
+    
     if (!$this->_ref_stock_group->loadObject($where)) {
     	$this->_ref_stock_group = null;
     }
