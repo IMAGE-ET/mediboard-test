@@ -83,8 +83,9 @@ class CSpUrgDos extends CSpObject {
     }
         
     $sejour = $mbObject;
+    $sejour->_ref_patient = null;
     $sejour->loadRefPatient();
-
+    
     // Malade
     $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);
     $this->malnum = $idMalade->id400;

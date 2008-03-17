@@ -203,7 +203,11 @@ class CSpUrgDro extends CSpObject {
     // Malade
     $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
     $this->malnum = $idMalde->id400;
-        
+    
+    // Horodatage
+    $this->datarr = mbDateToLocale($sejour->entree_reelle);
+    $this->datdep = mbDateToLocale($sejour->sortie_reelle);
+    
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

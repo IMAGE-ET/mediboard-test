@@ -128,7 +128,7 @@ function loadTransfert(mode_sortie, sejour_id){
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
   {{assign var=rpu value=$curr_sejour->_ref_rpu}}
-  {{assign var=patient value=$patient}}
+  {{assign var=patient value=$curr_sejour->_ref_patient}}
   <tr>
     <td>
 		  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
