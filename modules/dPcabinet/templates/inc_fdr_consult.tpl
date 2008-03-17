@@ -316,6 +316,8 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 				  	  {{$_ext_fse->_view}}
 				  	</span>
 		      </td>
+		    </tr>
+		    <tr>
 	        {{if $_ext_fse->_annulee}}
 	        <td class="cancelled">
 	          {{mb_value object=$_ext_fse field=S_FSE_ETAT}}
@@ -336,7 +338,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 		    </tr>
         {{foreachelse}}
 				<tr>
-				  <td colspan="2">
+				  <td>
 				    <em>Aucune FSE associée</em>
 		      </td>
 		    </tr>
@@ -344,7 +346,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 
         <tr>
 		      {{if $patient->_id_vitale && $praticien->_id_cps}}
-          <td colspan="2" class="button">
+          <td class="button">
             {{if !$consult->_current_fse}}
 			      <button class="new" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
 			        Formater FSE
