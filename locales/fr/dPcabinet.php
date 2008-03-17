@@ -1274,4 +1274,8 @@ $locales['pref-view_traitement'] = "Affichage des traitements";
 $locales['pref-view_traitement-0'] = "Cacher";
 $locales['pref-view_traitement-1'] = "Visible";
 $locales['pref-view_traitement-desc'] = "Affichage des traitemens";
+$locales['pref-autoCloseConsult'] = "Terminer automatiquement la consultation";
+$locales['pref-autoCloseConsult-desc'] = "Terminer automatiquement la consultation lors de la validation du tarif";
+$locales['pref-autoCloseConsult-0'] = "Non";
+$locales['pref-autoCloseConsult-1'] = "Oui";
 ?>

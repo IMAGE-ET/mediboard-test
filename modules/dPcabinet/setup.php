@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.00";
+$config["mod_version"]     = "1.01";
 $config["mod_type"]        = "user";
 
 
@@ -1104,7 +1104,12 @@ class CSetupdPcabinet extends CSetup {
             WHERE accident_travail = '0000-00-00';";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.00";
+    $this->makeRevision("1.00");
+    $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )
+            VALUES ('0', 'autoCloseConsult', '0');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.01";
   }
 }
 ?>

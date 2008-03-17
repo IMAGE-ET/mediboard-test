@@ -75,6 +75,13 @@ function cancelTarif(action) {
     oForm.tarif.value = "";
   }
   
+  {{if $app->user_prefs.autoCloseConsult}}
+  if(oForm.chrono){
+    oForm.chrono.value = "48";
+  }
+  {{/if}}
+            
+            
   if(oForm.valide){
     oForm.valide.value = 0;
   }
@@ -205,7 +212,15 @@ function confirmFileDeletion(oButton) {
 }
 
 function submitFdr(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadFdr });
+  submitFormAjax(oForm, 'systemMsg', { 
+    onComplete : 
+      function() {
+        reloadFdr();
+        {{if $app->user_prefs.autoCloseConsult}}
+        reloadFinishBanner();
+        {{/if}}
+      }
+    } );
 }
 
 // Mise a jour de du_patient
@@ -545,6 +560,12 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
             {{if !$consult->sejour_id && $consult->du_patient}}
             <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
             {{/if}}
+            
+            {{if $app->user_prefs.autoCloseConsult}}
+            <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
+            {{/if}}
+            
+            
             {{if !$consult->_current_fse}}
             <button class="cancel" type="button" onclick="this.form.du_tiers.value = 0; this.form.du_patient.value = 0; cancelTarif()">Annuler la validation</button>
             {{/if}}
@@ -565,7 +586,11 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
           <td colspan="2" class="button">
             <input type="hidden" name="_delete_actes" value="0" />
             <input type="hidden" name="valide" value="1" />
-          
+            
+            {{if $app->user_prefs.autoCloseConsult}}
+            <input type="hidden" name="chrono" value="64" />
+            {{/if}}
+            
             <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
             <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
           </td>

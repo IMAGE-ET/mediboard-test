@@ -72,6 +72,7 @@ $array_list_module_pref = array (
     "simpleCabinet",
     "ccam_consultation",
     "view_traitement",
+    "autoCloseConsult"
   ),
   "dPplanningOp" => array (
     "mode_dhe",

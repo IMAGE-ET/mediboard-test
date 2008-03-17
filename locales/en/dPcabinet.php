@@ -1274,4 +1274,8 @@ $locales['pref-view_traitement'] = "";
 $locales['pref-view_traitement-0'] = "";
 $locales['pref-view_traitement-1'] = "";
 $locales['pref-view_traitement-desc'] = "";
+$locales['pref-autoCloseConsult'] = "";
+$locales['pref-autoCloseConsult-desc'] = "";
+$locales['pref-autoCloseConsult-0'] = "";
+$locales['pref-autoCloseConsult-1'] = "";
 ?>
