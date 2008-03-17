@@ -4,7 +4,7 @@ function pageMain() {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
-function modeSortieDest(mode_sortie, rpu_id){
+function modeSortieDest(mode_sortie, rpu_id) {
   var oFormRPU = document.forms["editRPU-" + rpu_id]; 
   
   // Recuperation du tableau de contrainte modeSortie/Destination en JSON
@@ -56,7 +56,6 @@ function modeSortieOrient(mode_sortie, rpu_id){
     input.disabled = !_contrainteOrientation.include(input.value);
   });
 }
-
 
 function submitRPU(oForm, action){
   oForm.submit();
@@ -128,28 +127,39 @@ function loadTransfert(mode_sortie, sejour_id){
     
   </tr>
   {{foreach from=$listSejours item=curr_sejour}}
-  {{assign var="rpu" value=$curr_sejour->_ref_rpu}}
+  {{assign var=rpu value=$curr_sejour->_ref_rpu}}
+  {{assign var=patient value=$patient}}
   <tr>
     <td>
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
-        <strong>
-        {{$curr_sejour->_ref_patient->_view}}
-        {{if $curr_sejour->_ref_patient->_IPP}}
-          [{{$curr_sejour->_ref_patient->_IPP}}]
+		  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
+	        <img src="images/icons/edit.png" alt="modifier">
+	 	  </a>
+ 	  
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
+        {{if $patient->_IPP}}
+          [{{$patient->_IPP}}]
         {{/if}}
-        </strong>
+        <strong>{{$patient->_view}}</strong>
       </a>
     </td>
     <td>
-      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$curr_sejour->_ref_rpu->_id}}">
+      <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$curr_sejour->_ref_praticien->_view}}
       </a>
     </td>
-    <td>
-       <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$curr_sejour->_ref_rpu->_ref_consult->_id}}">Voir prise en charge</a><br />
-       Praticien: {{$curr_sejour->_ref_rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
+    
+    <td class="button">
+       par {{$rpu->_ref_consult->_ref_plageconsult->_ref_chir->_view}}
+       <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$rpu->_ref_consult->_id}}">Voir prise en charge</a>
     </td>
+    
     <td>
+      {{if $can->edit}}
+      <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+        <img src="images/icons/planning.png" alt="Planifier"/>
+      </a>
+      {{/if}}
+    
       <form name="editRPU-{{$rpu->_id}}" action="?m=dPurgences" method="post"> 
 			  <input type="hidden" name="dosql" value="do_rpu_aed" />
 			  <input type="hidden" name="m" value="dPurgences" />
@@ -159,25 +169,27 @@ function loadTransfert(mode_sortie, sejour_id){
 			  <input type="hidden" name="sejour_id" value="{{$rpu->_ref_sejour->_id}}" />
 			  
 			  <table>
-				 <!-- Annulation de la sortie -->
+				
+				<!-- Annulation de la sortie -->
 			  {{if $rpu->sortie}}
-			   <tr>
-			     <td>
-			      {{if $curr_sejour->_num_dossier}}
-              [{{$curr_sejour->_num_dossier}}]
-              <br />
-            {{/if}}
-			       <input type="hidden" name="mode_sortie" value="" />
-			       <input type="hidden" name="destination" value="" />
-			       <input type="hidden" name="orientation" value="" />
-			       <input type="hidden" name="sortie" value="" />
-			       <button class="cancel" type="button" onclick="submitRPU(this.form, 'annuler')">
-			         Annuler la sortie
-			        </button>
-			      </td>
-			    </tr>
-			  <!-- Sortie à effectuer -->
-			  {{else}}
+		    <tr>
+		      <td>
+
+		        {{if $curr_sejour->_num_dossier}}[{{$curr_sejour->_num_dossier}}]{{/if}}
+            {{mb_value object=$curr_sejour field=sortie_reelle}}<br />
+           
+		        <input type="hidden" name="mode_sortie" value="" />
+		        <input type="hidden" name="destination" value="" />
+		        <input type="hidden" name="orientation" value="" />
+		        <input type="hidden" name="sortie" value="" />
+		        <button class="cancel" type="button" onclick="submitRPU(this.form, 'annuler')">
+		          Annuler la sortie
+		         </button>
+		       </td>
+		     </tr>
+			    
+			   <!-- Sortie à effectuer -->
+			   {{else}}
 			   <tr>
 			     <td class="text">
 			      {{if $curr_sejour->_num_dossier}}
@@ -185,10 +197,10 @@ function loadTransfert(mode_sortie, sejour_id){
               <br />
             {{/if}}
             {{assign var="sejour_id" value=$rpu->_ref_sejour->_id}}
+			      <input type="hidden" name="_modifier_sortie" value="1" />
 			      {{mb_field object=$rpu field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="this.form.destination.value = ''; this.form.orientation.value = ''; modeSortieDest(this.value, this.form.rpu_id.value); modeSortieOrient(this.value, this.form.rpu_id.value); loadTransfert(this.value, $sejour_id);"}}
 			      {{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination"}} 
 			      {{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation"}}
-			      <input type="hidden" name="sortie" value="current" />
 			      <button class="tick" type="button" onclick="submitRPU(this.form, 'effectuer');">
 			        Effectuer la sortie
 			      </button>
@@ -215,7 +227,7 @@ function loadTransfert(mode_sortie, sejour_id){
 
 
 {{foreach from=$listSejours item=curr_sejour}}
-	{{assign var="rpu" value=$curr_sejour->_ref_rpu}} 
+	{{assign var="rpu" value=$rpu}} 
 	<table>
 	  <tr>
 	    <td>
@@ -236,7 +248,7 @@ function loadTransfert(mode_sortie, sejour_id){
 <script type="text/javascript">
 
 {{foreach from=$listSejours item=curr_sejour}}
-  {{assign var="rpu" value=$curr_sejour->_ref_rpu}}
+  {{assign var="rpu" value=$rpu}}
   
   {{if $rpu->mode_sortie}}
     modeSortieDest("{{$rpu->mode_sortie}}", "{{$rpu->_id}}");

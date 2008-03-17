@@ -39,6 +39,7 @@ class CRPU extends CMbObject {
   var $_cp         = null;
   var $_ville      = null;
   var $_naissance  = null;
+  
   // Sejour
   var $_responsable_id = null;
   var $_entree         = null;
@@ -50,9 +51,10 @@ class CRPU extends CMbObject {
   var $_ref_sejour = null;
   var $_ref_consult = null;
   
-  // Bind
+  // Behaviour fields
   var $_bind_sejour = null;
-
+  var $_modifier_sortie = null;
+  
   function CRPU() {
     $this->CMbObject("rpu", "rpu_id");
     
@@ -133,7 +135,7 @@ class CRPU extends CMbObject {
   }
   
   
-  function bindSejour(){
+  function bindSejour() {
     global $g;
     
     $this->_bind_sejour = false;
@@ -153,10 +155,30 @@ class CRPU extends CMbObject {
     $this->sejour_id = $this->_ref_sejour->_id;
   }
   
+  /**
+   * Modifier la sortie réelle du séjour lié au RPU
+   * @return string Store-like message
+   */
+  function modifierSortie() {
+    $this->sortie = mbDateTime();
+    $this->loadRefSejour();
+    $this->_ref_sejour->_modifier_sortie = "1";
+    return $this->_ref_sejour->store();
+  }
+  
   function store() {
     // Bind Sejour
-    if($this->_bind_sejour){
-      $this->bindSejour(); 
+    if ($this->_bind_sejour) {
+      if ($msg = $this->bindSejour()) {
+        return $msg;
+      }
+    }
+    
+    // Bind Sejour
+    if ($this->_modifier_sortie) {
+      if ($msg = $this->modifierSortie()) {
+        return $msg;
+      }
     }
     
     // Standard Store

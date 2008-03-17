@@ -20,7 +20,7 @@ class CSpUrgDos extends CSpObject {
   // DB Fields : see getSpecs();
   
 	function CSpUrgDos() {
-	  $this->CSpObject("ox_urgdos", "numdos");    
+	  $this->CSpObject("t_urgdos", "numdos");    
 	}
   
   function getSpec() {

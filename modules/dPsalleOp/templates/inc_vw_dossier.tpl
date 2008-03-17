@@ -10,17 +10,13 @@
 {{if $dossier_medical->_ref_addictions}}
   {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
   {{if $list_addiction|@count}}
+  {{foreach from=$list_addiction item=curr_addiction}}
   <li>
-    {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
-    {{foreach from=$list_addiction item=curr_addiction}}
-    <ul>
-      <li>
-        {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
-        {{$curr_addiction->addiction}}
-      </li>
-    </ul>
-    {{/foreach}}
+    <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
+    {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}
+    {{$curr_addiction->addiction}}
   </li>
+  {{/foreach}}
   {{/if}}
   {{/foreach}}
 {{else}}
@@ -32,19 +28,15 @@
 <ul>
   {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
+  {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
-    {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-    {{foreach from=$list_antecedent item=curr_antecedent}}
-    <ul>
-      <li>
-      {{if $curr_antecedent->date}}
-          {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
-        {{/if}}
-        {{$curr_antecedent->rques}}
-      </li>
-    </ul>
-    {{/foreach}}
+    <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
+    {{if $curr_antecedent->date}}
+      {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+    {{/if}}
+    {{$curr_antecedent->rques}}
   </li>
+  {{/foreach}}
   {{/if}}
   {{foreachelse}}
   <li><em>Pas d'antécédents</em></li>

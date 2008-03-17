@@ -34,45 +34,44 @@ Traitement = {
 
 </script>
 
-
-  {{include file="inc_consult_anesth/inc_list_addiction.tpl}}    
+{{include file="inc_consult_anesth/inc_list_addiction.tpl}}    
 
 <strong>Antécédents du patient</strong>
 <ul>
 {{if $patient->_ref_dossier_medical->_ref_antecedents}}
   {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
+  {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
-    {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-    {{foreach from=$list_antecedent item=curr_antecedent}}
-    <ul>
-      <li>
-        <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
+    <form name="delAntFrm-{{$curr_antecedent->_id}}" action="?m=dPcabinet" method="post">
 
-        <input type="hidden" name="m" value="dPpatients" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="dosql" value="do_antecedent_aed" />
-        <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
-        
-        <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadDossierMedicalPatient)">
-          {{tr}}delete{{/tr}}
-        </button> 
-        {{if $_is_anesth && $sejour->_id}}
-        <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
-          {{tr}}add{{/tr}}
-        </button>
-        {{/if}}         
-        {{if $curr_antecedent->date}}
-          {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
-        {{/if}}
-         <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
-          {{$curr_antecedent->rques}}
-         </span>
-      </form>
-      </li>
-    </ul>
-    {{/foreach}}
+    <input type="hidden" name="m" value="dPpatients" />
+    <input type="hidden" name="del" value="0" />
+    <input type="hidden" name="dosql" value="do_antecedent_aed" />
+    <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
+    
+    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadDossierMedicalPatient)">
+      {{tr}}delete{{/tr}}
+    </button> 
+    {{if $_is_anesth && $sejour->_id}}
+    <button class="add notext" type="button" onclick="copyAntecedent({{$curr_antecedent->_id}})">
+      {{tr}}add{{/tr}}
+    </button>
+    {{/if}}         
+    {{if $curr_antecedent->date}}
+      {{$curr_antecedent->date|date_format:"%d/%m/%Y"}} :
+    {{/if}}
+
+	  </form>
+
+    <strong>{{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}</strong> :
+    <!-- Ajout d'un affichage d'historique de la creation de l'addiction -->
+    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CAntecedent', object_id: {{$curr_antecedent->_id}} } })">
+      {{$curr_antecedent->rques}}
+    </span>
+
   </li>
+  {{/foreach}}
   {{/if}}
   {{/foreach}}
 {{else}}
@@ -96,14 +95,16 @@ Traitement = {
       {{tr}}add{{/tr}}
     </button>
     {{/if}}
+    
     {{if $curr_trmt->fin}}
       Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
     {{elseif $curr_trmt->debut}}
       Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
     {{/if}}
-      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CTraitement', object_id: {{$curr_trmt->_id}} } })">
-       {{$curr_trmt->traitement}}
-      </span>
+    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CTraitement', object_id: {{$curr_trmt->_id}} } })">
+     {{$curr_trmt->traitement}}
+    </span>
+
     </form>
   </li>
   {{foreachelse}}
