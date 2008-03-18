@@ -311,9 +311,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				  <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
 				</form>
 				<br />
-				{{if $curr_line->_specif_prise}}
-				  Remarques: {{$curr_line->_specif_prise}}
-				{{/if}}
 	    </div>
 	    </td>
       <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>

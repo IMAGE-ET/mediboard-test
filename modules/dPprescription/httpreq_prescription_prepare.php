@@ -32,7 +32,12 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		$prise_posologie = new CPrisePosologie();
 		$prise_posologie->prescription_line_id = $prescription_line_id;
 		$prise_posologie->moment_unitaire_id = $_association->moment_unitaire_id;
-		$prise_posologie->quantite = $posologie->quantite1;
+		// Si association ne OR, quantite à 0
+		if($_association->OR){
+			$prise_posologie->quantite = 0;
+		} else {
+		  $prise_posologie->quantite = $posologie->quantite1;
+		}
 		if($msg = $prise_posologie->store()){
 			return $msg;
 		}

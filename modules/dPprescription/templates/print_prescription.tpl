@@ -93,11 +93,17 @@ span.signature {
   <li>
     <strong>{{$elt_ald->_ref_produit->libelle}}</strong>:
     {{foreach from=$elt_ald->_ref_prises item=prise}}
+      {{if $prise->quantite}}
       {{$prise->_view}}, 
+      {{/if}}
     {{foreachelse}}
-      {{$elt_ald->_ref_posologie->_view}} <em>{{$elt_ald->commentaire}}</em>
-    {{/foreach}}   
+      {{$elt_ald->_ref_posologie->_view}}
+    {{/foreach}}
+     <em>{{$elt_ald->commentaire}}</em>
     {{$elt_ald->_duree_prise}}
+    {{if $elt_ald->_specif_prise}}
+		({{$elt_ald->_specif_prise}})
+		{{/if}}
   </li>
   {{/foreach}}  
   {{foreach from=$lines.medicament.comment.ald item="comment_ald"}}
@@ -123,11 +129,17 @@ span.signature {
   <li>
     <strong>{{$elt_no_ald->_ref_produit->libelle}}</strong>:
     {{foreach from=$elt_no_ald->_ref_prises item=prise}}
+      {{if $prise->quantite}}
       {{$prise->_view}}, 
+      {{/if}}
     {{foreachelse}}
-      {{$elt_no_ald->_ref_posologie->_view}} <em>{{$elt_no_ald->commentaire}}</em>
+      {{$elt_no_ald->_ref_posologie->_view}}
    {{/foreach}}  
+   <em>{{$elt_no_ald->commentaire}}</em>
    {{$elt_no_ald->_duree_prise}}
+   {{if $elt_no_ald->_specif_prise}}
+	   ({{$elt_no_ald->_specif_prise}})
+	 {{/if}}
   </li>
   {{/foreach}}  
   {{foreach from=$lines.medicament.comment.no_ald item="comment_no_ald"}}
@@ -146,11 +158,17 @@ span.signature {
   <li>
     <strong>{{$curr_line->_ref_produit->libelle}}</strong>: 
     {{foreach from=$curr_line->_ref_prises item=prise}}
+      {{if $prise->quantite}}
       {{$prise->_view}}, 
+      {{/if}}
     {{foreachelse}}
-      {{$curr_line->_ref_posologie->_view}} <em>{{$curr_line->commentaire}}</em>
+      {{$curr_line->_ref_posologie->_view}}
     {{/foreach}}   
+     <em>{{$curr_line->commentaire}}</em>
     {{$curr_line->_duree_prise}}
+     {{if $curr_line->_specif_prise}}
+	   ({{$curr_line->_specif_prise}})
+	 {{/if}}
   </li>
   {{/foreach}}
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
