@@ -204,7 +204,7 @@ class CSetupdPprescription extends CSetup {
     $moments[] = array("un soir sur deux","soir");
     $moments[] = array("un soir sur trois","soir");
     $moments[] = array("immédiatement après le dîner","soir");
-    $moments[] = array("1/2 heure à 1 heure avant le diner","soir");
+    $moments[] = array("1/2 heure à 1 heure avant le coucher","soir");
     $moments[] = array("2 heures aprés le dîner","soir");
     $moments[] = array("le soir dans chaque narine","soir");
     $moments[] = array("de préférence le soir au coucher","soir");
