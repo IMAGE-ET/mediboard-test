@@ -5,7 +5,7 @@
 	    <input type="hidden" name="code_moment_id" value="{{$moment->code_moment_id}}" />
 	    <input type="hidden" name="association_moment_id" value="" />
       <input type="hidden" name="del" value="0" />
-      <table class="form">
+      <table class="form" style="position: fixed; width: 150px;">
         <tr>
           <th class="category" colspan="2">Gestion des moments unitaires de: "{{$moment->libelle_moment}}"</th>
         </tr>

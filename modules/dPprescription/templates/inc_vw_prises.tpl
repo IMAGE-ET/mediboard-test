@@ -15,8 +15,7 @@ Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
 </script>
 
 {{foreach from=$curr_line->_ref_prises item=prise}}
-<div style="float:left; margin-right: 20px;">
-<form name="addPrise-{{$prise->_id}}" action="?" method="post">
+<form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block;">
   <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPprescription" />
@@ -58,8 +57,7 @@ Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
   
   
   <button type="button" class="submit notext" onclick="submitFormAjax(this.form, 'systemMsg');">Enregistrer</button>
-  <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form); ">Enregistrer</button>
+  <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form); ">Supprimer</button>
 
 </form>
-</div>
 {{/foreach}}

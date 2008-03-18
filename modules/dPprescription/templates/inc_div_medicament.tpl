@@ -220,8 +220,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				     {{mb_label object=$curr_line field=_fin}} 
 				    </td>
 				    <td class="date" style="border:none">
-				     <div id="editDates-{{$curr_line->_id}}_fin"> 
-				      </div>
+				     <div id="editDates-{{$curr_line->_id}}_fin"></div>
 				    </td>    
         </tr>
       </table>
@@ -267,7 +266,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" size="50" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
+        <input type="text" name="commentaire" size="80" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
     </td>
   </tr>
@@ -275,7 +274,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
     <td colspan="3">
       <table style="width:100%">
       <tr>
-      <td style="border:none">
+     <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left;">
       <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -329,12 +328,12 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				{{/if}}
 	    </div>
 	    </td>
-	    <td style="border:none">
-	     
-    <div id="prises-{{$curr_line->_id}}" style="float: right">
-        <!-- Parcours des prises -->
-        {{include file="inc_vw_prises.tpl"}}
-      </div>
+      <td style="border:none; font-weight: bold;">&gt;</td>
+	    <td style="border:none; text-align: left;">
+        <div id="prises-{{$curr_line->_id}}">
+          <!-- Parcours des prises -->
+          {{include file="inc_vw_prises.tpl"}}
+        </div>
       </td>
       </tr>
       </table>
