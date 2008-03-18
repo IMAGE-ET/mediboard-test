@@ -328,7 +328,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				{{/if}}
 	    </div>
 	    </td>
-      <td style="border:none; font-weight: bold;">&gt;</td>
+      <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>
 	    <td style="border:none; text-align: left;">
         <div id="prises-{{$curr_line->_id}}">
           <!-- Parcours des prises -->
