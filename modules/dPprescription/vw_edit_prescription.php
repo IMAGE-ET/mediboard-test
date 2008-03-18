@@ -125,6 +125,8 @@ if ($prescription->_id) {
   $categories = $category->loadCategoriesByChap();
 }
 
+$moments = CMomentUnitaire::loadAllMoments();
+
 
 // Liste des praticiens
 $user = new CMediusers();
@@ -133,6 +135,7 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("prise_posologie"    , new CPrisePosologie());
 $smarty->assign("categories"         , $categories);
 $smarty->assign("category"           , "medicament");
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
@@ -146,7 +149,7 @@ $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listFavoris", $listFavoris);
 $smarty->assign("protocoles", $protocoles);
 $smarty->assign("praticien", $praticien);
-
+$smarty->assign("moments", $moments);
 if($dialog == 1) {
   $smarty->display("vw_edit_prescription_popup.tpl");
 } else {

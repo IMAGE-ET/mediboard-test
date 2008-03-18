@@ -1,5 +1,105 @@
 <script type="text/javascript">
 
+// Calcul de la fin d'un traitement
+calculFin = function(oForm, curr_line_id){
+
+  var sDate = oForm.debut.value;
+  var nDuree = parseInt(oForm.duree.value, 10);
+  var nType = oForm.unite_duree.value;
+    
+  oDiv = $('editDates-'+curr_line_id+'_fin');
+  
+  if (!sDate || !nDuree) {
+    oDiv.innerHTML = "";  
+    return;
+  }
+  
+  var dDate = Date.fromDATE(sDate);  
+  if(nType == "jour"){
+    dDate.addDays(nDuree);
+  }
+  
+  // TODO: A modifier
+  if(nType == "minute" || nType == "heure" || nType == "demi_journee"){
+    // ne rien faire
+  }
+  if(nType == "semaine"){ dDate.addDays(nDuree*7); }
+  if(nType == "quinzaine"){ dDate.addDays(nDuree*14); }
+  if(nType == "mois"){dDate.addDays(nDuree*30); }
+  if(nType == "trimestre"){dDate.addDays(nDuree*90); }
+  if(nType == "semestre"){dDate.addDays(nDuree*180); }
+  if(nType == "an"){dDate.addDays(nDuree*365); }
+  
+  
+  
+	 // Update fields
+	Form.Element.setValue(oForm._fin, dDate.toDATE());
+  
+  oDiv.innerHTML = dDate.toLocaleDate();
+
+}
+
+viewButtonAddPrise = function(curr_line_id){
+  $('addPriseForm'+curr_line_id).show();
+}
+
+
+// Fonction lancée lors de la modfication de la posologie
+submitPoso = function(oForm, curr_line_id){
+  // On affiche ou on cache le bouton ajouter une prise
+  initPoso(oForm, curr_line_id);
+  
+  // Suppression des prises
+  oForm._delete_prises.value = "1";
+  submitFormAjax(oForm, 'systemMsg', { onComplete: 
+    function(){
+      var url = new Url;
+      url.setModuleAction("dPprescription", "httpreq_prescription_prepare");
+      url.addParam("prescription_line_id", curr_line_id);
+      url.addParam("no_poso", oForm.no_poso.value);
+      url.addParam("code_cip", oForm._code_cip.value);
+      url.requestUpdate('prises-'+curr_line_id, { waitingText: null });
+    } 
+   }
+  );
+}
+
+initPoso = function(oForm, curr_line_id){
+  if(oForm.no_poso.value == ''){
+    $('buttonAddPrise-'+curr_line_id).hide(); 
+  } else {
+    $('buttonAddPrise-'+curr_line_id).show();
+  }
+}
+
+
+reloadPrises = function(prescription_line_id){
+  url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_prises");
+  url.addParam("prescription_line_id", prescription_line_id);
+  url.requestUpdate('prises-'+prescription_line_id, { waitingText: null });
+}
+
+submitPrise = function(oForm){
+  submitFormAjax(oForm, 'systemMsg', { onComplete:
+    function(){
+      reloadPrises(oForm.prescription_line_id.value);
+      oForm.quantite.value = 0;
+      oForm.moment_unitaire_id.value = "";
+  } });
+}
+
+Main.add( function(){
+  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+    regFieldCalendar('editDates-{{$curr_line->_id}}', "debut", false);
+    regFieldCalendar('editDates-{{$curr_line->_id}}', "_fin", false);
+  
+    initPoso(document.forms["editLine-{{$curr_line->_id}}"],{{$curr_line->_id}});
+    calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
+  {{/foreach}}
+} );
+
+
 {{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
 {{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
 {{assign var=nb_total value=$nb_med+$nb_comment}}
@@ -11,14 +111,14 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
+      <option value="">&mdash; Médicaments les plus utilisés</option>
       {{foreach from=$listFavoris.medicament item=curr_prod}}
       <option value="{{$curr_prod->code_cip}}">
         {{$curr_prod->libelle}}
       </option>
       {{/foreach}}
     </select>
-    <button class="add" onclick="$('add_line_comment_med').show();">Ajouter une ligne de commentaire</button>
+    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter une ligne de commentaire</button>
     <br />
 	  <input type="text" name="produit" value=""/>
 	  <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
@@ -41,7 +141,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
   </form>
   <br />
   <div id="add_line_comment_med" style="display: none">
-   <button class="remove notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
+   <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
    <form name="addLineCommentMed" method="post" action="">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -57,21 +157,23 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
 <table class="tbl">
-  {{if $prescription->_ref_lines_med_comments.med|@count || $prescription->_ref_lines_med_comments.comment|@count}} 
-  <tr>
-    <th colspan="5">Médicaments</th>
-  </tr>
-  {{/if}}
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
- 
-  <tbody class="hoverable">
+    
+  <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
   <tr>
-    <td style="width: 25px">
+    <th colspan="11">
+    <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
+      {{$curr_line->_view}}
+    </a>
+    </th>
+  </tr>
+  <tr>
+    <td style="width: 25px" rowspan="3">
       <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
         {{tr}}Delete{{/tr}}
       </button>
     </td>
-    <td style="width: 10px">
+    <td style="width: 10px" rowspan="3">
     {{assign var="color" value=#ccc}}
       {{if $curr_line->_nb_alertes}}
         
@@ -102,28 +204,40 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       {{/foreach}}
       </div>
     </td>
-    <td>
-      <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
-        <strong>{{$curr_line->_view}}</strong>
-      </a>
-      <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
+    <td colspan="6">
+      <form name="editDates-{{$curr_line->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
         <input type="hidden" name="del" value="0" />
-        <select name="no_poso" onchange="submitFormAjax(this.form, 'systemMsg')">
-          <option value="">&mdash; Choisir une posologie</option>
-          {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
-          <option value="{{$curr_poso->code_posologie}}"
-            {{if $curr_poso->code_posologie == $curr_line->no_poso}}selected="selected"{{/if}}>
-            {{$curr_poso->_view}}
-          </option>
-          {{/foreach}}
-        </select>
-      </form>
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+        <table>
+          <tr>
+				    {{assign var=curr_line_id value=$curr_line->_id}}
+				    <td style="border:none">
+				    {{mb_label object=$curr_line field=debut}}
+				    </td>
+				    <td class="date" style="border:none">
+				    {{mb_field object=$curr_line field=debut form=editDates-$curr_line_id onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);"}}
+				    </td>
+				    <td style="border:none">
+				     {{mb_label object=$curr_line field=duree}}
+				    </td>
+				    <td style="border:none">
+				     {{mb_field object=$curr_line field=duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" size="3" }}
+				     {{mb_field object=$curr_line field=unite_duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" defaultOption="&mdash; Unité de temps"}}
+				    </td>
+				    <td style="border:none">
+				     {{mb_label object=$curr_line field=_fin}} 
+				    </td>
+				    <td class="date" style="border:none">
+				     <div id="editDates-{{$curr_line->_id}}_fin"> 
+				      </div>
+				    </td>    
+        </tr>
+      </table>
+    </form>
     </td>
-
-    <td>
+     <td>
       <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -133,46 +247,107 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </form>
     </td>
     <td>
-      <div style="float: right;">
-        <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
-          Equivalents
-        </button>
-        <script type="text/javascript">
-          if(EquivSelector.oUrl) {
-            EquivSelector.close();
-          }
-          EquivSelector.init = function(line_id, code_cip){
-            this.sForm = "searchProd";
-            this.sView = "produit";
-            this.sCodeCIP = code_cip
-            this.sLine = line_id;
-            this.selfClose = false;
-            this.pop();
-          }
-          EquivSelector.set = function(code, line_id){
-            Prescription.addEquivalent(code, line_id);
-          }
-        </script>
-      </div>
+      <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
+        Equivalents
+      </button>
+      <script type="text/javascript">
+        if(EquivSelector.oUrl) {
+          EquivSelector.close();
+        }
+        EquivSelector.init = function(line_id, code_cip){
+          this.sForm = "searchProd";
+          this.sView = "produit";
+          this.sCodeCIP = code_cip
+          this.sLine = line_id;
+          this.selfClose = false;
+          this.pop();
+        }
+        EquivSelector.set = function(code, line_id){
+          Prescription.addEquivalent(code, line_id);
+        }
+      </script>
+    </td>
+    <td>
       <form action="?" method="post" name="editLineALD-{{$curr_line->_id}}">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
         <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
         <input type="hidden" name="del" value="0" />
-        
         {{mb_field object=$curr_line field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
         {{mb_label object=$curr_line field="ald" typeEnum="checkbox"}}
       </form>
     </td>
+  </tr>
+  <tr>  
+    <td colspan="6">
+      <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_code_cip" value="{{$curr_line->_ref_produit->code_cip}}" />
+      
+        <input type="hidden" name="_delete_prises" value="0" />
+        
+        {{assign var=posologies value=$curr_line->_ref_produit->_ref_posologies}}
+        <select name="no_poso" onchange="submitPoso(this.form, '{{$curr_line->_id}}');">
+          <option value="">&mdash; Posologies </option>
+          {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
+          <option value="{{$curr_poso->code_posologie}}"
+            {{if $curr_poso->code_posologie == $curr_line->no_poso}}selected="selected"{{/if}}>
+            {{$curr_poso->_view}}
+          </option>
+          {{/foreach}}
+        </select>  
+      </form>
+      </td>
+      <td colspan="3">
+        <div id="buttonAddPrise-{{$curr_line->_id}}">
+          <button type="button" class="new" onclick="viewButtonAddPrise({{$curr_line->_id}});">Ajouter une prise</button>
+        </div>
+      </td>
+    </tr>    
+    <tr>
+    <td colspan="9" id="addPrisePosologie-{{$curr_line->_id}}">
+     <div id="addPriseForm{{$curr_line->_id}}" style="display:none">
+	      <form name="addPrise{{$curr_line->_id}}" action="?" method="post" >
+				  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
+				  <input type="hidden" name="del" value="0" />
+				  <input type="hidden" name="m" value="dPprescription" />
+				  <input type="hidden" name="prise_posologie_id" value="" />
+				  <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+				  <!-- Formulaire de selection de la quantite -->
+				  <button type="button" class="remove notext" onclick="this.form.quantite.value--;">Moins</button>
+				  {{mb_field object=$prise_posologie field=quantite}}
+				  <button type="button" class="add notext" onclick="this.form.quantite.value++;">Plus</button>    
+				  <!-- Selection du moment -->
+				  <select name="moment_unitaire_id" style="width: 150px">      
+				  <option value="">&mdash; Sélection du moment</option>
+				  {{foreach from=$moments key=type_moment item=_moments}}
+				     <optgroup label="{{$type_moment}}">
+				     {{foreach from=$_moments item=moment}}
+				     <option value="{{$moment->_id}}">{{$moment->_view}}</option>
+				     {{/foreach}}
+				     </optgroup>
+				  {{/foreach}}
+				  </select>	
+				  <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
+				</form>
+	    </div>
+	    <div id="prises-{{$curr_line->_id}}" style="float:left">
+        <!-- Parcours des prises -->
+        {{include file="inc_vw_prises.tpl"}}
+      </div>
+    </td>
    </tr>
   </tbody>
-  
+   
   {{/foreach}}
     <!-- Parcours des commentaires --> 
  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
    <tbody class="hoverable">
     <tr>
-      <td>
+      <td colspan="2">
         <form name="delLineCommentMed-{{$_line_comment->_id}}" action="" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -183,7 +358,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           </button>
         </form>
       </td>
-      <td colspan="3">
+      <td colspan="8">
         {{$_line_comment->commentaire}}
       </td>
       <td>

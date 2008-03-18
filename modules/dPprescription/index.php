@@ -13,4 +13,6 @@ $module->registerTab("vw_edit_prescription", null, TAB_READ);
 $module->registerTab("vw_edit_category", null, TAB_READ);
 $module->registerTab("vw_edit_element", null, TAB_READ);
 $module->registerTab("vw_edit_protocole", null, TAB_READ);
+$module->registerTab("vw_edit_associations_moments", null, TAB_ADMIN);
+
 ?>

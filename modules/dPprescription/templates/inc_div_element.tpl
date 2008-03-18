@@ -21,11 +21,11 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
     </select>
     
     {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-    <button class="add" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
+    <button class="new" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
     {{/if}}
   
   
-    <button class="add" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
+    <button class="new" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
    <br />
    <input type="text" name="{{$element}}" value="" />
    <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
@@ -52,7 +52,7 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
      Impossible de rajouter des éléments de prescription car cette section ne possède pas de catégorie
     </div>
     {{else}}
-    <button class="remove notext" type="button" onclick="$('add_{{$element}}').hide();">Cacher</button>
+    <button class="cancel notext" type="button" onclick="$('add_{{$element}}').hide();">Cacher</button>
     <form name="add{{$element}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_element_prescription_aed" />
@@ -71,7 +71,7 @@ Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
  </div>
  {{/if}}
  <div id="add_line_comment_{{$element}}" style="display: none">
-   <button class="remove notext" type="button" onclick="$('add_line_comment_{{$element}}').hide();">Cacher</button>
+   <button class="cancel notext" type="button" onclick="$('add_line_comment_{{$element}}').hide();">Cacher</button>
    <form name="addLineComment{{$element}}" method="post" action="" 
          onsubmit="return Prescription.onSubmitCommentaire(this,'{{$prescription->_id}}','{{$element}}');">
       <input type="hidden" name="m" value="dPprescription" />

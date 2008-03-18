@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.21";
 $config["mod_type"]        = "user";
 
 
@@ -110,7 +110,167 @@ class CSetupdPprescription extends CSetup {
             ADD `ald` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.16";
+    $this->makeRevision("0.16");
+    $sql = "CREATE TABLE `moment_unitaire` (
+           `moment_unitaire_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `libelle` VARCHAR(255) NOT NULL, 
+           `heure_min` TIME, 
+           `heure_max` TIME, 
+           `type_moment` ENUM('matin','midi','apres_midi','soir','horaire','autre') NOT NULL,
+            PRIMARY KEY (`moment_unitaire_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    // Creation d'un tableau de moments => array("libelle","type_moment")
+    $moments = array();
+    
+    $moments[] = array("le matin", "matin");
+    $moments[] = array("au lever", "matin");
+    $moments[] = array("en prise matinale unique","matin");
+    $moments[] = array("au cours de la matinée","matin");
+    $moments[] = array("le matin à jeun","matin");
+    $moments[] = array("1 heure avant le petit-déjeuner","matin");
+    $moments[] = array("2 heures avant le déjeuner","matin");
+    $moments[] = array("30 à 60 minutes avant le petit-déjeuner","matin");
+    $moments[] = array("30 minutes avant le petit-déjeuner","matin");
+    $moments[] = array("15 à 30 minutes avant le petit-déjeuner","matin");
+    $moments[] = array("1/4 d\'heure avant le petit-déjeuner","matin");
+    $moments[] = array("15 à 20 minutes avant le petit-déjeuner","matin");
+    $moments[] = array("immédiatement avant le petit-déjeuner","matin");
+    $moments[] = array("en début de petit-déjeuner","matin");
+    $moments[] = array("avant le petit-déjeuner","matin");
+    $moments[] = array("au petit-déjeuner","matin");
+    $moments[] = array("au cours du petit-déjeuner","matin");
+    $moments[] = array("après le petit-déjeuner","matin");
+    $moments[] = array("15 à 30 minutes après le petit-déjeuner","matin");
+    $moments[] = array("matin après la selle","matin");
+    $moments[] = array("à la fin du petit-déjeuner","matin");
+    $moments[] = array("le matin à jeun de préférence","matin");
+    $moments[] = array("à jeun d\'alcool, le matin au petit-déjeuner","matin");
+    $moments[] = array("le matin dans chaque narine","matin");
+    $moments[] = array("le matin à jeun, au moins 1/2 avant le repas","matin");
+    $moments[] = array("5 minutes au moins avant le petit-déjeuner","matin");
+    $moments[] = array("au lever, au moins 1/2 heure avant toute prise orale","matin");
+ 
+    $moments[] = array("le midi", "midi");
+    $moments[] = array("au déjeuner","midi");
+    $moments[] = array("1 heure avant le déjeuner","midi");
+    $moments[] = array("15 à 30 minutes avant le déjeuner","midi");
+    $moments[] = array("30 minutes avant le déjeuner","midi");
+    $moments[] = array("30 à 60 minutes avant le déjeuner","midi");
+    $moments[] = array("1/4 d\'heure avant le déjeuner","midi");
+    $moments[] = array("avant le déjeuner","midi");
+    $moments[] = array("en début de déjeuner","midi");
+    $moments[] = array("au cours du déjeuner","midi");
+    $moments[] = array("à la fin du déjeuner","midi");
+    $moments[] = array("après le déjeuner","midi");
+    $moments[] = array("15 à 30 minutes après le déjeuner","midi");
+   
+    $moments[] = array("l\'après-midi", "apres_midi");
+    $moments[] = array("en debut d\'après-midi","apres_midi");
+    $moments[] = array("en fin d\'après-midi","apres_midi");
+    
+    $moments[] = array("le soir", "soir");
+    $moments[] = array("avant le dîner","soir");
+    $moments[] = array("au coucher", "soir");
+    $moments[] = array("au dîner","soir");
+    $moments[] = array("en fin de journée","soir");
+    $moments[] = array("le soir avant le coucher","soir");
+    $moments[] = array("1h après le dîner","soir");
+    $moments[] = array("2h après le dîner","soir");
+    $moments[] = array("au cours du dîner","soir");
+    $moments[] = array("après le dîner","soir");
+    $moments[] = array("3/4 d\'heure avant le coucher","soir");
+    $moments[] = array("avant le coucher","soir");
+    $moments[] = array("immédiatement avant le coucher","soir");
+    $moments[] = array("au moment même du coucher","soir");
+    $moments[] = array("1 heure avant le coucher","soir");
+    $moments[] = array("15 à 30 minutes avant le dîner","soir");
+    $moments[] = array("15 à 30 minutes avant le coucher","soir");
+    $moments[] = array("15 à 30 minutes après le dîner","soir");
+    $moments[] = array("15 à 30 minutes après le coucher","soir");
+    $moments[] = array("30 minutes avant le coucher","soir");
+    $moments[] = array("1/4 d\'heure avant le dîner","soir");
+    $moments[] = array("30 minutes avant le dîner","soir");
+    $moments[] = array("30 à 60 minutes avant le dîner","soir");
+    $moments[] = array("1 heure avant le dîner","soir");
+    $moments[] = array("1 heure avant le coucher","soir");
+    $moments[] = array("au début du dîner","soir");
+    $moments[] = array("le soir après le brossage des dents","soir");
+    $moments[] = array("le soir après la toilette","soir");
+    $moments[] = array("à la fin du dîner","soir");
+    $moments[] = array("2 heures après le dîner","soir");
+    $moments[] = array("le soir après la toilette sur peau bien sèche","soir");
+    $moments[] = array("le soir 1/4 d\'heure après la toilette","soir");
+    $moments[] = array("un soir sur deux","soir");
+    $moments[] = array("un soir sur trois","soir");
+    $moments[] = array("immédiatement après le dîner","soir");
+    $moments[] = array("1/2 heure à 1 heure avant le diner","soir");
+    $moments[] = array("2 heures aprés le dîner","soir");
+    $moments[] = array("le soir dans chaque narine","soir");
+    $moments[] = array("de préférence le soir au coucher","soir");
+    $moments[] = array("la veille au soir","soir");
+    $moments[] = array("dans chaque narine le soir","soir");
+    $moments[] = array("à jeun au coucher","soir");
+    $moments[] = array("au coucher et 2h30 à 4h plus tard","soir");
+    $moments[] = array("au coucher, au moins 2 heures après le dîner","soir");
+    $moments[] = array("2 à 3 heures avant le coucher","soir");
+      
+    $moments[] = array("à distance d\'un repas","autre");
+    $moments[] = array("dans la journée","autre");
+    $moments[] = array("à l\'induction anesthésique","autre");
+    $moments[] = array("à l\'induction anesthésique et 2 heures après","autre");
+    $moments[] = array("au moment des troubles","autre");
+    $moments[] = array("4 fois par jour dans chaque narine","autre");
+    $moments[] = array("1 heure avant un repas","autre");
+    $moments[] = array("2 heures après un repas","autre");
+    $moments[] = array("2 fois par jour dans chaque narine","autre");
+    $moments[] = array("3 fois par jour dans chaque narine","autre");
+    $moments[] = array("5 fois par jour dans chaque narine","autre");
+    $moments[] = array("avant les repas","autre");
+    $moments[] = array("dans une narine le matin, dans l\'autre le soir","autre");
+    $moments[] = array("dans chaque narine","autre");
+    $moments[] = array("matin et soir (à 8 heures d\'intervalle)","autre");
+    $moments[] = array("matin et soir (à 12 heures d\'intervalle)","autre");
+    
+    for($i=0; $i<24; $i++){
+      $moments[] = array($i."h","horaire");
+    }
+    
+    foreach($moments as &$moment){
+      $sql = " INSERT INTO `moment_unitaire` ( `moment_unitaire_id` , `libelle` , `heure_min`, `heure_max`, `type_moment` ) VALUES ( '' , '".$moment[0]."', NULL, NULL, '".$moment[1]."');";
+      $this->addQuery($sql);
+    }
+    
+    $this->makeRevision("0.17");
+    $sql = "ALTER TABLE `prescription_line` 
+            ADD `debut` DATE, 
+            ADD `duree` INT(11);";
+    $this->addQuery($sql);
+
+    $this->makeRevision("0.18");
+    $sql = "CREATE TABLE `prise_posologie` (
+           `prise_posologie_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `prescription_line_id` INT(11) UNSIGNED NOT NULL, 
+           `moment_unitaire_id` INT(11) UNSIGNED NOT NULL, 
+           `quantite` INT(11), 
+            PRIMARY KEY (`prise_posologie_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.19");
+    $sql = "CREATE TABLE `association_moment` (
+           `association_moment_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
+           `code_moment_id` INT(11) UNSIGNED NOT NULL, 
+           `moment_unitaire_id` INT(11) UNSIGNED NOT NULL, 
+           `OR` ENUM('0','1') DEFAULT '0', 
+            PRIMARY KEY (`association_moment_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.20");
+    $sql = "ALTER TABLE `prescription_line`
+            ADD `unite_duree` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.21";
   }  
 }
 

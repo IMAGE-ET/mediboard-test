@@ -98,6 +98,7 @@ class CPrescription extends CMbObject {
   	$this->_ref_lines_med_comments["comment"] = array();
   	
   	foreach($this->_ref_prescription_lines as &$line_med){
+  		$line_med->loadRefsPrises();
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
   	if(isset($this->_ref_prescription_lines_comment["medicament"]["comment"])){

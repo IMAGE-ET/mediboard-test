@@ -105,7 +105,10 @@ if($prescription->object_id) {
 $categoryPresc = new CCategoryPrescription();
 $categories = $categoryPresc->loadCategoriesByChap();
 
- 
+// Chargement de la liste des moments
+$moments = CMomentUnitaire::loadAllMoments();
+
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -115,6 +118,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("httpreq", 1);
 
+$smarty->assign("prise_posologie", new CPrisePosologie());
+$smarty->assign("moments", $moments);
 $smarty->assign("protocole", new CPrescription());
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);

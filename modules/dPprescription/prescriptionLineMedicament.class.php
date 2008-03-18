@@ -19,6 +19,23 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $code_cip        = null;
   var $no_poso         = null;
   var $commentaire     = null;
+  var $debut           = null;
+  var $duree           = null;
+  var $unite_duree     = null;
+  
+  // Infos supplémentaires pour pouvoir gérer tous les cas
+  /*
+  var $nb_tous_les = null;    // tous les 24
+  var $unite_tous_les = null; // heures
+  
+  var $nb_par = null;         // 1 fois
+  var $unite_par = null;      // par jour
+  */
+
+  
+  // Form Field
+  var $_fin            = null;
+  var $_unite_prise    = null;
   
   // Object References
   var $_ref_prescription = null;
@@ -30,6 +47,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_alertes_text = null;
   var $_nb_alertes       = null;
 
+  // BackRefs
+  var $_ref_prises = null;
+  
+  // Behaviour field
+  var $_delete_prises = null;
+  
   
   function CPrescriptionLineMedicament() {
     $this->CMbObject("prescription_line", "prescription_line_id");
@@ -42,9 +65,20 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $specs = array (
       "code_cip"        => "notNull numchar|7",
       "no_poso"         => "num max|128",
-      "commentaire"     => "str"
+      "commentaire"     => "str",
+      "debut"           => "date",
+      "duree"           => "num",
+      "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
+      "_fin"            => "date",
+      "_unite_prise"    => "str"
     );
     return array_merge($specsParent, $specs);
+  }
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["prise_posologie"] = "CPrisePosologie prescription_line_id";
+    return $backRefs;
   }
   
   function getSeeks() {
@@ -59,12 +93,43 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_view = $this->_ref_produit->libelle;
   }
   
+  // Store-like function
+  function deletePrises(){
+  	$this->_delete_prises = 0;
+  	// Chargement des prises 
+    $this->loadRefsPrises();
+    // Parcours des suppression des prises
+    foreach($this->_ref_prises as &$_prise){
+      if($msg = $_prise->delete()){
+      	mbTrace($msg);
+      	return $msg;
+      }
+    }
+  }
+  
+  function store(){
+  	if($msg = parent::store()){
+  		return $msg;
+  	}
+  	
+  	if($this->_delete_prises){
+  		if($msg = $this->deletePrises()){
+  			return $msg;
+  		}
+  	}
+  }
+  
   function loadRefsFwd() {
-    $this->_ref_prescription = new CPrescription();
+  	$this->_ref_prescription = new CPrescription();
     $this->_ref_prescription->load($this->prescription_id);
     $this->_ref_produit = new CBcbProduit();
     $this->_ref_produit->load($this->code_cip);
     $this->loadPosologie();
+  }
+  
+  
+  function loadRefsPrises(){
+    $this->_ref_prises = $this->loadBackRefs("prise_posologie");	
   }
   
   function loadPosologie() {
@@ -72,6 +137,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->_ref_produit->code_cip && $this->no_poso) {
       $posologie->load($this->_ref_produit->code_cip, $this->no_poso);
     }
+    $this->_unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
     $this->_ref_posologie = $posologie;
   }
   
