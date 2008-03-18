@@ -32,6 +32,18 @@ class CPrisePosologie extends CMbObject {
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  
+  function loadRefPrescriptionLine(){
+    $this->_ref_prescription_line = new CPrescriptionLineMedicament();
+    $this->_ref_prescription_line->load($this->prescription_line_id);
+  }
+  
+  function loadRefMoment(){
+    $this->_ref_moment = new CMomentUnitaire();
+    $this->_ref_moment->load($this->moment_unitaire_id);	
+  }
+  
+  
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
@@ -49,6 +61,23 @@ class CPrisePosologie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
+    $this->loadRefPrescriptionLine();
+    $this->loadRefMoment();
+    
+    $this->_view = $this->quantite;
+    $this->_view .= " ".$this->_ref_prescription_line->_unite_prise;
+    if($this->moment_unitaire_id){
+    	$this->_view .= " ".$this->_ref_moment->_view;
+    }
+    if($this->nb_fois){
+    	$this->_view .= " ".$this->nb_fois." fois";
+    }
+    if($this->unite_fois && !$this->nb_tous_les){
+    	$this->_view .= " par ".$this->unite_fois;
+    }
+    if($this->nb_tous_les && $this->unite_tous_les){
+    	$this->_view .= " tous les ".$this->nb_tous_les." ".$this->unite_tous_les;
+    }   
   }
 }
   
