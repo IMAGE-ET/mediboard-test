@@ -99,8 +99,9 @@ span.signature {
     {{foreachelse}}
       {{$elt_ald->_ref_posologie->_view}}
     {{/foreach}}
-     <em>{{$elt_ald->commentaire}}</em>
+     
     {{$elt_ald->_duree_prise}}
+    <em>{{$elt_ald->commentaire}}</em>
     {{if $elt_ald->_specif_prise}}
 		({{$elt_ald->_specif_prise}})
 		{{/if}}
@@ -135,8 +136,9 @@ span.signature {
     {{foreachelse}}
       {{$elt_no_ald->_ref_posologie->_view}}
    {{/foreach}}  
-   <em>{{$elt_no_ald->commentaire}}</em>
+   
    {{$elt_no_ald->_duree_prise}}
+   <em>{{$elt_no_ald->commentaire}}</em>
    {{if $elt_no_ald->_specif_prise}}
 	   ({{$elt_no_ald->_specif_prise}})
 	 {{/if}}
@@ -164,8 +166,9 @@ span.signature {
     {{foreachelse}}
       {{$curr_line->_ref_posologie->_view}}
     {{/foreach}}   
-     <em>{{$curr_line->commentaire}}</em>
+     
     {{$curr_line->_duree_prise}}
+    <em>{{$curr_line->commentaire}}</em>
      {{if $curr_line->_specif_prise}}
 	   ({{$curr_line->_specif_prise}})
 	 {{/if}}
