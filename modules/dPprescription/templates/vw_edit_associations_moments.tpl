@@ -1,6 +1,10 @@
 <script type="text/javascript">
 
 function viewMomentsUnitaires(code_moment_id){
+  /*$("moments").childNodes.each(
+  
+  );*/
+  $("moment-"+code_moment_id).className = "selected";
   var url = new Url;
   url.setModuleAction("dPprescription","httpreq_vw_moments_unitaires");
   url.addParam("code_moment_id", code_moment_id);
@@ -37,7 +41,7 @@ function reloadMomentsUnitaires(code_moment_id){
 <table class="main">
   <tr>
     <td class="halfPane">
-      <table class="tbl">
+      <table class="tbl" id="moments">
         <tr>
           <th>Libelle</th>
           <th>Code Moment</th>
@@ -45,9 +49,9 @@ function reloadMomentsUnitaires(code_moment_id){
         </tr>
         <!-- Parcours des moments BCB-->
         {{foreach from=$moments item=_moment}}
-          <tr {{if $_moment.CODE_MOMENT == $moment->code_moment_id}}class="selected"{{/if}}>
+          <tr {{if $_moment.CODE_MOMENT == $moment->code_moment_id}}class="selected"{{/if}} id="moment-{{$_moment.CODE_MOMENT}}">
             <td>
-              <a href="#" onclick="viewMomentsUnitaires('{{$_moment.CODE_MOMENT}}');">
+              <a href="#1" onclick="viewMomentsUnitaires('{{$_moment.CODE_MOMENT}}');">
                 {{$_moment.LIBELLE_MOMENT}}
               </a>
             </td>
