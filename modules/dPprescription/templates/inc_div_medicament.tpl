@@ -258,18 +258,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </form>
     </td>
   </tr>
-  <tr>
-      <td colspan="3">
-      {{mb_label object=$curr_line field="commentaire"}}
-      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" size="80" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
-      </form>
-    </td>
-  </tr>
   <tr>  
     <td colspan="3">
       <table style="width:100%">
@@ -337,13 +325,20 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </td>
       </tr>
       </table>
-      
-   
-      
-      
       </td>
     </tr>    
-    
+      <tr>
+      <td colspan="3">
+      {{mb_label object=$curr_line field="commentaire"}}
+      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+        <input type="text" name="commentaire" size="80" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
+      </form>
+    </td>
+  </tr>
   </tbody>
    
   {{/foreach}}

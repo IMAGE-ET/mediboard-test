@@ -73,12 +73,12 @@
       </button>
       {{/if}}
       <!-- Impression de la prescription -->
-      <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')" style="float: right">
+      <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')" style="float: left">
         Print
       </button>
       {{if !$mode_protocole}}
       <!-- Affichage du recapitulatif des alertes -->
-      <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: right">
+      <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
         Alertes
       </button>
       {{/if}}

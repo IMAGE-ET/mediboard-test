@@ -92,6 +92,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->loadRefsFwd();
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
+    $this->_duree_prise = "";
+    if($this->debut){
+      $this->_duree_prise .= "à partir du ".mbTranformTime(null, $this->debut, "%d/%m/%Y");
+    }
+    if($this->duree && $this->unite_duree){
+    	$this->_duree_prise .= " pendant ".$this->duree." ".$this->unite_duree;
+    }
   }
   
   // Store-like function

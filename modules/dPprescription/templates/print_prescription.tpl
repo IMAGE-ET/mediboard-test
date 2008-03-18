@@ -97,6 +97,7 @@ span.signature {
     {{foreachelse}}
       {{$elt_ald->_ref_posologie->_view}} <em>{{$elt_ald->commentaire}}</em>
     {{/foreach}}   
+    {{$elt_ald->_duree_prise}}
   </li>
   {{/foreach}}  
   {{foreach from=$lines.medicament.comment.ald item="comment_ald"}}
@@ -126,7 +127,7 @@ span.signature {
     {{foreachelse}}
       {{$elt_no_ald->_ref_posologie->_view}} <em>{{$elt_no_ald->commentaire}}</em>
    {{/foreach}}  
-    
+   {{$elt_no_ald->_duree_prise}}
   </li>
   {{/foreach}}  
   {{foreach from=$lines.medicament.comment.no_ald item="comment_no_ald"}}
@@ -149,6 +150,7 @@ span.signature {
     {{foreachelse}}
       {{$curr_line->_ref_posologie->_view}} <em>{{$curr_line->commentaire}}</em>
     {{/foreach}}   
+    {{$curr_line->_duree_prise}}
   </li>
   {{/foreach}}
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
