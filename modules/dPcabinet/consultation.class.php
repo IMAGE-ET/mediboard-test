@@ -588,6 +588,9 @@ class CConsultation extends CCodable {
 	      if(count($detailCodeNGAP) >= 6){
 	      	$acte->demi = $detailCodeNGAP[5];
 	      }
+        if(count($detailCodeNGAP) >= 7){
+	      	$acte->complement = $detailCodeNGAP[6];
+	      }
 	      $acte->object_id = $this->_id;
 	      $acte->object_class = $this->_class_name;
 	      if (!$acte->countMatchingList()) {

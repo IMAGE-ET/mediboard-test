@@ -1278,4 +1278,9 @@ $locales['pref-autoCloseConsult'] = "";
 $locales['pref-autoCloseConsult-desc'] = "";
 $locales['pref-autoCloseConsult-0'] = "";
 $locales['pref-autoCloseConsult-1'] = "";
+$locales['CActeNGAP-complement-court'] = "";
+$locales['CActeNGAP-complement-desc'] = "";
+$locales['CActeNGAP.complement.F'] = "";
+$locales['CActeNGAP.complement.N'] = "";
+$locales['CActeNGAP.complement.U'] = "";
 ?>

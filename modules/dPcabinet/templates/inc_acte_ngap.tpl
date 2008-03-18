@@ -60,7 +60,7 @@ ActesNGAP = {
     </tr>
   {{if $object->_coded}}
     <tr>
-      <td colspan="5">
+      <td colspan="7">
         <div class="big-info">
         La cotation des actes est terminée.<br />
         Pour pouvoir coder des actes, veuillez dévalider la consultation.
@@ -75,6 +75,7 @@ ActesNGAP = {
       <th class="category">{{mb_title object=$acte_ngap field=demi}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=montant_base}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=montant_depassement}}</th>
+      <th class="category">{{mb_title object=$acte_ngap field=complement}}</th>
       {{if !$object->_coded}}
       <th class="category">Action</th>
       {{/if}}
@@ -99,6 +100,9 @@ ActesNGAP = {
       </td>
       <td>
         {{mb_field object=$acte_ngap field="montant_depassement"}}
+      </td>
+      <td>
+        {{mb_field object=$acte_ngap field="complement" defaultOption="&mdash; Sélection d'un complément"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
@@ -126,6 +130,13 @@ ActesNGAP = {
       </td>
       <td>
         {{mb_value object=$_acte_ngap field="montant_depassement"}}
+      </td>
+      <td>
+        {{if $_acte_ngap->complement}}
+        {{mb_value object=$_acte_ngap field="complement"}}
+        {{else}}
+        Aucun
+        {{/if}}
       </td>
       
       {{if !$object->_coded}}

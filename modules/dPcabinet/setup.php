@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.01";
+$config["mod_version"]     = "1.02";
 $config["mod_type"]        = "user";
 
 
@@ -1109,7 +1109,12 @@ class CSetupdPcabinet extends CSetup {
             VALUES ('0', 'autoCloseConsult', '0');";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.01";
+    $this->makeRevision("1.01");
+    $sql = "ALTER TABLE `acte_ngap` 
+            ADD `complement` ENUM('N','F','U');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.02";
   }
 }
 ?>

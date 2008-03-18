@@ -20,6 +20,7 @@ class CActeNGAP extends CActe {
   var $code        = null;
   var $coefficient = null;
   var $demi        = null;
+  var $complement  = null;
   
   function CActeNGAP() {
     $this->CMbObject("acte_ngap", "acte_ngap_id");
@@ -33,6 +34,7 @@ class CActeNGAP extends CActe {
     $specs["quantite"]            = "notNull num maxLength|2";
     $specs["coefficient"]         = "notNull float";
     $specs["demi"]                = "enum list|0|1 default|0";
+    $specs["complement"]          = "enum list|N|F|U";
     return $specs;
   }
  

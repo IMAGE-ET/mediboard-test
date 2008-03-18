@@ -1278,4 +1278,9 @@ $locales['pref-autoCloseConsult'] = "Terminer automatiquement la consultation";
 $locales['pref-autoCloseConsult-desc'] = "Terminer automatiquement la consultation lors de la validation du tarif";
 $locales['pref-autoCloseConsult-0'] = "Non";
 $locales['pref-autoCloseConsult-1'] = "Oui";
+$locales['CActeNGAP-complement-court'] = "Complément";
+$locales['CActeNGAP-complement-desc'] = "Complément";
+$locales['CActeNGAP.complement.F'] = "Férié";
+$locales['CActeNGAP.complement.N'] = "Nuit";
+$locales['CActeNGAP.complement.U'] = "Urgence";
 ?>
