@@ -89,16 +89,6 @@ submitPrise = function(oForm){
   } });
 }
 
-Main.add( function(){
-  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-    regFieldCalendar('editDates-{{$curr_line->_id}}', "debut", false);
-    regFieldCalendar('editDates-{{$curr_line->_id}}', "_fin", false);
-  
-    initPoso(document.forms["editLine-{{$curr_line->_id}}"],{{$curr_line->_id}});
-    calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
-  {{/foreach}}
-} );
-
 
 {{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
 {{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
@@ -380,3 +370,28 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
      Il n'y a aucun médicament dans cette prescription.
   </div>
 {{/if}}
+
+
+
+<script type="text/javascript">
+
+/*
+{{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+  var oForm = document.forms["editLine-{{$curr_line->_id}}"];
+  prepareForm(oForm);  
+{{/foreach}}
+*/
+prepareForms();
+
+
+Main.add( function(){
+  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+    regFieldCalendar('editDates-{{$curr_line->_id}}', "debut", false);
+    regFieldCalendar('editDates-{{$curr_line->_id}}', "_fin", false);
+  
+     initPoso(document.forms["editLine-{{$curr_line->_id}}"],{{$curr_line->_id}});
+     calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
+  {{/foreach}}
+} );
+
+</script>

@@ -1,3 +1,14 @@
+<script type="text/javascript">
+
+function startAssociation(){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_do_add_table_association");
+  url.requestUpdate("do_add_association");
+}
+
+
+</script>
+
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_configure" />
@@ -31,3 +42,15 @@
   </tr>
 </table>
 </form>
+
+<table class="tbl">
+  <tr>
+    <th>Action</th>
+    <th>Status</th>
+  </tr>
+  
+  <tr>
+    <td><button class="tick" onclick="startAssociation()" >Importer la table de gestion de donnees</button></td>
+    <td id="do_add_association"></td>
+  </tr>
+</table>

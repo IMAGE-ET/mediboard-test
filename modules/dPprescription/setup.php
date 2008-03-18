@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.21";
+$config["mod_version"]     = "0.24";
 $config["mod_type"]        = "user";
 
 
@@ -270,7 +270,37 @@ class CSetupdPprescription extends CSetup {
             ADD `unite_duree` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.21";
+    $this->makeRevision("0.21");
+    $sql = "ALTER TABLE `prise_posologie`
+            CHANGE `quantite` `quantite` FLOAT;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `prise_posologie`
+            CHANGE `moment_unitaire_id` `moment_unitaire_id` INT(11) UNSIGNED DEFAULT NULL, 
+            ADD `nb_fois` INT(11), 
+            ADD `unite_fois` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an'), 
+            ADD `nb_tous_les` INT(11), 
+            ADD `unite_tous_les` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an');";
+    $this->addQuery($sql);
+
+    
+    $this->makeRevision("0.23"); 
+    
+    $moments = array();
+    $moments[] = array("1 heure après les repas", "autre");
+    $moments[] = array("2 heures avant le déjeuner", "midi");
+    $moments[] = array("15 minutes avant le coucher", "soir");
+    $moments[] = array("1 heure après le petit-déjeuner", "matin");
+    $moments[] = array("1 fois par jour dans chaque narine", "autre");
+    $moments[] = array("30 minute avant le repas", "autre");
+    
+    foreach($moments as &$moment){
+      $sql = " INSERT INTO `moment_unitaire` ( `moment_unitaire_id` , `libelle` , `heure_min`, `heure_max`, `type_moment` ) VALUES ( '' , '".$moment[0]."', NULL, NULL, '".$moment[1]."');";
+      $this->addQuery($sql);
+    }
+   
+    $this->mod_version = "0.24";
   }  
 }
 
