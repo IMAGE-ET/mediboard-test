@@ -36,6 +36,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Form Field
   var $_fin            = null;
   var $_unite_prise    = null;
+  var $_specif_prise   = null;
   
   // Object References
   var $_ref_prescription = null;
@@ -138,6 +139,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $posologie->load($this->_ref_produit->code_cip, $this->no_poso);
     }
     $this->_unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
+    $this->_specif_prise = $posologie->_code_prise1;
     $this->_ref_posologie = $posologie;
   }
   

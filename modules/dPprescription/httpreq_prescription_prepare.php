@@ -22,9 +22,7 @@ $moments = CMomentUnitaire::loadAllMoments();
 // Chargement de la posologie selectionnée
 $posologie = new CBcbPosologie();
 $posologie->load($code_cip, $no_poso);
-
 //mbTrace($posologie);
-
 // Sauvegarde des prises
 if($posologie->code_moment && $code_cip && $no_poso){
 	$moment = new CBcbMoment();

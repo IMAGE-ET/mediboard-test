@@ -151,19 +151,19 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
     
   <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
   <tr>
-    <th colspan="11">
+    <th colspan="5">
     <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
       {{$curr_line->_view}}
     </a>
     </th>
   </tr>
   <tr>
-    <td style="width: 25px" rowspan="3">
+    <td rowspan="3">
       <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
         {{tr}}Delete{{/tr}}
       </button>
     </td>
-    <td style="width: 10px" rowspan="3">
+    <td rowspan="3">
     {{assign var="color" value=#ccc}}
       {{if $curr_line->_nb_alertes}}
         
@@ -194,7 +194,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       {{/foreach}}
       </div>
     </td>
-    <td colspan="6">
+    <td>
       <form name="editDates-{{$curr_line->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -206,15 +206,15 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				    <td style="border:none">
 				    {{mb_label object=$curr_line field=debut}}
 				    </td>
-				    <td class="date" style="border:none">
+				    <td class="date" style="border:none;">
 				    {{mb_field object=$curr_line field=debut form=editDates-$curr_line_id onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);"}}
 				    </td>
-				    <td style="border:none">
+				    <td style="border:none; padding-left: 40px;">
 				     {{mb_label object=$curr_line field=duree}}
 				    </td>
 				    <td style="border:none">
 				     {{mb_field object=$curr_line field=duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" size="3" }}
-				     {{mb_field object=$curr_line field=unite_duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" defaultOption="&mdash; Unité de temps"}}
+				     {{mb_field object=$curr_line field=unite_duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" defaultOption="&mdash; Unité"}}
 				    </td>
 				    <td style="border:none">
 				     {{mb_label object=$curr_line field=_fin}} 
@@ -226,15 +226,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
         </tr>
       </table>
     </form>
-    </td>
-     <td>
-      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
-      </form>
     </td>
     <td>
       <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
@@ -268,8 +259,23 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       </form>
     </td>
   </tr>
+  <tr>
+      <td colspan="3">
+      {{mb_label object=$curr_line field="commentaire"}}
+      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
+        <input type="hidden" name="m" value="dPprescription" />
+        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+        <input type="text" name="commentaire" size="50" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
+      </form>
+    </td>
+  </tr>
   <tr>  
-    <td colspan="6">
+    <td colspan="3">
+      <table style="width:100%">
+      <tr>
+      <td style="border:none">
       <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -280,7 +286,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
         <input type="hidden" name="_delete_prises" value="0" />
         
         {{assign var=posologies value=$curr_line->_ref_produit->_ref_posologies}}
-        <select name="no_poso" onchange="submitPoso(this.form, '{{$curr_line->_id}}');">
+        <select name="no_poso" onchange="submitPoso(this.form, '{{$curr_line->_id}}');" style="width: 300px;">
           <option value="">&mdash; Posologies </option>
           {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
           <option value="{{$curr_poso->code_posologie}}"
@@ -290,16 +296,10 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           {{/foreach}}
         </select>  
       </form>
-      </td>
-      <td colspan="3">
-        <div id="buttonAddPrise-{{$curr_line->_id}}">
-          <button type="button" class="new" onclick="viewButtonAddPrise({{$curr_line->_id}});">Ajouter une prise</button>
-        </div>
-      </td>
-    </tr>    
-    <tr>
-    <td colspan="9" id="addPrisePosologie-{{$curr_line->_id}}">
-     <div id="addPriseForm{{$curr_line->_id}}" style="display:none">
+      <br />
+      
+      
+        <div id="buttonAddPrise-{{$curr_line->_id}}" style="display:none">
 	      <form name="addPrise{{$curr_line->_id}}" action="?" method="post" >
 				  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 				  <input type="hidden" name="del" value="0" />
@@ -323,13 +323,28 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 				  </select>	
 				  <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
 				</form>
+				<br />
+				{{if $curr_line->_specif_prise}}
+				  Remarques: {{$curr_line->_specif_prise}}
+				{{/if}}
 	    </div>
-	    <div id="prises-{{$curr_line->_id}}" style="float:left">
+	    </td>
+	    <td style="border:none">
+	     
+    <div id="prises-{{$curr_line->_id}}" style="float: right">
         <!-- Parcours des prises -->
         {{include file="inc_vw_prises.tpl"}}
       </div>
-    </td>
-   </tr>
+      </td>
+      </tr>
+      </table>
+      
+   
+      
+      
+      </td>
+    </tr>    
+    
   </tbody>
    
   {{/foreach}}
@@ -348,7 +363,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
           </button>
         </form>
       </td>
-      <td colspan="8">
+      <td colspan="2">
         {{$_line_comment->commentaire}}
       </td>
       <td>

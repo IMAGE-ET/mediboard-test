@@ -225,4 +225,6 @@ $locales['CPrisePosologie.unite_fois.quinzaine'] = 'Quinzaine';
 $locales['CPrisePosologie.unite_fois.semaine'] = 'Semaine';
 $locales['CPrisePosologie.unite_fois.semestre'] = 'Semestre';
 $locales['CPrisePosologie.unite_fois.trimestre'] = 'Trimestre';
+$locales['CPrescriptionLineMedicament-commentaire'] = 'Commentaire';
+$locales['CPrescriptionLineMedicament-commentaire-desc'] = 'Commentaire';
 ?>
