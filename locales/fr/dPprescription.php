@@ -227,4 +227,16 @@ $locales['CPrisePosologie.unite_fois.semestre'] = 'Semestre';
 $locales['CPrisePosologie.unite_fois.trimestre'] = 'Trimestre';
 $locales['CPrescriptionLineMedicament-commentaire'] = 'Commentaire';
 $locales['CPrescriptionLineMedicament-commentaire-desc'] = 'Commentaire';
+$locales['msg-CPrescriptionLineMedicament-create'] = 'Médicament ajouté';
+$locales['msg-CPrescriptionLineMedicament-modify'] = 'Médicament modifié';
+$locales['msg-CPrescriptionLineMedicament-delete'] = 'Médicament supprimé';
+$locales['msg-CPrescriptionLineElement-create'] = 'Elément ajouté';
+$locales['msg-CPrescriptionLineElement-modify'] = 'Elément modifié';
+$locales['msg-CPrescriptionLineElement-delete'] = 'Elément supprimé';
+$locales['msg-CPrescriptionLineComment-create'] = 'Commentaire ajouté';
+$locales['msg-CPrescriptionLineComment-modify'] = 'Commentaire modifié';
+$locales['msg-CPrescriptionLineComment-delete'] = 'Commentaire supprimé';
+$locales['msg-CPrisePosologie-create'] = 'Posologie ajoutée';
+$locales['msg-CPrisePosologie-modify'] = 'Posologie modifiée';
+$locales['msg-CPrisePosologie-delete'] = 'Posologie supprimée';
 ?>

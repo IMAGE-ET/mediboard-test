@@ -64,7 +64,6 @@ foreach($prescription->_ref_lines_med_comments["comment"] as $key => $comment){
 }
 
 
-
 // Recherche de produits ALD
 foreach($prescription->_ref_lines_elements_comments as $nom_chap => $chapitre){
 	foreach($chapitre["element"] as &$element){

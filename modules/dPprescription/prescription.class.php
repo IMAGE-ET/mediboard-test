@@ -39,6 +39,8 @@ class CPrescription extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["prescription_line_medicament"] = "CPrescriptionLineMedicament prescription_id";
+    $backRefs["prescription_line_element"]    = "CPrescriptionLineElement prescription_id";
+    $backRefs["prescription_line_comment"]    = "CPrescriptionLineComment prescription_id";
     return $backRefs;
   }
   
@@ -60,19 +62,30 @@ class CPrescription extends CMbObject {
     if($this->libelle){
     	$this->_view .= "($this->libelle)";
     }
-  
     if(!$this->object_id){
     	$this->_view = "Protocole: ".$this->libelle;
     }
   }
   
-  function loadRefsFwd() {
-    $this->_ref_praticien = new CMediusers();
-    $this->_ref_praticien->load($this->praticien_id);
-    $this->_ref_object = new $this->object_class();
+  function loadRefPraticien(){
+  	$this->_ref_praticien = new CMediusers();
+  	$this->_ref_praticien->load($this->praticien_id);
+  }
+  
+  function loadRefObject(){
+  	$this->_ref_object = new $this->object_class();
     $this->_ref_object->load($this->object_id);
+  }
+  
+  function loadRefPatient(){
     $this->_ref_patient = new CPatient();
-    $this->_ref_patient->load($this->_ref_object->patient_id);
+    $this->_ref_patient->load($this->_ref_object->patient_id);	
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefPraticien();
+    $this->loadRefObject();
+    $this->loadRefPatient();
   }
   
   // Chargement des lignes de prescription
@@ -159,6 +172,13 @@ class CPrescription extends CMbObject {
   		  $this->_ref_prescription_lines_comment[$_line_comment->chapitre]["comment"][] = $_line_comment;
     }		
   }
+  
+  // Chargement de toutes les lignes (y compris medicaments)
+  function loadRefsLinesAllComments(){
+  	$this->_ref_prescription_lines_all_comments = $this->loadBackRefs("prescription_line_comment");
+  }
+  
+
   
   
   //-------------  

@@ -7,6 +7,17 @@
  *  @author Alexis Granger
  */
 
+
+function viewMsg($msg, $action){
+  global $AppUI, $m, $tab;
+  $action = $AppUI->_($action);
+  if($msg){
+    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
+  }
+  $AppUI->setMsg("$action", UI_MSG_OK );
+}
+
+
 global $AppUI, $can, $m;
 
 $can->needsRead();
@@ -17,9 +28,17 @@ $protocole_id = mbGetValueFromPost("protocole_id");
 // Chargement du protocole
 $protocole = new CPrescription();
 $protocole->load($protocole_id);
+
+// Chargement des lignes de medicaments
 $protocole->loadRefsLines();
+
+// Chargement des lignes d'elements
 $protocole->loadRefsLinesElement();
 
+// Chargement des lignes de commentaire
+$protocole->loadRefsLinesAllComments();
+
+// Parcours des lignes de prescription
 foreach($protocole->_ref_prescription_lines as $line){
   $new_line = new CPrescriptionLineMedicament();
   $new_line->_id = "";
@@ -31,14 +50,13 @@ foreach($protocole->_ref_prescription_lines as $line){
   $new_line->unite_duree = $line->unite_duree;
   $new_line->ald = $line->ald;
   $new_line->prescription_id = $prescription_id;
-  if($msg = $new_line->store()){
-  	return $msg;
-  }
-
+  $msg = $new_line->store();
+  viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
+  	
   // Chargement des prises
   $line->loadRefsPrises();
 
-	// Sauvegarde des nouvelles prises
+	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
 		$new_prise = new CPrisePosologie();
 	  $new_prise->_id = "";
@@ -49,23 +67,35 @@ foreach($protocole->_ref_prescription_lines as $line){
 	  $new_prise->unite_fois = $prise->unite_fois;
 	  $new_prise->nb_tous_les = $prise->nb_tous_les;
 	  $new_prise->unite_tous_les = $prise->unite_tous_les;
-	  if($msg = $new_prise->store()){
-	  	return $msg;
-	  }		
+	  $msg = $new_prise->store();
+	  viewMsg($msg, "msg-CPrisePosologie-create");  	
 	}
 }
 
+// Parcours des lignes d'elements
 foreach($protocole->_ref_prescription_lines_element as $line_element){
   $new_line_element = new CPrescriptionLineElement();
   $new_line_element = $line_element;
   $new_line_element->_id = "";
   $new_line_element->prescription_id = $prescription_id;
-  $new_line_element->store();
+  $msg = $new_line_element->store();
+  viewMsg($msg, "msg-CPrescriptionLineElement-create");  
 }
 
+// Parcours des lignes de commentaires
+foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
+	$new_line_comment = new CPrescriptionLineComment();
+	$new_line_comment = $line_comment;
+	$new_line_comment->_id = "";
+	$new_line_comment->prescription_id = $prescription_id;
+	$msg = $new_line_comment->store();
+	viewMsg($msg, "msg-CPrescriptionLineComment-create");
+}
 
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reload($prescription_id)</script>";
+echo $AppUI->getMsg();
 exit();   
+
 ?>

@@ -227,4 +227,16 @@ $locales['CPrisePosologie.unite_fois.semestre'] = '';
 $locales['CPrisePosologie.unite_fois.trimestre'] = '';
 $locales['CPrescriptionLineMedicament-commentaire'] = '';
 $locales['CPrescriptionLineMedicament-commentaire-desc'] = '';
+$locales['msg-CPrescriptionLineMedicament-create'] = '';
+$locales['msg-CPrescriptionLineMedicament-modify'] = '';
+$locales['msg-CPrescriptionLineMedicament-delete'] = '';
+$locales['msg-CPrescriptionLineElement-create'] = '';
+$locales['msg-CPrescriptionLineElement-modify'] = '';
+$locales['msg-CPrescriptionLineElement-delete'] = '';
+$locales['msg-CPrescriptionLineComment-create'] = '';
+$locales['msg-CPrescriptionLineComment-modify'] = '';
+$locales['msg-CPrescriptionLineComment-delete'] = '';
+$locales['msg-CPrisePosologie-create'] = '';
+$locales['msg-CPrisePosologie-modify'] = '';
+$locales['msg-CPrisePosologie-delete'] = '';
 ?>

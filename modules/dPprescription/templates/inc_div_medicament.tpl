@@ -30,13 +30,9 @@ calculFin = function(oForm, curr_line_id){
   if(nType == "semestre"){dDate.addDays(nDuree*180); }
   if(nType == "an"){dDate.addDays(nDuree*365); }
   
-  
-  
-	 // Update fields
+   // Update fields
 	Form.Element.setValue(oForm._fin, dDate.toDATE());
-  
   oDiv.innerHTML = dDate.toLocaleDate();
-
 }
 
 viewButtonAddPrise = function(curr_line_id){
@@ -49,10 +45,11 @@ submitPoso = function(oForm, curr_line_id){
   // On affiche ou on cache le bouton ajouter une prise
   initPoso(oForm, curr_line_id);
   
-  // Suppression des prises
+  // Suppression des prises de la ligne de prescription
   oForm._delete_prises.value = "1";
   submitFormAjax(oForm, 'systemMsg', { onComplete: 
     function(){
+      // Preparation des prises pour la nouvelle posologie selectionnée
       var url = new Url;
       url.setModuleAction("dPprescription", "httpreq_prescription_prepare");
       url.addParam("prescription_line_id", curr_line_id);
@@ -284,8 +281,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
         </select>  
       </form>
       <br />
-      
-      
         <div id="buttonAddPrise-{{$curr_line->_id}}" style="display:none">
 	      <form name="addPrise{{$curr_line->_id}}" action="?" method="post" >
 				  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
