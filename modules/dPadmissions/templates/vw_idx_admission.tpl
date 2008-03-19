@@ -13,7 +13,7 @@ function printPlanning() {
   url = new Url;
   url.setModuleAction("dPadmissions", "print_entrees");
   url.addParam("date", "{{$date}}");
-  url.addParam("type", oForm.type.value);
+  url.addParam("type", oForm._type_admission.value);
   url.popup(700, 550, "Entrees");
 }
 
