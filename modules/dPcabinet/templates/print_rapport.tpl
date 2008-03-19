@@ -33,11 +33,14 @@
      
       <table class="tbl">
         <tr>
-          <th class="category" colspan="8">Réglement Patients</th>
+          <th class="category" {{if !$compta}}colspan="9"{{else}}colspan="8"{{/if}}>Réglement Patients</th>
         </tr>
         <tr>
           <th class="category">Type réglement</th>
-          <th class="category">Total</th>
+          <th class="category">Total {{if !$compta}}Facturé{{/if}}</th>
+          {{if !$compta}}
+          <th class="category">Total Réglé</th>
+          {{/if}}
           <th class="category">Chèque</th>
           <th class="category">CB</th>
           <th class="category">Espèces</th>
@@ -50,6 +53,9 @@
         <tr>
           <th class="category">Nb consultations</th>
           <td>{{$recapitulatif.nb_patient}}</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.nb_patient-$recapitulatif.nb_non_reglee_patient}}</td>
+          {{/if}}
           <td>{{$reglement.cheque.nb_reglement_patient}}</td>
           <td>{{$reglement.CB.nb_reglement_patient}}</td>
           <td>{{$reglement.especes.nb_reglement_patient}}</td>
@@ -62,6 +68,9 @@
         <tr>
           <th class="category">Total réglement patient</th>
           <td>{{$recapitulatif.somme_patient|string_format:"%.2f"}} &euro;</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.somme_patient-$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
+          {{/if}}
           <td>{{$reglement.cheque.du_patient|string_format:"%.2f"}} &euro;</td>
           <td>{{$reglement.CB.du_patient|string_format:"%.2f"}} &euro;</td>
           <td>{{$reglement.especes.du_patient|string_format:"%.2f"}} &euro;</td>
@@ -72,11 +81,14 @@
           {{/if}}
         </tr>
         <tr>
-          <th class="category" colspan="8">Réglement Tiers</th>
+          <th class="category" {{if !$compta}}colspan="9"{{else}}colspan="8"{{/if}}>Réglement Tiers</th>
         </tr>
         <tr>
           <th class="category">Type réglement</th>
-          <th class="category">Total</th>
+          <th class="category">Total {{if !$compta}}Facturé{{/if}}</th>
+          {{if !$compta}}
+          <th class="category">Total Réglé</th>
+          {{/if}}
           <th class="category">Chèque</th>
           <th class="category">CB</th>
           <th class="category">Espèces</th>
@@ -89,6 +101,9 @@
         <tr>
           <th class="category">Nb consultations</th>
           <td>{{$recapitulatif.nb_tiers}}</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.nb_tiers-$recapitulatif.nb_non_reglee_tiers}}</td>
+          {{/if}}
           <td>{{$reglement.cheque.nb_reglement_tiers}}</td>
           <td>{{$reglement.CB.nb_reglement_tiers}}</td>
           <td>{{$reglement.especes.nb_reglement_tiers}}</td>
@@ -101,6 +116,9 @@
         <tr>
           <th class="category">Total réglement Tiers</th>
           <td>{{$recapitulatif.somme_tiers|string_format:"%.2f"}} &euro;</td>
+          {{if !$compta}}
+          <td>{{$recapitulatif.somme_tiers-$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
+          {{/if}}
           <td>{{$reglement.cheque.du_tiers|string_format:"%.2f"}} &euro;</td>
           <td>{{$reglement.CB.du_tiers|string_format:"%.2f"}} &euro;</td>
           <td>{{$reglement.especes.du_tiers|string_format:"%.2f"}} &euro;</td>
@@ -111,29 +129,29 @@
           {{/if}}
         </tr>
         <tr>
-          <th class="category" colspan="8">Récapitulatif des factures</th>
+          <th class="category" {{if !$compta}}colspan="9"{{else}}colspan="8"{{/if}}>Récapitulatif des factures</th>
         </tr>
         <tr>
           <th class="category">Total secteur 1</th>
-          <td colspan="7">{{$recapitulatif.total_secteur1|string_format:"%.2f"}} &euro;</td>
+          <td {{if !$compta}}colspan="8"{{else}}colspan="7"{{/if}}>{{$recapitulatif.total_secteur1|string_format:"%.2f"}} &euro;</td>
         </tr>
         <tr>
           <th class="category">Total secteur 2</th>
-          <td colspan="7">{{$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
+          <td {{if !$compta}}colspan="8"{{else}}colspan="7"{{/if}}>{{$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{if !$compta}}
         <tr>
           <th class="category">Total non réglée (Patient)</th>
-          <td colspan="7">{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
+          <td colspan="8">{{$recapitulatif.somme_non_reglee_patient|string_format:"%.2f"}} &euro;</td>
+        </tr>
+        <tr>
+          <th class="category">Total non réglée (AMO/AMC)</th>
+          <td colspan="8">{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
         </tr>
         {{/if}}
         <tr>
-          <th class="category">Total non réglée (AMO/AMC)</th>
-          <td colspan="7">{{$recapitulatif.somme_non_reglee_tiers|string_format:"%.2f"}} &euro;</td>
-        </tr>
-        <tr>
           <th class="category">Total facture</th>
-          <td colspan="7">{{$recapitulatif.total_secteur1+$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
+          <td {{if !$compta}}colspan="8"{{else}}colspan="7"{{/if}}>{{$recapitulatif.total_secteur1+$recapitulatif.total_secteur2|string_format:"%.2f"}} &euro;</td>
         </tr>
       </table>
     </td>
