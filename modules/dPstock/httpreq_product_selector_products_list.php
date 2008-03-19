@@ -11,6 +11,7 @@ global $AppUI;
 
 $category_id = mbGetValueFromGet('category_id');
 $search_string = mbGetValueFromGet('search_string');
+$selected_product = mbGetValueFromGet('selected_product');
 
 $product = new CProduct();
 $category = new CProductCategory();
@@ -41,6 +42,7 @@ if ($total == $count) $total = null;
 $smarty = new CSmartyDP();
 
 $smarty->assign('list_products', $list_products);
+$smarty->assign('selected_product', $selected_product);
 $smarty->assign('count', $count);
 $smarty->assign('total', $total);
 

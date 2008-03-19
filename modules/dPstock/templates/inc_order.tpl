@@ -1,7 +1,4 @@
-<table class="tbl" id="order[{{$order->_id}}]">
-  <tr>
-    <th colspan="6">{{$order->_view}}</th>
-  </tr>
+<table class="tbl" id="order-{{$order->_id}}">
   <tr>
     <th>Produit</th>
     <th>PU</th>
@@ -14,6 +11,18 @@
   {{/foreach}}
   </tbody>
   <tr>
-    <td colspan="6" id="order[{{$order->_id}}][total]" style="border-top: 1px solid #666; text-align: right;">Total : {{$order->_total|string_format:"%.2f"}}</td>
+    <td colspan="6" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
+    <span style="float: right;">Total : {{mb_value object=$order field=_total}}</span>
+    {{if $order->_ref_order_items|@count > 0}}
+      <form name="order-order-{{$order->_id}}" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="vw_idx_order_manager" />
+        <input type="hidden" name="dosql" value="do_order_aed" />
+        <input type="hidden" name="order_id" value="{{$order->_id}}" />
+        <input type="hidden" name="_order" value="1" />
+        <button type="submit" class="tick">Commander</button>
+      </form>
+    {{/if}}
+    </td>
   </tr>
 </table>

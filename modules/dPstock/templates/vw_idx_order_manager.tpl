@@ -14,14 +14,24 @@ function refreshListOrders(type) {
   url.requestUpdate("orders["+type+"]", { waitingText: null } );
 }
 
-function submitOrder (oForm, refreshList) {
-  submitFormAjax(oForm, 'systemMsg',{
-    onComplete: function() {
-      refreshListOrders("waiting");
-      refreshListOrders("pending");
-      refreshListOrders("old");
-    } 
-  });
+function submitOrder (oForm, refresh, listToRefresh) {
+  if (refresh) {
+    if (listToRefresh) {
+      submitFormAjax(oForm, 'systemMsg', {
+        onComplete: function() {refreshListOrders(listToRefresh);}
+      });
+    } else {
+      submitFormAjax(oForm, 'systemMsg', {
+        onComplete: function() {
+          refreshListOrders("waiting");
+          refreshListOrders("pending");
+          refreshListOrders("old");
+        }
+      });
+    }
+  } else {
+    submitFormAjax(oForm, 'systemMsg');
+  }
 }
 </script>
 
@@ -42,7 +52,7 @@ function submitOrder (oForm, refreshList) {
     </td>
     
     <td class="halfPane">
-    <form name="edit_order" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+    <form name="edit_order" action="?m={{$m}}{{if !$order->_id}}&amp;tab=vw_aed_order_fill{{/if}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_order_aed" />
 	    <input type="hidden" name="order_id" value="{{$order->_id}}" />
       <input type="hidden" name="group_id" value="{{$g}}" />

@@ -12,7 +12,6 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $order_id    = mbGetValueFromGetOrSession('order_id');
-$societe_id  = mbGetValueFromGetOrSession('societe_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
 
 // Loads the expected Order
@@ -20,6 +19,7 @@ $order = new CProductOrder();
 
 if ($order_id) {
   $order->load($order_id);
+  $order->loadRefsFwd();
   $order->updateFormFields();
 }
 
@@ -48,7 +48,6 @@ $list_societes = $societe->loadList();
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('unique_societe', true);
 $smarty->assign('order',           $order);
 $smarty->assign('category',        $category);
 $smarty->assign('list_categories', $list_categories);

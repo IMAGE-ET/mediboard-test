@@ -36,6 +36,10 @@ class CProductStock extends CMbObject {
   var $_max                     = null;
   // In which part of the graph the quantity is
   var $_zone                    = null;
+  var $_zone_future             = null;
+  
+  var $_ordered_count           = null;
+  var $_ordered_last            = null;
 
   function CProductStock() {
     $this->CMbObject('product_stock', 'stock_id');
@@ -63,6 +67,9 @@ class CProductStock extends CMbObject {
       '_optimum'                 => 'pct',
       '_max'                     => 'pct',
       '_zone'                    => 'num',
+      '_zone_future'             => 'num',
+	    '_ordered_count'           => 'num pos',
+	    '_ordered_last'            => 'dateTime',
     );
   }
 
@@ -71,8 +78,8 @@ class CProductStock extends CMbObject {
     $this->loadRefsFwd();
     $this->_view = $this->_ref_product->_view;
     
+    // Calculation of the levels for the bargraph
     $max = max(array($this->quantity, $this->order_threshold_max)) / 100;
-    
     if ($max > 0) {
 	    $this->_quantity = $this->quantity                 / $max;
 	    $this->_critical = $this->order_threshold_critical / $max;
@@ -80,19 +87,55 @@ class CProductStock extends CMbObject {
 	    $this->_optimum  = $this->order_threshold_optimum  / $max - $this->_critical - $this->_min;
 	    $this->_max      = $this->order_threshold_max      / $max - $this->_critical - $this->_min - $this->_optimum;
 	      
-	          if ($this->_quantity <= $this->_critical) {
+	    if ($this->quantity <= $this->order_threshold_critical) {
 	      $this->_zone = 0;
 	      
-	    } elseif ($this->_quantity <= $this->_min) {
+	    } elseif ($this->quantity <= $this->order_threshold_min) {
 	      $this->_zone = 1;
 	      
-	    } elseif ($this->quantity  <= $this->_optimum) {
+	    } elseif ($this->quantity <= $this->order_threshold_optimum) {
 	      $this->_zone = 2;
 	      
 	    } else {
 	      $this->_zone = 3;
 	    }
 	  }
+	  
+	  // Verifies wether there are pending orders for this stock
+	  $where = array();
+	  $where['date_ordered'] = 'IS NOT NULL';
+	  $order = new CProductOrder();
+	  $list_orders = $order->loadList($where);
+	  
+	  foreach ($list_orders as $order) {
+	  	$order->updateFormFields();
+	  	if (!$order->_received) {
+	  		foreach ($order->_ref_order_items as $item) {
+	  			$item->loadRefsFwd();
+	  			$item->_ref_reference->loadRefsFwd();
+	  			$item->_ref_order->loadRefsFwd();
+	  			if ($item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
+	  				$this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
+	  				$this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
+	  			}
+	  		}
+	  	}
+	  }
+	  
+	  $future_quantity = $this->quantity + $this->_ordered_count;
+	  
+    if ($future_quantity <= $this->order_threshold_critical) {
+      $this->_zone_future = 0;
+      
+    } elseif ($future_quantity <= $this->order_threshold_min) {
+      $this->_zone_future = 1;
+      
+    } elseif ($future_quantity <= $this->order_threshold_optimum) {
+      $this->_zone_future = 2;
+      
+    } else {
+      $this->_zone_future = 3;
+    }
   }
   
   /*function updateDBFields() {

@@ -36,7 +36,7 @@ class CProductOrder extends CMbObject {
   // actions
 	var $_order           = null;
 	var $_receive         = null;
-
+	var $_autofill        = null;
 
 	function CProductOrder() {
 		$this->CMbObject('product_order', 'order_id');
@@ -95,6 +95,49 @@ class CProductOrder extends CMbObject {
 		  $item->receive();
 		}
 	}
+	
+  /** Fills the order in function of the stocks and future stocks */
+  function autofill() {
+  	$stock = new CProductStock();
+  	$list_stocks = $stock->loadList();
+    foreach($list_stocks as $stock) {
+    	$stock->updateFormFields();
+    	
+    	// if the stock is in the "red" or "orange" zone
+    	if ($stock->_zone_future < 2) {
+    		// we create a new order item
+    		$order_item = new CProductOrderItem();
+    		$order_item->order_id = $this->_id;
+    		
+    		$current_stock = $stock->quantity;
+    		if ($stock->order_threshold_optimum) {
+    		  $expected_stock = $stock->order_threshold_optimum;
+    		} else {
+    		  $expected_stock = ($stock->order_threshold_max-$stock->order_threshold_min)/2;
+    		}
+    		
+    		// we get the best reference for this product
+    		$where = array();
+    		$where['product_id'] = " = '{$stock->_ref_product->_id}'";
+    		$orderby = 'price / quantity DESC';
+    		$best_reference = new CProductReference();
+    		$best_reference->loadObject($where, $orderby);
+    		
+    		// and we fill the order item with the good quantity of the stock's product
+    		while ($current_stock < $expected_stock) {
+    		  $current_stock += $best_reference->quantity;
+    	  }
+    	  
+    	  // we store the new order item in the current order
+    	  $order_item->quantity = $current_stock;
+    	  $order_item->reference_id = $best_reference->_id;
+    	  $order_item->unit_price = $best_reference->price / $best_reference->quantity;
+    	  $order_item->store();
+    	  
+    	  mbTrace($current_stock);
+    	}
+    }
+  }
 
 	function updateFormFields() {
 		parent::updateFormFields();
@@ -136,6 +179,10 @@ class CProductOrder extends CMbObject {
 				
 			}
 		}
+		
+	  if ($this->_autofill) {
+      $this->autofill();
+    }
 	}
 
 	function loadRefsBack(){

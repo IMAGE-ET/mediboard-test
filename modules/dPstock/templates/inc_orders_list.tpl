@@ -20,24 +20,21 @@
 	    </td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
-	      <form name="order-lock-{{$curr_order->_id}}" action="?m={{$m}}" method="post">
-	        <input type="hidden" name="m" value="dPstock" />
+	      <form name="order-lock-{{$curr_order->_id}}" action="?" method="post">
+	        <input type="hidden" name="m" value="{{$m}}" />
 	        <input type="hidden" name="dosql" value="do_order_aed" />
 	        <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
-	        <input type="hidden" name="locked" value="{{if $curr_order->locked}}0{{else}}1{{/if}}" />
-	        <button type="button" class="lock" onclick="submitOrder(this.form)">
-	          {{if $curr_order->locked}}Oui{{else}}Non{{/if}}
-	        </button>
+	        {{mb_field object=$curr_order field="locked" typeEnum="checkbox" onChange="submitOrder(this.form)"}}
 	      </form>
 	    </td>
 	    <td>
       {{if $curr_order->_ref_order_items|@count > 0}}
-	      <form name="order-order-{{$curr_order->_id}}" action="?m={{$m}}" method="post">
-	        <input type="hidden" name="m" value="dPstock" />
+	      <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
+	        <input type="hidden" name="m" value="{{$m}}" />
 	        <input type="hidden" name="dosql" value="do_order_aed" />
 	        <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
 	        <input type="hidden" name="_order" value="1" />
-	        <button type="button" class="tick" onclick="submitOrder(this.form)">Commander</button>
+	        <button type="button" class="tick" onclick="submitOrder(this.form, true)">Commander</button>
 	      </form>
         {{/if}}
 	  </td>

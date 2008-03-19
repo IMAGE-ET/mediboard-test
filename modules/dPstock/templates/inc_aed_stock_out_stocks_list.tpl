@@ -19,7 +19,6 @@
       <th>Quantité</th>
       <th>Code produit</th>
       <th>Pour le service</th>
-      <th>Déstocker</th>
     </tr>
     
   <!-- Products list -->

@@ -43,10 +43,6 @@ class CProductOrderItem extends CMbObject {
       '_receive'      => 'bool',
     );
   }
-  
-  function getStock() {
-  	
-  }
 
   function receive() {
     if (!$this->date_received) {
@@ -102,12 +98,11 @@ class CProductOrderItem extends CMbObject {
       if($duplicateKey->loadObject($where)) {
         $duplicateKey->loadRefsFwd();
         $this->_id = $duplicateKey->_id;
-        $this->quantity = $duplicateKey->quantity+1;
+        $this->quantity += $duplicateKey->quantity;
         $this->unit_price = $duplicateKey->unit_price;
         $this->date_received = $duplicateKey->date_received;
       } else {
         $this->unit_price = $this->_ref_reference->price;
-        $this->quantity = 1;
       }
     }
     return parent::store();

@@ -21,8 +21,8 @@ if ($product->load($product_id)) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('product',  $product);
-$smarty->assign('category_id', $category_id);
+$smarty->assign('selected_product',  $product->_id);
+$smarty->assign('selected_category', $category_id);
 
 $smarty->display('product_selector.tpl');
 

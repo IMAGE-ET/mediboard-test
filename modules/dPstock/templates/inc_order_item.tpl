@@ -12,19 +12,12 @@
   <td>{{mb_value object=$curr_item field=unit_price}}</td>
   <td>
     <form name="form-item-dec-{{$curr_item->_id}}" action="?m={{$m}}" method="post">
+      <button type="button" class="remove notext" onclick="this.form.quantity.value--; submitOrderItem(this.form, {{$order->_id}});"></button>
       <input type="hidden" name="m" value="dPstock" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="hidden" name="quantity" value="{{$curr_item->quantity-1}}" />
-      <button type="button" class="remove notext" onclick="submitOrderItem(this.form, {{$order->_id}})"></button>
-    </form>
-    {{$curr_item->quantity}}
-    <form name="form-item-inc-{{$curr_item->_id}}" action="?m={{$m}}" method="post">
-      <input type="hidden" name="m" value="dPstock" />
-      <input type="hidden" name="dosql" value="do_order_item_aed" />
-      <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="hidden" name="quantity" value="{{$curr_item->quantity+1}}" />
-      <button type="button" class="add notext" onclick="submitOrderItem(this.form, {{$order->_id}})"></button>
+      <input type="text" name="quantity" value="{{$curr_item->quantity}}" size="2" onchange="submitOrderItem(this.form, {{$order->_id}});" />
+      <button type="button" class="add notext" onclick="this.form.quantity.value++; submitOrderItem(this.form, {{$order->_id}});"></button>
     </form>
   </td>
   <td>{{mb_value object=$curr_item field=_price}}</td>

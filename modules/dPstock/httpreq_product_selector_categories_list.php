@@ -11,6 +11,7 @@ global $AppUI;
 
 $search_string = mbGetValueFromGet('search_string');
 $category_id = mbGetValueFromGet('category_id');
+$selected_category = mbGetValueFromGet('selected_category');
 
 // Loads the required Category and the complete list
 $category = new CProductCategory();
@@ -34,6 +35,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('category_id', $category_id);
+$smarty->assign('selected_category', $selected_category);
 $smarty->assign('count', $count);
 $smarty->assign('total', $total);
 
