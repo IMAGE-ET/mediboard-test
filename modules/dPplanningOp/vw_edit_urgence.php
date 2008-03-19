@@ -98,8 +98,6 @@ if($sejours){
   }
 }
 
-
-
 // Récupération des modèles
 
 // Modèles de l'utilisateur

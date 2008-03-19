@@ -188,9 +188,11 @@ function updateEntreePrevue() {
   }
 
   if(oOpForm.date.value) {
-    oSejourForm._date_entree_prevue.value = oOpForm.date.value;
-    oDiv = document.getElementById('editSejour__date_entree_prevue_da');
-    oDiv.innerHTML = Date.fromDATE(oOpForm.date.value).toLocaleDate();  
+    if(!oSejourForm._date_entree_prevue.value) {
+      oSejourForm._date_entree_prevue.value = oOpForm.date.value;
+      oDiv = document.getElementById('editSejour__date_entree_prevue_da');
+      oDiv.innerHTML = Date.fromDATE(oOpForm.date.value).toLocaleDate();
+    }
   }
   
   updateSortiePrevue();
