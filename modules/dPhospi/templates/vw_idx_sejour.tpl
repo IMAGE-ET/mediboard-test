@@ -1,4 +1,6 @@
 {{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
@@ -55,6 +57,14 @@ function popEtatSejour(sejour_id) {
   url.pop(1000, 550, 'Etat du Séjour');
 }
 
+function reloadDiagnostic(sejour_id, modeDAS) {
+  var url = new Url();
+  url.setModuleAction("dPsalleOp", "httpreq_diagnostic_principal");
+  url.addParam("sejour_id", sejour_id);
+  url.addParam("modeDAS", modeDAS);
+  url.requestUpdate("cim", { 	waitingText : null } );
+}
+
 
 function loadViewSejour(sejour_id, praticien_id){
   loadSejour(sejour_id); 
@@ -64,6 +74,9 @@ function loadViewSejour(sejour_id, praticien_id){
   }
   if($('ccam')){
     ActesCCAM.refreshList(sejour_id, praticien_id);
+  }
+  if($('cim')){
+    reloadDiagnostic(sejour_id, '1');    
   }
 }
 
@@ -222,6 +235,7 @@ function pageMain() {
             <ul id="main_tab_group" class="control_tabs">
               <li><a href="#one">Actes CCAM</a></li>
               <li><a href="#two">Actes NGAP</a></li>
+              <li><a href="#three">Diagnostics</a></li>
             </ul>
           </td>
         </tr>
@@ -237,12 +251,18 @@ function pageMain() {
             </div>
           </td>
         </tr>
+        <tr id="three">
+          <td>
+            <div id="cim">
+            </div>
+          </td>
+        </tr>
       </table>
       <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
     </div>
   </div>
   {{/if}}
-  
+      
    <div id="Docs">
       <div id="DocsHeader" class="accordionTabTitleBar">
         Documents

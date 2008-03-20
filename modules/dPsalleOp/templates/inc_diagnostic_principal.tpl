@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-function onSubmitDiag(oForm) {
+onSubmitDiag = function(oForm) {
 	return onSubmitFormAjax(oForm, { 
 		onComplete: function() { 
 			reloadDiagnostic({{$sejour->_id}}, {{$modeDAS}}) 
