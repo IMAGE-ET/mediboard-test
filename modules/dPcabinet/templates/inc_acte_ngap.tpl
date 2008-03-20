@@ -102,7 +102,7 @@ ActesNGAP = {
         {{mb_field object=$acte_ngap field="montant_depassement"}}
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="complement" defaultOption="&mdash; Sélection d'un complément"}}
+        {{mb_field object=$acte_ngap field="complement" defaultOption="&mdash; Aucun"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">

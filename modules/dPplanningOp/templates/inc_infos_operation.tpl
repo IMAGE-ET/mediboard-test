@@ -1,9 +1,6 @@
 <!-- $Id: $ -->
 
-{{if !$can->edit}}
-<div class="big-info">Vous n'avez pas accès au détail des interventions.</div>
-{{/if}}
-
+{{if $sejour->_canRead}}
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
@@ -47,5 +44,10 @@
   </tr>
   {{/foreach}}
 
-</table> 
+</table>
+ 
+{{else}}
+<div class="big-info">Vous n'avez pas accès au détail des interventions.</div>
+{{/if}}
+
 
