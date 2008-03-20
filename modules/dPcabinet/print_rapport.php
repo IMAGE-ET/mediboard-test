@@ -105,6 +105,10 @@ foreach($listPlage as $key => $value) {
   }
   
   
+  // Pas d'affichage de règlement patient
+  if($filter->_etat_reglement_patient == "aucun"){
+    $where["du_patient"] = " = '0'";
+  }
   // Facture réglée par le patient
   if($filter->_etat_reglement_patient == "non_reglee"){
     $where["du_patient"] = " != '0'";
@@ -114,7 +118,11 @@ foreach($listPlage as $key => $value) {
   if($filter->_etat_reglement_patient == "reglee"){
     $where["patient_date_reglement"] = " IS NOT NULL";
   }
-  
+
+  // Pas d'affichage de règlement tiers
+  if($filter->_etat_reglement_tiers == "aucun"){
+    $where["du_tiers"] = " = '0'";
+  }
   // Facture non reglée par tiers payant
   if($filter->_etat_reglement_tiers == "non_reglee"){
     $where[] = "`tiers_date_reglement` IS NULL";

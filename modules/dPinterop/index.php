@@ -15,10 +15,10 @@ $module->registerTab("export_egate"       , "Export EGATE"       , TAB_READ);
 $module->registerTab("export_prescription", "Export Prescription", TAB_READ);
 $module->registerTab("benchmark"          , "Montée en charge"   , TAB_READ);
 $module->registerTab("import_ami"         , "Import AMI"         , TAB_READ);
+$module->registerTab("import_dermato"     , "Import Dermato"     , TAB_READ);
+$module->registerTab("test"               , "Test"               , TAB_READ);
 
 //$module->registerTab("import_orl"    , "Import ORL"        , TAB_READ);
-$module->registerTab("import_dermato", "Import Dermato"    , TAB_READ);
-
 //$module->registerTab("consult_anesth", "maj consult anesth", TAB_READ);
 //$module->registerTab("codes_ccam"    , "maj codes ccam"    , TAB_READ);
 

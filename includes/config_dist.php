@@ -330,4 +330,13 @@ $dPconfig["dPccam"] = array (
   ),
 );
 
+$dPconfig["hprim21"] = array (
+  "CHprim21Reader" => array(
+    "hostname"      => "",
+    "username"      => "",
+    "userpass"      => "",
+    "fileextension" => "hpr",
+  ),
+);
+
 ?>

@@ -66,10 +66,76 @@ class CFTP {
     return true;
   }
   
+  function getListFiles($folder = ".") {
+    
+    if(!$this->connexion) {
+      $this->logError("Non connecté au serveur, impossible de lister le repertoire $folder");
+      return false;
+    }
+    
+    $list = ftp_nlist($this->connexion, $folder);
+    
+    if(!$list) {
+      $this->logError("Impossible de lister le repertoire $folder");
+      return false;
+    }
+    
+    $this->logStep("Repertoire $folder listé");
+    
+    return $list;
+  }
+  
+  function delFile($file) {
+    
+    if(!$this->connexion) {
+      $this->logError("Non connecté au serveur, impossible de supprimer le fichier source $file");
+      return false;
+    }
+    
+    $delete = ftp_delete($this->connexion, $file);
+    
+    if(!$delete) {
+      $this->logError("Impossible de supprimer le fichier $file");
+      return false;
+    }
+    
+    $this->logStep("Fichier $file supprimé");
+    
+    return true;
+    
+  }
+  
+  function getFile($source_file, $destination_file = null, $mode = FTP_BINARY) {
+    
+    $source_base = basename($source_file);
+    
+    if(!$destination_file) {
+      $destination_file = "tmp/$source_base";
+    }
+    $destination_info = pathinfo($destination_file);
+    CMbPath::forceDir($destination_info["dirname"]);
+    
+    if(!$this->connexion) {
+      $this->logError("Non connecté au serveur, impossible de récupérer le fichier source $source_base");
+      return false;
+    }
+    
+    // Download the file
+    $upload = ftp_get($this->connexion, $destination_file, $source_file, $mode);
+    if (!$upload) {
+      $this->logError("Impossible de récupérer le fichier source $source_base en fichier cible $destination_file");
+      return false;
+    } 
+    
+    $this->logStep("Fichier source $source_base récupéré en fichier cible $destination_file");
+    return $destination_file;
+  }
+  
   function sendFile($source_file, $destination_file, $mode = FTP_BINARY) {
     
     if(!$this->connexion) {
       $this->logError("Non connecté au serveur, impossible de copier le fichier source $source_base");
+      return false;
     }
     
     $source_base = basename($source_file);
