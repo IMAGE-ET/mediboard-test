@@ -13,7 +13,7 @@
   <tr>
     <td colspan="6" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
     <span style="float: right;">Total : {{mb_value object=$order field=_total}}</span>
-    {{if $order->_ref_order_items|@count > 0}}
+    {{if (!$order->date_ordered) && ($order->_ref_order_items|@count > 0)}}
       <form name="order-order-{{$order->_id}}" action="?" method="get">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="tab" value="vw_idx_order_manager" />

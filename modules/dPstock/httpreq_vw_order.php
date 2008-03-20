@@ -22,6 +22,7 @@ $order->loadRefsBack();
 $smarty = new CSmartyDP();
 
 $smarty->assign('order', $order);
+$smarty->assign('hide_products_list', true);
 
 $smarty->display('inc_order.tpl');
 ?>

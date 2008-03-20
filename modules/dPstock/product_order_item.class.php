@@ -9,23 +9,24 @@
 
 class CProductOrderItem extends CMbObject {
   // DB Table key
-  var $order_item_id  = null;
+  var $order_item_id      = null;
 
   // DB Fields
-  var $reference_id   = null;
-  var $order_id       = null;
-  var $quantity       = null;
-  var $unit_price     = null; // In the case the reference price changes
-  var $date_received  = null;
+  var $reference_id       = null;
+  var $order_id           = null;
+  var $quantity           = null;
+  var $unit_price         = null; // In the case the reference price changes
+  var $date_received      = null;
+  var $quantity_received  = null;
 
   // Object References
   //    Single
-  var $_ref_order     = null;
-  var $_ref_reference = null;
+  var $_ref_order         = null;
+  var $_ref_reference     = null;
 
   // Form fields
-  var $_price         = null;
-  var $_receive       = null;
+  var $_price             = null;
+  var $_receive           = null;
 
   function CProductOrderItem() {
     $this->CMbObject('product_order_item', 'order_item_id');
@@ -34,13 +35,14 @@ class CProductOrderItem extends CMbObject {
 
   function getSpecs() {
     return array (
-      'reference_id'  => 'notNull ref class|CProductReference',
-      'order_id'      => 'notNull ref class|CProductOrder',
-      'quantity'      => 'notNull num pos',
-      'unit_price'    => 'currency',
-      'date_received' => 'dateTime',
-	    '_price'        => 'currency',
-      '_receive'      => 'bool',
+      'reference_id'      => 'notNull ref class|CProductReference',
+      'order_id'          => 'notNull ref class|CProductOrder',
+      'quantity'          => 'notNull num pos',
+      'unit_price'        => 'currency',
+      'date_received'     => 'dateTime',
+      'quantity_received' => 'num pos',
+	    '_price'            => 'currency',
+      '_receive'          => 'bool',
     );
   }
 
@@ -48,18 +50,23 @@ class CProductOrderItem extends CMbObject {
     if (!$this->date_received) {
     	$this->load();
       $this->loadRefsFwd();
-
+      
+      $this->quantity_received = (($this->quantity_received > 0) && ($this->quantity_received <= $this->quantity)) 
+                                 ? $this->quantity_received 
+                                 : $this->quantity;
+      
       $stock = new CProductStock();
       $where = array();
       $where['group_id']   = "= '{$this->_ref_order->group_id}'";
       $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
-
-      $this->date_received = mbDateTime();
       
+      $this->date_received = mbDateTime();
+
       if ($stock->loadObject($where)) {
-        $stock->quantity += $this->quantity * $this->_ref_reference->quantity;
+        $stock->quantity += $this->quantity_received * $this->_ref_reference->quantity; //FIXME : 
         $stock->store();
       }
+      
       $this->store();
     }
   }
@@ -74,8 +81,10 @@ class CProductOrderItem extends CMbObject {
   }
   
   function updateDBFields() {
-    if ($this->_receive) {
+    if ($this->_receive == 1) {
     	$this->receive();
+    } else if ($this->_receive == -1) {
+    	
     }
   }
 

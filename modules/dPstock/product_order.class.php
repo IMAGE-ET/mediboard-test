@@ -51,12 +51,11 @@ class CProductOrder extends CMbObject {
 
 	function getSpecs() {
 		return array (
-      'name'            => 'str maxLength|64',
       'date_ordered'    => 'dateTime',
       'societe_id'      => 'notNull ref class|CSociete',
 		  'group_id'        => 'notNull ref class|CGroups',
       'locked'          => 'notNull bool',
-      'order_number'    => 'str',
+      'order_number'    => 'notNull str maxLength|64',
       '_total'          => 'currency',
       '_count_received' => 'num pos',
       '_received'       => 'bool',
@@ -66,9 +65,7 @@ class CProductOrder extends CMbObject {
 
 	function getSeeks() {
 		return array (
-      'name'         => 'like',
       'date_ordered' => 'like',
-      'societe_id'   => 'like',
       'order_number' => 'like',
 		);
 	}
@@ -98,16 +95,33 @@ class CProductOrder extends CMbObject {
 	
   /** Fills the order in function of the stocks and future stocks */
   function autofill() {
+    // we create a new order item
+    $order_item = new CProductOrderItem();
+    $order_item->order_id = $this->_id;
+    
+    $this->updateFormFields();
+    
+    // if the order has not been ordered yet
+    // and not partially received
+    // and not totally received
+    if (!$this->date_ordered && !$this->_partial && !$this->_received) {
+      $items = $order_item->loadMatchingList();
+      
+      // we empty the order
+      foreach($items as $item) {
+      	$item->delete();
+      }
+    }
+  	
   	$stock = new CProductStock();
   	$list_stocks = $stock->loadList();
+  	
     foreach($list_stocks as $stock) {
     	$stock->updateFormFields();
     	
     	// if the stock is in the "red" or "orange" zone
     	if ($stock->_zone_future < 2) {
-    		// we create a new order item
-    		$order_item = new CProductOrderItem();
-    		$order_item->order_id = $this->_id;
+
     		
     		$current_stock = $stock->quantity;
     		if ($stock->order_threshold_optimum) {
@@ -133,15 +147,13 @@ class CProductOrder extends CMbObject {
     	  $order_item->reference_id = $best_reference->_id;
     	  $order_item->unit_price = $best_reference->price / $best_reference->quantity;
     	  $order_item->store();
-    	  
-    	  mbTrace($current_stock);
     	}
     }
   }
 
 	function updateFormFields() {
 		parent::updateFormFields();
-		$this->loadRefsBack();
+		$this->loadRefs();
 
 		$this->_count_received = $this->countReceivedItems();
 
@@ -157,7 +169,7 @@ class CProductOrder extends CMbObject {
 		$this->_partial = !$this->_received && ($this->_count_received > 0);
 
 		$count = count($this->_ref_order_items);
-		$this->_view = $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
+		$this->_view = $this->_ref_societe->_view.' - '.$count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
 	}
 	
 	function updateDBFields() {
@@ -195,6 +207,21 @@ class CProductOrder extends CMbObject {
 		
 		$this->_ref_group = new CGroups();
     $this->_ref_group->load($this->group_id);
+	}
+	
+	function delete() {
+		global $AppUI;
+		
+		$this->updateFormFields();
+		if ((count($this->_ref_order_items) == 0) || !$this->date_ordered) {
+			return parent::delete();
+		} else if ($this->date_ordered && !$this->_received) {
+			
+			// TODO: here : cancel order !!
+			
+			return parent::delete();
+		}
+		return 'This order cannot be deleted';
 	}
 
 	function getPerm($permType) {

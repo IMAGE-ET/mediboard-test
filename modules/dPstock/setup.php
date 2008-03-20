@@ -52,12 +52,11 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
 
     $sql = 'CREATE TABLE `product_order` (
  `order_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
- `name` VARCHAR(64),
  `date_ordered` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `group_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
- `received` BOOL NOT NULL DEFAULT \'0\',
+ `order_number` VARCHAR(64) NOT NULL, 
 PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
 
@@ -68,7 +67,7 @@ PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
  `quantity` INT(11) UNSIGNED NOT NULL, 
  `unit_price` FLOAT, 
  `date_received` DATETIME, 
- `order_number` VARCHAR(255), 
+ `quantity_received` INT(11) UNSIGNED,
 PRIMARY KEY (`order_item_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
 

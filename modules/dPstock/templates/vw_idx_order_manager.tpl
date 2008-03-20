@@ -1,17 +1,26 @@
 <script type="text/javascript">
+
 function pageMain() {
   regFieldCalendar("edit_order", "date");
-  PairEffect.initGroup("productToggle", { bStartVisible: true });
-  refreshListOrders("waiting");
-  refreshListOrders("pending");
-  refreshListOrders("old");
+  refreshLists();
+  
+  // Initialisation des onglets du menu
+  var tabs = new Control.Tabs('tab_orders');
+  tabs.setActiveTab("orders-pending");
 }
 
-function refreshListOrders(type) {
+function refreshListOrders(type, keywords) {
   url = new Url;
   url.setModuleAction("dPstock","httpreq_vw_orders_list");
   url.addParam("type", type);
-  url.requestUpdate("orders["+type+"]", { waitingText: null } );
+  url.addParam("keywords", keywords);
+  url.requestUpdate("orders-"+type, { waitingText: null } );
+}
+
+function refreshLists(oForm) {
+  refreshListOrders("waiting", (oForm?oForm.keywords.value:null));
+  refreshListOrders("pending", (oForm?oForm.keywords.value:null));
+  refreshListOrders("old",     (oForm?oForm.keywords.value:null));
 }
 
 function submitOrder (oForm, refresh, listToRefresh) {
@@ -33,26 +42,45 @@ function submitOrder (oForm, refresh, listToRefresh) {
     submitFormAjax(oForm, 'systemMsg');
   }
 }
+
+function popupOrder(order_id, width, height) {
+  width = width?width:500;
+  height = height?height:500;
+  
+  var url = new Url();
+  url.setModuleAction("{{$m}}", "vw_aed_order");
+  url.addParam("order_id", order_id);
+  url.popup(width, height, "Edition/visualisation commande");
+}
 </script>
 
 <table class="main">
   <tr>
-    <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
-        Nouvelle commande
-      </a>
-      <h3>Commandes en attente</h3>
-      <div id="orders[waiting]"></div>
-      
-      <h3>Commandes en attente de réception</h3>
-      <div id="orders[pending]"></div>
-      
-      <h3>Commandes reçues</h3>
-      <div id="orders[old]"></div>
+    <td class="halfPane" rowspan="5">
+      <form name="search-order" action="?" method="post" onsubmit="refreshLists(this); return false;">
+        <input type="hidden" class="m" name="{{$m}}" />
+        <input type="text" class="search" name="keywords" title="Rechercher une commande par numéro ou fournisseur" />
+        <button type="button" class="search" onclick="refreshLists(this.form)">Rechercher</button>
+      </form>
+    
+      <ul id="tab_orders" class="control_tabs">
+        <li><a href="#orders-waiting"><span id="orders-waiting-count">0</span> pas envoyées</a></li>
+        <li><a href="#orders-pending"><span id="orders-pending-count">0</span> non reçues</a></li>
+        <li><a href="#orders-old"><span id="orders-old-count">0</span> reçues</a></li>
+      </ul>
+      <hr class="control_tabs" />
+      <div id="orders-waiting"></div>
+      <div id="orders-pending"></div>
+      <div id="orders-old"></div>
     </td>
     
     <td class="halfPane">
-    <form name="edit_order" action="?m={{$m}}{{if !$order->_id}}&amp;tab=vw_aed_order_fill{{/if}}" method="post" onsubmit="return checkForm(this)">
+    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
+      Nouvelle commande
+    </a>
+    <form name="edit_order" action="?" method="post" onsubmit="return checkForm(this)">
+      <input type="hidden" name="m" value="{{$m}}" />
+      <input type="hidden" name="tab" value="{{$tab}}" />
       <input type="hidden" name="dosql" value="do_order_aed" />
 	    <input type="hidden" name="order_id" value="{{$order->_id}}" />
       <input type="hidden" name="group_id" value="{{$g}}" />
@@ -66,8 +94,8 @@ function submitOrder (oForm, refresh, listToRefresh) {
           {{/if}}
         </tr>   
         <tr>
-          <th>{{mb_label object=$order field="name"}}</th>
-          <td>{{mb_field object=$order field="name"}}</td>
+          <th>{{mb_label object=$order field="order_number"}}</th>
+          <td>{{mb_field object=$order field="order_number"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$order field="societe_id"}}</th>
@@ -90,9 +118,7 @@ function submitOrder (oForm, refresh, listToRefresh) {
             <button class="submit" type="submit">Valider</button>
             {{if $order->_id}}
               <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la commande',objName:'{{$order->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
-            {{if !$order->locked}}
-              <a class="buttonedit" href="?m={{$m}}&amp;tab=vw_aed_order_fill&amp;order_id={{$order->_id}}">Peupler</a>
-            {{/if}}
+              <button class="edit" onclick="popupOrder({{$order->_id}}); return false;">Articles</button>
             {{/if}}
           </td>
         </tr>        

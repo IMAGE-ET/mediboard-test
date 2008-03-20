@@ -1,7 +1,7 @@
 {{if $type=="waiting"}}
 <table class="tbl">
   <tr>
-    <th>Intitulé</th>
+    <th>Numéro</th>
     <th>Fournisseur</th>
     <th>Articles</th>
     <th>Total</th>
@@ -10,13 +10,12 @@
   </tr>
   <tbody>
 	{{foreach from=$orders item=curr_order}}
-	  <tr id="order[{{$curr_order->_id}}]">
-	    <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
+	  <tr id="order-{{$curr_order->_id}}">
+	    <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>
-	      <a class="buttonedit" href="?m={{$m}}&tab=vw_aed_order_fill&order_id={{$curr_order->_id}}">
-	        {{$curr_order->_ref_order_items|@count}}
-	      </a>
+	      {{$curr_order->_ref_order_items|@count}}
+        <button class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600); return false;">Editer</button>
 	    </td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
@@ -44,12 +43,13 @@
 	    <td colspan="8">Aucune commande</td>
 	  </tr>
 	{{/foreach}}
+  
   </tbody>
 </table>
 {{elseif $type=="pending"}}
 <table class="tbl">
   <tr>
-    <th>Intitulé</th>
+    <th>Numéro</th>
     <th>Fournisseur</th>
     <th>Articles/Reçus</th>
     <th>Passée le</th>
@@ -58,13 +58,13 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr id="order[{{$curr_order->_id}}]">
-      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
+    <tr id="order-{{$curr_order->_id}}">
+      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_total}}</td>
-      <td class="button"><a class="buttontick" href="?m={{$m}}&amp;tab=vw_aed_order_reception&amp;order_id={{$curr_order->_id}}">Recevoir</a></td>
+      <td><button class="tick" onclick="popupOrder({{$curr_order->_id}});">Recevoir</button></td>
     </tr>
   {{foreachelse}}
     <tr>
@@ -76,7 +76,7 @@
 {{else}}
 <table class="tbl">
   <tr>
-    <th>Intitulé</th>
+    <th>Numéro</th>
     <th>Fournisseur</th>
     <th>Articles</th>
     <th>Passée le</th>
@@ -86,8 +86,8 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr id="order[{{$curr_order->_id}}]">
-      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{if $curr_order->name}}{{$curr_order->name}}{{else}}Sans nom{{/if}}</a></td>
+    <tr id="order-{{$curr_order->_id}}">
+      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
@@ -103,3 +103,8 @@
   </tbody>
 </table>
 {{/if}}
+
+<!-- The orders count -->
+<script type="text/javascript">
+  $('orders-{{$type}}-count').innerHTML = {{$orders|@count}};
+</script>
