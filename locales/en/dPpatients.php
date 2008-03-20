@@ -497,4 +497,7 @@ $locales['msg-CMedecin-create'] = "";
 $locales['msg-CMedecin-delete'] = "";
 $locales['msg-CMedecin-modify'] = "";
 $locales['UseVitale'] = "";
+$locales['CPatient.cmu.1'] = "";
+$locales['CPatient.cmu.0'] = "";
+$locales['CPatient.cmu.'] = "";
 ?>

@@ -229,7 +229,7 @@ class CPatient extends CMbObject {
     }
     
     $specs["rques"]             = "text";
-    $specs["cmu"]               = "date";
+    $specs["cmu"]               = "bool";
     $specs["ald"]               = "bool";
     $specs["code_exo"]          = "enum list|0|5|9 default|0";
     $specs["deb_amo"]           = "date";
@@ -453,7 +453,7 @@ class CPatient extends CMbObject {
           $this->ald      = $periode["PER_AMO_ALD"];
           $this->code_exo = $periode["PER_AMO_CODE_EXO"];
           if ($vitale["VIT_CMU"]) {
-            $this->cmu = $fin_amo;
+            $this->cmu = 1;
           }
         }
       }

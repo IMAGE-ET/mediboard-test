@@ -16,7 +16,6 @@ $name       = mbGetValueFromGet("name");
 $firstName  = mbGetValueFromGet("firstName");
 
 $date = mbDate();
-$dateCMU = mbDate("+1 year", $date);
 
 $patient = new CPatient;
 $patient->load($patient_id);
@@ -43,7 +42,6 @@ if (mbGetValueFromGet("useVitale")) {
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("dateCMU", $dateCMU);
 $smarty->assign("patient", $patient);
 $smarty->display("vw_edit_patients.tpl");
 ?>

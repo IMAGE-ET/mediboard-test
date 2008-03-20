@@ -596,4 +596,7 @@ $locales['msg-CPatient-modify'] = '';
 $locales['msg-CTraitement-create'] = '';
 $locales['msg-CTraitement-delete'] = '';
 $locales['msg-CTraitement-modify'] = '';
+$locales['CPatient.cmu.1'] = 'Oui';
+$locales['CPatient.cmu.0'] = 'Non';
+$locales['CPatient.cmu.'] = 'Non';
 ?>

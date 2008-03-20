@@ -102,7 +102,9 @@ function pageMain() {
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
   initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
   initPaysField("editFrm", "pays","_tel1");
-  regFieldCalendar("editFrm", "cmu");
+  regFieldCalendar("editFrm", "fin_amo");
+  regFieldCalendar("editFrm", "debut_amo");
+  
   regFieldCalendar("editFrm", "fin_validite_vitale");
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","_assure_tel1");

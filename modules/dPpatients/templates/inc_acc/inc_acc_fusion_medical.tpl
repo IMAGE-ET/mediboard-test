@@ -23,22 +23,17 @@
   </tr>
 
   <tr>
-    <th>
-      {{mb_label object=$finalPatient field="cmu"}}
-    </th>
+    <th>{{mb_label object=$finalPatient field="cmu"}}</th>
     <td>
-      <input type="radio" name="_choix_cmu" value="{{$patient1->cmu}}" checked="checked"
-      onclick="setField(this.form.cmu, '{{$patient1->cmu}}'); setField(this.form._cmu_view, '{{$patient1->cmu|date_format:"%d/%m/%Y"}}')" />
-      {{$patient1->cmu|date_format:"%d/%m/%Y"}}
+      <input type="radio" name="_choix_cmu" value="{{$patient1->cmu}}" checked="checked" onclick="setCheckedValue(this.form.cmu, '{{$patient1->cmu|smarty:nodefaults|JSAttribute}}')" />
+      {{tr}}CPatient.cmu.{{$patient1->cmu}}{{/tr}}
     </td>
     <td>
-      <input type="radio" name="_choix_cmu" value="{{$patient2->cmu}}"
-      onclick="setField(this.form.cmu, '{{$patient2->cmu}}'); setField(this.form._cmu_view, '{{$patient2->cmu|date_format:"%d/%m/%Y"}}')" />
-      {{$patient2->cmu|date_format:"%d/%m/%Y"}}
+      <input type="radio" name="_choix_cmu" value="{{$patient2->cmu}}" onclick="setCheckedValue(this.form.cmu, '{{$patient2->cmu|smarty:nodefaults|JSAttribute}}')" />
+      {{tr}}CPatient.cmu.{{$patient2->cmu}}{{/tr}}
     </td>
     <td>
-      {{mb_field object=$finalPatient field="cmu" hidden=1}}
-      <input type="text" readonly="readonly" name="_cmu_view" value="{{$finalPatient->cmu|date_format:"%d/%m/%Y"}}" />
+      {{mb_field object=$finalPatient field="cmu" tabindex="204"}}
     </td>
   </tr>
 

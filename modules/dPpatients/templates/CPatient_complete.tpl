@@ -103,9 +103,13 @@
       <strong>{{mb_label object=$object field="cmu"}}</strong>
       
         {{if $object->cmu}}
-          jusqu'au
+          {{if $object->fin_amo}}
+          jusqu'au 
+          {{mb_value object=$object field="fin_amo"}}
+          {{else}}
+          Oui
+          {{/if}}
         {{/if}}
-        {{mb_value object=$object field="cmu"}}
       
     </td>
   </tr>

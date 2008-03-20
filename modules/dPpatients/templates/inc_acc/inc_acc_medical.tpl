@@ -1,19 +1,19 @@
 <script type="text/javascript">
 
-CMU = {
-  del: function() {
-    oForm = document.editFrm;
-    oForm.cmu.value = "";
-    oDateDiv = $("editFrm_cmu_da");
-    oDateDiv.innerHTML = "";
-  },
-  set: function(sDate) {
-    oForm = document.editFrm;
-    oForm.cmu.value = sDate;
-    oDateDiv = $("editFrm_cmu_da");
-    oDateDiv.innerHTML = Date.fromDATE(sDate).toLocaleDate();
-  }
+calculFinAmo = function(){  
+  var oForm = document.editFrm;
+  var sDate = oForm.fin_amo.value;  
+      
+  if((getCheckedValue(oForm.cmu) == 1 && sDate == "")){
+    date = new Date;
+    date.addDays(365);
+    oForm.fin_amo.value = date.toDATE();
+    sDate = date.toLocaleDate();
+    var oDiv = $('editFrm_fin_amo_da');
+    oDiv.innerHTML = sDate;
+  }  
 }
+
 
 Medecin = {
   pop : function(type) {
@@ -111,25 +111,19 @@ Medecin = {
   
   <tr>
     <th>{{mb_label object=$patient field="cmu"}}</th>
-    <td class="date">
-      <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
-      {{mb_field object=$patient field="cmu" hidden=1 prop="date"}}
-      <img id="editFrm_cmu_trigger" src="./images/icons/calendar.gif" alt="calendar"/>
-      <button class="cancel notext" type="button" onclick="CMU.del()">{{tr}}Delete{{/tr}}</button>
-      <button class="tick notext" type="button" onclick="CMU.set('{{$dateCMU}}')">{{tr}}Create{{/tr}}</button>
-    </td>
+    <td>{{mb_field object=$patient field="cmu" onchange="calculFinAmo();"}}</td>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
     <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="deb_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="deb_amo" tabindex="203"}}</td>
+    <td class="date">{{mb_field object=$patient field="deb_amo" tabindex="203" form="editFrm"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="fin_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="fin_amo" tabindex="203"}}</td>
+    <td class="date">{{mb_field object=$patient field="fin_amo" tabindex="203" form="editFrm"}}</td>
   </tr>
   
   <tr>

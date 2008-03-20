@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.61";
+$config["mod_version"]     = "0.62";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -674,7 +674,21 @@ class CSetupdPpatients extends CSetup {
 						ADD `fin_amo` DATE;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.61";
+    $this->makeRevision("0.61");
+    $sql = "UPDATE `patients`
+            SET `fin_amo` = `cmu`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `patients`
+            CHANGE `cmu` `cmu` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `patients`
+            SET `cmu` = '1'
+            WHERE `fin_amo` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.62";
   }
 }
 
