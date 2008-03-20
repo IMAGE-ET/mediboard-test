@@ -490,12 +490,25 @@ class COperation extends CCodable {
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_chir){
-      $this->loadRefChir();
-    }if(!$this->_ref_anesth){
-      $this->loadRefPlageOp();
+    switch($permType) {
+      case PERM_EDIT :
+        if(!$this->_ref_chir){
+          $this->loadRefChir();
+        }if(!$this->_ref_anesth){
+          $this->loadRefPlageOp();
+        }
+        return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
+        break;
+      default :
+        return parent::getPerm($permType);
     }
-    return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
+    
+    //if(!$this->_ref_chir){
+    //  $this->loadRefChir();
+    //}if(!$this->_ref_anesth){
+    //  $this->loadRefPlageOp();
+    //}
+    //return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
   }
 
   function fillTemplate(&$template) {
