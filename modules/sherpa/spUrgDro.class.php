@@ -103,7 +103,7 @@ class CSpUrgDro extends CSpObject {
       "3", // Convocation pour soins
       "4", // Hospitalisation non attendue dans service
       "5", // Hospitalisation attendue dans service
-      "6", // Traiement immédiat important
+      "6", // Traitement immédiat important
     );
 
     $urgems = implode("|", $urgems);
@@ -219,8 +219,8 @@ class CSpUrgDro extends CSpObject {
     $this->urgfla = "1";
     
     // Malade
-    $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
-    $this->malnum = $idMalde->id400;
+    $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    $this->malnum = $idMalade->id400;
     
     // Horodatage
     $this->datarr = mbDateToLocale($sejour->entree_reelle);

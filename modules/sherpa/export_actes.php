@@ -35,101 +35,6 @@ if ($do = mbGetValueFromGet("do")) {
 	}
 }
 
-// Associations entre actes CCAM Mediboard et les détails CCAM Sherpa
-global $detCCAM; $detCCAM = array();
-function exportDetCCAM(CActeCCAM &$acte_ccam, $idinterv) {
-  global $detCCAM;
-  
-  $spDetCCAM = new CSpDetCCAM();
-  $spDetCCAM->makeId();
-  $spDetCCAM->idinterv = $idinterv;
-  $spDetCCAM->mapFrom($acte_ccam);
-  $spDetCCAM->getCurrentDataSource();
-  $detCCAM[$acte_ccam->_id] = $spDetCCAM->store();
-}
-
-// Associations diagnostics CIM Mediboard et les détails CIM Sherpa
-global $detCIM; $detCIM = array();
-function exportDetsCIM(CCodable &$codable) {
-  global $detCIM;
-  
-  $spDetCIM = new CSpDetCIM();
-  $spDetCIM->makeId();
-  $spDetCIM->mapFrom($codable);
-  $spDetCIM->idinterv = $codable->_idinterv;
-  $spDetCIM->getCurrentDataSource();
-
-  $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
-  
-  $sejour =& $codable->_ref_sejour;
-
-  // Diagnostic relié
-  if ($sejour->DR) {
-    $spDetCIM->makeId();
-    $spDetCIM->typdia = "R";
-    $spDetCIM->coddia = CSpObject::makeString($sejour->DR);
-    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
-    $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
-  }
-  
-  // Diagnostics associés
-  $sejour->loadRefDossierMedical();
-  if ($sejour->_ref_dossier_medical->_codes_cim) {
-	  foreach ($sejour->_ref_dossier_medical->_codes_cim as $code_cim) {
-	    $spDetCIM->makeId();
-	    $spDetCIM->typdia = "S";
-	    $spDetCIM->coddia = CSpObject::makeString($code_cim);
-	    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
-	    $detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
-	  }
-  }
-}
-
-function exportInfoCIM(COperation &$operation, $key) {
-  if (!$operation->$key) {
-    return;
-  }
-  
-  global $detCIM;
-  
-  $spDetCIM = new CSpDetCIM();
-  $spDetCIM->makeId();
-  $spDetCIM->mapFrom($operation);
-  $spDetCIM->idinterv = $operation->_idinterv;
-  $spDetCIM->getCurrentDataSource();
-  $spDetCIM->typdia = "S";
-  $spDetCIM->coddia = CSpObject::makeString($key);
-
-  $detCIM[$operation->_class_name][$operation->_id][] = $spDetCIM->store();
-}
-
-
-global $entCCAM; $entCCAM = array();
-
-/**
- * Associations entre codable Mediboard et les entêtes CCAM Sherpa
- */
-function exportEntCCAM(CCodable &$codable) {
-  global $entCCAM;
-
-  
-  $spEntCCAM = new CSpEntCCAM();
-  $spEntCCAM->makeId($codable);
-  $spEntCCAM->mapFrom($codable);
-  $spEntCCAM->getCurrentDataSource();
-  $entCCAM[$codable->_class_name][$codable->_id] = $spEntCCAM->store();
-  
-  foreach ($codable->_ref_actes_ccam as &$acte_ccam) {
-    exportDetCCAM($acte_ccam, $spEntCCAM->_id);
-  }
-  
-  $codable->_idinterv = $spEntCCAM->_id;
-}
-
-$delDetCCAM = array();
-$delDetCIM  = array();
-$delEntCCAM = array();
-
 foreach ($sejours as &$sejour) {
   $sejour->loadRefPatient();
   $sejour->loadRefPraticien();
@@ -140,23 +45,13 @@ foreach ($sejours as &$sejour) {
     break;
   }
   
-  
   // Suppression des anciens détails CCAM
-  $spDetCCAM = new CSpDetCCAM();
-  $delDetCCAM[$sejour->_id] = $spDetCCAM->deleteForDossier($sejour->_num_dossier);
-  
-  // Suppression des anciens détails CIM
-  $spDetCIM = new CSpDetCIM();
-  $delDetCIM[$sejour->_id] = $spDetCIM->deleteForDossier($sejour->_num_dossier);
-  
-  // Suppression des anciens entêtes
-  $spEntCCAM = new CSpEntCCAM();
-  $delEntCCAM[$sejour->_id] = $spEntCCAM->deleteForDossier($sejour->_num_dossier);
+  CSpActesExporter::deleteForDossier($sejour);
       
   // Actes du séjour
   $sejour->loadRefsActes();
-  exportEntCCAM($sejour);
-  exportDetsCIM($sejour, "0");
+  CSpActesExporter::exportEntCCAM($sejour);
+  CSpActesExporter::exportDetsCIM($sejour, "0");
   
   // Opérations
   $sejour->loadRefsOperations();
@@ -164,9 +59,9 @@ foreach ($sejours as &$sejour) {
     $operation->_ref_sejour =& $sejour;
     $operation->loadRefChir();
     $operation->loadRefsActes();
-    exportEntCCAM($operation);
-    exportInfoCIM($operation, "anapath");
-    exportInfoCIM($operation, "labo");
+    CSpActesExporter::exportEntCCAM($operation);
+    CSpActesExporter::exportInfoCIM($operation, "anapath");
+    CSpActesExporter::exportInfoCIM($operation, "labo");
 
     // Association d'un id400
     $idOperation = CSpObjectHandler::getId400For($operation);
@@ -188,12 +83,14 @@ $smarty->assign("do", $do);
 $smarty->assign("filter", $filter);
 $smarty->assign("acte_ccam", new CActeCCAM());
 $smarty->assign("sejours", $sejours);
-$smarty->assign("delDetCIM" , $delDetCIM );
-$smarty->assign("delDetCCAM", $delDetCCAM);
-$smarty->assign("delEntCCAM", $delEntCCAM);
-$smarty->assign("detCIM" , $detCIM);
-$smarty->assign("detCCAM", $detCCAM);
-$smarty->assign("entCCAM", $entCCAM);
+$smarty->assign("delDetCIM" , CSpActesExporter::$delDetCIM );
+$smarty->assign("delActNGAP", CSpActesExporter::$delActNGAP);
+$smarty->assign("delDetCCAM", CSpActesExporter::$delDetCCAM);
+$smarty->assign("delEntCCAM", CSpActesExporter::$delEntCCAM);
+$smarty->assign("detCIM" , CSpActesExporter::$detCIM);
+$smarty->assign("detCCAM", CSpActesExporter::$detCCAM);
+$smarty->assign("actNGAP", CSpActesExporter::$actNGAP);
+$smarty->assign("entCCAM", CSpActesExporter::$entCCAM);
 
 $smarty->display("export_actes.tpl");
 ?>

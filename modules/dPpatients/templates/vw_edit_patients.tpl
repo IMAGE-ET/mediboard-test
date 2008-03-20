@@ -195,7 +195,7 @@ function pageMain() {
             </div>
             <div id="Medical">
               <div id="MedicalHeader" class="accordionTabTitleBar">
-                Médical
+                Bénéficiaire de soins & Médecins
               </div>
               <div id="MedicalContent"  class="accordionTabContentBox">
               {{include file="inc_acc/inc_acc_medical.tpl"}}

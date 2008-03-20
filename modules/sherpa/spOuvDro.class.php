@@ -125,8 +125,8 @@ class CSpOuvDro extends CSpObject {
     $this->referan = mbTranformTime(null, $sejour->entree_prevue, "%Y") . substr($this->numdos, 1);
     
     // Malade
-    $idMalde = CSpObjectHandler::getId400For($sejour->_ref_patient);
-    $this->malnum = $idMalde->id400;
+    $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);
+    $this->malnum = $idMalade->id400;
     
     // Praticien responsable
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);

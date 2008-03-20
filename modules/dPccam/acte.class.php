@@ -24,6 +24,7 @@ class CActe extends CMbMetaObject {
   // Distant object
   var $_ref_sejour = null;
   var $_ref_patient = null;
+  var $_ref_praticien = null;
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -40,6 +41,12 @@ class CActe extends CMbMetaObject {
     $this->loadTargetObject();
     $this->_ref_object->loadRefPatient();
     $this->_ref_patient =& $this->_ref_object->_ref_patient;
+  }
+  
+  function loadRefPraticien() {
+    $this->loadTargetObject();
+    $this->_ref_object->loadRefPraticien();
+    $this->_ref_praticien =& $this->_ref_object->_ref_praticien;
   }
   
   function getSpecs() {

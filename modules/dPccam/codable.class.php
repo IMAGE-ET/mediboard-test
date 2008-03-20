@@ -15,7 +15,6 @@ class CCodable extends CMbObject {
   // Abstract fields
   var $_praticien_id       = null;
   var $_coded              = 0;    // Initialisation à 0 => codable qui peut etre codé !
-  var $_datetime           = null;
   
   // Actes CCAM
   var $_text_codes_ccam    = null;
@@ -43,6 +42,9 @@ class CCodable extends CMbObject {
   }
   
   function loadRefPatient() {
+  }
+  
+  function loadRefPraticien() {
   }
   
   function updateFormFields() {

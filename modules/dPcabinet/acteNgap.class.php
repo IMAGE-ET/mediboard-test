@@ -21,6 +21,9 @@ class CActeNGAP extends CActe {
   var $coefficient = null;
   var $demi        = null;
   var $complement  = null;
+
+  // Object references
+  var $_ref_executant = null; // Should be merged
   
   function CActeNGAP() {
     $this->CMbObject("acte_ngap", "acte_ngap_id");
@@ -40,7 +43,7 @@ class CActeNGAP extends CActe {
  
   function check(){
     parent::check();
-    if($msg = $this->checkCoded()){
+    if ($msg = $this->checkCoded()){
       return $msg;
     }
   }
@@ -58,6 +61,5 @@ class CActeNGAP extends CActe {
     $this->_view = "Acte NGAP de ".$this->object_class." : ".$this->object_id;
   }
 } 
-  
-  
+
 ?>

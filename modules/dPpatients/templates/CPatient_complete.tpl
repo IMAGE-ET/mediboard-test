@@ -115,8 +115,8 @@
       {{mb_value object=$object field="regime_sante"}}
     </td>
     <td class="text">
-      <strong>{{mb_label object=$object field="ald"}}</strong>
-      {{mb_value object=$object field="ald"}}
+      <strong>{{mb_label object=$object field="notes_amo"}}</strong>
+      {{mb_value object=$object field="notes_amo"}}
     </td>
   </tr>
   <tr>

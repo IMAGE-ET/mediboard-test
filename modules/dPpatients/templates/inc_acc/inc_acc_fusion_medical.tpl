@@ -43,17 +43,17 @@
   </tr>
 
   <tr>
-    <th>{{mb_label object=$finalPatient field="ald"}}</th>
+    <th>{{mb_label object=$finalPatient field="notes_amo"}}</th>
     <td class="text">
-      <input type="radio" name="_choix_ald" value="{{$patient1->ald}}" checked="checked" onclick="setField(this.form.ald, '{{$patient1->ald|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->ald|nl2br}}
+      <input type="radio" name="_choix_notes_amo" value="{{$patient1->notes_amo}}" checked="checked" onclick="setField(this.form.notes_amo, '{{$patient1->notes_amo|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient1->notes_amo|nl2br}}
     </td>
     <td class="text">
-      <input type="radio" name="_choix_ald" value="{{$patient2->ald}}" onclick="setField(this.form.ald, '{{$patient2->ald|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->ald|nl2br}}
+      <input type="radio" name="_choix_notes_amo" value="{{$patient2->notes_amo}}" onclick="setField(this.form.notes_amo, '{{$patient2->notes_amo|smarty:nodefaults|JSAttribute}}')" />
+      {{$patient2->notes_amo|nl2br}}
     </td>
     <td class="text">
-      {{mb_field object=$finalPatient field="ald" tabindex="201" rows="3"}}
+      {{mb_field object=$finalPatient field="notes_amo" tabindex="201" rows="3"}}
     </td>
   </tr>
 

@@ -402,11 +402,12 @@ class CConsultation extends CCodable {
     foreach ($this->_ref_actes_ngap as $acte_ngap) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $this->_fse_intermax["ACTE_$acteNumber"] = array(
-          "PRE_ACTE_TYPE"   => 0,
+        "PRE_ACTE_TYPE"   => 0,
 	      "PRE_DEPASSEMENT" => $acte_ngap->montant_depassement,
 	      "PRE_CODE"        => $acte_ngap->code,
-	      "PRE_COEFFICIENT" => $acte_ngap->coefficient,
+	      "PRE_COEFFICIENT" => $acte_ngap->demi ? $acte_ngap->coefficient/2 : $acte_ngap->coefficient,
 	      "PRE_QUANTITE"    => $acte_ngap->quantite,
+	      "PRE_DEMI"        => $acte_ngap->demi,
 	    );
     }
     
@@ -479,6 +480,13 @@ class CConsultation extends CCodable {
         $acte->code        = $fseActe["PRE_CODE"];
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
+        $acte->demi        = $fseActe["PRE_DEMI"];
+
+        // Coefficient facial doublé
+        if ($acte->demi) {
+          $acte->coefficient *= 2;
+        }
+        
         $acte->object_id = $this->_id;
         $acte->object_class = $this->_class_name;
         break;

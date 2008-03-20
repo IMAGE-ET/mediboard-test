@@ -473,6 +473,7 @@
           </td>
         </tr>
       </table>
+      
       {{if $consult->_ref_consult_anesth->premedication}}
       <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
         <tr>
@@ -487,6 +488,7 @@
         </tr>
       </table>
       {{/if}}
+      
       {{if $consult->_ref_consult_anesth->prepa_preop}}
       <table width="100%" style="font-size: 100%;">
         <tr>

@@ -684,27 +684,30 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 
     <!-- Professionnel de santé -->
     <td class="button">
+      {{if !$praticien->_id_cps}}
       <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
         Lire CPS
       </button>
       <button class="change" type="button" onclick="Intermax.result('Lire CPS');">
         Associer CPS
       </button>
+      {{/if}}
     </td>
 
     <!-- Patient Vitale -->
     <td class="button">
-      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-        Lire Vitale
-      </button>
       {{if $patient->_id_vitale}}
       <button class="search" type="button" onclick="Intermax.Triggers['Consulter Vitale']({{$patient->_id_vitale}});">
         Consulter Vitale
       </button>
-      {{/if}}
+      {{else}}
+      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
+        Lire Vitale
+      </button>
       <button class="change" type="button" onclick="Intermax.result();">
         Associer Vitale
       </button>
+      {{/if}}
     </td>
 
   </tr>

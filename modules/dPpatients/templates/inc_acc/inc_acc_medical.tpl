@@ -90,7 +90,7 @@ Medecin = {
 
   <tr>
     <th>{{mb_label object=$patient field="regime_sante"}}</th>
-    <td>{{mb_field object=$patient field="regime_sante" tabindex="204	"}}</td>
+    <td>{{mb_field object=$patient field="regime_sante" tabindex="204"}}</td>
     <th>
       {{mb_label object=$patient field="medecin3"}}
       {{mb_field object=$patient field="medecin3" hidden=1}}
@@ -103,6 +103,13 @@ Medecin = {
   </tr>
   
   <tr>
+    <th>{{mb_label object=$patient field="ald"}}</th>
+    <td>{{mb_field object=$patient field="ald" tabindex="205"}}</td>
+    <th>{{mb_label object=$patient field="incapable_majeur"}}</th>
+    <td>{{mb_field object=$patient field="incapable_majeur" tabindex="204"}}</td>
+  </tr>
+  
+  <tr>
     <th>{{mb_label object=$patient field="cmu"}}</th>
     <td class="date">
       <div id="editFrm_cmu_da">{{$patient->cmu|date_format:"%d/%m/%Y"}}</div>
@@ -111,17 +118,28 @@ Medecin = {
       <button class="cancel notext" type="button" onclick="CMU.del()">{{tr}}Delete{{/tr}}</button>
       <button class="tick notext" type="button" onclick="CMU.set('{{$dateCMU}}')">{{tr}}Create{{/tr}}</button>
     </td>
-    <th>{{mb_label object=$patient field="incapable_majeur"}}</th>
-    <td>{{mb_field object=$patient field="incapable_majeur" tabindex="204"}}</td>
+    <th>{{mb_label object=$patient field="ATNC"}}</th>
+    <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="ald"}}</th>
-    <td>
-      {{mb_field object=$patient field="ald" tabindex="203"}}
-    </td>
-    <th>{{mb_label object=$patient field="ATNC"}}</th>
-    <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
+    <th>{{mb_label object=$patient field="deb_amo"}}</th>
+    <td class="date">{{mb_field object=$patient field="deb_amo" tabindex="203"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$patient field="fin_amo"}}</th>
+    <td class="date">{{mb_field object=$patient field="fin_amo" tabindex="203"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$patient field="code_exo"}}</th>
+    <td>{{mb_field object=$patient field="code_exo" tabindex="203"}}</td>
+  </tr>
+  
+  <tr>
+    <th>{{mb_label object=$patient field="notes_amo"}}</th>
+    <td>{{mb_field object=$patient field="notes_amo" tabindex="203"}}</td>
   </tr>
   
 </table>

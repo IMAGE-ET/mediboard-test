@@ -53,6 +53,7 @@ class CSpObject extends CMbObject {
         "es_entccam" => array("idinterv", "valigs"),
         "es_detccam" => array("idinterv", "idacte", "dephon", "codsig"),
         "es_detcim" => array("idinterv", "iddiag"),
+        "es_ngap" => array("idacte", "idinterv", "quant", "coeff", "valdep"),
       );
     }
   }

@@ -132,14 +132,14 @@ class CSejour extends CCodable {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["affectations"] = "CAffectation sejour_id";
-      $backRefs["factures"]     = "CFacture sejour_id";
-      $backRefs["GHM"]          = "CGHM sejour_id";
-      $backRefs["operations"]   = "COperation sejour_id";
-      $backRefs["rpu"]          = "CRPU sejour_id";
-      $backRefs["consultations"]= "CConsultation sejour_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["affectations"] = "CAffectation sejour_id";
+    $backRefs["factures"]     = "CFacture sejour_id";
+    $backRefs["GHM"]          = "CGHM sejour_id";
+    $backRefs["operations"]   = "COperation sejour_id";
+    $backRefs["rpu"]          = "CRPU sejour_id";
+    $backRefs["consultations"]= "CConsultation sejour_id";
+    return $backRefs;
   }
 
   function getSpecs() {
@@ -404,11 +404,11 @@ class CSejour extends CCodable {
     }
     
     // Signaler l'action de validation de la sortie
-    if($this->_modifier_sortie){
+    if ($this->_modifier_sortie === '1') {
       $this->sortie_reelle = mbDateTime();
     }
     
-    if($this->_modifier_sortie === '0'){
+    if ($this->_modifier_sortie === '0'){
       $this->sortie_reelle = "";
     }    
   }

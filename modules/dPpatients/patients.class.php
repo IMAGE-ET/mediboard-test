@@ -43,6 +43,7 @@ class CPatient extends CMbObject {
   var $ATNC             = null;
   var $matricule        = null;
   var $SHS              = null;
+  
   var $code_regime      = null;
   var $caisse_gest      = null;
   var $centre_gest      = null;
@@ -50,6 +51,11 @@ class CPatient extends CMbObject {
   var $rques            = null;
   var $cmu              = null;
   var $ald              = null;
+  var $code_exo         = null;
+  var $notes_amo        = null;
+  var $deb_amo          = null;
+  var $fin_amo          = null;
+   
   var $rang_beneficiaire= null;
   var $rang_naissance   = null;
   var $fin_validite_vitale = null;
@@ -224,7 +230,11 @@ class CPatient extends CMbObject {
     
     $specs["rques"]             = "text";
     $specs["cmu"]               = "date";
-    $specs["ald"]               = "text";
+    $specs["ald"]               = "bool";
+    $specs["code_exo"]          = "enum list|0|5|9 default|0";
+    $specs["deb_amo"]           = "date";
+    $specs["fin_amo"]           = "date";
+    $specs["notes_amo"]         = "text";
     $specs["rang_beneficiaire"] = "enum list|01|02|09|11|12|13|14|15|16|31";
     $specs["rang_naissance"]    = "enum list|1|2|3|4|5|6 default|1";
     $specs["fin_validite_vitale"] = "date";
@@ -431,6 +441,23 @@ class CPatient extends CMbObject {
     );
     
     $this->rang_beneficiaire = $codeRangMatrix[$vitale["VIT_CODE_QUALITE"]];
+    
+    // Recherche de la période AMO courante
+    foreach ($intermax as $category => $periode) {
+      if (preg_match("/PERIODE_AMO_(\d)+/i", $category)) {
+        $deb_amo = mbDateFromLocale($periode["PER_AMO_DEBUT"]);
+        $fin_amo = mbDateFromLocale($periode["PER_AMO_FIN"]);
+        if (in_range(mbDate(), $deb_amo, $fin_amo)) {
+          $this->deb_amo  = $deb_amo;
+          $this->fin_amo  = $fin_amo;
+          $this->ald      = $periode["PER_AMO_ALD"];
+          $this->code_exo = $periode["PER_AMO_CODE_EXO"];
+          if ($vitale["VIT_CMU"]) {
+            $this->cmu = $fin_amo;
+          }
+        }
+      }
+    }
   }
   
   function updateFormFields() {
