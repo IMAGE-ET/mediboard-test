@@ -38,10 +38,10 @@ class CCodeSpec extends CMbFieldSpec {
     // cim10
     elseif ($this->cim10) {
       if (!preg_match ("/^([a-z0-9]){0,5}$/i", $propValue)) {
-        $codeCim = new CCodeCIM10($propValue);
-        if ($codeCim->loadLite()) {
-          return "Code CIM inconnu";
-        }
+//        $codeCim = new CCodeCIM10($propValue);
+//        if ($codeCim->loadLite()) {
+//          return "Code CIM inconnu";
+//        }
         
         return "Code CIM incorrect, doit contenir 5 lettres maximum";
       }
