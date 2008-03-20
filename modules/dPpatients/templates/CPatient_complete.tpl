@@ -109,6 +109,8 @@
           {{else}}
           Oui
           {{/if}}
+        {{else}}
+          Non
         {{/if}}
       
     </td>
