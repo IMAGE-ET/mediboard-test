@@ -18,7 +18,7 @@ $societe_id = mbGetValueFromGetOrSession('societe_id');
 $order = new CProductOrder();
 if ($order_id) {
   $order->load($order_id);
-  $order->loadRefsFwd();
+  $order->updateFormFields();
 }
 
 // Suppliers list

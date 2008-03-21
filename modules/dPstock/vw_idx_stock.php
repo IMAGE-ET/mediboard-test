@@ -14,6 +14,7 @@ $can->needsRead();
 $stock_id    = mbGetValueFromGetOrSession('stock_id');
 $product_id  = mbGetValueFromGetOrSession('product_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
+$only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks');
 
 // Loads the stock in function of the stock ID or the product ID
 $stock = new CProductStock();
@@ -67,6 +68,7 @@ $smarty->assign('stock',           $stock);
 $smarty->assign('colors',          $colors);
 $smarty->assign('category',        $category);
 $smarty->assign('list_categories', $list_categories);
+$smarty->assign('only_ordered_stocks', $only_ordered_stocks);
 
 $smarty->display('vw_idx_stock.tpl');
 

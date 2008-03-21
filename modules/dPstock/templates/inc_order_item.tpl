@@ -38,7 +38,7 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="hidden" name="_receive" value="-1" />
+      <input type="text" name="_receive" value="-{{$curr_item->quantity}}" size="2" />
       <button type="button" class="cancel" onclick="submitOrderItem(this.form)">Annuler</button>
     </form>
     {{else}}
@@ -46,7 +46,7 @@
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="hidden" name="_receive" value="1" />
+      <input type="text" name="_receive" value="{{$curr_item->quantity}}" size="2" />
       <button type="button" class="tick" onclick="submitOrderItem(this.form)">Recevoir</button>
     </form>
     {{/if}}

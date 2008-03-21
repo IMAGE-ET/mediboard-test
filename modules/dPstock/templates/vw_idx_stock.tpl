@@ -10,6 +10,11 @@
 
     {{if $category->category_id}}
     <h3>{{$category->_view}}</h3>
+      <form name="form_only_ordered_stocks" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="checkbox" name="only_ordered_stocks" onchange="this.form.submit()" {{if $only_ordered_stocks == "on"}}checked="checked"{{/if}} /> <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
+      </form>
       <table class="tbl">
         <tr>
           <th>Produit</th>
@@ -19,6 +24,7 @@
         
       <!-- Products list -->
       {{foreach from=$category->_ref_products item=curr_product}}
+       {{if (($only_ordered_stocks != "on") || ($only_ordered_stocks == "on" && $curr_product->_ref_stock_group->_ordered_count))}}
         {{if $curr_product->_ref_stock_group}}
           <tr {{if $curr_product->_ref_stock_group->_id == $stock->_id}}class="selected"{{/if}}>
             <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_product->_ref_stock_group->_id}}" title="Voir ou modifier le stock">{{$curr_product->_view}}</a></td>
@@ -36,6 +42,7 @@
             </td>
           </tr>
         {{/if}}
+       {{/if}}
       {{foreachelse}}
         <tr>
           <td colspan="3">Aucun produit dans cette catégorie</td>

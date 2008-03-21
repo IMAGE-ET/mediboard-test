@@ -30,6 +30,7 @@ class CProductOrder extends CMbObject {
 	// Form fields
 	var $_total           = null;
 	var $_count_received  = null;
+	var $_date_received   = null;
 	var $_received        = null;
   var $_partial         = null;
   
@@ -58,6 +59,7 @@ class CProductOrder extends CMbObject {
       'order_number'    => 'notNull str maxLength|64',
       '_total'          => 'currency',
       '_count_received' => 'num pos',
+		  '_date_received'  => 'dateTime',
       '_received'       => 'bool',
       '_partial'        => 'bool',
 		);
@@ -162,6 +164,7 @@ class CProductOrder extends CMbObject {
 			foreach ($this->_ref_order_items as $item) {
 				$item->updateFormFields();
 				$this->_total += $item->_price;
+				$this->_date_received = max(array($this->_date_received, $item->date_received));
 			}
 		}
 

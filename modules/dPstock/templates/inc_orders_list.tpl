@@ -1,4 +1,5 @@
 {{if $type=="waiting"}}
+<!-- Orders not ordered yet -->
 <table class="tbl">
   <tr>
     <th>Numéro</th>
@@ -6,7 +7,7 @@
     <th>Articles</th>
     <th>Total</th>
     <th>Bloquée</th>
-    <th>Actions</th>
+    <th style="width: 1%;">Actions</th>
   </tr>
   <tbody>
 	{{foreach from=$orders item=curr_order}}
@@ -43,10 +44,13 @@
 	    <td colspan="8">Aucune commande</td>
 	  </tr>
 	{{/foreach}}
-  
   </tbody>
 </table>
+
+
+
 {{elseif $type=="pending"}}
+<!-- Orders not received yet -->
 <table class="tbl">
   <tr>
     <th>Numéro</th>
@@ -54,7 +58,7 @@
     <th>Articles/Reçus</th>
     <th>Passée le</th>
     <th>Total</th>
-    <th>Actions</th>
+    <th style="width: 1%;">Actions</th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
@@ -73,7 +77,11 @@
   {{/foreach}}
   </tbody>
 </table>
+
+
+
 {{else}}
+<!-- Old orders -->
 <table class="tbl">
   <tr>
     <th>Numéro</th>
@@ -82,7 +90,7 @@
     <th>Passée le</th>
     <th>Reçue le</th>
     <th>Total</th>
-    <th>Actions</th>
+    <th style="width: 1%;">Actions</th>
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
@@ -91,7 +99,7 @@
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td>{{*mb_value object=$curr_order field=date_received*}}</td>
+      <td>{{mb_value object=$curr_order field=_date_received}}</td>
       <td>{{mb_value object=$curr_order field=_total}}</td>
       <td>redo del</td>
     </tr>

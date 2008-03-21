@@ -47,25 +47,27 @@ if ($reference_id) {
 }
 $reference->loadRefsFwd();
 
-// Categories list
 // Loads the required Category and the complete list
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
-
-// if a category is provided, we load it
-if ($category_id) {
-  $category->load($category_id);
-  
-// else, we load the category assiociated to the reference's product
+if (!$category_id) {
+  $category = $stock->_ref_product->_ref_category;
 } else {
-  $category = $reference->_ref_product->_ref_category;
+  $category->category_id = $category_id;
+  $category->loadMatchingObject();
 }
 
-$category->loadRefs();
-// Loads the products list
-foreach($category->_ref_products as $prod) {
-  $prod->loadRefs();
+if ($category) {
+  $category->loadRefs();
+  
+  // Loads the products list
+  foreach($category->_ref_products as $prod) {
+    $prod->loadRefs();
+  }
+} else {
+  $category = new CProductCategory();
 }
+
 
 // Suppliers list
 $societe = new CSociete();

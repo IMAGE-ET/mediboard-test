@@ -1,9 +1,12 @@
-<table class="tbl" id="order-{{$order->_id}}">
+<table class="tbl">
   <tr>
     <th>Produit</th>
-    <th>PU</th>
     <th>Quantité</th>
+    <th>PU</th>
     <th>Prix</th>
+    {{if $order->date_ordered}}
+    <th style="width: 1%">Reçu</th>
+    {{/if}}
   </tr>
   <tbody>
   {{foreach from=$order->_ref_order_items item=curr_item}}

@@ -9,28 +9,35 @@ function submitOrder (oForm) {
   });
 }
 
-function submitOrderItem (oForm) {
-  submitFormAjax(oForm, 'systemMsg',{
-    onComplete: function() {
-      refreshOrderItem(oForm.order_item_id.value);
-      refreshOrder(oForm.order_id.value);
-    }
-  });
+function submitOrderItem (oForm, noAjax) {
+  var order_id = oForm.order_id ? oForm.order_id.value : null;
+  var order_item_id = oForm.order_item_id ? oForm.order_item_id.value : null;
+
+  if (!noAjax) {
+    submitFormAjax(oForm, 'systemMsg',{
+      onComplete: function() {
+        refreshOrderItem(order_item_id);
+        refreshOrder(order_id);
+      }
+    });
+  } else {
+    oForm.submit();
+  }
 }
 
-function refreshOrder(order_id, products_list) {
+function refreshOrder(order_id) {
   url = new Url;
   url.setModuleAction("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
   url.requestUpdate("order-"+order_id, { waitingText: null } );
 }
 
-function refreshOrderItem(item_id) {
+function refreshOrderItem(order_item_id) {
   if (item_id) {
     url = new Url;
     url.setModuleAction("dPstock", "httpreq_vw_order_item");
-    url.addParam("item_id", item_id);
-    url.requestUpdate("item-"+item_id, { waitingText: null } );
+    url.addParam("item_id", order_item_id);
+    url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
     
     if (window.opener) {
       window.opener.refreshLists();
@@ -105,7 +112,7 @@ function refreshOrderItem(item_id) {
       <h3>{{$order->_view}}</h3>
       
       <!-- RECEPTION OR ORDER-->
-      <form name="order--{{$order->_id}}" action="?" method="post">
+      <form name="order-edit-{{$order->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
@@ -113,35 +120,24 @@ function refreshOrderItem(item_id) {
         {{if !$order->_received}}
           {{if $order->date_ordered}}
             <input type="hidden" name="_receive" value="1" />
-            <button type="button" class="tick" onclick="submitOrder(this.form)">Recevoir tout</button>
+            <button type="button" class="tick" onclick="submitOrder(this.form, true)">Recevoir tout</button>
             
-          {{elseif $order->_ref_order_items|@count > 0}}
-            <input type="hidden" name="_order" value="1" />
-            <button type="button" class="tick" onclick="submitOrder(this.form)">Commander</button>
+          {{else}}
+            {{if $order->_ref_order_items|@count > 0}}
+              <input type="hidden" name="_order" value="1" />
+              <button type="button" class="tick" onclick="submitOrder(this.form)">Commander</button>
+              
+            {{else}}
+              <input type="hidden" name="_autofill" value="1" />
+              <button type="button" class="change" onclick="submitOrder(this.form)">Commande auto</button>
+            {{/if}}
           {{/if}}
-          <button type="button" class="change" onclick="this.form._autofill.value=1; submitOrder(this.form)">Commande auto</button>
         {{/if}}
       </form>
       
-      <table class="tbl" id="order-{{$order->_id}}">
-        <tr>
-          <th>Produit</th>
-          <th style="width: 1%;">Quantité</th>
-          <th>PU</th>
-          <th>Prix</th>
-          {{if $order->date_ordered}}
-            <th>Reçu</th>
-          {{/if}}
-        </tr>
-        {{foreach from=$order->_ref_order_items item=curr_item}}
-        <tbody id="item-{{$curr_item->_id}}">
-          {{include file="inc_order_item.tpl"}}
-        </tbody>
-        {{/foreach}}
-        <tr>
-          <td colspan="8" style="border-top: 1px solid #666; text-align: right;">Total : {{mb_value object=$order field=_total}}</td>
-        </tr>
-      </table>
+      <div id="order-{{$order->_id}}">
+        {{include file="inc_order.tpl"}}
+      </div>
     </td>
   </tr>
 </table>
