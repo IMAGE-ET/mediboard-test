@@ -83,6 +83,10 @@ class CSpActesExporter {
 	 * Association des info CIM
 	 */
 	static function exportInfoCIM(COperation &$operation, $key) {
+	  if (!isset(self::$detCIM[$operation->_class_name])) {
+	    self::$detCIM[$operation->_class_name] = array();
+	  }
+	  
 	  if (!$operation->$key) {
 	    return;
 	  }

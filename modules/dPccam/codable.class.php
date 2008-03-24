@@ -47,6 +47,10 @@ class CCodable extends CMbObject {
   function loadRefPraticien() {
   }
   
+  function getActeExecution() {
+    $this->_acte_execution = mbDateTime();
+  }
+  
   function updateFormFields() {
   	parent::updateFormFields();
     

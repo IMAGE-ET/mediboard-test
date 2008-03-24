@@ -49,6 +49,9 @@
       <div class="warning">
         {{tr}}CSpDetCIM{{/tr}} : {{$delDetCIM.$sejour_id}} suppressions pour ce séjour 
       </div>
+      <div class="warning">
+        {{tr}}CSpNGAP{{/tr}} : {{$delActNGAP.$sejour_id}} suppressions pour ce séjour 
+      </div>
 			{{include file="inc_export_entccam.tpl" _codable=$_sejour}}
 			{{/if}}
     </td>
@@ -57,8 +60,8 @@
   <!-- Actes du séjour -->
  	{{if $_sejour->_num_dossier != "-"}}
   {{include file="inc_export_detcim.tpl" _codable=$_sejour}}
-  {{foreach from=$_sejour->_ref_actes_ccam item=_acte_ccam}}
-	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
+  {{foreach from=$_sejour->_ref_actes item=_acte}}
+	{{include file="inc_export_acte.tpl" _acte=$_acte}}
   {{foreachelse}}
   <tr>
     <td colspan="12"><em>Pas d'acte d'hospitalisation</em></td>
@@ -81,8 +84,8 @@
   </tr>
 
   {{include file="inc_export_detcim.tpl" _codable=$_operation}}
-  {{foreach from=$_operation->_ref_actes_ccam item=_acte_ccam}}
-	{{include file="inc_export_acte.tpl" _acte_ccam=$_acte_ccam}}
+  {{foreach from=$_operation->_ref_actes item=_acte}}
+	{{include file="inc_export_acte.tpl" _acte=$_acte}}
   {{foreachelse}}
   <tr>
     <td colspan="11"><em>Pas d'acte d'intervention</em></td>

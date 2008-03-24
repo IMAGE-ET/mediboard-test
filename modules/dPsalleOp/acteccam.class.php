@@ -57,7 +57,6 @@ class CActeCCAM extends CActe {
   var $_calcul_montant_base = false;
   
   // Object references
-  var $_ref_executant = null;
   var $_ref_code_ccam = null;
   
   var $_activite = null;

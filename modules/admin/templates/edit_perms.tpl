@@ -4,16 +4,20 @@
       <table class="tbl">
         <tr>
           <th class="title">
-          {{if $user->template}}
-            Profil utilisateur
-          {{else}}
-             Utilisateur : {{$user->_view}} 
-             {{if $profile->_id}}
-              ({{$profile->user_username}})
-             {{else}}
-              (Aucun profil)  
-             {{/if}}
-           {{/if}}
+            {{if $user->template}}
+            Profil utilisateur '{{$user->_view}}' 
+            {{else}}
+              Utilisateur '{{$user->_view}}' 
+              &mdash; basé sur
+              {{if $profile->_id}} 
+              le profil 
+              <a class="action" href="?m={{$m}}&amp;tab={{$tab}}&user_id={{$profile->_id}}">
+	              '{{$profile->user_username}}'
+	            </a>
+              {{else}}
+              aucun profil  
+              {{/if}}
+            {{/if}}
           </th>
         </tr>
       </table>

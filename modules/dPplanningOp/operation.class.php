@@ -398,6 +398,10 @@ class COperation extends CCodable {
     $this->_ref_praticien =& $this->_ref_chir;
   }
   
+  function getActeExecution() {
+    $this->loadRefPlageOp();
+  }
+  
   function loadRefPlageOp() {
     $this->_ref_anesth = new CMediusers;
     $this->_ref_anesth->load($this->anesth_id);

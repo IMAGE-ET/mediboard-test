@@ -1240,13 +1240,11 @@ class CMbObject {
    * @return array 
    */
   function getProps() {
-    $result = array();
-    foreach(get_object_vars($this) as $key => $value) {
-      if ($key[0] != "_") {
-        $result[$key] = $value;
-      }
+    $props = array();
+    foreach (array_keys($this->_specs) as $propName) {
+      $props[$propName] = $this->$propName;
     }
-    return $result;
+    return $props;
   }
   
   /**
@@ -1260,7 +1258,8 @@ class CMbObject {
    * Get seek specifications
    */
   function getSpecs() {
-    return array(
+    return array (
+      "_shortview" => "str",
       "_view" => "str",
       "$this->_tbl_key" => "ref class|$this->_class_name"
     );

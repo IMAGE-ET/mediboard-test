@@ -697,6 +697,10 @@ class CConsultation extends CCodable {
     $this->_ref_sejour->loadRefRPU();
   }
   
+  function getActeExecution() {
+    $this->loadRefPlageConsult();
+  }
+  
   function loadRefPlageConsult() {
     if ($this->_ref_plageconsult) {
       return; 

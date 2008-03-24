@@ -24,7 +24,8 @@ class CActe extends CMbMetaObject {
   // Distant object
   var $_ref_sejour = null;
   var $_ref_patient = null;
-  var $_ref_praticien = null;
+  var $_ref_praticien = null; // Probable user
+  var $_ref_executant = null; // Actual user
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -59,7 +60,7 @@ class CActe extends CMbMetaObject {
     return $specs;
   }
   
-  function checkCoded(){
+  function checkCoded() {
     if(!$this->_check_coded){
         return;
     }

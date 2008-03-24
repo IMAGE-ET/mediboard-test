@@ -7,14 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 mbSetValueToSession("_conduction", $_POST["_conduction"]);
 mbSetValueToSession("_oreille", $_POST["_oreille"]);
 
 $do = new CDoObjectAddEdit("CExamAudio", "examaudio_id");
-$do->createMsg = "Examen audio créé";
-$do->modifyMsg = "Examen audio modifié";
-$do->deleteMsg = "Examen audio supprimé";
 $do->doIt();
 ?>

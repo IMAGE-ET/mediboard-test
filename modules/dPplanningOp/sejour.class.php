@@ -347,6 +347,10 @@ class CSejour extends CCodable {
     }
   }
   
+  function getActeExecution() {
+    $this->updateFormFields();
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->_entree = mbGetValue($this->entree_reelle, $this->entree_prevue);

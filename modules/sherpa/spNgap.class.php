@@ -113,7 +113,8 @@ class CSpNGAP extends CSpObject {
     $this->pracod = $idPraticien->id400;
     
     // Contenu
-    $this->datact = mbDateToLocale($acte->_ref_object->_acte_execution);
+    $acte->loadExecution();
+    $this->datact = mbDateToLocale($acte->_execution);
     $this->codact = $acte->code;
     $this->quant  = $acte->quantite;
     $this->actqte = $acte->coefficient;
@@ -133,8 +134,6 @@ class CSpNGAP extends CSpObject {
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
-    
-    mbTrace($this->getProps());
   }
 }
 

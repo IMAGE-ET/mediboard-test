@@ -21,9 +21,12 @@ class CActeNGAP extends CActe {
   var $coefficient = null;
   var $demi        = null;
   var $complement  = null;
-
-  // Object references
-  var $_ref_executant = null; // Should be merged
+  
+  // Form fields
+  var $_short_view = null;
+  
+  // Distant fields
+  var $_execution = null;
   
   function CActeNGAP() {
     $this->CMbObject("acte_ngap", "acte_ngap_id");
@@ -38,27 +41,46 @@ class CActeNGAP extends CActe {
     $specs["coefficient"]         = "notNull float";
     $specs["demi"]                = "enum list|0|1 default|0";
     $specs["complement"]          = "enum list|N|F|U";
+
+    $specs["_execution"]          = "dateTime";
+    
     return $specs;
   }
  
+  function updateFormFields() {
+    parent::updateFormFields();
+    
+    // Vue codée
+    $this->_shortview = $this->quantite > 1 ? "{$this->quantite}x" : "";
+    $this->_shortview.= "$this->code$this->coefficient";
+    if ($this->demi) {
+      $this->_shortview.= "/2";
+    }
+    
+    $this->_view = "Acte NGAP $this->_shortview de $this->object_class:$this->object_id";
+  }
+  
+  function loadExecution() {
+    $this->loadTargetObject();
+    $this->_ref_object->getActeExecution();
+    $this->_execution = $this->_ref_object->_acte_execution;
+  }
+  
   function check(){
-    parent::check();
     if ($msg = $this->checkCoded()){
       return $msg;
     }
+    
+    return parent::check();
   }
   
  
-  function canDeleteEx(){
-    parent::canDeleteEx();
-    if($msg = $this->checkCoded()){
+  function canDeleteEx() {
+    if ($msg = $this->checkCoded()){
       return $msg;
     }
-  }
-  
-  function updateFormFields() {
-    parent::updateFormFields();
-    $this->_view = "Acte NGAP de ".$this->object_class." : ".$this->object_id;
+    
+    return parent::canDeleteEx();
   }
 } 
 
