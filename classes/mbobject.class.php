@@ -1240,11 +1240,13 @@ class CMbObject {
    * @return array 
    */
   function getProps() {
-    $props = array();
-    foreach (array_keys($this->_specs) as $propName) {
-      $props[$propName] = $this->$propName;
+    $result = array();
+    foreach(get_object_vars($this) as $key => $value) {
+      if ($key[0] != "_") {
+        $result[$key] = $value;
+      }
     }
-    return $props;
+    return $result;
   }
   
   /**
