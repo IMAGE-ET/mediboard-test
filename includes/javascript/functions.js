@@ -133,8 +133,20 @@ var WaitingMessage = {
     var eDiv = $(document.createElement("div"));
     eDiv.absolutize();
     eDiv.style.backgroundColor = "#000";
+    eDiv.style.border = "none";
     eDiv.setOpacity(0.1);
     Position.clone(element, eDiv);
+    
+    var descendant = $(element).firstDescendant();
+    
+    /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
+    if (descendant) {
+      if(descendant.tagName.toString().toLowerCase() == "tr") {
+        descendant.appendChild(eDiv);
+        return;
+      }
+    }
+
     $(element).appendChild(eDiv);
   }
 }
@@ -533,7 +545,7 @@ Object.extend(PairEffect, {
     
     Object.extend(oDefaultOptions, oOptions);
     
-    document.getElementsByClassName(sTargetsClass).each( 
+    $A(document.getElementsByClassName(sTargetsClass)).each( 
       function(oElement) {
         oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
         new PairEffect(oElement.id, oDefaultOptions);
@@ -615,7 +627,7 @@ Object.extend(TogglePairEffect, {
     
     Object.extend(oDefaultOptions, oOptions);
     
-    document.getElementsByClassName(sTargetsClass).each( 
+    $A(document.getElementsByClassName(sTargetsClass)).each( 
       function(oElement) {
         oDefaultOptions.bStartVisible = oDefaultOptions.bStartAllVisible || (oElement.id == oDefaultOptions.idStartVisible);
         new PairEffect(oElement.id, oDefaultOptions);
