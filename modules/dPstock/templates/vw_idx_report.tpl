@@ -8,8 +8,8 @@
         <th>Produit</th>
         <th>En stock</th>
         <th>Niveaux</th>
-        <th>En commande</th>
-        <th>Dernière commande le</th>
+        <th>Quantité en commande</th>
+        <th>Date commande en cours</th>
       </tr>
       {{foreach from=$list_stocks item=curr_stock}}
         <tr>

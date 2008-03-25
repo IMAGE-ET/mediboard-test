@@ -78,9 +78,8 @@ function popupOrder(order_id, width, height) {
     <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
       Nouvelle commande
     </a>
-    <form name="edit_order" action="?" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
+    <form name="edit-order" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <input type="hidden" name="tab" value="vw_idx_order_manager" />
       <input type="hidden" name="dosql" value="do_order_aed" />
 	    <input type="hidden" name="order_id" value="{{$order->_id}}" />
       <input type="hidden" name="group_id" value="{{$g}}" />

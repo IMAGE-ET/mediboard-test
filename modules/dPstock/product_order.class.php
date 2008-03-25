@@ -12,7 +12,6 @@ class CProductOrder extends CMbObject {
 	var $order_id         = null;
 
 	// DB Fields
-	var $name             = null;
 	var $date_ordered     = null;
 	var $societe_id       = null;
   var $group_id         = null;
@@ -77,7 +76,7 @@ class CProductOrder extends CMbObject {
 		$count = 0;
 		if ($this->_ref_order_items) {
 			foreach ($this->_ref_order_items as $item) {
-				if ($item->date_received) {
+				if ($item->quantity_received == $item->quantity) {
 					$count++;
 				}
 			}
@@ -91,7 +90,8 @@ class CProductOrder extends CMbObject {
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
-		  $item->receive();
+			$item->_quantity_received = $item->quantity;
+			$item->store();
 		}
 	}
 	
@@ -106,7 +106,7 @@ class CProductOrder extends CMbObject {
     // if the order has not been ordered yet
     // and not partially received
     // and not totally received
-    if (!$this->date_ordered && !$this->_partial && !$this->_received) {
+    if (!$this->date_ordered && !$this->_received) {
       $items = $order_item->loadMatchingList();
       
       // we empty the order
@@ -115,16 +115,17 @@ class CProductOrder extends CMbObject {
       }
     }
   	
+    // we retrieve all the stocks
   	$stock = new CProductStock();
   	$list_stocks = $stock->loadList();
   	
+  	// for every stock
     foreach($list_stocks as $stock) {
     	$stock->updateFormFields();
     	
     	// if the stock is in the "red" or "orange" zone
     	if ($stock->_zone_future < 2) {
 
-    		
     		$current_stock = $stock->quantity;
     		if ($stock->order_threshold_optimum) {
     		  $expected_stock = $stock->order_threshold_optimum;
@@ -147,7 +148,7 @@ class CProductOrder extends CMbObject {
     	  // we store the new order item in the current order
     	  $order_item->quantity = $current_stock;
     	  $order_item->reference_id = $best_reference->_id;
-    	  $order_item->unit_price = $best_reference->price / $best_reference->quantity;
+    	  $order_item->unit_price = $best_reference->price;
     	  $order_item->store();
     	}
     }
@@ -172,14 +173,15 @@ class CProductOrder extends CMbObject {
 		$this->_partial = !$this->_received && ($this->_count_received > 0);
 
 		$count = count($this->_ref_order_items);
-		$this->_view = $this->_ref_societe->_view.' - '.$count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
+		$this->_view  = $this->_ref_societe?($this->_ref_societe->_view.' - '):'';
+		$this->_view .= $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
 	}
 	
 	function updateDBFields() {
-		$this->loadRefsBack();
+		$this->updateFormFields();
 
 		// If the flag _receive is true, and if not every item has been received, we mark all them as received
-		if ($this->_receive && $this->countReceivedItems() != count($this->_ref_order_items)) {
+		if ($this->_receive && !$this->_received) {
 			$this->receive();
 		}
 

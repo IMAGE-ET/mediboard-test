@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function submitOrder (oForm) {
+function submitOrder (oForm, order_id) {
   submitFormAjax(oForm, 'systemMsg',{
     onComplete: function() {
     {{foreach from=$order->_ref_order_items item=curr_item}}
@@ -9,15 +9,12 @@ function submitOrder (oForm) {
   });
 }
 
-function submitOrderItem (oForm, noAjax) {
-  var order_id = oForm.order_id ? oForm.order_id.value : null;
-  var order_item_id = oForm.order_item_id ? oForm.order_item_id.value : null;
-
+function submitOrderItem (oForm, order_id, order_item_id, noAjax) {
   if (!noAjax) {
     submitFormAjax(oForm, 'systemMsg',{
       onComplete: function() {
-        refreshOrderItem(order_item_id);
         refreshOrder(order_id);
+        refreshOrderItem(order_item_id);
       }
     });
   } else {
@@ -30,18 +27,20 @@ function refreshOrder(order_id) {
   url.setModuleAction("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
   url.requestUpdate("order-"+order_id, { waitingText: null } );
+  
+  if (window.opener) {
+    window.opener.refreshLists();
+  }
 }
 
 function refreshOrderItem(order_item_id) {
-  if (item_id) {
-    url = new Url;
-    url.setModuleAction("dPstock", "httpreq_vw_order_item");
-    url.addParam("item_id", order_item_id);
-    url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
-    
-    if (window.opener) {
-      window.opener.refreshLists();
-    }
+  url = new Url;
+  url.setModuleAction("dPstock", "httpreq_vw_order_item");
+  url.addParam("item_id", order_item_id);
+  url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
+  
+  if (window.opener) {
+    window.opener.refreshLists();
   }
 }
 </script>
@@ -86,7 +85,7 @@ function refreshOrderItem(order_item_id) {
               <input type="hidden" name="order_id" value="{{$order->_id}}" />
               <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
               <input type="text" name="quantity" value="1" size="2" />
-              <button class="add notext" type="button" onclick="submitOrderItem(this.form)">
+              <button class="add notext" type="button" onclick="submitOrderItem(this.form, {{$order->_id}}, 0)">
                 Ajouter
               </button>
             </form>
@@ -116,22 +115,13 @@ function refreshOrderItem(order_item_id) {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
-        <input type="hidden" name="_autofill" value="0" />
-        {{if !$order->_received}}
-          {{if $order->date_ordered}}
-            <input type="hidden" name="_receive" value="1" />
-            <button type="button" class="tick" onclick="submitOrder(this.form, true)">Recevoir tout</button>
-            
-          {{else}}
-            {{if $order->_ref_order_items|@count > 0}}
-              <input type="hidden" name="_order" value="1" />
-              <button type="button" class="tick" onclick="submitOrder(this.form)">Commander</button>
-              
-            {{else}}
-              <input type="hidden" name="_autofill" value="1" />
-              <button type="button" class="change" onclick="submitOrder(this.form)">Commande auto</button>
-            {{/if}}
-          {{/if}}
+        {{if $order->date_ordered}}
+          <input type="hidden" name="_receive" value="1" />
+          <button type="button" class="tick" onclick="submitOrder(this.form, {{$order->_id}})">Recevoir tout</button>
+          
+        {{else if !$order->_received}}
+          <input type="hidden" name="_autofill" value="1" />
+          <button type="button" class="change" onclick="submitOrder(this.form, {{$order->_id}})">Commande auto</button>
         {{/if}}
       </form>
       

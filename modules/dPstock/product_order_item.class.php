@@ -26,7 +26,7 @@ class CProductOrderItem extends CMbObject {
 
   // Form fields
   var $_price             = null;
-  var $_receive           = null;
+  var $_quantity_received  = null;
 
   function CProductOrderItem() {
     $this->CMbObject('product_order_item', 'order_item_id');
@@ -40,45 +40,49 @@ class CProductOrderItem extends CMbObject {
       'quantity'          => 'notNull num pos',
       'unit_price'        => 'currency',
       'date_received'     => 'dateTime',
-      'quantity_received' => 'num pos',
+      'quantity_received' => 'num',
 	    '_price'            => 'currency',
-      '_receive'          => 'bool',
+      '_quantity_received'=> 'num',
     );
   }
 
-  function receive($count) {
-    $this->load();
+  function receive() {
+  	$this->load();
     $this->loadRefsFwd();
     
-    // Quantity of this article not received yet
-    $quantity_not_received = ($this->quantity - $this->quantity_received);
-    
-    // If we want to receive more of article than the total quantity, we set it to the max
-    if ($this->_receive > $quantity_not_received) {
-    	$this->_receive = $quantity_not_received;
+    // if a bad quantity received is given, we set it to a normal quantity
+    if ($this->_quantity_received > $this->quantity) {
+      $this->_quantity_received = $this->quantity;
+    } else if ($this->_quantity_received < 0) {
+      $this->_quantity_received = 0;
     }
     
-    // If we want to un-receive more articles than the already received quantity, we set it to -(quantity received)
-    if ($this->_receive < 0 && abs($this->_receive) > $this->quantity_received) {
-      $this->_receive = -$this->quantity_received;
-    }
+    // the difference between before and after
+    $delta = $this->_quantity_received - $this->quantity_received;
     
-    // The stock relative to this order item is loaded
+    // the new quantity is saved
+    $this->quantity_received = $this->_quantity_received;
+    
+    // the new reception date is saved
+    if ($this->quantity_received != 0 && $delta > 0) {
+      $this->date_received = mbDateTime();
+    }
+
+    // we have to update the stock too
     $stock = new CProductStock();
     $where = array();
     $where['group_id']   = "= '{$this->_ref_order->group_id}'";
     $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
 
-    // The quantity of the article that has been received is added to the stock
+    // The quantity of this article that has been received is added to the stock
     if ($stock->loadObject($where)) {
-      $stock->quantity += $this->_receive * $this->_ref_reference->quantity;
+      $stock->quantity += $delta * $this->_ref_reference->quantity;
       $stock->store();
     }
     
-    // The order item is updated
-    $this->date_received = mbDateTime();
-    $this->quantity_received += $this->_receive;
-    $this->store();
+    if ($this->quantity_received == 0) {
+      $this->date_received = null;
+    }
   }
   
   function updateFormFields() {
@@ -91,8 +95,8 @@ class CProductOrderItem extends CMbObject {
   }
   
   function updateDBFields() {
-  	if ($this->_receive) {
-      $this->receive($this->_receive);
+  	if (!is_null($this->_quantity_received)) {
+      $this->receive();
   	}
   }
 
@@ -117,11 +121,11 @@ class CProductOrderItem extends CMbObject {
         $this->_id = $duplicateKey->_id;
         $this->quantity += $duplicateKey->quantity;
         $this->unit_price = $duplicateKey->unit_price;
-        $this->date_received = $duplicateKey->date_received;
       } else {
         $this->unit_price = $this->_ref_reference->price;
       }
     }
+    
     return parent::store();
   }
 }

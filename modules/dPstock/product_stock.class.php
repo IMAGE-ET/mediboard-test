@@ -56,8 +56,8 @@ class CProductStock extends CMbObject {
     return array (
       'product_id'               => 'notNull ref class|CProduct',
       'group_id'                 => 'notNull ref class|CGroups',
-      'quantity'                 => 'num pos notNull',
-      'order_threshold_critical' => 'num pos',
+      'quantity'                 => 'num notNull',
+      'order_threshold_critical' => 'num',
       'order_threshold_min'      => 'num pos notNull moreEquals|order_threshold_critical',
       'order_threshold_optimum'  => 'num pos moreEquals|order_threshold_min',
       'order_threshold_max'      => 'num pos notNull moreEquals|order_threshold_optimum',

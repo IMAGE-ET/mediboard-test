@@ -16,12 +16,12 @@
     {{if !$order->date_ordered}}
     <!-- Order item quantity change -->
     <form name="form-item-quantity-{{$curr_item->_id}}" action="?" method="post">
-      <button type="button" class="remove notext" onclick="this.form.quantity.value--; submitOrderItem(this.form);"></button>
+      <button type="button" class="remove notext" onclick="this.form.quantity.value--; submitOrderItem(this.form);">-</button>
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       <input type="text" name="quantity" value="{{$curr_item->quantity}}" size="2" onchange="submitOrderItem(this.form);" />
-      <button type="button" class="add notext" onclick="this.form.quantity.value++; submitOrderItem(this.form);"></button>
+      <button type="button" class="add notext" onclick="this.form.quantity.value++; submitOrderItem(this.form);">+</button>
     </form>
     {{else}}
       {{mb_value object=$curr_item field=quantity}}
@@ -30,26 +30,19 @@
   <td>{{mb_value object=$curr_item field=unit_price}}</td>
   <td>{{mb_value object=$curr_item field=_price}}</td>
   
-  {{if $order->date_ordered}}
   <!-- Receive item -->
   <td>
-    {{if $curr_item->date_received}}
+    {{if $order->date_ordered}}
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post">
+      <button type="button" class="remove notext" onclick="this.form._quantity_received.value--; submitOrderItem(this.form, 0, {{$curr_item->_id}});">-</button>
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="text" name="_receive" value="-{{$curr_item->quantity}}" size="2" />
-      <button type="button" class="cancel" onclick="submitOrderItem(this.form)">Annuler</button>
-    </form>
-    {{else}}
-    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="dosql" value="do_order_item_aed" />
-      <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      <input type="text" name="_receive" value="{{$curr_item->quantity}}" size="2" />
-      <button type="button" class="tick" onclick="submitOrderItem(this.form)">Recevoir</button>
+      <input type="text" name="_quantity_received" value="{{$curr_item->quantity_received}}" size="2" onchange="submitOrderItem(this.form, 0, {{$curr_item->_id}});" />
+      <button type="button" class="add notext" onclick="this.form._quantity_received.value++; submitOrderItem(this.form, 0, {{$curr_item->_id}});">+</button>
+      <button type="button" class="tick" onclick="this.form._quantity_received.value = {{$curr_item->quantity}}; submitOrderItem(this.form, 0, {{$curr_item->_id}});">Tout</button>
     </form>
     {{/if}}
   </td>
-  {{/if}}
+  
 </tr>

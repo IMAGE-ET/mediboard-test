@@ -109,7 +109,7 @@ PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';
  `stock_out_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `stock_id` INT(11) UNSIGNED NOT NULL, 
  `date` DATETIME NOT NULL, 
- `quantity` INT(11) UNSIGNED, 
+ `quantity` INT(11) NOT NULL, 
  `product_code` VARCHAR(255), 
  `function_id` INT(11) UNSIGNED, 
 PRIMARY KEY (`stock_out_id`)) TYPE=MYISAM;';

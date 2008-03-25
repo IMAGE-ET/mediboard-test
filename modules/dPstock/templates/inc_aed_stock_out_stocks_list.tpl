@@ -7,10 +7,14 @@
   <input type="hidden" name="stock_id" value="" />
   <input type="hidden" name="quantity" value="" />
   <input type="hidden" name="product_code" value="" />
-  <input type="hidden" name="function_id" value="" />
   <input type="hidden" name="date" value="now" />
   <input type="hidden" name="_do_stock_out" value="1" />
   <input type="hidden" name="del" value="0" />
+  <select name="function_id">
+    {{foreach from=$list_functions item=curr_function}}
+    <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>
+    {{/foreach}}
+  </select>
   <table class="tbl">
     <tr>
       <th>Produit</th>
@@ -18,7 +22,6 @@
       <th>Seuils</th>
       <th>Quantité</th>
       <th>Code produit</th>
-      <th>Pour le service</th>
     </tr>
     
   <!-- Products list -->

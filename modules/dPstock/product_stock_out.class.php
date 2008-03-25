@@ -34,7 +34,7 @@ class CProductStockOut extends CMbObject {
     return array (
       'stock_id'     => 'notNull ref class|CProductStock',
       'date'         => 'notNull dateTime',
-      'quantity'     => 'num pos',
+      'quantity'     => 'notNull num',
       'product_code' => 'str',
       'function_id'  => 'ref class|CFunctions',
     );
@@ -68,7 +68,7 @@ class CProductStockOut extends CMbObject {
 	  	if (!$this->_ref_stock) {
 	  		$this->loadRefsFwd();
 	  	}
-	    if ($count <= 0 || $this->_ref_stock->quantity < $count) {
+	    if ($this->_ref_stock->quantity < $count) {
         return 'Erreur : Impossible de déstocker ce nombre d\'articles';
 	    }
   	}
@@ -78,10 +78,8 @@ class CProductStockOut extends CMbObject {
     $this->_ref_stock = new CProductStock();
     $this->_ref_stock->load($this->stock_id);
 
-    if ($this->function_id) {
-      $this->_ref_function = new CFunctions();
-      $this->_ref_function->load($this->function_id);
-    }
+    $this->_ref_function = new CFunctions();
+    $this->_ref_function->load($this->function_id);
   }
 
   function getPerm($permType) {
