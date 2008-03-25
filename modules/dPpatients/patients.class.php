@@ -281,7 +281,9 @@ class CPatient extends CMbObject {
     $specs["_annee"]                   = "num length|4 min|1850";
     $specs["_assure_jour"]             = "num length|2 min|01 max|99";
     $specs["_assure_mois"]             = "num length|2 min|01 max|99";
-    $specs["_assure_annee"]            = "num length|4 min|1850";   
+    $specs["_assure_annee"]            = "num length|4 min|1850";
+    $specs["_id_vitale"]               = "num";
+    
     return $specs;
   }
   
@@ -781,6 +783,8 @@ class CPatient extends CMbObject {
     // medecin3
     $this->_ref_medecin3 = new CMedecin();
     $this->_ref_medecin3->load($this->medecin3);
+    
+    $this->loadIdVitale();
   }
   
   // Liste statique des codes CIM10 initiaux

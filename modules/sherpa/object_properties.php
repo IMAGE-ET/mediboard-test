@@ -32,6 +32,8 @@ try {
     throw new Exception("Object of class '$class' could not be found with id400 '$filter->id400'", 3);
   }
   
+  $object->loadRefsFwd();
+  
   foreach (array_keys($object->_specs) as $propName) {
     $response[$propName] = $object->$propName;
   }
