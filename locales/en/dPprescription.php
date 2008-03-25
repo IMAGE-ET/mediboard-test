@@ -239,4 +239,5 @@ $locales['msg-CPrescriptionLineComment-delete'] = '';
 $locales['msg-CPrisePosologie-create'] = '';
 $locales['msg-CPrisePosologie-modify'] = '';
 $locales['msg-CPrisePosologie-delete'] = '';
+$locales['mod-dPprescription-tab-vw_edit_executant'] = '';
 ?>

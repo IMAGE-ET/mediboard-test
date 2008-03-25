@@ -11,76 +11,90 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
+// Chargement de l'etablissement
 $etablissement = new CGroups();
 $etablissement->load($g);
 
+// Chargement du praticien
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
 $prescription->_ref_praticien->loadRefsFwd();
 
-$prescription->loadRefsLinesMedComments();
+// Chargement de toutes les categories
+$categorie = new CCategoryPrescription();
+$cats = $categorie->loadList();
+foreach($cats as $key => $cat){
+	$categories["cat".$key] = $cat;
+}
 
+// Chargement de la liste des executants
+$executant = new CExecutantPrescriptionLine();
+$executants = $executant->loadList();
+
+// Chargement des lignes de prescriptions
+$prescription->loadRefsLinesMedComments();
 $prescription->loadRefsLinesElementsComments();
 
-$nb_ald["medicament"] = 0;
-$nb_ald["dmi"] = 0;
-$nb_ald["anapath"] = 0;
-$nb_ald["biologie"] = 0;
-$nb_ald["imagerie"] = 0;
-$nb_ald["consult"] = 0;
-$nb_ald["kine"] = 0;
-$nb_ald["soin"] = 0;
+$medicament = 0;
+$comment = 0;
 
 
-// Initialisation des tableaux
-$lines["medicament"]["element"]["ald"] = array();
-$lines["medicament"]["comment"]["ald"] = array();
-$lines["medicament"]["element"]["no_ald"] = array();
-$lines["medicament"]["comment"]["no_ald"] = array();
-
-foreach($prescription->_ref_lines_elements_comments as $chap => $elts){
-  $lines[$chap]["element"]["ald"] = array();
-  $lines[$chap]["comment"]["ald"] = array();
-  $lines[$chap]["element"]["no_ald"] = array();
-  $lines[$chap]["comment"]["no_ald"] = array();
+// Parcours des medicaments, pas de gestion d'executant pour les medicaments
+$lines["medicaments"]["med"]["ald"] = array();
+$lines["medicaments"]["med"]["no_ald"] = array();
+$lines["medicaments"]["comment"]["ald"] = array();
+$lines["medicaments"]["comment"]["no_ald"] = array();
+foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
+	foreach($lines_medicament_type as $line_medicament){
+	  if($line_medicament->ald){
+	    $lines["medicaments"][$key]["ald"][] = $line_medicament;
+	  } else {
+	  	$lines["medicaments"][$key]["no_ald"][] = $line_medicament;
+	  }
+	}
 }
 
-// Recherche de medicaments ALD 
-foreach($prescription->_ref_lines_med_comments["med"] as $key => $med){
-  if($med->ald){
-	  $lines["medicament"]["element"]["ald"][] = $med;
-  } else {
-  	$lines["medicament"]["element"]["no_ald"][] = $med;
+$linesElt = array();
+
+// Initialisation du tableau
+foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
+	foreach($chap_element as $name_cat => $cat_element){
+		foreach($cat_element as $type => $elements){
+			foreach($elements as $element){
+			  $executant = "aucun";
+		    if($element->executant_prescription_line_id){
+		      $executant = $element->executant_prescription_line_id;
+		    }
+				
+	      $linesElt[$name_chap][$name_cat][$executant]["element"]["ald"] = array();
+		    $linesElt[$name_chap][$name_cat][$executant]["element"]["no_ald"] = array();	
+		    
+	      $linesElt[$name_chap][$name_cat][$executant]["comment"]["ald"] = array();
+		    $linesElt[$name_chap][$name_cat][$executant]["comment"]["no_ald"] = array();
+			}
+		}
+	}
+}
+
+// Parcours des elements
+foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
+	foreach($chap_element as $name_cat => $cat_element){
+		foreach($cat_element as $type => $elements){
+			foreach($elements as $element){
+		    $executant = "aucun";
+		    if($element->executant_prescription_line_id){
+		      $executant = $element->executant_prescription_line_id;
+		    }
+		    if($element->ald){
+		    	$linesElt[$name_chap][$name_cat][$executant][$type]["ald"][] = $element;
+		    } else {
+		      $linesElt[$name_chap][$name_cat][$executant][$type]["no_ald"][] = $element;
+		    }
+		  }
+		}
   }
-}
-foreach($prescription->_ref_lines_med_comments["comment"] as $key => $comment){
-	if($comment->ald){
-	  $lines["medicament"]["comment"]["ald"][] = $comment;
-	} else {
-		$lines["medicament"]["comment"]["no_ald"][] = $comment;
-	}
-}
-
-
-// Recherche de produits ALD
-foreach($prescription->_ref_lines_elements_comments as $nom_chap => $chapitre){
-	foreach($chapitre["element"] as &$element){
-		$element->_ref_element_prescription->loadRefCategory();
-		if($element->ald){
-		  $lines[$nom_chap]["element"]["ald"][] = $element;
-		} else {
-			$lines[$nom_chap]["element"]["no_ald"][] = $element;
-		}
-	}
-	foreach($chapitre["comment"] as &$comment){
-		if($comment->ald){
-		  $lines[$nom_chap]["comment"]["ald"][] = $comment;
-		} else {
-			$lines[$nom_chap]["comment"]["no_ald"][] = $comment;
-		}
-	}
 }
 
 // Création du template
@@ -90,6 +104,9 @@ $smarty->assign("date"         , mbDate());
 $smarty->assign("etablissement", $etablissement);
 $smarty->assign("prescription" , $prescription);
 $smarty->assign("lines", $lines);
+$smarty->assign("linesElt", $linesElt);
+$smarty->assign("categories", $categories);
+$smarty->assign("executants", $executants);
 $smarty->display("print_prescription.tpl");
 
 ?>

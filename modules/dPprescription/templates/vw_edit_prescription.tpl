@@ -3,7 +3,7 @@
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPprescription" script="prescription_editor"}}
- 
+
 <script type="text/javascript">
 
 // Visualisation du produit

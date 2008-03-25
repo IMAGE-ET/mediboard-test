@@ -84,6 +84,8 @@ if ($prescription->_id) {
   // Chargement des elements et commentaires
   $prescription->loadRefsLinesElementsComments();
   
+  //mbTrace($prescription->_ref_lines_elements_comments,"_ref_lines_elements_comments");
+  
   
   // Gestion des alertes
   $allergies    = new CBcbControleAllergie();
@@ -126,15 +128,26 @@ if ($prescription->_id) {
 }
 
 $moments = CMomentUnitaire::loadAllMoments();
+$executants = CExecutantPrescriptionLine::getAllExecutants();
 
+// Chargement de toutes les categories
+$categorie = new CCategoryPrescription();
+$cats = $categorie->loadList();
+foreach($cats as $key => $cat){
+	$categories["cat".$key] = $cat;
+}
 
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
 
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("categories"         , $categories);
+$smarty->assign("executants"         , $executants);
 $smarty->assign("prise_posologie"    , new CPrisePosologie());
 $smarty->assign("categories"         , $categories);
 $smarty->assign("category"           , "medicament");

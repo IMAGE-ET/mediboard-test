@@ -30,12 +30,16 @@ var Prescription = {
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : 
         function(){ 
-          Prescription.reload(oForm.prescription_id.value);
-         } 
+          Prescription.reload(oForm.prescription_id.value, '', 'medicament');
+        } 
     });
   },
   addLineElement: function(element_id, category_name){
+    // Formulaire contenant la categorie courante
     var oForm = document.addLineElement;
+    if(!category_name){
+    var category_name = oForm._category_name.value;
+    }
     oForm.element_prescription_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){ Prescription.reload(oForm.prescription_id.value, element_id, category_name) } 
@@ -52,7 +56,7 @@ var Prescription = {
     oForm.prescription_line_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete : function(){ Prescription.reload(oForm.prescription_id.value) } 
+      onComplete : function(){ Prescription.reload(oForm.prescription_id.value, '', 'medicament') } 
     });
   },
   delLineElement: function(line_id, category_name) {
@@ -65,7 +69,7 @@ var Prescription = {
   },
   reload: function(prescription_id, element_id, category_name, mode_protocole) {
       if(window.opener){
-      window.opener.PrescriptionEditor.refresh(prescription_id);
+        window.opener.PrescriptionEditor.refresh(prescription_id);
       }
       var urlPrescription = new Url;
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
@@ -73,10 +77,16 @@ var Prescription = {
       urlPrescription.addParam("element_id", element_id);
       urlPrescription.addParam("category_name", category_name);
       urlPrescription.addParam("mode_protocole", mode_protocole);
+      
       if(mode_protocole){
         urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
       } else {
-        urlPrescription.requestUpdate("produits_elements", { waitingText : null });
+        if(category_name){
+          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );
+        } else {
+         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
+         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
+        }
       }
   },
   reloadAddProt: function(protocole_id) {

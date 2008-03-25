@@ -15,12 +15,13 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   var $prescription_line_comment_id = null;
   
   // DB Fields
-  //var $prescription_id         = null;
-  var $commentaire             = null;
-  var $chapitre                = null;
+  var $commentaire               = null;
+  var $category_prescription_id  = null;
+  var $executant_prescription_line_id = null;
   
-  var $_ref_element_prescription = null;
-    
+  var $_ref_category_prescription = null;
+  var $_ref_executant = null;
+  
   function CPrescriptionLineComment() {
     $this->CMbObject("prescription_line_comment", "prescription_line_comment_id");
     
@@ -30,16 +31,22 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "chapitre"        => "notNull enum list|medicament|dmi|anapath|biologie|imagerie|consult|kine|soin",
-      "commentaire"     => "text"
+      "category_prescription_id"       => "ref class|CCategoryPrescription",
+      "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
+      "commentaire"                    => "text"
     );
     return array_merge($specsParent, $specs);
  
   }
   
-  function loadRefElement(){
-  	$this->_ref_element_prescription = new CElementPrescription();
-  	$this->_ref_element_prescription->load($this->element_prescription_id);	
+  function loadRefCategory(){
+  	$this->_ref_category_prescription = new CCategoryPrescription();
+  	$this->_ref_category_prescription->load($this->category_prescription_id);	
+  }
+  
+  function loadRefExecutant(){
+    $this->_ref_executant = new CExecutantPrescriptionLine();
+    $this->_ref_executant->load($this->executant_prescription_line_id);
   }
 }
 

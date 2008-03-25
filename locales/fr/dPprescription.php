@@ -239,4 +239,5 @@ $locales['msg-CPrescriptionLineComment-delete'] = 'Commentaire supprimé';
 $locales['msg-CPrisePosologie-create'] = 'Posologie ajoutée';
 $locales['msg-CPrisePosologie-modify'] = 'Posologie modifiée';
 $locales['msg-CPrisePosologie-delete'] = 'Posologie supprimée';
+$locales['mod-dPprescription-tab-vw_edit_executant'] = 'Gestion des exécutants';  	 	 
 ?>

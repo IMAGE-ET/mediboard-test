@@ -1,177 +1,56 @@
-{{assign var=_prescription value=$prescription->_ref_lines_elements_comments}}
-{{assign var=lines_element value=$_prescription.$element}}
-
-{{assign var=nb_elt_element value=$lines_element.element|@count}}
-{{assign var=nb_elt_comment value=$lines_element.comment|@count}}
-{{assign var=nb_elt_total value=$nb_elt_element+$nb_elt_comment}}
 <script type="text/javascript">
 
-Prescription.refreshTabHeader("div_{{$element}}","{{$nb_elt_total}}");
+// On vide toutes les valeurs du formulaire d'ajout d'element
+var oForm = document.addLineElement;
+oForm.prescription_line_element_id.value = "";
+oForm.del.value = "0";
+oForm.element_prescription_id.value = "";
+
+// Preselection des executants
+preselectExecutant = function(executant_id, category_id){
+ $$('select.executant-'+category_id).each( function(select) {
+   select.value = executant_id;
+   select.onchange();
+ })
+}
 
 </script>
 
-  <form action="?" method="get" name="search{{$element}}" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLineElement(this.value,'{{$element}}'); this.value = '';">
-      <option value="">&mdash; produits les plus utilisés</option>
-      {{foreach from=$listFavoris.$element item=curr_element}}
-      <option value="{{$curr_element->_id}}">
-        {{$curr_element->libelle}}
-      </option>
-      {{/foreach}}
-    </select>
-    
-    {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-    <button class="new" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
-    {{/if}}
-  
-  
-    <button class="new" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
-   <br />
-   <input type="text" name="{{$element}}" value="" />
-   <input type="hidden" name="element_id" onchange="Prescription.addLineElement(this.value,'{{$element}}');" />
-   <div style="display:none;" class="autocomplete" id="{{$element}}_auto_complete"></div>
-   <button class="search" type="button" onclick="ElementSelector.init{{$element}}('{{$element}}')">Rechercher</button>
-   <script type="text/javascript">   
-     ElementSelector.init{{$element}} = function(type){
-       this.sForm = "search{{$element}}";
-       this.sLibelle = "{{$element}}";
-       this.sElement_id = "element_id";
-       this.sType = type;
-       this.selfClose = false;
-       this.pop();
-     }
-   </script>
-  </form>
-  
-  
-  <br />
-  {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
-  <div id="add_{{$element}}" style="display: none">
-    {{if !$categories.$element|@count}}
-    <div class="big-info">
-     Impossible de rajouter des éléments de prescription car cette section ne possède pas de catégorie
-    </div>
-    {{else}}
-    <button class="cancel notext" type="button" onclick="$('add_{{$element}}').hide();">Cacher</button>
-    <form name="add{{$element}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-      <input type="hidden" name="m" value="dPprescription" />
-      <input type="hidden" name="dosql" value="do_element_prescription_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="element_prescription_id" value="" />
-      <input type="hidden" name="callback" value="Prescription.addLineElement" />
-      <select name="category_prescription_id">
-        {{foreach from=$categories.$element item=cat}}
-          <option value="{{$cat->_id}}">{{$cat->_view}}</option>
-        {{/foreach}}
-      </select>
-      <input name="libelle" type="text" size="80" />
-      <button class="submit notext" type="button" onclick="this.form.onsubmit()">Ajouter</button>
-    </form>
-    {{/if}}
- </div>
- {{/if}}
- <div id="add_line_comment_{{$element}}" style="display: none">
-   <button class="cancel notext" type="button" onclick="$('add_line_comment_{{$element}}').hide();">Cacher</button>
-   <form name="addLineComment{{$element}}" method="post" action="" 
-         onsubmit="return Prescription.onSubmitCommentaire(this,'{{$prescription->_id}}','{{$element}}');">
-      <input type="hidden" name="m" value="dPprescription" />
-      <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="prescription_line_comment_id" value="" />
-      <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-      <input type="hidden" name="chapitre" value="{{$element}}" />
-      <input name="commentaire" type="text" size="98" />
-      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
-    </form>
- </div>
+<!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
+{{include file="inc_vw_form_addLine.tpl"}}
 
-
-{{if $lines_element.element || $lines_element.comment}}
-
-<table class="tbl">    
-  <!-- Si il y a des elements de type element dans la prescription -->
-  <tr>
-    <th colspan="6">
-      {{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}
-    </th>
-  </tr>
-  {{foreach from=$lines_element.element item=_line_element}}
+<table class="tbl">
+  {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
+  {{assign var=nb_lines value=0}}
   
-  <tbody class="hoverable">
-  <tr>
-    <td  style="width: 25px">
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
-        {{tr}}Delete{{/tr}}
-      </button>
-    </td>
-    <td colspan="2">
-     {{$_line_element->_ref_element_prescription->_view}}
-    </td>
-    <td>
-      <form name="addCommentElement-{{$_line_element->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
-        <input type="text" name="commentaire" value="{{$_line_element->commentaire}}" onchange="this.form.onsubmit();" />
-      </form>
-    </td>
-    <td>
-      {{$_line_element->_ref_element_prescription->_ref_category_prescription->_view}}
-    </td>
-    <td>
-      <form name="addALD-{{$_line_element->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
-        {{mb_field object=$_line_element field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-        {{mb_label object=$_line_element field="ald" typeEnum="checkbox"}}
-      </form>
-    </td>
-  </tr>
-  </tbody>
-  {{/foreach}}
-
-  <!-- Parcours des commentaires --> 
-  {{foreach from=$lines_element.comment item=_line_comment}}
-  <tbody class="hoverable">
-    <tr>
-      <td style="width: 25px">
-        <form name="delLineComment{{$element}}-{{$_line_comment->_id}}" action="" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$element}}') } } );">
-            {{tr}}Delete{{/tr}}
-          </button>
-        </form>
-      </td>
-      <td colspan="4">
-        {{$_line_comment->commentaire}}
-      </td>
-      <td style="width: 25px">
-        <form name="lineCommentALD{{$element}}-{{$_line_comment->_id}}" action="" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-          {{mb_field object=$_line_comment field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-          {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
-        </form>
-      </td>
-    </tr>
-  </tbody>
+  <!-- Parcours des elements de type $element -->
+  {{foreach from=$lines item=lines_cat key=category_id}}
+	  {{assign var=category value=$categories.$category_id}}
+	  <tr>
+	    <!-- Affichage de la categorie -->
+	    <th colspan="9">{{$category->_view}}</th>
+	  </tr>
+	  
+	  <!-- Parcours des categories d'elements et de commentaires -->
+	  {{foreach from=$lines_cat.element item=line_element}}
+	    {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element}}
+	  {{/foreach}}
+	  {{foreach from=$lines_cat.comment item=line_comment}}
+	    {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment}}
+	  {{/foreach}}
+	
+	  <!-- Calcul du nombre de lignes d'elements -->
+	  {{assign var=lines_element value=$lines_cat.element|@count}}
+	  {{assign var=lines_comment value=$lines_cat.comment|@count}}
+	  {{assign var=nb_lines value=$nb_lines+$lines_element+$lines_comment}}  
   {{/foreach}}
 </table>
-{{else}}
-  <div class="big-info"> 
-     Il n'y a aucun élément de type {{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}} dans cette prescription.
-  </div> 
-{{/if}}
+
 <script type="text/javascript">
 
+Prescription.refreshTabHeader('div_{{$element}}','{{$nb_lines}}');
+
+// Autocomplete
 prepareForm(document.search{{$element}});
   
 url = new Url();

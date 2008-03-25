@@ -15,11 +15,12 @@ $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $object_class    = mbGetValueFromGetOrSession("object_class");
 $object_id       = mbGetValueFromGetOrSession("object_id");
 
-$mode_protocole = mbGetValueFromGetOrSession("mode_protocole");
+$mode_protocole  = mbGetValueFromGetOrSession("mode_protocole");
 
 $listFavoris = array();
 $element_id = mbGetValueFromGetOrSession("element_id");
 $category_name = mbGetValueFromGetOrSession("category_name");
+
 $category = null;
 
 if ($element_id){
@@ -107,7 +108,14 @@ $categories = $categoryPresc->loadCategoriesByChap();
 
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMoments();
+$executants = CExecutantPrescriptionLine::getAllExecutants();
 
+// Chargement de toutes les categories
+$categorie = new CCategoryPrescription();
+$cats = $categorie->loadList();
+foreach($cats as $key => $cat){
+	$categories["cat".$key] = $cat;
+}
 
 // Liste des praticiens
 $user = new CMediusers();
@@ -118,6 +126,8 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("httpreq", 1);
 
+$smarty->assign("categories", $categories);
+$smarty->assign("executants", $executants);
 $smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("moments", $moments);
 $smarty->assign("protocole", new CPrescription());
@@ -137,6 +147,19 @@ if($mode_protocole){
 	$smarty->assign("category", "medicament");
 	$smarty->display("inc_vw_prescription.tpl");
 } else {
-  $smarty->display("inc_vw_produits_elements.tpl");
+
+  // Cas de la selection d'un protocole
+  if(!$category_name){
+    $smarty->display("inc_vw_produits_elements.tpl");	
+  } else {
+    // Cas du rafraichissement de la partie medicament
+    if($category_name == "medicament"){
+     	$smarty->display("inc_div_medicament.tpl");
+    } else {
+      // Cas du rafraichissement d'une partie element
+      $smarty->assign("element", $category_name);
+      $smarty->display("inc_div_element.tpl");
+    }
+  }
 }
 ?>

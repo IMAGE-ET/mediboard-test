@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.24";
+$config["mod_version"]     = "0.28";
 $config["mod_type"]        = "user";
 
 
@@ -300,7 +300,46 @@ class CSetupdPprescription extends CSetup {
       $this->addQuery($sql);
     }
    
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "CREATE TABLE `executant_prescription_line` (
+            `executant_prescription_line_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT,  
+            `category_prescription_id` INT(11) UNSIGNED NOT NULL, 
+            `nom` VARCHAR(255) NOT NULL, 
+            `description` TEXT, 
+            PRIMARY KEY (`executant_prescription_line_id`)) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.25");
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `executant_prescription_line_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.26");
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `category_prescription_id` INT(11) UNSIGNED, 
+            ADD `executant_prescription_line_id` INT(11) UNSIGNED, 
+            DROP `chapitre`;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `prescription`
+            ADD `type` ENUM('externe','pre_admission','sejour','sortie','traitement') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `praticien_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `praticien_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line`
+            ADD `stoppe` ENUM('0','1'), 
+            ADD `praticien_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.28";
   }  
 }
 

@@ -19,6 +19,7 @@ class CPrescription extends CMbObject {
   var $object_class = null;
   var $object_id    = null;
   var $libelle      = null;
+  var $type         = null;
   
   // Object References
   var $_ref_object  = null;
@@ -50,8 +51,9 @@ class CPrescription extends CMbObject {
       "praticien_id"  => "notNull ref class|CMediusers",
       "object_id"     => "ref class|CCodable meta|object_class",
       "object_class"  => "notNull enum list|CSejour|CConsultation",
-      "libelle"       => "str"
-    );
+      "libelle"       => "str",
+      "type"          => "notNull enum list|traitement|pre_admission|sejour|sortie|externe"
+     );
     return array_merge($specsParent, $specs);
   }
   
@@ -142,14 +144,14 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines_element as $line){
   		$category = new CCategoryPrescription();
   		$category->load($line->_ref_element_prescription->category_prescription_id);
-  	  $this->_ref_prescription_lines_element_by_cat[$category->chapitre]["element"][] = $line;	
-  	}
+  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["cat".$category->_id]["element"][] = $line;	
+   	}
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
   
   
   // Chargement des lignes de commentaires
-  function loadRefsLinesComment($chapitre = null){
+  function loadRefsLinesComment($category_name = null){
   	$this->_ref_prescription_lines_comment = array();
     
   	$this->_ref_prescription_lines_comment["dmi"] = array();
@@ -160,18 +162,37 @@ class CPrescription extends CMbObject {
   	$this->_ref_prescription_lines_comment["kine"] = array();
   	$this->_ref_prescription_lines_comment["soin"] = array();
   	
-  	
   	$commentaires = array();
   	$line_comment = new CPrescriptionLineComment();
-  	$line_comment->prescription_id = $this->_id;
-  	if($chapitre){
-  		$line_comment->chapitre = $chapitre;
+  	
+  	$where["prescription_id"] = " = '$this->_id'";
+  	$ljoin = array();
+  	
+  	if($category_name && $category_name != "medicament"){
+  		$ljoin["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
+  	  $where["category_prescription.chapitre"] = " = '$category_name'"; 	
   	}
-  	$commentaires = $line_comment->loadMatchingList();
+  	if($category_name == "medicament"){
+  	  $where["category_prescription_id"] = " IS NULL"; 		
+  	}
+  	$commentaires = $line_comment->loadList($where, null, null, null, $ljoin);
+  	
   	foreach($commentaires as $_line_comment){
-  		  $this->_ref_prescription_lines_comment[$_line_comment->chapitre]["comment"][] = $_line_comment;
+  		  if($_line_comment->category_prescription_id){
+  		  	// Chargement de la categorie
+          $_line_comment->loadRefCategory();
+          
+  		  	$cat = new CCategoryPrescription();
+  		  	$cat->load($_line_comment->category_prescription_id);
+  		  	$chapitre = $cat->chapitre;
+  		  } else {
+  		  	$chapitre = "medicament";
+  		  }
+        $this->_ref_prescription_lines_comment[$chapitre]["cat".$_line_comment->category_prescription_id]["comment"][] = $_line_comment;
     }		
   }
+  
+  
   
   // Chargement de toutes les lignes (y compris medicaments)
   function loadRefsLinesAllComments(){
@@ -193,13 +214,16 @@ class CPrescription extends CMbObject {
   	
   	// Fusion des tableaux d'element et de commentaire 
   	$this->_ref_lines_elements_comments = array_merge_recursive($this->_ref_prescription_lines_element_by_cat, $this->_ref_prescription_lines_comment);
-    foreach($this->_ref_lines_elements_comments as &$chapitre){
-    	if(!array_key_exists("comment", $chapitre)){
-    		$chapitre["comment"] = array();
+    
+  	foreach($this->_ref_lines_elements_comments as &$chapitre){
+  		foreach($chapitre as &$cat){
+    	if(!array_key_exists("comment", $cat)){
+    		$cat["comment"] = array();
     	}
-      if(!array_key_exists("element", $chapitre)){
-    		$chapitre["element"] = array();
+      if(!array_key_exists("element", $cat)){
+    		$cat["element"] = array();
     	}
+  		}
     }
   }
   

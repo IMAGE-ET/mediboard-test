@@ -95,6 +95,17 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 
 </script>
 
+<!-- Formulaire d'ajout de ligne dans la prescription -->
+<form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+  <input type="hidden" name="prescription_line_id" value=""/>
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
+  <input type="hidden" name="code_cip" value=""/>
+</form>
+
+
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
@@ -394,5 +405,27 @@ Main.add( function(){
      calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
   {{/foreach}}
 } );
+
+// UpdateFields de l'autocomplete de medicaments
+updateFieldsMedicament = function(selected) {
+  Element.cleanWhitespace(selected);
+  dn = selected.childNodes;
+  Prescription.addLine(dn[0].firstChild.nodeValue);
+  $('searchProd_produit').value = "";
+}
+
+// Preparation des formulaire
+prepareForm(document.addLine);
+prepareForm(document.searchProd);
+
+// Autocomplete des medicaments
+urlAuto = new Url();
+urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+urlAuto.addParam("produit_max", 10);
+urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+  minChars: 3,
+  updateElement: updateFieldsMedicament
+} );
+
 
 </script>

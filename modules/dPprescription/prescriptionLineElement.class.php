@@ -15,9 +15,9 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $prescription_line_element_id = null;
   
   // DB Fields
-  var $element_prescription_id = null;
-  //var $prescription_id         = null;
-  var $commentaire             = null;
+  var $element_prescription_id        = null;
+  var $commentaire                    = null;
+  var $executant_prescription_line_id = null; 
   
   var $_ref_element_prescription = null;
     
@@ -31,6 +31,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "element_prescription_id" => "notNull ref class|CElementPrescription cascade",
+      "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
       "commentaire"             => "str"
     );
     return array_merge($specsParent, $specs);
@@ -39,6 +40,11 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   function loadRefElement(){
   	$this->_ref_element_prescription = new CElementPrescription();
   	$this->_ref_element_prescription->load($this->element_prescription_id);	
+  }
+  
+  function loadRefExecutant(){
+    $this->_ref_executant = new CExecutantPrescriptionLine();
+    $this->_ref_executant->load($this->executant_prescription_line_id);
   }
 }
 
