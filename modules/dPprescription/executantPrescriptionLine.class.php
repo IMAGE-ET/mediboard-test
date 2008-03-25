@@ -48,6 +48,7 @@ class CExecutantPrescriptionLine extends CMbObject {
   
   static function getAllExecutants(){
   	$executant = new CExecutantPrescriptionLine();
+  	$executants = array();
   	$_executants = $executant->loadList();
   	foreach($_executants as $_executant){
   		$executants[$_executant->category_prescription_id][] = $_executant;
