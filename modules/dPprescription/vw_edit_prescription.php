@@ -25,6 +25,7 @@ if(!$filter->prescription_id && $popup){
 	$new_prescription->object_id = $filter->object_id;
 	$new_prescription->object_class = $filter->object_class;
 	$new_prescription->praticien_id = mbGetValueFromGet("praticien_id");
+	$new_prescription->type = "externe";
 	$new_prescription->store();
 	$prescription = $new_prescription;
 } else {

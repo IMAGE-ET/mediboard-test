@@ -240,4 +240,8 @@ $locales['msg-CPrisePosologie-create'] = '';
 $locales['msg-CPrisePosologie-modify'] = '';
 $locales['msg-CPrisePosologie-delete'] = '';
 $locales['mod-dPprescription-tab-vw_edit_executant'] = '';
+$locales['CExecutantPrescriptionLine-nom'] = '';
+$locales['CExecutantPrescriptionLine-description'] = '';
+$locales['CExecutantPrescriptionLine-nom-desc'] = '';
+$locales['CExecutantPrescriptionLine-description-desc'] = '';
 ?>
