@@ -8,6 +8,7 @@
    <input type="hidden" name="object_class" value=""/>
    <input type="hidden" name="object_id" value=""/>
    <input type="hidden" name="praticien_id" value="" />
+   <input type="hidden" name="type" value="externe" /> 
    <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
    <table class="form">
      <tr>
