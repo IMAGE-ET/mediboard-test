@@ -20,6 +20,10 @@ $order = new CProductOrder();
 if ($order_id) {
   $order->load($order_id);
   $order->updateFormFields();
+  
+  foreach ($order->_ref_order_items as $item) {
+  	$item->_quantity_received = $item->quantity_received;
+  }
 }
 
 // Categories list

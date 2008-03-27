@@ -5,7 +5,7 @@
     <th>PU</th>
     <th>Prix</th>
     {{if $order->date_ordered}}
-    <th style="width: 1%">Reçu</th>
+    <th>Reçu</th>
     {{/if}}
   </tr>
   {{foreach from=$order->_ref_order_items item=curr_item}}

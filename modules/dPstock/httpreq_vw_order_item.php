@@ -15,10 +15,11 @@ $item_id = mbGetValueFromGet('item_id');
 
 // Loads the expected Order Item
 $item = new CProductOrderItem();
-$item->load($item_id);
-$item->loadRefs();
-
-$item->_ref_reference->loadRefsFwd();
+if ($item->load($item_id)) {
+  $item->loadRefs();
+  $item->_ref_reference->loadRefsFwd();
+}
+$item->_quantity_received = $item->quantity_received;
 
 // Smarty template
 $smarty = new CSmartyDP();

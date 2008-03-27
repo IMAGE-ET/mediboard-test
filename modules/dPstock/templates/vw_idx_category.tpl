@@ -1,3 +1,5 @@
+{{mb_include_script module="dPstock" script="numeric_field"}}
+
 <table class="main">
   <tr>
     <td class="halfPane">

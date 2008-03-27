@@ -146,7 +146,7 @@ class CProductOrder extends CMbObject {
     	  }
     	  
     	  // we store the new order item in the current order
-    	  $order_item->quantity = $current_stock;
+    	  $order_item->quantity = $current_stock / $best_reference->quantity;
     	  $order_item->reference_id = $best_reference->_id;
     	  $order_item->unit_price = $best_reference->price;
     	  $order_item->store();

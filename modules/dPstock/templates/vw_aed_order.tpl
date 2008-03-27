@@ -2,9 +2,7 @@
 function submitOrder (oForm, order_id) {
   submitFormAjax(oForm, 'systemMsg',{
     onComplete: function() {
-    {{foreach from=$order->_ref_order_items item=curr_item}}
-      refreshOrderItem({{$curr_item->_id}});
-    {{/foreach}}
+      refreshOrder(order_id);
     }
   });
 }

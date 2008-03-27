@@ -1,5 +1,3 @@
-{{mb_include_script module="dPstock" script="product_selector"}}
-
 <script type="text/javascript">
 function pageMain() {
   url = new Url;
@@ -49,3 +47,4 @@ function stockOut(oForm, stock_id) {
     <td class="halfPane" id="stock-outs"></td>
   </tr>
 </table>
+
