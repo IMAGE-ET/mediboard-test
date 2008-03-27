@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.12";
+$config["mod_version"]     = "1.0.13";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
