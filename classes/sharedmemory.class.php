@@ -207,7 +207,6 @@ class APCSharedMemory implements ISharedMemory {
 
 
 // Shared Memory instance factory
-global $dPconfig;
 switch ($dPconfig['shared_memory']) {
   case 'none' :
     $shm = new DiskSharedMemory;
