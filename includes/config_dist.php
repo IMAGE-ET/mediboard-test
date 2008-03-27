@@ -321,6 +321,7 @@ $dPconfig["dPqualite"] = array (
 $dPconfig["admin"] = array (
   "CUser" => array(
     "strong_password" => "0",
+    "max_login_attempts" => "5",
   ),
 );
 
