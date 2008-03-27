@@ -189,7 +189,7 @@ function copyTraitement(traitement_id){
               </select>
             {{/foreach}}
             <input type="hidden" name="_hidden_rques" value="" />
-            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques')">
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value)">
               Nouveau
             </button>
           </td>

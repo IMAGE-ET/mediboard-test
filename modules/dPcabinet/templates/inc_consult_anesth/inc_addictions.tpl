@@ -54,7 +54,7 @@ function finAddiction(oForm){
       {{/foreach}}
 
       <input type="hidden" name="_hidden_addiction" value="" />
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAddiction', this.form._hidden_addiction, 'addiction')">
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAddiction', this.form._hidden_addiction, 'addiction', this.form.type.value)">
         {{tr}}New{{/tr}}
       </button>
     </td>

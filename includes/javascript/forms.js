@@ -1,11 +1,15 @@
 // $Id$
 
-function addHelp(sClass, oField, sName) {
+function addHelp(sClass, oField, sName, sDepend) {
   url = new Url;
+  if(!sDepend) {
+    sDepend = null;
+  }
   url.setModuleAction("dPcompteRendu", "edit_aide");
-  url.addParam("class", sClass);
-  url.addParam("field", sName || oField.name);
-  url.addParam("text", oField.value);
+  url.addParam("class"       , sClass);
+  url.addParam("field"       , sName || oField.name);
+  url.addParam("text"        , oField.value);
+  url.addParam("depend_value", sDepend);
   url.popup(600, 300, "AidesSaisie");
 }
 

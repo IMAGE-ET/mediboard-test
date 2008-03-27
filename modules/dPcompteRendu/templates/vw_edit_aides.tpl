@@ -71,7 +71,7 @@ function submitFormAides(oForm){
       <select name="depend_value" class="{{$aide->_props.depend_value}}">
         <option value="">&mdash; Tous</option>
         {{foreach from=$dependValues key=_value item=_translation}}
-        <option value="{{$_value}}">{{$_translation}}</option>
+        <option value="{{$_value}}" {{if $_value == $aide->depend_value}}selected="selected"{{/if}}>{{$_translation}}</option>
         {{/foreach}}
       </select>
     </td>

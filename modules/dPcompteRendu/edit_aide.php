@@ -11,9 +11,10 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
-$field = mbGetValueFromGet("field");
-$text  = utf8_decode(mbGetValueFromGet("text" ));
-$class = mbGetValueFromGet("class");
+$field        = mbGetValueFromGet("field");
+$text         = utf8_decode(mbGetValueFromGet("text" ));
+$class        = mbGetValueFromGet("class");
+$depend_value = mbGetValueFromGet("depend_value");
 
 // Liste des users accessibles
 $listPrat = new CMediusers();
@@ -32,9 +33,10 @@ if ($depend_field = $object->_helped_fields[$field]) {
 
 // Nouvelle Aide à la saisie
 $aide = new CAideSaisie();
-$aide->class   = $class;
-$aide->field   = $field;
-$aide->text    = stripslashes($text);
+$aide->class        = $class;
+$aide->field        = $field;
+$aide->text         = stripslashes($text);
+$aide->depend_value = $depend_value;
 $aide->user_id = $AppUI->user_id;
 
 // Création du template
