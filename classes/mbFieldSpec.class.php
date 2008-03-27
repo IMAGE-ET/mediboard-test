@@ -20,6 +20,7 @@ class CMbFieldSpec {
   var $moreEquals     = null;
   var $sameAs         = null;
   var $notContaining  = null;
+  var $notNear        = null;
   var $alphaAndNum    = null;
   var $xor            = null;
 
@@ -142,6 +143,17 @@ class CMbFieldSpec {
       $targetPropValue = $object->$field;
       if (stristr($propValue, $targetPropValue)) {
         return "Ne doit pas contenir '$field->fieldName'";
+      }
+    }
+    
+      // notNear
+    if($field = $this->notNear){
+      if($msg = $this->checkTargetPropValue($object, $field)){
+        return $msg;
+      }
+      $targetPropValue = $object->$field;  
+      if (levenshtein($propValue, $targetPropValue) < 2) {
+        return "Le mot de passe ressemble trop à '$field->fieldName'";
       }
     }
 
