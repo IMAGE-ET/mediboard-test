@@ -117,7 +117,7 @@ class CMediusers extends CMbObject {
     $specs["_user_password"] = "password minLength|";
 
     if ($dPconfig["admin"]["CUser"]["strong_password"] == "1")
-      $specs["_user_password"] .= "6 notContaining|_user_username alphaAndNum";
+      $specs["_user_password"] .= "6 notContaining|_user_username notNear|user_username alphaAndNum";
     else
       $specs["_user_password"] .= 4;
 

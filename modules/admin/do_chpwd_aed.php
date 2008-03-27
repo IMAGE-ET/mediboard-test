@@ -30,6 +30,7 @@ if($user->_id){
       return $AppUI->setMsg($msg);
     }
     $AppUI->setMsg("chgpwUpdated", UI_MSG_OK);
+    $AppUI->weak_password = false;
   }else{
     // Nouveaux mot de passe différents
     $AppUI->setMsg("chgpwNoMatch", UI_MSG_ERROR);

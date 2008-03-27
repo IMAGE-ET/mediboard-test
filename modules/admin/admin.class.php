@@ -48,10 +48,12 @@ class CUser extends CMbObject {
   var $user_pic         = null;
   var $user_signature   = null;
   var $user_last_login  = null;
+  var $user_login_errors= null;
   var $template         = null;
   var $profile_id       = null;
 
   var $_user_password   = null;
+  var $_login_locked    = null;
 
   var $_ref_preferences = null;
 
@@ -93,6 +95,7 @@ class CUser extends CMbObject {
       "user_pic"        => "text",
       "user_signature"  => "text",
       "user_last_login" => "dateTime",
+      "user_login_errors"=> "notNull num",
       "template"        => "bool notNull default|0",
       "profile_id"      => "ref class|CUser"
       );
@@ -100,7 +103,7 @@ class CUser extends CMbObject {
       $specs["_user_password"] = 'password minLength|';
 
       if ($dPconfig['admin']['CUser']['strong_password'] == '1')
-      $specs['_user_password'] .= '6 notContaining|user_username alphaAndNum';
+      $specs['_user_password'] .= '6 notContaining|user_username notNear|user_username alphaAndNum';
       else
       $specs['_user_password'] .= 4;
 
@@ -122,10 +125,13 @@ class CUser extends CMbObject {
   }
 
   function updateFormFields () {
+  	global $dPconfig;
+  	
     parent::updateFormFields();
     $this->user_last_name = strtoupper($this->user_last_name);
     $this->user_first_name = ucwords(strtolower($this->user_first_name));
     $this->_view = "$this->user_last_name $this->user_first_name";
+    $this->_login_locked = $this->user_login_errors > $dPconfig['admin']['CUser']['max_login_attempts'];
   }
 
   function check() {

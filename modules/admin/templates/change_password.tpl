@@ -1,13 +1,15 @@
 <h1>
   {{tr}}Change User Password{{/tr}}
 </h1>
-<form name="chpwdFrm" action="?m={{$m}}&amp;a=chpwd" method="post" onsubmit="return checkForm(this)">
+<form name="chpwdFrm" action="?m={{$m}}&amp;{{if $message}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_chpwd_aed" />
 <input type="hidden" name="del" value="0" />
-<input type="hidden" name="dialog" value="1" />
-{{if $message}}
+{{if !$message}}
+  <input type="hidden" name="dialog" value="1" />
+{{else}}
   <div class="error">{{$message|smarty:nodefaults}}</div>
 {{/if}}
+
 <table class="form">
   <tr>
     <td>

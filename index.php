@@ -162,7 +162,7 @@ if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
     }
   }
 }
-
+    
 // Still no target module
 if (null == $m) {
   $AppUI->redirect("m=system&a=access_denied");
@@ -179,6 +179,17 @@ $can = $currentModule->canDo();
 $a     = $AppUI->checkFileName(mbGetValueFromGet("a"     , "index"));
 $u     = $AppUI->checkFileName(mbGetValueFromGet("u"     , ""));
 $dosql = $AppUI->checkFileName(mbGetValueFromPost("dosql", ""));
+
+$tab = $a == "index"  ? 
+  mbGetValueFromGetOrSession("tab", 1) : 
+  mbGetValueFromGet("tab");
+
+// Check whether the password is strong enough
+if ($AppUI->weak_password && 
+    $AppUI->user_remote && 
+    !($m == "admin" && $tab == "chpwd")) {
+  $AppUI->redirect("m=admin&tab=chpwd&forceChange=1");
+}
 
 // set the group in use, put the user group if not allowed
 $g = mbGetAbsValueFromGetOrSession("g", $AppUI->user_group);
@@ -276,10 +287,6 @@ if (!$suppressHeaders) {
 }
 
 // -- Code pour les tabBox et Inclusion du fichier demandé --
-
-$tab = $a == "index"  ? 
-  mbGetValueFromGetOrSession("tab", 1) : 
-  mbGetValueFromGet("tab");
 
 if ($tab !== null) {
   $currentModule->showTabs();

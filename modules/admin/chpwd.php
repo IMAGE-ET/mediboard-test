@@ -11,17 +11,16 @@ $user->loadObject($where);
 
 $specs = $user->getSpecs();
 
-$showMessage = dPgetParam($_REQUEST, "showMessage");
+$forceChange = dPgetParam($_REQUEST, "forceChange");
 
-if ($showMessage) {
+if ($forceChange) {
 $message = 'Votre mot de passe ne correspond pas aux critères
     de sécurité de Mediboard. Nous vous serions gré de bien vouloir
     changer celui-ci afin qu\'il respecte ces critères. <br />
     La sécurité des informations de vos patients en dépendent.<br />
     Pour plus de précisions, veuillez vous conférer aux 
     <a href="http://mediboard.org/public/tiki-index.php?page=Recommandations+de+la+CNIL" target="_blank">
-    recommandations de la CNIL</a>.<br />
-	Merci';
+    recommandations de la CNIL</a>.<br />';
 } else {
   $message = null;
 }

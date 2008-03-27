@@ -175,6 +175,19 @@ var ElementChecker = {
       }
     }
     
+    // notNear
+    if (sTargetElement = this.aProperties["notNear"]) {
+      if (sParamMsg = this.castCompareValues(sTargetElement)) {
+        return sParamMsg;
+      }
+      
+      if (levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
+        var oTargetLabel = getLabelFor(this.oTargetElement);
+        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
+        return printf("Ressemble trop à %s", sTargetLabel);
+      }
+    }
+    
     // alphaAndNum
    	if(this.aProperties["alphaAndNum"]){
 	  if (!this.oElement.value.match(/[a-z]/)) {

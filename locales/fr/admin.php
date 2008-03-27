@@ -10,6 +10,7 @@ $locales['CModule-back-'] = '';
 $locales['CModule-back-permissions'] = '';
 $locales['config-admin-CUser'] = 'Configuration des permissions';
 $locales['config-admin-CUser-strong_password'] = 'Forcer des mots de passe sécurisés';
+$locales['config-admin-CUser-max_login_attempts'] = 'Nombre maximum de tentatives de connexion';
 $locales['copied from template'] = 'copiés depuis un modèle';
 $locales['cpermission::store failed'] = 'CPermission::store() a échoué';
 $locales['CPermModule'] = 'Permissions Module';

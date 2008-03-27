@@ -10,6 +10,7 @@ $locales['CModule-back-'] = "";
 $locales['CModule-back-permissions'] = "";
 $locales['config-admin-CUser'] = "";
 $locales['config-admin-CUser-strong_password'] = "";
+$locales['config-admin-CUser-max_login_attempts'] = "";
 $locales['copied from template'] = "";
 $locales['cpermission::store failed'] = "";
 $locales['CPermModule'] = "Modules Permissions";

@@ -76,7 +76,7 @@
       </a>
     </td>
     
-    <td class="button">
+    <td class="button" style="white-space: nowrap; text-align: left;">
       <button class="search" onclick="window.location='?m={{$m}}&amp;tab=edit_perms&amp;user_id={{$curr_user->_id}}'">
       	Droits
       </button>
@@ -85,6 +85,7 @@
       </button>
       {{assign var="loginas_user" value=$curr_user}}
       {{include file="loginas.tpl"}}
+      {{include file="unlock.tpl"}}
     </td>
   </tr>
   {{/foreach}}

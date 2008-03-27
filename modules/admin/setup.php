@@ -210,8 +210,12 @@ class CSetupadmin extends CSetup {
             SET `user_username` = TRIM(LEADING '>> ' FROM `user_username`)
             WHERE `user_username` LIKE '>>%';";
     $this->addQuery($sql);
+    
+    $this->makeRevision("1.0.12");
+    $sql = "ALTER TABLE `users` 
+            ADD `user_login_errors` TINYINT NOT NULL DEFAULT '0' AFTER `user_last_login` ;";
 
-    $this->mod_version = "1.0.12";
+    $this->mod_version = "1.0.13";
   }
 }
 ?>

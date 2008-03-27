@@ -17,6 +17,7 @@ class CPasswordSpec extends CMbFieldSpec {
   
   var $minLength     = null;
   var $notContaining = null;
+  var $notNear       = null;
   var $alphaAndNum   = null;
   
   function getDBSpec(){
@@ -48,6 +49,17 @@ class CPasswordSpec extends CMbFieldSpec {
       $targetPropValue = $object->$field;  
       if (stristr($propValue, $targetPropValue)) {
         return "Le mot de passe ne doit pas contenir '$field->fieldName'";
+      }
+    }
+    
+    // notNear
+    if($field = $this->notNear){
+      if($msg = $this->checkTargetPropValue($object, $field)){
+        return $msg;
+      }
+      $targetPropValue = $object->$field;  
+      if (levenshtein($propValue, $targetPropValue) < 3) {
+        return "Le mot de passe ressemble trop à '$field->fieldName'";
       }
     }
     

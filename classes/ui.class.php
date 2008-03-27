@@ -42,10 +42,14 @@ class CAppUI {
   var $user_group = null;
 /** @var dateTime */
   var $user_last_login = null;
+/** @var bool */
+  var $user_remote = null;
 /** @var array */
   var $user_prefs=null;
 /** @var int Unix time stamp */
   var $day_selected=null;
+/** @var bool Weak password */
+  var $weak_password=null;
 
 // localisation
 /** @var string */
@@ -481,10 +485,10 @@ class CAppUI {
     $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
     $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
 
-    $weakPwd = false;
+    $this->weak_password = false;
     // minLength
     if ($pwdSpecs->minLength > strlen($pwd)) {
-      $weakPwd = true;
+      $this->weak_password = true;
     }
 
     // notContaining
@@ -492,27 +496,25 @@ class CAppUI {
       $target = $pwdSpecs->notContaining;
         if ($field = $user->$target)
           if (stristr($pwd, $field))
-            $weakPwd = true;
+            $this->weak_password = true;
+    }
+    
+    // notNear
+    if($pwdSpecs->notNear) {
+      $target = $pwdSpecs->notNear;
+        if ($field = $user->$target)
+          if (levenshtein($pwd, $field) < 3)
+            $this->weak_password = true;
     }
 
     // alphaAndNum
     if($pwdSpecs->alphaAndNum) {
       if (!preg_match("/[a-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
-        $weakPwd = true;
+        $this->weak_password = true;
       }
     }
-    
-    
-    if ($weakPwd) {
-      $this->addOnLoadEvents(
-      'if (window.opener == null) {
-      var url = new Url;
-      url.setModuleAction("admin", "chpwd");
-      url.addParam("showMessage", "1");
-      url.popup(600, 300, "ChangePassword");
-    }');
-    }
-      //$this->setMsg('dsbfjsdbfhsdfhdbj', UI_MSG_WARNING);
+
+
       
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
@@ -529,24 +531,47 @@ class CAppUI {
       $this->setMsg("You should enter your password", UI_MSG_ERROR);
       return false;
     }
-        
-    
-    
+
+
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
-    if (!$user->_id) {
-      $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
+    $userByName = new CUser;
+    $userByName->user_username = trim(mbGetValueFromPost("username"));
+    $userByName->loadMatchingObject();
+    
+    if ($userByName->_login_locked) {
+      $this->setMsg("You cannot login anymore, please ask an administrator to unlock your account", UI_MSG_ERROR);
       return false;
     }
     
+    // Wrong login and/or password
+    if (!$user->_id) {
+      $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
+
+      // If the user exists, but has given a wrong password let's increment his error count
+	    if ($userByName->_id && !$userByName->_login_locked) {
+	      $userByName->user_login_errors++;
+	      $userByName->store();
+	      $remainingAttempts = $dPconfig['admin']['CUser']['max_login_attempts']-$userByName->user_login_errors;
+	      $this->setMsg("You have tried {$userByName->user_login_errors} times to login with a wrong password, $remainingAttempts attempts remaining", UI_MSG_ERROR);
+	    }
+      return false;
+      
+    // else, if he's not locked and has given a good password
+    } else {
+      $user->user_login_errors = 0;
+      $user->store();
+    }
+
+    
     // Put user_group in AppUI
-    $remote = 1;
+    $this->user_remote = 1;
     if ($ds->loadTable("users_mediboard") && $ds->loadTable("groups_mediboard")) {
       $sql = "SELECT `remote` FROM `users_mediboard` WHERE `user_id` = '$user->user_id'";
       if ($cur = $ds->exec($sql)) {
         if ($row = $ds->fetchRow($cur)) {
-          $remote = intval($row[0]);
+          $this->user_remote = intval($row[0]);
         }
       }
       $sql = "SELECT `groups_mediboard`.`group_id`" .
@@ -569,7 +594,7 @@ class CAppUI {
     $is_local[4] = ($ip0 == 192 && $ip1 == 168);
     $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
     $is_local[0] = $is_local[0] && ($_SERVER["REMOTE_ADDR"] != $dPconfig["system"]["reverse_proxy"]);
-    if (!$is_local[0] && $remote == 1 && $user->user_type != 1) {
+    if (!$is_local[0] && $this->user_remote == 1 && $user->user_type != 1) {
       $this->setMsg("User has no remote access", UI_MSG_ERROR);
       return false;
     }
@@ -593,6 +618,10 @@ class CAppUI {
     // load the user preferences
     $this->loadPrefs($this->user_id);
     $this->setUserLocale();
+    
+    if ($this->weak_password && $this->user_remote) {
+      $this->redirect("m=admin&tab=chpwd&forceChange=1");
+    }
     return true;
   }
 
