@@ -1,31 +1,3 @@
-{{if !$board}}
-
-{{include file="../../dPpatients/templates/inc_intermax.tpl" debug=false}}
-
-<script type="text/javascript">
-
-Intermax.ResultHandler["Consulter Vitale"] =
-Intermax.ResultHandler["Lire Vitale"] = function() {
-  var url = new Url;
-  url.setModuleTab("dPpatients", "vw_idx_patients");
-  url.addParam("useVitale", 1);
-  url.redirect();
-}
-
-var Patient = {
-  create : function() {
-    url = new Url;
-    url.setModuleTab("dPpatients", "vw_edit_patients");
-    url.addParam("patient_id", 0);
-    url.addParam("useVitale", {{$useVitale|json}});
-    url.addParam("name", {{$nom|json}});
-    url.addParam("firstName", {{$prenom|json}});
-    url.redirect();
-  }
-}
-</script>
-{{/if}}
-
 <form name="find" action="?" method="get">
 
 <input type="hidden" name="m" value="{{$m}}" />
@@ -34,7 +6,7 @@ var Patient = {
 
 <table class="form">
   <tr>
-    <th class="category" colspan="4">Recherche d'un dossier patient</th>
+    <th class="category" colspan="4">Recherche d'un dossier patient externe</th>
   </tr>
 
   <tr>
@@ -54,14 +26,7 @@ var Patient = {
   <tr>
     <th><label for="jeuneFille" title="Nom de naissance">Nom de naissance</label></th>
     <td><input tabindex="3" type="text" name="jeuneFille" value="{{$jeuneFille|stripslashes}}" /></td>
-    {{if $dPconfig.dPpatients.CPatient.tag_ipp && $dPsanteInstalled}}
-    <th>IPP</th>
-    <td>
-      <input tabindex="6" type="text" name="patient_ipp" value="{{$patient_ipp}}"/>
-    </td>
-    {{else}}
     <td colspan="2" />
-    {{/if}}
   </tr>
   
   <tr>
@@ -88,31 +53,9 @@ var Patient = {
   
   <tr>
     <td class="button" colspan="4">
-      {{if $board}}
-      <button class="search" type="button" onclick="updateListPatients()">
-        {{tr}}Search{{/tr}}
-      </button>
-      {{else}}
       <button class="search" type="submit">
         {{tr}}Search{{/tr}}
       </button>
-      {{if $app->user_prefs.GestionFSE}}
-      <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
-        Lire Vitale
-      </button>
-      <button class="change" type="button" onclick="Intermax.result('Lire Vitale');">
-        Résultat Vitale
-      </button>
-      {{/if}}
-      
-      {{if $can->edit}}
-      <button class="new" type="button" onclick="Patient.create();">
-        {{tr}}Create{{/tr}}
-        {{if $useVitale}}avec Vitale{{/if}}
-      </button>
-      {{/if}}
-      
-      {{/if}}
     </td>
   </tr>
 </table>
@@ -123,7 +66,7 @@ var Patient = {
 <input type="hidden" name="a" value="fusion_pat" />
 <table class="tbl">
   <tr>
-    {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit}}
+    {{if ((!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin)) && $can->edit && 0}}
     <th>
     <button type="submit" class="search">{{tr}}Merge{{/tr}}</button>
     </th>
@@ -136,21 +79,14 @@ var Patient = {
     <th>Adresse</th>
   </tr>
 
-  {{mb_ternary var="tabPatient" test=$board 
-     value="vw_full_patients&patient_id=" 
-     other="vw_idx_patients&patient_id="}}
+  {{assign var="tabPatient" value="vw_idx_patients&patient_id="}}
   
   {{foreach from=$patients item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
+    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit && 0}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
-      {{if $curr_patient->_id == $patVitale->_id}}
-      <div style="float:right;">
-        <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
-      </div>
-      {{/if}}
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
         {{mb_value object=$curr_patient field="_view"}}
       </a>
@@ -162,7 +98,8 @@ var Patient = {
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
-        {{mb_value object=$curr_patient field="adresse"}}
+        {{mb_value object=$curr_patient field="adresse1"}}
+        {{mb_value object=$curr_patient field="adresse2"}}
         {{mb_value object=$curr_patient field="cp"}}
         {{mb_value object=$curr_patient field="ville"}}
       </a>
@@ -184,7 +121,7 @@ var Patient = {
   {{/if}}
   {{foreach from=$patientsSoundex item=curr_patient}}
   <tr {{if $patient->_id == $curr_patient->_id}}class="selected"{{/if}}>
-    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit}}
+    {{if (!$dPconfig.dPpatients.CPatient.merge_only_admin || $can->admin) && $can->edit && 0}}
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
@@ -199,7 +136,8 @@ var Patient = {
     </td>
     <td class="text">
       <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
-        {{mb_value object=$curr_patient field="adresse"}}
+        {{mb_value object=$curr_patient field="adresse1"}}
+        {{mb_value object=$curr_patient field="adresse2"}}
         {{mb_value object=$curr_patient field="cp"}}
         {{mb_value object=$curr_patient field="ville"}}
       </a>
@@ -208,5 +146,4 @@ var Patient = {
   {{/foreach}}
   
 </table>
-</form>
-      
+</form>      

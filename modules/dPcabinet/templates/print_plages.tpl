@@ -51,7 +51,11 @@
     <td>{{$curr_consult->_ref_patient->_view}}</td>
     {{if $coordonnees}}
     <td>{{$curr_consult->_ref_patient->adresse}}<br />{{$curr_consult->_ref_patient->cp}} {{$curr_consult->_ref_patient->ville}}</td>
-    <td>{{$curr_consult->_ref_patient->tel}}</td>
+    <td>
+      {{$curr_consult->_ref_patient->tel}}
+      <br />
+      {{$curr_consult->_ref_patient->tel2}}
+    </td>
     {{/if}}
     <td>
       {{$curr_consult->_ref_patient->_age}} ans

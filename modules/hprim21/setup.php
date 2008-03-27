@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "hprim21";
-$config["mod_version"]     = "0.1";
+$config["mod_version"]     = "0.11";
 $config["mod_type"]        = "user";
 
 
@@ -143,7 +143,50 @@ class CSetuphprim21 extends CSetup {
               ADD `external_id` VARCHAR(255) NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.1";
+    $this->makeRevision("0.1");
+    $sql = "ALTER TABLE `hprim21_patient`
+            ADD `nom_soundex2` VARCHAR(255) AFTER `nom_jeune_fille`, 
+            ADD `prenom_soundex2` VARCHAR(255) AFTER `nom_soundex2`, 
+            ADD `nomjf_soundex2` VARCHAR(255) AFTER `prenom_soundex2`, 
+            CHANGE `naissance` `naissance` CHAR(10), 
+            CHANGE `code_regime` `code_regime` MEDIUMINT(3) UNSIGNED ZEROFILL;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `hprim21_patient`
+            ADD INDEX ( `patient_id` ),
+            ADD INDEX ( `nom` ),
+            ADD INDEX ( `prenom` ),
+            ADD INDEX ( `prenom2` ),
+            ADD INDEX ( `nom_jeune_fille` ),
+            ADD INDEX ( `nom_soundex2` ),
+            ADD INDEX ( `prenom_soundex2` ),
+            ADD INDEX ( `nomjf_soundex2` ),
+            ADD INDEX ( `naissance` ),
+            ADD INDEX ( `sexe` ),
+            ADD INDEX ( `emetteur_id` ),
+            ADD INDEX ( `external_id` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `hprim21_sejour`
+            ADD INDEX ( `hprim21_patient_id` ),
+            ADD INDEX ( `hprim21_medecin_id` ),
+            ADD INDEX ( `sejour_id` ),
+            ADD INDEX ( `date_mouvement` ),
+            ADD INDEX ( `emetteur_id` ),
+            ADD INDEX ( `external_id` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `hprim21_medecin`
+            ADD INDEX ( `user_id` ),
+            ADD INDEX ( `nom` ),
+            ADD INDEX ( `prenom` ),
+            ADD INDEX ( `emetteur_id` ),
+            ADD INDEX ( `external_id` );";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `hprim21_complementaire`
+            ADD INDEX ( `hprim21_patient_id` ),
+            ADD INDEX ( `emetteur_id` ),
+            ADD INDEX ( `external_id` );";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.11";
   }
 }
     

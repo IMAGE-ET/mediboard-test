@@ -596,6 +596,8 @@ class CPatient extends CMbObject {
     
   function updateDBFields() {
   	global $dPconfig;
+  	
+  	parent::updateDBFields();
   	 
     $soundex2 = new soundex2;
     if ($this->nom) {

@@ -7,30 +7,120 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m, $dPconfig, $g;
 
-$extension = mbGetValueFromGet("fileextension", $dPconfig["hprim21"]["CHprim21Reader"]["fileextension"]);
+$showCount = 30;
 
-$ftp = new CFTP();
-$ftp->hostname = mbGetValueFromGet("hostname", $dPconfig["hprim21"]["CHprim21Reader"]["hostname"]);
-$ftp->username = mbGetValueFromGet("username", $dPconfig["hprim21"]["CHprim21Reader"]["username"]);
-$ftp->userpass = mbGetValueFromGet("userpass", $dPconfig["hprim21"]["CHprim21Reader"]["userpass"]);
-$ftp->connect();
-$list = $ftp->getListFiles("./ftp");
+// Chargement du patient sélectionné
+$patient_id = mbGetValueFromGetOrSession("patient_id");
+$patient = new CHprim21Patient();
+$patient->load($patient_id);
 
-foreach($list as $filepath) {
-  if(substr($filepath, -(strlen($extension))) == $extension) {
-    $filename = basename($filepath);
-    $hprimFile = $ftp->getFile($filepath, "tmp/hprim21/$filename");
-    $hprimReader = new CHPrim21Reader();
-    $hprimReader->readFile($hprimFile);
-    if(!count($hprimReader->error_log)) {
-      $ftp->delFile($filepath);
-    }
-    unlink($hprimFile);
+// Récuperation des patients recherchés
+$patient_nom         = mbGetValueFromGetOrSession("nom"         , ""       );
+$patient_prenom      = mbGetValueFromGetOrSession("prenom"      , ""       );
+$patient_jeuneFille  = mbGetValueFromGetOrSession("jeuneFille"  , ""       );
+$patient_ville       = mbGetValueFromGetOrSession("ville"       , ""       );
+$patient_cp          = mbGetValueFromGetOrSession("cp"          , ""       );
+$patient_day         = mbGetValueFromGet("Date_Day"    , "");
+$patient_month       = mbGetValueFromGet("Date_Month"  , "");
+$patient_year        = mbGetValueFromGet("Date_Year"   , "");
+$patient_naissance   = null;
+
+$where        = array();
+$whereSoundex = array();
+$soundexObj   = new soundex2();
+
+if ($patient_nom) {
+  $patient_nom = trim($patient_nom);
+  $where["nom"]                 = "LIKE '$patient_nom%'";
+  $whereSoundex["nom_soundex2"] = "LIKE '".$soundexObj->build($patient_nom)."%'";
+}
+if ($patient_prenom) {
+  $patient_prenom = trim($patient_prenom);
+  $where["prenom"]                 = "LIKE '$patient_prenom%'";
+  $whereSoundex["prenom_soundex2"] = "LIKE '".$soundexObj->build($patient_prenom)."%'";
+}
+if ($patient_jeuneFille) {
+  $patient_jeuneFille = trim($patient_jeuneFille);
+  $where["nom_jeune_fille"]        = "LIKE '$patient_jeuneFille%'";
+  $whereSoundex["nomjf_soundex2"]  = "LIKE '".$soundexObj->build($patient_jeuneFille)."%'";
+}
+
+
+if(($patient_year) || ($patient_month) || ($patient_day)){
+	$patient_naissance = "on";
+}
+
+if ($patient_naissance == "on"){
+  $year =($patient_year)?"$patient_year-":"%-";
+  $month =($patient_month)?"$patient_month-":"%-";
+  $day =($patient_day)?"$patient_day":"%";
+  if ($day!="%") {
+    $day = str_pad($day,2,"0",STR_PAD_LEFT);
+  }
+  
+  $naissance = $year.$month.$day;
+  
+  if($patient_year || $patient_month || $patient_day){
+    $where["naissance"] = $whereSoundex["naissance"] = "LIKE '$naissance'";
   }
 }
 
-mbTrace($ftp->logs);
+if ($patient_ville) $where["ville"] = $whereSoundex["ville"] = "LIKE '$patient_ville%'";
+if ($patient_cp)    $where["cp"]    = $whereSoundex["cp"]    = "= '$patient_cp'";
+
+$patients        = array();
+$patientsSoundex = array();
+
+$order = "nom, prenom, naissance";
+$pat = new CHprim21Patient();
+
+// Patient counts
+$patientsCount = $where ? $pat->countList($where) : 0;
+$patientsSoundexCount = $whereSoundex ? $pat->countList($whereSoundex) : 0;
+$patientsSoundexCount -= $patientsCount;
+
+// Chargement des patients
+if ($where) {
+  $patients = $pat->loadList($where, $order, "0, $showCount");
+}
+
+if ($whereSoundex) {
+  $patientsSoundex = $pat->loadList($whereSoundex, $order, "0, $showCount");
+  $patientsSoundex = array_diff_key($patientsSoundex, $patients);
+}
+
+// Sélection du premier de la liste si aucun n'est déjà sélectionné
+if (!$patient->_id and count($patients) == 1) {
+  $patient = reset($patients);
+}
+
+if($patient->_id) {
+  $patient->loadRefs();
+  foreach($patient->_ref_hprim21_sejours as &$sejour) {
+    $sejour->loadRefs();
+    $sejour->_ref_sejour->loadRefsFwd();
+  }
+}
+
+// Création du template
+$smarty = new CSmartyDP();
+
+$smarty->assign("nom"                 , $patient_nom              );
+$smarty->assign("prenom"              , $patient_prenom           );
+$smarty->assign("jeuneFille"          , $patient_jeuneFille       );
+$smarty->assign("naissance"           , $patient_naissance        );
+$smarty->assign("ville"               , $patient_ville            );
+$smarty->assign("cp"                  , $patient_cp               );
+
+$smarty->assign("patients"            , $patients                 );
+$smarty->assign("patientsSoundex"     , $patientsSoundex          );
+$smarty->assign("patientsCount"       , $patientsCount            );
+$smarty->assign("patientsSoundexCount", $patientsSoundexCount     );
+
+$smarty->assign("patient"             , $patient                  );
+
+$smarty->display("vw_patients.tpl");
 
 ?>

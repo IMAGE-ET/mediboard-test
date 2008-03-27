@@ -210,5 +210,7 @@ $smarty->assign("anesth"              , $anesth                   );
 $smarty->assign("listPrat"            , $listPrat                 );
 $smarty->assign("board"               , 0                         );
 $smarty->assign("patient_ipp"         , $patient_ipp              );
+
 $smarty->display("vw_idx_patients.tpl");
+
 ?>

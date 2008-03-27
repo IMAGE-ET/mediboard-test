@@ -29,6 +29,9 @@ class CHprim21Patient extends CHprim21Object {
   var $civilite                  = null;
   var $diplome                   = null;
   var $nom_jeune_fille           = null;
+  var $nom_soundex2              = null;
+  var $prenom_soundex2           = null;
+  var $nomjf_soundex2            = null;
   var $naissance                 = null;
   var $sexe                      = null;
   var $adresse1                  = null;
@@ -86,6 +89,7 @@ class CHprim21Patient extends CHprim21Object {
   var $date_debut_grossesse   = null;
   
   var $_ref_patient = null;
+  var $_ref_hprim21_sejours = null;
 
 	function CHprim21Patient() {
 		$this->CMbObject("hprim21_patient", "hprim21_patient_id");
@@ -105,7 +109,10 @@ class CHprim21Patient extends CHprim21Object {
       "civilite"                  => "enum list|M|Mme|Mlle",
       "diplome"                   => "str",
       "nom_jeune_fille"           => "str",
-      "naissance"                 => "date",
+      "nom_soundex2"              => "str",
+      "prenom_soundex2"           => "str",
+      "nomjf_soundex2"            => "str",
+      "naissance"                 => "birthDate",
       "sexe"                      => "enum list|M|F|U",
       "adresse1"                  => "str",
       "adresse2"                  => "str",
@@ -161,6 +168,27 @@ class CHprim21Patient extends CHprim21Object {
       "date_debut_grossesse"   => "date",
     );
     return array_merge($specsParent, $specs);
+  }
+    
+  function updateDBFields() {
+  	
+  	parent::updateDBFields();
+  	 
+    $soundex2 = new soundex2;
+    if ($this->nom) {
+  	  $this->nom = strtoupper($this->nom);
+      $this->nom_soundex2 = $soundex2->build($this->nom);
+    }
+    
+    if ($this->nom_jeune_fille) {
+  	  $this->nom_jeune_fille = strtoupper($this->nom_jeune_fille);
+      $this->nomjf_soundex2 = $soundex2->build($this->nom_jeune_fille);
+    }
+
+    if ($this->prenom) {
+      $this->prenom = ucwords(strtolower($this->prenom));
+      $this->prenom_soundex2 = $soundex2->build($this->prenom);
+    }
   }
   
   function bindToLine($line, &$reader) {
@@ -277,6 +305,18 @@ class CHprim21Patient extends CHprim21Object {
     // Chargement du patient correspondant
     $this->_ref_patient = new CPatient();
     $this->_ref_patient->load($this->patient_id);
+  }
+  
+  function loadRefHprim21Sejours(){
+    $sejour = new CHprim21Sejour();
+    $where["hprim21_patient_id"] = "= '$this->_id'";
+    $order = "date_mouvement";
+    $this->_ref_hprim21_sejours = $sejour->loadList($where, $order);
+  }
+  
+  function loadRefsBack() {
+    parent::loadRefsBack();
+    $this->loadRefHprim21Sejours();
   }
 }
 ?>

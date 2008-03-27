@@ -35,7 +35,8 @@ class CHprim21Sejour extends CHprim21Object {
   var $localisation7        = null;
   var $localisation8        = null;
   
-  var $_ref_sejour = null;
+  var $_ref_sejour          = null;
+  var $_ref_hprim21_medecin = null;
 
 	function CHprim21Sejour() {
 		$this->CMbObject("hprim21_sejour", "hprim21_sejour_id");
@@ -106,10 +107,20 @@ class CHprim21Sejour extends CHprim21Object {
     return true;
   }
   
+  function updateFormFields() {
+    $this->_view = "Séjour du ".mbTranformTime(null, $this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
+  }
+  
+  function loadRefHprim21Medecin(){
+    $this->_ref_hprim21_medecin = new CHprim21Medecin();
+    $this->_ref_hprim21_medecin->load($this->hprim21_medecin_id);
+  }
+  
   function loadRefsFwd(){
     // Chargement du séjour correspondant
-    $this->_ref_sejour = new CPatient();
+    $this->_ref_sejour = new CSejour();
     $this->_ref_sejour->load($this->sejour_id);
+    $this->loadRefHprim21Medecin();
   }
 }
 ?>
