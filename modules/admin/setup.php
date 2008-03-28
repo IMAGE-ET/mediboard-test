@@ -213,7 +213,8 @@ class CSetupadmin extends CSetup {
     
     $this->makeRevision("1.0.12");
     $sql = "ALTER TABLE `users` 
-            ADD `user_login_errors` TINYINT NOT NULL DEFAULT '0' AFTER `user_last_login` ;";
+            ADD `user_login_errors` TINYINT NOT NULL DEFAULT '0' AFTER `user_last_login`;";
+    $this->addQuery($sql);
 
     $this->mod_version = "1.0.13";
   }
