@@ -93,6 +93,7 @@ class CBoolSpec extends CMbFieldSpec {
         $checked = " checked=\"checked\""; 
       }else{
         $checked = "";
+        $value = "0";
       }
     	$sHtml = "<input type=\"checkbox\" name=\"__$field\" 
         onclick=\"

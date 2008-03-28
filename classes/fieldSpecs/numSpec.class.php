@@ -23,11 +23,7 @@ class CNumSpec extends CMbFieldSpec {
   var $maxLength = null;
   var $minMax    = null;
 
-  
-  
   function checkProperty($object){
-  	
-  	
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
@@ -175,17 +171,46 @@ class CNumSpec extends CMbFieldSpec {
         $type_sql = "BIGINT(20)";
       }
     }elseif($this->pos){
-      $type_sql = "INT(11) UNSIGNED";
+      $type_sql = "INT(10) UNSIGNED";
     }
     
     return $type_sql;
   }
 
-  function getFormHtmlElement($object, $params, $value, $className){
+  function getFormHtmlElement($object, $params, $value, $className) {
+  	$form      = CMbArray::extract($params, "form");
+  	$increment = CMbArray::extract($params, "increment");
+  	$field     = htmlspecialchars($this->fieldName);
     $maxLength = mbGetValue($this->length, $this->maxLength, 11);
+    $fieldId = str_replace('-', '_', $form.'_'.$field);
+    
+    if (!$min = CMbArray::extract($params, "min")) {
+      $min = $this->checkNumeric($this->min);
+    }
+    if (!$max = CMbArray::extract($params, "max")) {
+      $max = $this->checkNumeric($this->max);
+    }
+    
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
-    return $this->getFormElementText($object, $params, $value, $className);
+    
+    if ($form && $increment) {
+	    $sHtml  = '<div class="numericField">';
+	    $sHtml .= $this->getFormElementText($object, $params, $value, $className);
+	    $sHtml .= '
+	  <script type="text/javascript">
+			'.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", 1, '.($this->pos?'0':($min?$min:'null')).', '.($max?$max:'null').');
+		</script>
+    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
+	  <map name="arrow_'.$fieldId.'" >
+	    <area coords="0,0,10,8"   href="#1" onclick="'.$fieldId.'_object.inc()" title="+" />
+	    <area coords="0,10,10,18" href="#1" onclick="'.$fieldId.'_object.dec()" title="-" />
+	  </map>
+	  </div>';
+    } else {
+    	$sHtml = $this->getFormElementText($object, $params, $value, $className);
+    }
+    return $sHtml;
   }
 }
 

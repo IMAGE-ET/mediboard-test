@@ -455,3 +455,54 @@ Object.extend(Form, {
     });
   }
 } );
+
+
+function NumericField (form, element, step, min, max) {
+    this.sField = form + "_" + element;
+    this.min  = (min  != undefined) ? min  : null;
+    this.max  = (max  != undefined) ? max  : null;
+    this.step = (step != undefined) ? step : null;
+}
+
+NumericField.prototype = {
+  // Increment function
+  inc: function () {
+    var oField = $(this.sField);
+    var current = oField.value;
+    var result = Number(current) + Number(this.getStep());
+    
+    oField.value = (result <= this.max || this.max == null) ? result : this.max;
+    
+    if (oField.value != current && oField.onchange) {
+      oField.onchange();
+    }
+  },
+
+  // Decrement function
+  dec: function () {
+    var oField = $(this.sField);
+    var current = oField.value;
+    var result = Number(current) - Number(this.getStep());
+    
+    oField.value = (result >= this.min || this.min == null) ? result : this.min;
+    
+    if (oField.value != current && oField.onchange) {
+      oField.onchange();
+    }
+  },
+  
+  // Calculate appropriate step
+  getStep: function () {
+    var oField = $(this.sField);
+    if (this.step != undefined) {
+      var value = Math.abs(oField.value);
+      if (value < 10)  return 1;
+      if (value < 50)  return 5;
+      if (value < 100) return 10;
+      if (value < 500) return 50;
+      return 100;
+    } else {
+      return step;
+    }
+  },
+}

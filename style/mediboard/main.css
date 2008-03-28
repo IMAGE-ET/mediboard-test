@@ -2716,3 +2716,19 @@ table.tbl td.ccmu-P{
 .bargraph .threshold div {
   float:left; 
 }
+
+.numericField {
+  display: inline;
+}
+
+.numericField img {
+  height: 19px; 
+  width: 11px; 
+  line-height: 19px; 
+  vertical-align: middle; 
+  margin: -5px 0 0 1px; 
+}
+
+.numericField input {
+  margin-right: 0;
+}
