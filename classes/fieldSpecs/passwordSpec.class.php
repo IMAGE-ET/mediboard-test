@@ -65,7 +65,7 @@ class CPasswordSpec extends CMbFieldSpec {
     
     // alphaAndNum
     if($field = $this->alphaAndNum){
-      if (!preg_match("/[a-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
+      if (!preg_match("/[A-z]/", $propValue) || !preg_match("/\d+/", $propValue)) {
         return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
       }
     }
