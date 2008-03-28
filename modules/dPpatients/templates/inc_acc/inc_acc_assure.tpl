@@ -50,7 +50,7 @@
     <th>{{mb_label object=$patient field="assure_pays"}}</th>
     <td>
       {{mb_field object=$patient field="assure_pays" tabindex="454" size="31"}}
-      <div style="display:none;" class="autocomplete" id="assure_pays_auto_complete"></div>
+      <div style="display:none" class="autocomplete" id="assure_pays_auto_complete"></div>
     </td>
   </tr>
 

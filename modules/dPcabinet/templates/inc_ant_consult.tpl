@@ -152,6 +152,8 @@ function copyTraitement(traitement_id){
     <td class="text">
      {{include file="../../dPcabinet/templates/inc_consult_anesth/inc_addictions.tpl}}
       <hr />
+      
+      <!-- Antécédents -->
       <form name="editAntFrm" action="?m=dPcabinet" method="post">
       
       <input type="hidden" name="m" value="dPpatients" />
@@ -176,6 +178,7 @@ function copyTraitement(traitement_id){
             <input type="hidden" name="date" value="" />
             <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
           </td>
+          
           <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
             {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
@@ -193,21 +196,32 @@ function copyTraitement(traitement_id){
               Nouveau
             </button>
           </td>
-
         </tr>
+
         <tr>
-          <th />
-          <td />
+			    <!-- Auto-completion -->
+			    <th>{{mb_label object=$antecedent field=_search}}</th>
+			    <td>
+			      {{mb_field object=$antecedent field=_search}}
+						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+			      <script type="text/javascript">
+			      	Main.add(function() {
+				        new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "_search", "CAntecedent", "{{$userSel->_id}}");
+			      	} );
+			      </script>
+			    </td>
           <td rowspan="3">
             <textarea name="rques" onblur="if(verifNonEmpty(this)){submitAnt(this.form);dateAntecedent();}"></textarea>
           </td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
             {{mb_field object=$antecedent field="type" onchange="putHelperContent(this,'rques')"}}
           </td>
         </tr>
+
         <tr>
           <td class="button" colspan="2">
             <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.rques)){submitAnt(this.form);dateAntecedent();}">
@@ -219,7 +233,8 @@ function copyTraitement(traitement_id){
       </form>
       
       <hr />
-
+      
+			<!-- Traitements -->
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -255,13 +270,6 @@ function copyTraitement(traitement_id){
           </td>
         </tr>
         <tr>
-          <th />
-          <td />
-          <td rowspan="3">
-            <textarea name="traitement" onblur="if(verifNonEmpty(this)){submitAnt(this.form);finTrmt();}"></textarea>
-          </td>
-        </tr>
-        <tr>
           <th>
             <input type="checkbox" name="_en_cours" disabled="disabled" onclick="dateFinTrmt()" />
             {{mb_label object=$traitement field="fin"}}
@@ -271,7 +279,25 @@ function copyTraitement(traitement_id){
             <input type="hidden" name="fin" class="{{$traitement->_props.fin}}" value="" />
             <img id="editTrmtFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
           </td>
+          <td rowspan="3">
+            <textarea name="traitement" onblur="if(verifNonEmpty(this)){submitAnt(this.form);finTrmt();}"></textarea>
+          </td>
         </tr>
+        
+        <tr>
+			    <!-- Auto-completion -->
+			    <th>{{mb_label object=$traitement field=_search}}</th>
+			    <td>
+			      {{mb_field object=$traitement field=_search}}
+						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+			      <script type="text/javascript">
+			      	Main.add(function() {
+				        new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, "_search", "CTraitement", "{{$userSel->_id}}");
+			      	} );
+			      </script>
+			    </td>
+        </tr>
+
         <tr>
           <td class="button" colspan="2">
             <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.traitement)){submitAnt(this.form);finTrmt();}">

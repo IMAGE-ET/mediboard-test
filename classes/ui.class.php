@@ -74,9 +74,6 @@ class CAppUI {
  * CAppUI Constructor
  */
   function CAppUI() {
-    
-    global $dPconfig;
-    
     $this->state = array();
 
     $this->user_first_name = "";
@@ -474,7 +471,6 @@ class CAppUI {
  * @return boolean True if successful, false if not
  */
   function login() {
-    global $dPconfig;
   	$ds = CSQLDataSource::get("std");
     // Test login and password validity
     $user = new CUser;
@@ -544,22 +540,26 @@ class CAppUI {
     }
     
     // Wrong login and/or password
+    $loginErrorsReady = $user->loginErrorsReady();
     if (!$user->_id) {
       $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
 
       // If the user exists, but has given a wrong password let's increment his error count
-	    if ($userByName->_id && !$userByName->_login_locked) {
+	    if ($loginErrorsReady && $userByName->_id && !$userByName->_login_locked) {
 	      $userByName->user_login_errors++;
 	      $userByName->store();
-	      $remainingAttempts = $dPconfig['admin']['CUser']['max_login_attempts']-$userByName->user_login_errors;
+	      $remainingAttempts = max(0, CAppUI::conf("admin CUser max_login_attempts")-$userByName->user_login_errors);
 	      $this->setMsg("You have tried {$userByName->user_login_errors} times to login with a wrong password, $remainingAttempts attempts remaining", UI_MSG_ERROR);
 	    }
       return false;
       
-    // else, if he's not locked and has given a good password
-    } else {
-      $user->user_login_errors = 0;
-      $user->store();
+    } 
+    // User not locked and has given a good password
+    else {
+      if ($loginErrorsReady) {
+	      $user->user_login_errors = 0;
+	      $user->store();
+      }
     }
 
     
@@ -591,7 +591,7 @@ class CAppUI {
     $is_local[3] = ($ip0 == 172 && $ip1 >= 16 && $ip1 < 32);
     $is_local[4] = ($ip0 == 192 && $ip1 == 168);
     $is_local[0] = $is_local[1] || $is_local[2] || $is_local[3] || $is_local[4];
-    $is_local[0] = $is_local[0] && ($_SERVER["REMOTE_ADDR"] != $dPconfig["system"]["reverse_proxy"]);
+    $is_local[0] = $is_local[0] && ($_SERVER["REMOTE_ADDR"] != CAppUI::conf("system reverse_proxy"));
     if (!$is_local[0] && $this->user_remote == 1 && $user->user_type != 1) {
       $this->setMsg("User has no remote access", UI_MSG_ERROR);
       return false;

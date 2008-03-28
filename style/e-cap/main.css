@@ -175,33 +175,6 @@ table.form td.date img {
   margin-top: 3px;
 }
 
-div.autocomplete {
-  position:absolute;
-  width:250px;
-  max-height:200px;
-  overflow: auto;
-  background-color:white;
-  border:1px solid #888;
-  margin:0px;
-  padding:0px;
-}
-div.autocomplete ul {
-  list-style-type:none;
-  margin:0px;
-  padding:0px;
-}
-div.autocomplete ul li.selected { 
-	background-color: #fafaa4;
-    /*font-weight:bold;EEDD*/
-}
-div.autocomplete ul li {
-  list-style-type:none;
-  display:block;
-  margin:0;
-  padding:2px;
-  cursor:pointer;
-}
-
 /* Navigation */
 
 td#mainHeader table {

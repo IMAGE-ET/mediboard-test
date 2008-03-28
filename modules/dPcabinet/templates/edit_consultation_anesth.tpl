@@ -90,8 +90,8 @@ function updateList() {
 
 function reloadConsultAnesth() {
   // Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
-  document.editTrmtFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
-  document.editAntFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
+  document.editTrmtFrm._sejour_id.value   = tabSejour[document.addOpFrm.operation_id.value];
+  document.editAntFrm._sejour_id.value    = tabSejour[document.addOpFrm.operation_id.value];
   document.editAddictFrm._sejour_id.value = tabSejour[document.addOpFrm.operation_id.value];
   
   // refresh de la liste des antecedents du sejour

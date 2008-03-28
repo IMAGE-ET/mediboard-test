@@ -17,6 +17,9 @@ class CAntecedent extends CMbObject {
   var $rques              = null;
   var $dossier_medical_id = null;
   
+  // Form Fields
+  var $_search = null;
+  
   function CAntecedent() {
     $this->CMbObject("antecedent", "antecedent_id");
     
@@ -25,11 +28,15 @@ class CAntecedent extends CMbObject {
 
   function getSpecs() {
     global $dPconfig;
+    
     $specs = parent::getSpecs();
     $specs["type"        ] = "notNull enum list|".$dPconfig["dPpatients"]["CAntecedent"]["types"];
     $specs["date"        ] = "date";
     $specs["rques"       ] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
+    
+    $specs["_search"] = "str";
+    
     return $specs;
   }
   

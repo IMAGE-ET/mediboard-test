@@ -16,6 +16,9 @@ class CTraitement extends CMbObject {
   var $fin                = null;
   var $traitement         = null;
   var $dossier_medical_id = null;
+
+  // Form Fields
+  var $_search = null;
   
   function CTraitement() {
     $this->CMbObject("traitement", "traitement_id");
@@ -29,6 +32,9 @@ class CTraitement extends CMbObject {
     $specs["fin"         ] = "date moreEquals|debut";
     $specs["traitement"  ] = "text";
     $specs["dossier_medical_id"] = "notNull ref class|CDossierMedical";
+    
+    $specs["_search"] = "str";
+    
     return $specs;
   }
 

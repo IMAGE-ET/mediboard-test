@@ -11,10 +11,13 @@ class CAddiction extends CMbObject {
   // DB Table key
   var $addiction_id = null;
 
-  // DB fields
+  // DB Fields
   var $type      = null;
   var $addiction = null;
   var $dossier_medical_id = null;
+  
+  // Form Fields
+  var $_search = null;
   
   function CAddiction() {
     $this->CMbObject("addiction", "addiction_id");
@@ -27,6 +30,9 @@ class CAddiction extends CMbObject {
     $specs["type"        ] = "notNull enum list|tabac|oenolisme|cannabis";
     $specs["addiction"   ] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
+
+    $specs["_search"] = "str";
+    
     return $specs;
   }
 

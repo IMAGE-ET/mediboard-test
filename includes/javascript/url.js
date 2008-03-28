@@ -145,7 +145,7 @@ Class.extend(Url, {
   autoComplete: function(idInput, idPopulate, oUserOptions) {
     var oOptions = {
 	    minChars: 3,
-	    frequency: 0.15,
+	    frequency: 0.25,
 	    
 	    // Allows bigger width than input
 			onShow: function(element, update) { 
@@ -157,7 +157,7 @@ Class.extend(Url, {
             offsetTop: element.offsetHeight
           });
         }
-        Effect.Appear(update,{duration:0.15});
+        Effect.Appear(update,{duration:0.25});
       }
           
     };

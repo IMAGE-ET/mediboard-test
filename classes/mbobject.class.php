@@ -1394,50 +1394,59 @@ class CMbObject {
     }
   }
 
-  function loadAides($user_id) {
+  /**
+   * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
+   *
+   * @param ref|CUser $user_id ID de l'utilisateur
+   * @param string $prefix Permet de filtrer les aides commançant par le filtre, si non null
+   */
+  function loadAides($user_id, $needle = null) {
+    // Initialisation des aides
   	foreach ($this->_helped_fields as $field => $prop) {
       $this->_aides[$field] = array();
       $this->_aides[$field]["no_enum"] = null;
       
-      if($prop){
+      if ($prop) {
       	$entryEnums = $this->_enumsTrans[$prop];
       	// Création des entrées pour les enums
         $this->_aides[$field]["no_enum"] = null;
-        foreach($entryEnums as $valueEnum){
+        foreach($entryEnums as $valueEnum) {
           $this->_aides[$field][$valueEnum] = null;
         }
       }
     }
     
     // Chargement de l'utilisateur courant
-    $currUser = new CMediusers();
-    $currUser->load($user_id);
+    $user = new CMediusers();
+    $user->load($user_id);
     
     // Préparation du chargement des aides
+    $ds =& $this->_spec->ds;
     $where = array();
     
-    $where["user_id"] = $this->_spec->ds->prepare("= %", $user_id);
-    $where["class"]   = $this->_spec->ds->prepare("= %", $this->_class_name);
+    $where["user_id"] = $ds->prepare("= %", $user_id);
+    $where["class"]   = $ds->prepare("= %", $this->_class_name);
     
+    if ($needle) {
+      $where[] = $ds->prepare("name LIKE %1 OR text LIKE %2", "%$needle%","%$needle%");
+    }
     
     $order = "name";
     
     // Chargement des Aides de l'utilisateur
-    $aides = new CAideSaisie();
-    $aides = $aides->loadList($where,$order); 
+    $aide = new CAideSaisie();
+    $aides = $aide->loadList($where,$order); 
     $this->orderAides($aides, "Aides du praticien");
-    unset($where["user_id"]);
-    
+
     // Chargement des Aides de la fonction de l'utilisateur
-    $where["function_id"] = $this->_spec->ds->prepare("= %", $currUser->function_id);
+    unset($where["user_id"]);
+    $where["function_id"] = $ds->prepare("= %", $user->function_id);
     
-    
-    $aides = new CAideSaisie();
-    $aides = $aides->loadList($where,$order);  
+    $aides = $aide->loadList($where, $order);  
     $this->orderAides($aides, "Aides du cabinet");
   }
   
-  function orderAides($aides, $title){
+  function orderAides($aides, $title) {
     global $AppUI;
     
     foreach ($aides as $aide) {
@@ -1452,14 +1461,14 @@ class CMbObject {
       // Ajout de l'aide à la liste générale
       $curr_aide["no_enum"][$title][$aide->text] = $aide->name; 
       
-      if(!$aide->depend_value && $linkField){
+      if (!$aide->depend_value && $linkField){
         // depend de toute les entrées
         foreach($entryEnums as $valueEnum){
           $curr_aide[$valueEnum][$title][$aide->text] = $aide->name;
         }
       }
       
-      if($aide->depend_value){
+      if ($aide->depend_value){
         $curr_aide[$AppUI->_($aide->class.".".$linkField.".".$aide->depend_value)][$title][$aide->text] = $aide->name;
       }
     }

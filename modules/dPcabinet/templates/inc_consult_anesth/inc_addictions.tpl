@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 function submitAddiction(oForm){
   submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossiersMedicaux });
@@ -36,10 +37,18 @@ function finAddiction(oForm){
 <table class="form">
 
   <tr>
-    <th>{{mb_label object=$addiction field="type"}}</th>
+    <!-- Auto-completion -->
+    <th>{{mb_label object=$addiction field=_search}}</th>
     <td>
-      {{mb_field object=$addiction field="type" onchange="putHelperContent(this,'addiction')"}}
+      {{mb_field object=$addiction field=_search}}
+			{{mb_include_script module=dPcompteRendu script=aideSaisie}}
+      <script type="text/javascript">
+      	Main.add(function() {
+	        new AideSaisie.AutoComplete("editAddictFrm" , "addiction", "type", "_search", "CAddiction", "{{$userSel->_id}}");
+      	} );
+      </script>
     </td>
+
     <td>
       {{mb_label object=$addiction field="addiction"}}
       {{foreach from=$addiction->_aides.addiction item=_helpers key=dependsOn}}
@@ -61,13 +70,21 @@ function finAddiction(oForm){
   </tr>
   
   <tr>
+    <th>{{mb_label object=$addiction field=type}}</th>
+    <td>
+      {{mb_field object=$addiction field=type onchange="putHelperContent(this,'addiction')"}}
+    </td>
+		<td rowspan="2">
+      <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>
+    </td>
+		
+  </tr>
+  
+  <tr>
     <td class="button" colspan="2">
       <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.addiction)){submitAddiction(this.form);finAddiction(this.form);}">
         {{tr}}Add{{/tr}} une addiction
       </button>
-    </td>
-    <td>
-      <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>
     </td>
   </tr>
 </table>

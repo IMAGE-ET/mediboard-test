@@ -117,6 +117,14 @@ class CUser extends CMbObject {
       );
   }
 
+  /**
+   * Return true if user login count system is ready
+   * @return bool
+   */
+  function loginErrorsReady() {
+    return $this->_spec->ds->loadField($this->_tbl, "user_login_errors");
+  }
+  
   function updateDBFields() {
     parent::updateDBFields();
 
