@@ -55,7 +55,8 @@ Class.extend(AideSaisie.AutoComplete, {
   
   // Update field after selection
   update: function(selected) {
-    var sDepend = selected.select(".depend")[0].textContent;
+    var oDepend = selected.select(".depend")[0];
+    var sDepend = oDepend ? oDepend.textContent : "";
     var sText   = selected.select(".text"  )[0].textContent;
     
     var oForm = document[this.sForm];
