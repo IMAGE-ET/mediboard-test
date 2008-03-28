@@ -5,6 +5,9 @@ function submitOrder (oForm, order_id) {
       refreshOrder(order_id);
     }
   });
+  if (window.opener) {
+    window.opener.refreshLists();
+  }
 }
 
 function submitOrderItem (oForm, order_id, order_item_id, noAjax) {
@@ -17,6 +20,9 @@ function submitOrderItem (oForm, order_id, order_item_id, noAjax) {
     });
   } else {
     oForm.submit();
+  }
+  if (window.opener) {
+    window.opener.refreshLists();
   }
 }
 

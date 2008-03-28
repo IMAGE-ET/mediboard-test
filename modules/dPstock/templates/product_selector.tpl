@@ -6,7 +6,7 @@ function pageMain() {
     refreshProductsList({{$selected_category}}, null, {{$selected_product}});
     refreshProductInfo({{$selected_product}});
   {{else}}
-    refreshProductsList(-1, null, {{$selected_product}});
+    refreshProductsList(-1, null{{if $selected_product}}, {{$selected_product}}{{/if}});
   {{/if}}
 }
 

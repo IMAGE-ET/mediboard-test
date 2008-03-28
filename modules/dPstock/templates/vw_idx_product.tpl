@@ -50,7 +50,7 @@
           <td><select name="category_id" class="{{$product->_props.category_id}}">
             <option value="">&mdash; Choisir une catégorie</option>
             {{foreach from=$list_categories item=curr_category}}
-              <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id}} selected="selected" {{/if}} >
+              <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id || $list_categories|@count==1}} selected="selected" {{/if}} >
               {{$curr_category->_view}}
               </option>
             {{/foreach}}
@@ -62,7 +62,7 @@
           <td><select name="societe_id" class="{{$product->_props.societe_id}}">
             <option value="">&mdash; Choisir un fabricant</option>
             {{foreach from=$list_societes item=curr_societe}}
-              <option value="{{$curr_societe->_id}}" {{if $product->societe_id == $curr_societe->_id}} selected="selected" {{/if}} >
+              <option value="{{$curr_societe->_id}}" {{if $product->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
               </option>
             {{/foreach}}

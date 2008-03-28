@@ -1,5 +1,4 @@
-{{* $category, $list_functions *}}
-<form name="form-stock-out" action="?" method="post" onsubmit="return checkForm(this)">
+<form name="form-stock-out" action="?" method="post">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   <input type="hidden" name="dosql" value="do_stock_out_aed" />

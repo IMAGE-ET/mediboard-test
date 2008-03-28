@@ -22,6 +22,9 @@ class CProductDelivery extends CMbObject {
   //    Single
   var $_ref_product = null;
   var $_ref_target  = null;
+  
+  var $_date_min    = null;
+  var $_date_max    = null;
 
   function CProductDelivery() {
     $this->CMbObject('product_delivery', 'delivery_id');
@@ -31,25 +34,34 @@ class CProductDelivery extends CMbObject {
   function getSpecs() {
     return array (
       'product_id'   => 'notNull ref class|CProduct',
-      'date'         => 'notNull date',
+      'date'         => 'notNull dateTime',
       'target_class' => 'notNull str maxLength|25',
       'target_id'    => 'notNull ref class|CMbObject meta|target_class',
       'description'  => 'text',
+	    '_date_min'    => 'dateTime',
+	    '_date_max'    => 'dateTime',
     );
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
+    $this->_ref_product->updateFormFields();
+    
+    if ($this->_ref_target) {
+      $this->_ref_target->updateFormFields();
+    }
     $this->_view = $this->_ref_product->_view . (($this->_ref_target)?" (pour {$this->_ref_target->_view})":'');
   }
 
-  function loadRefsFwd(){
-    $this->_ref_product = new CProduct;
+  function loadRefsFwd() {
+    $this->_ref_product = new CProduct();
     $this->_ref_product->load($this->product_id);
     
-    $this->_ref_target = new $this->target_class;
-    $this->_ref_target->load($this->target_id);
+    if ($this->target_class) {
+	    $this->_ref_target = new $this->target_class;
+	    $this->_ref_target->load($this->target_id);
+    }
   }
 
   function getPerm($permType) {
@@ -60,6 +72,7 @@ class CProductDelivery extends CMbObject {
   }
 
   function check() {
+  	$this->loadRefsFwd();
     if(!$this->_ref_target) {
       return 'Erreur : La cible n\'existe pas';
     } else {

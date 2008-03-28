@@ -13,22 +13,20 @@ $can->needsRead();
 
 $category_id = mbGetValueFromGetOrSession('category_id');
 
-// Loads the required Category and the complete list
+// Loads the required Category the complete list
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
-if ($category_id) {
-  $category->category_id = $category_id;
+$category->category_id = $category_id;
+$category->loadMatchingObject();
+
+if ($category) {
+  $category->loadRefsBack();
   
-  $category->loadMatchingObject();
-  if ($category->_id) {
-    $category->loadRefs();
-    
-    // Loads the products list
-    foreach($category->_ref_products as $prod) {
-      $prod->loadRefsBack();
-    }
+  // Loads the products list
+  foreach($category->_ref_products as $prod) {
+    $prod->loadRefsBack();
   }
-}
+} else $category = new CProductCategory();
 
 $function = new CFunctions();
 $list_functions = $function->loadList();

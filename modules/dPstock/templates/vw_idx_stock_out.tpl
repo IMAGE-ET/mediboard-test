@@ -1,9 +1,5 @@
 <script type="text/javascript">
 function pageMain() {
-  url = new Url;
-  url.setModuleAction("dPstock","httpreq_vw_stock_out_stocks_list");
-  url.addParam("category_id", {{$category->category_id}});
-  url.requestUpdate("stock-out-list-stocks", { waitingText: null } );
   refreshStockOutsList();
 }
 

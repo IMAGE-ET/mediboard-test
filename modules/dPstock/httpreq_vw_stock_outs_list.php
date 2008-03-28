@@ -16,10 +16,6 @@ $stock_out = new CProductStockOut();
 
 $list_latest_stock_outs = $stock_out->loadList(null, $order_by, 20);
 
-/*foreach($list_latest_stock_outs as $sto) {
-  $sto->loadRefsFwd();
-}*/
-
 // Création du template
 $smarty = new CSmartyDP();
 

@@ -173,7 +173,7 @@ class CProductOrder extends CMbObject {
 		$this->_partial = !$this->_received && ($this->_count_received > 0);
 
 		$count = count($this->_ref_order_items);
-		$this->_view  = $this->_ref_societe?($this->_ref_societe->_view.' - '):'';
+		$this->_view  = ($this->_ref_societe)?($this->_ref_societe->_view.' - '):'';
 		$this->_view .= $count.' article'.(($count>1)?'s':'').', total = '.$this->_total;
 	}
 	

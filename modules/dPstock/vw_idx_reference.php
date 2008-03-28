@@ -51,7 +51,7 @@ $reference->loadRefsFwd();
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 if (!$category_id) {
-  $category = $stock->_ref_product->_ref_category;
+  $category = $reference->_ref_product->_ref_category;
 } else {
   $category->category_id = $category_id;
   $category->loadMatchingObject();

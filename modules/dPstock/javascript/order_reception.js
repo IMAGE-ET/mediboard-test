@@ -1,4 +1,0 @@
-var Order = {
-  sId : null,
-  
-}

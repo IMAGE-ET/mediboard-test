@@ -72,7 +72,7 @@
         </tr>
         <tr>
           <th>{{mb_label object=$stock field="product_id"}}</th>
-          <td>
+          <td class="readonly">
             <input type="hidden" name="product_id" value="{{$stock->product_id}}" class="{{$stock->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>

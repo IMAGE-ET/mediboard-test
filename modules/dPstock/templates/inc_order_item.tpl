@@ -16,11 +16,20 @@
     {{if !$order->date_ordered}}
     <!-- Order item quantity change -->
     <form name="form-item-quantity-{{$curr_item->_id}}" action="?" method="post">
+      {{if $ajax}}
+      <script type="text/javascript">
+          prepareForm(document.forms['form-item-quantity-{{$curr_item->_id}}']);
+      </script>
+      {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       {{assign var=id value=$curr_item->_id}}
-      {{mb_field object=$curr_item field=quantity onchange="submitOrderItem(this.form);" form=form-item-quantity-$id}}
+      {{mb_field object=$curr_item 
+        field=quantity 
+        onchange="submitOrderItem(this.form);" 
+        form=form-item-quantity-$id 
+        increment=1}}
     </form>
     {{else}}
       {{mb_value object=$curr_item field=quantity}}
@@ -42,6 +51,7 @@
         field=_quantity_received 
         onchange="submitOrderItem(this.form, 0, $id);" 
         form=form-item-receive-$id 
+        increment=1
         max=$curr_item->quantity
       }}
       <button type="button" class="tick" onclick="this.form._quantity_received.value = {{$curr_item->quantity}}; submitOrderItem(this.form, 0, {{$curr_item->_id}});">Tout</button>

@@ -18,9 +18,10 @@ function refreshListOrders(type, keywords) {
 }
 
 function refreshLists(oForm) {
-  refreshListOrders("waiting", (oForm?oForm.keywords.value:null));
-  refreshListOrders("pending", (oForm?oForm.keywords.value:null));
-  refreshListOrders("old",     (oForm?oForm.keywords.value:null));
+  var keywords = (oForm?oForm.keywords.value:null);
+  refreshListOrders("waiting", keywords);
+  refreshListOrders("pending", keywords);
+  refreshListOrders("old",     keywords);
 }
 
 function submitOrder (oForm, refresh, listToRefresh) {
@@ -101,7 +102,7 @@ function popupOrder(order_id, width, height) {
           <td><select name="societe_id" class="{{$order->_props.societe_id}}">
             <option value="">&mdash; Choisir une société</option>
             {{foreach from=$list_societes item=curr_societe}}
-              <option value="{{$curr_societe->_id}}" {{if $order->societe_id == $curr_societe->_id}} selected="selected" {{/if}} >
+              <option value="{{$curr_societe->_id}}" {{if $order->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
               </option>
             {{/foreach}}

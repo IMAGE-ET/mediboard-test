@@ -60,7 +60,7 @@ function pageMain() {
 
 
     <td class="halfPane">
-      {{if $can->edit && $reference->product_id || $reference->societe_id}}
+      {{if $can->edit}}
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />
@@ -78,7 +78,7 @@ function pageMain() {
           <td><select name="societe_id" class="{{$reference->_props.societe_id}}">
             <option value="">&mdash; Choisir un Fournisseur</option>
             {{foreach from=$list_societes item=curr_societe}}
-              <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id}} selected="selected" {{/if}} >
+              <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
               </option>
             {{/foreach}}
@@ -87,7 +87,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="product_id"}}</th>
-          <td>
+          <td class="readonly">
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
             <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
