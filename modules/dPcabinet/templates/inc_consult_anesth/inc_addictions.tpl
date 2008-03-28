@@ -72,7 +72,7 @@ function finAddiction(oForm){
   <tr>
     <th>{{mb_label object=$addiction field=type}}</th>
     <td>
-      {{mb_field object=$addiction field=type onchange="putHelperContent(this,'addiction')"}}
+      {{mb_field object=$addiction field=type defaultOption="&mdash; Aucun" onchange="putHelperContent(this,'addiction')"}}
     </td>
 		<td rowspan="2">
       <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>

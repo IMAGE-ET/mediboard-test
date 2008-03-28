@@ -218,7 +218,7 @@ function copyTraitement(traitement_id){
         <tr>
           <th>{{mb_label object=$antecedent field="type"}}</th>
           <td>
-            {{mb_field object=$antecedent field="type" onchange="putHelperContent(this,'rques')"}}
+            {{mb_field object=$antecedent field="type" defaultOption="&mdash; Aucun" onchange="putHelperContent(this,'rques')"}}
           </td>
         </tr>
 
