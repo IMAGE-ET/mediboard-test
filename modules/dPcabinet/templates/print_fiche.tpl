@@ -6,7 +6,7 @@
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 110%;">
+      <table width="100%">
         <tr>
           <th class="title" colspan="4">
             <a href="#" onclick="window.print()">
@@ -29,15 +29,23 @@
 <table class="form" id="admission" style="page-break-after: always;">
   <tr>
     <td colspan="2">
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
-          <th class="category" colspan="2">Intervention</th>
+          <th class="category" colspan="2">Sejour</th>
         </tr>
         <tr>
           <td colspan="2">
           {{if $consult_anesth->operation_id}}
+            {{$patient->_view}}<br />
+            {{if $consult_anesth->_ref_operation->_ref_sejour}}
+            Admission en {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
+            le <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_entree|date_format:"%A %d/%m/%Y à %Hh%M"}}</strong>
+            pour <strong>{{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} nuit(s)</strong>
+            <br />
+            {{/if}}
           
-            Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%a %d %b %Y"}}</strong>
+            Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
+            par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong>
             <ul>
               {{if $consult_anesth->_ref_operation->libelle}}
                 <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
@@ -47,19 +55,27 @@
               {{/foreach}}
             </ul>
           {{else}}
-            Aucune Intervention
+            Aucun séjour
           {{/if}}
           </td>
         </tr>
         <tr>
           <td class="halfPane">
             {{if $consult_anesth->operation_id}}
-            par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong><br />
-            Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong><br />
-            Admission : {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}{{if $consult_anesth->_ref_operation->_ref_sejour->type!="ambu" && $consult_anesth->_ref_operation->_ref_sejour->type!="exte"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s){{/if}}
-            <br /><br />
-            Anesthésie prévue :
-            <strong>{{$consult_anesth->_ref_operation->_lu_type_anesth}}</strong>
+            <table>
+              <tr>
+                <th class="NotBold">Anesthésie prévue</th>
+                <td class="Bold">
+                  {{$consult_anesth->_ref_operation->_lu_type_anesth}}
+                </td>
+              </tr>
+              <tr>
+                <th class="NotBold">Position</th>
+                <td class="Bold">
+                  {{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}
+                </td>
+              </tr>
+            </table>
             
             {{elseif $consult_anesth->position}}
             Position : <strong>{{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}</strong>
@@ -84,7 +100,7 @@
 
   <tr>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
         </tr>
@@ -102,6 +118,7 @@
             Né{{if $patient->sexe != "m"}}e{{/if}} le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
             ({{$patient->_age}} ans)
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
+            {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}} 
             {{if $consult->_ref_consult_anesth->poid}}<strong>{{$consult->_ref_consult_anesth->poid}} kg</strong> - {{/if}}
             {{if $consult->_ref_consult_anesth->taille}}<strong>{{$consult->_ref_consult_anesth->taille}} cm</strong> - {{/if}}
             {{if $consult->_ref_consult_anesth->_imc}}IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>
@@ -111,7 +128,7 @@
         </tr>
         <tr>
           <td colspan="2">
-            <table style="font-size: 100%;">
+            <table>
               {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
               <tr>
                 <th class="NotBold">Groupe sanguin</th>
@@ -149,49 +166,77 @@
       </table>
     </td>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
+        <tr>
+          <th class="category" colspan="2">Allergies</th>
+        </tr>
+        <tr>
+          <td class="Bold" style="white-space: normal;font-size:130%;">
+          {{if $patient->_ref_dossier_medical->_ref_antecedents}}
+            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents.alle item=currAnt}}
+              <ul>
+                <li> 
+                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{/if}}
+                  {{$currAnt->rques}} 
+                </li>
+              </ul>
+            {{/foreach}}
+          {{else}}
+            <ul>
+              <li>Pas d'allergie saisie</li>
+            </ul>
+          {{/if}}
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="halfPane">
+      <table width="100%">
+        <tr>
+          <th class="category">Addictions</th>
+        </tr>
+        <tr>
+          <td>
+          {{if $patient->_ref_dossier_medical->_ref_addictions}}
+            {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
+              {{if $list_addiction|@count}}
+              <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
+              {{foreach from=$list_addiction item=curr_addiction}}
+                <ul>
+                  <li>
+                    {{$curr_addiction->addiction}}
+                  </li>
+                </ul>
+              {{/foreach}}
+              {{/if}}
+            {{/foreach}}
+          {{/if}}
+          </td>
+        </tr>
+      </table>
+    </td>
+    <td class="halfPane">
+      <table width="100%">
         <tr>
           <th class="category">Antécédents</th>
         </tr>
         <tr>
           <td>
-
-          
-          {{if $patient->_ref_dossier_medical->_ref_addictions}}
-            {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-              {{if $list_addiction|@count}}
-              
-              <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
-              {{foreach from=$list_addiction item=curr_addiction}}
-                <ul>
-                <li>
-                {{$curr_addiction->addiction}}
-                </li>
-                </ul>
-              {{/foreach}}
-              
-              {{/if}}
-              
-            {{/foreach}}
-          {{/if}}
-          
-							
-          
-            {{if $patient->_ref_dossier_medical->_ref_antecedents}}
-              {{foreach name=nameForeach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
+          {{if $patient->_ref_dossier_medical->_ref_antecedents}}
+            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
-              {{if !$smarty.foreach.nameForeach.first}}
-              <br />
-              {{/if}}
-              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong><br />
-              
+              <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
               {{foreach from=$currTypeAnt item=currAnt}}
               <ul>
                 <li> 
-                {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-                {{$currAnt->date|date_format:"%d/%m/%Y"}} :
-                {{/if}}
-                {{$currAnt->rques}} 
+                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{/if}}
+                  {{$currAnt->rques}} 
                 </li>
               </ul>
               {{/foreach}}
@@ -201,21 +246,7 @@
             <ul>
             <li>Pas d'antécédents</li>
             </ul>
-            {{/if}}
-
-            {{if $patient->_ref_dossier_medical->_ext_codes_cim}}
-          
-            <strong>Diagnostics du patient</strong>
-            <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
-              <li>
-                {{$curr_code->code}}: {{$curr_code->libelle}}
-              </li>
-              {{foreachelse}}
-              <li>Pas de diagnostic</li>
-              {{/foreach}}
-            </ul>
-            {{/if}}
+          {{/if}}
           </td>
         </tr>
       </table>
@@ -223,7 +254,7 @@
   </tr>
   <tr>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th class="category">Traitements</th>
         </tr>
@@ -248,27 +279,33 @@
       </table>
     </td>
     <td class="halfPane">
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th class="category" colspan="6">Examens Clinique</th>
         </tr>
         <tr>
-          <th class="NotBold">{{if $consult->_ref_consult_anesth->pouls}}Pouls{{/if}}</th>
+          <th class="NotBold">Pouls</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->pouls}}
             {{$consult->_ref_consult_anesth->pouls}} / min
+            {{else}}
+            ?
             {{/if}}
           </td>
-          <th class="NotBold">{{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}TA{{/if}}</th>
+          <th class="NotBold">TA</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}
             {{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}} cm Hg
+            {{else}}
+            ?
             {{/if}}
           </td>
-          <th class="NotBold">{{if $consult->_ref_consult_anesth->spo2}}Spo2{{/if}}</th>
+          <th class="NotBold">Spo2</th>
           <td class="Bold" style="white-space: nowrap;">
             {{if $consult->_ref_consult_anesth->spo2}}
             {{$consult->_ref_consult_anesth->spo2}} %
+            {{else}}
+            ?
             {{/if}}
           </td>
         </tr>
@@ -286,7 +323,7 @@
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 110%;">
+      <table width="100%">
         <tr>
           <th class="title" colspan="4">
             <a href="#" onclick="window.print()">
@@ -313,7 +350,7 @@
 <table class="form" id="admission">
   <tr>
     <td>
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th colspan="3" class="category">Conditions d'intubation</th>
         </tr>
@@ -355,7 +392,7 @@
         </tr>
       </table>    
 
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th class="category" colspan="3">
             Examens Complémentaires
@@ -365,7 +402,7 @@
         <tr>
         {{foreach from=$listChamps item=aChamps}}
           <td>
-            <table style="font-size: 100%;">
+            <table>
             {{foreach from=$aChamps item=champ}}
               {{assign var="donnees" value=$unites.$champ}}
               <tr>
@@ -393,7 +430,7 @@
   </tr>
   <tr>
     <td>
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
         {{if $list_exams|@count}}
         <tr>
@@ -425,7 +462,7 @@
       {{/foreach}}
       </table>
       
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
       {{if $consult->_ref_exampossum->_id}}
         <tr>
           <th>Score Possum</th>
@@ -455,7 +492,7 @@
       {{/if}}
       </table>
 
-      <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
+      <table width="100%" style="padding-bottom: 10px;">
         <tr>
           <th class="category">
             Liste des Documents Edités
@@ -475,7 +512,7 @@
       </table>
       
       {{if $consult->_ref_consult_anesth->premedication}}
-      <table width="100%" style="font-size: 100%;padding-bottom: 10px;">
+      <table width="100%" style="padding-bottom: 10px;">
         <tr>
           <th class="category">
             Prémédication
@@ -490,7 +527,7 @@
       {{/if}}
       
       {{if $consult->_ref_consult_anesth->prepa_preop}}
-      <table width="100%" style="font-size: 100%;">
+      <table width="100%">
         <tr>
           <th class="category">
             Préparation pré-opératoire
@@ -499,6 +536,27 @@
         <tr>
           <td>
             {{$consult->_ref_consult_anesth->prepa_preop|nl2br}}
+          </td>
+        </tr>
+      </table>
+      {{/if}}
+      
+      {{if $patient->_ref_dossier_medical->_ext_codes_cim}}
+      <table width="100%">
+        <tr>
+          <th class="category">Diagnostics PMSI du patient</th>
+        </tr>
+        <tr>
+          <td>
+            <ul>
+              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
+              <li>
+                {{$curr_code->code}}: {{$curr_code->libelle}}
+              </li>
+              {{foreachelse}}
+              <li>Pas de diagnostic</li>
+              {{/foreach}}
+            </ul>
           </td>
         </tr>
       </table>

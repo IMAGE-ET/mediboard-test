@@ -1581,7 +1581,6 @@ table.selectCode td {
   border-spacing: 6px;
   font-family: georgia, serif;
   color: #006;
-  font-size: 14px;
 }
 
 #admission th {
@@ -1597,8 +1596,8 @@ table.selectCode td {
   text-align: center;
   background: #68f;
   border: #aaa 3px outset;
-  padding: 10px;
-  font-size: 26px;
+  padding: 2px;
+  font-size: 16pt;
   color: #006;
 }
 
@@ -1606,9 +1605,9 @@ table.selectCode td {
   font-weight: bold;  
   text-align: center;
   background: #abf;
-  padding: 10px;
+  padding: 2px;
   border: #aaa 3px outset;
-  font-size: 20px;
+  font-size: 12pt;
 }
 
 #admission td {
@@ -1617,6 +1616,7 @@ table.selectCode td {
   background: transparent;
   text-align: left;
   padding: 1px 4px;
+  font-size: 10pt;
 }
 
 #admission td.halfPane {
