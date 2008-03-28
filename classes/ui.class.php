@@ -509,7 +509,7 @@ class CAppUI {
 
     // alphaAndNum
     if($pwdSpecs->alphaAndNum) {
-      if (!preg_match("/[a-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
         $this->weak_password = true;
       }
     }
