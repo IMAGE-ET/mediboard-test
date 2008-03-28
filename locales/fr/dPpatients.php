@@ -625,4 +625,6 @@ $locales['CTraitement-_shortview-court'] = '';
 $locales['CTraitement-_shortview-desc'] = '';
 $locales['CAntecedent-_search'] = 'Rechercher...';
 $locales['CTraitement-_search'] = 'Rechercher...';
+$locales['CAddiction.type.'] = 'Addictions';
+$locales['CAntecedent.type.'] = 'Antécédents';
 ?>

@@ -625,4 +625,6 @@ $locales['msg-CTraitement-create'] = '';
 $locales['msg-CTraitement-delete'] = '';
 $locales['msg-CTraitement-modify'] = '';
 $locales['CTraitement-_search'] = '';
+$locales['CAddiction.type.'] = '';
+$locales['CAntecedent.type.'] = '';
 ?>
