@@ -627,4 +627,5 @@ $locales['CAntecedent-_search'] = 'Rechercher...';
 $locales['CTraitement-_search'] = 'Rechercher...';
 $locales['CAddiction.type.'] = 'Addictions';
 $locales['CAntecedent.type.'] = 'Antécédents';
+$locales['CAntecedent.type.orl'] = 'ORL';
 ?>

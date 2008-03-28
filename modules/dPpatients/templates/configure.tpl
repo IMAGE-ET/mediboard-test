@@ -127,7 +127,8 @@ function addAnt(ant) {
       <span onclick="addAnt('neuropsy')">{{tr}}CAntecedent.type.neuropsy{{/tr}}</span>,
       <span onclick="addAnt('infect')">{{tr}}CAntecedent.type.infect{{/tr}}</span>,
       <span onclick="addAnt('endocrino')">{{tr}}CAntecedent.type.endocrino{{/tr}}</span>,
-      <span onclick="addAnt('carcino')">{{tr}}CAntecedent.type.carcino{{/tr}}</span>
+      <span onclick="addAnt('carcino')">{{tr}}CAntecedent.type.carcino{{/tr}}</span>,
+      <span onclick="addAnt('orl')">{{tr}}CAntecedent.type.orl{{/tr}}</span>
     </td>
   </tr>
   

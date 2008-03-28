@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.62";
+$config["mod_version"]     = "0.63";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -688,7 +688,17 @@ class CSetupdPpatients extends CSetup {
             WHERE `fin_amo` IS NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.62";
+    $this->makeRevision("0.62");
+    $sql = "ALTER TABLE `antecedent`
+            CHANGE `type` `type`
+            ENUM('med','alle','trans','obst','chir','fam','anesth','gyn','cardio','pulm','stomato','plast','ophtalmo','digestif','gastro','stomie','uro','ortho','traumato','amput','neurochir','greffe','thrombo','cutane','hemato','rhumato','neuropsy','infect','endocrino','carcino','orl');";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `addiction`
+            CHANGE `type` `type`
+            ENUM('tabac', 'oenolisme', 'cannabis');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.63";
   }
 }
 

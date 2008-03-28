@@ -30,7 +30,7 @@ class CAntecedent extends CMbObject {
     global $dPconfig;
     
     $specs = parent::getSpecs();
-    $specs["type"        ] = "notNull enum list|".$dPconfig["dPpatients"]["CAntecedent"]["types"];
+    $specs["type"        ] = "enum list|".$dPconfig["dPpatients"]["CAntecedent"]["types"];
     $specs["date"        ] = "date";
     $specs["rques"       ] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";

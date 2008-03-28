@@ -27,7 +27,7 @@ class CAddiction extends CMbObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["type"        ] = "notNull enum list|tabac|oenolisme|cannabis";
+    $specs["type"        ] = "enum list|tabac|oenolisme|cannabis";
     $specs["addiction"   ] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";
 

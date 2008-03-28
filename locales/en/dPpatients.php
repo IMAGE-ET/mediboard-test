@@ -627,4 +627,5 @@ $locales['msg-CTraitement-modify'] = '';
 $locales['CTraitement-_search'] = '';
 $locales['CAddiction.type.'] = '';
 $locales['CAntecedent.type.'] = '';
+$locales['CAntecedent.type.orl'] = '';
 ?>
