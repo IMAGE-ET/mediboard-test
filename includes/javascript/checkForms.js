@@ -608,8 +608,9 @@ function checkFormElement(oElement) {
 		switch (ElementChecker.sTypeSpec) {
 		case 'password':
 			if (oMsg) {
-				if (ElementChecker.checkElement()) {
-					oMsg.innerHTML = 'Sécurité trop faible';
+        var message = ElementChecker.checkElement();
+				if (message) {
+					oMsg.innerHTML = 'Sécurité trop faible : <br />'+message;
 					oMsg.style.backgroundColor = '#FF7A7A';
 				} else {
 					oMsg.innerHTML = 'Sécurité correcte';
