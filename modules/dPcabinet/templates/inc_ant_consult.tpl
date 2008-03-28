@@ -182,14 +182,16 @@ function copyTraitement(traitement_id){
           <td id="listAides_Antecedent_rques">
             {{mb_label object=$antecedent field="rques"}}
             {{foreach from=$antecedent->_aides.rques item=_helpers key=dependsOn}}
+            {{if $dependsOn != "no_enum"}} 
             <select name="_helpers_rques-{{$dependsOn}}" size="1" onchange="pasteHelperContent(this)" style="display:none;">
-                <option value="">&mdash; Choisir une aide</option>
-                {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
-                  <optgroup label="{{$sTitleOpt}}">
-                    {{html_options options=$list_aides}}
-                  </optgroup>
-                {{/foreach}}
-              </select>
+              <option value="">&mdash; Choisir une aide</option>
+              {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
+                <optgroup label="{{$sTitleOpt}}">
+                  {{html_options options=$list_aides}}
+                </optgroup>
+              {{/foreach}}
+            </select>
+            {{/if}}
             {{/foreach}}
             <input type="hidden" name="_hidden_rques" value="" />
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CAntecedent', this.form._hidden_rques, 'rques', this.form.type.value)">

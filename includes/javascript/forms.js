@@ -119,7 +119,7 @@ function pasteHelperContent(oHelpElement) {
 
 function putHelperContent(oElem, sFieldSelect) {
   var oForm      = oElem.form;
-  var sDependsOn = oElem.options[oElem.selectedIndex].innerHTML;
+  var sDependsOn = oElem.options[oElem.selectedIndex].value;
 
   // Search for helpers elements in same form
   for (var i=0; i< oForm.elements.length; i++) {
@@ -133,6 +133,7 @@ function putHelperContent(oElem, sFieldSelect) {
     
     Assert.that(aFound.length == 2, "Helper field name '%s' incorrect", element.name);
     Assert.that(element.nodeName == "SELECT", "Helper field name '%s' should be a select", element.name);
+    
     
     // Check correspondance
 		var aHelperParts = aFound[1].split("-");

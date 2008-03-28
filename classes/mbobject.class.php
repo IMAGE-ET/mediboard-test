@@ -1398,7 +1398,7 @@ class CMbObject {
    * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné
    *
    * @param ref|CUser $user_id ID de l'utilisateur
-   * @param string $prefix Permet de filtrer les aides commançant par le filtre, si non null
+   * @param string $needle Permet de filtrer les aides commançant par le filtre, si non null
    */
   function loadAides($user_id, $needle = null) {
     // Initialisation des aides
@@ -1407,10 +1407,9 @@ class CMbObject {
       $this->_aides[$field]["no_enum"] = null;
       
       if ($prop) {
-      	$entryEnums = $this->_enumsTrans[$prop];
       	// Création des entrées pour les enums
-        $this->_aides[$field]["no_enum"] = null;
-        foreach($entryEnums as $valueEnum) {
+        $this->_aides[$field][""] = null;
+          foreach($this->_enums[$prop] as $valueEnum) {
           $this->_aides[$field][$valueEnum] = null;
         }
       }
@@ -1447,29 +1446,25 @@ class CMbObject {
   }
   
   function orderAides($aides, $title) {
-    global $AppUI;
-    
     foreach ($aides as $aide) {
       $curr_aide =& $this->_aides[$aide->field];
       
-      // Verification de l'existance des clé dans le tableaux
-      $linkField = @$this->_helped_fields[$aide->field];
-      if($linkField){
-        $entryEnums = $this->_enumsTrans[$linkField];
-      }
-    
       // Ajout de l'aide à la liste générale
       $curr_aide["no_enum"][$title][$aide->text] = $aide->name; 
       
-      if (!$aide->depend_value && $linkField){
-        // depend de toute les entrées
-        foreach($entryEnums as $valueEnum){
+      // Verification de l'existance des clé dans le tableaux
+      $linkField = @$this->_helped_fields[$aide->field];
+      if (!$aide->depend_value && $linkField) {
+        // depend de toutes les entrées
+        foreach ($this->_enums[$linkField] as $valueEnum){
           $curr_aide[$valueEnum][$title][$aide->text] = $aide->name;
         }
+        
+        $curr_aide[""][$title][$aide->text] = $aide->name;
       }
       
-      if ($aide->depend_value){
-        $curr_aide[$AppUI->_($aide->class.".".$linkField.".".$aide->depend_value)][$title][$aide->text] = $aide->name;
+      if ($aide->depend_value) {
+        $curr_aide[$aide->depend_value][$title][$aide->text] = $aide->name;
       }
     }
   }

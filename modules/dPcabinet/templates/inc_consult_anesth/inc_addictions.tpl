@@ -52,6 +52,7 @@ function finAddiction(oForm){
     <td>
       {{mb_label object=$addiction field="addiction"}}
       {{foreach from=$addiction->_aides.addiction item=_helpers key=dependsOn}}
+      {{if $dependsOn != "no_enum"}}
       <select name="_helpers_addiction-{{$dependsOn}}" size="1" onchange="pasteHelperContent(this)" style="display:none;">
         <option value="">&mdash; Choisir une aide</option>
         {{foreach from=$_helpers item=list_aides key=sTitleOpt}}
@@ -60,6 +61,7 @@ function finAddiction(oForm){
         </optgroup>
         {{/foreach}}
       </select>
+      {{/if}}
       {{/foreach}}
 
       <input type="hidden" name="_hidden_addiction" value="" />

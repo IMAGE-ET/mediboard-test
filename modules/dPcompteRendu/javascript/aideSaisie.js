@@ -47,7 +47,7 @@ Class.extend(AideSaisie.AutoComplete, {
 	  oDiv.addClassName("autocomplete");
 	  oDiv.setStyle( {
 	    display: "none",
-	    width: "300px"
+	    width: "400px"
 	  } );
 	  
 	  oSearchField.parentNode.appendChild(oDiv);

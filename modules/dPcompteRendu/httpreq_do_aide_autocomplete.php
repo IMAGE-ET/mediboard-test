@@ -14,10 +14,14 @@ $property = mbGetValueFromGet("property");
 $object = new $object_class;
 $object->loadAides($user_id, $needle);
 
+$dependField = $object->_helped_fields[$property];
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("aides", $object->_aides[$property]);
+$smarty->assign("object", $object);
+$smarty->assign("property", $property);
+$smarty->assign("dependField", $dependField);
 $smarty->assign("needle", $needle);
 
 $smarty->display("httpreq_do_aide_autocomplete.tpl");
