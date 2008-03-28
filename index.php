@@ -186,7 +186,7 @@ $tab = $a == "index"  ?
 
 // Check whether the password is strong enough
 if ($AppUI->weak_password && 
-    $AppUI->user_remote && 
+    !$AppUI->user_remote && 
     !($m == "admin" && $tab == "chpwd")) {
   $AppUI->redirect("m=admin&tab=chpwd&forceChange=1");
 }

@@ -513,8 +513,6 @@ class CAppUI {
         $this->weak_password = true;
       }
     }
-
-
       
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
@@ -619,9 +617,6 @@ class CAppUI {
     $this->loadPrefs($this->user_id);
     $this->setUserLocale();
     
-    if ($this->weak_password && $this->user_remote) {
-      $this->redirect("m=admin&tab=chpwd&forceChange=1");
-    }
     return true;
   }
 

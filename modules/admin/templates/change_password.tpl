@@ -7,26 +7,26 @@
 {{if !$message}}
   <input type="hidden" name="dialog" value="1" />
 {{else}}
-  <div class="error">{{$message|smarty:nodefaults}}</div>
+  <div class="big-warning">{{$message|smarty:nodefaults}}</div>
 {{/if}}
 
 <table class="form">
   <tr>
-    <td>
+    <th style="width:50%">
       <label for="old_pwd" title="{{tr}}Current Password{{/tr}}">
         {{tr}}Current Password{{/tr}}
       </label>
-    </td>
-    <td>
+    </th>
+    <td style="width:50%">
       <input class="notNull str" type="password" name="old_pwd" />
     </td>
   </tr>
   <tr>
-    <td>
+    <th>
       <label for="new_pwd1" title="{{tr}}New Password{{/tr}}">
         {{tr}}New Password{{/tr}}
       </label>
-    </td>
+    </th>
     <td>
       <input type="hidden" name="user_username" value="{{$user->user_username}}" />
       <input class="{{$specs._user_password}}" type="password" name="new_pwd1" onkeyup="checkFormElement(this);" />
@@ -34,11 +34,11 @@
     </td>
   </tr>
   <tr>
-    <td>
+    <th>
       <label for="new_pwd2" title="{{tr}}Repeat New Password{{/tr}}">
         {{tr}}Repeat New Password{{/tr}}
       </label>
-    </td>
+    </th>
     <td>
       <input class="notNull password sameAs|new_pwd1" type="password" name="new_pwd2" />
     </td>
