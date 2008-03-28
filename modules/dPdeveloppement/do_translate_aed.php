@@ -35,8 +35,14 @@ $translateModule->sourcePath = null;
 //Ecriture du fichier
 $translateModule->options = array("name" => "locales");
 $translateModule->targetPath = "locales/fr/$module.php";
-$translateModule->update($tableau, true);  
 
-$AppUI->setMsg( "Locales file saved", UI_MSG_OK );
-$AppUI->redirect();
+$error = $translateModule->update($tableau, true);
+
+if ($error instanceof PEAR_Error) {
+  $AppUI->setMsg("Error while saving locales file : {$error->message}", UI_MSG_ERROR);
+} else {
+  $AppUI->setMsg( "Locales file saved", UI_MSG_OK );
+  $AppUI->redirect();
+}
+
 ?>
