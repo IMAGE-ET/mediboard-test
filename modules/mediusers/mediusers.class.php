@@ -392,7 +392,7 @@ class CMediusers extends CMbObject {
        
       // alphaAndNum
       if($pwdSpecs->alphaAndNum) {
-        if (!preg_match("/[a-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+        if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
           return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
         }
       }

@@ -190,7 +190,7 @@ var ElementChecker = {
     
     // alphaAndNum
    	if(this.aProperties["alphaAndNum"]){
-	  if (!this.oElement.value.match(/[a-z]/)) {
+	  if (!this.oElement.value.match(/[A-z]/)) {
 	    return "Doit contenir au moins une lettre";
 	  }
 	  if (!this.oElement.value.match(/\d+/)) {
