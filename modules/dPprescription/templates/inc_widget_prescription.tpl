@@ -7,17 +7,28 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 
 </script>
 
+	 	  
 {{if $prescription}}
-	<div id="prescription-{{$suffixe}}">
+	<div id="prescription-{{$object_class}}-{{$suffixe}}">
 	  <!-- Pas de prescription -->
 	  {{if !$prescription->_id}}
-	  <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
-	    Créer une prescription
-	  </button>
+	    <form name="addPrescriptionSejour">
+	    {{if $object_class == "CSejour"}}
+	      {{mb_label object=$prescription field="type"}}
+	      {{mb_field object=$prescription field="_type_sejour"}}
+	      <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
+	        Créer une prescription
+	      </button>
+	    {{else}}
+	    <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
+	      Créer une prescription
+	    </button>
+	    </form>
+	    {{/if}}
 	  {{else}}
 	  <!-- Une prescription -->
 	  <a href="#{{$prescription->_id}}" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
-	    {{$prescription->_view}}
+	    {{$prescription->_view}} - {{tr}}CPrescription.type.{{$prescription->type}}{{/tr}}
 	  </a>
 	  <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')">
 	    Imprimer
@@ -74,6 +85,7 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	  {{/if}}
 	</div>	
 {{else}}
+
   <div class="warning">
     Module Prescriptions non installé
   </div>

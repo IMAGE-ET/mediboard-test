@@ -10,10 +10,19 @@
 
 global $AppUI, $can, $m, $g, $dPconfig;
 
-// A voir
-$rechercheLivret = mbGetValueFromGet("rechercheLivret", 0);
-$rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
-$rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
+$_recherche_livret = mbGetValueFromGet("_recherche_livret");
+
+if($_recherche_livret){
+  // Si selecteur de medicament en mode sejour, on recherche en par default dans le livret
+	$rechercheLivret = 1;
+  $rechercheLivretComposant = 1;
+  $rechercheLivretDCI = 1;
+} else {
+	$rechercheLivret = mbGetValueFromGet("rechercheLivret", 0);
+  $rechercheLivretComposant = mbGetValueFromGet("rechercheLivretComposant", 0);
+  $rechercheLivretDCI = mbGetValueFromGet("rechercheLivretDCI", 0);
+}
+
 // Onglet ouvert par défaut
 $modes_recherche = array("produit"   => "one",
                          "classe"    => "two",

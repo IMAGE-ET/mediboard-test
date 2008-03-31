@@ -14,6 +14,7 @@ $filter = new CPrescription();
 $filter->prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $filter->object_class    = mbGetValueFromGet("object_class", "CSejour");
 $filter->object_id       = mbGetValueFromGet("object_id");
+$filter->type            = mbGetValueFromGet("type", "externe");
 $filter->loadRefsFwd();
 $filter->_ref_object->loadRefsFwd();
 
@@ -25,8 +26,12 @@ if(!$filter->prescription_id && $popup){
 	$new_prescription->object_id = $filter->object_id;
 	$new_prescription->object_class = $filter->object_class;
 	$new_prescription->praticien_id = mbGetValueFromGet("praticien_id");
-	$new_prescription->type = "externe";
-	$new_prescription->store();
+  if($filter->object_class == "CSejour" && $filter->type){
+  	$new_prescription->type = $filter->type;
+  } else {
+	  $new_prescription->type = "externe";
+  }
+	$msg = $new_prescription->store();
 	$prescription = $new_prescription;
 } else {
 	// Chargement de la prescription demandé
@@ -78,15 +83,12 @@ $alertesInteractions = array();
 $alertesIPC          = array();
 $alertesProfil       = array();
 if ($prescription->_id) {
-  
   // Chargement des medicaments et commentaire
   $prescription->loadRefsLinesMedComments();
-  
   // Chargement des elements et commentaires
   $prescription->loadRefsLinesElementsComments();
   
-  //mbTrace($prescription->_ref_lines_elements_comments,"_ref_lines_elements_comments");
-  
+  $prescription->loadRefPraticien();
   
   // Gestion des alertes
   $allergies    = new CBcbControleAllergie();
@@ -147,6 +149,8 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("contexteType"       , "");
+$smarty->assign("today"              , mbDate());
 $smarty->assign("categories"         , $categories);
 $smarty->assign("executants"         , $executants);
 $smarty->assign("prise_posologie"    , new CPrisePosologie());

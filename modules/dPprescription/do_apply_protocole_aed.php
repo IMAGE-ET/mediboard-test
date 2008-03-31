@@ -50,6 +50,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   $new_line->unite_duree = $line->unite_duree;
   $new_line->ald = $line->ald;
   $new_line->prescription_id = $prescription_id;
+  $new_line->praticien_id = $AppUI->user_id;
   $msg = $new_line->store();
   viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   	

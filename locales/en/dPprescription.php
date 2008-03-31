@@ -244,4 +244,15 @@ $locales['CExecutantPrescriptionLine-nom'] = '';
 $locales['CExecutantPrescriptionLine-description'] = '';
 $locales['CExecutantPrescriptionLine-nom-desc'] = '';
 $locales['CExecutantPrescriptionLine-description-desc'] = '';
+$locales['CPrescription-type'] = '';
+$locales['CPrescription-_type_sejour'] = '';
+$locales['CPrescription.type.pre_admission'] = '';
+$locales['CPrescription.type.traitement'] = '';
+$locales['CPrescription.type.sejour'] = '';
+$locales['CPrescription.type.sortie'] = '';
+$locales['CPrescription.type.externe'] = '';
+$locales['CPrescription._type_sejour.pre_admission'] = '';
+$locales['CPrescription._type_sejour.traitement'] = '';
+$locales['CPrescription._type_sejour.sejour'] = '';
+$locales['CPrescription._type_sejour.sortie'] = '';
 ?>

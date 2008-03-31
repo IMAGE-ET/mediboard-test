@@ -5,6 +5,7 @@ var MedSelector = {
   sView     : null,
   sCode     : null,
   sSearch   : null,
+  sRechercheLivret : null,
   sOnglet   : null,
   oUrl      : null,
   selfClose : true,
@@ -24,11 +25,11 @@ var MedSelector = {
       this.oUrl.addParam(this.sOnglet, this.sSearch);
     }
     this.oUrl.addParam("onglet_recherche", this.sOnglet);
+    this.oUrl.addParam("_recherche_livret", this.sRechercheLivret);
     this.oUrl.setModuleAction("dPmedicament", "vw_idx_recherche");
     
     this.oUrl.popup(this.options.width, this.options.height, "Medicament Selector");
   },
-  
   set: function(nom, code) {
     this.prepared.nom = nom;
     this.prepared.code = code;  

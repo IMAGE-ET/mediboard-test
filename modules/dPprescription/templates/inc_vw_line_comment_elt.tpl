@@ -16,7 +16,7 @@
       </td>
       <td>
         {{assign var=category value=$_line_comment->_ref_category_prescription}}
-        {{$category->_view}}
+        {{$_line_comment->_ref_praticien->_view}}
       </td>
      <td>
       {{assign var=category_id value=$category->_id}}

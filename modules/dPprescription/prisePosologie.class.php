@@ -50,9 +50,9 @@ class CPrisePosologie extends CMbObject {
       "prescription_line_id" => "ref class|CPrescriptionLineMedicament notNull cascade",
       "moment_unitaire_id"   => "ref class|CMomentUnitaire",
       "quantite"             => "float",
-      "nb_fois"              => "num",
+      "nb_fois"              => "float",
       "unite_fois"           => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "nb_tous_les"          => "num",
+      "nb_tous_les"          => "float",
       "unite_tous_les"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
     );
     return array_merge($specsParent, $specs);

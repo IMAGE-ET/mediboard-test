@@ -19,6 +19,7 @@ if($('alertes')){
   <input type="hidden" name="prescription_line_element_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="element_prescription_id" value=""/>
   <input type="hidden" name="_category_name" value="" />
 </form>
@@ -35,7 +36,6 @@ if($('alertes')){
   <li><a href="#div_kine">Kiné</a></li>
   <li><a href="#div_soin">Soin</a></li>
 </ul>
-
 <hr class="control_tabs" />
 
 <!-- Declaration des divs -->

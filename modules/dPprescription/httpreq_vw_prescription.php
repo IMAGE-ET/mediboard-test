@@ -72,7 +72,7 @@ if($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAntecedents();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
-  $prescription->_ref_object->loadRefsPrescriptions();
+  //$prescription->_ref_object->loadRefsPrescriptions();
   
   // Calcul des alertes
   $allergies    = new CBcbControleAllergie();
@@ -126,6 +126,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("httpreq", 1);
 
+$smarty->assign("today"              , mbDate());
 $smarty->assign("categories", $categories);
 $smarty->assign("executants", $executants);
 $smarty->assign("prise_posologie", new CPrisePosologie());

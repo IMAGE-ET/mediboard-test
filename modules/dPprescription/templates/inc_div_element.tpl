@@ -1,4 +1,8 @@
-<script type="text/javascript">
+<script type="text/javascript">      
+      
+if(window.opener){
+  window.opener.PrescriptionEditor.refresh('{{$prescription->_id}}','{{$prescription->object_class}}');
+}
 
 // On vide toutes les valeurs du formulaire d'ajout d'element
 var oForm = document.addLineElement;
@@ -39,7 +43,6 @@ preselectExecutant = function(executant_id, category_id){
 	    {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment}}
 	  {{/foreach}}
 	
-	  <!-- Calcul du nombre de lignes d'elements -->
 	  {{assign var=lines_element value=$lines_cat.element|@count}}
 	  {{assign var=lines_comment value=$lines_cat.comment|@count}}
 	  {{assign var=nb_lines value=$nb_lines+$lines_element+$lines_comment}}  

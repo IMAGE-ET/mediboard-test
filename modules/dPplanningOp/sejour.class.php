@@ -92,6 +92,9 @@ class CSejour extends CCodable {
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
   var $_ref_consultations     = null;
+  var $_ref_prescriptions     = null;
+  var $_ref_last_prescription = null;
+  var $_prescription = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -139,6 +142,7 @@ class CSejour extends CCodable {
     $backRefs["operations"]   = "COperation sejour_id";
     $backRefs["rpu"]          = "CRPU sejour_id";
     $backRefs["consultations"]= "CConsultation sejour_id";
+    $backRefs["prescriptions"] = "CPrescription object_id";
     return $backRefs;
   }
 
@@ -446,6 +450,7 @@ class CSejour extends CCodable {
     $this->_ref_sejour =& $this;
   }
   
+
   // Chargement du dossier medical du sejour
   function loadRefDossierMedical(){
     $this->_ref_dossier_medical = new CDossierMedical();
@@ -504,6 +509,35 @@ class CSejour extends CCodable {
   
   function loadRefsConsultations() {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
+  }
+  
+  function loadRefsPrescriptions() {
+  	$prescriptions = $this->loadBackRefs("prescriptions");
+  
+  	// Si $prescriptions n'est pas un tableau, module non installé
+    if(!is_array($prescriptions)){
+    	$this->_ref_last_prescription = null;
+    	return;
+    }
+    
+    $this->_ref_last_prescription = end($prescriptions);
+
+    if(!$this->_ref_last_prescription){
+  		$this->_ref_last_prescription = new CPrescription();
+  		return;
+  	}
+    
+  	$this->_ref_prescriptions["pre_admission"] = array();
+  	$this->_ref_prescriptions["traitement"] = array();
+  	$this->_ref_prescriptions["sejour"] = array();
+  	$this->_ref_prescriptions["sortie"] = array();
+  	
+  	// Classement des prescriptions par type
+  	foreach($prescriptions as $_prescription){
+	    $_prescription->loadRefsLinesMedComments();  
+	    $_prescription->loadRefsLinesElementsComments();
+  		$this->_ref_prescriptions[$_prescription->type][] = $_prescription;
+  	}
   }
   
   function loadRefsFwd() {

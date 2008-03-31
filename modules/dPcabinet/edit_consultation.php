@@ -105,8 +105,8 @@ $codePraticienEc = null;
 if ($consult->_id) {
   $consult->loadRefs();
   
-  $consult->loadRefPrescription();
-  if ($prescription =& $consult->_ref_prescription) {
+  $consult->loadRefsPrescriptions();
+  if ($prescription =& $consult->_ref_prescriptions) {
 	  if ($prescription->_id){
 	    $prescription->loadRefsLinesMedComments();  
 	    $prescription->loadRefsLinesElementsComments();
@@ -123,6 +123,7 @@ if ($consult->_id) {
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
+      $consultAnesth->_ref_operation->_ref_sejour->loadRefsPrescriptions(); 
       $consultAnesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }

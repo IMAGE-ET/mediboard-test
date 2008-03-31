@@ -87,6 +87,9 @@ class CBcbProduit extends CBcbObject {
 
     // Chargement de la composition du produit
     $this->loadRefComposition();
+    
+    // Permet de savoir si le produit appartient au livret therapeutique
+    $this->isInLivret();
 
   }
   
@@ -122,6 +125,21 @@ class CBcbProduit extends CBcbObject {
   function loadRefsEquivalents(){
     $produitEquivalent = new CBcbEquivalent();
     $this->_ref_equivalents = $produitEquivalent->searchEquivalents($this->code_cip);
+  }
+  
+  function loadRefsEquivalentsInLivret(){
+  	$this->loadRefsEquivalents();
+    foreach($this->_ref_equivalents as $key => $produit_equivalent){
+      if(!$produit_equivalent->inLivret){
+    		unset($this->_ref_equivalents[$key]);
+    	}
+    }
+  }
+  
+  function isInLivret(){
+  	global $g;
+  	$livretThera = new CBcbProduitLivretTherapeutique();
+  	$this->inLivret = $livretThera->distObj->isLivret($g, $this->code_cip);
   }
   
   // $livretTherapeutique = 1 pour une recherche dans le livret Therapeutique

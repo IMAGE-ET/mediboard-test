@@ -5,6 +5,7 @@ var EquivSelector = {
   sView     : null,
   sSearch   : null,
   sCodeCIP  : null,
+  sInLivret : null,
   sLine     : null,
   oUrl      : null,
   selfClose : true,
@@ -19,6 +20,7 @@ var EquivSelector = {
     this.oUrl.setModuleAction("dPmedicament", "vw_equivalents");
     this.oUrl.addParam("code_cip", this.sCodeCIP);
     this.oUrl.addParam("line_id", this.sLine);
+    this.oUrl.addParam("inLivret", this.sInLivret);
     this.oUrl.popup(this.options.width, this.options.height, "Equivalent Selector");
   },
   

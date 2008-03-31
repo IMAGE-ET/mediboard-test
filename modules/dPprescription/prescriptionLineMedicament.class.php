@@ -21,7 +21,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $debut           = null;
   var $duree           = null;
   var $unite_duree     = null;
-  var $stoppe          = null;  
+  var $date_arret      = null;
+  var $valide          = null; 
   
   // Form Field
   var $_fin            = null;
@@ -32,6 +33,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
+  var $_ref_user_arret   = null;
   
   // Alertes
   var $_ref_alertes      = null;
@@ -60,7 +62,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       "debut"           => "date",
       "duree"           => "num",
       "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "stoppe"          => "bool",
+      "date_arret"      => "date",
+      "valide"          => "bool",
       "_fin"            => "date",
       "_unite_prise"    => "str"
     );
@@ -72,11 +75,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $backRefs["prise_posologie"] = "CPrisePosologie prescription_line_id";
     return $backRefs;
   }
-  
-  function getSeeks() {
-    return array (
-    );
-  }
+
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -90,6 +89,35 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->duree && $this->unite_duree){
     	$this->_duree_prise .= " pendant ".$this->duree." ".$this->unite_duree;
     }
+    if($this->duree && $this->debut){
+    	if($this->unite_duree == "minute" || $this->unite_duree == "heure" || $this->unite_duree == "demi_journee"){
+    		$this->_fin = $this->debut;
+    	}
+    	if($this->unite_duree == "jour"){
+    		$this->_fin = mbDate("+ $this->duree DAYS", $this->debut);	
+    	}
+    	if($this->unite_duree == "semaine"){
+    		$this->_fin = mbDate("+ $this->duree WEEKS", $this->debut);
+    	}
+      if($this->unite_duree == "quinzaine"){
+      	$duree_temp = 2 * $this->duree;
+    		$this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut);
+    	}
+    	if($this->unite_duree == "mois"){
+    		$this->_fin = mbDate("+ $this->duree MONTHS", $this->debut);	
+    	}
+    	if($this->unite_duree == "trimestre"){
+    		$duree_temp = 3 * $this->duree;
+    		$this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);	
+    	}
+      if($this->unite_duree == "semestre"){
+    		$duree_temp = 6 * $this->duree;
+    		$this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);	
+    	}
+    	if($this->unite_duree == "an"){
+    		$this->_fin = mbDate("+ $this->duree YEARS", $this->debut);	
+    	}
+    }
   }
   
   // Store-like function
@@ -100,10 +128,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     // Parcours des suppression des prises
     foreach($this->_ref_prises as &$_prise){
       if($msg = $_prise->delete()){
-      	mbTrace($msg);
       	return $msg;
       }
     }
+  }
+  
+  
+  function check(){
+  	parent::check();
+  	
+  	// TODO: Verifier que le praticien_id passé est un praticien ou un admin
+  
   }
   
   function store(){
@@ -124,11 +159,32 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_ref_produit = new CBcbProduit();
     $this->_ref_produit->load($this->code_cip);
     $this->loadPosologie();
+    // Si aucune posologie, on chargement l'unite de prise de la premiere trouvée
+    if(!$this->_unite_prise){
+    	$this->_ref_produit->loadRefPosologies();
+    	$posologie_temp = reset($this->_ref_produit->_ref_posologies);
+    	$this->_unite_prise = $posologie_temp->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
+    }
   }
   
   
   function loadRefsPrises(){
     $this->_ref_prises = $this->loadBackRefs("prise_posologie");	
+  }
+  
+  // Chargement de l'utilisateur ayant arrete la ligne de prescription
+  function loadRefUserArret(){
+  	$this->_ref_user_arret = new CMediusers();
+  	$user_log = new CUserLog();
+  	$user_log->object_id = $this->_id;
+  	$user_log->object_class = $this->_class_name;
+  	//$user_log->fields = "date_arret";
+    $order = "user_log_id DESC";
+  	$user_log->loadMatchingObject($order);
+    if($user_log->_id && $this->date_arret){
+    	$user_log->loadRefsFwd();
+    	$this->_ref_user_arret = $user_log->_ref_user;
+    }
   }
   
   function loadPosologie() {

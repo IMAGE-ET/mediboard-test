@@ -109,6 +109,11 @@ function reloadConsultAnesth() {
   infosAnesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesthContent', { waitingText: null } );
+
+  var urlPrescription = new Url;
+  urlPrescription.setModuleAction("dPcabinet", "httpreq_vw_prescription_exam_comp");
+  urlPrescription.addParam("sejour_id", document.editAntFrm._sejour_id.value);
+  urlPrescription.requestUpdate('viewPrescriptionSejour', { waitingText: null } );
 }
 
 function pageMain() {

@@ -68,9 +68,11 @@ var Prescription = {
     });
   },
   reload: function(prescription_id, element_id, category_name, mode_protocole) {
+      /*
       if(window.opener){
         window.opener.PrescriptionEditor.refresh(prescription_id);
       }
+      */
       var urlPrescription = new Url;
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
@@ -141,5 +143,13 @@ var Prescription = {
     } else {
       tab[0].innerHTML = name_tab;
     }
+  },
+  submitFormStop: function(oForm){
+    submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
+      var url = new Url;
+      url.setModuleAction("dPprescription", "httpreq_vw_stop_medicament");
+      url.addParam("line_id", oForm.prescription_line_id.value);
+      url.requestUpdate("stop_"+oForm.prescription_line_id.value,  { waitingText: null } );
+    } } );
   }
 };

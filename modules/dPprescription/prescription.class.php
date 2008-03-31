@@ -31,6 +31,9 @@ class CPrescription extends CMbObject {
   var $_ref_prescription_lines_element_by_cat = null;
   var $_ref_prescription_lines_comment        = null;
   
+  // Others Fields
+  var $_type_sejour = null;
+  
   function CPrescription() {
     $this->CMbObject("prescription", "prescription_id");
     
@@ -52,7 +55,8 @@ class CPrescription extends CMbObject {
       "object_id"     => "ref class|CCodable meta|object_class",
       "object_class"  => "notNull enum list|CSejour|CConsultation",
       "libelle"       => "str",
-      "type"          => "notNull enum list|traitement|pre_admission|sejour|sortie|externe"
+      "type"          => "notNull enum list|traitement|pre_admission|sejour|sortie|externe",
+      "_type_sejour"  => "notNull enum list|traitement|pre_admission|sejour|sortie"
      );
     return array_merge($specsParent, $specs);
   }
@@ -114,11 +118,15 @@ class CPrescription extends CMbObject {
   	
   	foreach($this->_ref_prescription_lines as &$line_med){
   		$line_med->loadRefsPrises();
+  		$line_med->loadRefUserArret();
+  		$line_med->loadRefPraticien();
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
-  	if(isset($this->_ref_prescription_lines_comment["medicament"]["comment"])){
-      foreach($this->_ref_prescription_lines_comment["medicament"]["comment"] as &$comment_med){
-  	  	$this->_ref_lines_med_comments["comment"][] = $comment_med;
+  	
+  	if(isset($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"])){
+      foreach($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"] as &$comment_med){
+  	  	$comment_med->loadRefPraticien();
+      	$this->_ref_lines_med_comments["comment"][] = $comment_med;
   	  }
   	}
   }
@@ -131,6 +139,7 @@ class CPrescription extends CMbObject {
     $this->_ref_prescription_lines_element = $line->loadList($where, $order);
     foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
+    	$line_element->loadRefPraticien();
     	$line_element->_ref_element_prescription->loadRefCategory();
     }
   }
@@ -181,6 +190,7 @@ class CPrescription extends CMbObject {
   		  if($_line_comment->category_prescription_id){
   		  	// Chargement de la categorie
           $_line_comment->loadRefCategory();
+          $_line_comment->loadRefPraticien();
           
   		  	$cat = new CCategoryPrescription();
   		  	$cat->load($_line_comment->category_prescription_id);

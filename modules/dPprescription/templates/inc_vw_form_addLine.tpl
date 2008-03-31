@@ -72,12 +72,13 @@
   {{else}}
     <button class="cancel notext" type="button" onclick="$('add_line_comment_{{$element}}').hide();">Cacher</button>
     <form name="addLineComment{{$element}}" method="post" action="" 
-         onsubmit="return Prescription.onSubmitCommentaire(this,'{{$prescription->_id}}','{{$element}}');">
+          onsubmit="return Prescription.onSubmitCommentaire(this,'{{$prescription->_id}}','{{$element}}');">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="prescription_line_comment_id" value="" />
       <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+      <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
       <select name="category_prescription_id">
         {{foreach from=$categories.$element item=cat}}
         <option value="{{$cat->_id}}">{{$cat->_view}}</option>

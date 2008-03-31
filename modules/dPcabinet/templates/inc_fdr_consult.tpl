@@ -280,7 +280,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
     
       {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
       <hr />
-      {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$consult->_ref_prescription object_id=$consult->_id object_class="CConsultation" praticien_id=$consult->_praticien_id suffixe=fdr}}
+      {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$consult->_ref_prescriptions object_id=$consult->_id object_class="CConsultation" praticien_id=$consult->_praticien_id suffixe=fdr}}
       {{/if}}
     </td>
 	</tr>

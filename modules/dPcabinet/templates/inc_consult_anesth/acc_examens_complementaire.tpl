@@ -116,7 +116,12 @@ function reloadListExamComp() {
 			    
 			      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
             <hr />
-            {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$consult->_ref_prescription object_id=$consult->_id object_class="CConsultation" praticien_id=$consult->_praticien_id suffixe=exam}}
+            <div id="viewPrescriptionSejour">
+            {{if $consult->_ref_consult_anesth->operation_id}}
+              {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_operation->_ref_sejour}}
+              {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" prescription=$sejour->_ref_last_prescription object_id=$sejour->_id object_class="CSejour" praticien_id=$consult->_praticien_id suffixe=exam}}
+            {{/if}}
+            </div>
             {{/if}}
 			    </td>
 			  </tr>

@@ -65,15 +65,15 @@ class CCodable extends CMbObject {
     $backRefs = parent::getBackRefs();
     $backRefs["actes_ngap"] = "CActeNGAP object_id";
     $backRefs["actes_ccam"] = "CActeCCAM object_id";
-    $backRefs["prescriptions"] = "CPrescription object_id";
-    
+    //$backRefs["prescriptions"] = "CPrescription object_id";
     return $backRefs;
   }
 
+  /*
   function loadRefPrescription() {
   	$this->_ref_prescription = $this->loadUniqueBackRef("prescriptions");
   }
-  
+  */
   function getAssociationCodesActes() {
     $this->updateFormFields();
     $this->loadRefsActesCCAM();
@@ -140,12 +140,14 @@ class CCodable extends CMbObject {
     return null;
   }
   
+  /*
   function loadRefsPrescriptions() {
     $prescription = new CPrescription();
     $where = array("object_class" => "= '$this->_class_name'", "object_id" => "= $this->_id");
     $this->_ref_prescriptions = $prescription->loadList($where);
   }
-  
+  */
+
   function loadRefsActes(){
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  

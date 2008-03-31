@@ -40,11 +40,19 @@ if($protocole_id){
 if($praticien_id){
   $listFavoris = CPrescription::getFavorisPraticien($praticien_id);
 }
-  
+
+$contexteType = array();
+$contexteType["CConsultation"][] = "externe";
+$contexteType["CSejour"][] = "pre_admission";
+$contexteType["CSejour"][] = "sortie";
+$contexteType["CSejour"][] = "sejour";
+$contexteType["CSejour"][] = "traitement";
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("contexteType", $contexteType);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("praticiens" , $praticiens);
 $smarty->assign("praticien"  , $praticien);
