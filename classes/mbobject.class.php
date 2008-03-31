@@ -279,7 +279,12 @@ class CMbObject {
     }
     
     $this->loadOldObject();
-    if($this->$field !== $this->_old->$field){
+    if($this->_specs[$field] instanceof CFloatSpec) {
+      if((round($this->$field, 2) !== round($this->_old->$field, 2)) && $this->$field !== "" && $this->_old->$field !== null) {
+        return true;
+      }
+    }
+    else if(($this->$field !== $this->_old->$field) && $this->$field !== "" && $this->_old->$field !== null){
       return true;
     }
     return false;
