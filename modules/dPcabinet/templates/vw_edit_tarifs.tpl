@@ -133,6 +133,8 @@ function pageMain() {
   oNgapField = new TokenField(document.editFrm.codes_ngap, {
     onChange : updateTokenNgap
   } );
+  
+}
 
 </script>
 
