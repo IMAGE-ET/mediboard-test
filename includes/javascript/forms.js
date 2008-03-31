@@ -495,7 +495,7 @@ NumericField.prototype = {
   // Calculate appropriate step
   getStep: function () {
     var oField = $(this.sField);
-    if (this.step != undefined) {
+    if (this.step == null) {
       var value = Math.abs(oField.value);
       if (value < 10)  return 1;
       if (value < 50)  return 5;
@@ -503,7 +503,7 @@ NumericField.prototype = {
       if (value < 500) return 50;
       return 100;
     } else {
-      return step;
+      return this.step;
     }
   },
 }

@@ -2699,6 +2699,33 @@ table.tbl td.ccmu-P{
   min-width: 5em;
 }
 
+.bargraph .legend {
+  display: none;
+  position: absolute;
+  border: 1px solid #999999;
+  background: #F9F9F9;
+  z-index: 50;
+  margin-top: 16px;
+  margin-left: 16px;
+  padding: 2px;
+}
+
+.bargraph .legend .value {
+   font-weight: bold;
+}
+
+.bargraph .legend .color {
+   height: 6px; 
+   width: 6px; 
+   float: left;
+   margin: 3px;
+   border: 1px solid #333333;
+}
+
+.bargraph:hover .legend {
+  display: block;
+}
+
 .bargraph .value {
   height: 55%;
 }
@@ -2717,7 +2744,7 @@ table.tbl td.ccmu-P{
   float:left; 
 }
 
-.numericField {
+.numericField, .numericField map {
   display: inline;
 }
 

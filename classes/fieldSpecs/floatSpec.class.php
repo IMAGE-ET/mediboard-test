@@ -92,10 +92,42 @@ class CFloatSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className){
+    $form      = CMbArray::extract($params, "form");
+    $increment = CMbArray::extract($params, "increment");
+    $field     = htmlspecialchars($this->fieldName);
     $maxLength = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
     CMbArray::defaultValue($params, "maxlength", $maxLength);
-    return $this->getFormElementText($object, $params, $value, $className);
+    $fieldId = str_replace('-', '_', $form.'_'.$field);
+    
+    if (!$min = CMbArray::extract($params, "min")) {
+      $min = $this->checkNumeric($this->min);
+    }
+    if (!$max = CMbArray::extract($params, "max")) {
+      $max = $this->checkNumeric($this->max);
+    }
+    $step = $this->checkNumeric(CMbArray::extract($params, "step"));
+    
+    CMbArray::defaultValue($params, "size", min($maxLength, 20));
+    CMbArray::defaultValue($params, "maxlength", $maxLength);
+    
+    if ($form && $increment) {
+      $sHtml  = '<div class="numericField">';
+      $sHtml .= $this->getFormElementText($object, $params, $value, $className);
+      $sHtml .= '
+    <script type="text/javascript">
+      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:1).', '.($this->pos?'0':($min?$min:'null')).', '.($max?$max:'null').');
+    </script>
+    <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
+    <map name="arrow_'.$fieldId.'" >
+      <area coords="0,0,10,8"   href="#1" onclick="'.$fieldId.'_object.inc()" title="+" />
+      <area coords="0,10,10,18" href="#1" onclick="'.$fieldId.'_object.dec()" title="-" />
+    </map>
+    </div>';
+    } else {
+      $sHtml = $this->getFormElementText($object, $params, $value, $className);
+    }
+    return $sHtml;
   }
 }
 
