@@ -71,7 +71,8 @@ class CMbObject {
   var $_ref_notes      = array(); // Notes
   var $_ref_documents  = array(); // Documents
   var $_ref_files      = array(); // Fichiers
-  var $_ref_affectations_personnel  = null; 
+  var $_ref_affectations_personnel  = null;
+  var $_old            = null; // Object in database
   
   // Behaviour fields
   var $_merging = null;
@@ -253,6 +254,38 @@ class CMbObject {
   }
   
   /**
+   * Load the object database version
+   */
+  function loadOldObject() {
+    if (!$this->_old) {
+      $this->_old = new $this->_class_name;
+      $this->_old->load($this->_id);
+    }
+  }
+  
+  /**
+   * Check wether a field has been modified or not
+   * @param field string Field name
+   */
+  function fieldModified($field) {
+    // Field is not valued
+    if ($this->$field === null) {
+      return false;
+    }
+    
+    // Nothing in base
+    if (!$this->_id) {
+      return false;
+    }
+    
+    $this->loadOldObject();
+    if($this->$field !== $this->_old->$field){
+      return true;
+    }
+    return false;
+  }
+  
+  /**
    * Complete field with base value if missing
    * @param field string Field name
    */
@@ -267,8 +300,8 @@ class CMbObject {
       return;
     }
     
-  	$old = new $this->_class_name;
-  	$this->$field = $old->$field;
+    $this->loadOldObject();
+    $this->$field = $this->_old->$field;
   }
   
   

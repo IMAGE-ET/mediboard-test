@@ -638,6 +638,9 @@ class CConsultation extends CCodable {
   }
   
   function store() {
+    
+    $this->check();
+    
     // Dans le cas d'une urgence
     // Ne pas mettre dans l'updateDBFields sinon effet de bord sur loadMatching
   	if($this->sejour_id !== null && $this->sejour_id){
@@ -667,6 +670,32 @@ class CConsultation extends CCodable {
     if ($this->_bind_fse && $this->_id) {
       return $this->bindFSE();
     }
+  }
+  
+  function check() {
+    if(!$this->_id) {
+      return null;
+    }
+    $this->completeField("valide");
+    $this->loadOldObject();
+    if($this->valide === "0") {
+      if($this->_old->tiers_date_reglement || $this->_old->patient_date_reglement) {
+        return "Vous ne pouvez plus dévalider le tarif, le règlement a déjà été effectué";
+      }
+      if($this->fieldModified("tiers_date_reglement") || $this->fieldModified("patient_date_reglement")) {
+        return "Vous ne pouvez pas effectuer le règlement sie tarif n'a pas été validé";
+    }
+    if($this->valide === "1") {
+      // Modification du tarif
+      if ($this->fieldModified("secteur1") || $this->fieldModified("secteur2") ||
+          $this->fieldModified("total_assure") || $this->fieldModified("total_amc") ||
+          $this->fieldModified("total_amo") || $this->fieldModified("du_patient") ||
+          $this->fieldModified("du_tiers")) {
+        return "Vous ne pouvez plus modifier le tarif, il est déjà validé";
+      }
+    }
+  }
+    
   }
   
   function loadRefCategorie() {
