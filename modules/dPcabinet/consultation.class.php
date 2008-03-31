@@ -125,11 +125,12 @@ class CConsultation extends CCodable {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backRefs["examaudio" ] = "CExamAudio consultation_id";
-    $backRefs["examcomp"  ] = "CExamComp consultation_id";
-    $backRefs["examnyha"  ] = "CExamNyha consultation_id";
-    $backRefs["exampossum"] = "CExamPossum consultation_id";
-    $backRefs["examigs"   ] = "CExamIgs consultation_id";
+    $backRefs["examaudio" ]     = "CExamAudio consultation_id";
+    $backRefs["examcomp"  ]     = "CExamComp consultation_id";
+    $backRefs["examnyha"  ]     = "CExamNyha consultation_id";
+    $backRefs["exampossum"]     = "CExamPossum consultation_id";
+    $backRefs["examigs"   ]     = "CExamIgs consultation_id";
+    $backRefs["prescription"]   = "CPrescription object_id";
     return $backRefs;
   }
   
@@ -274,15 +275,10 @@ class CConsultation extends CCodable {
   function check() {
     // Data checking
     $msg = null;
-    if(!$this->consultation_id) {
+    if(!$this->_id) {
       if (!$this->plageconsult_id) {
         $msg .= "Plage de consultation non valide<br />";
       }
-      if ($this->patient_id === 0) {
-        $msg .= "Patient non valide<br />";
-      }
-    }
-    if(!$this->_id){
       return $msg . parent::check();
     }
     $this->loadOldObject();
@@ -884,6 +880,11 @@ class CConsultation extends CCodable {
     $this->_count_fiches_examen += $this->_ref_examnyha  ->_id ? 1 : 0; 
     $this->_count_fiches_examen += $this->_ref_exampossum->_id ? 1 : 0; 
     $this->_count_fiches_examen += $this->_ref_examigs   ->_id ? 1 : 0; 
+  }
+  
+  // Chargement de la prescription liée à la consultation
+  function loadRefsPrescriptions() {
+    $this->_ref_prescriptions = $this->loadUniqueBackRef("prescription");
   }
 
   function loadRefsBack() {
