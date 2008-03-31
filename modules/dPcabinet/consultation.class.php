@@ -295,6 +295,7 @@ class CConsultation extends CCodable {
       // Règlement sans validation
       if($this->fieldModified("tiers_date_reglement") || $this->fieldModified("patient_date_reglement")) {
         $msg .= "Vous ne pouvez pas effectuer le règlement si le tarif n'a pas été validé";
+      }
     }
     if($this->valide === "1") {
       // Modification du tarif déjà validé
