@@ -1,26 +1,26 @@
-
 <script type="text/javascript">
-function submitAddiction(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossiersMedicaux });
-}
 
-function finAddiction(oForm){
-  oForm._hidden_addiction.value = oForm.addiction.value;
-  oForm.addiction.value = "";
-}
-
-{{if $_is_anesth}}
-  function copyAddiction(addiction_id){
-   var oForm = document.frmCopyAddiction;
-   oForm.addiction_id.value = addiction_id;
-   submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadDossierMedicalSejour });
+function onSubmitAddiction(oForm) {
+  if (oForm.addiction.value.blank()) {
+    return false;
   }
-{{/if}}
+  
+  onSubmitFormAjax(oForm, {
+  	onComplete : reloadDossiersMedicaux 
+  } );
+  
+	// Garder les informations pour les aides à la saisie
+	oForm._hidden_addiction.value = oForm.addiction.value;
+  oForm.addiction.value = "";
+  
+  return false;
+}
+
 </script>
 
 <hr />
 
-<form name="editAddictFrm" action="?m=dPcabinet" method="post">
+<form name="editAddictFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAddiction(this);">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_addiction_aed" />
@@ -77,14 +77,14 @@ function finAddiction(oForm){
       {{mb_field object=$addiction field=type defaultOption="&mdash; Aucun" onchange="putHelperContent(this,'addiction')"}}
     </td>
 		<td rowspan="2">
-      <textarea name="addiction" onblur="if(verifNonEmpty(this)){submitAddiction(this.form);finAddiction(this.form);}"></textarea>
+      <textarea name="addiction" onblur="return this.form.onsubmit();}"></textarea>
     </td>
 		
   </tr>
   
   <tr>
     <td class="button" colspan="2">
-      <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.addiction)){submitAddiction(this.form);finAddiction(this.form);}">
+      <button class="tick" type="button">
         {{tr}}Add{{/tr}} une addiction
       </button>
     </td>

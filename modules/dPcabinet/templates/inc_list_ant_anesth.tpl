@@ -23,6 +23,35 @@
   <input type="hidden" name="_sejour_id" value="{{$sejour->_id}}" />
 </form>
 
+<script type="text/javascript">
+
+function onSubmitDossierMedical(form) {
+	return onSubmitFormAjax(oForm, { 
+		onComplete : reloadDossierMedicalSejour 
+	} );
+}
+
+function copyAntecedent(antecedent_id){
+  var oForm = document.frmCopyAntecedent;
+  oForm.antecedent_id.value = antecedent_id;
+ 	onSubmitDossierMedical(oForm);
+}
+
+function copyTraitement(traitement_id){
+  var oForm = document.frmCopyTraitement;
+  oForm.traitement_id.value = traitement_id;
+  onSubmitDossierMedical(oForm);
+}
+
+function copyAddiction(addiction_id) {
+	var oForm = document.frmCopyAddiction;
+	oForm.addiction_id.value = addiction_id;
+	onSubmitDossierMedical(oForm);
+}
+
+</script>
+
+
 {{include file="inc_consult_anesth/inc_list_addiction_anesth.tpl}}    
 
 <strong>Antécédents significatifs</strong>

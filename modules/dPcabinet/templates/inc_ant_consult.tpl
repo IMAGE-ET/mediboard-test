@@ -110,6 +110,13 @@ function reloadDossierMedicalPatient(){
   antUrl.requestUpdate('listAnt', { waitingText : null } );
 }
 
+function reloadDossierMedicalSejour() {
+  var antUrl = new Url;
+  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
+  antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
+  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
+}
+
 function reloadDossiersMedicaux(){
   reloadDossierMedicalPatient();
 
@@ -120,30 +127,33 @@ function reloadDossiersMedicaux(){
   {{/if}}
 }
 
-function submitAnt(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossiersMedicaux });
+function onSubmitAnt(oForm) {
+	if (oForm.rques.value.blank()) {
+    return false;
+  }
+	
+  onSubmitFormAjax(oForm, {
+  	onComplete : reloadDossiersMedicaux 
+  } );
+  
+  dateAntecedent();
+  
+  return false;
 }
 
-
-{{if $_is_anesth}}
-function reloadDossierMedicalSejour() {
-  var antUrl = new Url;
-  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
-  antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
-  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
+function onSubmitTraitement(oForm) {
+	if (oForm.traitement.value.blank()) {
+    return false;
+  }
+	
+  onSubmitFormAjax(oForm, {
+  	onComplete : reloadDossiersMedicaux 
+  } );
+  
+  finTrmt();
+  
+  return false;
 }
-
-function copyAntecedent(antecedent_id){
- var oForm = document.frmCopyAntecedent;
- oForm.antecedent_id.value = antecedent_id;
- submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadDossierMedicalSejour });
-}
-function copyTraitement(traitement_id){
- var oForm = document.frmCopyTraitement;
- oForm.traitement_id.value = traitement_id;
- submitFormAjax(oForm, 'systemMsg', { waitingText : null, onComplete : reloadDossierMedicalSejour });
-}
-{{/if}}
 
 </script>
 
@@ -154,7 +164,7 @@ function copyTraitement(traitement_id){
       <hr />
       
       <!-- Antécédents -->
-      <form name="editAntFrm" action="?m=dPcabinet" method="post">
+      <form name="editAntFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitAnt(this);">
       
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -213,7 +223,7 @@ function copyTraitement(traitement_id){
 			      </script>
 			    </td>
           <td rowspan="3">
-            <textarea name="rques" onblur="if(verifNonEmpty(this)){submitAnt(this.form);dateAntecedent();}"></textarea>
+            <textarea name="rques" onblur="this.form.onsubmit();"></textarea>
           </td>
         </tr>
 
@@ -226,7 +236,7 @@ function copyTraitement(traitement_id){
 
         <tr>
           <td class="button" colspan="2">
-            <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.rques)){submitAnt(this.form);dateAntecedent();}">
+            <button class="tick" type="button">
               {{tr}}Add{{/tr}} un antécédent
             </button>
           </td>
@@ -237,7 +247,7 @@ function copyTraitement(traitement_id){
       <hr />
       
 			<!-- Traitements -->
-      <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
+      <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_traitement_aed" />
@@ -282,7 +292,7 @@ function copyTraitement(traitement_id){
             <img id="editTrmtFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
           </td>
           <td rowspan="3">
-            <textarea name="traitement" onblur="if(verifNonEmpty(this)){submitAnt(this.form);finTrmt();}"></textarea>
+            <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
           </td>
         </tr>
         
@@ -302,7 +312,7 @@ function copyTraitement(traitement_id){
 
         <tr>
           <td class="button" colspan="2">
-            <button class="tick" type="button" onclick="if(verifNonEmpty(this.form.traitement)){submitAnt(this.form);finTrmt();}">
+            <button class="tick" type="button">
               {{tr}}Add{{/tr}} un traitement
             </button>
           </td>
