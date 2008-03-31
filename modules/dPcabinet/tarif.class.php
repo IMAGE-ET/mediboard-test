@@ -125,7 +125,8 @@ class CTarif extends CMbObject {
     if(!$this->_ref_chir || !$this->_ref_function) {
       $this->loadRefsFwd();
     }
-    return ($this->_ref_chir->getPerm($permType) && $this->_ref_function->getPerm($permType));
+    
+    return ($this->_ref_chir->getPerm($permType) || $this->_ref_function->getPerm($permType));
   }
 }
 
