@@ -37,7 +37,7 @@
 
   {{foreach from=$days key=_day item=_fses}}
   <tr>
-    <td coslpan="2"><strong>{{$_day|date_format:"%a %d %b %Y"}}</strong></td>
+    <td colspan="2"><strong>{{$_day|date_format:"%a %d %b %Y"}}</strong></td>
   </tr>
   <tr>
     <td colspan="2">
@@ -51,9 +51,17 @@
         {{foreach from=$_fses item=_fse}}
         <tr>
           <td>
-            <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
-			        {{mb_value object=$_fse field=S_FSE_NUMERO_FSE}} 
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CLmFSE', object_id: '{{$_fse->_id}}' } })">
+				  	  {{$_fse->_id}}
+				  	</span>
+			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_fse->_id}}');">
+			        {{tr}}View{{/tr}} 
 			      </button>
+			      <button class="print" type="button" onclick="Intermax.Triggers['Editer FSE']('{{$_fse->_id}}');">
+			        {{tr}}Print{{/tr}}
+			      </button>
+			    </td>
+			      
           <td>{{mb_value object=$_fse field=S_FSE_MODE_SECURISATION}}</td>
           {{if $_fse->_annulee}}
           <td colspan="2" class="cancelled">{{mb_value object=$_fse field=S_FSE_ETAT}}</td>

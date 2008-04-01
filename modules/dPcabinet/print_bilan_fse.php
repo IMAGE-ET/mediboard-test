@@ -17,10 +17,15 @@ $filter->_date_max = mbGetValueFromGet("_date_max", mbDate("+1 day"));
 $filter->S_FSE_CPS = mbGetValueFromGet("S_FSE_CPS", -1);
 $filter->S_FSE_ETAT = mbGetValueFromGet("S_FSE_ETAT");
 
+
 // Chargement des FSE
 $fse = new CLmFSE();
 $where = array();
 $where["S_FSE_DATE_FSE"] = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
+
+if ($filter->S_FSE_CPS) {
+  $where["S_FSE_CPS"] = "= '$filter->S_FSE_CPS'";
+}
 
 if ($filter->S_FSE_ETAT) {
   $where["S_FSE_ETAT"] = "= '$filter->S_FSE_ETAT'";
