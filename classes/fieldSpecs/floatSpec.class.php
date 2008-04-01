@@ -120,8 +120,8 @@ class CFloatSpec extends CMbFieldSpec {
     </script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
-      <area coords="0,0,10,8"   href="#1" onclick="'.$fieldId.'_object.inc()" title="+" />
-      <area coords="0,10,10,18" href="#1" onclick="'.$fieldId.'_object.dec()" title="-" />
+      <area coords="0,0,10,8"   href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.inc()" title="+" />
+      <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.dec()" title="-" />
     </map>
     </div>';
     } else {

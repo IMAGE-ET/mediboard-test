@@ -2760,3 +2760,12 @@ table.tbl td.ccmu-P{
 .numericField input {
   margin-right: 0;
 }
+
+table.main td.step {
+	background-color: #ccc; 
+	width: 10%; 
+	font-size: 12px; 
+	font-weight: bold; 
+	text-align: center;
+	vertical-align: middle;
+}

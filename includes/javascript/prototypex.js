@@ -102,13 +102,72 @@ Class.extend(Element.ClassNames, {
 Object.extend(Form.Element, {
   // Set an element value an notify 'change' event
   setValue: function(element, value) {
-   // Test if element exist
-   if(element && element.value != value) {
-     element.value = value;
-     (element.onchange || Prototype.emptyFunction).bind(element)();
-   }
-  }
-});
+   	// Test if element exist
+    if (element && element.value != value) {
+      element.value = value;
+      (element.onchange || Prototype.emptyFunction).bind(element)();
+    }
+  },
+  
+  Selection: {
+		setAll: function(input) {
+		  this.setRange(input, 0, input.value.length);
+		},
+		
+		setRange: function(input, start, end) {
+      // Gecko case
+ 		  if (input.selectionStart != undefined) {
+				input.selectionStart = start;
+				input.selectionEnd = end;
+	   	}
+	   	
+			// IE case
+	   	if (input.createTextRange != undefined) {
+				var range = input.createTextRange();
+				range.collapse(true);
+				range.moveStart("character", start);
+				range.moveEnd("character", end - start);
+				range.select();
+	   	}
+	  },
+	  
+		getStart: function(input) {
+      // Gecko case
+ 		  if (input.selectionStart != undefined) {
+				return input.selectionStart;
+			}
+			
+			// IE case
+	   	if (document.selection) {
+				var range = document.selection.createRange();
+				var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+				if (!isCollapsed) {
+					range.collapse(true);
+				}
+				var b = range.getBookmark();
+				return b.charCodeAt(2) - 2;
+			}
+		},
+		
+		getEnd: function(input)  {
+      // Gecko case
+ 		  if (input.selectionEnd != undefined) {
+				return input.selectionEnd;
+			}
+			
+			// IE case
+	   	if (document.selection) {
+				var range = document.selection.createRange();
+				var isCollapsed = range.compareEndPoints("StartToEnd", range) == 0;
+				if (!isCollapsed) {
+					range.collapse(false);
+				}
+				var b = range.getBookmark();
+				return b.charCodeAt(2) - 2;
+			}
+		}
+	}
+} );
 
 /**
  * Hack to make Ajax from prototype.js work with Rico

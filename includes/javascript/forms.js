@@ -469,27 +469,23 @@ NumericField.prototype = {
   // Increment function
   inc: function () {
     var oField = $(this.sField);
-    var current = oField.value;
-    var result = Number(current) + Number(this.getStep());
-    
-    oField.value = (result <= this.max || this.max == null) ? result : this.max;
-    
-    if (oField.value != current && oField.onchange) {
-      oField.onchange();
-    }
+    var step = Number(this.getStep());
+    var result = (parseInt(Number(oField.value) / step) + 1) * step;
+    result = (result <= this.max || this.max == null) ? result : this.max;
+    Form.Element.setValue(oField, result);
+//    Form.Element.Selection.setAll(oField);
+//    oField.focus();
   },
 
   // Decrement function
   dec: function () {
     var oField = $(this.sField);
-    var current = oField.value;
-    var result = Number(current) - Number(this.getStep());
-    
-    oField.value = (result >= this.min || this.min == null) ? result : this.min;
-    
-    if (oField.value != current && oField.onchange) {
-      oField.onchange();
-    }
+    var step = Number(this.getStep());
+    var result = (parseInt(Number(oField.value) / step) - 1) * step;
+ 	  result = (result >= this.min || this.min == null) ? result : this.min;
+    Form.Element.setValue(oField, result);
+//    Form.Element.Selection.setAll(oField);
+//    oField.focus();
   },
   
   // Calculate appropriate step
@@ -501,7 +497,9 @@ NumericField.prototype = {
       if (value < 50)  return 5;
       if (value < 100) return 10;
       if (value < 500) return 50;
-      return 100;
+      if (value < 1000) return 100;
+      if (value < 5000) return 500;
+      return 1000;
     } else {
       return this.step;
     }

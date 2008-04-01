@@ -23,10 +23,10 @@ function viewProduit(cip){
   {{assign var=sejour value=$prescription->_ref_object}}
   {{assign var=prescriptions value=$sejour->_ref_prescriptions}}
   <tr>
-    <td style="background-color: #ccc">
+    <td>
       <table style="width: 100%">
-        <tr >
-          <td id="traitement" style="width: 25%; font-size: 12px; font-weight: bold; text-align:center">
+        <tr>
+          <td id="traitement" class="step">
           {{if $prescriptions.traitement}}
 	          {{assign var=prescription_traitement value=$prescriptions.traitement.0}}
 	          {{if $prescription_traitement->_id}}
@@ -41,16 +41,15 @@ function viewProduit(cip){
 	              </a>
 	            </form>
 	          {{/if}}
-	            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_traitement->_id}}">
-	              {{if $prescription->type == "traitement"}}[{{/if}}
-	                {{tr}}CPrescription.type.traitement{{/tr}}
-	              {{if $prescription->type == "traitement"}}]{{/if}}
+	            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_traitement->_id}}"
+	              {{if $prescription->type == "traitement"}}style="font-size: 200%"{{/if}}>
+                {{tr}}CPrescription.type.traitement{{/tr}}
 	            </a>
 	          {{/if}}
           {{/if}}
           </td>
           
-          <td id="pre_admission" style="width: 25%; font-size: 12px; font-weight: bold; text-align:center">
+          <td id="pre_admission" class="step">
           {{if $prescriptions.pre_admission}}
           {{assign var=prescription_pre_admission value=$prescriptions.pre_admission.0}}
           {{if $prescription_pre_admission->_id}}
@@ -65,16 +64,15 @@ function viewProduit(cip){
             </a>            
           </form>   
           {{/if}}
-            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_pre_admission->_id}}">
-              {{if $prescription->type == "pre_admission"}}[{{/if}}
-                {{tr}}CPrescription.type.pre_admission{{/tr}}
-              {{if $prescription->type == "pre_admission"}}]{{/if}}           
+            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_pre_admission->_id}}"
+              {{if $prescription->type == "pre_admission"}}style="font-size: 200%"{{/if}}>
+              {{tr}}CPrescription.type.pre_admission{{/tr}}
             </a>
           {{/if}}
           {{/if}}
           </td>
           
-          <td id="sejour" style="width: 25%; font-size: 12px; font-weight: bold; text-align:center">
+          <td id="sejour" class="step">
           {{if $prescriptions.sejour}}
           {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
           {{if $prescription_sejour->_id}}
@@ -89,21 +87,20 @@ function viewProduit(cip){
           </a>
           </form>
           {{/if}}
-            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_sejour->_id}}">
-              {{if $prescription->type == "sejour"}}[{{/if}}
-                {{tr}}CPrescription.type.sejour{{/tr}}
-              {{if $prescription->type == "sejour"}}]{{/if}}
+            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_sejour->_id}}"
+              {{if $prescription->type == "sejour"}}style="font-size: 200%"{{/if}}>
+              {{tr}}CPrescription.type.sejour{{/tr}}
             </a>
           
           {{/if}}
           {{/if}}
           </td>
          
-          <td id="sortie" style="width: 25%; font-size: 12px; font-weight: bold; text-align:center">
+          <td id="sortie" class="step">
           {{if $prescriptions.sortie}}
-          {{if $prescription->type == "sortie"}}[{{/if}}
-          {{tr}}CPrescription.type.sortie{{/tr}}
-          {{if $prescription->type == "sortie"}}]{{/if}}
+            <span {{if $prescription->type == "sortie"}}style="font-size: 200%"{{/if}}>
+		          {{tr}}CPrescription.type.sortie{{/tr}}
+		        </span>
               
           <form name="selSortie" method="get" action="">
           <select name="selPrescriptionSortie" onchange="if(this.value != ''){ window.location.href='?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id='+this.value} ">
