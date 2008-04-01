@@ -1,5 +1,7 @@
 <li>
   <strong>{{$med->_ref_produit->libelle}}</strong>:
+  <ul>
+    <li>
   <!-- Affichage des prises s'il y en a -->
   {{foreach from=$med->_ref_prises item=prise}}
     {{if $prise->quantite}}
@@ -21,5 +23,8 @@
   <!-- Remarque sur la prise -->
   {{if $med->_specif_prise}}
   ({{$med->_specif_prise}})
+  
 {{/if}}
+</li>
+  </ul>
 </li>

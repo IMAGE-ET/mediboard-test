@@ -32,8 +32,9 @@ div.footer {
   overflow:hidden;
 }
 
-h2 {
+h1 {
   text-align: center;
+  color: #449944;
 } 
 
 h3 {
@@ -125,7 +126,7 @@ div#goUp {
   {{/if}}
 
 {{if $lines.medicaments.med.ald || $lines.medicaments.comment.ald}}
-  <h2>Medicaments</h2>
+  <h1>Medicaments</h1>
     <!-- Affichage des ald -->
     <h3>
     Prescriptions relatives au traitement de l'affection de longue durée
@@ -158,7 +159,7 @@ div#goUp {
     </ul>
 <!-- Affichage en mode normal -->
 {{else}}
-  <h2>Médicaments</h2>
+  <h1>Médicaments</h1>
     <!-- Affichage des no_ald -->
     <ul>
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
@@ -190,7 +191,7 @@ div#goUp {
        <div class="body">
      {{/if}}
      
-     <h2>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$name_category->_view}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h2>
+     <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$name_category->_view}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
      
      {{if $elements.element.ald || $elements.comment.ald}}
        <h3>
