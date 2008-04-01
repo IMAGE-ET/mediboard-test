@@ -3,13 +3,14 @@
 <script type="text/javascript">
 
 Prescription.suffixes.push("{{$suffixe}}");
+//Prescription.suffixes.push("CConsultation-fdr");
 Prescription.suffixes = Prescription.suffixes.uniq();
 
 </script>
 
 	 	  
 {{if $prescription}}
-	<div id="prescription-{{$object_class}}-{{$suffixe}}">
+	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
 	  {{if !$prescription->_id}}
 	    <form name="addPrescriptionSejour">
