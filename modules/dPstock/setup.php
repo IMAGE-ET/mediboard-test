@@ -13,7 +13,7 @@ global $AppUI;
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config['mod_name']    = 'dPstock';
-$config['mod_version'] = '0.1';
+$config['mod_version'] = '0.2';
 $config['mod_type']    = 'user';
 
 class CSetupdPstock extends CSetup {
@@ -115,7 +115,11 @@ PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';
 PRIMARY KEY (`stock_out_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.1';
+    $this->makeRevision('0.1');
+    $sql = 'ALTER TABLE `product_order` ADD `cancelled` BOOL NOT NULL ;';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.2';
   }
 }
 

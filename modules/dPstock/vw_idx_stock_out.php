@@ -25,6 +25,7 @@ if ($category) {
   // Loads the products list
   foreach($category->_ref_products as $prod) {
     $prod->loadRefsBack();
+    $prod->loadRefStock();
   }
 } else $category = new CProductCategory();
 

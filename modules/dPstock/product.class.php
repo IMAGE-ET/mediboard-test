@@ -41,7 +41,7 @@ class CProduct extends CMbObject {
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs['references'] = 'CProductReference reference_id';
+    $backRefs['references'] = 'CProductReference product_id';
     $backRefs['stocks']     = 'CProductStock product_id';
     return $backRefs;
   }
@@ -69,34 +69,26 @@ class CProduct extends CMbObject {
   }
 
   function loadRefsBack() {
-  	global $g;
-  	
-    $where = array();
-    $where['product_id'] = "= '$this->product_id'";
-
-    // Loads stocks references
-    $this->_ref_stocks = new CProductStock();
-    $this->_ref_stocks = $this->_ref_stocks->loadList($where);
-
-    // Loads suppliers references
-    $this->_ref_references = new CProductReference;
-    $this->_ref_references = $this->_ref_references->loadList($where);
-    
-    // Loads the stock associated to the current group
-    $where['group_id'] = "= $g";
-    $this->_ref_stock_group = new CProductStock();
-    
-    if (!$this->_ref_stock_group->loadObject($where)) {
-    	$this->_ref_stock_group = null;
-    }
+  	$this->_ref_references = $this->loadBackRefs('references');
+    $this->_ref_stocks = $this->loadBackRefs('stocks');
   }
 
-  function loadRefsFwd(){
+  function loadRefsFwd() {
     $this->_ref_category = new CProductCategory;
     $this->_ref_category->load($this->category_id);
 
     $this->_ref_societe = new CSociete;
     $this->_ref_societe->load($this->societe_id);
+  }
+  
+  // Loads the stock associated to the current group
+  function loadRefStock() {
+  	global $g;
+  	
+    $this->_ref_stock_group = new CProductStock();
+    $this->_ref_stock_group->group_id = $g;
+    $this->_ref_stock_group->product_id = $this->product_id;
+    $this->_ref_stock_group->loadMatchingObject();
   }
 
   function getPerm($permType) {
@@ -120,6 +112,5 @@ class CProduct extends CMbObject {
   		return false;
   	}
   }
-
 }
 ?>

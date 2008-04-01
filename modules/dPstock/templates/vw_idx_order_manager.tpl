@@ -6,7 +6,7 @@ function pageMain() {
   
   // Initialisation des onglets du menu
   var tabs = new Control.Tabs('tab_orders');
-  tabs.setActiveTab("orders-pending");
+  //tabs.setActiveTab("orders-pending");
 }
 
 function refreshListOrders(type, keywords) {
@@ -22,6 +22,7 @@ function refreshLists(oForm) {
   refreshListOrders("waiting", keywords);
   refreshListOrders("pending", keywords);
   refreshListOrders("old",     keywords);
+  refreshListOrders("cancelled",keywords);
 }
 
 function submitOrder (oForm, refresh, listToRefresh) {
@@ -36,6 +37,7 @@ function submitOrder (oForm, refresh, listToRefresh) {
           refreshListOrders("waiting");
           refreshListOrders("pending");
           refreshListOrders("old");
+          refreshListOrders("cancelled");
         }
       });
     }
@@ -68,14 +70,16 @@ function popupOrder(order_id, width, height) {
         <li><a href="#orders-waiting"><span id="orders-waiting-count">0</span> pas envoyées</a></li>
         <li><a href="#orders-pending"><span id="orders-pending-count">0</span> non reçues</a></li>
         <li><a href="#orders-old"><span id="orders-old-count">0</span> reçues</a></li>
+        <li><a href="#orders-cancelled"><span id="orders-cancelled-count">0</span> annulées ou archivées</a></li>
       </ul>
       <hr class="control_tabs" />
       <div id="orders-waiting"></div>
       <div id="orders-pending"></div>
       <div id="orders-old"></div>
+      <div id="orders-cancelled"></div>
     </td>
     
-    <td class="halfPane">
+    <td class="halfPane" style="width: 25%;">
     <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
       Nouvelle commande
     </a>
@@ -88,7 +92,7 @@ function popupOrder(order_id, width, height) {
       <table class="form">
         <tr>
           {{if $order->_id}}
-          <th class="title modify" colspan="2">Modification de la commande {{$order->_view}}</th>
+          <th class="title modify" colspan="2">Modification de la commande {{$order->order_number}}</th>
           {{else}}
           <th class="title" colspan="2">Nouvelle commande</th>
           {{/if}}

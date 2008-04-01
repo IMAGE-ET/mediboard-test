@@ -2707,11 +2707,12 @@ table.tbl td.ccmu-P{
   z-index: 50;
   margin-top: 16px;
   margin-left: 16px;
-  padding: 2px;
 }
 
 .bargraph .legend .value {
    font-weight: bold;
+   background: #CCCCCC;
+   padding: 2px;
 }
 
 .bargraph .legend .color {
@@ -2753,7 +2754,7 @@ table.tbl td.ccmu-P{
   width: 11px; 
   line-height: 19px; 
   vertical-align: middle; 
-  margin: -5px 0 0 1px; 
+  margin: -5px 0 0 -2px; 
 }
 
 .numericField input {

@@ -19,17 +19,26 @@ $societe = new CSociete();
 
 if ($type != 'waiting' && 
     $type != 'pending' && 
-    $type != 'old') {
-	$type = 'waiting';
+    $type != 'old' &&
+    $type != 'cancelled') {
+	$type = 'cancelled';
 }
 
 // we choose if it's an order that hasn't been sent yet
-$neg = ($type == 'waiting')?'':'NOT ';
+$neg_ordered = ($type == 'waiting')?'':'NOT ';
+$neg_cancelled = ($type == 'cancelled')?'1':'0';
 
 // the sql query (too complex to use the normal way)
-$sql = "SELECT `product_order`.* FROM `product_order`, `societe` 
-WHERE `product_order`.`date_ordered` IS $neg NULL 
-AND `product_order`.`societe_id` = `societe`.`societe_id`";
+$sql = "SELECT `product_order`.* FROM `product_order`, `societe` WHERE";
+
+// if the type is different from "cancelled", the ordered status isn't important
+if ($type != 'cancelled') {
+  $sql .= "`product_order`.`date_ordered` IS $neg_ordered NULL AND";
+}
+
+$sql .= 
+"`product_order`.`cancelled` = $neg_cancelled AND 
+`product_order`.`societe_id` = `societe`.`societe_id`";
 
 // if keywords have been provided
 if ($keywords) {
@@ -63,7 +72,8 @@ foreach($orders as $ord) {
   
   if ($type == 'waiting' ||
       $type == 'pending' && !$ord->_received ||
-      $type == 'old'     &&  $ord->_received)	{
+      $type == 'old'     &&  $ord->_received ||
+      $type == 'cancelled')	{
   	$orders_filtered[] = $ord;
   }
 }

@@ -1,12 +1,14 @@
 <script type="text/javascript">
 function submitOrder (oForm, order_id) {
-  submitFormAjax(oForm, 'systemMsg',{
-    onComplete: function() {
-      refreshOrder(order_id);
-    }
-  });
-  if (window.opener) {
-    window.opener.refreshLists();
+  if (oForm.elements._order && confirmOrder()) {
+    submitFormAjax(oForm, 'systemMsg',{
+      onComplete: function() {
+        refreshOrder(order_id);
+        if (window.opener && oForm.elements._order) {
+          window.close();
+        }
+      }
+    });
   }
 }
 
@@ -14,27 +16,23 @@ function submitOrderItem (oForm, order_id, order_item_id, noAjax) {
   if (!noAjax) {
     submitFormAjax(oForm, 'systemMsg',{
       onComplete: function() {
-        refreshOrder(order_id);
+        refreshOrder(order_id, oForm.reference_id);
         refreshOrderItem(order_item_id);
       }
     });
   } else {
     oForm.submit();
   }
-  if (window.opener) {
-    window.opener.refreshLists();
-  }
 }
 
-function refreshOrder(order_id) {
+function refreshOrder(order_id, reloadOpener) {
+  if (window.opener && reloadOpener) {
+    window.opener.refreshLists();
+  }
   url = new Url;
   url.setModuleAction("dPstock","httpreq_vw_order");
   url.addParam("order_id", order_id);
   url.requestUpdate("order-"+order_id, { waitingText: null } );
-  
-  if (window.opener) {
-    window.opener.refreshLists();
-  }
 }
 
 function refreshOrderItem(order_item_id) {
@@ -42,9 +40,17 @@ function refreshOrderItem(order_item_id) {
   url.setModuleAction("dPstock", "httpreq_vw_order_item");
   url.addParam("item_id", order_item_id);
   url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
-  
-  if (window.opener) {
-    window.opener.refreshLists();
+}
+
+function confirmOrder() {
+  return confirm("Etes-vous sur de vouloir passer cette commande ?");
+}
+
+function pageMain() {
+  window.onbeforeunload = function () {
+    if (window.opener) {
+      window.opener.refreshLists();
+    }
   }
 }
 </script>
@@ -54,9 +60,12 @@ function refreshOrderItem(order_item_id) {
 {{if !$order->date_ordered && !$hide_products_list}}
   <td class="halfPane">
     {{include file="inc_category_selector.tpl"}}
+    
+    {{if !$dialog}}
     <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id=0">
       Nouvelle commande
     </a>
+    {{/if}}
   
   <div style="text-align: right;">
   <button type="button" class="down" onclick="">Suggérer</button>
@@ -77,7 +86,13 @@ function refreshOrderItem(order_item_id) {
       {{foreach from=$curr_product->_ref_references item=curr_reference}}
         {{if $curr_reference->societe_id == $order->societe_id}}
         <tr {{if $curr_reference->_id == $order->_id}}class="selected"{{/if}}>
-          <td><a href="?m={{$m}}&amp;tab=vw_idx_order&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_product->_view}}</a></td>
+          <td>
+          {{if $dialog}}
+            {{$curr_product->_view}}
+          {{else}}
+            <a href="?m={{$m}}&amp;tab=vw_idx_order&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_product->_view}}</a>
+          {{/if}}
+          </td>
           <td>{{mb_value object=$curr_reference field=quantity}}</td>
           <td>{{mb_value object=$curr_reference field=price}}</td>
           <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
@@ -112,9 +127,6 @@ function refreshOrderItem(order_item_id) {
 
 {{if $order->_id}}
     <td class="halfPane">
-      <h3>{{$order->_view}}</h3>
-      
-      <!-- RECEPTION OR ORDER-->
       <form name="order-edit-{{$order->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />

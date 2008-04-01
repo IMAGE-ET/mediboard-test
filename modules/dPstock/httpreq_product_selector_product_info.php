@@ -16,6 +16,7 @@ if ($product_id) {
   $product = new CProduct();
   $product->load($product_id);
   $product->loadRefs();
+  $product->loadRefStock();
 }
 
 // Smarty template

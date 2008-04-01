@@ -17,6 +17,7 @@ class CProductOrder extends CMbObject {
   var $group_id         = null;
 	var $locked           = null;
 	var $order_number     = null;
+	var $cancelled        = null;
 
 	// Object References
 	//    Multiple
@@ -37,6 +38,8 @@ class CProductOrder extends CMbObject {
 	var $_order           = null;
 	var $_receive         = null;
 	var $_autofill        = null;
+	var $_redo            = null;
+	
 
 	function CProductOrder() {
 		$this->CMbObject('product_order', 'order_id');
@@ -54,8 +57,9 @@ class CProductOrder extends CMbObject {
       'date_ordered'    => 'dateTime',
       'societe_id'      => 'notNull ref class|CSociete',
 		  'group_id'        => 'notNull ref class|CGroups',
-      'locked'          => 'notNull bool',
-      'order_number'    => 'notNull str maxLength|64',
+      'locked'          => 'bool',
+		  'cancelled'       => 'bool',
+      'order_number'    => 'str maxLength|64',
       '_total'          => 'currency',
       '_count_received' => 'num pos',
 		  '_date_received'  => 'dateTime',
@@ -84,9 +88,11 @@ class CProductOrder extends CMbObject {
 		return $count;
 	}
 
-	/** Marks every product's items as received */
+	/** Marks every order's items as received */
 	function receive() {
-		$this->loadRefsBack();
+		if (!$this->_ref_order_items) {
+		  $this->loadRefsBack();
+		}
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
@@ -153,6 +159,33 @@ class CProductOrder extends CMbObject {
     	}
     }
   }
+  
+  /** Fills a new order with the same articles */
+  function redo() {
+  	$this->load();
+  	$order = new CProductOrder();
+  	$order->societe_id   = $this->societe_id;
+  	$order->group_id     = $this->group_id;
+  	$order->locked       = 0;
+  	$order->cancelled    = 0;
+  	$order->order_number = $this->getUniqueNumber();
+  	
+  	$this->loadRefsBack();
+  	foreach ($this->_ref_order_items as $item) {
+  		$item->loadRefs();
+  		$new_item = new CProductOrderItem();
+  		$new_item->reference_id = $item->reference_id;
+  		$new_item->order_id = $order->order_id;
+  		$new_item->quantity = $item->quantity;
+  		$new_item->unit_price = $item->_ref_reference->price;
+  		$new_item->store();
+  	}
+  }
+  
+  function getUniqueNumber() {
+  	$key = $this->_id?$this->_id:rand(0,1000);
+  	return mbTranformTime(null, null, "%y%m%d%H%M%S_").$key;
+  }
 
 	function updateFormFields() {
 		parent::updateFormFields();
@@ -200,6 +233,10 @@ class CProductOrder extends CMbObject {
 	  if ($this->_autofill) {
       $this->autofill();
     }
+    
+	  if ($this->_redo) {
+      $this->redo();
+    }
 	}
 
 	function loadRefsBack(){
@@ -212,6 +249,13 @@ class CProductOrder extends CMbObject {
 		
 		$this->_ref_group = new CGroups();
     $this->_ref_group->load($this->group_id);
+	}
+	
+	function store() {
+	  if ($this->order_number == '') {
+      $this->order_number = $this->getUniqueNumber();
+    }
+    parent::store();
 	}
 	
 	function delete() {

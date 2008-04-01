@@ -1,16 +1,22 @@
 <tr>
-  <td style="white-space: nowrap;">
-    {{if !$order->date_ordered}}
+  {{if !$order->date_ordered}}
+  <td>
     <!-- Delete order item -->
-    <form name="form-item-del-{{$curr_item->_id}}" action="?" method="post" style="display: inline;">
+    <form name="form-item-del-{{$curr_item->_id}}" action="?" method="post">
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <button type="button" class="trash notext" onclick="confirmDeletion(this.form,{typeName:'l\article',objName:'{{$curr_item->_view|smarty:nodefaults|JSAttribute}}', ajax: 1 }, {onComplete: function() {refreshOrder({{$order->_id}}) } })"></button>
+      <button type="button" class="trash notext" style="display: inline;" onclick="confirmDeletion(this.form,{typeName:'l\article',objName:'{{$curr_item->_view|smarty:nodefaults|JSAttribute}}', ajax: 1 }, {onComplete: function() {refreshOrder({{$order->_id}}, true) } })"></button>
     </form>
+  </td>
+  {{/if}}
+  <td>
+    {{if $dialog}}
+      {{$curr_item->_view}}
+    {{else}}
+      <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_item->_ref_reference->_ref_product->_id}}">{{$curr_item->_view}}</a>
     {{/if}}
-    <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_item->_ref_reference->_ref_product->_id}}">{{$curr_item->_view}}</a>
   </td>
   <td>
     {{if !$order->date_ordered}}

@@ -54,18 +54,16 @@ if ($category) {
 	// Loads the products list
 	foreach($category->_ref_products as $prod) {
 	  $prod->loadRefs();
+	  $prod->loadRefStock();
 	}
 } else {
 	$category = new CProductCategory();
 }
 
-$colors = array('#F00', '#FC3', '#1D6', '#06F', '#000');
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('stock',           $stock);
-$smarty->assign('colors',          $colors);
 $smarty->assign('category',        $category);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('only_ordered_stocks', $only_ordered_stocks);

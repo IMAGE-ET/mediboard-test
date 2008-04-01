@@ -100,30 +100,32 @@ class CProductStock extends CMbObject {
 	      $this->_zone = 3;
 	    }
 	  }
-	  
-	  // Verifies wether there are pending orders for this stock
-	  $where = array();
-	  $where['date_ordered'] = 'IS NOT NULL';
-	  $order = new CProductOrder();
-	  $list_orders = $order->loadList($where);
-	  
-	  foreach ($list_orders as $order) {
-	  	$order->updateFormFields();
-	  	if (!$order->_received) {
-	  		foreach ($order->_ref_order_items as $item) {
-	  			$item->loadRefsFwd();
-	  			$item->_ref_reference->loadRefsFwd();
-	  			$item->_ref_order->loadRefsFwd();
-	  			if ($item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
-	  				$this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
-	  				$this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
-	  			}
-	  		}
-	  	}
-	  }
-	  
-	  $future_quantity = $this->quantity + $this->_ordered_count;
-	  
+  }
+  
+  function loadRefOrders() {
+    // Verifies wether there are pending orders for this stock
+    $where = array();
+    $where['date_ordered'] = 'IS NOT NULL';
+    $order = new CProductOrder();
+    $list_orders = $order->loadList($where);
+    
+    foreach ($list_orders as $order) {
+      $order->updateFormFields();
+      if (!$order->_received) {
+        foreach ($order->_ref_order_items as $item) {
+          $item->loadRefsFwd();
+          $item->_ref_reference->loadRefsFwd();
+          $item->_ref_order->loadRefsFwd();
+          if ($item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
+            $this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
+            $this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
+          }
+        }
+      }
+    }
+    
+    $future_quantity = $this->quantity + $this->_ordered_count;
+    
     if ($future_quantity <= $this->order_threshold_critical) {
       $this->_zone_future = 0;
       
