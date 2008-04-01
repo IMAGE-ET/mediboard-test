@@ -479,37 +479,9 @@ class CAppUI {
     
     $specsObj = $user->getSpecsObj();
     $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
-    $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
-
-    $this->weak_password = false;
-    // minLength
-    if ($pwdSpecs->minLength > strlen($pwd)) {
-      $this->weak_password = true;
-    }
-
-    // notContaining
-    if($pwdSpecs->notContaining) {
-      $target = $pwdSpecs->notContaining;
-        if ($field = $user->$target)
-          if (stristr($pwd, $field))
-            $this->weak_password = true;
-    }
     
-    // notNear
-    if($pwdSpecs->notNear) {
-      $target = $pwdSpecs->notNear;
-        if ($field = $user->$target)
-          if (levenshtein($pwd, $field) < 3)
-            $this->weak_password = true;
-    }
 
-    // alphaAndNum
-    if($pwdSpecs->alphaAndNum) {
-      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
-        $this->weak_password = true;
-      }
-    }
-      
+    
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
       if ($this->user_type != 1) {
@@ -525,8 +497,40 @@ class CAppUI {
       $this->setMsg("You should enter your password", UI_MSG_ERROR);
       return false;
     }
-
-
+    
+    $pwd = $user->_user_password; // Le mot de passe récupéré est avec un _
+    
+    if ($pwd) {
+	    $this->weak_password = false;
+	    // minLength
+	    if ($pwdSpecs->minLength > strlen($pwd)) {
+	      $this->weak_password = true;
+	    }
+	
+	    // notContaining
+	    if($pwdSpecs->notContaining) {
+	      $target = $pwdSpecs->notContaining;
+	        if ($field = $user->$target)
+	          if (stristr($pwd, $field))
+	            $this->weak_password = true;
+	    }
+	    
+	    // notNear
+	    if($pwdSpecs->notNear) {
+	      $target = $pwdSpecs->notNear;
+	        if ($field = $user->$target)
+	          if (levenshtein($pwd, $field) < 3)
+	            $this->weak_password = true;
+	    }
+	
+	    // alphaAndNum
+	    if($pwdSpecs->alphaAndNum) {
+	      if (!preg_match("/[A-z]/", strtolower($pwd)) || !preg_match("/\d+/", $pwd)) {
+	        $this->weak_password = true;
+	      }
+	    }
+    }
+    
     // See CUser::updateDBFields
     $user->loadMatchingObject();
     
