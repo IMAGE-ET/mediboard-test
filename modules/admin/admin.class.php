@@ -95,7 +95,7 @@ class CUser extends CMbObject {
       "user_pic"        => "text",
       "user_signature"  => "text",
       "user_last_login" => "dateTime",
-      "user_login_errors"=> "notNull num",
+      "user_login_errors"=> "num",
       "template"        => "bool notNull default|0",
       "profile_id"      => "ref class|CUser"
       );
@@ -146,41 +146,7 @@ class CUser extends CMbObject {
     // Chargement des specs des attributs du mediuser
     $specsObj = $this->getSpecsObj();
 
-    /* On se concentre sur le mot de passe :
-     Le mot de passe doit etre controlé sur differents points 
-     - Sa longueur 6 en mode "strong_password", 4 sinon
-     - Doit contenir des chiffres ET des lettres en mode "strong_password"
-     - Ne doit pas contenir le login en mode "strong_password"
-     Ensuite, s'il est OK, on passe a la suite sans rien changer de ce qui avait
-     été fait dans updateDBFields (md5)
-     Sinon on renvoie un message d'erreur qui doit etre geré dans le store et on 
-     remet le mot de passe a mettre dans la base de données à null
-     */
-    $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
-    $pwd = $this->_user_password; // Le mot de passe récupéré est avec un _
-
-    // S'il a été défini, on le contrôle
-    if ($pwd) {
-      // minLength
-      if ($pwdSpecs->minLength > strlen($pwd)) {
-        return "Mot de passe trop court (minimum {$pwdSpecs->minLength})";
-      }
-
-      // notContaining
-      if($pwdSpecs->notContaining) {
-        $target = $pwdSpecs->notContaining;
-        if ($field = $this->$target)
-        if (stristr($pwd, $field))
-        return "Le mot de passe ne doit pas contenir '$field'";
-      }
-       
-      // alphaAndNum
-      if($pwdSpecs->alphaAndNum) {
-        if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
-          return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
-        }
-      }
-    } else {
+    if (!$this->_user_password) {
       $this->_user_password = null;
     }
     return parent::check();

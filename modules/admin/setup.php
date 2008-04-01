@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.13";
+$config["mod_version"]     = "1.0.14";
 $config["mod_type"]        = "core";
 
 class CSetupadmin extends CSetup {
@@ -216,7 +216,11 @@ class CSetupadmin extends CSetup {
             ADD `user_login_errors` TINYINT NOT NULL DEFAULT '0' AFTER `user_last_login`;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.0.13";
+    $this->makeRevision("1.0.13");
+    $sql = "ALTER TABLE `users` CHANGE `user_login_errors` `user_login_errors` TINYINT( 4 ) NULL DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.0.14";
   }
 }
 ?>
