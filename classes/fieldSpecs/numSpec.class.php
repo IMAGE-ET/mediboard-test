@@ -200,7 +200,7 @@ class CNumSpec extends CMbFieldSpec {
 	    $sHtml .= $this->getFormElementText($object, $params, $value, $className);
 	    $sHtml .= '
 	  <script type="text/javascript">
-			'.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:1).', '.($this->pos?'0':($min?$min:'null')).', '.($max?$max:'null').');
+			'.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':($min?$min:'null')).', '.($max?$max:'null').');
 		</script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
 	  <map name="arrow_'.$fieldId.'" >
