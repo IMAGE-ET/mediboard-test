@@ -1,24 +1,24 @@
 <script type="text/javascript">
 
 
-preselectType = function(contexte){
-  var oForm = document.addProtocolePresc; 
-  
-  {{if $contexteType}}
-  
-  contexteType = {{$contexteType|@json}};
-  _contexteType = contexteType[contexte];
-
-  if(contexte == "CConsultation"){
-    oForm.type.value = "externe";
-  } else {
-    oForm.type.value = "traitement";
+preselectType = function(contexte, oForm){
+  if(!oForm){
+    var oForm = document.addProtocolePresc; 
   }
   
-  $A(oForm.type).each( function(input) {
-    input.disabled = !_contexteType.include(input.value);
-  });
-  
+  {{if $contexteType}}
+	  contexteType = {{$contexteType|@json}};
+	  _contexteType = contexteType[contexte];
+	
+	  if(contexte == "CConsultation"){
+	    oForm.type.value = "externe";
+	  } else {
+	    oForm.type.value = "traitement";
+	  }
+	  
+	  $A(oForm.type).each( function(input) {
+	    input.disabled = !_contexteType.include(input.value);
+	  });
   {{/if}}
 }
 
@@ -60,7 +60,7 @@ preselectType = function(contexte){
 			  {{mb_label object=$protocole field="object_class"}}
 			</th>
 			<td>
-			  {{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}  
+			  {{mb_field object=$protocole field="object_class"}}  
 			</td>
 	  </tr>
 	  <tr>
@@ -88,14 +88,9 @@ preselectType = function(contexte){
   <input type="hidden" name="dosql" value="do_prescription_aed" />
   <input type="hidden" name="prescription_id" value="" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="object_class" value="{{$prescription->object_class}}"/>
   <input type="hidden" name="object_id" value="{{$prescription->object_id}}"/>
-  {{if $prescription->object_class == "CConsultation"}}
-  <input type="hidden" name="type" value="externe" />
-  {{/if}}
-  {{if $prescription->object_class == "CSejour"}}
-  <input type="hidden" name="type" value="pre_admission" />
-  {{/if}}
+  <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
+  
   <select name="praticien_id">
     {{foreach from=$listPrats item=curr_prat}}
     <option value="{{$curr_prat->_id}}">
@@ -103,7 +98,30 @@ preselectType = function(contexte){
     </option>
     {{/foreach}}
   </select>
-  <button type="submit" class="new">Créer une prescription</button>
+  
+  <!-- Choix du type de la prescription -->
+  {{if $prescription->object_class == "CConsultation"}}
+    <input type="hidden" name="type" value="externe" />
+  {{else}}
+    <select name="type">
+      <option value="traitement">Traitement</option>
+      <option value="pre_admission">Pre-admission</option>
+      <option value="sejour">Séjour</option>
+      <option value="sortie">sortie</option>
+    </select>
+  {{/if}}
+  
+  {{if $prescription->object_class == "CConsultation" && $prescription->_ref_object->_ref_prescriptions}}              
+  <div class="big-info">
+    Il n'est pas possible de créer plus d'une prescription par consultation
+    <a href="?m=dPprescription&tab=vw_edit_prescription&prescription_id={{$prescription->_ref_object->_ref_prescriptions->_id}}"><br />
+    Accéder à la prescription déja créée</a>
+  </div>
+  {{else}}
+    <button type="submit" class="new">Créer une prescription</button>
+  {{/if}}
+  
+  
 </form>
 {{/if}}
 
@@ -177,8 +195,7 @@ preselectType = function(contexte){
 {{/if}}
 
 <script type="text/javascript">
-
-
+  
 // Preparation du formulaire de creation de protocole
 if(document.addProtocolePresc){
   prepareForm(document.addProtocolePresc);

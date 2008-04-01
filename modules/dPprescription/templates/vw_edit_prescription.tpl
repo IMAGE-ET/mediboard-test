@@ -29,7 +29,7 @@ function viewProduit(cip){
         <tr>
           <td  class="readonly">
           	{{mb_label object=$filter field=object_class}}
-          	{{mb_field object=$filter field=object_class}}
+          	{{mb_field object=$filter field=object_class onchange="preselectType(this.value, document.addPrescription)"}}
           </td>
           <td class="readonly">
           	{{mb_label object=$filter field=object_id}}
@@ -157,18 +157,28 @@ function viewProduit(cip){
           </td>
         </tr>
       </table>
+      
       <table class="tbl">
         <tr>
-          <th>Sejour</th>
+          <th>
+          {{if $prescription->object_class == "CSejour"}}
+            Sejour    
+          {{else}}
+            Consultation
+          {{/if}}
+          </th>
         </tr>
         <tr>
-          <td>{{$prescription->_ref_object->_ref_sejour->_view}}</td>
-        </tr>
+          <td>{{$prescription->_ref_object->_view}}</td>
+        </tr> 
       </table>
+      
+      {{if $prescription->object_class == "CSejour"}}
       <table class="tbl">
         <tr>
           <th colspan="2">Liste des ordonnances</th>
-        </tr>
+        </tr>  
+        <!-- Affichage des prescription du sejour -->
         {{foreach from=$prescription->_ref_object->_ref_prescriptions item=prescriptions_type}}
         {{foreach from=$prescriptions_type item=curr_prescription}}
         <tr {{if $curr_prescription->_id == $prescription->_id}}class="selected"{{/if}}>
@@ -179,13 +189,15 @@ function viewProduit(cip){
           </td>
           <td class="text">
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;prescription_id={{$curr_prescription->_id}}" >
-              {{$curr_prescription->_view}}
+              {{$curr_prescription->_view}} {{tr}}CPrescription.type.{{$curr_prescription->type}}{{/tr}}
             </a>
           </td>
         </tr>
         {{/foreach}}
         {{/foreach}}
       </table>
+      {{/if}}
+        
     </td>
     <td class="greedyPane">
       {{assign var=httpreq value=0}}

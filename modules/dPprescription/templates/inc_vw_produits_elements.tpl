@@ -19,6 +19,7 @@ if($('alertes')){
   <input type="hidden" name="prescription_line_element_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
+  <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="element_prescription_id" value=""/>
   <input type="hidden" name="_category_name" value="" />

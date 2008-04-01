@@ -6,6 +6,7 @@ function viewMsg($msg, $action){
   $action = $AppUI->_($action);
   if($msg){
     $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
+    return;
   }
   $AppUI->setMsg("$action", UI_MSG_OK );
 }
@@ -25,8 +26,10 @@ $new_prescription->_id = "";
 $new_prescription->type = $type;
 $new_prescription->praticien_id = $AppUI->user_id;
 $msg = $new_prescription->store();
-
 viewMsg($msg, "msg-CPrescription-create");
+if($msg){
+	$AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$prescription_id);
+}
 
 // Rechargement de la prescription
 $old2_prescription = new CPrescription();
@@ -41,8 +44,11 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
 	$new_duree = "";
 	// Si la prescription à créer est sejour et qu'on a les infos sur la duree de la ligne
 	if($type == "sejour" && $line->debut && $line->duree){
-		// si la fin de la ligne est superieure a l'entree, on ne la sauvegarde pas
-    if($line->_fin < mbDate($sejour->_entree)){
+		// si la fin de la ligne est inferieur a l'entree, on ne la sauvegarde pas
+    if($line->date_arret){
+      $line->_fin = $line->date_arret;	
+    }
+		if($line->_fin < mbDate($sejour->_entree)){
     	continue;
     }
     // On ajuste la date d'entree et la duree
@@ -50,13 +56,17 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
 			$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_entree));
 			$new_duree = $line->duree - $diff_duree;
 			$new_debut = mbDate($sejour->_entree);
-			// Permet d'empecher la modification des valeurs duree et debut des lignes
 		}
 	}
 	
+	
+	
 	if($type == "sortie" && $line->debut && $line->duree){
 		// si le debut de la ligne est apres la fin du sejour, on ne sauvegarde pas la ligne
-    if($line->_fin < mbDate($sejour->_sortie)){
+    if($line->date_arret){
+      $line->_fin = $line->date_arret;	
+    }
+		if($line->_fin < mbDate($sejour->_sortie)){
     	continue;
     }
     if($line->debut < mbDate($sejour->_sortie)){

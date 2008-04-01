@@ -1,8 +1,10 @@
 <script type="text/javascript">      
       
+/*
 if(window.opener){
   window.opener.PrescriptionEditor.refresh('{{$prescription->_id}}','{{$prescription->object_class}}');
 }
+*/
 
 // On vide toutes les valeurs du formulaire d'ajout d'element
 var oForm = document.addLineElement;

@@ -73,6 +73,38 @@ class CPrescription extends CMbObject {
     }
   }
   
+  
+  function check(){
+    if ($msg = parent::check()) {
+  	  return $msg;
+  	}
+  	
+  	// Test permettant d'eviter que plusieurs prescriptions identiques soient créées 
+  	if($this->object_id !== null && $this->object_class !== null && $this->praticien_id !== null && $this->type !== null){
+      $prescription = new CPrescription();
+      $prescription->object_id = $this->object_id;
+      $prescription->object_class = $this->object_class;
+      $prescription->praticien_id = $this->praticien_id;
+      $prescription->type = $this->type;
+  	  $prescription->loadMatchingObject();
+  	  
+  	  if($prescription->_id){
+  	  	return "Prescription déjà existante";
+  	  }	
+  	}
+  }
+  
+  
+  function store(){
+    if ($msg = $this->check()) {
+      return $msg;
+    }
+    
+    return parent::store();
+  }
+  
+  
+  
   function loadRefPraticien(){
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien->load($this->praticien_id);
@@ -98,7 +130,7 @@ class CPrescription extends CMbObject {
   function loadRefsLines() {
     $line = new CPrescriptionLineMedicament();
     $where = array("prescription_id" => "= $this->_id");
-    $order = "prescription_line_id";
+    $order = "prescription_line_id DESC";
     $this->_ref_prescription_lines = $line->loadList($where, $order);
   }
   
@@ -135,7 +167,7 @@ class CPrescription extends CMbObject {
   function loadRefsLinesElement(){
   	$line = new CPrescriptionLineElement();
     $where = array("prescription_id" => "= $this->_id");
-    $order = "prescription_line_element_id";
+    $order = "prescription_line_element_id DESC";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order);
     foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
@@ -175,6 +207,7 @@ class CPrescription extends CMbObject {
   	$line_comment = new CPrescriptionLineComment();
   	
   	$where["prescription_id"] = " = '$this->_id'";
+  	$order = "prescription_line_comment_id DESC";
   	$ljoin = array();
   	
   	if($category_name && $category_name != "medicament"){
@@ -184,7 +217,7 @@ class CPrescription extends CMbObject {
   	if($category_name == "medicament"){
   	  $where["category_prescription_id"] = " IS NULL"; 		
   	}
-  	$commentaires = $line_comment->loadList($where, null, null, null, $ljoin);
+  	$commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
   	
   	foreach($commentaires as $_line_comment){
   		  if($_line_comment->category_prescription_id){

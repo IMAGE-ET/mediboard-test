@@ -15,24 +15,24 @@ $filter->prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $filter->object_class    = mbGetValueFromGet("object_class", "CSejour");
 $filter->object_id       = mbGetValueFromGet("object_id");
 $filter->type            = mbGetValueFromGet("type", "externe");
+$filter->praticien_id    = mbGetValueFromGet("praticien_id");
 $filter->loadRefsFwd();
 $filter->_ref_object->loadRefsFwd();
 
 $popup = mbGetValueFromGet("popup");
 $categories = array();
 
-if(!$filter->prescription_id && $popup){
-	$new_prescription = new CPrescription();
-	$new_prescription->object_id = $filter->object_id;
-	$new_prescription->object_class = $filter->object_class;
-	$new_prescription->praticien_id = mbGetValueFromGet("praticien_id");
-  if($filter->object_class == "CSejour" && $filter->type){
-  	$new_prescription->type = $filter->type;
-  } else {
-	  $new_prescription->type = "externe";
-  }
-	$msg = $new_prescription->store();
-	$prescription = $new_prescription;
+if(!$filter->prescription_id && $filter->object_id && $filter->object_class && $filter->praticien_id && $filter->type){
+	$prescription = new CPrescription();
+	$prescription->object_id = $filter->object_id;
+	$prescription->object_class = $filter->object_class;
+	$prescription->praticien_id = $filter->praticien_id;
+	$prescription->type = $filter->type;
+	$prescription->loadMatchingObject();
+  
+	if(!$prescription->_id){
+		$prescription->store();
+	}
 } else {
 	// Chargement de la prescription demandé
   $prescription = new CPrescription();
@@ -144,12 +144,19 @@ foreach($cats as $key => $cat){
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
 
+$contexteType = array();
+$contexteType["CConsultation"][] = "externe";
+$contexteType["CSejour"][] = "pre_admission";
+$contexteType["CSejour"][] = "sortie";
+$contexteType["CSejour"][] = "sejour";
+$contexteType["CSejour"][] = "traitement";
+
 
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("contexteType"       , "");
+$smarty->assign("contexteType"       , $contexteType);
 $smarty->assign("today"              , mbDate());
 $smarty->assign("categories"         , $categories);
 $smarty->assign("executants"         , $executants);

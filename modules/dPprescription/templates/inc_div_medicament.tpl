@@ -1,8 +1,11 @@
 <script type="text/javascript">
 
+/*
 if(window.opener){
   window.opener.PrescriptionEditor.refresh('{{$prescription->_id}}','{{$prescription->object_class}}');
 }      
+*/
+
       
 // Calcul de la fin d'un traitement
 calculFin = function(oForm, curr_line_id){
@@ -118,6 +121,7 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
   <input type="hidden" name="prescription_line_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
+  <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
 </form>
@@ -536,8 +540,8 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       {{/if}}
       </td>
       <td>
-      <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour")-->
-      {{if $prescription->type == "sejour"}}
+      <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
+      {{if $prescription->type == "sejour" || $prescription->type == "pre_admission"}}
       <div id="stop_{{$curr_line->_id}}">
         {{include file="inc_vw_stop_medicament.tpl"}}
       </div>

@@ -42,8 +42,10 @@ var Prescription = {
     }
     oForm.element_prescription_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete: function(){ Prescription.reload(oForm.prescription_id.value, element_id, category_name) } 
-    });
+      onComplete: function(){ 
+        Prescription.reload(oForm.prescription_id.value, element_id, category_name);
+       }
+     });
   },
   delLineWithoutRefresh: function(line_id) {
     var oForm = document.addLine;
@@ -56,7 +58,9 @@ var Prescription = {
     oForm.prescription_line_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete : function(){ Prescription.reload(oForm.prescription_id.value, '', 'medicament') } 
+      onComplete : function(){ 
+        Prescription.reload(oForm.prescription_id.value, '', 'medicament');
+       } 
     });
   },
   delLineElement: function(line_id, category_name) {
@@ -64,15 +68,18 @@ var Prescription = {
     oForm.prescription_line_element_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
-      onComplete : function(){ Prescription.reload(oForm.prescription_id.value, null, category_name) } 
+      onComplete : function(){ 
+        Prescription.reload(oForm.prescription_id.value, null, category_name);
+      } 
     });
   },
   reload: function(prescription_id, element_id, category_name, mode_protocole) {
-      /*
+      var oForm = document.addLine;
+      
       if(window.opener){
-        window.opener.PrescriptionEditor.refresh(prescription_id);
+        window.opener.PrescriptionEditor.refresh(oForm.prescription_id.value, oForm.object_class.value);
       }
-      */
+      
       var urlPrescription = new Url;
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
