@@ -32,16 +32,22 @@ $new_prescription_line = $prescription_line;
 
 $new_prescription_line->_id = "";
 
+// Si date_arret (cas du sejour)
 if($prescription_line->date_arret){
 	$new_prescription_line->debut = $prescription_line->date_arret;
+  $new_prescription_line->duree = mbDaysRelative($new_prescription_line->debut,$new_prescription_line->_fin);
 } else {
-	$new_prescription_line->debut = mbDate();
+	// Sinon, on met la fin de la ligne initiale ou la date courante
+	if($prescription_line->_fin){
+		$new_prescription_line->debut = $prescription_line->_fin;
+	} else {
+	  $new_prescription_line->debut = mbDate();
+	}
 }
 
 $new_prescription_line->no_poso = "";
 $new_prescription_line->date_arret = "";
 
-$new_prescription_line->duree = mbDaysRelative($new_prescription_line->debut,$new_prescription_line->_fin);
 $new_prescription_line->unite_duree = "jour";
 if($new_prescription_line->duree < 0){
 	$new_prescription_line->duree = "";

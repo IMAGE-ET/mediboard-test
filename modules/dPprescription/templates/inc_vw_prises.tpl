@@ -59,3 +59,9 @@ Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
     <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form); ">Supprimer</button> 
   </form>
 {{/foreach}}
+
+<script type="text/javascript">
+{{foreach from=$curr_line->_ref_prises item=prise}}
+  prepareForm(document.forms['addPrise-{{$prise->_id}}']);
+{{/foreach}}
+</script>

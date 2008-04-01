@@ -107,7 +107,7 @@ $categoryPresc = new CCategoryPrescription();
 $categories = $categoryPresc->loadCategoriesByChap();
 
 // Chargement de la liste des moments
-$moments = CMomentUnitaire::loadAllMoments();
+$moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 $executants = CExecutantPrescriptionLine::getAllExecutants();
 
 // Chargement de toutes les categories

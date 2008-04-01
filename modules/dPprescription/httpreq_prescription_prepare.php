@@ -17,7 +17,7 @@ $prescription_line = new CPrescriptionLineMedicament();
 $prescription_line->load($prescription_line_id);
 
 // Chargement des moments unitaires
-$moments = CMomentUnitaire::loadAllMoments();
+$moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
 // Chargement de la posologie selectionnée
 $posologie = new CBcbPosologie();

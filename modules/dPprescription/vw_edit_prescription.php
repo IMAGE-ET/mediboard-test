@@ -130,7 +130,7 @@ if ($prescription->_id) {
   $categories = $category->loadCategoriesByChap();
 }
 
-$moments = CMomentUnitaire::loadAllMoments();
+$moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 $executants = CExecutantPrescriptionLine::getAllExecutants();
 
 // Chargement de toutes les categories

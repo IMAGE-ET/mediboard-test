@@ -17,6 +17,7 @@ class CMomentUnitaire extends CMbObject {
   var $heure_min = null;
   var $heure_max = null;
   var $type_moment = null;
+  var $principal = null;
   
   function CMomentUnitaire() {
     $this->CMbObject("moment_unitaire", "moment_unitaire_id");
@@ -30,7 +31,8 @@ class CMomentUnitaire extends CMbObject {
       "libelle"     => "str notNull",
       "heure_min"   => "time",
       "heure_max"   => "time",
-      "type_moment" => "enum list|matin|midi|soir|apres_midi|horaire|autre"
+      "type_moment" => "enum list|matin|midi|soir|apres_midi|horaire|autre",
+      "principal"   => "bool"
     );
     return array_merge($specsParent, $specs);
   }
@@ -45,6 +47,21 @@ class CMomentUnitaire extends CMbObject {
     return $moments;
   }
   
+  // Chargement des moments
+  static function loadAllMomentsWithPrincipal(){
+    // Chargement de tous les moments
+  	$moment = new CMomentUnitaire();
+    $tabMoment = $moment->loadList();
+    
+    foreach($tabMoment as &$moment){
+      if($moment->principal){
+      	$moments["Principales"][] = $moment;
+      } else {
+    	  $moments[$moment->type_moment][] = $moment;
+      }
+    }
+    return $moments;
+  }
   
   function updateFormFields() {
     parent::updateFormFields();

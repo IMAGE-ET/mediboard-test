@@ -21,7 +21,7 @@ $prescription_line->load($prescription_line_id);
 $prescription_line->loadRefsPrises();
 
 // Chargement de la liste des moments
-$moments = CMomentUnitaire::loadAllMoments();
+$moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
 
 // Création du template

@@ -41,7 +41,7 @@ calculFin = function(oForm, curr_line_id){
 
 selDivPoso = function(type, line_id){
   if(!type){
-    type = "moment";
+    type = "foisPar";
   }
   $('moment'+line_id).hide();
   $('foisPar'+line_id).hide();
@@ -627,12 +627,8 @@ Main.add( function(){
        regFieldCalendar('editDates-{{$curr_line->_id}}', "debut", false);
        regFieldCalendar('editDates-{{$curr_line->_id}}', "_fin", false);
 
-       //if($('foisPar')){
-         $('foisPar{{$curr_line->_id}}').hide();
-       //}
-       //if($('tousLes')){
-         $('tousLes{{$curr_line->_id}}').hide();
-       //}
+       $('moment{{$curr_line->_id}}').hide();
+       $('tousLes{{$curr_line->_id}}').hide();
        
        //initPoso(document.forms["editLine-{{$curr_line->_id}}"],{{$curr_line->_id}});
        calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});

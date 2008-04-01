@@ -255,4 +255,5 @@ $locales['CPrescription._type_sejour.pre_admission'] = '';
 $locales['CPrescription._type_sejour.traitement'] = '';
 $locales['CPrescription._type_sejour.sejour'] = '';
 $locales['CPrescription._type_sejour.sortie'] = '';
+$locales['mod-dPprescription-tab-vw_edit_moments_unitaires'] = '';
 ?>

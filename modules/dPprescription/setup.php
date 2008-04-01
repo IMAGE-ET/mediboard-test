@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.30";
+$config["mod_version"]     = "0.31";
 $config["mod_type"]        = "user";
 
 
@@ -350,7 +350,12 @@ class CSetupdPprescription extends CSetup {
             ADD `valide` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.30";
+    $this->makeRevision("0.30");
+    $sql = "ALTER TABLE `moment_unitaire`
+            ADD `principal` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.31";
   }  
 }
 
