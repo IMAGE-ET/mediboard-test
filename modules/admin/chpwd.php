@@ -2,14 +2,10 @@
 
 
 global $AppUI, $can, $m;
-$ds = CSQLDataSource::get("std");
 
 $user = new CUser;
-$where = array();
-$where["user_id"]       = $ds->prepare("= %", $AppUI->user_id);
-$user->loadObject($where);
-
-$specs = $user->getSpecs();
+$user->load($AppUI->user_id);
+$user->updateSpecs();
 
 $forceChange = dPgetParam($_REQUEST, "forceChange");
 
@@ -26,8 +22,7 @@ $message = '<strong>Votre mot de passe ne correspond pas aux critères de sécurit
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("user"    , $user    );
-$smarty->assign("specs"   , $specs   );
-$smarty->assign("message" , $message );
+$smarty->assign("user",    $user);
+$smarty->assign("message", $message);
 $smarty->display("change_password.tpl");
 ?>

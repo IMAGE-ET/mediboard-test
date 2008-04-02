@@ -533,7 +533,7 @@ Object.extend(ElementChecker, {
 	    if (this.oElement.value.length < iLength) {
 	    	return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
 	    }
-	}
+	  }
     return null;
   }
 } );

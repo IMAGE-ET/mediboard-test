@@ -81,7 +81,7 @@ class CMediusers extends CMbObject {
     global $dPconfig;
      
     $parentSpecs = parent::getSpecs();
-    
+
     $specs = array (
       "remote"        => "bool",
       "adeli"         => "numchar length|9 confidential",
@@ -109,19 +109,36 @@ class CMediusers extends CMbObject {
       "_compte_numero"   => "str length|11 confidential",
       "_compte_cle"      => "num length|2 confidential",
       "_profile_id"      => "num",
-      "_user_type"       => "notNull num minMax|0|20"
+      "_user_type"       => "notNull num minMax|0|20",
     );
       
     // @TODO refactor with only $spec["propName"] = "propSpec" syntax
+    
+    // The different levels of security are stored to be usable in JS
+    $specs["_user_password_weak"]   = "password minLength|4";
+    $specs["_user_password_strong"] = "password minLength|6 notContaining|_user_username notNear|_user_username alphaAndNum";
 
-    $specs["_user_password"] = "password minLength|";
-
-    if ($dPconfig["admin"]["CUser"]["strong_password"] == "1")
-      $specs["_user_password"] .= "6 notContaining|_user_username notNear|_user_username alphaAndNum";
-    else
-      $specs["_user_password"] .= 4;
+    $specs["_user_password"] = $specs["_user_password_weak"];
 
     return array_merge($parentSpecs, $specs);
+  }
+  
+  /** Update the object's specs */
+  function updateSpecs() {
+  	$oldSpec = $this->_specs['_user_password'];
+  	
+  	$strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($this->remote == 0));
+  	
+  	// If the global strong password config is set to TRUE and the user can connect remotely
+    $this->_specs['_user_password'] = $strongPassword?
+      $this->_specs['_user_password_strong']:
+      $this->_specs['_user_password_weak'];
+    
+    $this->_specs['_user_password']->fieldName = $oldSpec->fieldName;
+    
+    $this->_props['_user_password'] = $strongPassword?
+      $this->_props['_user_password_strong']:
+      $this->_props['_user_password_weak'];
   }
 
   function getSeeks() {
@@ -235,6 +252,8 @@ class CMediusers extends CMbObject {
     $this->_compte_guichet = substr($this->compte, 5, 5);
     $this->_compte_numero  = substr($this->compte, 10, 11);
     $this->_compte_cle     = substr($this->compte, 21, 2);
+    
+    $this->updateSpecs();
   }
 
   function updateDBFields() {
@@ -366,7 +385,9 @@ class CMediusers extends CMbObject {
 
   function check() {
     // TODO: voir a fusionner cette fonction avec celle de admin.class.php qui est exactement la meme
-    // Chargement des specs des attributs du mediuser
+    // Chargement des specs des attributs du mediuser	
+    $this->updateSpecs();
+    
     $specsObj = $this->getSpecsObj();
 
     // On se concentre dur le mot de passe (_user_password)
@@ -374,7 +395,7 @@ class CMediusers extends CMbObject {
 
     $pwd = $this->_user_password;
 
-    // S'il a été défini, on le contrôle
+    // S'il a été défini, on le contrôle (necessaire de le mettre ici a cause du md5)
     if ($pwd) {
 
       // minLength
@@ -383,12 +404,18 @@ class CMediusers extends CMbObject {
       }
 
       // notContaining
-      if($pwdSpecs->notContaining) {
-        $target = $pwdSpecs->notContaining;
-        if ($field = $this->$target)
-     			if (stristr($pwd, $field))
-     			return "Le mot de passe ne doit pas contenir '$field'";
-      }
+      if($target = $pwdSpecs->notContaining) {
+        if ($field = $this->$target) {
+          if (stristr($pwd, $field)) {
+          return "Le mot de passe ne doit pas contenir '$field'";
+      } } }
+      
+	    // notNear
+	    if($target = $pwdSpecs->notNear) {
+	    	if ($field = $this->$target) {
+		      if (levenshtein($pwd, $field) < 3) {
+		        return "Le mot de passe ressemble trop à '$field'";
+		  } } }
        
       // alphaAndNum
       if($pwdSpecs->alphaAndNum) {
@@ -399,6 +426,7 @@ class CMediusers extends CMbObject {
     } else {
       $this->_user_password = null;
     }
+
     return parent::check();
   }
    
@@ -406,6 +434,7 @@ class CMediusers extends CMbObject {
     global $AppUI;
 
     $this->updateDBFields();
+    $this->updateSpecs();
 
     if ($msg = $this->check()) {
       return $AppUI->_(get_class( $this )) .

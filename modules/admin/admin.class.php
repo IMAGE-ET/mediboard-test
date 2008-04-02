@@ -100,14 +100,37 @@ class CUser extends CMbObject {
       "profile_id"      => "ref class|CUser"
       );
 
-      $specs["_user_password"] = 'password minLength|';
+    // The different levels of security are stored to be usable in JS
+    $specs["_user_password_weak"]   = "password minLength|4";
+    $specs["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
 
-      if ($dPconfig['admin']['CUser']['strong_password'] == '1')
-      $specs['_user_password'] .= '6 notContaining|user_username notNear|user_username alphaAndNum';
-      else
-      $specs['_user_password'] .= 4;
+    $specs["_user_password"] = $specs["_user_password_weak"];
 
-      return array_merge($specsParent, $specs);
+    return array_merge($specsParent, $specs);
+  }
+  
+  /** Update the object's specs */
+  function updateSpecs() {
+    $oldSpec = $this->_specs['_user_password'];
+    
+    $user = new CMediusers();
+    $remote = 0;
+    if($result = $user->load($this->user_id)) {
+    	 $remote = $user->remote;
+    }
+    
+    $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($remote == 0));
+    
+    // If the global strong password config is set to TRUE and the user can connect remotely
+    $this->_specs['_user_password'] = $strongPassword?
+      $this->_specs['_user_password_strong']:
+      $this->_specs['_user_password_weak'];
+    
+    $this->_specs['_user_password']->fieldName = $oldSpec->fieldName;
+    
+    $this->_props['_user_password'] = $strongPassword?
+      $this->_props['_user_password_strong']:
+      $this->_props['_user_password_weak'];
   }
 
   function getSeeks() {
@@ -144,12 +167,53 @@ class CUser extends CMbObject {
 
   function check() {
     // Chargement des specs des attributs du mediuser
+    $this->updateSpecs();
+    
     $specsObj = $this->getSpecsObj();
 
-    if (!$this->_user_password) {
+    // On se concentre dur le mot de passe (_user_password)
+    $pwdSpecs = $specsObj['_user_password'];
+
+    $pwd = $this->_user_password;
+
+    // S'il a été défini, on le contrôle (necessaire de le mettre ici a cause du md5)
+    if ($pwd) {
+
+      // minLength
+      if ($pwdSpecs->minLength > strlen($pwd)) {
+        return "Mot de passe trop court (minimum {$pwdSpecs->minLength})";
+      }
+
+      // notContaining
+      if($target = $pwdSpecs->notContaining) {
+        if ($field = $this->$target) {
+          if (stristr($pwd, $field)) {
+          return "Le mot de passe ne doit pas contenir '$field'";
+      } } }
+      
+      // notNear
+      if($target = $pwdSpecs->notNear) {
+        if ($field = $this->$target) {
+          if (levenshtein($pwd, $field) < 3) {
+            return "Le mot de passe ressemble trop à '$field'";
+      } } }
+       
+      // alphaAndNum
+      if($pwdSpecs->alphaAndNum) {
+        if (!preg_match("/[A-z]/", $pwd) || !preg_match("/\d+/", $pwd)) {
+          return 'Le mot de passe doit contenir au moins un chiffre ET une lettre';
+        }
+      }
+    } else {
       $this->_user_password = null;
     }
+    
     return parent::check();
+  }
+  
+  function store() {
+  	$this->updateSpecs();
+  	parent::store();
   }
 
   /**

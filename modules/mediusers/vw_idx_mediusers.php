@@ -11,10 +11,6 @@ global $AppUI, $can, $m, $utypes;
 
 $can->needsRead();
 
-// Récupération du user à ajouter/editer
-$mediuserSel = new CMediusers;
-$mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
-
 // Chargement des banques
 $order = "nom ASC";
 $banque = new CBanque();
@@ -52,6 +48,11 @@ foreach($profiles as $key => $profil){
   $tabProfil[$profil->user_type][] = $profil->_id;
 }
 
+// Récupération du user à ajouter/editer 
+// (mis en dernier car interferences avec le chargement 
+// des autres users car utilisation d'une spec commune)
+$mediuserSel = new CMediusers;
+$mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 
 // Création du template
 $smarty = new CSmartyDP();

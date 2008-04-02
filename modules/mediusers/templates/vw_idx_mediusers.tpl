@@ -48,6 +48,23 @@ function pageMain() {
   regFieldCalendar("mediuser", "fin_activite");
 }
 
+function changeRemote(o) {
+  var oPassword = o.form._user_password;
+  
+  // can the user connect remotely ?
+  var canRemote = getCheckedValue(o)==0;
+  
+  // we change the form element's spec 
+  oPassword.className = canRemote?
+  '{{$mediuserSel->_props._user_password_strong}}':
+  '{{$mediuserSel->_props._user_password_weak}}';
+  
+  oPassword.className += '{{if !$mediuserSel->user_id}} notNull{{/if}}';
+  
+  // we check the field
+  checkFormElement(oPassword);
+}
+
 </script>
 
 <table class="main">
@@ -172,7 +189,7 @@ function pageMain() {
         
         <tr>
           <th>{{mb_label object=$mediuserSel field="remote"}}</th>
-          <td>{{mb_field object=$mediuserSel field="remote"}}</td>
+          <td>{{mb_field object=$mediuserSel field="remote" onchange="changeRemote(this)"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="function_id"}}</th>

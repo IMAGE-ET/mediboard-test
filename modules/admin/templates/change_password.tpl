@@ -29,7 +29,7 @@
     </th>
     <td>
       <input type="hidden" name="user_username" value="{{$user->user_username}}" />
-      <input class="{{$specs._user_password}}" type="password" name="new_pwd1" onkeyup="checkFormElement(this);" />
+      <input class="{{$user->_props._user_password}}" type="password" name="new_pwd1" onkeyup="checkFormElement(this);" />
       <div id="new_pwd1_message"></div>
     </td>
   </tr>
