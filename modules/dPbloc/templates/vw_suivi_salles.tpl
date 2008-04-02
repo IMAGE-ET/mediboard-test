@@ -31,17 +31,14 @@ function showLegend() {
     </th>
   </tr>
   <tr>
-  {{foreach from=$listSalles key=keySalle item=currSalle}}
+  {{foreach from=$listSalles item=_salle}}
     <td>
       <table class="form">
         <tr>
-          <th class="category">{{$currSalle->nom}}</th>
+          <th class="category">{{$_salle->nom}}</th>
         </tr>
       </table>
-      {{assign var="plages" value=$listInfosSalles.$keySalle.plages}}
-      {{assign var="deplacees" value=$listInfosSalles.$keySalle.deplacees}}
-      {{assign var="urgences" value=$listInfosSalles.$keySalle.urgences}}
-      {{assign var="salle" value=$keySalle}}     
+      {{assign var="salle" value=$_salle}}     
       {{include file="../../dPsalleOp/templates/inc_details_plages.tpl"}}
     </td>
   {{/foreach}}

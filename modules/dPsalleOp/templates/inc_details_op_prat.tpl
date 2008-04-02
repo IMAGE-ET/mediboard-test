@@ -1,38 +1,39 @@
-{{foreach from=$plages item=curr_plage}}
+<!-- Plages -->
+{{foreach from=$praticien->_ref_plages item=_plage}}
 <hr />
 
 <table class="form">
   <tr>
     <th class="category{{if $vueReduite}} text{{/if}}" colspan="2">
-      <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$curr_plage->_id}}" title="Administrer la plage">
-        {{$curr_plage->_ref_salle->_view}}
+      <a href="?m=dPbloc&amp;tab=vw_edit_interventions&amp;plageop_id={{$_plage->_id}}" title="Administrer la plage">
+        {{$_plage->_ref_salle->_view}}
         {{if $vueReduite}}
           <br />
         {{else}}
           -
         {{/if}}
-        {{$curr_plage->debut|date_format:"%Hh%M"}} à {{$curr_plage->fin|date_format:"%Hh%M"}}
+        {{$_plage->debut|date_format:"%Hh%M"}} à {{$_plage->fin|date_format:"%Hh%M"}}
       </a>
     </th>
   </tr>
 </table>
 
 <table class="tbl">
-  {{if $curr_plage->_ref_operations|@count}}
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$curr_plage->_ref_operations}}
+  {{if $_plage->_ref_operations|@count}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_ref_operations}}
   {{/if}}
   
-  {{if $curr_plage->_unordered_operations|@count}}
+  {{if $_plage->_unordered_operations|@count}}
   <tr>
     <th colspan="10">Non placées</th>
   </tr>
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$curr_plage->_unordered_operations}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=0 operations=$_plage->_unordered_operations}}
   {{/if}}
 </table>
 {{/foreach}}
 
-{{if $deplacees|@count}}
-
+<!-- Déplacées -->
+{{if $praticien->_ref_deplacees|@count}}
 <hr />
 
 <table class="form">
@@ -42,13 +43,14 @@
     </th>
   </tr>
 </table>
+
 <table class="tbl">
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$deplacees}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$praticien->_ref_deplacees}}
 </table>
 {{/if}}
 
-{{if $urgences|@count}}
-
+<!-- Urgences -->
+{{if $praticien->_ref_urgences|@count}}
 <hr />
 
 <table class="form">
@@ -58,7 +60,8 @@
     </th>
   </tr>        
 </table>
+
 <table class="tbl">
-  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$urgences}}
+  {{include file="../../dPsalleOp/templates/inc_liste_operations.tpl" urgence=1 operations=$praticien->_ref_urgences}}
 </table>
 {{/if}}

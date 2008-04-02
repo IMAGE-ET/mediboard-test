@@ -27,7 +27,9 @@
 {{/if}}
 <tbody class="hoverable">
 <tr {{if $_operation->_id == $operation_id}}class="selected"{{/if}}>
-  {{if $_operation->entree_salle && $_operation->sortie_salle}}
+  {{if $_operation->_deplacee}}
+  <td class="text" rowspan="{{$rowspan}}" style="background-color:#ccf">
+  {{elseif $_operation->entree_salle && $_operation->sortie_salle}}
   <td class="text" rowspan="{{$rowspan}}" style="background-image:url(images/icons/ray.gif); background-repeat:repeat;">
   {{elseif $_operation->entree_salle}}
   <td class="text" rowspan="{{$rowspan}}" style="background-color:#cfc">
@@ -50,17 +52,27 @@
 	    {{/if}}
     </a>
   </td>
-  
-  <td class="text">
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
-      {{$_operation->_ref_sejour->_ref_patient->_view}}
-    </a>
-  {{if $vueReduite}}
-    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
-  {{/if}}
+ 
+  {{if $_operation->_deplacee}}
+  <td class="text" colspan="5">
+    <div class="warning">
+    	{{$_operation->_ref_patient->_view}}
+    	<br />
+	    Intervention déplacée vers {{$_operation->_ref_salle->_view}}
+    </div>
   </td>
   
-  {{if !$vueReduite}}
+  {{else}}
+  <td class="text">
+	  {{if $vueReduite}}
+	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
+	  {{/if}}
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+      {{$_operation->_ref_patient->_view}}
+    </a>
+  </td>
+  
+	{{if !$vueReduite}}
   <td>
 		{{mb_ternary var=direction test=$urgence value=vw_edit_urgence other=vw_edit_planning}}
     <a href="?m=dPplanningOp&amp;tab={{$direction}}&amp;operation_id={{$_operation->_id}}" title="Modifier l'intervention">
@@ -72,8 +84,10 @@
   <td>{{tr}}COperation.cote.{{$_operation->cote}}{{/tr}}</td>
   <td>{{$_operation->temp_operation|date_format:"%Hh%M"}}</td>
   {{/if}}
+  {{/if}}
 </tr>
-{{if $dPconfig.dPsalleOp.COperation.modif_salle}}
+
+{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

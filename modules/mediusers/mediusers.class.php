@@ -71,6 +71,11 @@ class CMediusers extends CMbObject {
   var $_ref_packs      = array();
   var $_ref_protocoles = array();
 
+  // Object references per day
+  var $_ref_plages = null;
+  var $_ref_urgences = null;
+  var $_ref_deplacees = null;
+  
   function CMediusers() {
     $this->CMbObject( "users_mediboard", "user_id" );
 
@@ -647,6 +652,70 @@ class CMediusers extends CMbObject {
     $template->addProperty("Praticien - titres"    , $this->titres);
     $template->addProperty("Praticien - ADELI"     , $this->adeli);
   }
+  
+  /**
+   * Charge la liste de plages et opérations pour un jour donné
+   * Analogue à CSalle::loadRefsForDay
+   * @param $date date Date to look for
+   */
+  function loadRefsForDay($date) {
+    // Plages d'opérations
+	  $plages = new CPlageOp;
+	  $where = array();
+	  $where["date"] = "= '$date'";
+  	$where["chir_id"] = "= '$this->_id'";
+	  $order = "debut";
+		$this->_ref_plages = $plages->loadList($where, $order);
+		foreach ($this->_ref_plages as &$plage) {
+		  $plage->loadRefs(0);
+		  $plage->_unordered_operations = array();
+		  foreach ($plage->_ref_operations as &$operation) {
+		    $operation->loadRefPatient();
+		    $operation->loadExtCodesCCAM();
+		    $operation->updateSalle();
+		    
+		    // Extraire les interventions non placées
+		    if ($operation->rank == 0) {
+		      $plage->_unordered_operations[$operation->_id] = $operation;
+		      unset($plage->_ref_operations[$operation->_id]);
+		    }
+		  }
+		}
+		
+		// Interventions déplacés
+		$deplacees = new COperation;
+		$ljoin = array();
+		$ljoin["plagesop"] = "operations.plageop_id = plagesop.plageop_id";
+		$where = array();
+		$where["operations.plageop_id"] = "IS NOT NULL";
+		$where["plagesop.salle_id"]     = "!= operations.salle_id";
+		$where["plagesop.date"]         = "= '$date'";
+	  $where["plagesop.chir_id"]      = "= '$this->_id'";
+		$order = "operations.time_operation";
+		$this->_ref_deplacees = $deplacees->loadList($where, $order, null, null, $ljoin);
+		foreach ($this->_ref_deplacees as &$deplacee) {
+		  $deplacee->loadRefChir();
+		  $deplacee->loadRefPatient();
+		  $deplacee->loadExtCodesCCAM();
+		}
+
+		// Urgences
+	  $urgences = new COperation;
+	  $where = array();
+	  $where["plageop_id"] = "IS NULL";
+	  $where["date"]     = "= '$date'";
+		$where["chir_id"]    = "= '$this->_id'";
+		$where["annulee"]    = "= '0'";
+	  $order = "chir_id";
+	  $this->_ref_urgences = $urgences->loadList($where);
+	  foreach($this->_ref_urgences as &$urgence) {
+	    $urgence->loadRefChir();
+	    $urgence->loadRefPatient();
+	    $urgence->loadExtCodesCCAM();
+	  }
+  }
+  
+  
 }
 
 ?>

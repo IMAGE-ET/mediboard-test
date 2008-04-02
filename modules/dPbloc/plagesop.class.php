@@ -140,6 +140,9 @@ class CPlageOp extends CMbObject {
     }
     $op = new COperation;
     $this->_ref_operations = $op->loadList($where, $order);
+    foreach ($this->_ref_operations as &$operation) {
+      $operation->_ref_plageop =& $this;
+    }
   }
   
   function reorderOp() {

@@ -72,6 +72,7 @@ class COperation extends CCodable {
   var $_presence_salle = null;
   var $_hour_voulu     = null;
   var $_min_voulu      = null;
+  var $_deplacee       = null;
 
   // Distant fields
   var $_datetime = null;
@@ -224,11 +225,6 @@ class COperation extends CCodable {
     if(!$this->operation_id && !$this->chir_id) {
       $msg .= "Praticien non valide ";
     }
-    
-    // Nombre max d'actes CCAM
-    //if ($this->codes_ccam && count(explode("|", $this->codes_ccam)) > 4) {
-    //  $msg .= "Impossible d'associer plus de 4 actes CCAM ";
-    //}
     
     $old = new COperation();
     $old->load($this->_id);
@@ -402,34 +398,64 @@ class COperation extends CCodable {
     $this->loadRefPlageOp();
   }
   
+  /**
+   * Met à jour les information sur la salle 
+   * Nécessiste d'avoir chargé la plage opératoire au préalable
+   */
+  function updateSalle() {
+    if ($this->plageop_id) {
+      $this->_deplacee = $this->_ref_plageop->salle_id != $this->salle_id;
+    }
+    
+	  // Evite de recharger la salle quand ce n'est pas nécessaire  
+    if (!$this->_deplacee) {
+      $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
+    }
+    else {
+	    $this->_ref_salle = new CSalle;
+	    $this->_ref_salle->load($this->salle_id);
+    }
+  }
+  
   function loadRefPlageOp() {
     $this->_ref_anesth = new CMediusers;
     $this->_ref_anesth->load($this->anesth_id);
     $this->_ref_plageop = new CPlageOp;
-    if($this->plageop_id) {
+    
+    // Avec plage d'opération
+    if ($this->plageop_id) {
       $this->_ref_plageop->load($this->plageop_id);
       $this->_ref_plageop->loadRefsFwd();
-      $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
-      if(!$this->anesth_id) {
+      
+      if (!$this->anesth_id) {
         $this->_ref_anesth =& $this->_ref_plageop->_ref_anesth;
       }
+      
       $date = $this->_ref_plageop->date;
-    } else {
+    } 
+    // Hors plage
+    else {
       $date = $this->date;
-      $this->_ref_salle = new CSalle;
-      $this->_ref_salle->load($this->salle_id);
-    }
+    }    
     
+    $this->updateSalle();
+    
+    // Horraire global
     $this->_datetime          = "$date $this->time_operation";
     $this->_datetime_reel     = "$date $this->debut_op";
     $this->_datetime_reel_fin = "$date $this->fin_op";
-    if($this->fin_op) {
+    
+    // Heure standard d'exécution des actes
+    if ($this->fin_op) {
       $this->_acte_execution = $this->_datetime_reel_fin;
-    } elseif($this->debut_op) {
+    } 
+    elseif ($this->debut_op) {
       $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime_reel);
-    } elseif($this->time_operation != "00:00:00") {
+    } 
+    elseif ($this->time_operation != "00:00:00") {
       $this->_acte_execution = mbAddDateTime($this->temp_operation, $this->_datetime);
-    } else {
+    } 
+    else {
       $this->_acte_execution = mbDateTime();
     }
     

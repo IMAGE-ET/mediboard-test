@@ -18,7 +18,7 @@
       <select name="salle" onchange="this.form.submit()">
         <option value="">&mdash; Aucune salle</option>
         {{foreach from=$listSalles item=curr_salle}}
-        <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle}} selected="selected" {{/if}}>
+        <option value="{{$curr_salle->_id}}" {{if $curr_salle->_id == $salle->_id}} selected="selected" {{/if}}>
           {{$curr_salle->nom}}
         </option>
         {{/foreach}}

@@ -21,4 +21,8 @@
     <td style="background-color:#fcc"></td>
     <td class="text">Problème de timing</td>
   </tr>
+  <tr>
+    <td style="background-color:#ccf"></td>
+    <td class="text">Intervention déplacée dans une autre salle</td>
+  </tr>
 </table>
