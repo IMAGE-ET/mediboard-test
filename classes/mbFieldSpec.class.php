@@ -335,7 +335,7 @@ class CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $aHtml[] = '<div id="'.$id.'_da">'.$date.'</div>';
+    $aHtml[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';
     $aHtml[] = '<input type="hidden" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
     $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
 

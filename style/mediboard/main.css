@@ -772,9 +772,16 @@ table.tbl td.date div {
   border: 1px dotted;
   padding: 0px 1px;
   margin: 1px;
-  width: 100px;
   min-height: 15px;
   float: left;
+}
+
+div.date {
+	width: 60px;
+}
+
+div.dateTime {
+	width: 90px;
 }
 
 table.tbl td.date img {
@@ -895,7 +902,6 @@ table.form td.date div {
   border: 1px dotted;
   padding: 0px 1px;
   margin: 1px;
-  width: 100px;
   min-height: 15px;
   float: left;
 }

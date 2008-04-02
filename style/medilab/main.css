@@ -157,20 +157,6 @@ table.form td.button {
   vertical-align: middle;
 }
 
-table.form td.date div {
-  font-size: 11px;
-  border: 1px dotted;
-  padding: 0px 1px;
-  margin: 1px;
-  width: 100px;
-  min-height: 15px;
-  float: left;
-}
-
-table.form td.date img {
-  margin-top: 3px;
-}
-
 div.autocomplete {
   position:absolute;
   width:250px;
@@ -720,20 +706,6 @@ table.tbl tr.clear td,
 table.tbl tr.clear th {
   background-color: transparent;
   border: none;
-}
-
-table.tbl td.date div {
-  font-size: 11px;
-  border: 1px dotted;
-  padding: 0px 1px;
-  margin: 1px;
-  width: 100px;
-  min-height: 15px;
-  float: left;
-}
-
-table.tbl td.date img {
-  margin-top: 3px;
 }
 
 table.titleblock td.titlecell {
