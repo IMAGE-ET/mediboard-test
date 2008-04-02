@@ -5,6 +5,7 @@
 function pageMain() {
   regFieldCalendar("edit-filter", "_date_min");
   regFieldCalendar("edit-filter", "_date_max");
+  submitFilter({});
 }
 
 function submitFilter (oForm) {

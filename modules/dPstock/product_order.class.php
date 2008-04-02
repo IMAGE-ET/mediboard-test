@@ -112,7 +112,7 @@ class CProductOrder extends CMbObject {
     // if the order has not been ordered yet
     // and not partially received
     // and not totally received
-    if (!$this->date_ordered && !$this->_received) {
+    if (!$this->date_ordered && !$this->_received && !$this->cancelled) {
       $items = $order_item->loadMatchingList();
       
       // we empty the order
@@ -169,6 +169,7 @@ class CProductOrder extends CMbObject {
   	$order->locked       = 0;
   	$order->cancelled    = 0;
   	$order->order_number = $this->getUniqueNumber();
+  	$order->store();
   	
   	$this->loadRefsBack();
   	foreach ($this->_ref_order_items as $item) {
@@ -212,26 +213,29 @@ class CProductOrder extends CMbObject {
 	
 	function updateDBFields() {
 		$this->updateFormFields();
-
-		// If the flag _receive is true, and if not every item has been received, we mark all them as received
-		if ($this->_receive && !$this->_received) {
-			$this->receive();
-		}
-
-		if ($this->_order && !$this->date_ordered) {
-			if (count($this->_ref_order_items) == 0) {
-				$this->_order = null;
-			} else {
-				$this->date_ordered = mbDateTime();
-				
-				// make the real order here !!!
-				
-				
-			}
-		}
 		
+	  if ($this->order_number == '') {
+      $this->order_number = $this->getUniqueNumber();
+    }
+
 	  if ($this->_autofill) {
       $this->autofill();
+    }
+    
+    if ($this->_order && !$this->date_ordered) {
+      if (count($this->_ref_order_items) == 0) {
+        $this->_order = null;
+      } else {
+        $this->date_ordered = mbDateTime();
+        
+        // make the real order here !!!
+
+      }
+    }
+    
+    // If the flag _receive is true, and if not every item has been received, we mark all them as received
+    if ($this->_receive && !$this->_received) {
+      $this->receive();
     }
     
 	  if ($this->_redo) {
@@ -249,13 +253,6 @@ class CProductOrder extends CMbObject {
 		
 		$this->_ref_group = new CGroups();
     $this->_ref_group->load($this->group_id);
-	}
-	
-	function store() {
-	  if ($this->order_number == '') {
-      $this->order_number = $this->getUniqueNumber();
-    }
-    parent::store();
 	}
 	
 	function delete() {

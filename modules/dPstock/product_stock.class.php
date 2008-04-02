@@ -111,7 +111,7 @@ class CProductStock extends CMbObject {
     
     foreach ($list_orders as $order) {
       $order->updateFormFields();
-      if (!$order->_received) {
+      if (!$order->_received && !$this->cancelled) {
         foreach ($order->_ref_order_items as $item) {
           $item->loadRefsFwd();
           $item->_ref_reference->loadRefsFwd();

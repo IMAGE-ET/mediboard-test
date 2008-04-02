@@ -17,6 +17,9 @@ $order_id = mbGetValueFromGet('order_id');
 $order = new CProductOrder();
 $order->load($order_id);
 $order->loadRefsBack();
+foreach($order->_ref_order_items as $item) {
+	$item->_quantity_received = $item->quantity_received;
+}
 
 // Smarty template
 $smarty = new CSmartyDP();

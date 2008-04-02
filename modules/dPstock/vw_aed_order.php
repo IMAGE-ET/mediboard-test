@@ -13,6 +13,8 @@ $can->needsRead();
 
 $order_id    = mbGetValueFromGetOrSession('order_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
+$societe_id  = mbGetValueFromGetOrSession('societe_id');
+$_autofill   = mbGetValueFromGetOrSession('_autofill');
 
 // Loads the expected Order
 $order = new CProductOrder();
@@ -44,13 +46,25 @@ if ($category) {
   }
 } else $category = new CProductCategory();
 
+
+// Suppliers list
+$societe = new CSociete();
+$list_societes = $societe->loadList();
+
+$societe->societe_id = $societe_id;
+if ($societe->loadMatchingObject() && !$order->societe_id) {
+  $order->societe_id = $societe_id;
+}
+
 // Smarty template
 $smarty = new CSmartyDP();
 
 $smarty->assign('order',           $order);
 $smarty->assign('category',        $category);
+$smarty->assign('_autofill',       $_autofill);
 $smarty->assign('hide_products_list', false);
 $smarty->assign('list_categories', $list_categories);
+$smarty->assign('list_societes',   $list_societes);
 
 $smarty->display('vw_aed_order.tpl');
 

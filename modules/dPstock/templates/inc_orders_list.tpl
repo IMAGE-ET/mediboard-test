@@ -11,12 +11,12 @@
   </tr>
   <tbody>
 	{{foreach from=$orders item=curr_order}}
-	  <tr id="order-{{$curr_order->_id}}">
+	  <tr>
 	    <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>
 	      {{$curr_order->_ref_order_items|@count}}
-        <button class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600); return false;">Editer</button>
+        
 	    </td>
 	    <td>{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
@@ -28,23 +28,24 @@
 	      </form>
 	    </td>
 	    <td>
-      {{if $curr_order->_ref_order_items|@count > 0}}
-	      <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
-	        <input type="hidden" name="m" value="{{$m}}" />
-	        <input type="hidden" name="dosql" value="do_order_aed" />
-	        <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
-	        <input type="hidden" name="_order" value="1" />
-	        <button type="button" class="tick" onclick="submitOrder(this.form, true)">Commander</button>
-	      </form>
-        {{/if}}
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel notext" onclick="submitOrder(this.form, true)">Annuler</button>
+          <button type="button" class="edit" onclick="popupOrder(this.form, 800, 600); return false;">Editer</button>
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">Annuler</button>
         </form>
-	  </td>
+        {{if $curr_order->_ref_order_items|@count > 0}}
+        <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="_order" value="1" />
+          <button type="button" class="tick" onclick="if (confirmOrder()) submitOrder(this.form, {refreshLists: true})">Commander</button>
+        </form>
+        {{/if}}
+	   </td>
 	  </tr>
 	{{foreachelse}}
 	  <tr>
@@ -69,20 +70,20 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr id="order-{{$curr_order->_id}}">
+    <tr>
       <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td>{{mb_value object=$curr_order field=date_ordered}}</td>
       <td>{{mb_value object=$curr_order field=_total}}</td>
       <td>
-        <button class="tick" onclick="popupOrder({{$curr_order->_id}});">Recevoir</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel notext" onclick="submitOrder(this.form, true)">Annuler</button>
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">Annuler</button>
+          <button type="button" class="tick" onclick="popupOrder(this.form);">Recevoir</button>
         </form>
       </td>
     </tr>
@@ -110,7 +111,7 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr id="order-{{$curr_order->_id}}">
+    <tr>
       <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
@@ -123,7 +124,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="_redo" value="1" />
-          <button type="button" class="change" onclick="submitOrder(this.form, true)">Refaire</button>
+          <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true})">Refaire</button>
         </form>
       </td>
     </tr>
@@ -151,7 +152,7 @@
   </tr>
   <tbody>
   {{foreach from=$orders item=curr_order}}
-    <tr id="order-{{$curr_order->_id}}">
+    <tr>
       <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
@@ -164,7 +165,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="0" />
-          <button type="button" class="tick notext" onclick="submitOrder(this.form, true)">Rétablir</button>
+          <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true})">Rétablir</button>
         </form>
       </td>
     </tr>
@@ -179,5 +180,5 @@
 
 <!-- The orders count -->
 <script type="text/javascript">
-  $('orders-{{$type}}-count').innerHTML = {{$orders|@count}};
+  $('list-orders-{{$type}}-count').innerHTML = {{$orders|@count}};
 </script>
