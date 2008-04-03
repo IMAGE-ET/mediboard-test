@@ -156,40 +156,7 @@ function pageMain() {
     </td>
 
     <td class="button" style="background-color: {{$background}};">
-      <!-- ici c'est comme pour une consult immédiate -->
-      {{if !$consult->_id}}
-        {{if $can->edit}}
-       <form name="createConsult{{$rpu->_id}}" method="post" action="?">
-         <input type="hidden" name="dosql" value="do_consult_now" />
-         <input type="hidden" name="m" value="dPcabinet" />
-         <input type="hidden" name="del" value="0" />
-         <input type="hidden" name="sejour_id" value="{{$sejour_id}}" />   
-         <input type="hidden" name="patient_id" value="{{$curr_sejour->patient_id}}" />    
-         <select name="prat_id">
-           <option value="">&mdash; Choisir un praticien</option>
-           {{foreach from=$listPrats item="curr_prat"}}
-           <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->_id}}"
-						 {{if $userCourant == $curr_prat->_id}} selected = "selected" {{/if}}>
-             {{$curr_prat->_view}}
-           </option>
-           {{/foreach}}
-         </select>
-         <br />
-         <button type="submit" class="new" onclick="return checkPraticien(this.form)">Prendre en charge</button>
-       </form>
-         {{else}}
-          - 
-         {{/if}}
-       {{else}}
-         par {{$consult->_ref_plageconsult->_ref_chir->_view}}
-         {{if $can->edit}}
-         <br />
-         <a class="action" title="Prise en charge" href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
-           Voir prise en charge
-         </a>
-         {{/if}}
-         
-       {{/if}}
+		  {{include file="inc_pec_praticien.tpl"}}
     </td>
   </tr>
   

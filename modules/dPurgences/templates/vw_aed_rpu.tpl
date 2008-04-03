@@ -172,57 +172,49 @@ function pageMain() {
 		  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">
 		    Supprimer
 		  </button>
-	   {{else}}
-	   <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
-    {{/if}}
-  </td>
+	    {{else}}
+	    <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
+      {{/if}}
+  	</td>
   </tr>
+  
 </table>
+
 </form>
 
 <!-- Dossier Médical du patient -->
 {{if $rpu->_id && $can->edit}}
 <table width="100%" class="form">
   <tr>
-     <td>
-      <table width="100%">
-      <tr id="ant-trigger">
-        <th colspan="6" class="category">
-         Dossier Médical du patient
-        </th>
-      </tr>
-      <tbody id="ant">
-        <tr class="script">
-          <td>
-           <script type="text/javascript">new PairEffect("ant");</script>
-          </td>
-        </tr>
-        <tr>
-          <td>
-            {{assign var="current_m" value="dPurgences"}}
-            {{assign var="_is_anesth" value="0"}}
-            {{assign var="consult" value=$rpu->_ref_consult}}
-            {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
-          </td>
-           
-        </tr>
-      </tbody>
-     </table>
-     </td>
-     <td style="width: 100px">
-       <table class="form">
-         <tr>
-           <th colspan="2" class="category">Autres informations</th>
-         </tr>
-         <tr>
-           <td id="radio">
-             Radio:
-             {{include file="inc_vw_radio.tpl"}}
-           </td>
-         </tr>
-       </table>
-     </td>
-   </table>
+    <th class="category">Autres informations</th>
+    <th class="category">Prise en charge</th>
+  </tr>
+
+  <tr>
+    <td id="radio">
+      Radio:
+      {{include file="inc_vw_radio.tpl"}}
+    </td>
+    <td class="button">
+  		{{include file="inc_pec_praticien.tpl" listPrats=$listResponsables}}
+    </td>
+  </tr>
+
+  <tr>
+    <th class="category" colspan="2">
+      Dossier Médical
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      {{assign var="current_m" value="dPurgences"}}
+      {{assign var="_is_anesth" value="0"}}
+      {{assign var="consult" value=$rpu->_ref_consult}}
+      {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
+    </td>
+     
+  </tr>
+</table>
 {{/if}}
 
 <script type="text/javascript">

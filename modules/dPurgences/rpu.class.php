@@ -128,8 +128,8 @@ class CRPU extends CMbObject {
     $this->_count_consultations = $this->_ref_sejour->countBackRefs("consultations");
     $this->_ref_consult = $this->_ref_sejour->loadUniqueBackRef("consultations");
     if ($this->_ref_consult->_id) {
-      $this->_ref_consult->loadRefPlageConsult();
-      $this->_ref_consult->_ref_plageconsult->_ref_chir->loadRefFunction();
+      $this->_ref_consult->loadRefPraticien();      
+      $this->_ref_consult->_ref_praticien->loadRefFunction();
       $this->_ref_consult->getNumDocsAndFiles();
     }
   }

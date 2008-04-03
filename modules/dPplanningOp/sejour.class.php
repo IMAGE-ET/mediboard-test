@@ -449,7 +449,6 @@ class CSejour extends CCodable {
   function loadRefSejour() {
     $this->_ref_sejour =& $this;
   }
-  
 
   // Chargement du dossier medical du sejour
   function loadRefDossierMedical(){
