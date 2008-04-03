@@ -19,6 +19,7 @@ class CPersonnel extends CMbObject {
   
   // DB fields
   var $emplacement = null;
+  var $actif       = null;
   
   // Form Field
   var $_user_last_name = null;
@@ -32,8 +33,9 @@ class CPersonnel extends CMbObject {
 	
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["user_id"] = "notNull ref class|CMediusers";
+    $specs["user_id"]     = "notNull ref class|CMediusers";
     $specs["emplacement"] = "notNull enum list|op|op_panseuse|reveil|service default|op";
+    $specs["actif"]       = "notNull bool";
     return $specs;
   }
   

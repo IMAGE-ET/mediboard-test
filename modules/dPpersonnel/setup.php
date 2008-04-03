@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpersonnel";
-$config["mod_version"]     = "0.13";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 
 
@@ -90,7 +90,12 @@ class CSetupdPpersonnel extends CSetup {
             WHERE personnel.emplacement = 'op';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.13";
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `personnel`
+            ADD `actif` ENUM('0','1') DEFAULT '1' NOT NULL";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }
 }
     

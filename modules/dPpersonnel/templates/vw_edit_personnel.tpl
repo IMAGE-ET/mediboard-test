@@ -98,6 +98,10 @@
 		  <tr>
 		    <th>{{mb_label object=$personnel field="emplacement"}}</th>
 		    <td>{{mb_field object=$personnel field="emplacement"  }}</td>
+		  </tr>
+		  <tr>
+		    <th>{{mb_label object=$personnel field="actif"}}</th>
+		    <td>{{mb_field object=$personnel field="actif"  }}</td>
 		  </tr>       
 		  <tr>
 		    <td class="button" colspan="2">
