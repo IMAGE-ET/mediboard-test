@@ -77,41 +77,41 @@
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="matricule"}}</th>
-          <td>{{mb_field object=$paramsPaie field="matricule"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="matricule"}}</td>
         </tr>
         <tr>
           <th class="title" colspan="3">Employeur</th>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="nom"}}</th>
-          <td>{{mb_field object=$paramsPaie field="nom"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="nom"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="adresse"}}</th>
-          <td>{{mb_field object=$paramsPaie field="adresse"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="adresse"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="cp"}}</th>
-          <td>{{mb_field object=$paramsPaie field="cp"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="cp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="ville"}}</th>
-          <td>{{mb_field object=$paramsPaie field="ville"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="ville"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="siret"}}</th>
-          <td>{{mb_field object=$paramsPaie field="siret"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="siret"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="ape"}}</th>
-          <td>{{mb_field object=$paramsPaie field="ape"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="ape"}}</td>
         </tr>
         <tr>
           <th class="title" colspan="3">Paramètres fiscaux</th>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="smic"}}</th>
-          <td>{{mb_field object=$paramsPaie field="smic"}}</td>
+          <td colspan="2">{{mb_field object=$paramsPaie field="smic"}}</td>
         </tr>
         <tr>
           <th class="category">Cotisations</th>
@@ -152,6 +152,11 @@
           <th>{{mb_label object=$paramsPaie field="aps"}}</th>
           <td>{{mb_field object=$paramsPaie field="aps"}}</td>
           <td>{{mb_field object=$paramsPaie field="app"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$paramsPaie field="ms"}}</th>
+          <td>{{mb_field object=$paramsPaie field="ms"}}</td>
+          <td>{{mb_field object=$paramsPaie field="mp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="acs"}}</th>

@@ -21,11 +21,12 @@ class CFichePaie extends CMbObject {
   var $salaire        = null;
   var $heures         = null;
   var $heures_sup     = null;
-  var $mutuelle       = null;
   var $precarite      = null;
   var $anciennete     = null;
   var $conges_payes   = null;
   var $prime_speciale = null;
+  
+  var $final_file     = null;
   
   // Forms Fields
   var $_salaire_base = null;
@@ -76,17 +77,18 @@ class CFichePaie extends CMbObject {
       "salaire"        => "notNull currency min|0",
       "heures"         => "notNull num max|255",
       "heures_sup"     => "notNull num max|255",
-      "mutuelle"       => "notNull currency min|0",
       "anciennete"     => "notNull pct",
       "precarite"      => "notNull pct",
       "conges_payes"   => "notNull pct",
-      "prime_speciale" => "notNull currency min|0"
+      "prime_speciale" => "notNull currency min|0",
+      "final_file"     => "html"
     );
     return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_locked = ($this->final_file !== null);
     $this->_view = "Fiche de paie du ".$this->debut." au ".$this->fin;
     if($this->fiche_paie_id) {
       // On charge cette référence dès le load
@@ -129,9 +131,10 @@ class CFichePaie extends CMbObject {
       $this->_aps     = $this->_salaire_brut * $this->_ref_params_paie->aps / 100;
       $this->_total_retenues += $this->_aps;
       $this->_app     = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
-      $this->_total_cot_patr += $this->_app;
+      $this->_total_cot_patr += $this->_ref_params_paie->_mp;
+      $this->_total_retenues += $this->_ref_params_paie->_ms;
       // On peut calculer ici la CSG/RDS
-      $this->_base_csg = $this->_salaire_brut * 0.97 + $this->_app;
+      $this->_base_csg = ($this->_salaire_brut + $this->_app + $this->_mp) * 0.97;
       $this->_csgds   = $this->_base_csg * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues += $this->_csgds;
       $this->_csgnds  = $this->_base_csg * $this->_ref_params_paie->csgnds / 100;
@@ -145,13 +148,16 @@ class CFichePaie extends CMbObject {
       $this->_total_cot_patr += $this->_aatp;
       $this->_csp     = $this->_salaire_brut * $this->_ref_params_paie->csp / 100;
       $this->_total_cot_patr += $this->_csp;
+      // Réductions bas salaires
       $this->_reduc_bas_salaires = (0.281/0.6)*(1.6*($this->_ref_params_paie->smic*$this->heures/$this->_salaire_brut)-1);
       $this->_reduc_bas_salaires = min(0.281, $this->_reduc_bas_salaires)*$this->_salaire_brut;
       $this->_reduc_bas_salaires = max(0, $this->_reduc_bas_salaires);
       $this->_total_cot_patr -= $this->_reduc_bas_salaires;
-      $this->_total_retenues += $this->mutuelle;
+      // Défiscalisation des heures sup
+      $this->_reduc_heures_sup = $this->_salaire_heures_sup * 0.215;
+      $this->_total_retenues -= $this->_reduc_heures_sup;
       $this->_salaire_a_payer = $this->_salaire_brut - $this->_total_retenues;
-      $this->_salaire_net = $this->_salaire_a_payer + $this->_csgnds;
+      $this->_salaire_net = $this->_salaire_a_payer + $this->_csgnds - $this->_salaire_heures_sup;
     }
   }
   

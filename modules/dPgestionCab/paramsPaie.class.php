@@ -35,6 +35,8 @@ class CParamsPaie extends CMbObject {
   var $acp     = null; // assurance chomage patronale
   var $aatp    = null; // assurance accident de travail patronale
   var $csp     = null; // contribution solidarité patronnale
+  var $ms      = null; // mutuelle salariale
+  var $mp      = null; // mutuelle patronale
   
   // Employeur
   var $nom     = null;
@@ -83,6 +85,8 @@ class CParamsPaie extends CMbObject {
       "acp"           => "notNull pct",
       "aatp"          => "notNull pct",
       "csp"           => "notNull pct",
+      "ms"            => "notNull currency min|0",
+      "mp"            => "notNull currency min|0",
       "nom"           => "notNull str confidential",
       "adresse"       => "text confidential",
       "cp"            => "numchar length|5 confidential",

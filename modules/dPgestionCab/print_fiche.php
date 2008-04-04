@@ -19,13 +19,18 @@ if(!$fichePaie->fiche_paie_id) {
   $AppUI->setMsg("Vous n'avez pas choisi de fiche de paie", MSG_ERROR);
   $AppUI->redirect( "m=dPgestionCab&tab=edit_paie" );
 }
-$fichePaie->loadRefsFwd();
-$fichePaie->_ref_params_paie->loadRefsFwd();
 
-// Création du template
-$smarty = new CSmartyDP();
+if($fichePaie->final_file) {
+    echo $fichePaie->final_file;
+} else {
+  $fichePaie->loadRefsFwd();
+  $fichePaie->_ref_params_paie->loadRefsFwd();
 
-$smarty->assign("fichePaie" , $fichePaie);
+  // Création du template
+  $smarty = new CSmartyDP();
 
-$smarty->display("print_fiche.tpl");
+  $smarty->assign("fichePaie" , $fichePaie);
+
+  $smarty->display("print_fiche.tpl");
+}
 ?>

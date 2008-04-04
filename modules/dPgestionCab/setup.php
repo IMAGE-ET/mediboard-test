@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.17";
+$config["mod_version"]     = "0.18";
 $config["mod_type"]        = "user";
 
 class CSetupdPgestionCab extends CSetup {
@@ -221,7 +221,17 @@ class CSetupdPgestionCab extends CSetup {
             CHANGE `ape` `ape` VARCHAR(6);";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.17";
+    $this->makeRevision("0.17");
+    $sql = "ALTER TABLE `fiche_paie`
+            DROP `mutuelle`,
+            ADD `final_file` MEDIUMTEXT;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `params_paie`
+            ADD `ms` FLOAT NOT NULL AFTER `csp`,
+            ADD `mp` FLOAT NOT NULL AFTER `ms;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.18";
   }
 }
 ?>
