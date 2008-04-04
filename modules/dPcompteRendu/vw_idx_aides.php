@@ -20,7 +20,7 @@ $classes         = array();
 foreach($listClass as $sClassName){  
   $object = new $sClassName;
   if(count($object->_helped_fields)){
-    $listTraductions[$sClassName] = $AppUI->_($sClassName);
+    $listTraductions[$sClassName] = CAppUI::tr($sClassName);
     
     foreach($object->_helped_fields as $field =>$help_field){
       $classes[$sClassName][$field] = null;

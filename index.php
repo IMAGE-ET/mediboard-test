@@ -56,13 +56,8 @@ header("Last-Modified: " . gmdate("D, d M Y H:i:s") . " GMT");  // always modifi
 header("Cache-Control: no-cache, must-revalidate");  // HTTP/1.1
 header("Pragma: no-cache");  // HTTP/1.0
 
- 
-//require_once("./includes/db_connect.php");
-
 require_once("./classes/sqlDataSource.class.php");
 require_once("./classes/mysqlDataSource.class.php");  	
-
-
 
 require_once("./includes/autoload.php");
 
@@ -82,15 +77,18 @@ $dialog = dPgetParam($_REQUEST, "dialog");
 
 // check if the user is trying to log in
 if (isset($_POST["login"])) {
+  include_once("./locales/core.php");
   $redirect = dPgetParam($_REQUEST, "redirect", "");
+
   $ok = $AppUI->login();
-  if(!$ok) {
-    @include_once("./locales/core.php");
-    $AppUI->setMsg("Login Failed", UI_MSG_ERROR, true);
+  if (!$ok) {
+    $AppUI->setMsg("Auth-failed", UI_MSG_ERROR);
   }
+  
   if ($ok && $dialog) {
     $redirect = "m=system&a=login_ok&dialog=1";
   }
+
   $AppUI->redirect($redirect);
 }
 
@@ -106,9 +104,7 @@ $u = "";
 $g = "";
 
 // load locale settings
-$AppUI->setUserLocale();
 require_once("./locales/core.php");
-//setlocale(LC_TIME, $AppUI->user_locale);
 setlocale(LC_TIME, "fr_FR");
 
 if (!$suppressHeaders || $ajax) {
@@ -232,8 +228,8 @@ if (!$suppressHeaders) {
     $affModule = array();
     foreach (CPermModule::getVisibleModules() as $module) {
       $affModule[$iKey]["modName"]      = "$module->mod_name";
-      $affModule[$iKey]["modNameCourt"] = $AppUI->_("module-$module->mod_name-court");
-      $affModule[$iKey]["modNameLong"]  = $AppUI->_("module-$module->mod_name-long");
+      $affModule[$iKey]["modNameCourt"] = CAppUI::tr("module-$module->mod_name-court");
+      $affModule[$iKey]["modNameLong"]  = CAppUI::tr("module-$module->mod_name-long");
       $iKey++;
     }  
   }

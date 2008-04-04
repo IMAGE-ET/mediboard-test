@@ -162,7 +162,7 @@ class CUser extends CMbObject {
     $this->user_last_name = strtoupper($this->user_last_name);
     $this->user_first_name = ucwords(strtolower($this->user_first_name));
     $this->_view = "$this->user_last_name $this->user_first_name";
-    $this->_login_locked = $this->user_login_errors > $dPconfig['admin']['CUser']['max_login_attempts'];
+    $this->_login_locked = $this->user_login_errors >= $dPconfig['admin']['CUser']['max_login_attempts'];
   }
 
   function check() {

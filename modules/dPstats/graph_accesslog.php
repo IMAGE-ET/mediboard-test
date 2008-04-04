@@ -86,7 +86,7 @@ foreach($datax as $x) {
 }
 
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
-if($module) $title .= " : ".$AppUI->_($module);
+if($module) $title .= " : ".CAppUI::tr($module);
 if($actionName) $title .= " - $actionName";
 
 $options = array( "size" => $size,

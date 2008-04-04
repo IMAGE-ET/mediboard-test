@@ -203,7 +203,7 @@ class CSpMalade extends CSpObject {
     $this->prvad1 = $this->makeString($patient->prevenir_adresse, 25);
     $this->prvil1 = $this->makeString($patient->prevenir_ville, 30);
     $this->prtel1 = $this->makePhone($patient->prevenir_tel);
-    $this->malie1 = $this->makeString($AppUI->_("CPatient.prevenir_parente.$patient->prevenir_parente"), 20);
+    $this->malie1 = $this->makeString(CAppUI::tr("CPatient.prevenir_parente.$patient->prevenir_parente"), 20);
     
     $this->perso2 = $this->makeString($patient->employeur_nom, 30);
     $this->prvad2 = $this->makeString($patient->employeur_adresse, 25);

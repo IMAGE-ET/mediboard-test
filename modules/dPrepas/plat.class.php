@@ -75,7 +75,7 @@ class CPlat extends CMbObject {
       return $this->_spec->ds->error();
     }
     if ($obj->number) {
-      return $AppUI->_("noDeleteRecord") . ": " . $obj->number . " repas";
+      return CAppUI::tr("noDeleteRecord") . ": " . $obj->number . " repas";
     }
     return null;
   }

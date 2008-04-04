@@ -880,9 +880,9 @@ class CMbObject {
     $objBefore->load($this->_id);
     
     if ($msg = $this->check()) {
-      return $AppUI->_(get_class($this)) . 
-        $AppUI->_("::store-check failed:") .
-        $AppUI->_($msg);
+      return CAppUI::tr(get_class($this)) . 
+        CAppUI::tr("::store-check failed:") .
+        CAppUI::tr($msg);
     }
 
     // DB query
@@ -1089,7 +1089,7 @@ class CMbObject {
 
     // Empty object
     if (!$this->_id) {
-      return $AppUI->_("noObjectToDelete") . " " . $AppUI->_($this->_class_name);
+      return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class_name);
     }
     
     // Counting backrefs
@@ -1127,10 +1127,10 @@ class CMbObject {
         }
         
         if ($cascadeIssuesCount) {
-          $issues[] = $AppUI->_("cascadeIssues")
+          $issues[] = CAppUI::tr("cascadeIssues")
             . " " . $cascadeIssuesCount 
             . "/" . count($cascadeObjects) 
-            . " " . $AppUI->_("$backSpec->class-back-$backName");
+            . " " . CAppUI::tr("$backSpec->class-back-$backName");
         }
         
         continue;
@@ -1140,12 +1140,12 @@ class CMbObject {
       if (!$backSpec->unlink) {
         if ($backCount = $this->countBackRefs($backName)) {
           $issues[] = $backCount 
-            . " " . $AppUI->_("$backSpec->class-back-$backName");
+            . " " . CAppUI::tr("$backSpec->class-back-$backName");
         }
       }
     };
     $msg = count($issues) ?
-      $AppUI->_("noDeleteRecord") . ": " . implode(", ", $issues) :
+      CAppUI::tr("noDeleteRecord") . ": " . implode(", ", $issues) :
       null;
     
     return $msg;

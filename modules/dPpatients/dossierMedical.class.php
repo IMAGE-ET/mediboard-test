@@ -157,7 +157,7 @@ class CDossierMedical extends CMbMetaObject {
       foreach($this->_ref_antecedents as $keyAnt=>$currTypeAnt){
         if($currTypeAnt){
           if($sAntecedents){$sAntecedents.="<br />";}
-          $sAntecedents .= $AppUI->_("CAntecedent.type.".$keyAnt)."\n";
+          $sAntecedents .= CAppUI::tr("CAntecedent.type.".$keyAnt)."\n";
           foreach($currTypeAnt as $currAnt){
             $sAntecedents .= " &bull; ";
             if($currAnt->date){
@@ -210,7 +210,7 @@ class CDossierMedical extends CMbMetaObject {
       $sAddictions = null;
       foreach($this->_ref_types_addiction as $typeAdd=>$listAdd){
         if($listAdd){
-          $sAddictions .= $AppUI->_("CAddiction.type.".$typeAdd)."\n";
+          $sAddictions .= CAppUI::tr("CAddiction.type.".$typeAdd)."\n";
           foreach($listAdd as $key => $curr_add){
             $sAddictions .= " &bull; ";
             $sAddictions .= $curr_add->addiction;

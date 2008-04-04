@@ -16,7 +16,7 @@ function do_translation($params, $content, &$smarty, &$repeat) {
   global $dPconfig,$AppUI;
 
   if (isset($content)) {
-    $content = $AppUI->_($content);
+    $content = CAppUI::tr($content);
     
     foreach ($params as $_key => $_val) {
       switch ($_key) {
@@ -205,8 +205,8 @@ function smarty_function_mb_colonne($params, &$smarty) {
   $order_way = CMbArray::extract($params, "order_way" , null, true);
   $url       = CMbArray::extract($params, "url"       , null, true);
   
-  $sHtml  = "<label for=\"$field\" title=\"".$AppUI->_($class."-".$field."-desc")."\">";
-  $sHtml .= $AppUI->_($class."-".$field);
+  $sHtml  = "<label for=\"$field\" title=\"".CAppUI::tr($class."-".$field."-desc")."\">";
+  $sHtml .= CAppUI::tr($class."-".$field);
   $sHtml .= "</label>";
     
   $css_class = ($order_col == $field) ? "sorted" : "sortable";

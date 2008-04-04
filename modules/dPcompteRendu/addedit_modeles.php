@@ -83,7 +83,7 @@ $listObjectClass     = array();
 $listObjectAffichage = array();
 foreach($compte_rendu->_enums["object_class"] as $valueClass){
   $listObjectClass[$valueClass]     = array();
-  $listObjectAffichage[$valueClass] = $AppUI->_($valueClass);
+  $listObjectAffichage[$valueClass] = CAppUI::tr($valueClass);
 }
 foreach($listObjectClass as $keyClass=>$value){
   $listCategory = CFilesCategory::listCatClass($keyClass);

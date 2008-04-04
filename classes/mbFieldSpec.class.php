@@ -258,16 +258,14 @@ class CMbFieldSpec {
    *   - defaultFor : name of a radio option to associate label with
    * @return string Rendered HTML
    */
-  function getLabelElement($object, $params){
-    global $AppUI;
-
+  function getLabelElement($object, $params) {
     $defaultFor = CMbArray::extract($params, "defaultFor");
     $forName = $defaultFor ? $defaultFor : $this->getLabelForElement($object, $params);
 
     $extra  = CMbArray::makeXmlAttributes($params);
 
-    $sHtml  = "<label for=\"$forName\" title=\"".$AppUI->_($object->_class_name."-".$this->fieldName."-desc")."\" $extra>";
-    $sHtml .= $AppUI->_($object->_class_name."-".$this->fieldName);
+    $sHtml  = "<label for=\"$forName\" title=\"".CAppUI::tr($object->_class_name."-".$this->fieldName."-desc")."\" $extra>";
+    $sHtml .= CAppUI::tr($object->_class_name."-".$this->fieldName);
     $sHtml .= "</label>";
 
     return $sHtml;
@@ -340,7 +338,7 @@ class CMbFieldSpec {
     $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
 
     if (!$this->notNull) {
-      $aHtml[] = '<button class="cancel notext" type="button" onclick="Form.Element.setValue('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.$AppUI->_("Delete").'</button>';
+      $aHtml[] = '<button class="cancel notext" type="button" onclick="Form.Element.setValue('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
     }
 
     // Can't be handeld here cauz preporeForms has to be done

@@ -10,7 +10,7 @@
 
 function viewMsg($msg, $action, $redirect = "", $txt = ""){
   global $AppUI, $m, $tab;
-  $action = $AppUI->_($action);
+  $action = CAppUI::tr($action);
   if($msg){
     $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
     $AppUI->redirect($redirect);

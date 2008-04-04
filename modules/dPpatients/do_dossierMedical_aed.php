@@ -10,9 +10,9 @@
 global $AppUI;
 
 $do = new CDoObjectAddEdit("CDossierMedical", "dossier_medical_id");
-$do->createMsg = $AppUI->_("msg-CIdDossierMedical-create");
-$do->modifyMsg = $AppUI->_("msg-CIdDossierMedical-modify");
-$do->deleteMsg = $AppUI->_("msg-CIdDossierMedical-delete");
+$do->createMsg = CAppUI::tr("msg-CIdDossierMedical-create");
+$do->modifyMsg = CAppUI::tr("msg-CIdDossierMedical-modify");
+$do->deleteMsg = CAppUI::tr("msg-CIdDossierMedical-delete");
 
 if($_POST["del"] == 0){
   // calcul de la valeur de l'id du dossier medical du patient

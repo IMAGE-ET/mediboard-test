@@ -1,10 +1,12 @@
 <?php /* CLASSES $Id$ */
 
 /**
-* @package dotproject
-* @subpackage core
-* @license http://opensource.org/licenses/bsd-license.php BSD License
-*/
+ * @package dotproject
+ * @subpackage core
+ * @license http://opensource.org/licenses/bsd-license.php BSD License
+ * @author Thomas Despoix (based on work of Andrew Eddie)
+ * @version $Revision: 1765 $
+ **/
 
 // Message No Constants
 define("UI_MSG_OK"     , 1);
@@ -20,75 +22,42 @@ define("UI_CASE_LOWER"     , 2);
 define("UI_CASE_UPPERFIRST", 3);
 
 /**
-* The Application User Interface Class.
-*
-* @author Andrew Eddie <eddieajau@users.sourceforge.net>
-* @version $Revision: 1765 $
-*/
+ * The Application Class
+ * 
+ * @TODO Should at least be static
+ * @TODO Should at best be fragmented : too many unrelated responsabilities
+ */
 class CAppUI {
-/** @var array generic array for holding the state of anything */
-  var $state = null;
-/** @var int */
   var $user_id = 0;
-/** @var string */
-  var $user_first_name = null;
-/** @var string */
-  var $user_last_name = null;
-/** @var string */
-  var $user_email = null;
-/** @var int */
-  var $user_type = null;
-/** @var int */
-  var $user_group = null;
-/** @var dateTime */
-  var $user_last_login = null;
-/** @var bool */
-  var $user_remote = null;
-/** @var array */
-  var $user_prefs=null;
-/** @var int Unix time stamp */
-  var $day_selected=null;
-/** @var bool Weak password */
-  var $weak_password=null;
+  var $_ref_user = null;
 
-// localisation
-/** @var string */
-  var $user_locale=null;
-/** @var string */
-  var $base_locale = "en"; // do not change - the base "keys" will always be in english
-/** @var string langage alert mask */
+  // DEPRECATED Use $_ref_user instead
+  // @TODO Remove all calls to these variables
+  var $user_first_name = null;
+  var $user_last_name = null;
+  var $user_email = null;
+  var $user_type = null;
+  var $user_group = null;
+  var $user_last_login = null;
+  var $user_remote = null;
+  // END DEPRECATED
+
+  /** @var bool Weak password */
+  var $weak_password = null;
+
+  /** @var string langage alert mask */
   static $locale_mask = "";
 
+  // Global collections
   var $messages = array();
-  
+  var $user_prefs = array();
+  var $cfg = array();
+  var $state = array();
   var $on_load_events = array();
   
-/** @var string Default page for a redirect call*/
+  /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
-/** @var array Configuration variable array*/
-  var $cfg=null;
-
-  var $ds = null;
-/**
- * CAppUI Constructor
- */
-  function CAppUI() {
-    $this->state = array();
-
-    $this->user_first_name = "";
-    $this->user_last_name = "";
-    $this->user_type = 0;
-
-    $this->project_id = 0;
-
-    $this->defaultRedirect = "";
-    
-    // set up the default preferences
-    $this->user_locale = $this->base_locale;
-    $this->user_prefs = array();
-  }
-  
   function getAllClasses() {
     $rootDir = $this->getConfig("root_dir");
     foreach(glob("classes/*/*.class.php") as $fileName) {
@@ -104,11 +73,11 @@ class CAppUI {
     }
   }
 
-/**
- * Used to load a php class file from the system classes directory
- * @param string $name The class root file name (excluding .class.php)
- * @return string The path to the include file
- */
+	/**
+	 * Used to load a php class file from the system classes directory
+	 * @param string $name The class root file name (excluding .class.php)
+	 * @return string The path to the include file
+	 */
   function getSystemClass($name=null) {
     if ($name) {
       if ($root = $this->getConfig("root_dir")) {
@@ -117,11 +86,11 @@ class CAppUI {
     }
   }
 
-/**
- * Used to load a php class file from the legacy classes directory
- * @param string <b>$name</b> The class file name (excluding .class.php)
- * @return string The path to the include file
- */
+	/**
+	 * Used to load a php class file from the legacy classes directory
+	 * @param string <b>$name</b> The class file name (excluding .class.php)
+	 * @return string The path to the include file
+	 */
   function getLegacyClass($name=null) {
     if ($name) {
       if ($root = $this->getConfig("root_dir")) {
@@ -130,11 +99,11 @@ class CAppUI {
     }
   }
 
-/**
- * Used to load a php class file from the lib directory
- * @param string <b>$name</b> The class root file name (excluding .php)
- * @return string The path to the include file
- */
+	/**
+	 * Used to load a php class file from the lib directory
+	 * @param string <b>$name</b> The class root file name (excluding .php)
+	 * @return string The path to the include file
+	 */
   function getLibraryFile($name=null) {
     if ($name) {
       if ($root = $this->getConfig("root_dir")) {
@@ -143,11 +112,11 @@ class CAppUI {
     }
   }
 
-/**
- * Used to load a php class file from the module directory
- * @param string $name The class root file name (excluding .class.php)
- * @return string The path to the include file
- */
+	/**
+	 * Used to load a php class file from the module directory
+	 * @param string $name The class root file name (excluding .class.php)
+	 * @return string The path to the include file
+	 */
   function getModuleClass($name = null, $file = null) {
     if ($name) {
       if ($root = $this->getConfig("root_dir")) {
@@ -272,36 +241,6 @@ class CAppUI {
   }
 
 /**
- * Sets the user locale.
- *
- * Looks in the user preferences first.  If this value has not been set by the user it uses the system default set in config.php.
- * @param string Locale abbreviation corresponding to the sub-directory name in the locales directory (usually the abbreviated language code).
- */
-  function setUserLocale() {
-    $this->user_locale = $this->user_prefs["LOCALE"];
-  }
-
-/**
- * DEPRECATED SEE CAppUI::tr()
- * Translate string to the local language [same form as the gettext abbreviation]
- * @param string The string to translate
- * @return string
- */
-  static function _($str) {
-    $str = trim($str);
-    if (empty($str)) {
-      return "";
-    }
-    
-    // Defined and not empty
-    if (isset($GLOBALS["translate"][$str]) && $GLOBALS["translate"][$str] != "") {
-      return $GLOBALS["translate"][$str];
-    }
-    
-    return sprintf(self::$locale_mask, $str);
-  }
-
-/**
 * Set the display of warning for untranslated strings
 * @param string
 */
@@ -362,9 +301,16 @@ class CAppUI {
   * Add message to the the system UI
   * @param string $msg The (translated) message
   * @param int $type type of message (cf UI constants)
+  * @param any number of printf-like parameters to be applied 
   */
   function setMsg($msg, $type = UI_MSG_OK) {
-    $msg = $this->_($msg);
+    // Formatage
+    $args = func_get_args();
+    $args[0] = CAppUI::tr($msg);
+    unset($args[1]);
+    $msg = call_user_func_array("sprintf", $args);
+
+    // Ajout
     @$this->messages[$type][$msg]++;
   }
   
@@ -474,18 +420,16 @@ class CAppUI {
   	$ds = CSQLDataSource::get("std");
     // Test login and password validity
     $user = new CUser;
-    $user->user_username = trim(mbGetValueFromPost("username"));
+    $user->user_username  = trim(mbGetValueFromPost("username"));
     $user->_user_password = trim(mbGetValueFromPost("password"));
     
     $specsObj = $user->getSpecsObj();
     $pwdSpecs = $specsObj['_user_password']; // Spec du mot de passe sans _
     
-
-    
     // Login as, for administators
     if ($loginas = mbGetValueFromPost("loginas")) {
       if ($this->user_type != 1) {
-        $this->setMsg("Only administrator can login as another user", UI_MSG_ERROR);
+        $this->setMsg("Auth-failed-loginas-admin", UI_MSG_ERROR);
         return false;
       }
       
@@ -494,7 +438,7 @@ class CAppUI {
     } 
     // No password given
     elseif (!$user->_user_password) {
-      $this->setMsg("You should enter your password", UI_MSG_ERROR);
+      $this->setMsg("Auth-failed-nopassword", UI_MSG_ERROR);
       return false;
     }
     
@@ -539,21 +483,21 @@ class CAppUI {
     $userByName->loadMatchingObject();
     
     if ($userByName->_login_locked) {
-      $this->setMsg("You cannot login anymore, please ask an administrator to unlock your account", UI_MSG_ERROR);
+      $this->setMsg("Auth-failed-user-locked", UI_MSG_ERROR);
       return false;
     }
     
     // Wrong login and/or password
     $loginErrorsReady = $user->loginErrorsReady();
     if (!$user->_id) {
-      $this->setMsg("Wrong login/password combination", UI_MSG_ERROR);
+      $this->setMsg("Auth-failed-combination", UI_MSG_ERROR);
 
       // If the user exists, but has given a wrong password let's increment his error count
 	    if ($loginErrorsReady && $userByName->_id && !$userByName->_login_locked) {
 	      $userByName->user_login_errors++;
 	      $userByName->store();
 	      $remainingAttempts = max(0, CAppUI::conf("admin CUser max_login_attempts")-$userByName->user_login_errors);
-	      $this->setMsg("You have tried {$userByName->user_login_errors} times to login with a wrong password, $remainingAttempts attempts remaining", UI_MSG_ERROR);
+	      $this->setMsg("Auth-failed-tried", UI_MSG_ERROR, $userByName->user_login_errors, $remainingAttempts);
 	    }
       return false;
       
@@ -565,7 +509,6 @@ class CAppUI {
 	      $user->store();
       }
     }
-
     
     // Put user_group in AppUI
     $this->user_remote = 1;
@@ -602,12 +545,16 @@ class CAppUI {
     }
 
     // Load the user in AppUI
-    $this->user_id         = $user->user_id;
+    $this->user_id   = $user->_id;
+    $this->_ref_user = $user;
+    
+    // DEPRECATED
     $this->user_first_name = $user->user_first_name;
     $this->user_last_name  = $user->user_last_name;
     $this->user_email      = $user->user_email;
     $this->user_type       = $user->user_type;
     $this->user_last_login = $user->user_last_login;
+    // END DEPRECATED
     
     // save the last_login dateTime
     if($ds->loadField("users", "user_last_login")) {
@@ -619,8 +566,6 @@ class CAppUI {
 
     // load the user preferences
     $this->loadPrefs($this->user_id);
-    $this->setUserLocale();
-    
     return true;
   }
 
@@ -656,7 +601,7 @@ class CAppUI {
       return $GLOBALS["translate"][$str];
     }
 
-    return sprintf(self::$locale_mask, $str);
+    return nl2br(sprintf(self::$locale_mask, $str));
   }
 
   /**

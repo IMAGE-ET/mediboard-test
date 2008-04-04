@@ -29,7 +29,7 @@ class CDoObjectAddEdit {
   var $_logIt              = null;
 
   function CDoObjectAddEdit($className, $objectKeyGetVarName) {
-    global $m,$AppUI;
+    global $m;
 
     $this->className           = $className;
     $this->objectKeyGetVarName = $objectKeyGetVarName;

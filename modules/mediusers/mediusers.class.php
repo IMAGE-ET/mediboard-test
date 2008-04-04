@@ -442,9 +442,9 @@ class CMediusers extends CMbObject {
     $this->updateSpecs();
 
     if ($msg = $this->check()) {
-      return $AppUI->_(get_class( $this )) .
-      $AppUI->_("::store-check failed:") .
-      $AppUI->_($msg);
+      return CAppUI::tr(get_class( $this )) .
+      CAppUI::tr("::store-check failed:") .
+      CAppUI::tr($msg);
     }
 
     // Store corresponding dP user first

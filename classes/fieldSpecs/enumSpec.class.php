@@ -14,10 +14,9 @@ class CEnumSpec extends CMbFieldSpec {
   var $list = null;
   
   function getValue($object, $smarty, $params = null) {
-    global $AppUI;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    return htmlspecialchars($AppUI->_("$object->_class_name.$fieldName.$propValue"));
+    return htmlspecialchars(CAppUI::tr("$object->_class_name.$fieldName.$propValue"));
   }
   
   function getSpecType() {

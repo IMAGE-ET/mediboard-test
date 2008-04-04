@@ -97,7 +97,7 @@ foreach($datas as $data) {
 // Set up the title for the graph
 $title = mbTranformTime(null, $date, "%A %d %b %Y");
 if($module) 		
-	$title .= " : ".$AppUI->_($module);
+	$title .= " : ".CAppUI::tr($module);
 
 $options = array( "height" => 200,
 									"size" => $size,

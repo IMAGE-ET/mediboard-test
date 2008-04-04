@@ -153,17 +153,17 @@ class CFicheEi extends CMbObject {
     }
     
     if($this->qualite_date_controle) {
-      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-CTRL_OK");
+      $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-CTRL_OK");
     } elseif(!$this->service_date_validation && $this->service_valid_user_id){
-      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CS_adm");
+      $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_CS_adm");
     } elseif(!$this->qualite_user_id){
-    	$this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
+    	$this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_QUALITE_adm");
     } elseif(!$this->qualite_date_validation){
-      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_QUALITE_adm");
+      $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_QUALITE_adm");
     } elseif(!$this->qualite_date_verification){
-      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_VERIF");
+      $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_VERIF");
     } else {
-      $this->_etat_actuel = $AppUI->_("_CFicheEi_acc-ATT_CTRL");
+      $this->_etat_actuel = CAppUI::tr("_CFicheEi_acc-ATT_CTRL");
     }
     // Calcul de la criticité
     if($this->gravite && $this->vraissemblance) {
@@ -197,7 +197,7 @@ class CFicheEi extends CMbObject {
   }
   
   function canDeleteEx() {
-    return $AppUI->_("msg-CFicheEi-canDelete");
+    return CAppUI::tr("msg-CFicheEi-canDelete");
   }
   
   function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0){

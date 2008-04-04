@@ -7,10 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 $text = mbGetValueFromGet("text");
-
-echo $AppUI->_($text);
+echo CAppUI::tr($text);
 
 ?>

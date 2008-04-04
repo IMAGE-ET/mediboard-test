@@ -80,13 +80,13 @@ class CDocGed extends CMbObject {
   function getEtatRedac() {
     global $AppUI;
     $etat = array();
-    $etat[self::DEMANDE]   = $AppUI->_("msg-CDocGed-etatredac_DEMANDE");
-    $etat[self::REDAC]     = $AppUI->_("msg-CDocGed-etatredac_REDAC");
-    $etat[self::VALID]     = $AppUI->_("msg-CDocGed-etatredac_VALID");
+    $etat[self::DEMANDE]   = CAppUI::tr("msg-CDocGed-etatredac_DEMANDE");
+    $etat[self::REDAC]     = CAppUI::tr("msg-CDocGed-etatredac_REDAC");
+    $etat[self::VALID]     = CAppUI::tr("msg-CDocGed-etatredac_VALID");
     if($this->annule){
-      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
+      $etat[self::TERMINE]   = CAppUI::tr("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
+      $etat[self::TERMINE]   = CAppUI::tr("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
@@ -95,13 +95,13 @@ class CDocGed extends CMbObject {
   function getEtatValid() {
     global $AppUI;
     $etat = array();
-    $etat[self::DEMANDE]   = $AppUI->_("msg-CDocGed-etatvalid_DEMANDE");
-    $etat[self::REDAC]     = $AppUI->_("msg-CDocGed-etatvalid_REDAC");
-    $etat[self::VALID]     = $AppUI->_("msg-CDocGed-etatvalid_VALID");
+    $etat[self::DEMANDE]   = CAppUI::tr("msg-CDocGed-etatvalid_DEMANDE");
+    $etat[self::REDAC]     = CAppUI::tr("msg-CDocGed-etatvalid_REDAC");
+    $etat[self::VALID]     = CAppUI::tr("msg-CDocGed-etatvalid_VALID");
     if($this->annule){
-      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_INDISPO");
+      $etat[self::TERMINE]   = CAppUI::tr("msg-CDocGed-etat_INDISPO");
     }else{
-      $etat[self::TERMINE]   = $AppUI->_("msg-CDocGed-etat_DISPO");  
+      $etat[self::TERMINE]   = CAppUI::tr("msg-CDocGed-etat_DISPO");  
     }
     if($this->etat)
       $this->_etat_actuel = $etat[$this->etat];
@@ -222,7 +222,7 @@ class CDocGed extends CMbObject {
        ){
       return parent::canDeleteEx();
     }else{
-      return $AppUI->_("msg-CDocGed-error_delete");
+      return CAppUI::tr("msg-CDocGed-error_delete");
     }
   }
   

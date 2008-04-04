@@ -130,7 +130,6 @@ var Menu = {
             <form name="ChangeGroup" action="" method="get">
 
             <input type="hidden" name="m" value="{{$m}}" />
-            CAPIO Santé -
             <select name="g" onchange="this.form.submit();">
               {{foreach from=$Etablissements item=currEtablissement key=keyEtablissement}}
               <option value="{{$keyEtablissement}}" {{if $keyEtablissement==$g}}selected="selected"{{/if}}>

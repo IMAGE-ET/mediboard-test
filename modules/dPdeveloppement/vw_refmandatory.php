@@ -18,7 +18,7 @@ $listClass = getInstalledClasses();
 
 foreach($listClass as $selected){
   $object = new $selected;
-  $nameKeyTable = $AppUI->_($selected)." - ".$selected." (".$object->_ref_module->mod_name.")";
+  $nameKeyTable = CAppUI::tr($selected)." - ".$selected." (".$object->_ref_module->mod_name.")";
   
   $aChamps[$nameKeyTable] = array();
   $aClass =& $aChamps[$nameKeyTable];
