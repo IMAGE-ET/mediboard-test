@@ -1,58 +1,44 @@
-{{mb_include_script module="dPstock" script="product_selector"}}
+{{mb_include_script module=dPstock script=product_selector}}
+{{mb_include_script module=dPstock script=filter}}
+
+<script type="text/javascript">
+function pageMain() {
+  filterFields = ["category_id", "keywords", "only_ordered_stocks"];
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_list", "list-stocks", filterFields);
+  stocksFilter.submit();
+}
+</script>
 
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_category_selector.tpl"}}
+
+      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit();">
+        <input type="hidden" name="m" value="{{$m}}" />
+        
+        <select name="category_id" onchange="stocksFilter.submit();">
+          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+        {{foreach from=$list_categories item=curr_category}}
+          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
+        {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" />
+        <button type="button" class="search" onclick="stocksFilter.submit();">Filtrer</button>
+        <button type="button" class="cancel notext" onclick="stocksFilter.empty('keywords');"></button><br />
+        
+        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
+        <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
+      </form>
+      
+      <div id="list-stocks"></div>
+    </td>
+    
+    <!-- Edit/New Stock form -->
+    <td class="halfPane">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">
         Nouveau stock
       </a>
-
-    {{if $category->category_id}}
-    <h3>{{$category->_view}}</h3>
-      <form name="form_only_ordered_stocks" action="?" method="get">
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="tab" value="{{$tab}}" />
-        <input type="checkbox" name="only_ordered_stocks" onchange="this.form.submit()" {{if $only_ordered_stocks == "on"}}checked="checked"{{/if}} /> <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
-      </form>
-      <table class="tbl">
-        <tr>
-          <th>Produit</th>
-          <th>En stock</th>
-          <th>Seuils</th>
-        </tr>
-        
-      <!-- Products list -->
-      {{foreach from=$category->_ref_products item=curr_product}}
-       {{if (($only_ordered_stocks != "on") || ($only_ordered_stocks == "on" && $curr_product->_ref_stock_group->_ordered_count))}}
-        {{if $curr_product->_ref_stock_group}}
-          <tr {{if $curr_product->_ref_stock_group->_id == $stock->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_product->_ref_stock_group->_id}}" title="Voir ou modifier le stock">{{$curr_product->_view}}</a></td>
-            <td>{{$curr_product->_ref_stock_group->quantity}}</td>
-            <td>{{include file="inc_bargraph.tpl" stock=$curr_product->_ref_stock_group}}</td>
-          </tr>
-        {{else}}
-          <tr>
-            <td>{{$curr_product->_view}}</td>
-            <td>Aucun stock pour ce produit</td>
-            <td>
-              <a style="display: inline; float: right; font-weight: normal;" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$curr_product->_id}}">
-                Nouveau stock
-              </a>
-            </td>
-          </tr>
-        {{/if}}
-       {{/if}}
-      {{foreachelse}}
-        <tr>
-          <td colspan="3">Aucun produit dans cette catégorie</td>
-        </tr>
-      {{/foreach}}
-      </table>
-    {{/if}}
-    </td>
-    <!-- Edit/New Stock form -->
-    <td class="halfPane">
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />

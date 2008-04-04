@@ -1,34 +1,45 @@
+{{mb_include_script module=dPstock script=filter}}
+
+<script type="text/javascript">
+function pageMain() {
+  filterFields = ["category_id", "societe_id", "keywords"];
+  productsFilter = new Filter("filter-products", "{{$m}}", "httpreq_vw_products_list", "list-products", filterFields);
+  productsFilter.submit();
+}
+</script>
+
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_category_selector.tpl"}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">
-        Créer un nouveau produit
-      </a>
-    {{if $category->category_id}}
-    <h2>{{$category->_view}}</h2>
-      <table class="tbl">
-        <tr>
-          <th>Nom</th>
-          <th>Description</th>
-          <th>Code barre</th>
-        </tr>
-        {{foreach from=$category->_ref_products item=curr_product}}
-          <tr {{if $curr_product->_id == $product->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}" title="Voir ou modifier le produit">{{$curr_product->name}}</a></td>
-            <td>{{$curr_product->description|nl2br}}</td>
-            <td>{{$curr_product->barcode}}</td>
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="3">Aucun produit dans cette catégorie</td>
-          </tr>
+      <form name="filter-products" action="?" method="post" onsubmit="return productsFilter.submit();">
+        <input type="hidden" name="m" value="{{$m}}" />
+        
+        <select name="category_id" onchange="productsFilter.submit();">
+          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+        {{foreach from=$list_categories item=curr_category}} 
+          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
-      </table>
-    {{/if}}
-      
+        </select>
+        
+        <select name="societe_id" onchange="productsFilter.submit();">
+          <option value="0" >&mdash; Toutes les fabricants &mdash;</option>
+        {{foreach from=$list_societes item=curr_societe}} 
+          <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
+        {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" />
+        
+        <button type="button" class="search" onclick="productsFilter.submit();">Filtrer</button>
+        <button type="button" class="cancel notext" onclick="productsFilter.empty('keywords');"></button>
+      </form>
+
+      <div id="list-products"></div>
     </td>
     <td class="halfPane">
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">
+        Nouveau produit
+      </a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -36,9 +47,9 @@
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">Modification de la fiche {{$product->_view}}</th>
+          <th class="title modify" colspan="2">Modification du produit {{$product->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'une fiche</th>
+          <th class="title" colspan="2">Création d'une fiche produit</th>
           {{/if}}
         </tr>   
         <tr>
@@ -70,8 +81,8 @@
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$product field="barcode"}}</th>
-          <td>{{mb_field object=$product field="barcode"}}</td>
+          <th>{{mb_label object=$product field="code"}}</th>
+          <td>{{mb_field object=$product field="code"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$product field="description"}}</th>

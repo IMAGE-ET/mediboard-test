@@ -12,21 +12,22 @@ function submitFilter (oForm) {
   if (oForm) {
     url = new Url; // FIXME : ya pas un autre moyen ?
     url.setModuleAction("dPstock","httpreq_vw_deliveries_list");
-    url.addParam("product_id",   (oForm.product_id   ?oForm.product_id.value:null));
-    url.addParam("_date_min",    (oForm._date_min    ?oForm._date_min.value:null));
-    url.addParam("_date_max",    (oForm._date_max    ?oForm._date_max.value:null));
-    url.addParam("target_class", (oForm.target_class ?oForm.target_class.value:null));
-    url.addParam("target_id",    (oForm.target_id    ?oForm.target_id.value:null));
-    url.addParam("keywords",     (oForm.keywords     ?oForm.keywords.value:null));
+    url.addParam("product_id",   $(oForm.product_id));
+    url.addParam("_date_min",    $(oForm._date_min));
+    url.addParam("_date_max",    $(oForm._date_max));
+    url.addParam("target_class", $(oForm.target_class));
+    url.addParam("target_id",    $(oForm.target_id));
+    url.addParam("keywords",     $(oForm.keywords));
     url.requestUpdate("deliveries-list", { waitingText: null } );
   }
+  return false
 }
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="5">
-      <form name="edit-filter" action="?" method="post" onsubmit="submitFilter(this); return false;">
+      <form name="edit-filter" action="?" method="post" onsubmit="return submitFilter(this);">
       <input type="hidden" class="m" name="{{$m}}" />
         <table class="form">
           <tr>
@@ -84,7 +85,7 @@ function submitFilter (oForm) {
           </tr>
           <tr>
             <td colspan="4" class="button">
-              <button type="submit" class="search">Rechercher</button>
+              <button type="submit" class="search">Filtrer</button>
             </td>
           </tr>
         </table>

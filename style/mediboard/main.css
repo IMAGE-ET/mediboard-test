@@ -2701,7 +2701,7 @@ table.tbl td.ccmu-P{
 
 .bargraph {
   overflow: hidden;
-  height: 0.8em; 
+  height: 1em; 
   min-width: 5em;
 }
 
@@ -2733,8 +2733,9 @@ table.tbl td.ccmu-P{
   display: block;
 }
 
-.bargraph .value {
-  height: 55%;
+.bargraph > .value {
+  height: 40%;
+  border: 1px solid;
 }
 
 .bargraph .threshold {

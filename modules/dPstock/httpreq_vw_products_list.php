@@ -12,20 +12,23 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 $category_id = mbGetValueFromGetOrSession('category_id');
+$societe_id  = mbGetValueFromGetOrSession('societe_id');
 $keywords    = mbGetValueFromGet('keywords');
-$order_id    = mbGetValueFromGet('order_id');
 
 $sql  = 'SELECT product.* FROM product ';
-$sql .= 'LEFT JOIN product_stock ON product.product_id = product_stock.product_id ';
 $sql .= 'WHERE ';
 if ($category_id) {
   $sql .= "product.category_id = '$category_id' AND ";
 }
+if ($societe_id) {
+  $sql .= "product.societe_id = '$societe_id' AND ";
+}
 if ($keywords) {
+	$sql .= "product.code LIKE '%$keywords%' OR ";
   $sql .= "product.name LIKE '%$keywords%' OR ";
   $sql .= "product.description LIKE '%$keywords%' AND ";
 }
-$sql .= "product_stock.group_id = $g ";
+$sql .= '1 ';
 $sql .= 'ORDER BY product.name ASC';
 
 $product = new CProduct();
@@ -37,8 +40,7 @@ foreach($list_products as $prod) {
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_products', $list_products);
-$smarty->assign('order_id', $order_id);
+$smarty->assign('list_products',   $list_products);
 
 $smarty->display('inc_products_list.tpl');
 ?>

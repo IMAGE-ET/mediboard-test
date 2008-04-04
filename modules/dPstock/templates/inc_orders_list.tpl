@@ -12,13 +12,13 @@
   <tbody>
 	{{foreach from=$orders item=curr_order}}
 	  <tr>
-	    <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
+	    <td>{{$curr_order->order_number}}</td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>
 	      {{$curr_order->_ref_order_items|@count}}
         
 	    </td>
-	    <td>{{mb_value object=$curr_order field=_total}}</td>
+	    <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
 	      <form name="order-lock-{{$curr_order->_id}}" action="?" method="post">
 	        <input type="hidden" name="m" value="{{$m}}" />
@@ -71,11 +71,11 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
+      <td>{{$curr_order->order_number}}</td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
-      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td>{{mb_value object=$curr_order field=_total}}</td>
+      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -112,12 +112,12 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
+      <td>{{$curr_order->order_number}}</td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
-      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td>{{mb_value object=$curr_order field=_date_received}}</td>
-      <td>{{mb_value object=$curr_order field=_total}}</td>
+      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -153,12 +153,12 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td><a href="?m={{$m}}&amp;tab=vw_idx_order_manager&amp;order_id={{$curr_order->_id}}">{{$curr_order->order_number}}</a></td>
+      <td>{{$curr_order->order_number}}</td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
-      <td>{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td>{{mb_value object=$curr_order field=_date_received}}</td>
-      <td>{{mb_value object=$curr_order field=_total}}</td>
+      <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
+      <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />

@@ -13,7 +13,8 @@ $can->needsRead();
 
 // Gets objects ID from Get or Session
 $product_id  = mbGetValueFromGetOrSession('product_id', null);
-$category_id = mbGetValueFromGetOrSession('category_id', null);
+$societe_id  = mbGetValueFromGetOrSession('societe_id');
+$category_id = mbGetValueFromGetOrSession('category_id');
 
 // Loads the required Product and its References
 $product = new CProduct();
@@ -28,26 +29,6 @@ if ($product->load($product_id)) {
 // Loads the required Category the complete list
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
-if (!$category_id) {
-  $category = $product->_ref_category;
-} else {
-  $category->category_id = $category_id;
-  $category->loadMatchingObject();
-}
-
-if ($category) {
-  $category->loadRefsBack();
-  
-  // Loads the products list
-  foreach($category->_ref_products as $prod) {
-    $prod->loadRefsBack();
-  }
-} else $category = new CProductCategory();
-
-// If a null product is called, we set him the provided category ID
-if (!$product->_id) {
-  $product->category_id = $category->_id;
-}
 
 // Loads the manufacturers list
 $societe = new CSociete();
@@ -57,9 +38,10 @@ $list_societes = $societe->loadList(null, 'name');
 $smarty = new CSmartyDP();
 
 $smarty->assign('product',         $product);
-$smarty->assign('category',        $category);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
+$smarty->assign('category_id',     $category_id);
+$smarty->assign('societe_id',      $societe_id);
 
 $smarty->display('vw_idx_product.tpl');
 

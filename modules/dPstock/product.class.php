@@ -14,7 +14,7 @@ class CProduct extends CMbObject {
   // DB Fields
   var $name              = null;
   var $description       = null;
-  var $barcode           = null;
+  var $code              = null;
   var $category_id       = null;
   var $societe_id        = null;
 
@@ -50,7 +50,7 @@ class CProduct extends CMbObject {
     return array (
       'name'        => 'notNull str maxLength|50',
       'description' => 'text',
-      'barcode'     => 'str maxLength|32',
+      'code'        => 'str maxLength|32',
       'category_id' => 'notNull ref class|CProductCategory',
       'societe_id'  => 'notNull ref class|CSociete',
     );

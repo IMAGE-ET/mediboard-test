@@ -1,66 +1,51 @@
-{{mb_include_script module="dPstock" script="product_selector"}}
+{{mb_include_script module=dPstock script=product_selector}}
+{{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
 function pageMain() {
-  PairEffect.initGroup("productToggle", { bStartVisible: true });
+  filterFields = ["category_id", "societe_id", "keywords"];
+  referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
+  referencesFilter.submit();
 }
 </script>
+
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      {{include file="inc_category_selector.tpl"}}
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
-        Nouvelle réference
-      </a>
-
-    {{if $category->category_id}}
-    <h3>{{$category->_view}}</h3>
-      <table class="tbl">
-        <tr>
-          <th>Fournisseur</th>
-          <th>Quantité</th>
-          <th>Prix</th>
-          <th>P.U.</th>
-        </tr>
+      <form name="filter-references" action="?" method="post" onsubmit="return referencesFilter.submit();">
+        <input type="hidden" name="m" value="{{$m}}" />
         
-        <!-- Products list -->
-        {{foreach from=$category->_ref_products item=curr_product}}
-        <tr id="product-{{$curr_product->_id}}-trigger">
-          <td colspan="4">
-            <a style="display: inline; float: right; font-weight: normal;" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0&amp;product_id={{$curr_product->_id}}">
-              Nouvelle référence
-            </a>
-            {{$curr_product->_view}} ({{$curr_product->_ref_references|@count}} références)
-          </td>
-        </tr>
-        <tbody class="productToggle" id="product-{{$curr_product->_id}}">
-        
-        <!-- Références list of this Product -->
-        {{foreach from=$curr_product->_ref_references item=curr_reference}}
-          <tr {{if $curr_reference->_id == $reference->_id}}class="selected"{{/if}}>
-            <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_reference->_ref_societe->_view}}</a></td>
-            <td>{{mb_value object=$curr_reference field=quantity}}</td>
-            <td>{{mb_value object=$curr_reference field=price}}</td>
-            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
-          </tr>
-        {{foreachelse}}
-          <tr>
-            <td colspan="4">Aucune réference pour ce produit</td>
-          </tr>
+        <select name="category_id" onchange="referencesFilter.submit();">
+          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+        {{foreach from=$list_categories item=curr_category}} 
+          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
-        </tbody>
-      {{foreachelse}}
-        <tr>
-          <td colspan="4">Aucun produit dans cette catégorie</td>
-        </tr>
-      {{/foreach}}
-      </table>
-    {{/if}}
+        </select>
+        
+        <select name="societe_id" onchange="referencesFilter.submit();">
+          <option value="0" >&mdash; Toutes les societés &mdash;</option>
+        {{foreach from=$list_societes item=curr_societe}} 
+          <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
+        {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" />
+        
+        <button type="button" class="search" onclick="referencesFilter.submit();">Filtrer</button>
+        <button type="button" class="cancel notext" onclick="referencesFilter.empty('keywords');"></button>
+      </form>
+
+      <div id="list-references"></div>
     </td>
 
 
     <td class="halfPane">
       {{if $can->edit}}
+      
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
+        Nouvelle réference
+      </a>
+      
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />

@@ -29,10 +29,10 @@ function pageMain() {
       </form>
     
       <ul id="tab_orders" class="control_tabs">
-        <li><a href="#list-orders-waiting">  <span id="list-orders-waiting-count">0</span> pas envoyées</a></li>
-        <li><a href="#list-orders-pending">  <span id="list-orders-pending-count">0</span> non reçues</a></li>
-        <li><a href="#list-orders-old">      <span id="list-orders-old-count">0</span> reçues</a></li>
-        <li><a href="#list-orders-cancelled"><span id="list-orders-cancelled-count">0</span> annulées ou archivées</a></li>
+        <li><a href="#list-orders-waiting">A envoyer (<span id="list-orders-waiting-count">0</span>)</a></li>
+        <li><a href="#list-orders-pending">A recevoir (<span id="list-orders-pending-count">0</span>)</a></li>
+        <li><a href="#list-orders-old">Reçues (<span id="list-orders-old-count">0</span>)</a></li>
+        <li><a href="#list-orders-cancelled">Annulées (<span id="list-orders-cancelled-count">0</span>)</a></li>
       </ul>
       <hr class="control_tabs" />
       <div id="list-orders-waiting"></div>

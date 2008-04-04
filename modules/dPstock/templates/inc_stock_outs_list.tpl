@@ -12,7 +12,7 @@
   {{foreach from=$list_latest_stock_outs item=curr_stock_out}}
   <tr>
     <td>{{$curr_stock_out->_ref_stock->_view}}</td>
-    <td>{{mb_value object=$curr_stock_out field=date}}</td>
+    <td class="date">{{mb_value object=$curr_stock_out field=date}}</td>
     <td>{{mb_value object=$curr_stock_out field=quantity}}</td>
     <td>{{mb_value object=$curr_stock_out field=product_code}}</td>
     <td>{{mb_value object=$curr_stock_out->_ref_function field=_view}}</td>

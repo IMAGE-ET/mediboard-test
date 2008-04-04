@@ -28,10 +28,15 @@ class CSetupdPstock extends CSetup {
  `product_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `name` VARCHAR(50) NOT NULL, 
  `description` TEXT, 
- `barcode` VARCHAR(32), 
+ `code` VARCHAR( 32 ) NULL,
  `category_id` INT(11) UNSIGNED NOT NULL, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
 PRIMARY KEY (`product_id`)) TYPE=MYISAM;';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product` ADD UNIQUE (
+	`code`
+	);';
     $this->addQuery($sql);
 
     $sql = 'CREATE TABLE `product_category` (

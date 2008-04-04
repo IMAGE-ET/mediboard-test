@@ -9,6 +9,7 @@
   <input type="hidden" name="date" value="now" />
   <input type="hidden" name="_do_stock_out" value="1" />
   <input type="hidden" name="del" value="0" />
+  <label for="function_id">Pour le service </label>
   <select name="function_id">
     {{foreach from=$list_functions item=curr_function}}
     <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>

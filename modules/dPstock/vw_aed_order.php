@@ -62,7 +62,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('order',           $order);
 $smarty->assign('category',        $category);
 $smarty->assign('_autofill',       $_autofill);
-$smarty->assign('hide_products_list', false);
+$smarty->assign('hide_references_list', false);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
 

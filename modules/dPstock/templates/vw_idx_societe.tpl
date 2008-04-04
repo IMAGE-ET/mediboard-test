@@ -27,11 +27,11 @@ function pageMain() {
               {{$curr_societe->_view}}
             </a>
           </td>
-          <td class="text">{{$curr_societe->contact_name}} {{$curr_societe->contact_surname}}</td>
+          <td class="text">{{mb_value object=$curr_societe field=contact_name}} {{mb_value object=$curr_societe field=contact_surname}}</td>
           <td class="text">
-            {{$curr_societe->address|nl2br}}<br />{{$curr_societe->postal_code}} {{$curr_societe->city}}
+            {{$curr_societe->address|nl2br}}<br />{{mb_value object=$curr_societe field=postal_code}} {{mb_value object=$curr_societe field=city}}
           </td>
-          <td>{{$curr_societe->phone}}</td>
+          <td>{{mb_value object=$curr_societe field=phone}}</td>
           <td><a href="mailto:{{$curr_societe->email}}">{{$curr_societe->email}}</a></td>
         </tr>
         {{/foreach}}       
@@ -118,9 +118,9 @@ function pageMain() {
          {{foreach from=$societe->_ref_product_references item=curr_reference}}
          <tr>
            <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_reference->_ref_product->_view}}</a></td>
-           <td>{{$curr_reference->quantity}}</td>
-           <td>{{$curr_reference->price|string_format:"%.2f"}}</td>
-           <td>{{$curr_reference->_unit_price|string_format:"%.2f"}}</td>
+           <td>{{mb_value object=$curr_reference field=quantity}}</td>
+           <td>{{mb_value object=$curr_reference field=price}}</td>
+           <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
          </tr>
          {{foreachelse}}
          <tr>
@@ -143,8 +143,8 @@ function pageMain() {
          {{foreach from=$societe->_ref_products item=curr_product}}
          <tr>
            <td><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}" title="Voir ou modifier le produit">{{$curr_product->_view}}</a></td>
-           <td>{{$curr_product->description}}</td>
-           <td>{{$curr_product->barcode}}</td>
+           <td>{{mb_value object=$curr_product field=description}}</td>
+           <td>{{mb_value object=$curr_product field=code}}</td>
          </tr>
          {{foreachelse}}
          <tr>
