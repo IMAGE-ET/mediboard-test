@@ -18,6 +18,8 @@ function main() {
 	}	
 }
 
+Event.onDOMReady(main);
+
 /**
  * Main page initialisation scripts
  */

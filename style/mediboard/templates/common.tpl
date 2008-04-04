@@ -34,7 +34,7 @@
   </script>
 </head>
 
-<body onload="main()">
+<body>
 
 <!-- Loading divs -->
 
