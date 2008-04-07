@@ -134,7 +134,7 @@ class CFichePaie extends CMbObject {
       $this->_total_cot_patr += $this->_ref_params_paie->_mp;
       $this->_total_retenues += $this->_ref_params_paie->_ms;
       // On peut calculer ici la CSG/RDS
-      $this->_base_csg = ($this->_salaire_brut + $this->_app + $this->mp) * 0.97;
+      $this->_base_csg = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgds   = $this->_base_csg * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues += $this->_csgds;
       $this->_csgnds  = $this->_base_csg * $this->_ref_params_paie->csgnds / 100;
