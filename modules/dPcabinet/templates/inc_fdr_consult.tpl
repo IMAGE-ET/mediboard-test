@@ -605,7 +605,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
       <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
         <input type="hidden" name="dosql" value="do_tarif_aed" />
         <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="_tab" value="vw_compta" />
+        <input type="hidden" name="_tab" value="vw_edit_tarifs" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="_bind_consult" value="1" />
         <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
