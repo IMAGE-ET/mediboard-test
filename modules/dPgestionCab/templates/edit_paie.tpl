@@ -89,10 +89,6 @@ function pageMain() {
           <td>{{mb_field object=$fichePaie field="heures_sup"}}h</td> 
         </tr>
         <tr>
-          <th>{{mb_label object=$fichePaie field="mutuelle"}}</th>
-          <td>{{mb_field object=$fichePaie field="mutuelle"}}</td> 
-        </tr>
-        <tr>
           <th>{{mb_label object=$fichePaie field="precarite"}}</th>
           <td>{{mb_field object=$fichePaie field="precarite"}}</td>
         </tr>
