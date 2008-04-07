@@ -148,6 +148,9 @@ class CFichePaie extends CMbObject {
       $this->_total_cot_patr += $this->_aatp;
       $this->_csp     = $this->_salaire_brut * $this->_ref_params_paie->csp / 100;
       $this->_total_cot_patr += $this->_csp;
+      // Mutuelle
+      $this->_total_retenues += $this->_ref_params_paie->ms;
+      $this->_total_cot_patr += $this->_ref_params_paie->mp;
       // Réductions bas salaires
       $this->_reduc_bas_salaires = (0.281/0.6)*(1.6*($this->_ref_params_paie->smic*$this->heures/$this->_salaire_brut)-1);
       $this->_reduc_bas_salaires = min(0.281, $this->_reduc_bas_salaires)*$this->_salaire_brut;
