@@ -217,8 +217,9 @@ Ajax.Request.prototype.setRequestHeaders = function() {
 	
 }
 
+EventEx = {};
 
-Object.extend(Event, {
+Object.extend(EventEx, {
   _domReady : function() {
     if (arguments.callee.done) return;
     arguments.callee.done = true;
