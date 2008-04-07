@@ -272,21 +272,29 @@ class CSejour extends CCodable {
     $where["annule"] = " = '0'";
     $where["type"] = " != 'urg'";
     $patient->loadRefsSejours($where);
-
+    
     // suppression de la liste des sejours le sejour courant
     $sejours = $patient->_ref_sejours;
     unset($sejours[$this->_id]);
     
-    foreach($sejours as $key => $sejour) {
-      // Test sur les entree prevues du sejour
-      if ((mbDate($sejour->entree_prevue) < mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->sortie_prevue))
-        or(mbDate($sejour->entree_prevue) < mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) > mbDate($this->entree_prevue))
-        or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue))) {
+    foreach ($sejours as $sejour) {
+      if ($this->collides($sejour)) {
         $collisions[$sejour->_id] = $sejour;
       }
     }
     
     return $collisions;
+  }
+  
+  /**
+   * Check is the object collide another
+   * @param $sejour CSejour
+   * @return boolean
+   */
+  function collides(CSejour $sejour) {
+    return (mbDate($sejour->entree_prevue) <= mbDate($this->sortie_prevue) and mbDate($sejour->sortie_prevue) >= mbDate($this->sortie_prevue))
+         or(mbDate($sejour->entree_prevue) <= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) >= mbDate($this->entree_prevue))
+         or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue));
   }
   
   function store() {
