@@ -67,7 +67,7 @@
 	  {{if $vueReduite}}
 	    <button style="float:right" class="print notext" onclick="printFeuilleBloc({{$_operation->_id}})">{{tr}}Imprimer{{/tr}}</button>
 	  {{/if}}
-    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
+    <a href="?m=dPsalleOp&amp;tab=vw_operations&amp;salle={{$salle->_id}}&amp;op={{$_operation->_id}}" title="Coder l'intervention">
       {{$_operation->_ref_patient->_view}}
     </a>
   </td>
