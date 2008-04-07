@@ -39,6 +39,7 @@ class CSpDetCCAM extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
+    $specs["idacte"]   = "num";                /* Numéro d'acte                */
     $specs["idinterv"] = "num";                /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6";     /* Numéro de dossier            */
     $specs["malnum"] = "numchar length|6";     /* Numéro de malade             */

@@ -32,6 +32,7 @@ class CSpEntCCAM extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
+    $specs["idinterv"] = "num";            /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */
     $specs["malnum"] = "numchar length|6"; /* Numéro de malade             */
     $specs["debint"] = "str length|19";    /* Début intervention           */
@@ -42,7 +43,7 @@ class CSpEntCCAM extends CSpObject {
     $specs["codane"] = "str length|3";     /* Code de l'anesthésiste       */
     $specs["codsal"] = "str length|2";     /* Code de la salle d'op        */
 
-	  $specs["codpan"]   = "str length|3";  /* Code panseuse                */
+	  $specs["codpan"]   = "str length|3";   /* Code panseuse                */
     for ($i = 1; $i <= 3; $i++) {
 	    $specs["aidop$i"] = "str length|3";  /* Code aide opératoire         */
 	    $specs["dhaid$i"] = "str length|19"; /* Début aide opératoire        */

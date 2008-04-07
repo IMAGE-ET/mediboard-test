@@ -39,6 +39,7 @@ class CSpDetCIM extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
+    $specs["iddiag"]   = "num";            /* Numéro de diagnostic         */
     $specs["idinterv"] = "num";            /* Numéro d'intervention        */
     $specs["numdos"] = "numchar length|6"; /* Numéro de dossier            */
     $specs["coddia"] = "str maxLength|7";  /* code CIM du diagnostic       */

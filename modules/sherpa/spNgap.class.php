@@ -39,6 +39,7 @@ class CSpNGAP extends CSpObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     
+    $specs["idacte"]   = "num";                  /* Numéro d'acte                */
     $specs["idinterv"] = "num";                  /* Numéro d'intervention        */
     $specs["numdos"]   = "numchar length|6";     /* Numéro de dossier            */
     $specs["malnum"]   = "numchar length|6";     /* Numéro de malade             */
@@ -46,8 +47,8 @@ class CSpNGAP extends CSpObject {
 //    $specs["prescr"]   = "str length|7";         /* Code du prescripteur         */
     $specs["datact"]   = "str length|19";        /* Date heure de l'acte         */
     $specs["codact"]   = "str maxLength|3";      /* Code Lettre                  */
-    $specs["actqte"]   = "str maxLength|64";     /* Quantité (numérique et demi) */
-    $specs["quant" ]   = "float";                /* Quantité libellé             */
+    $specs["actqte"]   = "str maxLength|64";     /* Coefficient libellé          */
+    $specs["quant" ]   = "float";                /* Quantité réelle              */
     $specs["coeff" ]   = "float";                /* Coefficient                    */
     $specs["depass"]   = "bool";                 /* Dépassement d'honoraire      */
     $specs["valdep"]   = "currency";             /* Valeur du dépassement        */

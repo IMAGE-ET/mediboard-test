@@ -1422,4 +1422,6 @@ $locales['msg-CTechniqueComp-create'] = '';
 $locales['msg-CTechniqueComp-delete'] = '';
 $locales['msg-CTechniqueComp-modify'] = '';
 $locales['CLmFSE-_consult_id-desc'] = '';
+$locales['mod-sherpa-tab-view_detngap'] = '';
+$locales['det'] = '';
 ?>
