@@ -58,7 +58,7 @@ function checkBilanFSE() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_bilan_fse");
   $H(Form.toObject(oForm)).each(function (pair) { url.addParam(pair.key, pair.value) } );
-  url.popup("600", "400", "Bilan FSE");
+  url.popup("700", "400", "Bilan FSE");
   return false;
 }
 

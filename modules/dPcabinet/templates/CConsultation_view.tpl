@@ -20,29 +20,32 @@ function newExam(sAction, consultation_id) {
   <tr>
     <td>
       <strong>Date:</strong>
-      <i>le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}}</i>
+      <em>
+      	le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}}
+      	à {{mb_value object=$object field=heure}} 
+      </em>
       <br />
       <strong>Praticien:</strong>
-      <i>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
+      <em>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</em>
       {{if $object->motif}}
         <br />
         <strong>Motif:</strong>
-        <i>{{$object->motif|nl2br|truncate:50}}</i>
+        <em>{{$object->motif|nl2br|truncate:50}}</em>
       {{/if}}
       {{if $object->rques}}
         <br />
         <strong>Remarques:</strong>
-        <i>{{$object->rques|nl2br|truncate:50}}</i>
+        <em>{{$object->rques|nl2br|truncate:50}}</em>
       {{/if}}
       {{if $object->examen}}
         <br />
         <strong>Examens:</strong>
-        <i>{{$object->examen|nl2br|truncate:50}}</i>
+        <em>{{$object->examen|nl2br|truncate:50}}</em>
       {{/if}}
       {{if $object->traitement}}
         <br />
         <strong>Traitement:</strong>
-        <i>{{$object->traitement|nl2br|truncate:50}}</i>
+        <em>{{$object->traitement|nl2br|truncate:50}}</em>
       {{/if}}
       {{if $object->_ref_examaudio->examaudio_id}}
         <br />
@@ -51,11 +54,9 @@ function newExam(sAction, consultation_id) {
         </a>
       {{/if}}
        
-       {{assign var="vue" value="view"}}
-        {{assign var="subject" value=$object}}
-        {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
-  
-    
+      {{assign var="vue" value="view"}}
+      {{assign var="subject" value=$object}}
+      {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
     </td>
   </tr>
 </table>

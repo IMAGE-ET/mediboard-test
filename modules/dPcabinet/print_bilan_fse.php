@@ -31,7 +31,7 @@ if ($filter->S_FSE_ETAT) {
   $where["S_FSE_ETAT"] = "= '$filter->S_FSE_ETAT'";
 }
 
-$fses = $fse->LoadList($where);
+$fses = $fse->loadList($where);
 
 // Tri et calcul des cumuls
 $base = array(
@@ -42,7 +42,8 @@ $cumuls = array();
 $total = $base;
 
 $days = array();
-foreach ($fses as $fse) {
+foreach ($fses as &$fse) {
+  $fse->loadRefIdExterne();
   $days[$fse->S_FSE_DATE_FSE][$fse->_id] = $fse;
   
   $cumul =& $cumuls[$fse->S_FSE_DATE_FSE];

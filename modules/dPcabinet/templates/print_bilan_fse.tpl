@@ -1,6 +1,18 @@
 <!-- $Id: print_compta.tpl 2031 2007-06-08 09:13:23Z lryo $ -->
 
 {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
+<script type="text/javascript">
+
+Consultation = {
+  show: function(consult_id) {
+    var url = new Url;
+    url.setModuleTab("dPcabinet", "edit_consultation");
+    url.addParam("selConsult", consult_id);
+    url.redirectOpener();
+  }
+}
+
+</script>
 
 <table class="main">
   <tr>
@@ -44,7 +56,7 @@
       <table class="tbl">
         <tr>
           <th width="15%">{{mb_label object=$filter field=S_FSE_NUMERO_FSE}}</th>
-          <th width="15%">{{mb_label object=$filter field=S_FSE_MODE_SECURISATION}}</th>
+          <th width="15%">{{mb_label object=$filter field=_consult_id}}</th>
           <th width="15%">{{mb_label object=$filter field=S_FSE_ETAT}}</th>
           <th width="15%">{{mb_label object=$filter field=S_FSE_TOTAL_FACTURE}}</th>
         </tr>
@@ -62,7 +74,15 @@
 			      </button>
 			    </td>
 			      
-          <td>{{mb_value object=$_fse field=S_FSE_MODE_SECURISATION}}</td>
+          <td>
+            {{if $_fse->_consult_id}}
+				  	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: '{{$_fse->_consult_id}}' } })">
+				  	  <a href="#CConsultation-{{$_fse->_consult_id}}" onclick="Consultation.show('{{$_fse->_consult_id}}')">
+				  	  	{{tr}}CConsultation{{/tr}} #{{$_fse->_consult_id}}
+				  	  </a>
+				  	</span>
+            {{/if}}
+          </td>
           {{if $_fse->_annulee}}
           <td colspan="2" class="cancelled">{{mb_value object=$_fse field=S_FSE_ETAT}}</td>
           {{else}}

@@ -124,8 +124,6 @@ function validTarif(){
   submitFdr(oForm);
 }
 
-
-
 function popFile(objectClass, objectId, elementClass, elementId) {
   var url = new Url;
   url.ViewFilePopup(objectClass, objectId, elementClass, elementId, 0);
@@ -331,14 +329,15 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 				  	  {{$_ext_fse->_view}}
 				  	</span>
 		      </td>
-		    </tr>
-		    <tr>
-	        {{if $_ext_fse->_annulee}}
+		      {{if $_ext_fse->_annulee}}
 	        <td class="cancelled">
 	          {{mb_value object=$_ext_fse field=S_FSE_ETAT}}
 	        </td>
-		      {{else}}
-		      <td class="button">
+	        {{/if}}
+		    </tr>
+        {{if !$_ext_fse->_annulee}}
+		    <tr>
+		      <td class="button" colspan="2">
 			      <button class="search" type="button" onclick="Intermax.Triggers['Consulter FSE']('{{$_id_fse}}');">
 			        Consulter 
 			      </button>
@@ -349,8 +348,8 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 			        Annuler
 			      </button>
 		      </td>
-		      {{/if}}
 		    </tr>
+	      {{/if}}
         {{foreachelse}}
 				<tr>
 				  <td>
@@ -361,7 +360,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 
         <tr>
 		      {{if $patient->_id_vitale && $praticien->_id_cps}}
-          <td class="button">
+          <td class="button" colspan="2">
             {{if !$consult->_current_fse}}
 			      <button class="new" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
 			        Formater FSE

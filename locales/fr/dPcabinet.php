@@ -1420,4 +1420,6 @@ $locales['CTechniqueComp-_view'] = '';
 $locales['CTechniqueComp-_view-court'] = '';
 $locales['CTechniqueComp-_view-desc'] = '';
 $locales['CTechniqueComp-back-'] = '';
+$locales['CLmFSE-_consult_id'] = 'Consultation';
+$locales['CLmFSE-_consult_id-desc'] = 'Consultation associée à la FSE';
 ?>

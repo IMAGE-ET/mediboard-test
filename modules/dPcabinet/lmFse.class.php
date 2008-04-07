@@ -25,6 +25,12 @@ class CLmFSE extends CLmObject {
   var $_date_min = null;
   var $_date_max = null;
   
+  // References
+  var $_ref_id = null;
+  
+  // Distant field
+  var $_consult_id = null;
+  
 	function CLmFSE() {
 	  $this->CLmObject("S_F_FSE", "S_FSE_NUMERO_FSE");
 	}
@@ -61,7 +67,20 @@ class CLmFSE extends CLmObject {
     $specs["_date_min"] = "date";
     $specs["_date_max"] = "date moreThan|_date_min";
     
+    // Distant field
+    $specs["_consult_id"] = "ref class|CConsultation";
+    
     return $specs;
+  }
+  
+  function loadRefIdExterne() {
+    $this->_ref_id = new CIdSante400();
+    $this->_ref_id->object_class = "CConsultation";
+    $this->_ref_id->tag = "LogicMax FSENumero";
+    $this->_ref_id->id400 = $this->_id;
+    $this->_ref_id->loadMatchingObject();
+    
+    $this->_consult_id = $this->_ref_id->object_id;
   }
 }
 

@@ -69,6 +69,10 @@ Class.extend(Url, {
       window.location.href = this.make();
   },
   
+  redirectOpener: function() {
+    window.opener.location.href = this.make();
+  },
+  
   pop: function(iWidth, iHeight, sWindowName, sBaseUrl, sPrefix) {
     this.addParam("dialog", "1");
   
