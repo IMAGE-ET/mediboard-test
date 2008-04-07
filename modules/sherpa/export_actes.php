@@ -36,44 +36,7 @@ if ($do = mbGetValueFromGet("do")) {
 }
 
 foreach ($sejours as &$sejour) {
-  $sejour->loadRefPatient();
-  $sejour->loadRefPraticien();
-  
-  // Suppression des actes
-  $sejour->loadNumDossier();
-  if ($sejour->_num_dossier == "-") {
-    break;
-  }
-  
-  // Suppression des anciens détails CCAM
-  CSpActesExporter::deleteForDossier($sejour);
-      
-  // Actes du séjour
-  $sejour->loadRefsActes();
-  CSpActesExporter::exportEntCCAM($sejour);
-  CSpActesExporter::exportDetsCIM($sejour, "0");
-  
-  // Opérations
-  $sejour->loadRefsOperations();
-  foreach ($sejour->_ref_operations as &$operation) {
-    $operation->_ref_sejour =& $sejour;
-    $operation->loadRefChir();
-    $operation->loadRefsActes();
-    CSpActesExporter::exportEntCCAM($operation);
-    CSpActesExporter::exportInfoCIM($operation, "anapath");
-    CSpActesExporter::exportInfoCIM($operation, "labo");
-
-    // Association d'un id400
-    $idOperation = CSpObjectHandler::getId400For($operation);
-    if (!$idOperation->_id) {
-      $idOperation->id400 = $operation->_idinterv;
-      $idOperation->last_update = mbDateTime();
-      if ($msg = $idOperation->store()) {
-        trigger_error("Impossible de créer un idenfiant externe pour l'opération: $msg", E_USER_WARNING);
-        break;
-      }
-    }
-  }
+  CSpActesExporter::exportSejour($sejour);
 }
 
 // Création du template

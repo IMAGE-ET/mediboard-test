@@ -279,8 +279,8 @@ class CMbObject {
     }
     
     $this->loadOldObject();
-    if($this->_specs[$field] instanceof CFloatSpec) {
-      if((round($this->$field, 2) !== round($this->_old->$field, 2)) && $this->$field !== "" && $this->_old->$field !== null) {
+    if ($this->_specs[$field] instanceof CFloatSpec) {
+      if ((round($this->$field, 2) !== round($this->_old->$field, 2)) && $this->$field !== "" && $this->_old->$field !== null) {
         return true;
       }
     }
@@ -812,8 +812,9 @@ class CMbObject {
   }
   
   
-  function log($objBefore) {
+  function log() {
   	global $AppUI;
+  	
     // Si object non loggable
     if (!$this->_spec->loggable){
       return;
@@ -822,24 +823,22 @@ class CMbObject {
     // Analyse changes fields
     $fields = array();
     foreach ($this->getProps() as $propName => $propValue) {
-    	if ($propValue !== null) {
-        $propValueBefore = $objBefore->$propName;
-        if ($propValueBefore != $propValue) {
-          $fields[] = $propName;
-        }
+      if ($this->fieldModified($propName)) {
+        $fields[] = $propName;
       }
     }
+    
     $object_id = $this->_id;
     
     $type = "store";
-    if ($objBefore->_id == null) {
+    if ($this->_old->_id == null) {
       $type = "create";
       $fields = array();
     }
     
     if ($this->_id == null) {
       $type = "delete";
-      $object_id = $objBefore->_id;
+      $object_id = $this->_old->_id;
       $fields = array();
     }
 
@@ -848,7 +847,7 @@ class CMbObject {
     }
     
     $system_version = explode(".", CModule::getInstalled("system")->mod_version);
-    if($system_version[0] == 1 && $system_version[1] == 0 && $system_version[2] < 4){
+    if ($system_version[0] == 1 && $system_version[1] == 0 && $system_version[2] < 4){
       return;	
     }
     
@@ -859,7 +858,7 @@ class CMbObject {
     $log->type = $type;
     $log->_fields = $fields;
     $log->date = mbDateTime();
-    $log->store();  
+    $log->store();
   }
   
   
@@ -870,14 +869,10 @@ class CMbObject {
    *  @return null|string null if successful otherwise returns and error message
    */
   function store() {
-  	global $AppUI;
-    
     // Properties checking
     $this->updateDBFields();
 
-    // Si l'object existe alors, on affecte à objBefore sa valeur
-    $objBefore = new $this->_class_name();
-    $objBefore->load($this->_id);
+    $this->loadOldObject();
     
     if ($msg = $this->check()) {
       return CAppUI::tr(get_class($this)) . 
@@ -886,7 +881,7 @@ class CMbObject {
     }
 
     // DB query
-    if ($objBefore->_id) {
+    if ($this->_old->_id) {
       $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key, $this->_spec->nullifyEmptyStrings);
     } else {
       $keyToUpadate = $this->_spec->incremented ? $this->_tbl_key : null;
@@ -903,7 +898,7 @@ class CMbObject {
     $this->load();
     
     //Creation du log une fois le store terminé
-    $this->log($objBefore);
+    $this->log();
     
     // Event Handlers
     self::makeHandlers();
@@ -911,6 +906,7 @@ class CMbObject {
       $handler->onStore($this);
     }
 
+    $this->_old = null;
     return null;
   }
 
@@ -1085,8 +1081,6 @@ class CMbObject {
    * @return null if ok error message otherwise
    */
   function canDeleteEx() {
-    global $AppUI;
-
     // Empty object
     if (!$this->_id) {
       return CAppUI::tr("noObjectToDelete") . " " . CAppUI::tr($this->_class_name);
@@ -1156,9 +1150,7 @@ class CMbObject {
    * @return null|string null if successful otherwise returns and error message
    */
   function delete() {
-    // Chargement de _objBefore 
-    $objBefore = new $this->_class_name;
-    $objBefore->load($this->_id);
+    $this->loadOldObject();
     
     if ($msg = $this->canDeleteEx()) {
       return $msg;
@@ -1211,7 +1203,7 @@ class CMbObject {
     $this->_id = null;
    
     // Creation du log une fois le delete terminé
-    $this->log($objBefore);
+    $this->log();
     
     // Event Handlers
     self::makeHandlers();
@@ -1219,6 +1211,7 @@ class CMbObject {
       $handler->onDelete($this);
     }   
 
+    $this->_old = null;
     return null;
   }
   

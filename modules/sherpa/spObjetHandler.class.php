@@ -206,7 +206,7 @@ class CSpObjectHandler extends CMbObjectHandler {
     if (!$this->isHandled($mbObject)) {
       return;
     }
-  
+
     // Propagate modifications to other IDs
     foreach ($this->getIds400For($mbObject) as $id400) {
       // Store id400;
@@ -247,6 +247,14 @@ class CSpObjectHandler extends CMbObjectHandler {
 	      }
       }
     }
+    
+    // Special triggers
+    if ($mbObject instanceof CSejour) {
+      if ($mbObject->fieldModified("sortie_reelle")) {
+        CSpActesExporter::exportSejour($mbObject);
+      }
+    }
+    
   }
   
   function onMerge(CMbObject &$mbObject) {

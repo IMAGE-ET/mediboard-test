@@ -57,7 +57,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("vueReduite"    , false        );
 $smarty->assign("praticien"     , $praticien   );
-$smarty->assign("salle"         , null         );
+$smarty->assign("salle"         , new CSalle   );
 $smarty->assign("listSalles"    , $listSalles  );
 $smarty->assign("listPrats"     , $listPrats   );
 $smarty->assign("date"          , $date        );
