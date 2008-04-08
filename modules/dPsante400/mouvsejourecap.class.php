@@ -88,7 +88,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->etablissement = $this->id400Etab->getCachedObject();
     if ($this->etablissement->_id) {
-      $this->trace($this->etablissement->getProps(), "Etablissement depuis le cache");
+      $this->trace($this->etablissement->getDBFields(), "Etablissement depuis le cache");
       $this->markCache(self::STATUS_ETABLISSEMENT);
       return;    
     } 
@@ -113,7 +113,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->etablissement->mail           = $etab400->consume("MAIL");
     $this->etablissement->domiciliation  = $etab400->consume("FINS");
 
-    $this->trace($this->etablissement->getProps(), "Etablissement à enregistrer");
+    $this->trace($this->etablissement->getDBFields(), "Etablissement à enregistrer");
 
     $this->id400Etab->bindObject($this->etablissement);
 
@@ -136,7 +136,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->fonction = $id400Func->getCachedObject();
     if ($this->fonction->_id) {
-      $this->trace($this->fonction->getProps(), "Cabinet depuis le cache");
+      $this->trace($this->fonction->getDBFields(), "Cabinet depuis le cache");
       $this->markCache(self::STATUS_FONCSALL);
       return;    
     } 
@@ -147,7 +147,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->fonction->text = "Import eCap";
     $this->fonction->color = "00FF00";
 
-    $this->trace($this->fonction->getProps(), "Cabinet à enregistrer");
+    $this->trace($this->fonction->getDBFields(), "Cabinet à enregistrer");
 
     $id400Func->bindObject($this->fonction);
     
@@ -162,7 +162,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $this->salle = $id400Salle->getCachedObject();
     if ($this->salle->_id) {
-      $this->trace($this->salle->getProps(), "Salle depuis le cache");
+      $this->trace($this->salle->getDBFields(), "Salle depuis le cache");
       $this->markCache(self::STATUS_FONCSALL);
       return;
     } 
@@ -171,7 +171,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->salle->nom = "Import eCap";
     $this->salle->stats = "0";
     
-    $this->trace($this->salle->getProps(), "Salle à enregistrer");
+    $this->trace($this->salle->getDBFields(), "Salle à enregistrer");
 
     $id400Salle->bindObject($this->salle);
     
@@ -192,7 +192,7 @@ class CMouvSejourEcap extends CMouvement400 {
 
     $praticien = $id400Prat->getCachedObject();
     if ($praticien->_id) {
-      $this->trace($praticien->getProps(), "Praticien depuis le cache");
+      $this->trace($praticien->getDBFields(), "Praticien depuis le cache");
       $this->id400Prats[$CPRT] = $id400Prat;
       $this->praticiens[$CPRT] = $praticien;
       $this->markCache(self::STATUS_PRATICIEN);
@@ -270,7 +270,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $pratDefault = new CMediusers;
     $pratDefault->function_id = $this->fonction->function_id;
 
-    $this->trace($praticien->getProps(), "Praticien à enregistrer");
+    $this->trace($praticien->getDBFields(), "Praticien à enregistrer");
     
     $id400Prat->bindObject($praticien, $pratDefault);
 
@@ -314,7 +314,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient = $this->id400Pat->getCachedObject();
     
     if ($this->patient->_id) {
-      $this->trace($this->patient->getProps(), "Patient depuis le cache");
+      $this->trace($this->patient->getDBFields(), "Patient depuis le cache");
       $this->markCache(self::STATUS_PATIENT);
       return;
     }
@@ -351,7 +351,7 @@ class CMouvSejourEcap extends CMouvement400 {
 //    $this->patient->pays              = $pat400->consume("ZPAY");
     $this->patient->nationalite       = @$transformNationalite[$pat400->consume("CNAT")];
 
-    $this->trace($this->patient->getProps(), "Patient à enregistrer");
+    $this->trace($this->patient->getDBFields(), "Patient à enregistrer");
 
     $this->id400Pat->bindObject($this->patient);
 
@@ -463,7 +463,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->id400Pat->id400,
     );
         
-    $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
+    $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
 
     $query = "SELECT * " .
         "\nFROM $this->base.ECATPF " .
@@ -597,7 +597,7 @@ class CMouvSejourEcap extends CMouvement400 {
       $this->sejour->_id = $collision->_id;
     }
             
-    $this->trace($this->sejour->getProps(), "Séjour à enregistrer");
+    $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
     $this->id400Sej->bindObject($this->sejour);
     
     $this->markStatus(self::STATUS_SEJOUR);

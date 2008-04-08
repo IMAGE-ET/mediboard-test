@@ -38,7 +38,7 @@ class CResultatsLaboGraph extends Graph {
     }
     
 //    mbTrace($xlabels);
-//    mbTrace($examen->getProps(), "exmamen");
+//    mbTrace($examen->getDBFields(), "exmamen");
 //    mbTrace($ydata, "Ydata");
 //    mbTrace($min, "Min");
 //    mbTrace($max, "Max");

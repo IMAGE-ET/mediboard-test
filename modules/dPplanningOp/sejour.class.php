@@ -23,7 +23,9 @@ class CSejour extends CCodable {
   var $patient_id         = null; // remplace $op->pat_id
   var $praticien_id       = null; // clone $op->chir_id
   var $group_id           = null;
-
+  
+  var $etablissement_transfert_id = null;
+  
   // DB Fields
   var $type               = null; // remplace $op->type_adm
   var $modalite           = null;
@@ -92,9 +94,9 @@ class CSejour extends CCodable {
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
   var $_ref_consultations     = null;
+  var $_ref_consult_atu       = null;
   var $_ref_prescriptions     = null;
   var $_ref_last_prescription = null;
-  var $_prescription = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -121,27 +123,22 @@ class CSejour extends CCodable {
   // Object tool field
   var $_modifier_sortie = null;
   
-  // BackRef
-  var $etablissement_transfert_id = null;
-    
   function CSejour() {
-    global $dPconfig;
-    
     $this->CMbObject("sejour", "sejour_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
     
-    $this->_locked = $dPconfig["dPplanningOp"]["CSejour"]["locked"];
+    $this->_locked = CAppUI::conf("dPplanningOp CSejour locked");
   }
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs["affectations"] = "CAffectation sejour_id";
-    $backRefs["factures"]     = "CFacture sejour_id";
-    $backRefs["GHM"]          = "CGHM sejour_id";
-    $backRefs["operations"]   = "COperation sejour_id";
-    $backRefs["rpu"]          = "CRPU sejour_id";
-    $backRefs["consultations"]= "CConsultation sejour_id";
+    $backRefs["affectations"]  = "CAffectation sejour_id";
+    $backRefs["factures"]      = "CFacture sejour_id";
+    $backRefs["GHM"]           = "CGHM sejour_id";
+    $backRefs["operations"]    = "COperation sejour_id";
+    $backRefs["rpu"]           = "CRPU sejour_id";
+    $backRefs["consultations"] = "CConsultation sejour_id";
     $backRefs["prescriptions"] = "CPrescription object_id";
     return $backRefs;
   }
@@ -516,6 +513,11 @@ class CSejour extends CCodable {
   
   function loadRefsConsultations() {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
+    
+    $this->_ref_consult_atu = new CConsultation;
+    if ($this->type == "urg" && count($this->_ref_consultations)) {
+    	$this->_ref_consult_atu = reset($this->_ref_consultations);
+    }
   }
   
   function loadRefsPrescriptions() {

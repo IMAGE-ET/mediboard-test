@@ -116,7 +116,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     // Si l'enregistrement existe toujours
     if ($dheECap->data) {
       $this->mapDHE($dheECap);
-      $this->trace($this->sejour->getProps(), "Séjour à enregistrer depuis DHE eCap");
+      $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer depuis DHE eCap");
       $this->id400DHE->bindObject($this->sejour);
     }
 
@@ -156,7 +156,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     // Si l'enregistrement existe toujours
     if ($sejECap->data) {
 	    $this->mapSej($sejECap);
-	    $this->trace($this->sejour->getProps(), "Séjour à enregistrer depuis Sej eCap");
+	    $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer depuis Sej eCap");
 	    $this->id400Sej->bindObject($this->sejour);
     }
     
@@ -232,7 +232,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $id400Oper->id400 = $CINT;
     $id400Oper->tag = $tag;
 
-    $this->trace($operation->getProps(), "Opération à enregistrer");
+    $this->trace($operation->getDBFields(), "Opération à enregistrer");
 
     $id400Oper->bindObject($operation);
     
@@ -307,7 +307,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       $id400acte->id400 = $CINT;
       $id400acte->tag = join(" ", $tags);
 
-      $this->trace($acte->getProps(), "Acte à enregistrer");
+      $this->trace($acte->getDBFields(), "Acte à enregistrer");
       $acte->_adapt_object = true;
       $id400acte->bindObject($acte);
             

@@ -35,7 +35,7 @@ class CMouvAttendueECap extends CMouvSejourEcap {
     $this->id400DHE->id400 = $IDAT;
     $this->id400DHE->tag = $tag;
 
-    $this->trace($this->sejour->getProps(), "Séjour (via DHE) à enregistrer");
+    $this->trace($this->sejour->getDBFields(), "Séjour (via DHE) à enregistrer");
 
     // Recherche de la DHE
     $this->mapDHE($dheECap);

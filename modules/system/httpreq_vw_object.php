@@ -40,7 +40,7 @@ $template = is_file("modules/$object->_view_template") ?
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
-$smarty->assign("props", $object->getProps());
+$smarty->assign("props", $object->getDBFields());
 
 $smarty->display("../../$template");
 ?>

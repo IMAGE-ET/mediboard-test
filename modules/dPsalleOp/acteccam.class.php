@@ -220,7 +220,7 @@ class CActeCCAM extends CActe {
     
       // Parcours des objets pour detecter les modifications
       $_modif = 0;
-      foreach($oldObject->getProps() as $propName => $propValue) {
+      foreach($oldObject->getDBFields() as $propName => $propValue) {
       	if (($this->$propName !== null) && ($propValue != $this->$propName)) {
           $_modif++;
         }

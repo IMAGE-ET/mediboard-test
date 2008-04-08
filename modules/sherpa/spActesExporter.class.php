@@ -42,24 +42,40 @@ class CSpActesExporter {
 	  // Opérations
 	  $sejour->loadRefsOperations();
 	  foreach ($sejour->_ref_operations as &$operation) {
-	    $operation->_ref_sejour =& $sejour;
-	    $operation->loadRefChir();
-	    $operation->loadRefsActes();
-	    CSpActesExporter::exportEntCCAM($operation);
-	    CSpActesExporter::exportInfoCIM($operation, "anapath");
-	    CSpActesExporter::exportInfoCIM($operation, "labo");
-	
-	    // Association d'un id400
-	    $idOperation = CSpObjectHandler::getId400For($operation);
-	    if (!$idOperation->_id) {
-	      $idOperation->id400 = $operation->_idinterv;
-	      $idOperation->last_update = mbDateTime();
-	      if ($msg = $idOperation->store()) {
-	        trigger_error("Impossible de créer un idenfiant externe pour l'opération: $msg", E_USER_WARNING);
-	        break;
-	      }
-	    }
+	    CSpActesExporter::exportCodable($operation);
 	  }
+	  
+	  // Opérations
+	  $sejour->loadRefsConsultations();
+	  CSpActesExporter::exportCodable($sejour->_ref_consult_atu);    
+  }
+  
+  static function exportCodable(CCodable &$codable) {
+    if (!$codable->_id) {
+      return;
+    }
+    
+    $codable->_ref_sejour =& $sejour;
+    $codable->loadRefPraticien();
+    $codable->loadRefsActes();
+    
+    CSpActesExporter::exportEntCCAM($codable);
+    
+    if ($codable instanceof COperation) {
+	    CSpActesExporter::exportInfoCIM($codable, "anapath");
+	    CSpActesExporter::exportInfoCIM($codable, "labo");
+    }
+    
+    // Association d'un id400
+    $idCodable = CSpObjectHandler::getId400For($codable);
+    if (!$idCodable->_id) {
+      $idCodable->id400 = $codable->_idinterv;
+      $idCodable->last_update = mbDateTime();
+      if ($msg = $idCodable->store()) {
+        trigger_error("Impossible de créer un idenfiant externe pour le codable de type '$codable->_class_name' : $msg", E_USER_WARNING);
+        break;
+      }
+    }
   }
   
   /**

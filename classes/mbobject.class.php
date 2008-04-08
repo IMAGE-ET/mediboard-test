@@ -421,7 +421,7 @@ class CMbObject {
     $request->addOrder($order);
 
     $this->updateDBFields();
-    foreach($this->getProps() as $key => $value) {
+    foreach($this->getDBFields() as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -441,7 +441,7 @@ class CMbObject {
     $request->setLimit($limit);
 
     $this->updateDBFields();
-    foreach($this->getProps() as $key => $value) {
+    foreach($this->getDBFields() as $key => $value) {
       if ($value !== null) {        
         $request->addWhereClause($key, "= '$value'");
       }
@@ -461,7 +461,7 @@ class CMbObject {
     $request->setLimit($limit);
 
     $this->updateDBFields();
-    foreach($this->getProps() as $key => $value) {
+    foreach($this->getDBFields() as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -482,7 +482,7 @@ class CMbObject {
     $list = $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
 
     foreach($list as $object) {
-      foreach($object->getProps() as $key => $value) {
+      foreach($object->getDBFields() as $key => $value) {
         $this->$key = $value;
       }
       $this->updateFormFields();
@@ -637,7 +637,7 @@ class CMbObject {
    * Nullify object properties that are empry strings
    */
   function nullifyEmptyFields() {
-    foreach ($this->getProps() as $propName => $propValue) {
+    foreach ($this->getDBFields() as $propName => $propValue) {
       if ($propValue === "") {
         $this->$propName = null;
       }
@@ -656,7 +656,7 @@ class CMbObject {
       return;
     }
     
-    foreach ($mbObject->getProps() as $propName => $propValue) {
+    foreach ($mbObject->getDBFields() as $propName => $propValue) {
       if ($propValue !== null) {
         $this->$propName = $propValue;
       }
@@ -822,7 +822,7 @@ class CMbObject {
 
     // Analyse changes fields
     $fields = array();
-    foreach ($this->getProps() as $propName => $propValue) {
+    foreach ($this->getDBFields() as $propName => $propValue) {
       if ($this->fieldModified($propName)) {
         $fields[] = $propName;
       }
@@ -1267,21 +1267,38 @@ class CMbObject {
   }
   
   /**
-   * Get Object properties
-   * @return array 
+   * Get DB fields and there values
+   * @return array Associative array
    */
-  function getProps() {
+  function getDBFields() {
     $result = array();
+    
     foreach(get_object_vars($this) as $key => $value) {
       if ($key[0] != "_") {
         $result[$key] = $value;
       }
     }
+
+    return $result;
+  }
+  
+  /**
+   * Get object properties, i.e. having specs
+   * @return array Associative array
+   */
+  function getProps() {
+    $result = array();
+    
+    foreach ($this->_specs as $key => $value) {
+      $result[$key] = $this->$key;
+    }
+
     return $result;
   }
   
   /**
    * Get properties specifications
+   * @return array
    */
   function getSeeks() {
     return array();
@@ -1289,6 +1306,7 @@ class CMbObject {
 
   /**
    * Get seek specifications
+   * @return array
    */
   function getSpecs() {
     return array (
@@ -1300,7 +1318,7 @@ class CMbObject {
   
   /**
    * Get backward reference specifications
-   * "collection-name" => "class join-field"
+   * @return array Array of form "collection-name" => "class join-field"
    */
   function getBackRefs() {
     return array (
@@ -1316,6 +1334,7 @@ class CMbObject {
   
   /**
    * Liste des champs d'aides à la saisie
+   * @return array
    */
   function getHelpedFields() {
     return array();

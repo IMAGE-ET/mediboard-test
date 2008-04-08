@@ -250,8 +250,10 @@ class CSpObjectHandler extends CMbObjectHandler {
     
     // Special triggers
     if ($mbObject instanceof CSejour) {
+      mbDump($mbObject->getProps(),  "Update CSejour NDOS");
       if ($mbObject->fieldModified("sortie_reelle")) {
         CSpActesExporter::exportSejour($mbObject);
+        die;
       }
     }
     

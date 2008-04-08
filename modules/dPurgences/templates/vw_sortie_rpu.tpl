@@ -81,7 +81,7 @@ function submitFormSejour(etablissement_transfert_id, sejour_id){
 
 function loadTransfert(mode_sortie, sejour_id){
   // si Transfert, affichage du select
-  if(mode_sortie=="7"){
+  if (mode_sortie=="7") {
     var url = new Url();
     url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
     url.requestUpdate('listEtabs-'+sejour_id, { waitingText: null } );

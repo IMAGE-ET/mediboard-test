@@ -37,7 +37,7 @@ foreach ($classSelected as $selected){
   $aClass[$object->_tbl_key]["keytable"] = $object->_tbl_key;
   
   // Extraction des champs
-  foreach ($object->getProps() as $k => $v) {
+  foreach ($object->getDBFields() as $k => $v) {
     $aClass[$k]["class_field"] = $k;
     
     if ($spec = @$object->_specs[$k]) {
