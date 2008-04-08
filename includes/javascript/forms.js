@@ -503,5 +503,5 @@ NumericField.prototype = {
     } else {
       return this.step;
     }
-  },
+  }
 }
