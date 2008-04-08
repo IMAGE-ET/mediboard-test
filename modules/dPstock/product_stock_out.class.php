@@ -15,7 +15,7 @@ class CProductStockOut extends CMbObject {
   var $stock_id      = null;
   var $date          = null;
   var $quantity      = null;
-  var $product_code  = null; // Lot number, lapsing date
+  var $code          = null; // Lot number, lapsing date
   var $function_id   = null;
 
   // Object References
@@ -31,13 +31,14 @@ class CProductStockOut extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'stock_id'     => 'notNull ref class|CProductStock',
       'date'         => 'notNull dateTime',
       'quantity'     => 'notNull num',
-      'product_code' => 'str',
+      'code'         => 'str maxLength|32',
       'function_id'  => 'ref class|CFunctions',
-    );
+    ));
   }
 
   function updateFormFields() {

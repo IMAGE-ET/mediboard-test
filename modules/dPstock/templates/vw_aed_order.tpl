@@ -9,7 +9,7 @@ function pageMain() {
     }
   }
 
-  {{if $order->_id && !$order->date_ordered && !$hide_references_list}}
+  {{if $order->_id && !$order->date_ordered}}
   filterFields = ["category_id", "societe_id", "keywords", "order_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
   referencesFilter.submit();
@@ -31,11 +31,11 @@ function pageMain() {
       <th class="title" colspan="2">Nouvelle commande</th>
     </tr>   
     <tr>
-      <th>{{mb_label object=$order field="order_number"}}</th>
-      <td>{{mb_field object=$order field="order_number"}}</td>
+      <th>{{mb_label object=$order field=order_number}}</th>
+      <td>{{mb_field object=$order field=order_number}}</td>
     </tr>
     <tr>
-      <th>{{mb_label object=$order field="societe_id"}}</th>
+      <th>{{mb_label object=$order field=societe_id}}</th>
       <td>
         <select name="societe_id" class="{{$order->_props.societe_id}}">
           <option value="">&mdash; Choisir une société</option>
@@ -46,10 +46,6 @@ function pageMain() {
         {{/foreach}}
         </select>
       </td>
-    </tr>
-    <tr>
-      <th>{{mb_label object=$order field="locked"}}</th>
-      <td>{{mb_field object=$order field="locked" typeEnum="checkbox"}}</td>
     </tr>
     <tr>
       <td colspan="2" class="button">
@@ -64,7 +60,7 @@ function pageMain() {
 {{else}}
 <table class="main">
   <tr>
-  {{if !$order->date_ordered && !$hide_references_list}}
+  {{if !$order->date_ordered}}
     <td class="halfPane">
       <form action="?" name="filter-references" method="post" onsubmit="return referencesFilter.submit();">
         <input type="hidden" name="m" value="{{$m}}" />
@@ -87,11 +83,10 @@ function pageMain() {
   {{/if}}
 
     <td class="halfPane">
-      <form name="order-edit-{{$order->_id}}" action="?" method="post" onsubmit="referencesFilter.submit();">
+      <form name="order-edit-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
-        <input type="hidden" name="group_id" value="{{$g}}" />
         <input type="hidden" name="del" value="0" />
         
       {{if $order->date_ordered}}
@@ -109,21 +104,17 @@ function pageMain() {
         <!-- Edit order -->
         <table class="form">
           <tr>
-            <th>{{mb_label object=$order field="order_number"}}</th>
+            <th>{{mb_label object=$order field=order_number}}</th>
             <td>
               {{mb_field object=$order field=order_number hidden=true}}
               {{$order->order_number}}</td>
           </tr>
           <tr>
-            <th>{{mb_label object=$order field="societe_id"}}</th>
+            <th>{{mb_label object=$order field=societe_id}}</th>
             <td>
               {{mb_field object=$order field=societe_id hidden=true}}
               {{$order->_ref_societe->_view}}
             </td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$order field="locked"}}</th>
-            <td>{{mb_field object=$order field="locked" typeEnum="checkbox" onChange="submitOrder(this.form, {refreshLists: true})"}}</td>
           </tr>
         </table>
       </form>

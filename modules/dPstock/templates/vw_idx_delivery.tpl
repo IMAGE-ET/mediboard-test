@@ -1,33 +1,22 @@
 {{mb_include_script module=dPstock script=product_selector}}
 {{mb_include_script module=system script=object_selector}}
+{{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
 function pageMain() {
-  regFieldCalendar("edit-filter", "_date_min");
-  regFieldCalendar("edit-filter", "_date_max");
-  submitFilter({});
-}
-
-function submitFilter (oForm) {
-  if (oForm) {
-    url = new Url; // FIXME : ya pas un autre moyen ?
-    url.setModuleAction("dPstock","httpreq_vw_deliveries_list");
-    url.addParam("product_id",   $(oForm.product_id));
-    url.addParam("_date_min",    $(oForm._date_min));
-    url.addParam("_date_max",    $(oForm._date_max));
-    url.addParam("target_class", $(oForm.target_class));
-    url.addParam("target_id",    $(oForm.target_id));
-    url.addParam("keywords",     $(oForm.keywords));
-    url.requestUpdate("deliveries-list", { waitingText: null } );
-  }
-  return false
+  regFieldCalendar("filter-deliveries", "_date_min");
+  regFieldCalendar("filter-deliveries", "_date_max");
+  
+  filterFields = ["product_id", "_date_min", "_date_max", "target_class", "target_id", "keywords"];
+  deliveriesFilter = new Filter("filter-deliveries", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
+  deliveriesFilter.submit();
 }
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="5">
-      <form name="edit-filter" action="?" method="post" onsubmit="return submitFilter(this);">
+      <form name="filter-deliveries" action="?" method="post" onsubmit="return deliveriesFilter.submit();">
       <input type="hidden" class="m" name="{{$m}}" />
         <table class="form">
           <tr>
@@ -45,12 +34,12 @@ function submitFilter (oForm) {
             </td>
             <th>{{mb_title object=$delivery field=target_id}}</th>
             <td class="readonly">
-              {{mb_field object=$delivery field=target_id hidden=1}}
+              <input type="hidden" name="target_id" value="" class="{{$delivery->_props.target_id}}" />
               <input type="text" size="20" name="_view" readonly="readonly" value="" ondblclick="ObjectSelector.initFilter()" />
               <button type="button" onclick="ObjectSelector.initFilter()" class="search notext">Rechercher</button>
               <script type="text/javascript">
                 ObjectSelector.initFilter = function() {
-                  this.sForm     = "edit-filter";
+                  this.sForm     = "filter-deliveries";
                   this.sView     = "_view";
                   this.sId       = "target_id";
                   this.sClass    = "target_class";
@@ -67,7 +56,7 @@ function submitFilter (oForm) {
               <button class="search notext" type="button" onclick="ProductSelector.initFilter()">Rechercher</button>
               <script type="text/javascript">
               ProductSelector.initFilter = function(){
-                this.sForm = "edit-filter";
+                this.sForm = "filter-deliveries";
                 this.sId   = "product_id";
                 this.sView = "product_name";
                 this.pop();
@@ -79,19 +68,20 @@ function submitFilter (oForm) {
           </tr>
           <tr>
             <th>{{mb_title object=$delivery field=_date_min}}</th>
-            <td class="date">{{mb_field object=$delivery field=_date_min form=edit-filter}}</td>
+            <td class="date">{{mb_field object=$delivery field=_date_min form=filter-deliveries}}</td>
             <th>{{mb_title object=$delivery field=_date_max}}</th>
-            <td class="date">{{mb_field object=$delivery field=_date_max form=edit-filter}}</td>
+            <td class="date">{{mb_field object=$delivery field=_date_max form=filter-deliveries}}</td>
           </tr>
           <tr>
             <td colspan="4" class="button">
               <button type="submit" class="search">Filtrer</button>
+              <button type="button" class="cancel notext" onclick="deliveriesFilter.empty();">Remettre à zéro</button>
             </td>
           </tr>
         </table>
       </form>
     
-      <div id="deliveries-list"></div>
+      <div id="list-deliveries"></div>
     </td>
     
     <td class="halfPane">
@@ -146,11 +136,14 @@ function submitFilter (oForm) {
                 this.sView     = "_view";
                 this.sId       = "target_id";
                 this.sClass    = "target_class";
-//                this.onlyclass = "true";
                 this.pop();
               }
             </script>
           </td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$delivery field="code"}}</th>
+          <td>{{mb_field object=$delivery field="code"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$delivery field="description"}}</th>

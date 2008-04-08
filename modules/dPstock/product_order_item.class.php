@@ -34,7 +34,8 @@ class CProductOrderItem extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'reference_id'      => 'notNull ref class|CProductReference',
       'order_id'          => 'notNull ref class|CProductOrder',
       'quantity'          => 'notNull num pos',
@@ -43,7 +44,7 @@ class CProductOrderItem extends CMbObject {
       'quantity_received' => 'num',
 	    '_price'            => 'currency',
       '_quantity_received'=> 'num',
-    );
+    ));
   }
 
   function receive() {

@@ -23,22 +23,22 @@ function setClose(oField) {
 
 /// category_id == -1   ->   we get an empty list
 /// category_id ==  0   ->   we get every product
-function refreshProductsList(category_id, search_string, selected_product) {
-  if (!search_string || search_string.length >= 2) {
+function refreshProductsList(category_id, keywords, selected_product) {
+  if (!keywords || keywords.length >= 2) {
     url = new Url;
     url.setModuleAction("dPstock","httpreq_product_selector_products_list");
     url.addParam("category_id", category_id);
-    url.addParam("search_string", search_string);
+    url.addParam("keywords", keywords);
     url.addParam("selected_product", selected_product);
     url.requestUpdate("products", { waitingText: null } );
   }
 }
 
-function refreshCategoriesList(search_string, selected_category) {
-  if (!search_string || search_string.length >= 2) {
+function refreshCategoriesList(keywords, selected_category) {
+  if (!keywords || keywords.length >= 2) {
     url = new Url;
     url.setModuleAction("dPstock","httpreq_product_selector_categories_list");
-    url.addParam("search_string", search_string);
+    url.addParam("keywords", keywords);
     url.addParam("selected_category", selected_category);
     url.requestUpdate("categories", { waitingText: null } );
   }

@@ -25,7 +25,7 @@ function pageMain() {
         
         <input type="text" name="keywords" value="" />
         <button type="button" class="search" onclick="stocksFilter.submit();">Filtrer</button>
-        <button type="button" class="cancel notext" onclick="stocksFilter.empty('keywords');"></button><br />
+        <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button><br />
         
         <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>

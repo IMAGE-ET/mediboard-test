@@ -9,18 +9,23 @@
  
 global $AppUI;
 
-$category_id = mbGetValueFromGet('category_id');
-$search_string = mbGetValueFromGet('search_string');
+$category_id      = mbGetValueFromGet('category_id');
+$keywords         = mbGetValueFromGet('keywords');
 $selected_product = mbGetValueFromGet('selected_product');
 
 $product = new CProduct();
 $category = new CProductCategory();
 $total = null;
 $count = null;
+$where_or = array();
 
-if ($search_string) {
+if ($keywords) {
 	$where = array();
-	$where['name'] = "LIKE '%$search_string%'";
+	$where_or[] = "`name` LIKE '%$keywords%'";
+	$where_or[] = "`description` LIKE '%$keywords%'";
+	$where_or[] = "`code` LIKE '%$keywords%'";
+	$where[] = implode(' OR ', $where_or);
+	
   $list_products = $product->loadList($where, 'name', 20);
   $total = $product->countList($where);
 } else {

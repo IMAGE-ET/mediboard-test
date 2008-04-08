@@ -32,7 +32,7 @@ function pageMain() {
         <input type="text" name="keywords" value="" />
         
         <button type="button" class="search" onclick="referencesFilter.submit();">Filtrer</button>
-        <button type="button" class="cancel notext" onclick="referencesFilter.empty('keywords');"></button>
+        <button type="button" class="cancel notext" onclick="referencesFilter.empty(['keywords', 'societe_id', 'category_id']);"></button>
       </form>
 
       <div id="list-references"></div>

@@ -26,13 +26,23 @@ Filter.prototype = {
   
   empty: function (fields) {
     oForm = document.forms[this.sForm];
-
-    if (typeof fields == "string") {
-      oForm[fields].value = null;
-    } else {
-      field.each (function (f) {
+    if (!fields) {
+      this.aFields.each (function (f) {
         if (oForm[f]) {
           oForm[f].value = null;
+          oForm[f].selectedIndex = 0;
+        }
+      });
+    } else if (typeof fields == "string") {
+      if (oForm[fields]) {
+        oForm[fields].value = null;
+        oForm[fields].selectedIndex = 0;
+      }
+    } else {
+      fields.each (function (f) {
+        if (oForm[f]) {
+          oForm[f].value = null;
+          oForm[f].selectedIndex = 0;
         }
       });
     }

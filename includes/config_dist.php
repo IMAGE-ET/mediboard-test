@@ -340,4 +340,10 @@ $dPconfig["hprim21"] = array (
   ),
 );
 
+$dPconfig["dPstock"] = array (
+  "CProductOrder" => array(
+    "order_number_format" => "%y%m%d%H%M%S%id",
+  ),
+);
+
 ?>

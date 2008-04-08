@@ -1,5 +1,12 @@
+{{mb_include_script module=dPstock script=filter}}
+{{mb_include_script module=dPstock script=refresh_value}}
+
 <script type="text/javascript">
 function pageMain() {
+  filterFields = ["category_id", "keywords"];
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stock_out_stocks_list", "stock-out-list-stocks", filterFields);
+  stocksFilter.submit();
+  
   refreshStockOutsList();
 }
 
@@ -16,29 +23,51 @@ function refreshStock(stock_id) {
   url.requestUpdate("stock-out-"+stock_id, { waitingText: null } );
 }
 
-function stockOut(oForm, stock_id) {
-  oForm.stock_id.value = stock_id;
-  oForm.quantity.value = ((oForm['_stock_back['+stock_id+']'].checked)?-1:1)*oForm['_quantity['+stock_id+']'].value;
-  oForm.product_code.value = oForm['_product_code['+stock_id+']'].value;
+function stockOut(oForm, sign) {
+  if (sign == undefined) sign = 1;
+  oForm.function_id.value = $F($('function_id'));
+  oForm.quantity.value = $F(oForm.quantity) * sign;
+  stock_id = $F(oForm.stock_id);
+  
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function() {
-      refreshStock(stock_id);
+      refreshValue('stock-'+stock_id+'-bargraph', 'CProductStock', stock_id, 'bargraph');
+      
       refreshStockOutsList();
-    } 
+    }
   });
+  oForm.quantity.value = $F(oForm.quantity) * sign;
 }
 </script>
 
 <table class="main">
   <tr>
     <td class="halfPane">
-    {{include file="inc_category_selector.tpl"}}
-    {{if $category->category_id}}
-      <h3>{{$category->_view}}</h3>
-      <div id="stock-out-list-stocks">
-      {{include file="inc_aed_stock_out_stocks_list.tpl"}}
-      </div>
-    {{/if}}
+
+      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit();">
+        <input type="hidden" name="m" value="{{$m}}" />
+        
+        <select name="category_id" onchange="stocksFilter.submit();">
+          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+        {{foreach from=$list_categories item=curr_category}}
+          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
+        {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" />
+        <button type="button" class="search" onclick="stocksFilter.submit();">Filtrer</button>
+        <button type="button" class="cancel notext" onclick="stocksFilter.empty();">Reset</button><br />
+      </form>
+
+      <div id="stock-out-list-stocks"></div>
+      
+      <label for="function_id">Pour le service </label>
+      <select name="function_id" id="function_id">
+        {{foreach from=$list_functions item=curr_function}}
+        <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>
+        {{/foreach}}
+      </select>
+
     </td>
     <td class="halfPane" id="stock-outs"></td>
   </tr>

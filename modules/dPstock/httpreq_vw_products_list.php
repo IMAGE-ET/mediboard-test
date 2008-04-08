@@ -15,24 +15,22 @@ $category_id = mbGetValueFromGetOrSession('category_id');
 $societe_id  = mbGetValueFromGetOrSession('societe_id');
 $keywords    = mbGetValueFromGet('keywords');
 
-$sql  = 'SELECT product.* FROM product ';
-$sql .= 'WHERE ';
+$where = array();
 if ($category_id) {
-  $sql .= "product.category_id = '$category_id' AND ";
+  $where['product.category_id'] = " = '$category_id'";
 }
 if ($societe_id) {
-  $sql .= "product.societe_id = '$societe_id' AND ";
+  $where['product.societe_id'] = " = '$societe_id'";
 }
 if ($keywords) {
-	$sql .= "product.code LIKE '%$keywords%' OR ";
-  $sql .= "product.name LIKE '%$keywords%' OR ";
-  $sql .= "product.description LIKE '%$keywords%' AND ";
+	$where[] = "product.code LIKE '%$keywords%' OR 
+	            product.name LIKE '%$keywords%' OR 
+	            product.description LIKE '%$keywords%'";
 }
-$sql .= '1 ';
-$sql .= 'ORDER BY product.name ASC';
+$orderby = 'product.name ASC';
 
 $product = new CProduct();
-$list_products = $product->loadQueryList($sql);
+$list_products = $product->loadList($where, $orderby, 20);
 foreach($list_products as $prod) {
 	$prod->loadRefs();
 }

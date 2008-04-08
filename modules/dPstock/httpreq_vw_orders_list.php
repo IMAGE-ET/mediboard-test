@@ -8,6 +8,7 @@
  */
  
 global $AppUI, $can, $m;
+$ds = CSQLDataSource::get('std');
 
 $can->needsRead();
 
@@ -17,71 +18,68 @@ $keywords = mbGetValueFromGetOrSession('keywords');
 $order = new CProductOrder();
 $societe = new CSociete();
 
-if ($type != 'waiting' && 
-    $type != 'pending' && 
-    $type != 'old' &&
-    $type != 'cancelled') {
-	$type = 'cancelled';
-}
+$where = array();
 
-// we choose if it's an order that hasn't been sent yet
-$neg_ordered = ($type == 'waiting')?'':'NOT ';
-$neg_cancelled = ($type == 'cancelled')?'1':'0';
-
-// the sql query (too complex to use the normal way)
-$sql = "SELECT `product_order`.* FROM `product_order`, `societe` WHERE";
-
-// if the type is different from "cancelled", the ordered status isn't important
-if ($type != 'cancelled') {
-  $sql .= "`product_order`.`date_ordered` IS $neg_ordered NULL AND";
-}
-
-$sql .= 
-"`product_order`.`cancelled` = $neg_cancelled AND 
-`product_order`.`societe_id` = `societe`.`societe_id`";
+$leftjoin = array();
+//$leftjoin['societe'] = 'product_order.societe_id = societe.societe_id';
+$leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
 
 // if keywords have been provided
 if ($keywords) {
-	$sql .= ' AND (';
+	$where_or = array();
 	
-	// we seek among ths orders
+	// we seek among the orders
 	$seeks = $order->getSeeks();
 	foreach($seeks as $col => $comp) {
-	  $sql .= "`product_order`.`$col` $comp '%$keywords%' OR";
+	  $where_or[] = "product_order.$col $comp '%$keywords%'";
 	}
+	$where[] = implode(' OR ', $where_or);
 	
 	// we seek among the societes
   $seeks = $societe->getSeeks();
   foreach($seeks as $col => $comp) {
-    $sql .= "`societe`.`$col` $comp '%$keywords%' OR";
+    $where_societe_or[] = "societe.$col $comp '%$keywords%'";
   }
-	
-	$sql .= ' 0)';
+  $where_societe[] = implode(' OR ', $where_societe_or);
+  $where['product.societe_id'] = $ds->prepareIn(array_keys($societe->loadList($where_societe)));
 }
 
-// we sort ths results
-$sql .= 'ORDER BY `product_order`.`date_ordered` DESC';
+$orderby = 'product_order.date_ordered DESC';
 
-$orders = $order->loadQueryList($sql);
-
-// and we apply the last filters (not using sql)
-$orders_filtered = array();
-foreach($orders as $ord) {
-  $ord->loadRefsFwd();
-  $ord->updateFormFields();
-  
-  if ($type == 'waiting' ||
-      $type == 'pending' && !$ord->_received ||
-      $type == 'old'     &&  $ord->_received ||
-      $type == 'cancelled')	{
-  	$orders_filtered[] = $ord;
-  }
+switch ($type) {
+	 case 'waiting':
+    $where['product_order.cancelled'] = " = 0";
+    $where['product_order.locked'] = " = 0";
+    $where['product_order.date_ordered'] = "IS NULL";
+    break;
+  case 'locked':
+  	$where['product_order.cancelled'] = " = 0";
+  	$where['product_order.locked'] = " = 1";
+  	$where['product_order.date_ordered'] = "IS NULL";
+  	break;
+	case 'pending':
+		$where['product_order.cancelled'] = " = 0";
+		$where['product_order.locked'] = " = 1";
+		$where['product_order.date_ordered'] = "IS NOT NULL";
+		$where['product_order_item.date_received'] = "IS NULL";
+		break;
+  case 'received':
+    $where['product_order.cancelled'] = " = 0";
+    $where['product_order.date_ordered'] = "IS NOT NULL";
+    $where['product_order_item.date_received'] = "IS NOT NULL";
+    //$groupby = 'product_order`.`order_id';
+    break;
+  default:
+  case 'cancelled':
+    $where['product_order.cancelled'] = " = 1";
+		break;
 }
+$orders_list = $order->loadList($where, $orderby, 20, (isset($groupby)?$groupby:null), $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('orders', $orders_filtered);
+$smarty->assign('orders', $orders_list);
 $smarty->assign('type',   $type);
 
 $smarty->display('inc_orders_list.tpl');

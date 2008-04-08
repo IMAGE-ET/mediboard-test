@@ -53,7 +53,8 @@ class CProductStock extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'product_id'               => 'notNull ref class|CProduct',
       'group_id'                 => 'notNull ref class|CGroups',
       'quantity'                 => 'num notNull',
@@ -70,7 +71,7 @@ class CProductStock extends CMbObject {
       '_zone_future'             => 'num',
 	    '_ordered_count'           => 'num pos',
 	    '_ordered_last'            => 'dateTime',
-    );
+    ));
   }
 
   function updateFormFields() {

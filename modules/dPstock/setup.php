@@ -28,7 +28,7 @@ class CSetupdPstock extends CSetup {
  `product_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
  `name` VARCHAR(50) NOT NULL, 
  `description` TEXT, 
- `code` VARCHAR( 32 ) NULL,
+ `code` VARCHAR(32) NULL,
  `category_id` INT(11) UNSIGNED NOT NULL, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
 PRIMARY KEY (`product_id`)) TYPE=MYISAM;';
@@ -51,6 +51,7 @@ PRIMARY KEY (`category_id`)) TYPE=MYISAM;';
  `date` DATETIME NOT NULL, 
  `target_class` VARCHAR(25) NOT NULL, 
  `target_id` INT(11) UNSIGNED NOT NULL, 
+ `code` VARCHAR(32) NULL, 
  `description` TEXT, 
 PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
@@ -61,6 +62,7 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `group_id` INT(11) UNSIGNED NOT NULL, 
  `locked` BOOL NOT NULL DEFAULT \'0\',
+ `cancelled` BOOL NOT NULL DEFAULT \'0\',
  `order_number` VARCHAR(64) NOT NULL, 
 PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
@@ -115,13 +117,9 @@ PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';
  `stock_id` INT(11) UNSIGNED NOT NULL, 
  `date` DATETIME NOT NULL, 
  `quantity` INT(11) NOT NULL, 
- `product_code` VARCHAR(255), 
+ `code` VARCHAR(32), 
  `function_id` INT(11) UNSIGNED, 
 PRIMARY KEY (`stock_out_id`)) TYPE=MYISAM;';
-    $this->addQuery($sql);
-    
-    $this->makeRevision('0.1');
-    $sql = 'ALTER TABLE `product_order` ADD `cancelled` BOOL NOT NULL ;';
     $this->addQuery($sql);
     
     $this->mod_version = '0.2';

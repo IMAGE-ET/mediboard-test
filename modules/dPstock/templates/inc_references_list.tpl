@@ -27,7 +27,6 @@
       <form name="product-reference-{{$curr_reference->_id}}" action="?" method="post">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_item_aed" />
-        <input type="hidden" name="order_item_id" value="0" />
         <input type="hidden" name="order_id" value="{{$order_id}}" />
         <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
         <input type="text" name="quantity" value="1" size="2" />
@@ -38,7 +37,7 @@
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="6">Aucune référence trouvée</td>
+    <td colspan="6">{{tr}}CProductReference.none{{/tr}}</td>
   </tr>
 {{/foreach}}
 </table>

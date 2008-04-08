@@ -31,7 +31,7 @@ function pageMain() {
         <input type="text" name="keywords" value="" />
         
         <button type="button" class="search" onclick="productsFilter.submit();">Filtrer</button>
-        <button type="button" class="cancel notext" onclick="productsFilter.empty('keywords');"></button>
+        <button type="button" class="cancel notext" onclick="productsFilter.empty();"></button>
       </form>
 
       <div id="list-products"></div>
@@ -120,7 +120,7 @@ function pageMain() {
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="3">Aucun stock trouvé</td>
+          <td colspan="3">{{tr}}CProductProduct.none{{/tr}}</td>
         </tr>
         {{/foreach}}
         {{if $product->_id}}
@@ -150,13 +150,13 @@ function pageMain() {
          {{foreach from=$product->_ref_references item=curr_reference}}
          <tr>
            <td>{{$curr_reference->_ref_societe->_view}}</td>
-           <td>{{$curr_reference->quantity}}</td>
-           <td>{{$curr_reference->price|string_format:"%.2f"}}</td>
-           <td>{{$curr_reference->_unit_price|string_format:"%.2f"}}</td>
+           <td>{{mb_value object=$curr_reference field=quantity}}</td>
+           <td>{{mb_value object=$curr_reference field=price}}</td>
+           <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
          </tr>
          {{foreachelse}}
          <tr>
-           <td colspan="4">Aucune référence trouvée</td>
+           <td colspan="4">{{tr}}CProductReference.none{{/tr}}</td>
          </tr>
          {{/foreach}}
          {{if $product->_id}}

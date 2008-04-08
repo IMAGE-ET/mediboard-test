@@ -11,4 +11,8 @@
     <th>En stock</th>
     <td>{{$product->_ref_stock_group->quantity}} {{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
   </tr>
+  <tr>
+    <th>Code produit</th>
+    <td>{{$product->code}}</td>
+  </tr>
 </table>

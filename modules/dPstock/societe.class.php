@@ -39,7 +39,8 @@ class CSociete extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'name'            => 'notNull str maxLength|50',
       'address'         => 'str',
       'postal_code'     => 'code insee',
@@ -48,7 +49,7 @@ class CSociete extends CMbObject {
       'email'           => 'email',
       'contact_name'    => 'str maxLength|50',
       'contact_surname' => 'str maxLength|50',
-    );
+    ));
   }
 
   function getSeeks() {

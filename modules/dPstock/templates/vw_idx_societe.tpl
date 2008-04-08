@@ -124,7 +124,7 @@ function pageMain() {
          </tr>
          {{foreachelse}}
          <tr>
-           <td class="button" colspan="4">Aucune référence trouvée</td>
+           <td class="button" colspan="4">{{tr}}CProductReference.none{{/tr}}</td>
          </tr>
          {{/foreach}}
        </table>
@@ -148,7 +148,7 @@ function pageMain() {
          </tr>
          {{foreachelse}}
          <tr>
-           <td class="button" colspan="3">Aucun produit trouvé</td>
+           <td class="button" colspan="3">{{tr}}CProduct.none{{/tr}}</td>
          </tr>
          {{/foreach}}
        </table>

@@ -16,12 +16,9 @@ $delivery_id  = mbGetValueFromGetOrSession('delivery_id');
 // Loads the delivery
 $delivery = new CProductDelivery();
 
-// If stock_id has been provided, we load the associated product
+// If delivery_id has been provided, we load the associated delivery
 if ($delivery_id) {
-  $delivery->_id = $delivery_id;
-  if (!$delivery->loadMatchingObject()) {
-  	$delivery = new CProductDelivery();
-  }
+  $delivery->load($delivery_id);
   $delivery->updateFormFields();
 }
 

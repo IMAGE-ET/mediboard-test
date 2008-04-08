@@ -53,7 +53,8 @@ class CProductOrder extends CMbObject {
 	}
 
 	function getSpecs() {
-		return array (
+		$specs = parent::getSpecs();
+		return array_merge($specs, array (
       'date_ordered'    => 'dateTime',
       'societe_id'      => 'notNull ref class|CSociete',
 		  'group_id'        => 'notNull ref class|CGroups',
@@ -65,7 +66,11 @@ class CProductOrder extends CMbObject {
 		  '_date_received'  => 'dateTime',
       '_received'       => 'bool',
       '_partial'        => 'bool',
-		);
+			'_order'          => 'bool',
+			'_receive'        => 'bool',
+			'_autofill'       => 'bool',
+			'_redo'           => 'bool',
+		));
 	}
 
 	function getSeeks() {
@@ -184,8 +189,17 @@ class CProductOrder extends CMbObject {
   }
   
   function getUniqueNumber() {
-  	$key = $this->_id?$this->_id:rand(0,1000);
-  	return mbTranformTime(null, null, "%y%m%d%H%M%S_").$key;
+  	global $AppUI;
+  	
+  	$format = $AppUI->conf('dPstock CProductOrder order_number_format');
+  	
+  	if (!preg_match('#\%\d*id#', $format)) {
+  		$AppUI->setMsg('format de numero de serie incorrect');
+  		return;
+  	}
+  	ereg_replace('#\%\d*id#', "bah", $format);
+  	$format = str_replace('%[0-9]*id', ($this->_id?$this->_id:0), $format);
+  	return mbTranformTime(null, null, $format);
   }
 
 	function updateFormFields() {
@@ -214,7 +228,7 @@ class CProductOrder extends CMbObject {
 	function updateDBFields() {
 		$this->updateFormFields();
 		
-	  if ($this->order_number == '') {
+	  if (empty($this->order_number)) {
       $this->order_number = $this->getUniqueNumber();
     }
 

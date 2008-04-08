@@ -14,7 +14,7 @@
     </tr>
   {{foreachelse}}
     <tr>
-      <td colspan="3">Aucun produit</td>
+      <td colspan="6">{{tr}}CProduct.none{{/tr}}</td>
     </tr>
   {{/foreach}}
 </table>

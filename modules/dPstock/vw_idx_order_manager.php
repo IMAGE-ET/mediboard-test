@@ -23,7 +23,7 @@ if ($order_id) {
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('order',          $order);
+$smarty->assign('order', $order);
 
 $smarty->display('vw_idx_order_manager.tpl');
 ?>

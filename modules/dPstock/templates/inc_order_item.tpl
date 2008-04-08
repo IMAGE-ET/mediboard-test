@@ -11,13 +11,7 @@
     </form>
   </td>
   {{/if}}
-  <td>
-    {{if $dialog}}
-      {{$curr_item->_view}}
-    {{else}}
-      <a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_item->_ref_reference->_ref_product->_id}}">{{$curr_item->_view}}</a>
-    {{/if}}
-  </td>
+  <td>{{$curr_item->_view}}</td>
   <td>
     {{if !$order->date_ordered}}
     <!-- Order item quantity change -->
@@ -67,7 +61,7 @@
         max=$curr_item->quantity
         min=0
       }}
-      <button type="button" class="tick" onclick="this.form._quantity_received.value = {{$curr_item->quantity}}; submitOrderItem(this.form, {refreshLists: true});">Tout</button>
+      <button type="button" class="tick" onclick="this.form._quantity_received.value = {{$curr_item->quantity}}; submitOrderItem(this.form, {refreshLists: true});">{{tr}}CProductOrder-_receive{{/tr}}</button>
     </form>
   </td>
   {{/if}}

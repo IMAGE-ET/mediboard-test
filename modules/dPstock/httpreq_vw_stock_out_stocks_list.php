@@ -6,39 +6,35 @@
  *  @version $Revision: $
  *  @author Fabien Ménager
  */
-
+ 
 global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$category_id = mbGetValueFromGetOrSession('category_id');
+$category_id         = mbGetValueFromGet('category_id');
+$keywords            = mbGetValueFromGet('keywords');
 
-// Loads the required Category and the complete list
-$category = new CProductCategory();
-$list_categories = $category->loadList(null, 'name');
+$where = array();
 if ($category_id) {
-  $category->category_id = $category_id;
-  
-  $category->loadMatchingObject();
-  if ($category->_id) {
-    $category->loadRefs();
-    
-    // Loads the products list
-    foreach($category->_ref_products as $prod) {
-      $prod->loadRefsBack();
-    }
-  }
+  $where['product.category_id'] = " = $category_id";
 }
+if ($keywords) {
+  $where['product.name'] = " LIKE '%$keywords%'";
+}
+$where['product_stock.group_id'] = " = $g";
 
-$function = new CFunctions();
-$list_functions = $function->loadList();
+$leftjoin = array();
+$leftjoin['product'] = 'product.product_id = product_stock.product_id';
 
-// Création du template
+$orderby = 'product.name ASC';
+
+$stock = new CProductStock();
+$list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
+
+// Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('category', $category);
-$smarty->assign('list_functions',  $list_functions);
+$smarty->assign('list_stocks', $list_stocks);
 
 $smarty->display('inc_aed_stock_out_stocks_list.tpl');
-
 ?>

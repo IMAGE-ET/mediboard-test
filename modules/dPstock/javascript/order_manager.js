@@ -57,6 +57,10 @@ function confirmOrder() {
   return confirm("Etes-vous sur de vouloir passer cette commande ?");
 }
 
+function confirmLock() {
+  return confirm("Etes-vous sur de vouloir verrouiller cette commande et la passer à l'état de validée ?");
+}
+
 function refreshListOrders(type, keywords) {
   url = new Url;
   url.setModuleAction("dPstock","httpreq_vw_orders_list");
@@ -67,10 +71,11 @@ function refreshListOrders(type, keywords) {
 
 function refreshLists(keywords) {
   if (!window.opener) {
-    refreshListOrders("waiting", keywords);
-    refreshListOrders("pending", keywords);
-    refreshListOrders("old",     keywords);
-    refreshListOrders("cancelled",keywords);
+    refreshListOrders("waiting",   keywords);
+    refreshListOrders("locked",    keywords);
+    refreshListOrders("pending",   keywords);
+    refreshListOrders("received",  keywords);
+    refreshListOrders("cancelled", keywords);
   } else {
     window.opener.refreshLists();
   }

@@ -17,6 +17,7 @@ class CProductDelivery extends CMbObject {
   var $target_class = null;
   var $target_id    = null;
   var $description  = null;
+  var $code         = null;
 
   // Object References
   //    Single
@@ -32,15 +33,17 @@ class CProductDelivery extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'product_id'   => 'notNull ref class|CProduct',
       'date'         => 'notNull dateTime',
       'target_class' => 'notNull str maxLength|25',
       'target_id'    => 'notNull ref class|CMbObject meta|target_class',
       'description'  => 'text',
+      'code'         => 'str maxLength|32',
 	    '_date_min'    => 'dateTime',
 	    '_date_max'    => 'dateTime',
-    );
+    ));
   }
 
   function updateFormFields() {

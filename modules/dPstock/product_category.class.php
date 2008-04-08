@@ -30,9 +30,10 @@ class CProductCategory extends CMbObject {
   }
 
   function getSpecs() {
-    return array (
+    $specs = parent::getSpecs();
+    return array_merge($specs, array (
       'name' => 'notNull str maxLength|50',
-    );
+    ));
   }
 
   function getSeeks() {

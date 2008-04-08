@@ -16,18 +16,6 @@ $category_id = mbGetValueFromGetOrSession('category_id');
 // Loads the required Category the complete list
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
-$category->category_id = $category_id;
-$category->loadMatchingObject();
-
-if ($category) {
-  $category->loadRefsBack();
-  
-  // Loads the products list
-  foreach($category->_ref_products as $prod) {
-    $prod->loadRefsBack();
-    $prod->loadRefStock();
-  }
-} else $category = new CProductCategory();
 
 $function = new CFunctions();
 $list_functions = $function->loadList();
@@ -35,7 +23,7 @@ $list_functions = $function->loadList();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('category',        $category);
+$smarty->assign('category_id',     $category_id);
 $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_functions',  $list_functions);
 

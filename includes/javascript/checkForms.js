@@ -516,8 +516,15 @@ Object.extend(ElementChecker, {
 
 			return "Matricule incorrect";
       
+    // Numero de commande
+    } else if(this.aProperties["product_order"]) {
+      if (this.oElement.value.indexOf("%id") == -1) {
+        return "Le numéro de commande doit contenir %id";
+      }
+      return null;
+      
     // Aucune Specification
-    }else{
+    } else {
       return "Spécification de code invalide";
     }
     return null;

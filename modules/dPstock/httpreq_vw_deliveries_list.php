@@ -41,10 +41,11 @@ if ($target_id) {
 }
 
 if ($keywords) {
-  $where['description'] = " LIKE '%$keywords%'";
+  $where[] = "description LIKE '%$keywords%' OR
+              code LIKE '%$keywords%'";
 }
 
-$order_by = '`product_delivery`.`date` DESC';
+$order_by = 'product_delivery.date DESC';
 
 $delivery = new CProductDelivery();
 $deliveries_list = $delivery->loadList($where, $order_by, 20);

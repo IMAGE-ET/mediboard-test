@@ -6,11 +6,11 @@
 
 <div class="bargraph">
   <div class="legend">
-    <div class="value" style="background: {{$colors.$zone}};">Quantité : {{$stock->quantity}}</div>
-    <div><div style="background: {{$colors.0}};" class="color"></div>Niveau critique : {{$stock->order_threshold_critical}}</div>
-    <div><div style="background: {{$colors.1}};" class="color"></div>Niveau minimal : {{$stock->order_threshold_min}}</div>
-    <div><div style="background: {{$colors.2}};" class="color"></div>Niveau optimal : {{$stock->order_threshold_optimum}}</div>
-    <div><div style="background: {{$colors.3}};" class="color"></div>Niveau maximal : {{$stock->order_threshold_max}}</div>
+    <div class="value" style="background: {{$colors.$zone}};">{{tr}}CProductStock-quantity{{/tr}} : {{$stock->quantity}}</div>
+    <div><div style="background: {{$colors.0}};" class="color"></div>{{tr}}CProductStock-order_threshold_critical{{/tr}} : {{$stock->order_threshold_critical}}</div>
+    <div><div style="background: {{$colors.1}};" class="color"></div>{{tr}}CProductStock-order_threshold_min{{/tr}} : {{$stock->order_threshold_min}}</div>
+    <div><div style="background: {{$colors.2}};" class="color"></div>{{tr}}CProductStock-order_threshold_optimum{{/tr}} : {{$stock->order_threshold_optimum}}</div>
+    <div><div style="background: {{$colors.3}};" class="color"></div>{{tr}}CProductStock-order_threshold_max{{/tr}} : {{$stock->order_threshold_max}}</div>
   </div>
   <div class="value" style="border-color: {{$colors.$zone}};">
     <div style="width: {{$stock->_quantity}}%; background: {{$colors.$zone}};"></div>

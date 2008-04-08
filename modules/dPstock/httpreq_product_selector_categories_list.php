@@ -9,7 +9,7 @@
 
 global $AppUI;
 
-$search_string = mbGetValueFromGet('search_string');
+$keywords = mbGetValueFromGet('keywords');
 $category_id = mbGetValueFromGet('category_id');
 $selected_category = mbGetValueFromGet('selected_category');
 
@@ -18,9 +18,9 @@ $category = new CProductCategory();
 $total = null;
 $count = null;
 
-if ($search_string) {
+if ($keywords) {
   $where = array();
-  $where['name'] = "LIKE '%$search_string%'";
+  $where['name'] = "LIKE '%$keywords%'";
   $list_categories = $category->loadList($where, 'name', 20);
   $total = $category->countList($where);
 } else {
