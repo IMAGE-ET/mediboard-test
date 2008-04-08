@@ -57,18 +57,19 @@ function modeSortieOrient(mode_sortie, rpu_id){
   });
 }
 
-function submitRPU(oForm, action){
-  oForm.submit();
+function submitRPU(oForm, action) {
   var sejour_id = oForm.sejour_id.value;
   var oFormSejour = document.forms["formSejour-" + sejour_id]; 
   
-  if(action == "annuler"){
-    // Suppression de l'etablissement_transfert_id du sejour
+  // Suppression de l'etablissement_transfert_id du sejour
+  if (action == "annuler"){
     oFormSejour.etablissement_transfert_id.value = "";
   }
   
   // Submit en ajax du formulaire de sejour
-  submitFormAjax(oFormSejour, 'systemMsg');
+  submitFormAjax(oFormSejour, 'systemMsg', {
+  	onComplete: oForm.submit.bind(oForm)
+  } );
 }
 
 
@@ -132,7 +133,7 @@ function loadTransfert(mode_sortie, sejour_id){
   <tr>
     <td>
 		  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-	        <img src="images/icons/edit.png" alt="modifier">
+	        <img src="images/icons/edit.png" alt="modifier" />
 	 	  </a>
  	  
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
@@ -232,7 +233,7 @@ function loadTransfert(mode_sortie, sejour_id){
 	  <tr>
 	    <td>
 			 <!-- Formulaire permettant de sauvegarder l'etablissement de transfert du RPU -->
-	     <form name="formSejour-{{$rpu->_ref_sejour->_id}}" action="?" method="post">
+	     <form name="formSejour-{{$rpu->_ref_sejour->_id}}" action="?m={{$m}}" method="post">
 	       <input type="hidden" name="dosql" value="do_sejour_aed" />
 	       <input type="hidden" name="m" value="dPplanningOp" />
 	       <input type="hidden" name="del" value="0" />

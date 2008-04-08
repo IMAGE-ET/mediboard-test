@@ -14,9 +14,6 @@ if ($praticien_id = mbGetValueFromPost("praticien_id")) {
 }
 
 $do = new CDoObjectAddEdit("CSejour", "sejour_id");
-$do->createMsg = "Séjour créé";
-$do->modifyMsg = "Séjour modifié";
-$do->deleteMsg = "Séjour supprimé";
 $do->doIt();
 
 ?>

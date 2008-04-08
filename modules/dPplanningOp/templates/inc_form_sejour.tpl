@@ -306,12 +306,12 @@ Main.add( function(){
   <td colspan="2">
     à
     <select name="_hour_entree_prevue" onchange="updateHeureSortie(); checkHeureSortie();">
-    {{foreach from=$hours|smarty:nodefaults item=hour}}
+    {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_entree_prevue == $hour || (!$sejour->sejour_id && $hour == $heure_entree_jour)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
     <select name="_min_entree_prevue" onchange="updateHeureSortie()">
-    {{foreach from=$mins|smarty:nodefaults item=min}}
+    {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_entree_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> mn
@@ -328,7 +328,7 @@ Main.add( function(){
   </td>
 </tr>
 
-<tr {{if $mode_operation}} style="display: none" {{/if}}>
+<tr {{if $mode_operation && !$can->admin}} style="display: none" {{/if}}>
   <th>{{mb_label object=$sejour field="_date_sortie_prevue"}}</th>
   <td class="date">
     {{mb_field object=$sejour form="editSejour" field="_date_sortie_prevue" prop="notNull date moreEquals|_date_entree_prevue" onchange="updateDureePrevue(); modifSejour()"}}
@@ -336,12 +336,12 @@ Main.add( function(){
   <td colspan="2">
     à 
     <select name="_hour_sortie_prevue">
-    {{foreach from=$hours|smarty:nodefaults item=hour}}
+    {{foreach from=$hours item=hour}}
       <option value="{{$hour}}" {{if $sejour->_hour_sortie_prevue == $hour  || (!$sejour->sejour_id && $hour == $heure_sortie_ambu)}} selected="selected" {{/if}}>{{$hour}}</option>
     {{/foreach}}
     </select> h
     <select name="_min_sortie_prevue">
-    {{foreach from=$mins|smarty:nodefaults item=min}}
+    {{foreach from=$mins item=min}}
       <option value="{{$min}}" {{if $sejour->_min_sortie_prevue == $min}} selected="selected" {{/if}}>{{$min}}</option>
     {{/foreach}}
     </select> mn

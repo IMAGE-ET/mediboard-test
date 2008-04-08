@@ -29,9 +29,6 @@ if(isset($_POST["sortie"])){
 }
 
 $do = new CDoObjectAddEdit("CRPU", "rpu_id");
-$do->createMsg = "Urgence créée";
-$do->modifyMsg = "Urgence modifiée";
-$do->deleteMsg = "Urgence supprimée";
 $do->doIt();
 
 ?>
