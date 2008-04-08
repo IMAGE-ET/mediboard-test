@@ -77,6 +77,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
         $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
         $where["num_ref"]          = "= '".$this->_obj->num_ref."'";
+        $order = "num_ref DESC";
         $sameNumRef = new CDocGed;
         $sameNumRef->loadObject($where,$order);
         if($sameNumRef->_id) {
