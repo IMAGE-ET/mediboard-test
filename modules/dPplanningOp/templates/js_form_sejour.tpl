@@ -122,7 +122,7 @@ function updateSortiePrevue() {
   
   // Si meme jour, sortie apres entree
   if (nDuree == 0){
-    oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, oForm._hour_entree_prevue.value + 1);
+    oForm._hour_sortie_prevue.value = Math.max(oForm._hour_sortie_prevue.value, parseInt(oForm._hour_entree_prevue.value,10)+1);
   }
 }
 
