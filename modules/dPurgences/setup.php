@@ -13,7 +13,7 @@ global $AppUI;
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config["mod_name"]        = "dPurgences";
-$config["mod_version"]     = "0.16";
+$config["mod_version"]     = "0.17";
 $config["mod_type"]        = "user";
 
 class CSetupdPurgences extends CSetup {
@@ -75,8 +75,14 @@ class CSetupdPurgences extends CSetup {
     $sql = "ALTER TABLE `rpu`
             ADD `type_pathologie` ENUM('C','E','M','P','T');";
     $this->addQuery($sql);
-    
-    $this->mod_version = "0.16";
+
+    $this->makeRevision("0.16");
+    $sql = "ALTER TABLE `rpu`
+						CHANGE `mode_entree` `mode_entree` ENUM('6','7','8') NOT NULL, 
+						CHANGE `transport` `transport` ENUM('perso','perso_taxi','ambu','ambu_vsl','vsab','smur','heli','fo') NOT NULL;";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.17";
   }  
 }
 

@@ -32,6 +32,18 @@ class CSpUrgDro extends CSpObject {
     "deces" => "D",
   );
   
+  static $transTrans = array (
+    "",
+    "perso" => "1",
+    "perso_taxi" => "7",
+    "ambu" => "3",
+    "ambu_vsl" => "2",
+    "vsab" => "5",
+    "smur" => "6",
+    "heli" => "8",
+    "fo" => "4",
+  );
+  
   // DB Table key
   var $numdos = null;
 
@@ -128,6 +140,7 @@ class CSpUrgDro extends CSpObject {
       "5", // Pompiers
       "6", // SAMU
       "7", // Taxi
+      "8", // Helico
     );
     
     $urmtra = implode("|", $urmtra);
@@ -240,8 +253,10 @@ class CSpUrgDro extends CSpObject {
     
     // Destination
     $this->urdest = self::$transDest[$sejour->mode_sortie];
-    mbTrace($sejour->mode_sortie, "Séjour Sortie");
     
+    // Transport
+    $this->urmtra = self::$transTrans[$rpu->transport];
+        
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

@@ -72,9 +72,9 @@ class CRPU extends CMbObject {
     $specs = array (
       "sejour_id"       => "notNull ref class|CSejour",
       "diag_infirmier"  => "text",
-      "mode_entree"     => "enum list|6|7|8",
+      "mode_entree"     => "enum list|6|7|8 notNull",
       "provenance"      => "enum list|1|2|3|4|5|8",
-      "transport"       => "enum list|perso|ambu|vsab|smur|heli|fo",
+      "transport"       => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "enum list|1|P|2|3|4|5|D",
