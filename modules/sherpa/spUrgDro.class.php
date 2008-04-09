@@ -256,6 +256,9 @@ class CSpUrgDro extends CSpObject {
     
     // Transport
     $this->urmtra = self::$transTrans[$rpu->transport];
+    
+    // Provenance
+    $this->urprov = "DO";
         
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
