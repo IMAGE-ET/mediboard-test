@@ -86,15 +86,15 @@ function submitSejour(){
 
 function loadTransfert(mode_sortie){
   // si Transfert, affichage du select
-  if(mode_sortie=="transfert"){
-    var url = new Url();
-    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
-    url.requestUpdate('listEtabs', { waitingText: null } );
-  } else {
-    // sinon, on vide le contenu de la div
-    $("listEtabs").innerHTML = "";
-    // On vide etablissement_transfert_id
-    //submitFormSejour("");
+  if($('listEtabs')){
+	  if(mode_sortie=="transfert"){
+	    var url = new Url();
+	    url.setModuleAction("dPurgences", "httpreq_vw_etab_externes");
+	    url.requestUpdate('listEtabs', { waitingText: null } );
+	  } else {
+	    // sinon, on vide le contenu de la div
+	    $("listEtabs").innerHTML = "";
+	  }
   }
 }
 
@@ -209,11 +209,15 @@ function initFields(mode_sortie){
 				    <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
 				    <td>
 				      {{mb_field object=$sejour field="mode_sortie" defaultOption="&mdash; Mode de sortie" onchange="initFields(this.value);submitSejour();loadTransfert(this.value);"}}
+				      {{if !$rpu->mutation_sejour_id}}
 				      <div id="listEtabs">
 				        {{if $sejour->mode_sortie == "transfert"}}
 				          {{include file="../../dPurgences/templates/inc_vw_etab_externes.tpl" _transfert_id=$sejour->etablissement_transfert_id}}
 				        {{/if}}
 				      </div>
+				      {{else}}
+				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">Hospitalisation vers le séjour {{$rpu->mutation_sejour_id}}</a> 
+				      {{/if}}
 		 		    </td>
 				   </tr>
 		     </table>
@@ -254,7 +258,7 @@ function initFields(mode_sortie){
   </tr>
 </table>
 
- 
+{{if !$rpu->mutation_sejour_id}}
 <table class="form">    
   <tr>
 	  <td class="button" colspan="4">
@@ -274,6 +278,7 @@ function initFields(mode_sortie){
 	  </td>
 	</tr>
 </table>
+{{/if}}
 
 <script type="text/javascript">
 

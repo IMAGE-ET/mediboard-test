@@ -297,7 +297,13 @@ class CSejour extends CCodable {
   }
   
   function store() {
-    if ($msg = parent::store()) {
+    if (null !== $this->mode_sortie) {
+      if ("transfert" != $this->mode_sortie) {
+        $this->etablissement_transfert_id = "";
+      }
+    }
+  	
+  	if ($msg = parent::store()) {
       return $msg;
     }
 
@@ -335,11 +341,7 @@ class CSejour extends CCodable {
       $this->_ref_last_affectation->store();
     }
     
-    if (null !== $this->mode_sortie) {
-      if ("transfert" != $this->mode_sortie) {
-        $this->etablissement_transfert_id = "";
-      }
-    }
+    
   }
   
   function delAffectations() {

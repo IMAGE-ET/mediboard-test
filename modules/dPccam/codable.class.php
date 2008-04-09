@@ -149,6 +149,8 @@ class CCodable extends CMbObject {
   */
 
   function loadRefsActes(){
+  	$this->_ref_actes = array();
+  	
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();  
     
