@@ -24,6 +24,8 @@ class CRPU extends CMbObject {
   var $prise_en_charge = null;
   var $motif           = null;
   var $ccmu            = null;
+  var $gemsa           = null;
+  var $type_pathologie = null;
   var $destination     = null;
   var $orientation     = null;
   var $radio_debut     = null;
@@ -76,18 +78,20 @@ class CRPU extends CMbObject {
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "enum list|1|P|2|3|4|5|D",
+      "gemsa"           => "enum list|1|2|3|4|5|6",
+      "type_pathologie" => "enum list|C|E|M|P|T",
       "destination"     => "enum list|1|2|3|4|6|7",
       "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
       "radio_debut"     => "dateTime",
       "radio_fin"       => "dateTime",
       "mutation_sejour_id" => "ref class|CSejour",
-      //"_mode_sortie"     => "enum list|6|7|8|9 default|8",
-      "_mode_sortie"     => "enum list|7|8|9 default|8",
+
+      "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"     => "notNull ref class|CPatient",
       "_responsable_id" => "notNull ref class|CMediusers",
       "_entree"         => "dateTime",
-      "_etablissement_transfert_id" => "ref class|CEtablissementExterne"
+      "_etablissement_transfert_id" => "ref class|CEtabExterne"
      );
     return array_merge($specsParent, $specs);
   }
@@ -139,7 +143,6 @@ class CRPU extends CMbObject {
       "diag_infirmier" => null
     );
   }
-  
   
   function loadRefSejour() {
     $this->_ref_sejour = new CSejour;

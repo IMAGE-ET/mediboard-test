@@ -48,45 +48,25 @@ $msg = $sejour->store();
 viewMsg($msg, "msg-CSejour-title-create");
 
 // Chargement des actes de la prise en charge aux urgences
-$actes_ccam = array();
-$acte_ccam = new CActeCCAM();
-$acte_ccam->object_id = $rpu->_ref_consult->_id;
-$acte_ccam->object_class = "CConsultation";
-$actes_ccam = $acte_ccam->loadMatchingList();
-
-// Transfert des actes CCAM sur le sejour
-foreach($actes_ccam as $key => $_acteCCAM){
-  $_acteCCAM->object_class = "CSejour";
-  $_acteCCAM->object_id = $sejour->_id;
-  $_acteCCAM->_adapt_object = 1;
-  $msg = $_acteCCAM->store();
-  viewMsg($msg, "msg-CActeCCAM-title-modify");
+$consult_atu =& $rpu->_ref_consult;
+$consult_atu->loadRefsActes();
+foreach ($consult_atu->_ref_actes as $acte) {
+  $acte->setObject($sejour);
+  $acte->_adapt_object = 1;
+  $msg = $acte->store();
+  viewMsg($msg, "msg-$acte->_class_name-title-modify");
 }
 
 
-$rpu->_ref_consult->codes_ccam = "";
-$rpu->_ref_consult->tarif = "Transfert Séjour";
-$rpu->_ref_consult->du_patient = 0;
-$rpu->_ref_consult->du_tiers = 0;
-$rpu->_ref_consult->secteur1 = 0;
-$rpu->_ref_consult->secteur2 = 0;
-$msg = $rpu->_ref_consult->store();
+$consult_atu->codes_ccam = "";
+$consult_atu->tarif = "Transfert Séjour";
+$consult_atu->valide = "0";
+$consult_atu->du_patient = 0;
+$consult_atu->du_tiers = 0;
+$consult_atu->secteur1 = 0;
+$consult_atu->secteur2 = 0;
+$msg = $consult_atu->store();
 viewMsg($msg, "msg-CConsultation-title-modify");
-
-// Chargement des actes NGAP de la prise en charge
-$actes_ngap = array();
-$acte_ngap = new CActeNGAP();
-$acte_ngap->object_id = $rpu->_ref_consult->_id;
-$acte_ngap->object_class = "CConsultation";
-$actes_ngap = $acte_ngap->loadMatchingList();
-
-// Transfert des actes NGAP sur le sejour
-foreach($actes_ngap as $key => $_acteNGAP){
-  $_acteNGAP->object_class = "CSejour";
-  $_acteNGAP->object_id = $sejour->_id;
-  $msg = $_acteNGAP->store();
-  viewMsg($msg, "msg-CActeNGAP-title-modify");
-}
 
 // Sauvegarde du RPU
 $rpu->orientation = "HO";
@@ -95,8 +75,11 @@ $msg = $rpu->store();
 viewMsg($msg, "msg-CRPU-title-close");
 
 // Sauvegarde du sejour
-$rpu->_ref_sejour->sortie_reelle = mbDateTime();
-$msg = $rpu->_ref_sejour->store();
+$sejour_rpu =& $rpu->_ref_sejour;
+$sejour_rpu->sortie_reelle = mbDateTime();
+$sejour_rpu->mode_sortie = "transfert";
+$sejour_rpu->etablissement_transfert_id = "";
+$msg = $sejour_rpu->store();
 viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");
 
 $AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");

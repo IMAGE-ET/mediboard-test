@@ -25,6 +25,13 @@ class CSpUrgDro extends CSpObject {
     "D" => "5",
   );
   
+  static $transDest = array (
+    "" => "",
+  	"normal" => "S",
+		"transfert" => "M",
+    "deces" => "D",
+  );
+  
   // DB Table key
   var $numdos = null;
 
@@ -199,14 +206,7 @@ class CSpUrgDro extends CSpObject {
     
     return $mbObject->type == "urg";
   }
-  
-  function store() {
-//    CSQLDataSource::$trace = true;
-    $msg = parent::store();
-//    CSQLDataSource::$trace = false;
-    return $msg;
-  }
-  
+    
   function mapFrom(CMbObject &$mbObject) {
     $mbClass = $this->_spec->mbClass;
     if (!$mbObject instanceof $mbClass) {
@@ -231,6 +231,16 @@ class CSpUrgDro extends CSpObject {
     
     // CCMU
     $this->urccmu = self::$transCCMU[$rpu->ccmu];
+    
+    // GEMSA
+    $this->urgems = $rpu->gemsa;
+    
+    // Type d'urgence
+    $this->urtype = $rpu->type_pathologie;
+    
+    // Destination
+    $this->urdest = self::$transDest[$sejour->mode_sortie];
+    mbTrace($sejour->mode_sortie, "Séjour Sortie");
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());

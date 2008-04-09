@@ -13,7 +13,7 @@ global $AppUI;
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config["mod_name"]        = "dPurgences";
-$config["mod_version"]     = "0.14";
+$config["mod_version"]     = "0.16";
 $config["mod_type"]        = "user";
 
 class CSetupdPurgences extends CSetup {
@@ -65,8 +65,18 @@ class CSetupdPurgences extends CSetup {
     $sql = "ALTER TABLE `rpu`
             ADD `mutation_sejour_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.14");
+    $sql = "ALTER TABLE `rpu`
+            ADD `gemsa` ENUM('1','2','3','4','5','6');";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.14";
+    $this->makeRevision("0.15");
+    $sql = "ALTER TABLE `rpu`
+            ADD `type_pathologie` ENUM('C','E','M','P','T');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.16";
   }  
 }
 

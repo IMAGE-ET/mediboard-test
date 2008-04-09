@@ -234,6 +234,14 @@ function initFields(mode_sortie){
 				    <th>{{mb_label object=$rpu field="orientation"}}</th>
 				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  <tr>
+				    <th>{{mb_label object=$rpu field="gemsa"}}</th>
+				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+				  <tr>
+				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
+				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash;Type Pathologie" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
 				  <tr>   
 				    <td colspan="2" />
 				  </tr>

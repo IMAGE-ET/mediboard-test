@@ -254,7 +254,9 @@ class CSejour extends CCodable {
     $collisions = array();
     
     // Ne concerne pas les annulés
-    if ($this->annule) {
+    $this->completeField("annule");
+    $this->completeField("type");
+    if ($this->annule || $this->type == "urg") {
       return $collisions;
     }
     
