@@ -247,10 +247,12 @@ $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
 $library->fileName = "FCKeditor_2.3.2.tar.gz";
+//$library->fileName = "FCKeditor_2.5.1.tar.gz";
+//$library->fileName = "FCKeditor_2.6.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "FCKeditor";
 $library->targetDir = "fckeditor";
-
+/*
 $patch = new CLibraryPatch;
 $patch->dirName = "fckeditor";
 $patch->subDirName = "browser";
@@ -273,7 +275,7 @@ $patch->sourceName = "fck_showtableborders_gecko.css";
 $patch->targetDir = "editor/css";
 
 $library->patches[] = $patch;
-
+*/
 CLibrary::$all[$library->name] = $library;
 
 $library = new CLibrary;

@@ -103,5 +103,5 @@ for (var i = 0; i < aMbCombos.length; i++) {
 aToolbarSet.push(aMbToolbar);
 
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
-FCKConfig.Plugins.Add( 'mbcombo2.3.2', 'en,fr', sMbPluginsPath );
+FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );

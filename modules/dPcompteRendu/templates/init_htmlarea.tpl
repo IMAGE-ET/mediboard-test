@@ -1,4 +1,4 @@
-{{if $templateManager->editor == "fckeditor2.3.2" }}
+{{if $templateManager->editor == "fckeditor" }}
 
 {{mb_include_script path="lib/fckeditor/fckeditor.js"}}
 
@@ -11,7 +11,7 @@ function initFCKEditor() {
 	// Be carefull: after that all Js code is executed in lib/fckeditor/
 	oFCKeditor.BasePath	= 'lib/fckeditor/';
 	
-	oFCKeditor.Config['CustomConfigurationsPath'] = '../../../modules/dPcompteRendu/mb_fckeditor2.3.2.php' ;
+	oFCKeditor.Config['CustomConfigurationsPath'] = '../../../modules/dPcompteRendu/mb_fckeditor.php' ;
 	
 	oFCKeditor.ReplaceTextarea() ;
 }

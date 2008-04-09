@@ -12,7 +12,7 @@ $mbPath = "../..";
 $m = "dPcompteRendu";
 
 class CTemplateManager {
-  var $editor = "fckeditor2.3.2";
+  var $editor = "fckeditor";
   
   var $properties = array();
   var $helpers = array();
@@ -44,5 +44,5 @@ $smarty = new CSmartyDP($dPconfig["root_dir"]."/modules/$m");
 
 $smarty->assign("templateManager" , $templateManager);
 
-$smarty->display("mb_fckeditor2.3.2.tpl");
+$smarty->display("mb_fckeditor.tpl");
 ?>

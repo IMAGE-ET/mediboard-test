@@ -46,7 +46,7 @@ if($compte_rendu->object_id){
 }
 // Gestion du modèle
 $templateManager = new CTemplateManager;
-$templateManager->editor = "fckeditor2.3.2";
+$templateManager->editor = "fckeditor";
 
 
 // L'utilisateur est il une secretaire ou un administrateur?
