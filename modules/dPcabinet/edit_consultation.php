@@ -106,10 +106,13 @@ if ($consult->_id) {
   $consult->loadRefs();
   
   $consult->loadRefsPrescriptions();
-  if ($prescription =& $consult->_ref_prescriptions) {
-	  if ($prescription->_id){
-	    $prescription->loadRefsLinesMedComments();  
-	    $prescription->loadRefsLinesElementsComments();
+ 
+  if($consult->_ref_prescriptions){
+	  foreach($consult->_ref_prescriptions as &$prescription){
+	  	if($prescription->_id){
+	  	  $prescription->loadRefsLinesMedComments();
+	  	  $prescription->loadRefsLinesElementsComments();
+	  	}
 	  }
   }
   $consult->loadAides($userSel->user_id);
@@ -268,19 +271,19 @@ $acte_ngap->coefficient = 1;
 
 // Tableau de contraintes pour les champs du RPU
 // Contraintes sur le mode d'entree / provenance
-$contrainteProvenance[6] = array("", 1, 2, 3, 4);
+//$contrainteProvenance[6] = array("", 1, 2, 3, 4);
 $contrainteProvenance[7] = array("", 1, 2, 3, 4);
 $contrainteProvenance[8] = array("", 5, 8);
 
 // Contraintes sur le mode de sortie / destination
-$contrainteDestination[6] = array("", 1, 2, 3, 4);
-$contrainteDestination[7] = array("", 1, 2, 3, 4);
-$contrainteDestination[8] = array("", 6, 7);
+//$contrainteDestination[6] = array("", 1, 2, 3, 4);
+$contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
+$contrainteDestination["normal"] = array("", 6, 7);
 
 // Contraintes sur le mode de sortie / orientation
-$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
-$contrainteOrientation[7] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
-$contrainteOrientation[8] = array("", "FUGUE", "SCAM", "PSA", "REO");
+//$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 // Création du template
 $smarty = new CSmartyDP();

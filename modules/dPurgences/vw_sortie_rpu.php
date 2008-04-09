@@ -33,7 +33,7 @@ $where["type"] = "= 'urg'";
 $where["consultation.consultation_id"] = "IS NOT NULL";
 
 if($selAffichage == "sortie"){
-  $where["rpu.sortie"] = "IS NULL";
+  $where["sortie_reelle"] = "IS NULL";
 }
 
 if($order_col != "_prise_en_charge"){
@@ -62,16 +62,12 @@ $etab = new CEtabExterne();
 $listEtab = $etab->loadList(null, $order);
 
 // Contraintes sur le mode de sortie / destination
-$contrainteDestination[6] = array("", 1, 2, 3, 4);
-$contrainteDestination[7] = array("", 1, 2, 3, 4);
-$contrainteDestination[8] = array("", 6, 7);
+$contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
+$contrainteDestination["normal"] = array("", 6, 7);
 
 // Contraintes sur le mode de sortie / orientation
-$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
-$contrainteOrientation[7] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
-$contrainteOrientation[8] = array("", "FUGUE", "SCAM", "PSA", "REO");
-
-
+$contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
+$contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
   
 // Création du template
 $smarty = new CSmartyDP();

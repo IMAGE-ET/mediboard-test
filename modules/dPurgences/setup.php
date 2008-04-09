@@ -13,7 +13,7 @@ global $AppUI;
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config["mod_name"]        = "dPurgences";
-$config["mod_version"]     = "0.12";
+$config["mod_version"]     = "0.14";
 $config["mod_type"]        = "user";
 
 class CSetupdPurgences extends CSetup {
@@ -55,7 +55,18 @@ class CSetupdPurgences extends CSetup {
             ADD `radio_fin` DATETIME;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.12";
+    $this->makeRevision("0.12");
+    $sql = "ALTER TABLE `rpu`
+            DROP `mode_sortie`,
+            DROP `sortie`";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.13");
+    $sql = "ALTER TABLE `rpu`
+            ADD `mutation_sejour_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.14";
   }  
 }
 

@@ -22,21 +22,10 @@ function viewMsg($msg, $action, $txt = ""){
 global $AppUI;
 
 // Récupération du rpu
-$rpu_id = $_POST["rpu_id"];
-
-// Sauvegarde du RPU
+$rpu_id = mbGetValueFromPost("rpu_id");
 $rpu = new CRPU();
 $rpu->load($rpu_id);
-$rpu->orientation = "HO";
-$rpu->sortie = mbDateTime();
-$msg = $rpu->store();
-viewMsg($msg, "msg-CRPU-title-close");
-
-// Sauvegarde du sejour
 $rpu->loadRefSejour();
-$rpu->_ref_sejour->sortie_reelle = mbDateTime();
-$msg = $rpu->_ref_sejour->store();
-viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");
 
 // Creation du nouveau sejour et pre-remplissage des champs
 $sejour = new CSejour();
@@ -74,10 +63,11 @@ foreach($actes_ccam as $key => $_acteCCAM){
   viewMsg($msg, "msg-CActeCCAM-title-modify");
 }
 
-// Si le transfert des actes CCAM est reussi, suppression de codes_ccam de l'ancienne consult
+
 $rpu->_ref_consult->codes_ccam = "";
 $rpu->_ref_consult->tarif = "Transfert Séjour";
 $rpu->_ref_consult->du_patient = 0;
+$rpu->_ref_consult->du_tiers = 0;
 $rpu->_ref_consult->secteur1 = 0;
 $rpu->_ref_consult->secteur2 = 0;
 $msg = $rpu->_ref_consult->store();
@@ -97,6 +87,17 @@ foreach($actes_ngap as $key => $_acteNGAP){
   $msg = $_acteNGAP->store();
   viewMsg($msg, "msg-CActeNGAP-title-modify");
 }
+
+// Sauvegarde du RPU
+$rpu->orientation = "HO";
+$rpu->mutation_sejour_id = $sejour->_id;
+$msg = $rpu->store();
+viewMsg($msg, "msg-CRPU-title-close");
+
+// Sauvegarde du sejour
+$rpu->_ref_sejour->sortie_reelle = mbDateTime();
+$msg = $rpu->_ref_sejour->store();
+viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");
 
 $AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
 

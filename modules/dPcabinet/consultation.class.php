@@ -98,7 +98,7 @@ class CConsultation extends CCodable {
   var $_count_fiches_examen = null;
 
   var $_ref_prescription   = null; 
-  
+  var $_ref_prescription_traitement = null;
   var $_ref_banque         = null;
   var $_ref_categorie      = null;
   
@@ -882,11 +882,34 @@ class CConsultation extends CCodable {
     $this->_count_fiches_examen += $this->_ref_examigs   ->_id ? 1 : 0; 
   }
   
-  // Chargement de la prescription liée à la consultation
+  // Chargement des prescriptions liées à la consultation
   function loadRefsPrescriptions() {
-    $this->_ref_prescriptions = $this->loadUniqueBackRef("prescription");
+  	$prescriptions = $this->loadBackRefs("prescription");
+  	$this->_ref_prescriptions["externe"] = new CPrescription();
+  	
+    // Cas du module non installé
+    if(!is_array($prescriptions)){
+      $this->_ref_prescriptions = null;
+      return;
+  	}
+     
+    foreach($prescriptions as &$prescription){
+    	$this->_ref_prescriptions[$prescription->type] = $prescription;
+    }
   }
 
+  
+  function loadRefPrescriptionTraitement(){
+    $prescription = new CPrescription();
+    $prescription->type = "traitement";
+    $prescription->object_id = $this->_id;
+    $prescription->object_class = $this->_class_name;
+    $prescription->loadMatchingObject();
+  	$this->_ref_prescription_traitement = $prescription;
+  }
+  
+ 
+  
   function loadRefsBack() {
     // Backward references
     $this->loadRefsFilesAndDocs();

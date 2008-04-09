@@ -51,7 +51,9 @@ $canUserSel = $userSel->canDo();
 
 if (!$userSel->isPraticien()) {
   $AppUI->setMsg("Vous devez selectionner un praticien", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
+  if($current_m != "dPurgences"){
+    $AppUI->redirect("m=dPcabinet&tab=0");
+  }
 }
 
 $canUserSel->needsEdit(array("chirSel"=>0));

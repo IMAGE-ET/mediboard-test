@@ -75,10 +75,14 @@ if ($selConsult) {
   $consult->loadRefsFiles();
   $consult->loadRefsFichesExamen();
   $consult->loadRefsPrescriptions();
-  if($consult->_ref_prescriptions && $consult->_ref_prescriptions->_id){
-    $consult->_ref_prescriptions->loadRefsLinesMedComments();
-    $consult->_ref_prescriptions->loadRefsLinesElementsComments();  
+  
+  $prescription = $consult->_ref_prescriptions["externe"];
+  if($prescription->_id){
+    $prescription->loadRefsLinesMedComments();
+    $prescription->loadRefsLinesElementsComments();
   }
+  
+  
   // Patient
   $patient =& $consult->_ref_patient;
 }

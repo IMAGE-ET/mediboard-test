@@ -24,12 +24,12 @@ class CRPU extends CMbObject {
   var $prise_en_charge = null;
   var $motif           = null;
   var $ccmu            = null;
-  var $sortie          = null;
-  var $mode_sortie     = null;
   var $destination     = null;
   var $orientation     = null;
   var $radio_debut     = null;
   var $radio_fin       = null;
+  var $mutation_sejour_id = null;
+  
   
   // Distant Fields
   var $_count_consultations = null;
@@ -53,7 +53,11 @@ class CRPU extends CMbObject {
   
   // Behaviour fields
   var $_bind_sejour = null;
-  var $_modifier_sortie = null;
+  var $_etablissement_transfert_id = null;
+  
+  var $_sortie          = null;
+  var $_mode_sortie     = null;
+  
   
   function CRPU() {
     $this->CMbObject("rpu", "rpu_id");
@@ -72,17 +76,18 @@ class CRPU extends CMbObject {
       "prise_en_charge" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "enum list|1|P|2|3|4|5|D",
-      "sortie"          => "dateTime",
-      "mode_sortie"     => "enum list|6|7|8|9 default|8",
       "destination"     => "enum list|1|2|3|4|6|7",
       "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
       "radio_debut"     => "dateTime",
       "radio_fin"       => "dateTime",
-      
+      "mutation_sejour_id" => "ref class|CSejour",
+      //"_mode_sortie"     => "enum list|6|7|8|9 default|8",
+      "_mode_sortie"     => "enum list|7|8|9 default|8",
+      "_sortie"          => "dateTime",
       "_patient_id"     => "notNull ref class|CPatient",
       "_responsable_id" => "notNull ref class|CMediusers",
       "_entree"         => "dateTime",
-      
+      "_etablissement_transfert_id" => "ref class|CEtablissementExterne"
      );
     return array_merge($specsParent, $specs);
   }
@@ -104,6 +109,23 @@ class CRPU extends CMbObject {
     $this->_ville      = $patient->ville;
     $this->_naissance  = $patient->naissance;
     $this->_view       = $patient->_view;
+    
+    
+    // Calcul des valeurs de _mode_sortie
+    if($this->_ref_sejour->mode_sortie == "transtert" && $this->mutation_sejour_id){
+    	$this->_mode_sortie = 6;
+    }
+    if($this->_ref_sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id){
+    	$this->_mode_sortie = 7; 
+    }
+    if($this->_ref_sejour->mode_sortie == "normal"){
+    	$this->_mode_sortie = 8;
+    }
+    if($this->_ref_sejour->mode_sortie == "deces"){
+    	$this->_mode_sortie = 9;
+    }
+    $this->_sortie = $this->_ref_sejour->sortie_reelle;
+    $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
   }
   
   function loadRefsFwd() {
@@ -155,16 +177,6 @@ class CRPU extends CMbObject {
     $this->sejour_id = $this->_ref_sejour->_id;
   }
   
-  /**
-   * Modifier la sortie réelle du séjour lié au RPU
-   * @return string Store-like message
-   */
-  function modifierSortie() {
-    $this->sortie = mbDateTime();
-    $this->loadRefSejour();
-    $this->_ref_sejour->_modifier_sortie = "1";
-    return $this->_ref_sejour->store();
-  }
   
   function store() {
     // Bind Sejour
@@ -173,14 +185,7 @@ class CRPU extends CMbObject {
         return $msg;
       }
     }
-    
-    // Bind Sejour
-    if ($this->_modifier_sortie) {
-      if ($msg = $this->modifierSortie()) {
-        return $msg;
-      }
-    }
-    
+       	
     // Standard Store
     if($msg = parent::store()){
       return $msg;

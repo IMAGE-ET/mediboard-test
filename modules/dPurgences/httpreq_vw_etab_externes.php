@@ -17,10 +17,9 @@ $listEtab = $etab->loadList(null, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("listEtab", $listEtab);
-
 $smarty->assign("_transfert_id", "");
+
 $smarty->display("../../dPurgences/templates/inc_vw_etab_externes.tpl");
 
 ?>

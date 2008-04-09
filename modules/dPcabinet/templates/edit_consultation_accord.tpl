@@ -75,7 +75,7 @@ function pageMain() {
   {{/if}}
   
   {{if $current_m == "dPurgences" && $consult->_id}}
-    regFieldCalendar("editRPU", "sortie", true);
+    regFieldCalendar("editSejour", "sortie_reelle", true);
   {{/if}}
   
   if (document.editAntFrm){
