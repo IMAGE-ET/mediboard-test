@@ -108,6 +108,8 @@ function pageMain() {
   regFieldCalendar("editFrm", "fin_validite_vitale");
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","_assure_tel1");
+  
+  var tabs = new Control.Tabs('tab-patient');
 }
 
 </script>
@@ -185,41 +187,17 @@ function pageMain() {
       
       <tr>
         <td colspan="5">
-          <div class="accordionMain" id="accordionConsult">
-          
-            <div id="Identite">
-              <div id="IdentiteHeader" class="accordionTabTitleBar">
-                Identité
-              </div>
-              <div id="IdentiteContent"  class="accordionTabContentBox">
-              {{include file="inc_acc/inc_acc_identite.tpl"}}
-              </div>
-            </div>
-            <div id="Medical">
-              <div id="MedicalHeader" class="accordionTabTitleBar">
-                Bénéficiaire de soins &amp; Médecins correspondants
-              </div>
-              <div id="MedicalContent"  class="accordionTabContentBox">
-              {{include file="inc_acc/inc_acc_medical.tpl"}}
-              </div>
-            </div>
-            <div id="Corresp">
-              <div id="CorrespHeader" class="accordionTabTitleBar">
-                Correspondance
-              </div>
-              <div id="CorrespContent"  class="accordionTabContentBox">
-              {{include file="inc_acc/inc_acc_corresp.tpl"}}
-              </div>
-            </div>
-            <div id="Assure">
-              <div id="AssureHeader" class="accordionTabTitleBar">
-                Assuré social
-              </div>
-              <div id="AssureContent"  class="accordionTabContentBox">
-              {{include file="inc_acc/inc_acc_assure.tpl"}}
-              </div>
-            </div>
-          </div>
+          <ul id="tab-patient" class="control_tabs">
+            <li><a href="#identite">Identité</a></li>
+            <li><a href="#medical">Médical</a></li>
+            <li><a href="#correspondance">Correspondance</a></li>
+            <li><a href="#assure">Assuré social</a></li>
+          </ul>
+          <hr class="control_tabs" />
+          <div id="identite">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
+          <div id="medical">{{include file="inc_acc/inc_acc_medical.tpl"}}</div>
+          <div id="correspondance">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
+          <div id="assure">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
         </td>
       </tr>
       
@@ -255,10 +233,3 @@ function pageMain() {
     </td>
   </tr>
 </table>
-<script language="Javascript" type="text/javascript">
-var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'button', iBottomMargin : 20 }),
-  showDelay: 50, 
-  showSteps: 3 
-} );
-</script>

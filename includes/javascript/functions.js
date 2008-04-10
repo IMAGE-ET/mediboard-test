@@ -974,7 +974,7 @@ Object.extend(Calendar, {
 	    aStyles.push("spot");
 	  }
 	  
-	  aStyles.removeDuplicates();
+	  aStyles.uniq();
 	  return aStyles.join(" ");
   },
 
@@ -1231,10 +1231,10 @@ TokenField.prototype.add = function(sValue,multiple) {
     }
   }
   var aToken = this.oElement.value.split("|");
-  aToken.removeByValue("");
+  aToken = aToken.without("");
   aToken.push(sValue);
   if(!multiple){
-    aToken.removeDuplicates();
+    aToken.uniq();
   }
   this.oElement.value = aToken.join("|");
   this.onComplete();
@@ -1246,8 +1246,13 @@ TokenField.prototype.remove = function(sValue) {
     return false;
   }
   var aToken = this.oElement.value.split("|");
-  aToken.removeByValue("");
-  aToken.removeByValue(sValue, true);
+  aToken = aToken.without("");
+  
+  var iPos = aToken.indexOf(sValue);
+  if (iPos != -1) {
+    aToken.splice(iPos, 1);
+  }
+  
   this.oElement.value = aToken.join("|");
   this.onComplete();
   return true;
@@ -1422,3 +1427,24 @@ function levenshtein( str1, str2 ) {
     }
     return a[l][t];
 }
+
+
+/* Control tabs creation. It saves selected tab into a cookie name TabState */
+Object.extend (Control.Tabs, {
+  storeTab: function (tabName, tab) {
+    var oTabCookie = new CJL_CookieUtil("TabState");
+    oTabCookie.setSubValue(tabName, tab);
+  },
+  loadTab: function (tabName) {
+    var oTabCookie = new CJL_CookieUtil("TabState");
+    return oTabCookie.getSubValue(tabName);
+  },
+  create: function (name, options) {
+    var tab = new Control.Tabs(name, options);
+    tab.options.afterChange = function (tab, tabName) {
+      Control.Tabs.storeTab(name, tab.id);
+    }
+    tab.setActiveTab(Control.Tabs.loadTab(name));
+    return tab;
+  }
+} );

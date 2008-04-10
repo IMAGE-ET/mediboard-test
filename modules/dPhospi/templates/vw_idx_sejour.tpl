@@ -22,22 +22,6 @@ Document.refreshList = function(sejour_id){
   url.addParam("sejour_id" , sejour_id);
   url.requestUpdate('documents', { waitingText: null } );
 }
-     
-var oCookie = new CJL_CookieUtil("EIAccordion");
-var showTabAcc = 0;
-
-if(oCookie.getSubValue("showTab")){
-  showTabAcc = oCookie.getSubValue("showTab");
-}
-
-function storeVoletAcc(objAcc){
-  var aArray = oAccord.accordionTabs;
-  for ( var i=0 ; i < aArray.length ; i++ ){
-    if(objAcc == aArray[i]){
-      oCookie.setSubValue("showTab", i.toString());
-    }
-  }
-}
 
 function loadSejour(sejour_id) {
   url_sejour = new Url;
@@ -80,14 +64,20 @@ function loadViewSejour(sejour_id, praticien_id){
   }
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
   {{if $object->_id}}
     loadViewSejour({{$object->_id}});
   {{/if}}
-}
 
+  /* Tab initialization */
+  var tab_sejour = Control.Tabs.create('tab-sejour');
+  
+  {{if $app->user_prefs.ccam_sejour == 1 }}
+  var tab_actes = new Control.Tabs('tab-actes');
+  {{/if}}
+});
 </script>
 
 <table class="main">
@@ -134,12 +124,12 @@ function pageMain() {
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr>
               <td>
-              <a href="#nothing" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
+              <a href="#1" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
                 <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
               </a>
               </td>
               <td>
-              <a href="#nothing" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
+              <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
                 {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
               </a>
               </td>
@@ -177,12 +167,12 @@ function pageMain() {
               {{if $curr_sejour->_id != ""}}
               <tr>
 	              <td>
-	              <a href="#nothing" onclick="popEtatSejour({{$curr_sejour->_id}});">
+	              <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
 	                <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
 	              </a>
 	              </td>
 	              <td>
-	              <a href="#nothing" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}})">
+	              <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}})">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
 	              </td>
@@ -211,83 +201,46 @@ function pageMain() {
     </td>
     <td>
     
-   <div class="accordionMain" id="accordionConsult">
-     
-     <div id="AntTrait">
-      <div id="AntTraitHeader" class="accordionTabTitleBar">
-        Sejour
-      </div>
-      <div id="AntTraitContent"  class="accordionTabContentBox">
-         <div id="viewSejourHospi">
-         </div>
-      </div>
-     </div>
-  
-   {{if $app->user_prefs.ccam_sejour == 1 }}
-   <div id="Actes">
-    <div id="ActesHeader" class="accordionTabTitleBar">
-      Gestion des actes
-    </div>
-    <div id="ActesContent"  class="accordionTabContentBox">
-      <table class="form">
-        <tr>
-          <td colspan="2">
-            <ul id="main_tab_group" class="control_tabs">
-              <li><a href="#one">Actes CCAM</a></li>
-              <li><a href="#two">Actes NGAP</a></li>
-              <li><a href="#three">Diagnostics</a></li>
-            </ul>
-          </td>
-        </tr>
-        <tr id="one">
-          <td>
-            <div id="ccam">
-            </div>
-          </td>
-        </tr>
-        <tr id="two">
-          <td>
-            <div id="listActesNGAP">
-            </div>
-          </td>
-        </tr>
-        <tr id="three">
-          <td>
-            <div id="cim">
-            </div>
-          </td>
-        </tr>
-      </table>
-      <script type="text/javascript">new Control.Tabs('main_tab_group');</script>
-    </div>
-  </div>
-  {{/if}}
+      <!-- Tab titles -->
+      <ul id="tab-sejour" class="control_tabs">
+        <li><a href="#viewSejourHospi">Séjour</a></li>
+        
+        {{if $app->user_prefs.ccam_sejour == 1 }}
+          <li><a href="#Actes">Gestion des actes</a></li>
+        {{/if}}
+    
+        <li><a href="#documents">Documents</a></li>
+      </ul>
+      <hr class="control_tabs" />
       
-   <div id="Docs">
-      <div id="DocsHeader" class="accordionTabTitleBar">
-        Documents
+      
+      <!-- Tabs -->
+      <div id="viewSejourHospi" style="display: none;"></div>
+      
+      {{if $app->user_prefs.ccam_sejour == 1 }}
+      <div id="Actes" style="display: none;">
+        <ul id="tab-actes" class="control_tabs">
+          <li><a href="#one">Actes CCAM</a></li>
+          <li><a href="#two">Actes NGAP</a></li>
+          <li><a href="#three">Diagnostics</a></li>
+        </ul>
+        <hr class="control_tabs" />
+        
+        <table class="form">
+          <tr id="one">
+            <td id="ccam"></td>
+          </tr>
+          <tr id="two">
+            <td id="listActesNGAP"></td>
+          </tr>
+          <tr id="three">
+            <td id="cim"></td>
+          </tr>
+        </table>
       </div>
-      <div id="DocsContent"  class="accordionTabContentBox">
-         <div id="documents">
-         </div>
-      </div>
-     </div>
-    </div>
-     
+      {{/if}}
+      
+      <div id="documents" style="display: none;"></div>
     </td>
   </tr>
 </table>
-
-
-<script language="Javascript" type="text/javascript">
-var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-  panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
-  showDelay:50,
-  showSteps:3,
-  onShowTab: storeVoletAcc,
-  onLoadShowTab: showTabAcc
-} );
-
-
-        
-</script>  

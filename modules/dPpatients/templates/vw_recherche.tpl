@@ -7,28 +7,21 @@
 function pageMain() {
   regFieldCalendar("recherche", "date_debut");
   
-  var oAccord = new Rico.Accordion($('accordionResultats'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionResultats', { iBottomMargin : 10 }),
-    showDelay: 50, 
-    showSteps: 3 
-  } );       
+  var tabs = new Control.Tabs('tab-resultats');  
 }
 
 </script>
 
-
-<form name="recherche" action="?" method="get">
-  <table class="main">
-    <tr>  
-      <td class="halfPane">
- 
-    <input type="hidden" name="m" value="{{$m}}" />
-    <input type="hidden" name="tab" value="{{$tab}}" />
-    <input type="hidden" name="new" value="1" />
-    <input type="hidden" name="rechercheOpClass" value="COperation" />
-    <input type="hidden" name="rechercheChir" value="{{$user_id}}" />
+<table class="main">
+  <tr>  
+    <td class="halfPane">
+     <form name="recherche" action="?" method="get">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+        <input type="hidden" name="new" value="1" />
+        <input type="hidden" name="rechercheOpClass" value="COperation" />
+        <input type="hidden" name="rechercheChir" value="{{$user_id}}" />
     
-       
     <table class="form">
       <tr>
         <th class="category" colspan="4">Recherche d'un dossier patient</th>
@@ -161,253 +154,223 @@ function pageMain() {
     </td>
     
       <td class="halfPane">
+        <ul id="tab-resultats" class="control_tabs">
+          {{if $dossiersMed}}<li><a href="#diagnostic">Diagnostics ({{$dossiersMed|@count}})</a></li>{{/if}}
+          {{if $traitements}}<li><a href="#traitement">Traitements ({{$traitements|@count}})</a></li>{{/if}}
+          {{if $antecedents}}<li><a href="#antecedent">Antécédents ({{$antecedents|@count}})</a></li>{{/if}}
+          {{if $consultations && $canCabinet->read}}<li><a href="#consultation">Consultations ({{$consultations|@count}})</a></li>{{/if}}
+          {{if $interventions && $canPlanningOp->read}}<li><a href="#intervention">Interventions ({{$interventions|@count}})</a></li>{{/if}}
+          {{if $sejours && $canPlanningOp->read}}<li><a href="#sejour">Séjours ({{$sejours|@count}})</a></li>{{/if}}
+          {{if !$antecedents && !$traitements && !$dossiersMed && !$consultations && !$sejours && !$interventions }}
+            <li><a href="#noresult">Aucun résultat pour la recherche</a></li>
+          {{/if}}
         
-        <div class="accordionMain" id="accordionResultats">
- 
-          {{if $dossiersMed}}
-          <div id="acc_diagnostic">
-            <div  class="accordionTabTitleBar" id="IdentiteHeader">
-              Résultats par Diagnostics ({{$dossiersMed|@count}})
-            </div>
-            <div class="accordionTabContentBox" id="IdentiteContent"  >
-              <table class="form">
+        </ul>
+        <hr class="control_tabs" />
+
+        {{if $dossiersMed}}
+        <div id="diagnostic" style="display: none;">
+          <table class="form">
+            <tr>
+              <td>
+                {{foreach from=$dossiersMed item=curr_dossier}}
+                {{assign var="patient" value=$curr_dossier->_ref_object}}
                 <tr>
-                 <td>
-                 {{foreach from=$dossiersMed item=curr_dossier}}
-                 {{assign var="patient" value=$curr_dossier->_ref_object}}
-                 <tr>
-                   <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                      {{mb_value object=$patient field="_view"}}
-                   </a>
-                   </td>
-                   <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                     {{mb_value object=$patient field="naissance"}}
-                   </a>
-                   </td>
-                   <td class="text">
-                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                     {{mb_value object=$patient field="adresse"}}
-                     {{mb_value object=$patient field="cp"}}
-                     {{mb_value object=$patient field="ville"}}
-                   </a>
-                   </td>
-                 </tr>
+                  <td class="text">
+                    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                       {{mb_value object=$patient field="_view"}}
+                    </a>
+                  </td>
+                  <td class="text">
+                    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                      {{mb_value object=$patient field="naissance"}}
+                    </a>
+                  </td>
+                  <td class="text">
+                    <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                      {{mb_value object=$patient field="adresse"}}
+                      {{mb_value object=$patient field="cp"}}
+                      {{mb_value object=$patient field="ville"}}
+                    </a>
+                  </td>
+                </tr>
+                {{/foreach}} 
+              </td>
+            </tr>
+          </table>
+        </div>
+        {{/if}}
+        
+        {{if $traitements}}
+        <div id="traitement" style="display: none;">
+         <table class="form">
+           <tr>
+             <td>
+               {{foreach from=$traitements item=curr_traitement}}
+               {{assign var="patient" value=$curr_traitement->_ref_dossier_medical->_ref_object}}
+                <tr>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="_view"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="naissance"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="adresse"}}
+                    {{mb_value object=$patient field="cp"}}
+                    {{mb_value object=$patient field="ville"}}
+                  </a>
+                  </td>
+                </tr>
+                {{/foreach}} 
+              </td>
+            </tr>
+          </table>
+        </div> 
+        {{/if}}
+
+        
+        {{if $antecedents}}
+        <div id="antecedent" style="display: none;">
+         <table class="form">
+           <tr>
+             <td>
+               {{foreach from=$antecedents item=curr_antecedent}}
+               {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
+                <tr>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="_view"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="naissance"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                    {{mb_value object=$patient field="adresse"}}
+                    {{mb_value object=$patient field="cp"}}
+                    {{mb_value object=$patient field="ville"}}
+                  </a>
+                  </td>
+                </tr>
                 {{/foreach}} 
              </td>
            </tr>
          </table>
-         </div>
         </div>
+        {{/if}}
+        
+          
+         
+        {{if $consultations && $canCabinet->read}}
+        <div id="consultation" style="display: none;">
+         <table class="form">
+           <tr>
+             <td>
+               {{foreach from=$consultations item=curr_consultation}}
+                <tr>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+                    {{mb_value object=$curr_consultation->_ref_patient field="_view"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+                    {{mb_value object=$curr_consultation->_ref_patient field="naissance"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+                    {{mb_value object=$curr_consultation->_ref_patient field="adresse"}}
+                    {{mb_value object=$curr_consultation->_ref_patient field="cp"}}
+                    {{mb_value object=$curr_consultation->_ref_patient field="ville"}}
+                  </a>
+                  </td>
+                </tr>
+                {{/foreach}} 
+             </td>
+           </tr>
+         </table>
+        </div> 
+        {{/if}}
+         
+          
+        {{if $interventions && $canPlanningOp->read}}
+        <div id="intervention" style="display: none;">
+         <table class="form">
+           <tr>
+             <td>
+               {{foreach from=$interventions item=curr_intervention}}
+                <tr>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+                    {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="_view"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+                    {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="naissance"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+                    {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="adresse"}}
+                    {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="cp"}}
+                    {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="ville"}}
+                  </a>
+                  </td>
+                </tr>
+                {{/foreach}} 
+             </td>
+           </tr>
+         </table>
+        </div> 
         {{/if}}
           
           
-         {{if $traitements}}
-         <div id="acc_traitement">
-           <div  class="accordionTabTitleBar" id="IdentiteHeader">
-             Résultats par Traitements ({{$traitements|@count}})
-           </div>
-           <div class="accordionTabContentBox" id="IdentiteContent"  > 
-             <table class="form">
-               <tr>
-                 <td>
-                   {{foreach from=$traitements item=curr_traitement}}
-                   {{assign var="patient" value=$curr_traitement->_ref_dossier_medical->_ref_object}}
-                    <tr>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="_view"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="naissance"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="adresse"}}
-                        {{mb_value object=$patient field="cp"}}
-                        {{mb_value object=$patient field="ville"}}
-                      </a>
-                      </td>
-                    </tr>
-                   {{/foreach}} 
-                 </td>
-               </tr>
-             </table>
-           </div>
-         </div> 
-         {{/if}}
+        {{if $sejours && $canPlanningOp->read}}
+        <div id="sejour" style="display: none;">
+         <table class="form">
+           <tr>
+             <td>
+               {{foreach from=$sejours item=curr_sejour}}
+                <tr>
+                  <td class="text">
+                   <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+                     {{mb_value object=$curr_sejour->_ref_patient field="_view"}}
+                   </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+                    {{mb_value object=$curr_sejour->_ref_patient field="naissance"}}
+                  </a>
+                  </td>
+                  <td class="text">
+                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+                    {{mb_value object=$curr_sejour->_ref_patient field="adresse"}}
+                    {{mb_value object=$curr_sejour->_ref_patient field="cp"}}
+                    {{mb_value object=$curr_sejour->_ref_patient field="ville"}}
+                  </a>
+                  </td>
+                </tr>
+                {{/foreach}} 
+             </td>
+           </tr>
+         </table>
+        </div> 
+        {{/if}}
         
         
-        
-        {{if $antecedents}}
-         <div id="acc_antecedent">
-           <div  class="accordionTabTitleBar" id="IdentiteHeader">
-             Résultats par Antécédents ({{$antecedents|@count}})
-           </div>
-           <div class="accordionTabContentBox" id="IdentiteContent"  > 
-             <table class="form">
-               <tr>
-                 <td>
-                   {{foreach from=$antecedents item=curr_antecedent}}
-                   {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
-                    <tr>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="_view"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="naissance"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                        {{mb_value object=$patient field="adresse"}}
-                        {{mb_value object=$patient field="cp"}}
-                        {{mb_value object=$patient field="ville"}}
-                      </a>
-                      </td>
-                    </tr>
-                    {{/foreach}} 
-                 </td>
-               </tr>
-             </table>
-           </div>
-         </div> 
-         {{/if}}
-        
-          
-         
-         {{if $consultations && $canCabinet->read}}
-         <div id="acc_consultation">
-           <div  class="accordionTabTitleBar" id="IdentiteHeader">
-             Résultats par Consultations ({{$consultations|@count}})
-           </div>
-           <div class="accordionTabContentBox" id="IdentiteContent"  > 
-             <table class="form">
-               <tr>
-                 <td>
-                   {{foreach from=$consultations item=curr_consultation}}
-                    <tr>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                        {{mb_value object=$curr_consultation->_ref_patient field="_view"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                        {{mb_value object=$curr_consultation->_ref_patient field="naissance"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                        {{mb_value object=$curr_consultation->_ref_patient field="adresse"}}
-                        {{mb_value object=$curr_consultation->_ref_patient field="cp"}}
-                        {{mb_value object=$curr_consultation->_ref_patient field="ville"}}
-                      </a>
-                      </td>
-                    </tr>
-                    {{/foreach}} 
-                 </td>
-               </tr>
-             </table>
-           </div>
-         </div> 
-         {{/if}}
-         
-          
-         {{if $interventions && $canPlanningOp->read}}
-         <div id="acc_intervention">
-           <div  class="accordionTabTitleBar" id="IdentiteHeader">
-             Résultats par Interventions ({{$interventions|@count}})
-           </div>
-           <div class="accordionTabContentBox" id="IdentiteContent"  > 
-             <table class="form">
-               <tr>
-                 <td>
-                   {{foreach from=$interventions item=curr_intervention}}
-                    <tr>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                        {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="_view"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                        {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="naissance"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                        {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="adresse"}}
-                        {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="cp"}}
-                        {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="ville"}}
-                      </a>
-                      </td>
-                    </tr>
-                    {{/foreach}} 
-                 </td>
-               </tr>
-             </table>
-           </div>
-         </div> 
-         {{/if}}
-          
-          
-         {{if $sejours && $canPlanningOp->read}}
-         <div id="acc_sejour">
-           <div  class="accordionTabTitleBar" id="IdentiteHeader">
-             Résultats par Séjours ({{$sejours|@count}})
-           </div>
-           <div class="accordionTabContentBox" id="IdentiteContent"  > 
-             <table class="form">
-               <tr>
-                 <td>
-                   {{foreach from=$sejours item=curr_sejour}}
-                    <tr>
-                      <td class="text">
-                       <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                         {{mb_value object=$curr_sejour->_ref_patient field="_view"}}
-                       </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                        {{mb_value object=$curr_sejour->_ref_patient field="naissance"}}
-                      </a>
-                      </td>
-                      <td class="text">
-                      <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                        {{mb_value object=$curr_sejour->_ref_patient field="adresse"}}
-                        {{mb_value object=$curr_sejour->_ref_patient field="cp"}}
-                        {{mb_value object=$curr_sejour->_ref_patient field="ville"}}
-                      </a>
-                      </td>
-                    </tr>
-                    {{/foreach}} 
-                 </td>
-               </tr>
-             </table>
-           </div>
-         </div> 
-         {{/if}}
-          
-          
-          {{if !$antecedents && !$traitements && !$dossiersMed && !$consultations && !$sejours && !$interventions }}
-          <div id="acc_aucunResultat">
-            <div  class="accordionTabTitleBar" id="IdentiteHeader">
-              Aucun résultat pour la recherche
-            </div>
-            <div class="accordionTabContentBox" id="IdentiteContent"  >
-              
-            </div>
-          </div>          
-          {{/if}}
-        </div>    
+        {{if !$antecedents && !$traitements && !$dossiersMed && !$consultations && !$sejours && !$interventions }}
+        <div id="noresult" style="display: none;"></div>          
+        {{/if}}
     </td>
   </table>
-</form>
