@@ -20,7 +20,7 @@
       </table>
     </td>
     <td>
-      <div id="produits_elements"
+      <div id="produits_elements">
       {{*include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 prescription=$prescription*}}
       </div>
     </td>
