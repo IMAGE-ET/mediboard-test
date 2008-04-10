@@ -15,13 +15,15 @@ if ($chir_id = mbGetValueFromPost("chir_id")) {
 
 $do = new CDoObjectAddEdit("CConsultation", "consultation_id");
 $do->doBind();
+
 if (intval(mbGetValueFromPost("del"))) {
     $do->doDelete();
     if(!$do->_obj->consultation_id){
       $selConsult = null;
       mbSetValueToSession("selConsult");
     }
-} else {
+} 
+else {
   $do->doStore();
   if(isset($_POST["_dialog"]))
     $do->redirect = "m=dPcabinet&dialog=1&a=".$_POST["_dialog"];

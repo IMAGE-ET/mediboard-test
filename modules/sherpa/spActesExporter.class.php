@@ -106,24 +106,25 @@ class CSpActesExporter {
 	/**
 	 * Associations diagnostics CIM Mediboard et les détails CIM Sherpa
 	 */
-	static function exportDetsCIM(CCodable &$codable) {
+	static function exportDetsCIM(CSejour &$sejour) {
 	  $spDetCIM = new CSpDetCIM();
-	  $spDetCIM->makeId();
-	  $spDetCIM->mapFrom($codable);
-	  $spDetCIM->idinterv = $codable->_idinterv;
-	  $spDetCIM->getCurrentDataSource();
-	
-	  self::$detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
 	  
-	  $sejour =& $codable->_ref_sejour;
-	
+	  if ($sejour->DP) {
+		  $spDetCIM->makeId();
+		  $spDetCIM->mapFrom($sejour);
+		  $spDetCIM->idinterv = $sejour->_idinterv;
+		  $spDetCIM->getCurrentDataSource();
+		
+		  self::$detCIM[$sejour->_class_name][$sejour->_id][] = $spDetCIM->store();
+	  }
+	  
 	  // Diagnostic relié
 	  if ($sejour->DR) {
 	    $spDetCIM->makeId();
 	    $spDetCIM->typdia = "R";
 	    $spDetCIM->coddia = CSpObject::makeString($sejour->DR);
 	    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
-	    self::$detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
+	    self::$detCIM[$sejour->_class_name][$sejour->_id][] = $spDetCIM->store();
 	  }
 	  
 	  // Diagnostics associés
@@ -134,7 +135,7 @@ class CSpActesExporter {
 		    $spDetCIM->typdia = "S";
 		    $spDetCIM->coddia = CSpObject::makeString($code_cim);
 		    $spDetCIM->datmaj = mbDateToLocale(mbDateTime());
-		    self::$detCIM[$codable->_class_name][$codable->_id][] = $spDetCIM->store();
+		    self::$detCIM[$sejour->_class_name][$sejour->_id][] = $spDetCIM->store();
 		  }
 	  }
 	}

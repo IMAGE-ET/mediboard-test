@@ -266,8 +266,10 @@ class CMbObject {
   /**
    * Check wether a field has been modified or not
    * @param field string Field name
+   * @return boolean
    */
   function fieldModified($field) {
+      
     // Field is not valued
     if ($this->$field === null) {
       return false;
@@ -278,15 +280,25 @@ class CMbObject {
       return false;
     }
     
+    // Load DB version
     $this->loadOldObject();
-    if ($this->_specs[$field] instanceof CFloatSpec) {
-      if ((round($this->$field, 2) !== round($this->_old->$field, 2)) && $this->$field !== "" && $this->_old->$field !== null) {
+    if (!$this->_old->_id) {
+      return false;
+    }
+    
+    $spec = $this->_specs[$field];
+    
+    // Not formally deterministic cas floats
+    if ($spec instanceof CFloatSpec) {
+      if (round($this->$field, 2) !== round($this->_old->$field, 2)) {
         return true;
       }
     }
-    else if(($this->$field !== $this->_old->$field) && $this->$field !== "" && $this->_old->$field !== null){
+    
+    if ($this->$field !== $this->_old->$field) {
       return true;
     }
+    
     return false;
   }
   

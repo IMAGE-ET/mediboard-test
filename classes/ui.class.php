@@ -17,10 +17,6 @@ define("UI_MSG_ERROR"  , 4);
 // global variable holding the translation array
 $GLOBALS["translate"] = array();
 
-define("UI_CASE_UPPER"     , 1);
-define("UI_CASE_LOWER"     , 2);
-define("UI_CASE_UPPERFIRST", 3);
-
 /**
  * The Application Class
  * 

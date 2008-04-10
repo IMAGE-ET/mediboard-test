@@ -33,7 +33,7 @@ class CSpUrgDro extends CSpObject {
   );
   
   static $transTrans = array (
-    "",
+    "" => "",
     "perso" => "1",
     "perso_taxi" => "7",
     "ambu" => "3",

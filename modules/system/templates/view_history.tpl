@@ -124,7 +124,7 @@ function pageMain() {
     <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
     <td>
       {{foreach from=$curr_object->_fields item=curr_field}}
-      {{tr}}{{$curr_object->object_class}}-{{$curr_field}}{{/tr}}<br />
+      <label title="{{$curr_field}}">{{tr}}{{$curr_object->object_class}}-{{$curr_field}}{{/tr}}</label><br />
       {{/foreach}}
     </td>
   </tr>

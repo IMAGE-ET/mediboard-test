@@ -252,7 +252,7 @@ class CConsultation extends CCodable {
   }
    
   function updateDBFields() {
-  	if (($this->_hour !== null) && ($this->_min !== null)) {
+    if (($this->_hour !== null) && ($this->_min !== null)) {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
@@ -281,25 +281,33 @@ class CConsultation extends CCodable {
       }
       return $msg . parent::check();
     }
+    
     $this->loadOldObject();
-    if($this->valide === "0"){
+    if ($this->valide === "0"){
       // Dévalidation avec règlement déjà effectué
-      if($this->_old->tiers_date_reglement || $this->_old->patient_date_reglement){
+      if ($this->_old->tiers_date_reglement 
+       || $this->_old->patient_date_reglement){
         $msg .= "Vous ne pouvez plus dévalider le tarif, le règlement a déjà été effectué";
       }
     }
-    if($this->_old->valide === "0"){
+    
+    if ($this->_old->valide === "0") {
       // Règlement sans validation
-      if($this->fieldModified("tiers_date_reglement") || $this->fieldModified("patient_date_reglement")) {
+      if ($this->fieldModified("tiers_date_reglement") 
+       || ($this->fieldModified("patient_date_reglement") && $this->patient_date_reglement !== "")) {
         $msg .= "Vous ne pouvez pas effectuer le règlement si le tarif n'a pas été validé";
       }
     }
-    if($this->_old->valide === "1" && $this->valide === "1"){
+    
+    if ($this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
-      if ($this->fieldModified("secteur1") || $this->fieldModified("secteur2") ||
-          $this->fieldModified("total_assure") || $this->fieldModified("total_amc") ||
-          $this->fieldModified("total_amo") || $this->fieldModified("du_patient") ||
-          $this->fieldModified("du_tiers")){
+      if ($this->fieldModified("secteur1") 
+       || $this->fieldModified("secteur2")
+       || $this->fieldModified("total_assure") 
+       || $this->fieldModified("total_amc") 
+       || $this->fieldModified("total_amo") 
+       || $this->fieldModified("du_patient") 
+       || $this->fieldModified("du_tiers")) {
         $msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         //$msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
@@ -660,9 +668,6 @@ class CConsultation extends CCodable {
   }
   
   function store() {
-    
-    $this->check();
-    
     // Dans le cas d'une urgence
     // Ne pas mettre dans l'updateDBFields sinon effet de bord sur loadMatching
   	if($this->sejour_id !== null && $this->sejour_id){

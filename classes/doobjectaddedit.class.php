@@ -57,7 +57,7 @@ class CDoObjectAddEdit {
     $this->callBack        = CMbArray::extract($this->refTab, "callback");
     
     // Object binding
-    if (!$this->_obj->bind( $this->refTab )) {
+    if (!$this->_obj->bind($this->refTab)) {
       $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
       if ($this->redirectError) {
         $this->redirect =& $this->redirectError;

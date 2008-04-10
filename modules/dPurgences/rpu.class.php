@@ -93,6 +93,7 @@ class CRPU extends CMbObject {
       "_entree"         => "dateTime",
       "_etablissement_transfert_id" => "ref class|CEtabExterne"
      );
+      
     return array_merge($specsParent, $specs);
   }
   
@@ -190,7 +191,7 @@ class CRPU extends CMbObject {
     }
        	
     // Standard Store
-    if($msg = parent::store()){
+    if ($msg = parent::store()){
       return $msg;
     }
   }
