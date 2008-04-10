@@ -349,7 +349,7 @@ function onSubmitTraitement(oForm) {
           {{foreach from=$curr_cat item=curr_code key="key"}}
           <tr>
             <td class="text">
-            <form name="code_finder{{$curr_code->sid}}" action="">
+            <form name="code_finder-{{$curr_code->sid}}" action="?">
               <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(document.addOpFrm &amp;&amp; document.addOpFrm.operation_id.value != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
                 Ajouter
               </button>
@@ -360,7 +360,7 @@ function onSubmitTraitement(oForm) {
               </button>
               <script type="text/javascript">   
                 CIM10Selector.initfind{{$curr_code->sid}} = function(){
-                  this.sForm = "code_finder{{$curr_code->sid}}";
+                  this.sForm = "code_finder-{{$curr_code->sid}}";
                   this.sCode = "codeCim";
                   this.find();
                 }

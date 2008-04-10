@@ -11,7 +11,7 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
 	  {{if !$prescription->_id}}
-	    <form name="addPrescriptionSejour">
+	    <form name="addPrescriptionSejour" action="?">
 	    {{if $object_class == "CSejour"}}
 	      {{mb_label object=$prescription field="type"}}
 	      {{mb_field object=$prescription field="_type_sejour"}}

@@ -27,17 +27,19 @@ $rpu = new CRPU();
 $rpu->load($rpu_id);
 $rpu->loadRefSejour();
 
+$sejour_rpu =& $rpu->_ref_sejour;
+
 // Creation du nouveau sejour et pre-remplissage des champs
 $sejour = new CSejour();
-$sejour->patient_id = $rpu->_ref_sejour->patient_id;
-$sejour->praticien_id = $rpu->_ref_sejour->praticien_id;
-$sejour->group_id = $rpu->_ref_sejour->group_id;
+$sejour->patient_id   = $sejour->rpu->patient_id;
+$sejour->praticien_id = $sejour->rpu->praticien_id;
+$sejour->group_id     = $sejour->rpu->group_id;
 $sejour->entree_prevue = mbDateTime();
 $sejour->sortie_prevue = mbDateTime("+ 1 day");
 $sejour->entree_reelle = mbDateTime();
 $sejour->type = "comp";
-$sejour->DP = $rpu->_ref_sejour->DP;
-$sejour->DR = $rpu->_ref_sejour->DR;
+$sejour->DP = $sejour->rpu->DP;
+$sejour->DR = $sejour->rpu->DR;
 if($rpu->diag_infirmier){ 
   $sejour->rques = "Diagnostic infirmier: $rpu->diag_infirmier\n";
 }
@@ -71,13 +73,14 @@ viewMsg($msg, "msg-CConsultation-title-modify");
 // Sauvegarde du RPU
 $rpu->orientation = "HO";
 $rpu->mutation_sejour_id = $sejour->_id;
+$rpu->GEMSA = "4";
 $msg = $rpu->store();
 viewMsg($msg, "msg-CRPU-title-close");
 
 // Sauvegarde du sejour
-$sejour_rpu =& $rpu->_ref_sejour;
 $sejour_rpu->sortie_reelle = mbDateTime();
 $sejour_rpu->mode_sortie = "transfert";
+$sejour_rpu->annule = "1";
 $sejour_rpu->etablissement_transfert_id = "";
 $msg = $sejour_rpu->store();
 viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");

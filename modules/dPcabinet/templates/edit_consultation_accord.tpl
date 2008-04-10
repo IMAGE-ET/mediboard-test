@@ -73,11 +73,7 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
-  
-  {{if $current_m == "dPurgences" && $consult->_id}}
-    regFieldCalendar("editSejour", "sortie_reelle", true);
-  {{/if}}
-  
+    
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
     Try.these(document.editAddictFrm.type.onchange);

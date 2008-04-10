@@ -144,8 +144,8 @@ function pageMain() {
     <th>{{mb_label object=$rpu field="ccmu"}}</th>
     <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence"}}</td>
   {{/if}}
-    <th>{{mb_label object=$rpu field="prise_en_charge"}}</th>
-    <td>{{mb_field object=$rpu field="prise_en_charge" defaultOption="&mdash; Prise en charge"}}</td>
+    <th>{{mb_label object=$rpu field="pec_transport"}}</th>
+    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
   </tr>
   
   {{if $can->edit}}

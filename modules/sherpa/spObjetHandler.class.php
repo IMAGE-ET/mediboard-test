@@ -50,11 +50,11 @@ class CSpObjectHandler extends CMbObjectHandler {
 	    }
 	    
 	    $counter = substr($id, 1, 1);
-	    if ($mbObject->type == "urg" && !in_range($counter, "5", "9")) {
+	    if ($mbObject->type == "urg" && !$mbObject->zt && !in_range($counter, "5", "9")) {
 	      return false;
 	    }
 	    
-	    if ($mbObject->type != "urg" && !in_range($counter, "0", "2")) {
+	    if (($mbObject->type != "urg" || $mbObject->zt) && !in_range($counter, "0", "2")) {
 	      return false;
 	    }
     }
@@ -82,7 +82,7 @@ class CSpObjectHandler extends CMbObjectHandler {
 	    $min = "00001";
 			$max = "29999";
 			
-			if ($mbObject->type == "urg") {
+			if ($mbObject->type == "urg" && !$mbObject->zt) {
 				$min = "50001";
 			  $max = "99999";
 			}

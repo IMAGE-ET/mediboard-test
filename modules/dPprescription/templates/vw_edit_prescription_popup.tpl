@@ -61,7 +61,7 @@ function viewProduit(cip){
               {{tr}}CPrescription.type.pre_admission{{/tr}}
             </a>
             {{if $prescription->type == "pre_admission" && !$prescriptions.sejour}}
-              <form name="addPrescriptionSejour" method="post" action="">
+              <form name="addPrescriptionSejour" method="post" action="?">
 	              <input type="hidden" name="m" value="dPprescription" />
 			          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
 			          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />

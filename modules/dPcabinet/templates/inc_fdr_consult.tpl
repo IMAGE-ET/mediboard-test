@@ -359,8 +359,8 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 		    </tr>
         {{/foreach}}
 
+        {{if $patient->_id_vitale && $praticien->_id_cps}}
         <tr>
-		      {{if $patient->_id_vitale && $praticien->_id_cps}}
           <td class="button" colspan="2">
             {{if !$consult->_current_fse}}
 			      <button class="new" type="button" onclick="Intermax.Triggers['Formater FSE']('{{$praticien->_id_cps}}', '{{$patient->_id_vitale}}');">
@@ -371,8 +371,9 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 			        Mettre à jour FSE
 			      </button>
           </td>
-          {{/if}}
         </tr>
+        {{/if}}
+
       </table>
     </td>
 	  {{/if}}
@@ -513,7 +514,14 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
         <!-- Fin du formulaire de reglement -->
         
         {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
-        {{if !$consult->sejour_id}}
+
+        {{if $consult->sejour_id}}
+        <tr>
+          <td colspan="2" style="text-align: center;">
+            <strong>ATU : Règlement à effectuer au bureau des sorties</strong>
+          </td>
+        </tr>
+        {{else}}
         
         {{if $consult->du_patient}}
         <tr>

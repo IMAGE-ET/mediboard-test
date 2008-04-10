@@ -299,7 +299,7 @@ class CConsultation extends CCodable {
       }
     }
     
-    /*if ($this->_old->valide === "1" && $this->valide === "1") {
+    if ($this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
       if ($this->fieldModified("secteur1") 
        || $this->fieldModified("secteur2")
@@ -307,11 +307,12 @@ class CConsultation extends CCodable {
        || $this->fieldModified("total_amc") 
        || $this->fieldModified("total_amo") 
        || $this->fieldModified("du_patient") 
-       || $this->fieldModified("du_tiers")) {
+       || $this->fieldModified("du_tiers")) {        
         $msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
         //$msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
-    }*/
+    }
+    
     return $msg . parent::check();
   }
   

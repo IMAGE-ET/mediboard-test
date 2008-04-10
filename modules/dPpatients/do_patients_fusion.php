@@ -79,7 +79,7 @@ if ($msg = $newPatient->transferBackRefsFrom($patient2)) {
   $do->errorRedirect($msg);
 }
 
-$newPatient->merge();
+$newPatient->onMerge();
 
 // Suppression des anciens objets
 if ($msg = $patient1->delete()) {

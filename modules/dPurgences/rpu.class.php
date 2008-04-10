@@ -21,7 +21,7 @@ class CRPU extends CMbObject {
   var $mode_entree     = null;
   var $provenance      = null;
   var $transport       = null;
-  var $prise_en_charge = null;
+  var $pec_transport = null;
   var $motif           = null;
   var $ccmu            = null;
   var $gemsa           = null;
@@ -31,7 +31,6 @@ class CRPU extends CMbObject {
   var $radio_debut     = null;
   var $radio_fin       = null;
   var $mutation_sejour_id = null;
-  
   
   // Distant Fields
   var $_count_consultations = null;
@@ -75,7 +74,7 @@ class CRPU extends CMbObject {
       "mode_entree"     => "enum list|6|7|8 notNull",
       "provenance"      => "enum list|1|2|3|4|5|8",
       "transport"       => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
-      "prise_en_charge" => "enum list|med|paramed|aucun",
+      "pec_transport" => "enum list|med|paramed|aucun",
       "motif"           => "text",
       "ccmu"            => "enum list|1|P|2|3|4|5|D",
       "gemsa"           => "enum list|1|2|3|4|5|6",
@@ -162,47 +161,53 @@ class CRPU extends CMbObject {
   
   
   function bindSejour() {
+    if (!$this->_bind_sejour) {
+      return;
+    }
+    
     global $g;
     
     $this->_bind_sejour = false;
     
     $this->loadRefsFwd();
-    $this->_ref_sejour->patient_id = $this->_patient_id;
-    $this->_ref_sejour->group_id = $g;
-    $this->_ref_sejour->praticien_id = $this->_responsable_id;
-    $this->_ref_sejour->type = "urg";
-    $this->_ref_sejour->entree_prevue = $this->_entree;
-    $this->_ref_sejour->entree_reelle = $this->_entree;
-    $this->_ref_sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
-    if($msg = $this->_ref_sejour->store()) {
+    $sejour =& $this->_ref_sejour;
+    $sejour->patient_id = $this->_patient_id;
+    $sejour->group_id = $g;
+    $sejour->praticien_id = $this->_responsable_id;
+    $sejour->type = "urg";
+    $sejour->entree_prevue = $this->_entree;
+    $sejour->entree_reelle = $this->_entree;
+    $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
+    if ($msg = $sejour->store()) {
       return $msg;
     }
     // Affectation du sejour_id au RPU
-    $this->sejour_id = $this->_ref_sejour->_id;
+    $this->sejour_id = $sejour->_id;
   }
   
   
   function store() {
     // Bind Sejour
-    if ($this->_bind_sejour) {
-      if ($msg = $this->bindSejour()) {
-        return $msg;
-      }
+    if ($msg = $this->bindSejour()) {
+      return $msg;
     }
        	
     // Standard Store
     if ($msg = parent::store()){
       return $msg;
     }
+    
+    $this->_ref_sejour->onStore();
   }
   
   function delete() {
-    $this->loadRefsFwd();
-    if($msg = parent::delete()) {
+    if ($msg = parent::delete()) {
       return $msg;
     }
-    $msg = $this->_ref_sejour->delete();
-    return $msg;
+    
+    // @TODO: N'est-ce pas un cascaded
+    $this->loadRefsFwd();
+    return $this->_ref_sejour->delete();
   }
 }
 ?>

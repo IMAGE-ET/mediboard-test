@@ -113,7 +113,7 @@ function submitSejour(){
     <th>{{tr}}CRPU-_patient_id{{/tr}}</th>
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
     <th>
-    {{mb_colonne class="CRPU" field="_prise_en_charge" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sortie_rpu"}}
+    {{mb_colonne class="CRPU" field="_pec_transport" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_sortie_rpu"}}
     </th>
     <th>RPU</th>
     <th>Séjour</th>

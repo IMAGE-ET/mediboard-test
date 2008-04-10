@@ -16,7 +16,7 @@ $selAffichage = mbGetValueFromPostOrSession("selAffichage","tous");
 
 // Parametre de tri
 $order_way = mbGetValueFromGetOrSession("order_way", "ASC");
-$order_col = mbGetValueFromGetOrSession("order_col", "_prise_en_charge");
+$order_col = mbGetValueFromGetOrSession("order_col", "_pec_transport");
 
 // Selection de la date
 $date = mbGetValueFromGetOrSession("date", mbDate());
@@ -36,11 +36,11 @@ if($selAffichage == "sortie"){
   $where["sortie_reelle"] = "IS NULL";
 }
 
-if($order_col != "_prise_en_charge"){
-  $order_col = "_prise_en_charge";
+if($order_col != "_pec_transport"){
+  $order_col = "_pec_transport";
 }
 
-if($order_col == "_prise_en_charge"){
+if($order_col == "_pec_transport"){
   $order = "consultation.heure $order_way";
 } else {
   $order = null;

@@ -155,9 +155,9 @@
   </tr>
     <tr>
     <td>
-      <strong>{{tr}}CRPU-prise_en_charge{{/tr}}:</strong>
-      {{if $rpu->prise_en_charge}}
-      {{mb_value object=$rpu field=prise_en_charge}}
+      <strong>{{tr}}CRPU-pec_transport{{/tr}}:</strong>
+      {{if $rpu->pec_transport}}
+      {{mb_value object=$rpu field=pec_transport}}
       {{/if}}
     </td>
     <td>

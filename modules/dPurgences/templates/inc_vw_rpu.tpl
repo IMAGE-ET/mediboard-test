@@ -160,8 +160,8 @@ function initFields(mode_sortie){
 				  
 				  </tr>
 				  <tr>
-				    <th>{{mb_label object=$rpu field="prise_en_charge"}}</th>
-				    <td>{{mb_field object=$rpu field="prise_en_charge" defaultOption="&mdash; Prise en charge" onchange="submitRPU(this.form);"}}</td>
+				    <th>{{mb_label object=$rpu field="pec_transport"}}</th>
+				    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
 			  </table>
 			</form>	      
@@ -201,10 +201,19 @@ function initFields(mode_sortie){
 			   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  
 				  <table class="form">
+				  {{if $can->admin && 0}}
 				  <tr>
 				    <th>{{mb_label object=$sejour field="sortie_reelle"}}</th>
-				    <td class="date">{{mb_field object=$sejour field="sortie_reelle" form="editSejour" onchange="submitSejour();"}}</td> 
+				    <td class="date">
+				    	{{mb_field object=$sejour field="sortie_reelle" form="editSejour" onchange="submitSejour();"}}
+				    	<script type="text/javascript">
+				    		Main.add(function() {
+				    			regFieldCalendar("editSejour", "sortie_reelle", true);
+				    		} );
+				    	</script>				    	
+				    </td> 
 				  </tr>
+				  {{/if}}
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
 				    <td>
@@ -230,21 +239,24 @@ function initFields(mode_sortie){
 		     <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
 			
 	      <table class="form">
-				  <tr> 
-				    <th style="width: 120px;">{{mb_label object=$rpu field="destination"}}</th>
-				    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="submitRPU(this.form);"}}</td> 
-				  </tr>	  
 				  <tr>
-				    <th>{{mb_label object=$rpu field="orientation"}}</th>
-				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="submitRPU(this.form);"}}</td>
-				  </tr>
-				  <tr>
-				    <th>{{mb_label object=$rpu field="gemsa"}}</th>
+				    <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
 				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
 				  <tr>
 				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
 				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash;Type Pathologie" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+				  <tr>
+				    <th class="category" colspan="2">Précisions sur la sortie</th>
+				  </tr>
+				  <tr>
+				    <th>{{mb_label object=$rpu field="orientation"}}</th>
+				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+				  <tr> 
+				    <th>{{mb_label object=$rpu field="destination"}}</th>
+				    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="submitRPU(this.form);"}}</td> 
 				  </tr>
 				  <tr>   
 				    <td colspan="2" />
@@ -262,13 +274,35 @@ function initFields(mode_sortie){
 <table class="form">    
   <tr>
 	  <td class="button" colspan="4">
+      <!-- ZSTCD --> 
+      <form name="EditSejourZT" method="post" action="?m={{$m}}">
+				<input type="hidden" name="dosql" value="do_sejour_aed" />
+				<input type="hidden" name="m" value="dPplanningOp" />
+				<input type="hidden" name="del" value="0" />
+				<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+				
+				{{if $sejour->zt == "0"}}
+				<input type="hidden" name="zt" value="1" />
+        <button class="tick" type="submit">
+          Passer en ZSTCD
+        </button>
+				{{/if}}
+				
+				{{if $sejour->zt == "1"}}
+				<input type="hidden" name="zt" value="0" />
+        <button class="cancel" type="submit">
+          Revenir en ATU
+        </button>
+				{{/if}}
+      </form>
+
 	    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
 	    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
         Reconvoquer
       </button>
        
       <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour --> 
-      <form name="transfertHospi" method="post">
+      <form name="transfertHospi" method="post" action="?m={{$m}}">
         <input type="hidden" name="dosql" value="do_transfert_aed" />
         <input type="hidden" name="m" value="dPurgences" />
         <input type="hidden" name="del" value="0" />

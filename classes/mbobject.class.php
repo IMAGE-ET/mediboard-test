@@ -287,19 +287,13 @@ class CMbObject {
     }
     
     $spec = $this->_specs[$field];
-    
+
     // Not formally deterministic cas floats
     if ($spec instanceof CFloatSpec) {
-      if (round($this->$field, 2) !== round($this->_old->$field, 2)) {
-        return true;
-      }
+      return round($this->$field, 2) != round($this->_old->$field, 2);
     }
     
-    if ($this->$field !== $this->_old->$field) {
-      return true;
-    }
-    
-    return false;
+    return $this->$field != $this->_old->$field;
   }
   
   /**
@@ -909,24 +903,33 @@ class CMbObject {
     // Load the object to get all properties
     $this->load();
     
-    //Creation du log une fois le store terminé
+    // Creation du log une fois le store terminé
     $this->log();
     
-    // Event Handlers
-    self::makeHandlers();
-    foreach (self::$handlers as $handler) {
-      $handler->onStore($this);
-    }
+    // Trigger event
+    $this->onStore();
 
     $this->_old = null;
     return null;
   }
 
   /**
-   * Dummy function triggering onMerge event for handlers
+   * Trigger store event for handlers
    * @return void
    */
-  function merge() {
+  function onStore() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onStore($this);
+    }
+  }
+  
+  /**
+   * Trigger merge event for handlers
+   * @return void
+   */
+  function onMerge() {
     // Event Handlers
     self::makeHandlers();
     foreach (self::$handlers as $handler) {
@@ -1218,13 +1221,22 @@ class CMbObject {
     $this->log();
     
     // Event Handlers
-    self::makeHandlers();
-    foreach (self::$handlers as $handler) {
-      $handler->onDelete($this);
-    }   
+    $this->onDelete();
 
     $this->_old = null;
     return null;
+  }
+
+  /**
+   * Trigger delete event for handlers
+   * @return void
+   */
+  function onDelete() {
+    // Event Handlers
+    self::makeHandlers();
+    foreach (self::$handlers as $handler) {
+      $handler->onDelete($this);
+    }
   }
   
 
