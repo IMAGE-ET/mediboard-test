@@ -85,7 +85,7 @@ var WaitingMessage = {
 		  if(FormObserver.checkChanges()) {
   		  WaitingMessage.show();
   		} else {
-  		  return false;
+  		  return "Vous avez modifié certaines informations sur cette page sans les sauvegarder.Si vous appuyez sur OK, ces données seront perdues.";
   		}
     };
 
