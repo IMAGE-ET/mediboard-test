@@ -8,11 +8,11 @@
     <td>{{mb_value object=$product field=description}}</td>
   </tr>
   <tr>
-    <th>En stock</th>
+    <th>{{tr}}CProductStock-quantity{{/tr}}</th>
     <td>{{$product->_ref_stock_group->quantity}} {{include file="inc_bargraph.tpl" stock=$product->_ref_stock_group}}</td>
   </tr>
   <tr>
-    <th>Code produit</th>
+    <th>{{tr}}CProduct-code{{/tr}}</th>
     <td>{{$product->code}}</td>
   </tr>
 </table>

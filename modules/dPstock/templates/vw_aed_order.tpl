@@ -28,7 +28,7 @@ function pageMain() {
   <!-- Edit order -->
   <table class="form">
     <tr>
-      <th class="title" colspan="2">Nouvelle commande</th>
+      <th class="title" colspan="2">{{tr}}CProductOrder.create{{/tr}}</th>
     </tr>   
     <tr>
       <th>{{mb_label object=$order field=order_number}}</th>
@@ -38,7 +38,7 @@ function pageMain() {
       <th>{{mb_label object=$order field=societe_id}}</th>
       <td>
         <select name="societe_id" class="{{$order->_props.societe_id}}">
-          <option value="">&mdash; Choisir une société</option>
+          <option value="">&mdash; {{tr}}CSociete.choose{{/tr}}</option>
         {{foreach from=$list_societes item=curr_societe}}
           <option value="{{$curr_societe->_id}}" {{if $list_societes|@count==1}} selected="selected" {{/if}} >
           {{$curr_societe->_view}}
@@ -49,7 +49,7 @@ function pageMain() {
     </tr>
     <tr>
       <td colspan="2" class="button">
-        <button class="submit" type="submit">Remplir</button>
+        <button class="submit" type="submit">{{tr}}Fill{{/tr}}</button>
       </td>
     </tr>
   </table>
@@ -72,11 +72,11 @@ function pageMain() {
         {{/foreach}}
         </select>
         <input type="text" name="keywords" value="" />
-        <button type="button" class="search" name="search" onclick="referencesFilter.submit();">Filtrer</button>
+        <button type="button" class="search" name="search" onclick="referencesFilter.submit();">{{tr}}Filter{{/tr}}</button>
       </form>
     
       <div style="text-align: right;">
-      <button type="button" class="down" onclick="">Suggérer</button>
+      <button type="button" class="down" onclick="">{{tr}}Suggest{{/tr}}</button>
       </div>
       <div id="list-references"></div>
     </td>
@@ -91,15 +91,15 @@ function pageMain() {
         
       {{if $order->date_ordered}}
         <input type="hidden" name="_receive" value="0" />
-        <button type="button" class="tick" onclick="Form.Element.setValue(_receive, 1); submitOrder(this.form, {close: true})">Recevoir tout</button>
+        <button type="button" class="tick" onclick="Form.Element.setValue(_receive, 1); submitOrder(this.form, {close: true})">{{tr}}CProductOrder-_receive{{/tr}}</button>
         
       {{else if !$order->_received}}
         <input type="hidden" name="_autofill" value="0" />
-        <button type="button" class="change" onclick="Form.Element.setValue(_autofill, 1); submitOrder(this.form, {refreshLists: true})">Commande auto</button>
+        <button type="button" class="change" onclick="Form.Element.setValue(_autofill, 1); submitOrder(this.form, {refreshLists: true})">{{tr}}CProductOrder-_autofill{{/tr}}</button>
       {{/if}}
         
         <input type="hidden" name="cancelled" value="0" />
-        <button class="trash" type="button" onclick="Form.Element.setValue(cancelled, 1); submitOrder(this.form, {close: true})">Supprimer</button>
+        <button class="trash" type="button" onclick="Form.Element.setValue(cancelled, 1); submitOrder(this.form, {close: true})">{{tr}}Remove{{/tr}}</button>
         
         <!-- Edit order -->
         <table class="form">

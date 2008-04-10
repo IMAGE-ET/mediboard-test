@@ -26,7 +26,7 @@ function pageMain() {
             <th>{{mb_title object=$delivery field=target_class}}</th>
             <td>
               <select class="notNull str" name="target_class">
-                <option value="">&mdash; Choisissez un type</option>
+                <option value="">&mdash; {{tr}}Choose a class{{/tr}}</option>
                 {{foreach from=$classes_list|smarty:nodefaults item=curr_class}}
                 <option value="{{$curr_class}}">{{tr}}{{$curr_class}}{{/tr}}</option>
                 {{/foreach}}
@@ -36,7 +36,7 @@ function pageMain() {
             <td class="readonly">
               <input type="hidden" name="target_id" value="" class="{{$delivery->_props.target_id}}" />
               <input type="text" size="20" name="_view" readonly="readonly" value="" ondblclick="ObjectSelector.initFilter()" />
-              <button type="button" onclick="ObjectSelector.initFilter()" class="search notext">Rechercher</button>
+              <button type="button" onclick="ObjectSelector.initFilter()" class="search notext">{{tr}}Search{{/tr}}</button>
               <script type="text/javascript">
                 ObjectSelector.initFilter = function() {
                   this.sForm     = "filter-deliveries";
@@ -53,7 +53,7 @@ function pageMain() {
             <td class="readonly">
               <input type="hidden" name="product_id" value="" />
               <input type="text" name="product_name" value="" size="20" readonly="readonly" ondblclick="ProductSelector.initFilter()" />
-              <button class="search notext" type="button" onclick="ProductSelector.initFilter()">Rechercher</button>
+              <button class="search notext" type="button" onclick="ProductSelector.initFilter()">{{tr}}Search{{/tr}}</button>
               <script type="text/javascript">
               ProductSelector.initFilter = function(){
                 this.sForm = "filter-deliveries";
@@ -63,7 +63,7 @@ function pageMain() {
               }
               </script>
             </td>
-            <th>Mots clés</th>
+            <th>{{tr}}Keywords{{/tr}}</th>
             <td colspan="3"><input type="text" class="search" name="keywords" /></td>
           </tr>
           <tr>
@@ -74,8 +74,8 @@ function pageMain() {
           </tr>
           <tr>
             <td colspan="4" class="button">
-              <button type="submit" class="search">Filtrer</button>
-              <button type="button" class="cancel notext" onclick="deliveriesFilter.empty();">Remettre à zéro</button>
+              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
+              <button type="button" class="cancel notext" onclick="deliveriesFilter.empty();">{{tr}}Reset{{/tr}}</button>
             </td>
           </tr>
         </table>
@@ -85,9 +85,7 @@ function pageMain() {
     </td>
     
     <td class="halfPane">
-    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_delivery&amp;delivery_id=0">
-      Nouvelle administration
-    </a>
+    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_delivery&amp;delivery_id=0">{{tr}}msg-CProductDelivery-create{{/tr}}</a>
     <form name="edit-delivery" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="tab" value="vw_idx_delivery" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -99,9 +97,9 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $delivery->_id}}
-          <th class="title modify" colspan="2">Modification de l'administration {{$delivery->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CProductDelivery-modify{{/tr}} {{$delivery->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Nouvelle administration</th>
+          <th class="title" colspan="2">{{tr}}msg-CProductDelivery-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
@@ -109,7 +107,7 @@ function pageMain() {
           <td class="readonly">
             <input type="hidden" name="product_id" value="{{$delivery->_ref_product}}" class="{{$delivery->_props.product_id}}" />
             <input type="text" name="product_name" value="{{if $delivery->_ref_product}}{{$delivery->_ref_product->_view}}{{/if}}" size="40" readonly="readonly" ondblclick="ProductSelector.initEdit()" />
-            <button class="search notext" type="button" onclick="ProductSelector.initEdit()">Rechercher</button>
+            <button class="search notext" type="button" onclick="ProductSelector.initEdit()">{{tr}}Search{{/tr}}</button>
             <script type="text/javascript">
             ProductSelector.initEdit = function(){
               this.sForm = "edit-delivery";
@@ -129,7 +127,7 @@ function pageMain() {
           <td class="readonly">
             {{mb_field object=$delivery field=target_id hidden="1"}}
             <input type="text" size="40" name="_view" readonly="readonly" value="{{if $delivery->_ref_target}}{{$delivery->_ref_target->_view}}{{/if}}" ondblclick="ObjectSelector.initEdit()" />
-            <button type="button" onclick="ObjectSelector.initEdit()" class="search notext">Rechercher</button>
+            <button type="button" onclick="ObjectSelector.initEdit()" class="search notext">{{tr}}Search{{/tr}}</button>
             <script type="text/javascript">
               ObjectSelector.initEdit = function() {
                 this.sForm     = "edit-delivery";
@@ -150,10 +148,14 @@ function pageMain() {
           <td>{{mb_field object=$delivery field="description"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
+          <td class="button" colspan="4">
             {{if $delivery->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la \'administration',objName:'{{$delivery->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$delivery->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{else}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>  

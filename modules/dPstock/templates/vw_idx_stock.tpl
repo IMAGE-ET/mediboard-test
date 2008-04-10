@@ -89,10 +89,14 @@ function pageMain() {
           <td>{{mb_field object=$stock field="order_threshold_max" form="edit_stock" increment="1"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
+          <td class="button" colspan="4">
             {{if $stock->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le stock',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$stock->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{else}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>        

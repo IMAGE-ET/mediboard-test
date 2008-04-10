@@ -91,10 +91,14 @@ function pageMain() {
           <td>{{mb_field object=$societe field="contact_surname"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
+          <td class="button" colspan="4">
             {{if $societe->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la societé',objName:'{{$societe->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$societe->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{else}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr> 

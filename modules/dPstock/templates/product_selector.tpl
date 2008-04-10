@@ -50,24 +50,23 @@ function refreshProductInfo(product_id) {
   url.addParam("product_id", product_id);
   url.requestUpdate("product_info", { waitingText: null } );
 }
-
 </script>
 
 <form name="form_product_selector" action="" method="get" onsubmit="return false">
 <table class="main">
   <tr>
-    <th class="title" style="width: 1%;">Catégorie</th>
-    <th class="title" style="width: 1%;">Produit</th>
-    <th class="title">Informations sur le produit</th>
+    <th class="title" style="width: 1%;">{{tr}}CProductCategory{{/tr}}</th>
+    <th class="title" style="width: 1%;">{{tr}}CProduct{{/tr}}</th>
+    <th class="title">{{tr}}Information{{/tr}}</th>
   </tr>
   <tr>
     <td>
       <input type="text" name="search_category" size="20" value="" onkeydown="refreshCategoriesList(this.value);" />
-      <button class="cancel notext" id="clear_category" onclick="refreshCategoriesList(); this.form.search_category.value='';">Effacer</button>
+      <button class="cancel notext" id="clear_category" onclick="refreshCategoriesList(); this.form.search_category.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
     <td>
       <input type="text" name="search_product" size="20" value="" onkeydown="refreshProductsList(null, this.value);" />
-      <button class="cancel notext" id="clear_product" onclick="refreshProductsList(); this.form.search_product.value='';">Effacer</button>
+      <button class="cancel notext" id="clear_product" onclick="refreshProductsList(); this.form.search_product.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
     <td id="product_info" style="vertical-align: top;" rowspan="2"></td>
   </tr>
@@ -77,8 +76,8 @@ function refreshProductInfo(product_id) {
   </tr>
   <tr style="height:1%;">
     <td>
-      <button class="tick" id="setclose_button" onclick="setClose(this.form.product);">Sélectionner</button>
-      <button class="cancel" id="close_button" onclick="setClose();">Annuler</button>
+      <button class="tick" id="setclose_button" onclick="setClose(this.form.product);">{{tr}}Select{{/tr}}</button>
+      <button class="cancel" id="close_button" onclick="setClose();">{{tr}}Cancel{{/tr}}</button>
     </td>
   </tr>
 </table>

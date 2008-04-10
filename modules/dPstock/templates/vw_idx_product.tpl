@@ -15,14 +15,14 @@ function pageMain() {
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="productsFilter.submit();">
-          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <select name="societe_id" onchange="productsFilter.submit();">
-          <option value="0" >&mdash; Toutes les fabricants &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -30,16 +30,14 @@ function pageMain() {
         
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="productsFilter.submit();">Filtrer</button>
+        <button type="button" class="search" onclick="productsFilter.submit();">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="productsFilter.empty();"></button>
       </form>
 
       <div id="list-products"></div>
     </td>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">
-        Nouveau produit
-      </a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}msg-CProductCategory-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -47,9 +45,9 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">Modification du produit {{$product->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CProductCategory-modify{{/tr}} {{$product->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'une fiche produit</th>
+          <th class="title" colspan="2">{{tr}}msg-CProductCategory-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
@@ -59,7 +57,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="category_id"}}</th>
           <td><select name="category_id" class="{{$product->_props.category_id}}">
-            <option value="">&mdash; Choisir une catégorie</option>
+            <option value="">&mdash; {{tr}}msg-CProductCategory-choose{{/tr}}</option>
             {{foreach from=$list_categories item=curr_category}}
               <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id || $list_categories|@count==1}} selected="selected" {{/if}} >
               {{$curr_category->_view}}
@@ -71,7 +69,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="societe_id"}}</th>
           <td><select name="societe_id" class="{{$product->_props.societe_id}}">
-            <option value="">&mdash; Choisir un fabricant</option>
+            <option value="">&mdash; {{tr}}msg-CSociete-choose{{/tr}}</option>
             {{foreach from=$list_societes item=curr_societe}}
               <option value="{{$curr_societe->_id}}" {{if $product->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
@@ -89,10 +87,14 @@ function pageMain() {
           <td>{{mb_field object=$product field="description"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
+          <td class="button" colspan="4">
             {{if $product->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le produit',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$product->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{else}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>        
@@ -105,12 +107,12 @@ function pageMain() {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="3">Stock(s) correspondant(s)</th>
+          <th class="title" colspan="4">Référence(s) correspondante(s)</th>
         </tr>
         <tr>
-          <th>Groupe</th>
-          <th>En stock</th>
-          <th>Seuils de Commande</th>
+          <th>{{tr}}CGroup{{/tr}}</th>
+          <th>{{tr}}CProductStock-quantity{{/tr}}</th>
+          <th>{{tr}}CProductStock-bargraph{{/tr}}</th>
         </tr>
         {{foreach from=$product->_ref_stocks item=curr_stock}}
         <tr>
@@ -127,7 +129,7 @@ function pageMain() {
           <tr>
             <td colspan="3">
               <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                Nouveau stock pour ce produit
+                {{tr}}msg-CProductStock-create{{/tr}}
               </button>
             </td>
           </tr>

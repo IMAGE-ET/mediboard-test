@@ -3,17 +3,15 @@
 <table class="main">
   <tr>
     <td class="halfPane">
-      <a class="buttonnew" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">
-        Nouvelle catégorie
-      </a>
+      <a class="buttonnew" href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id=0">{{tr}}msg-CProductCategory-create{{/tr}}</a>
       <table class="tbl">
         <tr>
-          <th>Catégorie</th>
+          <th>{{tr}}CProductCategory{{/tr}}</th>
         </tr>
         {{foreach from=$list_categories item=curr_category}}
         <tr {{if $curr_category->_id == $category->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="Modifier la catégorie">
+            <a href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="{{tr}}msg-CProductCategory-modify{{/tr}}">
               {{$curr_category->name}}
             </a>
           </td>
@@ -29,9 +27,9 @@
       <table class="form">
         <tr>
           {{if $category->_id}}
-          <th class="title modify" colspan="2">Modification de la catégorie {{$category->name}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CProductCategory-modify{{/tr}} {{$category->name}}</th>
           {{else}}
-          <th class="title" colspan="2">Nouvelle catégorie</th>
+          <th class="title" colspan="2">{{tr}}msg-CProductCategory-create{{/tr}}</th>
           {{/if}}
         </tr> 
         <tr>
@@ -39,10 +37,14 @@
           <td>{{mb_field object=$category field="name"}}</td>
         </tr>
         <tr>
-          <td class="button" colspan="2">
-            <button class="submit" type="submit">Valider</button>
+          <td class="button" colspan="4">
             {{if $category->_id}}
-              <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la catégorie',objName:'{{$category->_view|smarty:nodefaults|JSAttribute}}'})">Supprimer</button>
+            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$category->_view|smarty:nodefaults|JSAttribute}}'})">
+              {{tr}}Delete{{/tr}}
+            </button>
+            {{else}}
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
             {{/if}}
           </td>
         </tr>  
