@@ -12,7 +12,9 @@ $line_id = mbGetValueFromGet("line_id");
 // Chargement de la ligne de prescription
 $line_medicament = new CPrescriptionLineMedicament();
 $line_medicament->load($line_id);
-$line_medicament->loadRefUserArret();
+//$line_medicament->loadRefUserArret();
+$line_medicament->loadRefLogDateArret();
+//$line_medicament->loadRefLogSignee();
 
 // Création du template
 $smarty = new CSmartyDP();

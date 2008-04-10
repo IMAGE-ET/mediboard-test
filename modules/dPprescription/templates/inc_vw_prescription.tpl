@@ -13,7 +13,7 @@ preselectType = function(contexte, oForm){
 	  if(contexte == "CConsultation"){
 	    oForm.type.value = "externe";
 	  } else {
-	    oForm.type.value = "traitement";
+	    oForm.type.value = "pre_admission";
 	  }
 	  
 	  $A(oForm.type).each( function(input) {
@@ -60,7 +60,7 @@ preselectType = function(contexte, oForm){
 			  {{mb_label object=$protocole field="object_class"}}
 			</th>
 			<td>
-			  {{mb_field object=$protocole field="object_class"}}  
+			  {{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}  
 			</td>
 	  </tr>
 	  <tr>
@@ -68,7 +68,12 @@ preselectType = function(contexte, oForm){
 	      {{mb_label object=$protocole field="type"}}
 	    </th>
 	    <td>
-	      {{mb_field object=$protocole field="type"}}
+	      <select name="type">
+	        <option value="pre_admission">Pré-admission</option>
+	        <option value="sejour">Séjour</option>
+	        <option value="sortie">Sortie</option>
+	        <option value="externe">Externe</option>
+	      </select>  
 	    </td>
 	  </tr>
 	  <tr>
@@ -104,17 +109,19 @@ preselectType = function(contexte, oForm){
     <input type="hidden" name="type" value="externe" />
   {{else}}
     <select name="type">
-      <option value="traitement">Traitement</option>
       <option value="pre_admission">Pre-admission</option>
       <option value="sejour">Séjour</option>
       <option value="sortie">sortie</option>
     </select>
   {{/if}}
   
-  {{if $prescription->object_class == "CConsultation" && $prescription->_ref_object->_ref_prescriptions}}              
+  {{assign var=prescriptions value=$prescription->_ref_object->_ref_prescriptions}}
+  {{assign var=prescription_externe value=$prescriptions.externe}}
+  {{if $prescription->object_class == "CConsultation" && $prescription_externe->_id}}              
+  
   <div class="big-info">
     Il n'est pas possible de créer plus d'une prescription par consultation
-    <a href="?m=dPprescription&tab=vw_edit_prescription&prescription_id={{$prescription->_ref_object->_ref_prescriptions->_id}}"><br />
+    <a href="?m=dPprescription&tab=vw_edit_prescription&prescription_id={{$prescription_externe->_id}}"><br />
     Accéder à la prescription déja créée</a>
   </div>
   {{else}}
@@ -131,21 +138,62 @@ preselectType = function(contexte, oForm){
 <table class="form">
   <tr>
     <th class="title">
+    
+      {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
+        <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
+          <img alt="Ecrire une note" src="images/icons/note_grey.png" />
+        </div>
+      {{/if}}
+     
       {{if !$mode_protocole && !$dialog}}
       <button type="button" class="cancel" onclick="Prescription.close('{{$prescription->object_id}}','{{$prescription->object_class}}')" style="float: left">
         Fermer 
       </button>
       {{/if}}
+     
       <!-- Impression de la prescription -->
-      <button type="button" class="print notext" onclick="Prescription.print('{{$prescription->_id}}')" style="float: left">
-        Print
+      <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}')" style="float: left">
+        Prescription
       </button>
+      
+      <!-- Impression de la prescription -->
+      <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
+        Ordonnance
+      </button>
+      
       {{if !$mode_protocole}}
       <!-- Affichage du recapitulatif des alertes -->
       <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
         Alertes
       </button>
-      {{/if}}
+      
+      <!-- Affichage des allergies du patient -->
+      {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+      
+      {{if $antecedents}}
+      {{if array_key_exists('alle', $antecedents)}}
+        {{assign var=allergies value=$antecedents.alle}}
+		      <span style="float: left">
+		        <a href="#allergies-{{$prescription->_id}}"
+		           onmouseover="$('allergies-{{$prescription->_id}}').show();"
+			         onmouseout="$('allergies-{{$prescription->_id}}').hide();">
+			       <img src="images/icons/warning.png" alt="Allergies" title="allergies" />
+			       Allergies
+			     </a>
+		      </span>
+			          
+		      <div id="allergies-{{$prescription->_id}}" class="tooltip" style=" text-align: left; font-size: 12px; display: none; color: black; background-color: #eee; border-style: ridge; margin-top: 20px; padding-right:5px; ">
+			      {{include file="../../dPprescription/templates/inc_vw_allergies.tpl"}}
+			    </div>  
+		    {{/if}}
+		    {{/if}}       
+      {{/if}} 
+      
+      
+      
+      
+      
+      
       {{if $mode_protocole}}
       <!-- Formulaire de modification du libelle de la prescription -->
       <form name="addLibelle-{{$prescription->_id}}" method="post">
@@ -161,8 +209,18 @@ preselectType = function(contexte, oForm){
       </form>
       <button class="tick notext"></button>
       {{else}}
-        {{$prescription->_view}}
+        {{$prescription->_view}} <br />
+     
+     
+        {{$prescription->_ref_patient->_view}}
+     
+        {{if $prescription->_ref_patient->_age}}
+           ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}})
+        {{/if}}
+     
       {{/if}}
+     
+     
     </th>
   </tr>
   {{if !$mode_protocole}}
@@ -189,7 +247,7 @@ preselectType = function(contexte, oForm){
 
 <!-- Affichage des elements de la prescription -->
 <div id="produits_elements">
-  {{include file="inc_vw_produits_elements.tpl"}}  
+  {{include file="../../dPprescription/templates/inc_vw_produits_elements.tpl"}}  
 </div>
 
 {{/if}}

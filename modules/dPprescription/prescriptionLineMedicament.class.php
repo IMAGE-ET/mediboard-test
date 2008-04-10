@@ -22,18 +22,22 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $duree           = null;
   var $unite_duree     = null;
   var $date_arret      = null;
-  var $valide          = null; 
+  var $valide_pharma   = null; 
   
   // Form Field
   var $_fin            = null;
   var $_unite_prise    = null;
   var $_specif_prise   = null;
+  var $_traitement     = null;
   
   // Object References
   var $_ref_prescription = null;
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
-  var $_ref_user_arret   = null;
+  var $_ref_prescription_traitement = null;
+  
+  // Logs
+  var $_ref_log_date_arret = null;
   
   // Alertes
   var $_ref_alertes      = null;
@@ -63,9 +67,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       "duree"           => "num",
       "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "date_arret"      => "date",
-      "valide"          => "bool",
+      "valide_pharma"   => "bool",
       "_fin"            => "date",
-      "_unite_prise"    => "str"
+      "_unite_prise"    => "str",
+      "_traitement"     => "bool"
     );
     return array_merge($specsParent, $specs);
   }
@@ -118,6 +123,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     		$this->_fin = mbDate("+ $this->duree YEARS", $this->debut);	
     	}
     }
+    if($this->_ref_prescription->type == "traitement"){
+    	$this->_traitement = "1";
+    }
   }
   
   // Store-like function
@@ -153,6 +161,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	}
   }
   
+  
   function loadRefsFwd() {
   	$this->_ref_prescription = new CPrescription();
     $this->_ref_prescription->load($this->prescription_id);
@@ -172,19 +181,8 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_ref_prises = $this->loadBackRefs("prise_posologie");	
   }
   
-  // Chargement de l'utilisateur ayant arrete la ligne de prescription
-  function loadRefUserArret(){
-  	$this->_ref_user_arret = new CMediusers();
-  	$user_log = new CUserLog();
-  	$user_log->object_id = $this->_id;
-  	$user_log->object_class = $this->_class_name;
-  	//$user_log->fields = "date_arret";
-    $order = "user_log_id DESC";
-  	$user_log->loadMatchingObject($order);
-    if($user_log->_id && $this->date_arret){
-    	$user_log->loadRefsFwd();
-    	$this->_ref_user_arret = $user_log->_ref_user;
-    }
+  function loadRefLogDateArret(){ 	
+  	$this->_ref_log_date_arret = $this->loadLastLogForField("date_arret");
   }
   
   function loadPosologie() {

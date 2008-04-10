@@ -1544,6 +1544,21 @@ class CMbObject {
     $this->_ref_last_log  = end($this->_ref_logs);
   }
 
+  
+  function loadLastLogForField($fieldName){	
+  	$log = new CUserLog();
+  	$where = array();
+  	$order = "date DESC";
+  	$where["object_id"] = " = '$this->_id'";
+  	$where["object_class"] = " = '$this->_class_name'";
+  	$where["fields"] = " LIKE '%$fieldName%'";
+  	$log->loadObject($where, $order);
+  	if($log->_id){
+  	  $log->loadRefsFwd();
+  	}
+  	return $log;
+  }
+  
   function loadAffectationsPersonnel() {
     if (null == $affectations = $this->loadBackRefs("affectations_personnel")) {
       return;

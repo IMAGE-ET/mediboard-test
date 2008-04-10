@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.31";
+$config["mod_version"]     = "0.33";
 $config["mod_type"]        = "user";
 
 
@@ -355,7 +355,26 @@ class CSetupdPprescription extends CSetup {
             ADD `principal` ENUM('0','1') DEFAULT '0';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.31";
+    $this->makeRevision("0.31");
+    $sql = "ALTER TABLE `prescription_line`
+            CHANGE `valide` `valide_prat` ENUM('0','1') DEFAULT '0', 
+            ADD `valide_pharma` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.32");
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `signee` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `signee` ENUM('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line`
+            CHANGE `valide_prat` `signee` ENUM('0','1') DEFAULT '0'";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.33";
   }  
 }
 

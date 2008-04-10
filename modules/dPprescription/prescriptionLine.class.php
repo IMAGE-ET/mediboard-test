@@ -16,13 +16,18 @@ class CPrescriptionLine extends CMbObject {
   var $prescription_id = null;
   var $ald             = null;
   var $praticien_id    = null;
+  var $signee           = null;
+  
+  // Log
+  var $_ref_log_signee = null;
   
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "prescription_id" => "notNull ref class|CPrescription cascade",
       "ald"             => "bool",
-      "praticien_id"    => "ref class|CMediusers"
+      "praticien_id"    => "ref class|CMediusers",
+      "signee"          => "bool"
     );
     return array_merge($specsParent, $specs);
   }
@@ -36,6 +41,11 @@ class CPrescriptionLine extends CMbObject {
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien->load($this->praticien_id);
   }
+  
+  function loadRefLogSignee(){
+    $this->_ref_log_signee = $this->loadLastLogForField("signee");
+  }
+  
 
 }
 

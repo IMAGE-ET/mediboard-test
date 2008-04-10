@@ -1,5 +1,11 @@
-<?php
+<?php /* $Id: $ */
 
+/**
+* @package Mediboard
+* @subpackage dPprescription
+* @version $Revision: $
+* @author Alexis Granger
+*/
 
 function viewMsg($msg, $action){
   global $AppUI, $m, $tab;
@@ -35,8 +41,6 @@ if($msg){
 $old2_prescription = new CPrescription();
 $old2_prescription->load($prescription_id);
 $old2_prescription->loadRefsLines();
-$old2_prescription->loadRefsLinesElement();
-$old2_prescription->loadRefsLinesAllComments();
 
 // Parcours des lignes de prescription
 foreach($old2_prescription->_ref_prescription_lines as $line){
@@ -58,8 +62,6 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
 			$new_debut = mbDate($sejour->_entree);
 		}
 	}
-	
-	
 	
 	if($type == "sortie" && $line->debut && $line->duree){
 		// si le debut de la ligne est apres la fin du sejour, on ne sauvegarde pas la ligne
@@ -98,7 +100,7 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
   $new_line->ald = $line->ald;
   $new_line->prescription_id = $new_prescription->_id;
   $new_line->praticien_id = $AppUI->user_id;
-  $new_line->valide = $line->valide;
+  $new_line->signee = $line->signee;
   $msg = $new_line->store();
   viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   
@@ -119,26 +121,6 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
 	  $msg = $new_prise->store();
 	  viewMsg($msg, "msg-CPrisePosologie-create");  	
 	}
-}
-
-// Parcours des lignes d'elements
-foreach($old2_prescription->_ref_prescription_lines_element as $line_element){
-  $new_line_element = new CPrescriptionLineElement();
-  $new_line_element = $line_element;
-  $new_line_element->_id = "";
-  $new_line_element->prescription_id = $new_prescription->_id;
-  $msg = $new_line_element->store();
-  viewMsg($msg, "msg-CPrescriptionLineElement-create");  
-}
-
-// Parcours des lignes de commentaires
-foreach($old2_prescription->_ref_prescription_lines_all_comments as $line_comment){
-	$new_line_comment = new CPrescriptionLineComment();
-	$new_line_comment = $line_comment;
-	$new_line_comment->_id = "";
-	$new_line_comment->prescription_id = $new_prescription->_id;
-	$msg = $new_line_comment->store();
-	viewMsg($msg, "msg-CPrescriptionLineComment-create");
 }
 
 $AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$new_prescription->_id);

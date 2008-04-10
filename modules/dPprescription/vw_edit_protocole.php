@@ -46,7 +46,6 @@ $contexteType["CConsultation"][] = "externe";
 $contexteType["CSejour"][] = "pre_admission";
 $contexteType["CSejour"][] = "sortie";
 $contexteType["CSejour"][] = "sejour";
-$contexteType["CSejour"][] = "traitement";
 
 
 // Création du template

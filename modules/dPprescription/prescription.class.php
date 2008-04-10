@@ -56,7 +56,7 @@ class CPrescription extends CMbObject {
       "object_class"  => "notNull enum list|CSejour|CConsultation",
       "libelle"       => "str",
       "type"          => "notNull enum list|traitement|pre_admission|sejour|sortie|externe",
-      "_type_sejour"  => "notNull enum list|traitement|pre_admission|sejour|sortie"
+      "_type_sejour"  => "notNull enum list|pre_admission|sejour|sortie"
      );
     return array_merge($specsParent, $specs);
   }
@@ -75,16 +75,20 @@ class CPrescription extends CMbObject {
   
   
   function check(){
+  	global $AppUI;
+  	
     if ($msg = parent::check()) {
   	  return $msg;
   	}
-  	
+ 
   	// Test permettant d'eviter que plusieurs prescriptions identiques soient créées 
   	if($this->object_id !== null && $this->object_class !== null && $this->praticien_id !== null && $this->type !== null){
       $prescription = new CPrescription();
       $prescription->object_id = $this->object_id;
       $prescription->object_class = $this->object_class;
-      $prescription->praticien_id = $this->praticien_id;
+      if($prescription->type != "externe"){
+        $prescription->praticien_id = $this->praticien_id;
+      }
       $prescription->type = $this->type;
   	  $prescription->loadMatchingObject();
   	  
@@ -96,10 +100,11 @@ class CPrescription extends CMbObject {
   
   
   function store(){
+  	global $AppUI;
+  	
     if ($msg = $this->check()) {
       return $msg;
     }
-    
     return parent::store();
   }
   
@@ -111,7 +116,7 @@ class CPrescription extends CMbObject {
   }
   
   function loadRefObject(){
-  	$this->_ref_object = new $this->object_class();
+  	$this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id);
   }
   
@@ -150,7 +155,8 @@ class CPrescription extends CMbObject {
   	
   	foreach($this->_ref_prescription_lines as &$line_med){
   		$line_med->loadRefsPrises();
-  		$line_med->loadRefUserArret();
+  		$line_med->loadRefLogDateArret();
+  		$line_med->loadRefLogSignee();
   		$line_med->loadRefPraticien();
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
@@ -158,6 +164,7 @@ class CPrescription extends CMbObject {
   	if(isset($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"] as &$comment_med){
   	  	$comment_med->loadRefPraticien();
+  	  	$comment_med->loadRefLogSignee();
       	$this->_ref_lines_med_comments["comment"][] = $comment_med;
   	  }
   	}
@@ -172,6 +179,7 @@ class CPrescription extends CMbObject {
     foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
     	$line_element->loadRefPraticien();
+    	$line_element->loadRefLogSignee();
     	$line_element->_ref_element_prescription->loadRefCategory();
     }
   }
@@ -224,6 +232,7 @@ class CPrescription extends CMbObject {
   		  	// Chargement de la categorie
           $_line_comment->loadRefCategory();
           $_line_comment->loadRefPraticien();
+          $_line_comment->loadRefLogSignee();
           
   		  	$cat = new CCategoryPrescription();
   		  	$cat->load($_line_comment->category_prescription_id);

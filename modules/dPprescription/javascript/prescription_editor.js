@@ -3,7 +3,7 @@
 var PrescriptionEditor = {
   sForm     : null,
   options : {
-    width : 850,
+    width : 810,
     height: 600
   },
   popup : function(prescription_id, object_id, object_class, praticien_id, type) {

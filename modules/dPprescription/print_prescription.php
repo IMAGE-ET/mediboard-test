@@ -7,9 +7,18 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m, $g, $dPconfig;;
 
 $can->needsRead();
+
+$ordonnance = mbGetValueFromGet("ordonnance");
+
+// Mode ordonnance
+if($ordonnance){
+  $now = mbDateTime();
+  $user_id = $AppUI->user_id;
+  $time_print_ordonnance = $dPconfig["dPprescription"]["CPrescription"]["time_print_ordonnance"]; 
+}
 
 // Chargement de l'etablissement
 $etablissement = new CGroups();
@@ -48,6 +57,17 @@ $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
+	  // mode ordonnnance
+		if($ordonnance){
+			// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
+		  if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
+		  	continue;
+		  }
+		  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
+		  if($now > mbDateTime($line_medicament->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
+		  	continue;
+		  }
+	  }
 	  if($line_medicament->ald){
 	    $lines["medicaments"][$key]["ald"][] = $line_medicament;
 	  } else {
@@ -55,6 +75,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  }
 	}
 }
+
 
 $linesElt = array();
 
@@ -83,7 +104,18 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
-		    $executant = "aucun";
+			  // mode ordonnnance
+				if($ordonnance){
+					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
+				  if(!$element->signee || $element->praticien_id != $AppUI->user_id){
+				  	continue;
+				  }
+				  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
+				  if($now > mbDateTime($element->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
+            continue;
+				  }
+			  }
+				$executant = "aucun";
 		    if($element->executant_prescription_line_id){
 		      $executant = $element->executant_prescription_line_id;
 		    }
@@ -100,6 +132,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("ordonnance"   , $ordonnance);
 $smarty->assign("date"         , mbDate());
 $smarty->assign("etablissement", $etablissement);
 $smarty->assign("prescription" , $prescription);

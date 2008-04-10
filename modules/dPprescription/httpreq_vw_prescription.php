@@ -117,6 +117,22 @@ foreach($cats as $key => $cat){
 	$categories["cat".$key] = $cat;
 }
 
+// Chargement des traitement de la prescription
+if($prescription->_id){
+	$prescription->_ref_object->loadRefPrescriptionTraitement();
+	if($prescription->_ref_object->_ref_prescription_traitement->_id){
+		$prescription->_ref_object->_ref_prescription_traitement->loadRefsLines();
+		foreach($prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as &$line){
+		  $line->loadRefsPrises();
+	  	//$line->loadRefUserArret();
+	  	$line->loadRefLogDateArret();
+	  	//$line->loadRefLogSignee();
+	  	$line->loadRefPraticien();
+		}
+	}
+}
+
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);

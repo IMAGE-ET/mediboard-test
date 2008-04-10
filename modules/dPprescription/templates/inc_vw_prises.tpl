@@ -1,16 +1,18 @@
 <script type="text/javascript">
 
-var oForm = document.forms["editDates-{{$curr_line->_id}}"];
-
-Form.Element.setValue(oForm.debut,'{{$curr_line->debut}}');
-{{if $curr_line->debut}}
-var oDiv = $('editDates-'+{{$curr_line->_id}}+'_debut_da');
-dDate = Date.fromDATE(oForm.debut.value);
-oDiv.innerHTML = dDate.toLocaleDate();
+{{if !$curr_line->signee && !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
+	var oForm = document.forms["editDates-{{$curr_line->_id}}"];
+	
+	Form.Element.setValue(oForm.debut,'{{$curr_line->debut}}');
+	{{if $curr_line->debut}}
+	var oDiv = $('editDates-'+{{$curr_line->_id}}+'_debut_da');
+	dDate = Date.fromDATE(oForm.debut.value);
+	oDiv.innerHTML = dDate.toLocaleDate();
+	{{/if}}
+	Form.Element.setValue(oForm.duree,'{{$curr_line->duree}}');
+	
+  Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
 {{/if}}
-Form.Element.setValue(oForm.duree,'{{$curr_line->duree}}');
-
-Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
 
 </script>
 

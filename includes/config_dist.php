@@ -294,7 +294,8 @@ $dPconfig["dPmedicament"] = array (
 
 $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
-    "add_element_category" => "0"
+    "add_element_category" => "0",
+    "time_print_ordonnance" => "2"
   )
 );
 

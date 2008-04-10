@@ -41,28 +41,28 @@ if($('alertes')){
 
 <!-- Declaration des divs -->
 <div id="div_medicament" style="display:none;">
-  {{include file="inc_div_medicament.tpl"}}
+  {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
 </div>
 <div id="div_dmi" style="display:none;">
-  {{include file="inc_div_element.tpl" element="dmi"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="dmi"}}
 </div>
 <div id="div_anapath" style="display:none;">
-  {{include file="inc_div_element.tpl" element="anapath"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="anapath"}}
 </div>
 <div id="div_biologie" style="display:none;">
-  {{include file="inc_div_element.tpl" element="biologie"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="biologie"}}
 </div>
 <div id="div_imagerie" style="display:none;">
-  {{include file="inc_div_element.tpl" element="imagerie"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="imagerie"}}
 </div>
 <div id="div_consult" style="display:none;">
-  {{include file="inc_div_element.tpl" element="consult"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="consult"}}
 </div>
 <div id="div_kine" style="display:none;">
-  {{include file="inc_div_element.tpl" element="kine"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="kine"}}
 </div>
 <div id="div_soin" style="display:none;">
-  {{include file="inc_div_element.tpl" element="soin"}}
+  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="soin"}}
 </div>
 
 

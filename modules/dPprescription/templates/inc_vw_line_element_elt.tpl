@@ -1,3 +1,5 @@
+{{assign var=category value=$_line_element->_ref_element_prescription->_ref_category_prescription}}
+      
 <tbody class="hoverable">
   <tr>
     <td  style="width: 25px">
@@ -16,10 +18,6 @@
         <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
         <input type="text" name="commentaire" value="{{$_line_element->commentaire}}" onchange="this.form.onsubmit();" />
       </form>
-    </td>
-    <td>
-      {{assign var=category value=$_line_element->_ref_element_prescription->_ref_category_prescription}}
-      {{$_line_element->_ref_praticien->_view}}
     </td>
     <td>
       {{assign var=category_id value=$category->_id}}
@@ -56,6 +54,34 @@
         {{mb_field object=$_line_element field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
         {{mb_label object=$_line_element field="ald" typeEnum="checkbox"}}
       </form>
+    </td>
+    <td style="text-align: right">
+    {{if $_line_element->_ref_praticien->_id}}
+        {{$_line_element->_ref_praticien->_view}}
+        {{if $prescription->object_id}}  
+	        {{if $_line_element->signee}}
+	          {{if $_line_element->_ref_praticien->_id == $app->user_id}}
+	            <form name="delValidationElement-{{$element}}-{{$_line_element->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
+	              <input type="hidden" name="signee" value="0" />
+	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$element}}') } }  )">Annuler la validation</button>
+	            </form>
+	          {{/if}}
+	        {{else}}
+	          {{if $_line_element->_ref_praticien->_id == $app->user_id}}
+	            <form name="validationElement-{{$_line_element->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_element_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_element_id" value="{{$_line_element->_id}}" />
+	              <input type="hidden" name="signee" value="1" />
+	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$element}}') } }  );">Signer</button>
+	            </form>
+	          {{/if}}
+	        {{/if}}
+	      {{/if}}
+      {{/if}}
     </td>
   </tr>
   </tbody>

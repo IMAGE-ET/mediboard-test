@@ -279,6 +279,7 @@ textarea {
 
 button, 
 a.button, 
+a.buttonstop,
 a.buttonedit, 
 a.buttontrash, 
 a.buttonsubmit, 
@@ -480,6 +481,18 @@ button.remove, a.buttonremove {
 
 button.remove:hover, a.buttonremove:hover {
   background-image: url(./images/buttons/removeover.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.stop, a.buttonstop {
+  background-image: url(./images/buttons/stop.png);
+  background-position: left bottom;
+  padding-left: 18px;
+}
+
+button.stop:hover, a.buttonstop:hover {
+  background-image: url(./images/buttons/stopover.png);
   background-position: left bottom;
   padding-left: 18px;
 }

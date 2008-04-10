@@ -135,11 +135,12 @@ div#goUp {
     {{foreach from=$lines.medicaments.med.ald item=line_medicament_element_ald}}
       {{include file="inc_print_medicament.tpl" med=$line_medicament_element_ald}}
     {{/foreach}}
-    {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
-    <li>
-      {{$line_medicament_comment_ald->commentaire}}
-    </li>
-    {{/foreach}}
+   
+	    {{foreach from=$lines.medicaments.comment.ald item=line_medicament_comment_ald}}
+		    <li>
+		      {{$line_medicament_comment_ald->commentaire}}
+		    </li>
+	    {{/foreach}}
     </ul>
     <div class="middle"></div>
     
@@ -152,10 +153,10 @@ div#goUp {
       {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
     {{/foreach}}
     {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
-    <li>
-      {{$line_medicament_comment_no_ald->commentaire}}
-    </li>
-    {{/foreach}}
+		  <li>
+		    {{$line_medicament_comment_no_ald->commentaire}}
+		  </li>
+	  {{/foreach}}
     </ul>
 <!-- Affichage en mode normal -->
 {{else}}
@@ -165,16 +166,18 @@ div#goUp {
     {{foreach from=$lines.medicaments.med.no_ald item=line_medicament_element_no_ald}}
       {{include file="inc_print_medicament.tpl" med=$line_medicament_element_no_ald}}
     {{/foreach}}
-    {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
-    <li>
-      {{$line_medicament_comment_no_ald->commentaire}}
-    </li>
-    {{/foreach}}
+      {{foreach from=$lines.medicaments.comment.no_ald item=line_medicament_comment_no_ald}}
+		    <li>
+		      {{$line_medicament_comment_no_ald->commentaire}}
+		    </li>
+	    {{/foreach}}
     </ul>
  
 {{/if}}
  </div>
 {{/if}}
+
+
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
 <!-- Parcours des categories -->

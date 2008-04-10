@@ -177,6 +177,7 @@ div div.text {
 
 button,
 a.button,  
+a.buttonstop,
 a.buttonedit, 
 a.buttonhslip, 
 a.buttontrash, 
@@ -210,6 +211,7 @@ a.buttondown {
 
 button:hover, 
 a.button:hover,
+a.buttonstop:hover,
 a.buttonedit:hover, 
 a.buttontrash:hover, 
 a.buttonsubmit:hover,
@@ -340,6 +342,11 @@ button.add, a.buttonadd {
 
 button.remove, a.buttonremove {
   background-image: url(images/buttons/remove.png);
+  padding-left: 18px;
+}
+
+button.stop, a.buttonstop {
+  background-image: url(images/buttons/stop.png);
   padding-left: 18px;
 }
 

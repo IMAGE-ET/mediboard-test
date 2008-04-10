@@ -66,8 +66,7 @@ if ($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
   $prescription->_ref_object->loadRefsPrescriptions();
-  
-  
+
   // Chargement des protocoles
   $protocole = new CPrescription();
   $where = array();
@@ -85,6 +84,7 @@ $alertesProfil       = array();
 if ($prescription->_id) {
   // Chargement des medicaments et commentaire
   $prescription->loadRefsLinesMedComments();
+  
   // Chargement des elements et commentaires
   $prescription->loadRefsLinesElementsComments();
   
@@ -140,6 +140,23 @@ foreach($cats as $key => $cat){
 	$categories["cat".$key] = $cat;
 }
 
+
+// Chargement des traitement de la prescription
+if($prescription->_id){
+	$prescription->_ref_object->loadRefPrescriptionTraitement();
+	if($prescription->_ref_object->_ref_prescription_traitement->_id){
+		$prescription->_ref_object->_ref_prescription_traitement->loadRefsLines();
+		foreach($prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as &$line){
+			$line->loadRefsPrises();
+	  	//$line->loadRefUserArret();
+      $line->loadRefLogDateArret();
+      //$line->loadRefLogSignee();
+      
+	  	$line->loadRefPraticien();
+		}
+	}
+}
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -150,8 +167,6 @@ $contexteType["CSejour"][] = "pre_admission";
 $contexteType["CSejour"][] = "sortie";
 $contexteType["CSejour"][] = "sejour";
 $contexteType["CSejour"][] = "traitement";
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

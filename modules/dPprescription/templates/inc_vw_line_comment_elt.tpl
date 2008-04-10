@@ -1,3 +1,5 @@
+{{assign var=category value=$_line_comment->_ref_category_prescription}}
+        
 <tbody class="hoverable">
     <tr>
       <td style="width: 25px">
@@ -14,10 +16,7 @@
       <td colspan="3">
         {{$_line_comment->commentaire}}
       </td>
-      <td>
-        {{assign var=category value=$_line_comment->_ref_category_prescription}}
-        {{$_line_comment->_ref_praticien->_view}}
-      </td>
+    
      <td>
       {{assign var=category_id value=$category->_id}}
       {{if @$executants.$category_id}}
@@ -54,5 +53,33 @@
           {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
         </form>
       </td>
+      <td style="text-align: right">
+    {{if $_line_comment->_ref_praticien->_id}}
+        {{$_line_comment->_ref_praticien->_view}}
+        {{if $prescription->object_id}}  
+	        {{if $_line_comment->signee}}
+	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
+	            <form name="delValidationComment-{{$_line_comment->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+	              <input type="hidden" name="signee" value="0" />
+	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$element}}') } }  )">Annuler la validation</button>
+	            </form>
+	          {{/if}}
+	        {{else}}
+	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
+	            <form name="validationComment-{{$_line_comment->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+	              <input type="hidden" name="signee" value="1" />
+	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function(){ Prescription.reload('{{$prescription->_id}}','','{{$element}}') } } );">Signer</button>
+	            </form>
+	          {{/if}}
+	        {{/if}}
+	      {{/if}}
+      {{/if}}
+    </td>
     </tr>
   </tbody>

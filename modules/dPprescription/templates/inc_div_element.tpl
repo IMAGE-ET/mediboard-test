@@ -1,11 +1,5 @@
 <script type="text/javascript">      
-      
-/*
-if(window.opener){
-  window.opener.PrescriptionEditor.refresh('{{$prescription->_id}}','{{$prescription->object_class}}');
-}
-*/
-
+     
 // On vide toutes les valeurs du formulaire d'ajout d'element
 var oForm = document.addLineElement;
 oForm.prescription_line_element_id.value = "";
@@ -22,8 +16,24 @@ preselectExecutant = function(executant_id, category_id){
 
 </script>
 
+<!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
+{{if $prescription->object_id}}
+<div style="float: right">
+  <form name="valideAllLines-{{$element}}" method="post" action="">
+    <input type="hidden" name="m" value="dPprescription" />
+    <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+    <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+    <input type="hidden" name="chapitre" value="{{$element}}" />
+    <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"</button>
+  </form>
+</div>
+{{/if}}
+
+
+
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{include file="inc_vw_form_addLine.tpl"}}
+
 
 <table class="tbl">
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}

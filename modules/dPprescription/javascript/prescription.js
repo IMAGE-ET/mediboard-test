@@ -27,12 +27,18 @@ var Prescription = {
   addLine: function(code) {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
-    submitFormAjax(oForm, 'systemMsg', { 
-      onComplete : 
-        function(){ 
-          Prescription.reload(oForm.prescription_id.value, '', 'medicament');
-        } 
-    });
+    
+    var oFormTraitement = document.transfertToTraitement;
+    if(oForm.del.value == 0 && oFormTraitement._type.value == "pre_admission"){
+      submitFormAjax(oForm, 'systemMsg');
+    } else {
+	    submitFormAjax(oForm, 'systemMsg', { 
+	      onComplete : 
+	        function(){
+	          Prescription.reload(oForm.prescription_id.value, '', 'medicament');
+	        } 
+	    });
+    }
   },
   addLineElement: function(element_id, category_name){
     // Formulaire contenant la categorie courante
@@ -115,11 +121,14 @@ var Prescription = {
       alert('Pas de prescription en cours');
     }
   },
-  print: function(prescription_id) {
+  printPrescription: function(prescription_id, ordonnance) {
     if(prescription_id){
       var url = new Url;
       url.setModuleAction("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
+      if(ordonnance){
+        url.addParam("ordonnance", ordonnance);
+      }
       url.popup(700, 600, "print_prescription");
     }
   },

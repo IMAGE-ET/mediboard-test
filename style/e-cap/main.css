@@ -345,6 +345,7 @@ textarea {
 
 button, 
 a.button, 
+a.buttonstop,
 a.buttonedit, 
 a.buttontrash, 
 a.buttonsubmit, 
@@ -370,6 +371,7 @@ input[type=button] {
 }
 
 a.button,  
+a.buttonstop,
 a.buttonedit, 
 a.buttonhslip, 
 a.buttontrash, 
@@ -551,6 +553,14 @@ button.remove, a.buttonremove {
 
 button.remove:hover, a.buttonremove:hover {
   background-image: url(../tonkin/images/buttons/removeover.png);
+}
+
+button.stop, a.buttonstop {
+  background-image: url(../tonkin/images/buttons/stop.png);
+}
+
+button.stop:hover, a.buttonstop:hover {
+  background-image: url(../tonkin/images/buttons/stopover.png);
 }
 
 button.notext, button.notext:hover{

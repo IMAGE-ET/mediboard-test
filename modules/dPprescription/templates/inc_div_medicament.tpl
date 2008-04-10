@@ -1,46 +1,83 @@
 <script type="text/javascript">
 
-/*
-if(window.opener){
-  window.opener.PrescriptionEditor.refresh('{{$prescription->_id}}','{{$prescription->object_class}}');
-}      
-*/
+// Calcul de la date de debut lors de la modification de la fin
+syncDate = function(oForm, curr_line_id, fieldName) {
+  // Déclaration des div des dates
+  oDivDebut = $('editDates-'+curr_line_id+'_debut_da');
+  oDivFin = $('editDates-'+curr_line_id+'__fin_da');
 
-      
-// Calcul de la fin d'un traitement
-calculFin = function(oForm, curr_line_id){
-
-  var sDate = oForm.debut.value;
+  // Recuperation de la date actuelle
+  var todayDate = new Date();
+  var dToday = todayDate.toDATE();
+  
+  // Recuperation des dates des formulaires
+  var sDebut = oForm.debut.value;
+  var sFin = oForm._fin.value;
   var nDuree = parseInt(oForm.duree.value, 10);
-  var nType = oForm.unite_duree.value;
-    
-  oDiv = $('editDates-'+curr_line_id+'_fin');
+  var sType = oForm.unite_duree.value;
   
-  if (!sDate || !nDuree) {
-    oDiv.innerHTML = "";  
-    return;
+  // Transformation des dates
+  if(sDebut){
+    var dDebut = Date.fromDATE(sDebut);  
+  }
+  if(sFin){
+    var dFin = Date.fromDATE(sFin);  
   }
   
-  var dDate = Date.fromDATE(sDate);  
-  if(nType == "jour"){
-    dDate.addDays(nDuree);
+  // Modification de la fin en fonction du debut
+  if(fieldName != "_fin" && sDebut && sType && nDuree) {
+    dFin = dDebut;
+    if(sType == "jour")      { dFin.addDays(nDuree);     }
+    if(sType == "semaine")   { dFin.addDays(nDuree*7);   }
+    if(sType == "quinzaine") { dFin.addDays(nDuree*14);  }
+    if(sType == "mois")      { dFin.addDays(nDuree*30);  }
+    if(sType == "trimestre") { dFin.addDays(nDuree*90);  }
+    if(sType == "semestre")  { dFin.addDays(nDuree*180); }
+    if(sType == "an")        { dFin.addDays(nDuree*365); }
+
+  	oForm._fin.value = dFin.toDATE();
+  	oDivFin.innerHTML = dFin.toLocaleDate();
   }
   
-  // TODO: A modifier
-  if(nType == "minute" || nType == "heure" || nType == "demi_journee"){
-    // ne rien faire
+  //-- Lors de la modification de la fin --
+  // Si debut, on modifie la duree
+  if(sDebut && sFin && fieldName == "_fin"){
+    var nDuree = (dFin - dDebut)/86400000;
+    oForm.duree.value = nDuree;
+    oForm.unite_duree.value = "jour";
   }
-  if(nType == "semaine"){ dDate.addDays(nDuree*7); }
-  if(nType == "quinzaine"){ dDate.addDays(nDuree*14); }
-  if(nType == "mois"){dDate.addDays(nDuree*30); }
-  if(nType == "trimestre"){dDate.addDays(nDuree*90); }
-  if(nType == "semestre"){dDate.addDays(nDuree*180); }
-  if(nType == "an"){dDate.addDays(nDuree*365); }
   
-   // Update fields
-	Form.Element.setValue(oForm._fin, dDate.toDATE());
-  oDiv.innerHTML = dDate.toLocaleDate();
+  // Si !debut et duree, on modifie le debut
+  if(!sDebut && nDuree && sType && fieldName == "_fin"){
+    dDebut = dFin;
+    if(sType == "jour")      { dDebut.addDays(-nDuree);     }
+    if(sType == "semaine")   { dDebut.addDays(-nDuree*7);   }
+    if(sType == "quinzaine") { dDebut.addDays(-nDuree*14);  }
+    if(sType == "mois")      { dDebut.addDays(-nDuree*30);  }
+    if(sType == "trimestre") { dDebut.addDays(-nDuree*90);  }
+    if(sType == "semestre")  { dDebut.addDays(-nDuree*180); }
+    if(sType == "an")        { dDebut.addDays(-nDuree*365); }
+
+  	oForm.debut.value = dDebut.toDATE();
+  	oDivDebut.innerHTML = dDebut.toLocaleDate();
+  }
+  
+  // Si !debut et !duree, on met le debut a aujourd'hui, et on modifie la duree
+  if(!sDebut && !nDuree && fieldName == "_fin"){
+    dDebut = todayDate;
+    oForm.debut.value = todayDate.toDATE();
+    oDivDebut.innerHTML = todayDate.toLocaleDate();
+    var nDuree = parseInt((dFin - dDebut)/86400000,10);
+    oForm.duree.value = nDuree;
+    oForm.unite_duree.value = "jour";
+  }
 }
+
+syncDateSubmit = function(oForm, curr_line_id, fieldName) {
+  syncDate(oForm, curr_line_id, fieldName);
+  submitFormAjax(oForm, 'systemMsg');
+}
+  
 
 selDivPoso = function(type, line_id){
   if(!type){
@@ -52,17 +89,8 @@ selDivPoso = function(type, line_id){
   $(type+line_id).show();
 }
 
-/*
-viewButtonAddPrise = function(curr_line_id){
-  $('addPriseForm'+curr_line_id).show();
-}
-*/
-
 // Fonction lancée lors de la modfication de la posologie
 submitPoso = function(oForm, curr_line_id){
-  // On affiche ou on cache le bouton ajouter une prise
-  //initPoso(oForm, curr_line_id);
-  
   // Suppression des prises de la ligne de prescription
   oForm._delete_prises.value = "1";
   submitFormAjax(oForm, 'systemMsg', { onComplete: 
@@ -78,16 +106,6 @@ submitPoso = function(oForm, curr_line_id){
    }
   );
 }
-
-/*
-initPoso = function(oForm, curr_line_id){
-  if(oForm.no_poso.value == ''){
-    $('buttonAddPrise-'+curr_line_id).hide(); 
-  } else {
-    $('buttonAddPrise-'+curr_line_id).show();
-  }
-}
-*/
 
 reloadPrises = function(prescription_line_id){
   url = new Url;
@@ -105,17 +123,39 @@ submitPrise = function(oForm){
   } });
 }
 
-
 {{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
 {{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
 {{assign var=nb_total value=$nb_med+$nb_comment}}
 
 Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 
+
+// Permet de mettre la ligne en traitement
+transfertTraitement = function(line_id){
+  if(!line_id){
+    return;
+  }
+  var oForm = document.transfertToTraitement;
+  oForm.prescription_line_id.value = line_id;
+  submitFormAjax(oForm, "systemMsg");
+}
+
+
 </script>
 
+<form name="transfertToTraitement" action="?" method="post">
+  <input type="hidden" name="dosql" value="do_prescription_traitement_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="prescription_line_id" value="" />
+  <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+  <input type="hidden" name="_traitement" value="1" />
+  <input type="hidden" name="_type" value="{{$prescription->type}}" />
+</form>
+
+
+<!-- Cas normal -->
 <!-- Formulaire d'ajout de ligne dans la prescription -->
-<form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">
+<form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">  
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
   <input type="hidden" name="prescription_line_id" value=""/>
@@ -124,16 +164,21 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
+  
+  {{if $prescription->type=="pre_admission"}}
+  <input type="hidden" name="callback" value="transfertTraitement" />
+  {{/if}}  
 </form>
 
-<!-- Ne pas donner la possibilite de valider les lignes d'un protocole -->
+<!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
 {{if $prescription->object_id}}
 <div style="float: right">
   <form name="valideAllLines" method="post" action="">
     <input type="hidden" name="m" value="dPprescription" />
     <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
     <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-    <button class="tick" onclick="">Valider les lignes</button>
+    <input type="hidden" name="chapitre" value="medicament" />
+    <button class="tick" type="button" onclick="submitFormAjax(this.form,'systemMsg')">Signer les lignes de médicaments</button>
   </form>
 </div>
 {{/if}}
@@ -149,7 +194,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
       {{/foreach}}
     </select>
     <button class="new" onclick="$('add_line_comment_med').show();">Ajouter une ligne de commentaire</button>
-    
     
     <br />
 	  <input type="text" name="produit" value=""/>
@@ -193,381 +237,21 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
     </form>
  </div> 
 
-{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment}}
+{{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
+  
+  
+{{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements}}
 <table class="tbl">
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-    
-  <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
-  <tr>
-    <th colspan="5">
-      <!-- AFfichage du praticien -->
-      <div style="float: right">
-      {{if $curr_line->_ref_praticien->_id}}
-        {{$curr_line->_ref_praticien->_view}}
-        
-        {{if $prescription->object_id}}  
-	        {{if $curr_line->valide}}
-	          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
-	            <form name="delValidation-{{$curr_line->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-	              <input type="hidden" name="valide" value="0" />
-	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Annuler la validation</button>
-	            </form>
-	          {{/if}}
-	        {{else}}
-	          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
-	            <form name="validation-{{$curr_line->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-	              <input type="hidden" name="valide" value="1" />
-	              <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Valider</button>
-	            </form>
-	          {{/if}}
-	        {{/if}}
-	      {{/if}}
-      {{/if}}
-      </div>
-    <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
-      {{$curr_line->_view}}
-    </a>
-    </th>
-  </tr>
-  <tr>
-    <td rowspan="3" style="text-align: center">
-      {{if !$curr_line->_ref_produit->inLivret && $prescription->type == "sejour"}}
-        <img src="images/icons/warning.png" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
-        <br />
-      {{/if}}    
-      <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
-        {{tr}}Delete{{/tr}}
-      </button>
-    </td>
-    <td rowspan="3">
-    {{assign var="color" value=#ccc}}
-      {{if $curr_line->_nb_alertes}}
-        
-        {{if $curr_line->_ref_alertes.IPC || $curr_line->_ref_alertes.profil}}
-          {{assign var="image" value="note_orange.png"}}
-          {{assign var="color" value=#fff288}}
-        {{/if}}  
-        {{if $curr_line->_ref_alertes.allergie || $curr_line->_ref_alertes.interaction}}
-          {{assign var="image" value="note_red.png"}}
-          {{assign var="color" value=#ff7474}}
-        {{/if}}  
-        <img src="images/icons/{{$image}}" title="" alt="" 
-             onmouseover="$('line-{{$curr_line->_id}}').show();"
-             onmouseout="$('line-{{$curr_line->_id}}').hide();" />
-      {{/if}}
-      <div id="line-{{$curr_line->_id}}" class="tooltip" style="display: none; background-color: {{$color}}; border-style: ridge; padding-right:5px; ">
-      {{foreach from=$curr_line->_ref_alertes_text key=type item=curr_type}}
-        {{if $curr_type|@count}}
-          <ul>
-          {{foreach from=$curr_type item=curr_alerte}}
-            <li>
-              <strong>{{tr}}CPrescriptionLineMedicament-alerte-{{$type}}-court{{/tr}} :</strong>
-              {{$curr_alerte}}
-            </li>
-          {{/foreach}}
-          </ul>
-        {{/if}}
-      {{/foreach}}
-      </div>
-    </td>
-    <td>
-      <form name="editDates-{{$curr_line->_id}}" action="?" method="post">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <table>
-          <tr>
-				    {{assign var=curr_line_id value=$curr_line->_id}}
-				    <td style="border:none">
-				    {{mb_label object=$curr_line field=debut}}
-				    </td>
-				    
-				    {{if $curr_line->valide == 0}}
-				    <td class="date" style="border:none;">
-				      {{mb_field object=$curr_line field=debut form=editDates-$curr_line_id onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);"}}
-				    </td>
-				    {{else}}
-				    <td style="border:none">
-				      {{if $curr_line->debut}}
-				        {{$curr_line->debut|date_format:"%d/%m/%Y"}}
-				      {{else}}
-				        -
-				      {{/if}}				   
-				    </td>
-				    {{/if}}
-				   
-				    <td style="border:none; padding-left: 40px;">
-				     {{mb_label object=$curr_line field=duree}}
-				    </td>
-				    <td style="border:none">
-				    {{if $curr_line->valide == 0}}
-				     {{mb_field object=$curr_line field=duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" size="3" }}
-				     {{mb_field object=$curr_line field=unite_duree onchange="submitFormAjax(this.form, 'systemMsg'); calculFin(this.form, $curr_line_id);" defaultOption="&mdash; Unité"}}
-				    {{else}}
-				      {{if $curr_line->duree}}
-				        {{$curr_line->duree}}
-				      {{else}}
-				        -
-				      {{/if}}
-				      {{if $curr_line->unite_duree}}
-				        {{tr}}CPrescriptionLineMedicament.unite_duree.{{$curr_line->unite_duree}}{{/tr}}	      
-				      {{/if}}
-				    {{/if}}
-				    </td>
-				    <td style="border:none">
-				     {{mb_label object=$curr_line field=_fin}} 
-				    </td>
-				    {{if !$curr_line->valide}}
-				    <td class="date" style="border:none">
-				     <div id="editDates-{{$curr_line->_id}}_fin"></div>
-				    </td>    
-				    {{else}}
-				    <td style="border:none">
-				      {{if $curr_line->_fin}}
-				        {{$curr_line->_fin|date_format:"%d/%m/%Y"}}
-				      {{else}}
-				        -
-				      {{/if}}
-				    </td>
-				    {{/if}}
-        </tr>
-      </table>
-    </form>
-    </td>
-    <td>
-      {{if !$curr_line->valide}}
-      <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
-        Equivalents
-      </button>
-      <script type="text/javascript">
-        if(EquivSelector.oUrl) {
-          EquivSelector.close();
-        }
-        EquivSelector.init = function(line_id, code_cip){
-          this.sForm = "searchProd";
-          this.sView = "produit";
-          this.sCodeCIP = code_cip
-          this.sLine = line_id;
-          {{if $prescription->type == "sejour"}}
-          this.sInLivret = "1";
-          {{else}}
-          this.sInLivret = "0";
-          {{/if}}
-          this.selfClose = false;
-          this.pop();
-        }
-        EquivSelector.set = function(code, line_id){
-          Prescription.addEquivalent(code, line_id);
-        }
-      </script>
-      {{/if}}
-    </td>
-    <td>
-      {{if !$curr_line->valide}}
-      <form action="?" method="post" name="editLineALD-{{$curr_line->_id}}">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
-        <input type="hidden" name="del" value="0" />
-        {{mb_field object=$curr_line field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
-        {{mb_label object=$curr_line field="ald" typeEnum="checkbox"}}
-      </form>
-      {{else}}
-        {{mb_label object=$curr_line field="ald" typeEnum="checkbox"}}:
-        {{if $curr_line->ald}}
-          Oui
-        {{else}}
-          Non
-        {{/if}} 
-      {{/if}}
-    </td>
-  </tr>
-  <tr>  
-    <td colspan="3">
-      <table style="width:100%">
-      <tr>
-     <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left;">
-      <form action="?m=dPprescription" method="post" name="editLine-{{$curr_line->_id}}" onsubmit="return checkForm(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}"/>
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="_code_cip" value="{{$curr_line->_ref_produit->code_cip}}" />
-      
-        <input type="hidden" name="_delete_prises" value="0" />
-        
-        {{assign var=posologies value=$curr_line->_ref_produit->_ref_posologies}}
-        {{if !$curr_line->valide}}
-        <select name="no_poso" onchange="submitPoso(this.form, '{{$curr_line->_id}}');" style="width: 300px;">
-          <option value="">&mdash; Posologies </option>
-          {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
-          <option value="{{$curr_poso->code_posologie}}"
-            {{if $curr_poso->code_posologie == $curr_line->no_poso}}selected="selected"{{/if}}>
-            {{$curr_poso->_view}}
-          </option>
-          {{/foreach}}
-        </select>  
-        {{else}}
-          {{if $curr_line->no_poso}}
-            {{$curr_line->_ref_posologie->_view}}
-          {{else}}
-            Aucune posologie sélectionnée
-          {{/if}}
-        {{/if}}
-      </form>
-      {{if !$curr_line->valide}}
-      <br />
-        <div id="buttonAddPrise-{{$curr_line->_id}}">
-        {{assign var=curr_line_id value=$curr_line->_id}}
-	        
-				  <select name="selShowDivPoso" onchange="selDivPoso(this.value,'{{$curr_line->_id}}');">
-				    <option value="">&mdash; Sélection du type d'ajout de posologie</option>
-				    <option value="moment">Moment</option>
-				    <option value="foisPar">x fois par y</option>
-				    <option value="tousLes">tous les x y</option>
-				  </select>
-				  <br />
-				  
-				  
-				<div id="moment{{$curr_line->_id}}" style="display: inline">
-				  <form name="addPriseMoment{{$curr_line->_id}}" action="?" method="post" >
-					  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
-					  <input type="hidden" name="del" value="0" />
-					  <input type="hidden" name="m" value="dPprescription" />
-					  <input type="hidden" name="prise_posologie_id" value="" />
-					  <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-					  
-					  Quantité: 
-					  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseMoment$curr_line_id}}
-					  {{$curr_line->_unite_prise}}(s)
-					  <!-- Selection du moment -->
-					  <select name="moment_unitaire_id" style="width: 150px">      
-					  <option value="">&mdash; Sélection du moment</option>
-					  {{foreach from=$moments key=type_moment item=_moments}}
-					     <optgroup label="{{$type_moment}}">
-					     {{foreach from=$_moments item=moment}}
-					     <option value="{{$moment->_id}}">{{$moment->_view}}</option>
-					     {{/foreach}}
-					     </optgroup>
-					  {{/foreach}}
-					  </select>	
-				    <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
-				
-				  </form>
-				  
-				</div>
-				  
-				  <div id="foisPar{{$curr_line->_id}}" style="display: inline">
-						<form name="addPriseFoisPar{{$curr_line->_id}}" action="?" method="post" >
-					    <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
-					    <input type="hidden" name="del" value="0" />
-					    <input type="hidden" name="m" value="dPprescription" />
-					    <input type="hidden" name="prise_posologie_id" value="" />
-					    <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-						  Quantité: 
-						  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseFoisPar$curr_line_id}}
-						  {{$curr_line->_unite_prise}}(s)
-						  {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 form=addPriseFoisPar$curr_line_id}} fois par 
-						  {{mb_field object=$prise_posologie field=unite_fois}}
-					    <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
-				
-						</form>
-				  </div>
-				  
-				  
-          <div id="tousLes{{$curr_line->_id}}" style="display: inline">
-          	<form name="addPriseTousLes{{$curr_line->_id}}" action="?" method="post" >
-					    <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
-					    <input type="hidden" name="del" value="0" />
-					    <input type="hidden" name="m" value="dPprescription" />
-					    <input type="hidden" name="prise_posologie_id" value="" />
-					    <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-							
-		          Quantité: 
-						  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseTousLes$curr_line_id}}
-		          {{$curr_line->_unite_prise}}(s)
-		           tous les
-						  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 form=addPriseTousLes$curr_line_id}}				   
-						  {{mb_field object=$prise_posologie field=unite_tous_les}}
-				      <button type="button" class="submit notext" onclick="submitPrise(this.form);">Enregistrer</button>
-				
-				    </form>  
-				  </div>
-				  
-				<br />
-				{{/if}}
-	    </div>
-	    </td>
-      <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>
-	    <td style="border:none; text-align: left;">
-	      {{if !$curr_line->valide}}
-        <div id="prises-{{$curr_line->_id}}">
-          <!-- Parcours des prises -->
-          {{include file="inc_vw_prises.tpl"}}
-        </div>
-        {{else}}
-          {{foreach from=$curr_line->_ref_prises item=prise}}
-            {{if $prise->quantite}}
-              {{$prise->_view}}, 
-            {{/if}}
-          {{/foreach}}
-        {{/if}}
-      </td>
-      </tr>
-      </table>
-      </td>
-    </tr>    
-      <tr>
-      <td>
-      {{mb_label object=$curr_line field="commentaire"}}
-      {{if !$curr_line->valide}}
-      <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-        <input type="text" name="commentaire" size="80" value="{{$curr_line->commentaire}}" onchange="this.form.onsubmit();" />
-      </form>
-      {{else}}
-        {{$curr_line->commentaire}}
-      {{/if}}
-      </td>
-      <td>
-      <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
-      {{if $prescription->type == "sejour" || $prescription->type == "pre_admission"}}
-      <div id="stop_{{$curr_line->_id}}">
-        {{include file="inc_vw_stop_medicament.tpl"}}
-      </div>
-      {{/if}}
-      </td>
-      <td style="text-align: right">
-        <!-- Creation d'une ligne avec des dates contiguës -->
-        <form name="addLineCont-{{$curr_line->_id}}" method="post" action="">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_add_line_contigue_aed" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-          <a href="#" onclick="submitFormAjax(document.forms['addLineCont-{{$curr_line->_id}}'], 'systemMsg')">
-            <img src="images/icons/downarrow.png" width="12" height="12" title="Ajouter une ligne" border="0" />
-          </a>
-        </form>
-      </td>
-    </tr>
-  </tbody>
-   
+    {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
   {{/foreach}}
+  
+  
     <!-- Parcours des commentaires --> 
  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
    <tbody class="hoverable">
     <tr>
-      <td colspan="2">
+      <td>
         <form name="delLineCommentMed-{{$_line_comment->_id}}" action="" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -582,11 +266,6 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
         {{$_line_comment->commentaire}}
       </td>
       <td>
-        {{if $_line_comment->_ref_praticien->_id}}
-          Praticien: {{$_line_comment->_ref_praticien->_view}}
-        {{/if}}
-      </td>
-      <td>
 	      <form action="?" method="post" name="editLineCommentALD-{{$_line_comment->_id}}">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -596,9 +275,42 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 	        {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
 	      </form>
       </td>
+      <td style="text-align: right">
+        {{if $_line_comment->_ref_praticien->_id}}
+        {{$_line_comment->_ref_praticien->_view}}
+        {{if $prescription->object_id}}  
+	        {{if $_line_comment->signee}}
+	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
+	            <form name="delValidationComment-med-{{$_line_comment->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+	              <input type="hidden" name="signee" value="0" />
+	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Annuler la validation</button>
+	            </form>
+	          {{/if}}
+	        {{else}}
+	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
+	            <form name="validationComment-{{$_line_comment->_id}}" action="" method="post">
+	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	              <input type="hidden" name="m" value="dPprescription" />
+	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+	              <input type="hidden" name="signee" value="1" />
+	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  );">Signer</button>
+	            </form>
+	          {{/if}}
+	        {{/if}}
+	      {{/if}}
+      {{/if}}
+      </td>
     </tr>
   </tbody>
   {{/foreach}}
+  
+  {{foreach from=$traitements item=traitement}}
+    {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+  {{/foreach}}
+  
  </table> 
 {{else}}
   <div class="big-info"> 
@@ -610,36 +322,34 @@ Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
 
 <script type="text/javascript">
 
-
-// On masque les div "tous les" et "fois par" pour l'ajout de posologies
-
-
-
-
-/*
-{{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-  var oForm = document.forms["editLine-{{$curr_line->_id}}"];
-  prepareForm(oForm);  
-{{/foreach}}
-*/
 prepareForms();
 
 
-Main.add( function(){
-  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-     {{if !$curr_line->valide}}
-       regFieldCalendar('editDates-{{$curr_line->_id}}', "debut", false);
-       regFieldCalendar('editDates-{{$curr_line->_id}}', "_fin", false);
+	var todayDate = new Date();
+	var dToday = todayDate.toDATE();
+	
+	dates = {  
+	  limit: {
+	    start: dToday,
+	    stop: null
+	  }
+	}
 
-       $('moment{{$curr_line->_id}}').hide();
-       $('tousLes{{$curr_line->_id}}').hide();
+
+
+Main.add( function(){
+
+
+  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+     {{if !$curr_line->signee && !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
+       Calendar.regField('editDates-{{$curr_line->_id}}', "debut", false, dates);
+       Calendar.regField('editDates-{{$curr_line->_id}}', "_fin", false, dates);
        
-       //initPoso(document.forms["editLine-{{$curr_line->_id}}"],{{$curr_line->_id}});
-       calculFin(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
+       syncDate(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
      {{/if}}
-     
   {{/foreach}}
 } );
+
 
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {

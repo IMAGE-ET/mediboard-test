@@ -505,6 +505,7 @@ class CSejour extends CCodable {
     $this->_ref_prestation->load($this->prestation_id);
   }
   
+  
   function loadRefEtablissement() {
     // Chargement de l'établissement correspondant
     $this->_ref_group = new CGroups;
@@ -552,6 +553,17 @@ class CSejour extends CCodable {
   		$this->_ref_prescriptions[$_prescription->type][] = $_prescription;
   	}
   }
+  
+  
+  function loadRefPrescriptionTraitement(){
+    $prescription = new CPrescription();
+    $prescription->type = "traitement";
+    $prescription->object_id = $this->_id;
+    $prescription->object_class = $this->_class_name;
+    $prescription->loadMatchingObject();
+  	$this->_ref_prescription_traitement = $prescription;
+  }
+  
   
   function loadRefsFwd() {
     $this->loadRefPatient();
