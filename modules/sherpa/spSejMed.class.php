@@ -161,7 +161,7 @@ class CSpSejMed extends CSpObject {
       return false;
     }
     
-    return $mbObject->type != "urg";
+    return $mbObject->type != "urg" || $mbObject->zt;
   }
   
   function mapFrom(CMbObject &$mbObject) {
