@@ -1,27 +1,7 @@
 <script type="text/javascript">
-var oCookie = new CJL_CookieUtil("fileAccordion");
-
 var fHeight = 380;
 var file_preview = null;
 var file_deleted = null;
-var showTabAcc = 0;
-
-if(oCookie.getSubValue("showTab")){
-  showTabAcc = oCookie.getSubValue("showTab");
-}
-if(oCookie.getSubValue("height")){
-  fHeight = oCookie.getSubValue("height");
-}
-
-function storeKeyCat(objAcc){
-  var aArray = oAccord.accordionTabs;
-  for ( var i=0 ; i < aArray.length ; i++ ){
-    if(objAcc == aArray[i]){
-      oCookie.setSubValue("showTab", i.toString());
-      showTabAcc = i.toString();
-    }
-  }
-}
 
 function popFile(objectClass, objectId, elementClass, elementId, sfn){
   var url = new Url;
@@ -62,7 +42,7 @@ function setObject(oObject){
 function reloadListFileDossier(sAction){
   var sSelClass = document.FrmClass.selClass.value;
   var sSelKey   = document.FrmClass.selKey.value;
-  if(eval($('accordion'+sSelClass+sSelKey))){
+  if(eval($('tab-'+sSelClass+sSelKey))){
     return false;
   }
   var url = new Url;
