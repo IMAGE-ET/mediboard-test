@@ -479,13 +479,7 @@ class CMbObject {
    * Loads the first object matching the query
    */
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
-    $request = new CRequest;
-    $request->addLJoin($leftjoin);
-    $request->addWhere($where);
-    $request->addGroup($group);
-    $request->addOrder($order);
-    $request->setLimit("0,1");
-    $list = $this->loadList($request->where, $request->order, $request->limit, $request->group, $request->ljoin);
+    $list = $this->loadList($where, $order, '0,1', $group, $leftjoin);
 
     foreach($list as $object) {
       foreach($object->getDBFields() as $key => $value) {

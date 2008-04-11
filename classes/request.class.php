@@ -143,7 +143,7 @@ class CRequest {
         trigger_error("You have to choose either an object or table(s)");
       }
 
-      $arrayTable[] = "$obj->_tbl";
+      $arrayTable[] = $obj->_tbl;
     }
     else {
       $arraySelect = $this->select;
@@ -155,11 +155,11 @@ class CRequest {
       $select[$as] = is_string($as) ? "$column AS `$as`" : $column;
     }
     
-    $select = join($select, ", ");
+    $select = implode(', ', $select);
     $sql = "SELECT $select";
     
     // Table clauses
-    $table = implode(", ", $arrayTable);
+    $table = implode(', ', $arrayTable);
     $sql .= "\nFROM $table";
         
 
@@ -185,16 +185,11 @@ class CRequest {
       $where = $this->where;
       foreach ($where as $field => $eq) {
         if (is_string($field)) {
-          if($pos = strpos($field, ".")) {
-            $point_table = substr($field, 0, $pos);
-            $point_field = substr($field, $pos + 1);
-            $where[$field] = "`$point_table`.`$point_field` $eq";
-          } else {
-            $where[$field] = "`$field` $eq";
-          }
+        	$rep = str_replace('.', '`.`', $field);
+        	$where[$field] = "`$rep` $eq";
         }
         
-        $where[$field] = "(" . $where[$field] . ")";
+        $where[$field] = "($where[$field])";
       }
     }
     
@@ -222,7 +217,7 @@ class CRequest {
         // We cannot use the `` syntax because it wont work
         // with table.field syntax, neither the ASC/DESC one
         //$this->$order[$key] = "`$field`";
-        $this->order[$key] = "$field";
+        $this->order[$key] = $field;
       }
     }
     
@@ -252,13 +247,13 @@ class CRequest {
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-      $arrayTable[] = "$obj->_tbl";
+      $arrayTable[] = $obj->_tbl;
     } else {
       $arrayTable = $this->table;
     }
     
     // Table clauses
-    $table = implode(", ", $arrayTable);
+    $table = implode(', ', $arrayTable);
     $sql .= "\nFROM $table";
         
 
@@ -284,16 +279,11 @@ class CRequest {
       $where = $this->where;
       foreach ($where as $field => $eq) {
         if (is_string($field)) {
-          if($pos = strpos($field, ".")) {
-            $point_table = substr($field, 0, $pos);
-            $point_field = substr($field, $pos + 1);
-            $where[$field] = "`$point_table`.`$point_field` $eq";
-          } else {
-            $where[$field] = "`$field` $eq";
-          }
+          $rep = str_replace('.', '`.`', $field);
+          $where[$field] = "`$rep` $eq";
         }
         
-        $where[$field] = "(" . $where[$field] . ")";
+        $where[$field] = "($where[$field])";
       }
     }
     
