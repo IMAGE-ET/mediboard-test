@@ -1,0 +1,2401 @@
+/* $Id:$ */
+
+@import url("forms.css");
+@import url("print.css") print;
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-size: 11px;  
+  background: #EFEFEF;
+  color: #000000;
+  margin: 2px;
+}
+
+pre {
+  font-family: "Courier New", Courier, monospace;
+  font-size: 0.9em;
+  border: 1px solid #aaa;
+  line-height: 10px;
+  padding: 2px 10px;
+  margin: 2px 10px;
+  max-height: 25em;
+  overflow: auto;
+}
+
+table {
+  font-size: 1em;
+}
+
+th {
+  text-align: center;
+  vertical-align: top;
+}
+
+th.title {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+}
+
+th.title.modify, th.category.modify {
+  color: #f00;
+}
+th.title.urgence {
+  background-color: #00a;
+  color: #fff;
+}
+th.title.urgence.modify {
+  background-color: #00a;
+  color: #f00;
+}
+
+table.form td.cancelled,
+table.tbl td.cancelled,
+th.cancelled,
+th.category.cancelled,
+table.form th.category.cancelled {
+  color: #fff;
+  background-color: #f00;
+  text-transform: uppercase;
+  font-weight: bold;
+  text-align: center;
+}
+
+tr.script {
+  display: none;
+}
+
+img {
+  border: none;
+}
+
+ul {
+  padding-left: 20px;
+}
+
+dl {
+  padding-left: 1px;
+}
+
+dt {
+  margin-top: 5px;
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 20px;
+}
+
+a {
+  color: #555;
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1, h2, h3, h4 {
+	font-weight: bold;
+}
+
+h1 {
+  font-size: 1.5em;
+  color: #555;
+  margin: 10px 0px;
+}
+
+h2 {
+  font-size: 1.4em;
+  color: #494;
+  margin: 5px 10px;
+}
+
+h2.module {
+  background-position: left center;
+  background-repeat: no-repeat;
+  padding: 10px 0;
+  padding-left: 55px;
+}
+
+h2.dPpatients{
+  background-image: url(../../images/modules/dPpatients.png);
+}
+
+h3 {
+  font-size: 1.3em;
+  color: #449;
+  margin: 10px 20px;
+}
+
+div div.text {
+  white-space: normal;
+}
+
+a.selected {
+  background: url(../../images/icons/td_selected.png) no-repeat bottom center;
+  padding-bottom: 8px;    
+} 
+
+a.selectable{
+  padding-bottom: 8px;  
+}
+a.selectable:hover{
+  background: url(../../images/icons/td_selected.png) no-repeat bottom center;
+  padding-bottom: 8px;    
+} 
+
+
+a.sortable{
+  background: url(../../images/icons/a_sortable.png) no-repeat bottom center;
+  padding-bottom: 8px;  
+}
+
+a.sortable:hover{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;  
+}
+
+a.ASC{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+a.ASC:hover{
+  background: url(../../images/icons/a_desc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+a.DESC{
+  background: url(../../images/icons/a_desc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+a.DESC:hover{
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+/**
+ * Debug console
+ */
+
+div#console {
+  font-family: "Courier New", Courier, monospace;
+  margin: 5px;
+  max-height: 300px;
+  overflow: auto;
+  background: #444;
+  color: #aaf;
+  opacity: .9;
+  position: fixed;
+  bottom: 0px;
+  border: 1px dotted #aaf;
+  padding: 3px 20px;
+}
+
+div#console div {
+  background: transparent;
+  padding: 0 2px;
+}
+
+div#console div#console-title {
+  font-weight: bold;
+  text-align: center;
+}
+
+div#console div#console-hide {
+  background: url(../../images/icons/cancel.png) no-repeat;
+  width: 20px;
+  height: 20px;
+  margin-left: -20px;
+  position: fixed;
+}
+
+div#console div.label {
+  font-size: 8pt;
+}
+
+div#console div.key {
+  color: #afa;
+  font-size: 8pt;
+  float: left;
+}
+
+div#console div.error {
+  color: #faa;
+  font-size: 8pt;
+}
+
+div#console div.value {
+  color: #fff;
+  font-size: 8pt;
+}
+
+/* classes Mediboard */
+.mediuser {
+  border-left: 4px solid transparent; 
+  padding-left: 4px; 
+  margin-left: 0px;
+}
+
+.categorieConsult { 
+  padding-left: 20px;
+  height: 18px; 
+  margin-left: 0px;
+}
+
+
+
+optgroup.group {
+  text-align: center;
+  font-variant: small-caps;
+}
+
+/* Title block */
+
+table.titleblock td {
+  white-space: nowrap;
+}
+
+table.titleblock td.titlecell {
+  font-size: 1.6em; 
+  color: #620;
+  width: 100%;
+  padding-bottom: 10px;
+}
+
+/* Bread crumbs block */
+
+table.crumbsblock {
+  width: 100%;
+}
+
+table.crumbsblock td {
+  white-space: nowrap;
+}
+
+table.crumbsblock td.crumbscell {
+  width: 100%;
+}
+
+/* Tab view table */
+
+table.taborflat {
+  display: none;
+}
+
+#tabmenu {
+  margin-left: 20px;
+  border-spacing: 0px;
+  margin-bottom: -1px;
+}
+
+#tabmenu td {
+  height: 21px; 
+  padding-right: 1px;
+}
+
+#tabmenu td.normal {
+	padding: 6px;
+	padding-top: 3px;
+	padding-bottom: 0px;
+  background: url(images/pictures/tab_background.png) repeat-x bottom;
+}
+
+#tabmenu td.normalLeft {
+  width: 3px;
+  background: url(images/pictures/tab_left.png) no-repeat bottom right;
+}
+
+#tabmenu td.normalRight {
+  width: 3px;
+  background: url(images/pictures/tab_right.png) no-repeat bottom left;
+}
+
+#tabmenu td.selected {
+  background: url(images/pictures/tab_selected_background.png) repeat-x;
+}
+
+#tabmenu td.selectedLeft {
+  width: 3px;
+  background: url(images/pictures/tab_selected_left.png) no-repeat bottom right;
+}
+
+#tabmenu td.selectedRight {
+  width: 3px;
+  background: url(images/pictures/tab_selected_right.png) no-repeat bottom left;
+}
+
+/* Pane table */
+
+.main {
+  width: 100%;
+  margin: 2px;
+  border-spacing: 4px;
+}
+
+.main td {
+  vertical-align: top;
+}
+
+table.main tbody.viewported td.viewport {
+  border: 1px solid #000;
+}
+
+table.main td.halfPane {
+  width: 50%;
+}
+
+table.main th.halfPane {
+  width: 50%;
+}
+
+td.greedyPane {
+  width: 100%;
+}
+
+th.greedyPane {
+  width: 100%;
+}
+
+th.title {
+  font-size: 1.2em;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
+/* Standard table */
+
+table.tbl {
+  width: 100%;
+  border: 0px;
+  border-spacing: 1px;
+  background-color: #777;
+}
+
+table.tbl a {
+  display: block;
+  margin: 0 1px;
+}
+
+a.actionPat {
+  display: inline;
+  float: right;
+  margin: 0 1px;
+}
+
+table.tbl a.action {
+  display: inline;
+}
+
+table.tbl th a {
+  color: #fff;
+}
+
+table.tbl th {
+  background-color: #666;
+  padding: 2px;
+  color: #fff;
+  font-weight: normal;
+  text-align: center;
+  vertical-align: middle;
+  white-space: nowrap;
+}
+
+table.tbl th.title {
+  font-size: 14px;
+  font-weight: bold;  
+  text-align: center;
+  background: #bbb;
+  border: #aaa 1px outset;
+}
+
+table.tbl td,
+div.tree-header {
+  background-color: #fff;
+  padding: 2px;
+  white-space: nowrap;
+  vertical-align: middle;
+}
+
+table.tbl td.error,
+table.tbl tr:hover td.error {
+  background-color: #f00;
+}
+
+table.tbl td.warning,
+table.tbl tr:hover td.warning {
+  background-color: #fc0;
+}
+
+table.tbl td.ok,
+table.tbl tr:hover td.ok {
+  background-color: #afa;
+}
+
+table.tbl tr.selected td,
+div.selected {
+  background-color: #ffc;
+}
+
+div.dragged {
+  background-color: #ffc;
+  border: 1px solid black;
+  padding: 2px 10px;
+}
+
+div.draggable {
+  cursor: move;
+}
+
+tbody.hoverable:hover tr td,
+table.tbl tr:hover td,
+div.tree-header:hover {
+  background-color: #CCCCCC;
+}
+
+table.tbl th.text {
+  white-space: normal;
+}
+
+table.tbl td.text {
+  white-space: normal;
+}
+
+table.tbl td.button {
+  text-align: center;
+  vertical-align: middle;
+  white-space: normal;
+  line-height: 140%;
+}
+
+div.previewfile{
+  white-space: normal;
+  text-align:left;
+}
+
+div.previewfileMinus{
+  font-size: 70%;
+  max-width:450px;
+  max-height:450px;
+  overflow:auto;
+}
+
+table.tbl tr.clear,
+table.tbl tr.clear a {
+  background-color: #ddf;
+  color: #000;
+}
+
+table.tbl tr.clear td,
+table.tbl tr.clear th {
+  background-color: transparent;
+  border: none;
+}
+
+table.tbl td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  min-height: 15px;
+  float: left;
+}
+
+div.date {
+  width: 60px;
+}
+
+div.dateTime {
+  width: 90px;
+}
+
+table.tbl td.date img {
+  margin-top: 3px;
+}
+
+/* a 'standard' table */
+
+table.std {
+  border: solid #8c8 3px;
+  background: #eef;
+}
+table.std th {
+  background-color: #888;
+  color: #fff;
+  border: outset #ccc 1px;
+}
+
+table.std td.hilite {
+  background-color: #fff;
+}
+
+/* Form tables */
+
+table.form {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table.form th {
+  color: #000;
+  white-space: nowrap;
+  background-color: #EEE;
+  vertical-align: top;
+  text-align: right;
+  font-weight: normal;
+  padding: 2px 4px;
+  border: none;
+}
+
+table.form th.title {
+  font-size: 1.3em;
+  font-weight: bold;  
+  text-align: center;
+  background-color: #CCC;
+}
+
+table.form th.category {
+  font-weight: bold;  
+  text-align: center;
+  background-color: #CCCCCC;
+  vertical-align: middle;
+}
+
+table.form th.mandatory {
+  color: #000;
+  font-weight: bold;
+}
+
+label.notNull {
+  padding-right: 5px;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.notNullOK {
+  padding-right: 5px;
+  font-weight: bold;
+}
+
+table.form th.text {
+  white-space: normal;
+  text-align: center;
+}
+
+table.form td {
+  white-space: nowrap;
+  vertical-align: top;
+  background: #eee;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+table.form td.dark {
+  background-color: #ddd;
+}
+
+table.form td.light {
+  background-color: #fff;
+}
+
+table.form td.compte_rendu {
+  background: #ddd;
+}
+
+table.form td.text {
+  white-space: normal;
+}
+
+table.form td.info {
+  white-space: normal;
+}
+
+table.form td.readonly input {
+  background: #eee;
+  border: 1px dotted;
+}
+
+table.form td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.form td.date div {
+  font-size: 11px;
+  border: 1px dotted;
+  padding: 0px 1px;
+  margin: 1px;
+  min-height: 15px;
+  float: left;
+}
+
+table.form td.date img {
+  margin-top: 3px;
+}
+
+div.autocomplete {
+  position:absolute;
+  width:250px;
+  max-height:200px;
+  overflow: auto;
+  background-color:white;
+  border:1px solid #888;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete ul {
+  list-style-type:none;
+  margin:0px;
+  padding:0px;
+}
+
+div.autocomplete ul em {
+  text-decoration: underline;
+  font-style: normal;
+}
+
+div.autocomplete ul li.selected { 
+  background-color: #fafaa4;
+  /*font-weight:bold;*/
+}
+
+div.autocomplete ul li {
+  list-style-type: none;
+  display: block;
+  margin: 0;
+  padding:2px;
+  cursor:pointer;
+}
+
+div.autocomplete ul li small {
+  white-space: normal;
+}
+
+/* links in header blocks */
+
+a.hdr:link, 
+a.hdr:active, 
+a.hdr:visited {
+  color: #fff;
+}
+
+/* tabbed boxes */
+
+td.tabox {
+  background-color: #ccc;
+  border: solid #ccc 2px;
+}
+
+/* Spécialisation par média */
+
+@media print {
+  table.tbl {
+    font-size: 100%;
+  }
+  h1.newpage {
+    page-break-before:always;
+    display:none;
+  }
+}
+
+/* Message styles */
+
+table.dialog #systemMsg,
+#leftMenu #systemMsg {
+  max-height: 50%;
+  overflow: auto;
+  position: fixed;
+  top: 5px;
+  right: 5px;
+  background: #fff;
+  border: 1px solid #666;
+  padding: 5px;
+  right: 5px;
+}
+
+div#systemMsg {
+  cursor: pointer;
+  position: absolute;
+  right: 10px;
+}
+
+div.warning {
+  color: #666;
+  min-height: 16px;
+  background: url(../../images/icons/warning.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.error {
+  color: #f00;
+  min-height: 16px;
+  background: url(../../images/icons/cancel.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.message {
+  color: #008;
+  min-height: 16px;
+  background: url(../../images/icons/check.png) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.loading {
+  min-height: 16px;
+  background: url(images/icons/loading.gif) no-repeat center left;
+  padding: 2px;
+  padding-left: 20px;
+}
+
+div.big-success,
+div.big-info,
+div.big-warning,
+div.big-error{
+  margin: 10px 50px;
+  min-height: 50px;
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+  padding-left: 60px;
+}
+
+div.big-warning {
+  background-image: url(images/icons/warning.png);
+  background-color: #ffd;
+  border-color: #da0;
+}
+
+div.big-success {
+  background-image: url(images/icons/success.png);
+  background-color: #efe;
+  border-color: #5a5;
+}
+
+div.big-info {
+  background-image: url(images/icons/info.png);
+  background-color: #eef;
+  border-color: #55a;
+}
+
+div.big-error {
+  background-image: url(images/icons/error.png);
+  background-color: #fee;
+  border-color: #a55;
+}
+
+#goUp {
+  background: #Ccc url(./images/icons/action_up.png) no-repeat center;
+  opacity: 0.5; 
+  border: 1px solid #666; 
+  cursor: pointer;
+  position: fixed;
+  width: 18px;
+  height: 18px;
+  right: 5px;
+  bottom: 5px;
+  z-index: 1000;
+}
+
+#goUp:hover {
+  background-color: #fff;
+  opacity: 1; 
+}
+
+@media print {
+  div.warning,
+  div.error,
+  div.message {
+    display: none;
+  }
+}
+
+  /* @import "./tooltip.css   */
+
+span.tooltip-trigger {
+  cursor: pointer;
+}
+
+div.tooltip {
+  padding: 0px;
+  margin-left: 20px;
+  position: absolute;
+}
+
+div.tooltip table.decoration {
+  border-spacing: 0px;
+  border: none;
+}
+
+div.tooltip table.decoration td.deco {
+  border: 0px;
+  opacity: .7;
+}
+
+div.tooltip table.decoration td.top-right,
+div.tooltip table.decoration td.top,
+div.tooltip table.decoration td.top-left,
+div.tooltip table.decoration td.left,
+div.tooltip table.decoration td.bottom-left {
+  background-color: transparent;
+  opacity: 1;
+}
+
+div.tooltip table.decoration td.bottom {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom.png) top left no-repeat;
+}
+
+div.tooltip table.decoration td.bottom-right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom-right.png) top left no-repeat;
+}
+
+div.tooltip table.decoration td.right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/right.png) top left no-repeat;
+}
+
+div.tooltip table.decoration td.content {
+  border: 4px solid #fff;
+}
+
+div.postit {
+  padding: 0px;
+  margin-left: 20px;
+  position: absolute;
+}
+
+div.postit table.decoration {
+  border-spacing: 0px;
+  border: none;
+}
+
+div.postit table.decoration td {
+  border: 0px solid #883;
+}
+
+div.postit table.decoration td.deco {
+  opacity: .7;
+}
+
+div.postit table.decoration td.top-right,
+div.postit table.decoration td.top-left,
+div.postit table.decoration td.bottom-left {
+  background-color: transparent;
+  opacity: 1;
+}
+
+div.postit table.decoration td.left {
+  background-color: #ff6;
+  border-left-width: 1px;
+  border-bottom-width: 1px;
+  opacity: 1;
+}
+
+div.postit table.decoration td.top {
+  background: #ff6 url(../../images/icons/cancel.png) top right no-repeat;
+  opacity: 1;
+  border-top-width: 1px;
+  border-right-width: 1px;
+}
+
+div.postit table.decoration td.top-left {
+  width: 12px;
+  height: 15px;
+  background: url(images/pictures/note-top-left.png) top left no-repeat;
+  opacity: 1;
+}
+
+div.postit table.decoration td.bottom {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom.png) top left no-repeat;
+}
+
+div.postit table.decoration td.bottom-right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/bottom-right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.right {
+  width: 16px;
+  height: 16px;
+  background: url(images/pictures/right.png) top left no-repeat;
+}
+
+div.postit table.decoration td.content {
+  border-right-width: 1px;
+  border-bottom-width: 1px;
+  background-color: #ff6;
+  max-height: 40px;
+  overflow: scroll;
+  padding-right: 10px;
+  padding-bottom: 10px;
+}
+
+table.note {
+  background: transparent;
+  border-spacing: 0px;
+  padding: 0px;
+  font-size: 10px;
+  color: #000;
+  font-weight: normal;
+}
+
+table.note th,
+table.note td {
+  background: transparent;
+  text-align: left;
+}
+
+table.note th {
+  font-weight: bold;
+}
+
+table.note th.high {
+  background-color: #faa;
+}
+
+table.note th.low {
+  background-color: #afa;
+}
+
+  /* @import "./login.css";   */
+
+#login {
+  margin: 40px 0px 0px; 
+}
+
+#login table {
+  border: solid #8c8 3px;
+  width: 600px;
+  background: #eef;
+  margin: auto;
+  padding: 5px;
+}
+
+#login table td.logo {
+  width: 33%;
+  text-align: center;
+  font-size: 9px;
+  white-space: normal;
+}
+
+  /* @import "./header.css";  */
+
+/* Global header */
+
+#header {
+  width: 100%;
+  border-spacing: 0px;
+  border: none;
+}
+
+#header td {
+  padding: 0px;
+}
+
+table.Offline td.button {
+  text-align: center;
+  vertical-align: middle;
+}
+
+table.Offline select,
+table.Offline option,
+table.Offline input,
+table.Offline button  {
+  height: 20px;
+  font-size: 15px;
+  font-weight: bold;
+  margin : 2px 2px;
+}
+
+/* Banner */
+
+#banner {
+  vertical-align: middle;
+  text-align: center;
+}
+
+#banner p {
+  font-size: 1.9em; 
+  float: left;
+  color: #620;
+  margin: 5px 10px 0;
+}
+
+#banner a {
+  display: block;
+}
+
+/* Navigation */
+#nav {
+  display: block;
+  /*width: 100%;*/
+  margin: 0;
+}
+
+#nav ul, #nav li {
+  list-style: none;
+  margin: 0;
+  padding-left: 0;
+}
+
+#nav a {
+  display: block;
+  font-weight: bold;
+  font-size: 1em;
+  background: #EEE;
+  padding: 2px;
+  border: 1px solid #DDD;
+  -moz-border-radius: 4px 0 0 4px;
+  text-align: right;
+  margin: 2px 0;
+  vertical-align: middle;
+  background: #EEEEEE;
+}
+
+#nav a:hover {
+  text-decoration: none;
+  background: #ddd;
+}
+
+#nav a:active, #nav .selected a {
+  background: #E0DFE3;
+  padding-right: 6px;
+}
+
+#nav img {
+  display: none;
+}
+
+#nav a:hover img {
+  display: block;
+  position: absolute;
+  margin-top: -12px;
+}
+
+#nav .selected a:hover img {
+  display: inline;
+  position: relative;
+  margin-top: 0px;
+}
+
+#nav .selected a img {
+  display: inline;
+}
+
+
+
+/* User */
+#user {
+  background: #CCCCCC;
+  -moz-border-radius: 6px;
+  margin: 4px;
+  padding: 4px;
+  vertical-align: middle;
+  text-align: center;
+}
+
+
+
+/* Main -- table -- pane */
+
+#main {
+  background: #E0DFE3;
+  -moz-border-radius: 6px;
+  margin: 4px;
+  padding: 4px;
+  vertical-align: top;
+}
+
+#main > .title {
+  background: #CCCCCC;
+  -moz-border-radius: 6px;
+  margin: 4px;
+  padding: 4px;
+}
+
+#main .title h1 {
+  margin: 2px;
+}
+
+#main .title img {
+  float: left;
+  margin-right: 4px;
+}
+
+#main .content {
+  background: #FCFCFE;
+  border: 1px solid #919B9C;
+}
+
+
+#mainPane {
+  vertical-align: top;
+}
+  /* @import "./htmlarea.css" */
+
+textarea#htmlarea {
+  width: 99%;
+  height: 100%;
+}
+
+span.hilite {
+  background: #f5f;
+}
+
+@media screen {
+  span.field {
+    background: #bbd;
+  }
+
+  span.value {
+    background: #ddd;
+  }
+
+  span.name {
+    background: #bdb;
+  }
+
+  span.choice {
+    background: #ddd;
+  }
+
+}
+
+/* Module specific CSS*/
+  /* @import "./modules.css";   */
+
+table.dPsalleOp select,
+table.dPsalleOp option,
+table.dPsalleOp input,
+table.dPsalleOp button  {
+  height: 18px;
+  font-size: 14px;
+  font-weight: bold;
+}
+
+table.dPsalleOp .notext  {
+  font-size: 0px;
+}
+
+  /* @import "./contacts.css";  */
+
+/* contacts table */
+
+table.contacts {
+  background-color: #888;
+}
+
+table.contacts td {
+  background-color: #def;
+}
+
+table.contacts td.hilite {
+  background-color: #fff;
+}
+
+  /* @import "./calendar.css    */
+
+.calendar td.day.current {
+  background-color: #ddd;
+}
+
+.calendar td.day.spot {
+  border-style: solid;
+  border-color: #ca0;
+  border-width: 0px 2px 2px 0px;
+  padding: 0px 2px 0px 0px;
+}
+
+.calendar td.day.spot.hilite {
+  border-style: outset;
+}
+
+.calendar td.day.spot.selected {
+  border-style: inset;
+}
+
+.calendar td.day.weekend {
+  color: #822;
+}
+
+  /* @import "./ccam.css";      */
+
+table.fullCode {
+  width: 100%;
+  background: #f99;
+}
+
+table.fullCode tr td.pane {
+  vertical-align: top;
+  width: 50%;
+  background: #fdd;
+  padding: 5px;
+}
+
+table.fullCode tr td.pane table {
+  width: 100%;
+}
+
+table.findCode {
+  width: 100%;
+  background: #99f;
+}
+
+table.findCode th {
+  text-align: left;
+}
+
+table.findCode td {
+  vertical-align: top;
+  width: 25%;
+  background: #ddf;
+  padding: 5px;
+}
+
+table.bookCode {
+  width: 100%;
+  background: #f9f;
+}
+
+table.bookCode th {
+  text-align: left;
+}
+
+table.bookCode td {
+  vertical-align: top;
+  width: 25%;
+  background: #fdf;
+  padding: 5px;
+}
+
+table.selectCode {
+  width: 100%;
+  background: #f9f;
+}
+
+table.selectCode th {
+  text-align: left;
+}
+
+table.selectCode td {
+  vertical-align: top;
+  width: 33%;
+  background: #fdf;
+  padding: 5px;
+}
+
+  /* @import "./admission.css"; */
+
+/* The admission table based on the form one */
+
+#admission {
+  width: 100%;
+  border-spacing: 6px;
+  color: #006;
+}
+
+#admission th {
+  white-space: nowrap;
+  background: transparent;
+  vertical-align: top;
+  text-align: right;
+  font-weight: bold;
+}
+
+#admission th.title {
+  font-weight: bold;  
+  text-align: center;
+  background: #68f;
+  border: #aaa 3px outset;
+  padding: 2px;
+  font-size: 16pt;
+  color: #006;
+}
+
+#admission th.category {
+  font-weight: bold;  
+  text-align: center;
+  background: #abf;
+  padding: 2px;
+  border: #aaa 3px outset;
+  font-size: 12pt;
+}
+
+#admission td {
+  white-space: normal;
+  vertical-align: top;
+  background: transparent;
+  text-align: left;
+  padding: 1px 4px;
+  font-size: 10pt;
+}
+
+#admission td.halfPane {
+  white-space: normal;
+  vertical-align: top;
+  width: 50%;
+  background: transparent;
+  text-align: left;
+  padding: 1px 4px;
+}
+
+#admission td.info {
+  white-space: normal;
+  font-style: italic;
+  padding: 10px;
+  margin: 5px;
+  border: #aaa 2px dotted;
+}
+
+#admission .Bold{
+  font-weight: bold;
+}
+
+#admission .NotBold{
+  font-weight: normal;
+}
+
+/* Accordion rico */
+
+div.accordionMain {
+  border: 1px solid #000;
+}
+
+div.accordionTabTitleBar {
+  cursor: pointer;
+  font-size: 14px;
+  border: 1px outset #458;
+}
+
+div.accordionTabContentBox {
+}
+
+div.accordionTabContentBox table.tbl{
+  width:96%;
+}
+div.accordionTabContentBox table[class="tbl"]{
+  width:100%;
+}
+
+div.accordionTabContentBox table.form{
+  width:96%;
+}
+div.accordionTabContentBox table[class="form"]{
+  width:100%;
+}
+
+/* control tabs */
+
+hr.control_tabs {
+  clear: both;
+  border: none;
+  border-top: 1px solid #999;
+}
+  
+ul.control_tabs {
+  list-style: none;
+  clear: both;
+  padding: 3px 6px;
+}
+
+ul.control_tabs li {
+  float: left;
+  margin: 0px 2px;
+  text-align: center;
+}
+
+ul.control_tabs li a {
+  display: block;
+  border: 1px solid #666;
+  -moz-border-radius: 4px 4px 0 0;
+  background-color: #CCC;
+  font-size: 1.1em;
+  padding: 4px 8px;
+  color: #000;
+  font-weight: bold;
+  margin-top: 2px;
+  margin-bottom: -1px;
+}
+
+ul.control_tabs li a:hover {
+  background-color: #CCC;
+  color: #000;
+}
+
+ul.control_tabs li a.active {
+  background-color: #FFF;
+  color: #000;
+  border-bottom: #FFF 1px solid;
+}
+
+ul.control_tabs li a.minor {
+  background-color: #CCCCCC;
+  color: #333333;
+}
+
+ul.control_tabs li a.minor:hover {
+  background-color: #BBBBBB;
+  color: #000000;
+}
+
+ul.control_tabs li a.minor.active {
+  background-color: #999999;
+  color: #000000;
+}
+
+ul.control_tabs .separator {
+  padding: 0 10px; 
+  border: none;
+}
+
+
+  /* @import "./hospitalisation.css"; */
+
+/* Chambres */
+
+table.chambrecollapse,
+table.chambreexpand {
+  width: 100%;
+  border-spacing: 0px;
+  border-collapse: collapse;
+  margin: 1px 0;
+}
+
+table.chambrecollapse em,
+table.chambreexpand em {
+  font-weight: bold;
+}
+
+
+table.chambrecollapse td,
+table.chambrecollapse th,
+table.chambreexpand td,
+table.chambreexpand th {
+  border: 1px outset #050;
+}
+
+table.chambrecollapse td.action,
+table.chambreexpand td.action {
+  width: 20px;
+  text-align: center;
+  vertical-align: middle;
+}
+
+
+table.chambrecollapse th.chambre {
+  padding: 2px;
+  padding-left: 10px;
+  background: #aaa url(../../images/icons/collapse.gif) no-repeat center left;
+}
+
+table.chambreexpand th.chambre {
+  padding: 2px;
+  padding-left: 10px;
+  background: #aaa url(../../images/icons/expand.gif) no-repeat center left;
+}
+
+th.chambre img {
+  float: right;
+  margin: 0 1px;
+}
+
+table.chambrecollapse tr.litdispo td,
+table.chambreexpand tr.litdispo td {
+  background: #dfd;
+}
+
+table.chambrecollapse tr.lit td,
+table.chambreexpand tr.lit td {
+  background: #ccc;
+  color: #000;
+}
+
+table.chambrecollapse tr.litselected td,
+table.chambreexpand tr.litselected td {
+  background: #f00;
+}
+
+table.chambrecollapse tr.patient td,
+table.chambreexpand tr.patient td {
+  background: #eee;
+  color: #000;
+}
+
+
+table.chambrecollapse tr.patient img,
+table.chambreexpand tr.patient img {
+  float: left;
+  margin-right: 2px;
+}
+
+table.chambrecollapse tr.lit,
+table.chambrecollapse tr.litdispo,
+table.chambrecollapse tr.dates {
+  display: none;
+}
+
+table.chambreexpand td.dates {
+  white-space: normal;
+  color: red;
+}
+
+table.chambreexpand tr.dates {
+}
+
+/* Operations */
+
+table.operationcollapse,
+table.operationexpand,
+table.sejourcollapse,
+table.sejourexpand {
+  width: 100%;
+  background: #fff;
+  border-spacing: 0px;
+  border-collapse: collapse;
+}
+
+table.operationcollapse td,
+table.operationexpand td,
+table.sejourcollapse td,
+table.sejourexpand td {
+  border: 1px solid #555;
+  padding: 0 2px;
+  color: #000;
+}
+
+table.operationcollapse em,
+table.operationexpand em,
+table.sejourcollapse em,
+table.sejourexpand em {
+  font-weight: bold;
+}
+
+table.operationcollapse td.selectoperation,
+table.operationexpand td.selectsejour,
+table.sejourcollapse td.selectsejour,
+table.sejourexpand td.selectsejour {
+  background: #ddf;
+  text-align: center;
+  vertical-align: middle;
+  width: 20px;
+}
+
+table.operationcollapse td.patient,
+table.sejourcollapse td.patient {
+  white-space: normal;
+  padding-left: 17px;
+  background: #ddf url(../../images/icons/collapse.gif) no-repeat center left;
+}
+
+table.operationexpand td.patient,
+table.sejournexpand td.patient {
+  padding-left: 17px;
+  background: #ddf url(../../images/icons/expand.gif) no-repeat center left;
+}
+
+table.operationexpand td.date,
+table.sejourexpand td.date {
+}
+
+table.operationcollapse td.date,
+table.sejourcollapse td.date {
+  display: none;
+}
+
+table#planningBloc {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table#planningBloc th {
+  background-color: #888;
+  padding: 2px;
+  color: #fff;
+  border: outset #ccc 1px;
+  font-weight: normal;
+  white-space: nowrap;
+}
+
+table#planningBloc th a {
+  color: #fff;
+}
+
+table#planningBloc th.heure {
+  text-align: left;
+  width: 6%;
+}
+
+table#planningBloc td.salle {
+  background-color: #eee;
+  text-align: center;
+}
+
+table#planningBloc td {
+  vertical-align: middle;
+  background-color: #888;
+}
+table#planningBloc td.empty {
+  background: #eee;
+  width: 1.5%;
+}
+
+table#planningBloc td.firsthour {
+  background: #ddd;
+}
+
+/* @import "./dPpatients.css" */
+
+table#weeklyPlanning {
+  width: 100%;
+  border-spacing: 1px;
+}
+
+table#weeklyPlanning td {
+  text-align: center; 
+  vertical-align: middle;
+  white-space: normal;
+}
+
+table#weeklyPlanning td.selectedPlage {
+  background: #ddd;
+}
+
+table#weeklyPlanning td.nonEmpty {
+  background: #ccc; 
+}
+table#weeklyPlanning td.nonEmptyConsult {
+  background: #ccc url(images/pictures/plageConsult.png) repeat-y left;
+  border: #9f9 1px solid;
+}
+table#weeklyPlanning td.nonEmptyOp {
+  background: #ccc url(images/pictures/plageOp.png) repeat-y left;
+  border: #99f 1px solid;
+}
+table#weeklyPlanning td.selectedConsult {
+  background: #ddd;
+  border: #9f9 1px solid;
+}
+table#weeklyPlanning td.selectedOp {
+  background: #ddd;
+  border: #99f 1px solid;
+}
+
+table#weeklyPlanning td.empty {
+  background: #eee;
+  height: 3px; 
+}
+
+table#weeklyPlanning td.empty {
+  background: #eee;
+  height: 3px; 
+}
+  /* @import "./collapser.css"; */
+
+div.progressBar {
+  font-size: 80%;
+  background: #fff;
+  margin: 0 auto;
+  height: 12px;
+  width: 90%;
+  text-align: left;
+  border: 1px solid #888;
+}
+
+div.progressBar div {
+  padding: 0;
+  margin: 0;
+}
+
+div.progressBar div.bar {
+  height: 12px;
+/*  opacity: 0.2; */
+  display: block;
+  background-repeat: repeat;
+}
+
+div.progressBar div.empty {
+  background-image: url(./images/icons/pempty.png);
+}
+
+div.progressBar div.normal {
+  background-image: url(./images/icons/pnormal.png);
+}
+
+div.progressBar div.booked {
+  background-image: url(./images/icons/pbooked.png);
+}
+
+div.progressBar div.full {
+  background-image: url(./images/icons/pfull.png);
+}
+
+div.progressBar div.text {
+  margin-top: -13px;
+  text-align: center;
+  font-size: 11px;
+  white-space: nowrap;
+  width: 90%;
+}
+
+
+tr.groupexpand td,
+tr.groupcollapse td {
+  background-color: #ddf;
+}
+
+tr.groupexpand td,
+tr.groupcollapse td,
+tr.groupexpand th,
+tr.groupcollapse th {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.groupcollapse td,
+tr.groupcollapse th {
+  background-image: url(../../images/icons/collapse.gif);
+}
+
+tr.groupexpand td,
+tr.groupexpand th {
+  background-image: url(../../images/icons/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerHide td {
+  background-color: #ddf;
+}
+
+tr.triggerShow td,
+td.triggerShow,
+tr.triggerHide td,
+td.triggerHide,
+tr.triggerShow th,
+tr.triggerHide th,
+div.triggerShow,
+div.triggerHide {
+  padding-left: 25px;
+  font-weight: bold;
+  background-repeat: no-repeat;
+  background-position: center left;
+}
+
+tr.triggerHide td,
+tr.triggerHide th,
+td.triggerHide,
+div.triggerHide {
+  background-image: url(../../images/icons/expand.gif);
+}
+
+tr.triggerShow td,
+tr.triggerShow th,
+td.triggerShow,
+div.triggerShow {
+  background-image: url(../../images/icons/collapse.gif);
+}
+
+tr.show {
+  display: table-row;
+}
+
+td.show {
+  display: table-cell;
+}
+
+.hidden {
+  display: none;
+}
+
+div.tree-content {
+  margin: 0; 
+  padding-left: 25px;
+}
+
+div.tree-trigger {
+  overflow: hidden;
+  width: 0px;
+  float: left;
+}
+
+div.tree-header {
+  border: 1px solid #777;
+  margin-top: -1px;
+  padding-top: 4px;
+  font-weight: normal;
+}
+
+table.affectations {
+
+}
+
+table.affectations {
+  width: 100%;
+}
+
+table.affectations td.fullService {
+  border: 1px solid #aaa;
+  background-color: #fff;
+}
+
+  /* @import "./consultation.css"; */
+
+
+table#weber td {
+  text-align: center;
+}
+
+table#weber tr.values {
+  display: none;
+}
+
+table#weber tr.vocales {
+  display: none;
+}
+
+table#weber tr.moyenne td {
+  background-color: #ddd;
+}
+
+table#weber tr.moyenne td.aerien {
+  background-color: #aaf;
+  font-weight: bold;
+}
+
+table#weber tr.moyenne td.osseux {
+  background-color: #faa;
+  font-weight: bold;
+}
+
+table#weber td {
+  text-align: center;
+}
+
+@media print {
+  table#weber table#allvalues,
+  table#weber td.radiointeractive {
+    display: none;
+  }
+}
+
+/* Liste de choix dans les comptes rendus */
+
+td.listeChoixCR ul {
+  list-style-type: none;
+  list-style-position: inside;
+}
+
+td.listeChoixCR ul li {
+  display:inline;
+  float: left;
+  margin: 2px 2px 2px 0px;
+}
+
+/* Installation wizard */
+
+div.wizard {
+  padding: 20px; 
+  margin: 40px; 
+  background: #eee; 
+  border: 2px solid #8c8; 
+}
+
+div.wizard div.toc {
+  position: fixed;
+  right: 15px;
+  top: 15px;
+  background: #fff;
+  border: 2px solid #000;
+  margin: 5px;
+  padding: 10px;
+  opacity: .7;
+}
+
+div.wizard div.toc ol {
+  margin: 0px;
+  padding-left: 20px
+}
+
+div.wizard div.toc a {
+  display: block;
+  color: #000;
+}
+
+div.wizard-navigation {
+  text-align: center;
+  margin: 20px;
+}
+
+div.wizard-navigation a {
+  text-decoration: none;
+  border: 1px black solid;
+  font-weight: bold;
+  font-size: 12px;
+  background: #ddd;
+  margin: 0 2px;
+  padding: 2px 5px;
+}
+
+div.wizard-navigation a:hover {
+  background: #bbb;
+}
+
+div.generated {
+  margin: 5px;
+  text-align: center;
+  font-size: 90%;
+}
+
+div.about {
+  margin-top: 100px;
+  height: 200px;
+  position: absolute;
+  text-align: center;
+  width: 50%;
+}
+
+div.about div.text {
+  height: 100%;
+  text-align: center;
+  width: 100%;
+}
+
+div.about div.nav {
+  text-align: center;
+  width: 100%;
+}
+
+/* The main calendar widget.  DIV containing a table. */
+
+.calendar {
+  position: relative;
+  display: none;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  color: #000;
+  cursor: default;
+  background: #d4d0c8;
+}
+
+/* Header part -- contains navigation buttons and day names. */
+
+.calendar .button { /* "<<", "<", ">", ">>" buttons have this class */
+  text-align: center;
+  padding: 1px;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+}
+
+.calendar .nav {
+  background: transparent url(menuarrow.gif) no-repeat 100% 100%;
+}
+
+.calendar thead .title { /* This holds the current "month, year" */
+  font-weight: bold;
+  padding: 1px;
+  border: 1px solid #000;
+  background: #848078;
+  color: #fff;
+  text-align: center;
+}
+
+.calendar thead .headrow { /* Row <TR> containing navigation buttons */
+}
+
+.calendar thead .daynames { /* Row <TR> containing the day names */
+}
+
+.calendar thead .name { /* Cells <TD> containing the day names */
+  border-bottom: 1px solid #000;
+  padding: 2px;
+  text-align: center;
+  background: #f4f0e8;
+}
+
+.calendar thead .weekend { /* How a weekend day name shows in header */
+  color: #f00;
+}
+
+.calendar thead .hilite { /* How do the buttons in header appear when hover */
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  padding: 0px;
+  background-color: #e4e0d8;
+}
+
+.calendar thead .active { /* Active (pressed) buttons in header */
+  padding: 2px 0px 0px 2px;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  background-color: #c4c0b8;
+}
+
+/* The body part -- contains all the days in month. */
+
+.calendar tbody .day { /* Cells <TD> containing month days dates */
+  width: 2em;
+  text-align: right;
+  padding: 2px 4px 2px 2px;
+}
+.calendar tbody .day.othermonth {
+  font-size: 0.8em;
+  color: #aaa;
+}
+.calendar tbody .day.othermonth.oweekend {
+  color: #faa;
+}
+
+.calendar table .wn {
+  padding: 2px 3px 2px 2px;
+  border-right: 1px solid #000;
+  background: #f4f0e8;
+}
+
+.calendar tbody .rowhilite td {
+  background: #e4e0d8;
+}
+
+.calendar tbody .rowhilite td.wn {
+  background: #d4d0c8;
+}
+
+.calendar tbody td.hilite { /* Hovered cells <TD> */
+  padding: 1px 3px 1px 1px;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+}
+
+.calendar tbody td.active { /* Active (pressed) cells <TD> */
+  padding: 2px 2px 0px 2px;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+}
+
+.calendar tbody td.selected { /* Cell showing selected date */
+  font-weight: bold;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  padding: 2px 2px 0px 2px;
+  background: #e4e0d8;
+}
+
+.calendar tbody td.weekend { /* Cells showing weekend days */
+  color: #f00;
+}
+
+.calendar tbody td.today { /* Cell showing today date */
+  font-weight: bold;
+  color: #00f;
+}
+
+.calendar tbody .disabled { color: #999; }
+
+.calendar tbody .emptycell { /* Empty cells (the best is to hide them) */
+  visibility: hidden;
+}
+
+.calendar tbody .emptyrow { /* Empty row (some months need less than 6 rows) */
+  display: none;
+}
+
+/* The footer part -- status bar and "Close" button */
+
+.calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
+}
+
+.calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
+  background: #f4f0e8;
+  padding: 1px;
+  border: 1px solid #000;
+  background: #848078;
+  color: #fff;
+  text-align: center;
+}
+
+.calendar tfoot .hilite { /* Hover style for buttons in footer */
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  padding: 1px;
+  background: #e4e0d8;
+}
+
+.calendar tfoot .active { /* Active (pressed) style for buttons in footer */
+  padding: 2px 0px 0px 2px;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+}
+
+/* Combo boxes (menus that display months/years for direct selection) */
+
+.calendar .combo {
+  position: absolute;
+  display: none;
+  width: 4em;
+  top: 0px;
+  left: 0px;
+  cursor: default;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+  background: #e4e0d8;
+  font-size: 90%;
+  padding: 1px;
+  z-index: 100;
+}
+
+.calendar .combo .label,
+.calendar .combo .label-IEfix {
+  text-align: center;
+  padding: 1px;
+}
+
+.calendar .combo .label-IEfix {
+  width: 4em;
+}
+
+.calendar .combo .active {
+  background: #c4c0b8;
+  border: 1px solid;
+  border-color: #999 #000 #000 #999;
+}
+
+.calendar .combo .hilite {
+  background: #048;
+  color: #fea;
+}
+
+.calendar td.time {
+  border-top: 1px solid #000;
+  padding: 1px 0px;
+  text-align: center;
+  background-color: #f4f0e8;
+}
+
+.calendar td.time .hour,
+.calendar td.time .minute,
+.calendar td.time .ampm {
+  padding: 0px 3px 0px 4px;
+  border: 1px solid #889;
+  font-weight: bold;
+  background-color: #fff;
+}
+
+.calendar td.time .ampm {
+  text-align: center;
+}
+
+.calendar td.time .colon {
+  padding: 0px 2px 0px 3px;
+  font-weight: bold;
+}
+
+.calendar td.time span.hilite {
+  border-color: #000;
+  background-color: #766;
+  color: #fff;
+}
+
+.calendar td.time span.active {
+  border-color: #f00;
+  background-color: #000;
+  color: #0f0;
+}
+
+div.chargementMask {
+  width: 100%;
+  position: absolute;
+  background-color:#000 ;
+  z-index: 10;
+}
+
+div.chargementText {
+  width: 20em;
+  position: absolute;
+  z-index: 11;
+  background-color:#fff;
+  color:#000;
+  padding: 2em 0.5em;
+  font-size: 1.1em;
+  text-align: center;
+  border: 1px solid #666666;
+  vertical-align: middle;
+  line-height: 24px;
+  opacity: 0.8;
+}
+
+div#performance {
+  opacity: 0.6;
+  line-height: 110%;  
+  font-size: 9px;
+  margin: 10px; 
+  text-align: center;
+}
+
+option.validation {
+  height: 16px;
+  background-image: url(images/buttons/tick.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+option.modification {
+  height: 16px;
+  background-image: url(images/icons/warning.png);
+  background-repeat: no-repeat;
+  background-position: center right;
+}
+
+div.idsante400 {
+  height: 16px;
+    width: 18px;
+    float: right;
+  padding: 0 4px;
+}
+
+table#diagramme {
+  height: 100%;
+  width: 100%;
+  font-size: 12px;
+}
+
+table#diagramme td.only {
+  border: 2px solid #050440;
+  color : #050440;
+}
+
+table#diagramme td.done {
+  background-color:#f3f5f7;
+  text-align: center;
+}
+
+table#diagramme td.current {
+  background-color:#aabcee;
+  text-align: center;
+}
+
+table#diagramme td.expect {
+  text-align: center;
+  background-color:#aaaaaa;
+}
+
+table#diagramme td.ray {
+  background-image: url(images/icons/ray.gif); 
+  background-repeat: repeat;
+}
+
+table#diagramme td.arrowdown {
+  height: 40px;
+  background-image: url(images/icons/downarrow.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table#diagramme td.arrowup {
+  height: 40px;
+  background-image: url(images/icons/uparrow.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table#diagramme td.arrowright {
+  height: 40px;
+  width: 100px;
+  background-image: url(images/icons/loopnone.png);
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+table#diagramme td.space {
+  width: 100px;
+}
+
+div.sejour {
+  font-weight: bold;
+}
+
+span.listeCurrent a {
+  color:red ;
+}
+
+table.tbl td.highlight{
+  background-color: #ff5;
+}
+
+td.highlight{
+  background-color: #ff5;
+}
+
+div.effectue{
+  text-decoration: line-through;  
+}
+
+table.tbl td.ccmu-1{
+  background-color: #0F0;
+}
+
+table.tbl td.ccmu-2{
+  background-color: #9F0;
+}
+
+table.tbl td.ccmu-3{
+  background-color: #FF0;
+}
+
+table.tbl td.ccmu-4{
+  background-color: #FFCD00;
+}
+
+table.tbl td.ccmu-5{ 
+  background-color: #F60;
+}
+
+table.tbl td.ccmu-D{
+  background-color: #F00;
+}
+
+table.tbl td.ccmu-P{
+  background-color: #0F0;
+}
+
+.bargraph {
+  overflow: hidden;
+  height: 1em; 
+  min-width: 5em;
+}
+
+.bargraph .legend {
+  display: none;
+  position: absolute;
+  border: 1px solid #999999;
+  background: #F9F9F9;
+  z-index: 50;
+  margin-top: 16px;
+  margin-left: 16px;
+}
+
+table.main td.step {
+  background-color: #ccc; 
+  width: 10%; 
+  font-size: 12px; 
+  font-weight: bold; 
+  text-align: center;
+  vertical-align: middle;
+}

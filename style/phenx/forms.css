@@ -1,0 +1,260 @@
+:focus {
+  outline: 0;
+}
+
+form {
+  display: inline;
+}
+
+input, select, textarea, button {
+  border: 1px #999999 solid;
+  font-size: 1em;
+  margin: 1px;
+  padding: 1px;
+  background: #FDFDFD;
+}
+
+input:hover, select:hover, textarea:hover {
+  border: 1px #333333 solid;
+}
+
+input:focus, select:focus, textarea:focus {
+  border: 1px #E68B2C solid;
+}
+
+select, input[type=submit], input[type=reset], input[type=button] {
+  cursor: pointer;
+}
+
+input:focus,
+select:focus,
+textarea:focus {
+  background: #fff;
+}
+
+input[type=submit],
+input[type=reset],
+input[type=button] {
+  background: #ddd;
+}
+
+input[type=submit]:hover,
+input[type=reset]:hover,
+input[type=button]:hover {
+  background: #bbb;
+}
+
+optgroup {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: bold;
+  padding: 0px;
+  padding-left: 5px;
+  background: #fff;
+}
+
+option {
+  font-style: normal;
+  font-size: 10px;
+  font-weight: normal;
+  padding: 0px;
+  padding-right: 4px;
+  background: #fff;
+}
+
+option.novalue {
+  display:none;
+}
+
+option[value=""] {
+  font-style: italic;
+}
+
+label:hover {
+  border-bottom: 1px dotted #888;
+  cursor: help;
+}
+
+label.notNull, label.notNullOK {
+  font-weight: bold;
+}
+
+textarea {
+  font-family: Verdana, Arial, Helvetica, sans-serif;
+  width: 99%;
+}
+
+button,
+a.button,  
+a.buttonedit, 
+a.buttonhslip, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttonremove, 
+a.buttonadd, 
+a.buttondown {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+  border: 1px solid #999;
+  font-size: 1em;
+  font-weight: normal;
+  padding-right: 6px;
+  padding-left: 6px;
+  white-space: nowrap;
+  vertical-align: text-bottom;
+  background: url(images/buttons/button_background.gif);
+}
+
+/*button:before {
+	content: url(images/buttons/edit.png);
+}*/
+
+a.button,  
+a.buttonedit, 
+a.buttonhslip, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttonremove, 
+a.buttonadd, 
+a.buttondown {
+  margin: 2px;
+  padding: 2px;
+  height: 15px;
+}
+
+button:hover, 
+a.button:hover,
+a.buttonedit:hover, 
+a.buttontrash:hover, 
+a.buttonsubmit:hover,
+a.buttonnew:hover, 
+a.buttonprint:hover, 
+a.buttoncancel:hover, 
+a.buttonmodify:hover, 
+a.buttonsearch:hover, 
+a.buttonlock:hover 
+a.buttontick:hover, 
+a.buttonchange:hover, 
+a.buttondown:hover,
+a.buttonadd:hover, 
+a.buttonremove:hover {
+  background-color: #bbb;
+  text-decoration: none;
+  background: url(images/buttons/button_hover_background.gif);
+}
+
+/*button.edit, a.buttonedit {
+  background-image: url(images/buttons/edit.png);
+  padding-left: 18px;
+}
+
+button.hslip, a.buttonhslip {
+  background-image: url(images/buttons/hslip.png);
+  padding-left: 18px;
+}
+
+button.trash, a.buttontrash {
+  background-image: url(images/buttons/trash.png);
+  padding-left: 18px; 
+}
+
+button.submit, a.buttonsubmit {
+  background-image: url(images/buttons/save.png);
+  padding-left: 18px;
+}
+button.new, a.buttonnew {
+  background-image: url(images/buttons/new.png);
+  padding-left: 18px;
+}
+button.print, a.buttonprint {
+  background-image: url(images/buttons/print.png);
+  padding-left: 18px;
+}
+button.cancel, a.buttoncancel {
+  background-image: url(images/buttons/cancel.png);
+  padding-left: 18px;
+}
+
+button.modify, a.buttonmodify {
+  background-image: url(images/buttons/save.png);
+  padding-left: 18px;
+}
+
+button.search, a.buttonsearch {
+  background-image: url(images/buttons/search.png);
+  padding-left: 18px;
+}
+
+button.lock, a.buttonlock {
+  background-image: url(images/buttons/lock.png);
+  padding-left: 18px;
+}
+
+button.tick, a.buttontick {
+  background-image: url(images/buttons/tick.png);
+  padding-left: 18px;
+}
+
+button.down, a.buttondown {
+  background-image: url(images/buttons/down.png);
+  padding-left: 18px;
+}
+
+button.change, a.buttonchange {
+  background-image: url(images/buttons/change.png);
+  padding-left: 18px;
+}
+
+button.add, a.buttonadd {
+  background-image: url(images/buttons/add.png);
+  padding-left: 18px;
+}
+
+button.remove, a.buttonremove {
+  background-image: url(images/buttons/remove.png);
+  padding-left: 18px;
+}*/
+
+button.notext{
+  font-size: 0;
+  padding : 15px 0px 0px 0px;
+  width: 19px;
+}
+
+a.notext{
+  padding : 0px 0px 0px 16px;
+  height: 16px;
+}
+
+.numericField, .numericField map {
+  display: inline;
+}
+
+.numericField img {
+  height: 19px; 
+  width: 11px; 
+  line-height: 19px; 
+  vertical-align: middle; 
+  margin: -5px 0 0 -2px; 
+}
+
+.numericField input {
+  margin-right: 0;
+}
