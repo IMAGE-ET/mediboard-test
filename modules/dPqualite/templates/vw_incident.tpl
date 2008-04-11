@@ -58,7 +58,7 @@ function refreshListChoix(){
     if(oElement.value){
       sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
       var aItems = oElement.value.split("|");
-      aItems.removeByValue("");
+      oItems = aItems.without("");
       iCode = 0;
       while (sCode = aItems[iCode++]) {
         sListeChoix += "<li>" + $('titleItem' + sCode).title + "</li>";

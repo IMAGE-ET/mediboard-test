@@ -1,13 +1,13 @@
 <script language="Javascript" type="text/javascript">
 {{if $can->edit}}
-var oCookie = new CJL_CookieUtil("EIAccordion");
-var showTabAcc = 0;
+var oCookie = new CJL_CookieUtil("QualiteIncidentTab");
+var showTab = 0;
 
 if(oCookie.getSubValue("showTab")){
-  showTabAcc = oCookie.getSubValue("showTab");
+  showTab = oCookie.getSubValue("showTab");
 }
 
-function storeVoletAcc(objAcc){
+function storeTab(objTab){
   var aArray = oAccord.accordionTabs;
   for ( var i=0 ; i < aArray.length ; i++ ){
     if(objAcc == aArray[i]){

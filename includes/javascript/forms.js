@@ -237,13 +237,13 @@ function prepareForm(oForm) {
     //  Label emphasized for notNull elements
     if (sPropSpec = oElement.getAttribute("title")) {
       aSpecFragments = sPropSpec.split(" ");
-      if (aSpecFragments.contains("notNull")) {
+      if (aSpecFragments.indexOf("notNull") != -1) {
         notNullOK(oElement);
         Element.addEventHandler(oElement, "change", notNullOK);
       }
     }else if (sPropSpec = oElement.className) {
       aSpecFragments = sPropSpec.split(" ");
-      if (aSpecFragments.contains("notNull")) {
+      if (aSpecFragments.indexOf("notNull") != -1) {
         notNullOK(oElement);
         Element.addEventHandler(oElement, "change", notNullOK);
       }

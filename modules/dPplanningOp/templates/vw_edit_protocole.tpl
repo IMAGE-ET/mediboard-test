@@ -30,7 +30,7 @@ function refreshListCCAM() {
   oForm._codeCCAM.value="";
   var aCcam = oForm.codes_ccam.value.split("|");
   // Si la chaine est vide, il crée un tableau à un élément vide donc :
-  aCcam.removeByValue("");
+  aCcam = aCcam.without("");
   
   var aCodeNodes = new Array();
   var iCode = 0;

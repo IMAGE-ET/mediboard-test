@@ -47,7 +47,7 @@ ActesCCAM = {
     var oActeForm = null;
     if(oForm._actes && oForm._actes.value != "") {
       aListActes = oForm._actes.value.split("|");
-      aListActes.removeByValue("");
+      aListeActes = aListActes.without("");
       if(confirm('Des actes ont été validés pour ce code\nÊtes-vous sur de vouloir le supprimer ?')) {
         aListActes.each(function(elem) {
           oActeForm = document.forms['formActe-' + elem];

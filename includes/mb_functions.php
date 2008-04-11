@@ -582,13 +582,13 @@ function mbLoadScripts($modeReturn = 0) {
   
   // Gosu doit etre définit avant Prototype
   // Car Prototype redéfinit les méthodes de Array
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/array.js",$modeReturn);
+  /*$affichageScript .= mbLoadScript("includes/javascript/gosu/array.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/gosu/cookie.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/gosu/debug.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/gosu/ie5.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/gosu/keyboard.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/gosu/string.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/validate.js",$modeReturn);
+  $affichageScript .= mbLoadScript("includes/javascript/gosu/validate.js",$modeReturn);*/
   
   // Prototype doit être définit après Gosu (cf ci-dessus)
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);

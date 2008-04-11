@@ -358,7 +358,7 @@ Object.extend(ElementChecker, {
       return "Spécification 'list' manquante pour le champ " + this.oElement.name;
     }
     aSpecFragments = this.aProperties["list"].split("|");
-    if (!aSpecFragments.contains(this.oElement.value)) {
+    if (aSpecFragments.indexOf(this.oElement.value) == -1) {
       return "N'est pas une valeur possible";
     }
     return null;

@@ -30,7 +30,7 @@ function loadSejour(sejour_id) {
   url_sejour.addParam("object_id",sejour_id);
   url_sejour.requestUpdate('viewSejourHospi', {
   waitingText: null,
-	onComplete: initPuces
+	 onComplete: initPuces
   } );
 }
 
@@ -51,7 +51,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 
 function loadViewSejour(sejour_id, praticien_id){
-  loadSejour(sejour_id); 
+  //loadSejour(sejour_id); 
   Document.refreshList(sejour_id); 
   if($('listActesNGAP')){
     loadActesNGAP(sejour_id);
@@ -72,10 +72,10 @@ Main.add(function () {
   {{/if}}
 
   /* Tab initialization */
-  var tab_sejour = Control.Tabs.create('tab-sejour');
+  var tab_sejour = Control.Tabs.create('tab-sejour', true);
   
   {{if $app->user_prefs.ccam_sejour == 1 }}
-  var tab_actes = new Control.Tabs('tab-actes');
+  var tab_actes = Control.Tabs.create('tab-actes', false);
   {{/if}}
 });
 </script>

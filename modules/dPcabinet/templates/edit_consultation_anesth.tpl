@@ -17,10 +17,7 @@ var tabSejour = {{$tabSejour|@json}};
 
 function verifNonEmpty(oElement){
   var notWhitespace = /\S/;
-  if(notWhitespace.test(oElement.value)){
-    return true;
-  }
-  return false;
+  return notWhitespace.test(oElement.value);
 }
 
 function view_history_consult(id){
@@ -28,12 +25,6 @@ function view_history_consult(id){
   url.setModuleAction("dPcabinet", "vw_history");
   url.addParam("consultation_id", id);
   url.popup(600, 500, "consult_history");
-}
-
-var oCookie = new CJL_CookieUtil("AnesthAccordion");
-var fHeight = 340;
-if(oCookie.getSubValue("height")){
-  var fHeight = oCookie.getSubValue("height");
 }
 
 function submitForm(oForm) {
@@ -130,24 +121,15 @@ function pageMain() {
   regFieldCalendar("editTrmtFrm", "debut");
   regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
-    
+
   if (document.editAntFrm) {
     document.editAntFrm.type.onchange();
     Try.these(document.editAddictFrm.type.onchange);
   }
   
-  // Accordeon
   {{if $consult->_id}}
-
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   reloadDossierMedicalPatient();
-
-  var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'finishBanner', iBottomMargin : 12, iMinHeight : 360 } ), 
-    showDelay:50, 
-    showSteps:5
-  } );
-  
   {{/if}}
 }
 

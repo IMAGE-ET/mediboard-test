@@ -1439,12 +1439,14 @@ Object.extend (Control.Tabs, {
     var oTabCookie = new CJL_CookieUtil("TabState");
     return oTabCookie.getSubValue(tabName);
   },
-  create: function (name, options) {
-    var tab = new Control.Tabs(name, options);
-    tab.options.afterChange = function (tab, tabName) {
-      Control.Tabs.storeTab(name, tab.id);
+  create: function (name, storeInCookie) {
+    var tab = new Control.Tabs(name);
+    if (storeInCookie) {
+      tab.options.afterChange = function (tab, tabName) {
+        Control.Tabs.storeTab(name, tab.id);
+      }
+      tab.setActiveTab(Control.Tabs.loadTab(name));
     }
-    tab.setActiveTab(Control.Tabs.loadTab(name));
     return tab;
   }
 } );
