@@ -99,7 +99,7 @@ function reloadConsultAnesth() {
   var infosAnesthUrl = new Url;
   infosAnesthUrl.setModuleAction("dPcabinet", "httpreq_vw_choix_anesth");
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  infosAnesthUrl.requestUpdate('InfoAnesthContent', { waitingText: null } );
+  infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
 
   var urlPrescription = new Url;
   urlPrescription.setModuleAction("dPcabinet", "httpreq_vw_prescription_exam_comp");
