@@ -51,8 +51,8 @@
         {{foreach from=$affModule item=currModule}}    
         <li {{if $currModule.modName==$m}}class="selected"{{/if}}>
         <a href="?m={{$currModule.modName}}">
+          <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" />
           {{$currModule.modNameCourt}}
-          <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
         </a>
         </li>
         {{/foreach}}

@@ -6,6 +6,7 @@
 * {
   margin: 0;
   padding: 0;
+  border-spacing: 0;
 }
 
 body {
@@ -361,7 +362,7 @@ th.greedyPane {
   width: 100%;
 }
 
-th.title {
+th.title, caption  {
   font-size: 1.2em;
   font-weight: bold;  
   text-align: center;
@@ -380,7 +381,7 @@ table.tbl {
 
 table.tbl a {
   display: block;
-  margin: 0 1px;
+  margin: 0;
 }
 
 a.actionPat {
@@ -1064,6 +1065,7 @@ table.Offline button  {
   background: #EEE;
   padding: 2px;
   border: 1px solid #DDD;
+  border-right: none;
   -moz-border-radius: 4px 0 0 4px;
   text-align: right;
   margin: 2px 0;
@@ -1081,14 +1083,21 @@ table.Offline button  {
   padding-right: 6px;
 }
 
+#nav .selected a {
+  text-align: left;
+  vertical-align: middle;
+  line-height: 32px;
+}
+
 #nav img {
   display: none;
+  width: 24px;
+  height: 24px;
 }
 
 #nav a:hover img {
   display: block;
   position: absolute;
-  margin-top: -12px;
 }
 
 #nav .selected a:hover img {
@@ -1099,6 +1108,8 @@ table.Offline button  {
 
 #nav .selected a img {
   display: inline;
+  width: 32px;
+  height: 32px;
 }
 
 

@@ -36,11 +36,11 @@ function pageMain() {
         <li><a href="#list-orders-cancelled">Annulées (<span id="list-orders-cancelled-count">0</span>)</a></li>
       </ul>
       <hr class="control_tabs" />
-      <div id="list-orders-waiting"></div>
-      <div id="list-orders-locked"></div>
-      <div id="list-orders-pending"></div>
-      <div id="list-orders-received"></div>
-      <div id="list-orders-cancelled"></div>
+      <div id="list-orders-waiting" style="display: none;"></div>
+      <div id="list-orders-locked" style="display: none;"></div>
+      <div id="list-orders-pending" style="display: none;"></div>
+      <div id="list-orders-received" style="display: none;"></div>
+      <div id="list-orders-cancelled" style="display: none;"></div>
     </td>
   </tr>
 </table>

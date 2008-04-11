@@ -45,13 +45,11 @@ function pageMain() {
       <input type="hidden" name="group_id" value="{{$g}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
-        <tr>
-          {{if $stock->_id}}
-          <th class="title modify" colspan="2">Modification du stock de {{$stock->_view}}</th>
-          {{else}}
-          <th class="title" colspan="2">Nouveau stock</th>
-          {{/if}}
-        </tr>
+        {{if $stock->_id}}
+        <caption class="modify">Modification du stock de {{$stock->_view}}</caption>
+        {{else}}
+        <caption>Nouveau stock</caption>
+        {{/if}}
         <tr>
           <th>{{mb_label object=$stock field="quantity"}}</th>
           <td>{{mb_field object=$stock field="quantity" form="edit_stock" increment="1" min=0}}</td>

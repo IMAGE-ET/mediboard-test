@@ -4,7 +4,7 @@
   PHP : 
     {{$performance.genere}} sec. &ndash;
     Poids de la page : {{$performance.size}} &ndash;
-    Mï¿½moire {{$performance.memoire}}
+    Mémoire {{$performance.memoire}}
   <br />
   
   Journal :
@@ -13,13 +13,13 @@
     {{$performance.notice}}  notices 
   <br />
   
-  Objets mï¿½tier : 
+  Objets métier : 
     {{$performance.objets}} chargements &ndash;
     {{$performance.cachableCount}} cachable &ndash;
-    {{$performance.autoload}} classes auto-chargï¿½es
+    {{$performance.autoload}} classes auto-chargées
   <br />
   
-  Requï¿½tes SQL : 
+  Requêtes SQL : 
   {{foreach from=$performance.dataSources key=dsn item=dataSource}}
     &ndash; {{$dataSource.count}} 
     en {{$dataSource.time|string_format:"%.3f"}} sec.

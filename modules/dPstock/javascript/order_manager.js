@@ -81,13 +81,14 @@ function refreshLists(keywords) {
   }
 }
 
-function popupOrder(oForm, width, height) {
-  width = width?width:500;
-  height = height?height:500;
-  
-  url = new Url();
-  url.setModuleAction("dPstock", "vw_aed_order");
+function popupOrder(oForm, iWidth, iHeight) {
+  var width = iWidth?iWidth:500;
+  var height = iHeight?iHeight:500;
+
+  var url = new Url();
+  url.setModuleAction("dPstock", "vw_aed_order", null, null);
   url.addParam("order_id", $F(oForm.order_id));
   url.addParam("_autofill", oForm._autofill != undefined);
-  url.popup(width, height, "Edition/visualisation commande");
+
+  url.pop(width, height, "Edition/visualisation commande");
 }
