@@ -301,33 +301,43 @@ table.taborflat {
 
 #tabmenu td.normal {
 	padding: 6px;
-	padding-top: 3px;
+	padding-top: 2px;
 	padding-bottom: 0px;
-  background: url(images/pictures/tab_background.png) repeat-x bottom;
+  background: url(images/pictures/tab_background.png) repeat-x top;
 }
 
 #tabmenu td.normalLeft {
   width: 3px;
-  background: url(images/pictures/tab_left.png) no-repeat bottom right;
+  background: url(images/pictures/tab_left.png) no-repeat top right;
 }
 
 #tabmenu td.normalRight {
   width: 3px;
-  background: url(images/pictures/tab_right.png) no-repeat bottom left;
+  background: url(images/pictures/tab_right.png) no-repeat top left;
 }
 
 #tabmenu td.selected {
-  background: url(images/pictures/tab_selected_background.png) repeat-x;
+  background: url(images/pictures/tab_selected_background.png) repeat-x top;
 }
 
 #tabmenu td.selectedLeft {
   width: 3px;
-  background: url(images/pictures/tab_selected_left.png) no-repeat bottom right;
+  background: url(images/pictures/tab_selected_left.png) no-repeat top right;
 }
 
 #tabmenu td.selectedRight {
   width: 3px;
-  background: url(images/pictures/tab_selected_right.png) no-repeat bottom left;
+  background: url(images/pictures/tab_selected_right.png) no-repeat top left;
+}
+
+#tabmenu a {
+  display: block;
+  color: #000;
+}
+
+#tabmenu a:hover {
+  text-decoration: none;
+  color: #999;
 }
 
 /* Pane table */
@@ -1050,11 +1060,13 @@ table.Offline button  {
   display: block;
   /*width: 100%;*/
   margin: 0;
+  padding: 0;
 }
 
 #nav ul, #nav li {
   list-style: none;
   margin: 0;
+  margin-left: 4px;
   padding-left: 0;
 }
 
@@ -1069,47 +1081,60 @@ table.Offline button  {
   -moz-border-radius: 4px 0 0 4px;
   text-align: right;
   margin: 2px 0;
+  margin-left: 12px;
   vertical-align: middle;
   background: #EEEEEE;
+  white-space: nowrap;
 }
 
 #nav a:hover {
   text-decoration: none;
-  background: #ddd;
+  background: #DDD;
 }
 
 #nav a:active, #nav .selected a {
   background: #E0DFE3;
   padding-right: 6px;
+  margin-left: 0px;
+}
+
+#nav .selected {
+  padding: 0;
 }
 
 #nav .selected a {
   text-align: left;
   vertical-align: middle;
-  line-height: 32px;
+  height: 32px;
+}
+
+#nav .selected a * {
+  vertical-align: middle;
 }
 
 #nav img {
   display: none;
-  width: 24px;
-  height: 24px;
+  width: 32px;
+  height: 32px;
 }
 
 #nav a:hover img {
   display: block;
   position: absolute;
+  -moz-border-radius: 4px;
+  background: #BBB;
+  padding: 4px;
 }
 
 #nav .selected a:hover img {
   display: inline;
   position: relative;
   margin-top: 0px;
+  padding: 0px;
 }
 
 #nav .selected a img {
   display: inline;
-  width: 32px;
-  height: 32px;
 }
 
 
@@ -1122,8 +1147,27 @@ table.Offline button  {
   padding: 4px;
   vertical-align: middle;
   text-align: center;
+  white-space: nowrap;
+  
 }
 
+#user .menu {
+	background: #EFEFEF;
+	-moz-border-radius: 4px;
+	margin: 2px;
+	padding: 4px;
+	vertical-align: middle;
+	padding-bottom: 2px;
+	white-space: nowrap;
+}
+
+#user .menu img {
+  padding: 2px;
+}
+
+#user .menu a:hover img {
+  background: #CCC;
+}
 
 
 /* Main -- table -- pane */
@@ -1437,7 +1481,7 @@ ul.control_tabs li {
 ul.control_tabs li a {
   display: block;
   border: 1px solid #666;
-  -moz-border-radius: 4px 4px 0 0;
+  -moz-border-radius: 6px 6px 0 0;
   background-color: #CCC;
   font-size: 1.1em;
   padding: 4px 8px;
@@ -1448,7 +1492,8 @@ ul.control_tabs li a {
 }
 
 ul.control_tabs li a:hover {
-  background-color: #CCC;
+  background-color: #DDD;
+  text-decoration: none;
   color: #000;
 }
 

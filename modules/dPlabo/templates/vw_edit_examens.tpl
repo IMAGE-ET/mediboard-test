@@ -19,16 +19,12 @@ var Analyse = {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar('editExamen', 'deb_application');
   regFieldCalendar('editExamen', 'fin_application');
 
-  var oAccord = new Rico.Accordion($('accordionExamen'), { 
-    panelHeight: 320,
-    showDelay: 50, 
-    showSteps: 3 
-  } );
-}
+  var tabs = new Control.Tabs('tab-examen');
+});
 </script>
 
 <table class="main">
@@ -91,38 +87,15 @@ function pageMain() {
         </tr>
       </table>
 
-      <div class="accordionMain" id="accordionExamen">
-      
-        <div id="acc_infos">
-          <div  class="accordionTabTitleBar" id="IdentiteHeader">
-            {{tr}}mod-dPlabo-inc-acc_infos{{/tr}}
-          </div>
-          <div class="accordionTabContentBox" id="IdentiteContent"  >
-          {{include file="inc_examen/acc_infos.tpl"}}
-          </div>
-        </div>
-        
-        <div id="acc_realisation">
-          <div  class="accordionTabTitleBar" id="IdentiteHeader">
-            {{tr}}mod-dPlabo-inc-acc_realisation{{/tr}}
-          </div>
-          <div class="accordionTabContentBox" id="IdentiteContent"  >
-          {{include file="inc_examen/acc_realisation.tpl"}}
-          </div>
-        </div>
-        
-        <div id="acc_conservation">
-          <div  class="accordionTabTitleBar" id="IdentiteHeader">
-            {{tr}}mod-dPlabo-inc-acc_conservation{{/tr}}
-          </div>
-          <div class="accordionTabContentBox" id="IdentiteContent"  >
-          {{include file="inc_examen/acc_conservation.tpl"}}
-          </div>
-        </div>
-        
-      </div>
-
-      
+		  <ul id="tab-examen" class="control_tabs">
+		    <li><a href="#infos">{{tr}}mod-dPlabo-inc-acc_infos{{/tr}}</a></li>
+		    <li><a href="#realisation">{{tr}}mod-dPlabo-inc-acc_realisation{{/tr}}</a></li>
+		    <li><a href="#conservation">{{tr}}mod-dPlabo-inc-acc_conservation{{/tr}}</a></li>
+		  </ul>
+		  <hr class="control_tabs" />
+		  <div id="infos" style="display: none;">{{include file="inc_examen/acc_infos.tpl"}}</div>
+		  <div id="realisation" style="display: none;">{{include file="inc_examen/acc_realisation.tpl"}}</div>
+		  <div id="conservation" style="display: none;">{{include file="inc_examen/acc_conservation.tpl"}}</div>
             
       <table class="form">
         <tr>
@@ -172,7 +145,6 @@ function pageMain() {
           <td colspan="2">
             
             <form name="createSibling" action="#nowhere" method="get" onsubmit="return Analyse.createSibling(this)">
-              
               <label for="catalogue_labo_id" title="Choisir un catalogue pour créer un équivalent">
                 Créer un équivalent dans</label>
               <select class="notNull ref class|CCatalogueLabo" name="catalogue_labo_id">
