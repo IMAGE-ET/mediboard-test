@@ -3,6 +3,11 @@
 {{assign var="module" value="dPpsmi"}}
 {{assign var="object" value=$selOp}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+<script type="text/javascript">
+Main.add (function () {
+  Control.Tabs.create('tab-actes', false);
+} );
+</script>
 
 <table class="tbl">
   <tr>
@@ -21,13 +26,13 @@
   
   <tr>
     <td colspan="2">
-      <ul id="main_tab_group" class="control_tabs">
+      <ul id="tab-actes" class="control_tabs">
         <li><a href="#one">CCAM</a></li>
         <li><a href="#two">NGAP</a></li>
       </ul>
     </td>
   </tr>       
-  <tr id="one">
+  <tr id="one" style="display: none;">
     <th>Actes<br /><br />
       {{tr}}{{$selOp->_class_name}}{{/tr}}
       {{if ($module=="dPplanningOp") || ($module=="dPsalleOp")}}
@@ -45,7 +50,7 @@
       </div>
     </td> 
   </tr>
-  <tr id="two">
+  <tr id="two" style="display: none;">
     <th class="category" style="vertical-align: middle">
       Actes <br />NGAP
     </th>
@@ -55,4 +60,3 @@
     </td>
   </tr>
 </table>
- <script type="text/javascript">new Control.Tabs('main_tab_group');</script>

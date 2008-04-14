@@ -179,13 +179,13 @@ $library = new CLibrary;
 
 $library->name = "Scriptaculous";
 $library->url = "http://script.aculo.us/";
-$library->fileName = "scriptaculous-js-1.8.0_pre1.tar.gz";
-//$library->fileName = "scriptaculous-js-1.6.0.tar.gz";
+$library->fileName = "scriptaculous-js-1.8.1.tar.gz";
+//$library->fileName = "scriptaculous-js-1.8.0_pre1.tar.gz";
 
 $library->description = "Composant Javascript d'effets spéciaux, accompagné du framework prototype.js";
 
-$library->sourceDir = "scriptaculous-js-1.8.0_pre1";
-//$library->sourceDir = "scriptaculous-js-1.6.0";
+$library->sourceDir = "scriptaculous-js-1.8.1";
+//$library->sourceDir = "scriptaculous-js-1.8.0_pre1";
 $library->targetDir = "scriptaculous";
 
 $patch = new CLibraryPatch;
@@ -194,17 +194,6 @@ $patch->sourceName = "scriptaculous.js";
 $patch->targetDir = "src";
 
 $library->patches[] = $patch;
-
-CLibrary::$all[$library->name] = $library;
-
-$library = new CLibrary;
-
-$library->name = "Open Rico";
-$library->url = "http://openrico.org/";
-$library->fileName = "Rico-1.1.2.tar.gz";
-$library->description = "Composant Javascript d'effets spéciaux, utilisant le framework prototype.js";
-$library->sourceDir = "Rico-1.1.2";
-$library->targetDir = "rico";
 
 CLibrary::$all[$library->name] = $library;
 
@@ -246,8 +235,8 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "FCKEditor";
 $library->url = "http://www.fckeditor.net/";
-$library->fileName = "FCKeditor_2.3.2.tar.gz";
-//$library->fileName = "FCKeditor_2.5.1.tar.gz";
+//$library->fileName = "FCKeditor_2.3.2.tar.gz";
+$library->fileName = "FCKeditor_2.5.1.tar.gz";
 //$library->fileName = "FCKeditor_2.6.tar.gz";
 $library->description = "Composant Javascript d'édition de texte au format HTML";
 $library->sourceDir = "FCKeditor";
@@ -291,8 +280,9 @@ CLibrary::$all[$library->name] = $library;
 $library = new CLibrary;
 $library->name = "Livepipe control suite";
 $library->url = "http://livepipe.net/projects/control_suite/";
-$library->fileName = "control_suite.tar.gz";
+$library->fileName = "control_suite.zip";
 $library->description = "Six widgets de controle, utilisant le framework prototype.js";
+$library->extraDir = "control_suite";
 $library->sourceDir = "control_suite";
 $library->targetDir = "control_suite";
 

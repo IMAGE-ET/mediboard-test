@@ -113,7 +113,7 @@ Medecin = {
     <th>{{mb_label object=$patient field="cmu"}}</th>
     <td>{{mb_field object=$patient field="cmu" onchange="calculFinAmo();"}}</td>
     <th>{{mb_label object=$patient field="ATNC"}}</th>
-    <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="oAccord.changeTabAndFocus(2, this.form.prevenir_nom)"}}</td>
+    <td>{{mb_field object=$patient field="ATNC" tabindex="206" onblur="tabs.changeTabAndFocus('correspondance', this.form.prevenir_nom)"}}</td>
   </tr>
   
   <tr>

@@ -80,18 +80,9 @@ function pageMain() {
   } 
    
   {{if $consult->_id}}
-  
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   reloadDossierMedicalPatient();
-  
-  var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-    panelHeight: ViewPort.SetAccordHeight('accordionConsult' ,{ iBottomMargin : 10 } ),
-    showDelay:50, 
-    showSteps:5
-  } );
-  
   {{/if}}
-
 }
 </script>
 

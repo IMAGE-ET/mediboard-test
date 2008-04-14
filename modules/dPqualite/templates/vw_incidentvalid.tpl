@@ -1,21 +1,5 @@
 <script language="Javascript" type="text/javascript">
 {{if $can->edit}}
-var oCookie = new CJL_CookieUtil("QualiteIncidentTab");
-var showTab = 0;
-
-if(oCookie.getSubValue("showTab")){
-  showTab = oCookie.getSubValue("showTab");
-}
-
-function storeTab(objTab){
-  var aArray = oAccord.accordionTabs;
-  for ( var i=0 ; i < aArray.length ; i++ ){
-    if(objAcc == aArray[i]){
-      oCookie.setSubValue("showTab", i.toString());
-    }
-  }
-}
-
 function writeHeader(iId, sValue){
   $(iId).innerHTML = sValue;
 }
@@ -70,138 +54,91 @@ function pageMain() {
   {{/if}}  
 }
 {{/if}}
+
+Main.add(function () {
+  var tabIncident = Control.Tabs.create('tab-incident', true);
+});
 </script>
+
 {{assign var="listeFichesTitle" value=""}}
 {{assign var="voletAcc" value=""}}
 <table class="main">
   <tr>
     <td class="halfPane">
-      {{if $can->admin || $can->edit}}
-      <div class="accordionMain" id="accordionConsult">
-        {{if !$can->admin}}
-        
-        <div id="CSATraiter">
-          <div id="CSATraiterHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})
-          </div>
-          <div id="CSATraiterContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_CS}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-        <div id="CSEnCours">
-          <div id="CSEnCoursHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
-          </div>
-          <div id="CSEnCoursContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
     
-        <div id="CSAllEI">
-          <div id="CSAllEIHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})
-          </div>
-          <div id="CSAllEIContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
+      {{if $can->admin || $can->edit}}
+      <ul id="tab-incident" class="control_tabs">
+        {{if !$can->admin}}
+        <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li><a href="#CSEnCours">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li><a href="#CSAllEIHeader">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})</a></li>
         {{else}}
-        
-        <div id="QualNewFiches">
-          <div id="QualNewFichesHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})
-          </div>
-          <div id="QualNewFichesContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-        <div id="QualAttCS">
-          <div id="QualAttCSHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})
-          </div>
-          <div id="QualAttCSContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_CS}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-        <div id="QualValidMesures">
-          <div id="QualValidMesuresHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})
-          </div>
-          <div id="QualValidMesuresContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-        <div id="QualVerif">
-          <div id="QualVerifHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})
-          </div>
-          <div id="QualVerifContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-        <div id="QualCtrl">
-          <div id="QualCtrlHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})
-          </div>
-          <div id="QualCtrlContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-      
-        <div id="QualAllEI">
-          <div id="QualAllEIHeader" class="accordionTabTitleBar">
-            {{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})
-          </div>
-          <div id="QualAllEIContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
-            {{assign var="voletAcc" value="ALL_TERM"}}
-            {{include file="inc_ei_liste.tpl"}}
-            {{assign var="voletAcc" value=""}}
-          </div>
-        </div>
-      
-        <div id="QualAnnuleEI">
-          <div id="QualAnnuleEIHeader" class="accordionTabTitleBar">
-            {{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})
-          </div>
-          <div id="QualAnnuleEIContent"  class="accordionTabContentBox">
-            {{assign var="listeFiches" value=$listFiches.ANNULE}}
-            {{include file="inc_ei_liste.tpl"}}
-          </div>
-        </div>
-      
+        <li><a href="#QualNewFiches">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})</a></li>
+        <li><a href="#QualAttCS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li><a href="#QualValidMesures">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li><a href="#QualVerif">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})</a></li>
+        <li><a href="#QualCtrl">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})</a></li>
+        <li><a href="#QualAllEI">{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})</a></li>
+        <li><a href="#QualAnnuleEI">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})</a></li>
         {{/if}}
-  
+      </ul>
+      <hr class="control_tabs" />
+      
+      {{if !$can->admin}}
+      <div id="CSATraiter" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_CS}}
+        {{include file="inc_ei_liste.tpl"}}
       </div>
-  
+      <div id="CSEnCours" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="CSAllEIHeader" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      {{else}}
+      <div id="QualNewFiches" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.VALID_FICHE}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="QualAttCS" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_CS}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="QualValidMesures" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_QUALITE}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="QualVerif" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_VERIF}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="QualCtrl" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ATT_CTRL}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
+      <div id="QualAllEI" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ALL_TERM}}
+        {{assign var="voletAcc" value="ALL_TERM"}}
+        {{include file="inc_ei_liste.tpl"}}
+        {{assign var="voletAcc" value=""}}
+      </div>
+      <div id="QualAnnuleEI" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.ANNULE}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
       {{/if}}
+    {{/if}}
       <br />
       {{assign var="listeFichesTitle" value="Mes fiches d'EI"}}
       {{assign var="listeFiches" value=$listFiches.AUTHOR}}
       {{include file="inc_ei_liste.tpl"}}
-
-      <script language="Javascript" type="text/javascript">
-        var oAccord = new Rico.Accordion( $('accordionConsult'), { 
-          panelHeight: ViewPort.SetAccordHeight('accordionConsult', { sOtherElmt: 'ei_liste' }),
-          showDelay:50,
-          onShowTab: storeVoletAcc,
-          showSteps:3,
-          onLoadShowTab: showTabAcc
-        } );
-      </script>
     </td>
-
+    
+    
+    {{if $fiche->fiche_ei_id}}
     <td class="halfPane">
-      {{if $fiche->fiche_ei_id}}
-      
       <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
@@ -412,7 +349,7 @@ function pageMain() {
 
       </table>
       </form>
-      {{/if}}
     </td>
+    {{/if}}
   </tr>
 </table>

@@ -43,7 +43,7 @@ function viewCode() {
 }
 
 function pageMain() {
-  new Control.Tabs('main_tab_group');
+  new Control.Tabs('tabs-code');
 }
 
 </script>
@@ -89,7 +89,7 @@ function pageMain() {
 </form>
 
 <!-- Favoris par utilisateur -->
-<ul id="main_tab_group" class="control_tabs">
+<ul id="tabs-code" class="control_tabs">
 {{foreach from=$listByProfile key=profile item=list}}
   {{assign var=user value=$users.$profile}}
   <li>
@@ -103,9 +103,8 @@ function pageMain() {
 <hr class="control_tabs" />
 
 <table class="selectCode">
-
 {{foreach from=$listByProfile key=profile item=list}}
-<tbody id="{{$profile}}">
+<tbody id="{{$profile}}" style="display: none;">
 {{if $type=="ccam"}} 
   {{include file=inc_ccam_selector.tpl fusion=$list}}
 {{/if}}
@@ -116,7 +115,6 @@ function pageMain() {
 
 </tbody>
 {{/foreach}}
-
 
 </table>
 

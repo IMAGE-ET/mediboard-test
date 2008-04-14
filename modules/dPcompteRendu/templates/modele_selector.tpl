@@ -1,24 +1,23 @@
 <script type="text/javascript">
 function pageMain(){
   // Initialisation des onglets du menu
-  new Control.Tabs('main_tab_group');
+  new Control.Tabs('tabs-modeles');
 }
 
 function setClose(modele_id, object_id) {
   var oSelector = window.opener.ModeleSelector;
   oSelector.set(modele_id, object_id);
     window.close();
-  
 }
 </script>
 
-<ul id="main_tab_group" class="control_tabs">
+<ul id="tabs-modeles" class="control_tabs">
 {{foreach from=$modelesCompat key=class item=modeles}}
   {{if $modeles.prat|@count || $modeles.func|@count}}
     <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
   {{/if}}
 {{/foreach}}
-<li class="separator"></li>
+  <li class="separator"></li>
 {{foreach from=$modelesNonCompat key=class item=modeles}}
   {{if $modeles.prat|@count || $modeles.func|@count}}
     <li><a href="#{{$class}}" class="minor">{{tr}}{{$class}}{{/tr}}</a></li>

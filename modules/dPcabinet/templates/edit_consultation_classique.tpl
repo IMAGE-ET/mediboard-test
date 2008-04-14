@@ -69,7 +69,7 @@ function pageMain() {
       </div>
 
       <div id="Infos">
-        <div id="InfosContent"  class="accordionTabContentBox">
+        <div id="InfosContent">
           {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
         </div>
       </div>

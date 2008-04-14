@@ -2,7 +2,9 @@
 
 function pageMain(){
   // Initialisation des onglets du menu
-  new Control.Tabs('main_tab_group');
+  var tabsProduit = Control.Tabs.create('tab-produit', false);
+  var tabsClinique = Control.Tabs.create('tab-clinique', false);
+  var tabsPharmaco = Control.Tabs.create('tab-pharmaco', false);
 }
   
 </script>
@@ -21,12 +23,12 @@ function pageMain(){
   <!-- Menu de la monographie du medicament -->
   <tr>
     <td colspan="2">
-      <ul id="main_tab_group" class="control_tabs">
-        <li><a href="#one" style="font-size: 1em;">Composition et aspect</a></li>
-        <li><a href="#two" style="font-size: 1em;">Données cliniques</a></li>
-        <li><a href="#three" style="font-size: 1em;">Propriétés pharmacologiques</a></li>
-        <li><a href="#four" style="font-size: 1em;">Données pharmaceutiques</a></li>
-        <li><a href="#five" style="font-size: 1em;">Données technico-réglementaires</a></li>
+      <ul id="tab-produit" class="control_tabs">
+        <li><a href="#one" style="display: none;">Composition et aspect</a></li>
+        <li><a href="#two" style="display: none;">Données cliniques</a></li>
+        <li><a href="#three" style="display: none;">Propriétés pharmacologiques</a></li>
+        <li><a href="#four" style="display: none;">Données pharmaceutiques</a></li>
+        <li><a href="#five" style="display: none;">Données technico-réglementaires</a></li>
       </ul>
       <hr class="control_tabs" />    
     </td>
@@ -103,80 +105,28 @@ function pageMain(){
   <tbody id="two">  
     <tr>
       <td>
-        <div class="accordionMain" id="accordionClinique">
-          <div id="Identite">
-            <div id="IdentiteHeader" class="accordionTabTitleBar">
-              Indications thérapeutiques
-            </div>
-            <div id="IdentiteContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->indications|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Medical">
-            <div id="MedicalHeader" class="accordionTabTitleBar">
-              Posologie et mode d'administration
-            </div>
-            <div id="MedicalContent"  class="accordionTabContentBox">
-               {{$mbProduit->_ref_monographie->posologie|smarty:nodefaults}}
-            </div>
-            </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-              Contre-indications
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-             {{$mbProduit->_ref_monographie->contre_indications|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Assure">
-            <div id="AssureHeader" class="accordionTabTitleBar">
-              Mises en garde et précautions d'emploi
-            </div>
-            <div id="AssureContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->precautions_emploi|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-              Interactions avec d'autres médicaments et autres formes d'intéractions
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->interactions|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-              Grossesse et allaitement
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->grossesse_allaitement|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-              Effet sur l'aptitude à conduire des véhicules et à utiliser des machines
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->effets_aptitude|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-               Effets indésirables
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->effets_indesirables|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Corresp">
-            <div id="CorrespHeader" class="accordionTabTitleBar">
-              Surdosage
-            </div>
-            <div id="CorrespContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->surdosage|smarty:nodefaults}}
-            </div>
-          </div>
-        </div>
+        <ul id="tab-clinique" class="control_tabs">
+          <li><a href="#indications">Indications thérapeutiques</a></li>
+          <li><a href="#posologie">Posologie et mode d'administration</a></li>
+          <li><a href="#contre_indications">Contre-indications</a></li>
+          <li><a href="#precautions_emploi">Mises en garde et précautions d'emploi</a></li>
+          <li><a href="#interactions">Interactions avec d'autres médicaments et autres formes d'intéractions</a></li>
+          <li><a href="#grossesse_allaitement">Grossesse et allaitement</a></li>
+          <li><a href="#effets_aptitude">Effet sur l'aptitude à conduire des véhicules et à utiliser des machines</a></li>
+          <li><a href="#effets_indesirables">Effets indésirables</a></li>
+          <li><a href="#surdosage">Surdosage</a></li>
+        </ul>
+        <hr class="control_tabs" />  
+      
+        <div id="indications" style="display: none;">{{$mbProduit->_ref_monographie->indications|smarty:nodefaults}}</div>
+        <div id="posologie" style="display: none;">{{$mbProduit->_ref_monographie->posologie|smarty:nodefaults}}</div>
+        <div id="contre_indications" style="display: none;">{{$mbProduit->_ref_monographie->contre_indications|smarty:nodefaults}}</div>
+        <div id="precautions_emploi" style="display: none;">{{$mbProduit->_ref_monographie->precautions_emploi|smarty:nodefaults}}</div>
+        <div id="interactions" style="display: none;">{{$mbProduit->_ref_monographie->interactions|smarty:nodefaults}}</div>
+        <div id="grossesse_allaitement" style="display: none;">{{$mbProduit->_ref_monographie->grossesse_allaitement|smarty:nodefaults}}</div>
+        <div id="effets_aptitude" style="display: none;">{{$mbProduit->_ref_monographie->effets_aptitude|smarty:nodefaults}}</div>
+        <div id="effets_indesirables" style="display: none;">{{$mbProduit->_ref_monographie->effets_indesirables|smarty:nodefaults}}</div>
+        <div id="surdosage" style="display: none;">{{$mbProduit->_ref_monographie->surdosage|smarty:nodefaults}}</div>
       </td>
     </tr>
   </tbody>
@@ -185,107 +135,84 @@ function pageMain(){
   <tbody id="three">
     <tr>
       <td>
-        <div class="accordionMain" id="accordionPharmaco">
-          <div id="Identite">
-            <div id="IdentiteHeader" class="accordionTabTitleBar">
-              Classification thérapeutique  
-            </div>
-            <div id="IdentiteContent"  class="accordionTabContentBox">
-              <table class="tbl">
+        <ul id="tab-pharmaco" class="control_tabs">
+          <li><a href="#classification">Classification thérapeutique</a></li>
+          <li><a href="#pharmacodynamie">Propriétés pharmacodynamiques</a></li>
+          <li><a href="#pharmacocinetique">Propriétés pharmacocinétiques</a></li>
+          <li><a href="#securite_preclinique">Données de sécurité précliniques</a></li>
+        </ul>
+        <hr class="control_tabs" />  
+
+        <div id="classification" style="display: none;">
+          <table class="tbl">
+            <tr>
+              <th>Classification ATC</th>
+            </tr>
+            <!-- Parcours des classes ATC du produit -->
+            {{foreach from=$mbProduit->_ref_classes_ATC item=classeATC name=classesATC}}
+            
+              <!-- Initialisation du compteur -->
+              {{counter start=0 skip=2 assign="compteur"}}
+              {{foreach from=$classeATC->classes item=classe}}
+                {{if $classe.libelle}}
                 <tr>
-                  <th>Classification ATC</th>
+                  <td>
+                    {{$tabEspace.$compteur|smarty:nodefaults}}
+                    <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                    {{$classe.libelle}} ({{$classe.code}})
+                  </td>
                 </tr>
-                <!-- Parcours des classes ATC du produit -->
-                {{foreach from=$mbProduit->_ref_classes_ATC item=classeATC name=classesATC}}
-                
-                  <!-- Initialisation du compteur -->
-                  {{counter start=0 skip=2 assign="compteur"}}
-                  {{foreach from=$classeATC->classes item=classe}}
-                    {{if $classe.libelle}}
-                    <tr>
-                      <td>
-                        {{$tabEspace.$compteur|smarty:nodefaults}}
-                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
-                        {{$classe.libelle}} ({{$classe.code}})
-                      </td>
-                    </tr>
-                    {{/if}}
-                    {{counter}}
-                  {{/foreach}}
-                  
-									{{if !$smarty.foreach.classesATC.last}}
-									<tr>
-									<td>
-									&nbsp;
-									</td>
-									</tr>
-									{{/if}}
-                {{/foreach}}
-                
+                {{/if}}
+                {{counter}}
+              {{/foreach}}
+              
+							{{if !$smarty.foreach.classesATC.last}}
+							<tr>
+							  <td>&nbsp;</td>
+							</tr>
+							{{/if}}
+            {{/foreach}}
+            
+            <tr>
+              <th>Classification BCB</th>
+            </tr>
+            <!-- Parcours des classes ATC du produit -->
+            {{foreach from=$mbProduit->_ref_classes_thera item=classeThera name=classesThera}}
+            
+              <!-- Initialisation du compteur -->
+              {{counter start=0 skip=2 assign="compteur"}}
+              {{foreach from=$classeThera->classes item=classe}}
+                {{if $classe.libelle}}
                 <tr>
-                  <th>Classification BCB</th>
+                  <td>
+                    {{$tabEspace.$compteur|smarty:nodefaults}} 
+                    <img src="./images/icons/dotgrey.gif" alt="" title="" />
+                    {{$classe.libelle}} ({{$classe.code}})
+                  </td>
                 </tr>
-                <!-- Parcours des classes ATC du produit -->
-                {{foreach from=$mbProduit->_ref_classes_thera item=classeThera name=classesThera}}
-                
-                  <!-- Initialisation du compteur -->
-                  {{counter start=0 skip=2 assign="compteur"}}
-                  {{foreach from=$classeThera->classes item=classe}}
-                    {{if $classe.libelle}}
-                    <tr>
-                      <td>
-                        {{$tabEspace.$compteur|smarty:nodefaults}} 
-                        <img src="./images/icons/dotgrey.gif" alt="" title="" />
-                        {{$classe.libelle}} ({{$classe.code}})
-                      </td>
-                    </tr>
-                    {{/if}}
-                    {{counter}}
-                  {{/foreach}}
-                  
-									{{if !$smarty.foreach.classesThera.last}}
-									<tr>
-									<td>
-									&nbsp;
-									</td>
-									</tr>
-									{{/if}}
-                {{/foreach}}
-                
-              </table>
-            </div>
-          </div>
-          <div id="Medical">
-            <div id="MedicalHeader" class="accordionTabTitleBar">
-              Propriétés pharmacodynamiques
-            </div>
-            <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Medical">
-            <div id="MedicalHeader" class="accordionTabTitleBar">
-              Propriétés pharmacocinétiques
-            </div>
-            <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}
-            </div>
-          </div>
-          <div id="Medical">
-            <div id="MedicalHeader" class="accordionTabTitleBar">
-              Données de sécurité précliniques
-            </div>
-            <div id="MedicalContent"  class="accordionTabContentBox">
-              {{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}
-            </div>
-          </div>
+                {{/if}}
+                {{counter}}
+              {{/foreach}}
+              
+							{{if !$smarty.foreach.classesThera.last}}
+							<tr>
+							<td>&nbsp;</td>
+							</tr>
+							{{/if}}
+            {{/foreach}}
+            
+          </table>
         </div>
+          
+        <div id="pharmacodynamie" style="display: none;">{{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}</div>
+        <div id="pharmacocinetique" style="display: none;">{{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}</div>
+        <div id="securite_preclinique" style="display: none;">{{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}</div>
       </td>
     </tr>
   </tbody>
 
   <!-- Données pharmaceutiques -->
-  <tbody id="four">
+  <tbody id="four" style="display: none;">
     <tr>
       <td>
         <table class="tbl">
@@ -330,7 +257,7 @@ function pageMain(){
      </tr>
   </tbody>
   
-  <tbody id="five">
+  <tbody id="five" style="display: none;">
     <tr>
       <td>
         <table class="tbl">
@@ -338,15 +265,15 @@ function pageMain(){
             <th colspan="2">Données technico-réglementaires</th>
           </tr>
           <tr>
-            <td>Titulaire de l'AMM</th>
+            <th>Titulaire de l'AMM</th>
             <td>{{$mbProduit->_ref_economique->laboratoire}}</td>
           </tr>
           <tr>
-            <td>Laboratoire exploitant</th>
+            <th>Laboratoire exploitant</th>
             <td>{{$mbProduit->_ref_economique->labo_exploitant}}</td>
           </tr>
           <tr>
-            <td>Prix de vente TTC</th>
+            <th>Prix de vente TTC</th>
             <td>
             {{if $mbProduit->_ref_economique->prix_vente != "0000000"}}
               {{$mbProduit->_ref_economique->prix_vente}} &euro;
@@ -354,7 +281,7 @@ function pageMain(){
             </td>
           </tr>
           <tr>
-            <td>Taux de TVA</th>
+            <th>Taux de TVA</th>
             <td>{{$mbProduit->_ref_economique->taux_tva}} %</td>
           </tr>
           <tr>
@@ -362,11 +289,11 @@ function pageMain(){
             <td>{{$mbProduit->_ref_economique->taux_ss}} %</td>
           </tr>
           <tr>
-            <td>Code AMM</th>
+            <th>Code AMM</th>
             <td>{{$mbProduit->numero_AMM}}</td>
           </tr>
           <tr>
-            <td>Code UCD</th>
+            <th>Code UCD</th>
             <td>{{$mbProduit->_ref_economique->code_ucd}}</td>
           </tr>
           <tr>
@@ -401,21 +328,3 @@ function pageMain(){
   </tbody>
      
 </table>
-
-<script language="Javascript" type="text/javascript">
-
-var oAccordClinique = new Rico.Accordion( $('accordionClinique'), { 
-  panelHeight: 380,
-  showDelay: 50, 
-  showSteps: 3 
-} );
-
-var oAccordPharmaco = new Rico.Accordion( $('accordionPharmaco'), { 
-  panelHeight: 380,
-  showDelay: 50, 
-  showSteps: 3 
-} );
-
-
-</script>
-

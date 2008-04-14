@@ -4,7 +4,7 @@
 
 function pageMain(){
   // Initialisation des onglets du menu
-  new Control.Tabs('main_tab_group');
+  Control.Tabs.create('tabs-livret', false);
 }
 
 
@@ -55,22 +55,22 @@ var Livret = {
   
   // Refresh de la liste des produits dans le livret
   // code permet de rafraichir en fonction du produit ajouté
-  reloadAlpha: function(lettre, code_cip) {
+  reloadAlpha: function(lettre, codeCIP) {
     var url = new Url;
     url.setModuleAction("dPmedicament", "httpreq_vw_livret");
     url.addParam("lettre", lettre);
-    url.addParam("code_cip", code_cip);
+    url.addParam("code_cip", codeCIP);
     url.requestUpdate("livret", { waitingText : null });
   },
   
   // Refresh de la liste des produits dans le livret
   // code permet de rafraichir en fonction du produit ajouté
-  reloadATC: function(codeATC, code_cip) {
+  reloadATC: function(codeATC, codeCIP) {
     var url = new Url;
     url.setModuleAction("dPmedicament", "httpreq_vw_livret_arbre_ATC");
     url.addParam("codeATC", codeATC);
     // code permet de selectionner le bon code dans le cas d'un ajout de produit
-    url.addParam("code_cip", code_cip);
+    url.addParam("code_cip", codeCIP);
     url.requestUpdate("ATC", { waitingText : null });
   }
 };
@@ -137,26 +137,18 @@ function printLivret(){
   </tr>
 </table>
 
-
-<div>
-  <ul id="main_tab_group" class="control_tabs">
-    <li><a href="#one">Par ordre alphabétique</a></li>
-    <li><a href="#two">Par classe ATC</a></li>
-   </ul>
-   <hr class="control_tabs" />        
-</div>  
+<ul id="tabs-livret" class="control_tabs">
+  <li><a href="#livret">Par ordre alphabétique</a></li>
+  <li><a href="#ATC">Par classe ATC</a></li>
+</ul>
+<hr class="control_tabs" />
 
 <!-- Affichage des produits du livret en fonction de la lettre -->
-<div id="one">	
-	<div id="livret">
-	  {{include file="inc_vw_livret.tpl"}}
-	</div>
+<div id="livret" style="display: none;">
+  {{include file="inc_vw_livret.tpl"}}
 </div>
 
-
 <!-- Affichage des produits du livret en fonction de la classe ATC -->
-<div id="two" style="display: none"> 
-  <div id="ATC">
-	{{include file="inc_vw_livret_arbre_ATC.tpl"}}
-	</div>
+<div id="ATC" style="display: none;">
+{{include file="inc_vw_livret_arbre_ATC.tpl"}}
 </div>

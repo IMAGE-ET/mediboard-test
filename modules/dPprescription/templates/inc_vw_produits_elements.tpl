@@ -2,7 +2,7 @@
 
 // Initialisation des onglets
 Main.add( function(){
-  menuTabs = new Control.Tabs('main_tab_group');
+  menuTabs = Control.Tabs.create('main_tab_group', false);
 } );
 
 // Initialisation des alertes

@@ -662,50 +662,6 @@ var ViewPort = {
     oDiv.style.height = (fDivHeight * iPct - 10) +"px";
   },
   
-  SetAccordHeight: function(sAccordionId, oOptions){
-
-    var oDiv = $(sAccordionId);
-    if (!oDiv) {
-      return;
-    }
-    
-    var oDefaultOptions = {
-      sOtherElmt    : null,
-      iBottomMargin : 0,
-      iMinHeight    : 100
-    }
-    Object.extend(oDefaultOptions, oOptions);
-    
-    var fYDivPos            = 0;
-    var fNavHeight          = 0;
-    var fDivHeight          = 0;
-    var fDivTitleHeight     = 0;
-    var fDivAccordHeight    = 0;
-    var fDivOtherElmtHeight = 0;
-      
-    // Calcul de la position top de la div
-    fYDivPos = Position.cumulativeOffset(oDiv)[1];   
-    // hauteur de la fenetre
-    fNavHeight = window.getInnerDimensions().y;
-    // Calcul de la hauteur de la div
-    fDivHeight = fNavHeight - fYDivPos;
-    // Cumul des AccordTitle
-    fDivTitleHeight = Element.getOffsetHeightByClassName("accordionTabTitleBar");
-    // Hauteur de la div interne de l'accordeon
-    fDivAccordHeight = fDivHeight - fDivTitleHeight;
-    // Hauteur de l'élément optionnel
-    // Calcul de la hauteur de la div supplementaire a soustraire si elle existe
-    var oOtherElmt = $(oDefaultOptions.sOtherElmt);
-    fDivOtherElmtHeight = oOtherElmt ? oOtherElmt.offsetHeight : 0;
-    
-    // Hauteur final
-    fDivAccordHeightFinal = fDivAccordHeight - fDivOtherElmtHeight - oDefaultOptions.iBottomMargin;
-    fDivAccordHeightFinal = Math.max(fDivAccordHeightFinal, oDefaultOptions.iMinHeight);
-    
-    return fDivAccordHeightFinal;
-  },
-  
-  
   SetFrameHeight: function(oFrame, oOptions){
 	  var oDefaultOptions = {
 	    iBottomMargin : 15
@@ -1448,5 +1404,20 @@ Object.extend (Control.Tabs, {
       tab.setActiveTab(Control.Tabs.loadTab(name));
     }
     return tab;
+  }
+} );
+
+
+Class.extend (Control.Tabs, {
+  changeTabAndFocus: function(iIntexTab, oField) {
+    this.setActiveTab(iIntexTab);
+    if (oField) {
+      oField.focus();
+    } else {
+      var oInput = $$('#'+iIntexTab+' input', '#'+iIntexTab+' select', '#'+iIntexTab+' button', '#'+iIntexTab+' textarea');
+      if (oInput[0]) {
+        oInput[0].focus();
+      }
+    }
   }
 } );

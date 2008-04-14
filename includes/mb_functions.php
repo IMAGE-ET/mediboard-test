@@ -593,11 +593,9 @@ function mbLoadScripts($modeReturn = 0) {
   // Prototype doit être définit après Gosu (cf ci-dessus)
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
-  $affichageScript .= mbLoadScript("lib/rico/rico.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/ricoex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/prototype_hack.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);

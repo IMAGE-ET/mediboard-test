@@ -77,7 +77,7 @@ function pageMain(){
   </tr>
   
   
-  <tbody id="one">
+  <tbody id="one" style="display: none;">
   <tr>
     <td>Recherche par
       <form name="formSearch" action="?" method="get">
@@ -154,7 +154,7 @@ function pageMain(){
   </tr>
   </tbody>
   
-  <tbody id="two">
+  <tbody id="two" style="display: none;">
   <tr>
     <td>
     <input type="radio" name="type_classe" value="atc" checked="checked" onchange="viewATC();" />
@@ -163,7 +163,6 @@ function pageMain(){
     CLasses BCB
     </td>
   </tr>
-  
   <tr>
     <td>
       <div id="ATC">
@@ -171,7 +170,6 @@ function pageMain(){
       </div>
     </td>
   </tr>
-  
   <tr>
     <td>
       <div id="BCB">
@@ -179,11 +177,9 @@ function pageMain(){
       </div>
     </td>
   </tr>
-  
-  
   </tbody>
   
-  <tbody id="three">
+  <tbody id="three" style="display: none;">
   <tr>
     <td>
       <div id="composant">
@@ -193,8 +189,7 @@ function pageMain(){
   </tr>
   </tbody>
   
-  
-  <tbody id="four">
+  <tbody id="four" style="display: none;">
   <tr>
     <td>
       <div id="DCI">
@@ -203,12 +198,4 @@ function pageMain(){
     </td>
   </tr>
   </tbody>
-  
-  
 </table>
-  
-  
-  
-  
-  
-  

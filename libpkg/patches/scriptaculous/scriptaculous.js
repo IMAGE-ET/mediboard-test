@@ -1,4 +1,4 @@
-// script.aculo.us scriptaculous.js v1.8.0_pre1, Fri Oct 12 21:34:51 +0200 2007
+// script.aculo.us scriptaculous.js v1.8.1, Thu Jan 03 22:07:12 -0500 2008
 
 // Copyright (c) 2005-2007 Thomas Fuchs (http://script.aculo.us, http://mir.aculo.us)
 // 
@@ -24,12 +24,12 @@
 // For details, see the script.aculo.us web site: http://script.aculo.us/
 
 var Scriptaculous = {
-  Version: '1.8.0_pre1',
+  Version: '1.8.1',
   require: function(libraryName) {
-    // Hack to chek versions
+    // Hack to check versions
     libraryName += '?version=' + Scriptaculous.Version;
     // inserting via DOM fails in Safari 2.0, so brute force approach
-    document.write('<script type="text/javascript" src="'+libraryName+'"></script>');
+    document.write('<script type="text/javascript" src="'+libraryName+'"><\/script>');
   },
   REQUIRED_PROTOTYPE: '1.6.0',
   load: function() {

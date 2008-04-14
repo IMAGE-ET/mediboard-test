@@ -97,6 +97,7 @@ function printPatient(id) {
   url.popup(700, 550, "Patient");
 }
 
+var tabs;
 function pageMain() {
   initInseeFields("editFrm", "cp", "ville","pays");
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
@@ -109,7 +110,7 @@ function pageMain() {
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","_assure_tel1");
   
-  var tabs = new Control.Tabs('tab-patient');
+  tabs = new Control.Tabs('tab-patient');
 }
 
 </script>
@@ -194,10 +195,10 @@ function pageMain() {
             <li><a href="#assure">Assuré social</a></li>
           </ul>
           <hr class="control_tabs" />
-          <div id="identite">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
-          <div id="medical">{{include file="inc_acc/inc_acc_medical.tpl"}}</div>
-          <div id="correspondance">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
-          <div id="assure">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
+          <div id="identite" style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
+          <div id="medical" style="display: none;">{{include file="inc_acc/inc_acc_medical.tpl"}}</div>
+          <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
+          <div id="assure" style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
         </td>
       </tr>
       

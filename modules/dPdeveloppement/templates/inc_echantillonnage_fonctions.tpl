@@ -1,14 +1,14 @@
 <script type="text/javascript">
-function viewAccord(ivalue){
-  $('disabledEtape'+ivalue).show();
-  Element.setOpacity($('disabledEtape'+ivalue), 0.1);
-  $('disabledEtape'+ivalue).style.height = $('Etape'+ivalue+'Content').offsetHeight + "px";
-  $('disabledEtape'+ivalue).style.width  = $('Etape'+ivalue+'Content').offsetWidth + "px";
-      
-  var etap = ivalue+1;
-  $("vwButtonEtap"+etap).hide();
-  $("Etape"+etap).show();
-  oAccord.changeTabAndFocus(ivalue);
+var tabs = null;
+
+Main.add(function () {
+  tabs = Control.Tabs.create('tab-echantillonnage', false);
+  regFieldCalendar("echantillonage", "debut");
+});
+
+function showTab(iTab) {
+  $('btn_etape'+iTab).show();
+  tabs.changeTabAndFocus("etape"+iTab);
 }
 
 function extractSelectedMultiple(url, sField){
@@ -41,8 +41,8 @@ function goto_etape2(){
     if(oForm._create_group.length && oForm._create_group[1].checked){
       url.addParam("group_id", oForm.groups_selected.value);
     }
-    url.requestUpdate('Etape2Content');
-    viewAccord(1);
+    url.requestUpdate("etape2", {onComplete: showTab(2)});
+    showTab(2);
   }
 }
 
@@ -91,8 +91,8 @@ function goto_etape3(){
     if(oForm._create_group.length && oForm._create_group[1].checked){
       url = extractSelectedMultiple(url, "fct_selected[]");
     }
-    url.requestUpdate('Etape3Content', {method : "get"});
-    viewAccord(2);
+    url.requestUpdate("etape3", {method : "get"});
+    showTab(3);
   }else{
     alert(sAlert);
   }
@@ -119,12 +119,8 @@ function goto_etape4(){
     var url = new Url;
     url.setModuleAction("{{$m}}", "httpreq_echantillonnage_etape4");
     url.addParam("_nb_services", oForm._nb_services.value);
-    url.requestUpdate('Etape4Content');
-    viewAccord(3);
+    url.requestUpdate("etape4");
+    showTab(4);
   }
-}
-
-function pageMain() {
-  regFieldCalendar("echantillonage", "debut");
 }
 </script>

@@ -20,5 +20,3 @@
   </tr>
 </table>
 {{/if}}
-
-<div class="content">

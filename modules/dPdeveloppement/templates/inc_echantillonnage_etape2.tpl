@@ -1,8 +1,7 @@
-<div id="disabledEtape2" class="chargementMask" style="position:absolute;display:none;"></div>
 <table class="main">
   <tr>
     <th>
-      <label for="_nb_cab" title="Nombre de cabinet spécialiste à créer">Nombre de cabinets spécialiste à créer</label>
+      <label for="_nb_cab" title="Nombre de cabinets spécialistes à créer">Nombre de cabinets spécialistes à créer</label>
     </th>
     <td class="halfPane">
       {{html_options name="_nb_cab" options=$list_5}}
@@ -12,13 +11,13 @@
 
   <tr>
     <th>
-      <label for="_nb_anesth" title="Nombre de cabinet d'anesthésiste à créer">Nombre de cabinets d'anesthésiste à créer</label>
+      <label for="_nb_anesth" title="Nombre de cabinets d'anesthésistes à créer">Nombre de cabinets d'anesthésistes à créer</label>
     </th>
     <td class="halfPane">
       {{html_options name="_nb_anesth" options=$list_5}}
     </td>
     <th>
-      <label for="_nb_salles" title="Nombre de salles opératoire à créer">Nombre de salles</label>
+      <label for="_nb_salles" title="Nombre de salles opératoires à créer">Nombre de salles</label>
     </th>
     <td>
       {{html_options name="_nb_salles" options=$list_5}}
@@ -34,7 +33,7 @@
   {{if $group_id}}
   <tr>
     <th>
-      <label for="fct_selected[]" title="Cabinets disponible à l'utilisation">Cabinets existantes disponible</label>
+      <label for="fct_selected[]" title="Cabinets disponibles à l'utilisation">Cabinets existants disponibles</label>
     </th>
     <td>
       {{if $listCab|@count}}
@@ -51,7 +50,7 @@
     </td>
     
     <th>
-      <label for="salles_selected[]" title="Salles disponible à l'utilisation">Salles existantes disponible</label>
+      <label for="salles_selected[]" title="Salles disponibles à l'utilisation">Salles existantes disponibles</label>
     </th>
     <td>
       {{if $salles|@count}}
@@ -68,7 +67,7 @@
     </td>
     
     <th>
-      <label for="services_selected[]" title="Services disponible à l'utilisation">Services existants disponible</label>
+      <label for="services_selected[]" title="Services disponibles à l'utilisation">Services existants disponibles</label>
     </th>
     <td>
       {{if $services|@count}}

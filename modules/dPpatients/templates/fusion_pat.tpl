@@ -6,7 +6,7 @@ function setField(oField, sValue) {
 }
 
 Main.add(function () {
-  var tabs = new Control.Tabs('tab-fusion');
+  var tabs = Control.Tabs.create('tab-fusion', false);
 });
 </script>
 

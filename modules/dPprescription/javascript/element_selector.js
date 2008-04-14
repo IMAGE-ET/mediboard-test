@@ -10,7 +10,7 @@ var ElementSelector = {
     height: 450
   },
   prepared : {
-    element_id: null,
+    element_id: null
   },
   pop: function() {
     var oForm = document[this.sForm];
