@@ -46,8 +46,6 @@ mbTrace($requestParams, "Paramètres requete");
 
 $results = $client->GetInfoLabo($requestParams);
 
-mbTrace($results, "Résultats");
-
 /*
 $results = array(
   "listeInfoLabo" => array(
@@ -67,6 +65,8 @@ $results = array(
   "ex" => 0
 );
 */
+mbTrace($results, "Résultats");
+
 // Création du template
 $smarty = new CSmartyDP();
 

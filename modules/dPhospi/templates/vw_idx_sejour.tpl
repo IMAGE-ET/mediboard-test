@@ -76,7 +76,7 @@ function loadResultLabo(sejour_id) {
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
   {{if $isImedsInstalled}}
-  ImedsResultsWatcher.loadResults();
+    ImedsResultsWatcher.loadResults();
   {{/if}}
 
   {{if $object->_id}}
@@ -246,8 +246,6 @@ Main.add(function () {
         <li><a href="#Imeds">Résultats labo</a></li>
     
         <li><a href="#documents">Documents</a></li>
-        
-        <li><a href="#resultsrequest">Résultat requete</a></li>
       </ul>
       <hr class="control_tabs" />
       
@@ -295,8 +293,6 @@ Main.add(function () {
       <div id="Imeds" style="display: none;"></div>
       
       <div id="documents" style="display: none;"></div>
-      
-      <div id="resultsrequest" style="display: none;"></div>
     </td>
   </tr>
 </table>

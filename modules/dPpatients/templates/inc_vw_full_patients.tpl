@@ -1,3 +1,5 @@
+{{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+
 <script type="text/javascript">
 
 var ViewFullPatient = {
@@ -11,7 +13,8 @@ var ViewFullPatient = {
   },
   
   main: function() {
-    PairEffect.initGroup("patientEffect", { 
+    PairEffect.initGroup("patientEffect", {
+      idStartVisible: true,
       bStoreInCookie: true
     } );
   }
@@ -42,6 +45,12 @@ function popEtatSejour(sejour_id) {
   url.addParam("sejour_id",sejour_id);
   url.pop(1000, 550, 'Etat du Séjour');
 }
+
+Main.add(function () {
+  {{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
+  {{/if}}
+});
  
 </script>
   
@@ -57,7 +66,7 @@ function popEtatSejour(sejour_id) {
   <th class="title">
     {{if $patient->_canRead}}
     <div style="float:right;">
-      {{if $diagnosticsInstall}}
+      {{if $isImedsInstalled}}
       <a href="#" onclick="view_labo_patient()">
         <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
       </a>
@@ -102,6 +111,9 @@ function popEtatSejour(sejour_id) {
       Du {{$curr_sejour->_entree|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->_sortie|date_format:"%d/%m/%Y"}}
     </span>
+    <script language="Javascript" type="text/javascript">
+      ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
+    </script>
   </td>
   <td>
      {{assign var=praticien value=$curr_sejour->_ref_praticien}}
@@ -111,10 +123,12 @@ function popEtatSejour(sejour_id) {
   </td>
   <td style="text-align:right;">
   {{if $curr_sejour->_canRead}}
-    {{if $diagnosticsInstall}}
+    {{if $isImedsInstalled}}
+    <div id="labo_for_{{$curr_sejour->_id}}" style="display: none; float: left;">
     <a href="#" onclick="view_labo_sejour({{$curr_sejour->_id}})">
       <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
     </a>
+    </div>
     {{/if}}
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 

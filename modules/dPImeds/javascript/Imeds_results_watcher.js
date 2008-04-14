@@ -16,7 +16,7 @@ var ImedsResultsWatcher = {
     url.addObjectParam("date_debut"   , this.debut);
     url.addObjectParam("date_fin"     , this.fin);
     url.addObjectParam("list_sejours" , this.listNumSejours);
-    url.requestUpdate("resultsrequest", { waitingText: null } );
+    url.requestUpdate("systemMsg", { waitingText: null } );
   },
   setResults: function(results) {
     this.results = results.listeInfoLabo;

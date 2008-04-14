@@ -23,8 +23,6 @@ if(!$patient_id) {
   $AppUI->redirect("m=dPpatients&tab=0");
 }
 
-$diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
-
 // Liste des Praticiens
 $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_READ);
@@ -93,7 +91,7 @@ $smarty->assign("etablissements"    , $etablissements     );
 $smarty->assign("patient"           , $patient            );
 $smarty->assign("listPrat"          , $listPrat           );
 $smarty->assign("object"            , $patient            );
-$smarty->assign("diagnosticsInstall", $diagnosticsInstall );
+$smarty->assign("isImedsInstalled"  , CModule::getActive("dPImeds"));
 
 $smarty->display("vw_full_patients.tpl");
 

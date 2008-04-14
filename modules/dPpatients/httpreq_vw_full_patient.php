@@ -30,8 +30,6 @@ $patient->loadRefDossierMedical();
 $patient->_ref_dossier_medical->loadRefsAntecedents();
 $patient->_ref_dossier_medical->loadRefsTraitements();
 
-$diagnosticsInstall = CModule::getActive("dPImeds") && CModule::getActive("dPsante400");
-
 $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
 $codePraticienEc = null;
 $userSel = new CMediusers;
@@ -75,7 +73,7 @@ $smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 $smarty->assign("codePraticienEc"    , $codePraticienEc   );
 $smarty->assign("listPrat"           , $listPrat          );
 $smarty->assign("patient"            , $patient           );
-$smarty->assign("diagnosticsInstall" , $diagnosticsInstall);
+$smarty->assign("isImedsInstalled"   , CModule::getActive("dPImeds"));
 
 $smarty->display("inc_vw_full_patients.tpl");
 ?>

@@ -924,7 +924,7 @@ class CPatient extends CMbObject {
     // Sejours
     foreach ($this->_ref_sejours as $keySejour => $valueSejour) {
       $sejour =& $this->_ref_sejours[$keySejour];
-      
+      $sejour->loadNumDossier();
       $sejour->loadRefsAffectations();
       $sejour->loadRefsOperations();
       $sejour->getNumDocsAndFiles($permType);
