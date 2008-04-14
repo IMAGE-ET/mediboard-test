@@ -21,16 +21,21 @@ class CRPU extends CMbObject {
   var $mode_entree     = null;
   var $provenance      = null;
   var $transport       = null;
-  var $pec_transport = null;
+  var $pec_transport   = null;
   var $motif           = null;
   var $ccmu            = null;
   var $gemsa           = null;
-  var $type_pathologie = null;
   var $destination     = null;
   var $orientation     = null;
   var $radio_debut     = null;
   var $radio_fin       = null;
   var $mutation_sejour_id = null;
+  
+  // Legacy Sherpa fields
+  var $type_pathologie = null; // $urtype
+  var $urprov = null;
+  var $urmuta = null;
+  var $urtrau = null;
   
   // Distant Fields
   var $_count_consultations = null;
@@ -51,6 +56,7 @@ class CRPU extends CMbObject {
   // Object References
   var $_ref_sejour = null;
   var $_ref_consult = null;
+  var $_ref_sejour_mutation = null;
   
   // Behaviour fields
   var $_bind_sejour = null;
@@ -92,6 +98,12 @@ class CRPU extends CMbObject {
       "_entree"         => "dateTime",
       "_etablissement_transfert_id" => "ref class|CEtabExterne"
      );
+     
+    // Legacy Sherpa fields
+    $urgDro = new CSpUrgDro();
+    $specs["urprov"] = $urgDro->_props["urprov"];
+    $specs["urmuta"] = $urgDro->_props["urmuta"];
+    $specs["urtrau"] = $urgDro->_props["urtrau"];    
       
     return array_merge($specsParent, $specs);
   }
@@ -159,6 +171,11 @@ class CRPU extends CMbObject {
     }
   }
   
+  function loadRefSejourMutation() {
+    $this->_ref_sejour_mutation = new CSejour;
+    $this->_ref_sejour_mutation->load($this->mutation_sejour_id);
+    $this->_ref_sejour_mutation->loadNumDossier();
+  }
   
   function bindSejour() {
     if (!$this->_bind_sejour) {

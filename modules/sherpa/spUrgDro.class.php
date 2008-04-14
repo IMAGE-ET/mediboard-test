@@ -227,7 +227,7 @@ class CSpUrgDro extends CSpObject {
     }
     
     $sejour = $mbObject;
-    $sejour->loadRefsFwd();
+    $sejour->loadRefPatient();
     
     $this->urgfla = "1";
     
@@ -257,9 +257,11 @@ class CSpUrgDro extends CSpObject {
     // Transport
     $this->urmtra = self::$transTrans[$rpu->transport];
     
-    // Provenance
-    $this->urprov = "DO";
-        
+    // Legacy fields
+    $this->urprov = $rpu->urprov;
+    $this->urmuta = $rpu->urmuta;
+    $this->urtrau = $rpu->urtrau;
+    
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

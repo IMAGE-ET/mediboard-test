@@ -341,6 +341,10 @@ $dPconfig["hprim21"] = array (
   ),
 );
 
+$dPconfig["dPurgences"] = array (
+  "old_rpu" => "1",
+);
+
 $dPconfig["dPstock"] = array (
   "CProductOrder" => array(
     "order_number_format" => "%y%m%d%H%M%S%id",

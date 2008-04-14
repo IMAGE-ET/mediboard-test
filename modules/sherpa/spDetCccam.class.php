@@ -154,7 +154,7 @@ class CSpDetCCAM extends CSpObject {
     $this->modt3 = @$acte->_modificateurs[2];
     $this->modt4 = @$acte->_modificateurs[3];   
     $this->datact = mbDateToLocale($acte->execution);
-    $this->dephon = mbDateToLocale($acte->montant_depassement);
+    $this->dephon = $acte->montant_depassement;
     $this->codsig = $acte->signe;
     
     // Remboursement exceptionnel

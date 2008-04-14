@@ -1,79 +1,10 @@
+{{mb_include_script module=dPurgences script=contraintes_rpu}}
+
 <script type="text/javascript">
 
-function modeEntreeProv(mode_entree){
-  // Recuperation du tableau de contrainte modeEntree/Provenance en JSON
-  var contrainteProvenance = {{$contrainteProvenance|@json}}
-  
-  if(mode_entree == ""){
-    $A(document.editRPU.provenance).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteProvenance[mode_entree]){
-    $A(document.editRPU.provenance).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
- 
-  var _contrainteProvenance = contrainteProvenance[mode_entree];
-  
-  $A(document.editRPU.provenance).each( function(input) {
-    input.disabled = !_contrainteProvenance.include(input.value);
-  });
-}
-
-function modeSortieDest(mode_sortie){
-  // Recuperation du tableau de contrainte modeSortie/Destination en JSON
-  var contrainteDestination = {{$contrainteDestination|@json}}
- 
-  if(mode_sortie == ""){
-    $A(document.editRPUDest.destination).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteDestination[mode_sortie]){
-    $A(document.editRPUDest.destination).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
- 
-  var _contrainteDestination = contrainteDestination[mode_sortie];
-  $A(document.editRPUDest.destination).each( function(input) {
-    input.disabled = !_contrainteDestination.include(input.value);
-  });
-}
-
-
-function modeSortieOrient(mode_sortie){
-  // Recuperation du tableau de contrainte modeSortie/Orientation en JSON
-  var contrainteOrientation = {{$contrainteOrientation|@json}}
-  
-  if(mode_sortie == ""){
-    $A(document.editRPUDest.orientation).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteOrientation[mode_sortie]){
-    $A(document.editRPUDest.orientation).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
-  
-  var _contrainteOrientation = contrainteOrientation[mode_sortie];
-  $A(document.editRPUDest.orientation).each( function(input) {
-    input.disabled = !_contrainteOrientation.include(input.value);
-  });
-}
-
+ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
+ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
+ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
 function submitRPU(oForm){
   submitFormAjax(oForm, 'systemMsg');
@@ -98,18 +29,12 @@ function loadTransfert(mode_sortie){
   }
 }
 
-
 function initFields(mode_sortie){
-  var oForm = document.editRPUDest;
-  oForm.destination.value = ''; 
-  oForm.orientation.value = ''; 
-  modeSortieDest(mode_sortie);
-  modeSortieOrient(mode_sortie); 
+  ContraintesRPU.updateDestination(mode_sortie, true);
+  ContraintesRPU.updateOrientation(mode_sortie, true); 
 }
 
 </script>
-
-
 
 <table style="width:100%">
   <tr>
@@ -123,6 +48,7 @@ function initFields(mode_sortie){
 				  <tr>
 				    <th class="category" colspan="2">Prise en charge infirmier</th>
 				  </tr> 
+				  
 				  <tr>
 				    <td colspan="2">{{mb_label object=$rpu field="diag_infirmier"}}
 				    <!-- Aide a la saisie -->
@@ -133,36 +59,51 @@ function initFields(mode_sortie){
 			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />  
 			        </td>
 				  </tr>
+				  
 				  <tr>
 				    <td colspan="2">
 				      {{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU(this.form);"}}
 			      </td>
 				  </tr>
+				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="_entree"}}</th>
 				    <td>{{$rpu->_entree|date_format:"%d %b %Y à %Hh%M"}}</td>
 				  </tr>
+				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="ccmu"}}</th>
 				    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  
+				  
 				  <tr> 
 				    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="this.form.provenance.value = ''; modeEntreeProv(this.value); submitRPU(this.form);"}}</td>
-			    </tr>	  
+				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); submitRPU(this.form);"}}</td>
+			    </tr>
+			    
+			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+				  <tr>
+				    <th>{{mb_label object=$rpu field="urprov"}}</th>
+				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+			    {{/if}}	  
+
 				  <tr>
 				    <th>{{mb_label object=$rpu field="provenance"}}</th>
 				    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  
 				  <tr>   
 				    <th>{{mb_label object=$rpu field="transport"}}</th>
 				    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" onchange="submitRPU(this.form);"}}</td>
-				  
 				  </tr>
+				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="pec_transport"}}</th>
 				    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  
 			  </table>
 			</form>	      
     </td>
@@ -201,16 +142,11 @@ function initFields(mode_sortie){
 			   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  
 				  <table class="form">
-				  {{if $can->admin && 0}}
+				  {{if $can->admin}}
 				  <tr>
-				    <th>{{mb_label object=$sejour field="sortie_reelle"}}</th>
+				    <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
 				    <td class="date">
-				    	{{mb_field object=$sejour field="sortie_reelle" form="editSejour" onchange="submitSejour();"}}
-				    	<script type="text/javascript">
-				    		Main.add(function() {
-				    			regFieldCalendar("editSejour", "sortie_reelle", true);
-				    		} );
-				    	</script>				    	
+				    	{{mb_field object=$sejour field=sortie_reelle form=editSejour onchange="submitSejour();" register=true}}
 				    </td> 
 				  </tr>
 				  {{/if}}
@@ -243,13 +179,31 @@ function initFields(mode_sortie){
 				    <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
 				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  
+		      {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
-				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash;Type Pathologie" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash; Type de pathologie" onchange="submitRPU(this.form);"}}</td>
 				  </tr>
+				  
+				  <tr>
+				    <th>{{mb_label object=$rpu field="urtrau"}}</th>
+				    <td>{{mb_field object=$rpu field="urtrau" defaultOption="&mdash;Type de soins traumato" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+				  {{/if}}
+				  
+		      
 				  <tr>
 				    <th class="category" colspan="2">Précisions sur la sortie</th>
 				  </tr>
+
+			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
+				  <tr>
+				    <th>{{mb_label object=$rpu field="urmuta"}}</th>
+				    <td>{{mb_field object=$rpu field="urmuta" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
+				  </tr>
+			    {{/if}}	  
+				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="orientation"}}</th>
 				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="submitRPU(this.form);"}}</td>
@@ -318,7 +272,7 @@ function initFields(mode_sortie){
 
 // Lancement des fonctions de contraintes entre les champs
 {{if $rpu->mode_entree}}
-modeEntreeProv("{{$rpu->mode_entree}}");
+ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
 {{/if}}
 
 {{if $sejour->mode_sortie}}

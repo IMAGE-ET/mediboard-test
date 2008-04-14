@@ -22,7 +22,9 @@ class CCurrencySpec extends CFloatSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
-    return $propValue != null ? htmlspecialchars(sprintf("%.2f", $propValue).$dPconfig["currency_symbol"]) : "-";
+    return ($propValue !== null && $propValue !== "") ? 
+      htmlspecialchars(sprintf("%.2f", $propValue).$dPconfig["currency_symbol"]) : 
+      "-";
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {

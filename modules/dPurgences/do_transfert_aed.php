@@ -31,15 +31,15 @@ $sejour_rpu =& $rpu->_ref_sejour;
 
 // Creation du nouveau sejour et pre-remplissage des champs
 $sejour = new CSejour();
-$sejour->patient_id   = $sejour->rpu->patient_id;
-$sejour->praticien_id = $sejour->rpu->praticien_id;
-$sejour->group_id     = $sejour->rpu->group_id;
+$sejour->patient_id   = $sejour_rpu->patient_id;
+$sejour->praticien_id = $sejour_rpu->praticien_id;
+$sejour->group_id     = $sejour_rpu->group_id;
 $sejour->entree_prevue = mbDateTime();
 $sejour->sortie_prevue = mbDateTime("+ 1 day");
 $sejour->entree_reelle = mbDateTime();
 $sejour->type = "comp";
-$sejour->DP = $sejour->rpu->DP;
-$sejour->DR = $sejour->rpu->DR;
+$sejour->DP = $sejour_rpu->DP;
+$sejour->DR = $sejour_rpu->DR;
 if($rpu->diag_infirmier){ 
   $sejour->rques = "Diagnostic infirmier: $rpu->diag_infirmier\n";
 }

@@ -713,6 +713,10 @@ class CConsultation extends CCodable {
   }
   
   function loadRefPatient() {
+    if ($this->_ref_patient) {
+      return;
+    }
+    
     $this->_ref_patient = new CPatient;
     $this->_ref_patient->load($this->patient_id);
   }

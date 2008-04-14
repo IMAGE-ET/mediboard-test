@@ -327,8 +327,8 @@ function setToNow(element) {
         </span>
         {{/if}}
         
-        {{if $acte->montant_depassement && $dPconfig.dPsalleOp.CActeCCAM.tarif}}
-        &mdash; dépassement : {{$acte->montant_depassement|string_format:"%.2f"}} €
+        {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}
+        &mdash;  {{mb_label object=$acte field=montant_depassement}} : {{mb_value object=$acte field=montant_depassement}}
         {{/if}}
         {{/if}}
       </td>

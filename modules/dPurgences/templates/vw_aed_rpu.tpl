@@ -1,32 +1,9 @@
-{{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module=dPpatients script=pat_selector}}
+{{mb_include_script module=dPurgences script=contraintes_rpu}}
 
 <script type="text/javascript">
 
-function modeEntreeProv(mode_entree){
-  // Recuperation du tableau de contrainte modeEntree/Provenance en JSON
-  var contrainteProvenance = {{$contrainteProvenance|@json}}
-  
-  if(mode_entree == ""){
-    $A(document.editRpu.provenance).each( function(input) {
-      input.disabled = false;
-    });
-    return;
-  }
-  
-  if(!contrainteProvenance[mode_entree]){
-    $A(document.editRpu.provenance).each( function(input) {
-      input.disabled = true;
-    });
-    return;
-  }
- 
-  var _contrainteProvenance = contrainteProvenance[mode_entree];
-  
-  $A(document.editRpu.provenance).each( function(input) {
-    input.disabled = !_contrainteProvenance.include(input.value);
-  });
-}
-
+ContraintesRPU.contraintesProvenance = {{$contrainteProvenance|@json}};
 
 function submitRadio(oForm){
   submitFormAjax(oForm, 'systemMsg', {onComplete: function() { reloadRadio(oForm) } }); 
@@ -48,8 +25,6 @@ function verifNonEmpty(oElement){
 }
 
 function pageMain() {
-  regFieldCalendar("editRpu", "_entree", true);
-  
   {{if $rpu->_id && $can->edit}}
     reloadDossierMedicalPatient();
   {{/if}}
@@ -57,14 +32,12 @@ function pageMain() {
   if (document.editAntFrm){
     document.editAntFrm.type.onchange();
     Try.these(document.editAddictFrm.type.onchange);
-  } 
-  
-
+  }
 }
 
 </script>
 
-<form name="editRpu" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editRPU" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="m" value="dPurgences" />
 <input type="hidden" name="dosql" value="do_rpu_aed" />
@@ -105,34 +78,40 @@ function pageMain() {
     </td>
     
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="this.form.provenance.value = ''; modeEntreeProv(this.value)"}}</td>
+    <td>{{mb_field object=$rpu field="mode_entree" register=true defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true)"}}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$rpu field="_entree"}}</th>
-    <td class="date">{{mb_field object=$rpu field="_entree" form="editRpu"}}</td>
-    
+    <td class="date">{{mb_field object=$rpu field="_entree" form="editRPU" register=true}}</td>
+
+	  {{if $dPconfig.dPurgences.old_rpu == "1"}}
+    <th>{{mb_label object=$rpu field="urprov"}}</th>
+    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance"}}</td>
+		{{else}}
     <th>{{mb_label object=$rpu field="provenance"}}</th>
     <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
+	  {{/if}}	  
   </tr>
-  
+
   <tr>
-  <th>
-    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}" />
-    {{mb_label object=$rpu field="_patient_id"}}
-  </th>
-  <td class="readonly">
-  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
-   
-    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
-    <script type="text/javascript">
-      PatSelector.init = function(){
-        this.sForm = "editRpu";
-        this.sId   = "_patient_id";
-        this.sView = "_patient_view";
-        this.pop();
-      }
-    </script>
+	  <th>
+	    <input type="hidden" name="_patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$rpu->_patient_id}}" />
+	    {{mb_label object=$rpu field="_patient_id"}}
+	  </th>
+	  <td class="readonly">
+	  	<input type="text" name="_patient_view" size="20" value="{{$patient->_view}}" ondblclick="PatSelector.init()" readonly="readonly" />
+	   
+	    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
+	    <script type="text/javascript">
+	      PatSelector.init = function(){
+	        this.sForm = "editRpu";
+	        this.sId   = "_patient_id";
+	        this.sView = "_patient_view";
+	        this.pop();
+	      }
+	    </script>
+	    
     </td>
     
     <th>{{mb_label object=$rpu field="transport"}}</th>
@@ -203,7 +182,7 @@ function pageMain() {
   <tr>
     <th class="category" colspan="2">
       Dossier Médical
-    </td>
+    </th>
   </tr>
   <tr>
     <td colspan="2">
@@ -221,7 +200,7 @@ function pageMain() {
 
 // Lancement des fonctions de contraintes entre les champs
 {{if $rpu->mode_entree}}
-modeEntreeProv("{{$rpu->mode_entree}}");
+ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
 {{/if}}
 
 </script>

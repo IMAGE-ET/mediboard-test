@@ -602,19 +602,22 @@ class CSejour extends CCodable {
     
   }
 
-  function loadNumDossier(){
-    global $dPconfig, $g;
-    // Récuperation du tag de l'id Externe (ex: sherpa group:10)
-    
-    // si pas de fichier de config ==> IPP = ""
-    if(!$dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]){
+  function loadNumDossier() {
+    // Aucune configuration de numéro de dossier
+    if (!CAppUI::conf("dPplanningOp CSejour tag_dossier")) {
       $this->_num_dossier = "";
       return;
     }
     
+    // Objet inexistatn
+    if (!$this->_id) {
+      return "-";
+    }
+    
     // sinon, $_num_dossier = valeur id400
     // creation du tag de l'id Externe
-    $tag = str_replace('$g',$g, $dPconfig["dPplanningOp"]["CSejour"]["tag_dossier"]);
+    global $g;
+    $tag = str_replace('$g',$g, CAppUI::conf("dPplanningOp CSejour tag_dossier"));
 
     // Recuperation de la valeur de l'id400
     $id400 = new CIdSante400();

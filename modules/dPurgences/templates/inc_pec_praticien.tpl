@@ -7,16 +7,29 @@
 
 {{assign var=sejour value=$rpu->_ref_sejour}}
 {{assign var=consult value=$rpu->_ref_consult}}
- 
+
+<script type="text/javascript">
+
+function checkPraticien(oForm){
+  var prat = oForm.prat_id.value;
+  if(prat == ""){
+    alert("Veuillez sélectionner un praticien");
+    return false;
+  }
+  return true;
+}
+
+</script>
+
 {{if !$consult->_id}}
 {{if $can->edit}}
-<form name="createConsult-{{$rpu->_id}}" method="post" action="?">
+<form name="createConsult-{{$rpu->_id}}" method="post" action="?" onsubmit="return checkForm(this) || 'Error'">
   <input type="hidden" name="dosql" value="do_consult_now" />
   <input type="hidden" name="m" value="dPcabinet" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />   
   <input type="hidden" name="patient_id" value="{{$sejour->patient_id}}" />    
-  <select name="prat_id">
+  <select name="prat_id" class="ref notNull">
     <option value="">&mdash; Choisir un praticien</option>
     {{foreach from=$listPrats item=_prat}}
     <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}"

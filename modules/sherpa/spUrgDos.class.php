@@ -92,9 +92,19 @@ class CSpUrgDos extends CSpObject {
     
     // Annulation
     $this->anndos = "";
-    if ($sejour->annule) $this->anndos = "SH";
-    if (!$sejour->facturable) $this->anndos = "NF";
-      
+    if ($sejour->annule) {
+      $this->anndos = "SH";
+      $sejour->loadRefRPU();
+      if ($sejour->_ref_rpu->mutation_sejour_id) {
+        $this->anndos = "HO"; 
+      }
+    }
+    
+    // Facturable
+    if (!$sejour->facturable) {
+      $this->anndos = "NF";
+    }
+    
     // Date de mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());
   }

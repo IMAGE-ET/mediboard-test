@@ -13,17 +13,6 @@ function updateAttente(sejour_id){
   url.addParam("sejour_id", sejour_id);
   url.periodicalUpdate('attente-'+sejour_id, { frequency: 60, waitingText: null });
 }
-
-
-function checkPraticien(oForm){
-  var prat = oForm.prat_id.value;
-  if(prat == ""){
-    alert("Veuillez sélectionner un praticien");
-    return false;
-  }
-  return true;
-}
-
  
 function printMainCourante() {
   var url = new Url;

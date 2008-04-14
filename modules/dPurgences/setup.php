@@ -13,7 +13,7 @@ global $AppUI;
 // redundant now but mandatory until end of refactoring
 $config = array();
 $config["mod_name"]        = "dPurgences";
-$config["mod_version"]     = "0.18";
+$config["mod_version"]     = "0.19";
 $config["mod_type"]        = "user";
 
 class CSetupdPurgences extends CSetup {
@@ -87,7 +87,14 @@ class CSetupdPurgences extends CSetup {
 						CHANGE `prise_en_charge` `pec_transport` ENUM('med','paramed','aucun')";
     $this->addQuery($sql);
 
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    $sql = "ALTER TABLE `rpu`
+						ADD `urprov` ENUM('AM','AT','DO','EC','MT','OT','RA','RC','SP','VP'), 
+						ADD `urmuta` ENUM('A','D','M','P','X'), 
+						ADD `urtrau` ENUM('I','S','T');";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.19";
   }  
 }
 

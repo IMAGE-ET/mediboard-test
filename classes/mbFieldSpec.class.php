@@ -326,11 +326,13 @@ class CMbFieldSpec {
       $params["readonly"] = "readonly";
     }
 
-    global $AppUI;
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
     $date  = $value ? mbTranformTime(null, $value, $format) : "";
-    $form  = CMbArray::extract($params, "form");
+    
+    $form     = CMbArray::extract($params, "form");
+    $register = CMbArray::extract($params, "register");
+    
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $aHtml[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';
@@ -340,11 +342,12 @@ class CMbFieldSpec {
     if (!$this->notNull) {
       $aHtml[] = '<button class="cancel notext" type="button" onclick="Form.Element.setValue('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
     }
-
-    // Can't be handeld here cauz preporeForms has to be done
-    //$aHtml[] = '<script type="text/javascript">';
-    //$aHtml[] = 'regFieldCalendar("'.$form.'", "'.$field.'");';
-    //$aHtml[] = '</script>';
+    
+    if ($register) {
+      $time = $this instanceof CDateTimeSpec ? "true" : "false";
+      $aHtml[] = '<script type="text/javascript">Main.add(function() { regFieldCalendar("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
+		}
+    
     return join("\n", $aHtml);
   }
 
