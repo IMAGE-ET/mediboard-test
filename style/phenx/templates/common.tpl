@@ -19,15 +19,6 @@
     {{if $dialog}}
     Event.observe(document, 'keydown', closeWindowByEscape);
     {{/if}}
-    
-    {{if $on_load_events|@count}}
-    {{foreach from=$on_load_events item=notif}}
-      Main.add(function() {
-      {{$notif|smarty:nodefaults}}
-    });
-    {{/foreach}}
-    {{/if}}
-    
   </script>
 </head>
 

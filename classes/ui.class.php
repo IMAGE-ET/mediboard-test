@@ -49,7 +49,6 @@ class CAppUI {
   var $user_prefs = array();
   var $cfg = array();
   var $state = array();
-  var $on_load_events = array();
   
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
@@ -612,10 +611,6 @@ class CAppUI {
     	$conf = $conf[$part];
     }
     return $conf;
-  }
-    
-  function addOnLoadEvents($code) {
-    $this->on_load_events[] = $code;
   }
 }
 
