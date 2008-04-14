@@ -190,13 +190,15 @@ function pageMain() {
         <td colspan="5">
           <ul id="tab-patient" class="control_tabs">
             <li><a href="#identite">Identité</a></li>
-            <li><a href="#medical">Médical</a></li>
+            <li><a href="#beneficiaire">Bénéficiaire de soins</a></li>
+            <li><a href="#medecins">Médecins correspondants</a></li>
             <li><a href="#correspondance">Correspondance</a></li>
             <li><a href="#assure">Assuré social</a></li>
           </ul>
           <hr class="control_tabs" />
           <div id="identite" style="display: none;">{{include file="inc_acc/inc_acc_identite.tpl"}}</div>
-          <div id="medical" style="display: none;">{{include file="inc_acc/inc_acc_medical.tpl"}}</div>
+          <div id="beneficiaire" style="display: none;">{{include file="inc_acc/inc_acc_beneficiaire.tpl"}}</div>
+          <div id="medecins" style="display: none;">{{include file="inc_acc/inc_acc_medecins.tpl"}}</div>
           <div id="correspondance" style="display: none;">{{include file="inc_acc/inc_acc_corresp.tpl"}}</div>
           <div id="assure" style="display: none;">{{include file="inc_acc/inc_acc_assure.tpl"}}</div>
         </td>
