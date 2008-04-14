@@ -171,6 +171,8 @@ $contexteType["CSejour"][] = "traitement";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("refresh_pharma", "0");
+$smarty->assign("mode_pharma", "0");
 $smarty->assign("contexteType"       , $contexteType);
 $smarty->assign("today"              , mbDate());
 $smarty->assign("categories"         , $categories);

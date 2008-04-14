@@ -258,4 +258,6 @@ $locales['CPrescription._type_sejour.sortie'] = '';
 $locales['mod-dPprescription-tab-vw_edit_moments_unitaires'] = '';
 $locales['CPrescriptionLineMedicament-_traitement'] = '';
 $locales['config-dPprescription-CPrescription-time_print_ordonnance'] = '';
+$locales['CPrescriptionLineMedicament-accord_praticien'] = '';
+$locales['CPrescriptionLineMedicament-accord_praticien-desc'] = '';
 ?>

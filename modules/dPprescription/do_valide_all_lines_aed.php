@@ -20,6 +20,7 @@ global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
 $prescription_id = mbGetValueFromPost("prescription_id");
+$mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
 
 if($prescription_id){
@@ -54,16 +55,21 @@ if($prescription_id && $chapitre=="medicament"){
 	// Chargement de toutes les lignes du user_courant non validées
 	$prescriptionLineMedicament = new CPrescriptionLineMedicament();
 	$prescriptionLineMedicament->prescription_id = $prescription_id;
-	$prescriptionLineMedicament->praticien_id = $AppUI->user_id;
-	$prescriptionLineMedicament->signee = "0";
+	if($mode_pharma){
+		$prescriptionLineMedicament->valide_pharma = "0";
+	} else {
+    $prescriptionLineMedicament->praticien_id = $AppUI->user_id;
+		$prescriptionLineMedicament->signee = "0";
+	}
 	$medicaments = $prescriptionLineMedicament->loadMatchingList();
 	
-	
-	$prescriptionLineComment = new CPrescriptionLineComment();
-	$prescriptionLineComment->prescription_id = $prescription_id;
-	$prescriptionLineComment->praticien_id = $AppUI->user_id;
-	$prescriptionLineComment->signee = "0";
-	$comments = $prescriptionLineComment->loadMatchingList();
+	if(!$mode_pharma){
+	  $prescriptionLineComment = new CPrescriptionLineComment();
+	  $prescriptionLineComment->prescription_id = $prescription_id;
+	  $prescriptionLineComment->praticien_id = $AppUI->user_id;
+	  $prescriptionLineComment->signee = "0";
+	  $comments = $prescriptionLineComment->loadMatchingList();
+	}
 	
 	// Chargement de la prescription
 	$prescription = new CPrescription();
@@ -71,8 +77,8 @@ if($prescription_id && $chapitre=="medicament"){
 }
 
 
-// Validations de tous les $element
-if($prescription_id && $chapitre!="medicament"){
+// Validations de tous les $element si on est an mode pharma
+if($prescription_id && $chapitre!="medicament" && !$mode_pharma){
 	// Elements
 	$ljoinElement["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
 	$ljoinElement["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
@@ -96,29 +102,36 @@ if($prescription_id && $chapitre!="medicament"){
 
 // Parcours des medicaments et passage de valide à 1
 foreach($medicaments as $key => $lineMedicament){
-	$lineMedicament->signee = 1;
+	if($mode_pharma){
+		$lineMedicament->valide_pharma = 1;
+	} else {
+	  $lineMedicament->signee = 1;
+	}
 	$msg = $lineMedicament->store();
 	viewMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
 }
 
 // Parcours des medicaments et passage de valide à 1
-foreach($elements as $key => $lineElement){
-	$lineElement->signee = 1;
-	$msg = $lineElement->store();
-	viewMsg($msg, "msg-CPrescriptionLineElement-modify");	
+if(!$mode_pharma){
+	foreach($elements as $key => $lineElement){
+		$lineElement->signee = 1;
+		$msg = $lineElement->store();
+		viewMsg($msg, "msg-CPrescriptionLineElement-modify");	
+	}
 }
 
 // Parcours des medicaments et passage de valide à 1
-foreach($comments as $key => $lineComment){
-	$lineComment->signee = 1;
-	$msg = $lineComment->store();
-	viewMsg($msg, "msg-CPrescriptionLineComment-modify");	
+if(!$mode_pharma){
+	foreach($comments as $key => $lineComment){
+		$lineComment->signee = 1;
+		$msg = $lineComment->store();
+		viewMsg($msg, "msg-CPrescriptionLineComment-modify");	
+	}
 }
-
 
 // Si une ligne rajoutée dans la preadmission deborde sur le sejour alors que la prescription de sejour a deja ete créée
 // On rajoute la ligne dans la prescription de sejour
-if($prescription->type == "pre_admission" && $chapitre=="medicament"){
+if($prescription->type == "pre_admission" && $chapitre=="medicament" && !$mode_pharma){
 	// On teste s'il existe une prescription de sejour correspondant a l'object
   $prescription_sejour = new CPrescription();
   $prescription_sejour->object_id = $prescription->object_id;
@@ -193,7 +206,7 @@ if($prescription->type == "pre_admission" && $chapitre=="medicament"){
   }
 }
 
-echo "<script type='text/javascript'>Prescription.reload($prescription->_id,'', '$chapitre');</script>";
+echo "<script type='text/javascript'>Prescription.reload($prescription->_id,'', '$chapitre','','$mode_pharma');</script>";
 echo $AppUI->getMsg();
 exit();
 

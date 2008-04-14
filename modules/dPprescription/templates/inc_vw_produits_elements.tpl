@@ -29,6 +29,8 @@ if($('alertes')){
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#div_medicament">Médicaments</a></li>
+
+{{if !$mode_pharma}}
   <li><a href="#div_dmi">DMI</a></li>
   <li><a href="#div_anapath">Anapath</a></li>
   <li><a href="#div_biologie">Biologie</a></li>
@@ -36,6 +38,7 @@ if($('alertes')){
   <li><a href="#div_consult">Consult</a></li>
   <li><a href="#div_kine">Kiné</a></li>
   <li><a href="#div_soin">Soin</a></li>
+{{/if}}
 </ul>
 <hr class="control_tabs" />
 
@@ -43,6 +46,7 @@ if($('alertes')){
 <div id="div_medicament" style="display:none;">
   {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
 </div>
+{{if !$mode_pharma}}
 <div id="div_dmi" style="display:none;">
   {{include file="../../dPprescription/templates/inc_div_element.tpl" element="dmi"}}
 </div>
@@ -64,7 +68,7 @@ if($('alertes')){
 <div id="div_soin" style="display:none;">
   {{include file="../../dPprescription/templates/inc_div_element.tpl" element="soin"}}
 </div>
-
+{{/if}}
 
 <script type="text/javascript">
 	    	

@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.33";
+$config["mod_version"]     = "0.34";
 $config["mod_type"]        = "user";
 
 
@@ -374,7 +374,12 @@ class CSetupdPprescription extends CSetup {
             CHANGE `valide_prat` `signee` ENUM('0','1') DEFAULT '0'";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.33";
+    $this->makeRevision("0.33");
+    $sql = "ALTER TABLE `prescription_line`
+            ADD `accord_praticien` ENUM('0','1');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.34";
   }  
 }
 

@@ -88,6 +88,18 @@ if($service_id == "NP") {
   loadServiceComplet($service, $date, $mode);
 }
 
+
+foreach($service->_ref_chambres as &$_chambre){
+	foreach($_chambre->_ref_lits as &$_lits){
+		foreach($_lits->_ref_affectations as &$_affectation){
+			$_affectation->_ref_sejour->loadRefsPrescriptions();
+		//	mbTrace($_affectation->_id);
+		}
+	}
+}
+
+
+              
 // Chargement des documents du sejour
 $sejour->loadRefsDocs();
 

@@ -148,6 +148,8 @@ transfertTraitement = function(line_id){
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="prescription_line_id" value="" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+  <input type="hidden" name="object_id" value="{{$prescription->object_id}}" />
+  
   <input type="hidden" name="_traitement" value="1" />
   <input type="hidden" name="_type" value="{{$prescription->type}}" />
 </form>
@@ -165,7 +167,10 @@ transfertTraitement = function(line_id){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
   
-  {{if $prescription->type=="pre_admission"}}
+  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+  <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
+  
+  {{if $prescription->type=="pre_admission" && $prescription->object_id}}
   <input type="hidden" name="callback" value="transfertTraitement" />
   {{/if}}  
 </form>
@@ -178,7 +183,14 @@ transfertTraitement = function(line_id){
     <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
     <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
     <input type="hidden" name="chapitre" value="medicament" />
-    <button class="tick" type="button" onclick="submitFormAjax(this.form,'systemMsg')">Signer les lignes de médicaments</button>
+    <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+    <button class="tick" type="button" onclick="submitFormAjax(this.form,'systemMsg')">
+    {{if $mode_pharma}}
+      Validation pharmacien pour toutes les lignes
+    {{else}}
+      Signer les lignes de médicaments
+    {{/if}}
+    </button>
   </form>
 </div>
 {{/if}}
@@ -247,7 +259,7 @@ transfertTraitement = function(line_id){
   {{/foreach}}
   
   
-    <!-- Parcours des commentaires --> 
+  <!-- Parcours des commentaires --> 
  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
    <tbody class="hoverable">
     <tr>
@@ -341,11 +353,13 @@ Main.add( function(){
 
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-     {{if !$curr_line->signee && !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
+     {{if !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
+       {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
        Calendar.regField('editDates-{{$curr_line->_id}}', "debut", false, dates);
        Calendar.regField('editDates-{{$curr_line->_id}}', "_fin", false, dates);
        
        syncDate(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
+     {{/if}}
      {{/if}}
   {{/foreach}}
 } );

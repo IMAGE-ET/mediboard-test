@@ -24,6 +24,8 @@ $can->needsRead();
 
 $prescription_line_id = mbGetValueFromPost("prescription_line_id");
 
+$mode_pharma = mbGetValueFromPost("mode_pharma");
+
 // Chargement de la ligne de prescription
 $new_line = new CPrescriptionLineMedicament();
 $new_line->load($prescription_line_id);
@@ -67,7 +69,7 @@ foreach($new_line->_ref_prises as &$prise){
 
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reload($new_line->prescription_id,'','medicament')</script>";
+echo "<script type='text/javascript'>Prescription.reload($new_line->prescription_id,'','medicament','',$mode_pharma)</script>";
 echo $AppUI->getMsg();
 exit();
 

@@ -254,4 +254,5 @@ $locales['Configurer'] = 'Configure';
 $locales['module-hprim21-court'] = '';
 $locales['module-hprim21-long'] = '';
 $locales['View'] = 'View';
+$locales['module-pharmacie-court'] = '';
 ?>

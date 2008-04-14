@@ -1,6 +1,10 @@
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="dPprescription" script="element_selector"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
 
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
@@ -51,7 +55,14 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 }
 
 
-function loadViewSejour(sejour_id, praticien_id){
+function loadViewSejour(sejour_id, praticien_id, prescription_id){
+  // Affichage de la prescription
+  if(prescription_id){
+    Prescription.reload(prescription_id);
+  } else {
+    $('produits_elements').innerHTML = "<div class='big-info'>Aucune prescription de séjour</div>";
+  }
+  
   //loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
   if($('Imeds')){
@@ -146,7 +157,17 @@ Main.add(function () {
                   </a>
                 </td>
                 <td class="text">
-                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
+	                  {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
+		                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+		                
+		                {{if $prescriptions_sejour}}
+		               {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+		              
+		                {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
+	                {{else}}
+	                  {{assign var=prescription_sejour_id value=""}}
+	                {{/if}}
+                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}},'{{$prescription_sejour_id}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
                   <script language="Javascript" type="text/javascript">
@@ -240,7 +261,7 @@ Main.add(function () {
         
         <li><a href="#planSoins">Plan de soins</a></li>
         
-        <li><a href="#prescriptions">Prescriptions</a></li>
+        <li><a href="#produits_elements">Prescriptions</a></li>
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#Actes">Gestion des actes</a></li>
@@ -264,11 +285,9 @@ Main.add(function () {
           Prochainement disponible...
         </div>
       </div>
-      <div id="prescriptions" style="display: none;">
+      <div id="produits_elements" style="display: none;">
         <div class="big-info">
-          Affichage des presriptions en cours de développement
-          <br />
-          Prochainement disponible...
+        Aucune prescription de séjour
         </div>
       </div>
       

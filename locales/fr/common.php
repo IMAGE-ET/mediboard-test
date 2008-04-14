@@ -254,4 +254,5 @@ $locales['Configurer'] = 'Configurer';
 $locales['module-hprim21-court'] = 'HPRIM 2.1';
 $locales['module-hprim21-long'] = 'Gestion des objets HPRIM 2.1';
 $locales['View'] = 'Consulter';
+$locales['module-pharmacie-court'] = 'Pharmacie';
 ?>

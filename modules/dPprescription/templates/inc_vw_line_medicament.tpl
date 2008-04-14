@@ -3,7 +3,7 @@
     <th colspan="5" id="th_line_{{$curr_line->_id}}" {{if $curr_line->date_arret}}style="background-color:#aaa";{{/if}}{{if $curr_line->_traitement == 1}}style="background-color:#7c7"{{/if}}>
     <div style="float:left">
     {{if !$curr_line->_traitement}}
-       {{if !$curr_line->signee}}
+       {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
       <button type="button" class="change notext" onclick="EquivSelector.init('{{$curr_line->_id}}','{{$curr_line->_ref_produit->code_cip}}');">
         Equivalents
       </button>
@@ -31,7 +31,7 @@
       {{/if}}
     
      {{if $curr_line->_ref_prescription->object_id}}
-      {{if !$curr_line->signee}}
+      {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
 	      <form action="?" method="post" name="editLineALD-{{$curr_line->_id}}">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -50,7 +50,7 @@
       {{/if}}
 	   {{/if}}
 	  {{/if}}
-	     {{if !$curr_line->signee && $curr_line->_ref_prescription->object_id}} 
+	     {{if !$curr_line->signee && $curr_line->_ref_prescription->object_id && !$mode_pharma}} 
 	      <form action="?" method="post" name="editLineTraitement-{{$curr_line->_id}}">
 	        <input type="hidden" name="m" value="dPprescription" />
 	        <input type="hidden" name="dosql" value="do_prescription_traitement_aed" />
@@ -64,7 +64,19 @@
 	      {{/if}}  
     </div>
       <!-- AFfichage du praticien -->
+      
       <div style="float: right">
+      {{if $mode_pharma}}
+        {{$curr_line->_ref_praticien->_view}}
+        {{if $curr_line->signee}}
+           <img src="images/icons/tick-dPrepas.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
+        {{else}}
+           <img src="images/icons/cancel.png" alt="Ligne non signée par le praticien"title="Ligne non signée par le praticien" />
+        {{/if}}
+      {{/if}}
+      
+      {{if !$mode_pharma}}
+      <!-- Signature du praticien -->
       {{if !$curr_line->_traitement}}
       {{if $curr_line->_ref_praticien->_id}}
         {{$curr_line->_ref_praticien->_view}}
@@ -94,6 +106,45 @@
       {{else}}
       Médecin traitant
       {{/if}}
+      {{else}}
+      <!-- Signature du pharmacien -->
+      {{if $prescription->object_id}}  
+        {{if !$curr_line->valide_pharma && !$curr_line->_traitement}}
+        <form action="?" method="post" name="editLineAccordPraticien-{{$curr_line->_id}}">
+	        <input type="hidden" name="m" value="dPprescription" />
+	        <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+	        <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+	        <input type="hidden" name="del" value="0" />
+	        {{mb_field object=$curr_line field="accord_praticien" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	        {{mb_label object=$curr_line field="accord_praticien" typeEnum="checkbox"}}
+	      </form> 
+	      {{else}}
+	        {{if $curr_line->accord_praticien}}
+	        En accord avec le praticien
+	        {{/if}}
+	      {{/if}}
+        {{if $curr_line->valide_pharma}}
+           <form name="delValidation-{{$curr_line->_id}}" action="" method="post">
+              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+              <input type="hidden" name="valide_pharma" value="0" />
+              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}') } }  )">Annuler la validation pharmacien</button>
+            </form>
+        {{else}}
+          {{if !$curr_line->_traitement}}
+            <form name="validation-{{$curr_line->_id}}" action="" method="post">
+              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+              <input type="hidden" name="m" value="dPprescription" />
+              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+              <input type="hidden" name="mode_pharma" value="1" />
+              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg');">Validation pharmacien</button>
+            </form>
+          {{/if}}
+        {{/if}}
+      {{/if}}
+      {{/if}}
+
       </div>
     <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
       {{$curr_line->_view}}
@@ -120,7 +171,7 @@
 				    <td style="border:none">
 				    {{mb_label object=$curr_line field=debut}}
 				    </td>    
-				    {{if $curr_line->signee == 0}}
+				    {{if ($curr_line->signee == 0 || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
 				    <td class="date" style="border:none;">
 				      {{mb_field object=$curr_line field=debut form=editDates-$curr_line_id onchange="syncDateSubmit(this.form, $curr_line_id, this.name);"}}
 				    </td>
@@ -137,7 +188,7 @@
 				     {{mb_label object=$curr_line field=duree}}
 				    </td>
 				    <td style="border:none">
-				    {{if $curr_line->signee == 0}}
+				    {{if ($curr_line->signee == 0 || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
 				     {{mb_field object=$curr_line field=duree onchange="syncDateSubmit(this.form, $curr_line_id, this.name);" size="3" }}
 				     {{mb_field object=$curr_line field=unite_duree onchange="syncDateSubmit(this.form, $curr_line_id, this.name);"}}
 				    {{else}}
@@ -154,7 +205,7 @@
 				    <td style="border:none">
 				     {{mb_label object=$curr_line field=_fin}} 
 				    </td>
-				    {{if $curr_line->signee == 0}}
+				    {{if ($curr_line->signee == 0 || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
 				    <td class="date" style="border:none;">
 				      {{mb_field object=$curr_line field=_fin form=editDates-$curr_line_id onchange="syncDateSubmit(this.form, $curr_line_id, this.name);"}}
 				    </td>
@@ -225,7 +276,7 @@
         <input type="hidden" name="_code_cip" value="{{$curr_line->_ref_produit->code_cip}}" />
         <input type="hidden" name="_delete_prises" value="0" />
         {{assign var=posologies value=$curr_line->_ref_produit->_ref_posologies}}
-        {{if !$curr_line->signee}}
+        {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
         <select name="no_poso" onchange="submitPoso(this.form, '{{$curr_line->_id}}');" style="width: 230px;">
           <option value="">&mdash; Posologies automatiques</option>
           {{foreach from=$curr_line->_ref_produit->_ref_posologies item=curr_poso}}
@@ -243,7 +294,7 @@
           {{/if}}
         {{/if}}
       </form>
-      {{if !$curr_line->signee}}
+      {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
         {{assign var=curr_line_id value=$curr_line->_id}}
 				  <select name="selShowDivPoso" onchange="selDivPoso(this.value,'{{$curr_line->_id}}');">
 				    <option value="">&mdash; Posologies manuelles</option>
@@ -311,7 +362,7 @@
 	    </td>
       <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>
 	    <td style="border:none; text-align: left;">
-	      {{if !$curr_line->signee}}
+	      {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
         <div id="prises-{{$curr_line->_id}}">
           <!-- Parcours des prises -->
           {{include file="inc_vw_prises.tpl"}}
@@ -330,7 +381,7 @@
     </tr>    
     <tr>  
       <td>
-      {{if !$curr_line->signee}}  
+      {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}  
         <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
           {{tr}}Delete{{/tr}}
         </button>
@@ -345,12 +396,13 @@
           <input type="hidden" name="dosql" value="do_add_line_contigue_aed" />
           <input type="hidden" name="del" value="0" />
           <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+          <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
           <button type="button" class="new" onclick="submitFormAjax(document.forms['addLineCont-{{$curr_line->_id}}'],'systemMsg')">Ajouter une ligne</button>
         </form>
         </div>
         {{/if}}
       {{mb_label object=$curr_line field="commentaire"}}
-      {{if !$curr_line->signee}}
+      {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
       <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />

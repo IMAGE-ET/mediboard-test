@@ -15,14 +15,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $prescription_line_id = null;
   
   // DB Fields
-  var $code_cip        = null;
-  var $no_poso         = null;
-  var $commentaire     = null;
-  var $debut           = null;
-  var $duree           = null;
-  var $unite_duree     = null;
-  var $date_arret      = null;
-  var $valide_pharma   = null; 
+  var $code_cip         = null;
+  var $no_poso          = null;
+  var $commentaire      = null;
+  var $debut            = null;
+  var $duree            = null;
+  var $unite_duree      = null;
+  var $date_arret       = null;
+  var $valide_pharma    = null; 
+  var $accord_praticien = null;
   
   // Form Field
   var $_fin            = null;
@@ -68,6 +69,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "date_arret"      => "date",
       "valide_pharma"   => "bool",
+      "accord_praticien"=> "bool",
       "_fin"            => "date",
       "_unite_prise"    => "str",
       "_traitement"     => "bool"

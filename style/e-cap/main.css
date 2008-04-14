@@ -547,6 +547,17 @@ a.buttonadd:hover {
   background-image: url(../tonkin/images/buttons/addover.png);
 }
 
+button.warning, 
+a.buttonwarning {
+  background-image: url(../tonkin/images/buttons/warning.png);
+}
+
+button.warning:hover, 
+a.buttonwarning:hover {
+  background-image: url(../tonkin/images/buttons/warningover.png);
+}
+
+
 button.remove, a.buttonremove {
   background-image: url(../tonkin/images/buttons/remove.png);
 }

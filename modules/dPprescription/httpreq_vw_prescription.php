@@ -15,7 +15,10 @@ $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $object_class    = mbGetValueFromGetOrSession("object_class");
 $object_id       = mbGetValueFromGetOrSession("object_id");
 
-$mode_protocole  = mbGetValueFromGetOrSession("mode_protocole");
+$mode_pharma = mbGetValueFromGet("mode_pharma", 0);
+$refresh_pharma = mbGetValueFromGet("refresh_pharma", 0);
+
+$mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
 
 $listFavoris = array();
 $element_id = mbGetValueFromGetOrSession("element_id");
@@ -159,24 +162,48 @@ $smarty->assign("listFavoris" , $listFavoris);
 $smarty->assign("category"    , $category);
 $smarty->assign("categories"  , $categories);
 
+$smarty->assign("refresh_pharma", $refresh_pharma);
+
+	
 if($mode_protocole){
+	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "1");
 	$smarty->assign("category", "medicament");
 	$smarty->display("inc_vw_prescription.tpl");
-} else {
+} 
 
-  // Cas de la selection d'un protocole
+if($mode_pharma && $refresh_pharma){
+  $smarty->assign("mode_protocole", "0");
+  $smarty->assign("mode_pharma", $mode_pharma);
+  $smarty->assign("praticien", $prescription->_ref_praticien);
+  $smarty->display("inc_vw_prescription.tpl");	
+}
+	
+  	
+if(!$refresh_pharma && !$mode_protocole){
+	if($mode_pharma){
+		$category_name = "medicament";
+	  $smarty->assign("mode_pharma", "1");
+	  $smarty->display("inc_div_medicament.tpl");
+	} else {
+	
+	// Cas de la selection d'un protocole
   if(!$category_name){
-    $smarty->display("inc_vw_produits_elements.tpl");	
+    $smarty->assign("mode_pharma", "0");
+    $smarty->assign("mode_protocole", "0");
+		$smarty->display("inc_vw_produits_elements.tpl");	
   } else {
     // Cas du rafraichissement de la partie medicament
     if($category_name == "medicament"){
-     	$smarty->display("inc_div_medicament.tpl");
+     	$smarty->assign("mode_pharma", "0");
+    	$smarty->display("inc_div_medicament.tpl");
     } else {
+    	$smarty->assign("mode_pharma", "0");
       // Cas du rafraichissement d'une partie element
       $smarty->assign("element", $category_name);
       $smarty->display("inc_div_element.tpl");
     }
   }
+	}
 }
 ?>

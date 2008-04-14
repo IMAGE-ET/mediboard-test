@@ -28,14 +28,15 @@ var Prescription = {
     var oForm = document.addLine;
     oForm.code_cip.value = code;
     
+    var mode_pharma = oForm.mode_pharma.value;
     var oFormTraitement = document.transfertToTraitement;
-    if(oForm.del.value == 0 && oFormTraitement._type.value == "pre_admission"){
+    if(oForm.del.value == 0 && oFormTraitement._type.value == "pre_admission" && oFormTraitement.object_id.value != ""){
       submitFormAjax(oForm, 'systemMsg');
     } else {
-	    submitFormAjax(oForm, 'systemMsg', { 
+      submitFormAjax(oForm, 'systemMsg', { 
 	      onComplete : 
 	        function(){
-	          Prescription.reload(oForm.prescription_id.value, '', 'medicament');
+	          Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma);
 	        } 
 	    });
     }
@@ -63,9 +64,10 @@ var Prescription = {
     var oForm = document.addLine;
     oForm.prescription_line_id.value = line_id;
     oForm.del.value = 1;
+    var mode_pharma = oForm.mode_pharma.value;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, '', 'medicament');
+        Prescription.reload(oForm.prescription_id.value, '', 'medicament','',mode_pharma);
        } 
     });
   },
@@ -79,7 +81,7 @@ var Prescription = {
       } 
     });
   },
-  reload: function(prescription_id, element_id, category_name, mode_protocole) {
+  reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma) {
       var oForm = document.addLine;
       
       if(window.opener){
@@ -92,24 +94,42 @@ var Prescription = {
       urlPrescription.addParam("element_id", element_id);
       urlPrescription.addParam("category_name", category_name);
       urlPrescription.addParam("mode_protocole", mode_protocole);
+      urlPrescription.addParam("mode_pharma", mode_pharma);
       
-      if(mode_protocole){
-        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
+      
+      if(mode_pharma == "1"){
+    
+          urlPrescription.requestUpdate("div_medicament", { waitingText : null });  
       } else {
-        if(category_name){
-          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );
-        } else {
-         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
-         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
-        }
+        
+	    
+	      if(mode_protocole){
+	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
+	      } else {
+	        if(category_name){
+	          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );
+	        } else {
+	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
+	         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
+	        }
+	      }
       }
   },
+  reloadPrescPharma: function(prescription_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_vw_prescription");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("mode_pharma", "1");
+    url.addParam("refresh_pharma", "1");
+    url.addParam("mode_protocole", "0");
+    url.requestUpdate("prescription_pharma", { waitingText: null } );
+  },
   reloadAddProt: function(protocole_id) {
-    Prescription.reload(protocole_id, '','', '1');
+    Prescription.reload(protocole_id, '','', '1','0');
     Protocole.refreshList('',protocole_id);
   },
   reloadDelProt: function(){
-    Prescription.reload('', '','', '1');
+    Prescription.reload('', '','', '1','0');
   },
   reloadAlertes: function(prescription_id) {
     if(prescription_id){
@@ -167,5 +187,11 @@ var Prescription = {
       url.addParam("line_id", oForm.prescription_line_id.value);
       url.requestUpdate("stop_"+oForm.prescription_line_id.value,  { waitingText: null } );
     } } );
+  },
+  viewAllergies: function(prescription_id){
+    url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_vw_allergies_sejour");
+    url.addParam("prescription_id", prescription_id);
+    url.popup(500, 300, "Allergies");
   }
 };

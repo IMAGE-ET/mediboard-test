@@ -1,3 +1,12 @@
+<script type="text/javascript">
+
+function pageMain(){
+  regFieldCalendar('filterForm', "_date_min", true);
+  regFieldCalendar('filterForm', "_date_max", true);
+}
+
+</script>
+
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
@@ -5,24 +14,76 @@
 
 <table class="main">
   <tr>
+    <td colspan="2">
+      <form name="filterForm" method="get" action="?">
+			  <input type="hidden" name="m" value="{{$m}}" />
+	
+        <table class="form">
+          <tr>
+            <th>
+              Praticien
+            </th>
+	          <td>
+					    <select name="praticien_id">
+						    <option value="">&mdash; Praticien</option>
+						    {{foreach from=$praticiens item=_praticien}}
+						    <option value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}}>{{$_praticien->_view}}/{{$_praticien->_id}}</option>
+						    {{/foreach}}
+						  </select>
+		        </td>
+		        <th>
+		          Service
+		        </th>
+		        <td>
+		          <select name="service_id">
+			          <option value="">&mdash; Service</option>
+			          {{foreach from=$services item=_service}}
+			          <option value="{{$_service->_id}}" {{if $service_id == $_service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+			          {{/foreach}}
+			        </select>
+			      </td>
+			      <th>
+		 	        A partir du
+			      </th>
+			      <td class="date">  
+			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm}}
+			      </td>
+			      <th>
+			        Jusqu'au 
+			      </th>
+			      <td class="date">
+			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm}}
+	          </td>
+	          <td>
+	            <button class="tick" type="button" onclick="this.form.submit()">Filtrer</button>
+	          </td>
+          </tr>
+        </table>
+      </form>
+    </td>
+  </tr>
+  <tr>
     <td style="width: 150px;">
       <table class="tbl">  
         <tr>
-          <th>Praticien</th>
-          <th>Patient</th>
+          <th>Prescriptions</th>
         </tr>
-				{{foreach from=$prescriptions item=prescription}}
+				{{foreach from=$prescriptions item=_prescription}}
 				<tr>
-				  <td><a href="#{{$prescription->_id}}" onclick="Prescription.reload('{{$prescription->_id}}')">{{$prescription->_ref_praticien->_view}}</a></td>
-				  <td>{{$prescription->_ref_object->_view}}</td>
+				  <td style="width: 100px">
+				    <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescPharma('{{$_prescription->_id}}')">
+						  {{$_prescription->_ref_object->_view}}<br />
+				      {{$_prescription->_ref_patient->_view}}
+				    </a>
+				  </td>
 				</tr>
 				{{/foreach}}
       </table>
     </td>
     <td>
-      <div id="produits_elements">
-      {{*include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 prescription=$prescription*}}
+      <div id="prescription_pharma">
+      {{include file="../../dPprescription/templates/inc_vw_prescription.tpl" mode_protocole=0 pharma=1}}
       </div>
     </td>
-  </tr>  
+  </tr>
 </table>
