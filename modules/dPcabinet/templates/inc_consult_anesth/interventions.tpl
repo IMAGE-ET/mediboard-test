@@ -12,6 +12,7 @@
     </option>
     {{/foreach}}
   </select>
+  <br />
   {{else}}
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
