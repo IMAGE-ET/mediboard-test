@@ -2,13 +2,6 @@
 <form name="Ei{{$voletAcc}}" action="?m={{$m}}">
 {{/if}}
 <table class="tbl" id="ei_liste">
-  {{if $listeFichesTitle}}
-  <tr>
-    <th class="title" colspan="7">
-      {{$listeFichesTitle}}
-    </th>
-  </tr>
-  {{/if}}
   <tr>
     <th class="category">{{tr}}Date{{/tr}}</th>
     <th class="category">

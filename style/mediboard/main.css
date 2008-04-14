@@ -1712,11 +1712,19 @@ ul.control_tabs {
   clear: both;
   padding: 3px 6px;
 }
+  
+ul.full_width li {
+	width: 100%;
+}
 
 ul.control_tabs li {
   float: left;
   margin: 0px 2px;
   text-align: center;
+}
+
+ul.control_tabs li.linebreak {
+	clear: both;
 }
 
 ul.control_tabs li a {

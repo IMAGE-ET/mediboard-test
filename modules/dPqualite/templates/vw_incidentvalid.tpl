@@ -67,20 +67,30 @@ Main.add(function () {
     <td class="halfPane">
     
       {{if $can->admin || $can->edit}}
-      <ul id="tab-incident" class="control_tabs">
+      <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin}}
         <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#CSEnCours">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#CSAllEIHeader">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})</a></li>
         {{else}}
         <li><a href="#QualNewFiches">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualAttCS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualValidMesures">{{tr}}_CFicheEi_acc-ATT_QUALITE_adm{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualVerif">{{tr}}_CFicheEi_acc-ATT_VERIF{{/tr}} ({{$listFiches.ATT_VERIF|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualCtrl">{{tr}}_CFicheEi_acc-ATT_CTRL{{/tr}} ({{$listFiches.ATT_CTRL|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualAllEI">{{if $allEi_user_id}}{{tr}}_CFicheEi_allfichesuser{{/tr}} {{$listUsersTermine.$allEi_user_id->_view}}{{else}}{{tr}}_CFicheEi_allfiches{{/tr}}{{/if}} ({{$listFiches.ALL_TERM|@count}})</a></li>
+        <li class="linebreak"></li>
         <li><a href="#QualAnnuleEI">{{tr}}_CFicheEi_acc-ANNULE{{/tr}} ({{$listFiches.ANNULE|@count}})</a></li>
         {{/if}}
+        <li class="linebreak"></li>
+        <li><a href="#QualMyEI">{{tr}}_CFicheEi_acc-AUTHOR{{/tr}} ({{$listFiches.AUTHOR|@count}})</a></li>
       </ul>
       <hr class="control_tabs" />
       
@@ -129,11 +139,11 @@ Main.add(function () {
         {{include file="inc_ei_liste.tpl"}}
       </div>
       {{/if}}
+      <div id="QualMyEI" style="display: none;">
+        {{assign var="listeFiches" value=$listFiches.AUTHOR}}
+        {{include file="inc_ei_liste.tpl"}}
+      </div>
     {{/if}}
-      <br />
-      {{assign var="listeFichesTitle" value="Mes fiches d'EI"}}
-      {{assign var="listeFiches" value=$listFiches.AUTHOR}}
-      {{include file="inc_ei_liste.tpl"}}
     </td>
     
     
