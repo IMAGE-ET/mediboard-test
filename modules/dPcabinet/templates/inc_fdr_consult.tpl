@@ -181,7 +181,7 @@ function reloadFdr() {
   {{/if}}
 
   url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-	  url.requestUpdate('fdrConsultContent', { waitingText : null });
+	  url.requestUpdate('fdrConsult', { waitingText : null });
   
   {{if $app->user_prefs.ccam_consultation}} 
   // rafraichissement de la div ccam

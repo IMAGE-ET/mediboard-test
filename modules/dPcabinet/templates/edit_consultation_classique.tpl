@@ -69,16 +69,14 @@ function pageMain() {
       </div>
 
       <div id="Infos">
-        <div id="InfosContent">
-          {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
-        </div>
+        {{include file="../../dPcabinet/templates/inc_patient_infos_accord_consult.tpl"}}
       </div>
 
       <div id="mainConsult">
       {{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}
       </div>
 
-      <div id="fdrConsultContent">
+      <div id="fdrConsult">
       {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
       </div>
 

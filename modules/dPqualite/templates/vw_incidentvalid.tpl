@@ -11,7 +11,7 @@ function search_AllEI(){
   var url = new Url;
   url.setModuleAction("dPqualite", "httpreq_vw_allEi");
   url.addParam("allEi_user_id", oForm.allEi_user_id.value);
-  url.requestUpdate('QualAllEIContent');
+  url.requestUpdate('QualAllEI');
 }
 
 function annuleFiche(oForm,annulation){

@@ -88,7 +88,7 @@ function refreshFdr(consult_id) {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
   url.addParam("selConsult", consult_id);
-  url.requestUpdate('fdrConsultContent', { waitingText : null }) ;
+  url.requestUpdate('fdrConsult', { waitingText : null }) ;
 }
 
 </script>

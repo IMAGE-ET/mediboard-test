@@ -81,10 +81,10 @@ function printAllDocs() {
             </th>
           </tr>
         </table>
-        <div id="InfoAnesthContent">
+        <div id="InfoAnesth">
           {{include file="../../dPcabinet/templates/inc_consult_anesth/acc_infos_anesth.tpl"}}
         </div>
-        <div id="fdrConsultContent">
+        <div id="fdrConsult">
           {{include file="../../dPcabinet/templates/inc_fdr_consult.tpl"}}
         </div>
       {{/if}}
