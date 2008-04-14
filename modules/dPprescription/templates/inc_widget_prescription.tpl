@@ -10,8 +10,8 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 {{if $prescription}}
 	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
+	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 	  {{if !$prescription->_id}}
-	    <form name="addPrescriptionSejour" action="?">
 	    {{if $object_class == "CSejour"}}
 	      {{mb_label object=$prescription field="type"}}
 	      {{mb_field object=$prescription field="_type_sejour"}}
@@ -22,8 +22,8 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	    <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
 	      Créer une prescription
 	    </button>
-	    </form>
 	    {{/if}}
+	    </form>
 	  {{else}}
 	  
 	  
