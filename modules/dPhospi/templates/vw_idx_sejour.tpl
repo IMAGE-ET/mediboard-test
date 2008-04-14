@@ -1,5 +1,6 @@
 {{mb_include_script module="dPcompteRendu" script="document"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
+{{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
 
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
@@ -52,7 +53,8 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 function loadViewSejour(sejour_id, praticien_id){
   //loadSejour(sejour_id); 
-  Document.refreshList(sejour_id); 
+  Document.refreshList(sejour_id);
+  loadResultLabo(sejour_id);
   if($('listActesNGAP')){
     loadActesNGAP(sejour_id);
   }
@@ -64,8 +66,18 @@ function loadViewSejour(sejour_id, praticien_id){
   }
 }
 
+function loadResultLabo(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate('Imeds', { waitingText : null });
+}
+
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
+  {{if $isImedsInstalled}}
+  ImedsResultsWatcher.loadResults();
+  {{/if}}
 
   {{if $object->_id}}
     loadViewSejour({{$object->_id}});
@@ -98,6 +110,7 @@ Main.add(function () {
             <form name="selService" action="?m={{$m}}" method="get">
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="sejour_id" value="" />
               <select name="service_id" onChange="submit()">
                 <option value="">&mdash; Choix d'un service</option>
                 {{foreach from=$services item=curr_service}}
@@ -115,38 +128,47 @@ Main.add(function () {
             {{foreach from=$service->_ref_chambres item=curr_chambre}}
             
             {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
-            <tr>
-              <th class="category" colspan="5">
-                {{$curr_chambre->_view}} - {{$curr_lit->_view}}
-              </th> 
-                {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
+              <tr>
+                <th class="category" colspan="6">
+                  {{$curr_chambre->_view}} - {{$curr_lit->_view}}
+                </th>
+              </tr> 
+              {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
               
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr>
-              <td>
-              <a href="#1" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
-                <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
-              </a>
-              </td>
-              <td>
-              <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
-                {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
-              </a>
-              </td>
-              <td>
-                <a style="float: right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
-                  <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
-                </a>
+                <td>
+                  <a href="#1" onclick="popEtatSejour({{$curr_affectation->_ref_sejour->_id}});">
+                    <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
+                  </a>
+                </td>
+                <td class="text">
+                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}});">
+                    {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
+                  </a>
+                  <script language="Javascript" type="text/javascript">
+                    ImedsResultsWatcher.addSejour('{{$curr_affectation->_ref_sejour->_id}}', '{{$curr_affectation->_ref_sejour->_num_dossier}}');
+                  </script>
                 </td>
                 <td>
-                <a style="float: right;" href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
-                  <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
-                </a>                             
-              </td>
-              <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
-              {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
-              </td>
-            </tr>
+                  <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
+                    <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
+                  </a>
+                </td>
+                <td>
+                  <a href="{{$curr_affectation->_ref_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_affectation->_ref_sejour->_ref_patient->_id}}">
+                    <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
+                  </a>                             
+                </td>
+                <td>
+                  <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+                  </div>
+                </td>
+                <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
+                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
+                </td>
+              </tr>
             {{/if}}
             {{/foreach}}
             
@@ -158,7 +180,7 @@ Main.add(function () {
             {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
             <table class="tbl">
               <tr>
-                <th class="title" colspan="5">
+                <th class="title" colspan="6">
                   {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
                 </th>
               </tr>
@@ -175,19 +197,27 @@ Main.add(function () {
 	              <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}})">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
+                <script language="Javascript" type="text/javascript">
+                  ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
+                </script>
 	              </td>
 	              <td>
-	                <a style="float: right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+	                <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
 	                  <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
 	                </a>
 	                </td>
 	                <td>
-	                <a style="float: right;" href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+	                <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
 	                  <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
 	                </a>                             
 	              </td>
+                <td>
+                  <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+                  </div>
+                </td>
 	              <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
-	              {{$curr_sejour->_ref_praticien->_shortview}}
+	                {{$curr_sejour->_ref_praticien->_shortview}}
 	              </td>
               </tr>
               {{/if}}
@@ -205,17 +235,39 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
+        <li><a href="#planSoins">Plan de soins</a></li>
+        
+        <li><a href="#prescriptions">Prescriptions</a></li>
+        
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#Actes">Gestion des actes</a></li>
         {{/if}}
     
+        <li><a href="#Imeds">Résultats labo</a></li>
+    
         <li><a href="#documents">Documents</a></li>
+        
+        <li><a href="#resultsrequest">Résultat requete</a></li>
       </ul>
       <hr class="control_tabs" />
       
       
       <!-- Tabs -->
       <div id="viewSejourHospi" style="display: none;"></div>
+      <div id="planSoins" style="display: none;">
+        <div class="big-info">
+          Affichage du plan de soins en cours de développement
+          <br />
+          Prochainement disponible...
+        </div>
+      </div>
+      <div id="prescriptions" style="display: none;">
+        <div class="big-info">
+          Affichage des presriptions en cours de développement
+          <br />
+          Prochainement disponible...
+        </div>
+      </div>
       
       {{if $app->user_prefs.ccam_sejour == 1 }}
       <div id="Actes" style="display: none;">
@@ -240,7 +292,11 @@ Main.add(function () {
       </div>
       {{/if}}
       
+      <div id="Imeds" style="display: none;"></div>
+      
       <div id="documents" style="display: none;"></div>
+      
+      <div id="resultsrequest" style="display: none;"></div>
     </td>
   </tr>
 </table>
