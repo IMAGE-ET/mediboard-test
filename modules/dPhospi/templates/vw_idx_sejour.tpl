@@ -54,7 +54,9 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 function loadViewSejour(sejour_id, praticien_id){
   //loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
-  loadResultLabo(sejour_id);
+  if($('Imeds')){
+    loadResultLabo(sejour_id);
+  }
   if($('listActesNGAP')){
     loadActesNGAP(sejour_id);
   }
@@ -75,19 +77,20 @@ function loadResultLabo(sejour_id) {
 
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-  {{if $isImedsInstalled}}
-    ImedsResultsWatcher.loadResults();
-  {{/if}}
-
-  {{if $object->_id}}
-    loadViewSejour({{$object->_id}});
-  {{/if}}
 
   /* Tab initialization */
   var tab_sejour = Control.Tabs.create('tab-sejour', true);
   
   {{if $app->user_prefs.ccam_sejour == 1 }}
   var tab_actes = Control.Tabs.create('tab-actes', false);
+  {{/if}}
+
+  {{if $object->_id}}
+    loadViewSejour({{$object->_id}});
+  {{/if}}
+  
+  {{if $isImedsInstalled}}
+    ImedsResultsWatcher.loadResults();
   {{/if}}
 });
 </script>
@@ -243,7 +246,9 @@ Main.add(function () {
           <li><a href="#Actes">Gestion des actes</a></li>
         {{/if}}
     
-        <li><a href="#Imeds">Résultats labo</a></li>
+        {{if $isImedsInstalled}}
+          <li><a href="#Imeds">Résultats labo</a></li>
+        {{/if}}
     
         <li><a href="#documents">Documents</a></li>
       </ul>
@@ -289,8 +294,10 @@ Main.add(function () {
         </table>
       </div>
       {{/if}}
-      
+    
+      {{if $isImedsInstalled}}
       <div id="Imeds" style="display: none;"></div>
+      {{/if}}
       
       <div id="documents" style="display: none;"></div>
     </td>
