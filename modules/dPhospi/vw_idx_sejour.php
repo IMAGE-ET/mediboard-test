@@ -106,16 +106,17 @@ $sejour->loadRefsDocs();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("object"                , $sejour);
-$smarty->assign("mode"                  , $mode);
-$smarty->assign("totalLits"             , $totalLits);
-$smarty->assign("date"                  , $date);
-$smarty->assign("isImedsInstalled"      , CModule::getActive("dPImeds"));
-$smarty->assign("demain"                , mbDate("+ 1 day", $date));
-$smarty->assign("services"              , $services);
-$smarty->assign("service"               , $service);
-$smarty->assign("service_id"            , $service_id);
-$smarty->assign("groupSejourNonAffectes", $groupSejourNonAffectes);
+$smarty->assign("object"                 , $sejour);
+$smarty->assign("mode"                   , $mode);
+$smarty->assign("totalLits"              , $totalLits);
+$smarty->assign("date"                   , $date);
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
+$smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
+$smarty->assign("demain"                 , mbDate("+ 1 day", $date));
+$smarty->assign("services"               , $services);
+$smarty->assign("service"                , $service);
+$smarty->assign("service_id"             , $service_id);
+$smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
 $smarty->display("vw_idx_sejour.tpl");
 
 

@@ -57,10 +57,12 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 function loadViewSejour(sejour_id, praticien_id, prescription_id){
   // Affichage de la prescription
-  if(prescription_id){
-    Prescription.reload(prescription_id);
-  } else {
-    $('produits_elements').innerHTML = "<div class='big-info'>Aucune prescription de séjour</div>";
+  if($('produits_elements')){
+    if(prescription_id){
+      Prescription.reload(prescription_id);
+    } else {
+      $('produits_elements').innerHTML = "<div class='big-info'>Aucune prescription de séjour</div>";
+    }
   }
   
   //loadSejour(sejour_id); 
@@ -259,9 +261,11 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
+        {{if $isPrescriptionInstalled}}
         <li><a href="#planSoins">Plan de soins</a></li>
         
         <li><a href="#produits_elements">Prescriptions</a></li>
+        {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
           <li><a href="#Actes">Gestion des actes</a></li>
@@ -278,6 +282,7 @@ Main.add(function () {
       
       <!-- Tabs -->
       <div id="viewSejourHospi" style="display: none;"></div>
+      {{if $isPrescriptionInstalled}}
       <div id="planSoins" style="display: none;">
         <div class="big-info">
           Affichage du plan de soins en cours de développement
@@ -290,6 +295,7 @@ Main.add(function () {
         Aucune prescription de séjour
         </div>
       </div>
+      {{/if}}
       
       {{if $app->user_prefs.ccam_sejour == 1 }}
       <div id="Actes" style="display: none;">
