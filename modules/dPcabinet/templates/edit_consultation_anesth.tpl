@@ -144,11 +144,11 @@ function pageMain() {
     
     {{if $consult->consultation_id}}
       {{assign var="patient" value=$consult->_ref_patient}}
-      {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}      
-      {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/patient_infos.tpl"}}
       <div id="finishBanner">
       {{include file="../../dPcabinet/templates/inc_finish_banner.tpl"}}
       </div>
+      {{include file="../../dPcabinet/templates/inc_consult_anesth/accord.tpl"}}
     {{/if}}
 
     </td>
