@@ -220,7 +220,19 @@ Main.add(function () {
 	              </a>
 	              </td>
 	              <td>
-	              <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}})">
+	                
+                {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
+	                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+	                
+	                {{if $prescriptions_sejour}}
+	               {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+	              
+	                {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
+                {{else}}
+                  {{assign var=prescription_sejour_id value=""}}
+                {{/if}}
+                
+	              <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}')">
 	                {{$curr_sejour->_ref_patient->_view}}
 	              </a>
                 <script language="Javascript" type="text/javascript">

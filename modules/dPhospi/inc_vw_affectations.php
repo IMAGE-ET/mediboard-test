@@ -154,6 +154,7 @@ function loadSejourNonAffectes($where, $order = null) {
   foreach ($sejourNonAffectes as &$sejour) {
   	$sejour->loadRefPrestation();
   	$sejour->loadNumDossier();
+  	$sejour->loadRefsPrescriptions();
     $sejour->_ref_praticien =& getCachedPraticien($sejour->praticien_id);
     $sejour->_ref_patient   =& getCachedPatient($sejour->patient_id);
     
