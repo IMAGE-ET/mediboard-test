@@ -101,6 +101,12 @@ function reloadListTech() {
       <hr />
       {{if $consult->_ref_consult_anesth->operation_id}}
         {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_operation->_ref_sejour}}
+      {{elseif $consult->_ref_consult_anesth->sejour_id}}
+        {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_sejour}}
+      {{else}}
+        {{assign var=sejour value=""}}
+      {{/if}}
+      {{if $sejour}}
         {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
                   prescription=$sejour->_ref_last_prescription
                   prescriptions=$sejour->_ref_prescriptions 

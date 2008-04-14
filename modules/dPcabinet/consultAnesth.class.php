@@ -16,6 +16,7 @@ class CConsultAnesth extends CMbObject {
   // DB References
   var $consultation_id = null;
   var $operation_id    = null;
+  var $sejour_id       = null;
 
   // DB fields
   var $poid          = null;
@@ -75,6 +76,7 @@ class CConsultAnesth extends CMbObject {
   var $_ref_techniques         = null;
   var $_ref_last_consultanesth = null;
   var $_ref_operation          = null;
+  var $_ref_sejour             = null;
   var $_ref_plageconsult       = null;
 
   function CConsultAnesth() {
@@ -94,6 +96,7 @@ class CConsultAnesth extends CMbObject {
 
     $specs["consultation_id"]  = "notNull ref class|CConsultation cascade";
     $specs["operation_id"]     = "ref class|COperation";
+    $specs["sejour_id"]        = "ref class|CSejour";
 
     // @todo : un type particulier pour le poid et la taille
     $specs["poid"]             = "float pos";
@@ -154,6 +157,7 @@ class CConsultAnesth extends CMbObject {
     //"chir_id"         => "ref|CMediusers",
       "consultation_id" => "ref|CConsultation",
       "operation_id"    => "ref|COperation",
+      "sejour_id"       => "ref|CSejour",
       "conclusion"      => "like"
       );
   }
@@ -223,6 +227,11 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_operation->load($this->operation_id);
   }
 
+  function loadRefSejour() {
+    $this->_ref_sejour = new CSejour;
+    $this->_ref_sejour->load($this->sejour_id);
+  }
+
   function loadRefsFiles(){
     if(!$this->_ref_consultation){
       $this->loadRefConsultation();
@@ -243,11 +252,16 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation->loadRefsExamPossum();
     $this->_ref_consultation->loadRefsExamIgs();
     $this->loadRefOperation();
-    $this->_ref_operation->loadRefSejour();
-    $this->_ref_operation->_ref_sejour->loadRefDossierMedical();
-    $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
-    $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefsAddictions();
-    $this->_ref_operation->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
+    if(!$this->_ref_operation->_id) {
+      $this->loadRefSejour();
+    } else {
+      $this->_ref_operation->loadRefSejour();
+      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
+    }
+    $this->_ref_sejour->loadRefDossierMedical();
+    $this->_ref_sejour->_ref_dossier_medical->loadRefsAntecedents();
+    $this->_ref_sejour->_ref_dossier_medical->loadRefsAddictions();
+    $this->_ref_sejour->_ref_dossier_medical->loadRefstraitements();
      
     foreach ($this->_ref_consultation->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
@@ -259,6 +273,12 @@ class CConsultAnesth extends CMbObject {
     $this->_ref_consultation->loadRefsFwd();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
+    if(!$this->_ref_operation->_id) {
+      $this->loadRefSejour();
+    } else {
+      $this->_ref_operation->loadRefSejour();
+      $this->_ref_sejour =& $this->_ref_operation->_ref_sejour;
+    }
     $this->_ref_operation->loadRefsFwd();
     $this->_date_consult =& $this->_ref_consultation->_date;
     $this->_date_op =& $this->_ref_operation->_datetime;
@@ -340,6 +360,7 @@ class CConsultAnesth extends CMbObject {
     if(!$this->_ref_consultation){
       $this->loadRefConsultation();
     }
+    // Droits sur l'opération
     if($this->operation_id){
       if(!$this->_ref_operation){
         $this->loadRefOperation();
@@ -348,13 +369,23 @@ class CConsultAnesth extends CMbObject {
     }else{
       $canOper = false;
     }
-    return $this->_ref_consultation->getPerm($permType) || $canOper;
+    // Droits sur le séjour
+    if($this->sejour_id){
+      if(!$this->_ref_sejour){
+        $this->loadRefSejour();
+      }
+      $canSej = $this->_ref_sejour->getPerm($permType);
+    }else{
+      $canSej = false;
+    }
+    return $this->_ref_consultation->getPerm($permType) || $canOper || $canSej;
   }
 
   function fillTemplate(&$template) {
     $this->loadRefsFwd();
     $this->_ref_consultation->fillTemplate($template);
     $this->fillLimitedTemplate($template);
+    $this->_ref_sejour->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
   }
 

@@ -112,8 +112,12 @@ function reloadDossierMedicalPatient(){
 
 function reloadDossierMedicalSejour() {
   var antUrl = new Url;
+  var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
+  if(!sejour_id) {
+    sejour_id = document.addOpFrm.sejour_id.value;
+  }
   antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
-  antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
+  antUrl.addParam("sejour_id", sejour_id);
   antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
 }
 

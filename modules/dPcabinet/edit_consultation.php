@@ -121,13 +121,13 @@ if ($consult->_id) {
   $consultAnesth->loadAides($userSel->user_id);
   if($consultAnesth->consultation_anesth_id) {
     $consultAnesth->loadRefs();
-    if($consultAnesth->_ref_operation->operation_id) {
+    if($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM(1);
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
-      $consultAnesth->_ref_operation->_ref_sejour->loadRefDossierMedical();
-      $consultAnesth->_ref_operation->_ref_sejour->loadRefsPrescriptions(); 
-      $consultAnesth->_ref_operation->_ref_sejour->_ref_dossier_medical->updateFormFields();
+      $consultAnesth->_ref_sejour->loadRefDossierMedical();
+      $consultAnesth->_ref_sejour->loadRefsPrescriptions(); 
+      $consultAnesth->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
   

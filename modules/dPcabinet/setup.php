@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.02";
+$config["mod_version"]     = "1.03";
 $config["mod_type"]        = "user";
 
 
@@ -1114,7 +1114,12 @@ class CSetupdPcabinet extends CSetup {
             ADD `complement` ENUM('N','F','U');";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.02";
+    $this->makeRevision("1.02");
+    $sql = "ALTER TABLE `consultation_anesth`
+            ADD `sejour_id` INT(11) UNSIGNED AFTER `operation_id`";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.03";
   }
 }
 ?>
