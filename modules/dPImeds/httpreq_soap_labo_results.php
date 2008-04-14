@@ -42,9 +42,11 @@ $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "listePatients"    => array(),
                        "PWD"              => "");
 
-mbTrace($requestParams);
+mbTrace($requestParams, "Paramètres requete");
 
 $results = $client->GetInfoLabo($requestParams);
+
+mbTrace($results, "Résultats");
 
 /*
 $results = array(
