@@ -45,13 +45,12 @@ if($protocole_id) {
 
 
 // Durée d'une intervention
-$start = $dPconfig["dPplanningOp"]["COperation"]["duree_deb"];
-$stop = $dPconfig["dPplanningOp"]["COperation"]["duree_fin"];
-$step = $dPconfig["dPplanningOp"]["COperation"]["min_intervalle"];
+$start = CAppUI::conf("dPplanningOp COperation duree_deb");
+$stop  = CAppUI::conf("dPplanningOp COperation duree_fin");
+$step  = CAppUI::conf("dPplanningOp COperation min_intervalle");
 
 $hours = range($start, $stop);
 $mins = range(0,59,$step);
-
 
 // Création du template
 $smarty = new CSmartyDP();

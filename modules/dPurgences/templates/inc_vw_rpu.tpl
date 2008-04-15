@@ -39,7 +39,7 @@ function initFields(mode_sortie){
 <table style="width:100%">
   <tr>
     <td>
-      <form name="editRPU" action="?" method="post">
+      <form name="editRPU" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="dosql" value="do_rpu_aed" />
 			  <input type="hidden" name="m" value="dPurgences" />
 			  <input type="hidden" name="del" value="0" />
@@ -62,7 +62,7 @@ function initFields(mode_sortie){
 				  
 				  <tr>
 				    <td colspan="2">
-				      {{mb_field object=$rpu field="diag_infirmier" onchange="submitRPU(this.form);"}}
+				      {{mb_field object=$rpu field="diag_infirmier" onchange="this.form.onsubmit();"}}
 			      </td>
 				  </tr>
 				  
@@ -73,42 +73,49 @@ function initFields(mode_sortie){
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-				    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  
 				  <tr> 
 				    <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true); this.form.onsubmit();"}}</td>
 			    </tr>
 			    
 			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urprov"}}</th>
-				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 			    {{/if}}	  
 
 				  <tr>
 				    <th>{{mb_label object=$rpu field="provenance"}}</th>
-				    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  <tr>   
 				    <th>{{mb_label object=$rpu field="transport"}}</th>
-				    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="transport" defaultOption="&mdash; Type de transport" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="pec_transport"}}</th>
-				    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
+				  <tr>
+				    <th>{{mb_label object=$rpu field="box_id"}}</th>
+				    <td>
+				      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id ajaxSubmit=true listService=$listServicesUrgence}}
+						</td>
+				  </tr>
+
 			  </table>
 			</form>	      
     </td>
     <td>
-      <form name="editRPUMotif" action="?" method="post">
+      <form name="editRPUMotif" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
 			  <input type="hidden" name="dosql" value="do_rpu_aed" />
 			  <input type="hidden" name="m" value="dPurgences" />
 			  <input type="hidden" name="del" value="0" />
@@ -128,7 +135,7 @@ function initFields(mode_sortie){
 					  </tr>
 					  <tr>
 					    <td colspan="2">
-					      {{mb_field object=$rpu field="motif" onchange="submitRPU(this.form);"}}
+					      {{mb_field object=$rpu field="motif" onchange="this.form.onsubmit();"}}
 					    </td>
 				   </tr>
 				 </table>
@@ -142,7 +149,9 @@ function initFields(mode_sortie){
 			   <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
 			  
 				  <table class="form">
+				  
 				  {{if $can->admin}}
+				  <!-- Sortie réelle uniquement pour les administrateurs -->
 				  <tr>
 				    <th>{{mb_label object=$sejour field=sortie_reelle}}</th>
 				    <td class="date">
@@ -150,6 +159,7 @@ function initFields(mode_sortie){
 				    </td> 
 				  </tr>
 				  {{/if}}
+
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$sejour field="mode_sortie"}}</th>
 				    <td>
@@ -165,10 +175,11 @@ function initFields(mode_sortie){
 				      {{/if}}
 		 		    </td>
 				   </tr>
+				   
 		     </table>
 	     </form>
 	     
-	     <form name="editRPUDest" action="?" method="post">
+	     <form name="editRPUDest" action="?" method="post" onsubmit="return onSubmitFormAjax(this);">
 		     <input type="hidden" name="dosql" value="do_rpu_aed" />
 		     <input type="hidden" name="m" value="dPurgences" />
 		     <input type="hidden" name="del" value="0" />
@@ -177,21 +188,20 @@ function initFields(mode_sortie){
 	      <table class="form">
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
-				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 		      {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
-				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash; Type de pathologie" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash; Type de pathologie" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urtrau"}}</th>
-				    <td>{{mb_field object=$rpu field="urtrau" defaultOption="&mdash;Type de soins traumato" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="urtrau" defaultOption="&mdash;Type de soins traumato" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  {{/if}}
-				  
 		      
 				  <tr>
 				    <th class="category" colspan="2">Précisions sur la sortie</th>
@@ -200,17 +210,17 @@ function initFields(mode_sortie){
 			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urmuta"}}</th>
-				    <td>{{mb_field object=$rpu field="urmuta" defaultOption="&mdash; Provenance" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="urmuta" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 			    {{/if}}	  
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="orientation"}}</th>
-				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="submitRPU(this.form);"}}</td>
+				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  <tr> 
 				    <th>{{mb_label object=$rpu field="destination"}}</th>
-				    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="submitRPU(this.form);"}}</td> 
+				    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="this.form.onsubmit();"}}</td> 
 				  </tr>
 				  <tr>   
 				    <td colspan="2" />
@@ -276,8 +286,8 @@ ContraintesRPU.updateProvenance("{{$rpu->mode_entree}}");
 {{/if}}
 
 {{if $sejour->mode_sortie}}
-modeSortieDest("{{$sejour->mode_sortie}}");
-modeSortieOrient("{{$sejour->mode_sortie}}");
+ContraintesRPU.updateDestination("{{$sejour->mode_sortie}}");
+ContraintesRPU.updateOrientation("{{$sejour->mode_sortie}}");
 {{/if}}
 
 </script>

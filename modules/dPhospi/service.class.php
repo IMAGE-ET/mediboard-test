@@ -22,6 +22,7 @@ class CService extends CMbObject {
   // DB Fields
   var $nom = null;
   var $description = null;
+  var $urgence = null;
   
   // Object references
   var $_ref_chambres = null;
@@ -35,10 +36,10 @@ class CService extends CMbObject {
 	}
 
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["chambres"] = "CChambre service_id";
-      $backRefs["valid_repas"] = "CValidationRepas service_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["chambres"] = "CChambre service_id";
+    $backRefs["valid_repas"] = "CValidationRepas service_id";
+    return $backRefs;
   }
 
   function getSpecs() {
@@ -46,7 +47,8 @@ class CService extends CMbObject {
     $specs = array (
       "group_id"    => "notNull ref class|CGroups",
       "nom"         => "notNull str",
-      "description" => "text confidential"
+      "description" => "text",
+      "urgence"     => "bool",
     );
     return array_merge($specsParent, $specs);
   }
@@ -100,6 +102,26 @@ class CService extends CMbObject {
       $validrepas->loadObject($where);
       $validation[$keyType] = $validrepas;
     }
+  }
+  
+  /**
+   * Charge les services d'urgence de l'établissement courant
+   * @return array|CService
+   */
+  static function loadServicesUrgence() {
+    global $g;
+    $service = new CService();
+    $service->group_id = $g;
+    $service->urgence = "1";
+    $services = $service->loadMatchingList();
+    foreach ($services as $_service) {
+      $_service->loadRefsBack();
+      foreach ($_service->_ref_chambres as $_chambre) {
+        $_chambre->loadRefsBack();
+      }
+    }
+    
+    return $services;
   }
 }
 ?>

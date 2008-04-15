@@ -110,6 +110,7 @@ class CSejour extends CCodable {
   // Filter Fields
   var $_date_min	 			= null;
   var $_date_max 				= null;
+  var $_date_entree     = null;
   var $_date_sortie     = null;
   var $_admission 			= null;
   var $_service 				= null;
@@ -182,6 +183,7 @@ class CSejour extends CCodable {
     
     $specs["_entree"]         = "dateTime";
     $specs["_sortie"] 		    = "dateTime";
+    $specs["_date_entree"] 		= "date";
     $specs["_date_sortie"] 		= "date";
     $specs["_date_min"] 		  = "dateTime";
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";

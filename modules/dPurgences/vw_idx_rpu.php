@@ -76,9 +76,20 @@ foreach ($listSejours as &$sejour) {
   }
 }
 
+// Chargement des boxes d'urgences
+$boxes = array();
+foreach (CService::loadServicesUrgence() as $service) {
+  foreach ($service->_ref_chambres as $chambre) {
+    foreach ($chambre->_ref_lits as $lit) {
+      $boxes[$lit->_id] = $lit;
+    }
+  }
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("boxes", $boxes);
 $smarty->assign("tps_attente", $tps_attente);
 $smarty->assign("order_col", $order_col);
 $smarty->assign("order_way", $order_way);

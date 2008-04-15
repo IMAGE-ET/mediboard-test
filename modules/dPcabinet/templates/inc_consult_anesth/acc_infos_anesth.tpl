@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 function submitTech(oForm) {
   if(oForm.technique){
     var technique = oForm.technique.value;
@@ -11,10 +12,10 @@ function submitTech(oForm) {
 }
 
 function reloadListTech() {
-  var UrllistTech= new Url;
+  var UrllistTech = new Url;
   UrllistTech.setModuleAction("dPcabinet", "httpreq_vw_list_techniques_comp");
   UrllistTech.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-  UrllistTech.requestUpdate('listTech', { waitingText : null});
+  UrllistTech.requestUpdate('listTech', { waitingText : null} );
 }
 </script>
 

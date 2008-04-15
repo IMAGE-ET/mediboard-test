@@ -78,7 +78,7 @@ function pageMain() {
     </td>
     
     <th>{{mb_label object=$rpu field="mode_entree"}}</th>
-    <td>{{mb_field object=$rpu field="mode_entree" register=true defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true)"}}</td>
+    <td>{{mb_field object=$rpu field="mode_entree" defaultOption="&mdash; Mode d'entrée" onchange="ContraintesRPU.updateProvenance(this.value, true)"}}</td>
   </tr>
   
   <tr>
@@ -119,14 +119,21 @@ function pageMain() {
   </tr>
   
   <tr>
-  {{if $can->edit}}
+	  {{if $can->edit}}
     <th>{{mb_label object=$rpu field="ccmu"}}</th>
     <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence"}}</td>
-  {{/if}}
+	  {{/if}}
     <th>{{mb_label object=$rpu field="pec_transport"}}</th>
     <td>{{mb_field object=$rpu field="pec_transport" defaultOption="&mdash; Prise en charge"}}</td>
   </tr>
   
+  <tr>
+    <th>{{mb_label object=$rpu field="box_id"}}</th>
+    <td>
+      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id listService=$listServicesUrgence}}
+		</td>
+  </tr>
+
   {{if $can->edit}}
   <tr>
     <th>{{mb_label object=$rpu field="diag_infirmier"}} <br />

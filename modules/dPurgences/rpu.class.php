@@ -30,9 +30,10 @@ class CRPU extends CMbObject {
   var $radio_debut     = null;
   var $radio_fin       = null;
   var $mutation_sejour_id = null;
+  var $box_id          = null;
   
   // Legacy Sherpa fields
-  var $type_pathologie = null; // $urtype
+  var $type_pathologie = null; // Should be $urtype
   var $urprov = null;
   var $urmuta = null;
   var $urtrau = null;
@@ -90,7 +91,8 @@ class CRPU extends CMbObject {
       "radio_debut"     => "dateTime",
       "radio_fin"       => "dateTime",
       "mutation_sejour_id" => "ref class|CSejour",
-
+      "box_id"          => "ref class|CLit",
+      
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
       "_patient_id"     => "notNull ref class|CPatient",
@@ -202,7 +204,6 @@ if(CModule::getActive("sherpa")) {
     // Affectation du sejour_id au RPU
     $this->sejour_id = $sejour->_id;
   }
-  
   
   function store() {
     // Bind Sejour

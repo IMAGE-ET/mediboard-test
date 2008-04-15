@@ -63,10 +63,6 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 // Use single quotes or fails ?!!
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 
-
-
-
-
 function cancelTarif(action) {
   var oForm = document.tarifFrm;
   
@@ -291,10 +287,10 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 	</tr>
 
   {{if !$noReglement}}
-  {{assign var=gestionFSE value=$app->user_prefs.GestionFSE}}
+  {{mb_ternary var=gestionFSE test=$consult->sejour_id value=0 other=$app->user_prefs.GestionFSE}}
 	<tr>
 	  {{if $gestionFSE}}
-    <th class="category">Feuille de Soins</th>
+    <th class="category">{{tr}}CLmFSE{{/tr}}</th>
 	  {{/if}}
     <th {{if !$gestionFSE}}colspan="2"{{/if}} class="category">Règlement</th>
   </tr>

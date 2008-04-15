@@ -78,7 +78,12 @@ function pageMain() {
         {{if $rpu->ccmu}}
           {{tr}}CRPU.ccmu.{{$rpu->ccmu}}{{/tr}}
         {{/if}}
+      {{if $rpu->box_id}}
       </a>
+
+      {{assign var=rpu_box_id value=$rpu->box_id}}
+      <strong>{{$boxes.$rpu_box_id->_view}}</strong>
+      {{/if}}
     </td>
 
     <td class="text" style="background-color: {{$background}};">
@@ -90,7 +95,7 @@ function pageMain() {
         {{$patient->_view}}
         </strong>
         {{if $patient->_IPP}}
-          [{{$patient->_IPP}}]
+          <br />[{{$patient->_IPP}}]
         {{/if}}
       </a>
     </td>
@@ -103,14 +108,22 @@ function pageMain() {
       {{/if}}
 
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
+        {{if $curr_sejour->_date_entree_prevue == $date}}
+        {{$curr_sejour->_entree|date_format:"%Hh%M"}}
+        {{else}}
         {{$curr_sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}
+        {{/if}}
         {{if $curr_sejour->_num_dossier}}
           [{{$curr_sejour->_num_dossier}}]
         {{/if}}
-        {{if $rpu->radio_debut && !$rpu->radio_fin}}
-        <br />en radiologie
-        {{/if}}
       </a>
+      {{if $rpu->radio_debut && !$rpu->radio_fin}}
+      <strong>En radiologie</strong>
+      {{/if}}
+      {{if $rpu->radio_debut && $rpu->radio_fin}}
+      <strong>Retour de radiologie</strong>
+      {{/if}}
+      
     </td>
     
     {{if $consult->_id}}

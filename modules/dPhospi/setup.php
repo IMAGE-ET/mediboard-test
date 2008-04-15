@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.22";
+$config["mod_version"]     = "0.23";
 $config["mod_type"]        = "user";
 
 
@@ -150,8 +150,13 @@ class CSetupdPhospi extends CSetup {
     $this->makeRevision("0.21");
     $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` ) VALUES ('0', 'ccam_sejour', '0');";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.22");
+    $sql = "ALTER TABLE `service`
+    				ADD `urgence` ENUM('0','1');";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.22";
+    $this->mod_version = "0.23";
   }
 }
 ?>

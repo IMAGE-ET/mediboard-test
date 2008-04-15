@@ -186,6 +186,7 @@ function pageMain() {
             </select>
           </td>
         </tr>
+
         <tr>
           <th>
             {{mb_label object=$protocole field="_hour_op"}}
@@ -203,6 +204,7 @@ function pageMain() {
             </select> mn
           </td>
         </tr>
+
         <tr>
           <th>
             {{mb_label object=$protocole field="codes_ccam"}}
@@ -224,6 +226,7 @@ function pageMain() {
           </script>          
           </td>
         </tr>
+
         <tr>
           <th>
             Liste des codes CCAM:
@@ -232,6 +235,7 @@ function pageMain() {
           <td colspan="2" class="text" id="listCodesCcam">
           </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$protocole field="libelle"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="libelle" size="50"}}</td>
@@ -261,11 +265,12 @@ function pageMain() {
         </tr>
       </table>
     </td>
+    
     <td>
       <table class="form">
         <tr>
          <th class="category" colspan="3">Informations concernant le séjour</th>
-       </tr>
+        </tr>
         <tr>
           <th>{{mb_label object=$protocole field="DP"}}</th>
           <td>{{mb_field object=$protocole field="DP" size="10"}}</td>
@@ -279,22 +284,25 @@ function pageMain() {
             }
           </script>
           </td>
-          
         </tr>
+
         <tr>
           <th>{{mb_label object=$protocole field="duree_hospi"}}</th>
           <td colspan="2">{{mb_field object=$protocole field="duree_hospi" size="2"}} nuits</td>
         </tr>
+
         <tr>
           <th>{{mb_label object=$protocole field="type"}}</th>
           <td colspan="2">
             {{mb_field object=$protocole field="type"}}
           </td>
         </tr>
+
         <tr>
           <td>{{mb_label object=$protocole field="convalescence"}}</td>
           <td colspan="2">{{mb_label object=$protocole field="rques_sejour"}}</td>
         </tr>
+
         <tr>
           <td>{{mb_field object=$protocole field="convalescence" rows="3"}}</td>
           <td colspan="2">{{mb_field object=$protocole field="rques_sejour" rows="3"}}</td>
@@ -309,7 +317,7 @@ function pageMain() {
         <tr>
           <td class="button">
           {{if $protocole->protocole_id}}
-            <button class="submit" type="button" onclick="copier()" />Dupliquer</button>
+            <button class="submit" type="button" onclick="copier()">Dupliquer</button>
             <button class="modify" type="submit">Modifier</button>
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le {{$protocole->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer

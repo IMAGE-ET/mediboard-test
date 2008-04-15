@@ -71,8 +71,9 @@ class CProtocole extends CMbObject {
       "septique"        => "bool",
       "codes_ccam"      => "str",
       "temp_operation"  => "time",
-      "hour_op" => "", 
-      "min_op" => "", 
+      
+      "_hour_op" => "", 
+      "_min_op" => "", 
     );
     return array_merge($specsParent, $specs);
   }

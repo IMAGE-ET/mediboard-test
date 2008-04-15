@@ -56,13 +56,13 @@ Main.add(function () {
   </ul>
   <hr class="control_tabs"/>
   
-  <div id="ccam">
+  <div id="ccam" style="display: none;">
     {{assign var="module" value="dPcabinet"}}
     {{assign var="subject" value=$consult}}
     {{include file="../../dPsalleOp/templates/inc_gestion_ccam.tpl"}}
   </div>
   
-  <div id="ngap">
+  <div id="ngap" style="display: none;">
     <div id="listActesNGAP">
       {{assign var="_object_class" value="CConsultation"}}
       {{include file="../../dPcabinet/templates/inc_acte_ngap.tpl"}}
@@ -70,7 +70,7 @@ Main.add(function () {
   </div>
   
   {{if $consult->sejour_id}}
-  <div id="cim">
+  <div id="cim" style="display: none;">
     {{assign var="sejour" value=$consult->_ref_sejour}}
     {{include file="../../dPsalleOp/templates/inc_diagnostic_principal.tpl" modeDAS="1"}}
   </div>

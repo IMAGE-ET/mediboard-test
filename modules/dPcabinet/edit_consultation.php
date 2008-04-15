@@ -248,9 +248,10 @@ if ($consult->patient_id){
 $consult->loadRefsActesNGAP();
 
 $listEtab = array();
+$listServicesUrgence = array();
 
 // Chargement du sejour dans le cas d'une urgence
-if($consult->_id && $consult->sejour_id){
+if ($consult->_id && $consult->sejour_id){
   $consult->loadRefSejour();
   $consult->_ref_sejour->loadExtDiagnostics();
   $consult->_ref_sejour->loadRefDossierMedical();
@@ -261,6 +262,9 @@ if($consult->_id && $consult->sejour_id){
   $order = "nom";
   $etab = new CEtabExterne();
   $listEtab = $etab->loadList(null, $order);
+  
+  // Chargement des boxes d'urgences
+  $listServicesUrgence = CService::loadServicesUrgence();
 }
 
 // Initialisation d'un acte NGAP
@@ -281,16 +285,18 @@ $contrainteDestination["transfert"] = array("", 1, 2, 3, 4);
 $contrainteDestination["normal"] = array("", 6, 7);
 
 // Contraintes sur le mode de sortie / orientation
-//$contrainteOrientation[6] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("contrainteProvenance"  , $contrainteProvenance  );
-$smarty->assign("contrainteDestination" , $contrainteDestination );
-$smarty->assign("contrainteOrientation" , $contrainteOrientation );
-$smarty->assign("listEtab"       , $listEtab);
+$smarty->assign("contrainteProvenance" , $contrainteProvenance );
+$smarty->assign("contrainteDestination", $contrainteDestination);
+$smarty->assign("contrainteOrientation", $contrainteOrientation);
+
+$smarty->assign("listEtab"           , $listEtab           );
+$smarty->assign("listServicesUrgence", $listServicesUrgence);
+
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);
 $smarty->assign("banques"        , $banques);
