@@ -19,6 +19,7 @@
     {{/foreach}}
   </tr>
 </table>
-{{/if}}
 
 <div class="content">
+{{/if}}
+

@@ -44,6 +44,8 @@
   </a>
 </div>
 {{/if}}
+
+</div>
 </td>
 </tr>
 </table>
