@@ -47,12 +47,14 @@
      Prescription
    </button>
    
+   
+   
+   {{if !$mode_protocole}}
    <!-- Impression de la prescription -->
    <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
      Ordonnance
    </button>
    
-   {{if !$mode_protocole}}
    <!-- Affichage du recapitulatif des alertes -->
    <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
      Alertes

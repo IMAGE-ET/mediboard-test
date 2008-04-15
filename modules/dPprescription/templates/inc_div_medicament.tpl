@@ -236,7 +236,7 @@ transfertTraitement = function(line_id){
   <br />
   <div id="add_line_comment_med" style="display: none">
    <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
-   <form name="addLineCommentMed" method="post" action="">
+   <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
       <input type="hidden" name="del" value="0" />
@@ -245,7 +245,7 @@ transfertTraitement = function(line_id){
       <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
       <input type="hidden" name="chapitre" value="medicament" />
       <input name="commentaire" type="text" size="98" />
-      <button class="submit notext" type="button" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">Ajouter</button>
+      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
     </form>
  </div> 
 
