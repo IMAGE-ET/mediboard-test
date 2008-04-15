@@ -66,7 +66,7 @@
       <!-- AFfichage du praticien -->
       
       <div style="float: right">
-      {{if $mode_pharma}}
+      {{if $mode_pharma && !$curr_line->_traitement}}
         {{$curr_line->_ref_praticien->_view}}
         {{if $curr_line->signee}}
            <img src="images/icons/tick-dPrepas.png" alt="Ligne signée par le praticien" title="Ligne signée par le praticien" />
@@ -75,39 +75,45 @@
         {{/if}}
       {{/if}}
       
+      <!-- Mode prescription -->
       {{if !$mode_pharma}}
       <!-- Signature du praticien -->
       {{if !$curr_line->_traitement}}
-      {{if $curr_line->_ref_praticien->_id}}
-        {{$curr_line->_ref_praticien->_view}}
-        {{if $prescription->object_id}}  
-	        {{if $curr_line->signee}}
-	          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
-	            <form name="delValidation-{{$curr_line->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-	              <input type="hidden" name="signee" value="0" />
-	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Annuler la validation</button>
-	            </form>
-	          {{/if}}
-	        {{else}}
-	          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
-	            <form name="validation-{{$curr_line->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
-	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg');">Signer</button>
-	            </form>
-	          {{/if}}
-	        {{/if}}
+	      {{if $curr_line->_ref_praticien->_id}}
+	        {{$curr_line->_ref_praticien->_view}}
+	        {{if $prescription->object_id}}  
+					   {{if !$curr_line->valide_pharma}}
+						        {{if $curr_line->signee}}
+						          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
+						            <form name="delValidation-{{$curr_line->_id}}" action="" method="post">
+						              <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
+						              <input type="hidden" name="m" value="dPprescription" />
+						              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+						              <input type="hidden" name="signee" value="0" />
+						              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Annuler la validation</button>
+						            </form>
+						          {{/if}}
+						        {{else}}
+						          {{if $curr_line->_ref_praticien->_id == $app->user_id}}
+						            <form name="validation-{{$curr_line->_id}}" action="" method="post">
+						              <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
+						              <input type="hidden" name="m" value="dPprescription" />
+						              <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+						              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg');">Signer</button>
+						            </form>
+						          {{/if}}
+						        {{/if}}
+						    {{else}}
+						    (Validé par le pharmacien)
+						    {{/if}}
+		      {{/if}}
 	      {{/if}}
-      {{/if}}
       {{else}}
-      Médecin traitant
+        Médecin traitant
       {{/if}}
+      
       {{else}}
-      <!-- Signature du pharmacien -->
+      <!-- mode pharmacie -->
       {{if $prescription->object_id}}  
         {{if !$curr_line->valide_pharma && !$curr_line->_traitement}}
         <form action="?" method="post" name="editLineAccordPraticien-{{$curr_line->_id}}">
