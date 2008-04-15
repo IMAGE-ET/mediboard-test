@@ -7,7 +7,7 @@
         </div>
       {{/if}}
      
-      {{if !$mode_protocole && !$dialog}}
+      {{if !$mode_protocole && !$dialog && !$mode_pharma}}
       <button type="button" class="cancel" onclick="Prescription.close('{{$prescription->object_id}}','{{$prescription->object_class}}')" style="float: left">
         Fermer 
       </button>
@@ -70,7 +70,7 @@
    </td>
    
        
-  {{if !$mode_protocole}}
+  {{if !$mode_protocole && !$mode_pharma}}
    <td style="text-align: right">
       Protocoles de {{$praticien->_view}}
       <!-- Formulaire de selection protocole -->
