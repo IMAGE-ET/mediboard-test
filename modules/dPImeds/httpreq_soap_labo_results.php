@@ -48,18 +48,21 @@ $results = $client->GetInfoLabo($requestParams);
 
 /*
 $results = array(
-  "listeInfoLabo" => array(
-    1 => array(
-      "NumSejour"       => "12345",
-      "IsLabo"          => 1,
-      "IsLaboEntreDate" => 1,
-      "DateLaboDernier" => $date_debut
-    ),
-    2 => array(
-      "NumSejour"       => "67890",
-      "IsLabo"          => 1,
-      "IsLaboEntreDate" => 1,
-      "DateLaboDernier" => $date_debut
+  "GetInfoLaboResult" => 2,
+  "listeInfoLabo"     => array(
+    "InfoLabo" => array(
+      1 => array(
+        "NumSejour"       => "12345",
+        "IsLabo"          => 1,
+        "IsLaboEntreDate" => 1,
+        "DateLaboDernier" => $date_debut
+      ),
+      2 => array(
+        "NumSejour"       => "67890",
+        "IsLabo"          => 1,
+        "IsLaboEntreDate" => 1,
+        "DateLaboDernier" => $date_debut
+      ),
     ),
   ),
   "ex" => 0

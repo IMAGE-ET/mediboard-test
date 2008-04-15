@@ -1,6 +1,3 @@
-Code d'erreur : {{$results.ex}}<br />
-{{$results.listeInfoLabo|@count}} Résultat(s) reçu(s)
-
 <script language="Javascript" type="text/javascript">
   ImedsResultsWatcher.setResults({{$results|@JSON}});
 </script>

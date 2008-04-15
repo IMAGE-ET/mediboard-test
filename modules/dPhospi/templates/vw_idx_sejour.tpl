@@ -190,6 +190,9 @@ Main.add(function () {
                   <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
+                  <div id="labo_hot_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+                  </div>
                 </td>
                 <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
                   {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
@@ -252,6 +255,9 @@ Main.add(function () {
                 <td>
                   <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+                  </div>
+                  <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none">
+                    <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
                 </td>
 	              <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">

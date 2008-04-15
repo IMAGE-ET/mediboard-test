@@ -19,12 +19,19 @@ var ImedsResultsWatcher = {
     url.requestUpdate("systemMsg", { waitingText: null } );
   },
   setResults: function(results) {
-    this.results = results.listeInfoLabo;
+    if(results.GetInfoLaboResult > 1) {
+      this.results = results.listeInfoLabo.InfoLabo;
+    }
+    else {
+      this.results = {0: results.listeInfoLabo.InfoLabo};
+    }
     $H(this.results).each(function(result) { ImedsResultsWatcher.showResult(result.value) });
   },
   showResult: function(result) {
     sejour_id = this.listIdSejours[result.NumSejour];
-    if(result.IsLaboEntreDate && sejour_id) {
+    if(result.IsLaboEntreDate && sejour_id && $("labo_hot_for_"+sejour_id)) {
+      $("labo_hot_for_"+sejour_id).show();
+    }else if(result.IsLabo && sejour_id && $("labo_for_"+sejour_id)) {
       $("labo_for_"+sejour_id).show();
     }
   }

@@ -129,6 +129,11 @@ Main.add(function () {
       <img align="top" src="images/icons/labo.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
     </a>
     </div>
+    <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none; float: left;">
+    <a href="#" onclick="view_labo_sejour({{$curr_sejour->_id}})">
+      <img align="top" src="images/icons/labo_hot.png" title="Résultats de laboratoire" alt="Résultats de laboratoire"  />
+    </a>
+    </div>
     {{/if}}
     <a href="#" onclick="setObject( {
       objClass: 'CSejour', 
