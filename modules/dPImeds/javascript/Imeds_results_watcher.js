@@ -22,7 +22,7 @@ var ImedsResultsWatcher = {
     if(results.GetInfoLaboResult > 1) {
       this.results = results.listeInfoLabo.InfoLabo;
     }
-    else {
+    else if(this.results.listeInfoLabo) {
       this.results = {0: results.listeInfoLabo.InfoLabo};
     }
     $H(this.results).each(function(result) { ImedsResultsWatcher.showResult(result.value) });
