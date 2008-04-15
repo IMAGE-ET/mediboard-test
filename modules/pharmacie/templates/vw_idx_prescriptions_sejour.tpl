@@ -27,7 +27,9 @@ function pageMain(){
 					    <select name="praticien_id">
 						    <option value="">&mdash; Praticien</option>
 						    {{foreach from=$praticiens item=_praticien}}
-						    <option value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}}>{{$_praticien->_view}}/{{$_praticien->_id}}</option>
+						    <option class="mediuser" 
+	                      style="border-color: #{{$_praticien->_ref_function->color}};" 
+	                      value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}}>{{$_praticien->_view}}</option>
 						    {{/foreach}}
 						  </select>
 		        </td>
