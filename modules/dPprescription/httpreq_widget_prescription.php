@@ -23,9 +23,17 @@ if ($prescription->_id){
 	$prescription->loadRefsLinesMedComments();  
 	$prescription->loadRefsLinesElementsComments();
 
+	$prescription->loadRefObject();
+  $prescription->_ref_object->loadRefsPrescriptions();
+  		
+	if($prescription->object_class == "CConsultation"){
+	  foreach($prescription->_ref_object->_ref_prescriptions as $curr_prescription){
+	  	$curr_prescription->loadRefsLinesMedComments();
+	  	$curr_prescription->loadRefsLinesElementsComments();	
+	  }
+	}
+	
 	if($prescription->object_class == "CSejour"){
-  	$prescription->loadRefObject();
-  	$prescription->_ref_object->loadRefsPrescriptions();
   	foreach($prescription->_ref_object->_ref_prescriptions as $catPrescription){
   		foreach($catPrescription as &$_prescription){
   	    $_prescription->loadRefsLinesMedComments();
@@ -42,9 +50,7 @@ $smarty->assign("object_id", $prescription->object_id);
 $smarty->assign("object_class", $prescription->object_class);
 $smarty->assign("praticien_id", $prescription->praticien_id);
 $smarty->assign("prescription", $prescription);
-if($prescription->object_class == "CSejour"){
-	$smarty->assign("prescriptions", $prescription->_ref_object->_ref_prescriptions);
-}
+$smarty->assign("prescriptions", $prescription->_ref_object->_ref_prescriptions);
 
 $smarty->display("inc_widget_prescription.tpl");
 

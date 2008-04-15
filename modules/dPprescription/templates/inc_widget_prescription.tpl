@@ -10,8 +10,8 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 {{if $prescription}}
 	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
-	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 	  {{if !$prescription->_id}}
+	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 	    {{if $object_class == "CSejour"}}
 	      {{mb_label object=$prescription field="type"}}
 	      {{mb_field object=$prescription field="_type_sejour"}}
@@ -23,9 +23,8 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	      Créer une prescription
 	    </button>
 	    {{/if}}
-	    </form>
+	  </form>
 	  {{else}}
-	  
 	  
 	  <table class="tbl">
       <tr>
@@ -44,6 +43,10 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	    <!-- Affichage de la prescription de consultation -->
 	    {{if $prescription->object_class == "CConsultation"}}
 	     {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl"}}
+	     {{if array_key_exists('traitement', $prescriptions)}}
+	       {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl" 
+	                 prescription = $prescriptions.traitement}}
+	     {{/if}}
 	    {{else}}
 	      <!-- Affichage des prescriptions de sejour -->
 	      {{foreach from=$prescriptions item=catPrescription}}
