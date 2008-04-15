@@ -3,6 +3,7 @@
 <tbody class="hoverable">
     <tr>
       <td style="width: 25px">
+        {{if !$_line_comment->signee}}
         <form name="delLineComment{{$element}}-{{$_line_comment->_id}}" action="" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -12,6 +13,7 @@
             {{tr}}Delete{{/tr}}
           </button>
         </form>
+        {{/if}}
       </td>
       <td colspan="3">
         {{$_line_comment->commentaire}}

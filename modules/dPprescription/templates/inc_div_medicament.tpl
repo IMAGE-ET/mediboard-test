@@ -166,6 +166,8 @@ transfertTraitement = function(line_id){
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
+  <!-- Date de debut -->
+  <input type="hidden" name="debut" value="{{$today}}" />
   
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
@@ -264,6 +266,7 @@ transfertTraitement = function(line_id){
    <tbody class="hoverable">
     <tr>
       <td>
+        {{if !$_line_comment->signee}}
         <form name="delLineCommentMed-{{$_line_comment->_id}}" action="" method="post">
           <input type="hidden" name="m" value="dPprescription" />
           <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
@@ -273,6 +276,7 @@ transfertTraitement = function(line_id){
             {{tr}}Delete{{/tr}}
           </button>
         </form>
+        {{/if}}
       </td>
       <td>
         {{$_line_comment->commentaire}}

@@ -51,6 +51,7 @@ $contexteType["CSejour"][] = "sejour";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("today", mbDate());
 $smarty->assign("contexteType", $contexteType);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("praticiens" , $praticiens);

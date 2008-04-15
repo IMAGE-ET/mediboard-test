@@ -100,7 +100,6 @@ if ($prescription->_id) {
   
   foreach ($prescription->_ref_prescription_lines as &$line) {
     // Chargement de la posologie
-    //$line->_ref_produit->loadRefPosologies();
     // Ajout des produits pour les alertes
     $allergies->addProduit($line->code_cip);
     $interactions->addProduit($line->code_cip);
@@ -171,6 +170,7 @@ $contexteType["CSejour"][] = "traitement";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("today", mbDate());
 $smarty->assign("refresh_pharma", "0");
 $smarty->assign("mode_pharma", "0");
 $smarty->assign("contexteType"       , $contexteType);

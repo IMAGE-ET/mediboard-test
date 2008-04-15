@@ -46,6 +46,7 @@ if ($prescription->_id){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("today", mbDate());
 $smarty->assign("object_id", $prescription->object_id);
 $smarty->assign("object_class", $prescription->object_class);
 $smarty->assign("praticien_id", $prescription->praticien_id);

@@ -100,6 +100,7 @@ if(!$filter_sejour->_date_min || !$filter_sejour->_date_max){
 // Smarty template
 $smarty = new CSmartyDP();
 
+$smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", "1");
 $smarty->assign("prescription", new CPrescription());
 $smarty->assign("filter_sejour", $filter_sejour);

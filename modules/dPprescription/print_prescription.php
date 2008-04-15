@@ -46,6 +46,17 @@ $executants = $executant->loadList();
 $prescription->loadRefsLinesMedComments();
 $prescription->loadRefsLinesElementsComments();
 
+$traitements_arretes = array();
+
+$prescription->_ref_object->loadRefPrescriptionTraitement();
+	$prescription->_ref_object->_ref_prescription_traitement->loadRefsLines();
+	foreach($prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $line_med){
+		if($line_med->date_arret){
+			$traitements_arretes[] = $line_med;
+		}
+	}
+
+
 $medicament = 0;
 $comment = 0;
 
@@ -129,9 +140,11 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
   }
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("traitements_arretes", $traitements_arretes);
 $smarty->assign("ordonnance"   , $ordonnance);
 $smarty->assign("date"         , mbDate());
 $smarty->assign("etablissement", $etablissement);

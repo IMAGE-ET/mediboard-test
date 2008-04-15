@@ -1,6 +1,6 @@
 <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
   <tr>
-    <th colspan="5" id="th_line_{{$curr_line->_id}}" {{if $curr_line->date_arret}}style="background-color:#aaa";{{/if}}{{if $curr_line->_traitement == 1}}style="background-color:#7c7"{{/if}}>
+    <th colspan="5" id="th_line_{{$curr_line->_id}}" style="{{if $curr_line->_traitement}}background-color:#7c7{{elseif $curr_line->date_arret}}background-color:#aaa{{/if}}">
     <div style="float:left">
     {{if !$curr_line->_traitement}}
        {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
@@ -394,8 +394,9 @@
       {{/if}}
       </td>
       <td colspan="4">
+     
       {{if !$curr_line->_traitement}}
-        <div style="float: right">
+        <div style="float: right;">
         <!-- Creation d'une ligne avec des dates contiguës -->
         <form name="addLineCont-{{$curr_line->_id}}" method="post" action="">
           <input type="hidden" name="m" value="dPprescription" />
@@ -407,8 +408,18 @@
         </form>
         </div>
         {{/if}}
+        
+         
+      {{if $curr_line->_traitement && $prescription->object_id}}
+        <div id="stop_{{$curr_line->_id}}" style="float: right">
+          {{include file="inc_vw_stop_medicament.tpl"}}
+        </div>
+      {{/if}}
+     
+     
       {{mb_label object=$curr_line field="commentaire"}}
       {{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
+    
       <form name="addCommentMedicament-{{$curr_line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
         <input type="hidden" name="m" value="dPprescription" />
         <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
@@ -419,6 +430,8 @@
       {{else}}
         {{$curr_line->commentaire}}
       {{/if}}
+     
       </td>
+      
     </tr>
 </tbody>

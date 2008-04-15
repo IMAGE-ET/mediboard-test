@@ -3,9 +3,11 @@
 <tbody class="hoverable">
   <tr>
     <td  style="width: 25px">
+      {{if !$_line_element->signee}}
       <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
+      {{/if}}
     </td>
     <td colspan="2">
      {{$_line_element->_ref_element_prescription->_view}}

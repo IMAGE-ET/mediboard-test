@@ -158,6 +158,17 @@ div#goUp {
 		  </li>
 	  {{/foreach}}
     </ul>
+    
+    {{if $traitements_arretes|@count && !$ordonnance}}
+    <br />
+    <h1>Traitements arrêtés</h1>
+    <ul>
+    {{foreach from=$traitements_arretes item=line_traitement}}
+      <li>{{$line_traitement->_view}} (le {{$line_traitement->date_arret|date_format:"%d/%m/%Y"}})</li>
+    {{/foreach}}
+    </ul>
+    {{/if}}
+    
 <!-- Affichage en mode normal -->
 {{else}}
   <h1>Médicaments</h1>
@@ -172,7 +183,18 @@ div#goUp {
 		    </li>
 	    {{/foreach}}
     </ul>
- 
+    
+    
+    {{if $traitements_arretes|@count && !$ordonnance}}
+    <br />
+    <h1>Traitements arrêtés</h1>
+    <ul>
+    {{foreach from=$traitements_arretes item=line_traitement}}
+      <li>{{$line_traitement->_view}} (le {{$line_traitement->date_arret|date_format:"%d/%m/%Y"}})</li>
+    {{/foreach}}
+    </ul>
+    {{/if}}
+    
 {{/if}}
  </div>
 {{/if}}
