@@ -59,9 +59,11 @@ if(!$prescription->_id) {
 if($prescription->_id){
 	// Chargement des medicaments et commentaire
   $prescription->loadRefsLinesMedComments();
+  /*
   foreach($prescription->_ref_lines_med_comments["med"] as &$med){
   	$med->_ref_produit->loadRefPosologies();
   }
+*/
   // Chargement des elements et commentaires
   $prescription->loadRefsLinesElementsComments();
 }
@@ -86,7 +88,7 @@ if($prescription->object_id) {
   $profil->setPatient($prescription->_ref_object->_ref_patient);
   foreach($prescription->_ref_prescription_lines as &$line) {
     // Chargement de la posologie
-    $line->_ref_produit->loadRefPosologies();
+    //$line->_ref_produit->loadRefPosologies();
     // Ajout des produits pour les alertes
     $allergies->addProduit($line->code_cip);
     $interactions->addProduit($line->code_cip);
@@ -131,7 +133,7 @@ if($prescription->_id){
 	  	$line->loadRefLogDateArret();
 	  	//$line->loadRefLogSignee();
 	  	$line->loadRefPraticien();
-	  	$line->_ref_produit->loadRefPosologies();
+	  	//$line->_ref_produit->loadRefPosologies();
 		}
 	}
 }
