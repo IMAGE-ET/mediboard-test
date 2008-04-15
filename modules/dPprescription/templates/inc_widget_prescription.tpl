@@ -14,7 +14,14 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 	    {{if $object_class == "CSejour"}}
 	      {{mb_label object=$prescription field="type"}}
-	      {{mb_field object=$prescription field="_type_sejour"}}
+	      
+	      {{*mb_field object=$prescription field="_type_sejour"*}}
+	      <select name="_type_sejour">
+	        <option value="pre_admission">Pré-admission</option>
+	        <option value="sejour">Séjour</option>
+	        <option value="sortie">Sortie</option>
+	      </select>
+	      
 	      <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
 	        Créer une prescription
 	      </button>

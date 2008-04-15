@@ -131,6 +131,7 @@ if($prescription->_id){
 	  	$line->loadRefLogDateArret();
 	  	//$line->loadRefLogSignee();
 	  	$line->loadRefPraticien();
+	  	$line->_ref_produit->loadRefPosologies();
 		}
 	}
 }
