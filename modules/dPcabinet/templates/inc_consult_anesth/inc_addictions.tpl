@@ -77,7 +77,7 @@ function onSubmitAddiction(oForm) {
       {{mb_field object=$addiction field=type defaultOption="&mdash; Aucun" onchange="putHelperContent(this,'addiction')"}}
     </td>
 		<td rowspan="2">
-      <textarea name="addiction" onblur="return this.form.onsubmit();}"></textarea>
+      <textarea name="addiction" onblur="return this.form.onsubmit();"></textarea>
     </td>
 		
   </tr>
