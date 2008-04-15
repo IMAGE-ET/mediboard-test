@@ -53,8 +53,18 @@ calculDateArret = function(oForm, traitement){
 // Preparation du formulaire
 prepareForm(document.forms['stopMedicament-{{$curr_line->_id}}']);
 
+var todayDate = new Date();
+var dDate = todayDate.toDATE();
+
+var dates = {  
+  limit: {
+    start: dDate,
+    stop: null
+  }
+}
+
 Main.add( function(){
-    regFieldCalendar('stopMedicament-{{$curr_line->_id}}', "date_arret");
+  Calendar.regField('stopMedicament-{{$curr_line->_id}}', "date_arret", false, dates);
 } );
 
 </script>
