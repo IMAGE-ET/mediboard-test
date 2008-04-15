@@ -6,7 +6,6 @@
 * {
   margin: 0;
   padding: 0;
-  border-spacing: 0;
 }
 
 body {
@@ -29,9 +28,14 @@ pre {
   overflow: auto;
 }
 
+:focus {
+  outline: 0;
+}
+
 table {
   font-size: 1em;
   border-collapse: collapse;
+  border-spacing: 0;
 }
 
 th {
@@ -297,7 +301,6 @@ table.taborflat {
 #tabmenu {
   margin-left: 20px;
   border-spacing: 0px;
-  margin-bottom: -1px;
 }
 
 #tabmenu td {
@@ -307,7 +310,7 @@ table.taborflat {
 
 #tabmenu td.normal {
 	padding: 6px;
-	padding-top: 2px;
+	padding-top: 3px;
 	padding-bottom: 0px;
   background: url(images/pictures/tab_background.png) repeat-x top;
 }
@@ -343,7 +346,7 @@ table.taborflat {
 
 #tabmenu a:hover {
   text-decoration: none;
-  color: #999;
+  color: #FF6600;
 }
 
 /* Pane table */

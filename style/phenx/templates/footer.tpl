@@ -28,9 +28,9 @@
   <br />
 
   Utilisation CCAM : 
-    {{$performance.ccam.useCount.1}} light , 
+    {{$performance.ccam.useCount.1}} light,
     {{$performance.ccam.useCount.2}} medium,
-    {{$performance.ccam.useCount.3}} full  &ndash;
+    {{$performance.ccam.useCount.3}} full &ndash;
     {{$performance.ccam.cacheCount}} Appels au cache
   <br />
   Adresse IP : {{$userIP}}

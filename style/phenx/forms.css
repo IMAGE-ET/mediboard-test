@@ -1,7 +1,3 @@
-:focus {
-  outline: 0;
-}
-
 form {
   display: inline;
 }
@@ -19,7 +15,7 @@ input:hover, select:hover, textarea:hover {
 }
 
 input:focus, select:focus, textarea:focus {
-  border: 1px #E68B2C solid;
+  border: 1px #FF6600 solid;
 }
 
 select, input[type=submit], input[type=reset], input[type=button] {
@@ -110,7 +106,7 @@ a.buttondown {
   padding-right: 6px;
   padding-left: 6px;
   white-space: nowrap;
-  vertical-align: text-bottom;
+  vertical-align: middle;
   background: url(images/buttons/button_background.gif);
 }
 
@@ -137,6 +133,8 @@ a.buttondown {
   margin: 2px;
   padding: 2px;
   height: 15px;
+  line-height: 15px;
+  width: auto;
 }
 
 button:hover, 
