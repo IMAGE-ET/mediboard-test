@@ -105,7 +105,7 @@ function pageMain() {
 	    <button type="button" class="search" onclick="PatSelector.init()">Choisir un patient</button>
 	    <script type="text/javascript">
 	      PatSelector.init = function(){
-	        this.sForm = "editRpu";
+	        this.sForm = "editRPU";
 	        this.sId   = "_patient_id";
 	        this.sView = "_patient_view";
 	        this.pop();
