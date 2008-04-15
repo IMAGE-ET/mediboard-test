@@ -325,13 +325,13 @@ Main.add(function () {
         <hr class="control_tabs" />
         
         <table class="form">
-          <tr id="one">
+          <tr id="one" style="display: none;">
             <td id="ccam"></td>
           </tr>
-          <tr id="two">
+          <tr id="two" style="display: none;">
             <td id="listActesNGAP"></td>
           </tr>
-          <tr id="three">
+          <tr id="three" style="display: none;">
             <td id="cim"></td>
           </tr>
         </table>
