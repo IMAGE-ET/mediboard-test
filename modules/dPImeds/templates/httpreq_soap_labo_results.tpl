@@ -1,5 +1,5 @@
 <script language="Javascript" type="text/javascript">
-  ImedsResultsWatcher.setResults({{$results|@JSON}});
+  ImedsResultsWatcher.setResults({{$results|@json}});
 </script>
 
 

@@ -25,6 +25,7 @@ $heureLimit = "16:00:00";
 $sejour = new CSejour;
 $sejour->load($sejour_id);
 $sejour->loadRefs();
+$sejour->loadRefsPrescriptions();
 
 // Récupération de la liste des services
 $where = array();
