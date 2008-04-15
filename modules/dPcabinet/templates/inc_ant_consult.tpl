@@ -159,11 +159,24 @@ function onSubmitTraitement(oForm) {
   return false;
 }
 
+function easyMode() {
+  var width = 800;
+  var height = 500;
+
+  var url = new Url();
+  url.setModuleAction("dPcabinet", "vw_ant_easymode", null, null);
+  url.addParam("prat_id", {{$chir_id}});
+
+  url.pop(width, height, "easyMode");
+}
+
 </script>
 
 <table class="form">
   <tr>
     <td class="text">
+      <button class="edit" type="button" onclick="easyMode();">Mode de saisie simplifié</button>
+    
      {{include file="../../dPcabinet/templates/inc_consult_anesth/inc_addictions.tpl}}
       <hr />
       
