@@ -179,14 +179,19 @@ function viewProduit(cip){
           <th colspan="2">Liste des ordonnances</th>
         </tr>  
         <!-- Affichage des prescription du sejour -->
-        {{foreach from=$prescription->_ref_object->_ref_prescriptions item=prescriptions_type}}
+        {{foreach from=$prescription->_ref_object->_ref_prescriptions item=prescriptions_type key=type}}
+        
+        <!-- Ne pas afficher les prescriptions de traitements -->
+        {{if $type != "traitement"}}
         {{foreach from=$prescriptions_type item=curr_prescription}}
         <tr {{if $curr_prescription->_id == $prescription->_id}}class="selected"{{/if}}>
+          <!-- 
           <td>
             <button class="trash notext" onclick="alert('non fonctionnel')">
               {{tr}}Delete{{/tr}}
             </button>
           </td>
+           -->
           <td class="text">
             <a href="?m={{$m}}&amp;tab={{$tab}}&amp;prescription_id={{$curr_prescription->_id}}" >
               {{$curr_prescription->_view}} {{tr}}CPrescription.type.{{$curr_prescription->type}}{{/tr}}
@@ -194,6 +199,8 @@ function viewProduit(cip){
           </td>
         </tr>
         {{/foreach}}
+        {{/if}}
+        
         {{/foreach}}
       </table>
       {{/if}}

@@ -51,6 +51,7 @@ function startAssociation(){
         </option>
       {{/foreach}}
       </select>
+      heures
     </td>             
   </tr>
   
