@@ -56,8 +56,8 @@
 <!-- Javascript Console -->
 
 <div id="console" style="display:none;">
-  <div id="console-title">
-    <div id="console-hide" onclick="Console.hide()"></div>
+  <div class="title">
+    <div class="hide" onclick="Console.hide()"></div>
     Javascript console
   </div>
 </div>

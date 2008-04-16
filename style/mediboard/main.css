@@ -971,7 +971,7 @@ td.tabox {
   border: solid #ccc 2px;
 }
 
-/* Spécialisation par média */
+/* Spï¿½cialisation par mï¿½dia */
 
 @media print {
   table.tbl {
@@ -1667,36 +1667,6 @@ table.selectCode td {
 #admission .NotBold{
   font-weight: normal;
 }
-
-/* Accordion rico */
-
-div.accordionMain {
-  border: 1px solid #000;
-}
-
-div.accordionTabTitleBar {
-  cursor: pointer;
-  font-size: 14px;
-  border: 1px outset #458;
-}
-
-div.accordionTabContentBox {
-}
-
-div.accordionTabContentBox table.tbl{
-  width:96%;
-}
-div.accordionTabContentBox table[class="tbl"]{
-  width:100%;
-}
-
-div.accordionTabContentBox table.form{
-  width:96%;
-}
-div.accordionTabContentBox table[class="form"]{
-  width:100%;
-}
-
 
 
 /* control tabs */
