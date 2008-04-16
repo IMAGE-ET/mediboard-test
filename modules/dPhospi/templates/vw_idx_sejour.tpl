@@ -193,7 +193,7 @@ Main.add(function () {
                 </td>
                 <td>
                   <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}"
-                    {{if $curr_affectation->_ref_sejour->_num_dossier != 805017 && $curr_affectation->_ref_sejour->_num_dossiers != 805225}}
+                    {{if $curr_affectation->_ref_sejour->_num_dossier != 805017 && $curr_affectation->_ref_sejour->_num_dossier != 805225}}
                     style="display: none"
                     {{/if}}
                   >
