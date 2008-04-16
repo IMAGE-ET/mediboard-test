@@ -78,8 +78,8 @@ function pageMain() {
         {{if $rpu->ccmu}}
           {{tr}}CRPU.ccmu.{{$rpu->ccmu}}{{/tr}}
         {{/if}}
-      {{if $rpu->box_id}}
       </a>
+      {{if $rpu->box_id}}
 
       {{assign var=rpu_box_id value=$rpu->box_id}}
       <strong>{{$boxes.$rpu_box_id->_view}}</strong>

@@ -581,26 +581,26 @@ dates = {
   spots: datesOperations
 }
 
-Calendar.regField("editSejour", "entree_reelle", true, dates);
-Calendar.regField("editSejour", "sortie_reelle", true, dates);
+//Calendar.regField("editSejour", "entree_reelle", true, dates);
+//Calendar.regField("editSejour", "sortie_reelle", true, dates);
 
 dates.limit = {
   start: null,
   stop: datesOperations.first()
 }
 
-Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
+//Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
 
 dates.limit = {
   start: datesOperations.last(),
   stop: null 
 }
 
-Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
+//Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
 
-//regFieldCalendar("editSejour", "_date_entree_prevue");
-//regFieldCalendar("editSejour", "_date_sortie_prevue");
-//regFieldCalendar("editSejour", "entree_reelle", true);
-//regFieldCalendar("editSejour", "sortie_reelle", true);
+regFieldCalendar("editSejour", "_date_entree_prevue");
+regFieldCalendar("editSejour", "_date_sortie_prevue");
+regFieldCalendar("editSejour", "entree_reelle", true);
+regFieldCalendar("editSejour", "sortie_reelle", true);
 removePlageOp(false);
 </script>

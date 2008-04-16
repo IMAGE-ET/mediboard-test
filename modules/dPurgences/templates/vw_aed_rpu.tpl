@@ -130,7 +130,7 @@ function pageMain() {
   <tr>
     <th>{{mb_label object=$rpu field="box_id"}}</th>
     <td>
-      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id listService=$listServicesUrgence}}
+      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id ajaxSubmit=0 listService=$listServicesUrgence}}
 		</td>
   </tr>
 
