@@ -9,7 +9,7 @@
 
 global $can;
 
-$can->needsRead();
+$can->needsEdit();
 
 $patient_id = mbGetValueFromGetOrSession("patient_id");
 $name       = mbGetValueFromGet("name");
