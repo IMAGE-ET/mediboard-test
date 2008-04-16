@@ -31,10 +31,9 @@ $urlImeds = parse_url($dPconfig["dPImeds"]["url"]);
 
 $serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
 
+mbTrace("avant", "log", true);
 $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
-
-mbTrace($client, "client", true);
-
+mbTrace("apres", "log", true);
 $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "strDIV"           => "$idCSDV->id400",
                        "strSDV"           => "$idCSDV->id400",
