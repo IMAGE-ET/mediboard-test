@@ -65,7 +65,7 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id){
     }
   }
   
-  //loadSejour(sejour_id); 
+  loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
   if($('Imeds')){
     loadResultLabo(sejour_id);
