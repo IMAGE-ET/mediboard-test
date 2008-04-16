@@ -17,7 +17,7 @@ var Tarif = {
       oForm.secteur1.value = 0;
     } 
     oForm.secteur1.value = parseFloat(oForm.secteur1.value) - parseFloat(value);
-    round(oForm.secteur1.value,2);
+    Math.round(oForm.secteur1.value*100)/100;
     
   }
 }

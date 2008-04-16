@@ -7,7 +7,7 @@ function calculImcVst(){
    if(oForm.poid.value && !isNaN(parseFloat(oForm.poid.value)) && parseFloat(oForm.poid.value)>0){
      fVst = {{if $patient->sexe=="m"}}70{{else}}65{{/if}}*parseFloat(oForm.poid.value);
      if(oForm.taille.value && !isNaN(parseInt(oForm.taille.value)) && parseInt(oForm.taille.value)>0){
-       fImc = round(parseFloat(oForm.poid.value) / (parseInt(oForm.taille.value) * parseInt(oForm.taille.value) * 0.0001),2);
+       fImc = Math.round(100 * parseFloat(oForm.poid.value) / (parseInt(oForm.taille.value) * parseInt(oForm.taille.value) * 0.0001))/100; // Math.round(x*100)/100 == round(x, 2)
        if(fImc < 15){
          sImcValeur = "Inanition";
        }else if(fImc < 18.5){
