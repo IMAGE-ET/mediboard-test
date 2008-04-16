@@ -55,7 +55,7 @@ function addTraitement(rques, type) {
   </tr>
   {{foreach from=$addiction->_aides.addiction item=curr_type key=curr_key}}
     {{if $curr_key != "no_enum"}}
-    {{if $curr_type}}
+    {{if $curr_type && $curr_key}}
     <tr>
       <th colspan="{{$numCols*2}}">{{$addiction->_enumsTrans.type.$curr_key}}</th>
     </tr>
@@ -82,7 +82,7 @@ function addTraitement(rques, type) {
   </tr>
   {{foreach from=$antecedent->_aides.rques item=curr_type key=curr_key}}
     {{if $curr_key != "no_enum"}}
-    {{if $curr_type}}
+    {{if $curr_type && $curr_key}}
     <tr>
       <th colspan="{{$numCols*2}}">{{$antecedent->_enumsTrans.type.$curr_key}}</th>
     </tr>
