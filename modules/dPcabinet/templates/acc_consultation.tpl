@@ -11,7 +11,9 @@ function setField(oField, sValue) {
 
 Main.add(function () {
   var tabsConsult = Control.Tabs.create('tab-consult', false);
+  {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
+  {{/if}}
 });
 </script>
 
