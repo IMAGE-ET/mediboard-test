@@ -12,7 +12,6 @@ var ImedsResultsWatcher = {
   },
   loadResults: function(debut, fin) {
     var url = new Url;
-    alert('recherche');
     url.setModuleAction("dPImeds"     , "httpreq_soap_labo_results");
     url.addObjectParam("date_debut"   , this.debut);
     url.addObjectParam("date_fin"     , this.fin);

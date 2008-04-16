@@ -101,7 +101,11 @@ Main.add(function () {
   {{if $object->_id}}
     {{assign var=prescriptions value=$object->_ref_prescriptions}}
     {{assign var=prescription value=$prescriptions.sejour.0}}
+    {{if $prescription}}
     loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}');
+    {{else}}
+    loadViewSejour({{$object->_id}}, null, '');
+    {{/if}}
   {{/if}}
   
   {{if $isImedsInstalled}}
