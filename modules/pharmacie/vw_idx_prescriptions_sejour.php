@@ -7,7 +7,7 @@
  *  @author Alexis Granger
  */
  
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
  
 $can->needsRead();
 
@@ -17,7 +17,8 @@ $praticiens = $mediuser->loadPraticiens();
 
 // Chargement de la liste des services
 $service = new CService();
-$services = $service->loadList();
+$service->group_id = $g;
+$services = $service->loadMatchingList();
 
 $filter_sejour = new CSejour();
 
