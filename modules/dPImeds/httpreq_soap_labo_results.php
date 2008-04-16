@@ -9,8 +9,6 @@
 
 global $dPconfig, $g;
 
-mbTrace("dans le fichier", "resultat soap", true);
-
 $list_sejours = mbGetValueFromGet("list_sejours", array());
 $date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
@@ -28,6 +26,8 @@ $idCDIV->loadLatestFor($etab,"Imeds cdiv");
 
 $idCIDC = new CIdSante400();
 $idCIDC->loadLatestFor($etab, "Imeds cidc");
+
+mbTrace($idCSDV, "idCSDV", true);
 
 $urlImeds = parse_url($dPconfig["dPImeds"]["url"]);
 
