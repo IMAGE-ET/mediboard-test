@@ -9,6 +9,8 @@
 
 global $dPconfig, $g;
 
+mbTrace("dans le fichier", "resultat soap", true);
+
 $list_sejours = mbGetValueFromGet("list_sejours", array());
 $date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
