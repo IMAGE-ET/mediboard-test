@@ -10,7 +10,7 @@
 global $dPconfig, $g;
 
 $list_sejours = mbGetValueFromGet("list_sejours", array());
-$date_debut   = mbGetValueFromGet("date_debut"  , mbDate());
+$date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
 
 // Chargement de l'etablissement courant

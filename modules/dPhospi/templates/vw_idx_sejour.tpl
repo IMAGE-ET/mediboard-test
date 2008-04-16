@@ -161,16 +161,16 @@ Main.add(function () {
                   </a>
                 </td>
                 <td class="text">
-	                  {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
-		                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
-		                
-		                {{if $prescriptions_sejour}}
-		               {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
-		              
-		                {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
-	                {{else}}
-	                  {{assign var=prescription_sejour_id value=""}}
-	                {{/if}}
+                    {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
+                    {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+                    
+                    {{if $prescriptions_sejour}}
+                   {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+                  
+                    {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
+                  {{else}}
+                    {{assign var=prescription_sejour_id value=""}}
+                  {{/if}}
                   <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}},'{{$prescription_sejour_id}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
@@ -219,41 +219,39 @@ Main.add(function () {
               
               {{if $curr_sejour->_id != ""}}
               <tr>
-	              <td>
-	              <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
-	                <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
-	              </a>
-	              </td>
-	              <td>
-	                
+                <td>
+                <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
+                  <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
+                </a>
+                </td>
+                <td>
                 {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
-	                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
-	                
-	                {{if $prescriptions_sejour}}
-	               {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
-	              
-	                {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
+                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+                  
+                {{if $prescriptions_sejour}}
+                  {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+                  {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
                 {{else}}
                   {{assign var=prescription_sejour_id value=""}}
                 {{/if}}
                 
-	              <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}')">
-	                {{$curr_sejour->_ref_patient->_view}}
-	              </a>
+                <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}')">
+                  {{$curr_sejour->_ref_patient->_view}}
+                </a>
                 <script language="Javascript" type="text/javascript">
                   ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
                 </script>
-	              </td>
-	              <td>
-	                <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
-	                  <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
-	                </a>
-	                </td>
-	                <td>
-	                <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
-	                  <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
-	                </a>                             
-	              </td>
+                </td>
+                <td>
+                  <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+                    <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
+                  </a>
+                  </td>
+                  <td>
+                  <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+                    <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
+                  </a>                             
+                </td>
                 <td>
                   <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
@@ -262,9 +260,9 @@ Main.add(function () {
                     <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
                 </td>
-	              <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
-	                {{$curr_sejour->_ref_praticien->_shortview}}
-	              </td>
+                <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+                  {{$curr_sejour->_ref_praticien->_shortview}}
+                </td>
               </tr>
               {{/if}}
               {{/foreach}}
@@ -282,7 +280,7 @@ Main.add(function () {
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li><a href="#planSoins">Plan de soins</a></li>
+        <li><a href="#dossierSoins">Dossier de soins</a></li>
         
         <li><a href="#produits_elements">Prescriptions</a></li>
         {{/if}}
@@ -303,17 +301,17 @@ Main.add(function () {
       <!-- Tabs -->
       <div id="viewSejourHospi" style="display: none;"></div>
       {{if $isPrescriptionInstalled}}
-      <div id="planSoins" style="display: none;">
+      <div id="dossierSoins" style="display: none;">
         <div class="big-info">
-          Affichage du plan de soins en cours de développement
+          Affichage du dossier de soins en cours de développement
+          <br />
+          Cet onglet contiendra les soins à effectuer et les médicaments à administrer.
+          Il permettra d'indiquer les observation effectuées ainsi que de noter les transmissions.
           <br />
           Prochainement disponible...
         </div>
       </div>
       <div id="produits_elements" style="display: none;">
-        <div class="big-info">
-        Aucune prescription de séjour
-        </div>
       </div>
       {{/if}}
       
