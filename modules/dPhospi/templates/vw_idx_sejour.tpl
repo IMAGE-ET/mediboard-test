@@ -34,7 +34,6 @@ function loadSejour(sejour_id) {
   url_sejour.addParam("object_class","CSejour");
   url_sejour.addParam("object_id",sejour_id);
   url_sejour.requestUpdate('viewSejourHospi', {
-  waitingText: null,
 	 onComplete: initPuces
   } );
 }
