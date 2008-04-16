@@ -64,9 +64,11 @@ function addTraitement(rques, type) {
     {{foreach from=$curr_type item=curr_helper_for key=curr_helper_for_key}}
       {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
-      <td><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
+      <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
       <td {{if $i==$curr_helper_for|@count}}colspan="{{$numCols*2}}"{{/if}} class="text">
-        <label id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">{{$curr_helper}}</label>
+        <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
+          {{$curr_helper}}
+        </label>
       </td>
       {{if $i % $numCols == 0}}</tr><tr>{{/if}}
       {{/foreach}}
@@ -91,9 +93,11 @@ function addTraitement(rques, type) {
     {{foreach from=$curr_type item=curr_helper_for key=curr_helper_for_key}}
       {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
-      <td><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
+      <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
       <td {{if $i==$curr_helper_for|@count}}colspan="{{$numCols*2}}"{{/if}} class="text">
-        <label id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">{{$curr_helper}}</label>
+        <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
+          {{$curr_helper}}
+        </label>
       </td>
       {{if $i % $numCols == 0}}</tr><tr>{{/if}}
       {{/foreach}}
@@ -112,9 +116,11 @@ function addTraitement(rques, type) {
     {{foreach from=$curr_type item=curr_helper_for key=curr_helper_for_key}}
       {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
-      <td><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
+      <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
       <td {{if $i==$curr_helper_for|@count}}colspan="{{$numCols*2}}"{{/if}} class="text">
-        <label id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">{{$curr_helper}}</label>
+        <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
+          {{$curr_helper}}
+        </label>
       </td>
       {{if $i % $numCols == 0}}</tr><tr>{{/if}}
       {{/foreach}}
