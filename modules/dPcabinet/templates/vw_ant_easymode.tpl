@@ -42,17 +42,26 @@ function addTraitement(rques, type) {
     }
   }
 }
+
+Main.add(function () {
+  var tabsAntecedents = Control.Tabs.create('tab-antecedents', false);
+});
 </script>
 
 {{* Nombre de colonnes *}}
 {{assign var=numCols value=4}}
 
+<ul id="tab-antecedents" class="control_tabs">
+  <li><a href="#addictions">Addictions</a></li>
+  <li><a href="#antecedents">Antécédents</a></li>
+  <li><a href="#traitements">Traitements</a></li>
+</ul>
+<hr class="control_tabs" />
+
 <table class="main tbl">
 
   <!-- Addictions -->
-  <tr>
-    <th colspan="{{$numCols*2}}" class="title">Addictions</th>
-  </tr>
+  <tbody id="addictions" style="display: none;">
   {{foreach from=$addiction->_aides.addiction item=curr_type key=curr_key}}
     {{if $curr_key != "no_enum"}}
     {{if $curr_type && $curr_key}}
@@ -76,12 +85,11 @@ function addTraitement(rques, type) {
     </tr>
     {{/if}}
   {{/foreach}}
+  </tbody>
   
   
   <!-- Antécédents -->
-  <tr>
-    <th colspan="{{$numCols*2}}" class="title">Antécédents</th>
-  </tr>
+  <tbody id="antecedents" style="display: none;">
   {{foreach from=$antecedent->_aides.rques item=curr_type key=curr_key}}
     {{if $curr_key != "no_enum"}}
     {{if $curr_type && $curr_key}}
@@ -105,12 +113,11 @@ function addTraitement(rques, type) {
     </tr>
     {{/if}}
   {{/foreach}}
+  </tbody>
   
   
   <!-- Traitements -->
-  <tr>
-    <th colspan="{{$numCols*2}}" class="title">Traitements</th>
-  </tr>
+  <tbody id="traitements" style="display: none;">
   {{foreach from=$traitement->_aides.traitement item=curr_type key=curr_key}}
     <tr>
     {{foreach from=$curr_type item=curr_helper_for key=curr_helper_for_key}}
@@ -127,4 +134,5 @@ function addTraitement(rques, type) {
     {{/foreach}}
     </tr>
   {{/foreach}}
+  </tbody>
 </table>
