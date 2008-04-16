@@ -27,13 +27,13 @@ $idCDIV->loadLatestFor($etab,"Imeds cdiv");
 $idCIDC = new CIdSante400();
 $idCIDC->loadLatestFor($etab, "Imeds cidc");
 
-mbTrace($idCSDV, "idCSDV", true);
-
 $urlImeds = parse_url($dPconfig["dPImeds"]["url"]);
 
 $serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
 
 $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
+
+mbTrace($client, "client", true);
 
 $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "strDIV"           => "$idCSDV->id400",
