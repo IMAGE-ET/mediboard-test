@@ -42,7 +42,7 @@ $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "listePatients"    => array(),
                        "PWD"              => "");
 
-mbTrace($requestParams, "Paramètres requete");
+mbTrace($requestParams, "Paramètres requete", true);
 
 $results = $client->GetInfoLabo($requestParams);
 
@@ -68,7 +68,7 @@ $results = array(
   "ex" => 0
 );
 */
-mbTrace($results, "Résultats");
+mbTrace($results, "Résultats", true);
 
 // Création du template
 $smarty = new CSmartyDP();
