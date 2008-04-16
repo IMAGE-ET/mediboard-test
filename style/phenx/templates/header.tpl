@@ -23,6 +23,7 @@
           <a href="?logout=-1" title="{{tr}}menu-logout{{/tr}}"><img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" /></a>
         </div>
         
+        {{if $Etablissements|@count > 1}}
         <form name="group" action="" method="get">
           <input type="hidden" name="m" value="{{$m}}" />
           <select name="g" onchange="this.form.submit();">
@@ -33,6 +34,12 @@
             {{/foreach}}
           </select>
         </form>
+        {{else}}
+          {{foreach from=$Etablissements item=currEtablissement}}
+            {{$currEtablissement->_view}}
+          {{/foreach}}
+        {{/if}}
+        
       </div>
       
       <ul id="nav">

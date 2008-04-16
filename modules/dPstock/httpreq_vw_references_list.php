@@ -24,13 +24,14 @@ if ($societe_id) {
   $where['product.societe_id'] = " = $societe_id";
 }
 if ($keywords) {
-  $where['product.name'] = " LIKE '%$keywords%'";
+  $where[] = "product.code LIKE '%$keywords%' OR 
+              product.name LIKE '%$keywords%' OR 
+              product.description LIKE '%$keywords%'";
 }
+$orderby = 'product.name ASC';
 
 $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_reference.product_id';
-
-$orderby = 'product.name ASC';
 
 $reference = new CProductReference();
 $list_references = $reference->loadList($where, $orderby, 20, null, $leftjoin);

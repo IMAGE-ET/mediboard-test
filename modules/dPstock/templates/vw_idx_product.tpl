@@ -11,7 +11,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-products" action="?" method="post" onsubmit="return productsFilter.submit();">
+      <form name="filter-products" action="?" method="post" onsubmit="return productsFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="productsFilter.submit();">
@@ -30,14 +30,14 @@ function pageMain() {
         
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="productsFilter.submit();">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search" onclick="productsFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="productsFilter.empty();"></button>
       </form>
 
       <div id="list-products"></div>
     </td>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}msg-CProductCategory-create{{/tr}}</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}msg-CProduct-create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -45,9 +45,9 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CProductCategory-modify{{/tr}} {{$product->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}msg-CProduct-modify{{/tr}} {{$product->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CProductCategory-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}msg-CProduct-create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
@@ -57,7 +57,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="category_id"}}</th>
           <td><select name="category_id" class="{{$product->_props.category_id}}">
-            <option value="">&mdash; {{tr}}msg-CProductCategory-choose{{/tr}}</option>
+            <option value="">&mdash; {{tr}}msg-CProduct-choose{{/tr}}</option>
             {{foreach from=$list_categories item=curr_category}}
               <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id || $list_categories|@count==1}} selected="selected" {{/if}} >
               {{$curr_category->_view}}

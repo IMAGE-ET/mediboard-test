@@ -1089,6 +1089,21 @@ table.Offline button  {
   border-right: 0;
 }
 
+#nav a img {
+  display: none;
+  float: left;
+  width: 32px;
+  height: 32px;
+}
+
+#nav a:hover img {
+  display: block;
+  border: 1px #FF6600 solid;
+  -moz-border-radius: 4px;
+  background: #FFF;
+  padding: 4px;
+}
+
 #nav a:active, #nav .selected a {
   padding-right: 6px;
   margin-left: 0px;
@@ -1098,46 +1113,26 @@ table.Offline button  {
   padding: 0;
 }
 
+#nav .selected * {
+  vertical-align: middle;
+}
+
 #nav .selected a {
   text-align: left;
-  vertical-align: middle;
   height: 32px;
   border: 1px #FF6600 solid;
   border-right: 0;
 }
 
-#nav .selected a * {
-  vertical-align: middle;
-}
-
-#nav img {
-  display: none;
-  width: 32px;
-  height: 32px;
-}
-
-#nav a:hover img {
-  display: block;
-  position: absolute;
-  border: 1px #FF6600 solid;
-  -moz-border-radius: 4px;
-  background: #FFF;
-  padding: 4px;
-}
-
 #nav .selected a:hover img {
-  display: inline;
-  position: relative;
   margin-top: 0px;
   padding: 0px;
   border: 0;
 }
 
 #nav .selected a img {
-  display: inline;
+  display: block;
 }
-
-
 
 /* User */
 #user {
@@ -1464,7 +1459,7 @@ div.accordionTabContentBox table[class="form"]{
 hr.control_tabs {
   clear: both;
   border: none;
-  border-top: 1px solid #999;
+  border-top: 1px solid #F60;
 }
   
 ul.control_tabs {
@@ -1481,26 +1476,28 @@ ul.control_tabs li {
 
 ul.control_tabs li a {
   display: block;
-  border: 1px solid #666;
+  border: 1px solid #FFBA8C;
+  border-bottom: none;
   -moz-border-radius: 6px 6px 0 0;
-  background-color: #CCC;
+  background-color: #FFF;
   font-size: 1.1em;
   padding: 4px 8px;
-  color: #000;
+  color: #999;
   font-weight: bold;
   margin-top: 2px;
   margin-bottom: -1px;
 }
 
 ul.control_tabs li a:hover {
-  background-color: #DDD;
+  background-color: #FFF1E8;
   text-decoration: none;
-  color: #000;
+  color: #333;
 }
 
 ul.control_tabs li a.active {
   background-color: #FFF;
   color: #000;
+  border: 1px solid #F60;
   border-bottom: #FFF 1px solid;
 }
 
@@ -2439,6 +2436,43 @@ table.tbl td.ccmu-P{
   z-index: 50;
   margin-top: 16px;
   margin-left: 16px;
+}
+
+.bargraph .legend .value {
+   font-weight: bold;
+   background: #CCCCCC;
+   padding: 2px;
+}
+
+.bargraph .legend .color {
+   height: 6px; 
+   width: 6px; 
+   float: left;
+   margin: 3px;
+   border: 1px solid #333333;
+}
+
+.bargraph:hover .legend {
+  display: block;
+}
+
+.bargraph > .value {
+  height: 40%;
+  border: 1px solid;
+}
+
+.bargraph .threshold {
+  height: 55%;
+  opacity: .3;
+  margin-top: 1px;
+}
+
+.bargraph .value div, .bargraph .threshold div {
+  height: 100%;
+}
+
+.bargraph .threshold div {
+  float:left; 
 }
 
 table.main td.step {

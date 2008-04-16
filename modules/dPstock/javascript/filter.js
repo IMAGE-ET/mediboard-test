@@ -7,7 +7,7 @@ function Filter (sForm, sModule, sAction, sList, aFields) {
 }
 
 Filter.prototype = {
-  submit: function () {
+  submit: function (fieldToSelect) {
     oForm = document.forms[this.sForm];
     url = new Url;
     
@@ -18,6 +18,15 @@ Filter.prototype = {
         url.addParam(f,  $F(oForm[f]));
       }
     });
+    
+    if (fieldToSelect) {
+      var oField = oForm.elements[fieldToSelect];
+      
+      if (oField) {
+        oField.focus();
+        oField.select();
+      }
+    }
     
     url.requestUpdate(this.sList, { waitingText: null } );
     

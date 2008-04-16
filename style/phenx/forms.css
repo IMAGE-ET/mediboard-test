@@ -102,17 +102,56 @@ a.buttondown {
   cursor: pointer;
   border: 1px solid #909090;
   font-size: 1em;
+  line-height: 1em;
   font-weight: normal;
-  padding-right: 6px;
-  padding-left: 6px;
   white-space: nowrap;
   vertical-align: middle;
   background: url(images/buttons/button_background.gif);
 }
 
-/*button:before {
-	content: url(images/buttons/edit.png);
-}*/
+button.edit, 
+button.hslip, 
+button.trash, 
+button.submit, 
+button.new, 
+button.print, 
+button.cancel, 
+button.modify, 
+button.search, 
+button.lock, 
+button.tick, 
+button.change, 
+button.remove, 
+button.add, 
+button.down {
+  padding: 0;
+}
+
+button:before,
+a.button:before,  
+a.buttonedit:before, 
+a.buttonhslip:before, 
+a.buttontrash:before, 
+a.buttonsubmit:before, 
+a.buttonnew:before, 
+a.buttonprint:before, 
+a.buttoncancel:before, 
+a.buttonmodify:before, 
+a.buttonsearch:before, 
+a.buttonlock:before, 
+a.buttontick:before, 
+a.buttonchange:before, 
+a.buttonremove:before, 
+a.buttonadd:before, 
+a.buttondown:before {
+  line-height: 1em;
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  padding-right: 2px;
+  height: 1em;
+  width: 1em;
+}
 
 a.button,  
 a.buttonedit, 
@@ -130,11 +169,7 @@ a.buttonchange,
 a.buttonremove, 
 a.buttonadd, 
 a.buttondown {
-  margin: 2px;
-  padding: 2px;
-  height: 15px;
-  line-height: 15px;
-  width: auto;
+  display: inline-block;
 }
 
 button:hover, 
@@ -158,87 +193,65 @@ a.buttonremove:hover {
   background: url(images/buttons/button_hover_background.gif);
 }
 
-/*button.edit, a.buttonedit {
-  background-image: url(images/buttons/edit.png);
-  padding-left: 18px;
-}
-
-button.hslip, a.buttonhslip {
-  background-image: url(images/buttons/hslip.png);
-  padding-left: 18px;
-}
-
-button.trash, a.buttontrash {
-  background-image: url(images/buttons/trash.png);
-  padding-left: 18px; 
-}
-
-button.submit, a.buttonsubmit {
-  background-image: url(images/buttons/save.png);
-  padding-left: 18px;
-}
-button.new, a.buttonnew {
-  background-image: url(images/buttons/new.png);
-  padding-left: 18px;
-}
-button.print, a.buttonprint {
-  background-image: url(images/buttons/print.png);
-  padding-left: 18px;
-}
-button.cancel, a.buttoncancel {
-  background-image: url(images/buttons/cancel.png);
-  padding-left: 18px;
-}
-
-button.modify, a.buttonmodify {
-  background-image: url(images/buttons/save.png);
-  padding-left: 18px;
-}
-
-button.search, a.buttonsearch {
-  background-image: url(images/buttons/search.png);
-  padding-left: 18px;
-}
-
-button.lock, a.buttonlock {
-  background-image: url(images/buttons/lock.png);
-  padding-left: 18px;
-}
-
-button.tick, a.buttontick {
-  background-image: url(images/buttons/tick.png);
-  padding-left: 18px;
-}
-
-button.down, a.buttondown {
-  background-image: url(images/buttons/down.png);
-  padding-left: 18px;
-}
-
-button.change, a.buttonchange {
-  background-image: url(images/buttons/change.png);
-  padding-left: 18px;
-}
-
-button.add, a.buttonadd {
-  background-image: url(images/buttons/add.png);
-  padding-left: 18px;
-}
-
-button.remove, a.buttonremove {
-  background-image: url(images/buttons/remove.png);
-  padding-left: 18px;
-}*/
-
-button.notext{
+button.notext, a.notext {
   font-size: 0;
-  padding : 15px 0px 0px 0px;
-  width: 19px;
 }
 
-a.notext{
-  padding : 0px 0px 0px 16px;
-  height: 16px;
+button.edit:before, a.buttonedit:before {
+  content: url(images/buttons/edit.png);
+}
+
+button.hslip:before, a.buttonhslip:before {
+  content: url(images/buttons/hslip.png);
+}
+
+button.trash:before, a.buttontrash:before {
+  content: url(images/buttons/trash.png);
+}
+
+button.submit:before, a.buttonsubmit:before {
+  content: url(images/buttons/save.png);
+}
+button.new:before, a.buttonnew:before {
+  content: url(images/buttons/new.png);
+}
+button.print:before, a.buttonprint:before {
+  content: url(images/buttons/print.png);
+}
+button.cancel:before, a.buttoncancel:before {
+  content: url(images/buttons/cancel.png);
+}
+
+button.modify:before, a.buttonmodify:before {
+  content: url(images/buttons/save.png);
+}
+
+button.search:before, a.buttonsearch:before {
+  content: url(images/buttons/search.png);
+}
+
+button.lock:before, a.buttonlock:before {
+  content: url(images/buttons/lock.png);
+}
+
+button.tick:before, a.buttontick:before {
+  content: url(images/buttons/tick.png);
+}
+
+button.down:before, a.buttondown:before {
+  content: url(images/buttons/down.png);
+}
+
+button.change:before, a.buttonchange:before {
+  content: url(images/buttons/change.png);
+}
+
+button.add:before, a.buttonadd:before {
+  content: url(images/buttons/add.png);
+}
+
+button.remove:before, a.buttonremove:before {
+  content: url(images/buttons/remove.png);
 }
 
 .numericField, .numericField map {

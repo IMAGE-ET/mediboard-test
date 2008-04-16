@@ -18,6 +18,7 @@ $module->registerTab('vw_idx_category',      null, TAB_EDIT);
 $module->registerTab('vw_idx_societe',       null, TAB_EDIT);
 $module->registerTab('vw_idx_report',        null, TAB_READ);
 $module->registerTab('vw_idx_delivery',      null, TAB_READ);
+$module->registerTab('vw_traceability',      null, TAB_READ);
 
 
 ?>

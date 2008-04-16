@@ -73,10 +73,10 @@ class CProductReference extends CMbObject {
       
       if(count($ListVerifDuplicateKey) != 0) {
         return 'Erreur : La référence produit existe déjà';
-      } else {
-        return null;
       }
     }
+    
+    return parent::check();
   }
   
   function getPerm($permType) {

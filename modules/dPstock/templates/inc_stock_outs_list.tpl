@@ -3,11 +3,11 @@
     <th colspan="5" class="title">20 {{tr}}last{{/tr}} {{tr}}CProductStockOut.more{{/tr}}</th>
   </tr>
   <tr>
-    <th>{{tr}}CProductStockOut-product_id{{/tr}}</th>
+    <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductStockOut-date{{/tr}}</th>
     <th>{{tr}}CProductStockOut-quantity{{/tr}}</th>
     <th>{{tr}}CProductStockOut-code{{/tr}}</th>
-    <th>{{tr}}CFunction{{/tr}}</th>
+    <th>{{tr}}CProductStockOut-function_id{{/tr}}</th>
   </tr>
   {{foreach from=$list_latest_stock_outs item=curr_stock_out}}
   <tr>

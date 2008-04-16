@@ -181,10 +181,10 @@ class CProductStock extends CMbObject {
       
       if(count($ListVerifDuplicateKey) != 0) {
         return 'Erreur : Le stock de ce produit existe déjà';
-      } else {
-        return null;
       }
     }
+    
+    return parent::check();
   }
 }
 ?>

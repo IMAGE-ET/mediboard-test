@@ -54,7 +54,7 @@ class CProductDelivery extends CMbObject {
     if ($this->_ref_target) {
       $this->_ref_target->updateFormFields();
     }
-    $this->_view = $this->_ref_product->_view . (($this->_ref_target)?" (pour {$this->_ref_target->_view})":'');
+    $this->_view = $this->_ref_product->_view . (($this->_ref_target)?" pour {$this->_ref_target->_view}":'');
   }
 
   function loadRefsFwd() {
@@ -78,8 +78,8 @@ class CProductDelivery extends CMbObject {
   	$this->loadRefsFwd();
     if(!$this->_ref_target) {
       return 'Erreur : La cible n\'existe pas';
-    } else {
-      return null;
     }
+    
+    return parent::check();
   }
 }

@@ -23,9 +23,9 @@ if ($societe_id) {
   $where['product.societe_id'] = " = '$societe_id'";
 }
 if ($keywords) {
-	$where[] = "product.code LIKE '%$keywords%' OR 
-	            product.name LIKE '%$keywords%' OR 
-	            product.description LIKE '%$keywords%'";
+  $where[] = "product.code LIKE '%$keywords%' OR 
+              product.name LIKE '%$keywords%' OR 
+              product.description LIKE '%$keywords%'";
 }
 $orderby = 'product.name ASC';
 

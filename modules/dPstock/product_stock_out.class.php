@@ -44,7 +44,7 @@ class CProductStockOut extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = $this->_ref_stock->_view.($this->function_id?" (pour le service <i>{$this->_ref_function->_view}</i>)":'');
+    $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->function_id?" pour le service '{$this->_ref_function->_view}'":'');
   }
   
   function store() {
@@ -73,6 +73,8 @@ class CProductStockOut extends CMbObject {
         return 'Erreur : Impossible de déstocker ce nombre d\'articles';
 	    }
   	}
+  	
+  	return parent::check();
   }
 
   function loadRefsFwd() {

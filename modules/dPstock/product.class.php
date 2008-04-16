@@ -114,5 +114,21 @@ class CProduct extends CMbObject {
   		return false;
   	}
   }
+  
+  function check() {
+    // checks if the product code doesn't exist yet
+    if(!$this->_id) {
+      $where['code'] = "= '$this->code'";
+      
+      $check_duplicate_code = new CProduct();
+      $list_duplicate_code = $check_duplicate_code->loadList($where);
+      
+      if(count($list_duplicate_code) != 0) {
+        return 'Erreur : Un produit avec ce code existe déjà';
+      }
+    }
+    
+    return parent::check();
+  }
 }
 ?>

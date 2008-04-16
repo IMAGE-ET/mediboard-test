@@ -13,7 +13,7 @@ function pageMain() {
   <tr>
     <td class="halfPane" rowspan="3">
 
-      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit();">
+      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="stocksFilter.submit();">
@@ -24,7 +24,7 @@ function pageMain() {
         </select>
         
         <input type="text" name="keywords" value="" />
-        <button type="button" class="search" onclick="stocksFilter.submit();">Filtrer</button>
+        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">Filtrer</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button><br />
         
         <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />

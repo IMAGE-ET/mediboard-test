@@ -12,7 +12,7 @@ function pageMain() {
 <table class="main">
   <tr>
     <td class="halfPane" rowspan="3">
-      <form name="filter-references" action="?" method="post" onsubmit="return referencesFilter.submit();">
+      <form name="filter-references" action="?" method="post" onsubmit="return referencesFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="referencesFilter.submit();">
@@ -31,8 +31,8 @@ function pageMain() {
         
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="referencesFilter.submit();">Filtrer</button>
-        <button type="button" class="cancel notext" onclick="referencesFilter.empty(['keywords', 'societe_id', 'category_id']);"></button>
+        <button type="button" class="search" onclick="referencesFilter.submit('keywords');">Filtrer</button>
+        <button type="button" class="cancel notext" onclick="referencesFilter.empty();"></button>
       </form>
 
       <div id="list-references"></div>
