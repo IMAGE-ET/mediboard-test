@@ -30,7 +30,7 @@ $idCIDC->loadLatestFor($etab, "Imeds cidc");
 $urlImeds = parse_url($dPconfig["dPImeds"]["url"]);
 
 $serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
-mbTrace(class_exists("SoapClient"), "log", true);
+
 $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
 
 $requestParams = array("strIDC"           => "$idCIDC->id400",
