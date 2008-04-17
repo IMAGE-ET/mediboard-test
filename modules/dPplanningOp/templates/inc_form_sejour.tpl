@@ -571,14 +571,13 @@ Main.add( function(){
 <script type="text/javascript">
 // Explicit form preparation for Ajax loading
 prepareForm(document.editSejour);
-datesOperations = $H({{$sejour->_dates_operations|@json}}).values();
 
 dates = {
   current: {
     start: "{{$sejour->_date_entree_prevue}}",
     stop: "{{$sejour->_date_sortie_prevue}}"
   },
-  spots: datesOperations
+  spots: {{$sejour->_dates_operations|@json}}
 }
 
 Calendar.regField("editSejour", "entree_reelle", true, dates);
@@ -586,21 +585,17 @@ Calendar.regField("editSejour", "sortie_reelle", true, dates);
 
 dates.limit = {
   start: null,
-  stop: datesOperations.first()
+  stop: dates.spots.first()
 }
 
 Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
 
 dates.limit = {
-  start: datesOperations.last(),
+  start: dates.spots.last(),
   stop: null 
 }
 
 Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
 
-regFieldCalendar("editSejour", "_date_entree_prevue");
-regFieldCalendar("editSejour", "_date_sortie_prevue");
-regFieldCalendar("editSejour", "entree_reelle", true);
-regFieldCalendar("editSejour", "sortie_reelle", true);
 removePlageOp(false);
 </script>

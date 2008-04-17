@@ -340,22 +340,14 @@ transfertTraitement = function(line_id){
 
 prepareForms();
 
-
-	var todayDate = new Date();
-	var dToday = todayDate.toDATE();
-	
-	dates = {  
-	  limit: {
-	    start: dToday,
-	    stop: null
-	  }
-	}
-
-
+dates = {  
+  limit: {
+    start: dToday,
+    stop: new Date().toDATE();
+  }
+}
 
 Main.add( function(){
-
-
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
      {{if !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
        {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
