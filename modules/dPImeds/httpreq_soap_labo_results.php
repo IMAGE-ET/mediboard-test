@@ -9,7 +9,7 @@
 
 global $dPconfig, $g;
 
-$list_sejours = mbGetValueFromGet("list_sejours", array());
+$list_sejours = explode("-", mbGetValueFromGet("list_sejours", array()));
 $date_debut   = mbGetValueFromGet("date_debut"  , mbDate("-1 day"));
 $date_fin     = mbGetValueFromGet("date_fin"    , mbDate());
 
@@ -42,33 +42,9 @@ $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "listePatients"    => array(),
                        "PWD"              => "");
 
-mbTrace($requestParams, "Paramètres requete", true);
+mbTrace($requestParams, "Paramètres requete");
 
 $results = $client->GetInfoLabo($requestParams);
-
-/*
-$results = array(
-  "GetInfoLaboResult" => 2,
-  "listeInfoLabo"     => array(
-    "InfoLabo" => array(
-      1 => array(
-        "NumSejour"       => "12345",
-        "IsLabo"          => 1,
-        "IsLaboEntreDate" => 1,
-        "DateLaboDernier" => $date_debut
-      ),
-      2 => array(
-        "NumSejour"       => "67890",
-        "IsLabo"          => 1,
-        "IsLaboEntreDate" => 1,
-        "DateLaboDernier" => $date_debut
-      ),
-    ),
-  ),
-  "ex" => 0
-);
-*/
-mbTrace($results, "Résultats", true);
 
 // Création du template
 $smarty = new CSmartyDP();

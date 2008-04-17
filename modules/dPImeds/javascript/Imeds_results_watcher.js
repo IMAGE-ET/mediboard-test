@@ -15,8 +15,8 @@ var ImedsResultsWatcher = {
     url.setModuleAction("dPImeds"     , "httpreq_soap_labo_results");
     url.addObjectParam("date_debut"   , this.debut);
     url.addObjectParam("date_fin"     , this.fin);
-    url.addObjectParam("list_sejours" , this.listNumSejours);
-    url.requestUpdate("systemMsg", { waitingText: null } );
+    url.addObjectParam("list_sejours" , Object.values(this.listNumSejours).join("-"));
+    url.requestUpdate("systemMsg", { waitingText: "Attente des résultats de laboratoire" } );
   },
   setResults: function(results) {
     if(results.GetInfoLaboResult > 1) {
