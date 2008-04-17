@@ -6,7 +6,7 @@ function pageMain() {
   refreshLists();
   
   // Initialisation des onglets du menu
-  var tabs = new Control.Tabs('tab_orders');
+  var tabs = Control.Tabs.create('tab_orders', true);
   //tabs.setActiveTab("orders-pending");
 }
 </script>

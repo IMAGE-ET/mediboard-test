@@ -2,6 +2,7 @@
   <tr>
     <th>{{tr}}CProductReference-product_id{{/tr}}</th>
     <th>{{tr}}CProductReference-societe_id{{/tr}}</th>
+    <th>{{tr}}CProductReference-code{{/tr}}</th>
     <th>{{tr}}CProductReference-quantity{{/tr}}</th>
     <th>{{tr}}CProductReference-price{{/tr}}</th>
     <th>{{tr}}CProductReference-_unit_price{{/tr}}</th>
@@ -19,6 +20,7 @@
     {{/if}}
     </td>
     <td>{{$curr_reference->_ref_societe->_view}}</td>
+    <td>{{mb_value object=$curr_reference field=code}}</td>
     <td>{{mb_value object=$curr_reference field=quantity}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=price}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=_unit_price}}</td>

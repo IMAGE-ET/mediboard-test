@@ -92,3 +92,14 @@ function popupOrder(oForm, iWidth, iHeight) {
 
   url.pop(width, height, "Edition/visualisation commande");
 }
+
+function popupOrderForm(oForm, iWidth, iHeight) {
+  var width = iWidth?iWidth:500;
+  var height = iHeight?iHeight:500;
+
+  var url = new Url();
+  url.setModuleAction("dPstock", "vw_order_form", null, null);
+  url.addParam("order_id", $F(oForm.order_id));
+
+  url.pop(width, height, "Bon de commande");
+}

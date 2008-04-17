@@ -95,6 +95,10 @@ function pageMain() {
           <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$reference field="code"}}</th>
+          <td>{{mb_field object=$reference field="code"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="4">
             {{if $reference->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

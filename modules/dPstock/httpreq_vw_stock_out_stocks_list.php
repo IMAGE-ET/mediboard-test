@@ -19,7 +19,9 @@ if ($category_id) {
   $where['product.category_id'] = " = $category_id";
 }
 if ($keywords) {
-  $where['product.name'] = " LIKE '%$keywords%'";
+  $where[] = "product.code LIKE '%$keywords%' OR 
+              product.name LIKE '%$keywords%' OR 
+              product.description LIKE '%$keywords%'";
 }
 $where['product_stock.group_id'] = " = $g";
 

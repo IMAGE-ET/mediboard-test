@@ -30,7 +30,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="locked" value="1" />
-          <button type="button" class="tick" onclick="if (confirmLock()) submitOrder(this.form, {refreshLists: true});">{{tr}}CProductOrder-locked{{/tr}}</button>
+          <button type="button" class="tick" onclick="if (confirmLock()) submitOrder(this.form, {refreshLists: true});">Valider</button>
         </form>
         {{/if}}
 	   </td>
@@ -73,8 +73,7 @@
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
-          <input type="hidden" name="_order" value="1" />
-          <button type="button" class="tick" onclick="if (confirmOrder()) submitOrder(this.form, {refreshLists: true})">Commander</button>
+          <button type="button" class="tick" onclick="popupOrderForm(this.form)">Commander</button>
         </form>
      </td>
     </tr>

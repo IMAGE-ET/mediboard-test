@@ -16,6 +16,7 @@ class CProductReference extends CMbObject {
   var $societe_id    = null;
   var $quantity      = null;
   var $price         = null;
+  var $code          = null;
 
   // Object References
   //    Single
@@ -37,6 +38,7 @@ class CProductReference extends CMbObject {
       'societe_id'  => 'notNull ref class|CSociete',
       'quantity'    => 'notNull num pos',
       'price'       => 'notNull currency',
+      'code'        => 'str',
       '_unit_price' => 'notNull currency',
     ));
   }

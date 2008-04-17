@@ -2764,3 +2764,13 @@ table.main td.step {
 	text-align: center;
 	vertical-align: middle;
 }
+
+.grippie-h {
+  border: 1px solid #999;
+  background: #CCC url(../../images/buttons/drag-n.gif) center center no-repeat;
+  height: 7px;
+  margin: 0;
+  border-top: 0;
+  cursor: n-resize;
+  margin-left: 1px;
+}

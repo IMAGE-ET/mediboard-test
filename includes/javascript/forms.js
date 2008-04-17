@@ -191,6 +191,72 @@ var FormObserver = {
   }
 }
 
+Element.addMethods({
+  setResizable: function (oElement) {
+    // oGrippie is the draggable element
+    var oGrippie = new Element('div');
+    
+    // We remove the margin between the textarea and the grippie
+    oElement.style.marginBottom = '0';
+  
+    /*var cookie = new CookieJar({
+      expires: 3600*24,
+      path: '/'
+    }); 
+    
+    var entry = cookie.get('ElementHeight');
+    
+    if (entry) {
+      var h = entry.(oElement.id).height;
+      oElement.setStyle({height: h+'px'});
+    }*/
+    
+    // grippie's class and style
+    oGrippie.addClassName('grippie-h');
+    oGrippie.setStyle({
+      marginLeft: oElement.style.marginLeft,
+      marginRight: oElement.style.marginRight,
+      opacity: 0.5
+    });
+    
+    // When the mouse is pressed on the grippie, we begin the drag
+    oGrippie.onmousedown = startDrag;
+    
+    var staticOffset = null;
+    
+    function startDrag(e) {
+      staticOffset = oElement.getHeight() - Event.pointerY(e); 
+      oElement.setStyle({opacity: 0.4});
+      document.onmousemove = performDrag;
+      document.onmouseup = endDrag;
+      return false;
+    }
+  
+    function performDrag(e) {
+      var lineHeight = oElement.getStyle('line-height');
+      lineHeight = lineHeight.substr(0, lineHeight.length - 2);
+      
+      var h = Math.max(lineHeight*2, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2;
+      
+      h = Math.round(h / lineHeight)*lineHeight;
+      oElement.setStyle({height: null});
+      oElement.rows = Math.round(h / lineHeight)-1;
+      return false;
+    }
+  
+    function endDrag(e) {
+      oElement.setStyle({opacity: 1});
+      document.onmousemove = null;
+      document.onmouseup = null;
+      /*var data  = (oElement.id): oElement.getHeight();
+      cookie.put('ElementHeight', data);*/
+      return false;
+    }
+  
+    Element.insert(oElement, { after: oGrippie });
+  }
+} );
+
 function prepareForm(oForm) {
   oForm = $(oForm);
   // Event Observer
@@ -256,6 +322,10 @@ function prepareForm(oForm) {
         oElement.focus();
         bGiveFormFocus = false;
       } 
+    }
+    
+    if (oElement.type == "textarea") {
+      oElement.setResizable();
     }
   }
 }

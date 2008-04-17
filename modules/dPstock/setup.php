@@ -83,6 +83,7 @@ PRIMARY KEY (`order_item_id`)) TYPE=MYISAM;';
  `product_id` INT(11) UNSIGNED NOT NULL, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `quantity` INT(11) UNSIGNED NOT NULL, 
+ `code` VARCHAR(32) NULL, 
  `price` FLOAT NOT NULL, 
 PRIMARY KEY (`reference_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);

@@ -40,6 +40,7 @@ class CProductStock extends CMbObject {
   
   var $_ordered_count           = null;
   var $_ordered_last            = null;
+  var $_orders                  = null;
 
   function CProductStock() {
     $this->CMbObject('product_stock', 'stock_id');
@@ -107,19 +108,27 @@ class CProductStock extends CMbObject {
     // Verifies wether there are pending orders for this stock
     $where = array();
     $where['date_ordered'] = 'IS NOT NULL';
+    $orderby = 'date_ordered ASC';
     $order = new CProductOrder();
-    $list_orders = $order->loadList($where);
+    $list_orders = $order->loadList($where, $orderby);
+    $this->_orders = array();
     
     foreach ($list_orders as $order) {
       $order->updateFormFields();
       if (!$order->_received && !$order->cancelled) {
+        $done = false;
         foreach ($order->_ref_order_items as $item) {
           $item->loadRefsFwd();
           $item->_ref_reference->loadRefsFwd();
           $item->_ref_order->loadRefsFwd();
+          
           if ($item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
             $this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
             $this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
+            if (!$done) {
+              $this->_orders[] = $order;
+              $done = true;
+            }
           }
         }
       }

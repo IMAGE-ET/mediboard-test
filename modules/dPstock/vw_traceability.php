@@ -40,8 +40,6 @@ foreach ($tracked_classes as $class) {
   }
 }
 
-//mbTrace($track);
-
 // Création du template
 $smarty = new CSmartyDP();
 

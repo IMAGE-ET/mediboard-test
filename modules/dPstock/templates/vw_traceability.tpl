@@ -12,6 +12,7 @@
     <td>
       {{if $track.$code.$class}}
       {{foreach from=$curr_track.$class item=item}}
+        {{mb_value object=$item field=date}} | 
         {{mb_value object=$item field=_view}}<br />
       {{/foreach}}
       {{/if}}
