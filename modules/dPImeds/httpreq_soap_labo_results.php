@@ -42,8 +42,6 @@ $requestParams = array("strIDC"           => "$idCIDC->id400",
                        "listePatients"    => array(),
                        "PWD"              => "");
 
-mbTrace($requestParams, "Paramètres requete");
-
 $results = $client->GetInfoLabo($requestParams);
 
 // Création du template
