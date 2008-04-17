@@ -37,12 +37,14 @@ function setClose(date, salle_id) {
 function pageMain(){
   var oFormSejour = window.opener.document.editSejour;
   var form = document.frmSelector;   
-
-  if(oFormSejour.type.value == "comp"){
-    setCheckedValue(form.admission, "veille");
-  } 
-  if(oFormSejour.type.value == "ambu"){
-    setCheckedValue(form.admission, "jour");
+  if(!oFormSejour.sejour_id.value) {
+    if(oFormSejour.type.value == "ambu"){
+      setCheckedValue(form.admission, "jour");
+    } else {
+      setCheckedValue(form.admission, "jour");
+    }
+  } else {
+    setCheckedValue(form.admission, "aucune");
   }
 }
 </script>
@@ -151,7 +153,7 @@ function pageMain(){
         </tr>
         <tr>
           <td>
-            <input type="radio" name="admission" value="veille"{{if !$operation_id}} checked="checked"{{/if}} />
+            <input type="radio" name="admission" value="veille" />
           </td>
           <td>
             <label for="admission_veille">La veille</label> à
@@ -193,7 +195,7 @@ function pageMain(){
         </tr>
         <tr>
           <td>
-            <input type="radio" name="admission" value="aucune"{{if $operation_id}} checked="checked"{{/if}} />
+            <input type="radio" name="admission" value="aucune" />
           </td>
           <td colspan="2">
             <label for="admission_aucune">Ne pas modifier</label>

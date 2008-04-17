@@ -40,7 +40,10 @@ var ProtocoleSelector = {
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
     Form.Element.setValue(oOpForm[this.sChir_id]  , protocole.chir_id);
-    Form.Element.setValue(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
+    if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
+      Form.Element.setValue(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
+      oSejourForm[this.sType].value = protocole.type;
+    }
     if(oOpFormEasy) {
       Form.Element.setValue(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
       Form.Element.setValue(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
@@ -57,8 +60,6 @@ var ProtocoleSelector = {
     oOpForm[this.sForfait].value     = protocole.forfait;
     oOpForm[this.sFournitures].value = protocole.fournitures;
     oOpForm[this.sRques_op].value    = protocole.rques_operation;
-
-    oSejourForm[this.sType].value          = protocole.type;
     oSejourForm[this.sDP].value            = protocole.DP;
     oSejourForm[this.sConvalescence].value = protocole.convalescence;
     oSejourForm[this.sRques_sej].value     = protocole.rques_sejour;

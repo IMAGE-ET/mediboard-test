@@ -22,8 +22,12 @@ $etablissements = $etablissements->loadEtablissements(PERM_READ);
 $sejour_collision = array();
 if($patient->_ref_sejours){
 	foreach($patient->_ref_sejours as $key => $_sejour){
-	  $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
-	  $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
+	  if($_sejour->annule) {
+	    unset($patient->_ref_sejours[$key]);
+	  } else {
+      $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
+      $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
+	  }
   }
 }
 
