@@ -136,6 +136,12 @@ $extension->reasons[] = "Interopérabilité HPRIM XML, notamment pour le PMSI";
 $extensions[] = $extension;
 
 $extension = new CPHPExtension;
+$extension->name = "SOAP";
+$extension->description = "Extension permettant d'effectuer des requetes";
+$extension->reasons[] = "Requetes vers les serveurs de résultats de laboratoire";
+$extensions[] = $extension;
+
+$extension = new CPHPExtension;
 $extension->name = "FTP";
 $extension->description = "Extension d'accès aux serveur FTP";
 $extension->reasons[] = "Envoi HPRIM vers des serveurs de facturation";
