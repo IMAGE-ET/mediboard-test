@@ -192,18 +192,10 @@ Main.add(function () {
                   </a>                             
                 </td>
                 <td>
-                  <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}"
-                    {{if $curr_affectation->_ref_sejour->_num_dossier != 805017 && $curr_affectation->_ref_sejour->_num_dossier != 805225}}
-                    style="display: none"
-                    {{/if}}
-                  >
+                  <div id="labo_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
-                  <div id="labo_hot_for_{{$curr_affectation->_ref_sejour->_id}}"
-                    {{if $curr_affectation->_ref_sejour->_num_dossier != 806706}}
-                    style="display: none"
-                    {{/if}}
-                  >
+                  <div id="labo_hot_for_{{$curr_affectation->_ref_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
                 </td>
@@ -264,18 +256,10 @@ Main.add(function () {
                   </a>                             
                 </td>
                 <td>
-                  <div id="labo_for_{{$curr_sejour->_id}}"
-                    {{if $curr_sejour->_num_dossier != 805017 && $curr_sejour->_num_dossiers != 805225}}
-                    style="display: none"
-                    {{/if}}
-                  >
+                  <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
-                  <div id="labo_hot_for_{{$curr_sejour->_id}}"
-                    {{if $curr_sejour->_num_dossier != 806706}}
-                    style="display: none"
-                    {{/if}}
-                  >
+                  <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none">
                     <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
                   </div>
                 </td>
