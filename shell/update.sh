@@ -21,7 +21,7 @@ fi
 log=tmp/svnlog.txt
 prefixes="erg|fnc|fct|bug|warn|edit|syst|svn"
 
-case "$" in \
+case "$1" in \
   show) \
     echo "show" \
     ;; \
