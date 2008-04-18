@@ -21,6 +21,18 @@ fi
 log=tmp/svnlog.txt
 prefixes="erg|fnc|fct|bug|warn|edit|syst|svn"
 
+case "$" in \
+  show) \
+    echo "show" \
+    ;; \
+  do) \
+    echo "hide" \
+    ;; \
+  *) \
+    echo "Action $1 unknown" \
+    ;; \
+esac
+
 # Ensure log file exists
 touch $log;
 
