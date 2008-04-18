@@ -12,54 +12,60 @@ announce_script "Mediboard SVN updater"
 if [ "$#" -lt 1 ]
 then 
   echo "Usage: $0 <action>"
-  echo "  <action> The action to perform : show|do"
-  echo "     show : Shows the update log"
-  echo "     do   : Do the actual update"
+  echo "  <action> The action to perform : info|real"
+  echo "     info : Shows the update log"
+  echo "     real   : Do the actual update"
   exit 1
 fi
    
 log=tmp/svnlog.txt
-prefixes="erg|fnc|fct|bug|warn|edit|syst|svn"
+tmp=tmp/svnlog.tmp
+prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
+
 
 case "$1" in
-  show)
+  info)
     svn info | awk 'NR==5'
-    svn log -r BASE:HEAD | grep -i -E "(${prefixes})" | tac
+    svn log -r BASE:HEAD | grep -i -E "(${prefixes})"
     svn info -r HEAD | awk 'NR==5'
     ;;
     
-  do)
+  real)
+    # Concat the source (BASE) revision number : 5th line of SVN info (!)
+    svn info | awk 'NR==5' > $tmp
+    check_errs $? "Failed to get source revision info" "SVN Revision source info written!"
+    echo >> $tmp
+
+    # Concat SVN Log from BASE to HEAD
+    svn log -r BASE:HEAD | grep -i -E "(${prefixes})" >> $tmp
+    check_errs $? "Failed to parse SVN log" "SVN log parsed!"
+    
+    # Concat the target (HEAD) revision number
+    echo >> $tmp
+    svn info | awk 'NR==5' >> $tmp
+    check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
+
+    # Concat dating info
+    svn update
+    check_errs $? "Failed to perform SVN update" "SVN updated performed!"
+
+    ## Concat tmp file to log file 
+
     # Ensure log file exists
     touch $log;
     
-    # Log file is revered, make it straight
-    tac $log > $log.reversed
-    mv -f $log.reversed $log
-    
-    # Concat the source (BASE) revision number : 5th line of SVN info (!)
-    echo >> $log
-    svn info | awk 'NR==5' >> $log
-
-    # Concat SVN Log from BASE to HEAD
-    svn log -r BASE:HEAD | grep -i -E "(${prefixes})" >> $log
-    check_errs $? "Failed to append SVN log" "SVN log appended!"
-    
-    if [ "$1" = "do" ]
-    then
-      echo "+++ SHOULD UPDATE HERE +++" >> $log
-    fi
-    
-    # Concat the target (HEAD) revision number
-    echo >> $log
-    svn info | awk 'NR==5' >> $log
-    
-    # Concat dating info
-    echo "--- Updated Mediboard on $(date) ---" >> $log
-    echo >> $log
-    
-    ## Reverse the log file for user convenience
+    # Log file is reversed, make it straight
     tac $log > $log.straight
-    mv -f $log.straight $log
+
+    # Concat tmp file
+    cat $tmp >> $log.straight
+    
+    # Reverse the log file for user convenience
+    tac $log.straight > $log
+
+    # Clean files
+    rm -f $log.straight
+    rm -f $tmp
     ;;
 
   *)
