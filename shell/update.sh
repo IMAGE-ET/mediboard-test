@@ -9,8 +9,17 @@ BASH_PATH=$(dirname $0)
 
 announce_script "Mediboard SVN updater"
 
+if [ "$#" -lt 1 ]
+then 
+  echo "Usage: $0 <action>"
+  echo "  <action> The action to perform : show|do"
+  echo "     show : Shows the update log"
+  echo "     do   : Do the actual update"
+  exit 1
+fi
+   
 log=tmp/svnlog.txt
-prefixes="erg|fnc|fct|bug"
+prefixes="erg|fnc|fct|bug|warn|edit|syst|svn"
 
 # Ensure log file exists
 touch $log;
@@ -20,14 +29,17 @@ tac $log > $log.reversed
 mv -f $log.reversed $log
 
 # Concat SVN Log from BASE to HEAD
-svn log -r BASE:HEAD | grep -E "(${prefixes})" >> $log
+svn log -r BASE:HEAD | grep -i -E "(${prefixes})" >> $log
 check_errs $? "Failed to append SVN log" "SVN log appended!"
 
-echo "+++ SHOULD UPDATE HERE +++" >> $log
+if [ "$1" = "do" ]
+then
+  echo "+++ SHOULD UPDATE HERE +++" >> $log
+fi
 
 # Concat the target (HEAD) revision number : 5th line of SVN info (!)
 echo >> $log
-svn info -r BASE| awk 'NR==5' >> $log
+svn info | awk 'NR==5' >> $log
 
 # Concat dating info
 echo "--- Updated Mediboard on $(date) ---" >> $log
