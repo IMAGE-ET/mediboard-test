@@ -11,17 +11,21 @@
   <tbody>
 	{{foreach from=$orders item=curr_order}}
 	  <tr>
-	    <td>{{$curr_order->order_number}}</td>
+	    <td>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+          {{$curr_order->order_number}}
+        </span>
+      </td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
 	    <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
+        <button type="button" class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600); return false;">{{tr}}Modify{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="edit" onclick="popupOrder(this.form, 800, 600); return false;">{{tr}}Modify{{/tr}}</button>
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
         {{if $curr_order->_ref_order_items|@count > 0}}
@@ -57,7 +61,11 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td>{{$curr_order->order_number}}</td>
+      <td>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+          {{$curr_order->order_number}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
@@ -69,11 +77,13 @@
           <input type="hidden" name="cancelled" value="1" />
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">Annuler</button>
         </form>
-        <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
+        <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de commande</button>
+        <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
-          <button type="button" class="tick" onclick="popupOrderForm(this.form)">Commander</button>
+          <input type="hidden" name="_order" value="1" />
+          <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true})">Commandée</button>
         </form>
      </td>
     </tr>
@@ -101,19 +111,23 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td>{{$curr_order->order_number}}</td>
+      <td>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+          {{$curr_order->order_number}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
       <td>
+        <button type="button" class="tick" onclick="popupOrder({{$curr_order->_id}});">{{tr}}CProductOrder-_receive{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
-          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="order_id" value="" />
           <input type="hidden" name="cancelled" value="1" />
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Cancel{{/tr}}</button>
-          <button type="button" class="tick" onclick="popupOrder(this.form);">{{tr}}CProductOrder-_receive{{/tr}}</button>
         </form>
       </td>
     </tr>
@@ -142,7 +156,11 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td>{{$curr_order->order_number}}</td>
+      <td>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+          {{$curr_order->order_number}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
@@ -183,7 +201,11 @@
   <tbody>
   {{foreach from=$orders item=curr_order}}
     <tr>
-      <td>{{$curr_order->order_number}}</td>
+      <td>
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductOrder', object_id: {{$curr_order->_id}} } })">
+          {{$curr_order->order_number}}
+        </span>
+      </td>
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>

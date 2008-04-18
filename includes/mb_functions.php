@@ -580,20 +580,11 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/jscalendar/lang/calendar-fr.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
-  // Gosu doit etre définit avant Prototype
-  // Car Prototype redéfinit les méthodes de Array
-  /*$affichageScript .= mbLoadScript("includes/javascript/gosu/array.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/cookie.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/debug.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/ie5.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/keyboard.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/string.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/gosu/validate.js",$modeReturn);*/
-  
-  // Prototype doit être définit après Gosu (cf ci-dessus)
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
+  
+  $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/prototype_hack.js",$modeReturn);
@@ -784,6 +775,30 @@ function mbDateFromLocale($date) {
  */
 function in_range($value, $min, $max) {
   return $value <= $max && $value >= $min;
+}
+
+function luhn ($code) {
+  $code = preg_replace('/\D|\s/', '', $code);
+  $code_length = strlen($code);
+  $sum = 0;
+  
+  $parity = $code_length % 2;
+  
+  for ($i = $code_length - 1; $i >= 0; $i--) {
+    $digit = $code{$i};
+    
+    if ($i % 2 == $parity) {
+      $digit *= 2;
+      
+      if ($digit > 9) {
+        $digit -= 9;
+      }
+    }
+    
+    $sum += $digit;
+  }
+  
+  return (($sum % 10) == 0);
 }
 
 ?>

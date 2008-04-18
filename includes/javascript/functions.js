@@ -1389,6 +1389,29 @@ function levenshtein( str1, str2 ) {
     return a[l][t];
 }
 
+function luhn (code) {
+  var code_length = code.length;
+  var sum = 0;
+  var parity = code_length % 2;
+  
+  for (var i = code_length - 1; i >= 0; i--) {
+    var digit = code.charAt(i);
+    
+    
+    if (i % 2 == parity) {
+      digit *= 2;
+      
+      if (digit > 9) {
+        digit -= 9;
+      }
+    }
+    
+    sum += parseInt(digit);
+  }
+  
+  return ((sum % 10) == 0);
+}
+
 
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {

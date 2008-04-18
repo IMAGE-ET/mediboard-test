@@ -78,6 +78,14 @@ function pageMain() {
           <th>{{mb_label object=$societe field="phone"}}</th>
           <td>{{mb_field object=$societe field="phone"}}</td>
         </tr>
+         <tr>
+          <th>{{mb_label object=$societe field="fax"}}</th>
+          <td>{{mb_field object=$societe field="fax"}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$societe field="siret"}}</th>
+          <td>{{mb_field object=$societe field="siret"}}</td>
+        </tr>
         <tr>
           <th>{{mb_label object=$societe field="email"}}</th>
           <td>{{mb_field object=$societe field="email"}}</td>

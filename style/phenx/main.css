@@ -2361,7 +2361,7 @@ table.tbl td.ccmu-P{
   position: absolute;
   border: 1px solid #999999;
   background: #F9F9F9;
-  z-index: 50;
+  z-index: 100;
   margin-top: 16px;
   margin-left: 16px;
 }
@@ -2389,12 +2389,14 @@ table.tbl td.ccmu-P{
 .bargraph > .value {
   height: 40%;
   border: 1px solid;
+  z-index: 1;
 }
 
 .bargraph .threshold {
   height: 55%;
   opacity: .3;
   margin-top: 1px;
+  z-index: 1;
 }
 
 .bargraph .value div, .bargraph .threshold div {
@@ -2422,5 +2424,5 @@ table.main td.step {
   border-top: 0;
   cursor: n-resize;
   margin-left: 1px;
-  margin-right: -3px;
+  margin-right: -2px;
 }

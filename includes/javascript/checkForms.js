@@ -523,6 +523,12 @@ Object.extend(ElementChecker, {
       }
       return null;
       
+    // siret
+    } else if(this.aProperties["siret"]){
+      if (!luhn(this.oElement.value)) {
+        return "Code SIRET incorrect";
+      }
+      
     // Aucune Specification
     } else {
       return "Spécification de code invalide";

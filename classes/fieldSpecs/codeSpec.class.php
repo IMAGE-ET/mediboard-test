@@ -16,6 +16,7 @@ class CCodeSpec extends CMbFieldSpec {
   var $adeli = null;
   var $insee = null;
   var $rib   = null;
+  var $siret = null;
   
   function getSpecType() {
     return("code");
@@ -104,6 +105,13 @@ class CCodeSpec extends CMbFieldSpec {
       
     }
     
+    // siret
+    elseif($this->siret) {
+      if (!luhn($propValue)) {
+        return "Code SIRET incorrect, doit contenir exactement 14 chiffres";
+      }
+    }
+    
     else {
       return "Spécification de code invalide";
     }
@@ -124,7 +132,9 @@ class CCodeSpec extends CMbFieldSpec {
       $type_sql = "VARCHAR(15)";
     }elseif($this->rib){
       $type_sql = "VARCHAR(23)";
-    }    
+    }elseif($this->siret){
+      $type_sql = "VARCHAR(14)";
+    }      
     return $type_sql;
   }
 
@@ -151,6 +161,10 @@ class CCodeSpec extends CMbFieldSpec {
     // rib
     }elseif($this->rib){
       $object->$fieldName = "11111111111111111111111";
+    
+    // siret
+    }elseif($this->siret){
+      $object->$fieldName = "73282932000074";
     
     // insee
     }elseif($this->insee){

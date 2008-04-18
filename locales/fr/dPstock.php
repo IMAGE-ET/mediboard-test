@@ -415,4 +415,5 @@ $locales['CProductStockOut-code'] = "Code";
 $locales['CProductStockOut-code-court'] = "";
 $locales['CProductStockOut-code-desc'] = "";
 $locales['CProductStock-bargraph'] = "Stocks";
+$locales['CProductReference-code'] = "Code";
 ?>

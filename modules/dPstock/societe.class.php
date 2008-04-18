@@ -17,6 +17,8 @@ class CSociete extends CMbObject {
   var $postal_code     = null;
   var $city            = null;
   var $phone           = null;
+  var $fax             = null;
+  var $siret           = null;
   var $email           = null;
   var $contact_name    = null;
   var $contact_surname = null;
@@ -46,6 +48,8 @@ class CSociete extends CMbObject {
       'postal_code'     => 'code insee',
       'city'            => 'str',
       'phone'           => 'str',
+      'fax'             => 'str',
+      'siret'           => 'code siret',
       'email'           => 'email',
       'contact_name'    => 'str maxLength|50',
       'contact_surname' => 'str maxLength|50',

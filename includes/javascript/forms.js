@@ -553,27 +553,29 @@ NumericField.prototype = {
     var step = Number(this.getStep());
     var result = (parseInt(Number(oField.value) / step) + 1) * step;
     result = (result <= this.max || this.max == null) ? result : this.max;
-    Form.Element.setValue(oField, result);
-//    Form.Element.Selection.setAll(oField);
-//    oField.focus();
+    oField.setValue(result);
+    oField.select();
   },
 
   // Decrement function
   dec: function () {
     var oField = $(this.sField);
-    var step = Number(this.getStep());
+    var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
  	  result = (result >= this.min || this.min == null) ? result : this.min;
-    Form.Element.setValue(oField, result);
-//    Form.Element.Selection.setAll(oField);
-//    oField.focus();
+    oField.setValue(result);
+    oField.select();
   },
   
-  // Calculate appropriate step
-  getStep: function () {
+  /** Calculate appropriate step
+   *  ref is the reference to calculate the step, it is useful to avoid having bad steps :
+   *  for exampele, when we have oField.value = 10, if we decrement, we'll have 5 instead of 9 without this ref
+   *  Set it to -1 when decrementing, 0 when incrementing
+   */
+  getStep: function (ref) {
     var oField = $(this.sField);
     if (this.step == null) {
-      var value = Math.abs(oField.value);
+      var value = Math.abs(oField.value) + ((ref != undefined) ? ref : 0);
       if (value < 10)  return 1;
       if (value < 50)  return 5;
       if (value < 100) return 10;

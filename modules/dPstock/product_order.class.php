@@ -290,7 +290,7 @@ class CProductOrder extends CMbObject {
 		}
 
 		foreach ($this->_ref_order_items as $item) {
-			if (!$perm->getPerm($permType)) {
+			if (!$item->getPerm($permType)) {
 				return false;
 			}
 		}

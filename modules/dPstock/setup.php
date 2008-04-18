@@ -108,6 +108,8 @@ PRIMARY KEY (`stock_id`)) TYPE=MYISAM;';
  `city` VARCHAR(255), 
  `phone` VARCHAR(255), 
  `email` VARCHAR(50), 
+ `fax` VARCHAR(16) NULL,
+ `siret` VARCHAR(14) NULL,
  `contact_name` VARCHAR(50), 
  `contact_surname` VARCHAR(50), 
 PRIMARY KEY (`societe_id`)) TYPE=MYISAM;';

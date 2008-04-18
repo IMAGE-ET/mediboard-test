@@ -67,6 +67,8 @@ function refreshListOrders(type, keywords) {
   url.addParam("type", type);
   url.addParam("keywords", keywords);
   url.requestUpdate("list-orders-"+type, { waitingText: null } );
+  
+  return false;
 }
 
 function refreshLists(keywords) {
@@ -79,27 +81,28 @@ function refreshLists(keywords) {
   } else {
     window.opener.refreshLists();
   }
+  return false;
 }
 
-function popupOrder(oForm, iWidth, iHeight) {
+function popupOrder(iOrderId, iWidth, iHeight, bAutofill) {
   var width = iWidth?iWidth:500;
   var height = iHeight?iHeight:500;
 
   var url = new Url();
   url.setModuleAction("dPstock", "vw_aed_order", null, null);
-  url.addParam("order_id", $F(oForm.order_id));
-  url.addParam("_autofill", oForm._autofill != undefined);
+  url.addParam("order_id", iOrderId);
+  url.addParam("_autofill", bAutofill != undefined);
 
   url.pop(width, height, "Edition/visualisation commande");
 }
 
-function popupOrderForm(oForm, iWidth, iHeight) {
+function popupOrderForm(iOrderId, iWidth, iHeight) {
   var width = iWidth?iWidth:500;
   var height = iHeight?iHeight:500;
 
   var url = new Url();
   url.setModuleAction("dPstock", "vw_order_form", null, null);
-  url.addParam("order_id", $F(oForm.order_id));
+  url.addParam("order_id", iOrderId);
 
   url.pop(width, height, "Bon de commande");
 }
