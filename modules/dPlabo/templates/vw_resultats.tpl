@@ -7,6 +7,16 @@ var Prescription = {
   }
 }
 
+
+
+function printResultats(prescription_id){
+  var url = new Url;
+  url.setModuleAction("dPlabo", "vw_resultat_pdf");
+  url.addParam("suppressHeaders", "1");
+  url.addParam("prescription_id", prescription_id);
+  url.popup(800, 700, "Resultats");
+}
+
 var Anteriorite = {
  url: new Url,
  viewItem: function(item_id) {
@@ -71,6 +81,12 @@ function pageMain() {
               this.pop();
             }
             </script>
+          </td>
+          <td>
+          
+          <button class="print notext" type="button" onclick="printResultats('{{$prescription->_id}}')">
+          
+          </button>
           </td>
         </tr>
       </table>
