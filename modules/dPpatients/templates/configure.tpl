@@ -25,9 +25,8 @@ function addAnt(ant) {
 <table class="form">  
   {{assign var="class" value="CPatient"}}
   <tr>
-    <th class="category" colspan="100">Tag pour les IPP</th>
+    <th class="category" colspan="100">Configuration pour les patients</th>
   </tr>
-  
   <tr>
     {{assign var="var" value="tag_ipp"}}
     <th colspan="3">
@@ -39,39 +38,31 @@ function addAnt(ant) {
       <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
     </td>
   </tr>
-   {{assign var="var" value="date_naissance"}}
+
+  {{assign var="var" value="date_naissance"}}
   <tr>
-   <th class="category" colspan="6">
+    <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>    
-   </th>
-  </tr>
-  <tr>  
-    <td colspan="6" style="text-align: center">
+    </th>
+    <td colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
-  </tr>
-  <tr>
-    <td class="button" colspan="6">
-      <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-    </td>
   </tr>
   
   <!-- Merge only for admin -->
   {{assign var="var" value="merge_only_admin"}}
   <tr>
-   <th class="category" colspan="6">
+   <th colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
         {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
       </label>    
    </th>
-  </tr>
-  <tr>  
-    <td colspan="6" style="text-align: center">
+    <td  colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
@@ -79,9 +70,29 @@ function addAnt(ant) {
     </td>             
   </tr>
   
+  {{assign var="class" value="intermax"}}
+  <tr>
+    <th class="category" colspan="100">Configuration Intermax</th>
+  </tr>
+  <tr>
+    {{assign var="var" value="auto_watch"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td  colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+
+
   {{assign var="class" value="CAntecedent"}}
   <tr>
-    <th class="category" colspan="100">Tag pour les IPP</th>
+    <th class="category" colspan="100">Types d'antécédents</th>
   </tr>
   
   <tr>

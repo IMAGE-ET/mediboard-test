@@ -14,8 +14,8 @@ then
   echo "Usage: $0 <action> [<revision>]"
   echo "  <action> The action to perform : info|real"
   echo "     info : Shows the update log"
-  echo "     real   : Do the actual update"
-  echo "  <revision> The revision you want to update to, HEAD by default"
+  echo "     real : Performs the actual update"
+  echo "  <revision> The revision number you want to update to, HEAD by default"
   exit 1
 fi
    

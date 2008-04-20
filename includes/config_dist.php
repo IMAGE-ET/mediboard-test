@@ -251,6 +251,11 @@ $dPconfig["dPpatients"]["CPatient"] = array (
   "date_naissance" => "0",
   "merge_only_admin" => "0",
 );
+
+$dPconfig["dPpatients"]["intermax"] = array (
+  "auto_watch" => "0",
+);
+
 $dPconfig["dPpatients"]["CAntecedent"] = array(
   "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
 );

@@ -15,6 +15,8 @@
 {{/if}}
 <script type="text/javascript">
 
+Intermax.autoWatch = {{$dPconfig.dPpatients.intermax.auto_watch}};
+
 Intermax.errors = {
   // Intégration Mediboard LogicMax
   "100" : "{{tr}}Intermax.error.100{{/tr}}",
@@ -71,7 +73,6 @@ Intermax.errors = {
 }
 </script>
 
-
 <!-- Yoplet to write Intermax file -->
 <applet 
   name="intermaxTrigger"
@@ -111,7 +112,7 @@ Intermax.errors = {
   <param name="lineSeparator" value="---" />
   <param name="debug" value={{if $debug=="true"}}"true"{{else}}"false"{{/if}} />
   <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.OUT" />
-<!-- <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" /> -->
+	<param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/RETURN.FLG" />
 </applet>
 
 {{/if}}

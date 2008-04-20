@@ -161,4 +161,5 @@ $locales['CPermObject-back-'] = '';
 $locales['CUser-_view'] = '';
 $locales['CUser-_view-court'] = '';
 $locales['CUser-_view-desc'] = '';
+$locales['config-dPpatients-intermax-auto_watch'] = 'Retour de valeurs LogicMax automatique';
 ?>

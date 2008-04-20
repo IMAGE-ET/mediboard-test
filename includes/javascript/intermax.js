@@ -1,12 +1,16 @@
 /**
  * Class for LogicMax browser based Integration
  */
- 
 var Intermax = {
   oContent: {},
   aAllowedFunctions: [],
   newLine: "---",
+  watcher: null,
+  autoWatch: false,
   
+  /**
+   * Alerts information with LogicMax error codes
+   */
   alert: function(sError, sExtraInfo) {
     sExtraInfo = sExtraInfo || "";
     
@@ -19,6 +23,9 @@ var Intermax = {
     alert(sLogicMaxFonction + "\n\n" + sErrorMessage + sExtraInfo + sLogicMaxError);
   },
   
+  /**
+   * Turns the serialized string content into an object content
+   */
   bindContent: function(sContent) {    
     var aContentLines = sContent.split(this.newLine);
     this.oContent = {}
@@ -40,7 +47,10 @@ var Intermax = {
       
     } );
   },
-    
+  
+  /**
+   * Turns an object content into a serialized string content
+   */
   makeContent: function() {
     var sContent = '';
     $H(this.oContent).each(function(pair) {
@@ -66,27 +76,46 @@ var Intermax = {
         
     var sContent = this.makeContent();
     document.intermaxTrigger.performWrite(sContent);
+    this.watchResult(sFunction);
   },
   
   result: function(aAllowedFunctions) {
     this.aAllowedFunctions = aAllowedFunctions ? [aAllowedFunctions].flatten() : [];
     document.intermaxResult.performRead();
-    setTimeout(Intermax.handleContent.bind(Intermax), 100);
+    setTimeout(function() { Intermax.handleContent() }, 100);
+  },
+  
+  watchResult: function(aAllowedFunctions) {
+    if (this.autoWatch && !this.watcher) {
+	  	this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 0.5);
+    }
+    
   },
   
   handleContent: function() {
     // Append with empty Js String will cast a Java string to a Js string
     var sContent = document.intermaxResult.getContent() + ""; 
     this.bindContent(sContent);
+
     if (!$H(this.oContent).values().length) {
-	    Intermax.alert("100");
+	    if (!this.watcher) {
+	    	Intermax.alert("100");
+	   	}
+
       return;
     }
-
+    
 		// Fonctions autorisées    
     if (this.aAllowedFunctions.length && !this.aAllowedFunctions.include(this.oContent.FONCTION.NOM)) {
-	    Intermax.alert("110", this.aAllowedFunctions.join(", "));
+	    if (!this.watcher) {
+		    Intermax.alert("110", this.aAllowedFunctions.join(", "));
+		  }
 	    return;
+    }
+    
+    if (this.watcher) {
+	    this.watcher.stop();
+	    this.watcher = null;
     }
     
     // Fonction en cours d'execution
@@ -109,7 +138,7 @@ var Intermax = {
     url.addObjectParam("intermax", this.oContent);
     url.requestUpdate(SystemMessage.id, { method: "post" } );
   },
-   
+  
   handleResult: function(sFunction) {
     
 		// Activate function handler
@@ -135,13 +164,13 @@ var Intermax = {
 			} );
     },
 
-    "Formater FSE" : function(iVitale, iCPS) {
+    "Formater FSE" : function(iCPS, iVitale) {
       var oContent = { 
         CPS: {
-          CPS_NUMERO_LOGICMAX: iVitale
+          CPS_NUMERO_LOGICMAX: iCPS
         },
         VITALE: {
-          VIT_NUMERO_LOGICMAX: iCPS
+          VIT_NUMERO_LOGICMAX: iVitale
         }
       }
       

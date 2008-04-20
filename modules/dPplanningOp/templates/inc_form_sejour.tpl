@@ -569,6 +569,7 @@ Main.add( function(){
 </form>
 
 <script type="text/javascript">
+
 // Explicit form preparation for Ajax loading
 prepareForm(document.editSejour);
 
@@ -598,4 +599,5 @@ dates.limit = {
 Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
 
 removePlageOp(false);
+
 </script>
