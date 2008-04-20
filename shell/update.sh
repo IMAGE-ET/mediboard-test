@@ -47,14 +47,14 @@ case "$1" in
     svn log -r BASE:$revision | grep -i -E "(${prefixes})" >> $tmp
     check_errs $? "Failed to parse SVN log" "SVN log parsed!"
     
+    # Perform actual update
+    svn update --revision $revision
+    check_errs $? "Failed to perform SVN update" "SVN updated performed!"
+
     # Concat the target revision number
     echo >> $tmp
     svn info | awk 'NR==5' >> $tmp
     check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
-
-    # Perform actual update
-    svn update --revision $revision
-    check_errs $? "Failed to perform SVN update" "SVN updated performed!"
 
     # Concat dating info
     echo "--- Updated Mediboard on $(date) ---" >> $log
