@@ -57,8 +57,8 @@ case "$1" in
     check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
 
     # Concat dating info
-    echo "--- Updated Mediboard on $(date) ---" >> $log
-    echo >> $log
+    echo "--- Updated Mediboard on $(date) ---" >> $tmp
+    echo >> $tmp
 
     ## Concat tmp file to log file 
 
