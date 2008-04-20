@@ -22,14 +22,19 @@ fi
 log=tmp/svnlog.txt
 tmp=tmp/svnlog.tmp
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
-rev=HEAD
+revision=HEAD
 
+# Choose the target revision
+if [ "$#" -eq 2 ]
+then 
+  revision=$2
+fi
 
 case "$1" in
   info)
     svn info | awk 'NR==5'
-    svn log -r BASE:$rev | grep -i -E "(${prefixes})"
-    svn info -r $rev | awk 'NR==5'
+    svn log -r BASE:$revision | grep -i -E "(${prefixes})"
+    svn info -r $revision | awk 'NR==5'
     ;;
     
   real)
@@ -39,7 +44,7 @@ case "$1" in
     echo >> $tmp
 
     # Concat SVN Log from BASE to target revision
-    svn log -r BASE:$rev | grep -i -E "(${prefixes})" >> $tmp
+    svn log -r BASE:$revision | grep -i -E "(${prefixes})" >> $tmp
     check_errs $? "Failed to parse SVN log" "SVN log parsed!"
     
     # Concat the target revision number
@@ -48,7 +53,7 @@ case "$1" in
     check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
 
     # Concat dating info
-    svn update
+    svn update --revision $revision
     check_errs $? "Failed to perform SVN update" "SVN updated performed!"
 
     ## Concat tmp file to log file 
