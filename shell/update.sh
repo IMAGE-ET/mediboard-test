@@ -52,9 +52,13 @@ case "$1" in
     svn info | awk 'NR==5' >> $tmp
     check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
 
-    # Concat dating info
+    # Perform actual update
     svn update --revision $revision
     check_errs $? "Failed to perform SVN update" "SVN updated performed!"
+
+    # Concat dating info
+    echo "--- Updated Mediboard on $(date) ---" >> $log
+    echo >> $log
 
     ## Concat tmp file to log file 
 
