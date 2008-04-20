@@ -11,23 +11,25 @@ announce_script "Mediboard SVN updater"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <action>"
+  echo "Usage: $0 <action> [<revision>]"
   echo "  <action> The action to perform : info|real"
   echo "     info : Shows the update log"
   echo "     real   : Do the actual update"
+  echo "  <revision> The revision you want to update to, HEAD by default"
   exit 1
 fi
    
 log=tmp/svnlog.txt
 tmp=tmp/svnlog.tmp
 prefixes="erg|fnc|fct|bug|war|edi|sys|svn"
+rev=HEAD
 
 
 case "$1" in
   info)
     svn info | awk 'NR==5'
-    svn log -r BASE:HEAD | grep -i -E "(${prefixes})"
-    svn info -r HEAD | awk 'NR==5'
+    svn log -r BASE:$rev | grep -i -E "(${prefixes})"
+    svn info -r $rev | awk 'NR==5'
     ;;
     
   real)
@@ -36,11 +38,11 @@ case "$1" in
     check_errs $? "Failed to get source revision info" "SVN Revision source info written!"
     echo >> $tmp
 
-    # Concat SVN Log from BASE to HEAD
-    svn log -r BASE:HEAD | grep -i -E "(${prefixes})" >> $tmp
+    # Concat SVN Log from BASE to target revision
+    svn log -r BASE:$rev | grep -i -E "(${prefixes})" >> $tmp
     check_errs $? "Failed to parse SVN log" "SVN log parsed!"
     
-    # Concat the target (HEAD) revision number
+    # Concat the target revision number
     echo >> $tmp
     svn info | awk 'NR==5' >> $tmp
     check_errs $? "Failed to get target revision info" "SVN Revision target info written!"
