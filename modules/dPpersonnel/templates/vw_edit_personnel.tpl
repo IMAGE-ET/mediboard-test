@@ -43,12 +43,18 @@
 		  </tr>
 		<tr>
 		  <th>Nom</th>
-		  <th>Emplacement</th>
+		  <th colspan="2">Emplacement</th>
 		</tr>
 		{{foreach from=$personnels item=_personnel}}
 		<tr {{if $_personnel->_id == $personnel->_id}}class="selected"{{/if}}>
 		  <td><a href="?m={{$m}}&amp;tab={{$tab}}&amp;personnel_id={{$_personnel->_id}}">{{$_personnel->_ref_user->_view}}</a></td>
+			
+			{{if $_personnel->actif}}
+		  <td colspan="2">{{tr}}CPersonnel.emplacement.{{$_personnel->emplacement}}{{/tr}}</td>
+			{{else}}
 		  <td>{{tr}}CPersonnel.emplacement.{{$_personnel->emplacement}}{{/tr}}</td>
+		  <td class="cancelled">INACTIF</td>
+			{{/if}}
 		</tr>
 		{{/foreach}}
 	  </table>
@@ -57,9 +63,11 @@
 	
 	<td>
 	  <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-	    <input type="hidden" name="dosql" value="do_personnel_aed" />
+
+    <input type="hidden" name="dosql" value="do_personnel_aed" />
 		<input type="hidden" name="personnel_id" value="{{$personnel->_id}}" />
 		<input type="hidden" name="del" value="0" />
+
 		<table class="form">
 		  <tr>
 		  {{if $personnel->_id}}
@@ -76,33 +84,35 @@
 		    </th>
 		    {{/if}}
 		  </tr>
+		  
 		  <tr>
-		    <th>
-              {{mb_label object=$personnel field="user_id"}}
-            </th>
-            <td>
-              <input type="text" name="user_id" class="notNull" value="{{$personnel->user_id}}"/>
-              <input type="hidden" name="object_class" value="CMediusers" />
-              <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
-              <script type="text/javascript">
-               ObjectSelector.initEdit = function(){
-                  this.sForm     = "editFrm";
-                  this.sId       = "user_id";
-                  this.sClass    = "object_class";  
-                  this.onlyclass = "true";
-                  this.pop();
-                }
-              </script>
-            </td>
+		    <th>{{mb_label object=$personnel field="user_id"}}</th>
+        <td>
+          <input type="text" name="user_id" class="notNull" value="{{$personnel->user_id}}"/>
+          <input type="hidden" name="object_class" value="CMediusers" />
+          <button class="search" type="button" onclick="ObjectSelector.initEdit()">Chercher</button>
+          <script type="text/javascript">
+           ObjectSelector.initEdit = function(){
+              this.sForm     = "editFrm";
+              this.sId       = "user_id";
+              this.sClass    = "object_class";  
+              this.onlyclass = "true";
+              this.pop();
+            }
+          </script>
+        </td>
 		  </tr>
+		  
 		  <tr>
 		    <th>{{mb_label object=$personnel field="emplacement"}}</th>
 		    <td>{{mb_field object=$personnel field="emplacement"  }}</td>
 		  </tr>
+		  
 		  <tr>
 		    <th>{{mb_label object=$personnel field="actif"}}</th>
 		    <td>{{mb_field object=$personnel field="actif"  }}</td>
-		  </tr>       
+		  </tr>
+		         
 		  <tr>
 		    <td class="button" colspan="2">
 		      {{if $personnel->_id}}
@@ -115,8 +125,10 @@
 		      {{/if}}
 		    </td>
 		  </tr>
-		</table>   
-      </form>
+		</table>
+		   
+    </form>
+    
     </td>  
   </tr>
 </table>

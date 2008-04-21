@@ -36,6 +36,9 @@ class CPersonnel extends CMbObject {
     $specs["user_id"]     = "notNull ref class|CMediusers";
     $specs["emplacement"] = "notNull enum list|op|op_panseuse|reveil|service default|op";
     $specs["actif"]       = "notNull bool";
+    
+    $specs["_user_last_name" ] = "str";
+    $specs["_user_first_name"] = "str";
     return $specs;
   }
   
