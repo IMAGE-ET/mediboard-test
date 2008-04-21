@@ -56,9 +56,12 @@ class CPersonnel extends CMbObject {
     $this->_view = "Personnel $this->user_id";
   }
   
-  static function loadListPers($emplacement){
+  static function loadListPers($emplacement, $actif = true){
     $personnel = new CPersonnel();
     $personnel->emplacement = $emplacement;
+    if($actif) {
+      $personnel->actif = 1;
+    }
     $ljoin["users"] = "personnel.user_id = users.user_id";
     $order = "users.user_last_name";
     $listPers = $personnel->loadMatchingList($order, null, null, $ljoin);

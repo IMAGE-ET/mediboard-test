@@ -26,9 +26,6 @@ $modif_operation = $date>=$date_now;
 // Tableau d'affectations
 $tabPersonnel = array();
 
-// Liste du personnel
-$listPers = array();
-
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
   
