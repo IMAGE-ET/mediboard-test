@@ -7,7 +7,7 @@
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
       <input type="hidden" name="del" value="0" />
-      <button type="button" class="trash notext" onclick="confirmDeletion(this.form,{typeName:'l\article',objName:'{{$curr_item->_view|smarty:nodefaults|JSAttribute}}', ajax: 1 }, {onComplete: function() {refreshOrder({{$order->_id}}, {refreshLists: true}) } })"></button>
+      <button type="button" class="trash notext" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$curr_item->_view|smarty:nodefaults|JSAttribute}}', ajax: 1 }, {onComplete: function() {refreshOrder({{$order->_id}}, {refreshLists: true}) } })"></button>
     </form>
   </td>
   {{/if}}

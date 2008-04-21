@@ -14,12 +14,12 @@ function pageMain() {
   <!-- Filter -->
   <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($F(this.keywords));">
     <input type="hidden" class="m" name="{{$m}}" />
-    <input type="text" class="search" name="keywords" title="Rechercher une commande par numéro ou fournisseur" />
+    <input type="text" class="search" name="keywords" />
     <button type="button" class="search" onclick="refreshLists($F(this.form.keywords))">{{tr}}Filter{{/tr}}</button>
   </form>
   
-  <button type="button" class="change" onclick="popupOrder(this.form, 800, 600, true);">{{tr}}msg-CProductOrder-_autofill{{/tr}}</button>
-  <button type="button" class="new"    onclick="popupOrder(this.form, 800, 600);">{{tr}}msg-CProductOrder-create{{/tr}}</button>
+  <button type="button" class="change" onclick="popupOrder(this.form, 800, 600, true);">{{tr}}CProductOrder-_autofill{{/tr}}</button>
+  <button type="button" class="new"    onclick="popupOrder(this.form, 800, 600);">{{tr}}CProductOrder.create{{/tr}}</button>
 
   <!-- Tabs titles -->
   <ul id="tab_orders" class="control_tabs">

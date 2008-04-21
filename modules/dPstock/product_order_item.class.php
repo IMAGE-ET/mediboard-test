@@ -86,6 +86,10 @@ class CProductOrderItem extends CMbObject {
     }
   }
   
+  function isReceived() {
+  	return ($this->date_received && ($this->quantity == $this->quantity_received));
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
 

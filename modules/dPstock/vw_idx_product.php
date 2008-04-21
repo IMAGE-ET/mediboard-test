@@ -9,7 +9,7 @@
  
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsAdmin();
 
 // Gets objects ID from Get or Session
 $product_id  = mbGetValueFromGetOrSession('product_id', null);

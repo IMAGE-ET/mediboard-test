@@ -39,6 +39,7 @@ class CProductOrder extends CMbObject {
 	var $_receive         = null;
 	var $_autofill        = null;
 	var $_redo            = null;
+	var $_reset           = null;
 	
 
 	function CProductOrder() {
@@ -70,6 +71,7 @@ class CProductOrder extends CMbObject {
 			'_receive'        => 'bool',
 			'_autofill'       => 'bool',
 			'_redo'           => 'bool',
+		  '_reset'          => 'bool',
 		));
 	}
 
@@ -85,7 +87,7 @@ class CProductOrder extends CMbObject {
 		$count = 0;
 		if ($this->_ref_order_items) {
 			foreach ($this->_ref_order_items as $item) {
-				if ($item->quantity_received == $item->quantity) {
+				if ($item->isReceived()) {
 					$count++;
 				}
 			}
@@ -188,17 +190,30 @@ class CProductOrder extends CMbObject {
   	}
   }
   
+  function reset() {
+    $this->load();
+    $this->date_ordered = '';
+    $this->locked = 0;
+    $this->cancelled = 0;
+    
+    $this->loadRefsBack();
+    foreach ($this->_ref_order_items as $item) {
+      $item->date_received = '';
+      $item->quantity_received = '';
+      $item->store();
+    }
+  }
+  
   function getUniqueNumber() {
   	global $AppUI;
   	
   	$format = $AppUI->conf('dPstock CProductOrder order_number_format');
   	
-  	if (!preg_match('#\%\d*id#', $format)) {
-  		$AppUI->setMsg('format de numero de serie incorrect');
+  	if (!preg_match('#\%id#', $format)) {
+  		$AppUI->setMsg('format de numéro de serie incorrect');
   		return;
   	}
-  	ereg_replace('#\%\d*id#', "bah", $format);
-  	$format = str_replace('%[0-9]*id', ($this->_id?$this->_id:0), $format);
+  	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
   	return mbTranformTime(null, null, $format);
   }
 
@@ -228,10 +243,6 @@ class CProductOrder extends CMbObject {
 	function updateDBFields() {
 		$this->updateFormFields();
 		
-	  if (empty($this->order_number)) {
-      $this->order_number = $this->getUniqueNumber();
-    }
-
 	  if ($this->_autofill) {
       $this->autofill();
     }
@@ -241,9 +252,6 @@ class CProductOrder extends CMbObject {
         $this->_order = null;
       } else {
         $this->date_ordered = mbDateTime();
-        
-        // make the real order here !!!
-
       }
     }
     
@@ -255,6 +263,18 @@ class CProductOrder extends CMbObject {
 	  if ($this->_redo) {
       $this->redo();
     }
+    
+	  if ($this->_reset) {
+      $this->reset();
+    }
+	}
+	
+	function store () {
+	  parent::store();
+	  if (empty($this->order_number)) {
+      $this->order_number = $this->getUniqueNumber();
+    }
+    parent::store();
 	}
 
 	function loadRefsBack(){

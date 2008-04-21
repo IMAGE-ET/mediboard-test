@@ -5,7 +5,7 @@
   <input type="hidden" name="dosql" value="do_order_aed" />
   <input type="hidden" name="order_id" value="{{$order->_id}}" />
   <input type="hidden" name="_order" value="1" />
-  <button class="print" onclick="window.print(); submitOrder(this.form, {close: true});">Imprimer</button>
+  <button class="print" onclick="window.print(); submitOrder(this.form, {close: true});">{{tr}}Print{{/tr}}</button>
 </form>
 
 <table class="tbl">
@@ -16,13 +16,16 @@
     <th>{{tr}}CProductOrderItem-unit_price{{/tr}}</th>
   </tr>
   {{foreach from=$order->_ref_order_items item=curr_item}}
-    <tbody id="order-item-{{$curr_item->_id}}">
-    {{include file="inc_order_form_item.tpl"}}
-    </tbody>
+  <tr>
+    <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=name}}</td>
+    <td>{{mb_value object=$curr_item->_ref_reference->_ref_product field=code}}</td>
+    <td>{{mb_value object=$curr_item field=quantity}}</td>
+    <td>{{mb_value object=$curr_item field=unit_price}}</td>
+  </tr>
   {{/foreach}}
   <tr>
     <td colspan="6" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">Total : {{mb_value object=$order field=_total}}</span>
+      <span style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$order field=_total}}</span>
     </td>
   </tr>
 </table>

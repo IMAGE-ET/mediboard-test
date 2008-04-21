@@ -7,12 +7,12 @@
 * @author Fabien Ménager
 */
 
-global $AppUI, $dPconfig, $can, $m;
+global $AppUI, $can, $m;
 
 $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->display("configure.tpl");
+$smarty->display('configure.tpl');
 ?>

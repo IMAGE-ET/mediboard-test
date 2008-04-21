@@ -10,20 +10,20 @@ function pageMain() {
   <tr>
     <td class="halfPane" rowspan="2">
       <a class="buttonnew" href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id=0">
-        Nouvelle société
+        {{tr}}CSociete.create{{/tr}}
       </a>
       <table class="tbl">
         <tr>
-          <th>Société</th>
-          <th>Correspondant</th>
-          <th>Adresse</th>
-          <th>Téléphone</th>
-          <th>E-Mail</th>
+          <th>{{tr}}CSociete-name{{/tr}}</th>
+          <th>{{tr}}CSociete-contact_name{{/tr}}</th>
+          <th>{{tr}}CSociete-address{{/tr}}</th>
+          <th>{{tr}}CSociete-phone{{/tr}}</th>
+          <th>{{tr}}CSociete-email{{/tr}}</th>
         </tr>
         {{foreach from=$list_societes item=curr_societe}}
         <tr {{if $curr_societe->_id == $societe->_id}}class="selected"{{/if}}>
           <td class="text">
-            <a href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id={{$curr_societe->_id}}" title="Modifier la société">
+            <a href="?m=dPstock&amp;tab=vw_idx_societe&amp;societe_id={{$curr_societe->_id}}" title="{{tr}}CSociete.modify{{/tr}}">
               {{$curr_societe->_view}}
             </a>
           </td>
@@ -42,14 +42,14 @@ function pageMain() {
       {{if $can->edit}}
       <form name="edit_societe" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_societe_aed" />
-	  <input type="hidden" name="societe_id" value="{{$societe->_id}}" />
+	    <input type="hidden" name="societe_id" value="{{$societe->_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
           {{if $societe->_id}}
-          <th class="title modify" colspan="2">Modification du societe {{$societe->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CSociete.modify{{/tr}} {{$societe->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'une Societé</th>
+          <th class="title" colspan="2">{{tr}}CSociete.create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
@@ -113,23 +113,24 @@ function pageMain() {
       </table>
       </form>
       {{/if}}
-  {{if $societe->_id}}
+      
+      {{if $societe->_id}}
       <button class="new" type="button" onclick="window.location='?m=dPstock&amp;tab=vw_idx_reference&amp;reference_id=0&amp;societe_id={{$societe->_id}}'">
-        Nouvelle référence
+        {{tr}}CProductReference.create{{/tr}}
       </button>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">Fournit ces références</th>
+          <th class="title" colspan="4">{{tr}}CSociete-back-_ref_references{{/tr}}</th>
         </tr>
         <tr>
-           <th>Produit</th>
-           <th>Quantité</th>
-           <th>Prix</th>
-           <th>Prix Unitaire</th>
+           <th>{{tr}}CProduct{{/tr}}</th>
+           <th>{{tr}}CProductReference-quantity{{/tr}}</th>
+           <th>{{tr}}CProductReference-price{{/tr}}</th>
+           <th>{{tr}}CProductReference-_unit-price{{/tr}}</th>
          </tr>
          {{foreach from=$societe->_ref_product_references item=curr_reference}}
          <tr>
-           <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="Voir ou modifier la référence">{{$curr_reference->_ref_product->_view}}</a></td>
+           <td><a href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id={{$curr_reference->_id}}" title="{{tr}}CProductReference.modify{{/tr}}">{{$curr_reference->_ref_product->_view}}</a></td>
            <td>{{mb_value object=$curr_reference field=quantity}}</td>
            <td>{{mb_value object=$curr_reference field=price}}</td>
            <td>{{mb_value object=$curr_reference field=_unit_price}}</td>
@@ -141,20 +142,20 @@ function pageMain() {
          {{/foreach}}
        </table>
       <button class="new" type="button" onclick="window.location='?m=dPproduct&amp;tab=vw_idx_product&amp;product_id=0&amp;societe_id={{$societe->_id}}'">
-        Nouveau produit
+        {{tr}}CProduct.create{{/tr}}
       </button>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="3">Fabrique ces produits</th>
+          <th class="title" colspan="3">{{tr}}CSociete-back-_ref_products{{/tr}}</th>
         </tr>
         <tr>
-           <th>Nom</th>
-           <th>Description</th>
-           <th>Code barre</th>
+           <th>{{tr}}CProduct-name{{/tr}}</th>
+           <th>{{tr}}CProduct-description{{/tr}}</th>
+           <th>{{tr}}CProduct-code{{/tr}}</th>
          </tr>
          {{foreach from=$societe->_ref_products item=curr_product}}
          <tr>
-           <td><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}" title="Voir ou modifier le produit">{{$curr_product->_view}}</a></td>
+           <td><a href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id={{$curr_product->_id}}" title="{{tr}}CProduct.create{{/tr}}">{{$curr_product->_view}}</a></td>
            <td>{{mb_value object=$curr_product field=description}}</td>
            <td>{{mb_value object=$curr_product field=code}}</td>
          </tr>

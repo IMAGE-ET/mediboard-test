@@ -9,10 +9,13 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit('CProductStock', 'stock_id');
-$do->createMsg = 'Stock créé';
-$do->modifyMsg = 'Stock modifié';
-$do->deleteMsg = 'Stock supprimé';
+$class = 'CProductStock';
+
+$do = new CDoObjectAddEdit($class, 'stock_id');
+$do->createMsg = CAppUI::tr("msg-$class-create");
+$do->modifyMsg = CAppUI::tr("msg-$class-modify");
+$do->deleteMsg = CAppUI::tr("msg-$class-delete");
+
 $do->doIt();
 
 ?>

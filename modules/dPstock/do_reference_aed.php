@@ -9,10 +9,13 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit('CProductReference', 'reference_id');
-$do->createMsg = 'Référence créée';
-$do->modifyMsg = 'Référence modifiée';
-$do->deleteMsg = 'Référence supprimée';
+$class = 'CProductReference';
+
+$do = new CDoObjectAddEdit($class, 'reference_id');
+$do->createMsg = CAppUI::tr("msg-$class-create");
+$do->modifyMsg = CAppUI::tr("msg-$class-modify");
+$do->deleteMsg = CAppUI::tr("msg-$class-delete");
+
 $do->doIt();
 
 ?>

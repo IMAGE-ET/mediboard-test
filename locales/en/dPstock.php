@@ -282,4 +282,6 @@ $locales['msg-CSociete-delete'] = "";
 $locales['msg-CSociete-modify'] = "";
 $locales['module-dPstock-court'] = "";
 $locales['CProductStock-bargraph'] = "";
+$locales['CProductOrder-items_count'] = "";
+$locales['CProductOrder-_validate'] = "";
 ?>

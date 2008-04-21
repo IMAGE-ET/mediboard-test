@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsAdmin();
 
 $delivery_id  = mbGetValueFromGetOrSession('delivery_id');
 

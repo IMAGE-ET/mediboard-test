@@ -17,6 +17,7 @@ class CCodeSpec extends CMbFieldSpec {
   var $insee = null;
   var $rib   = null;
   var $siret = null;
+  var $order_number = null;
   
   function getSpecType() {
     return("code");
@@ -109,6 +110,13 @@ class CCodeSpec extends CMbFieldSpec {
     elseif($this->siret) {
       if (!luhn($propValue)) {
         return "Code SIRET incorrect, doit contenir exactement 14 chiffres";
+      }
+    }
+    
+    // order_number
+    elseif($this->order_number) {
+      if (!preg_match('#\%id#', $propValue)) {
+        return "Format de numéro de serie incorrect, doit contenir au moins une fois %id";
       }
     }
     

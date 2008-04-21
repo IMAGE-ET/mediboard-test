@@ -4,7 +4,7 @@
   <tr>
     <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-_ref_order_items{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
     <th style="width: 1%;"></th>
   </tr>
@@ -20,13 +20,13 @@
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
 	    <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
 	    <td>
-        <button type="button" class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600); return false;">{{tr}}Modify{{/tr}}</button>
+        <button type="button" class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600);">{{tr}}Modify{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Cancel{{/tr}}</button>
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
         {{if $curr_order->_ref_order_items|@count > 0}}
         <form name="order-lock-{{$curr_order->_id}}" action="?" method="post">
@@ -34,7 +34,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="locked" value="1" />
-          <button type="button" class="tick" onclick="if (confirmLock()) submitOrder(this.form, {refreshLists: true});">Valider</button>
+          <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true, confirm: true});">{{tr}}CProductOrder-_validate{{/tr}}</button>
         </form>
         {{/if}}
 	   </td>
@@ -54,7 +54,7 @@
   <tr>
     <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-_ref_order_items{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
     <th style="width: 1%;"></th>
   </tr>
@@ -75,15 +75,22 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">Annuler</button>
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
         <button type="button" class="print" onclick="popupOrderForm({{$curr_order->_id}})">Bon de commande</button>
-        <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
+        <form name="order-order-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="_order" value="1" />
-          <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true})">Commandée</button>
+          <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}CProductOrder-_order{{/tr}}</button>
+        </form>
+        <form name="order-reset-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="_reset" value="1" />
+          <button type="button" class="reset" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Reset{{/tr}}</button>
         </form>
      </td>
     </tr>
@@ -103,7 +110,7 @@
   <tr>
     <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-_ref_order_items{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
     <th style="width: 1%;"></th>
@@ -127,7 +134,7 @@
           <input type="hidden" name="dosql" value="do_order_aed" />
           <input type="hidden" name="order_id" value="" />
           <input type="hidden" name="cancelled" value="1" />
-          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Cancel{{/tr}}</button>
+          <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>
       </td>
     </tr>
@@ -147,7 +154,7 @@
   <tr>
     <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-_ref_order_items{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}} / {{tr}}CProductOrder-_count_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>
@@ -192,7 +199,7 @@
   <tr>
     <th>{{tr}}CProductOrder-order_number{{/tr}}</th>
     <th>{{tr}}CProductOrder-societe_id{{/tr}}</th>
-    <th>{{tr}}CProductOrder-_ref_order_items{{/tr}}</th>
+    <th>{{tr}}CProductOrder-items_count{{/tr}}</th>
     <th>{{tr}}CProductOrder-date_ordered{{/tr}}</th>
     <th>{{tr}}CProductOrder-_date_received{{/tr}}</th>
     <th>{{tr}}CProductOrder-_total{{/tr}}</th>

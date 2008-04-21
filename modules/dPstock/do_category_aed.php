@@ -9,10 +9,12 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit('CProductCategory', 'category_id');
-$do->createMsg = 'Catégorie créée';
-$do->modifyMsg = 'Catégorie modifiée';
-$do->deleteMsg = 'Catégorie supprimée';
+$class = 'CProductCategory';
+
+$do = new CDoObjectAddEdit($class, 'category_id');
+$do->createMsg = CAppUI::tr("msg-$class-create");
+$do->modifyMsg = CAppUI::tr("msg-$class-modify");
+$do->deleteMsg = CAppUI::tr("msg-$class-delete");
 $do->doIt();
 
 ?>

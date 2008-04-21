@@ -34,9 +34,10 @@ class CSetupdPstock extends CSetup {
 PRIMARY KEY (`product_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);
     
-    $sql = 'ALTER TABLE `product` ADD UNIQUE (
-	`code`
-	);';
+    $sql = 'ALTER TABLE `product` ADD UNIQUE (`code`);';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product` ADD INDEX (`code`);';
     $this->addQuery($sql);
 
     $sql = 'CREATE TABLE `product_category` (
@@ -86,6 +87,9 @@ PRIMARY KEY (`order_item_id`)) TYPE=MYISAM;';
  `code` VARCHAR(32) NULL, 
  `price` FLOAT NOT NULL, 
 PRIMARY KEY (`reference_id`)) TYPE=MYISAM;';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_reference` ADD INDEX (`code`);';
     $this->addQuery($sql);
 
     $sql = 'CREATE TABLE `product_stock` (

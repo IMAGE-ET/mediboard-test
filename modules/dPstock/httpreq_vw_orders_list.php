@@ -21,7 +21,6 @@ $societe = new CSociete();
 $where = array();
 
 $leftjoin = array();
-//$leftjoin['societe'] = 'product_order.societe_id = societe.societe_id';
 $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
 
 // if keywords have been provided
@@ -44,11 +43,14 @@ if ($keywords) {
 	$where[] = implode(' OR ', $where_or);
 }
 
-$orderby = 'product_order.date_ordered DESC';
+$orderby = 'product_order.date_ordered DESC, product_order_item.date_received DESC';
 
 switch ($type) {
 	 case 'waiting':
+	  $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 0";
+    $where['product_order.date_ordered'] = "IS NULL";
+    $where['product_order_item.date_received'] = "IS NULL";
     break;
   case 'locked':
   	$where['product_order.cancelled'] = " = 0";
@@ -61,19 +63,21 @@ switch ($type) {
 		$where['product_order.locked'] = " = 1";
 		$where['product_order.date_ordered'] = "IS NOT NULL";
 		$where['product_order_item.date_received'] = "IS NULL";
+		$where['product_order_item.quantity_received'] = ' < product_order_item.quantity';
 		break;
   case 'received':
     $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 1";
     $where['product_order.date_ordered'] = "IS NOT NULL";
     $where['product_order_item.date_received'] = "IS NOT NULL";
+    $where['product_order_item.quantity_received'] = ' >= product_order_item.quantity';
     break;
   default:
   case 'cancelled':
     $where['product_order.cancelled'] = " = 1";
 		break;
 }
-$orders_list = $order->loadList($where, $orderby, 20, (isset($groupby)?$groupby:null), $leftjoin);
+$orders_list = $order->loadList($where, $orderby, 20, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();

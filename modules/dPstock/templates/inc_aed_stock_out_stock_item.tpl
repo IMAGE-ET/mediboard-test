@@ -18,7 +18,7 @@
       <input type="hidden" name="_do_stock_out" value="1" />
       
       {{assign var=id value=$stock->_id}} 
-      {{mb_field object=$stock field=quantity form="form-stock-out-stock-$id" increment=1 size=3}}
+      {{mb_field object=$stock field=quantity form="form-stock-out-stock-$id" increment=1 size=3 value=1}}
       
       <button type="button" class="remove" onclick="stockOut(this.form, 1);">Sortie</button>
       <button type="button" class="add" onclick="stockOut(this.form, -1);">Retour</button>

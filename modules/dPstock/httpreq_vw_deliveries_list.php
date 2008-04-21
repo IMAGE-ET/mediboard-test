@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$product_id   = mbGetValueFromGetOrSession('product_id');
+$product_id   = mbGetValueFromGet('product_id');
 $date_min     = mbGetValueFromGet('date_min');
 $date_max     = mbGetValueFromGet('date_max');
 $target_class = mbGetValueFromGet('target_class');

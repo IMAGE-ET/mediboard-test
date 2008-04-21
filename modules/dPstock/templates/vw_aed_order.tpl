@@ -12,7 +12,6 @@ function pageMain() {
   {{if $order->_id && !$order->date_ordered}}
   filterFields = ["category_id", "societe_id", "keywords", "order_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
-  referencesFilter.submit();
   {{/if}}
 }
 </script>
@@ -38,7 +37,7 @@ function pageMain() {
       <th>{{mb_label object=$order field=societe_id}}</th>
       <td>
         <select name="societe_id" class="{{$order->_props.societe_id}}">
-          <option value="">&mdash; {{tr}}CSociete.choose{{/tr}}</option>
+          <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
         {{foreach from=$list_societes item=curr_societe}}
           <option value="{{$curr_societe->_id}}" {{if $list_societes|@count==1}} selected="selected" {{/if}} >
           {{$curr_societe->_view}}
@@ -49,7 +48,7 @@ function pageMain() {
     </tr>
     <tr>
       <td colspan="2" class="button">
-        <button class="submit" type="submit">{{tr}}Fill{{/tr}}</button>
+        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
       </td>
     </tr>
   </table>
@@ -66,7 +65,7 @@ function pageMain() {
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <select name="category_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}">{{$curr_category->name}}</option>
         {{/foreach}}

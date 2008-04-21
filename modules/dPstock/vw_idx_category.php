@@ -9,7 +9,7 @@
  
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsAdmin();
 
 $category_id = mbGetValueFromGetOrSession('category_id');
 

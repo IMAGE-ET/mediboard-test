@@ -16,14 +16,14 @@ function pageMain() {
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}} 
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <select name="societe_id" onchange="referencesFilter.submit();">
-          <option value="0" >&mdash; Toutes les societés &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CSociete.all{{/tr}} &mdash;</option>
         {{foreach from=$list_societes item=curr_societe}} 
           <option value="{{$curr_societe->societe_id}}" {{if $societe_id==$curr_societe->_id}}selected="selected"{{/if}}>{{$curr_societe->name}}</option>
         {{/foreach}}
@@ -31,7 +31,7 @@ function pageMain() {
         
         <input type="text" name="keywords" value="" />
         
-        <button type="button" class="search" onclick="referencesFilter.submit('keywords');">Filtrer</button>
+        <button type="button" class="search" onclick="referencesFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="referencesFilter.empty();"></button>
       </form>
 
@@ -43,7 +43,7 @@ function pageMain() {
       {{if $can->edit}}
       
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
-        Nouvelle réference
+        {{tr}}CProductCategory.create{{/tr}}
       </a>
       
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -53,15 +53,15 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $reference->_id}}
-          <th class="title modify" colspan="2">Modification de la référence {{$reference->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProductCategory.modify{{/tr}} {{$reference->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">Création d'une référence</th>
+          <th class="title" colspan="2">{{tr}}CProductCategory.create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="societe_id"}}</th>
           <td><select name="societe_id" class="{{$reference->_props.societe_id}}">
-            <option value="">&mdash; Choisir un Fournisseur</option>
+            <option value="">&mdash; {{tr}}CProductCategory.select{{/tr}}</option>
             {{foreach from=$list_societes item=curr_societe}}
               <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
@@ -75,7 +75,7 @@ function pageMain() {
           <td class="readonly">
             <input type="hidden" name="product_id" value="{{$reference->product_id}}" class="{{$reference->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$reference->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
-            <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
+            <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
             <script type="text/javascript">
             ProductSelector.init = function(){
               this.sForm = "edit_reference";

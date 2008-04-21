@@ -9,10 +9,13 @@
 
 global $AppUI;
 
-$do = new CDoObjectAddEdit('CSociete', 'societe_id');
-$do->createMsg = 'Société créée';
-$do->modifyMsg = 'Société modifiée';
-$do->deleteMsg = 'Société supprimée';
+$class = 'CSociete';
+
+$do = new CDoObjectAddEdit($class, 'societe_id');
+$do->createMsg = CAppUI::tr("msg-$class-create");
+$do->modifyMsg = CAppUI::tr("msg-$class-modify");
+$do->deleteMsg = CAppUI::tr("msg-$class-delete");
+
 $do->doIt();
 
 ?>

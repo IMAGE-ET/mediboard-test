@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsAdmin();
 
 $stock_id            = mbGetValueFromGetOrSession('stock_id');
 $product_id          = mbGetValueFromGetOrSession('product_id');

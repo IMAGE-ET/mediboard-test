@@ -4,15 +4,25 @@
  *  @param options Options used to execute functions after the submit : {refreshLists, close}
  */
 function submitOrder (oForm, options) {
-  submitFormAjax(oForm, 'systemMsg',{
-    onComplete: function() {
-      if (options.close && window.opener) {
-        window.close();
-      } else {
-        refreshOrder($F(oForm.order_id), options);
+  var oOptions = {
+    close: false,
+    confirm: false,
+    refreshLists: false
+  };
+  
+  Object.extend(oOptions, options);
+  
+  if (!oOptions.confirm || (oOptions.confirm && confirm('Voulez-vous vraiment effectuer cette action ?'))) {
+    submitFormAjax(oForm, 'systemMsg',{
+      onComplete: function() {
+        if (oOptions.close && window.opener) {
+          window.close();
+        } else {
+          refreshOrder($F(oForm.order_id), oOptions);
+        }
       }
-    }
-  });
+    });
+  }
 }
 
 /** Submit order item function
@@ -51,14 +61,6 @@ function refreshOrderItem(order_item_id) {
   url.setModuleAction("dPstock", "httpreq_vw_order_item");
   url.addParam("order_item_id", order_item_id);
   url.requestUpdate("order-item-"+order_item_id, { waitingText: null } );
-}
-
-function confirmOrder() {
-  return confirm("Etes-vous sur de vouloir passer cette commande ?");
-}
-
-function confirmLock() {
-  return confirm("Etes-vous sur de vouloir verrouiller cette commande et la passer à l'état de validée ?");
 }
 
 function refreshListOrders(type, keywords) {

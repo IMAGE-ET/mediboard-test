@@ -13,10 +13,12 @@ if (isset($_POST['date']) && ($_POST['date'] == 'now')) {
   $_POST['date'] = mbDateTime();
 }
 
-$do = new CDoObjectAddEdit('CProductDelivery', 'delivery_id');
-$do->createMsg = 'Administration créée';
-$do->modifyMsg = 'Administration modifiée';
-$do->deleteMsg = 'Administration supprimée';
+$class = 'CProductDelivery';
+
+$do = new CDoObjectAddEdit($class, 'delivery_id');
+$do->createMsg = CAppUI::tr("msg-$class-create");
+$do->modifyMsg = CAppUI::tr("msg-$class-modify");
+$do->deleteMsg = CAppUI::tr("msg-$class-delete");
 $do->doIt();
 
 ?>

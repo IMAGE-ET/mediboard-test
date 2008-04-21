@@ -16,7 +16,7 @@ function pageMain() {
         
         <select name="category_id" onchange="productsFilter.submit();">
           <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
-        {{foreach from=$list_categories item=curr_category}} 
+        {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
@@ -37,7 +37,7 @@ function pageMain() {
       <div id="list-products"></div>
     </td>
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}msg-CProduct-create{{/tr}}</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_product&amp;product_id=0">{{tr}}CProduct.create{{/tr}}</a>
       <form name="edit_product" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_product_aed" />
 	  <input type="hidden" name="product_id" value="{{$product->_id}}" />
@@ -45,9 +45,9 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $product->_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CProduct-modify{{/tr}} {{$product->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProduct.modify{{/tr}} {{$product->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CProduct-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProduct.create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>
@@ -57,7 +57,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="category_id"}}</th>
           <td><select name="category_id" class="{{$product->_props.category_id}}">
-            <option value="">&mdash; {{tr}}msg-CProduct-choose{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CProduct.select{{/tr}}</option>
             {{foreach from=$list_categories item=curr_category}}
               <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id || $list_categories|@count==1}} selected="selected" {{/if}} >
               {{$curr_category->_view}}
@@ -69,7 +69,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="societe_id"}}</th>
           <td><select name="societe_id" class="{{$product->_props.societe_id}}">
-            <option value="">&mdash; {{tr}}msg-CSociete-choose{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
             {{foreach from=$list_societes item=curr_societe}}
               <option value="{{$curr_societe->_id}}" {{if $product->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}
@@ -107,7 +107,7 @@ function pageMain() {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">Référence(s) correspondante(s)</th>
+          <th class="title" colspan="4">{{tr}}CProductStock-back-_ref_stocks{{/tr}}</th>
         </tr>
         <tr>
           <th>{{tr}}CGroup{{/tr}}</th>
@@ -129,7 +129,7 @@ function pageMain() {
           <tr>
             <td colspan="3">
               <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                {{tr}}msg-CProductStock-create{{/tr}}
+                {{tr}}CProductStock.create{{/tr}}
               </button>
             </td>
           </tr>
@@ -141,7 +141,7 @@ function pageMain() {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">Référence(s) correspondante(s)</th>
+          <th class="title" colspan="4">{{tr}}CProductStock-back-_ref_references{{/tr}}</th>
         </tr>
         <tr>
            <th>Fournisseur</th>

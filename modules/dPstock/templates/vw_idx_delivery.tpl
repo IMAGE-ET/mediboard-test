@@ -26,7 +26,7 @@ function pageMain() {
             <th>{{mb_title object=$delivery field=target_class}}</th>
             <td>
               <select class="notNull str" name="target_class">
-                <option value="">&mdash; {{tr}}Choose a class{{/tr}}</option>
+                <option value="">&mdash; {{tr}}CMbObject.select{{/tr}}</option>
                 {{foreach from=$classes_list|smarty:nodefaults item=curr_class}}
                 <option value="{{$curr_class}}">{{tr}}{{$curr_class}}{{/tr}}</option>
                 {{/foreach}}
@@ -85,7 +85,7 @@ function pageMain() {
     </td>
     
     <td class="halfPane">
-    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_delivery&amp;delivery_id=0">{{tr}}msg-CProductDelivery-create{{/tr}}</a>
+    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_delivery&amp;delivery_id=0">{{tr}}CProductDelivery.create{{/tr}}</a>
     <form name="edit-delivery" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="tab" value="vw_idx_delivery" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -97,9 +97,9 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $delivery->_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CProductDelivery-modify{{/tr}} {{$delivery->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProductDelivery.modify{{/tr}} {{$delivery->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CProductDelivery-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProductDelivery.create{{/tr}}</th>
           {{/if}}
         </tr>   
         <tr>

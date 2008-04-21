@@ -19,7 +19,7 @@
   {{/foreach}}
   <tr>
     <td colspan="6" id="order-{{$object->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">Total : {{mb_value object=$object field=_total}}</span>
+      <span style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$object field=_total}}</span>
     </td>
   </tr>
 </table>

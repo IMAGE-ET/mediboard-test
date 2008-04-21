@@ -54,6 +54,7 @@ $locales['Fax'] = 'Fax';
 $locales['File'] = 'Fichier';
 $locales['Files'] = 'Fichiers';
 $locales['filter'] = 'filtre';
+$locales['Filter'] = 'Filtrer';
 $locales['First Name'] = 'Prénom';
 $locales['flat'] = 'plat';
 $locales['forgotPassword'] = 'A l\'aide!!! J\'ai oublié mon login et mon mot de passe!';

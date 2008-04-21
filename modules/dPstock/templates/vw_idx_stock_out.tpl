@@ -48,20 +48,20 @@ function stockOut(oForm, sign) {
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="stocksFilter.submit();">
-          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <input type="text" name="keywords" value="" />
-        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">Filtrer</button>
-        <button type="button" class="cancel notext" onclick="stocksFilter.empty();">Reset</button><br />
+        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="stocksFilter.empty();">{{tr}}Reset{{/tr}}</button><br />
       </form>
 
       <div id="stock-out-list-stocks"></div>
       
-      <label for="function_id">Pour le service </label>
+      <label for="function_id">{{tr}}CProductStockOut-function_id{{/tr}} </label>
       <select name="function_id" id="function_id">
         {{foreach from=$list_functions item=curr_function}}
         <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>

@@ -9,7 +9,7 @@
  
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsAdmin();
 
 $societe_id = mbGetValueFromGetOrSession('societe_id');
 

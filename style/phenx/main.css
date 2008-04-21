@@ -368,7 +368,6 @@ table.main th.halfPane {
 table.tbl {
   width: 100%;
   border: 0px;
-  background-color: #777;
 }
 
 table.tbl tr {
@@ -2356,47 +2355,26 @@ table.tbl td.ccmu-P{
   min-width: 5em;
 }
 
-.bargraph .legend {
-  display: none;
-  position: absolute;
-  border: 1px solid #999999;
-  background: #F9F9F9;
-  z-index: 100;
-  margin-top: 16px;
-  margin-left: 16px;
-}
 
-.bargraph .legend .value {
+.legend .value {
    font-weight: bold;
-   background: #CCCCCC;
+   border: none;
    padding: 2px;
-   clear: both;
+   width: 12em;
 }
 
-.bargraph .legend .color {
+.legend .color {
    height: 6px; 
    width: 6px; 
    float: left;
    margin: 3px;
    border: 1px solid #333333;
-   clear: both;
-}
-
-.bargraph:hover .legend {
-  display: block;
-}
-
-.bargraph > .value {
-  height: 40%;
-  border: 1px solid;
-  z-index: 1;
 }
 
 .bargraph .threshold {
   height: 55%;
   opacity: .3;
   margin-top: 1px;
-  z-index: 1;
 }
 
 .bargraph .value div, .bargraph .threshold div {
@@ -2405,6 +2383,33 @@ table.tbl td.ccmu-P{
 
 .bargraph .threshold div {
   float:left; 
+}
+
+.critical {
+  background: #F00;
+  border-color: #F00;
+}
+
+.min {
+  background: #FC3;
+  border-color: #FC3;
+}
+
+.optimum {
+  background: #1D6;
+  border-color: #1D6;
+}
+
+.max {
+  background: #06F;
+  border-color: #06F;
+}
+
+.bargraph > .value {
+  height: 40%;
+  border-width: 1px;
+  border-style: solid;
+  background: none;
 }
 
 table.main td.step {

@@ -17,14 +17,14 @@ function pageMain() {
         <input type="hidden" name="m" value="{{$m}}" />
         
         <select name="category_id" onchange="stocksFilter.submit();">
-          <option value="0" >&mdash; Toutes les catégories &mdash;</option>
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
         {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
         {{/foreach}}
         </select>
         
         <input type="text" name="keywords" value="" />
-        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">Filtrer</button>
+        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button><br />
         
         <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
@@ -37,7 +37,7 @@ function pageMain() {
     <!-- Edit/New Stock form -->
     <td class="halfPane">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">
-        Nouveau stock
+        {{tr}}CProductStock.create{{/tr}}
       </a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_aed" />
@@ -46,9 +46,9 @@ function pageMain() {
       <input type="hidden" name="del" value="0" />
       <table class="form">
         {{if $stock->_id}}
-        <caption class="modify">Modification du stock de {{$stock->_view}}</caption>
+        <th class="title modify" colspan="2">{{tr}}CProductStock.modify{{/tr}} {{$stock->_view}}</th>
         {{else}}
-        <caption>Nouveau stock</caption>
+        <th class="title" colspan="2">{{tr}}CProductStock.create{{/tr}}</th>
         {{/if}}
         <tr>
           <th>{{mb_label object=$stock field="quantity"}}</th>
@@ -59,7 +59,7 @@ function pageMain() {
           <td class="readonly">
             <input type="hidden" name="product_id" value="{{$stock->product_id}}" class="{{$stock->_props.product_id}}" />
             <input type="text" name="product_name" value="{{$stock->_ref_product->name}}" size="30" readonly="readonly" ondblclick="ProductSelector.init()" />
-            <button class="search" type="button" onclick="ProductSelector.init()">Chercher</button>
+            <button class="search" type="button" onclick="ProductSelector.init()">{{tr}}Search{{/tr}}</button>
             <script type="text/javascript">
             ProductSelector.init = function(){
               this.sForm = "edit_stock";

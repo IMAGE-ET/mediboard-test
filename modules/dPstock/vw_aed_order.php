@@ -9,7 +9,7 @@
  
 global $AppUI, $can, $m;
 
-$can->needsRead();
+$can->needsEdit();
 
 $order_id    = mbGetValueFromGetOrSession('order_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
