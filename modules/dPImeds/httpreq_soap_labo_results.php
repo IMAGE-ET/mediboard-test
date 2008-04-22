@@ -46,9 +46,9 @@ $requestParams = array (
 );
 
 $results = $client->GetInfoLabo($requestParams);
-$countResults = count($results);
+$countResults = $results->GetInfoLaboResult;
 
-CAppUI::stepAjax("$countResults résultats trouvés", UI_MSG_OK);
+CAppUI::stepAjax("$countResults résultats labo trouvés", UI_MSG_OK);
 
 // Création du template
 $smarty = new CSmartyDP();
