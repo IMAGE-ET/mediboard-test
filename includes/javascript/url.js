@@ -202,7 +202,7 @@ Class.extend(Url, {
     if (oDefaultOptions.waitingText) {
       $(ioTarget).innerHTML = "<div class='loading'>" + oDefaultOptions.waitingText + "...<br>Merci de patienter.</div>";
 	    if (ioTarget == SystemMessage.id) {
-	      $(ioTarget).show();
+		    SystemMessage.doEffect();
 	    }
     }
     else {

@@ -3,7 +3,10 @@
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="m" value="dPcabinet" />
   {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+  
+  
   {{if !$consult_anesth->operation_id}}
+  <!-- Choix du séjour -->
   <select name="sejour_id" onchange="submitOpConsult()">
     <option value="">Pas de séjour</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
@@ -13,7 +16,9 @@
     {{/foreach}}
   </select>
   <br />
+
   {{else}}
+  <!-- Choix de l'intervention -->
   {{mb_field object=$consult_anesth field="sejour_id" hidden=1}}
   {{/if}}
   <select name="operation_id" onchange="submitOpConsult()">
@@ -29,26 +34,26 @@
     {{/foreach}}
   </select>
   <br />
+
+  {{assign var=sejour value=$consult_anesth->_ref_sejour}}
+  {{if $sejour->_id}}
+	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$sejour->_class_name}}', object_id: '{{$sejour->_id}}' } })">
+  <strong>Séjour :</strong>
+	  {{if $sejour->type!="ambu" && $sejour->type!="exte"}} {{$sejour->_duree_prevue}} jour(s) {{/if}}
+	  {{mb_value object=$sejour field=type}}
+	</span>
+  <br />
+  {{/if}}
   
-  {{if $consult_anesth->operation_id}}
-    <strong>Séjour :</strong>
-    {{if $consult_anesth->_ref_operation->_ref_sejour->type!="ambu" && $consult_anesth->_ref_operation->_ref_sejour->type!="exte"}} {{$consult_anesth->_ref_operation->_ref_sejour->_duree_prevue}} jour(s) {{/if}}
-    {{tr}}CSejour.type.{{$consult_anesth->_ref_operation->_ref_sejour->type}}{{/tr}}
-    <br />
-    <strong>Intervention :</strong>
-    le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-    par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
-    <ul>
-      {{if $consult_anesth->_ref_operation->libelle}}
-      <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
-      {{/if}}
-      {{foreach from=$consult_anesth->_ref_operation->_ext_codes_ccam item=curr_code}}
-      <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) - 
-      {{foreach from=$curr_code->activites item=curr_act}}
-      	Act. {{$curr_act->numero}} : {{$curr_act->phases.0->tarif}} euros - 
-      {{/foreach}}
-      </li>
-      {{/foreach}}
-    </ul>
+  {{assign var=operation value=$consult_anesth->_ref_operation}}
+  {{if $operation->_id}}
+	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$operation->_class_name}}', object_id: '{{$operation->_id}}', view_tarif: true } })">
+	  <strong>Intervention :</strong>
+	  le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
+	  par le <strong>Dr. {{$operation->_ref_chir->_view}}</strong>
+    {{if $operation->libelle}}
+    <em>[{{$operation->libelle}}]</em>
+    {{/if}}
+	</span>
   {{/if}}
 </form>

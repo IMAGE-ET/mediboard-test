@@ -285,6 +285,20 @@ class CMbArray {
     return $values;    
   }
   
-  
+  /**
+   * Create an array with filtered keys based on having given prefix
+   * @param $array array The array to filter
+   * @param $prefix string The prefix that has to start key strings
+   * @return array The filtered array 
+   */
+  static function filterPrefix($array, $prefix) {
+    $values = array();
+    foreach ($array as $key => $value) {
+      if (strpos($key, $prefix) === 0) {
+        $values[$key] = $value;
+      }
+    }
+    return $values;
+  }
 }
 ?>

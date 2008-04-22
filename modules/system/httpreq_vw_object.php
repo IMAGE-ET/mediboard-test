@@ -22,6 +22,9 @@ if (!$object->_id) {
   $AppUI->redirect("?ajax=$ajax&suppressHeaders=1&m=$m&a=object_not_found&object_classname=$object_class");
 }
 
+// Look for view options
+$options = CMbArray::filterPrefix($_GET, "view_");
+
 $object->loadView();
 
 //$canModule = CModule::getCanDo($object->_ref_module->mod_name);
@@ -41,6 +44,11 @@ $template = is_file("modules/$object->_view_template") ?
 $smarty = new CSmartyDP();
 $smarty->assign("object", $object);
 $smarty->assign("props", $object->getDBFields());
+
+// Options
+foreach ($options as $key => $value) {
+  $smarty->assign($key, $value);
+}
 
 $smarty->display("../../$template");
 ?>

@@ -7,7 +7,6 @@ function main() {
 	  BrowserDetect.init();
 	  ObjectInitialisation.hackIt();
 	  SystemMessage.init();
-	  SystemMessage.doEffect();
 	  WaitingMessage.init();
 	  initPuces();
 	  pageMain();
@@ -197,25 +196,14 @@ var SystemMessage = {
   effect: null,
 
   // Check message type (loading, notice, warning, error) from given div
-  checkType: function(div) {
-    this.autohide = $A(div.childNodes).pluck("className").compact().last() == "message";
+  checkType: function() {
+    this.autohide = $A($(this.id).childNodes).pluck("className").compact().last() == "message";
   },
 
-  // Catches the innerHTML watch event
-  refresh: function(idElement, oOldValue, oNewValue) {
-    var div = document.createElement("div");
-    div.innerHTML = oNewValue;
-
-    this.checkType(div);
-    this.doEffect();
-
-    // Mandatory, or value is not set
-    return oNewValue;    
-  },
-  
   // show/hide the div
-  doEffect : function (delay) {
+  doEffect : function (delay, forceFade) {
     var oDiv = $(this.id);
+    
     // Cancel current effect
     if (this.effect) {
       this.effect.cancel();
@@ -227,36 +215,31 @@ var SystemMessage = {
     oDiv.setOpacity(1);
     
     // Only hide on type 'message'
-    if (!this.autohide) {
+    this.checkType();
+    if (!this.autohide && !forceFade) {
       return;
     }
     
     // Program fading
-    this.effect = new Effect.Fade(this.id, { delay : delay || 3} );
+    this.effect = new Effect.Fade(this.id, { delay : delay || 5} );
   },
   
   init : function () {
     var oDiv = $(this.id);
     Assert.that(oDiv, "No system message div");
     
-    this.checkType(oDiv);
-    
     // Hide on onclick
     Event.observe(oDiv, 'click', function(event) {
-      SystemMessage.autohide = true;
-      SystemMessage.doEffect(0.1);
+      SystemMessage.doEffect(0.1, true);
     } );
-    
-    // Always show if watch does not exist (IE)
-    if (!oDiv.watch) {
-      Element.show(oDiv);
+        
+    // Hide empty message immediately
+    if (!oDiv.innerHTML.strip()) {
+      SystemMessage.doEffect(0.1, true);
       return;
     }
-        
-    // Hide empty message
-    if (!oDiv.innerHTML.strip()) {
-      new Effect.Fade(oDiv);
-    }
+    
+    SystemMessage.doEffect();
   }
 }
 
@@ -1215,7 +1198,7 @@ TokenField.prototype.remove = function(sValue) {
   }
   
   this.oElement.value = aToken.join("|");
-  this.onComplete();
+  this.onComplete();	
   return true;
 }
 

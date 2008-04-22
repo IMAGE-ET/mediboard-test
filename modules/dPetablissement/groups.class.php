@@ -196,6 +196,15 @@ class CGroups extends CMbObject {
     $this->fillLimitedTemplate($template);
   }
   
-  
+  /**
+   * Load the current group
+   * @return CGroups
+   */
+  static function loadCurrent() {
+    global $g;
+    $group = new CGroups();
+    $group->load($g);
+    return $group;
+  }
 }
 ?>

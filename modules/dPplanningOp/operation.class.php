@@ -374,6 +374,7 @@ class COperation extends CCodable {
   function loadView() {
     $this->loadRefsFwd();
     $this->loadRefsActesCCAM();
+    $this->loadExtCodesCCAM(1);
   }
   
   function loadComplete() {

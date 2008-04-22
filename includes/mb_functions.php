@@ -775,6 +775,12 @@ function in_range($value, $min, $max) {
   return $value <= $max && $value >= $min;
 }
 
+/**
+ * Check if a number is a valid Luhn number
+ * see http://en.wikipedia.org/wiki/Luhn
+ * @param code string String representing a potential Luhn number
+ * @return boolean
+ */
 function luhn ($code) {
   $code = preg_replace('/\D|\s/', '', $code);
   $code_length = strlen($code);
@@ -798,5 +804,16 @@ function luhn ($code) {
   
   return (($sum % 10) == 0);
 }
+
+/**
+ * Check wether a URL exists (200 HTTP Header)
+ * @param $url string URL to check
+ * @return boolean
+ */
+function url_exists($url) {
+  $headers = @get_headers($url);
+  return (preg_match("|200|", $headers[0])); 
+}
+
 
 ?>

@@ -122,7 +122,7 @@ if ($consult->_id) {
   if($consultAnesth->consultation_anesth_id) {
     $consultAnesth->loadRefs();
     if($consultAnesth->_ref_operation->_id || $consultAnesth->_ref_sejour->_id) {
-    	$consultAnesth->_ref_operation->loadExtCodesCCAM(1);
+    	$consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_sejour->loadRefDossierMedical();
@@ -137,18 +137,18 @@ if ($consult->_id) {
   $patient->loadStaticCIM10($userSel->user_id);
   
   // Chargement des ses consultations
-  foreach($patient->_ref_consultations as $key => $curr_cons) {
-    $patient->_ref_consultations[$key]->loadRefsFwd();
+  foreach($patient->_ref_consultations as &$_consultation) {
+    $_consultation->loadRefsFwd();
   }
   
   // Chargement des ses séjours
-  foreach($patient->_ref_sejours as $key => $curr_sejour) {
-    $patient->_ref_sejours[$key]->loadRefsFwd();
-    $patient->_ref_sejours[$key]->loadRefsOperations();
-    foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
-      $patient->_ref_sejours[$key]->_ref_operations[$keyOp]->loadRefsFwd();
+  foreach($patient->_ref_sejours as &$_sejour) {
+    $_sejour->loadRefsFwd();
+    $_sejour->loadRefsOperations();
+    foreach ($_sejour->_ref_operations as &$_operation) {
+      $_operation->loadRefsFwd();
       // Tableaux de correspondances operation_id => sejour_id
-      $tabSejour[$op->_id] = $patient->_ref_sejours[$key]->_id;
+      $tabSejour[$_operation->_id] = $_sejour->_id;
     }
   }
   
@@ -157,7 +157,7 @@ if ($consult->_id) {
   
   // Calcul des paramètres de DHE
   $patient->makeDHEUrl();
-  if(CModule::getInstalled("dPsante400") && ($dPconfig["interop"]["mode_compat"] == "medicap")) {
+  if (CModule::getInstalled("dPsante400") && (CAppUI::conf("interop mode_compat") == "medicap")) {
     $tmpEtab = array();
     foreach($etablissements as $etab) {
       $idExt = new CIdSante400;

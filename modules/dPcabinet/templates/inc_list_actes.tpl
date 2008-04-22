@@ -59,16 +59,27 @@ viewCode = function(code, class){
 	</tr>
 	
 	{{/foreach}}
+	
 <!-- Sinon, affichage des actes prevus -->
 {{elseif $subject->_ext_codes_ccam}}
 	<tr>
 	  <th class="category" colspan="2">{{tr}}{{$subject->_class_name}}-_ext_codes_ccam{{/tr}}</th>
 	</tr>
-	{{foreach from=$subject->_ext_codes_ccam item=currCode}}
+	{{foreach from=$subject->_ext_codes_ccam item=_code}}
 	<tr>
 	  <td class="text" colspan="2">
-	    <strong>{{$currCode->code}}</strong> :
-	    {{$currCode->libelleLong}}
+	    <strong>{{$_code->code}}</strong> :
+	    {{$_code->libelleLong}}
+
+	    {{if @$view_tarif}}
+	    <!-- Tarifs des activités (phase 0) -->
+	    <em>(
+			{{foreach from=$_code->activites item=_actvite name=tarif}}
+    	Activité {{$_actvite->numero}} : {{$_actvite->phases.0->tarif}}{{$dPconfig.currency_symbol}}
+    	{{if !$smarty.foreach.tarif.last}}&mdash;{{/if}}
+    	{{/foreach}}
+	    {{/if}}
+	    )</em>
 	  </td>
 	</tr>
 	{{/foreach}}

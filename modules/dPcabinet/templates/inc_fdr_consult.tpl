@@ -396,6 +396,9 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
          <td class="date">
            {{mb_field object=$consult field="accident_travail" form="accidentTravail" onchange="submitFormAjax(this.form,'systemMsg');"}}
          </td>
+         <td>
+           <strong>{{if $patient->cmu}}Bénéficiaire d'une CMU{{/if}}</strong>
+         </td>
        </tr>
       </table>  
     </form>
