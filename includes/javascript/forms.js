@@ -206,20 +206,18 @@ Element.addMethods({
     // We remove the margin between the textarea and the grippie
     oElement.style.marginBottom = '0';
   
-    /*var cookie = new CookieJar({
-      expires: 3600*24
-    }); 
+    var cookie = new CookieJar(); 
     
-    if (entry = cookie.get('ElementHeight')) {
-      var h = entry[oElement.id].height;
+    if (h = cookie.getValue('ElementHeight', oElement.id)) {
       oElement.setStyle({height: (h+'px')});
-    }*/
+    }
     
     // grippie's class and style
     oGrippie.addClassName('grippie-h');
     oGrippie.setStyle({
       opacity: 0.5,
-      display: ((oElement.style.display == 'none') ? 'none' : 'block')
+      display: ((oElement.style.display == 'none') ? 'none' : 'block'),
+      width: oElement.style.width
     });
     
     // When the mouse is pressed on the grippie, we begin the drag
@@ -236,18 +234,17 @@ Element.addMethods({
     }
   
     function performDrag(e) {
+      var h = null;
       if (typeof oDefaultOptions.step == 'string') {
-        var lineHeight = oElement.getStyle(oDefaultOptions.step);
-        lineHeight = lineHeight.substr(0, lineHeight.length - 2);
+        var iStep = oElement.getStyle(oDefaultOptions.step);
+        iStep = iStep.substr(0, iStep.length - 2);
         
-        var h = Math.max(lineHeight*2, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2;
-        
-        h = Math.round(h / lineHeight)*lineHeight;
-        oElement.setStyle({height: null});
-        oElement.rows = Math.round(h / lineHeight)-1;
+        h = Math.max(iStep*2, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2;
+        h = Math.round(h / iStep)*iStep;
       } else {
-        oElement.setStyle({height: Math.max(32, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2 + 'px'});
+        h = Math.max(32, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2
       }
+      oElement.setStyle({height: h+'px'});
       return false;
     }
   
@@ -255,12 +252,10 @@ Element.addMethods({
       oElement.setStyle({opacity: 1});
       document.onmousemove = null;
       document.onmouseup = null;
-      /*var data;
-      data.(oElement.id) = oElement.getHeight();
-      Console.debug(data, oElement.getHeight());
+
       if (oElement.id) {
-        cookie.put('ElementHeight', data);
-      }*/
+        cookie.setValue('ElementHeight', oElement.id, oElement.getHeight());
+      }
       return false;
     }
   
@@ -268,75 +263,84 @@ Element.addMethods({
   }
 } );
 
-function prepareForm(oForm) {
+function prepareForm(oForm, bForcePrepare) {
   oForm = $(oForm);
-  // Event Observer
-  if(oForm.classNames().include("watched")) {
-    new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
-  }
-  // Form preparation
-  var sFormName = oForm.getAttribute("name");
-  oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
-
-  // Build label targets
-  var aLabels = oForm.getElementsByTagName("label");
-  var iLabel = 0;
-  var oLabel = null;
-  var sFor = null;
-  while (oLabel = aLabels[iLabel++]) {
-    // oLabel.getAttribute("for") is not accessible in IE
-    if (sFor = oLabel.htmlFor) { 
-      if (sFor.indexOf(sFormName) != 0) {
-        oLabel.htmlFor = sFormName + "_" + sFor;
-      }
-    } 
-  }
-
-  // For each element
-  var iElement = 0;
-  var oElement = null;
-  var sPropSpec = null;
-  var aSpecFragments = null;
-  while (oElement = oForm.elements[iElement++]) {
-  	// Locked object
-  	if (oForm.lockAllFields) {
-  		oElement.disabled = true;
-  	}
-  	
-    // Create id for each element if id is null
-    if (!oElement.id) {
-      oElement.id = sFormName + "_" + oElement.name;
-      if (oElement.type == "radio") {
-        oElement.id += "_" + oElement.value;
-      }
-    }
   
-    //  Label emphasized for notNull elements
-    if (sPropSpec = oElement.getAttribute("title")) {
-      aSpecFragments = sPropSpec.split(" ");
-      if (aSpecFragments.indexOf("notNull") != -1) {
-        notNullOK(oElement);
-        Element.addEventHandler(oElement, "change", notNullOK);
-      }
-    }else if (sPropSpec = oElement.className) {
-      aSpecFragments = sPropSpec.split(" ");
-      if (aSpecFragments.indexOf("notNull") != -1) {
-        notNullOK(oElement);
-        Element.addEventHandler(oElement, "change", notNullOK);
-      }
+  // If this form hasn't been prepared yet
+  if (!oForm.hasClassName("prepared") || bForcePrepare) {
+  
+    // Event Observer
+    if(oForm.classNames().include("watched")) {
+      new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
     }
-   
-    // Focus on first text input
-    if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
-      // Internet Explorer will not give focus to a not visible element but will raise an error
-      if (oElement.clientWidth > 0) {
-        oElement.focus();
-        bGiveFormFocus = false;
+    // Form preparation
+    var sFormName = oForm.getAttribute("name");
+    oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
+  
+    // Build label targets
+    var aLabels = oForm.getElementsByTagName("label");
+    var iLabel = 0;
+    var oLabel = null;
+    var sFor = null;
+    while (oLabel = aLabels[iLabel++]) {
+      // oLabel.getAttribute("for") is not accessible in IE
+      if (sFor = oLabel.htmlFor) { 
+        if (sFor.indexOf(sFormName) != 0) {
+          oLabel.htmlFor = sFormName + "_" + sFor;
+        }
       } 
     }
+  
+    // For each element
+    var iElement = 0;
+    var oElement = null;
+    var sPropSpec = null;
+    var aSpecFragments = null;
+    while (oElement = oForm.elements[iElement++]) {
+    	// Locked object
+    	if (oForm.lockAllFields) {
+    		oElement.disabled = true;
+    	}
+    	
+      // Create id for each element if id is null
+      if (!oElement.id) {
+        oElement.id = sFormName + "_" + oElement.name;
+        if (oElement.type == "radio") {
+          oElement.id += "_" + oElement.value;
+        }
+      }
     
-    if (oElement.type == "textarea") {
-      oElement.setResizable();
+      //  Label emphasized for notNull elements
+      if (sPropSpec = oElement.getAttribute("title")) {
+        aSpecFragments = sPropSpec.split(" ");
+        if (aSpecFragments.indexOf("notNull") != -1) {
+          notNullOK(oElement);
+          Element.addEventHandler(oElement, "change", notNullOK);
+        }
+      }else if (sPropSpec = oElement.className) {
+        aSpecFragments = sPropSpec.split(" ");
+        if (aSpecFragments.indexOf("notNull") != -1) {
+          notNullOK(oElement);
+          Element.addEventHandler(oElement, "change", notNullOK);
+        }
+      }
+     
+      // Focus on first text input
+      if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
+        // Internet Explorer will not give focus to a not visible element but will raise an error
+        if (oElement.clientWidth > 0) {
+          oElement.focus();
+          bGiveFormFocus = false;
+        } 
+      }
+      
+      if (oElement.type == "textarea") {
+        oElement.setResizable({autoSave: true, step: 'font-size'});
+      }
+      
+      
+      // We mark this form as prepared
+      oForm.addClassName("prepared");
     }
   }
 }
@@ -554,6 +558,9 @@ NumericField.prototype = {
     var result = (parseInt(Number(oField.value) / step) + 1) * step;
     result = (result <= this.max || this.max == null) ? result : this.max;
     oField.setValue(result);
+    if (oField.onchange) {
+      oField.onchange();
+    }
     oField.select();
   },
 
@@ -564,6 +571,9 @@ NumericField.prototype = {
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
  	  result = (result >= this.min || this.min == null) ? result : this.min;
     oField.setValue(result);
+    if (oField.onchange) {
+      oField.onchange();
+    }
     oField.select();
   },
   

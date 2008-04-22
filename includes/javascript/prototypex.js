@@ -68,15 +68,14 @@ Element.addEventHandler = function(oElement, sEvent, oHandler) {
 
 Class.extend(Element.ClassNames, {
   load: function (sCookieName, nDuration) {
-    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
-    if (sValue = oCookie.getSubValue(this.element.id)) {
+    var oCookie = new CookieJar({expires: nDuration});
+    if (sValue = oCookie.getValue(sCookieName, this.element.id)) {
       this.set(sValue);
     }
   },
   
   save: function (sCookieName, nDuration) {
-    var oCookie = new CJL_CookieUtil(sCookieName, nDuration);
-    oCookie.setSubValue(this.element.id, this.toString());
+    new CookieJar({expires: nDuration}).setValue(sCookieNamethis.element.id, this.toString());
   },
 
   toggle: function(sClassName) {

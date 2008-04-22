@@ -1416,12 +1416,10 @@ function luhn (code) {
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {
   storeTab: function (tabName, tab) {
-    var oTabCookie = new CJL_CookieUtil("TabState");
-    oTabCookie.setSubValue(tabName, tab);
+    new CookieJar().setValue("TabState", tabName, tab);
   },
   loadTab: function (tabName) {
-    var oTabCookie = new CJL_CookieUtil("TabState");
-    return oTabCookie.getSubValue(tabName);
+    return new CookieJar().getValue("TabState", tabName);
   },
   create: function (name, storeInCookie) {
     var tab = new Control.Tabs(name);

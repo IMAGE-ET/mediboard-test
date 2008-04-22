@@ -2706,6 +2706,7 @@ table.tbl td.ccmu-P{
    width: 6px; 
    float: left;
    margin: 3px;
+   margin-bottom: 0;
    border: 1px solid #333333;
 }
 
