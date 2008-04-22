@@ -82,12 +82,6 @@ function pageMain() {
             }
             </script>
           </td>
-          <td>
-          
-          <button class="print notext" type="button" onclick="printResultats('{{$prescription->_id}}')">
-          
-          </button>
-          </td>
         </tr>
       </table>
 
@@ -118,6 +112,13 @@ function pageMain() {
               {{/foreach}}
             </select>
           </td>
+          {{if $prescription->_id}}
+          <td>
+            <button class="print notext" type="button" onclick="printResultats('{{$prescription->_id}}')">
+              {{tr}}Print{{/tr}}
+            </button>
+          </td>
+          {{/if}}
         </tr>
       </table>
       </form>

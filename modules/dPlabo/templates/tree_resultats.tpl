@@ -12,7 +12,7 @@
 {{foreach from=$_catalogue->_ref_prescription_items item=_item}}
 {{assign var=analyse value=$_item->_ref_examen_labo}}
 {{assign var=msgClass value=""}}
-{{if $_item->_ref_examen_labo->type == "num"}}
+{{if $analyse->type == "num"}}
   {{mb_ternary var=msgClass test=$_item->_hors_limite value=warning other=message}}
 {{/if}}
 
