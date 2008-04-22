@@ -317,6 +317,9 @@ table.crumbsblock td.crumbscell {
 }
 
 #tabmenu td.selected {
+  padding: 6px;
+  padding-top: 3px;
+  padding-bottom: 0px;
   background: url(images/pictures/tab_selected_background.png) repeat-x top;
 }
 
@@ -2431,4 +2434,37 @@ table.main td.step {
   cursor: n-resize;
   margin-left: 1px;
   margin-right: -2px;
+}
+
+.dent {
+  -moz-border-radius: 100%;
+  border-radius: 100%;
+  position: absolute;
+  cursor: pointer;
+}
+
+.hover {
+  border: 2px solid #FF0000;
+  background: transparent;
+}
+
+.bridge {
+  background: #6699FF;
+}
+
+.pivot {
+  background: #FF6600;
+}
+
+.mobile {
+	background: #33CC00;
+}
+
+.appareil {
+  background: #FF66FF;
+}
+
+.dent-menu {
+  position: absolute;
+  z-index: 8;
 }

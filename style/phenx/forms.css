@@ -7,15 +7,15 @@ input, select, textarea, button {
   font-size: 1em;
   margin: 1px;
   padding: 1px;
-  background: #FDFDFD;
+  background: #F9f9f9;
 }
 
 input:hover, select:hover, textarea:hover {
-  border: 1px #333333 solid;
+  border-color: #333333;
 }
 
 input:focus, select:focus, textarea:focus {
-  border: 1px #FF6600 solid;
+  border-color: #FF6600;
 }
 
 select, input[type=submit], input[type=reset], input[type=button] {
@@ -40,22 +40,25 @@ input[type=button]:hover {
   background: #bbb;
 }
 
-optgroup {
+option, optgroup {
   font-style: normal;
-  font-size: 10px;
-  font-weight: bold;
-  padding: 0px;
-  padding-left: 5px;
+  padding: 0;
+  margin: 0;
+  padding-right: 6px;
   background: #fff;
 }
 
 option {
   font-style: normal;
-  font-size: 10px;
   font-weight: normal;
-  padding: 0px;
-  padding-right: 4px;
-  background: #fff;
+}
+
+optgroup {
+  font-weight: bold;
+}
+
+optgroup option {
+  padding-left: 6px;
 }
 
 option.novalue {

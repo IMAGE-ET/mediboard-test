@@ -14,3 +14,7 @@ div.warning,div.error,div.message {
 table#weber table#allvalues,table#weber td.radiointeractive {
   display: none;
 }
+
+button, input[type=button] {
+  display: none;
+}
