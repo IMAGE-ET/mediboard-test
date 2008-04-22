@@ -25,25 +25,25 @@
 
 <script type="text/javascript">
 
-function onSubmitDossierMedical(form) {
+onSubmitDossierMedical = function(oForm) {
 	return onSubmitFormAjax(oForm, { 
 		onComplete : reloadDossierMedicalSejour 
 	} );
 }
 
-function copyAntecedent(antecedent_id){
+copyAntecedent = function(antecedent_id){
   var oForm = document.frmCopyAntecedent;
   oForm.antecedent_id.value = antecedent_id;
  	onSubmitDossierMedical(oForm);
 }
 
-function copyTraitement(traitement_id){
+copyTraitement = function(traitement_id){
   var oForm = document.frmCopyTraitement;
   oForm.traitement_id.value = traitement_id;
   onSubmitDossierMedical(oForm);
 }
 
-function copyAddiction(addiction_id) {
+copyAddiction = function(addiction_id) {
 	var oForm = document.frmCopyAddiction;
 	oForm.addiction_id.value = addiction_id;
 	onSubmitDossierMedical(oForm);
