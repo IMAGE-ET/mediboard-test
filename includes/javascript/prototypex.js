@@ -75,7 +75,7 @@ Class.extend(Element.ClassNames, {
   },
   
   save: function (sCookieName, nDuration) {
-    new CookieJar({expires: nDuration}).setValue(sCookieNamethis.element.id, this.toString());
+    new CookieJar({expires: nDuration}).setValue(sCookieName, this.element.id, this.toString());
   },
 
   toggle: function(sClassName) {

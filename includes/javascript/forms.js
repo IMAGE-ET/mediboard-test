@@ -239,12 +239,12 @@ Element.addMethods({
         var iStep = oElement.getStyle(oDefaultOptions.step);
         iStep = iStep.substr(0, iStep.length - 2);
         
-        h = Math.max(iStep*2, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2;
+        h = Math.max(iStep*2, staticOffset + Event.pointerY(e)) - Math.round(oGrippie.getHeight()/2);
         h = Math.round(h / iStep)*iStep;
       } else {
-        h = Math.max(32, staticOffset + Event.pointerY(e)) - oGrippie.getHeight()/2
+        h = Math.max(32, staticOffset + Event.pointerY(e));
       }
-      oElement.setStyle({height: h+'px'});
+      oElement.setStyle({height: h + 'px'});
       return false;
     }
   
@@ -254,7 +254,7 @@ Element.addMethods({
       document.onmouseup = null;
 
       if (oElement.id) {
-        cookie.setValue('ElementHeight', oElement.id, oElement.getHeight());
+        cookie.setValue('ElementHeight', oElement.id, oElement.getHeight() - Math.round(oGrippie.getHeight()/2));
       }
       return false;
     }
@@ -265,7 +265,7 @@ Element.addMethods({
 
 function prepareForm(oForm, bForcePrepare) {
   oForm = $(oForm);
-  
+
   // If this form hasn't been prepared yet
   if (!oForm.hasClassName("prepared") || bForcePrepare) {
   
