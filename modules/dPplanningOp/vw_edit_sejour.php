@@ -57,15 +57,15 @@ if ($sejour_id) {
   $sejour->loadRefs();
   
   // On vérifie que l'utilisateur a les droits sur le sejour
-  /*if (!$sejour->canEdit()) {
+  if (!$sejour->canRead()) {
     $AppUI->setMsg("Vous n'avez pas accés à ce séjour", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
-  }*/
+  }
   // Ancienne methode
-  if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
+  /*if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
     $AppUI->setMsg("Vous n'avez pas accés aux séjours du Dr. {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
-  }
+  }*/
 
   
   foreach ($sejour->_ref_operations as &$operation) {
