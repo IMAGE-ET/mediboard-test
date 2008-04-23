@@ -44,13 +44,19 @@ preselectExecutant = function(executant_id, category_id){
 	  {{assign var=category value=$categories.$category_id}}
 	  <tr>
 	    <!-- Affichage de la categorie -->
-	    <th colspan="9">{{$category->_view}}</th>
+	    <th class="title" colspan="9">{{$category->_view}}</th>
 	  </tr>
 	  
 	  <!-- Parcours des categories d'elements et de commentaires -->
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element}}
 	  {{/foreach}}
+	  {{if $lines_cat.comment|@count}}
+	  <tr>
+	    <th colspan="8">Commentaires</th>
+	  </tr>
+	  
+	  {{/if}}
 	  {{foreach from=$lines_cat.comment item=line_comment}}
 	    {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment}}
 	  {{/foreach}}

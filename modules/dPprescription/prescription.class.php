@@ -135,7 +135,7 @@ class CPrescription extends CMbObject {
   function loadRefsLines() {
     $line = new CPrescriptionLineMedicament();
     $where = array("prescription_id" => "= $this->_id");
-    $order = "prescription_line_id DESC";
+    $order = "prescription_line_medicament_id DESC";
     $this->_ref_prescription_lines = $line->loadList($where, $order);
     
     foreach($this->_ref_prescription_lines as &$_line){
@@ -184,6 +184,8 @@ class CPrescription extends CMbObject {
     	$line_element->loadRefElement();
     	$line_element->loadRefPraticien();
     	$line_element->loadRefLogSignee();
+    	$line_element->loadRefsPrises();
+    	$line_element->loadRefExecutant();
     	$line_element->_ref_element_prescription->loadRefCategory();
     }
   }
@@ -237,7 +239,8 @@ class CPrescription extends CMbObject {
           $_line_comment->loadRefCategory();
           $_line_comment->loadRefPraticien();
           $_line_comment->loadRefLogSignee();
-          
+          $_line_comment->loadRefExecutant();
+    	
   		  	$cat = new CCategoryPrescription();
   		  	$cat->load($_line_comment->category_prescription_id);
   		  	$chapitre = $cat->chapitre;

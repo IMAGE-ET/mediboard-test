@@ -30,7 +30,8 @@ if($posologie->code_moment && $code_cip && $no_poso){
 	$moment->loadRefsAssociations();
 	foreach($moment->_ref_associations as &$_association){
 		$prise_posologie = new CPrisePosologie();
-		$prise_posologie->prescription_line_id = $prescription_line_id;
+		$prise_posologie->object_id = $prescription_line_id;
+		$prise_posologie->object_class = "CPrescriptionLineMedicament";
 		$prise_posologie->moment_unitaire_id = $_association->moment_unitaire_id;
 		// Si association ne OR, quantite à 0
 		if($_association->OR){
@@ -46,7 +47,8 @@ if($posologie->code_moment && $code_cip && $no_poso){
 	if($no_poso){
 		// Posologie sans moment
 	  $prise_posologie = new CPrisePosologie();
-		$prise_posologie->prescription_line_id = $prescription_line_id;
+		$prise_posologie->object_id = $prescription_line_id;
+		$prise_posologie->object_class = "CPrescriptionLineMedicament";
 		$prise_posologie->quantite = $posologie->quantite1;
 		// Cas: x fois par y
 		if($posologie->code_moment == 0 && $posologie->tous_les <= 1){
@@ -83,9 +85,10 @@ $prescription_line->debut = mbDate();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("curr_line", $prescription_line);
+$smarty->assign("type", "Med");
+$smarty->assign("line", $prescription_line);
 $smarty->assign("moments", $moments);
 
-$smarty->display("inc_vw_prises.tpl");
+$smarty->display("../../dPprescription/templates/line/inc_vw_prises_posologie.tpl");
 
 ?>

@@ -20,19 +20,27 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $executant_prescription_line_id = null; 
   
   var $_ref_element_prescription = null;
-    
+  var $_ref_executant = null;
+  
   function CPrescriptionLineElement() {
     $this->CMbObject("prescription_line_element", "prescription_line_element_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
+  
+  function updateFormFields(){
+    parent::updateFormFields();
+    // Un element ne peut jamais être un traitement
+    $this->_traitement = 0;	
+  }
+  
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "element_prescription_id" => "notNull ref class|CElementPrescription cascade",
+      "element_prescription_id"        => "notNull ref class|CElementPrescription cascade",
       "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
-      "commentaire"             => "str"
+      "commentaire"  => "str"
     );
     return array_merge($specsParent, $specs);
   }

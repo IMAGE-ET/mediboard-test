@@ -7,7 +7,12 @@
  *  @author Romain Ollivier
  */
 
+
 global $AppUI, $can, $m;
+
+$mbProduit = new CBcbProduit();
+$produits = $mbProduit->searchProduitAutocomplete("effe", 10);
+
 
 $can->needsRead();
 
@@ -17,7 +22,6 @@ $object_id       = mbGetValueFromGetOrSession("object_id");
 
 $mode_pharma = mbGetValueFromGet("mode_pharma", 0);
 $refresh_pharma = mbGetValueFromGet("refresh_pharma", 0);
-
 $mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
 
 $listFavoris = array();
@@ -44,10 +48,19 @@ $alertesIPC          = array();
 $alertesProfil       = array();
 $favoris             = array();
 
+
+
 // Chargement de la catégorie demandé
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
+
+
 $listProduits = array();
+
+
+$chrono3 = new Chronometer;
+$chrono3->start();
+
 if(!$prescription->_id) {
   $prescription->object_class = $object_class;
   $prescription->object_id    = $object_id;
@@ -55,6 +68,7 @@ if(!$prescription->_id) {
   // Liste des favoris
   $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);  
 }
+
 
 if($prescription->_id){
 	// Chargement des medicaments et commentaire
@@ -64,16 +78,21 @@ if($prescription->_id){
   $prescription->loadRefsLinesElementsComments();
 }
 
-if($prescription->object_id) {
-  $prescription->loadRefsFwd();
-  $prescription->_ref_object->loadRefSejour();
-  $prescription->_ref_object->loadRefPatient();
-  $prescription->_ref_object->_ref_patient->loadRefDossierMedical();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->updateFormFields();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAntecedents();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
-  $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
-  //$prescription->_ref_object->loadRefsPrescriptions();
+
+if($prescription->object_id && $category_name == "medicament") {
+	
+
+	$prescription->loadRefsFwd();
+	$prescription->_ref_object->loadRefSejour();
+	$prescription->_ref_object->loadRefPatient();
+	$patient =& $prescription->_ref_object->_ref_patient;
+  $patient->loadRefDossierMedical();
+  $dossier_medical =& $patient->_ref_dossier_medical;
+
+  $dossier_medical->updateFormFields();
+  $dossier_medical->loadRefsAntecedents();
+  $dossier_medical->loadRefsTraitements();
+  $dossier_medical->loadRefsAddictions();
   
   // Calcul des alertes
   $allergies    = new CBcbControleAllergie();
@@ -99,8 +118,10 @@ if($prescription->object_id) {
     $line->checkIPC($alertesIPC);
     $line->checkProfil($alertesProfil);
   }
-}
 
+  
+}
+	
 // Chargement des categories pour chaque chapitre
 $categoryPresc = new CCategoryPrescription();
 $categories = $categoryPresc->loadCategoriesByChap();
@@ -116,6 +137,7 @@ foreach($cats as $key => $cat){
 	$categories["cat".$key] = $cat;
 }
 
+	
 // Chargement des traitement de la prescription
 if($prescription->_id){
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
@@ -130,6 +152,8 @@ if($prescription->_id){
 }
 
 
+
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -140,10 +164,12 @@ $smarty = new CSmartyDP();
 $smarty->assign("httpreq", 1);
 
 $smarty->assign("today"              , mbDate());
+
 $smarty->assign("categories", $categories);
 $smarty->assign("executants", $executants);
-$smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("moments", $moments);
+
+$smarty->assign("prise_posologie", new CPrisePosologie());
 $smarty->assign("protocole", new CPrescription());
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);
@@ -159,6 +185,11 @@ $smarty->assign("categories"  , $categories);
 $smarty->assign("refresh_pharma", $refresh_pharma);
 
 	
+// first_refresh_protocole => mode_protocole             => inc_vw_prescription
+// first_refresh_pharma => mode_pharma & refresh_pharma  => inc_vw_prescription
+
+
+
 if($mode_protocole){
 	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "1");
@@ -168,7 +199,7 @@ if($mode_protocole){
 
 if($mode_pharma && $refresh_pharma){
   $smarty->assign("mode_protocole", "0");
-  $smarty->assign("mode_pharma", $mode_pharma);
+  $smarty->assign("mode_pharma", "1");
   $smarty->assign("praticien", $prescription->_ref_praticien);
   $smarty->display("inc_vw_prescription.tpl");	
 }
@@ -180,24 +211,25 @@ if(!$refresh_pharma && !$mode_protocole){
 	  $smarty->assign("mode_pharma", "1");
 	  $smarty->display("inc_div_medicament.tpl");
 	} else {
-	
-	// Cas de la selection d'un protocole
-  if(!$category_name){
-    $smarty->assign("mode_pharma", "0");
-    $smarty->assign("mode_protocole", "0");
-		$smarty->display("inc_vw_produits_elements.tpl");	
-  } else {
-    // Cas du rafraichissement de la partie medicament
-    if($category_name == "medicament"){
-     	$smarty->assign("mode_pharma", "0");
-    	$smarty->display("inc_div_medicament.tpl");
+	  $smarty->assign("mode_pharma", "0");
+	  // Cas de la selection d'un protocole
+    if(!$category_name){
+      $smarty->assign("mode_protocole", "0");
+	  	$smarty->display("inc_vw_produits_elements.tpl");	
     } else {
-    	$smarty->assign("mode_pharma", "0");
-      // Cas du rafraichissement d'une partie element
-      $smarty->assign("element", $category_name);
-      $smarty->display("inc_div_element.tpl");
+      // Cas du rafraichissement de la partie medicament
+      if($category_name == "medicament"){
+       	$smarty->display("inc_div_medicament.tpl");
+      } else {
+      	// Cas du rafraichissement d'une partie element
+        $smarty->assign("element", $category_name);
+        $smarty->display("inc_div_element.tpl");
+      }
     }
-  }
 	}
 }
+
+
+
+
 ?>

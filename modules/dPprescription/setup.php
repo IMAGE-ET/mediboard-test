@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.34";
+$config["mod_version"]     = "0.36";
 $config["mod_type"]        = "user";
 
 
@@ -379,7 +379,41 @@ class CSetupdPprescription extends CSetup {
             ADD `accord_praticien` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $sql = "ALTER TABLE `prescription_line` RENAME `prescription_line_medicament`";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament`
+            CHANGE `prescription_line_id` `prescription_line_medicament_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `debut` DATE, 
+            ADD `duree` INT(11), 
+            ADD `unite_duree` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `debut` DATE, 
+            ADD `duree` INT(11), 
+            ADD `unite_duree` ENUM('minute','heure','demi_journee','jour','semaine','quinzaine','mois','trimestre','semestre','an');";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prise_posologie`
+            CHANGE `prescription_line_id` `object_id` INT(11) UNSIGNED NOT NULL, 
+            ADD `object_class` ENUM('CPrescriptionLineMedicament','CPrescriptionLineElement') NOT NULL DEFAULT 'CPrescriptionLineMedicament';";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.35");
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `date_arret` DATE;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `date_arret` DATE;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.36";
   }  
 }
 

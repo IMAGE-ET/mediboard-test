@@ -56,13 +56,15 @@ if($new_line->duree < 0){
 }
 $new_line->praticien_id = $AppUI->user_id;
 $new_line->signee = 0;
+$new_line->valide_pharma = 0;
 $msg = $new_line->store();
 viewMsg($msg, "msg-CPrescriptionLineMedicament-create");
 
 foreach($new_line->_ref_prises as &$prise){
 	// On copie les prises
 	$prise->_id = "";
-	$prise->prescription_line_id = $new_line->_id;
+	$prise->object_id = $new_line->_id;
+	$prise->object_class = "CPrescriptionLineMedicament";
 	$msg = $prise->store();
 	viewMsg($msg, "msg-CPrisePosologie-create");
 }

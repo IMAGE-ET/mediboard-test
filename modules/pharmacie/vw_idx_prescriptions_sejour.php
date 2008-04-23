@@ -36,7 +36,7 @@ $lines_medicament = array();
 $where = array();
 
 
-$ljoinMedicament["prescription"] = "prescription_line.prescription_id = prescription.prescription_id";
+$ljoinMedicament["prescription"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
 $ljoinMedicament["sejour"] = "prescription.object_id = sejour.sejour_id";
 	
 
@@ -45,7 +45,7 @@ $where["valide_pharma"] = " = '0'";
 
 // Filtre sur le praticiens (lignes)
 if($praticien_id){
-	$where["prescription_line.praticien_id"] = " = '$praticien_id'";
+	$where["prescription_line_medicament.praticien_id"] = " = '$praticien_id'";
 }
 
 // Filtre sur le service (séjour)

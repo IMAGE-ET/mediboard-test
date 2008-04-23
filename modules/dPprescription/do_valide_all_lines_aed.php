@@ -23,6 +23,7 @@ $prescription_id = mbGetValueFromPost("prescription_id");
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
 
+
 if($prescription_id){
 	$prescription = new CPrescription();
 	$prescription->load($prescription_id);
@@ -65,11 +66,14 @@ if($prescription_id && $chapitre=="medicament"){
 	
 	if(!$mode_pharma){
 	  $prescriptionLineComment = new CPrescriptionLineComment();
-	  $prescriptionLineComment->prescription_id = $prescription_id;
-	  $prescriptionLineComment->praticien_id = $AppUI->user_id;
-	  $prescriptionLineComment->signee = "0";
-	  $comments = $prescriptionLineComment->loadMatchingList();
-	}
+	  
+	  $where = array();
+	  $where["prescription_id"] = " = '$prescription_id'";
+	  $where["praticien_id"] = " = '$AppUI->user_id'";
+	  $where["category_prescription_id"] = "IS NULL";
+	  $where["signee"] = " = '0'";
+	  $comments = $prescriptionLineComment->loadList($where);
+  }
 	
 	// Chargement de la prescription
 	$prescription = new CPrescription();
@@ -196,7 +200,7 @@ if($prescription->type == "pre_admission" && $chapitre=="medicament" && !$mode_p
 			    
 			    foreach($line_med->_ref_prises as &$prise){
 			      $prise->_id = "";
-			      $prise->prescription_line_id = $line_med->_id;
+			      $prise->object_id = $line_med->_id;
 			      $msg = $prise->store();
 			      viewMsg($msg, "msg-CPrisePosologie-create");
 			    }

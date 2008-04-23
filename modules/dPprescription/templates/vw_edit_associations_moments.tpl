@@ -1,9 +1,6 @@
 <script type="text/javascript">
 
 function viewMomentsUnitaires(code_moment_id){
-  /*$("moments").childNodes.each(
-  
-  );*/
   $("moment-"+code_moment_id).className = "selected";
   var url = new Url;
   url.setModuleAction("dPprescription","httpreq_vw_moments_unitaires");

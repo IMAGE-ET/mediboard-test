@@ -61,7 +61,8 @@ foreach($protocole->_ref_prescription_lines as $line){
 	foreach($line->_ref_prises as $prise){
 		$new_prise = new CPrisePosologie();
 	  $new_prise->_id = "";
-		$new_prise->prescription_line_id = $new_line->_id;
+		$new_prise->object_id = $new_line->_id;
+		$new_prise->object_class = "CPrescriptionLineMedicament";
 		$new_prise->moment_unitaire_id = $prise->moment_unitaire_id;
 	  $new_prise->quantite = $prise->quantite;
 	  $new_prise->nb_fois = $prise->nb_fois;

@@ -1,10 +1,10 @@
 <script type="text/javascript">
 
 // Calcul de la date de debut lors de la modification de la fin
-syncDate = function(oForm, curr_line_id, fieldName) {
+syncDate = function(oForm, curr_line_id, fieldName, type) {
   // Déclaration des div des dates
-  oDivDebut = $('editDates-'+curr_line_id+'_debut_da');
-  oDivFin = $('editDates-'+curr_line_id+'__fin_da');
+  oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
+  oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');
 
   // Recuperation de la date actuelle
   var todayDate = new Date();
@@ -73,21 +73,24 @@ syncDate = function(oForm, curr_line_id, fieldName) {
   }
 }
 
-syncDateSubmit = function(oForm, curr_line_id, fieldName) {
-  syncDate(oForm, curr_line_id, fieldName);
+syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
+  syncDate(oForm, curr_line_id, fieldName, type);
   submitFormAjax(oForm, 'systemMsg');
 }
   
-
-selDivPoso = function(type, line_id){
+  
+  
+// Affichage des div d'ajout de posologies
+selDivPoso = function(type, line_id, type_elt){
   if(!type){
-    type = "foisPar";
+    type = "foisPar"+type_elt;
   }
-  $('moment'+line_id).hide();
-  $('foisPar'+line_id).hide();
-  $('tousLes'+line_id).hide();
+  $('moment'+type_elt+line_id).hide();
+  $('foisPar'+type_elt+line_id).hide();
+  $('tousLes'+type_elt+line_id).hide();
   $(type+line_id).show();
 }
+
 
 // Fonction lancée lors de la modfication de la posologie
 submitPoso = function(oForm, curr_line_id){
@@ -101,23 +104,24 @@ submitPoso = function(oForm, curr_line_id){
       url.addParam("prescription_line_id", curr_line_id);
       url.addParam("no_poso", oForm.no_poso.value);
       url.addParam("code_cip", oForm._code_cip.value);
-      url.requestUpdate('prises-'+curr_line_id, { waitingText: null });
+      url.requestUpdate('prises-Med'+curr_line_id, { waitingText: null });
     } 
    }
   );
 }
 
-reloadPrises = function(prescription_line_id){
+reloadPrises = function(prescription_line_id, type){
   url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_prises");
   url.addParam("prescription_line_id", prescription_line_id);
-  url.requestUpdate('prises-'+prescription_line_id, { waitingText: null });
+  url.addParam("type", type);
+  url.requestUpdate('prises-'+type+prescription_line_id, { waitingText: null });
 }
 
-submitPrise = function(oForm){
+submitPrise = function(oForm, type){
   submitFormAjax(oForm, 'systemMsg', { onComplete:
     function(){
-      reloadPrises(oForm.prescription_line_id.value);
+      reloadPrises(oForm.object_id.value, type);
       oForm.quantite.value = 0;
       oForm.moment_unitaire_id.value = "";
   } });
@@ -140,6 +144,13 @@ transfertTraitement = function(line_id){
   submitFormAjax(oForm, "systemMsg");
 }
 
+// Initialisation des dates pour les calendars
+dates = {  
+  limit: {
+    start: new Date().toDATE(),
+    stop: null
+  }
+}
 
 </script>
 
@@ -160,7 +171,7 @@ transfertTraitement = function(line_id){
 <form action="?m=dPprescription" method="post" name="addLine" onsubmit="return checkForm(this);">  
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="do_prescription_line_medicament_aed" />
-  <input type="hidden" name="prescription_line_id" value=""/>
+  <input type="hidden" name="prescription_line_medicament_id" value=""/>
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
@@ -259,70 +270,19 @@ transfertTraitement = function(line_id){
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
   {{/foreach}}
-  
+ 
+  {{if $prescription->_ref_lines_med_comments.comment|@count}}
+  <tr>
+	  <th colspan="8">Commentaires</th>
+	</tr>
+  {{/if}}
   
   <!-- Parcours des commentaires --> 
- {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-   <tbody class="hoverable">
-    <tr>
-      <td>
-        {{if !$_line_comment->signee}}
-        <form name="delLineCommentMed-{{$_line_comment->_id}}" action="" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'medicament') } } );">
-            {{tr}}Delete{{/tr}}
-          </button>
-        </form>
-        {{/if}}
-      </td>
-      <td>
-        {{$_line_comment->commentaire}}
-      </td>
-      <td>
-	      <form action="?" method="post" name="editLineCommentALD-{{$_line_comment->_id}}">
-	        <input type="hidden" name="m" value="dPprescription" />
-	        <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	        <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}"/>
-	        <input type="hidden" name="del" value="0" />
-	        {{mb_field object=$_line_comment field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
-	        {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
-	      </form>
-      </td>
-      <td style="text-align: right">
-        {{if $_line_comment->_ref_praticien->_id}}
-        {{$_line_comment->_ref_praticien->_view}}
-        {{if $prescription->object_id}}  
-	        {{if $_line_comment->signee}}
-	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
-	            <form name="delValidationComment-med-{{$_line_comment->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-	              <input type="hidden" name="signee" value="0" />
-	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  )">Annuler la validation</button>
-	            </form>
-	          {{/if}}
-	        {{else}}
-	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
-	            <form name="validationComment-{{$_line_comment->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-	              <input type="hidden" name="signee" value="1" />
-	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament') } }  );">Signer</button>
-	            </form>
-	          {{/if}}
-	        {{/if}}
-	      {{/if}}
-      {{/if}}
-      </td>
-    </tr>
-  </tbody>
+  {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
+    {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl"}}
   {{/foreach}}
   
+  <!-- Affichage des traitements -->
   {{foreach from=$traitements item=traitement}}
     {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
   {{/foreach}}
@@ -338,28 +298,23 @@ transfertTraitement = function(line_id){
 
 <script type="text/javascript">
 
-prepareForms();
+//prepareForms();
 
-dates = {  
-  limit: {
-    start: dToday,
-    stop: new Date().toDATE();
-  }
-}
 
+/*
 Main.add( function(){
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
      {{if !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
        {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
-       Calendar.regField('editDates-{{$curr_line->_id}}', "debut", false, dates);
-       Calendar.regField('editDates-{{$curr_line->_id}}', "_fin", false, dates);
+       //Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
+       //Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
        
-       syncDate(document.forms["editDates-{{$curr_line->_id}}"], {{$curr_line->_id}});
+       //syncDate(document.forms["editDates-Med-{{$curr_line->_id}}"], {{$curr_line->_id}},'','Med');
      {{/if}}
      {{/if}}
   {{/foreach}}
 } );
-
+*/
 
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {

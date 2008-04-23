@@ -5,7 +5,7 @@ var Prescription = {
     Prescription.delLineWithoutRefresh(line_id);
     // Suppression des champs de addLine
     var oForm = document.addLine;
-    oForm.prescription_line_id.value = "";
+    oForm.prescription_line_medicament_id.value = "";
     oForm.del.value = "";
     Prescription.addLine(code);
   },
@@ -56,13 +56,13 @@ var Prescription = {
   },
   delLineWithoutRefresh: function(line_id) {
     var oForm = document.addLine;
-    oForm.prescription_line_id.value = line_id;
+    oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg');
   },
   delLine: function(line_id) {
     var oForm = document.addLine;
-    oForm.prescription_line_id.value = line_id;
+    oForm.prescription_line_medicament_id.value = line_id;
     oForm.del.value = 1;
     var mode_pharma = oForm.mode_pharma.value;
     submitFormAjax(oForm, 'systemMsg', { 
@@ -180,12 +180,13 @@ var Prescription = {
       tab[0].innerHTML = name_tab;
     }
   },
-  submitFormStop: function(oForm){
+  submitFormStop: function(oForm, object_id, object_class){
     submitFormAjax(oForm, 'systemMsg', { onComplete: function(){ 
       var url = new Url;
-      url.setModuleAction("dPprescription", "httpreq_vw_stop_medicament");
-      url.addParam("line_id", oForm.prescription_line_id.value);
-      url.requestUpdate("stop_"+oForm.prescription_line_id.value,  { waitingText: null } );
+      url.setModuleAction("dPprescription", "httpreq_vw_stop_line");
+      url.addParam("object_id", object_id);
+      url.addParam("object_class", object_class)
+      url.requestUpdate("stop-"+object_class+"-"+object_id,  { waitingText: null } );
     } } );
   },
   viewAllergies: function(prescription_id){

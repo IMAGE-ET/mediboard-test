@@ -1,6 +1,7 @@
 <script type="text/javascript">
 
 preselectType = function(contexte, oForm){
+
   if(!oForm){
     var oForm = document.addProtocolePresc; 
   }
@@ -35,12 +36,7 @@ preselectType = function(contexte, oForm){
    <input type="hidden" name="object_class" value=""/>
    <input type="hidden" name="object_id" value=""/>
    <input type="hidden" name="praticien_id" value="" />
-   {{if $prescription->object_class == "CConsultation"}}
-     <input type="hidden" name="type" value="externe" />
-   {{/if}}
-   {{if $prescription->object_class == "CSejour"}}
-     <input type="hidden" name="type" value="pre_admission" />
-   {{/if}}
+   
    <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
    <table class="form">
      <tr>

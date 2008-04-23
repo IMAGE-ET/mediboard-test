@@ -12,21 +12,27 @@
  */
 class CPrescriptionLineMedicament extends CPrescriptionLine {
   // DB Table key
-  var $prescription_line_id = null;
+  var $prescription_line_medicament_id = null;
   
   // DB Fields
   var $code_cip         = null;
   var $no_poso          = null;
   var $commentaire      = null;
+ 
+  /*
   var $debut            = null;
   var $duree            = null;
   var $unite_duree      = null;
+  */
+/*
   var $date_arret       = null;
+*/
+
   var $valide_pharma    = null; 
   var $accord_praticien = null;
-  
+   
   // Form Field
-  var $_fin            = null;
+  //var $_fin            = null;
   var $_unite_prise    = null;
   var $_specif_prise   = null;
   var $_traitement     = null;
@@ -36,24 +42,18 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_produit      = null;
   var $_ref_posologie    = null;
   var $_ref_prescription_traitement = null;
-  
-  // Logs
-  var $_ref_log_date_arret = null;
-  
+    
   // Alertes
   var $_ref_alertes      = null;
   var $_ref_alertes_text = null;
   var $_nb_alertes       = null;
 
-  // BackRefs
-  var $_ref_prises = null;
-  
   // Behaviour field
   var $_delete_prises = null;
   
   
   function CPrescriptionLineMedicament() {
-    $this->CMbObject("prescription_line", "prescription_line_id");
+    $this->CMbObject("prescription_line_medicament", "prescription_line_medicament_id");
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
@@ -64,24 +64,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       "code_cip"        => "notNull numchar|7",
       "no_poso"         => "num max|128",
       "commentaire"     => "str",
-      "debut"           => "date",
-      "duree"           => "num",
-      "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "date_arret"      => "date",
       "valide_pharma"   => "bool",
       "accord_praticien"=> "bool",
-      "_fin"            => "date",
       "_unite_prise"    => "str",
       "_traitement"     => "bool"
     );
     return array_merge($specsParent, $specs);
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["prise_posologie"] = "CPrisePosologie prescription_line_id";
-    return $backRefs;
-  }
 
   
   function updateFormFields() {
@@ -95,35 +85,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
     if($this->duree && $this->unite_duree){
     	$this->_duree_prise .= " pendant ".$this->duree." ".$this->unite_duree;
-    }
-    if($this->duree && $this->debut){
-    	if($this->unite_duree == "minute" || $this->unite_duree == "heure" || $this->unite_duree == "demi_journee"){
-    		$this->_fin = $this->debut;
-    	}
-    	if($this->unite_duree == "jour"){
-    		$this->_fin = mbDate("+ $this->duree DAYS", $this->debut);	
-    	}
-    	if($this->unite_duree == "semaine"){
-    		$this->_fin = mbDate("+ $this->duree WEEKS", $this->debut);
-    	}
-      if($this->unite_duree == "quinzaine"){
-      	$duree_temp = 2 * $this->duree;
-    		$this->_fin = mbDate("+ $duree_temp WEEKS", $this->debut);
-    	}
-    	if($this->unite_duree == "mois"){
-    		$this->_fin = mbDate("+ $this->duree MONTHS", $this->debut);	
-    	}
-    	if($this->unite_duree == "trimestre"){
-    		$duree_temp = 3 * $this->duree;
-    		$this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);	
-    	}
-      if($this->unite_duree == "semestre"){
-    		$duree_temp = 6 * $this->duree;
-    		$this->_fin = mbDate("+ $duree_temp MONTHS", $this->debut);	
-    	}
-    	if($this->unite_duree == "an"){
-    		$this->_fin = mbDate("+ $this->duree YEARS", $this->debut);	
-    	}
     }
     if($this->_ref_prescription->type == "traitement"){
     	$this->_traitement = "1";
@@ -179,13 +140,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   }
   
   
-  function loadRefsPrises(){
-    $this->_ref_prises = $this->loadBackRefs("prise_posologie");	
-  }
-  
-  function loadRefLogDateArret(){ 	
-  	$this->_ref_log_date_arret = $this->loadLastLogForField("date_arret");
-  }
   
   function loadPosologie() {
     $posologie = new CBcbPosologie();

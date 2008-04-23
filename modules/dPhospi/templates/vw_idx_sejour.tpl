@@ -54,7 +54,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 }
 
 
-function loadViewSejour(sejour_id, praticien_id, prescription_id){
+function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
   // Affichage de la prescription
   if($('produits_elements')){
     if(prescription_id){
@@ -63,7 +63,6 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id){
       $('produits_elements').innerHTML = "<div class='big-info'>Aucune prescription de séjour</div>";
     }
   }
-  
   loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
   if($('Imeds')){
@@ -76,8 +75,9 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id){
     ActesCCAM.refreshList(sejour_id, praticien_id);
   }
   if($('cim')){
-    reloadDiagnostic(sejour_id, '1');    
+    reloadDiagnostic(sejour_id, '1');
   }
+  loadDossierSoin(prescription_id, date);
 }
 
 function loadResultLabo(sejour_id) {
@@ -86,6 +86,21 @@ function loadResultLabo(sejour_id) {
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('Imeds', { waitingText : null });
 }
+
+
+function loadDossierSoin(prescription_id, date){
+  if(!prescription_id){
+    $('dossier_soins').innerHTML = "<div class='big-info'>Aucun dossier de soins</div>";
+    return;
+  } 
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+  url.addParam("prescription_id", prescription_id);
+  url.addParam("date", date);
+  url.requestUpdate("dossier_soins", { waitingText: null } );
+}
+
+
 
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
@@ -101,9 +116,10 @@ Main.add(function () {
     {{assign var=prescriptions value=$object->_ref_prescriptions}}
     {{assign var=prescription value=$prescriptions.sejour.0}}
     {{if $prescription}}
-    loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}');
+    loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}','{{$date}}');
+    loadDossierSoin('{{$prescription->_id}}','{{$date}}');
     {{else}}
-    loadViewSejour({{$object->_id}}, null, '');
+    loadViewSejour({{$object->_id}}, null, '','{{$date}}');
     {{/if}}
   {{/if}}
   
@@ -174,7 +190,7 @@ Main.add(function () {
                   {{else}}
                     {{assign var=prescription_sejour_id value=""}}
                   {{/if}}
-                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}},'{{$prescription_sejour_id}}');">
+                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
                   <script language="Javascript" type="text/javascript">
@@ -238,7 +254,7 @@ Main.add(function () {
                   {{assign var=prescription_sejour_id value=""}}
                 {{/if}}
                 
-                <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}')">
+                <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}')">
                   {{$curr_sejour->_ref_patient->_view}}
                 </a>
                 <script language="Javascript" type="text/javascript">
@@ -283,7 +299,7 @@ Main.add(function () {
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li><a href="#dossierSoins">Dossier de soins</a></li>
+        <li onclick="loadDossierSoin('{{$prescription_sejour_id}}','{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
         
         <li><a href="#produits_elements">Prescriptions</a></li>
         {{/if}}
@@ -304,14 +320,9 @@ Main.add(function () {
       <!-- Tabs -->
       <div id="viewSejourHospi" style="display: none;"></div>
       {{if $isPrescriptionInstalled}}
-      <div id="dossierSoins" style="display: none;">
+      <div id="dossier_soins" style="display: none;">
         <div class="big-info">
-          Affichage du dossier de soins en cours de développement
-          <br />
-          Cet onglet contiendra les soins à effectuer et les médicaments à administrer.
-          Il permettra d'indiquer les observation effectuées ainsi que de noter les transmissions.
-          <br />
-          Prochainement disponible...
+          Aucun dossier de soins
         </div>
       </div>
       <div id="produits_elements" style="display: none;">

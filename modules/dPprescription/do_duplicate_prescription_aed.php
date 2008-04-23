@@ -22,30 +22,30 @@ global $AppUI;
 $prescription_id = mbGetValueFromPost("prescription_id");
 $type = mbGetValueFromPost("type");
 
-$old_prescription = new CPrescription();
-$old_prescription->load($prescription_id);
-$old_prescription->loadRefObject();
-$sejour =& $old_prescription->_ref_object;
+// Chargement de la prescription à dupliquer
+$prescription = new CPrescription();
+$prescription->load($prescription_id);
+$prescription->loadRefObject();
+$prescription->loadRefsLines();
 
-$new_prescription = $old_prescription;
-$new_prescription->_id = "";
-$new_prescription->type = $type;
-$new_prescription->praticien_id = $AppUI->user_id;
-$msg = $new_prescription->store();
+$sejour = $prescription->_ref_object;
+
+// Creation de la nouvelle prescription
+$prescription->_id = "";
+$prescription->type = $type;
+$prescription->praticien_id = $AppUI->user_id;
+$msg = $prescription->store();
 viewMsg($msg, "msg-CPrescription-create");
 if($msg){
 	$AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$prescription_id);
 }
 
-// Rechargement de la prescription
-$old2_prescription = new CPrescription();
-$old2_prescription->load($prescription_id);
-$old2_prescription->loadRefsLines();
-
 // Parcours des lignes de prescription
-foreach($old2_prescription->_ref_prescription_lines as $line){
-	$new_debut = "";
-	$new_duree = "";
+foreach($prescription->_ref_prescription_lines as $line){
+
+	// Chargements des lignes de posologie
+  $line->loadRefsPrises();
+	
 	// Si la prescription à créer est sejour et qu'on a les infos sur la duree de la ligne
 	if($type == "sejour" && $line->debut && $line->duree){
 		// si la fin de la ligne est inferieur a l'entree, on ne la sauvegarde pas
@@ -58,8 +58,8 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
     // On ajuste la date d'entree et la duree
 		if($line->debut < mbDate($sejour->_entree)){
 			$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_entree));
-			$new_duree = $line->duree - $diff_duree;
-			$new_debut = mbDate($sejour->_entree);
+			$line->duree = $line->duree - $diff_duree;
+			$line->debut = mbDate($sejour->_entree);
 		}
 	}
 	
@@ -73,56 +73,29 @@ foreach($old2_prescription->_ref_prescription_lines as $line){
     }
     if($line->debut < mbDate($sejour->_sortie)){
     	$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_sortie));
-    	$new_duree = $line->duree - $diff_duree;
-    	$new_debut = mbDate($sejour->_sortie);
+    	$line->duree = $line->duree - $diff_duree;
+    	$line->debut = mbDate($sejour->_sortie);
     }
 	}
 	
-  $new_line = new CPrescriptionLineMedicament();
-  $new_line->_id = "";
-  $new_line->code_cip = $line->code_cip;
-  $new_line->no_poso = $line->no_poso;
-  $new_line->commentaire = $line->commentaire;
+  $line->_id = "";
+  $line->prescription_id = $prescription->_id;
+  $line->praticien_id = $AppUI->user_id;
+  $line->signee = 0;
+  $line->valide_pharma = 0;
   
-  if($new_duree){
-  	$new_line->duree = $new_duree;
-  } else {
-  	$new_line->duree = $line->duree;
-  }
-  
-  if($new_debut){
-  	$new_line->debut = $new_debut;
-  } else {
-    $new_line->debut = $line->debut;
-  }
-  
-  $new_line->unite_duree = $line->unite_duree;
-  $new_line->ald = $line->ald;
-  $new_line->prescription_id = $new_prescription->_id;
-  $new_line->praticien_id = $AppUI->user_id;
-  $new_line->signee = $line->signee;
-  $msg = $new_line->store();
+  $msg = $line->store();
   viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   
-  // Chargement des prises
-  $line->loadRefsPrises();
-
-	// Parcours des prises
+	// Parcours des prises et creation des nouvelles prises
 	foreach($line->_ref_prises as $prise){
-		$new_prise = new CPrisePosologie();
-	  $new_prise->_id = "";
-		$new_prise->prescription_line_id = $new_line->_id;
-		$new_prise->moment_unitaire_id = $prise->moment_unitaire_id;
-	  $new_prise->quantite = $prise->quantite;
-	  $new_prise->nb_fois = $prise->nb_fois;
-	  $new_prise->unite_fois = $prise->unite_fois;
-	  $new_prise->nb_tous_les = $prise->nb_tous_les;
-	  $new_prise->unite_tous_les = $prise->unite_tous_les;
-	  $msg = $new_prise->store();
+		$prise->_id = "";
+		$prise->object_id = $line->_id;
+		$msg = $prise->store();
 	  viewMsg($msg, "msg-CPrisePosologie-create");  	
 	}
 }
 
-$AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$new_prescription->_id);
+$AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$prescription->_id);
 
 ?>

@@ -1,87 +1,50 @@
-{{assign var=category value=$_line_comment->_ref_category_prescription}}
-        
-<tbody class="hoverable">
-    <tr>
-      <td style="width: 25px">
-        {{if !$_line_comment->signee}}
-        <form name="delLineComment{{$element}}-{{$_line_comment->_id}}" action="" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="del" value="1" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-          <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$element}}') } } );">
-            {{tr}}Delete{{/tr}}
-          </button>
-        </form>
-        {{/if}}
-      </td>
-      <td colspan="3">
-        {{$_line_comment->commentaire}}
-      </td>
-    
-     <td>
-      {{assign var=category_id value=$category->_id}}
-      {{if @$executants.$category_id}}
-      <form name="addExecutant-{{$_line_comment->_id}}" method="post" action="">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-        <!-- Selection d'un executant -->
-        <select class="executant-{{$category_id}}" name="executant_prescription_line_id" onchange="submitFormAjax(this.form, 'systemMsg');">
-          <option value="">&mdash; Sélection d'un exécutant</option>
-          {{foreach from=$executants.$category_id item=executant}}
-          <option value="{{$executant->_id}}" {{if $executant->_id == $_line_comment->executant_prescription_line_id}}selected="selected"{{/if}}>{{$executant->_view}}</option>
-          {{/foreach}}
-        </select>
-      </form>
-      
-      <a href="#" style="display:inline" 
-         onclick="preselectExecutant(document.forms['addExecutant-'+{{$_line_comment->_id}}].executant_prescription_line_id.value,'{{$category_id}}');">
-		    <img src="images/icons/updown.gif" alt="Préselectionner" border="0" />
-			</a>
+{{mb_ternary var=perm_edit test=$_line_comment->signee value="0" other="1"}}
+{{assign var=line value=$_line_comment}}
+{{assign var=dosql value="do_prescription_line_comment_aed"}}
 			
-      {{else}}
-        Aucun exécutant disponible
-      {{/if}}
-    </td>
-      <td style="width: 25px">
-        <form name="lineCommentALD{{$element}}-{{$_line_comment->_id}}" action="" method="post">
-          <input type="hidden" name="m" value="dPprescription" />
-          <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-          {{mb_field object=$_line_comment field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-          {{mb_label object=$_line_comment field="ald" typeEnum="checkbox"}}
-        </form>
-      </td>
-      <td style="text-align: right">
-    {{if $_line_comment->_ref_praticien->_id}}
-        {{$_line_comment->_ref_praticien->_view}}
-        {{if $prescription->object_id}}  
-	        {{if $_line_comment->signee}}
-	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
-	            <form name="delValidationComment-{{$_line_comment->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-	              <input type="hidden" name="signee" value="0" />
-	              <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$element}}') } }  )">Annuler la validation</button>
-	            </form>
-	          {{/if}}
-	        {{else}}
-	          {{if $_line_comment->_ref_praticien->_id == $app->user_id}}
-	            <form name="validationComment-{{$_line_comment->_id}}" action="" method="post">
-	              <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
-	              <input type="hidden" name="signee" value="1" />
-	              <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function(){ Prescription.reload('{{$prescription->_id}}','','{{$element}}') } } );">Signer</button>
-	            </form>
-	          {{/if}}
-	        {{/if}}
-	      {{/if}}
-      {{/if}}
-    </td>
-    </tr>
-  </tbody>
+{{if $_line_comment->category_prescription_id}}
+	<!-- Commentaire d'elements -->
+	{{assign var=category value=$_line_comment->_ref_category_prescription}}
+	{{assign var=div_refresh value=$element}}
+{{else}}
+  <!-- Commentaires de medicaments -->
+  {{assign var=div_refresh value="medicament"}}  
+{{/if}}	        
+
+<tbody class="hoverable">
+   <tr>
+     <td style="width: 25px">
+       {{if $perm_edit}}
+	       <form name="delLineComment-{{$_line_comment->_id}}" action="" method="post">
+	         <input type="hidden" name="m" value="dPprescription" />
+	         <input type="hidden" name="dosql" value="do_prescription_line_comment_aed" />
+	         <input type="hidden" name="del" value="1" />
+	         <input type="hidden" name="prescription_line_comment_id" value="{{$_line_comment->_id}}" />
+	         <button type="button" class="trash notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}',null,'{{$div_refresh}}') } } );">
+	           {{tr}}Delete{{/tr}}
+	         </button>
+	       </form>
+       {{/if}}
+     </td>
+     <td>
+       {{if $_line_comment->_class_name == "CPrescriptionLineElement"}}
+         <div style="float: right">
+           {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
+         </div>
+       {{/if}}
+       {{$_line_comment->commentaire}}
+     </td>
+     
+     <td style="width: 25px">
+       {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
+     </td>
+     <td style="text-align: right">
+       {{if $_line_comment->_ref_praticien->_id}}
+         {{$_line_comment->_ref_praticien->_view}}
+         {{if !$_line_comment->_protocole}}  
+	         {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+	       {{/if}}
+       {{/if}}
+     </td>
+  </tr>
+</tbody>

@@ -1,24 +1,31 @@
 <script type="text/javascript">
 
-{{if !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
-{{if (!$curr_line->signee || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
-	var oForm = document.forms["editDates-{{$curr_line->_id}}"];
+{{if $type == "Med"}}
+
+{{if !$line->_traitement && $line->_ref_prescription->object_id}}
+
+{{if !$line->signee}}
 	
-	Form.Element.setValue(oForm.debut,'{{$curr_line->debut}}');
-	{{if $curr_line->debut}}
-	var oDiv = $('editDates-'+{{$curr_line->_id}}+'_debut_da');
-	dDate = Date.fromDATE(oForm.debut.value);
-	oDiv.innerHTML = dDate.toLocaleDate();
+	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
+	Form.Element.setValue(oForm.debut,'{{$line->debut}}');
+	
+	{{if $line->debut}}
+	  var oDiv = $('editDates-Med-'+{{$line->_id}}+'_debut_da');
+	  dDate = Date.fromDATE(oForm.debut.value);
+	  oDiv.innerHTML = dDate.toLocaleDate();
 	{{/if}}
-	Form.Element.setValue(oForm.duree,'{{$curr_line->duree}}');
 	
-  Form.Element.setValue(oForm.unite_duree,'{{$curr_line->unite_duree}}');
-{{/if}}
+	Form.Element.setValue(oForm.duree,'{{$line->duree}}');
+  Form.Element.setValue(oForm.unite_duree,'{{$line->unite_duree}}');
+  
 {{/if}}
 
+{{/if}}
+
+{{/if}}
 </script>
 
-{{foreach from=$curr_line->_ref_prises item=prise}}
+{{foreach from=$line->_ref_prises item=prise}}
   {{assign var=prise_id value=$prise->_id}}
   
   <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block;">
@@ -26,23 +33,28 @@
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="m" value="dPprescription" />
 	  <input type="hidden" name="prise_posologie_id" value="{{$prise->_id}}" />
-	  <input type="hidden" name="prescription_line_id" value="{{$curr_line->_id}}" />
+	  <input type="hidden" name="object_id" value="{{$line->_id}}" />
+	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
+						  
 	  <!-- Formulaire de selection de la quantite -->
 	  {{mb_field object=$prise field=quantite size="3" increment=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg');"}}	  
-	  {{$curr_line->_unite_prise}}(s)
-	  
+	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	  {{$line->_unite_prise}}(s)
+	  {{else}}
+	  soins
+	  {{/if}}
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}
 	  <!-- Selection du moment -->
 	  <select name="moment_unitaire_id" style="width: 150px" onchange="submitFormAjax(this.form, 'systemMsg');">      
 	    <option value="">&mdash; Sélection du moment</option>
-	  {{foreach from=$moments key=type_moment item=_moments}}
+	    {{foreach from=$moments key=type_moment item=_moments}}
 	     <optgroup label="{{$type_moment}}">
 	     {{foreach from=$_moments item=moment}}
 	     <option value="{{$moment->_id}}" {{if $prise->moment_unitaire_id == $moment->_id}}selected="selected"{{/if}}>{{$moment->_view}}</option>
 	     {{/foreach}}
 	     </optgroup>
-	  {{/foreach}}
+	    {{/foreach}}
 	  </select>
 	  {{/if}}
 	  
@@ -60,12 +72,13 @@
 		{{/if}}
   
     <button type="button" class="submit notext" onclick="submitFormAjax(this.form, 'systemMsg');">Enregistrer</button>
-    <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form); ">Supprimer</button> 
+    <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form,'{{$type}}'); ">Supprimer</button> 
   </form>
 {{/foreach}}
 
 <script type="text/javascript">
-{{foreach from=$curr_line->_ref_prises item=prise}}
+{{foreach from=$line->_ref_prises item=prise}}
   prepareForm(document.forms['addPrise-{{$prise->_id}}']);
 {{/foreach}}
 </script>
+

@@ -10,13 +10,12 @@
 /**
  * The CMomentUnitaire class
  */
-class CPrisePosologie extends CMbObject {
+class CPrisePosologie extends CMbMetaObject {
   
 	// DB Table key
   var $prise_posologie_id = null;
   
   // DB Fields
-  var $prescription_line_id  = null;
   var $moment_unitaire_id    = null;
   var $quantite              = null;
   
@@ -31,23 +30,17 @@ class CPrisePosologie extends CMbObject {
     
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
-  
-  
-  function loadRefPrescriptionLine(){
-    $this->_ref_prescription_line = new CPrescriptionLineMedicament();
-    $this->_ref_prescription_line->load($this->prescription_line_id);
-  }
-  
+    
   function loadRefMoment(){
     $this->_ref_moment = new CMomentUnitaire();
     $this->_ref_moment->load($this->moment_unitaire_id);	
   }
   
-  
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "prescription_line_id" => "ref class|CPrescriptionLineMedicament notNull cascade",
+      "object_id"            => "notNull ref class|CMbObject meta|object_class cascade",
+      "object_class"         => "notNull enum list|CPrescriptionLineMedicament|CPrescriptionLineElement",
       "moment_unitaire_id"   => "ref class|CMomentUnitaire",
       "quantite"             => "float",
       "nb_fois"              => "float",
@@ -61,11 +54,17 @@ class CPrisePosologie extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     
-    $this->loadRefPrescriptionLine();
+    $this->loadTargetObject();
     $this->loadRefMoment();
     
     $this->_view = $this->quantite;
-    $this->_view .= " ".$this->_ref_prescription_line->_unite_prise;
+    
+    if($this->object_class == "CPrescriptionLineMedicament"){
+      $this->_view .= " ".$this->_ref_object->_unite_prise;
+    } else {
+    	$this->_view .= " soins";
+    }
+    
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
     }
@@ -79,6 +78,64 @@ class CPrisePosologie extends CMbObject {
     	$this->_view .= " tous les ".$this->nb_tous_les." ".$this->unite_tous_les;
     }   
   }
+  
+  function calculDatesPrise($date){	
+
+  	// Calcul de la premiere prise du medicament
+    $date_temp = $this->_ref_object->debut;
+    $tabDates[] = $date_temp;
+  	
+    // Minute / Heure / demi-journee / jour
+  	if($this->unite_tous_les == "minute" || $this->unite_tous_les == "heure" || $this->unite_tous_les == "demi_journee"){
+  	}
+  	
+  	// Jour
+  	if($this->unite_tous_les == "jour"){
+  		$increment = $this->nb_tous_les;
+  	  $type_increment = "DAYS";
+  	}
+  	
+  	// Semaine / Quinzaine
+  	if($this->unite_tous_les == "semaine" || $this->unite_tous_les == "quinzaine"){	
+  		if($this->unite_tous_les == "semaine"){
+  			$increment = $this->nb_tous_les;
+  		}
+  		if($this->unite_tous_les == "quinzaine"){
+  			$increment = 2 * $this->nb_tous_les;
+  		}
+  		$type_increment = "WEEKS";
+  	}
+  	
+  	// Mois / Trimestre / Semestre
+  	if($this->unite_tous_les == "mois" || $this->unite_tous_les == "trimestre" || $this->unite_tous_les == "semestre"){
+  		if($this->unite_tous_les == "mois"){
+  			$increment = $this->nb_tous_les;
+  		}
+  		if($this->unite_tous_les == "trimestre"){
+  			$increment = 3 * $this->nb_tous_les;
+  		}
+  		if($this->unite_tous_les == "semestre"){
+  			$increment = 6 * $this->nb_tous_les;
+  		} 
+  		$type_increment = "MONTHS";
+  	}
+  	// Annee
+    if($this->unite_tous_les == "an"){
+    	$increment = $this->nb_tous_les;
+    	$type_increment = "YEARS";  
+    }
+    
+    while((mbDate($date_temp."+ $increment $type_increment")) <= $this->_ref_object->_fin){
+      $date_temp = mbDate($date_temp."+ $increment $type_increment");
+  	  $tabDates[] = $date_temp;
+    }
+    
+    if(in_array($date, $tabDates)){
+    	return true;
+    } 
+   
+    return false;
+  } 
 }
   
 ?>
