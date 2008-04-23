@@ -23,7 +23,7 @@ function verifIntubDifficileAndSave(oForm){
   </tr>
   <tr>
     {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
-    <td rowspan="4" class="button">
+    <td rowspan="2" class="button">
       <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
         <img src="images/pictures/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />
         <br />
@@ -47,6 +47,7 @@ function verifIntubDifficileAndSave(oForm){
   </tr>
 
   <tr>
+    <td colspan="4" rowspan="2">Schéma des dents</td>
     <th>{{mb_label object=$consult_anesth field="etatBucco"}}</th>
     <td>
       <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">

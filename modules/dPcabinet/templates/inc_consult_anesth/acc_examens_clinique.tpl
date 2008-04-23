@@ -33,7 +33,7 @@ function calculImcVst(){
 
 <table class="form">
   <tr>
-    <td class="HalfPane">
+    <td>
       <form name="editAnesthPatFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -88,7 +88,7 @@ function calculImcVst(){
         </table>
       </form>
     </td>
-    <td class="HalfPane">
+    <td class="greedyPane">
       <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -99,8 +99,9 @@ function calculImcVst(){
         <option value="">&mdash; Choisir une aide</option>
         {{html_options options=$consult->_aides.examen.no_enum}}
       </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}<br />
+      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button>
+      <br />
+      {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
     </td>
   </tr>
