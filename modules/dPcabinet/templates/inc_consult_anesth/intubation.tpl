@@ -62,7 +62,7 @@ var SchemaDentaire = {
         var y = parseInt(area[1]);
         var r = parseInt(area[2]);
         
-        // New div for the teeth
+        // New div for the tooth
         var oDent = new Element('div');
         oDent.addClassName('dent');
         oDent.setStyle({
@@ -79,7 +79,7 @@ var SchemaDentaire = {
           SchemaDentaire.setState(oDent.dentId, etat);
         }
         
-        // Callbacks on the teeth
+        // Callbacks on the tooth
         oDent.onmouseover = SchemaDentaire.onMouseOver;
         oDent.onmouseout = SchemaDentaire.onMouseOut;
         oDent.onclick = SchemaDentaire.onClick;
@@ -90,7 +90,7 @@ var SchemaDentaire = {
     oMenu.onclick = this.onSelectState;
   },
   
-  // Change the state of a teeth
+  // Change the state of a tooth
   setState: function (id, state) {
     var dent = $(SchemaDentaire.sId+'-dent-'+id);
     
@@ -141,10 +141,10 @@ var SchemaDentaire = {
   }
 };
 
-function pageMain() {
+function Main.add(function () {
   var states = [null, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
-}
+} );
 </script>
 <form name="editFrmIntubation" action="?m=dPcabinet" method="post">
 <input type="hidden" name="m" value="dPcabinet" />
