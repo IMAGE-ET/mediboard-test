@@ -24,11 +24,11 @@ function pageMain(){
   <tr>
     <td colspan="2">
       <ul id="tab-produit" class="control_tabs">
-        <li><a href="#one" style="display: none;">Composition et aspect</a></li>
-        <li><a href="#two" style="display: none;">Données cliniques</a></li>
-        <li><a href="#three" style="display: none;">Propriétés pharmacologiques</a></li>
-        <li><a href="#four" style="display: none;">Données pharmaceutiques</a></li>
-        <li><a href="#five" style="display: none;">Données technico-réglementaires</a></li>
+        <li><a href="#one">Composition et aspect</a></li>
+        <li><a href="#two">Données cliniques</a></li>
+        <li><a href="#three">Propriétés pharmacologiques</a></li>
+        <li><a href="#four">Données pharmaceutiques</a></li>
+        <li><a href="#five">Données technico-réglementaires</a></li>
       </ul>
       <hr class="control_tabs" />    
   
@@ -52,19 +52,19 @@ function pageMain(){
           </tr>
           {{/foreach}} 
           <tr>
-            <th class="title">Commentaires sur le composition</th>
+            <th class="title" colspan="3">Commentaires sur la composition</th>
           </tr>
           <tr>
-            <td class="text">
+            <td class="text" colspan="3">
              {{$mbProduit->_ref_composition->exprime_par|smarty:nodefaults}}
             </td>
           </tr>
           <tr>
-            <th colspan="2" class="title">Excipients</th>
+            <th colspan="3" class="title">Excipients</th>
           </tr>
           <tr>
             <th>Libelle</th>
-            <th>Commentaire</th>
+            <th colspan="2">Commentaire</th>
           </tr>
           {{foreach from=$mbProduit->_ref_composition->excipients item=excipient}}
           <tr>
@@ -76,14 +76,14 @@ function pageMain(){
                 (Excipient à effet notoire)
               {{/if}}
             </td>
-            <td>{{$excipient->Commentaire}}</td>
+            <td colspan="2">{{$excipient->Commentaire}}</td>
           </tr>
           {{/foreach}} 
           <tr>
-            <th class="title">Aspect</th>
+            <th class="title" colspan="3">Aspect</th>
           </tr>
           <tr>
-            <td>
+            <td colspan="3">
               {{$mbProduit->_ref_monographie->aspect_forme|smarty:nodefaults}}
            </td>
           </tr>
@@ -234,7 +234,7 @@ function pageMain(){
             <th colspan="2">Données technico-réglementaires</th>
           </tr>
           <tr>
-            <th>Titulaire de l'AMM</th>
+            <th style="width: 50px;">Titulaire de l'AMM</th>
             <td>{{$mbProduit->_ref_economique->laboratoire}}</td>
           </tr>
           <tr>
@@ -254,7 +254,7 @@ function pageMain(){
             <td>{{$mbProduit->_ref_economique->taux_tva}} %</td>
           </tr>
           <tr>
-            <td>Taux de remboursement SS</td>
+            <th>Taux de remboursement SS</th>
             <td>{{$mbProduit->_ref_economique->taux_ss}} %</td>
           </tr>
           <tr>
