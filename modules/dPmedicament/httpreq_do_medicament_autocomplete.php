@@ -16,8 +16,9 @@ $produit_max = mbGetValueFromPost("produit_max", 10);
 $mbProduit = new CBcbProduit();
 
 // Recherche dans la bcb
-$produits = $mbProduit->searchProduit($produit, 1, "debut", 1, $produit_max);
-    
+//$produits = $mbProduit->searchProduit($produit, 1, "debut", 1, $produit_max);
+$produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max);
+
 // Création du template
 $smarty = new CSmartyDP();
 
