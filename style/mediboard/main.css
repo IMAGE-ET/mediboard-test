@@ -2787,6 +2787,9 @@ table.main td.step {
   margin-left: 1px;
 }
 
+.schema-dentaire {
+  width: 1%;
+}
 
 .dent {
   -moz-border-radius: 100%;
@@ -2796,8 +2799,11 @@ table.main td.step {
 }
 
 .hover {
-  border: 2px solid #FF0000;
-  background: transparent;
+  border: 2px solid #F00;
+}
+
+.focus {
+  border: 1px solid #FF0000;
 }
 
 .bridge {
@@ -2819,4 +2825,25 @@ table.main td.step {
 .dent-menu {
   position: absolute;
   z-index: 8;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+.dent-menu a {
+  display: block;
+  cursor: pointer;
+  padding:3px;
+}
+
+.dent-menu a:hover {
+  text-decoration: none;
+  color: #666;
+}
+
+.dent-menu a.cancel {
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: right;
+  background: #999;
+  color: #fff;
 }

@@ -31,14 +31,9 @@ function pageMain(){
         <li><a href="#five" style="display: none;">Données technico-réglementaires</a></li>
       </ul>
       <hr class="control_tabs" />    
-    </td>
-    
-  </tr>
   
-  <!-- Commposition et aspect -->
-  <tbody id="one">
-    <tr>
-      <td>
+      <!-- Commposition et aspect -->
+      <div id="one" style="display: none;">
         <!-- Affichage de la composition du medicaments -->
         <table class="tbl">
           <tr>
@@ -56,16 +51,14 @@ function pageMain(){
             <td>{{$PA->Quantite}}{{$PA->Unite}}</td>
           </tr>
           {{/foreach}} 
-        </table>
-        <table class="tbl">
           <tr>
             <th class="title">Commentaires sur le composition</th>
           </tr>
-          <td class="text">
-           {{$mbProduit->_ref_composition->exprime_par|smarty:nodefaults}}
-          </td>
-        </table>
-        <table class="tbl">
+          <tr>
+            <td class="text">
+             {{$mbProduit->_ref_composition->exprime_par|smarty:nodefaults}}
+            </td>
+          </tr>
           <tr>
             <th colspan="2" class="title">Excipients</th>
           </tr>
@@ -86,8 +79,6 @@ function pageMain(){
             <td>{{$excipient->Commentaire}}</td>
           </tr>
           {{/foreach}} 
-        </table>
-        <table class="tbl">
           <tr>
             <th class="title">Aspect</th>
           </tr>
@@ -97,14 +88,10 @@ function pageMain(){
            </td>
           </tr>
         </table>
-      </td>
-    </tr>
-  </tbody>
+      </div>
 
-  <!-- Données cliniques -->
-  <tbody id="two">  
-    <tr>
-      <td>
+      <!-- Données cliniques -->
+      <div id="two" style="display: none;">
         <ul id="tab-clinique" class="control_tabs">
           <li><a href="#indications">Indications thérapeutiques</a></li>
           <li><a href="#posologie">Posologie et mode d'administration</a></li>
@@ -127,14 +114,10 @@ function pageMain(){
         <div id="effets_aptitude" style="display: none;">{{$mbProduit->_ref_monographie->effets_aptitude|smarty:nodefaults}}</div>
         <div id="effets_indesirables" style="display: none;">{{$mbProduit->_ref_monographie->effets_indesirables|smarty:nodefaults}}</div>
         <div id="surdosage" style="display: none;">{{$mbProduit->_ref_monographie->surdosage|smarty:nodefaults}}</div>
-      </td>
-    </tr>
-  </tbody>
+      </div>
 
-  <!-- Propriétés pharmacologiques -->
-  <tbody id="three">
-    <tr>
-      <td>
+      <!-- Propriétés pharmacologiques -->
+      <div id="three" style="display: none;">
         <ul id="tab-pharmaco" class="control_tabs">
           <li><a href="#classification">Classification thérapeutique</a></li>
           <li><a href="#pharmacodynamie">Propriétés pharmacodynamiques</a></li>
@@ -207,29 +190,19 @@ function pageMain(){
         <div id="pharmacodynamie" style="display: none;">{{$mbProduit->_ref_monographie->pharmacodynamie|smarty:nodefaults}}</div>
         <div id="pharmacocinetique" style="display: none;">{{$mbProduit->_ref_monographie->pharmacocinetique|smarty:nodefaults}}</div>
         <div id="securite_preclinique" style="display: none;">{{$mbProduit->_ref_monographie->securite_preclinique|smarty:nodefaults}}</div>
-      </td>
-    </tr>
-  </tbody>
+      </div>
 
-  <!-- Données pharmaceutiques -->
-  <tbody id="four" style="display: none;">
-    <tr>
-      <td>
+      <!-- Données pharmaceutiques -->
+      <div id="four" style="display: none;">
         <table class="tbl">
           <tr>
-            <th>
-              Incompatibilités
-            </th>
+            <th>Incompatibilités</th>
           </tr>
           <tr>
-            <td>
-              {{$mbProduit->_ref_monographie->incompatibilite|smarty:nodefaults}}
-            </td>
+            <td>{{$mbProduit->_ref_monographie->incompatibilite|smarty:nodefaults}}</td>
           </tr>
           <tr>
-            <th>
-              Durée et précautions particulières de conservation
-            </th>
+            <th>Durée et précautions particulières de conservation</th>
           </tr>
           <tr>
             <td class="text">
@@ -253,13 +226,9 @@ function pageMain(){
             </td>
           </tr>
         </table>
-       </td>
-     </tr>
-  </tbody>
-  
-  <tbody id="five" style="display: none;">
-    <tr>
-      <td>
+      </div>
+      
+      <div id="five" style="display: none;">
         <table class="tbl">
           <tr>
             <th colspan="2">Données technico-réglementaires</th>
@@ -323,8 +292,7 @@ function pageMain(){
             <td colspan="2" class="text">{{$mbProduit->_ref_monographie->condition_delivrance|smarty:nodefaults}}</td>
           </tr>
         </table>
-      </td>
-    </tr>
-  </tbody>
-     
+      </div>
+    </td>
+  </tr>
 </table>
