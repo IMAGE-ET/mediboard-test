@@ -226,6 +226,13 @@
           <input type="hidden" name="cancelled" value="0" />
           <button type="button" class="tick" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Restore{{/tr}}</button>
         </form>
+        <form name="order-delete-{{$curr_order->_id}}" action="?" method="post">
+          <input type="hidden" name="m" value="{{$m}}" />
+          <input type="hidden" name="dosql" value="do_order_aed" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
+          <input type="hidden" name="deleted" value="1" />
+          <button type="button" class="remove" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}Delete{{/tr}}</button>
+        </form>
       </td>
     </tr>
   {{foreachelse}}

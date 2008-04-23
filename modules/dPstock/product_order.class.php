@@ -18,6 +18,7 @@ class CProductOrder extends CMbObject {
 	var $locked           = null;
 	var $order_number     = null;
 	var $cancelled        = null;
+	var $deleted          = null;
 
 	// Object References
 	//    Multiple
@@ -61,6 +62,7 @@ class CProductOrder extends CMbObject {
 		  'group_id'        => 'notNull ref class|CGroups',
       'locked'          => 'bool',
 		  'cancelled'       => 'bool',
+		  'deleted'         => 'bool',
       'order_number'    => 'str maxLength|64',
       '_total'          => 'currency',
       '_count_received' => 'num pos',
@@ -110,20 +112,17 @@ class CProductOrder extends CMbObject {
 	
   /** Fills the order in function of the stocks and future stocks */
   function autofill() {
-    // we create a new order item
-    $order_item = new CProductOrderItem();
-    $order_item->order_id = $this->_id;
-    
     $this->updateFormFields();
     
     // if the order has not been ordered yet
     // and not partially received
     // and not totally received
-    if (!$this->date_ordered && !$this->_received && !$this->cancelled) {
-      $items = $order_item->loadMatchingList();
+    // and not cancelled
+    // and not deleted
+    if (!$this->date_ordered && !$this->_received && !$this->cancelled && !$this->deleted) {
       
       // we empty the order
-      foreach($items as $item) {
+      foreach($this->_ref_order_items as $item) {
       	$item->delete();
       }
     }
@@ -149,20 +148,23 @@ class CProductOrder extends CMbObject {
     		// we get the best reference for this product
     		$where = array();
     		$where['product_id'] = " = '{$stock->_ref_product->_id}'";
-    		$orderby = 'price / quantity DESC';
+    		$orderby = 'price / quantity ASC';
     		$best_reference = new CProductReference();
-    		$best_reference->loadObject($where, $orderby);
     		
-    		// and we fill the order item with the good quantity of the stock's product
-    		while ($current_stock < $expected_stock) {
-    		  $current_stock += $best_reference->quantity;
-    	  }
-    	  
-    	  // we store the new order item in the current order
-    	  $order_item->quantity = $current_stock / $best_reference->quantity;
-    	  $order_item->reference_id = $best_reference->_id;
-    	  $order_item->unit_price = $best_reference->price;
-    	  $order_item->store();
+    		if ($best_reference->loadObject($where, $orderby) && $best_reference->quantity > 0) {
+      		// and we fill the order item with the good quantity of the stock's product
+      		while ($current_stock < $expected_stock) {
+      		  $current_stock += $best_reference->quantity;
+      	  }
+      	  
+      	  // we store the new order item in the current order
+      	  $order_item = new CProductOrderItem();
+          $order_item->order_id = $this->_id;
+      	  $order_item->quantity = $current_stock / $best_reference->quantity;
+      	  $order_item->reference_id = $best_reference->_id;
+      	  $order_item->unit_price = $best_reference->price;
+      	  $order_item->store();
+      	}
     	}
     }
   }
@@ -175,8 +177,8 @@ class CProductOrder extends CMbObject {
   	$order->group_id     = $this->group_id;
   	$order->locked       = 0;
   	$order->cancelled    = 0;
-  	$order->order_number = $this->getUniqueNumber();
   	$order->store();
+  	$order->order_number = $order->getUniqueNumber();
   	
   	$this->loadRefsBack();
   	foreach ($this->_ref_order_items as $item) {
@@ -244,6 +246,7 @@ class CProductOrder extends CMbObject {
 		$this->updateFormFields();
 		
 	  if ($this->_autofill) {
+	    $this->_autofill = null;
       $this->autofill();
     }
     
@@ -252,19 +255,23 @@ class CProductOrder extends CMbObject {
         $this->_order = null;
       } else {
         $this->date_ordered = mbDateTime();
+        $this->_order = null;
       }
     }
     
     // If the flag _receive is true, and if not every item has been received, we mark all them as received
     if ($this->_receive && !$this->_received) {
+      $this->_receive = null;
       $this->receive();
     }
     
 	  if ($this->_redo) {
+	    $this->_redo = null;
       $this->redo();
     }
     
 	  if ($this->_reset) {
+	    $this->_reset = null;
       $this->reset();
     }
 	}

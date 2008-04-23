@@ -1,7 +1,9 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductReference-product_id{{/tr}}</th>
-    <th>{{tr}}CProductReference-societe_id{{/tr}}</th>
+    {{if !$hide_societes}}
+      <th>{{tr}}CProductReference-societe_id{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}CProductReference-code{{/tr}}</th>
     <th>{{tr}}CProductReference-quantity{{/tr}}</th>
     <th>{{tr}}CProductReference-price{{/tr}}</th>
@@ -19,7 +21,9 @@
       {{$curr_reference->_ref_product->_view}}
     {{/if}}
     </td>
-    <td>{{$curr_reference->_ref_societe->_view}}</td>
+    {{if !$hide_societes}}
+      <td>{{$curr_reference->_ref_societe->_view}}</td>
+    {{/if}}
     <td>{{mb_value object=$curr_reference field=code}}</td>
     <td>{{mb_value object=$curr_reference field=quantity}}</td>
     <td class="currency">{{mb_value object=$curr_reference field=price}}</td>

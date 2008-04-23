@@ -1,9 +1,12 @@
-function Filter (sForm, sModule, sAction, sList, aFields) {
+/** A filter funtion, useful */
+
+function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.sForm   = sForm;
   this.sModule = sModule;
   this.sAction = sAction;
   this.sList   = sList;
   this.aFields = aFields;
+  this.sHiddenColumn = sHiddenColumn;
 }
 
 Filter.prototype = {
@@ -28,6 +31,9 @@ Filter.prototype = {
       }
     }
     
+    if (this.sHiddenColumn) {
+      url.addParam("hidden_column",  this.sHiddenColumn);
+    }
     url.requestUpdate(this.sList, { waitingText: null } );
     
     return false;

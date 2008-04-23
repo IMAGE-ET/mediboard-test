@@ -15,6 +15,7 @@ $category_id = mbGetValueFromGet('category_id');
 $societe_id  = mbGetValueFromGet('societe_id');
 $keywords    = mbGetValueFromGet('keywords');
 $order_id    = mbGetValueFromGet('order_id');
+$hide_societes = mbGetValueFromGet('hidden_column');
 
 $where = array();
 if ($category_id) {
@@ -44,6 +45,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_references', $list_references);
 $smarty->assign('order_id', $order_id);
+$smarty->assign('hide_societes', $hide_societes);
 
 $smarty->display('inc_references_list.tpl');
 ?>

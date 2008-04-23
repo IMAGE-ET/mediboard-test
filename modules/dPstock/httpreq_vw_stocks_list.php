@@ -9,7 +9,7 @@
  
 global $AppUI, $can, $m, $g;
 
-$can->needsRead();
+$can->needsEdit();
 
 $category_id         = mbGetValueFromGet('category_id');
 $keywords            = mbGetValueFromGet('keywords');
@@ -29,27 +29,23 @@ if ($keywords) {
 $orderby = 'product.name ASC';
 
 $leftjoin = array();
-$leftjoin['product'] = 'product.product_id = product_stock.product_id';
+$leftjoin['product'] = 'product.product_id = product_stock.product_id'; // product to stock
+
+if ($only_ordered_stocks) {
+  $leftjoin['product_reference']    = 'product_reference.product_id = product_stock.product_id'; // stock to reference
+  $leftjoin['product_order_item']   = 'product_order_item.reference_id = product_reference.reference_id'; // reference to order item
+  $leftjoin['product_order']        = 'product_order.order_id = product_order_item.order_id'; // order item to order
+  $where['product_order.cancelled'] = ' = 0'; // order not cancelled
+  $where['product_order_item.quantity_received'] = ' < product_order_item.quantity'; // order item not received yet
+}
 
 $stock = new CProductStock();
 $list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
 
-if ($only_ordered_stocks == 'on') {
-	$filtered_stocks = array();
-	foreach($list_stocks as $sto) {
-		$sto->loadRefOrders();
-		if ($sto->_ordered_count > 0) {
-	    $filtered_stocks[] = $sto;
-		}
-	}
-} else {
-	$filtered_stocks = $list_stocks;
-}
-
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_stocks', $filtered_stocks);
+$smarty->assign('list_stocks', $list_stocks);
 
 $smarty->display('inc_stocks_list.tpl');
 ?>

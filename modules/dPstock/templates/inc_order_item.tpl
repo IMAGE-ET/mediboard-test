@@ -30,6 +30,7 @@
         onchange="submitOrderItem(this.form);" 
         form=form-item-quantity-$id 
         min=0
+        size="3"
         increment=true}}
     </form>
     {{else}}
@@ -58,6 +59,7 @@
         onchange="submitOrderItem(this.form);" 
         form=form-item-receive-$id 
         increment=true
+        size="3"
         max=$curr_item->quantity
         min=0
       }}

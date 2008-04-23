@@ -47,33 +47,44 @@ $orderby = 'product_order.date_ordered DESC, product_order_item.date_received DE
 
 switch ($type) {
 	 case 'waiting':
+	  $where['product_order.deleted'] = " = 0";
 	  $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 0";
     $where['product_order.date_ordered'] = "IS NULL";
     $where['product_order_item.date_received'] = "IS NULL";
     break;
   case 'locked':
+    $where['product_order.deleted'] = " = 0";
   	$where['product_order.cancelled'] = " = 0";
   	$where['product_order.locked'] = " = 1";
   	$where['product_order.date_ordered'] = "IS NULL";
   	$where['product_order_item.date_received'] = "IS NULL";
   	break;
 	case 'pending':
+    $where['product_order.deleted'] = " = 0";
 		$where['product_order.cancelled'] = " = 0";
 		$where['product_order.locked'] = " = 1";
 		$where['product_order.date_ordered'] = "IS NOT NULL";
 		$where['product_order_item.date_received'] = "IS NULL";
-		$where['product_order_item.quantity_received'] = ' < product_order_item.quantity';
+		$where[] = 'product_order_item.quantity_received < product_order_item.quantity OR
+		            product_order_item.quantity_received IS NULL';
 		break;
   case 'received':
+    $where['product_order.deleted'] = " = 0";
     $where['product_order.cancelled'] = " = 0";
     $where['product_order.locked'] = " = 1";
     $where['product_order.date_ordered'] = "IS NOT NULL";
-    $where['product_order_item.date_received'] = "IS NOT NULL";
-    $where['product_order_item.quantity_received'] = ' >= product_order_item.quantity';
+    $where['product_order.order_id'] = 'NOT IN (
+       SELECT order_id 
+       FROM product_order_item 
+       WHERE quantity_received < quantity 
+        OR quantity_received IS NULL 
+        OR date_received IS NULL
+       GROUP BY order_id)';
     break;
   default:
   case 'cancelled':
+    $where['product_order.deleted'] = " = 0";
     $where['product_order.cancelled'] = " = 1";
 		break;
 }

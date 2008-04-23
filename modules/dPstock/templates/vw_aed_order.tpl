@@ -10,8 +10,8 @@ function pageMain() {
   }
 
   {{if $order->_id && !$order->date_ordered}}
-  filterFields = ["category_id", "societe_id", "keywords", "order_id"];
-  referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
+  filterFields = ["category_id", "keywords", "order_id"];
+  referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
   {{/if}}
 }
 </script>
@@ -74,9 +74,9 @@ function pageMain() {
         <button type="button" class="search" name="search" onclick="referencesFilter.submit();">{{tr}}Filter{{/tr}}</button>
       </form>
     
-      <div style="text-align: right;">
+      <!-- <div style="text-align: right;">
       <button type="button" class="down" onclick="">{{tr}}Suggest{{/tr}}</button>
-      </div>
+      </div> -->
       <div id="list-references"></div>
     </td>
   {{/if}}
