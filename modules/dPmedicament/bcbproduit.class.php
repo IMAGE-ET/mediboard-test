@@ -182,6 +182,15 @@ class CBcbProduit extends CBcbObject {
   }
   
   
+  function searchProduitAutocomplete($text, $nb_max){   
+    $this->distObj->Specialite = 1;
+    $this->distObj->Supprime = 0;  
+    $this->distObj->Search($text, 0, $nb_max, 0);
+    
+    return $this->distObj->TabProduit;
+  }
+  
+  
   // Chargement de toutes les posologies d'un produit
   function loadRefPosologies(){
     $ds = CSQLDataSource::get("bcb");
@@ -232,12 +241,12 @@ class CBcbProduit extends CBcbObject {
   
   static function getFavoris($praticien_id) {
     $ds = CSQLDataSource::get("std");
-    $sql = "SELECT prescription_line.code_cip, COUNT(*) AS total
-            FROM prescription_line, prescription
-            WHERE prescription_line.prescription_id = prescription.prescription_id
+    $sql = "SELECT prescription_line_medicament.code_cip, COUNT(*) AS total
+            FROM prescription_line_medicament, prescription
+            WHERE prescription_line_medicament.prescription_id = prescription.prescription_id
             AND prescription.praticien_id = $praticien_id
             AND prescription.object_id IS NOT NULL
-            GROUP BY prescription_line.code_cip
+            GROUP BY prescription_line_medicament.code_cip
             ORDER BY total DESC
             LIMIT 0, 20";
     return $ds->loadlist($sql);
