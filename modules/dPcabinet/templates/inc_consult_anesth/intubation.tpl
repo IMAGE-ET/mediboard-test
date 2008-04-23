@@ -141,7 +141,7 @@ var SchemaDentaire = {
   }
 };
 
-function Main.add(function () {
+Main.add(function () {
   var states = [null, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
 } );
