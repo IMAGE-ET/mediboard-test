@@ -7,10 +7,9 @@ Main.add(function() {
 
 </script>
 
-<form target="Imeds-sejour" name="Imeds_sejour_form" action="{{$url}}?ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$sejour->_num_dossier}}" method="post">
+<form target="Imeds-sejour" name="Imeds_sejour_form" action="{{$url}}?nameframe=Imeds-sejour&amp;ctyp=s&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;ndos={{$sejour->_num_dossier}}" method="post">
   <input type="hidden" name="login" value="{{$idImeds.login}}" />
   <input type="hidden" name="password" value="{{$idImeds.password}}" />
-  <input type="hidden" name="nameframe" value="Imeds-sejour" />
 </form>
 
 <iframe 
