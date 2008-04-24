@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.63";
+$config["mod_version"]     = "0.64";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -698,7 +698,16 @@ class CSetupdPpatients extends CSetup {
             ENUM('tabac', 'oenolisme', 'cannabis');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.63";
+    $this->makeRevision("0.63");
+    $sql = "CREATE TABLE `etat_dent` (
+            `etat_dent_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+            `dossier_medical_id` INT NOT NULL ,
+            `dent` TINYINT UNSIGNED NOT NULL ,
+            `etat` ENUM('bridge', 'pivot', 'mobile', 'appareil') NULL
+            ) ENGINE = MYISAM ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.64";
   }
 }
 

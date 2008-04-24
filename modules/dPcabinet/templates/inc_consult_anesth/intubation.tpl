@@ -9,13 +9,12 @@ function verifIntubDifficileAndSave(oForm){
   }else{
     $('divAlertIntubDiff').style.visibility = "hidden";
   }
-  submitFormAjax(oForm, 'systemMsg')
+  submitFormAjax(oForm, 'systemMsg');
 }
 
 var SchemaDentaire = {
   sId: null,
-  iDossierMedicalId: 53{{*$consultation->_ref_patient->_ref_dossier_medical->_id*}},
-  oListEtats: {11: 'bridge'} {{*$etat_des_dents|@json*}},
+  oListEtats: {{$list_etat_dents|@json}},
   fAlpha: 0.4,
   iSelectedDent: null,
   
@@ -37,17 +36,19 @@ var SchemaDentaire = {
     var oClose = new Element('a');
     oClose.innerHTML = 'x';
     oClose.addClassName('cancel');
+    oClose.onclick = SchemaDentaire.closeMenu;
     oMenu.insert({bottom: oClose});
     
     states.each (function (o) {
       var oOption = new Element('a');
       if (o) {
         oOption.innerHTML = o.capitalize();
+        oOption.addClassName(o);
       } else {
         oOption.innerHTML = 'Aucun';
       }
-      oOption.addClassName(o);
-      oOption.onclick = this.onSelectState;
+      
+      oOption.onclick = SchemaDentaire.onSelectState;
       oMenu.insert({bottom: oOption});
     });
     oSchema.insert({bottom: oMenu});
@@ -85,26 +86,19 @@ var SchemaDentaire = {
         oDent.onclick = SchemaDentaire.onClick;
       }
     );
-    
-    // Callback on the menu
-    oMenu.onclick = this.onSelectState;
   },
   
   // Change the state of a tooth
   setState: function (id, state) {
     var dent = $(SchemaDentaire.sId+'-dent-'+id);
     
-    if (state != 'cancel') {
-      dent.setOpacity(SchemaDentaire.fAlpha);
-      dent.className = 'dent';
-      if (state != 'null') {
-        dent.addClassName(state);
-      }
-      else {
-        dent.setOpacity(1);
-      }
-    } else {
-      dent.removeClassName('focus');
+    dent.setOpacity(SchemaDentaire.fAlpha);
+    dent.className = 'dent';
+    if (state) {
+      dent.addClassName(state);
+    }
+    else {
+      dent.setOpacity(1);
     }
   },
   
@@ -118,25 +112,40 @@ var SchemaDentaire = {
   
   // Show the menu
   onClick: function (e) {
-    if (!SchemaDentaire.iSelectedDent) {
-      var dent = e.target;
-      var menu = $(SchemaDentaire.sId+'-menu');
-      
-      dent.addClassName('focus');
-      menu.setStyle({
-       top: dent.cumulativeOffset().top + 'px',
-       left: dent.cumulativeOffset().left + dent.getWidth() + 4 + 'px'
-      });
-      menu.show();
-      
-      SchemaDentaire.iSelectedDent = dent.dentId;
+    if (SchemaDentaire.iSelectedDent) {
+      $(SchemaDentaire.sId+'-dent-'+SchemaDentaire.iSelectedDent).removeClassName('focus');
     }
+    var dent = e.target;
+    SchemaDentaire.iSelectedDent = dent.dentId;
+    
+    var menu = $(SchemaDentaire.sId+'-menu');
+    
+    dent.addClassName('focus');
+    menu.setStyle({
+     top: dent.cumulativeOffset().top + 'px',
+     left: dent.cumulativeOffset().left + dent.getWidth() + 4 + 'px'
+    });
+    menu.show();
+    
+    SchemaDentaire.iSelectedDent = dent.dentId;
   },
   
   // Selection of a new state in the menu
   onSelectState: function (e) {
-    $(SchemaDentaire.sId+'-menu').hide();
+    var oForm = document.forms['etat-dent-edit'];
+    oForm.dent.setValue(SchemaDentaire.iSelectedDent);
+    oForm.etat.setValue(e.target.className ? e.target.className : '');
+    submitFormAjax(oForm, 'systemMsg');
+    
     SchemaDentaire.setState(SchemaDentaire.iSelectedDent, e.target.className);
+    
+    SchemaDentaire.closeMenu();
+  },
+  
+    // Close the menu
+  closeMenu: function (e) {
+    $(SchemaDentaire.sId+'-menu').hide();
+    $(SchemaDentaire.sId+'-dent-'+SchemaDentaire.iSelectedDent).removeClassName('focus');
     SchemaDentaire.iSelectedDent = null;
   }
 };
@@ -146,6 +155,16 @@ Main.add(function () {
   SchemaDentaire.initialize("dents-schema", states);
 } );
 </script>
+<form name="etat-dent-edit" action="?" method="post">
+  <input type="hidden" name="m" value="dPpatients" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="dosql" value="do_etat_dent_aed" />
+  <input type="hidden" name="etat_dent_id" value="" />
+  <input type="hidden" name="dossier_medical_id" value="{{$consult->_ref_patient->_ref_dossier_medical->_id}}" />
+  <input type="hidden" name="dent" value="" />
+  <input type="hidden" name="etat" value="" />
+</form>
+
 <form name="editFrmIntubation" action="?m=dPcabinet" method="post">
 <input type="hidden" name="m" value="dPcabinet" />
 <input type="hidden" name="del" value="0" />

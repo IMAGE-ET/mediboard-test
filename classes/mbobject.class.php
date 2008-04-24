@@ -434,6 +434,8 @@ class CMbObject {
     }
     
     $this->loadObject($request->where, $request->order, $request->group, $request->ljoin);
+    
+    return $this->_id;
   }
   
   /**

@@ -288,6 +288,14 @@ $contrainteDestination["normal"] = array("", 6, 7);
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
+$etat_dent = new CEtatDent();
+$etat_dent->dossier_medical_id = $consult->_ref_patient->_ref_dossier_medical->_id;
+$etat_dents = $etat_dent->loadMatchingList();
+$list_etat_dents = array();
+foreach ($etat_dents as $etat) {
+  $list_etat_dents[$etat->dent] = $etat->etat;
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("contrainteProvenance" , $contrainteProvenance );
@@ -322,7 +330,8 @@ $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
 $smarty->assign("_is_anesth"     , $consult->_is_anesth);  
 $smarty->assign("noReglement"    , 0);
-$smarty->assign("current_m"      ,  $current_m);
+$smarty->assign("current_m"      , $current_m);
+$smarty->assign("list_etat_dents", $list_etat_dents);
 
 if($consult->_is_anesth) {
 	$secs = range(0, 60-1, 1);
