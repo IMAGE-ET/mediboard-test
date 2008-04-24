@@ -11,6 +11,7 @@ Main.add(function() {
 <form target="Imeds-patient" name="Imeds_patient_form" action="{{$url}}?ctyp=p&amp;cidc={{$idImeds.cidc}}&amp;cdiv={{$idImeds.cdiv}}&amp;csdv={{$idImeds.csdv}}&amp;dpat={{$patient->_IPP}}" method="post">
   <input type="hidden" name="login" value="{{$idImeds.login}}" />
   <input type="hidden" name="password" value="{{$idImeds.password}}" />
+  <input type="hidden" name="nameframe" value="Imeds-patient" />
 </form>
 
  
