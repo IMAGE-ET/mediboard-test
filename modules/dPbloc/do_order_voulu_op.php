@@ -40,6 +40,7 @@ $plageop->debut = $firstOp->horaire_voulu;
 $oldOp = new COperation();
 $rank = 1;
 $horaire = $plageop->debut;
+$HourForNext = $horaire;
 foreach($listOp as $_op) {
   $_op->rank = $rank++;
   if($oldOp->_id) {
