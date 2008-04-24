@@ -32,6 +32,7 @@ $prescription->loadRefsFwd();
 $prescription->_ref_praticien->loadRefsFwd();
 
 // Chargement de toutes les categories
+$categories = array();
 $categorie = new CCategoryPrescription();
 $cats = $categorie->loadList();
 foreach($cats as $key => $cat){
