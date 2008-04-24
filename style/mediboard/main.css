@@ -2847,3 +2847,26 @@ table.main td.step {
   background: #999;
   color: #fff;
 }
+
+table.tbl th.element {
+  background-color: #ddf;
+  color: #000;
+}
+
+.div_signature {
+  position: absolute;
+  right: 15px;
+}
+
+.div_signature button {
+	margin-top: -3px;
+}
+
+table.tbl th.arretee {
+	background-color: #ddd;
+	color: #000;
+}
+
+table.tbl th.traitement {
+  background-color: #7c7;
+}

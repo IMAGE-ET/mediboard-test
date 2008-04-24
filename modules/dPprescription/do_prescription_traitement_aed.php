@@ -16,19 +16,16 @@ $line = new CPrescriptionLineMedicament();
 $line->load($prescription_line_id);
 
 if($traitement == 1){
-	// Suppression du praticien
-	$line->praticien_id = "";
-
 	// Chargement de la prescription de type traitement
   $prescription = new CPrescription();
   $prescription->object_id = $line->_ref_prescription->object_id;
   $prescription->object_class = $line->_ref_prescription->object_class;
-  $prescription->praticien_id = $AppUI->user_id;
   $prescription->type = "traitement";
   $prescription->loadMatchingObject();
   if(!$prescription->_id){
   	// Si la prescription de traitement n'existe pas, on la crée
-    $msg = $prescription->store();
+    $prescription->praticien_id = $AppUI->user_id;
+  	$msg = $prescription->store();
   }
   $line->prescription_id = $prescription->_id;  
   // Suppression des valeurs non disponibles pour une ligne de type traitement

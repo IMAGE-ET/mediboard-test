@@ -79,16 +79,15 @@ if($prescription->_id){
 }
 
 
-if($prescription->object_id && $category_name == "medicament") {
-	
-
+if($prescription->object_id) {
 	$prescription->loadRefsFwd();
 	$prescription->_ref_object->loadRefSejour();
 	$prescription->_ref_object->loadRefPatient();
 	$patient =& $prescription->_ref_object->_ref_patient;
   $patient->loadRefDossierMedical();
+  
   $dossier_medical =& $patient->_ref_dossier_medical;
-
+  
   $dossier_medical->updateFormFields();
   $dossier_medical->loadRefsAntecedents();
   $dossier_medical->loadRefsTraitements();

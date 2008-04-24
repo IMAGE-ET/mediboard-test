@@ -14,18 +14,19 @@ $date = mbGetValueFromGetOrSession("date");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
-
-
 $prises = array();
 $lines_med = array();
 $medsNonPresc = array();
 
+
 if($prescription->_id){
   $prescription->loadRefsLines();
+ 
 	foreach($prescription->_ref_prescription_lines as &$line){
 		if($line->date_arret && $line->date_arret < $date){
 			continue;
 		}
+		
 	  if($date >= $line->debut && $date <= $line->_fin){
 	  	$line->loadRefsPrises();  	
 	  	foreach($line->_ref_prises as $prise){
@@ -46,13 +47,13 @@ if($prescription->_id){
 }
 
 
-
 foreach($medsNonPresc as $_line){
 	// Si le medicament ne possede pas de prises
 	if(!array_key_exists($_line->_id, $prises)){
 		unset($lines_med[$_line->_id]);
 	}
 }
+
 
 
 // Création du template

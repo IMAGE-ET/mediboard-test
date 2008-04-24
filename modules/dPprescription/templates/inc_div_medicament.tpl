@@ -78,8 +78,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
   submitFormAjax(oForm, 'systemMsg');
 }
   
-  
-  
 // Affichage des div d'ajout de posologies
 selDivPoso = function(type, line_id, type_elt){
   if(!type){

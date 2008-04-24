@@ -1,5 +1,13 @@
 <!-- Initialisation des variables -->
-{{mb_ternary var=perm_edit test=$_line_element->signee value="0" other="1"}}
+{{*mb_ternary var=perm_edit test=$_line_element->signee value="0" other="1"*}}
+
+{{if ($_line_element->praticien_id == $app->user_id) && !$_line_element->signee}}
+  {{assign var=perm_edit value="1"}}
+{{else}}
+  {{assign var=perm_edit value="0"}}
+{{/if}}
+
+
 {{assign var=line value=$_line_element}}
 {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{assign var=div_refresh value=$element}}
@@ -9,24 +17,34 @@
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" style="{{if $_line_element->date_arret}}background-color:#aaa{{/if}}">
-      <div style="float: left">
+    <th class="{{if $_line_element->date_arret}}arretee{{else}}element{{/if}}" id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" >
+     
+      <div style="position: absolute">
         <!-- Formulaire ALD -->
         {{if !$_line_element->_protocole}}
           {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
 	      {{/if}}
-      </div>     
-      <div style="float: right">
+      </div>    
+     
+      <div class="div_signature">
         <!-- Affichage de la signature du praticien -->
-		    {{if $_line_element->_ref_praticien->_id}}
-		        {{$_line_element->_ref_praticien->_view}}
-		        {{if !$_line_element->_protocole}}  
-			        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-	          {{/if}}
-		      {{/if}}
+        {{if ($_line_element->praticien_id != $app->user_id) && !$_line_element->_protocole}}
+          {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+        {{else}}
+          {{$_line_element->_ref_praticien->_view}}    
+        {{/if}}
+        
+        <!-- Affichage du formulaire de signature du praticien -->
+		    {{if !$_line_element->_protocole}}  
+			    {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+	      {{/if}}
+		    
 	    </div>
+	    
 	    <!-- View de l'element -->
 	    {{$_line_element->_ref_element_prescription->_view}}
+	    
+	    
 	  </th>
 	</tr>
   <!-- Ligne affichée seulement dans le cas des soins -->
@@ -40,6 +58,7 @@
       {{/if}}
     </td>
     <!-- Gestion des dates -->
+    {{if !$_line_element->_protocole}}
     <td colspan="2">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
       {{if $perm_edit}}
@@ -57,6 +76,7 @@
         </div>
      {{/if}}
     </td>
+    {{/if}}
   </tr>
   <tr>
     <td colspan="3">
@@ -80,6 +100,8 @@
         <!-- Affichage des prises -->
         {{foreach from=$_line_element->_ref_prises item=prise}}
           {{$prise->_view}} ,
+        {{foreachelse}}
+          Aucune posologie
         {{/foreach}}
       {{/if}}
     </td>

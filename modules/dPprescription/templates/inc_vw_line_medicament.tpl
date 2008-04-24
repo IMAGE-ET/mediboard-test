@@ -1,9 +1,13 @@
 <!-- Initialisation des variables -->
-{{if (($curr_line->signee == 0 || $mode_pharma) && !$curr_line->valide_pharma)}}
+{{*if (($curr_line->signee == 0 || $mode_pharma) && !$curr_line->valide_pharma)*}}
+
+{{if (($curr_line->praticien_id == $app->user_id || $mode_pharma) && !$curr_line->valide_pharma && !$curr_line->signee)}}
   {{assign var=perm_edit value=1}}
 {{else}}
   {{assign var=perm_edit value=0}}
 {{/if}}
+
+
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
@@ -13,7 +17,7 @@
 <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
   <!-- Header de la ligne -->
   <tr>
-    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" style="{{if $curr_line->_traitement}}background-color:#7c7{{elseif $curr_line->date_arret}}background-color:#aaa{{/if}}">
+    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}">
       <div style="float:left">
         {{if !$curr_line->_traitement}}
 	        <!-- Selecteur equivalent -->
@@ -28,32 +32,33 @@
 		    {{/if}}  
 	     
 	      <!-- Formulaire Traitement -->
-        {{if !$curr_line->signee && !$curr_line->_protocole && !$mode_pharma}} 
+        {{if !$curr_line->_protocole && !$mode_pharma && $perm_edit}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
         {{/if}}  
       </div>
       
       <!-- AFfichage de la signature du praticien -->
       <div style="float: right">
-        {{if $mode_pharma && !$curr_line->_traitement}}
+        {{if ($curr_line->praticien_id != $app->user_id) && !$curr_line->_traitement && !$curr_line->_protocole}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+        {{else}}
+          {{if !$curr_line->_traitement}}
+            {{$curr_line->_ref_praticien->_view}}    
+          {{/if}}
         {{/if}}
       
         <!-- Mode prescription -->
         {{if !$mode_pharma}}
 	        {{if !$curr_line->_traitement}}
-		        {{if $curr_line->_ref_praticien->_id}}
-		          {{$curr_line->_ref_praticien->_view}}
 		          {{if !$curr_line->_protocole}}  
 						    {{if !$curr_line->valide_pharma}}
 						      {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 						    {{else}}
 							    (Validé par le pharmacien)
 							  {{/if}}
-			        {{/if}}
-		        {{/if}}
+			      {{/if}}
 	        {{else}}
-	          Médecin traitant
+	          Médecin traitant (Créé par {{$curr_line->_ref_praticien->_view}})
 	        {{/if}}
         {{else}}
           {{if !$curr_line->_protocole}} 
@@ -70,7 +75,7 @@
           {{/if}}
         {{/if}}
       </div>
-      <a href="#produit{{$curr_line->_id}}" onclick="viewProduit({{$curr_line->_ref_produit->code_cip}})">
+      <a href="#produit{{$curr_line->_id}}" onclick="Prescription.viewProduit({{$curr_line->_ref_produit->code_cip}})">
         {{$curr_line->_view}}
       </a>
     </th>
@@ -90,8 +95,10 @@
 	    {{if $perm_edit}}
 		    <script type="text/javascript">
 		      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
+		      
 		      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
 	        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
+		      
 		    </script>
 	    {{/if}}          
 		</td>

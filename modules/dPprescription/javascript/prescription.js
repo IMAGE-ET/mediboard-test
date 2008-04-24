@@ -194,5 +194,11 @@ var Prescription = {
     url.setModuleAction("dPprescription", "httpreq_vw_allergies_sejour");
     url.addParam("prescription_id", prescription_id);
     url.popup(500, 300, "Allergies");
+  },
+  viewProduit: function(cip){
+    var url = new Url;
+    url.setModuleAction("dPmedicament", "vw_produit");
+    url.addParam("CIP", cip);
+    url.popup(900, 640, "Descriptif produit");
   }
 };

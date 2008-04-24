@@ -60,7 +60,7 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     if(prescription_id){
       Prescription.reload(prescription_id);
     } else {
-      $('produits_elements').innerHTML = "<div class='big-info'>Aucune prescription de séjour</div>";
+      $('produits_elements').innerHTML = "";
     }
   }
   loadSejour(sejour_id); 
@@ -77,7 +77,10 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
   if($('cim')){
     reloadDiagnostic(sejour_id, '1');
   }
-  loadDossierSoin(prescription_id, date);
+  if($('dossier_soins')){
+    document.form_prescription.prescription_id.value = prescription_id;
+    loadDossierSoin(prescription_id, date);
+  }
 }
 
 function loadResultLabo(sejour_id) {
@@ -90,7 +93,7 @@ function loadResultLabo(sejour_id) {
 
 function loadDossierSoin(prescription_id, date){
   if(!prescription_id){
-    $('dossier_soins').innerHTML = "<div class='big-info'>Aucun dossier de soins</div>";
+    $('dossier_soins').innerHTML = "";
     return;
   } 
   var url = new Url;
@@ -115,23 +118,26 @@ Main.add(function () {
   {{if $object->_id}}
     {{assign var=prescriptions value=$object->_ref_prescriptions}}
     {{assign var=prescription value=$prescriptions.sejour.0}}
-    {{if $prescription}}
-    loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}','{{$date}}');
-    loadDossierSoin('{{$prescription->_id}}','{{$date}}');
-    {{else}}
-    loadViewSejour({{$object->_id}}, null, '','{{$date}}');
+	  {{if $prescription}}
+	    loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}','{{$date}}');
+	  {{else}}
+      loadViewSejour({{$object->_id}}, null, '','{{$date}}');
     {{/if}}
   {{/if}}
   
   {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
   {{/if}}
+  
 });
 </script>
 
 <table class="main">
   <tr>
     <td style="width:200px;" rowspan="3">
+      <form name="form_prescription">
+        <input type="hidden" name="prescription_id" value="" />
+      </form>
       <table>
         <tr>
           <th>
@@ -299,8 +305,7 @@ Main.add(function () {
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li onclick="loadDossierSoin('{{$prescription_sejour_id}}','{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
-        
+        <li onclick="loadDossierSoin(document.form_prescription.prescription_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
         <li><a href="#produits_elements">Prescriptions</a></li>
         {{/if}}
         

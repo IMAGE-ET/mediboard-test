@@ -53,7 +53,7 @@ preselectExecutant = function(executant_id, category_id){
 	  {{/foreach}}
 	  {{if $lines_cat.comment|@count}}
 	  <tr>
-	    <th colspan="8">Commentaires</th>
+	    <th colspan="8" class="element">Commentaires</th>
 	  </tr>
 	  
 	  {{/if}}

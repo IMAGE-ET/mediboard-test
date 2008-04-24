@@ -26,32 +26,6 @@ function viewProduit(cip){
     <td>
       <table style="width: 100%">
         <tr>
-        
-        <!-- 
-          <td id="traitement" class="step">
-          {{if $prescriptions.traitement}}
-	          {{assign var=prescription_traitement value=$prescriptions.traitement.0}}
-	          {{if $prescription_traitement->_id}}
-	          {{if $prescription->type == "traitement" && !$prescriptions.pre_admission}}
-	            <form name="addPrescriptionPreAdmission" method="post" action="">
-	              <input type="hidden" name="m" value="dPprescription" />
-	              <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
-	              <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-	              <input type="hidden" name="type" value="pre_admission" />
-	              <button type="button" class="add" onclick="this.form.submit();">
-	                Sortie
-	              </button>
-	            </form>
-	          {{/if}}
-	            <a href="?m=dPprescription&amp;a=vw_edit_prescription&amp;dialog=1&amp;prescription_id={{$prescription_traitement->_id}}"
-	              {{if $prescription->type == "traitement"}}style="font-size: 200%"{{/if}}>
-                {{tr}}CPrescription.type.traitement{{/tr}}
-	            </a>
-	          {{/if}}
-          {{/if}}
-          </td>
-         -->
-           
           <td id="pre_admission" class="step">
           {{if $prescriptions.pre_admission}}
           {{assign var=prescription_pre_admission value=$prescriptions.pre_admission.0}}

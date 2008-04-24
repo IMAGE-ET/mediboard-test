@@ -87,6 +87,7 @@ class CPrisePosologie extends CMbMetaObject {
   	
     // Minute / Heure / demi-journee / jour
   	if($this->unite_tous_les == "minute" || $this->unite_tous_les == "heure" || $this->unite_tous_les == "demi_journee"){
+  	  return true;
   	}
   	
   	// Jour
@@ -119,6 +120,7 @@ class CPrisePosologie extends CMbMetaObject {
   		} 
   		$type_increment = "MONTHS";
   	}
+  	
   	// Annee
     if($this->unite_tous_les == "an"){
     	$increment = $this->nb_tous_les;

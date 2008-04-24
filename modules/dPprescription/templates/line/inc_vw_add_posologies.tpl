@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+Main.add( function(){
+  prepareForm(document.forms['addPriseFoisPar{{$type}}{{$line->_id}}']);
+  prepareForm(document.forms['addPriseMoment{{$type}}{{$line->_id}}']); 
+  prepareForm(document.forms['addPriseTousLes{{$type}}{{$line->_id}}']);
+} );
+
+</script>
+
 {{assign var=line_id value=$line->_id}}
   <select name="selShowDivPoso{{$type}}" onchange="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');">
     <option value="">&mdash; Posologies manuelles</option>

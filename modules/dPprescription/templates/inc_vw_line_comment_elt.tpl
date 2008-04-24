@@ -1,4 +1,12 @@
-{{mb_ternary var=perm_edit test=$_line_comment->signee value="0" other="1"}}
+{{*mb_ternary var=perm_edit test=$_line_comment->signee value="0" other="1"*}}
+
+{{if ($_line_comment->praticien_id == $app->user_id) && !$_line_comment->signee}}
+  {{assign var=perm_edit value="1"}}
+{{else}}
+  {{assign var=perm_edit value="0"}}
+{{/if}}
+
+
 {{assign var=line value=$_line_comment}}
 {{assign var=dosql value="do_prescription_line_comment_aed"}}
 			
@@ -39,12 +47,17 @@
        {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
      </td>
      <td style="text-align: right">
-       {{if $_line_comment->_ref_praticien->_id}}
-         {{$_line_comment->_ref_praticien->_view}}
-         {{if !$_line_comment->_protocole}}  
-	         {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
-	       {{/if}}
+       <!-- Affichage de la signature du praticien -->
+       {{if ($_line_comment->praticien_id != $app->user_id) && !$_line_comment->_protocole}}
+         {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+       {{else}}
+         {{$_line_comment->_ref_praticien->_view}}    
        {{/if}}
+       
+       <!-- Affichage du formulaire de signature du praticien --> 
+       {{if !$_line_comment->_protocole}}  
+	       {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+	     {{/if}}
      </td>
   </tr>
 </tbody>
