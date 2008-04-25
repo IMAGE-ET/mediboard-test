@@ -33,7 +33,7 @@ function calculImcVst(oForm){
 
 <table class="form">
   <tr>
-    <td rowspan="4">
+    <td>
       <form name="editAnesthPatFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -99,61 +99,76 @@ function calculImcVst(oForm){
         <tr>
           <td id="imcValeur" colspan="2" style="color:#F00;">{{$consult_anesth->_imc_valeur}}</td>
         </tr>
-        </table>
-        </form>
-      </td>
-      
-      <td>
-        <form name="editAnesthExamenCardio" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-          {{mb_label object=$consult_anesth field="examenCardio"}}
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-          <select name="_helpers_examenCardio" size="1" onchange="pasteHelperContent(this);this.form.examenCardio.onchange();">
-            <option value="">&mdash; Choisir une aide</option>
-            {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
-          </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button>
-          <br />
-          {{mb_field object=$consult_anesth field="examenCardio" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-        </form>
-      </td>
-      
-      <td>
-        <form name="editAnesthExamenPulmo" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-          {{mb_label object=$consult_anesth field="examenPulmo"}}
-          <input type="hidden" name="m" value="dPcabinet" />
-          <input type="hidden" name="del" value="0" />
-          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
-          <select name="_helpers_examenPulmo" size="1" onchange="pasteHelperContent(this);this.form.examenPulmo.onchange();">
-            <option value="">&mdash; Choisir une aide</option>
-            {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
-          </select>
-          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button>
-          <br />
-          {{mb_field object=$consult_anesth field="examenPulmo" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-        </form>
-      </td>
-    </tr>
-
-    <tr>
-    <td colspan="2">
-      <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
-      <input type="hidden" name="m" value="dPcabinet" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_consultation_aed" />
-      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
-      {{mb_label object=$consult field="examen"}}
-      <select name="_helpers_examen" size="1" onchange="pasteHelperContent(this);this.form.examen.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult->_aides.examen.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button>
-      <br />
-      {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      </table>
       </form>
     </td>
+  
+    <td class="greedyPane">
+      <table class="form">
+        <tr>
+          <td>
+            <form name="editAnesthExamenCardio" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+              {{mb_label object=$consult_anesth field="examenCardio"}}
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+              {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+              <select name="_helpers_examenCardio" onchange="pasteHelperContent(this); this.form.examenCardio.onchange();">
+                <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
+              </select>
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button>
+              <br />
+              {{mb_field object=$consult_anesth field="examenCardio" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+            </form>
+          </td>
+        </tr>
+      </table>
+
+      <table class="form">
+        <tr>
+          <td>
+            <form name="editAnesthExamenPulmo" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+              {{mb_label object=$consult_anesth field="examenPulmo"}}
+              <input type="hidden" name="m" value="dPcabinet" />
+              <input type="hidden" name="del" value="0" />
+              <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+              {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+              <select name="_helpers_examenPulmo" onchange="pasteHelperContent(this); this.form.examenPulmo.onchange();">
+                <option value="">&mdash; Choisir une aide</option>
+                {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
+              </select>
+              <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button>
+              <br />
+              {{mb_field object=$consult_anesth field="examenPulmo" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+            </form>
+          </td>
+        </tr>
+      </table>
+    </td>
   </tr>
-</table>      
-      
-{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}
+  <tr>
+    <td colspan="2">
+      <table class="form">
+        <tr>
+          <td >
+            <form name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="del" value="0" />
+            <input type="hidden" name="dosql" value="do_consultation_aed" />
+            {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+            {{mb_label object=$consult field="examen"}}
+            <select name="_helpers_examen" onchange="pasteHelperContent(this); this.form.examen.onchange();">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult->_aides.examen.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultation', this.form.examen)">{{tr}}New{{/tr}}</button>
+            <br />
+            {{mb_field object=$consult field="examen" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+            </form>
+          </td>
+        </tr>
+      </table>
+    </td>
+  </tr>
+</table>

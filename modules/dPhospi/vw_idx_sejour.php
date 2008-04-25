@@ -14,7 +14,8 @@ $can->needsRead();
 
 $date = mbGetValueFromGetOrSession("date", mbDate()); 
 $mode = mbGetValueFromGetOrSession("mode", 0);
-$service_id = mbGetValueFromGetOrSession("service_id");
+$service_id   = mbGetValueFromGetOrSession("service_id");
+$praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $sejour_id = mbGetValueFromGetOrSession("sejour_id",0);
 // Récupération du service à ajouter/éditer
 $totalLits = 0;

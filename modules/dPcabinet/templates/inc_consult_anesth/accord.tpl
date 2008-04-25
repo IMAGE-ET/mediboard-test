@@ -26,15 +26,16 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
-  <li><a href="#Exams">Examens Clinique</a></li>
+  <li><a href="#Exams">Exam. Clinique</a></li>
+  <li><a href="#Intub">Intubation</a></li>
   
   {{if $app->user_prefs.ccam_consultation == 1}}
   <li><a href="#Actes">Actes</a></li>
   {{/if}}
   
-  <li><a href="#ExamsComp">Examens Comp.</a></li>
-  <li><a href="#InfoAnesth">Infos Anesthésie</a></li>
-  <li><a href="#fdrConsult">Docs et Réglements</a></li>
+  <li><a href="#ExamsComp">Exam. Comp.</a></li>
+  <li><a href="#InfoAnesth">Infos. Anesth.</a></li>
+  <li><a href="#fdrConsult">Docs. et Réglements</a></li>
 </ul>
 <hr class="control_tabs" />
 
@@ -46,6 +47,7 @@ Main.add(function () {
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
+<div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
 
 {{if $app->user_prefs.ccam_consultation == 1}}
 <div id="Actes" style="display: none;">
