@@ -197,37 +197,39 @@ Element.addMethods({
       autoSave: true,
       step: 1
     };
-    
     Object.extend(oDefaultOptions, oOptions);
   
+    var staticOffset = null;
+    var cookie = new CookieJar(); 
+    
     // oGrippie is the draggable element
     var oGrippie = new Element('div');
     
     // We remove the margin between the textarea and the grippie
     oElement.style.marginBottom = '0';
-  
-    var cookie = new CookieJar(); 
-    
-    if (h = cookie.getValue('ElementHeight', oElement.id)) {
-      oElement.setStyle({height: (h+'px')});
-    }
     
     // grippie's class and style
     oGrippie.addClassName('grippie-h');
-    oGrippie.setStyle({
-      opacity: 0.5,
-      display: ((oElement.style.display == 'none') ? 'none' : 'block'),
-      width: oElement.style.width
-    });
+    oGrippie.setOpacity(0.5);
+    if (!oElement.visible()) {
+      oGrippie.hide();
+    }
     
     // When the mouse is pressed on the grippie, we begin the drag
     oGrippie.onmousedown = startDrag;
+    oElement.insert({after: oGrippie});
     
-    var staticOffset = null;
+    // Loads the height maybe saved in a cookie
+    function loadHeight() {
+      if (h = cookie.getValue('ElementHeight', oElement.id)) {
+        oElement.setStyle({height: (h+'px')});
+      }
+    }
+    loadHeight.defer(); // deferred to prevent Firefox 2 resize bug
     
     function startDrag(e) {
       staticOffset = oElement.getHeight() - Event.pointerY(e); 
-      oElement.setStyle({opacity: 0.4});
+      oElement.setOpacity(0.4);
       document.onmousemove = performDrag;
       document.onmouseup = endDrag;
       return false;
@@ -258,8 +260,6 @@ Element.addMethods({
       }
       return false;
     }
-  
-    Element.insert(oElement, { after: oGrippie });
   }
 } );
 
@@ -334,10 +334,10 @@ function prepareForm(oForm, bForcePrepare) {
         } 
       }
       
-      if (oElement.type == "textarea") {
+      // Won't make it resizable on IE
+      if (oElement.type == "textarea" && !Prototype.Browser.IE) {
         oElement.setResizable({autoSave: true, step: 'font-size'});
       }
-      
       
       // We mark this form as prepared
       oForm.addClassName("prepared");

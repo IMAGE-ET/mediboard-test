@@ -9,30 +9,72 @@ function verifIntubDifficileAndSave(oForm){
   }else{
     $('divAlertIntubDiff').style.visibility = "hidden";
   }
+  
+  $A(oForm.mallampati).each(function (o) {
+    if (o.checked) {
+      o.up().up().addClassName('mallampati-selected');
+    }
+    else {
+      o.up().up().removeClassName('mallampati-selected');
+    }
+  });
   submitFormAjax(oForm, 'systemMsg');
 }
 
 var SchemaDentaire = {
   sId: null,
   oListEtats: {{$list_etat_dents|@json}},
-  fAlpha: 0.4,
+  aStates: null,
+  fAlpha: 0.5,
   iSelectedDent: null,
+  aDentsId: null,
+  aDentsNumbers: [
+    11, 12, 13, 14, 15, 16, 17, 18, 
+    21, 22, 23, 24, 25, 26, 27, 28, 
+    31, 32, 33, 34, 35, 36, 37, 38, 
+    41, 42, 43, 44, 45, 46, 47, 48, 
+    51, 52, 53, 54, 55, 
+    61, 62, 63, 64, 65,
+    71, 72, 73, 74, 75,
+    81, 82, 83, 84, 85
+  ],
   
   initialize: function(id, states) {
     // Class attributes
     this.sId = id;
+    this.aStates = states;
     
     // Elements
     var oSchema = $(this.sId);
-    oSchema.addClassName('schema-dentaire');
     var oMap = $(this.sId+"-map");
+    var oImage = $(this.sId+"-image");
+    oSchema.addClassName('schema-dentaire');
+    
+    // Clone the image's size to the container
+    var img = new Image();
+    img.src = oImage.src;
+    oSchema.setStyle({width: img.width+'px'});
     
     // Menu initialization
     var oMenu = new Element('div');
     oMenu.id = this.sId+'-menu';
     oMenu.addClassName('dent-menu');
     
-    // For each possible state, we add a link in the menu
+    var oLegend = new Element('div');
+    oLegend.id = this.sId+'-legend';
+    oLegend.addClassName('dent-legend');
+    
+    // Buttons initialization
+    var oActions = new Element('div');
+    oActions.addClassName('dent-buttons');
+    var oButton = new Element('a');
+    oButton.innerHTML = "Réinitialiser";
+    oButton.addClassName('buttoncancel');
+    oButton.href = '#1';
+    oButton.onclick = SchemaDentaire.reset;
+    oActions.insert({top: oButton});
+    
+    // For each possible state, we add a link in the menu and an item in the legend
     var oClose = new Element('a');
     oClose.innerHTML = 'x';
     oClose.addClassName('cancel');
@@ -40,10 +82,17 @@ var SchemaDentaire = {
     oMenu.insert({bottom: oClose});
     
     states.each (function (o) {
+      // Options and legend items
       var oOption = new Element('a');
+      
       if (o) {
         oOption.innerHTML = o.capitalize();
         oOption.addClassName(o);
+        
+        var oItem = new Element('div');
+        oItem.innerHTML = o.capitalize();
+        oItem.addClassName(o);
+        oLegend.insert({bottom: oItem});
       } else {
         oOption.innerHTML = 'Aucun';
       }
@@ -53,7 +102,12 @@ var SchemaDentaire = {
     });
     oSchema.insert({bottom: oMenu});
     oMenu.hide();
-  
+    
+    oSchema.insert({top: oLegend});
+    oSchema.insert({top: oActions});
+    
+    SchemaDentaire.aDentsId = [];
+    
     /* For each area in the map */
     oMap.childElements().each(
       function (o) {
@@ -67,17 +121,20 @@ var SchemaDentaire = {
         var oDent = new Element('div');
         oDent.addClassName('dent');
         oDent.setStyle({
-          marginTop: y-r-1+'px',
-          marginLeft: x-r-1+'px',
+          marginTop: y-r+'px',
+          marginLeft: x-r+'px',
           width: r*2+'px',
           height: r*2+'px'
         });
         oSchema.insert({top: oDent});
-        oDent.id = SchemaDentaire.sId+'-dent-'+o.id.substr(5);
-        oDent.dentId = o.id.substr(5);
+        
+        var id = parseInt(o.id.substr(5));
+        oDent.id = SchemaDentaire.sId+'-dent-'+id;
+        oDent.dentId = id;
+        SchemaDentaire.aDentsId[id] = oDent.id;
         
         if (etat = SchemaDentaire.oListEtats[oDent.dentId]) {
-          SchemaDentaire.setState(oDent.dentId, etat);
+          SchemaDentaire.setState(oDent.dentId, etat, true);
         }
         
         // Callbacks on the tooth
@@ -89,16 +146,25 @@ var SchemaDentaire = {
   },
   
   // Change the state of a tooth
-  setState: function (id, state) {
+  setState: function (id, state, displayOnly) {
     var dent = $(SchemaDentaire.sId+'-dent-'+id);
-    
-    dent.setOpacity(SchemaDentaire.fAlpha);
-    dent.className = 'dent';
-    if (state) {
-      dent.addClassName(state);
-    }
-    else {
-      dent.setOpacity(1);
+    if (dent) {
+      dent.setOpacity(SchemaDentaire.fAlpha);
+      dent.className = 'dent';
+      
+      if (state) {
+        dent.addClassName(state);
+      }
+      else {
+        dent.setOpacity(1);
+      }
+      
+      if (!displayOnly) {
+        var oForm = document.forms['etat-dent-edit'];
+        oForm.dent.setValue(id);
+        oForm.etat.setValue(state ? state : '');
+        submitFormAjax(oForm, 'systemMsg');
+      }
     }
   },
   
@@ -132,13 +198,7 @@ var SchemaDentaire = {
   
   // Selection of a new state in the menu
   onSelectState: function (e) {
-    var oForm = document.forms['etat-dent-edit'];
-    oForm.dent.setValue(SchemaDentaire.iSelectedDent);
-    oForm.etat.setValue(e.target.className ? e.target.className : '');
-    submitFormAjax(oForm, 'systemMsg');
-    
     SchemaDentaire.setState(SchemaDentaire.iSelectedDent, e.target.className);
-    
     SchemaDentaire.closeMenu();
   },
   
@@ -147,6 +207,21 @@ var SchemaDentaire = {
     $(SchemaDentaire.sId+'-menu').hide();
     $(SchemaDentaire.sId+'-dent-'+SchemaDentaire.iSelectedDent).removeClassName('focus');
     SchemaDentaire.iSelectedDent = null;
+  },
+  
+  // Reset the teeth state
+  reset: function () {
+    SchemaDentaire.aDentsId.each(function (name, key) {
+      key = SchemaDentaire.aDentsNumbers[key];
+      var oDent = $(name);
+      SchemaDentaire.aStates.each(function (state) {
+        if (oDent.hasClassName(state)) {
+          SchemaDentaire.setState(key, null);
+          return;
+        }
+      });
+    });
+    return false;
   }
 };
 
@@ -170,120 +245,135 @@ Main.add(function () {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
 {{mb_field object=$consult_anesth field="consultation_anesth_id" hidden=1 prop=""}}
+
 <table class="form">
-  <tr>
-    <th colspan="6" class="category">Condition d'intubation</th>
-  </tr>
-  <tr>
-    {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
-    <td rowspan="2" class="button">
-      <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
-        <img src="images/pictures/{{$curr_mallampati}}.gif" alt="{{$trans_mallampati}}" />
-        <br />
-        <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked"{{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
-        {{$trans_mallampati}}
-      </label>
-    </td>
-    {{/foreach}}
-
-    <th>{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
-    <td>
-      {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-    </td>
-  </tr>
+  <tr><th colspan="2" class="category">Condition d'intubation</th></tr>
   
   <tr>
-    <th>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
+    <td style="width: 1%;">
+      <table>
+        <tr>
+          {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
+          <td class="button">
+            <div {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
+            <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
+              <img src="images/pictures/{{$curr_mallampati}}.png" alt="{{$trans_mallampati}}" />
+              <br />
+              <input style="display: none;" type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+              {{$trans_mallampati}}
+            </label>
+            </div>
+          </td>
+          {{/foreach}}
+        </tr>
+        <tr>
+          <td colspan="4" class="button">
+            <div id="dents-schema">
+              <img id="dents-schema-image" src="images/pictures/dents.png" border="0" usemap="#dents-schema-map" alt="" /> 
+              <map id="dents-schema-map" name="dents-schema-map">
+                <area shape="circle" coords="116,33, 11" href="#1" alt="" id="dent-11" />
+                <area shape="circle" coords="97,44, 11" href="#1" alt="" id="dent-12" />
+                <area shape="circle" coords="79,55, 12" href="#1" alt="" id="dent-13" />
+                <area shape="circle" coords="70,74, 12" href="#1" alt="" id="dent-14" />
+                <area shape="circle" coords="61,93, 13" href="#1" alt="" id="dent-15" />
+                <area shape="circle" coords="55,118, 17" href="#1" alt="" id="dent-16" />
+                <area shape="circle" coords="51,146, 16" href="#1" alt="" id="dent-17" />
+                <area shape="circle" coords="50,174, 15" href="#1" alt="" id="dent-18" />
+                <area shape="circle" coords="137,33, 11" href="#1" alt="" id="dent-21" />
+                <area shape="circle" coords="156,44, 11" href="#1" alt="" id="dent-22" />
+                <area shape="circle" coords="174,55, 12" href="#1" alt="" id="dent-23" />
+                <area shape="circle" coords="183,74, 12" href="#1" alt="" id="dent-24" />
+                <area shape="circle" coords="192,94, 13" href="#1" alt="" id="dent-25" />
+                <area shape="circle" coords="198,118, 17" href="#1" alt="" id="dent-26" />
+                <area shape="circle" coords="201,146, 16" href="#1" alt="" id="dent-27" />
+                <area shape="circle" coords="203,174, 15" href="#1" alt="" id="dent-28" />
+                <area shape="circle" coords="135,356, 9" href="#1" alt="" id="dent-31" />
+                <area shape="circle" coords="150,349, 9" href="#1" alt="" id="dent-32" />
+                <area shape="circle" coords="164,338, 11" href="#1" alt="" id="dent-33" />
+                <area shape="circle" coords="177,322, 11" href="#1" alt="" id="dent-34" />
+                <area shape="circle" coords="186,303, 12" href="#1" alt="" id="dent-35" />
+                <area shape="circle" coords="195,279, 18" href="#1" alt="" id="dent-36" />
+                <area shape="circle" coords="199,250, 16" href="#1" alt="" id="dent-37" />
+                <area shape="circle" coords="203,222, 15" href="#1" alt="" id="dent-38" />
+                <area shape="circle" coords="118,356, 9" href="#1" alt="" id="dent-41" />
+                <area shape="circle" coords="103,348, 9" href="#1" alt="" id="dent-42" />
+                <area shape="circle" coords="89,338, 11" href="#1" alt="" id="dent-43" />
+                <area shape="circle" coords="76,323, 11" href="#1" alt="" id="dent-44" />
+                <area shape="circle" coords="66,304, 12" href="#1" alt="" id="dent-45" />
+                <area shape="circle" coords="58,279, 18" href="#1" alt="" id="dent-46" />
+                <area shape="circle" coords="54,250, 16" href="#1" alt="" id="dent-47" />
+                <area shape="circle" coords="49,223, 15" href="#1" alt="" id="dent-48" />
+                <area shape="circle" coords="318,114, 7" href="#1" alt="" id="dent-51" />
+                <area shape="circle" coords="307,120, 8" href="#1" alt="" id="dent-52" />
+                <area shape="circle" coords="298,131, 9" href="#1" alt="" id="dent-53" />
+                <area shape="circle" coords="290,147, 11" href="#1" alt="" id="dent-54" />
+                <area shape="circle" coords="285,166, 12" href="#1" alt="" id="dent-55" />
+                <area shape="circle" coords="331,114, 7" href="#1" alt="" id="dent-61" />
+                <area shape="circle" coords="342,120, 8" href="#1" alt="" id="dent-62" />
+                <area shape="circle" coords="351,131, 9" href="#1" alt="" id="dent-63" />
+                <area shape="circle" coords="357,147, 11" href="#1" alt="" id="dent-64" />
+                <area shape="circle" coords="363,166, 12" href="#1" alt="" id="dent-65" />
+                <area shape="circle" coords="330,271, 6" href="#1" alt="" id="dent-71" />
+                <area shape="circle" coords="339,265, 7" href="#1" alt="" id="dent-72" />
+                <area shape="circle" coords="350,255, 8" href="#1" alt="" id="dent-73" />
+                <area shape="circle" coords="357,243, 8" href="#1" alt="" id="dent-74" />
+                <area shape="circle" coords="365,227, 10" href="#1" alt="" id="dent-75" />
+                <area shape="circle" coords="319,271, 6" href="#1" alt="" id="dent-81" />
+                <area shape="circle" coords="309,265, 7" href="#1" alt="" id="dent-82" />
+                <area shape="circle" coords="298,255, 8" href="#1" alt="" id="dent-83" />
+                <area shape="circle" coords="291,242, 8" href="#1" alt="" id="dent-84" />
+                <area shape="circle" coords="282,228, 10" href="#1" alt="" id="dent-85" />
+              </map>
+            </div>
+          </td>
+        </tr>
+      </table>
+    </td>
     <td>
-      {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
-    </td>
-  </tr>
-
-  <tr>
-    <td colspan="4" rowspan="2" class="button">
-      <div id="dents-schema">
-        <img src="images/pictures/dents.png" width="503" height="420" border="0" usemap="#dents-schema-map" alt="" /> 
-        <map name="dents-schema-map" id="dents-schema-map">
-          <area shape="circle" coords="164,52, 11" href="#1" alt="" id="dent-11" />
-          <area shape="circle" coords="145,63, 11" href="#1" alt="" id="dent-12" />
-          <area shape="circle" coords="127,74, 12" href="#1" alt="" id="dent-13" />
-          <area shape="circle" coords="118,93, 12" href="#1" alt="" id="dent-14" />
-          <area shape="circle" coords="109,112, 13" href="#1" alt="" id="dent-15" />
-          <area shape="circle" coords="103,137, 17" href="#1" alt="" id="dent-16" />
-          <area shape="circle" coords="99,165, 16" href="#1" alt="" id="dent-17" />
-          <area shape="circle" coords="98,193, 15" href="#1" alt="" id="dent-18" />
-          <area shape="circle" coords="185,52, 11" href="#1" alt="" id="dent-21" />
-          <area shape="circle" coords="204,63, 11" href="#1" alt="" id="dent-22" />
-          <area shape="circle" coords="222,74, 12" href="#1" alt="" id="dent-23" />
-          <area shape="circle" coords="231,93, 12" href="#1" alt="" id="dent-24" />
-          <area shape="circle" coords="240,113, 13" href="#1" alt="" id="dent-25" />
-          <area shape="circle" coords="246,137, 17" href="#1" alt="" id="dent-26" />
-          <area shape="circle" coords="249,165, 16" href="#1" alt="" id="dent-27" />
-          <area shape="circle" coords="251,193, 15" href="#1" alt="" id="dent-28" />
-          <area shape="circle" coords="183,375, 9" href="#1" alt="" id="dent-31" />
-          <area shape="circle" coords="198,368, 9" href="#1" alt="" id="dent-32" />
-          <area shape="circle" coords="212,357, 11" href="#1" alt="" id="dent-33" />
-          <area shape="circle" coords="225,341, 11" href="#1" alt="" id="dent-34" />
-          <area shape="circle" coords="234,322, 12" href="#1" alt="" id="dent-35" />
-          <area shape="circle" coords="243,298, 18" href="#1" alt="" id="dent-36" />
-          <area shape="circle" coords="247,269, 16" href="#1" alt="" id="dent-37" />
-          <area shape="circle" coords="251,241, 15" href="#1" alt="" id="dent-38" />
-          <area shape="circle" coords="166,375, 9" href="#1" alt="" id="dent-41" />
-          <area shape="circle" coords="151,367, 9" href="#1" alt="" id="dent-42" />
-          <area shape="circle" coords="137,357, 11" href="#1" alt="" id="dent-43" />
-          <area shape="circle" coords="124,342, 11" href="#1" alt="" id="dent-44" />
-          <area shape="circle" coords="114,323, 12" href="#1" alt="" id="dent-45" />
-          <area shape="circle" coords="106,298, 18" href="#1" alt="" id="dent-46" />
-          <area shape="circle" coords="102,269, 16" href="#1" alt="" id="dent-47" />
-          <area shape="circle" coords="97,242, 15" href="#1" alt="" id="dent-48" />
-          <area shape="circle" coords="366,133, 7" href="#1" alt="" id="dent-51" />
-          <area shape="circle" coords="355,139, 8" href="#1" alt="" id="dent-52" />
-          <area shape="circle" coords="346,150, 9" href="#1" alt="" id="dent-53" />
-          <area shape="circle" coords="338,166, 11" href="#1" alt="" id="dent-54" />
-          <area shape="circle" coords="333,185, 12" href="#1" alt="" id="dent-55" />
-          <area shape="circle" coords="379,133, 7" href="#1" alt="" id="dent-61" />
-          <area shape="circle" coords="390,139, 8" href="#1" alt="" id="dent-62" />
-          <area shape="circle" coords="399,150, 9" href="#1" alt="" id="dent-63" />
-          <area shape="circle" coords="405,166, 11" href="#1" alt="" id="dent-64" />
-          <area shape="circle" coords="411,185, 12" href="#1" alt="" id="dent-65" />
-          <area shape="circle" coords="378,290, 6" href="#1" alt="" id="dent-71" />
-          <area shape="circle" coords="387,284, 7" href="#1" alt="" id="dent-72" />
-          <area shape="circle" coords="398,274, 8" href="#1" alt="" id="dent-73" />
-          <area shape="circle" coords="405,262, 8" href="#1" alt="" id="dent-74" />
-          <area shape="circle" coords="413,246, 10" href="#1" alt="" id="dent-75" />
-          <area shape="circle" coords="367,290, 6" href="#1" alt="" id="dent-81" />
-          <area shape="circle" coords="357,284, 7" href="#1" alt="" id="dent-82" />
-          <area shape="circle" coords="346,274, 8" href="#1" alt="" id="dent-83" />
-          <area shape="circle" coords="339,261, 8" href="#1" alt="" id="dent-84" />
-          <area shape="circle" coords="330,247, 10" href="#1" alt="" id="dent-85" />
-        </map>
-      </div>
-    </td>
-    <th>{{mb_label object=$consult_anesth field="etatBucco"}}</th>
-    <td>
-      <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-    </td>
-  </tr>
-  
-  <tr>
-    <th>{{mb_label object=$consult_anesth field="conclusion"}}</th>
-    <td>
-      <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();">
-        <option value="">&mdash; Choisir une aide</option>
-        {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
-      </select>
-      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion)">{{tr}}New{{/tr}}</button><br />
-      {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
-    </td>
-  </tr>
-  <tr>
-    <td colspan="6" class="button">
-      <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
+      <table class="main">
+        <tr>
+          <th style="width: 1%;">{{mb_label object=$consult_anesth field="bouche" defaultFor="bouche_m20"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="bouche" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="distThyro" defaultFor="distThyro_m65"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="distThyro" typeEnum="radio" separator="<br />" onclick="verifIntubDifficileAndSave(this.form);"}}
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="etatBucco"}}</th>
+          <td>
+            <select name="_helpers_etatBucco" size="1" onchange="pasteHelperContent(this);this.form.etatBucco.onchange();">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult_anesth->_aides.etatBucco.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)">{{tr}}New{{/tr}}</button><br />
+            {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="conclusion"}}</th>
+          <td>
+            <select name="_helpers_conclusion" size="1" onchange="pasteHelperContent(this);this.form.conclusion.onchange();">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult_anesth->_aides.conclusion.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.conclusion)">{{tr}}New{{/tr}}</button><br />
+            {{mb_field object=$consult_anesth field="conclusion" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+          </td>
+        </tr>
+        <tr>
+          <td colspan="2" class="button">
+            <div id="divAlertIntubDiff" style="float:right;color:#F00;{{if !$consult_anesth->_intub_difficile}}visibility:hidden;{{/if}}"><strong>Intubation Difficile Prévisible</strong></div>
+          </td>
+        </tr>
+      </table>
     </td>
   </tr>
 </table>

@@ -2788,7 +2788,9 @@ table.main td.step {
 }
 
 .schema-dentaire {
-  width: 1%;
+  margin: auto;
+  margin-top: 1em;
+  border: 1px dotted #666;
 }
 
 .dent {
@@ -2803,7 +2805,7 @@ table.main td.step {
 }
 
 .focus {
-  border: 1px solid #FF0000;
+  border: 1px solid #F00;
 }
 
 .bridge {
@@ -2832,7 +2834,8 @@ table.main td.step {
 .dent-menu a {
   display: block;
   cursor: pointer;
-  padding:3px;
+  padding: 3px;
+  color: #000;
 }
 
 .dent-menu a:hover {
@@ -2846,6 +2849,32 @@ table.main td.step {
   text-align: right;
   background: #999;
   color: #fff;
+}
+
+.dent-legend {
+  float: right;
+  display: block;
+  margin: 0.5em;
+}
+
+.dent-legend div {
+  padding: 2px;
+  margin: 2px;
+}
+
+.dent-buttons {
+  position: absolute;
+  float: left;
+  display: block;
+  margin: 0.5em;
+}
+
+.dent-legend button {
+  margin: 2px;
+}
+
+.mallampati-selected {
+  background: #B2CCFF;
 }
 
 table.tbl th.element {

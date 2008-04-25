@@ -2435,6 +2435,11 @@ table.main td.step {
   margin-left: 1px;
   margin-right: -2px;
 }
+.schema-dentaire {
+  margin: auto;
+  margin-top: 1em;
+  border: 1px dotted #666;
+}
 
 .dent {
   -moz-border-radius: 100%;
@@ -2444,8 +2449,11 @@ table.main td.step {
 }
 
 .hover {
-  border: 2px solid #FF0000;
-  background: transparent;
+  border: 2px solid #F00;
+}
+
+.focus {
+  border: 1px solid #F00;
 }
 
 .bridge {
@@ -2457,7 +2465,7 @@ table.main td.step {
 }
 
 .mobile {
-	background: #33CC00;
+  background: #33CC00;
 }
 
 .appareil {
@@ -2467,4 +2475,76 @@ table.main td.step {
 .dent-menu {
   position: absolute;
   z-index: 8;
+  border: 1px solid #999;
+  background: #fff;
+}
+
+.dent-menu a {
+  display: block;
+  cursor: pointer;
+  padding: 3px;
+  color: #000;
+}
+
+.dent-menu a:hover {
+  text-decoration: none;
+  color: #666;
+}
+
+.dent-menu a.cancel {
+  padding-top: 0;
+  padding-bottom: 0;
+  text-align: right;
+  background: #999;
+  color: #fff;
+}
+
+.dent-legend {
+  float: right;
+  display: block;
+  margin: 0.5em;
+}
+
+.dent-legend div {
+  padding: 2px;
+  margin: 2px;
+}
+
+.dent-buttons {
+  position: absolute;
+  float: left;
+  display: block;
+  margin: 0.5em;
+}
+
+.dent-legend button {
+  margin: 2px;
+}
+
+.mallampati-selected {
+  background: #B2CCFF;
+}
+
+
+table.tbl th.element {
+  background-color: #ddf;
+  color: #000;
+}
+
+.div_signature {
+  position: absolute;
+  right: 15px;
+}
+
+.div_signature button {
+  margin-top: -3px;
+}
+
+table.tbl th.arretee {
+  background-color: #ddd;
+  color: #000;
+}
+
+table.tbl th.traitement {
+  background-color: #7c7;
 }

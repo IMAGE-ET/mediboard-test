@@ -673,18 +673,6 @@ var ViewPort = {
 
 
 /**
- * Unique Id generator helper
- */
-
-var UniqueId = {
-  iCounter: 0,
-  generate: function() {
-    var id = "mbUniqueId-" + this.iCounter++;
-    return id;
-  }
-}
-
-/**
  * ObjectTooltip Class
  *   Handle object tooltip creation, associated with a MbObject and a target HTML element
  */
@@ -696,9 +684,7 @@ Class.extend(ObjectTooltip, {
   // Constructor
   initialize: function(eTrigger, oOptions) {
     eTrigger = $(eTrigger);
-    if(!eTrigger.id) {
-      eTrigger.id = UniqueId.generate();
-    }
+    eTrigger.identify();
     this.sTrigger = eTrigger.id;
     this.sDiv = null;
     this.sTarget = null;
@@ -778,7 +764,7 @@ Class.extend(ObjectTooltip, {
   createDiv: function() {
     var eTrigger = $(this.sTrigger);  
     var eDiv  = Dom.cloneElemById("tooltipTpl",true);
-    eDiv.id = UniqueId.generate();
+    eDiv.identify();
     Element.classNames(eDiv).add(this.mode.sClass);
     Element.hide(eDiv);
     eDiv.removeAttribute("_extended");
@@ -786,9 +772,7 @@ Class.extend(ObjectTooltip, {
     eTrigger.parentNode.insertBefore(eDiv, eTrigger.nextSibling);
     var eTarget = document.getElementsByClassName("content", eDiv)[0];
     eTarget.removeAttribute("_extended");
-    if(!eTarget.id) {
-      eTarget.id = UniqueId.generate();
-    }
+    eTarget.identify();
     this.sTarget = eTarget.id;
   }  
    
@@ -1423,9 +1407,9 @@ Class.extend (Control.Tabs, {
     if (oField) {
       oField.focus();
     } else {
-      var oInput = $$('#'+iIntexTab+' input', '#'+iIntexTab+' select', '#'+iIntexTab+' button', '#'+iIntexTab+' textarea');
-      if (oInput[0]) {
-        oInput[0].focus();
+      var oForm = $$('form')[0];
+      if (oForm) {
+        oForm.focusFirstElement();
       }
     }
   }
