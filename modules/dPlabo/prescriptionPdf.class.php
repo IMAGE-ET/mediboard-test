@@ -29,7 +29,7 @@ class CPrescriptionPdf extends CMbPdf {
   
  	
 	public function Footer() {
-	  $this->viewBarcode(15,240,5,null,30,true);
+	  $this->viewBarcode(15,230,5,null,30,true);
 	  $this->SetFontSize(12);	
 	  
 		$this->SetXY($this->original_lMargin, 290); 
