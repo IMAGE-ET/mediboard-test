@@ -1,6 +1,6 @@
 <script type="text/javascript">
 
-function signerActes(object_id, object_class){
+signerActes = function(object_id, object_class){
   var url = new Url;
   url.setModuleAction("dPsalleOp", "vw_signature_actes");
   url.addParam("object_id", object_id);
@@ -45,7 +45,7 @@ function signerActes(object_id, object_class){
     </td>
   </tr>
 
-  {{if $module == "dPsalleOp" && $dPconfig.dPsalleOp.CActeCCAM.signature}}
+  {{if ($module == "dPsalleOp" || $module == "dPhospi") && $dPconfig.dPsalleOp.CActeCCAM.signature}}
   <!-- Signature des actes -->
   <tr>
 	  <td class="button">
