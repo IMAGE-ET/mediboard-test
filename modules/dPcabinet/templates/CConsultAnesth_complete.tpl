@@ -183,7 +183,8 @@ newExam = function(sAction, consultation_id) {
   </tr>
   
   {{if $object->mallampati || $object->bouche ||
-       $object->distThyro || $object->etatBucco || $object->conclusion}}
+       $object->distThyro || $object->etatBucco || 
+       $object->examenCardio || $object->examenPulmo || $object->conclusion}}
   <tr>
     <th class="title" colspan="4">
       Conditions d'intubation
@@ -197,6 +198,16 @@ newExam = function(sAction, consultation_id) {
     <td class="text" colspan="2">
       <strong>Etat bucco-dentaire :</strong>
       <i>{{$object->etatBucco|nl2br}}</i>
+    </td>
+  </tr>
+  <tr>
+    <td class="text" colspan="2">
+      <strong>Examen cardiovasculaire :</strong>
+      <i>{{$object->examenCardio|nl2br}}</i>
+    </td>
+    <td class="text" colspan="2">
+      <strong>Examen pulmonaire :</strong>
+      <i>{{$object->examenPulmo|nl2br}}</i>
     </td>
   </tr>
   <tr>

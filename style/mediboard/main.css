@@ -2836,6 +2836,7 @@ table.main td.step {
   cursor: pointer;
   padding: 3px;
   color: #000;
+  clear: both;
 }
 
 .dent-menu a:hover {
@@ -2853,7 +2854,6 @@ table.main td.step {
 
 .dent-legend {
   float: right;
-  display: block;
   margin: 0.5em;
 }
 

@@ -37,6 +37,8 @@ class CConsultAnesth extends CMbObject {
   var $bouche        = null;
   var $distThyro     = null;
   var $etatBucco     = null;
+  var $examenCardio  = null;
+  var $examenPulmo   = null;
   var $conclusion    = null;
   var $position      = null;
   var $rai           = null;
@@ -138,6 +140,8 @@ class CConsultAnesth extends CMbObject {
     $specs["bouche"]           = "enum list|m20|m35|p35";
     $specs["distThyro"]        = "enum list|m65|p65";
     $specs["etatBucco"]        = "text";
+    $specs["examenCardio"]     = "text";
+    $specs["examenPulmo"]      = "text";
     $specs["conclusion"]       = "text";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
     
@@ -167,6 +171,8 @@ class CConsultAnesth extends CMbObject {
       "tabac"         => null,
       "oenolisme"     => null,
       "etatBucco"     => null,
+      "examenCardio"  => null,
+      "examenPulmo"   => null,
       "conclusion"    => null,
       "premedication" => null,
       "prepa_preop"   => null

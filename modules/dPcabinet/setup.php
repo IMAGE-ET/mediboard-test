@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.03";
+$config["mod_version"]     = "1.04";
 $config["mod_type"]        = "user";
 
 
@@ -1119,7 +1119,13 @@ class CSetupdPcabinet extends CSetup {
             ADD `sejour_id` INT(11) UNSIGNED AFTER `operation_id`";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.03";
+    $this->makeRevision("1.03");
+    $sql = "ALTER TABLE `consultation_anesth` 
+      ADD `examenCardio` TEXT NULL AFTER `etatBucco` ,
+      ADD `examenPulmo` TEXT NULL AFTER `examenCardio` ;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.04";
   }
 }
 ?>

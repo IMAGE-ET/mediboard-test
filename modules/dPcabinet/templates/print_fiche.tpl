@@ -375,6 +375,14 @@
           <td class="text Bold">{{$consult->_ref_consult_anesth->etatBucco}}</td>
         </tr>
         <tr>
+          <th class="NotBold">Examen cardiovasculaire</th>
+          <td class="text Bold">{{$consult->_ref_consult_anesth->examenCardio}}</td>
+        </tr>
+        <tr>
+          <th class="NotBold">Examen pulmonaire</th>
+          <td class="text Bold">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
+        </tr>
+        <tr>
           <th class="NotBold">Conclusion</th>
           <td class="text Bold">{{$consult->_ref_consult_anesth->conclusion}}</td>
         </tr>

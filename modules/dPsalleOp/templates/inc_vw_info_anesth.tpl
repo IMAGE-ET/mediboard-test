@@ -35,6 +35,14 @@
 	   <th>Etat bucco-dentaire</th>
 	   <td>{{$consult_anesth->etatBucco}}</td>
 	 </tr>
+   <tr>
+     <th>Examen cardiovasculaire</th>
+     <td>{{$consult_anesth->examenCardio}}</td>
+   </tr>
+   <tr>
+     <th>Examen pulmonaire</th>
+     <td>{{$consult_anesth->examenCardio}}</td>
+   </tr>
 	 <tr>
 	   <th>Conclusion</th>
 	   <td>{{$consult_anesth->conclusion}}</td>

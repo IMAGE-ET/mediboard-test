@@ -10,15 +10,20 @@ function verifIntubDifficileAndSave(oForm){
     $('divAlertIntubDiff').style.visibility = "hidden";
   }
   
-  $A(oForm.mallampati).each(function (o) {
+  submitFormAjax(oForm, 'systemMsg');
+  
+  var i = null;
+  for (i = 0; i < 4; i++) {
+    var o = oForm.mallampati[i];
+    var bg = $('mallampati_bg_classe'+(i+1));
+    
     if (o.checked) {
-      o.up().up().addClassName('mallampati-selected');
+      bg.addClassName('mallampati-selected');
     }
     else {
-      o.up().up().removeClassName('mallampati-selected');
+      bg.removeClassName('mallampati-selected');
     }
-  });
-  submitFormAjax(oForm, 'systemMsg');
+  }
 }
 
 var SchemaDentaire = {
@@ -50,6 +55,7 @@ var SchemaDentaire = {
     var oImage = $(this.sId+"-image");
     oSchema.addClassName('schema-dentaire');
     
+    if (Prototype.Browser.Gecko) {
     // Clone the image's size to the container
     var img = new Image();
     img.src = oImage.src;
@@ -71,14 +77,14 @@ var SchemaDentaire = {
     oButton.innerHTML = "Réinitialiser";
     oButton.addClassName('buttoncancel');
     oButton.href = '#1';
-    oButton.onclick = SchemaDentaire.reset;
+    oButton.observe('click', SchemaDentaire.reset);
     oActions.insert({top: oButton});
     
     // For each possible state, we add a link in the menu and an item in the legend
     var oClose = new Element('a');
     oClose.innerHTML = 'x';
     oClose.addClassName('cancel');
-    oClose.onclick = SchemaDentaire.closeMenu;
+    oClose.observe('click', SchemaDentaire.closeMenu);
     oMenu.insert({bottom: oClose});
     
     states.each (function (o) {
@@ -96,10 +102,10 @@ var SchemaDentaire = {
       } else {
         oOption.innerHTML = 'Aucun';
       }
-      
-      oOption.onclick = SchemaDentaire.onSelectState;
+      oOption.observe('click', SchemaDentaire.onSelectState);
       oMenu.insert({bottom: oOption});
     });
+    
     oSchema.insert({bottom: oMenu});
     oMenu.hide();
     
@@ -138,16 +144,23 @@ var SchemaDentaire = {
         }
         
         // Callbacks on the tooth
-        oDent.onmouseover = SchemaDentaire.onMouseOver;
-        oDent.onmouseout = SchemaDentaire.onMouseOut;
-        oDent.onclick = SchemaDentaire.onClick;
+        oDent.observe('mouseover', SchemaDentaire.onMouseOver);
+        oDent.observe('mouseout', SchemaDentaire.onMouseOut);
+        oDent.observe('click', SchemaDentaire.onClick);
       }
     );
+    } else {
+      oSchema.innerHTML = 'Requiert des fonctionnalités non présentes dans votre navigateur. <br />Veuillez <a href="http://www.mediboard.org/public/tiki-index.php?page=Firefox" target="_blank">utiliser Firefox</a> pour accéder à cet outil<br />' + oSchema.innerHTML;
+    }
+  },
+  
+  getDent: function (id) {
+    return $(SchemaDentaire.sId+'-dent-'+id);
   },
   
   // Change the state of a tooth
   setState: function (id, state, displayOnly) {
-    var dent = $(SchemaDentaire.sId+'-dent-'+id);
+    var dent = SchemaDentaire.getDent(id);
     if (dent) {
       dent.setOpacity(SchemaDentaire.fAlpha);
       dent.className = 'dent';
@@ -161,30 +174,31 @@ var SchemaDentaire = {
       
       if (!displayOnly) {
         var oForm = document.forms['etat-dent-edit'];
+        if (oForm) {
         oForm.dent.setValue(id);
         oForm.etat.setValue(state ? state : '');
         submitFormAjax(oForm, 'systemMsg');
+        }
       }
     }
   },
   
   onMouseOver: function (e) {
-    e.target.addClassName('hover');
+    e.element().addClassName('hover');
   },
   
   onMouseOut: function (e) {
-    e.target.removeClassName('hover');
+    e.element().removeClassName('hover');
   },
   
   // Show the menu
   onClick: function (e) {
-    if (SchemaDentaire.iSelectedDent) {
-      $(SchemaDentaire.sId+'-dent-'+SchemaDentaire.iSelectedDent).removeClassName('focus');
-    }
-    var dent = e.target;
-    SchemaDentaire.iSelectedDent = dent.dentId;
-    
+    var dent = e.element();
     var menu = $(SchemaDentaire.sId+'-menu');
+    
+    if (SchemaDentaire.iSelectedDent) {
+      SchemaDentaire.getDent(SchemaDentaire.iSelectedDent).removeClassName('focus');
+    }
     
     dent.addClassName('focus');
     menu.setStyle({
@@ -198,14 +212,14 @@ var SchemaDentaire = {
   
   // Selection of a new state in the menu
   onSelectState: function (e) {
-    SchemaDentaire.setState(SchemaDentaire.iSelectedDent, e.target.className);
+    SchemaDentaire.setState(SchemaDentaire.iSelectedDent, Event.element(e).className);
     SchemaDentaire.closeMenu();
   },
   
     // Close the menu
   closeMenu: function (e) {
     $(SchemaDentaire.sId+'-menu').hide();
-    $(SchemaDentaire.sId+'-dent-'+SchemaDentaire.iSelectedDent).removeClassName('focus');
+    SchemaDentaire.getDent(SchemaDentaire.iSelectedDent).removeClassName('focus');
     SchemaDentaire.iSelectedDent = null;
   },
   
@@ -226,7 +240,7 @@ var SchemaDentaire = {
 };
 
 Main.add(function () {
-  var states = [null, 'bridge', 'pivot', 'mobile', 'appareil'];
+  var states = [0, 'bridge', 'pivot', 'mobile', 'appareil'];
   SchemaDentaire.initialize("dents-schema", states);
 } );
 </script>
@@ -255,11 +269,11 @@ Main.add(function () {
         <tr>
           {{foreach from=$consult_anesth->_enumsTrans.mallampati|smarty:nodefaults key=curr_mallampati item=trans_mallampati}}
           <td class="button">
-            <div {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
+            <div id="mallampati_bg_{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
             <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
               <img src="images/pictures/{{$curr_mallampati}}.png" alt="{{$trans_mallampati}}" />
               <br />
-              <input style="display: none;" type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
+              <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
               {{$trans_mallampati}}
             </label>
             </div>
@@ -354,6 +368,30 @@ Main.add(function () {
             </select>
             <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.etatBucco)">{{tr}}New{{/tr}}</button><br />
             {{mb_field object=$consult_anesth field="etatBucco" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+          </td>
+        </tr>
+                
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="examenCardio"}}</th>
+          <td>
+            <select name="_helpers_examenCardio" size="1" onchange="pasteHelperContent(this);this.form.examenCardio.onchange();">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button><br />
+            {{mb_field object=$consult_anesth field="examenCardio" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+          </td>
+        </tr>
+                
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="examenPulmo"}}</th>
+          <td>
+            <select name="_helpers_examenPulmo" size="1" onchange="pasteHelperContent(this);this.form.examenPulmo.onchange();">
+              <option value="">&mdash; Choisir une aide</option>
+              {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
+            </select>
+            <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button><br />
+            {{mb_field object=$consult_anesth field="examenPulmo" onchange="submitFormAjax(this.form, 'systemMsg')"}}
           </td>
         </tr>
         
