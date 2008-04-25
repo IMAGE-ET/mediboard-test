@@ -70,7 +70,7 @@ class CSetupdPqualite extends CSetup {
     $sql = "INSERT INTO `doc_categories` VALUES (1, 'Manuel qualité', 'A');"; $this->addQuery($sql);
     $sql = "INSERT INTO `doc_categories` VALUES (2, 'Procédure',      'B');"; $this->addQuery($sql);
     $sql = "INSERT INTO `doc_categories` VALUES (3, 'Protocole',      'C');"; $this->addQuery($sql);
-    $sql = "INSERT INTO `doc_categories` VALUES (4, 'Enregistement',  'D');"; $this->addQuery($sql);
+    $sql = "INSERT INTO `doc_categories` VALUES (4, 'Enregistrement', 'D');"; $this->addQuery($sql);
     $sql = "INSERT INTO `doc_categories` VALUES (5, 'Données',        'E');"; $this->addQuery($sql);
     $sql = "CREATE TABLE `ei_categories` (
                 `ei_categorie_id` int( 11 ) NOT NULL AUTO_INCREMENT ,

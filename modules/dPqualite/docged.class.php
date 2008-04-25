@@ -211,6 +211,48 @@ class CDocGed extends CMbObject {
     $this->_firstentry->loadRefsFwd();
   }
   
+  function check() {
+    if($this->_id) {
+      $oldObj = new CDocGed();
+      $oldObj->load($this->_id);
+      if($this->group_id === null) {
+        $this->group_id = $oldObj->group_id;
+      }
+      if($this->doc_chapitre_id === null) {
+        $this->doc_chapitre_id = $oldObj->doc_chapitre_id;
+      }
+      if($this->doc_categorie_id === null) {
+        $this->doc_categorie_id = $oldObj->doc_categorie_id;
+      }
+      if($this->num_ref === null) {
+        $this->num_ref = $oldObj->num_ref;
+      }
+      if($this->annule === null) {
+        $this->annule = $oldObj->annule;
+      }
+    }
+    if($this->annule == 1) {
+      return null;
+    }
+    $where = array();
+    if($this->_id) {
+      $where["doc_ged_id"] = "!= '".$this->_id."'";
+    }
+    $where["num_ref"]          = "IS NOT NULL";
+    $where["group_id"]         = "= '".$this->group_id."'";
+    $where["doc_chapitre_id"]  = "= '".$this->doc_chapitre_id."'";
+    $where["doc_categorie_id"] = "= '".$this->doc_categorie_id."'";
+    $where["num_ref"]          = "= '".$this->num_ref."'";
+    $where["annule"]           = "= '0'";
+    $order = "num_ref DESC";
+    $sameNumRef = new CDocGed;
+    $sameNumRef->loadObject($where,$order);
+    if($sameNumRef->_id) {
+      return "Un document existe déjà avec la même référence";
+    }
+    return null;
+  }
+  
   function canDeleteEx() {
     // Suppr si Demande, redac, valid ou refus de demande (Terminé sans doc actif)
     if($this->etat==self::DEMANDE 

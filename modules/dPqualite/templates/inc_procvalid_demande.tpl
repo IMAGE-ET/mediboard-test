@@ -131,6 +131,7 @@
       </select>
     </td>
   </tr>
+  {{/if}}
   <tr>
     <th>
       <label for="ged[num_ref]" title="{{tr}}CDocGed-num_ref-desc{{/tr}}">
@@ -138,10 +139,9 @@
       </label>
     </th>
     <td>
-      <input type="text" name="ged[num_ref]" class="{{$docGed->_props.num_ref}}" />
+      <input type="text" name="ged[num_ref]" class="{{$docGed->_props.num_ref}}" value="{{$docGed->num_ref}}" />
     </td>
   </tr>
-  {{/if}}     
   <tr>
     <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
     <td>

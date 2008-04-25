@@ -77,6 +77,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
         $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
         $where["num_ref"]          = "= '".$this->_obj->num_ref."'";
+        $where["annule"]           = "= '0'";
         $order = "num_ref DESC";
         $sameNumRef = new CDocGed;
         $sameNumRef->loadObject($where,$order);
@@ -91,6 +92,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
         $where["group_id"]         = "= '".$this->_objBefore->group_id."'";
         $where["doc_chapitre_id"]  = "= '".$this->_obj->doc_chapitre_id."'";
         $where["doc_categorie_id"] = "= '".$this->_obj->doc_categorie_id."'";
+        $where["annule"]           = "= '0'";
         $order = "num_ref DESC";
         $lastNumRef = new CDocGed;
         $lastNumRef->loadObject($where,$order);
