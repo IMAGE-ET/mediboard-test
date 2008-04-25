@@ -332,16 +332,6 @@ table.tabmenu td.selectedRight {
 }
 
 /* Inputs */
-input,
-select,
-textarea {
-  color: #082F54;
-  background-image:url(./images/pictures/input.png);
-  border:1px solid #444;
-  font-size: 12px;
-  margin: 1px;
-  padding: 1px;
-}
 
 button, 
 a.button, 
@@ -609,9 +599,15 @@ option {
 input,
 select,
 textarea {
-  padding: 1px;
-  border: 1px #a5acb2 solid;
+  color: #082F54;
   background: #fff;
+  border: 1px #a5acb2 solid;
+  font-size: 12px;
+  padding: 1px;
+}
+
+select {
+  font-size: 10px;
 }
 
 input:focus,
