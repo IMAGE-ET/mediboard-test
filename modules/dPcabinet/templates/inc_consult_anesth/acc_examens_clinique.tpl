@@ -1,6 +1,6 @@
 <script type="text/javascript">
-function calculImcVst(){
-   var oForm = document.editAnesthPatFrm;
+function calculImcVst(oForm){
+   oForm = document.editAnesthPatFrm;
    var sImcValeur = "";
    var fImc       = "";
    var fVst       = "";
@@ -33,7 +33,7 @@ function calculImcVst(){
 
 <table class="form">
   <tr>
-    <td>
+    <td rowspan="4">
       <form name="editAnesthPatFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -46,6 +46,32 @@ function calculImcVst(){
             {{mb_field object=$consult_anesth field="poid" tabindex="1" size="4" onchange="javascript:calculImcVst();submitForm(this.form);"}}
             kg
           </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="taille"}}</th>
+          <td>
+            {{mb_field object=$consult_anesth field="taille" tabindex="2" size="4" onchange="javascript:calculImcVst();submitForm(this.form);"}}
+            cm
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="_vst"}}</th>
+          <td class="readonly">
+            {{mb_field object=$consult_anesth field="_vst" size="4"  readonly="readonly"}}
+            ml
+          </td>
+        </tr>
+        
+        <tr>
+          <th>{{mb_label object=$consult_anesth field="_imc"}}</th>
+          <td class="readonly">
+            {{mb_field object=$consult_anesth field="_imc" size="4" readonly="readonly"}}
+          </td>
+        </tr>
+        
+        <tr>
           <th>{{mb_label object=$consult_anesth field="tasys"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="tasys" tabindex="3" size="2" onchange="submitForm(this.form);"}}
@@ -54,24 +80,16 @@ function calculImcVst(){
             cm Hg
           </td>
         </tr>
+
         <tr>
-          <th>{{mb_label object=$consult_anesth field="taille"}}</th>
-          <td>
-            {{mb_field object=$consult_anesth field="taille" tabindex="2" size="4" onchange="javascript:calculImcVst();submitForm(this.form);"}}
-            cm
-          </td>
           <th>{{mb_label object=$consult_anesth field="pouls"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="pouls" size="4" tabindex="5" onchange="submitForm(this.form);"}}
             / min
           </td>
         </tr>
+        
         <tr>
-          <th>{{mb_label object=$consult_anesth field="_vst"}}</th>
-          <td class="readonly">
-            {{mb_field object=$consult_anesth field="_vst" size="4"  readonly="readonly"}}
-            ml
-          </td>
           <th>{{mb_label object=$consult_anesth field="spo2"}}</th>
           <td>
             {{mb_field object=$consult_anesth field="spo2" tabindex="6" size="4" onchange="submitForm(this.form);"}}
@@ -79,16 +97,47 @@ function calculImcVst(){
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$consult_anesth field="_imc"}}</th>
-          <td class="readonly">
-            {{mb_field object=$consult_anesth field="_imc" size="4" readonly="readonly"}}
-          </td>
           <td id="imcValeur" colspan="2" style="color:#F00;">{{$consult_anesth->_imc_valeur}}</td>
         </tr>
         </table>
-      </form>
-    </td>
-    <td class="greedyPane">
+        </form>
+      </td>
+      
+      <td>
+        <form name="editAnesthExamenCardio" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+          {{mb_label object=$consult_anesth field="examenCardio"}}
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+          <select name="_helpers_examenCardio" size="1" onchange="pasteHelperContent(this);this.form.examenCardio.onchange();">
+            <option value="">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.examenCardio.no_enum}}
+          </select>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenCardio)">{{tr}}New{{/tr}}</button>
+          <br />
+          {{mb_field object=$consult_anesth field="examenCardio" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+        </form>
+      </td>
+      
+      <td>
+        <form name="editAnesthExamenPulmo" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+          {{mb_label object=$consult_anesth field="examenPulmo"}}
+          <input type="hidden" name="m" value="dPcabinet" />
+          <input type="hidden" name="del" value="0" />
+          <input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+          <select name="_helpers_examenPulmo" size="1" onchange="pasteHelperContent(this);this.form.examenPulmo.onchange();">
+            <option value="">&mdash; Choisir une aide</option>
+            {{html_options options=$consult_anesth->_aides.examenPulmo.no_enum}}
+          </select>
+          <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.examenPulmo)">{{tr}}New{{/tr}}</button>
+          <br />
+          {{mb_field object=$consult_anesth field="examenPulmo" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+        </form>
+      </td>
+    </tr>
+
+    <tr>
+    <td colspan="2">
       <form class="watch" name="editFrmExams" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
