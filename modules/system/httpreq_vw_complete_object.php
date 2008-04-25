@@ -24,8 +24,8 @@ if (!$object->_id) {
 
 $object->loadComplete();
 
-$canModule = CModule::getCanDo($object->_ref_module->mod_name);
-$can->read = $canModule->read && $object->canRead();
+$can->read = $object->canRead();
+$can->edit = $object->canEdit();
 $can->needsRead();
 
 // Création du template

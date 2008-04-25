@@ -27,12 +27,8 @@ $options = CMbArray::filterPrefix($_GET, "view_");
 
 $object->loadView();
 
-//$canModule = CModule::getCanDo($object->_ref_module->mod_name);
-//$can->read = $canModule->read && $object->canRead();
-//$can->needsRead();
-$can = CModule::getCanDo($object->_ref_module->mod_name);
-$can->read = $can->read && $object->canRead();
-$can->edit = $can->edit && $object->canEdit();
+$can->read = $object->canRead();
+$can->edit = $object->canEdit();
 $can->needsRead();
 
 // If no template is defined, use generic
