@@ -396,15 +396,18 @@ class CConsultAnesth extends CMbObject {
   }
 
   function fillLimitedTemplate(&$template) {
-    $template->addProperty("Anesthésie - poids"          , $this->poid." kg");
-    $template->addProperty("Anesthésie - taille"         , $this->taille." cm");
-    $template->addProperty("Anesthésie - IMC"            , $this->_imc);
-    $template->addProperty("Anesthésie - tabac"          , $this->tabac);
-    $template->addProperty("Anesthésie - oenolisme"      , $this->oenolisme);
-    $template->addProperty("Anesthésie - TA"             , $this->tasys." / ".$this->tadias);
-    $template->addProperty("Anesthésie - Pouls"          , $this->pouls);
-    $template->addProperty("Anesthésie - Groupe Sanguin" , $this->groupe." ".$this->rhesus);
-    $template->addProperty("Anesthésie - ASA"            , $this->ASA);
+    $template->addProperty("Anesthésie - poids"                  , $this->poid." kg");
+    $template->addProperty("Anesthésie - taille"                 , $this->taille." cm");
+    $template->addProperty("Anesthésie - IMC"                    , $this->_imc);
+    $template->addProperty("Anesthésie - tabac"                  , $this->tabac);
+    $template->addProperty("Anesthésie - oenolisme"              , $this->oenolisme);
+    $template->addProperty("Anesthésie - TA"                     , $this->tasys." / ".$this->tadias);
+    $template->addProperty("Anesthésie - Pouls"                  , $this->pouls);
+    $template->addProperty("Anesthésie - Groupe Sanguin"         , $this->groupe." ".$this->rhesus);
+    $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
+    $template->addProperty("Anesthésie - Etat bucco-dentaire"    , $this->etatBucco);
+    $template->addProperty("Anesthésie - Examen cardiovasculaire", $this->examenCardio);
+    $template->addProperty("Anesthésie - Examen pulmonaire"      , $this->examenPulmo);
   }
 
   function canDeleteEx() {
