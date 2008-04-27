@@ -369,7 +369,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
 			        Formater FSE
 			      </button>
 			      {{/if}}
-			      <button class="change" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
+			      <button class="change intermax-result" type="button" onclick="Intermax.result(['Formater FSE', 'Consulter FSE', 'Annuler FSE']);">
 			        Mettre à jour FSE
 			      </button>
           </td>
@@ -701,7 +701,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
       <button class="search" type="button" onclick="Intermax.trigger('Lire CPS');">
         Lire CPS
       </button>
-      <button class="change" type="button" onclick="Intermax.result('Lire CPS');">
+      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire CPS');">
         Associer CPS
       </button>
       {{/if}}
@@ -717,7 +717,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
       </button>
-      <button class="change" type="button" onclick="Intermax.result();">
+      <button class="change intermax-result" type="button" onclick="Intermax.result();">
         Associer Vitale
       </button>
       {{/if}}

@@ -77,7 +77,7 @@ if ($selConsult) {
   $consult->loadRefsPrescriptions();
   
   $prescription = $consult->_ref_prescriptions["externe"];
-  if($prescription->_id){
+  if ($prescription && $prescription->_id){
     $prescription->loadRefsLinesMedComments();
     $prescription->loadRefsLinesElementsComments();
   }

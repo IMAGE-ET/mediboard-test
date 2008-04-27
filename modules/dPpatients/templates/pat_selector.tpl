@@ -158,7 +158,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
       </button>
-      <button class="change" type="button" onclick="Intermax.result();">
+      <button class="change intermax-result" type="button" onclick="Intermax.result();">
         Résultat Vitale
       </button>
     {{/if}}

@@ -100,7 +100,7 @@ var Patient = {
       <button class="search" type="button" onclick="Intermax.trigger('Lire Vitale');">
         Lire Vitale
       </button>
-      <button class="change" type="button" onclick="Intermax.result('Lire Vitale');">
+      <button class="change intermax-result" type="button" onclick="Intermax.result('Lire Vitale');">
         Résultat Vitale
       </button>
       {{/if}}

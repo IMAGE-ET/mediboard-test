@@ -350,11 +350,15 @@ button.stop, a.buttonstop {
   padding-left: 18px;
 }
 
-button.notext{
+button.notext {
   font-size: 0;
   padding : 15px 0px 0px 0px;
   margin  : 1px 1px;
   width: 19px;
+}
+
+button.intermax-result {
+	opacity: .4;
 }
 
 a.notext{

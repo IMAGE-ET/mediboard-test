@@ -918,6 +918,8 @@ Object.extend(Calendar, {
   },
   
   regField: function(sFormName, sFieldName, bTime, userDates) {
+    userDates |= {};
+    
 		if (!Object.isArray(userDates.spots)) {
 			userDates.spots = Object.values(userDates.spots);
 		}

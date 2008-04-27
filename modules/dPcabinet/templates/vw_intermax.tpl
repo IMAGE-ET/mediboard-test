@@ -22,7 +22,7 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   <!-- Yoplets for InterMax -->
   <tr>
     <th class="title">
-      <button class="change" onclick="Intermax.result();" style="float: right">
+      <button class="change intermax-result" onclick="Intermax.result();" style="float: right">
         Intégrer résultat
       </button>
       Fonctions LogicMax disponibles
