@@ -87,7 +87,9 @@ var Intermax = {
   
   watchResult: function(aAllowedFunctions) {
     if (this.autoWatch && !this.watcher) {
-	  	this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 0.5);
+    	// Empty current output
+	    document.intermaxResult.performRead();
+	  	this.watcher = new PeriodicalExecuter(function() { Intermax.result(aAllowedFunctions) }, 1);
     }
     
   },
