@@ -155,7 +155,7 @@ Document.refreshList = function(){
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="tab" value="vw_idx_patients" />
       <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
-      {{if $useVitale}}
+      {{if @$useVitale}}
       <input type="hidden" name="useVitale" value="1" />
       {{/if}}
       
@@ -168,7 +168,7 @@ Document.refreshList = function(){
       {{if $canPatients->edit}}
       <button type="button" class="modify" onclick="editPatient()">
         {{tr}}Modify{{/tr}}
-        {{if $useVitale}}avec Vitale{{/if}}
+        {{if @$useVitale}}avec Vitale{{/if}}
       </button>
       {{/if}}
       </form>
