@@ -196,7 +196,7 @@ function pageMain() {
       {{assign var="current_m" value="dPurgences"}}
       {{assign var="_is_anesth" value="0"}}
       {{assign var="consult" value=$rpu->_ref_consult}}
-      {{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}
+      {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
     </td>
      
   </tr>
