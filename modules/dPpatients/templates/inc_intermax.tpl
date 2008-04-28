@@ -91,7 +91,9 @@ Intermax.errors = {
   <param name="lineSeparator" value="---" />
   <param name="debug" value={{if $debug=="true"}}"true"{{else}}"false"{{/if}} />
   <param name="filePath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/INTERMAX.INI" />
+  {{if $dPconfig.dPpatients.intermax.auto_watch}}
   <param name="flagPath" value="{{$app->user_prefs.InterMaxDir}}/INTERMAX/CALL.FLG" />
+  {{/if}}
 </applet>
 
 

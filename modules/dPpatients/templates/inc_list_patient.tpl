@@ -151,17 +151,17 @@ var Patient = {
         <img src="images/icons/carte_vitale.png" alt="lecture vitale" title="Bénéficiaire associé à la carte Vitale" />
       </div>
       {{/if}}
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="_view"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="naissance"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="adresse"}}
         {{mb_value object=$curr_patient field="cp"}}
         {{mb_value object=$curr_patient field="ville"}}
@@ -188,17 +188,17 @@ var Patient = {
     <td><input type="checkbox" name="fusion_{{$curr_patient->_id}}" /></td>
     {{/if}}
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="_view"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="naissance"}}
       </a>
     </td>
     <td class="text">
-      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}">
+      <a href="?m={{$m}}&amp;tab={{$tabPatient}}{{$curr_patient->_id}}&amp;useVitale={{$useVitale}}">
         {{mb_value object=$curr_patient field="adresse"}}
         {{mb_value object=$curr_patient field="cp"}}
         {{mb_value object=$curr_patient field="ville"}}
