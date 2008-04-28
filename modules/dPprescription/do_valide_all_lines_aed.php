@@ -81,7 +81,6 @@ if($prescription_id && $chapitre=="medicament"){
 }
 
 
-// Validations de tous les $element si on est an mode pharma
 if($prescription_id && $chapitre!="medicament" && !$mode_pharma){
 	// Elements
 	$ljoinElement["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";

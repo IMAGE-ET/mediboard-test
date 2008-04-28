@@ -21,6 +21,7 @@
               <input type="hidden" name="m" value="dPprescription" />
               <input type="hidden" name="moment_unitaire_id" value="{{$moment->_id}}" />
              {{mb_field object=$moment field="principal" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
+            
             </form>
           </td>
         </tr>

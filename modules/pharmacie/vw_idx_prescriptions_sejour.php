@@ -25,6 +25,8 @@ $filter_sejour = new CSejour();
 // Recuperation des valeurs
 $praticien_id = mbGetValueFromGet("praticien_id");
 $service_id   = mbGetValueFromGet("service_id");
+//$valide_pharma = mbGetValueFromGet("valide_pharma");
+
 $filter_sejour->_date_min     = mbGetValueFromGet("_date_min");
 $filter_sejour->_date_max     = mbGetValueFromGet("_date_max");
 
@@ -105,6 +107,7 @@ $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", "1");
 $smarty->assign("prescription", new CPrescription());
 $smarty->assign("filter_sejour", $filter_sejour);
+$smarty->assign("filter_line_med", new CPrescriptionLineMedicament());
 $smarty->assign("prescriptions", $prescriptions);
 $smarty->assign("contexteType", "");
 $smarty->assign("praticiens", $praticiens);

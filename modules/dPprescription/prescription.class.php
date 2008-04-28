@@ -175,11 +175,21 @@ class CPrescription extends CMbObject {
   }
   
   // Chargement des lignes d'element
-  function loadRefsLinesElement(){
+  function loadRefsLinesElement($chapitre = ""){
   	$line = new CPrescriptionLineElement();
-    $where = array("prescription_id" => "= $this->_id");
+  	$where = array();
+  	$ljoin = array();
+  	
+  	if($chapitre){
+  	  $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+	    $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
+      $where["category_prescription.chapitre"] = " = 'soin'";
+  	}
+  	
+    $where["prescription_id"] = " = '$this->_id'";
+    
     $order = "prescription_line_element_id DESC";
-    $this->_ref_prescription_lines_element = $line->loadList($where, $order);
+    $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     foreach ($this->_ref_prescription_lines_element as &$line_element){
     	$line_element->loadRefElement();
     	$line_element->loadRefPraticien();

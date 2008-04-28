@@ -50,10 +50,12 @@
    
    
    {{if !$mode_protocole}}
+   {{if $prescription->type != "sortie" && $prescription->type != "externe"}}
    <!-- Impression de la prescription -->
    <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
      Ordonnance
    </button>
+   {{/if}}
    
    <!-- Affichage du recapitulatif des alertes -->
    <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
@@ -62,11 +64,30 @@
    
    {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
    {{if $antecedents}}
-   <button type="button" class="warning" onclick="Prescription.viewAllergies('{{$prescription->_id}}')">
-     Allergies
-   </button>
+   {{if array_key_exists('alle', $antecedents)}}
+     {{assign var=allergies value=$antecedents.alle}}
+   
+   
+    <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
+         onmouseover="$('allergies{{$prescription->_id}}').show();"
+         onmouseout="$('allergies{{$prescription->_id}}').hide();" />
+    
+    <div id="allergies{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
+      <strong>Allergies</strong>
+      <ul>
+	    {{foreach from=$allergies item=allergie}}
+	    <li>
+			    {{if $allergie->date}}
+			 	    {{$allergie->date|date_format:"%d/%m/%Y"}}:
+				  {{/if}} 
+	  			{{$allergie->rques}}
+	  	</li>
+	  	{{/foreach}}
+		 </ul>   
+    </div>   
    {{/if}}
    {{/if}} 
+   {{/if}}
    </td>
    
        

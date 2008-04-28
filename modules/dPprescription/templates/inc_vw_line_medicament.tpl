@@ -89,15 +89,24 @@
         <img src="images/icons/warning.png" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
         <br />
     {{/if}}  
+    {{if $curr_line->_ref_produit->hospitalier && $prescription->type == "sortie"}}
+        <img src="images/icons/warning.png" alt="Produit Hospitalier" title="Produit Hospitalier" />
+        <br />
+    {{/if}}
+    
     </td>
     <td colspan="2">
 	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
 	    {{if $perm_edit}}
 		    <script type="text/javascript">
 		      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
-		      
+		      /*
 		      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
 	        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
+		      */
+		      regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
+	        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
+		      
 		      
 		    </script>
 	    {{/if}}          

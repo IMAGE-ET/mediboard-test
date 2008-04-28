@@ -51,6 +51,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   // Behaviour field
   var $_delete_prises = null;
   
+  // Logs
+  var $_ref_log_validation_pharma = null;
+  
   
   function CPrescriptionLineMedicament() {
     $this->CMbObject("prescription_line_medicament", "prescription_line_medicament_id");
@@ -188,6 +191,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       }
     }
   }
+  
+  
+  function loadRefLogValidationPharma(){
+    $this->_ref_log_validation_pharma = $this->loadLastLogForField("valide_pharma");
+  }
+  
   
 }
 

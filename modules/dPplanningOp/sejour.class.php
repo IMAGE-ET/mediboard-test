@@ -461,6 +461,44 @@ class CSejour extends CCodable {
     $this->_ref_sejour =& $this;
   }
 
+  // Chargement de l'affectation courante (en fct de $date)
+  function loadCurrentAffectation($date = "") {
+  	if(!$date){
+  		$date = mbDateTime();
+  	}
+  
+		$this->_ref_curr_affectation = new CAffectation();
+  	$where = array();
+  	$where["sejour_id"] = " = '$this->_id'";
+		$where["entree"] = "<= '$date'";
+    $where["sortie"] = ">= '$date'";
+    $this->_ref_curr_affectation->loadObject($where);
+    if($this->_ref_curr_affectation->_id){
+    	$this->_ref_curr_affectation->loadRefLit();
+    	$this->_ref_curr_affectation->_ref_lit->loadCompleteView();
+    }
+    
+    $this->_ref_before_affectation = new CAffectation();
+    $where = array();
+    $where["sortie"] = " < '$date'";
+    $where["sejour_id"] = " = '$this->_id'";
+    $this->_ref_before_affectation->loadObject($where);
+    if($this->_ref_before_affectation->_id){
+    	$this->_ref_before_affectation->loadRefLit();
+     	$this->_ref_before_affectation->_ref_lit->loadCompleteView();
+    }
+    
+    $this->_ref_next_affectation = new CAffectation();
+    $where = array();
+    $where["entree"] = "> '$date'"; 
+    $where["sejour_id"] = " = '$this->_id'";
+    $this->_ref_next_affectation->loadObject($where);
+    if($this->_ref_next_affectation->_id){
+    	$this->_ref_next_affectation->loadRefLit();
+    	$this->_ref_next_affectation->_ref_lit->loadCompleteView();	
+    }  
+  }
+    
   // Chargement du dossier medical du sejour
   function loadRefDossierMedical(){
     $this->_ref_dossier_medical = new CDossierMedical();

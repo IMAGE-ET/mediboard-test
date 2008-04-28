@@ -251,7 +251,6 @@ class CBcbProduit extends CBcbObject {
             LIMIT 0, 20";
     return $ds->loadlist($sql);
   }
-  
 }
 
 ?>

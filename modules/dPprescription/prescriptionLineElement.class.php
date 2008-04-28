@@ -31,8 +31,12 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   function updateFormFields(){
     parent::updateFormFields();
+    $this->loadRefElement();
+    $this->_view = $this->_ref_element_prescription->_view;
+    
     // Un element ne peut jamais être un traitement
     $this->_traitement = 0;	
+    $this->_unite_prise = "soins";
   }
   
   function getSpecs() {
