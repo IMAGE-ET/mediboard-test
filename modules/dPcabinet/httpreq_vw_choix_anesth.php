@@ -62,7 +62,14 @@ if ($selConsult) {
     if($consult->_ref_consult_anesth->_ref_operation->operation_id){
       $consult->_ref_consult_anesth->_ref_operation->loadAides($userSel->user_id);
       $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
-      $consult->_ref_consult_anesth->_ref_operation->_ref_sejour->loadRefsPrescriptions();
+      $sejour =& $consult->_ref_consult_anesth->_ref_operation->_ref_sejour;
+      $sejour->_ref_prescriptions = $sejour->loadBackRefs("prescriptions"); 
+      
+      foreach($sejour->_ref_prescriptions as &$_prescription){
+    	  // Chargement du nombre d'elements pour chaque prescription
+	      $_prescription->countLinesMedsElements();
+	      $_prescription->loadRefPraticien();
+      }
     }
   }
 
@@ -80,6 +87,10 @@ $techniquesComp->loadAides($userSel->user_id);
 
 // Création du template
 $smarty = new CSmartyDP();
+
+
+  
+$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 
 $smarty->assign("consult"       , $consult       );
 $smarty->assign("consult_anesth", $consult_anesth);

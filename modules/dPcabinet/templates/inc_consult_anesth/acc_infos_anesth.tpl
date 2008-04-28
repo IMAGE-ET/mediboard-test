@@ -109,7 +109,6 @@ function reloadListTech() {
       {{/if}}
       {{if $sejour}}
         {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
-                  prescription=$sejour->_ref_last_prescription
                   prescriptions=$sejour->_ref_prescriptions 
                   object_id=$sejour->_id 
                   object_class="CSejour" 

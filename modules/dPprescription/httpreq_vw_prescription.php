@@ -7,7 +7,6 @@
  *  @author Romain Ollivier
  */
 
-
 global $AppUI, $can, $m;
 
 $mbProduit = new CBcbProduit();
@@ -56,10 +55,6 @@ $prescription->load($prescription_id);
 
 
 $listProduits = array();
-
-
-$chrono3 = new Chronometer;
-$chrono3->start();
 
 if(!$prescription->_id) {
   $prescription->object_class = $object_class;
@@ -182,10 +177,7 @@ $smarty->assign("category"    , $category);
 $smarty->assign("categories"  , $categories);
 
 $smarty->assign("refresh_pharma", $refresh_pharma);
-
-	
-// first_refresh_protocole => mode_protocole             => inc_vw_prescription
-// first_refresh_pharma => mode_pharma & refresh_pharma  => inc_vw_prescription
+$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 
 
 
@@ -227,6 +219,7 @@ if(!$refresh_pharma && !$mode_protocole){
     }
 	}
 }
+
 
 
 

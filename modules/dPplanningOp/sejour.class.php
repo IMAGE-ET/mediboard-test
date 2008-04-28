@@ -565,6 +565,7 @@ class CSejour extends CCodable {
     }
   }
   
+  
   function loadRefsPrescriptions() {
   	$prescriptions = $this->loadBackRefs("prescriptions");
   

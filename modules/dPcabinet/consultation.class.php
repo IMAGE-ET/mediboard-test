@@ -130,7 +130,7 @@ class CConsultation extends CCodable {
     $backRefs["examnyha"  ]     = "CExamNyha consultation_id";
     $backRefs["exampossum"]     = "CExamPossum consultation_id";
     $backRefs["examigs"   ]     = "CExamIgs consultation_id";
-    $backRefs["prescription"]   = "CPrescription object_id";
+    $backRefs["prescriptions"]   = "CPrescription object_id";
     return $backRefs;
   }
   
@@ -894,7 +894,7 @@ class CConsultation extends CCodable {
   
   // Chargement des prescriptions liées à la consultation
   function loadRefsPrescriptions() {
-  	$prescriptions = $this->loadBackRefs("prescription");
+  	$prescriptions = $this->loadBackRefs("prescriptions");
   	$this->_ref_prescriptions["externe"] = new CPrescription();
   	
     // Cas du module non installé

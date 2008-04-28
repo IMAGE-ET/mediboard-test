@@ -276,7 +276,6 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
       <hr />
       {{assign var=prescriptions value=$consult->_ref_prescriptions}}
       {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
-                prescription=$prescriptions.externe 
                 prescriptions=$prescriptions
                 object_id=$consult->_id 
                 object_class="CConsultation" 

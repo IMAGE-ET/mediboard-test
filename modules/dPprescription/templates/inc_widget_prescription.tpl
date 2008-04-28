@@ -7,26 +7,26 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 
 </script>
 
-{{if $prescription}}
+
+{{if $getActivePrescription}}
 	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
-	  {{if !$prescription->_id}}
+	  {{if !$prescriptions|@count}}
 	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
 	    {{if $object_class == "CSejour"}}
-	      {{mb_label object=$prescription field="type"}}
+	      Type
 	      
-	      {{*mb_field object=$prescription field="_type_sejour"*}}
 	      <select name="_type_sejour">
 	        <option value="pre_admission">Pré-admission</option>
 	        <option value="sejour">Séjour</option>
 	        <option value="sortie">Sortie</option>
 	      </select>
 	      
-	      <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
+	      <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
 	        Créer une prescription
 	      </button>
 	    {{else}}
-	    <button type="button" class="new" onclick="PrescriptionEditor.popup('{{$prescription->_id}}','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
+	    <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
 	      Créer une prescription
 	    </button>
 	    {{/if}}
@@ -47,21 +47,10 @@ Prescription.suffixes = Prescription.suffixes.uniq();
         <th>Soin</th>
       </tr>
   
-	    <!-- Affichage de la prescription de consultation -->
-	    {{if $prescription->object_class == "CConsultation"}}
-	     {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl"}}
-	     {{if array_key_exists('traitement', $prescriptions)}}
-	       {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl" 
-	                 prescription = $prescriptions.traitement}}
-	     {{/if}}
-	    {{else}}
-	      <!-- Affichage des prescriptions de sejour -->
-	      {{foreach from=$prescriptions item=catPrescription}}
-	        {{foreach from=$catPrescription item=_prescription}}
-	          {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl" prescription=$_prescription}}
-	        {{/foreach}}
-	      {{/foreach}}
-	    {{/if}}
+	    {{foreach from=$prescriptions item=_prescription}}
+	      {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl" prescription=$_prescription}}
+	    {{/foreach}}
+	 
 	    </table>
 	    {{/if}}
 	</div>

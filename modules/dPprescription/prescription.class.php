@@ -34,6 +34,9 @@ class CPrescription extends CMbObject {
   // Others Fields
   var $_type_sejour = null;
   
+  var $_count = null;
+  
+  
   function CPrescription() {
     $this->CMbObject("prescription", "prescription_id");
     
@@ -130,6 +133,50 @@ class CPrescription extends CMbObject {
     $this->loadRefObject();
     $this->loadRefPatient();
   }
+  
+  
+  //Chargement du nombre des medicaments et d'elements
+  function countLinesMedsElements(){
+  	$this->_count = array();
+  	
+  	$line_comment_med = new CPrescriptionLineComment();
+  	$ljoin_comment["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
+  	
+  	// Count sur les medicaments
+    $where = array();
+    $where["prescription_id"] = " = '$this->_id'";
+    $where["category_prescription.chapitre"] = "IS NULL";
+  	$line_med = new CPrescriptionLineMedicament();
+  	$line_med->prescription_id = $this->_id;
+  	$this->_count["med"] = $line_med->countMatchingList();
+  	$this->_count["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
+  	
+  	
+  	// Count sur les elements
+  	$ljoin_element["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
+	  $ljoin_element["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
+	  
+  	$line_element = new CPrescriptionLineElement();
+  	$line_comment = new CPrescriptionLineComment();
+		
+  	$tabElements = array("dmi","anapath","biologie","imagerie","consult","kine","soin");
+  	
+  	// Initialisation du tableau
+    foreach($tabElements as $element){
+    	$this->_count[$element] = 0;
+    }
+  	
+    // Parcours des elements
+  	foreach($tabElements as $element){
+  	  $where = array();
+      $where["prescription_id"] = " = '$this->_id'";
+  	  $where["category_prescription.chapitre"] = " = '$element'";
+   	  $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
+			$nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
+			$this->_count[$element] = $nb_element + $nb_comment;
+  	}
+  }
+  
   
   // Chargement des lignes de prescription
   function loadRefsLines() {

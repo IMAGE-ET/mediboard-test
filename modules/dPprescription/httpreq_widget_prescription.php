@@ -8,6 +8,7 @@
 */
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
+
 $prescription = new CPrescription();
 
 if (!$prescription->_ref_module) {
@@ -15,32 +16,18 @@ if (!$prescription->_ref_module) {
   return;
 }
 
+// Chargement de la prescription
 $prescription->load($prescription_id);
 
-// Chargement des lignes de prescriptions
-
 if ($prescription->_id){
-	$prescription->loadRefsLinesMedComments();  
-	$prescription->loadRefsLinesElementsComments();
-
 	$prescription->loadRefObject();
-  $prescription->_ref_object->loadRefsPrescriptions();
-  		
-	if($prescription->object_class == "CConsultation"){
-	  foreach($prescription->_ref_object->_ref_prescriptions as $curr_prescription){
-	  	$curr_prescription->loadRefsLinesMedComments();
-	  	$curr_prescription->loadRefsLinesElementsComments();	
-	  }
-	}
-	
-	if($prescription->object_class == "CSejour"){
-  	foreach($prescription->_ref_object->_ref_prescriptions as $catPrescription){
-  		foreach($catPrescription as &$_prescription){
-  	    $_prescription->loadRefsLinesMedComments();
-  	    $_prescription->loadRefsLinesElementsComments();
-  		}
-	  }
-	}
+	// Chargement de toutes les prescription de l'objet
+  $prescriptions = $prescription->_ref_object->loadBackRefs("prescriptions");
+  foreach($prescriptions as &$_prescription){
+  	// Chargement du nombre d'elements pour chaque prescription
+  	$_prescription->countLinesMedsElements();
+  	$_prescription->loadRefPraticien();
+  }
 }
 
 // Création du template
@@ -51,7 +38,8 @@ $smarty->assign("object_id", $prescription->object_id);
 $smarty->assign("object_class", $prescription->object_class);
 $smarty->assign("praticien_id", $prescription->praticien_id);
 $smarty->assign("prescription", $prescription);
-$smarty->assign("prescriptions", $prescription->_ref_object->_ref_prescriptions);
+$smarty->assign("prescriptions", $prescriptions);
+$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 
 $smarty->display("inc_widget_prescription.tpl");
 

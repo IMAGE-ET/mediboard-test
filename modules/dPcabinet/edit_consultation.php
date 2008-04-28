@@ -105,13 +105,11 @@ $codePraticienEc = null;
 if ($consult->_id) {
   $consult->loadRefs();
   
-  $consult->loadRefsPrescriptions();
- 
+  $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
   if($consult->_ref_prescriptions){
 	  foreach($consult->_ref_prescriptions as &$prescription){
 	  	if($prescription->_id){
-	  	  $prescription->loadRefsLinesMedComments();
-	  	  $prescription->loadRefsLinesElementsComments();
+	      $prescription->countLinesMedsElements();
 	  	}
 	  }
   }
@@ -126,7 +124,17 @@ if ($consult->_id) {
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
       $consultAnesth->_ref_sejour->loadRefDossierMedical();
-      $consultAnesth->_ref_sejour->loadRefsPrescriptions(); 
+      
+      //$consultAnesth->_ref_sejour->loadRefsPrescriptions(); 
+      $consultAnesth->_ref_sejour->_ref_prescriptions = $consultAnesth->_ref_sejour->loadBackRefs("prescriptions");
+      if($consultAnesth->_ref_sejour->_ref_prescriptions){
+	      foreach($consultAnesth->_ref_sejour->_ref_prescriptions as &$prescription_sejour){
+	  	    if($prescription_sejour->_id){
+	          $prescription_sejour->countLinesMedsElements();
+	  	    }
+	      }
+      }
+  
       $consultAnesth->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
@@ -298,12 +306,16 @@ foreach ($etat_dents as $etat) {
 
 // Création du template
 $smarty = new CSmartyDP();
+
 $smarty->assign("contrainteProvenance" , $contrainteProvenance );
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);
 
 $smarty->assign("listEtab"           , $listEtab           );
 $smarty->assign("listServicesUrgence", $listServicesUrgence);
+
+$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
+
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);
