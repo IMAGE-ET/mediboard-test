@@ -58,7 +58,16 @@ if ($selConsult) {
   
   if($consult->_ref_consult_anesth->consultation_anesth_id) {
     $consult->_ref_consult_anesth->loadRefs();
-  
+    $sejour =& $consult->_ref_consult_anesth->_ref_sejour;
+    $sejour->_ref_prescriptions = $sejour->loadBackRefs("prescriptions"); 
+    
+    foreach($sejour->_ref_prescriptions as &$_prescription){
+  	  // Chargement du nombre d'elements pour chaque prescription
+     $_prescription->countLinesMedsElements();
+     $_prescription->loadRefPraticien();
+    }
+      
+    
     if($consult->_ref_consult_anesth->_ref_operation->operation_id){
       $consult->_ref_consult_anesth->_ref_operation->loadAides($userSel->user_id);
       $consult->_ref_consult_anesth->_ref_operation->loadRefSejour();
