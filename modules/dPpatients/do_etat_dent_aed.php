@@ -9,6 +9,8 @@
 
 $class = 'CEtatDent';
 
+$_POST['dossier_medical_id'] = CDossierMedical::dossierMedicalId($_POST['_patient_id'], 'CPatient');
+
 $do = new CDoObjectAddEdit($class, 'etat_dent_id');
 
 $do->createMsg = CAppUI::tr("msg-$class-create");

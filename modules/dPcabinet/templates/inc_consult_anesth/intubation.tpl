@@ -34,14 +34,17 @@ var SchemaDentaire = {
   iSelectedDent: null,
   aDentsId: null,
   aDentsNumbers: [
-    11, 12, 13, 14, 15, 16, 17, 18, 
-    21, 22, 23, 24, 25, 26, 27, 28, 
-    31, 32, 33, 34, 35, 36, 37, 38, 
-    41, 42, 43, 44, 45, 46, 47, 48, 
-    51, 52, 53, 54, 55, 
-    61, 62, 63, 64, 65,
-    71, 72, 73, 74, 75,
-    81, 82, 83, 84, 85
+    // Adulte
+    11, 12, 13, 14, 15, 16, 17, 18, // haut droite
+    21, 22, 23, 24, 25, 26, 27, 28, // haut gauche
+    31, 32, 33, 34, 35, 36, 37, 38, // bas gauche
+    41, 42, 43, 44, 45, 46, 47, 48, // bas droite
+    
+    // Enfant
+    51, 52, 53, 54, 55, // haut droite
+    61, 62, 63, 64, 65, // haut gauche
+    71, 72, 73, 74, 75, // bas gauche
+    81, 82, 83, 84, 85  // bas droite
   ],
   
   initialize: function(id, states) {
@@ -59,7 +62,12 @@ var SchemaDentaire = {
     // Clone the image's size to the container
     var img = new Image();
     img.src = oImage.src;
-    oSchema.setStyle({width: img.width+'px'});
+
+    if (img.width != 0) {
+      oSchema.setStyle({width: img.width+'px'});
+    } else {
+      oSchema.setStyle({width: '407px'});
+    }
     
     // Menu initialization
     var oMenu = new Element('div');
@@ -150,7 +158,7 @@ var SchemaDentaire = {
       }
     );
     } else {
-      oSchema.innerHTML = 'Requiert des fonctionnalités non présentes dans votre navigateur. <br />Veuillez <a href="http://www.mediboard.org/public/tiki-index.php?page=Firefox" target="_blank">utiliser Firefox</a> pour accéder à cet outil<br />' + oSchema.innerHTML;
+      oSchema.innerHTML = '' + oSchema.innerHTML;
     }
   },
   
@@ -249,7 +257,7 @@ Main.add(function () {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_etat_dent_aed" />
   <input type="hidden" name="etat_dent_id" value="" />
-  <input type="hidden" name="dossier_medical_id" value="{{$consult->_ref_patient->_ref_dossier_medical->_id}}" />
+  <input type="hidden" name="_patient_id" value="{{$consult->_ref_patient->_id}}" />
   <input type="hidden" name="dent" value="" />
   <input type="hidden" name="etat" value="" />
 </form>
@@ -264,7 +272,7 @@ Main.add(function () {
   <tr><th colspan="5" class="category">Condition d'intubation</th></tr>
   
   <tr>
-    <td style="width: 1%;" class="button" rowspan="20">
+    <td class="button" rowspan="20" style="width: 1%;">
       <div id="dents-schema">
         <img id="dents-schema-image" src="images/pictures/dents.png" border="0" usemap="#dents-schema-map" alt="" /> 
         <map id="dents-schema-map" name="dents-schema-map">
