@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 function submitPersonnel(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadPersonnel });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() {reloadPersonnel(document.forms["affectationPers-aideop"].object_id.value)} });
 }
 
 </script>
