@@ -453,6 +453,7 @@ if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_consultation_aed" />
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+     {{mb_field object=$consult field="sejour_id" hidden=1 prop=""}}
       
       
       <!-- Formulaire de reglement -->

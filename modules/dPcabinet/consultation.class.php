@@ -270,6 +270,12 @@ class CConsultation extends CCodable {
     if ($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
       $this->patient_mode_reglement = "autre";
     }
+    
+    // Cas du paiement d'un séjour
+  	if($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
+  		$this->du_tiers = $this->secteur1 + $this->secteur2;
+  		$this->du_patient = 0;
+  	}
   }
 
   function check() {
@@ -669,12 +675,6 @@ class CConsultation extends CCodable {
   }
   
   function store() {
-    // Dans le cas d'une urgence
-    // Ne pas mettre dans l'updateDBFields sinon effet de bord sur loadMatching
-  	if($this->sejour_id !== null && $this->sejour_id){
-  		$this->du_tiers = $this->secteur1 + $this->secteur2;
-  		$this->du_patient = 0;
-  	}
   	
     // Standard store
     if ($msg = parent::store()) {
