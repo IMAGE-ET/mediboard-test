@@ -5,9 +5,11 @@ function pageMain(){
 }
 
 function setClose(modele_id, object_id) {
-  var oSelector = window.opener.ModeleSelector;
-  oSelector.set(modele_id, object_id);
-    window.close();
+  if (window.opener) {
+    var oSelector = window.opener.modeleSelector[{{$target_id}}];
+    oSelector.set(modele_id, object_id);
+  }
+  window.close();
 }
 </script>
 

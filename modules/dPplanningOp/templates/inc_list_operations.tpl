@@ -189,17 +189,12 @@
                       <option value="">{{tr}}pack-none{{/tr}}</option>
                     {{/foreach}}
                   </select>
-                  <button type="button" class="search" onclick="ModeleSelector.init('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}')">Modèle</button>
-							    <input type="hidden" name="_modele_id" />
-							    <input type="hidden" name="_object_id" onchange="Document.create(this.form._modele_id.value, this.form._object_id.value,'{{$curr_op->_id}}','{{$curr_op->_class_name}}'); this.value=''; this.form._modele_id.value = ''; "/>
+                  <button type="button" class="search" onclick="modeleSelector[{{$curr_op->_id}}].pop('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}')">Modèle</button>
+							    <input type="hidden" name="_modele_id" value="" />
+							    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value, '{{$curr_op->_id}}','{{$curr_op->_class_name}}'); this.value=''; this.form._modele_id.value=''; "/>
 							    <script type="text/javascript">
-							      ModeleSelector.init = function(object_id, object_class, praticien_id){
-							        this.sForm  = "newDocumentFrm-{{$curr_op->_id}}";
-							        this.sModele_id = "_modele_id";
-							        this.sObject_id = "_object_id";
-							        this.pop(object_id, object_class,praticien_id);
-							      }
-							    </script> 
+							      modeleSelector[{{$curr_op->_id}}] = new ModeleSelector("newDocumentFrm-{{$curr_op->_id}}", null, "_modele_id", "_object_id");
+							    </script>
                 </td>
               </tr>
             </table>

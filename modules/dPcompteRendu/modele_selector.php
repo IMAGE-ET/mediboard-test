@@ -10,8 +10,8 @@
 
 global $AppUI;
 
-$object_id    = mbGetValueFromGetOrSession("object_id");
-$object_class = mbGetValueFromGetOrSession("object_class");
+$object_id    = mbGetValueFromGet("object_id");
+$object_class = mbGetValueFromGet("object_class");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 
 $user_id      = $AppUI->user_id;
@@ -37,24 +37,16 @@ $whereFunc = array();
 foreach($templateClasses as $class => $id) {
   if ($id) {
     // Pour le praticien
-    $wherePrat["chir_id"] = "= '$praticien->_id'";
-    $wherePrat["object_class"] = "= '$class'";
-    $modelesCompat[$class]['prat'] = CCompteRendu::loadModeleByCat(null, $wherePrat, $order, true);
+    $modelesCompat[$class]['prat'] = CCompteRendu::loadModelesForPrat($class, $praticien->_id);
   
     // Pour la fonction du praticien
-    $whereFunc["function_id"] = "= '$praticien->function_id'";
-    $whereFunc["object_class"] = "= '$class'";
-    $modelesCompat[$class]['func'] = CCompteRendu::loadModeleByCat(null, $whereFunc, $order, true);
+    $modelesCompat[$class]['func'] = CCompteRendu::loadModelesForFunc($class, $praticien->function_id);
   } else {
     // Pour le praticien
-    $wherePrat["chir_id"] = "= '$praticien->_id'";
-    $wherePrat["object_class"] = "= '$class'";
-    $modelesNonCompat[$class]['prat'] = CCompteRendu::loadModeleByCat(null, $wherePrat, $order, true);
+    $modelesNonCompat[$class]['prat'] = CCompteRendu::loadModelesForPrat($class, $praticien->_id);
   
     // Pour la fonction du praticien
-    $whereFunc["function_id"] = "= '$praticien->function_id'";
-    $whereFunc["object_class"] = "= '$class'";
-    $modelesNonCompat[$class]['func'] = CCompteRendu::loadModeleByCat(null, $whereFunc, $order, true);
+    $modelesNonCompat[$class]['func'] = CCompteRendu::loadModelesForFunc($class, $praticien->function_id);
   }
 }
 
