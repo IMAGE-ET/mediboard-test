@@ -49,7 +49,7 @@ function confirmation(oForm){
 
 
 function submitAdmission(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadAdmission });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
 }
 
 function pageMain() {
