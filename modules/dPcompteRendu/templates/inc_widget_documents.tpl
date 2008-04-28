@@ -55,10 +55,10 @@ Document.refreshList = function() {
 			<!-- Création via ModeleSelector -->
 
 	    <script type="text/javascript">
-	      var modeleSelector{{$object->_id}} = new ModeleSelector("DocumentAdd-{{$suffixe}}", null, "_modele_id", "_object_id");
+	      modeleSelector[{{$object->_id}}] = new ModeleSelector("DocumentAdd-{{$suffixe}}", null, "_modele_id", "_object_id");
 	    </script>
 
-      <button type="button" class="search" onclick="modeleSelector{{$object->_id}}.pop('{{$object->_id}}','{{$object->_class_name}}','{{$praticien_id}}')">
+      <button type="button" class="search" onclick="modeleSelector[{{$object->_id}}].pop('{{$object->_id}}','{{$object->_class_name}}','{{$praticien_id}}')">
         Modèle
       </button>
 	    <input type="hidden" name="_modele_id" value="" />

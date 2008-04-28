@@ -30,8 +30,6 @@ function pageMain() {
   updateListOperations("{{$date}}");
 }
 
-var modeleSelector = [];
-
 </script>
 
 <table class="main">

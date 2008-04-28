@@ -189,12 +189,12 @@
                       <option value="">{{tr}}pack-none{{/tr}}</option>
                     {{/foreach}}
                   </select>
+                  <script type="text/javascript">
+                    modeleSelector[{{$curr_op->_id}}] = new ModeleSelector("newDocumentFrm-{{$curr_op->_id}}", null, "_modele_id", "_object_id");
+                  </script>
                   <button type="button" class="search" onclick="modeleSelector[{{$curr_op->_id}}].pop('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}')">Modèle</button>
 							    <input type="hidden" name="_modele_id" value="" />
 							    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value, '{{$curr_op->_id}}','{{$curr_op->_class_name}}'); this.value=''; this.form._modele_id.value=''; "/>
-							    <script type="text/javascript">
-							      modeleSelector[{{$curr_op->_id}}] = new ModeleSelector("newDocumentFrm-{{$curr_op->_id}}", null, "_modele_id", "_object_id");
-							    </script>
                 </td>
               </tr>
             </table>

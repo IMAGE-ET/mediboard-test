@@ -41,3 +41,5 @@ var ModeleSelector = Class.create({
     }
   }
 });
+
+var modeleSelector = []; 
