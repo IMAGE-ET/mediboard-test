@@ -76,39 +76,44 @@ class CRPU extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "sejour_id"       => "notNull ref class|CSejour",
-      "diag_infirmier"  => "text",
-      "mode_entree"     => "enum list|6|7|8 notNull",
-      "provenance"      => "enum list|1|2|3|4|5|8",
-      "transport"       => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
-      "pec_transport" => "enum list|med|paramed|aucun",
-      "motif"           => "text",
-      "ccmu"            => "enum list|1|P|2|3|4|5|D",
-      "gemsa"           => "enum list|1|2|3|4|5|6",
-      "type_pathologie" => "enum list|C|E|M|P|T",
-      "destination"     => "enum list|1|2|3|4|6|7",
-      "orientation"     => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
-      "radio_debut"     => "dateTime",
-      "radio_fin"       => "dateTime",
+      "sejour_id"        => "notNull ref class|CSejour",
+      "diag_infirmier"   => "text",
+      "mode_entree"      => "enum list|6|7|8 notNull",
+      "provenance"       => "enum list|1|2|3|4|5|8",
+      "transport"        => "enum list|perso|perso_taxi|ambu|ambu_vsl|vsab|smur|heli|fo notNull",
+      "pec_transport"    => "enum list|med|paramed|aucun",
+      "motif"            => "text",
+      "ccmu"             => "enum list|1|P|2|3|4|5|D",
+      "gemsa"            => "enum list|1|2|3|4|5|6",
+      "type_pathologie"  => "enum list|C|E|M|P|T",
+      "destination"      => "enum list|1|2|3|4|6|7",
+      "orientation"      => "enum list|HDT|HO|SC|SI|REA|UHCD|MED|CHIR|OBST|FUGUE|SCAM|PSA|REO",
+      "radio_debut"      => "dateTime",
+      "radio_fin"        => "dateTime",
       "mutation_sejour_id" => "ref class|CSejour",
-      "box_id"          => "ref class|CLit",
+      "box_id"           => "ref class|CLit",
       
       "_mode_sortie"     => "enum list|6|7|8|9 default|8",
       "_sortie"          => "dateTime",
-      "_patient_id"     => "notNull ref class|CPatient",
-      "_responsable_id" => "notNull ref class|CMediusers",
-      "_entree"         => "dateTime",
+      "_patient_id"      => "notNull ref class|CPatient",
+      "_responsable_id"  => "notNull ref class|CMediusers",
+      "_entree"          => "dateTime",
       "_etablissement_transfert_id" => "ref class|CEtabExterne"
      );
      
-    // Legacy Sherpa fields
-if(CModule::getActive("sherpa")) {
-    $urgDro = new CSpUrgDro();
-    $specs["urprov"] = $urgDro->_props["urprov"];
-    $specs["urmuta"] = $urgDro->_props["urmuta"];
-    $specs["urtrau"] = $urgDro->_props["urtrau"];    
-}
-    return array_merge($specsParent, $specs);
+		$specs["urprov"] = "";
+		$specs["urmuta"] = "";
+		$specs["urtrau"] = "";    
+
+		// Legacy Sherpa fields
+		if (CModule::getActive("sherpa")) {
+		    $urgDro = new CSpUrgDro();
+		    $specs["urprov"] = $urgDro->_props["urprov"];
+		    $specs["urmuta"] = $urgDro->_props["urmuta"];
+		    $specs["urtrau"] = $urgDro->_props["urtrau"];    
+		}
+
+		return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {
