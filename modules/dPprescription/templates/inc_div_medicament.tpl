@@ -220,6 +220,11 @@ dates = {
     
     <br />
 	  <input type="text" name="produit" value=""/>
+	  
+	  <input type="checkbox" name="_recherche_livret" value="1" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
+	  
+	  Livret Thérapeutique
+	  
 	  <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	  <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>
 	  <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
@@ -326,13 +331,24 @@ updateFieldsMedicament = function(selected) {
 prepareForm(document.addLine);
 prepareForm(document.searchProd);
 
+var oFormProduit = document.searchProd;
+
 // Autocomplete des medicaments
 urlAuto = new Url();
 urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-urlAuto.addParam("produit_max", 10);
+urlAuto.addParam("produit_max", 20);
+
+
+// callback => methode pour ajouter en post des parametres
+// Faire un mini framework pour rajouter des elements du meme formulaire
+
 urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
   minChars: 3,
-  updateElement: updateFieldsMedicament
+  updateElement: updateFieldsMedicament,
+  callback: 
+    function(input, queryString){ 
+      return (queryString + "&inLivret="+getCheckedValue(oFormProduit._recherche_livret)); 
+    }
 } );
 
 

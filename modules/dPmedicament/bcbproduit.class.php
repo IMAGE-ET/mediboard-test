@@ -182,9 +182,14 @@ class CBcbProduit extends CBcbObject {
   }
   
   
-  function searchProduitAutocomplete($text, $nb_max){   
-    $this->distObj->Specialite = 1;
-    $this->distObj->Supprime = 0;  
+  function searchProduitAutocomplete($text, $nb_max, $livretTherapeutique = 0){   
+    global $g;
+    
+  	$this->distObj->Specialite = 1;
+    $this->distObj->Supprime = 0;
+    if($livretTherapeutique){
+      $this->distObj->LivretTherapeutique = $g;  
+    }
     $this->distObj->Search($text, 0, $nb_max, 0);
     
     return $this->distObj->TabProduit;
