@@ -203,7 +203,7 @@ class CSpObject extends CMbObject {
     return strlen($return) == 10 ? $return : ""; 
   }
   
-   /**
+  /**
    * Sherpa to Mediboard matricule 
    * @param string $matricule
    * @param string $cle
@@ -214,6 +214,15 @@ class CSpObject extends CMbObject {
     return strlen($return) == 15 ? $return : ""; 
   }
   
+  /**
+   * Sherpa to Mediboard DateTime (will remove seconds)
+   * @param string $dateTime
+   * @return string
+   */
+  function importDateTime($dateTime) {
+    $return =  preg_replace("/(\d{2}):(\d{2}):(\d{2})/", "$1:$2:00", mbDateToLocale($dateTime));
+    return strlen($return) == 19 ? $return : ""; 
+  }
 }
 
 ?>

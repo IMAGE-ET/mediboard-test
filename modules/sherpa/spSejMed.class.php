@@ -180,12 +180,12 @@ class CSpSejMed extends CSpObject {
     
     // Date d'entrée
     $entree = mbGetValue($sejour->entree_reelle, $sejour->entree_prevue); 
-    $this->datent = mbDateToLocale($entree);
+    $this->datent = $this->importDateTime($entree);
     
     // Date de sortie, on ne passe pas les sorties prévues
     $sortie_prevue = in_array($sejour->type, array("ambu", "exte")) ? $sejour->sortie_prevue : null;
     $sortie = mbGetValue($sejour->sortie_reelle ,$sortie_prevue);
-    $this->datsor = $sortie ? mbDateToLocale($sortie) : "";
+    $this->datsor = $this->importDateTime($sortie);
     
     // Code du praticien
     $idPraticien = CSpObjectHandler::getId400For($sejour->_ref_praticien);

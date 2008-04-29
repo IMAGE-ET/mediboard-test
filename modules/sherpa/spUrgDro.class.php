@@ -236,8 +236,8 @@ class CSpUrgDro extends CSpObject {
     $this->malnum = $idMalade->id400;
     
     // Horodatage
-    $this->datarr = mbDateToLocale($sejour->entree_reelle);
-    $this->datdep = mbDateToLocale($sejour->sortie_reelle);
+    $this->datarr = $this->importDateTime($sejour->entree_reelle);
+    $this->datdep = $this->importDateTime($sejour->sortie_reelle);
     
     $sejour->loadRefRPU();
     $rpu = $sejour->_ref_rpu;
