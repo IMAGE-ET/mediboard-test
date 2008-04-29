@@ -63,7 +63,9 @@ function pageMain() {
     <th>{{mb_colonne class="CRPU" field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
     <th>Temps d'attente</th>
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
+    {{if $medicalView}}
     <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
+    {{/if}}
     <th>Prise en charge</th>
   </tr>
   {{foreach from=$listSejours item=curr_sejour key=sejour_id}}
@@ -151,11 +153,13 @@ function pageMain() {
       </a>
     </td>
 
+    {{if $medicalView}}
     <td class="text" style="background-color: {{$background}};">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$rpu->diag_infirmier|nl2br}}
       </a>
     </td>
+    {{/if}}
 
     <td class="button" style="background-color: {{$background}};">
 		  {{include file="inc_pec_praticien.tpl"}}

@@ -22,9 +22,13 @@ $order_col = mbGetValueFromGetOrSession("order_col", "ccmu");
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $today = mbDate();
 
+// L'utilisateur doit-il voir les informations médicales
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+$medicalView = in_array($user->_user_type, array(1, 3, 4, 7, 13));
+
 $group = new CGroups();
 $group->load($g);
-$user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $sejour = new CSejour;
@@ -90,15 +94,16 @@ foreach (CService::loadServicesUrgence() as $service) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("boxes", $boxes);
-$smarty->assign("tps_attente", $tps_attente);
-$smarty->assign("order_col", $order_col);
-$smarty->assign("order_way", $order_way);
-$smarty->assign("listPrats"  , $listPrats);
-$smarty->assign("listSejours", $listSejours);
+$smarty->assign("boxes"       , $boxes);
+$smarty->assign("tps_attente" , $tps_attente);
+$smarty->assign("order_col"   , $order_col);
+$smarty->assign("order_way"   , $order_way);
+$smarty->assign("listPrats"   , $listPrats);
+$smarty->assign("listSejours" , $listSejours);
 $smarty->assign("selAffichage", $selAffichage);
-$smarty->assign("date", $date);
-$smarty->assign("today", $today);
+$smarty->assign("medicalView" , $medicalView);
+$smarty->assign("date"        , $date);
+$smarty->assign("today"       , $today);
 
 $smarty->display("vw_idx_rpu.tpl");
 ?>
