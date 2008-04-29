@@ -57,6 +57,9 @@ if($praticien_id){
 	$where["praticien_id"] = " = '$praticien_id'";
 	$where["entree_prevue"] = " <= '$datetime'";
 	$where["sortie_prevue"] = " >= '$datetime'";
+	$where["annule"] = " = '0'";
+	$where[] = "type != 'urg' AND type != 'exte'";
+	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
 
