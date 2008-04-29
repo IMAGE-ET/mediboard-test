@@ -8,7 +8,7 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 </script>
 
 
-{{if $getActivePrescription}}
+{{if is_array($prescriptions)}}
 	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
 	  {{if !$prescriptions|@count}}

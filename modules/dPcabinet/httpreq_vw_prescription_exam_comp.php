@@ -18,21 +18,22 @@ if($sejour_id == "undefined"){
 $sejour = new CSejour();
 $sejour->load($sejour_id);
 
-$prescriptions = $sejour->loadBackRefs("prescriptions");
-foreach($prescriptions as &$_prescription){
-  // Chargement du nombre d'elements pour chaque prescription
-	$_prescription->countLinesMedsElements();
-	$_prescription->loadRefPraticien();
-}
-      
+$sejour->_ref_prescriptions = $sejour->loadBackRefs("prescriptions");
+if($sejour->_ref_prescriptions){
+	foreach($sejour->_ref_prescriptions as &$_prescription){
+	  // Chargement du nombre d'elements pour chaque prescription
+		$_prescription->countLinesMedsElements();
+		$_prescription->loadRefPraticien();
+	}
+}  
+    
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 $smarty->assign("object_id", $sejour_id);
 $smarty->assign("object_class", "CSejour");
 $smarty->assign("praticien_id", $AppUI->user_id);
-$smarty->assign("prescriptions", $prescriptions);
+$smarty->assign("prescriptions", $sejour->_ref_prescriptions);
 
 $smarty->display("../../dPprescription/templates/inc_widget_prescription.tpl");
 

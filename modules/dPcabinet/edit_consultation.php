@@ -314,8 +314,6 @@ $smarty->assign("contrainteOrientation", $contrainteOrientation);
 $smarty->assign("listEtab"           , $listEtab           );
 $smarty->assign("listServicesUrgence", $listServicesUrgence);
 
-$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
-
 
 $smarty->assign("acte_ngap"      , $acte_ngap);
 $smarty->assign("tabSejour"      , $tabSejour);

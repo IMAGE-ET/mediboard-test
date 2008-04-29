@@ -39,7 +39,6 @@ $smarty->assign("object_class", $prescription->object_class);
 $smarty->assign("praticien_id", $prescription->praticien_id);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("prescriptions", $prescriptions);
-$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 
 $smarty->display("inc_widget_prescription.tpl");
 

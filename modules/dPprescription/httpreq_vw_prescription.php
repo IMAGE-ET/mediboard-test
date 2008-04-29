@@ -177,7 +177,6 @@ $smarty->assign("category"    , $category);
 $smarty->assign("categories"  , $categories);
 
 $smarty->assign("refresh_pharma", $refresh_pharma);
-$smarty->assign("getActivePrescription", CModule::getActive("dPprescription"));
 
 
 
