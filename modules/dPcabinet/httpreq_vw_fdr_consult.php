@@ -74,14 +74,15 @@ if ($selConsult) {
   $consult->loadRefsDocs();
   $consult->loadRefsFiles();
   $consult->loadRefsFichesExamen();
-  $consult->loadRefsPrescriptions();
   
-  $prescription = $consult->_ref_prescriptions["externe"];
-  if ($prescription && $prescription->_id){
-    $prescription->loadRefsLinesMedComments();
-    $prescription->loadRefsLinesElementsComments();
+  
+  //$consult->loadRefsPrescriptions();
+  $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
+  if($consult->_ref_prescriptions){
+  	foreach($consult->_ref_prescriptions as $_prescription){
+  		$_prescription->countLinesMedsElements();
+  	}
   }
-  
   
   // Patient
   $patient =& $consult->_ref_patient;
