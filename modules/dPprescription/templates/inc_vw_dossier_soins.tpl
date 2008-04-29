@@ -17,13 +17,20 @@ printDossierSoin = function(prescription_id, date){
   <tr>
     <td>
       <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
-	      Imprimer la feuille de soin
+	      Imprimer la feuille de soin immédiate
       </button>
     </td>
   </tr>
 </table>
 
+<hr />
+
 <table class="tbl">
+  <tr>
+    <th colspan="2">
+      Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
+    </th>
+  </tr>
   {{if $lines_med|@count}}
   <tr>
     <th colspan="2">Medicaments</th>

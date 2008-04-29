@@ -1,7 +1,7 @@
 <!-- Initialisation des variables -->
 {{*if (($curr_line->signee == 0 || $mode_pharma) && !$curr_line->valide_pharma)*}}
 
-{{if (($curr_line->praticien_id == $app->user_id || $mode_pharma) && !$curr_line->valide_pharma && !$curr_line->signee)}}
+{{if (($curr_line->praticien_id == $app->user_id || $mode_pharma) && !$curr_line->valide_pharma && (!$curr_line->signee || $mode_pharma))}}
   {{assign var=perm_edit value=1}}
 {{else}}
   {{assign var=perm_edit value=0}}
@@ -90,8 +90,12 @@
         <br />
     {{/if}}  
     {{if $curr_line->_ref_produit->hospitalier && $prescription->type == "sortie"}}
-        <img src="images/icons/warning.png" alt="Produit Hospitalier" title="Produit Hospitalier" />
+        <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
         <br />
+    {{/if}}
+    {{if $curr_line->_ref_produit->_generique}}
+      <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
+      <br />
     {{/if}}
     
     </td>
