@@ -75,7 +75,7 @@ Main.add(function () {
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
       
       <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
-      <td class="text" {{if $i==$curr_helper_for|@count && $i!=$numCols}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
+      <td class="text" {{if $i==$curr_helper_for|@count}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
         <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAddiction('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
           {{$curr_helper}}
         </label>
@@ -103,7 +103,7 @@ Main.add(function () {
       {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
       <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
-      <td class="text" {{if $i==$curr_helper_for|@count && $i!=$numCols}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
+      <td class="text" {{if $i==$curr_helper_for|@count}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
         <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addAntecedent('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
           {{$curr_helper}}
         </label>
@@ -125,7 +125,7 @@ Main.add(function () {
       {{foreach from=$curr_helper_for item=curr_helper key=curr_helper_key name=helpers}}
       {{assign var=i value=$smarty.foreach.helpers.iteration}}
       <td style="width: 1%;"><button id="{{$curr_key}}-{{$curr_helper_key}}-button" class="tick notext" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')"></button></td>
-      <td class="text" {{if $i==$curr_helper_for|@count && $i!=$numCols}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
+      <td class="text" {{if $i==$curr_helper_for|@count}}colspan="{{math equation="2 * (c - (i % c)) + 1" c=$numCols i=$i}}"{{/if}}>
         <label title="{{$curr_helper_key}}" id="{{$curr_key}}-{{$curr_helper_key}}-label" onclick="addTraitement('{{$curr_helper_key|smarty:nodefaults|JSAttribute}}', '{{$curr_key|smarty:nodefaults|JSAttribute}}')">
           {{$curr_helper}}
         </label>
