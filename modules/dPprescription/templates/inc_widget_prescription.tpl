@@ -37,14 +37,15 @@ Prescription.suffixes = Prescription.suffixes.uniq();
       <tr>
         <th>Type</th>
         <th>Praticien</th>
-        <th>Médicament</th>
-        <th>DMI</th>
-        <th>Anapath</th>
-        <th>Biologie</th>
-        <th>Imagerie</th>
-        <th>Consult</th>
-        <th>Kiné</th>
-        <th>Soin</th>
+        
+        {{foreach from=$totals_by_chapitre item=total key=chapitre}}
+        {{if $total}}
+        <th>
+					{{tr}}CCategoryPrescription.chapitre.{{$chapitre}}{{/tr}}				
+				</th>
+				{{/if}}
+				{{/foreach}}
+        
       </tr>
   
 	    {{foreach from=$prescriptions item=_prescription}}

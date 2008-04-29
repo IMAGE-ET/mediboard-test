@@ -34,7 +34,7 @@ class CPrescription extends CMbObject {
   // Others Fields
   var $_type_sejour = null;
   
-  var $_count = null;
+  var $_counts_by_chapitre = null;
   
   
   function CPrescription() {
@@ -137,7 +137,7 @@ class CPrescription extends CMbObject {
   
   //Chargement du nombre des medicaments et d'elements
   function countLinesMedsElements(){
-  	$this->_count = array();
+  	$this->_counts_by_chapitre = array();
   	
   	$line_comment_med = new CPrescriptionLineComment();
   	$ljoin_comment["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
@@ -148,8 +148,8 @@ class CPrescription extends CMbObject {
     $where["category_prescription.chapitre"] = "IS NULL";
   	$line_med = new CPrescriptionLineMedicament();
   	$line_med->prescription_id = $this->_id;
-  	$this->_count["med"] = $line_med->countMatchingList();
-  	$this->_count["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
+  	$this->_counts_by_chapitre["med"] = $line_med->countMatchingList();
+  	$this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
   	
   	
   	// Count sur les elements
@@ -159,21 +159,22 @@ class CPrescription extends CMbObject {
   	$line_element = new CPrescriptionLineElement();
   	$line_comment = new CPrescriptionLineComment();
 		
-  	$tabElements = array("dmi","anapath","biologie","imagerie","consult","kine","soin");
-  	
+  	$category = new CCategoryPrescription;
+    $chapitres = explode("|", $category->_specs["chapitre"]->list);
+      	
   	// Initialisation du tableau
-    foreach($tabElements as $element){
-    	$this->_count[$element] = 0;
+    foreach ($chapitres as $chapitre){
+    	$this->_counts_by_chapitre[$chapitre] = 0;
     }
   	
     // Parcours des elements
-  	foreach($tabElements as $element){
+  	foreach ($chapitres as $chapitre){
   	  $where = array();
       $where["prescription_id"] = " = '$this->_id'";
-  	  $where["category_prescription.chapitre"] = " = '$element'";
+  	  $where["category_prescription.chapitre"] = " = '$chapitre'";
    	  $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
 			$nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);
-			$this->_count[$element] = $nb_element + $nb_comment;
+			$this->_counts_by_chapitre[$chapitre] = $nb_element + $nb_comment;
   	}
   }
   

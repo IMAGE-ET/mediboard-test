@@ -37,6 +37,9 @@ $divClasses = array (
   E_USER_NOTICE => "big-info",
 );
 
+// Pour BCB 
+unset($divClasses[E_STRICT]);
+
 if (!$dPconfig["debug"]) {
   unset($divClasses[E_STRICT]);
 }
