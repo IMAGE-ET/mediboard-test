@@ -77,10 +77,14 @@ if ($selConsult) {
   
   
   //$consult->loadRefsPrescriptions();
+  $consult->_totals_by_chapitre = array();
   $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
   if($consult->_ref_prescriptions){
   	foreach($consult->_ref_prescriptions as $_prescription){
   		$_prescription->countLinesMedsElements();
+      foreach ($_prescription->_counts_by_chapitre as $chapitre => $count) {
+	  	  @$sejour->_totals_by_chapitre[$chapitre]+= $count;
+	  	}
   	}
   }
   

@@ -109,6 +109,7 @@ function reloadListTech() {
       {{/if}}
       {{if $sejour}}
         {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
+         					totals_by_chapitre = $sejour->_totals_by_chapitre
                   prescriptions=$sejour->_ref_prescriptions 
                   object_id=$sejour->_id 
                   object_class="CSejour" 

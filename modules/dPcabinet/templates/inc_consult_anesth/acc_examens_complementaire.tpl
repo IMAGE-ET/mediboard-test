@@ -120,6 +120,7 @@ function reloadListExamComp() {
             {{if $consult->_ref_consult_anesth->operation_id}}
               {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_operation->_ref_sejour}}
               {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
+				      					totals_by_chapitre = $sejour->_totals_by_chapitre
                         prescriptions=$sejour->_ref_prescriptions
                         object_id=$sejour->_id 
                         object_class="CSejour" 

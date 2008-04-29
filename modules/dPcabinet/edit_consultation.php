@@ -106,10 +106,14 @@ if ($consult->_id) {
   $consult->loadRefs();
   
   $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
-  if($consult->_ref_prescriptions){
+  $consult->_totals_by_chapitre = array();
+  if ($consult->_ref_prescriptions){
 	  foreach($consult->_ref_prescriptions as &$prescription){
-	  	if($prescription->_id){
+	  	if ($prescription->_id){
 	      $prescription->countLinesMedsElements();
+	      foreach ($prescription->_counts_by_chapitre as $chapitre => $count) {
+		  	  @$consult->_totals_by_chapitre[$chapitre]+= $count;
+		  	}
 	  	}
 	  }
   }
@@ -126,11 +130,15 @@ if ($consult->_id) {
       $consultAnesth->_ref_sejour->loadRefDossierMedical();
       
       //$consultAnesth->_ref_sejour->loadRefsPrescriptions(); 
+      $consultAnesth->_ref_sejour->_totals_by_chapitre = array();
       $consultAnesth->_ref_sejour->_ref_prescriptions = $consultAnesth->_ref_sejour->loadBackRefs("prescriptions");
       if($consultAnesth->_ref_sejour->_ref_prescriptions){
 	      foreach($consultAnesth->_ref_sejour->_ref_prescriptions as &$prescription_sejour){
 	  	    if($prescription_sejour->_id){
 	          $prescription_sejour->countLinesMedsElements();
+			      foreach ($prescription_sejour->_counts_by_chapitre as $chapitre => $count) {
+				  	  @$consultAnesth->_ref_sejour->_totals_by_chapitre[$chapitre]+= $count;
+				  	}
 	  	    }
 	      }
       }
