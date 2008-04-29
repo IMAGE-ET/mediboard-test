@@ -12,6 +12,12 @@ function startUncaseBCBTables(){
   url.requestUpdate("uncase_bcb_tables");
 }
 
+function importCSV(){
+  var url = new Url;
+  url.setModuleAction("dPmedicament", "vw_bcb_import", null, null);
+  url.pop(400, 400, "Import de fichier CSV");
+}
+
 </script>
 
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
@@ -111,5 +117,9 @@ function startUncaseBCBTables(){
   <tr>
     <td><button class="tick" onclick="startBCBGES()" >Importer la base de données BCB GESTION</button></td>
     <td id="do_add_bcbges"></td>
+  </tr>
+  <tr>
+    <td><button class="tick" onclick="importCSV()" >Importer un fichier CSV de livrets thérapeutiques</button></td>
+    <td></td>
   </tr>
 </table>
