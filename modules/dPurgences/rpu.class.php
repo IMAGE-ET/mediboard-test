@@ -203,9 +203,11 @@ class CRPU extends CMbObject {
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
+    
     if ($msg = $sejour->store()) {
       return $msg;
     }
+    
     // Affectation du sejour_id au RPU
     $this->sejour_id = $sejour->_id;
   }

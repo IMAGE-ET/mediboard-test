@@ -32,6 +32,7 @@ $where = array();
 $ljoin["rpu"] = "sejour.sejour_id = rpu.sejour_id";
 $ljoin["patients"] = "sejour.patient_id = patients.patient_id";
 $where["entree_reelle"] = "LIKE '$date%'";
+$where["sortie_reelle"] = "IS NULL";
 $where["type"] = "= 'urg'";
 
 if($selAffichage == "prendre_en_charge"){
