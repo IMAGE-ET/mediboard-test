@@ -1,0 +1,65 @@
+{{if $curr_sejour->_id != ""}}
+<tr>
+  <td>
+  <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
+    <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
+  </a>
+  </td>
+  <td>
+  {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
+  {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+    
+  {{if $prescriptions_sejour}}
+    {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+    {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
+  {{else}}
+    {{assign var=prescription_sejour_id value=""}}
+  {{/if}}
+  
+  <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}')">
+    {{$curr_sejour->_ref_patient->_view}}
+  </a>
+  <script language="Javascript" type="text/javascript">
+    ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
+  </script>
+  </td>
+  <td>
+    <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+      <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
+    </a>
+    </td>
+    <td>
+    <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
+      <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
+    </a>                             
+  </td>
+  <td>
+    <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
+      <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+    </div>
+    <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none">
+      <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
+    </div>
+  </td>
+  <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
+    {{$curr_sejour->_ref_praticien->_shortview}}
+ 
+    {{if $isPrescriptionInstalled}}         
+	    <!-- Test des prescription de sortie -->
+	    {{assign var=prescription_sortie value=""}}
+	    {{if $prescriptions}}
+	    {{if array_key_exists('sortie', $prescriptions)}}
+	      {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
+	      {{if array_key_exists('0', $prescriptions_sortie)}}
+	        {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
+	      {{/if}}
+	    {{/if}}
+	    {{/if}}
+	    {{if !is_object($prescription_sortie)}}
+	      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
+	    {{/if}}
+    {{/if}}
+             
+  </td>
+</tr>
+{{/if}}

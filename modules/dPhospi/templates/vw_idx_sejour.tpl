@@ -129,13 +129,32 @@ Main.add(function () {
     ImedsResultsWatcher.loadResults();
   {{/if}}
   
+
+/*
+   var oFormService = document.selService;
+   oFormService.service_id.value = "";
+   $A(oFormService.service_id).each( function(input) {
+	    input.disabled = true;
+	 });
+	 
+	 var oFormMode = document.chgMode;
+   oFormMode.mode.value = "1";
+   $A(oFormMode.mode).each( function(input) {
+	    input.disabled = true;
+	 });
+*/	 
+	 
+	  
+
 });
+
+
 </script>
 
 <table class="main">
   <tr>
     <td style="width:200px;" rowspan="3">
-      <form name="form_prescription">
+      <form name="form_prescription" action="">
         <input type="hidden" name="prescription_id" value="" />
       </form>
       <table>
@@ -154,20 +173,43 @@ Main.add(function () {
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="sejour_id" value="" />
-              <select name="service_id" onChange="submit()">
+              <input type="hidden" name="praticien_id" value="" />
+              <select name="service_id" onChange="document.selPraticien.praticien_id.value = '';submit()">
                 <option value="">&mdash; Choix d'un service</option>
                 {{foreach from=$services item=curr_service}}
-                <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service->_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
+                <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
                 {{/foreach}}
                 <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
+            </form>
+            <br />
+            <form name="selPraticien" action="?m={{$m}}" method="get">
+	            <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="mode" value="0" />
+              <input type="hidden" name="service_id" value="" />
+	            <select name="praticien_id" onchange="document.selService.service_id.value = ''; submit();">
+	              <option value="">&mdash; Choix du praticien</option>
+	              {{foreach from=$praticiens item=_prat}}
+	                <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
+	                  {{$_prat->_view}}
+	                </option>
+	              {{/foreach}}
+	            </select>
             </form>
           </td>
         </tr>
         <tr>
           <td>
-            {{if $service->_id}}
             <table class="tbl">
+            
+            {{foreach from=$sejoursParService key=service_id item=service}}
+           
+            {{if array_key_exists($service_id, $services)}}
+            <tr>
+              {{assign var=_service value=$services.$service_id}}
+              <th colspan="6" class="title">{{$_service->_view}}</th>
+            </tr>
+            
             {{foreach from=$service->_ref_chambres item=curr_chambre}}
             
             {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
@@ -223,77 +265,62 @@ Main.add(function () {
                 </td>
                 <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
                   {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
-                </td>
-              </tr>
-            {{/if}}
-            {{/foreach}}
-            
-            {{/foreach}}
-            
-            {{/foreach}}
-            </table>
-            {{elseif $service_id == "NP"}}
-            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-            <table class="tbl">
-              <tr>
-                <th class="title" colspan="6">
-                  {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
-                </th>
-              </tr>
-              {{foreach from=$sejourNonAffectes item=curr_sejour}}
-              
-              {{if $curr_sejour->_id != ""}}
-              <tr>
-                <td>
-                <a href="#1" onclick="popEtatSejour({{$curr_sejour->_id}});">
-                  <img src="images/icons/jumelle.png" alt="edit" title="Etat du Séjour" />
-                </a>
-                </td>
-                <td>
-                {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
-                {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
-                  
-                {{if $prescriptions_sejour}}
-                  {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
-                  {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
-                {{else}}
-                  {{assign var=prescription_sejour_id value=""}}
-                {{/if}}
                 
-                <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}')">
-                  {{$curr_sejour->_ref_patient->_view}}
-                </a>
-                <script language="Javascript" type="text/javascript">
-                  ImedsResultsWatcher.addSejour('{{$curr_sejour->_id}}', '{{$curr_sejour->_num_dossier}}');
-                </script>
+                  {{if $isPrescriptionInstalled}}  
+		                <!-- Test des prescription de sortie -->
+		                {{assign var=prescription_sortie value=""}}
+		                  {{if $prescriptions}}
+		                  {{if array_key_exists('sortie', $prescriptions)}}
+		                    {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
+		                    {{if array_key_exists('0', $prescriptions_sortie)}}
+		                      {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
+		                    {{/if}}
+		                  {{/if}}
+		                  {{/if}}
+		                  {{if !is_object($prescription_sortie)}}
+		                    <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
+		                  {{/if}}
+                  {{/if}}
                 </td>
-                <td>
-                  <a href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
-                    <img src="images/icons/edit.png" alt="edit" title="Editer le patient" />
-                  </a>
-                  </td>
-                  <td>
-                  <a href="{{$curr_sejour->_ref_patient->_dossier_cabinet_url}}&amp;patient_id={{$curr_sejour->_ref_patient->_id}}">
-                    <img src="images/icons/search.png" alt="view" title="Afficher le dossier complet" />
-                  </a>                             
-                </td>
-                <td>
-                  <div id="labo_for_{{$curr_sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo.png" alt="Labo" title="Résultats de laboratoire disponibles" />
-                  </div>
-                  <div id="labo_hot_for_{{$curr_sejour->_id}}" style="display: none">
-                    <img src="images/icons/labo_hot.png" alt="Labo" title="Résultats de laboratoire disponibles" />
-                  </div>
-                </td>
-                <td class="action" style="background:#{{$curr_sejour->_ref_praticien->_ref_function->color}}">
-                  {{$curr_sejour->_ref_praticien->_shortview}}
-                </td>
+                
               </tr>
-              {{/if}}
-              {{/foreach}}
-            </table>
-            {{/foreach}}
             {{/if}}
+            {{/foreach}}
+            {{/foreach}}
+            {{/foreach}}
+           
+            {{/if}}
+            
+           {{/foreach}}
+            
+            <!-- Cas de l'affichage par praticien -->
+            {{if $praticien_id}}
+            {{if array_key_exists('NP', $sejoursParService)}}
+            <tr>
+             <th colspan="6">Non placés</th>
+            </tr>
+              {{foreach from=$sejoursParService.NP item=_sejour_NP}}
+                {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl" curr_sejour=$_sejour_NP}}
+              {{/foreach}}
+              {{/if}}
+            {{/if}}
+            
+            
+            <!-- Cas de l'affichage par service -->
+            {{if $service_id}}
+	            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
+	              <tr>
+	                <th class="title" colspan="6">
+	                  {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
+	                </th>
+	              </tr>
+	              {{foreach from=$sejourNonAffectes item=curr_sejour}}
+	                {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
+	              {{/foreach}}
+	            {{/foreach}}
+            {{/if}}
+          
+            </table>    
           </td>
         </tr>
       </table>
@@ -365,3 +392,5 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+
+

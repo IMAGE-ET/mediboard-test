@@ -47,7 +47,7 @@ div.header {
   top: 0cm;
   
   border-bottom-width: 1px;
-  height: 7em;
+  height: 9em;
 }
 
 div.footer {
@@ -91,18 +91,27 @@ div#goUp {
   <div style="text-align: left; margin: 4px;">
 		<table class="main">
 		  <tr>
-		    <th colspan="2">
-		      {{$etablissement->_view}}
-		    </th>
-		  </tr>
-		  <tr>
-		    <td>
+		  
+		    <td style="text-align: left">
 		      <strong>Dr. {{$prescription->_ref_praticien->_view}}</strong>
 		      <br />
 		      {{$prescription->_ref_praticien->_ref_discipline->_view}}
 		      <br />
+		      {{$prescription->_ref_praticien->titres}}
+		      <br />
 		      {{$prescription->_ref_praticien->adeli}}
 		    </td>
+		    
+		      <th colspan="2">
+		      {{$etablissement->_view}}<br />
+		      <br />
+		      {{$prescription->_ref_praticien->_ref_function->soustitre}}
+		      <br />
+		      {{$prescription->_ref_praticien->_ref_function->adresse}}
+		      {{$prescription->_ref_praticien->_ref_function->cp}}
+		      {{$prescription->_ref_praticien->_ref_function->ville}}
+		    </th>
+		  
 		  
 		    <td style="text-align: right">
 		      le {{$date|date_format:"%d %B %Y"}}
