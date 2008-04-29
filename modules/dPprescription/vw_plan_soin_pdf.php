@@ -105,10 +105,7 @@ function calculEtatJour($date, $dates, $nb_jours, $line){
   	$dates["jour_3"] = 1;
     $nb_jours++;
   }
-  
-  if(!$nb_jours){
-  	continue;
-  }
+
 }
 
 $prises = array();
@@ -308,25 +305,30 @@ $prescription->loadRefsLinesElement("soin");
 // Chargement des traitements
 $prescription->_ref_object->loadRefPrescriptionTraitement();
 $traitement = $prescription->_ref_object->_ref_prescription_traitement;
-$traitement->loadRefsLines();
-
-// Parcours des traitements
-foreach($traitement->_ref_prescription_lines as $_line_traitement){
-  $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
-  $nb_jours = 0;
-  
-  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
-  $_line_traitement->_fin = mbDate($prescription->_ref_object->_sortie);
-  
-	if($_line_traitement->date_arret){
-    $_line_traitement->_fin = $_line_traitement->date_arret;
-  }
-  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
-  
-  calculEtatJour($date, &$dates, &$nb_jours, $_line_traitement);
-  prescriptionLine($pdf, $_line_traitement, $date, $dates);
+if($traitement->_id){
+  $traitement->loadRefsLines();
+	
+	// Parcours des traitements
+	foreach($traitement->_ref_prescription_lines as $_line_traitement){
+	  $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
+	  $nb_jours = 0;
+	  
+	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
+	  $_line_traitement->_fin = mbDate($prescription->_ref_object->_sortie);
+	  
+		if($_line_traitement->date_arret){
+	    $_line_traitement->_fin = $_line_traitement->date_arret;
+	  }
+	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
+	  
+	  calculEtatJour($date, &$dates, &$nb_jours, $_line_traitement);
+	  
+	  if(!$nb_jours){
+	  	continue;
+	  }
+	  prescriptionLine($pdf, $_line_traitement, $date, $dates);
+	}
 }
-
 // Parcours des medicaments
 foreach($prescription->_ref_prescription_lines as $line){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
@@ -348,6 +350,10 @@ foreach($prescription->_ref_prescription_lines as $line){
 		continue;
 	}
 	calculEtatJour($date, &$dates, &$nb_jours, $line);
+  
+  if(!$nb_jours){
+  	continue;
+  }
   prescriptionLine($pdf, $line, $date, $dates);
 
   // CHargement et stockage des logs de validation pharmacien
@@ -371,6 +377,10 @@ foreach($prescription->_ref_prescription_lines_element as $_soin){
   	$_soin->debut = mbDate($prescription->_ref_object->_entree);
   }
   calculEtatJour($date, &$dates, &$nb_jours, $_soin);
+  
+  if(!$nb_jours){
+  	continue;
+  }
   prescriptionLine($pdf, $_soin, $date, $dates);
 }
 
