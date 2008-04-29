@@ -38,9 +38,9 @@ $is_praticien           = $mediuser->isPraticien();
 $is_admin_or_secretaire = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire"));
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$listPrat = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
-  $mediuser->loadPraticiens(PERM_READ) :
-  array($mediuser->_id => $mediuser);
+$listPrat = $is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee ? 
+               $mediuser->loadPraticiens(PERM_READ) : 
+               array($mediuser->_id => $mediuser);
   
 // Création du template
 $smarty = new CSmartyDP();

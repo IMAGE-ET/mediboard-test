@@ -67,6 +67,10 @@ function pageMain() {
           <td>{{mb_field object=$userfunction field="soustitre"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$userfunction field="compta_partagee"}}</th>
+          <td>{{mb_field object=$userfunction field="compta_partagee"}}</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$userfunction field="group_id"}}</th>
           <td>
             <select name="group_id" class="{{$userfunction->_props.group_id}}">

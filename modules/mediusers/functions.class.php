@@ -27,6 +27,7 @@ class CFunctions extends CMbObject {
   var $ville     = null;
   var $tel       = null;
   var $fax       = null;
+  var $compta_partagee = null;
   
   // Object References
   var $_ref_group = null;
@@ -77,7 +78,8 @@ class CFunctions extends CMbObject {
       "ville"    => "str maxLength|50",
       "tel"      => "numchar length|10",
       "fax"      => "numchar length|10",
-      "soustitre"=> "text"
+      "soustitre"=> "text",
+      "compta_partagee"=> "notNull bool"
     );
     return array_merge($specsParent, $specs);
   }
