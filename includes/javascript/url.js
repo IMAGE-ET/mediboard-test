@@ -149,7 +149,7 @@ Class.extend(Url, {
   autoComplete: function(idInput, idPopulate, oUserOptions) {
     var oOptions = {
 	    minChars: 3,
-	    frequency: 0.25,
+	    frequency: 0.5,
 	    
 	    // Allows bigger width than input
 			onShow: function(element, update) { 

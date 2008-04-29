@@ -24,16 +24,15 @@ preselectExecutant = function(executant_id, category_id){
     <input type="hidden" name="dosql" value="do_valide_all_lines_aed" />
     <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
     <input type="hidden" name="chapitre" value="{{$element}}" />
-    <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"</button>
+    <button class="tick" type="button" onclick="submitFormAjax(this.form, 'systemMsg')">
+    	Signer les lignes "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}"
+    </button>
   </form>
 </div>
 {{/if}}
 
-
-
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{include file="inc_vw_form_addLine.tpl"}}
-
 
 <table class="tbl">
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
@@ -78,8 +77,8 @@ url = new Url();
 url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
 url.addParam("category", "{{$element}}");
 url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
-    minChars: 3,
-    updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
+  minChars: 2,
+  updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
 } );
 
 </script>

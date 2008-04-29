@@ -333,6 +333,7 @@ class CMbFieldSpec {
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");
     
+    
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
     $aHtml[] = '<div class="'.$this->getSpecType().'" id="'.$id.'_da">'.$date.'</div>';

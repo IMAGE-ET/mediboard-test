@@ -44,7 +44,7 @@ changeColor = function(object_id, object_class, date_arret, traitement){
       <tr>
         <td class="date" style="border:none;">
           {{assign var=line_id value=$line->_id}}
-	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id}}
+	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
 	        <button type="button" 
 	                class="stop" 
 	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}');">  
