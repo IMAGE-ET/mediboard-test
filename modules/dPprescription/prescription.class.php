@@ -168,9 +168,9 @@ class CPrescription extends CMbObject {
     }
   	
     // Parcours des elements
-  	foreach ($chapitres as $chapitre){
-  	  $where = array();
-      $where["prescription_id"] = " = '$this->_id'";
+ 	  $where = array();
+    $where["prescription_id"] = " = '$this->_id'";
+    foreach ($chapitres as $chapitre) {
   	  $where["category_prescription.chapitre"] = " = '$chapitre'";
    	  $nb_element = $line_element->countList($where, null, null, null, $ljoin_element);
 			$nb_comment = $line_comment->countList($where, null, null, null, $ljoin_comment);

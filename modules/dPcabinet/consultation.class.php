@@ -453,7 +453,7 @@ class CConsultation extends CCodable {
     foreach ($this->_ref_actes_ccam as $acte_ccam) {
 	    $acteNumber = count($this->_fse_intermax)+1;
 	    $ACTE = array(
-          "PRE_ACTE_TYPE"   => 1,
+        "PRE_ACTE_TYPE"     => 1,
 	      "PRE_DEPASSEMENT"   => $acte_ccam->montant_depassement,
 	      "PRE_CODE_CCAM"     => $acte_ccam->code_acte,
 	      "PRE_CODE_ACTIVITE" => $acte_ccam->code_activite,
@@ -465,8 +465,16 @@ class CConsultation extends CCodable {
 	    for ($i = 1; $i <= 4; $i++) {
 	      $ACTE["PRE_MODIF_$i"] = @$acte_ccam->_modificateurs[$i-1];
 	    }
-	    
+
 	    $this->_fse_intermax["ACTE_$acteNumber"] = $ACTE;
+    }
+
+    // Accident de travail
+    if ($this->accident_travail) {
+		  $this->_fse_intermax["FSE"] = array(
+		    "FSE_NATURE_ASSURANCE" => "AT",
+		    "FSE_DATE_AT" => mbDateToLocale($this->accident_travail),
+		  );
     }
   }
   
@@ -567,6 +575,7 @@ class CConsultation extends CCodable {
     $consult->total_assure = $fse["FSE_TOTAL_ASSURE"];
     $consult->total_amo    = $fse["FSE_TOTAL_AMO"];
     $consult->total_amc    = $fse["FSE_TOTAL_AMC"];
+    $consult->accident_travail = mbDateFromLocale($fse["FSE_DATE_AT"]);
     
     $consult->du_patient = $consult->total_assure;
 

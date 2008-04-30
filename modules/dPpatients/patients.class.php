@@ -414,9 +414,12 @@ class CPatient extends CMbObject {
       "1" => "m",
       "2" => "f",
     );
-      
-    $this->sexe = $sexeMatrix[$this->matricule[0]];
     
+    // Sexe récupéré que quand le bénéficiaire est l'assuré
+    if ($vitale["VIT_CODE_QUALITE"] == "00") {
+      $this->sexe = $sexeMatrix[$this->matricule[0]];
+    }
+
     // Assuré
     $this->assure_nom          = $vitale["VIT_NOM_ASSURE"];
     $this->assure_prenom       = $vitale["VIT_PRENOM_ASSURE"];
