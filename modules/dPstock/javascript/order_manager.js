@@ -86,25 +86,25 @@ function refreshLists(keywords) {
   return false;
 }
 
-function popupOrder(iOrderId, iWidth, iHeight, bAutofill) {
-  var width = iWidth?iWidth:500;
-  var height = iHeight?iHeight:500;
+function popupOrder(iOrderId, width, height, bAutofill) {
+  width = width || 500;
+  height = height || 500;
 
   var url = new Url();
-  url.setModuleAction("dPstock", "vw_aed_order", null, null);
+  url.setModuleAction("dPstock", "vw_aed_order");
   url.addParam("order_id", iOrderId);
   url.addParam("_autofill", bAutofill != undefined);
 
-  url.pop(width, height, "Edition/visualisation commande");
+  url.popup(width, height, "Edition de commande");
 }
 
-function popupOrderForm(iOrderId, iWidth, iHeight) {
-  var width = iWidth?iWidth:500;
-  var height = iHeight?iHeight:500;
+function popupOrderForm(iOrderId, width, height) {
+  width = width || 500;
+  height = weight || 500;
 
   var url = new Url();
-  url.setModuleAction("dPstock", "vw_order_form", null, null);
+  url.setModuleAction("dPstock", "vw_order_form");
   url.addParam("order_id", iOrderId);
 
-  url.pop(width, height, "Bon de commande");
+  url.popup(width, height, "Bon de commande");
 }

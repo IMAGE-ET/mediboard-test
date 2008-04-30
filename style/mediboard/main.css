@@ -1037,6 +1037,8 @@ div.loading {
   background: url(images/icons/loading.gif) no-repeat center left;
   padding: 2px;
   padding-left: 20px;
+  white-space: nowrap;
+  display: inline;
 }
 
 div.big-success,
@@ -2539,21 +2541,21 @@ div.about div.nav {
   color: #0f0;
 }
 
-div.chargementMask{
+.chargementMask{
   width: 100%;
   position: absolute;
   background-color:#000 ;
   z-index: 10;
 }
 
-div.chargementText{
+.chargementText{
   width: 20%;
-  position: absolute;
+  position: fixed;
   z-index: 11;
-}
-div.chargementText table.tbl th{
+  font-size: 1.2em;
   background-color:#fff;
-  color:#000 ;
+  color:#000;
+  border: 1px solid #666;
   padding: 20px 5px;
   text-align: center;
 }

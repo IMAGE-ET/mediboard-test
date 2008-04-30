@@ -164,7 +164,7 @@ function easyMode() {
   var height = 500;
 
   var url = new Url();
-  url.setModuleAction("dPcabinet", "vw_ant_easymode", null, null);
+  url.setModuleAction("dPcabinet", "vw_ant_easymode");
   url.addParam("prat_id", "{{$chir_id}}");
 
   url.pop(width, height, "easyMode");

@@ -587,13 +587,13 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/prototype_hack.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);
+  //$affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/browser.js",$modeReturn);  
+  //$affichageScript .= mbLoadScript("includes/javascript/browser.js",$modeReturn);  
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   if($modeReturn)
     return $affichageScript;

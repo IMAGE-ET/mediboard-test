@@ -36,7 +36,7 @@
         <input type="hidden" name="order_id" value="{{$order_id}}" />
         <input type="hidden" name="reference_id" value="{{$curr_reference->_id}}" />
         <input type="text" name="quantity" value="1" size="2" />
-        <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: true})">{{tr}}Add{{/tr}}</button>
+        <button class="add notext" type="button" onclick="submitOrderItem(this.form, {refreshLists: false})">{{tr}}Add{{/tr}}</button>
       </form>
     </td>
     {{/if}}

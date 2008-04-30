@@ -14,7 +14,7 @@ function startUncaseBCBTables(){
 
 function importCSV(){
   var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_bcb_import", null, null);
+  url.setModuleAction("dPmedicament", "vw_bcb_import");
   url.pop(400, 400, "Import de fichier CSV");
 }
 

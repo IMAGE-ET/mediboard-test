@@ -14,7 +14,7 @@ $can->needsEdit();
 $order_id    = mbGetValueFromGetOrSession('order_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
 $societe_id  = mbGetValueFromGetOrSession('societe_id');
-$_autofill   = mbGetValueFromGetOrSession('_autofill');
+$_autofill   = mbGetValueFromGetOrSession('_autofill')=='true'?1:null;
 
 // Loads the expected Order
 $order = new CProductOrder();
@@ -22,6 +22,9 @@ $order = new CProductOrder();
 if ($order_id) {
   $order->load($order_id);
   $order->updateFormFields();
+  if ($_autofill) {
+    $order->autofill();
+  }
   
   foreach ($order->_ref_order_items as $item) {
   	$item->_quantity_received = $item->quantity_received;

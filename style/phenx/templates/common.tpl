@@ -27,8 +27,8 @@
 <!-- Loading divs -->
 
 <div id="waitingMsgMask" class="chargementMask" style="display: none;"></div>
-<div id="waitingMsgText" class="chargementText" style="display: none;">
-  Chargement en cours
+<div id="waitingMsgText" class="chargementText" style="top: -1500px;"><!-- This trick is to preload the background image -->
+  <div class="loading">Chargement en cours</div>
 </div>
 
 <!-- Tooltip div used for dom clonage -->

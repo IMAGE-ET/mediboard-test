@@ -62,9 +62,9 @@ PRIMARY KEY (`delivery_id`)) TYPE=MYISAM;';
  `date_ordered` DATETIME, 
  `societe_id` INT(11) UNSIGNED NOT NULL, 
  `group_id` INT(11) UNSIGNED NOT NULL, 
- `locked` BOOL NOT DEFAULT \'0\',
+ `locked` BOOL NULL DEFAULT \'0\',
  `cancelled` BOOL NULL DEFAULT \'0\',
- `deleted` BOOL NULL DEFAULT \'0\';
+ `deleted` BOOL NULL DEFAULT \'0\',
  `order_number` VARCHAR(64) NOT NULL, 
 PRIMARY KEY (`order_id`)) TYPE=MYISAM;';
     $this->addQuery($sql);

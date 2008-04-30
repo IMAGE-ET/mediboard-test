@@ -71,7 +71,7 @@ function pageMain() {
         {{/foreach}}
         </select>
         <input type="text" name="keywords" value="" />
-        <button type="button" class="search" name="search" onclick="referencesFilter.submit();">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="search" name="search" onclick="referencesFilter.submit();">{{tr}}Search{{/tr}}</button>
       </form>
     
       <!-- <div style="text-align: right;">
@@ -82,41 +82,41 @@ function pageMain() {
   {{/if}}
 
     <td class="halfPane">
-      <form name="order-edit-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
+      <form name="order-receive-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
         <input type="hidden" name="m" value="{{$m}}" />
         <input type="hidden" name="dosql" value="do_order_aed" />
         <input type="hidden" name="order_id" value="{{$order->_id}}" />
         <input type="hidden" name="del" value="0" />
         
       {{if $order->date_ordered}}
-        <input type="hidden" name="_receive" value="0" />
-        <button type="button" class="tick" onclick="Form.Element.setValue(_receive, 1); submitOrder(this.form, {close: true})">{{tr}}CProductOrder-_receive{{/tr}}</button>
+        <input type="hidden" name="_receive" value="1" />
+        <button type="button" class="tick" onclick="submitOrder(this.form, {close: true})">{{tr}}CProductOrder-_receive{{/tr}}</button>
         
       {{else if !$order->_received}}
-        <input type="hidden" name="_autofill" value="0" />
-        <button type="button" class="change" onclick="Form.Element.setValue(_autofill, 1); submitOrder(this.form, {refreshLists: true})">{{tr}}CProductOrder-_autofill{{/tr}}</button>
+        <input type="hidden" name="_autofill" value="1" />
+        <button type="button" class="change" onclick="submitOrder(this.form, {refreshLists: true})">{{tr}}CProductOrder-_autofill{{/tr}}</button>
       {{/if}}
-        
-        <input type="hidden" name="cancelled" value="0" />
-        <button class="trash" type="button" onclick="Form.Element.setValue(cancelled, 1); submitOrder(this.form, {close: true})">{{tr}}Remove{{/tr}}</button>
-        
-        <!-- Edit order -->
-        <table class="form">
-          <tr>
-            <th>{{mb_label object=$order field=order_number}}</th>
-            <td>
-              {{mb_field object=$order field=order_number hidden=true}}
-              {{$order->order_number}}</td>
-          </tr>
-          <tr>
-            <th>{{mb_label object=$order field=societe_id}}</th>
-            <td>
-              {{mb_field object=$order field=societe_id hidden=true}}
-              {{$order->_ref_societe->_view}}
-            </td>
-          </tr>
-        </table>
       </form>
+      
+      <form name="order-cancel-{{$order->_id}}" action="?" method="post" onsubmit="return checkForm(this);">
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="dosql" value="do_order_aed" />
+        <input type="hidden" name="order_id" value="{{$order->_id}}" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="cancelled" value="1" />
+        <button class="trash" type="button" onclick="submitOrder(this.form, {close: true})">{{tr}}Remove{{/tr}}</button>
+      </form>
+      
+      <table class="form">
+        <tr>
+          <th>{{mb_title object=$order field=order_number}}</th>
+          <td>{{mb_value object=$order field=order_number}}</td>
+        </tr>
+        <tr>
+          <th>{{mb_title object=$order field=societe_id}}</th>
+          <td>{{$order->_ref_societe->_view}}</td>
+        </tr>
+      </table>
       
       <div id="order-{{$order->_id}}">
         {{include file="inc_order.tpl"}}

@@ -4,7 +4,6 @@ function main() {
 	try {
 	  prepareForms();
 	  initFCKEditor();
-	  BrowserDetect.init();
 	  ObjectInitialisation.hackIt();
 	  SystemMessage.init();
 	  WaitingMessage.init();
@@ -87,15 +86,6 @@ var WaitingMessage = {
   		  return "Vous avez modifié certaines informations sur cette page sans les sauvegarder.Si vous appuyez sur OK, ces données seront perdues.";
   		}
     };
-
-// Preload seem not to be necessary and is broken anyway 
-//  (generates File not found 403 HTTP responses)
-//		// Autoload loading image cuz the browser won't try on before unload
-//    var eDiv = $(document.createElement("div"));
-//	  eDiv.className = "loading";
-//    var sStyle = eDiv.getStyle("background-image");
-//    var sImg = sStyle.match(/url\((.*)\)/);
-//    (new Image).src = sImg;
 	},
 	
   show: function() {
@@ -107,29 +97,34 @@ var WaitingMessage = {
     }
   
     // Display waiting text
-    eText.show();
-    Element.setOpacity(eText, 0.8);
-    var posTop  = eDoc.scrollTop  + (eDoc.clientHeight - eText.offsetHeight)/2;
-    var posLeft = eDoc.scrollLeft + (eDoc.clientWidth  - eText.offsetWidth )/2;
+    eText.setOpacity(0.8);
+    var posTop  = eDoc.scrollTop  + (document.viewport.getHeight() - eText.getHeight())/2;
+    var posLeft = eDoc.scrollLeft + (document.viewport.getWidth()  - eText.getWidth())/2;
     eText.style.top  = posTop + "px";
     eText.style.left = posLeft + "px";
-    
+    eText.show();
+     
+     
     // Display waiting mask
-    Element.setOpacity(eMask, 0.2);
+    eMask.setOpacity(0.2);
+    eMask.setStyle({
+      top: "0",
+      left: "0",
+      height: eDoc.scrollHeight + "px",
+      width: eDoc.scrollWidth + "px"
+    });
     eMask.show();
-    eMask.style.top  = "0px";
-    eMask.style.left = "0px";
-    eMask.style.height = eDoc.scrollHeight + "px";
-    eMask.style.width = eDoc.scrollWidth + "px";
   },
   
   cover: function(element) {
     // Problems under Explorer : don't want to waste time
     // - ugly rendering with no transparancy
     // - triggers errors when used in popup callbacks
-    if (BrowserDetect.browser == "Explorer") {
+    if (Prototype.Browser.IE) {
       return;
     }
+    
+    element = $(element);
     
     var eDiv = $(document.createElement("div"));
     eDiv.absolutize();
@@ -498,7 +493,7 @@ Class.extend(PairEffect, {
   flip: function() {
     var oTarget = $(this.oOptions.idTarget);
     var oTrigger = $(this.oOptions.idTrigger);
-    if (this.oOptions.sEffect && BrowserDetect.browser != "Explorer") {
+    if (this.oOptions.sEffect && !Prototype.Browser.IE) {
       new Effect.toggle(oTarget, this.oOptions.sEffect);
     } else {
       Element.toggle(oTarget);
@@ -684,8 +679,7 @@ Class.extend(ObjectTooltip, {
   // Constructor
   initialize: function(eTrigger, oOptions) {
     eTrigger = $(eTrigger);
-    eTrigger.identify();
-    this.sTrigger = eTrigger.id;
+    this.sTrigger = eTrigger.identify();
     this.sDiv = null;
     this.sTarget = null;
     this.idTimeOut = null;
@@ -719,6 +713,7 @@ Class.extend(ObjectTooltip, {
       this.load();
     }
     if (!this.oOptions.popup) {
+      this.reposition.bind(this);
       eDiv.show();
     }
   },
@@ -733,16 +728,32 @@ Class.extend(ObjectTooltip, {
     clearTimeout(this.idTimeout);
   },
   
+  reposition: function() {
+    var eDiv = $(this.sDiv);
+    var iDivDim = eDiv.getDimensions(); // Tooltip size
+    
+    var iDivOffset = eDiv.viewportOffset(); // Tooltip position
+    iDivOffset[2] = iDivOffset.left + iDivDim.width; // Tooltip right offset
+    iDivOffset[3] = iDivOffset.top + iDivDim.height; // Tooltip bottom offset
+    
+    var iWinDim = document.viewport.getDimensions(); // Viewport size
+    
+    // If the tooltip exceeds the viewport on the right
+    if (iDivOffset[2] > iWinDim.width) {
+      eDiv.setStyle({marginLeft: Math.max(iWinDim.width - iDivOffset[2], -iDivOffset[0]) + 'px'});
+    }
+  },
+  
   load: function() {
     var eTarget = $(this.sTarget);
     var url = new Url;
     url.setModuleAction(this.mode.module, this.mode.action);
     $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
     if(!this.oOptions.popup) {
-      url.requestUpdate(eTarget);
+      url.requestUpdate(eTarget, {onComplete: this.reposition.bind(this)});
       return;
     }
-    
+
     if(this.oOptions.popup) {
       url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
       return;
@@ -752,31 +763,35 @@ Class.extend(ObjectTooltip, {
   addHandlers: function() {
     var eDiv     = $(this.sDiv);
     var eTrigger = $(this.sTrigger);
-    if(this.oOptions.mode == "objectView" || this.oOptions.mode == "translate" || this.oOptions.mode == "objectViewHistory") {
-      Event.observe(eTrigger, "mouseout", this.hide.bind(this));
-    }
-    if(this.oOptions.mode == "objectNotes") {
-      Event.observe(eTrigger, "mouseout", this.stopShow.bind(this));
-      Event.observe(eDiv, "click", this.hide.bind(this));
+    
+    switch (this.oOptions.mode) {
+      case "objectView":
+      case "translate":
+      case "objectViewHistory":
+        eTrigger.observe("mouseout", this.hide.bind(this));
+        break;
+      case "objectNotes":
+        eTrigger.observe("mouseout", this.stopShow.bind(this));
+        eDiv.observe("click", this.hide.bind(this));
+        break;
     }
   },
   
   createDiv: function() {
     var eTrigger = $(this.sTrigger);  
+    
     var eDiv  = Dom.cloneElemById("tooltipTpl",true);
-    eDiv.identify();
-    Element.classNames(eDiv).add(this.mode.sClass);
-    Element.hide(eDiv);
+    eDiv.hide();
+    eDiv.addClassName(this.mode.sClass);
     eDiv.removeAttribute("_extended");
-    this.sDiv = eDiv.id;
-    eTrigger.parentNode.insertBefore(eDiv, eTrigger.nextSibling);
-    var eTarget = document.getElementsByClassName("content", eDiv)[0];
+    this.sDiv = eDiv.identify();
+    eTrigger.insert({after: eDiv});
+    
+    var eTarget = eDiv.select(".content")[0];
     eTarget.removeAttribute("_extended");
-    eTarget.identify();
-    this.sTarget = eTarget.id;
-  }  
-   
-  
+    
+    this.sTarget = eTarget.identify();
+  }
 } );
 
 /**
