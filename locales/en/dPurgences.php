@@ -206,4 +206,6 @@ $locales['msg-CRPU-modify'] = '';
 $locales['config-dPurgences-old_rpu-desc'] = '';
 $locales['config-dPurgences-old_rpu-1'] = '';
 $locales['config-dPurgences-old_rpu-0'] = '';
+$locales['CRPU-box_id'] = '';
+$locales['CRPU-box_id-desc'] = '';
 ?>

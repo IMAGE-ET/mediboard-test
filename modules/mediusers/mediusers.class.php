@@ -642,6 +642,10 @@ class CMediusers extends CMbObject {
   function isPraticien () {
     return $this->isFromType(array("Chirurgien", "Anesthésiste"));
   }
+  
+  function isMedical() {
+    return in_array($this->_user_type, array(1, 3, 4, 7, 13));
+  }
 
   function fillTemplate(&$template) {
     $this->loadRefsFwd();

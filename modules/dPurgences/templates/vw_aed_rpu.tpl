@@ -182,7 +182,7 @@ function pageMain() {
       {{include file="inc_vw_radio.tpl"}}
     </td>
     <td class="button">
-  		{{include file="inc_pec_praticien.tpl" listPrats=$listResponsables}}
+  		{{include file="inc_pec_praticien.tpl"}}
     </td>
   </tr>
 

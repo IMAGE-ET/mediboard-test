@@ -15,6 +15,7 @@ $group = new CGroups();
 $group->load($g);
 $user = new CMediusers();
 $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
+$listPrats        = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $rpu_id = mbGetValueFromGetOrSession("rpu_id");
 $rpu    = new CRPU;
@@ -66,17 +67,18 @@ $listServicesUrgence = CService::loadServicesUrgence();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("listServicesUrgence", $listServicesUrgence);
+$smarty->assign("listServicesUrgence" , $listServicesUrgence);
 $smarty->assign("contrainteProvenance", $contrainteProvenance);
-$smarty->assign("userSel", $userSel);
-$smarty->assign("today", mbDate());
-$smarty->assign("addiction", $addiction);
-$smarty->assign("traitement", $traitement);
-$smarty->assign("antecedent", $antecedent);
-$smarty->assign("rpu"             , $rpu);
-$smarty->assign("sejour"          , $sejour);
-$smarty->assign("patient"         , $patient);
-$smarty->assign("listResponsables", $listResponsables);
+$smarty->assign("userSel"             , $userSel);
+$smarty->assign("today"               , mbDate());
+$smarty->assign("addiction"           , $addiction);
+$smarty->assign("traitement"          , $traitement);
+$smarty->assign("antecedent"          , $antecedent);
+$smarty->assign("rpu"                 , $rpu);
+$smarty->assign("sejour"              , $sejour);
+$smarty->assign("patient"             , $patient);
+$smarty->assign("listResponsables"    , $listResponsables);
+$smarty->assign("listPrats"           , $listPrats);
 
 $smarty->display("vw_aed_rpu.tpl");
 ?>

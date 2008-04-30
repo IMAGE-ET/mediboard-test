@@ -25,7 +25,7 @@ $today = mbDate();
 // L'utilisateur doit-il voir les informations médicales
 $user = new CMediusers();
 $user->load($AppUI->user_id);
-$medicalView = in_array($user->_user_type, array(1, 3, 4, 7, 13));
+$medicalView = $user->isMedical();
 
 $group = new CGroups();
 $group->load($g);
@@ -42,6 +42,8 @@ $where["type"] = "= 'urg'";
 if($selAffichage == "prendre_en_charge"){
   $ljoin["consultation"] = "consultation.sejour_id = sejour.sejour_id";
   $where["consultation.consultation_id"] = "IS NULL";
+} else if($selAffichage == "presents"){
+  $where["sejour.sortie_reelle"] = "IS NULL";
 }
 
 

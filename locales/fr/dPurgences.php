@@ -206,4 +206,6 @@ $locales['config-dPurgences-old_rpu'] = 'Champs RPU';
 $locales['config-dPurgences-old_rpu-desc'] = 'Champs RPU utilisés dans les formulaires et en envoi';
 $locales['config-dPurgences-old_rpu-1'] = 'Anciens RPU (Recommandations 2003)';
 $locales['config-dPurgences-old_rpu-0'] = 'Nouveau RPU (Recommandations 2006)';
+$locales['CRPU-box_id'] = 'Box';
+$locales['CRPU-box_id-desc'] = 'Box ou est placé le patient';
 ?>
