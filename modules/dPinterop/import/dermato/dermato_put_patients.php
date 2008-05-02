@@ -109,7 +109,6 @@ foreach($listImport as $key => $value) {
     $pat->incapable_majeur = $value["incapable_majeur"] == 'o' ? 1 : 0;
     $pat->ATNC = $value["ATNC"] == 'o' ? 1 : 0;
     $pat->matricule = $value["matricule"];
-    $pat->SHS = null;
     $pat->rques = $value["rques"];
     echo $pat->store();
     $sql = "UPDATE dermato_import_patients" .

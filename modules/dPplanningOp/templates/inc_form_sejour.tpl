@@ -518,11 +518,6 @@ Main.add( function(){
 	{{/if}}
 </tr>
 
-<tr>
-  <th>{{mb_label object=$sejour field="venue_SHS"}}</th>
-  <td colspan="3">
-    {{mb_field object=$sejour field="venue_SHS" size="8" maxlength="8"}}
-  </td></tr>
 {{/if}}
 
 <tr>

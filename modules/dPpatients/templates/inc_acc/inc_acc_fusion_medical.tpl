@@ -161,18 +161,4 @@
       <input type="text" readonly="readonly" name="_medecin3_view" value="{{$finalPatient->_ref_medecin3->_view}}" />
     </td>
   </tr>
-  
-  <tr>
-    <th>{{mb_label object=$finalPatient field="SHS"}}</th>
-    <td>
-      <input type="radio" name="_choix_SHS" value="{{$patient1->SHS}}" checked="checked" onclick="setField(this.form.SHS, '{{$patient1->SHS|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient1->SHS}}
-    </td>
-    <td>
-      <input type="radio" name="_choix_SHS" value="{{$patient2->SHS}}" onclick="setField(this.form.SHS, '{{$patient2->SHS|smarty:nodefaults|JSAttribute}}')" />
-      {{$patient2->SHS}}
-    </td>
-    <td>{{mb_field object=$finalPatient field="SHS" tabindex="208" size="10" maxlength="10"}}</td>
-  </tr>
-
 </table>

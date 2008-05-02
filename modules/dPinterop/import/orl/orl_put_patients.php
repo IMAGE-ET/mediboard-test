@@ -85,7 +85,6 @@ foreach($listImport as $key => $value) {
     $pat->incapable_majeur = $value["incapable_majeur"];
     $pat->ATNC = $value["ATNC"];
     $pat->matricule = $value["matricule"];
-    $pat->SHS = null;
     $pat->rques = $value["rques"];
     echo $pat->store();
     $sql = "UPDATE import_patients" .

@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.64";
+$config["mod_version"]     = "0.65";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -707,7 +707,20 @@ class CSetupdPpatients extends CSetup {
             ) ENGINE = MYISAM ;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.64";
+    $this->makeRevision("0.64");
+    $this->addDependency("dPsante400", "0.1");
+    $sql = "INSERT INTO `id_sante400` (id_sante400_id, object_class, object_id, tag, last_update, id400)
+						SELECT NULL, 'CPatient', `patient_id`, 'SHS group:1', NOW(), `SHS`
+						FROM `patients` 
+						WHERE `SHS` IS NOT NULL 
+						AND `SHS` != 0";
+    $this->addQuery($sql);
+    
+//    $this->makeRevision("0.65");
+//    $sql = "ALTER TABLE `patients` DROP `SHS";
+//    $this->addQuery($sql);
+    
+    $this->mod_version = "0.65";
   }
 }
 

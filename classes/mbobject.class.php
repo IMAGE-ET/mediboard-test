@@ -316,7 +316,7 @@ class CMbObject {
   }
   
   
-  /*
+  /**
    * Chargement du dernier identifiant id400
    * @param : $tag = nom du tag à utiliser
    */
