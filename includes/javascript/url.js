@@ -3,10 +3,7 @@
  * Lazy poping and ajaxing
  */
 
-var Url = Class.create();
-
-// Url members 
-Class.extend(Url, {
+var Url = Class.create({
   // Constructor
   initialize: function() {
     this.oParams = {};

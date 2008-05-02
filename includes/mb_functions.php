@@ -585,7 +585,6 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
-  $affichageScript .= mbLoadScript("includes/javascript/prototype_hack.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
   //$affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);

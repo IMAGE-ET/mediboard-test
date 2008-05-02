@@ -1038,7 +1038,6 @@ div.loading {
   padding: 2px;
   padding-left: 20px;
   white-space: nowrap;
-  display: inline;
 }
 
 div.big-success,
@@ -2560,6 +2559,10 @@ div.about div.nav {
   text-align: center;
 }
 
+.chargementText .loading{
+  display: inline;
+}
+
 div#performance {
   opacity: 0.6;
   line-height: 110%;  
@@ -2696,7 +2699,7 @@ table.tbl td.ccmu-P{
 .bargraph {
   overflow: hidden;
   height: 1em; 
-  min-width: 5em;
+  min-width: 2em;
 }
 
 
@@ -2795,7 +2798,6 @@ table.main td.step {
 
 .schema-dentaire {
   margin: auto;
-  margin-top: 1em;
   border: 1px dotted #666;
 }
 

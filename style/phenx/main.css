@@ -738,7 +738,6 @@ div.loading {
   padding: 6px;
   padding-left: 30px;
   white-space: nowrap;
-  display: inline;
 }
 
 div.big-success,
@@ -2219,6 +2218,10 @@ div.about div.nav {
   text-align: center;
 }
 
+.chargementText .loading{
+  display: inline;
+}
+
 div#performance {
   opacity: 0.6;
   line-height: 110%;  
@@ -2437,7 +2440,6 @@ table.main td.step {
 }
 .schema-dentaire {
   margin: auto;
-  margin-top: 1em;
   border: 1px dotted #666;
 }
 

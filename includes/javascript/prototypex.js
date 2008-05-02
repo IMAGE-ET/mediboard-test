@@ -1,50 +1,15 @@
 /**
  * Class utility object
  */
- 
 Class.extend = function (oClass, oExtension) {
   Object.extend(oClass.prototype, oExtension);
 }
 
-/**
- * Object utility object
- */
-
-// Can't use Object.extend() due to recursions
-Object.clone = function(object) {
-  return Object.extend({}, object);
-}
-
-/**
- * Try utility object
- */
-
-Object.extend(Try, { 
-  // Try as many functions as possible and returns array of return values
-  allThese : function() {
-    var aReturnValues = [];
-    for (var i = 0; i < arguments.length; i++) {
-      var oLambda = arguments[i];
-      try {
-        aReturnValues.push(oLambda());
-      } catch (e) {
-        aReturnValues.push(false);
-      }
-    }
-    return aReturnValues;
-  }
-});
  
 /**
  * Function class
  */
- 
 Class.extend(Function, {
-  getName: function() {
-    var re = /function ([^\(]*)/;
-    return this.toString().match(re)[1] || "anonymous";
-  },
-  
   getSignature: function() {
     var re = /function ([^\{]*)/;
     return this.toString().match(re)[1];
@@ -65,7 +30,6 @@ Element.addEventHandler = function(oElement, sEvent, oHandler) {
 /**
  * Element.ClassNames class
  */
-
 Class.extend(Element.ClassNames, {
   load: function (sCookieName, nDuration) {
     var oCookie = new CookieJar({expires: nDuration});
@@ -96,7 +60,6 @@ Class.extend(Element.ClassNames, {
     }
   }
 });
-
 
 Object.extend(Form.Element, {
   // Set an element value an notify 'change' event
@@ -207,5 +170,3 @@ Object.extend(EventEx, {
     Event._readyCallbacks.push(f);
   }
 });
-
-

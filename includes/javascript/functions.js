@@ -4,7 +4,6 @@ function main() {
 	try {
 	  prepareForms();
 	  initFCKEditor();
-	  ObjectInitialisation.hackIt();
 	  SystemMessage.init();
 	  WaitingMessage.init();
 	  initPuces();
@@ -89,22 +88,21 @@ var WaitingMessage = {
 	},
 	
   show: function() {
+    var eDoc  = document.documentElement;
     var eMask = $('waitingMsgMask');
     var eText = $('waitingMsgText');
-    var eDoc = document.documentElement;
     if (!eMask && !eText) {
       return;
     }
   
     // Display waiting text
+    var vpd = document.viewport.getDimensions();
+    var etd = eText.getDimensions();
     eText.setOpacity(0.8);
-    var posTop  = eDoc.scrollTop  + (document.viewport.getHeight() - eText.getHeight())/2;
-    var posLeft = eDoc.scrollLeft + (document.viewport.getWidth()  - eText.getWidth())/2;
-    eText.style.top  = posTop + "px";
-    eText.style.left = posLeft + "px";
+    eText.style.top  = (vpd.height - etd.height)/2 + "px";
+    eText.style.left = (vpd.width  - etd.width) /2 + "px";
     eText.show();
-     
-     
+    
     // Display waiting mask
     eMask.setOpacity(0.2);
     eMask.setStyle({
@@ -451,10 +449,7 @@ var Assert = {
  * PairEffect Class
  */
 
-var PairEffect = Class.create();
-
-// PairEffect Methods
-Class.extend(PairEffect, {
+var PairEffect = Class.create({
 
   // Constructor
   initialize: function(idTarget, oOptions) {
@@ -540,11 +535,7 @@ Object.extend(PairEffect, {
  * TogglePairEffect Class
  */
 
-var TogglePairEffect = Class.create();
-
-// TogglePairEffect Methods
-Class.extend(TogglePairEffect, {
-
+var TogglePairEffect = Class.create({
   // Constructor
   initialize: function(idTarget1, idTarget2, oOptions) {
   	
@@ -672,10 +663,7 @@ var ViewPort = {
  *   Handle object tooltip creation, associated with a MbObject and a target HTML element
  */
 
-var ObjectTooltip = Class.create();
-
-Class.extend(ObjectTooltip, {
-
+var ObjectTooltip = Class.create({
   // Constructor
   initialize: function(eTrigger, oOptions) {
     eTrigger = $(eTrigger);
@@ -713,8 +701,8 @@ Class.extend(ObjectTooltip, {
       this.load();
     }
     if (!this.oOptions.popup) {
-      this.reposition.bind(this);
       eDiv.show();
+      //this.reposition();
     }
   },
   
@@ -732,16 +720,21 @@ Class.extend(ObjectTooltip, {
     var eDiv = $(this.sDiv);
     var iDivDim = eDiv.getDimensions(); // Tooltip size
     
-    var iDivOffset = eDiv.viewportOffset(); // Tooltip position
-    iDivOffset[2] = iDivOffset.left + iDivDim.width; // Tooltip right offset
-    iDivOffset[3] = iDivOffset.top + iDivDim.height; // Tooltip bottom offset
+    var iDivOffset = eDiv.cumulativeOffset(); // Tooltip position
+    iDivOffset.right = iDivOffset[2] = iDivOffset.left + iDivDim.width; // Tooltip right offset
+    iDivOffset.bottom = iDivOffset[3] = iDivOffset.top + iDivDim.height; // Tooltip bottom offset
     
     var iWinDim = document.viewport.getDimensions(); // Viewport size
     
     // If the tooltip exceeds the viewport on the right
-    if (iDivOffset[2] > iWinDim.width) {
-      eDiv.setStyle({marginLeft: Math.max(iWinDim.width - iDivOffset[2], -iDivOffset[0]) + 'px'});
+    if (iDivOffset.right > iWinDim.width) {
+      eDiv.setStyle({marginLeft: Math.max(iWinDim.width - iDivOffset.right, -iDivOffset.left) + 'px'});
     }
+    
+    // If the tooltip exceeds the viewport on the bottom
+    /*if (iDivOffset.bottom > iWinDim.height) {
+      eDiv.setStyle({marginTop: Math.max(iWinDim.height - iDivOffset.bottom - iDivDim.height, -iDivOffset.top) + 'px'});
+    }*/
   },
   
   load: function() {
@@ -1228,8 +1221,7 @@ function uploadFile(classe, id, categorie_id){
   url.popup(600, 200, "uploadfile");
 }
 
-var Note = Class.create();
-Class.extend(Note,  {
+var Note = Class.create({
   initialize: function() {
     this.url = new Url();
     this.url.setModuleAction("system", "edit_note");
@@ -1246,7 +1238,7 @@ Class.extend(Note,  {
   popup: function () {
     this.url.popup(600, 300, "note");
   }
-} )
+});
 
 // *******
 var notWhitespace   = /\S/;

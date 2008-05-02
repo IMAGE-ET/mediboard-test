@@ -58,7 +58,7 @@ function getLabelFor(oElement) {
   while (oLabel = aLabels[iLabel++]) {
     if (oElement.id == oLabel.htmlFor) {
       return oLabel;
-    }  
+    }
   } 
   
   return null; 
@@ -99,6 +99,78 @@ function setRadioValue(oElement, sValue) {
     if(oElement[i].value == sValue)
       oElement[i].checked = true;
   }
+}
+
+/** Universal get/set function for form elements
+  * @param element A form element (Form.Element or id) : input, textarea, select, group of radio buttons, group of checkboxes
+  * @param value   If set, sets the value to the element. Can be an array of values : ['elementvalue1', 'elementvalue2', ...] 
+  * @param fire    Determines wether the onchange callback has to be called or not
+  * @return        An array of values for multiple selectable elements, a boolean for 
+  *                single checkboxes/radios, a string for textareas and text inputs
+  */
+$V = function (element, value, fire) {
+  if (!element) {
+    return;
+  }
+  element = $(element);
+  fire = Object.isUndefined(fire) ? true : false;
+  
+  // We get the tag and the type
+  var tag  = element.tagName ? element.tagName.toLowerCase() : null;
+  var type = element.type    ? element.type.toLowerCase()    : null;
+  
+  // If it is a form element
+  if (Object.isElement(element) && (
+     tag == 'input' || 
+     tag == 'select' || 
+     tag == 'textarea')
+    ) {
+    
+    // If the element is a selectable one, we check if it's checked
+    var oldValue = (type == 'checkbox' || type == 'radio') ? element.checked : $F(element);
+
+    // If a value is provided
+    if (!Object.isUndefined(value) && value != oldValue) {
+      element.setValue(value);
+      if (fire) {
+        (element.onchange || Prototype.emptyFunction).bind(element)();
+      }
+    }
+    
+    // else, of no value is provided
+    else {
+      return oldValue;
+    }
+  } 
+  
+  // If the element is a list of elements (like radio buttons)
+  else if (element instanceof NodeList || Object.isArray(element)) {
+    if (!Object.isUndefined(value)) { // If a value is provided
+    
+      // If value isn't an array, we make it an array
+      value = Object.isArray(value) ? value : [value];
+      
+      // For every element, we apply the right value (in an array or not)
+      $A(element).each(function(e) { // For every element in the list
+        $V(e, value.indexOf(e.value) != -1, fire);
+      });
+    }
+    else { // else, if no value is provided
+      var ret = [];
+      $A(element).each(function (e) { // For every element in the list
+        if ($V(e)) {
+          ret.push(e.value);
+        }
+        type = e.type ? e.type.toLowerCase() : null;
+      });
+      
+      if (type == 'radio') {
+        ret = ret.reduce();
+      }
+      return (ret && ret.length > 0) ? ret : null;
+    }
+  }
+  return;
 }
 
 function pasteHelperContent(oHelpElement) {
@@ -150,6 +222,10 @@ function putHelperContent(oElem, sFieldSelect) {
 }
 
 function notNullOK(oElement) {
+  if (!Object.isElement(oElement)) {
+    oElement = Event.element(oElement);
+  }
+  
   if (oLabel = getLabelFor(oElement)) {
     oLabel.className = oElement.value ? "notNullOK" : "notNull";
   } 
@@ -311,17 +387,11 @@ function prepareForm(oForm, bForcePrepare) {
       }
     
       //  Label emphasized for notNull elements
-      if (sPropSpec = oElement.getAttribute("title")) {
+      if (sPropSpec = (oElement.getAttribute("title") || oElement.className)) {
         aSpecFragments = sPropSpec.split(" ");
         if (aSpecFragments.indexOf("notNull") != -1) {
           notNullOK(oElement);
-          Element.addEventHandler(oElement, "change", notNullOK);
-        }
-      }else if (sPropSpec = oElement.className) {
-        aSpecFragments = sPropSpec.split(" ");
-        if (aSpecFragments.indexOf("notNull") != -1) {
-          notNullOK(oElement);
-          Element.addEventHandler(oElement, "change", notNullOK);
+          oElement.observe("change", notNullOK);
         }
       }
      
@@ -557,10 +627,7 @@ NumericField.prototype = {
     var step = Number(this.getStep());
     var result = (parseInt(Number(oField.value) / step) + 1) * step;
     result = (result <= this.max || this.max == null) ? result : this.max;
-    oField.setValue(result);
-    if (oField.onchange) {
-      oField.onchange();
-    }
+    $V(oField, result, true);
     oField.select();
   },
 
@@ -570,10 +637,7 @@ NumericField.prototype = {
     var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
  	  result = (result >= this.min || this.min == null) ? result : this.min;
-    oField.setValue(result);
-    if (oField.onchange) {
-      oField.onchange();
-    }
+    $V(oField, result, true);
     oField.select();
   },
   
