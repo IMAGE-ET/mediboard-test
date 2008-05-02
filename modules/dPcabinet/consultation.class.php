@@ -125,11 +125,11 @@ class CConsultation extends CCodable {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backRefs["examaudio" ]     = "CExamAudio consultation_id";
-    $backRefs["examcomp"  ]     = "CExamComp consultation_id";
-    $backRefs["examnyha"  ]     = "CExamNyha consultation_id";
+    $backRefs["examaudio"]     = "CExamAudio consultation_id";
+    $backRefs["examcomp"]     = "CExamComp consultation_id";
+    $backRefs["examnyha"]     = "CExamNyha consultation_id";
     $backRefs["exampossum"]     = "CExamPossum consultation_id";
-    $backRefs["examigs"   ]     = "CExamIgs consultation_id";
+    $backRefs["examigs"]     = "CExamIgs consultation_id";
     $backRefs["prescriptions"]   = "CPrescription object_id";
     return $backRefs;
   }
@@ -779,22 +779,6 @@ class CConsultation extends CCodable {
     $this->loadExtCodesCCAM();
   }
 
-  function loadRefsDocsOld() {
-  	$this->loadRefConsultAnesth();
-    if($this->_ref_consult_anesth->consultation_anesth_id) {
-      $this->_ref_documents = new CCompteRendu();
-      $where = array();
-      $where[] = "(`object_class` = 'CConsultation' && `object_id` = '$this->consultation_id')
-               || (`object_class` = 'CConsultAnesth' && `object_id` = '".$this->_ref_consult_anesth->consultation_anesth_id."')";
-      $order = "nom";
-      $this->_ref_documents = $this->_ref_documents->loadList($where, $order);
-      $docs_valid = count($this->_ref_documents);
-    }else{
-      $docs_valid = parent::loadRefsDocs();
-    }
-    return $docs_valid;
-  }
-
   function loadRefsDocs() {
     parent::loadRefsDocs();
     
@@ -850,17 +834,13 @@ class CConsultation extends CCodable {
   }
   
   function loadRefConsultAnesth() {
-    if ($this->_ref_consult_anesth) {
-      return;
-    }
-   
-  	$this->_ref_consult_anesth = new CConsultAnesth;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
-    $this->_ref_consult_anesth->loadObject($where);
+  	$this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
   }
   
   function loadRefsExamAudio(){
+  	// Ne pas utiliser la backref => ne fonctionne pas 
+  	//$this->_ref_examaudio = $this->loadUniqueBackRef("examaudio");
+
   	$this->_ref_examaudio = new CExamAudio;
     $where = array();
     $where["consultation_id"] = "= '$this->consultation_id'";
@@ -868,24 +848,15 @@ class CConsultation extends CCodable {
   }
   
   function loadRefsExamNyha(){
-    $this->_ref_examnyha = new CExamNyha;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
-    $this->_ref_examnyha->loadObject($where);
+    $this->_ref_examnyha = $this->loadUniqueBackRef("examnyha");
   }
   
   function loadRefsExamPossum(){
-    $this->_ref_exampossum = new CExamPossum;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
-    $this->_ref_exampossum->loadObject($where);
+    $this->_ref_exampossum = $this->loadUniqueBackRef("exampossum");
   }
   
   function loadRefsExamIgs(){
-    $this->_ref_examigs = new CExamIgs;
-    $where = array();
-    $where["consultation_id"] = "= '$this->consultation_id'";
-    $this->_ref_examigs->loadObject($where);  
+    $this->_ref_examigs = $this->loadUniqueBackRef("examigs");
   }
   
   function loadRefsFichesExamen() {
@@ -893,7 +864,6 @@ class CConsultation extends CCodable {
     $this->loadRefsExamNyha();
     $this->loadRefsExamPossum();
     $this->loadRefsExamIgs();
-    
     $this->_count_fiches_examen = 0;
     $this->_count_fiches_examen += $this->_ref_examaudio ->_id ? 1 : 0; 
     $this->_count_fiches_examen += $this->_ref_examnyha  ->_id ? 1 : 0; 

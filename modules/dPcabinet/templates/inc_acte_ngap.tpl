@@ -18,7 +18,7 @@ ActesNGAP = {
 	  //refreshFdr("{{$object->_id}}") || Prototype.emptyFunction;
 	  
 	  {{if $object->_class_name == "CConsultation"}}
-	    refreshFdr("{{$object->_id}}");
+	    refreshReglement("{{$object->_id}}");
 	  {{/if}}
 	  
 	  var url = new Url;

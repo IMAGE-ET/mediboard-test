@@ -107,15 +107,22 @@ function reloadListTech() {
       {{else}}
         {{assign var=sejour value=""}}
       {{/if}}
-      {{if $sejour}}
-        {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
-         					totals_by_chapitre = $sejour->_totals_by_chapitre
-                  prescriptions=$sejour->_ref_prescriptions 
-                  object_id=$sejour->_id 
-                  object_class="CSejour" 
-                  praticien_id=$app->user_id 
-                  suffixe=info_anesth}}
-      {{/if}}
+      
+      <div id="prescription-CSejour-info_anesth" class="text">
+		
+	    </div>   
+	    
+	    {{if $sejour}}
+	    <script type="text/javascript">
+	      Main.add( function(){
+	        // Lancement de reloadWidget lors du rechargement de inc_fdr
+ 	        Prescription.suffixes.push("info_anesth");
+          PrescriptionEditor.refresh('{{$sejour->_id}}','CSejour');
+        } );
+	    </script>
+	    {{/if}}
+  
+      
       {{/if}}
     </td>
   </tr>

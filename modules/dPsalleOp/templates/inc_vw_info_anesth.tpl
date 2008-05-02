@@ -125,7 +125,13 @@
    
     <tr>
       <td colspan="2">
-        {{include file="../../dPcabinet/templates/inc_examens_comp.tpl" _is_anesth=1 consult=$consult_anesth->_ref_consultation}}
+        {{assign var=consult value=$consult_anesth->_ref_consultation}}
+        {{mb_include_script module="dPcabinet" script="exam_dialog"}}
+        <script type="text/javascript">
+          ExamDialog.register('{{$consult->_id}}','{{$consult->_class_name}}');
+        </script>
+      
+      
       </td>
     </tr>
       

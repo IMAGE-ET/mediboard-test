@@ -104,6 +104,7 @@ function reloadListExamComp() {
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
       </div>
       
+      
       <table class="form">
 			  <!-- Documents ExamComp -->
 			  <tr>
@@ -112,27 +113,32 @@ function reloadListExamComp() {
 			  <tr>
 			    <td>
 			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
-			      {{include file=../../dPcompteRendu/templates/inc_widget_documents.tpl praticien_id=$consult->_praticien_id suffixe=exam}}
+			      <!-- Documents -->
+			      <div id="documents-exam">
+			      </div>
+			      <script type="text/javascript">
+			         Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','exam');
+            </script>
 			    
 			      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
             <hr />
             <div id="viewPrescriptionSejour">
-            {{if $consult->_ref_consult_anesth->operation_id}}
-              {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_operation->_ref_sejour}}
-              {{include file="../../dPprescription/templates/inc_widget_prescription.tpl" 
-				      					totals_by_chapitre = $sejour->_totals_by_chapitre
-                        prescriptions=$sejour->_ref_prescriptions
-                        object_id=$sejour->_id 
-                        object_class="CSejour" 
-                        praticien_id=$app->user_id
-                        suffixe=exam}}
-            {{/if}}
+	            <div id="prescription-CSejour-exam" class="text">
+					    </div>
+							{{if $consult->_ref_consult_anesth->operation_id || $consult->_ref_consult_anesth->sejour_id}}
+						    <script type="text/javascript">
+						      Main.add( function(){
+						        // Lancement de reloadWidget lors du rechargement de inc_fdr
+					 	        Prescription.suffixes.push("exam");
+					          PrescriptionEditor.refresh('{{$consult->_ref_consult_anesth->_ref_sejour->_id}}','CSejour');
+					        } );
+						    </script>
+					    {{/if}}
             </div>
             {{/if}}
 			    </td>
 			  </tr>
       </table>
-      
     </td>
   </tr>
   <tr>

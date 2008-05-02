@@ -1,7 +1,7 @@
 <script type="text/javascript">
 
 // Lancement du reload
-window.opener.ExamDialog.reload();
+window.opener.ExamDialog.reload('{{$exam_possum->consultation_id}}');
 
 
 var listScorePhysio = {{$exam_possum->_score_possum_physio|@json}};

@@ -3,7 +3,7 @@
 <script type="text/javascript">
 
 // Lancement du reload
-window.opener.ExamDialog.reload();
+window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
 
 </script>
 

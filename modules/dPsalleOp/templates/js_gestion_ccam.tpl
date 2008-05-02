@@ -6,7 +6,7 @@ ActesCCAM = {
   refreshList: function(subject_id, chir_id){
     // Rafraichissement du inc_fdr
     if("{{$module}}" == "dPcabinet"){
-      refreshFdr(subject_id);
+      refreshReglement(subject_id);
     }
     if($('viewSejourHospi')){
       loadSejour(subject_id);
@@ -83,12 +83,12 @@ function setAssociation(association, oForm, subject_id, chir_id, oOptions) {
   submitFormAjax(oForm, 'systemMsg', oDefaultOptions)
 }
 
-function refreshFdr(consult_id) {
+function refreshReglement(consult_id) {
   // reload pour mettre a jour le champ codes_ccam dans la gestion des tarifs
   var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_fdr_consult");
+  url.setModuleAction("dPcabinet", "httpreq_vw_reglement");
   url.addParam("selConsult", consult_id);
-  url.requestUpdate('fdrConsult', { waitingText : null }) ;
+  url.requestUpdate('reglement', { waitingText : null }) ;
 }
 
 </script>

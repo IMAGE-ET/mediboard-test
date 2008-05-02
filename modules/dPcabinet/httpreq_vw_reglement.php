@@ -71,23 +71,8 @@ if ($selConsult) {
   
   // Some Forward references
   $consult->loadRefsFwd();
-  $consult->loadRefsDocs();
-  $consult->loadRefsFiles();
-  $consult->loadRefsFichesExamen();
-  
-  
-  //$consult->loadRefsPrescriptions();
-  $consult->_totals_by_chapitre = array();
-  $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
-  if($consult->_ref_prescriptions){
-  	foreach($consult->_ref_prescriptions as $_prescription){
-  		$_prescription->countLinesMedsElements();
-      foreach ($_prescription->_counts_by_chapitre as $chapitre => $count) {
-	  	  @$consult->_totals_by_chapitre[$chapitre]+= $count;
-	  	}
-  	}
-  }
-  
+  $consult->loadRefConsultAnesth();
+    
   // Patient
   $patient =& $consult->_ref_patient;
 }
@@ -97,16 +82,6 @@ $consult->loadIdsFSE();
 $consult->makeFSE();
 $consult->_ref_chir->loadIdCPS();
 $consult->_ref_patient->loadIdVitale();
-
-
-// Modèles de l'utilisateur
-$listModelePrat = array();
-$listModeleFunc = array();
-$object_class = $consult->_is_anesth ? "CConsultAnesth" : "CConsultation";
-if ($userSel->user_id) {
-  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $userSel->user_id);
-  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $userSel->function_id);
-}
 
 // Récupération des tarifs
 $order = "description";
@@ -119,7 +94,7 @@ $where["function_id"] = "= '$userSel->function_id'";
 $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
 
-$_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste")) 
+$_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste"))
   || $consult->_ref_consult_anesth->consultation_anesth_id;
 
 // Codes et actes NGAP
@@ -131,14 +106,12 @@ $smarty = new CSmartyDP();
 $smarty->assign("_is_anesth", $_is_anesth);  
 
 $smarty->assign("banques"       , $banques);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("noReglement"   , $noReglement);
 $smarty->assign("userSel"       , $userSel);
 
-$smarty->display("inc_fdr_consult.tpl");
+$smarty->display("inc_vw_reglement.tpl");
 
 ?>

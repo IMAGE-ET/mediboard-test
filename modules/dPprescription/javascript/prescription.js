@@ -85,7 +85,7 @@ var Prescription = {
       var oForm = document.addLine;
       
       if(window.opener){
-        window.opener.PrescriptionEditor.refresh(oForm.prescription_id.value, oForm.object_class.value);
+        window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
       }
       
       var urlPrescription = new Url;
@@ -96,13 +96,9 @@ var Prescription = {
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
       
-      
       if(mode_pharma == "1"){
-    
           urlPrescription.requestUpdate("div_medicament", { waitingText : null });  
       } else {
-        
-	    
 	      if(mode_protocole){
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
 	      } else {

@@ -105,10 +105,10 @@ function reloadConsultAnesth() {
   infosAnesthUrl.addParam("selConsult", document.editFrmFinish.consultation_id.value);
   infosAnesthUrl.requestUpdate('InfoAnesth', { waitingText: null } );
 
-  var urlPrescription = new Url;
-  urlPrescription.setModuleAction("dPcabinet", "httpreq_vw_prescription_exam_comp");
-  urlPrescription.addParam("sejour_id", document.editAntFrm._sejour_id.value);
-  urlPrescription.requestUpdate('viewPrescriptionSejour', { waitingText: null } );
+  var sejour_id = document.editAntFrm._sejour_id.value;
+  Prescription.suffixes.push("exam");
+  Prescription.suffixes.push("info_anesth");
+	PrescriptionEditor.refresh(sejour_id,'CSejour');
 }
 
 function pageMain() {

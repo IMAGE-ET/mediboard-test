@@ -12,6 +12,7 @@
 Document.suffixes.push("{{$suffixe}}");
 Document.suffixes = Document.suffixes.uniq();
 
+
 Document.refreshList = function() {
   var url = new Url;
   url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
@@ -24,9 +25,9 @@ Document.refreshList = function() {
 	  url.requestUpdate("documents-" + suffixe, { waitingText : null } );
   } );
 }
+
 </script>
 
-<div id="documents-{{$suffixe}}">
 
 <form name="DocumentAdd-{{$suffixe}}" action="?m={{$m}}" method="post">
 <table class="form">
@@ -92,5 +93,3 @@ Document.refreshList = function() {
   <li><em>Aucun document</em></li>
   {{/foreach}}
 </ul>
-
-</div>

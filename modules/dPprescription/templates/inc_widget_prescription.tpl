@@ -9,7 +9,6 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 
 
 {{if is_array($prescriptions)}}
-	<div id="prescription-{{$object_class}}-{{$suffixe}}" class="text">
 	  <!-- Pas de prescription -->
 	  {{if !$prescriptions|@count}}
 	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
@@ -23,11 +22,11 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	      </select>
 	      
 	      <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
-	        Créer une prescription
+	        Créer une prescription de séjour
 	      </button>
 	    {{else}}
 	    <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
-	      Créer une prescription
+	      Créer une prescription de consultation
 	    </button>
 	    {{/if}}
 	  </form>
@@ -37,7 +36,6 @@ Prescription.suffixes = Prescription.suffixes.uniq();
       <tr>
         <th>Type</th>
         <th>Praticien</th>
-        
         {{foreach from=$totals_by_chapitre item=total key=chapitre}}
         {{if $total}}
         <th>
@@ -45,7 +43,6 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 				</th>
 				{{/if}}
 				{{/foreach}}
-        
       </tr>
   
 	    {{foreach from=$prescriptions item=_prescription}}
@@ -54,7 +51,6 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	 
 	    </table>
 	    {{/if}}
-	</div>
 {{else}}
   <div class="warning">
     Module Prescriptions non installé

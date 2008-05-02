@@ -173,6 +173,8 @@ dates = {
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
+  <input type="hidden" name="object_id" value="{{$prescription->object_id}}" />
+  
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
   <!-- Date de debut -->

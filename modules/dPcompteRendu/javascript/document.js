@@ -52,6 +52,26 @@ var Document = {
     Console.trace("Refreshing for");
     Console.debug(object_class, "Object class");
     Console.debug(object_id   , "Object id");
+  },
+  
+  reloadInit: function(object_id, object_class, praticien_id){
+    var url = new Url;
+    url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
+    url.addParam("object_class", object_class); 
+    url.addParam("object_id"   , object_id);
+    url.addParam("praticien_id", praticien_id);
+    Document.suffixes.each( function(suffixe) {
+	    url.addParam("suffixe", suffixe);
+	    url.make();
+	    url.requestUpdate("documents-" + suffixe, { waitingText : null } );
+   } );
+  }, 
+  register: function(object_id, object_class, praticien_id, suffixe){
+    document.write('<div id=documents-'+suffixe+'></div>');
+    Main.add( function() {
+      Document.suffixes.push(suffixe);
+      Document.reloadInit(object_id,object_class,praticien_id);
+    } );
   }
 };
 

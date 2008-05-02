@@ -103,20 +103,7 @@ $codePraticienEc = null;
 
 // Chargement de la consultation
 if ($consult->_id) {
-  $consult->loadRefs();
-  
-  $consult->_ref_prescriptions = $consult->loadBackRefs("prescriptions");
-  $consult->_totals_by_chapitre = array();
-  if ($consult->_ref_prescriptions){
-	  foreach($consult->_ref_prescriptions as &$prescription){
-	  	if ($prescription->_id){
-	      $prescription->countLinesMedsElements();
-	      foreach ($prescription->_counts_by_chapitre as $chapitre => $count) {
-		  	  @$consult->_totals_by_chapitre[$chapitre]+= $count;
-		  	}
-	  	}
-	  }
-  }
+  $consult->loadRefs();  
   $consult->loadAides($userSel->user_id);
   
   // Chargment de la consultation d'anesthésie
@@ -127,22 +114,7 @@ if ($consult->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
-      $consultAnesth->_ref_sejour->loadRefDossierMedical();
-      
-      //$consultAnesth->_ref_sejour->loadRefsPrescriptions(); 
-      $consultAnesth->_ref_sejour->_totals_by_chapitre = array();
-      $consultAnesth->_ref_sejour->_ref_prescriptions = $consultAnesth->_ref_sejour->loadBackRefs("prescriptions");
-      if($consultAnesth->_ref_sejour->_ref_prescriptions){
-	      foreach($consultAnesth->_ref_sejour->_ref_prescriptions as &$prescription_sejour){
-	  	    if($prescription_sejour->_id){
-	          $prescription_sejour->countLinesMedsElements();
-			      foreach ($prescription_sejour->_counts_by_chapitre as $chapitre => $count) {
-				  	  @$consultAnesth->_ref_sejour->_totals_by_chapitre[$chapitre]+= $count;
-				  	}
-	  	    }
-	      }
-      }
-  
+      $consultAnesth->_ref_sejour->loadRefDossierMedical();  
       $consultAnesth->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
@@ -212,15 +184,6 @@ if ($consult->_id){
   $consult->makeFSE();
   $consult->_ref_chir->loadIdCPS();
   $consult->_ref_patient->loadIdVitale();
-}
-
-// Modèles de l'utilisateur
-$listModelePrat = array();
-$listModeleFunc = array();
-$object_class = $consult->_is_anesth ? "CConsultAnesth" : "CConsultation";
-if ($userSel->user_id) {
-  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $userSel->user_id);
-  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $userSel->function_id);
 }
 
 // Récupération des tarifs
@@ -335,8 +298,6 @@ $smarty->assign("hour"           , $hour);
 $smarty->assign("vue"            , $vue);
 $smarty->assign("today"          , $today);
 $smarty->assign("userSel"        , $userSel);
-$smarty->assign("listModelePrat" , $listModelePrat);
-$smarty->assign("listModeleFunc" , $listModeleFunc);
 $smarty->assign("tarifsChir"     , $tarifsChir);
 $smarty->assign("tarifsCab"      , $tarifsCab);
 $smarty->assign("anesth"         , $anesth);
@@ -350,6 +311,8 @@ $smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("noReglement"    , 0);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
+
+
 
 if($consult->_is_anesth) {
 	$secs = range(0, 60-1, 1);

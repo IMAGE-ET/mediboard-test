@@ -43,7 +43,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
-$smarty->assign("praticien_id"  , $praticien->user_id);
+$smarty->assign("praticien_id"  , $praticien->_id);
 $smarty->assign("object"        , $object);
 $smarty->assign("suffixe"       , mbGetValueFromGet("suffixe"));
 

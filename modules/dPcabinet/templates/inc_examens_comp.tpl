@@ -1,6 +1,3 @@
-{{mb_include_script module="dPcabinet" script="exam_dialog"}}
-<div id="exam_comp">
-
 <form name="newExamen" action="?m=dPcabinet">
 			            
 <select name="type_examen" onchange="ExamDialog.init(this.value)" style="float:right">
@@ -45,7 +42,7 @@
       {{mb_field object=$consult->_ref_examaudio field="examaudio_id" hidden=1 prop=""}}
       <input type="hidden" name="_conduction" value="" />
       <input type="hidden" name="_oreille" value="" />
-      <button class="trash notext" type="button" onclick="confirmFileDeletion(this)">{{tr}}Delete{{/tr}}</button>
+      <button class="trash notext" type="button" onclick="ExamDialog.remove(this,'{{$consult->_id}}')">{{tr}}Delete{{/tr}}</button>
     </form>
   </li>
   {{/if}}
@@ -71,5 +68,3 @@
   </li>
   {{/if}}
 </ul>
-
-</div>

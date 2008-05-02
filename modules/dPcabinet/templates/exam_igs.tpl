@@ -16,7 +16,7 @@ function checkSelect(){
 }
 
 // Lancement du reload
-window.opener.ExamDialog.reload();
+window.opener.ExamDialog.reload('{{$exam_igs->consultation_id}}');
 
 function pageMain(){
   // Lancement du calcul avec les valeurs selectionnees
