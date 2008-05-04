@@ -42,6 +42,13 @@
     return $specs;
   }
   
+  function updateDBFields() {
+    if($this->last_update === "") {
+      $this->last_update = mbDateTime();
+    }
+    return parent::updateDBFields();
+  }
+  
   /**
    * Loads a specific id400 for a given object (and optionnaly tag)
    */

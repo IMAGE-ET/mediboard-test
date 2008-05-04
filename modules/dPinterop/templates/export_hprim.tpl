@@ -39,23 +39,23 @@ function choosePreselection(oSelect) {
       <h3>Document non valide : pensez à valider les valeurs suivantes !</h3>
       <ul>
         <li>
-          {{if $mbSejour->_ref_patient->SHS}}
+          {{if $mbSejour->_ref_patient->_IPP}}
           <div class="message">
           {{else}}
           <div class="error">
           {{/if}}
           Identifiant S@nté.com du patient : 
-          '{{$mbSejour->_ref_patient->SHS}}'
+          '{{$mbSejour->_ref_patient->_IPP}}'
           </div>
         </li>
         <li>
-          {{if $mbSejour->venue_SHS}}
+          {{if $mbSejour->_num_dossier}}
           <div class="message">
           {{else}}
           <div class="error">
           {{/if}}
           Identifiant S@nté.com de la venue : 
-          '{{$mbSejour->venue_SHS}}'
+          '{{$mbSejour->_num_dossier}}'
           </div>
         </li>
         <li>
@@ -192,7 +192,7 @@ function choosePreselection(oSelect) {
             <label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
           </th>
           <td>
-            <input type="text" class="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->SHS}}" size="8" maxlength="8" />
+            <input type="text" class="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->_IPP}}" size="8" maxlength="8" />
           </td>
         </tr>
         <tr>
@@ -201,7 +201,7 @@ function choosePreselection(oSelect) {
             Suggestion :
           </th>
           <td>
-            <input type="text" class="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->venue_SHS}}" size="8" maxlength="8" />
+            <input type="text" class="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->_num_dossier}}" size="8" maxlength="8" />
             <br />
             {{$mbSejour->_venue_SHS_guess}}
           </td>

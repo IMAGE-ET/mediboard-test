@@ -60,7 +60,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $patient = $this->addElement($evenementServeurActe, "patient");
     $identifiant = $this->addElement($patient, "identifiant");
     $this->addIdentifiantPart($identifiant, "emetteur", "pat$mbPatient->patient_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->SHS);
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP);
     
     $personnePhysique = $this->addElement($patient, "personnePhysique");
     
@@ -100,7 +100,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     
     $identifiant = $this->addElement($venue, "identifiant");
     $this->addIdentifiantPart($identifiant, "emetteur", "sj$mbSejour->sejour_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbSejour->venue_SHS);
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbSejour->_num_dossier);
     
     // Entrée de séjour
     $mbEntree = mbGetValue($mbSejour->entree_reelle, $mbSejour->entree_prevue);

@@ -38,8 +38,7 @@ class CSejour extends CCodable {
   var $sortie_prevue      = null;
   var $entree_reelle      = null;
   var $sortie_reelle      = null;
-
-  var $venue_SHS          = null; // remplace $op->venue_SHS
+  
   var $saisi_SHS          = null; // remplace $op->saisie
   var $modif_SHS          = null; // remplace $op->modifiee
 
@@ -97,6 +96,7 @@ class CSejour extends CCodable {
   var $_ref_consult_atu       = null;
   var $_ref_prescriptions     = null;
   var $_ref_last_prescription = null;
+  var $_ref_numdos            = null;
   
   // External objects
   var $_ext_diagnostic_principal = null;
@@ -159,7 +159,6 @@ class CSejour extends CCodable {
     $specs["sortie_prevue"]       = "notNull dateTime moreEquals|entree_prevue";
     $specs["entree_reelle"]       = "dateTime";
     $specs["sortie_reelle"]       = "dateTime moreEquals|entree_reelle";
-    $specs["venue_SHS"]           = "numchar length|8 confidential";
     $specs["saisi_SHS"]           = "bool";
     $specs["modif_SHS"]           = "bool";
     $specs["DP"]                  = "code cim10";
@@ -665,6 +664,7 @@ class CSejour extends CCodable {
     $id400->loadLatestFor($this, $tag);
     
     // Stockage de la valeur de l'id400
+    $this->_ref_numdos  = $id400;
     $this->_num_dossier = $id400->id400;
     
     // Si pas d'id400 correspondant, on stocke "_"

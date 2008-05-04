@@ -42,7 +42,6 @@ class CPatient extends CMbObject {
   var $incapable_majeur = null;
   var $ATNC             = null;
   var $matricule        = null;
-  var $SHS              = null;
   
   var $code_regime      = null;
   var $caisse_gest      = null;
@@ -177,6 +176,7 @@ class CPatient extends CMbObject {
   var $_ref_medecin2         = null;
   var $_ref_medecin3         = null;
   var $_ref_dossier_medical  = null;
+  var $_ref_IPP              = null;
   
   function CPatient() {
     $this->CMbObject("patients", "patient_id");    
@@ -211,7 +211,6 @@ class CPatient extends CMbObject {
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
     $specs["regime_sante"]      = "str";
-    $specs["SHS"]               = "numchar length|8";
     $specs["sexe"]              = "enum list|m|f|j default|m";
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential";
@@ -956,8 +955,8 @@ class CPatient extends CMbObject {
       return;
     }
     
-  	global $dPconfig, $g;
-  	$tag_ipp = $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]; 
+  	global $g;
+  	$tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp"); 
 
   	// Pas de tag IPP => pas d'affichage d'IPP
   	if(!$tag_ipp) {
@@ -978,7 +977,8 @@ class CPatient extends CMbObject {
   	$id400->loadMatchingObject($order);
   	
     // Stockage de la valeur de l'id400
-    $this->_IPP = $id400->id400;
+    $this->_ref_IPP = $id400;
+    $this->_IPP     = $id400->id400;
     
     // Si pas d'id400 correspondant, on stocke "_"
     if (!$this->_IPP){

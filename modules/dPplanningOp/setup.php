@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.83";
+$config["mod_version"]     = "0.84";
 $config["mod_type"]        = "user";
 
 class CSetupdPplanningOp extends CSetup {
@@ -752,11 +752,11 @@ class CSetupdPplanningOp extends CSetup {
 						AND `venue_SHS` != 0";
     $this->addQuery($sql);
     
-//    $this->makeRevision("0.83");
-//    $sql = "ALTER TABLE `patients` DROP `SHS";
-//    $this->addQuery($sql);
+    $this->makeRevision("0.83");
+    $sql = "ALTER TABLE `sejour` DROP `venue_SHS";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.83";
+    $this->mod_version = "0.84";
   }
 }
 ?>

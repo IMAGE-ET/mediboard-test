@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsEdit();
 
@@ -32,6 +32,7 @@ if ($patient->patient_id) {
   $patient->loadRefsAffectations();
   $patient->loadRefsConsultations();
   $patient->loadRefsSejours();
+  $patient->loadIPP();
   foreach($patient->_ref_sejours as &$sejour) {
     $sejour->loadRefDossierMedical();
     $sejour->_ref_dossier_medical->updateFormFields();
@@ -64,6 +65,7 @@ if ($patient->patient_id) {
     $sejour->loadExtDiagnostics();
     $sejour->loadRefs();
     $sejour->loadRefGHM();
+    $sejour->loadNumDossier();
     foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
       
@@ -95,8 +97,10 @@ $smarty->assign("canAdmissions", CModule::getCanDo("dPadmissions"));
 $smarty->assign("canPlanningOp", CModule::getCanDo("dPplanningOp"));
 $smarty->assign("canCabinet"   , CModule::getCanDo("dPcabinet"));
 
-$smarty->assign("patient"    , $patient   );
-$smarty->assign("listPrat"   , $listPrat  );
+$smarty->assign("hprim21installed", CModule::getActive("hprim21"));
+
+$smarty->assign("patient" , $patient );
+$smarty->assign("listPrat", $listPrat);
 
 
 $smarty->display("vw_dossier.tpl");

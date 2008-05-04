@@ -2,6 +2,8 @@
 
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 {{mb_include_script module="dPpatients" script="pat_selector"}}
+{{mb_include_script module="Hprim21" script="pat_hprim_selector"}}
+{{mb_include_script module="Hprim21" script="sejour_hprim_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
@@ -31,9 +33,9 @@ function choosePreselection(oSelect) {
 
   var oForm = oSelect.form;
   oForm.code_uf.value = sCode;
-  oForm.code_uf.onchange();
+  //oForm.code_uf.onchange();
   oForm.libelle_uf.value = sLibelle;
-  oForm.libelle_uf.onchange();
+  //oForm.libelle_uf.onchange();
   
   oSelect.value = "";
 }
@@ -67,16 +69,33 @@ function exporterHPRIM(object_id, typeObject, oOptions) {
   url.requestUpdate("hprim_export_" + typeObject + object_id, oRequestOptions); 
 }
 
-function submitPatForm() {
-  var oForm = document.forms.editPatFrm;
-  var iTarget = "updatePat";
-  submitFormAjax(oForm, iTarget);
-}
+var ExtRefManager = {
+  sejour_id: null,
+  
+  submitIPPForm: function() {
+    var oForm = document.forms.editIPP;
+    submitFormAjax(oForm, "systemMsg", {onComplete: ExtRefManager.reloadIPPForm});
+  },
+  
+  reloadIPPForm: function() {
+    var url = new Url();
+    url.setModuleAction("dPpmsi", "httpreq_ipp_form");
+    url.addParam("pat_id", '{{$patient->_id}}');
+    url.requestUpdate("IPP", {waitingText: null });
+  },
+  
+  submitNumdosForm: function(sejour_id) {
+    ExtRefManager.sejour_id = sejour_id;
+    var oForm = document.forms["editNumdos" + this.sejour_id];
+    submitFormAjax(oForm, "systemMsg", {onComplete: ExtRefManager.reloadNumdosForm});
+  },
 
-function submitSejourForm(sejour_id) {
-  var oForm = document.forms["editSejourFrm" + sejour_id];
-  var iTarget = "updateSejour" + sejour_id;
-  submitFormAjax(oForm, iTarget);
+  reloadNumdosForm: function() {
+    var url = new Url();
+    url.setModuleAction("dPpmsi", "httpreq_numdos_form");
+    url.addParam("sejour_id", ExtRefManager.sejour_id);
+    url.requestUpdate("Numdos" + ExtRefManager.sejour_id, {waitingText: null });
+  }
 }
 
 function submitOpForm(operation_id) {
@@ -86,8 +105,8 @@ function submitOpForm(operation_id) {
 }
 
 function submitAllForms(operation_id, sejour_id) {
-  submitPatForm();
-  submitSejourForm(sejour_id);
+  ExtRefManager.submitIPPForm();
+  ExtRefManager.submitNumdosForm(sejour_id);
   submitOpForm(operation_id);
 }
 
@@ -107,7 +126,7 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlDiag.setModuleAction("dPpmsi", "httpreq_diagnostic");
   urlDiag.addParam("sejour_id", sejour_id);
   urlDiag.addParam("modeDAS", modeDAS);
-  urlDiag.requestUpdate("cim-"+sejour_id, { aitingText : null } );
+  urlDiag.requestUpdate("cim-"+sejour_id, { waitingText : null } );
   var urlListDiag = new Url();
   urlListDiag.setModuleAction("dPpmsi", "httpreq_list_diags");
   urlListDiag.addParam("sejour_id", sejour_id);
@@ -120,6 +139,12 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   urlGHM.requestUpdate("GHM-"+sejour_id, { 
 		waitingText : null
   } );
+}
+
+SejourHprimSelector.doSet = function(){
+  var oForm = document[SejourHprimSelector.sForm];
+  Form.Element.setValue(oForm[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
+  ExtRefManager.submitNumdosForm(oForm.object_id.value);
 }
 
 function pageMain() {
@@ -171,109 +196,50 @@ function pageMain() {
     {{if $patient->patient_id}}
     <td>
       <table class="form">
+      {{if $patient->_ref_IPP}}
         <tr>
-          <td colspan="4">
-            <form name="editPatFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-
-            <input type="hidden" name="dosql" value="do_patients_aed" />
-            <input type="hidden" name="m" value="dPpatients" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="patient_id" value="{{$patient->patient_id}}" />
- 
-            <table class="form">
-              <tr>
-                <th class="category" colspan="3">
-                  <em>Lien S@nté.com</em> : Patient 
-                  <button class="submit" type="button" onclick="submitPatForm()">Valider</button>
-                </th>
-              </tr>
-
-              <tr>
-                <th>
-                  <label for="SHS" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
-                </th>
-                <td>
-                  <input type="text" class="notNull {{$patient->_props.SHS}}" name="SHS" value="{{$patient->SHS}}" size="8" maxlength="8" />
-                </td>
-                <td id="updatePat" />
-              </tr>
-            </table>
- 
-            </form>
+          <td colspan="4" id="IPP">
+            {{include file="inc_ipp_form.tpl"}}
           </td>
         </tr>
+        {{/if}}
         <tr>
           <th colspan="4" class="title">Liste des séjours</th>
         </tr>
-        {{foreach from=$patient->_ref_sejours item=curr_sejour}}
-        <tr id="sejour{{$curr_sejour->sejour_id}}-trigger">
+        {{foreach from=$patient->_ref_sejours item=_sejour}}
+        <tr id="sejour{{$_sejour->sejour_id}}-trigger">
           <td colspan="4" style="background-color:#aaf;">
-          	Dr. {{$curr_sejour->_ref_praticien->_view}} -
-          	Séjour du {{$curr_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
-          	au {{$curr_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
+          	Dr. {{$_sejour->_ref_praticien->_view}} -
+          	Séjour du {{$_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
+          	au {{$_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           </td>
         </tr>
-        <tbody class="effectSejour" id="sejour{{$curr_sejour->sejour_id}}">
+        <tbody class="effectSejour" id="sejour{{$_sejour->sejour_id}}">
         <tr>
-          <td colspan="4">
-            <form name="editSejourFrm{{$curr_sejour->sejour_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-            
-            <input type="hidden" name="dosql" value="do_sejour_aed" />
-            <input type="hidden" name="m" value="dPplanningOp" />
-            <input type="hidden" name="del" value="0" />
-            <input type="hidden" name="sejour_id" value="{{$curr_sejour->sejour_id}}" />
-            <input type="hidden" name="entree_prevue" value="{{$curr_sejour->entree_prevue}}" />
-            <input type="hidden" name="sortie_prevue" value="{{$curr_sejour->sortie_prevue}}" />
- 
-            <table class="form">
-              <tr>
-                <th class="category" colspan="3">
-                  <em>Lien S@nté.com</em> : Séjour
-                  <button class="submit" type="button" onclick="submitSejourForm({{$curr_sejour->sejour_id}})">Valider</button>
-                </th>
-              </tr>
-              <tr>
-                <th>
-                  <label for="venue_SHS" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label>
-                </th>
-                <td>
-                  <input type="text" class="notNull {{$curr_sejour->_props.venue_SHS}}" name="venue_SHS" value="{{$curr_sejour->venue_SHS}}" size="8" maxlength="8" />
-                </td>
-                <td rowspan="2" id="updateSejour{{$curr_sejour->sejour_id}}" />
-              </tr>
-              <tr>
-                <th>
-                  Suggestion
-                </th>
-                <td>
-                  {{$curr_sejour->_venue_SHS_guess}}
-                </td>
-              </tr>
-            </table>
-
-            </form>
+          <td colspan="4" id="Numdos{{$_sejour->sejour_id}}">
+            {{include file="inc_numdos_form.tpl"}}
           </td>
         </tr>
         <tr>
           <th class="category" colspan="4">
-            <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">
+            <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$_sejour->_id}}">
               <img src="images/icons/planning.png" alt="Planifier" />
             </a>
-            <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$curr_sejour->_id}}">
+            <a style="float: right" title="Modifier les diagnostics" href="?m=dPpmsi&amp;tab=labo_groupage&amp;sejour_id={{$_sejour->_id}}">
               <img src="images/icons/edit.png" alt="Planifier" />
             </a>
-            {{$curr_sejour->_view}}
+            {{$_sejour->_view}}
           </th>
         </tr>
         <tr>
           <td class="text halfPane" colspan="2">
-            <div id="cim-{{$curr_sejour->_id}}">
-            {{assign var="sejour" value=$curr_sejour}}
+            <div id="cim-{{$_sejour->_id}}">
+            {{assign var="sejour" value=$_sejour}}
             {{include file="inc_diagnostic.tpl"}}
             </div>
           </td>
           <td class="text halfPane" colspan="2">
-            <div id="GHM-{{$curr_sejour->_id}}">
+            <div id="GHM-{{$_sejour->_id}}">
             {{include file="inc_vw_GHM.tpl"}}
             </div>
           </td>
@@ -288,7 +254,7 @@ function pageMain() {
         </tr>
         <tr>
           <td class="text" colspan="2">
-            <div id="cim-list-{{$curr_sejour->_id}}">
+            <div id="cim-list-{{$_sejour->_id}}">
               {{include file="inc_list_diags.tpl"}}
 		        </div>
           </td>
@@ -314,7 +280,7 @@ function pageMain() {
 		          </li>
               <li>Significatifs du séjour
                 <ul>
-	                {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
+	                {{foreach from=$_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
 	                {{if $list_addiction|@count}}
 					        <li>
 					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -365,7 +331,7 @@ function pageMain() {
 			        </li>
               <li>Significatifs du séjour
                 <ul>
-			            {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+			            {{foreach from=$_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
 			            {{if $list_antecedent|@count}}
 					        <li>
 					          {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
@@ -408,7 +374,7 @@ function pageMain() {
 		          </li>
               <li>Significatifs du séjour
                 <ul>
-		              {{foreach from=$curr_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+		              {{foreach from=$_sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
 		              <li>
 		                {{if $curr_trmt->fin}}
 		                  Du {{$curr_trmt->debut|date_format:"%d %b %Y"}} au {{$curr_trmt->fin|date_format:"%d %b %Y"}} :
@@ -425,12 +391,17 @@ function pageMain() {
             </ul>
           </td>
         </tr>
-        {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
+        {{foreach from=$_sejour->_ref_operations item=curr_op}}
         <tr>
           <th class="category" colspan="4">
             Intervention par le Dr. {{$curr_op->_ref_chir->_view}}
             &mdash; {{$curr_op->_datetime|date_format:"%A %d %B %Y"}}
-            &mdash; {{$curr_op->_ref_salle->nom}}
+            &mdash; 
+            {{if $curr_op->salle_id}}
+              {{$curr_op->_ref_salle->nom}}
+            {{else}}
+              Salle inconnue
+            {{/if}}
           </th>
         </tr>
         {{if $curr_op->libelle}}
@@ -575,7 +546,7 @@ function pageMain() {
             <table class="form">
               <tr>
                 <td class="button">
-                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}}, {{$curr_sejour->_id}})" >Tout valider</button>
+                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}}, {{$_sejour->_id}})" >Tout valider</button>
                 </td>
               </tr>
             </table>
@@ -593,7 +564,7 @@ function pageMain() {
         </tr>
         
         <tr>
-          <td colspan="4">Documents attachés :</th>
+          <td colspan="4">Documents attachés :</td>
         </tr>
         <tr>
           <td colspan="4" id="File{{$curr_op->_class_name}}{{$curr_op->_id}}">

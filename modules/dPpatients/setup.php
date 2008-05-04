@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.65";
+$config["mod_version"]     = "0.66";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -716,11 +716,11 @@ class CSetupdPpatients extends CSetup {
 						AND `SHS` != 0";
     $this->addQuery($sql);
     
-//    $this->makeRevision("0.65");
-//    $sql = "ALTER TABLE `patients` DROP `SHS";
-//    $this->addQuery($sql);
+    $this->makeRevision("0.65");
+    $sql = "ALTER TABLE `patients` DROP `SHS";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.65";
+    $this->mod_version = "0.66";
   }
 }
 

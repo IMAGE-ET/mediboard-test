@@ -47,10 +47,12 @@ switch ($typeObject) {
 		  }
 		  $mbSejour =& $mbObject->_ref_sejour;
 		  $mbSejour->loadRefsFwd();
-		  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->SHS = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->venue_SHS         = $_POST["sc_venue_id"    ];
-		  if (isset($_POST["cmca_uf_code"   ])) $mbObject->code_uf           = $_POST["cmca_uf_code"   ];
-		  if (isset($_POST["cmca_uf_libelle"])) $mbObject->libelle_uf        = $_POST["cmca_uf_libelle"];
+		  $mbSejour->loadNumDossier();
+		  $mbSejour->_ref_patient->loadIPP();
+		  if (isset($_POST["sc_patient_id"  ])) $mbSejour->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+		  if (isset($_POST["sc_venue_id"    ])) $mbSejour->_num_dossier       = $_POST["sc_venue_id"    ];
+		  if (isset($_POST["cmca_uf_code"   ])) $mbObject->code_uf            = $_POST["cmca_uf_code"   ];
+		  if (isset($_POST["cmca_uf_libelle"])) $mbObject->libelle_uf         = $_POST["cmca_uf_libelle"];
 		  if (!$doc->checkSchema()) {
 		    return;
 		  }
@@ -67,8 +69,10 @@ switch ($typeObject) {
 		if ($mbObject->load($mb_sejour_id)) {
 		  $mbObject->loadRefs();
 		  $mbObject->loadRefDossierMedical();
-		  if (isset($_POST["sc_patient_id"  ])) $mbObject->_ref_patient->SHS = $_POST["sc_patient_id"  ];
-		  if (isset($_POST["sc_venue_id"    ])) $mbObject->venue_SHS         = $_POST["sc_venue_id"    ];
+		  $mbObject->loadNumDossier();
+		  $mbObject->_ref_patient->loadIPP();
+		  if (isset($_POST["sc_patient_id"  ])) $mbObject->_ref_patient->_IPP = $_POST["sc_patient_id"  ];
+		  if (isset($_POST["sc_venue_id"    ])) $mbObject->_num_dossier       = $_POST["sc_venue_id"    ];
 		  if (!$doc->checkSchema()) {
 		    return;
 		  }

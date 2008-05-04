@@ -59,7 +59,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $patient = $this->addElement($evenementPMSI, "patient");
     $identifiant = $this->addElement($patient, "identifiant");
     $this->addIdentifiantPart($identifiant, "emetteur", "pat$mbPatient->_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->SHS);
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbPatient->_IPP);
     
     $personnePhysique = $this->addElement($patient, "personnePhysique");
     
@@ -98,7 +98,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     
     $identifiant = $this->addElement($venue, "identifiant");
     $this->addIdentifiantPart($identifiant, "emetteur", "sj$mbSej->_id");
-    $this->addIdentifiantPart($identifiant, "recepteur", $mbSej->venue_SHS);
+    $this->addIdentifiantPart($identifiant, "recepteur", $mbSej->_num_dossier);
     
     // Entrée de séjour
     $mbEntree = mbGetValue($mbSej->entree_reelle, $mbSej->entree_prevue);
@@ -136,7 +136,7 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     // Identifiant (on utilise le séjour)
     $identifiant = $this->addElement($saisie, "identifiant");
     $this->addElement($identifiant, "emetteur", "diag$mbSej->_id");
-    $this->addElement($identifiant, "recepteur", $mbSej->venue_SHS);
+    $this->addElement($identifiant, "recepteur", $mbSej->_num_dossier);
     // Unité médicale : vide pour l'instant car présent dans l'opération :
     // à passer dans le séjour (code_uf, libell_uf dans this->addUniteFonctionnelle())
     $uniteMedicale = $this->addElement($saisie, "uniteMedicale");

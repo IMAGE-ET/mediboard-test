@@ -25,6 +25,8 @@ $doc      = new CEGateXMLPatientStayInformation();
 
 if ($mbSejour->load($mb_sejour_id)) {
   $mbSejour->loadRefs();
+  $mbSejour->loadNumDossier();
+  $mbSejour->_ref_patient->loadIPP();
   foreach($mbSejour->_ref_operations as $key => $value) {
     $mbSejour->_ref_operations[$key]->loadRefsActesCCAM();
     $mbSejour->_ref_operations[$key]->loadRefPlageOp();
