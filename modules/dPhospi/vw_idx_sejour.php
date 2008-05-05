@@ -30,8 +30,6 @@ if($service_id){
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id",0);
 
-//$datetime = "2008-04-14 12:18:31";
-
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
 
@@ -42,9 +40,6 @@ $heureLimit = "16:00:00";
 $service = new CService;
 $groupSejourNonAffectes = array();
 $sejoursParService = array();
-$list_services = array();
-
-
 
 // Chargement de la liste de praticiens
 $praticien = new CMediusers();
@@ -72,15 +67,17 @@ if($praticien_id){
 		$_sejour->_ref_praticien->loadRefFunction();
 		$_sejour->loadNumDossier();
 		
-	  if($_sejour->_ref_curr_affectation->_id){
-	  	if(!array_key_exists($_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id, $list_services)){
-	  		$service = new CService();
-	  		$service->load($_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id);
-	  		$list_services[$service->_id] = $service;	
-	  	} else {
-	  		$service =& $sejoursParService[$_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id];
+	  if ($_sejour->_ref_curr_affectation->_id){
+			// Cache de services
+			$service_id = $_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+			if(!array_key_exists($service_id, $sejoursParService)) {
+	  		$_service = new CService();
+	  		$_service->load($service_id);
+	  		$sejoursParService[$_service->_id] = $_service;	
+	  	} 
 	  	
-	  	}
+  		$service =& $sejoursParService[$service_id];
+	  	
 	  	$chambre =& $_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
 	  	$lit =& $_sejour->_ref_curr_affectation->_ref_lit;
 	  	$affectation =& $_sejour->_ref_curr_affectation;
@@ -93,8 +90,6 @@ if($praticien_id){
 	  	$service->_ref_chambres[$chambre->_id]->_ref_lits[$lit->_id] = $lit;
 	  	// Ajout de l'affectation dans le lit
 			$service->_ref_chambres[$chambre->_id]->_ref_lits[$lit->_id]->_ref_affectations[$affectation->_id] = $affectation;
-				
-	  	$sejoursParService[$_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id] = $service;
 	  } else {
 	    $sejoursParService["NP"][$_sejour->_id] = $_sejour;
 	  }
@@ -200,7 +195,6 @@ $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"))
 $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
 $smarty->assign("demain"                 , mbDate("+ 1 day", $date));
 $smarty->assign("services"               , $services);
-$smarty->assign("list_services", $list_services);
 $smarty->assign("sejoursParService"      , $sejoursParService);
 
 $smarty->assign("service_id"             , $service_id);

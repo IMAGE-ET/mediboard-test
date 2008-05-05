@@ -215,7 +215,7 @@ Main.add(function () {
             {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
               <tr>
                 <th class="category" colspan="6">
-                  {{$curr_chambre->_view}} - {{$curr_lit->_view}}
+                  {{$curr_chambre->_view}} - {{$curr_lit->nom}}
                 </th>
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
