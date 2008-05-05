@@ -196,11 +196,39 @@ var SchemaDentaire = {
   },
   
   onMouseOver: function (e) {
-    e.element().addClassName('hover');
+    var el = e.element();
+    el.addClassName('hover');
+    var style = {
+      top: parseInt(el.getStyle('marginTop')), 
+      left: parseInt(el.getStyle('marginLeft')), 
+      width: parseInt(el.getStyle('width')), 
+      height: parseInt(el.getStyle('height'))
+    };
+
+    el.setStyle({
+      marginTop: style.top-1+'px',
+      marginLeft: style.left-1+'px',
+      width: style.width-1+'px',
+      height: style.height-1+'px'
+    });
   },
   
   onMouseOut: function (e) {
-    e.element().removeClassName('hover');
+    var el = e.element();
+    var style = {
+      top: parseInt(el.getStyle('marginTop')), 
+      left: parseInt(el.getStyle('marginLeft')), 
+      width: parseInt(el.getStyle('width')), 
+      height: parseInt(el.getStyle('height'))
+    };
+    
+    el.removeClassName('hover');
+    el.setStyle({
+      marginTop: style.top+1+'px',
+      marginLeft: style.left+1+'px',
+      width: style.width+1+'px',
+      height: style.height+1+'px'
+    });
   },
   
   // Show the menu
@@ -278,7 +306,7 @@ Main.add(function () {
   <tr>
     <td class="button" rowspan="20" style="width: 1%;">
       <div id="dents-schema">
-        <img id="dents-schema-image" src="images/pictures/dents.png" border="0" usemap="#dents-schema-map" alt="" /> 
+        <img id="dents-schema-image" src="images/pictures/dents.png?build={{$build}}" border="0" usemap="#dents-schema-map" alt="" /> 
         <map id="dents-schema-map" name="dents-schema-map">
           <area shape="circle" coords="127,112, 30" href="#1" alt="" id="dent-10" /><!-- Central haut adulte -->
           <area shape="circle" coords="116,33, 11" href="#1" alt="" id="dent-11" />
@@ -347,7 +375,7 @@ Main.add(function () {
           <td class="button">
             <div id="mallampati_bg_{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}class="mallampati-selected"{{/if}}>
             <label for="mallampati_{{$curr_mallampati}}" title="Mallampati de {{$trans_mallampati}}">
-              <img src="images/pictures/{{$curr_mallampati}}.png" alt="{{$trans_mallampati}}" />
+              <img src="images/pictures/{{$curr_mallampati}}.png?build={{$build}}" alt="{{$trans_mallampati}}" />
               <br />
               <input type="radio" name="mallampati" value="{{$curr_mallampati}}" {{if $consult_anesth->mallampati == $curr_mallampati}}checked="checked" {{/if}} onclick="verifIntubDifficileAndSave(this.form);" />
               {{$trans_mallampati}}
