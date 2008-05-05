@@ -24,8 +24,6 @@ ActesCCAM = {
   },
   
   add: function(subject_id, chir_id, oOptions){
-    Console.debug(subject_id);
-    Console.debug(chir_id);
     var oDefaultOptions = { 
       onComplete: function() { ActesCCAM.refreshList(subject_id, chir_id) }
     }

@@ -186,16 +186,6 @@ if ($consult->_id){
   $consult->_ref_patient->loadIdVitale();
 }
 
-// Récupération des tarifs
-$order = "description";
-$where = array();
-$where["chir_id"] = "= '$userSel->user_id'";
-$tarifsChir = new CTarif;
-$tarifsChir = $tarifsChir->loadList($where, $order);
-$where = array();
-$where["function_id"] = "= '$userSel->function_id'";
-$tarifsCab = new CTarif;
-$tarifsCab = $tarifsCab->loadList($where, $order);
 
 // Chargement des aides à la saisie
 $antecedent = new CAntecedent();
@@ -300,8 +290,6 @@ $smarty->assign("hour"           , $hour);
 $smarty->assign("vue"            , $vue);
 $smarty->assign("today"          , $today);
 $smarty->assign("userSel"        , $userSel);
-$smarty->assign("tarifsChir"     , $tarifsChir);
-$smarty->assign("tarifsCab"      , $tarifsCab);
 $smarty->assign("anesth"         , $anesth);
 $smarty->assign("consult"        , $consult);
 $smarty->assign("antecedent"     , $antecedent);
