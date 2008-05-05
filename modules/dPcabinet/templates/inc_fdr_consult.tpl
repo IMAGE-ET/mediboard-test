@@ -1,5 +1,3 @@
-
-
 {{assign var=patient value=$consult->_ref_patient}}
 {{assign var=praticien value=$consult->_ref_chir}}
 
@@ -54,6 +52,13 @@ function reloadAfterUploadFile(){
 	</tr>
 </table>
 
-<div id="reglement">
-  {{include file="inc_vw_reglement.tpl"}}
-</div> 
+<!-- Reglement -->
+{{mb_include_script module="dPcabinet" script="reglement"}}
+
+<script type="text/javascript">
+  // Initialisations
+  Reglement.noReglement = '{{$noReglement}}';
+  Reglement.consultation_id = '{{$consult->_id}}';
+  Reglement.user_id = '{{$userSel->_id}}';
+  Reglement.register('{{$consult->_id}}');
+</script>

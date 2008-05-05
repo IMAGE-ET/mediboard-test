@@ -22,7 +22,7 @@ Object.extend(Intermax.ResultHandler, {
     msg += "\n\nVoulez-vous continuer ?";
         
     if (confirm(msg)) {
-      submitReglement(document.BindVitale);
+      Reglement.submit(document.BindVitale);
     }
   },
   
@@ -44,16 +44,16 @@ Object.extend(Intermax.ResultHandler, {
     msg += "\n\nVoulez-vous continuer ?";
 
     if (confirm(msg)) {
-      submitReglement(document.BindCPS);
+      Reglement.submit(document.BindCPS);
     }
   },
 
   "Formater FSE": function() {
-    submitReglement(document.BindFSE);
+    Reglement.submit(document.BindFSE);
   },
 
   "Annuler FSE": function() {
-    reloadReglement();
+    Reglement.reload();
   }  
 } );
 
@@ -64,7 +64,7 @@ Intermax.ResultHandler["Consulter FSE"] = Intermax.ResultHandler["Formater FSE"]
 Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
 
 
-function cancelTarif(action) {
+cancelTarif = function(action) {
   var oForm = document.tarifFrm;
   
   if(action == "delActes"){
@@ -98,11 +98,11 @@ function cancelTarif(action) {
   }
   oForm.patient_date_reglement.value = "";
   
-  submitReglement(oForm);
+  Reglement.submit(oForm);
 }
 
 
-function validTarif(){
+validTarif = function(){
   var oForm = document.tarifFrm;
   
   if(oForm.du_tiers){
@@ -118,10 +118,10 @@ function validTarif(){
       oForm.tarif.value += " / "+oForm._tokens_ngap.value;
     }
   }
-  submitReglement(oForm);
+  Reglement.submit(oForm);
 }
 
-function modifTotal(){
+modifTotal = function(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
@@ -137,7 +137,7 @@ function modifTotal(){
 }
 
 
-function modifSecteur2(){
+modifSecteur2 = function(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
@@ -153,46 +153,14 @@ function modifSecteur2(){
   oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
 }
 
-function effectuerReglement() {
-  var oForm = document.tarifFrm;
-  oForm.patient_date_reglement.value = new Date().toDATE();
-  submitReglement(oForm);
-}
 
-function putTiers() {
+putTiers = function() {
   var oForm = document.tarifFrm;
   oForm.du_patient.value = 0;
 }
 
-function reloadReglement() {
-  var url = new Url;
-  url.setModuleAction("dPcabinet", "httpreq_vw_reglement");
 
-  {{if $noReglement}}
-  url.addParam("noReglement", "1"); 
-  {{/if}}
 
-  url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
-	  url.requestUpdate('reglement', { waitingText : null });
-  
-  {{if $app->user_prefs.ccam_consultation}} 
-  // rafraichissement de la div ccam
-    ActesCCAM.refreshList({{$consult->_id}}, {{$userSel->_id}});
-    ActesNGAP.refreshList();
-  {{/if}} 
-}
-
-function submitReglement(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete : 
-      function() {
-        reloadReglement();
-        {{if $app->user_prefs.autoCloseConsult}}
-        reloadFinishBanner();
-        {{/if}}
-      }
-    } );
-}
 
 Main.add( function(){
   // Mise a jour de du_patient
@@ -200,10 +168,6 @@ Main.add( function(){
   if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
     oForm.du_patient.value = oForm._somme.value; 
   }
-
-  prepareForm(document.accidentTravail);
-  regFieldCalendar('accidentTravail', "accident_travail");
-
 } );
 
 
@@ -328,6 +292,12 @@ Main.add( function(){
        </tr>
       </table>  
     </form>
+    <script type="text/javascript">
+      Main.add( function(){
+        prepareForm(document.accidentTravail);
+        regFieldCalendar('accidentTravail', "accident_travail");
+      });
+    </script>
       
       
       <!-- Formulaire de selection de tarif -->
@@ -345,7 +315,7 @@ Main.add( function(){
 	        <tr>
 	          <th><label for="choix" title="Type de cotation pour la consultation. Obligatoire.">Cotation</label></th>
 	          <td>
-	            <select name="_tarif_id"  class="notNull str" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : reloadReglement } );">
+	            <select name="_tarif_id"  class="notNull str" onchange="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } );">
 	              <option value="" selected="selected">&mdash; Choisir la cotation</option>
 	              {{if $tarifsChir|@count}}
 	              <optgroup label="Tarifs praticien">
@@ -498,7 +468,7 @@ Main.add( function(){
             <input type="hidden" name="tiers_date_reglement" value="{{$consult->tiers_date_reglement}}" />
             <input type="hidden" name="tiers_mode_reglement" value="{{$consult->tiers_mode_reglement}}" />
             {{if !$consult->sejour_id && $consult->du_patient}}
-            <button class="submit" type="button" onclick="effectuerReglement()">Règlement effectué</button>
+            <button class="submit" type="button" onclick="Reglement.effectuer()">Règlement effectué</button>
             {{/if}}
             
             {{if $app->user_prefs.autoCloseConsult}}
