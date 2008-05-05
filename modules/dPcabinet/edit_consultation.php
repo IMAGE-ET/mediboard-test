@@ -267,12 +267,14 @@ $contrainteDestination["normal"] = array("", 6, 7);
 $contrainteOrientation["transfert"] = array("", "HDT", "HO", "SC", "SI", "REA", "UHCD", "MED", "CHIR", "OBST");
 $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
-$etat_dent = new CEtatDent();
-$etat_dent->dossier_medical_id = $consult->_ref_patient->_ref_dossier_medical->_id;
-$etat_dents = $etat_dent->loadMatchingList();
 $list_etat_dents = array();
-foreach ($etat_dents as $etat) {
-  $list_etat_dents[$etat->dent] = $etat->etat;
+if ($consult->_id) {
+	$etat_dent = new CEtatDent();
+	$etat_dent->dossier_medical_id = $consult->_ref_patient->_ref_dossier_medical->_id;
+	$etat_dents = $etat_dent->loadMatchingList();
+	foreach ($etat_dents as $etat) {
+	  $list_etat_dents[$etat->dent] = $etat->etat;
+	}
 }
 
 // Création du template
