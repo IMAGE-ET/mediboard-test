@@ -16,7 +16,7 @@ $file = $_FILES['datafile'];
 if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
   $csv = fopen($file['tmp_name'], 'r');
   
-  $line = 0;
+  $line = 1;
   while (($data = fgetcsv($csv, 2000, ',')) !== false) {
     $num = count($data);
     for ($c = 0; $c < $num; $c++) {
