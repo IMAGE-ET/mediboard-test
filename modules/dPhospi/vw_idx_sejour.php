@@ -69,14 +69,14 @@ if($praticien_id){
 		
 	  if ($_sejour->_ref_curr_affectation->_id){
 			// Cache de services
-			$service_id = $_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
-			if(!array_key_exists($service_id, $sejoursParService)) {
+			$_service_id = $_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->service_id;
+			if(!array_key_exists($_service_id, $sejoursParService)) {
 	  		$_service = new CService();
-	  		$_service->load($service_id);
+	  		$_service->load($_service_id);
 	  		$sejoursParService[$_service->_id] = $_service;	
 	  	} 
 	  	
-  		$service =& $sejoursParService[$service_id];
+  		$service =& $sejoursParService[$_service_id];
 	  	
 	  	$chambre =& $_sejour->_ref_curr_affectation->_ref_lit->_ref_chambre;
 	  	$lit =& $_sejour->_ref_curr_affectation->_ref_lit;
