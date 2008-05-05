@@ -29,13 +29,15 @@ class CPrescriptionPdf extends CMbPdf {
   
  	
 	public function Footer() {
-	  $this->viewBarcode(15,230,5,null,30,true);
-	  $this->SetFontSize(12);	
+	  // On affiche "ETIQUETTE ...." seulement si un code barre est présent
+		if($this->viewBarcode(15,230,5,null,30,true)){
+		  $this->SetFontSize(12);	
+			$this->SetXY($this->original_lMargin, 290); 
+			$this->Cell(0, 0, "ETIQUETTE A COLLER SUR LE TUBE AVANT LE PRELEVEMENT", 0, 0, 'C');
+	  }
 	  
-		$this->SetXY($this->original_lMargin, 290); 
-		$this->Cell(0, 0, "ETIQUETTE A COLLER SUR LE TUBE AVANT LE PRELEVEMENT", 0, 0, 'C');
-	
-    $this->SetXY($this->original_lMargin, 290); 
+	  $this->SetXY($this->original_lMargin, 290); 
+	  
 	  // Impression du numero des pages
     $this->AliasNbPages();
 		$this->SetFontSize(8);
@@ -108,7 +110,8 @@ class CPrescriptionPdf extends CMbPdf {
 	      $this->decalage += 50;
 	      $compteur++;
 	    }
-	  }	
+	  }
+	  return $this->barcode;	
 	}
 }
 
