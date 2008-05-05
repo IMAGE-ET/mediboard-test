@@ -1,4 +1,8 @@
 
+</div>
+</td>
+</tr>
+</table>
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : 
@@ -44,11 +48,6 @@
   </a>
 </div>
 {{/if}}
-
-</div>
-</td>
-</tr>
-</table>
 
 </body>
 </html>

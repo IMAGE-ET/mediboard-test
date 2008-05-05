@@ -35,14 +35,18 @@ var SchemaDentaire = {
   aDentsId: null,
   aDentsNumbers: [
     // Adulte
+    10,
     11, 12, 13, 14, 15, 16, 17, 18, // haut droite
     21, 22, 23, 24, 25, 26, 27, 28, // haut gauche
+    30,
     31, 32, 33, 34, 35, 36, 37, 38, // bas gauche
     41, 42, 43, 44, 45, 46, 47, 48, // bas droite
     
     // Enfant
+    50,
     51, 52, 53, 54, 55, // haut droite
     61, 62, 63, 64, 65, // haut gauche
+    70,
     71, 72, 73, 74, 75, // bas gauche
     81, 82, 83, 84, 85  // bas droite
   ],
@@ -183,8 +187,8 @@ var SchemaDentaire = {
       if (!displayOnly) {
         var oForm = document.forms['etat-dent-edit'];
         if (oForm) {
-        oForm.dent.setValue(id);
-        oForm.etat.setValue(state ? state : '');
+        $V(oForm.dent, id);
+        $V(oForm.etat, state ? state : '');
         submitFormAjax(oForm, 'systemMsg');
         }
       }
@@ -276,6 +280,7 @@ Main.add(function () {
       <div id="dents-schema">
         <img id="dents-schema-image" src="images/pictures/dents.png" border="0" usemap="#dents-schema-map" alt="" /> 
         <map id="dents-schema-map" name="dents-schema-map">
+          <area shape="circle" coords="127,112, 30" href="#1" alt="" id="dent-10" /><!-- Central haut adulte -->
           <area shape="circle" coords="116,33, 11" href="#1" alt="" id="dent-11" />
           <area shape="circle" coords="97,44, 11" href="#1" alt="" id="dent-12" />
           <area shape="circle" coords="79,55, 12" href="#1" alt="" id="dent-13" />
@@ -292,6 +297,7 @@ Main.add(function () {
           <area shape="circle" coords="198,118, 17" href="#1" alt="" id="dent-26" />
           <area shape="circle" coords="201,146, 16" href="#1" alt="" id="dent-27" />
           <area shape="circle" coords="203,174, 15" href="#1" alt="" id="dent-28" />
+          <area shape="circle" coords="127,272, 30" href="#1" alt="" id="dent-30" /><!-- Central bas adulte -->
           <area shape="circle" coords="135,356, 9" href="#1" alt="" id="dent-31" />
           <area shape="circle" coords="150,349, 9" href="#1" alt="" id="dent-32" />
           <area shape="circle" coords="164,338, 11" href="#1" alt="" id="dent-33" />
@@ -308,6 +314,7 @@ Main.add(function () {
           <area shape="circle" coords="58,279, 18" href="#1" alt="" id="dent-46" />
           <area shape="circle" coords="54,250, 16" href="#1" alt="" id="dent-47" />
           <area shape="circle" coords="49,223, 15" href="#1" alt="" id="dent-48" />
+          <area shape="circle" coords="324,162, 19" href="#1" alt="" id="dent-50" /><!-- Central haut enfant -->
           <area shape="circle" coords="318,114, 7" href="#1" alt="" id="dent-51" />
           <area shape="circle" coords="307,120, 8" href="#1" alt="" id="dent-52" />
           <area shape="circle" coords="298,131, 9" href="#1" alt="" id="dent-53" />
@@ -318,6 +325,7 @@ Main.add(function () {
           <area shape="circle" coords="351,131, 9" href="#1" alt="" id="dent-63" />
           <area shape="circle" coords="357,147, 11" href="#1" alt="" id="dent-64" />
           <area shape="circle" coords="363,166, 12" href="#1" alt="" id="dent-65" />
+          <area shape="circle" coords="324,231, 19" href="#1" alt="" id="dent-70" /><!-- Central haut enfant -->
           <area shape="circle" coords="330,271, 6" href="#1" alt="" id="dent-71" />
           <area shape="circle" coords="339,265, 7" href="#1" alt="" id="dent-72" />
           <area shape="circle" coords="350,255, 8" href="#1" alt="" id="dent-73" />

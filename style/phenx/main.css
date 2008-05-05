@@ -9,7 +9,7 @@
 }
 
 body {
-  font-family: Verdana, Arial, Helvetica, sans-serif;
+  font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
   font-size: 11px;  
   background: #EFEFEF;
   color: #000000;
@@ -1090,8 +1090,9 @@ table.Offline button  {
   text-align: left;
   height: 32px;
   border: 1px #FF6600 solid;
-  border-right: 0;
+  border-right-color: #fff;
   color: #000;
+  margin-right: -1px;
 }
 
 #nav .selected a img {
@@ -1139,17 +1140,18 @@ table.Offline button  {
 /* Main -- table -- pane */
 
 #main {
-  background: #E0DFE3;
-  -moz-border-radius: 6px;
+  background: #fff/*#E0DFE3*/;
+  /*-moz-border-radius: 6px;*/
+  border: 1px solid #f60;
   margin: 4px;
   padding: 4px;
   vertical-align: top;
 }
 
 #main > .title {
-  background: #FFF;
+  background: #E0DFE3;
   -moz-border-radius: 6px;
-  border: 1px #FF6600 solid;
+  /*border: 1px #FF6600 solid;*/
   margin: 4px;
   padding: 4px;
 }
@@ -2444,8 +2446,8 @@ table.main td.step {
 }
 
 .dent {
-  -moz-border-radius: 100%;
-  border-radius: 100%;
+  -moz-border-radius: 22px;
+  border-radius: 22px;
   position: absolute;
   cursor: pointer;
 }
