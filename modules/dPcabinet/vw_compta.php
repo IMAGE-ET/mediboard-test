@@ -39,7 +39,7 @@ $is_admin_or_secretaire = in_array($utypes[$mediuser->_user_type], array("Admini
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 $listPrat = $is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee ? 
-               $mediuser->loadPraticiens(PERM_READ) : 
+               $mediuser->loadPraticiens(PERM_READ, $mediuser->function_id) : 
                array($mediuser->_id => $mediuser);
   
 // Création du template

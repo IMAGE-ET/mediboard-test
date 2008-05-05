@@ -35,6 +35,10 @@ if($aff == "complete") {
 	$aff = 0;
 }
 
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+$mediuser->loadRefFunction();
+
 $chir = mbGetValueFromGetOrSession("chir");
 $chirSel = new CMediusers;
 $chirSel->load($chir);
@@ -61,7 +65,7 @@ if($compta) {
 
 // Chargement des plages
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ);
+$listPrat = $listPrat->loadPraticiens(PERM_READ, $mediuser->function_id);
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, debut, chir_id", null, null, $ljoin);
@@ -212,6 +216,7 @@ $smarty->assign("_etat_reglement_patient", $filter->_etat_reglement_patient);
 $smarty->assign("_etat_reglement_tiers"  , $filter->_etat_reglement_tiers);
 $smarty->assign("type"               , $type);
 $smarty->assign("chirSel"            , $chirSel);
+$smarty->assign("listPrat"           , $listPrat);
 $smarty->assign("listPlage"          , $listPlage);
 
 $smarty->display("print_rapport.tpl");

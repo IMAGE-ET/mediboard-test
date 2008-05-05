@@ -14,7 +14,17 @@
             </a>
           </th>
         </tr>
-        {{if $chirSel->user_id}}<tr><th>Dr. {{$chirSel->_view}}</th></tr>{{/if}}
+        {{if $chirSel->user_id}}
+        <tr>
+          <th>Dr. {{$chirSel->_view}}</th>
+        </tr>
+        {{else}}
+        {{foreach from=$listPrat item=curr_prat}}
+        <tr>
+          <th>Dr. {{$curr_prat->_view}}</th>
+        </tr>
+        {{/foreach}}
+        {{/if}}
         <tr>
           <td>
             Reglement Patient: {{if $_etat_reglement_patient}}{{tr}}CConsultation._etat_reglement_patient.{{$_etat_reglement_patient}}{{/tr}}{{else}}Tous{{/if}}

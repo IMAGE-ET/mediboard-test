@@ -88,7 +88,9 @@ function pageMain() {
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td colspan="2">
             <select name="chir">
-              <!-- <option value="">&mdash; Tous &mdash;</option> -->
+              {{if $listPrat|@count}}
+              <option value="">&mdash; Tous</option>
+              {{/if}}
               {{foreach from=$listPrat item=curr_prat}}
               <option class="mediuser" style="border-color: #{{$curr_prat->_ref_function->color}};" value="{{$curr_prat->user_id}}">{{$curr_prat->_view}}</option>
               {{/foreach}}
