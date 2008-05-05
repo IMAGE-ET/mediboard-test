@@ -31,9 +31,6 @@
   {{/if}}
   {{if $consult->_ref_examaudio->_id}}
   <li>    
-    <a href="#nothing" onclick="ExamDialog.init('exam_audio');">
-      Audiogramme
-    </a>
     <form name="delFrm{{$consult->_ref_examaudio->_id}}" action="?m=dPcabinet" enctype="multipart/form-data" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="dosql" value="do_exam_audio_aed" />
@@ -44,6 +41,9 @@
       <input type="hidden" name="_oreille" value="" />
       <button class="trash notext" type="button" onclick="ExamDialog.remove(this,'{{$consult->_id}}')">{{tr}}Delete{{/tr}}</button>
     </form>
+    <a href="#nothing" onclick="ExamDialog.init('exam_audio');">
+      Audiogramme
+    </a>
   </li>
   {{/if}}
   {{if $consult->_ref_exampossum->_id}}

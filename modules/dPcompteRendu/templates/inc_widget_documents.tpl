@@ -77,17 +77,15 @@ Document.refreshList = function() {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_modele_aed" />
     <input type="hidden" name="object_id" value="{{$object->_id}}" />
-    {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
-    <button class="edit notext" type="button" onclick="Document.edit({{$document->_id}})">
-      {{tr}}Edit{{/tr}}
-    </button>
+    
     <button class="trash notext" type="button" onclick="Document.del(this.form, '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
     	{{tr}}Delete{{/tr}}
     </button>
+    {{mb_field object=$document field="compte_rendu_id" hidden=1 prop=""}}
     </form>
-    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">
+    <a href="#" class="tooltip-trigger" onclick="Document.edit({{$document->_id}})" onmouseover="ObjectTooltip.create(this, { mode: 'objectViewHistory', params: { object_class: 'CCompteRendu', object_id: {{$document->_id}} } })">
       {{$document->nom}}
-    </span>
+    </a>
   </li>
   {{foreachelse}}
   <li><em>Aucun document</em></li>
