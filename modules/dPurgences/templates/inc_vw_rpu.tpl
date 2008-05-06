@@ -239,12 +239,12 @@ function initFields(mode_sortie){
   <tr>
 	  <td class="button" colspan="4">
       <!-- ZSTCD --> 
+		  {{if 0}}
       <form name="EditSejourZT" method="post" action="?m={{$m}}">
 				<input type="hidden" name="dosql" value="do_sejour_aed" />
 				<input type="hidden" name="m" value="dPplanningOp" />
 				<input type="hidden" name="del" value="0" />
 				<input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-				
 				{{if $sejour->zt == "0"}}
 				<input type="hidden" name="zt" value="1" />
         <button class="tick" type="submit">
@@ -259,6 +259,7 @@ function initFields(mode_sortie){
         </button>
 				{{/if}}
       </form>
+      {{/if}}
 
 	    <!-- Reconvocation => formulaire de creation de consultation avec champs pre-remplis -->
 	    <button class="new" type="button" onclick="newConsultation({{$consult->_ref_plageconsult->chir_id}},{{$consult->patient_id}},{{$consult->_id}})">
