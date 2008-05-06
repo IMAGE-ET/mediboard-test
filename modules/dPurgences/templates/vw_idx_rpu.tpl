@@ -137,7 +137,11 @@ function pageMain() {
 	      <br/>le {{$consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
 	      {{/if}}
 	    </a>
-	    ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
+	    {{if !$curr_sejour->sortie_reelle}}
+	      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
+	    {{else}}
+	      (sortie à {{$curr_sejour->sortie_reelle|date_format:"%Hh%M"}})
+	    {{/if}}
     </td>
     {{else}}
     <td id="attente-{{$sejour_id}}" style="text-align: center">
