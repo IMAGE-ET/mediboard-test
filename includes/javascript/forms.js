@@ -113,7 +113,7 @@ $V = function (element, value, fire) {
     return;
   }
   element = $(element);
-  fire = Object.isUndefined(fire) ? true : false;
+  fire = Object.isUndefined(fire) ? true : fire;
   
   // We get the tag and the type
   var tag  = element.tagName ? element.tagName.toLowerCase() : null;
@@ -222,10 +222,6 @@ function putHelperContent(oElem, sFieldSelect) {
 }
 
 function notNullOK(oElement) {
-  if (!Object.isElement(oElement)) {
-    oElement = Event.element(oElement);
-  }
-  
   if (oLabel = getLabelFor(oElement)) {
     oLabel.className = oElement.value ? "notNullOK" : "notNull";
   } 
@@ -386,14 +382,30 @@ function prepareForm(oForm, bForcePrepare) {
         }
       }
     
-      //  Label emphasized for notNull elements
-      if (sPropSpec = (oElement.getAttribute("title") || oElement.className)) {
+    
+      if (sPropSpec = oElement.getAttribute("title")) {
         aSpecFragments = sPropSpec.split(" ");
         if (aSpecFragments.indexOf("notNull") != -1) {
           notNullOK(oElement);
-          oElement.observe("change", notNullOK);
+          Element.addEventHandler(oElement, "change", notNullOK);
+        }
+      }else if (sPropSpec = oElement.className) {
+        aSpecFragments = sPropSpec.split(" ");
+        if (aSpecFragments.indexOf("notNull") != -1) {
+          notNullOK(oElement);
+          Element.addEventHandler(oElement, "change", notNullOK);
         }
       }
+      
+      //  Label emphasized for notNull elements
+      /*if (sPropSpec = (oElement.getAttribute("title") || oElement.className)) {
+        aSpecFragments = sPropSpec.split(" ");
+        if (aSpecFragments.indexOf("notNull") != -1) {
+          //notNullOK(oElement);
+          oElement.observe("change", notNullOK);
+          oElement.fire("change");
+        }
+      }*/
      
       // Focus on first text input
       if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
