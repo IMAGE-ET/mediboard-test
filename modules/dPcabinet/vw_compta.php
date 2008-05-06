@@ -35,12 +35,19 @@ $mediuser->load($AppUI->user_id);
 $mediuser->loadRefFunction();
 
 $is_praticien           = $mediuser->isPraticien();
+$is_admin = in_array($utypes[$mediuser->_user_type], "Administrator");
 $is_admin_or_secretaire = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire"));
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$listPrat = $is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee ? 
-               $mediuser->loadPraticiens(PERM_READ, $mediuser->function_id) : 
-               array($mediuser->_id => $mediuser);
+if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {
+  if($is_admin) {
+    $mediuser->loadPraticiens(PERM_READ);
+  } else {
+    $mediuser->loadPraticiens(PERM_READ, $mediuser->function_id);
+  }
+} else {
+  $listPrat = array($mediuser->_id => $mediuser);
+}
   
 // Création du template
 $smarty = new CSmartyDP();

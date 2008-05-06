@@ -65,7 +65,12 @@ if($compta) {
 
 // Chargement des plages
 $listPrat = new CMediusers();
-$listPrat = $listPrat->loadPraticiens(PERM_READ, $mediuser->function_id);
+$is_admin = in_array($utypes[$mediuser->_user_type], "Administrator");
+if($is_admin) {
+  $listPrat = $listPrat->loadPraticiens(PERM_READ);
+} else {
+  $listPrat = $listPrat->loadPraticiens(PERM_READ, $mediuser->function_id);
+}
 $where["chir_id"] = $ds->prepareIn(array_keys($listPrat), $chir);
 $listPlage = new CPlageconsult;
 $listPlage = $listPlage->loadList($where, "date, debut, chir_id", null, null, $ljoin);
