@@ -65,7 +65,7 @@ if($compta) {
 
 // Chargement des plages
 $listPrat = new CMediusers();
-$is_admin = in_array($utypes[$mediuser->_user_type], "Administrator");
+$is_admin = in_array($utypes[$mediuser->_user_type], array("Administrator"));
 if($is_admin) {
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
 } else {
