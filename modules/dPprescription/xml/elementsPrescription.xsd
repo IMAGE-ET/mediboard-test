@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- by Thomas Despoix (openXtrem) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified">
+  <xs:element name="elementsPrescriptions" type="ElementsPrescription">
+  </xs:element>
+
+  <xs:complexType name="ElementsPrescription">
+  	<xs:sequence maxOccurs="unbounded" minOccurs="0">
+  		<xs:element name="chapitre" type="Chapitre" maxOccurs="unbounded" minOccurs="0">
+  		</xs:element>
+  	</xs:sequence>
+  </xs:complexType>
+  
+  <xs:complexType name="Chapitre">
+  	<xs:sequence>
+  		<xs:element name="categorie" type="Categorie" maxOccurs="unbounded" minOccurs="0"></xs:element>
+  	</xs:sequence>
+  	<xs:attribute name="type" type="EnumChapitre"></xs:attribute>
+  </xs:complexType>
+
+  <xs:complexType name="Categorie">
+  	<xs:sequence>
+  		<xs:element name="nom" type="Nom"></xs:element>
+  		<xs:element name="description" type="xs:string"></xs:element>
+  		<xs:element name="element" type="Element"></xs:element>
+  	</xs:sequence>
+  </xs:complexType>
+
+  <xs:complexType name="Element">
+  	<xs:sequence>
+  		<xs:element name="nom" type="Nom"></xs:element>
+  		<xs:element name="description" type="xs:string"></xs:element>
+  	</xs:sequence>
+  </xs:complexType>
+
+  <xs:simpleType name="EnumChapitre">
+  	<xs:restriction base="xs:string">
+      <xs:enumeration value="dmi"/>
+      <xs:enumeration value="anapath"/>
+      <xs:enumeration value="biologie"/>
+      <xs:enumeration value="imagerie"/>
+      <xs:enumeration value="consult"/>
+      <xs:enumeration value="kine"/>
+      <xs:enumeration value="soin"/>
+    </xs:restriction>
+  </xs:simpleType>
+
+
+  <xs:simpleType name="Nom">
+    <xs:restriction base="xs:string">
+      <xs:minLength value="2"></xs:minLength>
+    </xs:restriction>
+  </xs:simpleType>
+</xs:schema>

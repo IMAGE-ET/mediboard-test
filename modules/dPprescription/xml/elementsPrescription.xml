@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<elementsPrescriptions xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="elementsPrescription.xsd">
+  <chapitre type="dmi">
+    <categorie>
+      <nom>nom</nom>
+      <description>description</description>
+      <element>
+        <nom>nom</nom>
+        <description>description</description>
+      </element>
+    </categorie>
+  </chapitre>
+</elementsPrescriptions>
