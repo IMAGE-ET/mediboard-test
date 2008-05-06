@@ -62,10 +62,10 @@ Class.extend(AideSaisie.AutoComplete, {
     var oForm = document[this.sForm];
 
     if (this.sDependField) {
-	    Form.Element.setValue(oForm[this.sDependField], sDepend);
+	    $V(oForm[this.sDependField], sDepend);
     }
 
-    Form.Element.setValue(oForm[this.sTextField  ], sText  );
+    $V(oForm[this.sTextField  ], sText);
     oForm[this.sTextField  ].focus();
     oForm[this.sSearchField].value = "";
   }
