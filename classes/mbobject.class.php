@@ -1443,7 +1443,12 @@ class CMbObject {
         
     return $enumsTrans;
   }
-      
+  
+  /**
+   * Check a property against its specification
+   * @param $propName string Name of the property
+   * @return string Store-like error message
+   */
   function checkProperty($propName) {
     $spec = $this->_specs[$propName];
     return $spec->checkPropertyValue($this);

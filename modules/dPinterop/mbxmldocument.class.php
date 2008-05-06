@@ -77,14 +77,19 @@ class CMbXMLDocument extends DOMDocument {
   function libxml_display_errors() {
      $errors = libxml_get_errors();
      foreach ($errors as $error) {
-         trigger_error($this->libxml_display_error($error), E_USER_WARNING);
+       trigger_error($this->libxml_display_error($error), E_USER_WARNING);
      }
      libxml_clear_errors();
   }
   
+  /**
+   * Try to validate the document against a schema
+   * will trigger errors when not validating
+   * @param string Path of schema, use document inline schema if null 
+   * @return boolean  
+   */
   function schemaValidate($filename = null) {
-    global $dPconfig;
-    if (!$dPconfig["dPinterop"]["hprim_export"]["validation"]) {
+    if (!CAppUI::conf("dPinterop hprim_export validation")) {
       return true;
     }
     

@@ -4,15 +4,20 @@
   <input type="hidden" name="del" value="0" />
   <h3>Import d'un fichier CSV</h3>
   <div class="big-info">
-    Format du fichier (contenu des colonnes, dans l'ordre) :
-    <pre>CIP (indispensable)
-    PrixHopital
-    PrixVille
-    DatePrixHopital
-    DatePrixVille
-    Commentaire
-    CodeInterne</pre>
+  	Fichier de type CSV 
+  	avec séparateur <tt>,</tt> (virgule)
+  	et délimiteur <tt>"</tt> (double guillemets).
+  	<br />
+  	La structure des colonnes est, dans l'ordre :
+<pre>CIP (obligatoire)
+PrixHopital
+PrixVille
+DatePrixHopital
+DatePrixVille
+Commentaire
+CodeInterne</pre>
   </div>
+  
   <div style="text-align: center;">
     <input type="hidden" name="MAX_FILE_SIZE" value="4096000" />
     <input type="file" name="datafile" size="40">

@@ -38,39 +38,46 @@ class CCategoryPrescription extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["elements_prescription"] = "CElementPrescription category_prescription_id";
+    return $backRefs;
+  }     
+  
   function updateFormFields(){
   	parent::updateFormFields();
   	$this->_view = $this->nom;
   }
   
-  function loadCategoriesByChap($chap = null){
-  	$category = new CCategoryPrescription();
-  	$_categories = array();
-  	$where = array();
-  	if($chap){
-  		$where["chapitre"] = " = '$chap'";
-  	}
-  	$_categories["dmi"] = array();
-  	$_categories["anapath"] = array();
-  	$_categories["biologie"] = array();
-  	$_categories["imagerie"] = array();
-  	$_categories["consult"] = array();
-  	$_categories["kine"] = array();
-  	$_categories["soin"] = array();
-  	
-  	$categories = $category->loadList($where);
-  	foreach($categories as $_cat){
-  		$_categories[$_cat->chapitre][$_cat->_id] = $_cat;
-  	}
-  	ksort($_categories);
-  	return $_categories;
+  function loadElementsPrescription() {
+    $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription");
   }
   
-  function getBackRefs() {
-    $backRefs = parent::getBackRefs();
-    $backRefs["element_prescription"] = "CElementPrescription category_prescription_id";
-    return $backRefs;
-  }     
+  /**
+   * Charge toutes les categories triées par chapitre
+   * @param $chapitre string Permet de restreindre à un seul chapitre
+   * @return array[CCategoryPrescription] Les catégories
+   */
+  static function loadCategoriesByChap($chapitre = null) {
+		$categorie = new CCategoryPrescription;
+		$categorie->chapitre = $chapitre;
+		
+		// Initialisation des chapitres
+		$chapitres = explode("|", $categorie->_specs["chapitre"]->list);
+		$categories_par_chapitre = array();
+		foreach ($chapitres as $chapitre) {
+		  $categories_par_chapitre[$chapitre] = array();
+		}
+		
+		// Chargement et classement par chapitre
+    $categories = $categorie->loadMatchingList();;
+    foreach ($categories as &$categorie) {
+		  $categories_par_chapitre[$categorie->chapitre][$categorie->_id] =& $categorie;
+		} 
+
+  	ksort($categories_par_chapitre);
+  	return $categories_par_chapitre;
+  }
 }
 
 ?>

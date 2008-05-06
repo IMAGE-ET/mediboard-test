@@ -22,13 +22,13 @@
   	<xs:sequence>
   		<xs:element name="nom" type="Nom"></xs:element>
   		<xs:element name="description" type="xs:string"></xs:element>
-  		<xs:element name="element" type="Element"></xs:element>
+  		<xs:element name="element" type="Element" maxOccurs="unbounded" minOccurs="0"></xs:element>
   	</xs:sequence>
   </xs:complexType>
 
   <xs:complexType name="Element">
   	<xs:sequence>
-  		<xs:element name="nom" type="Nom"></xs:element>
+  		<xs:element name="libelle" type="Nom"></xs:element>
   		<xs:element name="description" type="xs:string"></xs:element>
   	</xs:sequence>
   </xs:complexType>

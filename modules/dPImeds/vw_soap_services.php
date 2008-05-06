@@ -7,10 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $dPconfig;
-
-$urlImeds = parse_url($dPconfig["dPImeds"]["url"]);
-
+$urlImeds = parse_url(CAppUI::conf("dPImeds url"));
 $serviceAdresse = $urlImeds["scheme"]."://".$urlImeds["host"]."/dllimeds/webimeddll.asmx";
 
 $client = new SoapClient($serviceAdresse."?WSDL", array('exceptions' => 0));
