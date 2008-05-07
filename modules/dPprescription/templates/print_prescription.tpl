@@ -53,7 +53,7 @@ div.header {
 div.footer {
   bottom: 0cm;
   border-top-width: 1px;
-  height: 2em;
+  height: 60px;
 }
 
 div.footer table {
@@ -282,6 +282,13 @@ div#goUp {
 <div class="footer">
   <div style="text-align: left; margin: 4px;">
     Dr. {{$prescription->_ref_praticien->_view}}
+    {{if $prescription->type == "externe"}}<br />
+      {{$prescription->_ref_praticien->titres}}<br />
+      {{$prescription->_ref_praticien->_ref_function->adresse}}
+		  {{$prescription->_ref_praticien->_ref_function->cp}}
+		  {{$prescription->_ref_praticien->_ref_function->ville}}<br />
+		  Tel: {{$prescription->_ref_praticien->_ref_function->tel}}
+		{{/if}}
   </div>
 </div>
 
