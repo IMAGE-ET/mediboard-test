@@ -42,7 +42,11 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
     $categorie = new CCategoryPrescription();
     $categorie->chapitre = $chapitre;
     $categorie->nom = utf8_decode((string) $domCategorie->nom[0]);
+    
+    $categorie->nom = addslashes($categorie->nom);
     $categorie->loadMatchingObject();
+    $categorie->nom = stripslashes($categorie->nom);
+    
     $categorie_id = $categorie->_id;
     $categorie->description = utf8_decode((string) $domCategorie->description[0]);
 
@@ -59,7 +63,11 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
       $element = new CElementPrescription();
       $element->category_prescription_id = $categorie->_id;
       $element->libelle = utf8_decode((string) $domElement->libelle);
+      
+      $element->libelle = addslashes($element->libelle);
       $element->loadMatchingObject();
+      $element->libelle = stripslashes($element->libelle);
+      
       $element_id = $element->_id;
       $element->description = utf8_decode((string) $domElement->description);
       
