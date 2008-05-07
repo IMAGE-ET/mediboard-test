@@ -2549,6 +2549,7 @@ div.about div.nav {
 
 .chargementText{
   width: 20%;
+  min-width: 150px;
   position: fixed;
   z-index: 11;
   font-size: 1.2em;

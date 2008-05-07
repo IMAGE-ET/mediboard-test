@@ -89,16 +89,24 @@ $where = array();
 $where["chir_id"] = "= '$userSel->user_id'";
 $tarifsChir = new CTarif;
 $tarifsChir = $tarifsChir->loadList($where, $order);
+
 $where = array();
 $where["function_id"] = "= '$userSel->function_id'";
 $tarifsCab = new CTarif;
 $tarifsCab = $tarifsCab->loadList($where, $order);
+
+// Reglement vide pour le formulaire
+$reglement = new CReglement();
+$reglement->montant = round($consult->_du_patient_restant, 2);
 
 $_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste"))
   || $consult->_ref_consult_anesth->consultation_anesth_id;
 
 // Codes et actes NGAP
 $consult->loadRefsActesNGAP();
+
+// Règlements
+$consult->loadRefsReglements();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -109,6 +117,7 @@ $smarty->assign("banques"       , $banques);
 $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("consult"       , $consult);
+$smarty->assign("reglement"     , $reglement);
 $smarty->assign("noReglement"   , $noReglement);
 $smarty->assign("userSel"       , $userSel);
 

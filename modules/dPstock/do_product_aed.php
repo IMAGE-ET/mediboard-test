@@ -7,15 +7,7 @@
 * @author Fabien Ménager
 */
 
-global $AppUI;
-
-$class = 'CProduct';
-
-$do = new CDoObjectAddEdit($class, 'product_id');
-$do->createMsg = CAppUI::tr("msg-$class-create");
-$do->modifyMsg = CAppUI::tr("msg-$class-modify");
-$do->deleteMsg = CAppUI::tr("msg-$class-delete");
-
+$do = new CDoObjectAddEdit('CProduct', 'product_id');
 $do->doIt();
 
 ?>

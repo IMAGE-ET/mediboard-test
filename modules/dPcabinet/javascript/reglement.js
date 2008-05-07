@@ -12,7 +12,7 @@ var Reglement = {
 	          reloadFinishBanner();
 	        }
 	      }
-	  } );  
+	  } );
   }, 
   reload: function(){
     var url = new Url;
@@ -31,15 +31,22 @@ var Reglement = {
   },
   effectuer: function(){
     var oForm = document.tarifFrm;
-    oForm.patient_date_reglement.value = new Date().toDATE();
+    $V(oForm.patient_date_reglement, new Date().toDATE());
     Reglement.submit(oForm);
   },
   register: function(){
-    document.write('<div id=reglement></div>');
+    document.write('<div id="reglement"></div>');
     
     Main.add( function() {
       Reglement.reload();
     } );
+  },
+  
+  cancel: function (reglement_id) {
+    var oForm = document.forms['reglement-delete'];
+    $V(oForm.reglement_id, reglement_id);
+    submitFormAjax(oForm, 'systemMsg', { onComplete : Reglement.reload } ); 
     
+    return false;
   }
 };

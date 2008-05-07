@@ -18,7 +18,7 @@ function submitOrder (oForm, options) {
         if (oOptions.close && window.opener) {
           window.close();
         } else {
-          refreshOrder($F(oForm.order_id), oOptions);
+          refreshOrder($V(oForm.order_id), oOptions);
         }
       }
     });
@@ -36,8 +36,8 @@ function submitOrderItem (oForm, options) {
   } else {
     submitFormAjax(oForm, 'systemMsg',{
       onComplete: function() {
-        refreshOrder($F(oForm.order_id), options); 
-        refreshOrderItem($F(oForm.order_item_id));
+        refreshOrder($V(oForm.order_id), options); 
+        refreshOrderItem($V(oForm.order_item_id));
       }
     });
   }

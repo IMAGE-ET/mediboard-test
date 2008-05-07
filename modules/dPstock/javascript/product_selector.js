@@ -19,7 +19,7 @@ var ProductSelector = {
 
   set: function(product_id, product_name) {
     var oForm = document[this.sForm];
-    Form.Element.setValue(oForm[this.sId] , product_id);
-    Form.Element.setValue(oForm[this.sView] , product_name);
+    $V(oForm[this.sId], product_id, true);
+    $V(oForm[this.sView], product_name, true);
   }
 }

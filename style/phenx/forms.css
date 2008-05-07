@@ -40,6 +40,10 @@ input[type=button]:hover {
   background: #bbb;
 }
 
+select {
+  padding: 0;
+}
+
 option, optgroup {
   font-style: normal;
   padding: 0;

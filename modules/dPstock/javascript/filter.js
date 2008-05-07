@@ -18,7 +18,7 @@ Filter.prototype = {
 
     this.aFields.each (function (f) {
       if (oForm[f]) {
-        url.addParam(f,  $F(oForm[f]));
+        url.addParam(f, $V(oForm[f]));
       }
     });
     

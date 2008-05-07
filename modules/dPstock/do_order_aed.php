@@ -9,12 +9,7 @@
 
 global $AppUI, $g;
 
-$class = 'CProductOrder';
-
-$do = new CDoObjectAddEdit($class, 'order_id');
-$do->createMsg = CAppUI::tr("msg-$class-create");
-$do->modifyMsg = CAppUI::tr("msg-$class-modify");
-$do->deleteMsg = CAppUI::tr("msg-$class-delete");
+$do = new CDoObjectAddEdit('CProductOrder', 'order_id');
 
 // New order
 if (mbGetValueFromPost('order_id') == 0) {

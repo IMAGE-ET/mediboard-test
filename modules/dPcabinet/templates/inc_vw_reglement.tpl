@@ -68,54 +68,36 @@ cancelTarif = function(action) {
   var oForm = document.tarifFrm;
   
   if(action == "delActes"){
-    oForm._delete_actes.value = 1; 
-    oForm.tarif.value = "";
+    $V(oForm._delete_actes, 1);
+    $V(oForm.tarif, "");
   }
   
   {{if $app->user_prefs.autoCloseConsult}}
-  if(oForm.chrono){
-    oForm.chrono.value = "48";
-  }
+  $V(oForm.chrono, "48");
   {{/if}}
-            
-            
-  if(oForm.valide){
-    oForm.valide.value = 0;
-  }
   
-  if(oForm._somme){
-    oForm._somme.value = 0;
-  }
+  $V(oForm.valide, 0);
+  $V(oForm._somme, 0);
   
   // On met à 0 les valeurs de tiers 
-  if(oForm.tiers_date_reglement){
-    oForm.tiers_date_reglement.value = "";
-    oForm.tiers_mode_reglement.value = "";
-  }
- 
-  if(oForm.patient_mode_reglement){
-    oForm.patient_mode_reglement.value = "";
-  }
-  oForm.patient_date_reglement.value = "";
+  $V(oForm.tiers_date_reglement, "");
+  $V(oForm.patient_date_reglement, "");
   
   Reglement.submit(oForm);
 }
 
-
 validTarif = function(){
   var oForm = document.tarifFrm;
   
-  if(oForm.du_tiers){
-    oForm.du_tiers.value = oForm._somme.value - oForm.du_patient.value;
-  }
+  $V(oForm.du_tiers,  $V(oForm._somme) - $V(oForm.du_patient));
   
-  if(oForm.tarif.value == ""){
-    oForm.tarif.value = "manuel";
-    if(oForm._tokens_ccam.value){
-      oForm.tarif.value += " / "+oForm._tokens_ccam.value;
+  if($V(oForm.tarif) == ""){
+    $V(oForm.tarif, "manuel");
+    if($V(oForm._tokens_ccam)){
+      oForm.tarif.value += " / "+$V(oForm._tokens_ccam);
     }
-    if(oForm._tokens_ngap.value){
-      oForm.tarif.value += " / "+oForm._tokens_ngap.value;
+    if($V(oForm._tokens_ngap)){
+      oForm.tarif.value += " / "+$V(oForm._tokens_ngap);
     }
   }
   Reglement.submit(oForm);
@@ -125,48 +107,30 @@ modifTotal = function(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
-  if(secteur1 == ""){
-    secteur1 = 0;
-  }
-  if(secteur2 == ""){
-    secteur2 = 0;
-  }
-  oForm._somme.value = parseFloat(secteur1) + parseFloat(secteur2);
-  oForm._somme.value = Math.round(oForm._somme.value*100)/100;
-  oForm.du_patient.value = oForm._somme.value; 
-}
 
+  $V(oForm._somme, Math.round(100*(parseFloat(secteur1) + parseFloat(secteur2))) / 100);
+  $V(oForm.du_patient, $V(oForm._somme)); 
+}
 
 modifSecteur2 = function(){
   var oForm = document.tarifFrm;
   var secteur1 = oForm.secteur1.value;
   var somme = oForm._somme.value;
   
-  if(somme == ""){
-    somme = 0;
-  }
-  if(secteur1 == ""){
-    secteur = 0;
-  }
-  oForm.du_patient.value = somme;
-  oForm.secteur2.value = parseFloat(somme) - parseFloat(secteur1); 
-  oForm.secteur2.value = Math.round(oForm.secteur2.value*100)/100;
+  $V(oForm.du_patient, somme);
+  $V(oForm.secteur2, Math.round(100*(parseFloat(somme) - parseFloat(secteur1))) / 100);
 }
-
 
 putTiers = function() {
   var oForm = document.tarifFrm;
   oForm.du_patient.value = 0;
 }
 
-
-
-
 Main.add( function(){
   // Mise a jour de du_patient
   var oForm = document.tarifFrm;
-  if(oForm && oForm.du_patient && oForm._somme && oForm.du_patient.value == "0"){
-    oForm.du_patient.value = oForm._somme.value; 
+  if(oForm && oForm.du_patient.value == "0"){
+    $V(oForm.du_patient, $V(oForm._somme)); 
   }
 } );
 
@@ -180,7 +144,22 @@ Main.add( function(){
 	  {{if $gestionFSE}}
     <th class="category">{{tr}}CLmFSE{{/tr}}</th>
 	  {{/if}}
-    <th {{if !$gestionFSE}}colspan="2"{{/if}} class="category">Règlement</th>
+    
+    <th {{if !$gestionFSE}}colspan="2"{{/if}} class="category">
+      {{if $consult->valide}}
+      <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
+      <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
+        <input type="hidden" name="dosql" value="do_tarif_aed" />
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="_tab" value="vw_edit_tarifs" />
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="_bind_consult" value="1" />
+        <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
+        <button class="submit" type="submit">Nouveau tarif</button>
+      </form>
+      {{/if}}
+      Règlement
+    </th>
   </tr>
   
 	<tr>	
@@ -342,8 +321,11 @@ Main.add( function(){
 	        {{/if}}
 	      </table>
       </form>
+      <!-- Fin formulaire de selection du tarif -->
+      
       <hr />
       
+      <!-- Formulaire de tarification -->
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="dPcabinet" />
@@ -351,26 +333,24 @@ Main.add( function(){
       <input type="hidden" name="dosql" value="do_consultation_aed" />
      {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
      {{mb_field object=$consult field="sejour_id" hidden=1 prop=""}}
-      
-      
-      <!-- Formulaire de reglement -->
-      <table width="100%">  
+
+      <table width="100%">
+        <!-- A regler -->
         {{if !$consult->patient_date_reglement}}   
-        <tr>          
+        <tr>
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
             {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
             <input type="hidden" name="patient_date_reglement" value="" />
             {{if $consult->valide}}
-	          {{mb_value object=$consult field="secteur1"}} (S1) +
-	          
-	          {{mb_value object=$consult field="secteur2"}} (S2) =
- 			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
+  	          {{mb_value object=$consult field="secteur1"}} (S1) +
+  	          {{mb_value object=$consult field="secteur2"}} (S2) =
+   			      {{mb_value object=$consult field="_somme" value=$consult->secteur1+$consult->secteur2 onchange="modifSecteur2()"}}
             {{else}}
-            {{mb_label object=$consult field="secteur1"}}
-	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
-	          {{mb_label object=$consult field="secteur2"}}
-	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
+              {{mb_label object=$consult field="secteur1"}}
+  	          {{mb_field object=$consult field="secteur1" onchange="modifTotal()"}} +
+  	          {{mb_label object=$consult field="secteur2"}}
+  	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
  			      <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
             {{/if}}
           </td>
@@ -379,7 +359,7 @@ Main.add( function(){
           <th>Codes CCAM</th>
           <td>{{mb_field object=$consult field="_tokens_ccam" readonly="readonly" hidden=1 prop=""}}
             {{foreach from=$consult->_ref_actes_ccam item="acte_ccam"}}
-              {{$acte_ccam->code_acte}}  
+              {{$acte_ccam->code_acte}}
             {{/foreach}}
           </td>
         </tr>
@@ -401,8 +381,6 @@ Main.add( function(){
             {{mb_field object=$consult field="du_tiers" hidden=1 prop=""}}
             
             {{mb_field object=$consult field="patient_date_reglement" hidden=1 prop=""}}
-            {{mb_field object=$consult field="patient_mode_reglement" hidden=1 prop=""}}
-            <strong>{{$consult->du_patient}} &euro; ont été réglés par le patient: {{mb_value object=$consult field="patient_mode_reglement"}}</strong>
           </td>
         </tr>
         <tr>
@@ -413,50 +391,9 @@ Main.add( function(){
           </td>
         </tr>
         {{/if}}
-        <!-- Fin du formulaire de reglement -->
-        
-        {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
 
-        {{if $consult->sejour_id}}
-        <tr>
-          <td colspan="2" style="text-align: center;">
-            <strong>ATU : Règlement à effectuer au bureau des sorties</strong>
-          </td>
-        </tr>
-        {{else}}
-        
-        {{if $consult->du_patient}}
-        <tr>
-          <th>
-            {{mb_label object=$consult field="patient_mode_reglement"}}
-          </th>
-          <td>
-            {{mb_field object=$consult field="patient_mode_reglement" defaultOption="&mdash;Veuillez Choisir &mdash;"}}
-          </td>
-        </tr>
-        <tr>
-          <th>
-            {{mb_label object=$consult field="du_patient"}}
-          </th>
-          <td>
-            {{mb_value object=$consult field="du_patient"}}
-          </td>
-        </tr>
-        <tr>
-          <th>
-           Banque
-          </th>
-          <td>
-           <select name="banque_id">
-           <option value="">&mdash; Choix d'une banque</option> 
-           {{foreach from=$banques item=banque}}
-             <option value="{{$banque->_id}}" {{if $consult->banque_id == $banque->_id}}selected = "selected"{{/if}}>{{$banque->_view}}</option>
-           {{/foreach}}
-           </select>
-          </td>
-        </tr>
-        {{/if}}
-        {{/if}}
+
+        {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
         <tr>
           <td colspan="2" class="button">
             <input type="hidden" name="valide" value="1" />
@@ -465,63 +402,121 @@ Main.add( function(){
             <input type="hidden" name="du_patient" value="{{$consult->du_patient}}" />
             <input type="hidden" name="du_tiers" value="{{$consult->du_tiers}}" />
             
-            <input type="hidden" name="tiers_date_reglement" value="{{$consult->tiers_date_reglement}}" />
-            <input type="hidden" name="tiers_mode_reglement" value="{{$consult->tiers_mode_reglement}}" />
-            {{if !$consult->sejour_id && $consult->du_patient}}
-            <button class="submit" type="button" onclick="Reglement.effectuer()">Règlement effectué</button>
-            {{/if}}
-            
             {{if $app->user_prefs.autoCloseConsult}}
             <input type="hidden" name="chrono" value="{{$consult->chrono}}" />
             {{/if}}
             
-            
-            {{if !$consult->_current_fse}}
+            {{if !$consult->_current_fse && $consult->_ref_reglements|@count == 0}}
             <button class="cancel" type="button" onclick="this.form.du_tiers.value = 0; this.form.du_patient.value = 0; cancelTarif()">Annuler la validation</button>
             {{/if}}
           </td>
         </tr>
         {{elseif !$consult->patient_date_reglement}}
-        {{if !$consult->sejour_id}}
-        <tr>
-          <th>{{mb_label object=$consult field="du_patient"}}</th>
-          <td>
-            {{mb_field object=$consult field="du_patient"}}
-            {{mb_field object=$consult field="du_tiers" hidden="1"}}
-            <button type="button" class="tick" onclick="putTiers();">Tiers-payant total</button>   
-          </td>
-        </tr>
+          {{if !$consult->sejour_id}}
+          <tr>
+            <th>{{mb_label object=$consult field="du_patient"}}</th>
+            <td>
+              {{mb_field object=$consult field="du_patient"}}
+              {{mb_field object=$consult field="du_tiers" hidden="1"}}
+              <button type="button" class="tick" onclick="putTiers();">Tiers-payant total</button>   
+            </td>
+          </tr>
+          {{/if}}
+          <tr>
+            <td colspan="2" class="button">
+              <input type="hidden" name="_delete_actes" value="0" />
+              <input type="hidden" name="valide" value="1" />
+              
+              {{if $app->user_prefs.autoCloseConsult}}
+              <input type="hidden" name="chrono" value="64" />
+              {{/if}}
+              
+              <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
+              <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
+            </td>
+          </tr>
         {{/if}}
-        <tr>
-          <td colspan="2" class="button">
-            <input type="hidden" name="_delete_actes" value="0" />
-            <input type="hidden" name="valide" value="1" />
-            
-            {{if $app->user_prefs.autoCloseConsult}}
-            <input type="hidden" name="chrono" value="64" />
-            {{/if}}
-            
-            <button class="submit" type="button" onclick="validTarif();">Valider la cotation</button>
-            <button class="cancel" type="button" onclick="cancelTarif('delActes')">Annuler la cotation</button>
-          </td>
-        </tr>
         {{/if}}
       </table>
-      
       </form>
+      <!-- Fin du formulaire de tarification -->
       
-      {{if $consult->valide}}
-      <!-- Creation d'un nouveau tarif avec les actes NGAP de la consultation courante -->
-      <form name="creerTarif" action="?m={{$m}}&amp;tab=vw_compta" method="post" style="float: right;">
-        <input type="hidden" name="dosql" value="do_tarif_aed" />
-        <input type="hidden" name="m" value="{{$m}}" />
-        <input type="hidden" name="_tab" value="vw_edit_tarifs" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="_bind_consult" value="1" />
-        <input type="hidden" name="_consult_id" value="{{$consult->_id}}" />
-        <button class="submit" type="submit">Créer un nouveau tarif</button>
-      </form>
+      
+      <!-- Debut du formulaire de rajout de reglements -->
+      {{if $consult->tarif && $consult->valide == "1"}}
+        {{if $consult->sejour_id}}
+         <div style="text-align: center; font-weight: bold;">
+           ATU : Règlement à effectuer au bureau des sorties
+         </div>
+        {{else}}
+
+         {{if $consult->du_patient}}
+         
+          <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
+          <form name="reglement-delete" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <input type="hidden" name="m" value="dPcabinet" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="dosql" value="do_reglement_aed" />
+            <input type="hidden" name="reglement_id" value="" />
+          </form>
+         
+          <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+           <input type="hidden" name="m" value="dPcabinet" />
+           <input type="hidden" name="del" value="0" />
+           <input type="hidden" name="dosql" value="do_reglement_aed" />
+           <input type="hidden" name="date" value="now" />
+          {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
+          
+           <table style="width: 100%;">
+              <tr>
+                <th class="category">{{tr}}CReglement-mode{{/tr}}</th>
+                <th class="category">{{tr}}CReglement-montant{{/tr}}</th>
+                <th class="category">{{tr}}CReglement-banque_id{{/tr}}</th>
+                <th class="category">{{tr}}CReglement-date{{/tr}}</th>
+                <th class="category"></th>
+              </tr>
+              
+              <!--  Liste des reglements deja effectués -->
+              {{foreach from=$consult->_ref_reglements item=curr_reglement}}
+              <tr>
+                <td>{{mb_value object=$curr_reglement field=mode}}</td>
+                <td>{{mb_value object=$curr_reglement field=montant}}</td>
+                <td>
+                {{if $curr_reglement->_ref_banque}}
+                  {{mb_value object=$curr_reglement->_ref_banque field=_view}}
+                {{/if}}
+                </td>
+                <td>{{mb_value object=$curr_reglement field=date}}</td>
+                <td>
+                  <button class="remove notext" onclick="return Reglement.cancel({{$curr_reglement->_id}});">-</button>
+                </td>
+              </tr>
+              {{/foreach}}
+             
+              {{if $reglement->montant > 0}}
+              <tr>
+                <td>{{mb_field object=$reglement field="mode" defaultOption="&mdash; Mode de paiement &mdash;"}}</td>
+                <td>{{mb_field object=$reglement field="montant"}}</td>
+                <td colspan="2">
+                  <select name="banque_id">
+                     <option value="">&mdash; {{tr}}CReglement-banque_id{{/tr}} &mdash;</option> 
+                     {{foreach from=$banques item=banque}}
+                       <option value="{{$banque->_id}}">{{$banque->_view}}</option>
+                     {{/foreach}}
+                  </select>
+                </td>
+                <td><button class="add notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } ); return false;">+</button></td>
+              </tr>
+              {{/if}}
+              <tr>
+                <td colspan="4" style="text-align: center;">{{mb_value object=$consult field=_reglements_total_patient}} réglé, {{mb_value object=$consult field=_du_patient_restant}} restant</td>
+              </tr>
+            </table>
+          </form>
+        
+        {{/if}}
       {{/if}}
+      <!-- Fin du formulaire de rajout de reglement -->
       
     </td>
   </tr>
@@ -549,14 +544,12 @@ Main.add( function(){
     
       {{if !$praticien->_id_cps}}
       <div class="warning">
-        Praticien non associé à une CPS. 
-        <br/>
+        Praticien non associé à une CPS. <br/>
         Merci d'effectuer une lecture de la CPS pour permettre le formatage d'une FSE. 
       </div>
       {{else}}
       <div class="message">
-        Praticien correctement associé à une CPS. 
-        <br/>
+        Praticien correctement associé à une CPS. <br/>
         Formatage des FSE disponible pour ce praticien.
       </div>
       {{/if}}
@@ -575,14 +568,12 @@ Main.add( function(){
             
       {{if !$patient->_id_vitale}}
       <div class="warning">
-        Patient non associé à un bénéficiaire Vitale. 
-        <br/>
+        Patient non associé à un bénéficiaire Vitale. <br/>
         Merci d'éffectuer une lecture de la carte pour permettre le formatage d'une FSE. 
       </div>
       {{else}}
       <div class="message">
-        Patient correctement associé à un bénéficiaire Vitale. 
-        <br/>
+        Patient correctement associé à un bénéficiaire Vitale. <br/>
         Formatage des FSE disponible pour ce patient.
       </div>
       {{/if}}

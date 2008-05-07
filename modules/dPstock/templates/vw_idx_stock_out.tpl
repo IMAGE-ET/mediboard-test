@@ -25,9 +25,9 @@ function refreshStock(stock_id) {
 
 function stockOut(oForm, sign) {
   if (sign == undefined) sign = 1;
-  oForm.function_id.value = $F($('function_id'));
-  oForm.quantity.value = $F(oForm.quantity) * sign;
-  stock_id = $F(oForm.stock_id);
+  oForm.function_id.value = $V($('function_id'));
+  oForm.quantity.value = $V(oForm.quantity) * sign;
+  stock_id = $V(oForm.stock_id);
   
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function() {
@@ -36,7 +36,6 @@ function stockOut(oForm, sign) {
       refreshStockOutsList();
     }
   });
-  oForm.quantity.value = $F(oForm.quantity) * sign;
 }
 </script>
 

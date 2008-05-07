@@ -18,10 +18,10 @@ function pageMain() {
   </div>
 
   <!-- Filter -->
-  <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($F(this.keywords));">
+  <form name="orders-list-filter" action="?" method="post" onsubmit="return refreshLists($V(this.keywords));">
     <input type="hidden" class="m" name="{{$m}}" />
     <input type="text" class="search" name="keywords" />
-    <button type="button" class="search" onclick="refreshLists($F(this.form.keywords))">{{tr}}Filter{{/tr}}</button>
+    <button type="button" class="search" onclick="refreshLists($V(this.form.keywords))">{{tr}}Filter{{/tr}}</button>
   </form>
 
   <!-- Tabs titles -->

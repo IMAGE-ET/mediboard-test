@@ -44,11 +44,7 @@ class CConsultation extends CCodable {
   var $adresse         = null; // Le patient a-t'il été adressé ?
   var $tarif           = null;
   
-  var $patient_mode_reglement = null;
-  var $tiers_mode_reglement   = null;
-  
   var $arrivee         = null;
-  var $banque_id       = null;
   var $categorie_id    = null;
   var $valide          = null; // Cotation validée
  
@@ -56,7 +52,7 @@ class CConsultation extends CCodable {
   var $total_amc       = null; 
   var $total_amo       = null;
 
-  var $du_patient      = null; // somme que le patient doit régler a la fn
+  var $du_patient      = null; // somme que le patient doit régler
   var $du_tiers        = null;
   var $accident_travail = null;
   
@@ -96,16 +92,18 @@ class CConsultation extends CCodable {
   var $_ref_exampossum     = null;
   var $_ref_examigs        = null;
   var $_count_fiches_examen = null;
+  var $_ref_reglements     = null;
 
   var $_ref_prescription   = null; 
   var $_ref_prescription_traitement = null;
-  var $_ref_banque         = null;
   var $_ref_categorie      = null;
   
   // Distant fields
   var $_ref_chir  = null;
   var $_date      = null;
   var $_is_anesth = null; 
+  var $_du_patient_restant = null;
+  var $_reglements_total_patient = null;
   
   // Filter Fields
   var $_date_min	 	   = null;
@@ -125,12 +123,13 @@ class CConsultation extends CCodable {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["consult_anesth"] = "CConsultAnesth consultation_id";
-    $backRefs["examaudio"]     = "CExamAudio consultation_id";
-    $backRefs["examcomp"]     = "CExamComp consultation_id";
-    $backRefs["examnyha"]     = "CExamNyha consultation_id";
+    $backRefs["examaudio"]      = "CExamAudio consultation_id";
+    $backRefs["examcomp"]       = "CExamComp consultation_id";
+    $backRefs["examnyha"]       = "CExamNyha consultation_id";
     $backRefs["exampossum"]     = "CExamPossum consultation_id";
-    $backRefs["examigs"]     = "CExamIgs consultation_id";
-    $backRefs["prescriptions"]   = "CPrescription object_id";
+    $backRefs["examigs"]        = "CExamIgs consultation_id";
+    $backRefs["prescriptions"]  = "CPrescription object_id";
+    $backRefs["reglements"]     = "CReglement consultation_id";
     return $backRefs;
   }
   
@@ -156,12 +155,11 @@ class CConsultation extends CCodable {
     
     $specs["patient_date_reglement"] = "date";
     $specs["tiers_date_reglement"]   = "date";
-    $specs["patient_mode_reglement"] = "enum list|cheque|CB|especes|virement|autre default|cheque";
-    $specs["tiers_mode_reglement"]   = "enum list|cheque|CB|especes|virement|autre default|cheque";
     $specs["du_patient"]          = "currency";
+    $specs["_du_patient_restant"] = "currency";
+    $specs["_reglements_total_patient"] = "currency";
     $specs["du_tiers"]            = "currency";
     
-    $specs["banque_id"]         = "ref class|CBanque";
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
@@ -249,6 +247,15 @@ class CConsultation extends CCodable {
     
     // si _coded vaut 1 alors, impossible de modifier la consultation
     $this->_coded = $this->valide;
+    
+    $this->loadRefsReglements();
+    // calcul de la somme du du patient restant
+    $this->_du_patient_restant = $this->du_patient;
+    $this->_reglements_total_patient = 0;
+    foreach ($this->_ref_reglements as $curr_reglement) {
+      $this->_du_patient_restant -= $curr_reglement->montant;
+      $this->_reglements_total_patient += $curr_reglement->montant;
+    }
   }
    
   function updateDBFields() {
@@ -256,19 +263,20 @@ class CConsultation extends CCodable {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
-    if ($this->patient_date_reglement == "0000-00-00") {
+    $this->updateFormFields();
+    // si la date est nulle ou si le patient n'a rien reglé
+    if ($this->patient_date_reglement == "0000-00-00" || $this->_reglements_total_patient == 0) {
       $this->patient_date_reglement = null;
+    }
+    
+    // Si le patient a tout reglé, on met la date d'acquitement
+    else if ($this->_du_patient_restant <= 0) {
+      $this->patient_date_reglement = mbDateTime();
     }
 
     // Liaison FSE prioritaire sur l'état    
     if ($this->_bind_fse) {
       $this->valide = 0;
-    }
-   
-    
-    // Si pas de mode de paiement defini => autre
-    if ($this->patient_mode_reglement !== null && $this->patient_mode_reglement == ""){
-      $this->patient_mode_reglement = "autre";
     }
     
     // Cas du paiement d'un séjour
@@ -827,11 +835,7 @@ class CConsultation extends CCodable {
     }
     return $nbDocs;
   }
-  
-  function loadRefBanque(){
-  	$this->_ref_banque = new CBanque();
-  	$this->_ref_banque->load($this->banque_id);	
-  }
+
   
   function loadRefConsultAnesth() {
   	$this->_ref_consult_anesth = $this->loadUniqueBackRef("consult_anesth");
@@ -887,6 +891,13 @@ class CConsultation extends CCodable {
     }
   }
 
+  function loadRefsReglements() {
+    $this->_ref_reglements = $this->loadBackRefs('reglements', 'date');
+    
+    foreach ($this->_ref_reglements as $curr_reglement) {
+      $curr_reglement->loadRefsBack();
+    }
+  }
   
   function loadRefPrescriptionTraitement(){
     $prescription = new CPrescription();
@@ -910,6 +921,7 @@ class CConsultation extends CCodable {
     $this->loadRefsFichesExamen();
     $this->loadRefsActesCCAM();
     $this->loadRefsActesNGAP();
+    $this->loadRefsReglements();
   }
   
   function loadExamsComp(){

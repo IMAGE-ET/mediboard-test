@@ -100,6 +100,44 @@ function pageMain() {
         </tr>        
       </table>
       </form>
+      
+      <form name="testform" action="">
+        <input type="radio" name="liste" value="item1" onchange="Console.debug('changed1');" />item1<br />
+        <input type="radio" name="liste" value="item2" onchange="Console.debug('changed2');" />item2<br />
+        <input type="radio" name="liste" value="item3" onchange="Console.debug('changed3');" />item3<br />
+        <input type="radio" name="liste" value="item4" onchange="Console.debug('changed4');" />item4<br />
+        <input type="button" name="setradio" onclick="$V(this.form.liste, 'item2', true);" value="set radio"/> 
+        <input type="button" name="getradio" onclick="Console.debug($V(this.form.liste));" value="get radio" /><br /> 
+        
+        <input type="checkbox" name="check" value="item5" onchange="Console.debug('changed_'+this.checked);" />item5<br />
+        <input type="button" name="setcheck" onclick="$V(this.form.check, true, true);" value="set check" />
+        <input type="button" name="getcheck" onclick="Console.debug($V(this.form.check));" value="get check" /><br /> 
+        
+        <input type="checkbox" name="liste2" value="itemcheck1" />item1<br />
+        <input type="checkbox" name="liste2" value="itemcheck2" />item2<br />
+        <input type="checkbox" name="liste2" value="itemcheck3" />item3<br />
+        <input type="checkbox" name="liste2" value="itemcheck4" />item4<br />
+        <input type="button" name="setcheck2" onclick="$V(this.form.liste2, ['itemcheck2', 'itemcheck3'], true);" value="set check list" />
+        <input type="button" name="getcheck2" onclick="Console.debug($V(this.form.liste2));" value="get check list" /><br /> 
+
+        <select name="sel" size="4">
+          <option value="i1">item1</option>
+          <option value="i2">item2</option>
+          <option value="i3">item3</option>
+          <option value="i4">item4</option>
+        </select><br /> 
+        <input type="button" name="setsel" onclick="$V(this.form.sel, ['i2', 'i3'], true);" value="set sel" />
+        <input type="button" name="getsel" onclick="Console.debug($V(this.form.sel));" value="get sel" /><br /> 
+        
+        <input type="text" name="txt" value="" /><br /> 
+        <input type="button" name="settxt" onclick="$V(this.form.txt, 'bahabahabaha');" value="set txt" />
+        <input type="button" name="gettxt" onclick="Console.debug($V(this.form.txt));" value="get txt" /><br /> 
+        
+        <textarea name="txtarea"></textarea>
+        <input type="button" name="settxtarea" onclick="$V('testform_txtarea', 'bahabahabaha2');" value="set txtarea" /> 
+        <input type="button" name="gettxtarea" onclick="Console.debug($V(this.form.txtarea));" value="get txtarea" /><br /> 
+      </form>
+      
     </td>
   </tr>
   {{if $product->_id}}

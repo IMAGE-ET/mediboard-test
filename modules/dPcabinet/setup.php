@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.04";
+$config["mod_version"]     = "1.05";
 $config["mod_type"]        = "user";
 
 
@@ -1125,7 +1125,70 @@ class CSetupdPcabinet extends CSetup {
       ADD `examenPulmo` TEXT NULL AFTER `examenCardio` ;";
     $this->addQuery($sql);
     
-    $this->mod_version = "1.04";
+    $this->makeRevision("1.04");
+    $sql = "CREATE TABLE `reglement` (
+      `reglement_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT ,
+      `consultation_id` INT( 11 ) UNSIGNED NOT NULL ,
+      `banque_id` INT( 11 ) UNSIGNED ,
+      `date` DATETIME NOT NULL ,
+      `montant` FLOAT NOT NULL ,
+      `emetteur` ENUM( 'patient', 'tiers' ) ,
+      `mode` ENUM( 'cheque', 'CB', 'especes', 'virement', 'autre' ) ,
+      PRIMARY KEY ( `reglement_id` )
+      ) TYPE = MYISAM ;";
+    $this->addQuery($sql);
+    
+    // On crée les règlements des patients
+    $sql = "INSERT INTO `reglement` (
+      `emetteur`,
+      `consultation_id`, 
+      `banque_id`, 
+      `date`, 
+      `montant`,
+      `mode`)
+      
+      SELECT 
+        'patient',
+        `consultation_id`, 
+        `banque_id`, 
+        `patient_date_reglement`, 
+        `du_patient`, 
+        `patient_mode_reglement`
+      FROM 
+        `consultation`
+      WHERE 
+        `patient_date_reglement` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    
+    // On crée les règlements des tiers
+    $sql = "INSERT INTO `reglement` (
+      `emetteur`,
+      `consultation_id`, 
+      `date`, 
+      `montant`,
+      `mode`)
+      
+      SELECT 
+        'tiers',
+        `consultation_id`, 
+        `tiers_date_reglement`, 
+        `du_tiers`, 
+        `tiers_mode_reglement`
+      FROM 
+        `consultation`
+      WHERE 
+        `tiers_date_reglement` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    // On supprime les champs inutiles des consultations
+    /*$sql = 'ALTER TABLE `consultation` 
+      DROP `tiers_mode_reglement`,
+      DROP `patient_mode_reglement`,
+      DROP `banque_id`;';
+    $this->addQuery($sql);*/
+    
+    $this->mod_version = "1.05";
   }
 }
 ?>
