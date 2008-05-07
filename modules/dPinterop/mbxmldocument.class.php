@@ -29,14 +29,33 @@ class CMbXMLDocument extends DOMDocument {
     $this->documentfilename = $documentfilename;
   }
   
-  function setSchema($schemapath, $schemaname) {
-    $this->schemapath     = $schemapath;
-    $this->schemafilename = "$schemapath/$schemaname";
+  function setSchema($schemafilename) {
+    $this->schemapath     = dirname($schemafilename);
+    $this->schemafilename = $schemafilename;
   }
+  
+	/**
+	 * Try to load and validate XML File
+	 * @param $docPath string Uploaded file temporary path
+	 * @return string Store-like message 
+	 */
+	function loadAndValidate($docPath) {
+	  // Chargement
+	  if (!$this->load($docPath)) {
+	    return "Le fichier fourni n'est pas un document XML bien formé";
+	  }
+	  
+	  // Validation
+	  if ($this->checkSchema() && !$this->schemaValidate()) {
+	    return "Catalogue d'élements de prescriptions invalide";
+	  }
+	  
+	  return null;
+	}
   
   function checkSchema() {
     if(!$this->schemafilename) {
-      trigger_error("You havent set the schema", E_USER_WARNING);
+      trigger_error("You haven't set the schema", E_USER_WARNING);
       return false;
     }
     if (!is_dir($this->schemapath)) {

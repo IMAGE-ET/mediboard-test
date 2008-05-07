@@ -49,7 +49,7 @@ $doc->save($path);
 $doc->load($path);
 
 // Validation du document
-$doc->setSchema("modules/$m/xml/","elementsPrescription.xsd");
+$doc->setSchema("modules/$m/xml/elementsPrescription.xsd");
 if (!$doc->schemaValidate()) {
   CAppUI::stepAjax("Catalogue d'élements de prescriptions invalide", UI_MSG_ERROR );
 }

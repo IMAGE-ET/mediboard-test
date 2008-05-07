@@ -25,7 +25,7 @@ $can->needsRead();
 
 $doc = new CMbXMLDocument();
 
-$doc->setSchema("modules/dPlabo/remote","prescription.xsd");
+$doc->setSchema("modules/dPlabo/remote/prescription.xsd");
 if (!$doc->checkSchema()) {
   $AppUI->setMsg("Schema manquant", UI_MSG_ERROR );
   redirect();

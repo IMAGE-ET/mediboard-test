@@ -861,6 +861,8 @@ class CMbObject {
     $log->_fields = $fields;
     $log->date = mbDateTime();
     $log->store();
+    
+    $this->_ref_last_log = $log;
   }
   
   

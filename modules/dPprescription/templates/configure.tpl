@@ -74,6 +74,11 @@ function exportElementsPrescription(){
   url.requestUpdate("export_elements_prescription");
 }
 
+function importElementsPrescription(){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "import_elements_prescription");
+  url.popup(700, 500, "export_elements_prescription");
+}
 </script>
 
 <table class="tbl">
@@ -96,4 +101,7 @@ function exportElementsPrescription(){
     <td id="export_elements_prescription"></td>
   </tr>
 
+  <tr>
+    <td colspan="2"><button class="tick" onclick="importElementsPrescription()" >Importer les éléments de prescriptions</button></td>
+  </tr>
 </table>

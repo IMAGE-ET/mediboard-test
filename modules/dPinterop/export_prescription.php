@@ -21,8 +21,8 @@ $doc = new CMbXMLDocument();
 $docReference = new CMbXMLDocument();
 $docReference->load("modules/dPlabo/remote/prescription.xml");
 
-$docReference->setSchema("modules/dPlabo/remote","prescription.xsd");
-$doc->setSchema("modules/dPlabo/remote","prescription.xsd");
+$docReference->setSchema("modules/dPlabo/remote/prescription.xsd");
+$doc->setSchema("modules/dPlabo/remote/prescription.xsd");
 if (!$doc->checkSchema()) {
   return;
 }
