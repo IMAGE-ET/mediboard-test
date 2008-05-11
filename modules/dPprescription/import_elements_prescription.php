@@ -43,10 +43,10 @@ foreach ($domCatalogue->chapitre as $domChapitre) {
     $categorie->chapitre = $chapitre;
     $categorie->nom = utf8_decode((string) $domCategorie->nom[0]);
     
-    $categorie->nom = addslashes($categorie->nom);
+    $categorie->escapeDBFields();
     $categorie->loadMatchingObject();
-    $categorie->nom = stripslashes($categorie->nom);
-    
+    $categorie->unescapeDBFields();
+        
     $categorie_id = $categorie->_id;
     $categorie->description = utf8_decode((string) $domCategorie->description[0]);
 

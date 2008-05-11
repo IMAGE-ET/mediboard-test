@@ -138,16 +138,16 @@ class CMbObject {
   }
 
   /**
-   * Saticly build object handlers array
+   * Staticly build object handlers array
+   * @return void
    */
   function makeHandlers() {
     if (CMbObject::$handlers) {
       return;
     }
     // Static initialisations
-    global $dPconfig;
     CMbObject::$handlers = array();
-    foreach ($dPconfig["object_handlers"] as $handler => $active) {
+    foreach (CAppUI::conf("object_handlers") as $handler => $active) {
       if ($active) {
         CMbObject::$handlers[] = new $handler;
       }
@@ -160,12 +160,6 @@ class CMbObject {
    */
   function getSpec() {
     return new CMbObjectSpec;
-  }
-  /**
-   * Set/get functions
-   */
-  function getError() {
-    return $this->_error;
   }
   
   /**
@@ -318,9 +312,8 @@ class CMbObject {
   
   /**
    * Chargement du dernier identifiant id400
-   * @param : $tag = nom du tag à utiliser
+   * @param : $tag string Tag à utiliser comme filtre, 
    */
-
   function loadLastId400($tag = null) {
     $id400 = new CIdSante400();
     if($id400->_ref_module) {
@@ -331,9 +324,9 @@ class CMbObject {
   
   /**
    * Permission generic check
-   * return true or false
+   * @param $permType Const enum Type of permission : PERM_READ|PERM_EDIT|PERM_DENY
+   * @return boolean
    */
-
   function getPerm($permType) {
     return(CPermObject::getPermObject($this, $permType));
   }
@@ -1302,6 +1295,30 @@ class CMbObject {
     }
 
     return $result;
+  }
+  
+  /**
+   * Escape DB Fields for SQL queries
+   * @return void
+   */
+  function escapeDBFields() {
+    foreach ($this->getDBFields() as $propName => $propValue) {
+      if ($propValue) {
+        $this->$propName = addslashes($propValue);
+      }
+    }
+  }
+  
+  /**
+   * Unescape DB Fields for SQL queries
+   * @return void
+   */
+  function unescapeDBFields() {
+    foreach ($this->getDBFields() as $propName => $propValue) {
+      if ($propValue) {
+        $this->$propName = stripslashes($propValue);
+      }
+    }
   }
   
   /**

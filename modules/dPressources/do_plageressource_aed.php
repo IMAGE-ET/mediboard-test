@@ -9,10 +9,7 @@
 
 // Object binding
 $obj = new CPlageressource();
-if (!$obj->bind( $_POST )) {
-	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
-	$AppUI->redirect();
-}
+$obj->bind($_POST);
 
 $del = dPgetParam( $_POST, 'del', 0 );
 $repeat = dPgetParam( $_POST, '_repeat', 1 );

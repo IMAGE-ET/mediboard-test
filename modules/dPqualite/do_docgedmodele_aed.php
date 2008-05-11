@@ -35,13 +35,7 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
     unset($_POST["callback"]);
     
     // Object binding
-    if (!$this->_obj->bind( $_POST["ged"] )) {
-      $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
-      if ($this->redirectError) {
-        $this->redirect =& $this->redirectError;
-      }
-      $this->doRedirect();
-    }
+    $this->_obj->bind($_POST["ged"]);
     $this->_objBefore->load($this->_obj->_id);
   }
 
@@ -103,13 +97,7 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
     unset($_POST["callback"]);
     
     // Object binding
-    if (!$this->_obj->bind( $_POST["suivi"] )) {
-      $AppUI->setMsg( $this->_obj->getError(), UI_MSG_ERROR );
-      if ($this->redirectError) {
-        $this->redirect =& $this->redirectError;
-      }
-      $this->doRedirect();
-    }
+    $this->_obj->bind($_POST["suivi"]);
     $this->_objBefore->load($this->_obj->_id);
   }
   

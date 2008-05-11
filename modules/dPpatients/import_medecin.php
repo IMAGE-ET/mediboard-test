@@ -224,13 +224,15 @@ $errors = 0;
 $updates = 0;
 
 foreach ($medecins as &$medecin) {
+  // Recherche des siblings
   $siblings = $medecin->loadExactSiblings();
   if ($medecin->_has_siblings = count($siblings)) {
     $sibling = reset($siblings);
     $medecin->_id = $sibling->_id;
     $updates++;
   } 
-  
+
+  // Sauvegarde
   if ($msg = $medecin->store()) {
     trigger_error("Error storing $medecin->nom $medecin->prenom ($medecin->cp) : $msg", E_USER_WARNING);
     $errors++;

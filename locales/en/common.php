@@ -1,8 +1,8 @@
 <?php
 $locales['modify'] = '';
-$locales['- New Item -'] = '';
+$locales['- New Item -'] = '-- New';
 $locales['::deleted not recreated'] = 'Object was deleted and couldn\'t be recreated';
-$locales['::store-check failed:'] = '';
+$locales['::store-check failed:'] = ': store failed,';
 $locales['About'] = 'About';
 $locales['Add'] = 'Add';
 $locales['add'] = 'add';
@@ -11,12 +11,12 @@ $locales['Address'] = 'Address';
 $locales['Administration'] = 'Administration';
 $locales['All'] = 'All';
 $locales['back'] = 'back';
-$locales['bool.'] = ' ';
+$locales['bool.'] = 'undefined';
 $locales['bool.0'] = 'no';
 $locales['bool.1'] = 'yes';
 $locales['cancel'] = 'cancel';
 $locales['CANCEL'] = 'CANCEL';
-$locales['Cancel'] = 'Annuler';
+$locales['Cancel'] = 'Cancel';
 $locales['cascadeIssues'] = 'cascading issues for';
 $locales['Change User Password'] = 'Change User Password';
 $locales['chgpwNoMatch'] = 'The new password don\'t match';

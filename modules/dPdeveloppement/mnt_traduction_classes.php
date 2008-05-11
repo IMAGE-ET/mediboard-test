@@ -79,6 +79,11 @@ foreach($classes as $class) {
     if (!$spec->prop) {
       continue;
     }
+    
+    if (in_array($prop, array($object->_tbl_key, "_view", "_shortview"))) {
+      continue;
+    }
+    
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");

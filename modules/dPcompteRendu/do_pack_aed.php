@@ -8,12 +8,7 @@
 */
 
 $obj = new CPack();
-$msg = null;
-
-if (!$obj->bind( $_POST )) {
-	$AppUI->setMsg( $obj->getError(), UI_MSG_ERROR );
-	$AppUI->redirect();
-}
+$obj->bind($_POST);
 
 // detect if a delete operation has to be processed
 $del = dPgetParam( $_POST, 'del', 0 );
