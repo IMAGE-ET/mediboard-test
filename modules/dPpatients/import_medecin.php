@@ -233,6 +233,7 @@ foreach ($medecins as &$medecin) {
   } 
 
   // Sauvegarde
+  $medecin->repair();
   if ($msg = $medecin->store()) {
     trigger_error("Error storing $medecin->nom $medecin->prenom ($medecin->cp) : $msg", E_USER_WARNING);
     $errors++;

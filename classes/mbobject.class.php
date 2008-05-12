@@ -663,10 +663,9 @@ class CMbObject {
   }
 
   /**
-   *  Generic check method
-   *  @return null if the object is ok a message if not
+   * Repair all non checking properties when possible
+   * @return null if the object is ok a message if not
    */
-
   function repair() {
     $properties = get_object_vars($this);
     foreach ($this->_props as $propName => $propSpec) {
@@ -688,13 +687,11 @@ class CMbObject {
   }
 
   /**
-   *  Generic check method
-   *  @return null if the object is ok a message if not
+   * Check all properties according to specification
+   * @return string Store-like message
    */
-
   function check() {
-    global $dPconfig;
-    $debug = $dPconfig["debug"];
+    $debug = CAppUI::conf("debug");
     
     $msg = null;
     $properties = get_object_vars($this);
@@ -719,7 +716,7 @@ class CMbObject {
   }
 
   
-    /**
+  /**
    * Split a tel number into tel parts
    *
    * @param string $telField
