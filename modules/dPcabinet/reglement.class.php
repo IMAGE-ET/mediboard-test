@@ -68,15 +68,27 @@ class CReglement extends CMbObject {
   }
   
   function store() {
-    // Au cas où le reglement fait l'acquittement
-    $this->loadRefsFwd();
-    $this->_ref_consultation->updateDBFields();
-    $this->_ref_consultation->store();
-    
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
+    // Au cas où le reglement fait l'acquittement
+    $this->loadRefsFwd();
+    $this->_ref_consultation->updateDBFields();
+    return $this->_ref_consultation->store();
+  }
+  
+  function delete() {
+    // Au cas où le reglement fait l'acquittement
+    $this->load($this->_id);
+    $this->loadRefsFwd();
+    $consult = $this->_ref_consultation;
+    // Standard delete
+    if ($msg = parent::delete()) {
+      return $msg;
+    }
+    $consult->updateDBFields();
+    return $consult->store();
   }
   
   function getPerm($permType) {

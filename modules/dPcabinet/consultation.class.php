@@ -85,25 +85,29 @@ class CConsultation extends CCodable {
   var $_delete_actes   = null;
   
   // Back References
-  var $_ref_consult_anesth = null;
-  var $_ref_examaudio      = null;
-  var $_ref_examcomp       = null;
-  var $_ref_examnyha       = null;
-  var $_ref_exampossum     = null;
-  var $_ref_examigs        = null;
-  var $_count_fiches_examen = null;
-  var $_ref_reglements     = null;
+  var $_ref_consult_anesth     = null;
+  var $_ref_examaudio          = null;
+  var $_ref_examcomp           = null;
+  var $_ref_examnyha           = null;
+  var $_ref_exampossum         = null;
+  var $_ref_examigs            = null;
+  var $_count_fiches_examen    = null;
+  var $_ref_reglements         = null;
+  var $_ref_reglements_patient = null;
+  var $_ref_reglements_tiers   = null;
 
-  var $_ref_prescription   = null; 
+  var $_ref_prescription            = null; 
   var $_ref_prescription_traitement = null;
-  var $_ref_categorie      = null;
+  var $_ref_categorie               = null;
   
   // Distant fields
-  var $_ref_chir  = null;
-  var $_date      = null;
-  var $_is_anesth = null; 
-  var $_du_patient_restant = null;
+  var $_ref_chir                 = null;
+  var $_date                     = null;
+  var $_is_anesth                = null; 
+  var $_du_patient_restant       = null;
   var $_reglements_total_patient = null;
+  var $_du_tiers_restant         = null;
+  var $_reglements_total_tiers   = null;
   
   // Filter Fields
   var $_date_min	 	   = null;
@@ -249,12 +253,19 @@ class CConsultation extends CCodable {
     $this->_coded = $this->valide;
     
     $this->loadRefsReglements();
-    // calcul de la somme du du patient restant
+    // calcul de la somme du restante du patient
     $this->_du_patient_restant = $this->du_patient;
     $this->_reglements_total_patient = 0;
-    foreach ($this->_ref_reglements as $curr_reglement) {
+    foreach ($this->_ref_reglements_patient as $curr_reglement) {
       $this->_du_patient_restant -= $curr_reglement->montant;
       $this->_reglements_total_patient += $curr_reglement->montant;
+    }
+    // calcul de la somme du restante du tiers
+    $this->_du_tiers_restant = $this->du_tiers;
+    $this->_reglements_total_tiers = 0;
+    foreach ($this->_ref_reglements_tiers as $curr_reglement) {
+      $this->_du_tiers_restant -= $curr_reglement->montant;
+      $this->_reglements_total_tiers += $curr_reglement->montant;
     }
   }
    
@@ -265,16 +276,18 @@ class CConsultation extends CCodable {
     
     $this->updateFormFields();
     // si la date est nulle ou si le patient n'a rien reglé
-    if ($this->patient_date_reglement == "0000-00-00" || $this->_reglements_total_patient == 0) {
-      $this->patient_date_reglement = null;
-    }
+    //if ($this->patient_date_reglement == "0000-00-00" || $this->_reglements_total_patient == 0) {
+    //  $this->patient_date_reglement = null;
+    //}
     
     // Si le patient a tout reglé, on met la date d'acquitement
-    else if ($this->_du_patient_restant <= 0) {
-      $this->patient_date_reglement = mbDateTime();
+    if ($this->du_patient && ($this->_du_patient_restant <= 0)) {
+      $this->patient_date_reglement = mbDate();
+    } else {
+      $this->patient_date_reglement = "";
     }
 
-    // Liaison FSE prioritaire sur l'état    
+    // Liaison FSE prioritaire sur l'état
     if ($this->_bind_fse) {
       $this->valide = 0;
     }
@@ -893,8 +906,15 @@ class CConsultation extends CCodable {
 
   function loadRefsReglements() {
     $this->_ref_reglements = $this->loadBackRefs('reglements', 'date');
+    $this->_ref_reglements_patient = array();
+    $this->_ref_reglements_tiers   = array();
     
     foreach ($this->_ref_reglements as $curr_reglement) {
+      if($curr_reglement->emetteur == "patient") {
+        $this->_ref_reglements_patient[$curr_reglement->_id] = $curr_reglement;
+      } else {
+        $this->_ref_reglements_tiers[$curr_reglement->_id] = $curr_reglement;
+      }
       $curr_reglement->loadRefsBack();
     }
   }

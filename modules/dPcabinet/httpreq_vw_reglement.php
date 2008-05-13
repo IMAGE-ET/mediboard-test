@@ -14,7 +14,7 @@ $can->needsEdit();
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
-$noReglement  = mbGetValueFromGet("noReglement" , 0);
+$noReglement  = mbGetValueFromGet("noReglement", 0);
 
 // Chargement des banques
 $orderBanque = "nom ASC";

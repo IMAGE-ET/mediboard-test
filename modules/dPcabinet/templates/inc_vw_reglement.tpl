@@ -336,7 +336,6 @@ Main.add( function(){
 
       <table width="100%">
         <!-- A regler -->
-        {{if !$consult->patient_date_reglement}}   
         <tr>
           <th>{{mb_label object=$consult field="_somme"}}</th>
           <td>
@@ -352,6 +351,12 @@ Main.add( function(){
   	          {{mb_label object=$consult field="secteur2"}}
   	          {{mb_field object=$consult field="secteur2" onchange="modifTotal()"}} =
  			      <input type="text" size="6" name="_somme" class="notNull currency" value="{{$consult->secteur1+$consult->secteur2}}" onchange="modifSecteur2()" /> &euro;
+            {{/if}}
+            {{if $consult->patient_date_reglement}}
+              {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}
+              {{mb_field object=$consult field="du_tiers" hidden=1 prop=""}}
+            
+              {{mb_field object=$consult field="patient_date_reglement" hidden=1 prop=""}}
             {{/if}}
           </td>
         </tr>
@@ -371,26 +376,14 @@ Main.add( function(){
           {{/foreach}}
           </td>
         </tr>
-        {{else}}
+        <!-- Suppression des actes associées a la consultation
         <tr>
-          <td colspan="2" class="button">
-            {{mb_field object=$consult field="secteur1" hidden=1 prop=""}}
-            {{mb_field object=$consult field="secteur2" hidden=1 prop=""}}
-            {{mb_field object=$consult field="tarif" hidden=1 prop=""}}
-            {{mb_field object=$consult field="du_patient" hidden=1 prop=""}}
-            {{mb_field object=$consult field="du_tiers" hidden=1 prop=""}}
-            
-            {{mb_field object=$consult field="patient_date_reglement" hidden=1 prop=""}}
-          </td>
-        </tr>
-        <tr>
-          <!-- Suppression des actes associées a la consultation -->
           <td colspan="2" class="button">
             <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
             <button class="cancel" type="button" onclick="cancelTarif()">Annuler le réglement</button>
           </td>
         </tr>
-        {{/if}}
+        -->
 
 
         {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
@@ -465,6 +458,7 @@ Main.add( function(){
            <input type="hidden" name="del" value="0" />
            <input type="hidden" name="dosql" value="do_reglement_aed" />
            <input type="hidden" name="date" value="now" />
+           <input type="hidden" name="emetteur" value="patient" />
           {{mb_field object=$consult field="consultation_id" hidden=1 prop=""}}
           
            <table style="width: 100%;">

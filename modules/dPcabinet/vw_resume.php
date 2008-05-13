@@ -36,8 +36,9 @@ $consultations =& $patient->_ref_consultations;
 $sejours =& $patient->_ref_sejours;
 
 // Consultations
-foreach ($patient->_ref_consultations as &$consultation) {
+foreach ($consultations as &$consultation) {
   $consultation->loadRefsBack();
+  $consultation->loadRefsReglements();
   $consultation->loadRefPlageConsult();
 }
 
