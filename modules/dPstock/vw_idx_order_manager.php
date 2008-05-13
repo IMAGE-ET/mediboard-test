@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$order_id   = mbGetValueFromGetOrSession('order_id');
+$order_id = mbGetValueFromGetOrSession('order_id');
 
 // Loads the expected Order
 $order = new CProductOrder();

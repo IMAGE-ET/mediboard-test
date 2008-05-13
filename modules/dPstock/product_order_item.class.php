@@ -68,15 +68,9 @@ class CProductOrderItem extends CMbObject {
     if ($this->quantity_received != 0 && $delta > 0) {
       $this->date_received = mbDateTime();
     }
-
-    // we have to update the stock too
-    $stock = new CProductStock();
-    $where = array();
-    $where['group_id']   = "= '{$this->_ref_order->group_id}'";
-    $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
-
+    
     // The quantity of this article that has been received is added to the stock
-    if ($stock->loadObject($where)) {
+    if ($stock = $this->getStock()) {
       $stock->quantity += $delta * $this->_ref_reference->quantity;
       $stock->store();
     }
@@ -88,6 +82,19 @@ class CProductOrderItem extends CMbObject {
   
   function isReceived() {
   	return ($this->date_received && ($this->quantity == $this->quantity_received));
+  }
+  
+  function getStock() {
+    if (!$this->_ref_order || $this->_ref_reference) {
+      $this->loadRefsFwd();
+    }
+    $stock = new CProductStock();
+    $where = array();
+    $where['group_id']   = "= '{$this->_ref_order->group_id}'";
+    $where['product_id'] = "= '{$this->_ref_reference->product_id}'";
+    $stock->loadObject($where);
+    
+    return $stock;
   }
   
   function updateFormFields() {
@@ -114,12 +121,15 @@ class CProductOrderItem extends CMbObject {
   }
 
   function store() {
+    global $AppUI;
+    
+    $this->loadRefsFwd();
+    
     if($this->order_id && $this->reference_id && !$this->_id) {
       $where['order_id']     = "= '$this->order_id'";
       $where['reference_id'] = "= '$this->reference_id'";
 
       $duplicateKey = new CProductOrderItem();
-      $this->loadRefsFwd();
       
       if($duplicateKey->loadObject($where)) {
         $duplicateKey->loadRefsFwd();
@@ -128,6 +138,13 @@ class CProductOrderItem extends CMbObject {
         $this->unit_price = $duplicateKey->unit_price;
       } else {
         $this->unit_price = $this->_ref_reference->price;
+      }
+    }
+    
+    if ($stock = $this->getStock()) {
+      $stock->loadRefOrders();
+      if ($stock->_zone_future > 2) {
+        $AppUI->setMsg('Attention : le stock optimum risque d\'être dépassé', UI_MSG_WARNING);
       }
     }
     
