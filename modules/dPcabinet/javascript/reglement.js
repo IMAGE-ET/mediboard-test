@@ -45,8 +45,7 @@ var Reglement = {
   cancel: function (reglement_id) {
     var oForm = document.forms['reglement-delete'];
     $V(oForm.reglement_id, reglement_id);
-    submitFormAjax(oForm, 'systemMsg', { onComplete : Reglement.reload } ); 
-    
+    confirmDeletion(oForm, { ajax: true, typeName:'le règlement' }, { onComplete : Reglement.reload } );
     return false;
   }
 };

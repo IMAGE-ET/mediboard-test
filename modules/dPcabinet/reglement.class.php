@@ -32,18 +32,20 @@ class CReglement extends CMbObject {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['consultation_id'] = 'notNull ref class|CConsultation';
+    $specs['consultation_id'] = 'ref notNull class|CConsultation';
     $specs['banque_id']       = 'ref class|CBanque';
-    $specs['date']            = 'notNull dateTime';
-    $specs['montant']         = 'currency';
+    $specs['date']            = 'dateTime notNull';
+    $specs['montant']         = 'currency notNull';
     $specs['emetteur']        = 'enum list|patient|tiers';
-    $specs['mode']            = 'enum list|cheque|CB|especes|virement|autre default|cheque';
+    $specs['mode']            = 'enum notNull list|cheque|CB|especes|virement|autre default|cheque';
     return $specs;
   }
   
   function loadRefsFwd() {
-    $this->_ref_consultation = new CConsultation();
-    $this->_ref_consultation->load($this->consultation_id);
+    if (!$this->_ref_consultation) {
+ 	    $this->_ref_consultation = new CConsultation();
+  	  $this->_ref_consultation->load($this->consultation_id);
+    }
   }
   
   function loadRefsBack() {
@@ -67,28 +69,49 @@ class CReglement extends CMbObject {
     $this->loadRefsFwd();
   }
   
+  /**
+   * Acquite la facture automatiquement
+   * @return Store-like message
+   */
+  function acquiteFacture() {
+    // Au cas où le reglement fait l'acquittement
+    $this->loadRefsFwd();
+    $consult =& $this->_ref_consultation;
+    $consult->loadRefsReglements();
+    
+    // Acquitement patient
+    if ($this->emetteur == "patient" && $consult->du_patient) {
+      $consult->patient_date_reglement = $consult->_du_patient_restant <= 0 ? mbDate() : "";
+    }
+      
+    // Acquitement tiers
+    if ($this->emetteur == "tiers" && $consult->du_tiers) {
+      $consult->tiers_date_reglement = $consult->_du_tiers_restant <= 0 ? mbDate() : "";
+    }
+      
+    return $consult->store();
+  }
+  
   function store() {
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
     }
-    // Au cas où le reglement fait l'acquittement
-    $this->loadRefsFwd();
-    $this->_ref_consultation->updateDBFields();
-    return $this->_ref_consultation->store();
+    
+    return $this->acquiteFacture();
   }
   
   function delete() {
-    // Au cas où le reglement fait l'acquittement
-    $this->load($this->_id);
+    // Preload consultation
+    $this->load();
     $this->loadRefsFwd();
-    $consult = $this->_ref_consultation;
+    
     // Standard delete
     if ($msg = parent::delete()) {
       return $msg;
     }
-    $consult->updateDBFields();
-    return $consult->store();
+
+    return $this->acquiteFacture();
   }
   
   function getPerm($permType) {

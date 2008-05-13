@@ -9,10 +9,9 @@
 
 global $AppUI, $m;
 
-
+// Permissions ?
 $module = CModule::getInstalled($m);
 $canModule = $module->canDo();
-
 $canModule->needsEdit();
 
 $chir = new CMediusers;
@@ -94,12 +93,12 @@ if(isset($_POST["sejour_id"])){
   $sejour->load($_POST["sejour_id"]);
   $sejour->praticien_id = $_POST["prat_id"];
   $sejour->store();
+  
 } else {
   $consult->motif = "Consultation immédiate";
 }
 
 $consult->store();
-
 
 if($ref_chir->isFromType(array("Anesthésiste"))) {
   // Un Anesthesiste a été choisi 

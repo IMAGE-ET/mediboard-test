@@ -453,7 +453,8 @@ Main.add( function(){
             <input type="hidden" name="reglement_id" value="" />
           </form>
          
-          <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+          <script type="text/javascript">Main.add( function() { prepareForm(document.forms["reglement-add"]); } );</script>
+          <form name="reglement-add" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this, { onComplete : Reglement.reload } );">
            <input type="hidden" name="m" value="dPcabinet" />
            <input type="hidden" name="del" value="0" />
            <input type="hidden" name="dosql" value="do_reglement_aed" />
@@ -463,10 +464,10 @@ Main.add( function(){
           
            <table style="width: 100%;">
               <tr>
-                <th class="category">{{tr}}CReglement-mode{{/tr}}</th>
-                <th class="category">{{tr}}CReglement-montant{{/tr}}</th>
-                <th class="category">{{tr}}CReglement-banque_id{{/tr}}</th>
-                <th class="category">{{tr}}CReglement-date{{/tr}}</th>
+                <th class="category">{{mb_label object=$reglement field=mode}}</th>
+                <th class="category">{{mb_label object=$reglement field=montant}}</th>
+                <th class="category">{{mb_label object=$reglement field=banque_id}}</th>
+                <th class="category">{{mb_label object=$reglement field=date}}</th>
                 <th class="category"></th>
               </tr>
               
@@ -499,11 +500,25 @@ Main.add( function(){
                      {{/foreach}}
                   </select>
                 </td>
-                <td><button class="add notext" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete : Reglement.reload } ); return false;">+</button></td>
+                <td><button class="add notext" type="submit" onclick="return this.form.onsubmit();">+</button></td>
               </tr>
               {{/if}}
               <tr>
-                <td colspan="4" style="text-align: center;">{{mb_value object=$consult field=_reglements_total_patient}} réglé, {{mb_value object=$consult field=_du_patient_restant}} restant</td>
+                <td colspan="4" style="text-align: center;">
+                	{{mb_value object=$consult field=_reglements_total_patient}} réglés, 
+                	<strong>{{mb_value object=$consult field=_du_patient_restant}} restant</strong>
+                </td>
+              </tr>
+              <tr>
+                <td colspan="4" style="text-align: center;">
+                	<strong>
+	                  {{if $consult->patient_date_reglement}}
+	                  {{mb_label object=$consult field=patient_date_reglement}}
+	                  le 
+	                  {{mb_value object=$consult field=patient_date_reglement}}
+	                  {{/if}}
+                  </strong>
+                </td>
               </tr>
             </table>
           </form>

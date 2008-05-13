@@ -253,20 +253,6 @@ class CConsultation extends CCodable {
     $this->_coded = $this->valide;
     
     $this->loadRefsReglements();
-    // calcul de la somme du restante du patient
-    $this->_du_patient_restant = $this->du_patient;
-    $this->_reglements_total_patient = 0;
-    foreach ($this->_ref_reglements_patient as $curr_reglement) {
-      $this->_du_patient_restant -= $curr_reglement->montant;
-      $this->_reglements_total_patient += $curr_reglement->montant;
-    }
-    // calcul de la somme du restante du tiers
-    $this->_du_tiers_restant = $this->du_tiers;
-    $this->_reglements_total_tiers = 0;
-    foreach ($this->_ref_reglements_tiers as $curr_reglement) {
-      $this->_du_tiers_restant -= $curr_reglement->montant;
-      $this->_reglements_total_tiers += $curr_reglement->montant;
-    }
   }
    
   function updateDBFields() {
@@ -274,26 +260,13 @@ class CConsultation extends CCodable {
       $this->heure = $this->_hour.":".$this->_min.":00";
     }
     
-    $this->updateFormFields();
-    // si la date est nulle ou si le patient n'a rien reglé
-    //if ($this->patient_date_reglement == "0000-00-00" || $this->_reglements_total_patient == 0) {
-    //  $this->patient_date_reglement = null;
-    //}
-    
-    // Si le patient a tout reglé, on met la date d'acquitement
-    if ($this->du_patient && ($this->_du_patient_restant <= 0)) {
-      $this->patient_date_reglement = mbDate();
-    } else {
-      $this->patient_date_reglement = "";
-    }
-
     // Liaison FSE prioritaire sur l'état
     if ($this->_bind_fse) {
       $this->valide = 0;
     }
     
     // Cas du paiement d'un séjour
-  	if($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
+  	if ($this->sejour_id !== null && $this->sejour_id && $this->secteur1 !== null && $this->secteur2 !== null){
   		$this->du_tiers = $this->secteur1 + $this->secteur2;
   		$this->du_patient = 0;
   	}
@@ -705,7 +678,6 @@ class CConsultation extends CCodable {
   }
   
   function store() {
-  	
     // Standard store
     if ($msg = parent::store()) {
       return $msg;
@@ -917,6 +889,26 @@ class CConsultation extends CCodable {
       }
       $curr_reglement->loadRefsBack();
     }
+    
+    // Calcul de la somme du restante du patient
+    $this->_du_patient_restant = $this->du_patient;
+    $this->_reglements_total_patient = 0;
+    foreach ($this->_ref_reglements_patient as $curr_reglement) {
+      $this->_du_patient_restant -= $curr_reglement->montant;
+      $this->_reglements_total_patient += $curr_reglement->montant;
+    }
+    $this->_du_patient_restant       = round($this->_du_patient_restant, 2);
+    $this->_reglements_total_patient = round($this->_reglements_total_patient, 2);
+    
+    // Calcul de la somme du restante du tiers
+    $this->_du_tiers_restant = $this->du_tiers;
+    $this->_reglements_total_tiers = 0;
+    foreach ($this->_ref_reglements_tiers as $curr_reglement) {
+      $this->_du_tiers_restant -= $curr_reglement->montant;
+      $this->_reglements_total_tiers += $curr_reglement->montant;
+    }
+    $this->_du_tiers_restant       = round($this->_du_tiers_restant, 2);
+    $this->_reglements_total_tiers = round($this->_reglements_total_tiers, 2);
   }
   
   function loadRefPrescriptionTraitement(){

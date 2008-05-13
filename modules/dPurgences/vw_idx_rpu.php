@@ -70,6 +70,7 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadNumDossier();
   $sejour->loadRefsFwd();
   $sejour->loadRefRPU();
+  $sejour->loadRefsConsultations();
   
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();

@@ -556,12 +556,16 @@ class CSejour extends CCodable {
   }
   
   function loadRefsConsultations() {
+    CSQLDataSource::$trace = true;
     $this->_ref_consultations = $this->loadBackRefs("consultations");
+    CSQLDataSource::$trace = false;
     
     $this->_ref_consult_atu = new CConsultation;
     if ($this->type == "urg" && count($this->_ref_consultations)) {
     	$this->_ref_consult_atu = reset($this->_ref_consultations);
     }
+    
+    mbTrace($this->_ref_consultations, "ATU");
   }
   
   
