@@ -129,7 +129,7 @@ function submitSejour(){
  	  
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{if $patient->_IPP}}
-          [{{$patient->_IPP}}]
+          [{{$patient->_IPP}}]<br />
         {{/if}}
         <strong>{{$patient->_view}}</strong>
       </a>
@@ -149,10 +149,13 @@ function submitSejour(){
       <!-- Vérification des champs semi obligatoires -->
       {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
       {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+
+	    {{if $dPconfig.dPurgences.old_rpu == "1"}}
       {{if !$rpu->type_pathologie}}<div class="warning">Champ manquant {{mb_label object=$rpu field=type_pathologie}}</div>{{/if}}
       {{if !$rpu->urtrau         }}<div class="warning">Champ manquant {{mb_label object=$rpu field=urtrau         }}</div>{{/if}}
       {{if !$rpu->urmuta         }}<div class="warning">Champ manquant {{mb_label object=$rpu field=urmuta         }}</div>{{/if}}
-      
+			{{/if}}
+			      
       {{if $sejour->sortie_reelle}}
          {{if $rpu->destination}}
            <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
@@ -199,7 +202,7 @@ function submitSejour(){
               {{if $sejour->mode_sortie == "transfert" && $sejour->etablissement_transfert_id}}
                 {{assign var=etab_externe_id value=$sejour->etablissement_transfert_id}}
                 {{assign var=etab_externe value=$listEtab.$etab_externe_id}}
-                vers {{$etab_externe->_view}}
+                <br />vers {{$etab_externe->_view}}<br />
               {{/if}}
             {{/if}}
             {{mb_value object=$sejour field=sortie_reelle}}<br />
