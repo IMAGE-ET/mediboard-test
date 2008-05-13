@@ -59,11 +59,7 @@ class CPrisePosologie extends CMbMetaObject {
     
     $this->_view = $this->quantite;
     
-    if($this->object_class == "CPrescriptionLineMedicament"){
-      $this->_view .= " ".$this->_ref_object->_unite_prise;
-    } else {
-    	$this->_view .= " soins";
-    }
+    $this->_view .= " ".$this->_ref_object->_unite_prise;
     
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;

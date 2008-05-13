@@ -156,6 +156,21 @@ if($prescription->_id){
 	}
 }
 
+
+// Chargement du poids du patient
+$poids = "";
+if($prescription->_id){
+	if($prescription->_ref_object->_class_name == "CSejour"){
+		$consult_anesth = new CConsultAnesth();
+		$consult_anesth->sejour_id = $prescription->_ref_object->_id;
+		$consult_anesth->loadMatchingObject();
+		
+		if($consult_anesth->_id){
+		  $poids = $consult_anesth->poid;
+		}
+	}
+}
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -169,7 +184,7 @@ $contexteType["CSejour"][] = "traitement";
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("poids", $poids);
 $smarty->assign("today", mbDate());
 $smarty->assign("refresh_pharma", "0");
 $smarty->assign("mode_pharma", "0");

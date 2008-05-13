@@ -10,8 +10,31 @@ if($('alertes')){
   Prescription.reloadAlertes({{$prescription->_id}});
 }
 
+// Lancement du mode de saisie popup
+viewEasyMode = function(){
+  var url = new Url();
+  url.setModuleAction("dPprescription","vw_easy_mode");
+  url.popup(850,500,"Mode de saisie simplifié");
+}
+
 </script>
 
+<form name="addPriseElement" action="?" method="post">
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
+  <input type="hidden" name="del" value="0" />
+  <input type="hidden" name="prise_posologie_id" value="" />
+  <input type="hidden" name="object_id" value="" />
+  <input type="hidden" name="object_class" value="CPrescriptionLineElement" />
+  <input type="hidden" name="quantite" value="" />
+  <input type="hidden" name="nb_fois" value="" />
+  <input type="hidden" name="unite_fois" value="" />
+  <input type="hidden" name="moment_unitaire_id" value="" />
+  <input type="hidden" name="nb_tous_les" value="" />
+  <input type="hidden" name="unite_tous_les" value="" />
+  <input type="hidden" name="category_name" value="" />
+</form>
+	    
 <!-- Formulaire d'ajout de ligne d'element dans la prescription -->
 <form action="?m=dPprescription" method="post" name="addLineElement" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPprescription" />
@@ -21,10 +44,17 @@ if($('alertes')){
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="debut" value="" />
+  <input type="hidden" name="duree" value="" />
+  <input type="hidden" name="unite_duree" value="" />
+  <input type="hidden" name="callback" value="" />
   <input type="hidden" name="element_prescription_id" value=""/>
   <input type="hidden" name="_category_name" value="" />
 </form>
 
+<div id="mode" style="position: absolute; right: 10px;">
+  <button class="new" type="button" onclick="viewEasyMode();">Mode de saisie simplifié</button>
+</div>
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
@@ -69,6 +99,8 @@ if($('alertes')){
   {{include file="../../dPprescription/templates/inc_div_element.tpl" element="soin"}}
 </div>
 {{/if}}
+
+
 
 <script type="text/javascript">
 	    	

@@ -113,6 +113,12 @@ class CPrescriptionPdf extends CMbPdf {
 	  }
 	  return $this->barcode;	
 	}
+	
+	
+	public function viewBarcodeSoin($x,$y,$h,$codage = "C128B", $decalage = 30, $traduction = true){  
+	  $this->writeBarcode($x, $y, 180, $h, $codage, false, false, 2, $this->barcode);
+	}
+	
 }
 
 

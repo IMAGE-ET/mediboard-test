@@ -30,13 +30,28 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   
   function updateFormFields(){
+  	global $AppUI;
+  	
+  	
+  	
     parent::updateFormFields();
     $this->loadRefElement();
+    $this->_ref_element_prescription->loadRefCategory();
+    
     $this->_view = $this->_ref_element_prescription->_view;
     
     // Un element ne peut jamais être un traitement
     $this->_traitement = 0;	
-    $this->_unite_prise = "soins";
+    
+    $this->_unite_prise = "fois";
+    
+    $this->_duree_prise = "";
+    if($this->debut){
+      $this->_duree_prise .= "à partir du ".mbTranformTime(null, $this->debut, "%d/%m/%Y");
+    }
+    if($this->duree && $this->unite_duree){
+    	$this->_duree_prise .= " pendant ".$this->duree." ".$this->unite_duree;
+    }
   }
   
   function getSpecs() {

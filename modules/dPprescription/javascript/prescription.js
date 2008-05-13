@@ -41,19 +41,82 @@ var Prescription = {
 	    });
     }
   },
-  addLineElement: function(element_id, category_name){
+  addLineElement: function(element_id, category_name, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
     var oForm = document.addLineElement;
+    if(debut){
+      oForm.debut.value = debut;
+    }
+    if(duree && unite_duree){
+      oForm.duree.value = duree;
+      oForm.unite_duree.value = unite_duree;
+    }
+    if(callback){
+      oForm.callback.value = callback;
+    }
     if(!category_name){
-    var category_name = oForm._category_name.value;
+      var category_name = oForm._category_name.value;
     }
     oForm.element_prescription_id.value = element_id;
+   
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){ 
-        Prescription.reload(oForm.prescription_id.value, element_id, category_name);
-       }
-     });
+        if(!callback){
+          Prescription.reload(oForm.prescription_id.value, element_id, category_name);
+        }
+      }
+    });
+    oForm.debut.value = "";
+    oForm.duree.value = "";
+    oForm.unite_duree.value = "";
+    oForm.callback.value = "";
   },
+
+
+
+  submitPriseElement: function(element_id){
+    var oFormElement = document.addLineElement;
+    var oForm = document.addPriseElement;
+    oForm.object_id.value = element_id;
+    submitFormAjax(oForm, 'systemMsg', { 
+      onComplete: function(){
+        Prescription.reload(oFormElement.prescription_id.value, element_id, oForm.category_name.value);
+      } 
+    });
+  },
+  
+  submitPriseElementWithoutRefresh: function(element_id){
+    var oFormElement = document.addLineElement;
+    var oForm = document.addPriseElement;
+    oForm.object_id.value = element_id;
+    submitFormAjax(oForm, 'systemMsg');
+  },
+  
+
+
+  addLineElementWithoutRefresh: function(element_id, debut, duree, unite_duree, callback){
+    // Formulaire contenant la categorie courante
+    var oForm = document.addLineElement;
+    if(debut){
+      oForm.debut.value = debut;
+    }
+    if(duree && unite_duree){
+      oForm.duree.value = duree;
+      oForm.unite_duree.value = unite_duree;
+    }
+    if(callback){
+      oForm.callback.value = callback;
+    }
+    oForm.element_prescription_id.value = element_id;
+    
+    submitFormAjax(oForm, 'systemMsg');
+    
+    oForm.debut.value = "";
+    oForm.duree.value = "";
+    oForm.unite_duree.value = "";
+  },
+  
+  
   delLineWithoutRefresh: function(line_id) {
     var oForm = document.addLine;
     oForm.prescription_line_medicament_id.value = line_id;

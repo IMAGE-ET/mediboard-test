@@ -1,95 +1,5 @@
 <script type="text/javascript">
 
-// Calcul de la date de debut lors de la modification de la fin
-syncDate = function(oForm, curr_line_id, fieldName, type) {
-  // Déclaration des div des dates
-  oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
-  oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');
-
-  // Recuperation de la date actuelle
-  var todayDate = new Date();
-  var dToday = todayDate.toDATE();
-  
-  // Recuperation des dates des formulaires
-  var sDebut = oForm.debut.value;
-  var sFin = oForm._fin.value;
-  var nDuree = parseInt(oForm.duree.value, 10);
-  var sType = oForm.unite_duree.value;
-  
-  // Transformation des dates
-  if(sDebut){
-    var dDebut = Date.fromDATE(sDebut);  
-  }
-  if(sFin){
-    var dFin = Date.fromDATE(sFin);  
-  }
-  
-  // Modification de la fin en fonction du debut
-  if(fieldName != "_fin" && sDebut && sType && nDuree) {
-    dFin = dDebut;
-    if(sType == "jour")      { dFin.addDays(nDuree);     }
-    if(sType == "semaine")   { dFin.addDays(nDuree*7);   }
-    if(sType == "quinzaine") { dFin.addDays(nDuree*14);  }
-    if(sType == "mois")      { dFin.addDays(nDuree*30);  }
-    if(sType == "trimestre") { dFin.addDays(nDuree*90);  }
-    if(sType == "semestre")  { dFin.addDays(nDuree*180); }
-    if(sType == "an")        { dFin.addDays(nDuree*365); }
-
-  	oForm._fin.value = dFin.toDATE();
-  	oDivFin.innerHTML = dFin.toLocaleDate();
-  }
-  
-  //-- Lors de la modification de la fin --
-  // Si debut, on modifie la duree
-  if(sDebut && sFin && fieldName == "_fin"){
-    var nDuree = (dFin - dDebut)/86400000;
-    oForm.duree.value = nDuree;
-    oForm.unite_duree.value = "jour";
-  }
-  
-  // Si !debut et duree, on modifie le debut
-  if(!sDebut && nDuree && sType && fieldName == "_fin"){
-    dDebut = dFin;
-    if(sType == "jour")      { dDebut.addDays(-nDuree);     }
-    if(sType == "semaine")   { dDebut.addDays(-nDuree*7);   }
-    if(sType == "quinzaine") { dDebut.addDays(-nDuree*14);  }
-    if(sType == "mois")      { dDebut.addDays(-nDuree*30);  }
-    if(sType == "trimestre") { dDebut.addDays(-nDuree*90);  }
-    if(sType == "semestre")  { dDebut.addDays(-nDuree*180); }
-    if(sType == "an")        { dDebut.addDays(-nDuree*365); }
-
-  	oForm.debut.value = dDebut.toDATE();
-  	oDivDebut.innerHTML = dDebut.toLocaleDate();
-  }
-  
-  // Si !debut et !duree, on met le debut a aujourd'hui, et on modifie la duree
-  if(!sDebut && !nDuree && fieldName == "_fin"){
-    dDebut = todayDate;
-    oForm.debut.value = todayDate.toDATE();
-    oDivDebut.innerHTML = todayDate.toLocaleDate();
-    var nDuree = parseInt((dFin - dDebut)/86400000,10);
-    oForm.duree.value = nDuree;
-    oForm.unite_duree.value = "jour";
-  }
-}
-
-syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
-  syncDate(oForm, curr_line_id, fieldName, type);
-  submitFormAjax(oForm, 'systemMsg');
-}
-  
-// Affichage des div d'ajout de posologies
-selDivPoso = function(type, line_id, type_elt){
-  if(!type){
-    type = "foisPar"+type_elt;
-  }
-  $('moment'+type_elt+line_id).hide();
-  $('foisPar'+type_elt+line_id).hide();
-  $('tousLes'+type_elt+line_id).hide();
-  $(type+line_id).show();
-}
-
-
 // Fonction lancée lors de la modfication de la posologie
 submitPoso = function(oForm, curr_line_id){
   // Suppression des prises de la ligne de prescription
@@ -108,22 +18,6 @@ submitPoso = function(oForm, curr_line_id){
   );
 }
 
-reloadPrises = function(prescription_line_id, type){
-  url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_prises");
-  url.addParam("prescription_line_id", prescription_line_id);
-  url.addParam("type", type);
-  url.requestUpdate('prises-'+type+prescription_line_id, { waitingText: null });
-}
-
-submitPrise = function(oForm, type){
-  submitFormAjax(oForm, 'systemMsg', { onComplete:
-    function(){
-      reloadPrises(oForm.object_id.value, type);
-      oForm.quantite.value = 0;
-      oForm.moment_unitaire_id.value = "";
-  } });
-}
 
 {{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
 {{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
@@ -268,7 +162,6 @@ dates = {
  </div> 
 
 {{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
-  
   
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements}}
 <table class="tbl">

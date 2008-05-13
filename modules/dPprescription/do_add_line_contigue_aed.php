@@ -23,6 +23,7 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $prescription_line_id = mbGetValueFromPost("prescription_line_id");
+$prescription_id = mbGetValueFromPost("prescription_id");
 
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 
@@ -30,7 +31,7 @@ $mode_pharma = mbGetValueFromPost("mode_pharma");
 $new_line = new CPrescriptionLineMedicament();
 $new_line->load($prescription_line_id);
 $new_line->loadRefsPrises();
-
+$new_line->loadRefPrescription();
 // On copie la ligne
 $new_line->_id = "";
 
@@ -69,9 +70,7 @@ foreach($new_line->_ref_prises as &$prise){
 	viewMsg($msg, "msg-CPrisePosologie-create");
 }
 
-
-// Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reload($new_line->prescription_id,'','medicament','',$mode_pharma)</script>";
+echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','',$mode_pharma)</script>";
 echo $AppUI->getMsg();
 exit();
 

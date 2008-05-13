@@ -28,6 +28,7 @@ $element_id = mbGetValueFromGetOrSession("element_id");
 $category_name = mbGetValueFromGetOrSession("category_name");
 
 $category = null;
+$poids = "";
 
 if ($element_id){
   $element = new CElementPrescription();
@@ -145,8 +146,16 @@ if($prescription->_id){
 	}
 }
 
-
-
+// Chargement du poids du patient
+if($prescription->_ref_object->_class_name == "CSejour"){
+	$consult_anesth = new CConsultAnesth();
+	$consult_anesth->sejour_id = $prescription->_ref_object->_id;
+	$consult_anesth->loadMatchingObject();
+	
+	if($consult_anesth->_id){
+	  $poids = $consult_anesth->poid;
+	}
+}
 
 // Liste des praticiens
 $user = new CMediusers();
@@ -158,7 +167,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("httpreq", 1);
 
 $smarty->assign("today"              , mbDate());
-
+$smarty->assign("poids", $poids);
 $smarty->assign("categories", $categories);
 $smarty->assign("executants", $executants);
 $smarty->assign("moments", $moments);

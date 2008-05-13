@@ -8,9 +8,14 @@
 */
 
 
+//Initialisation des variables
+$medicaments = array();
+$prises = array();
+$medocs = array();
+
 // Ligne de titre
 function createLineHoursTitle($pdf, $without_hour = 0, $date = ""){
-	$tabHours = array("6h","8h","12h","14h","18h","22h","24h","2h");
+	$tabHours = array("8h","12h","14h","18h","22h","24h","2h","6h");
 	foreach($tabHours as $hour){
     $pdf->Cell(7,7,$hour,1,0,'C',1);  
 	}
@@ -21,7 +26,7 @@ function createLineHoursTitle($pdf, $without_hour = 0, $date = ""){
 
 // Ligne contenant les heures
 function createLineHours($pdf, $y, $etat){
-	$tabHours = array("6h","8h","12h","14h","18h","22h","24h","2h");
+	$tabHours = array("8h","12h","14h","18h","22h","24h","2h","6h");
 	if($etat == 0){
 	  $pdf->SetFillColor(170,170,170);	
 	}
@@ -33,9 +38,24 @@ function createLineHours($pdf, $y, $etat){
 	$pdf->SetFillColor(255,255,255);	
 }
 
+function signatureIDE($pdf){
+	for($i=0;  $i<3; $i++) {
+	  $pdf->setX(105);
+	  for($j=0;  $j<3; $j++) {
+      $pdf->Cell(56,7,"",1,0,'C',1);
+	    barre($pdf);
+	  }
+		$pdf->Ln();
+	}
+}
+
+function barre($pdf){
+	$pdf->SetFillColor(220,220,220);
+  $pdf->Cell(2,7,"",1,0,'C',1);
+  $pdf->SetFillColor(255,255,255);
+}
 
 // Ligne de prescription
-//function prescriptionLine($pdf, $line_med, $line_id, $date){
 function prescriptionLine($pdf, $line, $date, $dates){	
 	
 	$line->loadRefsPrises();
@@ -49,42 +69,32 @@ function prescriptionLine($pdf, $line, $date, $dates){
 	$y_before = $pdf->getY();
 
 	$signature = "";
-	if($line->_class_name == "CPrescriptionLineElement" && !$line->signee){
-	  $signature = "(Non signé par le praticien)";
-	}
-	$pdf->MultiCell(50,4,utf8_encode($line->_view."\n ".$view_prise.$signature),"1","L");
+
+	$pdf->MultiCell(60,3.5,utf8_encode($line->_view."\n ".$view_prise),"1","L");
 	
 	$y_after = $pdf->getY();
 	$y = $y_after - $y_before;
 	
-	$pdf->setXY(65, $y_before);
+	$pdf->setXY(75, $y_before);
 
+	$valide = " ";
 	// Prescripteur de la ligne
   if($line->_traitement){
-    $pdf->Cell(40,$y,"Traitement personnel",1,0,'C',1);	
+  	$pdf->MultiCell(25,$y/2 ,"Traitement\npersonnel",1,'C',0,0);
+
+    $valide = "-";
   } else {
-    $pdf->Cell(40,$y,$line->_ref_praticien->_view,1,0,'C',1);
+	  $pdf->MultiCell(25,$y/2 ,utf8_encode($line->_ref_praticien->_user_first_name."\n".$line->_ref_praticien->_user_last_name),1,'C',0,0);
+    if(!$line->signee){
+    	$valide = "D";
+    }
+    if($line->_class_name == "CPrescriptionLineMedicament" && !$line->valide_pharma){
+    	$valide .= "P";
+    }
   }
-  /*
-  $line_date_1 = array();
-  $line_date_2 = array();
-  $line_date_3 = array();
   
-  if(array_key_exists($date, $line_med)){
-  	$line_date_1 = $line_med[$date];
-  }
-  if(array_key_exists(mbDate("+ 1 day", $date), $line_med)){
-  	$line_date_2 = $line_med[mbDate("+ 1 day", $date)];
-  }
-  if(array_key_exists(mbDate("+ 2 day", $date), $line_med)){
-  	$line_date_3 = $line_med[mbDate("+ 2 day", $date)];
-  }
-
-  createLineHours($pdf, $line_date_1);
-  createLineHours($pdf, $line_date_2);
-  createLineHours($pdf, $line_date_3);
-  */
-
+  $pdf->Cell(5,$y,$valide,1,0,'C',1);
+  
   createLineHours($pdf, $y, $dates["jour_1"]);
   createLineHours($pdf, $y, $dates["jour_2"]);
   createLineHours($pdf ,$y, $dates["jour_3"]);
@@ -105,7 +115,6 @@ function calculEtatJour($date, $dates, $nb_jours, $line){
   	$dates["jour_3"] = 1;
     $nb_jours++;
   }
-
 }
 
 $prises = array();
@@ -116,16 +125,18 @@ $logs = array();
 $pharmacien = new CMediusers();
 $last_log = new CUserLog();
 $prescription_id = mbGetValueFromGet("prescription_id");
-//$date = mbGetValueFromGet("date");
 $date = mbDateTime();
 //$date = "2008-04-28 07:49:46";
-
 
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefPatient();
+$patient =& $prescription->_ref_patient;
+$patient->loadIPP();
 $prescription->loadRefObject();
+$sejour =& $prescription->_ref_object;
+$sejour->loadNumDossier();
 
 $consult_anesth = new CConsultAnesth();
 $consult_anesth->sejour_id = $prescription->_ref_object->_id;
@@ -135,116 +146,56 @@ if($consult_anesth->_id){
   $poids = $consult_anesth->poid;
 }
 
-/*
-function addMedToArray(&$medicaments, $date, $lines){
-	// Parcours de tous les medicaments de la prescription
-	foreach($lines as &$line){
-		if($line->date_arret && $line->date_arret < $date){
-			continue;
-		}
-		if(!$line->valide_pharma){
-			continue;
-		}
-	  if($date >= $line->debut && $date <= $line->_fin){
-	  	$line->loadRefsPrises();  	
-	  	foreach($line->_ref_prises as $prise){
-	  		// Si nb_tous_les
-	  	  if($prise->nb_tous_les && $prise->unite_tous_les){
-	  		  if($prise->calculDatesPrise($date)){  	
-	  		  	$medicaments[$line->_id][$date][] = $prise;
-	  		  }
-	      } else {
-	      	$medicaments[$line->_id][$date][] = $prise;
-	      }
-	  	}
-	  }   
-	}
-
-
-//foreach($medsNonPresc as $_line){
-	// Si le medicament ne possede pas de prises
-	//if(!array_key_exists($_line->_id, $prises)){
-	//	unset($lines_med[$_line->_id]);
-	//}
-//}
-}
-
-*/
-
-
-
-// Stockage du plan de soin dans un tableau
-$medicaments = array();
-$prises = array();
-/*
-addMedToArray($medicaments, $date, $lines);
-addMedToArray($medicaments, mbDate("+ 1 day", $date) ,$lines);
-addMedToArray($medicaments, mbDate("+ 2 day", $date), $lines);
-*/
-
-$medocs = array();
-// Parcours des medicaments 
-/*
-foreach($medicaments as $medicament_id => $jours){
-	foreach($jours as $jour => $prises){
-		$liste_prise = array("6" => "","8" => "","12" => "","14" => "","18" => "","22" => "","24" => "","2" => "","libre" => array());
-	    
-		foreach($prises as $prise){
-			$libre = array();
-			if($prise->nb_tous_les){
-	    	mbTrace($prise->nb_tous_les);
-	    	$liste_prise["libre"][] = $prise->quantite." ".$prise->_ref_object->_unite_prise;	
-	    }
-		  if($prise->nb_fois){
-	    	$liste_prise["libre"][] = $prise->_view;	
-	    }
-	    if(!$prise->nb_tous_les && !$prise->nb_fois && !$prise->moment_unitaire_id){
-	     	$liste_prise["libre"][] = $prise->_view;	
-	    }
-	    
-	    //if($prise->moment_unitaire_id){
-	    //	$liste_prise[$prise->_ref_heure_moment] += $prise->quantite;
-	    //}
-		}
-		
-	$medocs[$medicament_id][$jour] = $liste_prise;
-	}
-}
-*/
-
 // Creation d'un nouveau fichier pdf
 $pdf = new CPrescriptionPdf("L", "mm", "A4", true); 
-
-// Définition des marges de la pages
-$pdf->SetMargins(15, 20);
-
-// Définition de la police et de la taille de l'entete
+$pdf->SetMargins(15, 15);
 $pdf->setHeaderFont(Array("vera", '', "10"));
-
-// Creation d'une nouvelle page
 $pdf->AddPage();
-
 $pdf->SetFillColor(255,255,255);
 
-$pdf->SetFont('','',"16");
-$pdf->Cell(50,7,utf8_encode($prescription->_ref_patient->_view),0,0,'C',1);
-/*
-$pdf->SetFont('','',"10");
-$pdf->Cell(40,5,"Age: ".$prescription->_ref_patient->_age." ans",0,0,'C',1);
-$pdf->SetFont('','',"11");
-*/
+
+$pdf->SetFont('','',"8");
+$pdf->MultiCell(50,4,"IPP: ".$patient->_IPP."\n".utf8_encode($patient->_view),0,'C',0,0);
+
+if($sejour->_num_dossier && $sejour->_num_dossier != "-"){
+  $pdf->setBarcode($sejour->_num_dossier);
+  $pdf->viewBarcodeSoin(25,23,4);
+	$pdf->SetFont('','',"7");
+	$pdf->Ln();
+	$pdf->setXY(20, 28);
+	$pdf->MultiCell(40,4,"Dossier ".$sejour->_num_dossier,0,'C',0,0);
+}
+
+$pdf->setXY(65, 15);
 
 $pdf->SetFont('','',"10");
 $pdf->MultiCell(40,4,"Age: ".$prescription->_ref_patient->_age." ans \nPoids: ".$poids." kg",0,'C',0,0);
 
-  
+
+
 $dateFormat = "%d/%m/%Y à %Hh%m";
 
-// Chargement de l'affectation courante du sejour
+
 $prescription->_ref_object->loadCurrentAffectation($date);
 
+$pdf->SetFont('','',"8");
+
+// Affichage de la chambre
 if($prescription->_ref_object->_ref_curr_affectation->_id){
-	$pdf->Cell(58,7,$prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view,0,0,'C',1);
+  $pdf->Cell(58,7,utf8_encode($prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view),0,0,'C',1);
+}
+// Affichage du début du séjour
+$pdf->Cell(58,7,utf8_encode("Début du séjour ".mbTranformTime(null, $prescription->_ref_object->_entree, $dateFormat)),0,0,'C',1);
+
+// Affichage de la date et l'heure d'édition de la feuille de soin
+$pdf->Cell(58,7,utf8_encode("Feuille de soin du ".mbTranformTime(null, $date, $dateFormat)),0,0,'C',1);
+
+
+// Chargement de l'affectation courante du sejour
+//$prescription->_ref_object->loadCurrentAffectation($date);
+/*
+if($prescription->_ref_object->_ref_curr_affectation->_id){
+	$pdf->Cell(58,7,utf8_encode($prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view),0,0,'C',1);
 	$pdf->SetFont('','',"10");
 }
 
@@ -260,19 +211,16 @@ if($prescription->_ref_object->_ref_next_affectation->_id){
 } else {
   $pdf->MultiCell(58,4,utf8_encode("Jusqu'au ".mbTranformTime(null, $prescription->_ref_object->_ref_curr_affectation->sortie, $dateFormat)." \n (Sortie)"),0,'C',0,0);
 }
-  
-$pdf->Ln();
-//$pdf->setX(65);
-//$pdf->Cell(40,0,"Poids: ".$poids." kg",0,0,'C',1);
-$pdf->Ln();
-$pdf->Ln();
+*/
 
 $dateFormat = "%d/%m/%Y";
-$pdf->setY(34);    
+$pdf->setY(35);    
+
 // Title du tableau
 $pdf->SetFillColor(220,220,220);
-$pdf->Cell(50,14,"Prescription",1,0,'C',1);
-$pdf->Cell(40,14,"Prescripteur",1,0,'C',1);
+$pdf->Cell(60,14,"Prescription",1,0,'C',1);
+$pdf->Cell(25,14,"Prescripteur",1,0,'C',1);
+$pdf->Cell(5, 14, "", 1,0, 'C',1);
 $pdf->Cell(56,7,mbTranformTime(null, $date, $dateFormat),1,0,'C',1);
 $pdf->Cell(2,7,"",1,0,'C',1);
 $pdf->Cell(56,7,mbTranformTime(null, mbDate("+ 1 day", $date), $dateFormat),1,0,'C',1);
@@ -290,7 +238,7 @@ createLineHoursTitle($pdf);
 createLineHoursTitle($pdf);
 
 $pdf->setX(15);
-$pdf->setY(48);
+$pdf->setY(49);
 $pdf->SetFillColor(255,255,255);	
 
 // Initialisation de last_log
@@ -300,44 +248,40 @@ $logs = "";
 $prescription->loadRefsLines();
 
 // Chargement des lignes de soins
-$prescription->loadRefsLinesElement("soin");
+$prescription->loadRefsLinesElement();
 
 // Chargement des traitements
 $prescription->_ref_object->loadRefPrescriptionTraitement();
+
 $traitement = $prescription->_ref_object->_ref_prescription_traitement;
 if($traitement->_id){
   $traitement->loadRefsLines();
-	
 	// Parcours des traitements
 	foreach($traitement->_ref_prescription_lines as $_line_traitement){
 	  $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
 	  $nb_jours = 0;
-	  
 	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
 	  $_line_traitement->_fin = mbDate($prescription->_ref_object->_sortie);
-	  
 		if($_line_traitement->date_arret){
 	    $_line_traitement->_fin = $_line_traitement->date_arret;
 	  }
 	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
-	  
 	  calculEtatJour($date, &$dates, &$nb_jours, $_line_traitement);
-	  
 	  if(!$nb_jours){
 	  	continue;
 	  }
 	  prescriptionLine($pdf, $_line_traitement, $date, $dates);
 	}
 }
+
+
 // Parcours des medicaments
 foreach($prescription->_ref_prescription_lines as $line){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
-  
 	if($line->date_arret){
     $line->_fin = $line->date_arret;
   }
-  
   // On arrete dans tous les cas la feuille de soin a la fin du sejour
   if($line->_fin > $prescription->_ref_object->_sortie){
   	$line->_fin = mbDate($prescription->_ref_object->_sortie);
@@ -345,27 +289,21 @@ foreach($prescription->_ref_prescription_lines as $line){
   if($line->debut < $prescription->_ref_object->_entree){
   	$line->debut = mbDate($prescription->_ref_object->_entree);
   }
-
-	if(!$line->valide_pharma){
-		continue;
-	}
 	calculEtatJour($date, &$dates, &$nb_jours, $line);
-  
   if(!$nb_jours){
   	continue;
   }
   prescriptionLine($pdf, $line, $date, $dates);
-
   // CHargement et stockage des logs de validation pharmacien
   $line->loadRefLogValidationPharma();
   $logs[$line->_ref_log_validation_pharma->date] = $line->_ref_log_validation_pharma;
 }
 
-// Parcours des soins
+
+// Parcours des elements
 foreach($prescription->_ref_prescription_lines_element as $_soin){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
-  
 	if($_soin->date_arret){
     $_soin->_fin = $_soin->date_arret;
   }
@@ -397,8 +335,10 @@ $pdf->Cell(264,2,"",1,0,'C',1);
 $pdf->Ln();
 
 // Affichage des signatures
-$pdf->Cell(50,7,"Remarques",1,0,'C',1);
-$pdf->Cell(40,7,"Validation Pharmacien",1,0,'C',1);
+$pdf->Cell(60,7,"Remarques",1,0,'C',1);
+$pdf->Cell(30,7,"Visa Pharmacien",1,0,'C',1);
+
+
 $pdf->Cell(56,7,"Signature IDE",1,0,'C',1);
 $pdf->Cell(2,7,"",1,0,'C',1);
 $pdf->Cell(56,7,"Signature IDE",1,0,'C',1);
@@ -411,21 +351,16 @@ $pdf->SetFillColor(255,255,255);
 
 $pdf->Ln();
 
-$dateFormat = "%d/%m/%Y à %Hh%m";
+$format_date = "%d/%m/%Y";
+$format_hour = "%Hh%m";
 
-$pdf->Cell(50,20,"",1,0,'C',1);
-$pdf->MultiCell(40,10,utf8_encode("Par ".$pharmacien->_view."\n le ".mbTranformTime(null, $last_log->date, $dateFormat)),1,'C',0,0);
-$pdf->Cell(56,20,"",1,0,'C',1);
-$pdf->SetFillColor(220,220,220);
-$pdf->Cell(2,20,"",1,0,'C',1);
-$pdf->SetFillColor(255,255,255);	
-$pdf->Cell(56,20,"",1,0,'C',1);
-$pdf->SetFillColor(220,220,220);
-$pdf->Cell(2,20,"",1,0,'C',1);
-$pdf->SetFillColor(255,255,255);	
-$pdf->Cell(56,20,"",1,0,'C',1);
-$pdf->SetFillColor(220,220,220);
-$pdf->Cell(2,20,"",1,0,'C',1);
+
+$pdf->Cell(60,21,"",1,0,'C',1);
+$pdf->MultiCell(30,5.25,utf8_encode("Par ".utf8_encode($pharmacien->_user_first_name."\n".$pharmacien->_user_last_name)."\n le ".mbTranformTime(null, $last_log->date, $format_date)."\n à ".mbTranformTime(null, $last_log->date, $format_hour)),1,'C',0,0);
+
+$pdf->Cell(56,7,"",1,0,'C',1);
+
+signatureIDE($pdf);
 
 $pdf->Output("plan_soin.pdf","I");
 

@@ -40,8 +40,6 @@
 	  {{mb_field object=$prise field=quantite size="3" increment=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg');"}}	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	  {{$line->_unite_prise}}(s)
-	  {{else}}
-	  soins
 	  {{/if}}
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}

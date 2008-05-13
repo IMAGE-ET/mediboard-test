@@ -6,6 +6,44 @@ Main.add( function(){
   prepareForm(document.forms['addPriseTousLes{{$type}}{{$line->_id}}']);
 } );
 
+// Affichage des div d'ajout de posologies
+selDivPoso = function(type, line_id, type_elt){
+  if(!type){
+    type = "foisPar"+type_elt;
+  }
+  
+  oDivMoment = $('moment'+type_elt+line_id);
+  oDivFoisPar = $('foisPar'+type_elt+line_id);
+  oDivTousLes = $('tousLes'+type_elt+line_id);
+  
+  oDivMoment.hide();
+  oDivFoisPar.hide();
+  oDivTousLes.hide();
+  $(type+line_id).show();
+}
+
+
+reloadPrises = function(prescription_line_id, type){
+  url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_prises");
+  url.addParam("prescription_line_id", prescription_line_id);
+  url.addParam("type", type);
+  url.requestUpdate('prises-'+type+prescription_line_id, { waitingText: null });
+}
+
+submitPrise = function(oForm, type){
+  if(!oForm.object_id.value){
+    return;
+  }
+  submitFormAjax(oForm, 'systemMsg', { onComplete:
+    function(){
+      reloadPrises(oForm.object_id.value, type);
+      oForm.quantite.value = 0;
+      oForm.moment_unitaire_id.value = "";
+  } });
+}
+
+
 </script>
 
 {{assign var=line_id value=$line->_id}}
@@ -28,12 +66,12 @@ Main.add( function(){
 		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseFoisPar$type$line_id}}
 		  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
-		  {{else}}
-		    soins
 		  {{/if}}
 		  {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 form=addPriseFoisPar$type$line_id}} fois par 
 		  {{mb_field object=$prise_posologie field=unite_fois}}
-	    <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      {{if $line->_id}}
+	      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+		  {{/if}}
 		</form>
   </div>
 <div id="moment{{$type}}{{$line->_id}}" style="display: none">
@@ -49,8 +87,6 @@ Main.add( function(){
 	  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseMoment$type$line_id}}
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
-		  {{else}}
-		    soins
 		  {{/if}}
 	  <!-- Selection du moment -->
 	  <select name="moment_unitaire_id" style="width: 150px">      
@@ -63,7 +99,9 @@ Main.add( function(){
 	     </optgroup>
 	  {{/foreach}}
 	  </select>	
-    <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+	  {{if $line->_id}}
+      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+    {{/if}}
   </form>
 </div>
       <div id="tousLes{{$type}}{{$line->_id}}" style="display: none">
@@ -79,12 +117,12 @@ Main.add( function(){
 		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseTousLes$type$line_id}}
       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
-		  {{else}}
-		    soins
 		  {{/if}}
          tous les
 		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 form=addPriseTousLes$type$line_id}}				   
 		  {{mb_field object=$prise_posologie field=unite_tous_les}}
-      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      {{if $line->_id}}
+        <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      {{/if}}
     </form>  
   </div>

@@ -110,8 +110,6 @@
 		      */
 		      regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
 	        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
-		      
-		      
 		    </script>
 	    {{/if}}          
 		</td>
@@ -166,31 +164,27 @@
   <tr>  
     <td>
       <!-- Suppression de la ligne -->
-      {{if $perm_edit}}  
+      {{if $perm_edit}}
         <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
           {{tr}}Delete{{/tr}}
         </button>
       {{/if}}
     </td>
     <td colspan="4">
-      {{if !$curr_line->_traitement}}
-        <!-- Ajouter une ligne -->
-        <div style="float: right;">
-          {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
-        </div>
-      {{/if}}
-     
+      <!-- Ajouter une ligne (même dans le cas du traitement)-->
+      <div style="float: right;">
+        {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
+      </div>
+      
       {{if $curr_line->_traitement && $prescription->object_id}}
         <!-- Stopper une ligne -->
         <div id="stop-CPrescriptionLineMedicament-{{$curr_line->_id}}" style="float: right">
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
         </div>
       {{/if}}
-     
-      <!-- Insérer un commentaire dans la ligne -->
       
+      <!-- Insérer un commentaire dans la ligne -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-     
     </td>
   </tr>
 </tbody>

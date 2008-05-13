@@ -32,9 +32,10 @@
         {{$prescription->_view}} <br />
         {{$prescription->_ref_patient->_view}}
         {{if $prescription->_ref_patient->_age}}
-           ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}})
+           ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
       {{/if}}
+      
     </th>
   </tr>
   <tr>
@@ -62,31 +63,35 @@
      Alertes
    </button>
    
-   {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-   {{if $antecedents}}
-   {{if array_key_exists('alle', $antecedents)}}
-     {{assign var=allergies value=$antecedents.alle}}
    
+
+	   {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+	   {{if $antecedents}}
+	   {{if array_key_exists('alle', $antecedents)}}
+	     {{assign var=allergies value=$antecedents.alle}}
+	   
+	   
+	    <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
+	         onmouseover="$('allergies{{$prescription->_id}}').show();"
+	         onmouseout="$('allergies{{$prescription->_id}}').hide();" />
+	    
+	    <div id="allergies{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
+	      <strong>Allergies</strong>
+	      <ul>
+		    {{foreach from=$allergies item=allergie}}
+		    <li>
+				    {{if $allergie->date}}
+				 	    {{$allergie->date|date_format:"%d/%m/%Y"}}:
+					  {{/if}} 
+		  			{{$allergie->rques}}
+		  	</li>
+		  	{{/foreach}}
+			 </ul>   
+	    </div>   
+	   {{/if}}
+	   {{/if}} 
+
    
-    <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
-         onmouseover="$('allergies{{$prescription->_id}}').show();"
-         onmouseout="$('allergies{{$prescription->_id}}').hide();" />
-    
-    <div id="allergies{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
-      <strong>Allergies</strong>
-      <ul>
-	    {{foreach from=$allergies item=allergie}}
-	    <li>
-			    {{if $allergie->date}}
-			 	    {{$allergie->date|date_format:"%d/%m/%Y"}}:
-				  {{/if}} 
-	  			{{$allergie->rques}}
-	  	</li>
-	  	{{/foreach}}
-		 </ul>   
-    </div>   
-   {{/if}}
-   {{/if}} 
    {{/if}}
    </td>
    

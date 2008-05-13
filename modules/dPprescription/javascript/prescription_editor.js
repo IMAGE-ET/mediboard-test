@@ -9,6 +9,7 @@ var PrescriptionEditor = {
   popup : function(prescription_id, object_id, object_class, praticien_id, type) {
       var url = new Url;
       url.setModuleAction("dPprescription", "vw_edit_prescription");
+      
       url.addParam("prescription_id", prescription_id);
       url.addParam("object_id", object_id);
       url.addParam("object_class", object_class);

@@ -11,7 +11,7 @@
 {{assign var=line value=$_line_element}}
 {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{assign var=div_refresh value=$element}}
-{{assign var=typeDate value="Soin"}}
+{{assign var=typeDate value=$element}}
 
 {{assign var=category value=$_line_element->_ref_element_prescription->_ref_category_prescription}}
 <tbody class="hoverable">
@@ -48,9 +48,9 @@
 	  </th>
 	</tr>
   <!-- Ligne affichée seulement dans le cas des soins -->
-  {{if $category->chapitre == "soin"}}
+  {{if $category->chapitre != "dmi"}}
   <tr>
-    <td style="width: 25px" {{if $category->chapitre == "soin"}}rowspan="3"{{/if}} >
+    <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
       {{if $perm_edit}}
       <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
@@ -70,7 +70,7 @@
       {{/if}}
     </td>
     <td>
-     {{if $category->chapitre == "soin" && ($prescription->type == "sejour" || $prescription->type == "pre_admission")}}
+     {{if $category->chapitre != "dmi" && ($prescription->type == "sejour" || $prescription->type == "pre_admission")}}
         <div id="stop-CPrescriptionLineElement-{{$_line_element->_id}}" style="float: right">
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
         </div>
@@ -108,7 +108,7 @@
   </tr>
   {{/if}}
   <tr>
-    {{if $category->chapitre != "soin"}}
+    {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
       {{if $perm_edit}}
       <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
@@ -117,7 +117,7 @@
       {{/if}}
     </td>
     {{/if}}
-    <td {{if $category->chapitre == "soin"}}colspan="3"{{else}}colspan="6"{{/if}}>
+    <td {{if $category->chapitre != "dmi"}}colspan="3"{{else}}colspan="6"{{/if}}>
       <div style="float: right">
         <!-- Formulaire de selection d'un executant -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
