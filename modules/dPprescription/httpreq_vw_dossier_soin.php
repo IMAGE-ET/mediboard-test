@@ -87,14 +87,14 @@ foreach($medsNonPresc as $_line){
 		unset($lines_med[$_line->_id]);
 	}
 }
-
+/*
 foreach($soinsNonPresc as $_line_soin){
 	// Si le medicament ne possede pas de prises
 	if(!array_key_exists($_line_soin->_id, $prises_soin)){
 		unset($lines_soin[$_line_soin->_id]);
 	}
 }
-
+*/
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("prescription_id", $prescription_id);

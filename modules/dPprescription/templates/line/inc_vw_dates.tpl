@@ -41,7 +41,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class) {
   //-- Lors de la modification de la fin --
   // Si debut, on modifie la duree
   if(sDebut && sFin && fieldName == "_fin"){
-    var nDuree = (dFin - dDebut)/86400000;
+    var nDuree = parseInt((dFin - dDebut)/86400000,10);
     oForm.duree.value = nDuree+1;
     oForm.unite_duree.value = "jour";
   }
