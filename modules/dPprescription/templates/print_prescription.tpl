@@ -70,12 +70,17 @@ div.footer table {
     margin-top: 270px;
     height: 0px;
   } 
-  
+  div.body {
+    padding-top: 150px;
+  }
+  div.bodyWithoutPageBreak {
+    padding-top: 150px;
+  }
 }
 
 @media screen {
   div.body {
-    padding-bottom: 5px;
+    padding-bottom: 15px;
     border-bottom: 1px dotted #888;
   }
 }
