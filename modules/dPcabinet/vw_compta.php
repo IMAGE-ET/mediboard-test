@@ -26,8 +26,10 @@ $filter->_date_min = mbDate();
 $filter->_date_max = mbDate("+ 0 day");
 
 $filter->_etat_paiement = mbGetValueFromGetOrSession("_etat_paiement", 0);
-$filter->patient_mode_reglement = mbGetValueFromGetOrSession("patient_mode_reglement", 0);
 $filter->_type_affichage = mbGetValueFromGetOrSession("_type_affichage", 0);
+
+$filter_reglement = new CReglement();
+$filter_reglement->mode = mbGetValueFromGetOrSession("mode", 0);
 
 // L'utilisateur est-il praticien ?
 $mediuser = new CMediusers();
@@ -53,6 +55,7 @@ if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("filter"                , $filter);
+$smarty->assign("filter_reglement"      , $filter_reglement);
 $smarty->assign("mediuser"              , $mediuser);
 $smarty->assign("is_praticien"          , $is_praticien);
 $smarty->assign("is_admin_or_secretaire", $is_admin_or_secretaire);

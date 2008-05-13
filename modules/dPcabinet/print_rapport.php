@@ -8,7 +8,7 @@
 */
 
 // !! Attention, régression importante si ajout de type de paiement
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $utypes;
 
 $ds = CSQLDataSource::get("std");
 $today = mbDate();
@@ -23,7 +23,7 @@ $filter->_date_max = mbGetValueFromGetOrSession("_date_max", mbDate());
 $filter->_etat_reglement_patient = mbGetValueFromGetOrSession("_etat_reglement_patient");
 $filter->_etat_reglement_tiers = mbGetValueFromGetOrSession("_etat_reglement_tiers");
 
-$type = $filter->patient_mode_reglement = mbGetValueFromGetOrSession("patient_mode_reglement", 0);
+$type = $filter->_mode_reglement = mbGetValueFromGetOrSession("mode", 0);
 if($type == null) {
 	$type = 0;
 }

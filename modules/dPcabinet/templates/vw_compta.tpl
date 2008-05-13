@@ -10,11 +10,6 @@ function checkRapport(){
     return false;
   }
   var url = new Url();
-  if(oForm.a.value == "print_compta"){
-    // Declenchement du mode comptabilite
-    oForm.a.value = "print_rapport";
-    var compta = 1;
-  }
   url.setModuleAction("dPcabinet", oForm.a.value);
   url.addParam("compta", compta);
   url.addElement(oForm._date_min);
@@ -24,7 +19,7 @@ function checkRapport(){
   url.addElement(oForm.chir);
   url.addElement(oForm._etat_reglement_patient);
   url.addElement(oForm._etat_reglement_tiers);
-  url.addElement(oForm.patient_mode_reglement);
+  url.addElement(oForm.mode);
   url.addElement(oForm._type_affichage);
   url.addParam("cs", getCheckedValue(oForm.cs));
   if(compta == 1){
@@ -97,8 +92,8 @@ function pageMain() {
             </select>
           </td>
         <tr>
-          <th>{{mb_label object=$filter field="patient_mode_reglement"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="patient_mode_reglement" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
+          <th>{{mb_label object=$filter_reglement field="mode"}}</th>
+          <td colspan="2">{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_type_affichage"}}</th>
