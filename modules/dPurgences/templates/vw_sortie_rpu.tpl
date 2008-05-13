@@ -146,6 +146,13 @@ function submitSejour(){
     </td>
     
     <td>
+      <!-- Vérification des champs semi obligatoires -->
+      {{if !$rpu->ccmu           }}<div class="warning">Champ manquant {{mb_label object=$rpu field=ccmu           }}</div>{{/if}}
+      {{if !$rpu->gemsa          }}<div class="warning">Champ manquant {{mb_label object=$rpu field=gemsa          }}</div>{{/if}}
+      {{if !$rpu->type_pathologie}}<div class="warning">Champ manquant {{mb_label object=$rpu field=type_pathologie}}</div>{{/if}}
+      {{if !$rpu->urtrau         }}<div class="warning">Champ manquant {{mb_label object=$rpu field=urtrau         }}</div>{{/if}}
+      {{if !$rpu->urmuta         }}<div class="warning">Champ manquant {{mb_label object=$rpu field=urmuta         }}</div>{{/if}}
+      
       {{if $sejour->sortie_reelle}}
          {{if $rpu->destination}}
            <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
