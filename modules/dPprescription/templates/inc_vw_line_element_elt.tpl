@@ -8,6 +8,12 @@
 {{/if}}
 
 
+{{if $_line_element->date_arret}}
+  {{assign var=_date_fin value=$_line_element->date_arret}}
+{{else}}
+  {{assign var=_date_fin value=$_line_element->_fin}}
+{{/if}}
+
 {{assign var=line value=$_line_element}}
 {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{assign var=div_refresh value=$element}}
@@ -17,7 +23,8 @@
 <tbody class="hoverable">
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th class="{{if $_line_element->date_arret}}arretee{{else}}element{{/if}}" id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" >
+    <th class="{{if $_line_element->date_arret}}arretee{{else}}element{{/if}}" id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" 
+        {{if $_date_fin && $_date_fin < $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
      
       <div style="position: absolute">
         <!-- Formulaire ALD -->

@@ -20,6 +20,13 @@ changeColor = function(object_id, object_class, date_arret, traitement){
   date_arret ? class_th=class_th_arretee : class_th=class_th_non_arretee;
   var oDiv = $('th_line_'+object_class+'_'+object_id);
   oDiv.className = class_th;
+  
+  // Ligne finie
+  if(date_arret != "" && date_arret < '{{$today}}'){
+    oDiv.setAttribute("style","background-image: url(images/icons/ray.gif);");
+  } else {
+    oDiv.setAttribute("style","background-image: '';");
+  }
 }
 
 </script>

@@ -15,6 +15,12 @@
 {{/if}}
 
 
+{{if $curr_line->date_arret}}
+  {{assign var=_date_fin value=$curr_line->date_arret}}
+{{else}}
+  {{assign var=_date_fin value=$curr_line->_fin}}
+{{/if}}
+
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{assign var=line value=$curr_line}}
 {{assign var=div_refresh value="medicament"}}
@@ -24,7 +30,8 @@
 <tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
   <!-- Header de la ligne -->
   <tr>
-    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}">
+    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}"
+     {{if $_date_fin && $_date_fin < $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
       <div style="float:left">
         {{if !$curr_line->_traitement}}
 	        <!-- Selecteur equivalent -->

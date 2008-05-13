@@ -1,6 +1,6 @@
 <script type="text/javascript">
 // Calcul de la date de debut lors de la modification de la fin
-syncDate = function(oForm, curr_line_id, fieldName, type) {
+syncDate = function(oForm, curr_line_id, fieldName, type, object_class) {
   // Déclaration des div des dates
   oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
   oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');
@@ -70,10 +70,21 @@ syncDate = function(oForm, curr_line_id, fieldName, type) {
     oForm.duree.value = nDuree;
     oForm.unite_duree.value = "jour";
   }
+  
+  // Ligne finie
+  {{if $typeDate != "mode_grille"}}
+  var oDiv = $('th_line_'+object_class+'_'+curr_line_id);
+  if(oForm._fin.value != "" && oForm._fin.value < '{{$today}}'){
+    oDiv.setAttribute("style","background-image: url(images/icons/ray.gif);");
+  } else {
+    oDiv.setAttribute("style","background-image: '';");
+  }
+  {{/if}}
 }
 
-syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
-  syncDate(oForm, curr_line_id, fieldName, type);
+syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class) {
+  syncDate(oForm, curr_line_id, fieldName, type, object_class);
+  
   if(!curr_line_id){
     return;
   }
@@ -91,12 +102,13 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
    <table>
      <tr>
        {{assign var=line_id value=$line->_id}}
+       {{assign var=_object_class value=$line->_class_name}}
        <td style="border:none">
          {{mb_label object=$line field=debut}}
        </td>    
        {{if $perm_edit}}
        <td class="date" style="border:none;">
-         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');"}}
+         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}
        </td>
        {{else}}
        <td style="border:none">
@@ -112,8 +124,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
        </td>
        <td style="border:none">
 	       {{if $perm_edit}}
-			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');" size="3" }}
-			     {{mb_field object=$line field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');"}}
+			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');" size="3" }}
+			     {{mb_field object=$line field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}
 			   {{else}}
 			     {{if $line->duree}}
 			       {{$line->duree}}
@@ -130,7 +142,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
        </td>
        {{if $perm_edit}}
        <td class="date" style="border:none;">
-         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');"}}
+         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}
        </td>
        {{else}}
        <td style="border:none">
