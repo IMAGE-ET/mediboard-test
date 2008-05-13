@@ -12,33 +12,27 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$prat_id = mbGetValueFromGetOrSession("prat_id");
+$user_id = mbGetValueFromGetOrSession("user_id");
 
 // On charge le praticien
-$userSel = new CMediusers;
-$userSel->load($prat_id);
-$userSel->loadRefs();
-$canUserSel = $userSel->canDo();
+$user = new CMediusers;
+$user->load($user_id);
+$user->loadRefs();
+$canUser = $user->canDo();
 
 // Vérification des droits sur les praticiens
-$listChir = $userSel->loadPraticiens(PERM_EDIT);
-
-if (!$userSel->isPraticien()) {
-  $AppUI->setMsg("Vous devez séléctionner un praticien", UI_MSG_ALERT);
-  $AppUI->redirect("m=dPcabinet&tab=0");
-}
-
-$canUserSel->needsEdit(array("chirSel"=>0));
+$listChir = $user->loadPraticiens(PERM_EDIT);
+$canUser->needsEdit(array("chirSel"=>0));
 
 // Chargement des aides à la saisie
 $addiction = new CAddiction();
-$addiction->loadAides($userSel->user_id);
+$addiction->loadAides($user->user_id);
 
 $antecedent = new CAntecedent();
-$antecedent->loadAides($userSel->user_id);
+$antecedent->loadAides($user->user_id);
 
 $traitement = new CTraitement();
-$traitement->loadAides($userSel->user_id);
+$traitement->loadAides($user->user_id);
 
 // Création du template
 $smarty = new CSmartyDP();

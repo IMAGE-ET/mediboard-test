@@ -126,15 +126,6 @@ putTiers = function() {
   oForm.du_patient.value = 0;
 }
 
-Main.add( function(){
-  // Mise a jour de du_patient
-  var oForm = document.tarifFrm;
-  if(oForm && oForm.du_patient.value == "0"){
-    $V(oForm.du_patient, $V(oForm._somme)); 
-  }
-} );
-
-
 </script>
 
 <table class="form">
@@ -326,6 +317,15 @@ Main.add( function(){
       <hr />
       
       <!-- Formulaire de tarification -->
+      <script type="text/javascript">
+        Main.add( function(){
+          // Mise a jour de du_patient
+          var oForm = document.forms['tarifFrm'];
+          if(oForm && oForm.du_patient && oForm.du_patient.value == "0"){
+            $V(oForm.du_patient, $V(oForm._somme)); 
+          }
+        } );
+      </script>
       <form name="tarifFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
       <input type="hidden" name="m" value="dPcabinet" />
@@ -442,7 +442,7 @@ Main.add( function(){
            ATU : Règlement à effectuer au bureau des sorties
          </div>
         {{else}}
-
+        
          {{if $consult->du_patient}}
          
           <!-- Formulaire de suppression d'un reglement (car pas possible de les imbriquer) -->
