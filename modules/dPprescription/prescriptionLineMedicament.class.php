@@ -87,7 +87,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       $this->_duree_prise .= "à partir du ".mbTranformTime(null, $this->debut, "%d/%m/%Y");
     }
     if($this->duree && $this->unite_duree){
-    	$this->_duree_prise .= " pendant ".$this->duree." ".$this->unite_duree;
+    	$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree);
     }
     if($this->_ref_prescription->type == "traitement"){
     	$this->_traitement = "1";
