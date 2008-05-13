@@ -483,7 +483,7 @@ Main.add( function(){
                 </td>
                 <td>{{mb_value object=$curr_reglement field=date}}</td>
                 <td>
-                  <button class="remove notext" onclick="return Reglement.cancel({{$curr_reglement->_id}});">-</button>
+                  <a class="buttonremove notext" href="" onclick="return Reglement.cancel({{$curr_reglement->_id}});"></a>
                 </td>
               </tr>
               {{/foreach}}
