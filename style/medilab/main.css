@@ -91,9 +91,9 @@ label.notNull {
   font-weight: bold;
 }
 
-label.notNullOK {
+label.canNull {
   padding-right: 13px;
-  background: url(./images/icons/greenbox.jpg) no-repeat center right;
+  background: url(./images/icons/orangebox.jpg) no-repeat center right;
   font-weight: bold;
 }
 

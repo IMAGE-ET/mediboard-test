@@ -436,14 +436,6 @@ label:hover {
   cursor: help;
 }
 
-label.notNull {
-  font-weight: bold;
-}
-
-label.notNullOK {
-  font-weight: bold;
-}
-
 /**
  * Debug console
  */
@@ -857,6 +849,12 @@ table.form th.mandatory {
 label.notNull {
   padding-right: 5px;
   background: url(./images/icons/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
+label.canNull {
+  padding-right: 5px;
+  background: url(./images/icons/orangebox.jpg) no-repeat center right;
   font-weight: bold;
 }
 

@@ -227,6 +227,12 @@ function notNullOK(oElement) {
   } 
 }
 
+function canNullOK(oElement) {
+  if (oLabel = getLabelFor(oElement)) {
+    oLabel.className = oElement.value ? "notNullOK" : "canNull";
+  } 
+}
+
 function getBoundingForm(oElement) {
   if (!oElement) {
     return null;
@@ -369,6 +375,8 @@ function prepareForm(oForm, bForcePrepare) {
     var sPropSpec = null;
     var aSpecFragments = null;
     while (oElement = oForm.elements[iElement++]) {
+    	oElement = $(oElement);
+    	
     	// Locked object
     	if (oForm.lockAllFields) {
     		oElement.disabled = true;
@@ -381,32 +389,19 @@ function prepareForm(oForm, bForcePrepare) {
           oElement.id += "_" + oElement.value;
         }
       }
-    
-    
-      if (sPropSpec = oElement.getAttribute("title")) {
-        aSpecFragments = sPropSpec.split(" ");
-        if (aSpecFragments.indexOf("notNull") != -1) {
-          notNullOK(oElement);
-          Element.addEventHandler(oElement, "change", notNullOK);
-        }
-      }else if (sPropSpec = oElement.className) {
-        aSpecFragments = sPropSpec.split(" ");
-        if (aSpecFragments.indexOf("notNull") != -1) {
-          notNullOK(oElement);
-          Element.addEventHandler(oElement, "change", notNullOK);
-        }
-      }
       
-      //  Label emphasized for notNull elements
-      /*if (sPropSpec = (oElement.getAttribute("title") || oElement.className)) {
-        aSpecFragments = sPropSpec.split(" ");
-        if (aSpecFragments.indexOf("notNull") != -1) {
-          //notNullOK(oElement);
-          oElement.observe("change", notNullOK);
-          oElement.fire("change");
-        }
-      }*/
-     
+			// Not null
+		  if (oElement.hasClassName("notNull")) {
+        notNullOK(oElement);
+        Element.addEventHandler(oElement, "change", notNullOK);
+      }
+           
+			// Can null
+		  if (oElement.hasClassName("canNull")) {
+        canNullOK(oElement);
+        Element.addEventHandler(oElement, "change", canNullOK);
+      }
+           
       // Focus on first text input
       if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
         // Internet Explorer will not give focus to a not visible element but will raise an error

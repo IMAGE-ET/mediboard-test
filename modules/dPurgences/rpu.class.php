@@ -108,7 +108,7 @@ class CRPU extends CMbObject {
 		// Legacy Sherpa fields
 		if (CModule::getActive("sherpa")) {
 		    $urgDro = new CSpUrgDro();
-		    $specs["urprov"] = $urgDro->_props["urprov"];
+		    $specs["urprov"] = $urgDro->_props["urprov"] . " notNull";
 		    $specs["urmuta"] = $urgDro->_props["urmuta"];
 		    $specs["urtrau"] = $urgDro->_props["urtrau"];    
 		}

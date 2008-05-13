@@ -78,10 +78,6 @@ label:hover {
   cursor: help;
 }
 
-label.notNull, label.notNullOK {
-  font-weight: bold;
-}
-
 textarea {
   font-family: Verdana, Arial, Helvetica, sans-serif;
   width: 99%;

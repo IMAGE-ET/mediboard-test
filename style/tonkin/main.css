@@ -75,6 +75,12 @@ label.notNull {
   font-weight: bold;
 }
 
+label.canNull {
+  padding-right: 13px;
+  background: url(./images/icons/redbox.jpg) no-repeat center right;
+  font-weight: bold;
+}
+
 label.notNullOK {
   padding-right: 13px;
   background: url(./images/icons/greenbox.jpg) no-repeat center right;

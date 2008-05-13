@@ -73,7 +73,7 @@ function initFields(mode_sortie){
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-				    <td>{{mb_field object=$rpu field="ccmu" defaultOption="&mdash; Degré d'urgence" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="ccmu" canNull=false defaultOption="&mdash; Degré d'urgence" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  
@@ -87,12 +87,12 @@ function initFields(mode_sortie){
 				    <th>{{mb_label object=$rpu field="urprov"}}</th>
 				    <td>{{mb_field object=$rpu field="urprov" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
-			    {{/if}}	  
-
+					{{else}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="provenance"}}</th>
 				    <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
+			    {{/if}}	  
 				  
 				  <tr>   
 				    <th>{{mb_label object=$rpu field="transport"}}</th>
@@ -188,18 +188,18 @@ function initFields(mode_sortie){
 	      <table class="form">
 				  <tr>
 				    <th style="width: 120px;">{{mb_label object=$rpu field="gemsa"}}</th>
-				    <td>{{mb_field object=$rpu field="gemsa" defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="gemsa" canNull=false defaultOption="&mdash; Code GEMSA" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 		      {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="type_pathologie"}}</th>
-				    <td>{{mb_field object=$rpu field="type_pathologie" defaultOption="&mdash; Type de pathologie" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="type_pathologie" canNull=false defaultOption="&mdash; Type de pathologie" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urtrau"}}</th>
-				    <td>{{mb_field object=$rpu field="urtrau" defaultOption="&mdash;Type de soins traumato" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="urtrau" canNull=false defaultOption="&mdash; Type de soins traumato" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  {{/if}}
 		      
@@ -210,10 +210,9 @@ function initFields(mode_sortie){
 			    {{if $dPconfig.dPurgences.old_rpu == "1"}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="urmuta"}}</th>
-				    <td>{{mb_field object=$rpu field="urmuta" defaultOption="&mdash; Provenance" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="urmuta" canNull=false defaultOption="&mdash; Cause" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
-			    {{/if}}	  
-				  
+				  {{else}}
 				  <tr>
 				    <th>{{mb_label object=$rpu field="orientation"}}</th>
 				    <td>{{mb_field object=$rpu field="orientation" defaultOption="&mdash; Orientation" onchange="this.form.onsubmit();"}}</td>
@@ -222,12 +221,8 @@ function initFields(mode_sortie){
 				    <th>{{mb_label object=$rpu field="destination"}}</th>
 				    <td>{{mb_field object=$rpu field="destination" defaultOption="&mdash; Destination" onchange="this.form.onsubmit();"}}</td> 
 				  </tr>
-				  <tr>   
-				    <td colspan="2" />
-				  </tr>
-				  <tr>
-				    <td colspan="2" />  
-				  </tr>
+				  {{/if}}		  
+				  
 			  </table>
       </form>
     </td>
