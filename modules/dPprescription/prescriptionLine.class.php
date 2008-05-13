@@ -67,10 +67,12 @@ class CPrescriptionLine extends CMbObject {
     		$this->_fin = $this->debut;
     	}
     	if($this->unite_duree == "jour"){
-    		$this->_fin = mbDate("+ $this->duree DAYS", $this->debut);	
+    		$_duree_temp = mbDate("+ $this->duree DAYS", $this->debut);
+    		$this->_fin = mbDate(" -1 DAYS", $_duree_temp);	
     	}
     	if($this->unite_duree == "semaine"){
-    		$this->_fin = mbDate("+ $this->duree WEEKS", $this->debut);
+    		$_duree_temp = mbDate("+ $this->duree WEEKS", $this->debut);
+    		$this->_fin = mbDate(" -1 DAYS", $_duree_temp);
     	}
       if($this->unite_duree == "quinzaine"){
       	$duree_temp = 2 * $this->duree;

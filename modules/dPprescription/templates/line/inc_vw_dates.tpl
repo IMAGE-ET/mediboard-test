@@ -26,8 +26,8 @@ syncDate = function(oForm, curr_line_id, fieldName, type) {
   // Modification de la fin en fonction du debut
   if(fieldName != "_fin" && sDebut && sType && nDuree) {
     dFin = dDebut;
-    if(sType == "jour")      { dFin.addDays(nDuree);     }
-    if(sType == "semaine")   { dFin.addDays(nDuree*7);   }
+    if(sType == "jour")      { dFin.addDays(nDuree-1);     }
+    if(sType == "semaine")   { dFin.addDays(nDuree*7-1);   }
     if(sType == "quinzaine") { dFin.addDays(nDuree*14);  }
     if(sType == "mois")      { dFin.addDays(nDuree*30);  }
     if(sType == "trimestre") { dFin.addDays(nDuree*90);  }
@@ -42,7 +42,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type) {
   // Si debut, on modifie la duree
   if(sDebut && sFin && fieldName == "_fin"){
     var nDuree = (dFin - dDebut)/86400000;
-    oForm.duree.value = nDuree;
+    oForm.duree.value = nDuree+1;
     oForm.unite_duree.value = "jour";
   }
   
@@ -112,7 +112,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type) {
        </td>
        <td style="border:none">
 	       {{if $perm_edit}}
-			     {{mb_field object=$line field=duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');" size="3" }}
+			     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');" size="3" }}
 			     {{mb_field object=$line field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate');"}}
 			   {{else}}
 			     {{if $line->duree}}

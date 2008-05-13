@@ -7,6 +7,13 @@
   {{assign var=perm_edit value=0}}
 {{/if}}
 
+{{assign var=perm_poso value=1}}
+
+
+{{if $curr_line->_traitement && ($prescription_reelle->type == "sejour" || $prescription_reelle->type == "sortie" || $mode_pharma) }}
+  {{assign var=perm_poso value=0}}
+{{/if}}
+
 
 {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{assign var=line value=$curr_line}}
@@ -86,7 +93,7 @@
   <tr>  
     <td style="text-align: center">
     {{if !$curr_line->_ref_produit->inLivret && $prescription->type == "sejour"}}
-        <img src="images/icons/warning.png" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+        <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
         <br />
     {{/if}}  
     {{if $curr_line->_ref_produit->hospitalier && $prescription->type == "sortie"}}
@@ -136,13 +143,13 @@
 			      <!-- Selection des posologies BCB -->
 			      {{include file="../../dPprescription/templates/line/inc_vw_form_select_poso.tpl"}}
 			      <!-- Ajout de posologies -->
-			      {{if $perm_edit}}
+			      {{if $perm_edit && $perm_poso}}
 			        {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl" type="Med"}}	  
 						{{/if}}
 	        </td>
           <td style="border:none; padding: 0;"><img src="images/icons/a_right.png" title="" alt="" /></td>
 	        <td style="border:none; text-align: left;">
-	          {{if $perm_edit}}
+	          {{if $perm_edit && $perm_poso}}
               <!-- Affichage des prises (modifiables) -->
               <div id="prises-Med{{$curr_line->_id}}">
                 {{include file="../../dPprescription/templates/line/inc_vw_prises_posologie.tpl" type="Med"}}
