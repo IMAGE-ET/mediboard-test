@@ -54,7 +54,7 @@
 	    
 	  </th>
 	</tr>
-  <!-- Ligne affichée seulement dans le cas des soins -->
+
   {{if $category->chapitre != "dmi"}}
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
@@ -85,6 +85,7 @@
     </td>
     {{/if}}
   </tr>
+  {{if $category->chapitre != "dm"}}
   <tr>
     <td colspan="3">
       {{if $perm_edit}}
@@ -113,6 +114,7 @@
       {{/if}}
     </td>
   </tr>
+  {{/if}}
   {{/if}}
   <tr>
     {{if $category->chapitre == "dmi"}}

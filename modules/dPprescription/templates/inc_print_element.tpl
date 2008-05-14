@@ -1,11 +1,13 @@
+{{assign var=chapitre_category value=$elt->_ref_element_prescription->_ref_category_prescription->chapitre}}
+
 <li>
-  {{if $elt->_ref_element_prescription->_ref_category_prescription->chapitre != "dmi"}}Faire pratiquer {{/if}}
+  {{if $chapitre_category != "dmi" && $chapitre_category != "dm"}}Faire pratiquer {{/if}}
   <strong>{{$elt->_ref_element_prescription->_view}}</strong>
   ({{$elt->_ref_element_prescription->_ref_category_prescription->_view}})
   {{if $elt->commentaire}}
   <em>{{$elt->commentaire}}</em>
   {{/if}}
-  {{if $elt->_ref_element_prescription->_ref_category_prescription->chapitre != "dmi" && $elt->_ref_prises|@count}}
+  {{if $chapitre_category != "dmi" && $chapitre_category != "dm" && $elt->_ref_prises|@count}}
 	  <ul>
 	    <li>
 			  <!-- Affichage des prises s'il y en a -->

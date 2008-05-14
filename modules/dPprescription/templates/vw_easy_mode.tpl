@@ -41,24 +41,25 @@ function addElement(element_id, name_chap){
   oFormPrise.unite_tous_les.value = "";
   
   if(name_chap != "dmi"){
-	  if(oDivMoment.visible() && oFormMoment.moment_unitaire_id.value && oFormMoment.quantite.value){
-	    oFormPrise.moment_unitaire_id.value = oFormMoment.moment_unitaire_id.value;
-	    oFormPrise.quantite.value = oFormMoment.quantite.value;
-	    callback = "Prescription.submitPriseElement";
-	  }
-	  if(oDivFoisPar.visible() && oFormFoisPar.nb_fois.value && oFormFoisPar.unite_fois.value && oFormFoisPar.quantite.value){
-	    oFormPrise.nb_fois.value = oFormFoisPar.nb_fois.value;
-	    oFormPrise.unite_fois.value = oFormFoisPar.unite_fois.value;
-	    oFormPrise.quantite.value = oFormFoisPar.quantite.value;
-	    callback = "Prescription.submitPriseElement";
-	  }
-	  if(oDivTousLes.visible() && oFormTousLes.nb_tous_les.value && oFormTousLes.unite_tous_les.value && oFormTousLes.quantite.value){
-	    oFormPrise.nb_tous_les.value = oFormTousLes.nb_tous_les.value;
-	    oFormPrise.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
-	    oFormPrise.quantite.value = oFormTousLes.quantite.value;
-	    callback = "Prescription.submitPriseElement";
-	  }
-
+    if(name_chap != "dm"){
+		  if(oDivMoment.visible() && oFormMoment.moment_unitaire_id.value && oFormMoment.quantite.value){
+		    oFormPrise.moment_unitaire_id.value = oFormMoment.moment_unitaire_id.value;
+		    oFormPrise.quantite.value = oFormMoment.quantite.value;
+		    callback = "Prescription.submitPriseElement";
+		  }
+		  if(oDivFoisPar.visible() && oFormFoisPar.nb_fois.value && oFormFoisPar.unite_fois.value && oFormFoisPar.quantite.value){
+		    oFormPrise.nb_fois.value = oFormFoisPar.nb_fois.value;
+		    oFormPrise.unite_fois.value = oFormFoisPar.unite_fois.value;
+		    oFormPrise.quantite.value = oFormFoisPar.quantite.value;
+		    callback = "Prescription.submitPriseElement";
+		  }
+		  if(oDivTousLes.visible() && oFormTousLes.nb_tous_les.value && oFormTousLes.unite_tous_les.value && oFormTousLes.quantite.value){
+		    oFormPrise.nb_tous_les.value = oFormTousLes.nb_tous_les.value;
+		    oFormPrise.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
+		    oFormPrise.quantite.value = oFormTousLes.quantite.value;
+		    callback = "Prescription.submitPriseElement";
+		  }
+    }
   
     oFormPrise.category_name.value = name_chap; 
     debut = formDate.debut.value;
@@ -106,19 +107,21 @@ function addCategorie(categorie_id, name_chap){
   oFormElementCat.unite_tous_les.value = "";
   
   if(name_chap != "dmi"){
-	  if(oDivMoment.visible() && oFormMoment.moment_unitaire_id.value && oFormMoment.quantite.value){
-	    oFormElementCat.moment_unitaire_id.value = oFormMoment.moment_unitaire_id.value;
-	    oFormElementCat.quantite.value = oFormMoment.quantite.value;
-	  }
-	  if(oDivFoisPar.visible() && oFormFoisPar.nb_fois.value && oFormFoisPar.unite_fois.value && oFormFoisPar.quantite.value){
-	    oFormElementCat.nb_fois.value = oFormFoisPar.nb_fois.value;
-	    oFormElementCat.unite_fois.value = oFormFoisPar.unite_fois.value;
-	    oFormElementCat.quantite.value = oFormFoisPar.quantite.value;
-	  }
-	  if(oDivTousLes.visible() && oFormTousLes.nb_tous_les.value && oFormTousLes.unite_tous_les.value && oFormTousLes.quantite.value){
-	    oFormElementCat.nb_tous_les.value = oFormTousLes.nb_tous_les.value;
-	    oFormElementCat.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
-	    oFormElementCat.quantite.value = oFormTousLes.quantite.value;
+    if(name_chap != "dm"){
+		  if(oDivMoment.visible() && oFormMoment.moment_unitaire_id.value && oFormMoment.quantite.value){
+		    oFormElementCat.moment_unitaire_id.value = oFormMoment.moment_unitaire_id.value;
+		    oFormElementCat.quantite.value = oFormMoment.quantite.value;
+		  }
+		  if(oDivFoisPar.visible() && oFormFoisPar.nb_fois.value && oFormFoisPar.unite_fois.value && oFormFoisPar.quantite.value){
+		    oFormElementCat.nb_fois.value = oFormFoisPar.nb_fois.value;
+		    oFormElementCat.unite_fois.value = oFormFoisPar.unite_fois.value;
+		    oFormElementCat.quantite.value = oFormFoisPar.quantite.value;
+		  }
+		  if(oDivTousLes.visible() && oFormTousLes.nb_tous_les.value && oFormTousLes.unite_tous_les.value && oFormTousLes.quantite.value){
+		    oFormElementCat.nb_tous_les.value = oFormTousLes.nb_tous_les.value;
+		    oFormElementCat.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
+		    oFormElementCat.quantite.value = oFormTousLes.quantite.value;
+		  }
 	  }
     oFormElementCat.debut.value = formDate.debut.value;
     oFormElementCat.duree.value = formDate.duree.value;
