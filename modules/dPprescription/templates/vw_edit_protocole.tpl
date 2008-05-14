@@ -33,7 +33,7 @@ function viewProduit(cip){
 	        </option>
 	        {{/foreach}}
 	      </select>
-	      <select name="function_id" onchange="this.form.praticien_id.value=''; submit()">
+	      <select name="function_id" onchange="this.form.praticien_id.value=''; this.form.submit()">
           <option value="">&mdash; Choix du cabinet</option>
           {{foreach from=$functions item=_function}}
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
