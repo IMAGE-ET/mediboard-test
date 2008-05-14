@@ -31,7 +31,7 @@ class CCategoryPrescription extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "chapitre" => "notNull enum list|dmi|anapath|biologie|imagerie|consult|kine|soin",
+      "chapitre" => "notNull enum list|dmi|anapath|biologie|imagerie|consult|kine|soin|dm",
       "nom"      => "notNull str",
       "description" => "text"
     );

@@ -196,7 +196,7 @@ $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listFavoris" , $listFavoris);
 $smarty->assign("category"    , $category);
 $smarty->assign("categories"  , $categories);
-
+$smarty->assign("class_category", new CCategoryPrescription());
 $smarty->assign("refresh_pharma", $refresh_pharma);
 
 

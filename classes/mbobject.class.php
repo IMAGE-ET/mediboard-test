@@ -1434,7 +1434,7 @@ class CMbObject {
     $enums = array();
     foreach ($this->_specs as $propName => $spec) {
       if ($spec instanceof CEnumSpec) {
-      	$enums[$propName] = explode("|", $spec->list);
+      	$spec->_list = $enums[$propName] = explode("|", $spec->list);
       }
       if ($spec instanceof CBoolSpec) {
         $enums[$propName] = array(0,1);

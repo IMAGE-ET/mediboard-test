@@ -219,6 +219,8 @@ $smarty->assign("listFavoris", $listFavoris);
 $smarty->assign("protocoles_praticien", $protocoles_praticien);
 $smarty->assign("protocoles_function", $protocoles_function);
 
+$smarty->assign("class_category", new CCategoryPrescription());
+
 $smarty->assign("praticien", $praticien);
 $smarty->assign("moments", $moments);
 if($dialog == 1) {

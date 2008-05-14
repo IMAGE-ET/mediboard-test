@@ -61,13 +61,10 @@ viewEasyMode = function(){
   <li><a href="#div_medicament">Médicaments</a></li>
 
 {{if !$mode_pharma}}
-  <li><a href="#div_dmi">DMI</a></li>
-  <li><a href="#div_anapath">Anapath</a></li>
-  <li><a href="#div_biologie">Biologie</a></li>
-  <li><a href="#div_imagerie">Imagerie</a></li>
-  <li><a href="#div_consult">Consult</a></li>
-  <li><a href="#div_kine">Kiné</a></li>
-  <li><a href="#div_soin">Soin</a></li>
+  {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
+  {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
+  <li><a href="#div_{{$_nom_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_nom_chapitre}}{{/tr}}</a></li>
+  {{/foreach}}
 {{/if}}
 </ul>
 <hr class="control_tabs" />
@@ -76,28 +73,13 @@ viewEasyMode = function(){
 <div id="div_medicament" style="display:none;">
   {{include file="../../dPprescription/templates/inc_div_medicament.tpl"}}
 </div>
+
 {{if !$mode_pharma}}
-<div id="div_dmi" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="dmi"}}
-</div>
-<div id="div_anapath" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="anapath"}}
-</div>
-<div id="div_biologie" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="biologie"}}
-</div>
-<div id="div_imagerie" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="imagerie"}}
-</div>
-<div id="div_consult" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="consult"}}
-</div>
-<div id="div_kine" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="kine"}}
-</div>
-<div id="div_soin" style="display:none;">
-  {{include file="../../dPprescription/templates/inc_div_element.tpl" element="soin"}}
-</div>
+  {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
+    <div id="div_{{$_nom_chapitre}}" style="display:none;">
+      {{include file="../../dPprescription/templates/inc_div_element.tpl" element=$_nom_chapitre}}
+    </div>
+  {{/foreach}}
 {{/if}}
 
 

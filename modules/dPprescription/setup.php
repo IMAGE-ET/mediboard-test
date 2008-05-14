@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.37";
+$config["mod_version"]     = "0.38";
 $config["mod_type"]        = "user";
 
 
@@ -419,7 +419,12 @@ class CSetupdPprescription extends CSetup {
             ADD `function_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.37";
+    $this->makeRevision("0.37");
+    $sql = "ALTER TABLE `category_prescription`
+            CHANGE `chapitre` `chapitre` ENUM('dmi','anapath','biologie','imagerie','consult','kine','soin','dm') NOT NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.38";
   }  
 }
 

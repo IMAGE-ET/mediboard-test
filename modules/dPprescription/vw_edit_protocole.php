@@ -98,6 +98,7 @@ $smarty->assign("listFavoris", $listFavoris);
 $smarty->assign("function_id", $function_id);
 $smarty->assign("protocoleSel_id", "");
 $smarty->assign("mode_pharma", "0");
+$smarty->assign("class_category", new CCategoryPrescription());
 $smarty->display("vw_edit_protocole.tpl");
 
 ?>

@@ -24,6 +24,7 @@ $smarty->assign("chapitres", $chapitres);
 $smarty->assign("filter_line_element", new CPrescriptionLineElement());
 $smarty->assign("moments", $moments);
 $smarty->assign("prise_posologie", new CPrisePosologie());
+$smarty->assign("class_category", new CCategoryPrescription());
 $smarty->display("../../dPprescription/templates/vw_easy_mode.tpl");
 
 ?>

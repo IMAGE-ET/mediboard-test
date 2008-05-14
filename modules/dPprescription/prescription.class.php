@@ -271,14 +271,13 @@ class CPrescription extends CMbObject {
   function loadRefsLinesComment($category_name = null){
   	$this->_ref_prescription_lines_comment = array();
     
-  	$this->_ref_prescription_lines_comment["dmi"] = array();
-  	$this->_ref_prescription_lines_comment["anapath"] = array();
-  	$this->_ref_prescription_lines_comment["biologie"] = array();
-  	$this->_ref_prescription_lines_comment["imagerie"] = array();
-  	$this->_ref_prescription_lines_comment["consult"] = array();
-  	$this->_ref_prescription_lines_comment["kine"] = array();
-  	$this->_ref_prescription_lines_comment["soin"] = array();
+  	// Initialisation des tableaux
+  	$category = new CCategoryPrescription();
   	
+  	foreach($category->_specs["chapitre"]->_list as $chapitre){
+  	  $this->_ref_prescription_lines_comment[$chapitre] = array();	
+  	}
+
   	$commentaires = array();
   	$line_comment = new CPrescriptionLineComment();
   	
@@ -354,22 +353,14 @@ class CPrescription extends CMbObject {
   	$favoris = array();
   	$listFavoris = array();
   	$listFavoris["medicament"] = array();
-  	$listFavoris["dmi"] = array();
-  	$listFavoris["imagerie"] = array();
-  	$listFavoris["consult"] = array();
-  	$listFavoris["kine"] = array();
-  	$listFavoris["soin"] = array();
-  	$listFavoris["anapath"] = array();
-  	$listFavoris["biologie"] = array();
-  	
   	$favoris["medicament"] = CBcbProduit::getFavoris($praticien_id);
-	  $favoris["dmi"] = CElementPrescription::getFavoris($praticien_id, "dmi");
-	  $favoris["anapath"] = CElementPrescription::getFavoris($praticien_id, "anapath");
-	  $favoris["biologie"] = CElementPrescription::getFavoris($praticien_id, "biologie");
-	  $favoris["imagerie"] = CElementPrescription::getFavoris($praticien_id, "imagerie");
-	  $favoris["consult"] = CElementPrescription::getFavoris($praticien_id, "consult");
-	  $favoris["kine"] = CElementPrescription::getFavoris($praticien_id, "kine");
-	  $favoris["soin"] = CElementPrescription::getFavoris($praticien_id, "soin");
+  	
+  	$category = new CCategoryPrescription();
+    foreach($category->_specs["chapitre"]->_list as $chapitre){
+  	  $listFavoris[$chapitre] = array();
+  	  $favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
+    }
+
 	  
 	  foreach($favoris as $key => $typeFavoris) {
 	  	foreach($typeFavoris as $curr_fav){

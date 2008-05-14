@@ -22,7 +22,7 @@ $locales['CCategoryPrescription.chapitre.biologie'] = 'Biologie';
 $locales['CCategoryPrescription.chapitre.consult'] = 'Consult.';
 $locales['CCategoryPrescription.chapitre.dmi'] = 'DMI';
 $locales['CCategoryPrescription.chapitre.imagerie'] = 'Imagerie';
-$locales['CCategoryPrescription.chapitre.kine'] = 'Kinésithérapeute';
+$locales['CCategoryPrescription.chapitre.kine'] = 'Kiné';
 $locales['CCategoryPrescription.chapitre.labo'] = 'Laboratoire';
 $locales['CCategoryPrescription.chapitre.soin'] = 'Soin';
 $locales['CCategoryPrescription.more'] = '';
@@ -269,4 +269,5 @@ $locales['CPrescriptionLineElement.unite_duree.semaine'] = 'Semaine(s)';
 $locales['CPrescriptionLineElement.unite_duree.semestre'] = 'Semestre(s)';
 $locales['CPrescriptionLineElement.unite_duree.trimestre'] = 'Trimestre(s)';
 $locales['CCategoryPrescription.chapitre.med'] = 'Médicament';
+$locales['CCategoryPrescription.chapitre.dm'] = 'DM';
 ?>

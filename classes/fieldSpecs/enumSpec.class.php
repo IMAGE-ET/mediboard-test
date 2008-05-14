@@ -12,6 +12,7 @@ require_once("./classes/mbFieldSpec.class.php");
 class CEnumSpec extends CMbFieldSpec {
   
   var $list = null;
+  var $_list = null;
   
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;

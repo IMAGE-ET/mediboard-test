@@ -207,13 +207,10 @@ function addCategorie(categorie_id, name_chap){
 
 <!-- Tabulations -->
 <ul id="main_tab_group" class="control_tabs">
-  <li><a href="#div_dmi">DMI</a></li>
-  <li><a href="#div_anapath">Anapath</a></li>
-  <li><a href="#div_biologie">Biologie</a></li>
-  <li><a href="#div_imagerie">Imagerie</a></li>
-  <li><a href="#div_consult">Consult</a></li>
-  <li><a href="#div_kine">Kiné</a></li>
-  <li><a href="#div_soin">Soin</a></li>
+  {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
+  {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
+  <li><a href="#div_{{$_nom_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_nom_chapitre}}{{/tr}}</a></li>
+  {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 

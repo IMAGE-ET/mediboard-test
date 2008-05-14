@@ -269,4 +269,5 @@ $locales['CPrescriptionLineElement.unite_duree.semaine'] = '';
 $locales['CPrescriptionLineElement.unite_duree.semestre'] = '';
 $locales['CPrescriptionLineElement.unite_duree.trimestre'] = '';
 $locales['CCategoryPrescription.chapitre.med'] = '';
+$locales['CCategoryPrescription.chapitre.dm'] = '';
 ?>
