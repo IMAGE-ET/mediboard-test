@@ -1,3 +1,21 @@
+<script type="text/javascript">
+
+refreshListProtocole = function(oForm){
+
+  var oFormFilter = document.selPrat;
+  
+  oFormFilter.praticien_id.value = oForm.praticien_id.value;
+  oFormFilter.function_id.value = oForm.function_id.value;
+ 
+  submitFormAjax(oForm, 'systemMsg', { 
+        onComplete : function() { 
+           Protocole.refreshList(oForm.praticien_id.value,oForm.prescription_id.value, oForm.function_id.value) 
+        } 
+  });
+}
+
+</script>
+
 <table class="form">
   <tr>
     <th class="title" colspan="2">
@@ -22,12 +40,31 @@
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
         <input type="text" name="libelle" value="{{$prescription->libelle}}" 
-               onchange="submitFormAjax(this.form, 'systemMsg', { 
-                 onComplete : function() { 
-                   Protocole.refreshList('{{$prescription->praticien_id}}','{{$prescription->_id}}') 
-                 } })" />
+               onchange="refreshListProtocole(this.form);" />
+      
+        <button class="tick notext" type="button"></button>
+      
+      <!-- Modification du pratcien_id / user_id -->
+         <select name="praticien_id" onchange="this.form.function_id.value=''; refreshListProtocole(this.form)">
+          <option value="">&mdash; Sélection d'un praticien</option>
+	        {{foreach from=$praticiens item=praticien}}
+	        <option class="mediuser" 
+	                style="border-color: #{{$praticien->_ref_function->color}};" 
+	                value="{{$praticien->_id}}"
+	                {{if $praticien->_id == $prescription->praticien_id}}selected="selected"{{/if}}>{{$praticien->_view}}
+	        </option>
+	        {{/foreach}}
+	      </select>
+	      
+	      <select name="function_id" onchange="this.form.praticien_id.value=''; refreshListProtocole(this.form)">
+          <option value="">&mdash; Choix du cabinet</option>
+          {{foreach from=$functions item=_function}}
+          <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" 
+          {{if $_function->_id == $prescription->function_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
+          {{/foreach}}
+        </select>
       </form>
-      <button class="tick notext"></button>
+        
       {{else}}
         {{$prescription->_view}} <br />
         {{$prescription->_ref_patient->_view}}

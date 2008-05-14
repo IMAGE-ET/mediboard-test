@@ -18,6 +18,14 @@ var Protocole = {
   },
   // Refresh de la liste des protocoles
   refreshList : function(praticien_id, protocoleSel_id, function_id) {
+    var oForm = document.selPrat;
+    if(!praticien_id){
+      praticien_id = oForm.praticien_id.value;
+    }
+    if(!function_id){
+      function_id = oForm.function_id.value;
+    }
+   
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_list_protocoles");
     url.addParam("praticien_id", praticien_id);
@@ -26,8 +34,8 @@ var Protocole = {
     url.requestUpdate("protocoles", { waitingText: null } );
   },
   // Edition d'un protocole
-  edit : function(protocole_id, praticien_id) {
+  edit : function(protocole_id, praticien_id, function_id) {
     Prescription.reload(protocole_id,"","","1");
-    Protocole.refreshList(praticien_id, protocole_id);
+    Protocole.refreshList(praticien_id, protocole_id, function_id);
   }
 }

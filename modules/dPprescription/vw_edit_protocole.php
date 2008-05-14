@@ -22,6 +22,8 @@ $praticiens = $praticien->loadPraticiens();
 $praticien->load($praticien_id);
 
 $tabProtocoles = array();
+$protocoles_function = array();
+$tabProtocoles_function = array();
 
 // Chargement des functions
 $function = new CFunctions();
@@ -34,6 +36,19 @@ if($praticien_id){
   $where["praticien_id"] = " = '$praticien_id'";
   $where["object_id"] = "IS NULL";
   $tabProtocoles = $prescription->loadList($where);
+  foreach($tabProtocoles as $_protocole){
+  	$protocoles[$_protocole->object_class][$_protocole->_id] = $_protocole;
+  }
+
+  // Chargement des protocoles du cabinet du praticien
+  $prescription = new CPrescription();
+  $where = array();
+  $where["function_id"] = " = '$praticien->function_id'";
+  $where["object_id"] = "IS NULL";
+  $tab_protocoles_function = $prescription->loadList($where);
+  foreach($tab_protocoles_function as $_protocole){
+  	$protocoles_function[$_protocole->object_class][$_protocole->_id] = $_protocole;
+  }
 }
 
 if($function_id){
@@ -41,12 +56,13 @@ if($function_id){
 	$where = array();
 	$where["function_id"] = " = '$function_id'";
 	$where["object_id"] = " IS NULL";
-  $tabProtocoles = $prescription->loadList($where);
+  $tab_protocoles_function = $prescription->loadList($where);
+  foreach($tab_protocoles_function as $_protocole){
+  	$protocoles_function[$_protocole->object_class][$_protocole->_id] = $_protocole;
+  }
 }
 
-foreach($tabProtocoles as $_protocole){
-	$protocoles[$_protocole->object_class][$_protocole->_id] = $_protocole;
-}
+
   
 if($protocole_id){
 	$protocole = new CPrescription();
@@ -69,6 +85,7 @@ $contexteType["CSejour"][] = "sejour";
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("protocoles_function", $protocoles_function);
 $smarty->assign("today", mbDate());
 $smarty->assign("contexteType", $contexteType);
 $smarty->assign("praticien_id", $praticien_id);

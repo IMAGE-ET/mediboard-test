@@ -159,7 +159,15 @@ if($prescription->_id){
 	}
 }
 
+if($mode_protocole){
+	// Chargement de la liste des praticiens
+  $praticien = new CMediusers();
+  $praticiens = $praticien->loadPraticiens();
 
+  // Chargement des functions
+  $function = new CFunctions();
+  $functions = $function->loadSpecialites(PERM_EDIT);
+}
 
 // Liste des praticiens
 $user = new CMediusers();
@@ -194,6 +202,8 @@ $smarty->assign("refresh_pharma", $refresh_pharma);
 
 
 if($mode_protocole){
+	$smarty->assign("praticiens", $praticiens);
+	$smarty->assign("functions", $functions);
 	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "1");
 	$smarty->assign("category", "medicament");

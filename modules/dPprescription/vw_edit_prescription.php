@@ -19,6 +19,10 @@ $filter->praticien_id    = mbGetValueFromGet("praticien_id");
 $filter->loadRefsFwd();
 $filter->_ref_object->loadRefsFwd();
 
+$protocoles_praticien = array();
+$protocoles_function = array();
+
+
 $popup = mbGetValueFromGet("popup");
 $categories = array();
 
