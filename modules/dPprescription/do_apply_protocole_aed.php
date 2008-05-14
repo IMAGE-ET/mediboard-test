@@ -80,6 +80,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   $new_line_element = $line_element;
   $new_line_element->_id = "";
   $new_line_element->prescription_id = $prescription_id;
+  $new_line_element->praticien_id = $AppUI->user_id;
   $msg = $new_line_element->store();
   viewMsg($msg, "msg-CPrescriptionLineElement-create");  
 }
@@ -90,6 +91,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$new_line_comment = $line_comment;
 	$new_line_comment->_id = "";
 	$new_line_comment->prescription_id = $prescription_id;
+	$new_line_comment->praticien_id = $AppUI->user_id;
 	$msg = $new_line_comment->store();
 	viewMsg($msg, "msg-CPrescriptionLineComment-create");
 }

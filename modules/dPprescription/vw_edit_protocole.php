@@ -8,6 +8,8 @@
  */
 
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$function_id = mbGetValueFromGetOrSession("function_id");
+
 $protocole_id = mbGetValueFromGet("prescription_id");
 
 $protocoles = array();
@@ -19,17 +21,33 @@ $praticien = new CMediusers();
 $praticiens = $praticien->loadPraticiens();
 $praticien->load($praticien_id);
 
+$tabProtocoles = array();
+
+// Chargement des functions
+$function = new CFunctions();
+$functions = $function->loadSpecialites(PERM_EDIT);
+
 // Chargement des protocoles de prescription du praticien selectionne
 if($praticien_id){
   $prescription = new CPrescription();
+  $where = array();
   $where["praticien_id"] = " = '$praticien_id'";
   $where["object_id"] = "IS NULL";
   $tabProtocoles = $prescription->loadList($where);
-  foreach($tabProtocoles as $_protocole){
-  	$protocoles[$_protocole->object_class][$_protocole->_id] = $_protocole;
-  }
 }
 
+if($function_id){
+	$prescription = new CPrescription();
+	$where = array();
+	$where["function_id"] = " = '$function_id'";
+	$where["object_id"] = " IS NULL";
+  $tabProtocoles = $prescription->loadList($where);
+}
+
+foreach($tabProtocoles as $_protocole){
+	$protocoles[$_protocole->object_class][$_protocole->_id] = $_protocole;
+}
+  
 if($protocole_id){
 	$protocole = new CPrescription();
 	$protocole->load($protocole_id);
@@ -55,10 +73,12 @@ $smarty->assign("today", mbDate());
 $smarty->assign("contexteType", $contexteType);
 $smarty->assign("praticien_id", $praticien_id);
 $smarty->assign("praticiens" , $praticiens);
+$smarty->assign("functions", $functions);
 $smarty->assign("praticien"  , $praticien);
 $smarty->assign("protocoles" , $protocoles);
 $smarty->assign("protocole"  , $protocole);
 $smarty->assign("listFavoris", $listFavoris);
+$smarty->assign("function_id", $function_id);
 $smarty->assign("protocoleSel_id", "");
 $smarty->assign("mode_pharma", "0");
 $smarty->display("vw_edit_protocole.tpl");

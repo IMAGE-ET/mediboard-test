@@ -135,9 +135,16 @@
         <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
         <select name="protocole_id" onchange="submitFormAjax(this.form, 'systemMsg'); this.value='';">
           <option value="">&mdash; Sélection d'un protocole</option>
-          {{foreach from=$protocoles item=protocole}}
-          <option value="{{$protocole->_id}}">{{$protocole->_view}}</option>
-          {{/foreach}}  
+          <optgroup label="Praticien">
+          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
+          <option value="{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
+          {{/foreach}}
+          </optgroup>
+          <optgroup label="Cabinet">
+          {{foreach from=$protocoles_function item=_protocole_function}}
+          <option value="{{$_protocole_function->_id}}">{{$_protocole_function->_view}}</option>
+          {{/foreach}}
+          </optgroup>
         </select>
       </form>
   </td>  

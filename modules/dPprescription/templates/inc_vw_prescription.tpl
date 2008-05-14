@@ -36,6 +36,7 @@ preselectType = function(contexte, oForm){
    <input type="hidden" name="object_class" value=""/>
    <input type="hidden" name="object_id" value=""/>
    <input type="hidden" name="praticien_id" value="" />
+   <input type="hidden" name="function_id" value="" />
    
    <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
    <table class="form">
@@ -92,7 +93,7 @@ preselectType = function(contexte, oForm){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="object_id" value="{{$prescription->object_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
-  
+
   <select name="praticien_id">
     {{foreach from=$listPrats item=curr_prat}}
     <option value="{{$curr_prat->_id}}">

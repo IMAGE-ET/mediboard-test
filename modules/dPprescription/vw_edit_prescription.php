@@ -29,7 +29,7 @@ if(!$filter->prescription_id && $filter->object_id && $filter->object_class && $
 	$prescription->praticien_id = $filter->praticien_id;
 	$prescription->type = $filter->type;
 	$prescription->loadMatchingObject();
-  
+  $prescription->function_id = "";
 	if(!$prescription->_id){
 		$prescription->store();
 	}
@@ -67,13 +67,21 @@ if ($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
   $prescription->_ref_object->loadRefsPrescriptions();
 
-  // Chargement des protocoles
+  // Chargement des protocoles du praticiens
   $protocole = new CPrescription();
   $where = array();
   $where["praticien_id"] = " = '$prescription->praticien_id'";
   $where["object_id"] = "IS NULL";
-  $protocoles = $protocole->loadList($where);
+  $protocoles_praticien = $protocole->loadList($where);
+  
+  // Chargement des protocoles de la fonction
+  $function_id = $prescription->_ref_praticien->function_id;
+  $where = array();
+  $where["function_id"] = " = '$function_id'";
+  $where["object_id"] = "IS NULL";
+  $protocoles_function = $protocole->loadList($where);
 }
+
 
 // Liste des alertes
 $listProduits = array();
@@ -204,7 +212,9 @@ $smarty->assign("prescription", $prescription);
 $smarty->assign("filter"      , $filter);
 $smarty->assign("listPrats"   , $listPrats);
 $smarty->assign("listFavoris", $listFavoris);
-$smarty->assign("protocoles", $protocoles);
+$smarty->assign("protocoles_praticien", $protocoles_praticien);
+$smarty->assign("protocoles_function", $protocoles_function);
+
 $smarty->assign("praticien", $praticien);
 $smarty->assign("moments", $moments);
 if($dialog == 1) {

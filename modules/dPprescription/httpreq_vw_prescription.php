@@ -62,7 +62,9 @@ if(!$prescription->_id) {
   $prescription->object_id    = $object_id;
 } else {
   // Liste des favoris
-  $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);  
+  if($prescription->praticien_id){
+    $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);  
+  }
 }
 
 
@@ -144,18 +146,20 @@ if($prescription->_id){
 	  	$line->loadRefPraticien();
 	  }
 	}
-}
-
-// Chargement du poids du patient
-if($prescription->_ref_object->_class_name == "CSejour"){
-	$consult_anesth = new CConsultAnesth();
-	$consult_anesth->sejour_id = $prescription->_ref_object->_id;
-	$consult_anesth->loadMatchingObject();
-	
-	if($consult_anesth->_id){
-	  $poids = $consult_anesth->poid;
+		
+	// Chargement du poids du patient
+	if($prescription->_ref_object->_class_name == "CSejour"){
+		$consult_anesth = new CConsultAnesth();
+		$consult_anesth->sejour_id = $prescription->_ref_object->_id;
+		$consult_anesth->loadMatchingObject();
+		
+		if($consult_anesth->_id){
+		  $poids = $consult_anesth->poid;
+		}
 	}
 }
+
+
 
 // Liste des praticiens
 $user = new CMediusers();

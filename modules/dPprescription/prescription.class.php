@@ -16,6 +16,9 @@ class CPrescription extends CMbObject {
   
   // DB Fields
   var $praticien_id = null;
+  var $function_id = null;  // XOR entre praticien_id et function_id
+  
+  
   var $object_class = null;
   var $object_id    = null;
   var $libelle      = null;
@@ -54,7 +57,8 @@ class CPrescription extends CMbObject {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "praticien_id"  => "notNull ref class|CMediusers",
+      "praticien_id"  => "ref class|CMediusers",
+      "function_id"   => "ref class|CFunctions",  
       "object_id"     => "ref class|CCodable meta|object_class",
       "object_class"  => "notNull enum list|CSejour|CConsultation",
       "libelle"       => "str",

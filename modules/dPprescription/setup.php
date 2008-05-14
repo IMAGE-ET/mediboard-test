@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.36";
+$config["mod_version"]     = "0.37";
 $config["mod_type"]        = "user";
 
 
@@ -413,7 +413,13 @@ class CSetupdPprescription extends CSetup {
             ADD `date_arret` DATE;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+    $sql = "ALTER TABLE `prescription`
+            CHANGE `praticien_id` `praticien_id` INT(11) UNSIGNED, 
+            ADD `function_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.37";
   }  
 }
 
