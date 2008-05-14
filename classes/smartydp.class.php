@@ -127,11 +127,6 @@ function smarty_function_mb_field($params, &$smarty) {
   
   if ($canNull === "false" || $canNull === false) {
     $spec->notNull = 1;
-    $spec->prop = "notNull $spec->prop";
-  }
-  
-  if($canNull === "canNull") {
-    $spec->notNull = 1;
     $spec->prop = "canNull $spec->prop";
   }
   
