@@ -64,7 +64,6 @@ if($order_col == "_patient_id"){
 
 $listSejours = $sejour->loadList($where, $order, null, null, $ljoin);
 
-$tps_attente = array();
 foreach ($listSejours as &$sejour) {
   // Chargement du numero de dossier
   $sejour->loadNumDossier();
@@ -74,13 +73,6 @@ foreach ($listSejours as &$sejour) {
   
   // Chargement de l'IPP
   $sejour->_ref_patient->loadIPP();
-
-  // Calcul du temps d'attente pour les patients deja pris en charge
-  if ($sejour->_ref_rpu->_count_consultations) {
-	  $entree = mbTime($sejour->_entree);
-	  $consult = mbTime($sejour->_ref_rpu->_ref_consult->heure);
-	  $tps_attente[$sejour->_id] = mbSubTime($entree,$consult);
-  }
 }
 
 // Chargement des boxes d'urgences
@@ -97,7 +89,6 @@ foreach (CService::loadServicesUrgence() as $service) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("boxes"       , $boxes);
-$smarty->assign("tps_attente" , $tps_attente);
 $smarty->assign("order_col"   , $order_col);
 $smarty->assign("order_way"   , $order_way);
 $smarty->assign("listPrats"   , $listPrats);

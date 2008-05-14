@@ -40,6 +40,8 @@ class CRPU extends CMbObject {
   
   // Distant Fields
   var $_count_consultations = null;
+  var $_attente  = null;
+  var $_presence = null;
 
   // Patient
   var $_patient_id = null;
@@ -98,7 +100,9 @@ class CRPU extends CMbObject {
       "_patient_id"      => "notNull ref class|CPatient",
       "_responsable_id"  => "notNull ref class|CMediusers",
       "_entree"          => "dateTime",
-      "_etablissement_transfert_id" => "ref class|CEtabExterne"
+      "_etablissement_transfert_id" => "ref class|CEtabExterne",
+      "_attente"         => "time",
+      "_presence"        => "time",
      );
      
 		$specs["urprov"] = "";
@@ -177,6 +181,20 @@ class CRPU extends CMbObject {
       $this->_ref_consult->_ref_praticien->loadRefFunction();
       $this->_ref_consult->getNumDocsAndFiles();
     }
+    
+	  // Calcul des temps d'attente et présence
+		$entree = mbTime($this->_ref_sejour->_entree);
+		$this->_presence =  mbSubTime($entree, mbTime());
+
+		if ($this->_ref_sejour->sortie_reelle) {
+	    $this->_presence  = mbSubTime($entree, mbTime($this->_ref_sejour->sortie_reelle));
+	  }
+	  
+		$this->_attente  = $this->_presence;
+		
+	  if ($this->_ref_consult->_id) {
+	    $this->_attente  = mbSubTime($entree, mbTime($this->_ref_consult->heure));
+	  }
   }
   
   function loadRefSejourMutation() {

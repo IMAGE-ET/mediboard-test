@@ -555,6 +555,9 @@ class CSejour extends CCodable {
     $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
   }
   
+  /**
+   * Charge les consultations, en particulier l'ATU dans le cas UPATOU
+   */
   function loadRefsConsultations() {
     $this->_ref_consultations = $this->loadBackRefs("consultations");
     
@@ -562,6 +565,8 @@ class CSejour extends CCodable {
     if ($this->type == "urg" && count($this->_ref_consultations)) {
     	$this->_ref_consult_atu = reset($this->_ref_consultations);
     }
+    
+    
   }
   
   function loadRefsPrescriptions() {

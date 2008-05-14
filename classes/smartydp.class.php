@@ -155,7 +155,11 @@ function smarty_function_mb_value($params, &$smarty) {
  * - typeEnum    : {optionnel} Type d'affichage des enums à cibler (values : "select", "radio") [default: "select"]
  */
 function smarty_function_mb_label($params, &$smarty) {
-  $object     = CMbArray::extract($params, "object", null, true);
+  if (null == $object = CMbArray::extract($params, "object")) {
+    $class = CMbArray::extract($params, "class" , null, true);
+    $object = new $class;
+  }
+  
   $field      = CMbArray::extract($params, "field" , null, true);
   
   if (!array_key_exists($field, $object->_specs)) {
@@ -173,7 +177,11 @@ function smarty_function_mb_label($params, &$smarty) {
  * - field       : Nom du champ a afficher (le champs doit avoir des specs sinon "spec" non optionnel) 
  */
 function smarty_function_mb_title($params, &$smarty) {
-  $object     = CMbArray::extract($params, "object", null, true);
+  if (null == $object = CMbArray::extract($params, "object")) {
+    $class = CMbArray::extract($params, "class" , null, true);
+    $object = new $class;
+  }
+  
   $field      = CMbArray::extract($params, "field" , null, true);
 
   return $object->_specs[$field]->getTitleElement($object, $params);

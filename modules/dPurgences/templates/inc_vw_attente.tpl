@@ -1,1 +1,1 @@
-{{$attente|date_format:"%Hh%M"}}
+{{mb_value object=$sejour->_ref_rpu field=_attente}}

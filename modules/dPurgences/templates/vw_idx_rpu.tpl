@@ -59,10 +59,10 @@ function pageMain() {
 
 <table class="tbl">
   <tr>
-    <th>{{mb_colonne class="CRPU" field="ccmu" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    <th>{{mb_colonne class="CRPU" field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    <th>{{mb_colonne class="CRPU" field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
-    <th>Temps d'attente</th>
+    <th>{{mb_colonne class=CRPU field="ccmu" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    <th>{{mb_colonne class=CRPU field="_patient_id" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    <th>{{mb_colonne class=CRPU field="_entree" order_col=$order_col order_way=$order_way url="?m=$m&amp;tab=vw_idx_rpu"}}</th>
+    <th>{{mb_title class=CRPU field=_attente}} / {{mb_title class=CRPU field=_presence}}</th>
     <th>{{tr}}CRPU-_responsable_id{{/tr}}</th>
     {{if $medicalView}}
     <th>{{tr}}CRPU-diag_infirmier{{/tr}}</th>
@@ -76,6 +76,12 @@ function pageMain() {
   {{mb_ternary var=background test=$consult->_id value=#cfc other=none}}
   
   <tr>
+  	{{if $curr_sejour->annule}}
+    <td class="cancelled">
+      {{tr}}Annulé{{/tr}}
+    </td>
+	  {{else}}
+
     <td class="ccmu-{{$rpu->ccmu}}">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{if $rpu->ccmu}}
@@ -88,6 +94,7 @@ function pageMain() {
       <strong>{{$boxes.$rpu_box_id->_view}}</strong>
       {{/if}}
     </td>
+    {{/if}}
 
     <td class="text" style="background-color: {{$background}};">
       <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
@@ -98,7 +105,7 @@ function pageMain() {
         {{$patient->_view}}
         </strong>
         {{if $patient->_IPP}}
-          <br />[{{$patient->_IPP}}]
+        <br />[{{$patient->_IPP}}]
         {{/if}}
       </a>
     </td>
@@ -129,8 +136,8 @@ function pageMain() {
       
     </td>
     
-    {{if $consult->_id}}
-	  <td style="background-color: {{$background}};">
+	  <td id="attente-{{$sejour_id}}" style="background-color: {{$background}}; text-align: center">
+	    {{if $consult->_id}}
 	    <a href="?m=dPurgences&amp;tab=edit_consultation&amp;selConsult={{$consult->_id}}">
 	      Consultation à {{$consult->heure|date_format:"%Hh%M"}}
 	      {{if $date != $consult->_ref_plageconsult->date}}
@@ -138,19 +145,19 @@ function pageMain() {
 	      {{/if}}
 	    </a>
 	    {{if !$curr_sejour->sortie_reelle}}
-	      ({{$tps_attente.$sejour_id|date_format:"%Hh%M"}})
+	      ({{mb_value object=$rpu field=_attente}} / {{mb_value object=$rpu field=_presence}})
 	    {{else}}
 	      (sortie à {{$curr_sejour->sortie_reelle|date_format:"%Hh%M"}})
 	    {{/if}}
-    </td>
-    {{else}}
-    <td id="attente-{{$sejour_id}}" style="text-align: center">
+	
+	    {{else}}
       <!-- Affichage du temps d'attente de chaque patient -->
+      {{mb_value object=$rpu field=_attente}}
       <script type="text/javascript">
         updateAttente("{{$sejour_id}}");
       </script>
+      {{/if}}
     </td>
-    {{/if}}
     
     <td class="text" style="background-color: {{$background}};">
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
