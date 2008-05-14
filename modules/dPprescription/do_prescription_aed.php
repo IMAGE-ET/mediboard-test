@@ -7,12 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
+//mbDump($_POST, "POST");
+//die;
 
 $do = new CDoObjectAddEdit("CPrescription", "prescription_id");
-$do->createMsg = "Prescription créée";
-$do->modifyMsg = "Prescription modifiée";
-$do->deleteMsg = "Prescription supprimée";
 $do->doIt();
 
 ?>

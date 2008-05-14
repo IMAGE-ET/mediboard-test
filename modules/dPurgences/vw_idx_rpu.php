@@ -69,6 +69,7 @@ foreach ($listSejours as &$sejour) {
   $sejour->loadNumDossier();
   $sejour->loadRefsFwd();
   $sejour->loadRefRPU();
+  $sejour->_ref_rpu->loadRefSejourMutation();
   $sejour->loadRefsConsultations();
   
   // Chargement de l'IPP

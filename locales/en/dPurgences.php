@@ -208,4 +208,13 @@ $locales['config-dPurgences-old_rpu-1'] = '';
 $locales['config-dPurgences-old_rpu-0'] = '';
 $locales['CRPU-box_id'] = '';
 $locales['CRPU-box_id-desc'] = '';
+$locales['confirm-RPU-Hospitalisation'] = '';
+$locales['CLit-back-'] = '';
+$locales['CRPU-box_id-court'] = '';
+$locales['CRPU-_attente'] = '';
+$locales['CRPU-_attente-court'] = '';
+$locales['CRPU-_attente-desc'] = '';
+$locales['CRPU-_presence'] = '';
+$locales['CRPU-_presence-court'] = '';
+$locales['CRPU-_presence-desc'] = '';
 ?>

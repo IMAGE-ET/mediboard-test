@@ -27,9 +27,9 @@ class CSpUrgDro extends CSpObject {
   
   static $transDest = array (
     "" => "",
-  	"normal" => "S",
+  	"normal" => "D",
 		"transfert" => "M",
-    "deces" => "D",
+    "deces" => "M",
   );
   
   static $transTrans = array (
@@ -148,9 +148,9 @@ class CSpUrgDro extends CSpObject {
     
     /* Destination                      */
     $urdest = array (
-      "D", // Décès
+      "D", // Domicile
       "M", // Mutation
-      "S", // Sortie
+      "S", // Hospitalisation
     );
     
     $urdest = implode("|", $urdest);
@@ -253,6 +253,9 @@ class CSpUrgDro extends CSpObject {
     
     // Destination
     $this->urdest = self::$transDest[$sejour->mode_sortie];
+    if ($rpu->mutation_sejour_id) {
+      $this->urdest = "S";
+    }
     
     // Transport
     $this->urmtra = self::$transTrans[$rpu->transport];

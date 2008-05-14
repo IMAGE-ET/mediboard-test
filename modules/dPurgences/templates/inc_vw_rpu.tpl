@@ -6,10 +6,6 @@ ContraintesRPU.contraintesProvenance  = {{$contrainteProvenance|@json}};
 ContraintesRPU.contraintesDestination = {{$contrainteDestination|@json}};
 ContraintesRPU.contraintesOrientation = {{$contrainteOrientation|@json}};
 
-function submitRPU(oForm){
-  submitFormAjax(oForm, 'systemMsg');
-}
-
 function submitSejour(){
   var oForm = document.editSejour;
   submitFormAjax(oForm, 'systemMsg');
@@ -171,7 +167,11 @@ function initFields(mode_sortie){
 				        {{/if}}
 				      </div>
 				      {{else}}
-				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">Hospitalisation vers le séjour {{$rpu->mutation_sejour_id}}</a> 
+				      <strong>
+				      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
+				      	Hospitalisation dossier [{{$rpu->_ref_sejour_mutation->_num_dossier}}]
+				     	</a> 
+				     	</strong>
 				      {{/if}}
 		 		    </td>
 				   </tr>
@@ -261,13 +261,13 @@ function initFields(mode_sortie){
         Reconvoquer
       </button>
        
-      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour --> 
-      <form name="transfertHospi" method="post" action="?m={{$m}}">
+      <!-- Hospitalisation immediate, creation d'un sejour et transfert des actes dans le nouveau sejour -->
+      <form name="transfertHospi" method="post" action="?m={{$m}}" onsubmit="return confirm('{{tr}}confirm-RPU-Hospitalisation{{/tr}}');">
         <input type="hidden" name="dosql" value="do_transfert_aed" />
         <input type="hidden" name="m" value="dPurgences" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
-        <button class="new" type="button" onclick="submit(this.form);">Hospitaliser</button>
+        <button class="new" type="submit">Hospitaliser</button>
       </form>
 	  </td>
 	</tr>

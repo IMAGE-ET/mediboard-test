@@ -137,7 +137,14 @@ function submitSejour(){
     
     {{if $sejour->annule}}
     <td class="cancelled" colspan="5">
+      {{if $rpu->mutation_sejour_id}}
+      Hospitalisation
+      <a href="?m=dPplanningOp&tab=vw_edit_sejour&sejour_id={{$rpu->mutation_sejour_id}}">
+        dossier [{{$rpu->_ref_sejour_mutation->_num_dossier}}]
+     	</a> 
+      {{else}}
       {{tr}}Cancelled{{/tr}}
+      {{/if}}
     </td>
     {{else}}
     <td>

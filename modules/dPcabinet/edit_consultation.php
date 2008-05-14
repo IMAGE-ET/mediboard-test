@@ -226,7 +226,8 @@ if ($consult->_id && $consult->sejour_id){
   $consult->_ref_sejour->loadRefDossierMedical();
   $consult->_ref_sejour->loadNumDossier();
   $consult->_ref_sejour->_ref_rpu->loadAides($AppUI->user_id);
-
+  $consult->_ref_sejour->_ref_rpu->loadRefSejourMutation();
+  
   // Chargement des etablissements externes
   $order = "nom";
   $etab = new CEtabExterne();
