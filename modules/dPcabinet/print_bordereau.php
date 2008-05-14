@@ -29,40 +29,48 @@ $compte_guichet = substr($praticien->compte, 5, 5);
 $compte_numero  = substr($praticien->compte, 10, 11);
 $compte_cle     = substr($praticien->compte, 21, 2);
 
-$consult = new CConsultation();
-
-$whereConsult["patient_mode_reglement"] = " = 'cheque' ";
-$whereConsult["patient_date_reglement"] = " BETWEEN '$date_min' AND '$date_max' ";
-
 // Nombre de cheques remis
 $nbRemise = 0;
 
 // Montant total des cheques
 $montantTotal = 0;
 
-$listConsult = array();
-$ljoin = array();
-$whereConsult["chir_id"] = "= '$praticien->_id'";
-$ljoin["plageconsult"] = "plageconsult.plageconsult_id = consultation.plageconsult_id";
+$where = array();
+$where['reglement.mode']     = "= 'cheque' ";
+$where['reglement.date']     = "BETWEEN '$date_min' AND '$date_max' ";
+$where['reglement.emetteur'] = "= 'patient'";
 
-// Recherche des consultations 
-$consults = $consult->loadList($whereConsult,null,null,null,$ljoin);
+$ljoin = array();
+$ljoin['consultation']       = 'consultation.consultation_id = reglement.consultation_id';
+
+if ($praticien->_id) {
+  $where['plageconsult.chir_id'] = "= '$praticien->_id'";
+  $ljoin['plageconsult']         = 'plageconsult.plageconsult_id = consultation.plageconsult_id';
+}
+
+$orderby = 'reglement.date ASC';
+
+// Recherche des reglements
+$reglement = new CReglement();
+$list_reglements = $reglement->loadList($where, $orderby, null, null, $ljoin);
 
 // Chargements des consultations
-foreach($consults as $key=>$consult){
-	$consult->loadRefPraticien();
-	$consult->loadRefPatient();
-	$consult->loadRefBanque();
-	$listConsult[$key] = $consult;
-	$nbRemise++;
-	$montantTotal += $consult->du_patient;
+foreach($list_reglements as $curr_reglement){
+  $curr_reglement->loadrefs();
+  
+  $curr_consult = $curr_reglement->_ref_consultation;
+	$curr_consult->loadRefPraticien();
+	$curr_consult->loadRefPatient();
+	
+	$montantTotal += $curr_reglement->montant;
 }
+$nbRemise = count($list_reglements);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("praticien"            , $praticien      );
-$smarty->assign("listConsult"          , $listConsult    );
+$smarty->assign("list_reglements"      , $list_reglements);
 $smarty->assign("date"                 , $date           );
 $smarty->assign("compte_banque"        , $compte_banque  );
 $smarty->assign("compte_guichet"       , $compte_guichet );

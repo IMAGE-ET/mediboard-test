@@ -32,14 +32,13 @@
     <th class="title">Montant</th>
   </tr>
   
-  {{foreach from=$listConsult item="consult"}}
+  {{foreach from=$list_reglements item="reglement"}}
   <tr>
-    <td colspan="3">{{$consult->_ref_patient->_view}}</td>
-    <td colspan="3">{{$consult->_ref_banque->_view}}</td>
-    <td>{{$consult->du_patient}} &euro;</td>
+    <td colspan="3">{{$reglement->_ref_consultation->_ref_patient->_view}}</td>
+    <td colspan="3">{{$reglement->_ref_banque->_view}}</td>
+    <td>{{$reglement->montant}} &euro;</td>
   </tr>
   {{/foreach}}
-  
   
   <tr>
     <td colspan="3"></td>
@@ -52,8 +51,8 @@
 
 <table class="form">
   <tr>
-    <th class="category" style="width: 150px">Visa de la banque</th>
-    <th class="category" style="width: 150px">Visa du client</th>
+    <th class="category" style="width: 50%;">Visa de la banque</th>
+    <th class="category" style="width: 50%;">Visa du client</th>
     
   </tr>
   <tr>  
@@ -61,9 +60,3 @@
     <td> </td>
   </tr>
 </table>
-
-
-
-
-
-

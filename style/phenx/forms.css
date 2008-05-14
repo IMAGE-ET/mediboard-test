@@ -30,13 +30,17 @@ textarea:focus {
 
 input[type=submit],
 input[type=reset],
-input[type=button] {
+input[type=button], 
+button,
+a.button {
   background: #ddd;
 }
 
 input[type=submit]:hover,
 input[type=reset]:hover,
-input[type=button]:hover {
+input[type=button]:hover, 
+button:hover,
+a:hover.button {
   background: #bbb;
 }
 
@@ -83,6 +87,9 @@ textarea {
   width: 99%;
 }
 
+input[type=submit],
+input[type=reset],
+input[type=button], 
 button,
 a.button,  
 a.buttonedit, 
@@ -110,6 +117,7 @@ a.buttondown {
   white-space: nowrap;
   vertical-align: middle;
   background: url(images/buttons/button_background.gif);
+  margin:0;
 }
 
 button.edit, 
@@ -128,76 +136,6 @@ button.remove,
 button.add, 
 button.down {
   padding: 0;
-}
-
-button:before,
-a.button:before,  
-a.buttonedit:before, 
-a.buttonhslip:before, 
-a.buttontrash:before, 
-a.buttonsubmit:before, 
-a.buttonnew:before, 
-a.buttonprint:before, 
-a.buttoncancel:before, 
-a.buttonmodify:before, 
-a.buttonsearch:before, 
-a.buttonlock:before, 
-a.buttontick:before, 
-a.buttonchange:before, 
-a.buttonremove:before, 
-a.buttonadd:before, 
-a.buttondown:before {
-  line-height: 1em;
-  vertical-align: middle;
-  margin: 0;
-  padding: 0;
-  padding-right: 2px;
-  height: 1em;
-  width: 1em;
-}
-
-a.button,  
-a.buttonedit, 
-a.buttonhslip, 
-a.buttontrash, 
-a.buttonsubmit, 
-a.buttonnew, 
-a.buttonprint, 
-a.buttoncancel, 
-a.buttonmodify, 
-a.buttonsearch, 
-a.buttonlock, 
-a.buttontick, 
-a.buttonchange, 
-a.buttonremove, 
-a.buttonadd, 
-a.buttondown {
-  display: inline-block;
-}
-
-button:hover, 
-a.button:hover,
-a.buttonedit:hover, 
-a.buttontrash:hover, 
-a.buttonsubmit:hover,
-a.buttonnew:hover, 
-a.buttonprint:hover, 
-a.buttoncancel:hover, 
-a.buttonmodify:hover, 
-a.buttonsearch:hover, 
-a.buttonlock:hover 
-a.buttontick:hover, 
-a.buttonchange:hover, 
-a.buttondown:hover,
-a.buttonadd:hover, 
-a.buttonremove:hover {
-  background-color: #bbb;
-  text-decoration: none;
-  background: url(images/buttons/button_hover_background.gif);
-}
-
-button.notext, a.notext {
-  font-size: 0;
 }
 
 button.edit:before, a.buttonedit:before {
@@ -255,6 +193,78 @@ button.add:before, a.buttonadd:before {
 
 button.remove:before, a.buttonremove:before {
   content: url(images/buttons/remove.png);
+}
+
+input[type=submit]:before,
+input[type=reset]:before,
+input[type=button]:before, 
+button:before,
+a.button:before,  
+a.buttonedit:before, 
+a.buttonhslip:before, 
+a.buttontrash:before, 
+a.buttonsubmit:before, 
+a.buttonnew:before, 
+a.buttonprint:before, 
+a.buttoncancel:before, 
+a.buttonmodify:before, 
+a.buttonsearch:before, 
+a.buttonlock:before, 
+a.buttontick:before, 
+a.buttonchange:before, 
+a.buttonremove:before, 
+a.buttonadd:before, 
+a.buttondown:before {
+  vertical-align: middle;
+  margin: 0;
+  padding: 0;
+  padding-right: 2px;
+  height: 12px;
+  width: 12px;
+}
+
+a.button,  
+a.buttonedit, 
+a.buttonhslip, 
+a.buttontrash, 
+a.buttonsubmit, 
+a.buttonnew, 
+a.buttonprint, 
+a.buttoncancel, 
+a.buttonmodify, 
+a.buttonsearch, 
+a.buttonlock, 
+a.buttontick, 
+a.buttonchange, 
+a.buttonremove, 
+a.buttonadd, 
+a.buttondown {
+  display: inline-block;
+}
+
+button:hover, 
+a.button:hover,
+a.buttonedit:hover, 
+a.buttontrash:hover, 
+a.buttonsubmit:hover,
+a.buttonnew:hover, 
+a.buttonprint:hover, 
+a.buttoncancel:hover, 
+a.buttonmodify:hover, 
+a.buttonsearch:hover, 
+a.buttonlock:hover 
+a.buttontick:hover, 
+a.buttonchange:hover, 
+a.buttondown:hover,
+a.buttonadd:hover, 
+a.buttonremove:hover {
+  background-color: #bbb;
+  text-decoration: none;
+  background: url(images/buttons/button_hover_background.gif);
+}
+
+button.notext, a.notext {
+  font-size: 0;
 }
 
 .numericField, .numericField map {
