@@ -117,15 +117,20 @@ function smarty_function_mb_field($params, &$smarty) {
   $canNull = CMbArray::extract($params, "canNull");
  
   $spec = $propKey ?  CMbFieldSpecFact::getSpec($object, $field, $prop) : $object->_specs[$field];
-
-  if ($canNull === true) {
+  
+  if ($canNull === "true" || $canNull === true) {
     $spec->notNull = 0;
     $tabSpec = split(" ",$spec->prop);
-    CMbArray::extract($tabSpec, "0");
+    CMbArray::removeValue("notNull", $tabSpec);
     $spec->prop = join($tabSpec, " ");
   }
   
-  if ($canNull === false) {
+  if ($canNull === "false" || $canNull === false) {
+    $spec->notNull = 1;
+    $spec->prop = "notNull $spec->prop";
+  }
+  
+  if($canNull === "canNull") {
     $spec->notNull = 1;
     $spec->prop = "canNull $spec->prop";
   }

@@ -12,8 +12,6 @@ global $AppUI, $can, $m, $utypes;
 
 $ds = CSQLDataSource::get("std");
 $today = mbDate();
-$compta = mbGetValueFromGet("compta", '0');
-$cs = mbGetValueFromGetOrSession("cs");
 
 // Récupération des paramètres
 $filter = new CPlageconsult();
@@ -42,17 +40,17 @@ $chirSel->load($chir);
 $reglement = new CReglement();
 
 // Initialisation du tableau de reglements
-$recapReglement["total"]      = array("du_patient" => "0",
-                                      "du_tiers" => "0",
+$recapReglement["total"]      = array("du_patient"           => "0",
+                                      "du_tiers"             => "0",
                                       "nb_reglement_patient" => "0",
-                                      "nb_reglement_tiers" => "0",
-                                      "secteur1" => "0",
-                                      "secteur2" => "0");
+                                      "nb_reglement_tiers"   => "0",
+                                      "secteur1"             => "0",
+                                      "secteur2"             => "0");
 foreach(explode("|", $reglement->_specs["mode"]->list) as $curr_type) {
-  $recapReglement[$curr_type] = array("du_patient" => "0",
-                                      "du_tiers" => "0",
+  $recapReglement[$curr_type] = array("du_patient"           => "0",
+                                      "du_tiers"             => "0",
                                       "nb_reglement_patient" => "0",
-                                      "nb_reglement_tiers" => "0");
+                                      "nb_reglement_tiers"   => "0");
 }
 
 // On recherche tous les règlements effectués selon les critères

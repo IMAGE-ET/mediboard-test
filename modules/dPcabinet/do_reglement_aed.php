@@ -13,5 +13,12 @@ if (isset($_POST['date']) && $_POST['date'] == 'now') {
 
 $do = new CDoObjectAddEdit('CReglement', 'reglement_id');
 
+if(isset($_POST["_dialog"])) {
+  $do->redirect = "m=dPcabinet&dialog=1&a=".$_POST["_dialog"];
+  if(isset($_POST["_href"])) {
+    $do->redirect .= "#".$_POST["_href"];
+  }
+}
+
 $do->doIt();
 ?>

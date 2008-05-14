@@ -81,7 +81,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
-          <td colspan="2">
+          <td>
             <select name="chir">
               {{if $listPrat|@count}}
               <option value="">&mdash; Tous</option>
@@ -91,13 +91,18 @@ function pageMain() {
               {{/foreach}}
             </select>
           </td>
+          <td rowspan="3" class="text">
+            <div class="big-info">
+              Affichage des règlements effectués, en fonction de la date de paiement.
+            </div>
+          </td>
         <tr>
           <th>{{mb_label object=$filter_reglement field="mode"}}</th>
-          <td colspan="2">{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
+          <td>{{mb_field object=$filter_reglement field="mode" defaultOption="&mdash; Tout type &mdash;" canNull="true"}}</td>    
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_type_affichage"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>     
+          <td>{{mb_field object=$filter field="_type_affichage" canNull="true"}}</td>     
         </tr>
         <tr>
           <td class="button" colspan="3">
@@ -112,18 +117,24 @@ function pageMain() {
         </tr>
         <tr>
           <th>Consultations gratuites</th>
-          <td colspan="2">
+          <td>
             Oui<input type="radio" name="cs" value="1" checked="checked"/>
             Non<input type="radio" name="cs" value="0" />
+          </td>
+          <td rowspan="3" class="text">
+            <div class="big-info">
+              Affichage de l'état des paiements, en fonction des dates de consultation.
+              Permet de rentrer de nouveaux paiements.
+            </div>
           </td>
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_etat_reglement_patient"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="_etat_reglement_patient" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_field object=$filter field="_etat_reglement_patient" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
           <th>{{mb_label object=$filter field="_etat_reglement_tiers"}}</th>
-          <td colspan="2">{{mb_field object=$filter field="_etat_reglement_tiers" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
+          <td>{{mb_field object=$filter field="_etat_reglement_tiers" defaultOption="&mdash; Tous  &mdash;" canNull="true"}}</td>          
         </tr>
         <tr>
           <td class="button" colspan="3">
