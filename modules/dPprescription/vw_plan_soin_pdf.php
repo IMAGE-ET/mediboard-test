@@ -155,7 +155,7 @@ $pdf->SetFillColor(255,255,255);
 
 
 $pdf->SetFont('','',"8");
-$pdf->MultiCell(50,4,"IPP: ".$patient->_IPP."\n".utf8_encode($patient->_view),0,'C',0,0);
+$pdf->MultiCell(50,4,utf8_encode("IPP: ".$patient->_IPP."\n".$patient->_view),0,'C',0,0);
 
 if($sejour->_num_dossier && $sejour->_num_dossier != "-"){
   $pdf->setBarcode($sejour->_num_dossier);
@@ -163,13 +163,13 @@ if($sejour->_num_dossier && $sejour->_num_dossier != "-"){
 	$pdf->SetFont('','',"7");
 	$pdf->Ln();
 	$pdf->setXY(20, 28);
-	$pdf->MultiCell(40,4,"Dossier ".$sejour->_num_dossier,0,'C',0,0);
+	$pdf->MultiCell(40,4,utf8_encode("Dossier ".$sejour->_num_dossier),0,'C',0,0);
 }
 
 $pdf->setXY(65, 15);
 
 $pdf->SetFont('','',"10");
-$pdf->MultiCell(40,4,"Age: ".$prescription->_ref_patient->_age." ans \nPoids: ".$poids." kg",0,'C',0,0);
+$pdf->MultiCell(40,4,utf8_encode("Age: ".$prescription->_ref_patient->_age." ans \nPoids: ".$poids." kg"),0,'C',0,0);
 
 
 
