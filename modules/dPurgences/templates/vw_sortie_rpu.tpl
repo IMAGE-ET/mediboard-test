@@ -122,7 +122,7 @@ function submitSejour(){
   {{assign var=rpu value=$sejour->_ref_rpu}}
   {{assign var=patient value=$sejour->_ref_patient}}
   <tr>
-    <td>
+    <td {{if $sejour->annule}}class="cancelled"{{/if}}>
 		  <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
 	        <img src="images/icons/edit.png" alt="modifier" />
 	 	  </a>
@@ -134,6 +134,12 @@ function submitSejour(){
         <strong>{{$patient->_view}}</strong>
       </a>
     </td>
+    
+    {{if $sejour->annule}}
+    <td class="cancelled" colspan="5">
+      {{tr}}Cancelled{{/tr}}
+    </td>
+    {{else}}
     <td>
       <a href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id={{$rpu->_id}}">
         {{$sejour->_ref_praticien->_view}}
@@ -248,6 +254,7 @@ function submitSejour(){
 			  </table>
 			</form>
     </td>
+    {{/if}}
   </tr>
   {{/foreach}}
 </table>

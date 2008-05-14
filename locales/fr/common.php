@@ -257,4 +257,5 @@ $locales['module-hprim21-long'] = 'Gestion des objets HPRIM 2.1';
 $locales['View'] = 'Consulter';
 $locales['module-pharmacie-court'] = 'Pharmacie';
 $locales['module-pharmacie-long'] = 'Pharmacie';
+$locales['Cancelled'] = 'Annulé';
 ?>

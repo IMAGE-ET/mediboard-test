@@ -78,7 +78,7 @@ function pageMain() {
   <tr>
   	{{if $curr_sejour->annule}}
     <td class="cancelled">
-      {{tr}}Annulé{{/tr}}
+      {{tr}}Cancelled{{/tr}}
     </td>
 	  {{else}}
 
@@ -96,7 +96,11 @@ function pageMain() {
     </td>
     {{/if}}
 
+  	{{if $curr_sejour->annule}}
+  	<td class="cancelled">
+	  {{else}}
     <td class="text" style="background-color: {{$background}};">
+    {{/if}}
       <a style="float: right;" title="Voir le dossier" href="?m=dPpatients&amp;tab=vw_full_patients&amp;patient_id={{$patient->_id}}&amp;sejour_id={{$sejour_id}}">
         <img src="images/icons/search.png" alt="Dossier patient"/>
       </a>
@@ -110,6 +114,11 @@ function pageMain() {
       </a>
     </td>
 
+  	{{if $curr_sejour->annule}}
+    <td class="cancelled"colspan="5">
+      {{tr}}Cancelled{{/tr}}
+    </td>
+	  {{else}}
     <td class="text" style="background-color: {{$background}};">
       {{if $can->edit}}
       <a style="float: right" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour_id}}">
@@ -176,6 +185,7 @@ function pageMain() {
     <td class="button" style="background-color: {{$background}};">
 		  {{include file="inc_pec_praticien.tpl"}}
     </td>
+    {{/if}}
   </tr>
   
   

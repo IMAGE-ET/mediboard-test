@@ -107,8 +107,8 @@
       {{mb_value object=$rpu field=_entree}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-sortie{{/tr}}:</strong>
-      {{mb_value object=$rpu field=sortie}}
+      <strong>{{tr}}CRPU-_sortie{{/tr}}:</strong>
+      {{mb_value object=$rpu field=_sortie}}
     </td>
   </tr>
   <tr>
@@ -119,8 +119,8 @@
       {{/if}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-mode_sortie{{/tr}}:</strong>
-      {{if $rpu->mode_sortie}}
+      <strong>{{tr}}CRPU-_mode_sortie{{/tr}}:</strong>
+      {{if $rpu->_mode_sortie}}
       {{mb_value object=$rpu field=mode_sortie}}
       {{/if}}
     </td>
