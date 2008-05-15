@@ -48,7 +48,7 @@
 
   <xs:simpleType name="Nom">
     <xs:restriction base="xs:string">
-      <xs:minLength value="2"></xs:minLength>
+      <xs:minLength value="1"></xs:minLength>
     </xs:restriction>
   </xs:simpleType>
 </xs:schema>
