@@ -69,7 +69,7 @@ function initFields(mode_sortie){
 				  
 				  <tr>
 				    <th>{{mb_label object=$rpu field="ccmu"}}</th>
-				    <td>{{mb_field object=$rpu field="ccmu" canNull=false defaultOption="&mdash; Degré d'urgence" onchange="this.form.onsubmit();"}}</td>
+				    <td>{{mb_field object=$rpu field="ccmu" canNull=false defaultOption="&mdash; Code CCMU" onchange="this.form.onsubmit();"}}</td>
 				  </tr>
 				  
 				  

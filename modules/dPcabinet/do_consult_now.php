@@ -84,17 +84,22 @@ $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 
 
+// Cas des urgences
 if(isset($_POST["sejour_id"])){
-  // Motif de la consultation
-  $consult->motif = "Passage aux urgences";
-  
   // Changement de praticien pour le sejour
   $sejour = new CSejour();
   $sejour->load($_POST["sejour_id"]);
   $sejour->praticien_id = $_POST["prat_id"];
   $sejour->store();
+  $sejour->loadRefRPU();
   
-} else {
+  // Motif de la consultation
+  $consult->motif = "RPU: ";
+  $consult->motif.= $sejour->_ref_rpu->diag_infirmier;
+} 
+
+// Cas standard
+else {
   $consult->motif = "Consultation immédiate";
 }
 
