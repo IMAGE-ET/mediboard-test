@@ -33,7 +33,9 @@ $sejour = $prescription->_ref_object;
 // Creation de la nouvelle prescription
 $prescription->_id = "";
 $prescription->type = $type;
-$prescription->praticien_id = $AppUI->user_id;
+if($prescription->type == "sortie" || $prescription->type == "pre_admission"){
+	$prescription->praticien_id = $AppUI->user_id;
+}
 $msg = $prescription->store();
 viewMsg($msg, "msg-CPrescription-create");
 if($msg){

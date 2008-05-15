@@ -20,12 +20,13 @@ var PrescriptionEditor = {
       url.addParam("popup", "1");
       url.popup(this.options.width, this.options.height, "Prescription");
   },
-  refresh: function(object_id, object_class){
+  refresh: function(object_id, object_class, praticien_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_widget_prescription");
     
     url.addParam("object_id", object_id);
     url.addParam("object_class", object_class);
+    url.addParam("praticien_id", praticien_id);
     
     Prescription.suffixes.each( function(suffixe) {
 	    url.addParam("suffixe", suffixe);
@@ -35,11 +36,11 @@ var PrescriptionEditor = {
       }
     } );
   },
-  register: function(object_id, object_class, suffixe){
+  register: function(object_id, object_class, suffixe, praticien_id){
     document.write('<div id=prescription-'+object_class+'-'+suffixe+'></div>'); 
     Main.add( function() {
       Prescription.suffixes.push(suffixe);
-	    PrescriptionEditor.refresh(object_id, object_class);
+	    PrescriptionEditor.refresh(object_id, object_class, praticien_id);
     } );
   }
 }

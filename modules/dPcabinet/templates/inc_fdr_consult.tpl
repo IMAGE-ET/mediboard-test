@@ -45,7 +45,7 @@ function reloadAfterUploadFile(){
       {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
         <hr />
 	      <script type="text/javascript">
-	        PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr');
+	        PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
 	      </script>
       {{/if}}
     </td>

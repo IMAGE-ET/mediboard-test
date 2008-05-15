@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-global $can, $dialog;
+global $AppUI, $can, $dialog;
 $can->needsRead();
 
 $filter = new CPrescription();
@@ -30,7 +30,11 @@ if(!$filter->prescription_id && $filter->object_id && $filter->object_class && $
 	$prescription = new CPrescription();
 	$prescription->object_id = $filter->object_id;
 	$prescription->object_class = $filter->object_class;
-	$prescription->praticien_id = $filter->praticien_id;
+	if($filter->type == "sortie" && $filter->type == "pre_admission"){
+		$prescription->praticien_id = $AppUI->user_id;
+	} else {
+	  $prescription->praticien_id = $filter->praticien_id;
+	}
 	$prescription->type = $filter->type;
 	$prescription->loadMatchingObject();
   $prescription->function_id = "";
@@ -220,7 +224,7 @@ $smarty->assign("protocoles_praticien", $protocoles_praticien);
 $smarty->assign("protocoles_function", $protocoles_function);
 
 $smarty->assign("class_category", new CCategoryPrescription());
-
+//$smarty->assign("mode_sejour", 0);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("moments", $moments);
 if($dialog == 1) {

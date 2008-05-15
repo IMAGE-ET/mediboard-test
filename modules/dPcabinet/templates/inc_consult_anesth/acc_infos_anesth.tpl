@@ -117,7 +117,7 @@ function reloadListTech() {
 	      Main.add( function(){
 	        // Lancement de reloadWidget lors du rechargement de inc_fdr
  	        Prescription.suffixes.push("info_anesth");
-          PrescriptionEditor.refresh('{{$sejour->_id}}','CSejour');
+          PrescriptionEditor.refresh('{{$sejour->_id}}','CSejour','{{$sejour->praticien_id}}');
         } );
 	    </script>
 	    {{/if}}

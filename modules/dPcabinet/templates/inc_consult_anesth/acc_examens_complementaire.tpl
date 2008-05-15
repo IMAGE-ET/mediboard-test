@@ -130,7 +130,7 @@ function reloadListExamComp() {
 						      Main.add( function(){
 						        // Lancement de reloadWidget lors du rechargement de inc_fdr
 					 	        Prescription.suffixes.push("exam");
-					          PrescriptionEditor.refresh('{{$consult->_ref_consult_anesth->_ref_sejour->_id}}','CSejour');
+					          PrescriptionEditor.refresh('{{$consult->_ref_consult_anesth->_ref_sejour->_id}}','CSejour','{{$consult->_ref_consult_anesth->_ref_sejour->praticien_id}}');
 					        } );
 						    </script>
 					    {{/if}}
