@@ -35,6 +35,8 @@ $prescription->_id = "";
 $prescription->type = $type;
 if($prescription->type == "sortie" || $prescription->type == "pre_admission"){
 	$prescription->praticien_id = $AppUI->user_id;
+} else {
+	$prescription->praticien_id = $prescription->_ref_object->praticien_id;
 }
 $msg = $prescription->store();
 viewMsg($msg, "msg-CPrescription-create");
