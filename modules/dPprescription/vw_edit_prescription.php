@@ -30,7 +30,7 @@ if(!$filter->prescription_id && $filter->object_id && $filter->object_class && $
 	$prescription = new CPrescription();
 	$prescription->object_id = $filter->object_id;
 	$prescription->object_class = $filter->object_class;
-	if($filter->type == "sortie" && $filter->type == "pre_admission"){
+	if($filter->type == "sortie" || $filter->type == "pre_admission"){
 		$prescription->praticien_id = $AppUI->user_id;
 	} else {
 	  $prescription->praticien_id = $filter->praticien_id;
