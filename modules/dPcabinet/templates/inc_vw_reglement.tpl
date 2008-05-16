@@ -529,7 +529,7 @@ putTiers = function() {
       
     </td>
   </tr>
-  
+  {{/if}}
 
   {{if $gestionFSE}}
   <!-- Patient Vitale et Professionnel de Santé -->
@@ -538,6 +538,7 @@ putTiers = function() {
     <th class="category">Patient Vitale</th>
   </tr>
   
+
   <tr>
 
     <!-- Professionnel de santé -->
@@ -621,7 +622,7 @@ putTiers = function() {
     </td>
 
   </tr>
-  {{/if}}
+
   {{/if}}
  
 </table>
