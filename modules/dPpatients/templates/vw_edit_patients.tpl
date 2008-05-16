@@ -9,7 +9,10 @@
 Intermax.ResultHandler["Consulter Vitale"] =
 Intermax.ResultHandler["Lire Vitale"] = function() {
   var url = new Url;
-  url.setModuleTab("dPpatients", "vw_edit_patients");
+//  url.setModuleTab("dPpatients", "vw_edit_patients");
+  url.addParam("m", "dPpatients");
+  url.addParam("{{$actionType}}",  "vw_edit_patients");
+  url.addParam("dialog",  "{{$dialog}}");
   url.addParam("useVitale", 1);
   url.redirect();
 }
@@ -118,7 +121,7 @@ function pageMain() {
 <table class="main">
   {{if $patient->_id}}
   <tr>
-    <td><a class="buttonnew" href="?m={{$m}}&amp;patient_id=0">Créer un nouveau patient</a></td>
+    <td><a class="buttonnew" href="?m={{$m}}&amp;{{$actionType}}={{$action}}&amp;dialog={{$dialog}}&amp;patient_id=0">Créer un nouveau patient</a></td>
   </tr>
   {{/if}}
 

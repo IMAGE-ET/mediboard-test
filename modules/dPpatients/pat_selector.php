@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $g, $dPconfig;
-
+global $can, $g;
 $can->needsRead();
 
 $name          = mbGetValueFromGet("name"       );
@@ -33,7 +32,7 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
   $patientsSoundexCount = 0;
   
   $idsante = new CIdSante400();
-  $idsante->tag = str_replace('$g',$g, $dPconfig["dPpatients"]["CPatient"]["tag_ipp"]);
+  $idsante->tag = str_replace('$g',$g, CAppUI::conf("dPpatients CPatient tag_ipp"));
   $idsante->id400 = $patient_ipp;
   $idsante->object_class = "CPatient";
   $idsante->loadMatchingObject();
@@ -149,6 +148,7 @@ $smarty->assign("dPsanteInstalled", CModule::getInstalled("dPsante400"));
 $smarty->assign("name"             , $name            );
 $smarty->assign("firstName"        , $firstName       );
 $smarty->assign("nomjf"            , $nomjf           );
+$smarty->assign("useVitale"        , $useVitale       );
 $smarty->assign("patVitale"        , $patVitale       );
 $smarty->assign("patients"         , $patients        );
 $smarty->assign("patientsSoundex"  , $patientsSoundex );
