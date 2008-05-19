@@ -51,10 +51,18 @@ $ljoin = array();
 $ljoin["plageconsult"] = "consultation.plageconsult_id = plageconsult.plageconsult_id";
 // Tri sur les paiements
 if($filter->_etat_reglement_patient) {
-  $where["consultation.patient_date_reglement"] = "IS NOT NULL";
+  if($filter->_etat_reglement_patient == "reglee") {
+    $where["consultation.patient_date_reglement"] = "IS NOT NULL";
+  } else {
+    $where["consultation.patient_date_reglement"] = "IS NULL";
+  }
 }
 if($filter->_etat_reglement_tiers) {
+  if($filter->_etat_reglement_tiers == "reglee") {
   $where["consultation.tiers_date_reglement"] = "IS NOT NULL";
+  } else {
+  $where["consultation.tiers_date_reglement"] = "IS NULL";
+  }
 }
 // Tri sur les dates
 $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
