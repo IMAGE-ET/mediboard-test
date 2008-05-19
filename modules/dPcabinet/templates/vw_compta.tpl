@@ -83,7 +83,7 @@ function pageMain() {
           <th>{{mb_label object=$filter field="_prat_id"}}</th>
           <td>
             <select name="chir">
-              {{if $listPrat|@count}}
+              {{if $listPrat|@count > 1}}
               <option value="">&mdash; Tous</option>
               {{/if}}
               {{foreach from=$listPrat item=curr_prat}}
