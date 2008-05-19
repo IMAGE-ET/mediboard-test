@@ -28,6 +28,22 @@
         <tr>
           <td>Paiments pris en compte : {{if $filter->_mode_reglement}}{{$filter->_mode_reglement}}{{else}}tous{{/if}}</td>
         </tr>
+        {{if $filter->_etat_reglement_patient}}
+        <tr>
+          <td>
+            Paiment patients :
+            {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_tiers}}{{/tr}}
+          </td>
+        </tr>
+        {{/if}}
+        {{if $filter->_etat_reglement_tiers}}
+        <tr>
+          <td>
+            Paiment tiers :
+            {{tr}}CConsultation._etat_reglement_tiers.{{$filter->_etat_reglement_tiers}}{{/tr}}
+          </td> 
+        </tr>
+        {{/if}}
       </table>
     </td>
     
