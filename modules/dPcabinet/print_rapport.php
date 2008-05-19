@@ -66,6 +66,8 @@ if($filter->_etat_reglement_tiers) {
     $where["consultation.du_tiers"] = "> 0";
   }
 }
+$where["consultation.patient_id"] = "IS NOT NULL";
+$where["consultation.annule"] = "= 0";
 // Tri sur les dates
 $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
 // Tri sur les praticiens
