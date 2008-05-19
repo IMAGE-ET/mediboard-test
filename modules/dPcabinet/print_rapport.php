@@ -55,6 +55,7 @@ if($filter->_etat_reglement_patient) {
     $where["consultation.patient_date_reglement"] = "IS NOT NULL";
   } else {
     $where["consultation.patient_date_reglement"] = "IS NULL";
+    $where["consultation.du_patient"] = "> 0";
   }
 }
 if($filter->_etat_reglement_tiers) {
@@ -62,6 +63,7 @@ if($filter->_etat_reglement_tiers) {
   $where["consultation.tiers_date_reglement"] = "IS NOT NULL";
   } else {
   $where["consultation.tiers_date_reglement"] = "IS NULL";
+    $where["consultation.du_tiers"] = "> 0";
   }
 }
 // Tri sur les dates
