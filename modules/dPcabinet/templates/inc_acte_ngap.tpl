@@ -95,7 +95,7 @@ ActesNGAP = {
         {{include file="../../dPcabinet/templates/inc_vw_tarif_ngap.tpl" tarif=0}}
       </td>
       <td>{{mb_field object=$acte_ngap field="montant_depassement"}}</td>
-      <td>{{mb_field object=$acte_ngap field="complement" defaultOption="&mdash; Aucun"}}</td>
+      <td>{{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}</td>
       <td>
         <select name="executant_id" class="{{$acte_ngap->_props.executant_id}}">
           <option value="">&mdash; Choisir un éxécutant</option>
@@ -105,9 +105,6 @@ ActesNGAP = {
           </option>
           {{/foreach}}
         </select>
-      </td>
-      <td>
-        {{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
