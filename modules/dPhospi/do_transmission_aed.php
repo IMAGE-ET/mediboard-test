@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-if($_POST["date"] == "now") {
+if(isset($_POST["date"]) && $_POST["date"] == "now") {
   $_POST["date"] = mbDateTime();
 }
 
