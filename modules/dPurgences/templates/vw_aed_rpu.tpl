@@ -39,7 +39,7 @@ function submitSuivi(oForm) {
 function pageMain() {
   {{if $rpu->_id && $can->edit}}
     reloadDossierMedicalPatient();
-    var tab_sejour = Control.Tabs.create('tab-dossier', true);
+    var tab_sejour = Control.Tabs.create('tab-dossier');
     loadSuivi({{$rpu->sejour_id}});
   {{/if}}
   
