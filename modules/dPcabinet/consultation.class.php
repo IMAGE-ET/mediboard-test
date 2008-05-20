@@ -284,7 +284,7 @@ class CConsultation extends CCodable {
     
     $this->loadOldObject();
     $this->loadRefsReglements();
-    if ($this->valide !== null && $this->valide === "0"){
+    if ($this->valide === "0"){
       // Dévalidation avec règlement déjà effectué
       if (count($this->_ref_reglements)){
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements ont déjà été effectués";
