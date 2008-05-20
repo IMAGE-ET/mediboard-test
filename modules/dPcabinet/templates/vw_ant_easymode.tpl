@@ -108,7 +108,7 @@ Main.add(function () {
           {{$curr_helper}}
         </label>
       </td>
-      {{if ((($i % $numCols) == 0) && $i != 1)}}</tr><tr>{{/if}}
+      {{if ((($i % $numCols) == 0) && $i != 1) || $i == count($curr_helper_for)}}</tr><tr>{{/if}}
       {{/foreach}}
     {{/foreach}}
     </tr>
