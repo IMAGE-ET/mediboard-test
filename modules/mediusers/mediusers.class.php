@@ -640,7 +640,7 @@ class CMediusers extends CMbObject {
   }
 
   function isPraticien () {
-    return $this->isFromType(array("Chirurgien", "Anesthésiste"));
+    return $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste"));
   }
   
   function isMedical() {
