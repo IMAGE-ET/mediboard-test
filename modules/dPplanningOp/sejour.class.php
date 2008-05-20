@@ -141,6 +141,8 @@ class CSejour extends CCodable {
     $backRefs["rpu"]           = "CRPU sejour_id";
     $backRefs["consultations"] = "CConsultation sejour_id";
     $backRefs["prescriptions"] = "CPrescription object_id";
+    $backRefs["observations"]  = "CObservationMedicale sejour_id";
+    $backRefs["transmissions"] = "CTransmissionMedicale sejour_id";
     return $backRefs;
   }
 

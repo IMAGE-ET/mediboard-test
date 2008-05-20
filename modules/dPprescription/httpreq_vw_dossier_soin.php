@@ -7,12 +7,15 @@
  *  @author Alexis Granger
  */
 
-$prescription_id = mbGetValueFromGetOrSession("prescription_id");
+$sejour_id = mbGetValueFromGetOrSession("sejour_id");
 $date = mbGetValueFromGetOrSession("date");
 
 // Chargement de la prescription
 $prescription = new CPrescription();
-$prescription->load($prescription_id);
+$prescription->object_id = $sejour_id;
+$prescription->object_class = "CSejour";
+$prescription->loadMatchingObject();
+$prescription_id = $prescription->_id;
 
 $prises = array();
 $prises_soin = array();

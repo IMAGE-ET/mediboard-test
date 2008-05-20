@@ -1396,7 +1396,6 @@ class CMbObject {
     if (array_key_exists($backName, $this->_backSpecs)) {
       return;
     }
-    
     return $this->_backSpecs[$backName] = new CMbBackSpec($backName, $this->_backRefs[$backName]);
   }
 

@@ -78,8 +78,7 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     reloadDiagnostic(sejour_id, '1');
   }
   if($('dossier_soins')){
-    document.form_prescription.prescription_id.value = prescription_id;
-    loadDossierSoin(prescription_id, date);
+    loadDossierSoin(sejour_id, date);
   }
 }
 
@@ -90,20 +89,30 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds', { waitingText : null });
 }
 
-
-function loadDossierSoin(prescription_id, date){
-  if(!prescription_id){
-    $('dossier_soins').innerHTML = "";
-    return;
-  } 
-  var url = new Url;
-  url.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
-  url.addParam("prescription_id", prescription_id);
-  url.addParam("date", date);
-  url.requestUpdate("dossier_soins", { waitingText: null } );
+function loadDossierSoin(sejour_id, date){
+  loadTraitement(sejour_id, date);
+  loadSuivi(sejour_id);
 }
 
+function loadTraitement(sejour_id, date) {
+  var urlTt = new Url;
+  urlTt.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+  urlTt.addParam("sejour_id", sejour_id);
+  urlTt.addParam("date", date);
+  urlTt.requestUpdate("dossier_traitement", { waitingText: null } );
+}
 
+function loadSuivi(sejour_id) {
+  var urlSuivi = new Url;
+  urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+  urlSuivi.addParam("sejour_id", sejour_id);
+  urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+}
+
+function submitSuivi(oForm) {
+  sejour_id = oForm.sejour_id.value;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+}
 
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
@@ -332,7 +341,7 @@ Main.add(function () {
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li onclick="loadDossierSoin(document.form_prescription.prescription_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
+        <li><a href="#dossier_soins">Dossier de soins</a></li>
         <li><a href="#produits_elements">Prescriptions</a></li>
         {{/if}}
         
@@ -353,8 +362,9 @@ Main.add(function () {
       <div id="viewSejourHospi" style="display: none;"></div>
       {{if $isPrescriptionInstalled}}
       <div id="dossier_soins" style="display: none;">
-        <div class="big-info">
-          Aucun dossier de soins
+        <div id="dossier_traitement">
+        </div>
+        <div id="dossier_suivi">
         </div>
       </div>
       <div id="produits_elements" style="display: none;">

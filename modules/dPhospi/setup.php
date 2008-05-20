@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.23";
+$config["mod_version"]     = "0.24";
 $config["mod_type"]        = "user";
 
 
@@ -137,7 +137,6 @@ class CSetupdPhospi extends CSetup {
     $sql = "ALTER TABLE `affectation` ADD INDEX ( `effectue` )";
     $this->addQuery($sql);
     
-    
     $this->makeRevision("0.20");
     $sql= "CREATE TABLE `prestation` (
            `prestation_id` INT(11) UNSIGNED NOT NULL AUTO_INCREMENT, 
@@ -156,7 +155,30 @@ class CSetupdPhospi extends CSetup {
     				ADD `urgence` ENUM('0','1');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.23";
+    $this->makeRevision("0.23");
+    $sql = "CREATE TABLE `observation_medicale` (
+              `observation_medicale_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+              `sejour_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `user_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
+              `date` DATETIME NOT NULL ,
+              `text` TEXT NULL ,
+              INDEX ( `sejour_id`, `user_id` , `degre` , `date` )
+            ) ENGINE = MYISAM COMMENT = 'Table des observations médicales';";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `transmission_medicale` (
+              `transmission_medicale_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+              `sejour_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `user_id` INT( 11 ) UNSIGNED NOT NULL ,
+              `degre` ENUM('low','high') NOT NULL DEFAULT 'low',
+              `date` DATETIME NOT NULL ,
+              `text` TEXT NULL ,
+              INDEX ( `sejour_id`, `user_id` , `degre` , `date` )
+            ) ENGINE = MYISAM COMMENT = 'Table des transmissions médicales';";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.24";
   }
 }
 ?>
