@@ -5,7 +5,7 @@
       <nom>nom</nom>
       <description>description</description>
       <element>
-        <nom>nom</nom>
+        <libelle>nom</libelle>
         <description>description</description>
       </element>
     </categorie>
