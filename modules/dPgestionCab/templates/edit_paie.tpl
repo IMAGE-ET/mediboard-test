@@ -85,6 +85,10 @@ function pageMain() {
           <td>{{mb_field object=$fichePaie field="heures"}}h</td> 
         </tr>
         <tr>
+          <th>{{mb_label object=$fichePaie field="heures_comp"}}</th>
+          <td>{{mb_field object=$fichePaie field="heures_comp"}}h</td> 
+        </tr>
+        <tr>
           <th>{{mb_label object=$fichePaie field="heures_sup"}}</th>
           <td>{{mb_field object=$fichePaie field="heures_sup"}}h</td> 
         </tr>

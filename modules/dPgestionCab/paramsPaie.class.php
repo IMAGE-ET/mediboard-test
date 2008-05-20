@@ -19,6 +19,7 @@ class CParamsPaie extends CMbObject {
   
   // Fiscalité
   var $smic    = null; // valeur du smic horaire
+  var $csgnis  = null; // CSG non imposable salariale
   var $csgds   = null; // CSG déductible salariale
   var $csgnds  = null; // CSG non déductible salariale
   var $ssms    = null; // sécurité sociale maladie salariale
@@ -69,6 +70,7 @@ class CParamsPaie extends CMbObject {
     $specs = array (
       "employecab_id" => "notNull ref class|CEmployeCab",
       "smic"          => "notNull currency|min|0",
+      "csgnis"        => "notNull pct",
       "csgds"         => "notNull pct",
       "csgnds"        => "notNull pct",
       "ssms"          => "notNull pct",

@@ -119,6 +119,11 @@
           <th class="category">patronnales</th>
         </tr>
         <tr>
+          <th>{{mb_label object=$paramsPaie field="csgnis"}}</th>
+          <td>{{mb_field object=$paramsPaie field="csgnis"}}</td>
+          <td>-</td>
+        </tr>
+        <tr>
           <th>{{mb_label object=$paramsPaie field="csgds"}}</th>
           <td>{{mb_field object=$paramsPaie field="csgds"}}</td>
           <td>-</td>
@@ -165,8 +170,8 @@
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="aatp"}}</th>
-          <td>{{mb_field object=$paramsPaie field="aatp"}}</td>
           <td>-</td>
+          <td>{{mb_field object=$paramsPaie field="aatp"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$paramsPaie field="csp"}}</th>

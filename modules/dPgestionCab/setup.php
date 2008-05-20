@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.18";
+$config["mod_version"]     = "0.19";
 $config["mod_type"]        = "user";
 
 class CSetupdPgestionCab extends CSetup {
@@ -231,7 +231,15 @@ class CSetupdPgestionCab extends CSetup {
             ADD `mp` FLOAT NOT NULL AFTER `ms;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.18";
+    $this->makeRevision("0.18");
+    $sql = "ALTER TABLE `fiche_paie`
+            ADD `heures_comp` tinyint(4) NOT NULL DEFAULT '0' AFTER `heures`;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `params_paie`
+            ADD `csgnis` FLOAT NOT NULL AFTER `smic`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.19";
   }
 }
 ?>

@@ -126,9 +126,23 @@
         {{$fichePaie->salaire|string_format:"%.2f"}} &euro;
       </td>
       <td align="right">
-        {{$fichePaie->heures}}
+        {{$fichePaie->heures}} h
       </td>
       <td align="right">{{$fichePaie->_salaire_base|string_format:"%.2f"}} &euro;</td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td colspan="2" height="17" align="right" bgcolor="#e63">
+        <font color="#fff">Heures complémentaires</font>
+      </td>
+      <td align="right">
+        {{$fichePaie->salaire|string_format:"%.2f"}} &euro;
+      </td>
+      <td align="right">
+        {{$fichePaie->heures_comp}} h
+      </td>
+      <td align="right">{{$fichePaie->_salaire_heures_comp|string_format:"%.2f"}} &euro;</td>
     </tr>
   </tbody>
   <tbody>
@@ -140,7 +154,7 @@
         {{$fichePaie->salaire*1.25|string_format:"%.2f"}} &euro;
       </td>
       <td align="right">
-        {{$fichePaie->heures_sup}}
+        {{$fichePaie->heures_sup}} h
       </td>
       <td align="right">{{$fichePaie->_salaire_heures_sup|string_format:"%.2f"}} &euro;</td>
     </tr>
@@ -195,9 +209,10 @@
   {{/if}}
   <tbody>
     <tr>
-      <td colspan="4" height="17" align="right" bgcolor="#eee">
+      <td colspan="3" height="17" align="right" bgcolor="#eee">
         <strong>Salaire brut mensuel</strong>
       </td>
+      <td align="right">{{$fichePaie->_total_heures}} h</td>
       <td align="right">{{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro;</td>
     </tr>
     <tr>
@@ -220,15 +235,22 @@
   </tbody>
   <tbody>
     <tr>
-      <td colspan="2" height="17" align="center" bgcolor="#e63">
-        <strong><font color="#309">BASE CSG : {{$fichePaie->_base_csg|string_format:"%.2f"}} &euro;</font></strong>
+      <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_base_csgnis|string_format:"%.2f"}} &euro; -
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnis|string_format:"%.2f"}} %</font>
       </td>
-      <td colspan="3" align="left"></td>
+      <td align="right" bgcolor="#e63">
+        <font color="#fff">CSG non imposable</font>
+      </td>
+      <td align="right">{{$fichePaie->_csgnis|string_format:"%.2f"}} &euro;</td>
+      <td align="left"></td>
+      <td align="left"></td>
     </tr>
   </tbody>
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_base_csgds|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->csgds|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -242,6 +264,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_base_csgnds|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnds|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -263,6 +286,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssms|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -270,6 +294,7 @@
       </td>
       <td align="right">{{$fichePaie->_ssms|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssmp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_ssmp|string_format:"%.2f"}} &euro;</td>
@@ -278,6 +303,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssvs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -285,6 +311,7 @@
       </td>
       <td align="right">{{$fichePaie->_ssvs|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssvp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_ssvp|string_format:"%.2f"}} &euro;</td>
@@ -293,6 +320,7 @@
   <tbody>
     <tr>
       <td height="17" align=right bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->rcs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -300,6 +328,7 @@
       </td>
       <td align="right">{{$fichePaie->_rcs|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->rcp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_rcp|string_format:"%.2f"}} &euro;</td>
@@ -308,6 +337,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->agffs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -315,6 +345,7 @@
       </td>
       <td align="right">{{$fichePaie->_agffs|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->agffp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_agffp|string_format:"%.2f"}} &euro;</td>
@@ -323,6 +354,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->aps|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -330,6 +362,7 @@
       </td>
       <td align="right">{{$fichePaie->_aps|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->app|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_app|string_format:"%.2f"}} &euro;</td>
@@ -338,6 +371,7 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->acs|string_format:"%.2f"}} %</font>
       </td>
       <td align="right" bgcolor="#e63">
@@ -345,6 +379,7 @@
       </td>
       <td align="right">{{$fichePaie->_acs|string_format:"%.2f"}} &euro;</td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->acp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_acp|string_format:"%.2f"}} &euro;</td>
@@ -358,6 +393,7 @@
       </td>
       <td align="left"></td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->aatp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_aatp|string_format:"%.2f"}} &euro;</td>
@@ -371,6 +407,7 @@
       </td>
       <td align="left"></td>
       <td align="right">
+        {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->csp|string_format:"%.2f"}} %</font>
       </td>
       <td align="right">{{$fichePaie->_csp|string_format:"%.2f"}} &euro;</td>
@@ -394,10 +431,24 @@
         <font color="#309">Réduc. Heures Sup.</font>
       </td>
       <td align="right">
-        <font color="#309">- {{$fichePaie->_reduc_heures_sup|string_format:"%.2f"}} &euro;</font>
+        <font color="#309">- {{$fichePaie->_reduc_heures_sup_sal|string_format:"%.2f"}} &euro;</font>
       </td>
       <td align="right">
+      </td>
+      <td align="right">
+        <font color="#309">- {{$fichePaie->_reduc_heures_sup_pat|string_format:"%.2f"}} &euro;</font>
+      </td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td height="17" align="left" bgcolor="#e63"></td>
+      <td align="right" bgcolor="#e63">
         <font color="#309">Réduc. Bas Sal.</font>
+      </td>
+      <td align="right">
+      </td>
+      <td align="right">
       </td>
       <td align="right">
         <font color="#309">- {{$fichePaie->_reduc_bas_salaires|string_format:"%.2f"}} &euro;</font>
