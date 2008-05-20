@@ -217,6 +217,7 @@ function addCategorie(categorie_id, name_chap){
 </ul>
 <hr class="control_tabs" />
 
+<form action="" method="get" onsubmit="return false;">
 <!-- Affichage des elements -->
 {{assign var=numCols value=4}}
 <table class="main">
@@ -238,11 +239,11 @@ function addCategorie(categorie_id, name_chap){
 		      <tr>
 		      {{foreach from=$categorie->_ref_elements_prescription item=element name=elements}}
 		        {{assign var=i value=$smarty.foreach.elements.iteration}}
-		        <td>
-  		        <button  id="elt-{{$element->_id}}" class="cat-{{$categorie->_id}} tick notext" onclick="addElement('{{$element->_id}}','{{$name_chap}}');" title="Ajouter cet élément"></button>
+		        <td style="width: 1%;">
+  		        <button name="elt-{{$element->_id}}" id="elt-{{$element->_id}}" class="cat-{{$categorie->_id}} tick notext" onclick="addElement('{{$element->_id}}','{{$name_chap}}');" title="Ajouter cet élément"></button>
   		      </td>
             <td>
-              {{$element->_view}}
+              <label for="elt-{{$element->_id}}">{{$element->_view}}</label>
             </td>
 		        {{if ((($i % $numCols) == 0) && $i != 1)}}</tr><tr>{{/if}}
 		      {{/foreach}}
@@ -252,4 +253,5 @@ function addCategorie(categorie_id, name_chap){
       {{/foreach}}
     </td>
   </tr>
-</table>  
+</table>
+</form>
