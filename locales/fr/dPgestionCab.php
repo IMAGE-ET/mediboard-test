@@ -224,4 +224,6 @@ $locales['mod-dPgestionCab-tab-edit_paie'] = 'Fiche de paie';
 $locales['mod-dPgestionCab-tab-edit_params'] = 'Paramètres';
 $locales['mod-dPgestionCab-tab-edit_rubrique'] = 'Rubrique';
 $locales['CParamsPaie-ms'] = 'Mutuelle';
+$locales['CFichePaie-heures_comp'] = 'Nombre d\'heures complémentaires';
+$locales['CParamsPaie-csgnis'] = 'CSG non imposable';
 ?>

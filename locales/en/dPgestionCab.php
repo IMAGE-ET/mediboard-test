@@ -224,4 +224,6 @@ $locales['mod-dPgestionCab-tab-edit_paie'] = '';
 $locales['mod-dPgestionCab-tab-edit_params'] = '';
 $locales['mod-dPgestionCab-tab-edit_rubrique'] = '';
 $locales['CParamsPaie-ms'] = '';
+$locales['CFichePaie-heures_comp'] = '';
+$locales['CParamsPaie-csgnis'] = '';
 ?>
