@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI, $can, $m, $g, $dPconfig;;
+global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
@@ -17,7 +17,7 @@ $ordonnance = mbGetValueFromGet("ordonnance");
 if($ordonnance){
   $now = mbDateTime();
   $user_id = $AppUI->user_id;
-  $time_print_ordonnance = $dPconfig["dPprescription"]["CPrescription"]["time_print_ordonnance"]; 
+  $time_print_ordonnance = CAppUI::conf("dPprescription CPrescription time_print_ordonnance"); 
 }
 
 // Chargement de l'etablissement

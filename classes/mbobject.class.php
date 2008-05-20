@@ -260,9 +260,10 @@ class CMbObject {
   /**
    * Check wether a field has been modified or not
    * @param field string Field name
+   * @param value mixed Check if modified to given value.
    * @return boolean
    */
-  function fieldModified($field) {
+  function fieldModified($field, $value = null) {
       
     // Field is not valued
     if ($this->$field === null) {
@@ -282,11 +283,17 @@ class CMbObject {
     
     $spec = $this->_specs[$field];
 
-    // Not formally deterministic cas floats
+    // Not formally deterministic case for floats
     if ($spec instanceof CFloatSpec) {
       return round($this->$field, 2) != round($this->_old->$field, 2);
     }
     
+    // Check against a specific value
+    if ($value !== null && $this->$field !== $value) {
+      return false;
+    }
+    
+    // Has it finally been modified ?
     return $this->$field != $this->_old->$field;
   }
   
@@ -1530,7 +1537,6 @@ class CMbObject {
     // Chargement des Aides de la fonction de l'utilisateur
     unset($where["user_id"]);
     $where["function_id"] = $ds->prepare("= %", $user->function_id);
-    
     $aides = $aide->loadList($where, $order);  
     $this->orderAides($aides, "Aides du cabinet");
   }

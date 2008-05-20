@@ -67,6 +67,9 @@ class CReglement extends CMbObject {
     }
     
     $this->loadRefsFwd();
+    if (!$this->_ref_consultation->valide) {
+    	return "Impossible d'enregistrer un règlement car le tarif de la consultation n'est pas validé";
+    }
   }
   
   /**

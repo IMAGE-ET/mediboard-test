@@ -284,12 +284,14 @@ class CConsultation extends CCodable {
     
     $this->loadOldObject();
     $this->loadRefsReglements();
-    if ($this->valide === "0"){
-      // Dévalidation avec règlement déjà effectué
+    
+    // Dévalidation avec règlement déjà effectué
+    if ($this->fieldModified("valide", "0")) {
       if (count($this->_ref_reglements)){
         $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements ont déjà été effectués";
       }
     }
+    
     /*
     if ($this->_old->valide === "0") {
       // Règlement sans validation
@@ -516,6 +518,8 @@ class CConsultation extends CCodable {
       switch ($typeActe = $fseActe["PRE_ACTE_TYPE"]) {
         case "0": 
         $acte = new CActeNGAP();
+        $acte->setObject($this);
+        $acte->executant_id  = $this->getExecutantId();
         $acte->code        = $fseActe["PRE_CODE"];
         $acte->quantite    = $fseActe["PRE_QUANTITE"];
         $acte->coefficient = $fseActe["PRE_COEFFICIENT"];
@@ -526,8 +530,6 @@ class CConsultation extends CCodable {
           $acte->coefficient *= 2;
         }
         
-        $acte->object_id = $this->_id;
-        $acte->object_class = $this->_class_name;
         break;
         
         case "1": 
@@ -786,7 +788,7 @@ class CConsultation extends CCodable {
     return count($this->_ref_documents);
   }
   
-  function getExecutantId($code_activite) {
+  function getExecutantId($code_activite = null) {
   	$this->loadRefPlageConsult();
     return $this->_praticien_id;
   }

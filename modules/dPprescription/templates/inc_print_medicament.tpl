@@ -26,7 +26,7 @@
 		  
 		  <!-- Remarque sur la prise -->
 		  {{if $med->_specif_prise}}
-		    ({{$med->_specif_prise}})
+		    <br />({{$med->_specif_prise}})
 		  {{/if}}
     </li>
   </ul>

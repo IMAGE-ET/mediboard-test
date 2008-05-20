@@ -61,7 +61,7 @@ ActesNGAP = {
     </tr>
   {{if $object->_coded}}
     <tr>
-      <td colspan="7">
+      <td colspan="10">
         <div class="big-info">
         La cotation des actes est terminée.<br />
         Pour pouvoir coder des actes, veuillez dévalider la consultation.

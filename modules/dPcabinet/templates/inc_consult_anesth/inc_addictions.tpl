@@ -38,9 +38,9 @@ function onSubmitAddiction(oForm) {
 
   <tr>
     <!-- Auto-completion -->
-    <th>{{mb_label object=$addiction field=_search}}</th>
-    <td>
-      {{mb_field object=$addiction field=_search}}
+    <th style="width: 70px;">{{mb_label object=$addiction field=_search}}</th>
+    <td style="width:100px;">
+      {{mb_field object=$addiction field=_search size=10}}
 			{{mb_include_script module=dPcompteRendu script=aideSaisie}}
       <script type="text/javascript">
       	Main.add(function() {

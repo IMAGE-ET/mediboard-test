@@ -1,0 +1,120 @@
+div.body {
+  page-break-after: always;
+  padding: 0;
+  font-size: 12px;
+}
+
+div.bodyWithoutPageBreak {
+  padding: 0;
+  font-size: 12px; 
+}
+
+li {
+  margin-left: 32px;
+  padding-top: 3px;
+}
+ 
+div.header,
+div.footer {
+  position: fixed; 
+  background: #ddd;
+  opacity: 0.9;
+  border: 0px solid #aaa;
+  width: 100%;
+  overflow: hidden;
+}
+
+h1 {
+  text-align: center;
+} 
+
+h2 {
+  color: black;
+} 
+
+h3 {
+  text-align: center;
+  border: 1px dotted #888;
+  
+}
+
+td.left {
+	text-align: left;
+	width: 25%
+}
+
+td.right {
+	text-align: right;
+	width: 25%
+}
+
+td.center {
+	text-align: center;
+	width: 50%;
+}
+
+
+div.header {
+  top: 0em;
+  border-bottom-width: 1px;
+}
+
+div.footer {
+  bottom: 0em;
+  border-top-width: 1px;
+}
+
+div.footer table,
+div.header table {
+  width: 100%;
+}
+
+@media print {
+  div.header,div.footer {
+    opacity: 1;
+    background: #fff;
+  }
+  div.middle {
+    margin-top: 270px;
+    height: 0px;
+  } 
+}
+
+@media screen {
+  div.body {
+    padding-bottom: 15px;
+    border-bottom: 1px dotted #888;
+  }
+}
+
+table#mainPane {
+  display:none;
+}
+
+div#goUp {
+  display: none;
+}
+
+div.body, 
+div.bodyWithoutPageBreak {
+  padding-top: {{$header}}em;
+  padding-bottom: {{$footer}}em;
+}
+
+// Partie variable
+
+@media print {
+	div.body,
+	div.bodyWithoutPageBreak {
+	  padding-top: {{$header+3}}em;
+	  padding-bottom: {{$footer+3}}em;
+	}
+}
+
+div.header {
+  height: {{$header}}em;
+}
+
+div.footer {
+  height: {{$footer}}em;
+}

@@ -169,8 +169,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         </div>
       {{else}}
         <div class="message">
-          Praticien correctement associé à une CPS. <br/>
-          Formatage des FSE disponible pour ce praticien.
+          Praticien correctement associé à une CPS.
         </div>
       {{/if}}
     </td>
@@ -191,8 +190,7 @@ Intermax.Triggers['Formater FSE'].aActes = {{$consult->_fse_intermax|@json}};
         </div>
       {{else}}
         <div class="message">
-          Patient correctement associé à un bénéficiaire Vitale. <br/>
-          Formatage des FSE disponible pour ce patient.
+          Patient correctement associé à un bénéficiaire Vitale.
         </div>
       {{/if}}
     </td>

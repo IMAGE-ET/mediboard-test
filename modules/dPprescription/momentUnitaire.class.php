@@ -37,6 +37,12 @@ class CMomentUnitaire extends CMbObject {
     return array_merge($specsParent, $specs);
   }
 
+  function getBackRefs() {
+    $back = parent::getBackRefs();
+    $back["associations"] = "CAssociationMoment moment_unitaire_id";
+    return $back;
+  }
+  
   // Chargement des moments
   static function loadAllMoments(){
     $moment = new CMomentUnitaire();

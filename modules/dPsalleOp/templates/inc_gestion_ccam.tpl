@@ -13,7 +13,7 @@ signerActes = function(object_id, object_class){
 <table class="form">
   {{if $subject->_coded}}
   <tr>
-    <td colspan="6">
+    <td colspan="10">
       <div class="big-info">
        La cotation des actes est terminée.<br />
        Pour pouvoir coder des actes, veuillez dévalider la consultation.

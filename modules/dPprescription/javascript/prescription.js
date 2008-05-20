@@ -208,7 +208,7 @@ var Prescription = {
       if(ordonnance){
         url.addParam("ordonnance", ordonnance);
       }
-      url.popup(700, 600, "print_prescription");
+      url.popup(800, 600, "print_prescription");
     }
   },
   viewFullAlertes: function(prescription_id) {

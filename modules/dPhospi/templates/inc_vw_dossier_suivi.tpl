@@ -1,9 +1,9 @@
 <table class="tbl">
   <tr>
-    <th class="halfPane title" class="title">
+    <th class="title" style="width: 50%">
       Observations
     </th>
-    <th class="halfPane title" class="title">
+    <th class="title" style="width: 50%">
       Transmissions
     </th>
   </tr>
