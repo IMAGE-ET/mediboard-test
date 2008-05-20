@@ -283,14 +283,14 @@ class CConsultation extends CCodable {
     }
     
     $this->loadOldObject();
+    $this->loadRefsReglements();
     if ($this->valide === "0"){
       // Dévalidation avec règlement déjà effectué
-      if ($this->_old->tiers_date_reglement 
-       || $this->_old->patient_date_reglement){
-        $msg .= "Vous ne pouvez plus dévalider le tarif, le règlement a déjà été effectué";
+      if (count($this->_ref_reglements)){
+        $msg .= "Vous ne pouvez plus dévalider le tarif, des règlements ont déjà été effectués";
       }
     }
-    
+    /*
     if ($this->_old->valide === "0") {
       // Règlement sans validation
       if ($this->fieldModified("tiers_date_reglement") 
@@ -298,7 +298,7 @@ class CConsultation extends CCodable {
         $msg .= "Vous ne pouvez pas effectuer le règlement si le tarif n'a pas été validé";
       }
     }
-    
+    */
     if ($this->_old->valide === "1" && $this->valide === "1") {
       // Modification du tarif déjà validé
       if ($this->fieldModified("secteur1") 
@@ -307,9 +307,9 @@ class CConsultation extends CCodable {
        || $this->fieldModified("total_amc") 
        || $this->fieldModified("total_amo") 
        || $this->fieldModified("du_patient") 
-       || $this->fieldModified("du_tiers")) {        
-        $msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
-        //$msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
+       || $this->fieldModified("du_tiers")) {
+        //$msg .= $this->du_patient." vs. ".$this->_old->du_patient." (".$this->fieldModified("du_patient").")";
+        $msg .= "Vous ne pouvez plus modifier le tarif, il est déjà validé";
       }
     }
     
