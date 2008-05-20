@@ -13,6 +13,7 @@ $ds = CSQLDataSource::get("ccamV2");
 $quantite = mbGetValueFromGetOrSession("quantite");
 $coefficient = mbGetValueFromGetOrSession("coefficient");
 $demi = mbGetValueFromGetOrSession("demi", 0);
+$complement = mbGetValueFromGetOrSession("complement");
 
 if($quantite == ""){
   $quantite = 1;
@@ -32,6 +33,16 @@ $tarif = $tarif["tarif"] * $quantite * $coefficient;
 if($demi == 1){
   $tarif = $tarif / 2;
 }
+
+if($complement && $complement != "U"){
+  if($complement == "F"){
+  	$tarif += 19.06;	
+  }
+  if($complement == "N"){
+  	$tarif += 25;	
+  }
+}
+
 
 // Création du template
 $smarty = new CSmartyDP();

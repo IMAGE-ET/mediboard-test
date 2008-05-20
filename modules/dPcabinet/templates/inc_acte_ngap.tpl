@@ -8,6 +8,7 @@ refreshTarif = function(){
   url.addParam("coefficient", oForm.coefficient.value);
   url.addParam("demi", oForm.demi.value);
   url.addParam("code", oForm.code.value);
+  url.addParam("complement", oForm.complement.value);
   url.requestUpdate('tarifActe', { waitingText: null } );
 }
   
@@ -102,7 +103,7 @@ ActesNGAP = {
         {{mb_field object=$acte_ngap field="montant_depassement"}}
       </td>
       <td>
-        {{mb_field object=$acte_ngap field="complement" defaultOption="&mdash; Aucun"}}
+        {{mb_field object=$acte_ngap field="complement" onchange="refreshTarif()" defaultOption="&mdash; Aucun"}}
       </td>
       <td>
         <button type="button" class="new" onclick="ActesNGAP.submit()">
