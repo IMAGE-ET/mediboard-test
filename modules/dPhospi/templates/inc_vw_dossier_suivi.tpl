@@ -9,6 +9,7 @@
   </tr>
   <tr>
     <td>
+      {{if $isPraticien}}
       <form name="editObs" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_observation_aed" />
       <input type="hidden" name="del" value="0" />
@@ -23,6 +24,7 @@
       <br />
       <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button>
       </form>
+      {{/if}}
     </td>
     <td>
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -44,7 +46,7 @@
   {{foreach from=$sejour->_ref_suivi_medical item=curr_suivi}}
   <tr>
   {{if $curr_suivi->_class_name == "CObservationMedicale"}}
-    <td>
+    <td class="text">
       <strong>{{$curr_suivi->date|date_format:"%d/%m/%Y à %Hh%M"}} - {{$curr_suivi->_view}}</strong>
       <br />
       {{$curr_suivi->text|nl2br}}
@@ -53,7 +55,7 @@
     <td />
   {{/if}}
   {{if $curr_suivi->_class_name == "CTransmissionMedicale"}}
-    <td>
+    <td xlass="text">
       <strong>{{$curr_suivi->date|date_format:"%d/%m/%Y à %Hh%M"}} - {{$curr_suivi->_view}}</strong>
       <br />
       {{$curr_suivi->text|nl2br}}

@@ -42,6 +42,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("observation" , $observation);
 $smarty->assign("transmission", $transmission);
 $smarty->assign("user"        , $user);
+$smarty->assign("isPraticien" , $user->isPraticien());
 $smarty->assign("sejour"      , $sejour);
 
 $smarty->display("inc_vw_dossier_suivi.tpl");

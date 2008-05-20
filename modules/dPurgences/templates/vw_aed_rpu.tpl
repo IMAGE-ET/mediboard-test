@@ -24,9 +24,23 @@ function verifNonEmpty(oElement){
   return false;
 }
 
+function loadSuivi(sejour_id) {
+  var urlSuivi = new Url;
+  urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+  urlSuivi.addParam("sejour_id", sejour_id);
+  urlSuivi.requestUpdate("suivisoins", { waitingText: null } );
+}
+
+function submitSuivi(oForm) {
+  sejour_id = oForm.sejour_id.value;
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+}
+
 function pageMain() {
   {{if $rpu->_id && $can->edit}}
     reloadDossierMedicalPatient();
+    var tab_sejour = Control.Tabs.create('tab-dossier', true);
+    loadSuivi({{$rpu->sejour_id}});
   {{/if}}
   
   if (document.editAntFrm){
@@ -185,22 +199,25 @@ function pageMain() {
   		{{include file="inc_pec_praticien.tpl"}}
     </td>
   </tr>
-
-  <tr>
-    <th class="category" colspan="2">
-      Dossier Médical
-    </th>
-  </tr>
-  <tr>
-    <td colspan="2">
-      {{assign var="current_m" value="dPurgences"}}
-      {{assign var="_is_anesth" value="0"}}
-      {{assign var="consult" value=$rpu->_ref_consult}}
-      {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
-    </td>
-     
-  </tr>
 </table>
+
+<ul id="tab-dossier" class="control_tabs">
+  <li><a href="#antecedents">Antécédents / Traitements</a></li>
+  <li><a href="#suivisoins">Suivi soins</a></li>
+</ul>
+
+<hr class="control_tabs" />
+
+<div id="antecedents"
+  {{assign var="current_m" value="dPurgences"}}
+  {{assign var="_is_anesth" value="0"}}
+  {{assign var="consult" value=$rpu->_ref_consult}}
+  {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
+</div>
+
+<div id="suivisoins">
+</div>
+
 {{/if}}
 
 <script type="text/javascript">
