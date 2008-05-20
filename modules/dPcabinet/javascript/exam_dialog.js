@@ -39,6 +39,5 @@ var ExamDialog = {
       onComplete: function() { ExamDialog.reload(object_id) } 
     }
     confirmDeletion(oButton.form, oOptions, oAjaxOptions);
-  },
-  
+  }
 }

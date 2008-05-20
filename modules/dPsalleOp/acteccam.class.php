@@ -29,9 +29,6 @@ class CActeCCAM extends CActe {
   // DB Table key
 	var $acte_id = null;
 
-  // DB References
-  var $executant_id        = null;
-
   // DB Fields
   var $code_acte           = null;
   var $code_activite       = null;
@@ -76,7 +73,6 @@ class CActeCCAM extends CActe {
     $specs["execution"]           = "notNull dateTime";
     $specs["modificateurs"]       = "str maxLength|4";
     $specs["commentaire"]         = "text";
-    $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["code_association"]    = "num minMax|1|5";
     $specs["rembourse"]           = "bool default|1";
     $specs["regle"]               = "bool";
@@ -242,12 +238,6 @@ class CActeCCAM extends CActe {
     $this->_ref_object->load($this->object_id); 
   }
 
-  function loadRefExecutant() {
-    $this->_ref_executant = new CMediusers;
-    $this->_ref_executant->load($this->executant_id);
-    $this->_ref_executant->loadRefFunction();
-  }
-  
   function loadRefCodeCCAM() {
     $this->_ref_code_ccam = CCodeCCAM::get($this->code_acte, CCodeCCAM::FULL);
   }

@@ -88,7 +88,6 @@ $smarty->assign("consult"        , $consult);
 $smarty->assign("consult_anesth" , $consult->_ref_consult_anesth);
 $smarty->assign("listModelePrat" , $listModelePrat);
 $smarty->assign("listModeleFunc" , $listModeleFunc);
-$smarty->assign("noReglement"    , 1);
 $smarty->assign("anesth"         , $anesth);
 $smarty->assign("techniquesComp" , $techniquesComp);
 

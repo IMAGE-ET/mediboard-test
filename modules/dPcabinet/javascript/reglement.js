@@ -1,5 +1,4 @@
 var Reglement = {
-  noReglement   : null,
   consultation_id   : null,
   user_id : null,
 
@@ -17,9 +16,6 @@ var Reglement = {
   reload: function(){
     var url = new Url;
     url.setModuleAction("dPcabinet", "httpreq_vw_reglement");
-    if(Reglement.noReglement == "1") {
-      url.addParam("noReglement", "1"); 
-    }
     url.addParam("selConsult", document.editFrmFinish.consultation_id.value);
 	  url.requestUpdate('reglement', { waitingText : null });
     

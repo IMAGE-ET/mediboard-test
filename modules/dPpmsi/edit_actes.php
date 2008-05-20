@@ -52,6 +52,7 @@ $listChirs = $listChirs->loadPraticiens();
 $acte_ngap = new CActeNGAP();
 $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
+$acte_ngap->loadListExecutants();
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -633,7 +633,9 @@ NumericField.prototype = {
     var oField = $(this.sField);
     var step = Number(this.getStep());
     var result = (parseInt(Number(oField.value) / step) + 1) * step;
-    result = (result <= this.max || this.max == null) ? result : this.max;
+    if (this.max != null) {
+      result = (result <= this.max) ? result : this.max;
+    }
     $V(oField, result, true);
     oField.select();
   },
@@ -643,7 +645,9 @@ NumericField.prototype = {
     var oField = $(this.sField);
     var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
- 	  result = (result >= this.min || this.min == null) ? result : this.min;
+    if (this.min != null) {
+ 	    result = (result >= this.min) ? result : this.min;
+    }
     $V(oField, result, true);
     oField.select();
   },

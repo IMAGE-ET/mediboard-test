@@ -56,6 +56,11 @@ option, optgroup {
   background: #fff;
 }
 
+optgroup.group {
+  text-align: center;
+  font-variant: small-caps;
+}
+
 option {
   font-style: normal;
   font-weight: normal;

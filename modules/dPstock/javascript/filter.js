@@ -32,7 +32,7 @@ Filter.prototype = {
     }
     
     if (this.sHiddenColumn) {
-      url.addParam("hidden_column",  this.sHiddenColumn);
+      url.addParam("hidden_column", this.sHiddenColumn);
     }
     url.requestUpdate(this.sList, { waitingText: null } );
     

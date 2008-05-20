@@ -1,124 +1,163 @@
 <table class="main">
+  <!-- Liste des classes -->
   <tr>
-    <th>
+    <td style="text-align: center;">
       <form action="?" name="mntTable" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
-
-      <label for="selClass" title="Veuillez Sélectionner une classe">Choix de la classe</label>
-      <select class="notNull str" name="selClass" onchange="submit();">
-        <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
-        {{foreach from=$listClass item=curr_listClass}}
-        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
+        <input type="hidden" name="m" value="{{$m}}" />
+        <input type="hidden" name="tab" value="{{$tab}}" />
+  
+        <label for="class_name" title="Veuillez Sélectionner une classe">Choix de la classe</label>
+        <select class="notNull str" name="class_name">
+          <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
+          {{foreach from=$list_classe_names item=curr_class_name}}
+          <option value="{{$curr_class_name}}"{{if $class_name==$curr_class_name}} selected="selected"{{/if}}>{{$curr_class_name}} - {{tr}}{{$curr_class_name}}{{/tr}}</option>
+          {{/foreach}}
+        </select>
+        <br />
+        
+        {{foreach from=$types key=type item=value}}
+          <input type="checkbox" name="types[]" value="{{$type}}" {{if $value}}checked="checked"{{/if}} />{{$type}}
         {{/foreach}}
-      </select>
+        <br />
+        
+        <button name="submit" class="search">Filtrer</button>
       </form>
-    </th>
+      
+      <div class="big-info">A savoir : la première ligne de chaque champ correspond aux spécifications données dans les specs de la classe, 
+      la deuxième correspond à ce qui est réelement appliqué au niveau de la base de données.</div>
+    </td>
   </tr>
+  
   <tr>
     <td>
       <table class="tbl">
         <tr>
           <th rowspan="2">Champ</th>
-          <th rowspan="2">Propriété du champ</th>
-          <th colspan="5">Base de Données</th>
+          <th rowspan="2">Spec object</th>
+          <th colspan="8">Base de données</th>
         </tr>
         <tr>
-          <th>Nom</th>
           <th>Type</th>
-          <th>Null</th>
           <th>Default</th>
           <th>Index</th>
+          <th>Extra</th>
         </tr>
         
-        {{foreach from=$aChamps key=keyClass item=currClass}}
-        
-        {{if $currClass|@count}}
-        <tr>
-          <th colspan="7" class="title">
-            <button id="Suggestion-{{$keyClass}}-trigger" class="edit" style="float: right">
-              {{tr}}Suggestion{{/tr}}
-            </button>
-            {{$keyClass}} ({{tr}}{{$keyClass}}{{/tr}})
-          </th>
-        </tr>
-        <tr id="Suggestion-{{$keyClass}}">
-          <td colspan="100">
-            <script type="text/javascript">new PairEffect('Suggestion-{{$keyClass}}');</script>
-  
-            <pre>{{tr}}{{$aSuggestions.$keyClass|default:"no suggestion"}}{{/tr}}</pre>
-          </td>
-        </tr>
-        {{foreach from=$currClass key=keyChamp item=currChamp}}
-        <tr>
-          <td {{if !$currChamp.class_field}}
-                class="error"
-              {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
-                class="ok"
-              {{/if}}>
-            {{$currChamp.class_field}}
-          </td>
-          <td {{if $currChamp.keytable && $currChamp.keytable==$currChamp.class_field && $currChamp.class_props}}
-                class="error"
-              {{elseif $currChamp.keytable && $currChamp.keytable==$currChamp.class_field}}
-                class="ok"
-              {{elseif $currChamp.error_class_props}}
-                class="warning"
-              {{elseif !$currChamp.class_props}}
-                class="error"
-              {{/if}}>
-            {{$currChamp.class_props}}
-            {{if !$currChamp.class_field && $currChamp.class_props}}
-            &mdash; <strong>{{$keyChamp}}</strong>
+        {{foreach from=$list_classes key=curr_class_name item=curr_class}}
+          {{if $list_errors.$curr_class_name || $list_classes|@count == 1}}
+          <tr>
+            <th colspan="11" class="title">
+              <button id="sugg-{{$curr_class_name}}-trigger" class="edit" style="float: left;">
+                {{tr}}Suggestion{{/tr}}
+              </button>
+              {{$curr_class_name}} ({{tr}}{{$curr_class_name}}{{/tr}})
+            </th>
+          </tr>
+          <tr id="sugg-{{$curr_class_name}}">
+            <td colspan="100">
+              <script type="text/javascript">new PairEffect('sugg-{{$curr_class_name}}', {bStoreInCookie: false});</script>
+              <pre>{{tr}}{{$curr_class.suggestion|default:"no suggestion"}}{{/tr}}</pre>
+            </td>
+          </tr>
+          {{foreach from=$curr_class.fields key=curr_field_name item=curr_field}}
+            
+            {{if $list_errors.$curr_class_name.$curr_field_name || $curr_class.key == $curr_field_name || $class_name == $curr_class_name}}
+            <tr>
+              <td {{if $curr_class.key == $curr_field_name}}class="ok"{{/if}}>{{$curr_field_name}}</td>
+              
+              {{if !$curr_field.object.spec}}
+                <td class="warning text">Aucune spec<br />&nbsp;</td>
+              {{else}}
+                <td class="text" title="{{$curr_field.object.spec}}">{{$curr_field.object.spec}}<br />&nbsp;</td>
+              {{/if}}
+              
+              <td class="text">
+                {{if $curr_field.object.db_spec}}
+                    {{$curr_field.object.db_spec.type}}
+                    
+                    {{if $curr_field.object.db_spec.params|@count > 0}}
+                    (
+                      {{foreach from=$curr_field.object.db_spec.params item=param name=params}}
+                        {{$param}}{{if !$smarty.foreach.params.last}},{{/if}} 
+                      {{/foreach}}
+                    )
+                    {{/if}}
+                    
+                    {{if $curr_field.object.db_spec.unsigned}}UNSIGNED{{/if}}
+                    {{if $curr_field.object.db_spec.zerofill}}ZEROFILL{{/if}}
+                  
+                    {{if !$curr_field.object.db_spec.null}}NOT NULL{{/if}}
+                {{else}}
+                  <div class="error">
+                    Pas de spec pour cette colonne
+                  </div>
+                {{/if}}
+                &nbsp;
+                <hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                
+                {{if $curr_field.db}}
+                  <span {{if $curr_field.db.type != $curr_field.object.db_spec.type}}class="warning"{{/if}}>
+                    {{$curr_field.db.type}}
+                  </span>
+                  
+                  <span {{if $curr_field.db.params != $curr_field.object.db_spec.params}}class="warning"{{/if}}>
+                    {{if $curr_field.db.params|@count > 0}}
+                    (
+                      {{foreach from=$curr_field.db.params item=param name=params}}
+                        {{$param}}{{if !$smarty.foreach.params.last}},{{/if}}
+                      {{/foreach}}
+                    )
+                    {{/if}}
+                  </span>
+                
+                  <span {{if $curr_field.db.unsigned != $curr_field.object.db_spec.unsigned}}class="warning"{{/if}}>
+                    {{if $curr_field.db.unsigned}}UNSIGNED{{else}}&nbsp;{{/if}}
+                  </span>
+                  
+                  <span {{if $curr_field.db.zerofill != $curr_field.object.db_spec.zerofill}}class="warning"{{/if}}>
+                    {{if $curr_field.db.zerofill}}ZEROFILL{{else}}&nbsp;{{/if}}
+                  </span>
+                  
+                  <span {{if $curr_field.db.null != $curr_field.object.db_spec.null}}class="warning"{{/if}}>
+                    {{if !$curr_field.db.null}}NOT NULL{{else}}&nbsp;{{/if}}
+                  </span>
+
+                {{else}}
+                  <div class="error">
+                    Pas de colonne pour cette spec
+                  </div>
+                {{/if}}
+              </td>
+              
+              <td>
+                {{$curr_field.object.db_spec.default}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                <span {{if $curr_field.db.default != $curr_field.object.db_spec.default}}class="warning"{{/if}}>
+                  {{$curr_field.db.default}}&nbsp;
+                </span>
+              </td>
+              
+              <td>
+                {{if $curr_field.object.db_spec.index}}Oui{{else}}Non{{/if}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                <span 
+                  {{if $curr_field.object.db_spec.index && !$curr_field.db.index}}
+                    class="error"
+                  {{elseif !$curr_field.object.db_spec.index && $curr_field.db.index}}
+                    class="warning"
+                  {{/if}}>
+                  {{if $curr_field.db.index}}Oui{{else}}Non{{/if}}&nbsp;
+                </span>
+              </td>
+              
+              <td>
+                {{$curr_field.object.db_spec.extra}}&nbsp;<hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
+                <span {{if $curr_field.db.extra != $curr_field.object.db_spec.extra}}class="warning"{{/if}}>
+                  {{$curr_field.db.extra}}&nbsp;
+                </span>
+              </td>
+            </tr>
             {{/if}}
-          </td>
-          {{if !$currChamp.BDD_name}}
-          <td colspan="5" class="error">
-          {{if $currChamp.object_spec}}
-            <strong>
-              {{$currChamp.object_spec}}
-            </strong>
+          {{/foreach}}
           {{/if}}
-          </td>
-          {{else}}
-          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                class="ok"
-              {{/if}}>
-            {{$currChamp.BDD_name}}
-          </td>
-          <td {{if $currChamp.error_BDD_type}}
-                class="warning"
-              {{elseif $currChamp.keytable==$currChamp.BDD_name}}
-                class="ok"
-              {{/if}}>
-            {{$currChamp.BDD_type}}
-            {{if $currChamp.error_BDD_type}}
-              &mdash; <strong>{{$currChamp.error_BDD_type}}</strong>
-            {{/if}}
-          </td>
-          <td {{if $currChamp.error_BDD_null}}
-                class="warning"
-              {{elseif $currChamp.keytable==$currChamp.BDD_name}}
-                class="ok"
-              {{/if}}>
-            {{if $currChamp.BDD_null!="NO"}}
-            {{$currChamp.BDD_null}}
-            {{/if}}
-          </td>
-          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                class="ok"
-              {{/if}}>
-            {{$currChamp.BDD_default}}
-          </td>
-          <td {{if $currChamp.keytable==$currChamp.BDD_name}}
-                class="ok"
-              {{/if}}>
-            {{$currChamp.BDD_index}}
-          </td>
-          {{/if}}
-        </tr>
-        {{/foreach}}
-        {{/if}}
         {{/foreach}}
       </table>
     </td>

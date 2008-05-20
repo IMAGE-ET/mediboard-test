@@ -12,7 +12,7 @@ global $AppUI, $utypes;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.05";
+$config["mod_version"]     = "1.06";
 $config["mod_type"]        = "user";
 
 
@@ -1188,7 +1188,51 @@ class CSetupdPcabinet extends CSetup {
       DROP `banque_id`;';
     $this->addQuery($sql);*/
     
-    $this->mod_version = "1.05";
+    $this->makeRevision("1.05");
+    $sql = "ALTER TABLE `acte_ngap` 
+      ADD `executant_id` int(11) unsigned NOT NULL DEFAULT '0',
+      ADD INDEX (`executant_id`)";
+    $this->addQuery($sql);
+    
+    // COperation : executant_id = operations -> chir_id
+    // CSejour : executant_id = sejour -> praticien_id
+    // CConsultation : executant_id = consultation -> plageconsult -> chir_id
+    $sql = "UPDATE `acte_ngap` 
+       SET `acte_ngap`.`executant_id` = 
+        (SELECT `chir_id` 
+         FROM `operations` 
+         WHERE `operations`.`operation_id` = `acte_ngap`.`object_id`
+         LIMIT 1)
+       WHERE 
+        `acte_ngap`.`object_class` = 'COperation' AND 
+        `acte_ngap`.`executant_id` = 0";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `acte_ngap` 
+       SET `acte_ngap`.`executant_id` = 
+        (SELECT `praticien_id` 
+         FROM `sejour` 
+         WHERE `sejour`.`sejour_id` = `acte_ngap`.`object_id`
+         LIMIT 1)
+       WHERE 
+        `acte_ngap`.`object_class` = 'CSejour' AND 
+        `acte_ngap`.`executant_id` = 0";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `acte_ngap` 
+       SET `acte_ngap`.`executant_id` = 
+        (SELECT `plageconsult`.`chir_id` 
+         FROM `plageconsult`, `consultation`
+         WHERE 
+           `consultation`.`consultation_id` = `acte_ngap`.`object_id` AND
+           `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`
+         LIMIT 1)
+       WHERE 
+        `acte_ngap`.`object_class` = 'CConsultation' AND 
+        `acte_ngap`.`executant_id` = 0";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "1.06";
   }
 }
 ?>

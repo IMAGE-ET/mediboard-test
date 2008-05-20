@@ -254,15 +254,7 @@ a.DESC:hover{
   margin-left: 0px;
 }
 
-
-
-optgroup.group {
-  text-align: center;
-  font-variant: small-caps;
-}
-
 /* Title block */
-
 table.titleblock td {
   white-space: nowrap;
 }
@@ -275,7 +267,6 @@ table.titleblock td.titlecell {
 }
 
 /* Bread crumbs block */
-
 table.crumbsblock {
   width: 100%;
 }

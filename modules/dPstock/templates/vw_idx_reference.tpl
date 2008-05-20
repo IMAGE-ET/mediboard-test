@@ -88,7 +88,7 @@ function pageMain() {
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
-          <td>{{mb_field object=$reference field="quantity" increment=1 form=edit_reference}}</td>
+          <td>{{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=0}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>

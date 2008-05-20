@@ -14,7 +14,6 @@ $can->needsEdit();
 // Utilisateur sélectionné ou utilisateur courant
 $prat_id      = mbGetValueFromGetOrSession("chirSel", 0);
 $selConsult   = mbGetValueFromGetOrSession("selConsult", null);
-$noReglement  = mbGetValueFromGet("noReglement", 0);
 
 // Chargement des banques
 $orderBanque = "nom ASC";
@@ -76,8 +75,6 @@ if ($selConsult) {
   // Patient
   $patient =& $consult->_ref_patient;
 }
-
-// Chargement des identifiants LogicMax
 $consult->loadIdsFSE();
 $consult->makeFSE();
 $consult->_ref_chir->loadIdCPS();
@@ -99,9 +96,6 @@ $tarifsCab = $tarifsCab->loadList($where, $order);
 $reglement = new CReglement();
 $reglement->montant = round($consult->_du_patient_restant, 2);
 
-$_is_anesth = $consult->_ref_chir->isFromType(array("Anesthésiste"))
-  || $consult->_ref_consult_anesth->consultation_anesth_id;
-
 // Codes et actes NGAP
 $consult->loadRefsActesNGAP();
 
@@ -111,15 +105,11 @@ $consult->loadRefsReglements();
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("_is_anesth", $_is_anesth);  
-
 $smarty->assign("banques"       , $banques);
 $smarty->assign("tarifsChir"    , $tarifsChir);
 $smarty->assign("tarifsCab"     , $tarifsCab);
 $smarty->assign("consult"       , $consult);
 $smarty->assign("reglement"     , $reglement);
-$smarty->assign("noReglement"   , $noReglement);
-$smarty->assign("userSel"       , $userSel);
 
 $smarty->display("inc_vw_reglement.tpl");
 

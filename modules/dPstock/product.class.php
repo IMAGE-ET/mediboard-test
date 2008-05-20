@@ -26,10 +26,6 @@ class CProduct extends CMbObject {
   //    Multiple
   var $_ref_stocks       = null;
   var $_ref_references   = null;
-
-  // Filter Fields
-  var $_date_min         = null;
-  var $_date_max         = null;
   
   // This group's stock id
   var $_ref_stock_group  = null;

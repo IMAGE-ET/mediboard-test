@@ -13,6 +13,9 @@ class CActe extends CMbMetaObject {
   // DB fields
   var $montant_depassement = null;
   var $montant_base        = null;
+  
+  // DB References
+  var $executant_id        = null;
 
   // Form fields
   var $_preserve_montant   = null; 
@@ -26,6 +29,8 @@ class CActe extends CMbMetaObject {
   var $_ref_patient = null;
   var $_ref_praticien = null; // Probable user
   var $_ref_executant = null; // Actual user
+  
+  var $_list_executants = null;
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -50,10 +55,40 @@ class CActe extends CMbMetaObject {
     $this->_ref_praticien =& $this->_ref_object->_ref_praticien;
   }
   
+  function loadRefExecutant() {
+    $this->_ref_executant = new CMediusers();
+    $this->_ref_executant->load($this->executant_id);
+    $this->_ref_executant->loadRefFunction();
+  }
+  
+  function loadListExecutants($guess = true) {
+    global $AppUI;
+    
+    $list_executants = new CMediusers;
+    $this->_list_executants = $list_executants->loadPraticiens(PERM_READ);
+    
+    // We guess who is the executant
+    if ($guess && $this->executant_id == null && $this->_id == null) {
+      if ($this->_ref_object && $this->loadRefPraticien() && $this->_ref_praticien->_id) {
+        $this->executant_id = $this->_ref_praticien->_id;
+        return;
+      }
+      else {
+        $user = new CMediusers();
+        $user->load($AppUI->user_id);
+        if ($user->isPraticien()) {
+          $this->executant_id = $user->_id;
+          return;
+        }
+      }
+    }
+  }
+  
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["object_id"]           = "notNull ref class|CCodable meta|object_class";
     $specs["object_class"]        = "notNull enum list|COperation|CSejour|CConsultation";
+    $specs["executant_id"]        = "notNull ref class|CMediusers";
     $specs["montant_depassement"] = "currency";
     $specs["montant_base"]        = "currency";
     $specs["_montant_facture"]    = "currency";
@@ -94,7 +129,5 @@ class CActe extends CMbMetaObject {
     return $this->updateMontant();
   }
 }
-
-
 
 ?>

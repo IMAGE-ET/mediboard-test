@@ -241,6 +241,7 @@ if ($consult->_id && $consult->sejour_id){
 $acte_ngap = new CActeNGAP();
 $acte_ngap->quantite = 1;
 $acte_ngap->coefficient = 1;
+$acte_ngap->loadListExecutants();
 
 
 // Tableau de contraintes pour les champs du RPU
@@ -298,8 +299,7 @@ $smarty->assign("traitement"     , $traitement);
 $smarty->assign("addiction"      , $addiction);
 $smarty->assign("techniquesComp" , $techniquesComp);
 $smarty->assign("examComp"       , $examComp);
-$smarty->assign("_is_anesth"     , $consult->_is_anesth);  
-$smarty->assign("noReglement"    , 0);
+$smarty->assign("_is_anesth"     , $consult->_is_anesth);
 $smarty->assign("current_m"      , $current_m);
 $smarty->assign("list_etat_dents", $list_etat_dents);
 

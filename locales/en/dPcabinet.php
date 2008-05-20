@@ -1453,4 +1453,7 @@ $locales['CReglement.mode.virement'] = '';
 $locales['msg-CReglement-create'] = '';
 $locales['msg-CReglement-delete'] = '';
 $locales['msg-CReglement-modify'] = '';
+$locales['CActeNGAP-executant_id'] = '';
+$locales['CActeNGAP-executant_id-court'] = '';
+$locales['CActeNGAP-executant_id-desc'] = '';
 ?>

@@ -1477,4 +1477,7 @@ $locales['CReglement.more'] = '';
 $locales['CReglement.none'] = '';
 $locales['CReglement.one'] = '';
 $locales['CSejour-back-'] = '';
+$locales['CActeNGAP-executant_id'] = 'Exécutant';
+$locales['CActeNGAP-executant_id-court'] = 'Exécutant';
+$locales['CActeNGAP-executant_id-desc'] = 'Personne éxécutant l\'acte NGAP';
 ?>

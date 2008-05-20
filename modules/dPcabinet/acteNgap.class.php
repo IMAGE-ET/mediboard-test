@@ -30,7 +30,6 @@ class CActeNGAP extends CActe {
   
   function CActeNGAP() {
     $this->CMbObject("acte_ngap", "acte_ngap_id");
-  
     $this->loadRefModule(basename(dirname(__FILE__)));
   }
   
@@ -73,7 +72,6 @@ class CActeNGAP extends CActe {
     
     return parent::check();
   }
-  
  
   function canDeleteEx() {
     if ($msg = $this->checkCoded()){

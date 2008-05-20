@@ -5,228 +5,320 @@
 * @subpackage dPdeveloppement
 * @version $Revision: $
 * @author Sébastien Fillonneau
+* @author Fabien Ménager
 */
 
 global $AppUI, $can, $m;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
-$selClass = mbGetValueFromGetOrSession("selClass", null);
+$ds = CSQLDataSource::get('std');
 
-$classSelected = array();
-$aChamps = array();
-// Liste des Class
-$listClass = getInstalledClasses();
+// Nom de la classe à prendre en compte
+$class_name = mbGetValueFromGetOrSession('class_name', null);
 
-$class_exist = array_search($selClass, $listClass);
-if($class_exist=== false){
-  $selClass = null;
-  mbSetValueToSession("selClass", $selClass);
-  $classSelected =& $listClass;
-}else{
-  $classSelected[] = $selClass;
+// Tableau des erreurs a prendre en compte
+$t          = mbGetValueFromGetOrSession('types');
+
+// Liste des noms des classes installées
+$list_classe_names = getInstalledClasses();
+
+$list_selected_classes = array(); // Liste des noms de classes selectionnées
+$list_classes = array(); // Liste des classes
+
+// On regarde si la classe existe vraiment
+if(array_search($class_name, $list_classe_names) == false) {
+  $class_name = null;
+  $list_selected_classes =& $list_classe_names;
+}
+else {
+  $list_selected_classes[] = $class_name;
+}
+mbSetValueToSession('class_name', $class_name);
+
+// Types d'erreurs qu'on peut prendre en compte
+$error_types = array('type', 'params', 'unsigned', 'zerofill', 'null', 'default', 'index', 'extra');
+
+$types = array();
+foreach ($error_types as $type) {
+  $types[$type] = !isset($t) || in_array($type, $t);
 }
 
-foreach ($classSelected as $selected){  
-  $object = new $selected;
-  
-  $aChamps[$selected] = array();
-  $aClass =& $aChamps[$selected];
-  
-  // CLé dela table
-  $aClass[$object->_tbl_key]["keytable"] = $object->_tbl_key;
-  
-  // Extraction des champs
-  foreach ($object->getDBFields() as $k => $v) {
-    $aClass[$k]["class_field"] = $k;
-    
-    if ($spec = @$object->_specs[$k]) {
-      $aClass[$k]["object_spec"] = $spec->getDBSpec();
+// Fonction d'extraction des proprietés d'un type SQL (du genre "UNSIGNED INT(11)")
+function extract_props($type) {
+  $props = array(
+    'type' => null,
+    'params' => null,
+    'unsigned' => null,
+    'zerofill' => null,
+  );
+  $props['type']    = $type;
+  $props['unsigned'] = stristr($type, 'unsigned') != false;
+  $props['zerofill'] = stristr($type, 'zerofill') != false;
+  $props['params']  = null;
+  if ($pos = strpos($props['type'], '(')) {
+    $props['params']  = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
+    $props['params'] = array_map('trim', $props['params']);
+    $props['type']    = substr($props['type'], 0, $pos);
+  }
+  $props['type'] = strtoupper($props['type']);
+  return $props;
+}
+
+function array_duplicates($array, $field) {
+  $ret = array();
+  $count = count($array);
+  for ($i = 0; $i < $count; $i++) {
+    for ($j = 0; $j < $count; $j++) {
+      if ($i != $j && $array[$i][$field] == $array[$j][$field]) {
+        $ret[$i][] = $array[$i];
+      }
     }
-  } 
+  }
+  return $ret;
+}
+
+// Pour toutes les classes selectionnées
+foreach ($list_selected_classes as $curr_class_name) {
+  $object = new $curr_class_name;
   
-  // Extraction des propriétés
+  $list_classes[$curr_class_name] = array();
+  $class = &$list_classes[$curr_class_name];
+  
+  // Clé dela table
+  $class['table'] = $object->_tbl;
+  $class['key'] = $object->_tbl_key;
+  $class['db_key'] = null;
+  $class['fields'] = array();
+  
+  // Extraction des champs de la classe
+  $db_fields = $object->getDBFields();
+  foreach ($db_fields as $k => $v) {
+    $class['fields'][$k] = array();
+    
+    // object fields
+    $class['fields'][$k]['object'] = array();
+    $class['fields'][$k]['object']['spec'] = null;
+    $class['fields'][$k]['object']['db_spec'] = null;
+    
+    $class['fields'][$k]['db'] = null;
+    
+    $object->getSpecsObj();
+    $is_key = $k == $class['key'];
+    // db fields
+    if ($spec = @$object->_specs[$k]) {
+      $class['fields'][$k]['object']['db_spec'] = extract_props($spec->getDBSpec());
+      
+      $specs_obj = $object->getSpecsObj();
+      $db_spec = &$class['fields'][$k]['object']['db_spec'];
+      $db_spec['index'] = (isset($spec->class) || 
+                           $spec->prop == 'dateTime' || 
+                           $spec->prop == 'date' || 
+                           $spec->prop == 'time' || 
+                           $k == $class['key']);
+      $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
+      if ($is_key) {
+        $db_spec['unsigned'] = true;
+      }
+      $db_spec['extra'] = null;
+      $db_spec['default'] = (isset($specs_obj['default']) ? 
+                            $specs_obj['default'] : 
+                            (isset($specs_obj['defaultOption']) ?
+                              $specs_obj['defaultOption'] :
+                              ''));
+    }
+    $class['fields'][$k]['db'] = null;
+  }
+  
+  // Extraction des propriétés de la classe
   foreach($object->_props as $k => $v) {
-    if($k[0] != "_"){
-      $aClass[$k]["class_props"] = $v;
+    if ($k[0] != '_') {
+      $class['fields'][$k]['object']['spec'] = $v;
     }
   }
   
-  //Extraction des champs de la BDD
+  // Extraction des champs de la BDD
   if($ds->loadTable($object->_tbl)) {
-	  $sql = "SHOW FULL FIELDS FROM `".$object->_tbl."`";
-	  $listFields = $ds->loadList($sql);
-	  foreach($listFields as $currField){
-	  	$aBdd_field =& $aClass[$currField["Field"]];
-	    $aBdd_field["BDD_name"]    = $currField["Field"];
-	    $aBdd_field["BDD_type"]    = $currField["Type"];
-	    $aBdd_field["BDD_null"]    = $currField["Null"];
-	    $aBdd_field["BDD_default"] = $currField["Default"];
-	    $aBdd_field["BDD_index"]   = null;
+	  $sql = "SHOW COLUMNS FROM `$object->_tbl`";
+	  $list_fields = $ds->loadList($sql);
+	  
+	  foreach($list_fields as $curr_field){
+	    $class['fields'][$curr_field['Field']]['db'] = array();
+	    if (!isset($class['fields'][$curr_field['Field']]['object'])) {
+	      $class['fields'][$curr_field['Field']]['object'] = array();
+	      $class['fields'][$curr_field['Field']]['object']['spec'] = null;
+	    }
+	  	$field =& $class['fields'][$curr_field['Field']]['db'];
+	  	
+	  	$props = extract_props($curr_field['Type']);
+	  	
+	    $field['type']     = $props['type'];
+	    $field['params']   = $props['params'];
+	    $field['unsigned'] = $props['unsigned'];
+	    $field['zerofill'] = $props['zerofill'];
+	    $field['null']     = ($curr_field['Null'] != 'NO');
+	    $field['default']  = $curr_field['Default'];
+	    $field['index']    = null;
+	    $field['extra']    = $curr_field['Extra'];
 	  }
 	  
 	  // Extraction des Index
 	  $sql = "SHOW INDEX FROM `$object->_tbl`";
     
-	  $listIndex = $ds->loadList($sql);
-	  foreach($listIndex as $currIndex) {
-	    if($aClass[$currIndex["Column_name"]]["BDD_index"]){
-	      $aClass[$currIndex["Column_name"]]["BDD_index"] .= ", ";
-	    }
-	    if($currIndex["Key_name"]=="PRIMARY"){
-	      $aClass[$currIndex["Column_name"]]["BDD_primary"] = true;
-	    }
-	    $aClass[$currIndex["Column_name"]]["BDD_index"] .= $currIndex["Key_name"];
+	  $list_indexes = $ds->loadList($sql);
+	  
+    $duplicates = array_duplicates($list_indexes, 'Column_name');
+    $class['duplicates'] = $duplicates;
+	  
+	  foreach($list_indexes as $curr_index) {
+      $class['fields'][$curr_index['Column_name']]['db']['index'] = $curr_index['Key_name'];
+      
+	    if($curr_index['Key_name'] == 'PRIMARY'){
+        $class['db_key'] = $curr_index['Column_name'];
+        $class['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
+      }
 	  }
-  } 
+  }
+  $class['suggestion'] = null;
+  //mbTrace($class);
 }
 
-$aChampsObligatoire = array(
-  "keytable", 
-  "class_field", 
-  "class_props",
-  "BDD_name",
-  "BDD_type",
-  "BDD_null",
-  "BDD_default",
-  "BDD_index",
-  "BDD_primary", 
-  "object_spec"
-);
-
-// Test de concordance
-foreach($aChamps as $nameClass=>$currClass){
-  foreach($currClass as $k=>$valueChamps){
-    $curr_champ =& $aChamps[$nameClass][$k];
-    
-    // Ajout des champs manquants
-    foreach($aChampsObligatoire as $VerifChamps){
-      if(!isset($curr_champ[$VerifChamps])){
-        $curr_champ[$VerifChamps] = null;
-      }
-    }
+// Tableau indiquant si chaque champ contient une erreur
+$list_errors = array();
+foreach ($list_classes as $curr_class_name => &$curr_class) {
+  $list_errors[$curr_class_name] = array();
   
-    // Ajout des champs de controle d'erreur
-    $curr_champ["error_BDD_null"]    = null;
-    $curr_champ["error_BDD_type"]    = null;
-    $curr_champ["error_class_props"] = null;
+  if ($class_name && ($class_name != $curr_class_name)) {
+    $list_errors[$curr_class_name] = null;
+    return;
+  }
+  
+  $show = false;
+  foreach ($curr_class['fields'] as $curr_field_name => &$curr_field) {
+    $list_errors[$curr_class_name][$curr_field_name] = false;
     
-    // Test clé de table
-    if ($curr_champ["keytable"]) {
-      if ($curr_champ["BDD_type"]) {
-        if ($curr_champ["class_field"] == $curr_champ["keytable"] && $curr_champ["BDD_type"] !== "int(11) unsigned"){
-          $curr_champ["error_BDD_type"] = "INT(11) UNSIGNED";
-        }
-      }
-      else {
-        $curr_champ["object_spec"] = "INT(11) UNSIGNED";
-      }
+    if (!isset($curr_field['db'])) {
+      $curr_field['db'] = array();
     }
     
-    // Test sur les propriétés
-    if($curr_champ["BDD_name"] && $curr_champ["class_props"]){
-      $type_sql = $curr_champ["object_spec"];
-      
-      if (strtoupper($curr_champ["BDD_type"]) != strtoupper($type_sql)) {
-        $curr_champ["error_class_props"] = true;
-        $curr_champ["error_BDD_type"]    = $type_sql;
-      }
-      
-      //Test notNull et YES dans BDD
-      $specFragments = explode(" ", $curr_champ["class_props"]);
-      $notNull = array_search("notNull", $specFragments);
-      if($notNull && $curr_champ["BDD_null"]=="YES"){
-        $curr_champ["error_BDD_null"] = true;
-        $curr_champ["error_class_props"] = true;
-      }
+    if (!isset($curr_field['object'])) {
+      $curr_field['object'] = array();
     }
     
-    
-    // Supressions des lignes correctes dans le mode d'affichage "liste des erreurs"
-    if($selClass===null){ 
-    	// Aucun champs d'erreur
-      $test_champs_valide = !$curr_champ["error_BDD_null"] && !$curr_champ["error_BDD_type"] && !$curr_champ["error_class_props"];
-      // ET -- Correspondance  Field et BDD
-      $test_champs_valide = $test_champs_valide && $curr_champ["BDD_name"] && $curr_champ["class_field"];
-      // ET -- clé primaire sans spec OU spec sans clé primaire
-      $test_champs_valide = $test_champs_valide && ($curr_champ["class_props"] XOR $curr_champ["BDD_primary"]);
-      $test_champs_valide = $test_champs_valide && !($curr_champ["keytable"] && $curr_champ["keytable"]==$curr_champ["class_field"] && $curr_champ["class_props"]);
+    if (!isset($curr_field['object']['db_spec'])) {
+      $curr_field['object']['db_spec'] = array();
+    }
+
+    foreach ($error_types as $err) {
+      if (!isset($curr_field['db'][$err])) {
+        $curr_field['db'][$err] = null;
+      }
       
-      if($test_champs_valide){
-        unset($aChamps[$nameClass][$k]);
+      if (!isset($curr_field['object']['db_spec'][$err])) {
+        $curr_field['object']['db_spec'][$err] = null;
+      }
+      
+      if ($types[$err] && $curr_field['db'][$err] != $curr_field['object']['db_spec'][$err]) {
+        $list_errors[$curr_class_name][$curr_field_name] = true;
+        $show = true;
       }
     }
+  }
+  if (!$show) {
+    $list_errors[$curr_class_name] = null;
   }
 }
 
-// Construction des suggestions
-$aSuggestions = array();
-foreach ($aChamps as $class => $aFields) {
-  $object = new $class;
-  $newTable = !$ds->loadTable($object->_tbl);
-
-  // Production de chaque item de suggestion
-  foreach ($aFields as $fieldName => $fieldInfo) {
-    $BDD_name = $fieldInfo["BDD_name"];
-    $error_BDD_type = $fieldInfo["error_BDD_type"];
-    $error_BDD_null = $fieldInfo["error_BDD_null"];
-    $class_props = $fieldInfo["class_props"];
-    $class_field = $fieldInfo["class_field"];
-    $BDD_sugg = $fieldInfo["object_spec"];
+// Construit la requete correspondant à la spec d'une classe 
+// (avec prise en compte des erreurs qu'on souhaite)
+function get_query_for_class($class, $errors = array()) {
+  $change = array();
+  $add = array();
+  $add_index = array();
+  $drop_index = array();
+  $ret = '';
+  
+  if (!isset($class['fields']) || count($class['fields']) == 0) return;
+  
+  // On compte les champs de BDD de la classe, si c'est null, on crée la classe 
+  $f = 0;
+  foreach($class['fields'] as $field) {
+    $f += count($field['db']);
+  }
+  $add_table = $f==0;
+  
+  // Gestion des ALTER TABLE
+  foreach ($class['fields'] as $name => $field) {
+    $spec_obj = $field['object']['db_spec'];
+    $spec_db = $field['db'];
     
-    $suggestion = null;
+    $add_field = count($spec_db) == 0;
     
-    if ($error_BDD_type || $error_BDD_null || !$BDD_name) {
-      $fieldCreateKeyword = $newTable ? "" : "ADD";
+    if ($add_field || $add_table ||
+        $errors['type']     && ($spec_obj['type']     != $spec_db['type']) ||
+        $errors['params']   && ($spec_obj['params']   != $spec_db['params']) ||
+        $errors['unsigned'] && ($spec_obj['unsigned'] != $spec_db['unsigned']) ||
+        $errors['zerofill'] && ($spec_obj['zerofill'] != $spec_db['zerofill']) ||
+        $errors['extra']    && ($spec_obj['extra']    != $spec_db['extra']) ||
+        $errors['null']     && ($spec_obj['null']     != $spec_db['null'])) {
+      $change[$name] = ($add_field||$add_table?'ADD':'CHANGE'). " `$name` " . strtoupper($spec_obj['type']);
       
-      $suggestion  = $BDD_name ?
-        "CHANGE `$fieldName` `$fieldName` $error_BDD_type" : 
-        "$fieldCreateKeyword `$fieldName` $BDD_sugg";
-      
-      if ($fieldInfo["keytable"]) {
-        $suggestion .= " NOT NULL AUTO_INCREMENT"; 
-      } 
-
-      if (false !== array_search("notNull", explode(" ", $class_props))) {
-        $suggestion .= " NOT NULL";
+      if (count($spec_obj['params']) > 0) {
+        $change[$name] .= ' (' . implode(',', $spec_obj['params']) . ')';
       }
+      $change[$name] .=
+         ($spec_obj['unsigned']?' UNSIGNED':'').
+         ($spec_obj['zerofill']?' ZEROFILL':'').
+         ($spec_obj['null']?'':' NOT NULL').
+         ($spec_obj['extra']?" {$spec_obj['extra']}":'').
+         (($name == $class['key'])?' PRIMARY KEY':'');
     }
     
-    if ($BDD_name && !$class_field) {
-      $suggestion = "DROP `$BDD_name`";
+    if ($errors['index'] && $spec_obj['index'] && !$spec_db['index']) {
+      $add_index[$name] = "ADD INDEX (`$name`)";
     }
     
-    if ($suggestion) {
-      $aSuggestions[$class][] = "\n$suggestion";
+    if ($errors['index'] && !$spec_obj['index'] && $spec_db['index']) {
+      $drop_index[$spec_db['index']] = "# DROP INDEX (`{$spec_db['index']}`)";
     }
+  }
   
+  if (count($change) > 0 || count($add_index) > 0 || count($drop_index) > 0) {
+    $glue = ",\n\t";
+    $q = array();
+    if (count($change) > 0) {
+      $q[] = implode($glue, $change);
+    }
+    if (count($add_index) > 0) {
+      $q[] = implode($glue, $add_index);
+    }
+    if (count($drop_index) > 0) {
+      $q[] = implode($glue, $drop_index);
+    }
+    
+    $ret = ($add_table?'ADD':'ALTER')." TABLE `{$class['table']}` (\n\t" . implode($glue, $q) . "\n)" . ($add_table?' TYPE=MYISAM;':';');
   }
   
-  // Production de la suggestion pour la table complete
-  if (array_key_exists($class, $aSuggestions)) {
-    if ($newTable) {
-      $aSuggestions[$class] = "CREATE TABLE `$object->_tbl` (" . 
-        join($aSuggestions[$class], ", ") . 
-        ", \nPRIMARY KEY (`$object->_tbl_key`)) TYPE=MYISAM;";
-    }
-    else {
-      $aSuggestions[$class] = "ALTER TABLE `$object->_tbl`" . 
-        join($aSuggestions[$class], ", ") . 
-        ";";
-    }
+  
+  if (count($class['duplicates']) > 0) {
+    $ret .= "\n# Il y a probablement des index en double sur cette table";
   }
-  else {
-    $aSuggestions[$class] = null;
-  }
+  
+  return $ret;
+}
 
+// Enregistre les suggestion pour chaque classe
+foreach ($list_classes as $curr_class_name => &$curr_class) {
+  $curr_class['suggestion'] = get_query_for_class($curr_class, $curr_class_name, $types);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("aChamps"   , $aChamps);
-$smarty->assign("aSuggestions"   , $aSuggestions);
-$smarty->assign("selClass"  , $selClass);
-$smarty->assign("listClass" , $listClass);
-$smarty->display("mnt_table_classes.tpl");
+$smarty->assign('list_classes',      $list_classes);
+$smarty->assign('types',             $types);
+$smarty->assign('list_errors',       $list_errors);
+$smarty->assign('class_name',        $class_name);
+$smarty->assign('list_classe_names', $list_classe_names);
+
+$smarty->display('mnt_table_classes.tpl');
 ?>
