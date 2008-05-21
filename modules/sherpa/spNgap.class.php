@@ -116,7 +116,7 @@ class CSpNGAP extends CSpObject {
     // Contenu
     $acte->loadExecution();
     $this->datact = mbDateToLocale($acte->_execution);
-    $this->codact = $acte->code;
+    $this->codact = CSpObject::makeString($acte->code);
     $this->quant  = $acte->quantite;
     $this->actqte = $acte->coefficient;
     $this->coeff  = $acte->coefficient;
