@@ -264,28 +264,6 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
-        {{$fichePaie->_base_csgnds|string_format:"%.2f"}} &euro; -
-        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnds|string_format:"%.2f"}} %</font>
-      </td>
-      <td align="right" bgcolor="#e63">
-        <font color="#fff">CSG non déductible</font>
-      </td>
-      <td align="right">{{$fichePaie->_csgnds|string_format:"%.2f"}} &euro;</td>
-      <td align="left"></td>
-      <td align="left"></td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td colspan="2" height="17" align="center" bgcolor="#e63">
-        <strong><font color="#309">Salaire de base</font></strong>
-      </td>
-      <td colspan="3" align="left"></td>
-    </tr>
-  </tbody>
-  <tbody>
-    <tr>
-      <td height="17" align="right" bgcolor="#e63">
         {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssms|string_format:"%.2f"}} %</font>
       </td>
@@ -479,6 +457,34 @@
       <td align="right" bgcolor="#eee">{{$fichePaie->_salaire_a_payer|string_format:"%.2f"}} &euro;</td>
       <td align="left" bgcolor="#eee"></td>
       <td align="left" bgcolor="#eee"></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_base_csgnds|string_format:"%.2f"}} &euro; -
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnds|string_format:"%.2f"}} %</font>
+      </td>
+      <td align="right" bgcolor="#e63">
+        <font color="#fff">CSG non déductible</font>
+      </td>
+      <td align="right">{{$fichePaie->_csgnds|string_format:"%.2f"}} &euro;</td>
+      <td align="left"></td>
+      <td align="left"></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td height="17" align="right" bgcolor="#e63">
+      </td>
+      <td align="right" bgcolor="#e63">
+        <font color="#fff">Heures comp + sup</font>
+      </td>
+      <td align="right">
+        <font color="#309">- {{$fichePaie->_total_heures_sup|string_format:"%.2f"}} &euro;</font>
+      </td>
+      <td align="left"></td>
+      <td align="left"></td>
     </tr>
   </tbody>
   <tbody>

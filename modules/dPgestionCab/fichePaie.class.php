@@ -107,16 +107,16 @@ class CFichePaie extends CMbObject {
       $this->_salaire_brut += $this->_salaire_heures_comp;
       $this->_salaire_heures_sup  = ($this->salaire * 1.25) * $this->heures_sup;
       $this->_salaire_brut += $this->_salaire_heures_sup;
+      $this->_total_heures_sup = $this->_salaire_heures_comp + $this->_salaire_heures_sup;
       $this->_prime_precarite = ($this->precarite / 100) *
-                                ($this->_salaire_base + $this->_salaire_heures_sup + $this->_salaire_heures_comp);
+                                ($this->_salaire_base + $this->_total_heures_sup);
       $this->_salaire_brut += $this->_prime_precarite;
       $this->_prime_anciennete = ($this->anciennete / 100) *
-                                 ($this->_salaire_base + $this->_salaire_heures_sup + $this->_salaire_heures_comp);
+                                 ($this->_salaire_base + $this->_total_heures_sup);
       $this->_salaire_brut += $this->_prime_anciennete;
       $this->_conges_payes = ($this->conges_payes / 100) *
                                    ($this->_salaire_base +
-                                    $this->_salaire_heures_sup +
-                                    $this->_salaire_heures_comp +
+                                    $this->_total_heures_sup +
                                     $this->_prime_precarite +
                                     $this->_prime_anciennete);
       $this->_salaire_brut += $this->_conges_payes;
@@ -142,12 +142,12 @@ class CFichePaie extends CMbObject {
       $this->_app     = $this->_salaire_brut * $this->_ref_params_paie->app / 100;
       $this->_total_cot_patr += $this->_app;
       // On peut calculer ici la CSG/RDS
-      $this->_base_csgnis = ($this->_salaire_base + $this->_ref_params_paie->mp + $this->_app) * 0.97;
+      $this->_base_csgnis = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgnis   = $this->_base_csgnis * $this->_ref_params_paie->csgnis / 100;
       $this->_total_retenues += $this->_csgnis;
-      $this->_base_csgnds = ($this->_salaire_base + $this->_app + $this->_ref_params_paie->mp) * 0.97;
+      $this->_base_csgnds = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgnds   = $this->_base_csgnds * $this->_ref_params_paie->csgnds / 100;
-      $this->_base_csgds = ($this->_salaire_heures_comp + $this->_salaire_heures_sup) * 0.97;
+      $this->_base_csgds = $this->_total_heures_sup * 0.97;
       $this->_csgds    = $this->_base_csgds * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues += $this->_csgds;
       // On reviens à nos cotisations classiques
@@ -163,17 +163,17 @@ class CFichePaie extends CMbObject {
       $this->_total_retenues += $this->_ref_params_paie->ms;
       $this->_total_cot_patr += $this->_ref_params_paie->mp;
       // Réductions bas salaires
-      $this->_reduc_bas_salaires = (0.281/0.6)*(1.6*($this->_ref_params_paie->smic*$this->heures/$this->_salaire_brut)-1);
-      $this->_reduc_bas_salaires = min(0.281, $this->_reduc_bas_salaires)*$this->_salaire_brut;
+      $this->_reduc_bas_salaires = (0.281/0.6) * (1.6 * ($this->_ref_params_paie->smic * $this->heures / $this->_salaire_brut) - 1);
+      $this->_reduc_bas_salaires = min(0.281, $this->_reduc_bas_salaires) * $this->_salaire_brut;
       $this->_reduc_bas_salaires = max(0, $this->_reduc_bas_salaires);
       $this->_total_cot_patr -= $this->_reduc_bas_salaires;
       // Défiscalisation des heures sup
-      $this->_reduc_heures_sup_sal = $this->_salaire_heures_sup + $this->_salaire_heures_comp * 0.215;
+      $this->_reduc_heures_sup_sal = $this->_total_heures_sup * 0.215;
       $this->_total_retenues -= $this->_reduc_heures_sup_sal;
-      $this->_reduc_heures_sup_pat = ($this->heures_sup + $this->heures_comp) * 1.5;
+      $this->_reduc_heures_sup_pat = $this->heures_sup * 1.5;
       $this->_total_cot_patr -= $this->_reduc_heures_sup_pat;
       $this->_salaire_a_payer = $this->_salaire_brut - $this->_total_retenues;
-      $this->_salaire_net = $this->_salaire_a_payer + $this->_csgnds - $this->_salaire_heures_sup;
+      $this->_salaire_net = $this->_salaire_a_payer + $this->_csgnds - $this->_total_heures_sup;
     }
   }
   
