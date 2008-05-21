@@ -147,6 +147,7 @@ class CFichePaie extends CMbObject {
       $this->_total_retenues += $this->_csgnis;
       $this->_base_csgnds = ($this->_salaire_brut + $this->_app + $this->_ref_params_paie->mp) * 0.97;
       $this->_csgnds   = $this->_base_csgnds * $this->_ref_params_paie->csgnds / 100;
+      $this->_total_retenues += $this->_csgnds;
       $this->_base_csgds = $this->_total_heures_sup * 0.97;
       $this->_csgds    = $this->_base_csgds * $this->_ref_params_paie->csgds / 100;
       $this->_total_retenues += $this->_csgds;

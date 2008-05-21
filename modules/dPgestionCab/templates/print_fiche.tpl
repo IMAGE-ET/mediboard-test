@@ -264,6 +264,20 @@
   <tbody>
     <tr>
       <td height="17" align="right" bgcolor="#e63">
+        {{$fichePaie->_base_csgnds|string_format:"%.2f"}} &euro; -
+        <font color="#3e3">{{$fichePaie->_ref_params_paie->csgnds|string_format:"%.2f"}} %</font>
+      </td>
+      <td align="right" bgcolor="#e63">
+        <font color="#fff">CSG non déductible</font>
+      </td>
+      <td align="right">{{$fichePaie->_csgnds|string_format:"%.2f"}} &euro;</td>
+      <td align="left"></td>
+      <td align="left"></td>
+    </tr>
+  </tbody>
+  <tbody>
+    <tr>
+      <td height="17" align="right" bgcolor="#e63">
         {{$fichePaie->_salaire_brut|string_format:"%.2f"}} &euro; -
         <font color="#3e3">{{$fichePaie->_ref_params_paie->ssms|string_format:"%.2f"}} %</font>
       </td>
