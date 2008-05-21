@@ -54,11 +54,12 @@ function extract_props($type) {
   $props['type']    = $type;
   $props['unsigned'] = stristr($type, 'unsigned') != false;
   $props['zerofill'] = stristr($type, 'zerofill') != false;
+  $props['type'] = trim(str_ireplace(array('unsigned', 'zerofill'), '', $props['type']));
   $props['params']  = null;
   if ($pos = strpos($props['type'], '(')) {
-    $props['params']  = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
+    $props['params'] = explode(',', substr($props['type'], $pos+1, strpos($props['type'], ')')-$pos-1));
     $props['params'] = array_map('trim', $props['params']);
-    $props['type']    = substr($props['type'], 0, $pos);
+    $props['type']   = substr($props['type'], 0, $pos);
   }
   $props['type'] = strtoupper($props['type']);
   return $props;
@@ -106,20 +107,23 @@ foreach ($list_selected_classes as $curr_class_name) {
     $is_key = $k == $class['key'];
     // db fields
     if ($spec = @$object->_specs[$k]) {
+      //mbTrace($spec);
       $class['fields'][$k]['object']['db_spec'] = extract_props($spec->getDBSpec());
       
       $specs_obj = $object->getSpecsObj();
       $db_spec = &$class['fields'][$k]['object']['db_spec'];
       $db_spec['index'] = (isset($spec->class) || 
-                           $spec->prop == 'dateTime' || 
-                           $spec->prop == 'date' || 
-                           $spec->prop == 'time' || 
+                           $spec instanceof CDateTimeSpec || 
+                           $spec instanceof CDateSpec || 
+                           $spec instanceof CTimeSpec || 
                            $k == $class['key']);
       $db_spec['null'] = !(isset($spec->notNull)) && !$is_key;
       if ($is_key) {
         $db_spec['unsigned'] = true;
       }
-      $db_spec['extra'] = null;
+      if ($k == $class['key']) {
+        $db_spec['extra'] = 'auto_increment';
+      }
       $db_spec['default'] = (isset($specs_obj['default']) ? 
                             $specs_obj['default'] : 
                             (isset($specs_obj['defaultOption']) ?
@@ -138,6 +142,7 @@ foreach ($list_selected_classes as $curr_class_name) {
   
   // Extraction des champs de la BDD
   if($ds->loadTable($object->_tbl)) {
+    $class['no_table'] = false;
 	  $sql = "SHOW COLUMNS FROM `$object->_tbl`";
 	  $list_fields = $ds->loadList($sql);
 	  
@@ -177,10 +182,13 @@ foreach ($list_selected_classes as $curr_class_name) {
         $class['fields'][$curr_index['Column_name']]['object']['db_spec']['extra'] = 'auto_increment';
       }
 	  }
+  } else {
+    $class['no_table'] = true;
   }
   $class['suggestion'] = null;
-  //mbTrace($class);
 }
+
+//mbTrace($class);
 
 // Tableau indiquant si chaque champ contient une erreur
 $list_errors = array();
@@ -198,6 +206,7 @@ foreach ($list_classes as $curr_class_name => &$curr_class) {
     
     if (!isset($curr_field['db'])) {
       $curr_field['db'] = array();
+      $curr_field['db']['no_column'] = true;
     }
     
     if (!isset($curr_field['object'])) {
@@ -240,19 +249,16 @@ function get_query_for_class($class, $errors = array()) {
   if (!isset($class['fields']) || count($class['fields']) == 0) return;
   
   // On compte les champs de BDD de la classe, si c'est null, on crée la classe 
-  $f = 0;
-  foreach($class['fields'] as $field) {
-    $f += count($field['db']);
-  }
-  $add_table = $f==0;
+  $add_table = $class['no_table'];
   
   // Gestion des ALTER TABLE
   foreach ($class['fields'] as $name => $field) {
     $spec_obj = $field['object']['db_spec'];
     $spec_db = $field['db'];
     
-    $add_field = count($spec_db) == 0;
+    $add_field = isset($spec_db['no_column']);
     
+    // creation des lignes de specification des champs
     if ($add_field || $add_table ||
         $errors['type']     && ($spec_obj['type']     != $spec_db['type']) ||
         $errors['params']   && ($spec_obj['params']   != $spec_db['params']) ||
@@ -260,7 +266,7 @@ function get_query_for_class($class, $errors = array()) {
         $errors['zerofill'] && ($spec_obj['zerofill'] != $spec_db['zerofill']) ||
         $errors['extra']    && ($spec_obj['extra']    != $spec_db['extra']) ||
         $errors['null']     && ($spec_obj['null']     != $spec_db['null'])) {
-      $change[$name] = ($add_field||$add_table?'ADD':'CHANGE'). " `$name` " . strtoupper($spec_obj['type']);
+      $change[$name] = ($add_field?'ADD':'CHANGE'). " `$name` " . strtoupper($spec_obj['type']);
       
       if (count($spec_obj['params']) > 0) {
         $change[$name] .= ' (' . implode(',', $spec_obj['params']) . ')';
@@ -273,7 +279,8 @@ function get_query_for_class($class, $errors = array()) {
          (($name == $class['key'])?' PRIMARY KEY':'');
     }
     
-    if ($errors['index'] && $spec_obj['index'] && !$spec_db['index']) {
+    // creation des lignes d'ajout suppression des index
+    if ($errors['index'] && $spec_obj['index'] && !$spec_db['index'] && $class['key'] != $name) {
       $add_index[$name] = "ADD INDEX (`$name`)";
     }
     
@@ -282,22 +289,29 @@ function get_query_for_class($class, $errors = array()) {
     }
   }
   
-  if (count($change) > 0 || count($add_index) > 0 || count($drop_index) > 0) {
-    $glue = ",\n\t";
-    $q = array();
-    if (count($change) > 0) {
-      $q[] = implode($glue, $change);
+  $glue = ",\n\t";
+  
+  // creation / modification de la table
+  if (count($change) > 0) {
+    if ($add_table) {
+      $ret = "CREATE TABLE `{$class['table']}` (\n\t" . implode($glue, $change) . "\n) TYPE=MYISAM;";
     }
-    if (count($add_index) > 0) {
-      $q[] = implode($glue, $add_index);
+    else {
+      $ret = "ALTER TABLE `{$class['table']}` \n\t" . implode($glue, $change) . "\n;";
     }
-    if (count($drop_index) > 0) {
-      $q[] = implode($glue, $drop_index);
-    }
-    
-    $ret = ($add_table?'ADD':'ALTER')." TABLE `{$class['table']}` (\n\t" . implode($glue, $q) . "\n)" . ($add_table?' TYPE=MYISAM;':';');
   }
   
+  // ajout / suppression des index
+  if (count($add_index) > 0 || count($drop_index) > 0) {
+      $q = array();
+      if (count($add_index) > 0) {
+        $q[] = implode($glue, $add_index);
+      }
+      if (count($drop_index) > 0) {
+        $q[] = implode($glue, $drop_index);
+      }
+      $ret .= "\nALTER TABLE `{$class['table']}` \n\t" . implode($glue, $q) . "\n;";
+  }
   
   if (count($class['duplicates']) > 0) {
     $ret .= "\n# Il y a probablement des index en double sur cette table";

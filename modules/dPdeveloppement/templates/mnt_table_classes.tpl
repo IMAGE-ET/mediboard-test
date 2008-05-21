@@ -95,36 +95,42 @@
                 &nbsp;
                 <hr style="border: 0; border-top: 1px solid #CCC; margin: 1px;" />
                 
-                {{if $curr_field.db}}
-                  <span {{if $curr_field.db.type != $curr_field.object.db_spec.type}}class="warning"{{/if}}>
-                    {{$curr_field.db.type}}
-                  </span>
+                {{if !$curr_class.no_table}}
+                  {{if $curr_field.db}}
+                    <span {{if $curr_field.db.type != $curr_field.object.db_spec.type}}class="warning"{{/if}}>
+                      {{$curr_field.db.type}}
+                    </span>
+                    
+                    <span {{if $curr_field.db.params != $curr_field.object.db_spec.params}}class="warning"{{/if}}>
+                      {{if $curr_field.db.params|@count > 0}}
+                      (
+                        {{foreach from=$curr_field.db.params item=param name=params}}
+                          {{$param}}{{if !$smarty.foreach.params.last}},{{/if}}
+                        {{/foreach}}
+                      )
+                      {{/if}}
+                    </span>
                   
-                  <span {{if $curr_field.db.params != $curr_field.object.db_spec.params}}class="warning"{{/if}}>
-                    {{if $curr_field.db.params|@count > 0}}
-                    (
-                      {{foreach from=$curr_field.db.params item=param name=params}}
-                        {{$param}}{{if !$smarty.foreach.params.last}},{{/if}}
-                      {{/foreach}}
-                    )
-                    {{/if}}
-                  </span>
-                
-                  <span {{if $curr_field.db.unsigned != $curr_field.object.db_spec.unsigned}}class="warning"{{/if}}>
-                    {{if $curr_field.db.unsigned}}UNSIGNED{{else}}&nbsp;{{/if}}
-                  </span>
-                  
-                  <span {{if $curr_field.db.zerofill != $curr_field.object.db_spec.zerofill}}class="warning"{{/if}}>
-                    {{if $curr_field.db.zerofill}}ZEROFILL{{else}}&nbsp;{{/if}}
-                  </span>
-                  
-                  <span {{if $curr_field.db.null != $curr_field.object.db_spec.null}}class="warning"{{/if}}>
-                    {{if !$curr_field.db.null}}NOT NULL{{else}}&nbsp;{{/if}}
-                  </span>
-
+                    <span {{if $curr_field.db.unsigned != $curr_field.object.db_spec.unsigned}}class="warning"{{/if}}>
+                      {{if $curr_field.db.unsigned}}UNSIGNED{{else}}&nbsp;{{/if}}
+                    </span>
+                    
+                    <span {{if $curr_field.db.zerofill != $curr_field.object.db_spec.zerofill}}class="warning"{{/if}}>
+                      {{if $curr_field.db.zerofill}}ZEROFILL{{else}}&nbsp;{{/if}}
+                    </span>
+                    
+                    <span {{if $curr_field.db.null != $curr_field.object.db_spec.null}}class="warning"{{/if}}>
+                      {{if !$curr_field.db.null}}NOT NULL{{else}}&nbsp;{{/if}}
+                    </span>
+  
+                  {{else}}
+                    <div class="error">
+                      Pas de colonne pour cette spec
+                    </div>
+                  {{/if}}
                 {{else}}
                   <div class="error">
-                    Pas de colonne pour cette spec
+                    Pas de table existance pour cette classe
                   </div>
                 {{/if}}
               </td>
