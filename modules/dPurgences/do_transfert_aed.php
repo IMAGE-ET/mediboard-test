@@ -37,15 +37,21 @@ $sejour->group_id     = $sejour_rpu->group_id;
 $sejour->entree_prevue = mbDateTime();
 $sejour->sortie_prevue = mbDateTime("+ 1 day");
 $sejour->entree_reelle = mbDateTime();
+$sejour->chambre_seule = "0";
 $sejour->type = "comp";
 $sejour->DP = $sejour_rpu->DP;
 $sejour->DR = $sejour_rpu->DR;
-if($rpu->diag_infirmier){ 
-  $sejour->rques = "Diagnostic infirmier: $rpu->diag_infirmier\n";
+$sejour->rques  = "";
+
+if ($rpu->diag_infirmier){ 
+  $sejour->rques .= "Diagnostic infirmier: $rpu->diag_infirmier\n";
 }
-if($rpu->motif){
+
+if ($rpu->motif){
   $sejour->rques .= "Motif de recours aux urgences: $rpu->motif";
 }
+
+$sejour->updateDBFields();
 $msg = $sejour->store();
 viewMsg($msg, "msg-CSejour-title-create");
 

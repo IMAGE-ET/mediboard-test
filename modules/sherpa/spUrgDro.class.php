@@ -166,7 +166,7 @@ class CSpUrgDro extends CSpObject {
     );
     
     $urmuta = implode("|", $urmuta);
-    $specs["urmuta"]  = "enum list|$urmuta";
+    $specs["urmuta"]  = "enum list|$urmuta default|X";
 
     /* Type d'Urgence                   */
     $urtype = array (

@@ -72,12 +72,14 @@ class CEnumSpec extends CMbFieldSpec {
           $sHtml    .= "<option value=\"\">$defaultOption</option>";
         }
       }
-      foreach($enumsTrans as $key => $item){
-        if(($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default" && !$defaultOption)){
+      foreach ($enumsTrans as $key => $item) {
+        if (($value !== null && $value === "$key") || ($value === null && "$key" === "$this->default")){
           $selected = " selected=\"selected\""; 
-        }else{
+        }
+        else {
           $selected = "";
         }
+        
         $sHtml    .= "<option value=\"$key\"$selected>$item</option>";
       }
       $sHtml      .= "</select>";
