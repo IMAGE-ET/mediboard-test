@@ -179,7 +179,7 @@ Main.add(function () {
         {{if !$praticien || $anesthesiste}}
         <tr>
           <td>
-            {{if $module == "dPhospi" || $anesthesiste}}
+            {{if $m == "dPhospi" || $anesthesiste}}
             <form name="selService" action="?m={{$m}}" method="get">
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
@@ -199,7 +199,7 @@ Main.add(function () {
 	            <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="mode" value="0" />
               <input type="hidden" name="service_id" value="" />
-	            <select name="praticien_id" onchange="document.selService.service_id.value = ''; submit();">
+	            <select name="praticien_id" onchange="{{if $m == "dPhospi" || $anesthesiste}}document.selService.service_id.value = '';{{/if}} submit();">
 	              <option value="">&mdash; Choix du praticien</option>
 	              {{foreach from=$praticiens item=_prat}}
 	                <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
