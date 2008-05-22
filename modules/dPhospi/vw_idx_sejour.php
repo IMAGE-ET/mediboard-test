@@ -29,7 +29,7 @@ $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
 $praticien    = $userCourant->isPraticien();
 
 if($praticien) {
-  $praticien_id = $userSel->user_id;
+  $praticien_id = $userCourant->user_id;
 }
 
 if($praticien_id){
