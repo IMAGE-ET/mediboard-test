@@ -138,7 +138,7 @@ foreach($opbyprat as $key => $value) {
   $to = "#EEEEEE";
   $bplot->SetFillGradient($from,$to,GRAD_LEFT_REFLECTION);
   $bplot->SetColor("white");
-  $bplot->setLegend($users[$key]->_view);
+  $bplot->setLegend(singleToMultiline($users[$key]->_view));
   $bplot->value->SetFormat("%01.0f");
   $bplot->value->SetColor($colors[($key % 12)]);
   $bplot->value->SetFont(FF_ARIAL,FS_NORMAL, 8); 

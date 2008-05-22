@@ -38,7 +38,7 @@ foreach($sejour->_enumsTrans["type"] as $keyType=>$vType){
   $testCourant    = ($type_adm == $keyType);
   $testTous       = ($type_adm == null);
   if( $testTous || $testCourant || $testAmbuOrComp){
-    $listHospis[$keyType] = str_replace(" ", "\n",$vType);
+    $listHospis[$keyType] = singleToMultiline($vType);
   }
 }
 

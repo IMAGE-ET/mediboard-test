@@ -63,7 +63,7 @@ $opbysalle = array();
 $i=0;
 foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$curr_salle_id]["legend"] = str_replace(" ", "\n", $salle["nom"]);
+  $opbysalle[$curr_salle_id]["legend"] = singleToMultiline($salle["nom"]);
   
   $sql = "SELECT COUNT(operations.operation_id) AS total," .
     "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .

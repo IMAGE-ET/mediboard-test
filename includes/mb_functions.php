@@ -775,6 +775,32 @@ function in_range($value, $min, $max) {
 }
 
 /**
+ * transform a single line into a \n multiline
+ * @param $string string The single line
+ * @param $minlenght int The maxlenght of a line
+ * @param $max mixed The upper limit
+ * @return bool 
+ */
+function singleToMultiline($string, $maxlength = 10) {
+  $words = explode(" ", $string);
+  $lines = array();
+  $i = 0;
+  foreach($words as $word) {
+    if(!isset($lines[$i])) {
+      $lines[$i] = $word;
+    } else {
+      if(strlen($lines[$i]) + strlen($word) < $maxlength) {
+        $lines[$i] .= " $word";
+      } else {
+        $i++;
+        $lines[$i] = $word;
+      }
+    }
+  }
+  return implode("\n", $lines);
+}
+
+/**
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
  * @param code string String representing a potential Luhn number
