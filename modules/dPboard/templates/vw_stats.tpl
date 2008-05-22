@@ -1,5 +1,14 @@
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 
+<script type="text/javascript">
+
+function pageMain() {
+  regFieldCalendar("filters", "_date_min_stat");
+  regFieldCalendar("filters", "_date_max_stat");
+}
+
+</script>
+
 <table class="main">
   <tr>
     <td>
@@ -13,9 +22,9 @@
         </tr>
         <tr>
           <td>{{mb_label object=$filterSejour field="_date_min_stat"}}</td>
-          <td class="date">{{mb_field object=$filterSejour field="_date_min_stat" form="hospitalisation" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filterSejour field="_date_min_stat" form="filters" canNull="false"}} </td>
           <td>{{mb_label object=$filterSejour field="_date_max_stat"}}</td>
-          <td class="date">{{mb_field object=$filterSejour field="_date_max_stat" form="hospitalisation" canNull="false"}} </td>
+          <td class="date">{{mb_field object=$filterSejour field="_date_max_stat" form="filters" canNull="false"}} </td>
         </tr>
         <tr>
           <td>{{mb_label object=$filterSejour field="type"}}</td>

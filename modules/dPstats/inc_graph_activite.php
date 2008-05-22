@@ -37,6 +37,26 @@ if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
 
 $ds = CSQLDataSource::get("std");
+
+$sql = "SELECT sallesbloc.*, COUNT(operations.operation_id) as total" .
+  "\nFROM operations" .
+  "\nINNER JOIN sallesbloc" .
+  "\nON operations.salle_id = sallesbloc.salle_id" .
+  "\nINNER JOIN plagesop" .
+  "\nON operations.plageop_id = plagesop.plageop_id" .
+  "\nINNER JOIN users_mediboard" .
+  "\nON operations.chir_id = users_mediboard.user_id" .
+  "\nWHERE sallesbloc.stats = '1'" .
+  "\nAND plagesop.date BETWEEN '$debutact' AND '$finact'" .
+  "\nAND operations.annulee = '0'";
+if($prat_id)
+  $sql .= "\nAND operations.chir_id = '$prat_id'";
+if($discipline_id)
+  $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
+if($codes_ccam)
+  $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+$sql .= "\nGROUP BY operations.salle_id";
+
 $salles = $ds->loadlist($sql);
 
 $opbysalle = array();
