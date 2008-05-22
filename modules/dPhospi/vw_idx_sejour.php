@@ -55,8 +55,8 @@ $groupSejourNonAffectes = array();
 $sejoursParService = array();
 
 // Chargement de la liste de praticiens
-$praticien = new CMediusers();
-$praticiens = $praticien->loadPraticiens(PERM_READ);
+$prat = new CMediusers();
+$praticiens = $prat->loadPraticiens(PERM_READ);
 
 
 if($praticien_id){
