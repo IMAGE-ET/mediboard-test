@@ -217,14 +217,21 @@ function pageMain() {
        {{if $compte_rendu->compte_rendu_id}}
          {{if $droit}}
          {{mb_field object=$compte_rendu field="source" id="htmlarea"}}
+
          {{else}}
+         <div class="big-info">
+           Le présent modèle est en lecture seule. 
+           <br/>Il comporte en l'état {{$compte_rendu->source|count_words}} mots.
+           <br/>Vous pouvez le copier pour votre propre usage en cliquant sur <strong>Dupliquer</strong>. 
+         </div>
          {{mb_field object=$compte_rendu field="source" id="htmlarea" hidden="1"}}
          
          <!-- Affichage du compte rendu sous forme de fichier en lecture seule -->       
+         <hr/>
          <div  class="previewfile">
             {{$compte_rendu->source|smarty:nodefaults}}
          </div>
-         
+         <hr/>
          {{/if}}
        {{/if}}
       </td>
