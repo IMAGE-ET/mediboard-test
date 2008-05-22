@@ -625,6 +625,7 @@ class CConsultation extends CCodable {
       if($code_ngap) {
 	      $detailCodeNGAP = explode("-", $code_ngap);
 	      $acte = new CActeNGAP();
+        $acte->executant_id = $this->getExecutantId();
 	      $acte->_preserve_montant = true;
 	      $acte->quantite            = $detailCodeNGAP[0];
 	      $acte->code                = $detailCodeNGAP[1];
@@ -644,7 +645,9 @@ class CConsultation extends CCodable {
 	      $acte->object_id = $this->_id;
 	      $acte->object_class = $this->_class_name;
 	      if (!$acte->countMatchingList()) {
-	        $acte->store();
+	        if ($msg = $acte->store()) {
+	          return $msg;
+	        }
 	      }
 	    }
     } 

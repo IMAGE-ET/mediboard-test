@@ -8,9 +8,10 @@
 */
 
 
-global $AppUI, $can, $m;
-
-$can->needsEdit();
+global $can;
+// @todo à transférer dans  dPpatient
+// En l'état on ne peut pas vérifier les droits sur dPcabinet
+//$can->needsRead();
 
 $user_id = mbGetValueFromGetOrSession("user_id");
 
@@ -21,8 +22,7 @@ $user->loadRefs();
 $canUser = $user->canDo();
 
 // Vérification des droits sur les praticiens
-$listChir = $user->loadPraticiens(PERM_EDIT);
-$canUser->needsEdit(array("chirSel"=>0));
+//$canUser->needsEdit(array("chirSel"=>0));
 
 // Chargement des aides à la saisie
 $addiction = new CAddiction();

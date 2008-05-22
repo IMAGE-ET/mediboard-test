@@ -228,15 +228,6 @@ modifSecteur2 = function(){
                   {{/foreach}}
                 </td>
               </tr>
-              <!-- Suppression des actes associées a la consultation
-              <tr>
-                <td colspan="2" class="button">
-                  <input type="hidden" name="tarif" value="{{$consult->tarif}}" />
-                  <button class="cancel" type="button" onclick="cancelTarif()">Annuler le réglement</button>
-                </td>
-              </tr>
-              -->
-      
       
               {{if $consult->tarif && $consult->patient_date_reglement == "" && $consult->valide == "1"}}
               <tr>
