@@ -12,7 +12,7 @@ printDossierSoin = function(prescription_id, date){
 
 </script>
 
-
+{{if $prescription_id}}
 <table>
   <tr>
     <td>
@@ -93,3 +93,8 @@ printDossierSoin = function(prescription_id, date){
   {{/foreach}}
   {{/if}}
 </table>
+{{else}}
+<div class="big-info">
+  Ce dossier ne possède pas de prescription
+</div>
+{{/if}}
