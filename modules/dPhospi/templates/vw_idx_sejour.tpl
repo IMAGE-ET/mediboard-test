@@ -174,8 +174,28 @@ Main.add(function () {
           </th>
         </tr>
         <tr>
-          {{include file="inc_mode_hospi.tpl"}}
+          {{include file="../../dPhospi/templates/inc_mode_hospi.tpl"}}
         </tr>
+        {{if $m ==  "dPboard" && ($secretaire || $admin)}}
+        <tr>
+          <td>
+            <form name="selPraticien" action="?m={{$m}}" method="get">
+	            <input type="hidden" name="m" value="{{$m}}" />
+              <input type="hidden" name="mode" value="0" />
+              <input type="hidden" name="service_id" value="" />
+	            <select name="praticien_id" onchange="document.selService.service_id.value = ''; submit();">
+	              <option value="">&mdash; Choix du praticien</option>
+	              {{foreach from=$praticiens item=_prat}}
+	                <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
+	                  {{$_prat->_view}}
+	                </option>
+	              {{/foreach}}
+	            </select>
+            </form>
+          </td>
+        </tr>
+        {{/if}}
+        {{if $m == "dPhospi"}}
         <tr>
           <td>
             <form name="selService" action="?m={{$m}}" method="get">
@@ -207,6 +227,7 @@ Main.add(function () {
             </form>
           </td>
         </tr>
+        {{/if}}
         <tr>
           <td>
             <table class="tbl">

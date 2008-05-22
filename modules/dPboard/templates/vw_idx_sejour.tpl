@@ -1,0 +1,1 @@
+{{include file="../../dPhospi/templates/vw_idx_sejour.tpl"}}

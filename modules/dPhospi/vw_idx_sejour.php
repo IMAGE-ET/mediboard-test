@@ -17,7 +17,15 @@ $date = mbGetValueFromGetOrSession("date", mbDate());
 $datetime = mbDateTime(); 
 $mode = mbGetValueFromGetOrSession("mode", 0);
 $service_id   = mbGetValueFromGetOrSession("service_id");
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$praticien_id = mbGetValueFromGetOrSession("praticien_id", $AppUI->user_id);
+
+// Chargement de l'utilisateur courant
+$userCourant = new CMediusers;
+$userCourant->load($AppUI->user_id);
+
+// Test du type de l'utilisateur courant
+$secretaire = $userCourant->isFromType(array("Secrétaire"));
+$admin = $userCourant->isFromType(array("Administrator"));
 
 if($praticien_id){
 	$mode = 1;
@@ -185,6 +193,8 @@ if($service_id){
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("secretaire"             , $secretaire);
+$smarty->assign("admin"                  , $admin);
 $smarty->assign("praticiens"             , $praticiens);
 $smarty->assign("praticien_id"           , $praticien_id);
 $smarty->assign("object"                 , $sejour);
