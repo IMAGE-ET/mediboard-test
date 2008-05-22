@@ -1,3 +1,4 @@
+
 {{mb_include_script module=dPpatients script=pat_selector}}
 {{mb_include_script module=dPurgences script=contraintes_rpu}}
 
@@ -192,7 +193,6 @@ function pageMain() {
 
   <tr>
     <td id="radio">
-      Radio:
       {{include file="inc_vw_radio.tpl"}}
     </td>
     <td class="button">
@@ -208,14 +208,14 @@ function pageMain() {
 
 <hr class="control_tabs" />
 
-<div id="antecedents"
+<div id="antecedents">
   {{assign var="current_m" value="dPurgences"}}
   {{assign var="_is_anesth" value="0"}}
   {{assign var="consult" value=$rpu->_ref_consult}}
   {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
 </div>
 
-<div id="suivisoins">
+<div id="suivisoins" style="display:none">
 </div>
 
 {{/if}}
