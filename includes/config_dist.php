@@ -210,6 +210,8 @@ $dPconfig["dPsalleOp"] = array(
 	"CDossierMedical" => array (
     "DAS" => "0",
   ),
+  "max_add_minutes" => "10",
+  "max_sub_minutes" => "30",
 );
 	 
 $dPconfig["dPhospi"]["pathologies"] = 1;

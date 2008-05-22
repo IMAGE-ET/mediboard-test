@@ -32,7 +32,7 @@ if($operation_id){
   $timing["induction_debut"] = array();
   $timing["induction_fin"]   = array();
   foreach($timing as $key => $value) {
-    for($i = -10; $i < 10 && $operation->$key !== null; $i++) {
+    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $operation->$key !== null; $i++) {
       $timing[$key][] = mbTime("$i minutes", $operation->$key);
     }
   }

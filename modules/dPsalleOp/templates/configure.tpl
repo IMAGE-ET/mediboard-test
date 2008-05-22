@@ -5,6 +5,34 @@
 
 <table class="form">
 
+  <tr>
+    <th class="category" colspan="6">Listes déroulantes des timings</th>
+  </tr>
+  
+  {{assign var="var" value="max_sub_minutes"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/> 
+    </td>             
+  </tr>
+  
+  {{assign var="var" value="max_add_minutes"}}
+  <tr>
+    <th colspan="3">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+    <td colspan="3">
+      <input type="text" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/> 
+    </td>             
+  </tr>
+
   {{assign var="class" value="COperation"}}
   
   <tr>
