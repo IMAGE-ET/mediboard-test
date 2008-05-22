@@ -9,6 +9,8 @@
 
 global $AppUI, $m;
 
+mbExport(CPlageconsult::$minutes_interval);
+
 // Permissions ?
 $module = CModule::getInstalled($m);
 $canModule = $module->canDo();
@@ -18,8 +20,8 @@ $chir = new CMediusers;
 $chir->load($_POST["prat_id"]);
 
 $day_now = strftime("%Y-%m-%d");
-$hour_now = strftime("%H:%M:00");
-$debut = strftime("%H:00:00");
+$time_now = strftime("%H:%M:00");
+$hour_now = strftime("%H:00:00");
 
 $plage = new CPlageconsult();
 $plageBefore = new CPlageconsult();
@@ -28,8 +30,8 @@ $plageAfter = new CPlageconsult();
 $where = array();
 $where["chir_id"] = "= '$chir->user_id'";
 $where["date"]    = "= '$day_now'";
-$where["debut"]   = "<= '$hour_now'";
-$where["fin"]     = "> '$hour_now'";
+$where["debut"]   = "<= '$time_now'";
+$where["fin"]     = "> '$time_now'";
 $plage->loadObject($where);
 
 if(!$plage->plageconsult_id) {
@@ -37,28 +39,28 @@ if(!$plage->plageconsult_id) {
 	$where = array();
 	$where["chir_id"] = "= '$chir->user_id'";
 	$where["date"]    = "= '$day_now'";
-	$where["debut"]   = "<= '$debut'";
-	$where["fin"]     = ">= '$debut'";
+	$where["debut"]   = "<= '$hour_now'";
+	$where["fin"]     = ">= '$hour_now'";
   $plageBefore->loadObject($where);
-	$where["debut"]   = "<= '".mbTime("+1 HOUR", $debut)."'";
-	$where["fin"]     = ">= '".mbTime("+1 HOUR", $debut)."'";
+	$where["debut"]   = "<= '".mbTime("+1 HOUR", $hour_now)."'";
+	$where["fin"]     = ">= '".mbTime("+1 HOUR", $hour_now)."'";
   $plageAfter->loadObject($where);
   if($plageBefore->plageconsult_id) {
     if($plageAfter->plageconsult_id) {
       $plageBefore->fin = $plageAfter->debut;
     } else {
-      $plageBefore->fin = max($plageBefore->fin, mbTime("+1 HOUR", $debut));
+      $plageBefore->fin = max($plageBefore->fin, mbTime("+1 HOUR", $hour_now));
     }
     $plage =& $plageBefore;
   } elseif($plageAfter->plageconsult_id) {
-    $plageAfter->debut = min($plageAfter->debut, $debut);
+    $plageAfter->debut = min($plageAfter->debut, $hour_now);
     $plage =& $plageAfter;
   } else {
     $plage->chir_id = $chir->user_id;
     $plage->date    = $day_now;
     $plage->freq    = "00:15:00";
-    $plage->debut   = $debut;
-    $plage->fin     = mbTime("+1 HOUR", $debut);
+    $plage->debut   = $hour_now;
+    $plage->fin     = mbTime("+1 HOUR", $hour_now);
     $plage->libelle = "automatique";
   }
   $plage->updateFormFields();
@@ -78,8 +80,8 @@ if(isset($_POST["sejour_id"])){
   $consult->sejour_id = $_POST["sejour_id"];
 }
 
-$consult->heure = $hour_now;
-$consult->arrivee = $day_now." ".$hour_now;
+$consult->heure = $time_now;
+$consult->arrivee = $day_now." ".$time_now;
 $consult->duree = 1;
 $consult->chrono = CConsultation::PATIENT_ARRIVE;
 

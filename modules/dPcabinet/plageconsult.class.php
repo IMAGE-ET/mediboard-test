@@ -256,8 +256,7 @@ class CPlageconsult extends CMbObject {
   }    
 }
 
-global $dPconfig;
-$pcConfig =& $dPconfig["dPcabinet"]["CPlageconsult"];
+$pcConfig = CAppUI::conf("dPcabinet CPlageconsult");
 
 /*
 CPlageconsult::$hours_start = $pcConfig["hours_start"];
