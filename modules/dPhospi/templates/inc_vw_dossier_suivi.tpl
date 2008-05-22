@@ -8,7 +8,7 @@
     </th>
   </tr>
   <tr>
-    <td>
+    <td style="white-space:normal">
       {{if $isPraticien}}
       <form name="editObs" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_observation_aed" />
@@ -26,7 +26,7 @@
       </form>
       {{/if}}
     </td>
-    <td>
+    <td style="white-space:normal">
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_transmission_aed" />
       <input type="hidden" name="del" value="0" />
