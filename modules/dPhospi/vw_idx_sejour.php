@@ -125,7 +125,11 @@ $where = array();
 $where["group_id"] = "= '$g'";
 $services = new CService;
 $order = "nom";
-$services = $services->loadListWithPerms(PERM_READ, $where, $order);
+if($praticien_id) {
+  $services = $services->loadList($where, $order);
+} else {
+  $services = $services->loadListWithPerms(PERM_READ, $where, $order);
+}
 
 
 if($service_id){
