@@ -111,6 +111,7 @@ class CHPrim21Reader {
     $nbLine = count($lines);
     $i = 0;
     while($i < $nbLine && $this->getTypeLine($lines[$i]) == "P") {
+      mbTrace($lines[$i], "ligne patient");
       $patient = new CHprim21Patient();
       if(!$this->segmentP($lines[$i], $patient)) {
         return false;
@@ -132,7 +133,7 @@ class CHPrim21Reader {
     }
     if(!isset($lines[$i]) || $this->getTypeLine($lines[$i]) != "L") {
       $this->error_log[] = "Erreur dans la suite des segments du message ADM";
-      mbTrace($lines);
+      mbTrace($lines, "lignes du message");
       return false;
     }
     return $this->segmentL($lines[$i]);
