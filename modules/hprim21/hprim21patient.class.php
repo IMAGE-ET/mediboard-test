@@ -196,14 +196,14 @@ class CHprim21Patient extends CHprim21Object {
     
     $elements                        = explode($reader->separateur_champ, $line);
   
-    if(count($elements) < 13) {
+    if(count($elements) < 34) {
       $reader->error_log[] = "Champs manquant dans le segment patient : ".count($elements)." champs trouvés";
       return false;
     }
     
     $identifiant                     = explode($reader->separateur_sous_champ, $elements[2]);
     if(!$identifiant[0]) {
-      $reader->error_log[] = "Identifiant externe dans le segment patient";
+      $reader->error_log[] = "Identifiant externe manquant dans le segment patient";
       return false;
     }
     $this->external_id               = $identifiant[0];
@@ -230,24 +230,22 @@ class CHprim21Patient extends CHprim21Object {
     if(isset($telephone[2])) {
       $this->telephone2              = $telephone[1];
     }
-    if(count($elements) > 33) {
-      $this->traitement_local1         = $elements[14];
-      $this->traitement_local2         = $elements[15];
-      $this->taille                    = $elements[16];
-      $this->poids                     = $elements[17];
-      $this->diagnostic                = $elements[18];
-      $this->traitement                = $elements[19];
-      $this->regime                    = $elements[20];
-      $this->commentaire1              = $elements[21];
-      $this->commentaire2              = $elements[22];
-      $this->classification_diagnostic = $elements[26];
-      $this->situation_maritale        = $elements[28];
-      $this->precautions               = $elements[29];
-      $this->langue                    = $elements[30];
-      $this->statut_confidentialite    = $elements[31];
-      $this->date_derniere_modif       = $this->getDateTimeFromHprim($elements[32]);
-      $this->date_deces                = $this->getDateFromHprim($elements[33]);
-    }
+    $this->traitement_local1         = $elements[14];
+    $this->traitement_local2         = $elements[15];
+    $this->taille                    = $elements[16];
+    $this->poids                     = $elements[17];
+    $this->diagnostic                = $elements[18];
+    $this->traitement                = $elements[19];
+    $this->regime                    = $elements[20];
+    $this->commentaire1              = $elements[21];
+    $this->commentaire2              = $elements[22];
+    $this->classification_diagnostic = $elements[26];
+    $this->situation_maritale        = $elements[28];
+    $this->precautions               = $elements[29];
+    $this->langue                    = $elements[30];
+    $this->statut_confidentialite    = $elements[31];
+    $this->date_derniere_modif       = $this->getDateTimeFromHprim($elements[32]);
+    $this->date_deces                = $this->getDateFromHprim($elements[33]);
     $reader->nb_patients++;
     return true;
   }

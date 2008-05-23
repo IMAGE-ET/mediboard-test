@@ -74,10 +74,11 @@ class CHprim21Sejour extends CHprim21Object {
     $elements                   = explode($reader->separateur_champ, $line);
   
     if(count($elements) < 34) {
-      $reader->error_log[] = "Champs manquant dans le segment patient (sejour)";
+      $reader->error_log[] = "Champs manquant dans le segment patient (sejour) : ".count($elements)." champs trouvés";
       return false;
     }
     if(!$elements[4]) {
+      $reader->error_log[] = "Identifiant externe manquant dans le segment patient (sejour)";
       return false;
     }
     

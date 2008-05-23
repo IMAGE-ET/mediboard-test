@@ -49,15 +49,27 @@ class CHPrim21Reader {
     $lines = array();
     while(!feof($file)){
       if(!$i) {
-        $header = fgets( $file, 1024);
+        $header = fgets($file, 1024);
+        $i++;
       } else {
-        $lines[] = fgets( $file, 1024);
+        $curr_line = fgets($file, 1024);
+        if(substr($curr_line, 0, 2) == "A|") {
+          $lines[$i-1] .= substr($curr_liné, 2);
+        } else {
+          $lines[$i] = $curr_line;
+          $i++;
+        }
       }
-      $i++;
     }
+    mbTrace($lines);
+    die;
+    
+    // Lecture de l'en-tête
     if(!$this->segmentH($header)) {
       return false;
     }
+    
+    // Lecture du message
     switch($this->type_message) {
       // De demandeur (d'analyses ou d'actes de radiologie) à exécutant
       case "ADM" :
