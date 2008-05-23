@@ -132,6 +132,7 @@ class CHPrim21Reader {
     }
     if(!isset($lines[$i]) || $this->getTypeLine($lines[$i]) != "L") {
       $this->error_log[] = "Erreur dans la suite des segments du message ADM";
+      mbTrace($lines);
       return false;
     }
     return $this->segmentL($lines[$i]);
