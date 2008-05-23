@@ -125,7 +125,7 @@ foreach ($profiles as $profile => $user_id) {
 		          AND DP != ''
 		          GROUP BY DP
 		          ORDER BY count(DP) DESC
-		          LIMIT 10;";
+		          LIMIT 50;";
 		
 		  $listCodes = $ds->loadList($sql);
 		
