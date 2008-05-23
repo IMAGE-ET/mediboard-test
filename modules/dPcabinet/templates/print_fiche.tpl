@@ -97,9 +97,16 @@
       </table>    
     </td>
   </tr>
-
+  
+  {{assign var=const_med value=$patient->_ref_constantes_medicales}}
+  {{assign var=ant value=$patient->_ref_dossier_medical->_ref_antecedents}}
+  {{if !$ant}}
+    {{assign var=no_alle value=0}}
+  {{else}}
+    {{assign var=no_alle value=$ant&&!array_key_exists("alle",$ant)}}
+  {{/if}}
   <tr>
-    <td class="halfPane">
+    <td class="halfPane" {{if $no_alle}}colspan="2"{{/if}}>
       <table width="100%">
         <tr>
           <th class="category" colspan="2">Informations sur le patient</th>
@@ -119,10 +126,10 @@
             ({{$patient->_age}} ans)
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
             {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}} 
-            {{if $consult->_ref_consult_anesth->poid}}<strong>{{$consult->_ref_consult_anesth->poid}} kg</strong> - {{/if}}
-            {{if $consult->_ref_consult_anesth->taille}}<strong>{{$consult->_ref_consult_anesth->taille}} cm</strong> - {{/if}}
-            {{if $consult->_ref_consult_anesth->_imc}}IMC : <strong>{{$consult->_ref_consult_anesth->_imc}}</strong>
-              {{if $consult->_ref_consult_anesth->_imc_valeur}}({{$consult->_ref_consult_anesth->_imc_valeur}}){{/if}}
+            {{if $const_med->poids}}<strong>{{$const_med->poids}} kg</strong> - {{/if}}
+            {{if $const_med->taille}}<strong>{{$const_med->taille}} cm</strong> - {{/if}}
+            {{if $const_med->_imc}}IMC : <strong>{{$const_med->_imc}}</strong>
+              {{if $const_med->_imc_valeur}}({{$const_med->_imc_valeur}}){{/if}}
             {{/if}}
           </td>
         </tr>
@@ -148,7 +155,7 @@
               <tr>
                 <th class="NotBold">VST</th>
                 <td class="Bold" style="white-space: nowrap;">
-                  {{if $consult->_ref_consult_anesth->_vst}}{{$consult->_ref_consult_anesth->_vst}} ml{{/if}}
+                  {{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}
                 </td>
               </tr>
               {{if $consult->_ref_consult_anesth->_psa}}
@@ -165,6 +172,7 @@
         </tr>
       </table>
     </td>
+    {{if !$no_alle}}
     <td class="halfPane">
       <table width="100%">
         <tr>
@@ -192,6 +200,7 @@
         </tr>
       </table>
     </td>
+    {{/if}}
   </tr>
   <tr>
     <td class="halfPane">
@@ -286,24 +295,24 @@
         <tr>
           <th class="NotBold">Pouls</th>
           <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->pouls}}
-            {{$consult->_ref_consult_anesth->pouls}} / min
+            {{if $const_med->pouls}}
+            {{$const_med->pouls}} / min
             {{else}}
             ?
             {{/if}}
           </td>
           <th class="NotBold">TA</th>
           <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->tasys || $consult->_ref_consult_anesth->tadias}}
-            {{$consult->_ref_consult_anesth->tasys}} / {{$consult->_ref_consult_anesth->tadias}} cm Hg
+            {{if $const_med->ta}}
+              {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
             {{else}}
             ?
             {{/if}}
           </td>
           <th class="NotBold">Spo2</th>
           <td class="Bold" style="white-space: nowrap;">
-            {{if $consult->_ref_consult_anesth->spo2}}
-            {{$consult->_ref_consult_anesth->spo2}} %
+            {{if $const_med->spo2}}
+            {{$const_med->spo2}} %
             {{else}}
             ?
             {{/if}}

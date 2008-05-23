@@ -19,16 +19,12 @@ class CConsultAnesth extends CMbObject {
   var $sejour_id       = null;
 
   // DB fields
-  var $poid          = null;
-  var $taille        = null;
   var $groupe        = null;
   var $rhesus        = null;
   var $antecedents   = null;
   var $traitements   = null;
   var $tabac         = null;
   var $oenolisme     = null;
-  var $tasys         = null;
-  var $tadias        = null;
   var $intubation    = null;
   var $biologie      = null;
   var $commande_sang = null;
@@ -52,8 +48,6 @@ class CConsultAnesth extends CMbObject {
   var $tsivy         = null;
   var $plaquettes    = null;
   var $ecbu          = null;
-  var $pouls         = null;
-  var $spo2          = null;
   var $ht            = null;
   var $ht_final      = null;
   var $premedication = null;
@@ -68,11 +62,8 @@ class CConsultAnesth extends CMbObject {
   var $_min_tca      = null;
   var $_intub_difficile = null;
   var $_clairance       = null;
-  var $_imc             = null;
-  var $_imc_valeur      = null;
-  var $_vst             = null;
   var $_psa             = null;
-  
+
   // Object References
   var $_ref_consultation       = null;
   var $_ref_techniques         = null;
@@ -100,17 +91,12 @@ class CConsultAnesth extends CMbObject {
     $specs["operation_id"]     = "ref class|COperation";
     $specs["sejour_id"]        = "ref class|CSejour";
 
-    // @todo : un type particulier pour le poid et la taille
-    $specs["poid"]             = "float pos";
-    $specs["taille"]           = "float min|0";
     $specs["groupe"]           = "enum list|?|O|A|B|AB default|?";
     $specs["rhesus"]           = "enum list|?|NEG|POS default|?";
     $specs["antecedents"]      = "text confidential";
     $specs["traitements"]      = "text confidential";
     $specs["tabac"]            = "text";
     $specs["oenolisme"]        = "text";
-    $specs["tasys"]            = "num max|64";
-    $specs["tadias"]           = "num max|64";
     $specs["intubation"]       = "enum list|?|dents|bouche|cou";
     $specs["biologie"]         = "enum list|?|NF|COAG|IONO";
     $specs["commande_sang"]    = "enum list|?|clinique|CTS|autologue";
@@ -128,8 +114,6 @@ class CConsultAnesth extends CMbObject {
     $specs["tsivy"]            = "time";
     $specs["plaquettes"]       = "numchar maxLength|4 pos";
     $specs["ecbu"]             = "enum list|?|NEG|POS default|?";
-    $specs["pouls"]            = "numchar maxLength|4 pos";
-    $specs["spo2"]             = "float minMax|0|100";
     $specs["ht"]               = "float minMax|0|100";
     $specs["ht_final"]         = "float minMax|0|100";
     $specs["premedication"]    = "text";
@@ -144,13 +128,10 @@ class CConsultAnesth extends CMbObject {
     $specs["examenPulmo"]      = "text";
     $specs["conclusion"]       = "text";
     $specs["position"]         = "enum list|DD|DV|DL|GP|AS|TO|GYN";
-    
+
     // Champs dérivés
     $specs["_intub_difficile"] = "";
     $specs["_clairance"]       = "";
-    $specs["_imc"]             = "";
-    $specs["_imc_valeur"]      = "";
-    $specs["_vst"]             = "";
     $specs["_psa"]             = "";
 
     return $specs;
@@ -189,36 +170,16 @@ class CConsultAnesth extends CMbObject {
     ){
       $this->_intub_difficile = true;
     }
-    // Calcul de l'Indice de Masse Corporelle
-    if($this->poid && $this->taille){
-      $this->_imc = round($this->poid / ($this->taille * $this->taille * 0.0001),2);
-    }
      
     $this->_sec_tsivy = intval(substr($this->tsivy, 6, 2));
-    $this->_min_tsivy  = intval(substr($this->tsivy, 3, 2));
-
-    // Hack for ZEROFILL issue
-    $this->tasys  = intval($this->tasys);
-    $this->tadias = intval($this->tadias);
+    $this->_min_tsivy = intval(substr($this->tsivy, 3, 2));
   }
    
   function updateDBFields() {
-
-    $this->tsivy = "00:";
-    if($this->_min_tsivy){
-      $this->tsivy .= $this->_min_tsivy.":";
-    }else{$this->tsivy .= "00:";}
-    if($this->_sec_tsivy){
-      $this->tsivy .= $this->_sec_tsivy;
-    }else{$this->tsivy .= "00";}
+    $this->tsivy  = '00:'.($this->_min_tsivy?$this->_min_tsivy:'00').':';
+    $this->tsivy .=       ($this->_sec_tsivy?$this->_sev_tsivy:'00');
 
     parent::updateDBFields();
-  }
-
-  function check() {
-    // Data checking
-    $msg = null;
-    return $msg . parent::check();
   }
 
   function loadRefConsultation() {
@@ -253,10 +214,12 @@ class CConsultAnesth extends CMbObject {
    
   function loadComplete(){
     parent::loadComplete();
+    
     $this->_ref_consultation->loadExamsComp();
     $this->_ref_consultation->loadRefsExamNyha();
     $this->_ref_consultation->loadRefsExamPossum();
     $this->_ref_consultation->loadRefsExamIgs();
+    
     $this->loadRefOperation();
     if(!$this->_ref_operation->_id) {
       $this->loadRefSejour();
@@ -277,6 +240,7 @@ class CConsultAnesth extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefConsultation();
     $this->_ref_consultation->loadRefsFwd();
+    $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();
     $this->_ref_plageconsult =& $this->_ref_consultation->_ref_plageconsult;
     $this->loadRefOperation();
     if(!$this->_ref_operation->_id) {
@@ -290,48 +254,25 @@ class CConsultAnesth extends CMbObject {
     $this->_date_op =& $this->_ref_operation->_datetime;
 
     // Calcul de la Clairance créatinine
-    if($this->poid && $this->creatinine && $this->_ref_consultation->_ref_patient->_age
-    && intval($this->_ref_consultation->_ref_patient->_age)>=18 && intval($this->_ref_consultation->_ref_patient->_age)<=110
-    && $this->poid>=35 && $this->poid<=120
-    && $this->creatinine>=6 && $this->creatinine<=70
-    ){
-      $this->_clairance = $this->poid * (140-$this->_ref_consultation->_ref_patient->_age) / (7.2 * $this->creatinine);
-      if($this->_ref_consultation->_ref_patient->sexe!="m"){
-        $this->_clairance = 0.85 * $this->_clairance;
+    $this->_ref_consultation->_ref_patient->loadRefConstantesMedicales();
+    $const_med = $this->_ref_consultation->_ref_patient->_ref_constantes_medicales;
+    $const_med->updateFormFields();
+    $age = intval($this->_ref_consultation->_ref_patient->_age);
+    if ($const_med->poids && $this->creatinine && 
+        $age && $age >= 18 && $age <= 110 && 
+        $const_med->poids >= 35 && $const_med->poids <= 120 && 
+        $this->creatinine >= 6 && $this->creatinine <= 70) {
+          $this->_clairance = $const_med->poids * (140-$age) / (7.2 * $this->creatinine);
+      if ($this->_ref_consultation->_ref_patient->sexe != 'm') {
+        $this->_clairance *= 0.85;
       }
-      $this->_clairance = round($this->_clairance,2);
+      $this->_clairance = round($this->_clairance, 2);
     }
-    // Calcul du Volume Sanguin Total
-    if($this->poid){
-      if($this->_ref_consultation->_ref_patient->sexe!="m"){
-        $this->_vst = 65 * $this->poid;
-      }else{
-        $this->_vst = 70 * $this->poid;
-      }
-    }
+    
     // Calcul des Pertes Sanguines Acceptables
-    if($this->ht && $this->_vst){
-      $this->_psa = $this->_vst * ($this->ht - 30) / 100;
+    if($this->ht && $const_med->_vst) {
+      $this->_psa = $const_med->_vst * ($this->ht - 30) / 100;
     }
-     
-    // Détermination valeur IMC
-    if($this->poid && $this->taille){
-      if($this->_ref_consultation->_ref_patient->sexe!="m"){
-        $valeurImc = array("seuil_inf" => 19, "seuil_sup" => 24);
-      }else{
-        $valeurImc = array("seuil_inf" => 20, "seuil_sup" => 25);
-      }
-      if($this->_imc < $valeurImc["seuil_inf"]){
-        $this->_imc_valeur = "Maigreur";
-      }elseif($this->_imc > $valeurImc["seuil_sup"] && $this->_imc <=30){
-        $this->_imc_valeur = "Surpoids";
-      }elseif($this->_imc > 30 && $this->_imc <=40){
-        $this->_imc_valeur = "Obésité";
-      }elseif($this->_imc > 40){
-        $this->_imc_valeur = "Obésité morbide";
-      }
-    }
-
   }
 
   function loadRefsTechniques() {
@@ -349,7 +290,7 @@ class CConsultAnesth extends CMbObject {
 
   function getTemplateClasses(){
     $this->loadRefsFwd();
-    
+
     $tab = array();
 
     // Stockage des objects liés à l'opération
@@ -396,13 +337,8 @@ class CConsultAnesth extends CMbObject {
   }
 
   function fillLimitedTemplate(&$template) {
-    $template->addProperty("Anesthésie - poids"                  , $this->poid." kg");
-    $template->addProperty("Anesthésie - taille"                 , $this->taille." cm");
-    $template->addProperty("Anesthésie - IMC"                    , $this->_imc);
     $template->addProperty("Anesthésie - tabac"                  , $this->tabac);
     $template->addProperty("Anesthésie - oenolisme"              , $this->oenolisme);
-    $template->addProperty("Anesthésie - TA"                     , $this->tasys." / ".$this->tadias);
-    $template->addProperty("Anesthésie - Pouls"                  , $this->pouls);
     $template->addProperty("Anesthésie - Groupe Sanguin"         , $this->groupe." ".$this->rhesus);
     $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
     $template->addProperty("Anesthésie - Etat bucco-dentaire"    , $this->etatBucco);

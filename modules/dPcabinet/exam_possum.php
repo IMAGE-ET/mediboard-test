@@ -27,9 +27,11 @@ $exam_possum->loadRefsFwd();
 $consultation =& $exam_possum->_ref_consult;
 $consultation->loadRefsFwd();
 $consultation->loadRefConsultAnesth();
+$consultation->_ref_consult_anesth->loadRefsFwd();
 
 $patient       =& $consultation->_ref_patient;
 $consultAnesth =& $consultation->_ref_consult_anesth;
+$const_med     =  $patient->_ref_constantes_medicales;
 
 $patient->evalAge($consultation->_date);
 if(!$exam_possum->age && $patient->_age != "??"){
@@ -48,8 +50,9 @@ if(!$exam_possum->hb && $consultAnesth->hb){
   }elseif($consultAnesth->hb >= 18.1){                                 $exam_possum->hb = "sup18.1";
   }
 }
-if(!$exam_possum->pression_arterielle && $consultAnesth->tasys){
-  $tasys = $consultAnesth->tasys * 10;
+
+if(!$exam_possum->pression_arterielle && $const_med->ta){
+  $tasys = $const_med->_ta_systole * 10;
   if($tasys <= 89){                        $exam_possum->pression_arterielle = "inf89";
   }elseif($tasys >= 90  && $tasys<= 99){  $exam_possum->pression_arterielle = "90";
   }elseif($tasys >= 100 && $tasys<= 109){ $exam_possum->pression_arterielle = "100";

@@ -37,12 +37,14 @@ function submitOpConsult() {
 }
 
 function submitAll() {
-  var oForm = document.editAnesthPatFrm;
+  var oForm = document.forms['edit-constantes-medicales'];
   submitFormAjax(oForm, 'systemMsg');
-  var oForm1 = document.editFrmIntubation;
-  submitFormAjax(oForm1, 'systemMsg');
-  var oForm2 = document.editExamCompFrm;
-  submitFormAjax(oForm2, 'systemMsg');  
+  
+  oForm = document.editFrmIntubation;
+  submitFormAjax(oForm, 'systemMsg');
+  
+  oForm = document.editExamCompFrm;
+  submitFormAjax(oForm, 'systemMsg');  
 }
 
 function showAll(patient_id) {

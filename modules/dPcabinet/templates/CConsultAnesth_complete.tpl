@@ -13,16 +13,12 @@ newExam = function(sAction, consultation_id) {
 <table class="form">
   <tr>
     <th class="title" colspan="4">
-      
       <div class="idsante400" id="{{$consult->_class_name}}-{{$consult->_id}}"></div>
       
       <a style="float:right;" href="#nothing" onclick="view_log('{{$consult->_class_name}}', {{$consult->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
-      
-	    
-	  
-	
+
       <div style="float:left;" class="noteDiv {{$consult->_class_name}}-{{$consult->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
@@ -108,21 +104,21 @@ newExam = function(sAction, consultation_id) {
     </td>
   </tr>
   
+  {{assign var=const_med value=$object->_ref_consultation->_ref_patient->_ref_constantes_medicales}}
   <tr>
     <th class="title" colspan="4">
       Informations sur le patient
     </th>
   </tr>
-  
   <tr>
     <td class="text">
       <strong>Poids :</strong>
-      {{if $object->poid}}<i>{{$object->poid}} kg</i>{{/if}}
+      {{if $const_med->poids}}<i>{{$const_med->poids}} kg</i>{{/if}}
     </td>
     <td class="text" rowspan="2">
       <strong>IMC :</strong>
-      {{if $object->_imc}}<i>{{$object->_imc}}</i>{{/if}}
-      {{if $object->_imc_valeur}}<br/><i>{{$object->_imc_valeur}}</i>{{/if}}
+      {{if $const_med->_imc}}<i>{{$const_med->_imc}}</i>{{/if}}
+      {{if $const_med->_imc_valeur}}<br/><i>{{$const_med->_imc_valeur}}</i>{{/if}}
     </td>
     <td class="text">
       <strong>Groupe sanguin :</strong>
@@ -137,7 +133,7 @@ newExam = function(sAction, consultation_id) {
   <tr>
     <td class="text">
       <strong>Taille :</strong>
-      {{if $object->taille}}<i>{{$object->taille}} cm</i>{{/if}}
+      {{if $const_med->taille}}<i>{{$const_med->taille}} cm</i>{{/if}}
     </td>
     <td class="text">
       <strong>ASA :</strong>
@@ -145,26 +141,26 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td class="text">
       <strong>VST :</strong>
-      <i>{{if $object->_vst}}{{$object->_vst}} ml{{/if}}</i>
+      <i>{{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}</i>
     </td>
   </tr>
   
   <tr>
     <td class="text">
       <strong>Pouls :</strong>
-      {{if $object->pouls}}<i>{{$object->pouls}} / min</i>{{/if}}
+      {{if $const_med->pouls}}<i>{{$const_med->pouls}} / min</i>{{/if}}
     </td>
     <td class="text">
       <strong>TA :</strong>
-      {{if $object->tasys || $object->tadias}}
+      {{if $const_med->ta}}
       <i>
-        {{$object->tasys}} / {{$object->tadias}} cm Hg
+        {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
       </i>
       {{/if}}
     </td>
     <td class="text">
       <strong>Spo2 :</strong>
-      {{if $object->spo2}}<i>{{$object->spo2}} %</i>{{/if}}
+      {{if $const_med->spo2}}<i>{{$const_med->spo2}} %</i>{{/if}}
     </td>
     <td class="text">
       <strong>PSA :</strong>
@@ -372,6 +368,7 @@ newExam = function(sAction, consultation_id) {
     <th class="title">Addiction(s)</th>
   </tr>
   
+  {{if $object->_ref_operation->_ref_sejour && $object->_ref_operation->_ref_sejour->_ref_dossier_medical}}
   <tr>
     <td class="text">
       {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
@@ -436,4 +433,12 @@ newExam = function(sAction, consultation_id) {
       {{/foreach}}
     </td>
   </tr>
+  {{else}}
+  <tr>
+    <td>Inconnu</td>
+    <td>Inconnu</td>
+    <td>Inconnu</td>
+    <td>Inconnu</td>
+  </tr>
+  {{/if}}
 </table>

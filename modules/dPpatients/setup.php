@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.66";
+$config["mod_version"]     = "0.67";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -720,7 +720,85 @@ class CSetupdPpatients extends CSetup {
     $sql = "ALTER TABLE `patients` DROP `SHS";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.66";
+    $this->makeRevision("0.66");
+    $this->addDependency("dPcabinet", "0.30");
+    $sql = "CREATE TABLE `constantes_medicales` (
+      `constantes_medicales_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `patient_id` INT (11) UNSIGNED NOT NULL,
+      `datetime` DATETIME NOT NULL,
+      `context_class` VARCHAR (255),
+      `context_id` INT (11) UNSIGNED,
+      `poids` FLOAT UNSIGNED,
+      `taille` FLOAT,
+      `ta` VARCHAR (10),
+      `pouls` INT (11) UNSIGNED,
+      `spo2` FLOAT
+    ) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `constantes_medicales` 
+      ADD INDEX (`patient_id`),
+      ADD INDEX (`datetime`),
+      ADD INDEX (`context_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "INSERT INTO `constantes_medicales` (
+        `context_class`, 
+        `context_id`, 
+        `patient_id`, 
+        `datetime`, 
+        `poids`, 
+        `taille`, 
+        `ta`, 
+        `pouls`, 
+        `spo2`
+      )
+      SELECT 
+        'CConsultation', 
+        `consultation`.`consultation_id`, 
+        `consultation`.`patient_id`,
+        CONCAT(`plageconsult`.`date`, ' ', `consultation`.`heure`), 
+        `consultation_anesth`.`poid`, 
+        `consultation_anesth`.`taille`, 
+        IF(`consultation_anesth`.`tasys`, CONCAT(`consultation_anesth`.`tasys`, '|', `consultation_anesth`.`tadias`), NULL),
+        `consultation_anesth`.`pouls`,
+        `consultation_anesth`.`spo2`
+      FROM 
+        `consultation_anesth`, `consultation`, `plageconsult`
+      WHERE 
+        `consultation`.`consultation_id` = `consultation_anesth`.`consultation_id` AND
+        `plageconsult`.`plageconsult_id` = `consultation`.`plageconsult_id`";
+    $this->addQuery($sql);
+    
+    /*$sql = "ALTER TABLE `consultation_anesth` 
+      DROP `poid`
+      DROP `taille`
+      DROP `tasys`
+      DROP `tadias`
+      DROP `pouls`
+      DROP `spo2`;";
+    $this->addQuery($sql);*/
+    
+    $repl = array("Patient - poids",
+                  "Patient - taille",
+                  "Patient - Pouls",
+                  "Patient - IMC",
+                  "Patient - TA");
+    
+    $find = array("Anesthésie - poids",
+                  "Anesthésie - taille",
+                  "Anesthésie - Pouls",
+                  "Anesthésie - IMC",
+                  "Anesthésie - TA");
+    $count = count($repl);
+    for ($i = 0; $i < $count; $i++) {
+      $sql = 'UPDATE `compte_rendu` 
+      SET `source` = REPLACE(`source`, "['.htmlentities($find[$i]).']", "['.$repl[$i].']") 
+      WHERE `object_id` IS NULL';
+      $this->addQuery($sql);
+    }
+    
+    $this->mod_version = "0.67";
   }
 }
 

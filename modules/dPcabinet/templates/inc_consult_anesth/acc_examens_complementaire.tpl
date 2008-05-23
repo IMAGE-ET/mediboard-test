@@ -1,29 +1,38 @@
 <script language="Javascript" type="text/javascript">
-function calculClairance(){
-  var oForm1 = document.editExamCompFrm;
-  var oForm2 = document.editAnesthPatFrm; 
-   if({{if $patient->_age && $patient->_age!="??" && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}}
-      && oForm2.poid.value && !isNaN(parseFloat(oForm2.poid.value)) && parseFloat(oForm2.poid.value)>0
-      && oForm1.creatinine.value && !isNaN(parseFloat(oForm1.creatinine.value)) && parseFloat(oForm1.creatinine.value)>0
-      && parseFloat(oForm2.poid.value)>=35 && parseFloat(oForm2.poid.value)<=120
-      && parseFloat(oForm1.creatinine.value)>=6 && parseFloat(oForm1.creatinine.value)<=70
-      ){
+function calculClairance () {
+  var oFormExam  = document.forms["editExamCompFrm"];
+  var oFormConst = document.forms["edit-constantes-medicales"];
+  
+  var poids      = parseFloat($V(oFormConst.poids) ? $V(oFormConst.poids): $V(oFormConst._poids));
+  var creatinine = parseFloat($V(oFormExam.creatinine));
+  
+   if({{if $patient->_age && $patient->_age!="??" && $patient->_age>=18 && $patient->_age<=110}}1{{else}}0{{/if}} && 
+     poids && !isNaN(poids) && poids >= 35 && poids <= 120 && 
+     creatinine && !isNaN(creatinine) && creatinine >= 6 && creatinine <= 70) {
      
-     oForm1._clairance.value = Math.round(({{if $patient->sexe!="m"}}0.85*{{/if}}parseFloat(oForm2.poid.value)*(140-{{if $patient->_age!="??"}}{{$patient->_age}}{{else}}0{{/if}})/(parseFloat(oForm1.creatinine.value)*7.2))*100)/100;
-   }else{
-     oForm1._clairance.value = "";
+     $V(oFormExam._clairance, Math.round(({{if $patient->sexe!="m"}}0.85 * {{/if}}poids * (140-{{if $patient->_age!="??"}}{{$patient->_age}}{{else}}0{{/if}})/creatinine*7.2)*100)/100);
+   }
+   else{
+     $V(oFormExam._clairance, "");
    }
 }
-function calculPSA(){
-  var oForm1 = document.editExamCompFrm;
-  var oForm2 = document.editAnesthPatFrm;
-  if(oForm2._vst.value && !isNaN(parseFloat(oForm2._vst.value))
-     && oForm1.ht.value && !isNaN(parseFloat(oForm1.ht.value)) && parseFloat(oForm1.ht.value)>0
-     && oForm1.ht_final.value && !isNaN(parseFloat(oForm1.ht_final.value)) && parseFloat(oForm1.ht_final.value)>0){
+
+function calculPSA () {
+  var oFormExam  = document.forms["editExamCompFrm"];
+  var oFormConst = document.forms["edit-constantes-medicales"];
+  
+  var vst = parseFloat($V(oFormConst._vst));
+  var ht = parseFloat($V(oFormExam.ht));
+  var ht_final = parseFloat($V(oFormExam.ht_final));
+  
+  if (vst && !isNaN(vst) && 
+    ht && !isNaN(ht) && ht > 0 &&
+    ht_final && !isNaN(ht_final) && ht_final > 0) {
     
-    oForm1._psa.value = Math.round(parseFloat(oForm2._vst.value)* (parseFloat(oForm1.ht.value) - parseFloat(oForm1.ht_final.value))/100);
-  }else{
-    oForm1._psa.value = "";
+    $V(oFormExam._psa, Math.round(vst * ht - ht_final)/100);
+  }
+  else {
+    $V(oFormExam._psa, "");
   }
 }
 
@@ -33,16 +42,12 @@ function delExamComp(oForm){
 }
 
 function modifEtatExamComp(oForm){
-  if(oForm.fait.value==1){
-    oForm.fait.value = 0;
-  }else{
-    oForm.fait.value = 1;  
-  }
+  oForm.fait.value = (oForm.fait.value == 1) ? 0 : 1;
   submitExamComp(oForm);
 }
 
 function submitExamComp(oForm) {
-  if(oForm.examen){
+  if (oForm.examen) {
     var examen = oForm.examen.value;
     var realisation = oForm.realisation.value;
   }

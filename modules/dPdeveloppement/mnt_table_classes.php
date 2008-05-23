@@ -1,4 +1,4 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
@@ -184,6 +184,7 @@ foreach ($list_selected_classes as $curr_class_name) {
 	  }
   } else {
     $class['no_table'] = true;
+    $class['duplicates'] = array();
   }
   $class['suggestion'] = null;
 }
@@ -266,7 +267,17 @@ function get_query_for_class($class, $errors = array()) {
         $errors['zerofill'] && ($spec_obj['zerofill'] != $spec_db['zerofill']) ||
         $errors['extra']    && ($spec_obj['extra']    != $spec_db['extra']) ||
         $errors['null']     && ($spec_obj['null']     != $spec_db['null'])) {
-      $change[$name] = ($add_field?'ADD':'CHANGE'). " `$name` " . strtoupper($spec_obj['type']);
+          
+      if ($add_field && !$add_table) {
+        $change[$name] = "ADD `$name` ";
+      }
+      else if ($add_table) {
+        $change[$name] = "`$name` ";
+      }
+      else {
+        $change[$name] = "CHANGE `$name` ";
+      }
+      $change[$name] .= strtoupper($spec_obj['type']);
       
       if (count($spec_obj['params']) > 0) {
         $change[$name] .= ' (' . implode(',', $spec_obj['params']) . ')';

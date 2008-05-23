@@ -103,7 +103,8 @@ foreach ($consults as $consult) {
     $consultation->traitement = $consult->traitement;
     $consultation->premiere = $consult->premiere;
     $consultation->tarif = $consult->tarif;
-    $consultation->patient_mode_reglement = "";
+    // FIXME
+    //$consultation->patient_mode_reglement = "";
 
     $consultation->store();
     $nbConsultationsCreees++;

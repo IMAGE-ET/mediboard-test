@@ -714,6 +714,7 @@ class CConsultation extends CCodable {
   
   function loadComplete() {
     parent::loadComplete();
+    $this->_ref_patient->loadRefConstantesMedicales();
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     }
@@ -771,6 +772,7 @@ class CConsultation extends CCodable {
   
   function loadRefsFwd() {
     $this->loadRefPatient();
+    $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult();
     $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";

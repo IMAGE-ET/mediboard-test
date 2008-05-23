@@ -87,26 +87,46 @@ newExam = function(sAction, consultation_id) {
   </tr>
   <tr>
     <td>
-      <strong>Date de paiement :</strong>
+      <strong>Date d'acquittement :</strong>
       {{if $object->patient_date_reglement}}
-      <i>{{$object->patient_date_reglement|date_format:"%d/%m/%Y"}}</i>
+      <i>{{mb_value object=$object field=patient_date_reglement}}</i>
       {{else}}
-      <i>Non payé</i>
+      <i>Non acquitté</i>
       {{/if}}
     </td>
-    <td>
-      <strong>Mode de paiement :</strong>
-      <i>{{tr}}{{$object->patient_mode_reglement}}{{/tr}}</i>
+    <td rowspan="3">
+      <table class="tbl">
+        <tr>
+          <th class="category">{{tr}}CReglement-mode{{/tr}}</th>
+          <th class="category">{{tr}}CReglement-montant{{/tr}}</th>
+          <th class="category">{{tr}}CReglement-date{{/tr}}</th>
+          <th class="category">{{tr}}CReglement-banque_id{{/tr}}</th>
+        </tr>
+      {{foreach from=$object->_ref_reglements item=reglement}}
+        <tr>
+          <td>{{tr}}CReglement.mode.{{$reglement->mode}}{{/tr}}</d>
+          <td>{{mb_value object=$reglement field=montant}}</td>
+          <td>{{mb_value object=$reglement field=date}}</td>
+          <td>{{$reglement->_ref_banque->_view}}</td>
+        </tr>
+      {{foreachelse}}
+        <tr>
+            <td colspan="4">Aucun réglement effectué</d>
+        </tr>
+      {{/foreach}}
+      </table>
     </td>
   </tr>
   <tr>
     <td>
       <strong>Partie conventionnée :</strong>
-      <i>{{$object->secteur1}} euros</i>
+      <i>{{mb_value object=$object field=secteur1}}</i>
     </td>
+  </tr>
+  <tr>
     <td>
       <strong>Dépassement d'honoraires :</strong>
-      <i>{{$object->secteur2}} euros</i>
+      <i>{{mb_value object=$object field=secteur2}}</i>
     </td>
   </tr>
 </table>

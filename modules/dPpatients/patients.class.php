@@ -177,6 +177,7 @@ class CPatient extends CMbObject {
   var $_ref_medecin3         = null;
   var $_ref_dossier_medical  = null;
   var $_ref_IPP              = null;
+  var $_ref_constantes_medicales = null;
   
   function CPatient() {
     $this->CMbObject("patients", "patient_id");    
@@ -719,6 +720,7 @@ class CPatient extends CMbObject {
     $where["object_id"] = "= '$this->_id'";
     $where["object_class"] = "= 'CPatient'";
     $this->_ref_dossier_medical->loadObject($where);
+    $this->_ref_dossier_medical->loadRefsBack();
   }
   
   function loadRefsAffectations() {
@@ -759,6 +761,11 @@ class CPatient extends CMbObject {
       $order = "date DESC";
       $this->_ref_prescriptions = $prescription->loadListWithPerms($perm, $where, $order);
     }
+  }
+  
+  function loadRefConstantesMedicales() {
+    list($this->_ref_constantes_medicales, $dates) = CConstantesMedicales::getLatestFor($this);
+    $this->_ref_constantes_medicales->updateFormFields();
   }
 
   function loadRefsBack() {
@@ -1052,7 +1059,8 @@ class CPatient extends CMbObject {
   
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
-
+    $this->loadRefConstantesMedicales();
+    
     $template->addProperty("Patient - article"           , $this->_shortview );
     $template->addProperty("Patient - article long"      , $this->_article   );
     $template->addProperty("Patient - nom"               , $this->nom        );
@@ -1093,6 +1101,13 @@ class CPatient extends CMbObject {
       $template->addProperty("Patient - médecin correspondant 3 - adresse");
     }
     
+    $const_med = $this->_ref_constantes_medicales;
+    $template->addProperty("Patient - poids",  $const_med->poids." kg");
+    $template->addProperty("Patient - taille", $const_med->taille." cm");
+    $template->addProperty("Patient - Pouls",  $const_med->pouls);
+    $template->addProperty("Patient - IMC",    $const_med->_imc);
+    $template->addProperty("Patient - VST",    $const_med->_vst);
+    $template->addProperty("Patient - TA",     ($const_med->ta ? $const_med->_ta_systole." / ".$const_med->_ta_diastole : ''));
   }
   
   function fillTemplate(&$template) {

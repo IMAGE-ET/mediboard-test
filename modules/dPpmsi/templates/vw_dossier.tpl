@@ -421,6 +421,7 @@ function pageMain() {
             avec le Dr. {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
           </td>
         </tr>
+        {{assign var=const_med value=$curr_op->_ref_consult_anesth->_ref_consultation->_ref_patient->_ref_constantes_medicales}}
         <tr>
           <td class="button">Poids</td>
           <td class="button">Taille</td>
@@ -428,10 +429,10 @@ function pageMain() {
           <td class="button">Tension</td>
         </tr>
         <tr>
-          <td class="button">{{$curr_op->_ref_consult_anesth->poid}} kg</td>
-          <td class="button">{{$curr_op->_ref_consult_anesth->taille}} cm</td>
+          <td class="button">{{$const_med->poids}} kg</td>
+          <td class="button">{{$const_med->taille}} cm</td>
           <td class="button">{{tr}}CConsultAnesth.groupe.{{$curr_op->_ref_consult_anesth->groupe}}{{/tr}} {{tr}}CConsultAnesth.rhesus.{{$curr_op->_ref_consult_anesth->rhesus}}{{/tr}}</td>
-          <td class="button">{{$curr_op->_ref_consult_anesth->tasys}}/{{$curr_op->_ref_consult_anesth->tadias}}</td>
+          <td class="button">{{$const_med->_ta_systole}}/{{$const_med->_ta_diastole}}</td>
         </tr>
         {{/if}}
         <tr>
