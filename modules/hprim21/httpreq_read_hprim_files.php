@@ -31,6 +31,8 @@ foreach($list as $filepath) {
       mbTrace($hprimReader->error_log, "Erreur(s) pour le fichier '$filepath'");
     }
     unlink($hprimFile);
+  } else {
+    $ftp->delFile($filepath);
   }
 }
 
