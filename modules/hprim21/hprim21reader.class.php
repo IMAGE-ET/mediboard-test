@@ -54,7 +54,7 @@ class CHPrim21Reader {
       } else {
         $curr_line = fgets($file, 1024);
         if(substr($curr_line, 0, 2) == "A|") {
-          $lines[$i-1] .= substr($curr_liné, 2);
+          $lines[$i-1] .= substr($curr_line, 2);
         } else {
           $lines[$i] = $curr_line;
           $i++;
