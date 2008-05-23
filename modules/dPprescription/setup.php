@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.38";
+$config["mod_version"]     = "0.40";
 $config["mod_type"]        = "user";
 
 
@@ -424,7 +424,40 @@ class CSetupdPprescription extends CSetup {
             CHANGE `chapitre` `chapitre` ENUM('dmi','anapath','biologie','imagerie','consult','kine','soin','dm') NOT NULL;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.38";
+    $this->makeRevision("0.38");
+    $sql = "ALTER TABLE `prescription_line_medicament`
+            ADD `child_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `child_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `child_id` INT(11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.39");
+    $sql = "ALTER TABLE `prise_posologie`
+            ADD `decalage_prise` INT(11) DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament`
+            ADD `decalage_line` INT(11), 
+            ADD `fin` DATE;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element`
+            ADD `decalage_line` INT(11), 
+            ADD `fin` DATE;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment`
+            ADD `decalage_line` INT(11), 
+            ADD `fin` DATE;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.40";
   }  
 }
 

@@ -70,7 +70,7 @@ function prescriptionLine($pdf, $line, $date, $dates){
 
 	$signature = "";
 
-	$pdf->MultiCell(60,3.5,utf8_encode($line->_view."\n ".$view_prise),"1","L");
+	$pdf->MultiCell(60,3.5,$line->_view."\n ".$view_prise,"1","L");
 	
 	$y_after = $pdf->getY();
 	$y = $y_after - $y_before;
@@ -84,7 +84,7 @@ function prescriptionLine($pdf, $line, $date, $dates){
 
     $valide = "-";
   } else {
-	  $pdf->MultiCell(25,$y/2 ,utf8_encode($line->_ref_praticien->_user_first_name."\n".$line->_ref_praticien->_user_last_name),1,'C',0,0);
+	  $pdf->MultiCell(25,$y/2 ,$line->_ref_praticien->_user_first_name."\n".$line->_ref_praticien->_user_last_name,1,'C',0,0);
     if(!$line->signee){
     	$valide = "D";
     }
@@ -103,15 +103,24 @@ function prescriptionLine($pdf, $line, $date, $dates){
 
 
 function calculEtatJour($date, $dates, $nb_jours, $line){
-  if(mbDate($date) >= $line->debut && mbDate($date) <= $line->_fin){
+	$line_med_en_cours = 0;
+	// Cas des lignes non medicamenteuses 
+  // Si pas de fin, juste valable pour le jour de debut
+	if($line->_class_name == "CPrescriptionLineElement" && !$line->_fin){
+		$line->_fin = $line->debut;
+	}
+	if($line->_class_name == "CPrescriptionLineMedicament" && !$line->_fin){
+		$line_med_en_cours = 1;
+	}
+  if((mbDate($date) >= $line->debut && mbDate($date) <= $line->_fin)|| ($line_med_en_cours && $line->debut <= $date)){
   	$dates["jour_1"] = 1;
   	$nb_jours++;
   }
-  if(mbDate("+ 1 day",$date) >= $line->debut && mbDate("+ 1 day",$date) <= $line->_fin){
+  if((mbDate("+ 1 day",$date) >= $line->debut && mbDate("+ 1 day",$date) <= $line->_fin)||($line_med_en_cours && $line->debut <= mbDate("+ 1 day",$date))){
   	$dates["jour_2"] = 1;
     $nb_jours++;
   }
-  if(mbDate("+ 2 day",$date) >= $line->debut && mbDate("+ 2 day",$date) <= $line->_fin){
+  if((mbDate("+ 2 day",$date) >= $line->debut && mbDate("+ 2 day",$date) <= $line->_fin)||($line_med_en_cours && $line->debut <= mbDate("+ 2 day",$date))){
   	$dates["jour_3"] = 1;
     $nb_jours++;
   }
@@ -155,7 +164,7 @@ $pdf->SetFillColor(255,255,255);
 
 
 $pdf->SetFont('','',"8");
-$pdf->MultiCell(50,4,utf8_encode("IPP: ".$patient->_IPP."\n".$patient->_view),0,'C',0,0);
+$pdf->MultiCell(50,4,"IPP: ".$patient->_IPP."\n".$patient->_view,0,'C',0,0);
 
 if($sejour->_num_dossier && $sejour->_num_dossier != "-"){
   $pdf->setBarcode($sejour->_num_dossier);
@@ -163,13 +172,13 @@ if($sejour->_num_dossier && $sejour->_num_dossier != "-"){
 	$pdf->SetFont('','',"7");
 	$pdf->Ln();
 	$pdf->setXY(20, 28);
-	$pdf->MultiCell(40,4,utf8_encode("Dossier ".$sejour->_num_dossier),0,'C',0,0);
+	$pdf->MultiCell(40,4,"Dossier ".$sejour->_num_dossier,0,'C',0,0);
 }
 
 $pdf->setXY(65, 15);
 
 $pdf->SetFont('','',"10");
-$pdf->MultiCell(40,4,utf8_encode("Age: ".$prescription->_ref_patient->_age." ans \nPoids: ".$poids." kg"),0,'C',0,0);
+$pdf->MultiCell(40,4,"Age: ".$prescription->_ref_patient->_age." ans \nPoids: ".$poids." kg",0,'C',0,0);
 
 
 
@@ -182,36 +191,13 @@ $pdf->SetFont('','',"8");
 
 // Affichage de la chambre
 if($prescription->_ref_object->_ref_curr_affectation->_id){
-  $pdf->Cell(58,7,utf8_encode($prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view),0,0,'C',1);
+  $pdf->Cell(58,7,$prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view,0,0,'C',1);
 }
 // Affichage du début du séjour
-$pdf->Cell(58,7,utf8_encode("Début du séjour ".mbTranformTime(null, $prescription->_ref_object->_entree, $dateFormat)),0,0,'C',1);
+$pdf->Cell(58,7,"Début du séjour ".mbTranformTime(null, $prescription->_ref_object->_entree, $dateFormat),0,0,'C',1);
 
 // Affichage de la date et l'heure d'édition de la feuille de soin
-$pdf->Cell(58,7,utf8_encode("Feuille de soin du ".mbTranformTime(null, $date, $dateFormat)),0,0,'C',1);
-
-
-// Chargement de l'affectation courante du sejour
-//$prescription->_ref_object->loadCurrentAffectation($date);
-/*
-if($prescription->_ref_object->_ref_curr_affectation->_id){
-	$pdf->Cell(58,7,utf8_encode($prescription->_ref_object->_ref_curr_affectation->_ref_lit->_view),0,0,'C',1);
-	$pdf->SetFont('','',"10");
-}
-
-$pdf->SetFont('','',"8");
-if($prescription->_ref_object->_ref_before_affectation->_id){
-  $pdf->MultiCell(58,4,utf8_encode("Depuis le ".mbTranformTime(null, $prescription->_ref_object->_ref_curr_affectation->entree, $dateFormat)." \n (Depuis ".$prescription->_ref_object->_ref_before_affectation->_ref_lit->_view.")"),0,'C',0,0);
-} else {
-  $pdf->Cell(58,7,utf8_encode("Depuis le ".mbTranformTime(null, $prescription->_ref_object->_ref_curr_affectation->entree, $dateFormat)),0,0,'C',1);
-}
-
-if($prescription->_ref_object->_ref_next_affectation->_id){
-  $pdf->MultiCell(58,4,utf8_encode("Jusqu'au ".mbTranformTime(null, $prescription->_ref_object->_ref_curr_affectation->sortie, $dateFormat)." \n (Vers ".$prescription->_ref_object->_ref_next_affectation->_ref_lit->_view.")"),0,'C',0,0);
-} else {
-  $pdf->MultiCell(58,4,utf8_encode("Jusqu'au ".mbTranformTime(null, $prescription->_ref_object->_ref_curr_affectation->sortie, $dateFormat)." \n (Sortie)"),0,'C',0,0);
-}
-*/
+$pdf->Cell(58,7,"Feuille de soin du ".mbTranformTime(null, $date, $dateFormat),0,0,'C',1);
 
 $dateFormat = "%d/%m/%Y";
 $pdf->setY(35);    
@@ -277,22 +263,24 @@ if($traitement->_id){
 
 // Parcours des medicaments
 foreach($prescription->_ref_prescription_lines as $line){
+	
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
 	if($line->date_arret){
     $line->_fin = $line->date_arret;
   }
   // On arrete dans tous les cas la feuille de soin a la fin du sejour
-  if($line->_fin > $prescription->_ref_object->_sortie){
+  if($line->_fin >= $prescription->_ref_object->_sortie){
   	$line->_fin = mbDate($prescription->_ref_object->_sortie);
   }
-  if($line->debut < $prescription->_ref_object->_entree){
+  if($line->debut <= $prescription->_ref_object->_entree){
   	$line->debut = mbDate($prescription->_ref_object->_entree);
   }
 	calculEtatJour($date, &$dates, &$nb_jours, $line);
+	/*
   if(!$nb_jours){
   	continue;
-  }
+  }*/
   prescriptionLine($pdf, $line, $date, $dates);
   // CHargement et stockage des logs de validation pharmacien
   $line->loadRefLogValidationPharma();
@@ -301,25 +289,26 @@ foreach($prescription->_ref_prescription_lines as $line){
 
 
 // Parcours des elements
-foreach($prescription->_ref_prescription_lines_element as $_soin){
+foreach($prescription->_ref_prescription_lines_element as $_elt){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
-	if($_soin->date_arret){
-    $_soin->_fin = $_soin->date_arret;
+	if($_elt->date_arret){
+    $_elt->_fin = $_elt->date_arret;
   }
   // On arrete dans tous les cas la feuille de soin a la fin du sejour
-  if($_soin->_fin > $prescription->_ref_object->_sortie){
-  	$_soin->_fin = mbDate($prescription->_ref_object->_sortie);
+  if($_elt->_fin > $prescription->_ref_object->_sortie){
+  	$_elt->_fin = mbDate($prescription->_ref_object->_sortie);
   }
-  if($_soin->debut < $prescription->_ref_object->_entree){
-  	$_soin->debut = mbDate($prescription->_ref_object->_entree);
+  if($_elt->debut < $prescription->_ref_object->_entree){
+  	$_elt->debut = mbDate($prescription->_ref_object->_entree);
   }
-  calculEtatJour($date, &$dates, &$nb_jours, $_soin);
-  
+  calculEtatJour($date, &$dates, &$nb_jours, $_elt);
+  /*
   if(!$nb_jours){
   	continue;
   }
-  prescriptionLine($pdf, $_soin, $date, $dates);
+  */
+  prescriptionLine($pdf, $_elt, $date, $dates);
 }
 
 // Chargement du dernier pharmacien qui a validé une ligne
@@ -356,7 +345,7 @@ $format_hour = "%Hh%m";
 
 
 $pdf->Cell(60,21,"",1,0,'C',1);
-$pdf->MultiCell(30,5.25,utf8_encode("Par ".utf8_encode($pharmacien->_user_first_name."\n".$pharmacien->_user_last_name)."\n le ".mbTranformTime(null, $last_log->date, $format_date)."\n à ".mbTranformTime(null, $last_log->date, $format_hour)),1,'C',0,0);
+$pdf->MultiCell(30,5.25,"Par ".$pharmacien->_user_first_name."\n".$pharmacien->_user_last_name."\n le ".mbTranformTime(null, $last_log->date, $format_date)."\n à ".mbTranformTime(null, $last_log->date, $format_hour),1,'C',0,0);
 
 $pdf->Cell(56,7,"",1,0,'C',1);
 

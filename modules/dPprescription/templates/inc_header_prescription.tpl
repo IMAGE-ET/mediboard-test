@@ -1,12 +1,9 @@
 <script type="text/javascript">
 
 refreshListProtocole = function(oForm){
-
   var oFormFilter = document.selPrat;
-  
   oFormFilter.praticien_id.value = oForm.praticien_id.value;
   oFormFilter.function_id.value = oForm.function_id.value;
- 
   submitFormAjax(oForm, 'systemMsg', { 
         onComplete : function() { 
            Protocole.refreshList(oForm.praticien_id.value,oForm.prescription_id.value, oForm.function_id.value) 
@@ -14,18 +11,87 @@ refreshListProtocole = function(oForm){
   });
 }
 
+
+
+changePraticien = function(praticien_id){
+  var oFormAddLine = document.addLine;
+  var oFormAddLineCommentMed = document.addLineCommentMed;
+  var oFormAddLineElement = document.addLineElement;
+  
+  oFormAddLine.praticien_id.value = praticien_id;
+  oFormAddLineCommentMed.praticien_id.value = praticien_id;
+  oFormAddLineElement.praticien_id.value = praticien_id;
+}
+
+
+
+// On met à jour les valeurs de praticien_id
+Main.add( function(){
+  if(document.selPraticienLine){
+	  changePraticien(document.selPraticienLine.praticien_id.value);
+  }
+  // On masque le calendrier
+	if($('calendarProt')){
+	  $('calendarProt').hide();
+	}
+} );
+
+
+
+submitProtocole = function(){
+  var oForm = document.applyProtocole;
+  if(oForm.debut_date){
+	  var debut_date = oForm.debut_date.value;
+	  if(debut_date != "other"){
+	    oForm.debut.value = debut_date;
+	  }
+	
+
+  }
+	if(document.selPraticienLine){
+   oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
+  }
+ 
+  submitFormAjax(oForm, 'systemMsg');
+
+  oForm.protocole_id.value = '';
+  oForm.debut.value = '';
+}
+
+
+
+
 </script>
+
+{{assign var=praticien value=$prescription->_ref_praticien}}
 
 <table class="form">
   <tr>
     <th class="title" colspan="2">
+    
+    <!-- Selection du praticien prescripteur de la ligne -->
+			{{if !$is_praticien && !$mode_protocole && !$mode_pharma}}
+       <div style="position: absolute; right: 15px">
+				<form name="selPraticienLine" action="?" method="get">
+				  <select name="praticien_id" onchange="changePraticienMed(this.value); changePraticienElt(this.value)">
+				    {{foreach from=$listPrats item=_praticien}}
+					    <option class="mediuser" 
+					            style="border-color: #{{$_praticien->_ref_function->color}};" 
+					            value="{{$_praticien->_id}}">{{$_praticien->_view}}
+					    </option>
+				    {{/foreach}}
+				  </select>
+				</form>
+       </div>
+			{{/if}}
+			 
       {{if !$mode_protocole && $prescription->object_class == "CSejour"}}
-        <div style="float:left; padding-right: 5px;" class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
+        <div style="float:left; padding-right: 5px; " class="noteDiv {{$prescription->_ref_object->_class_name}}-{{$prescription->_ref_object->_id}};">
           <img alt="Ecrire une note" src="images/icons/note_grey.png" />
         </div>
       {{/if}}
      
-      {{if !$mode_protocole && !$dialog && !$mode_pharma}}
+      {{if !$mode_protocole && !$dialog && !$mode_pharma && !$mode_sejour}}
       <button type="button" class="cancel" onclick="Prescription.close('{{$prescription->object_id}}','{{$prescription->object_class}}')" style="float: left">
         Fermer 
       </button>
@@ -66,13 +132,13 @@ refreshListProtocole = function(oForm){
       </form>
         
       {{else}}
-        {{$prescription->_view}} <br />
-        {{$prescription->_ref_patient->_view}}
+        Prescription du Dr. {{$prescription->_ref_praticien->_view}}<br />
+        {{$prescription->_ref_object->_view}}
         {{if $prescription->_ref_patient->_age}}
            ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})
         {{/if}}
       {{/if}}
-      
+
     </th>
   </tr>
   <tr>
@@ -162,29 +228,100 @@ refreshListProtocole = function(oForm){
    
        
   {{if !$mode_protocole && !$mode_pharma}}
-   <td style="text-align: right">
-      Protocoles de {{$praticien->_view}}
+   <td style="text-align: right;">
+      
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
-        <input type="hidden" name="m" value="dPprescription" />
-        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
-        <input type="hidden" name="del" value="0" />
-        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
-        <select name="protocole_id" onchange="submitFormAjax(this.form, 'systemMsg'); this.value='';">
-          <option value="">&mdash; Sélection d'un protocole</option>
-          <optgroup label="Praticien">
-          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
-          <option value="{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
-          {{/foreach}}
-          </optgroup>
-          <optgroup label="Cabinet">
-          {{foreach from=$protocoles_function item=_protocole_function}}
-          <option value="{{$_protocole_function->_id}}">{{$_protocole_function->_view}}</option>
-          {{/foreach}}
-          </optgroup>
-        </select>
+	      <table class="form">
+	        <tr>
+		        <td>
+			        Protocoles de {{$praticien->_view}}
+			        <input type="hidden" name="m" value="dPprescription" />
+			        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
+			        <input type="hidden" name="del" value="0" />
+			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
+			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+			        <select name="protocole_id">
+			          <option value="">&mdash; Sélection d'un protocole</option>
+			          {{if $protocoles_praticien|@count}}
+			          <optgroup label="Praticien">
+			          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
+			          <option value="{{$_protocole_praticien->_id}}">{{$_protocole_praticien->_view}}</option>
+			          {{/foreach}}
+			          </optgroup>
+			          {{/if}}
+			          {{if $protocoles_function|@count}}
+			          <optgroup label="Cabinet">
+			          {{foreach from=$protocoles_function item=_protocole_function}}
+			          <option value="{{$_protocole_function->_id}}">{{$_protocole_function->_view}}</option>
+			          {{/foreach}}
+			          </optgroup>
+			          {{/if}}
+			        </select>
+			        </td>
+			        <td class="date">
+				 				{{if $prescription->type == "sejour"}}
+				 				  <select name="debut_date" 
+				 				          onchange="document.applyProtocole.debut.value = '';
+				 				          					$('applyProtocole_debut_da').innerHTML = new String;
+				 				                    if(this.value == 'other') { 
+				 				          					  $('calendarProt').show();
+				 				          					  
+				 				          				  } else { 
+				 				          				    $('calendarProt').hide();
+				 				          				    
+				 				          				  }">
+				 				    <optgroup label="Séjour">
+				 				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+				 				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+				 				    </optgroup>
+				 				    <optgroup label="Opération">
+				 				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
+				 				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+				 				    {{/foreach}}
+ 										</optgroup>
+ 										
+				 				    <option value="other">Autre date</option>
+				 				  </select>
+				 				
+				 				  <!-- Prescription externe -->
+				 				  <div id="calendarProt" style="border:none; display: none">
+									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
+					 				<script type="text/javascript">
+					 				  dates = {
+									    current: {
+									      start: "{{$today}}",
+									      stop: ""
+									    }
+									  }
+					 				  Main.add( function(){
+					            Calendar.regField('applyProtocole', "debut", false, dates);
+					          } );
+					 				</script>
+				 				  </div>
+				 				  
+				 				{{else}}
+				 				  <!-- Prescription externe -->
+									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
+					 				<script type="text/javascript">
+					 				  dates = {
+									    current: {
+									      start: "{{$today}}",
+									      stop: ""
+									    }
+									  }
+					 				  Main.add( function(){
+					            Calendar.regField('applyProtocole', "debut", false, dates);
+					          } );
+					 				</script>				 				
+				 				{{/if}}
+			 				
+			          <button type="button" class="submit" onclick="submitProtocole(this.form);">Appliquer</button>
+		        </td>
+	        </tr>
+	      </table>
       </form>
-  </td>  
+    </td>  
   {{/if}}
   
   </tr>  

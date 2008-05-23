@@ -74,6 +74,12 @@ if($praticien_id){
 		// Vue instantanée => mode = 0 mbDateTime
 		// Vue journee     => mode = 1 mbDate
 		$_sejour->loadRefsPrescriptions();
+		if($_sejour->_ref_prescriptions){
+		  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
+			  $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"]["0"];
+				$prescription_sejour->countNoValideLines();
+			}
+		}
 	  $_sejour->loadCurrentAffectation($datetime);
 		$_sejour->loadRefPatient();
 		$_sejour->loadRefPraticien();
@@ -189,6 +195,13 @@ if($service_id){
 			foreach($_chambre->_ref_lits as &$_lits){
 				foreach($_lits->_ref_affectations as &$_affectation){
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
+					if($_affectation->_ref_sejour->_ref_prescriptions){
+						if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
+						  $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"]["0"];
+							$prescription_sejour->countNoValideLines();
+						}
+					}
+		
 				}
 			}
 		}

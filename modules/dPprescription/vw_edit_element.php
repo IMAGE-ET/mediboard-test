@@ -18,8 +18,9 @@ $elements_prescription = array();
 $element_prescription = new CElementPrescription();
 
 // Chargement des elements de prescription de la categorie selectionnee
+$order = "libelle";
 $element_prescription->category_prescription_id = $category_id;
-$elements_prescription = $element_prescription->loadMatchingList();	
+$elements_prescription = $element_prescription->loadMatchingList($order);	
 
 // Chargement de la liste des categories
 $category = new CCategoryPrescription();

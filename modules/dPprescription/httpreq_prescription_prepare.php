@@ -79,8 +79,9 @@ if($posologie->pendant1){
 if($posologie->_code_duree2){
   $prescription_line->unite_duree = $posologie->_code_duree2;
 }
-$prescription_line->debut = mbDate();
-
+if(!$prescription_line->debut){
+  $prescription_line->debut = mbDate();
+}
 
 // Création du template
 $smarty = new CSmartyDP();

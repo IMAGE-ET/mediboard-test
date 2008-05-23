@@ -115,22 +115,26 @@ if ($prescription->_id) {
   $profil->setPatient($prescription->_ref_object->_ref_patient);
   
   foreach ($prescription->_ref_prescription_lines as &$line) {
-    // Chargement de la posologie
-    // Ajout des produits pour les alertes
-    $allergies->addProduit($line->code_cip);
-    $interactions->addProduit($line->code_cip);
-    $IPC->addProduit($line->code_cip);
-    $profil->addProduit($line->code_cip);
+  	if(!$line->child_id){
+	    // Chargement de la posologie
+	    // Ajout des produits pour les alertes
+	    $allergies->addProduit($line->code_cip);
+	    $interactions->addProduit($line->code_cip);
+	    $IPC->addProduit($line->code_cip);
+	    $profil->addProduit($line->code_cip);
+  	}
   }
   $alertesAllergies    = $allergies->getAllergies();
   $alertesInteractions = $interactions->getInteractions();
   $alertesIPC          = $IPC->getIPC();
   $alertesProfil       = $profil->getProfil();
   foreach ($prescription->_ref_prescription_lines as &$line) {
-    $line->checkAllergies($alertesAllergies);
-    $line->checkInteractions($alertesInteractions);
-    $line->checkIPC($alertesIPC);
-    $line->checkProfil($alertesProfil);
+  	if(!$line->child_id){
+	    $line->checkAllergies($alertesAllergies);
+	    $line->checkInteractions($alertesInteractions);
+	    $line->checkIPC($alertesIPC);
+	    $line->checkProfil($alertesProfil);
+  	}
   }
 
   // Liste des favoris
@@ -184,12 +188,21 @@ if($prescription->_id){
 		if($consult_anesth->_id){
 		  $poids = $consult_anesth->poid;
 		}
+		
+		// Chargement des dates de l'operations
+    $sejour =& $prescription->_ref_object;
+    $sejour->makeDatesOperations();
 	}
+	$prescription->countLinesMedsElements();
 }
 
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
+
+// Chargement du user_courant
+$user->load($AppUI->user_id);
+$is_praticien = $user->isPraticien();
 
 $contexteType = array();
 $contexteType["CConsultation"][] = "externe";
@@ -200,6 +213,8 @@ $contexteType["CSejour"][] = "traitement";
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("is_praticien", $is_praticien);
+$smarty->assign("protocole_line", new CPrescriptionLineMedicament());
 $smarty->assign("poids", $poids);
 $smarty->assign("today", mbDate());
 $smarty->assign("refresh_pharma", "0");
@@ -224,7 +239,7 @@ $smarty->assign("protocoles_praticien", $protocoles_praticien);
 $smarty->assign("protocoles_function", $protocoles_function);
 
 $smarty->assign("class_category", new CCategoryPrescription());
-//$smarty->assign("mode_sejour", 0);
+$smarty->assign("mode_sejour", 0);
 $smarty->assign("praticien", $praticien);
 $smarty->assign("moments", $moments);
 if($dialog == 1) {

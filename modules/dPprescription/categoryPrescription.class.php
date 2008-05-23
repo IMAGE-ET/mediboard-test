@@ -51,7 +51,7 @@ class CCategoryPrescription extends CMbObject {
   }
   
   function loadElementsPrescription() {
-    $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription");
+    $this->_ref_elements_prescription = $this->loadBackRefs("elements_prescription","libelle");
   }
   
   /**
@@ -71,7 +71,8 @@ class CCategoryPrescription extends CMbObject {
 		}
 		
 		// Chargement et classement par chapitre
-    $categories = $categorie->loadMatchingList();;
+    $order = "nom";
+    $categories = $categorie->loadMatchingList($order);
     foreach ($categories as &$categorie) {
 		  $categories_par_chapitre[$categorie->chapitre][$categorie->_id] =& $categorie;
 		} 

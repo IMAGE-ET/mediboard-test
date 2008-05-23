@@ -1,7 +1,5 @@
 <!-- Initialisation des variables -->
-{{*if (($curr_line->signee == 0 || $mode_pharma) && !$curr_line->valide_pharma)*}}
-
-{{if (($curr_line->praticien_id == $app->user_id || $mode_pharma) && !$curr_line->valide_pharma && (!$curr_line->signee || $mode_pharma))}}
+{{if (($curr_line->signee == 0 || $mode_pharma) && !$curr_line->valide_pharma && ($curr_line->praticien_id == $app->user_id || array_key_exists($curr_line->praticien_id, $listPrats)))}}
   {{assign var=perm_edit value=1}}
 {{else}}
   {{assign var=perm_edit value=0}}
@@ -33,6 +31,11 @@
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}"
      {{if $_date_fin && $_date_fin < $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
       <div style="float:left">
+        {{if !$curr_line->_protocole && !$curr_line->_traitement}}
+        <a style="display: inline" href="#" onclick="Prescription.viewLineHistorique('{{$curr_line->_id}}','{{$curr_line->_class_name}}')">
+          <img src="images/icons/history.gif" alt="historique" />
+        </a> 
+        {{/if}}
         {{if !$curr_line->_traitement}}
 	        <!-- Selecteur equivalent -->
 	        {{if $perm_edit}}
@@ -46,9 +49,13 @@
 		    {{/if}}  
 	     
 	      <!-- Formulaire Traitement -->
+	      {{*if $prescription_reelle->type == "pre_admission" || $prescription_reelle->type == "externe"*}}
+	      {{*if ($curr_line->_traitement && $prescription_reelle->type == "pre_admission") || !$curr_line->_traitement*}}
         {{if !$curr_line->_protocole && !$mode_pharma && $perm_edit}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
-        {{/if}}  
+        {{/if}} 
+        {{*/if*}}
+        {{*/if*}}
       </div>
       
       <!-- AFfichage de la signature du praticien -->
@@ -90,7 +97,7 @@
         {{/if}}
       </div>
       <a href="#produit{{$curr_line->_id}}" onclick="Prescription.viewProduit({{$curr_line->_ref_produit->code_cip}})">
-        {{$curr_line->_view}}
+        <strong>{{$curr_line->_view}}</strong>
       </a>
     </th>
   </tr>
@@ -114,18 +121,20 @@
     
     </td>
     <td colspan="2">
-	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
-	    {{if $perm_edit}}
-		    <script type="text/javascript">
-		      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
-		      /*
-		      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-	        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
-		      */
-		      regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
-	        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
-		    </script>
-	    {{/if}}          
+    
+	      {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
+		    {{if $perm_edit}}
+			    <script type="text/javascript">
+			      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
+			      /*
+			      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
+		        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
+			      */
+			      regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
+		        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
+			    </script>
+		    {{/if}}
+	             
 		</td>
     <td>
       <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
@@ -137,6 +146,13 @@
     </td>
   </tr>
   {{/if}} 
+  
+  
+  <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
+  {{if $curr_line->_protocole}}
+    {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
+  {{/if}}  
+  
   
   <tr>  
 	  <td style="text-align: center">
@@ -179,17 +195,22 @@
     <td>
       <!-- Suppression de la ligne -->
       {{if $perm_edit}}
+        {{if ($curr_line->_traitement && $prescription_reelle->type == "pre_admission") || !$curr_line->_traitement}}
         <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
           {{tr}}Delete{{/tr}}
         </button>
+        {{/if}}
       {{/if}}
     </td>
     <td colspan="4">
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
+      {{if !$curr_line->_protocole && $curr_line->_ref_prescription->type != "externe"}}
+      {{if !$curr_line->_traitement || ($curr_line->_traitement && $prescription_reelle->type == "sortie")}}
       <div style="float: right;">
         {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
       </div>
-      
+      {{/if}}
+      {{/if}}
       {{if $curr_line->_traitement && $prescription->object_id}}
         <!-- Stopper une ligne -->
         <div id="stop-CPrescriptionLineMedicament-{{$curr_line->_id}}" style="float: right">

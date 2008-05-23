@@ -14,10 +14,29 @@ preselectExecutant = function(executant_id, category_id){
  })
 }
 
+
+changePraticienElt = function(praticien_id){
+  var oFormAddLineElement = document.addLineElement;
+  var oFormAddLineCommentElement = document.forms["addLineComment{{$element}}"];
+  
+  oFormAddLineElement.praticien_id.value = praticien_id;
+  if(oFormAddLineCommentElement){
+    oFormAddLineCommentElement.praticien_id.value = praticien_id;
+  }
+}
+
+
+// On met à jour les valeurs de praticien_id
+Main.add( function(){
+  if(document.selPraticienLine){
+	  changePraticienElt(document.selPraticienLine.praticien_id.value);
+  }
+} );
+
 </script>
 
 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-{{if $prescription->object_id}}
+{{if $prescription->object_id && $is_praticien}}
 <div style="float: right">
   <form name="valideAllLines-{{$element}}" method="post" action="">
     <input type="hidden" name="m" value="dPprescription" />
@@ -30,6 +49,8 @@ preselectExecutant = function(executant_id, category_id){
   </form>
 </div>
 {{/if}}
+
+
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
 {{include file="inc_vw_form_addLine.tpl"}}
@@ -59,16 +80,12 @@ preselectExecutant = function(executant_id, category_id){
 	  {{foreach from=$lines_cat.comment item=line_comment}}
 	    {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment}}
 	  {{/foreach}}
-	
-	  {{assign var=lines_element value=$lines_cat.element|@count}}
-	  {{assign var=lines_comment value=$lines_cat.comment|@count}}
-	  {{assign var=nb_lines value=$nb_lines+$lines_element+$lines_comment}}  
   {{/foreach}}
 </table>
 
 <script type="text/javascript">
 
-Prescription.refreshTabHeader('div_{{$element}}','{{$nb_lines}}');
+Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}');
 
 // Autocomplete
 prepareForm(document.search{{$element}});

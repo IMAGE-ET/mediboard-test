@@ -19,11 +19,7 @@ submitPoso = function(oForm, curr_line_id){
 }
 
 
-{{assign var=nb_med value=$prescription->_ref_lines_med_comments.med|@count}}
-{{assign var=nb_comment value=$prescription->_ref_lines_med_comments.comment|@count}}
-{{assign var=nb_total value=$nb_med+$nb_comment}}
-
-Prescription.refreshTabHeader("div_medicament","{{$nb_total}}");
+Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
 
 
 // Permet de mettre la ligne en traitement
@@ -43,6 +39,25 @@ dates = {
     stop: null
   }
 }
+
+
+
+changePraticienMed = function(praticien_id){
+  var oFormAddLine = document.addLine;
+  var oFormAddLineCommentMed = document.addLineCommentMed;
+  
+  oFormAddLine.praticien_id.value = praticien_id;
+  oFormAddLineCommentMed.praticien_id.value = praticien_id;
+}
+
+
+
+// On met à jour les valeurs de praticien_id
+Main.add( function(){
+  if(document.selPraticienLine){
+	  changePraticienMed(document.selPraticienLine.praticien_id.value);
+  }
+} );
 
 </script>
 
@@ -68,22 +83,20 @@ dates = {
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="object_id" value="{{$prescription->object_id}}" />
-  
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  
   <input type="hidden" name="code_cip" value=""/>
   <!-- Date de debut -->
   <input type="hidden" name="debut" value="{{$today}}" />
-  
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
-  
   {{if $prescription->type=="pre_admission" && $prescription->object_id}}
   <input type="hidden" name="callback" value="transfertTraitement" />
   {{/if}}  
 </form>
 
 <!-- Ne pas donner la possibilite de signer les lignes d'un protocole -->
-{{if $prescription->object_id}}
+{{if $prescription->object_id && ($is_praticien || $mode_pharma)}}
 <div style="float: right">
   <form name="valideAllLines" method="post" action="">
     <input type="hidden" name="m" value="dPprescription" />
@@ -101,6 +114,8 @@ dates = {
   </form>
 </div>
 {{/if}}
+
+
 
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
@@ -166,7 +181,10 @@ dates = {
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements}}
 <table class="tbl">
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-    {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+    <!-- Si la ligne ne possede pas d'enfant -->
+    {{if !$curr_line->child_id}}
+      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+    {{/if}}
   {{/foreach}}
  
   {{if $prescription->_ref_lines_med_comments.comment|@count}}
@@ -182,7 +200,9 @@ dates = {
   
   <!-- Affichage des traitements -->
   {{foreach from=$traitements item=traitement}}
-    {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+    {{if !$traitement->child_id}}
+      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+    {{/if}}
   {{/foreach}}
   
  </table> 

@@ -2780,13 +2780,14 @@ table.tbl td.ccmu-P{
 }
 
 table.main td.step {
-	background-color: #ccc; 
+	background: url(images/pictures/background.png);
 	width: 10%; 
 	font-size: 12px; 
 	font-weight: bold; 
 	text-align: center;
 	vertical-align: middle;
 }
+
 
 .grippie-h {
   border: 1px solid #999;

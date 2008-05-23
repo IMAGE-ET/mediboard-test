@@ -15,6 +15,13 @@ $traitement = mbGetValueFromPost("_traitement");
 $line = new CPrescriptionLineMedicament();
 $line->load($prescription_line_id);
 
+// Chargement de la parent_line
+$line->loadRefParentLine();
+if($line->_ref_parent_line->_id){
+  $line->_ref_parent_line->child_id = "";
+  $msg = $line->_ref_parent_line->store();
+}
+	
 if($traitement == 1){
 	// Chargement de la prescription de type traitement
   $prescription = new CPrescription();
@@ -39,8 +46,8 @@ if($traitement == 1){
 
 
 // On repasse la ligne en type normal (pre_admission, sejour, sortie)
-if($traitement == 0){
-	$line->praticien_id = $AppUI->user_id;
+if($traitement == 0){	
+	//$line->praticien_id = $AppUI->user_id;
 	$line->prescription_id = $prescription_id;
 	$msg = $line->store();
 }

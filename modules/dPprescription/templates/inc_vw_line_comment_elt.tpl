@@ -1,6 +1,4 @@
-{{*mb_ternary var=perm_edit test=$_line_comment->signee value="0" other="1"*}}
-
-{{if ($_line_comment->praticien_id == $app->user_id) && !$_line_comment->signee}}
+{{if ($_line_comment->praticien_id == $app->user_id || array_key_exists($_line_comment->praticien_id, $listPrats)) && !$_line_comment->signee}}
   {{assign var=perm_edit value="1"}}
 {{else}}
   {{assign var=perm_edit value="0"}}

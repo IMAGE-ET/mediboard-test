@@ -1,7 +1,5 @@
 <!-- Initialisation des variables -->
-{{*mb_ternary var=perm_edit test=$_line_element->signee value="0" other="1"*}}
-
-{{if ($_line_element->praticien_id == $app->user_id) && !$_line_element->signee}}
+{{if ($_line_element->praticien_id == $app->user_id || array_key_exists($_line_element->praticien_id, $listPrats)) && !$_line_element->signee}}
   {{assign var=perm_edit value="1"}}
 {{else}}
   {{assign var=perm_edit value="0"}}
@@ -32,7 +30,7 @@
           {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
 	      {{/if}}
       </div>    
-     
+  
       <div class="div_signature">
         <!-- Affichage de la signature du praticien -->
         {{if ($_line_element->praticien_id != $app->user_id) && !$_line_element->_protocole}}
@@ -45,17 +43,20 @@
 		    {{if !$_line_element->_protocole}}  
 			    {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 	      {{/if}}
-		    
 	    </div>
 	    
 	    <!-- View de l'element -->
 	    {{$_line_element->_ref_element_prescription->_view}}
-	    
-	    
 	  </th>
 	</tr>
 
   {{if $category->chapitre != "dmi"}}
+  
+  <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
+  {{if $_line_element->_protocole && $category->chapitre}}
+    {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
+  {{/if}}
+  
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
       {{if $perm_edit}}
@@ -85,6 +86,7 @@
     </td>
     {{/if}}
   </tr>
+  
   {{if $category->chapitre != "dm"}}
   <tr>
     <td colspan="3">
@@ -115,6 +117,8 @@
     </td>
   </tr>
   {{/if}}
+  
+  
   {{/if}}
   <tr>
     {{if $category->chapitre == "dmi"}}

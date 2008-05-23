@@ -38,6 +38,8 @@ class CPrescription extends CMbObject {
   var $_type_sejour = null;
   
   var $_counts_by_chapitre = null;
+  var $_counts_no_valide = null;
+  var $_dates_dispo = null;
   
   
   function CPrescription() {
@@ -139,6 +141,18 @@ class CPrescription extends CMbObject {
   }
   
   
+  // Compte le nombre de lignes non validées dans la prescription
+  function countNoValideLines(){
+    $this->_counts_no_valide = 0;
+    $line = new CPrescriptionLineMedicament();
+    $where = array();
+    $where["signee"] = " = '0'";
+    $where["prescription_id"] = " = '$this->_id'";
+    $where["child_id"] = "IS NULL";
+    $this->_counts_no_valide = $line->countList($where);
+  }
+  
+  
   //Chargement du nombre des medicaments et d'elements
   function countLinesMedsElements(){
   	$this->_counts_by_chapitre = array();
@@ -150,9 +164,14 @@ class CPrescription extends CMbObject {
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
     $where["category_prescription.chapitre"] = "IS NULL";
+    
+    
   	$line_med = new CPrescriptionLineMedicament();
-  	$line_med->prescription_id = $this->_id;
-  	$this->_counts_by_chapitre["med"] = $line_med->countMatchingList();
+  	$whereMed["prescription_id"] = " = '$this->_id'";
+  	$whereMed["child_id"] = "IS NULL";
+  	
+  	
+  	$this->_counts_by_chapitre["med"] = $line_med->countList($whereMed);
   	$this->_counts_by_chapitre["med"] += $line_comment_med->countList($where, null, null, null, $ljoin_comment);
   	
   	
@@ -235,14 +254,14 @@ class CPrescription extends CMbObject {
   	if($chapitre){
   	  $ljoin["element_prescription"] = "prescription_line_element.element_prescription_id = element_prescription.element_prescription_id";
 	    $ljoin["category_prescription"] = "element_prescription.category_prescription_id = category_prescription.category_prescription_id";
-      $where["category_prescription.chapitre"] = " = 'soin'";
+      $where["category_prescription.chapitre"] = " = '$chapitre'";
   	}
   	
     $where["prescription_id"] = " = '$this->_id'";
     
     $order = "prescription_line_element_id DESC";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
-    foreach ($this->_ref_prescription_lines_element as &$line_element){
+    foreach ($this->_ref_prescription_lines_element as &$line_element){	
     	$line_element->loadRefElement();
     	$line_element->loadRefPraticien();
     	$line_element->loadRefLogSignee();
@@ -348,12 +367,24 @@ class CPrescription extends CMbObject {
   }
   
   
-  // Chargement des favoris de prescription pour un praticien donné
-  static function getFavorisPraticien($praticien_id){
+  // Chargement des medicaments favoris d'un praticien
+  static function getFavorisMedPraticien($praticien_id){
   	$favoris = array();
   	$listFavoris = array();
   	$listFavoris["medicament"] = array();
-  	$favoris["medicament"] = CBcbProduit::getFavoris($praticien_id);
+  	$favoris = CBcbProduit::getFavoris($praticien_id);
+  	foreach($favoris as $_fav){
+  		$produit = new CBcbProduit();
+  		$produit->load($_fav["code_cip"]);
+  		$listFavoris["medicament"][] = $produit;
+  	}
+  	return $listFavoris["medicament"];
+  }
+  
+  
+  // Chargement des favoris de prescription pour un praticien donné
+  static function getFavorisPraticien($praticien_id){
+  	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
   	
   	$category = new CCategoryPrescription();
     foreach($category->_specs["chapitre"]->_list as $chapitre){
@@ -361,20 +392,14 @@ class CPrescription extends CMbObject {
   	  $favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
     }
 
-	  
 	  foreach($favoris as $key => $typeFavoris) {
 	  	foreach($typeFavoris as $curr_fav){
-	  		if($key == "medicament"){
-	  		  $produit = new CBcbProduit();
-	        $produit->load($curr_fav["code_cip"]);
-	        $listFavoris["medicament"][] = $produit;
-	  		} else {
-	  			$element = new CElementPrescription();
-	  			$element->load($curr_fav["element_prescription_id"]);
-	  			$listFavoris[$key][] = $element;
-	  		}
+	  		$element = new CElementPrescription();
+	  	  $element->load($curr_fav["element_prescription_id"]);
+	  		$listFavoris[$key][] = $element;
 	  	}
 	  }
+	  
 	  return $listFavoris;  	
   }
 }

@@ -37,7 +37,7 @@
 	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 						  
 	  <!-- Formulaire de selection de la quantite -->
-	  {{mb_field object=$prise field=quantite size="3" increment=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg');"}}	  
+	  {{mb_field object=$prise field=quantite size="3" increment=1 min=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg');"}}	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 	  {{$line->_unite_prise}}(s)
 	  {{/if}}
@@ -58,17 +58,20 @@
 	  
 	  <!-- Cas des fois par -->
 	  {{if $prise->nb_fois && $prise->unite_fois}}
-      {{mb_field object=$prise field=nb_fois size=3 increment=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg')"}} fois par 
+      {{mb_field object=$prise field=nb_fois size=3 increment=1 min=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg')"}} fois par 
 			{{mb_field object=$prise field=unite_fois onchange="submitFormAjax(this.form, 'systemMsg')"}}
 		{{/if}}
   
     <!-- Cas des tous les -->
     {{if $prise->nb_tous_les && $prise->unite_tous_les}}
       tous les
-			{{mb_field object=$prise field=nb_tous_les size=3 increment=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg')"}}				   
+			{{mb_field object=$prise field=nb_tous_les size=3 increment=1 min=1 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg')"}}				   
 			{{mb_field object=$prise field=unite_tous_les onchange="submitFormAjax(this.form, 'systemMsg')"}}
+		  (J+{{mb_field object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="submitFormAjax(this.form, 'systemMsg')"}})
 		{{/if}}
   
+  
+  	  
     <button type="button" class="submit notext" onclick="submitFormAjax(this.form, 'systemMsg');">Enregistrer</button>
     <button type="button" class="cancel notext" onclick="this.form.del.value = 1; submitPrise(this.form,'{{$type}}'); ">Supprimer</button> 
   </form>

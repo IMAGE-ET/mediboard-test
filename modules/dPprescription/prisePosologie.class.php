@@ -23,8 +23,9 @@ class CPrisePosologie extends CMbMetaObject {
   var $unite_fois            = null;
   var $nb_tous_les           = null;
   var $unite_tous_les        = null;
+  var $decalage_prise        = null;   // decalage de la prise J + $decalage (par defaut 0)
   
-  
+ 
   function CPrisePosologie() {
     $this->CMbObject("prise_posologie", "prise_posologie_id");
     
@@ -47,6 +48,7 @@ class CPrisePosologie extends CMbMetaObject {
       "unite_fois"           => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "nb_tous_les"          => "float",
       "unite_tous_les"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
+      "decalage_prise"       => "num min|0"
     );
     return array_merge($specsParent, $specs);
   }
@@ -68,10 +70,13 @@ class CPrisePosologie extends CMbMetaObject {
     	$this->_view .= " ".$this->nb_fois." fois";
     }
     if($this->unite_fois && !$this->nb_tous_les){
-    	$this->_view .= " par ".$this->unite_fois;
+    	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
     }
     if($this->nb_tous_les && $this->unite_tous_les){
-    	$this->_view .= " tous les ".$this->nb_tous_les." ".$this->unite_tous_les;
+    	$this->_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
+    	if($this->decalage_prise){
+    		$this->_view .= "(J+$this->decalage_prise)";
+    	}
     }   
   }
   
@@ -79,6 +84,10 @@ class CPrisePosologie extends CMbMetaObject {
 
   	// Calcul de la premiere prise du medicament
     $date_temp = $this->_ref_object->debut;
+    // Gestion du decalage entre les prises
+    if($this->decalage_prise && $this->decalage_prise > 0){
+    	$date_temp = mbDate("+ $this->decalage_prise DAYS", $date_temp);
+    }
     $tabDates[] = $date_temp;
   	
     // Minute / Heure / demi-journee / jour

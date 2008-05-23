@@ -158,21 +158,30 @@ var Prescription = {
       urlPrescription.addParam("category_name", category_name);
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
-      
+ 
+     
       if(mode_pharma == "1"){
-          urlPrescription.requestUpdate("div_medicament", { waitingText : null });  
+          urlPrescription.requestUpdate("div_medicament", { waitingText : null });      
       } else {
 	      if(mode_protocole){
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
 	      } else {
 	        if(category_name){
-	          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );
+	          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );     
 	        } else {
 	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
 	         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
 	        }
 	      }
       }
+  },
+  reloadPrescSejour: function(prescription_id, sejour_id){
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_vw_prescription");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("sejour_id", sejour_id)
+    url.addParam("mode_sejour", "1");
+    url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
   reloadPrescPharma: function(prescription_id){
     var url = new Url;
@@ -259,5 +268,12 @@ var Prescription = {
     url.setModuleAction("dPmedicament", "vw_produit");
     url.addParam("CIP", cip);
     url.popup(900, 640, "Descriptif produit");
+  },
+  viewLineHistorique: function(line_id, line_class){
+	  var url = new Url;
+	  url.setModuleAction("dPprescription", "view_historique");
+	  url.addParam("line_id", line_id);
+	  url.addParam("line_class", line_class);
+	  url.popup(500, 100, "Historique");
   }
 };

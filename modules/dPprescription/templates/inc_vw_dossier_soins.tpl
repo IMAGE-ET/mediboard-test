@@ -17,7 +17,7 @@ printDossierSoin = function(prescription_id, date){
   <tr>
     <td>
       <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
-	      Imprimer la feuille de soin immédiate
+	      Imprimer la feuille de soins immédiate
       </button>
     </td>
   </tr>
@@ -25,27 +25,29 @@ printDossierSoin = function(prescription_id, date){
 
 <hr />
 
+<h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
+  
+  
 <table class="tbl">
-  <tr>
-    <th colspan="2">
-      Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-    </th>
-  </tr>
-  {{if $lines_med|@count}}
-  <tr>
-    <th colspan="2">Medicaments</th>
-  </tr>
   <tr>
     <th>Libelle</th>
     <th>Posologie</th>
+    <th>Signature praticien</th>
+    <th>Signature pharmacien</th>
   </tr>
+  <!-- Affichage des medicaments -->
+  {{if $lines_med|@count}}
+  <tr>
+    <th colspan="4">Medicaments</th>
+  </tr>
+
   {{foreach from=$lines_med item=line}}
   <tr>
     <td>{{$line->_ref_produit->libelle}}</td>
     <td>
     {{assign var=line_id value=$line->_id}}
-    {{if array_key_exists($line_id, $prises)}}
-	    {{foreach from=$prises.$line_id item=prise name=prises}}
+    {{if array_key_exists($line_id, $prises_med)}}
+	    {{foreach from=$prises_med.$line_id item=prise name=prises}}
 	      {{if $prise->nb_tous_les && $prise->unite_tous_les}}
 	        {{$prise->quantite}} {{$prise->_ref_object->_unite_prise}}
 	      {{else}}
@@ -55,43 +57,65 @@ printDossierSoin = function(prescription_id, date){
 	    {{/foreach}}
     {{/if}}
     </td>
+    <td style="text-align: center">
+	    {{if $line->signee}}
+	    <img src="images/icons/tick.png" alt="Signée par le praticien" title="Signée par le praticien" />
+	    {{else}}
+	    <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
+	    {{/if}}
+    </td>
+    <td style="text-align: center">
+	    {{if $line->valide_pharma}}
+	    <img src="images/icons/tick.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
+	    {{else}}
+	    <img src="images/icons/cross.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
+	    {{/if}}
+    </td>
   </tr>
   {{/foreach}}
   {{/if}}
   
-  {{if $lines_soin|@count}}
+  
+  <!-- Affichage des elements -->
+  {{foreach from=$lines_element key=name_chap item=elements_chap}}
   <tr>
-    <th colspan="2">Soins</th>
+    <th colspan="4">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}</th>
   </tr>
+  {{foreach from=$elements_chap key=name_cat item=elements_cat}}
+  {{assign var=categorie value=$categories.$name_cat}}
   <tr>
-    <th>Libelle</th>
-    <th>Posologie</th>
+    <th colspan="4" class="element">{{$categorie->nom}}</th>
   </tr>
-  {{foreach from=$lines_soin item=_soin}}
+  {{foreach from=$elements_cat item=element}}
   <tr>
+    <td>{{$element->_view}}</td>
     <td>
-      {{if !$_soin->signee}}
-         <img src="images/icons/cross.png" title="Soin non signé par le praticien" alt="Soin non signé par le praticien">
+	    {{assign var=element_id value=$element->_id}}
+	    {{if array_key_exists($element_id, $prises_element)}}
+		    {{foreach from=$prises_element.$element_id item=prise name=prises}}
+		      {{if $prise->nb_tous_les && $prise->unite_tous_les}}
+		        {{$prise->quantite}} {{$prise->_ref_object->_unite_prise}}
+		      {{else}}
+		        {{$prise->_view}}
+		      {{/if}}
+		      {{if !$smarty.foreach.prises.last}},{{/if}}
+		    {{/foreach}}
+	    {{/if}}
+    </td> 
+    <td style="text-align: center">
+      {{if $element->signee}}
+        <img src="images/icons/tick.png" alt="Signée par le praticien" title="Signée par le praticien" />
+      {{else}}
+        <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
       {{/if}}
-      {{$_soin->_ref_element_prescription->_view}}
-    
     </td>
-    <td>
-    {{assign var=soin_id value=$_soin->_id}}
-    {{if array_key_exists($soin_id, $prises_soin)}}
-	    {{foreach from=$prises_soin.$soin_id item=prise name=prises_soin}}
-	      {{if $prise->nb_tous_les && $prise->unite_tous_les}}
-	        {{$prise->quantite}} {{$prise->_ref_object->_unite_prise}}
-	      {{else}}
-	        {{$prise->_view}}
-	      {{/if}}
-	      {{if !$smarty.foreach.prises_soin.last}},{{/if}}
-	    {{/foreach}}
-    {{/if}}
+    <td style="text-align: center">
+    -
     </td>
   </tr>
   {{/foreach}}
-  {{/if}}
+  {{/foreach}}
+  {{/foreach}}
 </table>
 {{else}}
 <div class="big-info">

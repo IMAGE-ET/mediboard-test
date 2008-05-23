@@ -13,16 +13,22 @@
 class CPrescriptionLine extends CMbObject {
   
   // DB Fields
-  var $prescription_id = null;
-  var $ald             = null;
-  var $praticien_id    = null;
+  var $prescription_id  = null;
+  var $ald              = null;
+  var $praticien_id     = null;
   var $signee           = null;
   
   var $debut            = null;
   var $duree            = null;
   var $unite_duree      = null;
   var $date_arret       = null;
-    
+  var $child_id         = null;
+  
+  var $decalage_line = null;    // Permet de gerer les decalages dans le tps entre les lignes d'un protocole
+  var $fin = null;              // Date de fin utilisée pour stocker la fin de la ligne dans le cas de la prescription de sortie
+  var $_ref_parent_line = null;
+  var $_ref_child_line = null;
+  
   var $_ref_log_signee = null;
   var $_ref_log_date_arret = null;
   var $_ref_prises = null;
@@ -40,12 +46,15 @@ class CPrescriptionLine extends CMbObject {
       "duree"           => "num",
       "unite_duree"     => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "date_arret"      => "date",
+      "child_id"        => "ref class|$this->_class_name",
+      "decalage_line"   => "num min|0",
+      "fin"             => "date",
       "_fin"            => "date"
     );
     return array_merge($specsParent, $specs);
   }
   
- function getBackRefs() {
+  function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["prise_posologie"] = "CPrisePosologie object_id";
     return $backRefs;
@@ -55,11 +64,67 @@ class CPrescriptionLine extends CMbObject {
     $this->_ref_prises = $this->loadBackRefs("prise_posologie");	
   }
   
+  // Chargement de la child_line
+  function loadRefChildLine(){
+    $this->_ref_child_line = new $this->_class_name;
+    if($this->child_id){
+      $this->_ref_child_line->_id = $this->child_id;
+      $this->_ref_child_line->loadMatchingObject();
+    }	
+  }
+  
+  function loadRefParentLine(){
+  	$this->_ref_parent_line = new $this->_class_name;
+  	$this->_ref_parent_line->child_id = $this->_id;
+  	$this->_ref_parent_line->loadMatchingObject();
+  	
+  }
+  
+
+  // Chargement recursif des parents d'une ligne
+  function loadRefsParents($lines = array()) {
+  	// Chargement de la parent_line
+    $this->loadRefParentLine();
+    // si $this possede une parent_line
+    if($this->_ref_parent_line->_id){
+    	// on stocke la parent_line
+      $lines[$this->_ref_parent_line->_id] = $this->_ref_parent_line;
+      // on relance la fonction recursive sur la parent_line touvée
+      return $this->_ref_parent_line->loadRefsParents($lines);
+    } else {
+    	return $lines;
+    }
+  }
+  
+  
+
+  
+  function delete(){
+  	$old_id = $this->_id;
+  	
+  	// Suppression de la ligne
+  	if($msg = parent::delete()){
+  		return $msg;
+  	}
+  	
+   	// Chargement de la child_line de l'objet à supprimer
+  	$line = new $this->_class_name;
+   	$line->child_id = $old_id;
+   	$line->loadMatchingObject();
+   	if($line->_id){
+   		// On vide le child_id
+   		$line->child_id = "";
+   		if($msg = $line->store()){
+   			return $msg;
+   		}
+   	}
+   
+  }
   
   function updateFormFields(){
     parent::updateFormFields();
     $this->loadRefPrescription();
-    
+    $this->loadRefChildLine();
     $this->_protocole = ($this->_ref_prescription->object_id) ? "0" : "1";
     
     if($this->duree && $this->debut){
@@ -114,9 +179,6 @@ class CPrescriptionLine extends CMbObject {
   function loadRefLogDateArret(){ 	
   	$this->_ref_log_date_arret = $this->loadLastLogForField("date_arret");
   }
-  
-  
-
 }
 
 ?>

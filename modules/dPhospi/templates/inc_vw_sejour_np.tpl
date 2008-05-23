@@ -58,6 +58,12 @@
 	    {{if !is_object($prescription_sortie)}}
 	      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
 	    {{/if}}
+	    {{if $prescription_sejour_id}}
+        {{if $prescription_sejour->_counts_no_valide}}
+        <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
+        {{/if}}
+      {{/if}}
+		                  
     {{/if}}
              
   </td>

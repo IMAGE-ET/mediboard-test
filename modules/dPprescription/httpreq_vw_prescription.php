@@ -21,7 +21,10 @@ $object_id       = mbGetValueFromGetOrSession("object_id");
 
 $mode_pharma = mbGetValueFromGet("mode_pharma", 0);
 $refresh_pharma = mbGetValueFromGet("refresh_pharma", 0);
+
 $mode_protocole  = mbGetValueFromGetOrSession("mode_protocole", 0);
+$mode_sejour = mbGetValueFromGet("mode_sejour", 0);
+$sejour_id = mbGetValueFromGetOrSession("sejour_id");
 
 $listFavoris = array();
 $element_id = mbGetValueFromGetOrSession("element_id");
@@ -55,6 +58,18 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
 
+if(!$prescription->_id && $sejour_id){
+	$prescription_sejour = new CPrescription();
+	$prescription_sejour->object_id = $sejour_id;
+	$prescription_sejour->object_class = "CSejour";
+	$prescription_sejour->type = "sejour";
+	$prescription_sejour->loadMatchingObject();
+	if($prescription_sejour->_id){
+		$prescription =& $prescription_sejour;
+	}
+}
+
+
 $listProduits = array();
 
 if(!$prescription->_id) {
@@ -81,6 +96,7 @@ if($prescription->object_id) {
 	$prescription->loadRefsFwd();
 	$prescription->_ref_object->loadRefSejour();
 	$prescription->_ref_object->loadRefPatient();
+	$prescription->_ref_object->loadRefsPrescriptions();
 	$patient =& $prescription->_ref_object->_ref_patient;
   $patient->loadRefDossierMedical();
   
@@ -99,21 +115,25 @@ if($prescription->object_id) {
   $profil       = new CBcbControleProfil();
   $profil->setPatient($prescription->_ref_object->_ref_patient);
   foreach($prescription->_ref_prescription_lines as &$line) {
-    // Ajout des produits pour les alertes
-    $allergies->addProduit($line->code_cip);
-    $interactions->addProduit($line->code_cip);
-    $IPC->addProduit($line->code_cip);
-    $profil->addProduit($line->code_cip);
+  	if(!$line->child_id){
+	    // Ajout des produits pour les alertes
+	    $allergies->addProduit($line->code_cip);
+	    $interactions->addProduit($line->code_cip);
+	    $IPC->addProduit($line->code_cip);
+	    $profil->addProduit($line->code_cip);
+  	}
   }
   $alertesAllergies    = $allergies->getAllergies();
   $alertesInteractions = $interactions->getInteractions();
   $alertesIPC          = $IPC->getIPC();
   $alertesProfil       = $profil->getProfil();
   foreach($prescription->_ref_prescription_lines as &$line) {
-    $line->checkAllergies($alertesAllergies);
-    $line->checkInteractions($alertesInteractions);
-    $line->checkIPC($alertesIPC);
-    $line->checkProfil($alertesProfil);
+  	if(!$line->child_id){
+	    $line->checkAllergies($alertesAllergies);
+	    $line->checkInteractions($alertesInteractions);
+	    $line->checkIPC($alertesIPC);
+	    $line->checkProfil($alertesProfil);
+  	}
   }
 
   
@@ -156,7 +176,18 @@ if($prescription->_id){
 		if($consult_anesth->_id){
 		  $poids = $consult_anesth->poid;
 		}
+		
+		// Chargement des dates de l'operations
+    $sejour =& $prescription->_ref_object;
+    $sejour->makeDatesOperations();
+    foreach($sejour->_dates_operations as $date){
+      $prescription->_dates_dispo[] = $date;
+    }
+    $prescription->_dates_dispo[] = mbDate($sejour->_entree);
 	}
+	
+	// Calcul du nombre d'elements dans la prescription
+	$prescription->countLinesMedsElements();
 }
 
 if($mode_protocole){
@@ -173,11 +204,17 @@ if($mode_protocole){
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
 
+// Chargement du user_courant
+$user->load($AppUI->user_id);
+$is_praticien = $user->isPraticien();
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("httpreq", 1);
-
+$smarty->assign("sejour_id", $sejour_id);
+$smarty->assign("is_praticien", $is_praticien);
 $smarty->assign("today"              , mbDate());
 $smarty->assign("poids", $poids);
 $smarty->assign("categories", $categories);
@@ -198,8 +235,18 @@ $smarty->assign("category"    , $category);
 $smarty->assign("categories"  , $categories);
 $smarty->assign("class_category", new CCategoryPrescription());
 $smarty->assign("refresh_pharma", $refresh_pharma);
+$smarty->assign("mode_sejour", $mode_sejour);
+$smarty->assign("protocole_line", new CPrescriptionLineMedicament());
 
 
+
+if($mode_sejour){
+	$smarty->assign("mode_pharma", "0");
+	$smarty->assign("mode_protocole", "0");
+	$smarty->assign("mode_sejour", 1);
+	$smarty->display("vw_edit_prescription_popup.tpl");
+	return;
+}
 
 if($mode_protocole){
 	$smarty->assign("praticiens", $praticiens);

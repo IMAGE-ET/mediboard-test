@@ -54,14 +54,16 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 }
 
 
+function reloadPrescription(prescription_id){
+  Console.debug(prescription_id);
+  Prescription.reloadPrescSejour(prescription_id, '');
+}
+
+
 function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
   // Affichage de la prescription
-  if($('produits_elements')){
-    if(prescription_id){
-      Prescription.reload(prescription_id);
-    } else {
-      $('produits_elements').innerHTML = "";
-    }
+  if($('prescription_sejour')){
+    Prescription.reloadPrescSejour(prescription_id, sejour_id);
   }
   loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
@@ -78,7 +80,9 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     reloadDiagnostic(sejour_id, '1');
   }
   if($('dossier_soins')){
-    loadDossierSoin(sejour_id, date);
+    document.form_prescription.sejour_id.value = sejour_id;
+    loadTraitement(sejour_id, date);
+    loadSuivi(sejour_id);
   }
 }
 
@@ -87,11 +91,6 @@ function loadResultLabo(sejour_id) {
   url.setModuleAction("dPImeds", "httpreq_vw_sejour_results");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('Imeds', { waitingText : null });
-}
-
-function loadDossierSoin(sejour_id, date){
-  loadTraitement(sejour_id, date);
-  loadSuivi(sejour_id);
 }
 
 function loadTraitement(sejour_id, date) {
@@ -137,24 +136,6 @@ Main.add(function () {
   {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
   {{/if}}
-  
-
-/*
-   var oFormService = document.selService;
-   oFormService.service_id.value = "";
-   $A(oFormService.service_id).each( function(input) {
-      input.disabled = true;
-   });
-   
-   var oFormMode = document.chgMode;
-   oFormMode.mode.value = "1";
-   $A(oFormMode.mode).each( function(input) {
-      input.disabled = true;
-   });
-*/   
-   
-    
-
 });
 
 
@@ -164,7 +145,7 @@ Main.add(function () {
   <tr>
     <td style="width:200px;" rowspan="3">
       <form name="form_prescription" action="">
-        <input type="hidden" name="prescription_id" value="" />
+        <input type="hidden" name="sejour_id" value="" />
       </form>
       <table>
         <tr>
@@ -244,8 +225,9 @@ Main.add(function () {
                   {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
                   {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
                     
-                  {{if $prescriptions_sejour}}
-                    {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+                    {{if $prescriptions_sejour}}
+                   {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
+                  
                     {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
                   {{else}}
                     {{assign var=prescription_sejour_id value=""}}
@@ -279,19 +261,24 @@ Main.add(function () {
                   {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
                 
                   {{if $isPrescriptionInstalled}}  
-                    <!-- Test des prescription de sortie -->
-                    {{assign var=prescription_sortie value=""}}
-                      {{if $prescriptions}}
-                      {{if array_key_exists('sortie', $prescriptions)}}
-                        {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
-                        {{if array_key_exists('0', $prescriptions_sortie)}}
-                          {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
-                        {{/if}}
-                      {{/if}}
-                      {{/if}}
-                      {{if !is_object($prescription_sortie)}}
-                        <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-                      {{/if}}
+		                <!-- Test des prescription de sortie -->
+		                {{assign var=prescription_sortie value=""}}
+		                  {{if $prescriptions}}
+		                  {{if array_key_exists('sortie', $prescriptions)}}
+		                    {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
+		                    {{if array_key_exists('0', $prescriptions_sortie)}}
+		                      {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
+		                    {{/if}}
+		                  {{/if}}
+		                  {{/if}}
+		                  {{if !is_object($prescription_sortie)}}
+		                    <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
+		                  {{/if}}
+		                  {{if $prescription_sejour_id}}
+		                    {{if $prescription_sejour->_counts_no_valide}}
+		                    <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
+		                    {{/if}}
+		                  {{/if}}
                   {{/if}}
                 </td>
                 
@@ -320,16 +307,16 @@ Main.add(function () {
             
             <!-- Cas de l'affichage par service -->
             {{if $service_id}}
-              {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
-                <tr>
-                  <th class="title" colspan="6">
-                    {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
-                  </th>
-                </tr>
-                {{foreach from=$sejourNonAffectes item=curr_sejour}}
-                  {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
-                {{/foreach}}
-              {{/foreach}}
+	            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}
+	              <tr>
+	                <th class="title" colspan="6">
+	                  {{tr}}CSejour.groupe.{{$group_name}}{{/tr}}
+	                </th>
+	              </tr>
+	              {{foreach from=$sejourNonAffectes item=curr_sejour}}
+	                {{include file="../../dPhospi/templates/inc_vw_sejour_np.tpl"}}
+	              {{/foreach}}
+	            {{/foreach}}
             {{/if}}
           
             </table>    
@@ -344,8 +331,8 @@ Main.add(function () {
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li><a href="#dossier_soins">Dossier de soins</a></li>
-        <li><a href="#produits_elements">Prescriptions</a></li>
+        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
+        <li><a href="#prescription_sejour">Prescriptions</a></li>
         {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -370,7 +357,7 @@ Main.add(function () {
         <div id="dossier_suivi">
         </div>
       </div>
-      <div id="produits_elements" style="display: none;">
+      <div id="prescription_sejour" style="display: none;">
       </div>
       {{/if}}
       

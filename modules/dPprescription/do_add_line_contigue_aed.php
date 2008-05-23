@@ -24,6 +24,11 @@ $can->needsRead();
 
 $prescription_line_id = mbGetValueFromPost("prescription_line_id");
 $prescription_id = mbGetValueFromPost("prescription_id");
+$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
+
+// Chargement de la prescription
+$prescription = new CPrescription();
+$prescription->load($prescription_id);
 
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 
@@ -32,7 +37,7 @@ $new_line = new CPrescriptionLineMedicament();
 $new_line->load($prescription_line_id);
 $new_line->loadRefsPrises();
 $new_line->loadRefPrescription();
-// On copie la ligne
+
 $new_line->_id = "";
 
 // Si date_arret (cas du sejour)
@@ -55,10 +60,17 @@ $new_line->unite_duree = "jour";
 if($new_line->duree < 0){
 	$new_line->duree = "";
 }
-$new_line->praticien_id = $AppUI->user_id;
+$new_line->praticien_id = $praticien_id;
 $new_line->signee = 0;
 $new_line->valide_pharma = 0;
+
+// Si prescription de sortie, on duplique la ligne en ligne de prescription
+if($prescription->type == "sortie"){
+	$new_line->prescription_id = $prescription_id;
+}
+
 $msg = $new_line->store();
+
 viewMsg($msg, "msg-CPrescriptionLineMedicament-create");
 
 foreach($new_line->_ref_prises as &$prise){
@@ -68,6 +80,16 @@ foreach($new_line->_ref_prises as &$prise){
 	$prise->object_class = "CPrescriptionLineMedicament";
 	$msg = $prise->store();
 	viewMsg($msg, "msg-CPrisePosologie-create");
+}
+
+$old_line = new CPrescriptionLineMedicament();
+$old_line->load($prescription_line_id);
+if(!($prescription->type == "sortie" && $old_line->_traitement)){
+	$old_line->child_id = $new_line->_id;
+	if($prescription->type != "sortie" && !$old_line->date_arret){
+	  $old_line->date_arret = mbDate();
+	}
+	$old_line->store();
 }
 
 echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','',$mode_pharma)</script>";

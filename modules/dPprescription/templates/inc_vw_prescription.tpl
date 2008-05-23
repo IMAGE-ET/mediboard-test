@@ -25,7 +25,6 @@ preselectType = function(contexte, oForm){
 </script>
 
 
-
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}
 <form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return Protocole.add();">	

@@ -14,6 +14,7 @@ if($('alertes')){
 viewEasyMode = function(){
   var url = new Url();
   url.setModuleAction("dPprescription","vw_easy_mode");
+  url.addParam("prescription_id", '{{$prescription->_id}}');
   url.popup(850,500,"Mode de saisie simplifié");
 }
 
@@ -44,7 +45,7 @@ viewEasyMode = function(){
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-  <input type="hidden" name="debut" value="" />
+  <input type="hidden" name="debut" value="{{$today}}" />
   <input type="hidden" name="duree" value="" />
   <input type="hidden" name="unite_duree" value="" />
   <input type="hidden" name="callback" value="" />

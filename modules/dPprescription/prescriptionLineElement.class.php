@@ -59,11 +59,12 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $specs = array (
       "element_prescription_id"        => "notNull ref class|CElementPrescription cascade",
       "executant_prescription_line_id" => "ref class|CExecutantPrescriptionLine",
-      "commentaire"  => "str"
+      "commentaire"                    => "str"
     );
     return array_merge($specsParent, $specs);
   }
   
+   
   function loadRefElement(){
   	$this->_ref_element_prescription = new CElementPrescription();
   	$this->_ref_element_prescription->load($this->element_prescription_id);	

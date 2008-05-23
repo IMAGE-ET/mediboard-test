@@ -39,18 +39,27 @@ function asc_shift($str, $offset=0) {
 
 
 // Classe de gestion des pdf heritant de TCPDF
+function is_utf8 ($str) {
+  return (utf8_encode(utf8_decode($str)) == $str);
+}
+
+function to_utf8($str) {
+  return is_utf8($str)?$str:utf8_encode($str);
+}
+
+// Classe de gestion des pdf heritant de TCPDF
 class CMbPdf extends TCPDF {
-	
-	public function initMarge($headerMarge, $footerMarge, $autoPageBreak = 25, $imageScale = 4){
-	  $this->SetAutoPageBreak(TRUE, $autoPageBreak);
-      $this->SetHeaderMargin($headerMarge);
-      $this->SetFooterMargin($footerMarge);
-      $this->setImageScale($imageScale);
-	}
-	
-	public function writeBarcode($x, $y, $w, $h, $type, $style, $font, $xres, $code) {
-	  parent::writeBarcode($x, $y, $w, $h, $type, $style, $font, $xres, asc_shift($code, -2));
-	}
+  public function Text($x, $y, $txt, $stroke=0, $clip=false) {
+    parent::Text($x, $y, to_utf8($txt), $stroke, $clip);
+  }
+  
+  public function Cell($w, $h=0, $txt='', $border=0, $ln=0, $align='', $fill=0, $link='', $stretch=0) {
+    return parent::Cell($w, $h, to_utf8($txt), $border, $ln, $align, $fill, $link, $stretch);
+  }
+    
+  public function Write($h, $txt, $link='', $fill=0, $align='', $ln=false, $stretch=0) {
+    return parent::Write($h, to_utf8($txt), $link, $fill, $align, $ln, $stretch);
+  }
 }
 
 

@@ -1,4 +1,3 @@
-
 <?php /* $Id: $ */
 
 /**
@@ -21,6 +20,13 @@ class CExecutantPrescriptionLine extends CMbObject {
   var $nom         = null;
   var $description  = null;
   
+
+  function CExecutantPrescriptionLine() {
+    $this->CMbObject("executant_prescription_line", "executant_prescription_line_id");
+    
+    $this->loadRefModule(basename(dirname(__FILE__)));
+  }
+  
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
@@ -31,11 +37,6 @@ class CExecutantPrescriptionLine extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  function CExecutantPrescriptionLine() {
-    $this->CMbObject("executant_prescription_line", "executant_prescription_line_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }
   
   function updateFormFields(){
     parent::updateFormFields();

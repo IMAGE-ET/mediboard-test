@@ -63,12 +63,13 @@ submitPrise = function(oForm, type){
 	    <input type="hidden" name="object_id" value="{{$line->_id}}" />
 	    <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  Quantité: 
-		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseFoisPar$type$line_id}}
+		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseFoisPar$type$line_id}}
 		  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
 		  {{/if}}
-		  {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 form=addPriseFoisPar$type$line_id}} fois par 
+		  {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPriseFoisPar$type$line_id}} fois par 
 		  {{mb_field object=$prise_posologie field=unite_fois}}
+	  
       {{if $line->_id}}
 	      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
 		  {{/if}}
@@ -84,7 +85,7 @@ submitPrise = function(oForm, type){
 	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  
 	  Quantité: 
-	  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseMoment$type$line_id}}
+	  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseMoment$type$line_id}}
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
 		  {{/if}}
@@ -99,6 +100,8 @@ submitPrise = function(oForm, type){
 	     </optgroup>
 	  {{/foreach}}
 	  </select>	
+
+		  
 	  {{if $line->_id}}
       <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
     {{/if}}
@@ -114,13 +117,15 @@ submitPrise = function(oForm, type){
         <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  
         Quantité: 
-		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 form=addPriseTousLes$type$line_id}}
+		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}
       {{if $line->_class_name == "CPrescriptionLineMedicament"}}
 		    {{$line->_unite_prise}}(s)
 		  {{/if}}
          tous les
-		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 form=addPriseTousLes$type$line_id}}				   
+		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}				   
 		  {{mb_field object=$prise_posologie field=unite_tous_les}}
+		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min=0 form=addPriseTousLes$type$line_id}})
+		  
       {{if $line->_id}}
         <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
       {{/if}}

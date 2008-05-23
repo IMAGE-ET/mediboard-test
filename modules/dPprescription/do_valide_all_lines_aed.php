@@ -16,6 +16,89 @@ function viewMsg($msg, $action){
   $AppUI->setMsg("$action", UI_MSG_OK );
 }
 
+
+// Fonction permettant d'inserer $lines dans $prescription
+function insertMedElts($lines, $prescription, $sejour){
+	global $AppUI;
+	
+  if($prescription->type == "sejour"){ 
+    $limit = $sejour->_entree;	
+  }
+  if($prescription->type == "sortie"){ 
+    $limit = $sejour->_sortie;	
+  }
+  				
+  // Chargement des lignes de medicament deja presents dans la prescription
+  $medicaments = array();
+  $line_medicament = new CPrescriptionLineMedicament();
+  $line_medicament->prescription_id = $prescription->_id;
+  $medicaments = $line_medicament->loadMatchingList();
+  $produits = array();
+  foreach($medicaments as &$_medicament){
+    $produits[$_medicament->code_cip] = $_medicament;  	
+  }	
+  
+  // Chargement des elements deja presents dans la prescription
+  $elements = array();
+  $line_element = new CPrescriptionLineElement();
+  $line_element->prescription_id = $prescription->_id;
+  $elements = $line_element->loadMatchingList();
+  
+  // Parcours des elements de la prescription courante
+  foreach($lines as $cat => $lines_by_cat){
+  	foreach($lines_by_cat as &$line){
+  		// Si le medicament est deja present dans la prescription, on passe a la ligne suivante
+  		if($cat == "medicament" && array_key_exists($line->code_cip,$produits)){
+      	continue;
+  		}
+  		// Si l'element est deja present, on passe a la ligne suivante
+  		if($cat == "element" && array_key_exists($line->_id, $elements)){
+  			continue;
+  		}	
+		  // si la ligne est un element, on verifie les date
+  		if($cat == "element"){
+		    if($line->date_arret){
+		      $line->_fin = $line->date_arret;	
+		    }
+			  if($line->_fin < mbDate($limit)){
+		    	continue;
+		    }
+  		}
+  		
+  		// Chargement des prises 
+			$line->loadRefsPrises();
+			
+  		// Adaptation des dates
+			if($line->debut < mbDate($limit)){
+				$diff_duree = mbDaysRelative($line->debut, mbDate($limit));
+				if( $line->duree - $diff_duree > 0){
+					$line->duree = $line->duree - $diff_duree;
+					$line->debut = mbDate($limit);
+				}
+			}					
+			$line->_id = "";
+	    $line->prescription_id = $prescription->_id;
+	    //$line->praticien_id = $AppUI->user_id;
+	    $line->signee = 0;
+	    if($cat == "medicament"){
+	      $line->valide_pharma = 0;
+	    }
+	    $msg = $line->store();
+	    viewMsg($msg, "msg-$line->_class_name-create");  
+	  
+		  // Parcours des prises et creation des nouvelles prises
+		  foreach($line->_ref_prises as $prise){
+			  $prise->_id = "";
+			  $prise->object_id = $line->_id;
+			  $msg = $prise->store();
+		    viewMsg($msg, "msg-CPrisePosologie-create");  	
+		  }
+  	}
+  }
+}
+
+
+
 global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
@@ -35,6 +118,7 @@ $prescription_line_id = mbGetValueFromPost("prescription_line_id");
 $medicaments = array();
 $elements = array();
 $comments = array();
+$lines = array();
 
 // Validation d'une ligne
 if($prescription_line_id){	
@@ -51,29 +135,76 @@ if($prescription_line_id){
 }
 
 
+// Si mode pharma en validation globale, chargement de tous les medicaments de la prescription et calcul des interactions
+if($prescription->_id && $mode_pharma){
+	$prescription->loadRefObject();
+	$prescription->_ref_object->loadRefPatient();
+	$prescription->loadRefsLines();
+	$sejour =& $prescription->_ref_object;
+	$patient =& $sejour->_ref_patient;
+	
+	// Chargement du dossier medical du patient
+	$patient->loadRefDossierMedical();
+  $patient->_ref_dossier_medical->updateFormFields();
+  $patient->_ref_dossier_medical->loadRefsAntecedents();
+  $patient->_ref_dossier_medical->loadRefsTraitements();
+  $patient->_ref_dossier_medical->loadRefsAddictions();
+  
+  // Gestion des alertes
+  $allergies    = new CBcbControleAllergie();
+  $allergies->setPatient($patient);
+  $interactions = new CBcbControleInteraction();
+  $IPC          = new CBcbControleIPC();
+  $profil       = new CBcbControleProfil();
+  $profil->setPatient($patient);
+  
+  foreach ($prescription->_ref_prescription_lines as &$_line_med) {
+  	if(!$_line_med->child_id){
+	    // Chargement de la posologie
+	    // Ajout des produits pour les alertes
+	    $allergies->addProduit($_line_med->code_cip);
+	    $interactions->addProduit($_line_med->code_cip);
+	    $IPC->addProduit($_line_med->code_cip);
+	    $profil->addProduit($_line_med->code_cip);
+  	}
+  }
+  $alertesAllergies    = $allergies->getAllergies();
+  $alertesInteractions = $interactions->getInteractions();
+  $alertesIPC          = $IPC->getIPC();
+  $alertesProfil       = $profil->getProfil();
+  foreach ($prescription->_ref_prescription_lines as &$_line) {
+  	if(!$_line->child_id){
+	    $_line->checkAllergies($alertesAllergies);
+	    $_line->checkInteractions($alertesInteractions);
+	    $_line->checkIPC($alertesIPC);
+	    $_line->checkProfil($alertesProfil);
+  	}
+  	if($_line->_nb_alertes == "0" && $_line->valide_pharma == "0"){
+  		$medicaments[$_line->_id] = $_line;
+  	}
+  }
+}
+
+
+
 // Validation de tous les medicaments
-if($prescription_id && $chapitre=="medicament"){
+if($prescription_id && $chapitre=="medicament" && !$mode_pharma){
 	// Chargement de toutes les lignes du user_courant non validées
 	$prescriptionLineMedicament = new CPrescriptionLineMedicament();
 	$prescriptionLineMedicament->prescription_id = $prescription_id;
-	if($mode_pharma){
-		$prescriptionLineMedicament->valide_pharma = "0";
-	} else {
-    $prescriptionLineMedicament->praticien_id = $AppUI->user_id;
-		$prescriptionLineMedicament->signee = "0";
-	}
+  $prescriptionLineMedicament->praticien_id = $AppUI->user_id;
+	$prescriptionLineMedicament->signee = "0";
 	$medicaments = $prescriptionLineMedicament->loadMatchingList();
-	
-	if(!$mode_pharma){
-	  $prescriptionLineComment = new CPrescriptionLineComment();
-	  
-	  $where = array();
-	  $where["prescription_id"] = " = '$prescription_id'";
-	  $where["praticien_id"] = " = '$AppUI->user_id'";
-	  $where["category_prescription_id"] = "IS NULL";
-	  $where["signee"] = " = '0'";
-	  $comments = $prescriptionLineComment->loadList($where);
-  }
+
+  $prescriptionLineComment = new CPrescriptionLineComment();
+  
+  $where = array();
+  $where["prescription_id"] = " = '$prescription_id'";
+  $where["praticien_id"] = " = '$AppUI->user_id'";
+  $where["category_prescription_id"] = "IS NULL";
+  $where["signee"] = " = '0'";
+  $where["child_id"] = "IS NULL";
+  $comments = $prescriptionLineComment->loadList($where);
 	
 	// Chargement de la prescription
 	$prescription = new CPrescription();
@@ -93,7 +224,7 @@ if($prescription_id && $chapitre!="medicament" && !$mode_pharma){
 	$where["prescription_id"] = " = '$prescription_id'";
 	$where["praticien_id"] = " = '$AppUI->user_id'";
 	$where["signee"] = " = '0'";
-	
+	$where["child_id"] = "IS NULL";
 	$where["category_prescription.chapitre"] = " = '$chapitre'";
 	
 	$prescription_line_element = new CPrescriptionLineElement();
@@ -132,81 +263,48 @@ if(!$mode_pharma){
 	}
 }
 
-// Si une ligne rajoutée dans la preadmission deborde sur le sejour alors que la prescription de sejour a deja ete créée
-// On rajoute la ligne dans la prescription de sejour
-if($prescription->type == "pre_admission" && $chapitre=="medicament" && !$mode_pharma){
-	// On teste s'il existe une prescription de sejour correspondant a l'object
+
+// Ajout des lignes a la prescription suivante si la ligne n'est pas déja incluse
+if(!$mode_pharma){
+	// Stockage dans un tableaux des medicaments et elements de la prescription courante
+	$lines["medicament"] = $medicaments;
+	$lines["element"] = $elements;
+	  
+  // Chargement de la prescription de sejour
   $prescription_sejour = new CPrescription();
   $prescription_sejour->object_id = $prescription->object_id;
   $prescription_sejour->object_class = $prescription->object_class;
   $prescription_sejour->type = "sejour";
   $prescription_sejour->loadMatchingObject();
   
-  // Si la prescription de sejour existe
-  if($prescription_sejour->_id){  	
-  	// Chargement des tous les produits presents dans la prescription de sejour
-    $medicaments_sejour = array();
-    $line_medicament = new CPrescriptionLineMedicament();
-    $line_medicament->prescription_id = $prescription_sejour->_id;
-    $medicaments_sejour = $line_medicament->loadMatchingList();
-    $produits = array();
-    foreach($medicaments_sejour as &$medicament_line){
-    	$produits[$medicament_line->code_cip] = $medicament_line;
-    }
-  	$sejour = new CSejour();
-  	$sejour->load($prescription_sejour->object_id);
-  	foreach($medicaments as &$line_med){
-  		// Si le medicament est déja present la prescription de sejour, on ne le copie pas
-      if(array_key_exists($line_med->code_cip, $produits)){
-      	continue;
-      }
-  		// Si la ligne de prescription possede une duree (_fin calculée)
-  		if($line_med->_fin && $line_med->debut && $line_med->duree && $line_med->unite_duree){
-  			// si l'une des bornes de la ligne fait partie du sejour
-  		  if($line_med->date_arret){
-      	  // Si la ligne possède une date d'arret, on modifie la date de fin
-          $fin_temp = $line_med->_fin;
-      	  $line_med->_fin = $line_med->date_arret;
-  		  }
-  			if(($line_med->debut > mbDate($sejour->_entree) && $line_med->debut < mbDate($sejour->_sortie)) || 
-  			   ($line_med->_fin > mbDate($sejour->_entree) && $line_med->_fin < mbDate($sejour->_sortie)) || 
-  			   ($line_med->debut <= mbDate($sejour->_entree) && $line_med->_fin >= mbDate($sejour->_sortie))){
-  			  // On duplique la ligne en mettant les valeurs appropriées
-          // Chargement des prises
-			    $line_med->loadRefsPrises();
-          $line_med->_id = "";
-          $line_med->prescription_id = $prescription_sejour->_id;
-          
-          // On ajuste la date d'entree et la duree
-		      if($line_med->debut < mbDate($sejour->_entree)){
-			 	    $diff_duree = mbDaysRelative($line_med->debut, mbDate($sejour->_entree));
-			 	    $line_med->duree = $line_med->duree - $diff_duree;
-				    $line_med->debut = mbDate($sejour->_entree);
-			      $line_med->unite_duree = "jour";
-		   	  }
-		   	  
-		   	  // Si il y a une date d'arret
-		   	  if($line_med->date_arret){
-		   	  	$diff_duree2 = mbDaysRelative($line_med->date_arret, $fin_temp);
-		       	$line_med->duree = $line_med->duree - $diff_duree2;
-		   	  }
-		   	  
-		   	  $line_med->date_arret = "";
-			    $line_med->praticien_id = $AppUI->user_id;
-			    $line_med->signee = 0;
-			    $msg = $line_med->store();
-			    viewMsg($msg, "msg-CPrescriptionLineMedicament-create");
-			    
-			    foreach($line_med->_ref_prises as &$prise){
-			      $prise->_id = "";
-			      $prise->object_id = $line_med->_id;
-			      $msg = $prise->store();
-			      viewMsg($msg, "msg-CPrisePosologie-create");
-			    }
-  			}
-  		}
-  	}
-  }
+  $sejour =& $prescription_sejour->_ref_object;
+  
+  // Chargement de la prescription de sortie
+  $prescription_sortie = new CPrescription();
+  $prescription_sortie->object_id = $prescription->object_id;
+  $prescription_sortie->object_class = $prescription->object_class;
+  $prescription_sortie->praticien_id = $AppUI->user_id;
+  $prescription_sortie->type = "sortie";
+  $prescription_sortie->loadMatchingObject();
+  
+  // Si la prescription est de type pre_admission, on insere les medicaments et les elements dans les prescriptions de sejour et de sortie
+	if($prescription->type == "pre_admission"){
+	  if($prescription_sejour->_id){
+		  // Insertion des medicaments et elements de pre_admission dans le sejour
+		  insertMedElts($lines, $prescription_sejour, $sejour);
+		}
+	}
+
+	// Si la prescription est de type pre_admission ou sejour
+	if($prescription->type == "pre_admission" || $prescription->type == "sejour"){
+		if($prescription_sejour->_id){
+			insertMedElts($lines, $prescription_sejour, $sejour);
+		}
+	  if($prescription_sortie->_id){
+      // Insertion des medicaments et elements de pre_admission dans la sortie
+			insertMedElts($lines, $prescription_sortie, $sejour);
+		}
+	}
 }
 
 echo "<script type='text/javascript'>Prescription.reload($prescription->_id,'', '$chapitre','','$mode_pharma');</script>";

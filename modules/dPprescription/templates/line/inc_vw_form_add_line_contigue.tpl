@@ -1,3 +1,12 @@
+<script type="text/javascript">
+  addLineContigue = function(oForm){
+    if(document.selPraticienLine){
+      oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
+    }
+    submitFormAjax(oForm, 'systemMsg'); 
+  }
+</script>
+
 <!-- Creation d'une ligne avec des dates contiguës -->
 <form name="addLineCont-{{$line->_id}}" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
@@ -6,5 +15,6 @@
   <input type="hidden" name="prescription_line_id" value="{{$line->_id}}" />
   <input type="hidden" name="prescription_id" value="{{$prescription_reelle->_id}}" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
-  <button type="button" class="new" onclick="submitFormAjax(document.forms['addLineCont-{{$line->_id}}'],'systemMsg')">Ajouter une ligne</button>
+  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <button type="button" class="new" onclick="addLineContigue(document.forms['addLineCont-{{$line->_id}}'])">Ajouter une ligne</button>
 </form>

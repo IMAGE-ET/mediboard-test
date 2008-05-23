@@ -24,34 +24,35 @@ $can->needsRead();
 
 $prescription_id = mbGetValueFromPost("prescription_id");
 $protocole_id = mbGetValueFromPost("protocole_id");
+$debut = mbGetValueFromPost("debut");
+$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 
+if(!$debut){
+	$debut = mbDate();
+}
+if(!$protocole_id){
+	exit();
+}
 // Chargement du protocole
 $protocole = new CPrescription();
 $protocole->load($protocole_id);
 
-// Chargement des lignes de medicaments
+// Chargement des lignes de medicaments, d'elements et de commentaires
 $protocole->loadRefsLines();
-
-// Chargement des lignes d'elements
 $protocole->loadRefsLinesElement();
-
-// Chargement des lignes de commentaire
 $protocole->loadRefsLinesAllComments();
 
 // Parcours des lignes de prescription
 foreach($protocole->_ref_prescription_lines as $line){
-  $new_line = new CPrescriptionLineMedicament();
-  $new_line->_id = "";
-  $new_line->code_cip = $line->code_cip;
-  $new_line->no_poso = $line->no_poso;
-  $new_line->commentaire = $line->commentaire;
-  $new_line->debut = $line->debut;
-  $new_line->duree = $line->duree;
-  $new_line->unite_duree = $line->unite_duree;
-  $new_line->ald = $line->ald;
-  $new_line->prescription_id = $prescription_id;
-  $new_line->praticien_id = $AppUI->user_id;
-  $msg = $new_line->store();
+  $line->_id = "";
+  $line->debut = $debut;
+  $line->unite_duree = "jour";
+  if($line->decalage_line && $line->decalage_line > 0){
+    $line->debut = mbDate("+ $line->decalage_line DAYS", $line->debut);
+  }
+  $line->prescription_id = $prescription_id;
+  $line->praticien_id = $praticien_id;
+  $msg = $line->store();
   viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   	
   // Chargement des prises
@@ -59,43 +60,38 @@ foreach($protocole->_ref_prescription_lines as $line){
 
 	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
-		$new_prise = new CPrisePosologie();
-	  $new_prise->_id = "";
-		$new_prise->object_id = $new_line->_id;
-		$new_prise->object_class = "CPrescriptionLineMedicament";
-		$new_prise->moment_unitaire_id = $prise->moment_unitaire_id;
-	  $new_prise->quantite = $prise->quantite;
-	  $new_prise->nb_fois = $prise->nb_fois;
-	  $new_prise->unite_fois = $prise->unite_fois;
-	  $new_prise->nb_tous_les = $prise->nb_tous_les;
-	  $new_prise->unite_tous_les = $prise->unite_tous_les;
-	  $msg = $new_prise->store();
+	  $prise->_id = "";
+		$prise->object_id = $new_line->_id;
+		$prise->object_class = "CPrescriptionLineMedicament";
+	  $msg = $prise->store();
 	  viewMsg($msg, "msg-CPrisePosologie-create");  	
 	}
 }
 
 // Parcours des lignes d'elements
 foreach($protocole->_ref_prescription_lines_element as $line_element){
-  $new_line_element = new CPrescriptionLineElement();
-  $new_line_element = $line_element;
-  $new_line_element->_id = "";
-  $new_line_element->prescription_id = $prescription_id;
-  $new_line_element->praticien_id = $AppUI->user_id;
-  $msg = $new_line_element->store();
+  $line_element->_id = "";
+  $line_element->unite_duree = "jour";
+  if($line_element->_ref_element_prescription->_ref_category_prescription->chapitre != "dmi"){
+	  $line_element->debut = $debut;
+	  if($line_element->decalage_line && $line_element->decalage_line > 0){
+	    $line_element->debut = mbDate("+ $line_element->decalage_line DAYS", $line_element->debut);
+	  }
+  }
+  $line_element->prescription_id = $prescription_id;
+  $line_element->praticien_id = $praticien_id;
+  $msg = $line_element->store();
   viewMsg($msg, "msg-CPrescriptionLineElement-create");  
 }
 
 // Parcours des lignes de commentaires
 foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
-	$new_line_comment = new CPrescriptionLineComment();
-	$new_line_comment = $line_comment;
-	$new_line_comment->_id = "";
-	$new_line_comment->prescription_id = $prescription_id;
-	$new_line_comment->praticien_id = $AppUI->user_id;
-	$msg = $new_line_comment->store();
+	$line_comment->_id = "";
+	$line_comment->prescription_id = $prescription_id;
+	$line_comment->praticien_id = $praticien_id;
+	$msg = $line_comment->store();
 	viewMsg($msg, "msg-CPrescriptionLineComment-create");
 }
-
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reload($prescription_id)</script>";
