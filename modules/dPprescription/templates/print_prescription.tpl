@@ -8,7 +8,7 @@
 
 <style type="text/css">
 
-{{include file=../../dPcompteRendu/css/print.css header=10 footer=5}}
+{{include file=../../dPcompteRendu/css/print.css header=10 footer=8}}
 
 </style>
   
@@ -32,7 +32,7 @@
 	    
 	    <td class="center">
 	      <h1>{{$etablissement->_view}}</h1>
-	      <h2>{{mb_value object=$function field=soustitre}}</h2>
+	      {{mb_value object=$function field=soustitre}}
 	    </td>
 	  
 	    <td class="right">
