@@ -101,7 +101,7 @@ if ($can->edit) {
   // Admissions de la veille
   $dayBefore = mbDate("-1 days", $date);
   $where = array(
-    "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 00:00:00'",
+    "entree_prevue" => "BETWEEN '$dayBefore 00:00:00' AND '$date 02:00:00'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
@@ -112,7 +112,7 @@ if ($can->edit) {
   
   // Admissions du matin
   $where = array(
-    "entree_prevue" => "BETWEEN '$date 00:00:01' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+    "entree_prevue" => "BETWEEN '$date 02:00:01' AND '$date ".mbTime("-1 second",$heureLimit)."'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
