@@ -55,7 +55,6 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 
 function reloadPrescription(prescription_id){
-  Console.debug(prescription_id);
   Prescription.reloadPrescSejour(prescription_id, '');
 }
 
