@@ -53,6 +53,7 @@ class CHPrim21Reader {
         $i++;
       } else {
         $curr_line = trim(fgets($file, 1024));
+        // On vérifie si la ligne est un Addendum
         if(substr($curr_line, 0, 2) == "A|") {
           $lines[$i-1] .= substr($curr_line, 2);
         } else {
@@ -61,8 +62,6 @@ class CHPrim21Reader {
         }
       }
     }
-    mbTrace($lines);
-    die;
     
     // Lecture de l'en-tête
     if(!$this->segmentH($header)) {
