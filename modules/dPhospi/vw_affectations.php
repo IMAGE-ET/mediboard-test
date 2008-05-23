@@ -112,7 +112,7 @@ if ($can->edit) {
   
   // Admissions du matin
   $where = array(
-    "entree_prevue" => "BETWEEN '$date 00:00:00' AND '$date ".mbTime("-1 second",$heureLimit)."'",
+    "entree_prevue" => "BETWEEN '$date 00:00:01' AND '$date ".mbTime("-1 second",$heureLimit)."'",
     "type" => "!= 'exte'",
     "annule" => "= '0'"
   );
