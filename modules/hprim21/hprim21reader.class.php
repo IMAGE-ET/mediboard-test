@@ -49,10 +49,10 @@ class CHPrim21Reader {
     $lines = array();
     while(!feof($file)){
       if(!$i) {
-        $header = fgets($file, 1024);
+        $header = str_replace("\n", "", fgets($file, 1024));
         $i++;
       } else {
-        $curr_line = fgets($file, 1024);
+        $curr_line = str_replace("\n", "", fgets($file, 1024));
         if(substr($curr_line, 0, 2) == "A|") {
           $lines[$i-1] .= substr($curr_line, 2);
         } else {
