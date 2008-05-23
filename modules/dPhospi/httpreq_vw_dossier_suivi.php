@@ -9,12 +9,14 @@
 
 global $AppUI, $can, $m, $g;
 
-$can->needsRead();
-
-$sejour_id = mbGetValueFromGet("sejour_id", 0);
-
 $user = new CMediusers();
 $user->load($AppUI->user_id);
+
+if(!$user->isPraticien()) {
+  $can->needsRead();
+}
+
+$sejour_id = mbGetValueFromGet("sejour_id", 0);
 
 $observation  = new CObservationMedicale();
 $transmission = new CTransmissionMedicale();
