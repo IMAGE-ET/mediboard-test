@@ -53,12 +53,14 @@ class CHPrim21Reader {
         $i++;
       } else {
         $curr_line = trim(fgets($file, 1024));
-        // On vérifie si la ligne est un Addendum
-        if(substr($curr_line, 0, 2) == "A|") {
-          $lines[$i-1] .= substr($curr_line, 2);
-        } else {
-          $lines[$i] = $curr_line;
-          $i++;
+        if($curr_line) {
+          // On vérifie si la ligne est un Addendum
+          if(substr($curr_line, 0, 2) == "A|") {
+            $lines[$i-1] .= substr($curr_line, 2);
+          } else {
+            $lines[$i] = $curr_line;
+            $i++;
+          }
         }
       }
     }
@@ -130,7 +132,6 @@ class CHPrim21Reader {
     }
     if(!isset($lines[$i]) || $this->getTypeLine($lines[$i]) != "L") {
       $this->error_log[] = "Erreur dans la suite des segments du message ADM";
-      mbTrace($lines);
       return false;
     }
     return $this->segmentL($lines[$i]);
