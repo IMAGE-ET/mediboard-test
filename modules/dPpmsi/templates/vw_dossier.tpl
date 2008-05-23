@@ -2,8 +2,8 @@
 
 {{include file="../../dPfiles/templates/inc_files_functions.tpl"}}
 {{mb_include_script module="dPpatients" script="pat_selector"}}
-{{mb_include_script module="Hprim21" script="pat_hprim_selector"}}
-{{mb_include_script module="Hprim21" script="sejour_hprim_selector"}}
+{{mb_include_script module="hprim21" script="pat_hprim_selector"}}
+{{mb_include_script module="hprim21" script="sejour_hprim_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 
 <script type="text/javascript">
@@ -250,7 +250,7 @@ function pageMain() {
         </tr>
         <tr>
           <th class="category" colspan="2">Diagnostics CIM</th>
-          <th class="category" colspan="2">Addicitions</th>
+          <th class="category" colspan="2">Addictions</th>
         </tr>
         <tr>
           <td class="text" colspan="2">
