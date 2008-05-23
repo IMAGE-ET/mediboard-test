@@ -52,8 +52,6 @@
   <table>
   	<tr>
   	  <td class="left">
-		   	{{mb_value object=$function field=_view}}
-		   	<br />
 		   	{{mb_value object=$function field=soustitre}}
 			</td>
   	  <td class="center">
