@@ -197,7 +197,7 @@ class CHprim21Patient extends CHprim21Object {
     $elements                        = explode($reader->separateur_champ, $line);
   
     if(count($elements) < 34) {
-      $reader->error_log[] = "Champs manquant dans le segment patient";
+      $reader->error_log[] = "Champs manquant dans le segment patient : ".count($elements)." champs trouvés";
       return false;
     }
     
