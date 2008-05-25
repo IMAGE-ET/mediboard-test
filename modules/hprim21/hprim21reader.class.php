@@ -212,11 +212,15 @@ class CHPrim21Reader {
     $patient->store();
     $medecin = new CHprim21Medecin();
     if($medecin->bindToLine($line, $this)) {
-      $medecin->store();
+      if($medecin->external_id) {
+        $medecin->store();
+      }
     }
     $sejour = new CHprim21Sejour();
     if($sejour->bindToLine($line, $this, $patient, $medecin)) {
-      $sejour->store();
+      if($sejour->external_id) {
+        $sejour->store();
+      }
     }
     return true;
   }
