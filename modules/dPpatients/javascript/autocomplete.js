@@ -3,10 +3,12 @@
 function updateFields(selected, sFormName, sFieldFocus, sFirstField, sSecondField) {
   Element.cleanWhitespace(selected);
   dn = selected.childNodes;
-  $(sFormName + '_' + sFirstField).value = dn[0].firstChild.firstChild.nodeValue;
+  $V(sFormName + '_' + sFirstField, dn[0].firstChild.firstChild.nodeValue, true);
+
   if(sSecondField){
-    $(sFormName + '_' + sSecondField).value = dn[2].firstChild.nodeValue;
+    $V(sFormName + '_' + sSecondField, dn[2].firstChild.nodeValue, true);
   }
+  
   if(sFieldFocus){
     $(sFormName + '_' + sFieldFocus).focus();
   }

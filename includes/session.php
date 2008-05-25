@@ -23,7 +23,5 @@ if(!isset($_SESSION["AppUI"]) || isset($_GET["logout"])) {
   $_SESSION["AppUI"] = new CAppUI();
 }
 
-$AppUI =& $_SESSION["AppUI"];
-$AppUI->setConfig($dPconfig);
- 
+$AppUI =& $_SESSION["AppUI"]; 
 ?>

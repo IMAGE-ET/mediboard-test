@@ -33,15 +33,17 @@
   
   <tr>
     <th>{{mb_label object=$patient field="deb_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="deb_amo" tabindex="209" form="editFrm"}}</td>
+    <td class="date">{{mb_field object=$patient field="deb_amo" tabindex="209" form="editFrm" register=true}}</td>
     
-    <th rowspan="3">{{mb_label object=$patient field="notes_amo"}}</th>
-    <td rowspan="3">{{mb_field object=$patient field="notes_amo" tabindex="212"}}</td>
+    <th>{{mb_label object=$patient field="fin_validite_vitale"}}</th>
+    <td class="date">{{mb_field object=$patient field="fin_validite_vitale" form="editFrm" register=true tabindex="166" }}</td>
   </tr>
   
   <tr>
     <th>{{mb_label object=$patient field="fin_amo"}}</th>
-    <td class="date">{{mb_field object=$patient field="fin_amo" tabindex="210" form="editFrm"}}</td>
+    <td class="date">{{mb_field object=$patient field="fin_amo" tabindex="210" form="editFrm" register=true}}</td>
+    <th rowspan="2">{{mb_label object=$patient field="notes_amo"}}</th>
+    <td rowspan="2">{{mb_field object=$patient field="notes_amo" tabindex="212"}}</td>
   </tr>
   
   <tr>

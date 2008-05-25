@@ -54,7 +54,7 @@ class CAppUI {
   var $defaultRedirect = "";
 
   function getAllClasses() {
-    $rootDir = $this->getConfig("root_dir");
+    $rootDir = self::conf("root_dir");
     foreach(glob("classes/*/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");
     }
@@ -75,7 +75,7 @@ class CAppUI {
 	 */
   function getSystemClass($name=null) {
     if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         return "$root/classes/$name.class.php";
       }
     }
@@ -88,7 +88,7 @@ class CAppUI {
 	 */
   function getLegacyClass($name=null) {
     if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         return "$root/legacy/$name.class.php";
       }
     }
@@ -101,7 +101,7 @@ class CAppUI {
 	 */
   function getLibraryFile($name=null) {
     if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         return "$root/lib/$name.php";
       }
     }
@@ -114,7 +114,7 @@ class CAppUI {
 	 */
   function getModuleClass($name = null, $file = null) {
     if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         $filename = $file ? $file : $name;
         return "$root/modules/$name/$filename.class.php";
       }
@@ -128,7 +128,7 @@ class CAppUI {
  */
   function getModuleFile($name = null, $file = null) {
     if ($name) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         $filename = $file ? $file : $name;
         return "$root/modules/$name/$filename.php";
       }
@@ -142,35 +142,12 @@ class CAppUI {
  */
   function getTmpPath($subpath) {
     if ($subpath) {
-      if ($root = $this->getConfig("root_dir")) {
+      if ($root = self::conf("root_dir")) {
         return "$root/tmp/$subpath";
       }
     }
   }
   
-
-/**
- * Sets the internal confuration settings array.
- * @param array A named array of configuration variables (usually from config.php)
- */
-  function setConfig(&$cfg) {
-    $this->cfg = $cfg;
-  }
-
-/**
- * Deprecated, see self::conf();
- * Retrieves a configuration setting.
- * @param string The name of a configuration setting
- * @return The value of the setting, otherwise null if the key is not found in the configuration array
- */
-  function getConfig($key) {
-    if (array_key_exists($key, $this->cfg)) {
-      return $this->cfg[$key];
-    } else {
-      return null;
-    }
-  }
-
 /**
  * Utility function to read the "directories" under "path"
  *

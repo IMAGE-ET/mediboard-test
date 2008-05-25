@@ -575,31 +575,8 @@ class CPatient extends CMbObject {
     }
     return $nbMois;
   }
-  
-  /**
-   * Copie un champ du bénéficiaire vers l'assuré
-   * @param string field Champ à mettre à jour
-   */
-  function updateAssureField($field) {
-    $assure_field = "assure_$field";
-
-    // Champs non altéré
-    if (null === $this->$assure_field) {
-      return;
-    }
-    
-    // Champ non vide
-    if (null != $this->$assure_field) {
-      return;
-    }
-    
-    // Copie des valeurs
-    $this->$assure_field = $this->$field;
-  }
-    
+      
   function updateDBFields() {
-  	global $dPconfig;
-  	
   	parent::updateDBFields();
   	 
     $soundex2 = new soundex2;
@@ -639,28 +616,6 @@ class CPatient extends CMbObject {
         $this->_jour;
   	}
   	
-  	// Assuré
-    $this->updateAssureField("nom");
-    $this->updateAssureField("adresse");
-    $this->updateAssureField("ville");
-    $this->updateAssureField("cp");
-    $this->updateAssureField("tel");
-    $this->updateAssureField("tel2");
-    $this->updateAssureField("pays");
-    $this->updateAssureField("nationalite");
-    
-    if ($this->rang_beneficiaire == "01") {
-	    $this->updateAssureField("nom_jeune_fille");
-	    $this->updateAssureField("prenom");
-	    $this->updateAssureField("naissance");
-	    $this->updateAssureField("sexe");
-      $this->updateAssureField("matricule");
-      $this->updateAssureField("lieu_naissance");
-      $this->updateAssureField("profession");
-      $this->updateAssureField("rques");
-    }
-
-
     if ($this->assure_nom) {
   	  $this->assure_nom = strtoupper($this->assure_nom);
     }

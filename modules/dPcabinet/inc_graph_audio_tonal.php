@@ -78,9 +78,9 @@ class AudiogrammeTonal extends Graph {
   }
   
   function addAudiogramme($values, $value_name, $title, $mark_color, $mark_type, $mark_file = null, $line = true) {
-    global $frequences, $AppUI;
+    global $frequences;
 
-    $root = $AppUI->getConfig("root_dir");
+    $root = CAppUI::conf("root_dir");
     $image_file = "$root/images/icons/$mark_file"; 
 
     // Empty plot case

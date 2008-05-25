@@ -13,8 +13,6 @@ require_once($AppUI->getLibraryFile( "json/JSON"));
  * Delegates the actual translation to $AppUI framework object
  */
 function do_translation($params, $content, &$smarty, &$repeat) {
-  global $dPconfig,$AppUI;
-
   if (isset($content)) {
     $content = CAppUI::tr($content);
     
@@ -39,11 +37,10 @@ function do_translation($params, $content, &$smarty, &$repeat) {
  * Render an image using phpThumb
  */
 function thumb($params, &$smarty) {
-  global $AppUI;
   $finUrl = "";
   foreach ($params as $_key => $_val) {
     if($_key == "src") {
-      $src = urlencode($AppUI->getConfig("root_dir")."/".$_val);
+      $src = urlencode(CAppUI::conf("root_dir")."/".$_val);
     } else {
       $finUrl .= ("&amp;$_key=$_val");
     }

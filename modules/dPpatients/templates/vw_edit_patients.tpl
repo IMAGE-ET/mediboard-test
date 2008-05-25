@@ -1,6 +1,7 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPpatients" script="autocomplete"}}
+{{mb_include_script module="dPpatients" script="siblings_checker"}}
 
 {{include file="../../dPpatients/templates/inc_intermax.tpl"}}
 
@@ -54,9 +55,20 @@ function checkNaissance(fieldPrefix) {
   return true;
 }
 
-var httpreq_running = false;
-function confirmCreation(oForm){
+function copyAssureValues(element) {
+	// Hack pour gérer les form fields
+	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
+  eOther = element.form[sPrefix + element.name];
+  $V(eOther, $V(element));
+}
 
+function copyIdentiteAssureValues(element) {
+	if (element.form.rang_beneficiaire.value == "01") {
+		copyAssureValues(element);
+	}
+}
+
+function confirmCreation(oForm){
   // Si date de naissance obligatoire
   {{if $dPconfig.dPpatients.CPatient.date_naissance}}
   if(!checkDateNaissance()){
@@ -72,24 +84,11 @@ function confirmCreation(oForm){
     return false;
   }
   
-  if(httpreq_running) {
-    return false;
-  }
-  
   if(!checkForm(oForm)){
     return false;
   }
-    
-  httpreq_running = true;
-  var url = new Url;
-  url.setModuleAction("dPpatients", "httpreq_get_siblings");
-  url.addParam("patient_id", oForm.patient_id.value);
-  url.addParam("nom", oForm.nom.value);
-  url.addParam("prenom", oForm.prenom.value);  
-  if(oForm._annee.value!="" && oForm._mois.value!="" && oForm._jour.value!=""){
-    url.addParam("naissance", oForm._annee.value + "-" + oForm._mois.value + "-" + oForm._jour.value);
-  }
-  url.requestUpdate('systemMsg', { waitingText: "Vérification des doublons" });
+  
+  SiblingsChecker.request();
   return false;
 }
 
@@ -106,10 +105,7 @@ function pageMain() {
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
   initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
   initPaysField("editFrm", "pays","_tel1");
-  regFieldCalendar("editFrm", "fin_amo");
-  regFieldCalendar("editFrm", "deb_amo");
   
-  regFieldCalendar("editFrm", "fin_validite_vitale");
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
   initPaysField("editFrm", "assure_pays","_assure_tel1");
   

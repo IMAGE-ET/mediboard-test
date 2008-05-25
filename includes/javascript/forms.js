@@ -591,9 +591,10 @@ function followUp(event) {
 	// Redirect to next field
   var field = event.target;
   if (field.value.length == field.maxLength) {
-    field.next().focus();
-    setSelectionAll(field.next());
-  }  
+    $(field.next()).activate();
+  }
+  
+  return true;
 }
 
 Object.extend(Form, {
