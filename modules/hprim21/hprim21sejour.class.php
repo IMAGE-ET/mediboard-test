@@ -78,8 +78,8 @@ class CHprim21Sejour extends CHprim21Object {
       return false;
     }
     if(!$elements[4]) {
-      $reader->error_log[] = "Identifiant externe manquant dans le segment patient (sejour)";
-      return false;
+      //$reader->error_log[] = "Identifiant externe manquant dans le segment patient (sejour)";
+      return true;
     }
     
     $this->external_id          = $elements[4];
