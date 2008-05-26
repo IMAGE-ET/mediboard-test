@@ -2,7 +2,7 @@
 
 // Initialisation des onglets
 Main.add( function(){
-  menuTabs = Control.Tabs.create('main_tab_group', false);
+  menuTabs = Control.Tabs.create('prescription_tab_group', false);
 } );
 
 // Initialisation des alertes
@@ -58,7 +58,7 @@ viewEasyMode = function(){
 </div>
 
 <!-- Tabulations -->
-<ul id="main_tab_group" class="control_tabs">
+<ul id="prescription_tab_group" class="control_tabs">
   <li><a href="#div_medicament">Médicaments</a></li>
 
 {{if !$mode_pharma}}

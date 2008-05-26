@@ -238,8 +238,6 @@ $smarty->assign("refresh_pharma", $refresh_pharma);
 $smarty->assign("mode_sejour", $mode_sejour);
 $smarty->assign("protocole_line", new CPrescriptionLineMedicament());
 
-
-
 if($mode_sejour){
 	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "0");

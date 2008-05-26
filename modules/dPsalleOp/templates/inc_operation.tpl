@@ -1,3 +1,23 @@
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="dPprescription" script="element_selector"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
+<script type="text/javascript">
+
+
+Main.add(function () {
+  if($('prescription_sejour')){
+    Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$selOp->_ref_sejour->_id}}');
+  }
+});
+
+function reloadPrescription(prescription_id){
+  Prescription.reloadPrescSejour(prescription_id, '');
+}
+
+</script>
+
+
 <!-- Informations générales sur l'intervention et le patient -->
 <table class="form">
   {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
@@ -49,6 +69,9 @@
   <li><a href="#three">CCAM</a></li>
   <li><a href="#four">NGAP</a></li>
   <li><a href="#five">Dossier</a></li>
+  {{if $isPrescriptionInstalled}}
+    <li><a href="#prescription_sejour">Prescription</a></li>
+  {{/if}}
 </ul>
   
 <hr class="control_tabs" />
@@ -105,3 +128,8 @@
     {{include file="inc_vw_dossier.tpl"}}
   </div>
 </div>
+
+{{if $isPrescriptionInstalled}}
+<div id="prescription_sejour" style="display:none">
+</div>
+{{/if}}
