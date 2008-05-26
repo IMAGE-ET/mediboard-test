@@ -157,9 +157,9 @@ class CAppUI {
  */
   function readDirs($path) {
     $dirs = array();
-    $d = dir($this->cfg["root_dir"]."/$path");
+    $d = dir(self::conf("root_dir") . "/$path");
     while (false !== ($name = $d->read())) {
-      if(is_dir($this->cfg["root_dir"]."/$path/$name") && $name != "." && $name != ".." && $name != "CVS") {
+      if(is_dir(self::conf("root_dir")."/$path/$name") && $name != "." && $name != ".." && $name != "CVS") {
         $dirs[$name] = $name;
       }
     }
@@ -213,22 +213,13 @@ class CAppUI {
   }
 
 /**
-* Set the display of warning for untranslated strings
-* @param string
-*/
-  function setWarning($state=true) {
-    $temp = @$this->cfg["locale_warn"];
-    $this->cfg["locale_warn"] = $state;
-    return $temp;
-  }
-/**
-* Save the url query string
-*
-* Also saves one level of history.  This is useful for returning from a delete
-* operation where the record more not now exist.  Returning to a view page
-* would be a nonsense in this case.
-* @param string If not set then the current url query string is used
-*/
+	* Save the url query string
+	*
+	* Also saves one level of history.  This is useful for returning from a delete
+	* operation where the record more not now exist.  Returning to a view page
+	* would be a nonsense in this case.
+	* @param string If not set then the current url query string is used
+	*/
   function savePlace($query="") {
     if (!$query) {
       $query = @$_SERVER["QUERY_STRING"];
@@ -240,15 +231,15 @@ class CAppUI {
   }
 
 /**
-* Redirects the browser to a new page.
-*
-* Mostly used in conjunction with the savePlace method. It is generally used
-* to prevent nasties from doing a browser refresh after a db update.  The
-* method deliberately does not use javascript to effect the redirect.
-*
-* @param string The URL query string to append to the URL
-* @param string A marker for a historic "place", only -1 or an empty string is valid.
-*/
+	* Redirects the browser to a new page.
+	*
+	* Mostly used in conjunction with the savePlace method. It is generally used
+	* to prevent nasties from doing a browser refresh after a db update.  The
+	* method deliberately does not use javascript to effect the redirect.
+	*
+	* @param string The URL query string to append to the URL
+	* @param string A marker for a historic "place", only -1 or an empty string is valid.
+	*/
   function redirect($params="", $hist="") {
     $session_id = SID;
 

@@ -53,7 +53,7 @@
     {{if !$dialog}}
      <tr>
       <th class="category" colspan="3">
-        {{$app->cfg.company_name}}
+        {{$dPconfig.company_name}}
       </th>
     </tr>
     <tr>

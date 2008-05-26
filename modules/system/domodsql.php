@@ -17,7 +17,7 @@ if ($mod_id) {
 	$module->mod_name    = $mod_name;
 }
 
-$ok = @include_once($AppUI->cfg["root_dir"]."/modules/$module->mod_name/setup.php");
+$ok = @include_once(CAppUI::conf("root_dir")."/modules/$module->mod_name/setup.php");
 
 if (!$ok) {
 	if ($module->mod_type != "core") {

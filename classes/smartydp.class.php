@@ -268,7 +268,7 @@ class CSmartyDP extends Smarty {
    */
   function CSmartyDP($rootDir = null) {
     global $AppUI, $version, $dPconfig, $can, $m, $a, $tab, $g, $action, $actionType, $dialog, $ajax, $suppressHeaders;
-
+    
     $root = $dPconfig["root_dir"];
 
     if (!$rootDir) {

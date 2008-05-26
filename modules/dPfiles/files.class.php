@@ -6,8 +6,8 @@
 * @version $Revision$
 * @author Romain Ollivier
 */
-global $filesDir, $AppUI;
-$filesDir = $AppUI->cfg["root_dir"]."/files";
+global $filesDir;
+$filesDir = CAppUI::conf("root_dir") . "/files";
 
 class CFile extends CMbMetaObject {
   // DB Table key
@@ -168,10 +168,9 @@ class CFile extends CMbMetaObject {
    * Parse file for indexing
    */
   function indexStrings() {
-    global $AppUI;
 
     // Get the parser application
-    $parser = @$AppUI->cfg["ft"][$this->file_type];
+    $parser = CAppUI::conf("ft $this->file_type");
     if (!$parser) {
       return false;
     }
@@ -213,7 +212,7 @@ class CFile extends CMbMetaObject {
     
     // filter out common strings
     $ignore = array();
-    include $AppUI->cfg["root_dir"]."/modules/dPcabinet/file_index_ignore.php";
+    include CAppUI::conf("root_dir") ."/modules/dPcabinet/file_index_ignore.php";
     foreach ($ignore as $w) {
       unset($wordarr[$w]);
     }
