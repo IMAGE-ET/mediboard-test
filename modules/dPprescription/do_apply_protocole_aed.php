@@ -44,6 +44,8 @@ $protocole->loadRefsLinesAllComments();
 
 // Parcours des lignes de prescription
 foreach($protocole->_ref_prescription_lines as $line){
+	$line->loadRefsPrises();
+	  
   $line->_id = "";
   $line->debut = $debut;
   $line->unite_duree = "jour";
@@ -55,13 +57,10 @@ foreach($protocole->_ref_prescription_lines as $line){
   $msg = $line->store();
   viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   	
-  // Chargement des prises
-  $line->loadRefsPrises();
-
 	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
 	  $prise->_id = "";
-		$prise->object_id = $new_line->_id;
+		$prise->object_id = $line->_id;
 		$prise->object_class = "CPrescriptionLineMedicament";
 	  $msg = $prise->store();
 	  viewMsg($msg, "msg-CPrisePosologie-create");  	
@@ -70,7 +69,9 @@ foreach($protocole->_ref_prescription_lines as $line){
 
 // Parcours des lignes d'elements
 foreach($protocole->_ref_prescription_lines_element as $line_element){
-  $line_element->_id = "";
+  $line_element->loadRefsPrises();
+  
+	$line_element->_id = "";
   $line_element->unite_duree = "jour";
   if($line_element->_ref_element_prescription->_ref_category_prescription->chapitre != "dmi"){
 	  $line_element->debut = $debut;
@@ -82,6 +83,15 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   $line_element->praticien_id = $praticien_id;
   $msg = $line_element->store();
   viewMsg($msg, "msg-CPrescriptionLineElement-create");  
+  
+  // Parcours des prises
+	foreach($line_element->_ref_prises as $prise){
+	  $prise->_id = "";
+		$prise->object_id = $line_element->_id;
+		$prise->object_class = "CPrescriptionLineElement";
+	  $msg = $prise->store();
+	  viewMsg($msg, "msg-CPrisePosologie-create");  	
+	}
 }
 
 // Parcours des lignes de commentaires

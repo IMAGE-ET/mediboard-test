@@ -12,6 +12,14 @@ printDossierSoin = function(prescription_id, date){
 
 </script>
 
+
+<table class="tbl">
+  <tr>
+    <th class="title">{{$sejour->_view}} (Dr. {{$sejour->_ref_praticien->_view}})</th>
+  </tr>
+</table>
+
+</table>
 {{if $prescription_id}}
 <table>
   <tr>

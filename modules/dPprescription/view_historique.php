@@ -18,6 +18,10 @@ $line->load($line_id);
 $parent_lines = $line->loadRefsParents();
 ksort($parent_lines);
 
+foreach($parent_lines as &$parent_line){
+	$parent_line->loadRefsPrises();
+}
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("parent_lines", $parent_lines);

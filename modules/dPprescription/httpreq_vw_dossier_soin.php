@@ -10,6 +10,11 @@
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 $date = mbGetValueFromGetOrSession("date");
 
+$sejour = new CSejour();
+$sejour->load($sejour_id);
+$sejour->loadRefPatient();
+$sejour->loadRefPraticien();
+
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->object_id = $sejour_id;
@@ -134,6 +139,7 @@ foreach($medsNonPresc as $_line){
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("sejour", $sejour);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("date", $date);
 $smarty->assign("prises_med", $prises_med);

@@ -28,7 +28,7 @@ var Prescription = {
     var oForm = document.addLine;
     
     var oFormDate = document.applyProtocole;
-    if(oFormDate.debut.value){
+    if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
     }
   
@@ -52,7 +52,7 @@ var Prescription = {
     var oForm = document.addLineElement;
     
     var oFormDate = document.applyProtocole;
-    if(oFormDate.debut.value){
+    if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
     }
     

@@ -12,6 +12,10 @@ global $AppUI, $can, $m;
 $mbProduit = new CBcbProduit();
 $produits = $mbProduit->searchProduitAutocomplete("effe", 10);
 
+$protocoles_praticien = array();
+$protocoles_function = array();
+
+
 
 $can->needsRead();
 
@@ -194,6 +198,24 @@ if($mode_protocole){
   $functions = $function->loadSpecialites(PERM_EDIT);
 }
 
+
+if($mode_sejour){
+  // Chargement des protocoles du praticiens
+  $protocole = new CPrescription();
+  $where = array();
+  $where["praticien_id"] = " = '$prescription->_current_praticien_id'";
+  $where["object_id"] = "IS NULL";
+  $protocoles_praticien = $protocole->loadList($where);
+  
+  // Chargement des protocoles de la fonction
+  $function_id = $prescription->_ref_current_praticien->function_id;
+  $where = array();
+  $where["function_id"] = " = '$function_id'";
+  $where["object_id"] = "IS NULL";
+  $protocoles_function = $protocole->loadList($where);	
+}
+
+
 // Liste des praticiens
 $user = new CMediusers();
 $listPrats = $user->loadPraticiens(PERM_EDIT);
@@ -237,7 +259,8 @@ $smarty->assign("protocole_line", $protocole_line);
 if($mode_sejour){
 	$_sejour = new CSejour();
 	$_sejour->load($sejour_id);
-
+$smarty->assign("protocoles_praticien", $protocoles_praticien);
+$smarty->assign("protocoles_function", $protocoles_function);
 	$smarty->assign("praticien_sejour", $_sejour->praticien_id);
 	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "0");
