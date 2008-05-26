@@ -30,11 +30,32 @@ if(!$filter->prescription_id && $filter->object_id && $filter->object_class && $
 	$prescription = new CPrescription();
 	$prescription->object_id = $filter->object_id;
 	$prescription->object_class = $filter->object_class;
-	if($filter->type == "sortie" || $filter->type == "pre_admission"){
-		$prescription->praticien_id = $AppUI->user_id;
+	
+	// Si prescription CSejour
+	if($filter->object_class == "CSejour"){
+		// Chargement du user_courant
+		$user_courant = new CMediusers();
+		$user_courant->load($AppUI->user_id);
+		
+		// Chargement du sejour
+  	$sejour = new CSejour();
+  	$sejour->load($filter->object_id);	  	
+		  	
+		if($filter->type == "pre_admission" || $filter->type == "sortie"){
+			if($user_courant->isPraticien()){
+		  	$prescription->praticien_id = $AppUI->user_id;
+		  } else {
+		  	$prescription->praticien_id = $sejour->praticien_id;
+		  }
+	  }
+	  if($filter->type ==  "sejour"){
+	  	$prescription->praticien_id = $sejour->praticien_id;
+	  }
 	} else {
-	  $prescription->praticien_id = $filter->praticien_id;
+		$prescription->praticien_id = $filter->praticien_id;
 	}
+	
+
 	$prescription->type = $filter->type;
 	$prescription->loadMatchingObject();
   $prescription->function_id = "";
@@ -78,12 +99,12 @@ if ($prescription->object_id) {
   // Chargement des protocoles du praticiens
   $protocole = new CPrescription();
   $where = array();
-  $where["praticien_id"] = " = '$prescription->praticien_id'";
+  $where["praticien_id"] = " = '$prescription->_current_praticien_id'";
   $where["object_id"] = "IS NULL";
   $protocoles_praticien = $protocole->loadList($where);
   
   // Chargement des protocoles de la fonction
-  $function_id = $prescription->_ref_praticien->function_id;
+  $function_id = $prescription->_ref_current_praticien->function_id;
   $where = array();
   $where["function_id"] = " = '$function_id'";
   $where["object_id"] = "IS NULL";
@@ -138,7 +159,7 @@ if ($prescription->_id) {
   }
 
   // Liste des favoris
-  $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);
+  $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
   
   // Chargement du praticien
   $praticien->load($prescription->praticien_id);
@@ -204,6 +225,9 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 $user->load($AppUI->user_id);
 $is_praticien = $user->isPraticien();
 
+$protocole_line = new CPrescriptionLineMedicament();
+$protocole_line->debut = mbDate();
+
 $contexteType = array();
 $contexteType["CConsultation"][] = "externe";
 $contexteType["CSejour"][] = "pre_admission";
@@ -214,7 +238,7 @@ $contexteType["CSejour"][] = "traitement";
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("is_praticien", $is_praticien);
-$smarty->assign("protocole_line", new CPrescriptionLineMedicament());
+$smarty->assign("protocole_line", $protocole_line);
 $smarty->assign("poids", $poids);
 $smarty->assign("today", mbDate());
 $smarty->assign("refresh_pharma", "0");

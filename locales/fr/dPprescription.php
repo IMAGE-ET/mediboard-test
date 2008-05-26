@@ -473,4 +473,8 @@ $locales['msg-CMomentUnitaire-create'] = '';
 $locales['msg-CMomentUnitaire-delete'] = '';
 $locales['msg-CMomentUnitaire-modify'] = '';
 $locales['CMomentUnitaire-back-associations'] = 'Associations de moments';
+$locales['CPrescriptionLineMedicament-fin'] = 'Fin';
+$locales['CPrescriptionLineMedicament-fin-desc'] = 'Fin';
+$locales['CPrescriptionLineElement-fin'] = 'Fin';
+$locales['CPrescriptionLineElement-fin-desc'] = 'Fin';
 ?>

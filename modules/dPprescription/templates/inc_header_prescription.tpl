@@ -31,9 +31,9 @@ Main.add( function(){
 	  changePraticien(document.selPraticienLine.praticien_id.value);
   }
   // On masque le calendrier
-	if($('calendarProt')){
+	/*if($('calendarProt')){
 	  $('calendarProt').hide();
-	}
+	}*/
 } );
 
 
@@ -77,7 +77,8 @@ submitProtocole = function(){
 				    {{foreach from=$listPrats item=_praticien}}
 					    <option class="mediuser" 
 					            style="border-color: #{{$_praticien->_ref_function->color}};" 
-					            value="{{$_praticien->_id}}">{{$_praticien->_view}}
+					            value="{{$_praticien->_id}}"
+					            {{if $_praticien->_id == $prescription->_current_praticien_id}}selected == "selected"{{/if}}>{{$_praticien->_view}}
 					    </option>
 				    {{/foreach}}
 				  </select>
@@ -235,7 +236,7 @@ submitProtocole = function(){
 	      <table class="form">
 	        <tr>
 		        <td>
-			        Protocoles de {{$praticien->_view}}
+			        Protocoles de {{$prescription->_ref_current_praticien->_view}}
 			        <input type="hidden" name="m" value="dPprescription" />
 			        <input type="hidden" name="dosql" value="do_apply_protocole_aed" />
 			        <input type="hidden" name="del" value="0" />
@@ -260,17 +261,19 @@ submitProtocole = function(){
 			        </select>
 			        </td>
 			        <td class="date">
-				 				{{if $prescription->type == "sejour"}}
+				 				{{if $prescription->type != "externe"}}
 				 				  <select name="debut_date" 
-				 				          onchange="document.applyProtocole.debut.value = '';
-				 				          					$('applyProtocole_debut_da').innerHTML = new String;
-				 				                    if(this.value == 'other') { 
+				 				          onchange="$('applyProtocole_debut_da').innerHTML = new String;
+				 				                    this.form.debut.value = '';
+				 				          				  if(this.value == 'other') { 
 				 				          					  $('calendarProt').show();
-				 				          					  
 				 				          				  } else { 
-				 				          				    $('calendarProt').hide();
 				 				          				    
+				 				          				    this.form.debut.value = this.value;
+				 				          				    $('calendarProt').hide();
 				 				          				  }">
+     				  
+				 				    <option value="other">Autre date</option>
 				 				    <optgroup label="Séjour">
 				 				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
 				 				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
@@ -281,11 +284,11 @@ submitProtocole = function(){
 				 				    {{/foreach}}
  										</optgroup>
  										
-				 				    <option value="other">Autre date</option>
+				 				    
 				 				  </select>
 				 				
 				 				  <!-- Prescription externe -->
-				 				  <div id="calendarProt" style="border:none; display: none">
+				 				  <div id="calendarProt" style="border:none;">
 									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
 					 				<script type="text/javascript">
 					 				  dates = {

@@ -130,8 +130,15 @@
 			      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
 		        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
 			      */
-			      regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
-		        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
+			      {{if $prescription->type != "sortie"}}
+			        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
+		          regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
+		        {{/if}}
+		        {{if $prescription->type == "sortie"}}
+			        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "fin");
+		        {{/if}}
+		        
+		        
 			    </script>
 		    {{/if}}
 	             

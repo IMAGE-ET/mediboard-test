@@ -52,9 +52,11 @@ function resetModeEasy(){
   oFormToken.token_med.value = '';
   oFormToken.token_elt.value = '';
   $$('button').each( function(oButton) {
+    if(oButton.id != "editDates-mode_grille-_"){
     if(oButton.hasClassName('cancel')){
       oButton.removeClassName('cancel');
       oButton.addClassName('tick');
+    }
     }
   }); 
 }
@@ -106,12 +108,17 @@ function submitAllElements(){
     <td>
 	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl" 
 	              perm_edit=1
-	              dosql=CPrescriptionLineElement}}
-	              
+	              dosql=CPrescriptionLineElement}}	      
+
 	     <script type="text/javascript">
-	       prepareForm(document.forms["editDates-{{$typeDate}}-"]);    
-	       regFieldCalendar("editDates-{{$typeDate}}-", "debut");
-	       regFieldCalendar("editDates-{{$typeDate}}-", "_fin");       
+	       prepareForm(document.forms["editDates-{{$typeDate}}-"]);  
+				 {{if !$line->fin}} 
+	         regFieldCalendar("editDates-{{$typeDate}}-", "debut");
+	         regFieldCalendar("editDates-{{$typeDate}}-", "_fin");     
+	       {{/if}}
+	       {{if $line->fin}}
+	         regFieldCalendar("editDates-{{$typeDate}}-", "fin");     
+	       {{/if}}  
 	     </script>
 	  </td>
 	  <td>

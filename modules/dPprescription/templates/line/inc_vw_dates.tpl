@@ -1,4 +1,5 @@
 <script type="text/javascript">
+
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class) {
   // Déclaration des div des dates
@@ -91,24 +92,55 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class) {
   submitFormAjax(oForm, 'systemMsg');
 }
 
+
 </script>
 
-
+  {{assign var=line_id value=$line->_id}}
+       {{assign var=_object_class value=$line->_class_name}}
 <form name="editDates-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
    <input type="hidden" name="m" value="dPprescription" />
    <input type="hidden" name="dosql" value="{{$dosql}}" />
    <input type="hidden" name="del" value="0" />
    <input type="hidden" name="{{$line->_tbl_key}}" value="{{$line->_id}}" />
    <table>
+     {{if !$line->fin}}
      <tr>
-       {{assign var=line_id value=$line->_id}}
-       {{assign var=_object_class value=$line->_class_name}}
        <td style="border:none">
          {{mb_label object=$line field=debut}}
        </td>    
        {{if $perm_edit}}
        <td class="date" style="border:none;">
-         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}
+         {{if $typeDate == "mode_grille" && $prescription->type != "externe"}}
+	           <select name="debut_date" onchange="$('editDates-{{$typeDate}}-{{$line->_id}}_debut_da').innerHTML = new String;
+				 				                                  this.form.debut.value = '';
+	           																		 if(this.value == 'other') {
+						 				          					           $('date_mb_field-{{$typeDate}}-{{$line_id}}').show();
+						 				          					  			 } else { 
+						 				          					  			   this.form.debut.value = this.value;
+						 				          				             $('date_mb_field-{{$typeDate}}-{{$line_id}}').hide();
+						 				          				           }">
+						 	 <option value="other">Autre date</option>
+						   <optgroup label="Séjour">
+						   <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
+						   <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
+						   </optgroup>
+						   <optgroup label="Opération">
+						   {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
+						   <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+						   {{/foreach}}
+							 </optgroup>
+						   
+						   
+						 </select>
+						 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
+						   {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}
+			       </div>
+			       
+	       {{else}}
+			       {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class');"}}  
+	       {{/if}} 
+     
+     
        </td>
        {{else}}
        <td style="border:none">
@@ -154,5 +186,28 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class) {
        </td>
        {{/if}}
     </tr>
+    {{/if}}
+    
+    {{if $line->fin}}
+    <tr>
+      <td style="border:none">
+         Fin
+      </td> 
+       
+     {{if $perm_edit}}
+       <td class="date" style="border:none;">
+         {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+       </td>
+       {{else}}
+       <td style="border:none">
+         {{if $line->fin}}
+	         {{$line->fin|date_format:"%d/%m/%Y"}}
+	       {{else}}
+	        -
+	       {{/if}}				   
+       </td>
+     {{/if}}
+    </tr>
+    {{/if}}
   </table>
 </form>

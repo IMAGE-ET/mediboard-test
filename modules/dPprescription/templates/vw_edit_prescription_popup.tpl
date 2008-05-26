@@ -48,8 +48,13 @@ function viewProduit(cip){
 			          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
 			          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			          <input type="hidden" name="type" value="sejour" />
-
-			          <button type="button" class="add" {{if $mode_sejour}}onclick="submitFormAjax(this.form, 'systemMsg');"{{else}}onclick="this.form.submit();{{/if}}">
+								<input type="hidden" name="praticien_id" value="" />
+			          <button type="button" 
+			                  class="add" 
+			                  onclick="if(document.selPraticienLine) { 
+			                             this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+			                           }
+			          			           {{if $mode_sejour}}submitFormAjax(this.form, 'systemMsg'){{else}}this.form.submit(){{/if}};">
 			            Séjour
 			          </button> 
 		          </form>   
@@ -81,9 +86,14 @@ function viewProduit(cip){
 	          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
 	          <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 	          <input type="hidden" name="type" value="sortie" />
-	          
-			      <button type="button" class="add" {{if $mode_sejour}}onclick="submitFormAjax(this.form, 'systemMsg');"{{else}}onclick="this.form.submit();{{/if}}">
-			        Sortie
+	          <input type="hidden" name="praticien_id" value="" />
+			      <button type="button" 
+			              class="add" 
+			              onclick="if(document.selPraticienLine) { 
+			                         this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+			                       }
+			          			       {{if $mode_sejour}}submitFormAjax(this.form, 'systemMsg'){{else}}this.form.submit(){{/if}};">			       
+			       Sortie
 			      </button>
           </form>
           {{/if}}

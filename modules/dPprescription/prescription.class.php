@@ -40,7 +40,8 @@ class CPrescription extends CMbObject {
   var $_counts_by_chapitre = null;
   var $_counts_no_valide = null;
   var $_dates_dispo = null;
-  
+  var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
+  var $_ref_current_praticien = null;
   
   function CPrescription() {
     $this->CMbObject("prescription", "prescription_id");
@@ -71,6 +72,8 @@ class CPrescription extends CMbObject {
   }
   
   function updateFormFields() {
+  	global $AppUI;
+  	
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = "Prescription du Dr. ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
@@ -80,6 +83,26 @@ class CPrescription extends CMbObject {
     if(!$this->object_id){
     	$this->_view = "Protocole: ".$this->libelle;
     }
+    
+    // Chargement de l'utilisateur courant
+    $user_courant = new CMediusers();
+    $user_courant->load($AppUI->user_id);
+    
+    if($this->_ref_object->_class_name == "CSejour"){
+	    if($user_courant->isPraticien()){
+	    	$this->_current_praticien_id = $user_courant->_id;
+	    } else {
+	    	$this->_current_praticien_id = $this->_ref_object->_praticien_id;
+	    }
+    }
+    if($this->_ref_object->_class_name == "CConsultation"){
+      if($user_courant->isPraticien()){
+	    	$this->_current_praticien_id = $user_courant->_id;
+	    } else {
+	    	$this->_current_praticien_id = $this->praticien_id;
+	    }
+    }
+    $this->loadRefCurrentPraticien();
   }
   
   
@@ -122,6 +145,12 @@ class CPrescription extends CMbObject {
   function loadRefPraticien(){
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien->load($this->praticien_id);
+  }
+  
+  function loadRefCurrentPraticien(){
+  	$this->_ref_current_praticien = new CMediusers();
+  	$this->_ref_current_praticien->load($this->_current_praticien_id);
+  	
   }
   
   function loadRefObject(){

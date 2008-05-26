@@ -78,7 +78,7 @@ if(!$prescription->_id) {
 } else {
   // Liste des favoris
   if($prescription->praticien_id){
-    $listFavoris = CPrescription::getFavorisPraticien($prescription->praticien_id);  
+    $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);  
   }
 }
 
@@ -208,6 +208,8 @@ $listPrats = $user->loadPraticiens(PERM_EDIT);
 $user->load($AppUI->user_id);
 $is_praticien = $user->isPraticien();
 
+$protocole_line = new CPrescriptionLineMedicament();
+$protocole_line->debut = mbDate();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -236,7 +238,7 @@ $smarty->assign("categories"  , $categories);
 $smarty->assign("class_category", new CCategoryPrescription());
 $smarty->assign("refresh_pharma", $refresh_pharma);
 $smarty->assign("mode_sejour", $mode_sejour);
-$smarty->assign("protocole_line", new CPrescriptionLineMedicament());
+$smarty->assign("protocole_line", $protocole_line);
 
 if($mode_sejour){
 	$smarty->assign("mode_pharma", "0");

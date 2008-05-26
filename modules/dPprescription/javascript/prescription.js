@@ -26,6 +26,12 @@ var Prescription = {
   }, 
   addLine: function(code) {
     var oForm = document.addLine;
+    
+    var oFormDate = document.applyProtocole;
+    if(oFormDate.debut.value){
+      oForm.debut.value = oFormDate.debut.value;  
+    }
+  
     oForm.code_cip.value = code;
     
     var mode_pharma = oForm.mode_pharma.value;
@@ -44,6 +50,12 @@ var Prescription = {
   addLineElement: function(element_id, category_name, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
     var oForm = document.addLineElement;
+    
+    var oFormDate = document.applyProtocole;
+    if(oFormDate.debut.value){
+      oForm.debut.value = oFormDate.debut.value;  
+    }
+    
     if(debut){
       oForm.debut.value = debut;
     }

@@ -71,9 +71,14 @@
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
       {{if $perm_edit}}
 	      <script type="text/javascript">
-	        prepareForm(document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]);    
-		      regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "debut");
-	        regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "_fin");       
+	        prepareForm(document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]); 
+	        {{if !$line->fin}}   
+			      regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "debut");
+		        regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "_fin");       
+	        {{/if}}
+	        {{if $line->fin}}
+	          regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "fin");       
+	        {{/if}}
 	      </script>
       {{/if}}
     </td>

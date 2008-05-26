@@ -4,7 +4,7 @@
 
 {{if !$line->_traitement && $line->_ref_prescription->object_id}}
 
-{{if !$line->signee}}
+{{if !$line->signee && !$line->fin}}
 	
 	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
 	Form.Element.setValue(oForm.debut,'{{$line->debut}}');

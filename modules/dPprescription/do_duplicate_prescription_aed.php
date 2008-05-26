@@ -12,8 +12,8 @@ function viewMsg($msg, $action){
   $action = CAppUI::tr($action);
   if($msg){
     $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-    echo $AppUI->getMsg();
-    exit();
+    //echo $AppUI->getMsg();
+    //exit();
   }
   $AppUI->setMsg("$action", UI_MSG_OK );
 }
@@ -21,6 +21,7 @@ function viewMsg($msg, $action){
 global $AppUI;
 
 $prescription_id = mbGetValueFromPost("prescription_id");
+$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 $type = mbGetValueFromPost("type");
 $ajax = mbGetValueFromPost("ajax");
 
@@ -45,6 +46,32 @@ if($prescription->type == "sortie" || $prescription->type == "pre_admission"){
 } else {
 	$prescription->praticien_id = $prescription->_ref_object->praticien_id;
 }
+
+
+// Chargement du user_courant
+$user_courant = new CMediusers();
+$user_courant->load($AppUI->user_id);
+	
+// Modification du praticien_id de la prescription suivant lel type de prescription
+if($prescription->type == "pre_admission"){
+	if($user_courant->isPraticien()){
+  	$prescription->praticien_id = $AppUI->user_id;
+  } else {
+  	$prescription->praticien_id = $sejour->praticien_id;
+  }
+}
+if($prescription->type ==  "sejour"){
+  $prescription->praticien_id = $sejour->praticien_id;
+}
+if($prescription->type == "sortie"){
+ if($user_courant->isPraticien()){
+ 	 $prescription->praticien_id = $AppUI->user_id;
+ } else {
+ 	 $prescription->praticien_id = $praticien_id;
+ }
+}
+	
+
 $msg = $prescription->store();
 viewMsg($msg, "msg-CPrescription-create");
 if($msg){
@@ -107,6 +134,16 @@ foreach($lines as $cat => $lines_by_type){
 	  if($cat == "medicament"){
 	    $line->valide_pharma = 0;
 	  }
+	  
+	  if($type == "sortie"){
+	  	if($line->debut && $line->unite_duree && $line->duree){
+	  		$line->fin = $line->_fin;
+	  		$line->debut = "";
+	  		$line->unite_duree = "";
+	  		$line->duree = "";
+	  	}
+	  }
+	  
 	  
 	  $msg = $line->store();
 	  viewMsg($msg, "msg-$line->_class_name-create");  

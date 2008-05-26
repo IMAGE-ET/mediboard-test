@@ -270,4 +270,8 @@ $locales['CPrescriptionLineElement.unite_duree.semestre'] = '';
 $locales['CPrescriptionLineElement.unite_duree.trimestre'] = '';
 $locales['CCategoryPrescription.chapitre.med'] = '';
 $locales['CCategoryPrescription.chapitre.dm'] = '';
+$locales['CPrescriptionLineMedicament-fin'] = '';
+$locales['CPrescriptionLineMedicament-fin-desc'] = '';
+$locales['CPrescriptionLineElement-fin'] = '';
+$locales['CPrescriptionLineElement-fin-desc'] = '';
 ?>
