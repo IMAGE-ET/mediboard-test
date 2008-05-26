@@ -199,7 +199,7 @@ if($mode_protocole){
 }
 
 
-if($mode_sejour){
+if($mode_sejour && $prescription->_id){
   // Chargement des protocoles du praticiens
   $protocole = new CPrescription();
   $where = array();
@@ -212,7 +212,7 @@ if($mode_sejour){
   $where = array();
   $where["function_id"] = " = '$function_id'";
   $where["object_id"] = "IS NULL";
-  $protocoles_function = $protocole->loadList($where);	
+  $protocoles_function = $protocole->loadList($where);
 }
 
 

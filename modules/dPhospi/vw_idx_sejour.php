@@ -23,6 +23,8 @@ $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 $userCourant = new CMediusers;
 $userCourant->load($AppUI->user_id);
 
+$prescription_sejour = new CPrescription();
+
 // Test du type de l'utilisateur courant
 
 $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
@@ -70,14 +72,14 @@ if($praticien_id){
 	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
-
-		// Vue instantanée => mode = 0 mbDateTime
-		// Vue journee     => mode = 1 mbDate
 		$_sejour->loadRefsPrescriptions();
+
 		if($_sejour->_ref_prescriptions){
 		  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
-			  $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"]["0"];
-				$prescription_sejour->countNoValideLines();
+		  	if(array_key_exists('0', $_sejour->_ref_prescriptions["sejour"])){
+			    $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"]["0"];
+			    $prescription_sejour->countNoValideLines();
+		  	}
 			}
 		}
 	  $_sejour->loadCurrentAffectation($datetime);
@@ -197,8 +199,10 @@ if($service_id){
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
 					if($_affectation->_ref_sejour->_ref_prescriptions){
 						if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
-						  $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"]["0"];
-							$prescription_sejour->countNoValideLines();
+							if(array_key_exists('0', $_sejour->_ref_prescriptions["sejour"])){
+						    $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"]["0"];
+							  $prescription_sejour->countNoValideLines();
+							}
 						}
 					}
 		
@@ -206,11 +210,8 @@ if($service_id){
 			}
 		}
 	}
-	
 	$sejoursParService[$service->_id] = $service;
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -228,7 +229,7 @@ $smarty->assign("isImedsInstalled"       , CModule::getActive("dPImeds"));
 $smarty->assign("demain"                 , mbDate("+ 1 day", $date));
 $smarty->assign("services"               , $services);
 $smarty->assign("sejoursParService"      , $sejoursParService);
-
+$smarty->assign("prescription_sejour"    , $prescription_sejour);
 $smarty->assign("service_id"             , $service_id);
 $smarty->assign("groupSejourNonAffectes" , $groupSejourNonAffectes);
 $smarty->display("vw_idx_sejour.tpl");

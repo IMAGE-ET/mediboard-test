@@ -62,7 +62,7 @@ function reloadPrescription(prescription_id){
 function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
   // Affichage de la prescription
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour(prescription_id, sejour_id);
+    Prescription.reloadPrescSejour('', sejour_id);
   }
   loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
@@ -122,15 +122,7 @@ Main.add(function () {
   var tab_actes = Control.Tabs.create('tab-actes', false);
   {{/if}}
 
-  {{if $object->_id}}
-    {{assign var=prescriptions value=$object->_ref_prescriptions}}
-    {{assign var=prescription value=$prescriptions.sejour.0}}
-    {{if $prescription}}
-      loadViewSejour({{$object->_id}}, null, '{{$prescription->_id}}','{{$date}}');
-    {{else}}
-      loadViewSejour({{$object->_id}}, null, '','{{$date}}');
-    {{/if}}
-  {{/if}}
+  loadViewSejour({{$object->_id}}, null, '','{{$date}}');
   
   {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
