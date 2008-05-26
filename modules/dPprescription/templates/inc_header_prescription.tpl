@@ -167,62 +167,62 @@ submitProtocole = function(){
      Alertes
    </button>
    
-   
 
-	   {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-	   <!-- Si le dossier medical possède des antecedents -->
-	   {{if $antecedents}}
-	   
-	     <!-- Affichage des allergies -->
-		   {{if array_key_exists('alle', $antecedents)}}
-		     {{assign var=allergies value=$antecedents.alle}}
-		      <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
-		           onmouseover="$('allergies{{$prescription->_id}}').show();"
-		           onmouseout="$('allergies{{$prescription->_id}}').hide();" />
-		    
-		      <div id="allergies{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
-		        <strong>Allergies</strong>
-		        <ul>
-			        {{foreach from=$allergies item=allergie}}
-			        <li>
-					      {{if $allergie->date}}
-					 	      {{$allergie->date|date_format:"%d/%m/%Y"}}:
-						    {{/if}} 
-			  		  	{{$allergie->rques}}
-			  	    </li>
-			  	    {{/foreach}}
-				    </ul>   
-		      </div>   
-		   {{/if}}
+       {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+		   <!-- Si le dossier medical possède des antecedents -->
+		   {{if $antecedents}}
 		   
-		   <!-- Affichage des autres antecedents -->
-	     {{if (array_key_exists('alle', $antecedents) && $antecedents|@count > 1) || ($antecedents|@count >= 1 && !array_key_exists('alle', $antecedents))}}
-	      <img src="images/icons/antecedents.gif" title="Antécédents" alt="Antécédents" 
-		           onmouseover="$('antecedents{{$prescription->_id}}').show();"
-		           onmouseout="$('antecedents{{$prescription->_id}}').hide();" />
-		     
-		      <div id="antecedents{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
-		        <ul>
-			        {{foreach from=$antecedents key=name item=cat}}
-			        {{if $name != "alle"}}
-			        <li>
-			        <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
+		     <!-- Affichage des allergies -->
+			   {{if array_key_exists('alle', $antecedents)}}
+			     {{assign var=allergies value=$antecedents.alle}}
+			      <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
+			           onmouseover="$('allergies{{$prescription->_id}}').show();"
+			           onmouseout="$('allergies{{$prescription->_id}}').hide();" />
+			    
+			      <div id="allergies{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
+			        <strong>Allergies</strong>
 			        <ul>
-			        {{foreach from=$cat item=ant}}
-			        <li>
-					      {{if $ant->date}}
-					 	      {{$ant->date|date_format:"%d/%m/%Y"}}:
-						    {{/if}} 
-			  		  	{{$ant->rques}}
-			  	    </li>
-			  	    {{/foreach}}
-			  	    </ul>
-			  	    </li>
-			  	    {{/if}}
-			  	    {{/foreach}}
-				    </ul>   
-		      </div>  
-	     {{/if}}
+				        {{foreach from=$allergies item=allergie}}
+				        <li>
+						      {{if $allergie->date}}
+						 	      {{$allergie->date|date_format:"%d/%m/%Y"}}:
+							    {{/if}} 
+				  		  	{{$allergie->rques}}
+				  	    </li>
+				  	    {{/foreach}}
+					    </ul>   
+			      </div>   
+			   {{/if}}
+		   
+			   <!-- Affichage des autres antecedents -->
+		     {{if (array_key_exists('alle', $antecedents) && $antecedents|@count > 1) || ($antecedents|@count >= 1 && !array_key_exists('alle', $antecedents))}}
+		      <img src="images/icons/antecedents.gif" title="Antécédents" alt="Antécédents" 
+			           onmouseover="$('antecedents{{$prescription->_id}}').show();"
+			           onmouseout="$('antecedents{{$prescription->_id}}').hide();" />
+			     
+			      <div id="antecedents{{$prescription->_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; left: 174px; top: 110px;">
+			        <ul>
+				        {{foreach from=$antecedents key=name item=cat}}
+				        {{if $name != "alle"}}
+				        <li>
+				        <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
+				        <ul>
+				        {{foreach from=$cat item=ant}}
+				        <li>
+						      {{if $ant->date}}
+						 	      {{$ant->date|date_format:"%d/%m/%Y"}}:
+							    {{/if}} 
+				  		  	{{$ant->rques}}
+				  	    </li>
+				  	    {{/foreach}}
+				  	    </ul>
+				  	    </li>
+				  	    {{/if}}
+				  	    {{/foreach}}
+					    </ul>   
+			      </div>  
+		     {{/if}}
+	
 	   {{/if}} 
    {{/if}}
    </td>

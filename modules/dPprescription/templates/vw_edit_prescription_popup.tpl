@@ -165,7 +165,7 @@ function viewProduit(cip){
 				  <input type="hidden" name="object_id" value="{{$sejour_id}}"/>
 				  <input type="hidden" name="object_class" value="CSejour" />
 				  <input type="hidden" name="type" value="sejour" />
-				  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+				  <input type="hidden" name="praticien_id" value="{{$praticien_sejour}}" />
 				  <input type="hidden" name="callback" value="reloadPrescription" />
 				  <button type=button class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">Créer la prescription de sejour</button>
 				</form>

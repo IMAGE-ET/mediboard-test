@@ -169,14 +169,8 @@ if($prescription->_id){
 		
 	// Chargement du poids du patient
 	if($prescription->_ref_object->_class_name == "CSejour"){
-		$consult_anesth = new CConsultAnesth();
-		$consult_anesth->sejour_id = $prescription->_ref_object->_id;
-		$consult_anesth->loadMatchingObject();
-		
-		if($consult_anesth->_id){
-		  $poids = $consult_anesth->poid;
-		}
-		
+    // Refaire le chargement du poids
+
 		// Chargement des dates de l'operations
     $sejour =& $prescription->_ref_object;
     $sejour->makeDatesOperations();
@@ -241,6 +235,10 @@ $smarty->assign("mode_sejour", $mode_sejour);
 $smarty->assign("protocole_line", $protocole_line);
 
 if($mode_sejour){
+	$_sejour = new CSejour();
+	$_sejour->load($sejour_id);
+
+	$smarty->assign("praticien_sejour", $_sejour->praticien_id);
 	$smarty->assign("mode_pharma", "0");
 	$smarty->assign("mode_protocole", "0");
 	$smarty->assign("mode_sejour", 1);
@@ -288,9 +286,5 @@ if(!$refresh_pharma && !$mode_protocole){
     }
 	}
 }
-
-
-
-
 
 ?>
