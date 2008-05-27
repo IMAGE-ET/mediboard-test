@@ -122,7 +122,9 @@ Main.add(function () {
   var tab_actes = Control.Tabs.create('tab-actes', false);
   {{/if}}
 
-  loadViewSejour({{$object->_id}}, null, '','{{$date}}');
+  {{if $object->_id}}
+  loadViewSejour('{{$object->_id}}', null, '','{{$date}}');
+  {{/if}}
   
   {{if $isImedsInstalled}}
     ImedsResultsWatcher.loadResults();
