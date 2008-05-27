@@ -83,11 +83,13 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     loadTraitement(sejour_id, date);
     loadSuivi(sejour_id);
   }
+  if($('constantes-medicales')){
+    refreshConstantesMedicales(sejour_id);
+  }
   if($('antecedents')){
     loadAntecedents(sejour_id);    
   }
 }
-
 
 function loadAntecedents(sejour_id){
   var url = new Url;
@@ -95,7 +97,6 @@ function loadAntecedents(sejour_id){
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate('antecedents', { waitingText: null } )
 }
-
 
 function loadResultLabo(sejour_id) {
   var url = new Url;
@@ -122,6 +123,13 @@ function loadSuivi(sejour_id) {
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+}
+
+function refreshConstantesMedicales(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("constantes-medicales", { waitingText: null } );
 }
 
 Main.add(function () {
@@ -335,9 +343,11 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
+        <li onclick="refreshConstantesMedicales({{$object->_id}})"><a href="#constantes-medicales">Constantes médicales</a></li>
+        
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
-        <li onclick="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescriptions</a></li>
+        <li><a href="#prescription_sejour">Prescriptions</a></li>
         {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -349,26 +359,22 @@ Main.add(function () {
         {{/if}}
     
         <li><a href="#documents">Documents</a></li>
-        
-        {{if $isPrescriptionInstalled}}
-        <li><a href="#antecedents">Antécédents</a></li>
-        {{/if}}
-        
       </ul>
       <hr class="control_tabs" />
       
       
       <!-- Tabs -->
       <div id="viewSejourHospi" style="display: none;"></div>
+      
+      <div id="constantes-medicales" style="display: none;"></div>
+      
       {{if $isPrescriptionInstalled}}
       <div id="dossier_soins" style="display: none;">
-        <div id="dossier_traitement">
-        </div>
-        <div id="dossier_suivi">
-        </div>
+        <div id="dossier_traitement"></div>
+        <div id="dossier_suivi"></div>
       </div>
-      <div id="prescription_sejour" style="display: none;">
-      </div>
+      
+      <div id="prescription_sejour" style="display: none;"></div>
       {{/if}}
       
       {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -399,12 +405,6 @@ Main.add(function () {
       {{/if}}
       
       <div id="documents" style="display: none;"></div>
-      
-      {{if $isPrescriptionInstalled}}
-      <div id="antecedents" style="display: none;">
-      </div>
-      {{/if}}
-      
     </td>
   </tr>
 </table>

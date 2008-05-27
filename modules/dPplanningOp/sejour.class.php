@@ -103,9 +103,11 @@ class CSejour extends CCodable {
   var $_ext_diagnostic_relie     = null;
   var $_ref_hprim_files          = null;
   
+  
   // Distant fields
   var $_dates_operations = null;
   var $_num_dossier      = null;
+  var $_list_constantes_medicales = null;
   
   // Filter Fields
   var $_date_min	 			= null;
@@ -397,7 +399,7 @@ class CSejour extends CCodable {
       $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
-    $this->_praticien_id = $this->praticien_id;   
+    $this->_praticien_id = $this->praticien_id;
   }
   
   function updateDBFields() {
@@ -610,6 +612,16 @@ class CSejour extends CCodable {
   	$this->_ref_prescription_traitement = $prescription;
   }
   
+  function loadListConstantesMedicales() {
+    if ($this->_list_constantes_medicales) return;
+    
+    $this->_list_constantes_medicales = new CConstantesMedicales();
+    $where = array();
+    $where['context_class'] = " = '$this->_class_name'";
+    $where['context_id']    = " = $this->_id";
+    $where['patient_id']    = " = $this->patient_id";
+    $this->_list_constantes_medicales = $this->_list_constantes_medicales->loadList($where, 'datetime ASC');
+  }
   
   function loadRefsFwd() {
     $this->loadRefPatient();

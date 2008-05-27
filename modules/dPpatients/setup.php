@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.67";
+$config["mod_version"]     = "0.68";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -798,7 +798,11 @@ class CSetupdPpatients extends CSetup {
       $this->addQuery($sql);
     }
     
-    $this->mod_version = "0.67";
+    $this->makeRevision("0.67");
+    $sql = 'ALTER TABLE `constantes_medicales` ADD `temperature` FLOAT';
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.68";
   }
 }
 

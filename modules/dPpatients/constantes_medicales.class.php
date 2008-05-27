@@ -21,6 +21,7 @@ class CConstantesMedicales extends CMbObject {
   var $ta                    = null;
   var $pouls                 = null;
   var $spo2                  = null;
+  var $temperature           = null;
 
   // Object References
   //    Single
@@ -33,8 +34,9 @@ class CConstantesMedicales extends CMbObject {
   var $_imc                  = null;
   var $_imc_valeur           = null;
   var $_vst                  = null;
+  var $_new_constantes_medicales = null;
   
-  static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2');
+  static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2', 'temperature');
 
   function CConstantesMedicales() {
     $this->CMbObject('constantes_medicales', 'constantes_medicales_id');
@@ -52,6 +54,7 @@ class CConstantesMedicales extends CMbObject {
     $specs['ta']            = 'str maxLength|10';
     $specs['pouls']         = 'num pos';
     $specs['spo2']          = 'float minMax|0|100';
+    $specs['temperature']   = 'float minMax|20|50'; // Au cas ou il y aurait des malades très malades
     $specs['_imc']          = '';
     $specs['_vst']          = '';
     $specs['_ta_systole']   = 'num';
@@ -124,8 +127,23 @@ class CConstantesMedicales extends CMbObject {
     $this->loadRefPatient();
   }
   
+  function check() {
+    if ($msg = parent::check()) {
+      return $msg;
+    }
+    
+    // Verifie si au moins une des valeurs est remplie
+    $ok = false;
+    foreach (CConstantesMedicales::$list_constantes as $const) {
+      if ($this->$const) {
+        $ok = true;
+        break;
+      }
+    }
+    if (!$ok) return 'Au moins une des valeurs doit être renseignée';
+  }
   function store () {
-    if (!$this->_id) {
+    if (!$this->_id && !$this->_new_constantes_medicales) {
       $this->updateDBFields();
       $constante = new CConstantesMedicales();
       $constante->patient_id    = $this->patient_id;
