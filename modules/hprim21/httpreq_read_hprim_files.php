@@ -19,6 +19,10 @@ $ftp->userpass = mbGetValueFromGet("userpass", $dPconfig["hprim21"]["CHprim21Rea
 $ftp->connect();
 $list = $ftp->getListFiles("./");
 
+if(!$list) {
+  return;
+}
+
 foreach($list as $filepath) {
   if(substr($filepath, -(strlen($extension))) == $extension) {
     $filename = basename($filepath);
