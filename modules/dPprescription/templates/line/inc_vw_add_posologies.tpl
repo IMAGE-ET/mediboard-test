@@ -11,10 +11,42 @@ selDivPoso = function(type, line_id, type_elt){
   if(!type){
     type = "foisPar"+type_elt;
   }
-  
+
   oDivMoment = $('moment'+type_elt+line_id);
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
+  
+  oFormFoisPar = document.forms['addPriseFoisPar'+type_elt+line_id];
+  oFormTousLes = document.forms['addPriseTousLes'+type_elt+line_id];
+  oFormMoment = document.forms['addPriseMoment'+type_elt+line_id];
+  
+  if(oFormFoisPar.quantite.value != ''){
+    var quantite = oFormFoisPar.quantite.value;
+  }
+  if(oFormFoisPar.nb_fois.value != ''){
+    var nb = oFormFoisPar.nb_fois.value;
+  }
+  if(oFormTousLes.quantite.value != ''){
+    var quantite = oFormTousLes.quantite.value;
+  }
+  if(oFormTousLes.nb_tous_les.value != ''){
+    var nb = oFormTousLes.nb_tous_les.value;
+  }
+  
+  
+  if(oFormMoment.quantite.value != ''){
+    var quantite = oFormMoment.quantite.value;
+  }
+  
+  if(quantite){
+    oFormFoisPar.quantite.value = quantite;
+    oFormTousLes.quantite.value = quantite;
+    oFormMoment.quantite.value = quantite;
+  }
+  if(nb){
+    oFormFoisPar.nb_fois.value = nb;
+    oFormTousLes.nb_tous_les.value = nb;
+  }
   
   oDivMoment.hide();
   oDivFoisPar.hide();
