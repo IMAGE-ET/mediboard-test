@@ -267,7 +267,7 @@ foreach($prescription->_ref_prescription_lines as $line){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
 	if($line->date_arret){
-    $line->_fin = $line->date_arret;
+    $line->_fin = mbDate("- 1 DAY", $line->date_arret);
   }
   // On arrete dans tous les cas la feuille de soin a la fin du sejour
   if($line->_fin >= $prescription->_ref_object->_sortie){
@@ -293,7 +293,7 @@ foreach($prescription->_ref_prescription_lines_element as $_elt){
   $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
   $nb_jours = 0;
 	if($_elt->date_arret){
-    $_elt->_fin = $_elt->date_arret;
+    $_elt->_fin = mbDate("- 1 DAY", $_elt->date_arret);
   }
   // On arrete dans tous les cas la feuille de soin a la fin du sejour
   if($_elt->_fin > $prescription->_ref_object->_sortie){

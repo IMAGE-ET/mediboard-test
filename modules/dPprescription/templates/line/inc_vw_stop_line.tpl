@@ -22,7 +22,7 @@ changeColor = function(object_id, object_class, date_arret, traitement){
   oDiv.className = class_th;
   
   // Ligne finie
-  if(date_arret != "" && date_arret < '{{$today}}'){
+  if(date_arret != "" && date_arret <= '{{$today}}'){
     oDiv.setAttribute("style","background-image: url(images/icons/ray.gif);");
   } else {
     oDiv.setAttribute("style","background-image: '';");

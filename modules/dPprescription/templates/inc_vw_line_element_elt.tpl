@@ -22,7 +22,7 @@
   <!-- Header de la ligne d'element -->
   <tr>    
     <th class="{{if $_line_element->date_arret}}arretee{{else}}element{{/if}}" id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" 
-        {{if $_date_fin && $_date_fin < $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
+        {{if $_date_fin && $_date_fin <= $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
      
       <div style="position: absolute">
         <!-- Formulaire ALD -->

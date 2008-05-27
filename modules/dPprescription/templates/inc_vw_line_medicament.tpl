@@ -29,7 +29,7 @@
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}"
-     {{if $_date_fin && $_date_fin < $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
+     {{if $_date_fin && $_date_fin <= $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
       <div style="float:left">
         {{if !$curr_line->_protocole && !$curr_line->_traitement}}
         <a style="display: inline" href="#" onclick="Prescription.viewLineHistorique('{{$curr_line->_id}}','{{$curr_line->_class_name}}')">
