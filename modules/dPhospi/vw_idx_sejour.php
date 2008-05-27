@@ -199,7 +199,7 @@ if($service_id){
 					$_affectation->_ref_sejour->loadRefsPrescriptions();
 					if($_affectation->_ref_sejour->_ref_prescriptions){
 						if(array_key_exists('sejour', $_affectation->_ref_sejour->_ref_prescriptions)){
-							if(array_key_exists('0', $_sejour->_ref_prescriptions["sejour"])){
+							if(array_key_exists('0', $_affectation->_ref_sejour->_ref_prescriptions["sejour"])){
 						    $prescription_sejour =& $_affectation->_ref_sejour->_ref_prescriptions["sejour"]["0"];
 							  $prescription_sejour->countNoValideLines();
 							}
