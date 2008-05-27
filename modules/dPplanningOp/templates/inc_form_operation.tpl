@@ -247,6 +247,11 @@
     <td>{{mb_field object=$op field="rques" rows="3"}}</td>
   </tr>
   
+  {{if $op->_ref_actes_ccam|@count}}
+  <tr>
+    <td class="text button" colspan="3"><em>Impossible de modifier ces champs, intervention déjà codée</em></td>
+  </tr>
+  {{/if}}
   <tr>
     <td class="text">{{mb_label object=$op field="depassement"}}</td>
     <td class="text">{{mb_label object=$op field="forfait"}}</td>
@@ -254,9 +259,15 @@
   </tr>
 
   <tr>
+    {{if $op->_ref_actes_ccam|@count}}
+    <td>{{mb_value object=$op field="depassement"}}</td>
+    <td>{{mb_value object=$op field="forfait"}}</td>
+    <td>{{mb_value object=$op field="fournitures"}}</td>
+    {{else}}
     <td>{{mb_field object=$op field="depassement" size="4"}}</td>
     <td>{{mb_field object=$op field="forfait" size="4"}}</td>
     <td>{{mb_field object=$op field="fournitures" size="4"}}</td>
+    {{/if}}
   </tr>
   
   <tr>
