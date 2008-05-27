@@ -33,9 +33,9 @@ function choosePreselection(oSelect) {
 
   var oForm = oSelect.form;
   oForm.code_uf.value = sCode;
-  //oForm.code_uf.onchange();
+  oForm.code_uf.onchange();
   oForm.libelle_uf.value = sLibelle;
-  //oForm.libelle_uf.onchange();
+  oForm.libelle_uf.onchange();
   
   oSelect.value = "";
 }
@@ -102,12 +102,6 @@ function submitOpForm(operation_id) {
   var oForm = document.forms["editOpFrm" + operation_id];
   var iTarget = "updateOp" + operation_id;
   submitFormAjax(oForm, iTarget);
-}
-
-function submitAllForms(operation_id, sejour_id) {
-  ExtRefManager.submitIPPForm();
-  ExtRefManager.submitNumdosForm(sejour_id);
-  submitOpForm(operation_id);
 }
 
 function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
@@ -500,7 +494,6 @@ function pageMain() {
               <tr>
                 <th class="category" colspan="2">
                   <em>Lien S@nté.com</em> : Intervention
-                  <button class="submit" type="button" onclick="submitOpForm({{$curr_op->operation_id}})">Valider</button>
                 </th>
               </tr>
 
@@ -527,13 +520,21 @@ function pageMain() {
               </tr>
 
               <tr>
-                <th><label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct.</label></th>
-                <td><input type="text" class="notNull {{$curr_op->_props.code_uf}}" name="code_uf" value="{{$curr_op->code_uf}}" size="10" maxlength="10" /></td>
+                <th>
+                  <label for="code_uf" title="Choisir un code pour l'unité fonctionnelle">Code d'unité fonct.</label>
+                </th>
+                <td>
+                  <input type="text" class="notNull {{$curr_op->_props.code_uf}}" name="code_uf" value="{{$curr_op->code_uf}}" size="10" maxlength="10" />
+                </td>
               </tr>
 
               <tr>
-                <th><label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct.</label></th>
-                <td><input type="text" class="notNull {{$curr_op->_props.libelle_uf}}" name="libelle_uf" value="{{$curr_op->libelle_uf}}" size="20" maxlength="35" /></td>
+                <th>
+                  <label for="libelle_uf" title="Choisir un libellé pour l'unité fonctionnelle">Libellé d'unité fonct.</label>
+                </th>
+                <td>
+                  <input type="text" class="notNull {{$curr_op->_props.libelle_uf}}" name="libelle_uf" value="{{$curr_op->libelle_uf}}" size="20" maxlength="35" onchange="submitOpForm({{$curr_op->_id}})" />
+                </td>
               </tr>
 
               <tr>
@@ -543,14 +544,6 @@ function pageMain() {
             </table>
 
             </form>
-            
-            <table class="form">
-              <tr>
-                <td class="button">
-                  <button class="submit" type="button" onclick="submitAllForms({{$curr_op->_id}}, {{$_sejour->_id}})" >Tout valider</button>
-                </td>
-              </tr>
-            </table>
           </td>
         </tr>
 
