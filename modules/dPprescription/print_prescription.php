@@ -73,10 +73,19 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 		if($line_medicament->child_id){
 			continue;
 		}
+
 	  // mode ordonnnance
 		if($ordonnance){
+			if($line_medicament->date_arret){
+				$line_medicament->_fin = $line_medicament->date_arret;
+			}
+			if($line_medicament->_fin < mbDate()){
+				continue;
+			}
+			
 			// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
-		  if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
+		  
+			if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
 		  	continue;
 		  }
 		  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
@@ -100,14 +109,12 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
-			  $executant = "aucun";
+				$executant = "aucun";
 		    if($element->executant_prescription_line_id){
 		      $executant = $element->executant_prescription_line_id;
 		    }
-				
 	      $linesElt[$name_chap][$name_cat][$executant]["element"]["ald"] = array();
 		    $linesElt[$name_chap][$name_cat][$executant]["element"]["no_ald"] = array();	
-		    
 	      $linesElt[$name_chap][$name_cat][$executant]["comment"]["ald"] = array();
 		    $linesElt[$name_chap][$name_cat][$executant]["comment"]["no_ald"] = array();
 			}
@@ -125,6 +132,13 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 				}
 			  // mode ordonnnance
 				if($ordonnance){
+          if($element->date_arret){
+				  	$element->_fin = $element->date_arret;
+				  }
+				  if($element->_fin < mbDate()){
+				  	continue;
+				  }
+				  
 					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
 				  if(!$element->signee || $element->praticien_id != $AppUI->user_id){
 				  	continue;
