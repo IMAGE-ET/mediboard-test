@@ -47,6 +47,7 @@ if($traitement == 1){
 
 // On repasse la ligne en type normal (pre_admission, sejour, sortie)
 if($traitement == 0){	
+	$line->debut = mbDate();
 	//$line->praticien_id = $AppUI->user_id;
 	$line->prescription_id = $prescription_id;
 	$msg = $line->store();

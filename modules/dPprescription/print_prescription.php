@@ -70,6 +70,9 @@ $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
+		if($line_medicament->child_id){
+			continue;
+		}
 	  // mode ordonnnance
 		if($ordonnance){
 			// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
@@ -117,6 +120,9 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
+				if($element->child_id){
+					continue;
+				}
 			  // mode ordonnnance
 				if($ordonnance){
 					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
