@@ -126,16 +126,12 @@
 		    {{if $perm_edit}}
 			    <script type="text/javascript">
 			      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
-			      /*
-			      Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-		        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
-			      */
 			      {{if $prescription->type != "sortie"}}
-			        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "debut");
-		          regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "_fin");
-		        {{/if}}
+			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
+		          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
+			      {{/if}}
 		        {{if $prescription->type == "sortie"}}
-			        regFieldCalendar('editDates-Med-{{$curr_line->_id}}', "fin");
+		          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);
 		        {{/if}}
 		        
 		        

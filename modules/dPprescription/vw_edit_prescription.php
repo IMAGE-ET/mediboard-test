@@ -202,13 +202,9 @@ if($prescription->_id){
 $poids = "";
 if($prescription->_id){
 	if($prescription->_ref_object->_class_name == "CSejour"){
-		$consult_anesth = new CConsultAnesth();
-		$consult_anesth->sejour_id = $prescription->_ref_object->_id;
-		$consult_anesth->loadMatchingObject();
-		
-		if($consult_anesth->_id){
-		  $poids = $consult_anesth->poid;
-		}
+		$prescription->_ref_object->_ref_patient->loadRefConstantesMedicales();
+		$const_med = $prescription->_ref_object->_ref_patient->_ref_constantes_medicales;
+		$poids = $const_med->poids;
 		
 		// Chargement des dates de l'operations
     $sejour =& $prescription->_ref_object;

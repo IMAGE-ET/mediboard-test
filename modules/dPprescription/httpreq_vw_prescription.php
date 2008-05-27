@@ -174,7 +174,10 @@ if($prescription->_id){
 	// Chargement du poids du patient
 	if($prescription->_ref_object->_class_name == "CSejour"){
     // Refaire le chargement du poids
-
+    $prescription->_ref_object->_ref_patient->loadRefConstantesMedicales();
+		$const_med = $prescription->_ref_object->_ref_patient->_ref_constantes_medicales;
+		$poids = $const_med->poids;
+		
 		// Chargement des dates de l'operations
     $sejour =& $prescription->_ref_object;
     $sejour->makeDatesOperations();

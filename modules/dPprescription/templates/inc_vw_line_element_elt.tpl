@@ -73,11 +73,11 @@
 	      <script type="text/javascript">
 	        prepareForm(document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]); 
 	        {{if !$line->fin}}   
-			      regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "debut");
-		        regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "_fin");       
+	          Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "debut", false, dates);
+		        Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "_fin", false, dates);      
 	        {{/if}}
 	        {{if $line->fin}}
-	          regFieldCalendar("editDates-{{$typeDate}}-{{$line->_id}}", "fin");       
+	           Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "fin", false, dates);    
 	        {{/if}}
 	      </script>
       {{/if}}
