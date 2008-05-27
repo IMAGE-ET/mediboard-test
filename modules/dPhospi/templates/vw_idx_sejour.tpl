@@ -59,6 +59,14 @@ function reloadPrescription(prescription_id){
 }
 
 
+function reloadAntAllergie(sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_vw_antecedent_allergie");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("antecedent_allergie", { waitingtext: null } );
+}
+
+
 function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
   // Affichage de la prescription
   if($('prescription_sejour')){
@@ -347,7 +355,7 @@ Main.add(function () {
         
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
-        <li><a href="#prescription_sejour">Prescriptions</a></li>
+        <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescriptions</a></li>
         {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -359,6 +367,11 @@ Main.add(function () {
         {{/if}}
     
         <li><a href="#documents">Documents</a></li>
+        
+        {{if $isPrescriptionInstalled}}
+        <li><a href="#antecedents">Antécédents</a></li>
+        {{/if}}
+        
       </ul>
       <hr class="control_tabs" />
       
@@ -405,6 +418,12 @@ Main.add(function () {
       {{/if}}
       
       <div id="documents" style="display: none;"></div>
+      
+      {{if $isPrescriptionInstalled}}
+      <div id="antecedents" style="display: none;">
+      </div>
+      {{/if}}
+      
     </td>
   </tr>
 </table>
