@@ -656,6 +656,26 @@ class CPatient extends CMbObject {
     }
   }
   
+  /**
+   * Get an associative array of uncancelled sejours and their dates
+   * @return array Sejour ID => array("entree_prevue" => DATE, "sortie_prevue" => DATE)
+   */
+  function getSejoursCollisions() {
+    $sejours_collision = array();
+    if ($this->_ref_sejours) {
+			foreach ($this->_ref_sejours as $_sejour) {
+			  if (!$_sejour->annule) {
+				  $sejours_collision[$_sejour->_id] = array (
+				    "entree_prevue" => mbDate($_sejour->entree_prevue),
+				    "sortie_prevue" => mbDate($_sejour->sortie_prevue)
+				  );
+			  }
+			}
+    }
+    
+    return $sejours_collision;
+  }
+  
   function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
     if ($this->patient_id){

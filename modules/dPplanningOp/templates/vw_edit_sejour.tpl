@@ -48,8 +48,7 @@ function pageMain() {
   <tr>
     <td>
       {{include file="js_form_sejour.tpl"}}
-      {{assign var="mode_operation" value=false}}
-      {{include file="inc_form_sejour.tpl"}}
+      {{include file="inc_form_sejour.tpl" mode_operation=false}}
     </td>
     <td>
       {{include file="inc_infos_operation.tpl"}}

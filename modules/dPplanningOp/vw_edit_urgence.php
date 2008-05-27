@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab, $dPconfig;
+global $AppUI, $can, $m, $tab;
 
 $can->needsRead();
 
@@ -89,15 +89,6 @@ $sejour->makeDatesOperations();
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
-// Creation d'un tableau permettant d'anticiper les collisions entre sejours
-$sejour_collision = array();
-if($sejours){
-	foreach($sejours as $key => $_sejour){
-	  $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
-	  $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
-  }
-}
-
 // Récupération des modèles
 
 // Modèles de l'utilisateur
@@ -128,27 +119,25 @@ if($chir->user_id) {
   $listPack = $listPack->loadlist($where, $order);
 }
 
-$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$config = CAppUI::conf("dPplanningOp CSejour");
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
 
-$config =& $dPconfig["dPplanningOp"]["COperation"];
+$config = CAppUI::conf("dPplanningOp COperation");
 $hours_duree = range($config["duree_deb"], $config["duree_fin"]);
 $hours_urgence = range($config["hour_urgence_deb"], $config["hour_urgence_fin"]);
 $mins_duree = range(0, 59, $config["min_intervalle"]);
 
-$config =& $dPconfig["dPplanningOp"]["CSejour"];
+$config = CAppUI::conf("dPplanningOp CSejour");
 $heure_sortie_ambu   = $config["heure_sortie_ambu"];
 $heure_sortie_autre  = $config["heure_sortie_autre"];
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
 
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour_collision", $sejour_collision);
+$smarty->assign("sejours_collision", $patient->getSejoursCollisions());
 
 $smarty->assign("canSante400", CModule::getCanDo("dPsante400"));
 $smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));

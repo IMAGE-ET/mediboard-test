@@ -2,7 +2,7 @@
 
 Main.add( function(){
   var oForm = document.editOp;
-  Sejour.sejour_collision = {{$sejour_collision|@json}};
+  Sejour.sejours_collision = {{$sejours_collision|@json}};
   Sejour.preselectSejour(oForm._date.value);
 } );
 

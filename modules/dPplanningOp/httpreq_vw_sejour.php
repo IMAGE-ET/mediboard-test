@@ -40,16 +40,6 @@ if($sejour_id) {
 $sejour->makeDatesOperations();
 $sejour->loadNumDossier();
 
-// Creation d'un tableau permettant d'anticiper les collisions entre sejours
-$sejour_collision = array();
-if($sejours){
-	foreach($sejours as $key => $_sejour){
-	  $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
-	  $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
-  }
-}
-
-
 // L'utilisateur est-il un praticien
 $mediuser = new CMediusers;
 $mediuser->load($AppUI->user_id);
@@ -74,7 +64,7 @@ $mins_duree = range(0, 59, $config["min_intervalle"]);
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour_collision", $sejour_collision);
+$smarty->assign("sejours_collision", $patient->getSejoursCollisions());
 
 $smarty->assign("urgInstalled", CModule::getInstalled("dPurgences"));
 $smarty->assign("heure_sortie_ambu",   $heure_sortie_ambu);

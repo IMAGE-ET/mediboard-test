@@ -85,26 +85,23 @@ function checkChambreSejourEasy(){
 
 // Declaration d'un objet Sejour
 var Sejour = {
-  sejour_collision: [],
+  sejours_collision: [],
   
-  /* 
-   Fonction permettant de preselectionner un sejour existant
-   en fonction de la date d'intervention choisie
-  */
+  
+  // Preselectionne un sejour existant en fonction de la date d'intervention choisie
   preselectSejour: function(date_plage){
-	  if(!date_plage){
+	  if (!date_plage){
 	    return;
 	  }
 	  
-	  var sejour_collision = this.sejour_collision;
-
+	  var sejours_collision = this.sejours_collision;
 	  var oForm = document.editSejour;
 	  var sejour_courant_id = oForm.sejour_id.value;
 	  	
 		// Liste des sejours
-		for (sejour_id in sejour_collision){
-		  var entree_prevue = sejour_collision[sejour_id]["entree_prevue"];
-		  var sortie_prevue = sejour_collision[sejour_id]["sortie_prevue"];
+		for (sejour_id in sejours_collision){
+		  var entree_prevue = sejours_collision[sejour_id]["entree_prevue"];
+		  var sortie_prevue = sejours_collision[sejour_id]["sortie_prevue"];
 		  if ((entree_prevue <= date_plage) && (sortie_prevue >= date_plage)) {
 		    if (sejour_courant_id != sejour_id){
 		      var msg = printf("Vous êtes en train de planifier une intervention pour le %s, or il existe déjà un séjour pour ce patient du %s au %s. Souhaitez vous placer l'intervention dans ce séjour ?", 
@@ -125,7 +122,7 @@ var Sejour = {
 
 
 Main.add( function(){
-  Sejour.sejour_collision = {{$sejour_collision|@json}};
+  Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = document.editOp;
   Sejour.preselectSejour(oForm._date.value);
 } );
@@ -206,8 +203,9 @@ Main.add( function(){
         &mdash; Créer un nouveau séjour
       </option>
       {{foreach from=$sejours item=curr_sejour}}
-      <option value="{{$curr_sejour->sejour_id}}" {{if $sejour->sejour_id == $curr_sejour->sejour_id}} selected="selected" {{/if}}>
+      <option value="{{$curr_sejour->_id}}" {{if $sejour->_id == $curr_sejour->_id}} selected="selected" {{/if}}>
         {{$curr_sejour->_view}}
+        {{if $curr_sejour->annule}}({{tr}}Cancelled{{/tr}}){{/if}}
       </option>
       {{/foreach}}
     </select>

@@ -177,17 +177,15 @@ class CSpEntCCAM extends CSpObject {
     }
 	    
     // Salle de l'intervention
-    switch ($mbObject->_class_name) {
-      case "COperation":
+    if ($mbObject instanceof COperation) {
       $operation =& $mbObject;
-	    if ($operation->_ref_salle->_id) {
+      $operation->updateSalle();
+      if ($operation->_ref_salle->_id) {
 		    $idSalle = CSpObjectHandler::getId400For($operation->_ref_salle);
 		    $this->codsal = $idSalle->id400;
 	    }
-	    
-      break;
     }
-	    
+    
     // Aides opératoire et panseuse
     $mbObject->loadAffectationsPersonnel();
     $affectations_op       = mbGetValue($mbObject->_ref_affectations_personnel["op"], array());

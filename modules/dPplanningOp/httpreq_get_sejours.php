@@ -7,9 +7,10 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab;
+global $can;
+$can->needsRead();
 
-$patient_id = mbGetValueFromGet("patient_id", 0);
+$patient_id = mbGetValueFromGet("patient_id");
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefsSejours();
@@ -18,24 +19,10 @@ $patient->loadRefsSejours();
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
-// Creation d'un tableau permettant d'anticiper les collisions entre sejours
-$sejour_collision = array();
-if($patient->_ref_sejours){
-	foreach($patient->_ref_sejours as $key => $_sejour){
-	  if($_sejour->annule) {
-	    unset($patient->_ref_sejours[$key]);
-	  } else {
-      $sejour_collision[$_sejour->_id]["entree_prevue"] = mbDate($_sejour->entree_prevue);
-      $sejour_collision[$_sejour->_id]["sortie_prevue"] = mbDate($_sejour->sortie_prevue);
-	  }
-  }
-}
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("sejour_collision", $sejour_collision);
+$smarty->assign("sejours_collision", $patient->getSejoursCollisions());
 $smarty->assign("sejours", $patient->_ref_sejours);
 $smarty->assign("etablissements", $etablissements);
 

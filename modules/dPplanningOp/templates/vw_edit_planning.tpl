@@ -264,3 +264,8 @@ function pageMain() {
   </tr>
 </table>
 
+{{if $op->_ref_actes|@count}}
+<hr />
+{{include file="../../dPsalleOp/templates/inc_vw_actes.tpl" subject=$op}}
+{{/if}}
+
