@@ -4,13 +4,13 @@
 
 var cim10url = new Url;
 
-function reloadCim10(sCode){
+reloadCim10 = function(sCode){
   var oForm = document.addDiagFrm;
   
   oCimField.add(sCode);
  
   {{if $_is_anesth}}
-  if (document.addOpFrm && document.addOpFrm.operation_id.value != '') {
+  if(DossierMedical.sejour_id){
     oCimAnesthField.add(sCode);
   }
   {{/if}}
@@ -18,17 +18,17 @@ function reloadCim10(sCode){
   oForm.code_diag.value="";
 }
 
-function updateTokenCim10() {
+updateTokenCim10 = function() {
   var oForm = document.editDiagFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossierMedicalPatient });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : DossierMedical.reloadDossierPatient });
 }
 
-function updateTokenCim10Anesth(){
+updateTokenCim10Anesth = function(){
   var oForm = document.editDiagAnesthFrm;
-  submitFormAjax(oForm, 'systemMsg', { onComplete : reloadDossierMedicalSejour });
+  submitFormAjax(oForm, 'systemMsg', { onComplete : DossierMedical.reloadDossierSejour });
 }
 
-function dateAntecedent(){
+dateAntecedent = function(){
   var oForm = document.editAntFrm;
   var oEnCours = oForm._date_ant;
   var oHiddenField = oForm.date;
@@ -47,7 +47,7 @@ function dateAntecedent(){
   }   
 }
 
-function dateTrmt(){
+dateTrmt = function(){
   var oForm = document.editTrmtFrm;
   var oDateTrmt = oForm._datetrmt
   var oHiddenDebutField = oForm.debut;
@@ -73,7 +73,7 @@ function dateTrmt(){
   }
 }
 
-function dateFinTrmt(){
+dateFinTrmt = function(){
   var oForm = document.editTrmtFrm;
   var oEnCours = oForm._en_cours;
   var oHiddenField = oForm.fin;
@@ -91,7 +91,7 @@ function dateFinTrmt(){
   }
 }
 
-function finTrmt() {
+finTrmt = function() {
   var oForm = document.editTrmtFrm;
   oForm._hidden_traitement.value = oForm.traitement.value;
   oForm.traitement.value = "";
@@ -99,76 +99,82 @@ function finTrmt() {
 }
 
 
-function reloadDossierMedicalPatient(){
-  var antUrl = new Url;
-  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
-  antUrl.addParam("patient_id", "{{$patient->_id}}");
-  antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
-  {{if $_is_anesth}}
-  antUrl.addParam("sejour_id", tabSejour[document.addOpFrm.operation_id.value]);
-  {{/if}}
-  antUrl.requestUpdate('listAnt', { waitingText : null } );
-}
-
-function reloadDossierMedicalSejour() {
-  var antUrl = new Url;
-  var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
-  if(!sejour_id) {
-    sejour_id = document.addOpFrm.sejour_id.value;
-  }
-  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
-  antUrl.addParam("sejour_id", sejour_id);
-  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
-}
-
-function reloadDossiersMedicaux(){
-  reloadDossierMedicalPatient();
-
-  {{if $_is_anesth}}
-  if (document.addOpFrm.operation_id.value != ""){
-    reloadDossierMedicalSejour();
-  }
-  {{/if}}
-}
-
-function onSubmitAnt(oForm) {
+onSubmitAnt = function (oForm) {
 	if (oForm.rques.value.blank()) {
     return false;
   }
-	
   onSubmitFormAjax(oForm, {
-  	onComplete : reloadDossiersMedicaux 
+  	onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
-  
   dateAntecedent();
-  
   return false;
 }
 
-function onSubmitTraitement(oForm) {
+onSubmitTraitement = function (oForm) {
 	if (oForm.traitement.value.blank()) {
     return false;
   }
-	
   onSubmitFormAjax(oForm, {
-  	onComplete : reloadDossiersMedicaux 
+  	onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
-  
   finTrmt();
-  
   return false;
 }
 
-function easyMode() {
+easyMode = function() {
   var width = 800;
   var height = 500;
-
   var url = new Url();
   url.setModuleAction("dPcabinet", "vw_ant_easymode");
   url.addParam("user_id", "{{$userSel->_id}}");
-
   url.pop(width, height, "easyMode");
 }
+
+
+
+/**
+ * Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
+ * et la widget de dossier medical
+ */
+DossierMedical = {
+	sejour_id: '{{$sejour_id}}',
+  updateSejourId : function(sejour_id) {
+  	this.sejour_id = sejour_id;
+  	
+  	// Mise à jour des formulaire
+	  document.editTrmtFrm._sejour_id.value   = sejour_id;
+	  document.editAntFrm._sejour_id.value    = sejour_id;
+	  document.editAddictFrm._sejour_id.value = sejour_id;
+  },
+  
+  reloadDossierPatient: function() {
+	  var antUrl = new Url;
+	  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents");
+	  antUrl.addParam("patient_id", "{{$patient->_id}}");
+	  antUrl.addParam("_is_anesth", "{{$_is_anesth}}");
+	  {{if $_is_anesth}}
+	    antUrl.addParam("sejour_id", DossierMedical.sejour_id);
+	  {{/if}}
+	  antUrl.requestUpdate('listAnt', { waitingText : null } );
+	},
+	reloadDossierSejour: function(){
+		var antUrl = new Url;  
+	  antUrl.setModuleAction("dPcabinet", "httpreq_vw_list_antecedents_anesth");  
+	  antUrl.addParam("sejour_id", DossierMedical.sejour_id);
+	  antUrl.requestUpdate('listAntCAnesth', { waitingText : null });
+	},
+	reloadDossiersMedicaux: function(){
+	  DossierMedical.reloadDossierPatient();
+    {{if $_is_anesth}}
+    DossierMedical.reloadDossierSejour();
+    {{/if}}
+	}
+}
+ 
+ 
+Main.add(function () {
+  DossierMedical.reloadDossiersMedicaux();
+});
 
 </script>
 
@@ -186,12 +192,12 @@ function easyMode() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_antecedent_aed" />
-      <input type="hidden" name="_patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
       
       <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
       {{if $_is_anesth}}
       <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
-      <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
+      <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
       {{/if}}
 
       <table class="form">
@@ -235,6 +241,7 @@ function easyMode() {
 						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
 			      <script type="text/javascript">
 			      	Main.add(function() {
+				        prepareForm(document.editAntFrm);
 				        new AideSaisie.AutoComplete("editAntFrm" , "rques", "type", "_search", "CAntecedent", "{{$userSel->_id}}");
 			      	} );
 			      </script>
@@ -268,11 +275,11 @@ function easyMode() {
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_traitement_aed" />
-      <input type="hidden" name="_patient_id" value="{{$patient->patient_id}}" />
+      <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
       
       {{if $_is_anesth}}
       <!-- On passe _sejour_id seulement s'il y a un sejour_id -->
-      <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
+      <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
       {{/if}}
       
       <table class="form">
@@ -321,6 +328,7 @@ function easyMode() {
 						{{mb_include_script module=dPcompteRendu script=aideSaisie}}
 			      <script type="text/javascript">
 			      	Main.add(function() {
+			      		prepareForm(document.editTrmtFrm);
 				        new AideSaisie.AutoComplete("editTrmtFrm" , "traitement", null, "_search", "CTraitement", "{{$userSel->_id}}");
 			      	} );
 			      </script>
@@ -362,12 +370,16 @@ function easyMode() {
           <td>{{$cat}}</td>
         </tr>
         <tbody id="category{{$cat}}">
-          <tr class="script"><td><script type="text/javascript">new PairEffect("category{{$cat}}");</script></td></tr>
+          <tr class="script">
+            <td>
+              <script type="text/javascript">new PairEffect("category{{$cat}}");</script>
+            </td>
+          </tr>
           {{foreach from=$curr_cat item=curr_code key="key"}}
           <tr>
             <td class="text">
             <form name="code_finder-{{$curr_code->sid}}" action="?">
-              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(document.addOpFrm &amp;&amp; document.addOpFrm.operation_id.value != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
+              <button class="tick notext" type="button" onclick="oCimField.add('{{$curr_code->code}}'); if(DossierMedical.sejour_id != '') { {{if $_is_anesth}}oCimAnesthField.add('{{$curr_code->code}}');{{/if}} }">
                 Ajouter
               </button>
               

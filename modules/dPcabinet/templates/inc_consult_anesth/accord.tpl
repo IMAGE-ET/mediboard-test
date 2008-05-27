@@ -45,7 +45,7 @@ Main.add(function () {
 <div id="rpuConsult" style="display: none;">{{include file="../../dPurgences/templates/inc_vw_rpu.tpl"}}</div>
 {{/if}}
 
-<div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
+<div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
 <div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
 

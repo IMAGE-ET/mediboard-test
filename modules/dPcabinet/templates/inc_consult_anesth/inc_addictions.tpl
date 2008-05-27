@@ -1,12 +1,12 @@
 <script type="text/javascript">
 
-function onSubmitAddiction(oForm) {
+onSubmitAddiction = function(oForm) {
   if (oForm.addiction.value.blank()) {
     return false;
   }
   
   onSubmitFormAjax(oForm, {
-  	onComplete : reloadDossiersMedicaux 
+  	onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
   
 	// Garder les informations pour les aides à la saisie
@@ -27,9 +27,9 @@ function onSubmitAddiction(oForm) {
   <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 
   {{if $current_m != "dPurgences"}}
-  {{if $consult->_ref_consult_anesth->_id}}
+  {{if $sejour_id}}
   <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
-  <input type="hidden" name="_sejour_id" value="{{$consult->_ref_consult_anesth->_ref_operation->_ref_sejour->_id}}" />
+  <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
   {{/if}}
   {{/if}}
 
@@ -44,6 +44,7 @@ function onSubmitAddiction(oForm) {
 			{{mb_include_script module=dPcompteRendu script=aideSaisie}}
       <script type="text/javascript">
       	Main.add(function() {
+      	prepareForm(document.editAddictFrm);
 	        new AideSaisie.AutoComplete("editAddictFrm" , "addiction", "type", "_search", "CAddiction", "{{$userSel->_id}}");
       	} );
       </script>

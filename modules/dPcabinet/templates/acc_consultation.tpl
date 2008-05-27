@@ -3,6 +3,7 @@
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+{{assign var=sejour_id value=""}}
 
 <script type="text/javascript">
 function setField(oField, sValue) {

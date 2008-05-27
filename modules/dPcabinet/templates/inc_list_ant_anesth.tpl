@@ -27,7 +27,7 @@
 
 onSubmitDossierMedical = function(oForm) {
 	return onSubmitFormAjax(oForm, { 
-		onComplete : reloadDossierMedicalSejour 
+		onComplete : DossierMedical.reloadDossierSejour 
 	} );
 }
 
@@ -67,7 +67,7 @@ copyAddiction = function(addiction_id) {
     <input type="hidden" name="dosql" value="do_antecedent_aed" />
     <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
     
-    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadDossierMedicalSejour)">
+    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierSejour)">
      {{tr}}delete{{/tr}}
     </button>          
     {{if $curr_antecedent->date}}
@@ -97,7 +97,7 @@ copyAddiction = function(addiction_id) {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     <input type="hidden" name="traitement_id" value="{{$curr_trmt->_id}}" />
-    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadDossierMedicalSejour)">
+    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierSejour)">
         {{tr}}delete{{/tr}}
     </button>
     {{if $curr_trmt->fin}}

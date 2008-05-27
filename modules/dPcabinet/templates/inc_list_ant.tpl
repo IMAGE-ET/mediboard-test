@@ -50,7 +50,7 @@ Traitement = {
     <input type="hidden" name="dosql" value="do_antecedent_aed" />
     <input type="hidden" name="antecedent_id" value="{{$curr_antecedent->_id}}" />
     
-    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, reloadDossierMedicalPatient)">
+    <button class="trash notext" type="button" onclick="Antecedent.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button> 
     {{if $_is_anesth && $sejour->_id}}
@@ -87,7 +87,7 @@ Traitement = {
     <input type="hidden" name="del" value="0" />
     <input type="hidden" name="dosql" value="do_traitement_aed" />
     <input type="hidden" name="traitement_id" value="{{$curr_trmt->traitement_id}}" />
-    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, reloadDossierMedicalPatient)">
+    <button class="trash notext" type="button" onclick="Traitement.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}delete{{/tr}}
     </button>
     {{if $_is_anesth && $sejour->_id}}

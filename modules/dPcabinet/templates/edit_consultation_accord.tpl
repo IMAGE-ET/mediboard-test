@@ -81,7 +81,7 @@ function pageMain() {
    
   {{if $consult->_id}}
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
-  reloadDossierMedicalPatient();
+  DossierMedical.reloadDossierPatient();
   {{/if}}
 }
 </script>

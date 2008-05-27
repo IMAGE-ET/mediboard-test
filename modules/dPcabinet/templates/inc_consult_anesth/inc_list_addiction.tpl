@@ -34,7 +34,7 @@ Addiction = {
     
     {{mb_field object=$curr_addiction field="addiction_id" hidden=1 prop=""}}         
 
-    <button class="trash notext" type="button" onclick="Addiction.remove(this.form, reloadDossierMedicalPatient)">
+    <button class="trash notext" type="button" onclick="Addiction.remove(this.form, DossierMedical.reloadDossierPatient)">
       {{tr}}Delete{{/tr}}        
     </button> 
     

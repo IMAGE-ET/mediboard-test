@@ -1,4 +1,3 @@
-
 {{mb_include_script module=dPpatients script=pat_selector}}
 {{mb_include_script module=dPurgences script=contraintes_rpu}}
 
@@ -39,7 +38,7 @@ function submitSuivi(oForm) {
 
 function pageMain() {
   {{if $rpu->_id && $can->edit}}
-    reloadDossierMedicalPatient();
+    DossierMedical.reloadDossierPatient();
     var tab_sejour = Control.Tabs.create('tab-dossier');
     loadSuivi({{$rpu->sejour_id}});
   {{/if}}
@@ -212,6 +211,7 @@ function pageMain() {
   {{assign var="current_m" value="dPurgences"}}
   {{assign var="_is_anesth" value="0"}}
   {{assign var="consult" value=$rpu->_ref_consult}}
+  {{assign var=sejour_id value=""}}
   {{include file="../../dPcabinet/templates/inc_ant_consult.tpl" chir_id=$rpu->_responsable_id}}
 </div>
 

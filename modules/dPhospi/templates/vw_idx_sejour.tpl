@@ -5,7 +5,7 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
-
+{{mb_include_script module="dPcompteRendu" script="aideSaisie"}}
 
 {{assign var="do_subject_aed" value="do_sejour_aed"}}
 {{assign var="module" value="dPhospi"}}
@@ -83,7 +83,19 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     loadTraitement(sejour_id, date);
     loadSuivi(sejour_id);
   }
+  if($('antecedents')){
+    loadAntecedents(sejour_id);    
+  }
 }
+
+
+function loadAntecedents(sejour_id){
+  var url = new Url;
+  url.setModuleAction("dPcabinet","httpreq_vw_antecedents");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate('antecedents', { waitingText: null } )
+}
+
 
 function loadResultLabo(sejour_id) {
   var url = new Url;
@@ -325,7 +337,7 @@ Main.add(function () {
         
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
-        <li><a href="#prescription_sejour">Prescriptions</a></li>
+        <li onclick="Prescription.reloadPrescSejour('', document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescriptions</a></li>
         {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -337,6 +349,11 @@ Main.add(function () {
         {{/if}}
     
         <li><a href="#documents">Documents</a></li>
+        
+        {{if $isPrescriptionInstalled}}
+        <li><a href="#antecedents">Antécédents</a></li>
+        {{/if}}
+        
       </ul>
       <hr class="control_tabs" />
       
@@ -382,6 +399,12 @@ Main.add(function () {
       {{/if}}
       
       <div id="documents" style="display: none;"></div>
+      
+      {{if $isPrescriptionInstalled}}
+      <div id="antecedents" style="display: none;">
+      </div>
+      {{/if}}
+      
     </td>
   </tr>
 </table>

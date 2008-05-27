@@ -81,20 +81,21 @@ function updateList() {
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
+
 function reloadConsultAnesth() {
-  // Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
   var sejour_id = tabSejour[document.addOpFrm.operation_id.value];
-  if(!sejour_id) {
+  if (!sejour_id) {
     sejour_id = document.addOpFrm.sejour_id.value;
   }
-  document.editTrmtFrm._sejour_id.value   = sejour_id;
-  document.editAntFrm._sejour_id.value    = sejour_id;
-  document.editAddictFrm._sejour_id.value = sejour_id;
+  
+  // Mise a jour du sejour_id
+  DossierMedical.updateSejourId(sejour_id);
   
   // refresh de la liste des antecedents du sejour
-  reloadDossierMedicalSejour();
-  reloadDossierMedicalPatient();
-   
+  DossierMedical.reloadDossierPatient();
+  DossierMedical.reloadDossierSejour();
+  
+
   // Reload Intervention
   var consultUrl = new Url;
   consultUrl.setModuleAction("dPcabinet", "httpreq_vw_consult_anesth");
@@ -119,7 +120,7 @@ function pageMain() {
   updateList();  
   
   // Chargement pour le sejour
-  reloadDossierMedicalSejour();
+  DossierMedical.reloadDossierSejour();
   
   {{if $consult->consultation_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
@@ -135,7 +136,7 @@ function pageMain() {
   
   {{if $consult->_id}}
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
-  reloadDossierMedicalPatient();
+  DossierMedical.reloadDossierPatient();
   {{/if}}
 }
 
