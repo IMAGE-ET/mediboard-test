@@ -30,7 +30,7 @@ $prescription_sejour = new CPrescription();
 $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
 $praticien    = $userCourant->isPraticien();
 
-if($praticien && !$service_id) {
+if($praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
 }
 
