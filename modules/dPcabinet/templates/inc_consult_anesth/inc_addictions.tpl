@@ -27,7 +27,7 @@ onSubmitAddiction = function(oForm) {
   <input type="hidden" name="_patient_id" value="{{$patient->_id}}" />
 
   {{if $current_m != "dPurgences"}}
-  {{if $sejour_id}}
+  {{if $_is_anesth}}
   <!-- dossier_medical_id du sejour si c'est une consultation_anesth -->
   <input type="hidden" name="_sejour_id" value="{{$sejour_id}}" />
   {{/if}}
