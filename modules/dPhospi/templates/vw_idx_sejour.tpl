@@ -168,9 +168,9 @@ Main.add(function () {
       <form name="form_prescription" action="">
         <input type="hidden" name="sejour_id" value="" />
       </form>
-      <table>
+      <table class="form">
         <tr>
-          <th>
+          <th class="category">
             {{$date|date_format:"%A %d %B %Y"}}
             <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />
           </th>
