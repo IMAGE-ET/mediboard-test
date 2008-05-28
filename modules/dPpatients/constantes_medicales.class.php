@@ -167,6 +167,9 @@ class CConstantesMedicales extends CMbObject {
     
     // Constante que l'on va construire
     $constante = new CConstantesMedicales();
+    if(!$patient_id) {
+      return array($constante, array());
+    }
     $constante->patient_id = $patient_id;
     $constante->datetime = mbDateTime();
     $constante->loadRefPatient();
