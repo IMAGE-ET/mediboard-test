@@ -20,17 +20,20 @@ $sejour_id = mbGetValueFromGet('sejour_id', 0);
 
 $sejour = new CSejour;
 $sejour->load($sejour_id);
-$sejour->loadRefPatient();
-$sejour->loadListConstantesMedicales();
+
+if ($sejour->_id) {
+  $sejour->loadRefPatient();
+  $sejour->loadListConstantesMedicales();
+}
 
 $new_constantes = new CConstantesMedicales();
 $new_constantes->context_class = $sejour->_class_name;
 $new_constantes->context_id = $sejour->_id;
 $new_constantes->patient_id = $sejour->_ref_patient->_id;
 
+// Initialisation de la structure
 $data = array(
   'ta' => array(
-    'title' => 'Tension artérielle',
     'series' => array(
       array('data' => array()),
       array(
@@ -44,27 +47,27 @@ $data = array(
     ),
   ),
   'temperature' => array(
-    'title' => 'Température',
     'series' => array(
       array('data' => array()),
       array('data' => array()),
     ),
   ),
   'pouls' => array(
-    'title' => 'Pouls',
     'series' => array(
       array('data' => array()),
       array('data' => array()),
     ),
   ),
+  'spo2' => array(
+    'series' => array(
+      array('data' => array()),
+    ),
+  ),
 );
 
+// Petite fonction utilitaire de récupération des valeurs
 function getValue($v) {
-  if ($v === null) {
-    return null;
-  } else {
-    return floatval($v);
-  }
+  return ($v === null) ? null : floatval($v);
 }
 
 $dates = array();
@@ -72,7 +75,7 @@ $hours = array();
 $i = 0;
 foreach ($sejour->_list_constantes_medicales as $cst) {
   $dates[$i] = mbTranformTime($cst->datetime, null, '%d/%m/%y');
-  $hours[$i] = mbTranformTime($cst->datetime, null, '%H:%M');
+  $hours[$i] = mbTranformTime($cst->datetime, null, '%Hh%M');
   
   $data['ta']['series'][1]['data'][$i] = array($i, getValue($cst->_ta_systole));
   $data['ta']['series'][2]['data'][$i] = array($i, getValue($cst->_ta_diastole));
@@ -80,21 +83,33 @@ foreach ($sejour->_list_constantes_medicales as $cst) {
   $data['pouls']['series'][1]['data'][$i] = array($i, getValue($cst->pouls));
 
   $data['temperature']['series'][1]['data'][$i] = array($i, getValue($cst->temperature));
+  
+  $data['spo2']['series'][0]['data'][$i] = array($i, getValue($cst->spo2));
   $i++;
 }
 
-$n = count($dates)-1;
+// Mise en place de la ligne de niveau normal pour chaque constante et de l'unité
+$n = 100;
+$data['ta']['title'] = htmlentities('Tension artérielle');
+$data['ta']['unit'] = 'cmHg';
 $data['ta']['series'][0]['data'] = array(array(0, 120), array($n, 120));
 $data['ta']['series'][0]['points']['show'] = false;
 $data['ta']['series'][0]['mouse']['track'] = false;
 
+$data['pouls']['title'] = 'Pouls';
+$data['pouls']['unit'] = 'puls./min';
 $data['pouls']['series'][0]['data'] = array(array(0, 60), array($n, 60));
 $data['pouls']['series'][0]['points']['show'] = false;
 $data['pouls']['series'][0]['mouse']['track'] = false;
 
+$data['temperature']['title'] = htmlentities('Température');
+$data['temperature']['unit'] = htmlentities('°C');
 $data['temperature']['series'][0]['data'] = array(array(0, 37.5), array($n, 37.5));
 $data['temperature']['series'][0]['points']['show'] = false;
 $data['temperature']['series'][0]['mouse']['track'] = false;
+
+$data['spo2']['title'] = htmlentities('Spo2');
+$data['spo2']['unit'] = htmlentities('%');
 
 /*mbTrace(json_encode($data['ta']));
 mbTrace(json_encode($data['pouls']));
