@@ -105,7 +105,7 @@ initializeGraph(data.spo2, options);
 // And we put the the specific options
 data.ta.options.colors = ['silver', '#00A8F0', '#C0D800'];
 data.ta.options.yaxis.min = 0;
-data.ta.options.yaxis.max = 300;
+data.ta.options.yaxis.max = 30;
 
 data.pouls.options.colors = ['silver', 'black'];
 data.pouls.options.mouse.trackDecimals = 0;
