@@ -21,6 +21,10 @@ printDossierSoin = function(prescription_id, date){
 
 </table>
 {{if $prescription_id}}
+
+<h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
+
+
 <table>
   <tr>
     <td>
@@ -31,11 +35,6 @@ printDossierSoin = function(prescription_id, date){
   </tr>
 </table>
 
-<hr />
-
-<h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
-  
-  
 <table class="tbl">
   <tr>
     <th>Libelle</th>

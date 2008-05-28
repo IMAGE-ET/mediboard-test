@@ -384,6 +384,7 @@ Main.add(function () {
       {{if $isPrescriptionInstalled}}
       <div id="dossier_soins" style="display: none;">
         <div id="dossier_traitement"></div>
+        <hr />
         <div id="dossier_suivi"></div>
       </div>
       

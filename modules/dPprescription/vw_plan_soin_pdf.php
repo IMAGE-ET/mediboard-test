@@ -102,7 +102,7 @@ function prescriptionLine($pdf, $line, $date, $dates){
 }
 
 
-function calculEtatJour($date, $dates, $nb_jours, $line){
+function calculEtatJour($date, &$dates, &$nb_jours, $line){
 	$line_med_en_cours = 0;
 	// Cas des lignes non medicamenteuses 
   // Si pas de fin, juste valable pour le jour de debut
@@ -252,7 +252,7 @@ if($traitement->_id){
 	    $_line_traitement->_fin = $_line_traitement->date_arret;
 	  }
 	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
-	  calculEtatJour($date, &$dates, &$nb_jours, $_line_traitement);
+	  calculEtatJour($date, $dates, $nb_jours, $_line_traitement);
 	  if(!$nb_jours){
 	  	continue;
 	  }
@@ -276,7 +276,7 @@ foreach($prescription->_ref_prescription_lines as $line){
   if($line->debut <= $prescription->_ref_object->_entree){
   	$line->debut = mbDate($prescription->_ref_object->_entree);
   }
-	calculEtatJour($date, &$dates, &$nb_jours, $line);
+	calculEtatJour($date, $dates, $nb_jours, $line);
 	/*
   if(!$nb_jours){
   	continue;
@@ -302,7 +302,7 @@ foreach($prescription->_ref_prescription_lines_element as $_elt){
   if($_elt->debut < $prescription->_ref_object->_entree){
   	$_elt->debut = mbDate($prescription->_ref_object->_entree);
   }
-  calculEtatJour($date, &$dates, &$nb_jours, $_elt);
+  calculEtatJour($date, $dates, $nb_jours, $_elt);
   /*
   if(!$nb_jours){
   	continue;
