@@ -680,4 +680,7 @@ $locales['CConstantesMedicales-_imc'] = '';
 $locales['CConstantesMedicales-_imc-desc'] = '';
 $locales['CConstantesMedicales-_vst'] = '';
 $locales['CConstantesMedicales-_vst-desc'] = '';
+$locales['CConstantesMedicales-temperature'] = '';
+$locales['CConstantesMedicales-temperature-court'] = '';
+$locales['CConstantesMedicales-temperature-desc'] = '';
 ?>
