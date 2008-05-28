@@ -351,19 +351,19 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
-        <li><a href="#constantes-medicales">Constantes médicales</a></li>
+        <li><a href="#constantes-medicales">Constantes</a></li>
         
         {{if $isPrescriptionInstalled}}
-        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Dossier de soins</a></li>
-        <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescriptions</a></li>
+        <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Soins</a></li>
+        <li onclick="reloadAntAllergie(document.form_prescription.sejour_id.value)"><a href="#prescription_sejour">Prescription</a></li>
         {{/if}}
         
         {{if $app->user_prefs.ccam_sejour == 1 }}
-          <li><a href="#Actes">Gestion des actes</a></li>
+          <li><a href="#Actes">Cotation</a></li>
         {{/if}}
     
         {{if $isImedsInstalled}}
-          <li><a href="#Imeds">Résultats labo</a></li>
+          <li><a href="#Imeds">Labo</a></li>
         {{/if}}
     
         <li><a href="#documents">Documents</a></li>
