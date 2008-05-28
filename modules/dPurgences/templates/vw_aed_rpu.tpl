@@ -25,15 +25,36 @@ function verifNonEmpty(oElement){
 }
 
 function loadSuivi(sejour_id) {
-  var urlSuivi = new Url;
-  urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
-  urlSuivi.addParam("sejour_id", sejour_id);
-  urlSuivi.requestUpdate("suivisoins", { waitingText: null } );
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+  url.addParam("sejour_id", sejour_id);
+  url.requestUpdate("suivisoins", { waitingText: null } );
 }
 
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+}
+
+function cancelRPU() {
+  var oForm = document.editRPU;
+  var oElement = oForm._annule;
+  
+  if (oElement.value == "0") {
+    if (confirm("Voulez-vous vraiment annuler le dossier ?")) {
+      oElement.value = "1";
+      oForm.submit();
+      return;
+    }
+  }
+      
+  if (oElement.value == "1") {
+    if (confirm("Voulez-vous vraiment rétablir le dossier ?")) {
+      oElement.value = "0";
+      oForm.submit();
+      return;
+    }
+  }
 }
 
 function pageMain() {
@@ -58,6 +79,8 @@ function pageMain() {
 <input type="hidden" name="del" value="0" />
 <input type="hidden" name="rpu_id" value="{{$rpu->_id}}" />
 <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+<input type="hidden" name="_annule" value="{{$rpu->_annule|default:"0"}}" />
+
 <input type="hidden" name="_bind_sejour" value="1" />
 <a class="buttonnew" href="?m=dPurgences&amp;tab=vw_aed_rpu&amp;rpu_id=0">
   Ajouter un patient
@@ -66,17 +89,36 @@ function pageMain() {
   <tr>
     {{if $rpu->_id}}
     <th class="title modify" colspan="4">
-    <a style="float:right;" href="#" onclick="view_log('CRPU',{{$rpu->_id}})">
-      <img src="images/icons/history.gif" alt="historique" />
-    </a>
-    Modification de l'urgence de {{$rpu->_view}}
-    {{if $rpu->_ref_sejour->_num_dossier}}
-      [{{$rpu->_ref_sejour->_num_dossier}}]
-    {{/if}}
+	    <a style="float:right;" href="#" onclick="view_log('CRPU',{{$rpu->_id}})">
+	      <img src="images/icons/history.gif" alt="historique" />
+	    </a>
+
+	    <a class="action" style="float: right;" title="Modifier uniquement le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$sejour->_id}}">
+	      <img src="images/icons/edit.png" alt="modifier" />
+	    </a>
+
+	    Modification de du RPU {{$rpu->_view}}
+	    {{if $sejour->_num_dossier}}
+	      [{{$sejour->_num_dossier}}]
+	    {{/if}}
     </th>
     {{else}}
-    <th class="title" colspan="4">Création d'une urgence</th>
+    <th class="title" colspan="4">
+	    Création d'un RPU 
+	    {{if $sejour->_num_dossier}}
+	    	pour le dossier
+	      [{{$sejour->_num_dossier}}]
+	    {{/if}}
+	  </th>
     {{/if}}
+
+		{{if $rpu->_annule}}
+		<tr>
+		  <th class="category cancelled" colspan="4">
+		  {{tr}}CRPU-_annule{{/tr}}
+		  </th>
+		</tr>
+		{{/if}}
   </tr>
   
   <tr>
@@ -105,7 +147,7 @@ function pageMain() {
 		{{else}}
     <th>{{mb_label object=$rpu field="provenance"}}</th>
     <td>{{mb_field object=$rpu field="provenance" defaultOption="&mdash; Provenance"}}</td>
-	  {{/if}}	  
+	  {{/if}}
   </tr>
 
   <tr>
@@ -144,7 +186,11 @@ function pageMain() {
   <tr>
     <th>{{mb_label object=$rpu field="box_id"}}</th>
     <td>
-      {{include file="../../dPhospi/templates/inc_select_lit.tpl field=box_id selected_id=$rpu->box_id ajaxSubmit=0 listService=$listServicesUrgence}}
+      {{include file="../../dPhospi/templates/inc_select_lit.tpl 
+      		field=box_id 
+      		selected_id=$rpu->box_id 
+      		ajaxSubmit=0 
+      		listService=$listServicesUrgence}}
 		</td>
   </tr>
 
@@ -168,12 +214,22 @@ function pageMain() {
   <tr>
 		<td class="button" colspan="4">
 		  {{if $rpu->_id}}
-		  <button class="modify" type="submit">Valider</button>
-		  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">
-		    Supprimer
-		  </button>
+			  <button class="modify" type="submit">Valider</button>
+		    {{mb_ternary var=annule_text test=$sejour->annule value="Rétablir" other="Annuler"}}
+		    {{mb_ternary var=annule_class test=$sejour->annule value="change" other="cancel"}}
+		    
+		    <button class="{{$annule_class}}" type="button" onclick="cancelRPU();">
+		      {{$annule_text}}
+		    </button>
+		    
+		    {{if $can->admin}}
+				  <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'urgence ',objName:'{{$rpu->_view|smarty:nodefaults|JSAttribute}}'})">
+				    {{tr}}Delete{{/tr}}
+				  </button>
+				{{/if}}
+				    
 	    {{else}}
-	    <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
+		    <button class="submit" name="btnFuseAction" type="submit">{{tr}}Create{{/tr}}</button>
       {{/if}}
   	</td>
   </tr>

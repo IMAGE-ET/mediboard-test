@@ -217,4 +217,5 @@ $locales['CRPU-_attente-desc'] = '';
 $locales['CRPU-_presence'] = '';
 $locales['CRPU-_presence-court'] = '';
 $locales['CRPU-_presence-desc'] = '';
+$locales['CRPU-_annule'] = '';
 ?>

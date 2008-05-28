@@ -52,7 +52,10 @@ function initFields(mode_sortie){
 			          <option value="">&mdash; Choisir une aide</option>
 			          {{html_options options=$rpu->_aides.diag_infirmier.no_enum}}
 			        </select>
-			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">{{tr}}New{{/tr}}</button><br />  
+			        <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CRPU', this.form.diag_infirmier)">
+			        	{{tr}}New{{/tr}}
+			        </button>
+			        <br />  
 			        </td>
 				  </tr>
 				  

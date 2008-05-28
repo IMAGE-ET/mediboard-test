@@ -1184,7 +1184,7 @@ class CMbObject {
       if (!$backSpec->cascade) {
         continue;
       }
-      
+            
       // Cas de l'interdiction de la non liaison des backRefs
       if ($backSpec->unlink) {
         continue; 
@@ -1198,7 +1198,9 @@ class CMbObject {
       }
 
       foreach ($backObject->loadMatchingList() as $object) {
-        $object->delete();
+        if ($msg = $object->delete()) {
+          return $msg;
+        }
       }
     }
     

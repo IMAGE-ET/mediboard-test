@@ -51,6 +51,7 @@ class CRPU extends CMbObject {
   
   // Sejour
   var $_responsable_id = null;
+  var $_annule         = null;
   var $_entree         = null;
   var $_DP             = null;
   var $_DAS            = null;
@@ -129,6 +130,7 @@ class CRPU extends CMbObject {
     $this->_responsable_id = $sejour->praticien_id;
     $this->_entree         = $sejour->_entree;
     $this->_DP             = $sejour->DP;
+    $this->_annule         = $sejour->annule;
     
     $patient =& $sejour->_ref_patient;
     
@@ -140,18 +142,22 @@ class CRPU extends CMbObject {
     
     
     // Calcul des valeurs de _mode_sortie
-    if($this->_ref_sejour->mode_sortie == "transtert" && $this->mutation_sejour_id){
+    if ($this->_ref_sejour->mode_sortie == "transtert" && $this->mutation_sejour_id) {
     	$this->_mode_sortie = 6;
     }
-    if($this->_ref_sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id){
+    
+    if ($this->_ref_sejour->mode_sortie == "transfert" && !$this->mutation_sejour_id) {
     	$this->_mode_sortie = 7; 
     }
-    if($this->_ref_sejour->mode_sortie == "normal"){
+    
+    if ($this->_ref_sejour->mode_sortie == "normal") {
     	$this->_mode_sortie = 8;
     }
-    if($this->_ref_sejour->mode_sortie == "deces"){
+    
+    if ($this->_ref_sejour->mode_sortie == "deces") {
     	$this->_mode_sortie = 9;
     }
+    
     $this->_sortie = $this->_ref_sejour->sortie_reelle;
     $this->_etablissement_transfert_id = $this->_ref_sejour->etablissement_transfert_id;
   }
@@ -221,7 +227,8 @@ class CRPU extends CMbObject {
     $sejour->entree_prevue = $this->_entree;
     $sejour->entree_reelle = $this->_entree;
     $sejour->sortie_prevue = mbDate(null, $this->_entree)." 23:59:59";
-    
+    $sejour->annule        = $this->_annule;
+        
     if ($msg = $sejour->store()) {
       return $msg;
     }
@@ -242,16 +249,6 @@ class CRPU extends CMbObject {
     }
     
     $this->_ref_sejour->onStore();
-  }
-  
-  function delete() {
-    if ($msg = parent::delete()) {
-      return $msg;
-    }
-    
-    // @TODO: N'est-ce pas un cascaded
-    $this->loadRefsFwd();
-    return $this->_ref_sejour->delete();
   }
 }
 ?>

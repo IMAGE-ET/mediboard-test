@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m, $tab, $g;
 
 $can->needsRead();
 
@@ -17,14 +17,26 @@ $user = new CMediusers();
 $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
 $listPrats        = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
-$rpu_id = mbGetValueFromGetOrSession("rpu_id");
 $rpu    = new CRPU;
-$rpu->load($rpu_id);
+$rpu_id = mbGetValueFromGetOrSession("rpu_id");
+
+// Création d'un RPU pour un séjour existant
+if ($sejour_id = mbGetValueFromGet("sejour_id")) {
+  $rpu_id = null;
+  $rpu->sejour_id = $sejour_id;
+  $rpu->updateFormFields();
+}
+
+if ($rpu_id && !$rpu->load($rpu_id)) {
+  $AppUI->setMsg("Ce RPU n'est pas ou plus disponible", UI_MSG_WARNING);
+  $AppUI->redirect("m=$m&tab=$tab&rpu_id=0");
+}
+
 
 // Chargement des aides a la saisie
 $rpu->loadAides($AppUI->user_id);
 
-if($rpu->_id) {
+if ($rpu->_id || $rpu->sejour_id) {
   $sejour  = $rpu->_ref_sejour;
   $patient = $sejour->_ref_patient;
   $patient->loadStaticCIM10($AppUI->user_id);
@@ -34,7 +46,8 @@ if($rpu->_id) {
   // Chargement du numero de dossier ($_num_dossier)
   $sejour->loadNumDossier();
   
-} else {
+} 
+else {
   $rpu->_responsable_id = $AppUI->user_id;
   $rpu->_entree         = mbDateTime();
   $sejour               = new CSejour;
