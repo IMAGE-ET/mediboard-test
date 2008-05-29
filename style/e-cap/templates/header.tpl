@@ -104,7 +104,8 @@ var Menu = {
       <table>
         <tr>
           <td class="logo">
-            <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" />
+            {{thumb src="images/pictures/mbNormal.gif" w="140" f="png"}}
+            <!-- <img src="./style/{{$uistyle}}/images/pictures/e-cap.jpg" alt="eCap logo" /> -->
           </td>
           <td width="1%">
             {{if !$offline}}
