@@ -22,6 +22,13 @@ $prescription_id = mbGetValueFromGet("prescription_id");
 // chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
+$prescription->loadRefsLinesElement();
+
+$elements = array();
+foreach($prescription->_ref_prescription_lines_element as $_line_element){
+	$elements[] = $_line_element->element_prescription_id; 
+}
+
 
 if($prescription->_ref_object->_class_name == "CSejour"){
 	// Chargement des dates des operations
@@ -35,11 +42,12 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 // chargement des medicaments favoris du praticien
 $medicaments = CPrescription::getFavorisMedPraticien($prescription->_current_praticien_id);
 
-$filter_line_element = new CPrescriptionLineElement();
+$filter_line_element = new CPrescriptionLineMedicament();
 $filter_line_element->debut = mbDate();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("elements", $elements);
 $smarty->assign("chapitres", $chapitres);
 $smarty->assign("filter_line_element", $filter_line_element);
 $smarty->assign("moments", $moments);

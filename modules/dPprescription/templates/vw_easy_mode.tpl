@@ -21,22 +21,6 @@ changeButton = function(oButton, element_id, oTokenField, modeCategorie){
   }
 }
 
-Main.add( function(){
-  // Initialisation des onglets
-  menuTabs = Control.Tabs.create('main_tab_group', false); 
-  // Initialisation des TokenFields
-  oMedField = new TokenField(document.add_med_element.token_med); 
-  oEltField = new TokenField(document.add_med_element.token_elt); 
-  
-  // Modification du praticien_id si celui-ci est spécifié
-  if(window.opener.document.selPraticienLine){
-    var oFormPraticien = window.opener.document.selPraticienLine;
-    var oForm = document.add_med_element;
-    oForm.praticien_id.value = oFormPraticien.praticien_id.value;
-  }
-} );
-
-
 // Ajout de tous les elements d'une categorie
 function addCategorie(categorie_id, oTokenField){
   // Parcours de tous les boutons
@@ -48,17 +32,26 @@ function addCategorie(categorie_id, oTokenField){
 }
 
 function resetModeEasy(){
+  $$('button').each( function(oButton) {
+    if(oButton.hasClassName('cancel') && !oButton.hasClassName("med") && oButton.getStyle("opacity") != "0.3" && oButton.id != "editDates-mode_grille-_"){
+      oButton.setOpacity(0.3);
+      oButton.onclick = null;
+
+      ids = oButton.id.split("-");
+      id = ids[1];
+      $('label-'+id).onclick = null;
+    }
+    
+    if(oButton.hasClassName("med") && oButton.hasClassName("cancel")){
+      oButton.removeClassName("cancel");
+      oButton.addClassName("tick");
+    }
+  });
+  
+  
   var oFormToken = document.add_med_element;
   oFormToken.token_med.value = '';
   oFormToken.token_elt.value = '';
-  $$('button').each( function(oButton) {
-    if(oButton.id != "editDates-mode_grille-_"){
-    if(oButton.hasClassName('cancel')){
-      oButton.removeClassName('cancel');
-      oButton.addClassName('tick');
-    }
-    }
-  }); 
 }
 
 function submitAllElements(){
@@ -96,6 +89,40 @@ function submitAllElements(){
   submitFormAjax(oForm,'systemMsg');
   resetModeEasy();
 }
+
+
+Main.add( function(){
+  // Initialisation des onglets
+  menuTabs = Control.Tabs.create('main_tab_group', false); 
+  // Initialisation des TokenFields
+  oMedField = new TokenField(document.add_med_element.token_med); 
+  oEltField = new TokenField(document.add_med_element.token_elt); 
+  
+  // Modification du praticien_id si celui-ci est spécifié
+  if(window.opener.document.selPraticienLine){
+    var oFormPraticien = window.opener.document.selPraticienLine;
+    var oForm = document.add_med_element;
+    oForm.praticien_id.value = oFormPraticien.praticien_id.value;
+  }
+  
+  // Affichage des elements deja dans la prescription
+	var elements = {{$elements|@json}};
+	$$('button').each( function(oButton) {
+	  if(!oButton.hasClassName("cat")){
+		  var _id = oButton.id;
+		  var elts = _id.split("-");
+		  var id = elts[1];
+		  if(elements.include(id)){
+		    oButton.removeClassName("tick");
+		    oButton.addClassName("cancel");
+		    oButton.setOpacity(0.3);
+		    oButton.onclick = null;
+		    $('label-'+id).onclick = null;
+		  }
+	  }
+	}); 
+} );
+
 
 </script>
 
@@ -180,7 +207,7 @@ function submitAllElements(){
 		        <td style="width: 1%;">
 		          <button name="med-{{$medicament->code_cip}}"
 		                  id="med-{{$medicament->code_cip}}" 
-		                  class="tick notext" 
+		                  class="tick notext med" 
 		                  onclick="changeButton(this,'{{$medicament->code_cip}}',oMedField);"></button>
 		        </td>
 		        <td>
@@ -197,7 +224,7 @@ function submitAllElements(){
 		      <tr>
 		        <th colspan="{{$numCols*2}}">{{$categorie->_view}}
 		          {{assign var=categorie_id value=$categorie->_id}}
-		          <button  id="cat-{{$categorie->_id}}" class="tick"  style="position: absolute; right: 12px; margin-top: -2px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
+		          <button  id="cat-{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -2px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
 		          Ajouter tous les éléments de la catégorie
 		          </button>
 		        </th>
@@ -213,7 +240,7 @@ function submitAllElements(){
 		                  onclick="changeButton(this,'{{$element->_id}}',oEltField);"></button>     
             </td>
             <td>		         
-              <label for="elt-{{$element->_id}}" onclick="changeButton($('elt-{{$element->_id}}'),'{{$element->_id}}',oEltField);">{{$element->_view}}</label>
+              <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}" onclick="changeButton($('elt-{{$element->_id}}'),'{{$element->_id}}',oEltField);">{{$element->_view}}</label>
 		        </td>
 		        {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
 		      {{/foreach}}
