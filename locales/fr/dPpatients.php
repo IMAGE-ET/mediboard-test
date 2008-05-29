@@ -686,4 +686,7 @@ $locales['CConstantesMedicales-_vst-desc'] = 'Volume Sanguin Total du patient';
 $locales['CConstantesMedicales-temperature'] = 'Température';
 $locales['CConstantesMedicales-temperature-court'] = 'Temp.';
 $locales['CConstantesMedicales-temperature-desc'] = 'Température du patient';
+$locales['CConstantesMedicales-datetime'] = 'Date';
+$locales['CConstantesMedicales-datetime-court'] = 'Date';
+$locales['CConstantesMedicales-datetime-desc'] = 'Date de mesure';
 ?>

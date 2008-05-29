@@ -683,4 +683,7 @@ $locales['CConstantesMedicales-_vst-desc'] = '';
 $locales['CConstantesMedicales-temperature'] = '';
 $locales['CConstantesMedicales-temperature-court'] = '';
 $locales['CConstantesMedicales-temperature-desc'] = '';
+$locales['CConstantesMedicales-datetime'] = '';
+$locales['CConstantesMedicales-datetime-court'] = '';
+$locales['CConstantesMedicales-datetime-desc'] = '';
 ?>
