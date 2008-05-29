@@ -4,47 +4,44 @@
  
 <script type="text/javascript">
 
-changeButton = function(oButton, element_id, oTokenField, modeCategorie){
-  // Ajout
-  if(oButton.hasClassName("tick")){
+changeButton = function(oCheckbox, element_id, oTokenField, modeCategorie){
+  if(oCheckbox.checked){
     oTokenField.add(element_id);
-    oButton.removeClassName('tick');
-    oButton.addClassName('cancel');
-    return;
-  }
-  // Suppression
-  if(oButton.hasClassName('cancel') && !modeCategorie){
+  } else {
     oTokenField.remove(element_id);
-    oButton.removeClassName('cancel');
-    oButton.addClassName('tick');
-    return;
   }
 }
 
 // Ajout de tous les elements d'une categorie
 function addCategorie(categorie_id, oTokenField){
   // Parcours de tous les boutons
-  $$('button.cat-'+categorie_id).each( function(button) {
-    elt = button.id;
+  $$('input.cat-'+categorie_id).each( function(oCheckbox) {
+    elt = oCheckbox.id;
     elts = elt.split("-");
-    changeButton(button, elts[1], oTokenField, "1");
+    id  = elts[1];
+    
+    // Si element pas encore selectionné
+    if(!oCheckbox.checked){
+      oCheckbox.checked = true;
+      oTokenField.add(id);
+    }
   }); 
 }
 
 function resetModeEasy(){
-  $$('button').each( function(oButton) {
-    if(oButton.hasClassName('cancel') && !oButton.hasClassName("med") && oButton.getStyle("opacity") != "0.3" && oButton.id != "editDates-mode_grille-_"){
-      oButton.setOpacity(0.3);
-      oButton.onclick = null;
-
-      ids = oButton.id.split("-");
-      id = ids[1];
-      $('label-'+id).onclick = null;
-    }
-    
-    if(oButton.hasClassName("med") && oButton.hasClassName("cancel")){
-      oButton.removeClassName("cancel");
-      oButton.addClassName("tick");
+  $$('input').each( function(oCheckbox) {
+    if(oCheckbox.checked){
+      if(!oCheckbox.hasClassName("med")){
+	      elt = oCheckbox.id;
+	      elts = elt.split("-");
+	      id = elts[1];
+	      
+	      oCheckbox.disabled = true;
+			  oCheckbox.setOpacity(0.6);
+			  $('label-'+id).setOpacity(0.6);
+		  } else {
+		    oCheckbox.checked = false;
+		  }
     }
   });
   
@@ -105,19 +102,18 @@ Main.add( function(){
     oForm.praticien_id.value = oFormPraticien.praticien_id.value;
   }
   
-  // Affichage des elements deja dans la prescription
+  // Elements deja dans la prescription
 	var elements = {{$elements|@json}};
-	$$('button').each( function(oButton) {
-	  if(!oButton.hasClassName("cat")){
-		  var _id = oButton.id;
+	$$('input').each( function(oCheckbox) {
+	  if(!oCheckbox.hasClassName("cat")){
+		  var _id = oCheckbox.id;
 		  var elts = _id.split("-");
 		  var id = elts[1];
 		  if(elements.include(id)){
-		    oButton.removeClassName("tick");
-		    oButton.addClassName("cancel");
-		    oButton.setOpacity(0.3);
-		    oButton.onclick = null;
-		    $('label-'+id).onclick = null;
+		    oCheckbox.checked = true;
+		    oCheckbox.disabled = true;
+		    oCheckbox.setOpacity(0.6);
+		    $('label-'+id).setOpacity(0.6);
 		  }
 	  }
 	}); 
@@ -205,13 +201,13 @@ Main.add( function(){
 		  {{foreach from=$medicaments item=medicament name=meds}}
 		    {{assign var=i value=$smarty.foreach.meds.iteration}}
 		        <td style="width: 1%;">
-		          <button name="med-{{$medicament->code_cip}}"
-		                  id="med-{{$medicament->code_cip}}" 
-		                  class="tick notext med" 
-		                  onclick="changeButton(this,'{{$medicament->code_cip}}',oMedField);"></button>
+		          
+		          <input type="checkbox" name="med-{{$medicament->code_cip}}"
+		                 class="med"
+		                 onclick="changeButton(this,'{{$medicament->code_cip}}',oMedField);" />
 		        </td>
 		        <td>
-		          <label for="med-{{$medicament->code_cip}}" onclick="changeButton($('med-{{$medicament->code_cip}}'),'{{$medicament->code_cip}}',oMedField);">{{$medicament->libelle}}</label>
+		          <label for="med-{{$medicament->code_cip}}">{{$medicament->libelle}}</label>
 		        </td>
 		     {{if ((($i % 2) == 0))}}</tr>{{if !$smarty.foreach.meds.last}}<tr>{{/if}}{{/if}}
 		  {{/foreach}}
@@ -235,12 +231,12 @@ Main.add( function(){
 		      {{foreach from=$categorie->_ref_elements_prescription item=element name=elements}}
 		        {{assign var=i value=$smarty.foreach.elements.iteration}}
 		        <td style="width: 1%;">
-		          <button name="elt-{{$element->_id}}" id="elt-{{$element->_id}}" 
-		                  class="cat-{{$categorie->_id}} tick notext" 
-		                  onclick="changeButton(this,'{{$element->_id}}',oEltField);"></button>     
+		          <input type="checkbox" name="elt-{{$element->_id}}"
+		                  class="cat-{{$categorie->_id}}" 
+		                  onclick="changeButton(this,'{{$element->_id}}',oEltField);" />    
             </td>
             <td>		         
-              <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}" onclick="changeButton($('elt-{{$element->_id}}'),'{{$element->_id}}',oEltField);">{{$element->_view}}</label>
+              <label id="label-{{$element->_id}}" for="elt-{{$element->_id}}">{{$element->_view}}</label>
 		        </td>
 		        {{if (($i % $numCols) == 0)}}</tr>{{if !$smarty.foreach.elements.last}}<tr>{{/if}}{{/if}}
 		      {{/foreach}}
