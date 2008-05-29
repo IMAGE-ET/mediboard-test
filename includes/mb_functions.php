@@ -585,6 +585,7 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("lib/flotr/flotr/flotr.debug-0.1.0alpha.js", $modeReturn);
+  $affichageScript .= mbLoadScript("lib/flotr/flotr/lib/excanvas.js", $modeReturn); // for IE
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);

@@ -100,7 +100,7 @@ function popupOrder(iOrderId, width, height, bAutofill) {
 
 function popupOrderForm(iOrderId, width, height) {
   width = width || 500;
-  height = weight || 500;
+  height = height || 500;
 
   var url = new Url();
   url.setModuleAction("dPstock", "vw_order_form");

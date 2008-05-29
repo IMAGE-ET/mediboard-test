@@ -351,7 +351,7 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
-        <li><a href="#constantes-medicales">Constantes</a></li>
+        <li onclick="refreshConstantesMedicales({{$object->_id}})"><a href="#constantes-medicales">Constantes</a></li>
         
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Soins</a></li>

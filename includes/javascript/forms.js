@@ -342,6 +342,9 @@ Element.addMethods({
 } );
 
 function prepareForm(oForm, bForcePrepare) {
+  if (Object.isString(oForm)) {
+    oForm = document.forms[oForm];
+  }
   oForm = $(oForm);
 
   // If this form hasn't been prepared yet

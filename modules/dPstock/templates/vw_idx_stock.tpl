@@ -70,7 +70,7 @@ Main.add(function () {
       </tr>
       <tr>
         <th>{{mb_label object=$stock field="order_threshold_critical"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_critical" form="edit_stock" increment="1"}}</td>
+        <td>{{mb_field object=$stock field="order_threshold_critical" form="edit_stock" increment="1" min=0}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$stock field="order_threshold_min"}}</th>
@@ -78,7 +78,7 @@ Main.add(function () {
       </tr>
       <tr>
         <th>{{mb_label object=$stock field="order_threshold_optimum"}}</th>
-        <td>{{mb_field object=$stock field="order_threshold_optimum" form="edit_stock" increment="1"}}</td>
+        <td>{{mb_field object=$stock field="order_threshold_optimum" form="edit_stock" increment="1" min=0}}</td>
       </tr>
       <tr>
         <th>{{mb_label object=$stock field="order_threshold_max"}}</th>
