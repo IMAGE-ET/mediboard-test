@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.68";
+$config["mod_version"]     = "0.69";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -802,7 +802,13 @@ class CSetupdPpatients extends CSetup {
     $sql = 'ALTER TABLE `constantes_medicales` ADD `temperature` FLOAT';
     $this->addQuery($sql);
     
-    $this->mod_version = "0.68";
+    $this->makeRevision("0.68");
+    $sql = "ALTER TABLE `patients` 
+	  				ADD `code_sit` MEDIUMINT (4) UNSIGNED ZEROFILL,
+  					ADD `regime_am` ENUM ('0','1');";
+    $this->addQuery($sql);
+  	
+    $this->mod_version = "0.69";
   }
 }
 

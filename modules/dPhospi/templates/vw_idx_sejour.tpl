@@ -178,7 +178,8 @@ Main.add(function () {
         <tr>
           {{include file="../../dPhospi/templates/inc_mode_hospi.tpl"}}
         </tr>
-        {{if !$praticien || $anesthesiste}}
+
+        {{if 1 || !$praticien || $anesthesiste}}
         <tr>
           <td>
             {{if $m == "dPhospi" || $anesthesiste}}
@@ -213,6 +214,7 @@ Main.add(function () {
           </td>
         </tr>
         {{/if}}
+        
         <tr>
           <td>
             <table class="tbl">
