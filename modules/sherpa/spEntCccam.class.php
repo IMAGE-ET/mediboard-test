@@ -137,8 +137,7 @@ class CSpEntCCAM extends CSpObject {
     $this->malnum = $idPatient->id400;
     
     // Dates
-    switch ($mbObject->_class_name) {
-      case "COperation":
+    if ($mbObject instanceof COperation) {
       $operation =& $mbObject;
 	    $operation->loadRefPlageOp();
 	    $date = mbDate($operation->_datetime);
@@ -154,7 +153,6 @@ class CSpEntCCAM extends CSpObject {
 	    $fin_int = mbGetValue($operation->sortie_salle, "00:00:00");
 	    $this->debint = mbDateToLocale("$date $deb_int");
 	    $this->finint = mbDateToLocale("$date $fin_int");
-	    break;
     }
     
     // Chirurgien
@@ -163,23 +161,19 @@ class CSpEntCCAM extends CSpObject {
     $this->pracod = $idPrat->id400;
 	    
     // Anesthésiste 
-    switch ($mbObject->_class_name) {
-      case "COperation":
+    if ($mbObject instanceof COperation) {
       $operation =& $mbObject;
-
-      // Déjà chargé par la plage op
-	    if ($operation->anesth_id) {
-		    $idAnesth = CSpObjectHandler::getId400For($operation->_ref_anesth);
-		    $this->codane = $idAnesth->id400;
-	    }
-	    
-      break;
+			
+			 // Déjà chargé par la plage op
+			if ($operation->anesth_id) {
+	      $idAnesth = CSpObjectHandler::getId400For($operation->_ref_anesth);
+			  $this->codane = $idAnesth->id400;
+			}
     }
 	    
     // Salle de l'intervention
     if ($mbObject instanceof COperation) {
       $operation =& $mbObject;
-      $operation->updateSalle();
       if ($operation->_ref_salle->_id) {
 		    $idSalle = CSpObjectHandler::getId400For($operation->_ref_salle);
 		    $this->codsal = $idSalle->id400;
