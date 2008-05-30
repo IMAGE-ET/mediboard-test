@@ -96,7 +96,7 @@ function printResultsCatalogue($catalogue, &$pdf) {
       $pdf->Cell(30,7,utf8_encode($_item->resultat),1,0,'L',0);
       if($analyse->type == "num") {
         $pdf->Cell(20,7,utf8_encode($analyse->unite),1,0,'L',0);
-        $pdf->Cell(20,7,utf8_encode($analyse->min - $analyse->max),1,0,'L',0);
+        $pdf->Cell(20,7,utf8_encode("$analyse->min - $analyse->max"),1,0,'L',0);
       } else {
         $pdf->Cell(40,7,utf8_encode($analyse->type),1,0,'L',0);
       }
