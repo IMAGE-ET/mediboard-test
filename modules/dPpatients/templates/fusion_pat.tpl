@@ -1,14 +1,14 @@
 {{mb_include_script module=system script="mb_object"}}
 
 <script type="text/javascript">
-function setField(oField, sValue) {
-  oField.value = sValue;
-}
-
 Main.add(function () {
   var tabs = Control.Tabs.create('tab-fusion', false);
 });
 </script>
+
+{{assign var=object1 value=$patient1}}
+{{assign var=object2 value=$patient2}}
+{{assign var=object_final value=$finalPatient}}
 
 <h2 class="module {{$m}}">Fusion de patients</h2>
 

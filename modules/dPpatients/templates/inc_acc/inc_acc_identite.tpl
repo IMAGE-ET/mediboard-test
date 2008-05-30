@@ -141,7 +141,6 @@
 
     </td>
   </tr>
-
   <tr>
     <td class="text">
     	<div class="big-info" id="copie-identite">
@@ -154,10 +153,9 @@
         	$("copie-identite")[document.editFrm.rang_beneficiaire.value == "01" ? "show" : "hide"]();
         }
         
-        showCopieIdentite()
+        showCopieIdentite();
       </script>
     </td>
-
     <td class="text">
     	<div class="big-info" id="copie-coordonnees">
     	  Les champs de correspondance du patient sont <strong>systématiquement recopiés</strong> vers 
@@ -165,5 +163,4 @@
     	</div>
     </td>
 	</tr>
-
 </table>
