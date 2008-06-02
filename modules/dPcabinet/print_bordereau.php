@@ -37,18 +37,17 @@ $montantTotal = 0;
 
 $where = array();
 $where['reglement.mode']     = "= 'cheque' ";
-$where['reglement.date']     = "BETWEEN '$date_min' AND '$date_max' ";
-$where['reglement.emetteur'] = "= 'patient'";
+$where['reglement.date']     = "BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59' ";
 
 $ljoin = array();
-$ljoin['consultation']       = 'consultation.consultation_id = reglement.consultation_id';
+$ljoin['consultation']       = "consultation.consultation_id = reglement.consultation_id";
 
 if ($praticien->_id) {
   $where['plageconsult.chir_id'] = "= '$praticien->_id'";
-  $ljoin['plageconsult']         = 'plageconsult.plageconsult_id = consultation.plageconsult_id';
+  $ljoin['plageconsult']         = "plageconsult.plageconsult_id = consultation.plageconsult_id";
 }
 
-$orderby = 'reglement.date ASC';
+$orderby = "reglement.date ASC";
 
 // Recherche des reglements
 $reglement = new CReglement();
