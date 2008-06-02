@@ -409,7 +409,7 @@ class COperation extends CCodable {
     }
     
 	  // Evite de recharger la salle quand ce n'est pas nécessaire  
-    if (!$this->_deplacee) {
+    if ($this->plageop_id && !$this->_deplacee) {
       $this->_ref_salle =& $this->_ref_plageop->_ref_salle;
     }
     else {

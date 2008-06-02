@@ -30,20 +30,20 @@ $prescription_sejour = new CPrescription();
 $anesthesiste = $userCourant->isFromType(array("Anesthésiste"));
 $praticien    = $userCourant->isPraticien();
 
-if($praticien && !$service_id && !$praticien_id) {
+if ($praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
 }
 
-if($praticien_id){
+if ($praticien_id) {
 	$mode = 1;
 	$service_id = "";
 }
 
-if($service_id){
+if ($service_id) {
 	$praticien_id = "";
 }
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id",0);
+$sejour_id = mbGetValueFromGetOrSession("sejour_id");
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;

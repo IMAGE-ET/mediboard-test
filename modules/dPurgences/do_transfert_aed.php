@@ -79,7 +79,7 @@ viewMsg($msg, "msg-CConsultation-title-modify");
 // Sauvegarde du RPU
 $rpu->orientation = "HO";
 $rpu->mutation_sejour_id = $sejour->_id;
-$rpu->GEMSA = "4";
+$rpu->gemsa = "4";
 $msg = $rpu->store();
 viewMsg($msg, "msg-CRPU-title-close");
 
