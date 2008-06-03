@@ -26,8 +26,8 @@ class CMbSemaphore {
   
   /**
    * Acquire the semaphore by putting a lock on it
-   * @param float $timeout the max time in secondes to acquire the semaphore
-   * @param float $step the step between each acquire attemp in seconds
+   * @param float $timeout the max time in seconds to acquire the semaphore (max 10s)
+   * @param float $step the step between each acquire attempt in seconds (max 10s)
    * @return boolean the job is done
    */
   function acquire($timeout = 5, $step = 0.1) {
@@ -38,10 +38,7 @@ class CMbSemaphore {
       usleep($step);
       $i += $step;
     }
-    if($i >= $timeout) {
-      return false;
-    }
-    return true;
+    return $i < $timeout;
   }
   
   /**
