@@ -21,7 +21,7 @@ class CMbSemaphore {
   function __construct($key) {
     $lockPath = CAppUI::conf("root_dir")."/tmp/locks";
     CMbPath::forceDir($lockPath);
-    $this->file = fopen("$lockPath/$file", "w+");
+    $this->key = fopen("$lockPath/$key", "w+");
   }
   
   /**
@@ -32,8 +32,8 @@ class CMbSemaphore {
    */
   function aquire($timeout = 5, $step = 0.1) {
     $i       = 0;
-    $timeout = intval(max($timeout, 10) * 1000000);
-    $step    = intval(max($step   , 10) * 1000000);
+    $timeout = intval(min($timeout, 10) * 1000000);
+    $step    = intval(min($step   , 10) * 1000000);
     while(!flock($this->key, LOCK_EX + LOCK_NB) && $i < $timeout) {
       usleep($step);
       $i += $step;
