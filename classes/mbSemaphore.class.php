@@ -25,12 +25,12 @@ class CMbSemaphore {
   }
   
   /**
-   * Aquire the semaphore by putting a lock on it
-   * @param float $timeout the max time in secondes to aquire the semaphore
-   * @param float $step the step between each aquire attemp in seconds
+   * Acquire the semaphore by putting a lock on it
+   * @param float $timeout the max time in secondes to acquire the semaphore
+   * @param float $step the step between each acquire attemp in seconds
    * @return boolean the job is done
    */
-  function aquire($timeout = 5, $step = 0.1) {
+  function acquire($timeout = 5, $step = 0.1) {
     $i       = 0;
     $timeout = intval(min($timeout, 10) * 1000000);
     $step    = intval(min($step   , 10) * 1000000);
