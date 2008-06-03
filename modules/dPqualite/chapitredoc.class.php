@@ -30,11 +30,12 @@ class CChapitreDoc extends CMbObject {
   // Other fields
   var $_level = null;
   var $_path = null;
-
-  function CChapitreDoc() {
-    $this->CMbObject("doc_chapitres", "doc_chapitre_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'doc_chapitres';
+    $spec->key   = 'doc_chapitre_id';
+    return $spec;
   }
   
   function getBackRefs() {

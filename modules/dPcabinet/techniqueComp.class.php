@@ -21,10 +21,11 @@ class CTechniqueComp extends CMbObject {
   // Fwd References
   var $_ref_consult_anesth = null;
   
-  function CTechniqueComp() {
-    $this->CMbObject("techniques_anesth", "technique_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'techniques_anesth';
+    $spec->key   = 'technique_id';
+    return $spec;
   }
   
   function getSpecs() {

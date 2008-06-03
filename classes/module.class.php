@@ -6,10 +6,8 @@
  * @version $Revision: $
  * @author Romain Ollivier
 */
- 
-global $AppUI, $m;
 
-require_once($AppUI->getSystemClass("mbobject"));
+require_once(CAppUI::getSystemClass("mbobject"));
 
 if(!defined("TAB_READ")) {
   define("TAB_READ"  , "0");
@@ -49,6 +47,13 @@ class CModule extends CMbObject {
   // Static Collections
   var $_registered = array();
 
+  function CModule() {
+    parent::__construct();
+   
+    // Hack to simulate the activeness of the class which has no real module 
+    $this->_ref_module = $this;
+  }
+  
 	/**
 	 * Get all classes for a given module
 	 * @param $module string Module name
@@ -70,12 +75,12 @@ class CModule extends CMbObject {
 	  	}
 	  	return $tabClass;
 	}
-	  
-  function CModule() {
-    $this->CMbObject("modules", "mod_id");
-   
-    // Hack to simulate the activeness of the class which has no real module 
-    $this->_ref_module = $this;
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'modules';
+    $spec->key   = 'mod_id';
+    return $spec;
   }
   
   function getBackRefs() {
@@ -224,7 +229,6 @@ class CModule extends CMbObject {
     $actionType = "tab";
     
     // Show template
-    require_once($AppUI->getSystemClass("smartydp"));
     $smartyStyle = new CSmartyDP("style/$uistyle");
     $smartyStyle->assign("tabs"   , $this->_tabs);
     $smartyStyle->assign("tab"    , $tab);
@@ -239,7 +243,7 @@ class CModule extends CMbObject {
   }
   
   function showAction() {
-    global $AppUI, $u, $a, $action, $actionType;
+    global $u, $a, $action, $actionType;
     $action     = $a;
     $actionType = "a";
     $actionPath = "./modules/$this->mod_name/";

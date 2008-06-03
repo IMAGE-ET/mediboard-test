@@ -39,10 +39,11 @@ class CEtabExterne extends CMbObject {
   var $_fax4        = null;
   var $_fax5        = null;
   
-  function CEtabExterne() {
-    $this->CMbObject("etab_externe", "etab_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'etab_externe';
+    $spec->key   = 'etab_id';
+    return $spec;
   }
   
   function getBackRefs() {

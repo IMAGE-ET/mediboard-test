@@ -28,10 +28,11 @@ class CExamNyha extends CMbObject {
   // Form fields
   var $_classeNyha  = null;
   
-  function CExamNyha() {
-    $this->CMbObject("examnyha", "examnyha_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'examnyha';
+    $spec->key   = 'examnyha_id';
+    return $spec;
   }
   
   function getSpecs() {

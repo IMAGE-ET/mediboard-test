@@ -4,7 +4,7 @@
 	  <input type="hidden" name="m" value="dPprescription" />
 	  <input type="hidden" name="dosql" value="{{$dosql}}" />
 	  <input type="hidden" name="del" value="0" />
-	  <input type="hidden" name="{{$line->_tbl_key}}" value="{{$line->_id}}" />
+	  <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
 	  <input type="text" name="commentaire" {{if $line->_traitement}}size="60"{{else}}size="90"{{/if}} value="{{$line->commentaire}}" onchange="this.form.onsubmit();" />
 	</form>
 {{else}}

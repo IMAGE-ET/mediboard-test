@@ -30,10 +30,11 @@ class CListeChoix extends CMbObject {
   var $_ref_function = null;
   var $_ref_modele   = null;
 
-  function CListeChoix() {
-    $this->CMbObject("liste_choix", "liste_choix_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'liste_choix';
+    $spec->key   = 'liste_choix_id';
+    return $spec;
   }
 
   function getSpecs() {

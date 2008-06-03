@@ -22,10 +22,11 @@ class CAssociationMoment extends CMbObject {
   
   var $_ref_moment_unitaire = null;
   
-  function CAssociationMoment() {
-    $this->CMbObject("association_moment", "association_moment_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'association_moment';
+    $spec->key   = 'association_moment_id';
+    return $spec;
   }
   
   function getSpecs() {

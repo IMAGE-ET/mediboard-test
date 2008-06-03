@@ -63,10 +63,11 @@ class CPermission extends CMbObject {
   var $_item_read = null;
   var $_item_edit = null;
   
-  function CPermission() {
-    $this->CMbObject("permissions", "permission_id");
-    
-    $this->loadRefModule("admin");
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'permissions';
+    $spec->key   = 'permission_id';
+    return $spec;
   }
   
   function updateFormFields() {

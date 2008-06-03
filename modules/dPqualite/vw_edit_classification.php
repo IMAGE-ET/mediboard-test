@@ -18,7 +18,6 @@ $etablissement = mbGetValueFromGetOrSession("etablissement", $g);
 $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
-require_once( $AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("etablissements", $etablissements);

@@ -26,9 +26,11 @@ class CProductReference extends CMbObject {
   // Form fields
   var $_unit_price   = null;
 
-  function CProductReference() {
-    $this->CMbObject('product_reference', 'reference_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_reference';
+    $spec->key   = 'reference_id';
+    return $spec;
   }
 
   function getSpecs() {

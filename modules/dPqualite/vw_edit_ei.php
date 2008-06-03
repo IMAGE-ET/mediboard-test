@@ -53,7 +53,7 @@ foreach($listItems as $key => $value) {
   $listItems[$key]->loadRefsFwd();
 }
 
-require_once( $AppUI->getSystemClass("smartydp"));
+require_once(CAppUI::getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("categorie"      , $categorie);

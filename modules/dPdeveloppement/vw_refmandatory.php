@@ -28,7 +28,7 @@ foreach($listClass as $selected){
     $typeProp = $v->getSpecType();
     if($typeProp == "refMandatory" || $typeProp == "ref"){
       //Comptage du nombre d'entrées à 0
-      $sql = "SELECT count(`".$object->_tbl_key."`) FROM `".$object->_tbl."` WHERE `$k` = '0';";
+      $sql = "SELECT count(`".$object->_spec->key."`) FROM `".$object->_spec->table."` WHERE `$k` = '0';";
       $nb_result = $ds->loadResult($sql);
       
       if($nb_result){
@@ -37,7 +37,7 @@ foreach($listClass as $selected){
         $aClass[$k]["count_0_bdd"] = $nb_result;
       
         //Comptage du nombre d'entrées totale
-        $sql = "SELECT count(`".$object->_tbl_key."`) FROM `".$object->_tbl."`";
+        $sql = "SELECT count(`".$object->_spec->key."`) FROM `".$object-_spec->table."`";
         $aClass[$k]["count_bdd"] = $ds->loadResult($sql);
       }
     }

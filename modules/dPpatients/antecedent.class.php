@@ -20,17 +20,16 @@ class CAntecedent extends CMbObject {
   // Form Fields
   var $_search = null;
   
-  function CAntecedent() {
-    $this->CMbObject("antecedent", "antecedent_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'antecedent';
+    $spec->key   = 'antecedent_id';
+    return $spec;
   }
 
   function getSpecs() {
-    global $dPconfig;
-    
     $specs = parent::getSpecs();
-    $specs["type"        ] = "enum list|".$dPconfig["dPpatients"]["CAntecedent"]["types"];
+    $specs["type"        ] = "enum list|".CAppUI::conf("dPpatients CAntecedent types");
     $specs["date"        ] = "date";
     $specs["rques"       ] = "text";
     $specs["dossier_medical_id"] = "ref class|CDossierMedical";

@@ -14,12 +14,13 @@ class CFavoricim10 extends CMbObject {
 	var $favoris_id   = null;
 	var $favoris_code = null;
 	var $favoris_user = null;
-
-	function CFavoricim10() {
-		$this->CMbObject("cim10favoris", "favoris_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'cim10favoris';
+    $spec->key   = 'favoris_id';
+    return $spec;
+  }
   
   function getSpecs() {
   	$specsParent = parent::getSpecs();

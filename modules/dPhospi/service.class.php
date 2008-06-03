@@ -28,12 +28,13 @@ class CService extends CMbObject {
   var $_ref_chambres = null;
   var $_ref_group    = null;
   var $_ref_validrepas = null;
-
-	function CService() {
-		$this->CMbObject("service", "service_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'service';
+    $spec->key   = 'service_id';
+    return $spec;
+  }
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();

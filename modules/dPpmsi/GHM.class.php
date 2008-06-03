@@ -61,11 +61,7 @@ class CGHM  extends CMbObject {
 
   // Constructeur
   function CGHM() {
-    $this->CMbObject("ghm", "ghm_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-
-    global $AppUI;
+    parent::__construct();
     
     // Connection à la base
     $this->_dsghm = CSQLDataSource::get("GHS1010");
@@ -74,6 +70,13 @@ class CGHM  extends CMbObject {
     $this->_type_hospi = "comp";
     $this->_chemin = "";
     $this->_chrono = new chronometer();
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'ghm';
+    $spec->key   = 'ghm_id';
+    return $spec;
   }
 
   function getSpecs() {

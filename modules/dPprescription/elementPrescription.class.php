@@ -21,11 +21,12 @@ class CElementPrescription extends CMbObject {
   
   // FwdRefs
   var $_ref_category_prescription = null;
-  
-  function CElementPrescription() {
-    $this->CMbObject("element_prescription", "element_prescription_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'element_prescription';
+    $spec->key   = 'element_prescription_id';
+    return $spec;
   }
   
   function getSpecs() {

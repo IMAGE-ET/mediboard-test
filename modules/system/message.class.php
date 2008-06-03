@@ -33,11 +33,13 @@ class CMessage extends CMbObject {
   var $module_id = null;
   
   var $_ref_module;
-  
-	function CMessage() {
-		$this->CMbObject("message", "message_id");
-		$this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'message';
+    $spec->key   = 'message_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specsParent = parent::getSpecs();

@@ -14,17 +14,13 @@ class CPaysInsee extends CMbObject {
   var $alpha_3 = null;
   var $nom_fr = null;
   var $nom_ISO = null;
-  
-  
-  function CPaysInsee() {
-    $this->CMbObject("pays", "numerique");
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }
 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->dsn = "INSEE";
     $spec->incremented = false;
+    $spec->table = 'pays';
+    $spec->key   = 'numerique';
     return $spec;
   }
   

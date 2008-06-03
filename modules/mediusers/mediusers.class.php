@@ -8,8 +8,7 @@
  */
 
 global $utypes, $utypes_flip;
-global $AppUI;
-require_once($AppUI->getModuleClass("admin"));
+require_once(CAppUI::getModuleClass("admin"));
 
 $utypes_flip = array_flip($utypes);
 
@@ -76,15 +75,14 @@ class CMediusers extends CMbObject {
   var $_ref_urgences = null;
   var $_ref_deplacees = null;
   
-  function CMediusers() {
-    $this->CMbObject( "users_mediboard", "user_id" );
-
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'users_mediboard';
+    $spec->key   = 'user_id';
+    return $spec;
   }
 
   function getSpecs() {
-    global $dPconfig;
-     
     $parentSpecs = parent::getSpecs();
 
     $specs = array (
@@ -460,10 +458,10 @@ class CMediusers extends CMbObject {
 
     // Can't use parent::store cuz user_id don't auto-increment
     if ($this->user_id) {
-      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->updateObject($this->_spec->table, $this, $this->_spec->key);
     } else {
       $this->user_id = $dPuser->user_id;
-      $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $this->_tbl_key);
+      $ret = $this->_spec->ds->insertObject($this->_spec->table, $this, $this->_spec->key);
     }
 
     if ($msg = $this->_spec->ds->error()) {

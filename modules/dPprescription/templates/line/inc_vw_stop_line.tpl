@@ -35,7 +35,7 @@ changeColor = function(object_id, object_class, date_arret, traitement){
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
   <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="{{$line->_tbl_key}}" value="{{$line->_id}}" />
+  <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
   {{if $line->date_arret}}
     <input type="hidden" name="date_arret" value="{{$line->date_arret}}" />
 	  <button type="button"

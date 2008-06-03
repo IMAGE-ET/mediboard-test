@@ -18,10 +18,11 @@ class CPrestation extends CMbObject {
   var $nom = null;
   var $description = null;
   
-  function CPrestation(){
-  	$this->CMbObject("prestation","prestation_id");
-  	
-  	$this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prestation';
+    $spec->key   = 'prestation_id';
+    return $spec;
   }
   
   function getSpecs(){

@@ -30,10 +30,12 @@ class CTransmissionMedicale extends CMbObject {
   var $_ref_sejour = null;
   var $_ref_user   = null;
   
-   function CTransmissionMedicale() {
-	  $this->CMbObject("transmission_medicale", "transmission_medicale_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'transmission_medicale';
+    $spec->key   = 'transmission_medicale_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specs = parent::getSpecs();

@@ -18,11 +18,12 @@ class CAddiction extends CMbObject {
   
   // Form Fields
   var $_search = null;
-  
-  function CAddiction() {
-    $this->CMbObject("addiction", "addiction_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'addiction';
+    $spec->key   = 'addiction_id';
+    return $spec;
   }
   
   function getSpecs() {

@@ -69,7 +69,7 @@ foreach($classes as $class) {
   checkTrans($backSpecs[$classname][$classname], "msg-$classname-delete");
   
   // Traductions pour la clé 
-  $prop = $object->_tbl_key;
+  $prop = $object->_spec->key;
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
@@ -80,7 +80,7 @@ foreach($classes as $class) {
       continue;
     }
     
-    if (in_array($prop, array($object->_tbl_key, "_view", "_shortview"))) {
+    if (in_array($prop, array($object->_spec->key, "_view", "_shortview"))) {
       continue;
     }
     

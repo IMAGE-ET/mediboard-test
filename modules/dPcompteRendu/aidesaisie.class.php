@@ -26,11 +26,12 @@ class CAideSaisie extends CMbObject {
   var $_ref_user          = null;
   var $_ref_function      = null;
   var $_ref_abstat_object = null;
-
-  function CAideSaisie() {
-    $this->CMbObject("aide_saisie", "aide_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'aide_saisie';
+    $spec->key   = 'aide_id';
+    return $spec;
   }
   
   function check() {

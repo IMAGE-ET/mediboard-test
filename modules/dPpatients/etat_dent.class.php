@@ -23,10 +23,12 @@ class CEtatDent extends CMbObject {
 
   // Object References
   var $_ref_dossier_medical = null;
-  
-  function __construct() {
-    $this->CMbObject("etat_dent", "etat_dent_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'etat_dent';
+    $spec->key   = 'etat_dent_id';
+    return $spec;
   }
   
   function getSpecs() {

@@ -24,10 +24,11 @@ class CTypeRepas extends CMbObject {
   var $_debut = null;
   var $_fin   = null;
   
-  function CTypeRepas() {
-    $this->CMbObject("repas_type", "typerepas_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'repas_type';
+    $spec->key   = 'typerepas_id';
+    return $spec;
   }
   
   function getBackRefs() {

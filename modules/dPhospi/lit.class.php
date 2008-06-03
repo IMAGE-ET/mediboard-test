@@ -29,12 +29,13 @@ class CLit extends CMbObject {
   var $_ref_affectations = null;
   var $_ref_last_dispo   = null;
   var $_ref_next_dispo   = null;
-
-	function CLit() {
-		$this->CMbObject("lit", "lit_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'lit';
+    $spec->key   = 'lit_id';
+    return $spec;
+  }
  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();

@@ -53,12 +53,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   // Logs
   var $_ref_log_validation_pharma = null;
-  
-  
-  function CPrescriptionLineMedicament() {
-    $this->CMbObject("prescription_line_medicament", "prescription_line_medicament_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription_line_medicament';
+    $spec->key   = 'prescription_line_medicament_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -74,8 +74,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     );
     return array_merge($specsParent, $specs);
   }
-  
-
   
   function updateFormFields() {
     parent::updateFormFields();

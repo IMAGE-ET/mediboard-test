@@ -127,11 +127,15 @@ class CSejour extends CCodable {
   var $_modifier_sortie = null;
   
   function CSejour() {
-    $this->CMbObject("sejour", "sejour_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-    
+    parent::__construct();
     $this->_locked = CAppUI::conf("dPplanningOp CSejour locked");
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'sejour';
+    $spec->key   = 'sejour_id';
+    return $spec;
   }
   
   function getBackRefs() {

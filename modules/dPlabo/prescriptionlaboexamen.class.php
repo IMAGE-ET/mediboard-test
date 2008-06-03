@@ -26,11 +26,12 @@ class CPrescriptionLaboExamen extends CMbObject {
 
   // Distant fields
   var $_hors_limite = null;
-    
-  function CPrescriptionLaboExamen() {
-    $this->CMbObject("prescription_labo_examen", "prescription_labo_examen_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription_labo_examen';
+    $spec->key   = 'prescription_labo_examen_id';
+    return $spec;
   }
   
   function getSpecs() {

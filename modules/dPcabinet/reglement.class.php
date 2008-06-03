@@ -25,9 +25,11 @@ class CReglement extends CMbObject {
   var $_ref_consultation = null;
   var $_ref_banque     = null;
   
-  function CReglement() {
-    $this->CMbObject('reglement', 'reglement_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'reglement';
+    $spec->key   = 'reglement_id';
+    return $spec;
   }
   
   function getSpecs() {

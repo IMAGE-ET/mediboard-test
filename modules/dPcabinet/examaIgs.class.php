@@ -36,12 +36,12 @@ class CExamIgs extends CMbObject {
   // Fwd References
   var $_ref_consult = null;
 
-  function CExamIgs() {
-    $this->CMbObject("examigs", "examigs_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'examigs';
+    $spec->key   = 'examigs_id';
+    return $spec;
   }
-  
   
   function getSpecs() {
   	$specsParent = parent::getSpecs();

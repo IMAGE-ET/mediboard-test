@@ -25,6 +25,8 @@ class CAccessLog extends CMbObject {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
+    $spec->table = 'access_log';
+    $spec->key   = 'accesslog_id';
     return $spec;
   }
 
@@ -41,20 +43,12 @@ class CAccessLog extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
-  
-  function CAccessLog () {
-    $this->CMbObject("access_log", "accesslog_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }
-  
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->hits) {
       $this->_average_duration = $this->duration / $this->hits;
       $this->_average_request = $this->request / $this->hits;
     }
-    
   }
   
   function loadAgregation($start, $end, $groupmod = 0, $module = 0) {
@@ -80,7 +74,4 @@ class CAccessLog extends CMbObject {
     return $list;
   }
 }
-
-
-
 ?>

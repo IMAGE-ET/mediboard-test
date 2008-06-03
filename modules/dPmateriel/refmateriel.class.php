@@ -26,12 +26,13 @@ class CRefMateriel extends CMbObject {
   
   //
   var $_prix_unitaire = null;
-  
-  function CRefMateriel() {
-    $this->CMbObject("ref_materiel", "reference_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }	  
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'ref_materiel';
+    $spec->key   = 'ref_materiel_id';
+    return $spec;
+  }
  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();

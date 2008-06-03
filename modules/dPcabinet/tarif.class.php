@@ -33,10 +33,11 @@ class CTarif extends CMbObject {
   var $_bind_consult = null;
   var $_consult_id  = null;
   
-  function CTarif() {
-    $this->CMbObject("tarifs", "tarif_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'tarifs';
+    $spec->key   = 'tarif_id';
+    return $spec;
   }
   
   function getSpecs() {

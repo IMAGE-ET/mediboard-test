@@ -63,13 +63,14 @@ class CFicheEi extends CMbObject {
   var $_ref_items           = null;
   var $_etat_actuel         = null;
   var $_criticite           = null;
-  
-  function CFicheEi() {
-    $this->CMbObject("fiches_ei", "fiche_ei_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }
 
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'fiches_ei';
+    $spec->key   = 'fiche_ei_id';
+    return $spec;
+  }
+  
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (

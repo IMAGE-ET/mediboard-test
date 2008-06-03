@@ -56,11 +56,12 @@ class CUser extends CMbObject {
   var $_login_locked    = null;
 
   var $_ref_preferences = null;
-
-  function CUser() {
-    $this->CMbObject("users", "user_id");
-
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'users';
+    $spec->key   = 'user_id';
+    return $spec;
   }
 
   function getBackRefs() {
@@ -74,8 +75,6 @@ class CUser extends CMbObject {
   }
 
   function getSpecs() {
-    global $dPconfig;
-    
   	$specsParent = parent::getSpecs();
      
     $specs = array (
@@ -145,7 +144,7 @@ class CUser extends CMbObject {
    * @return bool
    */
   function loginErrorsReady() {
-    return $this->_spec->ds->loadField($this->_tbl, "user_login_errors");
+    return $this->_spec->ds->loadField($this->_spec->table, "user_login_errors");
   }
   
   function updateDBFields() {
@@ -156,13 +155,11 @@ class CUser extends CMbObject {
   }
 
   function updateFormFields () {
-  	global $dPconfig;
-  	
     parent::updateFormFields();
     $this->user_last_name = strtoupper($this->user_last_name);
     $this->user_first_name = ucwords(strtolower($this->user_first_name));
     $this->_view = "$this->user_last_name $this->user_first_name";
-    $this->_login_locked = $this->user_login_errors >= $dPconfig['admin']['CUser']['max_login_attempts'];
+    $this->_login_locked = $this->user_login_errors >= CAppUI::conf('admin CUser max_login_attempts');
   }
 
   function check() {

@@ -24,10 +24,11 @@ class CNaissance extends CMbObject {
   // DB References
   var $_ref_operation = null;
   
-  function CNaissance() {
-    $this->CMbObject("naissance","naissance_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'naissance';
+    $spec->key   = 'naissance_id';
+    return $spec;
   }
   
   function getSpecs() {

@@ -30,10 +30,11 @@ class CPermObject extends CMbObject {
   var $_ref_db_user   = null;
   var $_ref_db_object = null;
   
-  function CPermObject() {
-    $this->CMbObject("perm_object", "perm_object_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'perm_object';
+    $spec->key   = 'perm_object_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -62,11 +63,8 @@ class CPermObject extends CMbObject {
     $this->loadRefDBUser();
   }
   
-  
   // Chargement des droits du user
-  function loadExactPermsObject($user_id = null){
-    global $AppUI, $userPermsObject, $permissionSystemeDown;
-    
+  static function loadExactPermsObject($user_id = null){
     $perm = new CPermObject;
     $listPermsObjects = array();
     $where = array();
@@ -88,9 +86,7 @@ class CPermObject extends CMbObject {
     } else {
       $user->load($AppUI->user_id);
     }
-    
-    $perm = new CPermObject;
-    
+
     //Declaration des tableaux de droits 
     $permsObjectProfil = array();
     $permsObjectSelf = array();
@@ -102,8 +98,8 @@ class CPermObject extends CMbObject {
     $tabObjectFinal = array();
     
     //Chargement des droits
-    $permsObjectProfil = $perm->loadExactPermsObject($user->profile_id);
-    $permsObjectSelf = $perm->loadExactPermsObject($user->user_id);
+    
+    $permsObjectSelf = CPermObject::loadExactPermsObject($user->user_id);
     
     // Creation du tableau de droits du user
     foreach($permsObjectSelf as $key => $value){
@@ -111,12 +107,13 @@ class CPermObject extends CMbObject {
     }
     
     // Creation du tableau de droits du profil
+    $permsObjectProfil = CPermObject::loadExactPermsObject($user->profile_id);
     foreach($permsObjectProfil as $key => $value){
       $tabObjectProfil["obj_".$value->object_id.$value->object_class] = $value;
     }
+    
     // Fusion des deux tableaux de droits
     $tabObjectFinal = array_merge($tabObjectProfil, $tabObjectSelf);
-    
     
     // Creation du tableau de fusion des droits
     foreach($tabObjectFinal as $object => $value){
@@ -138,7 +135,7 @@ class CPermObject extends CMbObject {
   }
   
   static function getPermObject($object, $permType) {
-    global $AppUI, $userPermsObjects, $permissionSystemeDown;
+    global $userPermsObjects, $permissionSystemeDown;
     if($permissionSystemeDown) {
       return true;
     }

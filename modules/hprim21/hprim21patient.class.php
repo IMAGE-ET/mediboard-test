@@ -91,10 +91,11 @@ class CHprim21Patient extends CHprim21Object {
   var $_ref_patient = null;
   var $_ref_hprim21_sejours = null;
 
-	function CHprim21Patient() {
-		$this->CMbObject("hprim21_patient", "hprim21_patient_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'hprim21_patient';
+    $spec->key   = 'hprim21_patient_id';
+    return $spec;
   }
   
   function getSpecs() {

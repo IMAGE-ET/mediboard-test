@@ -30,10 +30,11 @@ class CCompteRendu extends CMbMetaObject {
   var $_ref_category     = null;
   var $_ref_function     = null;
 
-  function CCompteRendu() {
-    $this->CMbObject("compte_rendu", "compte_rendu_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'compte_rendu';
+    $spec->key   = 'compte_rendu_id';
+    return $spec;
   }
   
   function getBackRefs() {

@@ -25,12 +25,12 @@ class CTempsHospi extends CMbObject {
   // Object References
   var $_ref_praticien = null;
 
-  
-  function CTempsHospi() {
-    $this->CMbObject("temps_hospi", "temps_hospi_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }   
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'temps_hospi';
+    $spec->key   = 'temps_hospi_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specsParent = parent::getSpecs();

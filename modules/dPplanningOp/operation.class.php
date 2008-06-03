@@ -108,13 +108,15 @@ class COperation extends CCodable {
   var $_ccam_libelle = null;
 
   function COperation() {
-    global $dPconfig;
-    
-    $this->CMbObject("operations", "operation_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-    
-    $this->_locked = $dPconfig["dPplanningOp"]["COperation"]["locked"];
+    parent::__construct();
+    $this->_locked = CAppUI::conf("dPplanningOp COperation locked");
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'operations';
+    $spec->key   = 'operation_id';
+    return $spec;
   }
   
   function getSpecs() {

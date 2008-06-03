@@ -18,10 +18,11 @@ class CCategory extends CMbObject {
   // Referencies
   var $_ref_materiel = null;
   
-  function CCategory() {
-    $this->CMbObject("materiel_category", "category_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'materiel_category';
+    $spec->key   = 'category_id';
+    return $spec;
   }
   
   function getBackRefs() {

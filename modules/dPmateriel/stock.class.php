@@ -26,11 +26,12 @@ class CStock extends CMbObject {
   // Object References
   var $_ref_group = null;
   var $_ref_materiel = null;
-
-	function CStock() {
-	  $this->CMbObject("stock", "stock_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'stock';
+    $spec->key   = 'stock_id';
+    return $spec;
   }
 
   function getSpecs() {

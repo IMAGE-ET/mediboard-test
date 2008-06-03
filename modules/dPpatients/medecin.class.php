@@ -43,10 +43,11 @@ class CMedecin extends CMbObject {
   // Object References
   var $_ref_patients = null;
 
-	function CMedecin() {
-		$this->CMbObject("medecin", "medecin_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'medecin';
+    $spec->key   = 'medecin_id';
+    return $spec;
   }
 	
   function getBackRefs() {

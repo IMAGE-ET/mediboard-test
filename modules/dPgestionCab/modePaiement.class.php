@@ -20,11 +20,12 @@ class CModePaiement extends CMbObject {
 
   // Object References
   var $_ref_function = null;
-
-  function CModePaiement() {
-    $this->CMbObject("mode_paiement", "mode_paiement_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'mode_paiement';
+    $spec->key   = 'mode_paiement_id';
+    return $spec;
   }
   
   function getBackRefs() {

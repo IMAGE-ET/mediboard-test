@@ -27,8 +27,8 @@ function purgeObjects($className, $fakeClassName = null) {
   // Ugly hack for CUser case
   $classNameID = mbGetValue($fakeClassName, $className);
   
-  $query = "DELETE FROM `$object->_tbl`" .
-      "\nWHERE `$object->_tbl_key`" .
+  $query = "DELETE FROM `{$object->_spec->table}`" .
+      "\nWHERE `{$object->_spec->key}`" .
       "\nIN (" .
       "\n  SELECT object_id" .
       "\n  FROM `id_sante400`" .

@@ -18,14 +18,12 @@ class CSpDossier extends CSpObject {
   var $numdos = null;
 
   // DB Fields : see getSpecs();
-  
-	function CSpDossier() {
-	  $this->CSpObject("t_dossier", "numdos");    
-	}
-  
+
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CSejour";
+    $spec->mbClass = 'CSejour';
+    $spec->table   = 't_dossier';
+    $spec->key     = 'numdos';
     return $spec;
   }
  	

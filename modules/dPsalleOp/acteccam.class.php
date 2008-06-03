@@ -12,10 +12,7 @@
  * interventions
  */
 
-global $AppUI;
-
-require_once($AppUI->getModuleClass("dPccam", "acte"));
-
+require_once(CAppUI::getModuleClass("dPccam", "acte"));
 
 class CActeCCAM extends CActe {
   static $coef_associations = array (
@@ -59,11 +56,12 @@ class CActeCCAM extends CActe {
   var $_activite = null;
   var $_phase = null;
   
-	function CActeCCAM() {
-		$this->CMbObject( "acte_ccam", "acte_id" );
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'acte_ccam';
+    $spec->key   = 'acte_id';
+    return $spec;
+  }
   
   function getSpecs() {
     $specs = parent::getSpecs();

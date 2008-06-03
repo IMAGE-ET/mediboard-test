@@ -22,9 +22,11 @@ class CTypeAnesth extends CMbObject {
   // References
   var $_count_operations = null;
   
-  function CTypeAnesth() {
-    $this->CMbObject("type_anesth", "type_anesth_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'type_anesth';
+    $spec->key   = 'type_anesth_id';
+    return $spec;
   }
   
   function getBackRefs() {

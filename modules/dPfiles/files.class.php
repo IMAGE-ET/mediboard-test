@@ -32,10 +32,11 @@ class CFile extends CMbMetaObject {
   // References
   var $_ref_file_owner = null;
 
-  function CFile() {
-    $this->CMbObject("files_mediboard", "file_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'files_mediboard';
+    $spec->key   = 'file_id';
+    return $spec;
   }
   
   function getBackRefs() {
@@ -228,7 +229,7 @@ class CFile extends CMbMetaObject {
   }
   
   function loadFilesForObject($object){
-    $key = $object->_tbl_key;
+    $key = $object->_spec->key;
     $where["object_class"]     = "= '".get_class($object)."'";
     $where["object_id"] = "= '".$object->$key."'";
     $listFile = new CFile();
@@ -244,7 +245,7 @@ class CFile extends CMbMetaObject {
   }
   
   function loadNbFilesByCategory($object){
-    $key = $object->_tbl_key;
+    $key = $object->_spec->key;
     
     // Liste des Category pour les fichiers de cet objet
     $listCategory = CFilesCategory::listCatClass(get_class($object));

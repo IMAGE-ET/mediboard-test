@@ -26,9 +26,11 @@ class CFacture extends CMbObject {
   var $_ref_sejour = null;
   var $_ref_items  = null;
   
-  function CFacture() {
-    $this->CMbObject("facture", "facture_id"); 
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'facture';
+    $spec->key   = 'facture_id';
+    return $spec;
   }
   
   function getBackRefs() {

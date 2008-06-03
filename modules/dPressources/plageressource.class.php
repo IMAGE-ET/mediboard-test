@@ -43,11 +43,12 @@ class CPlageressource extends CMbObject {
   // Object References
   var $_ref_prat     = null;
   var $_ref_patients = null;
-
-  function CPlageressource() {
-    $this->CMbObject("plageressource", "plageressource_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'plageressource';
+    $spec->key   = 'plageressource_id';
+    return $spec;
   }
   
   function getSpecs() {

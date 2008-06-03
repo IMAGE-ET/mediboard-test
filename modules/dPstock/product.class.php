@@ -29,10 +29,12 @@ class CProduct extends CMbObject {
   
   // This group's stock id
   var $_ref_stock_group  = null;
-
-  function CProduct() {
-    $this->CMbObject('product', 'product_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product';
+    $spec->key   = 'product_id';
+    return $spec;
   }
 
   function getBackRefs() {

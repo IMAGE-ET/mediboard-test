@@ -35,11 +35,12 @@ class CMenu extends CMbObject {
   
   // Object References
   var $_ref_typerepas = null;
-  
-  function CMenu() {
-    $this->CMbObject("menu", "menu_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'menu';
+    $spec->key   = 'menu_id';
+    return $spec;
   }
   
   function getBackRefs() {

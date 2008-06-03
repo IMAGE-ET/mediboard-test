@@ -58,7 +58,7 @@ if($objectClass && $objectId && $elementClass && $elementId){
       $acces_denied = !$listFile[$elementId]->_canRead;
       if($listFile[$elementId]->_canRead) {
         $fileSel = $listFile[$elementId];
-        $keyTable = $listFile[$elementId]->_tbl_key;
+        $keyTable = $listFile[$elementId]->_spec->key;
         $keyFileSel = $listFile[$elementId]->$nameFile;
         $keyFileSel .= "_" . $elementClass . "_";
         $keyFileSel .= $listFile[$elementId]->$keyTable;
@@ -133,7 +133,7 @@ if($popup==1){
     foreach($aFilePrevNext as $key=>$value){
       if($value){
         $aFile =& $aAllFilesDocs[$aFilePrevNext[$key]];
-        $keyFile = $aFile->_tbl_key;
+        $keyFile = $aFile->_spec->key;
         ${"file".$key} = array();
         ${"file".$key}["elementId"]   = $aFile->$keyFile;
         ${"file".$key}["elementClass"] = $aFile->_class_name;

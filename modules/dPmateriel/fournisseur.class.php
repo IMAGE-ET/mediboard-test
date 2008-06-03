@@ -27,10 +27,11 @@ class CFournisseur extends CMbObject {
   // Object References
   var $_ref_references = null;
   
-  function CFournisseur() {
-    $this->CMbObject("fournisseur", "fournisseur_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'fournisseur';
+    $spec->key   = 'fournisseur_id';
+    return $spec;
   }
   
   function getBackRefs() {

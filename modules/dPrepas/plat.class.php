@@ -22,11 +22,12 @@ class CPlat extends CMbObject {
   
   // Object References
   var $_ref_typerepas   = null;
-  
-  function CPlat() {
-    $this->CMbObject("plats", "plat_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'plats';
+    $spec->key   = 'plat_id';
+    return $spec;
   }
   
   function getBackRefs() {

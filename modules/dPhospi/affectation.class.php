@@ -39,10 +39,12 @@ class CAffectation extends CMbObject {
   var $_ref_next   = null;
   var $_no_synchro = null;
   var $_list_repas = null;
-
-  function CAffectation() {
-    $this->CMbObject("affectation", "affectation_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'affectation';
+    $spec->key   = 'affectation_id';
+    return $spec;
   }
 
   function getBackRefs() {

@@ -104,6 +104,7 @@ if ($prescription->object_id) {
   $protocoles_praticien = $protocole->loadList($where);
   
   // Chargement des protocoles de la fonction
+  $prescription->loadRefCurrentPraticien();
   $function_id = $prescription->_ref_current_praticien->function_id;
   $where = array();
   $where["function_id"] = " = '$function_id'";

@@ -20,12 +20,13 @@ class CEiCategorie extends CMbObject {
   // Object References
   var $_ref_items       = null;
 
-  function CEiCategorie() {
-    $this->CMbObject("ei_categories", "ei_categorie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'ei_categories';
+    $spec->key   = 'ei_categorie_id';
+    return $spec;
   }
-
+  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
       $backRefs["items"] = "CEiItem ei_categorie_id";

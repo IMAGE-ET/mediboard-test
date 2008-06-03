@@ -10,7 +10,6 @@
 global $permissionSystemeDown;
 $sql = "SHOW TABLE STATUS LIKE 'perm_module'";
 
-global $dPconfig;
 $permissionSystemeDown = !CSQLDataSource::get("std")->loadResult($sql);
 
 /**
@@ -29,12 +28,12 @@ class CPermModule extends CMbObject {
   // References
   var $_ref_db_user   = null;
   var $_ref_db_module = null;
-
-  function CPermModule() {
-    $this->CMbObject("perm_module", "perm_module_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'perm_module';
+    $spec->key   = 'perm_module_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -64,9 +63,7 @@ class CPermModule extends CMbObject {
   }
   
   // Chargement des droits du user
-  function loadExactPerms($user_id = null){
-    global $AppUI, $userPermsModules, $permissionSystemeDown;
-    
+  static function loadExactPerms($user_id = null){
     $perm = new CPermModule;
     $listPermsModules = array();
     $where = array();
@@ -83,7 +80,6 @@ class CPermModule extends CMbObject {
       return true;
     }
     
-    
     // Déclaration du user
     $user = new CUser();
     if($user_id !== null){
@@ -91,9 +87,7 @@ class CPermModule extends CMbObject {
     } else {
       $user->load($AppUI->user_id);
     }
-    
-    $perm = new CPermModule;
-    
+
     //Declaration des tableaux de droits 
     $permsProfil = array();
     $permsSelf = array();
@@ -105,8 +99,8 @@ class CPermModule extends CMbObject {
     $tabModFinal = array();
     
     //Chargement des droits
-    $permsProfil = $perm->loadExactPerms($user->profile_id);
-    $permsSelf = $perm->loadExactPerms($user->user_id);
+    $permsProfil = CPermModule::loadExactPerms($user->profile_id);
+    $permsSelf = CPermModule::loadExactPerms($user->user_id);
     
     // Creation du tableau de droit de permsSelf
     foreach($permsSelf as $key => $value){

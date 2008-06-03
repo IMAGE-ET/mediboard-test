@@ -30,10 +30,11 @@ class CAffectationPersonnel extends CMbMetaObject {
   var $_ref_personnel = null;
   var $_ref_object = null;
   
-  function CAffectationPersonnel() {
-	$this->CMbObject("affectation_personnel", "affect_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'affectation_personnel';
+    $spec->key   = 'affect_id';
+    return $spec;
   }
 	
   function getSpecs() {

@@ -19,11 +19,12 @@ class CValidationRepas extends CMbObject {
   var $date           = null;
   var $typerepas_id   = null;
   var $modif          = null;
-  
-  function CValidationRepas() {
-    $this->CMbObject("validationrepas", "validationrepas_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'validationrepas';
+    $spec->key   = 'validationrepas_id';
+    return $spec;
   }
   
   function getSpecs() {

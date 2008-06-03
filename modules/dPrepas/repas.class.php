@@ -43,10 +43,11 @@ class CRepas extends CMbObject {
   var $_is_modif        = null;
   var $_no_synchro      = null;
   
-  function CRepas() {
-    $this->CMbObject("repas", "repas_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'repas';
+    $spec->key   = 'repas_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -78,10 +79,10 @@ class CRepas extends CMbObject {
       if($this->repas_id){
         $where["repas_id"]   = $this->_spec->ds->prepare("!= %", $this->repas_id);
       }
-      $select = "count(`".$this->_tbl_key."`) AS `total`";
+      $select = "count(`".$this->_spec->key."`) AS `total`";
       
       $sql = new CRequest();
-      $sql->addTable($this->_tbl);
+      $sql->addTable($this->_spec->table);
       $sql->addSelect($select);
       $sql->addWhere($where);
       

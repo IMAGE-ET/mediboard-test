@@ -21,12 +21,13 @@ class CEiItem extends CMbObject {
   // Object References
   var $_ref_categorie   = null;
 
-  function CEiItem() {
-    $this->CMbObject("ei_item", "ei_item_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'ei_item';
+    $spec->key   = 'ei_item_id';
+    return $spec;
   }
-
+  
   function updateFormFields() {
     $this->_view = $this->nom;
   }

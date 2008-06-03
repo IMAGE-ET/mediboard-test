@@ -15,13 +15,16 @@ class CLmObject extends CMbObject {
   public $_ref_id400 = null;
   
   function CLmObject($table, $key) {
-    foreach (array_keys($this->getSpecs()) as $prop) {
+    parent::__construct();
+    
+    $spec_keys = array_keys($this->getSpecs());
+    foreach ($spec_keys as $prop) {
       $this->$prop = null;
     }
     
-    $this->loadRefModule(basename(dirname(__FILE__)));
     if ($this->_ref_module) {
-      $this->CMbObject($table, $key);
+      $this->_spec->table = $table;
+      $this->_spec->key   = $key;
     }
   }
   

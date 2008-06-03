@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codable"));
+require_once(CAppUI::getModuleClass("dPccam", "codable"));
 
 class CConsultation extends CCodable {
   const PLANIFIE = 16;
@@ -118,10 +117,11 @@ class CConsultation extends CCodable {
   var $_type_affichage     = null;
   var $_coordonnees        = null;
 
-  function CConsultation() {
-    $this->CMbObject("consultation", "consultation_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'consultation';
+    $spec->key   = 'consultation_id';
+    return $spec;
   }
   
   function getBackRefs() {

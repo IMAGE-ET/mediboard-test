@@ -20,10 +20,11 @@ class CTraitement extends CMbObject {
   // Form Fields
   var $_search = null;
   
-  function CTraitement() {
-    $this->CMbObject("traitement", "traitement_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'traitement';
+    $spec->key   = 'traitement_id';
+    return $spec;
   }
 
   function getSpecs() {

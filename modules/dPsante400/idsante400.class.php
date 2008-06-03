@@ -22,14 +22,10 @@
   // Derivate fields
   var $_last_id      = null;
   
-  function CIdSante400() {
-    $this->CMbObject("id_sante400", "id_sante400_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }
-  
   function getSpec() {
     $spec = parent::getSpec();
+    $spec->table = 'id_sante400';
+    $spec->key   = 'id_sante400_id';
     $spec->loggable = false;
     return $spec;
   }

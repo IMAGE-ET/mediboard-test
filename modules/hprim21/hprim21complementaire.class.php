@@ -28,10 +28,11 @@ class CHprim21Complementaire extends CHprim21Object {
   var $fin_droits      = null;
   var $type_contrat    = null;
 
-	function CHprim21Complementaire() {
-		$this->CMbObject("hprim21_complementaire", "hprim21_complementaire_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'hprim21_complementaire';
+    $spec->key   = 'hprim21_complementaire_id';
+    return $spec;
   }
   
   function getSpecs() {

@@ -22,10 +22,11 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   var $_ref_category_prescription = null;
   var $_ref_executant = null;
   
-  function CPrescriptionLineComment() {
-    $this->CMbObject("prescription_line_comment", "prescription_line_comment_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription_line_comment';
+    $spec->key   = 'prescription_line_comment_id';
+    return $spec;
   }
   
   function getSpecs() {

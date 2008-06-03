@@ -19,12 +19,12 @@ class CExecutantPrescriptionLine extends CMbObject {
   var $category_prescription_id = null;
   var $nom         = null;
   var $description  = null;
-  
 
-  function CExecutantPrescriptionLine() {
-    $this->CMbObject("executant_prescription_line", "executant_prescription_line_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'executant_prescription_line';
+    $spec->key   = 'executant_prescription_line_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -36,7 +36,6 @@ class CExecutantPrescriptionLine extends CMbObject {
     );
     return array_merge($specsParent, $specs);
   }
-  
   
   function updateFormFields(){
     parent::updateFormFields();

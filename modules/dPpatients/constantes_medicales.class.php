@@ -38,9 +38,11 @@ class CConstantesMedicales extends CMbObject {
   
   static $list_constantes = array('poids', 'taille', 'ta', 'pouls', 'spo2', 'temperature');
 
-  function CConstantesMedicales() {
-    $this->CMbObject('constantes_medicales', 'constantes_medicales_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'constantes_medicales';
+    $spec->key   = 'constantes_medicales_id';
+    return $spec;
   }
 
   function getSpecs() {

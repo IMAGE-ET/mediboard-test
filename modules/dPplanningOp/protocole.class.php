@@ -44,11 +44,12 @@ class CProtocole extends CMbObject {
   
   // External references
   var $_ext_codes_ccam = null;
-
-  function CProtocole() {
-    $this->CMbObject("protocole","protocole_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'protocole';
+    $spec->key   = 'protocole_id';
+    return $spec;
   }
   
   function getSpecs() {

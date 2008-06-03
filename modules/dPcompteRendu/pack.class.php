@@ -28,11 +28,12 @@ class CPack extends CMbObject {
   
   // Referenced objects
   var $_ref_chir     = null;
-
-  function CPack() {
-    $this->CMbObject("pack", "pack_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'pack';
+    $spec->key   = 'pack_id';
+    return $spec;
   }
 
   function getSpecs() {

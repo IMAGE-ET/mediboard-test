@@ -9,10 +9,12 @@
 
 class CMbObjectSpec {
   // Specification fields
-  public $incremented = true;
-  public $loggable = true;
+  public $incremented         = true;
+  public $loggable            = true;
   public $nullifyEmptyStrings = true;
-  public $dsn = "std";
+  public $dsn                 = 'std';
+  public $table               = null;
+  public $key                 = null;
   
   // Derivate fields
   public $ds = null;

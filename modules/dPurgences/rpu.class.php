@@ -69,11 +69,11 @@ class CRPU extends CMbObject {
   var $_sortie          = null;
   var $_mode_sortie     = null;
   
-  
-  function CRPU() {
-    $this->CMbObject("rpu", "rpu_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'rpu';
+    $spec->key   = 'rpu_id';
+    return $spec;
   }
 
   function getSpecs() {

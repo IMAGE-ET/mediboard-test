@@ -24,10 +24,7 @@ class CMbObject {
   /**
    * Global properties
    */
-  
   var $_class_name    = null; // class name of the object
-  var $_tbl           = null; // table name
-  var $_tbl_key       = null; // primary key name
   var $_error         = null; // error message
   var $_id            = null; // universal shortcut for the object id
   var $_view          = null; // universal view of the object
@@ -43,7 +40,6 @@ class CMbObject {
   /**
    * Properties  specification
    */
-
   var $_spec          = null;    // Spécifications unifiées
   var $_helped_fields = array(); // Champs concerné par les aides a la saisie
   var $_aides         = array(); // aides à la saisie
@@ -60,7 +56,6 @@ class CMbObject {
   /**
    * References
    */
-  
   var $_back           = null; // Back references collections
   var $_count          = null; // Back references counts
   var $_ref_module     = null; // Parent module
@@ -77,16 +72,12 @@ class CMbObject {
   // Behaviour fields
   var $_merging = null;
   
-  /**
-   * Constructor
-   */
- 
-  function CMbObject($table, $key) {
+  function __construct() {
+    return $this->CMbObject();
+  }
+  
+  function CMbObject() {
     self::$objectCount++;
-    
-    $this->_tbl     = $table;
-    $this->_tbl_key = $key;
-    $this->_id      =& $this->$key;
     
     static $spec          = null;
     static $class         = null;
@@ -99,14 +90,24 @@ class CMbObject {
     static $enums         = null;
     static $enumsTrans    = null;
     static $helped_fields = null;
+    static $module        = null;
 
+    // To simulate static inheritance
     static $static = false;
+    
     if (!$static) {
+      $class = get_class($this);
       $spec = $this->getSpec();
       $spec->init();
       
-      $class = get_class($this);
-      $this->_class_name =& $class;
+      $reflection = new ReflectionClass($class);
+      $module = basename(dirname($reflection->getFileName()));
+    }
+    $this->_class_name =& $class;
+    $this->_spec       =& $spec;
+    $this->loadRefModule($module);
+
+    if (!$static) {
       $props = $this->getSpecs();
       $this->_props =& $props;
       $backRefs = $this->getBackRefs();
@@ -124,9 +125,7 @@ class CMbObject {
       
       $static = true;
     }
-    
-    $this->_spec          =& $spec;
-    $this->_class_name    =& $class;
+
     $this->_props         =& $props;
     $this->_backRefs      =& $backRefs;
     $this->_backSpecs     =& $backSpecs;
@@ -134,7 +133,11 @@ class CMbObject {
     $this->_seek          =& $seeks;
     $this->_enums         =& $enums;
     $this->_enumsTrans    =& $enumsTrans;
-    $this->_helped_fields =& $helped_fields;    
+    $this->_helped_fields =& $helped_fields;
+    
+    if ($key = $this->_spec->key) {
+      $this->_id =& $this->$key;
+    }
   }
 
   /**
@@ -159,7 +162,7 @@ class CMbObject {
    * @return CMbObjectSpec the spec
    */
   function getSpec() {
-    return new CMbObjectSpec;
+    return new CMbObjectSpec();
   }
   
   /**
@@ -392,11 +395,11 @@ class CMbObject {
       $this->_id = $oid;
     }
 
-    if (!$this->_id) {
+    if (!$this->_id || !$this->_spec->table || !$this->_spec->key) {
       return false;
     }
     
-    $sql = "SELECT * FROM `$this->_tbl` WHERE `$this->_tbl_key` = '$this->_id'";
+    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE `{$this->_spec->key}` = '$this->_id'";
     
     $object = $this->_spec->ds->loadObject($sql, $this);
       
@@ -427,7 +430,8 @@ class CMbObject {
     $request->addOrder($order);
 
     $this->updateDBFields();
-    foreach($this->getDBFields() as $key => $value) {
+    $db_fields = $this->getDBFields();
+    foreach($db_fields as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -483,8 +487,10 @@ class CMbObject {
   function loadObject($where = null, $order = null, $group = null, $leftjoin = null) {
     $list = $this->loadList($where, $order, '0,1', $group, $leftjoin);
 
+    if ($list)
     foreach($list as $object) {
-      foreach($object->getDBFields() as $key => $value) {
+      $db_fields = $object->getDBFields();
+      foreach($db_fields as $key => $value) {
         $this->$key = $value;
       }
       $this->updateFormFields();
@@ -504,6 +510,7 @@ class CMbObject {
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!$this->_ref_module) {
+      mbTrace('grr');
       return null;
     }
     
@@ -555,6 +562,7 @@ class CMbObject {
     $list = array();
     while ($row = $this->_spec->ds->fetchAssoc($cur)) {
       $newObject = new $this->_class_name;
+      //mbTrace($this->_class_name);
       $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
@@ -571,7 +579,7 @@ class CMbObject {
    */
 
   function cloneObject() {
-    $_key = $this->_tbl_key;
+    $_key = $this->_spec->key;
     
     $newObj = $this;
     // blanking the primary key to ensure that's a new record
@@ -704,8 +712,8 @@ class CMbObject {
     $properties = get_object_vars($this);
     
     foreach($this->_props as $propName => $propSpec) {
-      if(substr($propName, 0, 1) != "_" ) {
-        if(!array_key_exists($propName, $properties)) {
+      if ($propName[0] != '_') {
+        if (!array_key_exists($propName, $properties)) {
           trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
         } else {
           $propValue =& $this->$propName;
@@ -821,7 +829,8 @@ class CMbObject {
 
     // Analyse changes fields
     $fields = array();
-    foreach ($this->getDBFields() as $propName => $propValue) {
+    $db_fields = $this->getDBFields();
+    foreach ($db_fields as $propName => $propValue) {
       if ($this->fieldModified($propName)) {
         $fields[] = $propName;
       }
@@ -883,10 +892,10 @@ class CMbObject {
 
     // DB query
     if ($this->_old->_id) {
-      $ret = $this->_spec->ds->updateObject($this->_tbl, $this, $this->_tbl_key, $this->_spec->nullifyEmptyStrings);
+      $ret = $this->_spec->ds->updateObject($this->_spec->table, $this, $this->_spec->key, $this->_spec->nullifyEmptyStrings);
     } else {
-      $keyToUpadate = $this->_spec->incremented ? $this->_tbl_key : null;
-      $ret = $this->_spec->ds->insertObject($this->_tbl, $this, $keyToUpadate);
+      $keyToUpadate = $this->_spec->incremented ? $this->_spec->key : null;
+      $ret = $this->_spec->ds->insertObject($this->_spec->table, $this, $keyToUpadate);
     }
     
 
@@ -950,17 +959,17 @@ class CMbObject {
     }
 
     // Empty object
-    if (!$this->_id) {
+    if (!$this->_id || !$backObject->_spec->table || !$backObject->_spec->key) {
       return 0;
     }
     
-    $query = "SELECT COUNT($backObject->_tbl_key) " .
-      "\nFROM `$backObject->_tbl` " .
-      "\nWHERE `$backField` = '$this->_id'";
+    $query = "SELECT COUNT({$backObject->_spec->key}) 
+      FROM `{$backObject->_spec->table}`
+      WHERE `$backField` = '$this->_id'";
 
     // Cas des meta objects
     $backSpec =& $backObject->_specs[$backField];
-    $backMeta = $backSpec->meta;      
+    $backMeta = $backSpec->meta;
     if ($backMeta) {
       $query .= "\nAND `$backMeta` = '$this->_class_name'";
     }
@@ -1205,7 +1214,7 @@ class CMbObject {
     }
     
     // Actually delete record
-    $sql = "DELETE FROM $this->_tbl WHERE $this->_tbl_key = '$this->_id'";
+    $sql = "DELETE FROM {$this->_spec->table} WHERE {$this->_spec->key} = '$this->_id'";
     		 
     if (!$this->_spec->ds->exec($sql)) {
       return $this->_spec->ds->error();
@@ -1242,7 +1251,7 @@ class CMbObject {
    *  @return the first 100 records which fits the keywords
    */
   function seek($keywords) {
-    $sql = "SELECT * FROM `$this->_tbl` WHERE 1";
+    $sql = "SELECT * FROM `{$this->_spec->table}` WHERE 1";
     if(count($keywords) and count($this->_seek)) {
       foreach($keywords as $key) {
         $sql .= "\nAND (0";
@@ -1281,7 +1290,7 @@ class CMbObject {
     foreach($this->_seek as $keySeek => $spec) {
       $sql .= "\n$keySeek,";
     }
-    $sql .= "\n $this->_tbl_key";
+    $sql .= "\n {$this->_spec->key}";
     $sql .=" LIMIT 0,100";
     
     return $this->loadQueryList($sql);
@@ -1357,7 +1366,7 @@ class CMbObject {
     return array (
       "_shortview" => "str",
       "_view" => "str",
-      "$this->_tbl_key" => "ref class|$this->_class_name"
+      $this->_spec->key => "ref class|$this->_class_name"
     );
   }
   

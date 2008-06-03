@@ -28,9 +28,11 @@ class CActeNGAP extends CActe {
   // Distant fields
   var $_execution = null;
   
-  function CActeNGAP() {
-    $this->CMbObject("acte_ngap", "acte_ngap_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'acte_ngap';
+    $spec->key   = 'acte_ngap_id';
+    return $spec;
   }
   
   function getSpecs() {

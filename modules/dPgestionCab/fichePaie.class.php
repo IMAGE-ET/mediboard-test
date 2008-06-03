@@ -65,11 +65,12 @@ class CFichePaie extends CMbObject {
 
   // Object References
   var $_ref_params_paie = null;
-
-  function CFichePaie() {
-    $this->CMbObject("fiche_paie", "fiche_paie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'fiche_paie';
+    $spec->key   = 'fiche_paie_id';
+    return $spec;
   }
 
   function getSpecs() {

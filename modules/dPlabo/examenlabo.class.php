@@ -65,11 +65,15 @@ class CExamenLabo extends CMbObject {
   var $_ref_root_catalogue = null;
   
   function CExamenLabo() {
-    $this->CMbObject("examen_labo", "examen_labo_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-
+    parent::__construct();
     $this->_locked =& $this->_external;
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'examen_labo';
+    $spec->key   = 'examen_labo_id';
+    return $spec;
   }
   
   function getSpecs() {

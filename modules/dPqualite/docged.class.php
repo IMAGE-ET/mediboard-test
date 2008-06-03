@@ -48,10 +48,11 @@ class CDocGed extends CMbObject {
   var $_ref_group       = null;
   var $_ref_user        = null;
   
-  function CDocGed() {
-    $this->CMbObject("doc_ged", "doc_ged_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'doc_ged';
+    $spec->key   = 'doc_ged_id';
+    return $spec;
   }
   
   function getBackRefs() {

@@ -21,19 +21,15 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   var $_ref_element_prescription = null;
   var $_ref_executant = null;
-  
-  function CPrescriptionLineElement() {
-    $this->CMbObject("prescription_line_element", "prescription_line_element_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription_line_element';
+    $spec->key   = 'prescription_line_element_id';
+    return $spec;
   }
   
-  
   function updateFormFields(){
-  	global $AppUI;
-  	
-  	
-  	
     parent::updateFormFields();
     $this->loadRefElement();
     $this->_ref_element_prescription->loadRefCategory();

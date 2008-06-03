@@ -53,10 +53,11 @@ class CPlageOp extends CMbObject {
   var $_nb_operations_placees  = null;
   var $_fill_rate      = null;
 
-  function CPlageOp() {
-    $this->CMbObject("plagesop", "plageop_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'plagesop';
+    $spec->key   = 'plageop_id';
+    return $spec;
   }
   
   function getBackRefs() {

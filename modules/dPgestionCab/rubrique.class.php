@@ -20,11 +20,12 @@ class CRubrique extends CMbObject {
 
   // Object References
   var $_ref_function = null;
-
-  function CRubrique() {
-    $this->CMbObject("rubrique_gestioncab", "rubrique_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'rubrique_gestioncab';
+    $spec->key   = 'rubrique_id';
+    return $spec;
   }
   
   function getBackRefs() {

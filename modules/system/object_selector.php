@@ -34,7 +34,7 @@ if ($selClass) {
       unset($list[$key]);
     }
   }
-  $key = $object->_tbl_key;
+  $key = $object->_spec->key;
 }
 
 

@@ -6,8 +6,6 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $dPconfig;
-
 $mbPath = "../..";
 $m = "dPcompteRendu";
 
@@ -25,6 +23,7 @@ class CTemplateManager {
   // As wierd as it is, only this property seems mandatory in this redefinition
   var $valueMode = true;
 };
+
 // required includes for start-up
 require_once("$mbPath/includes/config_dist.php");
 require_once("$mbPath/includes/config.php");
@@ -38,9 +37,9 @@ require_once("$mbPath/includes/autoload.php" );
 $templateManager =& $_SESSION[$m]["templateManager"];
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
+require_once(CAppUI::getSystemClass("smartydp"));
 
-$smarty = new CSmartyDP($dPconfig["root_dir"]."/modules/$m");
+$smarty = new CSmartyDP(CAppUI::conf("root_dir")."/modules/$m");
 
 $smarty->assign("templateManager" , $templateManager);
 

@@ -41,10 +41,12 @@ class CProductStock extends CMbObject {
   var $_ordered_count           = null;
   var $_ordered_last            = null;
   var $_orders                  = null;
-
-  function CProductStock() {
-    $this->CMbObject('product_stock', 'stock_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_stock';
+    $spec->key   = 'stock_id';
+    return $spec;
   }
   
   function getBackRefs() {
@@ -110,6 +112,7 @@ class CProductStock extends CMbObject {
     $where['date_ordered'] = 'IS NOT NULL';
     $orderby = 'date_ordered ASC';
     $order = new CProductOrder();
+
     $list_orders = $order->loadList($where, $orderby);
     $this->_orders = array();
     
@@ -122,7 +125,7 @@ class CProductStock extends CMbObject {
           $item->_ref_reference->loadRefsFwd();
           $item->_ref_order->loadRefsFwd();
           
-          if ($item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
+          if ($item->_ref_reference->_ref_product && $this->_ref_product && $item->_ref_reference->_ref_product->_id == $this->_ref_product->_id) {
             $this->_ordered_count += $item->quantity * $item->_ref_reference->quantity;
             $this->_ordered_last = max(array($item->_ref_order->date_ordered, $this->_ordered_last));
             if (!$done) {

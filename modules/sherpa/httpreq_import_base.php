@@ -35,14 +35,14 @@ mbSetValueToSession("idRetry", $idMin);
 
 // Requêtes
 $where = array();
-$where[$spObject->_tbl_key] = "> '$idMin'";
+$where[$spObject->_spec->key] = "> '$idMin'";
 
 // Bornes
 if ($import_id_min = $dPconfig["sherpa"]["import_id_min"]) {
-  $where[] = "$spObject->_tbl_key >= '$import_id_min'";
+  $where[] = $spObject->_spec->key." >= '$import_id_min'";
 }
 if ($import_id_max = $dPconfig["sherpa"]["import_id_max"]) {
-  $where[] = "$spObject->_tbl_key <= '$import_id_max'";
+  $where[] = $spObject->_spec->key." <= '$import_id_max'";
 }
 
 // Comptage
@@ -58,7 +58,7 @@ set_time_limit($seconds);
 
 // Import réel
 $errors = 0;
-$spObjects = $spObject->loadList($where, $spObject->_tbl_key, "0, $max");
+$spObjects = $spObject->loadList($where, $spObject->_spec->key, "0, $max");
 foreach ($spObjects as $_spObject) {
   $mbObject = $_spObject->mapTo();
 

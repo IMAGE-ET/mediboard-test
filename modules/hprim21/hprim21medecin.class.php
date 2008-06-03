@@ -31,11 +31,12 @@ class CHprim21Medecin extends CHprim21Object {
   var $type_code = null;
   
   var $_ref_user = null;
-
-	function CHprim21Medecin() {
-		$this->CMbObject("hprim21_medecin", "hprim21_medecin_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'hprim21_medecin';
+    $spec->key   = 'hprim21_medecin_id';
+    return $spec;
   }
   
   function getSpecs() {

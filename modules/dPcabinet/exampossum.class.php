@@ -49,9 +49,7 @@ class CExamPossum extends CMbObject {
   var $_ref_consult = null;
   
   function CExamPossum() {
-    $this->CMbObject("exampossum", "exampossum_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+    parent::__construct();
     
     static $score_possum_physio = null;
     if (!$score_possum_physio) {
@@ -64,6 +62,13 @@ class CExamPossum extends CMbObject {
       $score_possum_oper = $this->getScoreOper();
     }
     $this->_score_possum_oper =& $score_possum_oper;
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'exampossum';
+    $spec->key   = 'exampossum_id';
+    return $spec;
   }
   
   function getSpecs() {

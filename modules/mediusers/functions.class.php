@@ -44,12 +44,13 @@ class CFunctions extends CMbObject {
   var $_fax3        = null;
   var $_fax4        = null;
   var $_fax5        = null;
-  
-	function CFunctions() {
-		$this->CMbObject("functions_mediboard", "function_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'functions_mediboard';
+    $spec->key   = 'function_id';
+    return $spec;
+  }
   
   function getBackRefs() {
       $backRefs = parent::getBackRefs();

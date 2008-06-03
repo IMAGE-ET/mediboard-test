@@ -23,11 +23,12 @@ class CCommandeMateriel extends CMbObject {
 
   // Object References
   var $_ref_reference = null;
-
-	function CCommandeMateriel() {
-	  $this->CMbObject("commande_materiel", "commande_materiel_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'commande_materiel';
+    $spec->key   = 'commande_materiel_id';
+    return $spec;
   }
 
   function getSpecs() {

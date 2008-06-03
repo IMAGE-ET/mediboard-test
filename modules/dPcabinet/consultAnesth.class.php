@@ -7,8 +7,6 @@
  * @author Romain Ollivier
  */
 
-global $AppUI;
-
 class CConsultAnesth extends CMbObject {
   // DB Table key
   var $consultation_anesth_id = null;
@@ -72,10 +70,11 @@ class CConsultAnesth extends CMbObject {
   var $_ref_sejour             = null;
   var $_ref_plageconsult       = null;
 
-  function CConsultAnesth() {
-    $this->CMbObject("consultation_anesth", "consultation_anesth_id");
-
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'consultation_anesth';
+    $spec->key   = 'consultation_anesth_id';
+    return $spec;
   }
 
   function getBackRefs() {

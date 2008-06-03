@@ -24,10 +24,12 @@ class CProductStockOut extends CMbObject {
   var $_ref_function = null;
   
   var $_do_stock_out = null;
-
-  function CProductStockOut() {
-    $this->CMbObject('product_stock_out', 'stock_out_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_stock_out';
+    $spec->key   = 'stock_out_id';
+    return $spec;
   }
 
   function getSpecs() {

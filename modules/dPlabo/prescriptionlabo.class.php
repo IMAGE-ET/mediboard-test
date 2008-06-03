@@ -45,10 +45,11 @@ class CPrescriptionLabo extends CMbObject {
   var $_ref_examens = null;
   var $_ref_classification_roots = null;
   
-  function CPrescriptionLabo() {
-    $this->CMbObject("prescription_labo", "prescription_labo_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription_labo';
+    $spec->key   = 'prescription_labo_id';
+    return $spec;
   }
   
   function getSpecs() {

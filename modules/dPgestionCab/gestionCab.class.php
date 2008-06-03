@@ -32,11 +32,12 @@ class CGestionCab extends CMbObject {
   var $_ref_function      = null;
   var $_ref_rubrique      = null;
   var $_ref_mode_paiement = null;
-
-  function CGestionCab() {
-    $this->CMbObject("gestioncab", "gestioncab_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'gestioncab';
+    $spec->key   = 'gestioncab_id';
+    return $spec;
   }
 
   function getSpecs() {

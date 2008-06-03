@@ -28,9 +28,11 @@ class CSociete extends CMbObject {
   var $_ref_product_references = null;
   var $_ref_products   = null;
 
-  function CSociete() {
-    $this->CMbObject('societe', 'societe_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'societe';
+    $spec->key   = 'societe_id';
+    return $spec;
   }
 
   function getBackRefs() {

@@ -73,7 +73,7 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-  function getSystemClass($name=null) {
+  static function getSystemClass($name=null) {
     if ($name) {
       if ($root = self::conf("root_dir")) {
         return "$root/classes/$name.class.php";
@@ -112,12 +112,10 @@ class CAppUI {
 	 * @param string $name The class root file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-  function getModuleClass($name = null, $file = null) {
-    if ($name) {
-      if ($root = self::conf("root_dir")) {
-        $filename = $file ? $file : $name;
-        return "$root/modules/$name/$filename.class.php";
-      }
+  static function getModuleClass($name = null, $file = null) {
+    if ($name && $root = self::conf("root_dir")) {
+      $filename = $file ? $file : $name;
+      return "$root/modules/$name/$filename.class.php";
     }
   }
 

@@ -76,15 +76,12 @@ class CExamAudio extends CMbObject {
 
   // Fwd References
   var $_ref_consult = null;
-
-  function CExamAudio() {
-    global $frequences;
-    
-    $this->CMbObject("examaudio", "examaudio_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-
-    $this->updateFormFields();
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'examaudio';
+    $spec->key   = 'examaudio_id';
+    return $spec;
   }
   
   function getSpecs() {

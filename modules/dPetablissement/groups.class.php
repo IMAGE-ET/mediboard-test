@@ -54,10 +54,11 @@ class CGroups extends CMbObject {
   var $_fax4        = null;
   var $_fax5        = null;
   
-  function CGroups() {
-    $this->CMbObject("groups_mediboard", "group_id");
-
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'groups_mediboard';
+    $spec->key   = 'group_id';
+    return $spec;
   }
   
   function getBackRefs() {

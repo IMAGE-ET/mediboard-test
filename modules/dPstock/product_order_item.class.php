@@ -28,9 +28,11 @@ class CProductOrderItem extends CMbObject {
   var $_price             = null;
   var $_quantity_received  = null;
 
-  function CProductOrderItem() {
-    $this->CMbObject('product_order_item', 'order_item_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_order_item';
+    $spec->key   = 'order_item_id';
+    return $spec;
   }
 
   function getSpecs() {

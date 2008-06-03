@@ -21,11 +21,12 @@ class CCategoryPrescription extends CMbObject {
   
   // BackRefs
   var $_ref_elements_prescription = null;
-    
-  function CCategoryPrescription() {
-    $this->CMbObject("category_prescription", "category_prescription_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'category_prescription';
+    $spec->key   = 'category_prescription_id';
+    return $spec;
   }
   
   function getSpecs() {

@@ -15,10 +15,11 @@ class CBanque extends CMbObject {
   var $nom         = null;
   var $description = null;
   
-  function CBanque() {
-    $this->CMbObject("banque", "banque_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'banque';
+    $spec->key   = 'banque_id';
+    return $spec;
   }
   
   function getSpecs() {

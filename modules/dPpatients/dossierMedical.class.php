@@ -30,17 +30,16 @@ class CDossierMedical extends CMbMetaObject {
   // Derived back references
   var $_ref_types_addiction  = null;
   
-	function CDossierMedical() {
-		$this->CMbObject("dossier_medical", "dossier_medical_id");    
-    $this->loadRefModule(basename(dirname(__FILE__)));
- 	}
-  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'dossier_medical';
+    $spec->key   = 'dossier_medical_id';
+    return $spec;
+  }
   
   function getSpecs() {
     $specs = parent::getSpecs();
-
-    $specs["codes_cim"]         = "text";
-    
+    $specs["codes_cim"] = "text";
     return $specs;
   }  
   function getBackRefs() {

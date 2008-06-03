@@ -30,10 +30,12 @@ class CNote extends CMbMetaObject {
   // References
   var $_ref_user   = null;
   
-   function CNote() {
-	  $this->CMbObject("note", "note_id");
-      $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'note';
+    $spec->key   = 'note_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specs = parent::getSpecs();
@@ -63,7 +65,7 @@ class CNote extends CMbMetaObject {
   }
   
   function loadNotesForObject($object, $perm = PERM_READ) {
-    $key = $object->_tbl_key;
+    $key = $object->_spec->key;
     $where["object_class"]     = "= '".get_class($object)."'";
     $where["object_id"] = "= '".$object->$key."'";
     $order = "degre DESC, date DESC";

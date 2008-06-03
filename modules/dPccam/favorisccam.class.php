@@ -20,10 +20,11 @@ class CFavoriCCAM extends CMbObject {
   
   var $_ref_code = null;
 
-  function CFavoriCCAM() {
-	$this->CMbObject("ccamfavoris", "favoris_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'ccamfavoris';
+    $spec->key   = 'favoris_id';
+    return $spec;
   }
 
   function getSpecs() {

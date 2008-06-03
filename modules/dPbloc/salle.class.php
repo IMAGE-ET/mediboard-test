@@ -27,13 +27,14 @@ class CSalle extends CMbObject {
   var $_ref_plages = null;
   var $_ref_urgences = null;
   var $_ref_deplacees = null;
-
-	function CSalle() {
-		$this->CMbObject("sallesbloc", "salle_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'sallesbloc';
+    $spec->key   = 'salle_id';
+    return $spec;
   }
-	
+  
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["operations"] = "COperation salle_id";

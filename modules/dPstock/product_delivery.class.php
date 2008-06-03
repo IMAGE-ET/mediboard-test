@@ -27,9 +27,11 @@ class CProductDelivery extends CMbObject {
   var $_date_min    = null;
   var $_date_max    = null;
 
-  function CProductDelivery() {
-    $this->CMbObject('product_delivery', 'delivery_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_delivery';
+    $spec->key   = 'delivery_id';
+    return $spec;
   }
 
   function getSpecs() {

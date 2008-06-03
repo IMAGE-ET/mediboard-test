@@ -2,7 +2,7 @@
 <form name="manageCodes" action="?m={{$module}}" method="post">
   <input type="hidden" name="m" value="{{$subject->_ref_module->mod_name}}" />
   <input type="hidden" name="dosql" value="{{$do_subject_aed}}" />
-  <input type="hidden" name="{{$subject->_tbl_key}}" value="{{$subject->_id}}" />
+  <input type="hidden" name="{{$subject->_spec->key}}" value="{{$subject->_id}}" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="codes_ccam" value="{{$subject->codes_ccam}}" />
   <input type="submit" disabled="disabled" style="display:none;"/>

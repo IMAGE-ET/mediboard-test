@@ -25,9 +25,7 @@ class CDiscipline extends CMbObject {
   var $_compat    = null;
   
   function CDiscipline() {
-    $this->CMbObject("discipline", "discipline_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+    parent::__construct();
     
     static $dispo = null;
     if(!$dispo) {
@@ -80,6 +78,14 @@ class CDiscipline extends CMbObject {
     }
     $this->_compat =& $compat;
   }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'discipline';
+    $spec->key   = 'discipline_id';
+    return $spec;
+  }
+  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
       $backRefs["users"] = "CMediusers discipline_id";

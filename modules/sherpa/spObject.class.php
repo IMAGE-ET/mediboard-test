@@ -14,15 +14,11 @@
 class CSpObject extends CMbObject {  
   public $_ref_id400 = null;
   
-  function CSpObject($table, $key) {
+  function CSpObject() {
     foreach (array_keys($this->getSpecs()) as $prop) {
       $this->$prop = null;
     }
-        
-    $this->loadRefModule(basename(dirname(__FILE__)));
-    if($this->_ref_module) {
-      $this->CMbObject($table, $key);
-    }
+    parent::__construct();
   }
   
   function loadExternal() {

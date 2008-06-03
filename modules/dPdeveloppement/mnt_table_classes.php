@@ -82,12 +82,13 @@ function array_duplicates($array, $field) {
 foreach ($list_selected_classes as $curr_class_name) {
   $object = new $curr_class_name;
   
+  if ($object->_spec->table) {
   $list_classes[$curr_class_name] = array();
   $class = &$list_classes[$curr_class_name];
   
   // Clé dela table
-  $class['table'] = $object->_tbl;
-  $class['key'] = $object->_tbl_key;
+  $class['table'] = $object->_spec->table;
+  $class['key'] = $object->_spec->key;
   $class['db_key'] = null;
   $class['fields'] = array();
   
@@ -135,15 +136,16 @@ foreach ($list_selected_classes as $curr_class_name) {
   
   // Extraction des propriétés de la classe
   foreach($object->_props as $k => $v) {
-    if ($k[0] != '_') {
+    if (isset($k[0]) && $k[0] != '_') {
       $class['fields'][$k]['object']['spec'] = $v;
     }
   }
   
   // Extraction des champs de la BDD
-  if($ds->loadTable($object->_tbl)) {
+  if($object->_spec->table && $ds->loadTable($object->_spec->table)) {
     $class['no_table'] = false;
-	  $sql = "SHOW COLUMNS FROM `$object->_tbl`";
+
+	  $sql = "SHOW COLUMNS FROM `{$object->_spec->table}`";
 	  $list_fields = $ds->loadList($sql);
 	  
 	  foreach($list_fields as $curr_field){
@@ -167,7 +169,7 @@ foreach ($list_selected_classes as $curr_class_name) {
 	  }
 	  
 	  // Extraction des Index
-	  $sql = "SHOW INDEX FROM `$object->_tbl`";
+	  $sql = "SHOW INDEX FROM `{$object->_spec->table}`";
     
 	  $list_indexes = $ds->loadList($sql);
 	  
@@ -187,6 +189,7 @@ foreach ($list_selected_classes as $curr_class_name) {
     $class['duplicates'] = array();
   }
   $class['suggestion'] = null;
+  }
 }
 
 //mbTrace($class);

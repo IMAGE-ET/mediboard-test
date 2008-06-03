@@ -181,9 +181,11 @@ class CPatient extends CMbObject {
   var $_ref_IPP              = null;
   var $_ref_constantes_medicales = null;
   
-  function CPatient() {
-    $this->CMbObject("patients", "patient_id");    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'patients';
+    $spec->key   = 'patient_id';
+    return $spec;
   }
   
   function getBackRefs() {
@@ -195,8 +197,6 @@ class CPatient extends CMbObject {
   }
  
   function getSpecs() {
-    global $dPconfig;
-  	
     $specs = parent::getSpecs();
     
     $specs["nom"]               = "notNull str confidential";
@@ -224,7 +224,7 @@ class CPatient extends CMbObject {
     $specs["ATNC"]              = "bool";
     
     
-    if($dPconfig["dPpatients"]["CPatient"]["date_naissance"]){
+    if(CAppUI::conf("dPpatients CPatient date_naissance")){
       $specs["naissance"]         = "notNull birthDate";
     } else {
       $specs["naissance"]         = "birthDate";  

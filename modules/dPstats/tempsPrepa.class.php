@@ -24,11 +24,11 @@ class CTempsPrepa extends CMbObject {
   // Object References
   var $_ref_praticien = null;
 
-  
-  function CTempsPrepa() {
-    $this->CMbObject("temps_prepa", "temps_prepa_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'temps_prepa';
+    $spec->key   = 'temps_prepa_id';
+    return $spec;
   }
 
   function getSpecs() {

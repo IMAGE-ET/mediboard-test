@@ -29,11 +29,13 @@ class CObservationMedicale extends CMbObject {
   // References
   var $_ref_sejour = null;
   var $_ref_user   = null;
-  
-   function CObservationMedicale() {
-	  $this->CMbObject("observation_medicale", "observation_medicale_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
-	}
+	
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'observation_medicale';
+    $spec->key   = 'observation_medicale_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specs = parent::getSpecs();

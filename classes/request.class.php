@@ -137,13 +137,13 @@ class CRequest {
         trigger_error("You have to choose either an object or select(s)", E_USER_ERROR);
       }
 
-      $arraySelect[] = "`$obj->_tbl`.*";
+      $arraySelect[] = "`{$obj->_spec->table}`.*";
       
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
 
-      $arrayTable[] = $obj->_tbl;
+      $arrayTable[] = $obj->_spec->table;
     }
     else {
       $arraySelect = $this->select;
@@ -247,7 +247,7 @@ class CRequest {
       if (count($this->table)) {
         trigger_error("You have to choose either an object or table(s)");
       }
-      $arrayTable[] = $obj->_tbl;
+      $arrayTable[] = $obj->_spec->table;
     } else {
       $arrayTable = $this->table;
     }

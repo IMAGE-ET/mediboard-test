@@ -67,7 +67,7 @@ class CSpEntCCAM extends CSpObject {
     }
       
     $ds = $this->getCurrentDataSource();
-    $query = "SELECT MAX(`$this->_tbl_key`) FROM $this->_tbl";
+    $query = "SELECT MAX(`{$this->_spec->key}`) FROM {$this->_spec->table}";
     $latestId = $ds->loadResult($query);
     $this->_id = $latestId+1;
   }
@@ -78,10 +78,10 @@ class CSpEntCCAM extends CSpObject {
   function deleteForDossier($numdos) {
     $ds = $this->getCurrentDataSource();
 
-    $query = "SELECT COUNT(*) FROM $this->_tbl WHERE numdos = '$numdos'";
+    $query = "SELECT COUNT(*) FROM {$this->_spec->table} WHERE numdos = '$numdos'";
     $count = $ds->loadResult($query);
 
-    $query = "DELETE FROM $this->_tbl WHERE numdos = '$numdos'";
+    $query = "DELETE FROM {$this->_spec->table} WHERE numdos = '$numdos'";
     $ds->exec($query);
 
     return $count;

@@ -27,12 +27,12 @@ class CTempsOp extends CMbObject {
   // Object References
   var $_ref_praticien = null;
 
-  
-  function CTempsOp() {
-    $this->CMbObject("temps_op", "temps_op_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-  }	  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'temps_op';
+    $spec->key   = 'temps_op_id';
+    return $spec;
+  }
 
   function getSpecs() {
   	$specsParent = parent::getSpecs();

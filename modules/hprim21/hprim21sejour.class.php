@@ -38,10 +38,11 @@ class CHprim21Sejour extends CHprim21Object {
   var $_ref_sejour          = null;
   var $_ref_hprim21_medecin = null;
 
-	function CHprim21Sejour() {
-		$this->CMbObject("hprim21_sejour", "hprim21_sejour_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'hprim21_sejour';
+    $spec->key   = 'hprim21_sejour_id';
+    return $spec;
   }
   
   function getSpecs() {

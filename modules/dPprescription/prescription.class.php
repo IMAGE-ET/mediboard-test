@@ -43,10 +43,11 @@ class CPrescription extends CMbObject {
   var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
   var $_ref_current_praticien = null;
   
-  function CPrescription() {
-    $this->CMbObject("prescription", "prescription_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prescription';
+    $spec->key   = 'prescription_id';
+    return $spec;
   }
   
   function getBackRefs() {

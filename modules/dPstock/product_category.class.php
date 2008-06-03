@@ -18,9 +18,11 @@ class CProductCategory extends CMbObject {
   //    Multiple
   var $_ref_products = null;
 
-  function CProductCategory() {
-    $this->CMbObject('product_category', 'category_id');
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_category';
+    $spec->key   = 'category_id';
+    return $spec;
   }
 
   function getBackRefs() {

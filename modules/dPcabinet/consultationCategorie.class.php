@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI;
-
 class CConsultationCategorie extends CMbObject {
 	
   // DB Table key
@@ -21,11 +19,11 @@ class CConsultationCategorie extends CMbObject {
   var $nom_categorie = null;
   var $nom_icone     = null;
   
-  
-  function CConsultationCategorie() {
-    $this->CMbObject("consultation_cat", "categorie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'consultation_cat';
+    $spec->key   = 'categorie_id';
+    return $spec;
   }
   
   function getSpecs() {
@@ -35,7 +33,6 @@ class CConsultationCategorie extends CMbObject {
     $specs["nom_icone"]     = "notNull str";
     return $specs;
   }
-  
   
   function updateFormFields() {
   	parent::updateFormFields();

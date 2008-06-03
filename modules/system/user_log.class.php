@@ -33,13 +33,9 @@ class CUserLog extends CMbMetaObject {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->loggable = false;
+    $spec->table = 'user_log';
+    $spec->key   = 'user_log_id';
     return $spec;
-  }
-
-  function CUserLog() {
-    $this->CMbObject("user_log", "user_log_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
   }
 
   function getSpecs() {
@@ -55,7 +51,6 @@ class CUserLog extends CMbMetaObject {
     
     return $specs;
   }
-  
   
   function updateFormFields() {
     parent::updateFormFields();
@@ -85,6 +80,5 @@ class CUserLog extends CMbMetaObject {
     $this->_ref_user = new CUser;
     $this->_ref_user->load($this->user_id);
   }
-  
 }
 ?>

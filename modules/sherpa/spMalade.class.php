@@ -19,13 +19,11 @@ class CSpMalade extends CSpObject {
 
   // DB Fields : see getSpecs();
   
-	function CSpMalade() {
-	  $this->CSpObject("t_malade", "malnum");    
-	}
-  
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CPatient";
+    $spec->mbClass = 'CPatient';
+    $spec->table   = 't_malade';
+    $spec->key     = 'malnum';
     return $spec;
   }
  	

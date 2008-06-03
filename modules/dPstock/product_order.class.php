@@ -42,11 +42,12 @@ class CProductOrder extends CMbObject {
 	var $_redo            = null;
 	var $_reset           = null;
 	
-
-	function CProductOrder() {
-		$this->CMbObject('product_order', 'order_id');
-		$this->loadRefModule(basename(dirname(__FILE__)));
-	}
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'product_order';
+    $spec->key   = 'order_id';
+    return $spec;
+  }
 
 	function getBackRefs() {
 		$backRefs = parent::getBackRefs();

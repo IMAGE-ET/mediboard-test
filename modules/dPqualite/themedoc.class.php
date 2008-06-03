@@ -21,10 +21,11 @@ class CThemeDoc extends CMbObject {
   // Fwd refs
   var $_ref_group = null;
 
-  function CThemeDoc() {
-    $this->CMbObject("doc_themes", "doc_theme_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'doc_themes';
+    $spec->key   = 'doc_theme_id';
+    return $spec;
   }
   
   function getBackRefs() {

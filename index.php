@@ -95,7 +95,7 @@ if (isset($_POST["login"])) {
 // Get the user preference
 $uistyle = $AppUI->user_prefs["UISTYLE"];
 
-require_once( $AppUI->getSystemClass("smartydp"));
+require_once(CAppUI::getSystemClass("smartydp"));
 
 // clear out main url parameters
 $m = "";

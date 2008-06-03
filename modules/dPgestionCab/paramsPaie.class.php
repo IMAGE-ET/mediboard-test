@@ -52,11 +52,12 @@ class CParamsPaie extends CMbObject {
 
   // Object References
   var $_ref_user = null;
-
-  function CParamsPaie() {
-    $this->CMbObject("params_paie", "params_paie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'params_paie';
+    $spec->key   = 'params_paie_id';
+    return $spec;
   }
   
   function getBackRefs() {

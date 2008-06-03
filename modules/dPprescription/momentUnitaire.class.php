@@ -19,10 +19,11 @@ class CMomentUnitaire extends CMbObject {
   var $type_moment = null;
   var $principal = null;
   
-  function CMomentUnitaire() {
-    $this->CMbObject("moment_unitaire", "moment_unitaire_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'moment_unitaire';
+    $spec->key   = 'moment_unitaire_id';
+    return $spec;
   }
   
   function getSpecs() {

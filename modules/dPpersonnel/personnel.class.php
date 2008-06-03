@@ -25,10 +25,11 @@ class CPersonnel extends CMbObject {
   var $_user_last_name = null;
   var $_user_first_name = null;
   
-  function CPersonnel() {
-	$this->CMbObject("personnel", "personnel_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'personnel';
+    $spec->key   = 'personnel_id';
+    return $spec;
   }
 	
   function getSpecs() {

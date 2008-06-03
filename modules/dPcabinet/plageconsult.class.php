@@ -40,11 +40,12 @@ class CPlageconsult extends CMbObject {
   // Object References
   var $_ref_chir          = null;
   var $_ref_consultations = null;
-
-  function CPlageconsult() {
-    $this->CMbObject("plageconsult", "plageconsult_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'plageconsult';
+    $spec->key   = 'plageconsult_id';
+    return $spec;
   }
   
   function getBackRefs() {

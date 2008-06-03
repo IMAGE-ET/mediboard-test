@@ -7,8 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPcabinet", "lmObject"));
+require_once(CAppUI::getModuleClass("dPcabinet", "lmObject"));
 
 /**
  * FSE produite par LogicMax

@@ -22,10 +22,12 @@ class CSpEtablissement extends CMbObject {
   
   // Forward references
   var $_ref_group = null;
-  
-  function CSpEtablissement() {
-    $this->CMbObject("sp_etablissement", "sp_etab_id");    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'sp_etablissement';
+    $spec->key   = 'sp_etab_id';
+    return $spec;
   }
     
   function getSpecs() {

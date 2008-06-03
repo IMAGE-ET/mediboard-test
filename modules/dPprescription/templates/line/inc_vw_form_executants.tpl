@@ -5,7 +5,7 @@
 	    <input type="hidden" name="m" value="dPprescription" />
 	    <input type="hidden" name="dosql" value="{{$dosql}}" />
 	    <input type="hidden" name="del" value="0" />
-	    <input type="hidden" name="{{$line->_tbl_key}}" value="{{$line->_id}}" />
+	    <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
 	    <!-- Selection d'un executant -->
 	    <select class="executant-{{$category_id}}" name="executant_prescription_line_id" onchange="submitFormAjax(this.form, 'systemMsg');">
 	      <option value="">&mdash; Sélection d'un exécutant</option>

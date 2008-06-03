@@ -28,10 +28,11 @@ class CDocGedSuivi extends CMbObject {
   var $_ref_user    = null;
   var $_ref_file    = null;
 
-  function CDocGedSuivi() {
-    $this->CMbObject("doc_ged_suivi", "doc_ged_suivi_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'doc_ged_suivi';
+    $spec->key   = 'doc_ged_suivi_id';
+    return $spec;
   }
 
   function getSpecs() {

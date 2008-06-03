@@ -16,19 +16,19 @@ class CFilesCategory extends CMbObject {
   var $nom = null;
   var $class = null;
   
-  
-  function CFilesCategory() {
-    $this->CMbObject("files_category", "file_category_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'files_category';
+    $spec->key   = 'file_category_id';
+    return $spec;
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["compte_rendu"] = "CCompteRendu file_category_id";
-      $backRefs["employes"] = "CEmployeCab function_id";
-      $backRefs["files"] = "CFile file_category_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["compte_rendu"] = "CCompteRendu file_category_id";
+    $backRefs["employes"] = "CEmployeCab function_id";
+    $backRefs["files"] = "CFile file_category_id";
+    return $backRefs;
   }
 
   function getSpecs() {
@@ -60,6 +60,5 @@ class CFilesCategory extends CMbObject {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
-
 }
 ?>

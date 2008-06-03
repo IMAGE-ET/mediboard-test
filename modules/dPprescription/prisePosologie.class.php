@@ -25,11 +25,11 @@ class CPrisePosologie extends CMbMetaObject {
   var $unite_tous_les        = null;
   var $decalage_prise        = null;   // decalage de la prise J + $decalage (par defaut 0)
   
- 
-  function CPrisePosologie() {
-    $this->CMbObject("prise_posologie", "prise_posologie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'prise_posologie';
+    $spec->key   = 'prise_posologie_id';
+    return $spec;
   }
     
   function loadRefMoment(){

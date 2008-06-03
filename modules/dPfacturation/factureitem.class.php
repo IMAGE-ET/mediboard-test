@@ -25,9 +25,11 @@ class CFactureItem extends CMbObject {
    
   var $_ttc = null;
   
-  function CFactureItem() {
-    $this->CMbObject("factureitem", "factureitem_id"); 
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'factureitem';
+    $spec->key   = 'factureitem_id';
+    return $spec;
   }
 
   function getSpecs() {

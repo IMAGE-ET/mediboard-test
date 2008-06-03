@@ -36,12 +36,14 @@ class CChambre extends CMbObject {
   // Object references
   var $_ref_service = null;
   var $_ref_lits = null;
-
-	function CChambre() {
-		$this->CMbObject("chambre", "chambre_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'chambre';
+    $spec->key   = 'chambre_id';
+    return $spec;
   }
+  
   function getBackRefs() {
       $backRefs = parent::getBackRefs();
       $backRefs["lits"] = "CLit chambre_id";

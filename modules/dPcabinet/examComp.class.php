@@ -22,10 +22,11 @@ class CExamComp extends CMbObject {
   // Fwd References
   var $_ref_consult = null;
   
-  function CExamComp() {
-    $this->CMbObject("exams_comp", "exam_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'exams_comp';
+    $spec->key   = 'exam_id';
+    return $spec;
   }
   
   function getSpecs() {

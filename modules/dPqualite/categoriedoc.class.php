@@ -19,10 +19,11 @@ class CCategorieDoc extends CMbObject {
   var $nom  = null;
   var $code = null;
 
-  function CCategorieDoc() {
-    $this->CMbObject("doc_categories", "doc_categorie_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'doc_categories';
+    $spec->key   = 'doc_categorie_id';
+    return $spec;
   }
   
   function getBackRefs() {

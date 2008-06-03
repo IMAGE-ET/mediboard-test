@@ -27,11 +27,12 @@ class CEmployeCab extends CMbObject {
 
   // Object References
   var $_ref_function = null;
-
-  function CEmployeCab() {
-    $this->CMbObject("employecab", "employecab_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'employecab';
+    $spec->key   = 'employecab_id';
+    return $spec;
   }
   
   function getBackRefs() {

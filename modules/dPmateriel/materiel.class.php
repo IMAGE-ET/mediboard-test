@@ -29,9 +29,11 @@ class CMateriel extends CMbObject {
   var $_date_min	 	= null;
   var $_date_max 		= null;
   
-  function CMateriel() {
-    $this->CMbObject("materiel", "materiel_id");
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'materiel';
+    $spec->key   = 'materiel_id';
+    return $spec;
   }
 
   function getBackRefs() {

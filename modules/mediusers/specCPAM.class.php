@@ -20,11 +20,12 @@ class CSpecCPAM extends CMbObject {
 
   // Object References
   var $_ref_users = null;
-
-  function CSpecCPAM() {
-    $this->CMbObject("spec_cpam", "spec_cpam_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'spec_cpam';
+    $spec->key   = 'spec_cpam_id';
+    return $spec;
   }
   
   function getBackRefs() {

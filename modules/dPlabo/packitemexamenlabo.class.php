@@ -20,12 +20,15 @@ class CPackItemExamenLabo extends CMbObject {
   var $_ref_examen_labo       = null;
   
   function CPackItemExamenLabo() {
-    $this->CMbObject("pack_item_examen_labo", "pack_item_examen_labo_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-    
+    parent::__construct();
     $this->_locked =& $this->_external;
-    
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'pack_item_examen_labo';
+    $spec->key   = 'pack_item_examen_labo_id';
+    return $spec;
   }
   
   function check() {

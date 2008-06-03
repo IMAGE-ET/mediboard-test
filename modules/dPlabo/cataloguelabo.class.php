@@ -37,11 +37,15 @@ class CCatalogueLabo extends CMbObject {
   var $_level = null;
   
   function CCatalogueLabo() {
-    $this->CMbObject("catalogue_labo", "catalogue_labo_id");
-    
-    $this->loadRefModule(basename(dirname(__FILE__)));
-
+    parent::__construct();
     $this->_locked =& $this->_external;
+  }
+  
+  function getSpec() {
+    $spec = parent::getSpec();
+    $spec->table = 'catalogue_labo';
+    $spec->key   = 'catalogue_labo_id';
+    return $spec;
   }
   
   function check() {
