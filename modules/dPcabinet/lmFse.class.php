@@ -39,7 +39,7 @@ class CLmFSE extends CLmObject {
   function getSpec() {
     $spec = parent::getSpec();
     $spec->mbClass = 'CConsultation';
-    $spec->table   = 'S_F_FSE'
+    $spec->table   = 'S_F_FSE';
     $spec->key     = 'S_FSE_NUMERO_FSE';
     return $spec;
   }
