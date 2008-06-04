@@ -60,10 +60,12 @@ function reloadPrescription(prescription_id){
 
 
 function reloadAntAllergie(sejour_id){
+  if($('antecedent_allergie')){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_antecedent_allergie");
   url.addParam("sejour_id", sejour_id);
   url.requestUpdate("antecedent_allergie", { waitingtext: null } );
+  }
 }
 
 
@@ -353,7 +355,7 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
-        <li><a href="#constantes-medicales">Constantes</a></li>
+        <li onclick="refreshConstantesMedicales(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Soins</a></li>
