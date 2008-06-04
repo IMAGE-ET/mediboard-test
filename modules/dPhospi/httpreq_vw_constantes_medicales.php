@@ -96,8 +96,8 @@ if ($sejour->_list_constantes_medicales) {
 // Mise en place de la ligne de niveau normal pour chaque constante et de l'unité
 $data['ta']['title'] = htmlentities('Tension artérielle');
 $data['ta']['unit'] = 'cmHg';
-$data['ta']['standard'] = 120;
-$data['ta']['options']['yaxis'] = array('min' => 0, 'max' => 300);
+$data['ta']['standard'] = 12;
+$data['ta']['options']['yaxis'] = array('min' => 0, 'max' => 30);
 
 $data['pouls']['title'] = 'Pouls';
 $data['pouls']['unit'] = 'puls./min';
