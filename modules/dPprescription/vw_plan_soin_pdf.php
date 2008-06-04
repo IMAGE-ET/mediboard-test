@@ -147,6 +147,11 @@ $prescription->loadRefObject();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
 
+$patient->loadRefConstantesMedicales();
+$const_med = $patient->_ref_constantes_medicales;
+$poids = $const_med->poids;
+
+/*
 $consult_anesth = new CConsultAnesth();
 $consult_anesth->sejour_id = $prescription->_ref_object->_id;
 $consult_anesth->loadMatchingObject();
@@ -155,6 +160,7 @@ if($consult_anesth->_id){
   $poids = $consult_anesth->poid;
 }
 
+*/
 // Creation d'un nouveau fichier pdf
 $pdf = new CPrescriptionPdf("L", "mm", "A4", true); 
 $pdf->SetMargins(15, 15);
@@ -246,16 +252,19 @@ if($traitement->_id){
 	foreach($traitement->_ref_prescription_lines as $_line_traitement){
 	  $dates = array("jour_1" => "0","jour_2" => "0","jour_3" => "0");
 	  $nb_jours = 0;
-	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
+	  if(!$_line_traitement->debut){
+	    $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
+	  }
 	  $_line_traitement->_fin = mbDate($prescription->_ref_object->_sortie);
 		if($_line_traitement->date_arret){
-	    $_line_traitement->_fin = $_line_traitement->date_arret;
+	    $_line_traitement->_fin = mbDate("-1 DAY", $_line_traitement->date_arret);
 	  }
-	  $_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
+	  
 	  calculEtatJour($date, $dates, $nb_jours, $_line_traitement);
+	  /*
 	  if(!$nb_jours){
 	  	continue;
-	  }
+	  }*/
 	  prescriptionLine($pdf, $_line_traitement, $date, $dates);
 	}
 }
