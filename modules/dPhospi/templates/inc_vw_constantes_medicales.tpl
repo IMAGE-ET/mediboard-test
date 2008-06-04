@@ -27,13 +27,11 @@ editConstantes = function (const_id){
 }
 
 insertGraph = function (container, data, id, width, height) {
-  if (container.visible()){
   container.insert('<br /><b>'+data.title+(data.unit?(' ('+data.unit+')'):'')+'</b>');
   container.insert('<div id="'+id+'" style="width: '+width+'; height: '+height+';"></div>');
   
   last_date = null;
   return Flotr.draw($(id), data.series, data.options);
-  }
 }
 
 tickFormatter = function (n) {
@@ -160,7 +158,6 @@ drawGraph = function() {
 Main.add(drawGraph);
 Main.add(function () {
   prepareForm(document.forms['edit-constantes-medicales']);
-  //Calendar.regField('edit-constantes-medicales', 'datetime', true);
 });
 </script>
 

@@ -29,6 +29,7 @@ Document.refreshList = function(sejour_id){
 }
 
 function loadSejour(sejour_id) {
+  
   url_sejour = new Url;
   url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
   url_sejour.addParam("object_class","CSejour");
@@ -94,7 +95,8 @@ function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
     loadSuivi(sejour_id);
   }
   if($('constantes-medicales')){
-    refreshConstantesMedicales(sejour_id);
+    constantesMedicalesDrawn = false;
+    refreshConstantesHack(sejour_id);
   }
   if($('antecedents')){
     loadAntecedents(sejour_id);    
@@ -133,6 +135,14 @@ function loadSuivi(sejour_id) {
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
   submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+}
+
+var constantesMedicalesDrawn = false;
+function refreshConstantesHack(sejour_id) {
+  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible()) {
+    refreshConstantesMedicales(sejour_id);
+    constantesMedicalesDrawn = true;
+  }
 }
 
 function refreshConstantesMedicales(sejour_id) {
@@ -355,7 +365,7 @@ Main.add(function () {
       <ul id="tab-sejour" class="control_tabs">
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
-        <li onclick="refreshConstantesMedicales(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
+        <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
         
         {{if $isPrescriptionInstalled}}
         <li onclick="loadTraitement(document.form_prescription.sejour_id.value,'{{$date}}')"><a href="#dossier_soins">Soins</a></li>
