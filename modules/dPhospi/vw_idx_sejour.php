@@ -13,9 +13,9 @@ require_once($AppUI->getModuleFile("dPhospi", "inc_vw_affectations"));
 $can->needsRead();
 
 // Filtres
-$date = mbGetValueFromGetOrSession("date", mbDate());
-$datetime = mbDateTime(); 
-$mode = mbGetValueFromGetOrSession("mode", 0);
+$date         = mbGetValueFromGetOrSession("date", mbDate());
+$datetime     = mbDateTime(); 
+$mode         = mbGetValueFromGetOrSession("mode", 0);
 $service_id   = mbGetValueFromGetOrSession("service_id");
 $praticien_id = mbGetValueFromGetOrSession("praticien_id");
 
@@ -43,7 +43,15 @@ if ($service_id) {
 	$praticien_id = "";
 }
 
-$sejour_id = mbGetValueFromGetOrSession("sejour_id");
+$changeSejour = mbGetValueFromGet("service_id") || mbGetValueFromGet("praticien_id") || mbGetValueFromGet("date");
+$changeSejour = $changeSejour || (!$service_id && !$praticien_id);
+
+if($changeSejour) {
+  $sejour_id = null;
+  mbSetValueToSession("sejour_id");
+} else {
+  $sejour_id = mbGetValueFromGetOrSession("sejour_id");
+}
 
 // Récupération du service à ajouter/éditer
 $totalLits = 0;

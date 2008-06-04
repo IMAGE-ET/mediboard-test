@@ -118,18 +118,22 @@ function loadResultLabo(sejour_id) {
 }
 
 function loadTraitement(sejour_id, date) {
-  var urlTt = new Url;
-  urlTt.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
-  urlTt.addParam("sejour_id", sejour_id);
-  urlTt.addParam("date", date);
-  urlTt.requestUpdate("dossier_traitement", { waitingText: null } );
+  if(sejour_id) {
+    var urlTt = new Url;
+    urlTt.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
+    urlTt.addParam("sejour_id", sejour_id);
+    urlTt.addParam("date", date);
+    urlTt.requestUpdate("dossier_traitement", { waitingText: null } );
+  }
 }
 
 function loadSuivi(sejour_id) {
-  var urlSuivi = new Url;
-  urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
-  urlSuivi.addParam("sejour_id", sejour_id);
-  urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+  if(sejour_id) {
+    var urlSuivi = new Url;
+    urlSuivi.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");
+    urlSuivi.addParam("sejour_id", sejour_id);
+    urlSuivi.requestUpdate("dossier_suivi", { waitingText: null } );
+  }
 }
 
 function submitSuivi(oForm) {
@@ -139,17 +143,19 @@ function submitSuivi(oForm) {
 
 var constantesMedicalesDrawn = false;
 function refreshConstantesHack(sejour_id) {
-  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible()) {
+  if (constantesMedicalesDrawn == false && $('constantes-medicales').visible() && sejour_id) {
     refreshConstantesMedicales(sejour_id);
     constantesMedicalesDrawn = true;
   }
 }
 
 function refreshConstantesMedicales(sejour_id) {
-  var url = new Url;
-  url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
-  url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("constantes-medicales", { waitingText: null } );
+  if(sejour_id) {
+    var url = new Url;
+    url.setModuleAction("dPhospi", "httpreq_vw_constantes_medicales");
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate("constantes-medicales", { waitingText: null } );
+  }
 }
 
 Main.add(function () {
@@ -391,18 +397,38 @@ Main.add(function () {
       
       
       <!-- Tabs -->
-      <div id="viewSejourHospi" style="display: none;"></div>
+      <div id="viewSejourHospi" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+          ici toutes les informations le concernant.
+        </div>
+      </div>
       
-      <div id="constantes-medicales" style="display: none;"></div>
+      <div id="constantes-medicales" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+          les constantes du patient concerné.
+        </div>
+      </div>
       
       {{if $isPrescriptionInstalled}}
       <div id="dossier_soins" style="display: none;">
-        <div id="dossier_traitement"></div>
+        <div id="dossier_traitement">
+          <div class="big-info">
+            Veuillez selectionner un séjour dans la liste de gauche pour afficher
+            le dossier de soin du patient concerné.
+          </div>
+        </div>
         <hr />
         <div id="dossier_suivi"></div>
       </div>
       
-      <div id="prescription_sejour" style="display: none;"></div>
+      <div id="prescription_sejour" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+          la prescription du patient concerné.
+        </div>
+      </div>
       {{/if}}
       
       {{if $app->user_prefs.ccam_sejour == 1 }}
@@ -416,28 +442,55 @@ Main.add(function () {
         
         <table class="form">
           <tr id="one" style="display: none;">
-            <td id="ccam"></td>
+            <td id="ccam">
+              <div class="big-info text">
+                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+                ajouter des actes CCAM au patient concerné.
+              </div>
+            </td>
           </tr>
           <tr id="two" style="display: none;">
-            <td id="listActesNGAP"></td>
+            <td id="listActesNGAP">
+              <div class="big-info text">
+                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+                ajouter des actes NGAP au patient concerné.
+              </div>
+            </td>
           </tr>
           <tr id="three" style="display: none;">
-            <td id="cim"></td>
+            <td id="cim">
+              <div class="big-info text">
+                Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+                ajouter des actes diagnostics CIM au patient concerné.
+              </div>
+            </td>
           </tr>
         </table>
       </div>
       {{/if}}
     
       {{if $isImedsInstalled}}
-      <div id="Imeds" style="display: none;"></div>
-      {{/if}}
-      
-      <div id="documents" style="display: none;"></div>
-      
-      {{if $isPrescriptionInstalled}}
-      <div id="antecedents" style="display: none;">
+      <div id="Imeds" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+          consulter les résultats de laboratoire disponibles pour le patient concerné.
+        </div>
       </div>
       {{/if}}
+      
+      <div id="documents" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+          consulter et ajouter des documents pour le patient concerné.
+        </div>
+      </div>
+
+      <div id="antecedents" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour pouvoir
+          consulter et modifier les antécédents du le patient concerné.
+        </div>
+      </div>
       
     </td>
   </tr>

@@ -12,10 +12,6 @@ global $AppUI, $can, $m;
 $function = mbGetValueFromGet("action" , "release");
 $timeout  = mbGetValueFromGet("timeout", 5);
 
-mbtrace("avant sleep $timeout sec");
-sleep($timeout);
-mbtrace("apres sleep $timeout sec");
-
 $sem1 = new CMbSemaphore("montest");
 $sem2 = new CMbSemaphore("montest");
 if($function == "acquire") {
