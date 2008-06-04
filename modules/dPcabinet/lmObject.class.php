@@ -15,17 +15,12 @@ class CLmObject extends CMbObject {
   public $_ref_id400 = null;
   
   function CLmObject($table, $key) {
-    parent::__construct();
-    
     $spec_keys = array_keys($this->getSpecs());
     foreach ($spec_keys as $prop) {
       $this->$prop = null;
     }
     
-    if ($this->_ref_module) {
-      $this->_spec->table = $table;
-      $this->_spec->key   = $key;
-    }
+    parent::__construct();
   }
   
   function loadExternal() {
@@ -34,9 +29,9 @@ class CLmObject extends CMbObject {
     
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->dsn = "logicmax";
+    $spec->dsn         = "logicmax";
     $spec->incremented = false;
-    $spec->loggable = false;
+    $spec->loggable    = false;
     return $spec;
   }
 

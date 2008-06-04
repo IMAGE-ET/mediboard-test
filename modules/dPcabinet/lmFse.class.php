@@ -29,11 +29,7 @@ class CLmFSE extends CLmObject {
   
   // Distant field
   var $_consult_id = null;
-  
-	function CLmFSE() {
-	  $this->CLmObject("S_F_FSE", "S_FSE_NUMERO_FSE");
-	}
-  
+
 	function updateFormFields() {
 	  parent::updateFormFields();
 	  $this->_view = CAppUI::tr($this->_class_name) . " " . $this->_id;
@@ -42,7 +38,9 @@ class CLmFSE extends CLmObject {
 	
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CConsultation";
+    $spec->mbClass = 'CConsultation';
+    $spec->table   = 'S_F_FSE'
+    $spec->key     = 'S_FSE_NUMERO_FSE';
     return $spec;
   }
  	

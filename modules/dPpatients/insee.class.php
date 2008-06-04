@@ -17,10 +17,10 @@ class CPaysInsee extends CMbObject {
 
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->dsn = "INSEE";
+    $spec->dsn         = 'INSEE';
     $spec->incremented = false;
-    $spec->table = 'pays';
-    $spec->key   = 'numerique';
+    $spec->table       = 'pays';
+    $spec->key         = 'numerique';
     return $spec;
   }
   
