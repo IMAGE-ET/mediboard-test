@@ -18,14 +18,12 @@ class CSpUrgDos extends CSpObject {
   var $numdos = null;
 
   // DB Fields : see getSpecs();
-  
-	function CSpUrgDos() {
-	  $this->CSpObject("t_urgdos", "numdos");    
-	}
-  
+
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CSejour";
+    $spec->mbClass = 'CSejour';
+    $spec->table   = 't_urgdos';
+    $spec->key     = 'numdos';
     return $spec;
   }
  	

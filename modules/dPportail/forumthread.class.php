@@ -20,9 +20,11 @@ class CForumThread extends CForumMessage {
     var $_ref_forum_theme    = null;
     var $_ref_forum_messages = null;
 
-    function CForumThread() {
-        $this->CMbObject('forum_thread', 'forum_thread_id'); 
-        $this->loadRefModule(basename(dirname(__FILE__)));
+    function getSpec() {
+      $spec = parent::getSpec();
+      $spec->table = 'forum_thread';
+      $spec->key   = 'forum_thread_id';
+      return $spec;
     }
 
     function getSpecs() {

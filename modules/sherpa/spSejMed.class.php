@@ -18,14 +18,12 @@ class CSpSejMed extends CSpObject {
   var $numdos = null;
 
   // DB Fields : see getSpecs();
-  
-	function CSpSejMed() {
-	  $this->CSpObject("t_sejmed", "numdos");    
-	}
-  
+
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CSejour";
+    $spec->mbClass = 'CSejour';
+    $spec->table   = 't_sejmed';
+    $spec->key     = 'numdos';
     return $spec;
   }
  	

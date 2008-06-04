@@ -22,9 +22,11 @@ class CForumMessage extends CMbObject {
     var $_ref_forum_thread  = null;
     var $_ref_user          = null;
 
-    function CForumMessage() {
-        $this->CMbObject('forum_message', 'forum_message_id'); 
-        $this->loadRefModule(basename(dirname(__FILE__)));
+    function getSpec() {
+      $spec = parent::getSpec();
+      $spec->table = 'forum_message';
+      $spec->key   = 'forum_message_id';
+      return $spec;
     }
 
     function getSpecs() {

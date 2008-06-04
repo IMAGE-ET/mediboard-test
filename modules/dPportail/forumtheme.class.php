@@ -22,9 +22,11 @@ class CForumTheme extends CMbObject {
     // References
     var $_ref_forum_threads = null;
 
-    function CForumTheme() {
-        $this->CMbObject('forum_theme', 'forum_theme_id'); 
-        $this->loadRefModule(basename(dirname(__FILE__)));
+    function getSpec() {
+      $spec = parent::getSpec();
+      $spec->table = 'forum_theme';
+      $spec->key   = 'forum_theme_id';
+      return $spec;
     }
 
     function getSpecs() {

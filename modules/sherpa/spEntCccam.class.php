@@ -18,14 +18,12 @@ class CSpEntCCAM extends CSpObject {
   var $idinterv = null;
 
   // DB Fields : see getSpecs();
-  
-	function CSpEntCCAM() {
-	  $this->CSpObject("es_entccam", "idinterv");    
-	}
-  
+
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CCodable";
+    $spec->mbClass = 'CCodable';
+    $spec->table   = 'es_entccam';
+    $spec->key     = 'idinterv';
     return $spec;
   }
  	

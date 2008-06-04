@@ -19,13 +19,11 @@ class CSpOuvDro extends CSpObject {
 
   // DB Fields : see getSpecs();
   
-	function CSpOuvDro() {
-	  $this->CSpObject("t_ouvdro", "numdos");    
-	}
-  
   function getSpec() {
     $spec = parent::getSpec();
-    $spec->mbClass = "CSejour";
+    $spec->mbClass = 'CSejour';
+    $spec->table   = 't_ouvdro';
+    $spec->key     = 'numdos';
     return $spec;
   }
  	
