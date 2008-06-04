@@ -82,8 +82,6 @@ class CTraitement extends CMbObject {
     $this->_ref_dossier_medical = new CDossierMedical();
     $this->_ref_dossier_medical->load($this->dossier_medical_id);
   }
-  
-  
 
   function getSeeks() {
     return array (
@@ -92,11 +90,10 @@ class CTraitement extends CMbObject {
   }
 
   function getHelpedFields(){
-    return array(
+    return array (
       "traitement" => null
     );
   }
-  
 }
 
 ?>

@@ -1,3 +1,5 @@
+{{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+
 <script type="text/javascript">
 
 Antecedent = {
@@ -38,8 +40,8 @@ Traitement = {
 
 <strong>Antécédents du patient</strong>
 <ul>
-{{if $patient->_ref_dossier_medical->_ref_antecedents}}
-  {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+{{if $dossier_medical->_ref_antecedents}}
+  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
@@ -78,9 +80,12 @@ Traitement = {
   <li><em>Pas d'antécédents</em></li>
 {{/if}}
 </ul>
+
+{{if $dPconfig.dPpatients.CTraitement.enabled}}
+<!-- Traitements -->
 <strong>Traitements du patient</strong>
 <ul>
-  {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+  {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
   <li>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
@@ -111,9 +116,11 @@ Traitement = {
   <li><em>Pas de traitements</em></li>
   {{/foreach}}
 </ul>
+{{/if}}
+
 <strong>Diagnostics du patient</strong>
 <ul>
-  {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
+  {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}
@@ -138,7 +145,7 @@ Traitement = {
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$patient->_id}}" />
   <input type="hidden" name="object_class" value="CPatient" />
-  <input type="hidden" name="codes_cim" value="{{$patient->_ref_dossier_medical->codes_cim}}" />
+  <input type="hidden" name="codes_cim" value="{{$dossier_medical->codes_cim}}" />
 </form>
 
 <script type="text/javascript">

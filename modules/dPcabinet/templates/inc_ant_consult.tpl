@@ -28,85 +28,19 @@ updateTokenCim10Anesth = function(){
   submitFormAjax(oForm, 'systemMsg', { onComplete : DossierMedical.reloadDossierSejour });
 }
 
-dateAntecedent = function(){
-  var oForm = document.editAntFrm;
-  var oEnCours = oForm._date_ant;
-  var oHiddenField = oForm.date;
-  oForm._hidden_rques.value = oForm.rques.value;
-  oForm.rques.value = "";
-  var oViewField = document.getElementById('editAntFrm_date_da');
-  var oTriggerField = document.getElementById('editAntFrm_date_trigger');
-  if (oEnCours.checked) {
-    oHiddenField.value = "{{$today}}";
-    oViewField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
-    oTriggerField.style.display = "inline";
-  }else{
-    oHiddenField.value = "";
-    oViewField.innerHTML = "";
-    oTriggerField.style.display = "none";
-  }   
-}
-
-dateTrmt = function(){
-  var oForm = document.editTrmtFrm;
-  var oDateTrmt = oForm._datetrmt
-  var oHiddenDebutField = oForm.debut;
-  var oViewDebutField = document.getElementById('editTrmtFrm_debut_da');
-  var oTriggerDebutField = document.getElementById('editTrmtFrm_debut_trigger');
-  var oHiddenFinField = oForm.fin;
-  var oViewFinField = document.getElementById('editTrmtFrm_fin_da');
-  var oTriggerFinField = document.getElementById('editTrmtFrm_fin_trigger');
-  if (oDateTrmt.checked) {
-    oHiddenDebutField.value = "{{$today}}";
-    oViewDebutField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
-    oTriggerDebutField.style.display = "inline";
-    oForm._en_cours.disabled = false;
-    dateFinTrmt();
-  }else{
-    oHiddenDebutField.value = "";
-    oViewDebutField.innerHTML = "";
-    oTriggerDebutField.style.display = "none";
-    oHiddenFinField.value = "";
-    oViewFinField.innerHTML = "";
-    oTriggerFinField.style.display = "none";
-    oForm._en_cours.disabled = true;
-  }
-}
-
-dateFinTrmt = function(){
-  var oForm = document.editTrmtFrm;
-  var oEnCours = oForm._en_cours;
-  var oHiddenField = oForm.fin;
-  var oViewField = document.getElementById('editTrmtFrm_fin_da');
-  var oTriggerField = document.getElementById('editTrmtFrm_fin_trigger');
-  if (oEnCours.checked) {
-    oHiddenField.value = "{{$today}}";
-    oViewField.innerHTML = "{{$today|date_format:"%d/%m/%Y"}}";
-    oTriggerField.style.display = "inline";
-
-  } else {
-    oHiddenField.value = "";
-    oViewField.innerHTML = "En cours";
-    oTriggerField.style.display = "none";
-  }
-}
-
-finTrmt = function() {
-  var oForm = document.editTrmtFrm;
-  oForm._hidden_traitement.value = oForm.traitement.value;
-  oForm.traitement.value = "";
-  oForm._helpers_traitement.value = "";
-}
-
-
 onSubmitAnt = function (oForm) {
 	if (oForm.rques.value.blank()) {
     return false;
   }
+
   onSubmitFormAjax(oForm, {
   	onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
-  dateAntecedent();
+  
+  // Nettoyage du formulaire
+  oForm._hidden_rques.value = oForm.rques.value;
+  oForm.rques.value = "";
+
   return false;
 }
 
@@ -114,10 +48,16 @@ onSubmitTraitement = function (oForm) {
 	if (oForm.traitement.value.blank()) {
     return false;
   }
+  
   onSubmitFormAjax(oForm, {
   	onComplete : DossierMedical.reloadDossiersMedicaux 
   } );
-  finTrmt();
+  
+  // Nettoyage du formulaire
+  oForm._hidden_traitement.value = oForm.traitement.value;
+  oForm.traitement.value = "";
+  oForm._helpers_traitement.value = "";
+
   return false;
 }
 
@@ -129,8 +69,6 @@ easyMode = function() {
   url.addParam("user_id", "{{$userSel->_id}}");
   url.pop(width, height, "easyMode");
 }
-
-
 
 /**
  * Mise a jour du champ _sejour_id pour la creation d'antecedent, de traitement et d'addiction
@@ -203,13 +141,10 @@ Main.add(function () {
       <table class="form">
         <tr>
           <th>
-            <input type="checkbox" name="_date_ant" onclick="dateAntecedent()" />
-            {{mb_label object=$antecedent field="date"}}
+            {{mb_label object=$antecedent field=date}}
           </th>
           <td class="date">
-            <div id="editAntFrm_date_da"></div>
-            <input type="hidden" name="date" value="" />
-            <img id="editAntFrm_date_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+						{{mb_field object=$antecedent field=date form=editAntFrm register=true}}
           </td>
           
           <td id="listAides_Antecedent_rques">
@@ -268,9 +203,9 @@ Main.add(function () {
       </table>
       </form>
       
-      <hr />
-      
 			<!-- Traitements -->
+			{{if $dPconfig.dPpatients.CTraitement.enabled}}
+      <hr />
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />
       <input type="hidden" name="del" value="0" />
@@ -285,13 +220,10 @@ Main.add(function () {
       <table class="form">
         <tr>
           <th>
-            <input type="checkbox" name="_datetrmt" onclick="dateTrmt()" />
-            {{mb_label object=$traitement field="debut"}}
+            {{mb_label object=$traitement field=debut}}
           </th>
           <td class="date">
-            <div id="editTrmtFrm_debut_da"></div>
-            <input type="hidden" name="debut" class="{{$traitement->_props.debut}}" value="" />
-            <img id="editTrmtFrm_debut_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de début" style="display:none;" />
+						{{mb_field object=$traitement field=debut form=editTrmtFrm register=true}}
           </td>
           <td>
             {{mb_label object=$traitement field="traitement"}}
@@ -307,13 +239,10 @@ Main.add(function () {
         </tr>
         <tr>
           <th>
-            <input type="checkbox" name="_en_cours" disabled="disabled" onclick="dateFinTrmt()" />
-            {{mb_label object=$traitement field="fin"}}
+            {{mb_label object=$traitement field=fin}}
           </th>
           <td class="date">
-            <div id="editTrmtFrm_fin_da"></div>
-            <input type="hidden" name="fin" class="{{$traitement->_props.fin}}" value="" />
-            <img id="editTrmtFrm_fin_trigger" src="./images/icons/calendar.gif" alt="calendar" title="Choisir une date de fin" style="display:none;" />
+						{{mb_field object=$traitement field=fin form=editTrmtFrm register=true}}
           </td>
           <td rowspan="3">
             <textarea name="traitement" onblur="this.form.onsubmit()"></textarea>
@@ -344,9 +273,10 @@ Main.add(function () {
         </tr>
       </table>
       </form>
+      {{/if}}
       
+      <!-- Diagnostics CIM -->
       <hr />
-      
       <form name="addDiagFrm" action="?m=dPcabinet" method="post">
         <strong>Ajouter un diagnostic</strong>
         <input type="hidden" name="chir" value="{{$userSel->_id}}" />

@@ -248,20 +248,28 @@ $dPconfig["graph_engine"] = "jpgraph";
 $dPconfig["graph_svg"] = "non";
 
 
-$dPconfig["dPpatients"]["CPatient"] = array (
-  "tag_ipp" => "",
-  "date_naissance" => "0",
-  "merge_only_admin" => "0",
-);
-
-$dPconfig["dPpatients"]["intermax"] = array (
-  "auto_watch" => "0",
-);
-
-$dPconfig["dPpatients"]["CAntecedent"] = array(
-  "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
-);
+$dPconfig["dPpatients"] = array (
+	"CPatient" => array (
+	  "tag_ipp" => "",
+	  "date_naissance" => "0",
+	  "merge_only_admin" => "0",
+	),
   
+	"CAntecedent" => array (
+	  "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
+	),
+
+
+	"CTraitement" => array (
+	  "enabled" => "1",
+	),
+	
+	"intermax" => array (
+    "auto_watch" => "0",
+  ),
+  
+);
+
 $dPconfig["dPsante400"] = array (
   "nb_rows" => "5",
   "mark_row" => "0",

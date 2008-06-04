@@ -114,8 +114,6 @@ if ($consult->_id) {
     	$consultAnesth->_ref_operation->loadExtCodesCCAM();
       $consultAnesth->_ref_operation->loadAides($userSel->user_id);
       $consultAnesth->_ref_operation->loadRefs();
-      $consultAnesth->_ref_sejour->loadRefDossierMedical();  
-      $consultAnesth->_ref_sejour->_ref_dossier_medical->updateFormFields();
     }
   }
   
@@ -125,12 +123,12 @@ if ($consult->_id) {
   $patient->loadStaticCIM10($userSel->user_id);
   
   // Chargement des ses consultations
-  foreach($patient->_ref_consultations as &$_consultation) {
+  foreach ($patient->_ref_consultations as &$_consultation) {
     $_consultation->loadRefsFwd();
   }
   
   // Chargement des ses séjours
-  foreach($patient->_ref_sejours as &$_sejour) {
+  foreach ($patient->_ref_sejours as &$_sejour) {
     $_sejour->loadRefsFwd();
     $_sejour->loadRefsOperations();
     foreach ($_sejour->_ref_operations as &$_operation) {
@@ -208,7 +206,7 @@ $consult->getAssociationCodesActes();
 $consult->loadPossibleActes();
 
 // Chargement du dossier medical du patient de la consultation
-if ($consult->patient_id){
+if ($consult->patient_id) {
   $consult->_ref_patient->loadRefDossierMedical();
   $consult->_ref_patient->_ref_dossier_medical->updateFormFields();
 }

@@ -1,3 +1,5 @@
+{{assign var=dossier_medical value=$sejour->_ref_dossier_medical}}
+
 {{if $sejour->_id}}
 <form name="frmCopyAntecedent" action="?m=dPcabinet" method="post">
   <input type="hidden" name="m" value="dPpatients" />
@@ -56,7 +58,7 @@ copyAddiction = function(addiction_id) {
 
 <strong>Antécédents significatifs</strong>
 <ul>
-  {{foreach from=$sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
+  {{foreach from=$dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
   {{if $list_antecedent|@count}}
   {{foreach from=$list_antecedent item=curr_antecedent}}
   <li>
@@ -88,9 +90,11 @@ copyAddiction = function(addiction_id) {
   {{/foreach}}
 </ul>
       
+{{if $dPconfig.dPpatients.CTraitement.enabled}}
+<!-- Traitements -->
 <strong>Traitements significatifs</strong>
 <ul>
-  {{foreach from=$sejour->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+  {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
   <li>
     <form name="delTrmtFrm-{{$curr_trmt->_id}}" action="?m=dPcabinet" method="post">
     <input type="hidden" name="m" value="dPpatients" />
@@ -114,10 +118,11 @@ copyAddiction = function(addiction_id) {
   <li><em>Pas de traitements</em></li>
   {{/foreach}}
 </ul>
+{{/if}}
 
 <strong>Diagnostics significatifs de l'opération</strong>
 <ul>
-  {{foreach from=$sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
+  {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
   <li>
     <button class="trash notext" type="button" onclick="oCimAnesthField.remove('{{$curr_code->code}}')">
       {{tr}}delete{{/tr}}
@@ -136,7 +141,7 @@ copyAddiction = function(addiction_id) {
   <input type="hidden" name="dosql" value="do_dossierMedical_aed" />
   <input type="hidden" name="object_id" value="{{$sejour->_id}}" />
   <input type="hidden" name="object_class" value="CSejour" />
-  <input type="hidden" name="codes_cim" value="{{$sejour->_ref_dossier_medical->codes_cim}}" />
+  <input type="hidden" name="codes_cim" value="{{$dossier_medical->codes_cim}}" />
 </form>
 
 <script type="text/javascript">

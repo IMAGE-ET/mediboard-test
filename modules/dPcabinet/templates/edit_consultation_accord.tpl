@@ -70,8 +70,6 @@ function pageMain() {
   {{if $consult->_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   regFieldCalendar("editAntFrm", "date");
-  regFieldCalendar("editTrmtFrm", "debut");
-  regFieldCalendar("editTrmtFrm", "fin");
   {{/if}}
     
   if (document.editAntFrm){
