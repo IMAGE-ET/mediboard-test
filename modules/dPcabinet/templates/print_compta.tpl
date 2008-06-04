@@ -120,6 +120,7 @@
       </table>
     </td>
   </tr>
+  {{if $filter->_type_affichage}}
   {{foreach from=$listReglements key=key_date item=curr_date}}
   <tr>
     <td colspan="2"><strong>Règlements du {{$key_date|date_format:"%A %d %B %Y"}}</strong></td>
@@ -173,5 +174,6 @@
     </td>
   </tr>
   {{/foreach}}
+  {{/if}}
 </table>
       

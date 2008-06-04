@@ -162,6 +162,7 @@
       </table>
     </td>
   </tr>
+  {{if $filter->_type_affichage}}
   {{foreach from=$listPlages item=curr_plage}}
   <tr>
     <td colspan="2">
@@ -282,5 +283,6 @@
     </td>
   </tr>
   {{/foreach}}
+  {{/if}}
 </table>
       
