@@ -510,7 +510,6 @@ class CMbObject {
    */
   function loadList($where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {
     if (!$this->_ref_module) {
-      mbTrace('grr');
       return null;
     }
     
@@ -562,7 +561,6 @@ class CMbObject {
     $list = array();
     while ($row = $this->_spec->ds->fetchAssoc($cur)) {
       $newObject = new $this->_class_name;
-      //mbTrace($this->_class_name);
       $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
