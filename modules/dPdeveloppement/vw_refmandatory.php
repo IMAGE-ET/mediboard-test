@@ -23,7 +23,7 @@ foreach($listClass as $selected){
   $aChamps[$nameKeyTable] = array();
   $aClass =& $aChamps[$nameKeyTable];
   
-  // Extraction des champs de prop "refMnadatory" ou "ref"
+  // Extraction des champs de prop "refMandatory" ou "ref"
   foreach ($object->_specs as $k => $v) {
     $typeProp = $v->getSpecType();
     if($typeProp == "refMandatory" || $typeProp == "ref"){
@@ -37,7 +37,7 @@ foreach($listClass as $selected){
         $aClass[$k]["count_0_bdd"] = $nb_result;
       
         //Comptage du nombre d'entrées totale
-        $sql = "SELECT count(`".$object->_spec->key."`) FROM `".$object-_spec->table."`";
+        $sql = "SELECT count(`".$object->_spec->key."`) FROM `".$object->_spec->table."`";
         $aClass[$k]["count_bdd"] = $ds->loadResult($sql);
       }
     }
