@@ -17,6 +17,6 @@ if($id) {
   $result = $ds->exec($sql);
 }
 
+global $AppUI;
 $AppUI->redirect();
-
 ?>
