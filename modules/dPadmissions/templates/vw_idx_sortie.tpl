@@ -42,7 +42,6 @@ function confirmation(oForm, mode){
    }
 }
 
-
 function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, oForm, mode){
   if(entree_reelle == ""){
     if(!confirm('Attention, ce patient ne possède pas de date d\'entrée réelle, souhaitez vous confirmer la sortie du patient ?')){
@@ -54,11 +53,6 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
      return false;
     }
   }
-  if(entree_reelle == '') {
-    if(!confirm('Le séjour ne possede pas de date d\'entree reelle, souhaitez vous confimer la sortie du patient ?')){
-     return false;
-    }
-  } 
   submitSortie(oForm, mode);    
 }
 

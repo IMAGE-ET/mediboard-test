@@ -28,9 +28,9 @@
       <input type="hidden" name="dosql" value="do_sejour_aed" />
       <input type="hidden" name="sejour_id" value="{{$curr_sortie->_id}}" />
       
-      {{if $curr_sortie->mode_sortie}}
-      <input type="hidden" name="mode_sortie" value="" />
-      <input type="hidden" name="etablissement_transfert_id" value="" />
+      {{if $curr_sortie->sortie_reelle}}
+      <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
+      <input type="hidden" name="etablissement_transfert_id" value="{{$curr_sortie->etablissement_transfert_id}}" />
       <input type="hidden" name="_modifier_sortie" value="0" />
       <button class="cancel" type="button" onclick="submitSortie(this.form,'{{$mode}}')">
         Annuler la sortie
@@ -56,6 +56,9 @@
       <br />      
       {{mb_field object=$curr_sortie field="mode_sortie" onchange="loadTransfert(this.form, this.value)"}}
       <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
+      <button class="tick notext" type="button" onclick="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '{{$mode}}');">
+        Valider le mode de transfert
+      </button>
       {{/if}}
     
       </form>
