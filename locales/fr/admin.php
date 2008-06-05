@@ -162,5 +162,6 @@ $locales['CUser-_view'] = '';
 $locales['CUser-_view-court'] = '';
 $locales['CUser-_view-desc'] = '';
 $locales['config-dPpatients-intermax-auto_watch'] = 'Retour de valeurs LogicMax automatique';
-
+$locales['config-dPpatients-CAntecedent-types'] = 'Types d\'antécédents disponibles';
+$locales['config-dPpatients-CTraitement-enabled'] = 'Traitement personnels en texte libre';
 ?>

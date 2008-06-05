@@ -259,7 +259,6 @@ $dPconfig["dPpatients"] = array (
 	  "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
 	),
 
-
 	"CTraitement" => array (
 	  "enabled" => "1",
 	),

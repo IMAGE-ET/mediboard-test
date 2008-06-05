@@ -126,7 +126,7 @@ function viewProduit(cip){
 						{{/if}}
 						</ul>
 						
-						
+	          {{if is_array($dossier->_ref_traitements)}}
 						<strong>Traitements</strong>
 						<ul>
 						  {{foreach from=$dossier->_ref_traitements item=curr_trmt}}
@@ -144,6 +144,8 @@ function viewProduit(cip){
 						  <li><em>Pas de traitements</em></li>
 						  {{/foreach}}
 						</ul>
+						{{/if}}
+						
 						<strong>Diagnostics</strong>
 						<ul>
 						  {{foreach from=$dossier->_ext_codes_cim item=curr_code}}

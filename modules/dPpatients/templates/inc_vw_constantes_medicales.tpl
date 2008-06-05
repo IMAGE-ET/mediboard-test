@@ -28,7 +28,7 @@ calculImcVst = function (oForm) {
          sImcValeur = "Obésité modérée";
        }
        else if (fImc > 25) {
-         sImcValeur = "Surpoid";
+         sImcValeur = "Surpoids";
        }
      }
    }

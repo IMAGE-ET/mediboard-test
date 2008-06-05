@@ -233,14 +233,11 @@ newExam = function(sAction, consultation_id) {
   </tr>
   {{/if}}
   
-  
-  
   <tr>
     <th class="title" colspan="4">
       Examens Complémentaires
     </th>
   </tr>
-  
   
   <tr>
     <td class="text">
@@ -354,91 +351,14 @@ newExam = function(sAction, consultation_id) {
   {{include file="../../dPcabinet/templates/inc_list_actes.tpl"}}
 </table>
   
-  
-<table class="form">
-  <tr>
-    <th class="title" colspan="4">
-      Eléments significatifs
-    </th>
-  </tr>
-  <tr>
-    <th class="title">Antécédent(s)</th>
-    <th class="title">Traitement(s)</th>
-    <th class="title">Diagnostic(s)</th>
-    <th class="title">Addiction(s)</th>
-  </tr>
-  
-  {{if $object->_ref_operation->_ref_sejour && $object->_ref_operation->_ref_sejour->_ref_dossier_medical}}
-  <tr>
-    <td class="text">
-      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_antecedents key=curr_type item=list_antecedent}}
-      <strong>
-        {{tr}}CAntecedent.type.{{$curr_type}}{{/tr}}
-      </strong>
-      <ul>
-        {{foreach from=$list_antecedent item=curr_antecedent}}
-        <li>
-          {{mb_value object=$curr_antecedent field="date"}}
-          {{mb_value object=$curr_antecedent field="rques"}}
-        </li>
-        {{/foreach}}
-      </ul>
-      {{foreachelse}}
-        <i>Pas d'antécédents</i>
-      {{/foreach}}
-    </td>
-    <td class="text">
-      {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements item=curr_traitement}}
-        <li>
-          {{if $curr_traitement->fin}}
-            Du {{mb_value object=$curr_traitement field="debut"}}
-            au {{mb_value object=$curr_traitement field="fin"}} :
-          {{elseif $curr_traitement->debut}}
-            Depuis le {{mb_value object=$curr_traitement field="debut"}} :
-          {{/if}}
-          {{mb_value object=$curr_traitement field="traitement"}}
-        </li>
-      {{foreachelse}}
-        <i>Pas de traitements</i>
-      {{/foreach}}
-      {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
-    </td>
-    <td class="text">
-      {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}<ul>{{/if}}
-      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
-        <li>
-          <strong>{{$curr_code->code}}:</strong> {{$curr_code->libelle}}
-        </li>
-      {{foreachelse}}
-        <i>Pas de diagnostics</i>
-      {{/foreach}}
-      {{if $object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_traitements|@count}}</ul>{{/if}}
-    </td>
-    
-    <td class="text">
-      {{foreach from=$object->_ref_operation->_ref_sejour->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-      <strong>
-        {{tr}}CAddiction.type.{{$curr_type}}{{/tr}}
-      </strong>
-      <ul>
-        {{foreach from=$list_addiction item=curr_addiction}}
-        <li>
-          {{mb_value object=$curr_addiction field="addiction"}}
-        </li>
-        {{/foreach}}
-      </ul>
-      {{foreachelse}}
-        <i>Pas d'addictions</i>
-      {{/foreach}}
-    </td>
-  </tr>
-  {{else}}
-  <tr>
-    <td>Inconnu</td>
-    <td>Inconnu</td>
-    <td>Inconnu</td>
-    <td>Inconnu</td>
-  </tr>
-  {{/if}}
-</table>
+<!-- Dossier Médical -->
+{{assign var=sejour value=$object->_ref_sejour}}
+
+{{if !$sejour->_id}}
+<div class="big-info">
+  La consultation d'anesthésie n'est associé à aucun séjour, 
+  il n'y a donc pas de dossier médical disponible.
+</div>
+{{else}}
+{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$sejour->_ref_dossier_medical}}
+{{/if}}

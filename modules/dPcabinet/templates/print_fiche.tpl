@@ -99,7 +99,8 @@
   </tr>
   
   {{assign var=const_med value=$patient->_ref_constantes_medicales}}
-  {{assign var=ant value=$patient->_ref_dossier_medical->_ref_antecedents}}
+  {{assign var=dossier_medical value=$patient->_ref_dossier_medical}}
+  {{assign var=ant value=$dossier_medical->_ref_antecedents}}
   {{if !$ant}}
     {{assign var=no_alle value=0}}
   {{else}}
@@ -180,8 +181,8 @@
         </tr>
         <tr>
           <td class="Bold" style="white-space: normal;font-size:130%;">
-          {{if $patient->_ref_dossier_medical->_ref_antecedents}}
-            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents.alle item=currAnt}}
+          {{if $dossier_medical->_ref_antecedents}}
+            {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
               <ul>
                 <li> 
                   {{if $currAnt->date|date_format:"%d/%m/%Y"}}
@@ -210,8 +211,8 @@
         </tr>
         <tr>
           <td>
-          {{if $patient->_ref_dossier_medical->_ref_addictions}}
-            {{foreach from=$patient->_ref_dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
+          {{if $dossier_medical->_ref_addictions}}
+            {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
               {{if $list_addiction|@count}}
               <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
               {{foreach from=$list_addiction item=curr_addiction}}
@@ -235,8 +236,8 @@
         </tr>
         <tr>
           <td>
-          {{if $patient->_ref_dossier_medical->_ref_antecedents}}
-            {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
+          {{if $dossier_medical->_ref_antecedents}}
+            {{foreach from=$dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
               {{if $currTypeAnt}}
               <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
               {{foreach from=$currTypeAnt item=currAnt}}
@@ -262,6 +263,9 @@
     </td>
   </tr>
   <tr>
+  	
+    {{if is_array($dossier_medical->_ref_traitements)}}
+    <!-- Traitements -->
     <td class="halfPane">
       <table width="100%">
         <tr>
@@ -270,7 +274,7 @@
         <tr>
           <td>
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
+              {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
                 {{if $curr_trmt->fin}}
                   Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
@@ -287,6 +291,9 @@
         </tr>
       </table>
     </td>
+    {{/if}}
+    
+    <!-- Examens cliniques -->
     <td class="halfPane">
       <table width="100%">
         <tr>
@@ -326,6 +333,7 @@
         {{/if}}
       </table>
     </td>
+    
   </tr>
 </table>
 
@@ -558,7 +566,7 @@
       </table>
       {{/if}}
       
-      {{if $patient->_ref_dossier_medical->_ext_codes_cim}}
+      {{if $dossier_medical->_ext_codes_cim}}
       <table width="100%">
         <tr>
           <th class="category">Diagnostics PMSI du patient</th>
@@ -566,7 +574,7 @@
         <tr>
           <td>
             <ul>
-              {{foreach from=$patient->_ref_dossier_medical->_ext_codes_cim item=curr_code}}
+              {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
               <li>
                 {{$curr_code->code}}: {{$curr_code->libelle}}
               </li>

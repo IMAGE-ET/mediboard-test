@@ -293,10 +293,14 @@ function pageMain() {
             </ul>
           </td>
         </tr>
+        
         <tr>
           <th class="category" colspan="2">Antécedents</th>
+          {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
           <th class="category" colspan="2">Traitements</th>
+          {{/if}}
         </tr>
+        
         <tr>
           <td class="text" colspan="2">
             <ul>
@@ -348,6 +352,8 @@ function pageMain() {
 			        </li>
             </ul>
           </td>
+
+          {{if is_array($patient->_ref_dossier_medical->_ref_traitements)}}
           <td class="text" colspan="2">
             <ul>
               <li>Du patient
@@ -384,6 +390,8 @@ function pageMain() {
 		          </li>
             </ul>
           </td>
+          {{/if}}
+
         </tr>
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
         <tr>

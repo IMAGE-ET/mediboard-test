@@ -82,9 +82,9 @@ function addAnt(ant) {
       </label>  
     </th>
     <td  colspan="3">
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
+      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.1{{/tr}}</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
-      <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
+      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.0{{/tr}}</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
     </td>             
   </tr>
@@ -92,7 +92,7 @@ function addAnt(ant) {
 
   {{assign var="class" value="CAntecedent"}}
   <tr>
-    <th class="category" colspan="100">Types d'antécédents</th>
+    <th class="category" colspan="100">{{tr}}CAntecedent{{/tr}}</th>
   </tr>
   
   <tr>
@@ -106,6 +106,7 @@ function addAnt(ant) {
       <input class="str" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" size="80" />
     </td>
   </tr>
+
   <tr>
     <th>Valeurs possibles</th>
     <td class="text" colspan="3">
@@ -143,6 +144,26 @@ function addAnt(ant) {
     </td>
   </tr>
   
+  {{assign var="class" value="CTraitement"}}
+  <tr>
+    <th class="category" colspan="100">{{tr}}CAntecedent{{/tr}}</th>
+  </tr>
+
+  <tr>
+    {{assign var="var" value="enabled"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td  colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.1{{/tr}}</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$class}}][{{$var}}]">{{tr}}bool.0{{/tr}}</label>
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
+    </td>             
+  </tr>
+
   <tr>
     <td class="button" colspan="6">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

@@ -111,7 +111,9 @@ class CDossierMedical extends CMbMetaObject {
 
   function loadRefsTraitements() {
     $order = "fin DESC, debut DESC";
-    $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
+    if (CAppUI::conf("dPpatients CTraitement enabled")) {
+      $this->_ref_traitements = $this->loadBackRefs("traitements", $order);
+    }
   }
   
   function loadRefsAddictions() {

@@ -90,7 +90,7 @@ copyAddiction = function(addiction_id) {
   {{/foreach}}
 </ul>
       
-{{if $dPconfig.dPpatients.CTraitement.enabled}}
+{{if is_array($dossier_medical->_ref_traitements)}}
 <!-- Traitements -->
 <strong>Traitements significatifs</strong>
 <ul>

@@ -24,14 +24,14 @@ $patient->load($patient_id);
 
 // Chargement du dossier medical du patient
 $patient->loadRefDossierMedical();
+$dossier_medical =& $patient->_ref_dossier_medical;
 
 // Chargements des antecedents, traitements et addictions du dossier_medical
-if($patient->_ref_dossier_medical->_id){
-  $patient->_ref_dossier_medical->loadRefsAntecedents();
-  $patient->_ref_dossier_medical->loadRefsTraitements();
-  $patient->_ref_dossier_medical->loadRefsAddictions();
+if ($dossier_medical->_id) {
+	$dossier_medical->loadRefsAntecedents();
+	$dossier_medical->loadRefsTraitements();
+	$dossier_medical->loadRefsAddictions();
 }
-
 
 // Création du template
 $smarty = new CSmartyDP();

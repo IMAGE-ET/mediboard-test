@@ -18,74 +18,41 @@ function newExam(sAction, consultation_id) {
 
 </script>
 
+<!-- Dossier Médical -->
+{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$patient->_ref_dossier_medical}}
 
 <table class="tbl">
   <tr>
     <th colspan="4" class="title">{{$patient->_view}}</th>
   </tr>
-  <tr>
-    <th>Antécédents</th>
-    <th colspan="3">Documents</th>
+
+	</tr>
+    <th colspan="2">
+    	Fichiers du patient
+    </th>
+    <th colspan="2">
+    	Documents du patient
+    </th>
   </tr>
-  
+
   <tr>
-    <td class="text" valign="top">
-      <ul>
-      {{if $patient->_ref_dossier_medical->_ref_antecedents}}
-        {{foreach from=$patient->_ref_dossier_medical->_ref_antecedents key=keyAnt item=currTypeAnt}}
-        {{if $currTypeAnt}}
-        <li>
-          <strong>{{tr}}CAntecedent.type.{{$keyAnt}}{{/tr}}</strong>
-          {{foreach from=$currTypeAnt item=currAnt}}
-          <ul>
-            <li>         
-            {{if $currAnt->date|date_format:"%d/%m/%Y"}}
-              {{$currAnt->date|date_format:"%d/%m/%Y"}} :
-            {{/if}}
-            {{$currAnt->rques}}
-            </li>
-          </ul>
-          {{/foreach}}
-        </li>
-        {{/if}}
-        {{/foreach}}
-      {{else}}
-        <li><em>Pas d'antécédents</em></li>
-      {{/if}}
-      </ul>
-    </td>
-    <td rowspan="3" colspan="3"valign="top">
+    <td colspan="2">
       {{foreach from=$patient->_ref_documents item=curr_doc}}
-      <a href="#" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
+      <a href="#document-{{$curr_doc->_id}}" onclick="popFile('{{$curr_doc->object_class}}','{{$curr_doc->object_id}}','{{$curr_doc->_class_name}}','{{$curr_doc->_id}}')">
         {{$curr_doc->nom}}
       </a>
-      {{/foreach}}
-      {{foreach from=$patient->_ref_files item=curr_file}}
-      <a href="#" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
-        {{$curr_file->file_name}}
-      </a>
+      {{foreachelse}}
+      <em>Aucun</em>
       {{/foreach}}
     </td>
-  </tr>
-  <tr>
-    <th>Traitements</th>
-  </tr>
-  <tr>
-    <td class="text" valign="top">
-      <ul>
-        {{foreach from=$patient->_ref_dossier_medical->_ref_traitements item=curr_trmt}}
-        <li>
-          {{if $curr_trmt->fin}}
-            Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}}
-          {{else}}
-            Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}}
-          {{/if}}
-          : <i>{{$curr_trmt->traitement}}</i>
-        </li>
-        {{foreachelse}}
-        <li><em>Pas de traitements</em></li>
-        {{/foreach}}
-      </ul>
+    <td colspan="2">
+      {{foreach from=$patient->_ref_files item=curr_file}}
+      <a href="#file-{{$curr_file->_id}}" onclick="popFile('{{$patient->_class_name}}','{{$patient->_id}}','{{$curr_file->_class_name}}','{{$curr_file->_id}}')">
+        {{$curr_file->file_name}}
+      </a>
+      {{foreachelse}}
+      <em>Aucun</em>
+      {{/foreach}}
     </td>
   </tr>
   

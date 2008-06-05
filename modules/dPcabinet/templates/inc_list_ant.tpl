@@ -81,7 +81,7 @@ Traitement = {
 {{/if}}
 </ul>
 
-{{if $dPconfig.dPpatients.CTraitement.enabled}}
+{{if is_array($dossier_medical->_ref_traitements)}}
 <!-- Traitements -->
 <strong>Traitements du patient</strong>
 <ul>
