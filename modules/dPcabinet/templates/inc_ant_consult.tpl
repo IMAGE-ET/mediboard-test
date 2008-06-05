@@ -80,9 +80,15 @@ DossierMedical = {
   	this.sejour_id = sejour_id;
   	
   	// Mise à jour des formulaire
-	  document.editTrmtFrm._sejour_id.value   = sejour_id;
-	  document.editAntFrm._sejour_id.value    = sejour_id;
-	  document.editAddictFrm._sejour_id.value = sejour_id;
+  	if(document.editTrmtFrm){
+	    document.editTrmtFrm._sejour_id.value   = sejour_id;
+	  }
+	  if(document.editAntFrm){
+	    document.editAntFrm._sejour_id.value    = sejour_id;
+	  }
+	  if(document.editAddictFrm){
+	    document.editAddictFrm._sejour_id.value = sejour_id;
+    }
   },
   
   reloadDossierPatient: function() {
