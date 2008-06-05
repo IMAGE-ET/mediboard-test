@@ -25,7 +25,7 @@
     <option value="">Pas d'Intervention</option>
     {{foreach from=$patient->_ref_sejours item=curr_sejour}}
     <optgroup label="Séjour du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}} au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}"
-    {{if $consult_anesth->sejour_id!=$curr_sejour->_id}}disabled="disabled"{{/if}}>
+    {{if $consult_anesth->sejour_id!=$curr_sejour->_id && $consult_anesth->sejour_id}}disabled="disabled"{{/if}}>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       <option value="{{$curr_op->operation_id}}"{{if $consult_anesth->operation_id==$curr_op->_id}} selected="selected"{{/if}}>
         Le {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}} &mdash; Dr. {{$curr_op->_ref_chir->_view}}
