@@ -1,156 +1,66 @@
-<table class="main">
-  <tr>
-    <th>
-      <form action="?" name="mntBackRef" method="get">
-      <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="tab" value="{{$tab}}" />
+<form action="?" name="mntBackRef" method="get">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <input type="hidden" name="tab" value="{{$tab}}" />
+  
+  <label for="class_name" title="Veuillez sélectionner une classe">Choix de la classe</label>
+  <select name="class_name" onchange="submit();">
+    <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
+    {{foreach from=$list_class_names item=curr_class_name}}
+    <option value="{{$curr_class_name}}"{{if $class_name==$curr_class_name}} selected="selected"{{/if}}>{{$curr_class_name}} - {{tr}}{{$curr_class_name}}{{/tr}}</option>
+    {{/foreach}}
+  </select>
+</form>
 
-      <label for="selClass" title="Veuillez Sélectionner une classe">Choix de la classe</label>
-      <select class="notNull str" name="selClass" onchange="submit();">
-        <option value=""{{if !$selClass}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
-        {{foreach from=$listClass item=curr_listClass}}
-        <option value="{{$curr_listClass}}"{{if $selClass==$curr_listClass}} selected="selected"{{/if}}>{{tr}}{{$curr_listClass}}{{/tr}}</option>
-        {{/foreach}}
-      </select>
-      </form>
+<table class="tbl">
+  <tr>
+    <th>Alerte</th>
+    <th>Nom</th>
+    <th>Classe</th>
+    <th>Champ</th>
+    <th>Traduction</th>
+  </tr>
+
+{{foreach from=$list_selected_classes item=curr_class}}
+  {{if $list_suggestions.$curr_class|@count}}
+ 	<tr>
+    <th colspan="100" class="title">
+      {{if $list_suggestions.$curr_class|@count}}
+     	<button id="suggestion-{{$curr_class}}-trigger" class="edit" style="float: left;">{{tr}}Suggestion{{/tr}}</button>
+      {{/if}}
+      {{$curr_class}} ({{tr}}{{$curr_class}}{{/tr}}) 
     </th>
   </tr>
-  <tr>
-    <td>
-      <table class="tbl">
-        <tr>
-          <th colspan="4">Fonction getBackRefs()</th>
-          <th colspan="100">Classes de références</th>
-        </tr>
-        <tr>
-          <th>Alerte</th>
-          <th>Attribut</th>
-          <th>Traduction</th>
-          <th>Nom</th>
-          <th>Nom</th>
-        </tr>
-      
-        {{foreach from=$tabInfo key=keyTab item=_itemTab}}
-       	<tr>
-          <th colspan="100" class="title">
-           	<button id="Suggestion-{{$keyTab}}-trigger" class="edit" style="float: right">
-              {{tr}}Suggestion{{/tr}}
-            </button>
-            {{$keyTab}} ({{tr}}{{$keyTab}}{{/tr}}) 
-          </th>
-        </tr>
-        <tr id="Suggestion-{{$keyTab}}">
-          <td colspan="100">
-            <script type="text/javascript">new PairEffect('Suggestion-{{$keyTab}}');</script>
-            <pre>{{tr}}{{$tabSuggestions.$keyTab|default:"no suggestion"}}{{/tr}}</pre>
-          </td>
-        </tr>
-        {{foreach from=$_itemTab key=keyItemTab item=_item}}
-       	<tr>
-       	  {{if @$_item.real}}
-          	  {{if $_item.real.condition == "warningNum"}}
-                <td class="warning">
-                	Aucun nom n'a été défini
-                </td>
-              {{else}}
-              	 <td {{if $_item.real.condition == "ok"}}
-              	 		class="ok"
-              	 	 {{else}}
-                		class="error"
-              		{{/if}} >
-              	 </td>
-              {{/if}}
-          <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 class="error"
-              {{else}}
-                 class="ok"
-              {{/if}} >
-            	{{$_item.real.attribut}} 
-		  </td>
-		  {{if $_item.real.traduction == ""}}
-		  	<td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 class="error"
-              {{else}}
-                 class="warning"
-              {{/if}} >
-            	{{$keyTab}}-back-{{$_item.real.attribut}}
-		  </td>
-		  {{else}}
-		  	<td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 class="error"
-              {{else}}
-                 class="ok"
-              {{/if}} >
-            	{{$_item.real.traduction}}
-		  </td>
-		  {{/if}}
-		   
-          <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 class="error"
-              {{else}}
-                 class="ok"
-              {{/if}} >
-            	{{$keyItemTab}}
-          </td>
-           <td {{if $_item.real.condition == "default" || $_item.real.condition == "noCMbObject"}}
-              	 class="error"
-              {{else}}
-                 class="ok"
-              {{/if}} >
-              	{{$keyItemTab}}
-          </td>
-          {{else}}
-          	  {{if $_item.theo == "okn"}}
-                <td class="ok"> </td>
-              {{elseif $_item.theo == ""}}
-              	 <td class="warning"> 
-              	 	Invérifiable
-              	 </td>
-              {{elseif $_item.theo == "noClass"}}
-              	 <td class="error"> 
-              	 	{{$_item.theo}}
-              	 </td>
-              {{else}}
-                 <td class="error"> </td>
-              {{/if}}
-         <td {{if $_item.theo == "ok"}}
-              	 class="ok"
-              {{elseif $_item.theo == ""}}
-                  class="warning"
-              {{else}}
-                 class="error"
-              {{/if}} >
-          </td>
-          <td {{if $_item.theo == "ok"}}
-              	 class="ok"
-              {{elseif $_item.theo == ""}}
-                  class="warning"
-              {{else}}
-                 class="error"
-              {{/if}} >
-          </td>
-          <td {{if $_item.theo == "ok"}}
-              	 class="ok"
-              {{elseif $_item.theo == ""}}
-                  class="warning"
-              {{else}}
-                 class="error"
-              {{/if}} >
-          </td>
-          <td {{if $_item.theo == "ok"}}
-              	 class="ok"
-              {{elseif $_item.theo == ""}}
-                  class="warning"
-              {{else}}
-                  class="error"
-              {{/if}} >
-            	{{$keyItemTab}}
-          </td>
-          {{/if}}
-        </tr>
-        {{/foreach}}
-        {{/foreach}}
-       </table>
+  {{if $list_suggestions.$curr_class|@count||($list_backspecs.$curr_class|@count&&$list_selected_classes|@count==1)}}
+  <tr id="suggestion-{{$curr_class}}">
+    <td colspan="100">
+      <script type="text/javascript">new PairEffect('suggestion-{{$curr_class}}');</script>
+      <pre>{{$list_suggestions.$curr_class}}</pre>
     </td>
   </tr>
+  {{/if}}
+  
+  {{foreach from=$list_backspecs.$curr_class item=bs key=key}}
+  <tr>
+    {{if array_key_exists($key,$list_check_results.$curr_class.excess)}}
+      <td class="error">BackRef en trop</td>
+    {{else}}
+      <td></td>
+    {{/if}}
+    <td>{{$bs->name}}</td>
+    <td>{{$bs->class}}</td>
+    <td>{{$bs->field}}</td>
+    <td>{{$list_locales.$curr_class.$key}}</td>
+  </tr>
+  {{/foreach}}
+  
+  {{foreach from=$list_check_results.$curr_class.missing item=missing}}
+  <tr>
+    <td class="warning">BackRef manquante</td>
+    <td></td>
+    <td>{{$missing->className}}</td>
+    <td colspan="2">{{$missing->fieldName}}</td>
+  </tr>
+  {{/foreach}}
+  {{/if}}
+{{/foreach}}
 </table>

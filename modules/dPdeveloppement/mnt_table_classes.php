@@ -20,15 +20,15 @@ $class_name = mbGetValueFromGetOrSession('class_name', null);
 $t          = mbGetValueFromGetOrSession('types');
 
 // Liste des noms des classes installées
-$list_classe_names = getInstalledClasses();
+$list_class_names = getInstalledClasses();
 
 $list_selected_classes = array(); // Liste des noms de classes selectionnées
 $list_classes = array(); // Liste des classes
 
 // On regarde si la classe existe vraiment
-if(array_search($class_name, $list_classe_names) == false) {
+if(array_search($class_name, $list_class_names) == false) {
   $class_name = null;
-  $list_selected_classes =& $list_classe_names;
+  $list_selected_classes =& $list_class_names;
 }
 else {
   $list_selected_classes[] = $class_name;
@@ -346,7 +346,7 @@ $smarty->assign('list_classes',      $list_classes);
 $smarty->assign('types',             $types);
 $smarty->assign('list_errors',       $list_errors);
 $smarty->assign('class_name',        $class_name);
-$smarty->assign('list_classe_names', $list_classe_names);
+$smarty->assign('list_class_names',  $list_class_names);
 
 $smarty->display('mnt_table_classes.tpl');
 ?>

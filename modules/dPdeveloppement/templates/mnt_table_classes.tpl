@@ -9,7 +9,7 @@
         <label for="class_name" title="Veuillez Sélectionner une classe">Choix de la classe</label>
         <select class="notNull str" name="class_name">
           <option value=""{{if !$class_name}} selected="selected"{{/if}}>&mdash; Liste des erreurs</option>
-          {{foreach from=$list_classe_names item=curr_class_name}}
+          {{foreach from=$list_class_names item=curr_class_name}}
           <option value="{{$curr_class_name}}"{{if $class_name==$curr_class_name}} selected="selected"{{/if}}>{{$curr_class_name}} - {{tr}}{{$curr_class_name}}{{/tr}}</option>
           {{/foreach}}
         </select>
