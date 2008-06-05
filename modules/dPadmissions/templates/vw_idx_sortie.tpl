@@ -7,16 +7,19 @@ function printPlanning() {
   url.popup(700, 550, "Sorties");
 }
 
-function loadTransfert(form, mode_sortie){
+function loadTransfert(oForm){
+  sejour_id   = $V(oForm.sejour_id)
+  mode_sortie = $V(oForm.mode_sortie);
   // si Transfert, affichage du select
   if(mode_sortie=="transfert"){
     //Chargement de la liste des etablissement externes
     var url = new Url();
     url.setModuleAction("dPadmissions", "httpreq_vw_etab_externes");
-    url.requestUpdate('listEtabExterne-'+form.name, { waitingText : null });
+    url.addParam("sejour_id", sejour_id);
+    url.requestUpdate('listEtabExterne-'+oForm.name, { waitingText : null });
   } else {
     // sinon, on vide le contenu de la div
-    $("listEtabExterne-" + form.name).innerHTML = "";
+    $("listEtabExterne-" + oForm.name).innerHTML = "";
   }
 }
 

@@ -36,29 +36,32 @@
         Annuler la sortie
       </button>
       <br />
-    {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
-      {{$curr_sortie->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
-    {{else}}
-      {{$curr_sortie->sortie_reelle|date_format:"%Hh%M"}}
-    {{/if}}
+      {{if ($curr_sortie->sortie_reelle < $date_min) || ($curr_sortie->sortie_reelle > $date_max)}}
+        {{$curr_sortie->sortie_reelle|date_format:"%d/%m/%Y à %Hh%M"}}
+      {{else}}
+        {{$curr_sortie->sortie_reelle|date_format:"%Hh%M"}}
+      {{/if}}
       / 
       {{tr}}CSejour.mode_sortie.{{$curr_sortie->mode_sortie}}{{/tr}}
       {{if $curr_sortie->etablissement_transfert_id}}
         <br />{{$curr_sortie->_ref_etabExterne->_view}}
       {{/if}}
       {{else}}
-      <input type="hidden" name="mode_sortie" value="{{$curr_sortie->mode_sortie}}" />
       <input type="hidden" name="_modifier_sortie" value="1" />
       <input type="hidden" name="entree_reelle" value="{{$curr_sortie->entree_reelle}}" />
       <button class="tick" type="button" onclick="confirmation('{{$date_actuelle}}', '{{$date_demain}}', '{{$curr_sortie->sortie_prevue}}', '{{$curr_sortie->entree_reelle}}', this.form, '{{$mode}}');">
         Effectuer la sortie
       </button>
-      <br />      
-      {{mb_field object=$curr_sortie field="mode_sortie" onchange="loadTransfert(this.form, this.value)"}}
-      <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
+      <br />
       <button class="tick notext" type="button" onclick="this.form._modifier_sortie.value = '0'; submitSortie(this.form, '{{$mode}}');">
         Valider le mode de transfert
-      </button>
+      </button>     
+      {{mb_field object=$curr_sortie field="mode_sortie" onchange="loadTransfert(this.form)"}}
+      <br />
+      <div id="listEtabExterne-editFrm{{$curr_sortie->_id}}" style="display: inline;"></div>
+      <script type="text/javascript">
+        loadTransfert(document.editFrm{{$curr_sortie->_id}});
+      </script>
       {{/if}}
     
       </form>
