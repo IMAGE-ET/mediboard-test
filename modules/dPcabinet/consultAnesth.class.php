@@ -269,8 +269,8 @@ class CConsultAnesth extends CMbObject {
     }
     
     // Calcul des Pertes Sanguines Acceptables
-    if($this->ht && $const_med->_vst) {
-      $this->_psa = $const_med->_vst * ($this->ht - 30) / 100;
+    if($this->ht && $this->ht_final && $const_med->_vst) {
+      $this->_psa = $const_med->_vst * ($this->ht - $this->ht_final) / 100;
     }
   }
 
