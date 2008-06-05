@@ -713,13 +713,11 @@ $locales['CConstantesMedicales-context_id-desc'] = 'Contexte';
 $locales['CConstantesMedicales-patient_id'] = 'Patient';
 $locales['CConstantesMedicales-patient_id-court'] = 'Pat.';
 $locales['CConstantesMedicales-patient_id-desc'] = 'Patient';
-$locales['CConstantesMedicales.more'] = '';
-$locales['CConstantesMedicales.none'] = '';
-$locales['CConstantesMedicales.one'] = '';
 $locales['CPatient-code_sit'] = 'Code situation';
 $locales['CPatient-code_sit-court'] = 'Situation';
 $locales['CPatient-code_sit-desc'] = 'Code de situation de l\'assurance maladie';
 $locales['CPatient-regime_am'] = 'Régime AM';
 $locales['CPatient-regime_am-court'] = 'AM';
 $locales['CPatient-regime_am-desc'] = 'Patient bénéciaire du régime Alzace-Moselle';
+$locales['config-dPpatients-CDossierMedical-diags_static_cim'] = 'Afficher les favoris CIM statics';
 ?>

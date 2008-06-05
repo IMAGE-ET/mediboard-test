@@ -708,4 +708,16 @@ $locales['CConstantesMedicales-patient_id-desc'] = '';
 $locales['CConstantesMedicales.more'] = '';
 $locales['CConstantesMedicales.none'] = '';
 $locales['CConstantesMedicales.one'] = '';
+$locales['config-dPpatients-CDossierMedical-diags_static_cim'] = '';
+$locales['CAntecedent-_search-court'] = '';
+$locales['CAntecedent-_search-desc'] = '';
+$locales['CPatient-code_sit'] = '';
+$locales['CPatient-code_sit-court'] = '';
+$locales['CPatient-code_sit-desc'] = '';
+$locales['CPatient-regime_am'] = '';
+$locales['CPatient-regime_am-court'] = '';
+$locales['CPatient-regime_am-desc'] = '';
+$locales['CPatient-SHS'] = '';
+$locales['CPatient-SHS-court'] = '';
+$locales['CPatient-SHS-desc'] = '';
 ?>

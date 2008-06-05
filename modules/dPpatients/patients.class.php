@@ -782,6 +782,9 @@ class CPatient extends CMbObject {
   
   // Liste statique des codes CIM10 initiaux
   function loadStaticCIM10($user = 0) {
+    if (!CAppUI::conf("dPpatients CDossierMedical diags_static_cim")) {
+      return;
+    }
     
     // Liste des favoris
     if($user) {

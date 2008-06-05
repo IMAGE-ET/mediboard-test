@@ -267,6 +267,9 @@ $dPconfig["dPpatients"] = array (
     "auto_watch" => "0",
   ),
   
+  "CDossierMedical" => array (
+    "diags_static_cim" => "1"
+	),
 );
 
 $dPconfig["dPsante400"] = array (
