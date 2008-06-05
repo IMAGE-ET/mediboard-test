@@ -14,7 +14,7 @@
 class CLmObject extends CMbObject {  
   public $_ref_id400 = null;
   
-  function CLmObject($table, $key) {
+  function CLmObject() {
     $spec_keys = array_keys($this->getSpecs());
     foreach ($spec_keys as $prop) {
       $this->$prop = null;
