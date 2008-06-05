@@ -146,8 +146,11 @@
   <!-- Selection du type de chambre -->
   <tr>
     <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-    <td colspan="2">
+    <td>
       {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
+    </td>
+    <td class="button">
+      <!-- <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button> -->
     </td>
   </tr>
   

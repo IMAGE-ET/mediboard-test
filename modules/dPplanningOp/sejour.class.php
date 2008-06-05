@@ -57,6 +57,7 @@ class CSejour extends CCodable {
   var $repas_diabete      = null;
   var $repas_sans_sel     = null;
   var $repas_sans_residu  = null;
+  var $repas_sans_porc    = null;
   var $mode_sortie        = null;
   var $prestation_id      = null;
   var $facturable         = null; 
@@ -183,6 +184,7 @@ class CSejour extends CCodable {
     $specs["repas_diabete"]       = "bool";
     $specs["repas_sans_sel"]      = "bool";
     $specs["repas_sans_residu"]   = "bool";
+    $specs["repas_sans_porc"]     = "bool";
     $specs["mode_sortie"]         = "enum list|normal|transfert|deces default|normal";
     $specs["prestation_id"]       = "ref class|CPrestation";
     $specs["facturable"]          = "bool notNull default|1";
@@ -322,15 +324,15 @@ class CSejour extends CCodable {
     }
 
     // Cas où on a une premiere affectation différente de l'heure d'admission
+    $this->loadRefsAffectations();
+    $firstAff =& $this->_ref_first_affectation;
+    $lastAff =& $this->_ref_last_affectation;
     if ($this->entree_prevue) {
-      $this->loadRefsAffectations();
-      $firstAff =& $this->_ref_first_affectation;
       if ($firstAff->affectation_id && ($firstAff->entree != $this->entree_prevue)) {
         $firstAff->entree = $this->entree_prevue;
         $firstAff->_no_synchro = 1;
         $firstAff->store();
       }
-      $lastAff =& $this->_ref_last_affectation;
       if ($lastAff->affectation_id && ($lastAff->sortie != $this->sortie_prevue)) {
         $lastAff->sortie = $this->sortie_prevue;
         $lastAff->_no_synchro = 1;
@@ -339,15 +341,18 @@ class CSejour extends CCodable {
     }
     
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
-    if($this->mode_sortie){
+    if($this->sortie_reelle && $lastAff->_id){
       $this->_ref_last_affectation->effectue = 1;
       $this->_ref_last_affectation->store();  
     }
     
-    if($this->mode_sortie === ""){
+    if($this->sortie_reelle === "" && $lastAff->_id){
       $this->_ref_last_affectation->effectue = 0;
-      $this->sortie_reelle = "";
       $this->_ref_last_affectation->store();
+    }
+    
+    if($this->mode_sortie === ""){
+      $this->sortie_reelle = "";
     }
     
     

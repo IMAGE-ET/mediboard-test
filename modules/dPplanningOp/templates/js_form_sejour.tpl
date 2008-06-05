@@ -199,6 +199,10 @@ function changePat() {
   bChangePat = 1;
 }
 
+function popRegimes() {
+  alert("Choix des régimes alimentaires\nFonctionnalité non disponible pour l'instant");
+}
+
 function incFormSejourMain() {
 }
 

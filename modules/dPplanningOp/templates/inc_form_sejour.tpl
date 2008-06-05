@@ -449,14 +449,24 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field="chambre_seule"}}</th>
-  <td {{if $mode_operation}}colspan="3"{{/if}}>
+  <td>
     {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejour();"}}
+    {{if $mode_operation}}
+      {{mb_field object=$sejour field="repas_sans_sel"     hidden="hidden"}}
+      {{mb_field object=$sejour field="repas_sans_porc"    hidden="hidden"}}
+      {{mb_field object=$sejour field="repas_diabete"      hidden="hidden"}}
+      {{mb_field object=$sejour field="repas_sans_residu"  hidden="hidden"}}
+    {{/if}}
   </td>
   
-  {{if !$mode_operation}}
-  <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
+  {{if $mode_operation}}
+  <td colspan="2" class="button">
+    <!-- <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button> -->
+  </td>
+  {{else}}
+  <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
   <td>
-    {{mb_field object=$sejour field="lit_accompagnant"}}
+    {{mb_field object=$sejour field="repas_sans_sel"}}
   </td>
   {{/if}}
 </tr>
@@ -473,7 +483,7 @@ Main.add( function(){
   </select>
   </td>
   {{if $mode_operation}}
-  <td colspan="2"></td>
+  <td colspan="2" />
   {{/if}}
 </tr>
 {{/if}}
@@ -482,9 +492,13 @@ Main.add( function(){
 {{if !$mode_operation}}
 <tr>
 	{{if $can->edit}}
-  <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
+  <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
   <td>
-    {{mb_field object=$sejour field="repas_sans_sel"}}
+    {{mb_field object=$sejour field="lit_accompagnant"}}
+  </td>
+  <th>{{mb_label object=$sejour field="repas_sans_porc"}}</th>
+  <td>
+    {{mb_field object=$sejour field="repas_sans_porc"}}
   </td>
 	{{/if}}
 
