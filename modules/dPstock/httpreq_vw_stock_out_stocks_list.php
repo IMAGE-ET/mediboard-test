@@ -23,7 +23,9 @@ if ($keywords) {
               product.name LIKE '%$keywords%' OR 
               product.description LIKE '%$keywords%'";
 }
-$where['product_stock.group_id'] = " = $g";
+if ($g) {
+  $where['product_stock.group_id'] = " = $g";
+}
 
 $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_stock.product_id';

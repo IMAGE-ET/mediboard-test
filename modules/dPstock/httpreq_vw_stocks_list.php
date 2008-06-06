@@ -16,8 +16,9 @@ $keywords            = mbGetValueFromGet('keywords');
 $only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks');
 
 $where = array();
-$where['product_stock.group_id'] = " = $g";
-
+if ($g) {
+  $where['product_stock.group_id'] = " = $g";
+}
 if ($category_id) {
   $where['product.category_id'] = " = $category_id";
 }

@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 
