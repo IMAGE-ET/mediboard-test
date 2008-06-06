@@ -4,7 +4,7 @@ Main.add(function () {
 });
 </script>
 
-<form name="editIPP" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editIPP" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitIPPForm()">
 
 <input type="hidden" name="dosql" value="do_idsante400_aed" />
 <input type="hidden" name="m" value="dPsante400" />
@@ -45,7 +45,7 @@ Main.add(function () {
       <input type="hidden" class="notNull" name="last_update" value="" />
     </td>
     <td class="button">
-      <button class="submit" type="button" onclick="ExtRefManager.submitIPPForm()">Valider</button>
+      <button class="submit" type="submit">Valider</button>
     </td>
     <td class="button">
       {{if $hprim21installed}}

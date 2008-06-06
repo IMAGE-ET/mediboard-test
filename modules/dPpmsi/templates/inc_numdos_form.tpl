@@ -4,7 +4,7 @@ Main.add(function () {
 });
 </script>
 
-<form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="editNumdos{{$_sejour->_id}}" action="?m={{$m}}" method="post" onsubmit="return ExtRefManager.submitNumdosForm({{$_sejour->_id}})">
 
 <input type="hidden" name="dosql" value="do_idsante400_aed" />
 <input type="hidden" name="m" value="dPsante400" />
@@ -44,7 +44,7 @@ Main.add(function () {
       <input type="hidden" class="notNull" name="last_update" value="" />
     </td>
     <td class="button" rowspan="2">
-      <button class="submit" type="button" onclick="ExtRefManager.submitNumdosForm({{$_sejour->_id}})">Valider</button>
+      <button class="submit" type="submit">Valider</button>
     </td>
     <td class="button" rowspan="2">
       {{if $hprim21installed}}

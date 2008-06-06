@@ -74,7 +74,7 @@ var ExtRefManager = {
   
   submitIPPForm: function() {
     var oForm = document.forms.editIPP;
-    submitFormAjax(oForm, "systemMsg", {onComplete: ExtRefManager.reloadIPPForm});
+    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadIPPForm});
   },
   
   reloadIPPForm: function() {
@@ -87,7 +87,7 @@ var ExtRefManager = {
   submitNumdosForm: function(sejour_id) {
     ExtRefManager.sejour_id = sejour_id;
     var oForm = document.forms["editNumdos" + this.sejour_id];
-    submitFormAjax(oForm, "systemMsg", {onComplete: ExtRefManager.reloadNumdosForm});
+    return onSubmitFormAjax(oForm, {onComplete: ExtRefManager.reloadNumdosForm});
   },
 
   reloadNumdosForm: function() {
