@@ -212,18 +212,23 @@ class CExamAudio extends CMbObject {
   function updateDBFields() {
     parent::updateDBFields();
     
-    foreach($this->_gauche_vocale as $key => $value) {
+    // Tris
+    $dBs_gauche = array();
+    foreach ($this->_gauche_vocale as $key => $value) {
       $dBs_gauche[] = @$value[0] ? @$value[0] : "end sort";
       $this->_gauche_vocale[$key] = @$value[0] . "-" . @$value[1];
     }
+    
     array_multisort($dBs_gauche, SORT_ASC, $this->_gauche_vocale);
 
+    $dBs_droite = array();
     foreach($this->_droite_vocale as $key => $value) {
       $dBs_droite[] = @$value[0] ? @$value[0] : "end sort";
       $this->_droite_vocale[$key] = @$value[0] . "-" . @$value[1];
     }
     array_multisort($dBs_droite, SORT_ASC, $this->_droite_vocale);
 
+    // Implodes
     $this->gauche_aerien = implode("|", $this->_gauche_aerien);
     $this->gauche_osseux = implode("|", $this->_gauche_osseux);
     $this->gauche_conlat = implode("|", $this->_gauche_conlat);
