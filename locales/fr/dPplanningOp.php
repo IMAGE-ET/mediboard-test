@@ -656,4 +656,5 @@ $locales['msg-CSejour-modify'] = 'Séjour modifié';
 $locales['msg-CTypeAnesth-create'] = '';
 $locales['msg-CTypeAnesth-delete'] = '';
 $locales['msg-CTypeAnesth-modify'] = '';
+$locales['CSejour-repas_sans_porc'] = 'Repas sans porc';
 ?>
