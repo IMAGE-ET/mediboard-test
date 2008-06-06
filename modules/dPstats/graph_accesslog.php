@@ -41,7 +41,7 @@ switch($interval) {
 }
 
 for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
-  $datax[] = mbTranformTime(null, $i, $date_format);
+  $datax[] = mbTransformTime(null, $i, $date_format);
 }
 
 $logs = new CAccessLog();
@@ -71,7 +71,7 @@ $request = array();
 foreach($datax as $x) {
   $f = true;
   foreach($logs as $log) {
-    if($x == mbTranformTime(null, $log->period, $date_format)) {
+    if($x == mbTransformTime(null, $log->period, $date_format)) {
       $nbHits[] = $log->hits;
       $duration[] = $log->_average_duration;
       $request[] = $log->_average_request;
@@ -85,7 +85,7 @@ foreach($datax as $x) {
   }
 }
 
-$title = mbTranformTime(null, $date, "%A %d %b %Y");
+$title = mbTransformTime(null, $date, "%A %d %b %Y");
 if($module) $title .= " : ".CAppUI::tr($module);
 if($actionName) $title .= " - $actionName";
 

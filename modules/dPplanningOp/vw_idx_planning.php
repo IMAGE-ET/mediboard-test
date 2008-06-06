@@ -46,7 +46,7 @@ $sql = "SELECT plagesop.*," .
 		"\nON plagesop.plageop_id = operations.plageop_id" .
     "\nAND operations.annulee = '0'" .
 		"\nWHERE (plagesop.chir_id = '$selChirLogin' OR plagesop.spec_id = '$specialite')" .
-		"\nAND plagesop.date LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'" .
+		"\nAND plagesop.date LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'" .
 		"\nGROUP BY plagesop.plageop_id" .
 		"\nORDER BY plagesop.date, plagesop.debut, plagesop.plageop_id";
 if($selChirLogin) {
@@ -58,7 +58,7 @@ if($selChirLogin) {
 // Urgences du mois
 $listUrgences = new COperation;
 $where = array();
-$where["date"] = "LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'";
+$where["date"] = "LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'";
 $where["chir_id"] = "= '$selChirLogin'";
 $order = "date";
 $listUrgences = $listUrgences->loadList($where, $order);

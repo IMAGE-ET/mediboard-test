@@ -217,7 +217,7 @@ class CProductOrder extends CMbObject {
   		return;
   	}
   	$format = str_replace('%id', str_pad($this->_id?$this->_id:0, 8, '0', STR_PAD_LEFT), $format);
-  	return mbTranformTime(null, null, $format);
+  	return mbTransformTime(null, null, $format);
   }
 
 	function updateFormFields() {

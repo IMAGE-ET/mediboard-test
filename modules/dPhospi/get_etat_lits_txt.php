@@ -47,11 +47,11 @@ foreach($affectations as $key=>$_affectation){
    $list_affectations[$key]["chambre"]      = $_affectation->_ref_lit->_ref_chambre->_id;
    $list_affectations[$key]["lit"]          = $_affectation->_ref_lit->_id;
    $list_affectations[$key]["sexe"]         = $_affectation->_ref_sejour->_ref_patient->sexe;
-   $list_affectations[$key]["naissance"]    = mbTranformTime(null, $_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
-   $list_affectations[$key]["date_entree"]  = mbTranformTime(null, mbDate($_affectation->_ref_sejour->entree_reelle), "%Y%m%d"); 
-   $list_affectations[$key]["heure_entree"] = mbTranformTime(null, mbTime($_affectation->_ref_sejour->entree_reelle), "%H%M");
-   $list_affectations[$key]["date_sortie"]  = mbTranformTime(null, mbDate($_affectation->_ref_sejour->sortie_reelle), "%Y%m%d");
-   $list_affectations[$key]["heure_sortie"] = mbTranformTime(null, mbTime($_affectation->_ref_sejour->sortie_reelle), "%H%M");
+   $list_affectations[$key]["naissance"]    = mbTransformTime(null, $_affectation->_ref_sejour->_ref_patient->naissance, "%Y%m%d");
+   $list_affectations[$key]["date_entree"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->entree_reelle), "%Y%m%d"); 
+   $list_affectations[$key]["heure_entree"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->entree_reelle), "%H%M");
+   $list_affectations[$key]["date_sortie"]  = mbTransformTime(null, mbDate($_affectation->_ref_sejour->sortie_reelle), "%Y%m%d");
+   $list_affectations[$key]["heure_sortie"] = mbTransformTime(null, mbTime($_affectation->_ref_sejour->sortie_reelle), "%H%M");
    $list_affectations[$key]["type"]         = $_affectation->_ref_sejour->type;
 }
 

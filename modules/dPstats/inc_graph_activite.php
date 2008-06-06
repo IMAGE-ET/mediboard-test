@@ -26,7 +26,7 @@ $labels = array();
 $jscalls = array();
 
 for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
-  $nameMonth = mbTranformTime("+0 DAY", $i, "%m/%Y");
+  $nameMonth = mbTransformTime("+0 DAY", $i, "%m/%Y");
   $datax[] = $nameMonth; 
   $labels[] = "Voir le détails par jour pour le $nameMonth";
   $jscalls[] = "javascript:zoomGraphIntervention('$nameMonth');";

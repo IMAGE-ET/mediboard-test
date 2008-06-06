@@ -10,10 +10,10 @@
 global $AppUI, $can, $m;
 
 $debutact      = mbGetValueFromGetOrSession("debut", mbDate("-1 YEAR"));
-$rectif        = mbTranformTime("+0 DAY", $debutact, "%d")-1;
+$rectif        = mbTransformTime("+0 DAY", $debutact, "%d")-1;
 $debutact      = mbDate("-$rectif DAYS", $debutact);
 $finact        = mbGetValueFromGetOrSession("fin", mbDate());
-$rectif        = mbTranformTime("+0 DAY", $finact, "%d")-1;
+$rectif        = mbTransformTime("+0 DAY", $finact, "%d")-1;
 $finact        = mbDate("-$rectif DAYS", $finact);
 $finact        = mbDate("+ 1 MONTH", $finact);
 $finact        = mbDate("-1 DAY", $finact);

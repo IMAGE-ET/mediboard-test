@@ -328,7 +328,7 @@ class CMbFieldSpec {
 
     $class = htmlspecialchars(trim("$className $this->prop"));
     $field = htmlspecialchars($this->fieldName);
-    $date  = $value ? mbTranformTime(null, $value, $format) : "";
+    $date  = $value ? mbTransformTime(null, $value, $format) : "";
     
     $form     = CMbArray::extract($params, "form");
     $register = CMbArray::extract($params, "register");

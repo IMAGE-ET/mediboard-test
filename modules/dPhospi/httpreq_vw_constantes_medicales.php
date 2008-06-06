@@ -77,8 +77,8 @@ $i = 0;
 // Si le séjour a des constantes médicales
 if ($sejour->_list_constantes_medicales) {
   foreach ($sejour->_list_constantes_medicales as $cst) {
-    $dates[$i] = mbTranformTime($cst->datetime, null, '%d/%m/%y');
-    $hours[$i] = mbTranformTime($cst->datetime, null, '%Hh%M');
+    $dates[$i] = mbTransformTime($cst->datetime, null, '%d/%m/%y');
+    $hours[$i] = mbTransformTime($cst->datetime, null, '%Hh%M');
     $const_ids[$i] = $cst->_id;
     
     $data['ta']['series'][0]['data'][$i] = array($i, getValue($cst->_ta_systole));

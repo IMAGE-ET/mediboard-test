@@ -22,8 +22,8 @@ class CTemplateManager {
   var $valueMode = true; // @todo : changer en applyMode
   
   function CTemplateManager() {
-    $this->addProperty("Général - date du jour"  , mbTranformTime(null, null, "%d/%m/%Y"));
-    $this->addProperty("Général - heure courante", mbTranformTime(null, null, "%Hh%M"));
+    $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, "%d/%m/%Y"));
+    $this->addProperty("Général - heure courante", mbTransformTime(null, null, "%Hh%M"));
   }
 
   function makeSpan($spanClass, $text) {

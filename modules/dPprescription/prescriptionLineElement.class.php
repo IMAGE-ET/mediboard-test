@@ -44,10 +44,10 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->_duree_prise = "";
     
     if($this->fin){
-    	$this->_duree_prise .= "Jusqu'au ".mbTranformTime(null, $this->fin, "%d/%m/%Y");
+    	$this->_duree_prise .= "Jusqu'au ".mbTransformTime(null, $this->fin, "%d/%m/%Y");
     } else {
 	    if($this->debut){
-	      $this->_duree_prise .= "à partir du ".mbTranformTime(null, $this->debut, "%d/%m/%Y");
+	      $this->_duree_prise .= "à partir du ".mbTransformTime(null, $this->debut, "%d/%m/%Y");
 	    }
 	    if($this->duree && $this->unite_duree){
 	    	$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree);

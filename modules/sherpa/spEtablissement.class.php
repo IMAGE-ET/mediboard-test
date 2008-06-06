@@ -39,7 +39,7 @@ class CSpEtablissement extends CMbObject {
   }
    
   function initIncrements() {
-    $increment_year = mbTranformTime(null, null, "%Y") % 10;
+    $increment_year = mbTransformTime(null, null, "%Y") % 10;
     $increment_patient = 0;
   }
    

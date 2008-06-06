@@ -120,7 +120,7 @@ class CSpOuvDro extends CSpObject {
     $this->drofla = $typeMatrix[$sejour->type];
     
     // Numéro de dossier amélioré
-    $this->referan = mbTranformTime(null, $sejour->entree_prevue, "%Y") . substr($this->numdos, 1);
+    $this->referan = mbTransformTime(null, $sejour->entree_prevue, "%Y") . substr($this->numdos, 1);
     
     // Malade
     $idMalade = CSpObjectHandler::getId400For($sejour->_ref_patient);

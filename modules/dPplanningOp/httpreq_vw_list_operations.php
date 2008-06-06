@@ -24,7 +24,7 @@ if($urgences) {
   // Urgences du mois
   $listUrgences = new COperation;
   $where = array();
-  $where["date"] = "LIKE '".mbTranformTime("+ 0 day", $date, "%Y-%m")."-__'";
+  $where["date"] = "LIKE '".mbTransformTime("+ 0 day", $date, "%Y-%m")."-__'";
   $where["chir_id"] = "= '$userSel->user_id'";
   $order = "date";
   $listUrgences = $listUrgences->loadList($where, $order);

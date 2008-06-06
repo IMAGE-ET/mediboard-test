@@ -200,10 +200,10 @@ if($prescription->_ref_object->_ref_curr_affectation->_id){
   $pdf->Cell(58,7,$prescription->_ref_object->_ref_curr_affectation->_ref_lit->_ref_chambre->_view,0,0,'C',1);
 }
 // Affichage du début du séjour
-$pdf->Cell(58,7,"Début du séjour ".mbTranformTime(null, $prescription->_ref_object->_entree, $dateFormat),0,0,'C',1);
+$pdf->Cell(58,7,"Début du séjour ".mbTransformTime(null, $prescription->_ref_object->_entree, $dateFormat),0,0,'C',1);
 
 // Affichage de la date et l'heure d'édition de la feuille de soin
-$pdf->Cell(58,7,"Feuille de soin du ".mbTranformTime(null, $date, $dateFormat),0,0,'C',1);
+$pdf->Cell(58,7,"Feuille de soin du ".mbTransformTime(null, $date, $dateFormat),0,0,'C',1);
 
 $dateFormat = "%d/%m/%Y";
 $pdf->setY(35);    
@@ -213,11 +213,11 @@ $pdf->SetFillColor(220,220,220);
 $pdf->Cell(60,14,"Prescription",1,0,'C',1);
 $pdf->Cell(25,14,"Prescripteur",1,0,'C',1);
 $pdf->Cell(5, 14, "", 1,0, 'C',1);
-$pdf->Cell(56,7,mbTranformTime(null, $date, $dateFormat),1,0,'C',1);
+$pdf->Cell(56,7,mbTransformTime(null, $date, $dateFormat),1,0,'C',1);
 $pdf->Cell(2,7,"",1,0,'C',1);
-$pdf->Cell(56,7,mbTranformTime(null, mbDate("+ 1 day", $date), $dateFormat),1,0,'C',1);
+$pdf->Cell(56,7,mbTransformTime(null, mbDate("+ 1 day", $date), $dateFormat),1,0,'C',1);
 $pdf->Cell(2,7,"",1,0,'C',1);
-$pdf->Cell(56,7,mbTranformTime(null, mbDate("+ 2 day", $date), $dateFormat),1,0,'C',1);
+$pdf->Cell(56,7,mbTransformTime(null, mbDate("+ 2 day", $date), $dateFormat),1,0,'C',1);
 $pdf->Cell(2,7,"",1,0,'C',1);
 
 $pdf->Ln();
@@ -354,7 +354,7 @@ $format_hour = "%Hh%m";
 
 
 $pdf->Cell(60,21,"",1,0,'C',1);
-$pdf->MultiCell(30,5.25,"Par ".$pharmacien->_user_first_name."\n".$pharmacien->_user_last_name."\n le ".mbTranformTime(null, $last_log->date, $format_date)."\n à ".mbTranformTime(null, $last_log->date, $format_hour),1,'C',0,0);
+$pdf->MultiCell(30,5.25,"Par ".$pharmacien->_user_first_name."\n".$pharmacien->_user_last_name."\n le ".mbTransformTime(null, $last_log->date, $format_date)."\n à ".mbTransformTime(null, $last_log->date, $format_hour),1,'C',0,0);
 
 $pdf->Cell(56,7,"",1,0,'C',1);
 

@@ -81,10 +81,10 @@ if(!$service_id || !array_key_exists($service_id,$services)){
           }
           
           foreach($listTypeRepas as $keyType => $valType){
-            $heure_entree = mbTranformTime(null,$affectation->entree,"%H:%M");
-            $heure_sortie = mbTranformTime(null,$affectation->sortie,"%H:%M");
-            $date_entree  = mbTranformTime(null,$affectation->entree,"%Y-%m-%d");
-            $date_sortie  = mbTranformTime(null,$affectation->sortie,"%Y-%m-%d");
+            $heure_entree = mbTransformTime(null,$affectation->entree,"%H:%M");
+            $heure_sortie = mbTransformTime(null,$affectation->sortie,"%H:%M");
+            $date_entree  = mbTransformTime(null,$affectation->entree,"%Y-%m-%d");
+            $date_sortie  = mbTransformTime(null,$affectation->sortie,"%Y-%m-%d");
             
             if(($date == $date_entree && $heure_entree > $valType->fin) ||
                 ($date == $date_sortie && $valType->debut > $heure_sortie)){

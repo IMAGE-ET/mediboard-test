@@ -74,8 +74,8 @@ require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("datenow"        , mbDate());
-$smarty->assign("heurenow"       , mbTranformTime(null,null,"%H"));
-$smarty->assign("minnow"         , mbTranformTime(null,null,"%M"));
+$smarty->assign("heurenow"       , mbTransformTime(null,null,"%H"));
+$smarty->assign("minnow"         , mbTransformTime(null,null,"%M"));
 $smarty->assign("heures"         , $heures);
 $smarty->assign("mins"           , $mins);
 $smarty->assign("fiche"          , $fiche);

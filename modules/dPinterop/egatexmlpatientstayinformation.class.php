@@ -24,7 +24,7 @@ class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
     $patientStayInfo = $this->addElement($this, "PatientStayInformation", null, "http://www.capio.com");
     
     $header = $this->addElement($patientStayInfo, "Header");
-    $this->addAttribute($header, "Created"     , mbTranformTime(null, null, "%Y-%m-%dT%H:%M:%S"));
+    $this->addAttribute($header, "Created"     , mbTransformTime(null, null, "%Y-%m-%dT%H:%M:%S"));
     $this->addAttribute($header, "Originator"  , "Mediboard");
     $this->addAttribute($header, "CountryCode" , "FR");
   }

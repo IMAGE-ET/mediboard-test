@@ -139,7 +139,7 @@ class CMbXMLDocument extends DOMDocument {
 	}
   
   function addDateTimeElement($elParent, $elName, $dateValue = null) {
-    $this->addElement($elParent, $elName, mbTranformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
+    $this->addElement($elParent, $elName, mbTransformTime(null, $dateValue, "%Y-%m-%dT%H:%M:%S"));
   }
   
   function addAttribute($elParent, $atName, $atValue) {

@@ -14,11 +14,11 @@ $can->needsEdit();
 $filter = new COperation();
 
 $debutact = $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate("-1 YEAR"));
-$rectif = mbTranformTime("+0 DAY", $filter->_date_min, "%d")-1;
+$rectif = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
 $debutact = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
 
 $finact = $filter->_date_max = mbGetValueFromGetOrSession("_date_max",  mbDate());
-$rectif = mbTranformTime("+0 DAY", $filter->_date_max, "%d")-1;
+$rectif = mbTransformTime("+0 DAY", $filter->_date_max, "%d")-1;
 $finact = $filter->_date_max = mbDate("-$rectif DAYS", $filter->_date_max);
 $finact = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
 $finact = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);

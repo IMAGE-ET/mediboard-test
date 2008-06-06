@@ -389,12 +389,12 @@ class CSejour extends CCodable {
 
     $this->_date_entree_prevue = mbDate(null, $this->entree_prevue);
     $this->_date_sortie_prevue = mbDate(null, $this->sortie_prevue);
-    $this->_hour_entree_prevue = mbTranformTime(null, $this->entree_prevue, "%H");
-    $this->_hour_sortie_prevue = mbTranformTime(null, $this->sortie_prevue, "%H");
-    $this->_min_entree_prevue  = mbTranformTime(null, $this->entree_prevue, "%M");
-    $this->_min_sortie_prevue  = mbTranformTime(null, $this->sortie_prevue, "%M");
+    $this->_hour_entree_prevue = mbTransformTime(null, $this->entree_prevue, "%H");
+    $this->_hour_sortie_prevue = mbTransformTime(null, $this->sortie_prevue, "%H");
+    $this->_min_entree_prevue  = mbTransformTime(null, $this->entree_prevue, "%M");
+    $this->_min_sortie_prevue  = mbTransformTime(null, $this->sortie_prevue, "%M");
 
-    $this->_venue_SHS_guess = mbTranformTime(null, $this->entree_prevue, "%y");
+    $this->_venue_SHS_guess = mbTransformTime(null, $this->entree_prevue, "%y");
     $this->_venue_SHS_guess .= 
       $this->type == "exte" ? "5" :
       $this->type == "ambu" ? "4" : "0";
@@ -403,9 +403,9 @@ class CSejour extends CCodable {
 
     if($this->entree_prevue && $this->sortie_prevue) {
       $this->_view = "Séjour du ";
-      $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
+      $this->_view .= mbTransformTime(null, $this->entree_prevue, "%d/%m/%Y");
       $this->_view .= " au ";
-      $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
+      $this->_view .= mbTransformTime(null, $this->sortie_prevue, "%d/%m/%Y");
     }
     $this->_acte_execution = mbAddDateTime($this->entree_prevue);
     $this->_praticien_id = $this->praticien_id;
@@ -537,9 +537,9 @@ class CSejour extends CCodable {
     $this->_view = "Séjour de ";
     $this->_view .= $this->_ref_patient->_view;
     $this->_view .= " du ";
-    $this->_view .= mbTranformTime(null, $this->entree_prevue, "%d/%m/%Y");
+    $this->_view .= mbTransformTime(null, $this->entree_prevue, "%d/%m/%Y");
     $this->_view .= " au ";
-    $this->_view .= mbTranformTime(null, $this->sortie_prevue, "%d/%m/%Y");
+    $this->_view .= mbTransformTime(null, $this->sortie_prevue, "%d/%m/%Y");
   }
   
   function loadRefPraticien() {
@@ -836,10 +836,10 @@ class CSejour extends CCodable {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
     
-    $template->addProperty("Admission - Date"                 , mbTranformTime(null, $this->entree_prevue, $dateFormat));
-    $template->addProperty("Admission - Heure"                , mbTranformTime(null, $this->entree_prevue, $timeFormat));
+    $template->addProperty("Admission - Date"                 , mbTransformTime(null, $this->entree_prevue, $dateFormat));
+    $template->addProperty("Admission - Heure"                , mbTransformTime(null, $this->entree_prevue, $timeFormat));
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
-    $template->addProperty("Hospitalisation - Date sortie"    , mbTranformTime(null, $this->sortie_prevue, $dateFormat));
+    $template->addProperty("Hospitalisation - Date sortie"    , mbTransformTime(null, $this->sortie_prevue, $dateFormat));
     
     // Diagnostics
     $this->loadExtDiagnostics();

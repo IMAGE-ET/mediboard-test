@@ -14,7 +14,7 @@ $can->needsRead();
 
 // Initialisation de variables
 $date = mbGetValueFromGetOrSession("date", mbDate());
-$month = mbTranformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
+$month = mbTransformTime("+ 0 day", $date, "%Y-%m-__ __:__:__");
 $lastmonth = mbDate("-1 month", $date);
 $nextmonth = mbDate("+1 month", $date);
 $selAdmis = mbGetValueFromGetOrSession("selAdmis", "0");

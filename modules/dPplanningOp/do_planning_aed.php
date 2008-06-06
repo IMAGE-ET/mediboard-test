@@ -19,7 +19,7 @@ $listTimes = array("entree_bloc", "entree_salle", "pose_garrot", "debut_op",
 foreach($listTimes as $curr_item) {
   if(isset($_POST[$curr_item])) {
     if($_POST[$curr_item] == "current") {
-      $_POST[$curr_item] = mbTranformTime(null, null, "%H:%M:00");
+      $_POST[$curr_item] = mbTransformTime(null, null, "%H:%M:00");
     }
   }
 }

@@ -46,7 +46,7 @@ class CCommandeMateriel extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = mbTranformTime(null, $this->date, "%d/%m/%Y")." - ".$this->_ref_reference->_view;
+    $this->_view = mbTransformTime(null, $this->date, "%d/%m/%Y")." - ".$this->_ref_reference->_view;
   }
   
   function loadRefsFwd(){

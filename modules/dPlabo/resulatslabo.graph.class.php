@@ -34,7 +34,7 @@ class CResultatsLaboGraph extends Graph {
       $min = min($min, $resultat->resultat);
       $max = max($max, $resultat->resultat);
       $ydata[] = $resultat->resultat;
-      $xlabels[] = $resultat->date ? mbTranformTime(null, $resultat->date, "%d/%m/%y") : "attendu";
+      $xlabels[] = $resultat->date ? mbTransformTime(null, $resultat->date, "%d/%m/%y") : "attendu";
     }
     
 //    mbTrace($xlabels);

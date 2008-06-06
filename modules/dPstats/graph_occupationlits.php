@@ -25,8 +25,8 @@ $serviceSel->load($service_id);
 
 $datax = array("ticks" => array(), "date" => array());
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax["ticks"][] = mbTranformTime("+0 DAY", $i, "%m/%Y");
-  $datax["date"][]  = mbTranformTime("+0 DAY", $i, "%Y-%m");
+  $datax["ticks"][] = mbTransformTime("+0 DAY", $i, "%m/%Y");
+  $datax["date"][]  = mbTransformTime("+0 DAY", $i, "%Y-%m");
 }
 
 $sql = "SELECT * FROM service";

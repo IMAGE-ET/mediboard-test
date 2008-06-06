@@ -158,7 +158,7 @@ function mbSetAbsValueToSession($valName, $value = null) {
 function mbBankHolidays($date = null) {
   if(!$date)
     $date = mbDate();
-  $year = mbTranformTime("+0 DAY", $date, "%Y");
+  $year = mbTransformTime("+0 DAY", $date, "%Y");
 
   // Calcul du Dimanche de Pâques : http://fr.wikipedia.org/wiki/Computus
   $n = $year - 1900;
@@ -199,18 +199,18 @@ function mbWorkDaysInMonth($date = null) {
   $result = 0;
   if(!$date)
     $date = mbDate();
-  $year = mbTranformTime("+0 DAY", $date, "%Y");
+  $year = mbTransformTime("+0 DAY", $date, "%Y");
   $debut = $date;
-  $rectif = mbTranformTime("+0 DAY", $debut, "%d")-1;
+  $rectif = mbTransformTime("+0 DAY", $debut, "%d")-1;
   $debut = mbDate("-$rectif DAYS", $debut);
   $fin   = $date;
-  $rectif = mbTranformTime("+0 DAY", $fin, "%d")-1;
+  $rectif = mbTransformTime("+0 DAY", $fin, "%d")-1;
   $fin = mbDate("-$rectif DAYS", $fin);
   $fin = mbDate("+ 1 MONTH", $fin);
   $fin = mbDate("-1 DAY", $fin);
   $freeDays = mbBankHolidays($date);
   for($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {
-    $day = mbTranformTime("+0 DAY", $i, "%u");
+    $day = mbTransformTime("+0 DAY", $i, "%u");
     if($day == 6 and !in_array($i, $freeDays))
       $result += 0.5;
     elseif($day != 7 and !in_array($i, $freeDays))
@@ -223,7 +223,7 @@ function mbWorkDaysInMonth($date = null) {
  * Transforms absolute or relative time into a given format
  * @return string: the transformed time 
  **/
-function mbTranformTime($relative = null, $ref = null, $format) {
+function mbTransformTime($relative = null, $ref = null, $format) {
   if ($relative == "last sunday") {
     $relative .= " 12:00:00";
   }
@@ -242,7 +242,7 @@ function mbTranformTime($relative = null, $ref = null, $format) {
  * @return string: the transformed time 
  **/
 function mbDateTime($relative = null, $ref = null) {
-  return mbTranformTime($relative, $ref, "%Y-%m-%d %H:%M:%S");
+  return mbTransformTime($relative, $ref, "%Y-%m-%d %H:%M:%S");
 }
 
 /**
@@ -267,7 +267,7 @@ function mbDateTimeFromXMLDuration($duration) {
  * @return string: the transformed time 
  **/
 function mbDate($relative = null, $ref = null) {
-  return mbTranformTime($relative, $ref, "%Y-%m-%d");
+  return mbTransformTime($relative, $ref, "%Y-%m-%d");
 }
 
 /**
@@ -275,7 +275,7 @@ function mbDate($relative = null, $ref = null) {
  * @return string: the transformed time 
  **/
 function mbTime($relative = null, $ref = null) {
-  return mbTranformTime($relative, $ref, "%H:%M:%S");
+  return mbTransformTime($relative, $ref, "%H:%M:%S");
 }
 
 /**
@@ -293,15 +293,15 @@ function mbTimeCountIntervals($reference, $relative, $interval) {
 }
 
 function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
-  $min_reference = mbTranformTime(null, $reference, "%M");
+  $min_reference = mbTransformTime(null, $reference, "%M");
   $div = intval($min_reference / $mins_interval);
   $borne_inf = $mins_interval * $div;
   $borne_sup = $mins_interval * ($div + 1);
   $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? $borne_inf : $borne_sup;
   if($mins_replace == 60) {
-    $reference = str_pad(mbTranformTime(null, $reference, "%H")+1, 2, "0").":00:00";
+    $reference = str_pad(mbTransformTime(null, $reference, "%H")+1, 2, "0").":00:00";
   } else {
-    $reference = str_pad(mbTranformTime(null, $reference, "%H"), 2, "0").":".str_pad($mins_replace, 2, "0").":00";
+    $reference = str_pad(mbTransformTime(null, $reference, "%H"), 2, "0").":".str_pad($mins_replace, 2, "0").":00";
   }
   return $reference;
 }

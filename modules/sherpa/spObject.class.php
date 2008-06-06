@@ -148,7 +148,7 @@ class CSpObject extends CMbObject {
       return "00/00/0000";
     }
     
-    return mbTranformTime(null, $date, "%d/%m/%Y");
+    return mbTransformTime(null, $date, "%d/%m/%Y");
   }
   
   /**

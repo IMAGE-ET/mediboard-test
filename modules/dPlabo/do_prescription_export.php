@@ -134,7 +134,7 @@ $nom              = $doc->addElement($patient, "nom", $mbPatient->nom);
 $prenom           = $doc->addElement($patient, "prenom", $mbPatient->prenom);
 $titre            = $doc->addElement($patient, "titre", $transTitre[$titre_]);
 $sexe             = $doc->addElement($patient, "sexe", $transSexe[$mbPatient->sexe]);
-$datenaissance    = $doc->addElement($patient, "datenaissance", mbTranformTime(null, $mbPatient->naissance, "%Y%m%d"));
+$datenaissance    = $doc->addElement($patient, "datenaissance", mbTransformTime(null, $mbPatient->naissance, "%Y%m%d"));
 $adresseligne1    = $doc->addElement($patient, "adresseligne1", $mbPatient->adresse);
 $adresseligne2    = $doc->addElement($patient, "adresseligne2", "");
 $codepostal       = $doc->addElement($patient, "codepostal", $mbPatient->cp);
@@ -144,7 +144,7 @@ $assurance        = $doc->addElement($patient, "assurance", $mbPatient->regime_s
 
 // Prescription --> Dossier 
 $dossier          = $doc->addElement($prescription, "Dossier");
-$dateprelevement  = $doc->addElement($dossier,"dateprelevement", mbTranformTime(null, mbDate($mbPrescription->date), "%Y%m%d"));
+$dateprelevement  = $doc->addElement($dossier,"dateprelevement", mbTransformTime(null, mbDate($mbPrescription->date), "%Y%m%d"));
 $heureprelevement = $doc->addElement($dossier,"heureprelevement", mbTime($mbPrescription->date));
 $urgent           = $doc->addElement($dossier,"urgent", $mbPrescription->urgence);
 $afaxer           = $doc->addElement($dossier,"afaxer", "");

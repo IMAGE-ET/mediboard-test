@@ -15,7 +15,7 @@ if (!$ds->loadTable("access_log")) {
 }
 
 $module = $m;
-$period = mbTranformTime(null, null, "%Y-%m-%d %H:00:00");
+$period = mbTransformTime(null, null, "%Y-%m-%d %H:00:00");
 
 $where = array();
 $where["module"] = "= '$module'";

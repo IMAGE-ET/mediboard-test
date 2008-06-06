@@ -27,7 +27,7 @@ $disciplineSel = new CDiscipline;
 $disciplineSel->load($discipline_id);
 
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
+  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
 }
 
 $users= new CMediusers;

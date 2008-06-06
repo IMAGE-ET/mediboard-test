@@ -208,7 +208,7 @@ class CConsultation extends CCodable {
   function getEtat() {
     $etat = array();
     $etat[self::PLANIFIE]       = "Plan.";
-    $etat[self::PATIENT_ARRIVE] = mbTranformTime(null, $this->arrivee, "%Hh%M");
+    $etat[self::PATIENT_ARRIVE] = mbTransformTime(null, $this->arrivee, "%Hh%M");
     $etat[self::EN_COURS]       = "En cours";
     $etat[self::TERMINE]        = "Term.";
     if($this->chrono)
@@ -775,7 +775,7 @@ class CConsultation extends CCodable {
     $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult();
     $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
-    $this->_view .= " (".mbTranformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
+    $this->_view .= " (".mbTransformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
     $this->loadExtCodesCCAM();
   }
 
@@ -973,7 +973,7 @@ class CConsultation extends CCodable {
   
   function fillLimitedTemplate(&$template) {
     $this->loadRefsFwd();
-    $template->addProperty("Consultation - date"      , mbTranformTime("+0 DAY", $this->_ref_plageconsult->date, "%d / %m / %Y") );
+    $template->addProperty("Consultation - date"      , mbTransformTime("+0 DAY", $this->_ref_plageconsult->date, "%d / %m / %Y") );
     $template->addProperty("Consultation - heure"     , $this->heure);
     $template->addProperty("Consultation - motif"     , $this->motif);
     $template->addProperty("Consultation - remarques" , $this->rques);

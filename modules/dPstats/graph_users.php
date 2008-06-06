@@ -30,7 +30,7 @@ $logs = $ds->loadlist($sql);
 $datax = array();
 $datay = array();
 for($i = $debut; $i <= $fin; $i = mbDate("+1 DAY", $i)) {
-  $datax[] = mbTranformTime("+0 DAY", $i, "%a %d/%m/%Y");
+  $datax[] = mbTransformTime("+0 DAY", $i, "%a %d/%m/%Y");
   $f = true;
   foreach($logs as $value) {
     if($value["day"] == $i) {

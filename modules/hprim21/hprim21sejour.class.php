@@ -110,7 +110,7 @@ class CHprim21Sejour extends CHprim21Object {
   }
   
   function updateFormFields() {
-    $this->_view = "Séjour du ".mbTranformTime(null, $this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
+    $this->_view = "Séjour du ".mbTransformTime(null, $this->date_mouvement, "%d/%m/%Y")." [".$this->external_id."]";
   }
   
   function loadRefHprim21Medecin(){

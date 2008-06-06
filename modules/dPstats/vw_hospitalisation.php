@@ -14,11 +14,11 @@ $can->needsRead();
 $filter = new CSejour();
 
 $filter->_date_min_stat = mbGetValueFromGetOrSession("_date_min_stat", mbDate("-1 YEAR"));
-$rectif = mbTranformTime("+0 DAY", $filter->_date_min_stat, "%d")-1;
+$rectif = mbTransformTime("+0 DAY", $filter->_date_min_stat, "%d")-1;
 $filter->_date_min_stat = mbDate("-$rectif DAYS", $filter->_date_min_stat);
 
 $filter->_date_max_stat = mbGetValueFromGetOrSession("_date_max_stat",  mbDate());
-$rectif = mbTranformTime("+0 DAY", $filter->_date_max_stat, "%d")-1;
+$rectif = mbTransformTime("+0 DAY", $filter->_date_max_stat, "%d")-1;
 $filter->_date_max_stat = mbDate("-$rectif DAYS", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("+ 1 MONTH", $filter->_date_max_stat);
 $filter->_date_max_stat = mbDate("-1 DAY", $filter->_date_max_stat);

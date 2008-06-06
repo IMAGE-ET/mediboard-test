@@ -12,7 +12,7 @@ global $AppUI, $can, $m;
 require_once($AppUI->getSystemClass("mbGraph"));
 
 $size          = mbGetValueFromGet("size" , 1);
-$date          = mbGetValueFromGetOrSession("date", mbTranformTime("+0 DAY", mbDate(), "%m/%Y"));
+$date          = mbGetValueFromGetOrSession("date", mbTransformTime("+0 DAY", mbDate(), "%m/%Y"));
 $prat_id       = mbGetValueFromGetOrSession("prat_id", 0);
 $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
@@ -39,8 +39,8 @@ $date_format = "%d";
 
 // Tableaux des jours
 for($i = $startx; $i <= $endx; $i = mbDateTime($step, $i)) {
-  $datax[] = mbTranformTime(null, $i, $date_format);
-  $datax2[] = mbTranformTime(null, $i, "%a %d");
+  $datax[] = mbTransformTime(null, $i, $date_format);
+  $datax2[] = mbTransformTime(null, $i, "%a %d");
 }
 
 // Chargement des salles
@@ -95,7 +95,7 @@ foreach($salles as $salle) {
 }
 
 // Set up the title for the graph
-$title = "Nombre d'interventions par salle - ".mbTranformTime(null, $startx, "%m/%Y");;
+$title = "Nombre d'interventions par salle - ".mbTransformTime(null, $startx, "%m/%Y");;
 $subtitle = "- $total opérations -";
 if($prat_id) {
   $subtitle .= " Dr. $pratSel->_view -";

@@ -24,7 +24,7 @@ $serviceSel = new CSalle;
 $serviceSel->load($service_id);
 
 for($i = $debut; $i <= $fin; $i = mbDate("+1 MONTH", $i)) {
-  $datax[] = mbTranformTime("+0 DAY", $i, "%m/%Y");
+  $datax[] = mbTransformTime("+0 DAY", $i, "%m/%Y");
 }
 
 $sql = "SELECT * FROM service WHERE";
