@@ -171,7 +171,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function checkInteractions($listInteractions) {
     $this->_ref_alertes["interaction"] = array();
     foreach($listInteractions as $key => $int) {
-      if($int->CIP1 == $this->code_cip) {
+      if($int->CIP1 == $this->code_cip || $int->CIP2 == $this->code_cip) {
         $this->_nb_alertes++;
         $this->_ref_alertes["interaction"][$key]      = $int;
         $this->_ref_alertes_text["interaction"][$key] = $int->Type;

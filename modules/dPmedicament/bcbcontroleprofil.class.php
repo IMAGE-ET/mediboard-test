@@ -36,8 +36,8 @@ class CBcbControleProfil extends CBcbObject {
   }
   
   function testProfil() {
-    if($this->_ref_patient) {
-      if($this->_ref_patient->_ref_dossier_medical) {
+    if($this->_ref_patient->_id) {
+      if($this->_ref_patient->_ref_dossier_medical->_id) {
         foreach($this->_ref_patient->_ref_dossier_medical->_codes_cim as $code) {
           $this->addCIM(CCodeCIM10::addPoint($code));
         }
@@ -48,7 +48,13 @@ class CBcbControleProfil extends CBcbObject {
         $sexe = "F";
       }
       $nbMois = $this->_ref_patient->evalAgeMois();
-      return $this->distObj->Test($nbMois, 0, 0, 0, $sexe);
+      
+      $poids = 0;
+      $this->_ref_patient->loadRefConstantesMedicales();
+      $const_med = $this->_ref_patient->_ref_constantes_medicales;
+      $poids = $const_med->poids;
+
+      return $this->distObj->Test($nbMois, $poids, 0, 0, $sexe);
     } else {
       return false;
     }
