@@ -16,7 +16,7 @@
 			
 			<!-- Décalage -->
 			à partir de J+ 
-			{{mb_field object=$line field=decalage_line increment=1 min=1 form=editDuree-$typeDate-$line_id 
+			{{mb_field object=$line field=decalage_line increment=1 min=0 form=editDuree-$typeDate-$line_id 
 			           onchange="submitFormAjax(this.form, 'systemMsg');" size="3"}}
 			
     </form>

@@ -36,9 +36,9 @@ foreach($med_lines as $meds_by_cat){
 			// Chargement des parents lines
 			$parent_lines = $line->loadRefsparents();
 			ksort($parent_lines);
-			if(count($parent_lines) < 2){
-				continue;
-			}
+			//if(count($parent_lines) < 2){
+			//	continue;
+			//}
 			$lines[$line->_id]= $line;
 		  foreach($parent_lines as &$_parent_line){
 		  	$_parent_line->loadRefsPrises();
