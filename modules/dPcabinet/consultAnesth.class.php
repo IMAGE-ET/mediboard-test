@@ -333,6 +333,9 @@ class CConsultAnesth extends CMbObject {
     $this->fillLimitedTemplate($template);
     $this->_ref_sejour->fillLimitedTemplate($template);
     $this->_ref_operation->fillLimitedTemplate($template);
+    
+    $this->_ref_sejour->loadRefDossierMedical();
+    $this->_ref_sejour->_ref_dossier_medical->fillTemplate($template, "Sejour");
   }
 
   function fillLimitedTemplate(&$template) {

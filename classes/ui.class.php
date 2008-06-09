@@ -58,14 +58,22 @@ class CAppUI {
     foreach(glob("classes/*/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");
     }
+
     // Require all global classes
     foreach(glob("classes/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");
     }
+
     // Require all modules classes
     foreach(glob("modules/*/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");
     }
+
+    // Require all modules setups 
+    foreach(glob("modules/*/setup.php") as $fileName) {
+      require_once("$rootDir/$fileName");
+    }
+    
   }
 
 	/**

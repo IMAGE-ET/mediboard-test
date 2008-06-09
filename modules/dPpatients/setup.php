@@ -10,7 +10,7 @@
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.69";
+$config["mod_version"]     = "0.70";
 $config["mod_type"]        = "user";
 
 class CSetupdPpatients extends CSetup {
@@ -808,7 +808,18 @@ class CSetupdPpatients extends CSetup {
   					ADD `regime_am` ENUM ('0','1');";
     $this->addQuery($sql);
   	
-    $this->mod_version = "0.69";
+    $this->makeRevision("0.69");
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - antécédents", "Patient - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - traitements", "Patient - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - addictions" , "Patient - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Patient - diagnostics", "Patient - Diagnotics" ));
+    
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - antécédents", "Sejour - Antécédents -- tous"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - traitements", "Sejour - Traitements"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - addictions" , "Sejour - Addictions -- toutes"));
+    $this->addQuery(CSetupdPcompteRendu::getTemplaceReplaceQuery("Sejour - diagnostics", "Sejour - Diagnotics" ));
+    
+    $this->mod_version = "0.70";
   }
 }
 

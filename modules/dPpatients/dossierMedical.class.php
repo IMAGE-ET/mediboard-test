@@ -98,6 +98,12 @@ class CDossierMedical extends CMbMetaObject {
   }
     
   function loadRefsAntecedents() {
+    // Initialisation du classement
+    $ant = new CAntecedent();
+    foreach (explode("|", $ant->_specs["type"]->list) as $type) {
+      $this->_ref_antecedents[$type] = array();
+    }
+
     $order = "type ASC";
     if (null == $antecedents = $this->loadBackRefs("antecedents", $order)) {
       return;
@@ -117,6 +123,12 @@ class CDossierMedical extends CMbMetaObject {
   }
   
   function loadRefsAddictions() {
+    // Initialisation du classement
+    $ant = new CAntecedent();
+    foreach (explode("|", $ant->_specs["type"]->list) as $type) {
+      $this->_ref_types_addiction[$type] = array();
+    }
+
     $order = "type ASC";
     if (null == $this->_ref_addictions = $this->loadBackRefs("addictions", $order)) {
       return;
@@ -148,91 +160,90 @@ class CDossierMedical extends CMbMetaObject {
   }
 
   function fillTemplate(&$template, $champ = "Patient") {
-    global $AppUI;
-    
     // Antécédents
     $this->loadRefsAntecedents();
-    if(is_array($this->_ref_antecedents)){
-      // Réécritude des antécédents
-      $sAntecedents = null;
-      foreach($this->_ref_antecedents as $keyAnt=>$currTypeAnt){
-        if($currTypeAnt){
-          if($sAntecedents){$sAntecedents.="<br />";}
-          $sAntecedents .= CAppUI::tr("CAntecedent.type.".$keyAnt)."\n";
-          foreach($currTypeAnt as $currAnt){
-            $sAntecedents .= " &bull; ";
-            if($currAnt->date){
-              $sAntecedents .= substr($currAnt->date, 8, 2) ."/";
-              $sAntecedents .= substr($currAnt->date, 5, 2) ."/";
-              $sAntecedents .= substr($currAnt->date, 0, 4) ." : ";
-            }
-            $sAntecedents .= $currAnt->rques;
+    if (is_array($this->_ref_antecedents)){
+      $sAntecedents = "";
+      foreach ($this->_ref_antecedents as $keyAnt => $currTypeAnt) {
+        $sAntecedentsParType = "";
+        $sType =  CAppUI::tr("CAntecedent.type.".$keyAnt);
+        foreach ($currTypeAnt as $currAnt) {
+          $sAntecedentsParType .= "<br /> &bull; ";
+          if ($currAnt->date) { 
+            $sAntecedentsParType .= mbDateToLocale($currAnt->date) . " : ";
           }
+          $sAntecedentsParType .= $currAnt->rques;
+        }
+
+        $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
+        
+        if (count($currTypeAnt)) {
+	        $sAntecedents .="<br />";
+	        $sAntecedents .= $sType;
+	        $sAntecedents .= $sAntecedentsParType;
         }
       }
-      $template->addProperty("$champ - antécédents", $sAntecedents);
-    }else{
-      $template->addProperty("$champ - antécédents");
+      
+      $template->addProperty("$champ - Antécédents -- tous", $sAntecedents !== "" ? $sAntecedents : null);
     }
     
-
     // Traitements
     $this->loadRefsTraitements();
-    if($this->_ref_traitements){
-      $sTrmt = null;
+    if (is_array($this->_ref_traitements)) {
+      $sTraitements = "";
       foreach($this->_ref_traitements as $curr_trmt){
-        if($sTrmt){$sTrmt.=" &bull; ";}
+        $sTraitements.="<br /> &bull; ";
         if ($curr_trmt->fin){
-          $sTrmt .= "Du ";
-          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." au ";
-          $sTrmt .= substr($curr_trmt->fin, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->fin, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->fin, 0, 4) ." : ";
-        }elseif($curr_trmt->debut){
-          $sTrmt .= "Depuis le ";
-          $sTrmt .= substr($curr_trmt->debut, 8, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 5, 2) ."/";
-          $sTrmt .= substr($curr_trmt->debut, 0, 4) ." : ";
+          $sTraitements .= "Du ";
+          $sTraitements .= mbDateToLocale($curr_trmt->debut) ;
+          $sTraitements .= " au ";
+          $sTraitements .= mbDateToLocale($curr_trmt->fin);
+          $sTraitements .= " : ";
         }
-        $sTrmt .= $curr_trmt->traitement;
+        elseif($curr_trmt->debut){
+          $sTraitements .= "Depuis le ";
+          $sTraitements .= mbDateToLocale($curr_trmt->debut);
+          $sTraitements .= " : ";
+        }
+        
+        $sTraitements .= $curr_trmt->traitement;
       }
-      $template->addProperty("$champ - traitements", $sTrmt);
-    }else{
-      $template->addProperty("$champ - traitements");
+      $template->addProperty("$champ - Traitements", $sTraitements !== "" ? $sTraitements : null);
     }
-    
     
     // Addictions
     $this->loadRefsAddictions();
-    if(is_array($this->_ref_types_addiction)){
-      // Réécritude des addictions
-      $sAddictions = null;
-      foreach($this->_ref_types_addiction as $typeAdd=>$listAdd){
-        if($listAdd){
-          $sAddictions .= CAppUI::tr("CAddiction.type.".$typeAdd)."\n";
-          foreach($listAdd as $key => $curr_add){
-            $sAddictions .= " &bull; ";
-            $sAddictions .= $curr_add->addiction;
-          }
+    if (is_array($this->_ref_addictions)) {
+      $sAddictions = "";
+      foreach ($this->_ref_types_addiction as $keyAdd => $currTypeAdd) {
+        $sAddictionsParType = "";
+        $sType =  CAppUI::tr("CAddiction.type.".$keyAdd);
+        foreach ($currTypeAdd as $currAdd) {
+          $sAddictionsParType .= "<br /> &bull; ";
+          $sAddictionsParType .= $currAdd->addiction;
+        }
+
+        $template->addProperty("$champ - Addictions - $sType", $sAddictionsParType);
+        
+        if (count($currTypeAdd)) {
+	        $sAddictions .="<br />";
+	        $sAddictions .= $sType;
+	        $sAddictions .= $sAddictionsParType;
         }
       }
-      $template->addProperty("$champ - addictions", $sAddictions);
-    }else{
-      $template->addProperty("$champ - addictions");
+      
+      $template->addProperty("$champ - Addictions -- toutes", $sAddictions !== "" ? $sAddictions : null);
     }
-    
-    
+        
     // Codes CIM10
     $aCim10 = array();
     if ($this->_ext_codes_cim){
       foreach ($this->_ext_codes_cim as $curr_code){
-        $aCim10[] = "$curr_code->code : $curr_code->libelle";
+        $aCim10[] = "<br />&bull; $curr_code->code : $curr_code->libelle";
       }
     }
     
-    $template->addProperty("$champ - diagnostics", join("&bull;", $aCim10));
+    $template->addProperty("$champ - Diagnostics", join("", $aCim10));
   }
 }
 

@@ -1620,28 +1620,35 @@ class CMbObject {
   }
 
 	/**
-	 * This function register this object to a templateManager object
+	 * This function register all templated properties for the object
+	 * Will load as necessary and fill in values
+	 * @param $template CTemplateManager
 	 */
-   function fillTemplate(&$template){
-   }
+  function fillTemplate(&$template) {
+  }
    
-   // Register only the fields of this object
-   function fillLimitedTemplate(&$template){
-   }
+	/**
+	 * This function register most important templated properties for the object
+	 * Won't register distant properties
+	 * Will load as necessary and fill in values
+	 * @param $template CTemplateManager
+	 **/
+  function fillLimitedTemplate(&$template) {
+  }
    
-   /**
-    * Decode all string fields (str, text, html)
-    * @return void
-    */
-   function decodeUtfStrings() {
-     foreach($this->_specs as $name => $spec) {
-       if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
-         if (null !== $this->$name) {
-           $this->$name = utf8_decode($this->$name);
-         }
-       }
-     }
-   }
+  /**
+   * Decode all string fields (str, text, html)
+   * @return void
+   */
+  function decodeUtfStrings() {
+    foreach($this->_specs as $name => $spec) {
+      if (in_array(get_class($spec), array("CStrSpec", "CHtmlSpec", "CTextSpec"))) {
+        if (null !== $this->$name) {
+          $this->$name = utf8_decode($this->$name);
+        }
+      }
+    }
+  }
 }
 
 function htmlReplace($find, $replace, &$source) {
