@@ -92,7 +92,7 @@ if(!($prescription->type == "sortie" && $old_line->_traitement)){
 	$old_line->store();
 }
 
-echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','',$mode_pharma)</script>";
+echo "<script type='text/javascript'>Prescription.reload($prescription_id,'','medicament','','$mode_pharma')</script>";
 echo $AppUI->getMsg();
 exit();
 
