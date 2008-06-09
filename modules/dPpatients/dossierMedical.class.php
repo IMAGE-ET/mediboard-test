@@ -278,7 +278,7 @@ class CDossierMedical extends CMbMetaObject {
       sort($list);
       $sEtatsDents .= $key.' : '.implode(', ', $list);
     }
-    $template->addProperty("Dossier médical - Etat dentaire", $sEtatsDents);
+    $template->addProperty("$champ - Etat dentaire", $sEtatsDents);
     
     
     // Codes CIM10

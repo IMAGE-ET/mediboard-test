@@ -867,6 +867,7 @@ class CSejour extends CCodable {
       }
     }
     $template->addProperty("Sejour - Prescriptions", $str);
+    $template->addProperty("Sejour - Remarques", $this->rques);
   }
   
   function fillTemplate(&$template) {

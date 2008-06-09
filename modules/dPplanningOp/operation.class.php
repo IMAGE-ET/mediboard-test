@@ -591,6 +591,7 @@ class COperation extends CCodable {
     $template->addProperty("Opération - exams pre-op"         , $this->examen);
     $template->addProperty("Opération - matériel"             , $this->materiel);
     $template->addProperty("Opération - convalescence"        , $this->_ref_sejour->convalescence);
+    $template->addProperty("Opération - remarques"            , $this->rques);
   }
 }
 
