@@ -29,6 +29,7 @@ class CDossierMedical extends CMbMetaObject {
   
   // Derived back references
   var $_ref_types_addiction  = null;
+  var $_count_antecedents = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -115,6 +116,14 @@ class CDossierMedical extends CMbMetaObject {
     }
   }
 
+  function countAntecedents(){
+  	$antedecent = new CAntecedent();
+  	$where = array();
+  	$where["type"] = " != 'alle'";
+  	$where["dossier_medical_id"] = " = '$this->_id'";
+  	$this->_count_antecedents = $antedecent->countList($where);
+  }
+  
   function loadRefsTraitements() {
     $order = "fin DESC, debut DESC";
     if (CAppUI::conf("dPpatients CTraitement enabled")) {

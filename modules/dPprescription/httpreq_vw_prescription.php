@@ -38,7 +38,7 @@ $alertesIPC           = array();
 $alertesProfil        = array();
 $favoris              = array();
 $listProduits         = array();
-
+$dossier_medical = new CDossierMedical();
 //$perm_create_line     = 0;
 $perm_create_line     = 1;
 
@@ -149,6 +149,7 @@ if($prescription->object_id && $prescription->_id) {
   $dossier_medical->loadRefsAntecedents();
   $dossier_medical->loadRefsTraitements();
   $dossier_medical->loadRefsAddictions();
+  $dossier_medical->countAntecedents();
   
   // Calcul des alertes de la prescription
   $allergies    = new CBcbControleAllergie();
@@ -299,7 +300,7 @@ $smarty->assign("full_mode"          , $full_mode);
 $smarty->assign("protocole_line"     , $protocole_line);
 $smarty->assign("mode_protocole"     , $mode_protocole);
 $smarty->assign("prescriptions_sejour", $prescriptions_sejour);
-
+$smarty->assign("dossier_medical"    , $dossier_medical);
 if($full_mode){
 	$_sejour = new CSejour();
 	$_sejour->load($sejour_id);

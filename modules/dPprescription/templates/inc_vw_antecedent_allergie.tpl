@@ -1,9 +1,8 @@
-		   <!-- Si le dossier medical possède des antecedents -->
-{{if $antecedents}}
 
   <!-- Affichage des allergies -->
 {{if array_key_exists('alle', $antecedents)}}
   {{assign var=allergies value=$antecedents.alle}}
+  {{if $allergies|@count}}
    <img src="images/icons/warning.png" title="Allergies" alt="Allergies" 
         onmouseover="$('allergies{{$sejour_id}}').show();"
         onmouseout="$('allergies{{$sejour_id}}').hide();" />
@@ -21,10 +20,11 @@
 	    {{/foreach}}
    </ul>   
    </div>   
+  {{/if}}
 {{/if}}
 
 <!-- Affichage des autres antecedents -->
- {{if (array_key_exists('alle', $antecedents) && $antecedents|@count > 1) || ($antecedents|@count >= 1 && !array_key_exists('alle', $antecedents))}}
+ {{if $dossier_medical->_count_antecedents}}
   <img src="images/icons/antecedents.gif" title="Antécédents" alt="Antécédents" 
         onmouseover="$('antecedents{{$sejour_id}}').show();"
         onmouseout="$('antecedents{{$sejour_id}}').hide();" />
@@ -32,7 +32,7 @@
    <div id="antecedents{{$sejour_id}}" class="tooltip" style="display: none; background-color: #ddd; border-style: ridge; padding:3px; top: 110px;">
      <ul>
       {{foreach from=$antecedents key=name item=cat}}
-      {{if $name != "alle"}}
+      {{if $name != "alle" && $cat|@count}}
       <li>
       <strong>{{tr}}CAntecedent.type.{{$name}}{{/tr}}</strong>
       <ul>
@@ -52,4 +52,3 @@
    </div>  
  {{/if}}
  
- {{/if}}
