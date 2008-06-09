@@ -52,7 +52,7 @@ class CPrescriptionLine extends CMbObject {
       "child_id"        => "ref class|$this->_class_name",
       "decalage_line"   => "num min|0",
       "fin"             => "date",
-      "_fin"            => "date moreThan|debut"
+      "_fin"            => "date moreEquals|debut"
     );
     return array_merge($specsParent, $specs);
   }
