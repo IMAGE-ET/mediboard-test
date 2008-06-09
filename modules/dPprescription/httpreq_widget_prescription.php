@@ -55,6 +55,16 @@ $user->load($AppUI->user_id);
 $is_praticien = $user->isPraticien();
 
 
+$type ="";
+if($object_class == "CSejour"){
+	$type = "pre_admission";
+} 
+if($object_class == "CConsultation"){
+	$type = "externe";
+} 
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -66,7 +76,7 @@ $smarty->assign("object_class"       , $object_class);
 $smarty->assign("suffixe"            , $suffixe);
 $smarty->assign("praticien_id"       , $praticien_id);
 $smarty->assign("prescriptions"      , $prescriptions);
-
+$smarty->assign("type", $type);
 $smarty->display("inc_widget_prescription.tpl");
 
 ?>

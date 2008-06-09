@@ -40,9 +40,11 @@
      
       {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
         <hr />
+        <div id="prescription_register">
 	      <script type="text/javascript">
 	        PrescriptionEditor.register('{{$consult->_id}}','{{$consult->_class_name}}','fdr','{{$consult->_praticien_id}}');
 	      </script>
+	      </div>
       {{/if}}
     </td>
 	</tr>

@@ -64,6 +64,9 @@ reloadPrises = function(prescription_line_id, type){
 }
 
 submitPrise = function(oForm, type){
+  if(!checkForm(oForm)){
+    return;
+  }
   if(!oForm.object_id.value){
     return;
   }

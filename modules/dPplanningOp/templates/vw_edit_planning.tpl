@@ -1,8 +1,20 @@
 <!-- $Id$ -->
 
 {{mb_include_script module="dPplanningOp" script="protocole_selector"}}
+{{mb_include_script module="dPprescription" script="prescription_editor"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="dPcompteRendu" script="document"}}
+
 
 <script type="text/javascript">
+
+Document.refreshList = function(operation_id) {
+  var url = new Url;
+  url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
+  url.addParam("operation_id" , operation_id);
+  url.requestUpdate('document-'+operation_id, { waitingText: null } );
+}
+
 
 function printDocument(iDocument_id) {
   form = document.editOp;
@@ -257,6 +269,12 @@ function pageMain() {
           {{else}}
             <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
           {{/if}}
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div id="document-{{$op->_id}}">
+            </div>
           </td>
         </tr>
       </table>

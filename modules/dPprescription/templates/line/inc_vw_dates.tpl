@@ -110,6 +110,10 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 }
 
 syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
+  if(!checkForm(oForm)){
+    return;
+  }
+ 
   syncDate(oForm, curr_line_id, fieldName, type, object_class, cat_id);
   
   if(!curr_line_id){
@@ -129,7 +133,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 {{else}}
   {{assign var=category_id value=""}}
 {{/if}}
-
 
 <form name="editDates-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
    <input type="hidden" name="m" value="dPprescription" />

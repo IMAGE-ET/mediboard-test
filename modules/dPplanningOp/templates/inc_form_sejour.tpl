@@ -565,10 +565,22 @@ Main.add( function(){
   </td>
 </tr>
 {{/if}}
-
 </table>
 
 </form>
+
+{{if $mode_operation && $isPrescriptionInstalled}}
+<table style="width:100%" class="form"> 
+  <tr>
+    <td id="prescription_register">
+		  <script type="text/javascript">
+		    PrescriptionEditor.register('{{$sejour->_id}}','{{$sejour->_class_name}}','dhe','{{$sejour->praticien_id}}');
+		  </script>
+    </td>
+  </tr>  
+</table>
+{{/if}}
+
 
 <script type="text/javascript">
 

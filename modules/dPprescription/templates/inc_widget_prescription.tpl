@@ -1,5 +1,5 @@
 {{if !@$suffixe}}{{assign var=suffixe value="std"}}{{/if}}
-  
+
 <script type="text/javascript">
 
 Prescription.suffixes.push("{{$suffixe}}");
@@ -8,7 +8,7 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 
 
 openPrescription = function(prescription_id){
-  PrescriptionEditor.popup(prescription_id,'{{$object_id}}','{{$object_class}}','externe');
+  PrescriptionEditor.popup(prescription_id,'{{$object_id}}','{{$object_class}}','{{$type}}');
 }
 
 </script>
@@ -24,16 +24,15 @@ openPrescription = function(prescription_id){
 	    <input type="hidden" name="callback" value="openPrescription" />
 	    <input type="hidden" name="object_id" value="{{$object_id}}" />
 	    <input type="hidden" name="object_class" value="{{$object_class}}" />
-	       
+	    <input type="hidden" name="type" value="{{$type}}" />
+	    
 	    <!-- Creation d'une prescription de type sejour (pre_admission/sejour/sortie) -->
 	    {{if $object_class == "CSejour"}}
-        <input type="hidden" name="type" value="pre_admission" />
-	      <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">
+        <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">
 	        Créer une prescription de séjour
 	      </button>    
 	    {{else}}
 	    <!-- Creation d'une prescription d'externe -->
-	    <input type="hidden" name="type" value="externe" />
 	    <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">
 	      Créer une prescription de consultation
 	    </button>

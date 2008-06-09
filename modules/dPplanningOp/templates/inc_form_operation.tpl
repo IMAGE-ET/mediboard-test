@@ -1,3 +1,8 @@
+<script type="text/javascript">
+	Main.add(function () {
+    Document.refreshList('{{$op->_id}}');
+	} );
+</script>
 <!-- $Id: $ -->
 {{mb_include_script module="dPplanningOp" script="ccam_selector"}}
 {{mb_include_script module="dPplanningOp" script="plage_selector"}}

@@ -1,3 +1,5 @@
+<div id="prescription_sejour">
+
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
@@ -148,3 +150,5 @@ function viewProduit(cip){
     {{/if}}
   {{/if}}
 </table>
+
+</div>
