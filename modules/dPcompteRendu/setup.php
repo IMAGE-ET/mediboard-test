@@ -14,7 +14,12 @@ $config["mod_version"]     = "0.34";
 $config["mod_type"]        = "user";
 
 class CSetupdPcompteRendu extends CSetup {
-  
+  static function getTemplaceReplaceQuery($search, $replace) {
+    return 'UPDATE `compte_rendu` 
+      SET `source` = REPLACE(`source`, "['.htmlentities($search).']", "['.htmlentities($replace).']") 
+      WHERE `object_id` IS NULL';
+  }
+
   function __construct() {
     parent::__construct();
     
