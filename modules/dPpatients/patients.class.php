@@ -1057,6 +1057,7 @@ class CPatient extends CMbObject {
     $template->addProperty("Patient - date de naissance" , mbTransformTime(null, $this->naissance, "%d/%m/%Y"));
     $template->addProperty("Patient - téléphone"         , $this->tel        );
     $template->addProperty("Patient - mobile"            , $this->tel2       );
+    $template->addProperty("Patient - profession"        , $this->profession );
     if($this->medecin_traitant) {
       $template->addProperty("Patient - médecin traitant"          , "{$this->_ref_medecin_traitant->nom} {$this->_ref_medecin_traitant->prenom}");
       $template->addProperty("Patient - médecin traitant - adresse", "{$this->_ref_medecin_traitant->adresse}\n{$this->_ref_medecin_traitant->cp} {$this->_ref_medecin_traitant->ville}");
