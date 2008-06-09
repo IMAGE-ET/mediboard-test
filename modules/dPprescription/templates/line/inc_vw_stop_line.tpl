@@ -1,36 +1,31 @@
+<script type="text/javascript">
+
+// Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
+Main.add( function(){
+var oDiv = $('editLineTraitement-{{$line->_id}}');
+if(oDiv){  
+{{if $line->_traitement && $line->date_arret && $line->date_arret <= $today}}
+  oDiv.hide();
+{{else}}
+  oDiv.show();
+{{/if}}
+}
+} );
+
+</script>
+
 {{if $line->_class_name == "CPrescriptionLineMedicament"}}
   {{assign var=dosql value="do_prescription_line_medicament_aed"}}
 {{else}}
   {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{/if}}
 
-<script type="text/javascript">
 
-// Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
-changeColor = function(object_id, object_class, date_arret, traitement){
-  if(traitement == "1"){
-    return;
-  }
-  var class_th_arretee = "arretee";
-  if(object_class == "CPrescriptionLineMedicament"){
-    var class_th_non_arretee = "";
-  } else {
-    var class_th_non_arretee = "element";
-  }
-  date_arret ? class_th=class_th_arretee : class_th=class_th_non_arretee;
-  var oDiv = $('th_line_'+object_class+'_'+object_id);
-  oDiv.className = class_th;
-  
-  // Ligne finie
-  if(date_arret != "" && date_arret <= '{{$today}}'){
-    oDiv.setAttribute("style","background-image: url(images/icons/ray.gif);");
-  } else {
-    oDiv.setAttribute("style","background-image: '';");
-  }
-}
-
-</script>
-
+{{if $line->_class_name == "CPrescriptionLineElement"}}
+  {{assign var=category_id value=$category->_id}}
+{{else}}
+  {{assign var=category_id value=""}}
+{{/if}}
 <form name="form-stop-{{$object_class}}-{{$line->_id}}" method="post" action="">
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -41,7 +36,7 @@ changeColor = function(object_id, object_class, date_arret, traitement){
 	  <button type="button"
 	          class="cancel" 
 	          onclick="this.form.date_arret.value = ''; 
-	                   changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}'); 
+	                   changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}','{{$category_id}}'); 
 	                   Prescription.submitFormStop(this.form,'{{$line->_id}}','{{$line->_class_name}}');">
 	    Annuler l'arrêt
 	  </button>
@@ -54,7 +49,7 @@ changeColor = function(object_id, object_class, date_arret, traitement){
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
 	        <button type="button" 
 	                class="stop" 
-	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}');">  
+	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
 	          Arrêter
 	        </button>
 	      </td>
@@ -66,11 +61,11 @@ changeColor = function(object_id, object_class, date_arret, traitement){
 
 <script type="text/javascript">
 
-calculDateArret = function(oForm, object_id, object_class, traitement){
+calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
   if(!oForm.date_arret.value){
     oForm.date_arret.value = "{{$today}}";
   }
-  changeColor(object_id, object_class, oForm.date_arret.value, traitement);
+  changeColor(object_id, object_class, oForm.date_arret.value, traitement, cat_id);
   Prescription.submitFormStop(oForm, object_id, object_class);
 }
 

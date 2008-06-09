@@ -156,7 +156,7 @@ submitPrise = function(oForm, type){
          tous les
 		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}				   
 		  {{mb_field object=$prise_posologie field=unite_tous_les}}
-		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min=0 form=addPriseTousLes$type$line_id}})
+		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPriseTousLes$type$line_id}})
 		  
       {{if $line->_id}}
         <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>

@@ -77,7 +77,7 @@ function &getCachedLit($lit_id) {
 /**
  * Charge complètement un service pour l'affichage des affectations
  */
-function loadServiceComplet(&$service, $date, $mode) {
+function loadServiceComplet(&$service, $date, $mode, $praticien_id = "") {
   $service->loadRefsBack();
   $service->_nb_lits_dispo = 0;
 
@@ -90,6 +90,14 @@ function loadServiceComplet(&$service, $date, $mode) {
       foreach ($lit->_ref_affectations as $affectation_id => &$affectation) {
         if (!$affectation->effectue || $mode) {
           $affectation->loadRefSejour();
+          if($praticien_id){
+          	if($affectation->_ref_sejour->praticien_id != $praticien_id){
+          		unset($lit->_ref_affectations[$affectation_id]);
+          		continue;
+          	}
+          }
+          
+          
           $affectation->loadRefsAffectations();
           $affectation->checkDaysRelative($date);
 
@@ -129,7 +137,7 @@ function loadServiceComplet(&$service, $date, $mode) {
 /**
  *  Chargement des admissions à affecter
  */
-function loadSejourNonAffectes($where, $order = null) {
+function loadSejourNonAffectes($where, $order = null, $praticien_id = null) {
   global $g;
   
   $leftjoin = array(
@@ -137,6 +145,11 @@ function loadSejourNonAffectes($where, $order = null) {
     "users_mediboard" => "sejour.praticien_id = users_mediboard.user_id",
     "patients"        => "sejour.patient_id = patients.patient_id"
   );
+
+  if($praticien_id){
+    $where["sejour.praticien_id"] = " = '$praticien_id'";	
+  }
+
   $where["sejour.group_id"] = "= '$g'";
   
   // On enleve de l'affichage les urgences

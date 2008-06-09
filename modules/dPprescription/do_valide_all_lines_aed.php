@@ -179,7 +179,7 @@ if($prescription->_id && $mode_pharma){
 	    $_line->checkIPC($alertesIPC);
 	    $_line->checkProfil($alertesProfil);
   	}
-  	if($_line->_nb_alertes == "0" && $_line->valide_pharma == "0"){
+  	if($_line->_nb_alertes == "0" && $_line->valide_pharma == "0" && $_line->_ref_produit->inLivret){
   		$medicaments[$_line->_id] = $_line;
   	}
   }

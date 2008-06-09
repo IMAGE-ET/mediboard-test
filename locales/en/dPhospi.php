@@ -116,4 +116,5 @@ $locales['CTransmissionMedicale.degre.low'] = '';
 $locales['CTransmissionMedicale.degre.high'] = '';
 $locales['CObservationMedicale-text'] = '';
 $locales['CTransmissionMedicale-text'] = '';
+$locales['mod-dPhospi-tab-vw_bilan_prescription'] = '';
 ?>

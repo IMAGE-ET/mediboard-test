@@ -7,6 +7,6 @@
     <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}') } }  )">Annuler la validation pharmacien</button>
   {{else}}
     <input type="hidden" name="valide_pharma" value="1" />
-      <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}') } }  )">Validation pharmacien</button>
+    <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','medicament','','{{$mode_pharma}}') } }  )">Validation pharmacien</button>
   {{/if}}
 </form>

@@ -155,9 +155,14 @@ drawGraph = function() {
   }
 };
 
-Main.add(drawGraph);
+//Main.add(drawGraph);
 Main.add(function () {
+
   prepareForm(document.forms['edit-constantes-medicales']);
+   drawGraph();
+
+ 
+
 });
 </script>
 

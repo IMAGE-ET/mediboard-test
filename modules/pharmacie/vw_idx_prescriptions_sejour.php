@@ -25,7 +25,7 @@ $filter_sejour = new CSejour();
 // Recuperation des valeurs
 $praticien_id = mbGetValueFromGet("praticien_id");
 $service_id   = mbGetValueFromGet("service_id");
-//$valide_pharma = mbGetValueFromGet("valide_pharma");
+$valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulement les prescriptions contenant des lignes non validees
 
 $filter_sejour->_date_min     = mbGetValueFromGet("_date_min");
 $filter_sejour->_date_max     = mbGetValueFromGet("_date_max");
@@ -43,7 +43,10 @@ $ljoinMedicament["sejour"] = "prescription.object_id = sejour.sejour_id";
 	
 
 $where["prescription.type"] = " = 'sejour'";
-$where["valide_pharma"] = " = '0'";
+
+if($valide_pharma == 0){
+  $where["valide_pharma"] = " = '$valide_pharma'";
+}
 
 // Filtre sur le praticiens (lignes)
 if($praticien_id){
@@ -103,6 +106,7 @@ if(!$filter_sejour->_date_min || !$filter_sejour->_date_max){
 // Smarty template
 $smarty = new CSmartyDP();
 
+$smarty->assign("valide_pharma", $valide_pharma);
 $smarty->assign("today", mbDate());
 $smarty->assign("mode_pharma", "1");
 $smarty->assign("prescription", new CPrescription());

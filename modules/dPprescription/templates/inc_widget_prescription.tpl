@@ -5,6 +5,12 @@
 Prescription.suffixes.push("{{$suffixe}}");
 Prescription.suffixes = Prescription.suffixes.uniq();
 
+
+
+openPrescription = function(prescription_id){
+  PrescriptionEditor.popup(prescription_id,'{{$object_id}}','{{$object_class}}','externe');
+}
+
 </script>
 
 
@@ -12,20 +18,23 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 	  <!-- Pas de prescription -->
 	  {{if !$prescriptions|@count}}
 	  <form name="addPrescriptionSejour{{$suffixe}}" action="?">
+	    <input type="hidden" name="m" value="dPprescription" />
+	    <input type="hidden" name="dosql" value="do_prescription_aed" />
+	    <input type="hidden" name="del" value="0" />
+	    <input type="hidden" name="callback" value="openPrescription" />
+	    <input type="hidden" name="object_id" value="{{$object_id}}" />
+	    <input type="hidden" name="object_class" value="{{$object_class}}" />
+	       
+	    <!-- Creation d'une prescription de type sejour (pre_admission/sejour/sortie) -->
 	    {{if $object_class == "CSejour"}}
-	      Type
-	      
-	      <select name="_type_sejour">
-	        <option value="pre_admission">Pré-admission</option>
-	        <option value="sejour">Séjour</option>
-	        <option value="sortie">Sortie</option>
-	      </select>
-	      
-	      <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}', this.form._type_sejour.value)">
+        <input type="hidden" name="type" value="pre_admission" />
+	      <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">
 	        Créer une prescription de séjour
-	      </button>
+	      </button>    
 	    {{else}}
-	    <button type="button" class="new" onclick="PrescriptionEditor.popup('','{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
+	    <!-- Creation d'une prescription d'externe -->
+	    <input type="hidden" name="type" value="externe" />
+	    <button type="button" class="new" onclick="submitFormAjax(this.form, 'systemMsg');">
 	      Créer une prescription de consultation
 	    </button>
 	    {{/if}}
@@ -44,11 +53,29 @@ Prescription.suffixes = Prescription.suffixes.uniq();
 				{{/if}}
 				{{/foreach}}
       </tr>
-  
 	    {{foreach from=$prescriptions item=_prescription}}
-	      {{include file="../../dPprescription/templates/inc_widget_vw_prescription.tpl" prescription=$_prescription}}
+	      <tr>
+				  <td>
+				   {{if $_prescription->type != "traitement"}}
+				   <a href="#{{$_prescription->_id}}" onclick="PrescriptionEditor.popup('{{$_prescription->_id}}');">
+				     {{tr}}CPrescription.type.{{$_prescription->type}}{{/tr}}
+				   </a>
+				   {{else}}
+				   {{tr}}CPrescription.type.{{$_prescription->type}}{{/tr}}
+				   {{/if}}
+				  </td>
+				  <td>
+				    {{$_prescription->_ref_praticien->_view}}
+				  </td>
+				  {{foreach from=$_prescription->_counts_by_chapitre key=chapitre item=count}}
+				  {{if $totals_by_chapitre.$chapitre}}
+				  <td style="text-align: center;">
+				    {{if $count}}{{$count}}{{else}}-{{/if}}
+				  </td>
+				  {{/if}}
+				  {{/foreach}}
+				</tr>
 	    {{/foreach}}
-	 
 	    </table>
 	    {{/if}}
 {{else}}

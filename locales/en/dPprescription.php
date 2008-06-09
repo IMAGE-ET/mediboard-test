@@ -274,4 +274,5 @@ $locales['CPrescriptionLineMedicament-fin'] = '';
 $locales['CPrescriptionLineMedicament-fin-desc'] = '';
 $locales['CPrescriptionLineElement-fin'] = '';
 $locales['CPrescriptionLineElement-fin-desc'] = '';
+$locales['config-dPprescription-CPrescription-infirmiere_borne'] = '';
 ?>

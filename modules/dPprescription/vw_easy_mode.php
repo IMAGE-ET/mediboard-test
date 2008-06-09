@@ -40,7 +40,10 @@ if($prescription->_ref_object->_class_name == "CSejour"){
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
 // chargement des medicaments favoris du praticien
-$medicaments = CPrescription::getFavorisMedPraticien($prescription->_current_praticien_id);
+$medicaments = array();
+if($prescription->_current_praticien_id){
+  $medicaments = CPrescription::getFavorisMedPraticien($prescription->_current_praticien_id);
+}
 
 $filter_line_element = new CPrescriptionLineMedicament();
 $filter_line_element->debut = mbDate();

@@ -210,7 +210,7 @@ Main.add(function () {
       </form>
       
 			<!-- Traitements -->
-			{{if $dPconfig.dPpatients.CTraitement.enabled}}
+			{{if $dPconfig.dPpatients.CTraitement.enabled && !$isPrescriptionInstalled}}
       <hr />
       <form name="editTrmtFrm" action="?m=dPcabinet" method="post" onsubmit="return onSubmitTraitement(this);">
       <input type="hidden" name="m" value="dPpatients" />

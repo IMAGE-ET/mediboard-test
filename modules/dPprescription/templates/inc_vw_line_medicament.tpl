@@ -25,17 +25,27 @@
 {{assign var=typeDate value="Med"}}
 
 
-<tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable">
+<tbody id="line_medicament_{{$curr_line->_id}}" class="hoverable 
+  {{if $curr_line->_traitement}}traitement{{else}}med{{/if}}
+  {{if $_date_fin && $_date_fin <= $today}}line_stopped{{/if}}">
+
   <!-- Header de la ligne -->
   <tr>
-    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" class="{{if $curr_line->_traitement}}traitement{{elseif $curr_line->date_arret}}arretee{{/if}}"
-     {{if $_date_fin && $_date_fin <= $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
-      <div style="float:left">
-        {{if !$curr_line->_protocole && !$curr_line->_traitement}}
-        <a style="display: inline" href="#" onclick="Prescription.viewLineHistorique('{{$curr_line->_id}}','{{$curr_line->_class_name}}')">
-          <img src="images/icons/history.gif" alt="historique" />
-        </a> 
+    <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$curr_line->_id}}" 
+        class="{{if $curr_line->_traitement}}traitement{{/if}}
+               {{if $_date_fin && $_date_fin <= $today}}arretee{{/if}}">
+     
+      <script type="text/javascript">
+         Main.add( function(){
+           moveTbody($('line_medicament_{{$curr_line->_id}}'));
+         });
+      </script>
+  
+      <div style="float:left;">
+        {{if !$curr_line->_protocole && $curr_line->_count_parent_line}}
+          <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
         {{/if}}
+
         {{if !$curr_line->_traitement}}
 	        <!-- Selecteur equivalent -->
 	        {{if $perm_edit}}
@@ -49,19 +59,17 @@
 		    {{/if}}  
 	     
 	      <!-- Formulaire Traitement -->
-	      {{*if $prescription_reelle->type == "pre_admission" || $prescription_reelle->type == "externe"*}}
-	      {{*if ($curr_line->_traitement && $prescription_reelle->type == "pre_admission") || !$curr_line->_traitement*}}
         {{if !$curr_line->_protocole && !$mode_pharma && $perm_edit}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
         {{/if}} 
-        {{*/if*}}
-        {{*/if*}}
+
       </div>
       
       <!-- AFfichage de la signature du praticien -->
       <div style="float: right">
+      
         {{if ($curr_line->praticien_id != $app->user_id) && !$curr_line->_traitement && !$curr_line->_protocole}}
-          {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
+            {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else}}
           {{if !$curr_line->_traitement}}
             {{$curr_line->_ref_praticien->_view}}    
@@ -73,7 +81,7 @@
 	        {{if !$curr_line->_traitement}}
 		          {{if !$curr_line->_protocole}}  
 						    {{if !$curr_line->valide_pharma}}
-						      {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+						        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
 						    {{else}}
 							    (Validé par le pharmacien)
 							  {{/if}}
@@ -103,8 +111,8 @@
   </tr>
   
   <!-- Pas traitement ni protocole -->
-  {{if !$curr_line->_traitement && !$curr_line->_protocole}}
   <tr>  
+  {{if !$curr_line->_traitement && !$curr_line->_protocole}}
     <td style="text-align: center">
     {{if !$curr_line->_ref_produit->inLivret && $prescription->type == "sejour"}}
         <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
@@ -118,30 +126,35 @@
       <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
       <br />
     {{/if}}
-    
     </td>
+  {{/if}}
+  
+  {{if !$curr_line->_protocole}}
+    {{if $curr_line->_traitement}}
+    <td></td>
+    {{/if}}
     <td colspan="2">
-    
 	      {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
 		    {{if $perm_edit}}
 			    <script type="text/javascript">
 			      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
-			      {{if $prescription->type != "sortie"}}
+			      {{if $curr_line->_traitement}}
 			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-		          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
-			      {{/if}}
-		        {{if $prescription->type == "sortie"}}
-		          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);
-		        {{/if}}
-		        
-		        
+			      {{else}}
+				      {{if $prescription->type != "sortie"}}
+				        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
+			          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
+				      {{/if}}
+			        {{if $prescription->type == "sortie"}}
+			          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);
+			        {{/if}}
+		        {{/if}}	        
 			    </script>
-		    {{/if}}
-	             
+		    {{/if}}            
 		</td>
     <td>
       <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
-      {{if $prescription->type == "sejour" || $prescription->type == "pre_admission"}}
+      {{if $prescription_reelle->type != "sortie"}}
         <div id="stop-CPrescriptionLineMedicament-{{$curr_line->_id}}">
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
         </div>
@@ -155,7 +168,6 @@
   {{if $curr_line->_protocole}}
     {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
   {{/if}}  
-  
   
   <tr>  
 	  <td style="text-align: center">
@@ -208,17 +220,11 @@
     <td colspan="4">
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
       {{if !$curr_line->_protocole && $curr_line->_ref_prescription->type != "externe"}}
-      {{if !$curr_line->_traitement || ($curr_line->_traitement && $prescription_reelle->type == "sortie")}}
+      
       <div style="float: right;">
         {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
       </div>
-      {{/if}}
-      {{/if}}
-      {{if $curr_line->_traitement && $prescription->object_id}}
-        <!-- Stopper une ligne -->
-        <div id="stop-CPrescriptionLineMedicament-{{$curr_line->_id}}" style="float: right">
-          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
-        </div>
+      
       {{/if}}
       
       <!-- Insérer un commentaire dans la ligne -->

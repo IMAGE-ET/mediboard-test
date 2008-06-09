@@ -6,18 +6,15 @@ var PrescriptionEditor = {
     width : 810,
     height: 600
   },
-  popup : function(prescription_id, object_id, object_class, praticien_id, type) {
+  popup : function(prescription_id, object_id, object_class, type) {
       var url = new Url;
-      url.setModuleAction("dPprescription", "vw_edit_prescription");
-      
+      url.setModuleAction("dPprescription", "httpreq_vw_prescription");
       url.addParam("prescription_id", prescription_id);
+      url.addParam("popup", "1");
+      url.addParam("full_mode", "1");
       url.addParam("object_id", object_id);
       url.addParam("object_class", object_class);
-      url.addParam("praticien_id", praticien_id);
-      if(type){
-        url.addParam("type", type);
-      }
-      url.addParam("popup", "1");
+      url.addParam("type", type);
       url.popup(this.options.width, this.options.height, "Prescription");
   },
   refresh: function(object_id, object_class, praticien_id){

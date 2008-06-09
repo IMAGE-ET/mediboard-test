@@ -272,6 +272,7 @@ if ($consult->_id) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("contrainteProvenance" , $contrainteProvenance );
 $smarty->assign("contrainteDestination", $contrainteDestination);
 $smarty->assign("contrainteOrientation", $contrainteOrientation);

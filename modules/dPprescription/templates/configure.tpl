@@ -46,6 +46,43 @@
     </td>             
   </tr>
   
+  
+  {{assign var="var" value="infirmiere_borne"}}
+  <tr>
+    <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>    
+    </th>
+  </tr>
+
+  <tr>  
+    {{assign var="var" value="infirmiere_borne_start"}}
+    <td colspan="3" style="text-align: center">
+      Du soir
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHoursSoir item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+      heures
+    </td>
+    {{assign var="var" value="infirmiere_borne_stop"}}
+    <td colspan="3" style="text-align: center">
+      au matin
+      <select class="num" name="{{$m}}[{{$class}}][{{$var}}]">
+      {{foreach from=$listHoursMatin item=_hour}}
+        <option value="{{$_hour}}" {{if $_hour == $dPconfig.$m.$class.$var}}selected="selected"{{/if}}>
+          {{$_hour}}
+        </option>
+      {{/foreach}}
+      </select>
+      heures
+    </td>             
+  </tr>
+  
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

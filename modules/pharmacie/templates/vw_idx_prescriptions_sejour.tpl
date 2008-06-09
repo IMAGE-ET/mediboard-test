@@ -57,6 +57,12 @@ function pageMain(){
 			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm}}
 	          </td>
 	          <td>
+	            <select name="valide_pharma">
+	              <option value="0" {{if $valide_pharma == "0"}}selected="selected"{{/if}}>Seulement les non validées</option>
+	              <option value="1" {{if $valide_pharma == "1"}}selected="selected"{{/if}}>Toutes</option>
+	            </select>
+	          </td>
+	          <td>
 	            <button class="tick" type="button" onclick="this.form.submit()">Filtrer</button>
 	          </td>
           </tr>

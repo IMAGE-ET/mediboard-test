@@ -368,4 +368,11 @@ $dPconfig["dPstock"] = array (
   ),
 );
 
+$dPconfig["dPprescription"] = array (
+  "CPrescription" => array(
+    "infirmiere_borne_start" => "20",
+    "infirmiere_borne_stop"  => "08"
+  )
+);
+  
 ?>

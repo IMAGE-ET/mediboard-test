@@ -39,45 +39,59 @@ foreach($cats as $key => $cat){
 	$categories["cat".$key] = $cat;
 }
 
+$lines_med_trait = array();
 
 if($prescription->_id){
 	// Chargement des lignes de medicaments
   $prescription->loadRefsLines();
-  
   // Chargement des lignes d'elements
   $prescription->loadRefsLinesElementByCat();
+  // Chargement des lignes de traitement
+  $prescription->_ref_object->loadRefPrescriptionTraitement();
+  
+  $lines_med_trait["medicament"] = $prescription->_ref_prescription_lines;
+  $traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
+  if($traitement_personnel->_id){
+    $traitement_personnel->loadRefsLines();
+  }
+  $lines_med_trait["traitement"] = $traitement_personnel->_ref_prescription_lines;
   
   // Parcours des medicaments
-	foreach($prescription->_ref_prescription_lines as &$line){
-		$view_line = 0;
-		if($line->date_arret){
-			$line->_fin = $line->date_arret;
+  foreach($lines_med_trait as $cat_name => $lines_cat){
+  	if($lines_cat|@count){
+		foreach($lines_cat as &$line){
+			$view_line = 0;
+			if($line->date_arret){
+				$line->_fin = mbDate("- 1 DAY", $line->date_arret);
+			}
+			if($line->_fin && $line->_fin < $date){
+				continue;
+			}
+			
+			// Si pas de date de fin, on affiche tout le tps la ligne dans le dossier de soin
+			if(!$line->_fin && $line->debut <= $date){
+				$view_line = 1;
+			}
+
+		  if(($date >= $line->debut && $date <= $line->_fin) || $view_line){
+		  	$line->loadRefsPrises();  	
+		  	foreach($line->_ref_prises as $prise){
+		  	  if($prise->nb_tous_les && $prise->unite_tous_les){
+		  		  if($prise->calculDatesPrise($date)){  	
+		  		  	$prises_med[$line->_id][] = $prise;
+		  		  } else {
+		  		  	// liste des medicaments contenant des prises non prescrites pour la journée courante 
+		  		  	$medsNonPresc[$line->_id] = $line; 
+		  		  }
+		      } else {
+		      	$prises_med[$line->_id][] = $prise;
+		      }
+		  	}
+		  	$lines_med[$line->_id] = $line;
+		  }  
 		}
-		if($line->_fin && $line->_fin < $date){
-			continue;
-		}
-		// Si pas de date de fin, on affiche tout le tps la ligne dans le dossier de soin
-		if(!$line->_fin && $line->debut <= $date){
-			$view_line = 1;
-		}
-	  if(($date >= $line->debut && $date <= $line->_fin) || $view_line){
-	  	$line->loadRefsPrises();  	
-	  	foreach($line->_ref_prises as $prise){
-	  	  if($prise->nb_tous_les && $prise->unite_tous_les){
-	  		  if($prise->calculDatesPrise($date)){  	
-	  		  	$prises_med[$line->_id][] = $prise;
-	  		  } else {
-	  		  	// liste des medicaments contenant des prises non prescrites pour la journée courante 
-	  		  	$medsNonPresc[$line->_id] = $line; 
-	  		  }
-	      } else {
-	      	$prises_med[$line->_id][] = $prise;
-	      }
-	  	}
-	  	$lines_med[$line->_id] = $line;
-	  }  
-	}
-	
+  	}
+  }
   foreach($prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
   	if($name_chap != "dmi"){
 	  	foreach($elements_chap as $name_cat => $elements_cat){
@@ -86,7 +100,7 @@ if($prescription->_id){
 	  				$view_line_element = 0;
 	  				// Si les dates ne correspondent pas, on passe au suivant
             if($_element->date_arret){
-            	$_element->_fin = $_element->date_arret;
+            	$_element->_fin = mbDate("- 1 DAY", $_element->date_arret);
             }
 	  				if($_element->_fin && $_element->_fin < $date){
 			        continue;

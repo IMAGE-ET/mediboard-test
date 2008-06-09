@@ -9,14 +9,6 @@ var Prescription = {
     oForm.del.value = "";
     Prescription.addLine(code);
   },
-  close : function(object_id, object_class) {
-    var url = new Url;
-    url.setModuleTab("dPprescription", "vw_edit_prescription");
-    url.addParam("prescription_id", 0);
-    url.addParam("object_id", object_id);
-    url.addParam("object_class", object_class);
-    url.redirect();
-  },
   applyProtocole: function(prescription_id, protocole_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_add_protocole_lines");
@@ -191,8 +183,8 @@ var Prescription = {
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
-    url.addParam("sejour_id", sejour_id)
-    url.addParam("mode_sejour", "1");
+    url.addParam("sejour_id", sejour_id);
+    url.addParam("full_mode", "1");
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
   reloadPrescPharma: function(prescription_id){
@@ -281,11 +273,10 @@ var Prescription = {
     url.addParam("CIP", cip);
     url.popup(900, 640, "Descriptif produit");
   },
-  viewLineHistorique: function(line_id, line_class){
+  viewHistorique: function(prescription_id){
 	  var url = new Url;
 	  url.setModuleAction("dPprescription", "view_historique");
-	  url.addParam("line_id", line_id);
-	  url.addParam("line_class", line_class);
-	  url.popup(500, 100, "Historique");
+	  url.addParam("prescription_id", prescription_id);
+	  url.popup(500, 400, "Historique");
   }
 };

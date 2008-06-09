@@ -11,8 +11,6 @@ refreshListProtocole = function(oForm){
   });
 }
 
-
-
 changePraticien = function(praticien_id){
   var oFormAddLine = document.addLine;
   var oFormAddLineCommentMed = document.addLineCommentMed;
@@ -23,20 +21,12 @@ changePraticien = function(praticien_id){
   oFormAddLineElement.praticien_id.value = praticien_id;
 }
 
-
-
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
 	  changePraticien(document.selPraticienLine.praticien_id.value);
   }
-  // On masque le calendrier
-	/*if($('calendarProt')){
-	  $('calendarProt').hide();
-	}*/
 } );
-
-
 
 submitProtocole = function(){
   var oForm = document.applyProtocole;
@@ -45,21 +35,14 @@ submitProtocole = function(){
 	  if(debut_date != "other"){
 	    oForm.debut.value = debut_date;
 	  }
-	
-
   }
 	if(document.selPraticienLine){
    oForm.praticien_id.value = document.selPraticienLine.praticien_id.value;
   }
- 
   submitFormAjax(oForm, 'systemMsg');
-
   oForm.protocole_id.value = '';
   oForm.debut.value = '';
 }
-
-
-
 
 </script>
 
@@ -70,7 +53,7 @@ submitProtocole = function(){
     <th class="title" colspan="2">
     
     <!-- Selection du praticien prescripteur de la ligne -->
-			{{if !$is_praticien && !$mode_protocole && !$mode_pharma}}
+			{{if !$is_praticien && !$mode_protocole && !$mode_pharma && $perm_create_line}}
        <div style="position: absolute; right: 15px">
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); changePraticienElt(this.value)">
@@ -78,7 +61,7 @@ submitProtocole = function(){
 					    <option class="mediuser" 
 					            style="border-color: #{{$_praticien->_ref_function->color}};" 
 					            value="{{$_praticien->_id}}"
-					            {{if $_praticien->_id == $prescription->_current_praticien_id}}selected == "selected"{{/if}}>{{$_praticien->_view}}
+					            {{if $_praticien->_id == $prescription->_current_praticien_id}}selected="selected"{{/if}}>{{$_praticien->_view}}
 					    </option>
 				    {{/foreach}}
 				  </select>
@@ -92,13 +75,6 @@ submitProtocole = function(){
         </div>
       {{/if}}
      
-      {{if !$mode_protocole && !$dialog && !$mode_pharma && !$mode_sejour}}
-      <button type="button" class="cancel" onclick="Prescription.close('{{$prescription->object_id}}','{{$prescription->object_class}}')" style="float: left">
-        Fermer 
-      </button>
-      {{/if}}
-     
-      
       {{if $mode_protocole}}
       <!-- Formulaire de modification du libelle de la prescription -->
       <form name="addLibelle-{{$prescription->_id}}" method="post">
@@ -111,7 +87,7 @@ submitProtocole = function(){
       
         <button class="tick notext" type="button"></button>
       
-      <!-- Modification du pratcien_id / user_id -->
+         <!-- Modification du pratcien_id / user_id -->
          <select name="praticien_id" onchange="this.form.function_id.value=''; refreshListProtocole(this.form)">
           <option value="">&mdash; Sélection d'un praticien</option>
 	        {{foreach from=$praticiens item=praticien}}
@@ -143,42 +119,39 @@ submitProtocole = function(){
     </th>
   </tr>
   <tr>
-  <td>
+    <td>
+		  <!-- Impression de la prescription -->
+		  <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}')" style="float: left">
+		    Prescription
+		  </button>
+	    {{if !$mode_protocole}}
+		     {{if $prescription->type != "sortie" && $prescription->type != "externe"}}
+				   <!-- Impression de la prescription -->
+				   <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
+				     Ordonnance
+				   </button>
+			   {{/if}}
+			   
+			   <!-- Affichage du recapitulatif des alertes -->
+			   <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
+			     Alertes
+			   </button>
+			   
+			   <!-- Affichage de l'historique -->
+			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}')" style="float: left">
+			     Historique
+			   </button>
+			 
+			   <div id="antecedent_allergie">
+			     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+			     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+			     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+				 </div>
+		   {{/if}}
+    </td>
+   
 
-  
-
-   <!-- Impression de la prescription -->
-   <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}')" style="float: left">
-     Prescription
-   </button>
-   
-   
-   
-   {{if !$mode_protocole}}
-   {{if $prescription->type != "sortie" && $prescription->type != "externe"}}
-   <!-- Impression de la prescription -->
-   <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
-     Ordonnance
-   </button>
-   {{/if}}
-   
-   <!-- Affichage du recapitulatif des alertes -->
-   <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
-     Alertes
-   </button>
-   
-   <div id="antecedent_allergie">
-     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-	 </div>
-	   
-	   
-   {{/if}}
-   </td>
-   
-       
-  {{if !$mode_protocole && !$mode_pharma}}
+  {{if !$mode_protocole && !$mode_pharma && $perm_create_line}}
    <td style="text-align: right;">
       
       <!-- Formulaire de selection protocole -->
@@ -248,6 +221,7 @@ submitProtocole = function(){
 									    }
 									  }
 					 				  Main.add( function(){
+					 				    prepareForm(document.applyProtocole);
 					            Calendar.regField('applyProtocole', "debut", false, dates);
 					          } );
 					 				</script>
@@ -264,6 +238,7 @@ submitProtocole = function(){
 									    }
 									  }
 					 				  Main.add( function(){
+					 				    prepareForm(document.applyProtocole);
 					            Calendar.regField('applyProtocole', "debut", false, dates);
 					          } );
 					 				</script>				 				

@@ -3,13 +3,25 @@
 {{assign var="module" value="dPcabinet"}}
 {{assign var="do_subject_aed" value="do_consultation_aed"}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
+{{mb_include_script module="dPmedicament" script="medicament_selector"}}
+{{mb_include_script module="dPmedicament" script="equivalent_selector"}}
+{{mb_include_script module="dPprescription" script="element_selector"}}
+{{mb_include_script module="dPprescription" script="prescription"}}
 
 <script type="text/javascript">
+
+function reloadPrescription(prescription_id){
+  Prescription.reloadPrescSejour(prescription_id, '');
+}
+
 Main.add(function () {
   var tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
+  if($('prescription_sejour')){
+    Prescription.reloadPrescSejour('', DossierMedical.sejour_id);
+  }
 });
 </script>
 
@@ -26,6 +38,10 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
+  
+  {{if $isPrescriptionInstalled}}
+  <li><a href="#prescription_sejour">Traitement et prescription</li>
+  {{/if}}
   <li><a href="#Exams">Exam. Clinique</a></li>
   <li><a href="#Intub">Intubation</a></li>
   
@@ -46,6 +62,9 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl" sejour_id=$consult->_ref_consult_anesth->_ref_sejour->_id}}</div>
+{{if $isPrescriptionInstalled}}
+<div id="prescription_sejour" style="display: none"></div>
+{{/if}}
 <div id="Exams" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/acc_examens_clinique.tpl"}}</div>
 <div id="Intub" style="display: none;">{{include file="../../dPcabinet/templates/inc_consult_anesth/intubation.tpl"}}</div>
 

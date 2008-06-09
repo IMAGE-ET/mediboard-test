@@ -18,12 +18,21 @@
 {{assign var=typeDate value=$element}}
 
 {{assign var=category value=$_line_element->_ref_element_prescription->_ref_category_prescription}}
-<tbody class="hoverable">
+<tbody id="line_element_{{$_line_element->_id}}" class="hoverable elt
+       {{if $_date_fin && $_date_fin <= $today}}line_stopped{{/if}}">
+       
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th class="{{if $_line_element->date_arret}}arretee{{else}}element{{/if}}" id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8" 
-        {{if $_date_fin && $_date_fin <= $today}}style="background-image:url(images/icons/ray.gif); background-repeat:repeat;"{{/if}}>
+    <th id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8"
+        class="element 
+        {{if $_date_fin && $_date_fin <= $today}}arretee{{/if}}">
      
+      <script type="text/javascript">
+         Main.add( function(){
+           moveTbodyElt($('line_element_{{$_line_element->_id}}'),'{{$category->_id}}');
+         });
+      </script>
+      
       <div style="position: absolute">
         <!-- Formulaire ALD -->
         {{if !$_line_element->_protocole}}
@@ -84,7 +93,7 @@
     </td>
     <td>
      {{if $category->chapitre != "dmi" && ($prescription->type == "sejour" || $prescription->type == "pre_admission")}}
-        <div id="stop-CPrescriptionLineElement-{{$_line_element->_id}}" style="float: right">
+        <div id="stop-CPrescriptionLineElement-{{$_line_element->_id}}">
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
         </div>
      {{/if}}

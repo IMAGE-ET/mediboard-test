@@ -870,14 +870,13 @@ class CConsultation extends CCodable {
   // Chargement des prescriptions liées à la consultation
   function loadRefsPrescriptions() {
   	$prescriptions = $this->loadBackRefs("prescriptions");
-  	$this->_ref_prescriptions["externe"] = new CPrescription();
-  	
     // Cas du module non installé
     if(!is_array($prescriptions)){
       $this->_ref_prescriptions = null;
       return;
   	}
-     
+  	$this->_count_prescriptions = count($prescriptions);
+  	
     foreach($prescriptions as &$prescription){
     	$this->_ref_prescriptions[$prescription->type] = $prescription;
     }

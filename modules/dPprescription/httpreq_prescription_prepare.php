@@ -83,6 +83,8 @@ if(!$prescription_line->debut){
   $prescription_line->debut = mbDate();
 }
 
+$prescription_line->countPrisesLine();
+
 // Création du template
 $smarty = new CSmartyDP();
 

@@ -49,10 +49,16 @@ if ($object->_id){
   }
 }
 
+// Chargement du user_courant
+$user = new CMediusers();
+$user->load($AppUI->user_id);
+$is_praticien = $user->isPraticien();
+
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("is_praticien"       , $is_praticien);
 $smarty->assign("today"              , mbDate());
 $smarty->assign("totals_by_chapitre" , $totals_by_chapitre);
 $smarty->assign("object_id"          , $object_id);

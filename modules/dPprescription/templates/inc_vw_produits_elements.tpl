@@ -15,7 +15,7 @@ viewEasyMode = function(){
   var url = new Url();
   url.setModuleAction("dPprescription","vw_easy_mode");
   url.addParam("prescription_id", '{{$prescription->_id}}');
-  url.popup(850,500,"Mode de saisie simplifié");
+  url.popup(900,500,"Mode grille");
 }
 
 </script>
@@ -53,9 +53,11 @@ viewEasyMode = function(){
   <input type="hidden" name="_category_name" value="" />
 </form>
 
+{{if $perm_create_line}}
 <div id="mode" style="position: absolute; right: 10px;">
-  <button class="new" type="button" onclick="viewEasyMode();">Mode de saisie simplifié</button>
+  <button class="new" type="button" onclick="viewEasyMode();">Mode grille</button>
 </div>
+{{/if}}
 
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">

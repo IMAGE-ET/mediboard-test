@@ -7,7 +7,7 @@
 
 Main.add(function () {
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$selOp->_ref_sejour->_id}}');
+    Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}');
   }
 });
 

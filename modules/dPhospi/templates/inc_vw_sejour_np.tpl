@@ -8,15 +8,8 @@
   <td>
   {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
   {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
-    
-  {{if $prescriptions_sejour}}
-    {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
-    {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
-  {{else}}
-    {{assign var=prescription_sejour_id value=""}}
-  {{/if}}
-  
-  <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}')">
+
+  <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$date}}')">
     {{$curr_sejour->_ref_patient->_view}}
   </a>
   <script language="Javascript" type="text/javascript">
@@ -50,22 +43,15 @@
 	    {{if $prescriptions}}
 	    {{if array_key_exists('sortie', $prescriptions)}}
 	      {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
-	      {{if array_key_exists('0', $prescriptions_sortie)}}
-	        {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
+	      {{if $prescriptions_sortie|@count < 1}}
+	        <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
 	      {{/if}}
 	    {{/if}}
 	    {{/if}}
-	    {{if !is_object($prescription_sortie)}}
-	      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-	    {{/if}}
-	    {{if $prescription_sejour_id}}
-        {{if $prescription_sejour->_counts_no_valide}}
-        <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
-        {{/if}}
-      {{/if}}
-		                  
-    {{/if}}
-             
+      {{if $prescription_sejour->_counts_no_valide}}
+      <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
+      {{/if}}               
+    {{/if}}             
   </td>
 </tr>
 {{/if}}

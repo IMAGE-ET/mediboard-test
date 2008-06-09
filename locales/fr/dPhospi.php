@@ -116,4 +116,5 @@ $locales['CTransmissionMedicale.degre.low'] = 'normal';
 $locales['CTransmissionMedicale.degre.high'] = 'urgent';
 $locales['CObservationMedicale-text'] = 'Observation';
 $locales['CTransmissionMedicale-text'] = 'Transmission';
+$locales['mod-dPhospi-tab-vw_bilan_prescription'] = 'Bilan des prescriptions';
 ?>

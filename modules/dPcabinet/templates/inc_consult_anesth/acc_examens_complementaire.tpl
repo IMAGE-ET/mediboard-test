@@ -123,23 +123,6 @@ function reloadListExamComp() {
 			      <script type="text/javascript">
 			         Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','exam');
             </script>
-			    
-			      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
-            <hr />
-            <div id="viewPrescriptionSejour">
-	            <div id="prescription-CSejour-exam" class="text">
-					    </div>
-							{{if $consult->_ref_consult_anesth->operation_id || $consult->_ref_consult_anesth->sejour_id}}
-						    <script type="text/javascript">
-						      Main.add( function(){
-						        // Lancement de reloadWidget lors du rechargement de inc_fdr
-					 	        Prescription.suffixes.push("exam");
-					          PrescriptionEditor.refresh('{{$consult->_ref_consult_anesth->_ref_sejour->_id}}','CSejour','{{$consult->_ref_consult_anesth->_ref_sejour->praticien_id}}');
-					        } );
-						    </script>
-					    {{/if}}
-            </div>
-            {{/if}}
 			    </td>
 			  </tr>
       </table>

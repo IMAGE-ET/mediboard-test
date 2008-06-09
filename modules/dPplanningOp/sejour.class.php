@@ -584,30 +584,24 @@ class CSejour extends CCodable {
   
   function loadRefsPrescriptions() {
   	$prescriptions = $this->loadBackRefs("prescriptions");
-  
   	// Si $prescriptions n'est pas un tableau, module non installé
     if(!is_array($prescriptions)){
     	$this->_ref_last_prescription = null;
     	return;
     }
-    
-    $this->_ref_last_prescription = end($prescriptions);
-
-    if(!$this->_ref_last_prescription){
-  		$this->_ref_last_prescription = new CPrescription();
-  		return;
-  	}
-    
-  	$this->_ref_prescriptions["pre_admission"] = array();
-  	$this->_ref_prescriptions["traitement"] = array();
-  	$this->_ref_prescriptions["sejour"] = array();
+    $this->_count_prescriptions = count($prescriptions);
+  	$this->_ref_prescriptions["pre_admission"] = new CPrescription();
+  	$this->_ref_prescriptions["traitement"] = new CPrescription();
+  	$this->_ref_prescriptions["sejour"] = new CPrescription();
   	$this->_ref_prescriptions["sortie"] = array();
   	
-  	// Classement des prescriptions par type
+  	// Stockage des prescriptions par type
   	foreach($prescriptions as $_prescription){
-	    $_prescription->loadRefsLinesMedComments();  
-	    $_prescription->loadRefsLinesElementsComments();
-  		$this->_ref_prescriptions[$_prescription->type][] = $_prescription;
+	    if($_prescription->type == "sortie"){
+	      $this->_ref_prescriptions[$_prescription->type][] = $_prescription;	
+	    } else {
+	    	$this->_ref_prescriptions[$_prescription->type] = $_prescription;
+	    }
   	}
   }
   

@@ -43,7 +43,6 @@ $timingAffect = array();
 // Opération selectionnée
 $selOp = new COperation;
 $timing = array();
-$prescription_sejour = new CPrescription();
 
 if ($op) {
   $selOp->load($op);
@@ -54,14 +53,6 @@ if ($op) {
   $selOp->_ref_sejour->loadExtDiagnostics();
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
-
-  // Chargement des prescriptions
-  $selOp->_ref_sejour->loadRefsPrescriptions();
-  if($selOp->_ref_sejour->_ref_prescriptions){
-  	if(array_key_exists('sejour', $selOp->_ref_sejour->_ref_prescriptions)){
-  		$prescription_sejour = $selOp->_ref_sejour->_ref_prescriptions["sejour"]["0"];
-  	}
-  }
   
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();
@@ -186,7 +177,6 @@ $smarty->assign("listPersAideOp"  , $listPersAideOp          );
 $smarty->assign("listPersPanseuse", $listPersPanseuse        );
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("timingAffect"    , $timingAffect);
-$smarty->assign("prescription_sejour", $prescription_sejour);
 $smarty->display("vw_operations.tpl");
 
 ?>

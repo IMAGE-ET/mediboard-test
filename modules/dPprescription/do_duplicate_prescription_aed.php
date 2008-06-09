@@ -41,43 +41,14 @@ $sejour = $prescription->_ref_object;
 // Creation de la nouvelle prescription
 $prescription->_id = "";
 $prescription->type = $type;
-if($prescription->type == "sortie" || $prescription->type == "pre_admission"){
-	$prescription->praticien_id = $AppUI->user_id;
-} else {
-	$prescription->praticien_id = $prescription->_ref_object->praticien_id;
-}
-
-
-// Chargement du user_courant
-$user_courant = new CMediusers();
-$user_courant->load($AppUI->user_id);
-	
-// Modification du praticien_id de la prescription suivant lel type de prescription
-if($prescription->type == "pre_admission"){
-	if($user_courant->isPraticien()){
-  	$prescription->praticien_id = $AppUI->user_id;
-  } else {
-  	$prescription->praticien_id = $sejour->praticien_id;
-  }
-}
-if($prescription->type ==  "sejour"){
-  $prescription->praticien_id = $sejour->praticien_id;
-}
-if($prescription->type == "sortie"){
- if($user_courant->isPraticien()){
- 	 $prescription->praticien_id = $AppUI->user_id;
- } else {
- 	 $prescription->praticien_id = $praticien_id;
- }
-}
-	
 
 $msg = $prescription->store();
 viewMsg($msg, "msg-CPrescription-create");
 if($msg){
-	$AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$prescription_id);
+	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
+	echo $AppUI->getMsg();
+  exit();
 }
-
 // Parcours des lignes de medicaments
 foreach($lines as $cat => $lines_by_type){
 	foreach($lines_by_type as &$line){
@@ -134,7 +105,6 @@ foreach($lines as $cat => $lines_by_type){
 	  if($cat == "medicament"){
 	    $line->valide_pharma = 0;
 	  }
-	  
 	  if($type == "sortie"){
 	  	if($line->debut && $line->unite_duree && $line->duree){
 	  		$line->fin = $line->_fin;
@@ -143,11 +113,8 @@ foreach($lines as $cat => $lines_by_type){
 	  		$line->duree = "";
 	  	}
 	  }
-	  
-	  
 	  $msg = $line->store();
 	  viewMsg($msg, "msg-$line->_class_name-create");  
-	  
 		// Parcours des prises et creation des nouvelles prises
 		foreach($line->_ref_prises as $prise){
 			$prise->_id = "";
@@ -158,12 +125,8 @@ foreach($lines as $cat => $lines_by_type){
 	}
 }
 
-if($ajax){
-	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
-	echo $AppUI->getMsg();
-	exit();
-} else {
-  $AppUI->redirect("m=dPprescription&a=vw_edit_prescription&popup=1&dialog=1&prescription_id=".$prescription->_id);
-}
+echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
+echo $AppUI->getMsg();
+exit();
 
 ?>

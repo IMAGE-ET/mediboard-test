@@ -85,7 +85,11 @@
         {{/foreach}}
       </select>
       <input name="commentaire" type="text" size="98" />
-      <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
+      <button class="submit notext" type="button" 
+              onclick="if(document.selPraticienLine){
+                         this.form.praticien_id.value = document.selPraticienLine.praticien_id.value;
+                       }                        
+                       this.form.onsubmit();">Ajouter</button>
     </form>
   {{/if}}
 </div>

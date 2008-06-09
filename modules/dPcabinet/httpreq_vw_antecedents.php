@@ -45,6 +45,7 @@ $smarty->assign("traitement", $traitement);
 $smarty->assign("_is_anesth", "1");
 $smarty->assign("userSel", $userSel);
 $smarty->assign("today", mbDate());
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 
 $smarty->display("inc_ant_consult.tpl");
 

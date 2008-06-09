@@ -1,5 +1,57 @@
 <script type="text/javascript">
 
+moveTbody = function(oTbody){
+  var oTableMed = $('med');
+	var oTableTrt = $('traitement');
+	var oTableMedArt = $('med_art');
+	var oTableTrtArt = $('traitement_art');
+	
+	if(oTbody.hasClassName('med')){
+    if(oTbody.hasClassName('line_stopped')){
+      oTableMedArt.insert(oTbody);		  
+    } else {
+      oTableMed.insert(oTbody);		  
+    }	
+  }
+  if (oTbody.hasClassName('traitement')){
+    if(oTbody.hasClassName('line_stopped')){
+      oTableTrtArt.insert(oTbody);		  
+    } else {
+      oTableTrt.insert(oTbody);		  
+    }		  	
+  }
+}
+
+
+// Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
+changeColor = function(object_id, object_class, date_arret, traitement, cat_id){   
+  // Entete de la ligne
+  var oDiv = $('th_line_'+object_class+'_'+object_id);
+  if(object_class == 'CPrescriptionLineMedicament'){
+    var oTbody = $('line_medicament_'+object_id);
+  } else {
+    var oTbody = $('line_element_'+object_id);
+  }
+  var classes_before = oTbody.className;
+  if(date_arret != "" && date_arret <= '{{$today}}'){
+    oDiv.addClassName("arretee");
+    oTbody.addClassName("line_stopped");
+  } else {
+    oDiv.removeClassName("arretee");
+    oTbody.removeClassName("line_stopped");
+  }
+  var classes_after = oTbody.className;
+  
+  // Deplacement de la ligne
+  if(classes_before != classes_after){
+	  if(object_class == 'CPrescriptionLineMedicament'){
+	    moveTbody(oTbody);
+	  } else {
+	    moveTbodyElt(oTbody, cat_id);
+	  }
+  }
+}
+
 // Fonction lancée lors de la modfication de la posologie
 submitPoso = function(oForm, curr_line_id){
   // Suppression des prises de la ligne de prescription
@@ -18,9 +70,7 @@ submitPoso = function(oForm, curr_line_id){
   );
 }
 
-
 Prescription.refreshTabHeader("div_medicament","{{$prescription->_counts_by_chapitre.med}}");
-
 
 // Permet de mettre la ligne en traitement
 transfertTraitement = function(line_id){
@@ -40,8 +90,6 @@ dates = {
   }
 }
 
-
-
 changePraticienMed = function(praticien_id){
   var oFormAddLine = document.addLine;
   var oFormAddLineCommentMed = document.addLineCommentMed;
@@ -49,8 +97,6 @@ changePraticienMed = function(praticien_id){
   oFormAddLine.praticien_id.value = praticien_id;
   oFormAddLineCommentMed.praticien_id.value = praticien_id;
 }
-
-
 
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
@@ -60,6 +106,7 @@ Main.add( function(){
 } );
 
 </script>
+
 
 <form name="transfertToTraitement" action="?" method="post">
   <input type="hidden" name="dosql" value="do_prescription_traitement_aed" />
@@ -116,7 +163,7 @@ Main.add( function(){
 {{/if}}
 
 
-
+{{if $perm_create_line}}
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
@@ -175,11 +222,38 @@ Main.add( function(){
       <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
     </form>
  </div> 
+{{else}}
+  <div class="big-info">
+    L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
+    entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures
+  </div>
+{{/if}}
 
-{{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
-  
+
+{{if $prescription->object_id}}
+  {{assign var=traitements value=$prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines}}
+{{else}}
+  {{assign var=traitements value=""}}
+{{/if}}
+
+<!-- Declaration des tableaux permettant de stocker toutes les lignes -->
+<table class="tbl" id="med">
+</table>
+
+<table class="tbl" id="med_art">
+</table>
+
+<table class="tbl" id="traitement">
+</table>
+
+<table class="tbl" id="traitement_art">
+</table>
+
+
+
 {{if $prescription->_ref_lines_med_comments.med || $prescription->_ref_lines_med_comments.comment || $traitements}}
 <table class="tbl">
+
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
     <!-- Si la ligne ne possede pas d'enfant -->
     {{if !$curr_line->child_id}}
@@ -193,16 +267,15 @@ Main.add( function(){
 	</tr>
   {{/if}}
   
+  <!-- Affichage des traitements -->
+  {{if $prescription->object_id && $traitements}}
+	  {{foreach from=$traitements item=traitement}}
+	      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+	  {{/foreach}}
+  {{/if}}
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
     {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl"}}
-  {{/foreach}}
-  
-  <!-- Affichage des traitements -->
-  {{foreach from=$traitements item=traitement}}
-    {{if !$traitement->child_id}}
-      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-    {{/if}}
   {{/foreach}}
   
  </table> 
@@ -216,23 +289,7 @@ Main.add( function(){
 
 <script type="text/javascript">
 
-//prepareForms();
-
-
-/*
-Main.add( function(){
-  {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
-     {{if !$curr_line->_traitement && $curr_line->_ref_prescription->object_id}}
-       {{if (!$curr_line->signee  || ($mode_pharma && !$curr_line->valide_pharma)) && !$curr_line->valide_pharma}}
-       //Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-       //Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
-       
-       //syncDate(document.forms["editDates-Med-{{$curr_line->_id}}"], {{$curr_line->_id}},'','Med');
-     {{/if}}
-     {{/if}}
-  {{/foreach}}
-} );
-*/
+if(document.addLine && document.searchProd){
 
 // UpdateFields de l'autocomplete de medicaments
 updateFieldsMedicament = function(selected) {
@@ -243,15 +300,16 @@ updateFieldsMedicament = function(selected) {
 }
 
 // Preparation des formulaire
-prepareForm(document.addLine);
-prepareForm(document.searchProd);
+  prepareForm(document.addLine);
+  prepareForm(document.searchProd);
+
 
 var oFormProduit = document.searchProd;
 
 // Autocomplete des medicaments
 urlAuto = new Url();
 urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-urlAuto.addParam("produit_max", 20);
+urlAuto.addParam("produit_max", 40);
 
 
 // callback => methode pour ajouter en post des parametres
@@ -265,6 +323,8 @@ urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
       return (queryString + "&inLivret="+getCheckedValue(oFormProduit._recherche_livret)); 
     }
 } );
+
+}
 
 
 </script>

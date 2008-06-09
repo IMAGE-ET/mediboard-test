@@ -1,23 +1,37 @@
 <script type="text/javascript">      
      
-// On vide toutes les valeurs du formulaire d'ajout d'element
-var oForm = document.addLineElement;
-oForm.prescription_line_element_id.value = "";
-oForm.del.value = "0";
-oForm.element_prescription_id.value = "";
-
-// Preselection des executants
-preselectExecutant = function(executant_id, category_id){
- $$('select.executant-'+category_id).each( function(select) {
-   select.value = executant_id;
-   select.onchange();
- })
+moveTbodyElt = function(oTbody, cat_id){
+  var oTableElt = $('elt_'+cat_id);
+	var oTableEltArt = $('elt_art_'+cat_id);
+	
+	if(oTbody.hasClassName('elt')){
+    if(oTbody.hasClassName('line_stopped')){
+      oTableEltArt.insert(oTbody);		  
+    } else {
+      oTableElt.insert(oTbody);		  
+    }	
+  }
 }
 
 
-changePraticienElt = function(praticien_id){
+// On vide toutes les valeurs du formulaire d'ajout d'element
+
+	var oForm = document.addLineElement;
+	oForm.prescription_line_element_id.value = "";
+	oForm.del.value = "0";
+	oForm.element_prescription_id.value = "";
+	
+	// Preselection des executants
+	preselectExecutant = function(executant_id, category_id){
+	 $$('select.executant-'+category_id).each( function(select) {
+	   select.value = executant_id;
+	   select.onchange();
+	 })
+	}
+
+changePraticienElt = function(praticien_id, element){
   var oFormAddLineElement = document.addLineElement;
-  var oFormAddLineCommentElement = document.forms["addLineComment{{$element}}"];
+  var oFormAddLineCommentElement = document.forms['addLineComment'+element];
   
   oFormAddLineElement.praticien_id.value = praticien_id;
   if(oFormAddLineCommentElement){
@@ -29,7 +43,7 @@ changePraticienElt = function(praticien_id){
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
-	  changePraticienElt(document.selPraticienLine.praticien_id.value);
+	  changePraticienElt(document.selPraticienLine.praticien_id.value, '{{$element}}');
   }
 } );
 
@@ -50,52 +64,73 @@ Main.add( function(){
 </div>
 {{/if}}
 
-
-
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
-{{include file="inc_vw_form_addLine.tpl"}}
+{{if $perm_create_line}}
+  {{include file="inc_vw_form_addLine.tpl"}}
+{{else}}
+  <div class="big-info">
+    L'ajout de lignes dans la prescription est réservé aux praticiens ou aux infirmières 
+    entre {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_start}} heures et {{$dPconfig.dPprescription.CPrescription.infirmiere_borne_stop}} heures
+  </div>
+{{/if}}
 
-<table class="tbl">
+
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
   {{assign var=nb_lines value=0}}
   
   <!-- Parcours des elements de type $element -->
   {{foreach from=$lines item=lines_cat key=category_id}}
 	  {{assign var=category value=$categories.$category_id}}
-	  <tr>
-	    <!-- Affichage de la categorie -->
-	    <th class="title" colspan="9">{{$category->_view}}</th>
-	  </tr>
 	  
-	  <!-- Parcours des categories d'elements et de commentaires -->
+	  <!-- Elements d'une categorie-->
+	  <table class="tbl" id="elt_{{$category->_id}}">
+
+	  <tr>
+	    <th class="title" colspan="9">{{$category->_view}}</th>
+	  </tr>	  
+	  </table>
+	  <table class="tbl" id="elt_art_{{$category->_id}}">
+
+	  </table>
+    <table class="tbl">
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element}}
 	  {{/foreach}}
+	  </table>
+	  
+	  <!-- Commentaires d'une categorie -->
+	  <table class="tbl">
 	  {{if $lines_cat.comment|@count}}
 	  <tr>
-	    <th colspan="8" class="element">Commentaires</th>
+	    <th colspan="9" class="element">Commentaires</th>
 	  </tr>
-	  
 	  {{/if}}
 	  {{foreach from=$lines_cat.comment item=line_comment}}
 	    {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment}}
 	  {{/foreach}}
-  {{/foreach}}
-</table>
+	  </table>
+	  
+  {{foreachelse}}
 
+  <div class="big-info"> 
+     Il n'y a aucun élément de type "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}" dans cette prescription.
+  </div>
+
+  {{/foreach}}
 <script type="text/javascript">
 
 Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}');
 
-// Autocomplete
-prepareForm(document.search{{$element}});
-  
-url = new Url();
-url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
-url.addParam("category", "{{$element}}");
-url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
-  minChars: 2,
-  updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
-} );
-
+if(document.search{{$element}}){
+	// Autocomplete
+	prepareForm(document.search{{$element}});
+	  
+	url = new Url();
+	url.setModuleAction("dPprescription", "httpreq_do_element_autocomplete");
+	url.addParam("category", "{{$element}}");
+	url.autoComplete("search{{$element}}_{{$element}}", "{{$element}}_auto_complete", {
+	  minChars: 2,
+	  updateElement: function(element) { updateFieldsElement(element, 'search{{$element}}', '{{$element}}') }
+	} );
+}
 </script>

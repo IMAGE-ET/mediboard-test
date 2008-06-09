@@ -1,3 +1,29 @@
+<script type="text/javascript">
+
+Main.add( function(){
+	var oFormAddLineCont = document.forms['addLineCont-{{$line->_id}}'];
+	var oFormStopLine = document.forms['form-stop-{{$line->_class_name}}-{{$line->_id}}'];
+	
+	{{if $line->signee}}
+	  if(oFormAddLineCont){
+	    oFormAddLineCont.show();
+	  }
+	  if(oFormStopLine){
+	    oFormStopLine.show();
+	  }
+	{{else}}
+	  if(oFormAddLineCont){
+	    oFormAddLineCont.hide();
+	  }
+	  if(oFormStopLine){
+	    oFormStopLine.hide();
+	  }
+	{{/if}}
+} );
+
+
+</script>
+
 {{if $line->_ref_praticien->_id == $app->user_id}}
   {{if $line->_class_name == "CPrescriptionLineElement" || $line->_class_name == "CPrescriptionLineComment"}}
 	  <!-- Signature d'un element -->
@@ -10,7 +36,7 @@
 	      <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$div_refresh}}') } }  )">Annuler la signature</button>
 	    {{else}}
 	      <input type="hidden" name="signee" value="1" />
-	      <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$div_refresh}}') } }  )">Signer</button>  
+	      <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="submitFormAjax(this.form,'systemMsg', { onComplete: function() { Prescription.reload('{{$prescription->_id}}','','{{$div_refresh}}') } }  )">Signer</button>  
 	    {{/if}}
 	  </form>
   {{else}}
@@ -29,7 +55,7 @@
        <input type="hidden" name="m" value="dPprescription" />
        <input type="hidden" name="prescription_line_id" value="{{$line->_id}}" />
        <input type="hidden" name="mode_pharma" value="0" />
-       <button type="button" class="tick" onclick="submitFormAjax(this.form,'systemMsg');">Signer</button>
+       <button type="button" class="tick" id="signature_{{$line->_id}}" onclick="submitFormAjax(this.form,'systemMsg');">Signer</button>
      </form>
     {{/if}}       
   {{/if}}

@@ -31,7 +31,6 @@ $prescription_line->loadRefsPrises();
 // Chargement de la liste des moments
 $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 
-
 // Création du template
 $smarty = new CSmartyDP();
 

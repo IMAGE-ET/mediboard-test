@@ -1,28 +1,34 @@
 <script type="text/javascript">
 
 {{if $type == "Med"}}
-
 {{if !$line->_traitement && $line->_ref_prescription->object_id}}
-
 {{if !$line->signee && !$line->fin}}
-	
 	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
 	Form.Element.setValue(oForm.debut,'{{$line->debut}}');
-	
 	{{if $line->debut}}
 	  var oDiv = $('editDates-Med-'+{{$line->_id}}+'_debut_da');
 	  dDate = Date.fromDATE(oForm.debut.value);
 	  oDiv.innerHTML = dDate.toLocaleDate();
 	{{/if}}
-	
 	Form.Element.setValue(oForm.duree,'{{$line->duree}}');
   Form.Element.setValue(oForm.unite_duree,'{{$line->unite_duree}}');
-  
+{{/if}}
 {{/if}}
 
+
+// On grise le formulaire de signature de la ligne si aucune prise n'est créée
+var oButton = $('signature_{{$line->_id}}'); 
+if(oButton){
+{{if $line->_count_prises_line}}
+  oButton.disabled = false;
+  oButton.setOpacity(1.0);
+{{else}}
+  oButton.disabled = true;
+  oButton.setOpacity(0.3);
+{{/if}}
+}
 {{/if}}
 
-{{/if}}
 </script>
 
 {{foreach from=$line->_ref_prises item=prise}}

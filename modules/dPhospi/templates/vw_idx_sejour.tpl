@@ -65,12 +65,12 @@ function reloadAntAllergie(sejour_id){
   var url = new Url;
   url.setModuleAction("dPprescription", "httpreq_vw_antecedent_allergie");
   url.addParam("sejour_id", sejour_id);
-  url.requestUpdate("antecedent_allergie", { waitingtext: null } );
+  url.requestUpdate("antecedent_allergie", { waitingText: null } );
   }
 }
 
 
-function loadViewSejour(sejour_id, praticien_id, prescription_id, date){
+function loadViewSejour(sejour_id, praticien_id, date){
   // Affichage de la prescription
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('', sejour_id);
@@ -169,7 +169,7 @@ Main.add(function () {
   {{/if}}
 
   {{if $object->_id}}
-  loadViewSejour('{{$object->_id}}', null, '','{{$date}}');
+  loadViewSejour('{{$object->_id}}', null, '{{$date}}');
   {{/if}}
   
   {{if $isImedsInstalled}}
@@ -205,8 +205,8 @@ Main.add(function () {
               <label for="service_id">Service</label>
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="sejour_id" value="" />
-              <input type="hidden" name="praticien_id" value="" />
-              <select name="service_id" onChange="document.selPraticien.praticien_id.value = '';submit()">
+
+              <select name="service_id" onchange="this.form.submit()">
                 <option value="">&mdash; Choix d'un service</option>
                 {{foreach from=$services item=curr_service}}
                 <option value="{{$curr_service->_id}}" {{if $curr_service->_id == $service_id}} selected="selected" {{/if}}>{{$curr_service->nom}}</option>
@@ -217,10 +217,11 @@ Main.add(function () {
             <br />
             {{/if}}
             <form name="selPraticien" action="?m={{$m}}" method="get">
+              <label for="praticien_id">Praticien</label>
               <input type="hidden" name="m" value="{{$m}}" />
               <input type="hidden" name="mode" value="0" />
-              <input type="hidden" name="service_id" value="" />
-              <select name="praticien_id" onchange="{{if $m == "dPhospi" || $anesthesiste}}document.selService.service_id.value = '';{{/if}} submit();">
+							<input type="hidden" name="sejour_id" value="" />
+              <select name="praticien_id" onchange="this.form.submit();">
                 <option value="">&mdash; Choix du praticien</option>
                 {{foreach from=$praticiens item=_prat}}
                   <option class="mediuser" style="border-color: #{{$_prat->_ref_function->color}};" value="{{$_prat->_id}}" {{if $_prat->_id == $praticien_id}}selected="selected"{{/if}}>
@@ -232,21 +233,16 @@ Main.add(function () {
           </td>
         </tr>
         {{/if}}
-        
         <tr>
           <td>
-            <table class="tbl">
-            
-            {{foreach from=$sejoursParService key=service_id item=service}}
-           
-              {{if array_key_exists($service_id, $services)}}
+            <table class="tbl">    
+            {{foreach from=$sejoursParService key=_service_id item=service}}
+              {{if array_key_exists($_service_id, $services)}}
               <tr>
-                {{assign var=_service value=$services.$service_id}}
+                {{assign var=_service value=$services.$_service_id}}
                 <th colspan="6" class="title">{{$_service->_view}}</th>
               </tr>
-            
               {{foreach from=$service->_ref_chambres item=curr_chambre}}
-            
               {{foreach from=$curr_chambre->_ref_lits item=curr_lit}}
               <tr>
                 <th class="category" colspan="6">
@@ -254,7 +250,6 @@ Main.add(function () {
                 </th>
               </tr> 
               {{foreach from=$curr_lit->_ref_affectations item=curr_affectation}}
-              
               {{if $curr_affectation->_ref_sejour->_id != ""}}
               <tr>
                 <td>
@@ -264,16 +259,8 @@ Main.add(function () {
                 </td>
                 <td class="text">
                   {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
-                  {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
-                    
-                    {{if $prescriptions_sejour}}
-                   {{assign var=prescription_sejour value=$prescriptions.sejour.0}}
-                  
-                    {{assign var=prescription_sejour_id value=$prescription_sejour->_id}}
-                  {{else}}
-                    {{assign var=prescription_sejour_id value=""}}
-                  {{/if}}
-                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}},'{{$prescription_sejour_id}}','{{$date}}');">
+                  {{assign var=prescription_sejour value=$prescriptions.sejour}}
+                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, '{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
                   <script language="Javascript" type="text/javascript">
@@ -299,39 +286,32 @@ Main.add(function () {
                   </div>
                 </td>
                 <td class="action" style="background:#{{$curr_affectation->_ref_sejour->_ref_praticien->_ref_function->color}}">
-                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}
-                
+                  {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}          
                   {{if $isPrescriptionInstalled}}  
 		                <!-- Test des prescription de sortie -->
 		                {{assign var=prescription_sortie value=""}}
 		                  {{if $prescriptions}}
 		                  {{if array_key_exists('sortie', $prescriptions)}}
 		                    {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
-		                    {{if array_key_exists('0', $prescriptions_sortie)}}
-		                      {{assign var=prescription_sortie value=$prescriptions_sortie.0}}
+		                    {{if $prescriptions_sortie|@count < 1}}
+		                      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
 		                    {{/if}}
 		                  {{/if}}
 		                  {{/if}}
-		                  {{if !is_object($prescription_sortie)}}
-		                    <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-		                  {{/if}}
-		                  {{if $prescription_sejour_id}}
-		                    {{if $prescription_sejour->_counts_no_valide}}
+		                  {{if $prescription_sejour->_counts_no_valide}}
 		                    <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
-		                    {{/if}}
 		                  {{/if}}
                   {{/if}}
                 </td>
-                
               </tr>
             {{/if}}
             {{/foreach}}
             {{/foreach}}
             {{/foreach}}
-           
             {{/if}}
-            
            {{/foreach}}
+            
+
             
             <!-- Cas de l'affichage par praticien -->
             {{if $praticien_id}}
@@ -346,6 +326,8 @@ Main.add(function () {
             {{/if}}
             
             
+            
+
             <!-- Cas de l'affichage par service -->
             {{if $service_id}}
 	            {{foreach from=$groupSejourNonAffectes key=group_name item=sejourNonAffectes}}

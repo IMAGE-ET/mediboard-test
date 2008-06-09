@@ -49,6 +49,8 @@ function reloadListTech() {
       
       <br />
       {{/if}}
+      
+
       <form name="editAsaFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
       <input type="hidden" name="m" value="dPcabinet" />
       <input type="hidden" name="del" value="0" />
@@ -58,6 +60,8 @@ function reloadListTech() {
       {{mb_field object=$consult_anesth field="ASA" onchange="submitFormAjax(this.form, 'systemMsg')"}}
 		  {{mb_label object=$consult_anesth field="position"}}
 		  {{mb_field object=$consult_anesth field="position" defaultOption="&mdash; Veuillez Choisir" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      
+      {{if !$isPrescriptionInstalled}}
       <br />
       {{mb_label object=$consult_anesth field="premedication"}}
       <select name="_helpers_premedication" size="1" onchange="pasteHelperContent(this);this.form.premedication.onchange();">
@@ -66,6 +70,8 @@ function reloadListTech() {
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.premedication)">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="premedication" onchange="submitFormAjax(this.form, 'systemMsg')"}}
+      {{/if}}
+      
       
       <br />
       {{mb_label object=$consult_anesth field="prepa_preop"}}
@@ -76,6 +82,7 @@ function reloadListTech() {
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CConsultAnesth', this.form.prepa_preop)">{{tr}}New{{/tr}}</button><br />
       {{mb_field object=$consult_anesth field="prepa_preop" onchange="submitFormAjax(this.form, 'systemMsg')"}}
       </form>
+      
 
       <br />
       <form name="edittechniqueFrm" action="?m=dPcabinet" method="post" onsubmit="return checkForm(this)">
@@ -97,33 +104,6 @@ function reloadListTech() {
     
     <td class="text" rowspan="2" id="listTech">
       {{include file="../../dPcabinet/templates/inc_consult_anesth/techniques_comp.tpl"}}
-      
-      {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}
-      <hr />
-      {{if $consult->_ref_consult_anesth->operation_id}}
-        {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_operation->_ref_sejour}}
-      {{elseif $consult->_ref_consult_anesth->sejour_id}}
-        {{assign var=sejour value=$consult->_ref_consult_anesth->_ref_sejour}}
-      {{else}}
-        {{assign var=sejour value=""}}
-      {{/if}}
-      
-      <div id="prescription-CSejour-info_anesth" class="text">
-		
-	    </div>   
-	    
-	    {{if $sejour}}
-	    <script type="text/javascript">
-	      Main.add( function(){
-	        // Lancement de reloadWidget lors du rechargement de inc_fdr
- 	        Prescription.suffixes.push("info_anesth");
-          PrescriptionEditor.refresh('{{$sejour->_id}}','CSejour','{{$sejour->praticien_id}}');
-        } );
-	    </script>
-	    {{/if}}
-  
-      
-      {{/if}}
     </td>
   </tr>
   <tr>

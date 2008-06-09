@@ -1,21 +1,17 @@
 <script type="text/javascript">
 
 preselectType = function(contexte, oForm){
-
   if(!oForm){
     var oForm = document.addProtocolePresc; 
   }
-  
   {{if $contexteType}}
 	  contexteType = {{$contexteType|@json}};
 	  _contexteType = contexteType[contexte];
-	
 	  if(contexte == "CConsultation"){
 	    oForm.type.value = "externe";
 	  } else {
 	    oForm.type.value = "pre_admission";
 	  }
-	  
 	  $A(oForm.type).each( function(input) {
 	    input.disabled = !_contexteType.include(input.value);
 	  });
@@ -36,7 +32,6 @@ preselectType = function(contexte, oForm){
    <input type="hidden" name="object_id" value=""/>
    <input type="hidden" name="praticien_id" value="" />
    <input type="hidden" name="function_id" value="" />
-   
    <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
    <table class="form">
      <tr>
@@ -82,53 +77,6 @@ preselectType = function(contexte, oForm){
 </form>
 {{/if}}
 
-
-<!-- Formulaire de création de la prescription -->
-{{if !$prescription->_id && !$mode_protocole && !$mode_pharma}}
-<form action="?m=dPprescription" method="post" name="addPrescription" onsubmit="return checkForm(this);">
-  <input type="hidden" name="m" value="dPprescription" />
-  <input type="hidden" name="dosql" value="do_prescription_aed" />
-  <input type="hidden" name="prescription_id" value="" />
-  <input type="hidden" name="del" value="0" />
-  <input type="hidden" name="object_id" value="{{$prescription->object_id}}"/>
-  <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
-
-  <select name="praticien_id">
-    {{foreach from=$listPrats item=curr_prat}}
-    <option value="{{$curr_prat->_id}}">
-      {{$curr_prat->_view}}
-    </option>
-    {{/foreach}}
-  </select>
-  
-  <!-- Choix du type de la prescription -->
-  {{if $prescription->object_class == "CConsultation"}}
-     <input type="hidden" name="type" value="externe" />
-  
-    {{assign var=prescriptions value=$prescription->_ref_object->_ref_prescriptions}}
-    
-    {{if array_key_exists('externe', $prescriptions)}}              
-      {{assign var=prescription_externe value=$prescriptions.externe}}
-      {{if $prescription_externe->_id}}
-        <div class="big-info">
-			    Il n'est pas possible de créer plus d'une prescription par consultation
-			    <a href="?m=dPprescription&tab=vw_edit_prescription&prescription_id={{$prescription_externe->_id}}"><br />
-			    Accéder à la prescription déja créée</a>
-			  </div>
-			{{else}}  
-      <button type="submit" class="new">Créer une prescription pour la consultation</button>
-      {{/if}}
-    {{/if}}
-  {{else}}
-    <select name="type">
-      <option value="pre_admission">Pre-admission</option>
-      <option value="sejour">Séjour</option>
-      <option value="sortie">sortie</option>
-    </select>
-    <button type="submit" class="new">Créer une prescription pour le séjour</button>
-  {{/if}}
-</form>
-{{/if}}
 
 {{if !$prescription->_id && $mode_pharma}}
   <div class="big-info">

@@ -2902,9 +2902,8 @@ table.tbl th.element {
 	margin-top: -3px;
 }
 
-table.tbl th.arretee {
-	background-color: #ddd;
-	color: #000;
+table.tbl th.arretee {		
+	background-image: url(images/icons/ray.gif);
 }
 
 table.tbl th.traitement {

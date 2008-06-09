@@ -34,6 +34,9 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_prises = null;
   var $_fin = null;
   var $_protocole = null;
+  var $_count_parent_line = null;
+  var $_count_prises_line = null;
+  
   
   function getSpecs() {
   	$specsParent = parent::getSpecs();
@@ -73,16 +76,31 @@ class CPrescriptionLine extends CMbObject {
     }	
   }
   
+  
+  function countParentLine(){
+  	$line = new $this->_class_name;
+  	$line->child_id = $this->_id;
+  	$this->_count_parent_line = $line->countMatchingList(); 
+  }
+
+  function countPrisesLine(){
+    $prise = new CPrisePosologie();
+    $prise->object_id = $this->_id;
+    $prise->object_class = $this->_class_name;
+    $this->_count_prises_line = $prise->countMatchinglist();	
+  }
+  
   function loadRefParentLine(){
   	$this->_ref_parent_line = new $this->_class_name;
   	$this->_ref_parent_line->child_id = $this->_id;
   	$this->_ref_parent_line->loadMatchingObject();
-  	
   }
-  
 
   // Chargement recursif des parents d'une ligne
   function loadRefsParents($lines = array()) {
+  	if(!array_key_exists($this->_id, $lines)){
+  	  $lines[$this->_id] = $this;
+  	}
   	// Chargement de la parent_line
     $this->loadRefParentLine();
     // si $this possede une parent_line
@@ -95,7 +113,6 @@ class CPrescriptionLine extends CMbObject {
     	return $lines;
     }
   }
-  
   
 
   
@@ -158,6 +175,8 @@ class CPrescriptionLine extends CMbObject {
     		$this->_fin = mbDate("+ $this->duree YEARS", $this->debut);	
     	}
     }
+    $this->countParentLine();
+    $this->countPrisesLine();
   }
   
   
