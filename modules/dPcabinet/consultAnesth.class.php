@@ -343,9 +343,23 @@ class CConsultAnesth extends CMbObject {
     $template->addProperty("Anesthésie - oenolisme"              , $this->oenolisme);
     $template->addProperty("Anesthésie - Groupe Sanguin"         , $this->groupe." ".$this->rhesus);
     $template->addProperty("Anesthésie - ASA"                    , $this->ASA);
+    $template->addProperty("Anesthésie - Préparation pré-opératoire", $this->prepa_preop);
+    
+    $this->loadRefsTechniques();
+    $str = '';
+    foreach ($this->_ref_techniques as $tech) {
+      $str .= "&bull; $tech->technique<br />";
+    }
+    $template->addProperty("Anesthésie - Techniques complémentaires", $str);
     $template->addProperty("Anesthésie - Etat bucco-dentaire"    , $this->etatBucco);
     $template->addProperty("Anesthésie - Examen cardiovasculaire", $this->examenCardio);
     $template->addProperty("Anesthésie - Examen pulmonaire"      , $this->examenPulmo);
+    
+    $img = '';
+    if ($this->mallampati) {
+      $img = $this->mallampati.'<br /><img src="../../../images/pictures/'.$this->mallampati.'.png" alt="'.$this->mallampati.'" />';
+    }
+    $template->addProperty("Anesthésie - Mallampati", $img);
   }
 
   function canDeleteEx() {

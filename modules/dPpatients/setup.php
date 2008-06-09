@@ -792,9 +792,7 @@ class CSetupdPpatients extends CSetup {
                   "Anesthésie - TA");
     $count = count($repl);
     for ($i = 0; $i < $count; $i++) {
-      $sql = 'UPDATE `compte_rendu` 
-      SET `source` = REPLACE(`source`, "['.htmlentities($find[$i]).']", "['.$repl[$i].']") 
-      WHERE `object_id` IS NULL';
+      $sql = CSetupdPcompteRendu::getTemplaceReplaceQuery($find[$i], $repl[$i]);
       $this->addQuery($sql);
     }
     

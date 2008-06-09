@@ -33,6 +33,9 @@ $order = "nom";
 $wherePrat = array();
 $whereFunc = array();
 
+$modelesCompat = array();
+$modelesNonCompat = array();
+
 // Chargement des modeles pour chaque classe, pour les praticiens et leur fonction
 foreach($templateClasses as $class => $id) {
   if ($id) {

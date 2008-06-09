@@ -259,10 +259,9 @@ $contrainteOrientation["normal"] = array("", "FUGUE", "SCAM", "PSA", "REO");
 
 $list_etat_dents = array();
 if ($consult->_id) {
-	$etat_dent = new CEtatDent();
 	if ($consult->_ref_patient->_ref_dossier_medical->_id) {
-  	$etat_dent->dossier_medical_id = $consult->_ref_patient->_ref_dossier_medical->_id;
-  	$etat_dents = $etat_dent->loadMatchingList();
+  	$consult->_ref_patient->_ref_dossier_medical->loadRefsEtatsDents();
+  	$etat_dents = $consult->_ref_patient->_ref_dossier_medical->_ref_etats_dents;
   	foreach ($etat_dents as $etat) {
   	  $list_etat_dents[$etat->dent] = $etat->etat;
   	}

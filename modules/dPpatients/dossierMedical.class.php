@@ -26,6 +26,7 @@ class CDossierMedical extends CMbMetaObject {
   var $_ref_antecedents = null;
   var $_ref_traitements = null;
   var $_ref_addictions  = null;
+  var $_ref_etats_dents = null;
   
   // Derived back references
   var $_ref_types_addiction  = null;
@@ -115,6 +116,14 @@ class CDossierMedical extends CMbMetaObject {
       $this->_ref_antecedents[$_antecedent->type][$_antecedent->_id] = $_antecedent;
     }
   }
+  
+  function loadRefsEtatsDents() {
+    $etat_dent = new CEtatDent();
+    if ($this->_id) {
+      $etat_dent->dossier_medical_id = $this->_id;
+      $this->_ref_etats_dents = $etat_dent->loadMatchingList();
+    }
+  }
 
   function countAntecedents(){
   	$antedecent = new CAntecedent();
@@ -133,8 +142,8 @@ class CDossierMedical extends CMbMetaObject {
   
   function loadRefsAddictions() {
     // Initialisation du classement
-    $ant = new CAntecedent();
-    foreach (explode("|", $ant->_specs["type"]->list) as $type) {
+    $add = new CAddiction();
+    foreach (explode("|", $add->_specs["type"]->list) as $type) {
       $this->_ref_types_addiction[$type] = array();
     }
 
@@ -243,7 +252,35 @@ class CDossierMedical extends CMbMetaObject {
       
       $template->addProperty("$champ - Addictions -- toutes", $sAddictions !== "" ? $sAddictions : null);
     }
-        
+    
+    // Etat dentaire
+    $this->loadRefsEtatsDents();
+    $etats = array();
+    if (is_array($this->_ref_etats_dents)) {
+      foreach($this->_ref_etats_dents as $etat) {
+        if ($etat->etat != null) {
+          switch ($etat->dent) {
+            case 10: 
+            case 30: $position = 'Central haut'; break;
+            case 30: 
+            case 70: $position = 'Central bas'; break;
+            default: $position = $etat->dent;
+          }
+          if (!isset ($etats[$etat->etat])) {
+            $etats[$etat->etat] = array();
+          }
+          $etats[$etat->etat][] = $position;
+        }
+      }
+    }
+    $sEtatsDents = '';
+    foreach ($etats as $key => $list) {
+      sort($list);
+      $sEtatsDents .= $key.' : '.implode(', ', $list);
+    }
+    $template->addProperty("Dossier médical - Etat dentaire", $sEtatsDents);
+    
+    
     // Codes CIM10
     $aCim10 = array();
     if ($this->_ext_codes_cim){

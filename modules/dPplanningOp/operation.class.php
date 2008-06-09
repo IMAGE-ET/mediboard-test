@@ -563,7 +563,8 @@ class COperation extends CCodable {
 
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
-    
+    $this->loadRefPraticien();
+    $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr. ".$this->_ref_praticien->_view) : '');
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);

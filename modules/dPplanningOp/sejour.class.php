@@ -835,12 +835,38 @@ class CSejour extends CCodable {
     $template->addProperty("Hospitalisation - Durée"          , $this->_duree_prevue);
     $template->addProperty("Hospitalisation - Date sortie"    , mbTransformTime(null, $this->sortie_prevue, $dateFormat));
     
+    $this->loadRefPraticien();
+    $template->addProperty("Hospitalisation - Praticien"    , "Dr. ".$this->_ref_praticien->_view);
+    
     // Diagnostics
     $this->loadExtDiagnostics();
     $diag = $this->DP ? "$this->DP: {$this->_ext_diagnostic_principal->libelle}" : null;
     $template->addProperty("Sejour - Diagnostic Principal"    , $diag);
     $diag = $this->DR ? "$this->DR: {$this->_ext_diagnostic_relie->libelle}" : null;
     $template->addProperty("Sejour - Diagnostic Relié"        , $diag);
+    
+    $str = '';
+    $this->loadRefPrescriptionTraitement();
+    if ($this->_ref_prescription_traitement->_id) {
+      $this->_ref_prescription_traitement->loadRefsLines();
+      if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
+        foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
+          $str .= "&bull; {$line->_ref_produit->libelle}<br />";
+        }
+      }
+    }
+    
+    $str = '';
+    $this->loadRefPrescriptionTraitement();
+    if ($this->_ref_prescription_traitement->_id) {
+      $this->_ref_prescription_traitement->loadRefsLines();
+      if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
+        foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
+          $str .= "&bull; {$line->_ref_produit->libelle}<br />";
+        }
+      }
+    }
+    $template->addProperty("Sejour - Prescriptions", $str);
   }
   
   function fillTemplate(&$template) {
