@@ -229,6 +229,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       </td>
 	      </tr>
 	     {{/if}}
+	   
+	    </tr>
+	    {{/if}}
 	    
 	    {{/if}}
 	    {{if $line->fin}}
@@ -250,7 +253,6 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       </td>
 	       {{/if}}
 	     {{/if}}
-	    </tr>
-	    {{/if}}
+	     
   </table>
 </form>
