@@ -49,11 +49,11 @@ if($new_line->date_arret){
 	}
 } else {
 	// Sinon, on met la fin de la ligne initiale ou la date courante
-	if($new_line->_fin){
-		$new_line->debut = $new_line->_fin;
-	} else {
+	//f($new_line->_fin){
+	//	$new_line->debut = $new_line->_fin;
+	//} else {
 	  $new_line->debut = mbDate();
-	}
+	//}
 }
 
 $new_line->unite_duree = "jour";
