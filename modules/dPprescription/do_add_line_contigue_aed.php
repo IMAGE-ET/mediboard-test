@@ -35,6 +35,9 @@ $mode_pharma = mbGetValueFromPost("mode_pharma");
 // Chargement de la ligne de prescription
 $new_line = new CPrescriptionLineMedicament();
 $new_line->load($prescription_line_id);
+
+$date_arret_tp = $new_line->date_arret;
+
 $new_line->loadRefsPrises();
 $new_line->loadRefPrescription();
 
@@ -65,9 +68,10 @@ $new_line->signee = 0;
 $new_line->valide_pharma = 0;
 
 // Si prescription de sortie, on duplique la ligne en ligne de prescription
-if($prescription->type == "sortie"){
+if($prescription->type == "sortie" && $new_line->_traitement && !$date_arret_tp){
 	$new_line->prescription_id = $prescription_id;
 }
+
 
 $msg = $new_line->store();
 
@@ -84,7 +88,8 @@ foreach($new_line->_ref_prises as &$prise){
 
 $old_line = new CPrescriptionLineMedicament();
 $old_line->load($prescription_line_id);
-if(!($prescription->type == "sortie" && $old_line->_traitement)){
+
+if(!($prescription->type == "sortie" && $old_line->_traitement && !$date_arret_tp)){
 	$old_line->child_id = $new_line->_id;
 	if($prescription->type != "sortie" && !$old_line->date_arret){
 	  $old_line->date_arret = mbDate();

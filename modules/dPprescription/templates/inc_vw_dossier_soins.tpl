@@ -126,6 +126,6 @@ printDossierSoin = function(prescription_id, date){
 </table>
 {{else}}
 <div class="big-info">
-  Ce dossier ne possède pas de prescription
+  Ce dossier ne possède pas de prescription de séjour
 </div>
 {{/if}}
