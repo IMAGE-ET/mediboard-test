@@ -5,18 +5,14 @@
 
 {{assign var=header value=10}}
 {{assign var=footer value=5}}
-
 <style type="text/css">
-
 {{include file=../../dPcompteRendu/css/print.css header=10 footer=8}}
-
 </style>
   
 <div class="header">
 	<table class="main">
 	  <tr>
 	    <td class="left">
-	      {{assign var=praticien value=$prescription->_ref_praticien}}
 	      {{assign var=function value=$praticien->_ref_function}}
 	      
 	      <strong>Dr. {{$praticien->_view}}</strong>

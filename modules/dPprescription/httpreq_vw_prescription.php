@@ -26,6 +26,7 @@ $sejour_id       = mbGetValueFromGetOrSession("sejour_id");
 $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $category        = mbGetValueFromGetOrSession("category_name");
+$praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
 
 // Initialisations
 $protocoles_praticien = array();
@@ -126,7 +127,7 @@ if($prescription->_id){
 	}
 	
   // Calcul du nombre d'elements dans la prescription
-	$prescription->countLinesMedsElements();
+	$prescription->countLinesMedsElements($praticien_sortie_id);
 }
 
 
@@ -270,8 +271,10 @@ if(!$is_praticien){
   }
 }
 */
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("praticien_sortie_id", $praticien_sortie_id);
 $smarty->assign("perm_create_line"   , $perm_create_line);
 $smarty->assign("contexteType"       , $contexteType);
 $smarty->assign("httpreq"            , 1);

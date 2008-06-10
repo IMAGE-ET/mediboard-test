@@ -260,6 +260,8 @@ Main.add(function () {
                 <td class="text">
                   {{assign var=prescriptions value=$curr_affectation->_ref_sejour->_ref_prescriptions}}
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
+                  {{assign var=prescription_sortie value=$prescriptions.sortie}}
+
                   <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, '{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
@@ -289,14 +291,8 @@ Main.add(function () {
                   {{$curr_affectation->_ref_sejour->_ref_praticien->_shortview}}          
                   {{if $isPrescriptionInstalled}}  
 		                <!-- Test des prescription de sortie -->
-		                {{assign var=prescription_sortie value=""}}
-		                  {{if $prescriptions}}
-		                  {{if array_key_exists('sortie', $prescriptions)}}
-		                    {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
-		                    {{if $prescriptions_sortie|@count < 1}}
+											{{if !$prescription_sortie->_id}}
 		                      <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-		                    {{/if}}
-		                  {{/if}}
 		                  {{/if}}
 		                  {{if $prescription_sejour->_counts_no_valide}}
 		                    <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />

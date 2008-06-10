@@ -105,6 +105,20 @@ Main.add( function(){
   }
 } );
 
+
+{{if $prescription->type == "sortie"}}
+  var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
+  var chps = document.selSortie.selPraticien;
+  chps.innerHTML = "";
+  chps.insert('<option value="">Tous</option>');
+  for(var prat in praticiens){
+    chps.insert('<option value='+prat+'>'+praticiens[prat]+'</option>');
+  }
+  var praticien_sortie_id = {{$praticien_sortie_id|json}};
+  $A(chps).each( function(option) {
+	  option.selected = option.value==praticien_sortie_id;
+	});
+{{/if}}
 </script>
 
 
@@ -255,9 +269,11 @@ Main.add( function(){
 <table class="tbl">
 
   {{foreach from=$prescription->_ref_lines_med_comments.med item=curr_line}}
+    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $curr_line->praticien_id) || !$praticien_sortie_id}}
     <!-- Si la ligne ne possede pas d'enfant -->
     {{if !$curr_line->child_id}}
       {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" prescription_reelle=$prescription}} 
+    {{/if}}
     {{/if}}
   {{/foreach}}
  
@@ -273,9 +289,12 @@ Main.add( function(){
 	      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
 	  {{/foreach}}
   {{/if}}
+  
   <!-- Parcours des commentaires --> 
   {{foreach from=$prescription->_ref_lines_med_comments.comment item=_line_comment}}
-    {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl"}}
+    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $_line_comment->praticien_id) || !$praticien_sortie_id}}
+      {{include file="../../dPprescription/templates/inc_vw_line_comment_elt.tpl"}}
+    {{/if}}
   {{/foreach}}
   
  </table> 

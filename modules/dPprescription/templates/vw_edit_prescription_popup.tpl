@@ -26,6 +26,7 @@ function viewProduit(cip){
   {{assign var=prescriptions value=$sejour->_ref_prescriptions}}
   {{assign var=prescription_pre_admission value=$prescriptions.pre_admission}}
   {{assign var=prescription_sejour value=$prescriptions.sejour}}
+  {{assign var=prescription_sortie value=$prescriptions.sortie}}
   
   <tr>
     <td>
@@ -64,7 +65,7 @@ function viewProduit(cip){
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 		      
-		          {{if $prescription->type == "sejour"}}
+		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id}}
 			          <form name="addPrescriptionSejour" method="post" action="">
 				          <input type="hidden" name="m" value="dPprescription" />
 				          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />
@@ -81,21 +82,24 @@ function viewProduit(cip){
           </td>
          
           <td id="sortie" class="step" style="border: {{if $prescription->type == "sortie"}}2px ridge{{else}}1px dotted{{/if}} #55A">
-          {{if $prescriptions.sortie|@count > 0}}
-            <span {{if $prescription->type == "sortie"}}style="font-size: 170%"{{/if}}>
-		          {{tr}}CPrescription.type.sortie{{/tr}}
-		        </span>
+          {{if $prescriptions.sortie->_id}}
+              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}');"
+		          {{if $prescription->type == "sortie"}}style="font-size: 170%"{{/if}}>
+		            {{tr}}CPrescription.type.sortie{{/tr}}
+		          </a>
+		          {{if $prescription->type == "sortie"}}
             <form name="selSortie" method="get" action="">
-		          <select name="selPrescriptionSortie" 
-		                  onchange="if(this.value != ''){ 
-		                              Prescription.reloadPrescSejour(this.value,'{{$prescription->object_id}}');
-		                            } ">
-		            <option value="">&mdash; Praticien</option>
-		          {{foreach from=$prescriptions.sortie item=prescription_sortie}}
-		            <option {{if $prescription_sortie->_id == $prescription->_id}}selected="selected"{{/if}}value="{{$prescription_sortie->_id}}">{{$prescription_sortie->_ref_praticien->_view}}</option>
-		          {{/foreach}}
+		          <select name="selPraticien" 
+		                  onchange="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}',this.value);">
+		              <option value="">Tous</option>
+
+			            {{foreach from=$prescription->_praticiens item=_praticien}}
+			              <option value="{{$_praticien}}" {{if $_praticien == $praticien_sortie_id}}selected="selected"{{/if}}>{{$_praticien}}</option>
+			            {{/foreach}}
+		          
 		          </select>
 	         </form>
+	         {{/if}}
           {{/if}}
           </td>
         </tr>

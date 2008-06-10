@@ -39,15 +39,9 @@
  
     {{if $isPrescriptionInstalled}}         
 	    <!-- Test des prescription de sortie -->
-	    {{assign var=prescription_sortie value=""}}
-	    {{if $prescriptions}}
-	    {{if array_key_exists('sortie', $prescriptions)}}
-	      {{assign var=prescriptions_sortie value=$prescriptions.sortie}}
-	      {{if $prescriptions_sortie|@count < 1}}
-	        <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
-	      {{/if}}
-	    {{/if}}
-	    {{/if}}
+      {{if !$prescription_sortie->_id}}
+	    <img src="images/icons/warning.png" alt="Aucune prescription de sortie" title="Aucune prescription de sortie" />
+      {{/if}}
       {{if $prescription_sejour->_counts_no_valide}}
       <img src="images/icons/flag.png" alt="Lignes non validées" title="Lignes non validées" />
       {{/if}}               

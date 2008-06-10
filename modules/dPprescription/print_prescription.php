@@ -12,6 +12,7 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 $ordonnance = mbGetValueFromGet("ordonnance");
+$praticien_sortie_id = mbGetValueFromGet("praticien_sortie_id");
 
 // Mode ordonnance
 if($ordonnance){
@@ -24,12 +25,22 @@ if($ordonnance){
 $etablissement = new CGroups();
 $etablissement->load($g);
 
-// Chargement du praticien
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefsFwd();
-$prescription->_ref_praticien->loadRefsFwd();
+
+
+
+// Chargement du praticien
+if($praticien_sortie_id){
+  $praticien = new CMediusers();
+  $praticien->load($praticien_sortie_id);	
+} else {
+	$praticien =& $prescription->_ref_praticien;
+}
+$praticien->loadRefsFwd();
+
 
 // Chargement de toutes les categories
 $categories = array();
@@ -70,10 +81,12 @@ $lines["medicaments"]["comment"]["ald"] = array();
 $lines["medicaments"]["comment"]["no_ald"] = array();
 foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type){
 	foreach($lines_medicament_type as $line_medicament){
+		if($praticien_sortie_id && $line_medicament->praticien_id != $praticien_sortie_id){
+			continue;
+		}	
 		if($line_medicament->child_id){
 			continue;
 		}
-
 	  // mode ordonnnance
 		if($ordonnance){
 			if($line_medicament->date_arret){
@@ -127,6 +140,9 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
+		  	if($praticien_sortie_id && $element->praticien_id != $praticien_sortie_id){
+			    continue;
+		    }	
 				if($element->child_id){
 					continue;
 				}
@@ -166,15 +182,16 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("traitements_arretes", $traitements_arretes);
-$smarty->assign("ordonnance"   , $ordonnance);
-$smarty->assign("date"         , mbDate());
-$smarty->assign("etablissement", $etablissement);
-$smarty->assign("prescription" , $prescription);
-$smarty->assign("lines", $lines);
-$smarty->assign("linesElt", $linesElt);
-$smarty->assign("categories", $categories);
-$smarty->assign("executants", $executants);
+$smarty->assign("praticien"           , $praticien);
+$smarty->assign("traitements_arretes" , $traitements_arretes);
+$smarty->assign("ordonnance"          , $ordonnance);
+$smarty->assign("date"                , mbDate());
+$smarty->assign("etablissement"       , $etablissement);
+$smarty->assign("prescription"        , $prescription);
+$smarty->assign("lines"               , $lines);
+$smarty->assign("linesElt"            , $linesElt);
+$smarty->assign("categories"          , $categories);
+$smarty->assign("executants"          , $executants);
 $smarty->display("print_prescription.tpl");
 
 ?>

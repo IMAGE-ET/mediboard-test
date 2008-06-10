@@ -578,8 +578,6 @@ class CSejour extends CCodable {
     if ($this->type == "urg" && count($this->_ref_consultations)) {
     	$this->_ref_consult_atu = reset($this->_ref_consultations);
     }
-    
-    
   }
   
   function loadRefsPrescriptions() {
@@ -593,15 +591,11 @@ class CSejour extends CCodable {
   	$this->_ref_prescriptions["pre_admission"] = new CPrescription();
   	$this->_ref_prescriptions["traitement"] = new CPrescription();
   	$this->_ref_prescriptions["sejour"] = new CPrescription();
-  	$this->_ref_prescriptions["sortie"] = array();
+  	$this->_ref_prescriptions["sortie"] = new CPrescription();
   	
   	// Stockage des prescriptions par type
   	foreach($prescriptions as $_prescription){
-	    if($_prescription->type == "sortie"){
-	      $this->_ref_prescriptions[$_prescription->type][] = $_prescription;	
-	    } else {
-	    	$this->_ref_prescriptions[$_prescription->type] = $_prescription;
-	    }
+	    $this->_ref_prescriptions[$_prescription->type] = $_prescription;
   	}
   }
   

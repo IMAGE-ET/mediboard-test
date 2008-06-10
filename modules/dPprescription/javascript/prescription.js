@@ -149,12 +149,15 @@ var Prescription = {
     });
   },
   reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma) {
-      var oForm = document.addLine;
-      
+      // Select de choix du praticien
+      if(document.selSortie){
+        var praticien_sortie_id = document.selSortie.selPraticien.value;
+      }
+  
+      var oForm = document.addLine;    
       if(window.opener){
         window.opener.PrescriptionEditor.refresh(oForm.object_id.value, oForm.object_class.value);
       }
-      
       var urlPrescription = new Url;
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
@@ -162,7 +165,7 @@ var Prescription = {
       urlPrescription.addParam("category_name", category_name);
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
- 
+      urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
      
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { waitingText : null });      
@@ -179,12 +182,13 @@ var Prescription = {
 	      }
       }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
     url.addParam("full_mode", "1");
+    url.addParam("praticien_sortie_id", praticien_sortie_id);
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
   reloadPrescPharma: function(prescription_id){
@@ -214,10 +218,17 @@ var Prescription = {
     }
   },
   printPrescription: function(prescription_id, ordonnance) {
+    // Select de choix du praticien
+    var praticien_sortie_id = "";
+    if(document.selSortie){
+      var praticien_sortie_id = document.selSortie.selPraticien.value;
+    }
+      
     if(prescription_id){
       var url = new Url;
       url.setModuleAction("dPprescription", "print_prescription");
       url.addParam("prescription_id", prescription_id);
+      url.addParam("praticien_sortie_id", praticien_sortie_id);
       if(ordonnance){
         url.addParam("ordonnance", ordonnance);
       }
