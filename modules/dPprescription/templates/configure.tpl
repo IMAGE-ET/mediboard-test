@@ -46,7 +46,7 @@
     </td>             
   </tr>
   
-  
+  <!-- 
   {{assign var="var" value="infirmiere_borne"}}
   <tr>
     <th class="category" colspan="6">
@@ -82,7 +82,7 @@
       heures
     </td>             
   </tr>
-  
+   -->
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
