@@ -165,6 +165,7 @@ class CConsultation extends CCodable {
     $specs["du_tiers"]            = "currency";
     
     $specs["categorie_id"]      = "ref class|CConsultationCategorie";
+    $specs["_date"]             = "date";
     $specs["_date_min"]         = "date";
     $specs["_date_max"] 	      = "date moreEquals|_date_min";
     $specs["_etat_reglement_patient"]   = "enum list|reglee|non_reglee";

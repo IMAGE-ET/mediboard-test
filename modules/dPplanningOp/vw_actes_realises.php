@@ -33,12 +33,14 @@ $where["execution"] = "BETWEEN '$_date_min' AND '$_date_max'";
 $actes_ccam = $acte_ccam->loadList($where, $order);
 
 // Initialisation du tableau de codables
-$codables = array("COperation" => array(), "CSejour" => array(), "CConsultation" => array() );
+$codables = array(
+  "COperation"    => array(), 
+  "CSejour"       => array(), 
+  "CConsultation" => array(),
+);
 
 // Parcours des actes ccam
-foreach($actes_ccam as $key => $acte_ccam){
-  $acte_ccam->loadRefCodeCCAM();
-  $acte_ccam->getTarif();
+foreach($actes_ccam as $key => $acte_ccam) {
   if(!array_key_exists($acte_ccam->object_id,$codables[$acte_ccam->object_class])){
     $codable = new $acte_ccam->object_class;
     $codable->load($acte_ccam->object_id);
@@ -96,14 +98,14 @@ foreach($sejours as $key => $sejour){
     if($sejour->_ref_actes_ccam){
       foreach($sejour->_ref_actes_ccam as $acte){
         @$nbActes[$sejour->_id]++;
-        @$montantSejour[$sejour->_id] += $acte->_tarif; 
+        @$montantSejour[$sejour->_id] += $acte->_montant_facture; 
       }
     }
     if($sejour->_ref_operations){
       foreach($sejour->_ref_operations as $operation){
         foreach($operation->_ref_actes_ccam as $acte){
           @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_tarif;
+          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
         }
       }
     }
@@ -111,7 +113,7 @@ foreach($sejours as $key => $sejour){
       foreach($sejour->_ref_consultations as $consult){
         foreach($consult->_ref_actes_ccam as $acte){
           @$nbActes[$sejour->_id]++;
-          @$montantSejour[$sejour->_id] += $acte->_tarif;
+          @$montantSejour[$sejour->_id] += $acte->_montant_facture;
         }
       }
     }

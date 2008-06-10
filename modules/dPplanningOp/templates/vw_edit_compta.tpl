@@ -10,7 +10,7 @@ function viewActes(){
   url.addElement(form.chir_id);
   url.addElement(form.typeVue);
   url.addElement(form.etatReglement);
-  url.popup(700, 550, "Rapport des actes réalisés");
+  url.popup(950, 550, "Rapport des actes réalisés");
   
   return false;
 }

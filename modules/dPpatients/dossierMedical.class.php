@@ -183,15 +183,17 @@ class CDossierMedical extends CMbMetaObject {
     if (is_array($this->_ref_antecedents)){
       $sAntecedents = "";
       foreach ($this->_ref_antecedents as $keyAnt => $currTypeAnt) {
-        $sAntecedentsParType = "";
+        $aAntecedentsParType = array();
         $sType =  CAppUI::tr("CAntecedent.type.".$keyAnt);
         foreach ($currTypeAnt as $currAnt) {
-          $sAntecedentsParType .= "<br /> &bull; ";
+          $sAntecedent = "&bull; ";
           if ($currAnt->date) { 
-            $sAntecedentsParType .= mbDateToLocale($currAnt->date) . " : ";
+            $sAntecedent .= mbDateToLocale($currAnt->date) . " : ";
           }
-          $sAntecedentsParType .= $currAnt->rques;
+          $sAntecedent .= $currAnt->rques;
+          $aAntecedentsParType[] = $sAntecedent;
         }
+        $sAntecedentsParType = join("<br />");
 
         $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
         
