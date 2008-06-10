@@ -1,4 +1,4 @@
-<form name="edit-constantes-medicales" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<form name="edit-constantes-medicales" action="?" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="dPpatients" />
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="dosql" value="do_constantes_medicales_aed" />
@@ -36,7 +36,7 @@
       <td>{{mb_field object=$constantes field=datetime form="edit-constantes-medicales" register=true}}</td>
       {{/if}}
       <td>
-        <button type="button" class="modify" onclick="return submitConstantesMedicales(this.form);">
+        <button class="modify" onclick="return submitConstantesMedicales(this.form);">
           {{if !$constantes->datetime}}
             {{tr}}Create{{/tr}}
           {{else}}
@@ -46,7 +46,7 @@
 
         {{if $constantes->datetime}}
           <br />
-          <button type="button" class="new" onclick="$V(this.form.constantes_medicales_id, null); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
+          <button class="new" onclick="$V(this.form.constantes_medicales_id, null); $V(this.form._new_constantes_medicales, 1); return submitConstantesMedicales(this.form);">
             {{tr}}Create{{/tr}}
           </button>
         {{/if}}

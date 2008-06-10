@@ -12,6 +12,7 @@ submitConstantesMedicales = function(oForm) {
       refreshConstantesMedicales($V(oForm.context_id));
     }
   });
+  return false;
 }
 
 editConstantes = function (const_id){
@@ -155,14 +156,9 @@ drawGraph = function() {
   }
 };
 
-//Main.add(drawGraph);
 Main.add(function () {
-
   prepareForm(document.forms['edit-constantes-medicales']);
-   drawGraph();
-
- 
-
+  drawGraph();
 });
 </script>
 
