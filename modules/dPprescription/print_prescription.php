@@ -151,7 +151,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
           if($element->date_arret){
 				  	$element->_fin = $element->date_arret;
 				  }
-				  if($element->_fin < mbDate()){
+				  if($element->_fin && $element->_fin < mbDate()){
 				  	continue;
 				  }
 				  
