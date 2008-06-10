@@ -9,6 +9,9 @@
       <a style="float:right;" href="#nothing" onclick="view_log('{{$object->_class_name}}', {{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="{{tr}}History.desc{{/tr}}" />
       </a>
+      <a class="action" style="float: right"  title="Modifier le sejour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$object->_id}}">
+        <img src="images/icons/edit.png" alt="modifier" />
+       </a>
 
       <div style="float:left;" class="noteDiv {{$object->_class_name}}-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
