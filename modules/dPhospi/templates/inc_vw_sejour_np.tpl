@@ -7,7 +7,9 @@
   </td>
   <td>
   {{assign var=prescriptions value=$curr_sejour->_ref_prescriptions}}
-  {{assign var=prescriptions_sejour value=$prescriptions.sejour}}
+  {{assign var=prescription_sejour value=$prescriptions.sejour}}
+  {{assign var=prescription_sortie value=$prescriptions.sortie}}
+  
 
   <a href="#1" onclick="loadViewSejour({{$curr_sejour->_id}},{{$curr_sejour->praticien_id}},'{{$date}}')">
     {{$curr_sejour->_ref_patient->_view}}

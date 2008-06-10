@@ -49,6 +49,7 @@ Main.add( function(){
 
 
 {{if $prescription->type == "sortie"}}
+  {{if $prescription->_praticiens|@count}}
   var praticiens = {{$prescription->_praticiens|smarty:nodefaults|escape:"htmlall"|@json}};
   var chps = document.selSortie.selPraticien;
   chps.innerHTML = "";
@@ -60,6 +61,7 @@ Main.add( function(){
   $A(chps).each( function(option) {
 	  option.selected = option.value==praticien_sortie_id;
 	});
+  {{/if}}
 {{/if}}
 
 
