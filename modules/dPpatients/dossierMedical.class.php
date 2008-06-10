@@ -262,7 +262,7 @@ class CDossierMedical extends CMbMetaObject {
           switch ($etat->dent) {
             case 10: 
             case 30: $position = 'Central haut'; break;
-            case 30: 
+            case 50: 
             case 70: $position = 'Central bas'; break;
             default: $position = $etat->dent;
           }
@@ -276,7 +276,7 @@ class CDossierMedical extends CMbMetaObject {
     $sEtatsDents = '';
     foreach ($etats as $key => $list) {
       sort($list);
-      $sEtatsDents .= $key.' : '.implode(', ', $list);
+      $sEtatsDents .= '&bull; '.ucfirst($key).' : '.implode(', ', $list).'<br />';
     }
     $template->addProperty("$champ - Etat dentaire", $sEtatsDents);
     
