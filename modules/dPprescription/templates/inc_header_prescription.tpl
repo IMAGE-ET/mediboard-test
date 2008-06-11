@@ -26,6 +26,7 @@ Main.add( function(){
   if(document.selPraticienLine){
 	  changePraticien(document.selPraticienLine.praticien_id.value);
   }
+  initPuces();
 } );
 
 submitProtocole = function(){
