@@ -193,7 +193,7 @@ class CDossierMedical extends CMbMetaObject {
           $sAntecedent .= $currAnt->rques;
           $aAntecedentsParType[] = $sAntecedent;
         }
-        $sAntecedentsParType = join("<br />");
+        $sAntecedentsParType = join("<br />", $aAntecedentsParType);
 
         $template->addProperty("$champ - Antécédents - $sType", $sAntecedentsParType);
         
