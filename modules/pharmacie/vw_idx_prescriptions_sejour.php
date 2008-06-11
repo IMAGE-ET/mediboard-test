@@ -30,9 +30,6 @@ $valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulemen
 $filter_sejour->_date_min     = mbGetValueFromGet("_date_min");
 $filter_sejour->_date_max     = mbGetValueFromGet("_date_max");
 
-$now = mbDateTime();
-//$now = "2008-04-18 11:56:00";
-
 // Initialisations
 $lines_medicament = array();
 $where = array();
@@ -53,7 +50,7 @@ if($praticien_id){
 	$where["prescription_line_medicament.praticien_id"] = " = '$praticien_id'";
 }
 
-// Filtre sur le service (séjour)
+// Filtre sur le service, date des affectations
 if($service_id){
   $ljoinMedicament["affectation"] = "sejour.sejour_id = affectation.sejour_id";
   $ljoinMedicament["lit"] = "affectation.lit_id = lit.lit_id";
@@ -64,24 +61,20 @@ if($service_id){
 	  $where[] = "(affectation.entree BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR 
 			 				  (affectation.sortie BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR
 						    (affectation.entree <= '$filter_sejour->_date_min' AND affectation.sortie >= '$filter_sejour->_date_max')";
-  	
-  } else {
-    $where[] = "affectation.entree <= '$now' AND affectation.sortie >= '$now'";
-  }
+  } 
   $where["service.service_id"] = " = '$service_id'";
+} else {
+	// Filtre sur les dates du séjour
+	if($filter_sejour->_date_min && $filter_sejour->_date_max){
+		$where[] = "(sejour.entree_prevue BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR 
+								(sejour.sortie_prevue BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR
+							  (sejour.entree_prevue <= '$filter_sejour->_date_min' AND sejour.sortie_prevue >= '$filter_sejour->_date_max')";
+	}
 }
 
-// Filtre sur les dates (sejour)
-if($filter_sejour->_date_min && $filter_sejour->_date_max){
-	$where[] = "(sejour.entree_prevue BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR 
-							(sejour.sortie_prevue BETWEEN '$filter_sejour->_date_min' AND '$filter_sejour->_date_max') OR
-						  (sejour.entree_prevue <= '$filter_sejour->_date_min' AND sejour.sortie_prevue >= '$filter_sejour->_date_max')";
-}
-
-
-if($praticien_id || $service_id || $filter_sejour->_date_min || $filter_sejour->_date_max){
+if($praticien_id || $service_id || ($filter_sejour->_date_min && $filter_sejour->_date_max)){
   $line_medicament = new CPrescriptionLineMedicament();
-  $lines_medicament = $line_medicament->loadList($where, null, null, null, $ljoinMedicament);
+  $lines_medicament = $line_medicament->loadList($where, null, "100", null, $ljoinMedicament);
 }
 
 $prescriptions = array();
@@ -97,6 +90,7 @@ foreach($lines_medicament as $line_med){
     $prescriptions[$line_med->prescription_id] = $prescription;
 	}
 }
+
 
 if(!$filter_sejour->_date_min || !$filter_sejour->_date_max){
 	$filter_sejour->_date_min = "";
