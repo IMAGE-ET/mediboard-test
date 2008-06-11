@@ -101,8 +101,7 @@ div.bodyWithoutPageBreak {
   padding-bottom: {{$footer}}em;
 }
 
-// Partie variable
-
+/*  Partie variable */
 @media print {
 	div.body,
 	div.bodyWithoutPageBreak {
