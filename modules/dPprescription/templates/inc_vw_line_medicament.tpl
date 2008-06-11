@@ -137,19 +137,19 @@
 	      {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
 		    {{if $perm_edit}}
 			    <script type="text/javascript">
-			      prepareForm(document.forms["editDates-Med-{{$curr_line->_id}}"]);
-			      {{if $curr_line->_traitement}}
+			      var oForm = document.forms["editDates-Med-{{$curr_line->_id}}"];
+			      prepareForm(oForm);
+			      
+			      if(oForm.debut){
 			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-			      {{else}}
-				      {{if $prescription->type != "sortie"}}
-				        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "debut", false, dates);
-			          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);
-				      {{/if}}
-			        {{if $prescription->type == "sortie"}}
-			          Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);
-			        {{/if}}
-		        {{/if}}	        
-			    </script>
+			      }
+			      if(oForm._fin){
+			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "_fin", false, dates);			      
+			      }
+			      if(oForm.fin){
+			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);		      
+			      }
+		     </script>
 		    {{/if}}            
 		</td>
     <td>
