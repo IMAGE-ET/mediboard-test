@@ -3,21 +3,24 @@
 <li>
   {{if $chapitre_category != "dmi" && $chapitre_category != "dm"}}Faire pratiquer {{/if}}
   <strong>{{$elt->_ref_element_prescription->_view}}</strong>
+
   {{if $elt->commentaire}}
-  <em>{{$elt->commentaire}}</em>
+  <em>({{$elt->commentaire}})</em>
   {{/if}}
-  {{if $chapitre_category != "dmi" && $chapitre_category != "dm" && $elt->_ref_prises|@count}}
+  {{if  $chapitre_category != "dmi" && ($elt->_ref_prises|@count || $elt->_duree_prise || $elt->date_arret) }}
 	  <ul>
 	    <li>
 			  <!-- Affichage des prises s'il y en a -->
 			    {{foreach from=$elt->_ref_prises item=prise name=foreach_prise}}
 				    {{if $prise->quantite}}
 				        {{$prise->_view}}
-				      {{if !$smarty.foreach.foreach_prise.last}},{{/if}} 
+				        {{if !$smarty.foreach.foreach_prise.last}},{{/if}} 
 				    {{/if}}
 				  {{/foreach}}
-			    <!-- Duree de la prise --> 
-					{{$elt->_duree_prise}}
+				   
+				  {{$elt->_duree_prise}}
+									
+				  <!-- Affichage de la date d'arret -->
 					{{if $elt->date_arret}}
 					  (Element arrêté le {{$elt->date_arret|date_format:"%d/%m/%Y"}}) 
 					{{/if}}

@@ -1,6 +1,7 @@
 <li>
-  <strong>{{$med->_ref_produit->libelle}}</strong>:
+  <strong>{{$med->_ref_produit->libelle}}</strong>
   <ul>
+    {{if $med->_ref_prises|@count || $med->_duree_prise || $med->date_arret || $med->_specif_prise}}
     <li>
 		  <!-- Affichage des prises s'il y en a -->
 		  {{foreach from=$med->_ref_prises item=prise}}
@@ -21,13 +22,14 @@
 		  
 		  <!-- Commentaire -->
 		  {{if $med->commentaire}}
-		  <em>{{$med->commentaire}}</em>
+		  <em>, {{$med->commentaire}}</em>
 		  {{/if}}
 		  
 		  <!-- Remarque sur la prise -->
-		  {{if $med->_specif_prise}}
+		  {{if $med->_specif_prise && $med->_ref_prises|@count}}
 		    <br />({{$med->_specif_prise}})
 		  {{/if}}
     </li>
+    {{/if}}
   </ul>
 </li>
