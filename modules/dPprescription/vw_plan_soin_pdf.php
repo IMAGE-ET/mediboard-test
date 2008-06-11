@@ -151,16 +151,6 @@ $patient->loadRefConstantesMedicales();
 $const_med = $patient->_ref_constantes_medicales;
 $poids = $const_med->poids;
 
-/*
-$consult_anesth = new CConsultAnesth();
-$consult_anesth->sejour_id = $prescription->_ref_object->_id;
-$consult_anesth->loadMatchingObject();
-
-if($consult_anesth->_id){
-  $poids = $consult_anesth->poid;
-}
-
-*/
 // Creation d'un nouveau fichier pdf
 $pdf = new CPrescriptionPdf("L", "mm", "A4", true); 
 $pdf->SetMargins(15, 15);
@@ -320,6 +310,8 @@ foreach($prescription->_ref_prescription_lines_element as $_elt){
   prescriptionLine($pdf, $_elt, $date, $dates);
 }
 
+
+
 // Chargement du dernier pharmacien qui a validé une ligne
 if($logs){
   ksort($logs);
@@ -350,12 +342,15 @@ $pdf->SetFillColor(255,255,255);
 $pdf->Ln();
 
 $format_date = "%d/%m/%Y";
-$format_hour = "%Hh%m";
+$format_hour = "%Hh%M";
 
 
 $pdf->Cell(60,21,"",1,0,'C',1);
-$pdf->MultiCell(30,5.25,"Par ".$pharmacien->_user_first_name."\n".$pharmacien->_user_last_name."\n le ".mbTransformTime(null, $last_log->date, $format_date)."\n à ".mbTransformTime(null, $last_log->date, $format_hour),1,'C',0,0);
-
+if($last_log->_id){
+  $pdf->MultiCell(30,5.25,"Par ".$pharmacien->_user_first_name."\n".$pharmacien->_user_last_name."\n le ".mbTransformTime(null, $last_log->date, $format_date)."\n à ".mbTransformTime(null, $last_log->date, $format_hour),1,'C',0,0);
+} else {
+	$pdf->MultiCell(30,21,"",1,'C',0,0);
+}
 $pdf->Cell(56,7,"",1,0,'C',1);
 
 signatureIDE($pdf);

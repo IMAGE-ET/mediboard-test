@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.40";
+$config["mod_version"]     = "0.41";
 $config["mod_type"]        = "user";
 
 
@@ -457,7 +457,50 @@ class CSetupdPprescription extends CSetup {
             ADD `fin` DATE;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.40";
+    $this->makeRevision("0.40");
+    
+    $sql = "ALTER TABLE `prescription` 
+	          ADD INDEX (`function_id`),
+ 	          ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+						ADD INDEX (`prescription_id`),
+						ADD INDEX (`praticien_id`),
+						ADD INDEX (`debut`),
+						ADD INDEX (`date_arret`),
+						ADD INDEX (`child_id`),
+						ADD INDEX (`fin`);";
+	  $this->addQuery($sql);
+	  
+	  $sql = "ALTER TABLE `prescription_line_element` 
+						ADD INDEX (`element_prescription_id`),
+						ADD INDEX (`executant_prescription_line_id`),
+						ADD INDEX (`prescription_id`),
+						ADD INDEX (`praticien_id`),
+						ADD INDEX (`debut`),
+						ADD INDEX (`date_arret`),
+						ADD INDEX (`child_id`),
+						ADD INDEX (`fin`);";
+	  $this->addQuery($sql);
+    
+	  $sql = "ALTER TABLE `prescription_line_comment` 
+						ADD INDEX (`category_prescription_id`),
+						ADD INDEX (`executant_prescription_line_id`),
+						ADD INDEX (`prescription_id`),
+						ADD INDEX (`praticien_id`),
+						ADD INDEX (`debut`),
+						ADD INDEX (`date_arret`),
+						ADD INDEX (`child_id`),
+						ADD INDEX (`fin`);";
+	  $this->addQUery($sql);
+	  
+    $sql = "ALTER TABLE `prise_posologie` 
+	          ADD INDEX (`moment_unitaire_id`),
+          	ADD INDEX (`object_id`);";
+	  $this->addQuery($sql);  
+
+    $this->mod_version = "0.41";
   }  
 }
 
