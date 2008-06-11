@@ -5,7 +5,7 @@
 	  <input type="hidden" name="dosql" value="{{$dosql}}" />
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
-	  <input type="text" name="commentaire" {{if $line->_traitement}}size="60"{{else}}size="90"{{/if}} value="{{$line->commentaire}}" onchange="this.form.onsubmit();" />
+	  <input type="text" name="commentaire" size="60" value="{{$line->commentaire}}" onchange="this.form.onsubmit();" />
 	</form>
 {{else}}
   {{if $line->commentaire}}

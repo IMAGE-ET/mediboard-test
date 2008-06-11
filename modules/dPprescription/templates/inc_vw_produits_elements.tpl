@@ -53,11 +53,7 @@ viewEasyMode = function(){
   <input type="hidden" name="_category_name" value="" />
 </form>
 
-{{if $perm_create_line}}
-<div id="mode" style="position: absolute; right: 10px;">
-  <button class="new" type="button" onclick="viewEasyMode();">Mode grille</button>
-</div>
-{{/if}}
+
 
 <!-- Tabulations -->
 <ul id="prescription_tab_group" class="control_tabs">
@@ -70,7 +66,15 @@ viewEasyMode = function(){
   {{/foreach}}
 {{/if}}
 </ul>
+
+
+
 <hr class="control_tabs" />
+
+{{if $perm_create_line}}
+  <button class="new" type="button" onclick="viewEasyMode();" style="float: right">Mode grille</button>
+{{/if}}
+
 
 <!-- Declaration des divs -->
 <div id="div_medicament" style="display:none;">
