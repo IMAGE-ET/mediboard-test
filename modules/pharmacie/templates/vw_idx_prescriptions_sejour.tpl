@@ -48,13 +48,13 @@ function pageMain(){
 		 	        A partir du
 			      </th>
 			      <td class="date">  
-			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm}}
+			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm canNull=false}}
 			      </td>
 			      <th>
 			        Jusqu'au 
 			      </th>
 			      <td class="date">
-			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm}}
+			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm canNull=false}}
 	          </td>
 	          <td>
 	            <select name="valide_pharma">

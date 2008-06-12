@@ -30,6 +30,14 @@ $valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulemen
 $filter_sejour->_date_min     = mbGetValueFromGet("_date_min");
 $filter_sejour->_date_max     = mbGetValueFromGet("_date_max");
 
+// Si aucune date n'est specifiée, on filtre par rapport à la date d'aujourd'hui
+if(!$filter_sejour->_date_min && !$filter_sejour->_date_max){
+	$now = mbDate();
+	$filter_sejour->_date_min = mbDateTime("- 7 DAYS", $now);
+	$filter_sejour->_date_max = mbDateTime("+ 7 DAYS", $now);
+}
+
+
 // Initialisations
 $lines_medicament = array();
 $where = array();
@@ -92,10 +100,6 @@ foreach($lines_medicament as $line_med){
 }
 
 
-if(!$filter_sejour->_date_min || !$filter_sejour->_date_max){
-	$filter_sejour->_date_min = "";
-	$filter_sejour->_date_max = "";
-}
 
 // Smarty template
 $smarty = new CSmartyDP();

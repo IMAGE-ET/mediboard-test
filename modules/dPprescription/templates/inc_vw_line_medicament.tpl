@@ -51,7 +51,7 @@
 	        {{if $perm_edit}}
 	          {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
 	        {{/if}}
-	       
+	        
 	        <!-- Formulaire ALD -->
 		      {{if !$curr_line->_protocole}}
 	            {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
@@ -62,7 +62,6 @@
         {{if !$curr_line->_protocole && !$mode_pharma && $perm_edit}} 
           {{include file="../../dPprescription/templates/line/inc_vw_form_traitement.tpl"}}
         {{/if}} 
-
       </div>
       
       <!-- AFfichage de la signature du praticien -->
@@ -209,7 +208,7 @@
   <tr>  
     <td>
       <!-- Suppression de la ligne -->
-      {{if $perm_edit}}
+      {{if $perm_edit && !$mode_pharma}}
         {{if ($curr_line->_traitement && $prescription_reelle->type == "pre_admission") || !$curr_line->_traitement}}
         <button type="button" class="trash notext" onclick="Prescription.delLine({{$curr_line->_id}})">
           {{tr}}Delete{{/tr}}
