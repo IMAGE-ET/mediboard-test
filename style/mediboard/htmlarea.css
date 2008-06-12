@@ -1,7 +1,7 @@
 body {
   font-family: Georgia, serifs;
   font-size: 12px;
-  background: #ddf;
+  background: #fff;
 }
 
 textarea#htmlarea {
@@ -13,8 +13,23 @@ span.hilite {
   background: #f5f;
 }
 
+table {
+	margin: 2px;
+	border: 1px solid #888;
+	border-collapse: collapse;
+}
+
 @media screen {
-  span.field {
+	html {
+		background: #eee;
+	}
+	
+	body {
+	  border: 1px solid #aaa;
+	  margin: 10px;
+	}
+
+	span.field {
     background: #bbd;
   }
 
@@ -31,11 +46,11 @@ span.hilite {
   }
   
   hr.pagebreak {
-    border-style: dashed;
-    border-top-color: #fff;
-    border-right-color: #fff;
-    border-bottom-color: #aaa;
-    border-left-color: #aaa;
+    border: 1px dotted #aaa;
+    border-width: 1px 0;
+    margin: 0 -10px;
+    background: #bbb;
+    height: 5px;
   }
 }
 
