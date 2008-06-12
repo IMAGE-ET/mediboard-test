@@ -110,28 +110,23 @@
   </tr>
   
   <!-- Pas traitement ni protocole -->
-  <tr>  
-  {{if !$curr_line->_traitement && !$curr_line->_protocole}}
+  <tr>
     <td style="text-align: center">
-    {{if !$curr_line->_ref_produit->inLivret && $prescription->type == "sejour"}}
-        <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
-        <br />
-    {{/if}}  
-    {{if $curr_line->_ref_produit->hospitalier && $prescription->type == "sortie"}}
-        <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
-        <br />
-    {{/if}}
-    {{if $curr_line->_ref_produit->_generique}}
+      {{if !$curr_line->_ref_produit->inLivret && ($prescription->type == "sejour" || !$prescription->object_id)}}
+      <img src="images/icons/livret_therapeutique_barre.gif" alt="Produit non présent dans le livret Thérapeutique" title="Produit non présent dans le livret Thérapeutique" />
+      <br />
+      {{/if}}  
+      {{if $curr_line->_ref_produit->hospitalier && ($prescription->type == "sortie" || !$prescription->object_id)}}
+      <img src="images/icons/hopital.gif" alt="Produit Hospitalier" title="Produit Hospitalier" />
+      <br />
+      {{/if}}
+      {{if $curr_line->_ref_produit->_generique}}
       <img src="images/icons/generiques.gif" alt="Produit générique" title="Produit générique" />
       <br />
-    {{/if}}
+      {{/if}}
     </td>
-  {{/if}}
-  
-  {{if !$curr_line->_protocole}}
-    {{if $curr_line->_traitement}}
-    <td></td>
-    {{/if}}
+    
+    {{if !$curr_line->_protocole}}
     <td colspan="2">
 	      {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}  
 		    {{if $perm_edit}}
@@ -149,7 +144,7 @@
 			        Calendar.regField('editDates-Med-{{$curr_line->_id}}', "fin", false, dates);		      
 			      }
 		     </script>
-		    {{/if}}            
+		    {{/if}}
 		</td>
     <td>
       <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
@@ -159,8 +154,10 @@
         </div>
       {{/if}}
     </td>
-  </tr>
-  {{/if}} 
+    {{else}}
+    <td colspan="3" />
+    {{/if}}
+  </tr> 
   
   
   <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
