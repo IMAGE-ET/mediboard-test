@@ -22,7 +22,6 @@ function viewProduit(cip){
 	    <form name="selPrat" action="?" method="get">
 	      <input type="hidden" name="tab" value="vw_edit_protocole" />
         <input type="hidden" name="m" value="dPprescription" />
-
         <select name="praticien_id" onchange="this.form.function_id.value=''; this.form.submit()">
           <option value="">&mdash; Sélection d'un praticien</option>
 	        {{foreach from=$praticiens item=praticien}}
@@ -39,8 +38,6 @@ function viewProduit(cip){
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
           {{/foreach}}
         </select>
-      
-      
 	    </form>
 	    <a href="?m={{$m}}&amp;tab={{$tab}}" class="buttonnew">
         Créer un protocole

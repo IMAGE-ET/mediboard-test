@@ -4,11 +4,14 @@ refreshListProtocole = function(oForm){
   var oFormFilter = document.selPrat;
   oFormFilter.praticien_id.value = oForm.praticien_id.value;
   oFormFilter.function_id.value = oForm.function_id.value;
-  submitFormAjax(oForm, 'systemMsg', { 
-        onComplete : function() { 
-           Protocole.refreshList(oForm.praticien_id.value,oForm.prescription_id.value, oForm.function_id.value) 
-        } 
-  });
+  
+  if(oFormFilter.praticien_id.value || oFormFilter.function_id.value){
+	  submitFormAjax(oForm, 'systemMsg', { 
+	        onComplete : function() { 
+	           Protocole.refreshList(oForm.praticien_id.value,oForm.prescription_id.value, oForm.function_id.value) 
+	        } 
+	  });
+  }
 }
 
 changePraticien = function(praticien_id){

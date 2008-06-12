@@ -23,58 +23,64 @@ preselectType = function(contexte, oForm){
 
 <!-- Formulaire de creation du protocole -->
 {{if !$prescription->_id && $mode_protocole && !$mode_pharma}}
-<form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return Protocole.add();">	
-   <input type="hidden" name="m" value="dPprescription" />
-   <input type="hidden" name="dosql" value="do_prescription_aed" />
-   <input type="hidden" name="prescription_id" value="" />
-   <input type="hidden" name="del" value="0" />
-   <input type="hidden" name="object_class" value=""/>
-   <input type="hidden" name="object_id" value=""/>
-   <input type="hidden" name="praticien_id" value="" />
-   <input type="hidden" name="function_id" value="" />
-   <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
-   <table class="form">
-     <tr>
-       <th class="category" colspan="2">
-         Création d'un protocole
-       </th>
-    </tr>
-    <tr>
-      <th>  
-        {{mb_label object=$protocole field="libelle"}}
-      </th>
-      <td>
-		    {{mb_field object=$protocole field="libelle" class="notNull"}}  
-      </td>
-    </tr>
-    <tr>
-      <th>
-			  {{mb_label object=$protocole field="object_class"}}
-			</th>
-			<td>
-			  {{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}  
-			</td>
-	  </tr>
-	  <tr>
-	    <th>
-	      {{mb_label object=$protocole field="type"}}
-	    </th>
-	    <td>
-	      <select name="type">
-	        <option value="pre_admission">Pré-admission</option>
-	        <option value="sejour">Séjour</option>
-	        <option value="sortie">Sortie</option>
-	        <option value="externe">Externe</option>
-	      </select>  
-	    </td>
-	  </tr>
-	  <tr>
-	   <td colspan="2" style="text-align: center">
-			  <button type="button" onclick="this.form.onsubmit();" class="new">Créer une protocole</button>
-	   </td>  
-	  </tr>
-  </table>
-</form>
+  {{if $function_id || $praticien_id}}
+		<form action="?m=dPprescription" method="post" name="addProtocolePresc" onsubmit="return Protocole.add();">	
+		   <input type="hidden" name="m" value="dPprescription" />
+		   <input type="hidden" name="dosql" value="do_prescription_aed" />
+		   <input type="hidden" name="prescription_id" value="" />
+		   <input type="hidden" name="del" value="0" />
+		   <input type="hidden" name="object_class" value=""/>
+		   <input type="hidden" name="object_id" value=""/>
+		   <input type="hidden" name="praticien_id" value="" />
+		   <input type="hidden" name="function_id" value="" />
+		   <input type="hidden" name="callback" value="Prescription.reloadAddProt" />
+		   <table class="form">
+		     <tr>
+		       <th class="category" colspan="2">
+		         Création d'un protocole
+		       </th>
+		    </tr>
+		    <tr>
+		      <th>  
+		        {{mb_label object=$protocole field="libelle"}}
+		      </th>
+		      <td>
+				    {{mb_field object=$protocole field="libelle" class="notNull"}}  
+		      </td>
+		    </tr>
+		    <tr>
+		      <th>
+					  {{mb_label object=$protocole field="object_class"}}
+					</th>
+					<td>
+					  {{mb_field object=$protocole field="object_class" onchange="preselectType(this.value)"}}  
+					</td>
+			  </tr>
+			  <tr>
+			    <th>
+			      {{mb_label object=$protocole field="type"}}
+			    </th>
+			    <td>
+			      <select name="type">
+			        <option value="pre_admission">Pré-admission</option>
+			        <option value="sejour">Séjour</option>
+			        <option value="sortie">Sortie</option>
+			        <option value="externe">Externe</option>
+			      </select>  
+			    </td>
+			  </tr>
+			  <tr>
+			   <td colspan="2" style="text-align: center">
+					  <button type="button" onclick="this.form.onsubmit();" class="new">Créer un protocole</button>
+			   </td>  
+			  </tr>
+		  </table>
+		</form>
+  {{else}}
+    <div class="big-info">
+      Veuillez sélectionner un praticien ou un cabinet pour créer des protocoles.
+    </div>
+  {{/if}}
 {{/if}}
 
 
