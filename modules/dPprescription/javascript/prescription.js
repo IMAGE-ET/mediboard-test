@@ -148,6 +148,33 @@ var Prescription = {
       } 
     });
   },
+  stopTraitementPerso: function(oSelect, prescription_id, mode_pharma) {
+    $V(oSelect, "");
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_prescription_modif_all_tp");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("actionType", "stop");
+    if(document.applyProtocole){
+      url.addParam("date", $V(document.applyProtocole.debut));
+    }
+    url.addParam("mode_pharma", mode_pharma);
+    url.requestUpdate("systemMsg", { waitingText : null });
+  },
+  goTraitementPerso: function(oSelect, prescription_id, mode_pharma) {
+    $V(oSelect, "");
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_prescription_modif_all_tp");
+    url.addParam("prescription_id", prescription_id);
+    url.addParam("actionType", "go");
+    if(document.applyProtocole){
+      url.addParam("date", $V(document.applyProtocole.debut));
+    }
+    if(document.selPraticienLine) {
+      url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));
+    }
+    url.addParam("mode_pharma", mode_pharma);
+    url.requestUpdate("systemMsg", { waitingText : null });
+  },
   reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma) {
       // Select de choix du praticien
       if(document.selSortie){

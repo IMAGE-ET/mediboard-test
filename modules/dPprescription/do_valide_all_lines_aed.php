@@ -7,14 +7,10 @@
 * @author Alexis Granger
 */
 
-function viewMsg($msg, $action){
-  global $AppUI, $m, $tab;
-  $action = CAppUI::tr($action);
-  if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-  }
-  $AppUI->setMsg("$action", UI_MSG_OK );
-}
+/*
+ * Permet de valider une ou toutes les lignes
+ * en mode pharmacien ou praticien
+ */
 
 
 // Fonction permettant d'inserer $lines dans $prescription
@@ -84,14 +80,14 @@ function insertMedElts($lines, $prescription, $sejour){
 	      $line->valide_pharma = 0;
 	    }
 	    $msg = $line->store();
-	    viewMsg($msg, "msg-$line->_class_name-create");  
+	    $AppUI->displayMsg($msg, "msg-$line->_class_name-create");  
 	  
 		  // Parcours des prises et creation des nouvelles prises
 		  foreach($line->_ref_prises as $prise){
 			  $prise->_id = "";
 			  $prise->object_id = $line->_id;
 			  $msg = $prise->store();
-		    viewMsg($msg, "msg-CPrisePosologie-create");  	
+		    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
 		  }
   	}
   }
@@ -242,7 +238,7 @@ foreach($medicaments as $key => $lineMedicament){
 	  $lineMedicament->signee = 1;
 	}
 	$msg = $lineMedicament->store();
-	viewMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
+	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
 }
 
 // Parcours des medicaments et passage de valide à 1
@@ -250,7 +246,7 @@ if(!$mode_pharma){
 	foreach($elements as $key => $lineElement){
 		$lineElement->signee = 1;
 		$msg = $lineElement->store();
-		viewMsg($msg, "msg-CPrescriptionLineElement-modify");	
+		$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-modify");	
 	}
 }
 
@@ -259,7 +255,7 @@ if(!$mode_pharma){
 	foreach($comments as $key => $lineComment){
 		$lineComment->signee = 1;
 		$msg = $lineComment->store();
-		viewMsg($msg, "msg-CPrescriptionLineComment-modify");	
+		$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-modify");	
 	}
 }
 

@@ -7,16 +7,10 @@
 * @author Alexis Granger
 */
 
-function viewMsg($msg, $action){
-  global $AppUI, $m, $tab;
-  $action = CAppUI::tr($action);
-  if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-    //echo $AppUI->getMsg();
-    //exit();
-  }
-  $AppUI->setMsg("$action", UI_MSG_OK );
-}
+/*
+ * Permet d'avancer dans l'ordre des prescriptions :
+ * Pré-admission / Séjour / Sortie
+ */
 
 global $AppUI;
 
@@ -43,7 +37,7 @@ $prescription->_id = "";
 $prescription->type = $type;
 
 $msg = $prescription->store();
-viewMsg($msg, "msg-CPrescription-create");
+$AppUI->displayMsg($msg, "msg-CPrescription-create");
 if($msg){
 	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
 	echo $AppUI->getMsg();
@@ -114,13 +108,13 @@ foreach($lines as $cat => $lines_by_type){
 	  	}
 	  }
 	  $msg = $line->store();
-	  viewMsg($msg, "msg-$line->_class_name-create");  
+	  $AppUI->displayMsg($msg, "msg-$line->_class_name-create");
 		// Parcours des prises et creation des nouvelles prises
 		foreach($line->_ref_prises as $prise){
 			$prise->_id = "";
 			$prise->object_id = $line->_id;
 			$msg = $prise->store();
-		  viewMsg($msg, "msg-CPrisePosologie-create");  	
+		  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
 		}
 	}
 }

@@ -290,6 +290,20 @@ class CAppUI {
     $errors += count(@$this->messages[UI_MSG_ERROR]);
     return $errors == 0;
   }
+  
+  /*
+   * Retourne le message résultant de la modification
+   * d'un objet
+   * @param string $msg résultat de la modification
+   * @param string $action message à afficher
+   */
+  function displayMsg($msg, $action) {
+    $action = $this->tr($action);
+    if($msg){
+      $this->setMsg("$action: $msg", UI_MSG_ERROR );
+    }
+    $this->setMsg("$action", UI_MSG_OK );
+  }
 
   /**
    * Display the formatted message and icon

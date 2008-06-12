@@ -8,16 +8,6 @@
  */
 
 
-function viewMsg($msg, $action){
-  global $AppUI, $m, $tab;
-  $action = CAppUI::tr($action);
-  if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-  }
-  $AppUI->setMsg("$action", UI_MSG_OK );
-}
-
-
 global $AppUI, $can, $m;
 
 $can->needsRead();
@@ -55,7 +45,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
   $msg = $line->store();
-  viewMsg($msg, "msg-CPrescriptionLineMedicament-create");  
+  $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   	
 	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
@@ -63,7 +53,7 @@ foreach($protocole->_ref_prescription_lines as $line){
 		$prise->object_id = $line->_id;
 		$prise->object_class = "CPrescriptionLineMedicament";
 	  $msg = $prise->store();
-	  viewMsg($msg, "msg-CPrisePosologie-create");  	
+	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
 	}
 }
 
@@ -82,7 +72,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   $line_element->prescription_id = $prescription_id;
   $line_element->praticien_id = $praticien_id;
   $msg = $line_element->store();
-  viewMsg($msg, "msg-CPrescriptionLineElement-create");  
+  $AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");  
   
   // Parcours des prises
 	foreach($line_element->_ref_prises as $prise){
@@ -90,7 +80,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
 		$prise->object_id = $line_element->_id;
 		$prise->object_class = "CPrescriptionLineElement";
 	  $msg = $prise->store();
-	  viewMsg($msg, "msg-CPrisePosologie-create");  	
+	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
 	}
 }
 
@@ -100,7 +90,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$line_comment->prescription_id = $prescription_id;
 	$line_comment->praticien_id = $praticien_id;
 	$msg = $line_comment->store();
-	viewMsg($msg, "msg-CPrescriptionLineComment-create");
+	$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-create");
 }
 
 // Lancement du refresh des lignes de la prescription

@@ -7,6 +7,11 @@
 * @author Alexis Granger
 */
 
+/*
+ * Permet de transformer une ligne en traitement
+ * personnel et inversement
+ */
+
 $prescription_line_id = mbGetValueFromPost("prescription_line_id");
 $prescription_id = mbGetValueFromPost("prescription_id");
 $traitement = mbGetValueFromPost("_traitement");

@@ -7,15 +7,6 @@
  *  @author Alexis Granger
  */
 
-function viewMsg($msg, $action){
-  global $AppUI, $m, $tab;
-  $action = CAppUI::tr($action);
-  if($msg){
-    $AppUI->setMsg("$action: $msg", UI_MSG_ERROR );
-  }
-  $AppUI->setMsg("$action", UI_MSG_OK );
-}
-
 global $AppUI;
 
 $token_med          = mbGetValueFromPost("token_med");
@@ -53,7 +44,7 @@ foreach($medicaments as $code_cip){
 	$line_medicament->prescription_id = $prescription_id;
 	$line_medicament->praticien_id = $praticien_id;
 	$msg = $line_medicament->store();
-	viewMsg($msg, "msg-CPrescriptionLineMedicament-create");
+	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
   $lines["medicament"][$line_medicament->_id] = $line_medicament;
 }
 
@@ -64,7 +55,7 @@ foreach($elements as $element_id){
 	$line_element->prescription_id = $prescription_id;
 	$line_element->praticien_id = $praticien_id;
 	$msg = $line_element->store();
-	viewMsg($msg, "msg-CPrescriptionLineElement-create");
+	$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;
 }
 
@@ -85,7 +76,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $prise->quantite = $quantite;
 				  $prise->moment_unitaire_id = $moment_unitaire_id;
 				  $msg = $prise->store();
-				  viewMsg($msg, "msg-CPrisePosologie-create");
+				  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 				}
 				// Prise Fois Par
 			  if($quantite && $nb_fois && $unite_fois){
@@ -93,7 +84,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $prise->nb_fois = $nb_fois;
 				  $prise->unite_fois = $unite_fois;
 				  $msg = $prise->store(); 
-			 	  viewMsg($msg, "msg-CPrisePosologie-create");
+			 	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 			  }
 			  // Prise Tous Les
 			  if($quantite && $nb_tous_les && $unite_tous_les){
@@ -101,7 +92,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $prise->nb_tous_les = $nb_tous_les;
 				  $prise->unite_tous_les = $unite_tous_les;
 				  $msg = $prise->store();  	
-			    viewMsg($msg, "msg-CPrisePosologie-create");
+			    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 			  } 
 		  }
 		}
