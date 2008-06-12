@@ -7,7 +7,7 @@
   <input type="hidden" name="_delete_prises" value="0" />
   {{assign var=posologies value=$line->_ref_produit->_ref_posologies}}
   {{if $perm_edit && $perm_poso}}
-  <select name="no_poso" onchange="submitPoso(this.form, '{{$line->_id}}');" style="width: 230px;">
+  <select name="no_poso" onchange="testPharma({{$line->_id}}); submitPoso(this.form, '{{$line->_id}}');" style="width: 230px;">
     <option value="">&mdash; Posologies automatiques</option>
     {{foreach from=$line->_ref_produit->_ref_posologies item=curr_poso}}
     <option value="{{$curr_poso->code_posologie}}"

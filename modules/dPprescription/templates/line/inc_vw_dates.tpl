@@ -4,6 +4,10 @@
 
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
+
+  // Test case à cocher
+  testPharma(curr_line_id); 
+
   // Déclaration des div des dates
   oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
   oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');

@@ -106,7 +106,7 @@ submitPrise = function(oForm, type){
 		  {{mb_field object=$prise_posologie field=unite_fois}}
 	  
       {{if $line->_id}}
-	      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+	      <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
 		  {{/if}}
 		</form>
   </div>
@@ -138,7 +138,7 @@ submitPrise = function(oForm, type){
 
 		  
 	  {{if $line->_id}}
-      <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
     {{/if}}
   </form>
 </div>
@@ -162,7 +162,7 @@ submitPrise = function(oForm, type){
 		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPriseTousLes$type$line_id}})
 		  
       {{if $line->_id}}
-        <button type="button" class="submit notext" onclick="submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+        <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
       {{/if}}
     </form>  
   </div>

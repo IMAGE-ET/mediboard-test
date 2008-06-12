@@ -122,6 +122,22 @@ Main.add( function(){
 	});
   {{/if}}	 
 {{/if}}
+
+
+// Test permettant de pré-selectionner la case à cocher 
+testPharma = function(line_id){
+  // si on est pas en mode pharmacie, on sort de la fonction
+  {{if !$mode_pharma}}return;{{/if}} 
+  var oFormAccordPraticien = document.forms["editLineAccordPraticien-"+line_id];
+  if(oFormAccordPraticien.accord_praticien.value == 0){
+    if(confirm("Modifiez vous cette ligne en accord avec le praticien ?")){
+      oFormAccordPraticien.__accord_praticien.checked = true;
+      $V(oFormAccordPraticien.accord_praticien,"1");
+    }
+  }
+}
+
+
 </script>
 
 
