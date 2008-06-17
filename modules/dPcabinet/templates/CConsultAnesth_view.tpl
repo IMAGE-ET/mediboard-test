@@ -27,7 +27,7 @@
       <i>le {{$object->_ref_plageconsult->date|date_format:"%d %B %Y"}}</i>
       <br />
       <strong>Praticien:</strong>
-      <i>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
+      <i>Dr {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
       {{if $object->_ref_consultation->motif}}
         <br />
         <strong>Motif:</strong>

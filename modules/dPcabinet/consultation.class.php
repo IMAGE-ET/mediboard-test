@@ -501,7 +501,7 @@ class CConsultation extends CCodable {
       $id_fse->loadTargetObject();
       $consOther =& $id_fse->_ref_object;
       $consOther->loadRefsFwd();
-      return sprintf ("FSE déjà associée à la consultation du patient %s par le Dr. %s le %s",
+      return sprintf ("FSE déjà associée à la consultation du patient %s par le Dr %s le %s",
         $consOther->_ref_patient->_view,
         $consOther->_ref_chir->_view,
         mbDateToLocale($consOther->_date));
@@ -775,7 +775,7 @@ class CConsultation extends CCodable {
     $this->loadRefPatient();
     $this->_ref_patient->loadRefConstantesMedicales();
     $this->loadRefPlageConsult();
-    $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr. ".$this->_ref_plageconsult->_ref_chir->_view;
+    $this->_view = "Consult. de ".$this->_ref_patient->_view." par le Dr ".$this->_ref_plageconsult->_ref_chir->_view;
     $this->_view .= " (".mbTransformTime(null, $this->_ref_plageconsult->date, "%d/%m/%Y").")";
     $this->loadExtCodesCCAM();
   }

@@ -63,7 +63,7 @@ if ($sejour_id) {
   }
   // Ancienne methode
   /*if (!array_key_exists($sejour->praticien_id, $listPraticiens)) {
-    $AppUI->setMsg("Vous n'avez pas accés aux séjours du Dr. {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
+    $AppUI->setMsg("Vous n'avez pas accés aux séjours du Dr {$sejour->_ref_praticien->_view}", UI_MSG_WARNING);
     $AppUI->redirect("m=$m&tab=$tab&sejour_id=0");
   }*/
 

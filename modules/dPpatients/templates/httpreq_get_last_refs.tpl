@@ -13,7 +13,7 @@
       <br />
       <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" />
       Intervention le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
-      avec le Dr. {{$curr_op->_ref_chir->_view}}
+      avec le Dr {{$curr_op->_ref_chir->_view}}
       {{if $curr_op->_ext_codes_ccam|@count || $curr_op->libelle}}
       <ul>
         {{if $curr_op->libelle}}
@@ -39,7 +39,7 @@
   <tr>
     <td class="text">
       Consultation le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
-      avec le Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+      avec le Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
     </td>
   </tr>
   {{foreachelse}}

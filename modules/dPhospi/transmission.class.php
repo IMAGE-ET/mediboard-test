@@ -10,7 +10,7 @@
 /**
  * 
  * Classe CTransmissionMedicale. 
- * @abstract Permet d'ajouter des transcriptions médicales à un séjour
+ * @abstract Permet d'ajouter des transmissions médicales à un séjour
  */
 
 class CTransmissionMedicale extends CMbObject {

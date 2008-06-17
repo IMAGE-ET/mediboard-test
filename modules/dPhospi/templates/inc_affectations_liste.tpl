@@ -47,7 +47,7 @@
         <td class="date" colspan="2"><em>Age</em> : {{$curr_sejour->_ref_patient->_age}} ans ({{$curr_sejour->_ref_patient->_naissance}})
       </tr>
       <tr>
-        <td class="date" colspan="2"><em>Dr. {{$curr_sejour->_ref_praticien->_view}}</em></td>
+        <td class="date" colspan="2"><em>Dr {{$curr_sejour->_ref_praticien->_view}}</em></td>
       </tr>
       {{if $curr_sejour->prestation_id}}
       <tr>

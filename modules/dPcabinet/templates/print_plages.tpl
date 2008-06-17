@@ -14,7 +14,7 @@
   {{foreach from=$listPlage item=curr_plage}}
   <tr class="clear">
     <td colspan="6">
-      <b>{{$curr_plage->date|date_format:"%d/%m/%Y"}} - Dr. {{$curr_plage->_ref_chir->_view}}</b>
+      <b>{{$curr_plage->date|date_format:"%d/%m/%Y"}} - Dr {{$curr_plage->_ref_chir->_view}}</b>
     </td>
   </tr>
   <tr>
@@ -70,7 +70,7 @@
 
         {{if $curr_consult->motif}}<br />{{/if}}
         Intervention le {{$curr_consult->_ref_consult_anesth->_date_op|date_format:"%d/%m/%Y"}}
-        - Dr. {{$curr_op->_ref_plageop->_ref_chir->_view}}<br />
+        - Dr {{$curr_op->_ref_plageop->_ref_chir->_view}}<br />
         {{if $curr_op->libelle}}
           <em>[{{$curr_op->libelle}}]</em>
           <br />

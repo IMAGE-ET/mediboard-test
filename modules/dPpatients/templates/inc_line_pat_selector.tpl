@@ -58,7 +58,7 @@
 <tr>
   <td colspan="3" class="text">
     Consult. aujourd'hui à {{mb_value object=$_consult field=heure}}
-    avec le Dr. {{$_consult->_ref_plageconsult->_ref_chir->_view}}
+    avec le Dr {{$_consult->_ref_plageconsult->_ref_chir->_view}}
   </td>
 </tr>
 {{/foreach}}
@@ -68,7 +68,7 @@
 <tr>
   <td colspan="3" class="text">
     Admission aujourd'hui à {{mb_value object=$_sejour field=entree_prevue format="%Hh%M"}}
-    pour le Dr. {{$_sejour->_ref_praticien->_view}}
+    pour le Dr {{$_sejour->_ref_praticien->_view}}
   </td>
 </tr>
 {{/foreach}}

@@ -36,7 +36,7 @@ newExam = function(sAction, consultation_id) {
     </td>
     <td>
       <strong>Praticien :</strong>
-      <i>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
+      <i>Dr {{$object->_ref_plageconsult->_ref_chir->_view}}</i>
     </td>
   </tr>
   <tr>

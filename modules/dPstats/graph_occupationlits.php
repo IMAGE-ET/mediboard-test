@@ -86,7 +86,7 @@ $graph->SetMarginColor("lightblue");
 $title = "Occupation moyenne des lits par mois (en heures par jour)";
 $subtitle = "";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
+  $subtitle .= "- Dr $pratSel->_view ";
 }
 if($service_id) {
   $subtitle .= "- $serviceSel->nom ";

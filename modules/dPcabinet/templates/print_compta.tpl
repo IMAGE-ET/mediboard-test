@@ -16,12 +16,12 @@
         </tr>
         {{if $chirSel->user_id}}
         <tr>
-          <th>Dr. {{$chirSel->_view}}</th>
+          <th>Dr {{$chirSel->_view}}</th>
         </tr>
         {{else}}
         {{foreach from=$listPrat item=curr_prat}}
         <tr>
-          <th>Dr. {{$curr_prat->_view}}</th>
+          <th>Dr {{$curr_prat->_view}}</th>
         </tr>
         {{/foreach}}
         {{/if}}
@@ -141,7 +141,7 @@
         </tr>
         {{foreach from=$curr_date.reglements item=curr_reglement}}
         <tr>
-          <td class="text">Dr. {{$curr_reglement->_ref_consultation->_ref_chir->_view}}</td>
+          <td class="text">Dr {{$curr_reglement->_ref_consultation->_ref_chir->_view}}</td>
           <td class="text">{{$curr_reglement->_ref_consultation->_ref_patient->_view}}</td>
           <td>{{$curr_reglement->mode}}</td>
           <td class="text">{{$curr_reglement->_ref_consultation->tarif}}</td>

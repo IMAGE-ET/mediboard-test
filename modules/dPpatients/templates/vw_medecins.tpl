@@ -152,7 +152,7 @@ function pageMain() {
 	         <a style="float:right;" href="#" onclick="view_log('CMedecin',{{$medecin->medecin_id}})">
                <img src="images/icons/history.gif" alt="historique" />
               </a>
-              Modification du Dr. {{$medecin->_view}}
+              Modification du Dr {{$medecin->_view}}
             {{else}}
               Création d'une fiche
             {{/if}}

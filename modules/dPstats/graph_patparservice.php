@@ -102,7 +102,7 @@ $taille = array(480,300);
 $title = "Nombre de patients par service";
 $subtitle = "- $total passages -";
 if($prat_id) {
-  $subtitle .= " Dr. $pratSel->_view -";
+  $subtitle .= " Dr $pratSel->_view -";
 }
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";

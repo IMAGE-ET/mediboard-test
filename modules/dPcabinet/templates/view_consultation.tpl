@@ -13,7 +13,7 @@
   </tr>
   <tr>
     <th>Praticien</th>
-    <td>Dr. {{$prat_id->_view}}</td>
+    <td>Dr {{$prat_id->_view}}</td>
   </tr>
   
   <tr>

@@ -43,7 +43,7 @@ function pageMain() {
 		{{foreach from=$op item=curr_op}}
 		<tr>
 		  <td>{{$curr_op->_datetime|date_format:"%a %d %b %Y"}}</td>
-		  <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+		  <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
 		  <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
 		  <td class="text">
         {{if $curr_op->libelle}}

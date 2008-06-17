@@ -301,7 +301,7 @@ Document.refreshList = function(){
     {{else}}
       {{if $curr_sejour->group_id == $g}}
       <td>
-        Dr. {{$curr_sejour->_ref_praticien->_view}}
+        Dr {{$curr_sejour->_ref_praticien->_view}}
       </td>
       {{else}}
       <td style="background-color:#afa">
@@ -347,7 +347,7 @@ Document.refreshList = function(){
       </td>
       {{else}}
       <td>
-        Dr. {{$curr_op->_ref_chir->_view}}
+        Dr {{$curr_op->_ref_chir->_view}}
       </td>
       {{/if}}
     {{/if}}
@@ -381,7 +381,7 @@ Document.refreshList = function(){
       </a>
     </td>
     <td>
-      Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
     </td>
   </tr>
   {{/foreach}}

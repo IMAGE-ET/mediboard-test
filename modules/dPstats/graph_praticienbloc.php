@@ -100,7 +100,7 @@ foreach($datax as $x) {
 $title = "Heures réservées / occupées par mois";
 $subtitle = "";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
+  $subtitle .= "- Dr $pratSel->_view ";
 }
 if($salle_id) {
   $subtitle .= "- $salleSel->nom ";

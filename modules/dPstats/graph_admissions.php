@@ -80,7 +80,7 @@ $graph->SetMarginColor("lightblue");
 $title = "Interventions par mois";
 $subtitle = "";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
+  $subtitle .= "- Dr $pratSel->_view ";
 }
 if($salle_id) {
   $subtitle .= "- $salleSel->nom ";

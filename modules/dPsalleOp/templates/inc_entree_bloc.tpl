@@ -24,7 +24,7 @@
   <tr>
     <td>{{$curr_op->time_operation|date_format:"%Hh%M"}}</td>
     <td>{{$curr_op->_ref_salle->nom}}</td>
-    <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+    <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
     <td class="button">
       {{if $can->edit || $modif_operation}}

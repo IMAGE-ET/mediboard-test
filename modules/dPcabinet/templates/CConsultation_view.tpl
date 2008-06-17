@@ -26,7 +26,7 @@ function newExam(sAction, consultation_id) {
       </em>
       <br />
       <strong>Praticien:</strong>
-      <em>Dr. {{$object->_ref_plageconsult->_ref_chir->_view}}</em>
+      <em>Dr {{$object->_ref_plageconsult->_ref_chir->_view}}</em>
       {{if $object->motif}}
         <br />
         <strong>Motif:</strong>

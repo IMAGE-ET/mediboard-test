@@ -93,7 +93,7 @@
             <a class="buttonedit" href="?m=dPpmsi&amp;tab=edit_actes&amp;operation_id={{$curr_op->operation_id}}" style="float:right;">
               Modifier les actes
             </a>
-            Actes du Dr. {{$curr_op->_ref_chir->_view}} le {{$curr_op->_datetime|date_format:"%d %B %Y"}}
+            Actes du Dr {{$curr_op->_ref_chir->_view}} le {{$curr_op->_datetime|date_format:"%d %B %Y"}}
           </th>
         </tr>
         {{/foreach}}

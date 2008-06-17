@@ -306,7 +306,7 @@ function setToNow(element) {
           <option value="5" {{if $acte->code_association == 5}}selected="selected"{{/if}}>5 (100%)</option>
         </select>
         
-        Association pour le Dr. {{$acte->_ref_executant->_view}}
+        Association pour le Dr {{$acte->_ref_executant->_view}}
         
         <strong>
         {{if $dPconfig.dPsalleOp.CActeCCAM.tarif}}

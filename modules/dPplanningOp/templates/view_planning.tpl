@@ -31,7 +31,7 @@
   
   <tr>
     <th>Chirurgien </th>
-    <td>Dr. {{$operation->_ref_chir->_view}}</td>
+    <td>Dr {{$operation->_ref_chir->_view}}</td>
   </tr>
   
   <tr>

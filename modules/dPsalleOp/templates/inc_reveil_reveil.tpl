@@ -46,7 +46,7 @@ submitReveil = function(oFormAffectation, oFormOperation){
   {{foreach from=$listReveil key=key item=curr_op}}
   <tr>
     <td>{{$curr_op->_ref_salle->nom}}</td>
-    <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+    <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">
       <div style="float: left; display: inline">
       {{$curr_op->_ref_sejour->_ref_patient->_view}}

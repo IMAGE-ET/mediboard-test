@@ -9,7 +9,7 @@
         <input type="hidden" name="temps_inter_op" value="{{$plage->temps_inter_op}}" />
         <input type="hidden" name="_repeat" value="1" />
         <input type="hidden" name="_type_repeat" value="1" />
-	      Dr. {{$plage->_ref_chir->_view}}
+	      Dr {{$plage->_ref_chir->_view}}
 	      <br />
 	      {{$plage->date|date_format:"%A %d %B %Y"}}
 	      <br />

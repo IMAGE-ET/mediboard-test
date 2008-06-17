@@ -833,7 +833,7 @@ class CSejour extends CCodable {
     $template->addProperty("Hospitalisation - Date sortie"    , mbTransformTime(null, $this->sortie_prevue, $dateFormat));
     
     $this->loadRefPraticien();
-    $template->addProperty("Hospitalisation - Praticien"    , "Dr. ".$this->_ref_praticien->_view);
+    $template->addProperty("Hospitalisation - Praticien"    , "Dr ".$this->_ref_praticien->_view);
     
     // Diagnostics
     $this->loadExtDiagnostics();

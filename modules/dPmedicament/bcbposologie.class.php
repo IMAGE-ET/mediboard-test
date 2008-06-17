@@ -62,11 +62,30 @@ class CBcbPosologie extends CBcbObject {
   
   // Constructeur
   function CBcbPosologie(){
-  
+    $this->distClass = "BCBPosologie";
+    parent::__construct();
   }
  
   // Chargement d'une posologie a partir d'un code CIP
   function load($cip, $numPoso = null){
+    /* Test des fonctions intégrées BCB
+    $this->distObj->chargementDetail($cip, $numPoso);
+    //mbTrace($this->distObj, "chargementDetail(CIP : $cip, NUMPOSO : $numPoso)"); die;
+    $result = $this->distObj->ChargementGetData(1,25);
+    mbTrace($result); die;
+    $args = "";
+    $arrayPoso = array_values(get_object_vars($this->distObj->gPosoDetail));
+    foreach($arrayPoso as $arg) {
+      $args .=", $arg";
+    }
+    mbTrace($args); die;
+    $result = $this->distObj->DecodageDetail(1, 2, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 6, 0, 40, 2004, 0, 0, 1, 3419544, 1, "P", "Boire immédiatement après dissolution complète dans un grand verre d'eau, de préférence au cours des repas.
+*1 comprimé effervescent (200 mg), à renouveler si besoin au bout de 6 heures. En cas de douleurs ou de fièvre plus intense, 2 comprimés effervescents à 200 mg, à renouveler si besoin au bout de 6 heures. Dans tous les cas ne pas dépasser 6 comprimés effervescents par jour (1200 mg par jour).
+- Les prises systématiques permettent d'éviter les oscillations de fièvre ou de douleur. Elles doivent être espacées d'au moins 6 heures.
+- Boire immédiatement après dissolution complète du comprimé effervescent dans un grand verre d'eau, de préférence au cours des repas.
+- Au cours des traitements prolongés, contrôler la formule sanguin, les fonctions hépatiques et rénales.");
+    mbTrace($result); die;
+    */
     // Chargement des posologies du produit
     $ds = CSQLDataSource::get("bcb");
     if($numPoso){
@@ -121,7 +140,7 @@ class CBcbPosologie extends CBcbObject {
      
 		  $this->code_terrain = $posologie["CODE_TERRAIN"];
 		  $this->getValeur($this->code_terrain, "_code_terrain", "TERRAIN,AGE1,AGE2,CAGE1,CAGE2,POIDS1,POIDS2", "CODE_TERRAIN", "POSO_PRODUITS_TERRAIN");
-      
+		  
 		  $this->code_age1 = $this->_code_terrain["CAGE1"].$this->_code_terrain["AGE1"];
 		  $this->getValeur($this->code_age1, "_code_age1", "POIDS_G,POIDS_F,TAILLE_G,TAILLE_F,SURFACE_G,SURFACE_F", "CODE_AGE", "POSO_TABLEAU");
       
@@ -177,7 +196,8 @@ class CBcbPosologie extends CBcbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->quantite1;
+    $this->_view = "";
+    $this->_view .= $this->quantite1;
     if($this->quantite2) {
       $this->_view .= " à $this->quantite2";
     }
@@ -212,6 +232,10 @@ class CBcbPosologie extends CBcbObject {
       }
       $this->_view .= " $this->_code_duree2";
     }
+  }
+  
+  static function checkTerrain($patient) {
+    
   }
 
 }

@@ -45,7 +45,7 @@
       {{if $plage->_id}}
       <tr>
         <th colspan="3">
-          Dr. {{$plage->_ref_chir->_view}}
+          Dr {{$plage->_ref_chir->_view}}
           <br />
           Plage du {{$plage->date|date_format:"%A %d %B %Y"}}
         </th>

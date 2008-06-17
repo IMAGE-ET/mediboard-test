@@ -45,7 +45,7 @@ function pageMain() {
         </tr>
         {{foreach from=$list item=curr_prat}}
         <tr id="plages{{$curr_prat.prat_id}}-trigger">
-          <td>Dr. {{$curr_prat.praticien->_view}}</td>
+          <td>Dr {{$curr_prat.praticien->_view}}</td>
           <td>{{$curr_prat.total}} plage(s)</td>
           <td>{{$curr_prat.somme}} €</td>
         </tr>

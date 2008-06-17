@@ -16,12 +16,12 @@
         </tr>
         {{if $chirSel->user_id}}
         <tr>
-          <th>Dr. {{$chirSel->_view}}</th>
+          <th>Dr {{$chirSel->_view}}</th>
         </tr>
         {{else}}
         {{foreach from=$listPrat item=curr_prat}}
         <tr>
-          <th>Dr. {{$curr_prat->_view}}</th>
+          <th>Dr {{$curr_prat->_view}}</th>
         </tr>
         {{/foreach}}
         {{/if}}
@@ -169,7 +169,7 @@
       <strong>
         {{$curr_plage.plage->date|date_format:"%A %d %B %Y"}}
         de {{$curr_plage.plage->debut|date_format:"%Hh%M"}} à {{$curr_plage.plage->fin|date_format:"%Hh%M"}}
-        - Dr. {{$curr_plage.plage->_ref_chir->_view}}
+        - Dr {{$curr_plage.plage->_ref_chir->_view}}
       </strong>
     </td>
   </tr>
@@ -188,7 +188,7 @@
         </tr>
         {{foreach from=$curr_plage.consultations item=curr_consultation}}
         <tr>
-          <td class="text"><a name="consult-{{$curr_consultation->_id}}">Dr. {{$curr_consultation->_ref_chir->_view}}</a></td>
+          <td class="text"><a name="consult-{{$curr_consultation->_id}}">Dr {{$curr_consultation->_ref_chir->_view}}</a></td>
           <td class="text">{{$curr_consultation->_ref_patient->_view}}</td>
           <td class="text">{{$curr_consultation->tarif}}</td>
           <td>{{$curr_consultation->secteur1}} &euro;</td>

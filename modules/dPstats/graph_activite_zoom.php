@@ -98,7 +98,7 @@ foreach($salles as $salle) {
 $title = "Nombre d'interventions par salle - ".mbTransformTime(null, $startx, "%m/%Y");;
 $subtitle = "- $total opérations -";
 if($prat_id) {
-  $subtitle .= " Dr. $pratSel->_view -";
+  $subtitle .= " Dr $pratSel->_view -";
 }
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";

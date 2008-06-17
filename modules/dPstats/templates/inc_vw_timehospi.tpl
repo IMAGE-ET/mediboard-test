@@ -12,7 +12,7 @@
         </tr>
         {{foreach from=$listTemps item=curr_temps}}
         <tr>
-          <td>Dr. {{$curr_temps->_ref_praticien->_view}}</td>
+          <td>Dr {{$curr_temps->_ref_praticien->_view}}</td>
           <td>{{tr}}CSejour.type.{{$curr_temps->type}}{{/tr}}</td>
           <td>{{$curr_temps->ccam}}</td>
           <td>{{$curr_temps->nb_sejour}}</td>

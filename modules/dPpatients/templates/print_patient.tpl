@@ -39,7 +39,7 @@
   <tr><th class="category" colspan="2">Séjours précédent</th></tr>
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
-    <th>Dr. {{$curr_sejour->_ref_praticien->_view}}</th>
+    <th>Dr {{$curr_sejour->_ref_praticien->_view}}</th>
     <td>
       Du {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y"}}
       au {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y"}}
@@ -62,7 +62,7 @@
   <tr><th class="category" colspan="2">Consultations</th></tr>
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
-    <th>Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</th>
+    <th>Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}</th>
     <td>le {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}</td>
   </tr>
   {{/foreach}}

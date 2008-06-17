@@ -66,7 +66,7 @@ function choosePreselection(oSelect) {
           {{/if}}
           Code Adeli du praticien responsable du séjour : 
           '{{$mbSejour->_ref_praticien->adeli}}' 
-          (Dr. {{$mbSejour->_ref_praticien->_view}})
+          (Dr {{$mbSejour->_ref_praticien->_view}})
           </div>
         </li>
         {{if $typeObject =="op"}}
@@ -78,7 +78,7 @@ function choosePreselection(oSelect) {
           {{/if}}
           Code Adeli du chirurgien responsable de l'intervention : 
           '{{$mbObject->_ref_chir->adeli}}'
-          (Dr. {{$mbObject->_ref_chir->_view}})
+          (Dr {{$mbObject->_ref_chir->_view}})
           </div>
         </li>
         <li>

@@ -60,7 +60,7 @@ function pageMain() {
                   {{$curr_plage->debut|date_format:"%H"}}h - {{$curr_plage->fin|date_format:"%H"}}h
                   {{if $curr_plage->prat_id}}
                     <br />
-                    Dr. {{$curr_plage->_ref_prat->_view}}
+                    Dr {{$curr_plage->_ref_prat->_view}}
                   {{/if}}
                   {{if $curr_plage->prat_id == $app->user_id}}
                   </font>
@@ -204,7 +204,7 @@ function pageMain() {
           <td class="text">Plage réglée</td>
         </tr>
         <tr>
-          <th style="font-weight: bold; color: #060;">Dr. {{$prat->_view}}</th>
+          <th style="font-weight: bold; color: #060;">Dr {{$prat->_view}}</th>
           <td class="text">Plage vous appartenant</td>
         </tr>
       </table>

@@ -113,7 +113,7 @@ submitProtocole = function(){
       </form>
         
       {{else}}
-        Prescription du Dr. {{$prescription->_ref_praticien->_view}}<br />
+        Prescription du Dr {{$prescription->_ref_praticien->_view}}<br />
         {{$prescription->_ref_object->_view}}
         {{if $prescription->_ref_patient->_age}}
            ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})

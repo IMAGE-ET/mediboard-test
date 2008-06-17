@@ -14,8 +14,8 @@ Main.add (function () {
     <th class="title" colspan="2">
       {{$selOp->_ref_sejour->_ref_patient->_view}} 
       &mdash; {{$selOp->_datetime|date_format:"%A %d %B %Y"}}
-      <br /> Chirurgien : Dr. {{$selOp->_ref_chir->_view}}
-      <br /> Anesthésiste probable : Dr. {{$selOp->_ref_anesth->_view}} 
+      <br /> Chirurgien : Dr {{$selOp->_ref_chir->_view}}
+      <br /> Anesthésiste probable : Dr {{$selOp->_ref_anesth->_view}} 
     </th>
   </tr>
 

@@ -27,7 +27,7 @@ function pageMain() {
         {{foreach from=$urgences item=curr_op}}
         <tr>
           <td>{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
-          <td>Dr. {{$curr_op->_ref_chir->_view}}</td>
+          <td>Dr {{$curr_op->_ref_chir->_view}}</td>
           <td class="text">
             <a href="?m=dPplanningOp&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->operation_id}}">
             {{$curr_op->_datetime|date_format:"%Hh%M"}}

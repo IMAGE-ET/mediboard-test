@@ -42,7 +42,7 @@ function pageMain() {
   </tr>
   {{foreach from=$currService item=currOp}}
   <tr>
-    <td>Dr. {{$currOp->_ref_chir->_view}}</td>
+    <td>Dr {{$currOp->_ref_chir->_view}}</td>
     <td>{{$currOp->_ref_sejour->_ref_patient->_view}}</td>
     <td>
       {{if !$currOp->entree_bloc && !$currOp->entree_salle}}       En attente d'entrée au bloc

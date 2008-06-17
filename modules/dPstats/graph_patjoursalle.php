@@ -74,7 +74,7 @@ foreach($datax as $x) {
 $title = "Patients / jour / salle";
 $subtitle = "";
 if($prat_id) {
-  $subtitle .= "- Dr. $pratSel->_view ";
+  $subtitle .= "- Dr $pratSel->_view ";
 }
 if($salle_id) {
   $subtitle .= "- $salleSel->nom ";

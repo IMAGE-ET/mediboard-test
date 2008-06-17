@@ -15,7 +15,7 @@ printDossierSoin = function(prescription_id, date){
 
 <table class="tbl">
   <tr>
-    <th class="title">{{$sejour->_view}} (Dr. {{$sejour->_ref_praticien->_view}})</th>
+    <th class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
 </table>
 

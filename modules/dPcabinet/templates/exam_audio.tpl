@@ -21,7 +21,7 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
   <th class="title" colspan="2">
     Consultation de <span style="color:#f00;">{{$exam_audio->_ref_consult->_ref_patient->_view}}</span>
     le {{$exam_audio->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
-    par le Dr. {{$exam_audio->_ref_consult->_ref_chir->_view}}
+    par le Dr {{$exam_audio->_ref_consult->_ref_chir->_view}}
   </th>
 </tr>
   

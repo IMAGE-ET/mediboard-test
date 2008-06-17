@@ -7,7 +7,7 @@
 
   <tr>
     <th>Praticien : </th>
-    <td>Dr. {{$admission->_ref_praticien->_view}}</td>
+    <td>Dr {{$admission->_ref_praticien->_view}}</td>
   </tr>
   
   {{assign var=patient value=$admission->_ref_patient}}
@@ -153,7 +153,7 @@
 
   <tr>
     <th>Chirurgien :</th>
-    <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+    <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
   </tr>
 
   <tr>

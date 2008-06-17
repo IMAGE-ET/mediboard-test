@@ -505,7 +505,7 @@ class COperation extends CCodable {
     $this->loadExtCodesCCAM();
     $this->loadRefSejour();
     $this->_ref_sejour->loadRefsFwd();
-    $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr. {$this->_ref_chir->_view}";
+    $this->_view = "Intervention de {$this->_ref_sejour->_ref_patient->_view} par le Dr {$this->_ref_chir->_view}";
   }
   
   function loadRefsBack() {
@@ -564,7 +564,7 @@ class COperation extends CCodable {
     $dateFormat = "%d / %m / %Y";
     $timeFormat = "%Hh%M";
     $this->loadRefPraticien();
-    $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr. ".$this->_ref_praticien->_view) : '');
+    $template->addProperty("Opération - Chirurgien"           , $this->_ref_praticien->_id ? ("Dr ".$this->_ref_praticien->_view) : '');
     $template->addProperty("Opération - Anesthésiste - nom"   , @$this->_ref_anesth->_user_last_name);
     $template->addProperty("Opération - Anesthésiste - prénom", @$this->_ref_anesth->_user_first_name);
     $template->addProperty("Opération - Anesthésie"           , $this->_lu_type_anesth);

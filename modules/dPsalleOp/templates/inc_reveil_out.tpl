@@ -17,7 +17,7 @@
   {{foreach from=$listOut key=key item=curr_op}}
   <tr>
     <td>{{$curr_op->_ref_salle->nom}}</td>
-    <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+    <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
     <td class="text">
       {{assign var="affectation" value=$curr_op->_ref_sejour->_ref_first_affectation}}

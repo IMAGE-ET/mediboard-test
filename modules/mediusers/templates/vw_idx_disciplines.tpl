@@ -74,7 +74,7 @@
          </tr>
          {{foreach from=$specialite->_ref_users item=curr_user}}
          <tr>
-           <td class="text"><a href="?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr. {{$curr_user->_view}}</a></td>
+           <td class="text"><a href="?m=mediusers&amp;tab=vw_idx_mediusers&amp;user_id={{$curr_user->user_id}}" title="Modifier cet utilisateur">Dr {{$curr_user->_view}}</a></td>
          </tr>
          {{foreachelse}}
          <tr>

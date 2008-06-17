@@ -26,7 +26,7 @@ var scoreOper   = {{$exam_possum->_score_oper}};
     <th class="title" colspan="6">
       Consultation de <span style="color:#f00;">{{$exam_possum->_ref_consult->_ref_patient->_view}}</span>
       le {{$exam_possum->_ref_consult->_date|date_format:"%A %d/%m/%Y"}}
-      par le Dr. {{$exam_possum->_ref_consult->_ref_chir->_view}}
+      par le Dr {{$exam_possum->_ref_consult->_ref_chir->_view}}
     </th>
   </tr>
 

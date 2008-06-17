@@ -149,7 +149,7 @@ function pageMain() {
       {{tr}}msg-COperation-title-{{$message}}{{if $modurgence}}-urgence{{/if}}{{/tr}} 
       {{$patient->_view}} 
       {{if $chir->_id}}
-      par le Dr. {{$chir->_view}}
+      par le Dr {{$chir->_view}}
       {{/if}}
     </th>
   </tr>

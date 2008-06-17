@@ -24,7 +24,7 @@ function printAdmission(id) {
   <tr>
     <td>
       <strong>
-        Dr. {{$praticien->_view}} : {{$curr_prat.sejours|@count}} admission(s)
+        Dr {{$praticien->_view}} : {{$curr_prat.sejours|@count}} admission(s)
       </strong>
     </td>
   </tr>

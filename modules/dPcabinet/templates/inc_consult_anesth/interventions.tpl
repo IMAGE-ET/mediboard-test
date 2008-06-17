@@ -28,7 +28,7 @@
     {{if $consult_anesth->sejour_id!=$curr_sejour->_id && $consult_anesth->sejour_id}}disabled="disabled"{{/if}}>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       <option value="{{$curr_op->operation_id}}"{{if $consult_anesth->operation_id==$curr_op->_id}} selected="selected"{{/if}}>
-        Le {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}} &mdash; Dr. {{$curr_op->_ref_chir->_view}}
+        Le {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}} &mdash; Dr {{$curr_op->_ref_chir->_view}}
       </option>
       {{/foreach}}
     </optgroup>
@@ -51,7 +51,7 @@
 	<span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$operation->_class_name}}', object_id: '{{$operation->_id}}', view_tarif: true } })">
 	  <strong>Intervention :</strong>
 	  le <strong>{{$operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-	  par le <strong>Dr. {{$operation->_ref_chir->_view}}</strong>
+	  par le <strong>Dr {{$operation->_ref_chir->_view}}</strong>
     {{if $operation->libelle}}
     <em>[{{$operation->libelle}}]</em>
     {{/if}}

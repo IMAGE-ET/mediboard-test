@@ -1,5 +1,5 @@
 <table class="form" id="admission">
-  <tr><th colspan="2">Dr. {{$admission->_ref_chir->_view}}</th></tr>
+  <tr><th colspan="2">Dr {{$admission->_ref_chir->_view}}</th></tr>
   <tr><th colspan="2">Centre Médico Chirurgical de l'Atlantique</th></tr>
   <tr><th colspan="2">26 rue Moulin des justices</th></tr>
   <tr><th colspan="2">17138 &mdash; Puilboreau</th></tr>

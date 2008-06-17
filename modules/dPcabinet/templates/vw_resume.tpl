@@ -73,7 +73,7 @@ function newExam(sAction, consultation_id) {
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
     <td class="text" valign="top">
-      Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
+      Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}
       &mdash; {{$curr_consult->_ref_plageconsult->date|date_format:"%d/%m/%Y"}}
         {{if $curr_consult->motif}}
 	      <br />
@@ -151,7 +151,7 @@ function newExam(sAction, consultation_id) {
       <ul>
         {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
         <li>
-          Dr. {{$curr_op->_ref_chir->_view}}
+          Dr {{$curr_op->_ref_chir->_view}}
           &mdash; {{$curr_op->_ref_plageop->date|date_format:"%d/%m/%Y"}}
           {{if $curr_op->libelle}}
           <br/>

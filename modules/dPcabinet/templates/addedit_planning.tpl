@@ -143,7 +143,7 @@ function pageMain() {
         <a style="float:right;" href="#" onclick="view_log('CConsultation',{{$consult->consultation_id}})">
           <img src="images/icons/history.gif" alt="historique" />
         </a>
-        Modification de la consultation de {{$pat->_view}} pour le Dr. {{$chir->_view}}
+        Modification de la consultation de {{$pat->_view}} pour le Dr {{$chir->_view}}
       </th>
     {{else}}
       <th class="title" colspan="5">Création d'une consultation</th>

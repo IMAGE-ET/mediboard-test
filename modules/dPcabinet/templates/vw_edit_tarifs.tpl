@@ -249,7 +249,7 @@ function pageMain() {
             Tarif de cabinet
             {{else}}
             <input type="hidden" name="_type" value="chir" />
-            Tarif du Dr. {{$tarifMediuser->_view}}
+            Tarif du Dr {{$tarifMediuser->_view}}
             {{/if}}
           </td>
         </tr>

@@ -33,7 +33,7 @@ var viewCCAM = function(codeacte) {
       <table class="main">
         <tr>
           <td>
-            Dr. {{$praticien->_view}}
+            Dr {{$praticien->_view}}
           </td>
         </tr>
         <tr>

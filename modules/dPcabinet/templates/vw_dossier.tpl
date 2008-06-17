@@ -79,7 +79,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               id: {{$curr_consult->consultation_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_consult->_view|smarty:nodefaults|JSAttribute}}'} )">
             <strong>
-            Dr. {{$curr_consult->_ref_plageconsult->_ref_chir->_view}} &mdash;
+            Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}} &mdash;
             {{$curr_consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}} &mdash;
             {{$curr_consult->_etat}}
             </strong>
@@ -140,7 +140,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
               id: {{$curr_op->operation_id|smarty:nodefaults|JSAttribute}}, 
               view:'{{$curr_op->_view|smarty:nodefaults|JSAttribute}}'} )">
             <strong>
-            Dr. {{$curr_op->_ref_chir->_view}} &mdash;
+            Dr {{$curr_op->_ref_chir->_view}} &mdash;
             {{$curr_op->_ref_plageop->date|date_format:"%d %B %Y"}}
             {{if $curr_op->_nb_files_docs}}
               &mdash; {{$curr_op->_nb_files_docs}} Doc.

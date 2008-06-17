@@ -203,7 +203,7 @@ function pageMain() {
         {{foreach from=$patient->_ref_sejours item=_sejour}}
         <tr id="sejour{{$_sejour->sejour_id}}-trigger">
           <td colspan="4" style="background-color:#aaf;">
-          	Dr. {{$_sejour->_ref_praticien->_view}} -
+          	Dr {{$_sejour->_ref_praticien->_view}} -
           	Séjour du {{$_sejour->entree_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           	au {{$_sejour->sortie_prevue|date_format:"%d %b %Y (%Hh%M)"}}
           </td>
@@ -396,7 +396,7 @@ function pageMain() {
         {{foreach from=$_sejour->_ref_operations item=curr_op}}
         <tr>
           <th class="category" colspan="4">
-            Intervention par le Dr. {{$curr_op->_ref_chir->_view}}
+            Intervention par le Dr {{$curr_op->_ref_chir->_view}}
             &mdash; {{$curr_op->_datetime|date_format:"%A %d %B %Y"}}
             &mdash; 
             {{if $curr_op->salle_id}}
@@ -420,7 +420,7 @@ function pageMain() {
         {{if $curr_op->_ref_consult_anesth->consultation_anesth_id}}
         <tr>
           <td class="button" colspan="4">Consultation de pré-anesthésie le {{$curr_op->_ref_consult_anesth->_ref_plageconsult->date|date_format:"%A %d %b %Y"}}
-            avec le Dr. {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
+            avec le Dr {{$curr_op->_ref_consult_anesth->_ref_plageconsult->_ref_chir->_view}}
           </td>
         </tr>
         {{assign var=const_med value=$curr_op->_ref_consult_anesth->_ref_consultation->_ref_patient->_ref_constantes_medicales}}

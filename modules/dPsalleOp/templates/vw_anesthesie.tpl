@@ -61,7 +61,7 @@ function printAllDocs() {
               <br />
               <strong>Intervention :</strong>
               le <strong>{{$consult_anesth->_ref_operation->_datetime|date_format:"%a %d %b %Y"}}</strong>
-              par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
+              par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong> (coté {{tr}}COperation.cote.{{$consult_anesth->_ref_operation->cote}}{{/tr}})<br />
             </td>
             <td class="button">
               <a class="buttonsearch" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult->consultation_id}}">

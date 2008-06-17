@@ -74,8 +74,8 @@ function pageMain() {
           <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
           <td class="text">{{tr}}CSejour.type.{{$curr_op->_ref_sejour->type}}{{/tr}}</td>
           <td class="text">{{if $curr_op->_ref_sejour->_at_midnight}}Oui{{else}}Non{{/if}}</td>
-          <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
-          <td class="text">Dr. {{$curr_op->_ref_anesth->_view}}</td>
+          <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
+          <td class="text">Dr {{$curr_op->_ref_anesth->_view}}</td>
           <td class="text">{{$curr_op->libelle}}</td>
           <td class="text">{{$curr_op->codes_ccam|replace:'|':' '}}</td>
           <td class="text">{{$curr_op->_lu_type_anesth}}</td>

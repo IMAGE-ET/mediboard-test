@@ -77,7 +77,7 @@ class CPrescription extends CMbObject {
   	
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = "Prescription du Dr. ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
+    $this->_view = "Prescription du Dr ".$this->_ref_praticien->_view." : ".$this->_ref_object->_view;
     if($this->libelle){
     	$this->_view .= "($this->libelle)";
     }

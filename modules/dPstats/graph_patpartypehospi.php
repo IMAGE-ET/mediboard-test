@@ -84,7 +84,7 @@ foreach($listHospis as $type=>$vType) {
 $title = "Nombre d'admissions par type d'hospitalisation";
 $subtitle = "- $total patients -";
 if($prat_id) {
-  $subtitle .= " Dr. $pratSel->_view -";
+  $subtitle .= " Dr $pratSel->_view -";
 }
 if($discipline_id) {
   $subtitle .= " $disciplineSel->_view -";

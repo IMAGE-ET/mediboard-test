@@ -32,7 +32,7 @@ function reloadPrescription(prescription_id){
       {{$patient->_view}}
       ({{$patient->_age}} ans
       {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
-      &mdash; Dr. {{$selOp->_ref_chir->_view}}
+      &mdash; Dr {{$selOp->_ref_chir->_view}}
       <br />
       {{if $selOp->libelle}}{{$selOp->libelle}} &mdash;{{/if}}
       {{mb_label object=$selOp field=cote}} : {{mb_value object=$selOp field=cote}}

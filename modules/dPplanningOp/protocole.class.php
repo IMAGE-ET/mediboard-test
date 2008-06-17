@@ -145,7 +145,7 @@ class CProtocole extends CMbObject {
   function loadRefsFwd() {
     $this->loadRefChir();
     $this->loadExtCodesCCAM();
-    $this->_view = "Protocole du Dr. {$this->_ref_chir->_view}";
+    $this->_view = "Protocole du Dr {$this->_ref_chir->_view}";
     if($this->libelle) {
       $this->_view .= " - $this->libelle";
     } else {

@@ -63,7 +63,7 @@
         <tr>
           <th>Chirurgien</th>
           <td class="text">
-            Dr. {{$operation->_ref_chir->_view}}
+            Dr {{$operation->_ref_chir->_view}}
           </td>
         </tr>
         
@@ -71,7 +71,7 @@
           <th>Anesthésiste</th>
           <td class="text">
             {{if $operation->_ref_anesth->user_id}}
-            Dr. {{$operation->_ref_anesth->_view}}
+            Dr {{$operation->_ref_anesth->_view}}
             {{else}}
             &mdash;
             {{/if}}

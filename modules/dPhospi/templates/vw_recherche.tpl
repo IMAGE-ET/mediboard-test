@@ -79,7 +79,7 @@ function pageMain() {
         <tr>
           <th class="title" colspan="8">
             {{if $selPrat}}
-              Dr. {{$listPrat.$selPrat->_view}} -
+              Dr {{$listPrat.$selPrat->_view}} -
             {{/if}}
             {{$date_recherche|date_format:"%A %d %B %Y"}} : {{$listAff|@count}} patient(s)
           </th>

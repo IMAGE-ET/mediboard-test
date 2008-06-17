@@ -18,7 +18,7 @@
           <th>Date </th>
           <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
           <th>Anesthésiste </th>
-          <td>Dr. {{$consult->_ref_chir->_view}}</td>
+          <td>Dr {{$consult->_ref_chir->_view}}</td>
         </tr>
       </table>
     </td>
@@ -45,7 +45,7 @@
             {{/if}}
           
             Intervention le <strong>{{$consult_anesth->_ref_operation->_ref_plageop->date|date_format:"%A %d/%m/%Y"}}</strong>
-            par le <strong>Dr. {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong>
+            par le <strong>Dr {{$consult_anesth->_ref_operation->_ref_chir->_view}}</strong>
             <ul>
               {{if $consult_anesth->_ref_operation->libelle}}
                 <li><em>[{{$consult_anesth->_ref_operation->libelle}}]</em></li>
@@ -352,7 +352,7 @@
           <th>Date </th>
           <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
           <th>Anesthésiste </th>
-          <td>Dr. {{$consult->_ref_chir->_view}}</td>
+          <td>Dr {{$consult->_ref_chir->_view}}</td>
         </tr>
         <tr>
           <th>Patient </th>

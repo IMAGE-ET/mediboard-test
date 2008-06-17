@@ -32,7 +32,7 @@ function pageMain() {
       {{/if}}
     </td>
     <td class="text">
-      Dr. {{$curr_op->_ref_chir->_view}}
+      Dr {{$curr_op->_ref_chir->_view}}
     </td>
 
     <td class="text">
@@ -77,7 +77,7 @@ function pageMain() {
       {{/if}}
     </td>
     <td class="text">
-      Dr. {{$curr_op->_ref_chir->_view}}
+      Dr {{$curr_op->_ref_chir->_view}}
     </td>
 
     <td class="text">

@@ -15,7 +15,7 @@
 	    <td class="left">
 	      {{assign var=function value=$praticien->_ref_function}}
 	      
-	      <strong>Dr. {{$praticien->_view}}</strong>
+	      <strong>Dr {{$praticien->_view}}</strong>
 	      <br />
 	      {{mb_title object=$praticien field=adeli}}
 	      {{mb_value object=$praticien field=adeli}}

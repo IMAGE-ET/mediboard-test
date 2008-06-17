@@ -30,7 +30,7 @@
     <th class="title" colspan="11">
 	    {{$_sejour->_view}}
 	    <strong>[{{$_sejour->_num_dossier}}]</strong>
-	    <br />Dr. {{$_sejour->_ref_praticien->_view}}
+	    <br />Dr {{$_sejour->_ref_praticien->_view}}
     </th>
 
     <td>
@@ -75,7 +75,7 @@
 	    {{if $_operation->libelle}}
 	    <em>[{{$_operation->libelle}}]</em>
 	    {{/if}}
-	    <br />Dr. {{$_operation->_ref_chir->_view}}
+	    <br />Dr {{$_operation->_ref_chir->_view}}
 	    &mdash; [IDINTERV = {{$_operation->_idinterv}}]
     </th>
     <td>

@@ -86,7 +86,7 @@
       {{/if}}
         
     </td>
-    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr. {{$curr_sortie->_ref_praticien->_view}}</td>
+    <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">Dr {{$curr_sortie->_ref_praticien->_view}}</td>
     <td class="text" style="{{if !$curr_sortie->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
       
       {{foreach from=$curr_sortie->_ref_affectations item="affectation"}}

@@ -98,13 +98,13 @@ function editPatient() {
     <td class="text">
       {{$curr_sejour->_view}}
       {{if $curr_sejour->hprim21_medecin_id}}
-        Dr. {{$curr_sejour->_ref_hprim21_medecin->_view}}
+        Dr {{$curr_sejour->_ref_hprim21_medecin->_view}}
       {{/if}}
 	  </td>
     <td class="text">
       {{if $curr_sejour->sejour_id}}
         <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
-        {{$curr_sejour->_ref_sejour->_view}} - Dr. {{$curr_sejour->_ref_sejour->_ref_praticien->_view}}
+        {{$curr_sejour->_ref_sejour->_view}} - Dr {{$curr_sejour->_ref_sejour->_ref_praticien->_view}}
         </a>
       {{else}}
         Pas de séjour associé

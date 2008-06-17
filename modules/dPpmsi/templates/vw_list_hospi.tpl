@@ -33,7 +33,7 @@ function pageMain() {
       {{/if}}
     </td>
     <td class="text">
-      Dr. {{$curr_sejour->_ref_praticien->_view}}
+      Dr {{$curr_sejour->_ref_praticien->_view}}
     </td>
 
     <td class="text">

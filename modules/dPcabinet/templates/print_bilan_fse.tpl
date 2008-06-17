@@ -29,7 +29,7 @@ Consultation = {
           </th>
         </tr>
         {{if $prat->user_id}}
-        <tr><th colspan="2">Dr. {{$prat->_view}}</th></tr>
+        <tr><th colspan="2">Dr {{$prat->_view}}</th></tr>
         {{/if}}
         <tr>
           <td>{{mb_label object=$filter field=S_FSE_ETAT}}</td>

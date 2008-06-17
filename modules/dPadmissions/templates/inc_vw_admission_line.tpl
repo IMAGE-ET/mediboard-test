@@ -23,7 +23,7 @@
 
 <td class="text" style="background: {{$background}}; {{if !$curr_adm->facturable}}background-image:url(images/icons/ray_vertical.gif); background-repeat:repeat;{{/if}}">
   <a href="#" onclick="printAdmission({{$curr_adm->sejour_id}})">
-  Dr. {{$curr_adm->_ref_praticien->_view}}
+  Dr {{$curr_adm->_ref_praticien->_view}}
   </a>
 </td>
 

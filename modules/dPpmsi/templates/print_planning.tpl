@@ -27,13 +27,13 @@ function printAdmission(id) {
   <tr>
     <td class="text">
       {{if $curr_plageop->_id}}
-      <strong>Dr. {{$curr_plageop->_ref_chir->_view}}</strong> -
+      <strong>Dr {{$curr_plageop->_ref_chir->_view}}</strong> -
       <strong>{{$curr_plageop->_ref_salle->nom}}</strong>
       de {{$curr_plageop->debut|date_format:"%Hh%M"}} à {{$curr_plageop->fin|date_format:"%Hh%M"}}
       le {{$curr_plageop->date|date_format:"%d/%m/%Y"}}
     
       {{if $curr_plageop->anesth_id}}
-        - Anesthesiste : <strong>Dr. {{$curr_plageop->_ref_anesth->_view}}</strong>
+        - Anesthesiste : <strong>Dr {{$curr_plageop->_ref_anesth->_view}}</strong>
       {{/if}}
       
       {{else}}
@@ -88,7 +88,7 @@ function printAdmission(id) {
           {{if !$curr_plageop->_id}}
           <!-- Cas des urgences -->
           <td>{{$curr_op->date|date_format:"%d/%m/%Y"}}</td>
-          <td class="text">Dr. {{$curr_op->_ref_chir->_view}}</td>
+          <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
           {{/if}}
           <!-- Patient -->
           <td class="text">
@@ -145,7 +145,7 @@ function printAdmission(id) {
             <ul>
             {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
               <li>
-                Dr. {{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}
+                Dr {{$curr_acte->_ref_executant->_view}} : {{$curr_acte->code_acte}}
                 <br />
                 Act. : {{$curr_acte->code_activite}}
                 &mdash; Phase : {{$curr_acte->code_phase}}
