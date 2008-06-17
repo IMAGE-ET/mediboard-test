@@ -206,6 +206,7 @@ class CSejour extends CCodable {
     $specs["_num_dossier"]    = "str";
     $specs["_ccam_libelle"]   = "bool default|1";
     $specs["_duree_prevue"]   = "num";
+    $specs["_duree_reelle"]   = "num";
     $specs["_date_entree_prevue"]  = "date";
     $specs["_date_sortie_prevue"]  = "date";
     return $specs;
@@ -646,6 +647,8 @@ class CSejour extends CCodable {
     foreach ($this->_ref_actes_ccam as &$acte_ccam) {
       $acte_ccam->loadRefsFwd();
     } 
+    
+    $this->loadExtDiagnostics();
     
     // Chargement du RPU dans le cas des urgences
     $this->loadRefRPU();

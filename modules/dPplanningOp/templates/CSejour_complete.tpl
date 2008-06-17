@@ -1,6 +1,6 @@
 {{assign var="sejour" value=$object}}
 
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title" colspan="2">
 
@@ -29,61 +29,74 @@
   {{/if}}
   
   <tr>
+    <td colspan="2" class="text">
+      <strong>{{mb_label object=$object field="DP"}}</strong>
+      {{if $object->DP}}
+        {{$object->_ext_diagnostic_principal->libelle}} ({{$object->DP}})
+      {{else}}
+        -
+      {{/if}}
+    </td>
+  </tr>
+  
+  <tr>
     <td>
-      <strong>{{tr}}CSejour-group_id{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="group_id"}}</strong>
       {{$object->_ref_group->_view}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-praticien_id{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="praticien_id"}}</strong>
       <i>{{$object->_ref_praticien->_view}}</i>
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-_date_entree_prevue{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="_date_entree_prevue"}}</strong>
       {{mb_value object=$sejour field="entree_prevue"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-entree_reelle{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="entree_reelle"}}</strong>
       {{mb_value object=$sejour field="entree_reelle"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-_date_sortie_prevue{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="_date_sortie_prevue"}}</strong>
       {{mb_value object=$sejour field="sortie_prevue"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-sortie_reelle{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="sortie_reelle"}}</strong>
       {{mb_value object=$sejour field="sortie_reelle"}}
     </td>
   </tr>
   <tr>
     <td>
-      <strong>{{tr}}CSejour-_duree_prevue{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="_duree_prevue"}}</strong>
       {{$sejour->_duree_prevue}} jour(s)
     </td>
     <td>
-      <strong>{{tr}}CSejour-_duree_reelle{{/tr}} :</strong>
+      {{if $object->entree_reelle && $object->sortie_reelle}}
+      <strong>{{mb_label object=$object field="_duree_reelle"}}</strong>
       {{$sejour->_duree_reelle}} jour(s)
+      {{/if}}
     </td>
   </tr>
+  {{if $sejour->mode_sortie != null}}
   <tr>
     <td>
-    {{if $sejour->mode_sortie != null}}
-      <strong>{{tr}}CSejour-mode_sortie{{/tr}}:</strong>
+      <strong>{{mb_label object=$object field="mode_sortie"}}</strong>
       <i>{{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
       <br />
-    {{/if}}
     <td>
   </tr>
+  {{/if}}
   
   {{if $object->rques}}
   <tr>
     <td class="text" colspan="2">
-      <strong>{{tr}}CSejour-rques-court{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="rques"}}</strong>
       {{$object->rques|nl2br}}
     </td>
   </tr>
@@ -92,7 +105,7 @@
   {{if $object->convalescence}}
   <tr>
     <td class="text" colspan="2">
-      <strong>{{tr}}CSejour-convalescence{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="convalescence"}}</strong>
       {{$object->convalescence|nl2br}}
     </td>
   </tr>
@@ -106,23 +119,23 @@
   </tr>
   <tr>
     <td>
-      <strong>{{tr}}CRPU-_entree{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="_entree"}}</strong>
       {{mb_value object=$rpu field=_entree}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-_sortie{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="_sortie"}}</strong>
       {{mb_value object=$rpu field=_sortie}}
     </td>
   </tr>
   <tr>
     <td>
-      <strong>{{tr}}CRPU-ccmu{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="ccmu"}}</strong>
       {{if $rpu->ccmu}}
       {{mb_value object=$rpu field=ccmu}}
       {{/if}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-_mode_sortie{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="mode_sortie"}}</strong>
       {{if $rpu->_mode_sortie}}
       {{mb_value object=$rpu field=mode_sortie}}
       {{/if}}
@@ -130,13 +143,13 @@
   </tr>
   <tr>
     <td>
-      <strong>{{tr}}CRPU-provenance{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="provenance"}}</strong>
       {{if $rpu->provenance}}
       {{mb_value object=$rpu field=provenance}}
       {{/if}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-destination{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="destination"}}</strong>
       {{if $rpu->destination}}
       {{mb_value object=$rpu field=destination}}
       {{/if}}
@@ -144,13 +157,13 @@
   </tr>
     <tr>
     <td>
-      <strong>{{tr}}CRPU-transport{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="transport"}}</strong>
       {{if $rpu->transport}}
       {{mb_value object=$rpu field=transport}}
       {{/if}}
     </td>
     <td>
-      <strong>{{tr}}CRPU-orientation{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="orientation"}}</strong>
       {{if $rpu->orientation}}
       {{mb_value object=$rpu field=orientation}}
       {{/if}}
@@ -158,7 +171,7 @@
   </tr>
     <tr>
     <td>
-      <strong>{{tr}}CRPU-pec_transport{{/tr}}:</strong>
+      <strong>{{mb_label object=$rpu field="pec_transport"}}</strong>
       {{if $rpu->pec_transport}}
       {{mb_value object=$rpu field=pec_transport}}
       {{/if}}
@@ -174,63 +187,67 @@
   
   <tr>
     <td>
-      <strong>{{tr}}CSejour-type{{/tr}}</strong>
+      <strong>{{mb_label object=$object field="type"}}</strong>
       {{mb_value object=$sejour field="type"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-modalite-court{{/tr}}</strong>:
+      <strong>{{mb_label object=$object field="ATNC"}}</strong>
+      {{mb_value object=$sejour field="ATNC"}}
+    </td>
+  </tr>
+
+  <tr>
+    <td>
+      <strong>{{mb_label object=$object field="chambre_seule"}}</strong>
+      {{mb_value object=$sejour field="chambre_seule"}}
+    </td>
+    <td>
+      <strong>{{mb_label object=$object field="modalite"}}</strong>
       {{mb_value object=$sejour field="modalite"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-ATNC{{/tr}} :</strong>
-      {{mb_value object=$sejour field="ATNC"}}
+      <strong>{{mb_label object=$object field="repas_sans_sel"}}</strong>
+      {{mb_value object=$sejour field="repas_sans_sel"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-hormone_croissance{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="hormone_croissance"}}</strong>
       {{mb_value object=$sejour field="hormone_croissance"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-chambre_seule{{/tr}} :</strong>
-      {{mb_value object=$sejour field="chambre_seule"}}
+      <strong>{{mb_label object=$object field="repas_diabete"}}</strong>
+      {{mb_value object=$sejour field="repas_diabete"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-lit_accompagnant{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="lit_accompagnant"}}</strong>
       {{mb_value object=$sejour field="lit_accompagnant"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-repas_sans_sel{{/tr}} :</strong>
-      {{mb_value object=$sejour field="repas_sans_sel"}}
+      <strong>{{mb_label object=$object field="repas_sans_residu"}}</strong>
+      {{mb_value object=$sejour field="repas_sans_residu"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-isolement{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="isolement"}}</strong>
       {{mb_value object=$sejour field="isolement"}}
     </td>
   </tr>
 
   <tr>
     <td>
-      <strong>{{tr}}CSejour-repas_diabete{{/tr}} :</strong>
-      {{mb_value object=$sejour field="repas_diabete"}}
+      <strong>{{mb_label object=$object field="repas_sans_porc"}}</strong>
+      {{mb_value object=$sejour field="repas_sans_porc"}}
     </td>
     <td>
-      <strong>{{tr}}CSejour-television{{/tr}} :</strong>
+      <strong>{{mb_label object=$object field="television"}}</strong>
       {{mb_value object=$sejour field="television"}}
-    </td>
-  </tr>
-
-  <tr>
-    <td>
-      <strong>{{tr}}CSejour-repas_sans_residu{{/tr}} :</strong>
-      {{mb_value object=$sejour field="repas_sans_residu"}}
     </td>
   </tr>
   {{/if}}

@@ -28,8 +28,17 @@ Document.refreshList = function(sejour_id){
   url.requestUpdate('documents', { waitingText: null } );
 }
 
+function loadPatient(patient_id) {
+  url_sejour = new Url;
+  url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
+  url_sejour.addParam("object_class","CPatient");
+  url_sejour.addParam("object_id",patient_id);
+  url_sejour.requestUpdate('viewPatient', {
+   onComplete: initPuces
+  } );
+}
+
 function loadSejour(sejour_id) {
-  
   url_sejour = new Url;
   url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
   url_sejour.addParam("object_class","CSejour");
@@ -70,11 +79,12 @@ function reloadAntAllergie(sejour_id){
 }
 
 
-function loadViewSejour(sejour_id, praticien_id, date){
+function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   // Affichage de la prescription
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('', sejour_id);
   }
+  loadPatient(patient_id);
   loadSejour(sejour_id); 
   Document.refreshList(sejour_id);
   if($('Imeds')){
@@ -158,6 +168,13 @@ function refreshConstantesMedicales(sejour_id) {
   }
 }
 
+function printPatient(patient_id) {
+  var url = new Url();
+  url.setModuleAction("dPpatients", "print_patient");
+  url.addParam("patient_id", patient_id);
+  url.popup(700, 550, "Patient");
+}
+
 Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 
@@ -169,7 +186,7 @@ Main.add(function () {
   {{/if}}
 
   {{if $object->_id}}
-  loadViewSejour('{{$object->_id}}', null, '{{$date}}');
+  loadViewSejour('{{$object->_id}}', null, '{{$object->patient_id}}', '{{$date}}');
   {{/if}}
   
   {{if $isImedsInstalled}}
@@ -262,7 +279,7 @@ Main.add(function () {
                   {{assign var=prescription_sejour value=$prescriptions.sejour}}
                   {{assign var=prescription_sortie value=$prescriptions.sortie}}
 
-                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, '{{$date}}');">
+                  <a href="#1" onclick="loadViewSejour({{$curr_affectation->_ref_sejour->_id}}, {{$curr_affectation->_ref_sejour->praticien_id}}, {{$curr_affectation->_ref_sejour->patient_id}}, '{{$date}}');">
                     {{$curr_affectation->_ref_sejour->_ref_patient->_view}}
                   </a>
                   <script language="Javascript" type="text/javascript">
@@ -347,6 +364,7 @@ Main.add(function () {
     
       <!-- Tab titles -->
       <ul id="tab-sejour" class="control_tabs">
+        <li><a href="#viewPatient">Patient</a></li>
         <li><a href="#viewSejourHospi">Séjour</a></li>
         
         <li onclick="refreshConstantesHack(document.form_prescription.sejour_id.value)"><a href="#constantes-medicales">Constantes</a></li>
@@ -375,6 +393,13 @@ Main.add(function () {
       
       
       <!-- Tabs -->
+      <div id="viewPatient" style="display: none;">
+        <div class="big-info">
+          Veuillez selectionner un séjour dans la liste de gauche pour afficher
+          ici toutes les informations sur le patient.
+        </div>
+      </div>
+      
       <div id="viewSejourHospi" style="display: none;">
         <div class="big-info">
           Veuillez selectionner un séjour dans la liste de gauche pour afficher

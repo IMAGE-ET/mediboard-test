@@ -1,4 +1,4 @@
-<table class="form">
+<table class="tbl">
   <tr>
     <th class="title" colspan="2">
     
@@ -7,6 +7,16 @@
       <a style="float:right;" href="#nothing" onclick="view_history_patient({{$object->_id}})">
         <img src="images/icons/history.gif" alt="historique" title="Voir l'historique" />
       </a>
+      
+      <a style="float:right;" href="#nothing" onclick="printPatient({{$object->_id}})">
+        <img src="images/icons/print.png" alt="imprimer" title="Imprimer la fiche patient" />
+      </a>
+      
+      {{if $can->edit}}
+      <a style="float:right;" href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$object->_id}}">
+        <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient" />
+      </a>
+      {{/if}}
       
       <div style="float:left;" class="noteDiv CPatient-{{$object->_id}}">
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
@@ -18,14 +28,6 @@
       <input type="hidden" name="patient_id" value="{{$object->_id}}" />
       {{$object->_view}}
       {{if $object->_IPP}}[{{$object->_IPP}}]{{/if}}
-      <button type="button" class="print" onclick="printPatient({{$object->_id}})">
-        Imprimer
-      </button>
-      {{if $can->edit}}
-      <button type="button" class="modify" onclick="editPatient()">
-        Modifier
-      </button>
-      {{/if}}
       </form>
     </th>
   </tr>
@@ -78,7 +80,16 @@
       <strong>{{mb_label object=$object field="tel2"}}</strong>
       {{mb_value object=$object field="tel2"}}
     </td>
-    
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="nationalite"}}</strong>
+      {{mb_value object=$object field="nationalite"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="profession"}}</strong>
+      {{mb_value object=$object field="profession"}}
+    </td>
   </tr>
   {{if $object->rques}}
   <tr>
@@ -88,6 +99,49 @@
     </td>
   </tr>
   {{/if}}
+  
+  <tr>
+    <th class="title" colspan="2">
+      Personne à prévenir
+    </th>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_nom"}}</strong>
+      {{mb_value object=$object field="prevenir_nom"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_adresse"}}</strong>
+      {{mb_value object=$object field="prevenir_adresse"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_prenom"}}</strong>
+      {{mb_value object=$object field="prevenir_prenom"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_cp"}}</strong>
+      {{mb_value object=$object field="prevenir_cp"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_tel"}}</strong>
+      {{mb_value object=$object field="prevenir_tel"}}
+    </td>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_ville"}}</strong>
+      {{mb_value object=$object field="prevenir_ville"}}
+    </td>
+  </tr>
+  <tr>
+    <td class="text">
+      <strong>{{mb_label object=$object field="prevenir_parente"}}</strong>
+      {{mb_value object=$object field="prevenir_parente"}}
+    </td>
+    <td class="text" />
+  </tr>
   
   <tr>
     <th class="title" colspan="2">
