@@ -362,7 +362,7 @@ function mbTimeRelative($from, $to) {
   $hours = intval($diff / 3600);
   $mins = intval(($diff % 3600) / 60);
   $secs = intval($diff % 60);
-  return "$hours:".str_pad($mins, 2, "0").":".str_pad($secs, 2, "0");
+  return "$hours:".str_pad($mins, 2, "0", STR_PAD_LEFT).":".str_pad($secs, 2, "0", STR_PAD_LEFT);
 }
 
 function mbHoursRelative($from, $to) {

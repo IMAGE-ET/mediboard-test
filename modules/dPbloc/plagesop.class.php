@@ -42,6 +42,7 @@ class CPlageOp extends CMbObject {
   var $_heurefin     = null;
   var $_minutefin    = null;
   var $_min_inter_op = null;
+  var $_duree_prevue = null;
   
   // Object References
   var $_ref_chir       = null;
@@ -244,6 +245,7 @@ class CPlageOp extends CMbObject {
     $this->_heurefin     = substr($this->fin, 0, 2);
     $this->_minutefin    = substr($this->fin, 3, 2);
     $this->_min_inter_op = substr($this->temps_inter_op, 3, 2);
+    $this->_duree_prevue = mbTimeRelative($this->debut, $this->fin);
   }
   
   function updateDBFields() {
