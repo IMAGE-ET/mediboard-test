@@ -78,6 +78,28 @@ function pageMain() {
           <td>{{$curr_plage->_ref_affectations_personnel.op_panseuse|@count}}</td>
         </tr>
         {{/foreach}}
+        <tr>
+          <td colspan="3"></td>
+          <td>
+            <strong>
+              {{$total.days_duree_prevue}}j
+              {{$total.duree_prevue|date_format:"%Hh%M"}}
+            </strong>
+          </td>
+          <td>
+            <strong>
+              {{$total.days_duree_first_to_last}}j
+              {{$total.duree_first_to_last|date_format:"%Hh%M"}}
+            </strong>
+          </td>
+          <td>
+            <strong>
+              {{$total.days_duree_reelle}}j
+              {{$total.duree_reelle|date_format:"%Hh%M"}}
+            </strong>
+          </td>
+          <td colspan="2"></td>
+        </tr>
       </table>
     </td>
   </tr>
