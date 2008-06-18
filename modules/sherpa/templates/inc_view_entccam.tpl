@@ -1,9 +1,9 @@
-<form name="editEntCCCAM" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+{{if $entccam->_id == ''}}
+<div class="big-info">
+  Aucune entête CCAM sélectionnée
+</div>
 
-<input type="hidden" name="dosql" value="do_entccam_aed" />
-<input type="hidden" name="idinterv" value="{{$entccam->_id}}" />
-<input type="hidden" name="del" value="0" />
-
+{{else}}
 <table class="form">
   <tr>
     {{if $entccam->_id != ''}}
@@ -16,7 +16,6 @@
     </th>
     {{/if}}
   </tr>
-  {{if $entccam->_id != ''}}
   
   <tr>
 		<th>{{mb_label object=$entccam field="numdos"}}</th>
@@ -121,14 +120,19 @@
   {{if $can->edit}}
   <tr>
     <td class="button" colspan="2">
+      <form name="editEntCCCAM" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+
+			<input type="hidden" name="dosql" value="do_entccam_aed" />
+			<input type="hidden" name="idinterv" value="{{$entccam->_id}}" />
+			<input type="hidden" name="del" value="0" />
       <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'l\'entête CCAM',objName:'{{$entccam->_view|smarty:nodefaults|JSAttribute}}'})">
         {{tr}}Delete{{/tr}}</button>
+      </form>
     </td>
   </tr>
   {{/if}}     
 </table>
 
-</form>
 
 {{assign var=id400 value=$entccam->_ref_id400}}
 <table class="tbl">
@@ -151,5 +155,4 @@
     {{/if}}
   </tr>
 </table>
-
 {{/if}}

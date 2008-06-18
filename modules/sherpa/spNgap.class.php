@@ -106,10 +106,10 @@ class CSpNGAP extends CSpObject {
     $this->malnum = $idPatient->id400;
     
     // Exécutant
-    $acte->loadRefPraticien();
-    $praticien =& $acte->_ref_praticien;
-    $idPraticien = CSpObjectHandler::getId400For($praticien);
-    $this->pracod = $idPraticien->id400;
+    $acte->loadRefExecutant();
+    $executant =& $acte->_ref_executant;
+    $idExecutant = CSpObjectHandler::getId400For($executant);
+    $this->pracod = $idExecutant->id400;  
     
     // Contenu
     $acte->loadExecution();
