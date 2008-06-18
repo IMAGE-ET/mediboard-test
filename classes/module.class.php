@@ -199,6 +199,10 @@ class CModule extends CMbObject {
   }
   
   function showTabs() {
+    if (!$this->checkActive()) {
+      return;
+    }
+    
     global $uistyle, $AppUI, $tab, $a, $action, $actionType;
 
     // Add configure tab if exist
@@ -241,9 +245,14 @@ class CModule extends CMbObject {
   
     $smartyStyle->assign("fintab", true);
     $smartyStyle->display("tabbox.tpl");
+    
   }
   
   function showAction() {
+    if (!$this->checkActive()) {
+      return;
+    }
+    
     global $u, $a, $action, $actionType;
     $action     = $a;
     $actionType = "a";
@@ -251,6 +260,16 @@ class CModule extends CMbObject {
     $actionPath .= $u ? "$u/" : "";
     $actionPath .= "$a.php";
     require_once $actionPath;
+  }
+  
+  function checkActive() {
+    if (!$this->mod_active) {
+      $smarty = new CSmartyDP("modules/system");
+      $smarty->display("module_inactive.tpl");
+      return false;
+    }
+    
+    return true;
   }
   
   /**
