@@ -17,7 +17,7 @@
          });
       </script>
       <div style="float:left;">
-        {{if $line->_can_vw_historique}}
+        {{if $line->_can_view_historique}}
           <img src="images/icons/history.gif" alt="Ligne possédant un historique" title="Ligne possédant un historique"/>
         {{/if}}
         {{if !$line->_traitement}}

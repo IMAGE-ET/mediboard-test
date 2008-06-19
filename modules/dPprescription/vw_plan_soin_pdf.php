@@ -133,7 +133,7 @@ $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
 // Chargement des lignes de prescriptions
-$prescription->loadRefsLines();
+$prescription->loadRefsLines("1");
 $prescription->loadRefsLinesElement();
 
 // Chargement de la prescription de traitement

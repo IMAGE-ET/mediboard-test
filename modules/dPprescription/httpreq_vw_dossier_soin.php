@@ -43,14 +43,14 @@ $lines_med_trait = array();
 
 if($prescription->_id){
 	// Chargement des lignes
-  $prescription->loadRefsLines();
+  $prescription->loadRefsLines("1");
   $prescription->loadRefsLinesElementByCat();
   $prescription->_ref_object->loadRefPrescriptionTraitement();
   
   $lines_med_trait["medicament"] = $prescription->_ref_prescription_lines;
   $traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
   if($traitement_personnel->_id){
-    $traitement_personnel->loadRefsLines();
+    $traitement_personnel->loadRefsLines("1");
   }
   $lines_med_trait["traitement"] = $traitement_personnel->_ref_prescription_lines;
   

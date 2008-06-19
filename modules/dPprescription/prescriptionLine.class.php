@@ -185,16 +185,9 @@ class CPrescriptionLine extends CMbObject {
   }
   
   function delete(){
-    $old_id = $this->_id;
-    
-    // Suppression de la ligne
-    if($msg = parent::delete()){
-      return $msg;
-    }
-    
     // Chargement de la child_line de l'objet à supprimer
     $line = new $this->_class_name;
-    $line->child_id = $old_id;
+    $line->child_id = $this->_id;
     $line->loadMatchingObject();
     if($line->_id){
       // On vide le child_id
@@ -203,6 +196,13 @@ class CPrescriptionLine extends CMbObject {
         return $msg;
       }
     }
+    
+    // Suppression de la ligne
+    if($msg = parent::delete()){
+      return $msg;
+    }
+    
+ 
   }
   
   function updateFormFields(){
