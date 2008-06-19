@@ -22,9 +22,23 @@ if($line->_class_name == "CPrescriptionLineElement"){
 	$category = $line->_ref_element_prescription->_ref_category_prescription;
 }
 
+// Liste d'heures et de minutes
+$hours = range(0,23);
+foreach($hours as &$hour){
+	$hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
+}
+$mins = range(0,59);
+foreach($mins as &$min){
+	$min = str_pad($min, 2, "0", STR_PAD_LEFT);
+}
+
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("hours", $hours);
+$smarty->assign("mins", $mins);
 $smarty->assign("today", mbDate());
+$smarty->assign("now", mbDateTime());
 $smarty->assign("line" , $line);
 $smarty->assign("object_class", $object_class);
 $smarty->assign("category", $category);

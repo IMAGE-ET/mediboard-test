@@ -6,7 +6,8 @@
  *	@version $Revision: $
  *  @author Romain Ollivier
  */
-
+	    
+	      
 
 global $AppUI, $can, $m;
 
@@ -40,9 +41,15 @@ $alertesProfil        = array();
 $favoris              = array();
 $listProduits         = array();
 $dossier_medical = new CDossierMedical();
-//$perm_create_line     = 0;
-$perm_create_line     = 1;
 
+
+// Liste des praticiens disponibles
+$user = new CMediusers();
+$listPrats = $user->loadPraticiens(PERM_EDIT);
+
+// Chargement de l'utilisateur courant
+$user->load($AppUI->user_id);
+$is_praticien = $user->isPraticien();
 
 // Chargement des categories pour chaque chapitre
 $categoryPresc = new CCategoryPrescription();
@@ -58,7 +65,6 @@ $cats = $categorie->loadList();
 foreach($cats as $key => $cat){
 	$categories["cat".$key] = $cat;
 }
-
 
 // Calcul de la div à rafraichir
 if ($element_id){
@@ -96,7 +102,6 @@ if(!$prescription->_id && $sejour_id){
   }
 }
 
-
 // Si tous les elements sont passés, on charge la prescription (cas de la prescription externe)
 // Permet de ne pas recreer une prescription si elle existe déja... en cas de non rechargement de la widget
 if(!$prescription_id && $object_class && $object_id && $type){
@@ -107,19 +112,40 @@ if(!$prescription_id && $object_class && $object_id && $type){
   $prescription->type = $type;	
   $prescription->loadMatchingObject();
 }
-
-// Chargement des lignes de la prescription
+ 
+// Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
-  $prescription->loadRefsLinesMedComments();
-  $prescription->loadRefsLinesElementsComments();
+  // Calcul des droits de la prescription	
+	$prescription->getAdvancedPerms($is_praticien, $listPrats);
   
-  // Chargement de la prescription de traitement
+	// Chargement des medicaments et commentaires de medicament
+	$prescription->loadRefsLinesMedComments();
+  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
+  	foreach($lines_by_type as $med_id => $_line_med){
+	    $_line_med->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+  	}
+  }
+ 
+  // Chargement des elements et commentaires d'elements
+  $prescription->loadRefsLinesElementsComments();
+  foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
+  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
+  		foreach($lines_by_cat as $type_elt => $lines_by_type){
+  			foreach($lines_by_type as $key => $_line){
+  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+  			}
+  		}
+  	}
+  }
+  
+ 	// Chargement de la prescription de traitement
   $object =& $prescription->_ref_object;
   $object->loadRefPrescriptionTraitement();
   $prescription_traitement =& $object->_ref_prescription_traitement;
 	if($prescription_traitement->_id){
 		$prescription_traitement->loadRefsLines();
 		foreach($prescription_traitement->_ref_prescription_lines as &$line){
+			$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
 		  $line->loadRefsPrises();
 	  	$line->loadRefLogDateArret();
 	  	$line->loadRefPraticien();
@@ -129,9 +155,6 @@ if($prescription->_id){
   // Calcul du nombre d'elements dans la prescription
 	$prescription->countLinesMedsElements($praticien_sortie_id);
 }
-
-
-
 
 if($prescription->object_id && $prescription->_id) {
 	// Chargement des fovoris 
@@ -230,18 +253,8 @@ if($full_mode && $prescription->_id){
   $protocoles_function = $protocole->loadList($where);
 }
 
-
-// Liste des praticiens
-$user = new CMediusers();
-$listPrats = $user->loadPraticiens(PERM_EDIT);
-
-// Chargement du user_courant
-$user->load($AppUI->user_id);
-$is_praticien = $user->isPraticien();
-
 $protocole_line = new CPrescriptionLineMedicament();
 $protocole_line->debut = mbDate();
-
 
 $contexteType = array();
 $contexteType["CConsultation"][] = "externe";
@@ -250,37 +263,27 @@ $contexteType["CSejour"][] = "sortie";
 $contexteType["CSejour"][] = "sejour";
 $contexteType["CSejour"][] = "traitement";
 
-/*
-if($is_praticien){
-	$perm_create_line = 1;
+// Liste d'heures et de minutes pour l'arret des lignes
+$hours = range(0,23);
+foreach($hours as &$hour){
+	$hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
 }
-
-if(!$is_praticien){
-	$time = mbTime();
-	//$time = "20:01:00";
-	
-	$borne_start = CAppUI::conf("dPprescription CPrescription infirmiere_borne_start");
-	$borne_stop = CAppUI::conf("dPprescription CPrescription infirmiere_borne_stop");
-	
-	$borne_start .= ":00:00";
-	$borne_stop .= ":00:00";
-
-	$freeDays = mbBankHolidays();
-  if(array_key_exists(mbDate(),$freeDays) || ($time >= $borne_start) || ($time <= $borne_stop)){
-  	$perm_create_line = 1;
-  }
+$mins = range(0,59);
+foreach($mins as &$min){
+	$min = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
-*/
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("hours", $hours);
+$smarty->assign("mins", $mins);
 $smarty->assign("praticien_sortie_id", $praticien_sortie_id);
-$smarty->assign("perm_create_line"   , $perm_create_line);
 $smarty->assign("contexteType"       , $contexteType);
 $smarty->assign("httpreq"            , 1);
 $smarty->assign("sejour_id"          , $sejour_id);
 $smarty->assign("is_praticien"       , $is_praticien);
 $smarty->assign("today"              , mbDate());
+$smarty->assign("now"                , mbDateTime());
 $smarty->assign("poids"              , $poids);
 $smarty->assign("categories"         , $categories);
 $smarty->assign("executants"         , $executants);
@@ -310,7 +313,6 @@ if($full_mode){
   $smarty->assign("protocoles_praticien", $protocoles_praticien);
   $smarty->assign("protocoles_function", $protocoles_function);
 	$smarty->assign("praticien_sejour", $_sejour->praticien_id);
-	//$smarty->assign("full_mode", 1);
 	$smarty->display("vw_edit_prescription_popup.tpl");
 	return;
 }

@@ -44,6 +44,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   }
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
+  $line->creator_id = $AppUI->user_id;
   $msg = $line->store();
   $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");  
   	
@@ -71,6 +72,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   }
   $line_element->prescription_id = $prescription_id;
   $line_element->praticien_id = $praticien_id;
+  $line_element->creator_id = $AppUI->user_id;
   $msg = $line_element->store();
   $AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");  
   
@@ -89,6 +91,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$line_comment->_id = "";
 	$line_comment->prescription_id = $prescription_id;
 	$line_comment->praticien_id = $praticien_id;
+	$line_comment->creator_id = $AppUI->user_id;
 	$msg = $line_comment->store();
 	$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-create");
 }

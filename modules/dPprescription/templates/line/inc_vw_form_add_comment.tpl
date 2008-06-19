@@ -1,4 +1,4 @@
-{{if $perm_edit}}
+{{if $line->_can_modify_comment}}
 	{{mb_label object=$line field="commentaire"}}: 
 	<form name="addComment{{$line->_class_name}}-{{$line->_id}}" method="post" action="" onsubmit="return onSubmitFormAjax(this);">
 	  <input type="hidden" name="m" value="dPprescription" />

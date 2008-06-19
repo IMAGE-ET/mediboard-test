@@ -2,14 +2,14 @@
 
 // Si ligne de traitement perso finie, on empeche le passage en ligne de prescription normale
 Main.add( function(){
-var oDiv = $('editLineTraitement-{{$line->_id}}');
-if(oDiv){  
-{{if $line->_traitement && $line->date_arret && $line->date_arret <= $today}}
-  oDiv.hide();
-{{else}}
-  oDiv.show();
-{{/if}}
-}
+  var oDiv = $('editLineTraitement-{{$line->_id}}');
+  if(oDiv){  
+    {{if $line->_traitement && $line->date_arret && $line->date_arret <= $today}}
+      oDiv.hide();
+    {{else}}
+      oDiv.show();
+    {{/if}}
+  }
 } );
 
 </script>
@@ -32,21 +32,40 @@ if(oDiv){
   <input type="hidden" name="del" value="0" />
   <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
   {{if $line->date_arret}}
-    <input type="hidden" name="date_arret" value="{{$line->date_arret}}" />
+    <input type="hidden" name="date_arret" value="" />
+    <input type="hidden" name="_heure_arret" value="" />
+    <input type="hidden" name="_min_arret" value="" />
 	  <button type="button"
 	          class="cancel" 
-	          onclick="this.form.date_arret.value = ''; 
-	                   changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}','{{$category_id}}'); 
+	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}','{{$category_id}}'); 
 	                   Prescription.submitFormStop(this.form,'{{$line->_id}}','{{$line->_class_name}}');">
 	    Annuler l'arrêt
 	  </button>
-	  {{mb_value object=$line field=date_arret}}<br />
+	  {{mb_value object=$line field=date_arret}}
+	  {{if $line->time_arret}}
+	    à {{mb_value object=$line field=time_arret}}  
+	  {{/if}}<br />
   {{else}}
     <table>
       <tr>
         <td class="date" style="border:none;">
           {{assign var=line_id value=$line->_id}}
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
+	        à
+	        <select name="_heure_arret">
+	          <option value="">-</option>
+	          {{foreach from=$hours item=_hour}}
+	          <option value="{{$_hour}}" {{if $line->_heure_arret == $_hour}}selected="selected"{{/if}}>{{$_hour}}</option>
+	          {{/foreach}}
+	        </select>
+	        h
+	        <select name="_min_arret">
+	          <option value="">-</option>
+	          {{foreach from=$mins item=_min}}
+	          <option value="{{$_min}}" {{if $line->_min_arret == $_min}}selected="selected"{{/if}}>{{$_min}}</option>
+	          {{/foreach}}
+	        </select>
+	        min
 	        <button type="button" 
 	                class="stop" 
 	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
@@ -65,7 +84,11 @@ calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
   if(!oForm.date_arret.value){
     oForm.date_arret.value = "{{$today}}";
   }
-  changeColor(object_id, object_class, oForm.date_arret.value, traitement, cat_id);
+  if(!oForm._heure_arret.value || !oForm._min_arret.value){
+    oForm._heure_arret.value = "{{$now|date_format:'%H'}}";
+    oForm._min_arret.value = "{{$now|date_format:'%M'}}";
+  }
+  changeColor(object_id, object_class, oForm, traitement, cat_id);
   Prescription.submitFormStop(oForm, object_id, object_class);
 }
 

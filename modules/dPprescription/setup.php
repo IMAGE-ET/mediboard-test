@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.41";
+$config["mod_version"]     = "0.42";
 $config["mod_type"]        = "user";
 
 
@@ -500,7 +500,146 @@ class CSetupdPprescription extends CSetup {
           	ADD INDEX (`object_id`);";
 	  $this->addQuery($sql);  
 
-    $this->mod_version = "0.41";
+	  $this->makeRevision("0.41");
+
+	  $sql = "ALTER TABLE `prescription_line_medicament` 
+ 	          ADD `valide_infirmiere` ENUM ('0','1') DEFAULT '0',
+            ADD `substitution_line_id` INT (11) UNSIGNED;";
+	  $this->addQuery($sql);
+	  
+	  // Pour toute les lignes qui n'ont pas de praticien_id, on stocke celui de la prescription
+    $sql = "UPDATE `prescription_line_medicament`,`prescription`
+            SET `prescription_line_medicament`.`praticien_id` = `prescription`.`praticien_id`
+            WHERE `prescription_line_medicament`.`praticien_id` IS NULL
+            AND `prescription`.`prescription_id` = `prescription_line_medicament`.`prescription_id`
+            AND `prescription`.`object_id` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_element`,`prescription`
+            SET `prescription_line_element`.`praticien_id` = `prescription`.`praticien_id`
+            WHERE `prescription_line_element`.`praticien_id` IS NULL
+            AND `prescription`.`prescription_id` = `prescription_line_element`.`prescription_id`
+            AND `prescription`.`object_id` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_comment`,`prescription`
+            SET `prescription_line_comment`.`praticien_id` = `prescription`.`praticien_id`
+            WHERE `prescription_line_comment`.`praticien_id` IS NULL
+            AND `prescription`.`prescription_id` = `prescription_line_comment`.`prescription_id`
+            AND `prescription`.`object_id` IS NOT NULL;";
+    $this->addQuery($sql);
+    
+    // Ajout du creator_id, par defaut, le creator_id est le praticien_id
+	  $sql = "ALTER TABLE `prescription_line_medicament` 
+           	ADD `creator_id` INT (11) UNSIGNED NOT NULL,
+            ADD INDEX (`creator_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_medicament`
+            SET `creator_id` = `praticien_id`;";
+    $this->addQuery($sql);
+    
+	  $sql = "ALTER TABLE `prescription_line_element` 
+           	ADD `creator_id` INT (11) UNSIGNED NOT NULL,
+            ADD INDEX (`creator_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_element`
+            SET `creator_id` = `praticien_id`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment` 
+           	ADD `creator_id` INT (11) UNSIGNED NOT NULL,
+            ADD INDEX (`creator_id`);";
+    $this->addQuery($sql);
+    
+    $sql = "UPDATE `prescription_line_comment`
+            SET `creator_id` = `praticien_id`;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment` 
+	          ADD `valide_infirmiere` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element` 
+ 	          ADD `valide_infirmiere` ENUM ('0','1') DEFAULT '0';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+            ADD `time_arret` TIME;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element` 
+            ADD `time_arret` TIME;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_comment` 
+            ADD `time_arret` TIME;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prise_posologie` 
+            ADD `unite_prise` TEXT;";
+    $this->addQuery($sql);
+       
+    function updateUnitePrise(){
+
+     $ds_std = CSQLDataSource::get("std");
+     $ds_bcb = CSQLDataSource::get("bcb");
+             
+     // Recuperation de toutes les lignes de posologies ayant unite_prise à NULL et aucun numero de poso indiqué 
+     $sql = "SELECT prise_posologie.prise_posologie_id, prescription_line_medicament.code_cip 
+             FROM prise_posologie, prescription_line_medicament
+             WHERE prise_posologie.object_id = prescription_line_medicament.prescription_line_medicament_id
+						 AND prise_posologie.unite_prise IS NULL	              
+						 AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+             AND prescription_line_medicament.no_poso IS NULL";
+     $res_sans_poso = $ds_std->loadList($sql);
+
+     foreach($res_sans_poso as $_prise){
+     	// Recuperation de l'unite de prise
+     	$sql = "SELECT `LIBELLE_UNITE_DE_PRISE_PLURIEL` 
+                FROM `POSO_UNITES_PRISE`,`POSO_PRODUITS` 
+                WHERE `POSO_PRODUITS`.`CODE_CIP` = '".$_prise["code_cip"]."'
+							  AND `POSO_PRODUITS`.`CODE_UNITE_DE_PRISE` = `POSO_UNITES_PRISE`.`CODE_UNITE_DE_PRISE`
+                LIMIT 1;";	
+       $res = $ds_bcb->loadResult($sql);	
+       
+       // Mise a jour de la prise
+       $sql = "UPDATE `prise_posologie`
+                SET `unite_prise` = '".$res."'
+                WHERE `prise_posologie_id` = '".$_prise["prise_posologie_id"]."';";
+     	$res = $ds_std->exec( $sql );
+     }
+
+     // Recuperation de toutes les lignes de posologies ayant unite_prise à NULL mais un numero de poso indiqué 
+     $sql = "SELECT prise_posologie.prise_posologie_id, prescription_line_medicament.code_cip, prescription_line_medicament.no_poso 
+             FROM prise_posologie, prescription_line_medicament
+             WHERE prise_posologie.object_id = prescription_line_medicament.prescription_line_medicament_id
+             AND prise_posologie.object_class = 'CPrescriptionLineMedicament'
+             AND prise_posologie.unite_prise IS NULL
+             AND prescription_line_medicament.no_poso IS NOT NULL";
+     $res_avec_poso = $ds_std->loadList($sql);
+       
+     foreach($res_avec_poso as $_prise){
+     	// Recuperation de l'unite de prise
+     	$sql = "SELECT `LIBELLE_UNITE_DE_PRISE_PLURIEL` 
+              FROM `POSO_UNITES_PRISE`,`POSO_PRODUITS` 
+              WHERE `POSO_PRODUITS`.`CODE_CIP` = '".$_prise["code_cip"]."'
+              AND `POSO_PRODUITS`.`NO_POSO` = '".$_prise["no_poso"]."'
+							AND `POSO_PRODUITS`.`CODE_UNITE_DE_PRISE` = `POSO_UNITES_PRISE`.`CODE_UNITE_DE_PRISE`;";	
+       $res = $ds_bcb->loadResult($sql);	
+       
+       // Mise a jour de la prise
+       $sql = "UPDATE `prise_posologie`
+                SET `unite_prise` = '".$res."'
+                WHERE `prise_posologie_id` = '".$_prise["prise_posologie_id"]."';";
+     	$res = $ds_std->exec( $sql );
+     }
+     return true;
+    }
+    $this->addFunctions("updateUnitePrise");
+   
+    $this->mod_version = "0.42";
   }  
 }
 

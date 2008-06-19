@@ -45,6 +45,7 @@ viewEasyMode = function(){
   <input type="hidden" name="prescription_id" value="{{$prescription->_id}}"/>
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+  <input type="hidden" name="creator_id" value="{{$app->user_id}}" />  
   <input type="hidden" name="debut" value="{{$today}}" />
   <input type="hidden" name="duree" value="" />
   <input type="hidden" name="unite_duree" value="" />
@@ -71,7 +72,7 @@ viewEasyMode = function(){
 
 <hr class="control_tabs" />
 
-{{if $perm_create_line}}
+{{if $prescription->_can_add_line}}
   {{if !$mode_protocole}}
   <select name="advAction" style="float: right">
     <option value="">&mdash; Actions spécifiques</option>

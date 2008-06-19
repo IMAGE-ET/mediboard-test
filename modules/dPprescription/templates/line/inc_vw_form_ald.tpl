@@ -1,4 +1,4 @@
-{{if $perm_edit}}
+{{if $line->_can_view_form_ald}}
   <form action="?" method="post" name="editLineALD-{{$line->_class_name}}-{{$line->_id}}">
      <input type="hidden" name="m" value="dPprescription" />
      <input type="hidden" name="dosql" value="{{$dosql}}" />

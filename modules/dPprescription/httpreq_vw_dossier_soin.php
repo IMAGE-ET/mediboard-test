@@ -42,11 +42,9 @@ foreach($cats as $key => $cat){
 $lines_med_trait = array();
 
 if($prescription->_id){
-	// Chargement des lignes de medicaments
+	// Chargement des lignes
   $prescription->loadRefsLines();
-  // Chargement des lignes d'elements
   $prescription->loadRefsLinesElementByCat();
-  // Chargement des lignes de traitement
   $prescription->_ref_object->loadRefPrescriptionTraitement();
   
   $lines_med_trait["medicament"] = $prescription->_ref_prescription_lines;
@@ -59,57 +57,33 @@ if($prescription->_id){
   // Parcours des medicaments
   foreach($lines_med_trait as $cat_name => $lines_cat){
   	if($lines_cat|@count){
-		foreach($lines_cat as &$line){
-			$view_line = 0;
-			if($line->date_arret){
-				$line->_fin = mbDate("- 1 DAY", $line->date_arret);
-			}
-			if($line->_fin && $line->_fin < $date){
-				continue;
-			}
-			
-			// Si pas de date de fin, on affiche tout le tps la ligne dans le dossier de soin
-			if(!$line->_fin && $line->debut <= $date){
-				$view_line = 1;
-			}
-
-		  if(($date >= $line->debut && $date <= $line->_fin) || $view_line){
-		  	$line->loadRefsPrises();  	
-		  	foreach($line->_ref_prises as $prise){
-		  	  if($prise->nb_tous_les && $prise->unite_tous_les){
-		  		  if($prise->calculDatesPrise($date)){  	
-		  		  	$prises_med[$line->_id][] = $prise;
-		  		  } else {
-		  		  	// liste des medicaments contenant des prises non prescrites pour la journée courante 
-		  		  	$medsNonPresc[$line->_id] = $line; 
-		  		  }
-		      } else {
-		      	$prises_med[$line->_id][] = $prise;
-		      }
-		  	}
-		  	$lines_med[$line->_id] = $line;
-		  }  
-		}
+			foreach($lines_cat as &$line){
+			  if(($date >= $line->debut && $date <= mbDate($line->_date_arret_fin)) || (!$line->_date_arret_fin && $line->_date_arret_fin <= $date)){
+			  	$line->loadRefsPrises();  	
+			  	foreach($line->_ref_prises as $prise){
+			  	  if($prise->nb_tous_les && $prise->unite_tous_les){
+			  		  if($prise->calculDatesPrise($date)){  	
+			  		  	$prises_med[$line->_id][] = $prise;
+			  		  } else {
+			  		  	// liste des medicaments contenant des prises non prescrites pour la journée courante 
+			  		  	$medsNonPresc[$line->_id] = $line; 
+			  		  }
+			      } else {
+			      	$prises_med[$line->_id][] = $prise;
+			      }
+			  	}
+			  	$lines_med[$line->_id] = $line;
+			  }  
+		  }
   	}
   }
   foreach($prescription->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
   	if($name_chap != "dmi"){
 	  	foreach($elements_chap as $name_cat => $elements_cat){
 	  		foreach($elements_cat as $_elements){
-	  			foreach($_elements as $_element){
-	  				$view_line_element = 0;
-	  				// Si les dates ne correspondent pas, on passe au suivant
-            if($_element->date_arret){
-            	$_element->_fin = mbDate("- 1 DAY", $_element->date_arret);
-            }
-	  				if($_element->_fin && $_element->_fin < $date){
-			        continue;
-		        }
-		        if(!$_element->_fin && $_element->debut == $date){
-		        	$view_line_element = 1;
-		        }
-		        if(($date >= $_element->debut && $date <= $_element->_fin) || $view_line_element){
-					  	// Si l'element est un DM, on le rajoute dans la liste
+	  			foreach($_elements as $_element){		        
+		        if(($date >= $_element->debut && $date <= mbDate($_element->_date_arret_fin))){
+		        	// Si l'element est un DM, on le rajoute dans la liste
 		        	if($name_chap == "dm"){
 					  		$lines_element[$name_chap][$name_cat][$_element->_id] = $_element;
 					  	} 
@@ -148,8 +122,6 @@ foreach($medsNonPresc as $_line){
 		unset($lines_med[$_line->_id]);
 	}
 }
-
-
 
 // Création du template
 $smarty = new CSmartyDP();

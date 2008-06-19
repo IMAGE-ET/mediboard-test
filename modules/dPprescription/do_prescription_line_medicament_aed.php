@@ -10,9 +10,6 @@
 global $AppUI;
 
 $do = new CDoObjectAddEdit("CPrescriptionLineMedicament", "prescription_line_medicament_id");
-$do->createMsg = "Traitement ajouté";
-$do->modifyMsg = "Traitement modifié";
-$do->deleteMsg = "Traitement supprimé";
 $do->doIt();
 
 ?>

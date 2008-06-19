@@ -312,7 +312,9 @@ $dPconfig["dPmedicament"] = array (
 $dPconfig["dPprescription"] = array (
   "CPrescription" => array (
     "add_element_category" => "0",
-    "time_print_ordonnance" => "2"
+    "time_print_ordonnance" => "2",
+    "infirmiere_borne_start" => "20",
+    "infirmiere_borne_stop"  => "08"
   )
 );
 
@@ -366,13 +368,6 @@ $dPconfig["dPstock"] = array (
   "CProductOrder" => array(
     "order_number_format" => "%y%m%d%H%M%S%id",
   ),
-);
-
-$dPconfig["dPprescription"] = array (
-  "CPrescription" => array(
-    "infirmiere_borne_start" => "20",
-    "infirmiere_borne_stop"  => "08"
-  )
 );
   
 ?>

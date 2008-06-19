@@ -65,7 +65,7 @@ function viewProduit(cip){
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 		      
-		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id}}
+		          {{if $prescription->type == "sejour" && !$prescription_sortie->_id && $is_praticien}}
 			          <form name="addPrescriptionSejour" method="post" action="">
 				          <input type="hidden" name="m" value="dPprescription" />
 				          <input type="hidden" name="dosql" value="do_duplicate_prescription_aed" />

@@ -47,7 +47,11 @@ if(oButton){
 	  <!-- Formulaire de selection de la quantite -->
 	  {{mb_field object=$prise field=quantite size="3" increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg');"}}	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	  {{$line->_unite_prise}}(s)
+	  <select name="unite_prise" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">
+		  {{foreach from=$line->_unites_prise item=_unite}}
+		    <option value="{{$_unite}}" {{if $prise->unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
+		  {{/foreach}}
+		</select>
 	  {{/if}}
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}

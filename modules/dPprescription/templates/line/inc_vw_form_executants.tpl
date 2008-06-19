@@ -1,4 +1,4 @@
-{{if $perm_edit}}
+{{if $line->_can_select_executant}}
   {{assign var=category_id value=$category->_id}}
   {{if @$executants.$category_id}}
 	  <form name="addExecutant-{{$line->_id}}" method="post" action="">

@@ -43,6 +43,7 @@ foreach($medicaments as $code_cip){
 	$line_medicament->code_cip = $code_cip;
 	$line_medicament->prescription_id = $prescription_id;
 	$line_medicament->praticien_id = $praticien_id;
+	$line_medicament->creator_id = $AppUI->user_id;
 	$msg = $line_medicament->store();
 	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
   $lines["medicament"][$line_medicament->_id] = $line_medicament;
@@ -54,6 +55,7 @@ foreach($elements as $element_id){
 	$line_element->element_prescription_id = $element_id;
 	$line_element->prescription_id = $prescription_id;
 	$line_element->praticien_id = $praticien_id;
+	$line_element->creator_id = $AppUI->user_id;
 	$msg = $line_element->store();
 	$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;

@@ -79,6 +79,7 @@
       <input type="hidden" name="prescription_line_comment_id" value="" />
       <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
       <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
+      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
       <select name="category_prescription_id">
         {{foreach from=$categories.$element item=cat}}
         <option value="{{$cat->_id}}">{{$cat->_view}}</option>

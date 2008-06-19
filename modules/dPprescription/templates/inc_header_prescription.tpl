@@ -56,9 +56,9 @@ submitProtocole = function(){
   <tr>
     <th class="title" colspan="2">
     
-    <!-- Selection du praticien prescripteur de la ligne -->
-			{{if !$is_praticien && !$mode_protocole && $mode_pharma && $perm_create_line}}
-       <div style="position: absolute; right: 15px">
+      <!-- Selection du praticien prescripteur de la ligne -->
+			{{if !$is_praticien && !$mode_protocole && $prescription->_can_add_line}}
+       <div style="position: absolute; right: 25px">
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 				    {{foreach from=$listPrats item=_praticien}}
@@ -155,7 +155,7 @@ submitProtocole = function(){
     </td>
    
 
-  {{if !$mode_protocole && !$mode_pharma && $perm_create_line}}
+  {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
    <td style="text-align: right;">
       
       <!-- Formulaire de selection protocole -->

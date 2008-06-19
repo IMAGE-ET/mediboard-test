@@ -39,6 +39,7 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		} else {
 		  $prise_posologie->quantite = $posologie->quantite1;
 		}
+		$prise_posologie->unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
 		if($msg = $prise_posologie->store()){
 			return $msg;
 		}
@@ -65,6 +66,8 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		  	$prise_posologie->unite_tous_les = $posologie->_code_duree1;
 		  }
 		}
+		// Stockage de la prise
+		$prise_posologie->unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
 		if($msg = $prise_posologie->store()){
 		 	return $msg;
 		}

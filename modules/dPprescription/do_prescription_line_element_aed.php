@@ -7,6 +7,7 @@
 * @author Alexis Granger
 */
 
+
 global $AppUI;
 
 $do = new CDoObjectAddEdit("CPrescriptionLineElement", "prescription_line_element_id");

@@ -43,12 +43,7 @@ class CElementPrescription extends CMbObject {
   	parent::updateFormFields();
   	$this->_view = $this->libelle;
   }
-    
-  function loadRefCategory(){
-  	$this->_ref_category_prescription = new CCategoryPrescription();
-  	$this->_ref_category_prescription->load($this->category_prescription_id);	
-  }
-  
+      
   static function getFavoris($praticien_id, $category) {
     $ds = CSQLDataSource::get("std");
     $sql = "SELECT prescription_line_element.element_prescription_id, COUNT(*) AS total
@@ -65,10 +60,14 @@ class CElementPrescription extends CMbObject {
     return $ds->loadlist($sql);
   }
   
-  
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefCategory();
+  }
+  
+  function loadRefCategory(){
+  	$this->_ref_category_prescription = new CCategoryPrescription();
+  	$this->_ref_category_prescription->load($this->category_prescription_id);	
   }
 }
 

@@ -1,5 +1,3 @@
-
-
 <script type="text/javascript">
 
 // Calcul de la date de debut lors de la modification de la fin
@@ -35,11 +33,11 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     dFin = dDebut;
     if(sType == "jour")      { dFin.addDays(nDuree-1);     }
     if(sType == "semaine")   { dFin.addDays(nDuree*7-1);   }
-    if(sType == "quinzaine") { dFin.addDays(nDuree*14);  }
-    if(sType == "mois")      { dFin.addDays(nDuree*30);  }
-    if(sType == "trimestre") { dFin.addDays(nDuree*90);  }
-    if(sType == "semestre")  { dFin.addDays(nDuree*180); }
-    if(sType == "an")        { dFin.addDays(nDuree*365); }
+    if(sType == "quinzaine") { dFin.addDays(nDuree*14-1);  }
+    if(sType == "mois")      { dFin.addDays(nDuree*30-1);  }
+    if(sType == "trimestre") { dFin.addDays(nDuree*90-1);  }
+    if(sType == "semestre")  { dFin.addDays(nDuree*180-1); }
+    if(sType == "an")        { dFin.addDays(nDuree*365-1); }
 
   	oForm._fin.value = dFin.toDATE();
   	oDivFin.innerHTML = dFin.toLocaleDate();
@@ -90,7 +88,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 	  
 	  // Ligne finie
 	  var oDiv = $('th_line_'+object_class+'_'+curr_line_id);
-	  if(oForm._fin.value != "" && oForm._fin.value <= '{{$today}}'){
+	  if(oForm._fin.value != "" && oForm._fin.value < '{{$today}}'){
 	    oDiv.addClassName("arretee");
 	    oTbody.addClassName("line_stopped");
 	  } else {
@@ -112,6 +110,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 	  }
   {{/if}}
 }
+
 
 syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
   if(!checkForm(oForm)){
@@ -149,7 +148,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       <td style="border:none">
 	         {{mb_label object=$line field=debut}}
 	       </td>    
-	       {{if $perm_edit}}
+	       {{if $line->_can_modify_dates}}
 	       <td class="date" style="border:none;">
 	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
 		           <select name="debut_date" onchange="$('editDates-{{$typeDate}}-{{$line->_id}}_debut_da').innerHTML = new String;
@@ -201,9 +200,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	         {{mb_label object=$line field=duree}}
 	       </td>
 	       <td style="border:none">
-		       {{if $perm_edit}}
-				     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="3" }}
-				     {{mb_field object=$line field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+		       {{if $line->_can_modify_dates}}
+				     {{mb_field object=$line field=duree increment=1 min=1 form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');" size="1" }}
+				     {{mb_field object=$line style="width: 70px;" field=unite_duree onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 				   {{else}}
 				     {{if $line->duree}}
 				       {{$line->duree}}
@@ -219,7 +218,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       <td style="border:none">
 	         {{mb_label object=$line field=_fin}} 
 	       </td>
-	       {{if $perm_edit}}
+	       {{if $line->_can_modify_dates}}
 	       <td class="date" style="border:none;">
 	         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	       </td>
@@ -243,7 +242,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	      <td style="border:none">
 	         Fin
 	      </td>       
-	     {{if $perm_edit}}
+	     {{if $line->_can_modify_dates}}
 	       <td class="date" style="border:none;">
 	         {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 	       </td>

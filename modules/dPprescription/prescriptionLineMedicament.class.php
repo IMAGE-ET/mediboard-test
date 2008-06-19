@@ -18,22 +18,13 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $code_cip         = null;
   var $no_poso          = null;
   var $commentaire      = null;
- 
-  /*
-  var $debut            = null;
-  var $duree            = null;
-  var $unite_duree      = null;
-  */
-/*
-  var $date_arret       = null;
-*/
 
   var $valide_pharma    = null; 
   var $accord_praticien = null;
-   
+  var $substitution_line_id = null;
+  
   // Form Field
-  //var $_fin            = null;
-  var $_unite_prise    = null;
+  var $_unites_prise    = null;
   var $_specif_prise   = null;
   var $_traitement     = null;
   
@@ -53,7 +44,23 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   // Logs
   var $_ref_log_validation_pharma = null;
-
+  
+  // Can fields
+ 	var $_can_select_equivalent              = null;
+  var $_can_view_historique                = null;
+ 	var $_can_view_form_ald                  = null;
+ 	var $_can_vw_form_traitement             = null;
+ 	var $_can_view_signature_praticien       = null;
+ 	var $_can_view_form_signature_praticien  = null;
+ 	var $_can_view_form_signature_infirmiere = null;
+  var $_can_vw_livret_therapeutique        = null;
+  var $_can_vw_hospi                       = null;
+  var $_can_vw_generique                   = null;
+ 	var $_can_modify_poso                    = null;
+  var $_can_delete_line                    = null;
+	var $_can_vw_form_add_line_contigue      = null;
+  var $_can_modify_dates                   = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_medicament';
@@ -64,13 +71,14 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function getSpecs() {
   	$specsParent = parent::getSpecs();
     $specs = array (
-      "code_cip"        => "notNull numchar|7",
-      "no_poso"         => "num max|128",
-      "commentaire"     => "str",
-      "valide_pharma"   => "bool",
-      "accord_praticien"=> "bool",
-      "_unite_prise"    => "str",
-      "_traitement"     => "bool"
+      "code_cip"             => "notNull numchar|7",
+      "no_poso"              => "num max|128",
+      "commentaire"          => "str",
+      "valide_pharma"        => "bool",
+      "accord_praticien"     => "bool",
+      "substitution_line_id" => "ref class|CPrescriptionLineMedicament",
+      "_unite_prise"         => "str",
+      "_traitement"          => "bool"
     );
     return array_merge($specsParent, $specs);
   }
@@ -95,9 +103,107 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->_ref_prescription->type == "traitement"){
     	$this->_traitement = "1";
     }
+    
+    // Dans le cas d'un traitement, la date de fin est la date de sortie du sejour
+    if($this->_traitement){
+    	$this->_date_arret_fin = $this->_ref_prescription->_ref_object->_sortie; 	
+    } else {
+      $this->_date_arret_fin = $this->_fin ? "$this->_fin 23:59:00" : "";    	
+    }
+    
+    // Calcul de la date de fin de la ligne
+    if($this->date_arret){
+    	$this->_date_arret_fin = $this->date_arret;
+      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
+    }    
   }
   
-  // Store-like function
+  /*
+   * Calcul des droits
+   */
+  function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {
+  	
+  	/*
+  	 * Une infirmiere peut remplir entierement une ligne si elle l'a créée.
+  	 * Une fois que la ligne est validé par la praticien ou par le pharmacien, l'infirmiere ne peut plus y toucher
+  	 */
+  	
+		global $AppUI;
+		
+		$perm_infirmiere = $this->creator_id == $AppUI->user_id && 
+                       !$this->signee && 
+                       !$this->valide_infirmiere && 
+                       !$this->valide_pharma;
+    
+		$perm_edit = (!$this->signee || $mode_pharma) && 
+                 !$this->valide_pharma && 
+                 ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
+ 
+    // Modification des dates
+    if($perm_edit){
+    	$this->_can_modify_dates = 1;
+    }
+    // Select equivalent
+    if($perm_edit){
+    	$this->_can_select_equivalent = 1;
+    }
+		// Affichage de l'icone d'historique
+		if (!$this->_protocole && $this->_count_parent_line){
+			$this->_can_view_historique = 1;
+		}
+    // View ALD
+    if($perm_edit && !$this->_protocole){
+    	$this->_can_view_form_ald = 1;
+    }
+    // View formulaire traitement
+    if($perm_edit && !$mode_pharma && !$this->_protocole){
+    	$this->_can_vw_form_traitement = 1;
+    }
+    // View signature praticien
+    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole && !$this->_traitement){
+    	$this->_can_view_signature_praticien = 1;
+    }
+    // Affichage du formulaire de signature praticien
+    if(!$this->_protocole && $is_praticien && ($this->praticien_id == $AppUI->user_id)){
+    	$this->_can_view_form_signature_praticien = 1;
+    }
+    // Affichage du formulaire de signature infirmiere
+    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id && !$this->valide_pharma){
+    	$this->_can_view_form_signature_infirmiere = 1;
+    }
+    // Affichage de l'icone Livret Therapeutique
+    if(!$this->_ref_produit->inLivret && ($prescription->type == "sejour" || $this->_protocole)){
+      $this->_can_vw_livret_therapeutique = 1;
+    }
+    // Affichage de l'icone Produit Hospitalier
+    if(!$this->_ref_produit->hospitalier && ($prescription->type == "sortie" || $this->_protocole)){
+      $this->_can_vw_hospi = 1;
+    }
+    // Affichage de l'icone generique
+    if($this->_ref_produit->_generique){
+      $this->_can_vw_generique = 1;
+    }
+    // Modification de la posologie
+    if($perm_edit){
+    	$this->_can_modify_poso = 1;
+    	// On ne peut modifier une ligne de traitement personnel seulement en pre_admission
+      if($this->_traitement && ($prescription_type != "pre_admission")){
+      	$this->_can_modify_poso = 0;
+      }
+    }
+    // Suppression de la ligne
+    if(($perm_edit && $is_praticien) || $this->_protocole){
+      $this->_can_delete_line = 1;
+  	}
+  	// Affichage du bouton "Modifier une ligne"
+  	if(!$this->_protocole && $this->_ref_prescription->type != "externe"){
+  		$this->_can_vw_form_add_line_contigue = 1;
+  	}
+	}
+  
+  /*
+   * Store-like function, suppression des prises de la ligne
+   */
   function deletePrises(){
   	$this->_delete_prises = 0;
   	// Chargement des prises 
@@ -108,14 +214,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
       	return $msg;
       }
     }
-  }
-  
-  
-  function check(){
-  	parent::check();
-  	
-  	// TODO: Verifier que le praticien_id passé est un praticien ou un admin
-  
   }
   
   function store(){
@@ -130,23 +228,29 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	}
   }
   
-  
   function loadRefsFwd() {
-  	$this->_ref_prescription = new CPrescription();
-    $this->_ref_prescription->load($this->prescription_id);
-    $this->_ref_produit = new CBcbProduit();
-    $this->_ref_produit->load($this->code_cip);
+  	parent::loadRefsFwd();
+    $this->loadRefProduit();
     $this->loadPosologie();
-    // Si aucune posologie, on chargement l'unite de prise de la premiere trouvée
-    if(!$this->_unite_prise){
-    	$this->_ref_produit->loadRefPosologies();
-    	$posologie_temp = reset($this->_ref_produit->_ref_posologies);
-    	$this->_unite_prise = $posologie_temp->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
+  
+    $this->_ref_produit->loadRefPosologies();
+    foreach($this->_ref_produit->_ref_posologies as $_poso){
+    	$this->_unites_prise[] = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
     }
+    $this->_unites_prise = array_unique($this->_unites_prise);
   }
   
+  /*
+   * Chargement du produit
+   */
+  function loadRefProduit(){
+  	$this->_ref_produit = new CBcbProduit();
+  	$this->_ref_produit->load($this->code_cip);
+  }
   
-  
+  /*
+   * Chargement de la posologie
+   */
   function loadPosologie() {
     $posologie = new CBcbPosologie();
     if($this->_ref_produit->code_cip && $this->no_poso) {
@@ -157,6 +261,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_ref_posologie = $posologie;
   }
   
+  /*
+   * Controle des allergies
+   */
   function checkAllergies($listAllergies) {
     $this->_ref_alertes["allergie"] = array();
     foreach($listAllergies as $key => $all) {
@@ -168,6 +275,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
+  /*
+   * Controle des interactions
+   */
   function checkInteractions($listInteractions) {
     $this->_ref_alertes["interaction"] = array();
     foreach($listInteractions as $key => $int) {
@@ -179,11 +289,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
+  /*
+   * Controle des IPC
+   */
   function checkIPC($listIPC) {
     $this->_ref_alertes["IPC"]      = array();
     $this->_ref_alertes_text["IPC"] = array();
   }
   
+  /*
+   * Controle du profil du patient
+   */
   function checkProfil($listProfil) {
     $this->_ref_alertes["profil"] = array();
     foreach($listProfil as $key => $pro) {
@@ -195,12 +311,12 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     }
   }
   
-  
+  /*
+   * Chargement du log de validation par le pharmacien
+   */
   function loadRefLogValidationPharma(){
     $this->_ref_log_validation_pharma = $this->loadLastLogForField("valide_pharma");
   }
-  
-  
 }
 
 ?>

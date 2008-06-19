@@ -43,11 +43,6 @@ class CAssociationMoment extends CMbObject {
   	$this->_ref_moment_unitaire = new CMomentUnitaire();
   	$this->_ref_moment_unitaire->load($this->moment_unitaire_id);
   }
-  
-  function updateFormFields() {
-    parent::updateFormFields();
-    
-  }
 }
   
 ?>

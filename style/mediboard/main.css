@@ -1040,6 +1040,23 @@ div.loading {
   white-space: nowrap;
 }
 
+
+div.little-info{
+  margin: 10px 15px;
+  min-height: 15px;
+  background-repeat: no-repeat;
+  background-position: 5px center;
+  border-width: 1px;
+  border-style: solid;
+  padding: 5px;
+  padding-left: 30px;
+  background-image: url(images/icons/little-info.png);
+ 	background-color: #eef;
+  border-color: #55a;
+  
+}
+
+
 div.big-success,
 div.big-info,
 div.big-warning,
@@ -2894,7 +2911,7 @@ table.tbl th.element {
 
 .div_signature {
   position: absolute;
-  right: 15px;
+  right: 25px;
 }
 
 .div_signature button {

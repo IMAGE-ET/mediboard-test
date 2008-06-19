@@ -1,110 +1,92 @@
 <!-- Initialisation des variables -->
-{{if ($_line_element->praticien_id == $app->user_id || array_key_exists($_line_element->praticien_id, $listPrats)) && !$_line_element->signee}}
-  {{assign var=perm_edit value="1"}}
-{{else}}
-  {{assign var=perm_edit value="0"}}
-{{/if}}
-
-
-{{if $_line_element->date_arret}}
-  {{assign var=_date_fin value=$_line_element->date_arret}}
-{{else}}
-  {{assign var=_date_fin value=$_line_element->_fin}}
-{{/if}}
-
 {{assign var=line value=$_line_element}}
 {{assign var=dosql value="do_prescription_line_element_aed"}}
 {{assign var=div_refresh value=$element}}
 {{assign var=typeDate value=$element}}
-
-{{assign var=category value=$_line_element->_ref_element_prescription->_ref_category_prescription}}
-<tbody id="line_element_{{$_line_element->_id}}" class="hoverable elt
-       {{if $_date_fin && $_date_fin <= $today}}line_stopped{{/if}}">
-       
+{{assign var=category value=$line->_ref_element_prescription->_ref_category_prescription}}
+<tbody id="line_element_{{$line->_id}}" class="hoverable elt
+       {{if $line->_date_arret_fin && $line->_date_arret_fin < $now}}line_stopped{{/if}}">
   <!-- Header de la ligne d'element -->
   <tr>    
-    <th id="th_line_CPrescriptionLineElement_{{$_line_element->_id}}" colspan="8"
-        class="element 
-        {{if $_date_fin && $_date_fin <= $today}}arretee{{/if}}">
-     
+    <th id="th_line_CPrescriptionLineElement_{{$line->_id}}" colspan="8"
+        class="element {{if $line->_date_arret_fin && $line->_date_arret_fin < $now}} arretee{{/if}}">
       <script type="text/javascript">
          Main.add( function(){
-           moveTbodyElt($('line_element_{{$_line_element->_id}}'),'{{$category->_id}}');
+           moveTbodyElt($('line_element_{{$line->_id}}'),'{{$category->_id}}');
          });
       </script>
-      
       <div style="position: absolute">
         <!-- Formulaire ALD -->
-        {{if !$_line_element->_protocole}}
+        {{if $line->_can_view_form_ald}}
           {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
 	      {{/if}}
       </div>    
-  
       <div class="div_signature">
         <!-- Affichage de la signature du praticien -->
-        {{if ($_line_element->praticien_id != $app->user_id) && !$_line_element->_protocole}}
+        {{if $line->_can_view_signature_praticien}}
           {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else}}
-          {{$_line_element->_ref_praticien->_view}}    
-        {{/if}}
-        
-        <!-- Affichage du formulaire de signature du praticien -->
-		    {{if !$_line_element->_protocole}}  
-			    {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+          {{$line->_ref_praticien->_view}}    
+        {{/if}}  
+	      <!-- Affichage du formulaire de signature du praticien --> 
+        {{if $line->_can_view_form_signature_praticien}} 
+	        {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+	      {{/if}}
+	      <!-- Affichage du formulaire de signature de l'infirmiere -->
+	      {{if $line->_can_view_form_signature_infirmiere}} 
+	        {{include file="../../dPprescription/templates/line/inc_vw_form_validation_infirmiere.tpl"}}  
 	      {{/if}}
 	    </div>
-	    
 	    <!-- View de l'element -->
-	    {{$_line_element->_ref_element_prescription->_view}}
+	    {{$line->_ref_element_prescription->_view}}
 	  </th>
 	</tr>
-
   {{if $category->chapitre != "dmi"}}
-  
   <!-- Si protocole, possibilité de rajouter une durée et un decalage entre les lignes -->
-  {{if $_line_element->_protocole && $category->chapitre}}
+  {{if $line->_protocole}}
     {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
   {{/if}}
-  
   <tr>
     <td style="width: 25px" {{if $category->chapitre != "dmi"}}rowspan="3"{{/if}} >
-      {{if $perm_edit}}
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
+      {{if $line->_can_delete_line}}
+      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
     </td>
     <!-- Gestion des dates -->
-    {{if !$_line_element->_protocole}}
+    {{if !$line->_protocole}}
     <td colspan="2">
       {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl"}}
-      {{if $perm_edit}}
 	      <script type="text/javascript">
-	        prepareForm(document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]); 
-	        {{if !$line->fin}}   
-	          Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "debut", false, dates);
-		        Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "_fin", false, dates);      
-	        {{/if}}
-	        {{if $line->fin}}
-	           Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "fin", false, dates);    
-	        {{/if}}
+	        if(document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]){
+		        var oForm = document.forms["editDates-{{$typeDate}}-{{$line->_id}}"]
+		        prepareForm(oForm); 
+		        if(oForm.debut){
+		          Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "debut", false, dates);
+		        }
+		        if(oForm._fin){
+		          Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "_fin", false, dates);      
+		        }
+		        if(oForm.fin){
+		           Calendar.regField('editDates-{{$typeDate}}-{{$line->_id}}', "fin", false, dates);    
+		        }
+	        }
 	      </script>
-      {{/if}}
     </td>
     <td>
      {{if $category->chapitre != "dmi" && ($prescription->type == "sejour" || $prescription->type == "pre_admission")}}
-        <div id="stop-CPrescriptionLineElement-{{$_line_element->_id}}">
+        <div id="stop-CPrescriptionLineElement-{{$line->_id}}">
           {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
         </div>
      {{/if}}
     </td>
     {{/if}}
   </tr>
-  
   {{if $category->chapitre != "dm"}}
   <tr>
     <td colspan="3">
-      {{if $perm_edit}}
+      {{if $line->_can_modify_poso}}
 	      <table style="width: 100%">
 	       <tr>
 			    <td style="border:none; border-right: 1px solid #999; width:5%; text-align: left;">
@@ -114,31 +96,49 @@
 			      <img src="images/icons/a_right.png" title="" alt="" />
 			    </td>
 				  <td style="border:none; text-align: left;">
-			      <div id="prises-Soin{{$_line_element->_id}}">
+			      <div id="prises-Soin{{$line->_id}}">
 			        <!-- Parcours des prises -->
 			        {{include file="../../dPprescription/templates/line/inc_vw_prises_posologie.tpl" type="Soin"}}
 			      </div>
 			    </td>
 	      </table>
       {{else}}
-        <!-- Affichage des prises -->
-        {{foreach from=$_line_element->_ref_prises item=prise}}
-          {{$prise->_view}} ,
-        {{foreachelse}}
-          Aucune posologie
-        {{/foreach}}
+        <table>
+          <tr>
+            <td style="border:none;">
+			        <div class="little-info">
+			          {{if !$line->signee}}
+						     Vous devez être le créateur ou le responsable de cette ligne pour rajouter des posologies <br />
+						     (Créateur: {{$line->_ref_creator->_view}} / Responsable: {{$line->_ref_praticien->_view}})
+						    {{else}}
+						       Seul le responsable de cette ligne peut la modifier ({{$line->_ref_praticien->_view}})
+						    {{/if}}
+						  </div>
+			      </td>
+			      <td style="border:none;"> 
+			        <!-- Affichage des prises -->
+			        {{if $line->_ref_prises|@count}}
+			        <ul>
+			        {{foreach from=$line->_ref_prises item=prise name=foreach_prise}}
+			          <li>{{$prise->_view}}</li>
+			        {{/foreach}}
+			        </ul>
+			        {{else}}
+			          Aucune posologie
+			        {{/if}}
+			      </td>
+          </tr>
+        </table>
       {{/if}}
     </td>
   </tr>
   {{/if}}
-  
-  
   {{/if}}
   <tr>
     {{if $category->chapitre == "dmi"}}
     <td style="width: 25px">
-      {{if $perm_edit}}
-      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$_line_element->_id}}','{{$element}}')">
+      {{if $line->_can_delete_line}}
+      <button type="button" class="trash notext" onclick="Prescription.delLineElement('{{$line->_id}}','{{$element}}')">
         {{tr}}Delete{{/tr}}
       </button>
       {{/if}}
@@ -149,10 +149,8 @@
         <!-- Formulaire de selection d'un executant -->
         {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
       </div>
-   
       <!-- Formulaire d'ajout de commentaire -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-    </td>
-    
+    </td>   
   </tr>
 </tbody>

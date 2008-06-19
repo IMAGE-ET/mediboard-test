@@ -11,22 +11,22 @@
  * The CPrescription class
  */
 class CPrescription extends CMbObject {
+	
   // DB Table key
   var $prescription_id = null;
   
   // DB Fields
-  var $praticien_id = null;
-  var $function_id = null;  // XOR entre praticien_id et function_id
-  
-  
-  var $object_class = null;
-  var $object_id    = null;
-  var $libelle      = null;
-  var $type         = null;
+  var $praticien_id    = null;
+  var $function_id     = null;
+  var $object_class    = null;
+  var $object_id       = null;
+  var $libelle         = null;
+  var $type            = null;
   
   // Object References
-  var $_ref_object  = null;
-  var $_ref_patient = null;
+  var $_ref_object     = null;
+  var $_ref_patient    = null;
+  var $_ref_current_praticien = null;
   
   // BackRefs
   var $_ref_prescription_lines                = null;
@@ -36,12 +36,12 @@ class CPrescription extends CMbObject {
   
   // Others Fields
   var $_type_sejour = null;
-  
   var $_counts_by_chapitre = null;
   var $_counts_no_valide = null;
   var $_dates_dispo = null;
   var $_current_praticien_id = null;  // Praticien utilisé pour l'affichage des protocoles / favoris dans la prescription
-  var $_ref_current_praticien = null;
+  var $_praticiens = null;            // Tableau de praticiens prescripteur
+  var $_can_add_line = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -106,6 +106,33 @@ class CPrescription extends CMbObject {
     $this->loadRefCurrentPraticien();
   }
   
+  /*
+   * Permet de savoir si l'utilisateur courant a le droit de créer des lignes dans la prescription
+   */
+  function getAdvancedPerms($is_praticien){
+  	global $AppUI;
+		
+  	// Chargement du user_courant
+		$user = new CMediusers();
+  	$user->load($AppUI->user_id);
+		
+		// Si le user courant est un praticien
+		if($is_praticien){
+			$this->_can_add_line = 1;
+		} 
+		// Sinon (infirmiere)
+		else {
+			$time = mbTime();
+			$borne_start = CAppUI::conf("dPprescription CPrescription infirmiere_borne_start").":00:00";
+			$borne_stop = CAppUI::conf("dPprescription CPrescription infirmiere_borne_stop").":00:00";	
+			$freeDays = mbBankHolidays();
+			$day = mbTransformTime(null, mbDate(), "%w");
+
+		  if(array_key_exists(mbDate(),$freeDays) || ($time >= $borne_start) || ($time <= $borne_stop) || ($day == 0) || ($day == 6)){
+		  	$this->_can_add_line = 1;
+		  }
+		}	
+  }
   
   function check(){
   	global $AppUI;
@@ -131,8 +158,10 @@ class CPrescription extends CMbObject {
   	}	
   }
   
-  
-  function calculPraticien(){
+  /*
+   * Calcul du praticien_id responsable de la prescription
+   */
+  function calculPraticienId(){
   	global $AppUI;
   	
   	if($this->object_id !== null && $this->object_class !== null && $this->type !== null){
@@ -160,7 +189,7 @@ class CPrescription extends CMbObject {
   
   function store(){  	
   	if(!$this->_id){
-  		$this->calculPraticien(); 
+  		$this->calculPraticienId(); 
   	}
     if ($msg = $this->check()) {
       return $msg;
@@ -169,35 +198,50 @@ class CPrescription extends CMbObject {
   }
   
   
-  
+  /*
+   * Chargement du praticien
+   */
   function loadRefPraticien(){
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien->load($this->praticien_id);
   }
   
+  /*
+   * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
+   */
   function loadRefCurrentPraticien(){
   	$this->_ref_current_praticien = new CMediusers();
   	$this->_ref_current_praticien->load($this->_current_praticien_id);
   }
   
+  /*
+   * Chargement de l'objet de la prescription
+   */ 
   function loadRefObject(){
   	$this->_ref_object = new $this->object_class;
     $this->_ref_object->load($this->object_id);
   }
   
+  /*
+   * Chargement du patient
+   */
   function loadRefPatient(){
     $this->_ref_patient = new CPatient();
     $this->_ref_patient->load($this->_ref_object->patient_id);	
   }
   
+  /*
+   * Forward Refs
+   */
   function loadRefsFwd() {
     $this->loadRefPraticien();
     $this->loadRefObject();
     $this->loadRefPatient();
   }
   
-  
-  // Compte le nombre de lignes non validées dans la prescription
+  /*
+   * Compte le nombre de lignes non validées dans la prescription
+   */ 
   function countNoValideLines(){
     $this->_counts_no_valide = 0;
     $line = new CPrescriptionLineMedicament();
@@ -208,8 +252,9 @@ class CPrescription extends CMbObject {
     $this->_counts_no_valide = $line->countList($where);
   }
   
-  
-  //Chargement du nombre des medicaments et d'elements
+	/*
+	 * Chargement du nombre des medicaments et d'elements
+	 */
   function countLinesMedsElements($praticien_sortie_id = null){
   	$this->_counts_by_chapitre = array();
   	
@@ -264,24 +309,26 @@ class CPrescription extends CMbObject {
   	}
   }
   
-  
-  // Chargement des lignes de prescription
+  /*
+   * Chargement des lignes de prescription
+   */
   function loadRefsLines() {
-	    $line = new CPrescriptionLineMedicament();
-	    $where = array();
-	    $where["prescription_id"] = " = '$this->_id'";
-	    $where["child_id"] = "IS NULL";
-	    
-	    $order = "prescription_line_medicament_id DESC";
-	    $this->_ref_prescription_lines = $line->loadList($where, $order);
-	    
-	    foreach($this->_ref_prescription_lines as &$_line){
-	    	$_line->_ref_produit->loadRefPosologies();
-	    }
+    $line = new CPrescriptionLineMedicament();
+    $where = array();
+    $where["prescription_id"] = " = '$this->_id'";
+    $where["child_id"] = "IS NULL";
+    
+    $order = "prescription_line_medicament_id DESC";
+    $this->_ref_prescription_lines = $line->loadList($where, $order);
+    
+    foreach($this->_ref_prescription_lines as &$_line){
+    	$_line->_ref_produit->loadRefPosologies();
+    }
   }
   
-  
-  // Chargement des lignes de medicaments (medicaments + commentaires)
+  /*
+   * Chargement des lignes de medicaments (medicaments + commentaires)
+   */
   function loadRefsLinesMedComments(){
     // Chargement des lignes de medicaments
   	$this->loadRefsLines();
@@ -311,7 +358,9 @@ class CPrescription extends CMbObject {
   	}
   }
   
-  // Chargement des lignes d'element
+  /*
+   * Chargement des lignes d'element
+   */
   function loadRefsLinesElement($chapitre = ""){
   	$line = new CPrescriptionLineElement();
   	$where = array();
@@ -339,7 +388,9 @@ class CPrescription extends CMbObject {
   }
   
   
-  // Chargement des lignes d'elements par catégorie
+  /*
+   * Chargement des lignes d'elements par catégorie
+   */
   function loadRefsLinesElementByCat(){
   	$this->loadRefsLinesElement();
   	$this->_ref_prescription_lines_element_by_cat = array();
@@ -353,7 +404,9 @@ class CPrescription extends CMbObject {
   }
   
   
-  // Chargement des lignes de commentaires
+  /*
+   * Chargement des lignes de commentaires
+   */
   function loadRefsLinesComment($category_name = null){
   	$this->_ref_prescription_lines_comment = array();
     
@@ -400,17 +453,16 @@ class CPrescription extends CMbObject {
     }		
   }
   
-  
-  
-  // Chargement de toutes les lignes (y compris medicaments)
+  /*
+   * Chargement de toutes les lignes (y compris medicaments)
+   */
   function loadRefsLinesAllComments(){
   	$this->_ref_prescription_lines_all_comments = $this->loadBackRefs("prescription_line_comment");
   }
   
-
-  
-
-  // Chargement des lignes d'elements (Elements + commentaires)
+  /*
+   * Chargement des lignes d'elements (Elements + commentaires)
+   */
   function loadRefsLinesElementsComments(){
   	$this->loadRefsLinesElementByCat();
   	$this->loadRefsLinesComment();
@@ -433,8 +485,9 @@ class CPrescription extends CMbObject {
     }
   }
   
-  
-  // Chargement des medicaments favoris d'un praticien
+  /*
+   * Chargement des medicaments favoris d'un praticien
+   */
   static function getFavorisMedPraticien($praticien_id){
   	$favoris = array();
   	$listFavoris = array();
@@ -448,8 +501,9 @@ class CPrescription extends CMbObject {
   	return $listFavoris["medicament"];
   }
   
-  
-  // Chargement des favoris de prescription pour un praticien donné
+  /*
+   * Chargement des favoris de prescription pour un praticien donné
+   */
   static function getFavorisPraticien($praticien_id){
   	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
   	$category = new CCategoryPrescription();

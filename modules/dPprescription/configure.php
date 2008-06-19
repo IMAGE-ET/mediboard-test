@@ -12,8 +12,11 @@ global $AppUI, $dPconfig, $can, $m, $tab;
 $can->needsAdmin();
 $listHours = range(1, 24);
 
-$listHoursMatin = range(0,12);
-$listHoursSoir = range(13, 24);
+$hours_matin = range(0,12);
+foreach($hours_matin as $_hour_matin){
+	$listHoursMatin[] = str_pad($_hour_matin,2,"0",STR_PAD_LEFT);
+}
+$listHoursSoir = range(12, 24);
 
 // Création du template
 $smarty = new CSmartyDP();

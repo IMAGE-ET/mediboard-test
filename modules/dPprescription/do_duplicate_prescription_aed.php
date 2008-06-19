@@ -107,6 +107,7 @@ foreach($lines as $cat => $lines_by_type){
 	  		$line->duree = "";
 	  	}
 	  }
+	  $line->creator_id = $AppUI->user_id;
 	  $msg = $line->store();
 	  $AppUI->displayMsg($msg, "msg-$line->_class_name-create");
 		// Parcours des prises et creation des nouvelles prises

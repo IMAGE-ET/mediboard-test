@@ -83,7 +83,7 @@ Main.add( function(){
 {{/if}}
 
 <!-- Formulaire d'ajout de ligne d'elements et de commentaires -->
-{{if $perm_create_line}}
+{{if $prescription->_can_add_line}}
   {{include file="inc_vw_form_addLine.tpl"}}
 {{else}}
   <div class="big-info">

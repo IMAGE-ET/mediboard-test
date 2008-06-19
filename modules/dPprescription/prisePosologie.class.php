@@ -24,17 +24,14 @@ class CPrisePosologie extends CMbMetaObject {
   var $nb_tous_les           = null;
   var $unite_tous_les        = null;
   var $decalage_prise        = null;   // decalage de la prise J + $decalage (par defaut 0)
+  var $unite_prise           = null;
+  
   
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prise_posologie';
     $spec->key   = 'prise_posologie_id';
     return $spec;
-  }
-    
-  function loadRefMoment(){
-    $this->_ref_moment = new CMomentUnitaire();
-    $this->_ref_moment->load($this->moment_unitaire_id);	
   }
   
   function getSpecs() {
@@ -48,20 +45,17 @@ class CPrisePosologie extends CMbMetaObject {
       "unite_fois"           => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "nb_tous_les"          => "float",
       "unite_tous_les"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
-      "decalage_prise"       => "num min|0"
+      "decalage_prise"       => "num min|0",
+      "unite_prise"          => "text"
     );
     return array_merge($specsParent, $specs);
   }
   
   function updateFormFields() {
     parent::updateFormFields();
-    
-    $this->loadTargetObject();
-    $this->loadRefMoment();
-    
+    $this->loadRefsFwd();
     $this->_view = $this->quantite;
-    
-    $this->_view .= " ".$this->_ref_object->_unite_prise;
+    $this->_view .= " ".$this->unite_prise;
     
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
@@ -80,8 +74,23 @@ class CPrisePosologie extends CMbMetaObject {
     }   
   }
   
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+    $this->loadRefMoment();
+  }
+  
+  /*
+   * Chargement du moment unitaire
+   */
+  function loadRefMoment(){
+    $this->_ref_moment = new CMomentUnitaire();
+    $this->_ref_moment->load($this->moment_unitaire_id);	
+  }
+  
+  /*
+   * Calcul des prises d'un medicament à une date donnée
+   */
   function calculDatesPrise($date){	
-
   	// Calcul de la premiere prise du medicament
     $date_temp = $this->_ref_object->debut;
     // Gestion du decalage entre les prises
@@ -140,7 +149,6 @@ class CPrisePosologie extends CMbMetaObject {
     if(in_array($date, $tabDates)){
     	return true;
     } 
-   
     return false;
   } 
 }

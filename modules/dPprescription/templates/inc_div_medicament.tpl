@@ -24,7 +24,18 @@ moveTbody = function(oTbody){
 
 
 // Permet de changer la couleur de la ligne lorsqu'on stoppe la ligne
-changeColor = function(object_id, object_class, date_arret, traitement, cat_id){   
+changeColor = function(object_id, object_class, oForm, traitement, cat_id){   
+  if(oForm.date_arret){
+    var date_arret = oForm.date_arret.value;
+    var date_fin = date_arret;
+  }
+  
+  if(oForm._heure_arret && oForm._min_arret){
+    var heure_arret = oForm._heure_arret.value;
+    var min_arret = oForm._min_arret.value;
+    var date_fin = date_fin+" "+heure_arret+":"+min_arret+":00";
+  }
+    
   // Entete de la ligne
   var oDiv = $('th_line_'+object_class+'_'+object_id);
   if(object_class == 'CPrescriptionLineMedicament'){
@@ -33,7 +44,7 @@ changeColor = function(object_id, object_class, date_arret, traitement, cat_id){
     var oTbody = $('line_element_'+object_id);
   }
   var classes_before = oTbody.className;
-  if(date_arret != "" && date_arret <= '{{$today}}'){
+  if(date_fin != "" && date_fin <= '{{$now}}'){
     oDiv.addClassName("arretee");
     oTbody.addClassName("line_stopped");
   } else {
@@ -164,7 +175,7 @@ testPharma = function(line_id){
   <input type="hidden" name="object_class" value="{{$prescription->object_class}}" />
   <input type="hidden" name="object_id" value="{{$prescription->object_id}}" />
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-  
+  <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
   <input type="hidden" name="code_cip" value=""/>
   <!-- Date de debut -->
   <input type="hidden" name="debut" value="{{$today}}" />
@@ -196,7 +207,7 @@ testPharma = function(line_id){
 {{/if}}
 
 
-{{if $perm_create_line}}
+{{if $prescription->_can_add_line}}
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
@@ -251,6 +262,7 @@ testPharma = function(line_id){
       <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
       <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
       <input type="hidden" name="chapitre" value="medicament" />
+      <input type="hidden" name="creator_id" value="{{$app->user_id}}" />
       <input name="commentaire" type="text" size="98" />
       <button class="submit notext" type="button" onclick="this.form.onsubmit();">Ajouter</button>
     </form>
@@ -328,40 +340,38 @@ testPharma = function(line_id){
 <script type="text/javascript">
 
 if(document.addLine && document.searchProd){
-
-// UpdateFields de l'autocomplete de medicaments
-updateFieldsMedicament = function(selected) {
-  Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  Prescription.addLine(dn[0].firstChild.nodeValue);
-  $('searchProd_produit').value = "";
-}
-
-// Preparation des formulaire
-  prepareForm(document.addLine);
-  prepareForm(document.searchProd);
-
-
-var oFormProduit = document.searchProd;
-
-// Autocomplete des medicaments
-urlAuto = new Url();
-urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-urlAuto.addParam("produit_max", 40);
-
-
-// callback => methode pour ajouter en post des parametres
-// Faire un mini framework pour rajouter des elements du meme formulaire
-
-urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
-  minChars: 3,
-  updateElement: updateFieldsMedicament,
-  callback: 
-    function(input, queryString){ 
-      return (queryString + "&inLivret="+getCheckedValue(oFormProduit._recherche_livret)); 
-    }
-} );
-
+	// UpdateFields de l'autocomplete de medicaments
+	updateFieldsMedicament = function(selected) {
+	  Element.cleanWhitespace(selected);
+	  dn = selected.childNodes;
+	  Prescription.addLine(dn[0].firstChild.nodeValue);
+	  $('searchProd_produit').value = "";
+	}
+	
+	// Preparation des formulaire
+	  prepareForm(document.addLine);
+	  prepareForm(document.searchProd);
+	
+	
+	var oFormProduit = document.searchProd;
+	
+	// Autocomplete des medicaments
+	urlAuto = new Url();
+	urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+	urlAuto.addParam("produit_max", 40);
+	
+	
+	// callback => methode pour ajouter en post des parametres
+	// Faire un mini framework pour rajouter des elements du meme formulaire
+	
+	urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+	  minChars: 3,
+	  updateElement: updateFieldsMedicament,
+	  callback: 
+	    function(input, queryString){ 
+	      return (queryString + "&inLivret="+getCheckedValue(oFormProduit._recherche_livret)); 
+	    }
+	} );
 }
 
 
