@@ -1,34 +1,42 @@
 <table class="tbl">
   <tr>
-    <th colspan="3" class="title">Historique</th>
+    <th colspan="4" class="title">Historique {{if $type=="substitutions"}} - Substitutions{{/if}}</th>
   </tr>
   <tr>
     <th>Ligne</th>
+    {{if $type == "historique"}}
     <th>Signature Prat</th>
+    {{/if}}
     <th>Posologies</th>
+    {{if $type == "substitutions"}}
+    <th>Créé par</th>
+    <th>Produit substitué</th>
+    {{/if}}
   </tr>
   {{foreach from=$hist key=hist_line_id item=_hist_lines}}  
   {{assign var=line value=$lines.$hist_line_id}}
   <tr>
     <!-- Affichage du libelle du medicament -->
-    <th colspan="3">{{$line->_view}}
+    <th colspan="4">{{$line->_view}}
     {{if $line->_traitement}}(Traitement Personnel){{/if}}
     </th>
   </tr>
-  {{foreach from=$_hist_lines item=_line}}
+  {{foreach from=$_hist_lines item=_line name="foreach_line"}}
   <tr>
     <td>Ligne prévue initialement du {{$_line->debut|date_format:"%d/%m/%Y"}} au {{$_line->_fin|date_format:"%d/%m/%Y"}}.
     {{if $_line->date_arret}}
     <br />
     Arrêt le {{$_line->date_arret|date_format:"%d/%m/%Y"}}
     {{/if}}</td>
-    <td>
-    {{if $_line->signee}}
-    Oui
-    {{else}}
-    Non
+    {{if $type ==  "historique"}}
+	    <td>
+	    {{if $_line->signee}}
+	    Oui
+	    {{else}}
+	    Non
+	    {{/if}}
+	    </td>
     {{/if}}
-    </td>
     <td>
     {{foreach from=$_line->_ref_prises item=prise name=foreach_prise}}
 	    {{if $prise->quantite}}
@@ -37,6 +45,18 @@
 	    {{/if}}
 	  {{/foreach}}
     </td>
+    {{if $type == "substitutions"}}
+    <td>{{$_line->_ref_creator->_view}}</td>
+    
+    <td>
+    {{if !$smarty.foreach.foreach_line.last}}
+    {{$_line->_ref_produit->libelle}}
+    {{else}}
+    Produit actuel
+    {{/if}}
+    
+    </td>
+    {{/if}}
   </tr>
   {{/foreach}}
   {{/foreach}}

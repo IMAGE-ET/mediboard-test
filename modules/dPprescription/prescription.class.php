@@ -312,13 +312,16 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de prescription
    */
-  function loadRefsLines($with_child = 0) {
+  function loadRefsLines($with_child = 0, $with_subst = 0) {
     $line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
     
     if($with_child != "1"){
       $where["child_id"] = "IS NULL";
+    }
+    if($with_subst != "1"){
+      $where["substitution_line_id"] = "IS NULL";
     }
     
     $order = "prescription_line_medicament_id DESC";

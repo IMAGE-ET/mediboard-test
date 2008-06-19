@@ -142,8 +142,13 @@ submitProtocole = function(){
 			   </button>
 			   
 			   <!-- Affichage de l'historique -->
-			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}')" style="float: left">
+			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}','historique')" style="float: left">
 			     Historique
+			   </button>
+			
+			   <!-- Affichage de l'historique -->
+			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}','substitutions')" style="float: left">
+			     Substitutions
 			   </button>
 			 
 			   <div id="antecedent_allergie">

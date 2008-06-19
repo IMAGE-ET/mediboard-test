@@ -8,6 +8,8 @@
 */
 
 $prescription_id = mbGetValueFromGet("prescription_id");
+$type = mbGetValueFromGet("type");
+
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
@@ -19,7 +21,7 @@ $object =& $prescription->_ref_object;
 $object->loadRefPrescriptionTraitement();
 $prescription_traitement =& $object->_ref_prescription_traitement;
 if($prescription_traitement->_id){
-  $prescription_traitement->loadRefsLines();
+  $prescription_traitement->loadRefsLines('','1');
 }
 // Tableau d'historique des lignes
 $hist = array();
@@ -34,11 +36,15 @@ foreach($med_lines as $meds_by_cat){
 	if(is_array($meds_by_cat)){
 		foreach($meds_by_cat as &$line){
 			// Chargement des parents lines
-			$parent_lines = $line->loadRefsparents();
+      if ($type == "historique"){
+			  $parent_lines = $line->loadRefsparents();
+      } else {
+      	$parent_lines = $line->loadRefsPrevLines();
+      }
 			ksort($parent_lines);
-			//if(count($parent_lines) < 2){
-			//	continue;
-			//}
+			if(count($parent_lines) < 2 && $type != "historique"){
+				continue;
+			}
 			$lines[$line->_id]= $line;
 		  foreach($parent_lines as &$_parent_line){
 		  	$_parent_line->loadRefsPrises();
@@ -50,10 +56,12 @@ foreach($med_lines as $meds_by_cat){
 
 
 
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("lines", $lines);
 $smarty->assign("hist", $hist);
+$smarty->assign("type", $type);
 $smarty->display("view_historique.tpl");
 
 ?>

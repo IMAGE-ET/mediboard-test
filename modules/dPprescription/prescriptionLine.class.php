@@ -201,8 +201,6 @@ class CPrescriptionLine extends CMbObject {
     if($msg = parent::delete()){
       return $msg;
     }
-    
- 
   }
   
   function updateFormFields(){

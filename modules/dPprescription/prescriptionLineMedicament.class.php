@@ -83,6 +83,17 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     return array_merge($specsParent, $specs);
   }
   
+  
+  /*
+   * Déclaration des backRefs
+   */
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["prev_hist_line"]  = "CPrescriptionLineMedicament substitution_line_id";
+    return $backRefs;
+  }
+  
+  
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -260,6 +271,72 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     $this->_specif_prise = $posologie->_code_prise1;
     $this->_ref_posologie = $posologie;
   }
+  
+  
+  /*
+   * Chargement de la ligne suivante (dans le cas d'une subsitution)
+   */
+  function loadRefNextHistLine(){
+    $this->_ref_next_hist_line = new $this->_class_name;
+    if($this->subsitution_line_id){
+      $this->_ref_next_hist_line->_id = $this->subsitution_line_id;
+      $this->_ref_next_hist_line->loadMatchingObject();
+    }  
+  }
+  
+  
+  /*
+   * Calcul permettant de savoir si la ligne possède un historique (substitution)
+   */
+  function countPrevHistLine(){
+    $line = new $this->_class_name;
+    $line->subsitution_line_id = $this->_id;
+    $this->_count_prev_hist_line = $line->countMatchingList(); 
+  }
+  
+  /*
+   * Chargement de la ligne precedent la ligne courante
+   */
+  function loadRefPrevHistLine(){
+  	$this->_ref_prev_hist_line = $this->loadUniqueBackRef("prev_hist_line");
+  }
+
+  /*
+   * Chargement récursif des parents d'une ligne (substitution) permet d'afficher l'historique d'une ligne
+   */
+  function loadRefsPrevLines($lines = array()) {
+    if(!array_key_exists($this->_id, $lines)){
+      $lines[$this->_id] = $this;
+    }
+    // Chargement de la parent_line
+    $this->loadRefPrevHistLine();
+    if($this->_ref_prev_hist_line->_id){
+      $lines[$this->_ref_prev_hist_line->_id] = $this->_ref_prev_hist_line;
+      return $this->_ref_prev_hist_line->loadRefsPrevLines($lines);
+    } else {
+      return $lines;
+    }
+  }
+  
+  
+  function delete(){
+    // Chargement de la substitution_line de l'objet à supprimer
+    $line = new $this->_class_name;
+    $line->substitution_line_id = $this->_id;
+    $line->loadMatchingObject();
+    if($line->_id){
+      if($msg = $line->delete()){
+        return $msg;
+      }
+    }
+    
+    // Suppression de la ligne
+    if($msg = parent::delete()){
+      return $msg;
+    }
+  }
+  
+  
   
   /*
    * Controle des allergies
