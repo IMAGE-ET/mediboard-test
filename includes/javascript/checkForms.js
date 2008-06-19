@@ -390,6 +390,8 @@ Object.extend(ElementChecker, {
   
   // float
   check_float: function() {
+    this.oElement.value = this.oElement.value.toString().replace(',', '.');
+    
     if(isNaN(parseFloat(this.oElement.value)) || parseFloat(this.oElement.value)!=this.oElement.value){
       return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
     }
