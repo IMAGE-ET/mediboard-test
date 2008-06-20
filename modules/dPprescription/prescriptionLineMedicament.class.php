@@ -60,6 +60,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_can_delete_line                    = null;
 	var $_can_vw_form_add_line_contigue      = null;
   var $_can_modify_dates                   = null;
+  var $_can_modify_comment                 = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -150,9 +151,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
                  !$this->valide_pharma && 
                  ($this->praticien_id == $AppUI->user_id  || $perm_infirmiere || $is_praticien || $mode_pharma);
  
-    // Modification des dates
+    // Modification des dates et des commentaires
     if($perm_edit){
     	$this->_can_modify_dates = 1;
+    	$this->_can_modify_comment = 1;
     }
     // Select equivalent
     if($perm_edit){
