@@ -183,11 +183,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Affichage de l'icone Livret Therapeutique
-    if(!$this->_ref_produit->inLivret && ($prescription->type == "sejour" || $this->_protocole)){
+    if(!$this->_ref_produit->inLivret && ($prescription_type == "sejour" || $this->_protocole)){
       $this->_can_vw_livret_therapeutique = 1;
     }
     // Affichage de l'icone Produit Hospitalier
-    if(!$this->_ref_produit->hospitalier && ($prescription->type == "sortie" || $this->_protocole)){
+    if(!$this->_ref_produit->hospitalier && ($prescription_type == "sortie" || $this->_protocole)){
       $this->_can_vw_hospi = 1;
     }
     // Affichage de l'icone generique
