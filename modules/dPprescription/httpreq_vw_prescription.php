@@ -116,7 +116,7 @@ if(!$prescription_id && $object_class && $object_id && $type){
 // Chargement des lignes de la prescription et des droits sur chaque ligne
 if($prescription->_id){
   // Calcul des droits de la prescription	
-	$prescription->getAdvancedPerms($is_praticien, $listPrats);
+	$prescription->getAdvancedPerms($is_praticien, $mode_pharma);
   
 	// Chargement des medicaments et commentaires de medicament
 	$prescription->loadRefsLinesMedComments();

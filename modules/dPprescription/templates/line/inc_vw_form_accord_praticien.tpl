@@ -1,4 +1,4 @@
-{{if !$this->valide_pharma}}
+{{if !$line->valide_pharma}}
 	<form action="?" method="post" name="editLineAccordPraticien-{{$line->_id}}">
 	  <input type="hidden" name="m" value="dPprescription" />
 	  <input type="hidden" name="dosql" value="{{$dosql}}" />

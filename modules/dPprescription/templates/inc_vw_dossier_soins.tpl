@@ -50,7 +50,7 @@ printDossierSoin = function(prescription_id, date){
 
   {{foreach from=$lines_med item=line}}
   <tr>
-    <td>{{$line->_ref_produit->libelle}}</td>
+    <td>{{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}} </td>
     <td>
     {{assign var=line_id value=$line->_id}}
     {{if array_key_exists($line_id, $prises_med)}}

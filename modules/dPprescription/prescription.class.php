@@ -109,7 +109,7 @@ class CPrescription extends CMbObject {
   /*
    * Permet de savoir si l'utilisateur courant a le droit de créer des lignes dans la prescription
    */
-  function getAdvancedPerms($is_praticien){
+  function getAdvancedPerms($is_praticien, $mode_pharma){
   	global $AppUI;
 		
   	// Chargement du user_courant
@@ -132,6 +132,10 @@ class CPrescription extends CMbObject {
 		  	$this->_can_add_line = 1;
 		  }
 		}	
+		// Le pharmacien n'a pas le droit de rajouter des lignes
+		if($mode_pharma){
+			$this->_can_add_line = 0;
+		}
   }
   
   function check(){

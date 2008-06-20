@@ -47,7 +47,7 @@
         {{/if}}
         {{if $mode_pharma}}
         <!-- Vue pharmacie -->
-          {{if !$line->_protocole && !$line->_traitement}}
+          {{if !$line->_protocole}}
             {{include file="../../dPprescription/templates/line/inc_vw_form_accord_praticien.tpl"}}
             {{include file="../../dPprescription/templates/line/inc_vw_form_validation_pharma.tpl"}}
           {{/if}}
