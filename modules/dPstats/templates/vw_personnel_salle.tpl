@@ -66,7 +66,7 @@ function pageMain() {
         </tr>
         {{foreach from=$listPlages item=curr_plage}}
         <tr>
-          <td>{{$curr_plage->date}}</td>
+          <td>{{$curr_plage->date|date_format:"%d/%m/%Y"}}</td>
           <td>{{$curr_plage->_ref_salle->_view}}</td>
           <td>{{$curr_plage->_ref_operations|@count}}</td>
           <td>{{$curr_plage->_duree_prevue|date_format:"%Hh%M"}}</td>
