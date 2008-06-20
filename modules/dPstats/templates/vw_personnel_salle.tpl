@@ -52,6 +52,7 @@ function pageMain() {
         </tr>
       </table>
       </form>
+      {{if $prat_personnel}}
       <table class="tbl">
         <tr>
           <th>Date</th>
@@ -101,6 +102,7 @@ function pageMain() {
           <td colspan="2"></td>
         </tr>
       </table>
+      {{/if}}
     </td>
   </tr>
 </table>

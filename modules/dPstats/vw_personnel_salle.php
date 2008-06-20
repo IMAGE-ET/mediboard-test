@@ -18,6 +18,13 @@ $prat_personnel = mbGetValueFromGetOrSession("prat_personnel", null);
 $user = new CMediusers();
 $user->load($AppUI->user_id);
 $listPrats = $user->loadPraticiens(PERM_READ);
+  
+$total["duree_prevue"]             = "00:00:00";
+$total["days_duree_prevue"]        = 0;
+$total["duree_first_to_last"]      = "00:00:00";
+$total["days_duree_first_to_last"] = 0;
+$total["duree_reelle"]             = "00:00:00";
+$total["days_duree_reelle"]        = 0;
 
 // Récupération des plages
 $plage = new CPlageOp;
@@ -28,13 +35,6 @@ if($prat_personnel) {
   $where["chir_id"] = "= '$prat_personnel'";
   $order = "date, salle_id, debut";
   $listPlages = $plage->loadList($where, $order);
-  
-  $total["duree_prevue"]             = "00:00:00";
-  $total["days_duree_prevue"]        = 0;
-  $total["duree_first_to_last"]      = "00:00:00";
-  $total["days_duree_first_to_last"] = 0;
-  $total["duree_reelle"]             = "00:00:00";
-  $total["days_duree_reelle"]        = 0;
 
   // Récupération des interventions
   foreach($listPlages as &$curr_plage) {
