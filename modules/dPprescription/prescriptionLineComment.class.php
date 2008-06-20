@@ -60,7 +60,9 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {
 		global $AppUI;
 		
-		$perm_edit = ($this->praticien_id == $AppUI->user_id) && !$this->signee;
+	  $perm_infirmiere = $this->creator_id == $AppUI->user_id;                
+		$perm_edit = !$this->signee && ($this->praticien_id == $AppUI->user_id || $perm_infirmiere || $is_praticien);             
+                 
     if($this->_class_name == "CPrescriptionLineElement"){
     	// Visualisation du forulaire de gestion d'executant
     	$this->_can_vw_form_executant = 1;  
@@ -74,7 +76,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
       $this->_can_view_form_ald = 1;
     }
     // Suppression de la ligne
-    if(($perm_edit) || $this->_protocole){
+    if(($perm_edit && $is_praticien) || $this->_protocole){
   	  $this->_can_delete_line = 1;
   	}
   	// View signature praticien
