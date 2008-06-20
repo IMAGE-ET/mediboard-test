@@ -103,7 +103,11 @@ class CUser extends CMbObject {
     $specs["_user_password_weak"]   = "password minLength|4";
     $specs["_user_password_strong"] = "password minLength|6 notContaining|user_username notNear|user_username alphaAndNum";
 
-    $specs["_user_password"] = $specs["_user_password_weak"];
+    if(CAppUI::conf("admin CUser strong_password")) {
+      $specs["_user_password"] = $specs["_user_password_strong"];
+    } else {
+      $specs["_user_password"] = $specs["_user_password_weak"];
+    }
 
     return array_merge($specsParent, $specs);
   }
