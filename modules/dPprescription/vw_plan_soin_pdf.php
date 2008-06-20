@@ -222,15 +222,15 @@ $pdf->SetFillColor(255,255,255);
 
 // Parcours et affichage des traitements
 if($prescription_traitement->_id){
-  $prescription_traitement->loadRefsLines();
+  $prescription_traitement->loadRefsLines("1");
 	// Parcours des traitements
 	foreach($prescription_traitement->_ref_prescription_lines as $_line_traitement){
 		// On arrete dans tous les cas la feuille de soin a la fin du sejour
-	  if($line->_fin >= $prescription->_ref_object->_sortie){
-    	$line->_fin = mbDate($prescription->_ref_object->_sortie);
+	  if($_line_traitement->_fin >= $prescription->_ref_object->_sortie){
+    	$_line_traitement->_fin = mbDate($prescription->_ref_object->_sortie);
     }
-    if($line->debut <= $prescription->_ref_object->_entree){
-    	$line->debut = mbDate($prescription->_ref_object->_entree);
+    if($_line_traitement->debut <= $prescription->_ref_object->_entree){
+    	$_line_traitement->debut = mbDate($prescription->_ref_object->_entree);
     }
 		
 	  calculEtatJour($date, $dates, $nb_jours, $_line_traitement);
