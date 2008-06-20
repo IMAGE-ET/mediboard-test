@@ -155,69 +155,73 @@
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
 <!-- Parcours des categories -->
-{{foreach from=$elementsChap key=cat_id item=elementsCat name="foreachCat"}}
-  {{assign var=name_category value=$categories.$cat_id}}
-  {{foreach from=$elementsCat key=exec item=elements name="foreachExec"}}
+  {{foreach from=$elementsChap key=exec item=elements name="foreachExec"}}
     {{if $exec != "aucun"}}
       {{assign var=exec value=$executants.$exec}}
     {{/if}}
      
-     {{if $smarty.foreach.foreachChap.last && $smarty.foreach.foreachCat.last && $smarty.foreach.foreachExec.last}}
+     {{if $smarty.foreach.foreachChap.last && $smarty.foreach.foreachExec.last}}
        <div class="bodyWithoutPageBreak">
      {{else}} 
        <div class="body">
      {{/if}}
      
-     <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$name_category->_view}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
-     
-     {{if $elements.element.ald || $elements.comment.ald}}
-       <h3>
-         Prescriptions relatives au traitement de l'affection de longue durée
-	   	 </h3>
-	   	 <ul>
+     <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
+     {{if $elements.ald|@count}}
+     <h3>
+	     Prescriptions relatives au traitement de l'affection de longue durée 
+		 </h3>
+	   {{/if}}
+
+     <ul>
 	     <!-- Affichage des ALD -->
-	     {{foreach from=$elements.element.ald item=_element_ald}}
-	       {{include file="inc_print_element.tpl" elt=$_element_ald}}
-	     {{/foreach}}
-	     {{foreach from=$elements.comment.ald item=_comment_ald}}
-	     <li>
-	       {{$_comment_ald->commentaire}}
-	     </li>
+	     {{foreach from=$elements.ald key=name_cat item=_elements_ald name="foreach_elts_ald"}}  
+	        {{foreach from=$_elements_ald  item=_element_ald name=foreach_elt_ald}}
+	           {{if $smarty.foreach.foreach_elt_ald.first}}
+	           {{assign var=category value=$categories.$name_cat}}
+		         <strong>{{$category->nom}} : {{$category->header}}</strong>
+		         {{/if}}
+
+		         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
+	             <!-- Affichage de l'element -->
+	             {{include file="inc_print_element.tpl" elt=$_element_ald}}
+	           {{else}}
+	             <!-- Affichage du commentaire -->
+	              <li>{{$_element_ald->commentaire}}</li>
+	           {{/if}}
+	           
+	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
 	     
-	     <div class="middle"></div>
+	    {{if $elements.ald|@count}}
+	    <div class="middle"></div>
+		  	 <h3>
+	         Prescriptions SANS RAPPORT avec l'affection de longue durée 
+	       </h3>
+	    {{/if}}
 	     
-	     <h3>
-         Prescriptions SANS RAPPORT avec l'affection de longue durée
-       </h3>
 	     <!-- Affichage des no_ald -->
 	     <ul>
-	     {{foreach from=$elements.element.no_ald item=_element_no_ald}}
-	       {{include file="inc_print_element.tpl" elt=$_element_no_ald}}
-	     {{/foreach}}
-	     {{foreach from=$elements.comment.no_ald item=_comment_no_ald}}
-	     <li>
-	       {{$_comment_no_ald->commentaire}}
-	     </li>
-	     {{/foreach}}
-	     </ul>
-     {{else}}
-	     <!-- Affichage normal -->
-	     <ul>
-	     {{foreach from=$elements.element.no_ald item=_element_no_ald}}
-	       {{include file="inc_print_element.tpl" elt=$_element_no_ald}}
-	     {{/foreach}}
-	     {{foreach from=$elements.comment.no_ald item=_comment_no_ald}}
-	     <li>
-	       {{$_comment_no_ald->commentaire}}
-	     </li>
+	     {{foreach from=$elements.no_ald key=name_cat item=_elements_no_ald name="foreach_elts_no_ald"}}
+	       {{foreach from=$_elements_no_ald  item=_element_no_ald name=foreach_elt_no_ald}}
+	           {{if $smarty.foreach.foreach_elt_no_ald.first}}
+	           {{assign var=category value=$categories.$name_cat}}
+		         <strong>{{$category->nom}} : {{$category->header}}</strong>
+		         {{/if}}
+		
+		         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}
+	             <!-- Affichage de l'element -->
+	             {{include file="inc_print_element.tpl" elt=$_element_no_ald}}
+	           {{else}}
+	             <!-- Affichage du commentaire -->
+	             <li>{{$_element_no_ald->commentaire}}</li>
+	           {{/if}}
+	        {{/foreach}}
 	     {{/foreach}}
 	     </ul>
-     {{/if}}
-     </div>
+        </div>
   {{/foreach}}
-{{/foreach}}
 {{/foreach}}
 
 <!-- Re-ouverture des tableaux -->

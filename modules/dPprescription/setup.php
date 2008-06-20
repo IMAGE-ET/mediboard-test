@@ -12,7 +12,7 @@ global $AppUI;
 // MODULE CONFIGURATION DEFINITION
 $config = array();
 $config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.42";
+$config["mod_version"]     = "0.43";
 $config["mod_type"]        = "user";
 
 
@@ -639,7 +639,12 @@ class CSetupdPprescription extends CSetup {
     }
     $this->addFunctions("updateUnitePrise");
    
-    $this->mod_version = "0.42";
+    $this->makeRevision("0.42");
+    $sql = "ALTER TABLE `category_prescription` 
+	          ADD `header` TEXT;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.43";
   }  
 }
 

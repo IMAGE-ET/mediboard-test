@@ -58,7 +58,7 @@ submitProtocole = function(){
     
       <!-- Selection du praticien prescripteur de la ligne -->
 			{{if !$is_praticien && !$mode_protocole && $prescription->_can_add_line}}
-       <div style="position: absolute; right: 25px">
+       <div style="float: right">
 				<form name="selPraticienLine" action="?" method="get">
 				  <select name="praticien_id" onchange="changePraticienMed(this.value); {{if !$mode_pharma}}changePraticienElt(this.value);{{/if}}">
 				    {{foreach from=$listPrats item=_praticien}}
@@ -113,7 +113,8 @@ submitProtocole = function(){
       </form>
         
       {{else}}
-        Prescription du Dr {{$prescription->_ref_praticien->_view}}<br />
+        <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->
+       
         {{$prescription->_ref_object->_view}}
         {{if $prescription->_ref_patient->_age}}
            ({{$prescription->_ref_patient->_age}} ans - {{$prescription->_ref_patient->naissance|date_format:"%d/%m/%Y"}}{{if $poids}} - {{$poids}} kg{{/if}})

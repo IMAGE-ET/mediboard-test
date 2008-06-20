@@ -1,7 +1,6 @@
 {{assign var=chapitre_category value=$elt->_ref_element_prescription->_ref_category_prescription->chapitre}}
 
 <li>
-  {{if $chapitre_category != "dmi" && $chapitre_category != "dm"}}Faire pratiquer {{/if}}
   <strong>{{$elt->_ref_element_prescription->_view}}</strong>
 
   {{if $elt->commentaire}}

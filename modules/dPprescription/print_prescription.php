@@ -122,18 +122,35 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
+			if($ordonnance){
+          if($element->date_arret){
+				  	$element->_fin = $element->date_arret;
+				  }
+				  if($element->_fin && $element->_fin < mbDate()){
+				  	continue;
+				  }
+				  
+					// si ligne non signée, ou que le praticien de la ligne n'est pas le user, on ne la prend pas en compte
+				  if(!$element->signee || $element->praticien_id != $AppUI->user_id){
+				  	continue;
+				  }
+				  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
+				  if($now > mbDateTime($element->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
+            continue;
+				  }
+			  }
+			  
 				$executant = "aucun";
 		    if($element->executant_prescription_line_id){
 		      $executant = $element->executant_prescription_line_id;
 		    }
-	      $linesElt[$name_chap][$name_cat][$executant]["element"]["ald"] = array();
-		    $linesElt[$name_chap][$name_cat][$executant]["element"]["no_ald"] = array();	
-	      $linesElt[$name_chap][$name_cat][$executant]["comment"]["ald"] = array();
-		    $linesElt[$name_chap][$name_cat][$executant]["comment"]["no_ald"] = array();
+	      $linesElt[$name_chap][$executant]["ald"] = array();
+		    $linesElt[$name_chap][$executant]["no_ald"] = array();	
 			}
 		}
 	}
 }
+
 
 // Parcours des elements
 foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
@@ -164,19 +181,21 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
             continue;
 				  }
 			  }
+			  
 				$executant = "aucun";
 		    if($element->executant_prescription_line_id){
 		      $executant = $element->executant_prescription_line_id;
 		    }
 		    if($element->ald){
-		    	$linesElt[$name_chap][$name_cat][$executant][$type]["ald"][] = $element;
+		    	$linesElt[$name_chap][$executant]["ald"][$name_cat][] = $element;
 		    } else {
-		      $linesElt[$name_chap][$name_cat][$executant][$type]["no_ald"][] = $element;
+		      $linesElt[$name_chap][$executant]["no_ald"][$name_cat][] = $element;
 		    }
 		  }
 		}
   }
 }
+
 
 
 // Création du template

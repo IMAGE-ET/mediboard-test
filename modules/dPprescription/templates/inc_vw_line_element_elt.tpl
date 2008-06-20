@@ -17,9 +17,7 @@
       </script>
       <div style="position: absolute">
         <!-- Formulaire ALD -->
-        {{if $line->_can_view_form_ald}}
           {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}} 
-	      {{/if}}
       </div>    
       <div class="div_signature">
         <!-- Affichage de la signature du praticien -->

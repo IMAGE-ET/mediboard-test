@@ -57,6 +57,10 @@
           <td>{{mb_field object=$category field="description"}}</td>
         </tr>
         <tr>
+          <th>{{mb_label object=$category field="header"}}</th>
+          <td>{{mb_field object=$category field="header"}}</td>
+        </tr>
+        <tr>
           <td class="button" colspan="2">
           {{if $category->_id}}
             <button class="modify" type="submit" name="modify">
