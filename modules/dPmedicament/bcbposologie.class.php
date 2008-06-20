@@ -89,7 +89,7 @@ class CBcbPosologie extends CBcbObject {
     // Chargement des posologies du produit
     $ds = CSQLDataSource::get("bcb");
     if($numPoso){
-      $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' AND `NO_POSO` = '$numPoso';";  
+      $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' AND `NO_POSO` = '$numPoso';";
     } else {
       $query = "SELECT * FROM `POSO_PRODUITS` WHERE `CODE_CIP` = '$cip' ORDER BY `NO_POSO` ASC;";
     }
@@ -105,10 +105,10 @@ class CBcbPosologie extends CBcbObject {
       $this->quantite1 = $posologie["QUANTITE1"];
       $this->quantite2 = $posologie["QUANTITE2"];
      
-      $this->code_prise1 = $posologie["CODE_PRISE1"];	  
+      $this->code_prise1 = $posologie["CODE_PRISE1"];
       $this->getValeur($this->code_prise1, "_code_prise1", "LIBELLE_SPECIF", "CODE_SPECIF",  "POSO_SPECIF_PRISE");
   
-      $this->code_prise2 = $posologie["CODE_PRISE2"];	  
+      $this->code_prise2 = $posologie["CODE_PRISE2"];
       $this->getValeur($this->code_prise2, "_code_prise2", "LIBELLE_SPECIF", "CODE_SPECIF", "POSO_SPECIF_PRISE");
  
       $this->code_indication = $posologie["CODE_INDICATION"];
@@ -202,6 +202,9 @@ class CBcbPosologie extends CBcbObject {
       $this->_view .= " à $this->quantite2";
     }
     $this->_view .= " ".$this->_code_unite_prise["LIBELLE_UNITE_DE_PRISE"];
+    if($this->p_kg) {
+      $this->_view .= "/kg";
+    }
     if($this->code_moment) {
       $this->_view .= " $this->_code_moment";
     }

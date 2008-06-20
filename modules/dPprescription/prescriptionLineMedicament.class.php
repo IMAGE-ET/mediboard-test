@@ -248,7 +248,11 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
     $this->_ref_produit->loadRefPosologies();
     foreach($this->_ref_produit->_ref_posologies as $_poso){
-    	$this->_unites_prise[] = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
+      $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
+      if($_poso->p_kg) {
+        $unite .= "/kg";
+      }
+    	$this->_unites_prise[] = $unite;
     }
     $this->_unites_prise = array_unique($this->_unites_prise);
   }
