@@ -101,7 +101,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_signature_praticien = 1;
     }
     // Affichage du formulaire de signature infirmiere
-    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator == $AppUI->user_id){
+    if(!$this->_protocole && !$is_praticien && !$this->signee && $this->creator_id == $AppUI->user_id){
     	$this->_can_view_form_signature_infirmiere = 1;
     }
     // Suppression de la ligne
