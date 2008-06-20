@@ -117,7 +117,7 @@ class CPrescription extends CMbObject {
   	$user->load($AppUI->user_id);
 		
 		// Si le user courant est un praticien
-		if($is_praticien){
+		if($is_praticien || !$this->object_id){
 			$this->_can_add_line = 1;
 		} 
 		// Sinon (infirmiere)
