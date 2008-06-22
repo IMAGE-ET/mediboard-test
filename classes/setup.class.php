@@ -161,15 +161,22 @@ class CSetup {
   /**
    * Removes a module
    * Warning, it actually breaks module dependency
+   * @return bool Job done
    */
   function remove() {
     global $AppUI;
+    
+    if ($this->mod_type == "core") {
+      $AppUI->setMsg("Impossible de supprimer le module '%s'", UI_MSG_ERROR, $this->mod_name);
+      return false;
+    }
+    
     $success = true;
     foreach ($this->tables as $table) {
       $query = "DROP TABLE `$table`";
       if (!$this->ds->exec($query)) {
         $success = false;
-        $AppUI->setMsg("Failed to remove table '$table'", UI_MSG_ERROR, true);
+        $AppUI->setMsg("Failed to remove table '%s'", UI_MSG_ERROR, $table);
       } 
     }
     

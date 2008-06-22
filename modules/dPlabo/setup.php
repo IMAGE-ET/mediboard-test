@@ -1,18 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPlabo
-* @version $Revision: $
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-$config = array();
-$config["mod_name"]        = "dPlabo";
-$config["mod_version"]     = "0.28";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPlabo
+ * @version $Revision: $
+ * @author Romain Ollivier
+ */
 
 class CSetupdPlabo extends CSetup {
   

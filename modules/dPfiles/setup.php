@@ -1,19 +1,11 @@
 <?php /* $Id: setup.php 356 2006-07-17 16:28:06Z MyttO $ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision: 356 $
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPfiles";
-$config["mod_version"]     = "0.18";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision: 356 $
+ * @author Romain Ollivier
+ */
 
 class CSetupdPfiles extends CSetup {
   
@@ -21,6 +13,7 @@ class CSetupdPfiles extends CSetup {
     parent::__construct();
     
     $this->mod_name = "dPfiles";
+    
     $this->makeRevision("all");
     $this->setTimeLimit(120);
     if(!$this->ds->loadTable("files_mediboard")) {

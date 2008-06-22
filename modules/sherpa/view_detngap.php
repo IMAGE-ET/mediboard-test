@@ -52,6 +52,7 @@ if ($filter->pracod) {
 $order = "idacte";
 
 $detsngap = $filter->loadList($where, $order, "0,30");
+$count_detsngap = $filter->countList($where);
 
 // Chargement du sejour sélectionné
 $detngap = new CSpNGAP();

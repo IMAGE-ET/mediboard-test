@@ -1,18 +1,11 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage dPpersonnel
-* @version $Revision:  $
-* @author Alexis Granger
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPpersonnel";
-$config["mod_version"]     = "0.14";
-$config["mod_type"]        = "user";
-
+ * @package Mediboard
+ * @subpackage dPpersonnel
+ * @version $Revision:  $
+ * @author Alexis Granger
+ */
 
 class CSetupdPpersonnel extends CSetup {
   

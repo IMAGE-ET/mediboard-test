@@ -1,29 +1,17 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "admin";
-$config["mod_version"]     = "1.0.14";
-$config["mod_type"]        = "core";
+ * @package Mediboard
+ * @subpackage dPpatients
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupadmin extends CSetup {
-  
-  function remove() {
-    global $AppUI;
-    $AppUI->setMsg("Impossible de supprimer le module 'admin'", UI_MSG_ERROR, true);
-    return null;
-  }
-  
   function __construct() {
     parent::__construct();
     
+    $this->mod_type = "core";
     $this->mod_name = "admin";
     
     $this->makeRevision("all");

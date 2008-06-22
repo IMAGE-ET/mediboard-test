@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpatients
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPpatients";
-$config["mod_version"]     = "0.70";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPpatients
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPpatients extends CSetup {
   
@@ -19,6 +13,7 @@ class CSetupdPpatients extends CSetup {
     parent::__construct();
     
     $this->mod_name = "dPpatients";
+
     $this->makeRevision("all");
     $sql = "CREATE TABLE `patients` (
               `patient_id` INT(11) NOT NULL AUTO_INCREMENT,

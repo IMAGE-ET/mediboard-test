@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPstats
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPstats";
-$config["mod_version"]     = "0.15";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPstats
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPstats extends CSetup {
   
@@ -21,6 +15,7 @@ class CSetupdPstats extends CSetup {
     $this->mod_name = "dPstats";
     
     $this->makeRevision("all");
+
     $this->makeRevision("0.1");
     $sql = "CREATE TABLE `temps_op` (
                `temps_op_id` INT(11) NOT NULL AUTO_INCREMENT ,

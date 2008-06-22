@@ -1,19 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPplanningOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPplanningOp";
-$config["mod_version"]     = "0.85";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPplanningOp
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPplanningOp extends CSetup {
   
@@ -106,37 +98,8 @@ class CSetupdPplanningOp extends CSetup {
           "\nADD `libelle` TEXT DEFAULT NULL AFTER `CCAM_code2` ;";
     $this->addQuery($sql);
     
-    $this->makeRevision("0.27");
-    $this->setTimeLimit(1800);
-    
-    function setup_moveDocs(){
-      $ds = CSQLDataSource::get("std");
-      
-      $document_types = array (
-      array ("name" => "compte_rendu", "valide" => "cr_valide"));
-      foreach ($document_types as $document_type) {
-        $document_name = $document_type["name"];
-        $document_valide = $document_type["valide"];
-  
-        $sql = "SELECT *" .
-            "\nFROM `operations`" .
-            "\nWHERE `$document_name` IS NOT NULL" .
-            "\nAND `$document_name` != ''";
-        $res = $ds->exec( $sql );
-    
-        while ($obj = $ds->fetchObject($res)) {
-          $document = new CCompteRendu;
-          $document->type = "operation";
-          $document->nom = $document_name;
-          $document->object_id = $obj->operation_id;
-          $document->source = $obj->$document_name;
-          $document->valide = $obj->$document_valide;
-          $document->store();
-        }
-      }
-      return true;
-    }
-    $this->addFunctions("setup_moveDocs");
+    // CR passage des champs à enregistrements supprimé car regressif
+//    $this->makeRevision("0.27");
     
     $this->makeRevision("0.28");
     $sql = "ALTER TABLE `operations` ADD `codes_ccam` VARCHAR( 160 ) AFTER `CIM10_code`";

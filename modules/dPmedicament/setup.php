@@ -1,20 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPmedicament
- *	@version $Revision: $
- *  @author Alexis Granger
+ * @package Mediboard
+ * @subpackage dPmedicament
+ * @version $Revision: $
+ * @author Alexis Granger
  */
-
-global $AppUI;
- 
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPmedicament";
-$config["mod_version"]     = "0.13";
-$config["mod_type"]        = "user";
-
 
 class CSetupdPmedicament extends CSetup {
   

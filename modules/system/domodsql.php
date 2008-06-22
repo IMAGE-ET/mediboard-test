@@ -12,25 +12,22 @@ $mod_name = mbGetValueFromGet("mod_name", "0");
 $module = new CModule();
 if ($mod_id) {
 	$module->load($mod_id);
-} else {
+}
+else {
   $module->mod_version = "all";
 	$module->mod_name    = $mod_name;
 }
 
-$ok = @include_once(CAppUI::conf("root_dir")."/modules/$module->mod_name/setup.php");
-
-if (!$ok) {
-	if ($module->mod_type != "core") {
-		$AppUI->setMsg("Module setup file could not be found", UI_MSG_ERROR);
-		$AppUI->redirect();
-	}
-}
-
-if (!class_exists($setupclass = "CSetup".$config["mod_name"])) {
+if (!class_exists($setupclass = "CSetup$module->mod_name")) {
   if ($module->mod_type != "core") {
     $AppUI->setMsg("Module does not have a valid setup class defined", UI_MSG_ERROR);
     $AppUI->redirect();
   }
+}
+
+if ($module->mod_type == "core" && in_array($cmd, array("remove", "install", "toggle"))) {
+  $AppUI->setMsg("Core modules can't be uninstalled or disactivated", UI_MSG_ERROR);
+  $AppUI->redirect();
 }
 
 $setup = new $setupclass;
@@ -38,68 +35,79 @@ $setup = new $setupclass;
 switch ($cmd) {
 	case "moveup":
 	case "movedn":
-		$module->move($cmd);
-		$AppUI->setMsg("Module re-ordered", UI_MSG_OK);
-		break;
+	$module->move($cmd);
+	$AppUI->setMsg("Module re-ordered", UI_MSG_OK);
+	break;
+		
 	case "toggle":
 	// just toggle the active state of the table entry
-		$module->mod_active = 1 - $module->mod_active;
-		$module->store();
-		$AppUI->setMsg("Module state changed", UI_MSG_OK);
-		break;
+	$module->mod_active = 1 - $module->mod_active;
+	$module->store();
+	$AppUI->setMsg("Module state changed", UI_MSG_OK);
+	break;
+
 	case "toggleMenu":
-	  // just toggle the active state of the table entry
-		$module->mod_ui_active = 1 - $module->mod_ui_active;
-		$module->store();
-    $AppUI->setMsg("Module menu state changed", UI_MSG_OK);
-		break;
+  // just toggle the active state of the table entry
+	$module->mod_ui_active = 1 - $module->mod_ui_active;
+	$module->store();
+   $AppUI->setMsg("Module menu state changed", UI_MSG_OK);
+	break;
+
 	case "remove":
-    $success = $setup->remove();
-    if($success !== null){
-      $module->remove();
-      $AppUI->setMsg("Module removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
-    }
-		break;
+  $success = $setup->remove();
+  if($success !== null){
+    $module->remove();
+    $AppUI->setMsg("Module removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
+  }
+  break;
+
   case "install":
-    $newVersion = $setup->upgrade($module->mod_version);
-    if ($newVersion) {
-      $module->bind( $config );
-      $topVersion = $module->mod_version;
-      $module->mod_version = $newVersion;
-      $module->install();
-      if ($newVersion == $topVersion)
-        $AppUI->setMsg("Installation de '$module->mod_name' à la version $newVersion", UI_MSG_OK, true);
-      else
-        $AppUI->setMsg("Installation de '$module->mod_name' à la version $newVersion sur $topVersion", UI_MSG_WARNING, true);
-    } else {
-      $AppUI->setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
+  
+  if ($module->mod_version = $setup->upgrade($module->mod_version)) {
+    $module->mod_type = $setup->mod_type;
+    $module->install();
+    
+    if ($setup->mod_version == $module->mod_version) {
+      $AppUI->setMsg("Installation de '$module->mod_name' à la version $setup->mod_version", UI_MSG_OK, true);
     }
-    break;
-	case "upgrade":
-    $newVersion = $setup->upgrade($module->mod_version);
-		if ($newVersion) {
-			$module->bind($config);
-      $topVersion = $module->mod_version;
-      $module->mod_version = $newVersion;
-			$module->store();
-      if ($newVersion == $topVersion)
-			  $AppUI->setMsg("Mise à jour de '$module->mod_name' à la version $newVersion", UI_MSG_OK, true);
-      else
-        $AppUI->setMsg("Mise à jour de '$module->mod_name' à la version $newVersion sur $topVersion", UI_MSG_WARNING, true);
-		} else {
-			$AppUI->setMsg("Module '$module->mod_name' non mis à jour", UI_MSG_ERROR, true);
-		}
-		break;
+    else {
+      $AppUI->setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+    }
+  } 
+  else {
+    $AppUI->setMsg("Module '$module->mod_name' non installé", UI_MSG_ERROR, true);
+  }
+  break;
+
+  case "upgrade":
+  if ($module->mod_version = $setup->upgrade($module->mod_version)) {
+    $module->mod_type = $setup->mod_type;
+    $module->store();
+
+    if ($setup->mod_version == $module->mod_version) {
+      $AppUI->setMsg("Installation de '$module->mod_name' à la version $setup->mod_version", UI_MSG_OK, true);
+    }
+    else {
+      $AppUI->setMsg("Installation de '$module->mod_name' à la version $module->mod_version sur $setup->mod_version", UI_MSG_WARNING, true);
+    }
+	} 
+	else {
+		$AppUI->setMsg("Module '$module->mod_name' non mis à jour", UI_MSG_ERROR, true);
+	}
+	break;
+
 	case "configure":
-		if ($setup->configure()) { 	//returns true if configure succeeded
-		}
-		else {
-			$AppUI->setMsg("Module configuration failed", UI_MSG_ERROR);
-		}
-		break;
+	if ($setup->configure()) { 	//returns true if configure succeeded
+	}
+	else {
+		$AppUI->setMsg("Module configuration failed", UI_MSG_ERROR);
+	}
+	break;
+
 	default:
-		$AppUI->setMsg("Unknown Command", UI_MSG_ERROR);
-		break;
+	$AppUI->setMsg("Unknown Command", UI_MSG_ERROR);
+	break;
 }
+
 $AppUI->redirect();
 ?>

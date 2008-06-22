@@ -1,20 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPhospi
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPhospi";
-$config["mod_version"]     = "0.24";
-$config["mod_type"]        = "user";
-
+ * @package Mediboard
+ * @subpackage dPhospi
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPhospi extends CSetup {
   

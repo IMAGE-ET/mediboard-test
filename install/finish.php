@@ -92,7 +92,7 @@ if (@$_POST["changePassword"]) {
 </tr>
 
 <tr>
-  <td>Créations des bases et des utilisateurs</td>
+  <td>Modification du mot de passe 'admin'</td>
   <td>
     <?php if (!Pear::isError($res)) { ?>
     <div class="message">Mot de passe modifié</div>

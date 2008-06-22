@@ -22,11 +22,19 @@
         
         <button name="submit" class="search">Filtrer</button>
       </form>
-      
-      <div class="big-info">A savoir : la première ligne de chaque champ correspond aux spécifications données dans les specs de la classe, 
-      la deuxième correspond à ce qui est réelement appliqué au niveau de la base de données.</div>
     </td>
   </tr>
+	
+	<tr>
+	  <td>
+      <div class="big-info">Pour chaque spécification de propriété : 
+      	<ul>
+      	  <li><strong>la première ligne</strong> correspond au mapping objet => relationnel théorique,</li> 
+					<li><strong>la deuxième ligne </strong>correspond à ce qui est réellement présent dans la base de données.</li>
+				</ul>
+			</div>
+	  </td>
+	</tr>
   
   <tr>
     <td>
@@ -45,20 +53,22 @@
         
         {{foreach from=$list_classes key=curr_class_name item=curr_class}}
           {{if $list_errors.$curr_class_name || $list_classes|@count == 1}}
-          <tr>
-            <th colspan="11" class="title">
-              <button id="sugg-{{$curr_class_name}}-trigger" class="edit" style="float: left;">
-                {{tr}}Suggestion{{/tr}}
-              </button>
-              {{$curr_class_name}} ({{tr}}{{$curr_class_name}}{{/tr}})
-            </th>
-          </tr>
-          <tr id="sugg-{{$curr_class_name}}">
-            <td colspan="100">
-              <script type="text/javascript">new PairEffect('sugg-{{$curr_class_name}}', {bStoreInCookie: false});</script>
-              <pre>{{tr}}{{$curr_class.suggestion|default:"no suggestion"}}{{/tr}}</pre>
-            </td>
-          </tr>
+            {{if $$curr_class.suggestion}}
+	          <tr>
+	            <th colspan="11" class="title">
+	              <button id="sugg-{{$curr_class_name}}-trigger" class="edit" style="float: left;">
+	                {{tr}}Suggestion{{/tr}}
+	              </button>
+	              {{$curr_class_name}} ({{tr}}{{$curr_class_name}}{{/tr}})
+	            </th>
+	          </tr>
+	          <tr id="sugg-{{$curr_class_name}}">
+	            <td colspan="100">
+	              <script type="text/javascript">new PairEffect('sugg-{{$curr_class_name}}', {bStoreInCookie: false});</script>
+	              <pre>{{$curr_class.suggestion}}</pre>
+	            </td>
+	          </tr>
+	          {{/if}}
           {{foreach from=$curr_class.fields key=curr_field_name item=curr_field}}
             
             {{if $list_errors.$curr_class_name.$curr_field_name || $curr_class.key == $curr_field_name || $class_name == $curr_class_name}}

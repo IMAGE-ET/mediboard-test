@@ -62,13 +62,13 @@ if (@$_POST["do"]) {
 </tr>
 
 <tr>
-  <td>Créations des bases et des utilisateurs</td>
+  <td>Construction des tables pour les 'core' modules</td>
   <td>
     <?php if (!count($dbConnection->_errors)) { ?>
-    <div class="message">Créations réussies</div>
+    <div class="message">Construction réussie</div>
     <?php } else { ?>
     <div class="error">
-      Erreurs lors des créations
+      Erreurs lors de la construction
       <br />
       <?php echo nl2br(join($dbConnection->_errors, "\n")); ?>
     </div>

@@ -1,19 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpmsi
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPpmsi";
-$config["mod_version"]     = "0.14";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPpmsi
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPpmsi extends CSetup {
   

@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPadmissions
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPadmissions";
-$config["mod_version"]     = "0.1";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPadmissions
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPadmissions extends CSetup {
   

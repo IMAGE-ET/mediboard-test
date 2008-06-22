@@ -11,41 +11,27 @@ global $AppUI, $can, $m;
 
 $can->needsEdit();
 
-$sql = "SELECT * FROM modules ORDER BY mod_ui_order";
-$modules = $this->_spec->ds->loadList($sql);
-
-// get the modules actually installed on the file system
-$modFiles = $AppUI->readDirs("modules");
-
-CMbArray::removeValue(".svn", $modFiles);
-
+CAppUI::getAllClasses();
+$setupClasses = getChildClasses("CSetup");
+$mbmodules = array();
 $coreModules = array();
-
-// do the modules that are installed on the system
-foreach ($modules as $keyRow => $row) {
-  $modules[$keyRow]["is_setup"]     = @include_once(CAppUI::conf("root_dir")."/modules/".$row["mod_name"]."/setup.php");
-  $modules[$keyRow]["is_upToDate"]  = $config["mod_version"] == $row["mod_version"];
-  $modules[$keyRow]["is_config"]    = is_file("modules/".$row["mod_name"]."/configure.php");
-  $modules[$keyRow]["href"]         = "?m=$m&a=domodsql&mod_id=".$row["mod_id"];
-  
-  if($config["mod_type"] == "core") {
-    if(!$modules[$keyRow]["is_upToDate"]) {
-      $coreModules[] = $modules[$keyRow];
-    }
+foreach($setupClasses as $setupClass) {
+  $setup = new $setupClass;
+  $mbmodule = new CModule();
+  $mbmodule->compareToSetup($setup);
+  $mbmodules[] = $mbmodule;
+  if ($mbmodule->mod_type == "core" && $mbmodule->_upgradable) {
+    $coreModules[] = $mbmodule;
   }
-
-  if(isset($modFiles[$row["mod_name"]])) {
-    unset($modFiles[$row["mod_name"]]);
-  } 
 }
+
+array_multisort(CMbArray::pluck($mbmodules, "mod_ui_order"), SORT_ASC, $mbmodules);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->debugging = false;
-$smarty->assign("modules"     , $modules);
+$smarty->assign("mbmodules"   , $mbmodules);
 $smarty->assign("coreModules" , $coreModules);
-$smarty->assign("modFiles"    , $modFiles);
 
 $smarty->display("view_modules.tpl");
 

@@ -339,6 +339,8 @@ foreach ($list_classes as $curr_class_name => &$curr_class) {
   $curr_class['suggestion'] = get_query_for_class($curr_class, $curr_class_name, $types);
 }
 
+
+
 // Création du template
 $smarty = new CSmartyDP();
 

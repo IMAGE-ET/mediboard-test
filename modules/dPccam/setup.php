@@ -1,18 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPccam
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPccam";
-$config["mod_version"]     = "0.12";
-$config["mod_type"]        = "user";
-
+ * @package Mediboard
+ * @subpackage dPccam
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPccam extends CSetup {
   

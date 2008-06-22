@@ -1,20 +1,11 @@
 <?php /* $Id: $ */
 
 /**
- *	@package Mediboard
- *	@subpackage dPmateriel
- *	@version $Revision: $
- *  @author Sébastien Fillonneau
+ * @package Mediboard
+ * @subpackage dPmateriel
+ * @version $Revision: $
+ * @author Sébastien Fillonneau
  */
-
-global $AppUI;
- 
-// MODULE CONFIGURATION 
-// redundant now but mandatory until end of refactoring
-$config = array();
-$config["mod_name"]        = "dPmateriel";
-$config["mod_version"]     = "0.14";
-$config["mod_type"]        = "user";
 
 class CSetupdPmateriel extends CSetup {
   

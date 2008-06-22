@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPpmsi
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPgestionCab";
-$config["mod_version"]     = "0.19";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPpmsi
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPgestionCab extends CSetup {
   

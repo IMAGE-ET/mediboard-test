@@ -115,11 +115,14 @@ class CUser extends CMbObject {
   /** Update the object's specs */
   function updateSpecs() {
     $oldSpec = $this->_specs['_user_password'];
-    
+
     $user = new CMediusers();
     $remote = 0;
-    if($result = $user->load($this->user_id)) {
-    	 $remote = $user->remote;
+    
+    if ($user->isInstalled()) {
+	    if ($result = $user->load($this->user_id)) {
+	    	 $remote = $user->remote;
+	    }
     }
     
     $strongPassword = ((CAppUI::conf("admin CUser strong_password") == "1") && ($remote == 0));

@@ -17,9 +17,12 @@ class CCompteRendu extends CMbMetaObject {
   
   // DB fields
   var $nom               = null;
+  var $type              = null;
   var $source            = null;
   var $valide            = null;
   var $file_category_id  = null;
+  var $header_id         = null;
+  var $footer_id         = null;
   
   /// Form fields
   var $_is_document      = false;
@@ -38,9 +41,9 @@ class CCompteRendu extends CMbMetaObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["listes_choix"] = "CListeChoix compte_rendu_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["listes_choix"] = "CListeChoix compte_rendu_id";
+    return $backRefs;
   }
   
   function getSpecs() {
@@ -50,9 +53,12 @@ class CCompteRendu extends CMbMetaObject {
     $specs["object_id"]        = "ref xor|function_id|chir_id class|CMbObject meta|object_class";
     $specs["object_class"]     = "notNull enum list|CPatient|CConsultAnesth|COperation|CConsultation|CSejour";
     $specs["nom"]              = "notNull str";
+    $specs["type"]             = "enum list|header|body|footer";
     $specs["source"]           = "html";
     $specs["file_category_id"] = "ref class|CFilesCategory";
-    $specs["valide"]           = "numchar maxLength|1";
+    $specs["header_id"]        = "ref class|CCompteRendu";
+    $specs["footer_id"]        = "ref class|CCompteRendu";
+    $specs["valide"]           = "bool";
     return $specs;
   }
 

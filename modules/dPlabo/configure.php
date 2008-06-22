@@ -21,8 +21,7 @@ $newId400 = new CIdSante400();
 $prat = new CMediusers();
 $listPrat = $prat->loadPraticiens();
 
-$config = $dPconfig[$m]["CCatalogueLabo"];
-$remote_name = $config["remote_name"];
+$remote_name = CAppUI::conf("dPlabo CCatalogueLabo remote_name");
 
 $id400 = new CIdSante400();
 $id400->object_class = "CMediusers";

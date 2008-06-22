@@ -63,6 +63,13 @@ class CPermission extends CMbObject {
   var $_item_read = null;
   var $_item_edit = null;
   
+  function __construct() {
+    parent::__construct();
+    
+    // Hack to simulate the former admin module for this class 
+    $this->loadRefModule("admin");
+    
+  }
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'permissions';

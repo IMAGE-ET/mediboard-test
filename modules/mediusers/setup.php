@@ -1,16 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage mediusers
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-$config = array();
-$config["mod_name"]        = "mediusers";
-$config["mod_version"]     = "0.29";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage mediusers
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupmediusers extends CSetup {
   

@@ -1,19 +1,11 @@
 <?php /* $Id: */
 
 /**
-* @package Mediboard
-* @subpackage dPfacturation
-* @version $Revision: $
-* @author Alexis / Yohann
-*/
-
-global $AppUI;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPfacturation";
-$config["mod_version"]     = "0.11";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPfacturation
+ * @version $Revision: $
+ * @author Alexis / Yohann
+ */
 
 class CSetupdPfacturation extends CSetup {
   

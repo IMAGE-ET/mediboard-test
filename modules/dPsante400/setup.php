@@ -1,17 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPsante400
-* @version $Revision: $
-* @author Thomas Despoix
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPsante400";
-$config["mod_version"]     = "0.16";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPsante400
+ * @version $Revision: $
+ * @author Thomas Despoix
+ */
 
 class CSetupdPsante400 extends CSetup {
   

@@ -7,7 +7,7 @@
  *  @author Thomas Despoix
  */
  
-global $can, $m, $AppUI, $dPconfig, $remote_name;
+global $can, $m, $AppUI, $remote_name;
 
 $can->needsAdmin();
 
@@ -194,16 +194,14 @@ function importCatalogue($cat, $parent_id = null) {
   $AppUI->stepAjax("Analyses Importées: ".$compteur["analyses"].", Chapitres Importés: ".$compteur["chapitres"].", Sous chapitres Importés: ".$compteur["sousChapitre"], UI_MSG_OK);
 }
 
-
-
 // Check import configuration
-$config = $dPconfig[$m]["CCatalogueLabo"];
+$clCconfig = CAppUI::conf("$m CCatalogueLabo");
 
-if (null == $remote_name = $config["remote_name"]) {
+if (null == $remote_name = $clCconfig["remote_name"]) {
   $AppUI->stepAjax("Remote name not configured", UI_MSG_ERROR);
 }
 
-if (null == $remote_url = $config["remote_url"]) {
+if (null == $remote_url = $clCconfig["remote_url"]) {
   $AppUI->stepAjax("Remote URL not configured", UI_MSG_ERROR);
 }
 

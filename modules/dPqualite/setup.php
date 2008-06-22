@@ -7,18 +7,13 @@
  *  @author Sébastien Fillonneau
  */
  
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]    = "dPqualite";
-$config["mod_version"] = "0.18";
-$config["mod_type"]    = "user";
-
 class CSetupdPqualite extends CSetup {
   
   function __construct() {
     parent::__construct();
     
     $this->mod_name = "dPqualite";
+
     $this->makeRevision("all");
     $sql = "CREATE TABLE `doc_ged_suivi` (
                `doc_ged_suivi_id` int(11) NOT NULL auto_increment,

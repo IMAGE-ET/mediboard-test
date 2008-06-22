@@ -7,23 +7,12 @@
 * @author Romain Ollivier
 */
 
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "system";
-$config["mod_version"]     = "1.0.11";
-$config["mod_type"]        = "core";
-
 class CSetupsystem extends CSetup {
-  
-  function remove() {
-    global $AppUI;
-    $AppUI->setMsg("Impossible de supprimer le module 'system'", UI_MSG_ERROR, true);
-    return null;
-  }
   
   function __construct() {
     parent::__construct();
     
+    $this->mod_type = "core";
     $this->mod_name = "system";
     
     $this->makeRevision("all");

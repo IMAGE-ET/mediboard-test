@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPcim10
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPcim10";
-$config["mod_version"]     = "0.11";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPcim10
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPcim10 extends CSetup {
   

@@ -7,15 +7,6 @@
  *  @author Sébastien Fillonneau
  */
 
-global $AppUI;
- 
-// MODULE CONFIGURATION 
-// redundant now but mandatory until end of refactoring
-$config = array();
-$config["mod_name"]        = "dPurgences";
-$config["mod_version"]     = "0.20";
-$config["mod_type"]        = "user";
-
 class CSetupdPurgences extends CSetup {
   
   function __construct() {

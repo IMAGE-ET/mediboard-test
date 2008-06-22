@@ -1,27 +1,17 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPetablissement
-* @version $Revision: $
-* @author Romain Ollivier
-*/
-
-$config = array();
-$config["mod_name"]        = "dPetablissement";
-$config["mod_version"]     = "0.19";
-$config["mod_type"]        = "core";
+ * @package Mediboard
+ * @subpackage dPetablissement
+ * @version $Revision: $
+ * @author Romain Ollivier
+ */
 
 class CSetupdPetablissement extends CSetup {
-  function remove() {
-    global $AppUI;
-    $AppUI->setMsg("Impossible de supprimer le module 'dPetablissement'", UI_MSG_ERROR, true);
-    return null;
-  }
-  
   function __construct() {
     parent::__construct();
     
+    $this->mod_type = "core";
     $this->mod_name = "dPetablissement";
     
     $this->makeRevision("all");

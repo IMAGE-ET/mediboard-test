@@ -1,20 +1,13 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPcabinet
-* @version $Revision$
-* @author Romain Ollivier
-*/
+ * @package Mediboard
+ * @subpackage dPcabinet
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
-global $AppUI, $utypes;
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPcabinet";
-$config["mod_version"]     = "1.06";
-$config["mod_type"]        = "user";
-
+global $utypes;
 
 class CSetupdPcabinet extends CSetup {
   
@@ -160,40 +153,8 @@ class CSetupdPcabinet extends CSetup {
           ) TYPE=MyISAM COMMENT = 'Consultations d\'anesthésie';";
     $this->addQuery($sql);
     
-    $this->makeRevision("0.30");
-    $this->setTimeLimit(1800);
-    function setup_moveDocs(){
-      $ds = CSQLDataSource::get("std");
-
-      $document_types = array (
-      array ("name" => "compte_rendu", "valide" => "cr_valide"),
-      array ("name" => "ordonnance", "valide" => "or_valide"),
-      array ("name" => "courrier1", "valide" => "c1_valide"),
-      array ("name" => "courrier2", "valide" => "c2_valide"));
-  
-      foreach ($document_types as $document_type) {
-        $document_name = $document_type["name"];
-        $document_valide = $document_type["valide"];
-  
-        $sql = "SELECT *" .
-          "\nFROM `consultation`" .
-          "\nWHERE `$document_name` IS NOT NULL" .
-          "\nAND `$document_name` != ''";
-        $res = $ds->exec( $sql );
-  
-        while ($obj = $ds->fetchObject($res)) {
-          $document = new CCompteRendu;
-          $document->type = "consultation";
-          $document->nom = $document_name;
-          $document->object_id = $obj->consultation_id;
-          $document->source = $obj->$document_name;
-          $document->valide = $obj->$document_valide;
-          $document->store();
-        }
-      }
-      return true;
-    }
-    $this->addFunctions("setup_moveDocs");
+    // CR passage des champs à enregistrements supprimé car regressifs
+//    $this->makeRevision("0.30");
     
     $this->makeRevision("0.31");
     $sql = "CREATE TABLE `examaudio` (" .

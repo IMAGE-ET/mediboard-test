@@ -1,17 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPdeveloppement
-* @version $Revision: $
-* @author Sébastien Fillonneau
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPdeveloppement";
-$config["mod_version"]     = "0.1";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPdeveloppement
+ * @version $Revision: $
+ * @author Sébastien Fillonneau
+ */
 
 class CSetupdPdeveloppement extends CSetup {
   

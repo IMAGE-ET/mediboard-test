@@ -1,18 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPbloc
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPbloc";
-$config["mod_version"]     = "0.22";
-$config["mod_type"]        = "user";
-
+ * @package Mediboard
+ * @subpackage dPbloc
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPbloc extends CSetup {
   

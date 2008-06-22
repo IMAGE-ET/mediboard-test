@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPinterop
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPinterop";
-$config["mod_version"]     = "0.1";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPinterop
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPinterop extends CSetup {
   

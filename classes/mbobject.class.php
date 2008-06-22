@@ -1499,6 +1499,15 @@ class CMbObject {
       }
     }
   }
+  
+  /**
+   * Check whether object table is installed
+   * @return bool Result
+   */
+  function isInstalled() {
+    $ds =& $this->_spec->ds;
+    return $ds->loadTable($this->_spec->table);    
+  }
 
   /**
    * Charge toutes les aides à la saisie de l'objet pour un utilisateur donné

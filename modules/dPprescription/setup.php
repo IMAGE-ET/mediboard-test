@@ -7,15 +7,6 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI;
- 
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPprescription";
-$config["mod_version"]     = "0.43";
-$config["mod_type"]        = "user";
-
-
 class CSetupdPprescription extends CSetup {
   
   function __construct() {

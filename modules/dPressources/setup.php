@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPressources
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPressources";
-$config["mod_version"]     = "0.13";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPressources
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPressources extends CSetup {
   
@@ -19,6 +13,7 @@ class CSetupdPressources extends CSetup {
     parent::__construct();
     
     $this->mod_name = "dPressources";
+    
     $this->makeRevision("all");
     $sql = "CREATE TABLE `plageressource` (
                  `plageressource_id` BIGINT NOT NULL AUTO_INCREMENT ,

@@ -7,12 +7,6 @@
 * @author Romain Ollivier
 */
 
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPcompteRendu";
-$config["mod_version"]     = "0.34";
-$config["mod_type"]        = "user";
-
 class CSetupdPcompteRendu extends CSetup {
   static function getTemplaceReplaceQuery($search, $replace) {
     return 'UPDATE `compte_rendu` 
@@ -260,7 +254,24 @@ class CSetupdPcompteRendu extends CSetup {
             WHERE `field` = 'compte_rendu';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.34";
+    $this->makeRevision("0.34");
+    $sql = "ALTER TABLE `compte_rendu` 
+			ADD `type` ENUM ('header','body','footer'),
+			CHANGE `valide` `valide` ENUM ('0','1'),
+			ADD `header_id` INT (11) UNSIGNED,
+			ADD `footer_id` INT (11) UNSIGNED";
+    $this->addQuery($sql);
+    $sql = "UPDATE `compte_rendu` 
+			SET `type` = 'body'
+			WHERE `object_id` IS NULL";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `compte_rendu` 
+			ADD INDEX (`header_id`),
+			ADD INDEX (`footer_id`)";
+    $this->addQuery($sql);
+    
+    
+    $this->mod_version = "0.35";
   }
 }
 ?>

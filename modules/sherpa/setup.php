@@ -1,17 +1,11 @@
 <?php /* $Id: setup.php 1390 2006-12-13 09:55:29Z maskas $ */
 
 /**
-* @package Mediboard
-* @subpackage sherpa
-* @version $Revision: 1390 $
-* @author sherpa
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "sherpa";
-$config["mod_version"]     = "0.16";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage sherpa
+ * @version $Revision: 1390 $
+ * @author sherpa
+ */
 
 class CSetupsherpa extends CSetup {
   

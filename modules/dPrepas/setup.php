@@ -7,12 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPrepas";
-$config["mod_version"]     = "0.13";
-$config["mod_type"]        = "user";
-
 class CSetupdPrepas extends CSetup {
   
   function __construct() {

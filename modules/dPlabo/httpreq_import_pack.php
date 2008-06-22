@@ -123,13 +123,11 @@ function importPacks($packs){
 
 
 // Check import configuration
-$config = $dPconfig[$m]["CPackExamensLabo"];
-
-if (null == $remote_name = $dPconfig[$m]["CCatalogueLabo"]["remote_name"]) {
+if (null == $remote_name =  CAppUI::conf("$m CCatalogueLabo remote_name")) {
   $AppUI->stepAjax("Remote name not configured", UI_MSG_ERROR);
 }
 
-if (null == $remote_url = $config["remote_url"]) {
+if (null == $remote_url = CAppUI::conf("$m CPackExamensLabo remote_url")) {
   $AppUI->stepAjax("Remote URL not configured", UI_MSG_ERROR);
 }
 

@@ -1,18 +1,11 @@
 <?php /* $Id: $ */
 
 /**
-* @package Mediboard
-* @subpackage dPboard
-* @version $Revision: $
-* @author Romain Ollivier
-*/
-
-global $AppUI;
-
-$config = array();
-$config["mod_name"]        = "dPboard";
-$config["mod_version"]     = "0.1";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPboard
+ * @version $Revision: $
+ * @author Romain Ollivier
+ */
 
 class CSetupdPboard extends CSetup {
   

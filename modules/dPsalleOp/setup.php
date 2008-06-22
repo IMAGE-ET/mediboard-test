@@ -1,17 +1,11 @@
 <?php /* $Id$ */
 
 /**
-* @package Mediboard
-* @subpackage dPsalleOp
-* @version $Revision$
-* @author Romain Ollivier
-*/
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "dPsalleOp";
-$config["mod_version"]     = "0.25";
-$config["mod_type"]        = "user";
+ * @package Mediboard
+ * @subpackage dPsalleOp
+ * @version $Revision$
+ * @author Romain Ollivier
+ */
 
 class CSetupdPsalleOp extends CSetup {
   
@@ -19,7 +13,9 @@ class CSetupdPsalleOp extends CSetup {
     parent::__construct();
     
     $this->mod_name = "dPsalleOp";
+    
     $this->makeRevision("all");
+    
     $this->makeRevision("0.1");
     $sql = "CREATE TABLE `acte_ccam` (" .
             "\n`acte_id` INT NOT NULL ," .

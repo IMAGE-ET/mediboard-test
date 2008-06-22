@@ -1,18 +1,11 @@
 <?php
 
 /**
-* @package Mediboard
-* @subpackage hprim21
-* @version $Revision:  $
-* @author Romain Ollivier
+ * @package Mediboard
+ * @subpackage hprim21
+ * @version $Revision: $
+ * @author Romain Ollivier
 */
-
-// MODULE CONFIGURATION DEFINITION
-$config = array();
-$config["mod_name"]        = "hprim21";
-$config["mod_version"]     = "0.11";
-$config["mod_type"]        = "user";
-
 
 class CSetuphprim21 extends CSetup {
   

@@ -25,7 +25,8 @@ if(!defined("PERM_DENY")) {
  * Module class
  */
 class CModule extends CMbObject {
-	static $installed = array();
+  // Static Collections
+  static $installed = array();
 	static $active    = array();
 	static $visible   = array();
   
@@ -41,11 +42,13 @@ class CModule extends CMbObject {
   var $mod_ui_order  = null; // UI Position
 
   // Form Fields
-  var $_tabs      = null;  // List of tabs with permission
-  var $_upgradable = null; // Check if upgradable
+  var $_latest     = null;
+  var $_upgradable = null;
+  var $_configable = null;
   
-  // Static Collections
-  var $_registered = array();
+  // Other collections
+  var $_tabs      = null;  // List of tabs with permission
+  
 
   function CModule() {
     parent::__construct();
@@ -95,11 +98,31 @@ class CModule extends CMbObject {
       "mod_name"      => "notNull str maxLength|20",
       "mod_type"      => "notNull enum list|core|user",
       "mod_version"   => "notNull str maxLength|6",
-      "mod_active" => "bool",
+      "mod_active"    => "bool",
       "mod_ui_active" => "bool",
-      "mod_ui_order"  => "num"
-    );
+      "mod_ui_order"  => "num",
+
+      "_latest"       => "notNull str maxLength|6",
+      "_upgradable"   => "bool",
+      "_configable"   => "bool",
+      );
     return array_merge($specsParent, $specs);
+  }
+  
+  /**
+   * Load and compare a module to a given setup
+   * @param $setup CSetup
+   */
+  function compareToSetup(CSetup $setup) {
+    $this->mod_name = $setup->mod_name;
+    $this->loadMatchingObject();
+    $this->mod_type = $setup->mod_type;
+    $this->_latest = $setup->mod_version;
+    $this->_upgradable = $this->mod_version != $this->_latest;
+    $this->_configable = is_file("modules/$this->mod_name/configure.php");
+    if (!$this->_id) {
+      $this->mod_ui_order = 100;
+    }
   }
   
   function updateFormFields() {
@@ -150,16 +173,6 @@ class CModule extends CMbObject {
     return $canDo;
   }
   
-  function registerSetup() {
-    global $registeredModules;
-
-    if (array_key_exists($this->name, $registeredModules)) {
-      trigger_error("Module '$this->name' already registered", E_USER_ERROR);
-    }
-    
-    $registeredModules[$this->name] = $this;
-  }
-
   static function loadModules() {
     $modules = new CModule;
     $order = "mod_ui_order";
@@ -332,7 +345,9 @@ class CModule extends CMbObject {
       // TODO: check for older version - upgrade
       return false;
     }
+    
     $this->store();
+    
     $this->reorder();
     return true;
   }
