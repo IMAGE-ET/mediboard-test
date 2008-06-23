@@ -96,6 +96,7 @@ foreach($lines as $cat => $lines_by_type){
 	  $line->prescription_id = $prescription->_id;
 	  //$line->praticien_id = $AppUI->user_id;
 	  $line->signee = 0;
+	  $line->valide_infirmiere = 0;
 	  if($cat == "medicament"){
 	    $line->valide_pharma = 0;
 	  }

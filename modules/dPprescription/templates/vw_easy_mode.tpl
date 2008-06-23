@@ -31,6 +31,12 @@ function addCategorie(categorie_id, oTokenField){
 function resetModeEasy(){
   $$('input').each( function(oCheckbox) {
     if(oCheckbox.checked){
+      oCheckbox.checked = false;
+    }
+  });
+  /*
+  $$('input').each( function(oCheckbox) {
+    if(oCheckbox.checked){
       if(!oCheckbox.hasClassName("med")){
 	      elt = oCheckbox.id;
 	      elts = elt.split("-");
@@ -44,7 +50,7 @@ function resetModeEasy(){
 		  }
     }
   });
-  
+  */
   
   var oFormToken = document.add_med_element;
   oFormToken.token_med.value = '';
