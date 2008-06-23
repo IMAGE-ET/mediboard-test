@@ -66,7 +66,7 @@
         <tr>
           <td class="text">
             <a href="#{{$_prescription->_id}}" onclick="Prescription.reloadPrescSejour('{{$_prescription->_id}}')">
-            {{$_prescription->_view}}
+            {{$_prescription->_ref_patient->_view}}
             </a>
           </td>
         </tr>
