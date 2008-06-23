@@ -20,11 +20,12 @@ $line->load($line_id);
 $line->_id = "";
 $line->code_cip = $code_cip;
 $line->creator_id = $AppUI->user_id;
+$line->accord_praticien = "";
 $msg = $line->store();
 
 $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
     
-// Sauvegarde de 
+// Sauvegarde de l'ancienne ligne
 $old_line = new CPrescriptionLineMedicament();
 $old_line->load($line_id);
 $old_line->substitution_line_id = $line->_id;
@@ -33,7 +34,8 @@ $old_line->time_arret = mbTime();
 $msg = $old_line->store();
 $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-store");
 
-echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', '', '', '$mode_pharma')</script>";
+// Le passage de la ligne au reload permet de realiser le testPharma (pre-cochage de la case "Accord du praticien")
+echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', '', '', '$mode_pharma','$line->_id')</script>";
 echo $AppUI->getMsg();
 exit();
 

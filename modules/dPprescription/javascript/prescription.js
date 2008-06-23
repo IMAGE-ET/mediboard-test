@@ -183,7 +183,8 @@ var Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
   },
-  reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma) {
+  reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma,line_id) {
+
       // Select de choix du praticien
       if(document.selSortie){
         var praticien_sortie_id = document.selSortie.selPraticien.value;
@@ -203,7 +204,7 @@ var Prescription = {
       urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
      
       if(mode_pharma == "1"){
-          urlPrescription.requestUpdate("div_medicament", { waitingText : null });      
+          urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
 	      if(mode_protocole){
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
@@ -216,6 +217,17 @@ var Prescription = {
 	        }
 	      }
       }
+  },
+  testPharma: function(line_id){  
+    if(line_id){
+	    var oFormAccordPraticien = document.forms["editLineAccordPraticien-"+line_id];
+	    if(oFormAccordPraticien.accord_praticien.value == 0){
+	      if(confirm("Modifiez vous cette ligne en accord avec le praticien ?")){
+	        oFormAccordPraticien.__accord_praticien.checked = true;
+	        $V(oFormAccordPraticien.accord_praticien,"1");
+	      }
+	    }
+    }
   },
   reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id){
     var url = new Url;

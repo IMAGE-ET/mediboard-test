@@ -71,7 +71,7 @@ if(oButton){
 	  <!-- Cas des fois par -->
 	  {{if $prise->nb_fois && $prise->unite_fois}}
       {{mb_field object=$prise field=nb_fois size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}} fois par 
-			{{mb_field object=$prise field=unite_fois onchange="testPharma(); submitFormAjax(this.form, 'systemMsg')"}}
+			{{mb_field object=$prise field=unite_fois onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
 		{{/if}}
   
     <!-- Cas des tous les -->
