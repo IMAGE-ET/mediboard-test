@@ -163,7 +163,7 @@
               {{/foreach}}
               </ul>
               {{else}}
-                Aucun posologie
+                Aucune posologie
               {{/if}}
             {{/if}}
           </td>

@@ -7,11 +7,11 @@
 * @author Alexis Granger
 */
 
-global $can, $m;
+global $can, $m, $AppUI;
 
 $can->needsRead();
 
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
+$praticien_id = mbGetValueFromGetOrSession("praticien_id" , $AppUI->user_id);
 $signee       = mbGetValueFromGetOrSession("signee"       , 0       );  // par default les non signees
 $date         = mbGetValueFromGetOrSession("date"         , mbDate());  // par default, date du jour
 $type         = mbGetValueFromGetOrSession("type"         , "sejour");  // sejour - externe - sortie_manquante

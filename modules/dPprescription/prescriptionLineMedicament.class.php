@@ -118,7 +118,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     
     // Dans le cas d'un traitement, la date de fin est la date de sortie du sejour
     if($this->_traitement){
-    	$this->_date_arret_fin = $this->_ref_prescription->_ref_object->_sortie; 	
+    	if($this->_ref_prescription->object_class == "CSejour"){
+    	  $this->_date_arret_fin = $this->_ref_prescription->_ref_object->_sortie; 	
+    	}
     } else {
       $this->_date_arret_fin = $this->_fin ? "$this->_fin 23:59:00" : "";    	
     }

@@ -104,14 +104,11 @@
         <table>
           <tr>
             <td style="border:none;">
+             {{if !$line->signee}}
 			        <div class="little-info">
-			          {{if !$line->signee}}
-						     Vous devez être le créateur ou le responsable de cette ligne pour rajouter des posologies <br />
-						     (Créateur: {{$line->_ref_creator->_view}} / Responsable: {{$line->_ref_praticien->_view}})
-						    {{else}}
-						       Seul le responsable de cette ligne peut la modifier ({{$line->_ref_praticien->_view}})
-						    {{/if}}
+						     Vous devez être le responsable de cette ligne pour rajouter des posologies <br />
 						  </div>
+						  {{/if}}
 			      </td>
 			      <td style="border:none;"> 
 			        <!-- Affichage des prises -->
