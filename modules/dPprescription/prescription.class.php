@@ -117,7 +117,7 @@ class CPrescription extends CMbObject {
   	$user->load($AppUI->user_id);
 		
 		// Si le user courant est un praticien
-		if($is_praticien || !$this->object_id){
+		if($is_praticien || !$this->object_id || $mode_pharma){
 			$this->_can_add_line = 1;
 		} 
 		// Sinon (infirmiere)
@@ -132,10 +132,6 @@ class CPrescription extends CMbObject {
 		  	$this->_can_add_line = 1;
 		  }
 		}	
-		// Le pharmacien n'a pas le droit de rajouter des lignes
-		if($mode_pharma){
-			$this->_can_add_line = 0;
-		}
   }
   
   function check(){
