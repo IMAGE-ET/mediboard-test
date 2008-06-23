@@ -3,7 +3,7 @@
 
 <head>
   <title>{{$dPconfig.page_title}} &mdash; {{tr}}module-{{$m}}-court{{/tr}}</title>
-  <meta http-equiv="Content-Type" content="text/html;charset={{$localeCharSet}}" />
+  <meta http-equiv="Content-Type" content="application/xhtml+xml; charset={{$localeCharSet}}" />
   <meta name="Description" content="Mediboard: Plateforme Open Source pour les Etablissements de Santé" />
   <meta name="Version" content="{{$version.string}}" />
   {{$mediboardShortIcon|smarty:nodefaults}}

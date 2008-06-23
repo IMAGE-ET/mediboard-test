@@ -13,7 +13,7 @@ $can->needsEdit();
 
 $category_id         = mbGetValueFromGet('category_id');
 $keywords            = mbGetValueFromGet('keywords');
-$only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks');
+$only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks')=='true';
 
 $where = array();
 if ($g) {
@@ -39,7 +39,6 @@ if ($only_ordered_stocks) {
   $where['product_order.cancelled'] = ' = 0'; // order not cancelled
   $where['product_order_item.quantity_received'] = ' < product_order_item.quantity'; // order item not received yet
 }
-
 $stock = new CProductStock();
 $list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
 

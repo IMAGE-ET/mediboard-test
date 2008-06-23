@@ -13,7 +13,7 @@ body {
   font-size: 11px;  
   background: #EFEFEF;
   color: #000000;
-  margin: 2px;
+  margin: 0px;
   cursor: default;
 }
 
@@ -1102,7 +1102,7 @@ table.Offline button  {
   background: #FFF;
   -moz-border-radius: 6px;
   margin: 4px;
-  padding: 4px;
+  padding: 2px;
   vertical-align: middle;
   text-align: center;
   white-space: nowrap;
@@ -1125,15 +1125,16 @@ table.Offline button  {
 
 #user .menu a:hover img {
   background: #CCC;
+  -moz-border-radius: 2px;
 }
 
 
 /* Main -- table -- pane */
 
 #main {
-  background: #fff/*#E0DFE3*/;
-  /*-moz-border-radius: 6px;*/
+  background: #fff;
   border: 1px solid #f60;
+  border-width: 0 0 1px 1px;
   margin: 4px;
   padding: 4px;
   vertical-align: top;
@@ -1142,8 +1143,6 @@ table.Offline button  {
 #main > .title {
   background: #E0DFE3;
   -moz-border-radius: 6px;
-  /*border: 1px #FF6600 solid;*/
-  /*margin: 4px;*/
   margin-bottom: 4px;
   padding: 4px;
 }
@@ -1166,7 +1165,6 @@ table.Offline button  {
 #mainPane {
   vertical-align: top;
 }
-  /* @import "./htmlarea.css" */
 
 textarea#htmlarea {
   width: 99%;
@@ -1394,6 +1392,7 @@ table.selectCode td {
 
 hr.control_tabs {
   clear: both;
+  display: none;
   border: none;
   border-top: 1px solid #F60;
 }
@@ -1401,13 +1400,18 @@ hr.control_tabs {
 ul.control_tabs {
   list-style: none;
   clear: both;
-  padding: 3px 6px;
+  border-bottom: 1px solid #F60;
+  display: block;
+  padding: 0;
 }
 
 ul.control_tabs li {
-  float: left;
-  margin: 0px 2px;
+  /*float: left;*/
+  display: inline-block;
   text-align: center;
+  margin-left: 2px;
+  margin-bottom: -1px;
+  margin-top: 2px;
 }
 
 ul.control_tabs li a {
@@ -1416,12 +1420,10 @@ ul.control_tabs li a {
   border-bottom: none;
   -moz-border-radius: 6px 6px 0 0;
   background-color: #FFF;
-  font-size: 1.1em;
+  font-size: 1.05em;
   padding: 4px 8px;
   color: #999;
   font-weight: bold;
-  margin-top: 2px;
-  margin-bottom: -1px;
 }
 
 ul.control_tabs li a:hover {
