@@ -312,7 +312,7 @@ class CPrescriptionLine extends CMbObject {
     $new_line->praticien_id = $praticien_id;
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;
-    
+    $new_line->valide_infirmiere = 0;
     $prescription = new CPrescription();
     $prescription->load($prescription_id);
     
