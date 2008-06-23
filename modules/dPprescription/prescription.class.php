@@ -249,6 +249,7 @@ class CPrescription extends CMbObject {
     $where["signee"] = " = '0'";
     $where["prescription_id"] = " = '$this->_id'";
     $where["child_id"] = "IS NULL";
+    $where["substitution_line_id"] = "IS NULL";
     $this->_counts_no_valide = $line->countList($where);
   }
   
@@ -270,7 +271,7 @@ class CPrescription extends CMbObject {
   	$line_med = new CPrescriptionLineMedicament();
   	$whereMed["prescription_id"] = " = '$this->_id'";
   	$whereMed["child_id"] = "IS NULL";
-  	
+  	$whereMed["substitution_line_id"] = "IS NULL";
   	if($praticien_sortie_id){
   		$where["praticien_id"] = " = '$praticien_sortie_id'";
   		$whereMed["praticien_id"] = " = '$praticien_sortie_id'";
