@@ -103,6 +103,7 @@ Main.add( function(){
   }
   
   // Elements deja dans la prescription
+  /*
 	var elements = {{$elements|@json}};
 	$$('input').each( function(oCheckbox) {
 	  if(!oCheckbox.hasClassName("cat")){
@@ -116,7 +117,8 @@ Main.add( function(){
 		    $('label-'+id).setOpacity(0.6);
 		  }
 	  }
-	}); 
+	});
+	*/ 
 } );
 
 
