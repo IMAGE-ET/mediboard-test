@@ -29,12 +29,13 @@ function addCategorie(categorie_id, oTokenField){
 }
 
 function resetModeEasy(){
+/*
   $$('input').each( function(oCheckbox) {
     if(oCheckbox.checked){
       oCheckbox.checked = false;
     }
   });
-  /*
+*/  
   $$('input').each( function(oCheckbox) {
     if(oCheckbox.checked){
       if(!oCheckbox.hasClassName("med")){
@@ -42,15 +43,15 @@ function resetModeEasy(){
 	      elts = elt.split("-");
 	      id = elts[1];
 	      
-	      oCheckbox.disabled = true;
-			  oCheckbox.setOpacity(0.6);
-			  $('label-'+id).setOpacity(0.6);
-		  } else {
+	      //oCheckbox.disabled = true;
+			  //oCheckbox.setOpacity(0.6);
+			  //$('label-'+id).setOpacity(0.6);
+		    $('label-'+id).setStyle("color: #070");
 		    oCheckbox.checked = false;
 		  }
     }
   });
-  */
+  
   
   var oFormToken = document.add_med_element;
   oFormToken.token_med.value = '';
@@ -109,7 +110,7 @@ Main.add( function(){
   }
   
   // Elements deja dans la prescription
-  /*
+  
 	var elements = {{$elements|@json}};
 	$$('input').each( function(oCheckbox) {
 	  if(!oCheckbox.hasClassName("cat")){
@@ -117,14 +118,15 @@ Main.add( function(){
 		  var elts = _id.split("-");
 		  var id = elts[1];
 		  if(elements.include(id)){
-		    oCheckbox.checked = true;
-		    oCheckbox.disabled = true;
-		    oCheckbox.setOpacity(0.6);
-		    $('label-'+id).setOpacity(0.6);
+		    //oCheckbox.checked = true;
+		    //oCheckbox.disabled = true;
+		    //oCheckbox.setOpacity(0.6);
+		    $('label-'+id).setStyle("color: #070");
+		   // $('label-'+id).setOpacity(0.6);
 		  }
 	  }
 	});
-	*/ 
+	 
 } );
 
 
