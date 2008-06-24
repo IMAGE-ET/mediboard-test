@@ -1,3 +1,13 @@
+<script type="text/javascript">
+
+function pageMain(){
+  {{if $print}}
+    window.print();
+  {{/if}}
+}
+
+</script>
+
 <!-- Fermeture des tableaux -->
     </td>
   </tr>
