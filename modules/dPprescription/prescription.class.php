@@ -244,6 +244,7 @@ class CPrescription extends CMbObject {
    */ 
   function countNoValideLines(){
     $this->_counts_no_valide = 0;
+    if($this->_id){
     $line = new CPrescriptionLineMedicament();
     $where = array();
     $where["signee"] = " = '0'";
@@ -251,6 +252,7 @@ class CPrescription extends CMbObject {
     $where["child_id"] = "IS NULL";
     $where["substitution_line_id"] = "IS NULL";
     $this->_counts_no_valide = $line->countList($where);
+    }
   }
   
 	/*
