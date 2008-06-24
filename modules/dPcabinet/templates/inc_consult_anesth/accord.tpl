@@ -15,7 +15,7 @@ function reloadPrescription(prescription_id){
 }
 
 Main.add(function () {
-  var tabsConsultAnesth = Control.Tabs.create('tab-consult-anesth', false);
+  tabsConsultAnesth = new Control.Tabs.create('tab-consult-anesth', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}

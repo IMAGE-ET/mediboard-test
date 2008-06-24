@@ -107,8 +107,9 @@ function reloadListExamComp() {
       <div id="listExamComp">
       {{include file="../../dPcabinet/templates/exam_comp.tpl"}}
       </div>
-      
-      
+      {{if $isPrescriptionInstalled}}
+      <button class="tick" onclick="tabsConsultAnesth.setActiveTab('prescription_sejour')">Accéder à la prescription</button>
+      {{/if}}
       <table class="form">
 			  <!-- Documents ExamComp -->
 			  <tr>
