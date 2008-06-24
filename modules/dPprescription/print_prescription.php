@@ -13,7 +13,7 @@ $can->needsRead();
 
 $ordonnance = mbGetValueFromGet("ordonnance");
 $praticien_sortie_id = mbGetValueFromGet("praticien_sortie_id");
-
+$print = mbGetValueFromGet("print", 0);
 // Mode ordonnance
 if($ordonnance){
   $now = mbDateTime();
@@ -200,7 +200,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 
 // Création du template
 $smarty = new CSmartyDP();
-
+$smarty->assign("print"               , $print);
 $smarty->assign("praticien"           , $praticien);
 $smarty->assign("traitements_arretes" , $traitements_arretes);
 $smarty->assign("ordonnance"          , $ordonnance);

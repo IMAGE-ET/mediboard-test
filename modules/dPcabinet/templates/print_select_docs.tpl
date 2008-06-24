@@ -1,3 +1,5 @@
+{{mb_include_script module="dPprescription" script="prescription"}}
+
 {{if !$documents|@count}}
   <strong>Il n'y a pas de document pour cette consultation</strong>
 {{else}}
@@ -18,7 +20,7 @@
   
   <form name="selectDocsFrm" action="?m={{$m}}&amp;dialog=1&amp;a=print_docs" method="post">
   <input type="hidden" name="consultation_id" value="{{$consult->consultation_id}}" />
-  
+  <input type="hidden" name="prescription_pre_adm_id" value="{{$prescription_pre_adm_id}}" />
   <table class="form">
     <tr>
       <th class="title" colspan="2">
@@ -47,3 +49,21 @@
   </table>
   </form>
 {{/if}}
+
+{{if $prescription_pre_adm_id}}
+<table class="form">
+  <tr>
+    <th class="title">Prescription de pre-admission</th>
+  </tr>
+  <tr>
+   <td style="text-align: center">
+       <button class="print" type="button" onclick="Prescription.printPrescription('{{$prescription_pre_adm_id}}','','1')">Imprimer la prescription</button>
+   </td>
+  </tr>
+</table>
+{{/if}}
+  
+
+
+
+
