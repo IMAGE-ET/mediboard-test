@@ -635,7 +635,14 @@ class CSetupdPprescription extends CSetup {
 	          ADD `header` TEXT;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.43";
+    $this->makeRevision("0.43");
+    $sql = "ALTER TABLE `moment_unitaire` 
+   	        ADD `heure` TIME,
+ 	          DROP `heure_min`,
+	          DROP `heure_max`;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.44";
   }  
 }
 

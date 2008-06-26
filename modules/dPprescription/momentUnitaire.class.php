@@ -14,10 +14,13 @@ class CMomentUnitaire extends CMbObject {
   // DB Table key
   var $moment_unitaire_id = null;
   var $libelle  = null;
-  var $heure_min = null;
-  var $heure_max = null;
+  var $heure = null;
   var $type_moment = null;
   var $principal = null;
+  
+  // Forms fields
+  var $_heure = null;
+  var $_min   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -30,10 +33,11 @@ class CMomentUnitaire extends CMbObject {
   	$specsParent = parent::getSpecs();
     $specs = array (
       "libelle"     => "str notNull",
-      "heure_min"   => "time",
-      "heure_max"   => "time",
+      "heure"       => "time",
       "type_moment" => "enum list|matin|midi|soir|apres_midi|horaire|autre",
-      "principal"   => "bool"
+      "principal"   => "bool",
+      "_heure"      => "num",
+      "_min"        => "num"
     );
     return array_merge($specsParent, $specs);
   }
@@ -73,10 +77,22 @@ class CMomentUnitaire extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->libelle;
-    if($this->heure_min && $this->heure_max){
-    	$this->_view .= "(de $this->heure_min à $this->max)";
+    if($this->heure) {
+      $this->_heure = intval(substr($this->heure, 0, 2));
     }
   }
+  
+	function updateDBFields(){
+	 	parent::updateDBFields();	 	
+	  if($this->_heure !== null) {
+	   	if($this->_heure){
+	      $this->heure = 
+	      $this->_heure.":00:00";
+	   	} else {
+	  		$this->heure = "";
+	  	}
+	  }
+	}
 }
   
 ?>

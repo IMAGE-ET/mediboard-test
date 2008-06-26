@@ -55,8 +55,11 @@ class CPrisePosologie extends CMbMetaObject {
     parent::updateFormFields();
     $this->loadRefsFwd();
     $this->_view = $this->quantite;
-    $this->_view .= " ".$this->unite_prise;
-    
+    if($this->object_class == "CPrescriptionLineElement"){
+      $this->_view .= " ".$this->_ref_object->_view;
+    } else {
+      $this->_view .= " ".$this->unite_prise;	
+    }
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
     }
@@ -145,6 +148,7 @@ class CPrisePosologie extends CMbMetaObject {
       $date_temp = mbDate($date_temp."+ $increment $type_increment");
   	  $tabDates[] = $date_temp;
     }
+    
     
     if(in_array($date, $tabDates)){
     	return true;
