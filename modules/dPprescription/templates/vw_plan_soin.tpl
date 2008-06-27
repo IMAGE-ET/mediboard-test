@@ -40,6 +40,7 @@ ul {
   <tr>
     <th colspan="2" class="title" style="width: 7cm">Prescription</th>
     <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
+    <th rowspan="2" style="width: 5px"></th>
     {{foreach from=$dates item=date}}
     <th colspan="8" class="title" style="width: 5cm">{{$date|date_format:"%d/%m/%Y"}}</th>
     {{/foreach}}
@@ -72,6 +73,7 @@ ul {
 	        </ul>
 	        {{/if}}
         </td>
+        
   			<td class="text" style="text-align: center">
   			  {{if $_line->_traitement}}
   			    Traitement Personnel
@@ -79,6 +81,18 @@ ul {
   			   {{$_line->_ref_praticien->_view}}
   			  {{/if}}
   			</td>
+  			<td style="border: 1px solid #ccc; text-align: center">
+          {{if !$_line->signee && !$_line->valide_pharma}}
+  			    DP
+  			  {{else}}
+  			    {{if !$_line->signee}}
+  			      D
+  			    {{/if}}
+  			    {{if !$_line->valide_pharma}}
+  			      P
+  			    {{/if}}
+  			  {{/if}}
+        </td>
         <!-- Affichage des heures de prises des medicaments -->
 		  	{{foreach from=$dates item=date}}
 		    {{if array_key_exists($line_id, $list_prises_med.$date)}}
@@ -135,9 +149,15 @@ ul {
 	        </ul>
 	        {{/if}}
         </td>
+       
   			<td class="text" style="text-align: center">
   			   {{$element->_ref_praticien->_view}} 
   			</td>
+  			 <td style="border: 1px solid #ccc; text-align: center">
+  			  {{if !$element->signee}}
+  			    D
+  			  {{/if}}
+        </td>
         <!-- Affichage des heures de prises des medicaments -->
 		  	{{foreach from=$dates item=date}}
 		    {{if array_key_exists($element_id, $list_prises_element.$date)}}
@@ -176,14 +196,14 @@ ul {
   {{/foreach}}
 	  <tr>
 	    <th class="title" colspan="2">Remarque</th>
-	    <th class="title text">Pharmacien</th>
+	    <th class="title" colspan="2">Pharmacien</th>
 	    <th class="title" colspan="8">Signature IDE</th>
 	    <th class="title" colspan="8">Signature IDE</th>
 	    <th class="title" colspan="8">Signature IDE</th>
 	  </tr>
 	  <tr>
 	    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2"></td>
-	    <td class="text" style="border: 1px solid #ccc; text-align: center">
+	    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2">
 	    {{if $pharmacien->_id}}
 	      {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
 	    {{/if}}  
