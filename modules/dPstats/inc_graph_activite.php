@@ -38,17 +38,17 @@ if($salle_id)
 
 $ds = CSQLDataSource::get("std");
 
-$sql = "SELECT sallesbloc.*, COUNT(operations.operation_id) as total" .
-  "\nFROM operations" .
-  "\nINNER JOIN sallesbloc" .
-  "\nON operations.salle_id = sallesbloc.salle_id" .
-  "\nINNER JOIN plagesop" .
-  "\nON operations.plageop_id = plagesop.plageop_id" .
-  "\nINNER JOIN users_mediboard" .
-  "\nON operations.chir_id = users_mediboard.user_id" .
-  "\nWHERE sallesbloc.stats = '1'" .
-  "\nAND plagesop.date BETWEEN '$debutact' AND '$finact'" .
-  "\nAND operations.annulee = '0'";
+$sql = "SELECT sallesbloc.*, COUNT(operations.operation_id) as total
+	FROM operations
+  INNER JOIN sallesbloc
+  ON operations.salle_id = sallesbloc.salle_id
+  INNER JOIN plagesop
+  ON operations.plageop_id = plagesop.plageop_id
+  INNER JOIN users_mediboard
+  ON operations.chir_id = users_mediboard.user_id
+  WHERE sallesbloc.stats = '1'
+  AND plagesop.date BETWEEN '$debutact' AND '$finact'
+  AND operations.annulee = '0'";
 if($prat_id)
   $sql .= "\nAND operations.chir_id = '$prat_id'";
 if($discipline_id)
@@ -65,28 +65,28 @@ foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
   $opbysalle[$curr_salle_id]["legend"] = singleToMultiline($salle["nom"]);
   
-  $sql = "SELECT COUNT(operations.operation_id) AS total," .
-    "\nDATE_FORMAT(plagesop.date, '%m/%Y') AS mois," .
-    "\nDATE_FORMAT(plagesop.date, '%Y%m') AS orderitem," .
-    "\nsallesbloc.nom AS nom" .
-    "\nFROM operations" .
-    "\nINNER JOIN sallesbloc" .
-    "\nON operations.salle_id = sallesbloc.salle_id" .
-    "\nINNER JOIN plagesop" .
-    "\nON operations.plageop_id = plagesop.plageop_id" .
-    "\nINNER JOIN users_mediboard" .
-    "\nON operations.chir_id = users_mediboard.user_id" .
-    "\nWHERE plagesop.date BETWEEN '$debutact' AND '$finact'" .
-    "\nAND operations.annulee = '0'";
+  $sql = "SELECT COUNT(operations.operation_id) AS total,
+    DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
+    DATE_FORMAT(plagesop.date, '%Y%m') AS orderitem,
+    sallesbloc.nom AS nom
+    FROM operations
+    INNER JOIN sallesbloc
+    ON operations.salle_id = sallesbloc.salle_id
+    INNER JOIN plagesop
+    ON operations.plageop_id = plagesop.plageop_id
+    INNER JOIN users_mediboard
+    ON operations.chir_id = users_mediboard.user_id
+    WHERE plagesop.date BETWEEN '$debutact' AND '$finact'
+    AND operations.annulee = '0'";
   if($prat_id)
     $sql .= "\nAND operations.chir_id = '$prat_id'";
   if($discipline_id)
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
   if($codes_ccam)
     $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-  $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'" .
-    "\nGROUP BY mois" .
-    "\nORDER BY orderitem";
+  $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'
+    GROUP BY mois
+    ORDER BY orderitem";
   $result = $ds->loadlist($sql);
   foreach($datax as $x) {
     $f = true;
