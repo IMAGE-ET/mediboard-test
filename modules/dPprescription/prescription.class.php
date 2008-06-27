@@ -612,7 +612,7 @@ class CPrescription extends CMbObject {
 			        	if($name_chap == "dm" || $name_chap == "anapath" || $name_chap == "consult" || $name_chap == "imagerie"){
 						  		$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 						  		$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						  	
+						  	  @$nb_produit_by_cat[$name_cat]++;
 						  	} 
 						  	// Sinon, on regarde si l'element possède des prises pour la date donnée
 						  	else {
@@ -633,12 +633,10 @@ class CPrescription extends CMbObject {
 								 	 
 							  		if($_prise_element->nb_tous_les && $_prise_element->unite_tous_les){
 									    if($_prise_element->calculDatesPrise($date)){
-									    	
-											    // Stockage du nombre de ligne de medicaments
+											  // Stockage du nombre de ligne de medicaments
 											 	if(!@array_key_exists($prise, $lines_element[$name_chap][$name_cat][$_line_element->_id])){
 											 	  @$nb_produit_by_cat[$name_cat]++;
 											 	}
-											 	
 									      $prises_element[$_line_element->_id][$prise][] = $_prise_element;
 									      $lines_element[$name_chap][$name_cat][$_line_element->_id][$prise] = $_line_element;
 									      if(is_array($all_lines_element)){
