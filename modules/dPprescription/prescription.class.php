@@ -546,6 +546,7 @@ class CPrescription extends CMbObject {
 	  
     // Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){
+    	if(count($lines_cat)){
     	foreach($lines_cat as &$_line_med){
     		// Si la ligne est prescrite pour la date donnée
     		if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_date_arret_fin)) 
@@ -598,6 +599,7 @@ class CPrescription extends CMbObject {
 					 }
 				 }
     	 }
+    	}
      }
        
      
