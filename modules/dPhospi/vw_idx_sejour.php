@@ -67,8 +67,8 @@ if($praticien_id && !$service_id){
 	$sejours = array();
 	$sejour = new CSejour();
 	$where["praticien_id"] = " = '$praticien_id'";
-	$where["entree_prevue"] = " <= '$date'";
-	$where["sortie_prevue"] = " >= '$date'";
+	$where["entree_prevue"] = " <= '$date 23:59:59'";
+	$where["sortie_prevue"] = " >= '$date 00:00:00'";
 	$where["annule"] = " = '0'";
 	$where[] = "type != 'urg' AND type != 'exte'";
 	
