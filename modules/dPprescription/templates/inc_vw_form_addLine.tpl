@@ -13,7 +13,7 @@
   {{if $dPconfig.dPprescription.CPrescription.add_element_category}}
   <button class="new" onclick="$('add_{{$element}}').show();">Ajouter un élément</button>
   {{/if}}
-  <button class="new" onclick="$('add_line_comment_{{$element}}').show();">Ajouter une ligne de commentaire</button>
+  <button class="new" onclick="$('add_line_comment_{{$element}}').show();">Ajouter un commentaire</button>
  <br />
  
   <!-- Selecteur d'elements -->

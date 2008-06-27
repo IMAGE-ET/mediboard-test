@@ -126,11 +126,13 @@ submitProtocole = function(){
   <tr>
     <td>
 		  <!-- Impression de la prescription -->
+		  {{if $prescription->type != "sortie"}}
 		  <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}')" style="float: left">
 		    Prescription
 		  </button>
+		  {{/if}}
 	    {{if !$mode_protocole}}
-		     {{if $prescription->type != "sortie" && $prescription->type != "externe"}}
+		     {{if $prescription->type != "externe"}}
 				   <!-- Impression de la prescription -->
 				   <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
 				     Ordonnance

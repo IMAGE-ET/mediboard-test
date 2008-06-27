@@ -218,7 +218,7 @@ testPharma = function(line_id){
       </option>
       {{/foreach}}
     </select>
-    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter une ligne de commentaire</button>
+    <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
     
     <br />
 	  <input type="text" name="produit" value=""/>
