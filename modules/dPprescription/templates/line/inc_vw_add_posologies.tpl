@@ -106,6 +106,9 @@ submitPrise = function(oForm, type){
 		    {{/foreach}}
 		  </select>
 		  {{/if}}
+		  {{if $line->_class_name == "CPrescriptionLineElement"}}
+		    {{$line->_unite_prise}}
+		  {{/if}}
 		  {{mb_field object=$prise_posologie field=nb_fois size=3 increment=1 min=1 form=addPriseFoisPar$type$line_id}} fois par 
 		  {{mb_field object=$prise_posologie field=unite_fois}}
 	  
@@ -131,6 +134,9 @@ submitPrise = function(oForm, type){
 		      <option value="{{$_unite}}">{{$_unite}}</option>
 		    {{/foreach}}
 		  </select>
+		  {{/if}}
+		  {{if $line->_class_name == "CPrescriptionLineElement"}}
+		    {{$line->_unite_prise}}
 		  {{/if}}
 	  <!-- Selection du moment -->
 	  <select name="moment_unitaire_id" style="width: 150px">      
@@ -167,6 +173,9 @@ submitPrise = function(oForm, type){
 		      <option value="{{$_unite}}">{{$_unite}}</option>
 		    {{/foreach}}
 		    </select>
+		  {{/if}}
+		  {{if $line->_class_name == "CPrescriptionLineElement"}}
+		    {{$line->_unite_prise}}
 		  {{/if}}
          tous les
 		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}				   

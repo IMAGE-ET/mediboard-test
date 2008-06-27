@@ -610,14 +610,15 @@ class CPrescription extends CMbObject {
 			        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
 			        	// Si l'element est un DM, on le rajoute dans la liste
 			        	if($name_chap == "dm"){
-						  		$lines_element[$name_chap][$name_cat][$_line_element->_id] = $_line_element;
+						  		$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						  		$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						  	
 						  	} 
 						  	// Sinon, on regarde si l'element possède des prises pour la date donnée
 						  	else {
 				        	// Chargement des prises
 			  			  	$_line_element->loadRefsPrises();  	
 							  	foreach($_line_element->_ref_prises as &$_prise_element){	
-							  		// Calcul du nombre de lignes
 								 	  if($_prise_element->moment_unitaire_id){
 								 	  	$prise = $_prise_element->unite_prise;
 								 	  	$intitule_prise_element[$_line_element->_id][$_prise_element->unite_prise][$_prise_element->_id] = $_prise_element->_view;

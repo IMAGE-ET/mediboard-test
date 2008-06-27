@@ -81,7 +81,27 @@
       heures
     </td>             
   </tr>
-
+  
+  {{assign var="class" value="CCategoryPrescription"}}
+  <tr>
+   <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}{{/tr}}
+      </label>    
+   </th>
+  </tr>
+  <tr>
+    <th class="category" colspan="3">Impression ordonnance</th>
+    <th class="category" colspan="3">Unité de prise</th>
+  </tr>
+  {{include file="inc_configure_chapitre.tpl" var=dmi}}
+  {{include file="inc_configure_chapitre.tpl" var=anapath}}
+  {{include file="inc_configure_chapitre.tpl" var=biologie}}
+  {{include file="inc_configure_chapitre.tpl" var=imagerie}}
+  {{include file="inc_configure_chapitre.tpl" var=consult}}
+  {{include file="inc_configure_chapitre.tpl" var=kine}}
+  {{include file="inc_configure_chapitre.tpl" var=soin}}
+  {{include file="inc_configure_chapitre.tpl" var=dm}}
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

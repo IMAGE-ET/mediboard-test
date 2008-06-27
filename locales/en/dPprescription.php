@@ -277,4 +277,5 @@ $locales['CPrescriptionLineElement-fin-desc'] = '';
 $locales['config-dPprescription-CPrescription-infirmiere_borne'] = '';
 $locales['CCategoryPrescription-header'] = '';
 $locales['CCategoryPrescription-header-desc'] = '';
+$locales['config-dPprescription-CCategoryPrescription'] = '';
 ?>

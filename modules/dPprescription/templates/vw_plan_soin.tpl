@@ -127,7 +127,7 @@ ul {
           <ul>
             <li>{{$intitule_prise_element.$element_id.autre.$unite_prise}}</li>
           </ul>
-          {{else}}
+          {{elseif $unite_prise != "aucune_prise"}}
 	        <ul>
 	        {{foreach from=$intitule_prise_element.$element_id.$unite_prise item=_prise}}
 	          <li>{{$_prise}}</li>

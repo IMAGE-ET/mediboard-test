@@ -480,4 +480,5 @@ $locales['CPrescriptionLineElement-fin-desc'] = 'Fin';
 $locales['config-dPprescription-CPrescription-infirmiere_borne'] = 'Création des lignes par les infirmières';
 $locales['CCategoryPrescription-header'] = 'Entete';
 $locales['CCategoryPrescription-header-desc'] = 'Entete';
+$locales['config-dPprescription-CCategoryPrescription'] = 'Gestion des chapitres';
 ?>

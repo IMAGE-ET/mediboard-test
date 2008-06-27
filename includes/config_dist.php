@@ -315,7 +315,41 @@ $dPconfig["dPprescription"] = array (
     "time_print_ordonnance" => "2",
     "infirmiere_borne_start" => "20",
     "infirmiere_borne_stop"  => "08"
-  )
+  ),
+  "CCategoryPrescription" => array (
+    "dmi" => array(
+      "phrase" => "Bon pour",
+      "unite_prise" => "dispositif(s)"
+    ),
+    "anapath" => array(
+      "phrase" => "Faire pratiquer",
+      "unite_prise" => "examen(s)"
+    ),
+    "biologie" => array(
+      "phrase" => "Faire pratiquer",
+      "unite_prise" => "examen(s)"
+    ),
+    "imagerie" => array(
+      "phrase" => "Faire pratiquer",
+      "unite_prise" => "cliché(s)"
+    ),
+    "consult" => array(
+      "phrase" => "",
+      "unite_prise" => "consultation(s)"
+    ),
+    "kine" => array(
+      "phrase" => "Faire pratiquer",
+      "unite_prise" => "séance(s)"
+    ),
+    "soin" => array(
+      "phrase" => "Pratiquer",
+      "unite_prise" => "soin(s)"
+    ),
+    "dm" => array(
+      "phrase" => "Délivrer",
+      "unite_prise" => "dispositif(s)"
+    )
+  )   
 );
 
 $dPconfig["system"] = array(

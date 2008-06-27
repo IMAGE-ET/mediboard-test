@@ -47,9 +47,11 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     $this->_ref_element_prescription->loadRefCategory();
     $this->_view = $this->_ref_element_prescription->_view;
     
+    $chapitre = $this->_ref_element_prescription->_ref_category_prescription->chapitre;
+    
     // Un element ne peut jamais être un traitement
     $this->_traitement = 0;	
-    $this->_unite_prise = "fois";
+    $this->_unite_prise = CAppUI::conf("dPprescription CCategoryPrescription $chapitre unite_prise");
     $this->_duree_prise = "";
     
     if($this->fin){

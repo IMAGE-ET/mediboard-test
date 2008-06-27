@@ -164,6 +164,7 @@ function pageMain(){
 
 <!-- Parcours des chapitres -->
 {{foreach from=$linesElt key=name_chap item=elementsChap name="foreachChap"}}
+ 
 <!-- Parcours des categories -->
   {{foreach from=$elementsChap key=exec item=elements name="foreachExec"}}
     {{if $exec != "aucun"}}
@@ -177,6 +178,9 @@ function pageMain(){
      {{/if}}
      
      <h1>{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{if $exec != "aucun"}}{{$exec->_view}}{{/if}}</h1>
+     
+     <h2>{{$dPconfig.dPprescription.CCategoryPrescription.$name_chap.phrase}}</h2>
+     
      {{if $elements.ald|@count}}
      <h3>
 	     Prescriptions relatives au traitement de l'affection de longue durée 
@@ -189,7 +193,7 @@ function pageMain(){
 	        {{foreach from=$_elements_ald  item=_element_ald name=foreach_elt_ald}}
 	           {{if $smarty.foreach.foreach_elt_ald.first}}
 	           {{assign var=category value=$categories.$name_cat}}
-		         <strong>{{$category->nom}} : {{$category->header}}</strong>
+		         <strong>{{$category->nom}}</strong>
 		         {{/if}}
 
 		         {{if $_element_ald->_class_name == "CPrescriptionLineElement"}} 
@@ -217,7 +221,7 @@ function pageMain(){
 	       {{foreach from=$_elements_no_ald  item=_element_no_ald name=foreach_elt_no_ald}}
 	           {{if $smarty.foreach.foreach_elt_no_ald.first}}
 	           {{assign var=category value=$categories.$name_cat}}
-		         <strong>{{$category->nom}} : {{$category->header}}</strong>
+		         <strong>{{$category->nom}}</strong>
 		         {{/if}}
 		
 		         {{if $_element_no_ald->_class_name == "CPrescriptionLineElement"}}

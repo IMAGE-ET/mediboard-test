@@ -53,6 +53,10 @@ if(oButton){
 		  {{/foreach}}
 		</select>
 	  {{/if}}
+	  {{if $line->_class_name == "CPrescriptionLineElement"}}
+		  {{$line->_unite_prise}}
+		{{/if}}
+		  
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}
 	  <!-- Selection du moment -->

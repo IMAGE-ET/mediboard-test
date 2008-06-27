@@ -56,7 +56,7 @@ class CPrisePosologie extends CMbMetaObject {
     $this->loadRefsFwd();
     $this->_view = $this->quantite;
     if($this->object_class == "CPrescriptionLineElement"){
-      $this->_view .= " ".$this->_ref_object->_view;
+      $this->_view .= " ".$this->_ref_object->_unite_prise;
     } else {
       $this->_view .= " ".$this->unite_prise;	
     }
