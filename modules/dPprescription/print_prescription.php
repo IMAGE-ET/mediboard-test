@@ -122,6 +122,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
+				$element->loadCompleteView();
 			if($ordonnance){
           if($element->date_arret){
 				  	$element->_fin = $element->date_arret;

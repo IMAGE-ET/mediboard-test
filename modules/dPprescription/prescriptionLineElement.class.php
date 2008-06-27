@@ -74,6 +74,29 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   }
   
   /*
+   * Vue modifiée en fonction de la présence de prises
+   */
+  function loadCompleteView(){
+  	$this->loadRefsPrises();
+  	
+  	// Si la ligne comportent des prises ==> "à partir du"
+  	if(count($this->_ref_prises)){
+  		$this->_duree_prise = "";
+	    if($this->fin){
+	    	$this->_duree_prise .= "Jusqu'au ".mbTransformTime(null, $this->fin, "%d/%m/%Y");
+	    } else {
+        if($this->debut){
+          $this->_duree_prise .= "à partir du ".mbTransformTime(null, $this->debut, "%d/%m/%Y");
+        }
+	    	if($this->duree){
+	    		$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree).".";
+	    	} 	
+	    } 
+  	}
+  }
+  
+  
+  /*
    * Calcul des droits
    */
   function getAdvancedPerms($is_praticien = 0, $prescription_type = "", $mode_protocole = 0, $mode_pharma = 0) {	
