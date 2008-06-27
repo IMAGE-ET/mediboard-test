@@ -2,7 +2,6 @@
 
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
-
   // Test case à cocher
   if(curr_line_id){
     testPharma(curr_line_id); 
@@ -134,9 +133,13 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 
 {{if $line->_class_name == "CPrescriptionLineElement"}}
   {{assign var=category_id value=$category->_id}}
+  {{assign var=chapitre value=$line->_ref_element_prescription->_ref_category_prescription->chapitre}}
 {{else}}
   {{assign var=category_id value=""}}
+  {{assign var=chapitre value=""}}
 {{/if}}
+
+
 
 <form name="editDates-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
    <input type="hidden" name="m" value="dPprescription" />
@@ -172,14 +175,14 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 								 </optgroup>					   
 							 </select>
 							 <div id="date_mb_field-{{$typeDate}}-{{$line_id}}" style="border:none;">
-							   {{if $typeDate != "mode_grille" && $line->_traitement}}
+							   {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 							   {{else}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 				         {{/if}}
 				       </div>	       
 		       {{else}}
-		           {{if $typeDate != "mode_grille" && $line->_traitement}}
+		           {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
 				         {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}  
 		           {{else}}
 		             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
@@ -196,7 +199,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       </td>
 	       {{/if}}
 
-	       {{if !$line->_traitement}}
+	       {{if !$line->_traitement && $chapitre != "consult" && $chapitre != "anapath" && $chapitre != "imagerie"}}
 	       <td style="border:none;">
 	         {{mb_label object=$line field=duree}}
 	       </td>
@@ -238,6 +241,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	    {{/if}}
 	    
 	    {{/if}}
+	    
+	    
 	    {{if $line->fin}}
 	    <tr>
 	      <td style="border:none">
