@@ -67,9 +67,9 @@ $sejour->loadCurrentAffectation(mbDateTime());
 
 // Calcul du plan de soin pour les 3 jours
 foreach($dates as $_date){
-  $prescription->calculPlanSoin($_date, &$lines_med[$_date], &$prises_med[$_date], &$list_prises_med[$_date], &$lines_element[$_date], 
-	                              &$prises_element[$_date], &$list_prises_element[$_date], &$nb_produit_by_cat[$_date], &$all_lines_med, &$all_lines_element,
-	                              &$intitule_prise_med, &$intitule_prise_element);
+  $prescription->calculPlanSoin($_date, $lines_med[$_date], $prises_med[$_date], $list_prises_med[$_date], $lines_element[$_date], 
+	                              $prises_element[$_date], $list_prises_element[$_date], $nb_produit_by_cat[$_date], $all_lines_med, $all_lines_element,
+	                              $intitule_prise_med, $intitule_prise_element);
 }
 
 $tabHours = array("08","12","14","18","22","24","02","06");

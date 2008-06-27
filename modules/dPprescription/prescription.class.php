@@ -532,7 +532,7 @@ class CPrescription extends CMbObject {
   
   
   // Generation du plan de soin sous forme de tableau
-  function calculPlanSoin($date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat, $all_lines_med="", $all_lines_element="", $intitule_prise_med="", $intitule_prise_element=""){
+  function calculPlanSoin($date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
     // Chargement des lignes
   	$this->loadRefsLines("1");
 	  $this->loadRefsLinesElementByCat();

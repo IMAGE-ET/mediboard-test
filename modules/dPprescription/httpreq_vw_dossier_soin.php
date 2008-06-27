@@ -42,7 +42,7 @@ foreach($cats as $key => $cat){
 
 if($prescription->_id){
 	// Calcul du plan de soin pour la journée $date
-	$prescription->calculPlanSoin($date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat);
+	$prescription->calculPlanSoin($date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat);
 }	
 
 $tabHours = array("08","12","14","18","22","24","02","06");
