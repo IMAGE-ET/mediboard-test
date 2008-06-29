@@ -1,4 +1,4 @@
-<form name="anesth{{$selOp->operation_id}}" action="?m={{$m}}" method="post">
+<form name="anesthTiming" action="?m={{$m}}" method="post">
 <input type="hidden" name="m" value="dPplanningOp" />
 <input type="hidden" name="dosql" value="do_planning_aed" />
 <input type="hidden" name="operation_id" value="{{$selOp->operation_id}}" />
