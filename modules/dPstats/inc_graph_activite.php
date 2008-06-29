@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
 require_once($AppUI->getSystemClass("mbGraph"));
 
@@ -32,31 +32,13 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
   $jscalls[] = "javascript:zoomGraphIntervention('$nameMonth');";
 }
 
-$sql = "SELECT * FROM sallesbloc WHERE stats = '1'";
+$sql = "SELECT * FROM sallesbloc
+  WHERE stats = '1'
+  AND group_id = '$g'";
 if($salle_id)
   $sql .= "\nAND salle_id = '$salle_id'";
 
 $ds = CSQLDataSource::get("std");
-
-$sql = "SELECT sallesbloc.*, COUNT(operations.operation_id) as total
-	FROM operations
-  INNER JOIN sallesbloc
-  ON operations.salle_id = sallesbloc.salle_id
-  INNER JOIN plagesop
-  ON operations.plageop_id = plagesop.plageop_id
-  INNER JOIN users_mediboard
-  ON operations.chir_id = users_mediboard.user_id
-  WHERE sallesbloc.stats = '1'
-  AND plagesop.date BETWEEN '$debutact' AND '$finact'
-  AND operations.annulee = '0'";
-if($prat_id)
-  $sql .= "\nAND operations.chir_id = '$prat_id'";
-if($discipline_id)
-  $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-if($codes_ccam)
-  $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
-$sql .= "\nGROUP BY operations.salle_id";
-
 $salles = $ds->loadlist($sql);
 
 $opbysalle = array();
@@ -64,6 +46,7 @@ $i=0;
 foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
   $opbysalle[$curr_salle_id]["legend"] = singleToMultiline($salle["nom"]);
+  $opbysalle[$curr_salle_id]["total"] = 0;
   
   $sql = "SELECT COUNT(operations.operation_id) AS total,
     DATE_FORMAT(plagesop.date, '%m/%Y') AS mois,
@@ -93,6 +76,7 @@ foreach($salles as $salle) {
     foreach($result as $totaux) {
       if($x == $totaux["mois"]) {        
         $opbysalle[$curr_salle_id]["data"][] = $totaux["total"];
+        $opbysalle[$curr_salle_id]["total"] += $totaux["total"];
         $total += $totaux["total"];
         $f = false;
       }
@@ -100,6 +84,9 @@ foreach($salles as $salle) {
     if($f) {
       $opbysalle[$curr_salle_id]["data"][] = 0;
     }
+  }
+  if(!$opbysalle[$curr_salle_id]["total"] && count($opbysalle) > 1) {
+    unset($opbysalle[$curr_salle_id]);
   }
 }
 
