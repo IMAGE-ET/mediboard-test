@@ -21,7 +21,7 @@ function updateListConsults() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
 
-  url.addParam("chirSel"   , "{{$pratSel->_id}}");
+  url.addParam("chirSel"   , "{{$prat->_id}}");
   url.addParam("date"      , "{{$date}}");
   url.addParam("vue2"      , "{{$vue}}");
   url.addParam("selConsult", "");
@@ -34,7 +34,7 @@ function updateListOperations() {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
 
-  url.addParam("chirSel" , "{{$pratSel->_id}}");
+  url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
@@ -66,7 +66,7 @@ function updateListHospi() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_vw_hospi");
 
-  url.addParam("chirSel" , "{{$pratSel->_id}}");
+  url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
@@ -77,7 +77,7 @@ function updateSemainier() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_semainier");
 
-  url.addParam("chirSel" , "{{$pratSel->_id}}");
+  url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
@@ -89,7 +89,7 @@ function pageMain() {
   hideIcon("operations");
   hideIcon("hospi");
   hideIcon("patients");
-  {{if $prat}}
+  {{if $prat->_id}}
     updateListConsults();
     updateListOperations();
     updateListPatients();
@@ -108,20 +108,8 @@ function pageMain() {
 {{mb_include_script path="includes/javascript/intermax.js"}}
 
 <table class="main">
-  {{if $secretaire || $admin}}
-  <tr>
-    <td colspan="2">
-    <form name="praticien" method="post">
-	    <select name="praticien_id" onchange="form.submit()">
-	    <option value="">&mdash; Choix d'un praticien</option>
-	    {{foreach from=$listPraticiens item="praticien"}}
-	      <option value="{{$praticien->_id}}" class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};" {{if $praticien_id == $praticien->_id}}selected = "selected"{{/if}}>{{$praticien->_view}}</option>
-	    {{/foreach}}
-	    </select>
-	  </form>
-	  </td>
-  </tr>
-  {{/if}}
+  {{include file=inc_board.tpl}}
+
   <tr>
     <th colspan="2">
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">

@@ -43,12 +43,12 @@ function viewItem(oTd, sClassName, id, date) {
     url.setModuleAction("dPcabinet", "httpreq_vw_list_consult");
     url.addParam("plageconsult_id", id);
     url.addParam("date"           , date);
-    url.addParam("chirSel"        , "{{$pratSel->_id}}");
+    url.addParam("chirSel"        , "{{$prat->_id}}");
     url.addParam("vue2"           , "{{$vue}}");
     url.addParam("selConsult"     , "");
   } else if(sClassName == "CPlageOp"){
     url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");
-    url.addParam("chirSel" , "{{$pratSel->_id}}");
+    url.addParam("chirSel" , "{{$prat->_id}}");
     url.addParam("date"    , date);
     url.addParam("urgences", "0");
   } else{
@@ -67,7 +67,7 @@ function updateSemainier() {
   var url = new Url;
   url.setModuleAction("dPboard", "httpreq_semainier");
 
-  url.addParam("chirSel" , "{{$pratSel->_id}}");
+  url.addParam("chirSel" , "{{$prat->_id}}");
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
@@ -75,7 +75,11 @@ function updateSemainier() {
 }
 
 function pageMain() {
-  updateSemainier();
+  {{if $prat->_id}}
+		  updateSemainier();
+  {{/if}}
+  
+  ViewPort.SetAvlHeight("semainier", 1);
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
 }
 
@@ -85,20 +89,8 @@ function pageMain() {
 {{mb_include_script path="includes/javascript/intermax.js"}}
 
 <table class="main">
-  {{if $secretaire || $admin}}
-  <tr>
-    <td>
-    <form name="praticien" method="post">
-	    <select name="praticien_id" onchange="form.submit()">
-	    <option value="">&mdash; Choix d'un praticien</option>
-	    {{foreach from=$listPraticiens item="praticien"}}
-	      <option value="{{$praticien->_id}}" class="mediuser" style="border-color: #{{$praticien->_ref_function->color}};" {{if $praticien_id == $praticien->_id}}selected = "selected"{{/if}}>{{$praticien->_view}}</option>
-	    {{/foreach}}
-	    </select>
-	  </form>
-	  </td>
-  </tr>
-  {{/if}}
+  {{include file=inc_board.tpl}}
+
   <tr>
     <th>
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">
@@ -110,10 +102,16 @@ function pageMain() {
       </form>
     </th>
   </tr>
+
+  <tbody class="viewported">
+
   <tr>
-    <td style="border: 1px dotted #000;" colspan="2">
+    <td class="viewport" colspan="2">
       <div id="semainier">
       </div>
     </td>
   </tr>
+  
+  </tbody>
+  
 </table>

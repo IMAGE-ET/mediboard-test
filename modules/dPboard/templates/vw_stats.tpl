@@ -10,22 +10,30 @@ function pageMain() {
 </script>
 
 <table class="main">
+  {{include file=inc_board.tpl}}
+
+	{{if $prat->_id}}
   <tr>
     <td>
       <form name="filters" action="?" method="get" onsubmit="return checkForm(this)">
+
       <input type="hidden" name="m" value="dPboard" />
       <input type="hidden" name="_chir" value="{{$user_id}}" />
       <input type="hidden" name="_class_name" value="" />
+
       <table class="form">
+      
         <tr>
           <th colspan="4" class="category">Statistiques cliniques</th>
         </tr>
+
         <tr>
           <td>{{mb_label object=$filterSejour field="_date_min_stat"}}</td>
           <td class="date">{{mb_field object=$filterSejour field="_date_min_stat" form="filters" canNull="false"}} </td>
           <td>{{mb_label object=$filterSejour field="_date_max_stat"}}</td>
           <td class="date">{{mb_field object=$filterSejour field="_date_max_stat" form="filters" canNull="false"}} </td>
         </tr>
+
         <tr>
           <td>{{mb_label object=$filterSejour field="type"}}</td>
           <td>
@@ -55,17 +63,22 @@ function pageMain() {
             
           </td>
         </tr>
+
         <tr>
           <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
         </tr>
+
         <tr>
           <td colspan="4" class="button">
             <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$filterSejour->_date_min_stat}}&amp;fin={{$filterSejour->_date_max_stat}}&amp;prat_id={{$filterSejour->praticien_id}}&amp;type_adm={{$filterSejour->type}}' />
             <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$filterSejour->_date_min_stat}}&amp;fin={{$filterSejour->_date_max_stat}}&amp;prat_id={{$filterSejour->praticien_id}}&amp;codes_ccam={{$filterOperation->codes_ccam}}' />
           </td>
         </tr>
+        
       </table>
+      
       </form>
     </td>
   </tr>
+  {{/if}}
 </table>

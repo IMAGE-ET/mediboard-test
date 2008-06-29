@@ -58,6 +58,8 @@ class CMediusers extends CMbObject {
   var $_compte_numero   = null;
   var $_compte_cle      = null;
   var $_profile_id      = null;
+  var $_is_praticien    = null;
+  var $_is_secretaire   = null;
 
   // CPS
   var $_bind_cps = null;
@@ -637,10 +639,26 @@ class CMediusers extends CMbObject {
     return array_search(@$utypes[$this->_user_type], $user_types) !== false;
   }
 
+  /**
+   * Check whether user is a pratician
+   * @return bool
+   */
   function isPraticien () {
-    return $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste"));
+    return $this->_is_praticien = $this->isFromType(array("Médecin", "Chirurgien", "Anesthésiste"));
   }
   
+  /**
+   * Check whether user is a secretary
+   * @return bool
+   */
+  function isSecretaire () {
+    return $this->_is_secretaire = $this->isFromType(array("Secrétaire", "Administrator"));
+  }
+  
+  /**
+   * Check whether user is a medical user
+   * @return bool
+   */
   function isMedical() {
     return in_array($this->_user_type, array(1, 3, 4, 7, 13));
   }
