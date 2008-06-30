@@ -624,11 +624,12 @@ Object.extend(Form, {
 } );
 
 
-function NumericField (form, element, step, min, max) {
+function NumericField (form, element, step, min, max, showPlus) {
     this.sField = form + "_" + element;
     this.min  = (min  != undefined) ? min  : null;
     this.max  = (max  != undefined) ? max  : null;
     this.step = (step != undefined) ? step : null;
+    this.showPlus = showPlus | null;
 }
 
 NumericField.prototype = {
@@ -640,7 +641,7 @@ NumericField.prototype = {
     if (this.max != null) {
       result = (result <= this.max) ? result : this.max;
     }
-    $V(oField, result, true);
+    $V(oField, (((this.showPlus && result > 0)?'+':'')+result), true);
     oField.select();
   },
 
@@ -652,7 +653,7 @@ NumericField.prototype = {
     if (this.min != null) {
  	    result = (result >= this.min) ? result : this.min;
     }
-    $V(oField, result, true);
+    $V(oField, (((this.showPlus && result > 0)?'+':'')+result), true);
     oField.select();
   },
   

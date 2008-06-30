@@ -180,6 +180,7 @@ class CNumSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className) {
   	$form      = CMbArray::extract($params, "form");
   	$increment = CMbArray::extract($params, "increment");
+  	$showPlus  = CMbArray::extract($params, "showPlus", false);
   	$field     = htmlspecialchars($this->fieldName);
     $maxLength = mbGetValue($this->length, $this->maxLength, 11);
     $fieldId = str_replace('-', '_', $form.'_'.$field);
@@ -199,10 +200,10 @@ class CNumSpec extends CMbFieldSpec {
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     if ($form && $increment) {
 	    $sHtml  = '<div class="numericField">';
-	    $sHtml .= $this->getFormElementText($object, $params, $value, $className);
+	    $sHtml .= $this->getFormElementText($object, $params, (($value>0 && $showPlus)?'+':'').$value, $className);
 	    $sHtml .= '
 	  <script type="text/javascript">
-      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').');
+      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.(isset($showPlus)?'true':'null').');
 		</script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
 	  <map name="arrow_'.$fieldId.'" >

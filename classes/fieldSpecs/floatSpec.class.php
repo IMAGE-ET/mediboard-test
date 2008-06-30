@@ -94,6 +94,7 @@ class CFloatSpec extends CMbFieldSpec {
   function getFormHtmlElement($object, $params, $value, $className){
     $form      = CMbArray::extract($params, "form");
     $increment = CMbArray::extract($params, "increment");
+    $showPlus  = CMbArray::extract($params, "showPlus");
     $field     = htmlspecialchars($this->fieldName);
     $maxLength = 8;
     CMbArray::defaultValue($params, "size", $maxLength);
@@ -116,10 +117,10 @@ class CFloatSpec extends CMbFieldSpec {
     
     if ($form && $increment) {
       $sHtml  = '<div class="numericField">';
-      $sHtml .= $this->getFormElementText($object, $params, $value, $className);
+      $sHtml .= $this->getFormElementText($object, $params, (($value>0 && $showPlus)?'+':'').$value, $className);
       $sHtml .= '
     <script type="text/javascript">
-      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').');
+      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.(isset($showPlus)?'true':'null').');
     </script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
