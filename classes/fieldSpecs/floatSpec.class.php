@@ -117,7 +117,7 @@ class CFloatSpec extends CMbFieldSpec {
     
     if ($form && $increment) {
       $sHtml  = '<div class="numericField">';
-      $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').$value, $className);
+      $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0)?'0':$value), $className);
       $sHtml .= '
     <script type="text/javascript">
       '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').');
