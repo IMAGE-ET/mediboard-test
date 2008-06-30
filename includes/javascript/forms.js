@@ -641,7 +641,7 @@ NumericField.prototype = {
     if (this.max != null) {
       result = (result <= this.max) ? result : this.max;
     }
-    $V(oField, (((this.showPlus && result > 0)?'+':'')+result), true);
+    $V(oField, (((this.showPlus && result >= 0)?'+':'')+result), true);
     oField.select();
   },
 
@@ -653,7 +653,7 @@ NumericField.prototype = {
     if (this.min != null) {
  	    result = (result >= this.min) ? result : this.min;
     }
-    $V(oField, (((this.showPlus && result > 0)?'+':'')+result), true);
+    $V(oField, (((this.showPlus && result >= 0)?'+':'')+result), true);
     oField.select();
   },
   
