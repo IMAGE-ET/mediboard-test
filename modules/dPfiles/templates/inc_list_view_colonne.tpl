@@ -43,7 +43,7 @@ Main.add(function () {
              {{/if}}
            </select>
            </div>
-           <button class="new" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
+           <button class="new" type="button" onclick="uploadFile('{{$selClass}}', '{{$selKey}}', '{{$keyCat}}')">
              Ajouter un fichier
            </button>
          </td>
