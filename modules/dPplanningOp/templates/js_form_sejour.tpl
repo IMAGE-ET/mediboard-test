@@ -200,7 +200,24 @@ function changePat() {
 }
 
 function popRegimes() {
-  alert("Choix des régimes alimentaires\nFonctionnalité non disponible pour l'instant");
+  var oForm = document.editSejour;
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "vw_regimes_alimentaires");
+  url.addParam("hormone_croissance" , $V(oForm.hormone_croissance));
+  url.addParam("repas_sans_sel"     , $V(oForm.repas_sans_sel));
+  url.addParam("repas_sans_porc"    , $V(oForm.repas_sans_porc));
+  url.addParam("repas_diabete"      , $V(oForm.repas_diabete));
+  url.addParam("repas_sans_residu"  , $V(oForm.repas_sans_residu));
+  url.pop(500, 200, "regimes");
+}
+
+function syncRegimes(hormone_croissance, repas_sans_sel, repas_sans_porc, repas_diabete, repas_sans_residu) {
+  var oForm = document.editSejour;
+  $V(oForm.hormone_croissance, hormone_croissance);
+  $V(oForm.repas_sans_sel    , repas_sans_sel);
+  $V(oForm.repas_sans_porc   , repas_sans_porc);
+  $V(oForm.repas_diabete     , repas_diabete);
+  $V(oForm.repas_sans_residu , repas_sans_residu);
 }
 
 function incFormSejourMain() {

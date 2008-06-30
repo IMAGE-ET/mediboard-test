@@ -456,7 +456,7 @@ Main.add( function(){
   
   {{if $mode_operation}}
   <td colspan="2" class="button">
-    <!-- <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button> -->
+    <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
   </td>
   {{else}}
   <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>

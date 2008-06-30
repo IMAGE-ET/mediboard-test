@@ -150,7 +150,7 @@
       {{mb_field object=$sejour field="chambre_seule" onchange="checkChambreSejourEasy()"}}
     </td>
     <td class="button">
-      <!-- <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button> -->
+      <button type="button" class="new" onclick="popRegimes()">Régime alimentaire</button>
     </td>
   </tr>
   
