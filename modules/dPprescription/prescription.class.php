@@ -164,7 +164,7 @@ class CPrescription extends CMbObject {
   function calculPraticienId(){
   	global $AppUI;
   	
-  	if($this->object_id !== null && $this->object_class !== null && $this->type !== null){
+  	if($this->object_id !== null && $this->object_class !== null && $this->type !== null && $this->object_id){
   		// Chargement du user courant
   		$user_courant = new CMediusers();
   		$user_courant->load($AppUI->user_id);
@@ -191,6 +191,7 @@ class CPrescription extends CMbObject {
   	if(!$this->_id){
   		$this->calculPraticienId(); 
   	}
+  	
     if ($msg = $this->check()) {
       return $msg;
     }
