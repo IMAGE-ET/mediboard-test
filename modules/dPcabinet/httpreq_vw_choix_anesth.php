@@ -81,9 +81,7 @@ $techniquesComp->loadAides($userSel->user_id);
 
 // Création du template
 $smarty = new CSmartyDP();
-
-
-
+$smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
 $smarty->assign("consult"       , $consult       );
 $smarty->assign("consult_anesth", $consult_anesth);
 $smarty->assign("anesth"        , $anesth        );
