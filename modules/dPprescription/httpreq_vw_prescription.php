@@ -324,6 +324,8 @@ if($full_mode){
 }
 
 if($mode_protocole){
+	$smarty->assign("function_id", "");
+	$smarty->assign("praticien_id", "");
 	$smarty->assign("praticiens", $praticiens);
 	$smarty->assign("functions", $functions);
 	$smarty->assign("category", "medicament");
