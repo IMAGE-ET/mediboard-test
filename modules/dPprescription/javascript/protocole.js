@@ -39,7 +39,6 @@ var Protocole = {
     Protocole.refreshList(praticien_id, protocole_id, function_id);
   },
   duplicate: function(protocole_id){
-    Console.debug(protocole_id);
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_duplicate_protocole");
     url.addParam("protocole_id", protocole_id);
