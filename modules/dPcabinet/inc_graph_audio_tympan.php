@@ -7,12 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $graph_tympan_gauche, $graph_tympan_droite;
+global $can, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
+CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_line");
 
 class AudiogrammeTympano extends Graph {
+  static public $gauche = null;
+  static public $droite = null;
+  
   function setTitle($title) {
     $this->title->Set($title);
   }
@@ -125,14 +128,14 @@ class AudiogrammeTympano extends Graph {
 global $exam_audio,$reloadGraph;
 
 if(!$reloadGraph || $reloadGraph=="gauche"){
-  $graph_tympan_gauche = new AudiogrammeTympano();
-  $graph_tympan_gauche->setTitle("Oreille gauche");
-  $graph_tympan_gauche->addAudiogramme($exam_audio->_gauche_tympan, "blue");
+  AudiogrammeTympano::$gauche = new AudiogrammeTympano();
+  AudiogrammeTympano::$gauche->setTitle("Oreille gauche");
+  AudiogrammeTympano::$gauche->addAudiogramme($exam_audio->_gauche_tympan, "blue");
 }
 
 if(!$reloadGraph || $reloadGraph=="droite"){
-  $graph_tympan_droite = new AudiogrammeTympano();
-  $graph_tympan_droite->setTitle("Oreille droite");
-  $graph_tympan_droite->addAudiogramme($exam_audio->_droite_tympan, "red");
+  AudiogrammeTympano::$droite = new AudiogrammeTympano();
+  AudiogrammeTympano::$droite->setTitle("Oreille droite");
+  AudiogrammeTympano::$droite->addAudiogramme($exam_audio->_droite_tympan, "red");
 }
 ?>

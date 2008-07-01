@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $m;
 
 $debutact      = mbGetValueFromGetOrSession("debut", mbDate("-1 YEAR"));
 $rectif        = mbTransformTime("+0 DAY", $debutact, "%d")-1;
@@ -22,7 +22,7 @@ $salle_id      = mbGetValueFromGetOrSession("salle_id", 0);
 $discipline_id = mbGetValueFromGetOrSession("discipline_id", 0);
 $codes_ccam    = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 
-require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
+CAppUI::requireModuleFile($m, "inc_graph_activite");
 // Finally send the graph to the browser
 $graph->render("out",$options);
 ?>

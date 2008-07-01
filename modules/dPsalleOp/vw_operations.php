@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $g, $dPconfig;
 
-require_once($AppUI->getModuleFile("dPsalleOp", "inc_personnel"));
+CAppUI::requireModuleFile("dPsalleOp", "inc_personnel");
 
 $can->needsRead();
 

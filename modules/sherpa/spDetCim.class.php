@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("sherpa", "spObject"));
+CAppUI::requireModuleClass("sherpa", "spObject");
 
 /**
  * Détail CIM pour Sherpa, correspond à une diagnostic Mediboard

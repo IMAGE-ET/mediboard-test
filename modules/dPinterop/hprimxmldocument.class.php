@@ -7,17 +7,13 @@
 * @author Thomas Despoix
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
+CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 
 if (!class_exists("CMbXMLDocument")) {
   return;
 }
 
-global $AppUI, $m;
-
 class CHPrimXMLDocument extends CMbXMLDocument {
-
   var $pmsipath = "modules/dPinterop/hprim";
   var $finalpath = "files/hprim";
   var $documentfinalprefix = null;

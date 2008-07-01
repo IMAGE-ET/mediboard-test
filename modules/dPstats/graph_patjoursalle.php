@@ -9,8 +9,7 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getSystemClass("mbGraph"));
-
+CAppUI::requireSystemClass("mbGraph");
 
 $debut      = mbGetValueFromGet("debut"     , mbDate("-1 YEAR"));
 $fin        = mbGetValueFromGet("fin"       , mbDate()         );

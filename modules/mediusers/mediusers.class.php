@@ -8,7 +8,7 @@
  */
 
 global $utypes, $utypes_flip;
-require_once(CAppUI::getModuleClass("admin"));
+CAppUI::requireModuleClass("admin");
 
 $utypes_flip = array_flip($utypes);
 

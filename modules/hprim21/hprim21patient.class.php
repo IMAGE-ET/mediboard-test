@@ -7,9 +7,7 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI;
-
-require_once($AppUI->getModuleClass("hprim21", "hprim21object"));
+CAppUI::requireModuleClass("hprim21", "hprim21object");
 
 /**
  * The HPRIM 2.1 patient class

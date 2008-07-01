@@ -7,12 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
+CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_line");
 
 class AudiogrammeTonal extends Graph {
+  static public $gauche = null;
+  static public $droite = null;
+  
   function setTitle($title) {
     $this->title->Set($title);
   }
@@ -133,22 +136,22 @@ class AudiogrammeTonal extends Graph {
 global $exam_audio,$reloadGraph;
 
 if(!$reloadGraph || $reloadGraph=="gauche"){
-  $graph_tonal_gauche = new AudiogrammeTonal(true);
-  $graph_tonal_gauche->setTitle("Oreille gauche");
-  $graph_tonal_gauche->addAudiogramme($exam_audio->_gauche_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
-  $graph_tonal_gauche->addAudiogramme($exam_audio->_gauche_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
-  $graph_tonal_gauche->addAudiogramme($exam_audio->_gauche_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
-  $graph_tonal_gauche->addAudiogramme($exam_audio->_gauche_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
-  $graph_tonal_gauche->addAudiogramme($exam_audio->_gauche_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
+  AudiogrammeTonal::$gauche = new AudiogrammeTonal(true);
+  AudiogrammeTonal::$gauche->setTitle("Oreille gauche");
+  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
+  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
+  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
+  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
+  AudiogrammeTonal::$gauche->addAudiogramme($exam_audio->_gauche_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
 }
 
 if(!$reloadGraph || $reloadGraph=="droite"){
-  $graph_tonal_droite = new AudiogrammeTonal(true);
-  $graph_tonal_droite->setTitle("Oreille droite");
-  $graph_tonal_droite->addAudiogramme($exam_audio->_droite_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
-  $graph_tonal_droite->addAudiogramme($exam_audio->_droite_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
-  $graph_tonal_droite->addAudiogramme($exam_audio->_droite_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
-  $graph_tonal_droite->addAudiogramme($exam_audio->_droite_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
-  $graph_tonal_droite->addAudiogramme($exam_audio->_droite_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
+  AudiogrammeTonal::$droite = new AudiogrammeTonal(true);
+  AudiogrammeTonal::$droite->setTitle("Oreille droite");
+  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_aerien, "aerien", "Conduction\naérienne", "blue", MARK_FILLEDCIRCLE);
+  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_osseux, "osseux", "Conduction\nosseuse", "red", MARK_STAR);
+  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_pasrep, "pasrep", "Pas de\nréponse", "green", MARK_DTRIANGLE, null, false);
+  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_ipslat, "ipslat", "Stapédien\nipsilatéral", "black", MARK_IMG, "si.png", false);
+  AudiogrammeTonal::$droite->addAudiogramme($exam_audio->_droite_conlat, "conlat", "Stapédien\ncontrolatéral", "black", MARK_IMG, "sc.png", false);
 }
 ?>

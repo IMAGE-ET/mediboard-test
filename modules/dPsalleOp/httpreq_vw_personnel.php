@@ -7,9 +7,9 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
-require_once($AppUI->getModuleFile("dPsalleOp", "inc_personnel"));
+CAppUI::requireModuleFile("dPsalleOp", "inc_personnel");
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();

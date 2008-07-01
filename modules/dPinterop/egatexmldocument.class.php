@@ -7,14 +7,13 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
+CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 
 if (!class_exists("CMbXMLDocument")) {
   return;
 }
 
-global $AppUI, $m, $aTypesAnesth;
+global $aTypesAnesth;
 
 // tableau associatif pour les types d'anesthésie
 // cf clé sur : index.php?m=dPplanningOp&tab=vw_edit_typeanesth

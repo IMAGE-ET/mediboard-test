@@ -1,7 +1,6 @@
 <?php
 
-global $AppUI;
-require_once $AppUI->getModuleClass("dPsante400", "mouvement400");
+CAppUI::requireModuleClass("dPsante400", "mouvement400");
 
 class CMouvSejourEcap extends CMouvement400 {  
   const STATUS_ETABLISSEMENT = 0;

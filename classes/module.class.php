@@ -7,7 +7,7 @@
  * @author Romain Ollivier
 */
 
-require_once(CAppUI::getSystemClass("mbobject"));
+CAppUI::requireSystemClass("mbobject");
 
 if(!defined("TAB_READ")) {
   define("TAB_READ"  , "0");

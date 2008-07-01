@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getSystemClass("mbGraph"));
+CAppUI::requireSystemClass("mbGraph");
 
 $size          = mbGetValueFromGet("size" , 1);
 $date          = mbGetValueFromGetOrSession("date", mbTransformTime("+0 DAY", mbDate(), "%m/%Y"));

@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codable"));
+CAppUI::requireModuleClass("dPccam", "codable");
 
 class COperation extends CCodable {
   // DB Table key

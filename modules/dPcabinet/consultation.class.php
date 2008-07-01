@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-require_once(CAppUI::getModuleClass("dPccam", "codable"));
+CAppUI::requireModuleClass("dPccam", "codable");
 
 class CConsultation extends CCodable {
   const PLANIFIE = 16;

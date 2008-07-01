@@ -7,9 +7,9 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m;
 
-require_once($AppUI->getModuleFile($m, "inc_vw_affectations"));
+CAppUI::requireModuleFile($m, "inc_vw_affectations");
 
 $can->needsRead();
 

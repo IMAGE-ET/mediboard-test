@@ -7,7 +7,8 @@
 * @author Alexis Granger
 */
 
+global $current_m;
 $current_m = "dPurgences";
-require_once($AppUI->getModuleFile("dPcabinet", "edit_consultation"));
+CAppUI::requireModuleFile("dPcabinet", "edit_consultation");
 
 ?>

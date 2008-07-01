@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-require_once($AppUI->getSystemClass("mbGraph"));
+CAppUI::requireSystemClass("mbGraph");
 
 $date     = mbGetValueFromGet("date"       , mbDate());
 $module   = mbGetValueFromGet("module"     , 0);

@@ -15,16 +15,16 @@ Element.getOffsetHeightByClassName = function(class_name){
 
 Element.getInnerWidth = function(element){
   element = $(element);
-  var aBorderLeft = Element.getStyle(element,"border-left-width").split("px");
-  var aBorderRight = Element.getStyle(element,"border-right-width").split("px");
+  var aBorderLeft = element.getStyle("border-left-width").split("px");
+  var aBorderRight = element.getStyle("border-right-width").split("px");
   var fwidthElem = element.offsetWidth - parseFloat(aBorderLeft[0]) - parseFloat(aBorderRight[0])
   return fwidthElem; 
 }
 
 Element.getInnerHeight = function(element){
   element = $(element);
-  var aBorderTop = Element.getStyle(element,"border-top-width").split("px");
-  var aBorderBottom = Element.getStyle(element,"border-bottom-width").split("px");
+  var aBorderTop = element.getStyle("border-top-width").split("px");
+  var aBorderBottom = element.getStyle("border-bottom-width").split("px");
   var fheightElem = element.offsetHeight - parseFloat(aBorderTop[0]) - parseFloat(aBorderBottom[0])
   return fheightElem; 
 }

@@ -29,8 +29,9 @@ $prat_id = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
-require_once($AppUI->getModuleFile($m, "inc_graph_activite"));
+CAppUI::requireModuleFile($m, "inc_graph_activite");
 
+global $graph, $options;
 $graph->render("in",$options);
 $map_graph_interventions = $graph->getHTMLImageMap();
 $map_graph_interventions = preg_replace("/javascript:/", "#nothing\" onclick=\"", $map_graph_interventions);

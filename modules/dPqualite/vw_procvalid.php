@@ -100,7 +100,6 @@ if($docGed->version){
   $versionDoc[] = "1";
 }
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("lastactif"         , $lastactif);

@@ -7,14 +7,11 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPinterop", "egatexmldocument"));
+CAppUI::requireModuleClass("dPinterop", "egatexmldocument");
 
 if (!class_exists("CEGateXMLDocument")) {
   return;
 }
-
-global $AppUI, $m;
 
 class CEGateXMLPatientStayInformation extends CEGateXMLDocument {
   function __construct() {

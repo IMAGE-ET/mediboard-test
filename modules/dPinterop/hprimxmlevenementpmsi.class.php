@@ -7,9 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m, $g;
-
-require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
+CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
 
 if (!class_exists("CHPrimXMLDocument")) {
   return;

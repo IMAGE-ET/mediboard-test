@@ -57,7 +57,9 @@ class CBcbProduit extends CBcbObject {
 
     if($infoProduit->Charge == 1){
       $this->code_cip        = $infoProduit->Code_CIP;
-      $this->code_ucd        = $infoProduit->Code_Ucd;
+      if (isset($infoProduit->Code_Ucd)) {
+        $this->code_ucd        = $infoProduit->Code_Ucd;
+      }
       $this->libelle         = $infoProduit->Libelle;
       $this->nom_commercial  = $infoProduit->NomCommercial;
       $this->forme           = $infoProduit->Forme;

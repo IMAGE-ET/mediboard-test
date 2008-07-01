@@ -9,7 +9,6 @@
 include_once("./includes/magic_quotes_gpc.php");
 
 $dPconfig = array();
-global $performance;
 $performance = array();
 
 if (!is_file("./includes/config.php")) {
@@ -95,7 +94,7 @@ if (isset($_POST["login"])) {
 // Get the user preference
 $uistyle = $AppUI->user_prefs["UISTYLE"];
 
-require_once(CAppUI::getSystemClass("smartydp"));
+CAppUI::requireSystemClass("smartydp");
 
 // clear out main url parameters
 $m = "";

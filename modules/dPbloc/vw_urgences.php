@@ -7,6 +7,6 @@
 * @author Romain Ollivier
 */
 
-require_once($AppUI->getModuleFile("dPsalleOp", "vw_urgences"));
+CAppUI::requireModuleFile('dPsalleOp', 'vw_urgences');
 
 ?>

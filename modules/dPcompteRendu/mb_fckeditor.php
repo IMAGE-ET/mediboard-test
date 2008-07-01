@@ -36,12 +36,12 @@ require_once("$mbPath/includes/autoload.php" );
 
 $templateManager =& $_SESSION[$m]["templateManager"];
 
-// Création du template
-require_once(CAppUI::getSystemClass("smartydp"));
+CAppUI::requireSystemClass("smartydp");
 
+// Création du template
 $smarty = new CSmartyDP(CAppUI::conf("root_dir")."/modules/$m");
 
-$smarty->assign("templateManager" , $templateManager);
+$smarty->assign("templateManager", $templateManager);
 
 $smarty->display("mb_fckeditor.tpl");
 ?>

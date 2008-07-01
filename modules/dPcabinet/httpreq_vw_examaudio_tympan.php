@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m;
+global $m;
 global $frequences, $pressions, $exam_audio, $reloadGraph;
 
 $examaudio_id = mbGetValueFromGetOrSession("examaudio_id");
@@ -17,10 +17,10 @@ $reloadGraph  = $side;
 $exam_audio = new CExamAudio;
 $exam_audio->load($examaudio_id);
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tympan"));
+CAppUI::requireModuleFile($m, "inc_graph_audio_tympan");
 
-${"graph_tympan_".$side}->Stroke("tmp/graphtmp.png");
-$map_tympan = ${"graph_tympan_".$side}->GetHTMLImageMap("graph_tympan_".$side);
+AudiogrammeTympano::${$side}->Stroke("tmp/graphtmp.png");
+$map_tympan = AudiogrammeTympano::${$side}->GetHTMLImageMap("graph_tympan_".$side);
 
 // Création du template
 $smarty = new CSmartyDP();

@@ -1,7 +1,6 @@
 <?php
 
-global $AppUI;
-require_once $AppUI->getModuleClass("dPsante400", "recordsante400");
+CAppUI::requireModuleClass("dPsante400", "recordsante400");
 
 class CMouvement400 extends CRecordSante400 {
   protected $base = null;

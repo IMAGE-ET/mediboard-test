@@ -64,20 +64,16 @@ class CMbArray {
    * Build and array with ranged values
    * @param str The string to split out
    */
-	static function createRange($min, $max, $cleasvalue = false, $step = 1){
-	  if($min>=$max) {
-	    return false;
-	  }
-	  $aTemp = array();
-	  while($min<=$max){
-	    if($cleasvalue){
-	      $aTemp[$min] = $min;
-	    }else{
-	      $aTemp[] = $min;
+	static function createRange($min, $max, $key_as_value = false, $step = 1){
+    $range = range($min, $max, $step);
+	  if ($key_as_value) {
+	    $tmp_range = array();
+      foreach ($range as $n) {
+	      $tmp_range[$n] = $n;
 	    }
-	    $min += $step;
-	  }
-	  return $aTemp;
+	    $range = $tmp_range;
+    }
+    return $range;
 	}
 	
 	/**
@@ -141,19 +137,6 @@ class CMbArray {
     return $result;
   }
   
-  /**
-   * DEPRECATED ALIAS TO BUILT IN str_split() TO REMOVE
-   * 
-   * Build and array with string chars as values
-   * @param str The string to split out
-   */
-	static function fromString($str) {
-	  $array = array();
-	  for ($i = 0; $i < strlen($str); $i++) {
-	    $array[] = $str[$i];
-	  }
-	  return $array;
-	}
   
   /**
    * Returns the value following the given one in cycle mode

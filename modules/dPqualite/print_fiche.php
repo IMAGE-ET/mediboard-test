@@ -37,13 +37,10 @@ if(!$fiche->load($fiche_ei_id)){
       }
     }
   }
-
 }
 
 // Création du template
-require_once(CAppUI::getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
-
 $smarty->assign("catFiche" , $catFiche);
 $smarty->assign("fiche"    , $fiche);
 $smarty->display("print_fiche.tpl");

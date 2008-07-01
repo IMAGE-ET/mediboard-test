@@ -12,7 +12,7 @@
  * @abstract Adds Mediboard abstraction layer functionality for meta-objects
  */
 
-require_once(CAppUI::getSystemClass("mbobject"));
+CAppUI::requireSystemClass('mbobject');
 
 class CMbMetaObject extends CMbObject {
   // DB Fields	

@@ -12,8 +12,7 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
-require_once($AppUI->getModuleFile("dPhospi", "inc_vw_affectations"));
-
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $service_id = mbGetValueFromGet("service_id" , null);
 $date       = mbGetValueFromGet("date"       , mbDate());

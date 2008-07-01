@@ -7,15 +7,12 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_plotband"));
+CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_line");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_plotband");
 
 class CResultatsLaboGraph extends Graph {
   var $maxValues = 10;
-  
   var $resultats = null;
   
   function CResultatsLaboGraph($patient, $examen, $resultats) {

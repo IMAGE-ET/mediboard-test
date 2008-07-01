@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m;
 
-require_once($AppUI->getModuleClass("dPsalleOp", "acteccam"));
+CAppUI::requireModuleClass("dPsalleOp", "acteccam");
 
 $class = mbGetValueFromGet("class","");
 

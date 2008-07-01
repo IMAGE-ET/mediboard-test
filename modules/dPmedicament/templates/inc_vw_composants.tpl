@@ -1,5 +1,4 @@
 <script type="text/javascript">
- 
 loadComposants = function(composant, code, libelle, dialog){
   var oForm = document.rechercheComposant;
   
@@ -9,11 +8,9 @@ loadComposants = function(composant, code, libelle, dialog){
   url.addParam("code", code);
   url.addParam("libelle", libelle);
   url.addParam("dialog", dialog);
-  url.addParam("rechercheLivretComposant", getCheckedValue(oForm.rechercheLivretComposant));
-  url.requestUpdate("composant", { waitingText: null } );
+  url.addParam("rechercheLivretComposant", $V(oForm.rechercheLivretComposant));
+  url.requestUpdate("composants", { waitingText: null } );
 }
-
-
 </script>
 
 <table class="form">

@@ -7,7 +7,7 @@
 */
 
 global $AppUI;
-require_once($AppUI->getLibraryFile("phpThumb/phpthumb.class"));
+CAppUI::requireLibraryFile("phpThumb/phpthumb.class");
 //require_once("./lib/phpThumb/phpthumb.class.php");
 //trigger_error("Source is $file->_file");
 

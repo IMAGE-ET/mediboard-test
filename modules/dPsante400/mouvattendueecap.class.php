@@ -1,7 +1,6 @@
 <?php
 
-global $AppUI;
-require_once $AppUI->getModuleClass("dPsante400", "mouvsejourecap");
+CAppUI::requireModuleClass("dPsante400", "mouvsejourecap");
 
 class CMouvAttendueECap extends CMouvSejourEcap {  
   

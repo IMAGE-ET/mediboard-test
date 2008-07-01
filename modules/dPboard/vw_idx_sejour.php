@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
-require_once($AppUI->getModuleFile("dPhospi", "vw_idx_sejour"));
-
+CAppUI::requireModuleFile('dPhospi', 'vw_idx_sejour');
 
 ?>

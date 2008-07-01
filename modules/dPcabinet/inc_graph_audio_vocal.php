@@ -7,13 +7,13 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
+global $can, $m;
 
-require_once($AppUI->getModuleFile("dPcabinet", "jpgraph_bezier"));
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_scatter"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
+CAppUI::requireModuleFile("dPcabinet", "jpgraph_bezier");
+CAppUI::requireLibraryFile("jpgraph/src/mbjpgraph");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_line");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_scatter");
+CAppUI::requireLibraryFile("jpgraph/src/jpgraph_regstat");
 
 function xPseudoAxisFormatCb ($value) {
 	$value -= 50;
@@ -24,7 +24,9 @@ function xPseudoAxisFormatCb ($value) {
   return sprintf("%d", $value);
 }
 
-class AudiogrammeVocal extends Graph {  
+class AudiogrammeVocal extends Graph {
+  static public $graph = null;
+  
   function AudiogrammeVocal() {
     // Setup the graph.
     $this->Graph(460,305); 
@@ -169,8 +171,8 @@ class AudiogrammeVocal extends Graph {
 
 global $exam_audio;
 
-$graph_vocal = new AudiogrammeVocal();
-$graph_vocal->addAudiogramme($exam_audio->_gauche_vocale, "Oreille gauche", "blue", MARK_STAR);
-$graph_vocal->addAudiogramme($exam_audio->_droite_vocale, "Oreille droite", "red", MARK_SQUARE);
+AudiogrammeVocal::$graph = new AudiogrammeVocal();
+AudiogrammeVocal::$graph->addAudiogramme($exam_audio->_gauche_vocale, "Oreille gauche", "blue", MARK_STAR);
+AudiogrammeVocal::$graph->addAudiogramme($exam_audio->_droite_vocale, "Oreille droite", "red", MARK_SQUARE);
 
 ?>

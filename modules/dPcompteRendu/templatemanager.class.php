@@ -134,7 +134,6 @@ class CTemplateManager {
   
   
   function loadHelpers($user_id, $modeleType) {
-    global $dPconfig;
     $compte_rendu = new CCompteRendu();
   	
     // Chargement de l'utilisateur courant

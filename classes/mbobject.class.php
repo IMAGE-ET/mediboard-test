@@ -1486,8 +1486,7 @@ class CMbObject {
   }
   
   function checkConfidential($specs = null) {
-    global $dPconfig;
-    if ($dPconfig["hide_confidential"]) {
+    if (CAppUI::conf("hide_confidential")) {
       if($specs == null){
         $specs = $this->_specs;
       }

@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m;
+global $m;
 global $frequences, $pressions, $exam_audio, $reloadGraph;
 
 $examaudio_id = mbGetValueFromGetOrSession("examaudio_id");
@@ -17,7 +17,7 @@ $reloadGraph  = $side;
 $exam_audio = new CExamAudio;
 $exam_audio->load($examaudio_id);
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tonal"));
+CAppUI::requireModuleFile($m, "inc_graph_audio_tonal");
 
 ${"graph_tonal_".$side}->Stroke("tmp/graphtmp.png");
 $map_tonal = ${"graph_tonal_".$side}->GetHTMLImageMap("graph_tonal_".$side);

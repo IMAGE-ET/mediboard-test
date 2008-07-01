@@ -7,8 +7,7 @@
  *  @author Thomas Despoix
  */
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPccam", "codable"));
+CAppUI::requireModuleClass("dPccam", "codable");
 
 /**
  * Classe CSejour. 

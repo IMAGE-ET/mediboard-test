@@ -8,29 +8,24 @@
 */
 
 require_once("./classes/fieldSpecs/floatSpec.class.php");
-require_once("./includes/config_dist.php");
 
 class CCurrencySpec extends CFloatSpec {
-  //global $dPconfig;
-    
   function getSpecType() {
     return("currency");
   }
   
   function getValue($object, $smarty, $params = null) {
-  	global $dPconfig;
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
     return ($propValue !== null && $propValue !== "") ? 
-      htmlspecialchars(sprintf("%.2f", $propValue).$dPconfig["currency_symbol"]) : 
+      htmlspecialchars(sprintf("%.2f", $propValue).CAppUI::conf("currency_symbol")) : 
       "-";
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
     CMbArray::defaultValue($params, "size", 4);
-    global $dPconfig;
-    return parent::getFormHtmlElement($object, $params, $value, $className).$dPconfig["currency_symbol"];
+    return parent::getFormHtmlElement($object, $params, $value, $className).CAppUI::conf("currency_symbol");
   }
 	
 }

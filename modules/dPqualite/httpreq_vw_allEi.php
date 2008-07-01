@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m;
 
 $can->needsAdmin();
 $ds = CSQLDataSource::get("std");
@@ -23,9 +23,7 @@ if($allEi_user_id){
 
 $listeFiches = CFicheEi::loadFichesEtat("ALL_TERM",null,$where_allei);
 
-
 // Création du template
-require_once(CAppUI::getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("listUsersTermine" , $listUsersTermine);

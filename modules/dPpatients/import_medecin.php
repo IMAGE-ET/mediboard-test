@@ -55,7 +55,7 @@ class CMbXPath extends DOMXPath {
     $text = null;
     if ($node = $this->queryUniqueNode($query, $contextNode)) {
       $text = utf8_decode($node->textContent);
-      $text = str_replace(CMbArray::fromString($purgeChars), "", $text);
+      $text = str_replace(str_split($purgeChars), "", $text);
       $text = trim($text);
       $text = addslashes($text);
     }

@@ -1,5 +1,4 @@
 <script type="text/javascript">
- 
 loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   var oForm = document.rechercheDCI;  
   url = new Url;
@@ -9,11 +8,9 @@ loadDCI = function(DC_search, DCI_code, dialog, forme, dosage){
   url.addParam("dialog", dialog);
   url.addParam("forme", forme);
   url.addParam("dosage", dosage);
-  url.addParam("rechercheLivretDCI", getCheckedValue(oForm.rechercheLivretDCI));
+  url.addParam("rechercheLivretDCI",$V(oForm.rechercheLivretDCI));
   url.requestUpdate("DCI", { waitingText: null } );
 }
-
-
 </script>
 
 <table class="form">

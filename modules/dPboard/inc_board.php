@@ -7,7 +7,7 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can;
+global $AppUI, $can, $smarty, $prat;
 
 $can->needsRead();
 

@@ -6,16 +6,13 @@
  * @version $Revision: 1390 $
  * @author Thomas Despoix
  */
-
-
-global $AppUI, $performance, $shm;
-
+global $performance, $shm;
 $performance["autoload"] = 0;
 
 // Load class paths in shared memory
 if ($shm->isReady()) {
   if (null == $classPaths = $shm->get("class-paths")) {
-    $AppUI->getAllClasses();
+    CAppUI::getAllClasses();
     $classNames = getChildClasses(null);
     foreach ($classNames as $className) {
       $class = new ReflectionClass($className);
@@ -43,7 +40,7 @@ if ($shm->isReady()) {
 }
 // Load all classes normally
 else {
-  $AppUI->getAllClasses();
+  CAppUI::getAllClasses();
 }
 
 ?>

@@ -595,7 +595,6 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
-  //$affichageScript .= mbLoadScript("includes/javascript/browser.js",$modeReturn);  
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   
   if($modeReturn)

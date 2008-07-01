@@ -12,8 +12,6 @@
  * interventions
  */
 
-require_once(CAppUI::getModuleClass("dPccam", "acte"));
-
 class CActeCCAM extends CActe {
   static $coef_associations = array (
     "1" => 100,

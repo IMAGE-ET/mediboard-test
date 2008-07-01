@@ -7,9 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m, $g, $prat_id, $salle_id, $discipline_id, $debutact, $finact, $codes_ccam, $graph;
 
-require_once($AppUI->getSystemClass("mbGraph"));
+CAppUI::requireSystemClass("mbGraph");
 
 $total = 0;
 

@@ -53,7 +53,7 @@ class CAppUI {
   /** @var string Default page for a redirect call*/
   var $defaultRedirect = "";
 
-  function getAllClasses() {
+  static function getAllClasses() {
     $rootDir = self::conf("root_dir");
     foreach(glob("classes/*/*.class.php") as $fileName) {
       require_once("$rootDir/$fileName");
@@ -73,71 +73,58 @@ class CAppUI {
     foreach(glob("modules/*/setup.php") as $fileName) {
       require_once("$rootDir/$fileName");
     }
-    
   }
-
-	/**
-	 * Used to load a php class file from the system classes directory
-	 * @param string $name The class root file name (excluding .class.php)
-	 * @return string The path to the include file
-	 */
-  static function getSystemClass($name=null) {
-    if ($name) {
-      if ($root = self::conf("root_dir")) {
-        return "$root/classes/$name.class.php";
-      }
+  
+  /**
+   * Used to include a php class file from the system classes directory
+   * @param string $name The class root file name (excluding .class.php)
+   */
+  static function requireSystemClass($name = null) {
+    if ($name && $root = self::conf("root_dir")) {
+      return require_once("$root/classes/$name.class.php");
     }
   }
 
 	/**
-	 * Used to load a php class file from the legacy classes directory
+	 * Used to include a php class file from the legacy classes directory
 	 * @param string <b>$name</b> The class file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-  function getLegacyClass($name=null) {
-    if ($name) {
-      if ($root = self::conf("root_dir")) {
-        return "$root/legacy/$name.class.php";
-      }
+  static function requireLegacyClass($name = null) {
+    if ($name && $root = self::conf("root_dir")) {
+      return require_once("$root/legacy/$name.class.php");
     }
   }
-
-	/**
-	 * Used to load a php class file from the lib directory
-	 * @param string <b>$name</b> The class root file name (excluding .php)
-	 * @return string The path to the include file
-	 */
-  function getLibraryFile($name=null) {
-    if ($name) {
-      if ($root = self::conf("root_dir")) {
-        return "$root/lib/$name.php";
-      }
+  
+  /**
+   * Used to include a php class file from the lib directory
+   * @param string <b>$name</b> The class root file name (excluding .php)
+   */
+  static function requireLibraryFile($name = null) {
+    if ($name && $root = self::conf("root_dir")) {
+      return require_once("$root/lib/$name.php");
     }
   }
-
-	/**
-	 * Used to load a php class file from the module directory
-	 * @param string $name The class root file name (excluding .class.php)
-	 * @return string The path to the include file
-	 */
-  static function getModuleClass($name = null, $file = null) {
+  
+  /**
+   * Used to load a php class file from the module directory
+   * @param string $name The class root file name (excluding .class.php)
+   */
+  static function requireModuleClass($name = null, $file = null) {
     if ($name && $root = self::conf("root_dir")) {
       $filename = $file ? $file : $name;
-      return "$root/modules/$name/$filename.class.php";
+      return require_once("$root/modules/$name/$filename.class.php");
     }
   }
-
+  
 /**
- * Used to load a php file from the module directory
+ * Used to include a php file from the module directory
  * @param string $name The class root file name (excluding .class.php)
- * @return string The path to the include file
  */
-  function getModuleFile($name = null, $file = null) {
-    if ($name) {
-      if ($root = self::conf("root_dir")) {
-        $filename = $file ? $file : $name;
-        return "$root/modules/$name/$filename.php";
-      }
+  static function requireModuleFile($name = null, $file = null) {
+    if ($name && $root = self::conf("root_dir")) {
+      $filename = $file ? $file : $name;
+      return require_once("$root/modules/$name/$filename.php");
     }
   }
   
@@ -146,11 +133,9 @@ class CAppUI {
  * @param string $subpath in tmp directory
  * @return string The path to the include file
  */
-  function getTmpPath($subpath) {
-    if ($subpath) {
-      if ($root = self::conf("root_dir")) {
-        return "$root/tmp/$subpath";
-      }
+  static function getTmpPath($subpath) {
+    if ($subpath && $root = self::conf("root_dir")) {
+      return "$root/tmp/$subpath";
     }
   }
   
@@ -161,7 +146,7 @@ class CAppUI {
  * @param string The path to read.
  * @return array A named array of the directories (the key and value are identical).
  */
-  function readDirs($path) {
+  static function readDirs($path) {
     $dirs = array();
     $d = dir(self::conf("root_dir") . "/$path");
     while (false !== ($name = $d->read())) {
@@ -179,7 +164,7 @@ class CAppUI {
  * @param string A regular expression to filter by.
  * @return array A named array of the files (the key and value are identical).
  */
-  function readFiles($path, $filter=".") {
+  static function readFiles($path, $filter=".") {
     $files = array();
 
     if ($handle = opendir($path)) {
@@ -201,7 +186,7 @@ class CAppUI {
  * @param string The file name.
  * @return array A named array of the files (the key and value are identical).
  */
-  function checkFileName($file) {
+  static function checkFileName($file) {
     global $AppUI;
 
     // define bad characters and their replacement
@@ -598,10 +583,11 @@ class CAppUI {
    * @param $path string Tokenized path, eg "module class var";
    * @return mixed scalar or array of values depending on the path
    */
-  static function conf($path = "") {
+  static function conf($path = '') {
     global $dPconfig;
     $conf = $dPconfig;
-    foreach (explode(" ", $path) as $part) {
+    $items = explode(' ', $path);
+    foreach ($items as $part) {
     	$conf = $conf[$part];
     }
     return $conf;

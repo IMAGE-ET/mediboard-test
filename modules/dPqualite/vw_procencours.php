@@ -67,7 +67,6 @@ $etablissements = new CMediusers();
 $etablissements = $etablissements->loadEtablissements(PERM_READ);
 
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("procTermine"    , $procTermine);

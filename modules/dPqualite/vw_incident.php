@@ -70,7 +70,6 @@ for ($i = 0; $i <= 23; $i++) {
 }
   
 // Création du template
-require_once($AppUI->getSystemClass("smartydp"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("datenow"        , mbDate());

@@ -8,15 +8,12 @@
 */
 
 
-global $AppUI;
-require_once($AppUI->getModuleClass("dPinterop", "mbxmldocument"));
-require_once($AppUI->getModuleClass("dPinterop", "mbxmlschema"));
+CAppUI::requireModuleClass("dPinterop", "mbxmldocument");
+CAppUI::requireModuleClass("dPinterop", "mbxmlschema");
 
 if (!class_exists("CMbXMLDocument") || !class_exists("CMbXMLSchema")) {
   return;
 }
-
-global $AppUI, $m;
 
 class CEGateXMLSchema extends CMbXMLSchema {  
   function __construct() {

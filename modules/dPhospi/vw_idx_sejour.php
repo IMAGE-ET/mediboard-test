@@ -8,7 +8,7 @@
 */
 
 global $AppUI, $can, $m, $g;
-require_once($AppUI->getModuleFile("dPhospi", "inc_vw_affectations"));
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 $can->needsRead();
 

@@ -7,8 +7,6 @@
  *  @version $Revision: 1706 $
  */
 
-global $AppUI, $m;
-
 class CDoObjectAddEdit {
   var $className           = null;
   var $objectKeyGetVarName = null;
@@ -50,8 +48,6 @@ class CDoObjectAddEdit {
   }
 
   function doBind() {
-    global $AppUI;
-
     $this->ajax            = CMbArray::extract($this->refTab, "ajax");
     $this->suppressHeaders = CMbArray::extract($this->refTab, "suppressHeaders");
     $this->callBack        = CMbArray::extract($this->refTab, "callback");

@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m;
+global $m;
 global $frequences, $pressions, $exam_audio;
 
 
@@ -16,9 +16,9 @@ $examaudio_id = mbGetValueFromGetOrSession("examaudio_id");
 $exam_audio = new CExamAudio;
 $exam_audio->load($examaudio_id);
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_vocal"));
-$graph_vocal->Stroke("tmp/graphtmp.png");
-$map_vocal = $graph_vocal->GetHTMLImageMap("graph_vocal");
+CAppUI::requireModuleFile($m, "inc_graph_audio_vocal");
+AudiogrammeVocal::$graph->Stroke("tmp/graphtmp.png");
+$map_vocal = AudiogrammeVocal::$graph->GetHTMLImageMap("graph_vocal");
 
 // Création du template
 $smarty = new CSmartyDP();

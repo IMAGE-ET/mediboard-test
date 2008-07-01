@@ -7,8 +7,8 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-global $frequences, $pressions, $exam_audio, $graph_tympan_gauche, $graph_tympan_droite;
+global $can, $m;
+global $frequences, $pressions, $exam_audio;
 
 $can->needsEdit();
 
@@ -29,24 +29,25 @@ $exam_audio->loadRefs();
 $exam_audio->_ref_consult->loadRefsFwd();
 $exam_audio->loadAides($exam_audio->_ref_consult->_ref_plageconsult->chir_id);
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tonal"));
+CAppUI::requireModuleFile($m, "inc_graph_audio_tonal");
+AudiogrammeTonal::$gauche->Stroke("tmp/graphtmp.png");
+$map_tonal_gauche = AudiogrammeTonal::$gauche->GetHTMLImageMap("graph_tonal_gauche");
 
-$graph_tonal_gauche->Stroke("tmp/graphtmp.png");
-$map_tonal_gauche = $graph_tonal_gauche->GetHTMLImageMap("graph_tonal_gauche");
+AudiogrammeTonal::$droite->Stroke("tmp/graphtmp.png");
+$map_tonal_droite = AudiogrammeTonal::$droite->GetHTMLImageMap("graph_tonal_droite");
 
-$graph_tonal_droite->Stroke("tmp/graphtmp.png");
-$map_tonal_droite = $graph_tonal_droite->GetHTMLImageMap("graph_tonal_droite");
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_tympan"));
-$graph_tympan_gauche->Stroke("tmp/graphtmp.png");
-$map_tympan_gauche = $graph_tympan_gauche->GetHTMLImageMap("graph_tympan_gauche");
+CAppUI::requireModuleFile($m, "inc_graph_audio_tympan");
+AudiogrammeTympano::$gauche->Stroke("tmp/graphtmp.png");
+$map_tympan_gauche = AudiogrammeTympano::$gauche->GetHTMLImageMap("graph_tympan_gauche");
 
-$graph_tympan_droite->Stroke("tmp/graphtmp.png");
-$map_tympan_droite = $graph_tympan_droite->GetHTMLImageMap("graph_tympan_droite");
+AudiogrammeTympano::$droite->Stroke("tmp/graphtmp.png");
+$map_tympan_droite = AudiogrammeTympano::$droite->GetHTMLImageMap("graph_tympan_droite");
 
-require_once($AppUI->getModuleFile("$m", "inc_graph_audio_vocal"));
-$graph_vocal->Stroke("tmp/graphtmp.png");
-$map_vocal = $graph_vocal->GetHTMLImageMap("graph_vocal");
+
+CAppUI::requireModuleFile($m, "inc_graph_audio_vocal");
+AudiogrammeVocal::$graph->Stroke("tmp/graphtmp.png");
+$map_vocal = AudiogrammeVocal::$graph->GetHTMLImageMap("graph_vocal");
 
 $bilan = array();
 foreach ($exam_audio->_gauche_osseux as $index => $perte) {

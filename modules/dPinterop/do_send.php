@@ -7,9 +7,9 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $msg;
+global $AppUI;
 
-require_once($AppUI->getLibraryFile("phpmailer/class.phpmailer"));
+CAppUI::requireLibraryFile("phpmailer/class.phpmailer");
 
 $mail = new PHPMailer();
 

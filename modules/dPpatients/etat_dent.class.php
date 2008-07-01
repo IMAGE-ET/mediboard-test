@@ -7,8 +7,6 @@
 * @author Fabien Ménager
 */
 
-global $AppUI;
-
 /**
  * The CEtatDent Class
  */

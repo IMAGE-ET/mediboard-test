@@ -7,13 +7,11 @@
  *  @version $Revision: $
  */
 
-global $AppUI;
-
-require_once($AppUI->getLibraryFile("jpgraph/src/mbjpgraph"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_bar"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_line"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_regstat"));
-require_once($AppUI->getLibraryFile("jpgraph/src/jpgraph_pie"));
+CAppUI::requireLibraryFile('jpgraph/src/mbjpgraph');
+CAppUI::requireLibraryFile('jpgraph/src/jpgraph_bar');
+CAppUI::requireLibraryFile('jpgraph/src/jpgraph_line');
+CAppUI::requireLibraryFile('jpgraph/src/jpgraph_regstat');
+CAppUI::requireLibraryFile('jpgraph/src/jpgraph_pie');
 
 class CMbGraph {
 	/**
@@ -26,8 +24,7 @@ class CMbGraph {
   * Constructor
   */
 	function CMbGraph() {
-		global $dPconfig;
-		$this->config = $dPconfig['graph_engine'];
+		$this->config = CAppUI::conf('graph_engine');
 		$this->options = array ("width" => 320,   //width of frame 
 														"height" => 125,  //height of frame
 														"size" => 1, 			//frame scale

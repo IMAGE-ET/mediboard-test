@@ -11,7 +11,7 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-require_once($AppUI->getModuleFile("dPhospi", "inc_vw_affectations"));
+CAppUI::requireModuleFile("dPhospi", "inc_vw_affectations");
 
 
 $service_id = mbGetValueFromGetOrSession("service_id" , null);
