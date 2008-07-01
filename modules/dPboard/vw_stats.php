@@ -8,35 +8,31 @@
 */
 
 CAppUI::requireModuleFile("dPboard", "inc_board");
-global $smarty, $prat;
+global $prat;
+if (!$prat->_id) {
+  return;
+}
 
-$filterSejour    = new CSejour();
-$filterOperation = new COperation();
+$stats = array(
+  "sejours_interventions",
+  "prescripteurs",
+);
 
-$filterSejour->_date_min_stat = mbGetValueFromGetOrSession("_date_min_stat", mbDate("-1 YEAR"));
-$rectif = mbTransformTime("+0 DAY", $filterSejour->_date_min_stat, "%d") - 1;
-$filterSejour->_date_min_stat = mbDate("-$rectif DAYS", $filterSejour->_date_min_stat);
+$stat = mbGetValueFromPostOrSession("stat", "sejours_interventions");
 
-$filterSejour->_date_max_stat =  mbGetValueFromGetOrSession("_date_max_stat",  mbDate());
-$rectif = mbTransformTime("+0 DAY", $filterSejour->_date_max_stat, "%d") - 1;
-$filterSejour->_date_max_stat = mbDate("-$rectif DAYS", $filterSejour->_date_max_stat);
-$filterSejour->_date_max_stat = mbDate("+ 1 MONTH", $filterSejour->_date_max_stat);
-$filterSejour->_date_max_stat = mbDate("-1 DAY", $filterSejour->_date_max_stat);
+if (!in_array($stat, $stats)) {
+  trigger_error("Unknown stat view '$stat'", E_USER_WARNING);
+  return;
+}
 
+// Affichage
+$smarty = new CSmartyDP();
 
-$filterSejour->praticien_id = $prat->_id;
-$filterSejour->type = mbGetValueFromGetOrSession("type", 1);
-$filterOperation->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
-
-$sejour = new CSejour;
-$listHospis = array();
-$listHospis = array_merge($listHospis, $sejour->_enumsTrans["type"]);
-
-// Variables de templates
-$smarty->assign("filterSejour",    $filterSejour);
-$smarty->assign("filterOperation", $filterOperation);
-$smarty->assign("listHospis",      $listHospis);
+$smarty->assign("stats", $stats);
+$smarty->assign("stat" , $stat);
 
 $smarty->display("vw_stats.tpl");
+
+CAppUI::requireModuleFile("dPboard", "vw_$stat");
 
 ?>

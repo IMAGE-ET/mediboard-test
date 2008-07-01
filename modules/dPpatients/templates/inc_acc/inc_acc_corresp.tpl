@@ -46,7 +46,7 @@
   </tr>
   <tr>
     <th>{{mb_label object=$patient field="prevenir_parente"}}</th>
-    <td>{{mb_field object=$patient field="prevenir_parente" tabindex="311" defaultOption="&mdash;Veuillez Choisir &mdash;"}}</td>
+    <td>{{mb_field object=$patient field="prevenir_parente" tabindex="311" defaultOption="&mdash;Veuillez Choisir"}}</td>
   </tr>
 </table>
 

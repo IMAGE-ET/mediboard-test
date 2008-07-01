@@ -89,8 +89,6 @@ function pageMain() {
 {{mb_include_script path="includes/javascript/intermax.js"}}
 
 <table class="main">
-  {{include file=inc_board.tpl}}
-
   <tr>
     <th>
       <form name="editFrmPratDate" action="?m={{$m}}" method="get">

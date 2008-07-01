@@ -103,24 +103,28 @@ if($codes_ccam) {
   $subtitle .= " CCAM : $codes_ccam -";
 }
 
-$options = array( "width" => 480,
-									"height" => 300,
-									"title" => $title,
-									"subtitle" => $subtitle,
-									"sizeFontTitle" => 10,
-									"margin" => array(50,100,50,70),
-									"posLegend" => array(0.02, 0.06, "right", "top"), 
-									"sizeFontAxis" => 8,
-									"labelAngle" => 50,
-									"textTickInterval" => 2,
-									"posXAbsDelta" => 15,
-									"posYAbsDelta" => -15,
-									"dataAccBar" => $opbysalle,
-									"datax" => $datax,
-									"graphAccLegend" => $opbysalle,
-									"map" => "oui",
-									"mapInfo" => array($jscalls, $labels),
-									"nameHtmlImageMap" => "graph_interventions" );
+global $graph, $options;
+
+$options = array( 
+	"width" => 480,
+	"height" => 300,
+	"title" => $title,
+	"subtitle" => $subtitle,
+	"sizeFontTitle" => 10,
+	"margin" => array(50,100,50,70),
+	"posLegend" => array(0.02, 0.06, "right", "top"), 
+	"sizeFontAxis" => 8,
+	"labelAngle" => 50,
+	"textTickInterval" => 2,
+	"posXAbsDelta" => 15,
+	"posYAbsDelta" => -15,
+	"dataAccBar" => $opbysalle,
+	"datax" => $datax,
+	"graphAccLegend" => $opbysalle,
+	"map" => "oui",
+	"mapInfo" => array($jscalls, $labels),
+	"nameHtmlImageMap" => "graph_interventions" 
+);
 				
 $graph = new CMbGraph();
 $graph->selectType("Graph",$options);

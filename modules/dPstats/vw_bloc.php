@@ -29,6 +29,7 @@ $prat_id = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
+global $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
 CAppUI::requireModuleFile($m, "inc_graph_activite");
 
 global $graph, $options;

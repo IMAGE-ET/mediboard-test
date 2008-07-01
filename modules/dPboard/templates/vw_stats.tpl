@@ -1,84 +1,18 @@
-{{mb_include_script module="dPplanningOp" script="ccam_selector"}}
+<br />
+<form name="ChoixStat" method="post" action="#">
+  <label for="stat" title="Statistique à afficher">Statistique</label>
+  <select name="stat" onchange="form.submit()">
+  {{foreach from=$stats item=_stat}}
+    <option value="{{$_stat}}" {{if $_stat == $stat}}selected="selected"{{/if}}> 
+    	{{tr}}mod-dPboard-tab-vw_{{$_stat}}{{/tr}}
+    </option>
+  {{/foreach}}
+  </select>
+</form>
 
-<script type="text/javascript">
-
-function pageMain() {
-  regFieldCalendar("filters", "_date_min_stat");
-  regFieldCalendar("filters", "_date_max_stat");
-}
-
-</script>
-
-<table class="main">
-  {{include file=inc_board.tpl}}
-
-	{{if $prat->_id}}
-  <tr>
-    <td>
-      <form name="filters" action="?" method="get" onsubmit="return checkForm(this)">
-
-      <input type="hidden" name="m" value="dPboard" />
-      <input type="hidden" name="_chir" value="{{$user_id}}" />
-      <input type="hidden" name="_class_name" value="" />
-
-      <table class="form">
-      
-        <tr>
-          <th colspan="4" class="category">Statistiques cliniques</th>
-        </tr>
-
-        <tr>
-          <td>{{mb_label object=$filterSejour field="_date_min_stat"}}</td>
-          <td class="date">{{mb_field object=$filterSejour field="_date_min_stat" form="filters" canNull="false"}} </td>
-          <td>{{mb_label object=$filterSejour field="_date_max_stat"}}</td>
-          <td class="date">{{mb_field object=$filterSejour field="_date_max_stat" form="filters" canNull="false"}} </td>
-        </tr>
-
-        <tr>
-          <td>{{mb_label object=$filterSejour field="type"}}</td>
-          <td>
-            <select name="type">
-              <option value="">&mdash; Tous les types d'hospi</option>
-              <option value="1" {{if $filterSejour->type == "1"}}selected="selected"{{/if}}>Hospi complètes + ambu</option>
-              {{foreach from=$listHospis key=key_hospi item=curr_hospi}}
-              <option value="{{$key_hospi}}" {{if $key_hospi == $filterSejour->type}}selected="selected"{{/if}}>
-                {{$curr_hospi}}
-              </option>
-              {{/foreach}}
-            </select>
-          </td>
-          <td>{{mb_label object=$filterOperation field="codes_ccam"}}</td>
-          <td>
-            {{mb_field object=$filterOperation field="codes_ccam" canNull="true" size="20"}}
-            <button class="search" type="button" onclick="CCAMSelector.init()">Rechercher</button>   
-            <script type="text/javascript">
-              CCAMSelector.init = function(){
-                this.sForm = "filters";
-                this.sView = "codes_ccam";
-                this.sChir = "_chir";
-                this.sClass = "_class_name";
-                this.pop();
-              }
-            </script>
-            
-          </td>
-        </tr>
-
-        <tr>
-          <td colspan="4" class="button"><button type="submit" class="search">Afficher</button></td>
-        </tr>
-
-        <tr>
-          <td colspan="4" class="button">
-            <img alt="Admissions par type d'hospitalisation" src='?m=dPstats&amp;a=graph_patpartypehospi&amp;suppressHeaders=1&amp;debut={{$filterSejour->_date_min_stat}}&amp;fin={{$filterSejour->_date_max_stat}}&amp;prat_id={{$filterSejour->praticien_id}}&amp;type_adm={{$filterSejour->type}}' />
-            <img alt="Nombre d'interventions" src='?m=dPstats&amp;a=graph_activite&amp;suppressHeaders=1&amp;debut={{$filterSejour->_date_min_stat}}&amp;fin={{$filterSejour->_date_max_stat}}&amp;prat_id={{$filterSejour->praticien_id}}&amp;codes_ccam={{$filterOperation->codes_ccam}}' />
-          </td>
-        </tr>
-        
-      </table>
-      
-      </form>
-    </td>
-  </tr>
-  {{/if}}
-</table>
+{{if !$stat}}
+<div class="big-info">
+  Plusieurs statistiques sont disponibles pour le praticien.
+  <br />Merci d'en <strong>sélectionner</strong> une dans la liste ci-dessus.
+</div>
+{{/if}}

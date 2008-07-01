@@ -41,4 +41,6 @@ $smarty->assign("user"      , $user);
 $smarty->assign("prat"      , $prat);
 $smarty->assign("praticiens", $praticiens);
 
+$smarty->display("inc_board.tpl");
+
 ?>
