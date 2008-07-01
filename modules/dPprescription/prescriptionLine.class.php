@@ -24,7 +24,8 @@ class CPrescriptionLine extends CMbObject {
   var $date_arret          = null;
   var $time_arret          = null;
   var $child_id            = null;
-  var $decalage_line       = null;   
+  var $decalage_line       = null;
+  var $jour_decalage       = null;   
   var $fin                 = null;              
   var $valide_infirmiere   = null;
   
@@ -59,7 +60,8 @@ class CPrescriptionLine extends CMbObject {
       "date_arret"        => "date",
       "time_arret"        => "time",
       "child_id"          => "ref class|$this->_class_name",
-      "decalage_line"     => "num min|0",
+      "decalage_line"     => "num",
+      "jour_decalage"     => "enum list|E|I|S|N default|E",
       "fin"               => "date",
       "valide_infirmiere" => "bool",
       "_fin"              => "date moreEquals|debut",

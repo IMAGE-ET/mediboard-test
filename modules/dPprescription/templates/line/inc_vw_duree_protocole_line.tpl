@@ -15,9 +15,16 @@
 			jours
 			
 			<!-- Décalage -->
-			à partir de J+ 
-			{{mb_field object=$line field=decalage_line increment=1 min=0 form=editDuree-$typeDate-$line_id 
+			à partir de 
+			
+			{{if $line->_ref_prescription->object_class == "CSejour"}}
+			{{mb_field object=$line field=jour_decalage onchange="submitFormAjax(this.form, 'systemMsg');"}}
+			{{else}}
+			J
+			{{/if}}
+			{{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id 
 			           onchange="submitFormAjax(this.form, 'systemMsg');" size="3"}}
+			           (Jours)
 			
     </form>
     <script type="text/javascript">

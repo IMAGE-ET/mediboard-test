@@ -221,11 +221,11 @@ testPharma = function(line_id){
     <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
     
     <br />
-	  <input type="text" name="produit" value=""/>
+	  <input type="text" name="produit" value="" size="12" />
 	  
 	  <input type="checkbox" name="_recherche_livret" value="1" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
 	  
-	  Livret Thérapeutique
+	  Livret Thérap.
 	  
 	  <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
 	  <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>

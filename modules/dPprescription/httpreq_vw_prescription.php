@@ -243,6 +243,7 @@ if($full_mode && $prescription->_id){
   $where = array();
   $where["praticien_id"] = " = '$prescription->_current_praticien_id'";
   $where["object_id"] = "IS NULL";
+  $where["object_class"] = " = '$prescription->object_class'";
   $protocoles_praticien = $protocole->loadList($where);
   
   // Chargement des protocoles de la fonction
@@ -250,6 +251,7 @@ if($full_mode && $prescription->_id){
   $where = array();
   $where["function_id"] = " = '$function_id'";
   $where["object_id"] = "IS NULL";
+  $where["object_class"] = " = '$prescription->object_class'";
   $protocoles_function = $protocole->loadList($where);
 }
 
@@ -273,8 +275,12 @@ foreach($mins as &$min){
 	$min = str_pad($min, 2, "0", STR_PAD_LEFT);
 }
 
+$filter_line = new CPrescriptionLineMedicament();
+$filter_line->debut = mbDate();
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("filter_line", $filter_line);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins", $mins);
 $smarty->assign("praticien_sortie_id", $praticien_sortie_id);

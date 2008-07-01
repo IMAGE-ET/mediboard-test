@@ -112,6 +112,10 @@ submitProtocole = function(){
         </select>
       </form>
         
+      <form name="duplicate">
+        <button type="button" class="submit" onclick="Protocole.duplicate('{{$prescription->_id}}')">Dupliquer</button> 
+      </form>
+        
       {{else}}
         <!-- Prescription du Dr {{$prescription->_ref_praticien->_view}}<br /> -->
        
@@ -165,10 +169,9 @@ submitProtocole = function(){
 
   {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
    <td style="text-align: right;">
-      
       <!-- Formulaire de selection protocole -->
       <form name="applyProtocole" method="post" action="?">
-	      <table class="form">
+	      <table class="form" style="border: 2px ridge #68C;">
 	        <tr>
 		        <td>
 			        Protocoles de {{$prescription->_ref_current_praticien->_view}}
@@ -197,48 +200,11 @@ submitProtocole = function(){
 			        </td>
 			        <td class="date">
 				 				{{if $prescription->type != "externe"}}
-				 				  <select name="debut_date" 
-				 				          onchange="$('applyProtocole_debut_da').innerHTML = new String;
-				 				                    this.form.debut.value = '';
-				 				          				  if(this.value == 'other') { 
-				 				          					  $('calendarProt').show();
-				 				          				  } else { 
-				 				          				    
-				 				          				    this.form.debut.value = this.value;
-				 				          				    $('calendarProt').hide();
-				 				          				  }">
-     				  
-				 				    <option value="other">Autre date</option>
-				 				    <optgroup label="Séjour">
-				 				      <option value="{{$prescription->_ref_object->_entree|date_format:'%Y-%m-%d'}}">Entrée: {{$prescription->_ref_object->_entree|date_format:"%d/%m/%Y"}}</option>
-				 				      <option value="{{$prescription->_ref_object->_sortie|date_format:'%Y-%m-%d'}}">Sortie: {{$prescription->_ref_object->_sortie|date_format:"%d/%m/%Y"}}</option>
-				 				    </optgroup>
-				 				    <optgroup label="Opération">
+				 				  <select name="debut">
 				 				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
 				 				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
 				 				    {{/foreach}}
- 										</optgroup>
- 										
-				 				    
-				 				  </select>
-				 				
-				 				  <!-- Prescription externe -->
-				 				  <div id="calendarProt" style="border:none;">
-									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
-					 				<script type="text/javascript">
-					 				  dates = {
-									    current: {
-									      start: "{{$today}}",
-									      stop: ""
-									    }
-									  }
-					 				  Main.add( function(){
-					 				    prepareForm(document.applyProtocole);
-					            Calendar.regField('applyProtocole', "debut", false, dates);
-					          } );
-					 				</script>
-				 				  </div>
-				 				  
+ 									</select>
 				 				{{else}}
 				 				  <!-- Prescription externe -->
 									{{mb_field object=$protocole_line field="debut" form=applyProtocole}}       
@@ -266,5 +232,4 @@ submitProtocole = function(){
   
   </tr>  
 
-    
 </table>

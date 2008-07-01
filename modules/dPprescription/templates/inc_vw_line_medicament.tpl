@@ -55,6 +55,9 @@
         <!-- Vue normale  -->
           {{if $line->_traitement}}
             Médecin traitant (Créé par {{$line->_ref_praticien->_view}})
+            {{if $line->_can_view_form_signature_praticien}}
+							  {{include file="../../dPprescription/templates/line/inc_vw_form_signature_praticien.tpl"}}
+					  {{/if}}
           {{else}}
 					  {{if !$line->valide_pharma}}
 						  {{if $line->_can_view_form_signature_praticien}}

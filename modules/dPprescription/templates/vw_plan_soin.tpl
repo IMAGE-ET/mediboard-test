@@ -21,8 +21,8 @@ ul {
       <strong>{{$patient->_view}}</strong>
     </td>
     <td>
-      Age {{$patient->_age}}<br />
-      Poids {{$poids}}
+      Age {{$patient->_age}}{{if $patient->_age != "??"}} ans{{/if}}<br />
+      Poids {{$poids}}{{if $poids}} kg{{/if}}
     </td>
     <td>
       Début du séjour: {{$sejour->_entree|date_format:"%d/%m/%Y à %Hh%M"}}<br />

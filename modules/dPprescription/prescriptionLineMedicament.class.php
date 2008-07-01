@@ -170,7 +170,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_vw_form_traitement = 1;
     }
     // View signature praticien
-    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole && !$this->_traitement){
+    if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole){
     	$this->_can_view_signature_praticien = 1;
     }
     // Affichage du formulaire de signature praticien

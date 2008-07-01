@@ -38,7 +38,7 @@ function viewProduit(cip){
           <option class="mediuser" style="border-color: #{{$_function->color}}" value="{{$_function->_id}}" {{if $function_id == $_function->_id}}selected=selected{{/if}}>{{$_function->_view}}</option>
           {{/foreach}}
         </select>
-	    </form>
+	    </form><br />
 	    <a href="?m={{$m}}&amp;tab={{$tab}}" class="buttonnew">
         Créer un protocole
       </a>

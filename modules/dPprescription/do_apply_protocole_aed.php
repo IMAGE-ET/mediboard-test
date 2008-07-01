@@ -13,13 +13,10 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $prescription_id = mbGetValueFromPost("prescription_id");
-$protocole_id = mbGetValueFromPost("protocole_id");
-$debut = mbGetValueFromPost("debut");
-$praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
+$protocole_id    = mbGetValueFromPost("protocole_id");
+$date_sel  = mbGetValueFromPost("debut", mbDate());
+$praticien_id    = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 
-if(!$debut){
-	$debut = mbDate();
-}
 if(!$protocole_id){
 	exit();
 }
@@ -32,16 +29,48 @@ $protocole->loadRefsLines();
 $protocole->loadRefsLinesElement();
 $protocole->loadRefsLinesAllComments();
 
+// Chargement de la prescription
+$prescription = new CPrescription();
+$prescription->load($prescription_id);
+
+$sejour = new CSejour();
+if($prescription->_ref_object->_class_name == "CSejour"){
+	$sejour =& $prescription->_ref_object;
+}
+
+ 
 // Parcours des lignes de prescription
 foreach($protocole->_ref_prescription_lines as $line){
 	$line->loadRefsPrises();
 	  
   $line->_id = "";
-  $line->debut = $debut;
   $line->unite_duree = "jour";
-  if($line->decalage_line && $line->decalage_line > 0){
-    $line->debut = mbDate("+ $line->decalage_line DAYS", $line->debut);
+  
+  // Cas du sejour
+  switch($line->jour_decalage){
+  	case 'E': 
+  	  $date = $sejour->_entree;
+  		break;
+  	case 'I': 
+  	  $date = $date_sel;	
+  		break;
+  	case 'S':  
+  	  $date = $sejour->_sortie;
+  		break;
+  	case 'N':  
+  	  $date = mbDate();	
+  		break;
   }
+  
+  // Cas d'une consultation
+  if(!$line->jour_decalage){
+  	$date = $date_sel;
+  }
+  
+  $signe = ($line->decalage_line >= 0) ? "+" : "";
+  $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+  
+  
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
   $line->creator_id = $AppUI->user_id;
@@ -61,15 +90,37 @@ foreach($protocole->_ref_prescription_lines as $line){
 // Parcours des lignes d'elements
 foreach($protocole->_ref_prescription_lines_element as $line_element){
   $line_element->loadRefsPrises();
-  
 	$line_element->_id = "";
   $line_element->unite_duree = "jour";
-  if($line_element->_ref_element_prescription->_ref_category_prescription->chapitre != "dmi"){
-	  $line_element->debut = $debut;
-	  if($line_element->decalage_line && $line_element->decalage_line > 0){
-	    $line_element->debut = mbDate("+ $line_element->decalage_line DAYS", $line_element->debut);
-	  }
+  
+  // Cas du sejour
+  switch($line_element->jour_decalage){
+  	case 'E': 
+  	  $date = $sejour->_entree;
+  		break;
+  	case 'I': 
+  	  $date = $date_sel;	
+  		break;
+  	case 'S':  
+  	  $date = $sejour->_sortie;
+  		break;
+  	case 'N':  
+  	  $date = mbDate();	
+  		break;
   }
+  
+  // Cas d'une consultation
+  if(!$line_element->jour_decalage){
+  	$date = $date_sel;
+  }
+  
+  $chapitre = $line_element->_ref_element_prescription->_ref_category_prescription->chapitre;
+  
+  if($chapitre != "dmi"){
+	  $signe = ($line->decalage_line >= 0) ? "+" : "";
+    $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+  }
+  
   $line_element->prescription_id = $prescription_id;
   $line_element->praticien_id = $praticien_id;
   $line_element->creator_id = $AppUI->user_id;

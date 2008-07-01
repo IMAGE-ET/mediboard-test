@@ -278,4 +278,12 @@ $locales['config-dPprescription-CPrescription-infirmiere_borne'] = '';
 $locales['CCategoryPrescription-header'] = '';
 $locales['CCategoryPrescription-header-desc'] = '';
 $locales['config-dPprescription-CCategoryPrescription'] = '';
+$locales['CPrescriptionLineMedicament.jour_decalage.E'] = '';
+$locales['CPrescriptionLineMedicament.jour_decalage.I'] = '';
+$locales['CPrescriptionLineMedicament.jour_decalage.S'] = '';
+$locales['CPrescriptionLineMedicament.jour_decalage.N'] = '';
+$locales['CPrescriptionLineElement.jour_decalage.E'] = '';
+$locales['CPrescriptionLineElement.jour_decalage.I'] = '';
+$locales['CPrescriptionLineElement.jour_decalage.S'] = '';
+$locales['CPrescriptionLineElement.jour_decalage.N'] = '';
 ?>

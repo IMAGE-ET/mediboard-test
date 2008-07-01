@@ -99,6 +99,7 @@ global $AppUI;
 
 // Dans le cas de la validation de la totalite des prescriptions
 $prescription_id = mbGetValueFromPost("prescription_id");
+$prescription_reelle_id = mbGetValueFromPost("prescription_reelle_id");
 $mode_pharma = mbGetValueFromPost("mode_pharma");
 $chapitre = mbGetValueFromPost("chapitre", "medicament");
 
@@ -303,7 +304,9 @@ if(!$mode_pharma){
 	}
 }
 
-echo "<script type='text/javascript'>Prescription.reload($prescription->_id,'', '$chapitre','','$mode_pharma');</script>";
+$prescription_id = ($prescription_reelle_id) ? $prescription_reelle_id : $prescription->_id;
+
+echo "<script type='text/javascript'>Prescription.reload($prescription_id,'', '$chapitre','','$mode_pharma');</script>";
 echo $AppUI->getMsg();
 exit();
 

@@ -481,4 +481,12 @@ $locales['config-dPprescription-CPrescription-infirmiere_borne'] = 'Création des
 $locales['CCategoryPrescription-header'] = 'Entete';
 $locales['CCategoryPrescription-header-desc'] = 'Entete';
 $locales['config-dPprescription-CCategoryPrescription'] = 'Gestion des chapitres';
+$locales['CPrescriptionLineMedicament.jour_decalage.E'] = 'E';
+$locales['CPrescriptionLineMedicament.jour_decalage.I'] = 'I';
+$locales['CPrescriptionLineMedicament.jour_decalage.S'] = 'S';
+$locales['CPrescriptionLineMedicament.jour_decalage.N'] = 'N';
+$locales['CPrescriptionLineElement.jour_decalage.E'] = 'E';
+$locales['CPrescriptionLineElement.jour_decalage.I'] = 'I';
+$locales['CPrescriptionLineElement.jour_decalage.S'] = 'S';
+$locales['CPrescriptionLineElement.jour_decalage.N'] = 'N';
 ?>

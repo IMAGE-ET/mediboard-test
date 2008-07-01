@@ -37,5 +37,12 @@ var Protocole = {
   edit : function(protocole_id, praticien_id, function_id) {
     Prescription.reload(protocole_id,"","","1");
     Protocole.refreshList(praticien_id, protocole_id, function_id);
+  },
+  duplicate: function(protocole_id){
+    Console.debug(protocole_id);
+    var url = new Url;
+    url.setModuleAction("dPprescription", "httpreq_duplicate_protocole");
+    url.addParam("protocole_id", protocole_id);
+    url.requestUpdate("systemMsg", { waitingText : null });
   }
 }

@@ -27,7 +27,7 @@ var Prescription = {
   addLine: function(code) {
     var oForm = document.addLine;
     
-    var oFormDate = document.applyProtocole;
+    var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
     }
@@ -51,7 +51,7 @@ var Prescription = {
     // Formulaire contenant la categorie courante
     var oForm = document.addLineElement;
     
-    var oFormDate = document.applyProtocole;
+    var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
     }
@@ -162,8 +162,8 @@ var Prescription = {
     url.setModuleAction("dPprescription", "httpreq_prescription_modif_all_tp");
     url.addParam("prescription_id", prescription_id);
     url.addParam("actionType", "stop");
-    if(document.applyProtocole){
-      url.addParam("date", $V(document.applyProtocole.debut));
+    if(document.selDateLine){
+      url.addParam("date", $V(document.selDateLine.debut));
     }
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
@@ -174,8 +174,8 @@ var Prescription = {
     url.setModuleAction("dPprescription", "httpreq_prescription_modif_all_tp");
     url.addParam("prescription_id", prescription_id);
     url.addParam("actionType", "go");
-    if(document.applyProtocole){
-      url.addParam("date", $V(document.applyProtocole.debut));
+    if(document.selDateLine){
+      url.addParam("date", $V(document.selDateLine.debut));
     }
     if(document.selPraticienLine) {
       url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));

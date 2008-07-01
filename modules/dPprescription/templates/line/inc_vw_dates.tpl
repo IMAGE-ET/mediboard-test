@@ -2,10 +2,7 @@
 
 // Calcul de la date de debut lors de la modification de la fin
 syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) {
-  // Test case à cocher
-  if(curr_line_id){
-    testPharma(curr_line_id); 
-  }
+ 
   // Déclaration des div des dates
   oDivDebut = $('editDates-'+type+'-'+curr_line_id+'_debut_da');
   oDivFin = $('editDates-'+type+'-'+curr_line_id+'__fin_da');
@@ -41,6 +38,9 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 
   	oForm._fin.value = dFin.toDATE();
   	oDivFin.innerHTML = dFin.toLocaleDate();
+  	if(curr_line_id){
+  	  testPharma(curr_line_id);
+  	}
   }
   
   //-- Lors de la modification de la fin --
@@ -49,6 +49,9 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     var nDuree = parseInt((dFin - dDebut)/86400000,10);
     oForm.duree.value = nDuree+1;
     oForm.unite_duree.value = "jour";
+    if(curr_line_id){
+  	  testPharma(curr_line_id);
+  	}
   }
   
   // Si !debut et duree, on modifie le debut
@@ -64,6 +67,10 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 
   	oForm.debut.value = dDebut.toDATE();
   	oDivDebut.innerHTML = dDebut.toLocaleDate();
+  	
+    if(curr_line_id){
+  	  testPharma(curr_line_id);
+  	}	
   }
   
   // Si !debut et !duree, on met le debut a aujourd'hui, et on modifie la duree
@@ -74,6 +81,9 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
     var nDuree = parseInt((dFin - dDebut)/86400000,10);
     oForm.duree.value = nDuree;
     oForm.unite_duree.value = "jour";
+    if(curr_line_id){
+  	  testPharma(curr_line_id);
+  	}
   }
   
   {{if $typeDate != "mode_grille"}}
@@ -108,7 +118,7 @@ syncDate = function(oForm, curr_line_id, fieldName, type, object_class, cat_id) 
 		    moveTbodyElt(oTbody, cat_id);
 		  }
 	  }
-  {{/if}}
+  {{/if}}  
 }
 
 
@@ -116,9 +126,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
   if(!checkForm(oForm)){
     return;
   }
- 
   syncDate(oForm, curr_line_id, fieldName, type, object_class, cat_id);
-  
   if(!curr_line_id){
     return;
   }
