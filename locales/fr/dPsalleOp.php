@@ -97,4 +97,11 @@ $locales['pref-ccam_sejour-0'] = 'Cacher';
 $locales['pref-ccam_sejour-1'] = 'Visible';
 $locales['config-dPsalleOp-max_sub_minutes'] = 'Nombre de minutes en moins maximum';
 $locales['config-dPsalleOp-max_add_minutes'] = 'Nombre de minutes en plus maximum';
+$locales['CActeCCAM-_rembex'] = 'Remboursement Exceptionnel';
+$locales['CActeCCAM-_rembex-court'] = 'RembEx.';
+$locales['CActeCCAM-_rembex-desc'] = 'Acte exceptionnellement remboursé pour raison médical sur décision de l\'exécutant lorsque la nomenclature le permet';
+$locales['CCodable-back-actes_ccam'] = '';
+$locales['msg-CActeCCAM-create'] = '';
+$locales['msg-CActeCCAM-delete'] = '';
+$locales['msg-CActeCCAM-modify'] = '';
 ?>

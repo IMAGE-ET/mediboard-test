@@ -153,10 +153,7 @@ class CSpDetCCAM extends CSpObject {
     $this->datact = mbDateToLocale($acte->execution);
     $this->dephon = $acte->montant_depassement;
     $this->codsig = $acte->signe;
-    
-    // Remboursement exceptionnel
-    $code = CCodeCCAM::get($acte->code_acte, CCodeCCAM::LITE);
-    $this->rembex = $acte->rembourse && $code->remboursement == 3 ? '1' : '0';
+    $this->rembex = $acte->_rembex;
     
     // Mise à jour
     $this->datmaj = mbDateToLocale(mbDateTime());

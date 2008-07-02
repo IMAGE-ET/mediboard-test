@@ -452,14 +452,15 @@ function pageMain() {
           <td colspan="4">
             <table class="tbl">
               <tr>
-                <th class="category">supprimer</th>
-                <th class="category">Praticien</th>
-                <th class="category">Code</th>
-                <th class="category">Activité</th>
-                <th class="category">Phase</th>
-                <th class="category">Modifs</th>
-                <th class="category">Asso</th>
-                <th class="category">DH</th>
+                <th class="category">{{tr}}Delete{{/tr}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=executant_id}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=code_acte}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=code_activite}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=code_phase}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=modificateurs}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=code_association}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
+                <th class="category">{{mb_title class=CActeCCAM field=_rembex}}</th>
               </tr>
               {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
               <tr>
@@ -475,16 +476,13 @@ function pageMain() {
                   </form>
                 </td>
                 <td class="text">{{$curr_acte->_ref_executant->_view}}</td>
-                <td class="button">{{$curr_acte->code_acte}}</td>
-                <td class="button">{{$curr_acte->code_activite}}</td>
-                <td class="button">{{$curr_acte->code_phase}}</td>
-                <td class="button">{{$curr_acte->modificateurs}}</td>
-                <td class="button">{{$curr_acte->code_association}}</td>
-                <td class="button">
-                  {{if $curr_acte->montant_depassement}}
-                    {{$curr_acte->montant_depassement}}&euro;
-                  {{/if}}
-                </td>
+                <td class="button">{{mb_value object=$curr_acte field=code_acte}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=code_activite}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=code_phase}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=modificateurs}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=code_association}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=montant_depassement}}</td>
+                <td class="button">{{mb_value object=$curr_acte field=_rembex}}</td>
               </tr>
               {{/foreach}}
             </table>

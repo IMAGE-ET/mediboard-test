@@ -141,7 +141,8 @@ class CHPrimXMLDocument extends CMbXMLDocument {
     $this->addAttribute($acteCCAM, "valide", "oui");
     $this->addAttribute($acteCCAM, "documentaire", "non");
     $this->addAttribute($acteCCAM, "gratuit", "non");
-
+    $this->addAttribute($acteCCAM, "remboursementExceptionnel", $mbActeCCAM->_rembex ? "oui" : "non");
+    
     $identifiant = $this->addElement($acteCCAM, "identifiant");
     $emetteur = $this->addElement($identifiant, "emetteur", "acte{$mbActeCCAM->_id}");
     $this->addElement($acteCCAM, "codeActe", $mbActeCCAM->code_acte);

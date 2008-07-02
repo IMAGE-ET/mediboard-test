@@ -38,6 +38,7 @@ class CActeCCAM extends CActe {
   
   // Form fields
   var $_modificateurs     = array();
+  var $_rembex            = null;
   var $_anesth            = null;
   var $_anesth_associe    = null;
   var $_linked_actes      = null;
@@ -72,8 +73,11 @@ class CActeCCAM extends CActe {
     $specs["code_association"]    = "num minMax|1|5";
     $specs["rembourse"]           = "bool default|1";
     $specs["regle"]               = "bool";
-    $specs["_montant_facture"]    = "currency";
     $specs["signe"]               = "bool default|0";
+
+    $specs["_montant_facture"]    = "currency";
+    $specs["_rembex"]             = "bool";
+    
     return $specs;
   }
   
@@ -193,6 +197,11 @@ class CActeCCAM extends CActe {
     $this->_view       = "$this->code_acte-$this->code_activite-$this->code_phase-$this->modificateurs";
     $this->_viewUnique = $this->_id ? $this->_id : $this->_view;
     $this->_anesth = ($this->code_activite == 4) ? true : false;
+    
+    // Remboursement exceptionnel
+    $code = CCodeCCAM::get($this->code_acte, CCodeCCAM::LITE);
+    $this->_rembex = $this->rembourse && $code->remboursement == 3 ? '1' : '0';
+    
   }
   
   
