@@ -113,7 +113,7 @@ Main.add( function(){
     <table class="tbl">
 	  {{foreach from=$lines_cat.element item=line_element}}
 	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_element->praticien_id) || !$praticien_sortie_id}}
-	      {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element}}
+	      {{include file="inc_vw_line_element_elt.tpl" _line_element=$line_element prescription_reelle=$prescription}}
 	    {{/if}}
 	  {{/foreach}}
 	  </table>
@@ -127,7 +127,7 @@ Main.add( function(){
 	  {{/if}}
 	  {{foreach from=$lines_cat.comment item=line_comment}}
 	    {{if !($prescription->type == "sortie" && $praticien_sortie_id != $line_comment->praticien_id) || !$praticien_sortie_id}}
-	      {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment }}
+	      {{include file="inc_vw_line_comment_elt.tpl" _line_comment=$line_comment prescription_reelle=$prescription}}
 	    {{/if}}
 	  {{/foreach}}
 	  </table>
