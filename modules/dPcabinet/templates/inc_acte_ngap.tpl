@@ -151,11 +151,7 @@ prepareForm(document.editNGAP);
 
 // UpdateFields de l'autocomplete
 function updateFields(selected) {
-  Element.cleanWhitespace(selected);
-  dn = selected.childNodes;
-  $('editNGAP_code').value = dn[0].firstChild.nodeValue;  
-  var oForm = document.editNGAP;
-  oForm.code.onchange();
+  $V(document.editNGAP.code, selected.down().select('.code')[0].innerHTML, true);
 }
 
 // Autocomplete
