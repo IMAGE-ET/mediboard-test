@@ -35,8 +35,9 @@ for($i = $debutact; $i <= $finact; $i = mbDate("+1 MONTH", $i)) {
 $sql = "SELECT * FROM sallesbloc
   WHERE stats = '1'
   AND group_id = '$g'";
-if($salle_id)
+if($salle_id) {
   $sql .= "\nAND salle_id = '$salle_id'";
+}
 
 $ds = CSQLDataSource::get("std");
 $salles = $ds->loadlist($sql);
@@ -61,12 +62,18 @@ foreach($salles as $salle) {
     ON operations.chir_id = users_mediboard.user_id
     WHERE plagesop.date BETWEEN '$debutact' AND '$finact'
     AND operations.annulee = '0'";
-  if($prat_id)
+  if($prat_id && !$pratSel->isFromType(array("Anesthésiste"))) {
     $sql .= "\nAND operations.chir_id = '$prat_id'";
-  if($discipline_id)
+  }
+  if($prat_id && $pratSel->isFromType(array("Anesthésiste"))) {
+    $sql .= "\nAND operations.anesth_id = '$prat_id'";
+  }
+  if($discipline_id) {
     $sql .= "\nAND users_mediboard.discipline_id = '$discipline_id'";
-  if($codes_ccam)
+  }
+  if($codes_ccam) {
     $sql .= "\nAND operations.codes_ccam LIKE '%$codes_ccam%'";
+  }
   $sql .= "\nAND sallesbloc.salle_id = '$curr_salle_id'
     GROUP BY mois
     ORDER BY orderitem";
@@ -91,8 +98,13 @@ foreach($salles as $salle) {
 }
 
 // Set up the title for the graph
-$title = "Nombre d'interventions par salle";
-$subtitle = "- $total opérations -";
+if($prat_id && $pratSel->isFromType(array("Anesthésiste"))) {
+  $title = "Nombre d'anesthésie par salle";
+  $subtitle = "- $total anesthésies -";
+} else {
+  $title = "Nombre d'interventions par salle";
+  $subtitle = "- $total interventions -";
+}
 if($prat_id) {
   $subtitle .= " Dr $pratSel->_view -";
 }
