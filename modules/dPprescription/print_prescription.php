@@ -120,7 +120,9 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
 			foreach($elements as $element){
-				$element->loadCompleteView();
+				if($element->_class_name == "CPrescriptionLineElement"){
+				  $element->loadCompleteView();
+				}
 			if($ordonnance){
 				  if($element->_date_arret_fin && $element->_date_arret_fin < mbDate()){
 				  	continue;

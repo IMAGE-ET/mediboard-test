@@ -376,8 +376,6 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines as &$line_med){
   		if($withRefs){
   			$line_med->loadRefsPrises();
-  		  $line_med->loadRefLogDateArret();
-  		  $line_med->loadRefLogSignee();
   		  $this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
   		}
   		$this->_ref_lines_med_comments["med"][] = $line_med;
@@ -386,8 +384,6 @@ class CPrescription extends CMbObject {
   	if(isset($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"] as &$comment_med){
   	  	if($withRefs){
-      	  //$comment_med->loadRefPraticien();
-  	  	  $comment_med->loadRefLogSignee();
   	  	  $this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
   	  	}
   	  	$this->_ref_lines_med_comments["comment"][] = $comment_med;
@@ -416,7 +412,6 @@ class CPrescription extends CMbObject {
     foreach ($this->_ref_prescription_lines_element as &$line_element){	
     	$line_element->loadRefElement();
     	if($withRefs){
-	    	$line_element->loadRefLogSignee();
 	    	$line_element->loadRefsPrises();
 	    	$line_element->loadRefExecutant();
 	    	$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
@@ -473,13 +468,11 @@ class CPrescription extends CMbObject {
   	
   	foreach($commentaires as $_line_comment){
   		  if($withRefs){
-          $_line_comment->loadRefLogSignee();
           $_line_comment->loadRefExecutant();
   		  }
         if($_line_comment->category_prescription_id){
   		  	// Chargement de la categorie
           $_line_comment->loadRefCategory();
-    	
   		  	$cat = new CCategoryPrescription();
   		  	$cat->load($_line_comment->category_prescription_id);
   		  	$chapitre = $cat->chapitre;

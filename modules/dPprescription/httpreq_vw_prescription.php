@@ -150,8 +150,6 @@ if($prescription->_id){
 		foreach($prescription_traitement->_ref_prescription_lines as &$line){
 			$line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
 		  $line->loadRefsPrises();
-	  	$line->loadRefLogDateArret();
-	  	$line->loadRefPraticien();
 	  }
 	}
 	
