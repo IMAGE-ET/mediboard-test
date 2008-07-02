@@ -50,7 +50,7 @@ class CBcbProduit extends CBcbObject {
   }
 
   // Chargement d'un produit
-  function load($code_cip){
+  function load($code_cip, $full_mode="1"){
     $this->distObj->SearchInfo($code_cip);
     
     $infoProduit = $this->distObj->DataInfo;  
@@ -69,30 +69,31 @@ class CBcbProduit extends CBcbObject {
       $this->nom_laboratoire = $infoProduit->Laboratoire;
     }
     
-    // Chargement de la monographie (permet d'obtenir la date de suppression) 
-    $this->loadRefMonographie();
+   if($full_mode){
+	    // Chargement de la monographie (permet d'obtenir la date de suppression) 
+	    $this->loadRefMonographie();
+	
+	    // Chargement du statut du produit
+	    $this->getStatut();  
+	    
+	    // Chargement de l'agrement
+	    $this->getAgrement();
 
-    // Chargement du statut du produit
-    $this->getStatut();  
-    
-    // Chargement de l'agrement
-    $this->getAgrement();
-    
-    // Produit générique ?
-    $this->getGenerique();
-    
-    // Produit référent ?
-    $this->getReferent();
+	    // Produit supprime ?
+	    $this->getSuppression();
+	
+	    // Chargement de la composition du produit
+	    $this->loadRefComposition();
 
-    // Produit supprime ?
-    $this->getSuppression();
-
-    // Chargement de la composition du produit
-    $this->loadRefComposition();
-    
-    // Permet de savoir si le produit appartient au livret therapeutique
-    $this->isInLivret();
-
+	    // Permet de savoir si le produit appartient au livret therapeutique
+	    $this->isInLivret();
+	    
+	  	// Produit générique ?
+	    $this->getGenerique();
+	   
+	    // Produit référent ?
+	    $this->getReferent();
+     }   
   }
   
   // Permet de savoir si le produit est un générique 

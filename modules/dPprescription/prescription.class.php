@@ -526,9 +526,9 @@ class CPrescription extends CMbObject {
   	$favoris = CBcbProduit::getFavoris($praticien_id);
   	foreach($favoris as $_fav){
   		$produit = new CBcbProduit();
-  		$produit->load($_fav["code_cip"]);
+  		$produit->load($_fav["code_cip"],"0");
   		$listFavoris["medicament"][] = $produit;
-  	}
+    }
   	return $listFavoris["medicament"];
   }
   
@@ -547,7 +547,7 @@ class CPrescription extends CMbObject {
 	  		$element = new CElementPrescription();
 	  	  $element->load($curr_fav["element_prescription_id"]);
 	  		$listFavoris[$key][] = $element;
-	  	}
+      }
 	  }
 	  return $listFavoris;  	
   }
