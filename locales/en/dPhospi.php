@@ -117,4 +117,13 @@ $locales['CTransmissionMedicale.degre.high'] = '';
 $locales['CObservationMedicale-text'] = '';
 $locales['CTransmissionMedicale-text'] = '';
 $locales['mod-dPhospi-tab-vw_bilan_prescription'] = '';
+$locales['mod-dPhospi-tab-vw_idx_cibles_transmissions'] = '';
+$locales['CCategorieCibleTransmission-libelle'] = '';
+$locales['CCategorieCibleTransmission-libelle-desc'] = '';
+$locales['CCategorieCibleTransmission-description'] = '';
+$locales['CCategorieCibleTransmission-description-desc'] = '';
+$locales['CCibleTransmission-libelle'] = '';
+$locales['CCibleTransmission-description'] = '';
+$locales['CCibleTransmission-description-desc'] = '';
+$locales['CCibleTransmission-libelle-desc'] = '';
 ?>

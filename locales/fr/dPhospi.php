@@ -117,4 +117,13 @@ $locales['CTransmissionMedicale.degre.high'] = 'urgent';
 $locales['CObservationMedicale-text'] = 'Observation';
 $locales['CTransmissionMedicale-text'] = 'Transmission';
 $locales['mod-dPhospi-tab-vw_bilan_prescription'] = 'Bilan des prescriptions';
+$locales['mod-dPhospi-tab-vw_idx_cibles_transmissions'] = 'Gestion des cibles';
+$locales['CCategorieCibleTransmission-libelle'] = 'Libellé';
+$locales['CCategorieCibleTransmission-libelle-desc'] = 'Libellé de la catégorie de cible';
+$locales['CCategorieCibleTransmission-description'] = 'Description';
+$locales['CCategorieCibleTransmission-description-desc'] = 'Description de la catégorie de cible';
+$locales['CCibleTransmission-libelle'] = 'Libellé';
+$locales['CCibleTransmission-description'] = 'Description';
+$locales['CCibleTransmission-description-desc'] = 'Description de la cible';
+$locales['CCibleTransmission-libelle-desc'] = 'Libellé de la cible';
 ?>

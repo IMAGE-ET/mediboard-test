@@ -1374,13 +1374,13 @@ class CMbObject {
    */
   function getBackRefs() {
     return array (
-      "identifiants" => "CIdSante400 object_id",
-      "notes"        => "CNote object_id",
-      "files"        => "CFile object_id",
-      "documents"    => "CCompteRendu object_id",
-      "permissions"  => "CPermObject object_id",
-      "logs"         => "CUserLog object_id",
-      "affectations_personnel"    => "CAffectationPersonnel object_id",
+      "identifiants"           => "CIdSante400 object_id",
+      "notes"                  => "CNote object_id",
+      "files"                  => "CFile object_id",
+      "documents"              => "CCompteRendu object_id",
+      "permissions"            => "CPermObject object_id",
+      "logs"                   => "CUserLog object_id",
+      "affectations_personnel" => "CAffectationPersonnel object_id",
     );
   }
   

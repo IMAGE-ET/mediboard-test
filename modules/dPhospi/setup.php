@@ -1,11 +1,11 @@
 <?php /* $Id$ */
 
 /**
- * @package Mediboard
- * @subpackage dPhospi
- * @version $Revision$
- * @author Romain Ollivier
- */
+* @package Mediboard
+* @subpackage dPhospi
+* @version $Revision$
+* @author Romain Ollivier
+*/
 
 class CSetupdPhospi extends CSetup {
   
@@ -169,7 +169,32 @@ class CSetupdPhospi extends CSetup {
             ) ENGINE = MYISAM COMMENT = 'Table des transmissions médicales';";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.24";
+    $this->makeRevision("0.24");
+    $sql = "CREATE TABLE `categorie_cible_transmission` (
+              `categorie_cible_transmission_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `libelle` VARCHAR (255) NOT NULL,
+              `description` TEXT
+            ) TYPE=MYISAM COMMENT = 'Table des catégories de cible de transmission médicales';";
+    $this->addQuery($sql);
+    
+    $sql = "CREATE TABLE `cible_transmission` (
+              `cible_transmission_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+              `categorie_cible_transmission_id` INT (11) UNSIGNED NOT NULL,
+              `libelle` VARCHAR (255) NOT NULL,
+              `description` TEXT,
+              INDEX(`categorie_cible_transmission_id`)
+            ) TYPE=MYISAM COMMENT = 'Table des cible de transmission médicales';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `transmission_medicale` 
+            ADD `cible_transmission_id` INT (11) UNSIGNED AFTER user_id;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `transmission_medicale` 
+            ADD INDEX (`cible_transmission_id`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.25";
   }
 }
 ?>
