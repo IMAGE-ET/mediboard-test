@@ -313,6 +313,10 @@ class CSejour extends CCodable {
         $this->etablissement_transfert_id = "";
       }
     }
+    
+    if($this->mode_sortie === ""){
+      $this->sortie_reelle = "";
+    }
   	
   	if ($msg = parent::store()) {
       return $msg;
@@ -338,10 +342,6 @@ class CSejour extends CCodable {
         $lastAff->_no_synchro = 1;
         $lastAff->store();
       }
-    }
-    
-    if($this->mode_sortie === ""){
-      $this->sortie_reelle = "";
     }
     
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
