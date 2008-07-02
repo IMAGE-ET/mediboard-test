@@ -133,12 +133,86 @@ Main.add( function(){
 	  </table>
 	  
   {{foreachelse}}
-
   <div class="big-info"> 
      Il n'y a aucun élément de type "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}" dans cette prescription.
   </div>
-
   {{/foreach}}
+  
+  <br />
+  
+  <!-- Affichage de l'historique -->
+  <table class="tbl">
+		{{foreach from=$historique key=type_prescription item=hist_prescription}}
+	    {{foreach from=$hist_prescription->_ref_lines_elements_comments.$element item=_hist_lines name="foreach_hist_elt"}}
+		    {{if $smarty.foreach.foreach_hist_elt.first}}
+			    <tr>
+			      <th colspan="7" class="title">Historique {{tr}}CPrescription.type.{{$type_prescription}}{{/tr}}</th>
+			    </tr>
+	      {{/if}}
+			  {{foreach from=$_hist_lines item=_hist_line}}
+			    {{foreach from=$_hist_line item=_line}}
+			      <tr>
+			        <!-- Affichage d'une ligne de commentaire -->
+			        {{if $_line->_class_name == "CPrescriptionLineComment"}}
+			          <td colspan="4">
+			            {{$_line->commentaire}}
+			          </td>
+			        {{else}}
+			          {{assign var=chapitre value=$_line->_ref_element_prescription->_ref_category_prescription->chapitre}}
+			          <!-- Affichage d'une ligne d'element -->
+					      <td
+					      {{if $chapitre == "dmi"}}
+					       colspan="4"
+					      {{/if}}><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_line->_class_name}}', object_id: {{$_line->_id}} } })">{{$_line->_view}}</a></td>
+					      
+					      {{if $chapitre != "dmi"}}
+						      {{if !$_line->fin}}
+							    <td>
+							      {{mb_label object=$_line field="debut"}}: {{mb_value object=$_line field="debut"}}
+							    </td>
+							    {{if $chapitre != "anapath" && $chapitre != "imagerie" && $chapitre != "consult"}}
+							    <td>
+							      {{mb_label object=$_line field="duree"}}: 
+							        {{if $_line->duree && $_line->unite_duree}}
+							          {{mb_value object=$_line field="duree"}}  
+							          {{mb_value object=$_line field="unite_duree"}}
+							        {{else}}
+							        -
+							        {{/if}}
+							    </td>
+							    <td>
+							      {{mb_label object=$_line field="_fin"}}: {{mb_value object=$_line field="_fin"}}
+							    </td>
+							    {{/if}}
+							    {{else}}
+							    <td colspan="3">
+							      {{mb_label object=$_line field="fin"}}: {{mb_value object=$_line field="fin"}}
+							    </td>
+						      {{/if}}
+					      {{/if}}
+				      {{/if}}
+				        <td>
+					        Praticien: {{$_line->_ref_praticien->_view}}
+					      </td>
+                <td>
+				      		{{mb_label object=$_line field="ald"}}:
+						      {{if $_line->ald}}
+						        Oui
+						      {{else}}
+						        Non
+						      {{/if}}
+				        </td>
+				        <td>
+			            Exécutant: {{$_line->_ref_executant->_view}}
+			          </td>
+				    </tr>
+			    {{/foreach}}
+			  {{/foreach}}
+			{{/foreach}}
+		{{/foreach}}
+	</table>
+	  
+  
 <script type="text/javascript">
 
 Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}');

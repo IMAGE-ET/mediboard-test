@@ -71,7 +71,18 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_date_arret_fin = $this->date_arret;
       $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }
+      
+    // Calcul permettant de savoir si la ligne est encore en cours
+    //if($this->_date_arret_fin && $this->_date_arret_fin > mbDateTime() || !$this->_date_arret_fin && $this->debut < mbDateTime()){
+    	$this->_en_cours = 1;
+    //}
   }
+  
+  
+  function loadView() {
+    $this->loadRefsPrises();
+  }
+  
   
   /*
    * Vue modifiée en fonction de la présence de prises

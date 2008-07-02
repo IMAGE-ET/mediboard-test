@@ -37,6 +37,7 @@ class CPrescriptionLine extends CMbObject {
   var $_count_parent_line  = null;
   var $_count_prises_line  = null;  
   var $_date_arret_fin     = null;
+  var $_en_cours           = null;
   
   // Object References
   var $_ref_parent_line    = null;

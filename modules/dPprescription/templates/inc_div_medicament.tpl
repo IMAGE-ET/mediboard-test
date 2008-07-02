@@ -337,6 +337,68 @@ testPharma = function(line_id){
   </div>
 {{/if}}
 
+  <br />
+
+<!-- Affichage de l'historique des prescriptions precedentes -->
+<table class="tbl">
+{{foreach from=$historique key=type_prescription item=hist_prescription}}
+ {{if $hist_prescription->_ref_lines_med_comments.med|@count || $hist_prescription->_ref_lines_med_comments.comment|@count}}
+  <tr>
+    <th colspan="5" class="title">Historique {{tr}}CPrescription.type.{{$type_prescription}}{{/tr}}</th>
+  </tr>
+  {{/if}}
+  {{foreach from=$hist_prescription->_ref_lines_med_comments item=_type_hist_line}}
+    {{foreach from=$_type_hist_line item=_hist_line}}
+    <tr>
+      <!-- Affichage d'une ligne de medicament -->
+      {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
+	      <td><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_hist_line->_class_name}}', object_id: {{$_hist_line->_id}} } })">{{$_hist_line->_view}}</a></td>
+		    {{if !$_hist_line->fin}}
+			    <td>
+			      {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}
+			    </td>
+			    <td>
+			      {{mb_label object=$_hist_line field="duree"}}: 
+			        {{if $_hist_line->duree && $_hist_line->unite_duree}}
+			          {{mb_value object=$_hist_line field="duree"}}  
+			          {{mb_value object=$_hist_line field="unite_duree"}}
+			        {{else}}
+			        -
+			        {{/if}}
+			    </td>
+			    <td>
+			      {{mb_label object=$_hist_line field="_fin"}}: {{mb_value object=$_hist_line field="_fin"}}
+			    </td>
+			    {{else}}
+			    <td colspan="3">
+			      {{mb_label object=$_hist_line field="fin"}}: {{mb_value object=$_hist_line field="fin"}}
+			    </td>
+		    {{/if}}
+	      <td>
+	        Praticien: {{$_hist_line->_ref_praticien->_view}}
+	      </td>
+      {{else}}
+      <!-- Affichage d'une ligne de commentaire -->
+        <td colspan="3">
+           {{$_hist_line->commentaire}}
+         </td>
+         <td>
+           {{mb_label object=$_hist_line field="ald"}}:
+		      {{if $_hist_line->ald}}
+		        Oui
+		      {{else}}
+		        Non
+		      {{/if}}
+         </td>
+         <td>
+            Praticien: {{$_hist_line->_ref_praticien->_view}}
+         </td>
+      {{/if}}
+    </tr>
+    {{/foreach}}
+  {{/foreach}}
+{{/foreach}}
+</table>
 
 
 <script type="text/javascript">
@@ -351,9 +413,8 @@ if(document.addLine && document.searchProd){
 	}
 	
 	// Preparation des formulaire
-	  prepareForm(document.addLine);
-	  prepareForm(document.searchProd);
-	
+	prepareForm(document.addLine);
+	prepareForm(document.searchProd);
 	
 	var oFormProduit = document.searchProd;
 	
@@ -362,10 +423,8 @@ if(document.addLine && document.searchProd){
 	urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
 	urlAuto.addParam("produit_max", 40);
 	
-	
 	// callback => methode pour ajouter en post des parametres
 	// Faire un mini framework pour rajouter des elements du meme formulaire
-	
 	urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
 	  minChars: 3,
 	  updateElement: updateFieldsMedicament,

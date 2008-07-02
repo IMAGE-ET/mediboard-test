@@ -28,7 +28,7 @@ $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $category        = mbGetValueFromGetOrSession("category_name");
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
-
+$historique = array();
 // Initialisations
 $protocoles_praticien = array();
 $protocoles_function  = array();
@@ -118,6 +118,9 @@ if($prescription->_id){
   // Calcul des droits de la prescription	
 	$prescription->getAdvancedPerms($is_praticien, $mode_pharma);
   
+	// Chargement de l'historique
+  $historique = $prescription->loadRefsLinesHistorique();
+	
 	// Chargement des medicaments et commentaires de medicament
 	$prescription->loadRefsLinesMedComments();
   foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
@@ -278,8 +281,12 @@ foreach($mins as &$min){
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = mbDate();
 
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);
 $smarty->assign("hours", $hours);
 $smarty->assign("mins", $mins);

@@ -313,6 +313,30 @@ class CPrescription extends CMbObject {
   	}
   }
   
+  
+  /*
+   * Chargement de l'historique
+   */
+  function loadRefsLinesHistorique(){
+  	$this->loadRefObject();
+  	$historique = array();
+  	$this->_ref_object->loadRefsPrescriptions();
+  	if($this->type == "sejour" || $this->type == "sortie"){
+  		$prescription_pre_adm =& $this->_ref_object->_ref_prescriptions["pre_admission"];
+  		$prescription_pre_adm->loadRefsLinesMedComments("0");
+  		$prescription_pre_adm->loadRefsLinesElementsComments("0");
+  		$historique["pre_admission"] = $prescription_pre_adm;
+  	}
+  	if($this->type == "sortie"){
+  		$prescription_sejour =& $this->_ref_object->_ref_prescriptions["sejour"];
+  		$prescription_sejour->loadRefsLinesMedComments("0");
+  		$prescription_sejour->loadRefsLinesElementsComments("0");
+  		$historique["sejour"] = $prescription_sejour;
+  	}
+  	return $historique;
+  }
+  
+  
   /*
    * Chargement des lignes de prescription
    */
@@ -339,7 +363,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de medicaments (medicaments + commentaires)
    */
-  function loadRefsLinesMedComments(){
+  function loadRefsLinesMedComments($withRefs = "1"){
     // Chargement des lignes de medicaments
   	$this->loadRefsLines();
   	// Chargement des lignes de commentaire du medicament
@@ -350,28 +374,31 @@ class CPrescription extends CMbObject {
   	$this->_ref_lines_med_comments["comment"] = array();
   	
   	foreach($this->_ref_prescription_lines as &$line_med){
-  		$line_med->loadRefsPrises();
-  		$line_med->loadRefLogDateArret();
-  		$line_med->loadRefLogSignee();
-  		$line_med->loadRefPraticien();
+  		if($withRefs){
+  			$line_med->loadRefsPrises();
+  		  $line_med->loadRefLogDateArret();
+  		  $line_med->loadRefLogSignee();
+  		  $this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
+  		}
   		$this->_ref_lines_med_comments["med"][] = $line_med;
-  		$this->_praticiens[$line_med->praticien_id] = $line_med->_ref_praticien->_view;
   	}
   	
   	if(isset($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"])){
       foreach($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"] as &$comment_med){
-  	  	$comment_med->loadRefPraticien();
-  	  	$comment_med->loadRefLogSignee();
-      	$this->_ref_lines_med_comments["comment"][] = $comment_med;
-      	$this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
-  	  }
+  	  	if($withRefs){
+      	  //$comment_med->loadRefPraticien();
+  	  	  $comment_med->loadRefLogSignee();
+  	  	  $this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
+  	  	}
+  	  	$this->_ref_lines_med_comments["comment"][] = $comment_med;
+      }
   	}
   }
   
   /*
    * Chargement des lignes d'element
    */
-  function loadRefsLinesElement($chapitre = ""){
+  function loadRefsLinesElement($chapitre = "", $withRefs = "1"){
   	$line = new CPrescriptionLineElement();
   	$where = array();
   	$ljoin = array();
@@ -388,12 +415,13 @@ class CPrescription extends CMbObject {
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
     foreach ($this->_ref_prescription_lines_element as &$line_element){	
     	$line_element->loadRefElement();
-    	$line_element->loadRefPraticien();
-    	$line_element->loadRefLogSignee();
-    	$line_element->loadRefsPrises();
-    	$line_element->loadRefExecutant();
+    	if($withRefs){
+	    	$line_element->loadRefLogSignee();
+	    	$line_element->loadRefsPrises();
+	    	$line_element->loadRefExecutant();
+	    	$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
+	    }
     	$line_element->_ref_element_prescription->loadRefCategory();
-    	$this->_praticiens[$line_element->praticien_id] = $line_element->_ref_praticien->_view;
     }
   }
   
@@ -401,8 +429,8 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements par catégorie
    */
-  function loadRefsLinesElementByCat(){
-  	$this->loadRefsLinesElement();
+  function loadRefsLinesElementByCat($withRefs = "1"){
+  	$this->loadRefsLinesElement("",$withRefs);
   	$this->_ref_prescription_lines_element_by_cat = array();
   	
   	foreach($this->_ref_prescription_lines_element as $line){
@@ -417,7 +445,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de commentaires
    */
-  function loadRefsLinesComment($category_name = null){
+  function loadRefsLinesComment($category_name = null, $withRefs = "1"){
   	$this->_ref_prescription_lines_comment = array();
     
   	// Initialisation des tableaux
@@ -444,10 +472,10 @@ class CPrescription extends CMbObject {
   	$commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
   	
   	foreach($commentaires as $_line_comment){
-  		  $_line_comment->loadRefPraticien();
-        $_line_comment->loadRefLogSignee();
-        $_line_comment->loadRefExecutant();
-  		  
+  		  if($withRefs){
+          $_line_comment->loadRefLogSignee();
+          $_line_comment->loadRefExecutant();
+  		  }
         if($_line_comment->category_prescription_id){
   		  	// Chargement de la categorie
           $_line_comment->loadRefCategory();
@@ -473,9 +501,9 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes d'elements (Elements + commentaires)
    */
-  function loadRefsLinesElementsComments(){
-  	$this->loadRefsLinesElementByCat();
-  	$this->loadRefsLinesComment();
+  function loadRefsLinesElementsComments($withRefs = "1"){
+  	$this->loadRefsLinesElementByCat($withRefs);
+  	$this->loadRefsLinesComment("",$withRefs);
   	
   	// Suppression des ligne de medicaments
   	unset($this->_ref_prescription_lines_comment["medicament"]);

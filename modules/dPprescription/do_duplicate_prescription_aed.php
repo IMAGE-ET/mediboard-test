@@ -43,6 +43,8 @@ if($msg){
 	echo $AppUI->getMsg();
   exit();
 }
+
+
 // Parcours des lignes de medicaments
 foreach($lines as $cat => $lines_by_type){
 	foreach($lines_by_type as &$line){
@@ -53,9 +55,15 @@ foreach($lines as $cat => $lines_by_type){
 		    continue;
 	    }
 		}
+		
+		// Si la ligne n'est plus en terminée ou arretée, on ne la duplique pas
+		if(!$line->_en_cours){
+			continue;
+		}
+		
 		// Chargements des prises
 	  $line->loadRefsPrises();
-		
+
 		// Modification des durées
 		if($type == "sejour" && $line->debut && $line->duree){
 			if($cat == "element"){
@@ -92,14 +100,18 @@ foreach($lines as $cat => $lines_by_type){
 	    }
 		}
 	
+		
+		
+		// On modifie la ligne en supprimant les validations
 	  $line->_id = "";
 	  $line->prescription_id = $prescription->_id;
-	  //$line->praticien_id = $AppUI->user_id;
 	  $line->signee = 0;
 	  $line->valide_infirmiere = 0;
+	  $line->creator_id = $AppUI->user_id;
 	  if($cat == "medicament"){
 	    $line->valide_pharma = 0;
 	  }
+	  // Dans le cas de la sortie, on supprime toutes les infos de durees et on ne stocke que la fin de la ligne
 	  if($type == "sortie"){
 	  	if($line->debut && $line->unite_duree && $line->duree){
 	  		$line->fin = $line->_fin;
@@ -108,10 +120,10 @@ foreach($lines as $cat => $lines_by_type){
 	  		$line->duree = "";
 	  	}
 	  }
-	  $line->creator_id = $AppUI->user_id;
 	  $msg = $line->store();
 	  $AppUI->displayMsg($msg, "msg-$line->_class_name-create");
-		// Parcours des prises et creation des nouvelles prises
+		
+	  // Parcours des prises et creation des nouvelles prises
 		foreach($line->_ref_prises as $prise){
 			$prise->_id = "";
 			$prise->object_id = $line->_id;
