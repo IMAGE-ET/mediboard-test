@@ -21,7 +21,7 @@ $prescription->load($prescription_id);
 $prescription->loadRefObject();
 $prescription->_ref_object->loadRefPrescriptionTraitement();
 $prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
-$prescription_traitement->loadRefsLines();
+$prescription_traitement->loadRefsLinesMed();
 
 foreach($prescription_traitement->_ref_prescription_lines as &$line) {
 	if($actionType == "stop" && !$line->date_arret) {

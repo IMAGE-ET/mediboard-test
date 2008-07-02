@@ -25,7 +25,7 @@ $protocole = new CPrescription();
 $protocole->load($protocole_id);
 
 // Chargement des lignes de medicaments, d'elements et de commentaires
-$protocole->loadRefsLines();
+$protocole->loadRefsLinesMed();
 $protocole->loadRefsLinesElement();
 $protocole->loadRefsLinesAllComments();
 

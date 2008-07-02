@@ -62,7 +62,7 @@ $traitements_arretes = array();
 
 $prescription->_ref_object->loadRefPrescriptionTraitement();
 if($prescription->_ref_object->_ref_prescription_traitement->_id){
-	$prescription->_ref_object->_ref_prescription_traitement->loadRefsLines();
+	$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed();
 	foreach($prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $line_med){
 		if($line_med->date_arret){
 			$traitements_arretes[] = $line_med;

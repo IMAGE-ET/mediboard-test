@@ -18,6 +18,12 @@
 		{{$performance.autoload}} classes auto-chargées
   <br />
   
+  Objets par class :
+  {{foreach from=$performance.objectCache key=objectClass item=objectCount}}
+  &ndash; {{$objectCount}} {{$objectClass}}
+	{{/foreach}}
+  <br />
+
   Requêtes SQL : 
   {{foreach from=$performance.dataSources key=dsn item=dataSource}}
 	  &ndash; {{$dataSource.count}} 

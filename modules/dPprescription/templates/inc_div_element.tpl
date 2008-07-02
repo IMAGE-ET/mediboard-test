@@ -93,12 +93,13 @@ Main.add( function(){
 {{/if}}
 
 
+
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
   {{assign var=nb_lines value=0}}
   
   <!-- Parcours des elements de type $element -->
   {{foreach from=$lines item=lines_cat key=category_id}}
-	  {{assign var=category value=$categories.$category_id}}
+	  {{assign var=category value=$categories.$element.$category_id}}
 	  
 	  <!-- Elements d'une categorie-->
 	  <table class="tbl" id="elt_{{$category->_id}}">

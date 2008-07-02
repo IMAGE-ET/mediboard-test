@@ -67,7 +67,7 @@ if($function_id){
 if($protocole_id){
 	$protocole = new CPrescription();
 	$protocole->load($protocole_id);
-	$protocole->loadRefsLines();
+	$protocole->loadRefsLinesMed();
 	$protocole->loadRefsLinesElementByCat();
 }
 

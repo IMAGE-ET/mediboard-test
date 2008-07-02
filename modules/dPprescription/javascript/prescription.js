@@ -47,7 +47,7 @@ var Prescription = {
 	    });
     }
   },
-  addLineElement: function(element_id, category_name, debut, duree, unite_duree, callback){
+  addLineElement: function(element_id, chapitre, debut, duree, unite_duree, callback){
     // Formulaire contenant la categorie courante
     var oForm = document.addLineElement;
     
@@ -66,15 +66,15 @@ var Prescription = {
     if(callback){
       oForm.callback.value = callback;
     }
-    if(!category_name){
-      var category_name = oForm._category_name.value;
+    if(!chapitre){
+      var chapitre = oForm._chapitre.value;
     }
     oForm.element_prescription_id.value = element_id;
    
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){ 
         if(!callback){
-          Prescription.reload(oForm.prescription_id.value, element_id, category_name);
+          Prescription.reload(oForm.prescription_id.value, element_id, chapitre);
         }
       }
     });
@@ -92,7 +92,7 @@ var Prescription = {
     oForm.object_id.value = element_id;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete: function(){
-        Prescription.reload(oFormElement.prescription_id.value, element_id, oForm.category_name.value);
+        Prescription.reload(oFormElement.prescription_id.value, element_id, oForm.chapitre.value);
       } 
     });
   },
@@ -146,13 +146,13 @@ var Prescription = {
        } 
     });
   },
-  delLineElement: function(line_id, category_name) {
+  delLineElement: function(line_id, chapitre) {
     var oForm = document.addLineElement;
     oForm.prescription_line_element_id.value = line_id;
     oForm.del.value = 1;
     submitFormAjax(oForm, 'systemMsg', { 
       onComplete : function(){ 
-        Prescription.reload(oForm.prescription_id.value, null, category_name);
+        Prescription.reload(oForm.prescription_id.value, null, chapitre);
       } 
     });
   },
@@ -183,7 +183,7 @@ var Prescription = {
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
   },
-  reload: function(prescription_id, element_id, category_name, mode_protocole,mode_pharma,line_id) {
+  reload: function(prescription_id, element_id, chapitre, mode_protocole,mode_pharma,line_id) {
 
       // Select de choix du praticien
       if(document.selSortie){
@@ -198,7 +198,7 @@ var Prescription = {
       urlPrescription.setModuleAction("dPprescription", "httpreq_vw_prescription");
       urlPrescription.addParam("prescription_id", prescription_id);
       urlPrescription.addParam("element_id", element_id);
-      urlPrescription.addParam("category_name", category_name);
+      urlPrescription.addParam("chapitre", chapitre);
       urlPrescription.addParam("mode_protocole", mode_protocole);
       urlPrescription.addParam("mode_pharma", mode_pharma);
       urlPrescription.addParam("praticien_sortie_id", praticien_sortie_id);
@@ -209,8 +209,8 @@ var Prescription = {
 	      if(mode_protocole){
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
 	      } else {
-	        if(category_name){
-	          urlPrescription.requestUpdate("div_"+category_name, { waitingText: null } );     
+	        if(chapitre){
+	          urlPrescription.requestUpdate("div_"+chapitre, { waitingText: null } );     
 	        } else {
 	         // Dans le cas de la selection d'un protocole, rafraichissement de toute la prescription
 	         urlPrescription.requestUpdate("produits_elements", { waitingText: null } );
@@ -289,10 +289,10 @@ var Prescription = {
     url.addParam("prescription_id", prescription_id);
     url.popup(700, 550, "Alertes");
   },
-  onSubmitCommentaire: function(oForm, prescription_id, category_name){
+  onSubmitCommentaire: function(oForm, prescription_id, chapitre){
     return onSubmitFormAjax(oForm, { 
       onComplete: function() { 
-        Prescription.reload(prescription_id, null, category_name)
+        Prescription.reload(prescription_id, null, chapitre)
       } 
     } );
   },

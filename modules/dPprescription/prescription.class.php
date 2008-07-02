@@ -114,7 +114,7 @@ class CPrescription extends CMbObject {
 		
   	// Chargement du user_courant
 		$user = new CMediusers();
-  	$user->load($AppUI->user_id);
+		$user->load($AppUI->user_id);
 		
 		// Si le user courant est un praticien
 		if($is_praticien || !$this->object_id || $mode_pharma){
@@ -338,9 +338,9 @@ class CPrescription extends CMbObject {
   
   
   /*
-   * Chargement des lignes de prescription
+   * Chargement des lignes de prescription de médicament
    */
-  function loadRefsLines($with_child = 0, $with_subst = 0) {
+  function loadRefsLinesMed($with_child = 0, $with_subst = 0) {
     $line = new CPrescriptionLineMedicament();
     $where = array();
     $where["prescription_id"] = " = '$this->_id'";
@@ -365,7 +365,7 @@ class CPrescription extends CMbObject {
    */
   function loadRefsLinesMedComments($withRefs = "1"){
     // Chargement des lignes de medicaments
-  	$this->loadRefsLines();
+  	$this->loadRefsLinesMed();
   	// Chargement des lignes de commentaire du medicament
   	$this->loadRefsLinesComment("medicament");
   	
@@ -431,7 +431,7 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines_element as $line){
   		$category = new CCategoryPrescription();
   		$category->load($line->_ref_element_prescription->category_prescription_id);
-  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["cat".$category->_id]["element"][] = $line;	
+  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][] = $line;	
    	}
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
@@ -440,14 +440,14 @@ class CPrescription extends CMbObject {
   /*
    * Chargement des lignes de commentaires
    */
-  function loadRefsLinesComment($category_name = null, $withRefs = "1"){
+  function loadRefsLinesComment($chapitre = null, $withRefs = "1"){
   	$this->_ref_prescription_lines_comment = array();
     
   	// Initialisation des tableaux
   	$category = new CCategoryPrescription();
   	
-  	foreach($category->_specs["chapitre"]->_list as $chapitre){
-  	  $this->_ref_prescription_lines_comment[$chapitre] = array();	
+  	foreach($category->_specs["chapitre"]->_list as $_chapitre){
+  	  $this->_ref_prescription_lines_comment[$_chapitre] = array();	
   	}
 
   	$commentaires = array();
@@ -457,11 +457,11 @@ class CPrescription extends CMbObject {
   	$order = "prescription_line_comment_id DESC";
   	$ljoin = array();
   	
-  	if($category_name && $category_name != "medicament"){
+  	if($chapitre && $chapitre != "medicament"){
   		$ljoin["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
-  	  $where["category_prescription.chapitre"] = " = '$category_name'"; 	
+  	  $where["category_prescription.chapitre"] = " = '$chapitre'"; 	
   	}
-  	if($category_name == "medicament"){
+  	if($chapitre == "medicament"){
   	  $where["category_prescription_id"] = " IS NULL"; 		
   	}
   	$commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
@@ -479,7 +479,7 @@ class CPrescription extends CMbObject {
   		  } else {
   		  	$chapitre = "medicament";
   		  }
-        $this->_ref_prescription_lines_comment[$chapitre]["cat".$_line_comment->category_prescription_id]["comment"][] = $_line_comment;
+        $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][] = $_line_comment;
         $this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
     }		
   }
@@ -556,13 +556,13 @@ class CPrescription extends CMbObject {
   // Generation du plan de soin sous forme de tableau
   function calculPlanSoin($date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
     // Chargement des lignes
-  	$this->loadRefsLines("1");
+  	$this->loadRefsLinesMed("1");
 	  $this->loadRefsLinesElementByCat();
 	  $this->_ref_object->loadRefPrescriptionTraitement();
 	  $lines["medicament"] = $this->_ref_prescription_lines;
 	  $traitement_personnel = $this->_ref_object->_ref_prescription_traitement;
 	  if($traitement_personnel->_id){
-	    $traitement_personnel->loadRefsLines("1");
+	    $traitement_personnel->loadRefsLinesMed("1");
 	  }
 	  $lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
 	  

@@ -33,7 +33,7 @@ if($prescription->object_id) {
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsTraitements();
   $prescription->_ref_object->_ref_patient->_ref_dossier_medical->loadRefsAddictions();
   $prescription->_ref_object->loadRefsPrescriptions();
-  $prescription->loadRefsLines();
+  $prescription->loadRefsLinesMed();
   
   // Calcul des alertes
   $allergies    = new CBcbControleAllergie();

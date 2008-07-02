@@ -138,6 +138,7 @@ submitPrise = function(oForm, type){
 		  {{if $line->_class_name == "CPrescriptionLineElement"}}
 		    {{$line->_unite_prise}}
 		  {{/if}}
+
 	  <!-- Selection du moment -->
 	  <select name="moment_unitaire_id" style="width: 150px">      
 	  <option value="">&mdash; Sélection du moment</option>
@@ -149,7 +150,6 @@ submitPrise = function(oForm, type){
 	     </optgroup>
 	  {{/foreach}}
 	  </select>	
-
 		  
 	  {{if $line->_id}}
       <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>

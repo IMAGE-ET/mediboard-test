@@ -49,6 +49,7 @@ Main.add( function(){
     <table>
       <tr>
         <td class="date" style="border:none;">
+
           {{assign var=line_id value=$line->_id}}
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
 	        à

@@ -136,7 +136,7 @@ if($prescription_line_id){
 if($prescription->_id && $mode_pharma){
 	$prescription->loadRefObject();
 	$prescription->_ref_object->loadRefPatient();
-	$prescription->loadRefsLines();
+	$prescription->loadRefsLinesMed();
 	$sejour =& $prescription->_ref_object;
 	$patient =& $sejour->_ref_patient;
 	

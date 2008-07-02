@@ -34,7 +34,7 @@ $last_log = new CUserLog();
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
-$prescription->loadRefsLines();
+$prescription->loadRefsLinesMed();
 
 $pharmacien = new CMediusers();
 

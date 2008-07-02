@@ -35,7 +35,7 @@ if($prescription->_id) {
   //$prescription->_ref_object->loadRefsPrescriptions();
   
   // Chargement des lignes
-  $prescription->loadRefsLines();
+  $prescription->loadRefsLinesMed();
   $allergies    = new CBcbControleAllergie();
   $allergies->setPatient($prescription->_ref_object->_ref_patient);
   $interactions = new CBcbControleInteraction();

@@ -23,7 +23,7 @@ $ajax = mbGetValueFromPost("ajax");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 $prescription->loadRefObject();
-$prescription->loadRefsLines();
+$prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElement();
 
 $lines = array();

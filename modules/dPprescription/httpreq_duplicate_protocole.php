@@ -14,7 +14,7 @@ $protocole_id = mbGetValueFromGet("protocole_id");
 // Chargement du protocole
 $protocole = new CPrescription();
 $protocole->load($protocole_id);
-$protocole->loadRefsLines();
+$protocole->loadRefsLinesMed();
 $protocole->loadRefsLinesElement();
 $protocole->loadRefsLinesAllComments();
 

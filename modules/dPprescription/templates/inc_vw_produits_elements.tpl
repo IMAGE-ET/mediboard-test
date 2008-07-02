@@ -33,7 +33,7 @@ viewEasyMode = function(){
   <input type="hidden" name="moment_unitaire_id" value="" />
   <input type="hidden" name="nb_tous_les" value="" />
   <input type="hidden" name="unite_tous_les" value="" />
-  <input type="hidden" name="category_name" value="" />
+  <input type="hidden" name="chapitre" value="" />
 </form>
 	    
 <!-- Formulaire d'ajout de ligne d'element dans la prescription -->
@@ -51,7 +51,7 @@ viewEasyMode = function(){
   <input type="hidden" name="unite_duree" value="" />
   <input type="hidden" name="callback" value="" />
   <input type="hidden" name="element_prescription_id" value=""/>
-  <input type="hidden" name="_category_name" value="" />
+  <input type="hidden" name="_chapitre" value="" />
 </form>
 
 
@@ -62,8 +62,8 @@ viewEasyMode = function(){
 
 {{if !$mode_pharma}}
   {{assign var=specs_chapitre value=$class_category->_specs.chapitre}}
-  {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
-  <li><a href="#div_{{$_nom_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_nom_chapitre}}{{/tr}}</a></li>
+  {{foreach from=$specs_chapitre->_list item=_chapitre}}
+  <li><a href="#div_{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
   {{/foreach}}
 {{/if}}
 </ul>
@@ -144,9 +144,9 @@ viewEasyMode = function(){
 </div>
 
 {{if !$mode_pharma}}
-  {{foreach from=$specs_chapitre->_list item=_nom_chapitre}}
-    <div id="div_{{$_nom_chapitre}}" style="display:none;">
-      {{include file="../../dPprescription/templates/inc_div_element.tpl" element=$_nom_chapitre}}
+  {{foreach from=$specs_chapitre->_list item=_chapitre}}
+    <div id="div_{{$_chapitre}}" style="display:none;">
+      {{include file="../../dPprescription/templates/inc_div_element.tpl" element=$_chapitre}}
     </div>
   {{/foreach}}
 {{/if}}

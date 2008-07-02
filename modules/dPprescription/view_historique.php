@@ -13,7 +13,7 @@ $type = mbGetValueFromGet("type");
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
 
-$prescription->loadRefsLines();
+$prescription->loadRefsLinesMed();
 
 // Chargement de la prescription traitement
 $prescription->loadRefObject();
@@ -21,7 +21,7 @@ $object =& $prescription->_ref_object;
 $object->loadRefPrescriptionTraitement();
 $prescription_traitement =& $object->_ref_prescription_traitement;
 if($prescription_traitement->_id){
-  $prescription_traitement->loadRefsLines('','1');
+  $prescription_traitement->loadRefsLinesMed('','1');
 }
 // Tableau d'historique des lignes
 $hist = array();

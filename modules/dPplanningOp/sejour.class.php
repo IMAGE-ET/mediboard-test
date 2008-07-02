@@ -844,7 +844,7 @@ class CSejour extends CCodable {
     $str = '';
     $this->loadRefPrescriptionTraitement();
     if ($this->_ref_prescription_traitement->_id) {
-      $this->_ref_prescription_traitement->loadRefsLines();
+      $this->_ref_prescription_traitement->loadRefsLinesMed();
       if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
         foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
           $str .= "&bull; {$line->_ref_produit->libelle}<br />";
@@ -855,7 +855,7 @@ class CSejour extends CCodable {
     $str = '';
     $this->loadRefPrescriptionTraitement();
     if ($this->_ref_prescription_traitement->_id) {
-      $this->_ref_prescription_traitement->loadRefsLines();
+      $this->_ref_prescription_traitement->loadRefsLinesMed();
       if ($this->_ref_prescription_traitement->_ref_prescription_lines) {
         foreach ($this->_ref_prescription_traitement->_ref_prescription_lines as $line) {
           $str .= "&bull; {$line->_ref_produit->libelle}<br />";

@@ -44,7 +44,7 @@
     </div>
   {{else}}
     <button class="cancel notext" type="button" onclick="$('add_{{$element}}').hide();">Cacher</button>
-      <form name="add{{$element}}" method="post" action="" onsubmit="document.addLineElement._category_name.value='{{$element}}'; return onSubmitFormAjax(this);">
+      <form name="add{{$element}}" method="post" action="" onsubmit="document.addLineElement._chapitre.value='{{$element}}'; return onSubmitFormAjax(this);">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_element_prescription_aed" />
       <input type="hidden" name="del" value="0" />

@@ -76,9 +76,7 @@ class CMbObject {
     return $this->CMbObject();
   }
   
-  function CMbObject() {
-    self::$objectCount++;
-    
+  function CMbObject() {    
     static $spec          = null;
     static $class         = null;
     static $objectsTable  = array();
@@ -407,17 +405,22 @@ class CMbObject {
       $this->_id = null;
       return false;
     }
-        
+
+    $this->register();
     $this->checkConfidential();
     $this->updateFormFields();
+        
+    return $this;
+  }
+  
+  function register() {
+    self::$objectCount++;
     
     // Statistiques sur cache d'object
     if (isset(self::$objectCache[$this->_class_name][$this->_id])) {
       self::$cachableCount++;
     }
     self::$objectCache[$this->_class_name][$this->_id] = true;
-    
-    return $this;
   }
   
   /**
@@ -564,6 +567,7 @@ class CMbObject {
       $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
+      $newObject->register();
       $list[$newObject->_id] = $newObject;
     }
 
