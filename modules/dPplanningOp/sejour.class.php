@@ -340,21 +340,20 @@ class CSejour extends CCodable {
       }
     }
     
+    if($this->mode_sortie === ""){
+      $this->sortie_reelle = "";
+    }
+    
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
     if($this->sortie_reelle && $lastAff->_id){
       $this->_ref_last_affectation->effectue = 1;
       $this->_ref_last_affectation->store();  
     }
     
-    if($this->sortie_reelle === "" && $lastAff->_id){
+    if(!$this->sortie_reelle && $lastAff->_id){
       $this->_ref_last_affectation->effectue = 0;
       $this->_ref_last_affectation->store();
     }
-    
-    if($this->mode_sortie === ""){
-      $this->sortie_reelle = "";
-    }
-    
     
   }
   
