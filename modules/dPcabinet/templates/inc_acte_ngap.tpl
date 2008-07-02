@@ -151,7 +151,7 @@ prepareForm(document.editNGAP);
 
 // UpdateFields de l'autocomplete
 function updateFields(selected) {
-  $V(document.editNGAP.code, selected.down().select('.code')[0].innerHTML, true);
+  $V(document.editNGAP.code, selected.select('.code')[0].innerHTML, true);
 }
 
 // Autocomplete
