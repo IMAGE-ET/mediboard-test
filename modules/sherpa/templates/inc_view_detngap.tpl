@@ -86,8 +86,8 @@
   </tr>  
   
   <tr>
-		<th>{{mb_label object=$detngap field="ferie"}}</th>
-		<td>{{mb_value object=$detngap field="ferie"}}</td>
+		<th>{{mb_label object=$detngap field="gratuit"}}</th>
+		<td>{{mb_value object=$detngap field="gratuit"}}</td>
   </tr>  
   
   <tr>
