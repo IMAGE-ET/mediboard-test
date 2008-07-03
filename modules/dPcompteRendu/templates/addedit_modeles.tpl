@@ -24,7 +24,7 @@ function copie() {
   
   {{if !$droit}}
     var oForm = document.editFrm;
-    oForm.compte_rendu_id.value = 0;
+    oForm.compte_rendu_id.value = '';
     oForm.chir_id.value = "{{$user_id}}";
     oForm.nom.value = "Copie de "+oForm.nom.value;
     oForm.submit();
@@ -43,6 +43,7 @@ function supprimer() {
   form.del.value = 1;
   form.submit();
 }
+
 {{*if !$compte_rendu->_id*}}
 // Taleau des categories en fonction de la classe du compte rendu
 var listObjectClass = {{$listObjectClass|@json}};
@@ -126,6 +127,7 @@ function pageMain() {
             Informations sur le modèle
           </th>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$compte_rendu field="nom"}}</th>
           <td>
@@ -136,6 +138,7 @@ function pageMain() {
           {{/if}}
           </td>
         </tr>
+        
         <tr>
           <th>{{mb_label object=$compte_rendu field="function_id"}}</th>
           <td>
@@ -150,9 +153,9 @@ function pageMain() {
               </option>
               {{/foreach}}
             </select>
-         
           </td>
         </tr>
+                
         <tr>
           <th>{{mb_label object=$compte_rendu field="chir_id"}}</th>
           <td>
@@ -169,6 +172,19 @@ function pageMain() {
             </select>
           </td>
         </tr>
+        
+        <tr>
+          <th>{{mb_label object=$compte_rendu field=type}}</th>
+          <td>
+          {{if $droit}}
+            <input type="hidden" name="type" value="body" />
+            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
+          {{else}}
+            {{mb_field object=$compte_rendu field=type disabled="disabled"}}
+          {{/if}}
+          </td>
+        </tr>
+        
         <tr>
           <th>{{mb_label object=$compte_rendu field="object_class"}}</th>
             <td>
@@ -183,6 +199,7 @@ function pageMain() {
               {{/if}}
             </td>
           </tr>
+
           <tr>
             <th>{{mb_label object=$compte_rendu field="file_category_id"}}</th>
             <td>
@@ -193,20 +210,19 @@ function pageMain() {
           </tr>
           
           <tr>
-            {{*if $isPraticien*}}
-            {{if !$droit}}<td colspan="2">{{else}}<td>{{/if}}<button class="modify" onclick="copie(this.form)">Dupliquer</button></td>
-            {{*/if*}}
+            {{if !$droit}}<td colspan="2">{{else}}<td>{{/if}}
+            	<button class="modify" onclick="copie(this.form)">Dupliquer</button></td>
             {{if $droit}}
-            <td class="button" colspan="2">
-            {{if $compte_rendu->compte_rendu_id}}
-            <button class="modify" type="submit">Modifier</button>
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
-            Supprimer
-            </button>
-            {{else}}
-            <button class="submit" type="submit">Créer</button>
-            {{/if}}
-            </td>
+	            <td class="button" colspan="2">
+	            {{if $compte_rendu->_id}}
+	            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
+	            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$compte_rendu->nom|smarty:nodefaults|JSAttribute}}'})">
+	            {{tr}}Delete{{/tr}}
+	            </button>
+	            {{else}}
+	            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
+	            {{/if}}
+	            </td>
             {{/if}}
           </tr>
           

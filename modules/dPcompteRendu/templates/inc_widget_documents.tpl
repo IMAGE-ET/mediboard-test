@@ -37,20 +37,15 @@ Document.refreshList = function() {
       
       <select name="_choix_modele" onchange="Document.create(this.value, '{{$object->_id}}')">
         <option value="">&mdash; Choisir un modèle</option>
-        <optgroup label="Modèles du praticien">
-          {{foreach from=$listModelePrat item=_modele}}
+        {{foreach from=$modelesByOwner key=owner item=_modeles}}
+        <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+          {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
           {{foreachelse}}
-          <option value="">Aucun</option>
+          <option value="">{{tr}}None{{/tr}}</option>
           {{/foreach}}
         </optgroup>
-        <optgroup label="Modèles du cabinet">
-          {{foreach from=$listModeleFunc item=_modele}}
-          <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
-          {{foreachelse}}
-          <option value="">Aucun</option>
-          {{/foreach}}
-        </optgroup>
+        {{/foreach}}
       </select>
 
 			<!-- Création via ModeleSelector -->

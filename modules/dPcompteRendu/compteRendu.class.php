@@ -27,6 +27,7 @@ class CCompteRendu extends CMbMetaObject {
   /// Form fields
   var $_is_document      = false;
   var $_is_modele        = false;
+  var $_owner            = null;
   
   // Referenced objects
   var $_ref_chir         = null;
@@ -43,6 +44,8 @@ class CCompteRendu extends CMbMetaObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["listes_choix"] = "CListeChoix compte_rendu_id";
+    $backRefs["modeles_headed"] = "CCompteRendu header_id";
+    $backRefs["modeles_footed"] = "CCompteRendu footer_id";
     return $backRefs;
   }
   
@@ -59,6 +62,9 @@ class CCompteRendu extends CMbMetaObject {
     $specs["header_id"]        = "ref class|CCompteRendu";
     $specs["footer_id"]        = "ref class|CCompteRendu";
     $specs["valide"]           = "bool";
+
+    $specs["_owner"]           = "enum list|prat|func";
+
     return $specs;
   }
 
@@ -86,11 +92,10 @@ class CCompteRendu extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    if($this->object_id == null)
-      $this->_view = "Modèle : ";
-    else
-      $this->_view = "Document : ";
-    $this->_view .= $this->nom;
+    $this->_view = $this->object_id ? "Modèle : " : "Document : ";
+    
+    if ($this->chir_id    ) $this->_owner = "prat";
+    if ($this->function_id) $this->_owner = "func";
   }
 
   function loadCategory(){
@@ -169,6 +174,53 @@ class CCompteRendu extends CMbMetaObject {
   }
   
   /**
+   * Charge tous les modèles pour une classe d'objets associés à un utilisateur
+   * @param $prat_id ref|CMediuser L'utilisateur concerné
+   * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
+   * @param $type enum list|header|body|footer Type de composant , optionnel. Doit être un CMbObject
+   * @return array ("prat" => array<CCompteRendu>, "func" array<CCompteRendu> 
+   */
+  static function loadAllModelesForPrat($prat_id, $object_class = null, $type = null) {
+    $modeles = array(
+      "prat" => array(), 
+      "func" => array(),
+    );
+    
+    $prat = new CMediusers;
+    if (!$prat->load($prat_id)) {
+      trigger_error("User '$prat_id' does not exist");
+      return $modeles; 
+    }
+    
+    $modele = new CCompteRendu();
+    $where = array();
+    $where["object_id"] = "IS NULL";
+    
+    if ($object_class) {  
+  		$where["object_class"] = "= '$object_class'";
+    }
+    
+    if ($type) {
+  		$where["type"] = "= '$type'";
+    }
+    
+    $order = "object_class, type, nom";
+
+		// Modèle du praticien
+    $where["chir_id"] = "= '$prat_id'";
+    $where["function_id"] = "IS NULL";
+    $modeles["prat"] = $modele->loadlist($where, $order);
+    
+		// Modèle de la fonction
+    $where["chir_id"] = "IS NULL";
+    $where["function_id"] = "= '$prat->function_id'";
+    $modeles["func"] = $modele->loadlist($where, $order);
+
+		return $modeles;
+  }
+    
+  /**
+   * DEPRECATED see loadAllModelesForPrat()
    * Charge les modèles pour une classe d'objets associés à un utilisateur
    * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
    * @param $prat_id ref|CMediuser L'utilisateur concerné
@@ -185,6 +237,7 @@ class CCompteRendu extends CMbMetaObject {
   }
   
   /**
+   * DEPRECATED see loadAllModelesForPrat()
    * Charge les modèles pour une classe d'objets associés à une fonction
    * @param $object_class Nom de la classe d'objet. Doit être un CMbObject
    * @param $function_id ref|CFonction L'utilisateur concerné

@@ -39,9 +39,10 @@ $userCourant = $med->load($user_id);
 $compte_rendu_id = mbGetValueFromGetOrSession("compte_rendu_id");
 $compte_rendu = new CCompteRendu();
 $compte_rendu->load($compte_rendu_id);
-if($compte_rendu->object_id){
+if ($compte_rendu->object_id) {
   $compte_rendu = new CCompteRendu();
-}else{
+}
+else{
   $compte_rendu->loadCategory();
 }
 // Gestion du modèle
@@ -76,8 +77,6 @@ if ($compte_rendu->_id) {
   }
 }
 
-
-
 // Class and fields
 $listObjectClass     = array();
 $listObjectAffichage = array();
@@ -85,6 +84,7 @@ foreach($compte_rendu->_enums["object_class"] as $valueClass){
   $listObjectClass[$valueClass]     = array();
   $listObjectAffichage[$valueClass] = CAppUI::tr($valueClass);
 }
+
 foreach($listObjectClass as $keyClass=>$value){
   $listCategory = CFilesCategory::listCatClass($keyClass);
   foreach($listCategory as $keyCat=>$valueCat){
@@ -92,6 +92,13 @@ foreach($listObjectClass as $keyClass=>$value){
   }
 }
 
+// Headers and footers
+$component = new CCompteRendu();
+
+
+// 
+//$footer->chir_id = $compte_rendu->chir_id;
+//$footer->
 
 // Création du template
 $smarty = new CSmartyDP();

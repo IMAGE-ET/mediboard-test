@@ -29,81 +29,16 @@
         </table>
       </form>
     </td>
-
-
   </tr>
+  
   <tr>
 
     <td>
-      {{if $listModelePrat|@count}}
-      <table class="tbl">
-		<tr>
-		  <th class="title" colspan="3">Modèles de {{$userSel->_view}}</th>
-		</tr>
-        <tr>
-          <th>Nom</th>
-          <th>Class</th>
-          <th>Supprimer</th>
-        </tr>
-        {{foreach from=$listModelePrat item=curr_modele}}
-        <tr>
-          <td>
-            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
-          </td>
-          <td>
-            <form name="editFrm" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="dosql" value="do_modele_aed" />
-            {{mb_field object=$curr_modele field="compte_rendu_id" hidden=1 prop=""}}
-            <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
-            </button>
-            </form>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
-      {{/if}}
+      {{include file=inc_modeles.tpl modeles=$modeles.prat object=$userSel}}
     </td>
-
 
     <td>
-      {{if $listModeleFunc|@count}}
-      <table class="tbl">
-        <tr>
-		  <th class="title" colspan="3">Modèles de {{$userSel->_ref_function->_view}}</th>
-		</tr>
-		<tr>
-          <th>Nom</th><th>Type</th><th>Supprimer</th>
-        </tr>
-        {{foreach from=$listModeleFunc item=curr_modele}}
-        <tr>
-          <td>
-            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&tab=addedit_modeles&compte_rendu_id={{$curr_modele->compte_rendu_id}}">{{tr}}{{$curr_modele->object_class}}{{/tr}}</a>
-          </td>
-          <td>
-            <form name="editFrm" action="?m={{$m}}" method="post">
-            <input type="hidden" name="m" value="{{$m}}" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="dosql" value="do_modele_aed" />
-            {{mb_field object=$curr_modele field="compte_rendu_id" hidden=1 prop=""}}
-            <button  type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'le modèle',objName:'{{$curr_modele->nom|smarty:nodefaults|JSAttribute}}'})">
-              Supprimer
-            </button>
-            </form>
-          </td>
-        </tr>
-        {{/foreach}}
-      </table>
-      {{/if}}
+      {{include file=inc_modeles.tpl modeles=$modeles.func object=$userSel->_ref_function}}
     </td>
-
   </tr>
 </table>

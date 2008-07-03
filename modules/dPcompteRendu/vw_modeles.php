@@ -16,15 +16,17 @@ $listPrat = new CMediusers();
 $listPrat = $listPrat->loadPraticiens(PERM_EDIT);
 
 // Utilisateur sélectionné ou utilisateur courant
-$prat_id = mbGetValueFromGetOrSession("prat_id");
+$prat_id = mbGetValueFromGetOrSession("prat_id", $AppUI->user_id);
 
 $userSel = new CMediusers;
-$userSel->load($prat_id ? $prat_id : $AppUI->user_id);
+$userSel->load($prat_id);
 $userSel->loadRefs();
 
 if ($userSel->isPraticien()) {
   mbSetValueToSession("prat_id", $userSel->user_id);
 }
+
+$modeles = CCompteRendu::loadAllModelesForPrat($prat_id);
 
 // Liste des modèles pour le praticien
 $listModelePrat = array();
@@ -53,6 +55,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("userSel"       , $userSel);
 $smarty->assign("listPrat"      , $listPrat);
+$smarty->assign("modeles"       , $modeles);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 

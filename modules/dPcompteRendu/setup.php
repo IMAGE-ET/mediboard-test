@@ -248,10 +248,10 @@ class CSetupdPcompteRendu extends CSetup {
     
     $this->makeRevision("0.33");
     $sql = "UPDATE aide_saisie
-            SET `depend_value` = `class`,
-                `class` = 'CCompteRendu',
-                `field` = 'source'
-            WHERE `field` = 'compte_rendu';";
+      SET `depend_value` = `class`,
+          `class` = 'CCompteRendu',
+          `field` = 'source'
+      WHERE `field` = 'compte_rendu';";
     $this->addQuery($sql);
     
     $this->makeRevision("0.34");
@@ -259,19 +259,19 @@ class CSetupdPcompteRendu extends CSetup {
 			ADD `type` ENUM ('header','body','footer'),
 			CHANGE `valide` `valide` ENUM ('0','1'),
 			ADD `header_id` INT (11) UNSIGNED,
-			ADD `footer_id` INT (11) UNSIGNED";
+			ADD `footer_id` INT (11) UNSIGNED,
+			ADD INDEX (`header_id`),
+			ADD INDEX (`footer_id`)";
     $this->addQuery($sql);
+
+    $this->makeRevision("0.35");
+    
     $sql = "UPDATE `compte_rendu` 
 			SET `type` = 'body'
 			WHERE `object_id` IS NULL";
     $this->addQuery($sql);
-    $sql = "ALTER TABLE `compte_rendu` 
-			ADD INDEX (`header_id`),
-			ADD INDEX (`footer_id`)";
-    $this->addQuery($sql);
     
-    
-    $this->mod_version = "0.35";
+    $this->mod_version = "0.36";
   }
 }
 ?>

@@ -36,11 +36,13 @@ $listModeleFunc = array();
 if ($praticien->user_id) {
   $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $praticien->user_id);
   $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $praticien->function_id);
+  $modelesByOwner = CCompteRendu::loadAllModelesForPrat($praticien->_id, $object_class, "body");
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("modelesByOwner", $modelesByOwner);
 $smarty->assign("listModelePrat", $listModelePrat);
 $smarty->assign("listModeleFunc", $listModeleFunc);
 $smarty->assign("praticien_id"  , $praticien->_id);
