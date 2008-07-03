@@ -12,6 +12,7 @@ global $AppUI;
 $prescription_id = mbGetValueFromGet("prescription_id");
 $praticien_id    = mbGetValueFromGet("praticien_id", $AppUI->user_id);
 $date            = mbGetValueFromGet("date", mbDate());
+$time            = mbGetValueFromGet("time_debut");
 $actionType      = mbGetValueFromGet("actionType", "stop");
 $mode_pharma     = mbGetValueFromGet("mode_pharma");
 
@@ -26,10 +27,11 @@ $prescription_traitement->loadRefsLinesMed();
 foreach($prescription_traitement->_ref_prescription_lines as &$line) {
 	if($actionType == "stop" && !$line->date_arret) {
 		$line->date_arret = $date;
+		$line->time_arret = $time;
     $AppUI->displayMsg($line->store(), "msg-CPrescriptionLineMedicament-store");
 	}
 	if($actionType == "go" && $line->date_arret) {
-		$line->duplicateLine($praticien_id, $prescription_id);
+		$line->duplicateLine($praticien_id, $prescription_id, $date, $time);
 		
 	}
 }

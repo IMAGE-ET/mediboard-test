@@ -113,14 +113,16 @@ if($prescription->_id){
 	
   // Chargement des elements et commentaires d'elements
   $prescription->loadRefsLinesElementsComments();
-  foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
-  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
-  		foreach($lines_by_cat as $type_elt => $lines_by_type){
-  			foreach($lines_by_type as $key => $_line){
-  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
-  			}
-  		}
-  	}
+  if(count($prescription->_ref_lines_elements_comments)){
+	  foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
+	  	foreach($cat_by_chap as $name_cat => $lines_by_cat){
+	  		foreach($lines_by_cat as $type_elt => $lines_by_type){
+	  			foreach($lines_by_type as $key => $_line){
+	  			  $_line->getAdvancedPerms($is_praticien, $prescription->type, $mode_protocole, $mode_pharma);
+	  			}
+	  		}
+	  	}
+	  }
   }    	
   // Calcul du nombre d'elements dans la prescription
 	$prescription->countLinesMedsElements($praticien_sortie_id);
@@ -318,7 +320,7 @@ $smarty->assign("protocole_line"     , $protocole_line);
 $smarty->assign("mode_protocole"     , $mode_protocole);
 $smarty->assign("prescriptions_sejour", $prescriptions_sejour);
 $smarty->assign("dossier_medical"    , $dossier_medical);
-
+$smarty->assign("now_time", mbTime());
 
 if($full_mode){
 	$_sejour = new CSejour();

@@ -188,6 +188,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							   {{else}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 				         {{/if}}
+				         {{if $typeDate != "mode_grille"}}
+				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				         {{/if}}
 				       </div>	       
 		       {{else}}
 		           {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
@@ -195,6 +198,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 		           {{else}}
 		             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
 		           {{/if}}
+		           {{if $typeDate != "mode_grille"}}
+		             {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}} 
+		           {{/if}}       
 		       {{/if}} 
 	       </td>
 	       {{else}}

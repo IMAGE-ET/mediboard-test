@@ -179,6 +179,7 @@ testPharma = function(line_id){
   <input type="hidden" name="code_cip" value=""/>
   <!-- Date de debut -->
   <input type="hidden" name="debut" value="{{$today}}" />
+  <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
   <input type="hidden" name="refresh_pharma" value="{{$refresh_pharma}}" />
   {{if $prescription->type=="pre_admission" && $prescription->object_id}}

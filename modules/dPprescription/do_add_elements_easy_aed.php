@@ -13,6 +13,7 @@ $token_med          = mbGetValueFromPost("token_med");
 $token_elt          = mbGetValueFromPost("token_elt");
 $prescription_id    = mbGetValueFromPost("prescription_id");
 $debut              = mbGetValueFromPost("debut");
+$time_debut         = mbGetValueFromPost("time_debut");
 $duree              = mbGetValueFromPost("duree");
 $unite_duree        = mbGetValueFromPost("unite_duree");
 $quantite           = mbGetValueFromPost("quantite");
@@ -67,6 +68,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 	foreach($lines_by_cat as $_line){
 		if($cat_name != "dmi"){
       $_line->debut = $debut;
+      $_line->time_debut = $time_debut;
 	    $_line->duree = $duree;
 	    $_line->unite_duree = $unite_duree;
 		  $_line->store();

@@ -33,8 +33,7 @@ Main.add( function(){
   <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
   {{if $line->date_arret}}
     <input type="hidden" name="date_arret" value="" />
-    <input type="hidden" name="_heure_arret" value="" />
-    <input type="hidden" name="_min_arret" value="" />
+    <input type="hidden" name="time_arret" value="" />
 	  <button type="button"
 	          class="cancel" 
 	          onclick="changeColor('{{$line->_id}}','{{$line->_class_name}}',this.form.date_arret.value,'{{$line->_traitement}}','{{$category_id}}'); 
@@ -49,24 +48,9 @@ Main.add( function(){
     <table>
       <tr>
         <td class="date" style="border:none;">
-
           {{assign var=line_id value=$line->_id}}
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
-	        à
-	        <select name="_heure_arret">
-	          <option value="">-</option>
-	          {{foreach from=$hours item=_hour}}
-	          <option value="{{$_hour}}" {{if $line->_heure_arret == $_hour}}selected="selected"{{/if}}>{{$_hour}}</option>
-	          {{/foreach}}
-	        </select>
-	        h
-	        <select name="_min_arret">
-	          <option value="">-</option>
-	          {{foreach from=$mins item=_min}}
-	          <option value="{{$_min}}" {{if $line->_min_arret == $_min}}selected="selected"{{/if}}>{{$_min}}</option>
-	          {{/foreach}}
-	        </select>
-	        min
+	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
 	        <button type="button" 
 	                class="stop" 
 	                onclick="calculDateArret(this.form, '{{$line->_id}}','{{$line->_class_name}}','{{$line->_traitement}}','{{$category_id}}');">  
@@ -82,12 +66,12 @@ Main.add( function(){
 <script type="text/javascript">
 
 calculDateArret = function(oForm, object_id, object_class, traitement, cat_id){
-  if(!oForm.date_arret.value){
+  // Date mais pas heure
+  if(oForm.date_arret.value && !oForm.time_arret.value){
+    oForm.time_arret.value = "00:00";
+  } else {
     oForm.date_arret.value = "{{$today}}";
-  }
-  if(!oForm._heure_arret.value || !oForm._min_arret.value){
-    oForm._heure_arret.value = "{{$now|date_format:'%H'}}";
-    oForm._min_arret.value = "{{$now|date_format:'%M'}}";
+    oForm.time_arret.value = "{{$now_time}}";
   }
   changeColor(object_id, object_class, oForm, traitement, cat_id);
   Prescription.submitFormStop(oForm, object_id, object_class);

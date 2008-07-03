@@ -23,6 +23,7 @@ var Prescription = {
     var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
+      oForm.time_debut.value = oFormDate.time_debut.value;
     }
   
     oForm.code_cip.value = code;
@@ -46,7 +47,8 @@ var Prescription = {
     
     var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
-      oForm.debut.value = oFormDate.debut.value;  
+      oForm.debut.value = oFormDate.debut.value;
+      oForm.time_debut.value = oFormDate.debut.value;  
     }
     
     if(debut){
@@ -157,6 +159,7 @@ var Prescription = {
     url.addParam("actionType", "stop");
     if(document.selDateLine){
       url.addParam("date", $V(document.selDateLine.debut));
+      url.addParam("time_debut", $V(document.selDateLine.time_debut));
     }
     url.addParam("mode_pharma", mode_pharma);
     url.requestUpdate("systemMsg", { waitingText : null });
@@ -169,6 +172,7 @@ var Prescription = {
     url.addParam("actionType", "go");
     if(document.selDateLine){
       url.addParam("date", $V(document.selDateLine.debut));
+      url.addParam("time_debut", $V(document.selDateLine.time_debut));
     }
     if(document.selPraticienLine) {
       url.addParam("praticien_id", $V(document.selPraticienLine.praticien_id));

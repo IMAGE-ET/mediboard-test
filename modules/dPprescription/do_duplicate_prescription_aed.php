@@ -56,25 +56,16 @@ foreach($lines as $cat => $lines_by_type){
 	    }
 		}
 		
-		// Si la ligne n'est plus en terminée ou arretée, on ne la duplique pas
-		if(!$line->_en_cours){
-			continue;
-		}
-		
 		// Chargements des prises
 	  $line->loadRefsPrises();
 
-		// Modification des durées
-		if($type == "sejour" && $line->debut && $line->duree){
-			if($cat == "element"){
-				if($line->date_arret){
-		      $line->_fin = $line->date_arret;	
-		    }
-				if($line->_fin < mbDate($sejour->_entree)){
-		    	continue;
-		    }
+		// Creation d'une prescription de sejour
+		if($type == "sejour"){
+			// On ne duplique pas les lignes qui seront finis avant la debut du séjour
+			if($line->_date_arret_fin < $sejour->_entree){
+				continue;
 			}
-			if($line->debut < mbDate($sejour->_entree)){
+			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_entree))){
 				$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_entree));
 				if( $line->duree - $diff_duree > 0){
 					$line->duree = $line->duree - $diff_duree;
@@ -82,26 +73,22 @@ foreach($lines as $cat => $lines_by_type){
 				}
 			}
 		}
-		if($type == "sortie" && $line->debut && $line->duree){
-			if($cat == "element"){
-			  if($line->date_arret){
-          $line->_fin = $line->date_arret;	
-        }
-		    if($line->_fin < mbDate($sejour->_sortie)){
-    	    continue;
-        }
+		
+		// Creation d'une prescription de sortie
+		if($type == "sortie"){
+			// On ne duplique pas les lignes qui seront finis avant la fin du sejour
+			if($line->_date_arret_fin < $sejour->_sortie){
+				continue;
 			}
-	    if($line->debut < mbDate($sejour->_sortie)){
-	    	$diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_sortie));
-	    	if($line->duree - $diff_duree > 0){
-		    	$line->duree = $line->duree - $diff_duree;
-		    	$line->debut = mbDate($sejour->_sortie);
-	    	} 
-	    }
+			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_sortie))){
+	      $diff_duree = mbDaysRelative($line->debut, mbDate($sejour->_sortie));
+	      if($line->duree - $diff_duree > 0){
+		      $line->duree = $line->duree - $diff_duree;
+		      $line->debut = mbDate($sejour->_sortie);
+	      }
+			}
 		}
 	
-		
-		
 		// On modifie la ligne en supprimant les validations
 	  $line->_id = "";
 	  $line->prescription_id = $prescription->_id;
@@ -116,6 +103,7 @@ foreach($lines as $cat => $lines_by_type){
 	  	if($line->debut && $line->unite_duree && $line->duree){
 	  		$line->fin = $line->_fin;
 	  		$line->debut = "";
+	  		$line->time_debut = "";
 	  		$line->unite_duree = "";
 	  		$line->duree = "";
 	  	}

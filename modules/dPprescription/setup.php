@@ -653,7 +653,18 @@ class CSetupdPprescription extends CSetup {
 	          ADD `jour_decalage` ENUM ('E','I','S','N');";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.45";
+    $this->makeRevision("0.45");
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+						ADD `time_debut` TIME;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_element` 
+						ADD `time_debut` TIME;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_comment` 
+						ADD `time_debut` TIME;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.46";
   }  
 }
 

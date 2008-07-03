@@ -19,6 +19,7 @@ class CPrescriptionLine extends CMbObject {
   var $signee              = null;
   var $creator_id          = null;
   var $debut               = null;
+  var $time_debut          = null;
   var $duree               = null;
   var $unite_duree         = null;
   var $date_arret          = null;
@@ -30,14 +31,11 @@ class CPrescriptionLine extends CMbObject {
   var $valide_infirmiere   = null;
   
   // Form Fields
-  var $_heure_arret        = null;
-  var $_min_arret          = null;
   var $_fin                = null;
   var $_protocole          = null;
   var $_count_parent_line  = null;
   var $_count_prises_line  = null;  
   var $_date_arret_fin     = null;
-  var $_en_cours           = null;
   
   // Object References
   var $_ref_parent_line    = null;
@@ -56,6 +54,7 @@ class CPrescriptionLine extends CMbObject {
       "creator_id"        => "notNull ref class|CMediusers",
       "signee"            => "bool",
       "debut"             => "date",
+      "time_debut"        => "time",
       "duree"             => "num",
       "unite_duree"       => "enum list|minute|heure|demi_journee|jour|semaine|quinzaine|mois|trimestre|semestre|an default|jour",
       "date_arret"        => "date",
@@ -247,26 +246,6 @@ class CPrescriptionLine extends CMbObject {
         $this->_fin = mbDate(" -1 DAYS", $this->_fin);  
       }
     }
-    
-    // Décomposition de time_arret
-    if($this->time_arret) {
-      $this->_heure_arret = intval(substr($this->time_arret, 0, 2));
-      $this->_min_arret  = intval(substr($this->time_arret, 3, 2));
-    }
-  }
-  
-  function updateDBFields(){
-  	parent::updateDBFields();
-  	
-    if($this->_heure_arret !== null && $this->_min_arret !== null) {
-    	if($this->_heure_arret && $this->_min_arret){
-	      $this->time_arret = 
-	        $this->_heure_arret.":".
-	        $this->_min_arret.":00";
-    	} else {
-    		$this->time_arret = "";
-    	}
-    }
   }
   
   /*
@@ -279,7 +258,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Duplication d'une ligne
    */
-  function duplicateLine($praticien_id, $prescription_id) {
+  function duplicateLine($praticien_id, $prescription_id, $debut, $time_debut) {
     global $AppUI;
     
     // Chargement de la ligne de prescription
@@ -291,6 +270,12 @@ class CPrescriptionLine extends CMbObject {
     $new_line->_id = "";
     
     // Si date_arret (cas du sejour)
+    $new_line->debut = $debut;
+    $new_line->time_debut = $time_debut;
+    $new_line->date_arret = "";
+    $new_line->time_arret = "";
+    
+    /*
     if($new_line->date_arret){
       $new_line->debut = $new_line->date_arret;
       $new_line->date_arret = "";
@@ -300,7 +285,7 @@ class CPrescriptionLine extends CMbObject {
     } else {
       $new_line->debut = mbDate();
     }
-    
+    */
     $new_line->unite_duree = "jour";
     if($new_line->duree < 0){
       $new_line->duree = "";
@@ -337,6 +322,7 @@ class CPrescriptionLine extends CMbObject {
       $old_line->child_id = $new_line->_id;
       if($prescription->type != "sortie" && !$old_line->date_arret){
         $old_line->date_arret = mbDate();
+        $old_line->time_arret = mbTime();
       }
       $old_line->store();
     }

@@ -509,16 +509,18 @@ class CPrescription extends CMbObject {
   	
   	
   	// Initialisation des tableaux
-  	foreach($this->_ref_lines_elements_comments as &$chapitre){
-  		foreach($chapitre as &$cat){
-    	if(!array_key_exists("comment", $cat)){
-    		$cat["comment"] = array();
-    	}
-      if(!array_key_exists("element", $cat)){
-    		$cat["element"] = array();
-    	}
-  		}
-    }
+		if(count($this->_ref_lines_elements_comments)){
+	  	foreach($this->_ref_lines_elements_comments as &$chapitre){
+	  		foreach($chapitre as &$cat){
+	    	if(!array_key_exists("comment", $cat)){
+	    		$cat["comment"] = array();
+	    	}
+	      if(!array_key_exists("element", $cat)){
+	    		$cat["element"] = array();
+	    	}
+	  		}
+	    }
+		}
   }
   
   /*

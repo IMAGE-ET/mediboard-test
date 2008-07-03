@@ -49,6 +49,7 @@ viewEasyMode = function(mode_protocole, mode_pharma){
   <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
   <input type="hidden" name="creator_id" value="{{$app->user_id}}" />  
   <input type="hidden" name="debut" value="{{$today}}" />
+  <input type="hidden" name="time_debut" value="" />
   <input type="hidden" name="duree" value="" />
   <input type="hidden" name="unite_duree" value="" />
   <input type="hidden" name="callback" value="" />
@@ -110,8 +111,9 @@ viewEasyMode = function(mode_protocole, mode_pharma){
 						</optgroup>
 				  </select>		 				
 				  <!-- Prescription externe -->
-				  <div id="calendarProt" style="border:none;">
-				    {{mb_field object=$filter_line field="debut" form=selDateLine}}       
+				  <div id="calendarProt" style="border:none; margin-right: 60px">
+				    {{mb_field object=$filter_line field="debut" form=selDateLine}}
+				    {{mb_field object=$filter_line field="time_debut" form=selDateLine}}      
 				  </div>
         {{else}}
            {{mb_field object=$filter_line field="debut" form="selDateLine"}}

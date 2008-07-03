@@ -42,6 +42,7 @@ if($traitement == 1){
   $line->prescription_id = $prescription->_id;  
   // Suppression des valeurs non disponibles pour une ligne de type traitement
   $line->debut = "";
+  $line->time_debut = "";
   $line->duree = "";
   $line->unite_duree = "";
   $line->ald = "";

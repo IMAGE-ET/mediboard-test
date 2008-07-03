@@ -374,7 +374,7 @@ Object.extend(ElementChecker, {
   
   // time
   check_time: function() {
-    if(!this.oElement.value.match(/^(\d{1,2}):(\d{1,2}):(\d{1,2})$/)) {
+    if(!this.oElement.value.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/)) {
       return "N'as pas un format correct";
     }
     return null;
