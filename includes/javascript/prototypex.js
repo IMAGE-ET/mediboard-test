@@ -131,6 +131,31 @@ Object.extend(Form.Element, {
 	}
 } );
 
+// Makes an element to be in the viewport instead of overflow
+Element.addMethods({
+  unoverflow: function(element, options) {
+    var dim = element.getDimensions(); // Element dimensions
+    var offset = element.cumulativeOffset(); // Element position
+    var viewport = document.viewport.getDimensions(); // Viewport size
+    
+    offset.right  = offset[2] = offset.left + dim.width;  // Element right offset
+    offset.bottom = offset[3] = offset.top  + dim.height; // Element bottom offset
+    
+    // If the element exceeds the viewport on the right
+    if (offset.right > viewport.width) {
+      element.setStyle({marginLeft: Math.max(viewport.width - offset.right, -offset.left) + 'px'});
+      return true;
+    }
+    
+    return false;
+
+    // If the tooltip exceeds the viewport on the bottom
+    /*if (iDivOffset.bottom > iWinDim.height) {
+      eDiv.setStyle({marginTop: Math.max(iWinDim.height - iDivOffset.bottom - iDivDim.height, -iDivOffset.top) + 'px'});
+    }*/
+  }
+});
+
 EventEx = {};
 
 Object.extend(EventEx, {

@@ -702,7 +702,7 @@ var ObjectTooltip = Class.create({
     }
     if (!this.oOptions.popup) {
       eDiv.show();
-      //this.reposition();
+      this.reposition();
     }
   },
   
@@ -718,6 +718,8 @@ var ObjectTooltip = Class.create({
   
   reposition: function() {
     var eDiv = $(this.sDiv);
+    eDiv.unoverflow();
+    /*
     var iDivDim = eDiv.getDimensions(); // Tooltip size
     
     var iDivOffset = eDiv.cumulativeOffset(); // Tooltip position

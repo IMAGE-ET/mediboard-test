@@ -58,16 +58,16 @@ class CTimeSpec extends CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $html  = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
+    $html  = '<span class="date"><input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
     if ($form) {
-      $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="time-picker" />';
+      $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="date" />';
       if (!$this->notNull) {
         $html .= '<button class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
       }
     $html .= '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
     }
     
-    return $html;
+    return $html.'</span>';
   }
 }
 

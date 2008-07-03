@@ -685,8 +685,7 @@ var TimePicker = Class.create({
     var element = this;
     this.form = form;
     this.field = field;
-    this.hour = null;
-    this.minute = null;
+    this.existing = false;
 
     // Form field
     prepareForm(this.form);
@@ -705,60 +704,64 @@ var TimePicker = Class.create({
     this.minute = parts[1];
     
     // Time picker trigger
-    var trigger = $(this.fieldId+'_trigger');
-    if (trigger) { // If a trigger is already present
-      trigger.addClassName('time-picker');
-    } else { // if not
-      trigger = new Element('img')
-                .writeAttribute('src', 'images/icons/time.png')
-                .addClassName('time-picker');
-      trigger.id = this.fieldId+'_trigger';
-      formField.insert({after: trigger});
+    this.trigger = $(this.fieldId+'_trigger');
+    if (!this.trigger) {
+      this.trigger = new Element('img')
+                        .writeAttribute('src', 'images/icons/time.png');
+      this.trigger.id = this.fieldId+'_trigger';
+      formField.insert({after: this.trigger});
     }
-    // The trigger position
-    this.position = trigger.cumulativeOffset();
     
     // Time hour-minute selector
-    var picker = new Element('table')
-                    .writeAttribute('id', this.pickerId)
-                    .addClassName('time-picker');
-    trigger.insert({after: picker});
-    picker.absolutize().hide();
-    
-      // Hours
-    var str = '<tr><td><table class="hour"><tr>';
-    for (i = 0; i < 24; i++) {
-      if (i%12 == 0) str += '</tr><tr>';
-      var h = printf('%02d', i);
-      str += '<td class="hour-'+h+'">'+h+'</td>';
+    var picker = $(this.pickerId);
+    if (!picker) {
+      //picker.remove();
+      picker = new Element('table')
+                  .writeAttribute('id', this.pickerId)
+                  .addClassName('time-picker');
+      $('main').appendChild(picker);
+      picker.absolutize().hide();
+      this.existing = false;
+    } else {
+      this.existing = true;
     }
-    str += '</tr></table></td></tr>';
     
-      // Minutes
-    str += '<tbody class="long" style="display: none;"><tr><td><table class="minute"><tr>';
-    for (i = 0; i < 60; i++) {
-      if (i%10 == 0) str += '</tr><tr>';
-      var m = printf('%02d', i);
-      str += '<td class="minute-'+m+'">:'+m+'</td>';
+    if (!this.existing) {
+        // Hours
+      var str = '<tr><td><table class="hour"><tr>';
+      for (i = 0; i < 24; i++) {
+        if (i%12 == 0) str += '</tr><tr>';
+        var h = printf('%02d', i);
+        str += '<td class="hour-'+h+'">'+h+'</td>';
+      }
+      str += '</tr></table></td></tr>';
+      
+        // Minutes
+      str += '<tbody class="long" style="display: none;"><tr><td><table class="minute"><tr>';
+      for (i = 0; i < 60; i++) {
+        if (i%10 == 0) str += '</tr><tr>';
+        var m = printf('%02d', i);
+        str += '<td class="minute-'+m+'">:'+m+'</td>';
+      }
+      str += '</tr></table></td></tr></tbody>';
+      
+        // Short minutes
+      str += '<tbody class="short"><tr><td><table class="minute"><tr>';
+      for (i = 0; i < 60; i=i+5) {
+        if (i%30 == 0) str += '</tr><tr>';
+        var m = printf('%02d', i);
+        str += '<td class="minute-'+m+'">:'+m+'</td>';
+      }
+      str += '</tr></table></td></tr></tbody>';
+  
+      // Long-short switcher
+      str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
+      picker.insert(str);
     }
-    str += '</tr></table></td></tr></tbody>';
-    
-      // Short minutes
-    str += '<tbody class="short"><tr><td><table class="minute"><tr>';
-    for (i = 0; i < 60; i=i+5) {
-      if (i%30 == 0) str += '</tr><tr>';
-      var m = printf('%02d', i);
-      str += '<td class="minute-'+m+'">:'+m+'</td>';
-    }
-    str += '</tr></table></td></tr></tbody>';
-
-    // Long-short switcher
-    str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
-    picker.insert(str);
 
     // Behaviour
       // on click on the trigger
-    trigger.observe('click', this.togglePicker.bindAsEventListener(this));
+    this.trigger.observe('click', this.togglePicker.bindAsEventListener(this));
     
       // on click on the switch "long-short"
     picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
@@ -782,7 +785,16 @@ var TimePicker = Class.create({
     var picker = $(this.pickerId);
     
     $$('table.time-picker').each(function(o){if (o.id != element.pickerId) o.hide();});
-    picker.toggle().setStyle({left: this.position.left+'px'});
+    
+    // The trigger position
+    this.position = this.trigger.cumulativeOffset();
+    this.position.top += this.trigger.getDimensions().height;
+    
+    picker.toggle().setStyle({
+      left: this.position.left+'px',
+      top: this.position.top+'px'
+    });
+    picker.unoverflow();
   },
   
   // Set the hour

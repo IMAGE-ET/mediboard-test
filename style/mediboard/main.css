@@ -789,8 +789,9 @@ div.dateTime {
 	width: 90px;
 }
 
-table.tbl td.date img {
-  margin-top: 3px;
+.date img {
+  cursor: pointer;
+  margin: 2px;
 }
 
 /* a 'standard' table */
@@ -915,10 +916,6 @@ table.form td.date div {
   margin: 1px;
   min-height: 15px;
   float: left;
-}
-
-table.form td.date img {
-  margin-top: 3px;
 }
 
 div.autocomplete {
@@ -2977,11 +2974,4 @@ table.tbl th.traitement {
   cursor: pointer;
   padding: 3px;
   font-weight: bold;
-}
-
-img.time-picker {
-  cursor: pointer;
-  vertical-align: middle;
-  border: none;
-  background: none;
 }
