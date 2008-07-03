@@ -11,6 +11,8 @@
   </tr>
 
 	{{assign var=submit value=submitTiming}}
+  {{assign var=opid value=$selOp->operation_id}}
+  {{assign var=form value=timing$opid}}
   <tr>
     {{include file=inc_field_timing.tpl object=$selOp field=entree_salle}}
     {{include file=inc_field_timing.tpl object=$selOp field=pose_garrot }}

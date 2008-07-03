@@ -7,14 +7,13 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 
 $can->needsRead();
 
 $operation_id = mbGetValueFromGetOrSession("operation_id");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
-$date_now = mbDate();
-$modif_operation = $date>=$date_now;
+$modif_operation = $date >= mbDate();
 
 
 $operation = new COperation();
@@ -42,10 +41,10 @@ if($operation_id){
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("selOp", $operation);
-$smarty->assign("date"          , $date                    );
-$smarty->assign("modif_operation", $modif_operation        );
-$smarty->assign("timing"        , $timing                  );
+$smarty->assign("selOp",           $operation);
+$smarty->assign("date",            $date);
+$smarty->assign("modif_operation", $modif_operation);
+$smarty->assign("timing",          $timing);
 
 $smarty->display("inc_vw_timing.tpl");
 

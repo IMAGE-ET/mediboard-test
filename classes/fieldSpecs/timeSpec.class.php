@@ -46,8 +46,8 @@ class CTimeSpec extends CMbFieldSpec {
   }
   
   function getFormHtmlElement($object, $params, $value, $className) {
-    CMbArray::defaultValue($params, "size", 5);
-    CMbArray::defaultValue($params, "maxLength", 8);
+    CMbArray::defaultValue($params, "size", 3);
+    CMbArray::defaultValue($params, "maxLength", 5);
     if ($object->_locked) {
       $params["readonly"] = "readonly";
     }
@@ -58,11 +58,11 @@ class CTimeSpec extends CMbFieldSpec {
     $form  = CMbArray::extract($params, "form");
     $id    = $form.'_'.$field;
     $extra = CMbArray::makeXmlAttributes($params);
-    $html  = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.$value.'" '.$extra.' />';
+    $html  = '<input type="text" name="'.$field.'" class="'.$class.'" value="'.substr($value, 0, 5).'" '.$extra.' />';
     if ($form) {
       $html .= '<img id="'.$id.'_trigger" src="./images/icons/time.png" alt="Choisir l\'heure" class="time-picker" />';
       if (!$this->notNull) {
-        $html .= '<button class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null);">'.CAppUI::tr("Delete").'</button>';
+        $html .= '<button class="cancel notext" type="button" onclick="$V(this.form.'.$field.', null, true);">'.CAppUI::tr("Delete").'</button>';
       }
     $html .= '<script type="text/javascript">Main.add(function() { new TimePicker("'.$form.'", "'.$field.'"); } ); </script>';
     }
