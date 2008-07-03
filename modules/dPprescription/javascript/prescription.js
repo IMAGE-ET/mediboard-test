@@ -23,6 +23,9 @@ var Prescription = {
     var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;  
+      
+    }
+    if(oFormDate && oFormDate.time_debut){
       oForm.time_debut.value = oFormDate.time_debut.value;
     }
   
@@ -48,6 +51,8 @@ var Prescription = {
     var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;
+    }
+    if(oFormDate && oFormDate.time_debut){
       oForm.time_debut.value = oFormDate.time_debut.value;  
     }
     
