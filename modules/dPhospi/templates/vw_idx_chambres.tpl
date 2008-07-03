@@ -1,10 +1,18 @@
 <script type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("serviceEffect");
-}
-
+  var chambresTabs = Control.Tabs.create('tabs-chambres', true);
+});
 </script>
+
+<ul id="tabs-chambres" class="control_tabs">
+  <li><a href="#chambres">{{tr}}CChambre{{/tr}}</a></li>
+  <li><a href="#services">{{tr}}CService{{/tr}}</a></li>
+  <li><a href="#prestations">{{tr}}CPrestation{{/tr}}</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<div id="chambres" style="display: none;">
 <table class="main">
 <tr>
   <td class="halfPane">
@@ -138,3 +146,6 @@ function pageMain() {
   </td>
 </tr>
 </table>
+</div>
+<div style="display: none;" id="services">{{include file="vw_idx_services.tpl"}}</div>
+<div style="display: none;" id="prestations">{{include file="vw_idx_prestations.tpl"}}</div>

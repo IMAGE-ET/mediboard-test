@@ -21,6 +21,4 @@ $module->registerTab("vw_bilan_prescription"      , null, TAB_READ);
 $module->registerTab("vw_suivi_bloc"              , null, TAB_READ);
 $module->registerTab("vw_idx_cibles_transmissions", null, TAB_ADMIN);
 $module->registerTab("vw_idx_chambres"            , null, TAB_ADMIN);
-$module->registerTab("vw_idx_services"            , null, TAB_ADMIN);
-$module->registerTab("vw_idx_prestations"         , null, TAB_ADMIN);
 ?>

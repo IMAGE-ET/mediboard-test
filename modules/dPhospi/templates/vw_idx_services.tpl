@@ -1,5 +1,4 @@
 <table class="main">
-
 <tr>
   <td class="halfPane">
     <a href="?m={{$m}}&amp;tab={{$tab}}&amp;service_id=0" class="buttonnew">
@@ -7,13 +6,8 @@
     </a>
     
     <!-- Liste des services -->
-    
     <table class="tbl">
-
-    <tr>
-      <th colspan="3">Liste des services</th>
-    </tr>
-
+    <tr><th colspan="3">Liste des services</th></tr>
     <tr>
       <th>Intitulé</th>
       <th>Description</th>
@@ -27,13 +21,10 @@
       <td>{{$curr_service->_ref_group->text}}</td>
     </tr>
     {{/foreach}}
-
     </table>
-
   </td> 
 
   <td class="halfPane">
-  	
   	<!-- Formulaire d'un service -->
     <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 
@@ -42,7 +33,6 @@
     <input type="hidden" name="del" value="0" />
 
     <table class="form">
-
     <tr>
       {{if $serviceSel->_id}}
       <th class="title modify" colspan="2">
