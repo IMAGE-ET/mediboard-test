@@ -34,7 +34,7 @@ class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
     }
   }
 }
-//echo "toto"; die();
+
 $do = new CDoActeCCAMAddEdit();
 $do->doIt();
 ?>

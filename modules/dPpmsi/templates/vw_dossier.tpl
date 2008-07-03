@@ -465,7 +465,7 @@ function pageMain() {
               {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
               <tr>
                 <td class="button">
-                  <form name="formActe-{{$curr_acte->_view}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                  <form name="formDelActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
                   <input type="hidden" name="m" value="dPsalleOp" />
                   <input type="hidden" name="dosql" value="do_acteccam_aed" />
                   <input type="hidden" name="del" value="0" />
@@ -480,7 +480,22 @@ function pageMain() {
                 <td class="button">{{mb_value object=$curr_acte field=code_activite}}</td>
                 <td class="button">{{mb_value object=$curr_acte field=code_phase}}</td>
                 <td class="button">{{mb_value object=$curr_acte field=modificateurs}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=code_association}}</td>
+                <td class="button">
+                  <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                  <input type="hidden" name="m" value="dPsalleOp" />
+                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
+                  <input type="hidden" name="del" value="0" />
+                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
+                  <select name="code_association" onchange="onSubmitFormAjax(this.form)">
+                    <option value="" {{if !$curr_acte->code_association}}selected="selected"{{/if}}> </option>
+                    <option value="1" {{if $curr_acte->code_association == 1}}selected="selected"{{/if}}>1</option>
+                    <option value="2" {{if $curr_acte->code_association == 2}}selected="selected"{{/if}}>2</option>
+                    <option value="3" {{if $curr_acte->code_association == 3}}selected="selected"{{/if}}>3</option>
+                    <option value="4" {{if $curr_acte->code_association == 4}}selected="selected"{{/if}}>4</option>
+                    <option value="5" {{if $curr_acte->code_association == 5}}selected="selected"{{/if}}>5</option>
+                  </select>
+                  </form>
+                </td>
                 <td class="button">{{mb_value object=$curr_acte field=montant_depassement}}</td>
                 <td class="button">{{mb_value object=$curr_acte field=_rembex}}</td>
               </tr>
