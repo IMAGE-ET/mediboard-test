@@ -477,7 +477,7 @@ function onSubmitFormAjax(oForm, oUserOptions) {
   
   // Check the form
   if (!oOptions.check(oForm)) {
-    return false;;
+    return false;
   }
 
 	// Build url
@@ -678,3 +678,158 @@ NumericField.prototype = {
     }
   }
 }
+
+// The time picker
+var TimePicker = Class.create({
+  initialize: function(form, field) {
+    var element = this;
+    this.form = form;
+    this.field = field;
+    this.hour = null;
+    this.minute = null;
+
+    // Form field
+    prepareForm(this.form);
+    var formField = $(document.forms[form].elements[field]);
+    if (formField) {
+      this.fieldId = formField.id;
+      if (!formField.size) {
+        formField.writeAttribute('size', 3).writeAttribute('maxlength', 5);
+      }
+      this.pickerId = this.fieldId+'_picker';
+    } else return;
+    
+    // Get the data from the form field
+    var parts = $V(formField).split(':');
+    this.hour   = parts[0];
+    this.minute = parts[1];
+    
+    // Time picker trigger
+    var trigger = $(this.fieldId+'_trigger');
+    if (trigger) { // If a trigger is already present
+      trigger.addClassName('time-picker');
+    } else { // if not
+      trigger = new Element('img')
+                .writeAttribute('src', 'images/icons/time.png')
+                .addClassName('time-picker');
+      trigger.id = this.fieldId+'_trigger';
+      formField.insert({after: trigger});
+    }
+    // The trigger position
+    this.position = trigger.cumulativeOffset();
+    
+    // Time hour-minute selector
+    var picker = new Element('table')
+                    .writeAttribute('id', this.pickerId)
+                    .addClassName('time-picker');
+    trigger.insert({after: picker});
+    picker.absolutize().hide();
+    
+      // Hours
+    var str = '<tr><td><table class="hour"><tr>';
+    for (i = 0; i < 24; i++) {
+      if (i%12 == 0) str += '</tr><tr>';
+      var h = printf('%02d', i);
+      str += '<td class="hour-'+h+'">'+h+'</td>';
+    }
+    str += '</tr></table></td></tr>';
+    
+      // Minutes
+    str += '<tbody class="long" style="display: none;"><tr><td><table class="minute"><tr>';
+    for (i = 0; i < 60; i++) {
+      if (i%10 == 0) str += '</tr><tr>';
+      var m = printf('%02d', i);
+      str += '<td class="minute-'+m+'">:'+m+'</td>';
+    }
+    str += '</tr></table></td></tr></tbody>';
+    
+      // Short minutes
+    str += '<tbody class="short"><tr><td><table class="minute"><tr>';
+    for (i = 0; i < 60; i=i+5) {
+      if (i%30 == 0) str += '</tr><tr>';
+      var m = printf('%02d', i);
+      str += '<td class="minute-'+m+'">:'+m+'</td>';
+    }
+    str += '</tr></table></td></tr></tbody>';
+
+    // Long-short switcher
+    str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
+    picker.insert(str);
+
+    // Behaviour
+      // on click on the trigger
+    trigger.observe('click', this.togglePicker.bindAsEventListener(this));
+    
+      // on click on the switch "long-short"
+    picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
+    
+      // on click on the hours 
+    picker.select('.hour td').each(function(hour) {
+      hour.observe('click', element.setHour.bindAsEventListener(element));
+    });
+    
+      // on click on the minutes
+    picker.select('.minute td').each(function(minute) {
+      minute.observe('click', element.setMinute.bindAsEventListener(element));
+    });
+    
+    this.highlight();
+  }, 
+  
+  // Show the selector
+  togglePicker: function(e) {
+    var element = this;
+    var picker = $(this.pickerId);
+    
+    $$('table.time-picker').each(function(o){if (o.id != element.pickerId) o.hide();});
+    picker.toggle().setStyle({left: this.position.left+'px'});
+  },
+  
+  // Set the hour
+  setHour: function (e) {
+    var picker = $(this.pickerId);
+    this.hour = e.element().innerHTML;
+    this.highlight();
+    
+    $V(this.fieldId, this.hour+':'+(this.minute?this.minute:''), true);
+  },
+  
+  // Set the minutes
+  setMinute: function (e) {
+    var picker = $(this.pickerId);
+    var field = $(this.fieldId);
+    
+    this.minute = e.element().innerHTML.substring(1,3);
+    this.highlight();
+    
+    if (this.hour) {
+      $V(field, this.hour+':'+this.minute, true);
+      this.togglePicker();
+    } else {
+      $V(field, '00:'+this.minute, true);
+    }
+  },
+  
+  highlight: function() {
+    var picker = $(this.pickerId);
+    
+    var selected = picker.select('.hour td.selected');
+    if (selected.length) {
+      selected[0].removeClassName('selected');
+    }
+    picker.select('.hour td.hour-'+this.hour)[0].addClassName('selected');
+  
+    selected = picker.select('.minute td.selected');
+    if (selected.length) {
+      selected.each(function(o){o.removeClassName('selected');});
+    }
+    picker.select('.minute td.minute-'+this.minute).each(function(o){o.addClassName('selected');});
+  },
+  
+  toggleShortLong: function (e) {
+    var picker = $(this.pickerId);
+    var short = picker.select('.short')[0].toggle();
+    picker.select('.long')[0].toggle();
+    picker.select('.switch')[0].update(short.visible() ? '&gt;&gt;' : '&lt;&lt;');
+  }
+});
