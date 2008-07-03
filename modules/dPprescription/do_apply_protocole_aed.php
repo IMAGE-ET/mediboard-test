@@ -68,9 +68,12 @@ foreach($protocole->_ref_prescription_lines as $line){
   }
   
   $signe = ($line->decalage_line >= 0) ? "+" : "";
-  $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
-  
-  
+  if($line->decalage_line){
+    $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+  } else {
+  	$line->debut = $date;
+  }
+
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
   $line->creator_id = $AppUI->user_id;
@@ -118,7 +121,11 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   
   if($chapitre != "dmi"){
 	  $signe = ($line->decalage_line >= 0) ? "+" : "";
-    $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+	  if($line->decalage_line){
+	    $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+	  } else {
+	  	$line->debut = $date;
+	  }	
   }
   
   $line_element->prescription_id = $prescription_id;
