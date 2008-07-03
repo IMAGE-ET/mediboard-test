@@ -381,8 +381,8 @@ class CPrescription extends CMbObject {
   		$this->_ref_lines_med_comments["med"][] = $line_med;
   	}
   	
-  	if(isset($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"])){
-      foreach($this->_ref_prescription_lines_comment["medicament"]["cat"]["comment"] as &$comment_med){
+  	if(isset($this->_ref_prescription_lines_comment["medicament"][""]["comment"])){
+      foreach($this->_ref_prescription_lines_comment["medicament"][""]["comment"] as &$comment_med){
   	  	if($withRefs){
   	  	  $this->_praticiens[$comment_med->praticien_id] = $comment_med->_ref_praticien->_view;
   	  	}
@@ -431,8 +431,10 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines_element as $line){
   		$category = new CCategoryPrescription();
   		$category->load($line->_ref_element_prescription->category_prescription_id);
-  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["cat$category->_id"]["element"][] = $line;	
-   	}
+  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
+  		$this->_ref_lines_elements_comments[$category->chapitre]["$category->_id"]["element"][$line->_id] = $line;
+  	}
+
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
   
@@ -457,17 +459,18 @@ class CPrescription extends CMbObject {
   	$order = "prescription_line_comment_id DESC";
   	$ljoin = array();
   	
-  	if($chapitre && $chapitre != "medicament"){
+  	if ($chapitre && $chapitre != "medicament"){
   		$ljoin["category_prescription"] = "prescription_line_comment.category_prescription_id = category_prescription.category_prescription_id";
   	  $where["category_prescription.chapitre"] = " = '$chapitre'"; 	
   	}
-  	if($chapitre == "medicament"){
+  	if ($chapitre == "medicament"){
   	  $where["category_prescription_id"] = " IS NULL"; 		
   	}
+  	
   	$commentaires = $line_comment->loadList($where, $order, null, null, $ljoin);
   	
   	foreach($commentaires as $_line_comment){
-  		  if($withRefs){
+  		  if ($withRefs){
           $_line_comment->loadRefExecutant();
   		  }
         if($_line_comment->category_prescription_id){
@@ -479,7 +482,8 @@ class CPrescription extends CMbObject {
   		  } else {
   		  	$chapitre = "medicament";
   		  }
-        $this->_ref_prescription_lines_comment[$chapitre]["cat$_line_comment->category_prescription_id"]["comment"][] = $_line_comment;
+        $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
+        $this->_ref_lines_elements_comments[$chapitre]["$_line_comment->category_prescription_id"]["comment"][$_line_comment->_id] = $_line_comment;
         $this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
     }		
   }
@@ -499,12 +503,12 @@ class CPrescription extends CMbObject {
   	$this->loadRefsLinesComment("",$withRefs);
   	
   	// Suppression des ligne de medicaments
-  	unset($this->_ref_prescription_lines_comment["medicament"]);
+  	unset($this->_ref_lines_elements_comments["medicament"]);
   	
-  	// Fusion des tableaux d'element et de commentaire 
-    
-  	$this->_ref_lines_elements_comments = array_merge_recursive($this->_ref_prescription_lines_element_by_cat, $this->_ref_prescription_lines_comment);
-    
+  	ksort($this->_ref_prescription_lines_element_by_cat);
+  	
+  	
+  	// Initialisation des tableaux
   	foreach($this->_ref_lines_elements_comments as &$chapitre){
   		foreach($chapitre as &$cat){
     	if(!array_key_exists("comment", $cat)){
