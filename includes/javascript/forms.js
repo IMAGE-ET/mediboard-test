@@ -817,13 +817,17 @@ var TimePicker = Class.create({
     if (selected.length) {
       selected[0].removeClassName('selected');
     }
-    picker.select('.hour td.hour-'+this.hour)[0].addClassName('selected');
+    if (this.hour && (selected = picker.select('.hour td.hour-'+this.hour))) {
+      selected[0].addClassName('selected');
+    }
   
     selected = picker.select('.minute td.selected');
     if (selected.length) {
       selected.each(function(o){o.removeClassName('selected');});
     }
-    picker.select('.minute td.minute-'+this.minute).each(function(o){o.addClassName('selected');});
+    if (this.minute && (selected = picker.select('.minute td.minute-'+this.minute))) {
+      selected.each(function(o){o.addClassName('selected');});
+    }
   },
   
   toggleShortLong: function (e) {
