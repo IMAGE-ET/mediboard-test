@@ -37,6 +37,7 @@ $icons = array(PERM_DENY => "",
 
 $where = array();
 $whereGeneral = array("mod_id" => "IS NULL");
+$matrice = array();
 foreach($listFunctions as $curr_func) {
   foreach($curr_func->_ref_users as $curr_user) {
     $permModule = new CPermModule();
