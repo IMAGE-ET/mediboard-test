@@ -1131,6 +1131,7 @@ div.tooltip {
   padding: 0px;
   margin-left: 20px;
   position: absolute;
+  z-index: 30;
 }
 
 div.tooltip table.decoration {
@@ -2930,6 +2931,7 @@ table.tbl th.traitement {
   border: 1px solid #999;
   background: #eee;
   border-collapse: separate;
+  z-index: 30;
 }
 
 .time-picker table {
