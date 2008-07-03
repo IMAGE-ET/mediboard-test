@@ -141,6 +141,7 @@ Main.add( function(){
   
   <br />
   
+  {{if $prescription->object_id}}
   <!-- Affichage de l'historique -->
   <table class="tbl">
 		{{foreach from=$historique key=type_prescription item=hist_prescription}}
@@ -212,7 +213,7 @@ Main.add( function(){
 			{{/foreach}}
 		{{/foreach}}
 	</table>
-	  
+	{{/if}}  
   
 <script type="text/javascript">
 

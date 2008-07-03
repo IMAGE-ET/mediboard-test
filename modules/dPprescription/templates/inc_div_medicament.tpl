@@ -340,6 +340,7 @@ testPharma = function(line_id){
 
   <br />
 
+{{if $prescription->object_id}}
 <!-- Affichage de l'historique des prescriptions precedentes -->
 <table class="tbl">
 {{foreach from=$historique key=type_prescription item=hist_prescription}}
@@ -400,7 +401,7 @@ testPharma = function(line_id){
   {{/foreach}}
 {{/foreach}}
 </table>
-
+{{/if}}
 
 <script type="text/javascript">
 

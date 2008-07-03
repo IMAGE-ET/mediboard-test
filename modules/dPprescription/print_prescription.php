@@ -43,12 +43,7 @@ $praticien->loadRefsFwd();
 
 
 // Chargement de toutes les categories
-$categories = array();
-$categorie = new CCategoryPrescription();
-$cats = $categorie->loadList();
-foreach($cats as $key => $cat){
-	$categories["cat".$key] = $cat;
-}
+$categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Chargement de la liste des executants
 $executant = new CExecutantPrescriptionLine();
@@ -116,6 +111,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 $linesElt = array();
 
 // Initialisation du tableau
+if(count($prescription->_ref_lines_elements_comments)){
 foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
@@ -148,9 +144,10 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 		}
 	}
 }
-
+}
 
 // Parcours des elements
+if(count($prescription->_ref_lines_elements_comments)){
 foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_element){
 	foreach($chap_element as $name_cat => $cat_element){
 		foreach($cat_element as $type => $elements){
@@ -193,7 +190,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 		}
   }
 }
-
+}
 
 
 // Création du template

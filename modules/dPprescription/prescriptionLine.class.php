@@ -258,7 +258,7 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Duplication d'une ligne
    */
-  function duplicateLine($praticien_id, $prescription_id, $debut, $time_debut) {
+  function duplicateLine($praticien_id, $prescription_id, $debut="", $time_debut="") {
     global $AppUI;
     
     // Chargement de la ligne de prescription

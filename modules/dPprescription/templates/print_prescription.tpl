@@ -192,7 +192,7 @@ function pageMain(){
 	     {{foreach from=$elements.ald key=name_cat item=_elements_ald name="foreach_elts_ald"}}  
 	        {{foreach from=$_elements_ald  item=_element_ald name=foreach_elt_ald}}
 	           {{if $smarty.foreach.foreach_elt_ald.first}}
-	           {{assign var=category value=$categories.$name_cat}}
+	           {{assign var=category value=$categories.$name_chap.$name_cat}}
 		         <strong>{{$category->nom}}</strong>
 		         {{/if}}
 
@@ -220,7 +220,7 @@ function pageMain(){
 	     {{foreach from=$elements.no_ald key=name_cat item=_elements_no_ald name="foreach_elts_no_ald"}}
 	       {{foreach from=$_elements_no_ald  item=_element_no_ald name=foreach_elt_no_ald}}
 	           {{if $smarty.foreach.foreach_elt_no_ald.first}}
-	           {{assign var=category value=$categories.$name_cat}}
+	           {{assign var=category value=$categories.$name_chap.$name_cat}}
 		         <strong>{{$category->nom}}</strong>
 		         {{/if}}
 		
