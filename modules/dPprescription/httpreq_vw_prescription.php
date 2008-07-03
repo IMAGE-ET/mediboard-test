@@ -9,9 +9,6 @@
 
 global $AppUI, $can, $m;
 
-$chronoPHP = new Chronometer();
-$chronoPHP->start();
-
 $can->needsRead();
 
 $mbProduit = new CBcbProduit();
@@ -114,7 +111,6 @@ if($prescription->_id){
 	// Chargement de l'historique
   $historique = $prescription->loadRefsLinesHistorique();
 	
- 
   // Chargement des elements et commentaires d'elements
   $prescription->loadRefsLinesElementsComments();
   foreach($prescription->_ref_lines_elements_comments as $name_chap => $cat_by_chap){
@@ -125,16 +121,15 @@ if($prescription->_id){
   			}
   		}
   	}
-  }
-    	
+  }    	
   // Calcul du nombre d'elements dans la prescription
 	$prescription->countLinesMedsElements($praticien_sortie_id);
 }
 
 // Chargement des medicaments et commentaires de medicament
-if ($full_mode || $chapitre == "medicament") {
+if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
   if ($prescription->_id) {
-	  if ($full_mode || $chapitre == "medicament") {
+	  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
 			$prescription->loadRefsLinesMedComments();
 		  foreach($prescription->_ref_lines_med_comments as $type => $lines_by_type){
 		  	foreach($lines_by_type as $med_id => $_line_med){
@@ -159,9 +154,6 @@ if ($full_mode || $chapitre == "medicament") {
 	  
 	  // Pour une prescription non protocole
 	  if ($prescription->object_id) {
-			// Chargement des fovoris 
-		  $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
-		  
 			// Chargement du patient
 		  $object->loadRefPatient();
 			$patient =& $object->_ref_patient;
@@ -230,6 +222,12 @@ if ($full_mode || $chapitre == "medicament") {
 	}
 }
 	
+
+// Chargement des fovoris 
+if($prescription->_id){
+  $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
+}
+
 if($mode_protocole){
 	// Chargement de la liste des praticiens
   $praticien = new CMediusers();
@@ -281,9 +279,6 @@ foreach($mins as &$min){
 
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = mbDate();
-
-$chronoPHP->stop("PHP");
-$chronoPHP->start();
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -369,7 +364,5 @@ if(!$refresh_pharma && !$mode_protocole){
 	}
 }
 
-$chronoPHP->stop("Smarty");
-mbTrace($chronoPHP);
 
 ?>

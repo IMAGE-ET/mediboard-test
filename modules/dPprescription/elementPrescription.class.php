@@ -52,7 +52,7 @@ class CElementPrescription extends CMbObject {
             AND prescription_line_element.element_prescription_id = element_prescription.element_prescription_id
             AND element_prescription.category_prescription_id = category_prescription.category_prescription_id
             AND category_prescription.chapitre = '$category'
-            AND prescription.praticien_id = $praticien_id
+            AND prescription_line_element.praticien_id = '$praticien_id'
             AND prescription.object_id IS NOT NULL
             GROUP BY prescription_line_element.element_prescription_id
             ORDER BY total DESC

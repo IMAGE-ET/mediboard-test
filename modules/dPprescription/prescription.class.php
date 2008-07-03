@@ -431,7 +431,7 @@ class CPrescription extends CMbObject {
   	foreach($this->_ref_prescription_lines_element as $line){
   		$category = new CCategoryPrescription();
   		$category->load($line->_ref_element_prescription->category_prescription_id);
-  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["$category->_id"]["element"][] = $line;	
+  		$this->_ref_prescription_lines_element_by_cat[$category->chapitre]["cat-$category->_id"]["element"][] = $line;	
    	}
   	ksort($this->_ref_prescription_lines_element_by_cat);
   }
@@ -479,7 +479,7 @@ class CPrescription extends CMbObject {
   		  } else {
   		  	$chapitre = "medicament";
   		  }
-        $this->_ref_prescription_lines_comment[$chapitre]["$_line_comment->category_prescription_id"]["comment"][] = $_line_comment;
+        $this->_ref_prescription_lines_comment[$chapitre]["cat-$_line_comment->category_prescription_id"]["comment"][] = $_line_comment;
         $this->_praticiens[$_line_comment->praticien_id] = $_line_comment->_ref_praticien->_view;
     }		
   }
@@ -502,6 +502,7 @@ class CPrescription extends CMbObject {
   	unset($this->_ref_prescription_lines_comment["medicament"]);
   	
   	// Fusion des tableaux d'element et de commentaire 
+    
   	$this->_ref_lines_elements_comments = array_merge_recursive($this->_ref_prescription_lines_element_by_cat, $this->_ref_prescription_lines_comment);
     
   	foreach($this->_ref_lines_elements_comments as &$chapitre){
@@ -539,6 +540,7 @@ class CPrescription extends CMbObject {
   	$listFavoris["medicament"] = CPrescription::getFavorisMedPraticien($praticien_id);
   	$category = new CCategoryPrescription();
     foreach($category->_specs["chapitre"]->_list as $chapitre){
+    	
   	  $listFavoris[$chapitre] = array();
   	  $favoris[$chapitre] = CElementPrescription::getFavoris($praticien_id, $chapitre);	  
     }
