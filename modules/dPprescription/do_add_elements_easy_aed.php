@@ -21,6 +21,8 @@ $unite_fois         = mbGetValueFromPost("unite_fois");
 $moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
 $nb_tous_les        = mbGetValueFromPost("nb_tous_les");
 $unite_tous_les     = mbGetValueFromPost("unite_tous_les");
+$mode_protocole     = mbGetValueFromPost("mode_protocole","0");
+$mode_pharma        = mbGetValueFromPost("mode_pharma","0");
 
 $praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 
@@ -101,7 +103,13 @@ foreach($lines as $cat_name => $lines_by_cat){
 	}
 }
 
-echo "<script type='text/javascript'>window.opener.Prescription.reload($prescription_id)</script>";
+// Reload en full mode
+if($mode_protocole || $mode_pharma){
+echo "<script type='text/javascript'>window.opener.Prescription.reload('$prescription_id','','','$mode_protocole','$mode_pharma')</script>";
+} else {
+echo "<script type='text/javascript'>window.opener.Prescription.reloadPrescSejour('$prescription_id')</script>";
+	
+}
 echo $AppUI->getMsg();
 exit();
 

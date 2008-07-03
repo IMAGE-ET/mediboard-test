@@ -1,21 +1,14 @@
 var Prescription = {
 	// Multiples occurences de la même widget
   suffixes: [],
-  addEquivalent: function(code, line_id, mode_pharma){
+  addEquivalent: function(code, line_id, mode_pharma, mode_protocole){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_substitute_line");
     url.addParam("code_cip", code);
     url.addParam("line_id", line_id);
     url.addParam("mode_pharma", mode_pharma);
+    url.addParam("mode_protocole", mode_protocole);
     url.requestUpdate("systemMsg", { waitingText : null });
-    /*
-    Prescription.delLineWithoutRefresh(line_id);
-    // Suppression des champs de addLine
-    var oForm = document.addLine;
-    oForm.prescription_line_medicament_id.value = "";
-    oForm.del.value = "";
-    Prescription.addLine(code);
-    */
   },
   applyProtocole: function(prescription_id, protocole_id){
     var url = new Url;
@@ -206,7 +199,7 @@ var Prescription = {
       if(mode_pharma == "1"){
           urlPrescription.requestUpdate("div_medicament", { waitingText : null, onComplete: function(){ Prescription.testPharma(line_id) } });      
       } else {
-	      if(mode_protocole){
+	      if(mode_protocole == "1"){
 	        urlPrescription.requestUpdate("vw_protocole", { waitingText : null });
 	      } else {
 	        if(chapitre){

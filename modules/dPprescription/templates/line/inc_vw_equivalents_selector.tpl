@@ -19,6 +19,6 @@
     this.pop();
   }
   EquivSelector.set = function(code, line_id){
-    Prescription.addEquivalent(code, line_id,'{{$mode_pharma}}');
+    Prescription.addEquivalent(code, line_id,'{{$mode_pharma}}','{{$mode_protocole}}');
   }
 </script>

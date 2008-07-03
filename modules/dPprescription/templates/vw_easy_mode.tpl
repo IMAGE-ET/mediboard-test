@@ -176,6 +176,8 @@ Main.add( function(){
 			  <input type="hidden" name="moment_unitaire_id" value="" />
 			  <input type="hidden" name="nb_tous_les" value="" />
 			  <input type="hidden" name="unite_tous_les" value="" />
+			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
+			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
 			  <button type="button" 
 			          class="submit" 
 			          onclick="submitAllElements();">Ajouter les éléments à la prescription</button>

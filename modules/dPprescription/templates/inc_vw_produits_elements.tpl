@@ -11,10 +11,12 @@ if($('alertes')){
 }
 
 // Lancement du mode de saisie popup
-viewEasyMode = function(){
+viewEasyMode = function(mode_protocole, mode_pharma){
   var url = new Url();
   url.setModuleAction("dPprescription","vw_easy_mode");
   url.addParam("prescription_id", '{{$prescription->_id}}');
+  url.addParam("mode_protocole", mode_protocole);
+  url.addParam("mode_pharma", mode_pharma);
   url.popup(900,500,"Mode grille");
 }
 
@@ -132,7 +134,7 @@ viewEasyMode = function(){
     <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
   </select>
   {{/if}}
-  <button class="new" type="button" onclick="viewEasyMode();" style="float: right">Mode grille</button>
+  <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');" style="float: right">Mode grille</button>
   
 {{/if}}
 

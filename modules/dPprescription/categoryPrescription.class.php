@@ -77,7 +77,7 @@ class CCategoryPrescription extends CMbObject {
     $order = "nom";
     $categories = $categorie->loadMatchingList($order);
     foreach ($categories as &$categorie) {
-		  $categories_par_chapitre[$categorie->chapitre]["cat-$categorie->_id"] =& $categorie;
+		  $categories_par_chapitre[$categorie->chapitre]["cat$categorie->_id"] =& $categorie;
 		} 
 
   	ksort($categories_par_chapitre);

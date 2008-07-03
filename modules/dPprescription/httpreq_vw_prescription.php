@@ -142,7 +142,7 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 	  $object =& $prescription->_ref_object;
 	  $object->loadRefPrescriptionTraitement();
 	  $prescription_traitement =& $object->_ref_prescription_traitement;
-	  if ($full_mode || $chapitre == "medicament") {
+	  if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) {
 			 if($prescription_traitement->_id){
 				$prescription_traitement->loadRefsLinesMed();
 				foreach($prescription_traitement->_ref_prescription_lines as &$line){
@@ -225,7 +225,9 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 
 // Chargement des fovoris 
 if($prescription->_id){
-  $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
+	if($prescription->_current_praticien_id){
+    $listFavoris = CPrescription::getFavorisPraticien($prescription->_current_praticien_id);
+	}
 }
 
 if($mode_protocole){
@@ -316,6 +318,8 @@ $smarty->assign("protocole_line"     , $protocole_line);
 $smarty->assign("mode_protocole"     , $mode_protocole);
 $smarty->assign("prescriptions_sejour", $prescriptions_sejour);
 $smarty->assign("dossier_medical"    , $dossier_medical);
+
+
 if($full_mode){
 	$_sejour = new CSejour();
 	$_sejour->load($sejour_id);

@@ -148,7 +148,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 }
 
 // Lancement du refresh des lignes de la prescription
-echo "<script type='text/javascript'>Prescription.reload($prescription_id)</script>";
+echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
 echo $AppUI->getMsg();
 exit();   
 

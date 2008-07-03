@@ -12,6 +12,7 @@ global $AppUI;
 $code_cip    = mbGetValueFromGet("code_cip");
 $line_id     = mbGetValueFromGet("line_id");
 $mode_pharma = mbGetValueFromGet("mode_pharma"); 
+$mode_protocole = mbGetValueFromGet("mode_protocole");
 
 $line = new CPrescriptionLineMedicament();
 $line->load($line_id);
@@ -35,7 +36,11 @@ $msg = $old_line->store();
 $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-store");
 
 // Le passage de la ligne au reload permet de realiser le testPharma (pre-cochage de la case "Accord du praticien")
-echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', '', '', '$mode_pharma','$line->_id')</script>";
+if($mode_protocole || $mode_pharma){
+  echo "<script type='text/javascript'>Prescription.reload($line->prescription_id, '', '', '$mode_protocole', '$mode_pharma','$line->_id')</script>";
+} else {
+  echo "<script type='text/javascript'>Prescription.reloadPrescSejour($line->prescription_id)</script>";
+}
 echo $AppUI->getMsg();
 exit();
 

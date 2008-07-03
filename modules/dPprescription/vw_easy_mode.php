@@ -18,6 +18,9 @@ foreach($chapitres as &$categories){
 }
 
 $prescription_id = mbGetValueFromGet("prescription_id");
+$mode_protocole  = mbGetValueFromGet("mode_protocole");
+$mode_pharma     = mbGetValueFromGet("mode_pharma");
+
 
 // chargement de la prescription
 $prescription = new CPrescription();
@@ -59,6 +62,8 @@ $smarty->assign("class_category", new CCategoryPrescription());
 $smarty->assign("medicaments", $medicaments);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("prescription_id", $prescription_id);
+$smarty->assign("mode_protocole", $mode_protocole);
+$smarty->assign("mode_pharma", $mode_pharma);
 $smarty->display("../../dPprescription/templates/vw_easy_mode.tpl");
 
 ?>

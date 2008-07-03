@@ -34,7 +34,11 @@ foreach($prescription_traitement->_ref_prescription_lines as &$line) {
 	}
 }
 
-echo "<script type='text/javascript'>Prescription.reload($prescription->_id, '', '', '', '$mode_pharma')</script>";
+if($mode_pharma){
+  echo "<script type='text/javascript'>Prescription.reload($prescription->_id, '', '', '', '$mode_pharma')</script>";
+} else {
+  echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription->_id)</script>";
+}
 echo $AppUI->getMsg();
 exit();
 
