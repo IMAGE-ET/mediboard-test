@@ -92,7 +92,7 @@ Main.add( function(){
   </div>
 {{/if}}
 
-
+{{if is_array($prescription->_ref_lines_elements_comments) && array_key_exists($element, $prescription->_ref_lines_elements_comments)}}
 
   {{assign var=lines value=$prescription->_ref_lines_elements_comments.$element}}
   {{assign var=nb_lines value=0}}
@@ -132,12 +132,14 @@ Main.add( function(){
 	    {{/if}}
 	  {{/foreach}}
 	  </table>
+	  {{/foreach}}
 	  
-  {{foreachelse}}
+	  
+  {{else}}
   <div class="big-info"> 
      Il n'y a aucun élément de type "{{tr}}CCategoryPrescription.chapitre.{{$element}}{{/tr}}" dans cette prescription.
   </div>
-  {{/foreach}}
+  {{/if}}
   
   <br />
   
@@ -145,6 +147,7 @@ Main.add( function(){
   <!-- Affichage de l'historique -->
   <table class="tbl">
 		{{foreach from=$historique key=type_prescription item=hist_prescription}}
+		  {{if array_key_exists($element, $hist_prescription->_ref_lines_elements_comments)}}
 	    {{foreach from=$hist_prescription->_ref_lines_elements_comments.$element item=_hist_lines name="foreach_hist_elt"}}
 		    {{if $smarty.foreach.foreach_hist_elt.first}}
 			    <tr>
@@ -211,10 +214,11 @@ Main.add( function(){
 			    {{/foreach}}
 			  {{/foreach}}
 			{{/foreach}}
+			{{/if}}
 		{{/foreach}}
 	</table>
-	{{/if}}  
-  
+	
+  {{/if}}
 <script type="text/javascript">
 
 Prescription.refreshTabHeader('div_{{$element}}','{{$prescription->_counts_by_chapitre.$element}}');

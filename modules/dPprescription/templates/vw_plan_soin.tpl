@@ -130,7 +130,7 @@ ul {
   <!-- Affichage des elements -->
   {{foreach from=$all_lines_element key=name_chap item=elements_chap}}
     {{foreach from=$elements_chap key=name_cat item=elements_cat}}
-      {{assign var=categorie value=$categories.$name_cat}}
+      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
       {{foreach from=$elements_cat item=_element}}
         {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}
        {{assign var=element_id value=$element->_id}}

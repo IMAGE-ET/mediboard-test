@@ -48,7 +48,7 @@ var Prescription = {
     var oFormDate = document.selDateLine;
     if(oFormDate && oFormDate.debut.value){
       oForm.debut.value = oFormDate.debut.value;
-      oForm.time_debut.value = oFormDate.debut.value;  
+      oForm.time_debut.value = oFormDate.time_debut.value;  
     }
     
     if(debut){

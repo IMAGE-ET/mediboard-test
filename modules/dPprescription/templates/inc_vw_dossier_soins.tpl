@@ -113,7 +113,7 @@ printDossierSoin = function(prescription_id, date){
   <!-- Affichage des elements -->
   {{foreach from=$lines_element key=name_chap item=elements_chap}}
     {{foreach from=$elements_chap key=name_cat item=elements_cat}}
-      {{assign var=categorie value=$categories.$name_cat}}
+      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
       {{foreach from=$elements_cat item=_element name="foreach_cat"}}
         {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}
       

@@ -75,11 +75,7 @@ foreach($dates as $_date){
 $tabHours = array("08","12","14","18","22","24","02","06");
 
 // Chargement des categories
-$categorie = new CCategoryPrescription();
-$cats = $categorie->loadList();
-foreach($cats as $key => $cat){
-	$categories["cat".$key] = $cat;
-}
+$categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Création du template
 $smarty = new CSmartyDP();

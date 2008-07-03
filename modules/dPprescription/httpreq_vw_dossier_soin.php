@@ -34,11 +34,9 @@ $list_prises_element = array();
 $nb_produit_by_cat = array();
 
 // Chargement des categories
-$categorie = new CCategoryPrescription();
-$cats = $categorie->loadList();
-foreach($cats as $key => $cat){
-	$categories["cat".$key] = $cat;
-}
+// Chargement des categories pour chaque chapitre
+$categories = CCategoryPrescription::loadCategoriesByChap();
+
 
 if($prescription->_id){
 	// Calcul du plan de soin pour la journée $date
