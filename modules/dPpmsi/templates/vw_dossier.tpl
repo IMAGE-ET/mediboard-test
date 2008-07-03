@@ -481,12 +481,12 @@ function pageMain() {
                 <td class="button">{{mb_value object=$curr_acte field=code_phase}}</td>
                 <td class="button">{{mb_value object=$curr_acte field=modificateurs}}</td>
                 <td class="button">
-                  <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+                  <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
                   <input type="hidden" name="m" value="dPsalleOp" />
                   <input type="hidden" name="dosql" value="do_acteccam_aed" />
                   <input type="hidden" name="del" value="0" />
                   <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-                  <select name="code_association" onchange="onSubmitFormAjax(this.form)">
+                  <select name="code_association" onchange="this.form.onsubmit()">
                     <option value="" {{if !$curr_acte->code_association}}selected="selected"{{/if}}> </option>
                     <option value="1" {{if $curr_acte->code_association == 1}}selected="selected"{{/if}}>1</option>
                     <option value="2" {{if $curr_acte->code_association == 2}}selected="selected"{{/if}}>2</option>

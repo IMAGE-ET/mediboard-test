@@ -70,7 +70,7 @@ class CActeCCAM extends CActe {
     $specs["execution"]           = "notNull dateTime";
     $specs["modificateurs"]       = "str maxLength|4";
     $specs["commentaire"]         = "text";
-    $specs["code_association"]    = "num minMax|1|5";
+    $specs["code_association"]    = "enum list|1|2|3|4|5";
     $specs["rembourse"]           = "bool default|1";
     $specs["regle"]               = "bool";
     $specs["signe"]               = "bool default|0";
