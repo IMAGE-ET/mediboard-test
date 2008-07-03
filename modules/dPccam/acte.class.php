@@ -99,6 +99,8 @@ class CActe extends CMbMetaObject {
     if(!$this->_check_coded){
         return;
     }
+    $this->completeField("object_class");
+    $this->completeField("object_id");
     $object = new $this->object_class;
     $object->load($this->object_id);
     if($object->_coded == "1") {

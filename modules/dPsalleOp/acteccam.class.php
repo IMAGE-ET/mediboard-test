@@ -103,7 +103,11 @@ class CActeCCAM extends CActe {
       // dans le cas de la modification
       $where["acte_id"]     = "<> '$this->_id'";  
     }
-    
+    $this->completeField("code_acte");
+    $this->completeField("object_class");
+    $this->completeField("object_id");
+    $this->completeField("code_activite");
+    $this->completeField("code_phase");
     $where["code_acte"]     = "= '$this->code_acte'";
     $where["object_class"]  = "= '$this->object_class'";
     $where["object_id"]     = "= '$this->object_id'";
