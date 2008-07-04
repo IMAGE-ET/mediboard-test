@@ -48,6 +48,12 @@ class CCibleTransmission extends CMbObject {
     $this->_view = $this->libelle;
   }
   
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+    $this->_ref_categorie_cible_transmission = new CCategorieCibleTransmission();
+    $this->_ref_categorie_cible_transmission->load($this->categorie_cible_transmission_id);
+  }
+  
 }
 
 ?>

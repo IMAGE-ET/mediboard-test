@@ -30,6 +30,7 @@ class CTransmissionMedicale extends CMbObject {
   // References
   var $_ref_sejour = null;
   var $_ref_user   = null;
+  var $_ref_cible   = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -56,6 +57,9 @@ class CTransmissionMedicale extends CMbObject {
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
     $this->_view = "Transmission faite par ".$this->_ref_user->_view;
+    $this->_ref_cible = new CCibleTransmission();
+    $this->_ref_cible->load($this->cible_transmission_id);
+    $this->_ref_cible->loadRefsFwd();
   }
   
   function getPerm($perm) {
