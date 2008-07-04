@@ -1,8 +1,3 @@
-
-</div>
-</td>
-</tr>
-</table>
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : 
@@ -23,6 +18,12 @@
     {{$performance.autoload}} classes auto-chargées
   <br />
   
+  Objets par class :
+  {{foreach from=$performance.objectCache key=objectClass item=objectCount}}
+  &ndash; {{$objectCount}} {{$objectClass}}
+  {{/foreach}}
+  <br />
+
   Requêtes SQL : 
   {{foreach from=$performance.dataSources key=dsn item=dataSource}}
     &ndash; {{$dataSource.count}} 
@@ -32,14 +33,18 @@
   <br />
 
   Utilisation CCAM : 
-    {{$performance.ccam.useCount.1}} light,
+    {{$performance.ccam.useCount.1}} light , 
     {{$performance.ccam.useCount.2}} medium,
-    {{$performance.ccam.useCount.3}} full &ndash;
+    {{$performance.ccam.useCount.3}} full  &ndash;
     {{$performance.ccam.cacheCount}} Appels au cache
   <br />
   Adresse IP : {{$userIP}}
 </div>
 {{/if}}
+
+    </td>
+  </tr>
+</table>
 
 {{if $demoVersion && !$offline}}
 <div style="margin: 10px; float:right">

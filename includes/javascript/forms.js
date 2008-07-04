@@ -757,39 +757,40 @@ var TimePicker = Class.create({
       // Long-short switcher
       str += '<tr><td><div class="switch">&gt;&gt;</div></td></tr>';
       picker.insert(str);
+  
+      // Behaviour
+        // on click on the switch "long-short"
+      picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
+      
+        // on click on the hours 
+      picker.select('.hour td').each(function(hour) {
+        hour.observe('click', element.setHour.bindAsEventListener(element));
+      });
+      
+        // on click on the minutes
+      picker.select('.minute td').each(function(minute) {
+        minute.observe('click', element.setMinute.bindAsEventListener(element));
+      });
+      
+      this.highlight();
     }
-
-    // Behaviour
       // on click on the trigger
-    this.trigger.observe('click', this.togglePicker.bindAsEventListener(this));
-    
-      // on click on the switch "long-short"
-    picker.select('.switch')[0].observe('click', element.toggleShortLong.bindAsEventListener(element));
-    
-      // on click on the hours 
-    picker.select('.hour td').each(function(hour) {
-      hour.observe('click', element.setHour.bindAsEventListener(element));
-    });
-    
-      // on click on the minutes
-    picker.select('.minute td').each(function(minute) {
-      minute.observe('click', element.setMinute.bindAsEventListener(element));
-    });
-    
-    this.highlight();
+    this.trigger.observe('click', element.togglePicker.bindAsEventListener(element));
   }, 
   
   // Show the selector
-  togglePicker: function(e) {
+  togglePicker: function() {
     var element = this;
     var picker = $(this.pickerId);
     
+    // We hide every other picker
     $$('table.time-picker').each(function(o){if (o.id != element.pickerId) o.hide();});
     
     // The trigger position
     this.position = this.trigger.cumulativeOffset();
     this.position.top += this.trigger.getDimensions().height;
-    
+
+    // The picker position
     picker.toggle().setStyle({
       left: this.position.left+'px',
       top: this.position.top+'px'
@@ -846,6 +847,6 @@ var TimePicker = Class.create({
     var picker = $(this.pickerId);
     var short = picker.select('.short')[0].toggle();
     picker.select('.long')[0].toggle();
-    picker.select('.switch')[0].update(short.visible() ? '&gt;&gt;' : '&lt;&lt;');
+    e.element().update(short.visible() ? '&gt;&gt;' : '&lt;&lt;');
   }
 });

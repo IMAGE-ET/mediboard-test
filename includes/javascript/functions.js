@@ -98,20 +98,22 @@ var WaitingMessage = {
     // Display waiting text
     var vpd = document.viewport.getDimensions();
     var etd = eText.getDimensions();
-    eText.setOpacity(0.8);
-    eText.style.top  = (vpd.height - etd.height)/2 + "px";
-    eText.style.left = (vpd.width  - etd.width) /2 + "px";
-    eText.show();
+    eText.setStyle({
+      top: (vpd.height - etd.height)/2 + "px",
+      left: (vpd.width  - etd.width) /2 + "px",
+      zIndex: 101,
+      opacity: 0.8
+    }).show();
     
     // Display waiting mask
-    eMask.setOpacity(0.2);
     eMask.setStyle({
       top: "0",
       left: "0",
       height: eDoc.scrollHeight + "px",
-      width: eDoc.scrollWidth + "px"
-    });
-    eMask.show();
+      width: eDoc.scrollWidth + "px",
+      zIndex: 100,
+      opacity: 0.2
+    }).show();
   },
   
   cover: function(element) {
@@ -124,11 +126,13 @@ var WaitingMessage = {
     
     element = $(element);
     
-    var eDiv = $(document.createElement("div"));
-    eDiv.absolutize();
-    eDiv.style.backgroundColor = "#000";
-    eDiv.style.border = "none";
-    eDiv.setOpacity(0.1);
+    var eDiv = new Element("div").
+                   absolutize().
+                   setStyle({
+                     backgroundColor: "#000",
+                     border: "none",
+                     opacity: 0.1
+                   });
     Position.clone(element, eDiv);
     
     var descendant = $(element).firstDescendant();
@@ -136,12 +140,12 @@ var WaitingMessage = {
     /** If the element is a TR, we add the div to the firstChild to avoid a bad page render (a div in a <table> or a <tr>)*/
     if (descendant) {
       if(descendant.tagName.toString().toLowerCase() == "tr") {
-        descendant.appendChild(eDiv);
+        descendant.insert({bottom: eDiv});
         return;
       }
     }
 
-    $(element).appendChild(eDiv);
+    element.insert({bottom: eDiv});
   }
 }
 
@@ -204,8 +208,7 @@ var SystemMessage = {
     }
       
     // Ensure visible        
-    oDiv.show();
-    oDiv.setOpacity(1);
+    oDiv.show().setOpacity(1);
     
     // Only hide on type 'message'
     this.checkType();
@@ -246,7 +249,7 @@ var Console = {
   id: "console",
 
   hide: function() {
-    Element.hide($(this.id));
+    $(this.id).hide();
   },
   
   trace: function(sContent, sClass, nIndent) {
@@ -260,7 +263,7 @@ var Console = {
     eDiv.innerHTML = sContent.toString().escapeHTML();
 
     if (nIndent) {
-      Element.setStyle(eDiv, { marginLeft: nIndent + "em" } );
+      eDiv.setStyle({ marginLeft: nIndent + "em" });
     }
 
     var eParent = $(this.id);
@@ -473,7 +476,7 @@ var PairEffect = Class.create({
     Assert.that(oTrigger, "Trigger element '%s' is undefined ", this.oOptions.idTrigger);
   
     // Initialize the effect
-    Event.observe(oTrigger, "click", this.flip.bind(this));
+    oTrigger.observe("click", this.flip.bind(this));
   
     // Initialize classnames and adapt visibility
     var aCNs = Element.classNames(oTrigger);
@@ -562,8 +565,8 @@ var TogglePairEffect = Class.create({
   
     // Initialize the effect
     var fShow = this.show.bind(this);
-    Event.observe(oTrigger1, "click", function() { fShow(2); } );
-    Event.observe(oTrigger2, "click", function() { fShow(1); } );
+    oTrigger1.observe("click", function() { fShow(2); } );
+    oTrigger2.observe("click", function() { fShow(1); } );
   	
   	this.show(this.oOptions.idFirstVisible);
   },
@@ -717,26 +720,7 @@ var ObjectTooltip = Class.create({
   },
   
   reposition: function() {
-    var eDiv = $(this.sDiv);
-    eDiv.unoverflow();
-    /*
-    var iDivDim = eDiv.getDimensions(); // Tooltip size
-    
-    var iDivOffset = eDiv.cumulativeOffset(); // Tooltip position
-    iDivOffset.right = iDivOffset[2] = iDivOffset.left + iDivDim.width; // Tooltip right offset
-    iDivOffset.bottom = iDivOffset[3] = iDivOffset.top + iDivDim.height; // Tooltip bottom offset
-    
-    var iWinDim = document.viewport.getDimensions(); // Viewport size
-    
-    // If the tooltip exceeds the viewport on the right
-    if (iDivOffset.right > iWinDim.width) {
-      eDiv.setStyle({marginLeft: Math.max(iWinDim.width - iDivOffset.right, -iDivOffset.left) + 'px'});
-    }
-    
-    // If the tooltip exceeds the viewport on the bottom
-    /*if (iDivOffset.bottom > iWinDim.height) {
-      eDiv.setStyle({marginTop: Math.max(iWinDim.height - iDivOffset.bottom - iDivDim.height, -iDivOffset.top) + 'px'});
-    }*/
+    $(this.sDiv).unoverflow();
   },
   
   load: function() {
@@ -883,11 +867,8 @@ Object.extend(Calendar, {
 	  var sDate = date.toDATE();
 	  var aStyles = [];
 	
-	  if (this.limit.start && this.limit.start > sDate) {
-	    aStyles.push("disabled");
-	  }
-	
-	  if (this.limit.stop && this.limit.stop < sDate) {
+	  if (this.limit.start && this.limit.start > sDate ||
+        this.limit.stop && this.limit.stop < sDate) {
 	    aStyles.push("disabled");
 	  }
 	
@@ -895,11 +876,8 @@ Object.extend(Calendar, {
 	    aStyles.push("current");
 		}
 		
-	  if (this.current.start && this.current.start > sDate) {
-	    aStyles = aStyles.without("current");
-	  }
-	
-	  if (this.current.stop && this.current.stop < sDate) {
+	  if (this.current.start && this.current.start > sDate ||
+        this.current.stop && this.current.stop < sDate) {
 	    aStyles = aStyles.without("current");
 	  }
 	  
@@ -974,7 +952,7 @@ function regFieldCalendar(sFormName, sFieldName, bTime) {
   
   var sInputId = sFormName + "_" + sFieldName;
   
-  if (!document.getElementById(sInputId)) {
+  if (!$(sInputId)) {
     return;
   }
 
