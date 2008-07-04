@@ -120,11 +120,11 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
   $chapitre = $line_element->_ref_element_prescription->_ref_category_prescription->chapitre;
   
   if($chapitre != "dmi"){
-	  $signe = ($line->decalage_line >= 0) ? "+" : "";
-	  if($line->decalage_line){
-	    $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
+	  $signe = ($line_element->decalage_line >= 0) ? "+" : "";
+	  if($line_element->decalage_line){
+	    $line_element->debut = mbDate("$signe $line_element->decalage_line DAYS", $date);	
 	  } else {
-	  	$line->debut = $date;
+	  	$line_element->debut = $date;
 	  }	
   }
   
