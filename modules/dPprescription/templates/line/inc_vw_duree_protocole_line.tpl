@@ -9,16 +9,16 @@
       <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
       
       <!-- Durée -->
-      Durée de 
-      {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3"
-                 onchange="submitFormAjax(this.form, 'systemMsg');"}}
-			jours
-			
-			<!-- Décalage -->
-			à partir de 
-			
+      {{if $element != "anapath" && $element != "imagerie" && $element != "consult"}}
+	      Durée de 
+	      {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3"
+	                 onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				jour(s)
+				<!-- Décalage -->
+				à partir de 
+			{{/if}}
 			{{if $line->_ref_prescription->object_class == "CSejour"}}
-			{{mb_field object=$line field=jour_decalage onchange="submitFormAjax(this.form, 'systemMsg');"}}
+			{{mb_field object=$line field=jour_decalage onchange="submitFormAjax(this.form, 'systemMsg');" defaultOption="&mdash Début"}}
 			{{else}}
 			J
 			{{/if}}
