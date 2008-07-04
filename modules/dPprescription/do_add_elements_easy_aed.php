@@ -72,7 +72,8 @@ foreach($lines as $cat_name => $lines_by_cat){
 	    $_line->duree = $duree;
 	    $_line->unite_duree = $unite_duree;
 		  $_line->store();
-		  if($cat_name != "dm"){
+		  
+		  //if($cat_name != "dm"){
 				$prise = new CPrisePosologie();
 			  $prise->object_id = $_line->_id;
 			  $prise->object_class = $_line->_class_name;	
@@ -100,7 +101,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $msg = $prise->store();  	
 			    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 			  } 
-		  }
+		  //}
 		}
 	}
 }

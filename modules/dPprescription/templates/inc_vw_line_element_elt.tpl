@@ -83,7 +83,7 @@
   </tr>
   
   <!-- Affichage des pososlogies -->
-  {{if $category->chapitre != "dm" && $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
+  {{if $category->chapitre != "anapath" && $category->chapitre != "consult" && $category->chapitre != "imagerie"}}
   <tr>
     <td colspan="3">
       {{if $line->_can_modify_poso}}

@@ -641,7 +641,7 @@ class CPrescription extends CMbObject {
 		  			foreach($_elements as &$_line_element){
 			        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
 			        	// Si l'element est un DM, on le rajoute dans la liste
-			        	if($name_chap == "dm" || $name_chap == "anapath" || $name_chap == "consult" || $name_chap == "imagerie"){
+			        	if($name_chap == "anapath" || $name_chap == "consult" || $name_chap == "imagerie"){
 						  		$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 						  		$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
 						  	  @$nb_produit_by_cat[$name_cat]++;

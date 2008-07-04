@@ -31,7 +31,7 @@
     {{/if}}
   </tr>
   {{/if}}
-  {{if $chapitre != "dmi" && $chapitre != "anapath" && $chapitre != "dm"}}
+  {{if $chapitre != "dmi" && $chapitre != "anapath"}}
   <tr>
     <td colspan="3">
     Posologie:<br />
