@@ -59,17 +59,20 @@ if(oButton){
 		  
 	  <!-- Cas d'un moment unitaire_id -->
 	  {{if $prise->moment_unitaire_id}}
-	  <!-- Selection du moment -->
-	  <select name="moment_unitaire_id" style="width: 150px" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">      
-	    <option value="">&mdash; Sélection du moment</option>
-	    {{foreach from=$moments key=type_moment item=_moments}}
-	     <optgroup label="{{$type_moment}}">
-	     {{foreach from=$_moments item=moment}}
-	     <option value="{{$moment->_id}}" {{if $prise->moment_unitaire_id == $moment->_id}}selected="selected"{{/if}}>{{$moment->_view}}</option>
-	     {{/foreach}}
-	     </optgroup>
-	    {{/foreach}}
-	  </select>
+		  {{$prise->_ref_moment->_view}}
+		  <!-- Selection du moment -->
+		  <!-- 
+		  <select name="moment_unitaire_id" style="width: 150px" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">      
+		    <option value="">&mdash; Sélection du moment</option>
+		    {{foreach from=$moments key=type_moment item=_moments}}
+		     <optgroup label="{{$type_moment}}">
+		     {{foreach from=$_moments item=moment}}
+		     <option value="{{$moment->_id}}" {{if $prise->moment_unitaire_id == $moment->_id}}selected="selected"{{/if}}>{{$moment->_view}}</option>
+		     {{/foreach}}
+		     </optgroup>
+		    {{/foreach}}
+		  </select>
+		   -->
 	  {{/if}}
 	  
 	  <!-- Cas des fois par -->
