@@ -97,7 +97,7 @@ submitPrise = function(oForm, type){
 	    <input type="hidden" name="prise_posologie_id" value="" />
 	    <input type="hidden" name="object_id" value="{{$line->_id}}" />
 	    <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
-		  Quantité: 
+
 		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseFoisPar$type$line_id}}
 		  {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
 		  <select name="unite_prise">
@@ -126,7 +126,7 @@ submitPrise = function(oForm, type){
 	  <input type="hidden" name="object_id" value="{{$line->_id}}" />
 	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  
-	  Quantité: 
+
 	  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseMoment$type$line_id}}
 	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
 		  <select name="unite_prise">
@@ -165,7 +165,7 @@ submitPrise = function(oForm, type){
 	    <input type="hidden" name="object_id" value="{{$line->_id}}" />
         <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  
-        Quantité: 
+
 		  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}
       {{if $line->_class_name == "CPrescriptionLineMedicament"&& $type != "mode_grille"}}
 		    <select name="unite_prise">

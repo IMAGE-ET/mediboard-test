@@ -73,7 +73,6 @@ foreach($protocole->_ref_prescription_lines as $line){
   } else {
   	$line->debut = $date;
   }
-
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
   $line->creator_id = $AppUI->user_id;

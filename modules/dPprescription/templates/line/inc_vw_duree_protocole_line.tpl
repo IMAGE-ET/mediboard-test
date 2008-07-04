@@ -1,3 +1,4 @@
+
 {{assign var=line_id value=$line->_id}}
 <tr>
   <td></td>
@@ -25,7 +26,7 @@
 			{{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id 
 			           onchange="submitFormAjax(this.form, 'systemMsg');" size="3"}}
 			           (Jours)
-			
+			à {{mb_field object=$line field=time_debut form=editDuree-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
     </form>
     <script type="text/javascript">
       Main.add( function(){
@@ -33,6 +34,5 @@
       } );
     </script>
   </td>
-
-
 </tr>
+
