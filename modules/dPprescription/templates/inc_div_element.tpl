@@ -147,7 +147,7 @@ Main.add( function(){
   <!-- Affichage de l'historique -->
   <table class="tbl">
 		{{foreach from=$historique key=type_prescription item=hist_prescription}}
-		  {{if array_key_exists($element, $hist_prescription->_ref_lines_elements_comments)}}
+		  {{if is_array($hist_prescription->_ref_lines_elements_comments) && array_key_exists($element, $hist_prescription->_ref_lines_elements_comments)}}
 	    {{foreach from=$hist_prescription->_ref_lines_elements_comments.$element item=_hist_lines name="foreach_hist_elt"}}
 		    {{if $smarty.foreach.foreach_hist_elt.first}}
 			    <tr>
