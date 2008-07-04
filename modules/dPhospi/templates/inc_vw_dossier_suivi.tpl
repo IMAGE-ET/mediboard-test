@@ -37,17 +37,6 @@
       {{mb_label object=$transmission field="text"}}
       {{mb_field object=$transmission field="degre"}}
       <br />
-      <select name="cible_transmission_id">
-        <option value="">&mdash; Cible</option>
-        {{foreach from=$listCategoriesCibles item="curr_cat"}}
-        <optgroup label="{{$curr_cat->_view}}">
-          {{foreach from=$curr_cat->_back.cibles item="curr_cible"}}
-          <option value="{{$curr_cible->_id}}">{{$curr_cible->_view}}</option>
-          {{/foreach}}
-        </optgroup>
-        {{/foreach}}
-      </select>
-      <br />
       {{mb_field object=$transmission field="text"}}
       <br />
       <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button>
@@ -91,14 +80,6 @@
       {{/if}}
       <strong>{{$curr_suivi->date|date_format:"%d/%m/%Y à %Hh%M"}} - {{$curr_suivi->_view}}</strong>
       </div>
-      {{if $curr_suivi->cible_transmission_id}}
-      <em>
-        Cible :
-        {{$curr_suivi->_ref_cible->_ref_categorie_cible_transmission->_view}}
-        - {{$curr_suivi->_ref_cible->_view}}
-      </em>
-      <br />
-      {{/if}}
       {{$curr_suivi->text|nl2br}}
     </td>
   {{else}}

@@ -21,7 +21,6 @@ class CTransmissionMedicale extends CMbObject {
   // DB Fields
   var $sejour_id             = null;
   var $user_id               = null;
-  var $cible_transmission_id = null;
   
   var $degre        = null;
   var $date         = null;
@@ -43,7 +42,6 @@ class CTransmissionMedicale extends CMbObject {
   	$specs = parent::getSpecs();
     $specs["sejour_id"]             = "notNull ref class|CSejour";
     $specs["user_id"]               = "notNull ref class|CMediusers";
-    $specs["cible_transmission_id"] = "ref class|CCibleTransmission";
     $specs["degre"]                 = "notNull enum list|low|high default|low";
     $specs["date"]                  = "notNull dateTime";
     $specs["text"]                  = "text";
@@ -57,9 +55,6 @@ class CTransmissionMedicale extends CMbObject {
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
     $this->_view = "Transmission faite par ".$this->_ref_user->_view;
-    $this->_ref_cible = new CCibleTransmission();
-    $this->_ref_cible->load($this->cible_transmission_id);
-    $this->_ref_cible->loadRefsFwd();
   }
   
   function getPerm($perm) {

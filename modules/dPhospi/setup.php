@@ -194,7 +194,16 @@ class CSetupdPhospi extends CSetup {
             ADD INDEX (`cible_transmission_id`)";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.25";
+    $this->makeRevision("0.25");
+    $sql = "DROP TABLE `categorie_cible_transmission`";
+    $this->addQuery($sql);
+    $sql = "DROP TABLE `cible_transmission`";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `transmission_medicale`
+            DROP `cible_transmission_id`";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.26";
   }
 }
 ?>

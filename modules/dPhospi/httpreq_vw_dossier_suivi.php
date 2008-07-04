@@ -39,19 +39,11 @@ foreach($sejour->_back["transmissions"] as $curr_trans) {
 
 krsort($sejour->_ref_suivi_medical);
 
-// Chargement des cibles de transmission
-$categorie = new CCategorieCibleTransmission();
-$listCategoriesCibles = $categorie->loadList();
-foreach($listCategoriesCibles as &$cat) {
-  $cat->loadBackRefs("cibles");
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("observation"         , $observation);
 $smarty->assign("transmission"        , $transmission);
-$smarty->assign("listCategoriesCibles", $listCategoriesCibles);
 $smarty->assign("user"                , $user);
 $smarty->assign("isPraticien"         , $user->isPraticien());
 $smarty->assign("sejour"              , $sejour);
