@@ -7,6 +7,17 @@ printDossierSoin = function(prescription_id, date){
   url.popup(900, 600, "Plan de soin");
 }
 
+addCibleTransmission = function(object_class, object_id, view) {
+  oDiv = $('cibleTrans');
+  if(!oDiv) {
+    return;
+  }
+  oForm = document.forms['editTrans'];
+  $V(oForm.object_class, object_class);
+  $V(oForm.object_id, object_id);
+  oDiv.innerHTML = view;
+  oForm.text.focus();
+}
 
 </script>
 
@@ -55,7 +66,11 @@ printDossierSoin = function(prescription_id, date){
 				    {{if $smarty.foreach.foreach_med.first && $smarty.foreach.foreach_line.first}}
 				    <th rowspan="{{$nb_produit_by_cat.med}}">Medicaments</th>
 				    {{/if}}
-				    <td class="text">{{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}} </td>
+				    <td class="text">
+				      <div onclick="addCibleTransmission('{{$line->_class_name}}', '{{$line->_id}}', '{{$line->_view}}');">
+				      {{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}}
+				      </div>
+				    </td>
 				    <td class="text">   
 					    {{assign var=line_id value=$line->_id}}
 					    {{if array_key_exists($line_id, $prises_med)}}
@@ -122,7 +137,11 @@ printDossierSoin = function(prescription_id, date){
 		        <th rowspan="{{$nb_produit_by_cat.$name_cat}}">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}</th>
 		      {{/if}}
     
-			    <td class="text">{{$element->_view}}</td>
+			    <td class="text">
+			      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');">
+			      {{$element->_view}}
+			      </div>
+			    </td>
    	      
    	      <td class="text">
 				    {{assign var=element_id value=$element->_id}}

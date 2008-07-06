@@ -13,23 +13,23 @@
  * @abstract Permet d'ajouter des transmissions médicales à un séjour
  */
 
-class CTransmissionMedicale extends CMbObject {
+class CTransmissionMedicale extends CMbMetaObject {
 
   // DB Table key
   var $transmission_medicale_id = null;	
   
   // DB Fields
-  var $sejour_id             = null;
-  var $user_id               = null;
+  var $sejour_id = null;
+  var $user_id   = null;
   
-  var $degre        = null;
-  var $date         = null;
-  var $text         = null;
+  var $degre = null;
+  var $date  = null;
+  var $text  = null;
   
   // References
   var $_ref_sejour = null;
   var $_ref_user   = null;
-  var $_ref_cible   = null;
+  var $_ref_cible  = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -40,11 +40,13 @@ class CTransmissionMedicale extends CMbObject {
 
   function getSpecs() {
   	$specs = parent::getSpecs();
-    $specs["sejour_id"]             = "notNull ref class|CSejour";
-    $specs["user_id"]               = "notNull ref class|CMediusers";
-    $specs["degre"]                 = "notNull enum list|low|high default|low";
-    $specs["date"]                  = "notNull dateTime";
-    $specs["text"]                  = "text";
+    $specs["object_id"]    = "ref class|CMbObject meta|object_class";
+  	$specs["object_class"] = "enum list|CPrescriptionLineElement|CPrescriptionLineMedicament|CPrescriptionLineComment";
+    $specs["sejour_id"]    = "notNull ref class|CSejour";
+    $specs["user_id"]      = "notNull ref class|CMediusers";
+    $specs["degre"]        = "notNull enum list|low|high default|low";
+    $specs["date"]         = "notNull dateTime";
+    $specs["text"]         = "text";
     return $specs;
   }
   

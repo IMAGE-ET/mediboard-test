@@ -27,10 +27,14 @@
       {{/if}}
     </td>
     <td>
+      <div id="cibleTrans" style="font-style: italic;">
+      </div>
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_transmission_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="m" value="dPhospi" />
+      <input type="hidden" name="object_class" value="" />
+      <input type="hidden" name="object_id" value="" />
       <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
       <input type="hidden" name="user_id" value="{{$user->_id}}" />
       <input type="hidden" name="date" value="now" />
@@ -49,7 +53,7 @@
     <td class="text">
       <div {{if $curr_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
       {{if $curr_suivi->user_id == $user->_id}}
-      <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="delObs{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_observation_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="m" value="dPhospi" />
@@ -68,8 +72,12 @@
   {{if $curr_suivi->_class_name == "CTransmissionMedicale"}}
     <td class="text">
       <div {{if $curr_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
+      {{if $curr_suivi->object_id}}
+      <em>Cible : {{$curr_suivi->_ref_object->_view}}</em>
+      <br />
+      {{/if}}
       {{if $curr_suivi->user_id == $user->_id}}
-      <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+      <form name="delTrans{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_transmission_aed" />
       <input type="hidden" name="del" value="1" />
       <input type="hidden" name="m" value="dPhospi" />

@@ -203,7 +203,16 @@ class CSetupdPhospi extends CSetup {
             DROP `cible_transmission_id`";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.26";
+        
+    $this->makeRevision("0.26");
+    $sql = "ALTER TABLE `transmission_medicale` 
+	          ADD `object_id` INT (11) UNSIGNED,
+	          ADD `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment'),
+            ADD INDEX (`object_id`),
+            ADD INDEX (`object_class`)";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.27";
   }
 }
 ?>
