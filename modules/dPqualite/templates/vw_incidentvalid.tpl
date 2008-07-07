@@ -56,7 +56,9 @@ function pageMain() {
 {{/if}}
 
 Main.add(function () {
-  var tabIncident = Control.Tabs.create('tab-incident', true);
+  if($('tab-incident')){
+    var tabIncident = Control.Tabs.create('tab-incident', true);
+  }
 });
 </script>
 
