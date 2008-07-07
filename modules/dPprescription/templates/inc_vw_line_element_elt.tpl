@@ -72,13 +72,7 @@
 	        }
 	      </script>
     </td>
-    <td>
-     {{if $category->chapitre != "dmi" && ($prescription->type == "sejour" || $prescription->type == "pre_admission")}}
-        <div id="stop-CPrescriptionLineElement-{{$line->_id}}">
-          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
-        </div>
-     {{/if}}
-    </td>
+
     {{/if}}
   </tr>
   
@@ -142,12 +136,33 @@
     </td>
     {{/if}}
     <td {{if $category->chapitre != "dmi"}}colspan="3"{{else}}colspan="6"{{/if}}>
-      <div style="float: right">
-        <!-- Formulaire de selection d'un executant -->
-        {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
-      </div>
+      {{if $prescription->type == "sortie" || $line->_protocole}}
+	      <div style="float: right">
+	        <!-- Formulaire de selection d'un executant -->
+	        {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
+	      </div>
+      {{/if}}
       <!-- Formulaire d'ajout de commentaire -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
     </td>   
   </tr>
+  {{if (($category->chapitre == "biologie" || $category->chapitre == "kine" || $category->chapitre == "soin" || $category->chapitre == "dm") && $prescription->type != "sortie") && !$line->_protocole }}
+  <tr>
+  <td></td>
+    <td>
+	    <div style="float: right">
+		    <!-- Formulaire de selection d'un executant -->
+		    {{include file="../../dPprescription/templates/line/inc_vw_form_executants.tpl"}}
+		  </div>
+	 
+     {{if ($prescription->type == "sejour" || $prescription->type == "pre_admission") && !$line->_protocole}}
+        <div id="stop-CPrescriptionLineElement-{{$line->_id}}"> 
+          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineElement"}}
+        </div>
+     {{/if}}
+    </td>
+    
+  
+  </tr>
+  {{/if}}
 </tbody>

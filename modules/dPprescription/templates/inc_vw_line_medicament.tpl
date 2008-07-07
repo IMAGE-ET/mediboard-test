@@ -113,14 +113,6 @@
 	      }
       </script>
 	  </td>
-    <td>
-      <!-- Formulaire permettant de stopper la prise (seulement si type == "sejour" ou si type == "pre_admission" )-->
-      {{if $prescription_reelle->type != "sortie"}}
-        <div id="stop-CPrescriptionLineMedicament-{{$line->_id}}">
-          {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
-        </div>
-      {{/if}}
-    </td>
     {{else}}
     <td colspan="3" />
     {{/if}}
@@ -184,14 +176,40 @@
       {{/if}}
     </td>
     <td colspan="4">
+     {{if $prescription->type == "sortie"}}
+   
+
       <!-- Ajouter une ligne (même dans le cas du traitement)-->
       {{if $line->_can_vw_form_add_line_contigue}}
-	      <div style="float: right;">
+	      <div style="float: right">
 	        {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
 	      </div>
       {{/if}}
+   
+    {{/if}}
+    
       <!-- Insérer un commentaire dans la ligne -->
       {{include file="../../dPprescription/templates/line/inc_vw_form_add_comment.tpl"}}
-    </td>
+  
+   
+      </td>
   </tr>
+  {{if $prescription->type != "sortie" && !$line->_protocole}}
+  <tr>
+  <td></td>
+    <td style="text-align:center;">
+      <div id="stop-CPrescriptionLineMedicament-{{$line->_id}}">
+        {{include file="../../dPprescription/templates/line/inc_vw_stop_line.tpl" object_class="CPrescriptionLineMedicament"}}
+      </div>
+    </td>
+    <td>
+      <!-- Ajouter une ligne (même dans le cas du traitement)-->
+      {{if $line->_can_vw_form_add_line_contigue}}
+	      <div>
+	        {{include file="../../dPprescription/templates/line/inc_vw_form_add_line_contigue.tpl"}}
+	      </div>
+      {{/if}}
+      </td>
+  </tr>
+  {{/if}}
 </tbody>

@@ -47,7 +47,9 @@ Main.add( function(){
   {{else}}
     <table>
       <tr>
+        <td style="border: none;">Date d'arrêt</td>
         <td class="date" style="border:none;">
+          
           {{assign var=line_id value=$line->_id}}
 	        {{mb_field object=$line field=date_arret form=form-stop-$object_class-$line_id canNull=false}}
 	        {{mb_field object=$line field=time_arret form=form-stop-$object_class-$line_id}}
