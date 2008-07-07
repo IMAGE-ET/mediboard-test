@@ -19,6 +19,14 @@ addCibleTransmission = function(object_class, object_id, view) {
   oForm.text.focus();
 }
 
+administrationMed = function(oDiv, value, text) {
+  quantite = prompt('Veuillez indiquer la quantité ('+text+')',value);
+  if(quantite) {
+    oDiv.innerHTML = quantite;
+    oDiv.style.backgroundColor = '#8f8';
+  }
+}
+
 </script>
 
 
@@ -104,7 +112,8 @@ addCibleTransmission = function(object_class, object_id, view) {
 					                      {{else}}
 					                        background-color: #f88
 					                      {{/if}}
-					                    {{/if}}">
+					                    {{/if}}"
+					        onclick="administrationMed(this, '{{$quantite}}', '{{$line->_view}}');">
 				            {{$quantite}}
 				          </div>
 				        </td>
@@ -112,7 +121,8 @@ addCibleTransmission = function(object_class, object_id, view) {
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
 					     <td style="text-align: center">
-					       <div style="border: 1px dotted #000;">
+					       <div style="border: 1px dotted #000;"
+					        onclick="administrationMed(this, '0', '{{$line->_view}}');">
 					         -
 					       </div>
 					     </td>
@@ -189,7 +199,8 @@ addCibleTransmission = function(object_class, object_id, view) {
 					                      {{else}}
 					                        background-color: #f88
 					                      {{/if}}
-					                    {{/if}}">
+					                    {{/if}}"
+					        onclick="administrationMed(this, '{{$quantite}}', '{{$line->_view}}');">
 					          {{$quantite}}
 					        </div>
 				        </td>
@@ -197,7 +208,8 @@ addCibleTransmission = function(object_class, object_id, view) {
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
 					     <td style="text-align: center">
-					       <div style="border: 1px dotted #000;">
+					       <div style="border: 1px dotted #000;"
+					        onclick="administrationMed(this, '0', '{{$line->_view}}');">
 					         -
 					       </div>
 					     </td>
