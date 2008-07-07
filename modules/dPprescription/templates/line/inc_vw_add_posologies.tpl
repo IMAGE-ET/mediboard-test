@@ -63,17 +63,19 @@ reloadPrises = function(prescription_line_id, type){
   url.requestUpdate('prises-'+type+prescription_line_id, { waitingText: null });
 }
 
-submitPrise = function(oForm, type){
-  if(!checkForm(oForm)){
+onSubmitPrise = function(oForm, type){
+  if (!checkForm(oForm)){
     return;
   }
-  if(!oForm.object_id.value){
+  
+  if (!oForm.object_id.value){
     return;
   }
-  submitFormAjax(oForm, 'systemMsg', { onComplete:
+  
+  return onSubmitFormAjax(oForm, { onComplete:
     function(){
       reloadPrises(oForm.object_id.value, type);
-      oForm.quantite.value = 0;
+      oForm.quantite.value = 1;
       oForm.moment_unitaire_id.value = "";
   } });
 }
@@ -82,15 +84,19 @@ submitPrise = function(oForm, type){
 </script>
 
 {{assign var=line_id value=$line->_id}}
-  <select name="selShowDivPoso{{$type}}" onchange="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');">
-    <option value="">&mdash; Posologies manuelles</option>
-    <option value="moment{{$type}}">Moment</option>
-    <option value="foisPar{{$type}}">x fois par y</option>
-    <option value="tousLes{{$type}}">tous les x y</option>
-  </select>
+  <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
+  
+  <input name="typePrise" type="radio" value="moment{{$type}}"   onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_moment{{$type}}">Moment</label>
+  <input name="typePrise" type="radio" value="foisPar{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}">x fois par y</label>
+  <input name="typePrise" type="radio" value="tousLes{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}">tous les x y</label>
+
+	</form>
+	
+	<script type="text/javascript">Main.add(function() { prepareForm('ChoixPrise-{{$line->_id}}') } )</script>
+
   <br />
-  <div id="foisPar{{$type}}{{$line->_id}}">
-		<form name="addPriseFoisPar{{$type}}{{$line->_id}}" action="?" method="post" >
+  <div id="foisPar{{$type}}{{$line->_id}}" style="display: none">
+		<form name="addPriseFoisPar{{$type}}{{$line->_id}}" action="?" method="post" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$type}}');">
 	    <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 	    <input type="hidden" name="del" value="0" />
 	    <input type="hidden" name="m" value="dPprescription" />
@@ -113,12 +119,12 @@ submitPrise = function(oForm, type){
 		  {{mb_field object=$prise_posologie field=unite_fois}}
 	  
       {{if $line->_id}}
-	      <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
 		  {{/if}}
 		</form>
   </div>
 <div id="moment{{$type}}{{$line->_id}}" style="display: none">
-  <form name="addPriseMoment{{$type}}{{$line->_id}}" action="?" method="post" >
+  <form name="addPriseMoment{{$type}}{{$line->_id}}" action="?" method="post"  onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$type}}');">
 	  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="m" value="dPprescription" />
@@ -152,12 +158,12 @@ submitPrise = function(oForm, type){
 	  </select>	
 		  
 	  {{if $line->_id}}
-      <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+    <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
     {{/if}}
   </form>
 </div>
       <div id="tousLes{{$type}}{{$line->_id}}" style="display: none">
-      	<form name="addPriseTousLes{{$type}}{{$line->_id}}" action="?" method="post" >
+      	<form name="addPriseTousLes{{$type}}{{$line->_id}}" action="?" method="post" onsubmit="testPharma({{$line->_id}}); return onSubmitPrise(this,'{{$type}}');" >
 	    <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 	    <input type="hidden" name="del" value="0" />
 	    <input type="hidden" name="m" value="dPprescription" />
@@ -183,7 +189,7 @@ submitPrise = function(oForm, type){
 		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPriseTousLes$type$line_id}})
 		  
       {{if $line->_id}}
-        <button type="button" class="submit notext" onclick="testPharma({{$line->_id}}); submitPrise(this.form,'{{$type}}');">Enregistrer</button>
+      <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
       {{/if}}
     </form>  
   </div>

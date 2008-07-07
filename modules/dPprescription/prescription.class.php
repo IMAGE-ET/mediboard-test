@@ -85,20 +85,16 @@ class CPrescription extends CMbObject {
     	$this->_view = "Protocole: ".$this->libelle;
     }
     
-    // Chargement de l'utilisateur courant
-    $user_courant = new CMediusers();
-    $user_courant->load($AppUI->user_id);
-    
-    if($this->_ref_object->_class_name == "CSejour"){
-	    if($user_courant->isPraticien()){
-	    	$this->_current_praticien_id = $user_courant->_id;
+    if ($this->_ref_object->_class_name == "CSejour"){
+	    if ($AppUI->_ref_user->isPraticien()) {
+	    	$this->_current_praticien_id = $AppUI->_ref_user->_id;
 	    } else {
 	    	$this->_current_praticien_id = $this->_ref_object->_praticien_id;
 	    }
     }
-    if($this->_ref_object->_class_name == "CConsultation"){
-      if($user_courant->isPraticien()){
-	    	$this->_current_praticien_id = $user_courant->_id;
+    if ($this->_ref_object->_class_name == "CConsultation"){
+      if ($AppUI->_ref_user->isPraticien()) {
+	    	$this->_current_praticien_id = $AppUI->_ref_user->_id;
 	    } else {
 	    	$this->_current_praticien_id = $this->praticien_id;
 	    }
@@ -110,14 +106,8 @@ class CPrescription extends CMbObject {
    * Permet de savoir si l'utilisateur courant a le droit de créer des lignes dans la prescription
    */
   function getAdvancedPerms($is_praticien, $mode_pharma){
-  	global $AppUI;
-		
-  	// Chargement du user_courant
-		$user = new CMediusers();
-		$user->load($AppUI->user_id);
-		
 		// Si le user courant est un praticien
-		if($is_praticien || !$this->object_id || $mode_pharma){
+		if ($is_praticien || !$this->object_id || $mode_pharma){
 			$this->_can_add_line = 1;
 		} 
 		// Sinon (infirmiere)
@@ -134,9 +124,7 @@ class CPrescription extends CMbObject {
 		}	
   }
   
-  function check(){
-  	global $AppUI;
-  	
+  function check() {  	
     if ($msg = parent::check()) {
   	  return $msg;
   	}
@@ -164,18 +152,15 @@ class CPrescription extends CMbObject {
   function calculPraticienId(){
   	global $AppUI;
   	
-  	if($this->object_id !== null && $this->object_class !== null && $this->type !== null && $this->object_id){
-  		// Chargement du user courant
-  		$user_courant = new CMediusers();
-  		$user_courant->load($AppUI->user_id);
+  	if ($this->object_id !== null && $this->object_class !== null && $this->type !== null && $this->object_id){
   		// Chargement de l'object
   		$object = new $this->object_class;
   	  $object->load($this->object_id);
   	  $object->loadRefsFwd();
   		
   		if($this->type != "sejour"){
-  			if($user_courant->isPraticien()){
-  				$this->praticien_id = $user_courant->_id;
+  			if($AppUI->_ref_user->isPraticien()){
+  				$this->praticien_id = $AppUI->_ref_user->_id;
   			} else {
   				$this->praticien_id = $object->_praticien_id;
   			}

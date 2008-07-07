@@ -38,6 +38,10 @@ class CPrescriptionLine extends CMbObject {
   var $_date_arret_fin     = null;
   
   // Object References
+  var $_ref_prescription   = null;
+  var $_ref_praticien      = null;
+  var $_ref_creator        = null;
+  
   var $_ref_parent_line    = null;
   var $_ref_child_line     = null;
   var $_ref_log_signee     = null;
@@ -94,25 +98,31 @@ class CPrescriptionLine extends CMbObject {
   /*
    * Chargement de la prescription
    */
-  function loadRefPrescription(){
-    $this->_ref_prescription = new CPrescription();
-    $this->_ref_prescription->load($this->prescription_id);
+  function loadRefPrescription() {
+    if (!$this->_ref_prescription) {
+	    $this->_ref_prescription = new CPrescription();
+	    $this->_ref_prescription->load($this->prescription_id);
+    }
   }
   
   /*
    * Chargement du praticien
    */
-  function loadRefPraticien(){
-    $this->_ref_praticien = new CMediusers();
-    $this->_ref_praticien->load($this->praticien_id);
+  function loadRefPraticien() {
+    if (!$this->_ref_praticien) {
+	    $this->_ref_praticien = new CMediusers();
+	    $this->_ref_praticien->load($this->praticien_id);
+    }
   }
   
   /*
    * Chargement du createur de la ligne
    */
-  function loadRefCreator(){
-    $this->_ref_creator = new CMediusers();
-    $this->_ref_creator->load($this->creator_id);	
+  function loadRefCreator() {
+    if (!$this->_ref_creator) {
+	    $this->_ref_creator = new CMediusers();
+	    $this->_ref_creator->load($this->creator_id);	
+    }
   }
   
   /*

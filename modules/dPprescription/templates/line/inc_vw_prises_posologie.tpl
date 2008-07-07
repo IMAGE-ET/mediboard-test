@@ -61,7 +61,7 @@ if(oButton){
 	  {{if $prise->moment_unitaire_id}}
 		  {{$prise->_ref_moment->_view}}
 		  <!-- Selection du moment -->
-		  <!-- 
+{{* MASQUAGE DES CHANGEMENT DE MOMENTS UNITAIRE
 		  <select name="moment_unitaire_id" style="width: 150px" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">      
 		    <option value="">&mdash; Sélection du moment</option>
 		    {{foreach from=$moments key=type_moment item=_moments}}
@@ -72,7 +72,7 @@ if(oButton){
 		     </optgroup>
 		    {{/foreach}}
 		  </select>
-		   -->
+*}}
 	  {{/if}}
 	  
 	  <!-- Cas des fois par -->
@@ -89,7 +89,7 @@ if(oButton){
 		  (J+{{mb_field object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}})
 		{{/if}}
 		  
-    <button type="button" class="cancel notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); submitPrise(this.form,'{{$type}}'); ">Supprimer</button> 
+    <button type="button" class="cancel notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
   </form>
 {{/foreach}}
 

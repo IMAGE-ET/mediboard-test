@@ -18,9 +18,9 @@
 		{{$performance.autoload}} classes auto-chargées
   <br />
   
-  Objets par class :
-  {{foreach from=$performance.objectCache key=objectClass item=objectCount}}
-  &ndash; {{$objectCount}} {{$objectClass}}
+  Détails cachable :
+  {{foreach from=$performance.cachableCounts key=objectClass item=cachableCount}}
+  &ndash; {{$cachableCount}} {{$objectClass}}
 	{{/foreach}}
   <br />
 

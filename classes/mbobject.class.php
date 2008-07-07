@@ -18,7 +18,7 @@ require_once("./classes/mbObjectSpec.class.php");
 class CMbObject {
   static $objectCount = 0;
   static $objectCache = array();
-  static $cachableCount = 0;
+  static $cachableCounts = array();
   static $handlers = null;
   
   /**
@@ -418,7 +418,11 @@ class CMbObject {
     
     // Statistiques sur cache d'object
     if (isset(self::$objectCache[$this->_class_name][$this->_id])) {
-      self::$cachableCount++;
+      if (!isset(self::$cachableCounts[$this->_class_name])) {
+        self::$cachableCounts[$this->_class_name] = 0;
+      }
+      
+      self::$cachableCounts[$this->_class_name]++;
     }
     self::$objectCache[$this->_class_name][$this->_id] = true;
   }

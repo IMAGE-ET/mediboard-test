@@ -71,7 +71,7 @@ foreach($protocole->_ref_prescription_lines as $line){
   if($line->decalage_line){
     $line->debut = mbDate("$signe $line->decalage_line DAYS", $date);	
   } else {
-  	$line->debut = $date;
+  	$line->debut = mbDate($date);
   }
   $line->prescription_id = $prescription_id;
   $line->praticien_id = $praticien_id;
@@ -123,7 +123,7 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
 	  if($line_element->decalage_line){
 	    $line_element->debut = mbDate("$signe $line_element->decalage_line DAYS", $date);	
 	  } else {
-	  	$line_element->debut = $date;
+	  	$line_element->debut = mbDate($date);
 	  }	
   }
   

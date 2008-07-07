@@ -284,6 +284,9 @@ foreach($mins as &$min){
 $filter_line = new CPrescriptionLineMedicament();
 $filter_line->debut = mbDate();
 
+$prise = new CPrisePosologie();
+$prise->quantite = 1.0;
+
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("historique", $historique);
@@ -301,7 +304,7 @@ $smarty->assign("poids"              , $poids);
 $smarty->assign("categories"         , $categories);
 $smarty->assign("executants"         , $executants);
 $smarty->assign("moments"            , $moments);
-$smarty->assign("prise_posologie"    , new CPrisePosologie());
+$smarty->assign("prise_posologie"    , $prise);
 $smarty->assign("protocole"          , new CPrescription());
 $smarty->assign("alertesAllergies"   , $alertesAllergies);
 $smarty->assign("alertesInteractions", $alertesInteractions);

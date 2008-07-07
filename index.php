@@ -147,6 +147,13 @@ if (!$AppUI->user_id) {
   exit;
 }
 
+$user = new CMediusers();
+if ($user->isInstalled()) {
+  $user->load($AppUI->user_id);
+  $AppUI->_ref_user = $user;
+}
+
+
 // Set the module and action from the url
 if (null == $m = $AppUI->checkFileName(mbGetValueFromGet("m", 0))) {
   $m = CPermModule::getFirstVisibleModule();
@@ -293,14 +300,11 @@ if( !function_exists("memory_get_usage") ) {
   }
 }
 
-$performance["genere"]       = number_format($phpChrono->total, 3);
-$performance["memoire"]      = mbConvertDecaBinary(memory_get_usage());
-$performance["objets"]       = CMbObject::$objectCount;
-$performance["cachableCount"]= CMbObject::$cachableCount;
-$performance["objectCache"]  = array();
-foreach (CMbObject::$objectCache as $object_class => $objects) {
-  $performance["objectCache"][$object_class] = count($objects);
-}
+$performance["genere"]         = number_format($phpChrono->total, 3);
+$performance["memoire"]        = mbConvertDecaBinary(memory_get_usage());
+$performance["objets"]         = CMbObject::$objectCount;
+$performance["cachableCount"]  = array_sum(CMbObject::$cachableCounts);
+$performance["cachableCounts"] = CMbObject::$cachableCounts;
 
 $performance["size"]    = mbConvertDecaBinary(ob_get_length());
 $performance["ccam"]    = array (

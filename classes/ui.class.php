@@ -25,6 +25,7 @@ $GLOBALS["translate"] = array();
  */
 class CAppUI {
   var $user_id = 0;
+  
   var $_ref_user = null;
 
   // DEPRECATED Use $_ref_user instead
@@ -518,9 +519,7 @@ class CAppUI {
       return false;
     }
 
-    // Load the user in AppUI
     $this->user_id   = $user->_id;
-    $this->_ref_user = $user;
     
     // DEPRECATED
     $this->user_first_name = $user->user_first_name;

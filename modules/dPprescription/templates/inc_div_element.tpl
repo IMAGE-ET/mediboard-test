@@ -39,7 +39,6 @@ changePraticienElt = function(praticien_id, element){
   }
 }
 
-
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
