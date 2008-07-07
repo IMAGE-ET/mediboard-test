@@ -37,21 +37,28 @@ if(oButton){
   {{assign var=prise_id value=$prise->_id}}
   
   <form name="addPrise-{{$prise->_id}}" action="?" method="post" style="display: block;">
+    <button style="float: right" type="button" class="cancel notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
+  
+  
 	  <input type="hidden" name="dosql" value="do_prise_posologie_aed" />
 	  <input type="hidden" name="del" value="0" />
 	  <input type="hidden" name="m" value="dPprescription" />
 	  <input type="hidden" name="prise_posologie_id" value="{{$prise->_id}}" />
 	  <input type="hidden" name="object_id" value="{{$line_id}}" />
 	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
-						  
+
 	  <!-- Formulaire de selection de la quantite -->
 	  {{mb_field object=$prise field=quantite size="3" increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg');"}}	  
+	  
 	  {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+	  {{$prise->unite_prise}}
+	  <!-- 
 	  <select name="unite_prise" onchange="testPharma({{$line_id}}); submitFormAjax(this.form, 'systemMsg');">
 		  {{foreach from=$line->_unites_prise item=_unite}}
 		    <option value="{{$_unite}}" {{if $prise->unite_prise == $_unite}}selected="selected"{{/if}}>{{$_unite}}</option>
 		  {{/foreach}}
 		</select>
+		 -->
 	  {{/if}}
 	  {{if $line->_class_name == "CPrescriptionLineElement"}}
 		  {{$line->_unite_prise}}
@@ -77,19 +84,19 @@ if(oButton){
 	  
 	  <!-- Cas des fois par -->
 	  {{if $prise->nb_fois && $prise->unite_fois}}
-      {{mb_field object=$prise field=nb_fois size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}} fois par 
-			{{mb_field object=$prise field=unite_fois onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
+      {{mb_value object=$prise field=nb_fois size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}} fois par 
+			{{mb_value object=$prise field=unite_fois onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
 		{{/if}}
   
     <!-- Cas des tous les -->
     {{if $prise->nb_tous_les && $prise->unite_tous_les}}
       tous les
-			{{mb_field object=$prise field=nb_tous_les size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}				   
-			{{mb_field object=$prise field=unite_tous_les onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
-		  (J+{{mb_field object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}})
+			{{mb_value object=$prise field=nb_tous_les size=3 increment=1 min=1 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}				   
+			{{mb_value object=$prise field=unite_tous_les onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}}
+		  (J+{{mb_value object=$prise field=decalage_prise size=1 increment=1 min=0 form=addPrise-$prise_id onchange="testPharma($line_id); submitFormAjax(this.form, 'systemMsg')"}})
 		{{/if}}
-		  
-    <button type="button" class="cancel notext" onclick="this.form.del.value = 1; testPharma({{$line_id}}); onSubmitPrise(this.form ,'{{$type}}'); ">Supprimer</button> 
+	
+  
   </form>
 {{/foreach}}
 

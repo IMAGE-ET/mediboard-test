@@ -157,7 +157,7 @@ administrationMed = function(oDiv, value, text) {
       
         <tr>
 		      {{if $smarty.foreach.foreach_elt.first && $smarty.foreach.foreach_cat.first}}
-		        <th rowspan="{{$nb_produit_by_cat.$name_cat}}">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}</th>
+		        <th rowspan="{{$nb_produit_by_cat.$name_cat}}">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{$categorie->nom}}</th>
 		      {{/if}}
     
 			    <td class="text">
