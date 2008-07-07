@@ -129,41 +129,29 @@ submitProtocole = function(){
   </tr>
   <tr>
     <td>
-		  <!-- Impression de la prescription -->
-		  {{if $prescription->type != "sortie"}}
-		  <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}')" style="float: left">
-		    Prescription
-		  </button>
-		  {{/if}}
-	    {{if !$mode_protocole}}
-		     {{if $prescription->type != "externe"}}
-				   <!-- Impression de la prescription -->
-				   <button type="button" class="print" onclick="Prescription.printPrescription('{{$prescription->_id}}','ordonnance')" style="float: left">
-				     Ordonnance
-				   </button>
-			   {{/if}}
-			   
-			   <!-- Affichage du recapitulatif des alertes -->
-			   <button type="button" class="search" onclick="Prescription.viewFullAlertes('{{$prescription->_id}}')" style="float: left">
-			     Alertes
-			   </button>
-			   
-			   <!-- Affichage de l'historique -->
-			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}','historique')" style="float: left">
-			     Historique
-			   </button>
-			
-			   <!-- Affichage de l'historique -->
-			   <button type="button" class="search" onclick="Prescription.viewHistorique('{{$prescription->_id}}','substitutions')" style="float: left">
-			     Substitutions
-			   </button>
-			 
-			   <div id="antecedent_allergie">
-			     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-			     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-			     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-				 </div>
-		   {{/if}}
+      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
+        <option value="">Impressions / Historiques / Alertes</option>
+	 		  <!-- Impression de la prescription -->
+			  {{if $prescription->type != "sortie"}}
+			  <option value="printPrescription">Impression de la prescription</option>
+			  {{/if}}
+		    {{if !$mode_protocole}}
+			     {{if $prescription->type != "externe"}}
+			       <option value="printOrdonnance">Impression de l'ordonnance</option>
+				   {{/if}}				   
+				   <option value="viewAlertes">Affichage des alertes</option>
+					 <option value="viewHistorique">Affichage de l'historique</option>
+				   <option value="viewSubstitutions">Affichage des substitutions</option>
+         {{/if}}      
+        </select>
+    
+      {{if !$mode_protocole}}
+       <div id="antecedent_allergie">
+				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+			 </div>   
+      {{/if}}
     </td>
    
 

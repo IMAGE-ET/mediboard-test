@@ -340,6 +340,25 @@ var Prescription = {
 	  url.addParam("prescription_id", prescription_id);
 	  url.addParam("type", type);
 	  url.popup(500, 400, type);
+  },
+  popup: function(prescription_id, type){
+    switch (type) {
+      case 'printPrescription':
+        Prescription.printPrescription(prescription_id);
+        break;
+      case 'printOrdonnance':
+        Prescription.printPrescription(prescription_id,'ordonnance');
+        break;
+      case 'viewAlertes':
+        Prescription.viewFullAlertes(prescription_id)
+        break;
+      case 'viewHistorique':
+        Prescription.viewHistorique(prescription_id, 'historique');
+        break;
+      case 'viewSubstitutions':
+        Prescription.viewHistorique(prescription_id,'substitutions');
+        break;
+    }
   }
 };
 

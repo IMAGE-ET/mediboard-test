@@ -229,10 +229,7 @@ testPharma = function(line_id){
 	  Livret Thérap.
 	  
 	  <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-	  <button type="button" class="search" onclick="MedSelector.init('produit');">Produits</button>
-	  <button type="button" class="search" onclick="MedSelector.init('classe');">Classes</button>
-	  <button type="button" class="search" onclick="MedSelector.init('composant');">Composants</button>
-	  <button type="button" class="search" onclick="MedSelector.init('DC_search');">DCI</button>
+	  <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
 	  <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
 	  {{if $prescription->type == "sejour"}}
 	  <input type="hidden" name="_recherche_livret" value="1" />
