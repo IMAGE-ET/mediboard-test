@@ -11,7 +11,7 @@ selDivPoso = function(type, line_id, type_elt){
   if(!type){
     type = "foisPar"+type_elt;
   }
-
+  
   oDivMoment = $('moment'+type_elt+line_id);
   oDivFoisPar = $('foisPar'+type_elt+line_id);
   oDivTousLes = $('tousLes'+type_elt+line_id);
@@ -19,6 +19,18 @@ selDivPoso = function(type, line_id, type_elt){
   oFormFoisPar = document.forms['addPriseFoisPar'+type_elt+line_id];
   oFormTousLes = document.forms['addPriseTousLes'+type_elt+line_id];
   oFormMoment = document.forms['addPriseMoment'+type_elt+line_id];
+   
+  // Copie des moments
+  if(type == "moment"+type_elt){ 
+    if(type == "momentmode_grille"){
+      var selectMoments = window.opener.document.moment_unitaire.moment_unitaire_id;  
+    } else {
+      var selectMoments = document.moment_unitaire.moment_unitaire_id;
+    }
+  	$A(selectMoments.childNodes).each(function (optgroup) {
+ 	    oFormMoment.moment_unitaire_id.appendChild(optgroup.cloneNode(true));
+	  } );
+  }
   
   if(oFormFoisPar.quantite.value != ''){
     var quantite = oFormFoisPar.quantite.value;
@@ -31,13 +43,10 @@ selDivPoso = function(type, line_id, type_elt){
   }
   if(oFormTousLes.nb_tous_les.value != ''){
     var nb = oFormTousLes.nb_tous_les.value;
-  }
-  
-  
+  }  
   if(oFormMoment.quantite.value != ''){
     var quantite = oFormMoment.quantite.value;
   }
-  
   if(quantite){
     oFormFoisPar.quantite.value = quantite;
     oFormTousLes.quantite.value = quantite;
@@ -46,14 +55,12 @@ selDivPoso = function(type, line_id, type_elt){
   if(nb){
     oFormFoisPar.nb_fois.value = nb;
     oFormTousLes.nb_tous_les.value = nb;
-  }
-  
+  }  
   oDivMoment.hide();
   oDivFoisPar.hide();
   oDivTousLes.hide();
   $(type+line_id).show();
 }
-
 
 reloadPrises = function(prescription_line_id, type){
   url = new Url;
@@ -67,11 +74,9 @@ onSubmitPrise = function(oForm, type){
   if (!checkForm(oForm)){
     return;
   }
-  
   if (!oForm.object_id.value){
     return;
   }
-  
   return onSubmitFormAjax(oForm, { onComplete:
     function(){
       reloadPrises(oForm.object_id.value, type);
@@ -80,18 +85,16 @@ onSubmitPrise = function(oForm, type){
   } });
 }
 
-
 </script>
 
 {{assign var=line_id value=$line->_id}}
+<div style="margin-top: 5px; margin-bottom: -14px;">
   <form name="ChoixPrise-{{$line->_id}}" action="" method="post" onsubmit="return false">
-  
-  <input name="typePrise" type="radio" value="moment{{$type}}"   onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_moment{{$type}}">Moment</label>
-  <input name="typePrise" type="radio" value="foisPar{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}">x fois par y</label>
-  <input name="typePrise" type="radio" value="tousLes{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}">tous les x y</label>
-
+	  <input name="typePrise" type="radio" value="moment{{$type}}"   onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_moment{{$type}}"> Moment</label>
+	  <input name="typePrise" type="radio" value="foisPar{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_foisPar{{$type}}"> x fois par y</label>
+	  <input name="typePrise" type="radio" value="tousLes{{$type}}"  onclick="selDivPoso(this.value,'{{$line->_id}}','{{$type}}');" /><label for="typePrise_tousLes{{$type}}"> Tous les x y</label>
 	</form>
-	
+	</div>
 	<script type="text/javascript">Main.add(function() { prepareForm('ChoixPrise-{{$line->_id}}') } )</script>
 
   <br />
@@ -132,8 +135,7 @@ onSubmitPrise = function(oForm, type){
 	  <input type="hidden" name="object_id" value="{{$line->_id}}" />
 	  <input type="hidden" name="object_class" value="{{$line->_class_name}}" />
 		  
-
-	  {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseMoment$type$line_id}}
+    {{mb_field object=$prise_posologie field=quantite size=3 increment=1 min=1 form=addPriseMoment$type$line_id}}
 	  {{if $line->_class_name == "CPrescriptionLineMedicament" && $type != "mode_grille"}}
 		  <select name="unite_prise">
 		    {{foreach from=$line->_unites_prise item=_unite}}
@@ -146,17 +148,11 @@ onSubmitPrise = function(oForm, type){
 		  {{/if}}
 
 	  <!-- Selection du moment -->
-	  <select name="moment_unitaire_id" style="width: 150px">      
-	  <option value="">&mdash; Sélection du moment</option>
-	  {{foreach from=$moments key=type_moment item=_moments}}
-	     <optgroup label="{{$type_moment}}">
-	     {{foreach from=$_moments item=moment}}
-	     <option value="{{$moment->_id}}">{{$moment->_view}}</option>
-	     {{/foreach}}
-	     </optgroup>
-	  {{/foreach}}
+	  <select name="moment_unitaire_id" style="width: 150px">  
+	
 	  </select>	
-		  
+		 
+		 
 	  {{if $line->_id}}
     <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
     {{/if}}

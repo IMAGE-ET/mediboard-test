@@ -61,7 +61,9 @@ ul {
       <tr>
         <td class="text"  style="border: 1px solid #ccc;">{{$_line->_view}}</td>
         <td class="text"  style="border: 1px solid #ccc;">
+         {{if array_key_exists($line_id, $intitule_prise_med)}}
           {{if is_numeric($unite_prise)}}
+          
           <ul>
             <li>{{$intitule_prise_med.$line_id.autre.$unite_prise}}</li>
           </ul>
@@ -71,6 +73,7 @@ ul {
 	          <li>{{$_prise}}</li>
 	        {{/foreach}}
 	        </ul>
+	        {{/if}}
 	        {{/if}}
         </td>
         

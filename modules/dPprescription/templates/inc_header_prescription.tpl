@@ -54,8 +54,19 @@ submitProtocole = function(){
 
 <table class="form">
   <tr>
-    <th class="title" colspan="2">
-    
+    <th class="title" colspan="3">
+    <form name="moment_unitaire" style="display: none">
+	    <select name="moment_unitaire_id" style="width: 150px">  
+	      <option value="">&mdash; Sélection du moment</option>
+		    {{foreach from=$moments key=type_moment item=_moments}}
+		    <optgroup label="{{$type_moment}}">
+		    {{foreach from=$_moments item=moment}}
+		    <option value="{{$moment->_id}}">{{$moment->_view}}</option>
+		    {{/foreach}}
+		    </optgroup>
+		    {{/foreach}}
+	    </select>
+	  </form>
       <!-- Selection du praticien prescripteur de la ligne -->
 			{{if !$is_praticien && !$mode_protocole && $prescription->_can_add_line}}
        <div style="float: right">
@@ -128,33 +139,6 @@ submitProtocole = function(){
     </th>
   </tr>
   <tr>
-    <td>
-      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
-        <option value="">Impressions / Historiques / Alertes</option>
-	 		  <!-- Impression de la prescription -->
-			  {{if $prescription->type != "sortie"}}
-			  <option value="printPrescription">Impression de la prescription</option>
-			  {{/if}}
-		    {{if !$mode_protocole}}
-			     {{if $prescription->type != "externe"}}
-			       <option value="printOrdonnance">Impression de l'ordonnance</option>
-				   {{/if}}				   
-				   <option value="viewAlertes">Affichage des alertes</option>
-					 <option value="viewHistorique">Affichage de l'historique</option>
-				   <option value="viewSubstitutions">Affichage des substitutions</option>
-         {{/if}}      
-        </select>
-    
-      {{if !$mode_protocole}}
-       <div id="antecedent_allergie">
-				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
-				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
-				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
-			 </div>   
-      {{/if}}
-    </td>
-   
-
   {{if !$mode_protocole && !$mode_pharma && $prescription->_can_add_line}}
    <td style="text-align: right;">
       <!-- Formulaire de selection protocole -->
@@ -168,8 +152,8 @@ submitProtocole = function(){
 			        <input type="hidden" name="del" value="0" />
 			        <input type="hidden" name="prescription_id" value="{{$prescription->_id}}" />
 			        <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
-			        <select name="protocole_id">
-			          <option value="">&mdash; Sélection d'un protocole</option>
+			        <select name="protocole_id" style="width: 80px;">
+			          <option value="">&mdash; Sélection</option>
 			          {{if $protocoles_praticien|@count}}
 			          <optgroup label="Praticien">
 			          {{foreach from=$protocoles_praticien item=_protocole_praticien}}
@@ -217,6 +201,38 @@ submitProtocole = function(){
       </form>
     </td>  
   {{/if}}
+  <td style="text-align: right">
+
+      <select name="affichageImpression" onchange="Prescription.popup('{{$prescription->_id}}', this.value); this.value='';">
+        <option value="">Impressions / Historiques / Alertes</option>
+	 		  <!-- Impression de la prescription -->
+			  {{if $prescription->type != "sortie"}}
+			  <option value="printPrescription">Impression de la prescription</option>
+			  {{/if}}
+		    {{if !$mode_protocole}}
+			     {{if $prescription->type != "externe"}}
+			       <option value="printOrdonnance">Impression de l'ordonnance</option>
+				   {{/if}}				   
+				   <option value="viewAlertes">Affichage des alertes</option>
+					 <option value="viewHistorique">Affichage de l'historique</option>
+				   <option value="viewSubstitutions">Affichage des substitutions</option>
+         {{/if}}      
+        </select>
+      {{if !$mode_protocole}}
+       <div id="antecedent_allergie">
+				     {{assign var=antecedents value=$prescription->_ref_object->_ref_patient->_ref_dossier_medical->_ref_antecedents}}
+				     {{assign var=sejour_id value=$prescription->_ref_object->_id}}
+				     {{include file="../../dPprescription/templates/inc_vw_antecedent_allergie.tpl"}}    
+			 </div>   
+      {{/if}}
+       
+ 
+
+    
+     <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');">Mode grille</button>
+ 
+  
+  </td>
   
   </tr>  
 

@@ -129,15 +129,7 @@ viewEasyMode = function(mode_protocole, mode_pharma){
 	    </td>
 	  </tr>
 	</table>
-
-  <select name="advAction" style="float: right">
-    <option value="">&mdash; Actions spécifiques</option>
-    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
-    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
-  </select>
-  {{/if}}
-  <button class="new" type="button" onclick="viewEasyMode('{{$mode_protocole}}','{{$mode_pharma}}');" style="float: right">Mode grille</button>
-  
+  {{/if}} 
 {{/if}}
 
 

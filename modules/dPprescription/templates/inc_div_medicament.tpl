@@ -207,11 +207,18 @@ testPharma = function(line_id){
 </div>
 {{/if}}
 
-
+<select name="advAction" style="float: right">
+    <option value="">&mdash; Actions spécifiques</option>
+    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
+    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
+  </select>
+  
 {{if $prescription->_can_add_line}}
+
+  
 <!-- Affichage des div des medicaments et autres produits -->
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
-    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';">
+    <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
       <option value="">&mdash; Médicaments les plus utilisés</option>
       {{foreach from=$listFavoris.medicament item=curr_prod}}
       <option value="{{$curr_prod->code_cip}}">
@@ -249,7 +256,9 @@ testPharma = function(line_id){
 		  }
 	</script>
   </form>
+  
   <br />
+  
   <div id="add_line_comment_med" style="display: none">
    <button class="cancel notext" type="button" onclick="$('add_line_comment_med').hide();">Cacher</button>
    <form name="addLineCommentMed" method="post" action="" onsubmit="return onSubmitFormAjax(this, { onComplete: function(){ Prescription.reload('{{$prescription->_id}}',null,'medicament')} } )">

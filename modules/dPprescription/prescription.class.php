@@ -546,6 +546,26 @@ class CPrescription extends CMbObject {
   }
   
   
+  function calculPrisesSoin($date, &$_line, &$lines, &$list_prises, &$all_lines, &$intitule_prise, &$tab_count, &$prises){
+    foreach($_line->_ref_prises as &$_prise){
+			$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
+			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
+			// Stockage du nombre de ligne de medicaments
+		  if(!@array_key_exists($key_tab, $lines[$_line->_id])){
+			  @$tab_count++;
+			}
+			if($_prise->moment_unitaire_id){
+	 	  	$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] = $_prise->quantite;
+	 	  } elseif ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
+	 	  	continue;
+	 	  }
+	 	  $lines[$_line->_id][$key_tab] = $_line;
+		  $prises[$_line->_id][$key_tab][] = $_prise;
+		  $all_lines[$_line->_id][$key_tab] = $_line;			
+	 	  $intitule_prise[$_line->_id][$key_prise][$_prise->_id] = $_prise->_view;
+	  }
+  }
+  
   // Generation du plan de soin sous forme de tableau
   function calculPlanSoin($date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
     // Chargement des lignes
@@ -564,122 +584,47 @@ class CPrescription extends CMbObject {
     	if(count($lines_cat)){
     	foreach($lines_cat as &$_line_med){
     		// Si la ligne est prescrite pour la date donnée
-    		if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_date_arret_fin)) 
-    		|| (!$_line_med->_date_arret_fin && $_line_med->_date_arret_fin <= $date && $date >= $_line_med->debut)){
-    		   // Chargement des prises de la ligne
-           $_line_med->loadRefsPrises();
-           // Parcours des prises
-					 foreach($_line_med->_ref_prises as &$_prise_med){
-					 	 // Calcul du nombre de lignes
-					 	 if($_prise_med->moment_unitaire_id){
-					 	 	$prise = $_prise_med->unite_prise;
-					 	 	$intitule_prise_med[$_line_med->_id][$_prise_med->unite_prise][$_prise_med->_id] = $_prise_med->_view;
-					 	 } else {
-					 	 	$prise = $_prise_med->_id;
-					 	 	$intitule_prise_med[$_line_med->_id]["autre"][$_prise_med->_id] = $_prise_med->_view;
-					 	 }
-			       
-					 
-					 	 if($_prise_med->moment_unitaire_id){
-					 	 	 // Stockage des quantite de prises pour le pre-remplissage de la feuille de soin
-					 	   $list_prises_med[$_line_med->_id][$prise][substr($_prise_med->_ref_moment->heure, 0, 2)] = $_prise_med->quantite;
-					 	 } 
-					 	 // Stockage des lignes rangées par unite de prise et par prise
-						 if($_prise_med->nb_tous_les && $_prise_med->unite_tous_les){
-						 	 if($_prise_med->calculDatesPrise($date)){
-						 	 	 if(is_array($all_lines_med)){
-						 	     $all_lines_med[$_line_med->_id][$prise] = $_line_med;
-						 	 	 }
-						 	 	 
-								 	 // Stockage du nombre de ligne de medicaments
-							 	 if(!@array_key_exists($prise, $lines_med[$_line_med->_id])){
-							 	 	 @$nb_produit_by_cat["med"]++;
-							 	 }
-							 	 
-					 	     $lines_med[$_line_med->_id][$prise] = $_line_med;
-					 	     $prises_med[$_line_med->_id][$prise][] = $_prise_med;
-						 	 }
-						 } else {
-							 // Stockage du nombre de ligne de medicaments
-						 	 if(!@array_key_exists($prise, $lines_med[$_line_med->_id])){
-						 	 	 @$nb_produit_by_cat["med"]++;
-						 	 }
-						 	 
-						 	  if(is_array($all_lines_med)){
-						 	    $all_lines_med[$_line_med->_id][$prise] = $_line_med;
-						 	  }
-						 	  $lines_med[$_line_med->_id][$prise] = $_line_med;
-					 	    $prises_med[$_line_med->_id][$prise][] = $_prise_med;
+        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_date_arret_fin)) || (!$_line_med->_date_arret_fin && $_line_med->_date_arret_fin <= $date && $date >= $_line_med->debut)){
+        	$_line_med->loadRefsPrises();
+        	
+        	// Si aucune prise
+					if(count($_line_med->_ref_prises) < 1){
+						$lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
+						$all_lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
+					  if(!@array_key_exists($key_tab, $lines_med[$_line_med->_id])){
+						  @$nb_produit_by_cat["med"]++;
+						}
+						continue;
+					}
+					$this->calculPrisesSoin($date, $_line_med, $lines_med, $list_prises_med, $all_lines_med, $intitule_prise_med, $nb_produit_by_cat["med"], $prises_med);
+    	  }
+      }
+    }
+   }
+	 // Parcours des elements
+	 foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+	   foreach($elements_chap as $name_cat => $elements_cat){
+		   foreach($elements_cat as &$_elements){
+		 	  foreach($_elements as &$_line_element){
+		  	  	
+		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
+		        $_line_element->loadRefsPrises();
+        	
+		        // Si aucune prise
+						if(count($_line_element->_ref_prises) < 1){
+							$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+							$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+						 if(!@array_key_exists($key_tab, $lines_element[$name_chap][$name_cat][$_line_element->_id])){
+						   @$nb_produit_by_cat[$name_cat]++;
 						 }
-					 }
-				 }
-    	 }
-    	}
-     }
-       
-     
-	  // Parcours des elements
-	  foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
-	  	if($name_chap != "dmi"){
-		  	foreach($elements_chap as $name_cat => $elements_cat){
-		  		foreach($elements_cat as &$_elements){
-		  			foreach($_elements as &$_line_element){
-			        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
-			        	// Si l'element est un DM, on le rajoute dans la liste
-			        	if($name_chap == "anapath" || $name_chap == "consult" || $name_chap == "imagerie"){
-						  		$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						  		$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						  	  @$nb_produit_by_cat[$name_cat]++;
-						  	} 
-						  	// Sinon, on regarde si l'element possède des prises pour la date donnée
-						  	else {
-				        	// Chargement des prises
-			  			  	$_line_element->loadRefsPrises();  	
-							  	foreach($_line_element->_ref_prises as &$_prise_element){	
-								 	  if($_prise_element->moment_unitaire_id){
-								 	  	$prise = $_prise_element->unite_prise;
-								 	  	$intitule_prise_element[$_line_element->_id][$_prise_element->unite_prise][$_prise_element->_id] = $_prise_element->_view;
-								 	  } else {
-								 	  	$prise = $_prise_element->_id;
-								 	  	$intitule_prise_element[$_line_element->_id]["autre"][$_prise_element->_id] = $_prise_element->_view;
-								 	  }
-									 	if($_prise_element->moment_unitaire_id){
-								 	 	 // Stockage des quantite de prises pour le pre-remplissage de la feuille de soin
-								 	   $list_prises_element[$_line_element->_id][$prise][substr($_prise_element->_ref_moment->heure, 0, 2)] = $_prise_element->quantite;
-								 	  } 
-								 	 
-							  		if($_prise_element->nb_tous_les && $_prise_element->unite_tous_les){
-									    if($_prise_element->calculDatesPrise($date)){
-											  // Stockage du nombre de ligne de medicaments
-											 	if(!@array_key_exists($prise, $lines_element[$name_chap][$name_cat][$_line_element->_id])){
-											 	  @$nb_produit_by_cat[$name_cat]++;
-											 	}
-									      $prises_element[$_line_element->_id][$prise][] = $_prise_element;
-									      $lines_element[$name_chap][$name_cat][$_line_element->_id][$prise] = $_line_element;
-									      if(is_array($all_lines_element)){
-									        $all_lines_element[$name_chap][$name_cat][$_line_element->_id][$prise] = $_line_element;
-									      }
-									    }
-									  } else {
-										  // Stockage du nombre de ligne de medicaments
-										 	if(!@array_key_exists($prise, $lines_element[$name_chap][$name_cat][$_line_element->_id])){
-										 	  @$nb_produit_by_cat[$name_cat]++;
-										 	}
-										 	
-									    $prises_element[$_line_element->_id][$prise][] = $_prise_element;
-									    $lines_element[$name_chap][$name_cat][$_line_element->_id][$prise] = $_line_element;
-									    if(is_array($all_lines_element)){
-									      $all_lines_element[$name_chap][$name_cat][$_line_element->_id][$prise] = $_line_element;
-									    }
-									  }
-							  	}
-			  			  }
-			        }
-		    	  }
-		  	  }
-	  	  }
-	  	}
-	  }
+						 continue;
+						}  
+						$this->calculPrisesSoin($date, $_line_element, $lines_element[$name_chap][$name_cat], $list_prises_element, $all_lines_element[$name_chap][$name_cat], $intitule_prise_element, $nb_produit_by_cat[$name_cat], $prises_element);
+		  		}
+		  	}
+		  }
+	  }	  
+   }
   }
 }
 

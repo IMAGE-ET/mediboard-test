@@ -17,6 +17,7 @@
 	    {{/foreach}}
 	  </select>  
 	</form>
+	<br />
 {{else}}
   {{if $line->no_poso}}
     {{$line->_ref_posologie->_view}}
