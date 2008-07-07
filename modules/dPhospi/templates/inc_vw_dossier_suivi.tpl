@@ -1,3 +1,18 @@
+<script type="text/javascript">
+
+delCibleTransmission = function() {
+  oDiv = $('cibleTrans');
+  if(!oDiv) {
+    return;
+  }
+  oForm = document.forms['editTrans'];
+  $V(oForm.object_class, "");
+  $V(oForm.object_id, "");
+  oDiv.innerHTML = "";
+}
+
+</script>
+
 <table class="tbl">
   <tr>
     <th class="title" style="width: 50%">
@@ -27,7 +42,7 @@
       {{/if}}
     </td>
     <td>
-      <div id="cibleTrans" style="font-style: italic;">
+      <div id="cibleTrans" style="font-style: italic;" onclick="delCibleTransmission()">
       </div>
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_transmission_aed" />
