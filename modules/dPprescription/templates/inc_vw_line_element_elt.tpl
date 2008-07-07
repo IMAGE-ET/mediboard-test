@@ -99,13 +99,17 @@
       {{else}}
         <table>
           <tr>
+          <!-- 
             <td style="border:none;">
+         
              {{if !$line->signee}}
 			        <div class="little-info">
 						     Vous devez être le responsable de cette ligne pour rajouter des posologies <br />
 						  </div>
 						  {{/if}}
+						  
 			      </td>
+			       -->
 			      <td style="border:none;"> 
 			        <!-- Affichage des prises -->
 			        {{if $line->_ref_prises|@count}}
@@ -115,7 +119,7 @@
 			        {{/foreach}}
 			        </ul>
 			        {{else}}
-			          Aucune posologie
+			         Aucune posologie
 			        {{/if}}
 			      </td>
           </tr>
