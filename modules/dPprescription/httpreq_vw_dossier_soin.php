@@ -9,6 +9,7 @@
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 $date      = mbGetValueFromGetOrSession("date");
+$now       = mbDateTime();
 
 // Chargement du sejour
 $sejour = new CSejour();
@@ -47,18 +48,20 @@ $tabHours = array("08","12","14","18","22","24","02","06");
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("list_prises_med", $list_prises_med);
+$smarty->assign("list_prises_med"    , $list_prises_med);
 $smarty->assign("list_prises_element", $list_prises_element);
-$smarty->assign("tabHours", $tabHours);
-$smarty->assign("sejour", $sejour);
-$smarty->assign("prescription_id", $prescription_id);
-$smarty->assign("date", $date);
-$smarty->assign("prises_med", $prises_med);
-$smarty->assign("lines_med", $lines_med);
-$smarty->assign("prises_element",$prises_element);
-$smarty->assign("lines_element", $lines_element);
-$smarty->assign("nb_produit_by_cat",$nb_produit_by_cat);
-$smarty->assign("categories", $categories);
+$smarty->assign("tabHours"           , $tabHours);
+$smarty->assign("sejour"             , $sejour);
+$smarty->assign("prescription_id"    , $prescription_id);
+$smarty->assign("date"               , $date);
+$smarty->assign("now"                , $now);
+$smarty->assign("prises_med"         , $prises_med);
+$smarty->assign("lines_med"          , $lines_med);
+$smarty->assign("prises_element"     , $prises_element);
+$smarty->assign("lines_element"      , $lines_element);
+$smarty->assign("nb_produit_by_cat"  , $nb_produit_by_cat);
+$smarty->assign("categories"         , $categories);
+
 $smarty->display("inc_vw_dossier_soins.tpl");
 
 ?>

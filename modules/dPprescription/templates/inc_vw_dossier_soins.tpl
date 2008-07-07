@@ -95,14 +95,27 @@ addCibleTransmission = function(object_class, object_id, view) {
 					        {{if array_key_exists($_hour, $prise_line)}}
 					          {{assign var=quantite value=$prise_line.$_hour}}
 					        {{else}}
-					         {{assign var=quantite value=""}}
+					         {{assign var=quantite value="-"}}
 					        {{/if}}
-				          {{$quantite}}
+					        <div style="border: 1px dotted #000;
+					                    {{if $quantite > 0}}
+					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}
+					                        background-color: #88f
+					                      {{else}}
+					                        background-color: #f88
+					                      {{/if}}
+					                    {{/if}}">
+				            {{$quantite}}
+				          </div>
 				        </td>
 					     {{/foreach}}
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
-					     <td></td>
+					     <td style="text-align: center">
+					       <div style="border: 1px dotted #000;">
+					         -
+					       </div>
+					     </td>
 					     {{/foreach}}
 					   {{/if}}
 				   <td style="text-align: center">
@@ -167,14 +180,27 @@ addCibleTransmission = function(object_class, object_id, view) {
 					        {{if array_key_exists($_hour, $prise_line)}}
 					          {{assign var=quantite value=$prise_line.$_hour}}
 					        {{else}}
-					         {{assign var=quantite value=""}}
+					         {{assign var=quantite value="-"}}
 					        {{/if}}
-				          {{$quantite}}
+					        <div style="border: 1px dotted #000;
+					                    {{if $quantite > 0}}
+					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}
+					                        background-color: #88f
+					                      {{else}}
+					                        background-color: #f88
+					                      {{/if}}
+					                    {{/if}}">
+					          {{$quantite}}
+					        </div>
 				        </td>
 					     {{/foreach}}
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
-					     <td></td>
+					     <td style="text-align: center">
+					       <div style="border: 1px dotted #000;">
+					         -
+					       </div>
+					     </td>
 					     {{/foreach}}
 					   {{/if}}
 				   <td style="text-align: center">
