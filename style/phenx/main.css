@@ -1,6 +1,6 @@
 /* $Id:$ */
-
 @import url("forms.css");
+
 @import url("print.css") print;
 
 * {
@@ -10,7 +10,7 @@
 
 body {
   font-family: Tahoma, Verdana, Arial, Helvetica, sans-serif;
-  font-size: 11px;  
+  font-size: 11px;
   background: #EFEFEF;
   color: #000000;
   margin: 0px;
@@ -43,7 +43,7 @@ th {
   vertical-align: top;
 }
 
-th.title, caption {
+th.title,caption {
   font-size: 1.2em;
   font-weight: bold;
   text-align: center;
@@ -51,13 +51,15 @@ th.title, caption {
   border: #aaa 1px solid;
 }
 
-th.title.modify, th.category.modify {
+th.title.modify,th.category.modify {
   color: #f00;
 }
+
 th.title.urgence {
   background-color: #00a;
   color: #fff;
 }
+
 th.title.urgence.modify {
   background-color: #00a;
   color: #f00;
@@ -105,8 +107,8 @@ a:hover {
   text-decoration: underline;
 }
 
-h1, h2, h3, h4 {
-	font-weight: bold;
+h1,h2,h3,h4 {
+  font-weight: bold;
 }
 
 h1 {
@@ -128,7 +130,7 @@ h2.module {
   padding-left: 55px;
 }
 
-h2.dPpatients{
+h2.dPpatients {
   background-image: url(../../images/modules/dPpatients.png);
 }
 
@@ -144,43 +146,44 @@ h3 {
 
 a.selected {
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
-  padding-bottom: 8px;    
-} 
-
-a.selectable{
-  padding-bottom: 8px;  
+  padding-bottom: 8px;
 }
-a.selectable:hover{
+
+a.selectable {
+  padding-bottom: 8px;
+}
+
+a.selectable:hover {
   background: url(../../images/icons/td_selected.png) no-repeat bottom center;
-  padding-bottom: 8px;    
-} 
+  padding-bottom: 8px;
+}
 
-
-a.sortable{
+a.sortable {
   background: url(../../images/icons/a_sortable.png) no-repeat bottom center;
-  padding-bottom: 8px;  
+  padding-bottom: 8px;
 }
 
-a.sortable:hover{
-  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
-  padding-bottom: 8px;  
-}
-
-a.ASC{
+a.sortable:hover {
   background: url(../../images/icons/a_asc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
 
-a.ASC:hover{
+a.ASC {
+  background: url(../../images/icons/a_asc.png) no-repeat bottom center;
+  padding-bottom: 8px;
+}
+
+a.ASC:hover {
   background: url(../../images/icons/a_desc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
 
-a.DESC{
+a.DESC {
   background: url(../../images/icons/a_desc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
-a.DESC:hover{
+
+a.DESC:hover {
   background: url(../../images/icons/a_asc.png) no-repeat bottom center;
   padding-bottom: 8px;
 }
@@ -188,7 +191,6 @@ a.DESC:hover{
 /**
  * Debug console
  */
-
 #console {
   font-family: "Courier New", Courier, monospace;
   font-size: 1.0em;
@@ -243,14 +245,14 @@ a.DESC:hover{
 
 /* classes Mediboard */
 .mediuser {
-  border-left: 4px solid transparent; 
-  padding-left: 4px; 
+  border-left: 4px solid transparent;
+  padding-left: 4px;
   margin-left: 0px;
 }
 
-.categorieConsult { 
+.categorieConsult {
   padding-left: 20px;
-  height: 18px; 
+  height: 18px;
   margin-left: 0px;
 }
 
@@ -260,7 +262,7 @@ table.titleblock td {
 }
 
 table.titleblock td.titlecell {
-  font-size: 1.6em; 
+  font-size: 1.6em;
   color: #620;
   width: 100%;
   padding-bottom: 10px;
@@ -280,20 +282,19 @@ table.crumbsblock td.crumbscell {
 }
 
 /* Tab view table */
-
 #tabmenu {
   border-spacing: 0px;
 }
 
 #tabmenu td {
-  height: 21px; 
+  height: 21px;
   padding-right: 1px;
 }
 
 #tabmenu td.normal {
-	padding: 6px;
-	padding-top: 3px;
-	padding-bottom: 0px;
+  padding: 6px;
+  padding-top: 3px;
+  padding-bottom: 0px;
   background: url(images/pictures/tab_background.png) repeat-x top;
 }
 
@@ -335,7 +336,6 @@ table.crumbsblock td.crumbscell {
 }
 
 /* Pane table */
-
 .main {
   width: 100%;
   margin: 2px;
@@ -358,7 +358,6 @@ table.main th.halfPane {
 }
 
 /* Standard table */
-
 table.tbl {
   width: 100%;
   border: 0px;
@@ -368,11 +367,11 @@ table.tbl tr {
   border-bottom: 1px solid #DDD;
 }
 
-table.tbl td, table.tbl th {
+table.tbl td,table.tbl th {
   border-right: 1px dotted #DDD;
 }
 
-table.tbl td input, table.tbl td button {
+table.tbl td input,table.tbl td button {
   margin: 0;
 }
 
@@ -407,37 +406,32 @@ table.tbl th {
 
 table.tbl th.title {
   font-size: 14px;
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
   background: #bbb;
   border: #aaa 1px outset;
 }
 
-table.tbl td,
-div.tree-header {
+table.tbl td,div.tree-header {
   background-color: #fff;
   padding: 2px;
   white-space: nowrap;
   vertical-align: middle;
 }
 
-table.tbl td.error,
-table.tbl tr:hover td.error {
+table.tbl td.error,table.tbl tr:hover td.error {
   background-color: #f00;
 }
 
-table.tbl td.warning,
-table.tbl tr:hover td.warning {
+table.tbl td.warning,table.tbl tr:hover td.warning {
   background-color: #fc0;
 }
 
-table.tbl td.ok,
-table.tbl tr:hover td.ok {
+table.tbl td.ok,table.tbl tr:hover td.ok {
   background-color: #afa;
 }
 
-table.tbl tr.selected td,
-div.selected {
+table.tbl tr.selected td,div.selected {
   background-color: #ffc;
 }
 
@@ -451,9 +445,7 @@ div.draggable {
   cursor: move;
 }
 
-tbody.hoverable:hover tr td,
-table.tbl tr:hover td,
-div.tree-header:hover {
+tbody.hoverable:hover tr td,table.tbl tr:hover td,div.tree-header:hover {
   background-color: #EEEEEE;
 }
 
@@ -464,26 +456,24 @@ table.tbl td.button {
   line-height: 140%;
 }
 
-div.previewfile{
+div.previewfile {
   white-space: normal;
-  text-align:left;
+  text-align: left;
 }
 
-div.previewfileMinus{
+div.previewfileMinus {
   font-size: 70%;
-  max-width:450px;
-  max-height:450px;
-  overflow:auto;
+  max-width: 450px;
+  max-height: 450px;
+  overflow: auto;
 }
 
-table.tbl tr.clear,
-table.tbl tr.clear a {
+table.tbl tr.clear,table.tbl tr.clear a {
   background-color: #ddf;
   color: #000;
 }
 
-table.tbl tr.clear td,
-table.tbl tr.clear th {
+table.tbl tr.clear td,table.tbl tr.clear th {
   background-color: transparent;
   border: none;
 }
@@ -511,11 +501,11 @@ div.dateTime {
 }
 
 /* a 'standard' table */
-
 table.std {
   border: solid #8c8 3px;
   background: #eef;
 }
+
 table.std th {
   background-color: #888;
   color: #fff;
@@ -527,7 +517,6 @@ table.std td.hilite {
 }
 
 /* Form tables */
-
 table.form {
   width: 100%;
   border-spacing: 1px;
@@ -546,13 +535,13 @@ table.form th {
 
 table.form th.title {
   font-size: 1.3em;
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
   background-color: #CCC;
 }
 
 table.form th.category {
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
   background-color: #CCCCCC;
   vertical-align: middle;
@@ -622,20 +611,20 @@ table.form td.date div {
 }
 
 div.autocomplete {
-  position:absolute;
-  width:250px;
-  max-height:200px;
+  position: absolute;
+  width: 250px;
+  max-height: 200px;
   overflow: auto;
-  background-color:white;
-  border:1px solid #888;
-  margin:0px;
-  padding:0px;
+  background-color: white;
+  border: 1px solid #888;
+  margin: 0px;
+  padding: 0px;
 }
 
 div.autocomplete ul {
-  list-style-type:none;
-  margin:0px;
-  padding:0px;
+  list-style-type: none;
+  margin: 0px;
+  padding: 0px;
 }
 
 div.autocomplete ul em {
@@ -643,7 +632,7 @@ div.autocomplete ul em {
   font-style: normal;
 }
 
-div.autocomplete ul li.selected { 
+div.autocomplete ul li.selected {
   background-color: #fafaa4;
   /*font-weight:bold;*/
 }
@@ -652,8 +641,8 @@ div.autocomplete ul li {
   list-style-type: none;
   display: block;
   margin: 0;
-  padding:2px;
-  cursor:pointer;
+  padding: 2px;
+  cursor: pointer;
 }
 
 div.autocomplete ul li small {
@@ -661,24 +650,18 @@ div.autocomplete ul li small {
 }
 
 /* links in header blocks */
-
-a.hdr:link, 
-a.hdr:active, 
-a.hdr:visited {
+a.hdr:link,a.hdr:active,a.hdr:visited {
   color: #fff;
 }
 
 /* tabbed boxes */
-
 td.tabox {
   background-color: #ccc;
   border: solid #ccc 2px;
 }
 
 /* Message styles */
-
-table.dialog #systemMsg,
-#leftMenu #systemMsg {
+table.dialog #systemMsg,#leftMenu #systemMsg {
   max-height: 50%;
   overflow: auto;
   position: fixed;
@@ -728,10 +711,7 @@ div.loading {
   white-space: nowrap;
 }
 
-div.big-success,
-div.big-info,
-div.big-warning,
-div.big-error{
+div.big-success,div.big-info,div.big-warning,div.big-error {
   margin: 10px 50px;
   min-height: 50px;
   background-repeat: no-repeat;
@@ -768,8 +748,8 @@ div.big-error {
 
 #goUp {
   background: #Ccc url(./images/icons/action_up.png) no-repeat center;
-  opacity: 0.5; 
-  border: 1px solid #666; 
+  opacity: 0.5;
+  border: 1px solid #666;
   cursor: pointer;
   position: fixed;
   width: 18px;
@@ -779,13 +759,12 @@ div.big-error {
   z-index: 1000;
 }
 
-#goUp:hover {
+#goUp :hover {
   background-color: #fff;
-  opacity: 1; 
+  opacity: 1;
 }
 
-  /* @import "./tooltip.css   */
-
+/* @import "./tooltip.css   */
 span.tooltip-trigger {
   cursor: pointer;
 }
@@ -807,11 +786,8 @@ div.tooltip table.decoration td.deco {
   opacity: .7;
 }
 
-div.tooltip table.decoration td.top-right,
-div.tooltip table.decoration td.top,
-div.tooltip table.decoration td.top-left,
-div.tooltip table.decoration td.left,
-div.tooltip table.decoration td.bottom-left {
+div.tooltip table.decoration td.top-right,div.tooltip table.decoration td.top,div.tooltip table.decoration td.top-left,div.tooltip table.decoration td.left,div.tooltip table.decoration td.bottom-left
+  {
   background-color: transparent;
   opacity: 1;
 }
@@ -857,9 +833,7 @@ div.postit table.decoration td.deco {
   opacity: .7;
 }
 
-div.postit table.decoration td.top-right,
-div.postit table.decoration td.top-left,
-div.postit table.decoration td.bottom-left {
+div.postit table.decoration td.top-right,div.postit table.decoration td.top-left,div.postit table.decoration td.bottom-left {
   background-color: transparent;
   opacity: 1;
 }
@@ -922,8 +896,7 @@ table.note {
   font-weight: normal;
 }
 
-table.note th,
-table.note td {
+table.note th,table.note td {
   background: transparent;
   text-align: left;
 }
@@ -940,10 +913,9 @@ table.note th.low {
   background-color: #afa;
 }
 
-  /* @import "./login.css";   */
-
+/* @import "./login.css";   */
 #login {
-  margin: 40px 0px 0px; 
+  margin: 40px 0px 0px;
 }
 
 #login table {
@@ -961,10 +933,7 @@ table.note th.low {
   white-space: normal;
 }
 
-  /* @import "./header.css";  */
-
-/* Global header */
-
+/* @import "./header.css";  */ /* Global header */
 #header {
   width: 100%;
   border-spacing: 0px;
@@ -980,25 +949,21 @@ table.Offline td.button {
   vertical-align: middle;
 }
 
-table.Offline select,
-table.Offline option,
-table.Offline input,
-table.Offline button  {
+table.Offline select,table.Offline option,table.Offline input,table.Offline button {
   height: 20px;
   font-size: 15px;
   font-weight: bold;
-  margin : 2px 2px;
+  margin: 2px 2px;
 }
 
 /* Banner */
-
 #banner {
   vertical-align: middle;
   text-align: center;
 }
 
 #banner p {
-  font-size: 1.9em; 
+  font-size: 1.9em;
   float: left;
   color: #620;
   margin: 5px 10px 0;
@@ -1016,7 +981,7 @@ table.Offline button  {
   padding: 0;
 }
 
-#nav ul, #nav li {
+#nav ul,#nav li {
   list-style: none;
   margin: 0;
   margin-left: 4px;
@@ -1059,7 +1024,7 @@ table.Offline button  {
   -moz-border-radius: 4px;
   background: #FFF;
   padding: 4px;
-  z-index: 100;
+  z-index: 40;
 }
 
 #nav .selected a {
@@ -1107,13 +1072,13 @@ table.Offline button  {
 }
 
 #user .menu {
-	background: #EFEFEF;
-	-moz-border-radius: 4px;
-	margin: 2px;
-	padding: 4px;
-	vertical-align: middle;
-	padding-bottom: 2px;
-	white-space: nowrap;
+  background: #EFEFEF;
+  -moz-border-radius: 4px;
+  margin: 2px;
+  padding: 4px;
+  vertical-align: middle;
+  padding-bottom: 2px;
+  white-space: nowrap;
 }
 
 #user .menu img {
@@ -1125,9 +1090,7 @@ table.Offline button  {
   -moz-border-radius: 2px;
 }
 
-
 /* Main -- table -- pane */
-
 #main {
   background: #fff;
   border: 1px solid #f60;
@@ -1137,7 +1100,7 @@ table.Offline button  {
   vertical-align: top;
 }
 
-#main > .title {
+#main>.title {
   background: #E0DFE3;
   -moz-border-radius: 6px;
   margin-bottom: 4px;
@@ -1158,7 +1121,6 @@ table.Offline button  {
   border: 1px solid #919B9C;
 }
 
-
 #mainPane {
   vertical-align: top;
 }
@@ -1176,41 +1138,29 @@ span.hilite {
   span.field {
     background: #bbd;
   }
-
   span.value {
     background: #ddd;
   }
-
   span.name {
     background: #bdb;
   }
-
   span.choice {
     background: #ddd;
   }
-
 }
 
-/* Module specific CSS*/
-  /* @import "./modules.css";   */
-
-table.dPsalleOp select,
-table.dPsalleOp option,
-table.dPsalleOp input,
-table.dPsalleOp button  {
+/* Module specific CSS*/ /* @import "./modules.css";   */
+table.dPsalleOp select,table.dPsalleOp option,table.dPsalleOp input,table.dPsalleOp button {
   height: 18px;
   font-size: 14px;
   font-weight: bold;
 }
 
-table.dPsalleOp .notext  {
+table.dPsalleOp .notext {
   font-size: 0px;
 }
 
-  /* @import "./contacts.css";  */
-
-/* contacts table */
-
+/* @import "./contacts.css";  */ /* contacts table */
 table.contacts {
   background-color: #888;
 }
@@ -1223,8 +1173,7 @@ table.contacts td.hilite {
   background-color: #fff;
 }
 
-  /* @import "./calendar.css    */
-
+/* @import "./calendar.css    */
 .calendar td.day.current {
   background-color: #ddd;
 }
@@ -1248,8 +1197,7 @@ table.contacts td.hilite {
   color: #822;
 }
 
-  /* @import "./ccam.css";      */
-
+/* @import "./ccam.css";      */
 table.fullCode {
   width: 100%;
   background: #f99;
@@ -1314,10 +1262,7 @@ table.selectCode td {
   padding: 5px;
 }
 
-  /* @import "./admission.css"; */
-
-/* The admission table based on the form one */
-
+/* @import "./admission.css"; */ /* The admission table based on the form one */
 #admission {
   width: 100%;
   border-spacing: 6px;
@@ -1333,7 +1278,7 @@ table.selectCode td {
 }
 
 #admission th.title {
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
   background: #68f;
   border: #aaa 3px outset;
@@ -1343,7 +1288,7 @@ table.selectCode td {
 }
 
 #admission th.category {
-  font-weight: bold;  
+  font-weight: bold;
   text-align: center;
   background: #abf;
   padding: 2px;
@@ -1377,23 +1322,22 @@ table.selectCode td {
   border: #aaa 2px dotted;
 }
 
-#admission .Bold{
+#admission .Bold {
   font-weight: bold;
 }
 
-#admission .NotBold{
+#admission .NotBold {
   font-weight: normal;
 }
 
 /* control tabs */
-
 hr.control_tabs {
   clear: both;
   display: none;
   border: none;
   border-top: 1px solid #F60;
 }
-  
+
 ul.control_tabs {
   list-style: none;
   clear: both;
@@ -1402,8 +1346,7 @@ ul.control_tabs {
   padding: 0;
 }
 
-ul.control_tabs li {
-  /*float: left;*/
+ul.control_tabs li { /*float: left;*/
   display: inline-block;
   text-align: center;
   margin-left: 2px;
@@ -1452,43 +1395,31 @@ ul.control_tabs li a.minor.active {
 }
 
 ul.control_tabs .separator {
-  padding: 0 10px; 
+  padding: 0 10px;
   border: none;
 }
 
-
-  /* @import "./hospitalisation.css"; */
-
-/* Chambres */
-
-table.chambrecollapse,
-table.chambreexpand {
+/* @import "./hospitalisation.css"; */ /* Chambres */
+table.chambrecollapse,table.chambreexpand {
   width: 100%;
   border-spacing: 0px;
   border-collapse: collapse;
   margin: 1px 0;
 }
 
-table.chambrecollapse em,
-table.chambreexpand em {
+table.chambrecollapse em,table.chambreexpand em {
   font-weight: bold;
 }
 
-
-table.chambrecollapse td,
-table.chambrecollapse th,
-table.chambreexpand td,
-table.chambreexpand th {
+table.chambrecollapse td,table.chambrecollapse th,table.chambreexpand td,table.chambreexpand th {
   border: 1px outset #050;
 }
 
-table.chambrecollapse td.action,
-table.chambreexpand td.action {
+table.chambrecollapse td.action,table.chambreexpand td.action {
   width: 20px;
   text-align: center;
   vertical-align: middle;
 }
-
 
 table.chambrecollapse th.chambre {
   padding: 2px;
@@ -1507,38 +1438,30 @@ th.chambre img {
   margin: 0 1px;
 }
 
-table.chambrecollapse tr.litdispo td,
-table.chambreexpand tr.litdispo td {
+table.chambrecollapse tr.litdispo td,table.chambreexpand tr.litdispo td {
   background: #dfd;
 }
 
-table.chambrecollapse tr.lit td,
-table.chambreexpand tr.lit td {
+table.chambrecollapse tr.lit td,table.chambreexpand tr.lit td {
   background: #ccc;
   color: #000;
 }
 
-table.chambrecollapse tr.litselected td,
-table.chambreexpand tr.litselected td {
+table.chambrecollapse tr.litselected td,table.chambreexpand tr.litselected td {
   background: #f00;
 }
 
-table.chambrecollapse tr.patient td,
-table.chambreexpand tr.patient td {
+table.chambrecollapse tr.patient td,table.chambreexpand tr.patient td {
   background: #eee;
   color: #000;
 }
 
-
-table.chambrecollapse tr.patient img,
-table.chambreexpand tr.patient img {
+table.chambrecollapse tr.patient img,table.chambreexpand tr.patient img {
   float: left;
   margin-right: 2px;
 }
 
-table.chambrecollapse tr.lit,
-table.chambrecollapse tr.litdispo,
-table.chambrecollapse tr.dates {
+table.chambrecollapse tr.lit,table.chambrecollapse tr.litdispo,table.chambrecollapse tr.dates {
   display: none;
 }
 
@@ -1548,65 +1471,51 @@ table.chambreexpand td.dates {
 }
 
 table.chambreexpand tr.dates {
+  
 }
 
 /* Operations */
-
-table.operationcollapse,
-table.operationexpand,
-table.sejourcollapse,
-table.sejourexpand {
+table.operationcollapse,table.operationexpand,table.sejourcollapse,table.sejourexpand {
   width: 100%;
   background: #fff;
   border-spacing: 0px;
   border-collapse: collapse;
 }
 
-table.operationcollapse td,
-table.operationexpand td,
-table.sejourcollapse td,
-table.sejourexpand td {
+table.operationcollapse td,table.operationexpand td,table.sejourcollapse td,table.sejourexpand td {
   border: 1px solid #555;
   padding: 0 2px;
   color: #000;
 }
 
-table.operationcollapse em,
-table.operationexpand em,
-table.sejourcollapse em,
-table.sejourexpand em {
+table.operationcollapse em,table.operationexpand em,table.sejourcollapse em,table.sejourexpand em {
   font-weight: bold;
 }
 
-table.operationcollapse td.selectoperation,
-table.operationexpand td.selectsejour,
-table.sejourcollapse td.selectsejour,
-table.sejourexpand td.selectsejour {
+table.operationcollapse td.selectoperation,table.operationexpand td.selectsejour,table.sejourcollapse td.selectsejour,table.sejourexpand td.selectsejour
+  {
   background: #ddf;
   text-align: center;
   vertical-align: middle;
   width: 20px;
 }
 
-table.operationcollapse td.patient,
-table.sejourcollapse td.patient {
+table.operationcollapse td.patient,table.sejourcollapse td.patient {
   white-space: normal;
   padding-left: 17px;
   background: #ddf url(../../images/icons/collapse.gif) no-repeat center left;
 }
 
-table.operationexpand td.patient,
-table.sejournexpand td.patient {
+table.operationexpand td.patient,table.sejournexpand td.patient {
   padding-left: 17px;
   background: #ddf url(../../images/icons/expand.gif) no-repeat center left;
 }
 
-table.operationexpand td.date,
-table.sejourexpand td.date {
+table.operationexpand td.date,table.sejourexpand td.date {
+  
 }
 
-table.operationcollapse td.date,
-table.sejourcollapse td.date {
+table.operationcollapse td.date,table.sejourcollapse td.date {
   display: none;
 }
 
@@ -1642,6 +1551,7 @@ table#planningBloc td {
   vertical-align: middle;
   background-color: #888;
 }
+
 table#planningBloc td.empty {
   background: #eee;
   width: 1.5%;
@@ -1652,14 +1562,13 @@ table#planningBloc td.firsthour {
 }
 
 /* @import "./dPpatients.css" */
-
 table#weeklyPlanning {
   width: 100%;
   border-spacing: 1px;
 }
 
 table#weeklyPlanning td {
-  text-align: center; 
+  text-align: center;
   vertical-align: middle;
   white-space: normal;
 }
@@ -1669,20 +1578,24 @@ table#weeklyPlanning td.selectedPlage {
 }
 
 table#weeklyPlanning td.nonEmpty {
-  background: #ccc; 
+  background: #ccc;
 }
+
 table#weeklyPlanning td.nonEmptyConsult {
   background: #ccc url(images/pictures/plageConsult.png) repeat-y left;
   border: #9f9 1px solid;
 }
+
 table#weeklyPlanning td.nonEmptyOp {
   background: #ccc url(images/pictures/plageOp.png) repeat-y left;
   border: #99f 1px solid;
 }
+
 table#weeklyPlanning td.selectedConsult {
   background: #ddd;
   border: #9f9 1px solid;
 }
+
 table#weeklyPlanning td.selectedOp {
   background: #ddd;
   border: #99f 1px solid;
@@ -1690,15 +1603,15 @@ table#weeklyPlanning td.selectedOp {
 
 table#weeklyPlanning td.empty {
   background: #eee;
-  height: 3px; 
+  height: 3px;
 }
 
 table#weeklyPlanning td.empty {
   background: #eee;
-  height: 3px; 
+  height: 3px;
 }
-  /* @import "./collapser.css"; */
 
+/* @import "./collapser.css"; */
 div.progressBar {
   font-size: 80%;
   background: #fff;
@@ -1716,7 +1629,7 @@ div.progressBar div {
 
 div.progressBar div.bar {
   height: 12px;
-/*  opacity: 0.2; */
+  /*  opacity: 0.2; */
   display: block;
   background-repeat: repeat;
 }
@@ -1744,62 +1657,41 @@ div.progressBar div.text {
   width: 90%;
 }
 
-
-tr.groupexpand td,
-tr.groupcollapse td {
+tr.groupexpand td,tr.groupcollapse td {
   background-color: #ddf;
 }
 
-tr.groupexpand td,
-tr.groupcollapse td,
-tr.groupexpand th,
-tr.groupcollapse th {
+tr.groupexpand td,tr.groupcollapse td,tr.groupexpand th,tr.groupcollapse th {
   padding-left: 25px;
   font-weight: bold;
   background-repeat: no-repeat;
   background-position: center left;
 }
 
-tr.groupcollapse td,
-tr.groupcollapse th {
+tr.groupcollapse td,tr.groupcollapse th {
   background-image: url(../../images/icons/collapse.gif);
 }
 
-tr.groupexpand td,
-tr.groupexpand th {
+tr.groupexpand td,tr.groupexpand th {
   background-image: url(../../images/icons/expand.gif);
 }
 
-tr.triggerShow td,
-tr.triggerHide td {
+tr.triggerShow td,tr.triggerHide td {
   background-color: #ddf;
 }
 
-tr.triggerShow td,
-td.triggerShow,
-tr.triggerHide td,
-td.triggerHide,
-tr.triggerShow th,
-tr.triggerHide th,
-div.triggerShow,
-div.triggerHide {
+tr.triggerShow td,td.triggerShow,tr.triggerHide td,td.triggerHide,tr.triggerShow th,tr.triggerHide th,div.triggerShow,div.triggerHide {
   padding-left: 25px;
   font-weight: bold;
   background-repeat: no-repeat;
   background-position: center left;
 }
 
-tr.triggerHide td,
-tr.triggerHide th,
-td.triggerHide,
-div.triggerHide {
+tr.triggerHide td,tr.triggerHide th,td.triggerHide,div.triggerHide {
   background-image: url(../../images/icons/expand.gif);
 }
 
-tr.triggerShow td,
-tr.triggerShow th,
-td.triggerShow,
-div.triggerShow {
+tr.triggerShow td,tr.triggerShow th,td.triggerShow,div.triggerShow {
   background-image: url(../../images/icons/collapse.gif);
 }
 
@@ -1816,7 +1708,7 @@ td.show {
 }
 
 div.tree-content {
-  margin: 0; 
+  margin: 0;
   padding-left: 25px;
 }
 
@@ -1842,9 +1734,7 @@ table.affectations td.fullService {
   background-color: #fff;
 }
 
-  /* @import "./consultation.css"; */
-
-
+/* @import "./consultation.css"; */
 table#weber td {
   text-align: center;
 }
@@ -1876,25 +1766,23 @@ table#weber td {
 }
 
 /* Liste de choix dans les comptes rendus */
-
 td.listeChoixCR ul {
   list-style-type: none;
   list-style-position: inside;
 }
 
 td.listeChoixCR ul li {
-  display:inline;
+  display: inline;
   float: left;
   margin: 2px 2px 2px 0px;
 }
 
 /* Installation wizard */
-
 div.wizard {
-  padding: 20px; 
-  margin: 40px; 
-  background: #eee; 
-  border: 2px solid #8c8; 
+  padding: 20px;
+  margin: 40px;
+  background: #eee;
+  border: 2px solid #8c8;
 }
 
 div.wizard div.toc {
@@ -1962,7 +1850,6 @@ div.about div.nav {
 }
 
 /* The main calendar widget.  DIV containing a table. */
-
 .calendar {
   position: relative;
   display: none;
@@ -1973,7 +1860,6 @@ div.about div.nav {
 }
 
 /* Header part -- contains navigation buttons and day names. */
-
 .calendar .button { /* "<<", "<", ">", ">>" buttons have this class */
   text-align: center;
   padding: 1px;
@@ -1994,9 +1880,11 @@ div.about div.nav {
 }
 
 .calendar thead .headrow { /* Row <TR> containing navigation buttons */
+  
 }
 
 .calendar thead .daynames { /* Row <TR> containing the day names */
+  
 }
 
 .calendar thead .name { /* Cells <TD> containing the day names */
@@ -2022,16 +1910,17 @@ div.about div.nav {
 }
 
 /* The body part -- contains all the days in month. */
-
 .calendar tbody .day { /* Cells <TD> containing month days dates */
   width: 2em;
   text-align: right;
   padding: 2px 4px 2px 2px;
 }
+
 .calendar tbody .day.othermonth {
   font-size: 0.8em;
   color: #aaa;
 }
+
 .calendar tbody .day.othermonth.oweekend {
   color: #faa;
 }
@@ -2079,7 +1968,9 @@ div.about div.nav {
   color: #00f;
 }
 
-.calendar tbody .disabled { color: #999; }
+.calendar tbody .disabled {
+  color: #999;
+}
 
 .calendar tbody .emptycell { /* Empty cells (the best is to hide them) */
   visibility: hidden;
@@ -2090,8 +1981,8 @@ div.about div.nav {
 }
 
 /* The footer part -- status bar and "Close" button */
-
 .calendar tfoot .footrow { /* The <TR> in footer (only one right now) */
+  
 }
 
 .calendar tfoot .ttip { /* Tooltip (status bar) cell <TD> */
@@ -2117,7 +2008,6 @@ div.about div.nav {
 }
 
 /* Combo boxes (menus that display months/years for direct selection) */
-
 .calendar .combo {
   position: absolute;
   display: none;
@@ -2133,8 +2023,7 @@ div.about div.nav {
   z-index: 100;
 }
 
-.calendar .combo .label,
-.calendar .combo .label-IEfix {
+.calendar .combo .label,.calendar .combo .label-IEfix {
   text-align: center;
   padding: 1px;
 }
@@ -2161,9 +2050,7 @@ div.about div.nav {
   background-color: #f4f0e8;
 }
 
-.calendar td.time .hour,
-.calendar td.time .minute,
-.calendar td.time .ampm {
+.calendar td.time .hour,.calendar td.time .minute,.calendar td.time .ampm {
   padding: 0px 3px 0px 4px;
   border: 1px solid #889;
   font-weight: bold;
@@ -2191,36 +2078,36 @@ div.about div.nav {
   color: #0f0;
 }
 
-.chargementMask{
+.chargementMask {
   width: 100%;
   position: absolute;
-  background-color:#000 ;
+  background-color: #000;
   z-index: 10;
 }
 
-.chargementText{
+.chargementText {
   width: 20%;
   min-width: 150px;
   position: fixed;
   z-index: 11;
   font-size: 1.2em;
-  background-color:#fff;
-  color:#000;
+  background-color: #fff;
+  color: #000;
   border: 1px solid #F60;
   -moz-border-radius: 6px;
   padding: 20px 5px;
   text-align: center;
 }
 
-.chargementText .loading{
+.chargementText .loading {
   display: inline;
 }
 
 div#performance {
   opacity: 0.6;
-  line-height: 110%;  
+  line-height: 110%;
   font-size: 9px;
-  margin: 10px; 
+  margin: 10px;
   text-align: center;
 }
 
@@ -2230,6 +2117,7 @@ option.validation {
   background-repeat: no-repeat;
   background-position: center right;
 }
+
 option.modification {
   height: 16px;
   background-image: url(images/icons/warning.png);
@@ -2239,8 +2127,8 @@ option.modification {
 
 div.idsante400 {
   height: 16px;
-    width: 18px;
-    float: right;
+  width: 18px;
+  float: right;
   padding: 0 4px;
 }
 
@@ -2252,26 +2140,26 @@ table#diagramme {
 
 table#diagramme td.only {
   border: 2px solid #050440;
-  color : #050440;
+  color: #050440;
 }
 
 table#diagramme td.done {
-  background-color:#f3f5f7;
+  background-color: #f3f5f7;
   text-align: center;
 }
 
 table#diagramme td.current {
-  background-color:#aabcee;
+  background-color: #aabcee;
   text-align: center;
 }
 
 table#diagramme td.expect {
   text-align: center;
-  background-color:#aaaaaa;
+  background-color: #aaaaaa;
 }
 
 table#diagramme td.ray {
-  background-image: url(images/icons/ray.gif); 
+  background-image: url(images/icons/ray.gif);
   background-repeat: repeat;
 }
 
@@ -2306,70 +2194,69 @@ div.sejour {
 }
 
 span.listeCurrent a {
-  color:red ;
+  color: red;
 }
 
-table.tbl td.highlight{
+table.tbl td.highlight {
   background-color: #ff5;
 }
 
-td.highlight{
+td.highlight {
   background-color: #ff5;
 }
 
-div.effectue{
-  text-decoration: line-through;  
+div.effectue {
+  text-decoration: line-through;
 }
 
-table.tbl td.ccmu-1{
+table.tbl td.ccmu-1 {
   background-color: #0F0;
 }
 
-table.tbl td.ccmu-2{
+table.tbl td.ccmu-2 {
   background-color: #9F0;
 }
 
-table.tbl td.ccmu-3{
+table.tbl td.ccmu-3 {
   background-color: #FF0;
 }
 
-table.tbl td.ccmu-4{
+table.tbl td.ccmu-4 {
   background-color: #FFCD00;
 }
 
-table.tbl td.ccmu-5{ 
+table.tbl td.ccmu-5 {
   background-color: #F60;
 }
 
-table.tbl td.ccmu-D{
+table.tbl td.ccmu-D {
   background-color: #F00;
 }
 
-table.tbl td.ccmu-P{
+table.tbl td.ccmu-P {
   background-color: #0F0;
 }
 
 .bargraph {
   overflow: hidden;
-  height: 1em; 
+  height: 1em;
   min-width: 5em;
 }
 
-
 .legend .value {
-   font-weight: bold;
-   border: none;
-   padding: 2px;
-   width: 12em;
+  font-weight: bold;
+  border: none;
+  padding: 2px;
+  width: 12em;
 }
 
 .legend .color {
-   height: 6px; 
-   width: 6px; 
-   float: left;
-   margin: 3px;
-   margin-bottom: 0;
-   border: 1px solid #333333;
+  height: 6px;
+  width: 6px;
+  float: left;
+  margin: 3px;
+  margin-bottom: 0;
+  border: 1px solid #333333;
 }
 
 .bargraph .threshold {
@@ -2378,12 +2265,12 @@ table.tbl td.ccmu-P{
   margin-top: 1px;
 }
 
-.bargraph .value div, .bargraph .threshold div {
+.bargraph .value div,.bargraph .threshold div {
   height: 100%;
 }
 
 .bargraph .threshold div {
-  float:left; 
+  float: left;
 }
 
 .critical {
@@ -2406,7 +2293,7 @@ table.tbl td.ccmu-P{
   border-color: #06F;
 }
 
-.bargraph > .value {
+.bargraph>.value {
   height: 40%;
   border-width: 1px;
   border-style: solid;
@@ -2414,10 +2301,10 @@ table.tbl td.ccmu-P{
 }
 
 table.main td.step {
-  background-color: #ccc; 
-  width: 10%; 
-  font-size: 12px; 
-  font-weight: bold; 
+  background-color: #ccc;
+  width: 10%;
+  font-size: 12px;
+  font-weight: bold;
   text-align: center;
   vertical-align: middle;
 }
@@ -2432,6 +2319,7 @@ table.main td.step {
   margin-left: 1px;
   margin-right: -2px;
 }
+
 .schema-dentaire {
   margin: auto;
   border: 1px dotted #666;
@@ -2521,7 +2409,6 @@ table.main td.step {
   background: #B2CCFF;
 }
 
-
 table.tbl th.element {
   background-color: #ddf;
   color: #000;
@@ -2544,7 +2431,6 @@ table.tbl th.arretee {
 table.tbl th.traitement {
   background-color: #7c7;
 }
-
 
 .time-picker {
   border: 1px solid #999;
@@ -2593,4 +2479,35 @@ table.tbl th.traitement {
   cursor: pointer;
   padding: 3px;
   font-weight: bold;
+}
+
+ul.select-tree {
+  padding: 0;
+}
+
+ul.select-tree li {
+  list-style-type: none;
+  border: 1px solid #999;
+  margin-top: -1px;
+  padding: 1px;
+  padding-left: 3px;
+  width: 100px;
+  background: #fff;
+  cursor: pointer;
+  margin-left: 0;
+}
+
+ul.select-tree li:hover {
+  background: #ccc;
+}
+
+ul.select-tree li.selected {
+  background: #ddd;
+  font-weight: bold;
+}
+
+ul.select-tree li.drop {
+  background-image: url(../../images/icons/a_right.png);
+  background-position: center right;
+  background-repeat: no-repeat;
 }

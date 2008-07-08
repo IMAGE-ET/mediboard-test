@@ -15,12 +15,10 @@ var ElementChecker = {
     this.aProperties  = {};
     this.oElement     = oElement;
     this.sTypeSpec    = null;
+    
     // Extraction des props
-    if(sPropSpec = oElement.title){
-      aSpecFragments = sPropSpec.split(" ");
-    }else if(sPropSpec = oElement.className){
-      aSpecFragments = sPropSpec.split(" ");
-    }
+    sPropSpec = oElement.title || oElement.className || '';
+    aSpecFragments = sPropSpec.split(' ');
     
     // Props trouvées : Recherche de la prop principale et creation propriétés
     if(aSpecFragments){

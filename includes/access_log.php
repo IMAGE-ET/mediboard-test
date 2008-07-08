@@ -7,7 +7,7 @@
  * @author Thomas Despoix
  */
 
-global $AppUI, $m, $tab, $a, $dosql, $action;
+global $m, $action;
 
 $ds = CSQLDataSource::get("std");
 if (!$ds->loadTable("access_log")) {

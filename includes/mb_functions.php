@@ -581,6 +581,7 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
+  //$affichageScript .= mbLoadScript("lib/deprecation.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   

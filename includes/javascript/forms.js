@@ -351,7 +351,7 @@ function prepareForm(oForm, bForcePrepare) {
   if (!oForm.hasClassName("prepared") || bForcePrepare) {
   
     // Event Observer
-    if(oForm.classNames().include("watched")) {
+    if(oForm.hasClassName("watched")) {
       new Form.Observer(oForm, 1, function() { FormObserver.elementChanged(); });
     }
     // Form preparation
@@ -359,17 +359,17 @@ function prepareForm(oForm, bForcePrepare) {
     oForm.lockAllFields = (oForm._locked && oForm._locked.value) == "1"; 
   
     // Build label targets
-    var aLabels = oForm.getElementsByTagName("label");
+    var aLabels = oForm.select("label");
     var iLabel = 0;
     var oLabel = null;
     var sFor = null;
     while (oLabel = aLabels[iLabel++]) {
       // oLabel.getAttribute("for") is not accessible in IE
-      if (sFor = oLabel.htmlFor) { 
+      if (sFor = oLabel.htmlFor) {
         if (sFor.indexOf(sFormName) != 0) {
           oLabel.htmlFor = sFormName + "_" + sFor;
         }
-      } 
+      }
     }
   
     // For each element
@@ -398,26 +398,31 @@ function prepareForm(oForm, bForcePrepare) {
         notNullOK(oElement);
         Element.addEventHandler(oElement, "change", notNullOK);
       }
-           
+      
 			// Can null
 		  if (oElement.hasClassName("canNull")) {
         canNullOK(oElement);
         Element.addEventHandler(oElement, "change", canNullOK);
       }
-           
+      
+      // Select tree
+      if (oElement.hasClassName("select-tree")) {
+        oElement.buildTree();
+      }
+      
       // Focus on first text input
       if (bGiveFormFocus && oElement.type == "text" && !oElement.getAttribute("readonly")) {
         // Internet Explorer will not give focus to a not visible element but will raise an error
         if (oElement.clientWidth > 0) {
           oElement.focus();
           bGiveFormFocus = false;
-        } 
+        }
       }
       
       // Won't make it resizable on IE
       if (oElement.type == "textarea" && !Prototype.Browser.IE) {
         oElement.setResizable({autoSave: true, step: 'font-size'});
-      }
+      }      
       
       // We mark this form as prepared
       oForm.addClassName("prepared");
@@ -847,6 +852,116 @@ var TimePicker = Class.create({
     var picker = $(this.pickerId);
     var short = picker.select('.short')[0].toggle();
     picker.select('.long')[0].toggle();
-    e.element().update(short.visible() ? '&gt;&gt;' : '&lt;&lt;');
+    e.element().update(short.visible()?'&gt;&gt;':'&lt;&lt;');
+  }
+});
+
+// Make a select form control with optgroups appear as a tree
+Element.addMethods(['select', 'optgroup'], {
+  buildTree: function (element, tree) {
+
+    if (!tree) { // If it is the root
+      // Every option is hidden
+      element.descendants().each(function(d) {d.hide()});
+      
+      // New unordered list
+      tree = new Element('ul').addClassName('select-tree');
+      var pos = element.cumulativeOffset();
+      var dim = element.getDimensions();
+     
+      // The hack input to blur the select control
+      var hack = new Element('input').writeAttribute('type', 'text').hide();
+      hack.name = element.name+'_tree__hack';
+      hack.id = element.id+'_tree__hack';
+      element.insert({after: hack});
+
+      bubble = function () {
+        tree.hide();
+        document.body.stopObserving('mouseup', bubble);
+        return false;
+      }
+        
+      showTree = function () {
+        hack.focus();
+        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
+        tree.show();
+        document.body.observe('mouseup', bubble);
+      };
+    
+      tree.id = element.id+'_tree';
+      element.insert({after: tree});
+      element.observe('click', showTree.bindAsEventListener(element));
+      
+      if (tree.getStyle('position') != 'absolute') { // Prototype bug
+        tree.absolutize();
+      }
+      tree.setStyle({
+        zIndex: 40,
+        left: pos.left+'px',
+        top: pos.top+dim.height+'px'
+      }).hide();
+    }
+    
+    var subTree;
+    
+    // For each select child
+    element.childElements().each(function (o) {
+      var li = new Element('li');
+      
+      // If it is an optgroup
+      if (o.tagName.toLowerCase() == 'optgroup') {
+        li.insert(o.label);
+        
+        subTree = new Element('ul');
+        o.buildTree(subTree.hide());
+        li.insert(subTree).addClassName('drop');
+        
+        // On mouse over on the LI
+        li.observe('mouseover', function() {
+          var liDim = li.getDimensions();
+          var liPos = li.positionedOffset();
+          $$('ul.select-tree ul').each(function(ul) {ul.hide()});
+          li.childElements().each(function (e) {
+            e.show();
+            if (e.getStyle('position') != 'absolute') {
+              e.absolutize();
+            }
+            e.setStyle({
+              left: liPos.left+liDim.width-21+'px',
+              top: liPos.top+1+'px'
+            });
+          });
+        });
+
+      // If it is an option
+      } else {
+        li.insert(o.text);
+
+        // we retrieve the select
+        var e = element;
+        while (e && e.tagName.toLowerCase() != 'select') {
+            e = e.up();
+        }
+        li.id = e.id+'_'+o.value;
+        if ($V(e) == o.value) li.addClassName('selected');
+        
+        // on click on the li
+        li.observe('click', function() {
+          // we set the value and hide every other select tree
+          $(e.id+'_'+$V(e)).removeClassName('selected');
+          $V(e, o.value, true);
+          li.addClassName('selected');
+          $$('ul.select-tree').each(function(ul) {ul.hide()});
+        });
+        
+        // we hide every other other select tree ul on mouseover
+        li.observe('mouseover', function() {
+          tree.select('ul').each(function(ul) {ul.hide()});
+        });
+      }
+      tree.insert(li);
+    });
+    
+    return element;
   }
 });

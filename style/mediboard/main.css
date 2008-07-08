@@ -2976,3 +2976,29 @@ table.tbl th.traitement {
   padding: 3px;
   font-weight: bold;
 }
+
+ul.select-tree {
+  padding-left: 0;
+}
+
+ul.select-tree li {
+  list-style-type: none;
+  border: 1px solid #999;
+  margin-top: -1px;
+  padding: 1px;
+  padding-left: 3px;
+  width: 100px;
+  background: #fff;
+  cursor: pointer;
+  margin-left: 0;
+}
+
+ul.select-tree li:hover, ul.select-tree li.selected {
+  background: #ccc;
+}
+
+ul.select-tree li.drop {
+  background-image: url(../../images/icons/a_right.png);
+  background-position: center right;
+  background-repeat: no-repeat;
+}
