@@ -2481,8 +2481,10 @@ table.tbl th.traitement {
   font-weight: bold;
 }
 
+/* Select tree */
 ul.select-tree {
   padding: 0;
+  text-align: left;
 }
 
 ul.select-tree li {

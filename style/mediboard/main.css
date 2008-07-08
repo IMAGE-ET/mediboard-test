@@ -2978,7 +2978,8 @@ table.tbl th.traitement {
 }
 
 ul.select-tree {
-  padding-left: 0;
+  padding: 0;
+  text-align: left;
 }
 
 ul.select-tree li {
