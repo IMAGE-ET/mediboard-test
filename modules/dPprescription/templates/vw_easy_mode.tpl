@@ -15,7 +15,7 @@ changeButton = function(oCheckbox, element_id, oTokenField, modeCategorie){
 // Ajout de tous les elements d'une categorie
 function addCategorie(categorie_id, oTokenField){
   // Parcours de tous les boutons
-  $$('input.cat-'+categorie_id).each( function(oCheckbox) {
+  $$('input.'+categorie_id).each( function(oCheckbox) {
     elt = oCheckbox.id;
     elts = elt.split("-");
     id  = elts[1];
@@ -29,24 +29,17 @@ function addCategorie(categorie_id, oTokenField){
 }
 
 function resetModeEasy(){
-/*
-  $$('input').each( function(oCheckbox) {
-    if(oCheckbox.checked){
-      oCheckbox.checked = false;
-    }
-  });
-*/  
   $$('input').each( function(oCheckbox) {
     if(oCheckbox.checked){
       if(!oCheckbox.hasClassName("med")){
 	      elt = oCheckbox.id;
 	      elts = elt.split("-");
 	      id = elts[1];
-	      
-	      //oCheckbox.disabled = true;
-			  //oCheckbox.setOpacity(0.6);
-			  //$('label-'+id).setOpacity(0.6);
-		    $('label-'+id).setStyle("color: #070");
+	      if($('label-'+id)){
+	        $('label-'+id).setStyle("color: #070");
+		    }
+		    oCheckbox.checked = false;
+		  } else {
 		    oCheckbox.checked = false;
 		  }
     }
@@ -118,11 +111,7 @@ Main.add( function(){
 		  var elts = _id.split("-");
 		  var id = elts[1];
 		  if(elements.include(id)){
-		    //oCheckbox.checked = true;
-		    //oCheckbox.disabled = true;
-		    //oCheckbox.setOpacity(0.6);
 		    $('label-'+id).setStyle("color: #070");
-		   // $('label-'+id).setOpacity(0.6);
 		  }
 	  }
 	});
@@ -231,8 +220,9 @@ Main.add( function(){
 		    {{foreach from=$chapitre item=categorie}}
 		      <tr>
 		        <th colspan="{{$numCols*2}}">{{$categorie->_view}}
+		        {{$categorie->_id}}
 		          {{assign var=categorie_id value=$categorie->_id}}
-		          <button  id="cat-{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -2px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
+		          <button  id="{{$categorie->_id}}" class="cat tick"  style="position: absolute; right: 12px; margin-top: -2px;" onclick="addCategorie('{{$categorie->_id}}',oEltField);" title="Ajouter cet élément">
 		          Ajouter tous les éléments de la catégorie
 		          </button>
 		        </th>
@@ -243,8 +233,8 @@ Main.add( function(){
 		      {{foreach from=$categorie->_ref_elements_prescription item=element name=elements}}
 		        {{assign var=i value=$smarty.foreach.elements.iteration}}
 		        <td style="width: 1%;">
-		          <input type="checkbox" name="elt-{{$element->_id}}"
-		                  class="cat-{{$categorie->_id}}" 
+		          <input type="checkbox" name="elt-{{$element->_id}}" 
+		                  class="{{$categorie->_id}}" 
 		                  onclick="changeButton(this,'{{$element->_id}}',oEltField);" />    
             </td>
             <td>		         

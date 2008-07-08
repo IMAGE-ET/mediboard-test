@@ -94,9 +94,14 @@ transfertTraitement = function(line_id){
 }
 
 // Initialisation des dates pour les calendars
+var date = new Date().toDATE();
+var dDate = Date.fromDATE(date); 
+dDate.addDays(-1);
+date = dDate.toDATE();
+
 dates = {  
   limit: {
-    start: new Date().toDATE(),
+    start: date,
     stop: null
   }
 }
