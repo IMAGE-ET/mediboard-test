@@ -42,10 +42,10 @@
         {{$typeChir->_view}}
       {{else}}-{{/if}}
     </td>
-    {{include file=inc_field_timing.tpl object=$selOp field=induction_debut submit=submitAnesth}}
+    {{include file=inc_field_timing.tpl object=$selOp form="anesthTiming" field=induction_debut submit=submitAnesth}}
   </tr>
   <tr>
-    {{include file=inc_field_timing.tpl object=$selOp field=induction_fin submit=submitAnesth}}
+    {{include file=inc_field_timing.tpl object=$selOp form="anesthTiming" field=induction_fin submit=submitAnesth}}
   </tr>
 </table>
   

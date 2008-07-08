@@ -72,6 +72,7 @@ function submitPersonnel(oForm){
     
     {{assign var="affectation_id" value=$affectation->_id}}
     {{assign var="timing" value=$timingAffect.$affectation_id}}
+    {{assign var="form" value="affectationPersonnel-$affectation_id"}}
     
     {{$affectation->_ref_personnel->_ref_user->_view}} /
     {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
@@ -117,6 +118,7 @@ function submitPersonnel(oForm){
     
     {{assign var="affectation_id" value=$affectation->_id}}
     {{assign var="timing" value=$timingAffect.$affectation_id}}
+    {{assign var="form" value="affectationPersonnel-$affectation_id"}}
 
     {{$affectation->_ref_personnel->_ref_user->_view}} / 
     {{tr}}CPersonnel.emplacement.{{$affectation->_ref_personnel->emplacement}}{{/tr}}
