@@ -205,16 +205,21 @@ ul {
 	    <th class="title" colspan="8">Signature IDE</th>
 	  </tr>
 	  <tr>
-	    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2"></td>
-	    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2">
+	    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
+	    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
 	    {{if $pharmacien->_id}}
 	      {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
 	    {{/if}}  
 	      
 	    </td>
-	    <td style="border: 1px solid #ccc;" colspan="8" ></td>
-	    <td style="border: 1px solid #ccc;" colspan="8"></td>
-	    <td style="border: 1px solid #ccc;" colspan="8"></td>
+
+	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
+	  </tr>
+	  <tr>
+	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
+	  </tr>
+	  <tr>
+	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
 	  </tr>
   </table>
 

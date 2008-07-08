@@ -51,16 +51,12 @@ function insertMedElts($lines, $prescription, $sejour){
   		if($cat == "element" && array_key_exists($line->_id, $elements)){
   			continue;
   		}	
-		  // si la ligne est un element, on verifie les date
-  		if($cat == "element"){
-		    if($line->date_arret){
-		      $line->_fin = $line->date_arret;	
-		    }
-			  if($line->_fin < mbDate($limit)){
-		    	continue;
-		    }
-  		}
-  		
+	
+  		// On ne duplique pas la ligne si elle est finie
+  		if($line->_date_arret_fin && $line->_date_arret_fin < $limit){
+	      continue;
+	    }
+		
   		// Chargement des prises 
 			$line->loadRefsPrises();
 			
