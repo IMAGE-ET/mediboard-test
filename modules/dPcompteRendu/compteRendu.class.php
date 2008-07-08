@@ -92,7 +92,8 @@ class CCompteRendu extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->object_id ? "Modèle : " : "Document : ";
+    $this->_view = $this->object_id ? "" : "Modèle : ";
+    $this->_view.= $this->nom;
     
     if ($this->chir_id    ) $this->_owner = "prat";
     if ($this->function_id) $this->_owner = "func";
