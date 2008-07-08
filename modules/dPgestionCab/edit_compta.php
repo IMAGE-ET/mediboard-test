@@ -42,20 +42,25 @@ $where["function_id"] = "IS NULL";
 $listRubriques = new CRubrique;
 $listRubriques = $listRubriques->loadList($where);
 
-// Récupération de la liste des rubriques liés aux fonctions
-$where["function_id"] = "= $user->function_id";
-$listRubriquesFonction = new CRubrique;
-$listRubriquesFonction = $listRubriquesFonction->loadList($where);
-
 // Récupération de la liste des mode de paiement hors fonction
-$where["function_id"] = "IS NULL";
 $listModesPaiement = new CModePaiement;
 $listModesPaiement = $listModesPaiement->loadList($where);
 
-// Récupération de la liste des mode de paiement liés aux fonctions
-$where["function_id"] = "= $user->function_id";
-$listModePaiementFonction = new CModePaiement;
-$listModePaiementFonction = $listModePaiementFonction->loadList($where);
+// Récupération de la liste des rubriques liés aux fonctions
+if ($user->function_id) {
+  $where["function_id"] = "= $user->function_id";
+  $listRubriquesFonction = new CRubrique;
+  $listRubriquesFonction = $listRubriquesFonction->loadList($where);
+  
+  // Récupération de la liste des mode de paiement liés aux fonctions
+  $listModePaiementFonction = new CModePaiement;
+  $listModePaiementFonction = $listModePaiementFonction->loadList($where);
+} else {
+  $listRubriquesFonction = array();
+  $listModePaiementFonction = array();
+  $where = array();
+}
+
 
 $listGestionCab    = new CGestionCab();
 $where["date"]     = "BETWEEN '$filter->_date_min' AND '$filter->_date_max'";
@@ -74,16 +79,16 @@ foreach($listGestionCab as $key => $fiche) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("etablissement"       			, $etablissement);
-$smarty->assign("fonction"       						, $fonction);
-$smarty->assign("gestioncab"       					, $gestioncab);
-$smarty->assign("gestioncab"       					, $gestioncab);
-$smarty->assign("filter"           					, $filter);
-$smarty->assign("listRubriques"    					, $listRubriques);
-$smarty->assign("listRubriquesFonction"			, $listRubriquesFonction);
-$smarty->assign("listModesPaiement"					, $listModesPaiement);
-$smarty->assign("listModePaiementFonction"	, $listModePaiementFonction);
-$smarty->assign("listGestionCab"   					, $listGestionCab);
+$smarty->assign("etablissement"             , $etablissement);
+$smarty->assign("fonction"                  , $fonction);
+$smarty->assign("gestioncab"                , $gestioncab);
+$smarty->assign("gestioncab"                , $gestioncab);
+$smarty->assign("filter"                    , $filter);
+$smarty->assign("listRubriques"             , $listRubriques);
+$smarty->assign("listRubriquesFonction"     , $listRubriquesFonction);
+$smarty->assign("listModesPaiement"         , $listModesPaiement);
+$smarty->assign("listModePaiementFonction"  , $listModePaiementFonction);
+$smarty->assign("listGestionCab"            , $listGestionCab);
 
 $smarty->display("edit_compta.tpl");
 ?>
