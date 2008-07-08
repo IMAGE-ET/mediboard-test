@@ -40,8 +40,22 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 
 
 if($prescription->_id){
+	
+	// Chargement des lignes
+	$prescription->loadRefsLinesMed("1");
+	$prescription->loadRefsLinesElementByCat();
+	$prescription->_ref_object->loadRefPrescriptionTraitement();
+		  
+	$lines["medicament"] = $prescription->_ref_prescription_lines;
+	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
+	if($traitement_personnel->_id){
+	  $traitement_personnel->loadRefsLinesMed("1");
+	}
+	$lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
+	  	  
+
 	// Calcul du plan de soin pour la journée $date
-	$prescription->calculPlanSoin($date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat);
+	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat);
 }	
 
 $tabHours = array("08","12","14","18","22","24","02","06");

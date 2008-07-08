@@ -567,26 +567,16 @@ class CPrescription extends CMbObject {
   }
   
   // Generation du plan de soin sous forme de tableau
-  function calculPlanSoin($date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
-    // Chargement des lignes
-  	$this->loadRefsLinesMed("1");
-	  $this->loadRefsLinesElementByCat();
-	  $this->_ref_object->loadRefPrescriptionTraitement();
-	  $lines["medicament"] = $this->_ref_prescription_lines;
-	  $traitement_personnel = $this->_ref_object->_ref_prescription_traitement;
-	  if($traitement_personnel->_id){
-	    $traitement_personnel->loadRefsLinesMed("1");
-	  }
-	  $lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
-	  
+  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
     // Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){
     	if(count($lines_cat)){
     	foreach($lines_cat as &$_line_med){
     		// Si la ligne est prescrite pour la date donnée
         if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_date_arret_fin)) || (!$_line_med->_date_arret_fin && $_line_med->_date_arret_fin <= $date && $date >= $_line_med->debut)){
-        	$_line_med->loadRefsPrises();
-        	
+        	if(!$_line_med->_ref_prises){
+        	  $_line_med->loadRefsPrises();
+        	}
         	// Si aucune prise
 					if(count($_line_med->_ref_prises) < 1){
 						$lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
@@ -608,8 +598,9 @@ class CPrescription extends CMbObject {
 		 	  foreach($_elements as &$_line_element){
 		  	  	
 		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
-		        $_line_element->loadRefsPrises();
-        	
+		      	if(!$_line_element->_ref_prises){
+		          $_line_element->loadRefsPrises();
+		      	}
 		        // Si aucune prise
 						if(count($_line_element->_ref_prises) < 1){
 							$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;

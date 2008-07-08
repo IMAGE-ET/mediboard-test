@@ -66,8 +66,21 @@ $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
 
 // Calcul du plan de soin pour les 3 jours
+
+// Chargement des lignes
+$prescription->loadRefsLinesMed("1");
+$prescription->loadRefsLinesElementByCat();
+$prescription->_ref_object->loadRefPrescriptionTraitement();
+	  
+$lines["medicament"] = $prescription->_ref_prescription_lines;
+$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
+if($traitement_personnel->_id){
+  $traitement_personnel->loadRefsLinesMed("1");
+}
+$lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
+	  	  
 foreach($dates as $_date){
-  $prescription->calculPlanSoin($_date, $lines_med[$_date], $prises_med[$_date], $list_prises_med[$_date], $lines_element[$_date], 
+  $prescription->calculPlanSoin($lines, $_date, $lines_med[$_date], $prises_med[$_date], $list_prises_med[$_date], $lines_element[$_date], 
 	                              $prises_element[$_date], $list_prises_element[$_date], $nb_produit_by_cat[$_date], $all_lines_med, $all_lines_element,
 	                              $intitule_prise_med, $intitule_prise_element);
 }
