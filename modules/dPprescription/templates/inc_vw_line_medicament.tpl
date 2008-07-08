@@ -41,7 +41,7 @@
         {{if $line->_can_view_signature_praticien}}
             {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
         {{else}}
-          {{if !$line->_traitement}}
+          {{if !$line->_traitement && !$line->_protocole}}
             {{$line->_ref_praticien->_view}}    
           {{/if}}
         {{/if}}

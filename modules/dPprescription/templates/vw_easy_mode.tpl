@@ -59,11 +59,38 @@ function submitAllElements(){
 
   // Forms
   var oForm = document.add_med_element;
-  var oFormDate = document.forms["editDates-{{$typeDate}}-"];
-
   var oFormMoment = document.addPriseMomentmode_grille;
   var oFormFoisPar = document.addPriseFoisParmode_grille;
   var oFormTousLes = document.addPriseTousLesmode_grille;
+  
+  
+  // Formulaire par defaut
+  if(document.forms["editDates-{{$typeDate}}-"]){
+    var oFormDate = document.forms["editDates-{{$typeDate}}-"];
+    oForm.debut.value = oFormDate.debut.value;
+    oForm.duree.value = oFormDate.duree.value;
+    oForm.unite_duree.value = oFormDate.unite_duree.value;
+    if(oForm.time_debut){
+      oForm.time_debut.value = oFormDate.time_debut.value;
+    }
+  }
+  // Formulaire dans le cas d'un protocole
+  if(document.forms["editDuree-{{$typeDate}}-"]){
+   
+  
+    var oFormDate = document.forms["editDuree-{{$typeDate}}-"];
+    
+    
+    
+    oForm.duree.value = oFormDate.duree.value;
+    if(oFormDate.jour_decalage){
+      oForm.jour_decalage.value = oFormDate.jour_decalage.value;
+    }
+    oForm.decalage_line.value = oFormDate.decalage_line.value;
+    oForm.time_debut.value = oFormDate.time_debut.value;
+  }
+  
+
 
   if(oDivMoment.visible() && oFormMoment.moment_unitaire_id.value && oFormMoment.quantite.value){
     oForm.moment_unitaire_id.value = oFormMoment.moment_unitaire_id.value;
@@ -79,10 +106,6 @@ function submitAllElements(){
     oForm.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
     oForm.quantite.value = oFormTousLes.quantite.value;
   }
-  oForm.debut.value = oFormDate.debut.value;
-  oForm.duree.value = oFormDate.duree.value;
-  oForm.unite_duree.value = oFormDate.unite_duree.value;
-
   submitFormAjax(oForm,'systemMsg');
   resetModeEasy();
 }
@@ -131,8 +154,9 @@ Main.add( function(){
 	    {{include file="../../dPprescription/templates/line/inc_vw_dates.tpl" 
 	              perm_edit=1
 	              dosql=CPrescriptionLineElement}}	      
-
+	              
 	     <script type="text/javascript">
+	     if(document.forms["editDates-{{$typeDate}}-"]){
 	       prepareForm(document.forms["editDates-{{$typeDate}}-"]);  
 				 {{if !$line->fin}} 
 	         regFieldCalendar("editDates-{{$typeDate}}-", "debut");
@@ -141,7 +165,9 @@ Main.add( function(){
 	       {{if $line->fin}}
 	         regFieldCalendar("editDates-{{$typeDate}}-", "fin");     
 	       {{/if}}  
+	       }
 	     </script>
+	  
 	  </td>
 	  <td>
 	    {{include file="../../dPprescription/templates/line/inc_vw_add_posologies.tpl"}}
@@ -158,13 +184,16 @@ Main.add( function(){
 			  <input type="hidden" name="praticien_id" value="{{$app->user_id}}" />
 			  <input type="hidden" name="debut" value="" />
 			  <input type="hidden" name="duree" value="" />
-			  <input type="hidden" name="unite_duree" value="" />
+			  <input type="hidden" name="unite_duree" value="jour" />
 			  <input type="hidden" name="quantite" value="" />
 			  <input type="hidden" name="nb_fois" value="" />
 			  <input type="hidden" name="unite_fois" value="" />
 			  <input type="hidden" name="moment_unitaire_id" value="" />
 			  <input type="hidden" name="nb_tous_les" value="" />
 			  <input type="hidden" name="unite_tous_les" value="" />
+			  <input type="hidden" name="decalage_line" value="" />
+			  <input type="hidden" name="jour_decalage" value="" />
+			  <input type="hidden" name="time_debut" value="" />
 			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
 			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
 			  <button type="button" 

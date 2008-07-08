@@ -148,12 +148,13 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 {{/if}}
 
 
-
+ {{if $prescription->object_id}}
 <form name="editDates-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
    <input type="hidden" name="m" value="dPprescription" />
    <input type="hidden" name="dosql" value="{{$dosql}}" />
    <input type="hidden" name="del" value="0" />
    <input type="hidden" name="{{$line->_spec->key}}" value="{{$line->_id}}" />
+  
    <table>
 	     {{if !$line->fin}}
 	     <tr>
@@ -190,6 +191,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 				         {{/if}}
 				         {{if $typeDate != "mode_grille"}}
 				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+				         {{else}}
+				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id}}
 				         {{/if}}
 				       </div>	       
 		       {{else}}
@@ -200,7 +203,9 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 		           {{/if}}
 		           {{if $typeDate != "mode_grille"}}
 		             {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}} 
-		           {{/if}}       
+		           {{else}}
+				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id}}
+				       {{/if}}      
 		       {{/if}} 
 	       </td>
 	       {{else}}
@@ -278,4 +283,14 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     {{/if}}
 	     
   </table>
-</form>
+ </form> 
+  {{else}}
+	  <table>
+	    <tr>
+	      <td>
+	        <!-- Selection d'une date dans le cas des protocoles -->
+	        {{include file="../../dPprescription/templates/line/inc_vw_duree_protocole_line.tpl"}}
+	      </td>
+	    </tr>
+	  </table>
+	{{/if}}

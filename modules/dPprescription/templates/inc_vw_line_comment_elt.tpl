@@ -40,7 +40,7 @@
        <!-- Affichage de la signature du praticien -->
        {{if $line->_can_view_signature_praticien}}
          {{include file="../../dPprescription/templates/line/inc_vw_signature_praticien.tpl"}}
-       {{else}}
+       {{elseif !$line->_protocole}}
          {{$line->_ref_praticien->_view}}    
        {{/if}}
        <!-- Affichage du formulaire de signature du praticien --> 

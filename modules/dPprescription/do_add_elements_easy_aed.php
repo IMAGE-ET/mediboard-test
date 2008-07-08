@@ -15,15 +15,18 @@ $prescription_id    = mbGetValueFromPost("prescription_id");
 $debut              = mbGetValueFromPost("debut");
 $time_debut         = mbGetValueFromPost("time_debut");
 $duree              = mbGetValueFromPost("duree");
-$unite_duree        = mbGetValueFromPost("unite_duree");
+$unite_duree        = mbGetValueFromPost("unite_duree", "jour");
 $quantite           = mbGetValueFromPost("quantite");
 $nb_fois            = mbGetValueFromPost("nb_fois");
 $unite_fois         = mbGetValueFromPost("unite_fois");
 $moment_unitaire_id = mbGetValueFromPost("moment_unitaire_id");
 $nb_tous_les        = mbGetValueFromPost("nb_tous_les");
 $unite_tous_les     = mbGetValueFromPost("unite_tous_les");
+$jour_decalage      = mbGetValueFromPost("jour_decalage");
+$decalage_line      = mbGetValueFromPost("decalage_line");
 $mode_protocole     = mbGetValueFromPost("mode_protocole","0");
 $mode_pharma        = mbGetValueFromPost("mode_pharma","0");
+
 
 $praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 
@@ -47,6 +50,7 @@ foreach($medicaments as $code_cip){
 	$line_medicament->prescription_id = $prescription_id;
 	$line_medicament->praticien_id = $praticien_id;
 	$line_medicament->creator_id = $AppUI->user_id;
+
 	$msg = $line_medicament->store();
 	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
   $lines["medicament"][$line_medicament->_id] = $line_medicament;
@@ -59,6 +63,7 @@ foreach($elements as $element_id){
 	$line_element->prescription_id = $prescription_id;
 	$line_element->praticien_id = $praticien_id;
 	$line_element->creator_id = $AppUI->user_id;
+
 	$msg = $line_element->store();
 	$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;
@@ -69,11 +74,19 @@ foreach($lines as $cat_name => $lines_by_cat){
 		if($cat_name != "dmi"){
       $_line->debut = $debut;
       $_line->time_debut = $time_debut;
-	    $_line->duree = $duree;
-	    $_line->unite_duree = $unite_duree;
+	    $_line->jour_decalage = $jour_decalage;
+	    $_line->decalage_line = $decalage_line;
+    	$_line->time_debut = $time_debut;
+      
+      
+      if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
+		    $_line->duree = $duree;
+		    $_line->unite_duree = $unite_duree;
+      }
+	
 		  $_line->store();
 		  
-		  //if($cat_name != "dm"){
+		  if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
 				$prise = new CPrisePosologie();
 			  $prise->object_id = $_line->_id;
 			  $prise->object_class = $_line->_class_name;	
@@ -101,7 +114,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $msg = $prise->store();  	
 			    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 			  } 
-		  //}
+		  }
 		}
 	}
 }

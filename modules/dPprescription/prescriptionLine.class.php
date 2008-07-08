@@ -121,7 +121,7 @@ class CPrescriptionLine extends CMbObject {
   function loadRefCreator() {
     if (!$this->_ref_creator) {
 	    $user = new CMediusers();
-	    $this->_ref_praticien = $user->getCached($this->creator_id);
+	    $this->_ref_creator = $user->getCached($this->creator_id);
     }
   }
   
