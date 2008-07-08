@@ -104,11 +104,11 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   /*
    * Chargement de la categorie du commentaire
    */
-  function loadRefCategory(){
-  	$this->_ref_category_prescription = new CCategoryPrescription();
-  	$this->_ref_category_prescription->load($this->category_prescription_id);	
+  function loadRefCategory() {
+    $category = new CCategoryPrescription();
+  	$this->_ref_category_prescription = $category->getCached($this->category_prescription_id);	
   }
-  
+    
   /*
    * Chargement de l'executant
    */

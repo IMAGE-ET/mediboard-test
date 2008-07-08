@@ -170,17 +170,21 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   /*
    * Chargement de l'element
    */
-  function loadRefElement(){
-  	$this->_ref_element_prescription = new CElementPrescription();
-  	$this->_ref_element_prescription->load($this->element_prescription_id);	
+  function loadRefElement() {
+    if (!$this->_ref_element_prescription) {
+	  	$element = new CElementPrescription();
+	  	$this->_ref_element_prescription = $element->getCached($this->element_prescription_id);	
+    }
   }
   
   /*
    * Chargement de l'executant
    */
   function loadRefExecutant(){
-    $this->_ref_executant = new CExecutantPrescriptionLine();
-    $this->_ref_executant->load($this->executant_prescription_line_id);
+    if (!$this->_ref_executant) {
+	    $executant = new CExecutantPrescriptionLine();
+	    $this->_ref_executant = $executant->getCached($this->executant_prescription_line_id);
+    }
   }
 }
 

@@ -73,7 +73,6 @@ class CPrescription extends CMbObject {
   }
   
   function updateFormFields() {
-  	global $AppUI;
   	
     parent::updateFormFields();
     $this->loadRefsFwd();
@@ -85,20 +84,6 @@ class CPrescription extends CMbObject {
     	$this->_view = "Protocole: ".$this->libelle;
     }
     
-    if ($this->_ref_object->_class_name == "CSejour"){
-	    if ($AppUI->_ref_user->isPraticien()) {
-	    	$this->_current_praticien_id = $AppUI->_ref_user->_id;
-	    } else {
-	    	$this->_current_praticien_id = $this->_ref_object->_praticien_id;
-	    }
-    }
-    if ($this->_ref_object->_class_name == "CConsultation"){
-      if ($AppUI->_ref_user->isPraticien()) {
-	    	$this->_current_praticien_id = $AppUI->_ref_user->_id;
-	    } else {
-	    	$this->_current_praticien_id = $this->praticien_id;
-	    }
-    }
     $this->loadRefCurrentPraticien();
   }
   
@@ -187,7 +172,7 @@ class CPrescription extends CMbObject {
   /*
    * Chargement du praticien
    */
-  function loadRefPraticien(){
+  function loadRefPraticien() {
   	$this->_ref_praticien = new CMediusers();
   	$this->_ref_praticien->load($this->praticien_id);
   }
@@ -195,9 +180,21 @@ class CPrescription extends CMbObject {
   /*
    * Chargement du praticien utilisé pour l'affichage des protocoles/favoris
    */
-  function loadRefCurrentPraticien(){
-  	$this->_ref_current_praticien = new CMediusers();
-  	$this->_ref_current_praticien->load($this->_current_praticien_id);
+  function loadRefCurrentPraticien() {
+    if ($this->_ref_current_praticien) {
+      return;
+    }
+
+    global $AppUI;
+  	if ($AppUI->_ref_user->isPraticien()) {
+  	  $this->_ref_current_praticien = $AppUI->_ref_user;
+  	}
+    else {
+    	$this->_ref_object->loadRefPraticien();
+    	$this->_ref_current_praticien = $this->_ref_object->_ref_praticien;
+    }
+
+    $this->_current_praticien_id = $this->_ref_current_praticien->_id;
   }
   
   /*
@@ -394,6 +391,7 @@ class CPrescription extends CMbObject {
     
     $order = "prescription_line_element_id DESC";
     $this->_ref_prescription_lines_element = $line->loadList($where, $order, null, null, $ljoin);
+    
     foreach ($this->_ref_prescription_lines_element as &$line_element){	
     	$line_element->loadRefElement();
     	if($withRefs){

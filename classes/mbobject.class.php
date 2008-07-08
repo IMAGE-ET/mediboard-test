@@ -406,14 +406,18 @@ class CMbObject {
       return false;
     }
 
-    $this->register();
+    $this->registerCache();
     $this->checkConfidential();
     $this->updateFormFields();
         
     return $this;
   }
   
-  function register() {
+  /**
+   * Register the object into cache
+   * @return void
+   */
+  function registerCache() {
     self::$objectCount++;
     
     // Statistiques sur cache d'object
@@ -424,11 +428,31 @@ class CMbObject {
       
       self::$cachableCounts[$this->_class_name]++;
     }
-    self::$objectCache[$this->_class_name][$this->_id] = true;
+    
+    self::$objectCache[$this->_class_name][$this->_id] =& $this;
+  }
+  
+  /**
+   * Retrieve an already rigistered object from cache if available,
+   * performs a standard load otherwise
+   *
+   * @param ref $id The actual object identifier
+   * @return the retrieved object
+   */
+  function getCached($id) {
+    if (isset(self::$objectCache[$this->_class_name][$id])) {
+      return self::$objectCache[$this->_class_name][$id];
+    }
+    
+    $this->load($id);
+    return $this;
   }
   
   /**
    * Loads the first object matching defined properties
+   * @param string $order Order SQL statement
+   * @param string $group Group by SQL statement
+   * @param array leftjoin Left join SQL statement collection
    */
   function loadMatchingObject($order = null, $group = null, $leftjoin = null) {
     $request = new CRequest;
@@ -451,6 +475,10 @@ class CMbObject {
   
   /**
    * Loads the list which objects match defined properties
+   * @param string $order Order SQL statement
+   * @param string $limit Limit SQL statement
+   * @param string $group Group by SQL statement
+   * @param array leftjoin Left join SQL statement collection
    */
   function loadMatchingList($order = null, $limit = null, $group = null, $leftjoin = null) {
     $request = new CRequest;
@@ -571,7 +599,7 @@ class CMbObject {
       $newObject->bind($row, false);
       $newObject->checkConfidential();
       $newObject->updateFormFields();
-      $newObject->register();
+      $newObject->registerCache();
       $list[$newObject->_id] = $newObject;
     }
 

@@ -42,11 +42,11 @@ class CExecutantPrescriptionLine extends CMbObject {
     $this->_view = $this->nom;	
   }
   
-  function loadRefCategory(){
-  	$this->_ref_category = new CCategoryPrescription();
-  	$this->_ref_category->load($this->category_id);
+  function loadRefCategory() {
+    $category = new CCategoryPrescription();
+  	$this->_ref_category_prescription = $category->getCached($this->category_prescription_id);	
   }
-  
+    
   static function getAllExecutants(){
   	$executant = new CExecutantPrescriptionLine();
   	$executants = array();

@@ -65,9 +65,9 @@ class CElementPrescription extends CMbObject {
   	$this->loadRefCategory();
   }
   
-  function loadRefCategory(){
-  	$this->_ref_category_prescription = new CCategoryPrescription();
-  	$this->_ref_category_prescription->load($this->category_prescription_id);	
+  function loadRefCategory() {
+    $category = new CCategoryPrescription();
+  	$this->_ref_category_prescription = $category->getCached($this->category_prescription_id);	
   }
 }
 

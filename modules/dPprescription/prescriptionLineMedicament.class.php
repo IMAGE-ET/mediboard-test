@@ -101,18 +101,18 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
     $this->_nb_alertes = 0;
     $this->_view = $this->_ref_produit->libelle;
     $this->_duree_prise = "";
     
-    if($this->fin){
+    if ($this->fin){
     	$this->_duree_prise .= "Jusqu'au ".mbTransformTime(null, $this->fin, "%d/%m/%Y");
-    } else {
-	    if($this->debut){
+    }
+    else {
+	    if ($this->debut){
 	      $this->_duree_prise .= "à partir du ".mbTransformTime(null, $this->debut, "%d/%m/%Y");
 	    }
-	    if($this->duree && $this->unite_duree){
+	    if ($this->duree && $this->unite_duree){
 	    	$this->_duree_prise .= " pendant ".$this->duree." ".CAppUI::tr("CPrescriptionLineMedicament.unite_duree.".$this->unite_duree);
 	    }
     }

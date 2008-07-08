@@ -53,22 +53,33 @@ class CPrisePosologie extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-    $this->loadRefsFwd();
+  }
+  
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+
+    $this->loadRefMoment();
+    
     $this->_view = $this->quantite;
+
     if($this->object_class == "CPrescriptionLineElement"){
       $this->_view .= " ".$this->_ref_object->_unite_prise;
     } else {
       $this->_view .= " ".$this->unite_prise;	
     }
+    
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
     }
+    
     if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
     }
+    
     if($this->unite_fois && !$this->nb_tous_les){
     	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
     }
+    
     if($this->nb_tous_les && $this->unite_tous_les){
     	$this->_view .= " tous les ".$this->nb_tous_les." ".CAppUI::tr("CPrisePosologie.unite_tous_les.".$this->unite_tous_les);
     	if($this->decalage_prise){
@@ -77,17 +88,12 @@ class CPrisePosologie extends CMbMetaObject {
     }   
   }
   
-  function loadRefsFwd() {
-    parent::loadRefsFwd();
-    $this->loadRefMoment();
-  }
-  
   /*
    * Chargement du moment unitaire
    */
   function loadRefMoment(){
-    $this->_ref_moment = new CMomentUnitaire();
-    $this->_ref_moment->load($this->moment_unitaire_id);	
+    $moment = new CMomentUnitaire();
+    $this->_ref_moment = $moment->getCached($this->moment_unitaire_id);
   }
   
   /*

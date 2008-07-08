@@ -110,8 +110,8 @@ class CPrescriptionLine extends CMbObject {
    */
   function loadRefPraticien() {
     if (!$this->_ref_praticien) {
-	    $this->_ref_praticien = new CMediusers();
-	    $this->_ref_praticien->load($this->praticien_id);
+	    $user = new CMediusers();
+	    $this->_ref_praticien = $user->getCached($this->praticien_id);
     }
   }
   
@@ -120,8 +120,8 @@ class CPrescriptionLine extends CMbObject {
    */
   function loadRefCreator() {
     if (!$this->_ref_creator) {
-	    $this->_ref_creator = new CMediusers();
-	    $this->_ref_creator->load($this->creator_id);	
+	    $user = new CMediusers();
+	    $this->_ref_praticien = $user->getCached($this->creator_id);
     }
   }
   
@@ -150,7 +150,11 @@ class CPrescriptionLine extends CMbObject {
    * Chargement des prises de la ligne
    */
   function loadRefsPrises(){
-    $this->_ref_prises = $this->loadBackRefs("prise_posologie");  
+    $this->_ref_prises = $this->loadBackRefs("prise_posologie");
+    foreach ($this->_ref_prises as &$prise) {
+      $prise->_ref_object =& $this;
+      $prise->loadRefsFwd();
+    }
   }
  
   /*
