@@ -2993,8 +2993,13 @@ ul.select-tree li {
   margin-left: 0;
 }
 
-ul.select-tree li:hover, ul.select-tree li.selected {
+ul.select-tree li:hover {
   background: #ccc;
+}
+
+ul.select-tree li.selected {
+  background: #ddd;
+  font-weight: bold;
 }
 
 ul.select-tree li.drop {
