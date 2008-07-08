@@ -861,14 +861,16 @@ Element.addMethods(['select', 'optgroup'], {
   buildTree: function (element, tree) {
 
     if (!tree) { // If it is the root
-      // Every option is hidden
-      element.descendants().each(function(d) {d.hide()});
-      
       // New unordered list
       tree = new Element('ul').addClassName('select-tree');
       var pos = element.cumulativeOffset();
       var dim = element.getDimensions();
-     
+      
+      // Every option is hidden
+      element.descendants().each(function(d) {d.hide()});
+      element.setStyle({'width': dim.width+'px'});
+      tree.setStyle({'width': dim.width+'px'});
+      
       // The hack input to blur the select control
       var hack = new Element('input').writeAttribute('type', 'text').hide();
       hack.name = element.name+'_tree__hack';
