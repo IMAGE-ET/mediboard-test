@@ -809,7 +809,7 @@ var TimePicker = Class.create({
     this.hour = e.element().innerHTML;
     this.highlight();
     
-    $V(this.fieldId, this.hour+':'+(this.minute?this.minute:''), true);
+    $V(this.fieldId, this.hour+':'+(this.minute?this.minute:'00'), true);
   },
   
   // Set the minutes
