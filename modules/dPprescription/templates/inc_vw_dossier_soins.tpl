@@ -85,8 +85,8 @@ administrationMed = function(oDiv, value, text) {
 						    <ul>
 						    {{foreach from=$prises_med.$line_id.$unite_prise item=prise name=prises}}
 						      <li>
-						      {{if $prise->nb_tous_les && $prise->unite_tous_les}}
-						        {{$prise->quantite}} {{$prise->_ref_object->_unite_prise}}
+						      {{if $prise->nb_tous_les && $prise->unite_tous_les && $prise->unite_tous_les == "jour"}}
+						        {{$prise->quantite}} {{$prise->unite_prise}}
 						      {{else}}
 						        {{$prise->_view}}
 						      {{/if}}
@@ -172,7 +172,7 @@ administrationMed = function(oDiv, value, text) {
 				      <ul>
 					    {{foreach from=$prises_element.$element_id.$unite_prise item=prise name=prises}}
 					    <li>
-					      {{if $prise->nb_tous_les && $prise->unite_tous_les}}
+					      {{if $prise->nb_tous_les && $prise->unite_tous_les && $prise->unite_tous_les == "jour"}}
 					        {{$prise->quantite}} {{$prise->_ref_object->_unite_prise}}
 					      {{else}}
 					        {{$prise->_view}}
