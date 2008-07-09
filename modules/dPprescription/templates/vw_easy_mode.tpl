@@ -76,18 +76,19 @@ function submitAllElements(){
   }
   // Formulaire dans le cas d'un protocole
   if(document.forms["editDuree-{{$typeDate}}-"]){
-   
-  
     var oFormDate = document.forms["editDuree-{{$typeDate}}-"];
-    
-    
-    
     oForm.duree.value = oFormDate.duree.value;
     if(oFormDate.jour_decalage){
       oForm.jour_decalage.value = oFormDate.jour_decalage.value;
     }
     oForm.decalage_line.value = oFormDate.decalage_line.value;
     oForm.time_debut.value = oFormDate.time_debut.value;
+    if(oFormDate.jour_decalage_fin){
+      oForm.jour_decalage_fin.value = oFormDate.jour_decalage_fin.value;
+      oForm.decalage_line_fin.value = oFormDate.decalage_line_fin.value;
+      oForm.time_fin.value = oFormDate.time_fin.value;
+    }   
+    
   }
   
 
@@ -105,6 +106,7 @@ function submitAllElements(){
     oForm.nb_tous_les.value = oFormTousLes.nb_tous_les.value;
     oForm.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
     oForm.quantite.value = oFormTousLes.quantite.value;
+    oForm.moment_unitaire_id.value = oFormTousLes.moment_unitaire_id.value;
   }
   submitFormAjax(oForm,'systemMsg');
   resetModeEasy();
@@ -194,6 +196,9 @@ Main.add( function(){
 			  <input type="hidden" name="decalage_line" value="" />
 			  <input type="hidden" name="jour_decalage" value="" />
 			  <input type="hidden" name="time_debut" value="" />
+			  <input type="hidden" name="jour_decalage_fin" value="" />
+			  <input type="hidden" name="decalage_line_fin" value="" />
+			  <input type="hidden" name="time_fin" value="" />
 			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
 			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
 			  <button type="button" 

@@ -32,6 +32,18 @@ selDivPoso = function(type, line_id, type_elt){
 	  } );
   }
   
+  // Copie des moments
+  if(type == "tousLes"+type_elt){ 
+    if(type == "tousLesmode_grille"){
+      var selectMoments = window.opener.document.moment_unitaire.moment_unitaire_id;  
+    } else {
+      var selectMoments = document.moment_unitaire.moment_unitaire_id;
+    }
+  	$A(selectMoments.childNodes).each(function (optgroup) {
+ 	    oFormTousLes.moment_unitaire_id.appendChild(optgroup.cloneNode(true));
+	  } );
+  }
+  
   if(oFormFoisPar.quantite.value != ''){
     var quantite = oFormFoisPar.quantite.value;
   }
@@ -183,7 +195,11 @@ onSubmitPrise = function(oForm, type){
 		  {{mb_field object=$prise_posologie field=nb_tous_les size=3 increment=1 min=1 form=addPriseTousLes$type$line_id}}				   
 		  {{mb_field object=$prise_posologie field=unite_tous_les}}
 		  (J+{{mb_field object=$prise_posologie field=decalage_prise size=1 increment=1 min="0" form=addPriseTousLes$type$line_id}})
-		  
+		  <br />
+		  <select name="moment_unitaire_id" style="width: 150px">  
+	
+	    </select>	
+	  
       {{if $line->_id}}
       <button type="button" class="submit notext" onclick="this.form.onsubmit()">{{tr}}Save{{/tr}}</button>
       {{/if}}

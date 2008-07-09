@@ -5,6 +5,7 @@
 {{else}}
   {{assign var=onchange value=""}}
 {{/if}}
+
 <tr>
   <td></td>
   <td colspan="5">
@@ -17,38 +18,24 @@
       <!-- Durée -->
       {{if $typeDate != "anapath" && $typeDate != "imagerie" && $typeDate != "consult"}}
 	      Durée de 
-	      {{if $typeDate != "mode_grille"}}
-	        {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3"
-	                   onchange="submitFormAjax(this.form, 'systemMsg');"}}
-	      {{else}}
-	         {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3"}}
-	      {{/if}}
-				jour(s)
-				<!-- Décalage -->
+	      {{mb_field object=$line field=duree increment=1 min=1 form=editDuree-$typeDate-$line_id size="3" 
+	      					onchange="if(this.form.jour_decalage){ this.form.jour_decalage_fin.value = ''; this.form.decalage_line_fin.value = ''; this.form.time_fin.value = '';} $onchange"}} jour(s)
 				à partir de 
 			{{/if}}
 			{{if $prescription->object_class == "CSejour"}}
-			  {{if $typeDate != "mode_grille"}}
-			    {{mb_field object=$line field=jour_decalage onchange="submitFormAjax(this.form, 'systemMsg');" defaultOption="&mdash Choix"}}
-			  {{else}}
-			    {{mb_field object=$line field=jour_decalage defaultOption="&mdash Choix"}}
-			  {{/if}}
+			  {{mb_field object=$line field=jour_decalage onchange="$onchange" defaultOption="&mdash Choix"}}
 			{{else}}
 			J
 			{{/if}}
-			{{if $typeDate != "mode_grille"}}
-			  {{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id 
-			           onchange="submitFormAjax(this.form, 'systemMsg');" size="3"}}
-			 {{else}}
-			   {{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id size="3"}}
-			 {{/if}}
-			           (Jours)
-			à 
-			{{if $typeDate != "mode_grille"}}
-			  {{mb_field object=$line field=time_debut form=editDuree-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
-			{{else}}
-			  {{mb_field object=$line field=time_debut form=editDuree-$typeDate-$line_id}}
-			{{/if}}
+			{{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id onchange="$onchange" size="3"}} (Jours) à 
+			{{mb_field object=$line field=time_debut form=editDuree-$typeDate-$line_id onchange="$onchange"}}
+			{{if ($typeDate != "anapath" && $typeDate != "imagerie" && $typeDate != "consult") && $prescription->object_class == "CSejour"}}
+				{{if $typeDate == "mode_grille"}}<br />{{/if}}
+				Jusqu'à 
+				{{mb_field object=$line field=jour_decalage_fin onchange="this.form.duree.value = ''; $onchange" defaultOption="&mdash Choix"}}
+				{{mb_field showPlus=1 object=$line field=decalage_line_fin increment=1 form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange" size="3"}} (Jours) à 
+				{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			
+		{{/if}}
     </form>
     <script type="text/javascript">
       Main.add( function(){
@@ -57,4 +44,3 @@
     </script>
   </td>
 </tr>
-

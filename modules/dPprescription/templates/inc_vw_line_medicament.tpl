@@ -125,7 +125,7 @@
   {{/if}}  
   
   <tr>  
-	  <td style="text-align: center">
+	  <td style="text-align: left">
 	    <!-- Affichage des alertes -->
 	    {{include file="../../dPprescription/templates/line/inc_vw_alertes.tpl"}}
 	  </td>  

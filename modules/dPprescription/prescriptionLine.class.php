@@ -18,17 +18,20 @@ class CPrescriptionLine extends CMbObject {
   var $praticien_id        = null;
   var $signee              = null;
   var $creator_id          = null;
-  var $debut               = null;
-  var $time_debut          = null;
-  var $duree               = null;
+  var $debut               = null;  // Date de debut
+  var $time_debut          = null;  // Heure de debut
+  var $duree               = null;  // Duree de la ligne
   var $unite_duree         = null;
-  var $date_arret          = null;
-  var $time_arret          = null;
+  var $date_arret          = null;  // Date d'arret
+  var $time_arret          = null;  // Heure d'arret
   var $child_id            = null;
-  var $decalage_line       = null;
-  var $jour_decalage       = null;   
-  var $fin                 = null;              
+  var $decalage_line       = null;  // Permet de definir le decalage de la ligne par rapport au jour de decalage specifié
+  var $jour_decalage       = null;  // Jour de decalage: I/E/S/N
   var $valide_infirmiere   = null;
+  var $fin                 = null;              
+  var $jour_decalage_fin   = null;  // Jour de fin: I/S
+  var $decalage_line_fin   = null;  // Decalage de la ligne
+  var $time_fin            = null;  // Heure de fin de la ligne de prescription
   
   // Form Fields
   var $_fin                = null;
@@ -68,6 +71,9 @@ class CPrescriptionLine extends CMbObject {
       "jour_decalage"     => "enum list|E|I|S|N default|E",
       "fin"               => "date",
       "valide_infirmiere" => "bool",
+      "jour_decalage_fin" => "enum list|I|S",
+      "decalage_line_fin" => "num",
+      "time_fin"          => "time",
       "_fin"              => "date moreEquals|debut",
       "_date_arret_fin"   => "date"
     );
@@ -288,18 +294,6 @@ class CPrescriptionLine extends CMbObject {
     $new_line->time_debut = $time_debut;
     $new_line->date_arret = "";
     $new_line->time_arret = "";
-    
-    /*
-    if($new_line->date_arret){
-      $new_line->debut = $new_line->date_arret;
-      $new_line->date_arret = "";
-      if($new_line->date_arret < $new_line->_fin){
-        $new_line->duree = mbDaysRelative($new_line->debut,$new_line->_fin);
-      }
-    } else {
-      $new_line->debut = mbDate();
-    }
-    */
     $new_line->unite_duree = "jour";
     if($new_line->duree < 0){
       $new_line->duree = "";

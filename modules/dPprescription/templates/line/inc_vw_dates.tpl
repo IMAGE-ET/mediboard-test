@@ -148,7 +148,13 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 {{/if}}
 
 
- {{if $prescription->object_id}}
+{{if $typeDate != "mode_grille"}}
+  {{assign var=onchange value="submitFormAjax(this.form, 'systemMsg');"}}
+{{else}}
+  {{assign var=onchange value=""}}
+{{/if}}
+
+{{if $prescription->object_id}}
 <form name="editDates-{{$typeDate}}-{{$line->_id}}" action="?" method="post">
    <input type="hidden" name="m" value="dPprescription" />
    <input type="hidden" name="dosql" value="{{$dosql}}" />
@@ -162,7 +168,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	         {{mb_label object=$line field=debut}}
 	       </td>    
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
-	       <td class="date" style="border:none;">
+	       <td class="date" style="border:none; {{if $typeDate == 'mode_grille'}}width: 130px;{{/if}}">
 	         {{if $prescription->type != "externe" && $typeDate == "mode_grille"}}
 		           <select name="debut_date" onchange="$('editDates-{{$typeDate}}-{{$line->_id}}_debut_da').innerHTML = new String;
 					 				                                  this.form.debut.value = '';
@@ -189,11 +195,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 							   {{else}}
 							     {{mb_field object=$line field=debut canNull=false form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 				         {{/if}}
-				         {{if $typeDate != "mode_grille"}}
-				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
-				         {{else}}
-				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id}}
-				         {{/if}}
+				         {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}
+				        
 				       </div>	       
 		       {{else}}
 		           {{if $typeDate != "mode_grille" && ($line->_traitement || $chapitre == "consult" || $chapitre == "anapath" || $chapitre == "imagerie")}}
@@ -201,12 +204,8 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 		           {{else}}
 		             {{mb_field object=$line field=debut form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}  
 		           {{/if}}
-		           {{if $typeDate != "mode_grille"}}
-		             {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}} 
-		           {{else}}
-				           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id}}
-				       {{/if}}      
-		       {{/if}} 
+		           {{mb_field object=$line field=time_debut form=editDates-$typeDate-$line_id onchange="$onchange"}}    
+				   {{/if}} 
 	       </td>
 	       {{else}}
 	       <td style="border:none">
@@ -244,6 +243,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	       {{if $line->_can_modify_dates || $typeDate == "mode_grille"}}
 	       <td class="date" style="border:none;">
 	         {{mb_field object=$line field=_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
+	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="syncDateSubmit(this.form, '$line_id', this.name, '$typeDate','$_object_class','$category_id');"}}
 	       </td>
 	       {{else}}
 	       <td style="border:none">
@@ -270,6 +270,7 @@ syncDateSubmit = function(oForm, curr_line_id, fieldName, type, object_class, ca
 	     {{if $line->_can_modify_dates}}
 	       <td class="date" style="border:none;">
 	         {{mb_field object=$line field=fin canNull=false form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
+	         {{mb_field object=$line field=time_fin form=editDates-$typeDate-$line_id onchange="submitFormAjax(this.form, 'systemMsg');"}}
 	       </td>
 	       {{else}}
 	       <td style="border:none">

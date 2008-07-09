@@ -7,7 +7,7 @@
      {{mb_field object=$line field="ald" typeEnum="checkbox" onchange="submitFormAjax(this.form, 'systemMsg');"}}
      {{mb_label object=$line field="ald" typeEnum="checkbox"}}
   </form>
-{{else}}
+{{elseif !$line->_protocole}}
   {{mb_label object=$line field="ald" typeEnum="checkbox"}}:
   {{if $line->ald}}
     Oui

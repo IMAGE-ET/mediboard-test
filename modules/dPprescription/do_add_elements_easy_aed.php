@@ -26,7 +26,9 @@ $jour_decalage      = mbGetValueFromPost("jour_decalage");
 $decalage_line      = mbGetValueFromPost("decalage_line");
 $mode_protocole     = mbGetValueFromPost("mode_protocole","0");
 $mode_pharma        = mbGetValueFromPost("mode_pharma","0");
-
+$jour_decalage_fin  = mbGetValueFromPost("jour_decalage_fin");
+$decalage_line_fin  = mbGetValueFromPost("decalage_line_fin");
+$time_fin           = mbGetValueFromPost("time_fin"); 
 
 $praticien_id = mbGetValueFromPost("praticien_id", $AppUI->user_id);
 
@@ -77,11 +79,13 @@ foreach($lines as $cat_name => $lines_by_cat){
 	    $_line->jour_decalage = $jour_decalage;
 	    $_line->decalage_line = $decalage_line;
     	$_line->time_debut = $time_debut;
-      
-      
+            
       if($cat_name != "anapath" && $cat_name != "imagerie" && $cat_name != "consult"){
 		    $_line->duree = $duree;
 		    $_line->unite_duree = $unite_duree;
+		    $_line->decalage_line_fin = $decalage_line_fin;
+		    $_line->jour_decalage_fin = $jour_decalage_fin;
+		    $_line->time_fin = $time_fin;
       }
 	
 		  $_line->store();
@@ -91,8 +95,13 @@ foreach($lines as $cat_name => $lines_by_cat){
 			  $prise->object_id = $_line->_id;
 			  $prise->object_class = $_line->_class_name;	
 				
+			  // On sauvegarde par defaut la premiere unite de prise trouvée
+        if($cat_name == "medicament"){
+			    $prise->unite_prise = reset($_line->_unites_prise);
+        }
+      
 			  // Prise Moment
-				if($quantite && $moment_unitaire_id){
+				if($quantite && $moment_unitaire_id && !$nb_tous_les){
 				  $prise->quantite = $quantite;
 				  $prise->moment_unitaire_id = $moment_unitaire_id;
 				  $msg = $prise->store();
@@ -111,6 +120,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 				  $prise->quantite = $quantite;
 				  $prise->nb_tous_les = $nb_tous_les;
 				  $prise->unite_tous_les = $unite_tous_les;
+				  $prise->moment_unitaire_id = $moment_unitaire_id;
 				  $msg = $prise->store();  	
 			    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
 			  } 

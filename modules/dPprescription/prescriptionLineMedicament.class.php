@@ -159,7 +159,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_can_modify_comment = 1;
     }
     // Select equivalent
-    if($perm_edit){
+    if($perm_edit && !$this->_protocole){
     	$this->_can_select_equivalent = 1;
     }
 		// Affichage de l'icone d'historique
@@ -266,6 +266,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	$this->_ref_produit = new CBcbProduit();
   	$this->_ref_produit->load($this->code_cip);
   }
+  
   
   /*
    * Chargement de la posologie

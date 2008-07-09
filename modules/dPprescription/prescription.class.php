@@ -552,9 +552,13 @@ class CPrescription extends CMbObject {
 		  if(!@array_key_exists($key_tab, $lines[$_line->_id])){
 			  @$tab_count++;
 			}
-			if($_prise->moment_unitaire_id){
-	 	  	$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] = $_prise->quantite;
-	 	  } elseif ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
+			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
+	 	  	@$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
+	 	  }
+	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
+	 	  	@$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
+	 	  }
+	 	  if ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
 	 	  	continue;
 	 	  }
 	 	  $lines[$_line->_id][$key_tab] = $_line;

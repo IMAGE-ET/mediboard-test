@@ -76,7 +76,7 @@ administrationMed = function(oDiv, value, text) {
 				    {{/if}}
 				    <td class="text">
 				      <div onclick="addCibleTransmission('{{$line->_class_name}}', '{{$line->_id}}', '{{$line->_view}}');">
-				      {{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}}
+				        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line->_class_name}}', object_id: {{$line->_id}} } })">{{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}}</a>
 				      </div>
 				    </td>
 				    <td class="text">   
@@ -162,7 +162,7 @@ administrationMed = function(oDiv, value, text) {
     
 			    <td class="text">
 			      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');">
-			      {{$element->_view}}
+				        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$element->_class_name}}', object_id: {{$element->_id}} } })">{{$element->_view}}</a>
 			      </div>
 			    </td>
    	      

@@ -25,6 +25,8 @@ foreach($dates as $_date){
 	$list_prises_element[$_date] = array();
 	$nb_produit_by_cat[$_date] = array();
 }
+
+
 $all_lines_med = array();
 $all_lines_element = array();
 $intitule_prise_med = array();
@@ -64,8 +66,6 @@ $prescription->loadRefObject();
 $sejour =& $prescription->_ref_object;
 $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
-
-// Calcul du plan de soin pour les 3 jours
 
 // Chargement des lignes
 $prescription->loadRefsLinesMed("1");

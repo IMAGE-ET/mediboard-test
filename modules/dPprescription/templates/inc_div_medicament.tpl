@@ -212,12 +212,13 @@ testPharma = function(line_id){
 </div>
 {{/if}}
 
-<select name="advAction" style="float: right">
-    <option value="">&mdash; Actions spécifiques</option>
-    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
-    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
+{{if $prescription->object_id}}
+	<select name="advAction" style="float: right">
+	  <option value="">&mdash; Actions spécifiques</option>
+	  <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
+	  <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
   </select>
-  
+{{/if}}
 {{if $prescription->_can_add_line}}
 
   

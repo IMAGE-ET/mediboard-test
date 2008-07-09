@@ -664,7 +664,23 @@ class CSetupdPprescription extends CSetup {
 						ADD `time_debut` TIME;";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.46";
+    $this->makeRevision("0.46");
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+	          ADD `jour_decalage_fin` ENUM ('I','S'),
+	          ADD `decalage_line_fin` INT (11),
+	          ADD `time_fin` TIME;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_element` 
+	          ADD `jour_decalage_fin` ENUM ('I','S'),
+	          ADD `decalage_line_fin` INT (11),
+	          ADD `time_fin` TIME;";
+    $this->addQuery($sql);
+    $sql = "ALTER TABLE `prescription_line_comment` 
+	          ADD `jour_decalage_fin` ENUM ('I','S'),
+	          ADD `decalage_line_fin` INT (11),
+        	  ADD `time_fin` TIME;";
+    $this->addQuery($sql); 
+    $this->mod_version = "0.47";
   }  
 }
 

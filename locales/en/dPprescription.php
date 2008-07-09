@@ -286,4 +286,8 @@ $locales['CPrescriptionLineElement.jour_decalage.E'] = '';
 $locales['CPrescriptionLineElement.jour_decalage.I'] = '';
 $locales['CPrescriptionLineElement.jour_decalage.S'] = '';
 $locales['CPrescriptionLineElement.jour_decalage.N'] = '';
+$locales['CPrescriptionLineMedicament.jour_decalage_fin.I'] = 'I';
+$locales['CPrescriptionLineMedicament.jour_decalage_fin.S'] = 'S';
+$locales['CPrescriptionLineElement.jour_decalage_fin.I'] = 'I';
+$locales['CPrescriptionLineElement.jour_decalage_fin.S'] = 'S';
 ?>
