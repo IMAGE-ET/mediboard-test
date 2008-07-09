@@ -2487,6 +2487,10 @@ ul.select-tree {
   text-align: left;
 }
 
+ul.select-tree ul {
+  padding: 0;
+}
+
 ul.select-tree li {
   list-style-type: none;
   border: 1px solid #999;
@@ -2503,8 +2507,8 @@ ul.select-tree li:hover {
 }
 
 ul.select-tree li.selected {
-  background: #ddd;
-  font-weight: bold;
+  background: #666;
+  color: #fff;
 }
 
 ul.select-tree li.drop {

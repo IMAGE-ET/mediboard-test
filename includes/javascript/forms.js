@@ -859,16 +859,17 @@ var TimePicker = Class.create({
 // Make a select form control with optgroups appear as a tree
 Element.addMethods(['select', 'optgroup'], {
   buildTree: function (element, tree) {
-
+    var select = element;
     if (!tree) { // If it is the root
       // New unordered list
       tree = new Element('ul').addClassName('select-tree');
       var pos = element.cumulativeOffset();
       var dim = element.getDimensions();
       
-      // Every option is hidden
+      // Every option of the select is hidden
       element.descendants().each(function(d) {d.hide()});
       element.setStyle({'width': dim.width+'px'});
+      element.writeAttribute('size', 1);
       tree.setStyle({'width': dim.width+'px'});
       
       // The hack input to blur the select control
@@ -876,35 +877,43 @@ Element.addMethods(['select', 'optgroup'], {
       hack.name = element.name+'_tree__hack';
       hack.id = element.id+'_tree__hack';
       element.insert({after: hack});
-
-      bubble = function () {
-        tree.hide();
-        document.body.stopObserving('mouseup', bubble);
-        return false;
-      }
-        
-      showTree = function () {
-        hack.focus();
-        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
-        tree.show();
-        document.body.observe('mouseup', bubble);
-      };
-    
+      
+      // Insertion of the tree and click event
       tree.id = element.id+'_tree';
       element.insert({after: tree});
-      element.observe('click', showTree.bindAsEventListener(element));
       
-      if (tree.getStyle('position') != 'absolute') { // Prototype bug
-        tree.absolutize();
-      }
+      // Toggle tree function
+      toggleTree = function (e) {
+        hack.focus();
+        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
+        tree.toggle();
+        document.body.observe('mouseup', close);
+      };
+      
+      // Close function used to hide the tree on click on the body
+      close = function (e) {
+        e = e.element();
+        if (!e.descendantOf(tree) && (e != element)) {
+          document.body.stopObserving('mouseup', close);
+          tree.hide();
+        }
+      };
+      
+      element.observe('click', toggleTree.bindAsEventListener(element));
+      
+      // Tree styling
       tree.setStyle({
         zIndex: 40,
-        left: pos.left+'px',
-        top: pos.top+dim.height+'px'
+        position: 'absolute',
+        left: pos.left+parseInt(select.getStyle('margin-left').split('px')[0])+'px',
+        top: pos.top+parseInt(select.getStyle('margin-top').split('px')[0])-1+dim.height+'px'
       }).hide();
+    } else {
+      // we retrieve the select
+      while (select && select.tagName.toLowerCase() != 'select') {
+         select = select.up();
+      }
     }
-    
-    var subTree;
     
     // For each select child
     element.childElements().each(function (o) {
@@ -914,7 +923,8 @@ Element.addMethods(['select', 'optgroup'], {
       if (o.tagName.toLowerCase() == 'optgroup') {
         li.insert(o.label);
         
-        subTree = new Element('ul');
+        // New sublist
+        var subTree = new Element('ul');
         o.buildTree(subTree.hide());
         li.insert(subTree).addClassName('drop');
         
@@ -922,14 +932,16 @@ Element.addMethods(['select', 'optgroup'], {
         li.observe('mouseover', function() {
           var liDim = li.getDimensions();
           var liPos = li.positionedOffset();
+          
+          // Every select-tree list is hidden
           $$('ul.select-tree ul').each(function(ul) {ul.hide()});
+          
+          // Every child element is drawn
           li.childElements().each(function (e) {
-            e.show();
-            if (e.getStyle('position') != 'absolute') {
-              e.absolutize();
-            }
-            e.setStyle({
-              left: liPos.left+liDim.width-21+'px',
+            e.show().setStyle({
+              position: 'absolute',
+              width: select.getWidth()+'px',
+              left: liPos.left+liDim.width-1+'px',
               top: liPos.top+1+'px'
             });
           });
@@ -938,20 +950,14 @@ Element.addMethods(['select', 'optgroup'], {
       // If it is an option
       } else {
         li.insert(o.text);
-
-        // we retrieve the select
-        var e = element;
-        while (e && e.tagName.toLowerCase() != 'select') {
-            e = e.up();
-        }
-        li.id = e.id+'_'+o.value;
-        if ($V(e) == o.value) li.addClassName('selected');
+        li.id = select.id+'_'+o.value;
+        if ($V(select) == o.value) li.addClassName('selected');
         
         // on click on the li
         li.observe('click', function() {
           // we set the value and hide every other select tree
-          $(e.id+'_'+$V(e)).removeClassName('selected');
-          $V(e, o.value, true);
+          $(select.id+'_'+$V(select)).removeClassName('selected');
+          $V(select, o.value, true);
           li.addClassName('selected');
           $$('ul.select-tree').each(function(ul) {ul.hide()});
         });

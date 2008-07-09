@@ -2977,9 +2977,14 @@ table.tbl th.traitement {
   font-weight: bold;
 }
 
+/* Select tree */
 ul.select-tree {
   padding: 0;
   text-align: left;
+}
+
+ul.select-tree ul {
+  padding: 0;
 }
 
 ul.select-tree li {
@@ -2998,12 +3003,11 @@ ul.select-tree li:hover {
 }
 
 ul.select-tree li.selected {
-  background: #ddd;
-  font-weight: bold;
+  background: #666;
+  color: #fff;
 }
 
 ul.select-tree li.drop {
   background-image: url(../../images/icons/a_right.png);
   background-position: center right;
   background-repeat: no-repeat;
-}
