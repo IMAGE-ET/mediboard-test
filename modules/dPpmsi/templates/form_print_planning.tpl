@@ -20,14 +20,14 @@ function popPlanning() {
   url.setModuleAction("dPpmsi", "print_planning");
   url.addElement(form._date_min);
   url.addElement(form._date_max);
-  url.addParam("_plage", getCheckedValue(form._plage));
+  url.addParam("_plage", $V(form._plage));
   url.addElement(form._codes_ccam);
   url.addElement(form._intervention);
   url.addElement(form._prat_id);
   url.addElement(form._specialite);
   url.addElement(form.salle_id);
   url.addElement(form.type);
-  url.addParam("_ccam_libelle", getCheckedValue(form._ccam_libelle));
+  url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.popup(900, 550, 'Planning');
 }
 

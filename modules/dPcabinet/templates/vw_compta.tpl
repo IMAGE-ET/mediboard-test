@@ -21,7 +21,7 @@ function checkRapport(){
   url.addElement(oForm._etat_reglement_tiers);
   url.addElement(oForm.mode);
   url.addElement(oForm._type_affichage);
-  url.addParam("cs", getCheckedValue(oForm.cs));
+  url.addParam("cs", $V(oForm.cs));
   if(compta == 1){
     url.popup(700, 550, "Rapport Comptabilité");
   } else {

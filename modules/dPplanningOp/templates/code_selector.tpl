@@ -36,8 +36,8 @@ function viewCode() {
   url.addElement(oForm.chir);
   url.addElement(oForm.anesth);
   url.addElement(oForm.object_class);  
-  url.addParam("mode" , getCheckedValue(oForm.mode ));
-  url.addParam("order", getCheckedValue(oForm.order));
+  url.addParam("mode" , $V(oForm.mode));
+  url.addParam("order", $V(oForm.order));
   url.addParam("dialog", 1);
   url.redirect();
 }

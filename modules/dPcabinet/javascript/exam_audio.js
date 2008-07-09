@@ -70,9 +70,7 @@ function changeTonalValueMouse(event, sCote) {
   }
   
   var oForm = document.editFrm;
-  var oElement = oForm._conduction;
-  var sConduction = getCheckedValue(oElement);
-  changeTonalValue(sCote, sConduction, iSelectedIndex, iSelectedDb);
+  changeTonalValue(sCote, $V(oForm._conduction), iSelectedIndex, iSelectedDb);
 }
 
 function changeTonalValueMouseGauche(event) {
@@ -252,7 +250,7 @@ function changeVocalValueMouse(event) {
   var iSelectedPc = parseInt((1 -iRelatY / oGraphRect.h) * iMaxVocalPc);
   
   var oForm = document.editFrm;
-  var sCote = getCheckedValue(oForm._oreille);
+  var sCote = $V(oForm._oreille);
   var iKey = 0;
   for (iKey = 0; iKey <= iMaxKey; ++iKey) {
     var sElements = printf("_%s_vocale[%i]", sCote, iKey);

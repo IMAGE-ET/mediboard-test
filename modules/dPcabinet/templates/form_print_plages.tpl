@@ -17,7 +17,7 @@ function popPlages() {
   url.addElement(form._date_min);
   url.addElement(form._date_max);
   url.addElement(form.chir);
-  url.addParam("_coordonnees",getCheckedValue(form._coordonnees));
+  url.addParam("_coordonnees",$V(form._coordonnees));
   url.popup(700, 550, "Planning");
 }
 

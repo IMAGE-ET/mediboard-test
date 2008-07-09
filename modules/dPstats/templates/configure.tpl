@@ -2,7 +2,7 @@
 
 function storeTemps(action) {
   var storeUrl = new Url;
-  var intervalle = getCheckedValue(document.storeTempsOp.intervalle);
+  var intervalle = $V(document.storeTempsOp.intervalle);
   storeUrl.setModuleAction("dPstats", action);
   storeUrl.addParam("intervalle", intervalle);
   storeUrl.requestUpdate('resultMsg');

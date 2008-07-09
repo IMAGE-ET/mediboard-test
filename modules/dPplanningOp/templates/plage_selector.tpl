@@ -11,7 +11,7 @@ function setClose(date, salle_id) {
     salle_id = form._salle_id.value;
   }
   var plage_id = 0;
-  plage_id = getCheckedValue(list);
+  plage_id = $V(list);
   var sDate = date;
   
   if (plage_id == 0) {
@@ -19,7 +19,7 @@ function setClose(date, salle_id) {
   	return;
   }
    
-  var adm = getCheckedValue(form.admission);
+  var adm = $V(form.admission);
   var typeHospi = "ambu";
   var hour_entree = form.hour_jour.value;
   var min_entree  = form.min_jour.value;
@@ -39,12 +39,12 @@ function pageMain(){
   var form = document.frmSelector;   
   if(!oFormSejour.sejour_id.value) {
     if(oFormSejour.type.value == "ambu"){
-      setCheckedValue(form.admission, "jour");
+      $V(form.admission, "jour");
     } else {
-      setCheckedValue(form.admission, "jour");
+      $V(form.admission, "jour");
     }
   } else {
-    setCheckedValue(form.admission, "aucune");
+    $V(form.admission, "aucune");
   }
 }
 </script>

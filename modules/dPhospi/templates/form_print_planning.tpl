@@ -24,7 +24,7 @@ function popPlanning() {
   url.addElement(form.praticien_id);
   url.addElement(form._specialite);
   url.addElement(form.convalescence);
-  url.addParam("_ccam_libelle", getCheckedValue(form._ccam_libelle));
+  url.addParam("_ccam_libelle", $V(form._ccam_libelle));
   url.popup(700, 500, "Planning");
   return;
 }

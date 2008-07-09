@@ -52,7 +52,7 @@ function changeRemote(o) {
   var oPassword = o.form._user_password;
   
   // can the user connect remotely ?
-  var canRemote = getCheckedValue(o)==0;
+  var canRemote = $V(o)==0;
   
   // we change the form element's spec 
   oPassword.className = canRemote?

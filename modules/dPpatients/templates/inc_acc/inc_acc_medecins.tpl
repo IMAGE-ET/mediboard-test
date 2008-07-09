@@ -4,7 +4,7 @@ calculFinAmo = function(){
   var oForm = document.editFrm;
   var sDate = oForm.fin_amo.value;  
       
-  if((getCheckedValue(oForm.cmu) == 1 && sDate == "")){
+  if(($V(oForm.cmu) == 1 && sDate == "")){
     date = new Date;
     date.addDays(365);
     oForm.fin_amo.value = date.toDATE();

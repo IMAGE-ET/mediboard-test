@@ -19,7 +19,7 @@ var Catalogue = {
       urlCat.addParam("catalogue_labo_id", iCatalogue);
       urlExam.addParam("catalogue_labo_id", iCatalogue);
     }
-    urlCat.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlCat.addParam("typeListe", $V(document.typeListeFrm.typeListe));
     urlCat.requestUpdate('topRightDiv', { waitingText : null });
     urlExam.requestUpdate('bottomRightDiv', { waitingText : null });
   }
@@ -43,7 +43,7 @@ var Pack = {
       urlExam.addParam("pack_examens_labo_id", pack_id);
     }
     urlPack.addParam("dragPacks", 1);
-    urlPack.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+    urlPack.addParam("typeListe", $V(document.typeListeFrm.typeListe));
     urlPack.requestUpdate("topRightDiv", { waitingText: null });
     urlExam.requestUpdate("bottomRightDiv", { waitingText: null });
   },
@@ -149,7 +149,7 @@ var Prescription = {
     eSelected : null,
     
     init: function(iPrescriptionItem) {
-      if(getCheckedValue(document.typeListeFrm.typeListe) == "Resultat") {
+      if($V(document.typeListeFrm.typeListe) == "Resultat") {
         Prescription.Examen.edit(iPrescriptionItem);
       } else {
         Prescription.Examen.select(iPrescriptionItem);
@@ -169,13 +169,12 @@ var Prescription = {
     },
 
     edit: function(iPrescriptionItem) {
-      setCheckedValue(document.typeListeFrm.typeListe, "Resultat");
-
+      $V(document.typeListeFrm.typeListe, "Resultat");
       var urlResult = new Url;
       var urlGraph  = new Url;
       urlResult.setModuleAction("dPlabo", "httpreq_edit_resultat");
       urlGraph.setModuleAction("dPlabo", "httpreq_graph_resultats");
-      urlResult.addParam("typeListe", getCheckedValue(document.typeListeFrm.typeListe));
+      urlResult.addParam("typeListe", $V(document.typeListeFrm.typeListe));
       if (!isNaN(iPrescriptionItem)) {
         Prescription.Examen.select(iPrescriptionItem);
         urlResult.addParam("prescription_labo_examen_id", iPrescriptionItem);
@@ -254,7 +253,7 @@ function pageMain() {
   ViewPort.SetAvlHeight('listPrescriptions', 0.4);
   ViewPort.SetAvlHeight('listExamens'      , 1);
   Prescription.select();
-  window[getCheckedValue(document.typeListeFrm.typeListe)].select();
+  window[$V(document.typeListeFrm.typeListe)].select();
   
   PatSelector.sForm = "patFrm";
   PatSelector.sId   = "patient_id";

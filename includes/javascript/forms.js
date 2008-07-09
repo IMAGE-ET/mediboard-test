@@ -53,7 +53,7 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
 }
 
 function getLabelFor(oElement) {
-  var aLabels = oElement.form.getElementsByTagName("label");
+  var aLabels = oElement.form.select("label");
   var iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
     if (oElement.id == oLabel.htmlFor) {
@@ -62,43 +62,6 @@ function getLabelFor(oElement) {
   } 
   
   return null; 
-}
-
-function getCheckedValue(radioObj) {
-  if (!radioObj)
-    return "";
-  var radioLength = radioObj.length;
-  if(radioLength == undefined)
-    if(radioObj.checked)
-      return radioObj.value;
-    else
-      return "";
-  for(var i = 0; i < radioLength; i++) {
-    if(radioObj[i].checked) {
-      return radioObj[i].value;
-    }
-  }
-  return "";
-}
-
-function setCheckedValue(oRadio, sValue) {
-  if (!oRadio) {
-    return;
-  }
-  
-  for (var i = 0; i < oRadio.length; i++) {
-    if (oRadio[i].value == sValue) {
-      oRadio[i].checked = true;
-    }
-  }
-}
-
-
-function setRadioValue(oElement, sValue) {
-  for(var i = 0;i < oElement.length; i++) {
-    if(oElement[i].value == sValue)
-      oElement[i].checked = true;
-  }
 }
 
 /** Universal get/set function for form elements
@@ -703,6 +666,8 @@ var TimePicker = Class.create({
       this.pickerId = this.fieldId+'_picker';
     } else return;
     
+    this.closeEvent = this.closePicker.bindAsEventListener(this);
+    
     // Get the data from the form field
     var parts = $V(formField).split(':');
     this.hour   = parts[0];
@@ -779,9 +744,23 @@ var TimePicker = Class.create({
       
       this.highlight();
     }
-      // on click on the trigger
+    
+    // on click on the trigger
     this.trigger.observe('click', element.togglePicker.bindAsEventListener(element));
-  }, 
+    
+    // on change
+    formField.observe('change', element.getData.bindAsEventListener(element));
+  },
+
+  closePicker: function (e) {
+    e = e.element();
+    var picker = $(this.pickerId);
+    var trigger = $(this.fieldId+'_trigger');
+    if (!e.descendantOf(picker) && (e != trigger)) {
+      picker.hide();
+      document.body.stopObserving('mouseup', this.closeEvent);
+    }
+  },
   
   // Show the selector
   togglePicker: function() {
@@ -799,14 +778,15 @@ var TimePicker = Class.create({
     picker.toggle().setStyle({
       left: this.position.left+'px',
       top: this.position.top+'px'
-    });
-    picker.unoverflow();
+    }).unoverflow();
+    
+    document.body.observe('mouseup', this.closeEvent);
   },
   
   // Set the hour
   setHour: function (e) {
     var picker = $(this.pickerId);
-    this.hour = e.element().innerHTML;
+    
     this.highlight();
     
     $V(this.fieldId, this.hour+':'+(this.minute?this.minute:'00'), true);
@@ -826,6 +806,14 @@ var TimePicker = Class.create({
     } else {
       $V(field, '00:'+this.minute, true);
     }
+  },
+  
+  getData: function() {
+    var field = $(this.fieldId);
+    var data = $V(field).split(':');
+    this.hour = data[0];
+    this.minute = data[1];
+    this.highlight();
   },
   
   highlight: function() {

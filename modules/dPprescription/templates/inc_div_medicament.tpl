@@ -443,7 +443,7 @@ if(document.addLine && document.searchProd){
 	  updateElement: updateFieldsMedicament,
 	  callback: 
 	    function(input, queryString){ 
-	      return (queryString + "&inLivret="+getCheckedValue(oFormProduit._recherche_livret)); 
+	      return (queryString + "&inLivret="+$V(oFormProduit._recherche_livret)); 
 	    }
 	} );
 }
