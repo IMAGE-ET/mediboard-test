@@ -94,16 +94,9 @@ class CBoolSpec extends CMbFieldSpec {
         $checked = "";
         $value = "0";
       }
-    	$sHtml = "<input type=\"checkbox\" name=\"__$field\" 
-        onclick=\"
-          if(getCheckedValue(this.form)=='on'){ 
-            Form.Element.setValue($field, 1);            
-          }
-          else {
-            Form.Element.setValue($field, 0);
-          }\"
-          $checked  />";
-    	$sHtml .= "<input type=hidden name=\"$field\" $extra value=\"$value\"/>";
+    	$sHtml = '<input type="checkbox" name="__'.$field.'" 
+        onclick="$V(this.form.'.$field.', $V(this)?1:0);" '.$checked.' />';
+    	$sHtml .= '<input type="hidden" name="'.$field.'" '.$extra.' value="'.$value.'" />';
     
     	return $sHtml;
     } 
