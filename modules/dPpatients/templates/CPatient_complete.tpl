@@ -193,30 +193,24 @@
     <td class="text">
       <strong>Médecins correspondants</strong>
       {{if $object->medecin1}}
-      
-        <br />Dr {{mb_value object=$object->_ref_medecin1 field="_view"}}
-        {{if $object->_ref_medecin1->tel}}
-          ({{mb_value object=$object->_ref_medecin1 field="tel"}})
-        {{/if}}
-      
+        <br />
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin1}} } });">
+          Dr {{mb_value object=$object->_ref_medecin1 field="_view"}}
+        </span>
       {{/if}}
       
       {{if $object->medecin2}}
-      
-        <br />Dr {{mb_value object=$object->_ref_medecin2 field="_view"}}
-        {{if $object->_ref_medecin2->tel}}
-          ({{mb_value object=$object->_ref_medecin2 field="tel"}})
-        {{/if}}
-      
+        <br />
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin2}} } });">
+          Dr {{mb_value object=$object->_ref_medecin2 field="_view"}}
+        </span>
       {{/if}}
       
       {{if $object->medecin3}}
-      
-        <br />Dr {{mb_value object=$object->_ref_medecin3 field="_view"}}
-        {{if $object->_ref_medecin3->tel}}
-          ({{mb_value object=$object->_ref_medecin3 field="tel"}})
-        {{/if}}
-      
+        <br />
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin3}} } });">
+          Dr {{mb_value object=$object->_ref_medecin3 field="_view"}}
+        </span>
       {{/if}}
     </td>
   </tr>
