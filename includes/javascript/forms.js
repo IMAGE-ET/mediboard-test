@@ -786,7 +786,7 @@ var TimePicker = Class.create({
   // Set the hour
   setHour: function (e) {
     var picker = $(this.pickerId);
-    
+    this.hour = e.element().innerHTML;
     this.highlight();
     
     $V(this.fieldId, this.hour+':'+(this.minute?this.minute:'00'), true);
