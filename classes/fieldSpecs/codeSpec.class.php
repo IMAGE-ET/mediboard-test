@@ -77,9 +77,12 @@ class CCodeSpec extends CMbFieldSpec {
                 }
         }
         $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
-        if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
-        	return "Rib incorrect";
-        }
+	      // Use bcmod since standard modulus
+	      if (function_exists("bcmod")) {
+	        if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
+	        	return "Rib incorrect";
+	        }
+	      }
     }
      
     // INSEE
@@ -97,7 +100,7 @@ class CCodeSpec extends CMbFieldSpec {
       $code = $matches[1];
       $cle  = $matches[2];
       
-      // Use bcmod since standard modulus can't work on numbers exceedind the 2^32 limit
+      // Use bcmod since standard modulus
       if (function_exists("bcmod")) {
         if (97 - bcmod($code, 97) != $cle) {
           return "Matricule incorrect, la clé n'est pas valide";
