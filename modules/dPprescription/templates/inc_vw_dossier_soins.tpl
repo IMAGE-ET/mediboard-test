@@ -98,13 +98,13 @@ administrationMed = function(oDiv, value, text) {
 				    <!-- Affichage des heures de prises des medicaments -->
 				    {{if count($list_prises_med) && @array_key_exists($unite_prise, $list_prises_med.$line_id)}}
 					    {{assign var=prise_line value=$list_prises_med.$line_id.$unite_prise}}
-					    {{foreach from=$tabHours item=_hour}}
+					    {{foreach from=$tabHours item=_hour key=_date_hour}}
 				        <td style="text-align: center">
-					        {{if array_key_exists($_hour, $prise_line)}}
-					          {{assign var=quantite value=$prise_line.$_hour}}
-					        {{else}}
-					         {{assign var=quantite value="-"}}
-					        {{/if}}
+				          {{if $line->_debut_reel < $_date_hour && $line->_fin_reelle > $_date_hour && array_key_exists($_hour, $prise_line)}}
+						        {{assign var=quantite value=$prise_line.$_hour}}
+						      {{else}}
+						        {{assign var=quantite value="-"}}
+						      {{/if}}  
 					        <div style="border: 1px dotted #000;
 					                    {{if $quantite > 0}}
 					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}
@@ -185,13 +185,14 @@ administrationMed = function(oDiv, value, text) {
 				    <!-- Affichage des heures de prises des medicaments -->
 				    {{if count($list_prises_element) && @array_key_exists($unite_prise, $list_prises_element.$element_id)}}
 					    {{assign var=prise_line value=$list_prises_element.$element_id.$unite_prise}}
-					    {{foreach from=$tabHours item=_hour}}
+					    {{foreach from=$tabHours item=_hour key=_date_hour}}
 				        <td style="text-align: center">
-					        {{if array_key_exists($_hour, $prise_line)}}
-					          {{assign var=quantite value=$prise_line.$_hour}}
-					        {{else}}
-					         {{assign var=quantite value="-"}}
-					        {{/if}}
+					        {{if $element->_debut_reel < $_date_hour && $element->_fin_reelle > $_date_hour && array_key_exists($_hour, $prise_line)}}
+						        {{assign var=quantite value=$prise_line.$_hour}}
+						      {{else}}
+						        {{assign var=quantite value="-"}}
+						      {{/if}}  
+						      
 					        <div style="border: 1px dotted #000;
 					                    {{if $quantite > 0}}
 					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}

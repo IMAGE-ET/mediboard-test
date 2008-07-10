@@ -51,7 +51,7 @@ class CPrescriptionLineComment extends CPrescriptionLine {
   
   function updateFormFields(){
     parent::updateFormFields();
-    $this->_date_arret_fin = "";
+    $this->_fin_reelle = "";
     $this->_view = $this->commentaire;
   }
   

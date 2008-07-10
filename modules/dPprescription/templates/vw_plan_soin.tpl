@@ -49,7 +49,7 @@ ul {
     <th class="title" style="width: 4cm">Produit</th>
     <th class="title" style="width: 3cm">Posologie</th>
     {{foreach from=$dates item=date}}
-      {{foreach from=$tabHours item=_hour}}
+      {{foreach from=$tabHours.$date item=_hour}}
         <th>{{$_hour}}h</th>
       {{/foreach}}
     {{/foreach}}
@@ -98,35 +98,23 @@ ul {
         </td>
         <!-- Affichage des heures de prises des medicaments -->
 		  	{{foreach from=$dates item=date}}
-		    {{if array_key_exists($line_id, $list_prises_med.$date)}}
-		      {{foreach from=$tabHours item=_hour}}
+		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
 		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
-			      {{if array_key_exists($unite_prise, $list_prises_med.$date.$line_id)}}
+			      {{assign var=quantite value=""}}  
+			      {{if array_key_exists($line_id, $list_prises_med.$date)}}
 					    {{assign var=prise_line value=$list_prises_med.$date.$line_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}
-	            {{else}}
-	             {{assign var=quantite value=""}}
 	            {{/if}}
-	            {{$quantite}}
-		         {{/if}}
-	         </td>
-	       {{/foreach}}
-	     {{else}}	    
-	        {{if ($_line->_date_arret_fin >= $date && $_line->debut <= $date) || (!$_line->_date_arret_fin && $_line->debut <= $date)}}
-	          {{foreach from=$tabHours item=_hour}}
-					    <td style="padding: 0; border: 1px solid #ccc">
-					    </td>
-					  {{/foreach}}
-	        {{else}} 
-				    {{foreach from=$tabHours item=_hour}}
-					    <td style="padding: 0; border: 1px solid #ccc; text-align:center">
-					      <img src="images/icons/gris.gif" />
-					    </td>
-					  {{/foreach}}
-			    {{/if}}
-		    {{/if}}    
-        {{/foreach}}
+		        {{/if}}
+           {{if $_line->_debut_reel > $_real_hour || $_line->_fin_reelle < $_real_hour}}
+             <img src="images/icons/gris.gif" />
+           {{else}}
+             {{$quantite}}
+           {{/if}}
+	        </td>
+	        {{/foreach}}
+	      {{/foreach}}
       </tr>
     {{/foreach}}
   {{/foreach}} 
@@ -162,36 +150,24 @@ ul {
   			  {{/if}}
         </td>
         <!-- Affichage des heures de prises des medicaments -->
-		  	{{foreach from=$dates item=date}}
-		    {{if array_key_exists($element_id, $list_prises_element.$date)}}
-		      {{foreach from=$tabHours item=_hour}}
-		      <td style="padding: 0; border: 1px solid #ccc; text-align: center">
-			      {{if array_key_exists($unite_prise, $list_prises_element.$date.$element_id)}}
+        {{foreach from=$dates item=date}}
+		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
+		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
+			      {{assign var=quantite value=""}}  
+			      {{if array_key_exists($element_id, $list_prises_element.$date)}}
 					    {{assign var=prise_line value=$list_prises_element.$date.$element_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}
-	            {{else}}
-	             {{assign var=quantite value=""}}
 	            {{/if}}
-	            {{$quantite}}
-		         {{/if}}
-	         </td>
-	       {{/foreach}}
-	     {{else}}	    
-	        {{if $element->_date_arret_fin >= $date && $element->debut <= $date}}
-	          {{foreach from=$tabHours item=_hour}}
-					    <td style="padding: 0; border: 1px solid #ccc">
-					    </td>
-					  {{/foreach}}
-	        {{else}} 
-				    {{foreach from=$tabHours item=_hour}}
-					    <td style="padding: 0; border: 1px solid #ccc; text-align:center">
-					      <img src="images/icons/gris.gif"/>
-					    </td>
-					  {{/foreach}}
-			    {{/if}}
-		    {{/if}}   
-        {{/foreach}}
+		        {{/if}}
+           {{if $element->_debut_reel > $_real_hour || $element->_fin_reelle < $_real_hour}}
+             <img src="images/icons/gris.gif" />
+           {{else}}
+             {{$quantite}}
+           {{/if}}
+	        </td>
+	        {{/foreach}}
+	      {{/foreach}}
         </tr>
         {{/foreach}}
       {{/foreach}}

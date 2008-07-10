@@ -85,7 +85,7 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 	  // mode ordonnnance
 		if($ordonnance){
 
-			if($line_medicament->_date_arret_fin && $line_medicament->_date_arret_fin < mbDate()){
+			if($line_medicament->_fin_reelle && $line_medicament->_fin_reelle < mbDate()){
 				continue;
 			}
 			
@@ -120,7 +120,7 @@ foreach($prescription->_ref_lines_elements_comments as $name_chap => $chap_eleme
 				  $element->loadCompleteView();
 				}
 			if($ordonnance){
-				  if($element->_date_arret_fin && $element->_date_arret_fin < mbDate()){
+				  if($element->_fin_reelle && $element->_fin_reelle < mbDate()){
 				  	continue;
 				  }
 				  

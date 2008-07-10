@@ -553,10 +553,16 @@ class CPrescription extends CMbObject {
 			  @$tab_count++;
 			}
 			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
-	 	  	@$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
-	 	  }
+				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
+				if($_line->_fin_reelle > $dateTimePrise){
+	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
+				}
+			}
 	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
-	 	  	@$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
+	 	  	$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
+	 	  	if($_line->_fin_reelle > $dateTimePrise){
+	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
+	 	  	}
 	 	  }
 	 	  if ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
 	 	  	continue;
@@ -575,7 +581,7 @@ class CPrescription extends CMbObject {
     	if(count($lines_cat)){
     	foreach($lines_cat as &$_line_med){
     		// Si la ligne est prescrite pour la date donnée
-        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_date_arret_fin)) || (!$_line_med->_date_arret_fin && $_line_med->_date_arret_fin <= $date && $date >= $_line_med->debut)){
+        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle)) || (!$_line_med->_fin_reelle && $_line_med->_fin_reelle <= $date && $date >= $_line_med->debut)){
         	if(!$_line_med->_ref_prises){
         	  $_line_med->loadRefsPrises();
         	}
@@ -599,7 +605,7 @@ class CPrescription extends CMbObject {
 		   foreach($elements_cat as &$_elements){
 		 	  foreach($_elements as &$_line_element){
 		  	  	
-		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_date_arret_fin))){
+		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
 		      	if(!$_line_element->_ref_prises){
 		          $_line_element->loadRefsPrises();
 		      	}

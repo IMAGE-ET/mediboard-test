@@ -53,7 +53,7 @@ function insertMedElts($lines, $prescription, $sejour){
   		}	
 	
   		// On ne duplique pas la ligne si elle est finie
-  		if($line->_date_arret_fin && $line->_date_arret_fin < $limit){
+  		if($line->_fin_reelle && $line->_fin_reelle < $limit){
 	      continue;
 	    }
 		

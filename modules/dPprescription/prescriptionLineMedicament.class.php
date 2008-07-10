@@ -119,17 +119,16 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($this->_ref_prescription->type == "traitement"){
     	$this->_traitement = "1";
     }
-    
+
+    // Calcul de la fin reelle de la ligne
     $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
     if(!$this->_traitement){
-      $this->_date_arret_fin = $this->_fin ? "$this->_fin $time_fin" : "";    	
+      $this->_fin_reelle = $this->_fin ? "$this->_fin $time_fin" : "";    	
     }
-    
-    // Calcul de la date de fin de la ligne
     if($this->date_arret){
-    	$this->_date_arret_fin = $this->date_arret;
-      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
-    }    
+    	$this->_fin_reelle = $this->date_arret;
+      $this->_fin_reelle .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
+    }
   }
   
   /*

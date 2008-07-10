@@ -5,12 +5,12 @@
 
 <tbody id="line_medicament_{{$line->_id}}" class="hoverable 
   {{if $line->_traitement}}traitement{{else}}med{{/if}}
-  {{if $line->_date_arret_fin && $line->_date_arret_fin < $now && !$line->_protocole}}line_stopped{{/if}}">
+  {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}line_stopped{{/if}}">
   <!-- Header de la ligne -->
   <tr>
     <th colspan="5" id="th_line_CPrescriptionLineMedicament_{{$line->_id}}" 
         class="{{if $line->_traitement}}traitement{{/if}}
-               {{if $line->_date_arret_fin && $line->_date_arret_fin < $now && !$line->_protocole}}arretee{{/if}}">
+               {{if $line->_fin_reelle && $line->_fin_reelle < $now && !$line->_protocole}}arretee{{/if}}">
       <script type="text/javascript">
          Main.add( function(){
            moveTbody($('line_medicament_{{$line->_id}}'));

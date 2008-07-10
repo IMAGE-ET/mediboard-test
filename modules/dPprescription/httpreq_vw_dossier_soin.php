@@ -58,7 +58,15 @@ if($prescription->_id){
 	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat);
 }	
 
-$tabHours = array("08","12","14","18","22","24","02","06");
+// Génération du tableau d'heures
+$tabHours = array("$date 02:00:00" => "02",
+									"$date 06:00:00" => "06",
+									"$date 08:00:00" => "08",
+									"$date 12:00:00" => "12",
+									"$date 14:00:00" => "14",
+									"$date 18:00:00" => "18",
+									"$date 22:00:00" => "22",
+									"$date 24:00:00" => "24");	      
 
 // Création du template
 $smarty = new CSmartyDP();

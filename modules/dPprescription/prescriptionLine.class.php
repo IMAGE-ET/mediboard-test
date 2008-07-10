@@ -38,7 +38,8 @@ class CPrescriptionLine extends CMbObject {
   var $_protocole          = null;
   var $_count_parent_line  = null;
   var $_count_prises_line  = null;  
-  var $_date_arret_fin     = null;
+  var $_fin_reelle         = null;
+  var $_debut_reel         = null;
   
   // Object References
   var $_ref_prescription   = null;
@@ -75,7 +76,7 @@ class CPrescriptionLine extends CMbObject {
       "decalage_line_fin" => "num",
       "time_fin"          => "time",
       "_fin"              => "date moreEquals|debut",
-      "_date_arret_fin"   => "date"
+      "_fin_reelle"   => "date"
     );
     return array_merge($specsParent, $specs);
   }
@@ -266,6 +267,11 @@ class CPrescriptionLine extends CMbObject {
         $this->_fin = mbDate(" -1 DAYS", $this->_fin);  
       }
     }
+    
+    
+    // Calcul du debut reel de la ligne
+    $time_debut = ($this->time_debut) ? $this->time_debut : "06:00:00";
+    $this->_debut_reel = $this->debut." $time_debut";
   }
   
   /*

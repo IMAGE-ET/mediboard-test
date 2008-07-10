@@ -62,7 +62,7 @@ foreach($lines as $cat => $lines_by_type){
 		// Creation d'une prescription de sejour
 		if($type == "sejour"){
 			// On ne duplique pas les lignes qui seront finis avant la debut du séjour
-			if($line->_date_arret_fin && $line->_date_arret_fin < $sejour->_entree){
+			if($line->_fin_reelle && $line->_fin_reelle < $sejour->_entree){
 				continue;
 			}
 			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_entree))){
@@ -77,7 +77,7 @@ foreach($lines as $cat => $lines_by_type){
 		// Creation d'une prescription de sortie
 		if($type == "sortie"){
 			// On ne duplique pas les lignes qui seront finis avant la fin du sejour
-			if($line->_date_arret_fin && $line->_date_arret_fin < $sejour->_sortie){
+			if($line->_fin_reelle && $line->_fin_reelle < $sejour->_sortie){
 				continue;
 			}
 			if($line->debut && $line->duree && ($line->debut < mbDate($sejour->_sortie))){
