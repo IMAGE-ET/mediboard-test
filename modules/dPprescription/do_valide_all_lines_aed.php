@@ -128,6 +128,23 @@ if($prescription_line_id){
 }
 
 
+// Validation des traitements perso
+if($prescription->_id && $chapitre == "medicament"){
+	$prescription->_ref_object->loadRefPrescriptionTraitement();
+	$prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
+	$prescription_traitement->loadRefsLinesMed();
+	foreach($prescription_traitement->_ref_prescription_lines as $_line_traitement){
+		if($mode_pharma){
+	  	$_line_traitement->valide_pharma = 1;		
+		} else {
+		  $_line_traitement->signee = 1;
+		}
+		$msg = $_line_traitement->store();
+	  $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
+	}
+}
+
+
 // Si mode pharma en validation globale, chargement de tous les medicaments de la prescription et calcul des interactions
 if($prescription->_id && $mode_pharma){
 	$prescription->loadRefObject();

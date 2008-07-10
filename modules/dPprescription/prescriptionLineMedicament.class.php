@@ -120,15 +120,15 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     	$this->_traitement = "1";
     }
     
-    $time = ($this->time_arret) ? $this->time_arret : "23:59:00";
+    $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
     if(!$this->_traitement){
-      $this->_date_arret_fin = $this->_fin ? "$this->_fin $time" : "";    	
+      $this->_date_arret_fin = $this->_fin ? "$this->_fin $time_fin" : "";    	
     }
     
     // Calcul de la date de fin de la ligne
     if($this->date_arret){
     	$this->_date_arret_fin = $this->date_arret;
-      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " $time";
+      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
     }    
   }
   

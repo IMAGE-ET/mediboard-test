@@ -65,13 +65,13 @@ class CPrescriptionLineElement extends CPrescriptionLine {
 	    }
     }
     
-    $time = ($this->time_arret) ? $this->time_arret : "23:59:00";
+    $time_fin = ($this->time_fin) ? $this->time_fin : "23:59:00";
     // Calcul de la date de fin de la ligne
-    $this->_date_arret_fin = $this->_fin ? "$this->_fin $time" : "$this->debut 23:59:00";    
+    $this->_date_arret_fin = $this->_fin ? "$this->_fin $time_fin" : "$this->debut 23:59:00";    
     if($this->date_arret){
     	$this->_date_arret_fin = $this->date_arret;
-      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " $time";
-    }
+      $this->_date_arret_fin .= $this->time_arret ? " $this->time_arret" : " 23:59:00";
+    }    
   }
   
   

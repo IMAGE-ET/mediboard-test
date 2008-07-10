@@ -203,7 +203,7 @@ testPharma = function(line_id){
     <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
     <button class="tick" type="button" onclick="submitFormAjax(this.form,'systemMsg')">
     {{if $mode_pharma}}
-      Validation pharmacien pour toutes les lignes
+      Valider toutes les lignes
     {{else}}
       Signer les lignes de médicaments
     {{/if}}
