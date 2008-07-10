@@ -2511,6 +2511,10 @@ ul.select-tree li.selected {
   color: #fff;
 }
 
+ul.select-tree li.focused {
+  background: #ccc;
+}
+
 ul.select-tree li.drop {
   background-image: url(../../images/icons/a_right.png);
   background-position: center right;
