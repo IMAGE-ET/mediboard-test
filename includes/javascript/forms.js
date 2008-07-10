@@ -984,7 +984,7 @@ Element.addMethods(['select', 'optgroup'], {
         
         if (validKey(keycode)) { // Valid keycode
           if (keycode == 8 && catcher.value == '' && !select.visible()) {
-            //showSelect(true);
+            showSelect(true);
           } else {
             getMatchingOptions(catcher.value);
           }
