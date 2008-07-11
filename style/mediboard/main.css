@@ -2988,6 +2988,9 @@ table.tbl th.traitement {
 ul.select-tree {
   padding: 0;
   text-align: left;
+  color: #000;
+  font-weight: normal;
+  font-size: 1.0em;
 }
 
 ul.select-tree ul {
