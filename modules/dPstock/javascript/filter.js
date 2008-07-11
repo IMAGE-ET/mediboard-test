@@ -1,4 +1,4 @@
-/** A filter funtion, useful */
+/** A filter function, useful */
 
 function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.sForm   = sForm;
@@ -7,11 +7,13 @@ function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.sList   = sList;
   this.aFields = aFields;
   this.sHiddenColumn = sHiddenColumn;
+  this.selected = 0;
 }
 
 Filter.prototype = {
   submit: function (fieldToSelect) {
     oForm = document.forms[this.sForm];
+    element = this;
     url = new Url;
     
     url.setModuleAction(this.sModule, this.sAction);
@@ -34,8 +36,68 @@ Filter.prototype = {
     if (this.sHiddenColumn) {
       url.addParam("hidden_column", this.sHiddenColumn);
     }
-    url.requestUpdate(this.sList, { waitingText: null } );
     
+    makeRanges = function (total, step) {
+      var ranges = [];
+      var i = 0;
+      while(total > 0) {
+        ranges.push(i*step+','+step);
+        total-=step;
+        i++;
+      }
+      return ranges;
+    }
+
+    makeRangeSelector = function () {
+      var count = $(element.sList+'-total-count');
+      if (count) {
+        count = parseInt(count.innerHTML);
+      }
+      
+      var form = document.forms[element.sForm];
+      var field = form.limit;
+
+      var rangeSel = new Element('div').setStyle({textAlign: 'center'});
+      if (count > 20) {
+        var total = count;
+        var r = makeRanges(total, 20);
+        
+        rangeSel.insert(
+          new Element('a')
+             .writeAttribute('href', '#')
+             .update('|&lt;&nbsp;')
+             .observe('click', function () {$V(field, 20); form.onsubmit(); element.selected = 0;})
+        );
+        
+        r.each(function (e, k) {
+          var a = new Element('a')
+                      .writeAttribute('href', '#')
+                      .update('&nbsp;'+(k+1)+'&nbsp;')
+                      .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
+          if (k == element.selected) {
+            a.setStyle({fontWeight: 'bold'});
+          }
+          rangeSel.insert(a);
+        });
+        
+        rangeSel.insert(
+          new Element('a')
+             .writeAttribute('href', '#')
+             .update('&nbsp;&gt;|')
+             .observe('click', 
+                function () {
+                  $V(field, (total-(total%20))+', '+20);
+                  form.onsubmit(); 
+                  element.selected = r.length-1;
+                }
+             )
+        );
+      }
+      $(element.sList).insert(rangeSel);
+    }
+    
+    url.requestUpdate(this.sList, { waitingText: null, onComplete: makeRangeSelector } );
+
     return false;
   },
   
@@ -62,5 +124,10 @@ Filter.prototype = {
       });
     }
     this.submit();
+  }, 
+  
+  resetRange: function () {
+    this.selected = 0;
+    $V(document.forms[this.sForm].limit, null, false);
   }
 }

@@ -13,6 +13,7 @@ $can->needsEdit();
 
 $category_id         = mbGetValueFromGet('category_id');
 $keywords            = mbGetValueFromGet('keywords');
+$limit               = mbGetValueFromGet('limit');
 $only_ordered_stocks = mbGetValueFromGet('only_ordered_stocks')=='true';
 
 $where = array();
@@ -40,12 +41,14 @@ if ($only_ordered_stocks) {
   $where['product_order_item.quantity_received'] = ' < product_order_item.quantity'; // order item not received yet
 }
 $stock = new CProductStock();
-$list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
+$list_stocks_count = $stock->countList($where, $orderby, null, null, $leftjoin);
+$list_stocks = $stock->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
 
 $smarty->assign('list_stocks', $list_stocks);
+$smarty->assign('list_stocks_count', $list_stocks_count);
 
 $smarty->display('inc_stocks_list.tpl');
 ?>

@@ -51,7 +51,7 @@ class CProduct extends CMbObject {
       'description' => 'text',
       'code'        => 'str maxLength|32',
       'category_id' => 'notNull ref class|CProductCategory',
-      'societe_id'  => 'notNull ref class|CSociete',
+      'societe_id'  => 'ref class|CSociete',
     ));
   }
 

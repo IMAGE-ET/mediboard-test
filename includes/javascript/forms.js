@@ -809,8 +809,7 @@ var TimePicker = Class.create({
   },
   
   getData: function() {
-    var field = $(this.fieldId);
-    var data = $V(field).split(':');
+    var data = $V($(this.fieldId)).split(':');
     this.hour = data[0];
     this.minute = data[1];
     this.highlight();
@@ -819,18 +818,15 @@ var TimePicker = Class.create({
   highlight: function() {
     var picker = $(this.pickerId);
     
-    var selected = picker.select('.hour td.selected');
+    var selected = picker.select('.hour td.selected, .minute td.selected');
     if (selected.length) {
-      selected[0].removeClassName('selected');
+      selected.each(function(o){o.removeClassName('selected')});
     }
+    
     if (this.hour && (selected = picker.select('.hour td.hour-'+this.hour))) {
-      selected[0].addClassName('selected');
+      selected.each(function(o){o.addClassName('selected');});
     }
   
-    selected = picker.select('.minute td.selected');
-    if (selected.length) {
-      selected.each(function(o){o.removeClassName('selected');});
-    }
     if (this.minute && (selected = picker.select('.minute td.minute-'+this.minute))) {
       selected.each(function(o){o.addClassName('selected');});
     }

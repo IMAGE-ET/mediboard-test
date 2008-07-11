@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "keywords", "only_ordered_stocks"];
+  filterFields = ["category_id", "keywords", "only_ordered_stocks", "limit"];
   stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_list", "list-stocks", filterFields);
   stocksFilter.submit();
 } );
@@ -14,27 +14,25 @@ Main.add(function () {
     <td class="halfPane" rowspan="3">
       <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
-        <select name="category_id" onchange="stocksFilter.submit();">
+        <select name="category_id" onchange="stocksFilter.resetRange(); stocksFilter.submit();">
           <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
           {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
-        
-        <input type="text" name="keywords" value="" />
-        
+        <input type="text" name="keywords" onchange="stocksFilter.resetRange()" value="" />
+        <input type="hidden" name="limit" value="" />
         <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
         <br />
     
-        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
+        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.resetRange(); stocksFilter.submit();" />
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
       </form>
   
       <div id="list-stocks"></div>
     </td>
 
-    <!-- Edit/New Stock form -->
     <td class="halfPane">
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">{{tr}}CProductStock.create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -100,3 +98,22 @@ Main.add(function () {
     </td>
   </tr>
 </table>
+
+<!-- <form action="" name="test" method="get">
+  <select name="choice" class="select-tree" onchange="Console.trace(this.value+':'+this.options[this.selectedIndex].text);">
+    <option value="1">Thomas</option>
+    <option value="2" >Romain</option>
+    <option value="11" >123</option>
+    <optgroup label="Salariés">
+      <option value="3" >Alexis</option>
+      <option value="4" >Fabien</option>
+    </optgroup>
+    <optgroup label="Stagiaires">
+      <option value="8"  selected="selected">Alexandre</option>
+      <option value="9" >Un autre</option>
+      <option value="10" >encore un</option>
+    </optgroup>
+  </select>
+  <input type="text" value="bah" name="bih" />
+</form>-->
+

@@ -1,3 +1,5 @@
+<div id="list-stocks-total-count" style="display: none;">{{$list_stocks_count}}</div>
+
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductStock-product_id{{/tr}}</th>
@@ -18,3 +20,4 @@
   </tr>
 {{/foreach}}
 </table>
+
