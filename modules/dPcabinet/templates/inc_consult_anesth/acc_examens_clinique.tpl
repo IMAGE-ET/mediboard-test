@@ -1,3 +1,14 @@
+<script type="text/javascript">
+  function refreshConstantesMedicales () {
+    var url = new Url();
+    url.setModuleAction("dPpatients", "httpreq_vw_constantes_medicales");
+    url.addParam("patient_id", {{$consult->_ref_patient->_id}});
+    url.addParam("context_class", "{{$consult->_class_name}}");
+    url.addParam("context_id", {{$consult->consultation_id}});
+    url.requestUpdate("constantes-medicales", { waitingText: null } );
+  };
+  Main.add(refreshConstantesMedicales);
+</script>
 <table class="form">
   <tr>
     <td id="constantes-medicales"></td>
