@@ -41,4 +41,11 @@
 	<div class="big-info">
 		Aucun Cell Saver n'est prévu pour cette opération.
 	</div>
+	<form name="inscriptionRSPO" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+	<input type="hidden" name="operation_id" value="{{$selOp->_id}}">
+	<input type="hidden" name="m" value="bloodSalvage" />
+  <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
+  <button type=submit" class="submit">Inscrire le patient au protocole RSPO</button>
+  </form>
+
 {{/if}}
