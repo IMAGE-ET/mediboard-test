@@ -82,19 +82,6 @@ function modifSejour() {
   {{/if}}
 }
 
-function changeTypeHospi(value) {
-  var oForm = document.editSejour;
-  if(value == "ambu") {
-    $('showFor-comp').hide();
-    $V(oForm.reanimation, '0');
-  } else if(value == "comp") {
-    $('showFor-comp').show();
-  } else {
-    $('showFor-comp').hide();
-    $V(oForm.reanimation, '0');
-  }
-}
-
 function updateSortiePrevue() {
   var oForm = document.editSejour;
     

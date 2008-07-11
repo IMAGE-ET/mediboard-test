@@ -370,7 +370,7 @@ Main.add( function(){
 
 <tr>
   <th>{{mb_label object=$sejour field=mode_sortie}}</th>
-  <td colspan="3">
+  <td>
     {{if $can->view}}
       {{mb_field object=$sejour defaultOption="&mdash; Mode de sortie" field=mode_sortie onchange="loadTransfert(this.form, this.value);"}}
       <span id="listEtabExterne">
@@ -382,36 +382,41 @@ Main.add( function(){
 	  {{mb_value object=$sejour field=mode_sortie}}
 	{{/if}}    
   </td>
-</tr>
-
-<tr>
   <th>{{mb_label object=$sejour field=_sortie_autorisee}}</th>
-  <td colspan="3">{{mb_value object=$sejour field=_sortie_autorisee}}</td>
+  <td><strong>{{mb_value object=$sejour field=_sortie_autorisee}}</strong></td>
 </tr>
-
 {{/if}}
 
 
 <tr>
   <th>{{mb_label object=$sejour field="type"}}</th>
   <td>
-    <select name="type" onchange="changeTypeHospi(this.value)">
+    <select name="type" onchange="changeTypeHospi()">
     {{foreach from=$sejour->_enumsTrans.type item="curr_type" key="key"}}
-     {{if $key == 'urg'}}
-       {{if $urgInstalled}}
-       <option value="{{$key}}" {{if $sejour->type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
-       {{/if}}
-     {{else}}
-       <option value="{{$key}}" {{if $sejour->type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
-     {{/if}}
+      {{if $key != 'urg' || !$urgInstalled}}
+      <option value="{{$key}}" {{if $sejour->type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
+      {{/if}}
     {{/foreach}}
     </select>
-  
   </td>
-  <td colspan="2">
-    <div id="showFor-comp" {{if !$sejour->_id || $sejour->type != "comp"}} style="display: none;" {{/if}}>
-      {{mb_label object=$sejour field="reanimation"}}{{mb_field object=$sejour field="reanimation"}}
-    </div>
+  
+  <th class="reanimation">{{mb_label object=$sejour field="reanimation"}}</th>
+  <td class="reanimation">
+  	{{mb_field object=$sejour field="reanimation"}}
+    <script type="text/javascript">
+
+		function changeTypeHospi() {
+		  var oForm = document.editSejour;
+		  var sValue = $V(oForm.type);
+		  if (sValue != "comp") {
+		    $V(oForm.reanimation, '0');
+		  }
+		  
+	    oForm.select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
+		}
+		
+		changeTypeHospi();
+    </script>
   </td>
 </tr>
 
