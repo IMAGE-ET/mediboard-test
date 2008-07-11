@@ -10,8 +10,8 @@
     <th style="width: 16%"><strong> ASA : </strong></th><td style="width: 16%">{{$consult_anesth->ASA}}</td>
  	</tr>
  	<tr>
-	  <th><strong> Poids : </strong></th><td>{{$patient->_ref_constantes_medicales->poids}}</td>
-	  <th><strong> Taille : </strong></th><td>{{$patient->_ref_constantes_medicales->taille}}</td>
+	  <th><strong> Poids : </strong></th><td>{{$patient->_ref_constantes_medicales->poids}} kg</td>
+	  <th><strong> Taille : </strong></th><td>{{$patient->_ref_constantes_medicales->taille}} cm</td>
 	  <th><strong> IMC : </strong></th><td>{{$patient->_ref_constantes_medicales->_imc}}</td>
 	</tr>
 </table>
