@@ -844,6 +844,13 @@ table.form th.category {
   vertical-align: middle;
 }
 
+table.form th.category label {
+  font-weight: bold;  
+  text-align: center;
+  background-color: #aaa;
+  vertical-align: middle;
+}
+
 table.form th.mandatory {
   color: #000;
   font-weight: bold;

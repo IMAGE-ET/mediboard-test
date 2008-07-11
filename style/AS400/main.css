@@ -111,6 +111,14 @@ table.form th.category {
   border: #0f0 1px dashed;
 }
 
+table.form th.category label {
+  color: #fff;
+  font-weight: bold;  
+  font-style: italic;  
+  text-align: center;
+  background-color: #000;
+}
+
 table.form th.mandatory {
   color: #f00;
   font-weight: bold;

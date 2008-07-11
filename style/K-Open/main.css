@@ -80,6 +80,14 @@ table.form th.category {
   border: #638cc9 1px outset;
 }
 
+table.form th.category label {
+  color: #fff;
+  font-weight: bold;  
+  font-style: italic;  
+  text-align: center;
+  background-color: #638cc9;
+}
+
 table.form th.mandatory {
   color: #f00;
   font-weight: bold;
