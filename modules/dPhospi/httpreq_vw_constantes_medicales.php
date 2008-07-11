@@ -126,8 +126,8 @@ $data['pouls']['title'] = 'Pouls';
 $data['pouls']['unit'] = 'puls./min';
 $data['pouls']['standard'] = 60;
 $data['pouls']['options']['yaxis'] = array(
-  'min' => getMin(40,  $data['pouls']['series'][0]['data']), // min
-  'max' => getMax(160, $data['pouls']['series'][0]['data']), // max
+  'min' => getMin(50,  $data['pouls']['series'][0]['data']), // min
+  'max' => getMax(120, $data['pouls']['series'][0]['data']), // max
 );
 
 $data['temperature']['title'] = htmlentities('Température');
@@ -135,13 +135,13 @@ $data['temperature']['unit'] = htmlentities('°C');
 $data['temperature']['standard'] = 37.5;
 $data['temperature']['options']['yaxis'] = array(
   'min' => getMin(36, $data['temperature']['series'][0]['data']), // min
-  'max' => getMax(42, $data['temperature']['series'][0]['data']), // max
+  'max' => getMax(41, $data['temperature']['series'][0]['data']), // max
 );
 
 $data['spo2']['title'] = htmlentities('Spo2');
 $data['spo2']['unit'] = htmlentities('%');
 $data['spo2']['options']['yaxis'] = array(
-  'min' => getMin(0,   $data['spo2']['series'][0]['data']), // min
+  'min' => getMin(70,   $data['spo2']['series'][0]['data']), // min
   'max' => getMax(100, $data['spo2']['series'][0]['data']), // max
 );
 

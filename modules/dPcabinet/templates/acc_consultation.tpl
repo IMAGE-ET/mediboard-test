@@ -10,6 +10,16 @@ function setField(oField, sValue) {
   oField.value = sValue;
 }
 
+function refreshConstantesMedicales () {
+  var url = new Url();
+  url.setModuleAction("dPpatients", "httpreq_vw_constantes_medicales");
+  url.addParam("patient_id", {{$consult->_ref_patient->_id}});
+  url.addParam("context_class", "{{$consult->_class_name}}");
+  url.addParam("context_id", {{$consult->consultation_id}});
+  url.requestUpdate("Constantes", { waitingText: null } );
+};
+Main.add(refreshConstantesMedicales);
+
 Main.add(function () {
   var tabsConsult = Control.Tabs.create('tab-consult', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -29,6 +39,7 @@ Main.add(function () {
   {{/if}}
   
   <li><a href="#AntTrait">Antécédents</a></li>
+  <li><a href="#Constantes">Constantes</a></li>
   <li><a href="#Examens">Examens</a></li>
   
   {{if $app->user_prefs.ccam_consultation == 1}}
@@ -45,6 +56,7 @@ Main.add(function () {
 {{/if}}
 
 <div id="AntTrait" style="display: none;">{{include file="../../dPcabinet/templates/inc_ant_consult.tpl"}}</div>
+<div id="Constantes" style="display: none"></div>
 <div id="Examens" style="display: none;">{{include file="../../dPcabinet/templates/inc_main_consultform.tpl"}}</div>
 
 {{if $app->user_prefs.ccam_consultation == 1}}

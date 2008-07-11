@@ -35,8 +35,10 @@ calculImcVst = function (oForm) {
    $V(oForm._vst, fVst);
    $V(oForm._imc, fImc);
    $('constantes_medicales_imc').innerHTML = sImcValeur;
-   calculPSA(); 
-   calculClairance();
+   if(typeof(calculPSA) == 'function' && typeof(calculClairance) == 'function') {
+     calculPSA(); 
+     calculClairance();
+   }
 }
 </script>
 
@@ -65,7 +67,7 @@ calculImcVst = function (oForm) {
     <tr>
       <th>{{mb_label object=$constantes field=poids}}</th>
       <td>
-        {{mb_field object=$constantes_context field=poids tabindex="1" size="4" onchange="calculImcVst(this.form);submitForm(this.form);"}} kg
+        {{mb_field object=$constantes_context field=poids tabindex="1" size="4" onchange="calculImcVst(this.form);submitFormAjax(this.form, 'systemMsg');"}} kg
       </td>
       <td>
         {{if $constantes->poids}}
@@ -78,7 +80,7 @@ calculImcVst = function (oForm) {
     <tr>
       <th>{{mb_label object=$constantes field=taille}}</th>
       <td>
-        {{mb_field object=$constantes_context field=taille tabindex="2" size="4" onchange="calculImcVst(this.form);submitForm(this.form);"}} cm
+        {{mb_field object=$constantes_context field=taille tabindex="2" size="4" onchange="calculImcVst(this.form);submitFormAjax(this.form, 'systemMsg');"}} cm
       </td>
       <td>
         {{if $constantes->taille}}
@@ -92,17 +94,19 @@ calculImcVst = function (oForm) {
       <th>{{mb_label object=$constantes field=_vst}}</th>
       <td class="readonly">{{mb_field object=$constantes_context field=_vst size="4" readonly="readonly"}} ml</td>
       <td>{{mb_value object=$constantes field=_vst}}{{if $constantes->_vst}} ml{{/if}}</td>
+      <td />
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=_imc}}</th>
       <td class="readonly">{{mb_field object=$constantes_context field=_imc size="4" readonly="readonly"}}</td>
       <td>{{mb_value object=$constantes field=_imc}}</td>
+      <td />
     </tr>
     <tr>
       <th>{{mb_label object=$constantes field=ta}}</th>
       <td>
-        {{mb_field object=$constantes_context field=_ta_systole tabindex="3" size="1" onchange="submitForm(this.form);"}} /
-        {{mb_field object=$constantes_context field=_ta_diastole tabindex="4" size="1" onchange="submitForm(this.form);"}} cm Hg
+        {{mb_field object=$constantes_context field=_ta_systole tabindex="3" size="1" onchange="submitFormAjax(this.form, 'systemMsg');"}} /
+        {{mb_field object=$constantes_context field=_ta_diastole tabindex="4" size="1" onchange="submitFormAjax(this.form, 'systemMsg');"}} cm Hg
       </td>
       <td>
         {{if $constantes->ta}}
@@ -117,7 +121,7 @@ calculImcVst = function (oForm) {
     <tr>
       <th>{{mb_label object=$constantes field=pouls}}</th>
       <td>
-        {{mb_field object=$constantes_context field=pouls tabindex="5" size="4" onchange="submitForm(this.form);"}} /min
+        {{mb_field object=$constantes_context field=pouls tabindex="5" size="4" onchange="submitFormAjax(this.form, 'systemMsg');"}} /min
       </td>
       <td>
         {{if $constantes->pouls}}
@@ -130,7 +134,7 @@ calculImcVst = function (oForm) {
     <tr>
       <th>{{mb_label object=$constantes field=spo2}}</th>
       <td>
-        {{mb_field object=$constantes_context field=spo2 tabindex="6" size="4" onchange="submitForm(this.form);"}} %
+        {{mb_field object=$constantes_context field=spo2 tabindex="6" size="4" onchange="submitFormAjax(this.form, 'systemMsg');"}} %
       </td>
       <td>
         {{if $constantes->spo2}}
