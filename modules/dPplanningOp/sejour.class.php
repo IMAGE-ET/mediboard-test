@@ -73,6 +73,7 @@ class CSejour extends CCodable {
   var $_hour_sortie_prevue = null;
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
+  var $_sortie_autorisee   = null;
   var $_venue_SHS_guess    = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
@@ -206,8 +207,10 @@ class CSejour extends CCodable {
     $specs["_ccam_libelle"]   = "bool default|1";
     $specs["_duree_prevue"]   = "num";
     $specs["_duree_reelle"]   = "num";
-    $specs["_date_entree_prevue"]  = "date";
-    $specs["_date_sortie_prevue"]  = "date";
+    $specs["_date_entree_prevue"] = "date";
+    $specs["_date_sortie_prevue"] = "date";
+    $specs["_sortie_autorisee"]   = "bool";
+        
     return $specs;
   }
   
@@ -751,13 +754,16 @@ class CSejour extends CCodable {
     $where = array("sejour_id" => "= '$this->sejour_id'");
     $this->_ref_affectations = new CAffectation();
     $this->_ref_affectations = $this->_ref_affectations->loadList($where, $order);
-    if(count($this->_ref_affectations) > 0) {
+    if (count($this->_ref_affectations) > 0) {
       $this->_ref_first_affectation = end($this->_ref_affectations);
       $this->_ref_last_affectation = reset($this->_ref_affectations);
-    } else {
+    } 
+    else {
       $this->_ref_first_affectation = new CAffectation;
       $this->_ref_last_affectation = new CAffectation;
     }
+    
+    $this->_sortie_autorisee = $this->_ref_last_affectation->confirme;
   }
   
   function loadRefsOperations($where = array()) {

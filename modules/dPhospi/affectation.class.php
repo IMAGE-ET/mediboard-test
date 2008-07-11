@@ -60,10 +60,12 @@ class CAffectation extends CMbObject {
       "sejour_id"    => "ref class|CSejour cascade",
       "entree"       => "notNull dateTime",
       "sortie"       => "notNull dateTime",
-      "_mode_sortie" => "enum list|normal|transfert|deces default|normal",
       "confirme"     => "bool",
       "effectue"     => "bool",
-      "rques"        => "text"
+      "rques"        => "text",
+
+      "_mode_sortie" => "enum list|normal|transfert|deces default|normal",
+
     );
     return array_merge($specsParent, $specs);
   }

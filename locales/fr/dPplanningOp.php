@@ -657,4 +657,14 @@ $locales['msg-CTypeAnesth-create'] = '';
 $locales['msg-CTypeAnesth-delete'] = '';
 $locales['msg-CTypeAnesth-modify'] = '';
 $locales['CSejour-repas_sans_porc'] = 'Repas sans porc';
+$locales['CSejour-_date_entree'] = '';
+$locales['CSejour-_date_entree-court'] = '';
+$locales['CSejour-_date_entree-desc'] = '';
+$locales['CSejour-_duree_reelle-court'] = '';
+$locales['CSejour-_duree_reelle-desc'] = '';
+$locales['CSejour-_sortie_autorisee'] = 'Sortie autorisée';
+$locales['CSejour-_sortie_autorisee-court'] = 'Autorisée';
+$locales['CSejour-_sortie_autorisee-desc'] = 'Sortie autorisée par le praticien responsable du séjour';
+$locales['CSejour-repas_sans_porc-court'] = '';
+$locales['CSejour-repas_sans_porc-desc'] = '';
 ?>

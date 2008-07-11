@@ -243,7 +243,7 @@ Main.add( function(){
 
 <tr>
   <th>
-    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" ondblclick="PatSelector.init()" value="{{$patient->patient_id}}" onchange="changePat(); checkSejoursToReload();" />
+    <input type="hidden" name="patient_id" class="{{$sejour->_props.patient_id}}" value="{{$patient->_id}}" onchange="changePat(); checkSejoursToReload();" />
     {{mb_label object=$sejour field="patient_id"}}
   </th>
   <td class="readonly">
@@ -384,7 +384,10 @@ Main.add( function(){
   </td>
 </tr>
 
-
+<tr>
+  <th>{{mb_label object=$sejour field=_sortie_autorisee}}</th>
+  <td colspan="3">{{mb_value object=$sejour field=_sortie_autorisee}}</td>
+</tr>
 
 {{/if}}
 

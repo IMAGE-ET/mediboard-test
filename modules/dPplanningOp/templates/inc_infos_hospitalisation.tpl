@@ -2,24 +2,25 @@
 
 <table class="tbl">
   <tr>
-    <th class="title" colspan="3">
-      {{tr}}msg-CSejour-infoHospi{{/tr}}
+    <th class="title" colspan="10">
+      {{tr}}CSejour-back-affectations{{/tr}}
     </th>
   </tr>
   
   <tr>
-    <th>{{tr}}CLit-nom{{/tr}}</th>
-    <th>{{tr}}CAffectation-entree-court{{/tr}}</th>
-    <th>{{tr}}CAffectation-sortie-court{{/tr}}</th>
+    <th>{{mb_label class=CAffectation field=lit_id}}</th>
+    <th>{{mb_label class=CAffectation field=entree}}</th>
+    <th>{{mb_label class=CAffectation field=sortie}}</th>
+    <th>{{mb_label class=CAffectation field=effectue}}</th>
   </tr>
 
-  {{foreach from=$sejour->_ref_affectations item=curr_affectation}}
+  {{foreach from=$sejour->_ref_affectations item=_affectation}}
   <tr>
-    <td>{{$curr_affectation->_ref_lit->_view}}</td>
-    <td>{{$curr_affectation->entree|date_format:"%a %d %b %Y à %Hh%M"}}</td>
-    <td>{{$curr_affectation->sortie|date_format:"%a %d %b %Y à %Hh%M"}}</td>
+    <td>{{$_affectation->_ref_lit->_view}}</td>
+    <td>{{mb_value object=$_affectation field=entree}}</td>
+    <td>{{mb_value object=$_affectation field=sortie}}</td>
+    <td>{{mb_value object=$_affectation field=effectue}}</td>
   </tr>
   {{/foreach}}
-
+  
 </table> 
-

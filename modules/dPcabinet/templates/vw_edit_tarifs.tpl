@@ -34,7 +34,7 @@ function addCodeNgap(){
   oNgapField.add(code_ngap);
 }
 
-function refreshTotal(){
+function refreshTotal() {
   var oForm = document.editFrm;
   var secteur1 = oForm.secteur1.value;
   var secteur2 = oForm.secteur2.value;
@@ -177,52 +177,47 @@ function pageMain() {
           </td>
         </tr>
         {{/if}}
+
         {{if $is_praticien=="1" || $is_admin_or_secretaire=="1"}}
         <tr>
-          <th>Nom</th>
-          <th>Secteur 1</th>
-          <th>Secteur 2</th>
+          <th>{{mb_label class=CTarif field=description}}</th>
+          <th>{{mb_label class=CTarif field=secteur1}}</th>
+          <th>{{mb_label class=CTarif field=secteur2}}</th>
         </tr>
+
         {{foreach from=$listeTarifsChir item=curr_tarif}}
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
+            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{mb_value object=$curr_tarif field=description}}</a>
           </td>
-          <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} &euro;</a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} &euro;</a>
-          </td>
+          <td>{{mb_value object=$curr_tarif field=secteur1}}</td>
+          <td>{{mb_value object=$curr_tarif field=secteur2}}</td>
         </tr>
         {{/foreach}}
         {{/if}}
       </table>
     
       <table class="tbl">
+        <tr><th colspan="3">Tarifs du cabinet</th></tr>
+
         <tr>
-          <th colspan="3">Tarifs du cabinet</th>
+          <th>{{mb_label class=CTarif field=description}}</th>
+          <th>{{mb_label class=CTarif field=secteur1}}</th>
+          <th>{{mb_label class=CTarif field=secteur2}}</th>
         </tr>
-        <tr>
-          <th>Nom</th>
-          <th>Secteur 1</th>
-          <th>Secteur 2</th>
-        </tr>
+
         {{foreach from=$listeTarifsSpe item=curr_tarif}}
         <tr>
           <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->description}}</a>
+            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{mb_value object=$curr_tarif field=description}}</a>
           </td>
-          <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur1}} &euro;</a>
-          </td>
-          <td>
-            <a href="?m={{$m}}&amp;tarif_id={{$curr_tarif->tarif_id}}">{{$curr_tarif->secteur2}} &euro;</a>
-          </td>
+          <td>{{mb_value object=$curr_tarif field=secteur1}}</td>
+          <td>{{mb_value object=$curr_tarif field=secteur2}}</td>
         </tr>
         {{/foreach}}
       </table>
     </td>
+    
     <td>
       <form name="editFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_tarif_aed" />

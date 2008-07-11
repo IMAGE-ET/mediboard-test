@@ -9,15 +9,28 @@
  
   <tr>
     <td>
-      <strong>{{tr}}CAffectation-entree-court{{/tr}}:</strong>
-      <i>Le {{$object->entree|date_format:"%d/%m/%Y à %Hh%M"}}</i>
-      <br />
-      <strong>{{tr}}CAffectation-sortie-court{{/tr}}:</strong>
-      <i>Au {{$object->sortie|date_format:"%d/%m/%Y à %Hh%M"}}</i>
-      <br />
-      <strong>{{tr}}CAffectation-chambre{{/tr}}:</strong>
-      <i>{{$object->_ref_lit->_view}}</i>
-      <br />
+	    <strong>{{mb_label object=$affectation field=lit_id}}</strong> :
+	    <em>{{$affectation->_ref_lit->_view}}}</em>
+	    <br />
+	    
+	    <strong>{{mb_label object=$affectation field=entree}}</strong> :
+	    <em>{{mb_value object=$affectation field=entree}}</em>
+	    <br />
+
+	    <strong>{{mb_label object=$affectation field=sortie}}</strong> :
+	    <em>{{mb_value object=$affectation field=sortie}}</em>
+	    <br />
+
+	    <strong>{{mb_label object=$affectation field=effectue}}</strong> :
+	    <em>{{mb_value object=$affectation field=effectue}}</em>
+	    <br />
+
+			{{if $affectation->rques}}
+	    <strong>{{mb_label object=$affectation field=rques}}</strong> :
+	    <em>{{mb_value object=$affectation field=rques}}</em>
+	    <br />
+	    {{/if}}
+
     </td>
   </tr>
 </table>
