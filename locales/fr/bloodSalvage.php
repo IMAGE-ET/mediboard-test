@@ -1,0 +1,29 @@
+<?php
+$locales['CBloodSalvage-desc'] = "Description";
+$locales['mod-dPportail-tab-vw_blood_salvage'] = "Récupération sanguine";
+$locales['module-bloodSalvage-court'] = "Récupération Sanguine";
+$locales['module-bloodSalvage-long'] = "Récupération sanguine per-opératoire";
+$locales['CBloodSalvage-_recuperation_start'] = 'Début de récupération';
+$locales['CBloodSalvage-nurse_sspi'] = 'Personnel SSPI';
+$locales['CBloodSalvage-_recuperation_end'] = 'Fin de récupération';
+$locales['CBloodSalvage-_transfusion_start'] = 'Début retransfusion';
+$locales['CBloodSalvage-_transfusion_end'] = 'Fin retransfusion';
+$locales['CBloodSalvage-wash_volume'] = 'Volume de lavage';
+$locales['CBloodSalvage-saved_volume'] = 'Volume sanguin récupéré';
+$locales['CBloodSalvage-transfused_volume'] = 'Volume retransfusé';
+$locales['CBloodSalvage-hgb_pocket'] = 'Hgb de la poche';
+$locales['CBloodSalvage-hgb_patient'] = 'Hgb du patient post-transfusion';
+$locales['CBloodSalvage-_recuperation_start-desc'] = 'Début de récupération';
+$locales['CBloodSalvage-_recuperation_end-desc'] = 'Fin de récupération';
+$locales['CBloodSalvage-_transfusion_start-desc'] = 'Début retransfusion';
+$locales['CBloodSalvage-_transfusion_end-desc'] = 'Fin retransfusion';
+$locales['CBloodSalvage-wash_volume-desc'] = 'Volume de lavage';
+$locales['CBloodSalvage-saved_volume-desc'] = 'Volume sanguin récupéré';
+$locales['CBloodSalvage-transfused_volume-desc'] = 'Volume retransfusé';
+$locales['CBloodSalvage-hgb_pocket-desc'] = 'Hgb de la poche';
+$locales['CBloodSalvage-hgb_patient-desc'] = 'Hgb du patient post-transfusion';
+$locales['mod-bloodSalvage-tab-vw_bloodSalvage-desc'] = 'Cell Saver';
+$locales['mod-bloodSalvage-tab-vw_bloodSalvage_sspi-desc'] = 'Salle de reveil';
+$locales['mod-bloodSalvage-tab-vw_bloodSalvage'] = 'Cell Saver';
+$locales['mod-bloodSalvage-tab-vw_bloodSalvage_sspi'] = 'Salle de reveil';
+?>

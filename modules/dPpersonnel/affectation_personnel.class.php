@@ -108,7 +108,7 @@ class CAffectationPersonnel extends CMbMetaObject {
     	$this->_fin = mbAddDateTime($this->_ref_object->fin, $this->_ref_object->date);
     }
     
-    if($this->object_class == "COperation"){
+    if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       if($this->debut){
         $this->_debut = mbTime($this->debut);
       }
@@ -119,7 +119,7 @@ class CAffectationPersonnel extends CMbMetaObject {
   }
   
   function updateDBFields(){
-    if($this->object_class == "COperation"){
+    if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       $this->loadRefObject();
       $this->_ref_object->loadRefPlageOp();
 
