@@ -8,7 +8,7 @@
  */
  
 // Load AppUI from session
-$rootName = basename($dPconfig["root_dir"]);
+$rootName = basename(CAppUI::conf("root_dir"));
 
 // Manage the session variable(s)
 session_name("$rootName-session");

@@ -14,19 +14,19 @@ Main.add(function () {
     <td class="halfPane" rowspan="3">
       <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
-        <select name="category_id" onchange="stocksFilter.resetRange(); stocksFilter.submit();">
+        <select name="category_id" onchange="stocksFilter.submit();">
           <option value="0">&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
           {{foreach from=$list_categories item=curr_category}}
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
-        <input type="text" name="keywords" onchange="stocksFilter.resetRange()" value="" />
+        <input type="text" name="keywords" value="" />
         <input type="hidden" name="limit" value="" />
         <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
         <button type="button" class="cancel notext" onclick="stocksFilter.empty();"></button>
         <br />
     
-        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.resetRange(); stocksFilter.submit();" />
+        <input type="checkbox" name="only_ordered_stocks" onchange="stocksFilter.submit();" />
         <label for="only_ordered_stocks">Seulement les stocks en cours de réapprovisionnement</label>
       </form>
   

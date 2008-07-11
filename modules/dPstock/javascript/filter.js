@@ -8,6 +8,14 @@ function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.aFields = aFields;
   this.sHiddenColumn = sHiddenColumn;
   this.selected = 0;
+  
+  element = this;
+  oForm = document.forms[this.sForm];
+  this.aFields.each (function (f) {
+    if (oForm[f]) {
+      $(oForm[f]).observe('change', element.resetRange.bindAsEventListener(element));
+    }
+  });
 }
 
 Filter.prototype = {
@@ -127,6 +135,7 @@ Filter.prototype = {
   }, 
   
   resetRange: function () {
+    Console.debug('reset !!');
     this.selected = 0;
     $V(document.forms[this.sForm].limit, null, false);
   }
