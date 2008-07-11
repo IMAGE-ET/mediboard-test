@@ -290,4 +290,5 @@ $locales['CPrescriptionLineMedicament.jour_decalage_fin.I'] = 'I';
 $locales['CPrescriptionLineMedicament.jour_decalage_fin.S'] = 'S';
 $locales['CPrescriptionLineElement.jour_decalage_fin.I'] = 'I';
 $locales['CPrescriptionLineElement.jour_decalage_fin.S'] = 'S';
+$locales['config-dPprescription-CMomentUnitaire-principaux'] = '';
 ?>

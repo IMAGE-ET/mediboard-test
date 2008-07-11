@@ -349,7 +349,10 @@ $dPconfig["dPprescription"] = array (
       "phrase" => "Délivrer",
       "unite_prise" => "dispositif(s)"
     )
-  )   
+  ),
+  "CMomentUnitaire" => array(
+    "principaux" => "0"
+  )
 );
 
 $dPconfig["system"] = array(

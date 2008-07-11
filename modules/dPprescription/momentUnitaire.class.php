@@ -66,9 +66,11 @@ class CMomentUnitaire extends CMbObject {
     
     foreach($tabMoment as &$moment){
       if($moment->principal){
-      	$moments["Principales"][] = $moment;
+      	$moments["Principaux"][] = $moment;
       } else {
-    	  $moments[$moment->type_moment][] = $moment;
+        if (!CAppUI::conf("dPprescription CMomentUnitaire principaux")){
+          $moments[$moment->type_moment][] = $moment;
+        }
       }
     }
     return $moments;
