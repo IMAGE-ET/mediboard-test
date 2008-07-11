@@ -12,7 +12,7 @@
 	    <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
 	    <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
 	    <input type="hidden" name="del" value="0" />
-				<select name="anticoagulant_cip" onchange="submitForm(this.form)">
+				<select name="anticoagulant_cip" onchange="submitFormAjax(this.form, 'systemMsg');">
 	          <option value="null">&mdash; Anticoagulants</option>
 					{{foreach from=$liste_anticoagulants item=anticoag}}
 				    <option value="{{$anticoag->CodeCIP}}"{{if $anticoag->CodeCIP == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag->Libelle}}</option>

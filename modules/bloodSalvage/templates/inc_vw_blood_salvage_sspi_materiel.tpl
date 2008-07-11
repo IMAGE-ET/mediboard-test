@@ -16,7 +16,7 @@ function submitForm(oForm) {
   <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
   <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
   <input type="hidden" name="del" value="0" />
-  <select name="cell_saver_id" onchange="submitForm(this.form)">
+  <select name="cell_saver_id" onchange="submitFormAjax(this.form, 'systemMsg');">
     <option value="null">&mdash; Cell Saver</option>
 		{{foreach from=$list_cell_saver key=id item=name}}
 		<option value="{{$id}}" {{if $id == $blood_salvage->cell_saver_id}}selected="selected"{{/if}}>{{$name}}</option> 
