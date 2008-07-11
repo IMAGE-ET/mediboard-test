@@ -54,7 +54,7 @@ if($rspo) {
     }
   }
   
-  loadAffected(&$blood_salvage->_id, &$list_nurse_sspi, &$tabAffected, &$timingAffect);
+  loadAffected($blood_salvage->_id, $list_nurse_sspi, $tabAffected, $timingAffect);
   
 }
 

@@ -7,7 +7,7 @@
 * @author Alexandre Germonneau
 */
 
-global $AppUI, $can, $m, $g;
+global $can, $m, $g;
 
 $can->needsRead();
 
