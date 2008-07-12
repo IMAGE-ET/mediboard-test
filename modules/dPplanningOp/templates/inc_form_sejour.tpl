@@ -382,7 +382,7 @@ Main.add( function(){
 	  {{mb_value object=$sejour field=mode_sortie}}
 	{{/if}}    
   </td>
-  <th>{{mb_label object=$sejour field=_sortie_autorisee}}</th>
+  <th><strong>{{mb_label object=$sejour field=_sortie_autorisee}}</strong></th>
   <td><strong>{{mb_value object=$sejour field=_sortie_autorisee}}</strong></td>
 </tr>
 {{/if}}
