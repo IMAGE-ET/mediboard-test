@@ -110,6 +110,7 @@ class CProductStock extends CMbObject {
     // Verifies wether there are pending orders for this stock
     $where = array();
     $where['date_ordered'] = 'IS NOT NULL';
+    $where[] = 'deleted IS NULL OR deleted = 0';
     $orderby = 'date_ordered ASC';
     $order = new CProductOrder();
 
@@ -152,16 +153,6 @@ class CProductStock extends CMbObject {
       $this->_zone_future = 3;
     }
   }
-  
-  /*function updateDBFields() {
-    if (!$this->order_threshold_critical) {
-    	$this->order_threshold_critical = $this->order_threshold_min;
-    }
-    if (!$this->order_threshold_optimum) {
-      $this->order_threshold_optimum = round(($this->order_threshold_min+$this->order_threshold_max)/2);
-    }
-    //mbTrace($this);
-  }*/
 
   function loadRefsFwd(){
     $this->_ref_group = new CGroups;

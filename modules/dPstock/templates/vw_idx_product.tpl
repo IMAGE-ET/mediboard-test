@@ -1,11 +1,11 @@
 {{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   filterFields = ["category_id", "societe_id", "keywords"];
   productsFilter = new Filter("filter-products", "{{$m}}", "httpreq_vw_products_list", "list-products", filterFields);
   productsFilter.submit();
-}
+});
 </script>
 
 <table class="main">
@@ -57,7 +57,7 @@ function pageMain() {
         <tr>
           <th>{{mb_label object=$product field="category_id"}}</th>
           <td><select name="category_id" class="{{$product->_props.category_id}}">
-            <option value="">&mdash; {{tr}}CProduct.select{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CProductCategory.select{{/tr}}</option>
             {{foreach from=$list_categories item=curr_category}}
               <option value="{{$curr_category->_id}}" {{if $product->category_id == $curr_category->_id || $list_categories|@count==1}} selected="selected" {{/if}} >
               {{$curr_category->_view}}
@@ -107,10 +107,10 @@ function pageMain() {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">{{tr}}CProductStock-back-_ref_stocks{{/tr}}</th>
+          <th class="title" colspan="4">{{tr}}CProduct-back-stocks{{/tr}}</th>
         </tr>
         <tr>
-          <th>{{tr}}CGroup{{/tr}}</th>
+          <th>{{tr}}CGroups{{/tr}}</th>
           <th>{{tr}}CProductStock-quantity{{/tr}}</th>
           <th>{{tr}}CProductStock-bargraph{{/tr}}</th>
         </tr>
@@ -141,7 +141,7 @@ function pageMain() {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">{{tr}}CProductStock-back-_ref_references{{/tr}}</th>
+          <th class="title" colspan="4">{{tr}}CProduct-back-references{{/tr}}</th>
         </tr>
         <tr>
            <th>Fournisseur</th>

@@ -7,18 +7,17 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m, $g;
+global $can, $g;
 
 $can->needsRead();
 
-$stock = new CProductStock();
+$list_stocks = new CProductStock();
 
 $where = array();
 $where['group_id'] = " = '$g'";
 $orderby = "quantity / order_threshold_max";
-$list_stocks = $stock->loadList($where, $orderby);
+$list_stocks = $list_stocks->loadList($where, $orderby, 20);
 foreach($list_stocks as $stock) {
-	$stock->updateDBFields();
 	$stock->loadRefOrders();
 }
 

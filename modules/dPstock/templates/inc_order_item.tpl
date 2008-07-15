@@ -11,6 +11,8 @@
     </form>
   </td>
   {{/if}}
+  {{assign var=order_id value=$curr_item->order_id}}
+  {{assign var=id value=$curr_item->_id}}
   <td>{{$curr_item->_view}}</td>
   <td>
     {{if !$order->date_ordered}}
@@ -18,16 +20,18 @@
     <form name="form-item-quantity-{{$curr_item->_id}}" action="?" method="post">
       {{if $ajax}}
       <script type="text/javascript">
-          prepareForm(document.forms['form-item-quantity-{{$curr_item->_id}}']);
+          prepareForm('form-item-quantity-{{$curr_item->_id}}');
       </script>
       {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      {{assign var=id value=$curr_item->_id}}
       {{mb_field object=$curr_item 
         field=quantity 
-        onchange="submitOrderItem(this.form);" 
+        onchange="
+          submitOrderItem(this.form, {noRefresh: true});
+          refreshValue('order-total', 'CProductOrder', $order_id, '_total');
+          refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
         form=form-item-quantity-$id 
         min=0
         size="3"
@@ -38,7 +42,7 @@
     {{/if}}
   </td>
   <td>{{mb_value object=$curr_item field=unit_price}}</td>
-  <td>{{mb_value object=$curr_item field=_price}}</td>
+  <td id="order-item-{{$id}}-price">{{mb_value object=$curr_item field=_price}}</td>
   
   {{if $order->date_ordered}}
   <!-- Receive item -->
@@ -46,17 +50,19 @@
     <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post">
       {{if $ajax}}
       <script type="text/javascript">
-          prepareForm(document.forms['form-item-receive-{{$curr_item->_id}}']);
+          prepareForm('form-item-receive-{{$curr_item->_id}}');
       </script>
       {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
       <input type="hidden" name="dosql" value="do_order_item_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
-      {{assign var=id value=$curr_item->_id}}
       {{mb_field 
         object=$curr_item 
         field=_quantity_received 
-        onchange="submitOrderItem(this.form);" 
+        onchange="
+          submitOrderItem(this.form);
+          refreshValue('order-total', 'CProductOrder', $order_id, '_total');
+          refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
         form=form-item-receive-$id 
         increment=true
         size="3"

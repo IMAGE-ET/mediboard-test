@@ -4,10 +4,6 @@
 
   <table class="form">
     {{assign var="class" value="CProductOrder"}}
-    <tr>
-      <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
-    </tr>
-  
     {{assign var="var" value="order_number_format"}}
     <tr>
       <th><label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
@@ -21,6 +17,7 @@
     </tr>
   </table>
 </form>
+<div class="big-info">
 Les caractères suivants sont utilisés pour spécifier le format du numéro de commande :
 <ul>
   <li>%id - identifiant unique de la commande en base de données</li>
@@ -60,3 +57,4 @@ Les caractères suivants sont utilisés pour spécifier le format du numéro de comm
   <li>%Z ou %z - fuseau horaire, ou nom ou abréviation</li>
   <li>%% - un caractère `%&#039; littéral</li>
 </ul>
+</div>

@@ -1,5 +1,5 @@
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   refreshCategoriesList(null, {{$selected_category}});
   
   {{if $selected_category}}
@@ -8,7 +8,7 @@ function pageMain() {
   {{else}}
     refreshProductsList(-1, null{{if $selected_product}}, {{$selected_product}}{{/if}});
   {{/if}}
-}
+});
 
 function setClose(oField) {
   if (oField) {
@@ -61,11 +61,11 @@ function refreshProductInfo(product_id) {
   </tr>
   <tr>
     <td>
-      <input type="text" name="search_category" size="20" value="" onkeydown="refreshCategoriesList(this.value);" />
+      <input type="text" name="search_category" size="20" value="" onkeyup="refreshCategoriesList(this.value);" />
       <button class="cancel notext" id="clear_category" onclick="refreshCategoriesList(); this.form.search_category.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
     <td>
-      <input type="text" name="search_product" size="20" value="" onkeydown="refreshProductsList(null, this.value);" />
+      <input type="text" name="search_product" size="20" value="" onkeyup="refreshProductsList(null, this.value);" />
       <button class="cancel notext" id="clear_product" onclick="refreshProductsList(); this.form.search_product.value='';">{{tr}}Reset{{/tr}}</button>
     </td>
     <td id="product_info" style="vertical-align: top;" rowspan="2"></td>

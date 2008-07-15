@@ -1,3 +1,14 @@
+function refreshValue(element, class, id, field) {
+  if (id && $(element)) {
+    var url = new Url;
+    url.setModuleAction("dPstock", "httpreq_vw_object_value");
+    url.addParam("class", class);
+    url.addParam("id", id);
+    url.addParam("field", field);
+    url.requestUpdate(element, {waitingText: null});
+  }
+}
+
 /** Submit order function 
  *  Used to submit an order : new or edit order
  *  @param oForm The form containing all the info concerning the order to submit
@@ -35,9 +46,10 @@ function submitOrderItem (oForm, options) {
     oForm.submit();
   } else {
     submitFormAjax(oForm, 'systemMsg',{
-      onComplete: function() {
-        refreshOrder($V(oForm.order_id), options); 
-        refreshOrderItem($V(oForm.order_item_id));
+      onComplete: function() { 
+        if (!options.noRefresh) {
+          refreshOrderItem($V(oForm.order_item_id), options);
+        }
       }
     });
   }

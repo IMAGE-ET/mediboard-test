@@ -2,11 +2,11 @@
 {{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   filterFields = ["category_id", "societe_id", "keywords"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
   referencesFilter.submit();
-}
+});
 </script>
 
 <table class="main">
@@ -53,15 +53,15 @@ function pageMain() {
       <table class="form">
         <tr>
           {{if $reference->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductCategory.modify{{/tr}} {{$reference->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProductReference.modify{{/tr}} {{$reference->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProductCategory.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProductReference.create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="societe_id"}}</th>
           <td><select name="societe_id" class="{{$reference->_props.societe_id}}">
-            <option value="">&mdash; {{tr}}CProductCategory.select{{/tr}}</option>
+            <option value="">&mdash; {{tr}}CSociete.select{{/tr}}</option>
             {{foreach from=$list_societes item=curr_societe}}
               <option value="{{$curr_societe->societe_id}}" {{if $reference->societe_id == $curr_societe->_id || $list_societes|@count==1}} selected="selected" {{/if}} >
               {{$curr_societe->_view}}

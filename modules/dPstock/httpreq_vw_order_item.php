@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$item_id = mbGetValueFromGet('item_id');
+$item_id = mbGetValueFromGet('order_item_id');
 
 // Loads the expected Order Item
 $item = new CProductOrderItem();

@@ -2,13 +2,13 @@
 {{mb_include_script module=dPstock script=refresh_value}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   filterFields = ["category_id", "keywords"];
   stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stock_out_stocks_list", "stock-out-list-stocks", filterFields);
   stocksFilter.submit();
   
   refreshStockOutsList();
-}
+});
 
 function refreshStockOutsList() {
   url = new Url;
@@ -32,7 +32,6 @@ function stockOut(oForm, sign) {
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function() {
       refreshValue('stock-'+stock_id+'-bargraph', 'CProductStock', stock_id, 'bargraph');
-      
       refreshStockOutsList();
     }
   });

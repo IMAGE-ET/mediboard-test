@@ -1,9 +1,9 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   initInseeFields("edit_societe", "postal_code", "city");
-}
+});
 </script>
 
 <table class="main">
@@ -120,13 +120,13 @@ function pageMain() {
       </button>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">{{tr}}CSociete-back-_ref_references{{/tr}}</th>
+          <th class="title" colspan="4">{{tr}}CSociete-back-product_references{{/tr}}</th>
         </tr>
         <tr>
            <th>{{tr}}CProduct{{/tr}}</th>
            <th>{{tr}}CProductReference-quantity{{/tr}}</th>
            <th>{{tr}}CProductReference-price{{/tr}}</th>
-           <th>{{tr}}CProductReference-_unit-price{{/tr}}</th>
+           <th>{{tr}}CProductReference-_unit_price{{/tr}}</th>
          </tr>
          {{foreach from=$societe->_ref_product_references item=curr_reference}}
          <tr>
@@ -146,7 +146,7 @@ function pageMain() {
       </button>
       <table class="tbl">
         <tr>
-          <th class="title" colspan="3">{{tr}}CSociete-back-_ref_products{{/tr}}</th>
+          <th class="title" colspan="3">{{tr}}CSociete-back-products{{/tr}}</th>
         </tr>
         <tr>
            <th>{{tr}}CProduct-name{{/tr}}</th>

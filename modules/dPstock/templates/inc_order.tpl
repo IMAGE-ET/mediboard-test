@@ -14,7 +14,7 @@
   {{/foreach}}
   <tr>
     <td colspan="6" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
-      <span style="float: right;">{{tr}}Total{{/tr}} : {{mb_value object=$order field=_total}}</span>
+      <span style="float: right;">{{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span></span>
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
       
       {{if !$order->date_ordered && $order->_ref_order_items|@count > 0}}

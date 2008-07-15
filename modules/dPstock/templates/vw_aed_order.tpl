@@ -2,7 +2,7 @@
 {{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   window.onbeforeunload = function () {
     if (window.opener) {
       refreshLists();
@@ -13,7 +13,7 @@ function pageMain() {
   filterFields = ["category_id", "keywords", "order_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
   {{/if}}
-}
+});
 </script>
 
 {{if !$order->_id}}

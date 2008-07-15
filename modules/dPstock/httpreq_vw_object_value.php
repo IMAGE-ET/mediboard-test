@@ -1,4 +1,4 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  *  @package Mediboard
@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsRead();
 

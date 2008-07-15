@@ -3,14 +3,14 @@
 {{mb_include_script module=dPstock script=filter}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("filter-deliveries", "_date_min");
   regFieldCalendar("filter-deliveries", "_date_max");
   
   filterFields = ["product_id", "_date_min", "_date_max", "target_class", "target_id", "keywords"];
   deliveriesFilter = new Filter("filter-deliveries", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
   deliveriesFilter.submit();
-}
+});
 </script>
 
 <table class="main">
@@ -26,7 +26,7 @@ function pageMain() {
             <th>{{mb_title object=$delivery field=target_class}}</th>
             <td>
               <select class="notNull str" name="target_class">
-                <option value="">&mdash; {{tr}}CMbObject.select{{/tr}}</option>
+                <option value="">&mdash; Choisissez un type d'object</option>
                 {{foreach from=$classes_list|smarty:nodefaults item=curr_class}}
                 <option value="{{$curr_class}}">{{tr}}{{$curr_class}}{{/tr}}</option>
                 {{/foreach}}

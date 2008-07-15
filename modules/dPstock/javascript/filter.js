@@ -72,14 +72,14 @@ Filter.prototype = {
         
         rangeSel.insert(
           new Element('a')
-             .writeAttribute('href', '#')
+             .writeAttribute('href', '#1')
              .update('|&lt;&nbsp;')
              .observe('click', function () {$V(field, 20); form.onsubmit(); element.selected = 0;})
         );
         
         r.each(function (e, k) {
           var a = new Element('a')
-                      .writeAttribute('href', '#')
+                      .writeAttribute('href', '#1')
                       .update('&nbsp;'+(k+1)+'&nbsp;')
                       .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
           if (k == element.selected) {
@@ -90,7 +90,7 @@ Filter.prototype = {
         
         rangeSel.insert(
           new Element('a')
-             .writeAttribute('href', '#')
+             .writeAttribute('href', '#1')
              .update('&nbsp;&gt;|')
              .observe('click', 
                 function () {
@@ -135,7 +135,6 @@ Filter.prototype = {
   }, 
   
   resetRange: function () {
-    Console.debug('reset !!');
     this.selected = 0;
     $V(document.forms[this.sForm].limit, null, false);
   }

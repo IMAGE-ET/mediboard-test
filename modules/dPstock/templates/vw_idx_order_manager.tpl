@@ -1,13 +1,13 @@
 {{mb_include_script module=dPstock script=order_manager}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   // Menu tabs initialization
   var tabs = Control.Tabs.create('tab_orders', true);
   
   // Orders lists have to be shown
   refreshLists();
-}
+});
 </script>
 
 <div class="main">
