@@ -21,9 +21,9 @@ $tabAffected        = array();
 /*
  * Liste des cell saver : Figée pour le moment à ces trois valeurs. 
  */
-$list_cell_saver = array("1"=> "DIDÉCO ÉLECTA N°1 série B 013663 C 03", 
-													"2"=>"DIDÉCO ÉLECTA N°2série B 012740 C 02", 
-													"3"=> "FRÉSÉNIUS CATS N° série 1CAA1090");
+$list_cell_saver = array( "1"=> "DIDÉCO ÉLECTA N°1 série B 013663 C 03", 
+											    "2"=> "DIDÉCO ÉLECTA N°2 série B 012740 C 02", 
+											    "3"=> "FRÉSÉNIUS CATS N° série 1CAA1090");
 
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 
@@ -35,7 +35,9 @@ $liste_incident= array("Frisson",
                       "Fuite sur consommable",
                       "Déclaration correspondant hémovigilance fait", 
                       "Déclaration technicien machine fait");
-
+/*
+ * Création du tableau d'affectation et de celui des timings.
+ */
 $tabAffected = array();
 $timingAffect = array();
 
@@ -43,7 +45,6 @@ if($rspo) {
 	$blood_salvage->load($rspo);
 	$blood_salvage->loadRefsFwd();
 	$blood_salvage->_ref_operation->loadRefPatient();
-	
   $timing["_recuperation_start"]       = array();
   $timing["_recuperation_end"]         = array();
   $timing["_transfusion_start"]        = array();

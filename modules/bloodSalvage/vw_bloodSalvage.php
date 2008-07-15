@@ -7,7 +7,7 @@
  *  @author Alexandre Germonneau
  */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global  $can, $m, $g, $dPconfig;
 $can->needsRead();
 /*
  * Récupération des variables en session et ou issues des formulaires.
@@ -19,14 +19,18 @@ $date         		= mbGetValueFromGetOrSession("date", mbDate());
 
 $blood_salvage = new CBloodSalvage();
 $totaltime = "00:00:00";
+$modif_operation    = $date>=mbDate();
 
 
 
-$liste_anticoagulants = array();
+$anticoagulant_list = array();
 $classeBCB = new CBcbClasseTherapeutique();
 $classeBCB->loadRefsProduits();
 $classeBCB->loadRefsProduits("LABA");
-$liste_anticoagulants= $classeBCB->_refs_produits;
+$anticoagulant_list= $classeBCB->_refs_produits;
+
+$version_patient = CModule::getActive("dPpatients");
+$isInDM = ($version_patient->mod_version >= 0.71);
 
 $selOp = new COperation();
 
@@ -43,21 +47,27 @@ if ($op) {
 	
 	$where = array();
 	$where["operation_id"] = "='$selOp->_id'";	
-	$result = $blood_salvage->loadlist($where);
+	$blood_salvage->loadObject($where);
 	
-	foreach ($result as $key => $value){
-		$blood_salvage = $result[$key];
-	}
+  $timing["_recuperation_start"] = array();
+  foreach($timing as $key => $value) {
+    for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
+      $timing[$key][] = mbTime("$i minutes", $blood_salvage->$key);
+    }
+  }
 }
-  
+
 $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage", $blood_salvage);	
 $smarty->assign("salle", $salle);
 $smarty->assign("selOp", $selOp);
 $smarty->assign("date", $date);
+$smarty->assign("modif_operation", $modif_operation);
+$smarty->assign("isInDM", $isInDM);
 $smarty->assign("totaltime", $totaltime);
-$smarty->assign("liste_anticoagulants", $liste_anticoagulants);
+$smarty->assign("anticoagulant_list", $anticoagulant_list);
+$smarty->assign("timing", $timing);
 
 $smarty->display("vw_bloodSalvage.tpl");
 ?>

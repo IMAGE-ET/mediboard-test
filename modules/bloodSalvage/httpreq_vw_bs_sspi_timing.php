@@ -22,7 +22,6 @@ if($blood_salvage_id){
   $blood_salvage->load($blood_salvage_id);
   $blood_salvage->loadRefs();
 
-  $timing["_recuperation_start"]       = array();
   $timing["_recuperation_end"]         = array();
   $timing["_transfusion_start"]        = array();
   $timing["_transfusion_end"]          = array();

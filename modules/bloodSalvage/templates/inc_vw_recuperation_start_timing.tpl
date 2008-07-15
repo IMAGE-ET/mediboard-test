@@ -2,6 +2,7 @@
   <input type="hidden" name="m" value="bloodSalvage" />
   <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
   <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
+  <input type="hidden" name="operation_id" value="{{$blood_salvage->operation_id}}" />
   <input type="hidden" name="del" value="0" />
   <table class="form">
     <tr>

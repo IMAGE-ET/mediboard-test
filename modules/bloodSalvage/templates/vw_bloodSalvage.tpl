@@ -10,10 +10,6 @@ function submitInfos(oForm) {
   });
 }
 
-function submitForm(oForm) {
-  submitFormAjax(oForm, 'systemMsg');
-}
-
 function submitStartTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
     onComplete : function() {       

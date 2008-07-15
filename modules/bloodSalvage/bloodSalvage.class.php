@@ -27,7 +27,7 @@ class CBloodSalvage extends CMbObject {
 	var $hgb_pocket = null;																						  // *Hémoglobine de la poche récupérée*
 	var $hgb_patient = null;																		  		  // *Hémoglobine du patient post transfusion*
 	var $transfused_volume = null;
-	var $anticoagulant_cip = null;
+	var $anticoagulant_cip = null;                                    // *Code CIP de l'anticoagulant utilisé*
 	
   // Form Fields
   var $_recuperation_start =null;
@@ -48,7 +48,6 @@ class CBloodSalvage extends CMbObject {
 	var $_ref_operation = null;
 	var $_ref_cell_saver = null;
 	var $_ref_incident_file = null;
-	
 
 	
 	function getSpec() {
@@ -87,13 +86,25 @@ class CBloodSalvage extends CMbObject {
     
     return $specs;
 	}
+	
+  function loadRefsFwd() {
+    $this->_ref_operation = new COperation();
+    $this->_ref_operation->load($this->operation_id);
+    $this->_ref_operation->loadRefPlageOp();
+
+  }
+  
+  function loadRefPlageOp() {
+    $this->_ref_operation = new COperation;
+    $this->_ref_operation->load($this->operation_id);
+    $this->_ref_operation->loadRefPlageOp();
+    $this->_datetime = $this->_ref_operation->_datetime;
+  }
 	/*
 	 * Mise à jour des champs des formulaires (affichage des dateTime en time).
 	 */
 	
-	function updateFormFields() {
-		    $this->loadRefPlageOp();
-		
+	function updateFormFields() {		
 		if($this->recuperation_start){
 	    $this->_recuperation_start = mbTime($this->recuperation_start);
 	  }
@@ -109,6 +120,7 @@ class CBloodSalvage extends CMbObject {
 	}
 	
 	function updateDBFields() {
+		
 		$this->loadRefPlageOp();
 		
 		if($this->_recuperation_start !== null && $this->_recuperation_start !="") {
@@ -141,16 +153,7 @@ class CBloodSalvage extends CMbObject {
     }
 	}
 	
-	function loadRefsFwd() {
-		$this->_ref_operation = new COperation();
-		$this->_ref_operation->load($this->operation_id);
-		$this->_ref_operation->loadRefPlageOp();
-	}
-	
-	function loadRefPlageOp() {
-		//TODO
-		$this->_datetime = mbDateTime();	
-	}
+
 	
 	/*
 	 * fillTemplate permet de donner des champs qui seront disponibles dans FCK Editor
@@ -165,7 +168,6 @@ class CBloodSalvage extends CMbObject {
     $template->addProperty("Cell Saver - Volume retransfusé",$this->transfused_volume);   		
 		$template->addProperty("Cell Saver - Hémoglobine de la poche",$this->hgb_pocket);		
 		$template->addProperty("Cell Saver - Hémoglobine patient post-transfusion",$this->hgb_patient);		
-		
 	}
 }
 ?>
