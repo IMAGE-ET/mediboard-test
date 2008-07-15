@@ -14,16 +14,18 @@ $date  = mbGetValueFromGetOrSession("date", mbDate());
 
 $modif_operation = $date>=mbDate();
 
-if($blood_salvage_id) {
-	$blood_salvage = new CBloodSalvage();
-	$blood_salvage->load($blood_salvage_id);
-}
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 
 $tabAffected = array();
 $timingAffect = array();
 
-loadAffected(&$blood_salvage_id, &$list_nurse_sspi, &$tabAffected, &$timingAffect);
+if($blood_salvage_id) {
+	$blood_salvage = new CBloodSalvage();
+	$blood_salvage->load($blood_salvage_id);
+	loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
+}
+
+
 
 $smarty = new CSmartyDP();
 
