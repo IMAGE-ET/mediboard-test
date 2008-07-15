@@ -20,7 +20,7 @@ $date         		= mbGetValueFromGetOrSession("date", mbDate());
 $blood_salvage = new CBloodSalvage();
 $totaltime = "00:00:00";
 $modif_operation    = $date>=mbDate();
-
+$timing = array();
 
 
 $anticoagulant_list = array();
