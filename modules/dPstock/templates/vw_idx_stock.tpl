@@ -101,7 +101,7 @@ Main.add(function () {
   </tr>
 </table>
 
-<form action="" name="test" method="get">
+<!-- <form action="" name="test" method="get">
   <select name="choice" class="select-tree" onchange="Console.trace(this.value+':'+this.options[this.selectedIndex].text);">
     <option value="1">Thomas</option>
     <option value="2" >Romain</option>
@@ -117,5 +117,5 @@ Main.add(function () {
     </optgroup>
   </select>
   <input type="text" value="bah" name="bih" />
-</form>
+</form>-->
 

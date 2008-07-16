@@ -71,7 +71,7 @@ function getLabelFor(oElement) {
   * @return        An array of values for multiple selectable elements, a boolean for 
   *                single checkboxes/radios, a string for textareas and text inputs
   */
-$V = function (element, value, fire) {
+function $V (element, value, fire) {
   if (!element) {
     return;
   }
@@ -840,277 +840,281 @@ var TimePicker = Class.create({
   }
 });
 
-// Make a select form control with optgroups appear as a tree
-Element.addMethods(['select', 'optgroup'], {
-  buildTree: function (element, tree) {
-    if (Prototype.Browser.Gecko) { // If Gecko
-    var select = element;
-    var catcher = null;
-    var list = null;
-    var oldSubmitFunction = null;
-    if (!tree) { // If it is the root
-      //oldSubmitFunction = select.form.onsubmit;
-      // Toggle tree function
-      toggleTree = function (e) {
-        catcher.focus();
-        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
-        tree.toggle();
-        document.body.observe('mouseup', close);
-      };
+Element.addMethods('select', {
+  buildTree: function (element, options) {
+    var select  = element; // DOM select
+    var search  = null; // DOM text input
+    var tree    = null; // DOM UL/LI tree representing the select/optgroup
+    var list    = null; // DOM UL/LI list for keyword search
+    var pos     = null; // DOM select position
+    var dim     = null; // DOM select dimensions
+    
+    options = Object.extend({
+      className: 'select-tree'
+    }, options);
+    
+    // Utility functions ////////
+    var hideSelectTrees = function () {
+      $$('ul.'+options.className+' ul').each(function(ul) {ul.hide()});
+    }
+    
+    var validKey = function (keycode) {
+      return (keycode >= 48 && keycode <= 90 || // letters and digits
+              keycode >= 96 && keycode <= 111 || // num pad
+              keycode >= 186 && keycode <= 181 ||
+              keycode >= 219 && keycode <= 222 ||
+              keycode == 32 || // space
+              keycode == 8); // backspace
+    }
+    
+    var updateCoordinates = function () {
+      pos = select.cumulativeOffset();
+      dim = select.getDimensions();
       
-      showTree = function (e) {
-        catcher.focus();
-        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
-        tree.show();
-        document.body.observe('mouseup', close);
-      };
-      
-      hideTree = function (e) {
-        $$('ul.select-tree ul').each(function(ul) {ul.hide()});
-        tree.hide();
-      };
-      
-      // Close function used to hide the tree on click on the body
-      close = function (e) {
-        e = e.element();
-        if (!e.descendantOf(tree) && (e != element) && (e != catcher)) {
-          document.body.stopObserving('mouseup', close);
-          tree.hide();
-          showSelect(false);
-        }
-      };
-      
-      showSelect = function (show) {
-        //select.form.onsubmit = oldSubmitFunction;
-        catcher.setStyle({position: 'absolute', top: '-1200px'});
-        select.show();
-        list.hide();
-        if (show) showTree();
-        catcher.value = null;
-        catcher.observe('keydown', st);
-      };
-      
-      showText = function (e) {
-        var keycode;
-        if (window.event) keycode = window.event.keyCode;
-        else if (e) keycode = e.which;
-        ///select.form.onsubmit = function () {return false};
+      pos.left = pos.left+parseInt(select.getStyle('margin-left').split('px')[0])+'px';
+      pos.top = pos.top  +parseInt(select.getStyle('margin-top').split('px')[0])-1+dim.height+'px';
+    }
+    
+    var reposition = function () {
+      updateCoordinates();
+      var style = {zIndex: 40, position: 'absolute', left: pos.left, top: pos.top};
+      tree.setStyle(style);
+      list.setStyle(style);
+    }
+    
+    var makeTree = function (sel, ul) {
+      ul.update(null);
+      sel.childElements().each(function (o) {
+        var li = new Element('li');
         
-        if (validKey(keycode) && keycode != 8 && keycode != 27) {
-          select.hide();
-          hideTree();
-          list.update(null).show();
-          catcher.setStyle({position: 'relative', top: 0});
-          catcher.stopObserving('keydown', st);
-        }
-      };
-      
-      getMatchingOptions = function(s) {
-        var children = select.descendants();
-        var li = null;
-        list.update(null);
-        if (s) {
-          children.each(function (c) {
-            if (c.tagName.toLowerCase() == 'option' && c.text.toLowerCase().startsWith(s.toLowerCase())) {
-              li = new Element('li').update(c.text);
-              li.onclick = function() {
-                $V(select, c.value, true);
-                highlight();
-                catcher.value = null;
-                showSelect(false);
-              };
-              list.insert(li);
-            }
+        // If it is an optgroup
+        if (o.tagName.toLowerCase() == 'optgroup') {
+          li.insert(o.label);
+          
+          // New sublist
+          var subTree = new Element('ul');
+          makeTree(o, subTree.hide());
+          li.insert(subTree).addClassName('drop');
+          
+          // On mouse over on the LI
+          li.observe('mouseover', function() {
+            var liDim = li.getDimensions();
+            var liPos = li.positionedOffset();
+            
+            // Every select-tree list is hidden
+            hideSelectTrees();
+            
+            // Every child element is drawn
+            li.childElements().each(function (e) {
+              e.show().setStyle({
+                position: 'absolute',
+                width: select.getWidth()+'px',
+                left: liPos.left+liDim.width-1+'px',
+                top: liPos.top+1+'px'
+              });
+            });
+          });
+  
+        // If it is an option
+        } else {
+          li.insert(o.text);
+          li.id = select.id+'_'+o.value;
+          
+          // on click on the li
+          li.observe('click', function() {
+            // we set the value and hide every other select tree
+            $V(select, o.value, true);
+            tree.highlight();
+            $$('ul.'+options.className).each(function(ul) {ul.hide()});
+          });
+          
+          // we hide every other other select tree ul on mouseover
+          li.observe('mouseover', function() {
+            tree.select('ul').each(function(ul) {ul.hide()});
           });
         }
-      };
+        ul.insert(li);
+      });
+      tree.highlight();
+    }
+    /////////////////////////////
+    
+    updateCoordinates();
+    
+    // Tree -------------
+    tree = new Element('ul')
+              .addClassName(options.className)
+              .setStyle({'width': dim.width+'px'});
+    tree.id = select.id+'_tree';
+    
+    tree.display = function (e) {
+      if (tree.empty()) {
+        makeTree(select, tree);
+      }
+      Console.debug('display');
+      search.focus();
+      hideSelectTrees();
+      reposition();
+      tree.show();
       
-      navigateList = function (e) {
-        if (catcher.value != '') {
-          var keycode;
-          if (window.event) keycode = window.event.keyCode;
-          else if (e) keycode = e.which;
-          
-          var focused = list.select('.focused');
-          
-          switch (keycode) {
-            case 37:
-            case 38:
-              if (focused && (focused = focused[0])) {
-                focused.removeClassName('focused');
-                if (!(focused = focused.previous())) {
-                  focused = list.childElements().last();
-                }
-                focused.addClassName('focused');
-              } else if (!list.empty()) {
-                list.childElements().last().addClassName('focused');
-              }
-            
-            break;
-            case 39: 
-            case 40:
-              if (focused && (focused = focused[0])) {
-                focused.removeClassName('focused');
-                if (!(focused = focused.next())) {
-                  focused = list.firstDescendant();
-                }
-                focused.addClassName('focused');
-              } else if (!list.empty()) {
-                list.firstDescendant().addClassName('focused');
-              }
-            
-            break;
-          }
-        }
-      };
-      
-      validKey = function (keycode) {
-        return (keycode >= 48 && keycode <= 90 || // letters and digits
-                keycode >= 96 && keycode <= 111 || // num pad
-                keycode >= 186 && keycode <= 181 ||
-                keycode >= 219 && keycode <= 222 ||
-                keycode == 32 || // space
-                keycode == 8); // backspace
-      };
-      
-      keyCatch = function (e) {
+      document.body.observe('mouseup', tree.undisplay);
+    }
+    
+    tree.undisplay = function (e) {
+      Console.debug('undisplay');
+      document.body.stopObserving('mouseup', tree.undisplay);
+      tree.hide();
+    }
+    
+    tree.highlight = function () {
+      var selected = tree.select('.selected');
+      var val = $V(select);
+      selected.each(function(s) {
+        s.removeClassName('selected');
+      });
+      if (val && (s = $(select.id+'_'+val))) {
+        s.addClassName('selected');
+      }
+    }
+    select.insert({after: tree.hide()});
+    
+    // List -------------
+    list = new Element('ul')
+              .addClassName(options.className)
+              .setStyle({'width': dim.width+'px'});
+    list.id = select.id+'_list';
+    
+    list.navigate = function (e) {
+      if (search.value != '') {
         var keycode;
         if (window.event) keycode = window.event.keyCode;
         else if (e) keycode = e.which;
         
-        if (validKey(keycode)) { // Valid keycode
-          if (keycode == 8 && catcher.value == '' && !select.visible()) {
-            showSelect(true);
-          } else {
-            getMatchingOptions(catcher.value);
-          }
-        } else if (keycode == 27) { // Escape
-          showSelect(false);
-        } else if (keycode == 13) { // Enter
-          var focused = list.select('.focused');
-          if (focused && (focused = focused[0])) {
-            focused.onclick();
-          }
-          catcher.value = null;
+        var focused = list.select('.focused');
+        
+        switch (keycode) {
+          case 37:
+          case 38:
+            if (focused && (focused = focused[0])) {
+              focused.removeClassName('focused');
+              if (!(focused = focused.previous())) {
+                focused = list.childElements().last();
+              }
+              focused.addClassName('focused');
+            } else if (!list.empty()) {
+              list.childElements().last().addClassName('focused');
+            }
+          
+          break;
+          case 39: 
+          case 40:
+            if (focused && (focused = focused[0])) {
+              focused.removeClassName('focused');
+              if (!(focused = focused.next())) {
+                focused = list.firstDescendant();
+              }
+              focused.addClassName('focused');
+            } else if (!list.empty()) {
+              list.firstDescendant().addClassName('focused');
+            }
+          
+          break;
         }
-      };
-      
-      highlight = function () {
-        var selected = tree.select('.selected');
-        var val = $V(select);
-        selected.each(function(s) {
-          s.removeClassName('selected');
-        });
-        if (val && (s = $(select.id+'_'+val))) {
-          s.addClassName('selected');
-        }
-      };
-      
-      var st = showText.bindAsEventListener(element);
-    
-      var pos = element.cumulativeOffset();
-      var dim = element.getDimensions();
-      
-      // New unordered list
-      tree = new Element('ul').addClassName('select-tree');
-      tree.setStyle({'width': dim.width+'px'});
-      tree.id = element.id+'_tree';
-      element.insert({after: tree});
-      
-      // List
-      list = new Element('ul').addClassName('select-tree');
-      list.setStyle({'width': dim.width+'px'});
-      list.id = element.id+'_list';
-      element.insert({after:list});
-      
-      // Every option of the select is hidden
-      element.descendants().each(function(d) {d.hide()});
-      element.setStyle({'width': dim.width+'px'});
-      element.writeAttribute('size', 1);
-      element.observe('click', toggleTree.bindAsEventListener(element));
-      
-      // The catcher input to blur the select control and catch keys
-      catcher = new Element('input').writeAttribute('type', 'text').writeAttribute('autocomplete', 'off')
-             .observe('keydown', st)
-             .observe('keyup', keyCatch.bindAsEventListener(this))
-             .observe('keydown', navigateList.bindAsEventListener(this))
-             .setStyle({
-               width: select.getWidth()-4+'px',
-               position: 'absolute',
-               top: '-1200px'
-             });
-      catcher.name = element.name+'_tree__catcher';
-      catcher.id = element.id+'_tree__catcher';
-      element.insert({after: catcher});
-
-      // Tree and list styling
-      var left = pos.left+parseInt(select.getStyle('margin-left').split('px')[0])+'px';
-      var top = pos.top+parseInt(select.getStyle('margin-top').split('px')[0])-1+dim.height+'px';
-      tree.setStyle({zIndex: 40, position: 'absolute', left: left, top: top}).hide();
-      list.setStyle({zIndex: 40, position: 'absolute', left: left, top: top}).hide();
-    } else {
-      // we retrieve the select
-      while (select && select.tagName.toLowerCase() != 'select') {
-         select = select.up();
       }
     }
     
-    // For each select child
-    element.childElements().each(function (o) {
-      var li = new Element('li');
-      
-      // If it is an optgroup
-      if (o.tagName.toLowerCase() == 'optgroup') {
-        li.insert(o.label);
-        
-        // New sublist
-        var subTree = new Element('ul');
-        o.buildTree(subTree.hide());
-        li.insert(subTree).addClassName('drop');
-        
-        // On mouse over on the LI
-        li.observe('mouseover', function() {
-          var liDim = li.getDimensions();
-          var liPos = li.positionedOffset();
-          
-          // Every select-tree list is hidden
-          $$('ul.select-tree ul').each(function(ul) {ul.hide()});
-          
-          // Every child element is drawn
-          li.childElements().each(function (e) {
-            e.show().setStyle({
-              position: 'absolute',
-              width: select.getWidth()+'px',
-              left: liPos.left+liDim.width-1+'px',
-              top: liPos.top+1+'px'
-            });
-          });
-        });
-
-      // If it is an option
-      } else {
-        li.insert(o.text);
-        li.id = select.id+'_'+o.value;
-        
-        // on click on the li
-        li.observe('click', function() {
-          // we set the value and hide every other select tree
-          $V(select, o.value, true);
-          highlight();
-          $$('ul.select-tree').each(function(ul) {ul.hide()});
-        });
-        
-        // we hide every other other select tree ul on mouseover
-        li.observe('mouseover', function() {
-          tree.select('ul').each(function(ul) {ul.hide()});
+    list.getMatchingOptions = function(s) {
+      var children = select.descendants();
+      var li = null;
+      list.update(null);
+      if (s) {
+        children.each(function (c) {
+          if (c.tagName.toLowerCase() == 'option' && c.text.toLowerCase().startsWith(s.toLowerCase())) {
+            li = new Element('li').update(c.text);
+            li.onclick = function() {
+              $V(select, c.value, true);
+              tree.highlight();
+              search.value = null;
+              select.display(false);
+            };
+            list.insert(li);
+          }
         });
       }
-      tree.insert(li);
-    });
+    }
+    select.insert({after: list.hide()});
     
-    highlight();
+    reposition();
+
+    // search ----------
+    search = new Element('input')
+                 .writeAttribute('type', 'text')
+                 .writeAttribute('autocomplete', 'off')
+                 .setStyle({
+                   width: select.getWidth()-4+'px',
+                   position: 'absolute',
+                   top: '-12px'
+                 });
+    search.name = select.name+'_tree__search';
+    search.id   = select.id+'_tree__search';
     
-    return element;
-  }
+    search.catchKey = function (e) {
+      
+      var keycode;
+      if (window.event) keycode = window.event.keyCode;
+      else if (e) keycode = e.which;
+
+      if (validKey(keycode)) { // Valid keycode
+        if (keycode == 8 && search.value == '' && !select.visible()) {
+          select.display(true);
+        } else {
+          list.getMatchingOptions(search.value);
+        }
+      } else if (keycode == 27) { // Escape
+        select.display(false);
+      } else if (keycode == 13) { // Enter
+        var focused = list.select('.focused');
+        if (focused && (focused = focused[0])) {
+          focused.onclick();
+        }
+        search.value = null;
+      }
+    }
+    
+    search.display = function (e) {
+      var keycode;
+      if (window.event) keycode = window.event.keyCode;
+      else if (e) keycode = e.which;
+      
+      if (validKey(keycode) && keycode != 8 && keycode != 27) {
+        select.hide();
+        tree.undisplay();
+        list.update(null).show();
+        search.setStyle({position: 'relative', top: 0})
+              .stopObserving('keydown', search.display);
+      }
+    }
+    select.insert({after: search});
+    
+    // The search input to blur the select control and catch keys
+    search.observe('keydown', search.display);
+    search.observe('keydown', list.navigate);
+    search.observe('keyup',   search.catchKey);
+
+    // Select
+    select.setStyle({'width': dim.width+'px'})
+          .writeAttribute('size', 1)
+          .descendants().each(function(d) {d.hide()});
+          
+    select.display = function (show) {
+      search.setStyle({position: 'absolute', top: '-1200px'});
+      select.show();
+      list.hide();
+      if (show) tree.display();
+      search.value = null;
+      search.observe('keydown', search.display);
+    }
+
+    select.observe('click', tree.display);
   }
 });
