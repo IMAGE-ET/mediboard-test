@@ -12,6 +12,14 @@ global $AppUI, $can, $m, $g;
 $can->needsRead();
 
 $fiche_ei_id = mbGetValueFromGet("fiche_ei_id",0);
+/*
+ * Récupération du type de fiche à générer et de la RSPO concernée.
+ */
+$type_ei_id = mbGetValueFromGet("type_ei_id");
+$blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
+
+$blood_salvage = new CBloodSalvage();
+$type_fiche = new CTypeEi();
 
 $fiche  = new CFicheEi;
 $aUsers = array();
@@ -34,8 +42,36 @@ $fiche->loadRefsFwd();
 if(!$fiche->_ref_evenement){
   $fiche->_ref_evenement = array();
 }
+
 // Liste des Catégories
 $firstdiv = null;
+
+/*
+ * Si l'on est dans le cas où nous souhaitons préremplir automatiquement quelques à l'aide du modèle de fiche d'incident (module cell saver).
+ */
+if($type_ei_id) {
+  $type_fiche->load($type_ei_id);
+  $fiche->elem_concerne = $type_fiche->concerne;
+  $fiche->descr_faits = $type_fiche->desc;
+  if($blood_salvage_id) {
+    $blood_salvage->load($blood_salvage_id);
+    $blood_salvage->loadRefsFwd();
+    
+    if($fiche->elem_concerne == "pat") {
+      $fiche->elem_concerne_detail = $blood_salvage->_ref_patient->_view;
+      $fiche->evenements= "124";
+      $fiche->_ref_evenement[0]= "124";
+    }
+    if($fiche->elem_concerne == "mat") {
+      $fiche->elem_concerne_detail = $blood_salvage->_ref_cell_saver->_view;
+      $fiche->evenements= "125";
+      $fiche->_ref_evenement[0]= "125";
+    }
+  }
+  $firstdiv=25;
+}
+
+
 $listCategories = new CEiCategorie;
 $listCategories = $listCategories->loadList(null, "nom");
 foreach ($listCategories as $key=>$value){
@@ -57,7 +93,6 @@ foreach ($listCategories as $key=>$value){
     }
   }
 }
-
 // Liste minutes
 $mins = array();
 for ($i = 0; $i < 60; $i++) {
