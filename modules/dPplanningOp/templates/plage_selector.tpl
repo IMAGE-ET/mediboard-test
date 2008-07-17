@@ -41,7 +41,7 @@ function pageMain(){
     if(oFormSejour.type.value == "ambu"){
       $V(form.admission, "jour");
     } else {
-      $V(form.admission, "jour");
+      $V(form.admission, "veille");
     }
   } else {
     $V(form.admission, "aucune");
