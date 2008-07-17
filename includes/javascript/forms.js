@@ -676,8 +676,7 @@ var TimePicker = Class.create({
     // Time picker trigger
     this.trigger = $(this.fieldId+'_trigger');
     if (!this.trigger) {
-      this.trigger = new Element('img')
-                        .writeAttribute('src', 'images/icons/time.png');
+      this.trigger = new Element('img', {src: 'images/icons/time.png'});
       this.trigger.id = this.fieldId+'_trigger';
       formField.insert({after: this.trigger});
     }
@@ -686,8 +685,7 @@ var TimePicker = Class.create({
     var picker = $(this.pickerId);
     if (!picker) {
       //picker.remove();
-      picker = new Element('table')
-                  .writeAttribute('id', this.pickerId)
+      picker = new Element('table', {id: this.pickerId})
                   .addClassName('time-picker');
       $('main').appendChild(picker);
       picker.absolutize().hide();
@@ -951,7 +949,6 @@ Element.addMethods('select', {
       if (tree.empty()) {
         makeTree(select, tree);
       }
-      Console.debug('display');
       search.focus();
       hideSelectTrees();
       reposition();
@@ -961,7 +958,6 @@ Element.addMethods('select', {
     }
     
     tree.undisplay = function (e) {
-      Console.debug('undisplay');
       document.body.stopObserving('mouseup', tree.undisplay);
       tree.hide();
     }
@@ -1047,9 +1043,7 @@ Element.addMethods('select', {
     reposition();
 
     // search ----------
-    search = new Element('input')
-                 .writeAttribute('type', 'text')
-                 .writeAttribute('autocomplete', 'off')
+    search = new Element('input', {type: 'text', autocomplete: 'off'})
                  .setStyle({
                    width: select.getWidth()-4+'px',
                    position: 'absolute',
