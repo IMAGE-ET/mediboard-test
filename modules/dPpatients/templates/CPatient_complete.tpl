@@ -183,10 +183,10 @@
     <td class="text">
       <strong>{{mb_label object=$object field="medecin_traitant"}}</strong>
       {{if $object->medecin_traitant}}
-        <br />Dr {{mb_value object=$object->_ref_medecin_traitant field="_view"}}<br/>
-        {{mb_value object=$object->_ref_medecin_traitant field="adresse"}}
-        - {{mb_value object=$object->_ref_medecin_traitant field="cp"}} {{mb_value object=$object->_ref_medecin_traitant field="ville"}}
-        {{if $object->_ref_medecin_traitant->tel}}<br />{{mb_value object=$object->_ref_medecin_traitant field="tel"}}{{/if}}
+        <br />
+        <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { mode: 'objectView', params: { object_class: 'CMedecin', object_id: {{$object->medecin_traitant}} } });">
+          Dr {{mb_value object=$object->_ref_medecin_traitant field="_view"}}
+        </span>
         
       {{/if}}
     </td>
