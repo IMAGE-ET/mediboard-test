@@ -9,11 +9,11 @@
 
 class CProductStockService extends CProductStock {
   // DB Fields
-  var $function_id   = null;
+  var $service_id   = null;
 
   // Object References
   //    Single
-  var $_ref_function = null;
+  var $_ref_service = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -24,27 +24,27 @@ class CProductStockService extends CProductStock {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs['function_id'] = 'notNull ref class|CFunctions';
+    $specs['service_id'] = 'notNull ref class|CService';
     return $specs;
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = $this->_ref_product->_view." ({$this->_ref_function->_view})";
+    $this->_view = $this->_ref_product->_view." ({$this->_ref_service->_view})";
   }
 
   function loadRefsFwd(){
     parent::loadRefsFwd();
-    $this->_ref_function = new CFunctions();
-    $this->_ref_function->load($this->function_id);
+    $this->_ref_service = new CService();
+    $this->_ref_service->load($this->service_id);
   }
   
   function getPerm($permType) {
-    if(!$this->_ref_function) {
+    if(!$this->_ref_service) {
       $this->loadRefsFwd();
     }
-    return parent::getPerm($permType) && $this->_ref_function->getPerm($permType);
+    return parent::getPerm($permType) && $this->_ref_service->getPerm($permType);
   }
 }
 ?>

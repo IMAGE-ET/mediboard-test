@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m;
+global $can;
 
 $can->needsRead();
 
@@ -22,14 +22,14 @@ if ($stock_id) {
 	}
 }
 
-$function = new CFunctions();
-$list_functions = $function->loadList();
+$service = new CService();
+$list_services = $service->loadList();
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign('stock', $stock);
-$smarty->assign('list_functions',  $list_functions);
+$smarty->assign('list_services',  $list_services);
 
 $smarty->display('inc_aed_delivery_stock_item.tpl');
 

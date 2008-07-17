@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "function_id", "keywords", "limit"];
+  filterFields = ["category_id", "service_id", "keywords", "limit"];
   stocksServiceFilter = new Filter("filter-stocks-service", "{{$m}}", "httpreq_vw_stocks_service_list", "list-stocks-service", filterFields);
   stocksServiceFilter.submit();
 });
@@ -20,10 +20,10 @@ Main.add(function () {
           <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
           {{/foreach}}
         </select>
-        <select name="function_id" onchange="stocksServiceFilter.submit();">
-          <option value="0">&mdash; {{tr}}CFunctions.all{{/tr}} &mdash;</option>
-          {{foreach from=$list_functions item=curr_function}}
-          <option value="{{$curr_function->function_id}}" {{if $function_id==$curr_function->_id}}selected="selected"{{/if}}>{{$curr_function->_view}}</option>
+        <select name="service_id" onchange="stocksServiceFilter.submit();">
+          <option value="0">&mdash; {{tr}}CService.all{{/tr}} &mdash;</option>
+          {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->_view}}</option>
           {{/foreach}}
         </select>
         <input type="text" name="keywords" value="" />
@@ -40,7 +40,7 @@ Main.add(function () {
       <form name="edit_stock_service" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_service_aed" />
       <input type="hidden" name="stock_id" value="{{$stock_service->_id}}" />
-      <input type="hidden" name="function_id" value="{{$stock_service->function_id}}" />
+      <input type="hidden" name="service_id" value="{{$stock_service->service_id}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
@@ -71,12 +71,12 @@ Main.add(function () {
         </td>
       </tr>
       <tr>
-        <th>{{mb_label object=$stock_service field="function_id"}}</th>
+        <th>{{mb_label object=$stock_service field="service_id"}}</th>
         <td>
-          <select name="function_id">
-            <option value="0">&mdash; {{tr}}CFunctions.select{{/tr}} &mdash;</option>
-            {{foreach from=$list_functions item=curr_function}}
-            <option value="{{$curr_function->function_id}}" {{if $stock_service->function_id==$curr_function->_id}}selected="selected"{{/if}}>{{$curr_function->text}}</option>
+          <select name="service_id">
+            <option value="0">&mdash; {{tr}}CService.select{{/tr}} &mdash;</option>
+            {{foreach from=$list_services item=curr_service}}
+            <option value="{{$curr_service->_id}}" {{if $stock_service->service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
             {{/foreach}}
           </select>
         </td>

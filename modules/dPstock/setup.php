@@ -179,10 +179,21 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision('0.4');
-    $sql = 'RENAME TABLE `product_stock_out` TO `product_delivery` ;';
+    $sql = 'RENAME TABLE `product_stock_out` TO `product_delivery`;';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.5';
+    $this->makeRevision('0.5');
+    $sql = 'ALTER TABLE `product_delivery` 
+            CHANGE `stock_out_id` `delivery_id` INT( 11 ) UNSIGNED NOT NULL AUTO_INCREMENT'; 
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_delivery` CHANGE `function_id` `service_id` INT( 11 ) UNSIGNED NULL DEFAULT NULL';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_stock_service` CHANGE `function_id` `service_id` INT( 11 ) UNSIGNED NOT NULL';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.6';
   }
 }
 

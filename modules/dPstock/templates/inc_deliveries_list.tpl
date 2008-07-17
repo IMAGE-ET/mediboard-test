@@ -7,7 +7,7 @@
     <th>{{tr}}CProductDelivery-date{{/tr}}</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th>{{tr}}CProductDelivery-code{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-function_id{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
   </tr>
   {{foreach from=$list_latest_deliveries item=curr_delivery}}
   <tr>
@@ -15,7 +15,7 @@
     <td class="date">{{mb_value object=$curr_delivery field=date}}</td>
     <td>{{mb_value object=$curr_delivery field=quantity}}</td>
     <td>{{mb_value object=$curr_delivery field=code}}</td>
-    <td>{{mb_value object=$curr_delivery->_ref_function field=_view}}</td>
+    <td>{{mb_value object=$curr_delivery->_ref_service field=_view}}</td>
   </tr>
   {{foreachelse}}
   <tr>

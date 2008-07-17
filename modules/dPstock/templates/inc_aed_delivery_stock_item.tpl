@@ -13,7 +13,7 @@
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
-      <input type="hidden" name="function_id" value="" />
+      <input type="hidden" name="service_id" value="" />
       <input type="hidden" name="date" value="now" />
       <input type="hidden" name="_do_delivery" value="1" />
       

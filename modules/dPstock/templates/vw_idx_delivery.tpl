@@ -25,7 +25,7 @@ function refreshStock(stock_id) {
 
 function deliver(oForm, sign) {
   if (sign == undefined) sign = 1;
-  oForm.function_id.value = $V($('function_id'));
+  oForm.service_id.value = $V($('service_id'));
   oForm.quantity.value = $V(oForm.quantity) * sign;
   stock_id = $V(oForm.stock_id);
   
@@ -59,10 +59,10 @@ function deliver(oForm, sign) {
 
       <div id="delivery-list-stocks"></div>
       
-      <label for="function_id">{{tr}}CProductDelivery-function_id{{/tr}} </label>
-      <select name="function_id" id="function_id">
-        {{foreach from=$list_functions item=curr_function}}
-        <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>
+      <label for="service_id">{{tr}}CProductDelivery-service_id{{/tr}} </label>
+      <select name="service_id" id="service_id">
+        {{foreach from=$list_services item=curr_service}}
+        <option value="{{$curr_service->_id}}">{{$curr_service->_view}}</option>
         {{/foreach}}
       </select>
 

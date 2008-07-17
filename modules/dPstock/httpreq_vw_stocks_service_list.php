@@ -12,13 +12,13 @@ global $can, $m, $g;
 $can->needsEdit();
 
 $category_id = mbGetValueFromGet('category_id');
-$function_id = mbGetValueFromGet('function_id');
+$service_id  = mbGetValueFromGet('service_id');
 $keywords    = mbGetValueFromGet('keywords');
 $limit       = mbGetValueFromGet('limit');
 
 $where = array();
-if ($function_id) {
-  $where['product_stock_service.function_id'] = " = $function_id";
+if ($service_id) {
+  $where['product_stock_service.service_id'] = " = $service_id";
 }
 if ($category_id) {
   $where['product.category_id'] = " = $category_id";

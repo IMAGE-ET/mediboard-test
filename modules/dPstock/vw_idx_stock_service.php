@@ -13,7 +13,7 @@ $can->needsAdmin();
 
 $stock_id         = mbGetValueFromGetOrSession('stock_id');
 $category_id      = mbGetValueFromGetOrSession('category_id');
-$function_id      = mbGetValueFromGetOrSession('function_id');
+$service_id       = mbGetValueFromGetOrSession('service_id');
 
 // Loads the stock 
 $stock_service = new CProductStockService();
@@ -33,8 +33,8 @@ $list_categories = $list_categories->loadList(null, 'name');
 
 // Functions list
 $where = array('group_id' => "= $g");
-$list_functions = new CFunctions();
-$list_functions = $list_functions->loadList($where, 'text');
+$list_services = new CService();
+$list_services = $list_services->loadList($where, 'nom');
 
 // Création du template
 $smarty = new CSmartyDP();
@@ -42,10 +42,10 @@ $smarty = new CSmartyDP();
 $smarty->assign('stock_service', $stock_service);
 
 $smarty->assign('category_id', $category_id);
-$smarty->assign('function_id', $function_id);
+$smarty->assign('service_id',  $service_id);
 
 $smarty->assign('list_categories', $list_categories);
-$smarty->assign('list_functions',  $list_functions);
+$smarty->assign('list_services',   $list_services);
 
 $smarty->display('vw_idx_stock_service.tpl');
 

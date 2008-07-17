@@ -16,12 +16,12 @@ class CProductDelivery extends CMbObject {
   var $date          = null;
   var $quantity      = null;
   var $code          = null; // Lot number, lapsing date
-  var $function_id   = null;
+  var $service_id    = null;
 
   // Object References
   //    Single
   var $_ref_stock    = null;
-  var $_ref_function = null;
+  var $_ref_service  = null;
   
   var $_do_deliver = null;
   
@@ -39,14 +39,14 @@ class CProductDelivery extends CMbObject {
       'date'         => 'notNull dateTime',
       'quantity'     => 'notNull num',
       'code'         => 'str maxLength|32',
-      'function_id'  => 'ref class|CFunctions',
+      'service_id'   => 'ref class|CService',
     ));
   }
 
   function updateFormFields() {
     parent::updateFormFields();
     $this->loadRefsFwd();
-    $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->function_id?" pour le service '{$this->_ref_function->_view}'":'');
+    $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->service_id?" pour le service '{$this->_ref_service->_view}'":'');
   }
   
   function store() {
@@ -62,7 +62,7 @@ class CProductDelivery extends CMbObject {
     
     $stock_service = new CProductStockService();
     $stock_service->product_id = $this->_ref_stock->product_id;
-    $stock_service->function_id = $this->function_id;
+    $stock_service->service_id = $this->service_id;
     
     if ($stock_service->loadMatchingObject()) {
       $stock_service->quantity += $this->quantity;
@@ -98,16 +98,16 @@ class CProductDelivery extends CMbObject {
     $this->_ref_stock = new CProductStockGroup();
     $this->_ref_stock->load($this->stock_id);
 
-    $this->_ref_function = new CFunctions();
-    $this->_ref_function->load($this->function_id);
+    $this->_ref_service = new CService();
+    $this->_ref_service->load($this->service_id);
   }
 
   function getPerm($permType) {
-    if(!$this->_ref_stock || !$this->_ref_function) {
+    if(!$this->_ref_stock || !$this->_ref_service) {
       $this->loadRefsFwd();
     }
-    if ($this->_ref_function) {
-      return ($this->_ref_stock->getPerm($permType) && $this->_ref_function->getPerm($permType));
+    if ($this->_ref_service) {
+      return ($this->_ref_stock->getPerm($permType) && $this->_ref_service->getPerm($permType));
     } else {
       return ($this->_ref_stock->getPerm($permType));
     }
