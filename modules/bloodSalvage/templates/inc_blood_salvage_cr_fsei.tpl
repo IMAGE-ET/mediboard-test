@@ -15,7 +15,7 @@
   
   function doFiche(blood_salvage_id,type_ei_id) {
 	  var url = new Url;
-	  url.setModuleTab("dPqualite","httpreq_blood_salvage_redirect");
+	  url.setModuleTab("dPqualite","vw_incident");
 	  url.addParam("type_ei_id",type_ei_id);
 	  url.addParam("blood_salvage_id",blood_salvage_id);
 	  url.redirect();
