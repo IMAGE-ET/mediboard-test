@@ -1,4 +1,5 @@
 {{assign var="consult_anesth" value=$selOp->_ref_consult_anesth}}
+{{if $consult_anesth->_id}}
 <table class="form">
   <!-- Affichage d'information complementaire pour l'anestesie -->
   <tr>
@@ -17,7 +18,7 @@
 <tr>
   {{if $consult_anesth->mallampati}}
   <td rowspan="4">
-    <img src="images/pictures/{{$consult_anesth->mallampati}}.gif" alt="{{tr}}CConsultAnesth.mallampati.{{$consult_anesth->mallampati}}{{/tr}}" />
+    <img src="images/pictures/{{$consult_anesth->mallampati}}.png" alt="{{tr}}CConsultAnesth.mallampati.{{$consult_anesth->mallampati}}{{/tr}}" />
     <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult_anesth->mallampati}}{{/tr}}
    </td>
    {{/if}}
@@ -192,3 +193,68 @@
   </tr>
   
 </table>
+
+{{elseif $selOp->_ref_sejour->_ref_consult_anesth->_id}}
+{{assign var="consult_anesth" value=$selOp->_ref_sejour->_ref_consult_anesth}}
+
+<form name="linkConsultAnesth" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<input type="hidden" name="dosql" value="do_consult_anesth_aed" />
+<input type="hidden" name="m" value="dPcabinet" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="consultation_anesth_id" value="{{$consult_anesth->_id}}" />
+<input type="hidden" name="sejour_id" value="" />
+<input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
+<table class="form">
+  <tr>
+    <td class="text">
+      <div class="big-info">
+        Une consultation d'anesthésie a été effectuée pour le séjour de ce patient
+        le <strong>{{$consult_anesth->_date_consult|date_format:"%d/%m/%Y"}}</strong>
+        par le <strong>Dr {{$consult_anesth->_ref_consultation->_ref_chir->_view}}</strong>.
+        Vous devez <strong>relier cette consultation à l'intervention courante</strong> si vous désirez y accéder.
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="button">
+      <button type="submit" class="submit">Relier</button>
+    </td>
+  </tr>
+</table>
+</form>
+
+{{else}}
+
+
+<form name="createConsult" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+<input type="hidden" name="dosql" value="do_consult_now" />
+<input type="hidden" name="m" value="dPcabinet" />
+<input type="hidden" name="del" value="0" />
+<input type="hidden" name="consultation_id" value="" />
+<input type="hidden" name="_operation_id" value="{{$selOp->_id}}" />
+<input type="hidden" name="_m_redirect" value="{{$m}}" />
+<table class="form">
+  <tr>
+    <td class="text">
+      <div class="big-info">
+        Aucune consultation d'anesthésie n'a été effectuée pour ce patient.
+        Vous devez créer son dossier d'anesthésie pour y accéder.
+      </div>
+    </td>
+  </tr>
+  <tr>
+    <td class="button">
+      <select name="prat_id">
+        {{foreach from=$listAnesths item=curr_anesth}}
+        <option value="{{$curr_anesth->user_id}}" {{if $selOp->_ref_anesth->user_id == $curr_anesth->user_id}} selected="selected" {{/if}}>
+          {{$curr_anesth->_view}}
+        </option>
+        {{/foreach}}
+      </select>
+      <button type="submit" class="submit">Créer</button>
+    </td>
+  </tr>
+</table>
+</form>
+
+{{/if}}

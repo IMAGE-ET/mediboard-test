@@ -53,6 +53,8 @@ if ($op) {
   $selOp->_ref_sejour->loadExtDiagnostics();
   $selOp->_ref_sejour->loadRefDossierMedical();
   $selOp->_ref_sejour->_ref_dossier_medical->loadRefsBack();
+  $selOp->_ref_sejour->loadRefsConsultAnesth();
+  $selOp->_ref_sejour->_ref_consult_anesth->loadRefsFwd();
   
   $selOp->getAssociationCodesActes();
   $selOp->loadExtCodesCCAM();

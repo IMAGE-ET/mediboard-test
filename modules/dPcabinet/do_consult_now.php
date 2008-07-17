@@ -10,9 +10,9 @@
 global $AppUI, $m;
 
 // Permissions ?
-$module = CModule::getInstalled($m);
-$canModule = $module->canDo();
-$canModule->needsEdit();
+//$module = CModule::getInstalled($m);
+//$canModule = $module->canDo();
+//$canModule->needsEdit();
 
 // Cas des urgences 
 if ($sejour_id = mbGetValueFromPost("sejour_id")) {
@@ -34,6 +34,10 @@ if ($sejour_id = mbGetValueFromPost("sejour_id")) {
 
 $chir = new CMediusers;
 $chir->load($_POST["prat_id"]);
+if(!$chir->_id) {
+  $AppUI->setMsg("Vous devez choisir un praticien pour la consultation", UI_MSG_WARNING);
+  $AppUI->redirect();
+}
 
 $day_now = strftime("%Y-%m-%d");
 $time_now = strftime("%H:%M:00");
@@ -118,12 +122,19 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
   $where["consultation_id"] = "= '".$consult->consultation_id."'";
   $consultAnesth->loadObject($where);  
   $consultAnesth->consultation_id = $consult->consultation_id;
-  $consultAnesth->operation_id = "";
+  if(isset($_POST["_operation_id"])){
+    $consultAnesth->operation_id = $_POST["_operation_id"];      
+  } else {
+    $consultAnesth->operation_id = "";
+  }
   $consultAnesth->store();
 }
 
 // Redirect final
-$current_m = $sejour_id ? "dPurgences" : "dPcabinet";
-$AppUI->redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
-
+if($current_m = $_POST["_m_redirect"]) {
+  $AppUI->redirect("m=$current_m");
+} else {
+  $current_m = $sejour_id ? "dPurgences" : "dPcabinet";
+  $AppUI->redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
+}
 ?>

@@ -93,6 +93,7 @@ class CSejour extends CCodable {
   var $_ref_etabExterne       = null;
   var $_ref_dossier_medical   = null;
   var $_ref_rpu               = null;
+  var $_ref_consult_anesth    = null;
   var $_ref_consultations     = null;
   var $_ref_consult_atu       = null;
   var $_ref_prescriptions     = null;
@@ -568,6 +569,17 @@ class CSejour extends CCodable {
   
   function loadRefRPU() {
     $this->_ref_rpu = $this->loadUniqueBackRef("rpu");
+  }
+  
+  function loadRefsConsultAnesth() {
+    if ($this->_ref_consult_anesth) {
+      return;
+    }
+    
+    $order = "consultation_anesth_id ASC";
+    $this->_ref_consult_anesth = new CConsultAnesth();
+    $this->_ref_consult_anesth->sejour_id = $this->_id;
+    $this->_ref_consult_anesth->loadMatchingObject($order);
   }
   
   /**
