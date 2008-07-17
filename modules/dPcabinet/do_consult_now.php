@@ -131,8 +131,8 @@ if ($ref_chir->isFromType(array("Anesthésiste"))) {
 }
 
 // Redirect final
-if($current_m = $_POST["_m_redirect"]) {
-  $AppUI->redirect("m=$current_m");
+if(isset($_POST["_m_redirect"])) {
+  $AppUI->redirect("m=".$_POST["_m_redirect"]);
 } else {
   $current_m = $sejour_id ? "dPurgences" : "dPcabinet";
   $AppUI->redirect("m=$current_m&tab=edit_consultation&selConsult=$consult->consultation_id&chirSel=$chir->user_id");
