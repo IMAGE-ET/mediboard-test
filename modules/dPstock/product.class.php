@@ -99,18 +99,7 @@ class CProduct extends CMbObject {
   }
   
   function deliver($target_class, $target_id, $description = '') {
-  	$delivery = new CProductDelivery();
-  	if ($this->_id) {
-	  	$delivery->product_id   = $this->_id;
-	  	$delivery->date         = mbDateTime();
-	  	$delivery->target_class = $target_class;
-	  	$delivery->target_id    = $target_id;
-	  	$delivery->description  = $description;
-	  	$delivery->store();
-	  	return true;
-  	} else {
-  		return false;
-  	}
+  	// TODO: can be usefull
   }
   
   function check() {

@@ -13,8 +13,7 @@ $can->needsRead();
 
 $track = array();
 $tracked_classes = array(
-  'CProductStockOut',
-  'CProductDelivery',
+  'CProductDelivery'
 );
 $orderby = 'date DESC';
 $where['code'] = 'IS NOT NULL';

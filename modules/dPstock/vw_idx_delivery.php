@@ -7,28 +7,26 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 
-$can->needsAdmin();
+$can->needsEdit();
 
-$delivery_id  = mbGetValueFromGetOrSession('delivery_id');
+$category_id = mbGetValueFromGetOrSession('category_id');
 
-// Loads the delivery
-$delivery = new CProductDelivery();
+// Loads the required Category the complete list
+$category = new CProductCategory();
+$list_categories = $category->loadList(null, 'name');
 
-// If delivery_id has been provided, we load the associated delivery
-if ($delivery_id) {
-  $delivery->load($delivery_id);
-  $delivery->updateFormFields();
-}
-
-$classes_list = getInstalledClasses();
+$where = array('group_id' => "= $g");
+$list_functions = new CFunctions();
+$list_functions = $list_functions->loadList($where, 'text');
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('delivery', $delivery);
-$smarty->assign('classes_list', $classes_list);
+$smarty->assign('category_id',     $category_id);
+$smarty->assign('list_categories', $list_categories);
+$smarty->assign('list_functions',  $list_functions);
 
 $smarty->display('vw_idx_delivery.tpl');
 

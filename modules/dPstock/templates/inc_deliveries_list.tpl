@@ -1,20 +1,25 @@
 <table class="tbl">
   <tr>
-    <th>{{tr}}CProductDelivery-product_id{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-date{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-target_class{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-target_id{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-code{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-description{{/tr}}</th>
+    <th colspan="5" class="title">20 {{tr}}last{{/tr}} {{tr}}CProductDelivery.more{{/tr}}</th>
   </tr>
-  {{foreach from=$deliveries_list item=curr_delivery}}
   <tr>
-    <td><a href="?m=dPstock&amp;tab=vw_idx_delivery&amp;delivery_id={{$curr_delivery->_id}}">{{$curr_delivery->_ref_product->_view}}</a></td>
-    <td>{{mb_value object=$curr_delivery field=date}}</td>
-    <td>{{tr}}{{$curr_delivery->_ref_target->_class_name}}{{/tr}}</td>
-    <td>{{mb_value object=$curr_delivery->_ref_target field=_view}}</td>
+    <th>{{tr}}CProduct{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-code{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-function_id{{/tr}}</th>
+  </tr>
+  {{foreach from=$list_latest_deliveries item=curr_delivery}}
+  <tr>
+    <td>{{$curr_delivery->_ref_stock->_view}}</td>
+    <td class="date">{{mb_value object=$curr_delivery field=date}}</td>
+    <td>{{mb_value object=$curr_delivery field=quantity}}</td>
     <td>{{mb_value object=$curr_delivery field=code}}</td>
-    <td>{{mb_value object=$curr_delivery field=description}}</td>
+    <td>{{mb_value object=$curr_delivery->_ref_function field=_view}}</td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

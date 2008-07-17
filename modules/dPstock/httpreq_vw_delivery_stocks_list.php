@@ -40,5 +40,5 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('list_stocks', $list_stocks);
 
-$smarty->display('inc_aed_stock_out_stocks_list.tpl');
+$smarty->display('inc_aed_delivery_stocks_list.tpl');
 ?>

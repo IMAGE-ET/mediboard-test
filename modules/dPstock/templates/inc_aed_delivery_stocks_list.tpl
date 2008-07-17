@@ -5,8 +5,8 @@
     <th></th>
   </tr>
 {{foreach from=$list_stocks item=curr_stock}}
-  <tbody id="stock-out-{{$curr_stock->_id}}">
-  {{include file="inc_aed_stock_out_stock_item.tpl" stock=$curr_stock}}
+  <tbody id="delivery-{{$curr_stock->_id}}">
+  {{include file="inc_aed_delivery_stock_item.tpl" stock=$curr_stock}}
   </tbody>
 {{foreachelse}}
   <tr>

@@ -171,10 +171,18 @@ class CSetupdPstock extends CSetup {
       ADD INDEX (`function_id`);';
     $this->addQuery($sql);
     
-    $sql = 'RENAME TABLE `mediboard`.`product_stock` TO `mediboard`.`product_stock_group` ;';
+    $sql = 'RENAME TABLE `product_stock` TO `product_stock_group` ;';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.3';
+    $this->makeRevision('0.3');
+    $sql = 'DROP TABLE `product_delivery`;';
+    $this->addQuery($sql);
+    
+    $this->makeRevision('0.4');
+    $sql = 'RENAME TABLE `product_stock_out` TO `product_delivery` ;';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.5';
   }
 }
 

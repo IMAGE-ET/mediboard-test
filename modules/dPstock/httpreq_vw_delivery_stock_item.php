@@ -31,6 +31,6 @@ $smarty = new CSmartyDP();
 $smarty->assign('stock', $stock);
 $smarty->assign('list_functions',  $list_functions);
 
-$smarty->display('inc_aed_stock_out_stock_item.tpl');
+$smarty->display('inc_aed_delivery_stock_item.tpl');
 
 ?>

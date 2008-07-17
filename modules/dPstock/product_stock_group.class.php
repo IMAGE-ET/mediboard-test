@@ -20,7 +20,7 @@ class CProductStockGroup extends CProductStock {
   var $_ref_group               = null;
 
   //    Multiple
-  var $_ref_stock_outs          = null;
+  var $_ref_deliveries          = null;
   
   // Stock percentages 
   var $_quantity                = null;
@@ -45,7 +45,7 @@ class CProductStockGroup extends CProductStock {
   
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs['stock_outs'] = 'CProductStockOut stock_id';
+    $backRefs['deliveries'] = 'CProductDelivery stock_id';
     return $backRefs;
   }
 
@@ -150,7 +150,7 @@ class CProductStockGroup extends CProductStock {
   }
 
   function loadRefsBack(){
-    $this->_ref_stock_outs = $this->loadBackRefs('stock_outs');
+    $this->_ref_deliveries = $this->loadBackRefs('deliveries');
   }
   
   function getPerm($permType) {

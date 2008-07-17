@@ -1,166 +1,73 @@
-{{mb_include_script module=dPstock script=product_selector}}
-{{mb_include_script module=system script=object_selector}}
 {{mb_include_script module=dPstock script=filter}}
+{{mb_include_script module=dPstock script=refresh_value}}
 
 <script type="text/javascript">
 Main.add(function () {
-  regFieldCalendar("filter-deliveries", "_date_min");
-  regFieldCalendar("filter-deliveries", "_date_max");
+  filterFields = ["category_id", "keywords"];
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_delivery_stocks_list", "delivery-list-stocks", filterFields);
+  stocksFilter.submit();
   
-  filterFields = ["product_id", "_date_min", "_date_max", "target_class", "target_id", "keywords"];
-  deliveriesFilter = new Filter("filter-deliveries", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
-  deliveriesFilter.submit();
+  refreshDeliveriesList();
 });
+
+function refreshDeliveriesList() {
+  url = new Url;
+  url.setModuleAction("dPstock","httpreq_vw_deliveries_list");
+  url.requestUpdate("deliveries", { waitingText: null } );
+}
+
+function refreshStock(stock_id) {
+  url = new Url;
+  url.setModuleAction("dPstock","httpreq_vw_delivery_stock_item");
+  url.addParam("stock_id", stock_id);
+  url.requestUpdate("delivery-"+stock_id, { waitingText: null } );
+}
+
+function deliver(oForm, sign) {
+  if (sign == undefined) sign = 1;
+  oForm.function_id.value = $V($('function_id'));
+  oForm.quantity.value = $V(oForm.quantity) * sign;
+  stock_id = $V(oForm.stock_id);
+  
+  submitFormAjax(oForm, 'systemMsg', {
+    onComplete: function() {
+      refreshValue('stock-'+stock_id+'-bargraph', 'CProductStockGroup', stock_id, 'bargraph');
+      refreshDeliveriesList();
+    }
+  });
+}
 </script>
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="5">
-      <form name="filter-deliveries" action="?" method="post" onsubmit="return deliveriesFilter.submit();">
-      <input type="hidden" class="m" name="{{$m}}" />
-        <table class="form">
-          <tr>
-            <th class="title" colspan="4">Recherche d'administrations de produits</th>
-          </tr>
-          <tr>
-            <th>{{mb_title object=$delivery field=target_class}}</th>
-            <td>
-              <select class="notNull str" name="target_class">
-                <option value="">&mdash; Choisissez un type d'object</option>
-                {{foreach from=$classes_list|smarty:nodefaults item=curr_class}}
-                <option value="{{$curr_class}}">{{tr}}{{$curr_class}}{{/tr}}</option>
-                {{/foreach}}
-              </select>
-            </td>
-            <th>{{mb_title object=$delivery field=target_id}}</th>
-            <td class="readonly">
-              <input type="hidden" name="target_id" value="" class="{{$delivery->_props.target_id}}" />
-              <input type="text" size="20" name="_view" readonly="readonly" value="" ondblclick="ObjectSelector.initFilter()" />
-              <button type="button" onclick="ObjectSelector.initFilter()" class="search notext">{{tr}}Search{{/tr}}</button>
-              <script type="text/javascript">
-                ObjectSelector.initFilter = function() {
-                  this.sForm     = "filter-deliveries";
-                  this.sView     = "_view";
-                  this.sId       = "target_id";
-                  this.sClass    = "target_class";
-                  this.pop();
-                }
-              </script>
-            </td>
-          </tr>
-          <tr>
-            <th>{{mb_title object=$delivery field=product_id}}</th>
-            <td class="readonly">
-              <input type="hidden" name="product_id" value="" />
-              <input type="text" name="product_name" value="" size="20" readonly="readonly" ondblclick="ProductSelector.initFilter()" />
-              <button class="search notext" type="button" onclick="ProductSelector.initFilter()">{{tr}}Search{{/tr}}</button>
-              <script type="text/javascript">
-              ProductSelector.initFilter = function(){
-                this.sForm = "filter-deliveries";
-                this.sId   = "product_id";
-                this.sView = "product_name";
-                this.pop();
-              }
-              </script>
-            </td>
-            <th>{{tr}}Keywords{{/tr}}</th>
-            <td colspan="3"><input type="text" class="search" name="keywords" /></td>
-          </tr>
-          <tr>
-            <th>{{mb_title object=$delivery field=_date_min}}</th>
-            <td class="date">{{mb_field object=$delivery field=_date_min form=filter-deliveries}}</td>
-            <th>{{mb_title object=$delivery field=_date_max}}</th>
-            <td class="date">{{mb_field object=$delivery field=_date_max form=filter-deliveries}}</td>
-          </tr>
-          <tr>
-            <td colspan="4" class="button">
-              <button type="submit" class="search">{{tr}}Filter{{/tr}}</button>
-              <button type="button" class="cancel notext" onclick="deliveriesFilter.empty();">{{tr}}Reset{{/tr}}</button>
-            </td>
-          </tr>
-        </table>
-      </form>
-    
-      <div id="list-deliveries"></div>
-    </td>
-    
     <td class="halfPane">
-    <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_delivery&amp;delivery_id=0">{{tr}}CProductDelivery.create{{/tr}}</a>
-    <form name="edit-delivery" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="tab" value="vw_idx_delivery" />
-      <input type="hidden" name="dosql" value="do_delivery_aed" />
-      <input type="hidden" name="delivery_id" value="{{$delivery->_id}}" />
-      {{if !$delivery->_id}}
-      <input type="hidden" name="date" value="now" />
-      {{/if}}
-      <input type="hidden" name="del" value="0" />
-      <table class="form">
-        <tr>
-          {{if $delivery->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductDelivery.modify{{/tr}} {{$delivery->_view}}</th>
-          {{else}}
-          <th class="title" colspan="2">{{tr}}CProductDelivery.create{{/tr}}</th>
-          {{/if}}
-        </tr>   
-        <tr>
-          <th>{{mb_label object=$delivery field="product_id"}}</th>
-          <td class="readonly">
-            <input type="hidden" name="product_id" value="{{$delivery->_ref_product}}" class="{{$delivery->_props.product_id}}" />
-            <input type="text" name="product_name" value="{{if $delivery->_ref_product}}{{$delivery->_ref_product->_view}}{{/if}}" size="40" readonly="readonly" ondblclick="ProductSelector.initEdit()" />
-            <button class="search notext" type="button" onclick="ProductSelector.initEdit()">{{tr}}Search{{/tr}}</button>
-            <script type="text/javascript">
-            ProductSelector.initEdit = function(){
-              this.sForm = "edit-delivery";
-              this.sId   = "product_id";
-              this.sView = "product_name";
-              this.pop({{$delivery->product_id}});
-            }
-            </script>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$delivery field=target_class}}</th>
-          <td class="readonly">{{mb_field object=$delivery field=target_class readonly="readonly" size="30"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$delivery field="target_id"}}</th>
-          <td class="readonly">
-            {{mb_field object=$delivery field=target_id hidden="1"}}
-            <input type="text" size="40" name="_view" readonly="readonly" value="{{if $delivery->_ref_target}}{{$delivery->_ref_target->_view}}{{/if}}" ondblclick="ObjectSelector.initEdit()" />
-            <button type="button" onclick="ObjectSelector.initEdit()" class="search notext">{{tr}}Search{{/tr}}</button>
-            <script type="text/javascript">
-              ObjectSelector.initEdit = function() {
-                this.sForm     = "edit-delivery";
-                this.sView     = "_view";
-                this.sId       = "target_id";
-                this.sClass    = "target_class";
-                this.pop();
-              }
-            </script>
-          </td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$delivery field="code"}}</th>
-          <td>{{mb_field object=$delivery field="code"}}</td>
-        </tr>
-        <tr>
-          <th>{{mb_label object=$delivery field="description"}}</th>
-          <td>{{mb_field object=$delivery field="description"}}</td>
-        </tr>
-        <tr>
-          <td class="button" colspan="4">
-            {{if $delivery->_id}}
-            <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
-            <button type="button" class="trash" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$delivery->_view|smarty:nodefaults|JSAttribute}}'})">
-              {{tr}}Delete{{/tr}}
-            </button>
-            {{else}}
-            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
-            {{/if}}
-          </td>
-        </tr>  
-      </table>
-    </form>
+
+      <form name="filter-stocks" action="?" method="post" onsubmit="return stocksFilter.submit('keywords');">
+        <input type="hidden" name="m" value="{{$m}}" />
+        
+        <select name="category_id" onchange="stocksFilter.submit();">
+          <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
+        {{foreach from=$list_categories item=curr_category}}
+          <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
+        {{/foreach}}
+        </select>
+        
+        <input type="text" name="keywords" value="" />
+        <button type="button" class="search" onclick="stocksFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="stocksFilter.empty();">{{tr}}Reset{{/tr}}</button><br />
+      </form>
+
+      <div id="delivery-list-stocks"></div>
+      
+      <label for="function_id">{{tr}}CProductDelivery-function_id{{/tr}} </label>
+      <select name="function_id" id="function_id">
+        {{foreach from=$list_functions item=curr_function}}
+        <option value="{{$curr_function->_id}}">{{$curr_function->_view}}</option>
+        {{/foreach}}
+      </select>
+
     </td>
+    <td class="halfPane" id="deliveries"></td>
   </tr>
 </table>
+
