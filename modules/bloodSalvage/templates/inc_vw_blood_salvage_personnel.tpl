@@ -1,7 +1,11 @@
 <script type="text/javascript">
 
 function submitNurse(oForm){
-  submitFormAjax(oForm, 'systemMsg', { onComplete : function() {reloadNurse(document.forms["affectNurse"].object_id.value)} });
+  submitFormAjax(oForm, 'systemMsg', { 
+    onComplete : function() {
+      reloadNurse(document.forms["affectNurse"].object_id.value)
+    } 
+  });
 }
 
 </script>
@@ -44,7 +48,9 @@ function submitNurse(oForm){
 			    </form>
 		    </div>
 		    {{/if}}
-		
+		    
+		    {{$affectation->_ref_personnel->_ref_user->_view}}
+		    <!--  
 		    <form name="affectationNurse-{{$affectation_id}}" action="?m={{$m}}" method="post">
 		    <input type="hidden" name="m" value="dPpersonnel" />
 		    <input type="hidden" name="dosql" value="do_affectation_aed" />
@@ -59,7 +65,6 @@ function submitNurse(oForm){
         {{assign var="affect_id" value=$affectation->_id}}
         {{assign var="timing" value=$timingAffect.$affect_id}}
 		    {{assign var="form" value=affectationNurse-$affect_id}}
-		    {{$affectation->_ref_personnel->_ref_user->_view}}
 		    <table class="form">
 		      <tr>
 		        {{include file=../../dPsalleOp/templates/inc_field_timing.tpl object=$affectation field=_debut}}
@@ -67,6 +72,7 @@ function submitNurse(oForm){
 	        </tr>
 		    </table>
 		    </form>
+		    -->
 			<hr />   
 		{{/foreach}}
 		</td>

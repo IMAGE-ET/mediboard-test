@@ -19,7 +19,7 @@ class CBloodSalvage extends CMbObject {
 	//DB References 
 	var $operation_id = null;
 	var $cell_saver_id = null;																						// The Cell Saver equipment
-	var $incident_file_id = null;																					// Reference to an incident file
+	var $type_ei_id = null;																	      				// Reference to an incident type
 	
 	//DB Fields
 	var $wash_volume = null; 																							// *Volume de lavage*
@@ -28,7 +28,8 @@ class CBloodSalvage extends CMbObject {
 	var $hgb_patient = null;																		  		  // *Hémoglobine du patient post transfusion*
 	var $transfused_volume = null;
 	var $anticoagulant_cip = null;                                    // *Code CIP de l'anticoagulant utilisé*
-	
+	var $receive_kit = null;
+	var $wash_kit = null;
   // Form Fields
   var $_recuperation_start =null;
   var $_recuperation_end =null;
@@ -48,7 +49,7 @@ class CBloodSalvage extends CMbObject {
 	var $_ref_operation = null;
 	var $_ref_cell_saver = null;
 	var $_ref_incident_file = null;
-
+  var $_ref_patient = null;
 	
 	function getSpec() {
 		$spec = parent::getSpec();
@@ -62,8 +63,8 @@ class CBloodSalvage extends CMbObject {
 	function getSpecs() {
 		$specs= parent::getSpecs();
 		$specs["operation_id"]				= "notNull ref class|COperation";
-		$specs["cell_saver_id"]				= "num";
-	  $specs["incident_file_id"]		= "ref class|CFicheEi";
+		$specs["cell_saver_id"]				= "num ref class|CCellSaver";
+	  $specs["type_ei_id"]		      = "ref class|CTypeEi";
 	  
     $specs["recuperation_start"]  = "dateTime";
     $specs["recuperation_end"]    = "dateTime";
@@ -81,6 +82,8 @@ class CBloodSalvage extends CMbObject {
     $specs["hgb_pocket"]					= "num";
     $specs["hgb_patient"]					= "num";
     $specs["anticoagulant_cip"]		= "numchar|7";
+    $specs["wash_kit"]	        	= "varchar|32";
+    $specs["receive_kit"]	       	= "varchar|32";
     
     $specs["_datetime"]            = "dateTime";
     
@@ -91,7 +94,13 @@ class CBloodSalvage extends CMbObject {
     $this->_ref_operation = new COperation();
     $this->_ref_operation->load($this->operation_id);
     $this->_ref_operation->loadRefPlageOp();
-
+    
+    $this->_ref_patient = new CPatient();
+    $this->_ref_operation->loadRefPatient();
+    $this->_ref_patient = $this->_ref_operation->_ref_patient;
+    
+    $this->_ref_cell_saver = new CCellSaver();
+    $this->_ref_cell_saver->load($this->cell_saver_id);
   }
   
   function loadRefPlageOp() {

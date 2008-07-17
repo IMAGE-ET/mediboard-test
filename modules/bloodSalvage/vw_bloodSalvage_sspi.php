@@ -19,22 +19,22 @@ $modif_operation    = $date>=mbDate();
 $timing             = array();
 $tabAffected        = array();
 /*
- * Liste des cell saver : Figée pour le moment à ces trois valeurs. 
+ * Liste des cell saver.
  */
-$list_cell_saver = array( "1"=> "DIDÉCO ÉLECTA N°1 série B 013663 C 03", 
-											    "2"=> "DIDÉCO ÉLECTA N°2 série B 012740 C 02", 
-											    "3"=> "FRÉSÉNIUS CATS N° série 1CAA1090");
+$cell_saver = new CCellSaver();
+$list_cell_saver = $cell_saver->loadList();
 
+/*
+ * Liste du personnel présent en SSPI.
+ */
 $list_nurse_sspi= CPersonnel::loadListPers("reveil");
 
 /*
  * Liste d'incidents transfusionnels possibles.
  */
-$liste_incident= array("Frisson",
-                      "Hyperthermie",
-                      "Fuite sur consommable",
-                      "Déclaration correspondant hémovigilance fait", 
-                      "Déclaration technicien machine fait");
+$incident = new CTypeEi();
+$liste_incident = $incident->loadList();
+
 /*
  * Création du tableau d'affectation et de celui des timings.
  */

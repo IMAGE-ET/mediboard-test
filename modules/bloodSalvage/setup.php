@@ -42,11 +42,38 @@ class CSetupbloodSalvage extends CSetup {
 			ADD INDEX (`recuperation_start`),
 			ADD INDEX (`recuperation_end`),
 			ADD INDEX (`transfusion_start`),
-			ADD INDEX (`transfusion_end`)
-		;';
+			ADD INDEX (`transfusion_end`);';
 		$this->addQuery($sql);
 		
-    $this->mod_version = '0.01';
+    $this->makeRevision('0.01');
+    
+    $sql = 'ALTER TABLE `blood_salvage` 
+				    ADD `receive_kit` VARCHAR( 32 ),
+				    ADD `wash_kit` VARCHAR( 32 ) ' ;
+    $this->addQuery($sql);
+    
+    $sql = 'CREATE TABLE `cell_saver` (
+    `cell_saver_id`  INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+    `marque` VARCHAR(50) NOT NULL,
+    `modele` VARCHAR( 30 ) NOT NULL
+     ) TYPE=MYISAM;';
+    
+    $this->addQuery($sql);
+    
+    $sql="CREATE TABLE `type_ei` (
+          `type_ei_id` INT NOT NULL AUTO_INCREMENT PRIMARY KEY ,
+          `concerne` ENUM( 'pat', 'vis', 'pers', 'med', 'mat' ) NOT NULL ,
+          `desc` TEXT NULL,
+          `name` VARCHAR( 30 ) NOT NULL
+          ) ENGINE = MYISAM ;";
+    $this->addQuery($sql);
+    
+    $sql = " ALTER TABLE `blood_salvage` 
+             CHANGE `incident_file_id` `type_ei_id` INT( 11 ) UNSIGNED NULL DEFAULT NULL ;";
+    $this->addQuery($sql);
+    
+    
+    $this->mod_version='0.02'; 
   }
 }
 ?>

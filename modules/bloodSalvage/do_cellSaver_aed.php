@@ -7,11 +7,10 @@
 * @author Alexandre Germonneau
 */
 
+$do = new CDoObjectAddEdit('CCellSaver', 'cell_saver_id');
 
-global $AppUI, $can, $m;
-
-$do = new CDoObjectAddEdit("CFicheEi", "fiche_ei_id");
-
-$do->doStore();
+$do->modifyMsg = "Cell Saver modifié";
+$do->createMsg = "Cell Saver créé";
 $do->doIt();
+
 ?>

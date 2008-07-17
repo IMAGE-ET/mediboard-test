@@ -60,6 +60,7 @@ if ($op) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage", $blood_salvage);	
+$smarty->assign("blood_salvage_id", $blood_salvage->_id);	
 $smarty->assign("salle", $salle);
 $smarty->assign("selOp", $selOp);
 $smarty->assign("date", $date);

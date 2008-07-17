@@ -25,14 +25,9 @@
 	<div id="info-patient">
 		{{include file="inc_vw_patient_infos.tpl"}}
 	</div>
-	<!-- Informations sur l'opération de récupération. Volumes récupérés etc -->
-	<div id="cell-saver-infos">
-		{{include file="inc_vw_cell_saver_infos.tpl}}
-	</div>
 	<div id="start-timing">
 		{{include file=inc_vw_recuperation_start_timing.tpl}}
 	</div>
-	
 	<div id="materiel">
    {{include file=inc_blood_salvage_conso.tpl}}
   </div>

@@ -11,15 +11,16 @@ global $AppUI, $can, $m, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromPostOrSession("blood_salvage_id");
+$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $modif_operation    = $date>=mbDate();
+$timing  = mbGetValueFromGetOrSession("timing");
+
 
 $blood_salvage = new CBloodSalvage();
 if($blood_salvage_id){
   $blood_salvage->load($blood_salvage_id);
   $blood_salvage->loadRefs();
-  
   $timing["_recuperation_start"]       = array();
   foreach($timing as $key => $value) {
     for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {

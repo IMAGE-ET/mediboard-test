@@ -13,13 +13,13 @@ function submitInfos(oForm) {
 function submitStartTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
     onComplete : function() {       
-    reloadStartTiming(oForm.blood_salvage_id.value);
+      reloadStartTiming(oForm.blood_salvage_id.value);
     } 
   });
 }
 
 function reloadStartTiming(blood_salvage_id){ 
-  var url = new Url();
+    var url = new Url();
     url.setModuleAction("bloodSalvage", "httpreq_vw_recuperation_start_timing");
     url.addParam("blood_salvage_id", blood_salvage_id);
     url.requestUpdate("start-timing", { waitingText: null } );
@@ -41,7 +41,6 @@ function pageMain() {
   {{if $selOp->_id}}
 	  // Effet sur le programme
 	  new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
-		
   {{/if}}  
 }
 </script>

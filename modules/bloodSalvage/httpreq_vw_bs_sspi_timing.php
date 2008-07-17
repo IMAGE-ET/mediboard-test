@@ -11,7 +11,7 @@ global $can, $m, $g;
 
 $can->needsRead();
 
-$blood_salvage_id = mbGetValueFromPostOrSession("blood_salvage_id");
+$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 $timing  = mbGetValueFromGetOrSession("timing");
 $modif_operation    = $date>=mbDate();
