@@ -81,14 +81,14 @@ function $V (element, value, fire) {
   // We get the tag and the type
   var tag  = element.tagName ? element.tagName.toLowerCase() : null;
   var type = element.type    ? element.type.toLowerCase()    : null;
-  
+
   // If it is a form element
   if (Object.isElement(element) && (
      tag == 'input' || 
      tag == 'select' || 
      tag == 'textarea')
     ) {
-    
+
     // If the element is a selectable one, we check if it's checked
     var oldValue = (type == 'checkbox' || type == 'radio') ? element.checked : $F(element);
 
@@ -107,7 +107,7 @@ function $V (element, value, fire) {
   } 
   
   // If the element is a list of elements (like radio buttons)
-  else if (element instanceof NodeList || Object.isArray(element)) {
+  else if (Object.isArray(element) || (element[0] && Object.isElement(element[0]))) {
     if (!Object.isUndefined(value)) { // If a value is provided
     
       // If value isn't an array, we make it an array
