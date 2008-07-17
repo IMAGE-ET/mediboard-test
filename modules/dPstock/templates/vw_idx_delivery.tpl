@@ -1,5 +1,4 @@
 {{mb_include_script module=dPstock script=filter}}
-{{mb_include_script module=dPstock script=refresh_value}}
 
 <script type="text/javascript">
 Main.add(function () {

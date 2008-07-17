@@ -193,7 +193,13 @@ class CSetupdPstock extends CSetup {
     $sql = 'ALTER TABLE `product_stock_service` CHANGE `function_id` `service_id` INT( 11 ) UNSIGNED NOT NULL';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.6';
+    $this->makeRevision('0.6');
+    $sql = 'ALTER TABLE `product_delivery` 
+      ADD `status` ENUM (\'planned\',\'done\') NOT NULL,
+      ADD INDEX (`date`);';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.7';
   }
 }
 

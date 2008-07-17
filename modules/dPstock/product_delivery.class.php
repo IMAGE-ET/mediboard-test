@@ -17,6 +17,7 @@ class CProductDelivery extends CMbObject {
   var $quantity      = null;
   var $code          = null; // Lot number, lapsing date
   var $service_id    = null;
+  var $status        = null;
 
   // Object References
   //    Single
@@ -40,6 +41,7 @@ class CProductDelivery extends CMbObject {
       'quantity'     => 'notNull num',
       'code'         => 'str maxLength|32',
       'service_id'   => 'ref class|CService',
+      'status'       => 'notNull enum list|planned|done',
     ));
   }
 
@@ -58,22 +60,25 @@ class CProductDelivery extends CMbObject {
       $this->_ref_stock->load($this->stock_id);
       $this->_ref_stock->quantity -= $this->quantity;
       $this->_ref_stock->store();
+      
+      $stock_service = new CProductStockService();
+      $stock_service->product_id = $this->_ref_stock->product_id;
+      $stock_service->service_id = $this->service_id;
+      
+      if ($stock_service->loadMatchingObject()) {
+        $stock_service->quantity += $this->quantity;
+      } else if ($this->quantity > 0) {
+        $stock_service->quantity = $this->quantity;
+      }
+      $this->status = 'done';
+      
+      if ($msg = $stock_service->store()) {
+        return $msg;
+      }
+    } else if (!$this->_id) {
+      $this->status = 'planned';
     }
-    
-    $stock_service = new CProductStockService();
-    $stock_service->product_id = $this->_ref_stock->product_id;
-    $stock_service->service_id = $this->service_id;
-    
-    if ($stock_service->loadMatchingObject()) {
-      $stock_service->quantity += $this->quantity;
-    } else if ($this->quantity > 0) {
-      $stock_service->quantity = $this->quantity;
-    }
-    
-    if ($msg = $stock_service->store()) {
-      return $msg;
-    }
-    
+
     return parent::store();
   }
   
