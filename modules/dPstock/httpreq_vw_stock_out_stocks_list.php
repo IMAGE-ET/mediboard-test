@@ -24,15 +24,15 @@ if ($keywords) {
               product.description LIKE '%$keywords%'";
 }
 if ($g) {
-  $where['product_stock.group_id'] = " = $g";
+  $where['product_stock_group.group_id'] = " = $g";
 }
 
 $leftjoin = array();
-$leftjoin['product'] = 'product.product_id = product_stock.product_id';
+$leftjoin['product'] = 'product.product_id = product_stock_group.product_id';
 
 $orderby = 'product.name ASC';
 
-$stock = new CProductStock();
+$stock = new CProductStockGroup();
 $list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
 
 // Smarty template

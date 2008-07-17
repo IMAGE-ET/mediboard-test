@@ -111,8 +111,8 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{tr}}CGroups{{/tr}}</th>
-          <th>{{tr}}CProductStock-quantity{{/tr}}</th>
-          <th>{{tr}}CProductStock-bargraph{{/tr}}</th>
+          <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
+          <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
         </tr>
         {{foreach from=$product->_ref_stocks item=curr_stock}}
         <tr>
@@ -129,7 +129,7 @@ Main.add(function () {
           <tr>
             <td colspan="3">
               <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$product->_id}}'">
-                {{tr}}CProductStock.create{{/tr}}
+                {{tr}}CProductStockGroup.create{{/tr}}
               </button>
             </td>
           </tr>

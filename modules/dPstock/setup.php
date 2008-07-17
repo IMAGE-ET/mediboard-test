@@ -156,7 +156,25 @@ class CSetupdPstock extends CSetup {
       ADD INDEX (function_id)';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.2';
+    
+    $this->makeRevision('0.2');
+    $sql = 'CREATE TABLE `product_stock_service` (
+      `stock_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `product_id` INT (11) UNSIGNED NOT NULL,
+      `function_id` INT (11) UNSIGNED NOT NULL,
+      `quantity` INT (11) NOT NULL
+    ) TYPE=MYISAM;';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_stock_service` 
+      ADD INDEX (`product_id`),
+      ADD INDEX (`function_id`);';
+    $this->addQuery($sql);
+    
+    $sql = 'RENAME TABLE `mediboard`.`product_stock` TO `mediboard`.`product_stock_group` ;';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.3';
   }
 }
 

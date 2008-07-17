@@ -1,10 +1,10 @@
 {{**
-  * $stock ref|CProductStock
+  * $stock ref|CProductStockGroup
   *}}
 {{assign var=colors value=","|explode:"critical,min,optimum,max"}}
 {{assign var=zone value=$stock->_zone}}
 
-<div class="bargraph tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductStock', object_id: {{$stock->_id}} } })">
+<div class="bargraph tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CProductStockGroup', object_id: {{$stock->_id}} } })">
   <div class="value {{$colors.$zone}}">
     <div class="{{$colors.$zone}}" style="width: {{$stock->_quantity}}%;"></div>
   </div>

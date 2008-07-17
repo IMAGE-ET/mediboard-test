@@ -31,7 +31,7 @@ function stockOut(oForm, sign) {
   
   submitFormAjax(oForm, 'systemMsg', {
     onComplete: function() {
-      refreshValue('stock-'+stock_id+'-bargraph', 'CProductStock', stock_id, 'bargraph');
+      refreshValue('stock-'+stock_id+'-bargraph', 'CProductStockGroup', stock_id, 'bargraph');
       refreshStockOutsList();
     }
   });

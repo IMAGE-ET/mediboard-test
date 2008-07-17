@@ -11,7 +11,7 @@ global $can, $g;
 
 $can->needsRead();
 
-$list_stocks = new CProductStock();
+$list_stocks = new CProductStockGroup();
 
 $where = array();
 $where['group_id'] = " = '$g'";

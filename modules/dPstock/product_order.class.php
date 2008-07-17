@@ -129,7 +129,7 @@ class CProductOrder extends CMbObject {
     }
   	
     // we retrieve all the stocks
-  	$stock = new CProductStock();
+  	$stock = new CProductStockGroup();
   	$list_stocks = $stock->loadList();
   	
   	// for every stock

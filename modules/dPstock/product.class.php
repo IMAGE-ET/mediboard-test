@@ -40,7 +40,7 @@ class CProduct extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs['references'] = 'CProductReference product_id';
-    $backRefs['stocks']     = 'CProductStock product_id';
+    $backRefs['stocks']     = 'CProductStockGroup product_id';
     return $backRefs;
   }
 
@@ -85,7 +85,7 @@ class CProduct extends CMbObject {
   function loadRefStock() {
   	global $g;
   	
-    $this->_ref_stock_group = new CProductStock();
+    $this->_ref_stock_group = new CProductStockGroup();
     $this->_ref_stock_group->group_id = $g;
     $this->_ref_stock_group->product_id = $this->product_id;
     $this->_ref_stock_group->loadMatchingObject();

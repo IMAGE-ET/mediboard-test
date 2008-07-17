@@ -14,7 +14,7 @@ $can->needsRead();
 $stock_id = mbGetValueFromGetOrSession('stock_id');
 
 // Loads the stock in function of the stock ID or the product ID
-$stock = new CProductStock();
+$stock = new CProductStockGroup();
 if ($stock_id) {
   $stock->stock_id = $stock_id;
   if ($stock->loadMatchingObject()) {

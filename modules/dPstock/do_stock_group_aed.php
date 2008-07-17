@@ -7,7 +7,7 @@
 * @author Fabien Ménager
 */
 
-$do = new CDoObjectAddEdit('CProductStock', 'stock_id');
+$do = new CDoObjectAddEdit('CProductStockGroup', 'stock_id');
 $do->doIt();
 
 ?>

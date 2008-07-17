@@ -90,7 +90,7 @@ class CProductOrderItem extends CMbObject {
     if (!$this->_ref_order || $this->_ref_reference) {
       $this->loadRefsFwd();
     }
-    $stock = new CProductStock();
+    $stock = new CProductStockGroup();
     $where = array();
     $where['group_id']   = "= '{$this->_ref_order->group_id}'";
     $where['product_id'] = "= '{$this->_ref_reference->product_id}'";

@@ -17,8 +17,9 @@ $category_id = mbGetValueFromGetOrSession('category_id');
 $category = new CProductCategory();
 $list_categories = $category->loadList(null, 'name');
 
-$function = new CFunctions();
-$list_functions = $function->loadList();
+$where = array('group_id' => "= $g");
+$list_functions = new CFunctions();
+$list_functions = $list_functions->loadList($where, 'text');
 
 // Création du template
 $smarty = new CSmartyDP();

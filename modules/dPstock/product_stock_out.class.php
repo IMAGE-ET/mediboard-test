@@ -35,7 +35,7 @@ class CProductStockOut extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     return array_merge($specs, array (
-      'stock_id'     => 'notNull ref class|CProductStock',
+      'stock_id'     => 'notNull ref class|CProductStockGroup',
       'date'         => 'notNull dateTime',
       'quantity'     => 'notNull num',
       'code'         => 'str maxLength|32',
@@ -54,11 +54,26 @@ class CProductStockOut extends CMbObject {
       return $msg;
     }
     if (!$this->_id && $this->_do_stock_out && $this->date) {
-      $this->_ref_stock = new CProductStock();
+      $this->_ref_stock = new CProductStockGroup();
       $this->_ref_stock->load($this->stock_id);
       $this->_ref_stock->quantity -= $this->quantity;
       $this->_ref_stock->store();
     }
+    
+    $stock_service = new CProductStockService();
+    $stock_service->product_id = $this->_ref_stock->product_id;
+    $stock_service->function_id = $this->function_id;
+    
+    if ($stock_service->loadMatchingObject()) {
+      $stock_service->quantity += $this->quantity;
+    } else if ($this->quantity > 0) {
+      $stock_service->quantity = $this->quantity;
+    }
+    
+    if ($msg = $stock_service->store()) {
+      return $msg;
+    }
+    
     return parent::store();
   }
   
@@ -80,7 +95,7 @@ class CProductStockOut extends CMbObject {
   }
 
   function loadRefsFwd() {
-    $this->_ref_stock = new CProductStock();
+    $this->_ref_stock = new CProductStockGroup();
     $this->_ref_stock->load($this->stock_id);
 
     $this->_ref_function = new CFunctions();

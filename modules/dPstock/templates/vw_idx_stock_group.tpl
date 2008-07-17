@@ -4,7 +4,7 @@
 <script type="text/javascript">
 Main.add(function () {
   filterFields = ["category_id", "keywords", "only_ordered_stocks", "limit"];
-  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_list", "list-stocks", filterFields);
+  stocksFilter = new Filter("filter-stocks", "{{$m}}", "httpreq_vw_stocks_group_list", "list-stocks", filterFields);
   stocksFilter.submit();
 });
 </script>
@@ -34,18 +34,18 @@ Main.add(function () {
     </td>
 
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0">{{tr}}CProductStock.create{{/tr}}</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0">{{tr}}CProductStockGroup.create{{/tr}}</a>
       <form name="edit_stock" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_stock_aed" />
+      <input type="hidden" name="dosql" value="do_stock_group_aed" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="group_id" value="{{$g}}" />
       <input type="hidden" name="del" value="0" />
       <table class="form">
         <tr>
           {{if $stock->_id}}
-          <th class="title modify" colspan="2">{{tr}}CProductStock.modify{{/tr}} {{$stock->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CProductStockGroup.modify{{/tr}} {{$stock->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}CProductStock.create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CProductStockGroup.create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>
@@ -101,7 +101,7 @@ Main.add(function () {
   </tr>
 </table>
 
-<!-- <form action="" name="test" method="get">
+<form action="" name="test" method="get">
   <select name="choice" class="select-tree" onchange="Console.trace(this.value+':'+this.options[this.selectedIndex].text);">
     <option value="1">Thomas</option>
     <option value="2" >Romain</option>
@@ -117,5 +117,5 @@ Main.add(function () {
     </optgroup>
   </select>
   <input type="text" value="bah" name="bih" />
-</form>-->
+</form>
 

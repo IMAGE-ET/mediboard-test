@@ -16,7 +16,7 @@ $product_id          = mbGetValueFromGetOrSession('product_id');
 $category_id         = mbGetValueFromGetOrSession('category_id');
 
 // Loads the stock in function of the stock ID or the product ID
-$stock = new CProductStock();
+$stock = new CProductStockGroup();
 
 // If stock_id has been provided, we load the associated product
 if ($stock_id) {
@@ -48,6 +48,6 @@ $smarty->assign('stock',           $stock);
 $smarty->assign('category_id',     $category_id);
 $smarty->assign('list_categories', $list_categories);
 
-$smarty->display('vw_idx_stock.tpl');
+$smarty->display('vw_idx_stock_group.tpl');
 
 ?>
