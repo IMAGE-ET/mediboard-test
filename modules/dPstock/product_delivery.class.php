@@ -45,8 +45,8 @@ class CProductDelivery extends CMbObject {
       'quantity'          => 'notNull num',
       'code'              => 'str maxLength|32',
       'service_id'        => 'notNull ref class|CService',
-      '_date_min'         => 'dateTime',
-      '_date_max'         => 'dateTime',
+      '_date_min'         => 'notNull dateTime',
+      '_date_max'         => 'notNull dateTime',
     ));
   }
 
