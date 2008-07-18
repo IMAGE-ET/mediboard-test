@@ -582,6 +582,25 @@ class CPatient extends CMbObject {
     }
     return $nbMois;
   }
+  
+  /**
+   * Calcul l'âge du patient en semaines
+   */
+  function evalAgeSemaines($date = null){
+    $jours = evalAgeJours($date);
+    return intval($jours/7);
+  }
+  
+  /**
+   * Calcul l'âge du patient en jours
+   */
+  function evalAgeJours($date = null){
+    $date = $date ? $date : mbDate();
+    if ($this->naissance == "0000-00-00" || !$this->naissance) {
+      return 0;
+    }
+    return mbDaysRelative($this->naissance, $date);
+  }
       
   function updateDBFields() {
   	parent::updateDBFields();
