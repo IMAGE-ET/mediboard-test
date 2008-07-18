@@ -53,8 +53,16 @@ class CPrisePosologie extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["administration"] = "CAdministration prise_id";
+    return $backRefs;
+  }
+  
+ 
   function loadRefsFwd() {
     parent::loadRefsFwd();
 
@@ -155,12 +163,70 @@ class CPrisePosologie extends CMbMetaObject {
   	  $tabDates[] = $date_temp;
     }
     
-    
     if(in_array($date, $tabDates)){
     	return true;
     } 
     return false;
   } 
+  
+  
+  function calculQuantitePrise($borne_min, $borne_max){
+  	$nb_jours = mbDaysRelative($borne_min, $borne_max);
+  	
+  	
+  	// Cas d'une posologie de type moment (unite de prise: jour)
+  	if($this->moment_unitaire_id && !$this->nb_tous_les){
+    	$quantite = $this->quantite * $nb_jours;	
+    }
+    // Cas "Fois par" (avec unite_prise en jour)
+    if($this->nb_fois && $this->unite_fois){
+    	$quantite = $this->quantite * $nb_jours * $this->nb_fois;
+    }
+    // Cas "Tous les" ...
+    
+    
+    @$this->_ref_object->_quantites[$this->unite_prise] += $quantite;
+  }
+  
+  
+  // Chargement des administrations liées à l'object et à l'unite de prise
+  function loadRefsAdministrationsByUnite(){
+    $administration = new CAdministration();
+ 	  $where = array();
+ 	  $where["object_id"] = " = '$this->object_id'";
+ 	  $where["object_class"] = " = '$this->object_class'";
+    $where["unite_prise"] = " = '$this->unite_prise'";
+    $where["prise_id"] = "IS NULL";
+ 	  $this->_ref_administrations = $administration->loadList($where);
+  }
+  
+  
+  /*
+   * CanDelete
+   */
+  function canDeleteEx() {
+    if($msg = parent::canDeleteEx()) {
+      return $msg;
+    }
+  	
+  	$this->completeField("unite_prise");
+  	
+  	$administration = new CAdministration();
+  	$where = array();
+  	$where["object_id"] = " = '$this->object_id'";
+  	$where["object_class"] = " = '$this->object_class'";
+  	// Pas d'unite de prise de stockée dans le cas d'un element
+  	if($this->unite_prise){
+  	  $where["unite_prise"] = " = '$this->unite_prise'";
+  	}
+  	$where["prise_id"] = "IS NULL";
+  	$nb_administrations = $administration->countList($where);
+  	
+  	if($nb_administrations){
+  		return "$nb_administrations administration(s) liée(s) à cette prise";
+  	}
+  }
+
 }
   
 ?>

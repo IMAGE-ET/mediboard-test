@@ -291,4 +291,6 @@ $locales['CPrescriptionLineMedicament.jour_decalage_fin.S'] = 'S';
 $locales['CPrescriptionLineElement.jour_decalage_fin.I'] = 'I';
 $locales['CPrescriptionLineElement.jour_decalage_fin.S'] = 'S';
 $locales['config-dPprescription-CMomentUnitaire-principaux'] = '';
+$locales['CPrisePosologie-quantite'] = '';
+$locales['CPrisePosologie-quantite-desc'] = '';
 ?>

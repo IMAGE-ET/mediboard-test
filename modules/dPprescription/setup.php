@@ -680,7 +680,44 @@ class CSetupdPprescription extends CSetup {
 	          ADD `decalage_line_fin` INT (11),
         	  ADD `time_fin` TIME;";
     $this->addQuery($sql); 
-    $this->mod_version = "0.47";
+    
+    $this->makeRevision("0.47");
+    $sql = "CREATE TABLE `moment_complexe` (
+							`moment_complexe_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+							`code_moment_id` INT (11) NOT NULL,
+							`visible` ENUM ('0','1') DEFAULT '0'
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $this->makeRevision("0.48");
+    $sql = "CREATE TABLE `administration` (
+							`administration_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+          	  `administrateur_id` INT (11) UNSIGNED NOT NULL,
+							`dateTime` DATETIME,
+							`quantite` FLOAT,
+							`unite_prise` TEXT,
+							`commentaire` TEXT,
+							`object_id` INT (11) UNSIGNED NOT NULL,
+							`object_class` ENUM ('CPrescriptionLineMedicament','CPrescriptionLineElement') NOT NULL
+						) TYPE=MYISAM;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `administration` 
+						ADD INDEX (`dateTime`),
+	          ADD INDEX (`administrateur_id`),
+						ADD INDEX (`object_id`);";
+    $this->addQuery($sql);
+
+    $this->makeRevision("0.49");
+    $sql = "ALTER TABLE `administration` 
+	          ADD `prise_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `administration` 
+	          ADD INDEX (`prise_id`);";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.50";
   }  
 }
 

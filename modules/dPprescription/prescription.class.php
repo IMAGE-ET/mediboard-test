@@ -550,7 +550,9 @@ class CPrescription extends CMbObject {
 			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
 			// Stockage du nombre de ligne de medicaments
 		  if(!@array_key_exists($key_tab, $lines[$_line->_id])){
-			  @$tab_count++;
+		    if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
+		  	  @$tab_count++;
+		  	}
 			}
 			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
 				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
@@ -575,13 +577,24 @@ class CPrescription extends CMbObject {
   }
   
   // Generation du plan de soin sous forme de tableau
-  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element=""){
-    // Parcours des lignes
+  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element="", &$administrations=""){
+
+
+  	// Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){
     	if(count($lines_cat)){
     	foreach($lines_cat as &$_line_med){
     		// Si la ligne est prescrite pour la date donnée
         if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle)) || (!$_line_med->_fin_reelle && $_line_med->_fin_reelle <= $date && $date >= $_line_med->debut)){
+        	
+          // Chargement des administrations
+          if(is_array($administrations)){
+						$_line_med->loadRefsAdministrations($date);
+						foreach($_line_med->_ref_administrations as $_administration){
+							$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
+							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure] += $_administration->quantite;
+						}		
+          }		
         	if(!$_line_med->_ref_prises){
         	  $_line_med->loadRefsPrises();
         	}
@@ -595,10 +608,19 @@ class CPrescription extends CMbObject {
 						continue;
 					}
 					$this->calculPrisesSoin($date, $_line_med, $lines_med, $list_prises_med, $all_lines_med, $intitule_prise_med, $nb_produit_by_cat["med"], $prises_med);
-    	  }
+    	  
+					
+					if(is_array($administrations)){
+						if(@array_key_exists("aucune_prise", $administrations[$_line_med->_id])){
+							$lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
+							 @$nb_produit_by_cat["med"]++;
+						}
+					}
+        }
       }
-    }
-   }
+    }	  	 
+  } 
+   
 	 // Parcours des elements
 	 foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
 	   foreach($elements_chap as $name_cat => $elements_cat){
@@ -606,6 +628,15 @@ class CPrescription extends CMbObject {
 		 	  foreach($_elements as &$_line_element){
 		  	  	
 		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+		      	
+			      // Chargement des administrations
+			      if(is_array($administrations)){
+							$_line_element->loadRefsAdministrations($date);
+							foreach($_line_element->_ref_administrations as $_administration){
+								$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
+								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure] += $_administration->quantite;
+							}			
+			      }
 		      	if(!$_line_element->_ref_prises){
 		          $_line_element->loadRefsPrises();
 		      	}
@@ -619,12 +650,19 @@ class CPrescription extends CMbObject {
 						 continue;
 						}  
 						$this->calculPrisesSoin($date, $_line_element, $lines_element[$name_chap][$name_cat], $list_prises_element, $all_lines_element[$name_chap][$name_cat], $intitule_prise_element, $nb_produit_by_cat[$name_cat], $prises_element);
-		  		}
+
+						if(is_array($administrations)){
+							if(@array_key_exists("aucune_prise", $administrations[$name_chap][$name_cat][$_line_element->_id])){
+							  $lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+							   @$nb_produit_by_cat[$name_cat]++;
+						  }
+						}
+		      }
 		  	}
 		  }
 	  }	  
-   }
-  }
+   } 					  	
+ }
 }
 
 ?>

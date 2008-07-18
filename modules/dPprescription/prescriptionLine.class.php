@@ -51,6 +51,7 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_log_signee     = null;
   var $_ref_log_date_arret = null;
   var $_ref_prises         = null;
+  var $_ref_administrations = null;
   
 
   function getSpecs() {
@@ -149,8 +150,19 @@ class CPrescriptionLine extends CMbObject {
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
     $backRefs["prise_posologie"] = "CPrisePosologie object_id";
+    $backRefs["administration"] = "CAdministration object_id";
     $backRefs["parent_line"] = "$this->_class_name child_id";
     return $backRefs;
+  }
+  
+  
+  function loadRefsAdministrations($date){
+	  $administration = new CAdministration();
+  	$where = array();
+  	$where["object_id"] = " = '$this->_id'";
+  	$where["object_class"] = " = '$this->_class_name'";
+  	$where["dateTime"] = "LIKE '$date%'";
+  	$this->_ref_administrations = $administration->loadList($where);
   }
   
   /*

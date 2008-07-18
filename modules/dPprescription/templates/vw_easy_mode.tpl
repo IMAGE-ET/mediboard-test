@@ -49,6 +49,11 @@ function resetModeEasy(){
   var oFormToken = document.add_med_element;
   oFormToken.token_med.value = '';
   oFormToken.token_elt.value = '';
+  
+  $$('input.valeur').each( function(input) {
+	   input.value = '';
+	})
+	 
 }
 
 function submitAllElements(){
@@ -107,6 +112,7 @@ function submitAllElements(){
     oForm.unite_tous_les.value = oFormTousLes.unite_tous_les.value;
     oForm.quantite.value = oFormTousLes.quantite.value;
     oForm.moment_unitaire_id.value = oFormTousLes.moment_unitaire_id.value;
+    oForm.decalage_prise.value = oFormTousLes.decalage_prise.value;
   }
   submitFormAjax(oForm,'systemMsg');
   resetModeEasy();
@@ -187,20 +193,21 @@ Main.add( function(){
 			  <input type="hidden" name="debut" value="" />
 			  <input type="hidden" name="duree" value="" />
 			  <input type="hidden" name="unite_duree" value="jour" />
-			  <input type="hidden" name="quantite" value="" />
-			  <input type="hidden" name="nb_fois" value="" />
-			  <input type="hidden" name="unite_fois" value="" />
-			  <input type="hidden" name="moment_unitaire_id" value="" />
-			  <input type="hidden" name="nb_tous_les" value="" />
-			  <input type="hidden" name="unite_tous_les" value="" />
+			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
+			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
 			  <input type="hidden" name="decalage_line" value="" />
 			  <input type="hidden" name="jour_decalage" value="" />
 			  <input type="hidden" name="time_debut" value="" />
 			  <input type="hidden" name="jour_decalage_fin" value="" />
 			  <input type="hidden" name="decalage_line_fin" value="" />
 			  <input type="hidden" name="time_fin" value="" />
-			  <input type="hidden" name="mode_protocole" value="{{$mode_protocole}}" />
-			  <input type="hidden" name="mode_pharma" value="{{$mode_pharma}}" />
+			  <input class="valeur" type="hidden" name="quantite" value="" />
+			  <input class="valeur" type="hidden" name="nb_fois" value="" />
+			  <input class="valeur" type="hidden" name="unite_fois" value="" />
+			  <input class="valeur" type="hidden" name="moment_unitaire_id" value="" />
+			  <input class="valeur" type="hidden" name="nb_tous_les" value="" />
+			  <input class="valeur" type="hidden" name="unite_tous_les" value="" />
+			  <input class="valeur" type="hidden" name="decalage_prise" value="" />
 			  <button type="button" 
 			          class="submit" 
 			          onclick="submitAllElements();">Ajouter les éléments à la prescription</button>

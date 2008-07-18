@@ -101,7 +101,7 @@ ul {
 		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
 		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
 			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($line_id, $list_prises_med.$date)}}
+			      {{if array_key_exists($line_id, $list_prises_med.$date) && array_key_exists($unite_prise, $list_prises_med.$date.$line_id)}}
 					    {{assign var=prise_line value=$list_prises_med.$date.$line_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}
@@ -154,7 +154,7 @@ ul {
 		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
 		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
 			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($element_id, $list_prises_element.$date)}}
+			      {{if array_key_exists($element_id, $list_prises_element.$date) && array_key_exists($unite_prise, $list_prises_element.$date.$element_id)}}
 					    {{assign var=prise_line value=$list_prises_element.$date.$element_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}

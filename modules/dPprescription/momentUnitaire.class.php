@@ -64,6 +64,10 @@ class CMomentUnitaire extends CMbObject {
   	$moment = new CMomentUnitaire();
     $tabMoment = $moment->loadList();
     
+    $moment_complexe = new CMomentComplexe();
+    $moment_complexe->visible = 1;
+    $moments_complexe = $moment_complexe->loadMatchingList();
+    
     foreach($tabMoment as &$moment){
       if($moment->principal){
       	$moments["Principaux"][] = $moment;
@@ -72,6 +76,9 @@ class CMomentUnitaire extends CMbObject {
           $moments[$moment->type_moment][] = $moment;
         }
       }
+    }
+    foreach($moments_complexe as &$_moment_complexe){
+    	$moments["Complexes"][] = $_moment_complexe;
     }
     return $moments;
   }

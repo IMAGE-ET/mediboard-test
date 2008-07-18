@@ -96,6 +96,59 @@ class CBcbProduit extends CBcbObject {
      }   
   }
   
+  
+  function loadConditionnement(){
+  	// Chargement du nombre de produit dans la presentation
+  	$ds = CSQLDataSource::get("bcb");
+    $query = "SELECT * FROM `IDENT_PRODUITS` WHERE `CODE_CIP` = '$this->code_cip';";
+  	$conditionnement = reset($ds->loadList($query));
+  	$this->nb_unite_presentation = $conditionnement["NB_UNITE_DE_PRESENTATION"];
+  	
+  	// Libelle de la presentation
+  	$code_unite_presentation = $conditionnement['CODE_UNITE_DE_PRESENTATION'];
+  	$query = "SELECT * FROM `IDENT_UNITES_DE_PRESENTATION` WHERE `CODE_UNITE_DE_PRESENTATION` = '$code_unite_presentation';";
+  	$presentation = reset($ds->loadList($query));
+  	$this->libelle_unite_presentation = $presentation["LIBELLE_UNITE_DE_PRESENTATION_PLURIEL"];
+  	
+  	// Dosages
+  	$this->dosages = array();
+  	$this->loadDosage($conditionnement["DOSAGEUNITE1"],$conditionnement["DOSAGEQTE1"]);
+  	$this->loadDosage($conditionnement["DOSAGEUNITE2"],$conditionnement["DOSAGEQTE2"]);
+  	$this->loadDosage($conditionnement["DOSAGEUNITE3"],$conditionnement["DOSAGEQTE3"]);	
+  	
+  	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE1"], $conditionnement["CODE_UNITE_DE_CONTENANCE1"], $conditionnement["NB_UP1"]);
+  	$this->loadRapportUnitePrise($conditionnement["CODE_UNITE_DE_PRISE2"], $conditionnement["CODE_UNITE_DE_CONTENANCE2"], $conditionnement["NB_UP2"]);
+  	
+  	$this->nb_presentation = ($conditionnement["NB_PRESENTATION"]) ? $conditionnement["NB_PRESENTATION"] : "1";  	
+
+    $this->loadLibelleConditionnement($conditionnement["CODE_CONDITIONNEMENT"]);    
+  }
+ 
+  function loadLibelleConditionnement($code_conditionnement){
+  	$ds = CSQLDataSource::get("bcb");
+  	$query = "SELECT LIBELLE_CONDITIONNEMENT_PLURIEL FROM `IDENT_CONDITIONNEMENTS` WHERE `CODE_CONDITIONNEMENT` = '$code_conditionnement';";
+    $this->libelle_conditionnement = $ds->loadResult($query);
+  }
+  
+  function loadRapportUnitePrise($code_unite_prise, $code_unite_contenance, $nb_up){
+  	$ds = CSQLDataSource::get("bcb");
+    $query = "SELECT LIBELLE_UNITE_DE_PRISE_PLURIEL FROM `POSO_UNITES_PRISE` WHERE `CODE_UNITE_DE_PRISE` = '$code_unite_prise';";
+    $unite_prise = $ds->loadResult($query);
+    $query = "SELECT LIBELLE_UNITE_DE_CONTENANCE FROM `IDENT_UNITES_DE_CONTENANCE` WHERE `CODE_UNITE_DE_CONTENANCE` = '$code_unite_contenance';";
+    $unite_contenance = $ds->loadResult($query);
+    $this->rapport_unite_prise[$unite_prise][$unite_contenance] = $nb_up;
+  }
+  
+  function loadDosage($dosage_unite, $dosage_nb){
+   $ds = CSQLDataSource::get("bcb");
+   if($dosage_unite){
+	  	$query = "SELECT UNITE FROM `IDENT_UNITES_DE_DOSAGE` WHERE `CODE_UNITE` = '$dosage_unite';";
+	  	$unite = $ds->loadResult($query);
+	  	$this->dosages[] = array("nb_dosage" => $dosage_nb, "unite_dosage" => $unite);
+  	}
+  }
+  
+  
   // Permet de savoir si le produit est un générique 
   function getGenerique(){
     $this->_generique = $this->distObj->IsGenerique($this->code_cip);

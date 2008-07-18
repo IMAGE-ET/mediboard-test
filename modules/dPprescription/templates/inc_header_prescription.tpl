@@ -55,18 +55,23 @@ submitProtocole = function(){
 <table class="form">
   <tr>
     <th class="title" colspan="3">
-    <form name="moment_unitaire" style="display: none">
-	    <select name="moment_unitaire_id" style="width: 150px">  
+    <form name="moment_unitaire">
+	    <select name="moment_unitaire_id" style="width: 150px; display: none;">  
 	      <option value="">&mdash; Sélection du moment</option>
 		    {{foreach from=$moments key=type_moment item=_moments}}
 		    <optgroup label="{{$type_moment}}">
 		    {{foreach from=$_moments item=moment}}
-		    <option value="{{$moment->_id}}">{{$moment->_view}}</option>
+		    {{if $type_moment == "Complexes"}}
+		      <option value="complexe-{{$moment->code_moment_id}}">{{$moment->_view}}</option>
+		    {{else}}
+		      <option value="unitaire-{{$moment->_id}}">{{$moment->_view}}</option>
+		    {{/if}}
 		    {{/foreach}}
 		    </optgroup>
 		    {{/foreach}}
 	    </select>
 	  </form>
+
       <!-- Selection du praticien prescripteur de la ligne -->
 			{{if !$is_praticien && !$mode_protocole && $prescription->_can_add_line}}
        <div style="float: right">

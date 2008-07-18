@@ -33,6 +33,13 @@ $prises_element = array();
 $lines_element = array();
 $list_prises_element = array();
 $nb_produit_by_cat = array();
+$administrations = array();
+
+
+$all_lines_med="";
+$all_lines_element="";
+$intitule_prise_med="";
+$intitule_prise_element="";
 
 // Chargement des categories
 // Chargement des categories pour chaque chapitre
@@ -55,7 +62,8 @@ if($prescription->_id){
 	  	  
 
 	// Calcul du plan de soin pour la journée $date
-	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, $nb_produit_by_cat);
+	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, 
+	$nb_produit_by_cat, $all_lines_med, $all_lines_element, $intitule_prise_med,$intitule_prise_element,$administrations);
 }	
 
 // Génération du tableau d'heures
@@ -83,6 +91,7 @@ $smarty->assign("prises_element"     , $prises_element);
 $smarty->assign("lines_element"      , $lines_element);
 $smarty->assign("nb_produit_by_cat"  , $nb_produit_by_cat);
 $smarty->assign("categories"         , $categories);
+$smarty->assign("administrations"    , $administrations);
 
 $smarty->display("inc_vw_dossier_soins.tpl");
 

@@ -16,6 +16,10 @@ $code_moment_id = mbGetValueFromGetOrSession("code_moment_id");
 $moment = new CBcbMoment();
 $moment->load($code_moment_id);
 
+$moment_complexe = new CMomentComplexe();
+$moment_complexe->code_moment_id = $moment->code_moment_id;
+$moment_complexe->loadMatchingObject();
+
 // Chargement des moments unitaires
 $moments_unitaires = CMomentUnitaire::loadAllMoments();
 
@@ -32,7 +36,7 @@ $smarty->assign("association", new CAssociationMoment());
 $smarty->assign("moments", $moments);
 $smarty->assign("moments_unitaires", $moments_unitaires);
 $smarty->assign("moment", $moment);
-
+$smarty->assign("moment_complexe", $moment_complexe);
 $smarty->display("vw_edit_associations_moments.tpl");
 
 ?>

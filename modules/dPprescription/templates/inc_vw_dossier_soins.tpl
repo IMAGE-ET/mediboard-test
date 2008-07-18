@@ -19,12 +19,17 @@ addCibleTransmission = function(object_class, object_id, view) {
   oForm.text.focus();
 }
 
-administrationMed = function(oDiv, value, text) {
-  quantite = prompt('Veuillez indiquer la quantité ('+text+')',value);
-  if(quantite) {
-    oDiv.innerHTML = quantite;
-    oDiv.style.backgroundColor = '#8f8';
-  }
+
+addAdministration = function(line_id, quantite, key_tab, object_class, date, heure){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "httpreq_add_administration");
+  url.addParam("line_id",  line_id);
+  url.addParam("quantite", quantite);
+  url.addParam("key_tab", key_tab);
+  url.addParam("object_class", object_class);
+  url.addParam("date", date);
+  url.addParam("heure", heure);
+  url.popup(400,300,"Administration");
 }
 
 </script>
@@ -70,7 +75,7 @@ administrationMed = function(oDiv, value, text) {
   {{if $lines_med|@count}}
     {{foreach from=$lines_med item=_line name="foreach_med"}}
 		  {{foreach from=$_line key=unite_prise item=line name="foreach_line"}}
-				  <tr>
+				  <tr id="line_CPrescriptionLineMedicament_{{$line->_id}}">
 				    {{if $smarty.foreach.foreach_med.first && $smarty.foreach.foreach_line.first}}
 				    <th rowspan="{{$nb_produit_by_cat.med}}">Medicaments</th>
 				    {{/if}}
@@ -81,7 +86,7 @@ administrationMed = function(oDiv, value, text) {
 				    </td>
 				    <td class="text">   
 					    {{assign var=line_id value=$line->_id}}
-					    {{if array_key_exists($line_id, $prises_med)}}
+					    {{if array_key_exists($line_id, $prises_med) && array_key_exists($unite_prise,$prises_med.$line_id)}}
 						    <ul>
 						    {{foreach from=$prises_med.$line_id.$unite_prise item=prise name=prises}}
 						      <li>
@@ -105,25 +110,41 @@ administrationMed = function(oDiv, value, text) {
 						      {{else}}
 						        {{assign var=quantite value="-"}}
 						      {{/if}}  
-					        <div style="border: 1px dotted #000;
+					        <div style="border: 1px dotted #000; min-height: 15px;
 					                    {{if $quantite > 0}}
+					                      {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise) && 
+					                           $administrations.$line_id.$unite_prise.$_hour >= $quantite}}
+					                        background-color: #cfc
+					                    {{else}}
 					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}
 					                        background-color: #88f
 					                      {{else}}
 					                        background-color: #f88
 					                      {{/if}}
+					                    {{/if}}
+					                    
 					                    {{/if}}"
-					        onclick="administrationMed(this, '{{$quantite}}', '{{$line->_view}}');">
-				            {{$quantite}}
+					        onclick="addAdministration({{$line_id}}, '{{$quantite}}', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
+					        
+					        
+					        {{if $quantite!="-" || @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
+				           {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
+				             {{$administrations.$line_id.$unite_prise.$_hour}}
+					         {{else}}
+					         0
+					         {{/if}} / {{$quantite}}
+					        {{/if}}
 				          </div>
 				        </td>
 					     {{/foreach}}
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
 					     <td style="text-align: center">
-					       <div style="border: 1px dotted #000;"
-					        onclick="administrationMed(this, '0', '{{$line->_view}}');">
-					         -
+					       <div style="border: 1px dotted #000; min-height: 15px;"
+					        onclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
+       	           {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
+				             {{$administrations.$line_id.$unite_prise.$_hour}} / -
+				           {{/if}}
 					       </div>
 					     </td>
 					     {{/foreach}}
@@ -155,7 +176,7 @@ administrationMed = function(oDiv, value, text) {
       {{foreach from=$elements_cat item=_element name="foreach_cat"}}
         {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}
       
-        <tr>
+        <tr id="line_CPrescriptionLineElement_{{$element->_id}}">
 		      {{if $smarty.foreach.foreach_elt.first && $smarty.foreach.foreach_cat.first}}
 		        <th rowspan="{{$nb_produit_by_cat.$name_cat}}">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{$categorie->nom}}</th>
 		      {{/if}}
@@ -168,7 +189,7 @@ administrationMed = function(oDiv, value, text) {
    	      
    	      <td class="text">
 				    {{assign var=element_id value=$element->_id}}
-				    {{if @array_key_exists($element_id, $prises_element)}}
+				    {{if @array_key_exists($element_id, $prises_element) && @array_key_exists($unite_prise, $prises_element.$element_id)}}
 				      <ul>
 					    {{foreach from=$prises_element.$element_id.$unite_prise item=prise name=prises}}
 					    <li>
@@ -193,25 +214,43 @@ administrationMed = function(oDiv, value, text) {
 						        {{assign var=quantite value="-"}}
 						      {{/if}}  
 						      
-					        <div style="border: 1px dotted #000;
+					        <div style="border: 1px dotted #000; min-height:15px;
 					                    {{if $quantite > 0}}
+					                      {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise) && 
+					                           $administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour >= $quantite}}
+					                        background-color: #cfc
+					                    {{else}}
 					                      {{if $date == $now|date_format:"%Y-%m-%d" && $_hour > $now|date_format:"%H"}}
 					                        background-color: #88f
 					                      {{else}}
 					                        background-color: #f88
 					                      {{/if}}
+					                    {{/if}}
+					                    
 					                    {{/if}}"
-					        onclick="administrationMed(this, '{{$quantite}}', '{{$line->_view}}');">
-					          {{$quantite}}
+					        onclick="addAdministration('{{$element_id}}', '{{$quantite}}', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
+					         
+					          {{if $quantite!="-" || @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
+					          
+					         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
+				             {{$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour}}
+				             {{else}}
+				             0
+				             {{/if}}
+				             / {{$quantite}}
+				           {{/if}}
 					        </div>
 				        </td>
 					     {{/foreach}}
 					   {{else}}
 					     {{foreach from=$tabHours item=_hour}}
 					     <td style="text-align: center">
-					       <div style="border: 1px dotted #000;"
-					        onclick="administrationMed(this, '0', '{{$line->_view}}');">
-					         -
+					       <div style="border: 1px dotted #000; min-height: 15px;"
+					        onclick="addAdministration('{{$element_id}}', '', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
+					         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
+					           {{$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour}} / -
+				           {{/if}}
+				            
 					       </div>
 					     </td>
 					     {{/foreach}}
@@ -233,7 +272,7 @@ administrationMed = function(oDiv, value, text) {
   {{/foreach}}
 </table>
 {{else}}
-<div class="big-info">
-  Ce dossier ne possède pas de prescription de séjour
-</div>
+	<div class="big-info">
+	  Ce dossier ne possède pas de prescription de séjour
+	</div>
 {{/if}}

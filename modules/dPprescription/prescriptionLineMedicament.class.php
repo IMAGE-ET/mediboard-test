@@ -62,6 +62,9 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_can_modify_dates                   = null;
   var $_can_modify_comment                 = null;
   
+  
+  var $_quantites = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription_line_medicament';
@@ -241,6 +244,25 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   		}
   	}
   }
+  
+  /*
+   * Calcul des quantite de medicaments à fournir pour les dates indiquées
+   */
+  function calculQuantiteLine($date_min, $date_max){	
+  	$borne_min = ($this->_debut_reel > $date_min) ? $this->_debut_reel : $date_min;
+  	$borne_max = ($this->_fin_reelle < $date_max) ? $this->_fin_reelle : $date_max;
+  	
+  	if(!$this->_ref_prises){
+  		$this->loadRefsPrises();
+  	}
+  	foreach($this->_ref_prises as &$_prise){
+  	  $_prise->calculQuantitePrise($borne_min, $borne_max);
+  	}
+  	if(count($this->_ref_prises) < 1){
+  		$this->_quantites = array();
+  	}
+  }
+  
   
   function loadRefsFwd() {
   	parent::loadRefsFwd();

@@ -9,7 +9,7 @@ function viewMomentsUnitaires(code_moment_id){
 }
 
 
-function submitAssociation(oForm){
+function submitMomentComplexe(oForm){
   submitFormAjax(oForm, 'systemMsg', {
     onComplete:
       function(){

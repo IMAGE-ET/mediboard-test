@@ -1,15 +1,38 @@
 {{if $moment->code_moment_id}}
+<table class="form" style="position: fixed; width: 200px;">
+  <tr>
+    <th class="category" colspan="2">Moment complexe: "{{$moment->libelle_moment}}"</th>
+  </tr>     
+  <tr>
+    <td>
+      <table>
+			  <tr>
+          <td>
+	          Affichage dans la liste des moments 
+	        </td>
+	        <td>  
+			      <form name="editMomentComplexe-{{$moment_complexe->code_moment_id}}">
+			        <input type="hidden" name="dosql" value="do_moment_complexe_aed" />
+			        <input type="hidden" name="del" value="0" />
+			        <input type="hidden" name="m" value="dPprescription" />
+			        <input type="hidden" name="moment_complexe_id" value="{{$moment_complexe->_id}}" /> <!-- Charger l'id du moment complexe -->
+			        <input type="hidden" name="code_moment_id" value="{{$moment_complexe->code_moment_id}}" />
+			        {{mb_field object=$moment_complexe field=visible typeEnum="checkbox" onchange="submitMomentComplexe(this.form);"}}      
+			      </form>
+	        </td>
+        </tr>
+	    </table>
+	  </td>
+	</tr>
+	<tr>
+	  <td>          
       <form name="addMomentUnitaire" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPprescription" />
       <input type="hidden" name="dosql" value="do_association_moment_aed" />
 	    <input type="hidden" name="code_moment_id" value="{{$moment->code_moment_id}}" />
 	    <input type="hidden" name="association_moment_id" value="" />
       <input type="hidden" name="del" value="0" />
-      <table class="form" style="position: fixed; width: 150px;">
-        <tr>
-          <th class="category" colspan="2">Gestion des moments unitaires de: "{{$moment->libelle_moment}}"</th>
-        </tr>
-        
+      <table class="tbl">
         {{if !$moment->_ref_associations}}
         <tr>
           <td colspan="2">
@@ -63,13 +86,16 @@
 			  </tr>
 			  <tr>
 			    <td colspan="2" style="text-align: center">
-			      <button type="button" class="submit" onclick="submitAssociation(this.form);">Ajouter ce moment unitaire</button>
+			      <button type="button" class="submit" onclick="submitMomentComplexe(this.form);">Ajouter ce moment unitaire</button>
 			    </td>
 			  </tr>			  
        </table>
      </form>
-    {{else}}
-      <div class="big-info">
-        Veuillez sélectionner un moment afin d'éditer ces moments unitaires
-      </div>
-    {{/if}}
+    </td>
+   </tr>
+ </table>
+{{else}}
+  <div class="big-info">
+    Veuillez sélectionner un moment afin d'éditer ces moments unitaires
+  </div>
+{{/if}}
