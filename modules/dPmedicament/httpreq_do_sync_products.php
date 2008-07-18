@@ -37,7 +37,7 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
   
   // Sauvegarde du nouveau produit correspondant au médicament
   if (!($msg = $product->store())) {
-    $stock = new CProductStock();
+    $stock = new CProductStockGroup();
     $stock->product_id = $product->_id;
     $stock->group_id = $g;
     $stock->quantity = 1;
