@@ -20,6 +20,14 @@
 	  url.addParam("blood_salvage_id",blood_salvage_id);
 	  url.redirect();
   }
+  
+  function printRapport() {
+	  var url = new Url;
+	  url.setModuleAction("bloodSalvage", "print_rapport"); 
+	  url.addElement(document.rapport.blood_salvage_id);
+	  url.popup(700, 500, "printRapport");
+	  return;
+  }
 </script>
 
 <table class="form">
@@ -49,6 +57,14 @@
         <option>Non prélevé</option>
         <option>Prélevé et transmis</option>
       </select>
+    </td>
+    </tr>
+    <tr>
+    <td style="text-align:center;" colspan="4">
+    <form name="rapport" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
+    <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
+    <button class="print" type="button" onclick="printRapport()">{{tr}}CBloodSalvage.report{{/tr}}</button>
+    </form>
     </td>
   </tr>
 </table>

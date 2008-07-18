@@ -27,7 +27,7 @@ function submitNurse(oForm){
 			  <input type="hidden" name="realise" value="0" />
 			 
 			  <select name="personnel_id" onchange="submitNurse(this.form)">
-			    <option value="">&mdash;{{tr}}CBloodSalvage-nurse_sspi{{/tr}}</option>
+			    <option value="">&mdash; {{tr}}CBloodSalvage-nurse_sspi.all{{/tr}}</option>
 			    {{foreach from=$list_nurse_sspi item="nurse"}}
 			    <option value="{{$nurse->_id}}">{{$nurse->_ref_user->_view}}</option>
 			    {{/foreach}}

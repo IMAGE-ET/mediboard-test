@@ -48,7 +48,7 @@ class CBloodSalvage extends CMbObject {
 	//Refs
 	var $_ref_operation = null;
 	var $_ref_cell_saver = null;
-	var $_ref_incident_file = null;
+	var $_ref_incident_type = null;
   var $_ref_patient = null;
 	
 	function getSpec() {
@@ -101,6 +101,9 @@ class CBloodSalvage extends CMbObject {
     
     $this->_ref_cell_saver = new CCellSaver();
     $this->_ref_cell_saver->load($this->cell_saver_id);
+    
+    $this->_ref_incident_type = new CTypeEi();
+    $this->_ref_incident_type->load($this->type_ei_id);
   }
   
   function loadRefPlageOp() {
@@ -162,12 +165,11 @@ class CBloodSalvage extends CMbObject {
     }
 	}
 	
-
-	
 	/*
 	 * fillTemplate permet de donner des champs qui seront disponibles dans FCK Editor
 	 */
 	function fillLimitedTemplate(&$template) {
+		$template->addProperty("Cell Saver - Appareil utilisé",$this->_ref_cell_saver->_view);
 		$template->addProperty("Cell Saver - Début de récupération",$this->recuperation_start);
 		$template->addProperty("Cell Saver - Fin de récupération",$this->recuperation_end);
 		$template->addProperty("Cell Saver - Début de retransfusion",$this->transfusion_start);
@@ -177,6 +179,11 @@ class CBloodSalvage extends CMbObject {
     $template->addProperty("Cell Saver - Volume retransfusé",$this->transfused_volume);   		
 		$template->addProperty("Cell Saver - Hémoglobine de la poche",$this->hgb_pocket);		
 		$template->addProperty("Cell Saver - Hémoglobine patient post-transfusion",$this->hgb_patient);		
+		if($this->_ref_incident_type->_view) {
+			$template->addProperty("Cell Saver - Incident transfusionnel",$this->_ref_incident_type->_view);    
+		} else {
+	  	$template->addProperty("Cell Saver - Incident transfusionnel","Aucun incident signalé");    
+		}
 	}
 }
 ?>
