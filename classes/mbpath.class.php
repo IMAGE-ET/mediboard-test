@@ -120,10 +120,6 @@ class CMbPath {
       $nbFiles = count($archive->listContent());
       $extract = $archive->extract(array("add_path" => $destinationDir));
       break;
-      
-      default : 
-      $return = false;
-      break;
     }
     
     if (!$extract) {
