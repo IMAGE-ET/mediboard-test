@@ -195,25 +195,25 @@ $dPconfig["dPplanningOp"]["CSejour"] = array (
 
 $dPconfig["dPsalleOp"] = array(
   "COperation" => array(
-	  "mode"        => "0",
-	  "modif_salle" => "0",
-	),
+    "mode"        => "0",
+    "modif_salle" => "0",
+  ),
   "CActeCCAM" => array(
-	  "contraste"       => "0",
-	  "alerte_asso"     => "1",
-	  "tarif"           => "0",
-	  "signature"       => "0",
-	  "openline"        => "0",
-	  "modifs_compacts" => "0",
-	  "commentaire"     => "1",
-	),
-	"CDossierMedical" => array (
+    "contraste"       => "0",
+    "alerte_asso"     => "1",
+    "tarif"           => "0",
+    "signature"       => "0",
+    "openline"        => "0",
+    "modifs_compacts" => "0",
+    "commentaire"     => "1",
+  ),
+  "CDossierMedical" => array (
     "DAS" => "0",
   ),
   "max_add_minutes" => "10",
   "max_sub_minutes" => "30",
 );
-	 
+   
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
 $dPconfig["dPcabinet"]["addictions"] = 0;
@@ -249,27 +249,27 @@ $dPconfig["graph_svg"] = "non";
 
 
 $dPconfig["dPpatients"] = array (
-	"CPatient" => array (
-	  "tag_ipp" => "",
-	  "date_naissance" => "0",
-	  "merge_only_admin" => "0",
-	),
+  "CPatient" => array (
+    "tag_ipp" => "",
+    "date_naissance" => "0",
+    "merge_only_admin" => "0",
+  ),
   
-	"CAntecedent" => array (
-	  "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
-	),
+  "CAntecedent" => array (
+    "types" => "med|alle|trans|obst|chir|fam|anesth|gyn",
+  ),
 
-	"CTraitement" => array (
-	  "enabled" => "1",
-	),
-	
-	"intermax" => array (
+  "CTraitement" => array (
+    "enabled" => "1",
+  ),
+  
+  "intermax" => array (
     "auto_watch" => "0",
   ),
   
   "CDossierMedical" => array (
     "diags_static_cim" => "1"
-	),
+  ),
 );
 
 $dPconfig["dPsante400"] = array (
@@ -305,6 +305,9 @@ $dPconfig["dPmedicament"] = array (
   ),
   "CBcbClasseTherapeutique" => array (
     "niveauBCB" => "2",
+  ),
+  "CBcbProduitLivretTherapeutique" => array(
+    "product_category_id" => null
   ),
 );
 
