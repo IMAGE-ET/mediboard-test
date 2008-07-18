@@ -68,7 +68,7 @@ class CBcbPosologie extends CBcbObject {
  
   // Chargement d'une posologie a partir d'un code CIP
   function load($cip, $numPoso = null){
-    mbTrace($numPoso, $cip);
+    //mbTrace($numPoso, $cip);
     /*
     // Test des fonctions intégrées BCB
     $posologie &= $this->distObj;
