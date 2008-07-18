@@ -199,7 +199,19 @@ class CSetupdPstock extends CSetup {
       ADD INDEX (`date`);';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.7';
+    $this->makeRevision('0.7');
+    $sql = 'ALTER TABLE `product_delivery` 
+      CHANGE `date` `date_dispensation` DATETIME NOT NULL';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_delivery` 
+      ADD `date_delivery` DATETIME NULL AFTER `date_dispensation`,
+      DROP `status`,
+      CHANGE `service_id` `service_id` INT( 11 ) UNSIGNED NOT NULL,
+      ADD INDEX (`date_delivery`);';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.8';
   }
 }
 

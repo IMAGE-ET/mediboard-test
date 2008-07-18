@@ -1,33 +1,39 @@
-<table class="tbl">
-  <tr>
-    <th class="title" colspan="5">Dispensation des médicaments</th>
-  </tr>
-	<tr>
-	  <th>Quantité de la prise</th>
-	  <th>Quantité calculée (unité de référence)</th>
-	  <th>Nb de boites</th>
-	  <th>Dispensation</th>
-	</tr>
-	{{foreach from=$dispensations key=code_cip item=unites}}
-	  {{assign var=medicament value=$medicaments.$code_cip}}
-	  <tr>
-	    <th colspan="5">{{$medicament->libelle}}</th>
-	  </tr>
-	  <tbody class="hoverable">
-	  {{foreach from=$unites key=unite_prise item=quantite name="dispensation"}}
-		  <tr>
-		    <td>{{$quantite}} {{$unite_prise}}</td>
-		    <td>
-		    {{if array_key_exists($code_cip,$quantites_traduites) && array_key_exists($unite_prise, $quantites_traduites.$code_cip)}}
-		      {{$quantites_traduites.$code_cip.$unite_prise}} {{$medicament->libelle_unite_presentation}}
-		    {{/if}}
-		    </td>
-	      {{if $smarty.foreach.dispensation.first}}
-	      <td rowspan="{{$unites|@count}}" style="text-align: center">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</td>
-		    <td rowspan="{{$unites|@count}}" style="text-align: center"><button type="button" class="submit">Dispenser</button></td>
-		    {{/if}}
-		  </tr>
-	  {{/foreach}}
-	  </tbody>
-	{{/foreach}}
-</table>
+{{mb_include_script module=dPstock script=filter}}
+
+<script type="text/javascript">
+Main.add(function () {
+  filterFields = ["service_id"];
+  filter = new Filter("filter-dispensations", "{{$m}}", "httpreq_vw_dispensations_list", "list-dispensations", filterFields);
+  filter.submit();
+});
+
+function refreshDeliveriesList() {
+  url = new Url;
+  url.setModuleAction("pharmacie","httpreq_vw_dispensations_list");
+  url.requestUpdate("list-dispensations", { waitingText: null } );
+}
+</script>
+
+<form name="filter-dispensations" action="?" method="post" onsubmit="return filter.submit('keywords');">
+  <input type="hidden" name="m" value="{{$m}}" />
+  <table class="form">
+    <tr>
+      <th>{{mb_title object=$delivrance field=_date_min}}</th>
+      <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-dispensations register=1}}</td>
+      <th>{{mb_title object=$delivrance field=_date_max}}</th>
+      <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-dispensations register=1}}</td>
+      <td>
+        <select name="service_id" onchange="filter.submit();">
+        {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+        {{/foreach}}
+        </select>
+  
+        <button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="filter.empty();">{{tr}}Reset{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
+</form>
+
+<div id="list-dispensations"></div>

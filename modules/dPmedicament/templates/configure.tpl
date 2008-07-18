@@ -12,6 +12,15 @@ function startUncaseBCBTables(){
   url.requestUpdate("uncase_bcb_tables");
 }
 
+function startSyncProducts(category_id){
+  if (category_id) {
+    var url = new Url;
+    url.setModuleAction("dPmedicament", "httpreq_do_sync_products");
+    url.addParam("category_id", category_id);
+    url.requestUpdate("do_sync_products");
+  }
+}
+
 function importCSV(){
   var url = new Url;
   url.setModuleAction("dPmedicament", "vw_bcb_import");
@@ -96,9 +105,9 @@ function importCSV(){
     <td><button class="tick" onclick="startUncaseBCBTables()">Mettre les tables BCB en majuscules</button></td>
     <td id="uncase_bcb_tables">
       <div class="big-info">
-      	Cette action n'est pas nécessaire (et ne fonctionnera pas) sur les serveurs MS Windows.
-      	<br />
-      	Ces derniers ne sont pas sensibles à la casse pour les noms de table 
+        Cette action n'est pas nécessaire (et ne fonctionnera pas) sur les serveurs MS Windows.
+        <br />
+        Ces derniers ne sont pas sensibles à la casse pour les noms de table 
       </div>
     </td>
   </tr>
@@ -121,5 +130,21 @@ function importCSV(){
   <tr>
     <td><button class="tick" onclick="importCSV()" >Importer un fichier CSV de livrets thérapeutiques</button></td>
     <td></td>
+  </tr>
+  <tr>
+    <td>
+      <form name="sync-products" action="" onsubmit="return false">
+        {{assign var="class" value="CBcbProduitLivretTherapeutique"}}
+        {{assign var="var" value="product_category_id"}}
+        <select name="{{$m}}[{{$class}}][{{$var}}]">
+          <option value="">{{tr}}CProductCategory.select{{/tr}}</option>
+          {{foreach from=$categories_list item=category}}
+            <option value="{{$category->_id}}">{{$category->name}}</option>
+          {{/foreach}}
+        </select>
+        <button class="tick" onclick="startSyncProducts($V(this.form['{{$m}}[{{$class}}][{{$var}}]']))" >Synchroniser les produits du stock</button>
+      </form>
+    </td>
+    <td id="do_sync_products"></td>
   </tr>
 </table>

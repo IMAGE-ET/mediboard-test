@@ -11,7 +11,7 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-$order_by = 'date DESC';
+$order_by = 'date_dispensation DESC';
 $delivery = new CProductDelivery();
 
 $list_latest_deliveries = $delivery->loadList(null, $order_by, 20);

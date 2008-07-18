@@ -7,8 +7,8 @@
 * @author Fabien Ménager
 */
 
-if (isset($_POST['date']) && ($_POST['date'] == 'now')) {
-	$_POST['date'] = mbDateTime();
+if (isset($_POST['date_dispensation']) && ($_POST['date_dispensation'] == 'now')) {
+	$_POST['date_dispensation'] = mbDateTime();
 }
 
 $do = new CDoObjectAddEdit('CProductDelivery', 'delivery_id');

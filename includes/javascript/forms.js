@@ -1112,3 +1112,15 @@ Element.addMethods('select', {
     select.observe('click', tree.display);
   }
 });
+
+// Form getter
+function getForm(form, prepare) {
+  prepare = prepare || true;
+	if (Object.isString() && document.forms[form]) {
+	  if (prepare) prepareForm(document.forms[form]);
+	  return $(document.forms[form]);
+	} else {
+	  return form;
+	}
+	return null;
+}

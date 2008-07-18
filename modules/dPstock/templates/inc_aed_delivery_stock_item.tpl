@@ -14,8 +14,8 @@
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="service_id" value="" />
-      <input type="hidden" name="date" value="now" />
-      <input type="hidden" name="_do_delivery" value="1" />
+      <input type="hidden" name="date_dispensation" value="now" />
+      <input type="hidden" name="_do_deliver" value="1" />
       <input type="hidden" name="status" value="done" />
       
       {{assign var=id value=$stock->_id}} 

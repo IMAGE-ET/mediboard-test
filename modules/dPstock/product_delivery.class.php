@@ -13,16 +13,19 @@ class CProductDelivery extends CMbObject {
 
   // DB Fields
   var $stock_id      = null;
-  var $date          = null;
+  var $date_dispensation = null;
+  var $date_delivery = null;
   var $quantity      = null;
   var $code          = null; // Lot number, lapsing date
   var $service_id    = null;
-  var $status        = null;
 
   // Object References
   //    Single
   var $_ref_stock    = null;
   var $_ref_service  = null;
+  
+  var $_date_min     = null;
+  var $_date_max     = null;
   
   var $_do_deliver = null;
   
@@ -36,12 +39,14 @@ class CProductDelivery extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     return array_merge($specs, array (
-      'stock_id'     => 'notNull ref class|CProductStockGroup',
-      'date'         => 'notNull dateTime',
-      'quantity'     => 'notNull num',
-      'code'         => 'str maxLength|32',
-      'service_id'   => 'ref class|CService',
-      'status'       => 'notNull enum list|planned|done',
+      'stock_id'          => 'notNull ref class|CProductStockGroup',
+      'date_dispensation' => 'notNull dateTime',
+      'date_delivery'     => 'dateTime',
+      'quantity'          => 'notNull num',
+      'code'              => 'str maxLength|32',
+      'service_id'        => 'notNull ref class|CService',
+      '_date_min'         => 'dateTime',
+      '_date_max'         => 'dateTime',
     ));
   }
 
@@ -55,7 +60,12 @@ class CProductDelivery extends CMbObject {
     if ($msg = $this->check()) {
       return $msg;
     }
-    if (!$this->_id && $this->_do_deliver && $this->date) {
+    
+    if (!$this->_id) {
+      $this->date_dispensation = mbDateTime();
+    }
+    
+    if ($this->_do_deliver) {
       $this->_ref_stock = new CProductStockGroup();
       $this->_ref_stock->load($this->stock_id);
       $this->_ref_stock->quantity -= $this->quantity;
@@ -70,13 +80,11 @@ class CProductDelivery extends CMbObject {
       } else if ($this->quantity > 0) {
         $stock_service->quantity = $this->quantity;
       }
-      $this->status = 'done';
       
       if ($msg = $stock_service->store()) {
         return $msg;
       }
-    } else if (!$this->_id) {
-      $this->status = 'planned';
+      $this->date_delivery = mbDateTime();
     }
 
     return parent::store();
@@ -86,7 +94,7 @@ class CProductDelivery extends CMbObject {
   	if ($msg = parent::check()) {
   	  return $msg;
   	}
-  	if (!$this->_id && $this->_do_deliver && $this->date) {
+  	if (!$this->_id && $this->_do_deliver && $this->date_delivery) {
 	  	$count = $this->quantity;
 	  	if (!$this->_ref_stock) {
 	  		$this->loadRefsFwd();

@@ -2,9 +2,9 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "service_id"];
-  deliveriesFilter = new Filter("filter-deliveries", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
-  deliveriesFilter.submit();
+  filterFields = ["service_id"];
+  filter = new Filter("filter-delivrance", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
+  filter.submit();
 });
 
 function refreshDeliveriesList() {
@@ -14,25 +14,26 @@ function refreshDeliveriesList() {
 }
 </script>
 
-<form name="filter-deliveries" action="?" method="post" onsubmit="return deliveriesFilter.submit('keywords');">
+<form name="filter-delivrance" action="?" method="post" onsubmit="return filter.submit('keywords');">
   <input type="hidden" name="m" value="{{$m}}" />
+  <table class="form">
+    <tr>
+      <th>{{mb_title object=$delivrance field=_date_min}}</th>
+      <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-delivrance register=1}}</td>
+      <th>{{mb_title object=$delivrance field=_date_max}}</th>
+      <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-delivrance register=1}}</td>
+      <td>
+        <select name="service_id" onchange="filter.submit();">
+        {{foreach from=$list_services item=curr_service}}
+          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
+        {{/foreach}}
+        </select>
   
-  <select name="category_id" onchange="deliveriesFilter.submit();">
-    <option value="0" >&mdash; {{tr}}CProductCategory.all{{/tr}} &mdash;</option>
-  {{foreach from=$list_categories item=curr_category}}
-    <option value="{{$curr_category->category_id}}" {{if $category_id==$curr_category->_id}}selected="selected"{{/if}}>{{$curr_category->name}}</option>
-  {{/foreach}}
-  </select>
-  
-  <select name="service_id" onchange="deliveriesFilter.submit();">
-    <option value="0" >&mdash; {{tr}}CService.all{{/tr}} &mdash;</option>
-  {{foreach from=$list_services item=curr_service}}
-    <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
-  {{/foreach}}
-  </select>
-  
-  <button type="button" class="search" onclick="deliveriesFilter.submit();">{{tr}}Filter{{/tr}}</button>
-  <button type="button" class="cancel notext" onclick="deliveriesFilter.empty();">{{tr}}Reset{{/tr}}</button>
+        <button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button>
+        <button type="button" class="cancel notext" onclick="filter.empty();">{{tr}}Reset{{/tr}}</button>
+      </td>
+    </tr>
+  </table>
 </form>
 
 <div id="list-deliveries"></div>
