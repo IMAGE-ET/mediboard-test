@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["service_id"];
+  filterFields = ["service_id", "_date_min", "_date_max"];
   filter = new Filter("filter-delivrance", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
   filter.submit();
 });
@@ -23,14 +23,13 @@ function refreshDeliveriesList() {
       <th>{{mb_title object=$delivrance field=_date_max}}</th>
       <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-delivrance register=1}}</td>
       <td>
-        <select name="service_id" onchange="filter.submit();">
+        <select name="service_id">
         {{foreach from=$list_services item=curr_service}}
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
         </select>
   
         <button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button>
-        <button type="button" class="cancel notext" onclick="filter.empty();">{{tr}}Reset{{/tr}}</button>
       </td>
     </tr>
   </table>

@@ -725,17 +725,21 @@ var ObjectTooltip = Class.create({
   
   load: function() {
     var eTarget = $(this.sTarget);
-    var url = new Url;
-    url.setModuleAction(this.mode.module, this.mode.action);
-    $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
-    if(!this.oOptions.popup) {
-      url.requestUpdate(eTarget, {onComplete: this.reposition.bind(this)});
-      return;
-    }
-
-    if(this.oOptions.popup) {
-      url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
-      return;
+    if (this.oOptions.mode != 'dom') {
+      var url = new Url;
+      url.setModuleAction(this.mode.module, this.mode.action);
+      $H(this.oOptions.params).each( function(pair) { url.addParam(pair.key,pair.value); } );
+      
+      if(!this.oOptions.popup) {
+        url.requestUpdate(eTarget, {onComplete: this.reposition.bind(this)});
+        return;
+      } else {
+        url.popup(this.mode.width, this.mode.height, this.oOptions.mode);
+        return;
+      }
+    } else {
+      var elt = $(this.oOptions.params.element);
+      eTarget.update(elt.show());
     }
   },
   
@@ -746,6 +750,7 @@ var ObjectTooltip = Class.create({
     switch (this.oOptions.mode) {
       case "objectView":
       case "translate":
+      case "dom":
       case "objectViewHistory":
         eTrigger.observe("mouseout", this.hide.bind(this));
         break;
@@ -810,7 +815,10 @@ Object.extend(ObjectTooltip, {
       module: "system",
       action: "httpreq_vw_translation",
       sClass: "tooltip"
-    }
+    },
+    dom: {
+      sClass: "tooltip"
+    },
   },
   create: function(eTrigger, oOptions) {
     if (!eTrigger.oTooltip) {

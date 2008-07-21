@@ -9,8 +9,14 @@
   </tr>
   {{foreach from=$list_deliveries item=curr_delivery}}
   <tr>
-    <td>{{$curr_delivery->_ref_stock->_view}}</td>
-    <td class="date">{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+    <td>
+      <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
+      <div class="tooltip-trigger" 
+           onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_delivery->_id}}'} })">
+        {{$curr_delivery->_ref_stock->_view}}
+      </div>
+    </td>
+    <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
     <td>{{mb_value object=$curr_delivery field=quantity}}</td>
     <td>{{mb_value object=$curr_delivery field=code}}</td>
     <td>{{mb_value object=$curr_delivery->_ref_service field=_view}}</td>

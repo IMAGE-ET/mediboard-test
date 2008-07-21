@@ -22,16 +22,16 @@ $date_max = mbGetValueFromGetOrSession('_date_max', $date_max);
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();
 $ljoin = array();
-$ljoin["sejour"] = "prescription.object_id = sejour.sejour_id";
-$ljoin["affectation"] = "sejour.sejour_id = affectation.sejour_id";
-$ljoin["lit"] = "affectation.lit_id = lit.lit_id";
-$ljoin["chambre"] = "lit.chambre_id = chambre.chambre_id";
-$ljoin["service"] = "chambre.service_id = service.service_id";
-$where["prescription.type"] = " = 'sejour'";
+$ljoin['sejour'] = 'prescription.object_id = sejour.sejour_id';
+$ljoin['affectation'] = 'sejour.sejour_id = affectation.sejour_id';
+$ljoin['lit'] = 'affectation.lit_id = lit.lit_id';
+$ljoin['chambre'] = 'lit.chambre_id = chambre.chambre_id';
+$ljoin['service'] = 'chambre.service_id = service.service_id';
+$where['prescription.type'] = " = 'sejour'";
 $where[] = "(sejour.entree_prevue BETWEEN '$date_min' AND '$date_max') OR 
             (sejour.sortie_prevue BETWEEN '$date_min' AND '$date_max') OR
             (sejour.entree_prevue <= '$date_min' AND sejour.sortie_prevue >= '$date_max')"; 
-$where["service.service_id"] = " = '$service_id'";
+$where['service.service_id'] = " = '$service_id'";
 
 $dispensations = array();
 $delivrances = array();
@@ -69,7 +69,7 @@ foreach($prescriptions as $_prescription){
     // Calcul de la quantite en fonction des prises
     $_line_med->calculQuantiteLine($date_min, $date_max);
     foreach($_line_med->_quantites as $unite_prise => $quantite){
-      $_unite_prise = str_replace("/kg", "", $unite_prise);
+      $_unite_prise = str_replace('/kg', '', $unite_prise);
       // Dans le cas d'un unite_prise/kg
       if($_unite_prise != $unite_prise){
         // On recupere le poids du patient pour calculer la quantite

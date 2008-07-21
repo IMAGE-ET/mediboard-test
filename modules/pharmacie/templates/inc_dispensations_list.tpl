@@ -20,7 +20,13 @@
         {{/if}}
         </td>
         {{if $smarty.foreach.dispensation.first}}
-        <td rowspan="{{$unites|@count}}" style="text-align: center">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</td>
+        <td rowspan="{{$unites|@count}}" style="text-align: center">
+          <div id="tooltip-content-{{$code_cip}}" style="display: none;">{{$code_cip}}</div>
+          <div class="tooltip-trigger" 
+               onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })">
+            {{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}
+          </div>
+        </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
         {{if array_key_exists($code_cip,$delivrances)}}
           {{assign var=delivrance value=$delivrances.$code_cip}}

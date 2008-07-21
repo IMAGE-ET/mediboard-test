@@ -10,7 +10,7 @@ $version = array (
   "patch" => 0,
   
   // Automated numbering (should be incremented at each commit)
-  "build" => 232,
+  "build" => 233,
 );
 
 $version["string"] = join($version, ".");
