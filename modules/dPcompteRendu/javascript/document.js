@@ -24,7 +24,29 @@ var Document = {
     }
     
     url.popup(700, 700, "Document");
-  }, 
+  },
+  
+  createPack: function(pack_id, object_id, target_id, target_class) {
+    if (!pack_id) {
+      return;
+    }
+    
+    url = new Url;
+    url.setModuleAction("dPcompteRendu", "edit_compte_rendu");
+    url.addParam("pack_id", pack_id);
+    url.addParam("object_id", object_id);
+ 
+    if (target_id){
+      url.addParam("target_id", target_id);
+    }
+    
+    if(target_class){
+      url.addParam("target_class", target_class);
+    }
+    
+    url.popup(700, 700, "Document");
+  
+  },
   
   edit: function(compte_rendu_id){
     var url = new Url;

@@ -48,7 +48,7 @@ table {
   hr.pagebreak {
     border: 1px dotted #aaa;
     border-width: 1px 0;
-    margin: 0 -10px;
+    margin: 2px -10px;
     background: #bbb;
     height: 5px;
   }

@@ -31,20 +31,27 @@ $object->loadRefsDocs();
 // Modèles de l'utilisateur
 $praticien = new CMediusers();
 $praticien->load(mbGetValueFromGetOrSession("praticien_id"));
-$listModelePrat = array();
-$listModeleFunc = array();
+$modelesByOwner = array();
+$packs = array();
 if ($praticien->user_id) {
-  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $praticien->user_id);
-  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $praticien->function_id);
   $modelesByOwner = CCompteRendu::loadAllModelesForPrat($praticien->_id, $object_class, "body");
+  
+  // Chargement des packs
+  $pack = new CPack();
+  $pack->object_class = $object_class;
+  $pack->chir_id = $praticien->_id;
+  $packs = $pack->loadMatchingList("nom");
 }
+
+// NETTOYER LA REDONDANCE
+
+// Packs pour l'utilisateur
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
+$smarty->assign("packs", $packs);
 $smarty->assign("praticien_id"  , $praticien->_id);
 $smarty->assign("object"        , $object);
 $smarty->assign("suffixe"       , mbGetValueFromGet("suffixe"));

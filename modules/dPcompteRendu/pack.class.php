@@ -54,17 +54,20 @@ class CPack extends CMbObject {
   
   function updateFormFields() {
     parent::updateFormFields();
+    $this->_view = $this->nom;
   	$this->_modeles = array();
     $this->_source = "";
     if($this->modeles != "") {
       $modeles = explode("|", $this->modeles);
-      foreach($modeles as $key => $value) {
+      foreach($modeles as $value) {
         $this->_modeles[$value] = new CCompteRendu;
         $this->_modeles[$value]->load($value);
-        $this->_source .= $this->_modeles[$value]->source."<br style='page-break-after:always' />";        
         if($this->_object_class == null)
           $this->_object_class = $this->_modeles[$value]->object_class;
       }
+      
+      $this->_source = implode("<hr class='pageBreak' />", CMbArray::pluck($this->_modeles, "source"));   
+      
     }
     if($this->_object_class == null)
       $this->_object_class = "COperation";

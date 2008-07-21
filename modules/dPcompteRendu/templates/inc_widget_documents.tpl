@@ -1,7 +1,7 @@
 {{* $id: $
   * @param $object CMbObject Target Object for documents
-  * @param $listModelePrat array|CCompteRendu  List of modeles bound to a user
-  * @param $listModeleFunc array|CCompteRendu  List of modeles bound to a function
+  * @param $modelesByOwner array|CCompteRendu sorted by owner
+  * @param $packs array|CPack  List of packs
   * @param $praticien_id ref|CMediuser Owner of modèles
   * @param $id_suffixe string Suffixe for id of widget
   *}}
@@ -46,6 +46,16 @@ Document.refreshList = function() {
           {{/foreach}}
         </optgroup>
         {{/foreach}}
+      </select>
+      
+      <select name="_choix_pack" onchange="Document.createPack(this.value, '{{$object->_id}}')">
+        <option value="">&mdash; Choisir un pack</option>
+        {{foreach from=$packs item=_pack}}
+          <option value="{{$_pack->_id}}">{{$_pack->_view}}</option>
+        {{foreachelse}}
+          <option value="">{{tr}}None{{/tr}}</option>
+        {{/foreach}}
+        </optgroup>
       </select>
 
 			<!-- Création via ModeleSelector -->
