@@ -10,11 +10,9 @@ function setClose(date, salle_id) {
   if(salle_id == '') {
     salle_id = form._salle_id.value;
   }
-  var plage_id = 0;
-  plage_id = $V(list);
-  var sDate = date;
   
-  if (plage_id == 0) {
+  var plage_id = $V(list);
+  if (!plage_id) {
     alert('choisissez une plage non pleine');
   	return;
   }
@@ -30,7 +28,7 @@ function setClose(date, salle_id) {
     min_entree  = form.min_veille.value;
   }
     
-  window.opener.PlageOpSelector.set(plage_id, salle_id, sDate, adm, typeHospi, hour_entree, min_entree);  
+  window.opener.PlageOpSelector.set(plage_id, salle_id, date, adm, typeHospi, hour_entree, min_entree);  
   window.close();
 }  
 
