@@ -34,17 +34,14 @@ if ($del) {
   while ($repeat--) {
     $msg = NULL;
     if ($obj->plageop_id) {
-    	
       if (!$msg = $obj->canDeleteEx()) {
         if ($msg = $obj->delete()) {
           $not_deleted++;
-        } 
-        else {
+        } else {
           $msg = "plage supprimée";
           $deleted++;
         }
-      }
-      else {
+      } else {
         $not_deleted++;
       } 
     }
@@ -70,89 +67,88 @@ if ($del) {
   //Modification
   
   if($obj->plageop_id!=0) {
-  $created = 0;
-  $updated = 0;
-  $not_created = 0;
-  $not_updated = 0;
+    $created = 0;
+    $updated = 0;
+    $not_created = 0;
+    $not_updated = 0;
 
-  while ($repeat-- > 0) {
-    $msg = null;
-    if ($obj->plageop_id) {
-      if ($msg = $obj->store()) {
-        $not_updated++;
-      } else {
-        $msg = "plage mise à jour";
-        $updated++;
+    while ($repeat-- > 0) {
+      $msg = null;
+      if ($obj->plageop_id) {
+        if ($msg = $obj->store()) {
+          $not_updated++;
+        } else {
+          $msg = "plage mise à jour";
+          $updated++;
+        }
+      } 
+    
+      $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
+    
+      for($i=1;$i<=$type_repeat;$i++){
+        $obj->becomeNext();
       }
-    } 
-    
-    $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
-    
-    for($i=1;$i<=$type_repeat;$i++){
-      $obj->becomeNext();
     }
-  }
   
-  if ($created) $header [] = "$created plage(s) créée(s)";
-  if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
-  if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
-  if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
+    if ($created) $header [] = "$created plage(s) créée(s)";
+    if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
+    if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
+    if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
   
-  $msgNo = ($not_created + $not_updated) ?
-    (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
-    UI_MSG_OK;
+    $msgNo = ($not_created + $not_updated) ?
+      (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
+      UI_MSG_OK;
   }
   // fin modification
   
   // debut creation
   else {
   
-  $created = 0;
-  $updated = 0;
-  $not_created = 0;
-  $not_updated = 0;
+    $created = 0;
+    $updated = 0;
+    $not_created = 0;
+    $not_updated = 0;
 
-  while ($repeat-- > 0) {
-    $msg = null;
-    if ($obj->plageop_id) {
-      if ($msg = $obj->store()) {
-        $not_updated++;
+    while ($repeat-- > 0) {
+      $msg = null;
+      if ($obj->plageop_id) {
+        if ($msg = $obj->store()) {
+          $not_updated++;
+        } else {
+          $msg = "plage mise à jour";
+          $updated++;
+        }
       } else {
-        $msg = "plage mise à jour";
-        $updated++;
+        if ($msg = $obj->store()) {
+          $not_created++;
+        } else {
+          $msg = "plage créée";
+          $created++;
+        }
       }
-    } else {
-      if ($msg = $obj->store()) {
-        $not_created++;
-      } else {
-        $msg = "plage créée";
-        $created++;
+    
+      $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
+    
+      for($i=1;$i<=$type_repeat;$i++){
+        $obj->becomeNext();
       }
     }
-    
-    $body_msg .= "<br />Plage du $obj->_day-$obj->_month-$obj->_year: " . $msg;
-    
-    for($i=1;$i<=$type_repeat;$i++){
-      $obj->becomeNext();
-    }
-  }
   
-  if ($created) $header [] = "$created plage(s) créée(s)";
-  if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
-  if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
-  if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
+    if ($created) $header [] = "$created plage(s) créée(s)";
+    if ($updated) $header [] = "$updated plage(s) mise(s) à jour";
+    if ($not_created) $header [] = "$not_created plage(s) non créée(s)";
+    if ($not_updated) $header [] = "$not_created plage(s) non mise(s) à jour";
   
-  $msgNo = ($not_created + $not_updated) ?
-    (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
-    UI_MSG_OK;
-  
+    $msgNo = ($not_created + $not_updated) ?
+      (($not_created + $not_updated) ? UI_MSG_ALERT : UI_MSG_ERROR) :
+      UI_MSG_OK;
   }
 }
 
 $complete_msg = implode(" - ", $header);
 if ($body_msg) {
-// Uncomment for more verbose
-// $complete_msg .= $body_msg; 
+  // Uncomment for more verbose
+  // $complete_msg .= $body_msg; 
 }
 
 if( $otherm = dPgetParam($_POST, "otherm", 0) )
@@ -160,4 +156,5 @@ if( $otherm = dPgetParam($_POST, "otherm", 0) )
 
 $AppUI->setMsg($complete_msg, $msgNo);
 $AppUI->redirect("m=$m");
+
 ?>
