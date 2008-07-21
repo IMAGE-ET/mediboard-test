@@ -6,7 +6,6 @@
 
 function pageMain() {
   regFieldCalendar("recherche", "date_debut");
-  
   var tabs = new Control.Tabs('tab-resultats');  
 }
 
@@ -170,187 +169,163 @@ function pageMain() {
 
         {{if $dossiersMed}}
         <table class="form" id="diagnostic" style="display: none;">
+          {{foreach from=$dossiersMed item=curr_dossier}}
+          {{assign var="patient" value=$curr_dossier->_ref_object}}
           <tr>
-            <td>
-              {{foreach from=$dossiersMed item=curr_dossier}}
-              {{assign var="patient" value=$curr_dossier->_ref_object}}
-              <tr>
-                <td class="text">
-                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                     {{mb_value object=$patient field="_view"}}
-                  </a>
-                </td>
-                <td class="text">
-                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                    {{mb_value object=$patient field="naissance"}}
-                  </a>
-                </td>
-                <td class="text">
-                  <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                    {{mb_value object=$patient field="adresse"}}
-                    {{mb_value object=$patient field="cp"}}
-                    {{mb_value object=$patient field="ville"}}
-                  </a>
-                </td>
-              </tr>
-              {{/foreach}} 
+            <td class="text">
+              <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                 {{mb_value object=$patient field="_view"}}
+              </a>
+            </td>
+            <td class="text">
+              <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                {{mb_value object=$patient field="naissance"}}
+              </a>
+            </td>
+            <td class="text">
+              <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+                {{mb_value object=$patient field="adresse"}}
+                {{mb_value object=$patient field="cp"}}
+                {{mb_value object=$patient field="ville"}}
+              </a>
             </td>
           </tr>
+          {{/foreach}}
         </table>
         {{/if}}
         
         {{if $traitements}}
         <table class="form" id="traitement" style="display: none;">
-         <tr>
-           <td>
-             {{foreach from=$traitements item=curr_traitement}}
-             {{assign var="patient" value=$curr_traitement->_ref_dossier_medical->_ref_object}}
-              <tr>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="_view"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="naissance"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="adresse"}}
-                  {{mb_value object=$patient field="cp"}}
-                  {{mb_value object=$patient field="ville"}}
-                </a>
-                </td>
-              </tr>
-              {{/foreach}} 
+         {{foreach from=$traitements item=curr_traitement}}
+         {{assign var="patient" value=$curr_traitement->_ref_dossier_medical->_ref_object}}
+          <tr>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="_view"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="naissance"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="adresse"}}
+              {{mb_value object=$patient field="cp"}}
+              {{mb_value object=$patient field="ville"}}
+            </a>
             </td>
           </tr>
+          {{/foreach}} 
         </table>
         {{/if}}
 
         
         {{if $antecedents}}
         <table class="form" id="antecedent" style="display: none;">
-         <tr>
-           <td>
-             {{foreach from=$antecedents item=curr_antecedent}}
-             {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
-              <tr>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="_view"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="naissance"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
-                  {{mb_value object=$patient field="adresse"}}
-                  {{mb_value object=$patient field="cp"}}
-                  {{mb_value object=$patient field="ville"}}
-                </a>
-                </td>
-              </tr>
-              {{/foreach}} 
-           </td>
-         </tr>
+         {{foreach from=$antecedents item=curr_antecedent}}
+         {{assign var="patient" value=$curr_antecedent->_ref_dossier_medical->_ref_object}}
+          <tr>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="_view"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="naissance"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$patient->_id}}">
+              {{mb_value object=$patient field="adresse"}}
+              {{mb_value object=$patient field="cp"}}
+              {{mb_value object=$patient field="ville"}}
+            </a>
+            </td>
+          </tr>
+          {{/foreach}} 
         </table>
         {{/if}}
          
         {{if $consultations && $canCabinet->read}}
         <table class="form" id="consultation" style="display: none;">
-         <tr>
-           <td>
-             {{foreach from=$consultations item=curr_consultation}}
-              <tr>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                  {{mb_value object=$curr_consultation->_ref_patient field="_view"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                  {{mb_value object=$curr_consultation->_ref_patient field="naissance"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
-                  {{mb_value object=$curr_consultation->_ref_patient field="adresse"}}
-                  {{mb_value object=$curr_consultation->_ref_patient field="cp"}}
-                  {{mb_value object=$curr_consultation->_ref_patient field="ville"}}
-                </a>
-                </td>
-              </tr>
-              {{/foreach}} 
-           </td>
-         </tr>
+         {{foreach from=$consultations item=curr_consultation}}
+          <tr>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+              {{mb_value object=$curr_consultation->_ref_patient field="_view"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+              {{mb_value object=$curr_consultation->_ref_patient field="naissance"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_consultation->_ref_patient->_id}}&consultation_id={{$curr_consultation->_id}}">
+              {{mb_value object=$curr_consultation->_ref_patient field="adresse"}}
+              {{mb_value object=$curr_consultation->_ref_patient field="cp"}}
+              {{mb_value object=$curr_consultation->_ref_patient field="ville"}}
+            </a>
+            </td>
+          </tr>
+          {{/foreach}} 
         </table>
         {{/if}}
          
           
         {{if $interventions && $canPlanningOp->read}}
         <table class="form" id="intervention" style="display: none;">
-         <tr>
-           <td>
-             {{foreach from=$interventions item=curr_intervention}}
-              <tr>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                  {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="_view"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                  {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="naissance"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
-                  {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="adresse"}}
-                  {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="cp"}}
-                  {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="ville"}}
-                </a>
-                </td>
-              </tr>
-              {{/foreach}} 
-           </td>
-         </tr>
+         {{foreach from=$interventions item=curr_intervention}}
+          <tr>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+              {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="_view"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+              {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="naissance"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_intervention->_ref_sejour->_ref_patient->_id}}&operation_id={{$curr_intervention->_id}}">
+              {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="adresse"}}
+              {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="cp"}}
+              {{mb_value object=$curr_intervention->_ref_sejour->_ref_patient field="ville"}}
+            </a>
+            </td>
+          </tr>
+          {{/foreach}} 
         </table>
         {{/if}}
           
           
         {{if $sejours && $canPlanningOp->read}}
         <table class="form" id="sejour" style="display: none;">
-         <tr>
-           <td>
-             {{foreach from=$sejours item=curr_sejour}}
-              <tr>
-                <td class="text">
-                 <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                   {{mb_value object=$curr_sejour->_ref_patient field="_view"}}
-                 </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                  {{mb_value object=$curr_sejour->_ref_patient field="naissance"}}
-                </a>
-                </td>
-                <td class="text">
-                <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
-                  {{mb_value object=$curr_sejour->_ref_patient field="adresse"}}
-                  {{mb_value object=$curr_sejour->_ref_patient field="cp"}}
-                  {{mb_value object=$curr_sejour->_ref_patient field="ville"}}
-                </a>
-                </td>
-              </tr>
-              {{/foreach}} 
-           </td>
-         </tr>
+         {{foreach from=$sejours item=curr_sejour}}
+          <tr>
+            <td class="text">
+             <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+               {{mb_value object=$curr_sejour->_ref_patient field="_view"}}
+             </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+              {{mb_value object=$curr_sejour->_ref_patient field="naissance"}}
+            </a>
+            </td>
+            <td class="text">
+            <a href="?m=dPpatients&tab=vw_full_patients&patient_id={{$curr_sejour->_ref_patient->_id}}&sejour_id={{$curr_sejour->_id}}">
+              {{mb_value object=$curr_sejour->_ref_patient field="adresse"}}
+              {{mb_value object=$curr_sejour->_ref_patient field="cp"}}
+              {{mb_value object=$curr_sejour->_ref_patient field="ville"}}
+            </a>
+            </td>
+          </tr>
+          {{/foreach}} 
         </table>
         {{/if}}
         

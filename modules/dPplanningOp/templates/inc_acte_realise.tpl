@@ -27,7 +27,7 @@
   {{if $_counter != 0}}
   <tr>
   {{/if}}
-    <td><a href="#code-{{$acte_ccam->code_acte}}" onclick="viewCCAM('{{$acte_ccam->code_acte}}');">{{$acte_ccam->code_acte}}</div></td>
+    <td><a href="#code-{{$acte_ccam->code_acte}}" onclick="viewCCAM('{{$acte_ccam->code_acte}}');">{{$acte_ccam->code_acte}}</a></td>
     <td>{{$acte_ccam->code_activite}}</td>
     <td>{{$acte_ccam->code_phase}}</td>
     <td>{{$acte_ccam->modificateurs}}</td>

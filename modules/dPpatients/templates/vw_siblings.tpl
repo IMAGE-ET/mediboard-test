@@ -49,7 +49,7 @@
     {{/foreach}}
   </tr>
   </form>
-  </body>
+  </tbody>
   <tr>
     <td>
       {{include file="inc_vw_patient.tpl"}}

@@ -45,6 +45,7 @@
 		      <th>{{mb_label object=$cell_saver field="modele"}}</th>
 		      <td>{{mb_field object=$cell_saver size=32 field="modele"}}</td>
 		    </tr>
+        <tr>
 		      <td class="button" colspan="4">
 		        {{if $cell_saver->_id}}
 		        <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>
@@ -55,7 +56,7 @@
 		        <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
 		        {{/if}}
 		      </td>
-		    </tr>        
+		    </tr>
 		  </table>
 	  </form>
   </td>

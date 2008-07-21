@@ -51,9 +51,9 @@
 </table>
 
     </td>
-    <td>
+    <td style="50%">
 
-<table class="form" style="50%">
+<table class="form">
   <tr>
     <th class="category" colspan="2">
       Employeur
@@ -99,4 +99,4 @@
 
     </td>
   </tr>
-</table
+</table>

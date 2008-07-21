@@ -101,7 +101,6 @@
 						  <li><em>Pas d'antécédents</em></li>
 						{{/if}}
 						</ul>
-						</ul>
 						<strong>Traitements</strong>
 						<ul>
 						  {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}

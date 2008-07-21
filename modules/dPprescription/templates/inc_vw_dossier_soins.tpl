@@ -41,11 +41,9 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   </tr>
 </table>
 
-</table>
+
 {{if $prescription_id}}
-
 <h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
-
 
 <table>
   <tr>

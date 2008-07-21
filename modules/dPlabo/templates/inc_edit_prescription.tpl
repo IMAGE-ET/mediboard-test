@@ -29,10 +29,11 @@
     <th>{{mb_label object=$prescription field="patient_id"}}</th>
     <td>{{mb_field object=$prescription field="patient_id" hidden="hidden"}}{{$prescription->_ref_patient->_view}}</td>
   </tr>
+  <tr>
     <th>{{mb_label object=$prescription field="date"}}</th>
     <td class="date">{{mb_field object=$prescription field="date" form="addEditPrescription"}}</td>
   </tr>
-  </tr>
+  <tr>
     <th>{{mb_label object=$prescription field="praticien_id"}}</th>
     <td>
       <select name="praticien_id">
@@ -44,7 +45,6 @@
       </select>
     </td>
   </tr>
-  <br />
   <tr>
     <th class="title" colspan="2">Autres Informations</th>
   </tr>

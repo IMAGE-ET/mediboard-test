@@ -64,28 +64,29 @@ function pageMain() {
         
         {{foreach from=$listMenu item=curr_repas}}
           {{assign var="nbrows" value=0}}
+          
           {{foreach from=$plats->_enums.type item=curr_typePlat}}
             {{if $curr_repas.obj->$curr_typePlat}}
               {{assign var="nbrows" value=$nbrows+1}}
             {{/if}}
           {{/foreach}}
+          
           {{if $nbrows}} 
           <tr>
-
-          <td rowspan="{{$nbrows}}">{{$curr_repas.total}}</td>
-          <td class="text" rowspan="{{$nbrows}}">{{$curr_repas.obj->_view}}</td>
-          {{assign var="nbligne" value=0}}
-          {{foreach name="plat" from=$plats->_enums.type item=curr_typePlat}}
-            {{if $curr_repas.obj->$curr_typePlat}}
-              {{if $nbligne!=0}}<tr>{{/if}}
-              <td class="text">{{$curr_repas.obj->$curr_typePlat}}</td>
-              <td>{{$curr_repas.detail.$curr_typePlat}}</td>
-              {{if $nbligne==0 && !($nbrows!=$nbligne)}}</tr>{{/if}}
-              
-              {{assign var="nbligne" value=1}}
-            {{/if}}
-          {{/foreach}}
-        </tr>
+            <td rowspan="{{$nbrows}}">{{$curr_repas.total}}</td>
+            <td class="text" rowspan="{{$nbrows}}">{{$curr_repas.obj->_view}}</td>
+            {{assign var="nbligne" value=0}}
+            {{foreach name="plat" from=$plats->_enums.type item=curr_typePlat}}
+              {{if $curr_repas.obj->$curr_typePlat}}
+                {{if $nbligne!=0}}<tr>{{/if}}
+                <td class="text">{{$curr_repas.obj->$curr_typePlat}}</td>
+                <td>{{$curr_repas.detail.$curr_typePlat}}</td>
+                {{if $nbligne==0 && !($nbrows!=$nbligne)}}</tr>{{/if}}
+                
+                {{assign var="nbligne" value=1}}
+              {{/if}}
+            {{/foreach}}
+          </tr>
         {{/if}}
         {{/foreach}}
         

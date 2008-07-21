@@ -54,6 +54,7 @@
           <th>{{mb_label object=$type_ei field="desc"}}</th>
           <td>{{mb_field object=$type_ei field="desc"}}</td>
         </tr>
+        <tr>
           <td class="button" colspan="4">
             {{if $type_ei->_id}}
             <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

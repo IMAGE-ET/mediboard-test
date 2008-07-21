@@ -33,7 +33,7 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <th>Praticien</td>
+          <th>Praticien</th>
           <td>
             <select name="prat_personnel">
               <option value="">&mdash; Veuillez choisir un praticien</option>
