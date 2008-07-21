@@ -69,6 +69,17 @@ class CSetup {
       $table = trim($matches[1], "`");
       $this->addTable($table);
     }
+    // Table name changed ?
+    if (preg_match("/RENAME\s+TABLE\s+(\S+)\s+TO\s+(\S+)/i", $query, $matches)) {
+      $tableFrom = trim($matches[1], "`");
+      $tableTo   = trim($matches[2], "`");
+      $this->renameTable($tableFrom, $tableTo);
+    }
+    // Table removed ?
+    if (preg_match("/DROP\s+TABLE\s+(\S+)/i", $query, $matches)) {
+      $table = trim($matches[1], "`");
+      $this->dropTable($table);
+    }
     
     $this->queries[current($this->revisions)][] = $query;
   }
@@ -80,8 +91,22 @@ class CSetup {
     if (in_array($table, $this->tables)) {
       trigger_error("Table '$table' already exists", E_USER_ERROR);
     }
-
     $this->tables[] = $table;
+  }
+
+  /**
+   * Remove a table in the module
+   */
+  function dropTable($table) {
+    CMbArray::removeValue($table, $this->tables);
+  }
+
+  /**
+   * Change a table name in the module
+   */
+  function renameTable($tableFrom, $tableTo) {
+    $this->dropTable($tableFrom);
+    $this->addTable($tableTo);
   }
     
   /**

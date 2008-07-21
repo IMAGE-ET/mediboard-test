@@ -289,7 +289,7 @@ window.opener.ExamDialog.reload('{{$exam_audio->consultation_id}}');
             {{html_options options=$exam_audio->_aides.remarques.no_enum}}
           </select>
           <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CExamAudio', this.form.remarques)">{{tr}}New{{/tr}}</button><br />
-          <textarea name="remarques" rows="4" cols="1">{{$exam_audio->remarques}}</textarea>
+          <textarea name="remarques" rows="2">{{$exam_audio->remarques}}</textarea>
         </td>
       </tr>
       <tr>
