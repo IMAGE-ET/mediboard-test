@@ -19,8 +19,8 @@ $exam_audio->load($examaudio_id);
 
 CAppUI::requireModuleFile($m, "inc_graph_audio_tonal");
 
-${"graph_tonal_".$side}->Stroke("tmp/graphtmp.png");
-$map_tonal = ${"graph_tonal_".$side}->GetHTMLImageMap("graph_tonal_".$side);
+AudiogrammeTonal::${$side}->Stroke("tmp/graphtmp.png");
+$map_tonal = AudiogrammeTonal::${$side}->GetHTMLImageMap("graph_tonal_".$side);
 
 // Création du template
 $smarty = new CSmartyDP();
