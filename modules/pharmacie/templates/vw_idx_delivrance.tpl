@@ -2,19 +2,19 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["service_id", "_date_min", "_date_max"];
+  filterFields = ["service_id", "_date_min", "_date_max", "delivered"];
   filter = new Filter("filter-delivrance", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
   filter.submit();
 });
 
-function refreshDeliveriesList() {
+function refreshDeliveriesList(delivered) {
   url = new Url;
-  url.setModuleAction("pharmacie","httpreq_vw_deliveries_list");
+  url.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
   url.requestUpdate("list-deliveries", { waitingText: null } );
 }
 </script>
 
-<form name="filter-delivrance" action="?" method="post" onsubmit="return filter.submit('keywords');">
+<form name="filter-delivrance" action="?" method="post" onsubmit="return ">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>
@@ -28,9 +28,12 @@ function refreshDeliveriesList() {
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
         </select>
-  
-        <button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button>
       </td>
+      <td>
+        <input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
+        <input name="delivered" type="radio" value="true" /> délivrées</label>
+      </td>
+      <td><button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>
 </form>

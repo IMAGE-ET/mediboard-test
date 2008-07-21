@@ -12,12 +12,11 @@ global $g;
 $service_id = mbGetValueFromGetOrSession('service_id');
 
 // Calcul de date_max et date_min
-$date = mbDate();
-$date_min = "$date 00:00:00";
-$date_max = "$date 23:59:00";
+$date_min = mbGetValueFromGetOrSession('_date_min');
+$date_max = mbGetValueFromGetOrSession('_date_max');
 
-$date_min = mbGetValueFromGetOrSession('_date_min', $date_min);
-$date_max = mbGetValueFromGetOrSession('_date_max', $date_max);
+$_date_min = $date_min;
+$_date_max = $date_max;
 
 // Recherche des prescriptions dont les dates de sejours correspondent
 $where = array();
@@ -40,6 +39,7 @@ $medicaments = array();
 $stocks = array();
 $quantites_traduites = array();
 $quantites = array();
+$done = array();
 
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
@@ -145,8 +145,28 @@ foreach($quantites as $code => &$_quantite){
   if(strstr($_quantite, '.')){
     $_quantite = ceil($_quantite);
   }
+
+  $where = array();
+  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'";
+  $where['product.code'] = "= '$code'";
+  $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+
+  $ljoin = array();
+  $ljoin['product_stock_group'] = 'product_delivery.stock_id = product_stock_group.stock_id';
+  $ljoin['product'] = "product_stock_group.product_id = product.product_id";
+  
+  $deliv = new CProductDelivery();
+  $list_done = $deliv->loadList($where, null, null, null, $ljoin);
+  $done[$code] = array();
+  
+  if (count($list_done)) $done[$code][0] = 0;
+  foreach ($list_done as $d) {
+    $done[$code][] = $d;
+    $done[$code][0] += $d->quantity;
+  }
+  
   if(isset($delivrances[$code])) {
-    $delivrances[$code]->quantity = $quantites[$code];
+    $delivrances[$code]->quantity = max($quantites[$code] - (isset($done[$code][0]) ? $done[$code][0] : 0), 0);
   }
 }
 
@@ -155,6 +175,7 @@ $smarty = new CSmartyDP();
 $smarty->assign('dispensations', $dispensations);
 $smarty->assign('delivrances', $delivrances);
 $smarty->assign('medicaments'  , $medicaments);
+$smarty->assign('done'  , $done);
 $smarty->assign('quantites', $quantites);
 $smarty->assign('service_id', $service_id);
 $smarty->assign('quantites_traduites', $quantites_traduites);

@@ -13,7 +13,7 @@ function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   oForm = document.forms[this.sForm];
   this.aFields.each (function (f) {
     if (oForm[f]) {
-      $(oForm[f]).observe('change', element.resetRange.bindAsEventListener(element));
+      $A($(oForm[f])).each(function (e) {e.observe('change', element.resetRange.bindAsEventListener(element));});
     }
   });
 }

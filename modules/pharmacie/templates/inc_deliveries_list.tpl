@@ -25,9 +25,13 @@
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
+      {{if $curr_delivery->date_delivery}}
+      <input type="hidden" name="_do_undeliver" value="1" />
+      <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: refreshDeliveriesList})">Annuler la délivrance</button>
+      {{else}}
       <input type="hidden" name="_do_deliver" value="1" />
-      
       <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: refreshDeliveriesList})">Effectuer</button>
+      {{/if}}
     </form>
     </td>
   </tr>

@@ -27,7 +27,8 @@ class CProductDelivery extends CMbObject {
   var $_date_min     = null;
   var $_date_max     = null;
   
-  var $_do_deliver = null;
+  var $_do_deliver   = null;
+  var $_do_undeliver = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -65,9 +66,8 @@ class CProductDelivery extends CMbObject {
       $this->date_dispensation = mbDateTime();
     }
     
-    if ($this->_do_deliver) {
-      $this->_ref_stock = new CProductStockGroup();
-      $this->_ref_stock->load($this->stock_id);
+    if ($this->_do_deliver && !$this->date_delivery) {
+      $this->loadRefsFwd();
       $this->_ref_stock->quantity -= $this->quantity;
       $this->_ref_stock->store();
       
@@ -85,6 +85,25 @@ class CProductDelivery extends CMbObject {
         return $msg;
       }
       $this->date_delivery = mbDateTime();
+    } 
+    
+    else if ($this->_do_undeliver) {
+      $this->loadRefsFwd();
+      $this->_ref_stock->quantity += $this->quantity;
+      $this->_ref_stock->store();
+      
+      $stock_service = new CProductStockService();
+      $stock_service->product_id = $this->_ref_stock->product_id;
+      $stock_service->service_id = $this->service_id;
+      
+      if ($stock_service->loadMatchingObject()) {
+        $stock_service->quantity -= $this->quantity;
+      }
+      
+      if ($msg = $stock_service->store()) {
+        return $msg;
+      }
+      $this->date_delivery = '';
     }
 
     return parent::store();
@@ -94,12 +113,11 @@ class CProductDelivery extends CMbObject {
   	if ($msg = parent::check()) {
   	  return $msg;
   	}
-  	if (!$this->_id && $this->_do_deliver && $this->date_delivery) {
-	  	$count = $this->quantity;
+  	if ($this->_do_deliver && !$this->date_delivery) {
 	  	if (!$this->_ref_stock) {
 	  		$this->loadRefsFwd();
 	  	}
-	    if ($this->_ref_stock->quantity < $count) {
+	    if ($this->_ref_stock->quantity < $this->quantity) {
         return 'Erreur : Impossible de délivrer ce nombre d\'articles';
 	    }
   	}

@@ -197,7 +197,7 @@ function importCSV(){
         <select name="{{$m}}[{{$class}}][{{$var}}]">
           <option value="">{{tr}}CProductCategory.select{{/tr}}</option>
           {{foreach from=$categories_list item=category}}
-            <option value="{{$category->_id}}">{{$category->name}}</option>
+            <option value="{{$category->_id}}" {{if $category->_id==$dPconfig.$m.$class.$var}}selected="selected"{{/if}}>{{$category->name}}</option>
           {{/foreach}}
         </select>
         <button class="tick" onclick="startSyncProducts($V(this.form['{{$m}}[{{$class}}][{{$var}}]']))" >Synchroniser les produits du stock</button>
