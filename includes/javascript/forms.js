@@ -89,8 +89,8 @@ function $V (element, value, fire) {
      tag == 'textarea')
     ) {
 
-    // If the element is a selectable one, we check if it's checked
-    var oldValue = (type == 'checkbox' || type == 'radio') ? element.checked : $F(element);
+    // If the element is a checkbox, we check if it's checked
+    var oldValue = (type == 'checkbox') ? element.checked : $F(element);
 
     // If a value is provided
     if (!Object.isUndefined(value) && value != oldValue) {
