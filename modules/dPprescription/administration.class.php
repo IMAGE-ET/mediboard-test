@@ -56,11 +56,20 @@ class CAdministration extends CMbMetaObject {
   	if(mbTime($this->dateTime) == "23:59:00"){
   		$this->_heure = "24";
   	}
+  	
+  	
+  	$this->_unite_prise = $this->unite_prise != "aucune_prise" ? $this->unite_prise : ""; // Parfois modifié par loadRefPrise
   }
   
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefAdministrateur();
+  }
+  
+  function loadRefPrise(){
+  	$this->_ref_prise = new CPrisePosologie();
+  	$this->_ref_prise->load($this->prise_id);
+  	$this->_unite_prise = $this->_ref_prise->_unite;
   }
   
   function loadRefAdministrateur(){

@@ -3026,3 +3026,29 @@ ul.select-tree li.drop {
   background-position: center right;
   background-repeat: no-repeat;
 }
+
+.administration {
+	border: 1px dotted #000;
+	min-height: 15px;
+}
+
+.a_administrer {
+background-color: #88f;
+}
+
+.administration_partielle {
+  background-color: #ff0;	
+}
+
+.administre {
+  background-color: #cfc
+}
+
+.non_administre {
+	background-color: #f88;
+}
+
+.administration_annulee {
+	background-color: #F00;
+}
+}

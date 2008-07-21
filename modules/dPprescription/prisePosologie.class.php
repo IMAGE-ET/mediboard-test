@@ -26,6 +26,8 @@ class CPrisePosologie extends CMbMetaObject {
   var $decalage_prise        = null;   // decalage de la prise J + $decalage (par defaut 0)
   var $unite_prise           = null;
   
+  var $_type                 = null; // Type de prise
+  var $_unite                = null; // Unite de la prise
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -65,9 +67,7 @@ class CPrisePosologie extends CMbMetaObject {
  
   function loadRefsFwd() {
     parent::loadRefsFwd();
-
     $this->loadRefMoment();
-    
     $this->_view = $this->quantite;
 
     if($this->object_class == "CPrescriptionLineElement"){
@@ -78,14 +78,18 @@ class CPrisePosologie extends CMbMetaObject {
     
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
+      $this->_type = "moment";
+      $this->_unite = $this->unite_prise;
     }
     
     if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
+      $this->_type = "fois_par";
     }
     
     if($this->unite_fois && !$this->nb_tous_les){
     	$this->_view .= " par ".CAppUI::tr("CPrisePosologie.unite_fois.".$this->unite_fois);
+    	$this->_unite = $this->unite_fois;
     }
     
     if($this->nb_tous_les && $this->unite_tous_les){
@@ -93,6 +97,8 @@ class CPrisePosologie extends CMbMetaObject {
     	if($this->decalage_prise){
     		$this->_view .= "(J+$this->decalage_prise)";
     	}
+    	$this->_type = "tous_les";
+    	$this->_unite = $this->unite_tous_les;
     }   
   }
   
@@ -171,20 +177,99 @@ class CPrisePosologie extends CMbMetaObject {
   
   
   function calculQuantitePrise($borne_min, $borne_max){
-  	$nb_jours = mbDaysRelative($borne_min, $borne_max);
   	
+  	//mbTrace($borne_min, "min");
+  	//mbTrace($borne_max, "max");
+  	
+  	$nb_hours = mbHoursRelative($borne_min, $borne_max);
+  	$nb_days  = mbDaysRelative($borne_min, $borne_max);
+  	$nb_minutes = mbMinutesRelative($borne_min, $borne_max);
+  	
+  	/*
+  	mbTrace($nb_hours, "nombre d'heures entre le debut et la fin");
+  	mbTrace($nb_days,  "nombre de jours entre le debut et la fin");
+  	mbTrace($nb_minutes,  "nombre de minutes entre le debut et la fin");
+  	*/
+  	switch($this->_unite){
+  		case 'minute':
+  			$nb = $nb_minutes; 
+  			break;
+  		case 'heure':
+  			$nb = $nb_hours;
+  			break;
+  	  case 'demi_journee':
+  	  	$nb = $nb_hours / 12;
+  		  break;		  
+  		case 'jour':
+  			$nb = $nb_hours / 24;
+  		  break;  		
+  		case 'semaine':
+  			$nb = $nb_days / 7;
+  		  break; 		
+  		case 'quinzaine':
+  			$nb = $nb_days / 14;
+  		  break;		  
+  		case 'mois' : 
+  			$nb = $nb_days / 30;
+  			break;			
+  		case 'trimestre':
+  			$nb = $nb_days / 90;
+  			break;	
+  		case 'semestre':
+  			$nb = $nb_days / 180;
+  			break;			
+  		case 'an':
+  			$nb = $nb_days / 360;
+  			break;
+  	}
+  	
+  	
+  	if($this->moment_unitaire_id){
+  		// $nb_days represente le nombre de jour de prises du medicaments
+  		$nb = 0;
+  		$heure = $this->_ref_moment->heure;
+
+  		// Si une seule journée, on regarde si la prise est pendant la journée
+  		if($nb_days == 0){
+  			$day = mbDate($borne_min); // == mbDate($borne_max)	
+
+  			$date_heure = "$day ".$heure;
+				if($date_heure > $borne_min && $date_heure < $borne_max){
+				  $nb = 1;
+				}
+  		} 
+  		else {
+  			// On calcule combien de fois la prise sera effectuée pendant la ligne
+  		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
+				$first_prise = mbDate($borne_min)." $heure";
+  		  $last_prise  = mbDate($borne_max)." $heure";
+  		  
+  		  $nb = $nb_days - 2;
+  		  if($first_prise > $borne_min){
+				  $nb++;
+				}
+				if($last_prise < $borne_max){
+					$nb++;
+				}
+  		}
+  	}
+
   	
   	// Cas d'une posologie de type moment (unite de prise: jour)
   	if($this->moment_unitaire_id && !$this->nb_tous_les){
-    	$quantite = $this->quantite * $nb_jours;	
+    	$quantite = $this->quantite * $nb;	
     }
     // Cas "Fois par" (avec unite_prise en jour)
     if($this->nb_fois && $this->unite_fois){
-    	$quantite = $this->quantite * $nb_jours * $this->nb_fois;
+    	$quantite = $this->quantite * $nb * $this->nb_fois;
     }
     // Cas "Tous les" ...
-    
-    
+    if($this->nb_tous_les){
+    	$quantite = ceil($this->quantite * $nb / $this->nb_tous_les);	
+    }
+    if(!isset($quantite)){
+    	$quantite = $this->quantite * $nb_days;
+    }
     @$this->_ref_object->_quantites[$this->unite_prise] += $quantite;
   }
   

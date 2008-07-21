@@ -37,7 +37,7 @@ $delivrances = array();
 $prescriptions = array();
 $medicaments = array();
 $stocks = array();
-$quantites_traduites = array();
+$quantites_reference = array();
 $quantites = array();
 $done = array();
 
@@ -90,7 +90,7 @@ foreach($prescriptions as $_prescription){
       if (!isset($dispensations[$_line_med->code_cip][$_unite_prise])) {
         $dispensations[$_line_med->code_cip][$_unite_prise] = 0;
       }
-      $dispensations[$_line_med->code_cip][$_unite_prise] += $quantite;  
+      $dispensations[$_line_med->code_cip][$_unite_prise] += ceil($quantite);  
     }
     if(!array_key_exists($_line_med->code_cip, $medicaments)){
       $medicaments[$_line_med->code_cip] =& $_line_med->_ref_produit;
@@ -107,16 +107,18 @@ foreach($prescriptions as $_prescription){
         $coef = $medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation];
       }
       $_quantite = $quantite * $coef;
-      // Affichage des quantites traduites en fonction de l'unite de reference
-      if($_quantite != $quantite){
-        if (!isset($quantites_traduites[$code_cip])) {
-          $quantites_traduites[$code_cip] = array();
-        }
-        if (!isset($quantites_traduites[$code_cip][$unite_prise])) {
-          $quantites_traduites[$code_cip][$unite_prise] = 0;
-        }
-        $quantites_traduites[$code_cip][$unite_prise] += $_quantite;
+      // Affichage des quantites reference en fonction de l'unite de reference
+      if (!isset($quantites_reference[$code_cip])) {
+        $quantites_reference[$code_cip] = array();
       }
+      if (!isset($quantites_reference[$code_cip][$unite_prise])) {
+        $quantites_reference[$code_cip][$unite_prise] = 0;
+      }
+      $quantites_reference[$code_cip][$unite_prise] += $_quantite;
+       if (!isset($quantites_reference[$code_cip]["total"])) {
+       	 $quantites_reference[$code_cip]["total"] = 0;
+       }
+      $quantites_reference[$code_cip]["total"] += $_quantite;
       $presentation = $_quantite/$medicament->nb_unite_presentation;
       $_presentation = $presentation/$medicament->nb_presentation;
       if (!isset($quantites[$code_cip])) $quantites[$code_cip] = 0;
@@ -178,7 +180,7 @@ $smarty->assign('medicaments'  , $medicaments);
 $smarty->assign('done'  , $done);
 $smarty->assign('quantites', $quantites);
 $smarty->assign('service_id', $service_id);
-$smarty->assign('quantites_traduites', $quantites_traduites);
+$smarty->assign('quantites_reference', $quantites_reference);
 $smarty->display('inc_dispensations_list.tpl');
 
 ?>

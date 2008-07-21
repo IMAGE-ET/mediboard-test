@@ -592,7 +592,19 @@ class CPrescription extends CMbObject {
 						$_line_med->loadRefsAdministrations($date);
 						foreach($_line_med->_ref_administrations as $_administration){
 							$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure] += $_administration->quantite;
+							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["quantite"] += $_administration->quantite;
+							
+							// Chargement du log de creation de l'administration
+						  $log = new CUserLog;
+              $log->object_id = $_administration->_id;
+							$log->object_class = $_administration->_class_name;
+							$log->loadMatchingObject();
+							$log->loadRefsFwd();
+							
+							if($_administration->prise_id){
+								$_administration->loadRefPrise();
+							}
+							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
 						}		
           }		
         	if(!$_line_med->_ref_prises){
@@ -634,7 +646,19 @@ class CPrescription extends CMbObject {
 							$_line_element->loadRefsAdministrations($date);
 							foreach($_line_element->_ref_administrations as $_administration){
 								$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure] += $_administration->quantite;
+								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["quantite"] += $_administration->quantite;
+								
+						  	// Chargement du log de creation de l'administration
+							  $log = new CUserLog;
+	              $log->object_id = $_administration->_id;
+								$log->object_class = $_administration->_class_name;
+								$log->loadMatchingObject();
+								$log->loadRefsFwd();
+								
+								if($_administration->prise_id){
+									$_administration->loadRefPrise();
+								}
+								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
 							}			
 			      }
 		      	if(!$_line_element->_ref_prises){

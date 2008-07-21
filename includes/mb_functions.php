@@ -375,6 +375,17 @@ function mbHoursRelative($from, $to) {
   return $hours;
 }
 
+function mbMinutesRelative($from, $to) {
+  if (!$from || !$to) {
+    return null;
+  }
+  $from = intval(strtotime($from) / 60);
+  $to   = intval(strtotime($to  ) / 60);
+  $minutes = intval($to - $from);
+  return $minutes;
+}
+
+
 /**
  * Return the std variance of an array
  * @return float: ecart-type

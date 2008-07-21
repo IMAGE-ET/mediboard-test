@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["service_id", "_date_min", "_date_max"];
+  filterFields = ["service_id","_date_min","_date_max"];
   filter = new Filter("filter-dispensations", "{{$m}}", "httpreq_vw_dispensations_list", "list-dispensations", filterFields);
   filter.submit();
 });
@@ -28,7 +28,6 @@ function refreshDeliveriesList() {
           <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
         {{/foreach}}
         </select>
-  
         <button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button>
       </td>
     </tr>
