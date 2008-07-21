@@ -30,4 +30,5 @@ $locales['BCBScripts-extract_ko'] = '';
 $locales['BCBScripts-extract_ok'] = '';
 $locales['BCBScripts-test'] = '';
 $locales['BCBScripts-install'] = '';
+$locales['BCBScripts_password'] = '';
 ?>

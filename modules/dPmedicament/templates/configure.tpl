@@ -25,7 +25,7 @@ var BCBScripts = {
 
 <tr>
   <th class="title" colspan="100">
-    {{tr}}BCBScripts_test{{/tr}}
+    {{tr}}BCBScripts{{/tr}}
   </th>
 </tr>
 

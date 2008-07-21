@@ -30,4 +30,5 @@ $locales['BCBScripts-extract_ko'] = 'Extraction des scripts échouée';
 $locales['BCBScripts-extract_ok'] = 'Extraction des scripts BCB réussie : %s fichiers installés';
 $locales['BCBScripts-test'] = 'Test l\'existence des scripts BCB';
 $locales['BCBScripts-install'] = 'Install les scripts BCB';
+$locales['BCBScripts_password'] = 'Mot de passe';
 ?>
