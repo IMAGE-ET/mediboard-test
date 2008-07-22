@@ -21,16 +21,17 @@
     <td>{{mb_value object=$curr_delivery field=code}}</td>
     <td>{{mb_value object=$curr_delivery->_ref_service field=_view}}</td>
     <td>
-    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post">
+    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
       <input type="hidden" name="m" value="dPstock" /> 
+      <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
       {{if $curr_delivery->date_delivery}}
-      <input type="hidden" name="_do_undeliver" value="1" />
-      <button type="button" class="cancel" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: refreshDeliveriesList})">Annuler la délivrance</button>
+      <input type="hidden" name="_undeliver" value="1" />
+      <button type="submit" class="cancel">Annuler la délivrance</button>
       {{else}}
-      <input type="hidden" name="_do_deliver" value="1" />
-      <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: refreshDeliveriesList})">Effectuer</button>
+      <input type="hidden" name="_deliver" value="1" />
+      <button type="submit" class="tick">Effectuer</button>
       {{/if}}
     </form>
     </td>

@@ -27,8 +27,8 @@ class CProductDelivery extends CMbObject {
   var $_date_min     = null;
   var $_date_max     = null;
   
-  var $_do_deliver   = null;
-  var $_do_undeliver = null;
+  var $_deliver   = null;
+  var $_undeliver = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -58,15 +58,15 @@ class CProductDelivery extends CMbObject {
   }
   
   function store() {
-    if ($msg = $this->check()) {
-      return $msg;
-    }
-    
+    // If it's a new object, is is a dispensation
     if (!$this->_id) {
       $this->date_dispensation = mbDateTime();
     }
-    
-    if ($this->_do_deliver && !$this->date_delivery) {
+    $this->load();
+    if ($msg = $this->check()) return $msg;
+
+    // If we want to deliver and if it hasn't been delivered yet
+    if ($this->_deliver && !$this->date_delivery) {
       $this->loadRefsFwd();
       $this->_ref_stock->quantity -= $this->quantity;
       $this->_ref_stock->store();
@@ -80,14 +80,16 @@ class CProductDelivery extends CMbObject {
       } else if ($this->quantity > 0) {
         $stock_service->quantity = $this->quantity;
       }
-      
+
       if ($msg = $stock_service->store()) {
         return $msg;
       }
+      $this->_deliver = null;
       $this->date_delivery = mbDateTime();
     } 
     
-    else if ($this->_do_undeliver) {
+    // Un-deliver
+    else if ($this->_undeliver) {
       $this->loadRefsFwd();
       $this->_ref_stock->quantity += $this->quantity;
       $this->_ref_stock->store();
@@ -103,6 +105,7 @@ class CProductDelivery extends CMbObject {
       if ($msg = $stock_service->store()) {
         return $msg;
       }
+      $this->_undeliver = null;
       $this->date_delivery = '';
     }
 
@@ -110,16 +113,12 @@ class CProductDelivery extends CMbObject {
   }
   
   function check() {
-  	if ($msg = parent::check()) {
-  	  return $msg;
-  	}
-  	if ($this->_do_deliver && !$this->date_delivery) {
-	  	if (!$this->_ref_stock) {
-	  		$this->loadRefsFwd();
-	  	}
-	    if ($this->_ref_stock->quantity < $this->quantity) {
-        return 'Erreur : Impossible de délivrer ce nombre d\'articles';
-	    }
+  	$this->loadRefsFwd();
+  	
+  	if ($this->_deliver) {
+    	if (($this->quantity == 0) || ($this->_ref_stock->quantity < $this->quantity)) {
+        return 'impossible de délivrer ce nombre d\'articles';
+      }
   	}
   	
   	return parent::check();

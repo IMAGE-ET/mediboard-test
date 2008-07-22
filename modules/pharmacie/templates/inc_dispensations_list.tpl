@@ -6,11 +6,12 @@
     <th>Quantité</th>
     <th>Déjà effectuées</th>
     <th>Dispensation</th>
+    <th>Stock du service</th>
   </tr>
   {{foreach from=$dispensations key=code_cip item=unites}}
     {{assign var=medicament value=$medicaments.$code_cip}}
     <tr>
-      <th colspan="6">{{$medicament->libelle}}</th>
+      <th colspan="10">{{$medicament->libelle}}</th>
     </tr>
     <tbody class="hoverable">
     {{foreach from=$unites key=unite_prise item=quantite name="dispensation"}}
@@ -28,8 +29,8 @@
         <td rowspan="{{$unites|@count}}" style="text-align: left">
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
-              {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y à %Hh%M"}}
-              {{if $curr_done->date_delivery}}(délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y à %Hh%M"}}){{/if}}
+              {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+              {{if $curr_done->date_delivery}}(délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}}){{/if}}
               <br />
             {{/if}}
           {{foreachelse}}
@@ -41,7 +42,7 @@
           {{assign var=delivrance value=$delivrances.$code_cip}}
          
           <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
-          <form name="form-dispensation-{{$code_cip}}" action="?" method="post">
+          <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="tab" value="{{$tab}}" />
             <input type="hidden" name="dosql" value="do_delivery_aed" />
@@ -49,15 +50,21 @@
             <input type="hidden" name="date_dispensation" value="now" />
             <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
             <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
-            {{if $delivrance->quantity==0 && $done.$code_cip.0!=0}}<div style="color: red;">Dispensations déjà effectuées</div>{{/if}}
+            {{if $delivrance->quantity==0}}<div style="color: red;">Dispensation impossible ou déjà effectuée</div>{{/if}}
             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3}}
-            <button type="button" class="tick" onclick="submitFormAjax(this.form, 'systemMsg', {onComplete: refreshDeliveriesList})">
-              Délivrer
+            <button type="submit" class="tick">
+              Dispenser
             </button>
           </form>
         {{else}}
-        Pas de stock
+        Pas de stock à la pharmacie
         {{/if}}
+        </td>
+        <td rowspan="{{$unites|@count}}" style="text-align: center">
+        {{assign var=stock_service value=$stocks_service.$code_cip}}
+        {{foreach from=$stock_service item=stock}}
+          {{$stock->quantity}} déjà en stock
+        {{/foreach}}
         </td>
         {{/if}}
       </tr>

@@ -40,6 +40,7 @@ $stocks = array();
 $quantites_reference = array();
 $quantites = array();
 $done = array();
+$stocks_service = array();
 
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
@@ -148,14 +149,16 @@ foreach($quantites as $code => &$_quantite){
     $_quantite = ceil($_quantite);
   }
 
+  // Chargement des dispensation déjé effectuée
   $where = array();
-  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'";
-  $where['product.code'] = "= '$code'";
+  $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'"; // entre les deux dates
+  $where['product.code'] = "= '$code'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
   $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
 
+  // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement
   $ljoin = array();
   $ljoin['product_stock_group'] = 'product_delivery.stock_id = product_stock_group.stock_id';
-  $ljoin['product'] = "product_stock_group.product_id = product.product_id";
+  $ljoin['product'] = 'product_stock_group.product_id = product.product_id';
   
   $deliv = new CProductDelivery();
   $list_done = $deliv->loadList($where, null, null, null, $ljoin);
@@ -170,6 +173,8 @@ foreach($quantites as $code => &$_quantite){
   if(isset($delivrances[$code])) {
     $delivrances[$code]->quantity = max($quantites[$code] - (isset($done[$code][0]) ? $done[$code][0] : 0), 0);
   }
+  
+  $stocks_service[$code] = CProductStockService::getFromCode($code, $service_id);
 }
 
 // Smarty template
@@ -178,6 +183,7 @@ $smarty->assign('dispensations', $dispensations);
 $smarty->assign('delivrances', $delivrances);
 $smarty->assign('medicaments'  , $medicaments);
 $smarty->assign('done'  , $done);
+$smarty->assign('stocks_service'  , $stocks_service);
 $smarty->assign('quantites', $quantites);
 $smarty->assign('service_id', $service_id);
 $smarty->assign('quantites_reference', $quantites_reference);

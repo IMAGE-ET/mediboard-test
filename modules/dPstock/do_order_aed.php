@@ -23,7 +23,6 @@ if (mbGetValueFromPost('order_id') == 0) {
 		$AppUI->setMsg($msg);
 	} else {
 		$AppUI->setMsg($do->createMsg);
-		//mbTrace($order);
 		$AppUI->redirect('m=dPstock&a=vw_aed_order&dialog=1&order_id='.$order->order_id);
 	}
 }

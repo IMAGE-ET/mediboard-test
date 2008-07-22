@@ -27,6 +27,20 @@ class CProductStockService extends CProductStock {
     $specs['service_id'] = 'notNull ref class|CService';
     return $specs;
   }
+  
+  static function getFromCode($code, $service_id = null) {
+    $stock = new CProductStockService();
+    
+    $where = array();
+    $where['product.code'] = "= '$code'";
+    if ($service_id) {
+      $where['product_stock_service.service_id'] = "= $service_id";
+    }
+    $ljoin = array();
+    $ljoin['product'] = 'product_stock_service.product_id = product.product_id';
+
+    return $stock->loadList($where, null, null, null, $ljoin);
+  }
 
   function updateFormFields() {
     parent::updateFormFields();

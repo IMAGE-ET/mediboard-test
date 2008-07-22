@@ -15,8 +15,7 @@
       <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
       <input type="hidden" name="service_id" value="" />
       <input type="hidden" name="date_dispensation" value="now" />
-      <input type="hidden" name="_do_deliver" value="1" />
-      <input type="hidden" name="status" value="done" />
+      <input type="hidden" name="_deliver" value="1" />
       
       {{assign var=id value=$stock->_id}} 
       {{mb_field object=$stock field=quantity form="form-delivery-stock-$id" increment=1 size=3 value=1}}
