@@ -95,7 +95,7 @@ submitOperationForm = function(oFormOperation,sens) {
   {{/foreach}}
   <script type="text/javascript">
   $('liops').innerHTML = {{$listOps|@count}};
-  $('heure').innerHTML = "{{$hour|date_format:"%H:%M"}}";
+  $('heure').innerHTML = "{{$hour|date_format:"%Hh%M"}}";
 </script>
 </table>   
 </form>

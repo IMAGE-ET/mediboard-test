@@ -28,7 +28,7 @@ function pageMain() {
 	  <li style="float:right">
 		  <form action="?" name="selection" method="get">
 		    <input type="hidden" name="m" value="{{$m}}" />
-		      <strong><span id="heure">{{$hour|date_format:"%H:%M"}}</span> - {{$date|date_format:"%A %d %B %Y"}}
+		      <strong><span id="heure">{{$hour|date_format:"%Hh%M"}}</span> - {{$date|date_format:"%A %d %B %Y"}}
 		      </strong>
 		    <img id="changeDate" src="./images/icons/calendar.gif" title="Choisir la date" alt="calendar" />    
 	    </form>
