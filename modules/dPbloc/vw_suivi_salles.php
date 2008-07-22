@@ -8,7 +8,7 @@
 */
 
 global $can, $g;
-$can->needsEdit();
+$can->needsRead();
 
 $date_suivi  = mbGetValueFromGetOrSession("date_suivi", mbDate());
 

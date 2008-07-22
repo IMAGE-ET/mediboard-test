@@ -104,4 +104,5 @@ $locales['CCodable-back-actes_ccam'] = '';
 $locales['msg-CActeCCAM-create'] = '';
 $locales['msg-CActeCCAM-delete'] = '';
 $locales['msg-CActeCCAM-modify'] = '';
+$locales['mod-dPsalleOp-tab-vw_suivi_salles'] = 'Programme';
 ?>

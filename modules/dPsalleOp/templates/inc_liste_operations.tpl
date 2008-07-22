@@ -87,7 +87,7 @@
   {{/if}}
 </tr>
 
-{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee}}
+{{if $dPconfig.dPsalleOp.COperation.modif_salle && !$_operation->_deplacee && !($tab == "vw_suivi_salles" && $m == "dPsalleOp")}}
 <tr>
   <td colspan="5">
     <form name="changeSalle{{$_operation->_id}}" action="?m={{$m}}" method="post">

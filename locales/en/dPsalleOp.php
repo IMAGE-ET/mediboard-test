@@ -97,4 +97,12 @@ $locales['pref-ccam_sejour-0'] = '';
 $locales['pref-ccam_sejour-1'] = '';
 $locales['config-dPsalleOp-max_sub_minutes'] = '';
 $locales['config-dPsalleOp-max_add_minutes'] = '';
+$locales['mod-dPsalleOp-tab-vw_suivi_salles'] = '';
+$locales['CActeCCAM-_rembex'] = '';
+$locales['CActeCCAM-_rembex-court'] = '';
+$locales['CActeCCAM-_rembex-desc'] = '';
+$locales['CCodable-back-actes_ccam'] = '';
+$locales['msg-CActeCCAM-create'] = '';
+$locales['msg-CActeCCAM-delete'] = '';
+$locales['msg-CActeCCAM-modify'] = '';
 ?>

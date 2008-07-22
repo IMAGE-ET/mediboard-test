@@ -1,0 +1,1 @@
+{{include file="../../dPbloc/templates/vw_suivi_salles.tpl"}}
