@@ -56,9 +56,22 @@ foreach($destockages as $code_cip => $_destockage){
   $destockages[$code_cip]["stock"] = CProductStockService::getFromCode($code_cip, $service_id);
   if ($destockages[$code_cip]["stock"]) {
     $destockages[$code_cip]["stock"]->quantity -= $destockages[$code_cip]["nb_produit"];
+    
+    $stock = $destockages[$code_cip]["stock"];
+    $log = new CUserLog();
+    $where = array();
+    $order = "date DESC";
+    $where["object_id"] = " = '$stock->_id'";
+    $where["object_class"] = " = '$stock->_class_name'";
+    $where["date"] = " BETWEEN '$date_min' AND '$date_max'";
+    $where["fields"] = " LIKE '%quantity%'";
+    
+    $destockages[$code_cip]["stock"]->_ref_logs = $log->loadList($where, $order);
+    foreach ($destockages[$code_cip]["stock"]->_ref_logs as $log) {
+      $log->loadRefsFwd();
+    }
   }
 }
-//mbTrace($destockages);
 
 // Création du template
 $smarty = new CSmartyDP();

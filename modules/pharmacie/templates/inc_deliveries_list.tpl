@@ -28,7 +28,7 @@
     </td>
     <td>{{mb_value object=$curr_delivery->_ref_service field=_view}}</td>
     <td>
-    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="$V(this.code, $V($('code-{{$id}}'))); alert($V($('code-{{$id}}'))); alert(this.code.value); return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
+    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="$V(this.code, $V($('code-{{$id}}'))); return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />

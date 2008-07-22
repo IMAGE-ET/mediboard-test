@@ -15,6 +15,8 @@
   
   <table class="tbl" style="width: 1%;">
     <tr>
+      <th></th>
+      <th>{{mb_label object=$constantes field=poids}}</th>
       <th>{{mb_label object=$constantes field=ta}}</th>
       <th>{{mb_label object=$constantes field=pouls}}</th>
       <th>{{mb_label object=$constantes field=spo2}}</th>
@@ -25,6 +27,8 @@
       <th></th>
     </tr>
     <tr>
+      <th>Nouvelles</th>
+      <td>{{mb_field object=$constantes field=poids size="4"}} Kg</td>
       <td>
         {{mb_field object=$constantes field=_ta_systole size="1"}} /
         {{mb_field object=$constantes field=_ta_diastole size="1"}} cm Hg
@@ -51,6 +55,21 @@
           </button>
         {{/if}}
       </td>
+    </tr>
+    <tr>
+      <th>Dernières mesures</th>
+      {{assign var=const value=$latest_constantes.0}}
+      <td style="text-align: right;">{{if $const->poids}}{{mb_value object=$const field=poids size="4"}} Kg{{/if}}</td>
+      <td style="text-align: right;">
+      {{if $const->ta}}
+        {{mb_value object=$const field=_ta_systole size="1"}} /
+        {{mb_value object=$const field=_ta_diastole size="1"}} cm Hg
+      {{/if}}
+      </td style="text-align: right;">
+      <td style="text-align: right;">{{if $const->pouls}}{{mb_value object=$const field=pouls size="4"}} /min{{/if}}</td>
+      <td style="text-align: right;">{{if $const->spo2}}{{mb_value object=$const field=spo2 size="4"}} %{{/if}}</td>
+      <td style="text-align: right;">{{if $const->temperature}}{{mb_value object=$const field=temperature size="4"}} °C{{/if}}</td>
+      <td colspan="3"></td>
     </tr>
   </table>
 </form>

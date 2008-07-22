@@ -4,13 +4,16 @@
     <th>Stock précédent</th>
     <th>Articles théoriquement utilisés</th>
     <th>Nouveau stock</th>
-    <th></th>
   </tr>
   {{foreach from=$destockages item=curr_destockage}}
   {{assign var=stock value=$curr_destockage.stock}}
   <tr>
     <td>
-      <div id="tooltip-content-{{$stock->_id}}" style="display: none;">{{$stock->_view}}</div>
+      <div id="tooltip-content-{{$stock->_id}}" style="display: none;">
+      {{foreach from=$stock->_ref_logs item=log}}
+        {{mb_value object=$log field=date}} par <b>{{$log->_ref_user->_view}}</b><br />
+      {{/foreach}}
+      </div>
       <div class="tooltip-trigger" 
            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$stock->_id}}'} })">
         {{$stock->_view}}
@@ -27,6 +30,7 @@
         {{assign var=id value=$stock->_id}}
         {{mb_field object=$stock field=quantity form="destockage-$id" increment=1}}
         <button type="submit" class="tick">Valider</button>
+        {{if $stock->_ref_logs|@count>0}}<br />Destockage déjà réalisé durant la période indiquée{{/if}}
       </form>
     </td>
   </tr>

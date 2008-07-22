@@ -30,6 +30,8 @@ if ($sejour->_id) {
   $sejour->loadListConstantesMedicales();
 }
 
+$latest_constantes = CConstantesMedicales::getLatestFor($constantes->patient_id);
+
 $constantes->context_class = $sejour->_class_name;
 $constantes->context_id = $sejour->_id;
 
@@ -155,6 +157,7 @@ $smarty->assign('dates',      $dates);
 $smarty->assign('hours',      $hours);
 $smarty->assign('const_ids',  $const_ids);
 $smarty->assign('token',      time());
+$smarty->assign('latest_constantes', $latest_constantes);
 
 $smarty->display('inc_vw_constantes_medicales.tpl');
 
