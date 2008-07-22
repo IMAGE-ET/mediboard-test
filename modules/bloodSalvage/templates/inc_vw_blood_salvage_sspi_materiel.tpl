@@ -3,7 +3,7 @@
   <th class="category" colspan="4" >Cell saver</th>
 </tr>
 <tr>
-  <th style="width:10%"><b>Cell Saver</b></th>
+  <th>Cell Saver</th>
 	<td>
 	<form name="cell-saver-id{{$blood_salvage->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
   <input type="hidden" name="m" value="bloodSalvage" />
@@ -18,9 +18,7 @@
 	</select>
 	</form>
 	</td>
-	<th style="width:10%">
-    <b>{{mb_label object=$blood_salvage field=receive_kit}}</b>
-  </th>
+	<th>{{mb_label object=$blood_salvage field=receive_kit}}</th>
   <td>
     <form name="recueil" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
 	    <input type="hidden" name="m" value="bloodSalvage" />
@@ -33,4 +31,3 @@
     </form>
   </td>
 </tr>
-</table>

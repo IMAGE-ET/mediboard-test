@@ -1,5 +1,5 @@
 {{assign var=patient value=$blood_salvage->_ref_operation->_ref_sejour->_ref_patient}}
-<table class="form">
+<table class="tbl">
 	<tr>
 	  <th class="title text" colspan="2">
 	    <button class="hslip notext" id="listRSPO-trigger" type="button" style="float:left">
@@ -21,7 +21,7 @@
   {{include file="inc_total_time.tpl"}}
 </div>
 <div id="cell-saver-infos">
-  {{include file="inc_vw_cell_saver_infos.tpl}}
+  {{include file="inc_vw_cell_saver_volumes.tpl}}
 </div>
 <div id="materiel">
   {{include file=inc_vw_blood_salvage_sspi_materiel.tpl}}

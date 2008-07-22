@@ -1,5 +1,5 @@
 <!-- Haut de page, informations patient et opération (idem Salle d'op) -->
-<table class="form">
+<table class="tbl">
   {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
   <tr>
     <th class="title text" colspan="2">

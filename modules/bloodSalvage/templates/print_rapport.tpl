@@ -51,11 +51,20 @@
         <tr>
           <td colspan="2">
             <table>
-              {{if $patient->_ref_dossier_medical->groupe_sanguin!="?" || $patient->_ref_dossier_medical->rhesus!="?"}}
-              <tr>
-                <th>Groupe sanguin</th>
-                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$patient->_ref_dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}{{$patient->_ref_dossier_medical->rhesus}}{{/tr}}</b></td>
-              </tr>
+              {{if $isInDM}}
+	              {{if $patient->_ref_dossier_medical->groupe_sanguin!="?" || $patient->_ref_dossier_medical->rhesus!="?"}}
+	              <tr>
+	                <th>Groupe sanguin</th>
+	                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$patient->_ref_dossier_medical->groupe_sanguin}}{{/tr}} &nbsp;{{tr}}{{$patient->_ref_dossier_medical->rhesus}}{{/tr}}</b></td>
+	              </tr>
+	              {{/if}}
+              {{else}}
+	              {{if $consult_anesth->groupe!="?" || $consult_anesth->rhesus!="?"}}
+	              <tr>
+	                <th>Groupe sanguin</th>
+	                <td style="white-space: nowrap;font-size:130%;"><b>&nbsp;{{tr}}{{$consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}{{$consult_anesth->rhesus}}{{/tr}}</b></td>
+	              </tr>
+	              {{/if}}
               {{/if}}
               {{if $consult_anesth->rai && $consult_anesth->rai!="?"}}
               <tr>
@@ -101,10 +110,10 @@
         <tr>
           <td>
            {{$operation->_view}} <br />
-           Côté : {{$operation->cote}}<br />
+           {{mb_label object=$operation field=cote}} : {{mb_value object=$operation field=cote}}<br />
            {{if $operation->libelle}}{{mb_label object=$operation field=libelle}} : {{mb_value object=$operation field=libelle}} <br />{{/if}}
-           Anesthésie pratiquée : {{if $operation->_ref_type_anesth}}{{$operation->_ref_type_anesth->name}}  {{/if}} <br />
-           Anesthésiste : {{$operation->_ref_anesth->_view}}        
+           {{tr}}CBloodSalvage.anesthesia{{/tr}} : {{if $operation->_ref_type_anesth}}{{$operation->_ref_type_anesth->name}}  {{/if}} <br />
+           {{tr}}CBloodSalvage.anesthesist{{/tr}} : {{$operation->_ref_anesth->_view}}        
           </td>
         </tr>
       </table>
@@ -124,10 +133,10 @@
            {{tr}}CBloodSalvage-receive_kit{{/tr}} :{{if $blood_salvage->receive_kit}} Lot n° {{$blood_salvage->receive_kit}} {{/if}} &nbsp;
            {{tr}}CBloodSalvage-wash_kit{{/tr}} :{{if $blood_salvage->wash_kit}} Lot n° {{$blood_salvage->wash_kit}} {{/if}}<br />
            {{tr}}CBloodSalvage-anticoagulant_cip{{/tr}} : {{$anticoagulant->libelle}} <br /> <br />
-          {{tr}}CBloodSalvage-nurse_sspi.report{{/tr}}{{if $tabAffected|@count>1}}s{{/if}}  : 
-          {{foreach from=$tabAffected item=nurse name=affect}}
+           {{tr}}CBloodSalvage-nurse_sspi.report{{/tr}}{{if $tabAffected|@count>1}}s{{/if}}  : 
+           {{foreach from=$tabAffected item=nurse name=affect}}
              {{$nurse->_ref_personnel->_ref_user->_view}} &nbsp;
-          {{foreachelse}} - {{/foreach}}
+           {{foreachelse}} - {{/foreach}}
           </td>
         </tr>
       </table>
@@ -163,7 +172,7 @@
         <tr>
           <td>
            {{mb_label object=$blood_salvage field=hgb_pocket}} :  {{mb_value object=$blood_salvage field=hgb_pocket}} g/dl<br /> 
-          {{mb_label object=$blood_salvage field=hgb_patient}} : {{mb_value object=$blood_salvage field=hgb_patient}} g/dl<br /> <br /> 
+           {{mb_label object=$blood_salvage field=hgb_patient}} : {{mb_value object=$blood_salvage field=hgb_patient}} g/dl<br /> <br /> 
            {{mb_label object=$blood_salvage field=transfused_volume}} : {{mb_value object=$blood_salvage field=transfused_volume}} ml<br /> 
            {{mb_label object=$blood_salvage field=wash_volume}} : {{mb_value object=$blood_salvage field=wash_volume}} ml<br /> 
            {{mb_label object=$blood_salvage field=saved_volume}} : {{mb_value object=$blood_salvage field=saved_volume}} ml<br /> 

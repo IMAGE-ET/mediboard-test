@@ -30,11 +30,8 @@
   }
 </script>
 
-<table class="form">
   <tr>
-    <th style="width:10%">
-      <b>Incident</b>
-    </th>
+    <th>Incident</th>
     <td>
     <form name="fsei" action="?m={{$m}}" method="post">
         <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
@@ -48,9 +45,7 @@
 	      </select>
 	   </form>
     </td>
-    <th style="width:10%">
-      <b>Protocole qualité</b>
-    </th>
+    <th>Protocole qualité</th>
     <td>
       <select name="protocole-qualite">
         <option>&mdash; Protocole</option>

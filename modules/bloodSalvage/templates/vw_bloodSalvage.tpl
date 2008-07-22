@@ -47,8 +47,8 @@ function pageMain() {
 
 <table class="main">
 <tr>
-		<td style="width: 220px;" id="listplages"></td>
-		<td>
+		<td class="halfPane" id="listplages"></td>
+    <td class="halfPane">
 			{{if $selOp->_id}}
 				{{include file=inc_bloodSalvage.tpl}}
 			{{else}}

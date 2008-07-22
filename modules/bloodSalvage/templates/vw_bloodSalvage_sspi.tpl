@@ -17,7 +17,7 @@ function submitInfos(oForm) {
 
 function reloadInfos(blood_salvage_id) {
   var url = new Url(); 
-    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage_infos");
+    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage_volumes");
     url.addParam("blood_salvage_id", blood_salvage_id);
     url.requestUpdate('cell-saver-infos', { waitingText: null } );
 }
@@ -65,13 +65,13 @@ function pageMain() {
 
 <table class="main">
 <tr>
-<td style="width: 390px;" id="listRSPO"></td>
-<td>
-{{if $blood_salvage->_id}}
-  {{include file=inc_vw_sspi_bs.tpl}}
-{{else}}
-  <div class="big-info">Veuillez sélectionner un patient.</div>
-{{/if}}
-</td>
+	<td class="halfPane" id="listRSPO"></td>
+  <td class="halfPane">
+ 	{{if $blood_salvage->_id}}
+	  {{include file=inc_vw_sspi_bs.tpl}}
+	{{else}}
+	  <div class="big-info">Veuillez sélectionner un patient.</div>
+	{{/if}}
+	</td>
 </tr>
 </table>

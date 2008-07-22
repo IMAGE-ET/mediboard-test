@@ -25,6 +25,6 @@ $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage", $blood_salvage);
 
-$smarty->display("inc_vw_cell_saver_infos.tpl");
+$smarty->display("inc_vw_cell_saver_volumes.tpl");
 
 ?>

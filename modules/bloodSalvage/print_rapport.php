@@ -38,12 +38,15 @@ if($blood_salvage_id) {
   $tabAffected = array();
   $timingAffect = array(); 
 	loadAffected($blood_salvage->_id, $list_nurse_sspi, $tabAffected, $timingAffect);
-	
+	$version_patient = CModule::getActive("dPpatients");
+  $isInDM = ($version_patient->mod_version >= 0.71);
+	 
 }
 
 $smarty = new CSmartyDP();
 
 $smarty->assign("blood_salvage",$blood_salvage);
+$smarty->assign("isInDM",$isInDM);
 $smarty->assign("tabAffected",$tabAffected);
 $smarty->assign("anticoagulant",$anticoag);
 $smarty->display("print_rapport.tpl");
