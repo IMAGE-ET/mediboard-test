@@ -177,7 +177,7 @@ class CPrisePosologie extends CMbMetaObject {
   
   
   function calculQuantitePrise($borne_min, $borne_max){
-  	
+
   	//mbTrace($borne_min, "min");
   	//mbTrace($borne_max, "max");
   	
@@ -223,12 +223,9 @@ class CPrisePosologie extends CMbMetaObject {
   			break;
   	}
   	
-  	
-  	if($this->moment_unitaire_id){
-  		// $nb_days represente le nombre de jour de prises du medicaments
-  		$nb = 0;
+  	if($this->moment_unitaire_id && $this->_ref_moment->heure){
   		$heure = $this->_ref_moment->heure;
-
+  		
   		// Si une seule journée, on regarde si la prise est pendant la journée
   		if($nb_days == 0){
   			$day = mbDate($borne_min); // == mbDate($borne_max)	
@@ -243,8 +240,8 @@ class CPrisePosologie extends CMbMetaObject {
   		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
 				$first_prise = mbDate($borne_min)." $heure";
   		  $last_prise  = mbDate($borne_max)." $heure";
-  		  
   		  $nb = $nb_days - 2;
+ 		  
   		  if($first_prise > $borne_min){
 				  $nb++;
 				}
@@ -253,7 +250,9 @@ class CPrisePosologie extends CMbMetaObject {
 				}
   		}
   	}
-
+		if($this->moment_unitaire_id && !$this->_ref_moment->heure){
+  	  $nb = 1;
+		}
   	
   	// Cas d'une posologie de type moment (unite de prise: jour)
   	if($this->moment_unitaire_id && !$this->nb_tous_les){

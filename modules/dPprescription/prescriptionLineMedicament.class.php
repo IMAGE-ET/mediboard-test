@@ -251,7 +251,6 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   function calculQuantiteLine($date_min, $date_max){	
   	$borne_min = ($this->_debut_reel > $date_min) ? $this->_debut_reel : $date_min;
   	$borne_max = ($this->_fin_reelle < $date_max) ? $this->_fin_reelle : $date_max;
-
   	if(!$this->_ref_prises){
   		$this->loadRefsPrises();
   	}

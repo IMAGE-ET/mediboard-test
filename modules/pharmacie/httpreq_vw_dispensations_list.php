@@ -40,6 +40,7 @@ $stocks = array();
 $quantites_reference = array();
 $quantites = array();
 $done = array();
+$patients = array();
 $stocks_service = array();
 
 $prescription = new CPrescription();
@@ -49,12 +50,15 @@ foreach($prescriptions as $_prescription){
 
   // Stockage du sejour de la prescription
   $sejour =& $_prescription->_ref_object;
-    
+  if(!$sejour->_ref_patient){
+  	$sejour->loadRefPatient();
+  }
   // On borne les dates aux dates du sejour si besoin
   $date_min = ($date_min < $sejour->_entree) ? $sejour->_entree : $date_min;
   $date_max = ($date_max > $sejour->_sortie) ? $sejour->_sortie : $date_max;
-      
+
   foreach($_prescription->_ref_prescription_lines as $_line_med){ 
+  	$patients[$_line_med->code_cip][$sejour->_ref_patient->_id] = $sejour->_ref_patient;
     $_line_med->_ref_produit->loadConditionnement();
     // On remplit les bornes de la ligne avec les dates du sejour si besoin
     $_line_med->_debut_reel = (!$_line_med->_debut_reel) ? $sejour->_entree : $_line_med->_debut_reel;
@@ -66,7 +70,6 @@ foreach($prescriptions as $_prescription){
         $_line_med->_debut_reel <= $date_min && $_line_med->_fin_reelle >= $date_max)){
       continue;     
     }
-    
     // Calcul de la quantite en fonction des prises
     $_line_med->calculQuantiteLine($date_min, $date_max);
     foreach($_line_med->_quantites as $unite_prise => $quantite){
@@ -97,51 +100,52 @@ foreach($prescriptions as $_prescription){
       $medicaments[$_line_med->code_cip] =& $_line_med->_ref_produit;
     }
   }
+}
+
+// Calcul du nombre de boites (unites de presentation)
+foreach($dispensations as $code_cip => $unites){
+  $product = new CProduct();
+  $product->code = $code_cip;
+  $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
   
-  // Calcul du nombre de boites (unites de presentation)
-  foreach($dispensations as $code_cip => $unites){
-    $medicament =& $medicaments[$code_cip]; 
-    foreach($unites as $unite_prise => $quantite){
-      if (!isset($medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation])) {
-        $coef = 1;
-      } else {
-        $coef = $medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation];
-      }
-      $_quantite = $quantite * $coef;
-      // Affichage des quantites reference en fonction de l'unite de reference
-      if (!isset($quantites_reference[$code_cip])) {
-        $quantites_reference[$code_cip] = array();
-      }
-      if (!isset($quantites_reference[$code_cip][$unite_prise])) {
-        $quantites_reference[$code_cip][$unite_prise] = 0;
-      }
-      $quantites_reference[$code_cip][$unite_prise] += $_quantite;
-       if (!isset($quantites_reference[$code_cip]["total"])) {
-       	 $quantites_reference[$code_cip]["total"] = 0;
-       }
-      $quantites_reference[$code_cip]["total"] += $_quantite;
-      $presentation = $_quantite/$medicament->nb_unite_presentation;
-      $_presentation = $presentation/$medicament->nb_presentation;
-      if (!isset($quantites[$code_cip])) $quantites[$code_cip] = 0;
-      $quantites[$code_cip] += $_presentation;
-    }
+  if ($product->loadMatchingObject()) {
+    $stocks[$code_cip] = new CProductStockGroup();
+    $stocks[$code_cip]->group_id = $g;
+    $stocks[$code_cip]->product_id = $product->_id;
+    $stocks[$code_cip]->loadMatchingObject();
     
-    $product = new CProduct();
-    $product->code = $code_cip;
-    $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
-    
-    if ($product->loadMatchingObject()) {
-      $stocks[$code_cip] = new CProductStockGroup();
-      $stocks[$code_cip]->group_id = $g;
-      $stocks[$code_cip]->product_id = $product->_id;
-      $stocks[$code_cip]->loadMatchingObject();
-      
-      $delivrances[$code_cip] = new CProductDelivery();
-      $delivrances[$code_cip]->stock_id = $stocks[$code_cip]->_id;
-      $delivrances[$code_cip]->service_id = $service_id;
+    $delivrances[$code_cip] = new CProductDelivery();
+    $delivrances[$code_cip]->stock_id = $stocks[$code_cip]->_id;
+    $delivrances[$code_cip]->service_id = $service_id;
+  }
+  
+  $medicament =& $medicaments[$code_cip]; 
+  foreach($unites as $unite_prise => $quantite){
+    if (!isset($medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation])) {
+      $coef = 1;
+    } else {
+      $coef = $medicament->rapport_unite_prise[$unite_prise][$medicament->libelle_unite_presentation];
     }
+    $_quantite = $quantite * $coef;
+    // Affichage des quantites reference en fonction de l'unite de reference
+    if (!isset($quantites_reference[$code_cip])) {
+      $quantites_reference[$code_cip] = array();
+    }
+    if (!isset($quantites_reference[$code_cip][$unite_prise])) {
+      $quantites_reference[$code_cip][$unite_prise] = 0;
+    }
+    $quantites_reference[$code_cip][$unite_prise] += $_quantite;
+     if (!isset($quantites_reference[$code_cip]["total"])) {
+     	 $quantites_reference[$code_cip]["total"] = 0;
+     }
+    $quantites_reference[$code_cip]["total"] += $_quantite;
+    $presentation = $_quantite/$medicament->nb_unite_presentation;
+    $_presentation = $presentation/$medicament->nb_presentation;
+    if (!isset($quantites[$code_cip])) $quantites[$code_cip] = 0;
+    $quantites[$code_cip] += $_presentation;
   }
 }
+
 
 // On arrondit la quantite de "boites"
 foreach($quantites as $code => &$_quantite){
@@ -179,6 +183,7 @@ foreach($quantites as $code => &$_quantite){
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign('patients', $patients);
 $smarty->assign('dispensations', $dispensations);
 $smarty->assign('delivrances', $delivrances);
 $smarty->assign('medicaments'  , $medicaments);

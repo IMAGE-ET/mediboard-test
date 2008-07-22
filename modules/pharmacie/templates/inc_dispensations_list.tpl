@@ -10,6 +10,7 @@
   </tr>
   {{foreach from=$dispensations key=code_cip item=unites}}
     {{assign var=medicament value=$medicaments.$code_cip}}
+    {{assign var=_patients value=$patients.$code_cip}}
     <tr>
       <th colspan="10">{{$medicament->libelle}}</th>
     </tr>
@@ -25,8 +26,22 @@
         
         {{if $smarty.foreach.dispensation.first}}
         <td rowspan="{{$unites|@count}}" style="text-align: center" />{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
-        <td rowspan="{{$unites|@count}}" style="text-align: center">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</td>
-        <td rowspan="{{$unites|@count}}" style="text-align: left">
+        <td rowspan="{{$unites|@count}}" style="text-align: center">
+          <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
+               class="tooltip-trigger">
+            <a href="#">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
+          </div>  
+          <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
+            <ul>
+              {{foreach from=$_patients item=_patient}}
+	              <li>
+	                {{$_patient->_view}}
+	              </li>
+	            {{/foreach}}
+            </ul>
+          </div>
+        </td>
+        <td rowspan="{{$unites|@count}}" style="text-align: left">       
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
               {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
@@ -36,6 +51,7 @@
           {{foreachelse}}
             Aucune
           {{/foreach}}
+          </div>
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
         {{if array_key_exists($code_cip,$delivrances)}}
