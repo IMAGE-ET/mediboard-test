@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
+global $AppUI, $can, $m, $g;
 $ds = CSQLDataSource::get('std');
 
 $can->needsRead();
@@ -87,6 +87,9 @@ switch ($type) {
     $where['product_order.deleted'] = " = 0";
     $where['product_order.cancelled'] = " = 1";
 		break;
+}
+if ($g) {
+  $where['product_order.group_id'] = " = $g";
 }
 $orders_list = $order->loadList($where, $orderby, 20, null, $leftjoin);
 

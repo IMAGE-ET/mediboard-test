@@ -98,24 +98,19 @@ class CProduct extends CMbObject {
     return ($this->_ref_category->getPerm($permType));
   }
   
-  function deliver($target_class, $target_id, $description = '') {
-  	// TODO: can be usefull
-  }
-  
-  function check() {
-    // checks if the product code doesn't exist yet
+  function store() {
     if(!$this->_id) {
-      $where['code'] = "= '$this->code'";
-      
-      $check_duplicate_code = new CProduct();
-      $list_duplicate_code = $check_duplicate_code->loadList($where);
-      
-      if(count($list_duplicate_code) != 0) {
-        return 'Erreur : Un produit avec ce code existe déjà';
+      $duplicate_code = new CProduct();
+      $duplicate_code->code = $this->code;
+      if ($duplicate_code->loadMatchingObject()) {
+        foreach($duplicate_code->getDBFields() as $key => $value) {
+          if ($value !== null) {        
+            $this->$key = $value;
+          }
+        }
+        return $this->store();
       }
-    }
-    
-    return parent::check();
+    } else return parent::store();
   }
 }
 ?>

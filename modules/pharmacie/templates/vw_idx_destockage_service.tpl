@@ -2,19 +2,19 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["service_id", "_date_min", "_date_max", "delivered"];
-  filter = new Filter("filter-delivrance", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
+  filterFields = ["service_id", "_date_min", "_date_max"];
+  filter = new Filter("filter-destockage", "{{$m}}", "httpreq_vw_destockages_list", "list-destockages", filterFields);
   filter.submit();
 });
 
-function refreshDeliveriesList() {
+function refreshDestockagesList() {
   url = new Url;
-  url.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
-  url.requestUpdate("list-deliveries", { waitingText: null } );
+  url.setModuleAction("pharmacie", "httpreq_vw_destockages_list");
+  url.requestUpdate("list-destockages", { waitingText: null } );
 }
 </script>
 
-<form name="filter-delivrance" action="?" method="post" onsubmit="return ">
+<form name="filter-destockage" action="?" method="post" onsubmit="return ">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>
@@ -29,13 +29,9 @@ function refreshDeliveriesList() {
         {{/foreach}}
         </select>
       </td>
-      <td>
-        <input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
-        <input name="delivered" type="radio" value="true" /> délivrées</label>
-      </td>
       <td><button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>
 </form>
 
-<div id="list-deliveries"></div>
+<div id="list-destockages"></div>

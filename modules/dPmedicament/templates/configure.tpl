@@ -195,7 +195,7 @@ function importCSV(){
         {{assign var="class" value="CBcbProduitLivretTherapeutique"}}
         {{assign var="var" value="product_category_id"}}
         <select name="{{$m}}[{{$class}}][{{$var}}]">
-          <option value="">{{tr}}CProductCategory.select{{/tr}}</option>
+          <option value="0">{{tr}}CProductCategory.select{{/tr}}</option>
           {{foreach from=$categories_list item=category}}
             <option value="{{$category->_id}}" {{if $category->_id==$dPconfig.$m.$class.$var}}selected="selected"{{/if}}>{{$category->name}}</option>
           {{/foreach}}
