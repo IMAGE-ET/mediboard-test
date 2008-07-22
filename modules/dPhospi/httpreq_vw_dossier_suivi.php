@@ -21,6 +21,9 @@ $sejour_id = mbGetValueFromGet("sejour_id", 0);
 $observation  = new CObservationMedicale();
 $transmission = new CTransmissionMedicale();
 
+$observation->loadAides($AppUI->user_id);
+$transmission->loadAides($AppUI->user_id);
+
 // Chargement du sejour
 $sejour = new CSejour;
 $sejour->load($sejour_id);

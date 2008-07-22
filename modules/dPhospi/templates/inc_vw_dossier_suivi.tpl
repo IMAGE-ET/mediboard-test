@@ -26,21 +26,28 @@ delCibleTransmission = function() {
     <td>
       {{if $isPraticien}}
       <form name="editObs" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_observation_aed" />
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="m" value="dPhospi" />
-      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
-      <input type="hidden" name="user_id" value="{{$user->_id}}" />
-      <input type="hidden" name="date" value="now" />
-      {{mb_label object=$observation field="text"}}
-      {{mb_field object=$observation field="degre"}}
-      <br />
-      {{mb_field object=$observation field="text"}}
-      <br />
-      <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button>
+	      <input type="hidden" name="dosql" value="do_observation_aed" />
+	      <input type="hidden" name="del" value="0" />
+	      <input type="hidden" name="m" value="dPhospi" />
+	      <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
+	      <input type="hidden" name="user_id" value="{{$user->_id}}" />
+	      <input type="hidden" name="date" value="now" /> 
+	      <div style="float: right">
+		      <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
+		        <option value="">&mdash; Choisir une aide</option>
+		        {{html_options options=$observation->_aides.text.no_enum}}
+		      </select>
+		      <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CObservationMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
+	      </div>
+	      {{mb_label object=$observation field="text"}}
+	      {{mb_field object=$observation field="degre"}}
+	      <br />
+	      {{mb_field object=$observation field="text"}}
+	      <br />
+	      <button type="button" class="add" onclick="submitSuivi(this.form)">{{tr}}Add{{/tr}}</button> 
       </form>
       {{/if}}
-    </td>
+    </td>     
     <td>
       <div id="cibleTrans" style="font-style: italic;" onclick="delCibleTransmission()">
       </div>
@@ -53,6 +60,13 @@ delCibleTransmission = function() {
       <input type="hidden" name="sejour_id" value="{{$sejour->_id}}" />
       <input type="hidden" name="user_id" value="{{$user->_id}}" />
       <input type="hidden" name="date" value="now" />
+      <div style="float: right">
+		    <select name="_helpers_text" size="1" onchange="pasteHelperContent(this);">
+		      <option value="">&mdash; Choisir une aide</option>
+		      {{html_options options=$transmission->_aides.text.no_enum}}
+		    </select>
+		    <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTransmissionMedicale', this.form.text)">{{tr}}New{{/tr}}</button><br />      
+	    </div>
       {{mb_label object=$transmission field="text"}}
       {{mb_field object=$transmission field="degre"}}
       <br />

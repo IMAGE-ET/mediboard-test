@@ -71,9 +71,10 @@ class CAdministration extends CMbMetaObject {
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefAdministrateur();
-    $this->_ref_object->loadRefsFwd();
+  	if($this->_ref_object){
+      $this->_ref_object->loadRefsFwd();
+  	}
   	$this->_view = "Administration du $this->dateTime par {$this->_ref_administrateur->_view}";
-  	
   	if($this->object_class == "CPrescriptionLineMedicament"){
   		$this->_view .= " ({$this->_ref_object->_ref_produit->libelle})";
   	}

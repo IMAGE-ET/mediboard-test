@@ -47,6 +47,12 @@ class CObservationMedicale extends CMbObject {
     return $specs;
   }
   
+  function getHelpedFields(){
+    return array(
+      "text" => null
+    );
+  }
+  
   function loadRefsFwd() {
   	parent::loadRefsFwd();
     $this->_ref_sejour = new CSejour;

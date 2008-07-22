@@ -50,6 +50,13 @@ class CTransmissionMedicale extends CMbMetaObject {
     return $specs;
   }
   
+  function getHelpedFields(){
+    return array(
+      "text" => null
+    );
+  }
+  
+  
   function loadRefsFwd() {
   	parent::loadRefsFwd();
   	if($this->_ref_object){
