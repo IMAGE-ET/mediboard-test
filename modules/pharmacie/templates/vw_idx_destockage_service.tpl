@@ -3,7 +3,7 @@
 <script type="text/javascript">
 Main.add(function () {
   filterFields = ["service_id", "_date_min", "_date_max"];
-  filter = new Filter("filter-destockage", "{{$m}}", "httpreq_vw_destockages_list", "list-destockages", filterFields);
+  filter = new Filter("filter-destockage", "{{$m}}", "httpreq_vw_destockages_service_list", "list-destockages", filterFields);
   filter.submit();
 });
 

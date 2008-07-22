@@ -23,26 +23,9 @@ $delivrance = new CProductDelivery();
 $delivrance->_date_min = $date;
 $delivrance->_date_max = $date.' 23:59:59';
 
-
-// remplissage de liste destockages (a titre d'exemple de structure
-
-$list_destockages = array(
-  '0645821' => array( /// Code CIP
-    'quantite' => 3,
-    'conditionnement' => 'Boites',
-  ), 
-  
-  /// ...
-
-);
-
-
-
-
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_destockages', $list_destockages);
 $smarty->assign('service_id',       $service_id);
 $smarty->assign('list_services',    $list_services);
 $smarty->assign('delivrance',       $delivrance);
