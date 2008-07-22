@@ -39,7 +39,8 @@ class CProductStockService extends CProductStock {
     $ljoin = array();
     $ljoin['product'] = 'product_stock_service.product_id = product.product_id';
 
-    return $stock->loadList($where, null, null, null, $ljoin);
+    $stock->loadObject($where, null, null, $ljoin);
+    return $stock;
   }
 
   function updateFormFields() {

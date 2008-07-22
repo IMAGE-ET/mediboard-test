@@ -2,42 +2,37 @@
   <tr>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>Stock précédent</th>
-    <th>Stock actuel probable</th>
-    <th>Ecart</th>
+    <th>Articles théoriquement utilisés</th>
+    <th>Nouveau stock</th>
     <th></th>
   </tr>
   {{foreach from=$destockages item=curr_destockage}}
+  {{assign var=stock value=$curr_destockage.stock}}
   <tr>
     <td>
-      <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>
+      <div id="tooltip-content-{{$stock->_id}}" style="display: none;">{{$stock->_view}}</div>
       <div class="tooltip-trigger" 
-           onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_delivery->_id}}'} })">
-        {{$curr_delivery->_ref_stock->_view}}
+           onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$stock->_id}}'} })">
+        {{$stock->_view}}
       </div>
     </td>
-    <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
-    <td>{{mb_value object=$curr_delivery field=quantity}}</td>
-    <td>{{mb_value object=$curr_delivery field=code}}</td>
-    <td>{{mb_value object=$curr_delivery->_ref_service field=_view}}</td>
+    <td>{{$stock->quantity+$curr_destockage.nb_produit}}</td>
+    <td>{{$curr_destockage.nb_produit}}</td>
     <td>
-    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
-      <input type="hidden" name="m" value="dPstock" /> 
-      <input type="hidden" name="del" value="0" />
-      <input type="hidden" name="dosql" value="do_delivery_aed" />
-      <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
-      {{if $curr_delivery->date_delivery}}
-      <input type="hidden" name="_undeliver" value="1" />
-      <button type="submit" class="cancel">Annuler la délivrance</button>
-      {{else}}
-      <input type="hidden" name="_deliver" value="1" />
-      <button type="submit" class="tick">Effectuer</button>
-      {{/if}}
-    </form>
+      <form name="destockage-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})">
+        <input type="hidden" name="m" value="dPstock" /> 
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_stock_service_aed" />
+        <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
+        {{assign var=id value=$stock->_id}}
+        {{mb_field object=$stock field=quantity form="destockage-$id" increment=1}}
+        <button type="submit" class="tick">Valider</button>
+      </form>
     </td>
   </tr>
   {{foreachelse}}
   <tr>
-    <td colspan="10">{{tr}}CProductDelivery.none{{/tr}}</td>
+    <td colspan="10">{{tr}}CProduct.none{{/tr}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -48,15 +48,17 @@ foreach($destockages as $code_cip => $_destockage){
     $destockages[$code_cip]["nb_produit"] = 0;
   }
   $destockages[$code_cip]["nb_produit"] = $presentation; 
-}
-
-
-// On arrondit la quantite de "boites"
-foreach($destockages as &$produit){
-  if(strstr($produit["nb_produit"], '.')){
-    $produit["nb_produit"] = ceil($produit["nb_produit"]);
+  
+  if(strstr($destockages[$code_cip]["nb_produit"], '.')){
+    $destockages[$code_cip]["nb_produit"] = ceil($destockages[$code_cip]["nb_produit"]);
   }
-}  
+  
+  $destockages[$code_cip]["stock"] = CProductStockService::getFromCode($code_cip, $service_id);
+  if ($destockages[$code_cip]["stock"]) {
+    $destockages[$code_cip]["stock"]->quantity -= $destockages[$code_cip]["nb_produit"];
+  }
+}
+//mbTrace($destockages);
 
 // Création du template
 $smarty = new CSmartyDP();

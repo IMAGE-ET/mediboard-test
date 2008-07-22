@@ -62,9 +62,14 @@ class CProductDelivery extends CMbObject {
     if (!$this->_id) {
       $this->date_dispensation = mbDateTime();
     }
+    
+    // TODO: supprimer ce hack
+    $code = $this->code;
     $this->load();
+    $this->code = $code;
     if ($msg = $this->check()) return $msg;
-
+    
+    
     // If we want to deliver and if it hasn't been delivered yet
     if ($this->_deliver && !$this->date_delivery) {
       $this->loadRefsFwd();

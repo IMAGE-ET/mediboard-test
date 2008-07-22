@@ -45,7 +45,11 @@
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
               {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
-              {{if $curr_done->date_delivery}}(délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}}){{/if}}
+              {{if $curr_done->date_delivery}}
+                (délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}})
+              {{else}}
+                <button type="submit" class="cancel">annuler</button>
+              {{/if}}
               <br />
             {{/if}}
           {{foreachelse}}
@@ -77,10 +81,12 @@
         {{/if}}
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
-        {{assign var=stock_service value=$stocks_service.$code_cip}}
-        {{foreach from=$stock_service item=stock}}
-          {{$stock->quantity}} déjà en stock
-        {{/foreach}}
+        {{if $stocks_service.$code_cip}}
+          {{assign var=stock_service value=$stocks_service.$code_cip}}
+          {{if $stock_service->quantity>0}}
+          {{$stock_service->quantity}} déjà en stock
+          {{/if}}
+        {{/if}}
         </td>
         {{/if}}
       </tr>
