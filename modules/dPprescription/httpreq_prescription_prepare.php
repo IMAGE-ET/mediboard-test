@@ -23,6 +23,13 @@ $moments = CMomentUnitaire::loadAllMomentsWithPrincipal();
 $posologie = new CBcbPosologie();
 $posologie->load($code_cip, $no_poso);
 
+// Ajout de /kg 
+$unite_prise_posologie = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
+if($posologie->p_kg) {
+  $unite_prise_posologie .= "/kg";
+}
+      
+      
 // Sauvegarde des prises
 if($posologie->code_moment && $code_cip && $no_poso){
 	$moment = new CBcbMoment();
@@ -39,7 +46,7 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		} else {
 		  $prise_posologie->quantite = $posologie->quantite1;
 		}
-		$prise_posologie->unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
+		$prise_posologie->unite_prise = $unite_prise_posologie;
 		if($msg = $prise_posologie->store()){
 			return $msg;
 		}
@@ -67,7 +74,7 @@ if($posologie->code_moment && $code_cip && $no_poso){
 		  }
 		}
 		// Stockage de la prise
-		$prise_posologie->unite_prise = $posologie->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];
+		$prise_posologie->unite_prise = $unite_prise_posologie;
 		if($msg = $prise_posologie->store()){
 		 	return $msg;
 		}
