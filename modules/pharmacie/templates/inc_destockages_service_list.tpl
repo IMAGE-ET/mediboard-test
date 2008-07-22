@@ -6,7 +6,7 @@
     <th>Ecart</th>
     <th></th>
   </tr>
-  {{foreach from=$list_destockags item=curr_destockage}}
+  {{foreach from=$destockages item=curr_destockage}}
   <tr>
     <td>
       <div id="tooltip-content-{{$curr_delivery->_id}}" style="display: none;">{{$curr_delivery->_ref_stock->_view}}</div>

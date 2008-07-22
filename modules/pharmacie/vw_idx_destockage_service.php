@@ -20,7 +20,7 @@ $list_services = $service->loadMatchingList('nom');
 // Delivrance useful only for the filter
 $date = mbDate();
 $delivrance = new CProductDelivery();
-$delivrance->_date_min = $date;
+$delivrance->_date_min = $date.' 00:00:00';
 $delivrance->_date_max = $date.' 23:59:59';
 
 // Création du template
