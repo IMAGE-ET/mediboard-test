@@ -1,18 +1,31 @@
-<table class="form">
-  <tr>
-    <th class="category">{{$listOut|@count}} patient(s) sortis du bloc</th>
-  </tr>
-</table>
+<script type="text/javascript">
+
+submitSortieForm = function(oFormSortie,reveil) {
+  submitFormAjax(oFormSortie,'systemMsg', {onComplete: function(){
+      var url = new Url;
+      url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
+      url.addParam('date',"{{$date}}");
+      url.requestUpdate("out");
+      if(reveil) {
+      url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
+      url.addParam('date',"{{$date}}");
+      url.requestUpdate("reveil");
+      }
+    }
+  });
+}
+</script>
+
 
 <table class="tbl">
   <tr>
-    <th>Salle</th>
-    <th>Praticien</th>
-    <th>Patient</th>
-    <th>Chambre</th>
-    <th>Sortie Salle</th>
-    <th>Entrée reveil</th>
-    <th>Sortie reveil</th>
+    <th>{{tr}}SSPI.Salle{{/tr}}</th>
+    <th>{{tr}}SSPI.Praticien{{/tr}}</th>
+    <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th>{{tr}}SSPI.Chambre{{/tr}}</th>
+    <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
+    <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr> 
   {{foreach from=$listOut key=key item=curr_op}}
   <tr>
@@ -34,11 +47,12 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
         <input type="hidden" name="del" value="0" />
-     <input name="sortie_salle" size="3" maxlength="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
-     <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+        {{assign var=curr_op_id value=$curr_op->_id}}
+        {{mb_field object=$curr_op field=sortie_salle}}
+     <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
-      {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
+      {{mb_value object=$curr_op field="sortie_salle}}
       {{/if}}
     </td>
     <td class="button">
@@ -48,11 +62,11 @@
         <input type="hidden" name="dosql" value="do_planning_aed" />
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
         <input type="hidden" name="del" value="0" />
-        <input name="entree_reveil" size="3" maxlength="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
-        <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+        {{mb_field object=$curr_op field=entree_reveil}}
+        <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}
-      {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
+      {{mb_value object=$curr_op field="entree_reveil"}}
       {{/if}}
       
       {{if $curr_op->_ref_affectation_reveil->_id}}
@@ -67,12 +81,12 @@
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
         <input type="hidden" name="del" value="0" />
         {{if $can->edit}}
-        <input name="sortie_reveil" size="3" maxlength="5" type="text" value="{{$curr_op->sortie_reveil|date_format:"%H:%M"}}">
-        <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+        {{mb_field object=$curr_op field=sortie_reveil}}
+        <button class="tick notext" type="button" onclick="submitSortieForm(this.form);">{{tr}}Modify{{/tr}}</button>
 
-        <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
+        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form,1);">{{tr}}Cancel{{/tr}}</button>
         {{elseif $modif_operation}}
-        <select name="sortie_reveil" onchange="this.form.submit()">
+        <select name="sortie_reveil" onchange="submitSortieForm(this.form);">
           <option value="">-</option>
           {{foreach from=$timing.$key.sortie_reveil|smarty:nodefaults item=curr_time}}
           <option value="{{$curr_time}}" {{if $curr_time == $curr_op->sortie_reveil}}selected="selected"{{/if}}>
@@ -80,12 +94,16 @@
           </option>
           {{/foreach}}
         </select>
-        <button class="cancel notext" type="submit" onclick="this.form.sortie_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
+        <button class="cancel notext" type="button" onclick="$V(this.form.sortie_reveil, ''); submitSortieForm(this.form,1);">{{tr}}Cancel{{/tr}}</button>
         {{else}}
-          {{$curr_op->sortie_reveil|date_format:"%Hh%M"}}
+          {{mb_value object=$curr_op field="sortie_reveil"}}
         {{/if}}
       </form>
     </td>
   </tr>
   {{/foreach}}
 </table>
+
+<script type="text/javascript">
+  $('liout').innerHTML = {{$listOut|@count}};
+</script>

@@ -14,34 +14,50 @@ submitReveil = function(oFormAffectation, oFormOperation){
   // s'il y a une affectation, on submit les deux formulaires
 
   if(oFormAffectation.affect_id.value != ""){
-    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: oFormOperation.submit.bind(oFormOperation)} ); 
+    submitFormAjax(oFormAffectation, 'systemMsg', {onComplete: submitReveilForm(oFormOperation,0)} ); 
   }
   else {
   // sinon, on ne submit que l'operation
-    oFormOperation.submit();  
+    submitReveilForm(oFormOperation,1);  
   }
 }
+// Sens:
+// 0 Rafraichit seulement le tableau des reveils.
+// 1 Rafraichit le tableau des attentes et celui des reveils
+// 2 Rafraichit le tableau des reveils et celui des sorties
 
-</script>
-        
-<table class="form">
-  <tr>
-    <th class="category">
-      {{if $hour}}<div style="float: right;">{{$hour|date_format:"%Hh%M"}}</div>{{/if}}
-      {{$listReveil|@count}} patient(s) en salle de reveil
-    </th>
-  </tr>
-</table>
+submitReveilForm = function(oFormOperation,sens) {
+  submitFormAjax(oFormOperation,'systemMsg', {onComplete: function($sens){
+		  var url = new Url;
+		  url.setModuleAction("dPsalleOp", "httpreq_reveil_reveil");
+		  url.addParam('date',"{{$date}}");
+		  url.requestUpdate("reveil");
+
+      if(sens == 1) {
+			  url.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
+	      url.addParam('date',"{{$date}}");
+	      url.requestUpdate("ops");
+     }
+      if(sens == 2) {
+	      url.setModuleAction("dPsalleOp", "httpreq_reveil_out");
+	      url.addParam('date',"{{$date}}");
+	      url.requestUpdate("out");
+      }   
+    }
+  });
+}
+
+</script> 
 
 <table class="tbl">
   <tr>
-    <th>Salle</th>
-    <th>Praticien</th>
-    <th>Patient</th>
-    <th>Chambre</th>
-    <th>Sortie Salle</th>
-    <th>Entrée reveil</th>
-    <th>Sortie reveil</th>
+    <th>{{tr}}SSPI.Salle{{/tr}}</th>
+    <th>{{tr}}SSPI.Praticien{{/tr}}</th>
+    <th>{{tr}}SSPI.Patient{{/tr}}</th>
+    <th>{{tr}}SSPI.Chambre{{/tr}}</th>
+    <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
+    <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
+    <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
   </tr>    
   {{foreach from=$listReveil key=key item=curr_op}}
   <tr>
@@ -73,11 +89,11 @@ submitReveil = function(oFormAffectation, oFormOperation){
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
           <input type="hidden" name="del" value="0" />
-       <input name="sortie_salle" size="3" maxlength="5" type="text" value="{{$curr_op->sortie_salle|date_format:"%H:%M"}}">
-       <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
-     </form>
+          {{mb_field object=$curr_op field="sortie_salle"}}
+          <button class="tick notext" type="button" onclick="submitReveilForm(this.form,0);">{{tr}}Modify{{/tr}}</button>
+        </form>
       {{else}}
-      {{$curr_op->sortie_salle|date_format:"%Hh%M"}}
+      {{mb_value object=$curr_op field="sortie_salle"}}
       {{/if}}
     </td>
     <td>
@@ -99,11 +115,11 @@ submitReveil = function(oFormAffectation, oFormOperation){
         {{if $curr_op->_ref_sejour->type=="exte"}}
         -
         {{elseif $can->edit}}
-        <input name="entree_reveil" size="3" maxlength="5" type="text" value="{{$curr_op->entree_reveil|date_format:"%H:%M"}}">
-        <button class="tick notext" type="submit">{{tr}}Modify{{/tr}}</button>
+        {{mb_field object=$curr_op field="entree_reveil"}}
+        <button class="tick notext" type="button" onclick="submitReveilForm(this.form,0);">{{tr}}Modify{{/tr}}</button>
         <button class="cancel notext" type="button" onclick="submitReveil(document.delPersonnel{{$curr_op->_id}}, this.form);">{{tr}}Cancel{{/tr}}</button>
         {{elseif $modif_operation}}
-        <select name="entree_reveil" onchange="this.form.submit()">
+        <select name="entree_reveil" onchange="submitReveilForm(this.form,0);">
           <option value="">-</option>
           {{foreach from=$timing.$key.entree_reveil|smarty:nodefaults item=curr_time}}
           <option value="{{$curr_time}}" {{if $curr_time == $curr_op->entree_reveil}}selected="selected"{{/if}}>
@@ -111,9 +127,9 @@ submitReveil = function(oFormAffectation, oFormOperation){
           </option>
           {{/foreach}}
         </select>
-        <button class="cancel notext" type="submit" onclick="this.form.entree_reveil.value = ''">{{tr}}Cancel{{/tr}}</button>
+        <button class="cancel notext" type="button" onclick="$V(this.form.entree_reveil, '') ; submitReveilForm(this.form,1);">{{tr}}Cancel{{/tr}}</button>
         {{else}}
-          {{$curr_op->entree_reveil|date_format:"%Hh%M"}}
+          {{mb_value object=$curr_op field="entree_reveil"}}
         {{/if}}
       </form>
        
@@ -131,10 +147,14 @@ submitReveil = function(oFormAffectation, oFormOperation){
         <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="sortie_reveil" value="" />
-        <button class="tick notext" type="submit" onclick="this.form.sortie_reveil.value = 'current'">{{tr}}Modify{{/tr}}</button>
+        <button class="tick notext" type="button" onclick="$V(this.form.sortie_reveil, 'current') ; submitReveilForm(this.form,2);">{{tr}}Modify{{/tr}}</button>
       </form>
       {{else}}-{{/if}}
     </td>
   </tr>
   {{/foreach}}
 </table>
+
+<script type="text/javascript">
+  $('lireveil').innerHTML = {{$listReveil|@count}};
+</script>

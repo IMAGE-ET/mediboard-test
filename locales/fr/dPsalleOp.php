@@ -105,4 +105,14 @@ $locales['msg-CActeCCAM-create'] = '';
 $locales['msg-CActeCCAM-delete'] = '';
 $locales['msg-CActeCCAM-modify'] = '';
 $locales['mod-dPsalleOp-tab-vw_suivi_salles'] = 'Programme';
+$locales['SSPI.Attente'] = 'Attente';
+$locales['SSPI.Reveil'] = 'Réveil';
+$locales['SSPI.Sortie'] = 'Sortie';
+$locales['SSPI.Salle'] = 'Salle';
+$locales['SSPI.Praticien'] = 'Praticien';
+$locales['SSPI.Patient'] = 'Patient';
+$locales['SSPI.SortieSalle'] = 'Sortie salle';
+$locales['SSPI.EntreeReveil'] = 'Entrée réveil';
+$locales['SSPI.Chambre'] = 'Chambre';
+$locales['SSPI.SortieReveil'] = 'Sortie réveil';
 ?>

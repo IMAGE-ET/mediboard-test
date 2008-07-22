@@ -13,21 +13,9 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
-$hour = mbTime(null);
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
-
-// Chargement des praticiens
-$listAnesths = new CMediusers;
-$listAnesths = $listAnesths->loadAnesthesistes();
-
-$listChirs = new CMediusers;
-$listChirs = $listChirs->loadPraticiens();
-
-
-// Selection des salles
-$listSalles = new CSalle;
-$listSalles = $listSalles->loadList();
+$hour = mbTime(null);
 
 // Selection des plages opératoires de la journée
 $plages = new CPlageOp;
@@ -45,13 +33,15 @@ $where["entree_reveil"] = "IS NULL";
 $order = "sortie_salle";
 $listOps = $listOps->loadList($where, $order);
 foreach($listOps as $key => $value) {
-  $listOps[$key]->loadRefsFwd();
+  $listOps[$key]->loadRefChir();
+  $listOps[$key]->loadRefSejour();
+  $listOps[$key]->loadRefPlageOp();
   if($listOps[$key]->_ref_sejour->type == "exte"){
     unset($listOps[$key]);
     continue;
   }
-  $listOps[$key]->_ref_plageop->loadRefsFwd();
-  $listOps[$key]->_ref_sejour->loadRefsFwd();
+  
+  $listOps[$key]->_ref_sejour->loadRefPatient();
   //Tableau des timings
   $timing[$key]["entree_reveil"] = array();
   $timing[$key]["sortie_reveil"] = array();
@@ -69,19 +59,17 @@ if(Cmodule::getActive("dPpersonnel")) {
   $personnels = $personnel->loadListPers("reveil");
 }
 
+
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("personnels"    , $personnels              );
-$smarty->assign("listSalles"    , $listSalles              );
-$smarty->assign("listAnesths"   , $listAnesths             );
-$smarty->assign("listChirs"     , $listChirs               );
-$smarty->assign("plages"        , $plages                  );
-$smarty->assign("listOps"       , $listOps                 );
-$smarty->assign("timing"        , $timing                  );
-$smarty->assign("date"          , $date                    );
-$smarty->assign("hour"          , $hour                    );
-$smarty->assign("modif_operation", $modif_operation);
+$smarty->assign("personnels"             , $personnels              );
+$smarty->assign("plages"                 , $plages                  );
+$smarty->assign("listOps"                , $listOps                 );
+$smarty->assign("timing"                 , $timing                  );
+$smarty->assign("date"                   , $date                    );
+$smarty->assign("hour"                   , $hour        );
+$smarty->assign("modif_operation"        , $modif_operation         );
 
 $smarty->display("inc_reveil_ops.tpl");
 

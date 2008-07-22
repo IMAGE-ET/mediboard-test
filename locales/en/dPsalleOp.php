@@ -105,4 +105,14 @@ $locales['CCodable-back-actes_ccam'] = '';
 $locales['msg-CActeCCAM-create'] = '';
 $locales['msg-CActeCCAM-delete'] = '';
 $locales['msg-CActeCCAM-modify'] = '';
+$locales['SSPI.Attente'] = '';
+$locales['SSPI.Reveil'] = '';
+$locales['SSPI.Sortie'] = '';
+$locales['SSPI.Salle'] = '';
+$locales['SSPI.Praticien'] = '';
+$locales['SSPI.Patient'] = '';
+$locales['SSPI.SortieSalle'] = '';
+$locales['SSPI.EntreeReveil'] = '';
+$locales['SSPI.Chambre'] = '';
+$locales['SSPI.SortieReveil'] = '';
 ?>
