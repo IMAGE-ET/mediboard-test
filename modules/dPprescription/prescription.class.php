@@ -577,7 +577,9 @@ class CPrescription extends CMbObject {
   }
   
   // Generation du plan de soin sous forme de tableau
-  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, &$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", &$intitule_prise_element="", &$administrations=""){
+  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, 
+  												&$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", 
+  												&$intitule_prise_element="", &$administrations="", &$transmissions=""){
 
 
   	// Parcours des lignes
@@ -605,6 +607,8 @@ class CPrescription extends CMbObject {
 								$_administration->loadRefPrise();
 							}
 							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
+							$_administration->loadRefsTransmissions();  
+							$transmissions[$_administration->_id] = $_administration->_ref_transmissions;
 						}		
           }		
         	if(!$_line_med->_ref_prises){
@@ -659,6 +663,8 @@ class CPrescription extends CMbObject {
 									$_administration->loadRefPrise();
 								}
 								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
+							  $_administration->loadRefsTransmissions();
+							  $transmissions[$_administration->_id] = $_administration->_ref_transmissions;
 							}			
 			      }
 		      	if(!$_line_element->_ref_prises){

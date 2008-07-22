@@ -10,7 +10,7 @@
   {{foreach from=$dispensations key=code_cip item=unites}}
     {{assign var=medicament value=$medicaments.$code_cip}}
     <tr>
-      <th colspan="5">{{$medicament->libelle}}</th>
+      <th colspan="6">{{$medicament->libelle}}</th>
     </tr>
     <tbody class="hoverable">
     {{foreach from=$unites key=unite_prise item=quantite name="dispensation"}}
@@ -25,7 +25,7 @@
         {{if $smarty.foreach.dispensation.first}}
         <td rowspan="{{$unites|@count}}" style="text-align: center" />{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</td>
-        <td style="text-align: left">
+        <td rowspan="{{$unites|@count}}" style="text-align: left">
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
               {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y à %Hh%M"}}

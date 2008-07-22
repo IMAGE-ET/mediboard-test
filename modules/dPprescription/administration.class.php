@@ -25,7 +25,7 @@ class CAdministration extends CMbMetaObject {
   
   // Object references
   var $_ref_administrateur = null;
-  
+  var $_ref_transmissions  = null;
  
   function getSpec() {
     $spec = parent::getSpec();
@@ -33,6 +33,13 @@ class CAdministration extends CMbMetaObject {
     $spec->key   = 'administration_id';
     return $spec;
   }
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["transmissions"] = "CTransmissionMedicale object_id";
+    return $backRefs;
+  }     
+  
   
   function getSpecs() {
   	$specsParent = parent::getSpecs();
@@ -64,6 +71,19 @@ class CAdministration extends CMbMetaObject {
   function loadRefsFwd(){
   	parent::loadRefsFwd();
   	$this->loadRefAdministrateur();
+    $this->_ref_object->loadRefsFwd();
+  	$this->_view = "Administration du $this->dateTime par {$this->_ref_administrateur->_view}";
+  	
+  	if($this->object_class == "CPrescriptionLineMedicament"){
+  		$this->_view .= " ({$this->_ref_object->_ref_produit->libelle})";
+  	}
+  }
+  
+  function loadRefsTransmissions(){
+  	$this->_ref_transmissions = $this->loadBackRefs("transmissions");
+		foreach($this->_ref_transmissions as &$_trans){
+  	  $_trans->loadRefsFwd();
+    }					  
   }
   
   function loadRefPrise(){

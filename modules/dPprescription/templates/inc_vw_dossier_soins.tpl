@@ -32,6 +32,13 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
   url.popup(400,300,"Administration");
 }
 
+
+viewLegend = function(){
+  var url = new Url;
+  url.setModuleAction("dPhospi", "vw_lengende_dossier_soin");
+  url.popup(300,150, "Légende");
+}
+
 </script>
 
 
@@ -45,12 +52,15 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 {{if $prescription_id}}
 
 	<h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
-	<table>
+	<table style="width: 100%">
 	  <tr>
 	    <td>
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
+	    </td>
+	    <td style="text-align: right">
+	      <button type="button" class="search" onclick="viewLegend()">Légende</button>
 	    </td>
 	  </tr>
 	</table>
@@ -70,7 +80,8 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 	  <!-- Affichage des medicaments -->
 	  {{if $lines_med|@count}}
 	    {{foreach from=$lines_med item=_line name="foreach_med"}}
-			  {{foreach from=$_line key=unite_prise item=line name="foreach_line"}}        
+			  {{foreach from=$_line key=unite_prise item=line name="foreach_line"}}       
+	
 					  <tr id="line_CPrescriptionLineMedicament_{{$line->_id}}">
 					    {{if $smarty.foreach.foreach_med.first && $smarty.foreach.foreach_line.first}}
 					    <th rowspan="{{$nb_produit_by_cat.med}}">Medicaments</th>
@@ -140,7 +151,15 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 											 {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise) && @array_key_exists("administrations", $administrations.$line_id.$unite_prise.$_hour)}}
 							          <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>
+							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+								          {{if array_key_exists($administration_id, $transmissions)}}
+								            <ul>
+								              {{foreach from=$transmissions.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{/foreach}}
+								            </ul>
+								          {{/if}}
 							          {{/foreach}}
 							          </ul>
 							        {{else}}
@@ -154,6 +173,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 						     {{foreach from=$tabHours item=_hour}}
 						     <td style="text-align: center">
 						       <div style="border: 1px dotted #000; min-height: 15px;" 
+						            class="tooltip-trigger administration"
 						            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}'} })"
 						           onclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
 	       	           {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
@@ -164,7 +184,16 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 											 {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise) && @array_key_exists("administrations", $administrations.$line_id.$unite_prise.$_hour)}}
 							         <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
+							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
 							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+								          {{if array_key_exists($administration_id, $transmissions)}}
+								            <ul>
+								              {{foreach from=$transmissions.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{/foreach}}
+								            </ul>
+								          {{/if}}
+								        
 								        {{/foreach}}
 								      </ul>
 							        {{else}}
@@ -198,10 +227,12 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 	    {{foreach from=$elements_chap key=name_cat item=elements_cat}}
 	      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
 	      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
-	        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}    
+	        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}   
+	         
 	        <tr id="line_CPrescriptionLineElement_{{$element->_id}}">
 			      {{if $smarty.foreach.foreach_elt.first && $smarty.foreach.foreach_cat.first}}
-			        <th rowspan="{{$nb_produit_by_cat.$name_cat}}">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{$categorie->nom}}</th>
+			        <th rowspan="{{$nb_produit_by_cat.$name_cat}}" 
+			            onclick="addCibleTransmission('CCategoryPrescription', '{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{$categorie->nom}}</th>
 			      {{/if}}
 
 				    <td class="text">
@@ -268,7 +299,15 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 											 {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise) && @array_key_exists("administrations", $administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour)}}
 							          <ul>
 							          {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>
+							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+								          {{if array_key_exists($administration_id, $transmissions)}}
+								            <ul>
+								              {{foreach from=$transmissions.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{/foreach}}
+								            </ul>
+								          {{/if}}
 							          {{/foreach}}
 							          </ul>
 							        {{else}}
@@ -282,7 +321,7 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 						     <td style="text-align: center">
 						       <div style="border: 1px dotted #000; min-height: 15px;"
 						            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}-{{$element_id}}-{{$unite_prise}}-{{$_hour}}'} })"
-						            class="tooltip-trigger
+						            class="administration tooltip-trigger"
 						             
 						        onclick="addAdministration('{{$element_id}}', '', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
 						         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
@@ -293,7 +332,15 @@ addAdministration = function(line_id, quantite, key_tab, object_class, date, heu
 										{{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise) && @array_key_exists("administrations", $administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour)}}
 							        <ul>
 							        {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
-							           <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>
+							           {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+								          {{if array_key_exists($administration_id, $transmissions)}}
+								            <ul>
+								              {{foreach from=$transmissions.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{/foreach}}
+								            </ul>
+								          {{/if}}
 							        {{/foreach}}
 							        </ul>
 							      {{else}}

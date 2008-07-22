@@ -34,8 +34,14 @@ $prise->quantite = $quantite;
 
 $dateTime = ($heure==24) ? "$date 23:59:00" : "$date $heure:00:00";
 
+// Transmission
+$transmission = new CTransmissionMedicale();
+
+
+
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("transmission", $transmission);
 $smarty->assign("line", $line);
 $smarty->assign("unite_prise", $unite_prise);
 $smarty->assign("prise", $prise);

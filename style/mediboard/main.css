@@ -3030,6 +3030,7 @@ ul.select-tree li.drop {
 .administration {
 	border: 1px dotted #000;
 	min-height: 15px;
+  cursor: pointer;
 }
 
 .a_administrer {
@@ -3050,5 +3051,4 @@ background-color: #88f;
 
 .administration_annulee {
 	background-color: #F00;
-}
 }

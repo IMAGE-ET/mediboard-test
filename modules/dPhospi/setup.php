@@ -212,7 +212,12 @@ class CSetupdPhospi extends CSetup {
             ADD INDEX (`object_class`)";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.27";
+    $this->makeRevision("0.27");
+    $sql = "ALTER TABLE `transmission_medicale` 
+	          CHANGE `object_class` `object_class` ENUM ('CPrescriptionLineElement','CPrescriptionLineMedicament','CPrescriptionLineComment','CCategoryPrescription','CAdministration');";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.28";
   }
 }
 ?>
