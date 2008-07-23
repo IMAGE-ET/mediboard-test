@@ -2,23 +2,23 @@
 
 moveTbody = function(oTbody){
   var oTableMed = $('med');
-	var oTableTrt = $('traitement');
-	var oTableMedArt = $('med_art');
-	var oTableTrtArt = $('traitement_art');
-	
-	if(oTbody.hasClassName('med')){
+  var oTableTrt = $('traitement');
+  var oTableMedArt = $('med_art');
+  var oTableTrtArt = $('traitement_art');
+  
+  if(oTbody.hasClassName('med')){
     if(oTbody.hasClassName('line_stopped')){
-      oTableMedArt.insert(oTbody);		  
+      oTableMedArt.insert(oTbody);      
     } else {
-      oTableMed.insert(oTbody);		  
-    }	
+      oTableMed.insert(oTbody);     
+    } 
   }
   if (oTbody.hasClassName('traitement')){
     if(oTbody.hasClassName('line_stopped')){
-      oTableTrtArt.insert(oTbody);		  
+      oTableTrtArt.insert(oTbody);      
     } else {
-      oTableTrt.insert(oTbody);		  
-    }		  	
+      oTableTrt.insert(oTbody);     
+    }       
   }
 }
 
@@ -55,11 +55,11 @@ changeColor = function(object_id, object_class, oForm, traitement, cat_id){
   
   // Deplacement de la ligne
   if(classes_before != classes_after){
-	  if(object_class == 'CPrescriptionLineMedicament'){
-	    moveTbody(oTbody);
-	  } else {
-	    moveTbodyElt(oTbody, cat_id);
-	  }
+    if(object_class == 'CPrescriptionLineMedicament'){
+      moveTbody(oTbody);
+    } else {
+      moveTbodyElt(oTbody, cat_id);
+    }
   }
 }
 
@@ -117,7 +117,7 @@ changePraticienMed = function(praticien_id){
 // On met à jour les valeurs de praticien_id
 Main.add( function(){
   if(document.selPraticienLine){
-	  changePraticienMed(document.selPraticienLine.praticien_id.value);
+    changePraticienMed(document.selPraticienLine.praticien_id.value);
   }
 } );
 
@@ -134,9 +134,9 @@ Main.add( function(){
   var praticien_sortie_id = {{$praticien_sortie_id|json}};
   
   $A(chps).each( function(option) {
-	  option.selected = option.value==praticien_sortie_id;
-	});
-  {{/if}}	 
+    option.selected = option.value==praticien_sortie_id;
+  });
+  {{/if}}  
 {{/if}}
 
 
@@ -213,10 +213,10 @@ testPharma = function(line_id){
 {{/if}}
 
 {{if $prescription->object_id}}
-	<select name="advAction" style="float: right">
-	  <option value="">&mdash; Actions spécifiques</option>
-	  <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
-	  <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
+  <select name="advAction" style="float: right">
+    <option value="">&mdash; Actions spécifiques</option>
+    <option value="stopPerso" onclick="Prescription.stopTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Arret des traitements perso</option>
+    <option value="goPerso" onclick="Prescription.goTraitementPerso(this.parentNode,'{{$prescription->_id}}','{{$mode_pharma}}')">Reprise des traitements perso</option>
   </select>
 {{/if}}
 {{if $prescription->_can_add_line}}
@@ -235,32 +235,26 @@ testPharma = function(line_id){
     <button class="new" onclick="$('add_line_comment_med').show();">Ajouter un commentaire</button>
     
     <br />
-	  <input type="text" name="produit" value="" size="12" />
-	  
-	  <input type="checkbox" name="_recherche_livret" value="1" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
-	  
-	  Livret Thérap.
-	  
-	  <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
-	  <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
-	  <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
-	  {{if $prescription->type == "sejour"}}
-	  <input type="hidden" name="_recherche_livret" value="1" />
-	  {{else}}
-	  <input type="hidden" name="_recherche_livret" value="0" />
-	  {{/if}}
-	  <script type="text/javascript">
-		  MedSelector.init = function(onglet){
-		    this.sForm = "searchProd";
-		    this.sView = "produit";
-		    this.sCode = "code_cip";
-		    this.sRechercheLivret = document.searchProd._recherche_livret.value;
-		    this.sSearch = document.searchProd.produit.value;
-		    this.sOnglet = onglet;
-		    this.selfClose = false;
-		    this.pop();
-		  }
-	</script>
+    <input type="text" name="produit" value="" size="12" />
+    <input type="checkbox" name="_recherche_livret" {{if $prescription->type=="sejour"}}checked="checked"{{/if}} />
+    Livret Thérap.
+    
+    <div style="display:none;" class="autocomplete" id="produit_auto_complete"></div>
+    <button type="button" class="search" onclick="MedSelector.init('produit');">Rechercher</button>
+    <input type="hidden" name="code_cip" onchange="Prescription.addLine(this.value);"/>
+
+    <script type="text/javascript">
+      MedSelector.init = function(onglet){
+        this.sForm = "searchProd";
+        this.sView = "produit";
+        this.sCode = "code_cip";
+        this.sRechercheLivret = document.searchProd._recherche_livret.value;
+        this.sSearch = document.searchProd.produit.value;
+        this.sOnglet = onglet;
+        this.selfClose = false;
+        this.pop();
+      }
+  </script>
   </form>
   
   <br />
@@ -325,15 +319,15 @@ testPharma = function(line_id){
  
   {{if $prescription->_ref_lines_med_comments.comment|@count}}
   <tr>
-	  <th colspan="8">Commentaires</th>
-	</tr>
+    <th colspan="8">Commentaires</th>
+  </tr>
   {{/if}}
   
   <!-- Affichage des traitements -->
   {{if $prescription->object_id && $traitements}}
-	  {{foreach from=$traitements item=traitement}}
-	      {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
-	  {{/foreach}}
+    {{foreach from=$traitements item=traitement}}
+        {{include file="../../dPprescription/templates/inc_vw_line_medicament.tpl" curr_line=$traitement prescription=$prescription->_ref_object->_ref_prescription_traitement prescription_reelle=$prescription}}
+    {{/foreach}}
   {{/if}}
   
   <!-- Parcours des commentaires --> 
@@ -366,31 +360,31 @@ testPharma = function(line_id){
     <tr>
       <!-- Affichage d'une ligne de medicament -->
       {{if $_hist_line->_class_name == "CPrescriptionLineMedicament"}}
-	      <td><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_hist_line->_class_name}}', object_id: {{$_hist_line->_id}} } })">{{$_hist_line->_view}}</a></td>
-		    {{if !$_hist_line->fin}}
-			    <td>
-			      {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}
-			    </td>
-			    <td>
-			      {{mb_label object=$_hist_line field="duree"}}: 
-			        {{if $_hist_line->duree && $_hist_line->unite_duree}}
-			          {{mb_value object=$_hist_line field="duree"}}  
-			          {{mb_value object=$_hist_line field="unite_duree"}}
-			        {{else}}
-			        -
-			        {{/if}}
-			    </td>
-			    <td>
-			      {{mb_label object=$_hist_line field="_fin"}}: {{mb_value object=$_hist_line field="_fin"}}
-			    </td>
-			    {{else}}
-			    <td colspan="3">
-			      {{mb_label object=$_hist_line field="fin"}}: {{mb_value object=$_hist_line field="fin"}}
-			    </td>
-		    {{/if}}
-	      <td>
-	        Praticien: {{$_hist_line->_ref_praticien->_view}}
-	      </td>
+        <td><a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$_hist_line->_class_name}}', object_id: {{$_hist_line->_id}} } })">{{$_hist_line->_view}}</a></td>
+        {{if !$_hist_line->fin}}
+          <td>
+            {{mb_label object=$_hist_line field="debut"}}: {{mb_value object=$_hist_line field="debut"}}
+          </td>
+          <td>
+            {{mb_label object=$_hist_line field="duree"}}: 
+              {{if $_hist_line->duree && $_hist_line->unite_duree}}
+                {{mb_value object=$_hist_line field="duree"}}  
+                {{mb_value object=$_hist_line field="unite_duree"}}
+              {{else}}
+              -
+              {{/if}}
+          </td>
+          <td>
+            {{mb_label object=$_hist_line field="_fin"}}: {{mb_value object=$_hist_line field="_fin"}}
+          </td>
+          {{else}}
+          <td colspan="3">
+            {{mb_label object=$_hist_line field="fin"}}: {{mb_value object=$_hist_line field="fin"}}
+          </td>
+        {{/if}}
+        <td>
+          Praticien: {{$_hist_line->_ref_praticien->_view}}
+        </td>
       {{else}}
       <!-- Affichage d'une ligne de commentaire -->
         <td colspan="3">
@@ -398,11 +392,11 @@ testPharma = function(line_id){
          </td>
          <td>
            {{mb_label object=$_hist_line field="ald"}}:
-		      {{if $_hist_line->ald}}
-		        Oui
-		      {{else}}
-		        Non
-		      {{/if}}
+          {{if $_hist_line->ald}}
+            Oui
+          {{else}}
+            Non
+          {{/if}}
          </td>
          <td>
             Praticien: {{$_hist_line->_ref_praticien->_view}}
@@ -418,35 +412,35 @@ testPharma = function(line_id){
 <script type="text/javascript">
 
 if(document.addLine && document.searchProd){
-	// UpdateFields de l'autocomplete de medicaments
-	updateFieldsMedicament = function(selected) {
-	  Element.cleanWhitespace(selected);
-	  dn = selected.childNodes;
-	  Prescription.addLine(dn[0].firstChild.nodeValue);
-	  $('searchProd_produit').value = "";
-	}
-	
-	// Preparation des formulaire
-	prepareForm(document.addLine);
-	prepareForm(document.searchProd);
-	
-	var oFormProduit = document.searchProd;
-	
-	// Autocomplete des medicaments
-	urlAuto = new Url();
-	urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
-	urlAuto.addParam("produit_max", 40);
-	
-	// callback => methode pour ajouter en post des parametres
-	// Faire un mini framework pour rajouter des elements du meme formulaire
-	urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
-	  minChars: 3,
-	  updateElement: updateFieldsMedicament,
-	  callback: 
-	    function(input, queryString){ 
-	      return (queryString + "&inLivret="+$V(oFormProduit._recherche_livret)); 
-	    }
-	} );
+  // UpdateFields de l'autocomplete de medicaments
+  updateFieldsMedicament = function(selected) {
+    Element.cleanWhitespace(selected);
+    dn = selected.childNodes;
+    Prescription.addLine(dn[0].firstChild.nodeValue);
+    $('searchProd_produit').value = "";
+  }
+  
+  // Preparation des formulaire
+  prepareForm(document.addLine);
+  prepareForm(document.searchProd);
+  
+  var oFormProduit = document.searchProd;
+  
+  // Autocomplete des medicaments
+  urlAuto = new Url();
+  urlAuto.setModuleAction("dPmedicament", "httpreq_do_medicament_autocomplete");
+  urlAuto.addParam("produit_max", 40);
+  
+  // callback => methode pour ajouter en post des parametres
+  // Faire un mini framework pour rajouter des elements du meme formulaire
+  urlAuto.autoComplete("searchProd_produit", "produit_auto_complete", {
+    minChars: 3,
+    updateElement: updateFieldsMedicament,
+    callback: 
+      function(input, queryString){
+        return (queryString + "&inLivret="+($V(oFormProduit._recherche_livret)?'1':'0')); 
+      }
+  } );
 }
 
 
