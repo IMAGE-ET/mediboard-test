@@ -15,7 +15,7 @@ function main() {
 	}	
 }
 
-//Event.onDOMReady(main);
+//document.observe('dom:loaded', main);
 
 /**
  * Main page initialisation scripts
@@ -818,7 +818,7 @@ Object.extend(ObjectTooltip, {
     },
     dom: {
       sClass: "tooltip"
-    },
+    }
   },
   create: function(eTrigger, oOptions) {
     if (!eTrigger.oTooltip) {
