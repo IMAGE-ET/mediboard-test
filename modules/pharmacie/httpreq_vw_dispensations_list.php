@@ -42,6 +42,7 @@ $quantites = array();
 $done = array();
 $patients = array();
 $stocks_service = array();
+$warning = array();
 
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
@@ -73,9 +74,11 @@ foreach($prescriptions as $_prescription){
     // Calcul de la quantite en fonction des prises
     $_line_med->calculQuantiteLine($date_min, $date_max);
     foreach($_line_med->_quantites as $unite_prise => $quantite){
+    	$mode_kg = 0;
       $_unite_prise = str_replace('/kg', '', $unite_prise);
       // Dans le cas d'un unite_prise/kg
       if($_unite_prise != $unite_prise){
+      	$mode_kg = 1;
         // On recupere le poids du patient pour calculer la quantite
         if(!$_prescription->_ref_object->_ref_patient){
           $_prescription->_ref_object->loadRefPatient();
@@ -86,7 +89,15 @@ foreach($prescriptions as $_prescription){
         }
         $const_med = $patient->_ref_constantes_medicales;
         $poids     = $const_med->poids;
-        $quantite  *= $poids;
+        // Si poids
+        if($poids){
+          $quantite  *= $poids;
+        }
+        // Si le poids n'est pas renseigné, on remet l'ancienne unite
+				else {
+					$_unite_prise = $unite_prise;
+					$warning[$_line_med->code_cip][$_unite_prise] = 1;
+				}
       }
       if (!isset($dispensations[$_line_med->code_cip])) {
         $dispensations[$_line_med->code_cip] = array();
@@ -94,7 +105,9 @@ foreach($prescriptions as $_prescription){
       if (!isset($dispensations[$_line_med->code_cip][$_unite_prise])) {
         $dispensations[$_line_med->code_cip][$_unite_prise] = 0;
       }
-      $dispensations[$_line_med->code_cip][$_unite_prise] += ceil($quantite);  
+      if(($mode_kg && $poids) || !$mode_kg){
+        $dispensations[$_line_med->code_cip][$_unite_prise] += ceil($quantite);  
+      }  
     }
     if(!array_key_exists($_line_med->code_cip, $medicaments)){
       $medicaments[$_line_med->code_cip] =& $_line_med->_ref_produit;
@@ -183,6 +196,7 @@ foreach($quantites as $code => &$_quantite){
 
 // Smarty template
 $smarty = new CSmartyDP();
+$smarty->assign('warning', $warning);
 $smarty->assign('patients', $patients);
 $smarty->assign('dispensations', $dispensations);
 $smarty->assign('delivrances', $delivrances);

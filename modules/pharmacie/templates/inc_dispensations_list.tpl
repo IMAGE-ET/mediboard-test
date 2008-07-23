@@ -17,7 +17,12 @@
     <tbody class="hoverable">
     {{foreach from=$unites key=unite_prise item=quantite name="dispensation"}}
       <tr>
-        <td>{{$quantite}} {{$unite_prise}}</td>
+        <td>
+          {{$quantite}} {{$unite_prise}} 
+          {{if array_key_exists($code_cip, $warning) && array_key_exists($unite_prise, $warning.$code_cip)}}
+            <img src="images/icons/warning.png" alt="Poids non renseigné" title="Poids non renseigné" />
+          {{/if}}   
+        </td>
         <td>
         {{if array_key_exists($code_cip,$quantites_reference) && array_key_exists($unite_prise, $quantites_reference.$code_cip)}}
           {{$quantites_reference.$code_cip.$unite_prise}} {{$medicament->libelle_unite_presentation}}

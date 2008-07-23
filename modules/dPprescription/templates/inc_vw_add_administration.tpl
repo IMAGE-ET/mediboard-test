@@ -47,7 +47,7 @@ function submitTransmission(administration_id){
 	      {{mb_field object=$prise field=quantite min=1 increment=1 form=addAdministration}}
 	      
 	      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
-	        {{$unite_prise}}
+	        {{$line->_ref_produit->libelle_unite_presentation}}
 	      {{else}}
 	        {{$line->_unite_prise}}
 	      {{/if}} 

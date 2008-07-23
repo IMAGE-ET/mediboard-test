@@ -45,10 +45,7 @@ $intitule_prise_element="";
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
-
-
-if($prescription->_id){
-	
+if($prescription->_id){	
 	// Chargement des lignes
 	$prescription->loadRefsLinesMed("1");
 	$prescription->loadRefsLinesElementByCat();
@@ -61,7 +58,6 @@ if($prescription->_id){
 	}
 	$lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
 	  	  
-
 	// Calcul du plan de soin pour la journée $date
 	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, 
 	$nb_produit_by_cat, $all_lines_med, $all_lines_element, $intitule_prise_med,$intitule_prise_element,$administrations,$transmissions);

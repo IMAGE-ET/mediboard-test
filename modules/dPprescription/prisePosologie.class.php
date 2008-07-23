@@ -185,6 +185,7 @@ class CPrisePosologie extends CMbMetaObject {
   	$nb_days  = mbDaysRelative($borne_min, $borne_max);
   	$nb_minutes = mbMinutesRelative($borne_min, $borne_max);
   	
+  
   	/*
   	mbTrace($nb_hours, "nombre d'heures entre le debut et la fin");
   	mbTrace($nb_days,  "nombre de jours entre le debut et la fin");
@@ -222,10 +223,11 @@ class CPrisePosologie extends CMbMetaObject {
   			$nb = $nb_days / 360;
   			break;
   	}
-  	
+
+  
   	if($this->moment_unitaire_id && $this->_ref_moment->heure){
   		$heure = $this->_ref_moment->heure;
-  		
+  
   		// Si une seule journée, on regarde si la prise est pendant la journée
   		if($nb_days == 0){
   			$day = mbDate($borne_min); // == mbDate($borne_max)	
@@ -234,14 +236,15 @@ class CPrisePosologie extends CMbMetaObject {
 				if($date_heure > $borne_min && $date_heure < $borne_max){
 				  $nb = 1;
 				}
+				
   		} 
   		else {
   			// On calcule combien de fois la prise sera effectuée pendant la ligne
   		  // Pour cela, on verifie si la prise est faite le 1er et dernier jour
 				$first_prise = mbDate($borne_min)." $heure";
   		  $last_prise  = mbDate($borne_max)." $heure";
-  		  $nb = $nb_days - 2;
- 		  
+			  $nb = $nb_days - 2;
+
   		  if($first_prise > $borne_min){
 				  $nb++;
 				}

@@ -124,7 +124,6 @@ class CBcbProduit extends CBcbObject {
   	$this->nb_presentation = ($conditionnement["NB_PRESENTATION"]) ? $conditionnement["NB_PRESENTATION"] : "1";  	
 
     $this->loadLibelleConditionnement($conditionnement["CODE_CONDITIONNEMENT"]);    
-    //mbTrace($this);
   }
  
   function loadLibelleConditionnement($code_conditionnement){

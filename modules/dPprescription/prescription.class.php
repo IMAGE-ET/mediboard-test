@@ -544,10 +544,38 @@ class CPrescription extends CMbObject {
   }
   
   
-  function calculPrisesSoin($date, &$_line, &$lines, &$list_prises, &$all_lines, &$intitule_prise, &$tab_count, &$prises){
+  function calculPrisesSoin($date, &$_line, &$lines, &$list_prises, &$all_lines, &$intitule_prise, &$tab_count, &$prises, $mode_feuille_soin){
     foreach($_line->_ref_prises as &$_prise){
 			$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
 			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
+			
+			$poids_ok = 1;
+			
+			if(!is_numeric($_prise->unite_prise) && $_line->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
+				//$quantite = 0;
+				$_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
+        // Dans le cas d'un unite_prise/kg
+        if($_unite_prise != $_prise->unite_prise){
+          // On recupere le poids du patient pour calculer la quantite
+          if(!$_line->_ref_prescription->_ref_object->_ref_patient){
+           $_line->_ref_prescription->_ref_object->loadRefPatient();
+          }
+          $patient =& $_line->_ref_prescription->_ref_object->_ref_patient;          
+          if(!$patient->_ref_constantes_medicales){
+            $patient->loadRefConstantesMedicales();
+          }
+          $const_med = $patient->_ref_constantes_medicales;
+          $poids     = $const_med->poids;
+					
+          if($poids){
+            $_prise->quantite  *= $poids;
+          } else {
+          	$poids_ok = 0;
+          	$_prise->quantite = 0;
+          }
+        }
+    	}
+			
 			// Stockage du nombre de ligne de medicaments
 		  if(!@array_key_exists($key_tab, $lines[$_line->_id])){
 		    if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
@@ -556,13 +584,13 @@ class CPrescription extends CMbObject {
 			}
 			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
 				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-				if($_line->_fin_reelle > $dateTimePrise){
+				if($_line->_fin_reelle > $dateTimePrise && $poids_ok){
 	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
 				}
 			}
 	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
 	 	  	$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-	 	  	if($_line->_fin_reelle > $dateTimePrise){
+	 	  	if($_line->_fin_reelle > $dateTimePrise && $poids_ok){
 	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
 	 	  	}
 	 	  }
@@ -581,7 +609,8 @@ class CPrescription extends CMbObject {
   												&$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", 
   												&$intitule_prise_element="", &$administrations="", &$transmissions=""){
 
-
+    $mode_feuille_soin = is_array($administrations) ? 0 : 1;
+		
   	// Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){
     	if(count($lines_cat)){
@@ -592,7 +621,11 @@ class CPrescription extends CMbObject {
           // Chargement des administrations
           if(is_array($administrations)){
 						$_line_med->loadRefsAdministrations($date);
+						
+							
 						foreach($_line_med->_ref_administrations as $_administration){
+							
+							
 							$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
 							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["quantite"] += $_administration->quantite;
 							
@@ -602,6 +635,9 @@ class CPrescription extends CMbObject {
 							$log->object_class = $_administration->_class_name;
 							$log->loadMatchingObject();
 							$log->loadRefsFwd();
+							
+							$_line_med->_ref_produit->loadConditionnement();
+							$log->_ref_object->_ref_object =& $_line_med;
 							
 							if($_administration->prise_id){
 								$_administration->loadRefPrise();
@@ -623,7 +659,7 @@ class CPrescription extends CMbObject {
 						}
 						continue;
 					}
-					$this->calculPrisesSoin($date, $_line_med, $lines_med, $list_prises_med, $all_lines_med, $intitule_prise_med, $nb_produit_by_cat["med"], $prises_med);
+					$this->calculPrisesSoin($date, $_line_med, $lines_med, $list_prises_med, $all_lines_med, $intitule_prise_med, $nb_produit_by_cat["med"], $prises_med, $mode_feuille_soin);
     	  
 					
 					if(is_array($administrations)){
@@ -679,7 +715,7 @@ class CPrescription extends CMbObject {
 						 }
 						 continue;
 						}  
-						$this->calculPrisesSoin($date, $_line_element, $lines_element[$name_chap][$name_cat], $list_prises_element, $all_lines_element[$name_chap][$name_cat], $intitule_prise_element, $nb_produit_by_cat[$name_cat], $prises_element);
+						$this->calculPrisesSoin($date, $_line_element, $lines_element[$name_chap][$name_cat], $list_prises_element, $all_lines_element[$name_chap][$name_cat], $intitule_prise_element, $nb_produit_by_cat[$name_cat], $prises_element, $mode_feuille_soin);
 
 						if(is_array($administrations)){
 							if(@array_key_exists("aucune_prise", $administrations[$name_chap][$name_cat][$_line_element->_id])){

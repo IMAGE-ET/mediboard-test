@@ -29,6 +29,9 @@ if($prise_id){
 $line = new $object_class;
 $line->load($line_id);
 
+if($line->_class_name == "CPrescriptionLineMedicament"){
+  $line->_ref_produit->loadConditionnement();
+}
 $prise = new CPrisePosologie();
 $prise->quantite = $quantite;
 

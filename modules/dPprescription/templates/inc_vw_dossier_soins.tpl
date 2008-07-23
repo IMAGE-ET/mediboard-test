@@ -152,7 +152,7 @@ viewLegend = function(){
 							          <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
 								          {{if array_key_exists($administration_id, $transmissions)}}
 								            <ul>
 								              {{foreach from=$transmissions.$administration_id item=_transmission}}
@@ -172,8 +172,7 @@ viewLegend = function(){
 						   {{else}}
 						     {{foreach from=$tabHours item=_hour}}
 						     <td style="text-align: center">
-						       <div style="border: 1px dotted #000; min-height: 15px;" 
-						            class="tooltip-trigger administration"
+						       <div class="tooltip-trigger administration"
 						            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}'} })"
 						           onclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
 	       	           {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
@@ -185,7 +184,7 @@ viewLegend = function(){
 							         <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
 								          {{if array_key_exists($administration_id, $transmissions)}}
 								            <ul>
 								              {{foreach from=$transmissions.$administration_id item=_transmission}}
@@ -319,9 +318,8 @@ viewLegend = function(){
 						   {{else}}
 						     {{foreach from=$tabHours item=_hour}}
 						     <td style="text-align: center">
-						       <div style="border: 1px dotted #000; min-height: 15px;"
-						            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}-{{$element_id}}-{{$unite_prise}}-{{$_hour}}'} })"
-						            class="administration tooltip-trigger"
+						       <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}-{{$element_id}}-{{$unite_prise}}-{{$_hour}}'} })"
+						            class="tooltip-trigger administration"
 						             
 						        onclick="addAdministration('{{$element_id}}', '', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
 						         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
