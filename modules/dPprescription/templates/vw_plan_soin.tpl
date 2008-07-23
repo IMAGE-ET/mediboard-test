@@ -107,7 +107,7 @@ ul {
 	              {{assign var=quantite value=$prise_line.$_hour}}
 	            {{/if}}
 		        {{/if}}
-           {{if $_line->_debut_reel > $_real_hour || $_line->_fin_reelle < $_real_hour}}
+           {{if $_line->_debut_reel > $_real_hour || ($_line->_fin_reelle && $_line->_fin_reelle < $_real_hour)}}
              <img src="images/icons/gris.gif" />
            {{else}}
              {{$quantite}}

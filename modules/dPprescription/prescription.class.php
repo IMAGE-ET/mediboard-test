@@ -545,7 +545,10 @@ class CPrescription extends CMbObject {
   
   
   function calculPrisesSoin($date, &$_line, &$lines, &$list_prises, &$all_lines, &$intitule_prise, &$tab_count, &$prises, $mode_feuille_soin){
-    foreach($_line->_ref_prises as &$_prise){
+    
+  	foreach($_line->_ref_prises as &$_prise){
+  	
+  		
 			$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
 			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
 			
@@ -584,11 +587,12 @@ class CPrescription extends CMbObject {
 			}
 			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
 				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-				if($_line->_fin_reelle > $dateTimePrise && $poids_ok){
+				if(($_line->_fin_reelle > $dateTimePrise || !$_line->_fin_reelle) && $poids_ok){
 	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
 				}
 			}
 	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
+	 	  	
 	 	  	$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
 	 	  	if($_line->_fin_reelle > $dateTimePrise && $poids_ok){
 	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
@@ -621,11 +625,7 @@ class CPrescription extends CMbObject {
           // Chargement des administrations
           if(is_array($administrations)){
 						$_line_med->loadRefsAdministrations($date);
-						
-							
 						foreach($_line_med->_ref_administrations as $_administration){
-							
-							
 							$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
 							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["quantite"] += $_administration->quantite;
 							

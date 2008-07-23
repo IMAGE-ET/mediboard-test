@@ -63,6 +63,7 @@ if($prescription->_id){
 	$nb_produit_by_cat, $all_lines_med, $all_lines_element, $intitule_prise_med,$intitule_prise_element,$administrations,$transmissions);
 }	
 
+
 // Génération du tableau d'heures
 $tabHours = array("$date 02:00:00" => "02",
 									"$date 06:00:00" => "06",

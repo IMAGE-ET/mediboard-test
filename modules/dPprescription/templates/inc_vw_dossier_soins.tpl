@@ -114,7 +114,7 @@ viewLegend = function(){
 						    {{assign var=prise_line value=$list_prises_med.$line_id.$unite_prise}}
 						    {{foreach from=$tabHours item=_hour key=_date_hour}}
 					        <td style="text-align: center">
-					          {{if $line->_debut_reel < $_date_hour && $line->_fin_reelle > $_date_hour && array_key_exists($_hour, $prise_line)}}
+					          {{if (($line->_debut_reel < $_date_hour && $line->_fin_reelle > $_date_hour) || !$line->_fin_reelle) && array_key_exists($_hour, $prise_line)}}
 							        {{assign var=quantite value=$prise_line.$_hour}}
 							      {{else}}
 							        {{assign var=quantite value="-"}}
