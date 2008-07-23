@@ -171,7 +171,7 @@ foreach($quantites as $code => &$_quantite){
   $where['product_delivery.date_dispensation'] = "BETWEEN '$_date_min' AND '$_date_max'"; // entre les deux dates
   $where['product.code'] = "= '$code'"; // avec le bon code CIP et seulement les produits du livret thérapeutique
   $where['product.category_id'] = '= '.CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
-
+  $where['product_delivery.patient_id'] = "IS NULL";
   // Pour faire le lien entre le produit et la delivrance, on utilise le stock etablissement
   $ljoin = array();
   $ljoin['product_stock_group'] = 'product_delivery.stock_id = product_stock_group.stock_id';

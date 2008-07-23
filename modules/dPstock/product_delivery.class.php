@@ -145,15 +145,25 @@ class CProductDelivery extends CMbObject {
   	return parent::check();
   }
 
-  function loadRefsFwd() {
+  function loadRefStock(){
     $this->_ref_stock = new CProductStockGroup();
     $this->_ref_stock->load($this->stock_id);
-
-    $this->_ref_service = new CService();
-    $this->_ref_service->load($this->service_id);
-    
+  }
+  
+  function loadRefService(){
+  	$this->_ref_service = new CService();
+    $this->_ref_service->load($this->service_id);  
+  }
+  
+  function loadRefPatient(){
     $this->_ref_patient = new CPatient();
-    $this->_ref_patient->load($this->patient_id);
+    $this->_ref_patient->load($this->patient_id);	
+  }
+  
+  function loadRefsFwd() {
+    $this->loadRefStock();
+    $this->loadRefService();
+    $this->loadRefPatient();
   }
 
   function getPerm($permType) {
