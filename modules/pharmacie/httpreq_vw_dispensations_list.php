@@ -206,6 +206,7 @@ $smarty->assign('stocks_service'  , $stocks_service);
 $smarty->assign('quantites', $quantites);
 $smarty->assign('service_id', $service_id);
 $smarty->assign('quantites_reference', $quantites_reference);
+$smarty->assign('mode_nominatif', "0");
 $smarty->display('inc_dispensations_list.tpl');
 
 ?>

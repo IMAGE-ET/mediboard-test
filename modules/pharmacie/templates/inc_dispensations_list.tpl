@@ -1,4 +1,16 @@
+{{if $mode_nominatif && !$prescription->_id}}
+  <div class="big-info">
+    Veuillez sélectionner un patient pour réaliser une dispensation nominative.
+  </div>
+{{else}}
 <table class="tbl">
+  {{if $mode_nominatif}}
+  <tr>
+    <th colspan="10" class="title">
+      Dispensation pour {{$prescription->_ref_object->_ref_patient->_view}}
+    </th>
+  </tr>
+  {{/if}}
   <tr>
     <th>Quantité de la prise</th>
     <th>Quantité calculée (unité de référence)</th>
@@ -75,6 +87,9 @@
             <input type="hidden" name="date_dispensation" value="now" />
             <input type="hidden" name="stock_id" value="{{$delivrance->stock_id}}" />
             <input type="hidden" name="service_id" value="{{$delivrance->service_id}}" />
+            {{if $mode_nominatif}}
+            <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
+            {{/if}}
             {{if $delivrance->quantity==0}}<div style="color: red;">Dispensation impossible ou déjà effectuée</div>{{/if}}
             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3}}
             <button type="submit" class="tick">
@@ -99,3 +114,4 @@
     </tbody>
   {{/foreach}}
 </table>
+{{/if}}
