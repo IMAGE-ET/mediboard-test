@@ -1,19 +1,13 @@
-{{assign var=patient value=$blood_salvage->_ref_operation->_ref_sejour->_ref_patient}}
-<table class="tbl">
-	<tr>
-	  <th class="title text" colspan="2">
-	    <button class="hslip notext" id="listRSPO-trigger" type="button" style="float:left">
-	      {{tr}}Programme{{/tr}}
-	    </button>
-	    <a class="action" style="float: right;" title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$patient->_id}}">
-	      <img src="images/icons/edit.png" alt="modifier" />
-	    </a>
-	    {{$patient->_view}}
-	    ({{$patient->_age}} ans
-	    {{if $patient->_age != "??"}}- {{mb_value object=$patient field="naissance"}}{{/if}})
-	  </th>
-	</tr>
-</table>
+<script type="text/javascript">
+Main.add(function() {
+var url = new Url;
+      url.setModuleAction("bloodSalvage", "httpreq_total_time");
+      url.addParam("blood_salvage_id", "{{$blood_salvage->_id}}");
+      url.periodicalUpdate("totaltime", { frequency: 60 });
+}
+
+);
+</script>
 <div id="timing">
   {{include file="inc_vw_bs_sspi_timing.tpl"}}
 </div>

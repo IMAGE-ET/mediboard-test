@@ -12,6 +12,7 @@ global $can, $m, $g;
 $ds                 = CSQLDataSource::get("std");
 $blood_salvage      = new CBloodSalvage();
 
+$operation_id       = mbGetValueFromGetOrSession("operation_id");
 $date               = mbGetValueFromGetOrSession("date", mbDate());
 $hour               = mbTime();
 $totaltime          = "00:00:00";
@@ -24,25 +25,23 @@ $where["date"] = "= '$date'";
 $plages = $plages->loadList($where);
 
 // Récupération des détails des RSPO.
-$listRSPO = new CBloodSalvage;
+$listReveil = new COperation;
 $where = array();
 $where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NULL";
-$leftjoin["operations"] = "blood_salvage.operation_id = operations.operation_id";
 $order = "entree_reveil";
-$listRSPO = $listRSPO->loadList($where, $order,null, null, $leftjoin);
-foreach($listRSPO as $key => $value) {
-  $listRSPO[$key]->loadRefs();
-  $listRSPO[$key]->_ref_operation->loadRefs();
+$listReveil = $listReveil->loadList($where, $order);
+foreach($listReveil as $key => $value) {
+  $listReveil[$key]->loadRefs();
 }
 
 $smarty = new CSmartyDP();
 
-$smarty->assign("listRSPO", $listRSPO);
+$smarty->assign("listReveil", $listReveil);
 $smarty->assign("date", $date);
 $smarty->assign("hour", $hour);
-
+$smarty->assign("operation_id", $operation_id);
 $smarty->display("inc_liste_patients_bs.tpl");
 
 

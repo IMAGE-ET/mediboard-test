@@ -1,14 +1,4 @@
-<script type="text/javascript">
 
-function submitNurse(oForm){
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete : function() {
-      reloadNurse(document.forms["affectNurse"].object_id.value)
-    } 
-  });
-}
-
-</script>
 <table class="form">
 <tr>
 	<th class="category" colspan="2">

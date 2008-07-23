@@ -4,7 +4,7 @@
   </tr>
 	<tr>
 	  <th style="width:10%">
-	    <b>{{mb_label object=$blood_salvage field=anticoagulant_cip}}</b>
+	    {{mb_label object=$blood_salvage field=anticoagulant_cip}}
 	  </th>
     <td>
 	    <form name="anticoagulant{{$blood_salvage->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">
@@ -21,7 +21,7 @@
 			</form>
 		</td>
 	  <th style="width:10%">
-	  <b>{{mb_label object=$blood_salvage field=wash_kit}}</b>
+	  {{mb_label object=$blood_salvage field=wash_kit}}
 	  </th>
 	  <td>
 		  <form name="recueil" action="?m={{$m}}" method="post" onsubmit="return checkForm(this);">

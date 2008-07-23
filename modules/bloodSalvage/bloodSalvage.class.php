@@ -90,19 +90,32 @@ class CBloodSalvage extends CMbObject {
     return $specs;
 	}
 	
-  function loadRefsFwd() {
-    $this->_ref_operation = new COperation();
-    $this->_ref_operation->load($this->operation_id);
-    $this->_ref_operation->loadRefPlageOp();
-    
+  function loadRefsFwd() { 	
+  	$this->loadRefOperation();
+    $this->loadRefPatient();
+    $this->loadRefCellSaver(); 
+    $this->loadRefTypeEi();
+  }
+  
+  function loadRefPatient() {
     $this->_ref_patient = new CPatient();
     $this->_ref_operation->loadRefPatient();
     $this->_ref_patient = $this->_ref_operation->_ref_patient;
-    
-    $this->_ref_cell_saver = new CCellSaver();
-    $this->_ref_cell_saver->load($this->cell_saver_id);
-    
-    $this->_ref_incident_type = new CTypeEi();
+  }
+  
+  function loadRefOperation() {
+    $this->_ref_operation = new COperation();
+    $this->_ref_operation->load($this->operation_id);
+    $this->_ref_operation->loadRefPlageOp();
+  }
+  
+  function loadRefCellSaver() {
+  	$this->_ref_cell_saver = new CCellSaver();
+    $this->_ref_cell_saver->load($this->cell_saver_id);  
+  }
+  
+  function loadRefTypeEi() {
+  	$this->_ref_incident_type = new CTypeEi();
     $this->_ref_incident_type->load($this->type_ei_id);
   }
   
