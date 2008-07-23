@@ -212,7 +212,7 @@ class CSetupdPstock extends CSetup {
     $this->addQuery($sql);
     
     $this->makeRevision('0.8');
-    $sql = 'ALTER TABLE `product_delivery` ADD `patient_id` INT( 11 ) UNSIGNED NOT NULL ;';
+    $sql = 'ALTER TABLE `product_delivery` ADD `patient_id` INT( 11 ) UNSIGNED NULL ;';
     $this->addQuery($sql);
     
     $this->makeRevision('0.9');

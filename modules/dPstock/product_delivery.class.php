@@ -73,6 +73,7 @@ class CProductDelivery extends CMbObject {
     $code = $this->code;
     $this->load();
     $this->code = $code;
+    $this->patient_id = $this->patient_id == 0 ? null : $this->patient_id;
     if ($msg = $this->check()) return $msg;
     
     $this->loadRefsFwd();
@@ -135,8 +136,6 @@ class CProductDelivery extends CMbObject {
   function check() {
   	$this->loadRefsFwd();
   	
-  	mbTrace($this);
-  	
   	if ($this->_deliver) {
     	if (($this->quantity == 0) || ($this->_ref_stock->quantity < $this->quantity)) {
         return 'impossible de délivrer ce nombre d\'articles';
@@ -152,6 +151,9 @@ class CProductDelivery extends CMbObject {
 
     $this->_ref_service = new CService();
     $this->_ref_service->load($this->service_id);
+    
+    $this->_ref_patient = new CPatient();
+    $this->_ref_patient->load($this->patient_id);
   }
 
   function getPerm($permType) {
