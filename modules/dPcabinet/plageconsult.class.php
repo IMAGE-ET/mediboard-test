@@ -129,7 +129,7 @@ class CPlageconsult extends CMbObject {
     if(!$this->_ref_chir) {
       $this->loadRefsFwd();
     }
-    return $this->_ref_chir->getPerm($permType);
+    return $this->_ref_chir->getPerm($permType) && $this->_ref_module->getPerm($permType);
   }
 
   function checkFrequence() {

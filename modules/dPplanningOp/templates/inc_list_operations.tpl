@@ -16,11 +16,7 @@
 {{/if}}
         <tr>
           <th class="title" colspan="5">
-            {{if $boardItem}}
-              Interventions
-            {{else}}
-              Opérations
-            {{/if}}
+            Interventions
           </th>
         </tr>
         <tr>
@@ -36,7 +32,10 @@
         {{foreach from=$listUrgences item=curr_op}}
         <tr>
           <td class="text">
-            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}">
+            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
+              class="tooltip-trigger"
+              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
+            >
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
@@ -55,9 +54,9 @@
               {{/foreach}}
             </a>
           </td>
-          <td style="text-align: center;">
+          <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
             {{if $curr_op->annulee}}
-            [ANNULEE]
+              [ANNULEE]
             {{else}}
             <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
               {{$curr_op->_datetime|date_format:"le %d/%m/%Y à %Hh%M"}}
@@ -117,7 +116,10 @@
         {{foreach from=$curr_plage->_ref_operations item=curr_op}}
         <tr>
           <td class="text">
-            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}">
+            <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
+              class="tooltip-trigger"
+              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_op->_ref_sejour->_ref_patient->_id}} } })"
+            >
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
@@ -139,9 +141,9 @@
               {{/foreach}}
             </a>
           </td>
-          <td style="text-align: center;">
+          <td style="text-align: center;" {{if $curr_op->annulee}}class="cancelled{{/if}}">
             {{if $curr_op->annulee}}
-            [ANNULEE]
+              [ANNULEE]
             {{else}}
             <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->time_operation != "00:00:00"}}

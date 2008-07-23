@@ -283,16 +283,20 @@ Document.refreshList = function(){
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
     <td>
-      {{if $curr_sejour->group_id == $g}}
+      {{if $curr_sejour->group_id == $g && $curr_sejour->_canEdit}}
       <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
       </a>
-      {{/if}}
-      
-      {{if $canAdmissions->view && $curr_sejour->group_id == $g}}
-      <a class="actionPat" title="Accès à l'admission" href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}">
+      <a class="tooltip-trigger"
+         {{if $canAdmissions->view}}
+         href="?m=dPadmissions&amp;tab=vw_idx_admission&amp;date={{$curr_sejour->entree_prevue|date_format:"%Y-%m-%d"}}#adm{{$curr_sejour->sejour_id}}"
+         {{else}}
+         href="#nothing"
+         {{/if}}
+         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CSejour', object_id: {{$curr_sejour->_id}} } })"
+      >
       {{else}}
-      <a class="actionPat" title="Pas d'accès aux admissions">
+      <a href="#nothing">
       {{/if}}
         {{if $curr_sejour->_num_dossier && $curr_sejour->group_id == $g}}[{{$curr_sejour->_num_dossier}}]{{/if}}
         Séjour du {{$curr_sejour->_entree|date_format:"%d %b %Y"}} 
@@ -301,21 +305,21 @@ Document.refreshList = function(){
           - ({{$curr_sejour->_nb_files_docs}} Doc.)
         {{/if}}
       </a>
-	</td>
+    </td>
     {{if $curr_sejour->annule}}
- 	<td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
+    <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
       <strong>SEJOUR ANNULE</strong>
-	</td>
+    </td>
     {{else}}
-      {{if $curr_sejour->group_id == $g}}
-      <td>
-        Dr {{$curr_sejour->_ref_praticien->_view}}
-      </td>
-      {{else}}
-      <td style="background-color:#afa">
-        {{$curr_sejour->_ref_group->text|upper}}
-      </td>
-      {{/if}}
+    {{if $curr_sejour->group_id == $g}}
+    <td>
+      Dr {{$curr_sejour->_ref_praticien->_view}}
+    </td>
+    {{else}}
+    <td style="background-color:#afa">
+      {{$curr_sejour->_ref_group->text|upper}}
+    </td>
+    {{/if}}
     {{/if}}
   </tr>
   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
@@ -324,19 +328,17 @@ Document.refreshList = function(){
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
-      {{if $canPlanningOp->view && $curr_sejour->group_id == $g}}
+      {{if $curr_sejour->group_id == $g && $curr_op->_canEdit}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
-      {{else}}
-      <a class="actionPat" title="Modification d'intervention non autorisée">
-      {{/if}}
-        {{if $curr_sejour->group_id == $g}}
         <img src="images/icons/planning.png" alt="modifier"/>
-        {{/if}}
       </a>
-      {{if $canPlanningOp->view && $curr_sejour->group_id == $g}}
-      <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">
+      <a class="tooltip-trigger"
+         href="{{$curr_op->_link_editor}}"
+         class="tooltip-trigger"
+         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'COperation', object_id: {{$curr_op->_id}} } })"
+      >
       {{else}}
-      <a class="actionPat" title="Modification d'intervention non autorisée">
+      <a class="tooltip-trigger" title="Modification d'intervention non autorisée" href="#nothing">
       {{/if}}
         Intervention le {{$curr_op->_datetime|date_format:"%d %b %Y"}}
         {{if $curr_op->_nb_files_docs}}
@@ -345,19 +347,19 @@ Document.refreshList = function(){
       </a>
     </td>
     {{if $curr_op->annulee}}
- 	<td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
+    <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
       <strong>OPERATION ANNULEE</strong>
-	</td>
+    </td>
     {{else}}
-      {{if $curr_sejour->group_id != $g}}
-      <td style="background-color:#afa">
-        {{$curr_sejour->_ref_group->_view|upper}}
-      </td>
-      {{else}}
-      <td>
-        Dr {{$curr_op->_ref_chir->_view}}
-      </td>
-      {{/if}}
+    {{if $curr_sejour->group_id != $g}}
+    <td style="background-color:#afa">
+      {{$curr_sejour->_ref_group->_view|upper}}
+    </td>
+    {{else}}
+    <td>
+      Dr {{$curr_op->_ref_chir->_view}}
+    </td>
+    {{/if}}
     {{/if}}
   </tr>
   {{/foreach}}
@@ -372,21 +374,20 @@ Document.refreshList = function(){
       {{if $curr_consult->annule}}
       [ANNULE]
       {{else}}
-      {{if $canCabinet->view}}
+      {{if $curr_consult->_canEdit}}
       <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_planning&amp;consultation_id={{$curr_consult->_id}}">
-      {{else}}
-      <a class="actionPat" title="Accès la consultation non autorisé">
-      {{/if}}
         <img src="images/icons/planning.png" alt="modifier" />
       </a>
-      {{/if}}
-      {{if $canCabinet->view}}
-      <a class="actionPat" title="Modifier la consultation" href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}">
+      <a class="tooltip-trigger"
+         href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$curr_consult->_id}}&amp;chirSel={{$curr_consult->_ref_plageconsult->chir_id}}"
+         onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CConsultation', object_id: {{$curr_consult->_id}} } })"
+       >
       {{else}}
-      <a class="actionPat" title="Accès la consultation non autorisé">
+      <a href="#nothing">
       {{/if}}
         Le {{$curr_consult->_ref_plageconsult->date|date_format:"%d %b %Y"}} à {{$curr_consult->heure|date_format:"%Hh%M"}} - {{$curr_consult->_etat}}
       </a>
+      {{/if}}
     </td>
     <td>
       Dr {{$curr_consult->_ref_plageconsult->_ref_chir->_view}}

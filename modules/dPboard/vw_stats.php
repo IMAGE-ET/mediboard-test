@@ -15,6 +15,7 @@ if (!$prat->_id) {
 
 $stats = array(
   "sejours_interventions",
+  "stats_consultations",
   "prescripteurs",
 );
 

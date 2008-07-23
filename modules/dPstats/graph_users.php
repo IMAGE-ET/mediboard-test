@@ -62,3 +62,5 @@ $graph->selectPalette($options);
 $graph->setupAxis($options);
 $graph->addDataBarPlot($options);
 $graph->render("out",$options);
+
+?>

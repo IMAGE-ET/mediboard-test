@@ -349,7 +349,12 @@ function pageMain() {
             <a class="action" style="float: right"  title="Modifier le dossier administratif" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$curr_consult->_ref_patient->patient_id}}">
               <img src="images/icons/edit.png" alt="modifier" />
             </a>
-            <a href="{{$href_consult}}"  title="Voir la consultation">{{$curr_consult->_ref_patient->_view}}</a>
+            <a href="{{$href_consult}}"
+              class="tooltip-trigger"
+              onmouseover="ObjectTooltip.create(this, { params: { object_class: 'CPatient', object_id: {{$curr_consult->_ref_patient->_id}} } })"
+            >
+              {{$curr_consult->_ref_patient->_view}}
+            </a>
             {{/if}}
           </td>
           <td class="text" {{$style|smarty:nodefaults}}>

@@ -182,7 +182,7 @@ class CBloodSalvage extends CMbObject {
 	 * fillTemplate permet de donner des champs qui seront disponibles dans FCK Editor
 	 */
 	function fillTemplate(&$template) {
-		$this->fillLimitedTemplate(&$template);
+		$this->fillLimitedTemplate($template);
 	}
 	
 	function fillLimitedTemplate(&$template) {

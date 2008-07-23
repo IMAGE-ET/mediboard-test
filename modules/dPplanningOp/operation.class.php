@@ -529,7 +529,7 @@ class COperation extends CCodable {
         }if(!$this->_ref_anesth){
           $this->loadRefPlageOp();
         }
-        return ($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType));
+        return (($this->_ref_chir->getPerm($permType) || $this->_ref_anesth->getPerm($permType)) && $this->_ref_module->getPerm($permType));
         break;
       default :
         return parent::getPerm($permType);
