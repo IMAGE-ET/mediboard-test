@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["service_id", "_date_min", "_date_max"];
+  filterFields = ["service_id", "_date_min", "_date_max", "all_stocks"];
   filter = new Filter("filter-destockage", "{{$m}}", "httpreq_vw_destockages_service_list", "list-destockages", filterFields);
   filter.submit();
 });
@@ -29,6 +29,7 @@ function refreshDestockagesList() {
         {{/foreach}}
         </select>
       </td>
+      <td><label><input name="all_stocks" type="checkbox" /> tous les stocks</label></td>
       <td><button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>

@@ -19,7 +19,7 @@ function refreshPatient(){
   url.requestUpdate("patients", { waitingText: null } );
 }
 
-function refreshDeliveriesListByPatient() {
+function refreshDeliveriesList() {
   url = new Url;
   url.setModuleAction("pharmacie","httpreq_vw_dispensations_nominative_list");
   url.requestUpdate("list-dispensations", { waitingText: null } );

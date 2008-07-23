@@ -1,7 +1,7 @@
 <table class="tbl">
   <tr>
     <th>{{tr}}CProduct{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date_delivery{{/tr}}</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th style="width: 1%">{{tr}}CProductDelivery-code{{/tr}}</th>
     <th></th>
@@ -15,7 +15,7 @@
         {{$curr_delivery->_ref_stock->_view}}
       </div>
     </td>
-    <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+    <td>{{mb_value object=$curr_delivery field=date_delivery}}</td>
     <td>{{mb_value object=$curr_delivery field=quantity}}</td>
     <td>
     {{assign var=id value=$curr_delivery->_id}}
@@ -26,18 +26,17 @@
     {{/if}}
     </td>
     <td>
-    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="$V(this.code, $V($('code-{{$id}}'))); return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
+    <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshRestockagesList})">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_aed" />
       <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
-      {{if $curr_delivery->date_delivery}}
-      <input type="hidden" name="_undeliver" value="1" />
-      <button type="submit" class="cancel">Annuler la délivrance</button>
+      {{if $curr_delivery->date_reception}}
+      <input type="hidden" name="_unreceive" value="1" />
+      <button type="submit" class="cancel">Annuler la récéption</button>
       {{else}}
-      <input type="hidden" name="code" value="" />
-      <input type="hidden" name="_deliver" value="1" />
-      <button type="submit" class="tick">Délivrer</button>
+      <input type="hidden" name="_receive" value="1" />
+      <button type="submit" class="tick">Recevoir</button>
       {{/if}}
     </form>
     </td>

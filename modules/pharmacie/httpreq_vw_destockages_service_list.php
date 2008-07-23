@@ -11,6 +11,7 @@ global $can;
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
+$all_stocks = mbGetValueFromGetOrSession('all_stocks') == 'true';
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
 
@@ -69,6 +70,40 @@ foreach($destockages as $code_cip => $_destockage){
     $destockages[$code_cip]["stock"]->_ref_logs = $log->loadList($where, $order);
     foreach ($destockages[$code_cip]["stock"]->_ref_logs as $log) {
       $log->loadRefsFwd();
+    }
+  } else {
+    $product = new CProduct();
+    $product->code = $code_cip;
+    $product->category_id = CAppUI::conf('dPmedicament CBcbProduitLivretTherapeutique product_category_id');
+    if ($product->loadMatchingObject()) {
+      $stock = new CProductStockService();
+      $stock->service_id = $service_id;
+      $stock->product_id = $product->_id;
+      $stock->store();
+      $destockages[$code_cip]['stock'] = $stock;
+    } 
+    else {
+      $destockages[$code_cip]['stock'] = null;
+    }
+  }
+}
+
+if ($all_stocks) {
+  $stock = new CProductStockService();
+  $stock->service_id = $service_id;
+  $list_stocks = $stock->loadMatchingList();
+
+  foreach ($list_stocks as $sto) {
+    $sto->loadRefsFwd();
+    $already = false;
+    foreach ($destockages as $code => $desto) {
+      if ($sto->_ref_product->code == $code) {
+        $already = true;
+      }
+    }
+    if (!$already) {
+      $destockages[$sto->_ref_product->code]['stock'] = $sto;
+      $destockages[$sto->_ref_product->code]['nb_produit'] = $stock->quantity;
     }
   }
 }

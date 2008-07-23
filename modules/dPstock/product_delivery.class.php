@@ -12,24 +12,27 @@ class CProductDelivery extends CMbObject {
   var $delivery_id  = null;
 
   // DB Fields
-  var $stock_id      = null;
+  var $stock_id       = null;
   var $date_dispensation = null;
-  var $date_delivery = null;
-  var $quantity      = null;
-  var $code          = null; // Lot number, lapsing date
-  var $service_id    = null;
-  var $patient_id    = null;
+  var $date_delivery  = null;
+  var $date_reception = null;
+  var $quantity       = null;
+  var $code           = null; // Lot number, lapsing date
+  var $service_id     = null;
+  var $patient_id     = null;
 
   // Object References
   //    Single
-  var $_ref_stock    = null;
-  var $_ref_service  = null;
+  var $_ref_stock     = null;
+  var $_ref_service   = null;
   
-  var $_date_min     = null;
-  var $_date_max     = null;
+  var $_date_min      = null;
+  var $_date_max      = null;
   
-  var $_deliver   = null;
-  var $_undeliver = null;
+  var $_deliver       = null;
+  var $_undeliver     = null;
+  var $_receive       = null;
+  var $_unreceive     = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -44,6 +47,7 @@ class CProductDelivery extends CMbObject {
       'stock_id'          => 'notNull ref class|CProductStockGroup',
       'date_dispensation' => 'notNull dateTime',
       'date_delivery'     => 'dateTime',
+      'date_reception'    => 'dateTime',
       'quantity'          => 'notNull num',
       'code'              => 'str maxLength|32',
       'service_id'        => 'notNull ref class|CService',
@@ -71,13 +75,27 @@ class CProductDelivery extends CMbObject {
     $this->code = $code;
     if ($msg = $this->check()) return $msg;
     
+    $this->loadRefsFwd();
     
     // If we want to deliver and if it hasn't been delivered yet
     if ($this->_deliver && !$this->date_delivery) {
-      $this->loadRefsFwd();
       $this->_ref_stock->quantity -= $this->quantity;
       $this->_ref_stock->store();
+      $this->_deliver = null;
+      $this->date_delivery = mbDateTime();
+    }
+    
+    // Un-deliver
+    else if ($this->_undeliver) {
+      $this->_ref_stock->quantity += $this->quantity;
+      $this->_ref_stock->store();
       
+      $this->_undeliver = null;
+      $this->date_delivery = '';
+    }
+    
+    // If we want to receive and if it hasn't been reveived yet
+    if ($this->_receive && !$this->date_reception) {
       $stock_service = new CProductStockService();
       $stock_service->product_id = $this->_ref_stock->product_id;
       $stock_service->service_id = $this->service_id;
@@ -91,16 +109,10 @@ class CProductDelivery extends CMbObject {
       if ($msg = $stock_service->store()) {
         return $msg;
       }
-      $this->_deliver = null;
-      $this->date_delivery = mbDateTime();
-    } 
-    
-    // Un-deliver
-    else if ($this->_undeliver) {
-      $this->loadRefsFwd();
-      $this->_ref_stock->quantity += $this->quantity;
-      $this->_ref_stock->store();
-      
+      $this->_receive = null;
+      $this->date_reception = mbDateTime();
+    }
+    else if ($this->_unreceive) {
       $stock_service = new CProductStockService();
       $stock_service->product_id = $this->_ref_stock->product_id;
       $stock_service->service_id = $this->service_id;
@@ -112,15 +124,18 @@ class CProductDelivery extends CMbObject {
       if ($msg = $stock_service->store()) {
         return $msg;
       }
-      $this->_undeliver = null;
-      $this->date_delivery = '';
+      $this->_unreceive = null;
+      $this->date_reception = '';
     }
+
 
     return parent::store();
   }
   
   function check() {
   	$this->loadRefsFwd();
+  	
+  	mbTrace($this);
   	
   	if ($this->_deliver) {
     	if (($this->quantity == 0) || ($this->_ref_stock->quantity < $this->quantity)) {
