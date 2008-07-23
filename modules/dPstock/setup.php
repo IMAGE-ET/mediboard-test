@@ -211,7 +211,11 @@ class CSetupdPstock extends CSetup {
       ADD INDEX (`date_delivery`);';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.8';
+    $this->makeRevision('0.8');
+    $sql = 'ALTER TABLE `product_delivery` ADD `patient_id` INT( 11 ) UNSIGNED NOT NULL ;';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.9';
   }
 }
 

@@ -18,6 +18,7 @@ class CProductDelivery extends CMbObject {
   var $quantity      = null;
   var $code          = null; // Lot number, lapsing date
   var $service_id    = null;
+  var $patient_id    = null;
 
   // Object References
   //    Single
@@ -46,6 +47,7 @@ class CProductDelivery extends CMbObject {
       'quantity'          => 'notNull num',
       'code'              => 'str maxLength|32',
       'service_id'        => 'notNull ref class|CService',
+      'patient_id'        => 'ref class|CPatient',
       '_date_min'         => 'notNull dateTime',
       '_date_max'         => 'notNull dateTime',
     ));
