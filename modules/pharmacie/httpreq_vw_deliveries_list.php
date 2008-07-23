@@ -8,6 +8,7 @@
  */
 
 global $can;
+
 $can->needsRead();
 
 $service_id = mbGetValueFromGetOrSession('service_id');
