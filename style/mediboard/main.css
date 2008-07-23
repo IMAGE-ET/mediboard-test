@@ -3052,3 +3052,11 @@ background-color: #88f;
 .administration_annulee {
 	background-color: #F00;
 }
+
+.transmission, table.tbl th.transmission {
+  border: 2px solid #900;
+}
+
+.transmission_possible {
+  text-decoration: underline;
+}

@@ -64,6 +64,20 @@ if($prescription->_id){
 }	
 
 
+$transmission = new CTransmissionMedicale();
+$where = array();
+$where[] = "(object_class = 'CCategoryPrescription') OR 
+            (object_class = 'CPrescriptionLineElement') OR 
+            (object_class = 'CPrescriptionLineMedicament')";
+
+$where["sejour_id"] = " = '$sejour->_id'";
+$transmissions_by_class = $transmission->loadList($where);
+
+foreach($transmissions_by_class as $_transmission){
+	$transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+}
+
+
 // Génération du tableau d'heures
 $tabHours = array("$date 02:00:00" => "02",
 									"$date 06:00:00" => "06",

@@ -80,16 +80,27 @@ viewLegend = function(){
 	  <!-- Affichage des medicaments -->
 	  {{if $lines_med|@count}}
 	    {{foreach from=$lines_med item=_line name="foreach_med"}}
-			  {{foreach from=$_line key=unite_prise item=line name="foreach_line"}}       
 	
+			  {{foreach from=$_line key=unite_prise item=line name="foreach_line"}}       
+				
 					  <tr id="line_CPrescriptionLineMedicament_{{$line->_id}}">
 					    {{if $smarty.foreach.foreach_med.first && $smarty.foreach.foreach_line.first}}
 					    <th rowspan="{{$nb_produit_by_cat.med}}">Medicaments</th>
 					    {{/if}}
 					    {{if $smarty.foreach.foreach_line.first}}
 					    <td class="text" rowspan="{{$_line|@count}}">
-					      <div onclick="addCibleTransmission('{{$line->_class_name}}', '{{$line->_id}}', '{{$line->_view}}');">
-					        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line->_class_name}}', object_id: {{$line->_id}} } })">{{$line->_ref_produit->libelle}}  {{if $line->_traitement}}(Traitement perso){{/if}}</a>
+					    {{assign var=line_id value=$line->_id}}
+					    {{assign var=line_class value=$line->_class_name}}
+					      <div onclick="addCibleTransmission('{{$line->_class_name}}', '{{$line->_id}}', '{{$line->_view}}');" 
+					           class="{{if @$transmissions.$line_class.$line_id|@count}}
+					                   transmission
+					                   {{else}}
+					                    transmission_possible 
+					                   {{/if}}">
+					        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$line->_class_name}}', object_id: {{$line->_id}} } })">
+					          {{$line->_ref_produit->libelle}}  
+					          {{if $line->_traitement}}(Traitement perso){{/if}}
+					        </a>
 					      </div>
 					    </td>
 					    {{/if}}
@@ -120,7 +131,7 @@ viewLegend = function(){
 							        {{assign var=quantite value="-"}}
 							      {{/if}}     
 						        <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}'} })"
-						             class="tooltip-trigger administration 
+						             class="tooltip-trigger administration
 						                   {{if $quantite > 0}}
 						                      {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
 						                        {{if $administrations.$line_id.$unite_prise.$_hour.quantite == $quantite}}
@@ -137,7 +148,11 @@ viewLegend = function(){
 						                          non_administre
 						                        {{/if}}
 						                      {{/if}}
-																{{/if}}"
+																{{/if}}
+																{{if @$transmissions.$line_id.$unite_prise.$_hour.nb}}
+																  transmission
+																{{/if}}
+																"
 						              onclick="addAdministration({{$line_id}}, '{{$quantite}}', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
 							        {{if $quantite!="-" || @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
 						            {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
@@ -146,60 +161,58 @@ viewLegend = function(){
 							            0
 							          {{/if}} / {{$quantite}}
 							        {{/if}}
-							        
+							         </div>
 											<div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}" style="display: none; text-align: left">
 											 {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise) && @array_key_exists("administrations", $administrations.$line_id.$unite_prise.$_hour)}}
 							          <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
-								          {{if array_key_exists($administration_id, $transmissions)}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
 								            <ul>
-								              {{foreach from=$transmissions.$administration_id item=_transmission}}
-								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{foreach from=$transmissions.$line_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}</li>
 								              {{/foreach}}
 								            </ul>
-								          {{/if}}
 							          {{/foreach}}
 							          </ul>
 							        {{else}}
 							            Aucune administration
 							        {{/if}}
 											</div>
-					          </div>
+					         
 					        </td>
 						     {{/foreach}}
 						   {{else}}
 						     {{foreach from=$tabHours item=_hour}}
 						     <td style="text-align: center">
-						       <div class="tooltip-trigger administration"
+						       <div class="tooltip-trigger administration
+						                    {{if @$transmissions.$line_id.$unite_prise.$_hour.nb}}
+																  transmission
+																{{/if}}"
 						            onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}'} })"
 						           onclick="addAdministration({{$line_id}}, '', '{{$unite_prise}}', '{{$line->_class_name}}','{{$date}}','{{$_hour}}');">
 	       	           {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise)}}
 					             {{$administrations.$line_id.$unite_prise.$_hour.quantite}} / -
 					           {{/if}}
-					          
+					          </div>
 					           <div id="tooltip-content-{{$line_id}}-{{$unite_prise}}-{{$_hour}}" style="display: none; text-align: left">
 											 {{if @array_key_exists($_hour, $administrations.$line_id.$unite_prise) && @array_key_exists("administrations", $administrations.$line_id.$unite_prise.$_hour)}}
 							         <ul>
 							          {{foreach from=$administrations.$line_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
-								          {{if array_key_exists($administration_id, $transmissions)}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_ref_object->_ref_produit->libelle_unite_presentation}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
 								            <ul>
-								              {{foreach from=$transmissions.$administration_id item=_transmission}}
-								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{foreach from=$transmissions.$line_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}</li>
 								              {{/foreach}}
 								            </ul>
-								          {{/if}}
-								        
 								        {{/foreach}}
 								      </ul>
 							        {{else}}
 							            Aucune administration
 							        {{/if}}
 									</div>
-					       </div>
+					       
 						     </td>
 						     {{/foreach}}
 						   {{/if}}
@@ -216,7 +229,7 @@ viewLegend = function(){
 						    <img src="images/icons/cross.png" alt="Non signée par le pharmacien" title="Non signée par le pharmacien" />
 						    {{/if}}
 					    </td>
-					  </tr>	    
+					  </tr>	     
 			  {{/foreach}} 		 
 		  {{/foreach}}
 	  {{/if}}
@@ -230,12 +243,20 @@ viewLegend = function(){
 	         
 	        <tr id="line_CPrescriptionLineElement_{{$element->_id}}">
 			      {{if $smarty.foreach.foreach_elt.first && $smarty.foreach.foreach_cat.first}}
-			        <th rowspan="{{$nb_produit_by_cat.$name_cat}}" 
-			            onclick="addCibleTransmission('CCategoryPrescription', '{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br />{{$categorie->nom}}</th>
+			      {{assign var=categorie_id value=$categorie->_id}}
+			        <th class="{{if @$transmissions.CCategoryPrescription.$categorie_id|@count}}
+					                   transmission
+					                   {{else}}
+					                    transmission_possible 
+					                   {{/if}}" 
+			            rowspan="{{$nb_produit_by_cat.$name_cat}}" 
+			            onclick="addCibleTransmission('CCategoryPrescription', '{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
+			              {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
+			        </th>
 			      {{/if}}
 
 				    <td class="text">
-				      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');">
+				      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');" class="transmission_possible">
 					        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$element->_class_name}}', object_id: {{$element->_id}} } })">{{$element->_view}}</a>
 				      </div>
 				    </td>
@@ -283,7 +304,10 @@ viewLegend = function(){
 						                          non_administre
 						                        {{/if}}
 						                      {{/if}}
-																{{/if}}""
+																{{/if}}
+																{{if @$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.nb}}
+																  transmission
+																{{/if}}"
 						        onclick="addAdministration('{{$element_id}}', '{{$quantite}}', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
 						          {{if $quantite!="-" || @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
 						         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
@@ -299,14 +323,14 @@ viewLegend = function(){
 							          <ul>
 							          {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
-								          {{if array_key_exists($administration_id, $transmissions)}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
+								         
 								            <ul>
-								              {{foreach from=$transmissions.$administration_id item=_transmission}}
-								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{foreach from=$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}</li>
 								              {{/foreach}}
 								            </ul>
-								          {{/if}}
+								        
 							          {{/foreach}}
 							          </ul>
 							        {{else}}
@@ -319,8 +343,10 @@ viewLegend = function(){
 						     {{foreach from=$tabHours item=_hour}}
 						     <td style="text-align: center">
 						       <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}-{{$element_id}}-{{$unite_prise}}-{{$_hour}}'} })"
-						            class="tooltip-trigger administration"
-						             
+						            class="tooltip-trigger administration
+						            {{if @$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.nb}}
+												 transmission
+											  {{/if}}"
 						        onclick="addAdministration('{{$element_id}}', '', '{{$unite_prise}}', '{{$element->_class_name}}','{{$date}}','{{$_hour}}');">
 						         {{if @array_key_exists($_hour, $administrations.$name_chap.$name_cat.$element_id.$unite_prise)}}
 						           {{$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.quantite}} / -
@@ -331,14 +357,14 @@ viewLegend = function(){
 							        <ul>
 							        {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							           {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date}}</li>		         
-								          {{if array_key_exists($administration_id, $transmissions)}}
+							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
+								         
 								            <ul>
-								              {{foreach from=$transmissions.$administration_id item=_transmission}}
-								                <li>{{$_transmission->_view}} le {{$_transmission->date}}: {{$_transmission->text}}</li>
+								              {{foreach from=$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
+								                <li>{{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}</li>
 								              {{/foreach}}
 								            </ul>
-								          {{/if}}
+								         
 							        {{/foreach}}
 							        </ul>
 							      {{else}}

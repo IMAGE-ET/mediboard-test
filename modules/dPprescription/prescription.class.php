@@ -644,7 +644,8 @@ class CPrescription extends CMbObject {
 							}
 							@$administrations[$_line_med->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
 							$_administration->loadRefsTransmissions();  
-							$transmissions[$_administration->_id] = $_administration->_ref_transmissions;
+							@$transmissions[$_line_med->_id][$key_administration][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
+							@$transmissions[$_line_med->_id][$key_administration][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
 						}		
           }		
         	if(!$_line_med->_ref_prises){
@@ -700,7 +701,8 @@ class CPrescription extends CMbObject {
 								}
 								@$administrations[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
 							  $_administration->loadRefsTransmissions();
-							  $transmissions[$_administration->_id] = $_administration->_ref_transmissions;
+							  @$transmissions[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
+							  @$transmissions[$name_chap][$name_cat][$_line_element->_id][$key_administration][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
 							}			
 			      }
 		      	if(!$_line_element->_ref_prises){
