@@ -1,6 +1,9 @@
 
 <form action="?" name="selection" method="get">
 <input type="hidden" name="m" value="{{$m}}" />
+<script type="text/javascript">
+  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_bloodSalvage_sspi&date=");
+</script>
 <table class="form">
   <tr>
     <th class="category" colspan="2">
@@ -12,9 +15,6 @@
 </table>
 </form>
 
-<script type="text/javascript">
-  regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_bloodSalvage_sspi&date=");
-</script>
 
 <table class="tbl">
 	<tr>

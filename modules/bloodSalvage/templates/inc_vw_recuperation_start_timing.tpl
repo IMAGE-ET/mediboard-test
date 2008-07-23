@@ -1,3 +1,4 @@
+{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 <form name="timing{{$blood_salvage->_id}}" action="?m={{$m}}" method="post">
   <input type="hidden" name="m" value="bloodSalvage" />
   <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />

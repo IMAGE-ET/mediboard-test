@@ -7,7 +7,7 @@
  *  @author Alexandre Germonneau
  */
 
-global  $can, $m, $g, $dPconfig;
+global  $can, $m, $g;
 $can->needsRead();
 /*
  * Récupération des variables en session et ou issues des formulaires.

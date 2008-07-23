@@ -15,6 +15,7 @@ $blood_salvage      = new CBloodSalvage();
 $date               = mbGetValueFromGetOrSession("date", mbDate());
 $op                 = mbGetValueFromGetOrSession("op");
 
+
 if($op) {
 	$selOp->load($op);
   $selOp->loadRefs();

@@ -30,8 +30,10 @@ $where = array();
 $where[] = "`plageop_id` ".$ds->prepareIn(array_keys($plages))." OR (`plageop_id` IS NULL AND `date` = '$date')";
 $where["entree_reveil"] = "IS NOT NULL";
 $where["sortie_reveil"] = "IS NULL";
+$leftjoin["blood_salvage"] = "operations.operation_id = blood_salvage.operation_id";
+$where["blood_salvage.operation_id"] = "IS NOT NULL";
 $order = "entree_reveil";
-$listReveil = $listReveil->loadList($where, $order);
+$listReveil = $listReveil->loadList($where,$order, null, null, $leftjoin);
 foreach($listReveil as $key => $value) {
   $listReveil[$key]->loadRefs();
 }

@@ -181,17 +181,21 @@ class CBloodSalvage extends CMbObject {
 	/*
 	 * fillTemplate permet de donner des champs qui seront disponibles dans FCK Editor
 	 */
+	function fillTemplate(&$template) {
+		$this->fillLimitedTemplate(&$template);
+	}
+	
 	function fillLimitedTemplate(&$template) {
 		$template->addProperty("Cell Saver - Appareil utilisé",$this->_ref_cell_saver->_view);
 		$template->addProperty("Cell Saver - Début de récupération",$this->recuperation_start);
 		$template->addProperty("Cell Saver - Fin de récupération",$this->recuperation_end);
 		$template->addProperty("Cell Saver - Début de retransfusion",$this->transfusion_start);
 		$template->addProperty("Cell Saver - Début de retransfusion",$this->transfusion_end);		
-		$template->addProperty("Cell Saver - Volume récupéré",$this->saved_volume);		
-		$template->addProperty("Cell Saver - Volume de lavage",$this->wash_volume);		
-    $template->addProperty("Cell Saver - Volume retransfusé",$this->transfused_volume);   		
-		$template->addProperty("Cell Saver - Hémoglobine de la poche",$this->hgb_pocket);		
-		$template->addProperty("Cell Saver - Hémoglobine patient post-transfusion",$this->hgb_patient);		
+		$template->addProperty("Cell Saver - Volume récupéré",$this->saved_volume." ml");		
+		$template->addProperty("Cell Saver - Volume de lavage",$this->wash_volume." ml");		
+    $template->addProperty("Cell Saver - Volume retransfusé",$this->transfused_volume." ml");   		
+		$template->addProperty("Cell Saver - Hémoglobine de la poche",$this->hgb_pocket." g/dl");		
+		$template->addProperty("Cell Saver - Hémoglobine patient post-transfusion",$this->hgb_patient." g/dl");		
 		if($this->_ref_incident_type->_view) {
 			$template->addProperty("Cell Saver - Incident transfusionnel",$this->_ref_incident_type->_view);    
 		} else {

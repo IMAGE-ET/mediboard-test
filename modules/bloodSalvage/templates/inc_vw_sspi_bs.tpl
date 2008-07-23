@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 Main.add(function() {
 var url = new Url;
@@ -8,6 +9,10 @@ var url = new Url;
 
 );
 </script>
+{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+
+{{include file=inc_bs_sspi_header.tpl}}
+
 <div id="timing">
   {{include file="inc_vw_bs_sspi_timing.tpl"}}
 </div>
