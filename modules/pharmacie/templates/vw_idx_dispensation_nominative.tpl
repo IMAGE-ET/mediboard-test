@@ -2,12 +2,11 @@
 
 <script type="text/javascript">
 Main.add(function () {
- refreshPatient();
- filterFields = ["service_id","_date_min","_date_max","patient_id","prescription_id"];
- filter = new Filter("filter-dispensations", "{{$m}}", "httpreq_vw_dispensations_nominative_list", "list-dispensations", filterFields);
- filter.submit();
+  refreshPatient();
+  filterFields = ["service_id","_date_min","_date_max","patient_id","prescription_id"];
+  filter = new Filter("filter-dispensations", "{{$m}}", "httpreq_vw_dispensations_nominative_list", "list-dispensations", filterFields);
+  filter.submit();
 });
-
 
 function refreshPatient(){
   var oForm = document.forms['filter-dispensations'];
@@ -26,7 +25,7 @@ function refreshDeliveriesList() {
 }
 </script>
 
-<form name="filter-dispensations" action="?" method="post" onsubmit="return filter.submit('keywords');">
+<form name="filter-dispensations" action="?" method="post" onsubmit="return filter.submit();">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>

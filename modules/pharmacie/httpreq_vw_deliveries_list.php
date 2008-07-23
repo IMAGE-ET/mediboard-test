@@ -18,7 +18,6 @@ $delivered = mbGetValueFromGetOrSession('delivered') == 'true';
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
 
-// Chargement des delivrances globales
 $order_by = 'date_dispensation DESC';
 $where = array ();
 if ($service_id) {
@@ -29,6 +28,8 @@ $where[] = "date_dispensation BETWEEN '$date_min' AND '$date_max'";
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 20);
 
+$deliveries_nominatif = array();
+$deliveries_global = array();
 
 // Creation d'un tableau de patient
 $patients = array();
@@ -42,11 +43,10 @@ foreach($deliveries as $_delivery){
   }
 }
 
-
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("deliveries_global", $deliveries_global);
-$smarty->assign("deliveries_nominatif", $deliveries_nominatif);
+$smarty->assign('deliveries_global', $deliveries_global);
+$smarty->assign('deliveries_nominatif', $deliveries_nominatif);
 $smarty->display('inc_deliveries_list.tpl');
 
 ?>

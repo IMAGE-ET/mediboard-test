@@ -65,7 +65,13 @@
               {{if $curr_done->date_delivery}}
                 (délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}})
               {{else}}
-                <button type="submit" class="cancel">annuler</button>
+          <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
+            <input type="hidden" name="m" value="dPstock" />
+            <input type="hidden" name="dosql" value="do_delivery_aed" />
+            <input type="hidden" name="del" value="1" />
+            <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
+            <button type="submit" class="cancel">Annuler</button>
+          </form>
               {{/if}}
               <br />
             {{/if}}

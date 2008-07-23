@@ -25,11 +25,27 @@ if ($service_id) {
 $where['date_reception'] = $received ? 'IS NOT NULL' : 'IS NULL';
 $where[] = "date_delivery BETWEEN '$date_min' AND '$date_max'";
 $delivery = new CProductDelivery();
-$list_deliveries = $delivery->loadList($where, $order_by, 20);
+$deliveries = $delivery->loadList($where, $order_by, 20);
+
+$deliveries_nominatif = array();
+$deliveries_global = array();
+
+// Creation d'un tableau de patient
+$patients = array();
+foreach($deliveries as $_delivery){
+  if($_delivery->patient_id){
+    $_delivery->loadRefPatient();
+    $deliveries_nominatif[$_delivery->_id] = $_delivery;
+  } else {
+    $_delivery->loadRefService();
+    $deliveries_global[$_delivery->_id] = $_delivery;
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('list_deliveries', $list_deliveries);
+$smarty->assign('deliveries_global', $deliveries_global);
+$smarty->assign('deliveries_nominatif', $deliveries_nominatif);
 $smarty->display('inc_restockages_service_list.tpl');
 
 ?>
