@@ -53,14 +53,22 @@ $sql .= "\nGROUP BY mois
   ORDER BY orderitem";
 $result = $ds->loadlist($sql);
 foreach($datax as $x) {
+  $f = false;
   foreach($result as $totaux) {
-    if($x == $totaux["mois"]) {        
+    if($x == $totaux["mois"]) { 
+      $f = true;       
       $consults["data"][] = $totaux["total"];
       $consults["total"] += $totaux["total"];
       $total += $totaux["total"];
     }
   }
+  if(!$f) {
+    $consults["data"][] = 0;
+  }
 }
+
+//mbTrace($result);
+//mbTrace($datax); die;
 
 // Set up the title for the graph
 $title = "Nombre de consultations";
