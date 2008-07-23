@@ -141,13 +141,13 @@ class CGroups extends CMbObject {
   }
   
   
-  function loadRefLivretTherapeutique($lettre = "%"){
+  function loadRefLivretTherapeutique($lettre = "%", $limit = 50){
     global $g;
     $produit = new CBcbProduit();
     
     $produits = array();
     // Chargement des produits du livret Therapeutique en fonction d'une lettre
-    $produits = $produit->searchProduit($lettre, 1, "debut", 0, 50, $g);
+    $produits = $produit->searchProduit($lettre, 1, "debut", 0, $limit, $g);
     
     foreach($produits as $key => $prod){
       $produitLivretTherapeutique = new CBcbProduitLivretTherapeutique();

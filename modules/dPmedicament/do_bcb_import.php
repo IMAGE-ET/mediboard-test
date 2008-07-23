@@ -65,5 +65,14 @@ if (strtolower(pathinfo($file['name'] , PATHINFO_EXTENSION) == 'csv')) {
   fclose($csv);
 }
 
+/*
+$livret = new CBcbProduitLivretTherapeutique();
+$msg = $livret->distObj->Synchronize();
+if ($msg != 1) {
+  $AppUI->setMsg($livret->distObj->GetLastError(), UI_MSG_ERROR);
+} else {
+  $AppUI->setMsg("Synchronisation effectuée avec BCB GES");
+}
+*/
 $AppUI->redirect('m=dPmedicament&a=vw_bcb_import&dialog=1');
 ?>

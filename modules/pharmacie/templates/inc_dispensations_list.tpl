@@ -83,7 +83,7 @@
         <td rowspan="{{$unites|@count}}" style="text-align: center">
         {{if array_key_exists($code_cip,$delivrances)}}
           {{assign var=delivrance value=$delivrances.$code_cip}}
-         
+          {{if $delivrance->_ref_stock->quantity>0}}
           <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
           <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
             <input type="hidden" name="m" value="dPstock" />
@@ -102,6 +102,9 @@
               Dispenser
             </button>
           </form>
+          {{else}}
+          Stock épuisé à la pharmacie
+          {{/if}}
         {{else}}
         Pas de stock à la pharmacie
         {{/if}}

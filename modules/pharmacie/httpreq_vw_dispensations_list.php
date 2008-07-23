@@ -130,6 +130,7 @@ foreach($dispensations as $code_cip => $unites){
     $delivrances[$code_cip] = new CProductDelivery();
     $delivrances[$code_cip]->stock_id = $stocks[$code_cip]->_id;
     $delivrances[$code_cip]->service_id = $service_id;
+    $delivrances[$code_cip]->loadRefsFwd();
   }
   
   $medicament =& $medicaments[$code_cip]; 

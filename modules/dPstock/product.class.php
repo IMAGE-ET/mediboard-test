@@ -102,15 +102,12 @@ class CProduct extends CMbObject {
     if(!$this->_id) {
       $duplicate_code = new CProduct();
       $duplicate_code->code = $this->code;
-      if ($duplicate_code->loadMatchingObject()) {
-        foreach($duplicate_code->getDBFields() as $key => $value) {
-          if ($value !== null) {        
-            $this->$key = $value;
-          }
-        }
-        return $this->store();
+      $duplicate_code->loadMatchingObject();
+      if ($duplicate_code->_id) {
+        $this->_id = $duplicate_code->_id;
       }
-    } else return parent::store();
+    }
+    return parent::store();
   }
 }
 ?>

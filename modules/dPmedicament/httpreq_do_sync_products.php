@@ -24,19 +24,19 @@ if (!$category_id || !$category->load($category_id)) {
 // Chargement du livret thérapeutique de l'établissement
 $group = new CGroups();
 $group->load($g);
-$group->loadRefLivretTherapeutique();
+$group->loadRefLivretTherapeutique('%', 10000);
 
 // Chargement des produits du livret thérapeutique
 foreach ($group->_ref_produits_livret as $produit_livret) {
   $product = new CProduct();
-  $prod = $produit_livret->_ref_produit;
-  $product->name = $prod->libelle;
+  $product->name        = $produit_livret->_ref_produit->libelle;
   $product->description = $produit_livret->commentaire;
-  $product->code = $produit_livret->code_cip;
+  $product->code        = $produit_livret->code_cip;
   $product->category_id = $category_id;
-  
+  $msg = $product->store();
+
   // Sauvegarde du nouveau produit correspondant au médicament
-  if (!($msg = $product->store())) {
+  if (!$msg) {
     $stock = new CProductStockGroup();
     $stock->product_id = $product->_id;
     $stock->group_id = $g;
