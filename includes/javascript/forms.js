@@ -881,13 +881,21 @@ Element.addMethods('select', {
     }
     
     var makeTree = function (sel, ul) {
+      updateCoordinates();
+      var style = {width: dim.width+'px'};
+      select.setStyle(style).childElements().each(function(d) {d.hide()});
+      tree.setStyle(style);
+      list.setStyle(style);
+      search.setStyle({width: dim.width-4+'px'});
+      
       ul.update(null);
+      
       sel.childElements().each(function (o) {
         var li = new Element('li');
         
         // If it is an optgroup
         if (o.tagName.toLowerCase() == 'optgroup') {
-          li.insert(o.label);
+          li.insert(o.label?o.label:'&nbsp;');
           
           // New sublist
           var subTree = new Element('ul');
@@ -915,7 +923,7 @@ Element.addMethods('select', {
   
         // If it is an option
         } else {
-          li.insert(o.text);
+          li.insert(o.text?o.text:'&nbsp;');
           li.id = select.id+'_'+o.value;
           
           // on click on the li
@@ -941,8 +949,7 @@ Element.addMethods('select', {
     
     // Tree -------------
     tree = new Element('ul')
-              .addClassName(options.className)
-              .setStyle({'width': dim.width+'px'});
+              .addClassName(options.className);
     tree.id = select.id+'_tree';
     
     tree.display = function (e) {
@@ -976,8 +983,7 @@ Element.addMethods('select', {
     
     // List -------------
     list = new Element('ul')
-              .addClassName(options.className)
-              .setStyle({'width': dim.width+'px'});
+              .addClassName(options.className);
     list.id = select.id+'_list';
     
     list.navigate = function (e) {
@@ -1045,7 +1051,6 @@ Element.addMethods('select', {
     // search ----------
     search = new Element('input', {type: 'text', autocomplete: 'off'})
                  .setStyle({
-                   width: select.getWidth()-4+'px',
                    position: 'absolute',
                    top: '-1000px'
                  });
@@ -1053,7 +1058,6 @@ Element.addMethods('select', {
     search.id   = select.id+'_tree__search';
     
     search.catchKey = function (e) {
-      
       var keycode;
       if (window.event) keycode = window.event.keyCode;
       else if (e) keycode = e.which;
@@ -1096,10 +1100,8 @@ Element.addMethods('select', {
     search.observe('keyup',   search.catchKey);
 
     // Select
-    select.setStyle({'width': dim.width+'px'})
-          .writeAttribute('size', 1)
-          .descendants().each(function(d) {d.hide()});
-          
+    select.writeAttribute('size', 1);
+    
     select.display = function (show) {
       search.setStyle({position: 'absolute', top: '-1200px'});
       select.show();
