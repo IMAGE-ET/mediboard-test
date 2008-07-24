@@ -10,7 +10,7 @@ Main.add(function () {
 
 <table class="main">
   <tr>
-    <td class="halfPane" rowspan="3">
+    <td class="halfPane" rowspan="10">
       <form name="filter-products" action="?" method="post" onsubmit="return productsFilter.submit('keywords');">
         <input type="hidden" name="m" value="{{$m}}" />
         
@@ -108,29 +108,61 @@ Main.add(function () {
     <td class="halfPane">
       <table class="tbl">
         <tr>
-          <th class="title" colspan="4">{{tr}}CProduct-back-stocks{{/tr}}</th>
+          <th class="title" colspan="4">{{tr}}CProduct-back-stocks_group{{/tr}}</th>
         </tr>
         <tr>
           <th>{{tr}}CGroups{{/tr}}</th>
           <th>{{tr}}CProductStockGroup-quantity{{/tr}}</th>
           <th>{{tr}}CProductStockGroup-bargraph{{/tr}}</th>
         </tr>
-        {{foreach from=$product->_ref_stocks item=curr_stock}}
+        {{foreach from=$product->_ref_stocks_group item=curr_stock}}
         <tr>
-          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
+          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock">{{$curr_stock->_ref_group->_view}}</a></td>
           <td>{{$curr_stock->quantity}}</td>
           <td>{{include file="inc_bargraph.tpl" stock=$curr_stock}}</td>
         </tr>
         {{foreachelse}}
         <tr>
-          <td colspan="3">{{tr}}CProductProduct.none{{/tr}}</td>
+          <td colspan="3">{{tr}}CProductStockGroup.none{{/tr}}</td>
         </tr>
         {{/foreach}}
         {{if $product->_id}}
           <tr>
             <td colspan="3">
-              <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock&amp;stock_id=0&amp;product_id={{$product->_id}}'">
+              <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_group&amp;stock_id=0&amp;product_id={{$product->_id}}'">
                 {{tr}}CProductStockGroup.create{{/tr}}
+              </button>
+            </td>
+          </tr>
+        {{/if}}
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td class="halfPane">
+      <table class="tbl">
+        <tr>
+          <th class="title" colspan="4">{{tr}}CProduct-back-stocks_service{{/tr}}</th>
+        </tr>
+        <tr>
+          <th>{{tr}}CService{{/tr}}</th>
+          <th>{{tr}}CProductStockService-quantity{{/tr}}</th>
+        </tr>
+        {{foreach from=$product->_ref_stocks_service item=curr_stock}}
+        <tr>
+          <td><a href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id={{$curr_stock->_id}}" title="Voir ou modifier le stock du service">{{$curr_stock->_ref_service->_view}}</a></td>
+          <td>{{$curr_stock->quantity}}</td>
+        </tr>
+        {{foreachelse}}
+        <tr>
+          <td colspan="3">{{tr}}CProductStockService.none{{/tr}}</td>
+        </tr>
+        {{/foreach}}
+        {{if $product->_id}}
+          <tr>
+            <td colspan="3">
+              <button class="new" type="button" onclick="window.location='?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id=0&amp;product_id={{$product->_id}}'">
+                {{tr}}CProductStockService.create{{/tr}}
               </button>
             </td>
           </tr>

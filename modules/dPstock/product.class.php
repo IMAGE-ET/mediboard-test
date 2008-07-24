@@ -24,7 +24,8 @@ class CProduct extends CMbObject {
   var $_ref_societe      = null;
 
   //    Multiple
-  var $_ref_stocks       = null;
+  var $_ref_stocks_group   = null;
+  var $_ref_stocks_service = null;
   var $_ref_references   = null;
   
   // This group's stock id
@@ -39,8 +40,9 @@ class CProduct extends CMbObject {
 
   function getBackRefs() {
     $backRefs = parent::getBackRefs();
-    $backRefs['references'] = 'CProductReference product_id';
-    $backRefs['stocks']     = 'CProductStockGroup product_id';
+    $backRefs['references']     = 'CProductReference product_id';
+    $backRefs['stocks_group']   = 'CProductStockGroup product_id';
+    $backRefs['stocks_service'] = 'CProductStockService product_id';
     return $backRefs;
   }
 
@@ -70,7 +72,8 @@ class CProduct extends CMbObject {
 
   function loadRefsBack() {
   	$this->_ref_references = $this->loadBackRefs('references');
-    $this->_ref_stocks = $this->loadBackRefs('stocks');
+    $this->_ref_stocks_group = $this->loadBackRefs('stocks_group');
+    $this->_ref_stocks_service = $this->loadBackRefs('stocks_service');
   }
 
   function loadRefsFwd() {
