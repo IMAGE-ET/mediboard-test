@@ -325,6 +325,8 @@ Document.refreshList = function(){
   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
   <tr>
     <td>
+      <ul>
+      <li>
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
         <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
       </a>
@@ -345,6 +347,8 @@ Document.refreshList = function(){
           - ({{$curr_op->_nb_files_docs}} Doc.)
         {{/if}}
       </a>
+      </li>
+      </ul>
     </td>
     {{if $curr_op->annulee}}
     <td {{if $curr_sejour->group_id != $g}}style="background-color:#afa"{{else}}class="cancelled"{{/if}}>
