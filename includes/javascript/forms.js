@@ -1047,7 +1047,7 @@ Element.addMethods('select', {
                  .setStyle({
                    width: select.getWidth()-4+'px',
                    position: 'absolute',
-                   top: '-12px'
+                   top: '-1000px'
                  });
     search.name = select.name+'_tree__search';
     search.id   = select.id+'_tree__search';
