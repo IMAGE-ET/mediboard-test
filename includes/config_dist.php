@@ -307,7 +307,7 @@ $dPconfig["dPmedicament"] = array (
     "niveauBCB" => "2",
   ),
   "CBcbProduitLivretTherapeutique" => array(
-    "product_category_id" => null
+    "product_category_id" => "",
   ),
 );
 
