@@ -282,7 +282,7 @@ Document.refreshList = function(){
   </tr>
   {{foreach from=$patient->_ref_sejours item=curr_sejour}}
   <tr>
-    <td>
+    <td class="text">
       {{if $curr_sejour->group_id == $g && $curr_sejour->_canEdit}}
       <a class="actionPat" title="Modifier le séjour" href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->sejour_id}}">
         <img src="images/icons/planning.png" alt="Planifier"/>
@@ -324,7 +324,7 @@ Document.refreshList = function(){
   </tr>
   {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
   <tr>
-    <td>
+    <td class="text">
       <ul>
       <li>
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
@@ -374,7 +374,7 @@ Document.refreshList = function(){
   <tr><th class="category" colspan="2">Consultations</th></tr>
   {{foreach from=$patient->_ref_consultations item=curr_consult}}
   <tr>
-    <td>
+    <td class="text">
       {{if $curr_consult->annule}}
       [ANNULE]
       {{else}}
