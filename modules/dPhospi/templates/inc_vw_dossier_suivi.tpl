@@ -13,17 +13,17 @@ delCibleTransmission = function() {
 
 </script>
 
-<table class="tbl">
+<table class="form">
   <tr>
-    <th class="title" style="width: 50%">
+    <th class="title" style="width: 50%" colspan="4">
       Observations
     </th>
-    <th class="title" style="width: 50%">
+    <th class="title" style="width: 50%" colspan="4">
       Transmissions
     </th>
   </tr>
   <tr>
-    <td>
+    <td colspan="4">
       {{if $isPraticien}}
       <form name="editObs" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
 	      <input type="hidden" name="dosql" value="do_observation_aed" />
@@ -48,7 +48,7 @@ delCibleTransmission = function() {
       </form>
       {{/if}}
     </td>     
-    <td>
+    <td colspan="4">
       <div id="cibleTrans" style="font-style: italic;" onclick="delCibleTransmission()">
       </div>
       <form name="editTrans" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
@@ -76,52 +76,103 @@ delCibleTransmission = function() {
       </form>
     </td>
   </tr>
+</table>
+
+<table class="tbl">
+  
+  <tr>
+    <th colspan="2">Type</th>
+    <th>Utilisateur</th>
+    <th>Date</th>
+    <th>Heure</th>
+    
+    <th colspan="3">Texte</th>
+  </tr>
+  
+  {{assign var=date value=""}}
+  
   {{foreach from=$sejour->_ref_suivi_medical item=curr_suivi}}
   <tr>
   {{if $curr_suivi->_class_name == "CObservationMedicale"}}
-    <td class="text">
+    <td><strong>Observation</strong></td>
+    <td></td>
+    <td><strong>
+    <div class="mediuser" style="border-color: #{{$curr_suivi->_ref_user->_ref_function->color}};">
+      {{$curr_suivi->_ref_user->_view}}
+    </div>
+    </strong></td>
+    
+      <td  style="text-align: center">
+        <strong>
+      {{if $date != $curr_suivi->date|date_format:"%d/%m/%Y"}}
+        {{$curr_suivi->date|date_format:"%d/%m/%Y"}}
+      {{else}}
+        &mdash;
+      {{/if}}
+        </strong>
+      </td>
+      <td>
+           {{$curr_suivi->date|date_format:"%Hh%M"}}
+      </td>
+    
+    <td class="text" colspan="2">
+      
       <div {{if $curr_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
-      {{if $curr_suivi->user_id == $user->_id}}
+        <strong>{{$curr_suivi->text|nl2br}}</strong>
+      </div>
+    </td>
+    <td>
+    {{if $curr_suivi->user_id == $user->_id}}
       <form name="delObs{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_observation_aed" />
-      <input type="hidden" name="del" value="1" />
-      <input type="hidden" name="m" value="dPhospi" />
-      <input type="hidden" name="observation_medicale_id" value="{{$curr_suivi->_id}}" />
-      <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
-      <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+        <input type="hidden" name="dosql" value="do_observation_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="observation_medicale_id" value="{{$curr_suivi->_id}}" />
+        <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
       {{/if}}
-      <strong>{{$curr_suivi->date|date_format:"%d/%m/%Y à %Hh%M"}} - {{$curr_suivi->_view}}</strong>
-      </div>
-      {{$curr_suivi->text|nl2br}}
     </td>
-  {{else}}
-    <td />
+    </tr>
   {{/if}}
   {{if $curr_suivi->_class_name == "CTransmissionMedicale"}}
-    <td class="text">
+  <tr>
+    <td></td>
+    <td>Transmission</td>
+    <td>{{$curr_suivi->_ref_user->_view}}</td>
+   <td  style="text-align: center">
+      {{if $date != $curr_suivi->date|date_format:"%d/%m/%Y"}}
+        {{$curr_suivi->date|date_format:"%d/%m/%Y"}}
+      {{else}}
+        &mdash;
+      {{/if}}    
+      </td>
+      <td>
+        {{$curr_suivi->date|date_format:"%Hh%M"}}
+      </td>
+    <td class="text" colspan="2">
+      
       <div {{if $curr_suivi->degre == "high"}}style="background-color: #faa"{{/if}}>
-      {{if $curr_suivi->object_id}}
-      <em>Cible : {{$curr_suivi->_ref_object->_view}}</em>
-      <br />
-      {{/if}}
-      {{if $curr_suivi->user_id == $user->_id}}
+	      {{if $curr_suivi->object_id}}
+	      <em>Cible : {{$curr_suivi->_ref_object->_view}}</em><br />
+	      {{/if}}
+        {{$curr_suivi->text|nl2br}}
+      </div>
+    </td>
+    <td class="button">
+    {{if $curr_suivi->user_id == $user->_id}}
       <form name="delTrans{{$curr_suivi->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-      <input type="hidden" name="dosql" value="do_transmission_aed" />
-      <input type="hidden" name="del" value="1" />
-      <input type="hidden" name="m" value="dPhospi" />
-      <input type="hidden" name="transmission_medicale_id" value="{{$curr_suivi->_id}}" />
-      <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
-      <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
+        <input type="hidden" name="dosql" value="do_transmission_aed" />
+        <input type="hidden" name="del" value="1" />
+        <input type="hidden" name="m" value="dPhospi" />
+        <input type="hidden" name="transmission_medicale_id" value="{{$curr_suivi->_id}}" />
+        <input type="hidden" name="sejour_id" value="{{$curr_suivi->sejour_id}}" />
+        <button type="button" class="trash notext" onclick="submitSuivi(this.form)">{{tr}}Delete{{/tr}}</button>
       </form>
       {{/if}}
-      <strong>{{$curr_suivi->date|date_format:"%d/%m/%Y à %Hh%M"}} - {{$curr_suivi->_view}}</strong>
-      </div>
-      {{$curr_suivi->text|nl2br}}
     </td>
-  {{else}}
-    <td />
+    </tr>
   {{/if}}
-  </tr>
+  {{assign var=date value=$curr_suivi->date|date_format:"%d/%m/%Y"}}
   {{/foreach}}
 </table>

@@ -39,6 +39,14 @@ viewLegend = function(){
   url.popup(300,150, "Légende");
 }
 
+
+viewDossier = function(prescription_id){
+  var url = new Url;
+  url.setModuleAction("dPprescription", "vw_dossier_cloture");
+  url.addParam("prescription_id", prescription_id);
+  url.popup(500,500,"Dossier cloturé");
+}
+
 </script>
 
 
@@ -58,6 +66,9 @@ viewLegend = function(){
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
+	      <!-- 
+	      <button type="button" class="search" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
+	       -->
 	    </td>
 	    <td style="text-align: right">
 	      <button type="button" class="search" onclick="viewLegend()">Légende</button>
@@ -70,7 +81,7 @@ viewLegend = function(){
 	    <th rowspan="2">Libelle</th>
 	    <th rowspan="2">Posologie</th>
 	    <th colspan="8">Heures</th>
-	    <th rowspan="2">Signatures<br /> Prat. / Pharm.</th>
+	    <th rowspan="2" colspan="2">Signatures<br /> Prat. / Pharm.</th>
 	  </tr>
 	  <tr>
 	   {{foreach from=$tabHours item=_hour}}
@@ -142,10 +153,10 @@ viewLegend = function(){
 						                          administration_partielle
 						                        {{/if}}
 						                      {{else}}
-						                        {{if $date == $now|date_format:'%Y-%m-%d' && $_hour > $now|date_format:'%H'}}
-						                          a_administrer
-						                        {{else}}
+						                        {{if $date == $now|date_format:'%Y-%m-%d' && $_hour < $now|date_format:'%H'}}
 						                          non_administre
+						                        {{else}}
+						                          a_administrer
 						                        {{/if}}
 						                      {{/if}}
 																{{/if}}
@@ -222,7 +233,8 @@ viewLegend = function(){
 						    {{else}}
 						    <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
 						    {{/if}}
-								/
+						</td>
+						<td style="text-align: center">
 						    {{if $line->valide_pharma}}
 						    <img src="images/icons/tick.png" alt="Signée par le pharmacien" title="Signée par le pharmacien" />
 						    {{else}}
@@ -304,10 +316,10 @@ viewLegend = function(){
 						                          administration_partielle
 						                        {{/if}}
 						                      {{else}}
-						                        {{if $date == $now|date_format:'%Y-%m-%d' && $_hour > $now|date_format:'%H'}}
-						                          a_administrer
-						                        {{else}}
+						                        {{if $date == $now|date_format:'%Y-%m-%d' && $_hour < $now|date_format:'%H'}}
 						                          non_administre
+						                        {{else}}
+						                          a_administrer
 						                        {{/if}}
 						                      {{/if}}
 																{{/if}}
@@ -340,7 +352,7 @@ viewLegend = function(){
 							          {{/foreach}}
 							          </ul>
 							        {{else}}
-							            Aucune administration
+							            Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
 							        {{/if}}
 											</div>
 					        </td>
@@ -374,7 +386,7 @@ viewLegend = function(){
 							        {{/foreach}}
 							        </ul>
 							      {{else}}
-							        Aucune administration
+							        Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
 							      {{/if}}
 									</div>
 						     </td>
@@ -386,7 +398,8 @@ viewLegend = function(){
 					      {{else}}
 					        <img src="images/icons/cross.png" alt="Non signée par le praticien" title="Non signée par le praticien" />
 					      {{/if}}
-								/
+						</td>
+						<td style="text-align: center">
 					    -
 					    </td>
 	          </tr>

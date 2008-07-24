@@ -156,12 +156,14 @@ class CPrescriptionLine extends CMbObject {
   }
   
   
-  function loadRefsAdministrations($date){
+  function loadRefsAdministrations($date=""){
 	  $administration = new CAdministration();
   	$where = array();
   	$where["object_id"] = " = '$this->_id'";
   	$where["object_class"] = " = '$this->_class_name'";
-  	$where["dateTime"] = "LIKE '$date%'";
+  	if($date){
+  	  $where["dateTime"] = "LIKE '$date%'";
+  	}
   	$this->_ref_administrations = $administration->loadList($where);
   }
   

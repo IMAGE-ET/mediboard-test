@@ -148,7 +148,12 @@ function loadSuivi(sejour_id) {
 
 function submitSuivi(oForm) {
   sejour_id = oForm.sejour_id.value;
-  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { loadSuivi(sejour_id); } });
+  submitFormAjax(oForm, 'systemMsg', { onComplete: function() { 
+    loadSuivi(sejour_id); 
+    if(oForm.object_class.value != ""){
+      loadTraitement(sejour_id,'{{$date}}');
+    }  
+  } });
 }
 
 var constantesMedicalesDrawn = false;

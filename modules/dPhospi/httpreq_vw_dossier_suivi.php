@@ -33,6 +33,8 @@ $sejour->loadBackRefs("transmissions");
 $sejour->_ref_suivi_medical = array();
 foreach($sejour->_back["observations"] as $curr_obs) {
   $curr_obs->loadRefsFwd();
+ 
+  $curr_obs->_ref_user->loadRefFunction();
   $sejour->_ref_suivi_medical[$curr_obs->date.$curr_obs->_id."obs"] = $curr_obs;
 }
 foreach($sejour->_back["transmissions"] as $curr_trans) {
