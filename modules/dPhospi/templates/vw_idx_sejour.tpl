@@ -206,7 +206,7 @@ Main.add(function () {
   <tr>
     <td style="width:200px;" rowspan="3">
       <form name="form_prescription" action="">
-        <input type="hidden" name="sejour_id" value="" />
+        <input type="hidden" name="sejour_id" value="{{$object->_id}}" />
       </form>
       <table class="form">
         <tr>

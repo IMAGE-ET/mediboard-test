@@ -35,7 +35,7 @@ if($praticien && !$service_id && !$praticien_id) {
 }
 
 
-$changeSejour = mbGetValueFromGet("service_id") || mbGetValueFromGet("praticien_id") || mbGetValueFromGet("date");
+$changeSejour = mbGetValueFromGet("service_id") || mbGetValueFromGet("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
 
 if($changeSejour) {
