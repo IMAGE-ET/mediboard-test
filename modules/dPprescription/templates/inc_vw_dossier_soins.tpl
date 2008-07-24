@@ -256,12 +256,18 @@ viewLegend = function(){
 			      {{/if}}
 
 				    <td class="text">
-				      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');" class="transmission_possible">
+				    {{assign var=element_id value=$element->_id}}
+				      <div onclick="addCibleTransmission('{{$element->_class_name}}', '{{$element->_id}}', '{{$element->_view}}');" 
+				          class="{{if @$transmissions.CPrescriptionLineElement.$element_id|@count}}
+					                   transmission
+					                   {{else}}
+					                    transmission_possible 
+					                   {{/if}}">
 					        <a href="#" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$element->_class_name}}', object_id: {{$element->_id}} } })">{{$element->_view}}</a>
 				      </div>
 				    </td>
 	   	      <td class="text">
-					    {{assign var=element_id value=$element->_id}}
+					    
 					    {{if @array_key_exists($element_id, $prises_element) && @array_key_exists($unite_prise, $prises_element.$element_id)}}
 					      <ul>
 						    {{foreach from=$prises_element.$element_id.$unite_prise item=prise name=prises}}
