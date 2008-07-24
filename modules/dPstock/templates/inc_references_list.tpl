@@ -1,3 +1,5 @@
+<div id="list-references-total-count" style="display: none;">{{$list_references_count}}</div>
+
 <table class="tbl">
   <tr>
     <th>{{tr}}CProductReference-product_id{{/tr}}</th>

@@ -1,3 +1,5 @@
+<div id="list-products-total-count" style="display: none;">{{$list_products_count}}</div>
+
 <table class="tbl">
   <tr>
     <th>{{tr}}CProduct-name{{/tr}}</th>

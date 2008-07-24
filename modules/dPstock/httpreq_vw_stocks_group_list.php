@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m, $g;
-
+global $can, $g;
 $can->needsEdit();
 
 $category_id         = mbGetValueFromGet('category_id');
@@ -47,7 +46,7 @@ $list_stocks = $stock->loadList($where, $orderby, $limit?$limit:20, null, $leftj
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_stocks', $list_stocks);
+$smarty->assign('list_stocks',       $list_stocks);
 $smarty->assign('list_stocks_count', $list_stocks_count);
 
 $smarty->display('inc_stocks_group_list.tpl');

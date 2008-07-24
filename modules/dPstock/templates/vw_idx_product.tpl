@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "societe_id", "keywords"];
+  filterFields = ["category_id", "societe_id", "keywords", "limit"];
   productsFilter = new Filter("filter-products", "{{$m}}", "httpreq_vw_products_list", "list-products", filterFields);
   productsFilter.submit();
 });
@@ -28,6 +28,7 @@ Main.add(function () {
         {{/foreach}}
         </select>
         
+        <input type="hidden" name="limit" value="" />
         <input type="text" name="keywords" value="" />
         
         <button type="button" class="search" onclick="productsFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>

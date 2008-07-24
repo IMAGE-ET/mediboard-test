@@ -3,7 +3,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  filterFields = ["category_id", "societe_id", "keywords"];
+  filterFields = ["category_id", "societe_id", "keywords", "limit"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields);
   referencesFilter.submit();
 });
@@ -29,6 +29,7 @@ Main.add(function () {
         {{/foreach}}
         </select>
         
+        <input type="hidden" name="limit" value="" />
         <input type="text" name="keywords" value="" />
         
         <button type="button" class="search" onclick="referencesFilter.submit('keywords');">{{tr}}Filter{{/tr}}</button>
@@ -43,7 +44,7 @@ Main.add(function () {
       {{if $can->edit}}
       
       <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
-        {{tr}}CProductCategory.create{{/tr}}
+        {{tr}}CProductReference.create{{/tr}}
       </a>
       
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">

@@ -7,14 +7,14 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $category_id = mbGetValueFromGet('category_id');
 $societe_id  = mbGetValueFromGet('societe_id');
 $keywords    = mbGetValueFromGet('keywords');
 $order_id    = mbGetValueFromGet('order_id');
+$limit       = mbGetValueFromGet('limit');
 $hide_societes = mbGetValueFromGet('hidden_column');
 
 $where = array();
@@ -35,7 +35,8 @@ $leftjoin = array();
 $leftjoin['product'] = 'product.product_id = product_reference.product_id';
 
 $reference = new CProductReference();
-$list_references = $reference->loadList($where, $orderby, 20, null, $leftjoin);
+$list_references_count = $reference->countList($where, $orderby, null, null, $leftjoin);
+$list_references = $reference->loadList($where, $orderby, $limit?$limit:20, null, $leftjoin);
 foreach($list_references as $ref) {
   $ref->loadRefs();
 }
@@ -43,9 +44,10 @@ foreach($list_references as $ref) {
 // Smarty template
 $smarty = new CSmartyDP();
 
-$smarty->assign('list_references', $list_references);
-$smarty->assign('order_id', $order_id);
-$smarty->assign('hide_societes', $hide_societes);
+$smarty->assign('list_references',       $list_references);
+$smarty->assign('list_references_count', $list_references_count);
+$smarty->assign('order_id',              $order_id);
+$smarty->assign('hide_societes',         $hide_societes);
 
 $smarty->display('inc_references_list.tpl');
 ?>

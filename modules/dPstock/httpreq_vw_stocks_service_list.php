@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $can, $m, $g;
-
+global $can, $g;
 $can->needsEdit();
 
 $category_id = mbGetValueFromGet('category_id');
