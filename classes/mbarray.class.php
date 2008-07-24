@@ -119,7 +119,23 @@ class CMbArray {
 	   
 	  return $paArray1;
 	}
-
+	
+	/**
+	 * Recursively applies a function to values of an array
+	 * @param string $function Function name
+	 * @param array $array Array to map
+	 * @return array The mapped array
+	 */
+	static function mapRecursive($function, $array) {
+  foreach ($array as $key => $value ) {
+    $array[$key] = is_array($value) ? 
+      self::mapRecursive($function, $value) : 
+      $function($value);
+  }
+  
+  return $array;
+}
+	
 
 	/**
 	 * Alternative to array_merge that always preserves keys

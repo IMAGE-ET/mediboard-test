@@ -54,7 +54,7 @@ class CMbConfig {
   }
   
   function update($newValues = array(), $keepOld = true) {
-    $newValues = array_map_recursive('stripslashes', $newValues);
+    $newValues = CMbArray::mapRecursive('stripslashes', $newValues);
     
     if ($keepOld) {
       $this->load();
