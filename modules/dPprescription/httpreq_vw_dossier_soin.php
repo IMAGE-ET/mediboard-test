@@ -74,6 +74,7 @@ $where["sejour_id"] = " = '$sejour->_id'";
 $transmissions_by_class = $transmission->loadList($where);
 
 foreach($transmissions_by_class as $_transmission){
+  $_transmission->loadRefsFwd();
 	$transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
 }
 

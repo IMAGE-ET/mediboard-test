@@ -75,4 +75,16 @@
       {{$line->_ref_executant->_view}}
     </td>
   </tr>
+  {{if $line->_ref_transmissions|@count}}
+  <tr>
+    <th colspan="3">Transmissions</th>
+  </tr>
+  {{foreach from=$line->_ref_transmissions item=_transmission}}
+  <tr>
+    <td colspan="3">
+      {{$_transmission->_view}} le {{$_transmission->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_transmission->text}}
+    </td>
+  </tr>
+  {{/foreach}}
+  {{/if}}
 </table>

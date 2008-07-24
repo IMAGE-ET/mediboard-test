@@ -77,6 +77,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   
   function loadView() {
     $this->loadRefsPrises();
+    $this->loadRefsTransmissions();
   }
   
   

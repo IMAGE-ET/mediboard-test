@@ -52,7 +52,7 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_log_date_arret = null;
   var $_ref_prises         = null;
   var $_ref_administrations = null;
-  
+  var $_ref_transmissions   = null;
 
   function getSpecs() {
     $specsParent = parent::getSpecs();
@@ -151,8 +151,16 @@ class CPrescriptionLine extends CMbObject {
     $backRefs = parent::getBackRefs();
     $backRefs["prise_posologie"] = "CPrisePosologie object_id";
     $backRefs["administration"] = "CAdministration object_id";
-    $backRefs["parent_line"] = "$this->_class_name child_id";
+    $backRefs["parent_line"] = "$this->_class_name child_id";  
+    $backRefs["transmissions"] = "CTransmissionMedicale object_id";
     return $backRefs;
+  }
+  
+  function loadRefsTransmissions(){
+  	$this->_ref_transmissions = $this->loadBackRefs("transmissions");
+		foreach($this->_ref_transmissions as &$_trans){
+  	  $_trans->loadRefsFwd();
+    }					  
   }
   
   

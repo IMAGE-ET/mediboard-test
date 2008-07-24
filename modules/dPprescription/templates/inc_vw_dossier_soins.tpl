@@ -262,9 +262,31 @@ viewDossier = function(prescription_id){
 					                    transmission_possible 
 					                   {{/if}}" 
 			            rowspan="{{$nb_produit_by_cat.$name_cat}}" 
+			           
 			            onclick="addCibleTransmission('CCategoryPrescription', '{{$name_cat}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
-			              {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
-			        </th>
+			             <div class="tooltip-trigger"
+			                   onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$name_cat}}'} })">
+			                   
+			                   {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
+			       
+			       					  <div id="tooltip-content-{{$name_cat}}" style="display: none; color: black; text-align: left">
+			       					    {{if array_key_exists("CCategoryPrescription", $transmissions) && array_key_exists($name_cat, $transmissions.CCategoryPrescription)}}
+			       					    <ul>
+			       					    {{foreach from=$transmissions.CCategoryPrescription.$name_cat item=_trans}}
+			       					      <li>{{$_trans->_view}} le {{$_trans->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_trans->text}}</li>
+			       					    {{/foreach}}
+			       					    </ul>
+			       					    {{else}}
+			       					      Aucune transmission
+			       					    {{/if}}
+						            </div>           
+			         </th>
+			        
+			        
+						       
+	
+						             
+						             
 			      {{/if}}
 
 				    <td class="text">

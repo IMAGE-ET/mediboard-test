@@ -81,7 +81,7 @@ delCibleTransmission = function() {
 <table class="tbl">
   
   <tr>
-    <th colspan="2">Type</th>
+    <th>Type</th>
     <th>Utilisateur</th>
     <th>Date</th>
     <th>Heure</th>
@@ -95,7 +95,6 @@ delCibleTransmission = function() {
   <tr>
   {{if $curr_suivi->_class_name == "CObservationMedicale"}}
     <td><strong>Observation</strong></td>
-    <td></td>
     <td><strong>
     <div class="mediuser" style="border-color: #{{$curr_suivi->_ref_user->_ref_function->color}};">
       {{$curr_suivi->_ref_user->_view}}
@@ -137,7 +136,6 @@ delCibleTransmission = function() {
   {{/if}}
   {{if $curr_suivi->_class_name == "CTransmissionMedicale"}}
   <tr>
-    <td></td>
     <td>Transmission</td>
     <td>{{$curr_suivi->_ref_user->_view}}</td>
    <td  style="text-align: center">
