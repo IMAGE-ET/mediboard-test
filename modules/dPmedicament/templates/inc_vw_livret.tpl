@@ -56,7 +56,7 @@
         {{tr}}Modify{{/tr}} 
       </button>
     </td>  
-    <td>
+    <td class="text">
       <a href="#produit{{$produit_livret->code_cip}}" onclick="viewProduit({{$produit_livret->code_cip}})">
         {{$produit_livret->_ref_produit->libelle}}
       </a>
@@ -86,7 +86,7 @@
     <td>
       {{$produit_livret->code_interne}}
     </td> 
-    <td>
+    <td class="text">
       {{$produit_livret->commentaire}}
     </td> 
   </tr>
