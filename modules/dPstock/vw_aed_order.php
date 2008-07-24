@@ -14,7 +14,7 @@ $can->needsEdit();
 $order_id    = mbGetValueFromGetOrSession('order_id');
 $category_id = mbGetValueFromGetOrSession('category_id');
 $societe_id  = mbGetValueFromGetOrSession('societe_id');
-$_autofill   = mbGetValueFromGetOrSession('_autofill')=='true'?1:null;
+$_autofill   = mbGetValueFromGetOrSession('_autofill')=='true';
 
 // Loads the expected Order
 $order = new CProductOrder();

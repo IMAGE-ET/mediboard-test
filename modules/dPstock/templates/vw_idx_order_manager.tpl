@@ -13,8 +13,8 @@ Main.add(function () {
 <div class="main">
   <!-- Action buttons -->
   <div style="float: right;">
-    <button type="button" class="change" onclick="popupOrder(this.form, 800, 600, true);">{{tr}}CProductOrder-_autofill{{/tr}}</button>
-    <button type="button" class="new"    onclick="popupOrder(this.form, 800, 600);">{{tr}}CProductOrder.create{{/tr}}</button>
+    <button type="button" class="change" onclick="popupOrder(null, 800, 600, true);">{{tr}}CProductOrder-_autofill{{/tr}}</button>
+    <button type="button" class="new"    onclick="popupOrder(null, 800, 600);">{{tr}}CProductOrder.create{{/tr}}</button>
   </div>
 
   <!-- Filter -->

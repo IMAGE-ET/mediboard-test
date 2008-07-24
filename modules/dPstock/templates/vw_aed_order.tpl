@@ -13,6 +13,10 @@ Main.add(function () {
   filterFields = ["category_id", "keywords", "order_id"];
   referencesFilter = new Filter("filter-references", "{{$m}}", "httpreq_vw_references_list", "list-references", filterFields, "societe_id");
   {{/if}}
+
+  {{if $order->_id}}
+  refreshOrder({{$order->_id}}, {refreshLists: false});
+  {{/if}}
 });
 </script>
 
