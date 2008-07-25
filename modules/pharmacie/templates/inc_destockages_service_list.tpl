@@ -24,7 +24,7 @@
     <td>{{$curr_destockage.nb_produit}}</td>
     <td>
       <form name="destockage-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})"
-      {{if $stock->_ref_logs|@count>0}}style="opacity: 0.5" title="Destockage déjà réalisé durant la période indiquée"{{/if}}>
+      {{if $stock->_ref_logs|@count>0 && false}}style="opacity: 0.5" title="Destockage déjà réalisé durant la période indiquée"{{/if}}>
         <input type="hidden" name="m" value="dPstock" /> 
         <input type="hidden" name="del" value="0" />
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
