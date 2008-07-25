@@ -277,7 +277,7 @@ viewDossier = function(prescription_id){
 			       					    {{/foreach}}
 			       					    </ul>
 			       					    {{else}}
-			       					      Aucune transmission
+			       					      Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
 			       					    {{/if}}
 						            </div>           
 			         </th>
@@ -363,7 +363,7 @@ viewDossier = function(prescription_id){
 							          <ul>
 							          {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							            {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
+							            <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
 								         
 								            <ul>
 								              {{foreach from=$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
@@ -397,7 +397,7 @@ viewDossier = function(prescription_id){
 							        <ul>
 							        {{foreach from=$administrations.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.administrations item=_log_administration}}
 							           {{assign var=administration_id value=$_log_administration->_ref_object->_id}}
-							            <li>{{$_log_administration->_ref_object->quantite}} {{$_log_administration->_ref_object->_unite_prise}} administré par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
+							            <li>{{$_log_administration->_ref_object->quantite}} {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} effectué par {{$_log_administration->_ref_user->_view}} le {{$_log_administration->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>		         
 								         
 								            <ul>
 								              {{foreach from=$transmissions.$name_chap.$name_cat.$element_id.$unite_prise.$_hour.list.$administration_id item=_transmission}}
