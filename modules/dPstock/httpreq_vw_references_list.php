@@ -22,7 +22,7 @@ if ($category_id) {
   $where['product.category_id'] = " = $category_id";
 }
 if ($societe_id) {
-  $where['product.societe_id'] = " = $societe_id";
+  $where['product_reference.societe_id'] = " = $societe_id";
 }
 if ($keywords) {
   $where[] = "product.code LIKE '%$keywords%' OR 
