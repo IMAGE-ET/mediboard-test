@@ -14,13 +14,13 @@ function refreshDeliveriesList() {
 }
 </script>
 
-<form name="filter-delivrance" action="?" method="post" onsubmit="return ">
+<form name="filter-delivrance" action="?" method="post" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>
-      <th>{{mb_title object=$delivrance field=_date_min}}</th>
+      <th>{{mb_label object=$delivrance field=_date_min}}</th>
       <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-delivrance register=1}}</td>
-      <th>{{mb_title object=$delivrance field=_date_max}}</th>
+      <th>{{mb_label object=$delivrance field=_date_max}}</th>
       <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-delivrance register=1}}</td>
       <td>
         <select name="service_id">
@@ -33,7 +33,7 @@ function refreshDeliveriesList() {
         <input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
         <input name="delivered" type="radio" value="true" /> délivrées</label>
       </td>
-      <td><button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button></td>
+      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>
 </form>

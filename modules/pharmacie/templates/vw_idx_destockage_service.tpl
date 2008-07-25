@@ -14,13 +14,13 @@ function refreshDestockagesList() {
 }
 </script>
 
-<form name="filter-destockage" action="?" method="post" onsubmit="return ">
+<form name="filter-destockage" action="?" method="post" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
   <input type="hidden" name="m" value="{{$m}}" />
   <table class="form">
     <tr>
-      <th>{{mb_title object=$delivrance field=_date_min}}</th>
+      <th>{{mb_label object=$delivrance field=_date_min}}</th>
       <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-destockage register=1}}</td>
-      <th>{{mb_title object=$delivrance field=_date_max}}</th>
+      <th>{{mb_label object=$delivrance field=_date_max}}</th>
       <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-destockage register=1}}</td>
       <td>
         <select name="service_id">
@@ -30,7 +30,7 @@ function refreshDestockagesList() {
         </select>
       </td>
       <td><label><input name="all_stocks" type="checkbox" /> tous les stocks</label></td>
-      <td><button type="button" class="search" onclick="filter.submit();">{{tr}}Filter{{/tr}}</button></td>
+      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>
   </table>
 </form>

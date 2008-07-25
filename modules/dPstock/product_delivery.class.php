@@ -53,7 +53,7 @@ class CProductDelivery extends CMbObject {
       'service_id'        => 'notNull ref class|CService',
       'patient_id'        => 'ref class|CPatient',
       '_date_min'         => 'notNull dateTime',
-      '_date_max'         => 'notNull dateTime',
+      '_date_max'         => 'notNull dateTime moreThan|_date_min',
     ));
   }
 
