@@ -52,14 +52,16 @@
           <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
             <ul>
               {{foreach from=$_patients item=_patient}}
+                {{assign var=patient_id value=$_patient->_id}}
+                
 	              <li>
-	                {{$_patient->_view}}
+	                {{$_patient->_view}}: {{$quantitesParPatient.$code_cip.$patient_id}} {{$medicament->libelle_unite_presentation}}
 	              </li>
 	            {{/foreach}}
             </ul>
           </div>
         </td>
-        <td style="text-align: center">
+        <td  rowspan="{{$unites|@count}}" style="text-align: center">
           {{if array_key_exists($code_cip,$delivrances)}}
             {{assign var=delivrance value=$delivrances.$code_cip}}
             {{$delivrance->_ref_stock->quantity}}
