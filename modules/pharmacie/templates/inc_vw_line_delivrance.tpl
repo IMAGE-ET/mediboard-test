@@ -14,7 +14,13 @@
     </div>
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
+  <td>{{mb_value object=$curr_delivery->_ref_stock field=quantity}}</td>
   <td>{{mb_value object=$curr_delivery field=quantity}}</td>
+  <td>
+    {{assign var=id value=$curr_delivery->_id}}
+    {{assign var=stock value=$stocks_service.$id}}
+    {{$stock->quantity}}
+  </td>
   <td>
   {{assign var=id value=$curr_delivery->_id}}
   {{if !$curr_delivery->date_delivery}}
@@ -31,7 +37,7 @@
     <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
     {{if $curr_delivery->date_delivery}}
     <input type="hidden" name="_undeliver" value="1" />
-    <button type="submit" class="cancel">Annuler la délivrance</button>
+    <button type="submit" class="cancel">Annuler</button>
     {{else}}
     <input type="hidden" name="code" value="" />
     <input type="hidden" name="_deliver" value="1" />

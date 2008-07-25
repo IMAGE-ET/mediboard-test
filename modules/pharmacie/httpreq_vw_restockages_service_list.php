@@ -16,6 +16,8 @@ $received = mbGetValueFromGetOrSession('received') == 'true';
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+mbSetValueToSession('_date_min', $date_min);
+mbSetValueToSession('_date_max', $date_max);
 
 $order_by = 'date_delivery DESC';
 $where = array ();

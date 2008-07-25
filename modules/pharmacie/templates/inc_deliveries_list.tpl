@@ -7,7 +7,9 @@
     <th>{{tr}}CProductDelivery-service_id{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>Stock pharmacie</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    <th>Stock service</th>
     <th style="width: 1%">{{tr}}CProductDelivery-code{{/tr}}</th>
     <th></th>
   </tr>
@@ -27,7 +29,9 @@
     <th>{{tr}}CProductDelivery-patient_id{{/tr}}</th>
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>Stock pharmacie</th>
     <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
+    <th>Stock service</th>
     <th style="width: 1%">{{tr}}CProductDelivery-code{{/tr}}</th>
     <th></th>
   </tr>

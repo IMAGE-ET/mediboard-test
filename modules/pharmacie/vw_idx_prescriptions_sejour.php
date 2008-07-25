@@ -27,8 +27,10 @@ $praticien_id = mbGetValueFromGet("praticien_id");
 $service_id   = mbGetValueFromGet("service_id");
 $valide_pharma = mbGetValueFromGet("valide_pharma", 0);  // Par defaut, seulement les prescriptions contenant des lignes non validees
 
-$filter_sejour->_date_min     = mbGetValueFromGet("_date_min");
-$filter_sejour->_date_max     = mbGetValueFromGet("_date_max");
+$filter_sejour->_date_min     = mbGetValueFromGetOrSession("_date_min");
+$filter_sejour->_date_max     = mbGetValueFromGetOrSession("_date_max");
+mbSetValueToSession('_date_min', $filter_sejour->_date_min);
+mbSetValueToSession('_date_max', $filter_sejour->_date_max);
 
 // Si aucune date n'est specifiée, on filtre par rapport à la date d'aujourd'hui
 if(!$filter_sejour->_date_min && !$filter_sejour->_date_max){

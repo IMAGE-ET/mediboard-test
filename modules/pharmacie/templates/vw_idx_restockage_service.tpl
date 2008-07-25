@@ -45,8 +45,8 @@ function refreshRestockagesList() {
         </div>
       </td>
       <td>
-        <input name="received" type="radio" value="false" checked="checked" /> non reçues</label>
-        <input name="received" type="radio" value="true" /> reçues</label>
+        <label><input name="received" type="radio" value="false" checked="checked" /> non reçues</label>
+        <label><input name="received" type="radio" value="true" /> reçues</label>
       </td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>

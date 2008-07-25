@@ -13,6 +13,8 @@ $service_id = mbGetValueFromGetOrSession('service_id');
 $patient_id = mbGetValueFromGetOrSession('patient_id');
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+mbSetValueToSession('_date_min', $date_min);
+mbSetValueToSession('_date_max', $date_max);
 $prescription_id = mbGetValueFromGetOrSession('prescription_id');
 
 if($prescription_id == "undefined"){

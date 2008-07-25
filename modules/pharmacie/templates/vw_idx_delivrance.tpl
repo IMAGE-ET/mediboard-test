@@ -30,8 +30,8 @@ function refreshDeliveriesList() {
         </select>
       </td>
       <td>
-        <input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
-        <input name="delivered" type="radio" value="true" /> délivrées</label>
+        <label><input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
+        <label><input name="delivered" type="radio" value="true" /> délivrées</label>
       </td>
       <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
     </tr>

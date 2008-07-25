@@ -43,7 +43,7 @@
         </td>
         
         {{if $smarty.foreach.dispensation.first}}
-        <td rowspan="{{$unites|@count}}" style="text-align: center" />{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
+        <td rowspan="{{$unites|@count}}" style="text-align: center" class="text">{{$quantites_reference.$code_cip.total}} / {{$medicament->nb_unite_presentation}} ({{$medicament->libelle_unite_presentation}})</td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
           <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
                class="tooltip-trigger">
@@ -52,9 +52,7 @@
           <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
             <ul>
               {{foreach from=$_patients item=_patient}}
-	              <li>
-	                {{$_patient->_view}}
-	              </li>
+	              <li>{{$_patient->_view}}</li>
 	            {{/foreach}}
             </ul>
           </div>
@@ -70,19 +68,24 @@
         <td rowspan="{{$unites|@count}}" style="text-align: left">       
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
-              {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
               {{if $curr_done->date_delivery}}
-                (délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}})
+                <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}}</div>
+                <div class="tooltip-trigger" 
+                     onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
+                  {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+                  <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
+                </div>
               {{else}}
-          <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
-            <input type="hidden" name="m" value="dPstock" />
-            <input type="hidden" name="dosql" value="do_delivery_aed" />
-            <input type="hidden" name="del" value="1" />
-            <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
-            <button type="submit" class="cancel notext" title="Annuler">Annuler</button>
-          </form>
+                {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+                <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
+                  <input type="hidden" name="m" value="dPstock" />
+                  <input type="hidden" name="dosql" value="do_delivery_aed" />
+                  <input type="hidden" name="del" value="1" />
+                  <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
+                  <button type="submit" class="cancel notext" title="Annuler">Annuler</button>
+                </form>
+                <br />
               {{/if}}
-              <br />
             {{/if}}
           {{foreachelse}}
             Aucune
@@ -106,9 +109,7 @@
             <input type="hidden" name="patient_id" value="{{$prescription->_ref_object->_ref_patient->_id}}" />
             {{/if}}
             {{mb_field object=$delivrance field=quantity form="form-dispensation-$code_cip" increment=1 size=3}}
-            <button type="submit" class="tick">
-              Dispenser
-            </button>
+            <button type="submit" class="tick notext" title="Dispenser">Dispenser</button>
           </form>
           {{else}}
           Stock épuisé à la pharmacie
@@ -121,10 +122,11 @@
         {{if $stocks_service.$code_cip}}
           {{assign var=stock_service value=$stocks_service.$code_cip}}
           {{if $stock_service->quantity>0}}
-          {{$stock_service->quantity}} déjà en stock
+            {{$stock_service->quantity}}
           {{else}}
-          Aucun stock
+            0
           {{/if}}
+          {{$medicament->libelle_conditionnement}}
         {{/if}}
         </td>
         {{/if}}

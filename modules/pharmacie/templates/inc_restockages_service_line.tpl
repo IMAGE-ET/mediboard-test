@@ -15,7 +15,6 @@
   </td>
   <td>{{mb_value object=$curr_delivery field=date_dispensation}}</td>
   <td>{{mb_value object=$curr_delivery field=date_delivery}}</td>
-  <td>{{mb_value object=$curr_delivery field=quantity}}</td>
   <td>
   {{assign var=id value=$curr_delivery->_id}}
   {{if !$curr_delivery->date_delivery}}
@@ -31,9 +30,12 @@
     <input type="hidden" name="dosql" value="do_delivery_aed" />
     <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
     {{if $curr_delivery->date_reception}}
+    {{mb_value object=$curr_delivery field=quantity}} reçus
     <input type="hidden" name="_unreceive" value="1" />
-    <button type="submit" class="cancel">Annuler la récéption</button>
+    <button type="submit" class="cancel">Annuler</button>
     {{else}}
+    {{assign var=id value=$curr_delivery->_id}}
+    {{mb_field object=$curr_delivery field=quantity form="delivery-$id" increment=1 size=3}}
     <input type="hidden" name="_receive" value="1" />
     <button type="submit" class="tick">Recevoir</button>
     {{/if}}

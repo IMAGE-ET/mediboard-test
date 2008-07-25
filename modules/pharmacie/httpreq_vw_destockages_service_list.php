@@ -14,6 +14,8 @@ $service_id = mbGetValueFromGetOrSession('service_id');
 $all_stocks = mbGetValueFromGetOrSession('all_stocks') == 'true';
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+mbSetValueToSession('_date_min', $date_min);
+mbSetValueToSession('_date_max', $date_max);
 
 $destockages = array();
 $lines = array();

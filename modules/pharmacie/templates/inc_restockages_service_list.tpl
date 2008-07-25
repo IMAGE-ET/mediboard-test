@@ -8,7 +8,6 @@
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_delivery{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th style="width: 1%">{{tr}}CProductDelivery-code{{/tr}}</th>
     <th></th>
   </tr>
@@ -29,7 +28,6 @@
     <th>{{tr}}CProduct{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
     <th>{{tr}}CProductDelivery-date_delivery{{/tr}}</th>
-    <th>{{tr}}CProductDelivery-quantity{{/tr}}</th>
     <th style="width: 1%">{{tr}}CProductDelivery-code{{/tr}}</th>
     <th></th>
   </tr>

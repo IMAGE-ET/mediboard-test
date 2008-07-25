@@ -17,6 +17,8 @@ $delivered = mbGetValueFromGetOrSession('delivered') == 'true';
 // Calcul de date_max et date_min
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
+mbSetValueToSession('_date_min', $date_min);
+mbSetValueToSession('_date_max', $date_max);
 
 $order_by = 'date_dispensation DESC';
 $where = array ();
@@ -30,10 +32,13 @@ $deliveries = $delivery->loadList($where, $order_by, 20);
 
 $deliveries_nominatif = array();
 $deliveries_global = array();
+$stocks_service = array();
 
 // Creation d'un tableau de patient
 $patients = array();
 foreach($deliveries as $_delivery){
+  $_delivery->loadRefsFwd();
+  $_delivery->_ref_stock->loadRefsFwd();
   if($_delivery->patient_id){
   	$_delivery->loadRefPatient();
     $deliveries_nominatif[$_delivery->_id] = $_delivery;
@@ -41,12 +46,15 @@ foreach($deliveries as $_delivery){
   	$_delivery->loadRefService();
   	$deliveries_global[$_delivery->_id] = $_delivery;
   }
+  
+  $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
 }
 
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign('deliveries_global', $deliveries_global);
 $smarty->assign('deliveries_nominatif', $deliveries_nominatif);
+$smarty->assign('stocks_service', $stocks_service);
 $smarty->display('inc_deliveries_list.tpl');
 
 ?>
