@@ -20,30 +20,6 @@ function pageMain(){
 	
         <table class="form">
           <tr>
-            <th>
-              Praticien
-            </th>
-	          <td>
-					    <select name="praticien_id">
-						    <option value="">&mdash; Praticien</option>
-						    {{foreach from=$praticiens item=_praticien}}
-						    <option class="mediuser" 
-	                      style="border-color: #{{$_praticien->_ref_function->color}};" 
-	                      value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}}>{{$_praticien->_view}}</option>
-						    {{/foreach}}
-						  </select>
-		        </td>
-		        <th>
-		          Service
-		        </th>
-		        <td>
-		          <select name="service_id">
-			          <option value="">&mdash; Service</option>
-			          {{foreach from=$services item=_service}}
-			          <option value="{{$_service->_id}}" {{if $service_id == $_service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
-			          {{/foreach}}
-			        </select>
-			      </td>
 			      <th>
 		 	        A partir du
 			      </th>
@@ -56,15 +32,38 @@ function pageMain(){
 			      <td class="date">
 			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm canNull=false}}
 	          </td>
-	          <td>
-	            <select name="valide_pharma">
-	              <option value="0" {{if $valide_pharma == "0"}}selected="selected"{{/if}}>Seulement les non validées</option>
-	              <option value="1" {{if $valide_pharma == "1"}}selected="selected"{{/if}}>Toutes</option>
-	            </select>
-	          </td>
-	          <td>
-	            <button class="tick" type="button" onclick="this.form.submit()">Filtrer</button>
-	          </td>
+            <td>
+              <select name="service_id">
+                <option value="">&mdash; Service</option>
+                {{foreach from=$services item=_service}}
+                <option value="{{$_service->_id}}" {{if $service_id == $_service->_id}}selected="selected"{{/if}}>{{$_service->_view}}</option>
+                {{/foreach}}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <th>
+              Praticien
+            </th>
+            <td>
+              <select name="praticien_id">
+                <option value="">&mdash; Praticien</option>
+                {{foreach from=$praticiens item=_praticien}}
+                <option class="mediuser" 
+                        style="border-color: #{{$_praticien->_ref_function->color}};" 
+                        value="{{$_praticien->_id}}" {{if $praticien_id == $_praticien->_id}}selected="selected"{{/if}}>{{$_praticien->_view}}</option>
+                {{/foreach}}
+              </select>
+            </td>
+            <td colspan="2">
+              <select name="valide_pharma">
+                <option value="0" {{if $valide_pharma == "0"}}selected="selected"{{/if}}>Seulement les non validées</option>
+                <option value="1" {{if $valide_pharma == "1"}}selected="selected"{{/if}}>Toutes</option>
+              </select>
+            </td>
+            <td>
+              <button class="tick" type="button" onclick="this.form.submit()">Filtrer</button>
+            </td>
           </tr>
         </table>
       </form>
