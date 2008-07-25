@@ -21,6 +21,12 @@ $sejour->loadRefPatient();
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElementByCat();
 
+// Chargement de toutes les transmissions du sejour
+$sejour->loadRefsTransmissions();
+foreach($sejour->_ref_transmissions as &$_transmission){
+	$_transmission->loadRefsFwd();
+}
+
 // Parcours des lignes de medicament et stockage du dossier cloturé
 foreach($prescription->_ref_prescription_lines as $_line_med){
 	$_line_med->_ref_produit->loadConditionnement();

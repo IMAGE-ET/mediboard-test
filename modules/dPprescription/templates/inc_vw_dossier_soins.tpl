@@ -58,17 +58,16 @@ viewDossier = function(prescription_id){
 
 
 {{if $prescription_id}}
-
+  <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
 	<h2 style="text-align: center">Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}</h2>
 	<table style="width: 100%">
 	  <tr>
 	    <td>
+	      
+	    
 	      <button type="button" class="print" onclick="printDossierSoin('{{$prescription_id}}','{{$date}}');" title="{{tr}}Print{{/tr}}">
 		      Imprimer la feuille de soins immédiate
 	      </button>
-	      <!-- 
-	      <button type="button" class="search" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
-	       -->
 	    </td>
 	    <td style="text-align: right">
 	      <button type="button" class="search" onclick="viewLegend()">Légende</button>

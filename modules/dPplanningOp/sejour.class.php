@@ -560,6 +560,10 @@ class CSejour extends CCodable {
     $this->_ref_prestation->load($this->prestation_id);
   }
   
+  function loadRefsTransmissions(){
+    $this->_ref_transmissions = $this->loadBackRefs("transmissions");	
+  }
+  
   
   function loadRefEtablissement() {
     // Chargement de l'établissement correspondant
