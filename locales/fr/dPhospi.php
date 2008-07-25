@@ -272,4 +272,6 @@ $locales['msg-CService-modify'] = '';
 $locales['msg-CTransmissionMedicale-create'] = '';
 $locales['msg-CTransmissionMedicale-delete'] = '';
 $locales['msg-CTransmissionMedicale-modify'] = '';
+$locales['CService.all'] = 'Tous les services';
+$locales['CService.select'] = 'Choisir un service';
 ?>
