@@ -12,38 +12,19 @@ global $AppUI, $can, $m;
 $can->needsRead();
 
 $track = array();
-$tracked_classes = array(
-  'CProductDelivery'
-);
-$orderby = 'date DESC';
+$orderby = 'date_dispensation DESC';
 $where['code'] = 'IS NOT NULL';
 
 $product = new CProduct();
 $product->loadList();
 
-foreach ($tracked_classes as $class) {
-	if (class_exists($class)) {
-		$type = new $class;
-		$type = $type->loadList($where, $orderby);
-
-		foreach ($type as $tracked_item) {
-			$tracked_item->updateFormFields();
-			$track[$tracked_item->code][$class][] = $tracked_item;
-			
-		  foreach ($tracked_classes as $c) {
-        if (!isset($track[$tracked_item->code][$c])) {
-          $track[$tracked_item->code][$c] = array();
-        }
-      }
-		}
-  }
-}
+$list = new CProductDelivery;
+$list = $list->loadList($where, $orderby);
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign('track', $track);
-$smarty->assign('tracked_classes', $tracked_classes);
+$smarty->assign('list', $list);
 
 $smarty->display('vw_traceability.tpl');
 

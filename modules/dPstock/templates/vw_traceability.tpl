@@ -1,25 +1,16 @@
 <table class="main tbl">
   <tr>
-    <th>Produit</th>
-    {{foreach from=$tracked_classes item=class}}
-    <th>{{tr}}{{$class}}{{/tr}}</th>
-    {{/foreach}}
+    <th>{{tr}}CProductDelivery-code{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date_dispensation{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date_delivery{{/tr}}</th>
+    <th>{{tr}}CProductDelivery-date_reception{{/tr}}</th>
   </tr>
-  {{foreach from=$track item=curr_track key=code}}
+  {{foreach from=$list item=curr_deliv key=code}}
   <tr>
-    <td>{{$code}}</td>
-    {{foreach from=$tracked_classes item=class}}
-    <td>
-      {{if $track.$code.$class}}
-      {{foreach from=$curr_track.$class item=item}}
-        {{mb_value object=$item field=date}} | 
-        {{mb_value object=$item field=_view}}<br />
-      {{/foreach}}
-      {{/if}}
-    </td>
-    {{foreachelse}}
-    <td>{{$class}}</td>
-    {{/foreach}}
+    <td>{{mb_value object=$curr_deliv field=code}}</td>
+    <td>{{mb_value object=$curr_deliv field=date_dispensation}}</td>
+    <td>{{mb_value object=$curr_deliv field=date_delivery}}</td>
+    <td>{{mb_value object=$curr_deliv field=date_reception}}</td>
   </tr>
   {{/foreach}}
 </table>
