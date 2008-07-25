@@ -200,6 +200,14 @@ Main.add(function () {
 });
 
 
+viewBilanService = function(service_id, date){
+  var url = new Url;
+  url.setModuleAction("dPhospi", "vw_bilan_service");
+  url.addParam("service_id", service_id);
+  url.addParam("date", date);
+  url.popup(700,500,"Bilan par service");
+}
+
 </script>
 
 <table class="main">
@@ -235,6 +243,9 @@ Main.add(function () {
                 {{/foreach}}
                 <option value="NP" {{if $service_id == "NP"}} selected="selected" {{/if}}>Non placés</option>
               </select>
+              {{if $service_id && $isPrescriptionInstalled}}
+                <button type="button" class="search" onclick="viewBilanService('{{$service_id}}','{{$date}}');">Bilan par service</button>
+        			{{/if}}
             </form>
             <br />
             {{/if}}

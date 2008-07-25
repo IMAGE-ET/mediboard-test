@@ -43,6 +43,9 @@ class CPrescription extends CMbObject {
   var $_praticiens = null;            // Tableau de praticiens prescripteur
   var $_can_add_line = null;
   
+  var $_filter_time_min = null;
+  var $_filter_time_max = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
@@ -67,7 +70,9 @@ class CPrescription extends CMbObject {
       "object_class"  => "notNull enum list|CSejour|CConsultation",
       "libelle"       => "str",
       "type"          => "notNull enum list|traitement|pre_admission|sejour|sortie|externe",
-      "_type_sejour"  => "notNull enum list|pre_admission|sejour|sortie"
+      "_type_sejour"  => "notNull enum list|pre_admission|sejour|sortie",
+      "_filter_time_min" => "time",
+      "_filter_time_max" => "time"
      );
     return array_merge($specsParent, $specs);
   }

@@ -53,7 +53,8 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_prises         = null;
   var $_ref_administrations = null;
   var $_ref_transmissions   = null;
-
+  
+  
   function getSpecs() {
     $specsParent = parent::getSpecs();
     $specs = array (

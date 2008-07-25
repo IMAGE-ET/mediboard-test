@@ -85,14 +85,16 @@ foreach($dates as $_date){
 	                              $intitule_prise_med, $intitule_prise_element);
 
 	// Génération du tableau d'heures
-  $tabHours[$_date] = array("$_date 08:00:00" => "08",
-  													"$_date 12:00:00" => "12",
-  													"$_date 14:00:00" => "14",
-  													"$_date 18:00:00" => "18",
-  													"$_date 22:00:00" => "22",
-  													"$_date 24:00:00" => "24",
-  													mbDate("+ 1 DAY",$_date)." 02:00:00" => "02",
-  													mbDate("+ 1 DAY",$_date)." 06:00:00" => "06");	                              
+  $tabHours[$_date] = array(
+   "$_date 02:00:00" => "02",
+   "$_date 06:00:00" => "06",
+   "$_date 08:00:00" => "08",
+ 	 "$_date 12:00:00" => "12",
+	 "$_date 14:00:00" => "14",
+	 "$_date 18:00:00" => "18",
+ 	 "$_date 22:00:00" => "22",
+	 "$_date 24:00:00" => "24",
+	);	                              
 }
 
 
