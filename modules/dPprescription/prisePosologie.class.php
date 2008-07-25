@@ -253,8 +253,12 @@ class CPrisePosologie extends CMbMetaObject {
 				}
   		}
   	}
+  	/*
 		if($this->moment_unitaire_id && !$this->_ref_moment->heure){
   	  $nb = 1;
+		}*/
+		if($this->moment_unitaire_id && !isset($nb)){
+		  $nb = 1;
 		}
   	
   	// Cas d'une posologie de type moment (unite de prise: jour)
