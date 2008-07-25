@@ -39,6 +39,12 @@ if($praticien_sortie_id){
 } else {
 	$praticien =& $prescription->_ref_praticien;
 }
+
+$mediuser = new CMediusers();
+$mediuser->load($AppUI->user_id);
+if($mediuser->isPraticien()){
+	$praticien = $mediuser;
+}
 $praticien->loadRefsFwd();
 
 
@@ -94,6 +100,8 @@ foreach($prescription->_ref_lines_med_comments as $key => $lines_medicament_type
 			if(!$line_medicament->signee || $line_medicament->praticien_id != $AppUI->user_id){
 		  	continue;
 		  }
+		  
+		  $line_medicament->loadRefLogSignee();
 		  // si l'heure definie a ete depassée, on ne la prend pas non plus en compte
 		  if($now > mbDateTime($line_medicament->_ref_log_signee->date. "+ $time_print_ordonnance hours")){
 		  	continue;

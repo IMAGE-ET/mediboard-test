@@ -134,6 +134,13 @@ class CPrescriptionLine extends CMbObject {
   }
   
   /*
+   * Chargement du log de signature de la ligne
+   */
+  function loadRefLogSignee(){
+    $this->_ref_log_signee = $this->loadLastLogForField("signee");
+  }
+  
+  /*
    * Chargement de la ligne suivante
    */
   function loadRefChildLine(){
