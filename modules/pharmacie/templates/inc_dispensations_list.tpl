@@ -52,10 +52,8 @@
           <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
             <ul>
               {{foreach from=$_patients item=_patient}}
-                {{assign var=patient_id value=$_patient->_id}}
-                
 	              <li>
-	                {{$_patient->_view}}: {{$quantitesParPatient.$code_cip.$patient_id}} {{$medicament->libelle_unite_presentation}}
+	                {{$_patient->_view}}
 	              </li>
 	            {{/foreach}}
             </ul>

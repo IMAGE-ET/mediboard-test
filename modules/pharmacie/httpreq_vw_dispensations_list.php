@@ -43,7 +43,6 @@ $done = array();
 $patients = array();
 $stocks_service = array();
 $warning = array();
-$quantitesParPatient = array();
 
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
@@ -109,15 +108,11 @@ foreach($prescriptions as $_prescription){
       if(($mode_kg && $poids) || !$mode_kg){
         $dispensations[$_line_med->code_cip][$_unite_prise] += ceil($quantite);  
       }  
-      @$quantitesParPatient[$_line_med->code_cip][$sejour->_ref_patient->_id] += ceil($quantite);
     }
     if(!array_key_exists($_line_med->code_cip, $medicaments)){
       $medicaments[$_line_med->code_cip] =& $_line_med->_ref_produit;
     }
-    
   }
-  
-  
 }
 
 // Calcul du nombre de boites (unites de presentation)
@@ -202,7 +197,6 @@ foreach($quantites as $code => &$_quantite){
 
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("quantitesParPatient", $quantitesParPatient);
 $smarty->assign('warning', $warning);
 $smarty->assign('patients', $patients);
 $smarty->assign('dispensations', $dispensations);
