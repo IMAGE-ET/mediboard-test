@@ -43,10 +43,6 @@ if ($praticien->user_id) {
   $packs = $pack->loadMatchingList("nom");
 }
 
-// NETTOYER LA REDONDANCE
-
-// Packs pour l'utilisateur
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -54,7 +50,7 @@ $smarty->assign("modelesByOwner", $modelesByOwner);
 $smarty->assign("packs", $packs);
 $smarty->assign("praticien_id"  , $praticien->_id);
 $smarty->assign("object"        , $object);
-$smarty->assign("suffixe"       , mbGetValueFromGet("suffixe"));
+$smarty->assign("mode"         , mbGetValueFromGet("mode"));
 
 $smarty->display("inc_widget_documents.tpl");
 

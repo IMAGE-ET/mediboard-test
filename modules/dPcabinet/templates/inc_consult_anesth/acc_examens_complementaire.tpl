@@ -116,13 +116,11 @@ function reloadListExamComp() {
 			    <th class="category">Documents</th>
 			  </tr>
 			  <tr>
-			    <td>
+			    <td id="documents-exam">
 			      {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
 			      <!-- Documents -->
-			      <div id="documents-exam">
-			      </div>
 			      <script type="text/javascript">
-			         Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','exam');
+			         Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-exam');
             </script>
 			    </td>
 			  </tr>

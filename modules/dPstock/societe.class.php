@@ -47,7 +47,7 @@ class CSociete extends CMbObject {
     return array_merge($specs, array (
       'name'            => 'notNull str maxLength|50',
       'address'         => 'str',
-      'postal_code'     => 'code insee',
+      'postal_code'     => 'numchar minLength|4 maxLength|5',
       'city'            => 'str',
       'phone'           => 'str',
       'fax'             => 'str',

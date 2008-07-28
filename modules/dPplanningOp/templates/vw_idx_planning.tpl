@@ -4,13 +4,6 @@
 
 <script type="text/javascript">
 
-Document.refreshList = function(operation_id) {
-  var url = new Url;
-  url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
-  url.addParam("operation_id" , operation_id);
-  url.requestUpdate('document-'+operation_id, { waitingText: null } );
-}
-
 function updateListOperations(date, urgence) {
   var url = new Url;
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_operations");

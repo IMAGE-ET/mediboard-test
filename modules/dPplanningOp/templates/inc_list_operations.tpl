@@ -1,3 +1,5 @@
+{{mb_include_script module="dPcompteRendu" script="document"}}
+
 <input id="currDateJSAccess" name="currDateJSAccess" type="hidden" value="{{$date}}" />
 {{if !$board}}
 <div style="font-weight:bold; height:20px; text-align:center;">
@@ -16,21 +18,26 @@
 {{/if}}
         <tr>
           <th class="title" colspan="5">
-            Interventions
+             Interventions
           </th>
         </tr>
         <tr>
-          <th>Patient</th>
-          <th>Actes</th>
-          <th>Heure prévue</th>
-          <th>Durée</th>
+          <th>{{mb_label class=CSejour field=patient_id}}</th>
+          <th>
+            [{{mb_label class=COperation field=libelle}}] 
+            {{mb_label class=COperation field=codes_ccam}}
+          </th>
+          <th>{{mb_title class=COperation field=time_operation}}</th>
+          <th>{{mb_title class=COperation field=temp_operation}}</th>
           {{if !$boardItem}}
             <th>Compte-rendu</th>
           {{/if}}
         </tr>
+        
         {{if $urgences}}
         {{foreach from=$listUrgences item=curr_op}}
         <tr>
+        
           <td class="text">
             <a href="{{$curr_op->_ref_sejour->_ref_patient->_dossier_cabinet_url}}"
               class="tooltip-trigger"
@@ -39,6 +46,7 @@
               {{$curr_op->_ref_sejour->_ref_patient->_view}}
             </a>
           </td>
+          
           <td class="text">
             <a href="?m={{$m}}&amp;tab=vw_edit_urgence&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->libelle}}
@@ -68,42 +76,11 @@
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
-          <td>
-          
-            <form name="newDocumentFrm" action="?m={{$m}}" method="post">
-            <table>
-              <tr>
-                <td>
-                  <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$curr_op->_id}})">
-                    <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="Opération">
-                    {{foreach from=$crList item=curr_cr}}
-                    <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                    <optgroup label="Hospitalisation">
-                    {{foreach from=$hospiList item=curr_hospi}}
-                    <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                  </select>
-                  <br />
-                  <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$curr_op->_id}})">
-                    <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
-                    {{foreach from=$packList item=curr_pack}}
-                      <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
-                    {{foreachelse}}
-                      <option value="">{{tr}}pack-none{{/tr}}</option>
-                    {{/foreach}}
-                  </select>
-                </td>
-              </tr>
-            </table>
-            </form>
-            
-            <div id="document-{{$curr_op->_id}}">
-              {{include file="../../dPsalleOp/templates/inc_vw_list_documents.tpl" selOp=$curr_op}}
-            </div>
+
+          <td id="{{$curr_op->_guid}}">
+						<script type="text/javascript">
+        			Document.register('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}', '{{$curr_op->_guid}}', 'collapse');
+      			</script>
             
           </td>
         </tr>
@@ -147,13 +124,15 @@
             {{else}}
             <a href="?m={{$m}}&amp;tab=vw_edit_planning&amp;operation_id={{$curr_op->_id}}">
               {{if $curr_op->time_operation != "00:00:00"}}
-                Validé pour {{$curr_op->time_operation|date_format:"%Hh%M"}}
+                Validé pour 
+                <br/ >{{$curr_op->time_operation|date_format:"%Hh%M"}}
               {{else}}
                 Non validé
               {{/if}}
               <br />
               {{if $curr_op->horaire_voulu}}
-              (souhaité pour {{$curr_op->horaire_voulu|date_format:"%Hh%M"}})
+              souhaité pour 
+              <br/>{{$curr_op->horaire_voulu|date_format:"%Hh%M"}}
               {{/if}}
             </a>
             {{/if}}
@@ -163,47 +142,13 @@
               {{$curr_op->temp_operation|date_format:"%Hh%M"}}
             </a>
           </td>
+
           {{if !$boardItem}}
-          <td>
-            <form name="newDocumentFrm-{{$curr_op->_id}}" action="?m={{$m}}" method="post">
-            <table>
-              <tr>
-                <td>
-                  <select name="_choix_modele" onchange="if (this.value) Document.create(this.value, {{$curr_op->_id}})">
-                    <option value="">&mdash; Choisir un modèle</option>
-                    <optgroup label="Opération">
-                    {{foreach from=$crList item=curr_cr}}
-                    <option value="{{$curr_cr->compte_rendu_id}}">{{$curr_cr->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                    <optgroup label="Hospitalisation">
-                    {{foreach from=$hospiList item=curr_hospi}}
-                    <option value="{{$curr_hospi->compte_rendu_id}}">{{$curr_hospi->nom}}</option>
-                    {{/foreach}}
-                    </optgroup>
-                  </select>
-                  <br />
-                  <select name="_choix_pack" onchange="if (this.value) DocumentPack.create(this.value, {{$curr_op->_id}})">
-                    <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
-                    {{foreach from=$packList item=curr_pack}}
-                      <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
-                    {{foreachelse}}
-                      <option value="">{{tr}}pack-none{{/tr}}</option>
-                    {{/foreach}}
-                  </select>
-                  <script type="text/javascript">
-                    modeleSelector[{{$curr_op->_id}}] = new ModeleSelector("newDocumentFrm-{{$curr_op->_id}}", null, "_modele_id", "_object_id");
-                  </script>
-                  <button type="button" class="search" onclick="modeleSelector[{{$curr_op->_id}}].pop('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}')">Modèle</button>
-							    <input type="hidden" name="_modele_id" value="" />
-							    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value, '{{$curr_op->_id}}','{{$curr_op->_class_name}}'); this.value=''; this.form._modele_id.value=''; "/>
-                </td>
-              </tr>
-            </table>
-            </form>
-            <div id="document-{{$curr_op->_id}}">
-              {{include file="../../dPsalleOp/templates/inc_vw_list_documents.tpl" selOp=$curr_op}}
-            </div>
+          <td id="{{$curr_op->_guid}}">
+						<script type="text/javascript">
+        			Document.register('{{$curr_op->_id}}','{{$curr_op->_class_name}}','{{$curr_op->chir_id}}', '{{$curr_op->_guid}}', 'collapse');
+      			</script>
+            
           </td>
           {{/if}}
         </tr>

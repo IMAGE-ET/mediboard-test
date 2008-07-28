@@ -26,7 +26,6 @@ function reloadPrescription(prescription_id){
  
 </script>
 
-
 <!-- Informations générales sur l'intervention et le patient -->
 <table class="form">
   {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
@@ -140,7 +139,17 @@ function reloadPrescription(prescription_id){
 {{assign var="dossier_medical" value=$selOp->_ref_sejour->_ref_dossier_medical}}
 <div id="five" style="display:none">
   <div class="text">
-    {{include file="inc_vw_dossier.tpl"}}
+		{{include file=../../dPpatients/templates/CDossierMedical_complete.tpl object=$dossier_medical}}
+  </div>
+
+  <hr />
+
+  <div id="documents">
+		{{mb_include_script module="dPcompteRendu" script="document"}}
+		{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+    <script type="text/javascript">
+      Document.register('{{$selOp->_id}}','{{$selOp->_class_name}}','{{$selOp->chir_id}}','documents');
+    </script>
   </div>
 </div>
 

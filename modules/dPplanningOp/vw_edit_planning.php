@@ -103,36 +103,6 @@ $sejour->loadNumDossier();
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
-// Récupération des modèles
-
-// Modèles de l'utilisateur
-$listModelePrat = array();
-$order = "nom";
-if ($chir->user_id) {
-  $where = array();
-  $where["object_class"] = "= 'COperation'";
-  $where["chir_id"] = "= '$chir->user_id'";
-  $listModelePrat = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-}
-
-// Modèles de la fonction
-$listModeleFunc = array();
-if ($chir->user_id) {
-  $where = array();
-  $where["object_class"] = "= 'COperation'";
-  $where["function_id"] = "= '$chir->function_id'";
-  $listModeleFunc = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-}
-
-// Packs d'hospitalisation
-$listPack = array();
-if($chir->user_id) {
-  $where = array();
-  $where["chir_id"] = "= '$chir->user_id'";
-  $listPack = new CPack;
-  $listPack = $listPack->loadlist($where, $order);
-}
-
 $config = CAppUI::conf("dPplanningOp CSejour");
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
@@ -140,7 +110,6 @@ $heure_sortie_ambu   = $config["heure_sortie_ambu"];
 $heure_sortie_autre  = $config["heure_sortie_autre"];
 $heure_entree_veille = $config["heure_entree_veille"];
 $heure_entree_jour   = $config["heure_entree_jour"];
-
 
 $list_hours_voulu = range(7, 20);
 $list_minutes_voulu = range(0, 59, $config["min_intervalle"]);
@@ -182,9 +151,6 @@ $smarty->assign("msg_alert" , "");
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
-$smarty->assign("listPack"      , $listPack      );
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->assign("hours"        , $hours);

@@ -3,7 +3,8 @@
 /* Modele selector
    Allows to choose a modele from a praticien or a function
 */
-var ModeleSelector = Class.create({
+
+ModeleSelector = Class.create({
   sForm      : null,
   sView      : null,
   sModele_id : null,

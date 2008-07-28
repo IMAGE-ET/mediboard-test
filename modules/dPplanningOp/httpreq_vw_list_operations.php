@@ -19,7 +19,7 @@ $urgences = mbGetValueFromGetOrSession("urgences", 0);
 $board = mbGetValueFromGet("board", 0);
 $boardItem = mbGetValueFromGet("boardItem", 0);
 
-if($urgences) {
+if ($urgences) {
   $listDay = array();
   // Urgences du mois
   $listUrgences = new COperation;
@@ -28,11 +28,13 @@ if($urgences) {
   $where["chir_id"] = "= '$userSel->user_id'";
   $order = "date";
   $listUrgences = $listUrgences->loadList($where, $order);
-  foreach($listUrgences as $keyUrg => $curr_urg) {
-    $listUrgences[$keyUrg]->loadRefs();
-    $listUrgences[$keyUrg]->_ref_sejour->loadRefsFwd();
+  foreach($listUrgences as &$curr_urg) {
+    $curr_urg->loadRefsFwd();
+    $curr_urg->_ref_sejour->loadRefsFwd();
   }
-} else {
+} 
+
+else {
   $listUrgences = array();
   // Urgences du jour
   $listUrgences = new COperation;
@@ -41,9 +43,9 @@ if($urgences) {
   $where["chir_id"] = "= '$userSel->user_id'";
   $order = "date";
   $listUrgences = $listUrgences->loadList($where, $order);
-  foreach($listUrgences as $keyUrg => $curr_urg) {
-    $listUrgences[$keyUrg]->loadRefs();
-    $listUrgences[$keyUrg]->_ref_sejour->loadRefsFwd();
+  foreach($listUrgences as &$curr_urg) {
+    $curr_urg->loadRefsFwd();
+    $curr_urg->_ref_sejour->loadRefsFwd();
   }
   // Liste des opérations du jour sélectionné
   $listDay = new CPlageOp;
@@ -52,39 +54,20 @@ if($urgences) {
   $where["chir_id"] = "= '$userSel->user_id'";
   $order = "debut";
   $listDay = $listDay->loadList($where, $order);
-  foreach($listDay as $key => $value) {
-    $listDay[$key]->loadRefs();
-    foreach($listDay[$key]->_ref_operations as $key2 => $value2) {
-      $listDay[$key]->_ref_operations[$key2]->loadRefs();
-      $listDay[$key]->_ref_operations[$key2]->_ref_sejour->loadRefsFwd();
+  foreach ($listDay as &$curr_plage) {
+    $curr_plage->loadRefs();
+    foreach ($curr_plage->_ref_operations as &$curr_op) {
+      $curr_op->loadRefsFwd();
+      $curr_op->_ref_sejour->loadRefsFwd();
     }
   }
 }
-
-// récupération des modèles de compte-rendu disponibles
-$where                 = array();
-$order                 = "nom";
-$where["object_class"] = "= 'COperation'";
-$where["chir_id"]      = "= '$userSel->user_id'";
-$crList                = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
-$hospiList             = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-
-// Packs d'hospitalisation
-$packList         = array();
-$where            = array();
-$where["object_class"] = " = 'COperation'";
-$where["chir_id"] = "= '$userSel->user_id'";
-$pack             = new CPack;
-$packList         = $pack->loadlist($where, $order);
 
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("boardItem"   , $boardItem);
 $smarty->assign("date"        , $date);
-$smarty->assign("crList"      , $crList);
-$smarty->assign("hospiList"   , $hospiList);
-$smarty->assign("packList"    , $packList);
 $smarty->assign("listUrgences", $listUrgences);
 $smarty->assign("listDay"     , $listDay);
 $smarty->assign("urgences"    , $urgences);

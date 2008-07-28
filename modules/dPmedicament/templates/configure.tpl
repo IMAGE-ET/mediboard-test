@@ -146,11 +146,22 @@ function startSyncProducts(category_id){
   }
 }
 
-function importCSV(){
-  var url = new Url;
-  url.setModuleAction("dPmedicament", "vw_bcb_import");
-  url.pop(400, 400, "Import de fichier CSV");
+var Livret = {
+  import: function () {
+	  var url = new Url;
+	  url.setModuleAction("dPmedicament", "vw_bcb_import");
+	  url.pop(400, 400, "Import de fichier CSV");
+	},
+	
+	purge: function () {
+	  if (confirm("Vous êtes sur le point de vider le Livret Thérapeutique\n\nVoulez-vous poursuivre ?")) {
+		  var url = new Url;
+		  url.setModuleAction("dPmedicament", "httpreq_purge_livret");
+		  url.requestUpdate("livret-purge");
+	  }
+	}
 }
+
 
 </script>
 <table class="tbl">
@@ -186,8 +197,12 @@ function importCSV(){
     <td id="do_add_bcbges"></td>
   </tr>
   <tr>
-    <td><button class="tick" onclick="importCSV()" >Importer un fichier CSV de livrets thérapeutiques</button></td>
+    <td><button class="tick" onclick="Livret.import()" >Importer un fichier CSV de livrets thérapeutiques</button></td>
     <td></td>
+  </tr>
+  <tr>
+    <td><button class="trash" onclick="Livret.purge()" >Vider le livret thérapeutique</button></td>
+    <td id="livret-purge"></td>
   </tr>
   <tr>
     <td>

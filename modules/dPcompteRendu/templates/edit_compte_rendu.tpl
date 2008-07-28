@@ -23,7 +23,10 @@ function refreshCR() {
 }
 
 {{if $compte_rendu->_id}}
-window.opener.Document.refreshList('{{$compte_rendu->object_id}}','{{$compte_rendu->object_class}}');
+window.opener.Document.refreshList(
+  '{{$compte_rendu->object_class}}',
+	'{{$compte_rendu->object_id}}'	
+);
 {{/if}}
 
 </script>

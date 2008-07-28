@@ -6,9 +6,6 @@
 {{assign var="object" value=$selOp}}
 {{include file="../../dPsalleOp/templates/js_gestion_ccam.tpl"}}
 
-{{mb_include_script module="dPcompteRendu" script="document"}}
-
-
 <script type="text/javascript">
 
 function submitTiming(oForm) {
@@ -83,17 +80,7 @@ function pageMain() {
   new Control.Tabs('main_tab_group');
   // Effet sur le programme
   new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
-  // Affichage de la liste des documents de l'operation
-  Document.refreshList();
-
   {{/if}}
-}
-
-Document.refreshList = function() {
-  var url = new Url;
-  url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
-  url.addParam("operation_id" , "{{$selOp->_id}}");
-  url.requestUpdate('documents');
 }
 
 </script>

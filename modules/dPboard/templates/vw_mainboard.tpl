@@ -66,11 +66,6 @@ function hideItem(sClassName, id) {
   oElement.hide();
 }
 
-Document.refreshList = function(){
-  updateListOperations();
-  updateListHospi("sortie");
-}
-
 function affNaissance() {
   var oForm      = document.find;
   var oCheckNaissance = oForm.check_naissance;

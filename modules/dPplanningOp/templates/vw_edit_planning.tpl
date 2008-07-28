@@ -4,17 +4,9 @@
 {{mb_include_script module="dPprescription" script="prescription_editor"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
 {{mb_include_script module="dPcompteRendu" script="document"}}
-
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
-
-Document.refreshList = function(operation_id) {
-  var url = new Url;
-  url.setModuleAction("dPsalleOp", "httpreq_vw_list_documents");
-  url.addParam("operation_id" , operation_id);
-  url.requestUpdate('document-'+operation_id, { waitingText: null } );
-}
-
 
 function printDocument(iDocument_id) {
   form = document.editOp;
@@ -232,7 +224,7 @@ function pageMain() {
       <table class="form">
         <tr>
           <td class="button">
-          {{if $op->operation_id}}
+          {{if $op->_id}}
             <button class="modify" type="button" onclick="submitForms();">{{tr}}Modify{{/tr}}</button>
             <button class="trash" type="button" onclick="deleteObjects();">{{tr}}Delete{{/tr}}</button>
             {{if $op->annulee}}
@@ -240,48 +232,29 @@ function pageMain() {
             {{else}}
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
             {{/if}}
-            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
-            <select name="_choix_modele" onchange="printDocument(this)">
-              <option value="">&mdash; {{tr}}modele-choice{{/tr}}</option>
-              <optgroup label="Modèles du praticien">
-              {{foreach from=$listModelePrat item=curr_modele}}
-                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{foreachelse}}
-                <option value="">{{tr}}modele-none{{/tr}}</option>
-              {{/foreach}}
-              </optgroup>
-              <optgroup label="Modèles du cabinet">
-              {{foreach from=$listModeleFunc item=curr_modele}}
-                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{foreachelse}}
-                <option value="">{{tr}}modele-none{{/tr}}</option>
-              {{/foreach}}
-              </optgroup>
-            </select>
-            <select name="_choix_pack" onchange="printPack(this)">
-              <option value="">&mdash; {{tr}}pack-choice{{/tr}}</option>
-              {{foreach from=$listPack item=curr_pack}}
-                <option value="{{$curr_pack->pack_id}}">{{$curr_pack->nom}}</option>
-              {{foreachelse}}
-                <option value="">{{tr}}pack-none{{/tr}}</option>
-              {{/foreach}}
-            </select>
           {{else}}
             <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
           {{/if}}
+            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
           </td>
         </tr>
-        <tr>
-          <td>
-            <div id="document-{{$op->_id}}">
-            </div>
-          </td>
-        </tr>
+
       </table>
     </td>
   </tr>
 </table>
 
+<!-- Documents -->
+{{if $op->_id}}
+<hr />
+<div id="documents" />
+<script type="text/javascript">
+  Document.register('{{$op->_id}}','{{$op->_class_name}}','{{$op->chir_id}}','documents');
+</script>
+{{/if}}
+    
+
+<!-- Actes -->
 {{if $op->_ref_actes|@count}}
 <hr />
 {{include file="../../dPsalleOp/templates/inc_vw_actes.tpl" subject=$op}}

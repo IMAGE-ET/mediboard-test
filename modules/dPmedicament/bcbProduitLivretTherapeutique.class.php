@@ -32,8 +32,28 @@ class CBcbProduitLivretTherapeutique extends CBcbObject {
     $result = $this->distObj->InitConnexionGestion(CBcbObject::$objDatabaseGestion->LinkDB, CBcbObject::$TypeDatabaseGestion);
   }
   
+  /**
+   * Compte le nombre de produit du livret courant
+   * @return int Le nombre de produit
+   */
+  static function countProduits() {
+    global $g;
+    $query = "SELECT COUNT(*) FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
+    $ds = CSQLDataSource::get("bcb");
+    return $ds->loadResult($query);
+  }
   
-  function load($code_cip){
+  static function purgeProduits() {
+    global $g;
+    $query = "DELETE FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g'";
+    $ds = CSQLDataSource::get("bcbges");
+    $ds->exec($query);
+    $ds = CSQLDataSource::get("bcb");
+    $ds->exec($query);
+    return $ds->affectedRows();
+  }  
+  
+  function load($code_cip) {
     global $g;
     $ds = CSQLDataSource::get("bcb");
     $query = "SELECT * FROM `LIVRETTHERAPEUTIQUE` WHERE `CODEETABLISSEMENT` = '$g' AND `CODECIP` = '$code_cip';";

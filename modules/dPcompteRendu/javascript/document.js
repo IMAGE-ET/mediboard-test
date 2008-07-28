@@ -1,7 +1,4 @@
 var Document = {
-	// Multiples occurences de la même widget
-  suffixes: [],
-  
 	/**
 	 * @param ... A DECRIRE
 	 */
@@ -64,36 +61,44 @@ var Document = {
   	}
   	
   	var oAjaxOptions = {
-  		onComplete: Document.refreshList
+  		onComplete: function () { 
+  			Document.refreshList($V(form.object_class), $V(form.object_id)); 
+  		}
   	}
   	
 		confirmDeletion(form, oConfirmOptions, oAjaxOptions);
   },
   
   refreshList: function(object_class, object_id) {
-    Console.trace("Refreshing for");
-    Console.debug(object_class, "Object class");
-    Console.debug(object_id   , "Object id");
+    var selector = printf("div.documents-%s-%s", object_class, object_id);
+  	$$(selector).each(Document.refresh);
+  },
+    
+  /**
+   * Mode normal|collapse Defaults to normal
+   */
+  register: function(object_id, object_class, praticien_id, container, mode) {
+  	if (!mode) mode = "normal";
+    var div = document.createElement("div");
+    div.style.minWidth = "230px"; 
+    div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
+    $(container).insert(div);
+    Main.add( function() {
+      Document.refresh(div);
+    } );
   },
   
-  reloadInit: function(object_id, object_class, praticien_id){
-    var url = new Url;
-    url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
-    url.addParam("object_class", object_class); 
-    url.addParam("object_id"   , object_id);
-    url.addParam("praticien_id", praticien_id);
-    Document.suffixes.each( function(suffixe) {
-	    url.addParam("suffixe", suffixe);
-	    url.make();
-	    url.requestUpdate("documents-" + suffixe, { waitingText : null } );
-   } );
-  }, 
-  register: function(object_id, object_class, praticien_id, suffixe){
-    document.write('<div id=documents-'+suffixe+'></div>');
-    Main.add( function() {
-      Document.suffixes.push(suffixe);
-      Document.reloadInit(object_id,object_class,praticien_id);
-    } );
+  refresh: function(div) {
+    var matches = div.className.match(/documents-(\w+)-(\d+) praticien-(\d+) mode-(\w+)/);
+    
+	  var url = new Url;
+	  url.setModuleAction("dPcompteRendu", "httpreq_widget_documents");
+	  url.addParam("object_class", matches[1]);
+	  url.addParam("object_id"   , matches[2]);
+	  url.addParam("praticien_id", matches[3]);
+	  url.addParam("mode"        , matches[4]);
+	  url.requestUpdate(div, { waitingText : null } );
+    
   }
 };
 

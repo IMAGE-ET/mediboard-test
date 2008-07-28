@@ -4,11 +4,6 @@
 <script type="text/javascript">
 var notWhitespace   = /\S/;
 
-Document.refreshList = function(){
-  updateListOperations();
-  updateListHospi("sortie");
-}
-
 function hideIcon(frame) {
   $("icon-" + frame).hide();
 }

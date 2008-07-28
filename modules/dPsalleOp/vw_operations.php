@@ -28,7 +28,6 @@ $tabPersonnel = array();
 
 // Creation du tableau de timing pour les affectations  
 $timingAffect = array();
-  
 
 // Chargement des praticiens
 $listAnesths = new CMediusers;
@@ -105,22 +104,6 @@ if ($op) {
 
 	$selOp->_ref_consult_anesth->_ref_consultation->loadRefsBack();
 
-	// récupération des modèles de compte-rendu disponibles
-	$where                 = array();
-	$order                 = "nom";
-	$where["object_class"] = "= 'COperation'";
-	$where["chir_id"]      = "= '$selOp->chir_id'";
-	$crList                = CCompteRendu::loadModeleByCat("Opération", $where, $order, true);
-	$hospiList             = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-	
-	// Packs d'hospitalisation
-	$packList         = array();
-	$where            = array();
-	$where["object_class"] = " = 'COperation'";
-	$where["chir_id"] = "= '$selOp->chir_id'";
-	$pack             = new CPack;
-	$packList         = $pack->loadlist($where, $order);
-	
 	// Chargement des affectations de personnel pour la plageop et l'intervention
   loadAffectations($selOp, $tabPersonnel, $listPersAideOp, $listPersPanseuse, $timingAffect);
 }
@@ -158,9 +141,6 @@ $smarty->assign("unites",$unites);
 
 if ($selOp->_id){
   $smarty->assign("listChamps", $listChamps);
-  $smarty->assign("crList", $crList);
-  $smarty->assign("hospiList", $hospiList);
-  $smarty->assign("packList", $packList);
 }
 
 $smarty->assign("acte_ngap"       , $acte_ngap               );

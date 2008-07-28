@@ -30,12 +30,12 @@
       </script>
     </td>
     
-    <td style="width:50%"> 
+    <td style="width:50%" id="documents-fdr"> 
       {{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
       
       {{mb_include_script module="dPcompteRendu" script="document"}}
       <script type="text/javascript">
-        Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','fdr');
+        Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents-fdr');
       </script>
      
       {{if $dPconfig.dPcabinet.CPrescription.view_prescription}}

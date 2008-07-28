@@ -26,7 +26,9 @@ class CMbObject {
    */
   var $_class_name    = null; // class name of the object
   var $_error         = null; // error message
-  var $_id            = null; // universal shortcut for the object id
+  var $_id            = null; // shortcut for the object id
+  var $_guid          = null; // shortcut for the object class+id
+  
   var $_view          = null; // universal view of the object
   var $_shortview     = null; // universal shortview for the object
   var $_canRead       = null; // read permission for the object
@@ -627,6 +629,7 @@ class CMbObject {
    */
 
   function updateFormFields() {
+    $this->_guid = "$this->_class_name-$this->_id";
     $this->_view = "$this->_class_name#$this->_id";
     $this->_shortview = "#$this->_id";
     if ($module = $this->_ref_module) {
