@@ -1,5 +1,5 @@
-<script type="text/javascript">
 
+<script type="text/javascript">
 
 codageCCAM = function(operation_id){
   var url = new Url();
@@ -54,10 +54,14 @@ submitReveilForm = function(oFormOperation,sens) {
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
-    <th>{{tr}}SSPI.Chambre{{/tr}}</th>
+    <th>{{tr}}SSPI.Chambre{{/tr}}</th>    
+    {{if $isbloodSalvageInstalled}}
+      <th>{{tr}}SSPI.RSPO{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
     <th>{{tr}}SSPI.SortieReveil{{/tr}}</th>
+
   </tr>    
   {{foreach from=$listReveil key=key item=curr_op}}
   <tr>
@@ -82,6 +86,30 @@ submitReveilForm = function(oFormOperation,sens) {
       Non placé
       {{/if}}
     </td>
+    {{if $isbloodSalvageInstalled}}
+	    <td>
+	      {{if $curr_op->blood_salvage->_id}}
+	      <div style="float:left ; display:inline">
+	        <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$curr_op->_id}});">         
+	        <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo" />
+	        {{if $curr_op->blood_salvage->totaltime > "00:00:00"}}  
+	         Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:"%Hh%M"}}
+	        {{else}}
+	          Non débuté
+	        {{/if}} 
+	      </a>
+	      </div>
+	      {{if $curr_op->blood_salvage->totaltime|date_format:"%H:%M" > "05:00"}} 
+	      <div style="float:right; display:inline">
+	      
+	      <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
+	      {{/if}}
+	      </div>
+	      {{else}} 
+	        Non inscrit
+	      {{/if}}
+	    </td>
+    {{/if}}
     <td>
       {{if $can->edit}}
         <form name="editSortieBlocFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post">

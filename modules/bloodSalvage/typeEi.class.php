@@ -16,8 +16,13 @@ class CTypeEi extends CMbObject {
 	var $name = null;
 	var $concerne = null;
 	var $desc = null;
+	var $type_signalement = null;
+	var $evenements = null;
 	
-function getSpec() {
+	var $_ref_evenement = null ;
+  var $_ref_items           = null;
+	
+  function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'type_ei';
     $spec->key   = 'type_ei_id';
@@ -32,13 +37,27 @@ function getSpec() {
     $specs["name"]     = "notNull str maxLength|30";
     $specs["concerne"] = "notNull enum list|pat|vis|pers|med|mat";
     $specs["desc"]     = "text";
+    $specs["type_signalement"] = "notNull enum list|inc|ris";
+    $specs["evenements"] = "notNull str maxLength|255";
     return $specs;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->name;
+    
+    if($this->evenements){
+      $this->_ref_evenement = explode("|", $this->evenements);
+    } 
   }
   
+  function loadRefItems() {
+    $this->_ref_items = array();
+    foreach ($this->_ref_evenement as $evenement) {
+      $ext_item = new CEiItem();
+      $ext_item->load($evenement);
+      $this->_ref_items[] = $ext_item;
+    }
+  }
 }
 ?>

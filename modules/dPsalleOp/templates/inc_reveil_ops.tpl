@@ -34,6 +34,9 @@ submitOperationForm = function(oFormOperation,sens) {
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
+     {{if $isbloodSalvageInstalled}}
+      <th>{{tr}}SSPI.RSPO{{/tr}}</th>
+    {{/if}}
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
     <th>{{tr}}SSPI.EntreeReveil{{/tr}}</th>
   </tr>    
@@ -42,6 +45,30 @@ submitOperationForm = function(oFormOperation,sens) {
     <td>{{$curr_op->_ref_salle->nom}}</td>
     <td class="text">Dr {{$curr_op->_ref_chir->_view}}</td>
     <td class="text">{{$curr_op->_ref_sejour->_ref_patient->_view}}</td>
+    {{if $isbloodSalvageInstalled}}
+      <td>
+        {{if $curr_op->blood_salvage->_id}}
+        <div style="float:left ; display:inline">
+          <a href="#" title="Voir la procédure RSPO" onclick="viewRSPO({{$curr_op->_id}});">         
+          <img src="images/icons/search.png" title="Voir la procédure RSPO" alt="vw_rspo">
+          {{if $curr_op->blood_salvage->totaltime > "00:00:00"}}  
+            Débuté à {{$curr_op->blood_salvage->_recuperation_start|date_format:"%Hh%M"}}
+          {{else}}
+            Non débuté
+          {{/if}} 
+        </a>
+        </div>
+        {{if $curr_op->blood_salvage->totaltime|date_format:"%H:%M" > "05:00"}} 
+        <div style="float:right; display:inline">
+        
+        <img src="images/icons/warning.png" title="Durée légale bientôt atteinte !" alt="alerte-durée-RSPO">
+        {{/if}}
+        </div>
+        {{else}} 
+          Non inscrit
+        {{/if}}
+      </td>
+    {{/if}}
     <td>
       {{if $can->edit}}
         <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">

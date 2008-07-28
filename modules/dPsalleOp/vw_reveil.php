@@ -10,7 +10,6 @@
 global $AppUI, $can, $m;
 
 $can->needsRead();
-$ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
 $date_now = mbDate();

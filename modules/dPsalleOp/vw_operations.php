@@ -178,6 +178,7 @@ $smarty->assign("tabPersonnel"    , $tabPersonnel            );
 $smarty->assign("listPersAideOp"  , $listPersAideOp          );
 $smarty->assign("listPersPanseuse", $listPersPanseuse        );
 $smarty->assign("isPrescriptionInstalled", CModule::getActive("dPprescription"));
+$smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("timingAffect"    , $timingAffect);
 $smarty->display("vw_operations.tpl");
 

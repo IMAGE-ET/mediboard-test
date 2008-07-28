@@ -114,5 +114,6 @@ $locales['SSPI.Patient'] = 'Patient';
 $locales['SSPI.SortieSalle'] = 'Sortie salle';
 $locales['SSPI.EntreeReveil'] = 'Entrée réveil';
 $locales['SSPI.Chambre'] = 'Chambre';
+$locales['SSPI.RSPO'] = 'Cell Saver';
 $locales['SSPI.SortieReveil'] = 'Sortie réveil';
 ?>

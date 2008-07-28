@@ -1,3 +1,67 @@
+<script type="text/javascript">
+var oEvenementField = null;
+
+function viewItems(iCategorie){
+  var oForm = document.edit_type_ei;
+  $('Items' + oForm._elemOpen.value).hide();
+  $('Items' + iCategorie).show();
+  oForm._elemOpen.value = iCategorie;
+}
+function checkCode(oElement){
+  if(oElement.checked == true){
+    putCode(oElement.name);
+  }else{
+    delCode(oElement.name);
+  }
+}
+function delCode(iCode){
+  var oForm = document.edit_type_ei;
+  oEvenementField.remove(iCode);
+  
+  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
+  oItemSelField = new TokenField(oElement);
+  oItemSelField.remove(iCode);
+  
+  refreshListChoix();
+}
+
+function putCode(iCode){
+  var oForm = document.edit_type_ei;
+  oEvenementField.add(iCode);
+  
+  var oElement = eval("oForm._ItemsSel_cat_" + oForm._elemOpen.value);
+  oItemSelField = new TokenField(oElement);
+  oItemSelField.add(iCode);
+  
+  refreshListChoix();
+}
+function refreshListChoix(){
+  var oForm = document.edit_type_ei;
+  var oCategorie = oForm._cat_evenement.options;
+  var sListeChoix = "";
+  for(i=0; i< oCategorie.length; i++){
+    var oElement = eval("oForm._ItemsSel_cat_" + oCategorie[i].value);
+    if(oElement.value){
+      sListeChoix += "<strong>" + oCategorie[i].text + "</strong><ul>";
+      var aItems = oElement.value.split("|");
+      oItems = aItems.without("");
+      iCode = 0;
+      while (sCode = aItems[iCode++]) {
+        sListeChoix += "<li>" + $('titleItem' + sCode).title + "</li>";
+      }
+      sListeChoix += "</ul>";
+    }
+  }
+  $('listChoix').innerHTML = sListeChoix;
+}
+
+function pageMain() {
+  refreshListChoix();
+  oEvenementField = new TokenField(document.edit_type_ei.evenements);
+
+}
+
+</script>
 <table class="main">
 <tr>
   <td class="halfPane">
@@ -6,9 +70,9 @@
         <th class="title" colspan="4">{{tr}}CTypeEi{{/tr}}</th>
       </tr>
       <tr>
-        <th>{{tr}}CTypeEi.name{{/tr}}</th>
-        <th>{{tr}}CTypeEi.concerne{{/tr}}</th>
-        <th>{{tr}}CTypeEi.desc{{/tr}}</th>
+        <th>{{mb_label object=$type_ei field="name"}}</th>
+        <th>{{mb_label object=$type_ei field="concerne"}}</th>
+        <th>{{mb_label object=$type_ei field="desc"}}</th>
       </tr>
       {{foreach from=$type_ei_list key=id item=type}}
       <tr>
@@ -50,6 +114,59 @@
           <th>{{mb_label object=$type_ei field="concerne"}}</th>
           <td>{{mb_field object=$type_ei field="concerne"}}</td>
         </tr>
+        <tr>
+          <th>{{mb_label object=$type_ei field="type_signalement"}}</th>
+          <td>{{mb_field object=$type_ei field="type_signalement"}}</td>
+        </tr>
+        </tr>
+        <tr>
+          <th>{{mb_label object=$type_ei field="evenements"}}</th>
+          <td>
+            <input type="hidden" name="evenements" class="{{$type_ei->_props.evenements}}" value="{{$type_ei->evenements}}"/>
+            <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
+            <select name="_cat_evenement" onchange="javascript:viewItems(this.value);">
+            {{foreach from=$listCategories item=curr_evenement}}
+            <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
+              {{$curr_evenement->nom}}
+            </option>
+            {{/foreach}}
+            </select>
+            </td>
+        <tr>
+        <th></th>
+         <td colspan="2">
+           {{foreach from=$listCategories item=curr_evenement}}
+           <input type="hidden" name="_ItemsSel_cat_{{$curr_evenement->ei_categorie_id}}" value="{{$curr_evenement->checked}}" />
+           <table class="tbl" id="Items{{$curr_evenement->ei_categorie_id}}" {{if $curr_evenement->ei_categorie_id!=$firstdiv}}style="display:none;"{{/if}}>
+             {{counter start=0 skip=1 assign=curr_data}}
+             {{foreach name=itemEvenement from=$curr_evenement->_ref_items item=curr_item}}
+             {{if $curr_data is div by 3 || $curr_data==0}}
+             <tr>
+             {{/if}}
+               <td class="text">
+                 <input type="checkbox" name="{{$curr_item->ei_item_id}}" onclick="javascript:checkCode(this);" {{if $curr_item->checked}}checked="checked"{{/if}}/><label for="{{$curr_item->ei_item_id}}" id="titleItem{{$curr_item->ei_item_id}}" title="{{$curr_item->nom}}">{{$curr_item->nom}}</label>
+               </td>
+             {{if (($curr_data+1) is div by 3 || $smarty.foreach.itemEvenement.last)}}
+             </tr>
+             {{/if}}
+             {{counter}}
+             {{foreachelse}}
+             <tr>
+               <td>
+                 {{tr}}_CFicheEi-noitemscat{{/tr}}
+               </td>
+             </tr>
+             {{/foreach}}
+           </table>
+           {{foreachelse}}
+           {{tr}}CEiItem.none{{/tr}}
+           {{/foreach}}
+         </td>
+       </tr>
+       <tr>
+       <th></th>
+                 <td colspan="2" id="listChoix"></td>
+       </tr>
         <tr>
           <th>{{mb_label object=$type_ei field="desc"}}</th>
           <td>{{mb_field object=$type_ei field="desc"}}</td>

@@ -72,8 +72,15 @@ class CSetupbloodSalvage extends CSetup {
              CHANGE `incident_file_id` `type_ei_id` INT( 11 ) UNSIGNED NULL DEFAULT NULL ;";
     $this->addQuery($sql);
     
+    $this->makeRevision('0.02');
     
-    $this->mod_version='0.02'; 
+    $sql = " ALTER TABLE `type_ei`
+             ADD `evenements` VARCHAR( 255 ) NOT NULL,
+             ADD `type_signalement` ENUM('inc','ris') NOT NULL ;";
+    
+    $this->addQuery($sql);
+         
+    $this->mod_version='0.03'; 
   }
 }
 ?>

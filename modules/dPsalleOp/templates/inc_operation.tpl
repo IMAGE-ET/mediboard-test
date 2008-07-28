@@ -2,6 +2,8 @@
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
 {{mb_include_script module="dPprescription" script="prescription"}}
+{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
+
 <script type="text/javascript">
 
 
@@ -9,12 +11,19 @@ Main.add(function () {
   if($('prescription_sejour')){
     Prescription.reloadPrescSejour('','{{$selOp->_ref_sejour->_id}}');
   }
+  
+  if($('bloodSalvage')){
+    var url = new Url;
+    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage");
+    url.addParam("op","{{$selOp->_id}}");
+    url.requestUpdate("bloodSalvage", {waitingText: null});
+  } 
 });
 
 function reloadPrescription(prescription_id){
   Prescription.reloadPrescSejour(prescription_id, '');
 }
-
+ 
 </script>
 
 
@@ -65,6 +74,9 @@ function reloadPrescription(prescription_id){
 <ul id="main_tab_group" class="control_tabs">
   <li><a href="#one">Timings</a></li>
   <li><a href="#two">Anesthésie</a></li>
+  {{if $isbloodSalvageInstalled}}
+  <li><a href="#bloodSalvage">Cell Saver</a></li>
+  {{/if}}
   <li><a href="#threebis">Diagnostics</a></li>
   <li><a href="#three">CCAM</a></li>
   <li><a href="#four">NGAP</a></li>
@@ -95,7 +107,10 @@ function reloadPrescription(prescription_id){
   {{include file="inc_vw_info_anesth.tpl"}}
   </div>
 </div>
-
+{{if $isbloodSalvageInstalled}}
+<!--  Cell Saver -->
+<div id="bloodSalvage" style="display:none"></div>
+{{/if}}
 <!-- Troisieme onglet bis: codage diagnostics CIM -->
 <div id="threebis" style="display:none">
   <div id="cim">

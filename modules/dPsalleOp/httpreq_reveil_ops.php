@@ -50,6 +50,19 @@ foreach($listOps as $key => $value) {
       $timing[$key][$key2][] = mbTime("$i minutes", $value->$key2);
     }
   }
+  if (CModule::getActive("bloodSalvage")) {
+    $listOps[$key]->blood_salvage= new CBloodSalvage;
+    $where = array();
+    $where["operation_id"] = "= '$key'";
+    $listOps[$key]->blood_salvage->loadObject($where);
+    $listOps[$key]->blood_salvage->loadRefPlageOp();
+    $listOps[$key]->blood_salvage->totaltime = "00:00:00";
+    if($listOps[$key]->blood_salvage->recuperation_start && $listOps[$key]->blood_salvage->transfusion_end) {
+      $listOps[$key]->blood_salvage->totaltime = mbTimeRelative($listOps[$key]->blood_salvage->recuperation_start, $listOps[$key]->blood_salvage->transfusion_end);
+    } elseif($listOps[$key]->blood_salvage->recuperation_start){
+      $listOps[$key]->blood_salvage->totaltime = mbTimeRelative($listOps[$key]->blood_salvage->recuperation_start,mbDate($listOps[$key]->blood_salvage->_datetime)." ".mbTime());
+    }
+  }
 }
 
 // Chargement de la liste du personnel pour le reveil
@@ -68,6 +81,7 @@ $smarty->assign("plages"                 , $plages                  );
 $smarty->assign("listOps"                , $listOps                 );
 $smarty->assign("timing"                 , $timing                  );
 $smarty->assign("date"                   , $date                    );
+$smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("hour"                   , $hour        );
 $smarty->assign("modif_operation"        , $modif_operation         );
 

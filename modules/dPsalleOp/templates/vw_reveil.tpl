@@ -1,3 +1,5 @@
+
+{{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 <script type="text/javascript">
 
 function pageMain() {

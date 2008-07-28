@@ -13,6 +13,7 @@ $can->needsRead();
 $ds = CSQLDataSource::get("std");
 
 $date = mbGetValueFromGetOrSession("date", mbDate());
+
 $date_now = mbDate();
 $modif_operation = $date>=$date_now;
 
@@ -48,6 +49,20 @@ foreach($listReveil as $key => $value) {
   if($listReveil[$key]->_ref_affectations_personnel["reveil"]){
     $listReveil[$key]->_ref_affectation_reveil = reset($listReveil[$key]->_ref_affectations_personnel["reveil"]);
   }
+  
+  if (CModule::getActive("bloodSalvage")) {
+	  $listReveil[$key]->blood_salvage= new CBloodSalvage;
+	  $where = array();
+	  $where["operation_id"] = "= '$key'";
+	  $listReveil[$key]->blood_salvage->loadObject($where);
+	  $listReveil[$key]->blood_salvage->loadRefPlageOp();
+	  $listReveil[$key]->blood_salvage->totaltime = "00:00:00";
+    if($listReveil[$key]->blood_salvage->recuperation_start && $listReveil[$key]->blood_salvage->transfusion_end) {
+      $listReveil[$key]->blood_salvage->totaltime = mbTimeRelative($listReveil[$key]->blood_salvage->recuperation_start, $listReveil[$key]->blood_salvage->transfusion_end);
+    } elseif($listReveil[$key]->blood_salvage->recuperation_start){
+      $listReveil[$key]->blood_salvage->totaltime = mbTimeRelative($listReveil[$key]->blood_salvage->recuperation_start,mbDate($listReveil[$key]->blood_salvage->_datetime)." ".mbTime());
+    }
+  }
 
   $listReveil[$key]->_ref_sejour->loadRefsAffectations();
   if($listReveil[$key]->_ref_sejour->_ref_first_affectation->affectation_id) {
@@ -74,6 +89,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("listReveil"             , $listReveil              );
 $smarty->assign("timing"                 , $timing                  );
 $smarty->assign("date"                   , $date                    );
+$smarty->assign("isbloodSalvageInstalled", CModule::getActive("bloodSalvage"));
 $smarty->assign("modif_operation"        , $modif_operation         );
 
 $smarty->display("inc_reveil_reveil.tpl");

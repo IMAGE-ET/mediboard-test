@@ -23,11 +23,9 @@ $modif_operation    = $date>=mbDate();
 $timing = array();
 
 
-$anticoagulant_list = array();
-$classeBCB = new CBcbClasseTherapeutique();
-$classeBCB->loadRefsProduits();
-$classeBCB->loadRefsProduits("LABA");
-$anticoagulant_list= $classeBCB->_refs_produits;
+
+$anticoagulant = new CBcbClasseATC(); 
+$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
 
 $version_patient = CModule::getActive("dPpatients");
 $isInDM = ($version_patient->mod_version >= 0.71);
