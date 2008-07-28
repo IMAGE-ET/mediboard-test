@@ -74,9 +74,10 @@ var Menu = {
         <img src="style/{{$uistyle}}/images/icons/logout.png" alt="{{tr}}menu-logout{{/tr}}" />
       </a>
     </div>
+
     <hr />
-    {{foreach from=$modules item=currModule}}
-    {{if $currModule == $m}}
+    {{foreach from=$modules key=mod_name item=currModule}}
+    {{if $mod_name == $m}}
     <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="textSelected">
     {{else}}
     <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}"class="textNonSelected">

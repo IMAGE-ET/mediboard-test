@@ -14,11 +14,11 @@
     <td id="menubar">
       <table>
         <tr>
-          {{foreach from=$modules item=currModule}}    
+					{{foreach from=$modules key=mod_name item=currModule}}    
           <td align='center' style='border-right: 1px solid #000'>
-            <a href='?m={{$currModule->mod_name}}'>
+            <a href='?m={{$mod_name}}'>
               <strong>
-                {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+                {{tr}}module-{{$mod_name}}-court{{/tr}}
               </strong>
             </a>
           </td>

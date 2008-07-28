@@ -61,9 +61,9 @@
   <tr>
     <td id="menubar">
       | <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a> | 
-      {{foreach from=$modules item=currModule}}
-      <a href="?m={{$currModule->mod_name}}" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
-        {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+      {{foreach from=$modules key=mod_name item=currModule}}
+      <a href="?m={{$currModule->mod_name}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
+        {{tr}}module-{{$mod_name}}-court{{/tr}}
       </a> |
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> | 

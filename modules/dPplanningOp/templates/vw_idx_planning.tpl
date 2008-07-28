@@ -61,23 +61,32 @@ function pageMain() {
         <tr>
           <th>Date</th>
           <th>Plage</th>
-          <th>Opérations</th>
-          <th>Temps pris</th>
+          <th colspan="2">Nb. Opér.</th>
         </tr>
         {{foreach from=$listPlages item=curr_plage}}
         {{if $curr_plage.spec_id}}
         <tr>
-          <td style="background: #aae" align="right">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</td>
+          <td style="background: #aae" align="right">{{$curr_plage.date|date_format:"%a %d"}}</td>
           <td style="background: #aae" align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
           <td style="background: #aae" align="center">{{$curr_plage.total}}</td>
           <td style="background: #aae" align="center">Plage de spécialité</td>
         </tr>
         {{else}}
         <tr>
-          <td align="right"><a href="#nothing" onclick="updateListOperations('{{$curr_plage.date|date_format:"%Y-%m-%d"}}', '0')">{{$curr_plage.date|date_format:"%a %d %b %Y"}}</a></td>
+          <td align="right">
+          	<a href="#nothing" onclick="updateListOperations('{{$curr_plage.date|date_format:"%Y-%m-%d"}}', '0')">
+          	{{$curr_plage.date|date_format:"%a %d"}}</a>
+          </td>
+          
           <td align="center">{{$curr_plage.debut|date_format:"%Hh%M"}} à {{$curr_plage.fin|date_format:"%Hh%M"}}</td>
+
+          {{if $curr_plage.total}}
           <td align="center">{{$curr_plage.total}}</td>
           <td align="center">{{$curr_plage.duree|date_format:"%Hh%M"}}</td>
+          {{else}}
+          <td colspan="2" align="center">&mdash;</td>
+          {{/if}}
+          
         </tr>
         {{/if}}
         {{/foreach}}

@@ -64,9 +64,9 @@
         <tr>
           <td colspan="2" id="menubar2">
             {{if !$offline}}
-            {{foreach from=$modules item=currModule}}    
-            <a href="?m={{$currModule->mod_name}}" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
-              {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+	          {{foreach from=$modules key=mod_name item=currModule}}
+            <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
+              {{tr}}module-{{$mod_name}}-court{{/tr}}
             </a> |
             {{/foreach}}
             {{/if}}

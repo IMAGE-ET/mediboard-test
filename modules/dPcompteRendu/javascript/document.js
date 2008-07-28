@@ -77,7 +77,12 @@ var Document = {
   /**
    * Mode normal|collapse Defaults to normal
    */
-  register: function(object_id, object_class, praticien_id, container, mode) {
+  register: function(object_id, object_class, praticien_id, container, mode, userOptions) {
+  	options = {
+  	 
+  	}
+  	
+  	
   	if (!mode) mode = "normal";
     var div = document.createElement("div");
     div.style.minWidth = "230px"; 

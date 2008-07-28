@@ -21,12 +21,11 @@ function chgMenu(id, type) {
     <td class="menuTitle" id="modMenu" onmouseover="chgMenu('modMenuList', 'visible')" onmouseout="chgMenu('modMenuList', 'hidden')">
       Modules
       <div id="modMenuList" style="visibility: hidden; position: absolute">
-        {{foreach from=$modules item=currModule}}
-        <div class="menuItem {{if $currModule->mod_name==$m}}selected{{/if}}">
-          <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}">
-            {{assign var="modname" value=$currModule->mod_name}}
-            {{thumb src="images/modules/$modname.png" h="16" w="16" f="png"}}
-            {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+		    {{foreach from=$modules key=mod_name item=currModule}}
+        <div class="menuItem {{if $mod_name == $m}}selected{{/if}}">
+          <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
+            {{thumb src="images/modules/$mod_name.png" h="16" w="16" f="png"}}
+            {{tr}}module-{{$mod_name}}-court{{/tr}}
           </a>
         </div>
         {{/foreach}}

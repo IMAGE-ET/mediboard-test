@@ -205,7 +205,7 @@ class CPermModule extends CMbObject {
     $listModules = CModule::getVisible();
     foreach($listModules as $module) {
       if(CPermModule::getViewModule($module->mod_id, PERM_READ)) {
-        $listReadable[] = $module;
+        $listReadable[$module->mod_name] = $module;
       }
     }
     return $listReadable;
