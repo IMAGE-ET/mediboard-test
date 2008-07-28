@@ -11,18 +11,22 @@ announce_script "Mediboard synchronisation"
 
 if [ "$#" -lt 1 ]
 then 
-  echo "Usage: $0 <location> "
-  echo "  <location> is the remote location to be rsync-ed, ie root@oxmytto.homelinux.com"
+  echo "Usage: $0 <location> <source directory> <destination>"
+  echo "  <source location> <source directory> <destination> is the remote location to be rsync-ed, ie root@oxmytto.homelinux.com"
+  echo "  <source directory> is the remote directory to be rsync-ed, /var/www/"
+  echo "  <destination> is the target remote location, /var/backup/"
   exit 1
 fi
    
 location=$1
+directory=$2
+destination=$3
 
 # Backups directory
-rsync -e ssh -avz --delete-after $location:/var/backup /var/
+rsync -e ssh -avzn --delete-after $location:$directory $destination/$(echo $location | cut -d'@' -f2)
 check_errs $? "Failed to rsync Backups directory" "Succesfully rsync-ed Backups directory!"
 
 
 # system directory
-rsync -e ssh -avz --delete-after $location:/var/www/html/mediboard /var/www/html/
-check_errs $? "Failed to rsync Mediboard directory" "Succesfully rsync-ed Mediboard directory!"
+#rsync -e ssh -avzn --delete-after $location:/var/www/html/mediboard /var/www/html/
+#check_errs $? "Failed to rsync Mediboard directory" "Succesfully rsync-ed Mediboard directory!"
