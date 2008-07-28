@@ -485,13 +485,13 @@ class CActeCCAM extends CActe {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
         $this->_guess_association = "";
-        $this->_guess_regle_asso    = "B";
+        $this->_guess_regle_asso  = "B";
         return $this->_guess_association;
       }
       // 1 acte + 1 supplément des chap. 19.02 (règle B)
       if($numChap1902 == 1) {
         $this->_guess_association = "";
-        $this->_guess_regle_asso    = "B";
+        $this->_guess_regle_asso  = "B";
         return $this->_guess_association;
       }
     }
@@ -533,7 +533,7 @@ class CActeCCAM extends CActe {
           $this->_guess_regle_asso  = "F";
           break;
         case 1 :
-          if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
+          if($this->_ref_code_ccam->chapitres[0] == "18" || ($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02")) {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           } else {
@@ -542,7 +542,7 @@ class CActeCCAM extends CActe {
           }
           break;
         case 2 :
-          if($this->_ref_code_ccam->chapitres[0] == "18" || $this->_ref_code_ccam->chapitres[0] == "19") {
+          if($this->_ref_code_ccam->chapitres[0] == "18" || ($this->_ref_code_ccam->chapitres[0] == "19" && $this->_ref_code_ccam->chapitres[1] == "02")) {
             $this->_guess_association = "1";
             $this->_guess_regle_asso  = "F";
           } else {
@@ -554,7 +554,7 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 2 actes des chap. 01, 04, 11 ou 15 (règle G)
+    // 2 actes des chap. 01, 04, 11 ou 15 sur des membres différents (règle G)
     if($numActes == 2 && $numChap0115 == 2 && $membresDiff) {
       switch($position) {
         case 0 :

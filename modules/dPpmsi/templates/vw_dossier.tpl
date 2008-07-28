@@ -135,6 +135,15 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   } );
 }
 
+function reloadListActes(operation_id) {
+  var urlActes = new Url();
+  urlActes.setModuleAction("dPpmsi", "httpreq_list_actes");
+  urlActes.addParam("operation_id", operation_id);
+  urlActes.requestUpdate("modifActes-"+operation_id, { 
+		waitingText : null
+  } );
+}
+
 SejourHprimSelector.doSet = function(){
   var oForm = document[SejourHprimSelector.sForm];
   Form.Element.setValue(oForm[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
@@ -449,63 +458,13 @@ function pageMain() {
           </td>
         </tr>
         <tr>
-          <td colspan="4">
-            <table class="tbl">
-              <tr>
-                <th class="category">{{tr}}Delete{{/tr}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=executant_id}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=code_acte}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=code_activite}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=code_phase}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=modificateurs}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=code_association}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=montant_depassement}}</th>
-                <th class="category">{{mb_title class=CActeCCAM field=_rembex}}</th>
-              </tr>
-              {{foreach from=$curr_op->_ref_actes_ccam item=curr_acte}}
-              <tr>
-                <td class="button">
-                  <form name="formDelActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-                  <input type="hidden" name="m" value="dPsalleOp" />
-                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-                  <button class="trash notext" type="button" onclick="confirmDeletion(this.form, {typeName:'l\'acte',objName:'{{$curr_acte->code_acte|smarty:nodefaults|JSAttribute}}'})">
-                    {{tr}}Ajouter{{/tr}}
-                  </button>
-                  </form>
-                </td>
-                <td class="text">{{$curr_acte->_ref_executant->_view}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=code_acte}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=code_activite}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=code_phase}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=modificateurs}}</td>
-                <td class="button">
-                  <form name="formAssoActe-{{$curr_acte->_id}}" action="?m={{$m}}" method="post" onsubmit="return onSubmitFormAjax(this)">
-                  <input type="hidden" name="m" value="dPsalleOp" />
-                  <input type="hidden" name="dosql" value="do_acteccam_aed" />
-                  <input type="hidden" name="del" value="0" />
-                  <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
-                  <select name="code_association" onchange="this.form.onsubmit()">
-                    <option value="" {{if !$curr_acte->code_association}}selected="selected"{{/if}}> </option>
-                    <option value="1" {{if $curr_acte->code_association == 1}}selected="selected"{{/if}}>1</option>
-                    <option value="2" {{if $curr_acte->code_association == 2}}selected="selected"{{/if}}>2</option>
-                    <option value="3" {{if $curr_acte->code_association == 3}}selected="selected"{{/if}}>3</option>
-                    <option value="4" {{if $curr_acte->code_association == 4}}selected="selected"{{/if}}>4</option>
-                    <option value="5" {{if $curr_acte->code_association == 5}}selected="selected"{{/if}}>5</option>
-                  </select>
-                  </form>
-                </td>
-                <td class="button">{{mb_value object=$curr_acte field=montant_depassement}}</td>
-                <td class="button">{{mb_value object=$curr_acte field=_rembex}}</td>
-              </tr>
-              {{/foreach}}
-            </table>
+          <td colspan="4" id="modifActes-{{$curr_op->_id}}">
+            {{include file="inc_list_actes.tpl"}}
           </td>
         </tr>
         <tr>
           <td colspan="4">
-            <form name="editOpFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
+            <form name="editOpFrm{{$curr_op->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
             <input type="hidden" name="dosql" value="do_planning_aed" />
             <input type="hidden" name="m" value="dPplanningOp" />
             <input type="hidden" name="del" value="0" />
