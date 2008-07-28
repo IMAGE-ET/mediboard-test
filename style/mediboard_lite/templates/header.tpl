@@ -14,11 +14,11 @@
     <td id="menubar">
       <table>
         <tr>
-          {{foreach from=$affModule item=currModule}}
+          {{foreach from=$modules item=currModule}}
           <td align="center">
-            <a href="?m={{$currModule.modName}}">
-              <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
-              <br />{{$currModule.modNameCourt}}
+            <a href="?m={{$currModule->mod_name}}">
+              <img src="images/modules/{{$currModule->mod_name}}.png" alt="{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}" height="48" width="48" />
+              <br />{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
             </a>
           </td>
           {{/foreach}}

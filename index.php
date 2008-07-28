@@ -226,18 +226,7 @@ if (!$suppressHeaders) {
   }
   //Liste des Etablissements
   $etablissements = CMediusers::loadEtablissements(PERM_EDIT);
-  // Liste des Modules
-  if (!$dialog) {
-    //top navigation menu
-    $iKey = 0;
-    $affModule = array();
-    foreach (CPermModule::getVisibleModules() as $module) {
-      $affModule[$iKey]["modName"]      = "$module->mod_name";
-      $affModule[$iKey]["modNameCourt"] = CAppUI::tr("module-$module->mod_name-court");
-      $affModule[$iKey]["modNameLong"]  = CAppUI::tr("module-$module->mod_name-long");
-      $iKey++;
-    }  
-  }
+
   // Message
   $messages = new CMessage();
   $messages = $messages->loadPublications("present");
@@ -260,9 +249,7 @@ if (!$suppressHeaders) {
   $smartyHeader->compile_dir  = "style/$uistyle/templates_c/";
   $smartyHeader->config_dir   = "style/$uistyle/configs/";
   $smartyHeader->cache_dir    = "style/$uistyle/cache/";
-  if (!$dialog) {
-    $smartyHeader->assign("affModule" , $affModule);
-  }
+  
   $smartyHeader->assign("offline"              , false);
   $smartyHeader->assign("configOffline"        , null);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);

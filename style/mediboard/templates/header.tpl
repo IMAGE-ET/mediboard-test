@@ -22,11 +22,11 @@
         <tr>
           <td id="nav">
             <ul>
-              {{foreach from=$affModule item=currModule}}    
-              <li {{if $currModule.modName==$m}}class="selected"{{/if}}>
-              <a href="?m={{$currModule.modName}}">
-                <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
-                {{$currModule.modNameCourt}}
+              {{foreach from=$modules item=currModule}}    
+              <li {{if $currModule->mod_name==$m}}class="selected"{{/if}}>
+              <a href="?m={{$currModule->mod_name}}">
+                <img src="images/modules/{{$currModule->mod_name}}.png" alt="{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}" height="48" width="48" />
+               {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
               </a>
               </li>
               {{/foreach}}

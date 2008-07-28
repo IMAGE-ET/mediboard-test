@@ -16,10 +16,10 @@
         <tbody id="menuIcons">
         <tr>
           <td />
-          {{foreach from=$affModule item=currModule}}    
-          <td align="center" class="{{if $currModule.modName==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
-            <a href="?m={{$currModule.modName}}" title="{{$currModule.modNameLong}}">
-              <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" height="48" width="48" />
+          {{foreach from=$modules item=currModule}}    
+          <td align="center" class="{{if $currModule->mod_name==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
+            <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}">
+              <img src="images/modules/{{$currModule->mod_name}}.png" alt="{{$currModule->mod_name}}" height="48" width="48" />
             </a>
           </td>
           {{/foreach}}
@@ -29,10 +29,10 @@
           <td>
             <button id="menuIcons-trigger" type="button" style="float:left" class="notext">{{tr}}Show/Hide{{/tr}}</button>
           </td>
-          {{foreach from=$affModule item=currModule}}
-          <td align="center" class="{{if $currModule.modName==$m}}textSelected{{else}}textNonSelected{{/if}}" title="{{$currModule.modNameLong}}">
-            <a href="?m={{$currModule.modName}}">
-              <strong>{{$currModule.modNameCourt}}</strong>
+          {{foreach from=$modules item=currModule}}
+          <td align="center" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}">
+            <a href="?m={{$currModule->mod_name}}">
+              <strong>{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}</strong>
             </a>
           </td>
           {{/foreach}}

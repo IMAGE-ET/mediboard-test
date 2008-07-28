@@ -89,6 +89,7 @@ function smarty_modifier_stripslashes($string){
   return stripslashes($string);
 }
 
+
 /**
  * @param array params tableau des parametres
  * - object          : Objet
@@ -226,8 +227,6 @@ function smarty_function_mb_colonne($params, &$smarty) {
 }
 
 
-
-
 function smarty_function_mb_include_script($params, &$smarty) {
   global $AppUI, $version;
   $version_build = $version['build'];
@@ -251,6 +250,8 @@ function smarty_function_mb_include_script($params, &$smarty) {
   
   return "<script type='text/javascript' src='$path'></script>";
 }
+
+
 
 /**
  * dotProject integration of Smarty engine main class
@@ -323,6 +324,7 @@ class CSmartyDP extends Smarty {
     $this->assign("g", $g);
     $this->assign("dialog", $dialog);
     $this->assign("ajax", $ajax);
+    $this->assign("modules", CPermModule::getVisibleModules());
   }
 }
 ?>

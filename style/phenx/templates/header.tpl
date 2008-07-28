@@ -43,11 +43,11 @@
       </div>
       
       <ul id="nav">
-        {{foreach from=$affModule item=currModule}}    
-        <li {{if $currModule.modName==$m}}class="selected"{{/if}}>
-        <a href="?m={{$currModule.modName}}">
-          <img src="images/modules/{{$currModule.modName}}.png" alt="{{$currModule.modNameCourt}}" />
-          {{$currModule.modNameCourt}}
+        {{foreach from=$modules item=currModule}}    
+        <li {{if $currModule->mod_name==$m}}class="selected"{{/if}}>
+        <a href="?m={{$currModule->mod_name}}">
+          <img src="images/modules/{{$currModule->mod_name}}.png" alt="{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}" />
+          {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
         </a>
         </li>
         {{/foreach}}
