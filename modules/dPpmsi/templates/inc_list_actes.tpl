@@ -42,27 +42,27 @@
       <input type="hidden" name="acte_id" value="{{$curr_acte->acte_id}}" />
       <select name="code_association" onchange="this.form.onsubmit()">
         <option value="" {{if !$curr_acte->code_association}}selected="selected"{{/if}}
-        {{if !$curr_acte->_guess_association}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if !$curr_acte->_guess_association}}9f9{{else}}fc9{{/if}};">
           -
         </option>
         <option value="1" {{if $curr_acte->code_association == 1}}selected="selected"{{/if}}
-        {{if $curr_acte->_guess_association == 1}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if $curr_acte->_guess_association == 1}}9f9{{else}}fc9{{/if}};">
           1
         </option>
         <option value="2" {{if $curr_acte->code_association == 2}}selected="selected"{{/if}}
-        {{if $curr_acte->_guess_association == 2}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if $curr_acte->_guess_association == 2}}9f9{{else}}fc9{{/if}};">
           2
         </option>
         <option value="3" {{if $curr_acte->code_association == 3}}selected="selected"{{/if}}
-        {{if $curr_acte->_guess_association == 3}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if $curr_acte->_guess_association == 3}}9f9{{else}}fc9{{/if}};">
           3
         </option>
         <option value="4" {{if $curr_acte->code_association == 4}}selected="selected"{{/if}}
-        {{if $curr_acte->_guess_association == 4}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if $curr_acte->_guess_association == 4}}9f9{{else}}fc9{{/if}};">
           4
         </option>
         <option value="5" {{if $curr_acte->code_association == 5}}selected="selected"{{/if}}
-        {{if $curr_acte->_guess_association == 5}}style="padding-left: 10px;"{{/if}}>
+        style="border-left: 4px solid #{{if $curr_acte->_guess_association == 5}}9f9{{else}}fc9{{/if}};">
           5
         </option>
       </select>

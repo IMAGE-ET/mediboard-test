@@ -57,7 +57,7 @@ Main.add(function () {
       Suggestion
     </th>
     <td>
-      {{$_sejour->_venue_SHS_guess}}
+      {{$_sejour->_guess_num_dossier}}
     </td>
   </tr>
 </table>

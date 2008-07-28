@@ -480,8 +480,8 @@ class CActeCCAM extends CActe {
       return $this->_guess_association;
     }
     
-    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B et C)
-    if($numActes == 2) {
+    // 1 actes + 1 acte du chap. 18 ou du chap. 19.02 (règles B) / Non présent pour le mode Siemens
+    if($numActes == 2 && !(CAppUI::conf("dPpmsi systeme_facturation") == "siemens")) {
       // 1 acte + 1 geste complémentaire chap. 18 (règle B)
       if($numChap18 == 1) {
         $this->_guess_association = "";

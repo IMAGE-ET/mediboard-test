@@ -203,7 +203,7 @@ function choosePreselection(oSelect) {
           <td>
             <input type="text" class="notNull num length|8" name="sc_venue_id" value="{{$mbSejour->_num_dossier}}" size="8" maxlength="8" />
             <br />
-            {{$mbSejour->_venue_SHS_guess}}
+            {{$mbSejour->_guess_num_dossier}}
           </td>
         </tr>
         <tr>

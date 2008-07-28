@@ -409,5 +409,9 @@ $dPconfig["dPstock"] = array (
     "order_number_format" => "%y%m%d%H%M%S%id",
   ),
 );
+
+$dPconfig["dPpmsi"] = array(
+  "systeme_facturation" => "",
+);
   
 ?>

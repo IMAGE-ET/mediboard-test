@@ -74,7 +74,7 @@ class CSejour extends CCodable {
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
   var $_sortie_autorisee   = null;
-  var $_venue_SHS_guess    = null;
+  var $_guess_num_dossier    = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
   var $_curr_op_id         = null;
@@ -397,11 +397,17 @@ class CSejour extends CCodable {
     $this->_min_entree_prevue  = mbTransformTime(null, $this->entree_prevue, "%M");
     $this->_min_sortie_prevue  = mbTransformTime(null, $this->sortie_prevue, "%M");
 
-    $this->_venue_SHS_guess = mbTransformTime(null, $this->entree_prevue, "%y");
-    $this->_venue_SHS_guess .= 
-      $this->type == "exte" ? "5" :
-      $this->type == "ambu" ? "4" : "0";
-    $this->_venue_SHS_guess .="xxxxx";
+    switch(CAppUI::conf("dPpmsi systeme_facturation")) {
+      case "siemens" :
+        $this->_guess_num_dossier = mbTransformTime(null, $this->entree_prevue, "%y");
+        $this->_guess_num_dossier .= 
+          $this->type == "exte" ? "5" :
+          $this->type == "ambu" ? "4" : "0";
+        $this->_guess_num_dossier .="xxxxx";
+        break;
+      default: 
+        $this->_guess_num_dossier = "-";
+    }
     $this->_at_midnight = ($this->_date_entree_prevue != $this->_date_sortie_prevue);
 
     if($this->entree_prevue && $this->sortie_prevue) {

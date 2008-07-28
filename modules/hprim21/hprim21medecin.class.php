@@ -53,10 +53,9 @@ class CHprim21Medecin extends CHprim21Object {
   }
   
   function bindToLine($line, &$reader) {
-    // Attention, Siemens ne respecte pas la norme sur cette partie...
     $this->setEmetteur($reader);
     
-    $elements          = explode($reader->separateur_champ, $line);
+    $elements = explode($reader->separateur_champ, $line);
   
     if(count($elements) < 1) {
       $reader->error_log[] = "Champs manquant dans le segment patient (médecin)";
