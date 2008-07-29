@@ -135,10 +135,12 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     $identifiant = $this->addElement($saisie, "identifiant");
     $this->addElement($identifiant, "emetteur", "diag$mbSej->_id");
     $this->addElement($identifiant, "recepteur", $mbSej->_num_dossier);
-    // Unité médicale : vide pour l'instant car présent dans l'opération :
-    // à passer dans le séjour (code_uf, libell_uf dans this->addUniteFonctionnelle())
-    $uniteMedicale = $this->addElement($saisie, "uniteMedicale");
-    $codeUniteMedicale = $this->addElement($uniteMedicale, "code");
+    // Unité médicale : 
+    // à passer dans de l'opération vers le séjour (code_uf, libelle_uf dans this->addUniteFonctionnelle())
+    //$uniteMedicale = $this->addElement($saisie, "uniteMedicale");
+    //$codeUniteMedicale = $this->addElement($uniteMedicale, "code");
+    $mbOp = reset($mbSej->_ref_operations);
+    $this->addUniteFonctionnelle($saisie, $mbOp);
     // Médecin responsable
     $medecinResponsable = $this->addElement($saisie, "medecinResponsable");
     $this->addElement($medecinResponsable, "numeroAdeli", $mbPraticien->adeli);
@@ -147,16 +149,16 @@ class CHPrimXMLEvenementPmsi extends CHPrimXMLDocument {
     // Diagnostics RUM
     $diagnosticsRum = $this->addElement($saisie, "diagnosticsRum");
     $diagnosticPrincipal = $this->addElement($diagnosticsRum, "diagnosticPrincipal");
-    $this->addElement($diagnosticPrincipal, "codeCim10", $mbSej->DP);
+    $this->addElement($diagnosticPrincipal, "codeCim10", strtoupper($mbSej->DP));
     if($mbSej->DR) {
       $diagnosticRelie = $this->addElement($diagnosticsRum, "diagnosticRelie");
-      $this->addElement($diagnosticRelie, "codeCim10", $mbSej->DR);
+      $this->addElement($diagnosticRelie, "codeCim10", strtoupper($mbSej->DR));
     }
     if(count($mbSej->_ref_dossier_medical->_codes_cim)) {
       $diagnosticsSignificatifs = $this->addElement($diagnosticsRum, "diagnosticsSignificatifs");
       foreach($mbSej->_ref_dossier_medical->_codes_cim as $curr_code) {
         $diagnosticSignificatif = $this->addElement($diagnosticsSignificatifs, "diagnosticSignificatif");
-        $this->addElement($diagnosticSignificatif, "codeCim10", $curr_code);
+        $this->addElement($diagnosticSignificatif, "codeCim10", strtoupper($curr_code));
       }
     }
     // Ajout de l'IGS2 : à faire
