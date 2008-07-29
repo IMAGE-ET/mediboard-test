@@ -66,11 +66,15 @@ if ($patient->patient_id) {
     $sejour->loadRefs();
     $sejour->loadRefGHM();
     $sejour->loadNumDossier();
+    $sejour->canRead();
+    $sejour->canEdit();
     foreach ($sejour->_ref_operations as &$operation) {
       $operation->loadRefsFwd();
       
       $operation->getNumDocsAndFiles();
       $operation->loadRefsActesCCAM();
+      $operation->canRead();
+      $operation->canEdit();
       foreach ($operation->_ref_actes_ccam as &$acte) {
         $acte->loadRefsFwd();
         $acte->guessAssociation();
