@@ -1,12 +1,16 @@
+function getKeycode(e) {
+  return e.which || e.keyCode || window.event.keyCode || window.event.which;
+}
+
 //Helper Function for Caret positioning
-Element.addMethods('input', {
+Element.addMethods(['input', 'textarea'], {
   caret: function (element, begin, end) {
     if (element.length == 0) return null;
     
     if (Object.isNumber(begin)) {
-      end = (Object.isNumber(end))?end:begin;  
+      end = (Object.isNumber(end)) ? end : begin;
       
-      if(element.setSelectionRange){
+      if(element.setSelectionRange) {
         element.focus();
         element.setSelectionRange(begin, end);
       }
@@ -17,6 +21,7 @@ Element.addMethods('input', {
         range.moveStart('character', begin);
         range.select();
       }
+      return null;
     }
     else {
       if (element.setSelectionRange) {
@@ -24,7 +29,7 @@ Element.addMethods('input', {
         end = element.selectionEnd;
       }
       else if (document.selection && document.selection.createRange) {
-        var range = document.selection.createRange();     
+        var range = document.selection.createRange();
         begin = 0 - range.duplicate().moveStart('character', -100000);
         end = begin + range.text.length;
       }
@@ -34,188 +39,228 @@ Element.addMethods('input', {
 });
 
 Element.addMethods('input', {
-  addPlaceholder: function(element, c, r) {
-    element.options.charmap[c] = r;
-  },
-  
   mask: function(element, mask, options) {
-    element.options = Object.extend(options, {
+    element.options = Object.extend({
       placeholder: "_",
       charmap: {
         '9':"[0-9]",
         'a':"[A-Za-z]",
-        '*':"[A-Za-z0-9]"
+        '*':"[A-Za-z0-9]",
+        '~':"[+-]"
       },
-      completed: null
-    });
+      completed: Prototype.emptyFunction
+    }, options || {});
 
     var maskArray = mask.toArray();
     var buffer = new Array(mask.length);
     var locked = new Array(mask.length);
     var valid = false;   
-    var ignore = false;       //Variable for ignoring control keys
-    var firstNonMaskPos = null; 
+    var ignore = false; //Variable for ignoring control keys
+    var firstNonMaskPos = null;
+    element.rawvalue = null;
     
-    var re = new RegExp("^"+  
-    maskArray.collect(function(c,i) {           
-      return element.options.charmap[c]||((/[A-Za-z0-9]/.test(c)?"":"\\")+c);
-    }).join('')+        
-    "$");
-    
-    //Build buffer layout from mask & determine the first non masked character      
-    maskArray.each(function(i,c) {        
-      locked[i] = (element.options.charmap[c] == null);       
-      buffer[i] = locked[i] ? c : options.placeholder;                 
+    var re = new RegExp("^"+
+      maskArray.collect(function(c) {
+        return element.options.charmap[c]||((/[A-Za-z0-9]/.match(c) ? "" : "\\" )+c);
+      }).join('')+"$");
+
+    //Build buffer layout from mask & determine the first non masked character
+    maskArray.each(function(c, i) {
+      locked[i] = Object.isUndefined(element.options.charmap[c]);
+      buffer[i] = locked[i] ? c : element.options.placeholder;
       if(!locked[i] && firstNonMaskPos == null)
         firstNonMaskPos = i;
     });
     
-    function focusEvent() {          
+    function addPlaceholder (c, r) {
+      element.options.charmap[c] = r;
+    }
+    
+    function updateRawValue() {
+      element.rawvalue = null;
+      buffer.each(function(c, i) {
+        if (!locked[i] && (c != element.options.placeholder)) {
+          element.rawvalue = (element.rawvalue || '') +  c;
+        }
+      });
+    }
+    
+    function focusEvent(e) {
       checkVal();
       writeBuffer();
-      var c = function() {
-        element.caret(valid ? mask.length : firstNonMaskPos);         
+      var f = function() {
+        valid ?
+          element.caret(0, mask.length):
+          element.caret(firstNonMaskPos);
       };
-      c.defer();
-    };
+      f.defer();
+    }
+    focusEvent = focusEvent.bindAsEventListener(element);
     
-    function keydownEvent(e) {       
+    function keydownEvent(e) {
       var pos = element.caret();
-      var k = e.keyCode;
-      ignore = (k < 16 || (k > 16 && k < 32 ) || (k > 32 && k < 41));
+      var k = getKeycode(e);
+      ignore = ((k < 41) && (k != 32) && (k != 16));
       
       //delete selection before proceeding
-      if((pos.begin - pos.end)!=0 && (!ignore || k==8 || k==46)){
+      if((pos.begin - pos.end) != 0 && (!ignore || k==8 || k==46)) {
         clearBuffer(pos.begin, pos.end);
-      } 
+      }
+      
       //backspace and delete get special treatment
-      if(k == 8) {//backspace          
+      switch (k) { //backspace
+      case 8:
         while(pos.begin-- >= 0) {
-          if(!locked[pos.begin]) {               
-            buffer[pos.begin] = options.placeholder;
+          if(!locked[pos.begin]) {
+            buffer[pos.begin] = element.options.placeholder;
             if(Prototype.Browser.Opera) {
-              //Opera won't let you cancel the backspace, so we'll let it backspace over a dummy character.               
+              //Opera won't let you cancel the backspace, so we'll let it backspace over a dummy character.
               s = writeBuffer();
-              element.value = s.substring(0,pos.begin)+" "+s.substring(pos.begin);
-              element.caret(pos.begin+1);               
+              element.value = s.substring(0, pos.begin)+" "+s.substring(pos.begin);
+              element.caret(pos.begin+1);
             }
             else {
               writeBuffer();
               element.caret(Math.max(firstNonMaskPos, pos.begin));
-            }                 
-            return false;               
+            }
+            return false;
           }
-        }           
-      }
-      else if (k == 46) { //delete
+        }
+      break;
+      
+      case 46: //delete
         clearBuffer(pos.begin, pos.begin+1);
         writeBuffer();
-        element.caret(Math.max(firstNonMaskPos, pos.begin));         
+        element.caret(Math.max(firstNonMaskPos, pos.begin));
         return false;
-      }
-      else if (k == 27) { //escape
+      break;
+
+      case 27: //escape
         clearBuffer(0, mask.length);
         writeBuffer();
-        element.caret(firstNonMaskPos);         
+        element.caret(firstNonMaskPos);
         return false;
-      }                 
-    };
+      break;
+      }
+      
+      return true;
+    }
+    keydownEvent = keydownEvent.bindAsEventListener(element);
     
-    function keypressEvent(e){          
+    function keypressEvent(e) {
       if (ignore) {
         ignore = false;
         //Fixes Mac FF bug on backspace
-        return (e.keyCode == 8) ? false : null;
+        //return (e.keyCode == 8) ? false : null;
       }
+      
       e = e || window.event;
-      var k = e.charCode || e.keyCode || e.which;           
+      var k = getKeycode(e);
+
+      if (e.ctrlKey || e.altKey || 
+          (k == Event.KEY_TAB) || 
+          (k >= Event.KEY_PAGEDOWN && k <= Event.KEY_DOWN)) return true; //Ignore
+      
       var pos = element.caret();
-              
-      if (e.ctrlKey || e.altKey) {//Ignore
-        return true;
-      }
-      else if ((k>=41 && k<=122) ||k==32 || k>186){//typeable characters
-        var p = seekNext(pos.begin-1);          
+      
+      if ((k >= 41 && k <= 122) || k == 32 || k > 186) {//typeable characters
+        var p = seekNext(pos.begin-1);
+
         if (p < mask.length) {
-          if (new RegExp(element.options.charmap[mask.charAt(p)]).test(String.fromCharCode(k))) {
-            buffer[p] = String.fromCharCode(k);
+          var nRe = new RegExp(element.options.charmap[mask.charAt(p)]);
+          var c = String.fromCharCode(k);
+
+          if (c.match(nRe)) {
+            buffer[p] = c;
             writeBuffer();
             var next = seekNext(p);
             element.caret(next);
-            if (options.completed && next == mask.length)
-              options.completed.call($F(element));
+            
+            if (next == mask.length) {
+              checkVal();
+              element.options.completed(element);
+            }
           }
         }
-      }       
-      return false;       
-    };
-    
-    function clearBuffer(start, end){
-      for(var i = start; i < end && i < mask.length; i++) {
-        if(!locked[i])
-          buffer[i] = options.placeholder;
       }
-    };
+
+      return false;
+    }
+    keypressEvent = keypressEvent.bindAsEventListener(element);
     
-    function writeBuffer(){       
-      return element.value = buffer.join('');        
-    };
+    function clearBuffer(start, end) {
+      for(var i = start; i < end && i < mask.length; i++) {
+        if(!locked[i]) buffer[i] = element.options.placeholder;
+      }
+    }
     
-    function checkVal(){  
-      //try to place charcters where they belong
-      var test = $F(element);
+    function writeBuffer() {
+      element.value = buffer.join('');
+      return element.value;
+    }
+    
+    function checkVal() {
+      updateRawValue();
+      
+      var test = element.value;
       var pos = 0;
-      for (var i = 0; i < mask.length; i++) {         
-        if(!locked[i]){
-          buffer[i] = options.placeholder;
-          while(pos++ < test.length){
+      
+      for (var i = 0; i < mask.length; i++) {
+        if(!locked[i]) {
+          buffer[i] = element.options.placeholder;
+          while(pos++ < test.length) {
             //Regex Test each char here.
             var reChar = new RegExp(element.options.charmap[mask.charAt(i)]);
             if (test.charAt(pos-1).match(reChar)) {
               buffer[i] = test.charAt(pos-1);
               break;
-            }                 
+            }
           }
         }
       }
+      checkVal = checkVal.bindAsEventListener(element);
+      
       var s = writeBuffer();
-      if (!s.match(re)) {             
-        element.value = "";  
-        clearBuffer(0,mask.length);
+      if (!s.match(re)) {
+        element.value = "";
+        clearBuffer(0, mask.length);
         valid = false;
       }
       else valid = true;
-    };
+    }
     
-    function seekNext(pos) {       
-      while (++pos < mask.length){         
+    function seekNext(pos) {
+      while (++pos < mask.length) {
         if(!locked[pos]) return pos;
       }
       return mask.length;
-    };
+    }
     
-    element.observe("focus",   focusEvent);
-    element.observe("blur",    checkVal);
-    element.observe("keydown", keydownEvent);
-    element.observe("keypress",keypressEvent);
+    element.observe("focus", focusEvent);
+    element.observe("blur",  checkVal);
+    element.onkeydown  = keydownEvent;
+    element.onkeypress = keypressEvent;
     
     //Paste events for IE and Mozilla thanks to Kristinn Sigmundsson
-    if (Prototype.Browser.IE) 
+    if (Prototype.Browser.IE)
       element.onpaste = checkVal.defer();
-    else if (Prototype.Browser.Gecko)
+    
+    if (Prototype.Browser.Gecko)
       element.addEventListener('input', checkVal, false);
       
     checkVal();//Perform initial check for existing values
   },
   
   unmask: function(element) {
-    element.stopObserving("focus",   element.focusEvent);
-    element.stopObserving("blur",    element.checkVal);
-    element.stopObserving("keydown", element.keydownEvent);
-    element.stopObserving("keypress",element.keypressEvent);
-    if (Prototype.Browser.IE) 
+    element.onfocus    = null;
+    element.onblur     = null;
+    element.onkeydown  = null;
+    element.onkeypress = null;
+    
+    if (Prototype.Browser.IE)
       element.onpaste = null;
-    else if (Prototype.Browser.Gecko)
+    
+    if (Prototype.Browser.Gecko)
       element.removeEventListener('input', element.checkVal, false);
   }
 });
