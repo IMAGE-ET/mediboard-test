@@ -2,10 +2,10 @@
 
 <script type="text/javascript">
 
-function pageMain(){
+Main.add(function () {
   // Initialisation des onglets du menu
   Control.Tabs.create('tabs-livret', false);
-}
+});
 
 
 function loadLivretArbreATC(codeATC){
@@ -91,9 +91,6 @@ function printLivret(){
 }
 
 </script>
-
-
-
 
 <!-- Ajout d'un produit dans le livret -->
 <table class="form">

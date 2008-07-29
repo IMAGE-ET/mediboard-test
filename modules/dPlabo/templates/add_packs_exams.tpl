@@ -98,7 +98,7 @@ var oDragOptions = {
 }
 
 
-function pageMain() {
+Main.add(function() {
   Pack.select();
   Catalogue.select();
   ViewPort.SetAvlHeight('PacksView'            , 0.4);
@@ -112,7 +112,7 @@ function pageMain() {
   
   // Pour éviter de dropper en dessous du tableau de la liste des analyses
   Droppables.add('viewport-PacksExamensView', oDragOptions );
-}
+});
 
 // Recherche des analyses
 function search(){

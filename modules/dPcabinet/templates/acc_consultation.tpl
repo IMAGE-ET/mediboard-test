@@ -18,9 +18,10 @@ function refreshConstantesMedicales () {
   url.addParam("context_id", {{$consult->consultation_id}});
   url.requestUpdate("Constantes", { waitingText: null } );
 };
-Main.add(refreshConstantesMedicales);
 
 Main.add(function () {
+  refreshConstantesMedicales();
+  
   var tabsConsult = Control.Tabs.create('tab-consult', false);
   {{if $app->user_prefs.ccam_consultation == 1}}
   var tabsActes = Control.Tabs.create('tab-actes', false);

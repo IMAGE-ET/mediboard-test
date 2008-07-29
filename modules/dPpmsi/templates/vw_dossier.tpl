@@ -150,9 +150,9 @@ SejourHprimSelector.doSet = function(){
   ExtRefManager.submitNumdosForm(oForm.object_id.value);
 }
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("effectSejour");
-}
+});
 </script>
 
 <form name="FrmClass" action="?m={{$m}}" method="get" onsubmit="reloadListFileDossier('load'); return false;">

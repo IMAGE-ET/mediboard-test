@@ -94,11 +94,6 @@ function cancelObjects() {
 //  cancelSejour();
 }
 
-function pageMain() {
-  incFormOperationMain();
-  incFormSejourMain();
-}
-
 </script>
 
 {{include file="js_form_operation.tpl"}}

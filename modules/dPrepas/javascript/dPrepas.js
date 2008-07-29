@@ -9,9 +9,9 @@ var ETAT_REPAS_RECUP  = 32;
 var ETAT_REPAS_MODIF  = 48;
 var ETAT_SYNCH        = 64;
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("FrmSelectService", "date");
-}
+});
 
 function storageMain(){
   loadDatadPrepas();

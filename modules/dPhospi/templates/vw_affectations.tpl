@@ -2,7 +2,7 @@
 
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   // PairEffect.InitGroup can't be used because it scans all DOM nodes
   {{foreach from=$services item=curr_service}}
   new PairEffect("service{{$curr_service->service_id}}", {
@@ -17,8 +17,7 @@ function pageMain() {
  
   regFieldCalendar("addAffectationsejour", "entree", true);
   regFieldCalendar("addAffectationsejour", "sortie", true);
-
-}
+});
 
 </script>
 

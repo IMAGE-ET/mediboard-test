@@ -52,8 +52,7 @@ function submitAdmission(oForm) {
   submitFormAjax(oForm, 'systemMsg', { onComplete : function() { reloadAdmission() } });
 }
 
-function pageMain() {
-  
+Main.add(function () {
   var totalUpdater = new Url;
   totalUpdater.setModuleAction("dPadmissions", "httpreq_vw_all_admissions");
   totalUpdater.addParam("date", "{{$date}}");
@@ -65,8 +64,7 @@ function pageMain() {
   listUpdater.addParam("selSaisis", "{{$selSaisis}}");
   listUpdater.addParam("date", "{{$date}}");
   listUpdater.periodicalUpdate('listAdmissions', { frequency: 120 });
-
-}
+});
 
 </script>
 

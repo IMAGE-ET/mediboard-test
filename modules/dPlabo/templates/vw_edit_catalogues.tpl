@@ -1,5 +1,4 @@
 <script type="text/javascript">
-
 var Catalogue = {
   select: function(id) {
     var url = new Url;
@@ -21,11 +20,10 @@ function checkRefFunction(pere) {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup('tree-content');
-}
+});
 </script>
-  
 
 <table class="main">
   <tr>

@@ -64,7 +64,7 @@ function updateList() {
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
-function pageMain() {
+Main.add(function () {
   updateList();
   
   {{if $consult->_id}}
@@ -81,7 +81,7 @@ function pageMain() {
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   DossierMedical.reloadDossierPatient();
   {{/if}}
-}
+});
 </script>
 
 <table class="main">

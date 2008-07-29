@@ -207,9 +207,6 @@ function syncRegimes(hormone_croissance, repas_sans_sel, repas_sans_porc, repas_
   $V(oForm.repas_sans_residu , repas_sans_residu);
 }
 
-function incFormSejourMain() {
-}
-
 var bChangePat = 0;
 var bOldPat = 0;
 

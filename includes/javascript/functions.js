@@ -7,7 +7,6 @@ function main() {
 	  SystemMessage.init();
 	  WaitingMessage.init();
 	  initPuces();
-	  pageMain();
 	  Main.init();
 	}
 	catch (e) {
@@ -240,7 +239,6 @@ var SystemMessage = {
 }
 
 function initFCKEditor() {}
-function pageMain() {}
 
 /**
  * Javascript console

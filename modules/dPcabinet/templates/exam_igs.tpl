@@ -18,10 +18,10 @@ function checkSelect(){
 // Lancement du reload
 window.opener.ExamDialog.reload('{{$exam_igs->consultation_id}}');
 
-function pageMain(){
+Main.add(function () {
   // Lancement du calcul avec les valeurs selectionnees
   checkSelect();
-}
+});
 
 </script>
 

@@ -117,15 +117,14 @@ function checkDuree() {
   return true;
 }
 
-
-function pageMain() {
+Main.add(function () {
   refreshListCCAM();
 
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
   } );
-}
+});
 
 </script>
 

@@ -1,10 +1,10 @@
 {{mb_include_script module="system" script="object_selector"}}
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("filterFrm", "_date_min", true);
   regFieldCalendar("filterFrm", "_date_max", true);
-}
+});
 
 </script>
 

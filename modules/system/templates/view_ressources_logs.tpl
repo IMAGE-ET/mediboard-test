@@ -15,9 +15,9 @@ function zoom(date, module, element, interval, numelem) {
   url.popup(650, 445, date + " " + module + " " + element);
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

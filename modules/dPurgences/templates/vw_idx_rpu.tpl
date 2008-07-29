@@ -21,9 +21,9 @@ function printMainCourante() {
   url.popup(800, 600, "Impression main courante");
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

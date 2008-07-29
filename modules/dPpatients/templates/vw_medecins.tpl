@@ -9,11 +9,11 @@ function setClose(iId, sNom, sPrenom, sType) {
   window.close();
 }
 
-function pageMain() {
+Main.add(function () {
   if (document.editFrm) {
     initInseeFields("editFrm", "cp", "ville","_tel1");
   }
-}
+});
 </script>
 
 <table class="main">

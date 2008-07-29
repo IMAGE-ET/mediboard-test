@@ -20,9 +20,9 @@ function effectHighlight(){
 	}
 }
 
-function pageMain() {
+Main.add(function () {
 	var periode = new PeriodicalExecuter(effectHighlight,1);
-}
+});
 
 function editIntervention(op_id) {
   window.opener.location.href="?m=dPplanningOp&tab=vw_edit_planning&operation_id="+op_id;

@@ -86,7 +86,7 @@ function printPatient(id) {
   url.popup(700, 550, "Patient");
 }
 
-function pageMain() {
+Main.add(function () {
   
   ViewFullPatient.main();
   
@@ -103,7 +103,7 @@ function pageMain() {
   {{/if}}
   
   initNotes();
-}
+});
 
 </script>
 

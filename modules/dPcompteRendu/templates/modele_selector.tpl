@@ -1,8 +1,8 @@
 <script type="text/javascript">
-function pageMain(){
+Main.add(function () {
   // Initialisation des onglets du menu
   new Control.Tabs('tabs-modeles');
-}
+});
 
 function setClose(modele_id, object_id) {
   if (window.opener) {

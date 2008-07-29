@@ -161,7 +161,7 @@ function updateSemainier() {
   url.requestUpdate("semainier");
 }
 
-function pageMain() {
+Main.add(function () {
   {{if $view == "day"}}
     hideIcon("consultations");
     hideIcon("operations");
@@ -182,7 +182,7 @@ function pageMain() {
     updateSemainier();
   {{/if}}
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

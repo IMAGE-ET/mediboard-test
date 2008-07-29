@@ -55,11 +55,10 @@ function refreshListChoix(){
   $('listChoix').innerHTML = sListeChoix;
 }
 
-function pageMain() {
+Main.add(function () {
   refreshListChoix();
   oEvenementField = new TokenField(document.edit_type_ei.evenements);
-
-}
+});
 
 </script>
 <table class="main">

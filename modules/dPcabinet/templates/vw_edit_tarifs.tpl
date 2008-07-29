@@ -119,7 +119,7 @@ function updateTokenNgap(){
   document.editFrm._coefficient_ngap.value = "";
 }
 
-function pageMain() {
+Main.add(function () {
   refreshTotal();
 
   refreshListCCAM();
@@ -133,8 +133,7 @@ function pageMain() {
   oNgapField = new TokenField(document.editFrm.codes_ngap, {
     onChange : updateTokenNgap
   } );
-  
-}
+});
 
 </script>
 

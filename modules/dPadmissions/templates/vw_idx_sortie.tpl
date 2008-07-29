@@ -59,9 +59,7 @@ function confirmation(date_actuelle, date_demain, sortie_prevue, entree_reelle, 
   submitSortie(oForm, mode);    
 }
 
-
-
-function pageMain() {
+Main.add(function () {
   var ambuUpdater = new Url;
   ambuUpdater.setModuleAction("dPadmissions", "httpreq_vw_sorties");
   ambuUpdater.addParam("date", "{{$date}}");
@@ -77,7 +75,7 @@ function pageMain() {
   compUpdater.periodicalUpdate('sortiescomp', { frequency: 90 });
 
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

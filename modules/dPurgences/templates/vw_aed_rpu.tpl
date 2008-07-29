@@ -57,7 +57,7 @@ function cancelRPU() {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   {{if $rpu->_id && $can->edit}}
     DossierMedical.reloadDossierPatient();
     var tab_sejour = Control.Tabs.create('tab-dossier');
@@ -68,7 +68,7 @@ function pageMain() {
     document.editAntFrm.type.onchange();
     Try.these(document.editAddictFrm.type.onchange);
   }
-}
+});
 
 </script>
 

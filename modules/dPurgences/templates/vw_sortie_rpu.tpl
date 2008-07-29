@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 function modeSortieDest(mode_sortie, rpu_id) {
   var oFormRPU = document.forms["editRPU-" + rpu_id]; 

@@ -1,8 +1,7 @@
 <script type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date_suivi}}", "?m={{$m}}&tab={{$tab}}&date_suivi=");
-}
+});
 
 function printFeuilleBloc(oper_id) {
   var url = new Url;
@@ -16,8 +15,6 @@ function showLegend() {
   url.setModuleAction("dPbloc", "legende");
   url.popup(500, 150, "Legend");
 }
-
-
 </script>
 
 <table class="main">

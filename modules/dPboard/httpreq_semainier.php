@@ -150,6 +150,7 @@ $plageOp          = new CPlageOp();
 $listDays         = array();
 $plagesConsult    = array();
 $plagesOp         = array();
+$plagesPerDayOp   = array();
 
 for($i = 0; $i < 7; $i++) {
   $where = array();

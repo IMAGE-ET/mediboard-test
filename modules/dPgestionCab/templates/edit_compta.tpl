@@ -12,12 +12,11 @@ function printRapport() {
   url.popup(700, 550, "Rapport");
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("editFrm", "date");
   regFieldCalendar("selectFrm", "_date_min");
   regFieldCalendar("selectFrm", "_date_max");
-}
-
+});
 </script>
 
 <table class="main">

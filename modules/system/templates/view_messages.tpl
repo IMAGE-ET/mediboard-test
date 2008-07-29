@@ -1,12 +1,10 @@
 <!-- $Id$ -->
 
 <script type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("editFrm", "deb", true);
   regFieldCalendar("editFrm", "fin", true);
-}
-
+});
 </script>
 
 <table class="main">
@@ -15,7 +13,6 @@ function pageMain() {
   <td class="greedyPane">
 
     <form name="filterFrm" action="?" method="get">
-    
     <input type="hidden" name="m" value="{{$m}}" />
         
     <table class="form">

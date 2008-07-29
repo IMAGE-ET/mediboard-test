@@ -19,7 +19,7 @@ function updateFields(selected) {
   $('selection_codeacte').value = dn[0].firstChild.nodeValue;
 }
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("chapEffect");
   
   new Ajax.Autocompleter(
@@ -31,7 +31,7 @@ function pageMain() {
       updateElement: updateFields
     }
   );
-}
+});
   
 </script>
 

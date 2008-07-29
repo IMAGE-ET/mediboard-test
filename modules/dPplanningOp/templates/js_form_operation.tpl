@@ -246,4 +246,6 @@ function incFormOperationMain() {
   } );
 }
 
+Main.add(incFormOperationMain);
+
 </script>

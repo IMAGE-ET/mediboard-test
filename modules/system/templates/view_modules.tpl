@@ -35,9 +35,9 @@ var SharedMemory = {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   SharedMemory.check("SharedMemory");
-}
+});
 
 </script>
 

@@ -1,12 +1,10 @@
 <script type="text/javascript">
-
-function pageMain(){
+Main.add(function () {
   // Initialisation des onglets du menu
   var tabsProduit = Control.Tabs.create('tab-produit', false);
   var tabsClinique = Control.Tabs.create('tab-clinique', false);
   var tabsPharmaco = Control.Tabs.create('tab-pharmaco', false);
-}
-  
+});
 </script>
 
 <table class="main">

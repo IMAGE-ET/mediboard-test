@@ -1,11 +1,11 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_liste_plages");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('listplages', { frequency: 90 });
-}
+});
 
 function printFiche() {
   var url = new Url;

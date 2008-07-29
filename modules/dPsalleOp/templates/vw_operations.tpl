@@ -64,7 +64,7 @@ function reloadPersonnel(operation_id){
   } );
 }
 
-function pageMain() {  
+Main.add(function () {
   var url = new Url;
   {{if $dPconfig.dPsalleOp.COperation.mode}}
   url.setModuleAction("dPsalleOp", "httpreq_liste_op_prat");
@@ -81,7 +81,7 @@ function pageMain() {
   // Effet sur le programme
   new PairEffect("listplages", { sEffect : "appear", bStartVisible : true });
   {{/if}}
-}
+});
 
 </script>
 

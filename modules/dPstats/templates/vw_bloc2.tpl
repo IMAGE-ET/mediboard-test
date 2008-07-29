@@ -1,8 +1,8 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("bloc", "deblist");
-}
+});
 
 </script>
 

@@ -1,7 +1,7 @@
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
-}
+});
 
 function devalidationRepas(validation_id){
   oForm = document.validRepas;

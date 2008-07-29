@@ -1,12 +1,8 @@
+{{if $print}}
 <script type="text/javascript">
-
-function pageMain(){
-  {{if $print}}
-    window.print();
-  {{/if}}
-}
-
-</script>
+Main.add(window.print);
+</script> 
+{{/if}}
 
 <!-- Fermeture des tableaux -->
     </td>

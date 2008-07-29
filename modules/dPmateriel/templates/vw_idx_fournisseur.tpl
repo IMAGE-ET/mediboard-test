@@ -1,9 +1,9 @@
 {{mb_include_script module="dPpatients" script="autocomplete"}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   initInseeFields("editFournisseur", "codepostal", "ville");
-}
+});
 </script>
 
 <table class="main">

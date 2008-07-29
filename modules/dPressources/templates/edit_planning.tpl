@@ -1,10 +1,8 @@
 <script language="JavaScript" type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("addPlage", "date");
   regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut=");
-}
-
+});
 </script>
 
 <table class="main">

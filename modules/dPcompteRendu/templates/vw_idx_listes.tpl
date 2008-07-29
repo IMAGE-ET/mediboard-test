@@ -1,11 +1,10 @@
 <!--  $Id$ -->
 
 <script type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   if(oForm = document.addFrm)
     document.addFrm._new.focus();
-}
+});
 </script>
 
 <table class="main">

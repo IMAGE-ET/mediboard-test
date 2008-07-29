@@ -1,11 +1,11 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("ChapEffect", { 
     bStoreInCookie: false,
     sEffect: "appear"
   });
-}
+});
 
 
 function modifClass(){

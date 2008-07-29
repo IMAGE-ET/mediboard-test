@@ -274,10 +274,10 @@ function changeVocalValueMouse(event) {
   changeVocalValue(sCote, iKey, iSelectedDB, iSelectedPc);
 }
 
-function pageMain() {
+Main.add(function () {
   new PairEffect("dataTonal");
   new PairEffect("dataVocal");
-}
+});
 
 function reloadAllGraphs() {
   reloadGraphTonale();

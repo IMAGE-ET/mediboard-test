@@ -74,14 +74,14 @@ function updateSemainier() {
   url.requestUpdate("semainier");
 }
 
-function pageMain() {
+Main.add(function () {
   {{if $prat->_id}}
 		  updateSemainier();
   {{/if}}
   
   ViewPort.SetAvlHeight("semainier", 1);
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

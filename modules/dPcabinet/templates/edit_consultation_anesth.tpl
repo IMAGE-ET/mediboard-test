@@ -119,7 +119,7 @@ function reloadConsultAnesth() {
 */
 }
 
-function pageMain() {
+Main.add(function () {
 
   //rafraichissement de la liste des consultations
   updateList();  
@@ -141,7 +141,7 @@ function pageMain() {
   // Chargement des antecedents, traitements, addictions, diagnostics du patients
   DossierMedical.reloadDossierPatient();
   {{/if}}
-}
+});
 
 </script>
 

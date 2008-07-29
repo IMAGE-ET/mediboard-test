@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
-function pageMain(){
+Main.add(function () {
   regFieldCalendar('filterForm', "_date_min", true);
   regFieldCalendar('filterForm', "_date_max", true);
-}
+});
 
 </script>
 

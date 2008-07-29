@@ -1,9 +1,9 @@
 <!-- $Id$ -->
 
 <script language="javascript" type="text/javascript">
-function pageMain() {
+Main.add(function () {
   regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 </script>
 
 <div id="calendar-container"></div>

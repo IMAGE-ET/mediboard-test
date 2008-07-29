@@ -73,8 +73,7 @@ function viewCheckbox(user_id){
   } );
 }
 
-function pageMain() {
-  
+Main.add(function () {
   // Chargement des checkbox si un user est selectionné
   {{if $user_id}}
     viewCheckbox("{{$user_id}}");
@@ -93,8 +92,7 @@ function pageMain() {
 
   regFieldCalendar("editAffectation", "debut", true);
   regFieldCalendar("editAffectation", "fin", true);
-
-}
+});
 </script>
 
 

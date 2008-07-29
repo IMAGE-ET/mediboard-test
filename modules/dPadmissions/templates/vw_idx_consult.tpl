@@ -1,9 +1,8 @@
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 </script>
-
 
 <table class="main">
   <tr>

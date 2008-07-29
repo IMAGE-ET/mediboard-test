@@ -51,14 +51,14 @@ function changeFormSearch(){
   }
 }
 
-function pageMain(){
+Main.add(function () {
   changeFormSearch();
   searchTabs = new Control.Tabs('main_tab_group');
   searchTabs.setActiveTab('{{$onglet_recherche}}');
   
   // Au chargement, vue des classes ATC
   viewATC();  
-}
+});
 </script>
 
 <ul id="main_tab_group" class="control_tabs">

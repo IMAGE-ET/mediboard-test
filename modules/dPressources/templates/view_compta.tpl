@@ -1,12 +1,9 @@
 <script language="JavaScript" type="text/javascript">
-
 function checkFormPrint() {
   var form = document.paramFrm;
-    
   if (!checkForm(form)){
     return false;
   }
-
   popRapport();
 }
 
@@ -21,12 +18,11 @@ function popRapport() {
   url.popup(700, 550, "Rapport");
 }
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("effectPlage");
   regFieldCalendar("paramFrm", "_date_min");
   regFieldCalendar("paramFrm", "_date_max");
-}
-
+});
 </script>
 
 <table class="main">

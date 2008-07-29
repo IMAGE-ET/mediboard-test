@@ -45,17 +45,15 @@ function printIncident(ficheId){
   return;
 }
 
+Main.add(function () {
 {{if  $can->admin && $fiche->qualite_date_validation && (!$fiche->qualite_date_verification || !$fiche->qualite_date_controle)}}
-function pageMain() {
   {{if !$fiche->qualite_date_verification}}
   regFieldCalendar("ProcEditFrm", "qualite_date_verification");
   {{else}}
   regFieldCalendar("ProcEditFrm", "qualite_date_controle");
-  {{/if}}  
-}
+  {{/if}}
 {{/if}}
 
-Main.add(function () {
   if($('tab-incident')){
     var tabIncident = Control.Tabs.create('tab-incident', true);
   }

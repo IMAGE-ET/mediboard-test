@@ -39,14 +39,14 @@ function deldate(sField){
   oDateDiv.innerHTML = "";
 }
 
-function pageMain() {
+Main.add(function () {
 {{if $mediuserSel->_id}}
   loadProfil("{{$mediuserSel->_user_type}}");
 {{/if}}
 
   regFieldCalendar("mediuser", "deb_activite");
   regFieldCalendar("mediuser", "fin_activite");
-}
+});
 
 function changeRemote(o) {
   var oPassword = o.form._user_password;

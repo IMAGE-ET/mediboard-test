@@ -15,10 +15,10 @@ function zoomGraphIntervention(date){
   url.popup(760, 400, "ZoomMonth");
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("bloc", "_date_min");
   regFieldCalendar("bloc", "_date_max");
-}
+});
 
 </script>
 

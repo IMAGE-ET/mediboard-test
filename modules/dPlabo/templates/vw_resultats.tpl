@@ -7,8 +7,6 @@ var Prescription = {
   }
 }
 
-
-
 function printResultats(prescription_id){
   var url = new Url;
   url.setModuleAction("dPlabo", "vw_resultat_pdf");
@@ -42,14 +40,14 @@ var IMeds = {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   {{if $prescription->_id}}
     ViewPort.SetAvlHeight("resultats-internes", 0.5);
     ViewPort.SetAvlHeight("resultats-externes", 1);
   
     IMeds.viewPrescription({{$prescription->_id}}, "resultats-externes");
   {{/if}}
-}
+});
 
 </script>
 

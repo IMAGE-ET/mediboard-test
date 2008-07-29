@@ -45,13 +45,13 @@ function updateList() {
   url.periodicalUpdate('listConsult', { frequency: 90 });
 }
 
-function pageMain() {
+Main.add(function () {
   updateList();
   
   {{if $consult->consultation_id}}
   new PairEffect("listConsult", { sEffect : "appear", bStartVisible : true });
   {{/if}}
-}
+});
 
 </script>
 

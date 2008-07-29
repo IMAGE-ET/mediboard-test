@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("personnelSalle", "deb_personnel");
   regFieldCalendar("personnelSalle", "fin_personnel");
-}
+});
 
 </script>
 

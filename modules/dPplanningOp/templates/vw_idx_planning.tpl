@@ -19,9 +19,9 @@ function updateListOperations(date, urgence) {
   url.requestUpdate('operations', { waitingText:null } );
 }
 
-function pageMain() {
+Main.add(function () {
   updateListOperations("{{$date}}");
-}
+});
 
 </script>
 

@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
 {{if !$dialog}}
-function pageMain(){
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_signature_actes&date=");
-}
+});
 {{/if}}
 
 </script>

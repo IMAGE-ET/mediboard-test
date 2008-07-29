@@ -1,11 +1,3 @@
-<script type="text/javascript">
-
-function pageMain() {
-  incFormSejourMain();
-}
-  
-</script>
-  
 <table class="main">
 
   {{if $sejour->_id}}

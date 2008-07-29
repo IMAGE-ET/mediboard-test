@@ -247,7 +247,7 @@ function search(){
 } 
     
     
-function pageMain() {
+Main.add(function () {
   ViewPort.SetAvlHeight('topRightDiv'      , 0.4);
   ViewPort.SetAvlHeight('bottomRightDiv'   , 1);
   ViewPort.SetAvlHeight('listPrescriptions', 0.4);
@@ -265,7 +265,7 @@ function pageMain() {
   
   // Pour éviter de dropper en dessous du tableau de la liste des analyses
   Droppables.add('viewport-listExamens', oDragOptions );
-}
+});
 
 </script>
 

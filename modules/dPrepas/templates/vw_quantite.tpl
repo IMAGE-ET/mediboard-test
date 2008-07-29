@@ -9,12 +9,12 @@ function reloadChambres(){
   url.requestUpdate('vwService');
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date="); 
   {{if $service_id}}
   reloadChambres();
   {{/if}}
-}
+});
 </script>
 
 <table class="main">

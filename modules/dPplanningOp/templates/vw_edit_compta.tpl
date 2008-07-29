@@ -30,10 +30,10 @@ function changeDateCal(){
   oForm.select_days[2].checked = false;
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("paramFrm", "_date_min");
   regFieldCalendar("paramFrm", "_date_max");
-}
+});
 
 </script>
 <form name="paramFrm" method="get" action="?$m">

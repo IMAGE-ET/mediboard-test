@@ -42,9 +42,9 @@ function viewCode() {
   url.redirect();
 }
 
-function pageMain() {
+Main.add(function () {
   new Control.Tabs('tabs-code');
-}
+});
 
 </script>
 

@@ -5,9 +5,9 @@ function submitForm(oForm){
   submitFormAjax(oForm, 'systemMsg')
 }
 
-function pageMain() {
+Main.add(function () {
   initInseeFields("editFct", "cp", "ville");
-}
+});
 </script>
 <table class="main">
   <tr>

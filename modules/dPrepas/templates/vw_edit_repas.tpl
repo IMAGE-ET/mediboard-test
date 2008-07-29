@@ -24,13 +24,13 @@ function submitFormRepas(){
 }
 
 {{if $repas->repas_id}}
-function pageMain() {
+Main.add(function () {
   {{if $repas->menu_id}}
   viewplat({{$repas->menu_id}});
   {{else}}
   norepas();
   {{/if}}
-}
+});
 {{/if}}
 </script>
 <form name="editMenu" action="?m={{$m}}&amp;tab=vw_edit_repas" method="post" onsubmit="return checkForm(this)">

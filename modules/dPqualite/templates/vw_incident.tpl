@@ -69,12 +69,12 @@ function refreshListChoix(){
   $('listChoix').innerHTML = sListeChoix;
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("FrmEI", "_incident_date");
   refreshListChoix();
   
   oEvenementField = new TokenField(document.FrmEI.evenements);
-}
+});
 </script>
 <table class="main">
   <tr>

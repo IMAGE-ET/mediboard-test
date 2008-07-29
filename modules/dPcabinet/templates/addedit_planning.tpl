@@ -107,7 +107,7 @@ function printDocument(iDocument_id) {
   return false;
 }
 
-function pageMain() {
+Main.add(function () {
   var oForm = document.editFrm;
   
   requestInfoPat();
@@ -118,7 +118,7 @@ function pageMain() {
   refreshListCategorie({{$plageConsult->chir_id}});
   PlageConsultSelector.init();
   {{/if}}
-}
+});
 
 </script>
 

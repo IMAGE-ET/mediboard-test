@@ -4,10 +4,10 @@
 
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("recherche", "date_debut");
   var tabs = new Control.Tabs('tab-resultats');  
-}
+});
 
 </script>
 

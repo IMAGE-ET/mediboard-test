@@ -2,8 +2,7 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 <script type="text/javascript">
 
-function pageMain() {
-  
+Main.add(function () {
   new Control.Tabs('main_tab_group');
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_ops");
@@ -17,8 +16,7 @@ function pageMain() {
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_reveil_out");
   opsUpdater.addParam("date","{{$date}}");
   opsUpdater.requestUpdate("out", {waitingText: null});
-  
-}
+});
 </script>
 
 	<!-- Tabulations -->

@@ -100,7 +100,7 @@ function printPatient(id) {
 }
 
 var tabs;
-function pageMain() {
+Main.add(function () {
   initInseeFields("editFrm", "cp", "ville","pays");
   initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
   initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
@@ -110,7 +110,7 @@ function pageMain() {
   initPaysField("editFrm", "assure_pays","_assure_tel1");
   
   tabs = new Control.Tabs('tab-patient');
-}
+});
 
 </script>
 

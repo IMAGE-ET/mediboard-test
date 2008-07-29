@@ -21,9 +21,9 @@ function checkPlage() {
   return true;
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 function popPlanning(debut) {
   var url = new Url;

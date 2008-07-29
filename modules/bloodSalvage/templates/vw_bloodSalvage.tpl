@@ -4,7 +4,7 @@
 
 <script type="text/javascript">
 
-function pageMain() {  
+Main.add(function () {
   var url = new Url;
   url.setModuleAction("bloodSalvage", "httpreq_liste_plages");
   url.addParam("date", "{{$date}}");
@@ -16,7 +16,7 @@ function pageMain() {
 	  url.setModuleAction("bloodSalvage","httpreq_vw_bloodSalvage");
 	  url.requestUpdate('bloodSalvage', { waitingText: null });
   {{/if}}  
-}
+});
 </script>
 
 <table class="main">

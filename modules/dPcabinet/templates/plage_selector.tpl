@@ -28,9 +28,9 @@ var PlageConsult = {
   }
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "{{$redirect|smarty:nodefaults}}&date=");  
-}
+});
 
 </script>
 

@@ -2,9 +2,9 @@
 {{mb_include_script module="mediusers" script="color_selector"}}
 
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   initInseeFields("editFrm", "cp", "ville");
-}
+});
 </script>
 
 <table class="main">

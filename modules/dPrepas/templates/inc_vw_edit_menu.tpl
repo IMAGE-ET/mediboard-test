@@ -1,8 +1,8 @@
 <script type="text/javascript">
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("editMenu", "debut");
   regFieldCalendar("editMenu", "fin");
-}
+});
 </script>
   <tr>
     <td class="halfPane">

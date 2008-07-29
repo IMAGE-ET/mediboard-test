@@ -1,13 +1,13 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   var opsUpdater = new Url;
   opsUpdater.setModuleAction("dPsalleOp", "httpreq_entree_bloc");
   opsUpdater.addParam("date", "{{$date}}");
   opsUpdater.periodicalUpdate('ops', { frequency: 90 });
   
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab=vw_brancardage&date=");
-}
+});
 
 </script>
 

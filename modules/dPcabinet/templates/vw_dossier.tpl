@@ -5,10 +5,10 @@
 
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   PairEffect.initGroup("consEffect", { bStoreInCookie: false });
   PairEffect.initGroup("operEffect", { bStoreInCookie: false });
-}
+});
 
 
 function printPack(hospi_id, pack_id) {

@@ -76,11 +76,11 @@ function loadDependances(value){
   }
 }
 
-function pageMain() {
+Main.add(function () {
   loadClasses('{{$aide->class}}');
   loadFields('{{$aide->field}}');
   loadDependances('{{$aide->depend_value}}');
-}
+});
 
 </script>
 

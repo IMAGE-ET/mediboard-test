@@ -11,11 +11,11 @@ function reloadListModele(object_class){
   url.requestUpdate("listModeles", { waitingText: null } );
 }
 
-function pageMain(){
+Main.add(function () {
   if("{{$pack->_id}}" != ""){
     reloadListModele("{{$pack->object_class}}");
   }
-}
+});
 
 
 </script>

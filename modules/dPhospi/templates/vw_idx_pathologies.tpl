@@ -8,9 +8,9 @@ function reloadPatient(oForm) {
   url_patient.requestUpdate('sejour-'+oForm.sejour_id.value, { waitingText : null });
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

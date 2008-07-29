@@ -20,10 +20,10 @@ function popMateriel() {
   url.popup(700, 550, 'Materiel');
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("paramFrm", "_date_min");
   regFieldCalendar("paramFrm", "_date_max");
-}
+});
 
 </script>
 

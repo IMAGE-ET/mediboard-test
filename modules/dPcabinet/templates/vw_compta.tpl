@@ -38,10 +38,10 @@ function changeDate(sDebut, sFin){
   $('printFrm__date_max_da').innerHTML = Date.fromDATE(sFin).toLocaleDate();  
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("printFrm", "_date_min");
   regFieldCalendar("printFrm", "_date_max");
-}
+});
 
 </script>
 

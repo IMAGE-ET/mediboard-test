@@ -3,7 +3,7 @@
 {{mb_include_script module="bloodSalvage" script="bloodSalvage"}}
 
 <script type="text/javascript">
-function pageMain() {  
+Main.add(function () {
   var url = new Url;
   url.setModuleAction("bloodSalvage", "httpreq_liste_patients_bs");
   url.addParam("date","{{$date}}");
@@ -13,7 +13,7 @@ function pageMain() {
       url.addParam("date","{{$date}}");
       url.requestUpdate("bloodSalvageSSPI", {waitingText: null});
   {{/if}}  
-}
+});
 </script>
 
 <table class="main">

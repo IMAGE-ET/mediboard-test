@@ -79,7 +79,7 @@ function updateSemainier() {
   url.requestUpdate("semainier");
 }
 
-function pageMain() {
+Main.add(function () {
   hideIcon("consultations");
   hideIcon("operations");
   hideIcon("hospi");
@@ -95,7 +95,7 @@ function pageMain() {
   ViewPort.SetAvlHeight("patients", 1);
   ViewPort.SetAvlHeight("hospi", 1);
   regRedirectPopupCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-}
+});
 
 </script>
 

@@ -32,7 +32,7 @@ function setClose(date, salle_id) {
   window.close();
 }  
 
-function pageMain(){
+Main.add(function () {
   var oFormSejour = window.opener.document.editSejour;
   var form = document.frmSelector;   
   if(!oFormSejour.sejour_id.value) {
@@ -44,7 +44,7 @@ function pageMain(){
   } else {
     $V(form.admission, "aucune");
   }
-}
+});
 </script>
 
 <form action="?" name="frmSelector" method="get">

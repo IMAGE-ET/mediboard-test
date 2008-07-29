@@ -90,12 +90,12 @@ function loadCategory(value){
   }
 }
 
-function pageMain() {
+Main.add(function () {
   {{if !$compte_rendu->_id}}
   loadObjectClass('{{$compte_rendu->object_class}}');
   {{/if}}
   loadCategory('{{$compte_rendu->file_category_id}}');
-}
+});
 
 {{*/if*}}
 </script>

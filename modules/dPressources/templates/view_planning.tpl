@@ -1,20 +1,15 @@
 <script language="JavaScript" type="text/javascript">
-
 function alertAction() {
-  if(confirm("Voulez confirmer votre action ?")) {
-    return true;
-  }
-  return false;
+  return confirm("Voulez-vous confirmer votre action ?");
 }
 
-function pageMain() {
+Main.add(function () {
   {{if $isprat}}
   PairEffect.initGroup("effectCategory");
   {{/if}}
   regFieldCalendar("addPlage", "date");
   regRedirectPopupCal("{{$debut}}", "?m={{$m}}&tab={{$tab}}&debut="); 
-}
-
+});
 </script>
 
 <table class="main">

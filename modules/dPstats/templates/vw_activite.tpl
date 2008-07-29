@@ -1,11 +1,11 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("Form1", "debutact");
   regFieldCalendar("Form1", "finact");
   regFieldCalendar("Form2", "debutact");
   regFieldCalendar("Form2", "finact");
-}
+});
 
 </script>
 

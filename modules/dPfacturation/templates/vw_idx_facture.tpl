@@ -1,12 +1,9 @@
 {{mb_include_script module="system" script="object_selector"}}
 
-
 <script type="text/javascript">
-
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("editfacture", "date");
-}
-
+});
 </script>
 
 <table class="main">

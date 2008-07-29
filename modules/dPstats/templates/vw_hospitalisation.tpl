@@ -1,9 +1,9 @@
 <script type="text/javascript">
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("hospitalisation", "_date_min_stat");
   regFieldCalendar("hospitalisation", "_date_max_stat");
-}
+});
 
 </script>
 

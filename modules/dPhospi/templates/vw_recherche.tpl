@@ -7,9 +7,9 @@ function popPlanning(date) {
   url.popup(700, 550, 'Planning');
 }
 
-function pageMain() {
+Main.add(function () {
   regRedirectFlatCal("{{$date_recherche}}", "?m={{$m}}&tab={{$tab}}&date_recherche=", null, true);
-}
+});
 
 </script>
 

@@ -15,10 +15,10 @@ function saveFiche() {
   oForm.submit();
 }
 
-function pageMain() {
+Main.add(function () {
   regFieldCalendar("editFrm", "debut");
   regFieldCalendar("editFrm", "fin");
-}
+});
 
 </script>
 
