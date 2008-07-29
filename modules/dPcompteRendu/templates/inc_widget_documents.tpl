@@ -45,7 +45,7 @@
 	    </script>
 
       <button type="button" class="search" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
-        Modèle
+        Modèles
       </button>
 	    <input type="hidden" name="_modele_id" value="" />
 	    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, ''); $V(this.form._modele_id, ''); "/>
@@ -67,6 +67,7 @@
   {{if $collapse}}
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="2">
+    	{{tr}}{{$object->_class_name}}{{/tr}} :
     	{{$object->_ref_documents|@count}} document(s)
     </th>
   </tr>
@@ -94,13 +95,20 @@
 		  </td>
 		  
 		  <td class="button" style="width: 1px">
-		    <button class="trash notext" button" onclick="Document.del(document.forms['DocumentEdit-{{$document->_id}}'], '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
+		    <button class="trash notext" onclick="Document.del(document.forms['DocumentEdit-{{$document->_id}}'], '{{$document->nom|smarty:nodefaults|JSAttribute}}')">
 		    	{{tr}}Delete{{/tr}}
 		    </button>
 		  </td>  
 		<tr>
 	  {{foreachelse}}
-	  <tr><td><em>Aucun document</em></td></tr>
+	  <tr>
+	    <td>
+	      <em>
+	      	{{tr}}{{$object->_class_name}}{{/tr}} :
+	      	Aucun document
+	      </em>
+	    </td>
+	  </tr>
 	  {{/foreach}}
 
 	</tbody>

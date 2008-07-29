@@ -13,8 +13,13 @@ global $AppUI, $can, $m;
 $can->edit |= ($AppUI->user_type != 1);
 $can->needsEdit();
 
-$module = mbGetValueFromGetOrSession("module" , "admin");
+$module = mbGetValueFromGetOrSession("module" , "system");
 $classes = CModule::getClassesFor($module);
+
+// Hack to have CModule in system locale file
+if ($module == "system") {
+  $classes[] = "CModule";
+}
 
 // liste des dossiers modules + common et styles
 $modules = $AppUI->readDirs("modules");
@@ -46,6 +51,23 @@ foreach($localesDirs as $locale){
 	}
 }
 
+global $items, $completions;
+$items = array();
+$completions = array();
+
+function addLocale($class, $cat, $name) {
+  global $trans, $items, $completions;
+  $items[$class][$cat][$name] = array_key_exists($name, $trans) ? $trans[$name]["fr"] : "";
+  
+  // Stats
+  @$completions[$class]["total"]++;
+  if ($items[$class][$cat][$name]) {
+    @$completions[$class]["count"]++;
+  }
+  
+  @$completions[$class]["percent"] = round(100 * $completions[$class]["count"] / $completions[$class]["total"]);
+}
+
 function checkTrans(&$array, $key) {
   global $trans;
   $array[$key] = array_key_exists($key,$trans) ? $trans[$key]["fr"] : "";
@@ -68,11 +90,22 @@ foreach($classes as $class) {
   checkTrans($backSpecs[$classname][$classname], "msg-$classname-modify");
   checkTrans($backSpecs[$classname][$classname], "msg-$classname-delete");
   
+  addLocale($classname, $classname, "$classname");
+  addLocale($classname, $classname, "$classname.one");
+  addLocale($classname, $classname, "$classname.none");
+  addLocale($classname, $classname, "msg-$classname-create");
+  addLocale($classname, $classname, "msg-$classname-modify");
+  addLocale($classname, $classname, "msg-$classname-delete");
+  
   // Traductions pour la clé 
   $prop = $object->_spec->key;
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
   checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
+  
+  addLocale($classname, $prop, "$classname-$prop");
+  addLocale($classname, $prop, "$classname-$prop-desc");
+  addLocale($classname, $prop, "$classname-$prop-court");
   
   // Traductions de chaque propriété
 	foreach ($object->_specs as $prop => $spec) { 
@@ -88,13 +121,19 @@ foreach($classes as $class) {
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
     checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
     
+	  addLocale($classname, $prop, "$classname-$prop");
+	  addLocale($classname, $prop, "$classname-$prop-desc");
+	  addLocale($classname, $prop, "$classname-$prop-court");
+  
     if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
 	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.");        
+	      addLocale($classname, $prop, "$classname.$prop.");
       }
       
       foreach (explode("|", $spec->list) as $value) {
 	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.$value");
+	      addLocale($classname, $prop, "$classname.$prop.$value");
       }
     }
     
@@ -106,6 +145,7 @@ foreach($classes as $class) {
       // Find corresponding back name
       $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
       checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backName");
+	    addLocale($classname, $prop, "$spec->class-back-$backName");
     }
   }
 }
@@ -113,11 +153,12 @@ foreach($classes as $class) {
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("items"  		, $items);
+$smarty->assign("completions" , $completions);
 $smarty->assign("locales"  		, $localesDirs);
 $smarty->assign("modules"  		, $modules);
 $smarty->assign("module"   		, $module);
 $smarty->assign("trans"    		, $trans);
-$smarty->assign("backSpecs"   , $backSpecs);
 
 $smarty->display("mnt_traduction_classes.tpl");
 ?>

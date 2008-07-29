@@ -45,13 +45,13 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th colspan="2">{{tr}}Module{{/tr}}</th>
-    <th>{{tr}}Nom{{/tr}}</th>
-    <th>{{tr}}Type{{/tr}}</th>
+    <th colspan="2">{{mb_title class=CModule field=mod_name}}</th>
+    <th>{{mb_title class=CModule field=_view}}</th>
     <th>{{tr}}Status{{/tr}}</th>
-    <th>{{tr}}upgrade{{/tr}} ?</th>
+    <th>{{tr}}Upgrade{{/tr}} ?</th>
     <th>{{tr}}Version{{/tr}}</th>
-    <th>{{tr}}Menu Status{{/tr}}</th>
+    <th>{{mb_title class=CModule field=mod_active}}</th>
+    <th>{{mb_title class=CModule field=mod_ui_active}}</th>
     <th>#</th>
   </tr>
   
@@ -110,21 +110,20 @@ Main.add(function () {
     <td>
     	<!-- Actif -->
       {{mb_ternary var=dot test=$mbmodule->mod_active value=dotgreen other=dotyellowanim}}
-      {{mb_ternary var=active test=$mbmodule->mod_active value=active other=disabled}}
       <img alt="dot" src="./images/icons/{{$dot}}.gif" />
       {{if $mbmodule->mod_type == "core"}}
-      <strong>{{tr}}{{$active}}{{/tr}}</strong>
+      <strong>{{tr}}CModule-mod_active-{{$mbmodule->mod_active}}{{/tr}}</strong>
       {{else}}
       <a class="action" {{if $can->edit}}href="{{$cmd}}=toggle"{{/if}}>
-	      {{tr}}{{$active}}{{/tr}}
+	      {{tr}}CModule-mod_active-{{$mbmodule->mod_active}}{{/tr}}
       </a>
       {{/if}}
 
       <!-- Suppression -->
       {{if $mbmodule->mod_type != "core" && $can->edit}}
       |
-      <a class="action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}Confirm-module-deletion{{/tr}}');">
-        {{tr}}remove{{/tr}}
+      <a class="action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
+        {{tr}}Remove{{/tr}}
       </a>
       {{/if}}
       
@@ -137,14 +136,13 @@ Main.add(function () {
     </td>
 
     <!-- Mise à jour -->
-    <td>
+    <td style="text-align: center;">
       {{if $mbmodule->_upgradable}}
-      <a class="action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}Confirm-module-upgrade{{/tr}}')">
-        {{tr}}Upgrade{{/tr}}
-        &gt; {{$mbmodule->_latest}}
+      <a class="action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
+        {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
       </a>
       {{else}}
-      {{tr}}Uptodate{{/tr}}
+      &mdash;
       {{/if}}
     </td>
     
@@ -152,7 +150,7 @@ Main.add(function () {
     	{{$mbmodule->mod_version}}
     </td>
 
-    <td>
+    <td style="text-align: center;">
       {{mb_ternary var=dot test=$mbmodule->mod_ui_active value=dotgreen.gif other=dotredanim.gif}}
       <img alt="dot" src="./images/icons/{{$dot}}" />
       {{if $can->edit}}

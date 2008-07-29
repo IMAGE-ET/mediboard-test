@@ -20,7 +20,7 @@ else {
 
 if (!class_exists($setupclass = "CSetup$module->mod_name")) {
   if ($module->mod_type != "core") {
-    $AppUI->setMsg("Module does not have a valid setup class defined", UI_MSG_ERROR);
+    $AppUI->setMsg("CModule-msg-no-setup", UI_MSG_ERROR);
     $AppUI->redirect();
   }
 }
@@ -36,28 +36,28 @@ switch ($cmd) {
 	case "moveup":
 	case "movedn":
 	$module->move($cmd);
-	$AppUI->setMsg("Module re-ordered", UI_MSG_OK);
+	$AppUI->setMsg("CModule-msg-reordered", UI_MSG_OK);
 	break;
 		
 	case "toggle":
 	// just toggle the active state of the table entry
 	$module->mod_active = 1 - $module->mod_active;
 	$module->store();
-	$AppUI->setMsg("Module state changed", UI_MSG_OK);
+	$AppUI->setMsg("CModule-msg-state-changed", UI_MSG_OK);
 	break;
 
 	case "toggleMenu":
   // just toggle the active state of the table entry
 	$module->mod_ui_active = 1 - $module->mod_ui_active;
 	$module->store();
-   $AppUI->setMsg("Module menu state changed", UI_MSG_OK);
+   $AppUI->setMsg("CModule-msg-state-changed", UI_MSG_OK);
 	break;
 
 	case "remove":
   $success = $setup->remove();
   if($success !== null){
     $module->remove();
-    $AppUI->setMsg("Module removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
+    $AppUI->setMsg("CModule-msg-removed", $success ? UI_MSG_OK : UI_MSG_ERROR, true);
   }
   break;
 
@@ -100,7 +100,7 @@ switch ($cmd) {
 	if ($setup->configure()) { 	//returns true if configure succeeded
 	}
 	else {
-		$AppUI->setMsg("Module configuration failed", UI_MSG_ERROR);
+		$AppUI->setMsg("CModule-msg-config-failed", UI_MSG_ERROR);
 	}
 	break;
 

@@ -1,10 +1,13 @@
+<!-- Choix du module -->
 <form action="?m={{$m}}" name="modlang" method="get">
+
 <input type="hidden" name="m" value="{{$m}}" />
 <input type="hidden" name="tab" value="{{$tab}}" />
+
 <table class="main">
   <tr>
     <th>
-      Traduction
+      <label for="module" title="Filtrer le module de traduction">{{tr}}CModule{{/tr}}</label>
       <select name="module" onchange="this.form.submit()">
       {{foreach from=$modules item=curr_module}}
       <option value="{{$curr_module}}" {{if $curr_module == $module}} selected="selected" {{/if}}>
@@ -15,8 +18,10 @@
     </th>
   </tr>
 </table>
+
 </form>
 
+<!-- Modification des items -->
 <form action="?m={{$m}}" name="translate" method="post">
 
 <input type="hidden" name="m" value="{{$m}}" />
@@ -24,10 +29,60 @@
 <input type="hidden" name="module" value="{{$module}}" />
 <input type="hidden" name="trans[]" value="{{$trans}}" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
+
+<!-- Control tabs -->
+<ul id="tab-classes" class="control_tabs">
+  {{foreach from=$items key=class item=_item}}
+  <li>
+  	<a href="#class-{{$class}}">
+  	  {{tr}}{{$class}}{{/tr}}
+  	  <small>({{$completions.$class.percent}}%)</small>
+  	</a>
+	{{/foreach}}
+</ul>
+
+<hr class="control_tabs" />
+
+<script type="text/javascript">
+Main.add(function () {
+  Control.Tabs.create("tab-classes");
+} );
+</script>
+
 <table class="form">
-<tr>
+  <tr>
     <td>
-      <table class="tbl">
+      {{foreach from=$items key=class item=_item}}
+            
+      <table id="class-{{$class}}" class="tbl" style="display: none;">
+
+				<!-- Encouragements -->
+				<tr>
+				  <td colspan="10">
+			      {{if $completions.$class.percent == 0}}
+			      <div class="big-error">
+						  <strong>Attention...</strong>
+						  <p>Cette classe n'est absolument pas traduite, on ne peut garantir un affichage utilisable pour cette classe. Merci d'y remédier au plus vite.</p>
+						</div>
+			      {{elseif $completions.$class.percent < 50}}
+			      <div class="big-warning">
+						  <strong>Important</strong>
+						  <p>Cette classe est peu traduite, cela va probablement poser des problèmes d'affichage.</p>
+						</div>
+			      {{elseif $completions.$class.percent < 100}}
+			      <div class="big-info">
+						  <strong>Important</strong>
+						  <p>Cette classe est en cours de traduction, c'est un bon début, il reste encore des efforts à faire !</p>
+						</div>
+			      {{else}}
+			      <div class="big-success">
+						  <strong>Félicitations !</strong>
+						  <p>Cette classe est totalement traduite, ce qui est un gage de qualité manifeste !</p>
+						</div>
+			      {{/if}}
+				  </td>
+				</tr>
+				
         <tr>
           <th>Nom</th>
           <th>Chaine</th>
@@ -35,10 +90,9 @@
           <th>Save</th>
         </tr>
         
-        {{foreach from=$backSpecs key=key item=_item}}
         <tr>
 	        <th colspan="3" class="category">
-	     		 {{$key}}
+	     		 {{$class}}
 		    	</th>
 		    	<th class="category">
  	    		 <button type="submit" class="modify notext">{{tr}}Save{{/tr}}</button>
@@ -57,9 +111,9 @@
         {{/foreach}}
         </tbody>	
         {{/foreach}}
-        {{/foreach}}
        </table>
-    </td>
+       {{/foreach}}
+	  </td>
   </tr>
 </table>
 </form>

@@ -126,7 +126,7 @@ class CModule extends CMbObject {
   }
   
   function updateFormFields() {
-    $this->_view = $this->mod_name;
+    $this->_view = CAppUI::tr($this->mod_name);
   }
   
   function loadByName($name) {

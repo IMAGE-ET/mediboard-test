@@ -79,9 +79,11 @@ var Document = {
    */
   register: function(object_id, object_class, praticien_id, container, mode, userOptions) {
   	options = {
-  	 
+  	  mode: "normal",
+  	  categories: "hide"
   	}
   	
+  	Object.externd(options, userOptions);
   	
   	if (!mode) mode = "normal";
     var div = document.createElement("div");
