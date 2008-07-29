@@ -22,9 +22,8 @@ if ($module == "system") {
 }
 
 // liste des dossiers modules + common et styles
-$modules = $AppUI->readDirs("modules");
-CMbArray::removeValue(".svn", $modules);
-ksort($modules);
+$modules = array_keys(CModule::getInstalled());
+sort($modules);
 
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
@@ -37,7 +36,7 @@ $translateModule->sourcePath = null;
 $contenu_file = array();
 foreach($localesDirs as $locale){
   $translateModule->options = array("name" => "locales");
-  $translateModule->targetPath = "locales/fr/$modules[$module].php";
+  $translateModule->targetPath = "locales/fr/$module.php";
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
 }

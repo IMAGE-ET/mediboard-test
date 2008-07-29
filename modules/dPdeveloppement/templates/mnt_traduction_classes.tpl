@@ -11,7 +11,7 @@
       <select name="module" onchange="this.form.submit()">
       {{foreach from=$modules item=curr_module}}
       <option value="{{$curr_module}}" {{if $curr_module == $module}} selected="selected" {{/if}}>
-        {{$curr_module}}
+        {{tr}}module-{{$curr_module}}-court{{/tr}}
       </option>
       {{/foreach}}
       </select>
@@ -45,7 +45,7 @@
 
 <script type="text/javascript">
 Main.add(function () {
-  Control.Tabs.create("tab-classes");
+  Control.Tabs.create("tab-classes", true);
 } );
 </script>
 
@@ -112,6 +112,9 @@ Main.add(function () {
         </tbody>	
         {{/foreach}}
        </table>
+
+       {{foreachelse}}
+       <div class="big-info">Aucune classe à traduire pour ce module</div>
        {{/foreach}}
 	  </td>
   </tr>

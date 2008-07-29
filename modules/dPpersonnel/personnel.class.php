@@ -43,6 +43,12 @@ class CPersonnel extends CMbObject {
     return $specs;
   }
   
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs['affectations'] = 'CAffectationPersonnel personnel_id';
+	  return $backRefs;
+	}
+
   function loadRefsFwd() {
     parent::loadRefsFwd();
     $this->loadRefUser();
