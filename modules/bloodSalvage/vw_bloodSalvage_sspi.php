@@ -22,6 +22,8 @@ if($op) {
   $where = array();
   $where["operation_id"] = "='$selOp->_id'";  
   $blood_salvage->loadObject($where);
+  $blood_salvage->loadRefsFwd();
+  $blood_salvage->loadRefPlageOp();
 }
 
 $smarty = new CSmartyDP();

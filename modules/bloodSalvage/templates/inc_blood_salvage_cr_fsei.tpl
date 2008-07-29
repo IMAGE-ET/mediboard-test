@@ -1,7 +1,7 @@
 
   <tr>
     <th>Incident</th>
-    <td>
+    <td colspan="4">
     <form name="fsei" action="?m={{$m}}" method="post">
         <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
         <input type="hidden" name="m" value="bloodSalvage" />
@@ -14,6 +14,7 @@
 	      </select>
 	   </form>
     </td>
+    <!--  
     <th>Protocole qualité</th>
     <td>
       <select name="protocole-qualite">
@@ -22,6 +23,7 @@
         <option>Prélevé et transmis</option>
       </select>
     </td>
+    -->
     </tr>
     <tr>
     <td style="text-align:center;" colspan="4">

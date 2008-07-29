@@ -60,10 +60,10 @@ function printRapport() {
   return;
 }
 
-function submitTiming(oForm) {
+function submitBloodSalvageTiming(oForm) {
   submitFormAjax(oForm, 'systemMsg', { 
     onComplete : function() { 
-      reloadTiming(oForm.blood_salvage_id.value);
+      reloadBloodSalvageTiming(oForm.blood_salvage_id.value);
     } 
   });
 }
@@ -90,7 +90,7 @@ function reloadTotalTime(blood_salvage_id) {
   url.requestUpdate("totaltime", { waitingText: null } );
 }
 
-function reloadTiming(blood_salvage_id){ 
+function reloadBloodSalvageTiming(blood_salvage_id){ 
   var url = new Url();
   url.setModuleAction("bloodSalvage", "httpreq_vw_bs_sspi_timing");
   url.addParam("blood_salvage_id", blood_salvage_id);

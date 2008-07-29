@@ -20,7 +20,8 @@ $modif_operation    = $date>=mbDate();
 $blood_salvage = new CBloodSalvage();
 if($blood_salvage_id){
   $blood_salvage->load($blood_salvage_id);
-  $blood_salvage->loadRefs();
+  $blood_salvage->loadRefsFwd();
+  $blood_salvage->loadRefPlageOp();
 
   $timing["_recuperation_end"]         = array();
   $timing["_transfusion_start"]        = array();

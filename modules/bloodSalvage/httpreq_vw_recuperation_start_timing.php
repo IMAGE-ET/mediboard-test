@@ -21,13 +21,13 @@ $blood_salvage = new CBloodSalvage();
 if($blood_salvage_id){
   $blood_salvage->load($blood_salvage_id);
   $blood_salvage->loadRefs();
+  $blood_salvage->loadRefPlageOp();
   $timing["_recuperation_start"]       = array();
   foreach($timing as $key => $value) {
     for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
       $timing[$key][] = mbTime("$i minutes", $blood_salvage->$key);
     }
   }
-
 }
 // Création du template
 $smarty = new CSmartyDP();

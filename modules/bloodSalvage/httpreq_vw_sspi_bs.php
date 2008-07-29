@@ -46,6 +46,7 @@ if($op) {
   $where["operation_id"] = "='$op'";  
   $blood_salvage->loadObject($where);
   $blood_salvage->loadRefsFwd();
+  $blood_salvage->loadRefPlageOp();  
   $blood_salvage->_ref_operation->loadRefPatient();
   $timing["_recuperation_start"]       = array();
   $timing["_recuperation_end"]         = array();
