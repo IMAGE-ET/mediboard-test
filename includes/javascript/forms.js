@@ -945,8 +945,6 @@ Element.addMethods('select', {
     }
     /////////////////////////////
     
-    updateCoordinates();
-    
     // Tree -------------
     tree = new Element('ul')
               .addClassName(options.className);
@@ -1118,7 +1116,7 @@ Element.addMethods('select', {
 // Form getter
 function getForm(form, prepare) {
   prepare = prepare || true;
-	if (Object.isString() && document.forms[form]) {
+	if (Object.isString(form) && document.forms[form]) {
 	  if (prepare) prepareForm(document.forms[form]);
 	  return $(document.forms[form]);
 	} else {
