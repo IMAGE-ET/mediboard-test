@@ -7,8 +7,8 @@
  *  @author Sébastien Fillonneau
 */
 
-require_once("./classes/mbFieldSpec.class.php");
-require_once("./classes/fieldSpecs/numSpec.class.php");
+CAppUI::requireSystemClass("mbFieldSpec");
+CAppUI::requireSystemClass("fieldSpecs/numSpec");
 
 class CNumcharSpec extends CNumSpec {
   

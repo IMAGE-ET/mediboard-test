@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
 */
 
-require_once("./classes/mbFieldSpec.class.php");
+CAppUI::requireSystemClass("mbFieldSpec");
 
 class CFloatSpec extends CMbFieldSpec {
   

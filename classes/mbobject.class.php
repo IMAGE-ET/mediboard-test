@@ -7,9 +7,9 @@
  *  @author Thomas Despoix
  */
 
-require_once("./classes/request.class.php");
-require_once("./classes/mbFieldSpecFact.class.php");
-require_once("./classes/mbObjectSpec.class.php");
+CAppUI::requireSystemClass("request");
+CAppUI::requireSystemClass("mbFieldSpecFact");
+CAppUI::requireSystemClass("mbObjectSpec");
  
 /**
  * Class CMbObject 

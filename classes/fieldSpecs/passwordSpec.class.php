@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
 */
 
-require_once('./classes/mbFieldSpec.class.php');
+CAppUI::requireSystemClass("mbFieldSpec");
 
 class CPasswordSpec extends CMbFieldSpec {
   

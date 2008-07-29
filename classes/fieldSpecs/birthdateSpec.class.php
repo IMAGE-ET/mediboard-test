@@ -7,7 +7,7 @@
  *  @author Thomas Despoix
 */
 
-require_once("./classes/mbFieldSpec.class.php");
+CAppUI::requireSystemClass("mbFieldSpec");
 
 /**
  * Susceptible de gérer les dates de naissance non grégorienne 

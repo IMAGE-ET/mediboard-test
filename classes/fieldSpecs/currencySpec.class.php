@@ -7,7 +7,7 @@
  *  @author Sébastien Fillonneau
 */
 
-require_once("./classes/fieldSpecs/floatSpec.class.php");
+CAppUI::requireSystemClass("fieldSpecs/floatSpec");
 
 class CCurrencySpec extends CFloatSpec {
   function getSpecType() {
