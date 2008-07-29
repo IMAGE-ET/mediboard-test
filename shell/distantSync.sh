@@ -23,10 +23,5 @@ directory=$2
 destination=$3
 
 # Backups directory
-rsync -e ssh -avzn $location:$directory $destination/$(echo $location | cut -d'@' -f2)
+rsync -e ssh -avz $location:$directory $destination/$(echo $location | cut -d'@' -f2)
 check_errs $? "Failed to rsync Backups directory" "Succesfully rsync-ed Backups directory!"
-
-
-# system directory
-#rsync -e ssh -avzn $location:/var/www/html/mediboard /var/www/html/
-#check_errs $? "Failed to rsync Mediboard directory" "Succesfully rsync-ed Mediboard directory!"
