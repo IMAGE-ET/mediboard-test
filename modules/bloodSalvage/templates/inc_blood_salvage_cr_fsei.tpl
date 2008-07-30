@@ -1,4 +1,3 @@
-<table>
   <tr>
     <th>Incident</th>
     <td colspan="4">

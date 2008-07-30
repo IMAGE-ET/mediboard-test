@@ -22,13 +22,10 @@ var url = new Url;
 <div id="cell-saver-infos">
   {{include file="inc_vw_cell_saver_volumes.tpl}}
 </div>
-<div id="materiel">
+<div id="materiel-cr">
   {{include file=inc_vw_blood_salvage_sspi_materiel.tpl}}
-</div> 
-  <!-- CR et FSEI -->
-  <div id="incident">
-    {{include file=inc_blood_salvage_cr_fsei.tpl}}
-  </div>
-  <div id="listNurse">
+  {{include file=inc_blood_salvage_cr_fsei.tpl}}
+</div>
+<div id="listNurse">
   {{include file=inc_vw_blood_salvage_personnel.tpl}}
 </div>
