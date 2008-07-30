@@ -53,7 +53,7 @@ Main.add(function () {
     <th>{{mb_title class=CModule field=mod_version}}</th>
     <th>{{mb_title class=CModule field=mod_active}}</th>
     <th>{{mb_title class=CModule field=mod_ui_active}}</th>
-    <th colspan="2">#</th>
+    <th colspan="2">{{mb_title class=CModule field=mod_ui_order}}</th>
   </tr>
   
   {{foreach from=$mbmodules item=mbmodule}}

@@ -443,7 +443,7 @@ class CMediusers extends CMbObject {
 
     if ($msg = $this->check()) {
       return CAppUI::tr(get_class( $this )) .
-      CAppUI::tr("::store-check failed:") .
+      CAppUI::tr("CMbObject-msg-check-failed") .
       CAppUI::tr($msg);
     }
 

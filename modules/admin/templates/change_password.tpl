@@ -1,5 +1,5 @@
 <h1>
-  {{tr}}Change User Password{{/tr}}
+  {{tr}}CUser-user_password-change{{/tr}}
 </h1>
 <form name="chpwdFrm" action="?m={{$m}}&amp;{{if $message}}tab{{else}}a{{/if}}=chpwd" method="post" onsubmit="return checkForm(this)">
 <input type="hidden" name="dosql" value="do_chpwd_aed" />
@@ -13,8 +13,8 @@
 <table class="form">
   <tr>
     <th style="width:50%">
-      <label for="old_pwd" title="{{tr}}Current Password{{/tr}}">
-        {{tr}}Current Password{{/tr}}
+      <label for="old_pwd" title="{{tr}}CUser-user_password-current{{/tr}}">
+        {{tr}}CUser-user_password-current{{/tr}}
       </label>
     </th>
     <td style="width:50%">
@@ -23,8 +23,8 @@
   </tr>
   <tr>
     <th>
-      <label for="new_pwd1" title="{{tr}}New Password{{/tr}}">
-        {{tr}}New Password{{/tr}}
+      <label for="new_pwd1" title="{{tr}}CUser-user_password-new{{/tr}}">
+        {{tr}}CUser-user_password-new{{/tr}}
       </label>
     </th>
     <td>

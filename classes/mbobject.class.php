@@ -911,9 +911,9 @@ class CMbObject {
   
   
   /**
-   *  Inserts a new row if id is zero or updates an existing row in the database table
-   *  @param boolean $checkobject check values before storing if true (default)
-   *  @return null|string null if successful otherwise returns and error message
+   * Inserts a new row if id is zero or updates an existing row in the database table
+   * @param boolean $checkobject check values before storing if true (default)
+   * @return null|string null if successful otherwise returns and error message
    */
   function store() {
     // Properties checking
@@ -923,7 +923,7 @@ class CMbObject {
     
     if ($msg = $this->check()) {
       return CAppUI::tr(get_class($this)) . 
-        CAppUI::tr("::store-check failed:") .
+        CAppUI::tr("CMbObject-msg-check-failed") .
         CAppUI::tr($msg);
     }
 
@@ -1177,7 +1177,7 @@ class CMbObject {
         }
         
         if ($cascadeIssuesCount) {
-          $issues[] = CAppUI::tr("cascadeIssues")
+          $issues[] = CAppUI::tr("CMbObject-msg-cascade-issues")
             . " " . $cascadeIssuesCount 
             . "/" . count($cascadeObjects) 
             . " " . CAppUI::tr("$backSpec->class-back-$backName");
@@ -1195,7 +1195,7 @@ class CMbObject {
       }
     };
     $msg = count($issues) ?
-      CAppUI::tr("noDeleteRecord") . ": " . implode(", ", $issues) :
+      CAppUI::tr("CMbObject-msg-nodelete-backrefs") . ": " . implode(", ", $issues) :
       null;
     
     return $msg;

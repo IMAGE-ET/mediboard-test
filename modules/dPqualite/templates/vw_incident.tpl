@@ -129,7 +129,7 @@ Main.add(function () {
           <th>{{mb_label object=$fiche field="type_incident"}}</th>
           <td>
             <select name="type_incident" class="{{$fiche->_props.type_incident}}">
-            <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+            <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.type_incident selected=$fiche->type_incident}}
             </select>
           </td>
@@ -144,7 +144,7 @@ Main.add(function () {
           <th>{{mb_label object=$fiche field="elem_concerne"}}</th>
           <td>
             <select name="elem_concerne" class="{{$fiche->_props.elem_concerne}}">
-            <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+            <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
             {{html_options options=$fiche->_enumsTrans.elem_concerne selected=$fiche->elem_concerne}}
             </select>            
           </td>
@@ -236,7 +236,7 @@ Main.add(function () {
           <th colspan="2">{{mb_label object=$fiche field="suite_even"}}</th> 
           <td colspan="2">
             <select name="suite_even" class="{{$fiche->_props.suite_even}}" onchange="javascript:choixSuiteEven();">
-              <option value="">&mdash;{{tr}}select-choice{{/tr}} &mdash;</option>
+              <option value="">&mdash;{{tr}}Choose{{/tr}} &mdash;</option>
               {{html_options options=$fiche->_enumsTrans.suite_even selected=$fiche->suite_even}}
             </select>
             <table id="suiteEvenAutre" style="width:100%;{{if $fiche->suite_even!="autre"}}display:none;{{/if}}">
