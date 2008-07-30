@@ -369,7 +369,7 @@ function prepareForm(oForm, bForcePrepare) {
       }
       
       // Select tree
-      if (oElement.hasClassName("select-tree")) {
+      if (oElement.hasClassName("select-tree") && Prototype.Browser.Gecko) {
         oElement.buildTree();
       }
       
@@ -870,7 +870,7 @@ Element.addMethods('select', {
       dim = select.getDimensions();
       
       pos.left = pos.left+parseInt(select.getStyle('margin-left').split('px')[0])+'px';
-      pos.top = pos.top  +parseInt(select.getStyle('margin-top').split('px')[0])-1+dim.height+'px';
+      pos.top  = pos.top +parseInt(select.getStyle('margin-top').split('px')[0])-1+dim.height+'px';
     }
     
     var reposition = function () {
@@ -960,6 +960,7 @@ Element.addMethods('select', {
       tree.show();
       
       document.body.observe('mouseup', tree.undisplay);
+      return false;
     }
     
     tree.undisplay = function (e) {
@@ -1066,9 +1067,11 @@ Element.addMethods('select', {
         } else {
           list.getMatchingOptions(search.value);
         }
-      } else if (keycode == 27) { // Escape
+      }
+      else if (keycode == 27) { // Escape
         select.display(false);
-      } else if (keycode == 13) { // Enter
+      } 
+      else if (keycode == 13) { // Enter
         var focused = list.select('.focused');
         if (focused && (focused = focused[0])) {
           focused.onclick();
@@ -1109,7 +1112,7 @@ Element.addMethods('select', {
       search.observe('keydown', search.display);
     }
 
-    select.observe('click', tree.display);
+    select.onclick = tree.display;
   }
 });
 

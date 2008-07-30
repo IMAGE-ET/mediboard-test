@@ -1,8 +1,8 @@
-function refreshValue(element, class, id, field) {
+function refreshValue(element, klass, id, field) {
   if (id && $(element)) {
     var url = new Url;
     url.setModuleAction("dPstock", "httpreq_vw_object_value");
-    url.addParam("class", class);
+    url.addParam("class", klass);
     url.addParam("id", id);
     url.addParam("field", field);
     url.requestUpdate(element, {waitingText: null});

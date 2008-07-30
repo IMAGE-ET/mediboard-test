@@ -7,7 +7,13 @@ Main.add(function () {
 
 </script>
 
-<form name="test" action="?" method="get" onsubmit="if (checkForm(this)) {Console.debug(this.name+' submitted');} return false;">
+{{if !$dialog}}
+<a href="?m={{$m}}&amp;a={{$tab}}&amp;dialog=1">Lancer cette page sans les menus</a>
+{{else}}
+<a href="?m={{$m}}&amp;tab={{$a}}">Lancer cette page avec les menus</a>
+{{/if}}
+
+<form name="test" action="?" method="get" onsubmit="if (checkForm(this)) {Console.debug('form.submit()');} return false;">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
   
@@ -34,11 +40,12 @@ Main.add(function () {
       <td><input type="text" name="text_1" /> ~(99) 99 99 99 99</td>
     </tr>
     <tr>
-      <td><input type="text" name="text_2" onclick="Console.debug($(this).caret())" value="123456789"/></td>
+      <td>
+        <input type="text" name="text_2" value="123456789"/>
+        <button type="button" name="button_1" onclick="Console.debug($(this.form.text_2).caret(3, 6, 'toto'))">Caret</button>
+      </td>
     </tr>
-    <tr>
-      <td><button type="button" name="test_2" onclick="Console.debug($(this.form.text_2).caret(3, 6))">Caret</button></td>
-    </tr>
+
     
     <tr>
       <td><button type="submit" name="submit_1">OK</button></td>

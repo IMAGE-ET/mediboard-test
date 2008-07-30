@@ -1,33 +1,60 @@
 function getKeycode(e) {
-  return e.which || e.keyCode || window.event.keyCode || window.event.which;
+  return (window.event && (window.event.keyCode || window.event.which)) || e.which || e.keyCode || false;
 }
 
-//Helper Function for Caret positioning
+/** Helper Function for Caret positioning
+ * @param element The form element (automatically added by Prototype, don't use it)
+ * @param begin   Where the selection starts
+ * @param end     Where the selection ends
+ * @param value   The value replacing the selection
+ * @return If no argument is provided, it returns the selection start and end
+ *         If only start is provided, it puts the caret at the start position and returns an empty value
+ *         If start and end are provided, it selects the character range and returns the selected string
+ *         If value is provided, it returns the selected text and replaces it by value
+ */
 Element.addMethods(['input', 'textarea'], {
-  caret: function (element, begin, end) {
+  caret: function (element, begin, end, value) {
     if (element.length == 0) return null;
     
+    // Begin ?
     if (Object.isNumber(begin)) {
+      // End ?
       end = (Object.isNumber(end)) ? end : begin;
       
+      // Text replacement
+      var selected = element.value.substring(begin, end);
+      if (value) {
+        var s;
+        s = element.value.substring(0, begin) + 
+            value + 
+            element.value.substring(end, element.value.length);
+        element.value = s;
+      }
+      
+      // Gecko, Opera
       if(element.setSelectionRange) {
         element.focus();
-        element.setSelectionRange(begin, end);
+        element.setSelectionRange(begin, value ? begin+value.length : end);
       }
+      // IE
       else if (element.createTextRange) {
         var range = element.createTextRange();
         range.collapse(true);
-        range.moveEnd('character', end);
+        range.moveEnd('character', value ? begin+value.length : end);
         range.moveStart('character', begin);
         range.select();
       }
-      return null;
+
+      return selected;
     }
+    // No begin and end
     else {
+      // Gecko, Opera
       if (element.setSelectionRange) {
         begin = element.selectionStart;
         end = element.selectionEnd;
       }
+      // IE
       else if (document.selection && document.selection.createRange) {
         var range = document.selection.createRange();
         begin = 0 - range.duplicate().moveStart('character', -100000);
@@ -38,6 +65,13 @@ Element.addMethods(['input', 'textarea'], {
   }
 });
 
+/** Input mask for text input elements 
+ * @param element The form element (automatically added by Prototype, don't use it)
+ * @param mask    The input mask as a string composed by [9, a, *, ~] by default
+ * @param options Options : placeholder, 
+ *                          charmap, 
+ *                          completed (function called when the text is full)
+ */
 Element.addMethods('input', {
   mask: function(element, mask, options) {
     element.options = Object.extend({
@@ -49,7 +83,7 @@ Element.addMethods('input', {
         '~':"[+-]"
       },
       completed: Prototype.emptyFunction
-    }, options || {});
+    }, options);
 
     var maskArray = mask.toArray();
     var buffer = new Array(mask.length);
@@ -151,7 +185,7 @@ Element.addMethods('input', {
       if (ignore) {
         ignore = false;
         //Fixes Mac FF bug on backspace
-        //return (e.keyCode == 8) ? false : null;
+        return (e.keyCode == 8) ? false : null;
       }
       
       e = e || window.event;
@@ -249,11 +283,11 @@ Element.addMethods('input', {
       element.addEventListener('input', checkVal, false);
       
     checkVal();//Perform initial check for existing values
-  },
+  }/*,
   
   unmask: function(element) {
-    element.onfocus    = null;
-    element.onblur     = null;
+    element.stopObserving("focus", element.focusEvent);
+    element.stopObserving("blur",  element.checkVal);
     element.onkeydown  = null;
     element.onkeypress = null;
     
@@ -262,5 +296,5 @@ Element.addMethods('input', {
     
     if (Prototype.Browser.Gecko)
       element.removeEventListener('input', element.checkVal, false);
-  }
+  }*/
 });
