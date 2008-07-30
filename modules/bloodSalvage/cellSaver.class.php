@@ -22,9 +22,7 @@ class CCellSaver extends CMbObject {
     $spec->key   = 'cell_saver_id';
     return $spec;
   }
-  /*
-   * Spécifications. Indique les formats des différents éléments et références de la classe.
-   */
+
   function getSpecs() {
     $specs= parent::getSpecs();
     $specs["marque"] = "notNull str maxLength|50";
@@ -32,6 +30,12 @@ class CCellSaver extends CMbObject {
     return $specs;
   }
   
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs["blood_salvages"] = "CBloodSalvage cell_saver_id";
+	  return $backRefs;
+	}	
+	
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->marque $this->modele" ;

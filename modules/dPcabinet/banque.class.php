@@ -37,11 +37,17 @@ class CBanque extends CMbObject {
     );
   }
   
+	function getBackRefs() {
+	  $backRefs = parent::getBackRefs();
+	  $backRefs['users']      = 'CMediusers banque_id';
+	  $backRefs['reglements'] = 'CReglement banque_id';
+	  return $backRefs;
+	}
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = $this->nom;
   }
-
 }
 
 ?>

@@ -145,9 +145,9 @@ function getBackRefsSuggestion($c, $list_classes) {
   if (count($sugg)) {
     $ret = "function getBackRefs() {\n  \$backRefs = parent::getBackRefs();\n";
     foreach ($sugg as $key => $bs) {
-      $ret .= "  \$backRefs['$key'] ".str_pad('', $maxlength-strlen($key), ' ')."= '$bs';\n";
+      $ret .= "  \$backRefs[\"$key\"] ".str_pad('', $maxlength-strlen($key), ' ')."= \"$bs\";\n";
     }
-    $ret .= "  return \$backRefs;\n};";
+    $ret .= "  return \$backRefs;\n}";
   }
   return $ret;
 }

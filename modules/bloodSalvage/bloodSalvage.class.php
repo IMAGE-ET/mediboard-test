@@ -89,7 +89,7 @@ class CBloodSalvage extends CMbObject {
     
     return $specs;
 	}
-	
+
   function loadRefsFwd() { 	
   	$this->loadRefOperation();
     $this->loadRefPatient();
