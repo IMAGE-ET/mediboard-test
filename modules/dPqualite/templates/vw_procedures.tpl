@@ -17,7 +17,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : "{{tr}}msg-CFile-loadimgmini{{/tr}}" });
+  url.requestUpdate('bigView', { waitingText : "{{tr}}CFile-msg-loadimgmini{{/tr}}" });
 }
 
 </script>

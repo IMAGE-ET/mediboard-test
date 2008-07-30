@@ -22,7 +22,7 @@ function annuleFiche(oForm,annulation){
 
 function refusMesures(oForm){
   if(oForm.remarques.value == ""){
-    alert("{{tr}}msg-CFicheEi-validdoc{{/tr}}");
+    alert("{{tr}}CFicheEi-msg-validdoc{{/tr}}");
     oForm.remarques.focus();
   }else{
     oForm.service_date_validation.value = "";

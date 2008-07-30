@@ -11,10 +11,10 @@
   <tr>
     {{if $item->ei_item_id}}
     <th colspan="2" class="category modify">
-      {{tr}}msg-CEiItem-title-modify{{/tr}} : {{$item->_view}}
+      {{tr}}CEiItem-title-modify{{/tr}} : {{$item->_view}}
     {{else}}
     <th colspan="2" class="category">
-      {{tr}}msg-CEiItem-title-create{{/tr}}
+      {{tr}}CEiItem-title-create{{/tr}}
     {{/if}}
     </th>
   </tr>

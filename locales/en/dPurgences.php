@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CRPU-title-close'] = '';
+$locales['CRPU-title-close'] = '';
 $locales['CRPU'] = '';
 $locales['CRPU-ccmu'] = '';
 $locales['CRPU-ccmu-desc'] = '';
@@ -200,9 +200,9 @@ $locales['CRPU._mode_sortie.8'] = '';
 $locales['CRPU._mode_sortie.9'] = '';
 $locales['CSejour-back-'] = '';
 $locales['CSejour-back-rpu'] = '';
-$locales['msg-CRPU-create'] = '';
-$locales['msg-CRPU-delete'] = '';
-$locales['msg-CRPU-modify'] = '';
+$locales['CRPU-msg-create'] = '';
+$locales['CRPU-msg-delete'] = '';
+$locales['CRPU-msg-modify'] = '';
 $locales['config-dPurgences-old_rpu-desc'] = '';
 $locales['config-dPurgences-old_rpu-1'] = '';
 $locales['config-dPurgences-old_rpu-0'] = '';

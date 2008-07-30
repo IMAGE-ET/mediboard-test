@@ -55,7 +55,7 @@ foreach($medicaments as $code_cip){
 	$line_medicament->creator_id = $AppUI->user_id;
 
 	$msg = $line_medicament->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
   $lines["medicament"][$line_medicament->_id] = $line_medicament;
 }
 
@@ -68,7 +68,7 @@ foreach($elements as $element_id){
 	$line_element->creator_id = $AppUI->user_id;
 
 	$msg = $line_element->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-create");
 	$lines[$line_element->_ref_element_prescription->_ref_category_prescription->chapitre][$line_element->_id] = $line_element;
 }
 
@@ -121,7 +121,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 							$prise_posologie->unite_tous_les = $unite_tous_les;
 							$prise_posologie->decalage_prise = $decalage_prise;
 							$msg = $prise_posologie->store();
-							$AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+							$AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 						}
         	} else {
         		$prise_posologie = new CPrisePosologie();
@@ -133,7 +133,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 						  $prise_posologie->quantite = $quantite;
 						  $prise_posologie->moment_unitaire_id = $moment_unitaire_id;
 						  $msg = $prise_posologie->store();
-						  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+						  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 						}
 						// Prise Tous Les
 				    if($quantite && $nb_tous_les && $unite_tous_les){
@@ -143,7 +143,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 					    $prise_posologie->moment_unitaire_id = $moment_unitaire_id;
 					    $prise_posologie->decalage_prise = $decalage_prise;
 					    $msg = $prise_posologie->store();  	
-				      $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+				      $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 				    } 
         	}
         } 
@@ -164,7 +164,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 					  $prise->nb_fois = $nb_fois;
 					  $prise->unite_fois = $unite_fois;
 					  $msg = $prise->store(); 
-				 	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+				 	  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 				  }
 				  // Prise Tous Les
 				  if($quantite && $nb_tous_les && $unite_tous_les){
@@ -174,7 +174,7 @@ foreach($lines as $cat_name => $lines_by_cat){
 					  $prise->moment_unitaire_id = $moment_unitaire_id;
 					  $prise->decalage_prise = $decalage_prise;
 					  $msg = $prise->store();  	
-				    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+				    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 				  } 
 			  } 
        }

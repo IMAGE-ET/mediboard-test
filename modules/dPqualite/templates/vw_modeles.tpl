@@ -17,7 +17,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : "{{tr}}msg-CFile-loadimgmini{{/tr}}" });
+  url.requestUpdate('bigView', { waitingText : "{{tr}}CFile-msg-loadimgmini{{/tr}}" });
 }
 
 </script>
@@ -84,11 +84,11 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
           {{if $docGed->doc_ged_id}}
           <th class="title modify" colspan="2">
-            {{tr}}msg-CDocGed-title-modify-modele{{/tr}}
+            {{tr}}CDocGed-title-modify-modele{{/tr}}
             <input type="hidden" name="ged[user_id]" value="{{$docGed->user_id}}" />
           {{else}}
           <th class="title" colspan="2">
-            {{tr}}msg-CDocGed-title-create-modele{{/tr}}
+            {{tr}}CDocGed-title-create-modele{{/tr}}
             <input type="hidden" name="ged[user_id]" value="{{$user}}" />
           {{/if}}
           </th>
@@ -117,7 +117,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         <tr>
           <th>{{tr}}File{{/tr}}</th>
           <td class="button">
-            <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-loadimgmini{{/tr}}">
+            <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-loadimgmini{{/tr}}">
               <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
             </a>
           </td>

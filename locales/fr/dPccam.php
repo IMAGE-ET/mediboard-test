@@ -34,10 +34,10 @@ $locales['CUser-back-favoris_CCAM'] = "";
 $locales['mod-dPccam-tab-vw_find_code'] = "Rechercher un code";
 $locales['mod-dPccam-tab-vw_full_code'] = "Affichage d'un code";
 $locales['mod-dPccam-tab-vw_idx_favoris'] = "Mes favoris";
-$locales['msg-CActeCCAM-title-modify'] = "Modification Acte CCAM";
-$locales['msg-CFavoriCCAM-create'] = "Favori CCAM créé";
-$locales['msg-CFavoriCCAM-delete'] = "Favori CCAM supprimé";
-$locales['msg-CFavoriCCAM-modify'] = "Favori CCAM modifié";
+$locales['CActeCCAM-title-modify'] = "Modification Acte CCAM";
+$locales['CFavoriCCAM-msg-create'] = "Favori CCAM créé";
+$locales['CFavoriCCAM-msg-delete'] = "Favori CCAM supprimé";
+$locales['CFavoriCCAM-msg-modify'] = "Favori CCAM modifié";
 $locales['pref-ccam_consultation'] = "Gestion des actes CCAM des consultations";
 $locales['pref-ccam_sejour'] = "Gestion des actes CCAM des séjours";
 ?>

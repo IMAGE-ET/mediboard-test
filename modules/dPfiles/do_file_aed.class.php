@@ -68,7 +68,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
         }
         
         if ($file["error"] != 0) {
-          $AppUI->setMsg(CAppUI::tr("msg-CFile-upload-error-". $file["error"]), UI_MSG_ERROR);
+          $AppUI->setMsg(CAppUI::tr("CFile-msg-upload-error-". $file["error"]), UI_MSG_ERROR);
           continue;
         }
         

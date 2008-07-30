@@ -101,7 +101,7 @@
 
 <table class="form">
   <tr>
-    <th class="category" colspan="2">{{tr}}msg-COperation-horodatage{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}COperation-msg-horodatage{{/tr}}</th>
   </tr>
   
   <tr>

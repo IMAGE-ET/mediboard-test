@@ -66,7 +66,7 @@ $actes_ccam = $acte_ccam->loadMatchingList();
 foreach($actes_ccam as $key => $_acte_ccam){
   $_acte_ccam->signe = 1;
   $msg = $_acte_ccam->store();
-  viewMsg($msg, "msg-CActeCCAM-title-modify", $redirectUrl);
+  viewMsg($msg, "CActeCCAM-title-modify", $redirectUrl);
 }
 
 $AppUI->redirect($redirectUrl);

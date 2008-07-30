@@ -22,7 +22,7 @@ $protocole->loadRefsLinesAllComments();
 $protocole->_id = "";
 $protocole->libelle = "Copie de $protocole->libelle";
 $msg = $protocole->store();
-$AppUI->displayMsg($msg, "msg-CPrescription-create");
+$AppUI->displayMsg($msg, "CPrescription-msg-create");
 
 // Parcours des medicaments
 foreach($protocole->_ref_prescription_lines as $line){
@@ -30,14 +30,14 @@ foreach($protocole->_ref_prescription_lines as $line){
 	$line->prescription_id = $protocole->_id;
 	$line->_id = "";
 	$msg = $line->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
 	
 	// Parcours des prises
 	foreach($line->_ref_prises as $prise){
 	  $prise->_id = "";
 		$prise->object_id = $line->_id;
 		$msg = $prise->store();
-	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+	  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 	}
 }
 
@@ -47,14 +47,14 @@ foreach($protocole->_ref_prescription_lines_element as $line_element){
 	$line_element->prescription_id = $protocole->_id;
 	$line_element->_id = "";
 	$line_element->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-create");
 	
   // Parcours des prises
 	foreach($line_element->_ref_prises as $prise){
 	  $prise->_id = "";
 		$prise->object_id = $line_element->_id;
 		$msg = $prise->store();
-	  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+	  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
 	}
 }
 
@@ -63,7 +63,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$line_comment->prescription_id = $protocole->_id;
 	$line_comment->_id = "";
 	$line_comment->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
 }
 
 

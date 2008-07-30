@@ -34,10 +34,10 @@ $locales['CUser-back-favoris_CCAM'] = "";
 $locales['mod-dPccam-tab-vw_find_code'] = "";
 $locales['mod-dPccam-tab-vw_full_code'] = "";
 $locales['mod-dPccam-tab-vw_idx_favoris'] = "";
-$locales['msg-CActeCCAM-title-modify'] = "";
-$locales['msg-CFavoriCCAM-create'] = "";
-$locales['msg-CFavoriCCAM-delete'] = "";
-$locales['msg-CFavoriCCAM-modify'] = "";
+$locales['CActeCCAM-title-modify'] = "";
+$locales['CFavoriCCAM-msg-create'] = "";
+$locales['CFavoriCCAM-msg-delete'] = "";
+$locales['CFavoriCCAM-msg-modify'] = "";
 $locales['pref-ccam_consultation'] = "";
 $locales['pref-ccam_sejour'] = "";
 ?>

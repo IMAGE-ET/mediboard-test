@@ -264,7 +264,7 @@ $locales['mod-dPlabo-tab-vw_edit_idLabo'] = "Identifiants Labo";
 $locales['mod-dPlabo-tab-vw_edit_packs'] = "Packs (gestion)";
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = "Prescriptions";
 $locales['mod-dPlabo-tab-vw_resultats'] = "Résultats";
-$locales['msg-CPrescriptionLaboExamen-create'] = "Item de prescription ajouté";
-$locales['msg-CPrescriptionLaboExamen-delete'] = "Item de prescription supprimé";
-$locales['msg-CPrescriptionLaboExamen-modify'] = "Item de prescription modifié";
+$locales['CPrescriptionLaboExamen-msg-create'] = "Item de prescription ajouté";
+$locales['CPrescriptionLaboExamen-msg-delete'] = "Item de prescription supprimé";
+$locales['CPrescriptionLaboExamen-msg-modify'] = "Item de prescription modifié";
 ?>

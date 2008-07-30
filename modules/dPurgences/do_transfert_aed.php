@@ -53,7 +53,7 @@ if ($rpu->motif){
 
 $sejour->updateDBFields();
 $msg = $sejour->store();
-viewMsg($msg, "msg-CSejour-title-create");
+viewMsg($msg, "CSejour-title-create");
 
 // Chargement des actes de la prise en charge aux urgences
 $consult_atu =& $rpu->_ref_consult;
@@ -74,14 +74,14 @@ $consult_atu->du_tiers = 0;
 $consult_atu->secteur1 = 0;
 $consult_atu->secteur2 = 0;
 $msg = $consult_atu->store();
-viewMsg($msg, "msg-CConsultation-title-modify");
+viewMsg($msg, "CConsultation-title-modify");
 
 // Sauvegarde du RPU
 $rpu->orientation = "HO";
 $rpu->mutation_sejour_id = $sejour->_id;
 $rpu->gemsa = "4";
 $msg = $rpu->store();
-viewMsg($msg, "msg-CRPU-title-close");
+viewMsg($msg, "CRPU-title-close");
 
 // Sauvegarde du sejour
 $sejour_rpu->sortie_reelle = mbDateTime();
@@ -89,7 +89,7 @@ $sejour_rpu->mode_sortie = "transfert";
 $sejour_rpu->annule = "1";
 $sejour_rpu->etablissement_transfert_id = "";
 $msg = $sejour_rpu->store();
-viewMsg($msg, "msg-CSejour-title-close", "(Urgences)");
+viewMsg($msg, "CSejour-title-close", "(Urgences)");
 
 $AppUI->redirect("m=dPplanningOp&tab=vw_edit_sejour&sejour_id=$sejour->_id");
 

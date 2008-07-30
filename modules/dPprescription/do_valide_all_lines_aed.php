@@ -83,7 +83,7 @@ function insertMedElts($lines, $prescription, $sejour){
 			  $prise->_id = "";
 			  $prise->object_id = $line->_id;
 			  $msg = $prise->store();
-		    $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
+		    $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  	
 		  }
   	}
   }
@@ -140,7 +140,7 @@ if($prescription->_id && $chapitre == "medicament"){
 		  $_line_traitement->signee = 1;
 		}
 		$msg = $_line_traitement->store();
-	  $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
+	  $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
 	}
 }
 
@@ -252,7 +252,7 @@ foreach($medicaments as $key => $lineMedicament){
 	  $lineMedicament->signee = 1;
 	}
 	$msg = $lineMedicament->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-modify");	
+	$AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-modify");	
 }
 
 // Parcours des medicaments et passage de valide à 1
@@ -260,7 +260,7 @@ if(!$mode_pharma){
 	foreach($elements as $key => $lineElement){
 		$lineElement->signee = 1;
 		$msg = $lineElement->store();
-		$AppUI->displayMsg($msg, "msg-CPrescriptionLineElement-modify");	
+		$AppUI->displayMsg($msg, "CPrescriptionLineElement-msg-modify");	
 	}
 }
 
@@ -269,7 +269,7 @@ if(!$mode_pharma){
 	foreach($comments as $key => $lineComment){
 		$lineComment->signee = 1;
 		$msg = $lineComment->store();
-		$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-modify");	
+		$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-modify");	
 	}
 }
 

@@ -52,12 +52,12 @@ $locales['config-dPfiles-upload_max_filesize'] = "Taille maximale fichier";
 $locales['mod-dPfiles-tab-files_integrity'] = "Vérification fichiers";
 $locales['mod-dPfiles-tab-vw_category'] = "Gérer les catégories";
 $locales['mod-dPfiles-tab-vw_files'] = "Visualiser les fichiers";
-$locales['msg-CFile-loadimgmini'] = "Chargement du miniature";
-$locales['msg-CFile-maxsize'] = "Taille maximale des fichiers";
-$locales['msg-CFile-viewfile'] = "Voir le Fichier";
-$locales['msg-CFile-upload-error-1'] = "Fichier trop volumineux";
-$locales['msg-CFile-upload-error-2'] = "Fichier trop volumineux";
-$locales['msg-CFile-upload-error-3'] = "Chargement partiel ou interrompu";
-$locales['msg-CFile-upload-error-4'] = "Fichier absent";
+$locales['CFile-msg-loadimgmini'] = "Chargement du miniature";
+$locales['CFile-msg-maxsize'] = "Taille maximale des fichiers";
+$locales['CFile-msg-viewfile'] = "Voir le Fichier";
+$locales['CFile-msg-upload-error-1'] = "Fichier trop volumineux";
+$locales['CFile-msg-upload-error-2'] = "Fichier trop volumineux";
+$locales['CFile-msg-upload-error-3'] = "Chargement partiel ou interrompu";
+$locales['CFile-msg-upload-error-4'] = "Fichier absent";
 
 ?>

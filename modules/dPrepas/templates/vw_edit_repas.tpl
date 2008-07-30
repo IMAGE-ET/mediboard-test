@@ -46,10 +46,10 @@ Main.add(function () {
   <tr>
     {{if $repas->repas_id}}
     <th class="title modify" colspan="3">
-      {{tr}}msg-CRepas-title-modify{{/tr}}
+      {{tr}}CRepas-title-modify{{/tr}}
     {{else}}
     <th class="title" colspan="3">
-      {{tr}}msg-CRepas-title-create{{/tr}}
+      {{tr}}CRepas-title-create{{/tr}}
     {{/if}}
     </th>
   </tr>

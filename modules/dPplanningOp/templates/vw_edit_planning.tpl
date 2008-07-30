@@ -133,7 +133,7 @@ function cancelObjects() {
         {{tr}}button-COperation-choixProtocole{{/tr}}
       </button>
       {{mb_ternary var=message test=$op->_id value=modify other=create}}
-      {{tr}}msg-COperation-title-{{$message}}{{if $modurgence}}-urgence{{/if}}{{/tr}} 
+      {{tr}}COperation-title-{{$message}}{{if $modurgence}}-urgence{{/if}}{{/tr}} 
       {{$patient->_view}} 
       {{if $chir->_id}}
       par le Dr {{$chir->_view}}

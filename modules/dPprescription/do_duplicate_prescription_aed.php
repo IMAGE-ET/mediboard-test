@@ -37,7 +37,7 @@ $prescription->_id = "";
 $prescription->type = $type;
 
 $msg = $prescription->store();
-$AppUI->displayMsg($msg, "msg-CPrescription-create");
+$AppUI->displayMsg($msg, "CPrescription-msg-create");
 if($msg){
 	echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";
 	echo $AppUI->getMsg();
@@ -116,7 +116,7 @@ foreach($lines as $cat => $lines_by_type){
 			$prise->_id = "";
 			$prise->object_id = $line->_id;
 			$msg = $prise->store();
-		  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
+		  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  	
 		}
 	}
 }

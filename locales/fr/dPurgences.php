@@ -1,5 +1,5 @@
 <?php
-$locales['msg-CRPU-title-close'] = 'Fermeture du RPU';
+$locales['CRPU-title-close'] = 'Fermeture du RPU';
 $locales['CRPU'] = 'Résumé de passage aux urgences';
 $locales['CRPU-ccmu'] = 'Degré d\'urgence';
 $locales['CRPU-ccmu-desc'] = 'Degré d\'urgence CCMU estimé';
@@ -157,9 +157,9 @@ $locales['CRPU.provenance.'] = '';
 $locales['CRPU.transport.'] = 'Indéterminé';
 $locales['CSejour-back-'] = '';
 $locales['CSejour-back-rpu'] = 'RPU';
-$locales['msg-CRPU-create'] = 'RPU créé';
-$locales['msg-CRPU-delete'] = 'RPU supprimé';
-$locales['msg-CRPU-modify'] = 'RPU modifié';
+$locales['CRPU-msg-create'] = 'RPU créé';
+$locales['CRPU-msg-delete'] = 'RPU supprimé';
+$locales['CRPU-msg-modify'] = 'RPU modifié';
 $locales['CRPU-type_pathologie'] = 'Type de pathologie';
 $locales['CRPU-type_pathologie-court'] = 'Pathologie';
 $locales['CRPU-type_pathologie-desc'] = 'Type de pathologie';

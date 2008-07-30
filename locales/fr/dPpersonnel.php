@@ -64,11 +64,11 @@ $locales['CPersonnel-_user_last_name-court'] = '';
 $locales['CPersonnel-_user_last_name-desc'] = '';
 $locales['CPersonnel-actif-court'] = '';
 $locales['CPersonnel-actif-desc'] = '';
-$locales['msg-CAffectationPersonnel-create'] = 'Affectation créée';
-$locales['msg-CAffectationPersonnel-delete'] = 'Affectation supprimée';
-$locales['msg-CAffectationPersonnel-modify'] = 'Affectation modifiée';
-$locales['msg-CPersonnel-create'] = '';
-$locales['msg-CPersonnel-delete'] = '';
-$locales['msg-CPersonnel-modify'] = '';
+$locales['CAffectationPersonnel-msg-create'] = 'Affectation créée';
+$locales['CAffectationPersonnel-msg-delete'] = 'Affectation supprimée';
+$locales['CAffectationPersonnel-msg-modify'] = 'Affectation modifiée';
+$locales['CPersonnel-msg-create'] = '';
+$locales['CPersonnel-msg-delete'] = '';
+$locales['CPersonnel-msg-modify'] = '';
 $locales['CPersonnel-back-affectations'] = 'Affectations';
 ?>

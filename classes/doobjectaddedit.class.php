@@ -36,9 +36,9 @@ class CDoObjectAddEdit {
     $this->redirectError       = null;
     $this->redirectDelete      = null;
 
-    $this->createMsg           = CAppUI::tr("msg-$className-create");
-    $this->modifyMsg           = CAppUI::tr("msg-$className-modify");
-    $this->deleteMsg           = CAppUI::tr("msg-$className-delete");
+    $this->createMsg           = CAppUI::tr("$className-msg-create");
+    $this->modifyMsg           = CAppUI::tr("$className-msg-modify");
+    $this->deleteMsg           = CAppUI::tr("$className-msg-delete");
     
     $this->refTab              =& $_POST;
 

@@ -182,7 +182,7 @@
   </tr>
   {{else}}
   <tr>
-    <th class="category" colspan="2">{{tr}}msg-CSejour-hospi{{/tr}}</th>
+    <th class="category" colspan="2">{{tr}}CSejour-msg-hospi{{/tr}}</th>
   </tr>
   
   <tr>

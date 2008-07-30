@@ -28,7 +28,7 @@ foreach($prescription_traitement->_ref_prescription_lines as &$line) {
 	if($actionType == "stop" && !$line->date_arret) {
 		$line->date_arret = $date;
 		$line->time_arret = $time;
-    $AppUI->displayMsg($line->store(), "msg-CPrescriptionLineMedicament-store");
+    $AppUI->displayMsg($line->store(), "CPrescriptionLineMedicament-msg-store");
 	}
 	if($actionType == "go" && $line->date_arret) {
 		$line->duplicateLine($praticien_id, $prescription_id, $date, $time);

@@ -26,7 +26,7 @@ $locales['CFavoricim10-favoris_id'] = "ID favori CIM";
 $locales['CFavoricim10-favoris_id-court'] = "";
 $locales['CFavoricim10-favoris_id-desc'] = "";
 $locales['CUser-back-favoris_CIM10'] = "Favoris CIM";
-$locales['msg-CFavoricim10-create'] = "Favori CIM créé";
-$locales['msg-CFavoricim10-delete'] = "Favori CIM supprimé";
-$locales['msg-CFavoricim10-modify'] = "Favori CIM modifié";
+$locales['CFavoricim10-msg-create'] = "Favori CIM créé";
+$locales['CFavoricim10-msg-delete'] = "Favori CIM supprimé";
+$locales['CFavoricim10-msg-modify'] = "Favori CIM modifié";
 ?>

@@ -16,7 +16,7 @@ function annuleDoc(oForm,annulation){
 
 function validDoc(oForm){
   if(oForm.elements["suivi[remarques]"].value == ""){
-    alert("{{tr}}msg-CDocGed-refusdoc{{/tr}}");
+    alert("{{tr}}CDocGed-msg-refusdoc{{/tr}}");
     oForm.elements["suivi[remarques]"].focus();
   }else{
     oForm.elements["suivi[doc_ged_suivi_id]"].value = "";
@@ -37,7 +37,7 @@ function validDocDirect(oForm){
 
 function refuseDoc(oForm){
   if(oForm.elements["suivi[remarques]"].value == ""){
-    alert("{{tr}}msg-CDocGed-refusdoc{{/tr}}");
+    alert("{{tr}}CDocGed-msg-refusdoc{{/tr}}");
     oForm.elements["suivi[remarques]"].focus();
   }else{
     oForm.elements["suivi[doc_ged_suivi_id]"].value = "";    
@@ -225,7 +225,7 @@ function redactionDoc(oForm){
                 {{tr}}button-CDocGed-retablir{{/tr}}
               </button>
               {{if $currProc->etat==$currProc|const:'TERMINE'}}
-              {{tr}}msg-CDocGed-etat_INDISPO{{/tr}}
+              {{tr}}CDocGed-msg-etat_INDISPO{{/tr}}
               {{else}}
               <strong>{{tr}}_CDocGed_attente{{/tr}}</strong>
               {{/if}}

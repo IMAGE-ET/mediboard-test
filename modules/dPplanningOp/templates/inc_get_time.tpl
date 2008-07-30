@@ -5,7 +5,7 @@ periodicalTimeUpdater.currentlyExecuting = true;
 {{/if}}
 
 {{if $temps}}
-  <i>{{tr}}msg-COperation-EstimateTime{{/tr}} : {{$temps}}</i>
+  <i>{{tr}}COperation-msg-EstimateTime{{/tr}} : {{$temps}}</i>
 {{else}}
-  <i>{{tr}}msg-COperation-EstimateTime{{/tr}} : -</i>
+  <i>{{tr}}COperation-msg-EstimateTime{{/tr}} : -</i>
 {{/if}}

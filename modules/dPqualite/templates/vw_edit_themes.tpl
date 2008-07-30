@@ -48,9 +48,9 @@
       <table class="form">
         <tr>
           {{if $theme->_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CThemeDoc-title-modify{{/tr}}: {{$theme->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CThemeDoc-title-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CThemeDoc-title-create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>

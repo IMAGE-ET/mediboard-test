@@ -28,7 +28,7 @@
   </tr>
   <tr>
     <td colspan="2" class="button">
-      <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastactif->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
+      <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastactif->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
         <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastactif->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
       </a>
     </td>

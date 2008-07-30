@@ -198,7 +198,7 @@ class CFicheEi extends CMbObject {
   }
   
   function canDeleteEx() {
-    return CAppUI::tr("msg-CFicheEi-canDelete");
+    return CAppUI::tr("CFicheEi-msg-canDelete");
   }
   
   function loadFichesEtat($etat, $user_id = null, $where_termine = null, $annule = 0){

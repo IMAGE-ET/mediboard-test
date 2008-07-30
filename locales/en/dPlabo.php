@@ -264,7 +264,7 @@ $locales['mod-dPlabo-tab-vw_edit_idLabo'] = "";
 $locales['mod-dPlabo-tab-vw_edit_packs'] = "";
 $locales['mod-dPlabo-tab-vw_edit_prescriptions'] = "";
 $locales['mod-dPlabo-tab-vw_resultats'] = "Results";
-$locales['msg-CPrescriptionLaboExamen-create'] = "";
-$locales['msg-CPrescriptionLaboExamen-delete'] = "";
-$locales['msg-CPrescriptionLaboExamen-modify'] = "";
+$locales['CPrescriptionLaboExamen-msg-create'] = "";
+$locales['CPrescriptionLaboExamen-msg-delete'] = "";
+$locales['CPrescriptionLaboExamen-msg-modify'] = "";
 ?>

@@ -429,9 +429,9 @@ $locales['CSpEtablissement-_view'] = '';
 $locales['CSpEtablissement-_view-court'] = '';
 $locales['CSpEtablissement-_view-desc'] = '';
 $locales['mod-sherpa-tab-object_properties'] = '';
-$locales['msg-CSpEtablissement-create'] = '';
-$locales['msg-CSpEtablissement-delete'] = '';
-$locales['msg-CSpEtablissement-modify'] = '';
+$locales['CSpEtablissement-msg-create'] = '';
+$locales['CSpEtablissement-msg-delete'] = '';
+$locales['CSpEtablissement-msg-modify'] = '';
 $locales['mod-sherpa-tab-view_urgdro'] = '';
 $locales['mod-sherpa-tab-view_detngap'] = '';
 ?>

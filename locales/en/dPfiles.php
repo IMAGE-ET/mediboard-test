@@ -52,7 +52,7 @@ $locales['config-dPfiles-upload_max_filesize'] = "Upload max file size";
 $locales['mod-dPfiles-tab-files_integrity'] = "";
 $locales['mod-dPfiles-tab-vw_category'] = "";
 $locales['mod-dPfiles-tab-vw_files'] = "";
-$locales['msg-CFile-loadimgmini'] = "Chargement du miniature";
-$locales['msg-CFile-maxsize'] = "Taille maximale des fichiers";
-$locales['msg-CFile-viewfile'] = "Voir le Fichier";
+$locales['CFile-msg-loadimgmini'] = "Chargement du miniature";
+$locales['CFile-msg-maxsize'] = "Taille maximale des fichiers";
+$locales['CFile-msg-viewfile'] = "Voir le Fichier";
 ?>

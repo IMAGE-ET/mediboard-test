@@ -348,7 +348,7 @@ class CPrescriptionLine extends CMbObject {
     $new_line->creator_id = $AppUI->user_id;
     $msg = $new_line->store();
     
-    $AppUI->displayMsg($msg, "msg-CPrescriptionLineMedicament-create");
+    $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");
     
     foreach($new_line->_ref_prises as &$prise){
       // On copie les prises
@@ -356,7 +356,7 @@ class CPrescriptionLine extends CMbObject {
       $prise->object_id = $new_line->_id;
       $prise->object_class = "CPrescriptionLineMedicament";
       $msg = $prise->store();
-      $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");
+      $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");
     }
     
     $old_line = new CPrescriptionLineMedicament();

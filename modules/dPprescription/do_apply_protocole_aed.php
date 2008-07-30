@@ -116,7 +116,7 @@ foreach($lines as $type => $lines_by_type){
 		  $_line->praticien_id = $praticien_id;
 		  $_line->creator_id = $AppUI->user_id;
 		  $msg = $_line->store();
-		  $AppUI->displayMsg($msg, "msg-$object_class-create");  
+		  $AppUI->displayMsg($msg, "$object_class-msg-create");  
 		  	
 			// Parcours des prises
 			foreach($_line->_ref_prises as $prise){
@@ -124,7 +124,7 @@ foreach($lines as $type => $lines_by_type){
 				$prise->object_id = $_line->_id;
 				$prise->object_class = $object_class;
 			  $msg = $prise->store();
-			  $AppUI->displayMsg($msg, "msg-CPrisePosologie-create");  	
+			  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  	
 			}	  
 		}
 	}
@@ -137,7 +137,7 @@ foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
 	$line_comment->praticien_id = $praticien_id;
 	$line_comment->creator_id = $AppUI->user_id;
 	$msg = $line_comment->store();
-	$AppUI->displayMsg($msg, "msg-CPrescriptionLineComment-create");
+	$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
 }
 
 // Lancement du refresh des lignes de la prescription

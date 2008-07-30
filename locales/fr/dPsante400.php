@@ -46,10 +46,10 @@ $locales['config-dPsante400-pass'] = "Mot de passe";
 $locales['config-dPsante400-pass-desc'] = "Mot de passe de la DSN";
 $locales['config-dPsante400-user'] = "Utilisateur";
 $locales['config-dPsante400-user-desc'] = "Nom d'utilisation de la DSN";
-$locales['msg-CIdSante400-create'] = "Identifiant Externe créé";
-$locales['msg-CIdSante400-delete'] = "Identifiant Externe supprimé";
-$locales['msg-CIdSante400-modify'] = "Identifiant Externe modifié";
-$locales['msg-CIdSante400-title-create'] = "Création de l'identifiant externe";
-$locales['msg-CIdSante400-title-delete'] = "Suppression de l'identifiant externe";
-$locales['msg-CIdSante400-title-modify'] = "Modification de l'identifiant externe";
+$locales['CIdSante400-msg-create'] = "Identifiant Externe créé";
+$locales['CIdSante400-msg-delete'] = "Identifiant Externe supprimé";
+$locales['CIdSante400-msg-modify'] = "Identifiant Externe modifié";
+$locales['CIdSante400-title-create'] = "Création de l'identifiant externe";
+$locales['CIdSante400-title-delete'] = "Suppression de l'identifiant externe";
+$locales['CIdSante400-title-modify'] = "Modification de l'identifiant externe";
 ?>

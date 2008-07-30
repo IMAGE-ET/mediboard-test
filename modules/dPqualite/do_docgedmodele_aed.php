@@ -131,6 +131,6 @@ if($file_id){
   $do2->doIt();
 }elseif($_firstModeleGed){
   $do1->dodelete();
-  $AppUI->setMsg("msg-CDocGed-error_file", UI_MSG_ERROR );
+  $AppUI->setMsg("CDocGed-msg-error_file", UI_MSG_ERROR );
 }
 ?>

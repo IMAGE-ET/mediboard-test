@@ -78,9 +78,11 @@ foreach ($classes as $class) {
   addLocale($classname, $classname, "$classname");
   addLocale($classname, $classname, "$classname.one");
   addLocale($classname, $classname, "$classname.none");
-  addLocale($classname, $classname, "msg-$classname-create");
-  addLocale($classname, $classname, "msg-$classname-modify");
-  addLocale($classname, $classname, "msg-$classname-delete");
+  addLocale($classname, $classname, "$classname-msg-create");
+  addLocale($classname, $classname, "$classname-msg-modify");
+  addLocale($classname, $classname, "$classname-msg-delete");
+  addLocale($classname, $classname, "$classname-title-create");
+  addLocale($classname, $classname, "$classname-title-modify");
   
   // Traductions pour la clé 
   $prop = $object->_spec->key;

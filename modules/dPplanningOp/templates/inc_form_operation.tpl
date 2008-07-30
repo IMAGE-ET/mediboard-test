@@ -36,7 +36,7 @@
         <img alt="Ecrire une note" src="images/icons/note_grey.png" />
       </div>
       {{/if}}
-      {{tr}}msg-COperation-informations{{/tr}}
+      {{tr}}COperation-msg-informations{{/tr}}
     </th>
   </tr>
   

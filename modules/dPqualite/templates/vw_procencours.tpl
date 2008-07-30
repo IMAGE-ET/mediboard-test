@@ -200,10 +200,10 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               {{if $docGed->etat==$docGed|const:'TERMINE'}}
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              {{tr}}msg-CDocGed-title-modify-demande{{/tr}}
+              {{tr}}CDocGed-title-modify-demande{{/tr}}
               {{else}}
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="{{$docGed->_lastentry->doc_ged_suivi_id}}" />              
-              {{tr}}msg-CDocGed-title-modify{{/tr}}
+              {{tr}}CDocGed-title-modify{{/tr}}
               {{/if}}
             </th>
           <!-- Procédure en cours de rédaction -->
@@ -212,12 +212,12 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'VALID'}}" />
               <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'REDAC'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              {{tr}}msg-CDocGed-etatredac_REDAC{{/tr}}
+              {{tr}}CDocGed-msg-etatredac_REDAC{{/tr}}
             </th>
           <!-- Procédure validée -->
           {{elseif $docGed->doc_ged_id}}
             <th class="title modify" colspan="2">
-              {{tr}}msg-CDocGed-title-valid{{/tr}}
+              {{tr}}CDocGed-title-valid{{/tr}}
             </th>
           {{else}}
           <!-- Nouvelle procedure -->
@@ -226,7 +226,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
               <input type="hidden" name="ged[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               <input type="hidden" name="suivi[etat]" value="{{$docGed|const:'DEMANDE'}}" />
               <input type="hidden" name="suivi[doc_ged_suivi_id]" value="" />
-              {{tr}}msg-CDocGed-title-create{{/tr}}
+              {{tr}}CDocGed-title-create{{/tr}}
             </th>
           {{/if}}                    
         </tr>
@@ -310,7 +310,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
           <tr>
             <th>{{tr}}_CDocGed_lastfile{{/tr}}</th>
             <td>
-              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
+              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
                 <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
             </td>
@@ -347,7 +347,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             <td class="button text" colspan="2">
               <br />{{tr}}_CDocGed_valid{{/tr}}
               <br />
-              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}msg-CFile-viewfile{{/tr}}">
+              <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-viewfile{{/tr}}">
                 <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />
               </a>
               <br />{{$docGed->_reference_doc}}

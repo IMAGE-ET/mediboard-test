@@ -83,9 +83,9 @@
       <table class="form">
         <tr>
           {{if $chapitre->doc_chapitre_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CChapitreDoc-title-modify{{/tr}}: {{$chapitre->_view}}</th>
+          <th class="title modify" colspan="2">{{tr}}CChapitreDoc-title-modify{{/tr}}: {{$chapitre->_view}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CChapitreDoc-title-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CChapitreDoc-title-create{{/tr}}</th>
           {{/if}}
         </tr>
         <tr>

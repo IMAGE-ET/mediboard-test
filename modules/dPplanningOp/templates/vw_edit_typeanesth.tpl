@@ -39,9 +39,9 @@
       <table class="form">
         <tr>
           {{if $type_anesth->_id}}
-          <th class="title modify" colspan="2">{{tr}}msg-CTypeAnesth-title-modify{{/tr}} {{$type_anesth->name}}</th>
+          <th class="title modify" colspan="2">{{tr}}CTypeAnesth-title-modify{{/tr}} {{$type_anesth->name}}</th>
           {{else}}
-          <th class="title" colspan="2">{{tr}}msg-CTypeAnesth-title-create{{/tr}}</th>
+          <th class="title" colspan="2">{{tr}}CTypeAnesth-title-create{{/tr}}</th>
           {{/if}}
         </tr> 
         <tr>

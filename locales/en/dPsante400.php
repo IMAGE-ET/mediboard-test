@@ -46,10 +46,10 @@ $locales['config-dPsante400-pass'] = "Password";
 $locales['config-dPsante400-pass-desc'] = "DSN password";
 $locales['config-dPsante400-user'] = "User";
 $locales['config-dPsante400-user-desc'] = "DSN username";
-$locales['msg-CIdSante400-create'] = "";
-$locales['msg-CIdSante400-delete'] = "";
-$locales['msg-CIdSante400-modify'] = "";
-$locales['msg-CIdSante400-title-create'] = "";
-$locales['msg-CIdSante400-title-delete'] = "";
-$locales['msg-CIdSante400-title-modify'] = "";
+$locales['CIdSante400-msg-create'] = "";
+$locales['CIdSante400-msg-delete'] = "";
+$locales['CIdSante400-msg-modify'] = "";
+$locales['CIdSante400-title-create'] = "";
+$locales['CIdSante400-title-delete'] = "";
+$locales['CIdSante400-title-modify'] = "";
 ?>

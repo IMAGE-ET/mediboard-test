@@ -4,7 +4,7 @@
 <table class="tbl">
   <tr>
     <th class="title" colspan="3">
-      {{tr}}msg-CSejour-infoOper{{/tr}}
+      {{tr}}CSejour-msg-infoOper{{/tr}}
     </th>
   </tr>
   

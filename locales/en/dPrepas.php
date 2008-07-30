@@ -59,9 +59,9 @@ $locales['mod-dPrepas-tab-vw_edit_repas'] = "Repas";
 $locales['mod-dPrepas-tab-vw_quantite'] = "Récapitulatif";
 $locales['module-dPrepas-court'] = "Repas";
 $locales['module-dPrepas-long'] = "Gestion des repas";
-$locales['msg-CMenu-typevue'] = "Menu";
-$locales['msg-CPlat-typevue'] = "Plats de remplacements";
-$locales['msg-CRepas-title-create'] = "Enregistrement d'un repas";
-$locales['msg-CRepas-title-modify'] = "Modification d'un repas";
-$locales['msg-CTypeRepas-typevue'] = "Types de repas";
+$locales['CMenu-msg-typevue'] = "Menu";
+$locales['CPlat-msg-typevue'] = "Plats de remplacements";
+$locales['CRepas-title-create'] = "Enregistrement d'un repas";
+$locales['CRepas-title-modify'] = "Modification d'un repas";
+$locales['CTypeRepas-msg-typevue'] = "Types de repas";
 ?>
