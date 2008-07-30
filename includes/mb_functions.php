@@ -369,9 +369,7 @@ function mbHoursRelative($from, $to) {
   if (!$from || !$to) {
     return null;
   }
-  $from = intval(strtotime($from) / 3600);
-  $to   = intval(strtotime($to  ) / 3600);
-  $hours = intval($to - $from);
+  $hours = (strtotime($to) / 3600) - (strtotime($from) / 3600);
   return $hours;
 }
 
@@ -592,7 +590,6 @@ function mbLoadScripts($modeReturn = 0) {
   $affichageScript .= mbLoadScript("lib/jscalendar/calendar-setup.js",$modeReturn);
   
   $affichageScript .= mbLoadScript("lib/scriptaculous/lib/prototype.js",$modeReturn);
-  //$affichageScript .= mbLoadScript("lib/deprecation.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/scriptaculous/src/scriptaculous.js",$modeReturn);
   $affichageScript .= mbLoadScript("lib/control_suite/control.tabs.js",$modeReturn);
   
@@ -601,11 +598,12 @@ function mbLoadScripts($modeReturn = 0) {
   
   $affichageScript .= mbLoadScript("includes/javascript/prototypex.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/functions.js",$modeReturn);
-  //$affichageScript .= mbLoadScript("includes/javascript/input_mask.js",$modeReturn);
+  //$affichageScript .= mbLoadScript("includes/javascript/controls.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/cookies.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/url.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/forms.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/checkForms.js",$modeReturn);
+  
   $affichageScript .= mbLoadScript("includes/javascript/printf.js",$modeReturn);
   $affichageScript .= mbLoadScript("includes/javascript/window.js",$modeReturn);
   
