@@ -9,9 +9,9 @@
     <th>
       <label for="module" title="Filtrer le module de traduction">{{tr}}CModule{{/tr}}</label>
       <select name="module" onchange="this.form.submit()">
-      {{foreach from=$modules item=curr_module}}
-      <option value="{{$curr_module}}" {{if $curr_module == $module}} selected="selected" {{/if}}>
-        {{tr}}module-{{$curr_module}}-court{{/tr}}
+      {{foreach from=$modules item=_module}}
+      <option value="{{$_module}}" {{if $_module == $module}} selected="selected" {{/if}}>
+        {{tr}}module-{{$_module}}-court{{/tr}}
       </option>
       {{/foreach}}
       </select>

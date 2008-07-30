@@ -258,4 +258,10 @@ $locales['View'] = 'View';
 $locales['module-pharmacie-court'] = '';
 $locales['module-pharmacie-long'] = '';
 $locales['Cancelled'] = 'Cancelled';
+$locales['Install'] = 'Install';
+$locales['Remove'] = '';
+$locales['Upgrade'] = '';
+$locales['Uptodate'] = '';
+$locales['Configure'] = 'Configure';
+$locales['Action'] = 'Action';
 ?>

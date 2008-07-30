@@ -54,6 +54,7 @@ global $items, $completions;
 $items = array();
 $completions = array();
 
+// Ajoute un item de localisation
 function addLocale($class, $cat, $name) {
   global $trans, $items, $completions;
   $items[$class][$cat][$name] = array_key_exists($name, $trans) ? $trans[$name]["fr"] : "";
@@ -67,28 +68,13 @@ function addLocale($class, $cat, $name) {
   @$completions[$class]["percent"] = round(100 * $completions[$class]["count"] / $completions[$class]["total"]);
 }
 
-function checkTrans(&$array, $key) {
-  global $trans;
-  $array[$key] = array_key_exists($key,$trans) ? $trans[$key]["fr"] : "";
-}
-
-
-$backSpecs = array();
-$backRefs = array();
-foreach($classes as $class) {
+// Parcours des classes
+foreach ($classes as $class) {
   $object = new $class;
   $ref_modules = $object->_specs;
   $classname = $object->_class_name;
   
   // Traductions au niveau classe
-  checkTrans($backSpecs[$classname][$classname], "$classname");
-  checkTrans($backSpecs[$classname][$classname], "$classname.one");
-  checkTrans($backSpecs[$classname][$classname], "$classname.more");
-  checkTrans($backSpecs[$classname][$classname], "$classname.none");
-  checkTrans($backSpecs[$classname][$classname], "msg-$classname-create");
-  checkTrans($backSpecs[$classname][$classname], "msg-$classname-modify");
-  checkTrans($backSpecs[$classname][$classname], "msg-$classname-delete");
-  
   addLocale($classname, $classname, "$classname");
   addLocale($classname, $classname, "$classname.one");
   addLocale($classname, $classname, "$classname.none");
@@ -98,10 +84,6 @@ foreach($classes as $class) {
   
   // Traductions pour la clé 
   $prop = $object->_spec->key;
-  checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
-  checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
-  checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
-  
   addLocale($classname, $prop, "$classname-$prop");
   addLocale($classname, $prop, "$classname-$prop-desc");
   addLocale($classname, $prop, "$classname-$prop-court");
@@ -116,22 +98,16 @@ foreach($classes as $class) {
       continue;
     }
     
-    checkTrans($backSpecs[$classname][$prop], "$classname-$prop");
-    checkTrans($backSpecs[$classname][$prop], "$classname-$prop-desc");
-    checkTrans($backSpecs[$classname][$prop], "$classname-$prop-court");
-    
 	  addLocale($classname, $prop, "$classname-$prop");
 	  addLocale($classname, $prop, "$classname-$prop-desc");
 	  addLocale($classname, $prop, "$classname-$prop-court");
   
     if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
-	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.");        
 	      addLocale($classname, $prop, "$classname.$prop.");
       }
       
       foreach (explode("|", $spec->list) as $value) {
-	      checkTrans($backSpecs[$classname][$prop], "$classname.$prop.$value");
 	      addLocale($classname, $prop, "$classname.$prop.$value");
       }
     }
@@ -143,7 +119,6 @@ foreach($classes as $class) {
       
       // Find corresponding back name
       $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
-      checkTrans($backSpecs[$classname][$prop], "$spec->class-back-$backName");
 	    addLocale($classname, $prop, "$spec->class-back-$backName");
     }
   }

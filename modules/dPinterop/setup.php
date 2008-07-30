@@ -16,7 +16,7 @@ class CSetupdPinterop extends CSetup {
     
     $this->makeRevision("all");
     
-    $this->mod_version = "0.1";
+    $this->mod_version = "0.10	";
   }
 }
 ?>

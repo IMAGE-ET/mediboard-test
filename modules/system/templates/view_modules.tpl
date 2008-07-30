@@ -45,14 +45,15 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th colspan="2">{{mb_title class=CModule field=mod_name}}</th>
+    <th>{{mb_title class=CModule field=mod_name}}</th>
     <th>{{mb_title class=CModule field=_view}}</th>
-    <th>{{tr}}Status{{/tr}}</th>
-    <th>{{tr}}Upgrade{{/tr}} ?</th>
-    <th>{{tr}}Version{{/tr}}</th>
+    <th>{{mb_title class=CModule field=mod_type}}</th>
+    <th>{{tr}}Action{{/tr}}</th>
+    <th>{{mb_title class=CModule field=_configable}}</th>
+    <th>{{mb_title class=CModule field=mod_version}}</th>
     <th>{{mb_title class=CModule field=mod_active}}</th>
     <th>{{mb_title class=CModule field=mod_ui_active}}</th>
-    <th>#</th>
+    <th colspan="2">#</th>
   </tr>
   
   {{foreach from=$mbmodules item=mbmodule}}
@@ -61,8 +62,6 @@ Main.add(function () {
   {{assign var=module_name value=$mbmodule->mod_name}}
   {{assign var=cmd value="?m=system&a=domodsql&mod_name=$module_name&cmd"}}
   <tr>
-    <td></td>
-
     <td><strong>{{$mbmodule->mod_name}}</strong></td>
 
     <td>
@@ -71,14 +70,14 @@ Main.add(function () {
     	</label>
     </td>
 
-    <td>{{$mbmodule->mod_type}}</td>
+    <td>{{mb_value object=$mbmodule field=mod_type}}</td>
 
     <td colspan="10">
-      <img alt="not installed" src="./images/icons/dotgrey.gif" width="12" height="12" />
       {{if $can->edit}}
-        <a class="action" href="{{$cmd}}=install">
-          {{tr}}install{{/tr}}
-        </a>
+      <a class="buttonnew action" href="{{$cmd}}=install">
+        {{tr}}Install{{/tr}} &gt;
+        {{mb_value object=$mbmodule field=_latest}}
+      </a>
       {{/if}}
     </td>
   </tr>
@@ -86,17 +85,7 @@ Main.add(function () {
   {{else}}
   {{assign var=module_id value=$mbmodule->_id}}
   {{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
-  <tr>
-    <td>
-      <img alt="updown" src="./images/icons/updown.gif" width="10" height="15" border=0 usemap="#map-{{$mbmodule->_id}}" />
-      {{if $can->edit}}
-      <map name="map-{{$mbmodule->_id}}">
-        <area coords="0,0,10,7"  href="{{$cmd}}=moveup" />
-        <area coords="0,8,10,14" href="{{$cmd}}=movedn" />
-      </map>
-      {{/if}}
-    </td>
-    
+  <tr>    
     <td><strong>{{$mbmodule->mod_name}}</strong></td>
 
     <td>
@@ -105,49 +94,45 @@ Main.add(function () {
     	</label>
     </td>
 
-    <td>{{$mbmodule->mod_type}}</td>
+    <td>{{mb_value object=$mbmodule field=mod_type}}</td>
+
+    <!-- Actions -->
+    <td>
+      {{if $mbmodule->_upgradable}}
+      <a class="buttonchange action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
+        {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
+      </a>
+
+      {{elseif $mbmodule->mod_type != "core" && $can->edit}}
+      <a class="buttoncancel action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
+        {{tr}}Remove{{/tr}}
+      </a>
+      {{/if}}
+    </td>
+    
+    <td>
+      {{if $mbmodule->_configable}}
+      <a class="buttonsearch action" href="{{$cmd}}=configure">
+        {{tr}}Configure{{/tr}}
+      </a>
+      {{/if}}
+    </td>
+
+    <td>
+      {{mb_value object=$mbmodule field=mod_version}}
+    </td>
 
     <td>
     	<!-- Actif -->
       {{mb_ternary var=dot test=$mbmodule->mod_active value=dotgreen other=dotyellowanim}}
       <img alt="dot" src="./images/icons/{{$dot}}.gif" />
       {{if $mbmodule->mod_type == "core"}}
-      <strong>{{tr}}CModule-mod_active-{{$mbmodule->mod_active}}{{/tr}}</strong>
+      <strong>{{mb_value object=$mbmodule field=mod_active}}</strong>
       {{else}}
       <a class="action" {{if $can->edit}}href="{{$cmd}}=toggle"{{/if}}>
-	      {{tr}}CModule-mod_active-{{$mbmodule->mod_active}}{{/tr}}
+      {{mb_value object=$mbmodule field=mod_active}}
       </a>
       {{/if}}
-
-      <!-- Suppression -->
-      {{if $mbmodule->mod_type != "core" && $can->edit}}
-      |
-      <a class="action"  href="{{$cmd}}=remove" onclick="return confirm('{{tr}}CModule-confirm-deletion{{/tr}}');">
-        {{tr}}Remove{{/tr}}
-      </a>
-      {{/if}}
-      
-      {{if $mbmodule->_configable}}
-      |
-      <a class="action" href="{{$cmd}}=configure">
-        {{tr}}configure{{/tr}}
-      </a>
-      {{/if}}
-    </td>
-
-    <!-- Mise à jour -->
-    <td style="text-align: center;">
-      {{if $mbmodule->_upgradable}}
-      <a class="action" href="{{$cmd}}=upgrade" onclick="return confirm('{{tr}}CModule-confirm-upgrade{{/tr}}')">
-        {{tr}}Upgrade{{/tr}} &gt; {{$mbmodule->_latest}}
-      </a>
-      {{else}}
-      &mdash;
-      {{/if}}
-    </td>
-    
-    <td>
-    	{{$mbmodule->mod_version}}
     </td>
 
     <td style="text-align: center;">
@@ -161,7 +146,18 @@ Main.add(function () {
       </a>
       {{/if}}
     </td>
-    <td>{{$mbmodule->mod_ui_order}}</td>
+    
+    <td style="text-align: right;">{{$mbmodule->mod_ui_order}}</td>
+
+	  <td style="text-align: right;">
+	    <img alt="updown" src="./images/icons/updown.gif" usemap="#map-{{$mbmodule->_id}}" />
+	    {{if $can->edit}}
+	    <map name="map-{{$mbmodule->_id}}">
+	      <area coords="0,0,10,7"  href="{{$cmd}}=moveup" />
+	      <area coords="0,8,10,14" href="{{$cmd}}=movedn" />
+	    </map>
+	    {{/if}}
+	  </td>
   </tr>
 	{{/if}}
   {{/foreach}}

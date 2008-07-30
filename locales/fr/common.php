@@ -261,4 +261,7 @@ $locales['View'] = 'Consulter';
 $locales['module-pharmacie-court'] = 'Pharmacie';
 $locales['module-pharmacie-long'] = 'Pharmacie';
 $locales['Cancelled'] = 'Annulé';
+$locales['Install'] = 'Installer';
+$locales['Configure'] = 'Configure';
+$locales['Action'] = 'Action';
 ?>
