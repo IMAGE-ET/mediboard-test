@@ -108,7 +108,7 @@ function redactionDoc(oForm){
             </a>
           </td>
           {{if $currProc->annule}}
-          <td class="text" style="background-color:#f00;">[{{tr}}CANCEL{{/tr}}] {{$currProc->_lastentry->remarques|nl2br}}</td>
+          <td class="text" style="background-color:#f00;">[{{tr}}Cancel{{/tr}}] {{$currProc->_lastentry->remarques|nl2br}}</td>
           {{else}}
           <td>{{$currProc->_lastentry->remarques|nl2br}}</td>
           {{/if}}

@@ -1,22 +1,16 @@
 <?php
 $locales['CMbObject-msg-check-failed'] = ': impossible de sauvegarder l\'objet, ';
 $locales['About'] = 'A propos';
-$locales['Add'] = 'Ajouter';
-$locales['add'] = 'ajoutez';
-$locales['added'] = 'ajouté';
 $locales['All'] = 'Tous';
 $locales['Remove'] = 'Supprimer';
 $locales['bool.'] = 'indéfini';
 $locales['bool.0'] = 'Non';
 $locales['bool.1'] = 'Oui';
-$locales['cancel'] = 'annuler';
-$locales['CANCEL'] = 'ANNULE';
 $locales['Cancel'] = 'Annuler';
 $locales['CMbObject-msg-cascade-issues'] = 'problèmes en cascade pour';
 $locales['CUser-user_password-change'] = 'Changer le mot de passe utilisateur';
-$locales['CUser-user_password-nomatch'] = 'Le nouveau mot de passe ne correspond pas';
-$locales['CUser-msg-password-updated'] = 'Votre mot de passe a été mis à jour';
 $locales['CUser-user_password-nomatch'] = 'Vous avez entré un mauvais mot de passe';
+$locales['CUser-msg-password-updated'] = 'Votre mot de passe a été mis à jour';
 $locales['CMbObject-back-files'] = 'Fichiers';
 $locales['CMbObject-back-notes'] = 'Notes utilisateurs';
 $locales['CModule'] = 'Module';
@@ -40,7 +34,7 @@ $locales['History.desc'] = 'Voir l\'historique';
 $locales['hour'] = 'heure';
 $locales['hours'] = 'heures';
 $locales['Internal'] = 'Interne';
-$locales['login'] = 'Me connecter';
+$locales['Login'] = 'Me connecter';
 $locales['menu-changePassword'] = 'Changer le mot de passe';
 $locales['menu-logout'] = 'Déconnexion';
 $locales['menu-myInfo'] = 'Mon Compte';
@@ -168,5 +162,12 @@ $locales['Install'] = 'Installer';
 $locales['Configure'] = 'Configure';
 $locales['Action'] = 'Action';
 $locales['Welcome'] = 'Bienvenue';
-
+$locales['back'] = '';
+$locales['delete'] = '';
+$locales['Function'] = '';
+$locales['Government'] = '';
+$locales['Phone'] = '';
+$locales['Reminder'] = '';
+$locales['Upgrade'] = '';
+$locales['Uptodate'] = '';
 ?>
