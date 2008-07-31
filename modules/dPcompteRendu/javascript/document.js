@@ -83,11 +83,11 @@ var Document = {
   	  categories: "hide"
   	}
   	
-  	Object.externd(options, userOptions);
+  	Object.extend(options, userOptions);
   	
   	if (!mode) mode = "normal";
     var div = document.createElement("div");
-    div.style.minWidth = "230px"; 
+    div.style.minWidth = "240px"; 
     div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
     $(container).insert(div);
     Main.add( function() {
