@@ -19,6 +19,12 @@
       {{mb_value object=$cs field=modele}}
       </a>
       </td>
+      </tr> 
+      {{foreachelse}}
+      <tr>
+      <td colspan="3">
+      <i>{{tr}}CCellSaver.none{{/tr}}</i>
+      </td>
       </tr>
       {{/foreach}}
     </table>

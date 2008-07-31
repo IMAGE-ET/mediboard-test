@@ -88,6 +88,12 @@ Main.add(function () {
       </a>
       </td>
       </tr>
+      {{foreachelse}}
+      <tr>
+      <td colspan="3">
+      <i>{{tr}}CTypeEi.none{{/tr}}</i>
+      </td>
+      </tr>
       {{/foreach}}
     </table>
   </td>

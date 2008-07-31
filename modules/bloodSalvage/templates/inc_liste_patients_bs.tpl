@@ -42,5 +42,11 @@
 		  <td class="text">{{$rspo->entree_reveil|date_format:"%H:%M"}}</td>
 		</tr>
 		</tbody>
+	{{foreachelse}}
+	<tr>
+	<td colspan="4">
+	<i>{{tr}}CBloodSalvage.none{{/tr}}</i>
+	</td>
+	</tr>
 	{{/foreach}}
 </table>
