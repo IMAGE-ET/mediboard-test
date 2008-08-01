@@ -28,7 +28,7 @@
       <br />
       {{if $sejour->mode_sortie != ""}}
       <strong>{{tr}}CSejour-mode_sortie{{/tr}}:</strong>
-      <i>{{tr}}CAffectation._mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
+      <i>{{tr}}CSejour.mode_sortie.{{$sejour->mode_sortie}}{{/tr}}</i>
       <br />
       {{/if}}
       <strong>{{tr}}CSejour-praticien_id{{/tr}}:</strong>

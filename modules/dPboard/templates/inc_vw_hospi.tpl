@@ -25,14 +25,14 @@ PairEffect.initGroup("functionEffect", {
     {{else}}
     <td>
     {{/if}}
-      {{$curr_sejour->entree_prevue|date_format:"%d/%m/%Y %Hh%M"}}
+      {{$curr_sejour->entree_prevue|date_format:"%d/%m %Hh%M"}}
     </td>
     {{if $date == $curr_sejour->sortie_prevue|date_format:"%Y-%m-%d"}}
     <td style="background-color: #afa">
     {{else}}
     <td>
     {{/if}}
-      {{$curr_sejour->sortie_prevue|date_format:"%d/%m/%Y %Hh%M"}}
+      {{$curr_sejour->sortie_prevue|date_format:"%d/%m %Hh%M"}}
     </td>
     <td>
       <a href="?m=dPplanningOp&amp;tab=vw_edit_sejour&amp;sejour_id={{$curr_sejour->_id}}">

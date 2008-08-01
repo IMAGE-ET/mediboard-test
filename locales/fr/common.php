@@ -170,4 +170,8 @@ $locales['Phone'] = '';
 $locales['Reminder'] = '';
 $locales['Upgrade'] = '';
 $locales['Uptodate'] = '';
+$locales['Add'] = 'Ajouter';
+$locales['cancel'] = '';
+$locales['CANCEL'] = '';
+$locales['None'] = 'Aucun';
 ?>

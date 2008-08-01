@@ -129,11 +129,11 @@ var Patient = {
     </th>
     {{/if}}
     <th>
-      Patient
+      {{mb_title class=CPatient field=nom}}
       ({{$patientsCount}} {{tr}}found{{/tr}})
     </th>
-    <th>Date de naissance</th>
-    <th>Adresse</th>
+    <th>{{mb_title class=CPatient field=naissance}}</th>
+    <th>{{mb_title class=CPatient field=adresse}}</th>
   </tr>
 
   {{mb_ternary var="tabPatient" test=$board 

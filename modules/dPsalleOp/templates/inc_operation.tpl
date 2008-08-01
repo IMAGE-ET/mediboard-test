@@ -147,9 +147,7 @@ function reloadPrescription(prescription_id){
   <div id="documents">
 		{{mb_include_script module="dPcompteRendu" script="document"}}
 		{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
-    <script type="text/javascript">
-      Document.register('{{$selOp->_id}}','{{$selOp->_class_name}}','{{$selOp->chir_id}}','documents');
-    </script>
+    {{include file=../../dPplanningOp/templates/inc_documents_operation.tpl operation=$selOp}}
   </div>
 </div>
 

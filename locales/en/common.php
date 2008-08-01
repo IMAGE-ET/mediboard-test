@@ -172,4 +172,6 @@ $locales['CUser-msg-password-updated'] = '';
 $locales['Permission'] = '';
 $locales['Project'] = '';
 $locales['Projects'] = '';
+$locales['back'] = '';
+$locales['None'] = 'None';
 ?>

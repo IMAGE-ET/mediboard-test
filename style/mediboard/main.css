@@ -1508,9 +1508,9 @@ table.dPsalleOp select,
 table.dPsalleOp option,
 table.dPsalleOp input,
 table.dPsalleOp button  {
-  height: 22px;
+  height: 24px;
   font-size: 14px;
-  font-weight: bold;
+  font-weight: normal;
 }
 
 table.dPsalleOp .notext  {

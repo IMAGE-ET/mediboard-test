@@ -87,7 +87,9 @@ var Document = {
   	
   	if (!mode) mode = "normal";
     var div = document.createElement("div");
-    div.style.minWidth = "240px"; 
+    div.style.minWidth = "280px";
+    div.style.minHeight = "50px";
+    
     div.className = printf("documents-%s-%s praticien-%s mode-%s", object_class, object_id, praticien_id, mode);
     $(container).insert(div);
     Main.add( function() {

@@ -14,7 +14,7 @@
   <tr>
     <th><label for="praticien_id" title="Praticien">Praticien</label></th>
     <td>
-      <select name="praticien_id" onchange="this.form.submit()">
+      <select name="praticien_id" onchange="this.form.submit()" style="width: 180px;">
         <option value="">&mdash; Aucun praticien</option>
         {{foreach from=$listPrats key=prat_id item=prat_view}}
         <option value="{{$prat_id}}" {{if $prat_id == $praticien->_id}} selected="selected" {{/if}}>

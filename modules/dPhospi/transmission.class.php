@@ -66,7 +66,7 @@ class CTransmissionMedicale extends CMbMetaObject {
     $this->_ref_sejour->load($this->sejour_id);
     $this->_ref_user = new CMediusers;
     $this->_ref_user->load($this->user_id);
-    $this->_view = "Transmission faite par ".$this->_ref_user->_view;
+    $this->_view = "Transmission de ".$this->_ref_user->_view;
   }
   
   function getPerm($perm) {

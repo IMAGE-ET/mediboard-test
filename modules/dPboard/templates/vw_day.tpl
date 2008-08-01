@@ -22,7 +22,7 @@ function updateListConsults() {
   url.addParam("selConsult", "");
   url.addParam("board"     , "1");
 
-  url.requestUpdate("consultations");
+  url.requestUpdate("consultations", { waitingText: null } );
 }
 
 function updateListOperations() {
@@ -34,7 +34,7 @@ function updateListOperations() {
   url.addParam("urgences", "0");
   url.addParam("board"   , "1");
 
-  url.requestUpdate("operations");
+  url.requestUpdate("operations", { waitingText: null } );
 }
 
 function updateListPatients() {
@@ -54,7 +54,7 @@ function updateListPatients() {
   }
   url.addParam("board"   , "1");
 
-  url.requestUpdate("patients");
+  url.requestUpdate("patients", { waitingText: null } );
 }
 
 function updateListHospi() {
@@ -65,7 +65,7 @@ function updateListHospi() {
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
-  url.requestUpdate("hospi");
+  url.requestUpdate("hospi", { waitingText: null } );
 }
 
 function updateSemainier() {
@@ -76,7 +76,7 @@ function updateSemainier() {
   url.addParam("date"    , "{{$date}}");
   url.addParam("board"   , "1");
 
-  url.requestUpdate("semainier");
+  url.requestUpdate("semainier", { waitingText: null } );
 }
 
 Main.add(function () {
@@ -116,9 +116,11 @@ Main.add(function () {
   </tr>
 
   <tbody class="viewported">
+  
   <tr>
+
     <!--  Consultations -->
-    <td class="viewport" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
+    <td class="viewport" style="width: 50%" onmouseover="showIcon('consultations')" onmouseout="hideIcon('consultations')">
       <div style="position:absolute" id="icon-consultations">
         <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;date={{$date}}">
           <img src="images/modules/dPcabinet.png" height="24" width="24" />
@@ -129,7 +131,7 @@ Main.add(function () {
     </td>
     
     <!-- Operations -->
-    <td class="viewport" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
+    <td class="viewport" style="width: 50%" onmouseover="showIcon('operations')" onmouseout="hideIcon('operations')">
       <div style="position:absolute" id="icon-operations">
         <a href="?m=dPplanningOp&amp;tab=vw_idx_patients">
           <img src="images/modules/dPplanningOp.png" height="24" width="24" />
@@ -138,11 +140,13 @@ Main.add(function () {
       <div id="operations">
       </div>
     </td>
+    
   </tr>
   
   <tr>
+  
     <!-- Recherche de patients -->
-    <td class="viewport" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
+    <td class="viewport" style="width: 50%" id="patients-viewport" onmouseover="showIcon('patients')" onmouseout="hideIcon('patients')">
       <div style="position:absolute" id="icon-patients">
         <a href="?m=dPpatients&amp;tab=vw_idx_planning&amp;date={{$date}}">
           <img src="images/modules/dPpatients.png" height="24" width="24" />
@@ -153,14 +157,16 @@ Main.add(function () {
     </td>
 
     <!-- Patients hospitalisés -->
-    <td class="viewport" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
+    <td class="viewport" style="width: 50%" onmouseover="showIcon('hospi')" onmouseout="hideIcon('hospi')">
       <div style="position:absolute" id="icon-hospi">
         <img src="images/modules/dPhospi.png" height="24" width="24" />
       </div>
       <div id="hospi" style="overflow: auto">
       </div>
     </td>
+    
   </tr>
+  
   </tbody>
   
 </table>

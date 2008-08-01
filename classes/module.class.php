@@ -221,7 +221,7 @@ class CModule extends CMbObject {
     // Add configure tab if exist
     $configPath = "./modules/$this->mod_name/configure.php";
     if (is_file($configPath) && ($AppUI->user_type == 1)){
-      $this->registerTab("configure", "Configurer", TAB_ADMIN);
+      $this->registerTab("configure", "Configure", TAB_ADMIN);
     }
 
     // Try to access wanted tab
