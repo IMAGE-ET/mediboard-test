@@ -170,23 +170,34 @@ Main.add(function () {
         </tr>
         <tr>
           <th colspan="4" class="category">{{mb_label object=$fiche field="evenements"}}</th>
-       </tr>
+        </tr>
+       
+       	<!-- Choix de la catégorie -->
+      	{{if !count($listCategories)}}
         <tr>
+					<td colspan="10">
+					  <div class="big-warning">{{tr}}CEiCategorie.none{{/tr}}</div>
+					</td>
+					{{/if}}
+				</tr>
+				<tr>
           <td colspan="2"rowspan="2" class="halfPane" id="listChoix"></td>
           <th> <label for="_cat_evenement" title="{{tr}}CFicheEi-_cat_evenement-desc{{/tr}}">{{tr}}CFicheEi-_cat_evenement{{/tr}}</label>
           </th>
-          <td style="height:1%;">
+          <td style="height: 1%;">
             <input type="hidden" name="evenements" class="{{$fiche->_props.evenements}}" value="{{$fiche->evenements}}"/>
             <input type="hidden" name="_elemOpen" value="{{$firstdiv}}" />
-            <select name="_cat_evenement" onchange="javascript:viewItems(this.value);">
-            {{foreach from=$listCategories item=curr_evenement}}
-            <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
-              {{$curr_evenement->nom}}
-            </option>
-            {{/foreach}}
+            
+            <select name="_cat_evenement" onchange="viewItems(this.value);">
+	            {{foreach from=$listCategories item=curr_evenement}}
+	            <option value="{{$curr_evenement->ei_categorie_id}}"{{if $curr_evenement->ei_categorie_id==$firstdiv}} selected="selected"{{/if}}>
+	              {{$curr_evenement->nom}}
+	            </option>
+	            {{/foreach}}
             </select>
           </td>
         </tr>
+        
         <tr>
          <td colspan="2">
            {{foreach from=$listCategories item=curr_evenement}}

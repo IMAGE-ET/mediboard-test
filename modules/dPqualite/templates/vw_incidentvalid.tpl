@@ -45,19 +45,6 @@ function printIncident(ficheId){
   return;
 }
 
-Main.add(function () {
-{{if  $can->admin && $fiche->qualite_date_validation && (!$fiche->qualite_date_verification || !$fiche->qualite_date_controle)}}
-  {{if !$fiche->qualite_date_verification}}
-  regFieldCalendar("ProcEditFrm", "qualite_date_verification");
-  {{else}}
-  regFieldCalendar("ProcEditFrm", "qualite_date_controle");
-  {{/if}}
-{{/if}}
-
-  if($('tab-incident')){
-    var tabIncident = Control.Tabs.create('tab-incident', true);
-  }
-});
 </script>
 
 {{assign var="listeFichesTitle" value=""}}
@@ -65,8 +52,13 @@ Main.add(function () {
 <table class="main">
   <tr>
     <td class="halfPane">
-    
+
       {{if $can->admin || $can->edit}}
+      
+    	<script type="text/javascript">
+    		Main.add(function() { Control.Tabs.create('tab-incident', true) } );
+    	</script>
+
       <ul id="tab-incident" class="control_tabs full_width">
         {{if !$can->admin}}
         <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
@@ -147,8 +139,8 @@ Main.add(function () {
     </td>
     
     
-    {{if $fiche->fiche_ei_id}}
     <td class="halfPane">
+    {{if $fiche->fiche_ei_id}}
       <form name="ProcEditFrm" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_ficheEi_aed" />
       <input type="hidden" name="m" value="{{$m}}" />
@@ -283,6 +275,10 @@ Main.add(function () {
         {{if !$fiche->qualite_date_validation}}
         <tr>
           <td colspan="2" class="button">
+			    	<script type="text/javascript">
+			    		Main.add(function() { regFieldCalendar("ProcEditFrm", "qualite_date_controle"); } );
+			    	</script>
+          
             <input type="hidden" name="qualite_user_id" value="{{$user_id}}" />
             <input type="hidden" name="qualite_date_controle" value="" />
             <button class="modify" type="submit">
@@ -307,6 +303,7 @@ Main.add(function () {
           </td>
         </tr>
         {{else}}
+
         {{if !$fiche->qualite_date_verification && !$fiche->qualite_date_controle}}
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_verification"}}</th>
@@ -317,8 +314,13 @@ Main.add(function () {
             <button type="button" class="tick" onclick="this.form.qualite_date_verification.name = 'qualite_date_controle'; this.form.submit();">
               {{tr}}button-CFicheEi-classer{{/tr}}
             </button>
+			    	<script type="text/javascript">
+			    		Main.add(function() { regFieldCalendar("ProcEditFrm", "qualite_date_verification"); } );
+			    	</script>
+            
           </td>
         </tr>
+
         {{elseif !$fiche->qualite_date_controle}}
         <tr>
           <th>{{mb_label object=$fiche field="qualite_date_controle"}}</th>
@@ -329,6 +331,7 @@ Main.add(function () {
           </td>
         </tr>
         {{/if}}
+
         {{if !$fiche->qualite_date_verification || !$fiche->qualite_date_controle}}
         <tr>
           <td colspan="2" class="button">
@@ -359,7 +362,11 @@ Main.add(function () {
 
       </table>
       </form>
-    </td>
+    {{else}}
+    <div class="big-info">
+      Veuillez sélectionner un incident
+    </div>
     {{/if}}
+    </td>
   </tr>
 </table>
