@@ -412,6 +412,12 @@ $dPconfig["dPstock"] = array (
 
 $dPconfig["dPpmsi"] = array(
   "systeme_facturation" => "",
+); 
+
+$dPconfig["bloodSalvage"] = array (
+  "CBloodSalvage" => array(
+    "inLivretTherapeutique" => "1",
+  ),
 );
   
 ?>

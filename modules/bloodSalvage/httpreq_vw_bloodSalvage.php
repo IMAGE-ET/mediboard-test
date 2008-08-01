@@ -7,7 +7,7 @@
  *  @author Alexandre Germonneau
  */
 
-global  $can, $m, $g, $dPconfig;
+global  $AppUI, $can, $m, $g, $dPconfig;
 $can->needsRead();
 /*
  * Récupération des variables en session et ou issues des formulaires.
@@ -22,10 +22,18 @@ $totaltime = "00:00:00";
 $modif_operation    = $date>=mbDate();
 $timing = array();
 
+$inLivretTherapeutique = $AppUI->conf('bloodSalvage CBloodSalvage inLivretTherapeutique');
 
+if($inLivretTherapeutique) {
+	$anticoagulant = new CBcbClasseATC(); 
+	$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
+}
 
-$anticoagulant = new CBcbClasseATC(); 
-$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
+if(!$inLivretTherapeutique) {
+  $anticoagulant = new CBcbClasseATC(); 
+  $anticoagulant->loadRefsProduits("B01AB");
+  $anticoagulant_list = $anticoagulant->_ref_produits;
+}
 
 $version_patient = CModule::getActive("dPpatients");
 $isInDM = ($version_patient->mod_version >= 0.71);
@@ -66,6 +74,7 @@ $smarty->assign("isInDM", $isInDM);
 $smarty->assign("totaltime", $totaltime);
 $smarty->assign("anticoagulant_list", $anticoagulant_list);
 $smarty->assign("timing", $timing);
+$smarty->assign("inLivretTherapeutique", $inLivretTherapeutique);
 
 $smarty->display("inc_bloodSalvage.tpl");
 ?>

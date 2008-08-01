@@ -125,7 +125,7 @@ $locales['CTypeEi-name-court'] = 'Nom';
 $locales['CTypeEi-name-desc'] = 'Nom';
 $locales['CTypeEi-type_ei_id'] = 'TypeEI ID';
 $locales['CTypeEi-type_ei_id-court'] = 'TypeEI ID';
-$locales['CTypeEi-type_ei_id-desc'] = 'TypeEI ID';
+$locales['CTypeEi-type_ei_id-desc'] = 'Incident transfusionnel';
 $locales['CTypeEi-type_signalement-court'] = 'Type de signalement';
 $locales['CTypeEi-type_signalement-desc'] = 'Type de signalement';
 $locales['CTypeEi.none'] = 'Pas de modèle';
@@ -155,5 +155,6 @@ $locales['CTypeEi-msg-delete'] = 'Modèle supprimé';
 $locales['CTypeEi-msg-modify'] = 'Modèle modifié';
 $locales['CTypeEi-title-create'] = 'Création d\'un nouveau modèle';
 $locales['CTypeEi-title-modify'] = 'Modification du modèle';
-$locales['mod-dPportail-tab-vw_blood_salvage'] = '';
+$locales['config-bloodSalvage-CBloodSalvage'] = 'Configuration de la procédure de récupération sanguine';
+$locales['config-bloodSalvage-CBloodSalvage-inLivretTherapeutique'] = 'Anticoagulants du livret thérapeutique uniquement';
 ?>

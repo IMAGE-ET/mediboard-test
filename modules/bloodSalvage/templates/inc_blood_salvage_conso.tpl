@@ -15,7 +15,12 @@
 				<select name="anticoagulant_cip" onchange="submitFormAjax(this.form, 'systemMsg');">
 	          <option value="null">&mdash; Anticoagulants</option>
 					{{foreach from=$anticoagulant_list key=key item=anticoag}}
+					  {{if $inLivretTherapeutique}}
 				    <option value="{{$anticoag->code_cip}}"{{if $anticoag->code_cip == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag->_ref_produit->libelle}}</option>
+					  {{/if}}
+					  {{if !$inLivretTherapeutique}}
+				    <option value="{{$anticoag->CodeCIP}}"{{if $anticoag->CodeCIP == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag->Libelle}}</option>
+					  {{/if}}
 					{{/foreach}}
 				</select>
 			</form>

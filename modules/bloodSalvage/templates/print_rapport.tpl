@@ -191,7 +191,7 @@
         </tr>
         <tr>
           <td>
-            {{mb_label object=$blood_salvage field=type_ei_id}} :  {{if $blood_salvage->type_ei_id}}{{$blood_salvage->_ref_incident_type->_view}} {{else}} Aucun incident transfusionnel {{/if}}<br />
+            {{if $blood_salvage->type_ei_id}} {{tr}}CTypeEi-type_ei_id-desc{{/tr}} : {{$blood_salvage->_ref_incident_type->_view}} {{else}} Aucun incident transfusionnel {{/if}}<br />
           </td>
         </tr>
       </table>
