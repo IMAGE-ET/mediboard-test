@@ -1,9 +1,9 @@
 <table class="tbl">
   {{foreach from=$logs item="log"}}
-  <tr>
-    <td>{{mb_value object=$log field=type}}</td>
-    <td>{{mb_value object=$log field=date}}</td>
-    <td>{{$log->_ref_user->_view}}</td>
+  <tr style="text-align: center">
+    <td>{{mb_ditto name=user value=$log->_ref_user->_view}}</td>
+    <td>{{mb_ditto name=date value=$log->date|date_format:$dPconfig.date}}</td>
+		<td>{{$log->date|date_format:$dPconfig.time}}</td>
   </tr>
   {{/foreach}}
 </table>

@@ -242,10 +242,7 @@ function cancelObjects() {
 <!-- Documents -->
 {{if $op->_id}}
 <hr />
-<div id="documents" />
-<script type="text/javascript">
-  Document.register('{{$op->_id}}','{{$op->_class_name}}','{{$op->chir_id}}','documents');
-</script>
+{{include file=inc_documents_operation.tpl operation=$op}}
 {{/if}}
     
 

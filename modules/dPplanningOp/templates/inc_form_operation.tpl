@@ -254,9 +254,14 @@
   
   {{if $op->_ref_actes_ccam|@count}}
   <tr>
-    <td class="text button" colspan="3"><em>Impossible de modifier ces champs, intervention déjà codée</em></td>
+    <td class="" colspan="3">
+      <div class="little-info">
+      	L'intervention déjà codée.<br/>Impossible de modifier ces champs 
+      </div>
+		</td>
   </tr>
   {{/if}}
+  
   <tr>
     <td class="text">{{mb_label object=$op field="depassement"}}</td>
     <td class="text">{{mb_label object=$op field="forfait"}}</td>

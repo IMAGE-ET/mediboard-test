@@ -131,10 +131,25 @@ function smarty_function_mb_field($params, &$smarty) {
   return $spec->getFormElement($object, $params);
 }
 
+
+/**
+ * Show a value if different from previous cached one
+ * @param array params Smarty parameters
+ * - name  : Name of the cached value
+ * - value : Value to show, empty string to clear out cache
+ */
+function smarty_function_mb_ditto($params, &$smarty) {
+  static $cache = array();
+  $name   = CMbArray::extract($params, "name", null, true);
+  $value  = CMbArray::extract($params, "value", null, true);
+  $old = CMbArray::get($cache, $name, "");
+  $cache[$name] = $value;
+  return $old != $value ? $value : "|";
+}
+
 /**
  * Fonction that return the value of an object field
  */
-
 function smarty_function_mb_value($params, &$smarty) {
   return $params["object"]->_specs[$params["field"]]->getValue($params["object"], $smarty, $params);
 }
@@ -296,6 +311,7 @@ class CSmartyDP extends Smarty {
     // Register mediboard functions
     $this->register_block   ("tr"                , "do_translation"); 
     $this->register_function("thumb"             , "thumb");
+    $this->register_function("mb_ditto"          , "smarty_function_mb_ditto");
     $this->register_function("mb_field"          , "smarty_function_mb_field");
     $this->register_function("mb_value"          , "smarty_function_mb_value");
     $this->register_function("mb_label"          , "smarty_function_mb_label");

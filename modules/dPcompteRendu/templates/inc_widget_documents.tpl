@@ -56,7 +56,9 @@
 
 </form>
 
-<script>Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )</script>
+<script>
+Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
+</script>
 
 {{assign var=collapse value=false}}
 {{if $object->_ref_documents|@count && $mode == "collapse"}}
