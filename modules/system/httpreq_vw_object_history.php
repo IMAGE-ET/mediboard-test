@@ -22,23 +22,17 @@ if (!$object->_id) {
   $AppUI->redirect("?ajax=$ajax&suppressHeaders=1&m=$m&a=object_not_found&object_classname=$object_class");
 }
 
-// Récupération de la liste des utilisateurs disponibles
-$user = new CUser;
-$user->template = "0";
-$order = "user_last_name, user_first_name";
-$listUsers = $user->loadMatchingList($order);
-
 // Récupération des logs correspondants
 $logs = array();
 
 $log = new CUserLog;
-$log->object_id = $object->_id;
-$log->object_class = $object->_class_name;
+$log->setObject($object);
 $order = "date DESC";
 $logs = $log->loadMatchingList($order);
 
-foreach($logs as $key => $log) {
-  $log->loadRefsFwd();
+foreach($logs as $key => $_log) {
+  $_log->setObject($object);
+  $_log->loadRefsFwd();
 }
 
 // Création du template

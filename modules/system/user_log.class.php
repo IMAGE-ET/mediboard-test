@@ -66,19 +66,10 @@ class CUserLog extends CMbMetaObject {
     }
   }
   
-  /**
-   * Initializes id and class for given CMbObject
-   */
-  function setObject($mbObject) {
-    assert($mbObject instanceof CMbObject);
-    $this->object_id = $mbObject->_id;
-    $this->object_class = get_class($mbObject);
-  }
-  
   function loadRefsFwd() {
   	parent::loadRefsFwd();
-    $this->_ref_user = new CUser;
-    $this->_ref_user->load($this->user_id);
+  	$user = new CUser;
+    $this->_ref_user = $user->getCached($this->user_id);
   }
 }
 ?>

@@ -1,15 +1,9 @@
-<table>
+<table class="tbl">
+  {{foreach from=$logs item="log"}}
   <tr>
-    <td>
-      <ul>
-      {{foreach from=$logs item="log"}}
-        <li>
-          {{tr}}{{$log->type}}{{/tr}} le {{$log->date|date_format:"%d/%m/%Y à %Hh%M"}}
-          <br />
-          par {{$log->_ref_user->_view}}
-          </li>
-      {{/foreach}}
-      </ul>
-    </td>
+    <td>{{mb_value object=$log field=type}}</td>
+    <td>{{mb_value object=$log field=date}}</td>
+    <td>{{$log->_ref_user->_view}}</td>
   </tr>
+  {{/foreach}}
 </table>
