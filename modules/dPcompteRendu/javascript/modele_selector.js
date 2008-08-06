@@ -10,8 +10,8 @@ ModeleSelector = Class.create({
   sModele_id : null,
   sObject_id : null,
   options : {
-    width : 500,
-    height: 400
+    width : 600,
+    height: 500
   },
   
   initialize: function (sForm, sView, sModele_id, sObject_id, oDefaultOptions) {

@@ -115,7 +115,7 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
         </tr>
         {{if $docGed->doc_ged_id}}
         <tr>
-          <th>{{tr}}File{{/tr}}</th>
+          <th>{{tr}}CFile{{/tr}}</th>
           <td class="button">
             <a href="#" onclick="popFile('{{$docGed->_class_name}}','{{$docGed->_id}}','CFile','{{$docGed->_lastentry->file_id}}')" title="{{tr}}CFile-msg-loadimgmini{{/tr}}">
               <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$docGed->_lastentry->file_id}}&amp;phpThumb=1&amp;wl=64&amp;hp=64" alt="-" />

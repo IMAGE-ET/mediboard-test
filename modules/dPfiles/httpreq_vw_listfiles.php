@@ -89,7 +89,6 @@ $smarty->assign("object"         , $object      );
 $smarty->assign("typeVue"        , $typeVue     );
 $smarty->assign("accordDossier"  , $accordDossier);
 
-//$smarty->display("inc_list_view_colonne.tpl");
 switch($typeVue) {
   case 0 :
     $smarty->display("inc_list_view.tpl");

@@ -46,7 +46,7 @@ if (window.opener.reloadAfterUploadFile) {
       </select>
     </td>
     
-    <th><label for="formfile[{{$curr_nb_file}}]">{{tr}}File{{/tr}}</label></th>
+    <th><label for="formfile[{{$curr_nb_file}}]">{{tr}}CFile{{/tr}}</label></th>
     <td>
       <input type="file" name="formfile[{{$curr_nb_file}}]" size="0" />
     </td>

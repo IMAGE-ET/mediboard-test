@@ -13,29 +13,30 @@ function setClose(modele_id, object_id) {
 }
 </script>
 
+<h1>Modèles pour </h1>
+
 <ul id="tabs-modeles" class="control_tabs">
 {{foreach from=$modelesCompat key=class item=modeles}}
-  {{if $modeles.prat|@count || $modeles.func|@count}}
-    <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
-  {{/if}}
+  <li><a href="#{{$class}}">{{tr}}{{$class}}{{/tr}}</a></li>
 {{/foreach}}
   <li class="separator"></li>
 {{foreach from=$modelesNonCompat key=class item=modeles}}
-  {{if $modeles.prat|@count || $modeles.func|@count}}
-    <li><a href="#{{$class}}" class="minor">{{tr}}{{$class}}{{/tr}}</a></li>
-  {{/if}}
+  <li><a href="#{{$class}}" class="minor">{{tr}}{{$class}}{{/tr}}</a></li>
 {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
 {{foreach from=$modelesCompat key=class item=modeles}}
-  {{if $modeles.prat|@count || $modeles.func|@count}}
-    {{include file="inc_vw_list_models.tpl"}}
-  {{/if}}
+  {{include file="inc_vw_list_models.tpl"}}
 {{/foreach}}
 
 {{foreach from=$modelesNonCompat key=class item=modeles}}
-  {{if $modeles.prat|@count || $modeles.func|@count}}
-    {{include file="inc_vw_list_models.tpl"}}
-  {{/if}}
+  {{include file="inc_vw_list_models.tpl"}}
 {{/foreach}}
+
+
+<div class="little-info">
+  Cliquez sur un modèle pour l'utiliser !
+  <br />
+  Les section grisées contiennent des champs potentiellement incompatibles avec le contexte courant
+</div>

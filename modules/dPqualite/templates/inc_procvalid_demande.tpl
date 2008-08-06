@@ -143,7 +143,7 @@
     </td>
   </tr>
   <tr>
-    <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
+    <th><label for="formfile">{{tr}}CFile{{/tr}}</label></th>
     <td>
       <input type="hidden" name="object_class" value="CDocGed" />
       <input type="hidden" name="object_id" value="{{$docGed->doc_ged_id}}" />

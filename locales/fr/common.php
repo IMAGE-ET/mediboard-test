@@ -174,4 +174,5 @@ $locales['Add'] = 'Ajouter';
 $locales['cancel'] = '';
 $locales['CANCEL'] = '';
 $locales['None'] = 'Aucun';
+$locales['Move'] = 'Déplacer';
 ?>

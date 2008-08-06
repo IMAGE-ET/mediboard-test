@@ -323,7 +323,7 @@ function popFile(objectClass, objectId, elementClass, elementId){
             </td>
           </tr>          
           <tr>
-            <th><label for="formfile">{{tr}}File{{/tr}}</label></th>
+            <th><label for="formfile">{{tr}}CFile{{/tr}}</label></th>
             <td>
               <input type="file" name="formfile" size="0" class="notNull str" />
             </td>

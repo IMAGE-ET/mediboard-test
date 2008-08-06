@@ -174,4 +174,5 @@ $locales['Project'] = '';
 $locales['Projects'] = '';
 $locales['back'] = '';
 $locales['None'] = 'None';
+$locales['Move'] = 'Move';
 ?>

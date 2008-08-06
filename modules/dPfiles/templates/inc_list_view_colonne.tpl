@@ -79,53 +79,7 @@ Main.add(function () {
         <em>(historique)</em>
       </span>
       <hr />
-
-      {{if $curr_file->_class_name=="CCompteRendu" && $canFile->edit && !$accordDossier}}
-        <form name="editDoc{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPcompteRendu" />
-        <input type="hidden" name="dosql" value="do_modele_aed" />
-        <input type="hidden" name="_id" value="{{$curr_file->_id}}" />
-        <input type="hidden" name="del" value="0" />
-        {{assign var="confirmDeleteType" value="le document"}}
-        {{assign var="confirmDeleteName" value=$curr_file->nom}}
-        
-      {{elseif $curr_file->_class_name=="CFile" && $canFile->edit && !$accordDossier}}
-        <form name="editFile{{$curr_file->_id}}" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
-        <input type="hidden" name="m" value="dPfiles" />
-        <input type="hidden" name="dosql" value="do_file_aed" />
-        <input type="hidden" name="_id" value="{{$curr_file->_id}}" />
-        <input type="hidden" name="del" value="0" />
-        {{assign var="confirmDeleteType" value="le fichier"}}
-        {{assign var="confirmDeleteName" value=$curr_file->file_name}}
-      {{/if}}
-
-      {{if $canFile->edit && !$accordDossier}}
-        <button class="edit" type="button" onclick="Document.edit({{$elementId}})">
-          {{tr}}Edit{{/tr}}
-        </button>
-        <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(
-          this.form, {
-            typeName:'{{$confirmDeleteType}}',
-            objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
-            ajax:1,
-            target:'systemMsg'
-          },{
-            onComplete:reloadAfterDeleteFile
-          } );">
-          Supprimer
-        </button>
-        
-        <select name="file_category_id" onchange="submitFileChangt(this.form)">
-          <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>&mdash; Aucune catégorie</option>
-          {{foreach from=$listCategory item=curr_cat}}
-          <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >
-            {{$curr_cat->nom}}
-          </option>
-          {{/foreach}}
-        </select>
-      </form>
-      {{/if}}
-
+      {{include file=inc_file_toolbar.tpl}}
     </td>
   {{if ($curr_data+1) is div by 3}}
   </tr>

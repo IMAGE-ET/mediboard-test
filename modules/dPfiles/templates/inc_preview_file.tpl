@@ -34,5 +34,7 @@
     </a>  
     {{/if}}
 {{else}}
-  Selectionnez un fichier
+  <div class="big-info">
+  Sélectionnez un document pour en avoir un aperçu.
+  </div>
 {{/if}}

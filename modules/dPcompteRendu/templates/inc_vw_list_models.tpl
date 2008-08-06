@@ -1,27 +1,27 @@
 <table class="form" id="{{$class}}" style="display: none;">
   <tr>
-    {{if $modeles.prat|@count}}<th class="category">Modèles du praticien</th>{{/if}}
-    {{if $modeles.func|@count}}<th class="category">Modèles de la fonction</th>{{/if}}
+    <th class="category">Modèles du praticien</th>
+    <th class="category">Modèles de la fonction</th>
   </tr>
   <tr>
-  {{if $modeles.prat|@count}}
-    <td style="text-align:center">
-      <select id="modele_{{$class}}_prat" name="modele_{{$class}}_prat" onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}');" size="20">
+    <td style="text-align: center; width: 50%;">
+      <select  style="width: 80%" id="modele_{{$class}}_prat" name="modele_{{$class}}_prat" onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}');" size="20">
       {{foreach from=$modeles.prat item=modele}}
         <option value="{{$modele->_id}}">{{$modele->nom}}</option>
+      {{foreachelse}}
+      	<option value="">{{tr}}CCompteRendu.none{{/tr}}</option>
       {{/foreach}}
       </select>
     </td>
-  {{/if}}
-  
-  {{if $modeles.func|@count}}
-    <td style="text-align:center">
-      <select id="modele_{{$class}}_func" name="modele_{{$class}}_func" onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}');" size="20">
+
+    <td style="text-align: center; width: 50%;">
+      <select style="width: 80%" id="modele_{{$class}}_func" name="modele_{{$class}}_func" onchange="if (this.value) setClose(this.value,'{{$modelesId.$class}}');" size="20">
       {{foreach from=$modeles.func item=modele}}
         <option value="{{$modele->_id}}">{{$modele->nom}}</option>
-      {{/foreach}}
+      {{foreachelse}}
+      	<option value="">{{tr}}CCompteRendu.none{{/tr}}</option>
+	    {{/foreach}}
       </select>
     </td>
-  {{/if}}
   </tr>
 </table>
