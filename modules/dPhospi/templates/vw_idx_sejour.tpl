@@ -1,4 +1,5 @@
 {{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 {{mb_include_script module="dPplanningOp" script="cim10_selector"}}
 {{mb_include_script module="dPImeds" script="Imeds_results_watcher"}}
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
@@ -21,32 +22,33 @@ function loadActesNGAP(sejour_id){
   url.requestUpdate('listActesNGAP', { waitingText: null } );
 }
 
-Document.refreshList = function(sejour_id){
-  var url = new Url;
-  url.setModuleAction("dPhospi", "httpreq_vw_documents");
-  url.addParam("sejour_id" , sejour_id);
-  url.requestUpdate('documents', { waitingText: null } );
-}
-
 function loadPatient(patient_id) {
-  url_sejour = new Url;
-  url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
-  url_sejour.addParam("object_class","CPatient");
-  url_sejour.addParam("object_id",patient_id);
-  url_sejour.requestUpdate('viewPatient', {
+  url = new Url;
+  url.setModuleAction("system", "httpreq_vw_complete_object");
+  url.addParam("object_class","CPatient");
+  url.addParam("object_id",patient_id);
+  url.requestUpdate('viewPatient', {
    onComplete: initPuces
   } );
 }
 
 function loadSejour(sejour_id) {
-  url_sejour = new Url;
-  url_sejour.setModuleAction("system", "httpreq_vw_complete_object");
-  url_sejour.addParam("object_class","CSejour");
-  url_sejour.addParam("object_id",sejour_id);
-  url_sejour.requestUpdate('viewSejourHospi', {
+  url = new Url;
+  url.setModuleAction("system", "httpreq_vw_complete_object");
+  url.addParam("object_class","CSejour");
+  url.addParam("object_id",sejour_id);
+  url.requestUpdate('viewSejourHospi', {
    onComplete: initPuces
   } );
 }
+
+function loadDocuments(sejour_id) {
+  var url = new Url;
+  url.setModuleAction("dPhospi", "httpreq_documents_sejour");
+  url.addParam("sejour_id" , sejour_id);
+  url.requestUpdate("documents", { waitingText: null } );
+}
+
 
 function popEtatSejour(sejour_id) {
   var url = new Url;
@@ -86,7 +88,8 @@ function loadViewSejour(sejour_id, praticien_id, patient_id, date){
   }
   loadPatient(patient_id);
   loadSejour(sejour_id); 
-  Document.refreshList(sejour_id);
+  loadDocuments(sejour_id);
+
   if($('Imeds')){
     loadResultLabo(sejour_id);
   }

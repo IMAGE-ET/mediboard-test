@@ -1,12 +1,4 @@
 {{mb_include_script module="system" script="object_selector"}}
-<script type="text/javascript">
-
-Main.add(function () {
-  regFieldCalendar("filterFrm", "_date_min", true);
-  regFieldCalendar("filterFrm", "_date_max", true);
-});
-
-</script>
 
 {{if !$dialog}}
 <form name="filterFrm" action="?m={{$m}}" method="get" onsubmit="return checkForm(this)">
@@ -52,7 +44,7 @@ Main.add(function () {
     </td>
 
     <th>{{mb_label object=$filter field="_date_min"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" onchange=""}} </td>
+    <td class="date">{{mb_field object=$filter field="_date_min" form="filterFrm" register=true}}</td>
 
   </tr>
   <tr>
@@ -80,7 +72,7 @@ Main.add(function () {
    </td>
 
     <th>{{mb_label object=$filter field="_date_max"}}</th>
-    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" onchange=""}} </td>
+    <td class="date">{{mb_field object=$filter field="_date_max" form="filterFrm" register=true}} </td>
   </tr>
 
   <tr>
@@ -104,27 +96,28 @@ Main.add(function () {
   </tr>
   {{/if}}
   <tr>
-    <th>Utilisateur</th>
     {{if !$dialog}}
-    <th>classe</th>
-    <th>Objet</th>
+    <th>{{mb_title class=CUserLog field=object_class}}</th>
+    <th>{{mb_title class=CUserLog field=object_id}}</th>
     {{/if}}
-    <th>Date</th>
-    <th>Action</th>
-    <th>Champs</th>
+    <th>{{mb_title class=CUserLog field=user_id}}</th>
+    <th colspan="2">{{mb_title class=CUserLog field=date}}</th>
+    <th>{{mb_title class=CUserLog field=type}}</th>
+    <th>{{mb_title class=CUserLog field=fields}}</th>
   </tr>
-  {{foreach from=$list item=curr_object}}
+  {{foreach from=$list item=_log}}
   <tr>
-    <td>{{$curr_object->_ref_user->_view}} ({{$curr_object->user_id}})</td>
     {{if !$dialog}}
-    <td>{{$curr_object->object_class}}</td>
-    <td>{{$curr_object->_ref_object->_view}} ({{$curr_object->object_id}})</td>
+    <td>{{$_log->object_class}}</td>
+    <td>{{$_log->_ref_object->_view}} ({{$_log->object_id}})</td>
     {{/if}}
-    <td>{{$curr_object->date|date_format:"%d/%m/%Y à %Hh%M (%A)"}}</td>
-    <td>{{tr}}CUserLog.type.{{$curr_object->type}}{{/tr}}</td>
+    <td style="text-align: center;">{{mb_ditto name=user value=$_log->_ref_user->_view}}</td>
+    <td style="text-align: center;">{{mb_ditto name=date value=$_log->date|date_format:$dPconfig.date}}</td>
+    <td style="text-align: center;">{{$_log->date|date_format:$dPconfig.time}}</td>
+    <td>{{mb_value object=$_log field=type}}</td>
     <td>
-      {{foreach from=$curr_object->_fields item=curr_field}}
-      <label title="{{$curr_field}}">{{tr}}{{$curr_object->object_class}}-{{$curr_field}}{{/tr}}</label><br />
+      {{foreach from=$_log->_fields item=curr_field}}
+      <label title="{{$curr_field}}">{{tr}}{{$_log->object_class}}-{{$curr_field}}{{/tr}}</label><br />
       {{/foreach}}
     </td>
   </tr>

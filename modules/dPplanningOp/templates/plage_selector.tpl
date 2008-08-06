@@ -238,7 +238,7 @@ Main.add(function () {
         </tr>
         <tr>
           <td colspan="3" class="button">
-            <button class="cancel" type="button" onclick="window.close()">{{tr}}cancel{{/tr}}</button>
+            <button class="cancel" type="button" onclick="window.close()">{{tr}}Cancel{{/tr}}</button>
             <button class="tick" type="button" onclick="setClose('', '')">{{tr}}Select{{/tr}}</button>          
           </td>
         </tr>

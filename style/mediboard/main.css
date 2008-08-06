@@ -127,15 +127,15 @@ a:hover {
 
 h1 {
   font-size: 20px;
-  font-weight: bold;
-  color: #555;
+  font-weight: normal;
+  color: #444;
   margin: 10px 0px;
 }
 
 h2 {
   font-size: 18px;
-  font-weight: bold;
-  color: #494;
+  font-weight: normal;
+  color: #666;
   margin: 5px 10px;
 }
 
@@ -152,8 +152,8 @@ h2.dPpatients{
 
 h3 {
   font-size: 16px;
-  font-weight: bold;
-  color: #449;
+  font-weight: normal;
+  color: #888;
   margin: 10px 20px;
 }
 
@@ -2802,14 +2802,19 @@ table.tbl td.ccmu-P{
 }
 
 table.main td.step {
-	background: url(images/pictures/background.png);
+	background: url(images/pictures/background.png) left bottom;
 	width: 10%; 
 	font-size: 12px; 
 	font-weight: bold; 
 	text-align: center;
 	vertical-align: middle;
+	border: 1px dotted #55A;
 }
 
+table.main td.step.selected {
+	border: 2px solid;
+	font-size: 170%
+}
 
 .grippie-h {
   border: 1px solid #999;

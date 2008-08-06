@@ -34,10 +34,9 @@ function viewProduit(cip){
         <tr>
           
           <!-- Pre-admission -->
-          <td id="pre_admission" class="step" style="border:{{if $prescription->type == 'pre_admission'}}2px ridge{{else}}1px dotted{{/if}} #55A">
+          <td id="pre_admission" class="step {{if $prescription->type == 'pre_admission'}}selected{{/if}}">
           {{if $prescription_pre_admission->_id}}
-	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}');"
-	            {{if $prescription->type == "pre_admission"}}style="font-size: 170%"{{/if}}>
+	            <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_pre_admission->_id}}','{{$prescription->object_id}}');">
 	              {{tr}}CPrescription.type.pre_admission{{/tr}}
 	            </a>
             {{if $prescription->type == "pre_admission" && !$prescription_sejour->_id}}
@@ -58,10 +57,10 @@ function viewProduit(cip){
           
           
           <!-- Séjour -->
-          <td id="sejour" class="step" style="border: {{if $prescription->type == "sejour"}}2px ridge{{else}}1px dotted{{/if}} #55A">
+          <td id="sejour" class="step {{if $prescription->type == 'sejour'}}selected{{/if}}">
 	          {{if $prescription_sejour->_id}}
-		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}');"
-		          {{if $prescription->type == "sejour"}}style="font-size: 170%"{{/if}}>
+	            
+		          <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sejour->_id}}','{{$prescription->object_id}}');">
 		            {{tr}}CPrescription.type.sejour{{/tr}}
 		          </a>
 		      
@@ -81,10 +80,9 @@ function viewProduit(cip){
 	          {{/if}}
           </td>
          
-          <td id="sortie" class="step" style="border: {{if $prescription->type == "sortie"}}2px ridge{{else}}1px dotted{{/if}} #55A">
+          <td id="sortie" class="step {{if $prescription->type == 'sortie'}}selected{{/if}}">
           {{if $prescriptions.sortie->_id}}
-              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}');"
-		          {{if $prescription->type == "sortie"}}style="font-size: 170%"{{/if}}>
+              <a href="#" onclick="Prescription.reloadPrescSejour('{{$prescription_sortie->_id}}','{{$prescription->object_id}}');">
 		            {{tr}}CPrescription.type.sortie{{/tr}}
 		          </a>
 		          {{if $prescription->type == "sortie"}}
