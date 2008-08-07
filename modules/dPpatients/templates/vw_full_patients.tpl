@@ -24,7 +24,7 @@ function reloadListFile(sAction){
   var url = new Url;
   
   
-  url.setModuleAction("{{$m}}", "httpreq_vw_listfiles");
+  url.setModuleAction("dPfiles", "httpreq_vw_listfiles");
   url.addParam("selKey", document.FrmClass.selKey.value);
   url.addParam("selClass", document.FrmClass.selClass.value);  
   url.addParam("typeVue", document.FrmClass.typeVue.value);

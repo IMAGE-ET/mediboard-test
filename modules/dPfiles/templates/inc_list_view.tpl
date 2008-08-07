@@ -29,11 +29,10 @@ Main.add(function () {
   {{foreach from=$curr_listCat.DocsAndFiles item=curr_file}}
   <tr>
     <td class="{{cycle name=cellicon values="dark, light"}}">
+      {{assign var="elementId" value=$curr_file->_id}}
       {{if $curr_file->_class_name=="CCompteRendu"}}
-        {{assign var="elementId" value=$curr_file->_id}}
         {{assign var="srcImg" value="images/pictures/medifile.png"}}
       {{else}}
-        {{assign var="elementId" value=$curr_file->_id}}
         {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&wl=64&hp=64"}}
       {{/if}}
       

@@ -60,6 +60,7 @@
             {{if $typeVue==1}}
             {{include file="inc_list_view_colonne.tpl"}}
             {{else $typeVue==2}}
+            <pre>selObject: {{$selClass}}-{{$selKey}}</pre>
             {{include file="inc_list_view_gd_thumb.tpl"}}            
             {{/if}}
           </td>      

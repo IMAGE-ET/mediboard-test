@@ -101,12 +101,12 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
   $includeInfosFile = $fileSel->source;
 }
 
+$smarty->assign("objectClass"     , $objectClass);
+$smarty->assign("objectId"        , $objectId);
 $smarty->assign("elementClass"    , $elementClass);
 $smarty->assign("elementId"       , $elementId);
 $smarty->assign("catFileSel"      , $catFileSel);
 $smarty->assign("fileSel"         , $fileSel);
-$smarty->assign("objectClass"     , $objectClass);
-$smarty->assign("objectId"        , $objectId);
 $smarty->assign("arrNumPages"     , $arrNumPages);
 $smarty->assign("object"          , $object);
 $smarty->assign("page_prev"       , $page_prev);

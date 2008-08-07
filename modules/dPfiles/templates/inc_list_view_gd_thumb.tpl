@@ -26,16 +26,15 @@ Main.add(function () {
 
 </script>
 
-
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-  <li><a href="#{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
+  <li><a href="#Category-{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
 {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-<table class="tbl" id="{{$keyCat}}" style="display: none;">
+<table class="tbl" id="Category-{{$keyCat}}" style="display: none;">
   {{if $canFile->edit && !$accordDossier}}
   <tr>
     <td colspan="9">
@@ -52,19 +51,26 @@ Main.add(function () {
   {{/if}}
   <td class="halfPane button {{cycle name=cellicon values="dark, light"}}">
     {{assign var="includeInfosFile" value="0"}}
-    
+    {{assign var="elementId" value=$curr_file->_id}}
+
     {{if $curr_file->_class_name=="CCompteRendu"}}
-      {{assign var="elementId" value=$curr_file->compte_rendu_id}}
       {{assign var="srcImg" value="images/pictures/medifile.png"}}
       {{assign var="includeInfosFile" value="$curr_file->source"}}
+    {{/if}}
     
-    {{elseif $curr_file->_class_name=="CFile"}}
-      {{assign var="elementId" value=$curr_file->file_id}}
+    {{if $curr_file->_class_name=="CFile"}}
       {{assign var="srcImg" value="?m=dPfiles&a=fileviewer&suppressHeaders=1&file_id=$elementId&phpThumb=1&hp=450&wl=450"}}        
     {{/if}}
+    
       <div id="viewFile-{{$curr_file->_id}}">
-        {{assign var="fileSel" value=$curr_file}}
-        {{include file="../../dPfiles/templates/inc_preview_file.tpl"}}  
+        {{include file="../../dPfiles/templates/inc_preview_file.tpl" 
+        		fileSel=$curr_file
+        		objectClass=$selClass 
+        		objectId=$selKey
+        		elementClass=$curr_file->_class_name
+        		elementId=$curr_file->_id
+        		sfn=0
+        }}
       </div>
       <script type="text/javascript">
          File.view("{{$selClass}}", "{{$selKey}}", "{{$curr_file->_class_name}}", "{{$curr_file->_id}}","0"); 
@@ -72,13 +78,13 @@ Main.add(function () {
    
       <br />
       {{$curr_file->_view}}
-      {{if $curr_file->_class_name=="CFile"}}
-        <br />Date : {{$curr_file->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+      {{if $curr_file->_class_name == "CFile"}}
+        <br />
+        {{mb_label object=$curr_file field=file_date}} :
+        {{mb_value object=$curr_file field=file_date}}
       {{/if}}
-    </a>
     <hr />  
     {{include file=inc_file_toolbar.tpl}}
-    </form>
   </td>
   {{if ($curr_data+1) is div by 2}}
   </tr>

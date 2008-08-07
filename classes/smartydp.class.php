@@ -241,7 +241,6 @@ function smarty_function_mb_colonne($params, &$smarty) {
   }
 }
 
-
 function smarty_function_mb_include_script($params, &$smarty) {
   global $AppUI, $version;
   $version_build = $version['build'];
@@ -265,8 +264,6 @@ function smarty_function_mb_include_script($params, &$smarty) {
   
   return "<script type='text/javascript' src='$path'></script>";
 }
-
-
 
 /**
  * dotProject integration of Smarty engine main class
@@ -341,6 +338,75 @@ class CSmartyDP extends Smarty {
     $this->assign("dialog", $dialog);
     $this->assign("ajax", $ajax);
     $this->assign("modules", CPermModule::getVisibleModules());
+  }
+  
+  /**
+   * Show debug spans
+   *
+   * @param string $tpl_file
+   * @param string $vars
+   */
+  function showDebugSpans($tpl_file, $vars) {
+    // Prevents rendering before DOCTYPE definition
+    if (in_array(basename($tpl_file), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
+      return;
+    }
+    
+    // Only at debug time
+    if (!CAppUI::conf("debug")) {
+      return;
+    }
+    
+    // The span
+	  echo "\n<span class='smarty-include'>";
+	  echo "\n$tpl_file";
+	  foreach ($vars as $var => $value) {
+	    $show = $value;
+	    if ($value instanceof CMbObject) {
+	      $show = $value->_guid;
+	    }
+	
+	    if (is_array($value)) {
+	      $count = count($value);
+	      $show = "array ($count)";
+	    }
+	
+	     
+	    echo "\n<br />$var: $show";
+	  }
+
+	  echo "\n</span>\n";
+	}
+  
+  /**
+   * called for included templates
+   *
+   * @param string $params["smarty_include_tpl_file"]
+   * @param string $params["smarty_include_vars"]
+   */
+  function _smarty_include($params) {
+    $tpl_file = $params["smarty_include_tpl_file"];
+    $vars     = $params["smarty_include_vars"];
+    $this->showDebugSpans($tpl_file, $vars);
+    
+    echo "\n<!-- Start include: $tpl_file -->\n";
+    parent::_smarty_include($params);
+    echo "\n<!-- Stop include: $tpl_file -->\n";
+  }
+
+  /**
+   * executes & displays the template results
+   *
+   * @param string $resource_name
+   * @param string $cache_id
+   * @param string $compile_id
+   */
+  function display($resource_name, $cache_id = null, $compile_id = null) {
+    $this->showDebugSpans($resource_name, array());
+    
+    echo "\n<!-- Start display: $resource_name -->\n";
+    parent::display($resource_name, $cache_id, $compile_id);
+    echo "\n<!-- Stop display: $resource_name -->\n";
   }
 }
 ?>

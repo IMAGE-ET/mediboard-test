@@ -78,7 +78,6 @@ if($selClass && $selKey){
 
 $smarty->assign("canFile"        , $canFile);
 
-$smarty->assign("selKey", $selKey);
 $smarty->assign("listModeleFunc" , $listModeleFunc);
 $smarty->assign("listModelePrat" , $listModelePrat);
 $smarty->assign("reloadlist"     , $reloadlist  ); 
