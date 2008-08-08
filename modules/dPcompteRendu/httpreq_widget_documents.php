@@ -7,8 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can;
-  
+global $can, $AppUI;  
 $can->needsEdit();
 
 // Chargement de l'objet cible
@@ -28,12 +27,23 @@ if (!$object->_id) {
 
 $object->loadRefsDocs();
 
-// Modèles de l'utilisateur
-$praticien = new CMediusers();
-$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
+// Praticien concerné
+if ($AppUI->_ref_user->isPraticien()) {
+  $praticien = $AppUI->_ref_user;
+  $praticiens = null;
+}
+else {
+	$praticien = new CMediusers();
+	$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
+	$praticien->loadRefFunction();
+}
+
+$praticien->canDo();
+
+// Modèles du praticien
 $modelesByOwner = array();
 $packs = array();
-if ($praticien->user_id) {
+if ($praticien->_can->edit) {
   $modelesByOwner = CCompteRendu::loadAllModelesForPrat($praticien->_id, $object_class, "body");
   
   // Chargement des packs

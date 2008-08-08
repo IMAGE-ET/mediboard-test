@@ -13,12 +13,16 @@
 <table class="form">
   <tr>
     <td class="button">
+    	{{if $praticien->_can->edit}}
+
       <!-- Création via select classique -->
-      
-      <select name="_choix_modele" style="width: 100px;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
+
+      <select name="_choix_modele" style="width: 85px;" onchange="Document.create(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Modèle</option>
         {{foreach from=$modelesByOwner key=owner item=_modeles}}
-        <optgroup label="{{tr}}CCompteRendu._owner.{{$owner}}{{/tr}}">
+        {{if $owner == "prat"}}{{assign var=ref_owner value=$praticien}}{{/if}}
+        {{if $owner == "func"}}{{assign var=ref_owner value=$praticien->_ref_function}}{{/if}}
+        <optgroup label="{{tr}}CCompteRendu-_owner{{/tr}} {{$ref_owner->_view}}">
           {{foreach from=$_modeles item=_modele}}
           <option value="{{$_modele->_id}}">{{$_modele->nom}}</option>
           {{foreachelse}}
@@ -28,7 +32,7 @@
         {{/foreach}}
       </select>
       
-      <select name="_choix_pack" style="width:80px;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
+      <select name="_choix_pack" style="width: 70px;" onchange="Document.createPack(this.value, '{{$object_id}}'); $V(this, '');">
         <option value="">&mdash; Pack</option>
         {{foreach from=$packs item=_pack}}
           <option value="{{$_pack->_id}}">{{$_pack->_view}}</option>
@@ -38,6 +42,8 @@
         </optgroup>
       </select>
 
+      {{/if}}
+
 			<!-- Création via ModeleSelector -->
 
 	    <script type="text/javascript">
@@ -45,8 +51,14 @@
 	    </script>
 
       <button type="button" class="search" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
-        Modèles
+	    	{{if $praticien->_can->edit}}
+        Tous
+	    	{{else}}
+        Modèles disponibles
+	      {{/if}}
+      
       </button>
+      
 	    <input type="hidden" name="_modele_id" value="" />
 	    <input type="hidden" name="_object_id" value="" onchange="Document.create(this.form._modele_id.value, this.value,'{{$object_id}}','{{$object_class}}'); $V(this, ''); $V(this.form._modele_id, ''); "/>
     </td>
@@ -81,7 +93,7 @@ Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
   
 	  {{foreach from=$object->_ref_documents item=document}}
 	  <tr>
-	    <td>
+	    <td class="text">
 		    <form name="DocumentEdit-{{$document->_id}}" action="?m={{$m}}" method="post">
 		    <input type="hidden" name="m" value="dPcompteRendu" />
 		    <input type="hidden" name="del" value="0" />

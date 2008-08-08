@@ -179,7 +179,7 @@ class CCompteRendu extends CMbMetaObject {
    * @param $prat_id ref|CMediuser L'utilisateur concerné
    * @param $object_class string Nom de la classe d'objet, optionnel. Doit être un CMbObject
    * @param $type enum list|header|body|footer Type de composant , optionnel. Doit être un CMbObject
-   * @return array ("prat" => array<CCompteRendu>, "func" array<CCompteRendu> 
+   * @return array ("prat" => array<CCompteRendu>, "func" => array<CCompteRendu> 
    */
   static function loadAllModelesForPrat($prat_id, $object_class = null, $type = null) {
     $modeles = array(

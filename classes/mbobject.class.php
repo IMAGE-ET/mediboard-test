@@ -342,21 +342,18 @@ class CMbObject {
   }
   
   function canRead() {
-    $this->_canRead = $this->getPerm(PERM_READ);
-    return $this->_canRead;
+    return $this->_canRead = $this->getPerm(PERM_READ);
   }
   
   function canEdit() {
-    $this->_canEdit = $this->getPerm(PERM_EDIT);
-    return $this->_canEdit;
+    return $this->_canEdit = $this->getPerm(PERM_EDIT);;
   }
 
   function canDo(){
     $canDo = new CCanDo;
     $canDo->read  = $this->canRead();
     $canDo->edit  = $this->canEdit();
-    
-    return $canDo;
+    return $this->_can = $canDo;
   }
   
   function loadListWithPerms($permType = PERM_READ, $where = null, $order = null, $limit = null, $group = null, $leftjoin = null) {

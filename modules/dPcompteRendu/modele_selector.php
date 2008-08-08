@@ -10,19 +10,25 @@
 
 global $AppUI;
 
+// Chargement de l'objet
 $object_id    = mbGetValueFromGet("object_id");
 $object_class = mbGetValueFromGet("object_class");
-$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-
-$user_id      = $AppUI->user_id;
-
-// Chargement de l'objet
 $object = new $object_class;
 $object->load($object_id);
 
-// Chargement du praticien
-$praticien = new CMediusers();
-$praticien->load($praticien_id);
+// Chargement du praticien concerné et des praticiens disponibles
+if ($AppUI->_ref_user->isPraticien()) {
+  $praticien = $AppUI->_ref_user;
+  $praticiens = null;
+}
+else {
+	$praticien = new CMediusers();
+	$praticien->load(mbGetValueFromGetOrSession("praticien_id"));
+	$praticiens = $praticien->loadPraticiens(PERM_EDIT);
+}
+
+$praticien->canDo();
+
 
 // Chargement des objets relatifs a l'objet chargé
 $templateClasses = $object->getTemplateClasses();
@@ -38,18 +44,12 @@ $modelesNonCompat = array();
 
 // Chargement des modeles pour chaque classe, pour les praticiens et leur fonction
 foreach($templateClasses as $class => $id) {
+  $modeles = CCompteRendu::loadAllModelesForPrat($praticien->_id, $class);
   if ($id) {
-    // Pour le praticien
-    $modelesCompat[$class]['prat'] = CCompteRendu::loadModelesForPrat($class, $praticien->_id);
-  
-    // Pour la fonction du praticien
-    $modelesCompat[$class]['func'] = CCompteRendu::loadModelesForFunc($class, $praticien->function_id);
-  } else {
-    // Pour le praticien
-    $modelesNonCompat[$class]['prat'] = CCompteRendu::loadModelesForPrat($class, $praticien->_id);
-  
-    // Pour la fonction du praticien
-    $modelesNonCompat[$class]['func'] = CCompteRendu::loadModelesForFunc($class, $praticien->function_id);
+    $modelesCompat[$class] = $modeles;
+  } 
+  else {
+    $modelesNonCompat[$class] = $modeles;
   }
 }
 
@@ -57,6 +57,8 @@ foreach($templateClasses as $class => $id) {
   // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("praticien", $praticien);
+$smarty->assign("praticiens", $praticiens);
 $smarty->assign("target_id", $object->_id);
 $smarty->assign("target_class", $object->_class_name);
 

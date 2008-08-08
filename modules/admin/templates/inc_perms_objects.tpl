@@ -25,7 +25,7 @@ function cancelObject(oObject) {
   <tr>
     <th class="category" colspan="3">
       Ajouter un droit sur :
-      <select name="object_class">
+      <select class="select-tree" name="object_class">
         {{foreach from=$listClasses|smarty:nodefaults item=class}}
         <option value="{{$class}}">
           {{tr}}{{$class}}{{/tr}}

@@ -40,24 +40,6 @@ $whereCommon[] = "`object_class` = '$selClass'";
 
 $order = "nom";
 
-// Modèles de l'utilisateur
-$listModelePrat = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
-  $listModelePrat = new CCompteRendu;
-  $listModelePrat = $listModelePrat->loadlist($where, $order);
-}
-
-// Modèles de la fonction
-$listModeleFunc = array();
-if ($userSel->user_id) {
-  $where = $whereCommon;
-  $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
-  $listModeleFunc = new CCompteRendu;
-  $listModeleFunc = $listModeleFunc->loadlist($where, $order);
-}
-
 // Création du template
 $smarty = new CSmartyDP();
 
@@ -78,8 +60,6 @@ if($selClass && $selKey){
 
 $smarty->assign("canFile"        , $canFile);
 
-$smarty->assign("listModeleFunc" , $listModeleFunc);
-$smarty->assign("listModelePrat" , $listModelePrat);
 $smarty->assign("reloadlist"     , $reloadlist  ); 
 $smarty->assign("listCategory"   , $listCategory);
 $smarty->assign("selClass"       , $selClass    );
