@@ -62,7 +62,10 @@ Main.add(function () {
   {{assign var=module_name value=$mbmodule->mod_name}}
   {{assign var=cmd value="?m=system&a=domodsql&mod_name=$module_name&cmd"}}
   <tr>
-    <td><strong>{{$mbmodule->mod_name}}</strong></td>
+    <td>
+      <img src="images/modules/{{$mbmodule->mod_name}}.png" style="height:18px; width:18px; float: right;" alt="?" />
+      <strong>{{$mbmodule->mod_name}}</strong>
+    </td>
 
     <td>
     	<label title="{{tr}}module-{{$mbmodule->mod_name}}-long{{/tr}}">
@@ -85,8 +88,11 @@ Main.add(function () {
   {{else}}
   {{assign var=module_id value=$mbmodule->_id}}
   {{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
-  <tr>    
-    <td><strong>{{$mbmodule->mod_name}}</strong></td>
+  <tr> 
+    <td>
+      <img src="images/modules/{{$mbmodule->mod_name}}.png" style="height:18px; width:18px; float: right;" alt="?" />
+      <strong>{{$mbmodule->mod_name}}</strong>
+    </td>
 
     <td>
     	<label title="{{tr}}module-{{$mbmodule->mod_name}}-long{{/tr}}">
