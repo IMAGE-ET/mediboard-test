@@ -27,22 +27,23 @@ table {
 	body {
 	  border: 1px solid #aaa;
 	  margin: 10px;
+	  padding: 2px;
 	}
 
 	span.field {
-    background: #bbd;
+    background: #dde;
   }
 
   span.value {
-    background: #ddd;
+    background: #eee;
   }
 
   span.name {
-    background: #bdb;
+    background: #ded;
   }
 
   span.choice {
-    background: #ddd;
+    background: #eee;
   }
   
   hr.pagebreak {

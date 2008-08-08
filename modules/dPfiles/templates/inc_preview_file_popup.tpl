@@ -5,15 +5,9 @@ function goToPage(numpage){
   window.location.href = "?m=dPfiles&a=preview_files&popup=1&objectClass={{$objectClass}}&objectId={{$objectId}}&elementClass={{$elementClass}}&elementId={{$elementId}}&dialog=1&nonavig={{$nonavig}}&sfn=" + numpage;
 }
 
-function printDocument(doc_id) {
-  var url = new Url;
-  url.setModuleAction("dPcompteRendu", "print_cr");
-  url.addParam("compte_rendu_id", doc_id);
-  url.popup(700, 600, 'CompteRendu');
-}
-
 window.onbeforeunload= function () {
 }
+
 </script>
 <table class="form">
   <tr>
@@ -25,20 +19,27 @@ window.onbeforeunload= function () {
     </a>
     {{/if}}
     </td>
-    <td class="button" style="width:60%">
+    <td style="width:60%; text-align: center; white-space: normal;">
+			<!-- Nom du fichier -->
       {{if $fileSel}}
       <strong>{{$fileSel->_view}}</strong>
-      {{if $fileSel->_class_name=="CCompteRendu"}}
-      <button class="print notext" onclick="printDocument({{$fileSel->_id}})">
-      </button>
-      {{/if}}
-      <br />Catégorie : {{if $catFileSel->nom}}
-      {{$catFileSel->nom}} {{else}}Aucune Catégorie{{/if}}
+      
+			<!-- Category -->
+      {{if $catFileSel->nom}}
+      <br />
+      {{mb_label object=$fileSel field=file_category_id}} :
+      {{$catFileSel->nom}}
+			{{/if}}
+
+			<!-- Date -->
       {{if $fileSel->_class_name=="CFile"}}
-        &mdash; Date : {{$fileSel->file_date|date_format:"%d/%m/%Y à %Hh%M"}}
+	      <br />
+	      {{mb_label object=$fileSel field=file_date}} :
+	      {{mb_value object=$fileSel field=file_date}}
       {{/if}}
      {{/if}}
     </td>
+    
     <th style="width:20%">
     {{if $fileNext && !$nonavig}}
     <a class="button" href="{{$href}}&amp;elementClass={{$fileNext.elementClass}}&amp;elementId={{$fileNext.elementId}}">
@@ -75,9 +76,9 @@ window.onbeforeunload= function () {
               <img align="top" src="images/icons/next.png" alt="Page suivante" />
             </a>
             {{/if}}
-        {{/if}}<br />
+        {{/if}}
+        <br />
           {{if $includeInfosFile}}
-          {{assign var="stylecontenu" value=null}}
           {{include file="inc_preview_contenu_file.tpl"}}
           {{else}}
           <a href="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$elementId}}" title="Télécharger le fichier">

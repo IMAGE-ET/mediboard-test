@@ -19,11 +19,10 @@ function ZoomAjax(objectClass, objectId, elementClass, elementId, sfn){
   if(sfn && sfn!=0){
     url.addParam("sfn", sfn);
   }
-  url.requestUpdate('bigView', { waitingText : "Chargement du miniature" });
+  url.requestUpdate('bigView', { waitingText : null, onComplete: initFCKEditor });
 }
 
 function setObject(oObject){
-  //alert("toto"+"id"+oObject.id+"view"+oObject.view+"class"+oObject.objClass+"key"+oObject.keyword);
   var oForm = document.FrmClass;
   oForm.selKey.value = oObject.id;
   oForm.selView.value = oObject.view;

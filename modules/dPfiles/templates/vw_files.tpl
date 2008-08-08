@@ -38,7 +38,6 @@
             <select name="typeVue" onchange="if (this.form.onsubmit()) { this.form.submit() };">
               <option value="0" {{if $typeVue == 0}}selected="selected"{{/if}}>Miniatures et aperçus</option>
               <option value="1" {{if $typeVue == 1}}selected="selected"{{/if}}>Miniatures seuls</option>
-              <option value="2" {{if $typeVue == 2}}selected="selected"{{/if}}>Aperçus seuls</option>
             </select>
           </td>
           {{/if}}
@@ -55,15 +54,9 @@
           <th class="category" colspan="2">{{$object->_view}}</th>
         </tr>
         <tr>
-          {{if $typeVue}}
+          {{if $typeVue==1}}
           <td colspan="2" id="listView">
-            {{if $typeVue==1}}
             {{include file="inc_list_view_colonne.tpl"}}
-            {{else $typeVue==2}}
-            <pre>selObject: {{$selClass}}-{{$selKey}}</pre>
-            {{include file="inc_list_view_gd_thumb.tpl"}}            
-            {{/if}}
-          </td>      
           {{else}}
           <td style="width: 400px;" id="listView">
             {{include file="inc_list_view.tpl"}}

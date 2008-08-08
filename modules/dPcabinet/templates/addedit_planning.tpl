@@ -2,7 +2,8 @@
 
 {{mb_include_script module="dPpatients" script="pat_selector"}}
 {{mb_include_script module="dPcabinet" script="plage_selector"}}
-
+{{mb_include_script module="dPcompteRendu" script="document"}}
+{{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
 
@@ -318,36 +319,25 @@ Main.add(function () {
       <table class="form">
         <tr>
           <td class="button">
-          {{if $consult->consultation_id}}
-            <button class="modify" type="submit">Modifier</button>
+          {{if $consult->_id}}
+            <button class="modify" type="submit">
+            	{{tr}}Edit{{/tr}}
+            </button>
             {{if $consult->annule}}
-            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">Retablir</button>
+	            <button class="change" type="button" onclick="annuleConsult(this.form, 0)">
+	            	{{tr}}Restore{{/tr}}
+	            </button>
             {{else}}
-            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">Annuler</button>
+	            <button class="cancel" type="button" onclick="annuleConsult(this.form, 1)">
+	            	{{tr}}Cancel{{/tr}}
+	            </button>
             {{/if}}
             <button class="trash" type="button" onclick="confirmDeletion(this.form,{typeName:'la consultation de',objName:'{{$consult->_ref_patient->_view|smarty:nodefaults|JSAttribute}}'})">
               Supprimer
             </button>
             <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
-            <select name="_choix_modele" onchange="printDocument(this)">
-              <option value="">&mdash; {{tr}}modele-choice{{/tr}}</option>
-              <optgroup label="Modèles du praticien">
-              {{foreach from=$listModelePrat item=curr_modele}}
-                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{foreachelse}}
-                <option value="">{{tr}}modele-none{{/tr}}</option>
-              {{/foreach}}
-              </optgroup>
-              <optgroup label="Modèles du cabinet">
-              {{foreach from=$listModeleFunc item=curr_modele}}
-                <option value="{{$curr_modele->compte_rendu_id}}">{{$curr_modele->nom}}</option>
-              {{foreachelse}}
-                <option value="">{{tr}}modele-none{{/tr}}</option>
-              {{/foreach}}
-              </optgroup>
-            </select>
           {{else}}
-            <button class="submit" type="submit">Créer</button>
+            <button class="submit" type="submit">{{tr}}Create{{/tr}}</button>
           {{/if}}
           </td>
         </tr>
@@ -355,21 +345,32 @@ Main.add(function () {
     
     </td>
   </tr>
+  
+</table>
+
+</form>
+
+<table class="form">
   <tr>
-    <td colspan="2">
-      <table class="form">
-        <tr>
-          <th id="clickPat" class="category">
-            Infos patient
-          </th>
-        </tr>
-        <tr>
-          <td id="infoPat" class="text"></td>
-        </tr>
-      </table>
+    <th id="clickPat" class="category" style="width: 50%">
+      Infos patient
+    </th>
+    <th class="category" style="width: 50%">
+      Documents
+    </th>
+  </tr>
+  
+  <tr>
+    <td id="infoPat" class="text"></td>
+    
+    <td id="documents">
+    	{{if $consult->_id}}
+			{{mb_ternary var=object test=$consult->_is_anesth value=$consult->_ref_consult_anesth other=$consult}}
+      <script type="text/javascript">
+      	Document.register('{{$object->_id}}','{{$object->_class_name}}','{{$consult->_praticien_id}}','documents');
+      </script>
+      {{/if}}
     </td>
   </tr>
 
 </table>
-
-</form>

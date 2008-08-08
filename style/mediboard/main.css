@@ -185,15 +185,16 @@ span.smarty-include {
 	height: 10px;
 	overflow: hidden;
 	font-family: monospace;
+	font_size: 12px;
 	border: 1px solid #fff;
 }
 
 span.smarty-include:hover {
+	opacity: 1;
 	width: auto;
 	height: auto;
-	padding: 10px 20px;
+	padding: 5px 10px;
 }
-
 
 button,
 a.button,  
@@ -1502,25 +1503,6 @@ span.hilite {
   background: #f5f;
 }
 
-@media screen {
-  span.field {
-    background: #bbd;
-  }
-
-  span.value {
-    background: #ddd;
-  }
-
-  span.name {
-    background: #bdb;
-  }
-
-  span.choice {
-    background: #ddd;
-  }
-
-}
-
 /* Module specific CSS*/
   /* @import "./modules.css";   */
 
@@ -1789,6 +1771,7 @@ ul.control_tabs li a.minor.active {
 
 ul.control_tabs .separator {
   padding: 0 10px; 
+  display: block;
   visibility: hidden;
 }
 

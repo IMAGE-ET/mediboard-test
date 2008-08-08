@@ -5,8 +5,8 @@
 <script type="text/javascript">
 
 function initFCKEditor() {
-	var field = document.getElementById("htmlarea");
-	var oFCKeditor = new FCKeditor(field.name, '100%', '100%') ;
+	var element = $("htmlarea");
+	oFCKeditor = new FCKeditor(element.name, '100%', '100%');
 	
 	// Be carefull: after that all Js code is executed in lib/fckeditor/
 	oFCKeditor.BasePath	= 'lib/fckeditor/';
@@ -26,5 +26,6 @@ function FCKeventChanger(editorInstance) {
     FormObserver.FCKChanged(editorInstance.LastOnChangeTimer);
   }
 }
+
 </script>
 {{/if}}

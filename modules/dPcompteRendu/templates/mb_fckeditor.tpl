@@ -8,6 +8,14 @@ sMbPluginsPath = sMbPath + "modules/dPcompteRendu/fcke_plugins/" ;
 FCKConfig.EditorAreaCSS = sMbPath + "style/mediboard/htmlarea.css?build={{$version.build}}";
 FCKConfig.Debug = false;
 
+{{if $templateManager->printMode}}
+FCKConfig.ToolbarSets["Default"] = [
+	['Preview', 'Print', '-','Find','About'],
+	['FitWindow','Source',]
+] ;
+
+{{else}}
+
 // Toolbar Configuration
 FCKConfig.ToolbarSets["Default"] = [
 	['Save','Preview'],
@@ -105,3 +113,5 @@ aToolbarSet.push(aMbToolbar);
 FCKConfig.Plugins.Add( 'mbpagebreak', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbcombo', 'en,fr', sMbPluginsPath );
 FCKConfig.Plugins.Add( 'mbprint', 'en,fr', sMbPluginsPath );
+
+{{/if}}

@@ -20,6 +20,7 @@ class CTemplateManager {
   var $usedLists = array();
   
   var $valueMode = true; // @todo : changer en applyMode
+  var $printMode = false;
   
   function CTemplateManager() {
     $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, "%d/%m/%Y"));

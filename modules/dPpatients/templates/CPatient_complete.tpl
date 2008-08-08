@@ -13,7 +13,7 @@
       </a>
       
       {{if $can->edit}}
-      <a style="float:right;" href="?m=dPpatients&tab=vw_edit_patients&patient_id={{$object->_id}}">
+      <a style="float:right;" href="?m=dPpatients&amp;tab=vw_edit_patients&amp;patient_id={{$object->_id}}">
         <img src="images/icons/edit.png" alt="modifier" title="Modifier le patient" />
       </a>
       {{/if}}

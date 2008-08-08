@@ -1141,21 +1141,6 @@ span.hilite {
   background: #f5f;
 }
 
-@media screen {
-  span.field {
-    background: #bbd;
-  }
-  span.value {
-    background: #ddd;
-  }
-  span.name {
-    background: #bdb;
-  }
-  span.choice {
-    background: #ddd;
-  }
-}
-
 /* Module specific CSS*/ /* @import "./modules.css";   */
 table.dPsalleOp select,table.dPsalleOp option,table.dPsalleOp input,table.dPsalleOp button {
   height: 22px;

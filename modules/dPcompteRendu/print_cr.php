@@ -17,6 +17,11 @@ $compteRendu->load($compte_rendu_id);
 
 $cr = $compteRendu->source;
 
+// Initialisation de FCKEditor
+$templateManager = new CTemplateManager;
+$templateManager->printMode = true;
+$templateManager->initHTMLArea();
+
 // Création du template
 $smarty = new CSmartyDP();
 

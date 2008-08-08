@@ -65,7 +65,7 @@
       {{foreachelse}}
         <i>Pas de diagnostics</i>
       {{/foreach}}
-      {{if $object->_ref_traitements|@count}}</ul>{{/if}}
+      {{if $object->_ext_codes_cim|@count}}</ul>{{/if}}
     </td>
     
     <td class="text">

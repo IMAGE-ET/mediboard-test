@@ -47,7 +47,9 @@ if($objectClass && $objectId && $elementClass && $elementId){
     if($elementClass == "CFile"){
     	$type = "_ref_files";
       $nameFile = "file_name";
-    }elseif($elementClass == "CCompteRendu") {
+    }
+    
+    if($elementClass == "CCompteRendu") {
       $type = "_ref_documents";
       $nameFile = "nom";
     }
@@ -97,8 +99,16 @@ if($fileSel && $elementClass == "CFile" && !$acces_denied){
       $arrNumPages[] = $i;
     }
   }
-}elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
+}
+elseif($fileSel && $elementClass == "CCompteRendu" && !$acces_denied){
   $includeInfosFile = $fileSel->source;
+}
+
+// Initialisation de FCKEditor
+if ($includeInfosFile) {
+	$templateManager = new CTemplateManager;
+	$templateManager->printMode = true;
+	$templateManager->initHTMLArea();
 }
 
 $smarty->assign("objectClass"     , $objectClass);

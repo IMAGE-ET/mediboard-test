@@ -95,9 +95,6 @@ switch($typeVue) {
   case 1 :
     $smarty->display("inc_list_view_colonne.tpl");
     break;
-  case 2 :
-    $smarty->display("inc_list_view_gd_thumb.tpl");
-    break;
 }
 
 

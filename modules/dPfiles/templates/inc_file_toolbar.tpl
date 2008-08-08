@@ -6,7 +6,7 @@
 
  {{if $curr_file->_class_name== "CCompteRendu"}}
  	<!-- Modification -->
-   <button class="edit" type="button" onclick="Document.edit({{$elementId}})">
+   <button class="edit {{$notext}}" type="button" onclick="Document.edit({{$elementId}})">
      {{tr}}Edit{{/tr}}
    </button>
  {{/if}}
@@ -33,7 +33,7 @@
  {{/if}}
  
 	<!-- Deletion -->
-  <button type="button" class="trash" onclick="file_deleted={{$elementId}};confirmDeletion(
+  <button type="button" class="trash  {{$notext}}" onclick="file_deleted={{$elementId}};confirmDeletion(
     this.form, {
       typeName:'{{$confirmDeleteType}}',
       objName:'{{$confirmDeleteName|smarty:nodefaults|JSAttribute}}',
@@ -46,10 +46,10 @@
   </button>
    
 	<!-- Move -->
-	<button type="button" class="hslip" onclick="this.form.file_category_id.show()">
+	<button type="button" class="hslip  {{$notext}}" onclick="this.form.file_category_id.show()">
 	  {{tr}}Move{{/tr}}
 	</button>
-  <select style="display:none" name="file_category_id" onchange="submitFileChangt(this.form)">
+  <select style="display: none; width: 100px;" name="file_category_id" onchange="submitFileChangt(this.form)">
     <option value="" {{if !$curr_file->file_category_id}}selected="selected"{{/if}}>Aucune catégorie</option>
     {{foreach from=$listCategory item=curr_cat}}
     <option value="{{$curr_cat->file_category_id}}" {{if $curr_cat->file_category_id == $curr_file->file_category_id}}selected="selected"{{/if}} >

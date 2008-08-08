@@ -44,7 +44,7 @@ function imprimerDocument(doc_id) {
   var url = new Url();
   url.setModuleAction("dPcompteRendu", "print_cr");
   url.addParam("compte_rendu_id", doc_id);
-  url.popup(700, 600, "Compte-rendu");
+  url.popup(800, 800, "Compte-rendu");
 }
 
 function exporterHPRIM(object_id, typeObject, oOptions) {

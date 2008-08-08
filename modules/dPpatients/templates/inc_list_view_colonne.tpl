@@ -1,1 +1,0 @@
-{{include file="../../dPfiles/templates/inc_list_view_colonne.tpl"}}
