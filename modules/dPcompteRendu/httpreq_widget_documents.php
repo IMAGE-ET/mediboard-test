@@ -47,10 +47,10 @@ if ($praticien->user_id) {
 $smarty = new CSmartyDP();
 
 $smarty->assign("modelesByOwner", $modelesByOwner);
-$smarty->assign("packs", $packs);
-$smarty->assign("praticien_id"  , $praticien->_id);
+$smarty->assign("packs"         , $packs);
+$smarty->assign("praticien"     , $praticien);
 $smarty->assign("object"        , $object);
-$smarty->assign("mode"         , mbGetValueFromGet("mode"));
+$smarty->assign("mode"          , mbGetValueFromGet("mode"));
 
 $smarty->display("inc_widget_documents.tpl");
 

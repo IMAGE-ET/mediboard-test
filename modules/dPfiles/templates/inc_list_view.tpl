@@ -10,13 +10,13 @@ Main.add(function () {
 
 <ul id="tab-{{if $accordDossier}}{{$selClass}}{{$selKey}}{{else}}consult{{/if}}" class="control_tabs">
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-  <li><a href="#{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
+  <li><a href="#Category-{{$keyCat}}">{{$curr_listCat.name}} ({{$curr_listCat.DocsAndFiles|@count}})</a></li>
 {{/foreach}}
 </ul>
 <hr class="control_tabs" />
 
 {{foreach from=$affichageFile item=curr_listCat key=keyCat}}
-<table class="tbl" id="{{$keyCat}}" style="display: none;">
+<table class="tbl" id="Category-{{$keyCat}}" style="display: none;">
   {{if $canFile->edit && !$accordDossier}}
   <tr>
     <td colspan="2" class="text">
@@ -44,7 +44,7 @@ Main.add(function () {
     <td class="text {{cycle name=celltxt values="dark, light"}}" style="vertical-align: middle;">
       <strong>{{$curr_file->_view}}</strong>
       <hr />
-      {{include file=inc_file_toolbar.tpl}}
+      {{include file=inc_file_toolbar.tpl notext=notext}}
     </td>
   </tr>
 {{foreachelse}}

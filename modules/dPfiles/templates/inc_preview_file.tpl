@@ -34,13 +34,13 @@
   {{/if}}
   
   <hr />
-    {{if $includeInfosFile}}
-    {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
-    {{else}}
     <a href="#popFile" onclick="popFile('{{$objectClass}}', '{{$objectId}}', '{{$elementClass}}', '{{$elementId}}',{{if $sfn}}{{$sfn}}{{else}}0{{/if}})">
-      <img src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
+	    {{if $includeInfosFile}}
+	      {{include file="../../dPfiles/templates/inc_preview_contenu_file.tpl"}}
+	    {{else}}
+	      <img class="preview" src="?m=dPfiles&amp;a=fileviewer&amp;suppressHeaders=1&amp;file_id={{$fileSel->file_id}}&amp;phpThumb=1&amp;hp=450&amp;wl=450{{if $sfn}}&amp;sfn={{$sfn}}{{/if}}" title="Afficher le grand aperçu" border="0" />
+	    {{/if}}
     </a>  
-    {{/if}}
 
 {{else}}
   <div class="big-info">

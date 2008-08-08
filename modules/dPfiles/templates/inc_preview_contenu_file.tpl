@@ -10,7 +10,7 @@
 
 <!-- Ajax -->
 {{else}}
-<div style="margin: 0 auto;	font-size: 70%; width: 400px; background: #fff;">
+<div class="preview" style="white-space: normal; margin: 0 auto; font-size: 60%;  padding: 5px; width: 400px;">
 	{{$includeInfosFile|smarty:nodefaults}}
 </div>	
 

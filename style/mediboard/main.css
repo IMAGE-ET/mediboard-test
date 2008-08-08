@@ -3068,3 +3068,8 @@ background-color: #88f;
 .transmission_possible {
   text-decoration: underline;
 }
+
+.preview {
+	border: 1px solid #aaa;
+	background: #fff;
+}

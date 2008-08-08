@@ -2,7 +2,7 @@
   * @param $object CMbObject Target Object for documents
   * @param $modelesByOwner array|CCompteRendu sorted by owner
   * @param $packs array|CPack  List of packs
-  * @param $praticien_id ref|CMediuser Owner of modèles
+  * @param $praticien f|CMediuser Owner of modèles
   *}}
   
 {{assign var=object_class value=$object->_class_name}}
@@ -44,7 +44,7 @@
 	      modeleSelector[{{$object_id}}] = new ModeleSelector("DocumentAdd-{{$object->_guid}}", null, "_modele_id", "_object_id");
 	    </script>
 
-      <button type="button" class="search" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien_id}}')">
+      <button type="button" class="search" onclick="modeleSelector[{{$object_id}}].pop('{{$object_id}}','{{$object_class}}','{{$praticien->_id}}')">
         Modèles
       </button>
 	    <input type="hidden" name="_modele_id" value="" />
