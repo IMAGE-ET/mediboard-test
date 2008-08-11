@@ -383,6 +383,7 @@ class CSmartyDP extends Smarty {
     // Only at debug time
     if (!CAppUI::conf("debug")) {
       parent::_smarty_include($params);
+      return;
     }
     
     $tpl_file = $params["smarty_include_tpl_file"];
@@ -404,6 +405,7 @@ class CSmartyDP extends Smarty {
   function display($resource_name, $cache_id = null, $compile_id = null) {
     if (!CAppUI::conf("debug")) {
       parent::display($resource_name, $cache_id, $compile_id);
+      return;
     }
     
     $this->showDebugSpans($resource_name, array());
