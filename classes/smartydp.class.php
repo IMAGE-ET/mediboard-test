@@ -351,12 +351,7 @@ class CSmartyDP extends Smarty {
     if (in_array(basename($tpl_file), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       return;
     }
-    
-    // Only at debug time
-    if (!CAppUI::conf("debug")) {
-      return;
-    }
-    
+        
     // The span
 	  echo "\n<span class='smarty-include'>";
 	  echo "\n$tpl_file";
@@ -385,6 +380,11 @@ class CSmartyDP extends Smarty {
    * @param string $params["smarty_include_vars"]
    */
   function _smarty_include($params) {
+    // Only at debug time
+    if (!CAppUI::conf("debug")) {
+      parent::_smarty_include($params);
+    }
+    
     $tpl_file = $params["smarty_include_tpl_file"];
     $vars     = $params["smarty_include_vars"];
     $this->showDebugSpans($tpl_file, $vars);
@@ -402,8 +402,12 @@ class CSmartyDP extends Smarty {
    * @param string $compile_id
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
-    $this->showDebugSpans($resource_name, array());
+    if (!CAppUI::conf("debug")) {
+      parent::display($resource_name, $cache_id, $compile_id);
+    }
     
+    $this->showDebugSpans($resource_name, array());
+   
     echo "\n<!-- Start display: $resource_name -->\n";
     parent::display($resource_name, $cache_id, $compile_id);
     echo "\n<!-- Stop display: $resource_name -->\n";
