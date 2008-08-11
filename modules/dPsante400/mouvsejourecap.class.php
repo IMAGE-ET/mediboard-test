@@ -144,7 +144,8 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->fonction->loadMatchingObject();
     $this->fonction->type = "cabinet";
     $this->fonction->text = "Import eCap";
-    $this->fonction->color = "00FF00";
+    $this->fonction->color = "00FFF0";
+    $this->function->compta_partagee = '0';
 
     $this->trace($this->fonction->getDBFields(), "Cabinet à enregistrer");
 
