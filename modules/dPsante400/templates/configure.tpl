@@ -144,15 +144,6 @@ var Moves = {
 
 </form>
 
-<h2>Purge des mouvements non traités</h2>
-
-<div class="big-warning">
-  Attention, cette option permet de purger la base de données tierce de tous les
-  mouvements non traités par Mediboard. une application tierces.
-  <br />
-  A utiliser avec une extrême prudence, car <strong>l'opération est irréversible</strong> !
-</div>
-
 <table class="tbl">
   <tr>
     <th>Choix des mouvements</th>
@@ -190,6 +181,15 @@ var Moves = {
   </tr>
 
 </table>
+
+<h2>Purge des mouvements non traités</h2>
+
+<div class="big-warning">
+  Attention, cette option permet de purger la base de données tierce de tous les
+  mouvements non traités par Mediboard. une application tierces.
+  <br />
+  A utiliser avec une extrême prudence, car <strong>l'opération est irréversible</strong> !
+</div>
 
 <h2>Purge des données importés</h2>
 

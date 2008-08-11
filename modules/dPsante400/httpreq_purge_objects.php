@@ -11,6 +11,16 @@ global $AppUI, $can, $m, $g;
 
 $can->needsAdmin();
 
+if (null == $pass = mbGetValueFromGet("pass")) {
+  $AppUI->stepAjax("Fonctionnalité désactivée car trop dangereuse.", UI_MSG_WARNING);
+  return;
+}
+
+if (md5($pass) != "aa450aff6d0f4974711ff4c5536ed4cb") {
+  $AppUI->stepAjax("Mot de passe incorrect.\nAttention, fonctionnalité à utiliser avec une extrême prudence", UI_MSG_ERROR);
+}
+
+
 /**
  * Purge objects of a given class linked to an idSante400 from database
  * via a direct SQL query, no framework for better performance

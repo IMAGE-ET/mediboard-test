@@ -2,7 +2,7 @@
   * @param $object CMbObject Target Object for documents
   * @param $modelesByOwner array|CCompteRendu sorted by owner
   * @param $packs array|CPack  List of packs
-  * @param $praticien f|CMediuser Owner of modèles
+  * @param $praticien CMediuser Owner of modèles
   *}}
   
 {{assign var=object_class value=$object->_class_name}}

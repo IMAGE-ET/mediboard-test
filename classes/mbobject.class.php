@@ -717,18 +717,12 @@ class CMbObject {
    */
   function repair() {
     $properties = get_object_vars($this);
-    foreach ($this->_props as $propName => $propSpec) {
-      if (!array_key_exists($propName, $properties)) {
-        trigger_error("La spécification cible la propriété '$propName' inexistante dans la classe '$this->_class_name'", E_USER_WARNING);
-        continue;
-      } 
-
-      $propValue =& $this->$propName;
-      if ($propValue !== null) {
-        if ($msg = $this->checkProperty($propName)) {
-          $spec = $this->_specs[$propName];
+    foreach ($this->getProps() as $name => $value) {
+      if ($value !== null) {
+        if ($msg = $this->checkProperty($name)) {
+          $spec = $this->_specs[$name];
           if (!$spec->notNull) {
-            $propValue = "";
+            $this->$name = "";
           }
         }
       }
