@@ -7,25 +7,21 @@
 
 <table class="form">
 
-  <!-- Champs RPU -->  
-  <tr>
-    <th class="category" colspan="100">Mode RPU</th>
+  <th class="category" colspan="6">DHE e-Cap</th>
   </tr>
-  
+
+  {{assign var="mod" value="interop"}}
+  {{assign var="var" value="base_url"}}
   <tr>
-    {{assign var=var value=old_rpu}}
     <th colspan="3">
-      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
-        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      <label for="{{$mod}}[{{$var}}]" title="{{tr}}config-{{$mod}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$mod}}-{{$var}}{{/tr}}
       </label>  
     </th>
     <td colspan="3">
-      <select class="bool" name="{{$m}}[{{$var}}]">
-        <option value="0" {{if 0 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-0{{/tr}}</option>
-        <option value="1" {{if 1 == $dPconfig.$m.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$var}}-1{{/tr}}</option>
-      </select>
+      <input class="str" size="60" name="{{$mod}}[{{$var}}]" value="{{$dPconfig.$mod.$var}}" />
     </td>
-  </tr>
+  </tr>  
 
   <tr>
     <td class="button" colspan="6">

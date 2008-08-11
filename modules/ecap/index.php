@@ -9,6 +9,6 @@
 
 $module = CModule::getInstalled(basename(dirname(__FILE__)));
 
-$module->registerTab("vw_praticiens", null, TAB_EDIT);
+$module->registerTab("vw_identifiants", null, TAB_EDIT);
 
 ?>
