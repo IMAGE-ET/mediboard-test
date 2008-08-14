@@ -187,12 +187,19 @@ class CCompteRendu extends CMbMetaObject {
       "func" => array(),
     );
     
+    // Pas de praticien
+    if (!$prat_id) {
+      return $modeles;
+    }
+    
+    // Chargement du praticien
     $prat = new CMediusers;
     if (!$prat->load($prat_id)) {
       trigger_error("User '$prat_id' does not exist");
       return $modeles; 
     }
     
+    // Clauses de recherche
     $modele = new CCompteRendu();
     $where = array();
     $where["object_id"] = "IS NULL";

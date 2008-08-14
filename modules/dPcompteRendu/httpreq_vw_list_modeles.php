@@ -8,40 +8,31 @@
 * @abstract Permet de choisir des modèles pour constituer des packs
 */
 
-global $AppUI, $can, $m;
+global $AppUI, $can;
+$can->needsRead();
 
-$object_class = mbGetValueFromGetOrSession("object_class");
-$user_id = mbGetValueFromGetOrSession("user_id", $AppUI->user_id);
-$pack_id = mbGetValueFromGetOrSession("pack_id");
+// Chargement du user
+$user = new CMediusers;
+$user->load(mbGetValueFromGetOrSession("user_id", $AppUI->user_id));
+$user->loadRefs();
 
+// Chargement du pack
 $pack = new CPack();
-$pack->load($pack_id);
-if($pack_id) {
+if ($pack->load(mbGetValueFromGetOrSession("pack_id"))) {
   $pack->loadRefsFwd();
 } else {
-  $pack->chir_id = $userSel->user_id;
+  $pack->chir_id = $user->user_id;
 }
-
-$userSel = new CMediusers;
-$userSel->load($user_id);
-$userSel->loadRefs();
 
 // Modèles de l'utilisateur
-$listModelePrat = array();
-$listModeleFunc = array();
-if ($userSel->user_id) {
-  $listModelePrat = CCompteRendu::loadModelesForPrat($object_class, $userSel->user_id);
-  $listModeleFunc = CCompteRendu::loadModelesForFunc($object_class, $userSel->function_id);
-  
-}
+$object_class = mbGetValueFromGetOrSession("object_class");
+$modeles = CCompteRendu::loadAllModelesForPrat($user->_id);
 
 // Création du template
-
 $smarty = new CSmartyDP();
 
-$smarty->assign("listModelePrat"   , $listModelePrat);
-$smarty->assign("listModeleFunc"   , $listModeleFunc);
-$smarty->assign("pack"             , $pack          );
+$smarty->assign("modeles", $modeles);
+$smarty->assign("pack"   , $pack   );
 
 $smarty->display("inc_list_modeles.tpl");
 

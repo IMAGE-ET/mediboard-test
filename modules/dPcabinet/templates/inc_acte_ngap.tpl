@@ -56,10 +56,8 @@ ActesNGAP = {
   <input type="hidden" name="object_id" value="{{$object->_id}}" />
   <input type="hidden" name="object_class" value="{{$object->_class_name}}" />
   <table class="form">
-    <tr>
-      <th class="category" colspan="10">Actes NGAP</th>
-    </tr>
-  {{if $object->_coded}}
+  	
+  	{{if $object->_coded}}
     <tr>
       <td colspan="10">
         <div class="big-info">
@@ -69,6 +67,11 @@ ActesNGAP = {
       </td>
     </tr> 
     {{/if}}
+    
+    <tr>
+      <th class="category" colspan="10">Codages des actes NGAP</th>
+    </tr>
+
     <tr>
       <th class="category">{{mb_title object=$acte_ngap field=quantite}}</th>
       <th class="category">{{mb_title object=$acte_ngap field=code}}</th>
@@ -82,6 +85,7 @@ ActesNGAP = {
       <th class="category">Action</th>
       {{/if}}
     </tr>
+    
     {{if !$object->_coded}}
     <tr>
       <td>{{mb_field object=$acte_ngap field="quantite" onchange="refreshTarif()"}}</td>
@@ -113,6 +117,7 @@ ActesNGAP = {
       </td>     
     </tr>
     {{/if}}
+    
     {{foreach from=$object->_ref_actes_ngap item="_acte_ngap"}}
     <tr>
       <td>{{mb_value object=$_acte_ngap field="quantite"}}</td>

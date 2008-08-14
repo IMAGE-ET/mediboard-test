@@ -295,15 +295,17 @@ Main.add(function () {
           <tbody id="listCategorie">
           
           {{if $consult->_id || $chir->_id}}
-          {{assign var="categorie_id" value=$consult->categorie_id}}
-          {{assign var="categories" value=$categories}}
-          {{assign var="listCat" value=$listCat}}
-          {{include file="httpreq_view_list_categorie.tpl"}}
+	          {{include file="httpreq_view_list_categorie.tpl" 
+          		categorie_id=$consult->categorie_id 
+          		categories=$categories
+          		listCat=$listCat}}
           {{elseif $chir->_id}}
           {{assign var="categorie_id" value=""}}
           {{assign var="categories" value=$categories}}
-          {{assign var="listCat" value=$listCat}}
-          {{include file="httpreq_view_list_categorie.tpl"}}
+          {{include file="httpreq_view_list_categorie.tpl"
+          		categorie_id=""
+          		categories=$categories
+          		listCat=$listCat}}
           {{/if}}
         
           </tbody>

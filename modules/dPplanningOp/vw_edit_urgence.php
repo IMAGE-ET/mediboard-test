@@ -14,7 +14,6 @@ $can->needsRead();
 // Liste des Etablissements selon Permissions
 $etablissements = CMediusers::loadEtablissements(PERM_READ);
 
-
 // Chargement des prestations
 $prestation = new CPrestation();
 $prestations = $prestation->loadList();
@@ -89,36 +88,6 @@ $sejour->makeDatesOperations();
 $patient->loadRefsSejours();
 $sejours =& $patient->_ref_sejours;
 
-// Récupération des modèles
-
-// Modèles de l'utilisateur
-$listModelePrat = array();
-$order = "nom";
-if ($chir->user_id) {
-  $where = array();
-  $where["object_class"] = "= 'COperation'";
-  $where["chir_id"] = "= '".$chir->user_id."'";
-  $listModelePrat = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-}
-
-// Modèles de la fonction
-$listModeleFunc = array();
-if ($chir->user_id) {
-  $where = array();
-  $where["object_class"] = "= 'COperation'";
-  $where["function_id"] = "= '".$chir->function_id."'";
-  $listModeleFunc = CCompteRendu::loadModeleByCat("Hospitalisation", $where, $order, true);
-}
-
-// Packs d'hospitalisation
-$listPack = array();
-if($chir->user_id) {
-  $where = array();
-  $where["chir_id"] = "= '".$chir->user_id."'";
-  $listPack = new CPack;
-  $listPack = $listPack->loadlist($where, $order);
-}
-
 $config = CAppUI::conf("dPplanningOp CSejour");
 $hours = range($config["heure_deb"], $config["heure_fin"]);
 $mins = range(0, 59, $config["min_intervalle"]);
@@ -161,9 +130,6 @@ $smarty->assign("msg_alert" , $msg_alert);
 
 $smarty->assign("categorie_prat", $categorie_prat);
 $smarty->assign("listPraticiens", $listPraticiens);
-$smarty->assign("listModelePrat", $listModelePrat);
-$smarty->assign("listModeleFunc", $listModeleFunc);
-$smarty->assign("listPack"      , $listPack      );
 $smarty->assign("etablissements", $etablissements);
 
 $smarty->assign("hours"        , $hours);

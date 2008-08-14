@@ -19,8 +19,6 @@ $date  = mbGetValueFromGetOrSession("date", mbDate());
 $consultAnesth  = new CConsultAnesth;
 $consult        = new CConsultation;
 $userSel        = new CMediusers;
-$listModelePrat = array();
-$listModeleFunc = array();
 
 if($op) {
   $where = array();
@@ -47,27 +45,6 @@ if($op) {
     // On charge le praticien
     $userSel->load($prat_id);
     $userSel->loadRefs();
-
-    // Récupération des modèles
-    $whereCommon = array();
-    $whereCommon["object_id"]    = "IS NULL";
-    $whereCommon["object_class"] = "= 'CConsultAnesth'";
-    $order = "nom";
-    
-    // Modèles de l'utilisateur
-    if($userSel->user_id){
-      $where = $whereCommon;
-      $where["chir_id"] = $ds->prepare("= %", $userSel->user_id);
-      $listModelePrat = new CCompteRendu;
-      $listModelePrat = $listModelePrat->loadlist($where, $order);
-    }
-    // Modèles de la fonction
-    if($userSel->user_id){
-      $where = $whereCommon;
-      $where["function_id"] = $ds->prepare("= %", $userSel->function_id);
-      $listModeleFunc = new CCompteRendu;
-      $listModeleFunc = $listModeleFunc->loadlist($where, $order);
-    }
   }
 }
 
@@ -86,8 +63,6 @@ $smarty->assign("op"             , $op);
 $smarty->assign("date"           , $date);
 $smarty->assign("consult"        , $consult);
 $smarty->assign("consult_anesth" , $consult->_ref_consult_anesth);
-$smarty->assign("listModelePrat" , $listModelePrat);
-$smarty->assign("listModeleFunc" , $listModeleFunc);
 $smarty->assign("anesth"         , $anesth);
 $smarty->assign("techniquesComp" , $techniquesComp);
 

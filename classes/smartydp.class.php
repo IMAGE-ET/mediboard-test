@@ -403,6 +403,7 @@ class CSmartyDP extends Smarty {
    * @param string $compile_id
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
+    // Only at debug time
     if (!CAppUI::conf("debug")) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;
