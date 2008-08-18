@@ -128,8 +128,9 @@ if($prescription_line_id){
 }
 
 
+
 // Validation des traitements perso
-if($prescription->_id && $chapitre == "medicament"){
+if($prescription_id && $chapitre == "medicament"){
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
 	$prescription_traitement =& $prescription->_ref_object->_ref_prescription_traitement;
 	$prescription_traitement->loadRefsLinesMed();

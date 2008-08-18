@@ -42,15 +42,16 @@ ul {
     <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
     <th rowspan="2" style="width: 5px"></th>
     {{foreach from=$dates item=date}}
-    <th colspan="8" class="title" style="width: 5cm">{{$date|date_format:"%d/%m/%Y"}}</th>
+    <th colspan="8" class="title" style="width: 5cm; border-right: 1px solid black; border-left: 1px solid black;">{{$date|date_format:"%d/%m/%Y"}}</th>
     {{/foreach}}
   </tr>
   <tr>
     <th class="title" style="width: 4cm">Produit</th>
     <th class="title" style="width: 3cm">Posologie</th>
-    {{foreach from=$dates item=date}}
-      {{foreach from=$tabHours.$date item=_hour}}
-        <th>{{$_hour}}h</th>
+    {{foreach from=$dates item=date }}
+      {{foreach from=$tabHours.$date item=_hour name=foreach_date}}
+        <th style="{{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
+                   {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}">{{$_hour}}h</th>
       {{/foreach}}
     {{/foreach}}
   </tr>
@@ -84,7 +85,7 @@ ul {
   			   {{$_line->_ref_praticien->_view}}
   			  {{/if}}
   			</td>
-  			<td style="border: 1px solid #ccc; text-align: center">
+  			<td style="border-left: 1px solid #ccc; text-align: center">
           {{if !$_line->signee && !$_line->valide_pharma}}
   			    DP
   			  {{else}}
@@ -98,8 +99,11 @@ ul {
         </td>
         <!-- Affichage des heures de prises des medicaments -->
 		  	{{foreach from=$dates item=date}}
-		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
-		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
+		      {{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
+		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
+		                 {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
+                     {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
+                      text-align: center">
 			      {{assign var=quantite value=""}}  
 			      {{if array_key_exists($line_id, $list_prises_med.$date) && array_key_exists($unite_prise, $list_prises_med.$date.$line_id)}}
 					    {{assign var=prise_line value=$list_prises_med.$date.$line_id.$unite_prise}}	            
@@ -144,15 +148,18 @@ ul {
   			<td class="text" style="text-align: center">
   			   {{$element->_ref_praticien->_view}} 
   			</td>
-  			 <td style="border: 1px solid #ccc; text-align: center">
+  			 <td style="border-left: 1px solid #ccc; text-align: center">
   			  {{if !$element->signee}}
   			    D
   			  {{/if}}
         </td>
         <!-- Affichage des heures de prises des medicaments -->
         {{foreach from=$dates item=date}}
-		      {{foreach from=$tabHours.$date key=_real_hour item=_hour}}
-		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc; text-align: center">
+		      {{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
+		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
+		                 {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
+                     {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
+                      text-align: center">
 			      {{assign var=quantite value=""}}  
 			      {{if array_key_exists($element_id, $list_prises_element.$date) && array_key_exists($unite_prise, $list_prises_element.$date.$element_id)}}
 					    {{assign var=prise_line value=$list_prises_element.$date.$element_id.$unite_prise}}	            
