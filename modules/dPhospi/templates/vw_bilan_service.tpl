@@ -1,18 +1,35 @@
+<form name="filter_prescription" action="?" method="get">
+     
 <table class="form">
   <tr>
+    <th class="category">Horaire</th>
+    <th class="category">Categorie</th>
+  </tr>
+  <tr>
     <td>
-     <form name="filter_prescription" action="?" method="get">
       <input type="hidden" name="m" value="dPhospi" />
       <input type="hidden" name="a" value="vw_bilan_service" />
       <input type="hidden" name="dialog" value="1" />
       De {{mb_field object=$prescription field="_filter_time_min" form="filter_prescription"}}
       à {{mb_field object=$prescription field="_filter_time_max" form="filter_prescription"}}
+     </td>
+     <td>
+      <select name="categorie_id" class="select-tree">
+        <option value="all">Toutes</option>
+        <option value="med" {{if $categorie_id == "med"}}selected="selected"{{/if}}>Médicaments</option>
+        {{foreach from=$categories item=categories_by_type key=name}}
+          <optgroup label="{{$name}}">
+          {{foreach from=$categories_by_type item=cat}}
+            <option value="{{$cat->_id}}" {{if $categorie_id == $cat->_id}}selected="selected"{{/if}}>{{$cat->_view}}</option>
+          {{/foreach}}
+          </optgroup>
+        {{/foreach}}
+      </select>
       <button class="tick">Filtrer</button>
-      </form>
     </td>
   </tr>
 </table>
-
+</form>
 <table class="tbl">
   <tr>
     <th>Libelle</th>
@@ -24,10 +41,12 @@
 		 <th colspan="2">{{$patient->_view}}</th>
 		</tr>
 	  {{foreach from=$lines_by_patient_class_hour key=hour item=lines_by_patient_class}}
-		  {{foreach from=$lines_by_patient_class key=_class item=lines_by_patient}}	  
+		  {{foreach from=$lines_by_patient_class key=_class item=lines_by_patient name=foreach_hour}}	  
+			  {{if $smarty.foreach.foreach_hour.first}}
 			  <tr>
 	        <th colspan="2">{{$hour}}</th>
 	      </tr>
+	      {{/if}}
 			  {{foreach from=$lines_by_patient key=line_id item=prises_by_patient}}
 			  {{assign var=produit value=$lines_produit.$_class.$line_id}}
 			  <tr>
@@ -42,5 +61,9 @@
 			  </tr>
 		  {{/foreach}}
 	  {{/foreach}}
+	{{foreachelse}}
+	<tr>
+	  <td colspan="2">Aucune prise</td>
+	</tr>
 	{{/foreach}}
 </table>
