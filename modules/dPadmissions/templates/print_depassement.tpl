@@ -1,9 +1,9 @@
 <table class="form" id="admission">
   <tr><th colspan="2">Dr {{$admission->_ref_chir->_view}}</th></tr>
-  <tr><th colspan="2">Centre Médico Chirurgical de l'Atlantique</th></tr>
-  <tr><th colspan="2">26 rue Moulin des justices</th></tr>
-  <tr><th colspan="2">17138 &mdash; Puilboreau</th></tr>
-  <tr><th colspan="2">Tel : 05 46 00 40 40</th></tr>
+  <tr><th colspan="2"><!-- Adresse 1 --></th></tr>
+  <tr><th colspan="2"><!-- Adresse 2 --></th></tr>
+  <tr><th colspan="2"><!-- CP, ville --></th></tr>
+  <tr><th colspan="2"><!-- Tel --></th></tr>
   <tr><th class="title" colspan="2"><a href="#" onclick="window.print()">Supplément d'honoraire</a></th></tr>
 
   <tr>
