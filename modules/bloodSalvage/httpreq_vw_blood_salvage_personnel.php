@@ -8,7 +8,8 @@
  */
 CAppUI::requireModuleFile("bloodSalvage", "inc_personnel");
 
-$blood_salvage_id = mbGetValueFromPostOrSession("blood_salvage_id");
+$blood_salvage_id = mbGetValueFromGetOrSession("blood_salvage_id");
+$blood_salvage = new CBloodSalvage();
 
 $date  = mbGetValueFromGetOrSession("date", mbDate());
 
@@ -20,7 +21,6 @@ $tabAffected = array();
 $timingAffect = array();
 
 if($blood_salvage_id) {
-	$blood_salvage = new CBloodSalvage();
 	$blood_salvage->load($blood_salvage_id);
 	loadAffected($blood_salvage_id, $list_nurse_sspi, $tabAffected, $timingAffect);
 }

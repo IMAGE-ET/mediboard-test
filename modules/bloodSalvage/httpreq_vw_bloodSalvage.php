@@ -7,7 +7,7 @@
  *  @author Alexandre Germonneau
  */
 
-global  $AppUI, $can, $m, $g, $dPconfig;
+global $can, $m;
 $can->needsRead();
 /*
  * Récupération des variables en session et ou issues des formulaires.
@@ -22,7 +22,8 @@ $totaltime = "00:00:00";
 $modif_operation    = $date>=mbDate();
 $timing = array();
 
-$inLivretTherapeutique = $AppUI->conf('bloodSalvage CBloodSalvage inLivretTherapeutique');
+$inLivretTherapeutique = CAppUI::conf("bloodSalvage CBloodSalvage inLivretTherapeutique");
+
 
 if($inLivretTherapeutique) {
 	$anticoagulant = new CBcbClasseATC(); 

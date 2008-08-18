@@ -6,7 +6,7 @@
 <input type="hidden" name="del" value="0" />
 <table class="form">
   <tr>
-    <th class="category" colspan="4	">Timing</th>
+    <th class="category" colspan="6">Timing</th>
   </tr>
 	{{assign var=submit value=submitBloodSalvageTiming}}
 	{{assign var=blood_salvage_id value=$blood_salvage->_id}}
