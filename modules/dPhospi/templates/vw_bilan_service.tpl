@@ -1,9 +1,33 @@
+<script type="text/javascript">
+
+Main.add( function(){
+  oCatField = new TokenField(document.filter_prescription.token_cat); 
+  
+  var cats = {{$cats|@json}};
+  $$('input').each( function(oCheckbox) {
+    if(cats.include(oCheckbox.value)){
+      oCheckbox.checked = true;
+    }
+  });
+} );
+
+// Fonction permettant de modifier le tokenField lors de la selection des checkboxs
+changeBox = function(oCheckbox, cat_id, oTokenField){
+  if(oCheckbox.checked){
+    oTokenField.add(cat_id);
+  } else {
+    oTokenField.remove(cat_id);
+  }
+}
+	
+</script>
+
 <form name="filter_prescription" action="?" method="get">
-     
-<table class="form">
+  <input type="hidden" name="token_cat" value="{{$token_cat}}" />     
+ 
+ <table class="form">
   <tr>
     <th class="category">Horaire</th>
-    <th class="category">Categorie</th>
   </tr>
   <tr>
     <td>
@@ -13,18 +37,36 @@
       De {{mb_field object=$prescription field="_filter_time_min" form="filter_prescription"}}
       à {{mb_field object=$prescription field="_filter_time_max" form="filter_prescription"}}
      </td>
+   </tr>
+   <tr>
+     <th class="category">Categorie</th>
+   </tr>
+   <tr>
      <td>
-      <select name="categorie_id" class="select-tree">
-        <option value="all">Toutes</option>
-        <option value="med" {{if $categorie_id == "med"}}selected="selected"{{/if}}>Médicaments</option>
-        {{foreach from=$categories item=categories_by_type key=name}}
-          <optgroup label="{{$name}}">
-          {{foreach from=$categories_by_type item=cat}}
-            <option value="{{$cat->_id}}" {{if $categorie_id == $cat->_id}}selected="selected"{{/if}}>{{$cat->_view}}</option>
-          {{/foreach}}
-          </optgroup>
-        {{/foreach}}
-      </select>
+       <table>
+         <tr>
+           <td>
+             <strong>Médicaments</strong>
+           </td>
+           <td>
+             <input type="checkbox" value="med" onclick="changeBox(this,'med',oCatField)" />
+           </td>
+         </tr>
+         {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
+           <tr>
+             <td><strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong></td>
+             {{foreach from=$categories_by_chap item=categorie}}
+               <td class="text">
+                 <input type="checkbox" value="{{$categorie->_id}}" onclick="changeBox(this,'{{$categorie->_id}}',oCatField)"/> {{$categorie->_view}}
+               </td>
+             {{/foreach}}
+           </tr>
+         {{/foreach}}
+       </table>
+     </td>
+  </tr>
+  <tr>
+    <td style="text-align: center">
       <button class="tick">Filtrer</button>
     </td>
   </tr>

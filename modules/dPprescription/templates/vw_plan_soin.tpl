@@ -9,6 +9,10 @@ ul {
   padding-left: 11px;
 }
 
+.signature_ide {
+  border: 1px solid #ccc;
+}
+
 </style>
 
 <div class="plan_soin">
@@ -64,7 +68,6 @@ ul {
         <td class="text"  style="border: 1px solid #ccc;">
          {{if array_key_exists($line_id, $intitule_prise_med)}}
           {{if is_numeric($unite_prise)}}
-          
           <ul>
             <li>{{$intitule_prise_med.$line_id.autre.$unite_prise}}</li>
           </ul>
@@ -77,7 +80,6 @@ ul {
 	        {{/if}}
 	        {{/if}}
         </td>
-        
   			<td class="text" style="text-align: center">
   			  {{if $_line->_traitement}}
   			    Traitement Personnel
@@ -122,13 +124,18 @@ ul {
       </tr>
     {{/foreach}}
   {{/foreach}} 
+  
+  <tr>
+    <td colspan="30" style="padding:0; height: 1px; border: 1px solid black"></td>
+  </tr>
+   
   <!-- Affichage des elements -->
   {{foreach from=$all_lines_element key=name_chap item=elements_chap}}
     {{foreach from=$elements_chap key=name_cat item=elements_cat}}
       {{assign var=categorie value=$categories.$name_chap.$name_cat}}
-      {{foreach from=$elements_cat item=_element}}
+      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
         {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}
-       {{assign var=element_id value=$element->_id}}
+        {{assign var=element_id value=$element->_id}}
       <tr>
         <td class="text">{{$element->_view}}</td>
         <td class="text" style="border: 1px solid #ccc;">
@@ -144,7 +151,6 @@ ul {
 	        </ul>
 	        {{/if}}
         </td>
-       
   			<td class="text" style="text-align: center">
   			   {{$element->_ref_praticien->_view}} 
   			</td>
@@ -176,34 +182,38 @@ ul {
 	        {{/foreach}}
 	      {{/foreach}}
         </tr>
+        
+        
+        {{if $smarty.foreach.foreach_elt.last && $smarty.foreach.foreach_cat.last}}
+        <tr>
+          <td colspan="30" style="padding:0; height: 1px; border: 1px solid black"></td>
+        </tr>
+        {{/if}}
+        
         {{/foreach}}
       {{/foreach}}
     {{/foreach}}
   {{/foreach}}
-	  <tr>
-	    <th class="title" colspan="2">Remarque</th>
-	    <th class="title" colspan="2">Pharmacien</th>
-	    <th class="title" colspan="8">Signature IDE</th>
-	    <th class="title" colspan="8">Signature IDE</th>
-	    <th class="title" colspan="8">Signature IDE</th>
-	  </tr>
-	  <tr>
-	    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
-	    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
-	    {{if $pharmacien->_id}}
-	      {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
-	    {{/if}}  
-	      
-	    </td>
-
-	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
-	  </tr>
-	  <tr>
-	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
-	  </tr>
-	  <tr>
-	    <td style="border: 1px solid #ccc;" colspan="8" ></td><td style="border: 1px solid #ccc;" colspan="8"></td><td style="border: 1px solid #ccc;" colspan="8"></td>
-	  </tr>
+    <tbody class="hoverable">
+		  <tr>
+		    <th class="title" colspan="2">Remarque</th>
+		    <th class="title" colspan="2">Pharmacien</th>
+		    <th class="title" colspan="8">Signature IDE</th>
+		    <th class="title" colspan="8">Signature IDE</th>
+		    <th class="title" colspan="8">Signature IDE</th>
+		  </tr>
+		  <tr>
+		    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
+		    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
+		    {{if $pharmacien->_id}}
+		      {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
+		    {{/if}}  
+		    </td>
+		    <td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td>
+		  </tr>
+		  <tr><td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td></tr>
+		  <tr><td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td></tr>
+    </tbody>
   </table>
 
 <!-- Re-ouverture des tableaux -->

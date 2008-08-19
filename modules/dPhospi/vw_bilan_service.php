@@ -13,7 +13,8 @@ $date = mbGetValueFromGetOrSession("date");
 $date_min = "$date 00:00:00";
 $date_max = "$date 23:59:59";
 
-$categorie_id = mbGetValueFromGet("categorie_id", "all");
+$token_cat = mbGetValueFromGet("token_cat","");
+$cats = explode("|",$token_cat);
 
 $service_id = mbGetValueFromGetOrSession("service_id");
 
@@ -40,10 +41,12 @@ $where[] = "(sejour.entree_prevue BETWEEN '$date_min' AND '$date_max') OR
 $where['service.service_id'] = " = '$service_id'";
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
-
+$lines = array();
 $lines_produit = array();
 $patients = array();
 $prises = array();
+
+
 foreach($prescriptions as $_prescription){
 	$sejour =& $_prescription->_ref_object;
 	$sejour->loadRefPatient();
@@ -51,25 +54,18 @@ foreach($prescriptions as $_prescription){
 	$patients[$sejour->_ref_patient->_id] = $sejour->_ref_patient;
 	
 	// Chargement des lignes de med
-	if($categorie_id == "all" || $categorie_id == "med"){
+	if(in_array("med", $cats)){
 	  $_prescription->loadRefsLinesMed();
 	  $lines["medicament"] = $_prescription->_ref_prescription_lines;
 	}
 	
 	// Chargement des lignes d'elements
-	if($categorie_id != "med"){
-   $_prescription->loadRefsLinesElement();
-    if($categorie_id == "all"){
-      $lines["element"] = $_prescription->_ref_prescription_lines_element;
-    } else {
-			foreach($_prescription->_ref_prescription_lines_element as $_line_element){
-				if($_line_element->_ref_element_prescription->category_prescription_id == $categorie_id){
-					$lines["element"][$_line_element->_id] = $_line_element;
-				}
-			}
-    }
-	}
-	
+	$_prescription->loadRefsLinesElement();
+  foreach($_prescription->_ref_prescription_lines_element as $_line_element){
+	  if(in_array($_line_element->_ref_element_prescription->category_prescription_id, $cats)){
+		  $lines["element"][$_line_element->_id] = $_line_element;
+		}
+	}  	
 	
 	foreach($lines as $lines_by_type){
 		if(count($lines_by_type)){
@@ -102,9 +98,12 @@ $prescription = new CPrescription();
 $prescription->_filter_time_min = $_filter_time_min;
 $prescription->_filter_time_max = $_filter_time_max;
 
+$token_cat = implode("|", $cats);
+
 // Smarty template
 $smarty = new CSmartyDP();
-$smarty->assign("categorie_id", $categorie_id);
+$smarty->assign("token_cat", $token_cat);
+$smarty->assign("cats", $cats);
 $smarty->assign("categories", $categories);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("patients", $patients);

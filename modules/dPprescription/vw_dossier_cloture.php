@@ -17,6 +17,8 @@ $prescription->load($prescription_id);
 $sejour =& $prescription->_ref_object;
 $sejour->loadRefPatient();
 
+$dossier = array();
+
 // Chargement des lignes
 $prescription->loadRefsLinesMed();
 $prescription->loadRefsLinesElementByCat();
