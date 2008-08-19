@@ -1,3 +1,8 @@
+</div>
+    </td>
+  </tr>
+</table>
+
 {{if $debugMode && !$offline}}
 <div id="performance">
   PHP : 
@@ -41,10 +46,6 @@
   Adresse IP : {{$userIP}}
 </div>
 {{/if}}
-
-    </td>
-  </tr>
-</table>
 
 {{if $demoVersion && !$offline}}
 <div style="margin: 10px; float:right">

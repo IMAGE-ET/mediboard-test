@@ -3,19 +3,19 @@ form {
 }
 
 input, select, textarea, button {
-  border: 1px #909090 solid;
+  /*border: 1px #909090 solid;*/
   font-size: 1em;
   margin: 1px;
   padding: 1px;
-  background: #F9f9f9;
+  /*background: #F9f9f9;*/
 }
 
 input:hover, select:hover, textarea:hover {
-  border-color: #333333;
+  /*border-color: #333333;*/
 }
 
 input:focus, select:focus, textarea:focus {
-  border-color: #FF6600;
+  /*border-color: #FF6600;*/
 }
 
 select, input[type=submit], input[type=reset], input[type=button] {
@@ -25,7 +25,7 @@ select, input[type=submit], input[type=reset], input[type=button] {
 input:focus,
 select:focus,
 textarea:focus {
-  background: #fff;
+  /*background: #fff;*/
 }
 
 input[type=submit],
@@ -33,7 +33,7 @@ input[type=reset],
 input[type=button], 
 button,
 a.button {
-  background: #ddd;
+  /*background: #ddd;*/
 }
 
 input[type=submit]:hover,
@@ -41,7 +41,7 @@ input[type=reset]:hover,
 input[type=button]:hover, 
 button:hover,
 a:hover.button {
-  background: #bbb;
+  /*background: #bbb;*/
 }
 
 select {
@@ -53,7 +53,7 @@ option, optgroup {
   padding: 0;
   margin: 0;
   padding-right: 6px;
-  background: #fff;
+  /*background: #fff;*/
 }
 
 optgroup.group {
@@ -83,7 +83,7 @@ option[value=""] {
 }
 
 label:hover {
-  border-bottom: 1px dotted #888;
+  /*border-bottom: 1px dotted #888;*/
   cursor: help;
 }
 
@@ -112,16 +112,15 @@ a.buttonchange,
 a.buttonremove, 
 a.buttonadd, 
 a.buttondown {
-  color: #000;
+  /*color: #000;*/
   text-decoration: none;
   cursor: pointer;
-  border: 1px solid #909090;
+  /*border: 1px solid #909090;*/
   font-size: 1em;
   line-height: 1em;
   font-weight: normal;
   white-space: nowrap;
-  vertical-align: middle;
-  background: url(images/buttons/button_background.gif);
+  /*background: url(images/buttons/button_background.gif);*/
   margin:0;
 }
 
@@ -224,8 +223,8 @@ a.buttondown:before {
   margin: 0;
   padding: 0;
   padding-right: 2px;
-  height: 12px;
-  width: 12px;
+  height: 11px;
+  width: 11px;
 }
 
 a.button,  
@@ -263,9 +262,8 @@ a.buttonchange:hover,
 a.buttondown:hover,
 a.buttonadd:hover, 
 a.buttonremove:hover {
-  background-color: #bbb;
   text-decoration: none;
-  background: url(images/buttons/button_hover_background.gif);
+  /*background: url(images/buttons/button_hover_background.gif);*/
 }
 
 button.notext, a.notext {

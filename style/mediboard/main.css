@@ -1690,17 +1690,8 @@ table.selectCode td {
   border: #aaa 2px dotted;
 }
 
-#admission .Bold{
-  font-weight: bold;
-}
-
-#admission .NotBold{
-  font-weight: normal;
-}
-
 
 /* control tabs */
-
 hr.control_tabs {
   clear: both;
   border: none;
@@ -3033,6 +3024,10 @@ ul.select-tree li.drop {
   background-image: url(../../images/icons/a_right.png);
   background-position: center right;
   background-repeat: no-repeat;
+}
+
+ul.select-tree .highlight {
+  background: #ddd;
 }
 
 .administration {

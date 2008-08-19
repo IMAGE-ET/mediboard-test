@@ -188,6 +188,28 @@ a.DESC:hover {
   padding-bottom: 8px;
 }
 
+
+span.smarty-include {
+  background: #444;
+  position: absolute;
+  color: #fff;
+  opacity: 0.7;
+  text-indent: 10px;    
+  width: 10px;
+  height: 10px;
+  overflow: hidden;
+  font-family: monospace;
+  font_size: 12px;
+  border: 1px solid #fff;
+}
+
+span.smarty-include:hover {
+  opacity: 1;
+  width: auto;
+  height: auto;
+  padding: 5px 10px;
+}
+
 /**
  * Debug console
  */
@@ -1312,14 +1334,6 @@ table.selectCode td {
   padding: 10px;
   margin: 5px;
   border: #aaa 2px dotted;
-}
-
-#admission .Bold {
-  font-weight: bold;
-}
-
-#admission .NotBold {
-  font-weight: normal;
 }
 
 /* control tabs */
@@ -2514,4 +2528,8 @@ ul.select-tree li.drop {
   background-image: url(../../images/icons/a_right.png);
   background-position: center right;
   background-repeat: no-repeat;
+}
+
+ul.select-tree .highlight {
+  background: #ddd;
 }

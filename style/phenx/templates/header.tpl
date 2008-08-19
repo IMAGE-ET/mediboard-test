@@ -4,9 +4,7 @@
   <tr>
     {{if !$offline && !$dialog}}
     <td style="vertical-align: top; width: 1%; padding-right: 0;">
-      <div id="banner">
-        <a href="http://www.mediboard.org/"><img src="style/{{$uistyle}}/images/pictures/mbLogo.png" alt="Mediboard :: Syst�me de gestion des structures de sant�"  /></a>
-      </div>
+
       
       <div id="user">
         <div class="welcome" title="{{tr}}last connection{{/tr}} : {{$app->user_last_login|date_format:"%A %d %B %Y %Hh%M"}}">

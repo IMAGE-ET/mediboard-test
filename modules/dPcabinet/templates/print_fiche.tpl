@@ -64,14 +64,14 @@
             {{if $consult_anesth->operation_id}}
             <table>
               <tr>
-                <th class="NotBold">Anesthésie prévue</th>
-                <td class="Bold">
+                <th style="font-weight: normal;">Anesthésie prévue</th>
+                <td style="font-weight: bold;">
                   {{$consult_anesth->_ref_operation->_lu_type_anesth}}
                 </td>
               </tr>
               <tr>
-                <th class="NotBold">Position</th>
-                <td class="Bold">
+                <th style="font-weight: normal;">Position</th>
+                <td style="font-weight: bold;">
                   {{tr}}CConsultAnesth.position.{{$consult_anesth->position}}{{/tr}}
                 </td>
               </tr>
@@ -139,30 +139,30 @@
             <table>
               {{if $consult->_ref_consult_anesth->groupe!="?" || $consult->_ref_consult_anesth->rhesus!="?"}}
               <tr>
-                <th class="NotBold">Groupe sanguin</th>
-                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}</td>
+                <th style="font-weight: normal;">Groupe sanguin</th>
+                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.groupe.{{$consult->_ref_consult_anesth->groupe}}{{/tr}} &nbsp;{{tr}}CConsultAnesth.rhesus.{{$consult->_ref_consult_anesth->rhesus}}{{/tr}}</td>
               </tr>
               {{/if}}
               {{if $consult->_ref_consult_anesth->rai && $consult->_ref_consult_anesth->rai!="?"}}
               <tr>
-                <th class="NotBold">RAI</th>
-                <td class="Bold" style="white-space: nowrap;font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}</td>
+                <th style="font-weight: normal;">RAI</th>
+                <td style="font-weight: bold; white-space: nowrap; font-size:130%;">&nbsp;{{tr}}CConsultAnesth.rai.{{$consult->_ref_consult_anesth->rai}}{{/tr}}</td>
               </tr>
               {{/if}}
               <tr>
-                <th class="NotBold">ASA</th>
-                <td class="Bold">{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</td>
+                <th style="font-weight: normal;">ASA</th>
+                <td style="font-weight: bold;">{{tr}}CConsultAnesth.ASA.{{$consult_anesth->ASA}}{{/tr}}</td>
               </tr>
               <tr>
-                <th class="NotBold">VST</th>
-                <td class="Bold" style="white-space: nowrap;">
+                <th style="font-weight: normal;">VST</th>
+                <td style="font-weight: bold; white-space: nowrap;">
                   {{if $const_med->_vst}}{{$const_med->_vst}} ml{{/if}}
                 </td>
               </tr>
               {{if $consult->_ref_consult_anesth->_psa}}
               <tr>
-                <th class="NotBold">PSA</th>
-                <td class="Bold" style="white-space: nowrap;">
+                <th style="font-weight: normal;">PSA</th>
+                <td style="font-weight: bold; white-space: nowrap;">
                   {{$consult->_ref_consult_anesth->_psa}} ml/GR
                 </td>
                 <td colspan="2"></td>
@@ -180,7 +180,7 @@
           <th class="category" colspan="2">Allergies</th>
         </tr>
         <tr>
-          <td class="Bold" style="white-space: normal;font-size:130%;">
+          <td style="font-weight: bold; white-space: normal; font-size:130%;">
           {{if $dossier_medical->_ref_antecedents}}
             {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
               <ul>
@@ -300,24 +300,24 @@
           <th class="category" colspan="6">Examens Clinique</th>
         </tr>
         <tr>
-          <th class="NotBold">Pouls</th>
-          <td class="Bold" style="white-space: nowrap;">
+          <th style="font-weight: normal;">Pouls</th>
+          <td style="font-weight: bold; white-space: nowrap;">
             {{if $const_med->pouls}}
             {{$const_med->pouls}} / min
             {{else}}
             ?
             {{/if}}
           </td>
-          <th class="NotBold">TA</th>
-          <td class="Bold" style="white-space: nowrap;">
+          <th style="font-weight: normal;">TA</th>
+          <td style="font-weight: bold; white-space: nowrap;">
             {{if $const_med->ta}}
               {{$const_med->_ta_systole}} / {{$const_med->_ta_diastole}} cm Hg
             {{else}}
             ?
             {{/if}}
           </td>
-          <th class="NotBold">Spo2</th>
-          <td class="Bold" style="white-space: nowrap;">
+          <th style="font-weight: normal;">Spo2</th>
+          <td style="font-weight: bold; white-space: nowrap;">
             {{if $const_med->spo2}}
             {{$const_med->spo2}} %
             {{else}}
@@ -327,8 +327,8 @@
         </tr>
         {{if $consult->examen}}
         <tr>
-          <th class="NotBold">Examens</th>
-          <td colspan="5" class="text Bold">{{$consult->examen|nl2br}}</td>
+          <th style="font-weight: normal;">Examens</th>
+          <td style="font-weight: bold;" colspan="5" class="text">{{$consult->examen|nl2br}}</td>
         </tr>
         {{/if}}
       </table>
@@ -378,39 +378,39 @@
             <br />Mallampati<br />de {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
           </td>
           {{/if}}
-          <th class="NotBold">Ouverture de la bouche</th>
-          <td class="Bold">
+          <th style="font-weight: normal;">Ouverture de la bouche</th>
+          <td style="font-weight: bold;">
             {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
           </td>
         </tr>
         <tr>
-          <th class="NotBold">Distance thyro-mentonnière</th>
-          <td class="Bold">{{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
+          <th style="font-weight: normal;">Distance thyro-mentonnière</th>
+          <td style="font-weight: bold;">{{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}</td>
         </tr>
         <tr>
-          <th class="NotBold">Etat bucco-dentaire</th>
-          <td class="text Bold">{{$consult->_ref_consult_anesth->etatBucco}}</td>
+          <th style="font-weight: normal;">Etat bucco-dentaire</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->etatBucco}}</td>
         </tr>
         <tr>
-          <th class="NotBold">Examen cardiovasculaire</th>
-          <td class="text Bold">{{$consult->_ref_consult_anesth->examenCardio}}</td>
+          <th style="font-weight: normal;">Examen cardiovasculaire</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenCardio}}</td>
         </tr>
         <tr>
-          <th class="NotBold">Examen pulmonaire</th>
-          <td class="text Bold">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
+          <th style="font-weight: normal;">Examen pulmonaire</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->examenPulmo}}</td>
         </tr>
         <tr>
-          <th class="NotBold">Conclusion</th>
-          <td class="text Bold">{{$consult->_ref_consult_anesth->conclusion}}</td>
+          <th style="font-weight: normal;">Conclusion</th>
+          <td style="font-weight: bold;" class="text">{{$consult->_ref_consult_anesth->conclusion}}</td>
         </tr>
         
         <tr>
         {{if $consult->_ref_consult_anesth->_intub_difficile}}
-          <td colspan="3" class="Bold" style="text-align:center;color:#F00;">
+          <td colspan="3" style="font-weight: bold; text-align:center; color:#F00;">
             Intubation Difficile Prévisible
           </td>
         {{else}}
-          <td colspan="3" class="Bold" style="text-align:center;">
+          <td colspan="3" style="font-weight: bold; text-align:center;">
             Pas Intubation Difficile Prévisible
           </td>        
         {{/if}}
@@ -431,8 +431,8 @@
             {{foreach from=$aChamps item=champ}}
               {{assign var="donnees" value=$unites.$champ}}
               <tr>
-                <th class="NotBold">{{$donnees.nom}}</th>
-                <td class="Bold" style="white-space: nowrap;">
+                <th style="font-weight: normal;">{{$donnees.nom}}</th>
+                <td style="font-weight: bold; white-space: nowrap;">
                   {{if $champ=="tca"}}
                     {{$consult->_ref_consult_anesth->tca_temoin}} s / {{$consult->_ref_consult_anesth->tca}}
                   {{elseif $champ=="tsivy"}}
