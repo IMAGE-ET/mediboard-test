@@ -14,13 +14,15 @@
     <td id="menubar">
       <table>
         <tr>
-          {{foreach from=$modules key=mod_name item=currModule}}    
+          {{foreach from=$modules key=mod_name item=currModule}}  
+          {{if $currModule->mod_ui_active && $currModule->_can->view}}  
           <td align="center">
             <a href="?m={{$mod_name}}">
               <img src="images/modules/{{$mod_name}}.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
               <br />{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
             </a>
           </td>
+          {{/if}}
           {{/foreach}}
           <td id="new">
           </td>

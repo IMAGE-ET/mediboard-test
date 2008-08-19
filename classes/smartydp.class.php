@@ -322,6 +322,11 @@ class CSmartyDP extends Smarty {
     $this->register_modifier("stripslashes"      , "smarty_modifier_stripslashes");
     $this->register_modifier("JSAttribute"       , "JSAttribute");
     
+    $modules = CModule::getActive();
+    foreach ($modules as $mod) {
+    	$mod->canDo();
+    }
+    
     // Standard data assignment
     $this->assign("app", $AppUI);
     $this->assign("dPconfig", $dPconfig);
@@ -337,7 +342,8 @@ class CSmartyDP extends Smarty {
     $this->assign("g", $g);
     $this->assign("dialog", $dialog);
     $this->assign("ajax", $ajax);
-    $this->assign("modules", CPermModule::getVisibleModules());
+    $this->assign("modules",$modules);
+
   }
   
   /**

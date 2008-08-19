@@ -14,7 +14,8 @@
     <td id="menubar">
       <table>
         <tr>
-					{{foreach from=$modules key=mod_name item=currModule}}    
+					{{foreach from=$modules key=mod_name item=currModule}}  
+          {{if $currModule->mod_ui_active && $currModule->_can->view}} 
           <td align='center' style='border-right: 1px solid #000'>
             <a href='?m={{$mod_name}}'>
               <strong>
@@ -22,6 +23,7 @@
               </strong>
             </a>
           </td>
+          {{/if}}
           {{/foreach}}
           <td id="new">
           </td>

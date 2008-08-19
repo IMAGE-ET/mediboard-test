@@ -65,9 +65,11 @@
           <td colspan="2" id="menubar2">
             {{if !$offline}}
 	          {{foreach from=$modules key=mod_name item=currModule}}
+	          {{if $currModule->_can->view && $currModule->mod_ui_active}}
             <a href="?m={{$mod_name}}" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
               {{tr}}module-{{$mod_name}}-court{{/tr}}
             </a> |
+            {{/if}}
             {{/foreach}}
             {{/if}}
           </td>

@@ -62,9 +62,11 @@
     <td id="menubar">
       | <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a> | 
       {{foreach from=$modules key=mod_name item=currModule}}
+      {{if $currModule->_can->view && $currModule->mod_ui_active}}
       <a href="?m={{$currModule->mod_name}}" class="{{if $mod_name == $m}}textSelected{{else}}textNonSelected{{/if}}">
         {{tr}}module-{{$mod_name}}-court{{/tr}}
       </a> |
+      {{/if}}
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a> | 
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a> |

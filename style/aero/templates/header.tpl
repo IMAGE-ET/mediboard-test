@@ -22,12 +22,14 @@ function chgMenu(id, type) {
       Modules
       <div id="modMenuList" style="visibility: hidden; position: absolute">
 		    {{foreach from=$modules key=mod_name item=currModule}}
+		    {{if $currModule->mod_ui_active && $currModule->_can->view}}
         <div class="menuItem {{if $mod_name == $m}}selected{{/if}}">
           <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
             {{thumb src="images/modules/$mod_name.png" h="16" w="16" f="png"}}
             {{tr}}module-{{$mod_name}}-court{{/tr}}
           </a>
         </div>
+        {{/if}}
         {{/foreach}}
       </div>
     </td>

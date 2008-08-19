@@ -22,13 +22,15 @@
         <tr>
           <td id="nav">
             <ul>
-              {{foreach from=$modules key=mod_name item=currModule}}    
+              {{foreach from=$modules key=mod_name item=currModule}} 
+              {{if $currModule->_can->view && $currModule->mod_ui_active}}
               <li {{if $mod_name==$m}}class="selected"{{/if}}>
               <a href="?m={{$mod_name}}">
                 <img src="images/modules/{{$mod_name}}.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
                {{tr}}module-{{$mod_name}}-court{{/tr}}
               </a>
               </li>
+              {{/if}}
               {{/foreach}}
             </ul>
           </td>

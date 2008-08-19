@@ -77,14 +77,16 @@ var Menu = {
 
     <hr />
     {{foreach from=$modules key=mod_name item=currModule}}
-    {{if $mod_name == $m}}
-    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="textSelected">
-    {{else}}
-    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}"class="textNonSelected">
-    {{/if}}
-      <img src="images/modules/{{$currModule->mod_name}}.png" alt="Icone {{$currModule->mod_name}}" />
-      {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
-    </a>
+	    {{if $currModule->mod_ui_active && $currModule->_can->view}}
+		    {{if $mod_name == $m}}
+		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}" class="textSelected">
+		    {{else}}
+		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}"class="textNonSelected">
+		    {{/if}}
+		      <img src="images/modules/{{$currModule->mod_name}}.png" alt="Icone {{$currModule->mod_name}}" />
+		      {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
+		    </a>
+	    {{/if}}
     {{/foreach}}
   </div>
   
@@ -156,8 +158,10 @@ var Menu = {
     <td id="menubar">
       <a href="{{$portal.help}}" title="{{tr}}portal-help{{/tr}}" target="_blank">{{tr}}portal-help{{/tr}}</a>
       {{foreach from=$modules item=currModule}}
+      {{if $currModule->mod_ui_active && $currModule->_can->view}}
       <a href="?m={{$currModule->mod_name}}" class="{{if $currModule->mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}">
         {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}</a>
+      {{/if}}
       {{/foreach}}
       <a href="#" onclick="popChgPwd()">{{tr}}menu-changePassword{{/tr}}</a>
       <a href="?m=mediusers&amp;a=edit_infos">{{tr}}menu-myInfo{{/tr}}</a>

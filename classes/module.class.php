@@ -29,7 +29,7 @@ class CModule extends CMbObject {
   static $installed = array();
 	static $active    = array();
 	static $visible   = array();
-  
+ 
   // primary key
   var $mod_id;
   
@@ -48,7 +48,7 @@ class CModule extends CMbObject {
   
   // Other collections
   var $_tabs      = null;  // List of tabs with permission
-  
+  var $_can       = null;  // Rights
 
   function CModule() {
     parent::__construct();
@@ -164,31 +164,31 @@ class CModule extends CMbObject {
   }
   
   function canDo(){
-    $canDo = new CCanDo;
-    $canDo->read  = $this->canRead();
-    $canDo->edit  = $this->canEdit();
-    $canDo->view  = $this->canView();
-    $canDo->admin = $this->canAdmin();
-    
-    return $canDo;
+  	if(!$this->_can) {
+  	  $canDo = new CCanDo;
+  	  $canDo->read  = $this->canRead();
+      $canDo->edit  = $this->canEdit();
+      $canDo->view  = $this->canView();
+      $canDo->admin = $this->canAdmin();
+      $this->_can =  $canDo;
+      return $canDo;
+  	}
+  	return $this->_can;
   }
-  
+
   static function loadModules() {
     $modules = new CModule;
     $order = "mod_ui_order";
     $modules = $modules->loadList(null, $order);    
     foreach ($modules as &$module) {
       self::$installed[$module->mod_name] =& $module;
-      
       if($module->mod_active == 1) {
-        self::$active[$module->mod_name] =& $module;
-      }
-    
+        self::$active[$module->mod_name] =& $module;  
+      } 
       if($module->mod_ui_active == 1) {
         self::$visible[$module->mod_name] =& $module;
       }
     }
-    
   }
   
   function registerTab($file, $name, $permType) {

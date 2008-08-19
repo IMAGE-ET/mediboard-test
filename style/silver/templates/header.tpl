@@ -18,11 +18,13 @@
 	        <tr>
 	          <td />
 	          {{foreach from=$modules key=mod_name item=currModule}}
+	          {{if $currModule->_can->view && $currModule->mod_ui_active}}
 	          <td align="center" class="{{if $mod_name==$m}}iconSelected{{else}}iconNonSelected{{/if}}">
 	            <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
 	              <img src="images/modules/{{$mod_name}}.png" alt="{{$mod_name}}" height="48" width="48" />
 	            </a>
 	          </td>
+	          {{/if}}
 	          {{/foreach}}
 	        </tr>
         </tbody>
@@ -33,11 +35,13 @@
             <button id="menuIcons-trigger" type="button" style="float:left" class="notext">{{tr}}Show/Hide{{/tr}}</button>
           </td>
           {{foreach from=$modules key=mod_name item=currModule}}
+          {{if $currModule->_can->view && $currModule->mod_ui_active}}
           <td align="center" class="{{if $mod_name==$m}}textSelected{{else}}textNonSelected{{/if}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
             <a href="?m={{$mod_name}}">
               <strong>{{tr}}module-{{$mod_name}}-court{{/tr}}</strong>
             </a>
           </td>
+          {{/if}}
           {{/foreach}}
         </tr>
       </table>
