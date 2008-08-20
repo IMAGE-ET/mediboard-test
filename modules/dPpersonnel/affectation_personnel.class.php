@@ -122,6 +122,14 @@ class CAffectationPersonnel extends CMbMetaObject {
     if($this->object_class == "COperation" || $this->object_class == "CBloodSalvage" ){
       $this->loadRefObject();
       $this->_ref_object->loadRefPlageOp();
+      
+      if($this->_debut =="current") {
+      	$this->_debut = mbTime();
+      }
+      
+      if($this->_fin =="current") {
+      	$this->_fin = mbTime();
+      }
 
       if($this->_debut !== null && $this->_debut != ""){
         $this->_debut = mbTime($this->_debut);

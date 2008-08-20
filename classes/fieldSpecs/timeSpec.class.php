@@ -26,8 +26,12 @@ class CTimeSpec extends CMbFieldSpec {
   function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
-    
-    if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $propValue)) {
+  
+    if (!preg_match ("/^([0-9]{1,2}):([0-9]{1,2})(:([0-9]{1,2}))?$/", $propValue)) { 
+    	if($object->$fieldName == 'current'|| $object->$fieldName ==  'now') {
+        $object->$fieldName = mbTime();
+        return null;
+      }  
       return "format de time invalide";
     }
     return null;

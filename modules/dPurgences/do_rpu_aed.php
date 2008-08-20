@@ -10,6 +10,7 @@
 global $AppUI;
 
 // Radio : debut et fin
+/*
 if(isset($_POST["radio_debut"])){
   if($_POST["radio_debut"] == "current"){
     $_POST["radio_debut"] = mbDateTime();
@@ -27,7 +28,7 @@ if(isset($_POST["sortie"])){
     $_POST["sortie"] = mbDateTime();
   }
 }
-
+*/
 $do = new CDoObjectAddEdit("CRPU", "rpu_id");
 $do->doIt();
 

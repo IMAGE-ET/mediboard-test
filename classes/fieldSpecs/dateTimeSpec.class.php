@@ -30,7 +30,11 @@ class CDateTimeSpec extends CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})[ \+]([0-9]{1,2}):([0-9]{1,2}):([0-9]{1,2})$/", $propValue)) {
-      return "format de dateTime invalide";
+      if($object->$fieldName == 'current'|| $object->$fieldName ==  'now') {
+        $object->$fieldName = mbDateTime();
+        return null;
+      } 
+    	return "format de dateTime invalide";
     }
     return null;
   }

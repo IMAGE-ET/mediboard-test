@@ -148,6 +148,19 @@ class CBloodSalvage extends CMbObject {
 		
 		$this->loadRefPlageOp();
 		
+    if($this->_recuperation_start =="current") {
+      $this->_recuperation_start = mbTime();
+    }
+    if($this->_recuperation_end =="current") {
+      $this->_recuperation_end = mbTime();
+    }
+    if($this->_transfusion_start =="current") {
+      $this->_transfusion_start = mbTime();
+    }
+    if($this->_transfusion_end =="current") {
+      $this->_transfusion_end = mbTime();
+    }
+		
 		if($this->_recuperation_start !== null && $this->_recuperation_start !="") {
 			$this->_recuperation_start = mbTime($this->_recuperation_start);
 			$this->recuperation_start = mbAddDateTime($this->_recuperation_start, mbDate($this->_datetime));

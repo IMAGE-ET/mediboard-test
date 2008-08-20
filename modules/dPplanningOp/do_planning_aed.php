@@ -11,7 +11,7 @@
 global $AppUI, $can, $m;
 
 $chir_id = mbGetValueFromPostOrSession("chir_id", null);
-
+/*
 // lignes pour rentrer l'heure courante du serveur dans certains champs
 $listTimes = array("entree_bloc", "entree_salle", "pose_garrot", "debut_op",
                    "sortie_salle", "retrait_garrot", "fin_op",
@@ -23,6 +23,7 @@ foreach($listTimes as $curr_item) {
     }
   }
 }
+*/
 
 $do = new CDoObjectAddEdit("COperation", "operation_id");
 $do->doBind();

@@ -32,6 +32,10 @@ class CDateSpec extends CMbFieldSpec {
     // Vérification du format
     $matches = array();
     if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
+      if($object->$fieldName == 'current'|| $object->$fieldName ==  'now') {
+        $object->$fieldName = mbDate();
+        return null;
+      } 
       return "format de date invalide";
     }
     

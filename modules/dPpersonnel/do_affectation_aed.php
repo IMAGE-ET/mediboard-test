@@ -10,6 +10,7 @@
 global $AppUI;
 
 // lignes pour rentrer l'heure courante du serveur dans certains champs
+/*
 $listTimes = array("_debut", "_fin");
 foreach($listTimes as $curr_item) {
   if(isset($_POST[$curr_item])) {
@@ -17,7 +18,7 @@ foreach($listTimes as $curr_item) {
       $_POST[$curr_item] = mbTime();
     }
   }
-}
+}*/
 
 $do = new CDoObjectAddEdit("CAffectationPersonnel", "affect_id");
 $do->createMsg = "Affectation créée";

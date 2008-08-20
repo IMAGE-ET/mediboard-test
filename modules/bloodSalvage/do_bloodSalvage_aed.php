@@ -11,20 +11,17 @@
 global $AppUI, $can, $m;
 /*
  * Récupération de l'heure courante pour les timers de l'opération de Cell Saver.
- */
+ *//*
 $listTimes = array("_recuperation_start", "_recuperation_end", "_transfusion_start", "_transfusion_end");
 foreach($listTimes as $curr_item) {
   if(isset($_POST[$curr_item])) {
     if($_POST[$curr_item] == "current") {
-      $_POST[$curr_item] = mbTime();
+      $_POST[$curr_item] = mbTransformTime(null, null, "%H:%M:00");
     }
   }
-}
+}*/
 $do = new CDoObjectAddEdit('CBloodSalvage', 'blood_salvage_id');
 
-
-$do->modifyMsg = "RSPO modifié";
-$do->createMsg = "RSPO créé";
 $do->doIt();
 
 ?>
