@@ -78,23 +78,18 @@ if($traitement_personnel->_id){
   $traitement_personnel->loadRefsLinesMed("1");
 }
 $lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
-	  	  
+
+$hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
+sort($hours); 
+
 foreach($dates as $_date){
   $prescription->calculPlanSoin($lines, $_date, $lines_med[$_date], $prises_med[$_date], $list_prises_med[$_date], $lines_element[$_date], 
 	                              $prises_element[$_date], $list_prises_element[$_date], $nb_produit_by_cat[$_date], $all_lines_med, $all_lines_element,
 	                              $intitule_prise_med, $intitule_prise_element);
-
-	// Génération du tableau d'heures
-  $tabHours[$_date] = array(
-   "$_date 02:00:00" => "02",
-   "$_date 06:00:00" => "06",
-   "$_date 08:00:00" => "08",
- 	 "$_date 12:00:00" => "12",
-	 "$_date 14:00:00" => "14",
-	 "$_date 18:00:00" => "18",
- 	 "$_date 22:00:00" => "22",
-	 "$_date 24:00:00" => "24",
-	);	                              
+	
+  foreach($hours as $_hour){
+  	$tabHours[$_date]["$_date $_hour:00:00"] = $_hour;
+  }
 }
 
 

@@ -79,15 +79,11 @@ foreach($transmissions_by_class as $_transmission){
 }
 
 
-// Génération du tableau d'heures
-$tabHours = array("$date 02:00:00" => "02",
-									"$date 06:00:00" => "06",
-									"$date 08:00:00" => "08",
-									"$date 12:00:00" => "12",
-									"$date 14:00:00" => "14",
-									"$date 18:00:00" => "18",
-									"$date 22:00:00" => "22",
-									"$date 24:00:00" => "24");	      
+$hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
+sort($hours);
+foreach($hours as $_hour){
+	$tabHours["$date $_hour:00:00"] = $_hour;
+}
 
 // Création du template
 $smarty = new CSmartyDP();

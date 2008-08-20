@@ -496,4 +496,5 @@ $locales['CPrescriptionLineElement.jour_decalage_fin.S'] = 'S';
 $locales['config-dPprescription-CMomentUnitaire-principaux'] = 'Afficher seulement les moments principaux';
 $locales['CPrisePosologie-quantite'] = 'Quantité';
 $locales['CPrisePosologie-quantite-desc'] = 'Quantité';
+$locales['config-dPprescription-CPrisePosologie'] = 'Gestion des heures';
 ?>

@@ -79,7 +79,7 @@ viewDossier = function(prescription_id){
 	    <th rowspan="2">Type</th>
 	    <th rowspan="2">Libelle</th>
 	    <th rowspan="2">Posologie</th>
-	    <th colspan="8">Heures</th>
+	    <th colspan="{{$tabHours|@count}}">Heures</th>
 	    <th rowspan="2" colspan="2">Signatures<br /> Prat. / Pharm.</th>
 	  </tr>
 	  <tr>

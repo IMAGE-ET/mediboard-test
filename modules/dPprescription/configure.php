@@ -18,12 +18,18 @@ foreach($hours_matin as $_hour_matin){
 }
 $listHoursSoir = range(12, 24);
 
+foreach($listHours as &$_hour){
+	$_hour = str_pad($_hour,2,"0",STR_PAD_LEFT);
+}
+
+$heures_prise = CAppUI::conf("dPprescription CPrisePosologie heures_prise");
+
 // Création du template
 $smarty = new CSmartyDP();
 
 $smarty->assign("listHoursMatin", $listHoursMatin);
 $smarty->assign("listHoursSoir", $listHoursSoir);
 $smarty->assign("listHours", $listHours);
-
+$smarty->assign("heures_prise", $heures_prise);
 $smarty->display("configure.tpl");
 ?>

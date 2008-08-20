@@ -46,7 +46,7 @@ ul {
     <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
     <th rowspan="2" style="width: 5px"></th>
     {{foreach from=$dates item=date}}
-    <th colspan="8" class="title" style="width: 5cm; border-right: 1px solid black; border-left: 1px solid black;">{{$date|date_format:"%d/%m/%Y"}}</th>
+    <th colspan="{{$tabHours.$date|@count}}" class="title" style="width: 5cm; border-right: 1px solid black; border-left: 1px solid black;">{{$date|date_format:"%d/%m/%Y"}}</th>
     {{/foreach}}
   </tr>
   <tr>

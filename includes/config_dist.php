@@ -359,6 +359,17 @@ $dPconfig["dPprescription"] = array (
   ),
   "CMomentUnitaire" => array(
     "principaux" => "0"
+  ),
+  "CPrisePosologie" => array(
+    "heures_prise" => "02|06|08|12|14|18|22|24",
+    "heures" => array(
+      "tous_les" => "14",
+      "fois_par" => array(
+        "1" => "08",
+        "2" => "08|14",
+        "3" => "08|14|18",
+      )
+    )
   )
 );
 

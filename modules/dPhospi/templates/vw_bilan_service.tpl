@@ -94,8 +94,13 @@ changeBox = function(oCheckbox, cat_id, oTokenField){
 			  <tr>
 			    <td>{{$produit->_view}}</td>
 				  <td>
-				  {{foreach from=$prises_by_patient item=prise}}
-				    {{$prise->_view}}
+				  {{foreach from=$prises_by_patient item=prise name="view_prise"}}
+				    {{if $prise->_type == "moment"}}
+				      {{$prise->_view}}
+				    {{else}}
+				      {{$prise->_short_view}}
+				    {{/if}}
+				    {{if !$smarty.foreach.view_prise.last}}, {{/if}}
 				  {{/foreach}}
 				  </td>
 			  </tr>

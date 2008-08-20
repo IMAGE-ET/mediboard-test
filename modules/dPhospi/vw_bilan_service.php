@@ -12,10 +12,8 @@ $date = mbGetValueFromGetOrSession("date");
 // Filtres du sejour
 $date_min = "$date 00:00:00";
 $date_max = "$date 23:59:59";
-
 $token_cat = mbGetValueFromGet("token_cat","");
 $cats = explode("|",$token_cat);
-
 $service_id = mbGetValueFromGetOrSession("service_id");
 
 // Filtres sur l'heure des prises
@@ -45,7 +43,6 @@ $lines = array();
 $lines_produit = array();
 $patients = array();
 $prises = array();
-
 
 foreach($prescriptions as $_prescription){
 	$sejour =& $_prescription->_ref_object;
@@ -77,18 +74,26 @@ foreach($prescriptions as $_prescription){
 					$line->loadRefsPrises();
 				  foreach($line->_ref_prises as $_prise){
 				  	$_prise->loadRefsFwd();
-				  	if($_prise->_type == "moment"){
-				  		if(($_prise->_ref_moment->heure > $_filter_time_min) && ($_prise->_ref_moment->heure < $_filter_time_max)){
-				  		  $prises[$sejour->_ref_patient->_id][$_prise->_ref_moment->heure][$line->_class_name][$line->_id][$_prise->_id] = $_prise;	
+				  	
+				  	if($_prise->_type == "tous_les"){
+				  		if(!$_prise->calculDatesPrise($date)){
+				  			continue;
 				  		}
 				  	}
+				  	foreach($_prise->_heures as $_heure){
+				  		if(($_heure > $_filter_time_min) && ($_heure < $_filter_time_max)){
+				  		  $prises[$sejour->_ref_patient->_id][$_heure][$line->_class_name][$line->_id][$_prise->_id] = $_prise;	
+				  		}
+				  	}
+				  	
+				  	
+				  	
 				  }
 				}
 			}
 		}
 	}
 }
-
 
 // Chargement de toutes les categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
@@ -98,6 +103,7 @@ $prescription = new CPrescription();
 $prescription->_filter_time_min = $_filter_time_min;
 $prescription->_filter_time_max = $_filter_time_max;
 
+// Reconstruction du tokenField
 $token_cat = implode("|", $cats);
 
 // Smarty template

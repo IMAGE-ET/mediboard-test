@@ -28,6 +28,7 @@ class CPrisePosologie extends CMbMetaObject {
   
   var $_type                 = null; // Type de prise
   var $_unite                = null; // Unite de la prise
+  var $_heures                = null; // Heure de la prise
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -55,7 +56,7 @@ class CPrisePosologie extends CMbMetaObject {
   
   function updateFormFields() {
     parent::updateFormFields();
-
+    
   }
   
   function getBackRefs() {
@@ -76,15 +77,23 @@ class CPrisePosologie extends CMbMetaObject {
       $this->_view .= " ".$this->unite_prise;	
     }
     
+    $this->_short_view = $this->_view;
+    
     if($this->moment_unitaire_id){
     	$this->_view .= " ".$this->_ref_moment->_view;
       $this->_type = "moment";
       $this->_unite = $this->unite_prise;
+      $this->_heures[] = $this->_ref_moment->heure;
     }
     
     if($this->nb_fois){
     	$this->_view .= " ".$this->nb_fois." fois";
       $this->_type = "fois_par";
+      
+      $this->_heures = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures fois_par $this->nb_fois"));
+      foreach($this->_heures as &$_heure){
+      	$_heure .= ":00:00";
+      }
     }
     
     if($this->unite_fois && !$this->nb_tous_les){
@@ -99,6 +108,7 @@ class CPrisePosologie extends CMbMetaObject {
     	}
     	$this->_type = "tous_les";
     	$this->_unite = $this->unite_tous_les;
+    	$this->_heures[] = CAppUI::conf("dPprescription CPrisePosologie heures tous_les").":00:00";
     }   
   }
   
@@ -108,6 +118,9 @@ class CPrisePosologie extends CMbMetaObject {
   function loadRefMoment(){
     $moment = new CMomentUnitaire();
     $this->_ref_moment = $moment->getCached($this->moment_unitaire_id);
+    if($this->_ref_moment->heure){
+      $this->_heure = $this->_ref_moment->heure;
+    }
   }
   
   /*

@@ -1,5 +1,28 @@
-<!-- Variables de configuration -->
+<script type="text/javascript">
+Main.add( function(){
+  oHourField = new TokenField(document.editConfig["dPprescription[CPrisePosologie][heures_prise]"]); 
+  
+  var hours = {{$heures_prise|@json}};
+  $$('input.hour').each( function(oCheckbox) {
+    if(hours.include(oCheckbox.value)){
+      oCheckbox.checked = true;
+    }
+  });
+} );
 
+// Fonction permettant de modifier le tokenField lors de la selection des checkboxs
+changeBox = function(oCheckbox, hour, oTokenField){
+  if(oCheckbox.checked){
+    oTokenField.add(hour);
+  } else {
+    oTokenField.remove(hour);
+  }
+}
+
+</script>
+
+
+<!-- Variables de configuration -->
 <form name="editConfig" action="?m={{$m}}&amp;{{$actionType}}=configure" method="post" onsubmit="return checkForm(this)">
 
 <input type="hidden" name="dosql" value="do_configure" />
@@ -121,7 +144,54 @@
     </td>             
   </tr>
   
-  
+  {{assign var="class" value="CPrisePosologie"}}
+  <tr>
+   <th class="category" colspan="6">
+      <label for="{{$m}}[{{$class}}]" title="{{tr}}config-{{$m}}-{{$class}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}{{/tr}}
+      </label>    
+   </th>
+  </tr>
+
+  {{assign var="var" value="heures_prise"}}
+  <tr>
+    <td><strong>Heures disponibles</td>
+    <td colspan="5" class="text">
+    {{foreach from=$listHours item=_hour}}
+      <input class="hour" type="checkbox" value="{{$_hour}}" onclick="changeBox(this,'{{$_hour}}', oHourField);" /> {{$_hour}}
+    {{/foreach}}
+    <input type="hidden" name="{{$m}}[{{$class}}][{{$var}}]" value="{{$dPconfig.$m.$class.$var}}" />
+    </td>
+  </tr>
+  {{assign var="var" value="heures"}}
+  <tr>  
+	  <th><strong>Tous les</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][tous_les]" value="{{$dPconfig.$m.$class.$var.tous_les}}" /> heures
+	  </td>
+	  <td colspan="2" />             
+  </tr>
+  <tr>  
+	  <th><strong>1 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][1]" value="{{$dPconfig.$m.$class.$var.fois_par.1}}" /> heures
+	  </td>   
+	  <td colspan="2" />              
+  </tr>
+  <tr>  
+	  <th><strong>2 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][2]" value="{{$dPconfig.$m.$class.$var.fois_par.2}}" /> heures
+	  </td>
+	  <td colspan="2" />                 
+  </tr>
+  <tr>  
+	  <th><strong>3 fois par jour</strong></th>
+	  <td colspan="3" style="text-align: center">
+	    à <input type="text" name="{{$m}}[{{$class}}][{{$var}}][fois_par][3]" value="{{$dPconfig.$m.$class.$var.fois_par.3}}" /> heures
+	  </td>  
+	  <td colspan="2" />               
+  </tr>
   <tr>
     <td class="button" colspan="100">
       <button class="modify" type="submit">{{tr}}Modify{{/tr}}</button>

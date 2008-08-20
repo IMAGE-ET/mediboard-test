@@ -293,4 +293,5 @@ $locales['CPrescriptionLineElement.jour_decalage_fin.S'] = 'S';
 $locales['config-dPprescription-CMomentUnitaire-principaux'] = '';
 $locales['CPrisePosologie-quantite'] = '';
 $locales['CPrisePosologie-quantite-desc'] = '';
+$locales['config-dPprescription-CPrisePosologie'] = '';
 ?>
