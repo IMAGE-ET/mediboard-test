@@ -25,4 +25,15 @@ $locales['mod-dPpmsi-tab-labo_groupage'] = 'Groupage GHM';
 $locales['mod-dPpmsi-tab-vw_dossier'] = 'Dossiers patient';
 $locales['mod-dPpmsi-tab-vw_list_hospi'] = 'Liste des hospitalisations';
 $locales['config-dPpmsi-systeme_facturation'] = 'Système de facturation';
+$locales['CGHM-ghm_id'] = '';
+$locales['CGHM-ghm_id-court'] = '';
+$locales['CGHM-ghm_id-desc'] = '';
+$locales['CGHM-msg-create'] = 'GHM créée';
+$locales['CGHM-msg-delete'] = 'GHM supprimée';
+$locales['CGHM-msg-modify'] = 'GHM modifiée';
+$locales['CGHM-title-create'] = '';
+$locales['CGHM-title-modify'] = '';
+$locales['CGHM.all'] = '';
+$locales['CGHM.select'] = '';
+$locales['CSejour-back-GHM'] = '';
 ?>
