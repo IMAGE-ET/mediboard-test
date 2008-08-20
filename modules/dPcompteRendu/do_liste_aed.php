@@ -8,9 +8,6 @@
 */
 
 $do = new CDoObjectAddEdit("CListeChoix", "liste_choix_id");
-$do->createMsg = "Liste créée";
-$do->modifyMsg = "Liste modifiée";
-$do->deleteMsg = "Liste supprimée";
 $do->doBind();
 if (intval(dPgetParam($_POST, 'del'))) {
   $do->doDelete();

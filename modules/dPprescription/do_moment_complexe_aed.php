@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI;
-
 $do = new CDoObjectAddEdit("CMomentComplexe", "moment_complexe_id");
 $do->doIt();
 

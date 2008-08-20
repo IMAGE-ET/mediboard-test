@@ -11,11 +11,6 @@ global $AppUI;
 $ds = CSQLDataSource::get("std");
 
 $do = new CDoObjectAddEdit("CUser", "user_id");
-
-$do->createMsg = "Utilisateur créé";
-$do->modifyMsg = "Utilisateur modifié";
-$do->deleteMsg = "Utilisateur supprimé";
-
 $do->doBind();
     
 if (intval(dPgetParam($_POST, "del"))) {

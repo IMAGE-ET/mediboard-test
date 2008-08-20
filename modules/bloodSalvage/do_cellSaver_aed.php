@@ -8,8 +8,6 @@
 */
 
 $do = new CDoObjectAddEdit('CCellSaver', 'cell_saver_id');
-
-
 $do->doIt();
 
 ?>

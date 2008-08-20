@@ -13,10 +13,6 @@ class CDoPatientMerge extends CDoObjectAddEdit {
   function CDoPatientMerge() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");
     
-    $this->createMsg = "Patient créé";
-    $this->modifyMsg = "Patient modifié";
-    $this->deleteMsg = "Patient supprimé";
-    
     if ($dialog = dPgetParam($_POST, "dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
       $this->redirectStore  .= $this->redirect."&a=vw_edit_patients&dialog=1";

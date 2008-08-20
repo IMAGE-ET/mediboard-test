@@ -7,8 +7,6 @@
  *  @author 
  */
 
-global $AppUI;
-
 $do = new CDoObjectAddEdit("CSpUrgDos", "numdos");
 $do->doIt();
 

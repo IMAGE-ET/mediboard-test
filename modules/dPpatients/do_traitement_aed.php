@@ -14,11 +14,7 @@ $autoadd_default = isset($AppUI->user_prefs["AUTOADDSIGN"]) ? $AppUI->user_prefs
 // Sejour
 // si on a un sejour et que l'option d'ajout automatique est activée
 if(isset($_POST["_sejour_id"]) && ($autoadd_default == 1) && ($_POST["_sejour_id"] != "")){
- 
   $doSejour = new CDoObjectAddEdit("CTraitement", "traitement_id");
-  $doSejour->createMsg = "Traitement créé";
-  $doSejour->modifyMsg = "Traitement modifié";
-  $doSejour->deleteMsg = "Traitement supprimé";
  
   // Ajout du traitement dans le sejour
   $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_sejour_id"],"CSejour");
@@ -30,9 +26,6 @@ if(isset($_POST["_sejour_id"]) && ($autoadd_default == 1) && ($_POST["_sejour_id
 
 // Patient
 $doPatient = new CDoObjectAddEdit("CTraitement", "traitement_id");
-$doPatient->createMsg = "Traitement créé";
-$doPatient->modifyMsg = "Traitement modifié";
-$doPatient->deleteMsg = "Traitement supprimé";
 
 if($_POST["del"] != 1){
   $_POST["dossier_medical_id"] = CDossierMedical::dossierMedicalId($_POST["_patient_id"],"CPatient");

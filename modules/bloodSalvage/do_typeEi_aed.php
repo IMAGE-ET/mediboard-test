@@ -8,8 +8,6 @@
 */
 
 $do = new CDoObjectAddEdit('CTypeEi', 'type_ei_id');
-
-
 $do->doIt();
 
 ?>

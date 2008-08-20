@@ -6,15 +6,10 @@
 * @version $Revision: $
 * @author Sébastien Fillonneau
 */
-global $AppUI;
 
 class CDoCopyTraitement extends CDoObjectAddEdit {
   function CDoCopyTraitement() {
     $this->CDoObjectAddEdit("CTraitement", "traitement_id");
-    
-    $this->createMsg = "Traitement créé";
-    $this->modifyMsg = "Traitement modifié";
-    $this->deleteMsg = "Traitement supprimé";
   }  
   
   function doBind() {

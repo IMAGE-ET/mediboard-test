@@ -7,14 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
-
 class CDoMediuserAddEdit extends CDoObjectAddEdit {
   function CDoMediuserAddEdit() {
     $this->CDoObjectAddEdit("CMediusers", "user_id");
-    $this->createMsg = "Utilisateur créé";
-    $this->modifyMsg = "Utilisateur modifié";
-    $this->deleteMsg = "Utilisateur supprimé";
   }
   
   function doStore () {

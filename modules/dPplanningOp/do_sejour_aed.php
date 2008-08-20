@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
 if ($praticien_id = mbGetValueFromPost("praticien_id")) {
   mbSetValueToSession("praticien_id", $praticien_id);
 }

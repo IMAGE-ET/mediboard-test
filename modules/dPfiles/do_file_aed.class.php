@@ -8,17 +8,12 @@
 */
 
 class CFileAddEdit extends CDoObjectAddEdit {
-
   function CFileAddEdit() {
-    global $m, $_POST;    
+    global $m;    
     $selKey   = intval(mbGetValueFromPost("object_id", 0));
     $selClass = mbGetValueFromPost("object_class"    , "");
     
     $this->CDoObjectAddEdit("CFile", "file_id");
-    
-    $this->createMsg = "Fichier créé";
-    $this->modifyMsg = "Fichier modifié";
-    $this->deleteMsg = "Fichier supprimé";
     
     $this->redirect = "m=$m"; 
     
@@ -26,7 +21,6 @@ class CFileAddEdit extends CDoObjectAddEdit {
       $this->redirect      .= "&a=upload_file&dialog=1";
       $this->redirectStore = "m=$m&a=upload_file&dialog=1&uploadok=1";
     }
-
   }
 
   function bindFilePart(){
@@ -34,7 +28,7 @@ class CFileAddEdit extends CDoObjectAddEdit {
   }
   
   function doStore() {
-    global $AppUI,$_POST;
+    global $AppUI;
     $upload     = null;
     $multifiles = false;
 

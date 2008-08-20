@@ -7,8 +7,6 @@
 * @author Alexandre Germonneau
 */
 
-
-global $AppUI, $can, $m;
 /*
  * Récupération de l'heure courante pour les timers de l'opération de Cell Saver.
  *//*
@@ -21,7 +19,6 @@ foreach($listTimes as $curr_item) {
   }
 }*/
 $do = new CDoObjectAddEdit('CBloodSalvage', 'blood_salvage_id');
-
 $do->doIt();
 
 ?>

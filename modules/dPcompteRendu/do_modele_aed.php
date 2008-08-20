@@ -10,9 +10,6 @@
 global $AppUI, $m;
 
 $do = new CDoObjectAddEdit("CCompteRendu", "compte_rendu_id");
-$do->createMsg = "Document créé";
-$do->modifyMsg = "Document modifié";
-$do->deleteMsg = "Document supprimé";
 $do->redirectDelete = "m=$m&new=1";
 
 // Application des listes de choix

@@ -8,8 +8,5 @@
 */
 
 $do = new CDoObjectAddEdit("CNote", "note_id");
-$do->createMsg = "Note créée";
-$do->modifyMsg = "Note modifiée";
-$do->deleteMsg = "Note supprimée";
 $do->doIt();
 ?>

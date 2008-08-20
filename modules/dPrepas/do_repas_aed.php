@@ -7,8 +7,6 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI;
-
 class CDoRepasAddEdit extends CDoObjectAddEdit {
   
   var $synchro         = null;
@@ -20,10 +18,6 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
     global $m;
     
     $this->CDoObjectAddEdit("CRepas", "repas_id");
-    
-    $this->createMsg = "Repas créé";
-    $this->modifyMsg = "Repas modifié";
-    $this->deleteMsg = "Repas supprimé";
     
     $this->redirect  = "m=$m&tab=vw_planning_repas";
     
@@ -67,9 +61,6 @@ class CDoRepasAddEdit extends CDoObjectAddEdit {
       $AppUI->redirect($this->redirect);
     }
   }
-
-
-
 
   function doIt() {
     global $AppUI;

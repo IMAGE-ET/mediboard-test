@@ -7,15 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI;
-
 class CDoCopyAddiction extends CDoObjectAddEdit {
   function CDoCopyAddiction() {
     $this->CDoObjectAddEdit("CAddiction", "addiction_id");
-    
-    $this->createMsg = "Addiction créée";
-    $this->modifyMsg = "Addiction modifiée";
-    $this->deleteMsg = "Addiction supprimée";
   }  
   
   function doBind() {

@@ -7,15 +7,9 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI;
-
 class CDoCopyAntecedent extends CDoObjectAddEdit {
   function CDoCopyAntecedent() {
     $this->CDoObjectAddEdit("CAntecedent", "antecedent_id");
-    
-    $this->createMsg = "Antecedent créé";
-    $this->modifyMsg = "Antecedent modifié";
-    $this->deleteMsg = "Antecedent supprimé";
   }  
   
   function doBind() {

@@ -9,18 +9,9 @@
 
 
 class CDoActeCCAMAddEdit extends CDoObjectAddEdit {
-	
-	
   function CDoActeCCAMAddEdit() {
     $this->CDoObjectAddEdit("CActeCCAM", "acte_id");
-    
-    $this->createMsg = "Acte CCAM créé";
-    $this->modifyMsg = "Acte CCAM modifié";
-    $this->deleteMsg = "Acte supprimé";
-	  
   }
-  
-  
   
   function doBind() {
   	parent::doBind();

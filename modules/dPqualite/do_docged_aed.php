@@ -20,8 +20,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
   }
 
   function doBind() {
-    global $AppUI;
-    
     $this->ajax = mbGetValueFromPost("ajax");
     $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
     $this->callBack = mbGetValueFromPost("callback");
@@ -112,7 +110,6 @@ class CDoDocGedAddEdit extends CDoObjectAddEdit {
       $doc_ged_id = $this->_obj->doc_ged_id;
     } 
   }
-    
 }
 
 
@@ -122,8 +119,6 @@ class CDoDocGedSuiviAddEdit extends CDoObjectAddEdit {
   }
 
   function doBind() {
-    global $AppUI;
-    
     $this->ajax = mbGetValueFromPost("ajax");
     $this->suppressHeaders = mbGetValueFromPost("suppressHeaders");
     $this->callBack = mbGetValueFromPost("callback");

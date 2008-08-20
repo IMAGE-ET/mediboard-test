@@ -181,10 +181,7 @@ foreach($aCabinet as $title => $value){
           $nom    = $praticiens->listStaticProps["_user_last_name"];
           $praticiens->setField("_user_username", str_replace(" ","",strtolower(substr($prenom,0,1).$nom)));
           $praticiens->setField("_user_password", strtolower($prenom));
-          $praticiens->setField("_compte_banque", "00000");
-          $praticiens->setField("_compte_guichet", "00000");
-          $praticiens->setField("_compte_numero", "00000000000");
-          $praticiens->setField("_compte_cle", "97");
+          $praticiens->setField("compte", "00000 00000 00000000000 97");
           $praticiens->store();
           
           $user = new CUser;

@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 // Radio : debut et fin
 /*
 if(isset($_POST["radio_debut"])){

@@ -7,16 +7,13 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $m;
+global $m;
 
 $entree = $_POST["entree"];
 $sortie = $_POST["sortie"];
 
 // Modifier la première affectation
 $do = new CDoObjectAddEdit("CAffectation", "affectation_id");
-$do->createMsg = "Affectation créée";
-$do->modifyMsg = "Affectation modifiée";
-$do->deleteMsg = "Affectation supprimée";
 
 $_POST["entree"] = $entree;
 $_POST["sortie"] = $_POST["_date_split"];
@@ -27,9 +24,6 @@ $do->doIt();
 
 // Créer le second
 $do = new CDoObjectAddEdit("CAffectation", "affectation_id");
-$do->createMsg = "Affectation créée";
-$do->modifyMsg = "Affectation modifiée";
-$do->deleteMsg = "Affectation supprimée";
 
 $_POST["entree"] = $_POST["_date_split"];
 $_POST["sortie"] = $sortie;

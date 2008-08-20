@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $dPconfig;
+global $dPconfig;
 
 $verouillee = mbGetValueFromPost("verouillee");
 
@@ -50,9 +50,6 @@ if($verouillee){
 }
 
 $do = new CDoObjectAddEdit("CPrescriptionLabo", "prescription_labo_id");
-$do->createMsg = "Prescription ajoutée";
-$do->modifyMsg = "Prescription modifiée";
-$do->deleteMsg = "Prescription supprimée";
 $do->doIt();
 
 

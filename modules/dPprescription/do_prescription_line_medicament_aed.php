@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 $do = new CDoObjectAddEdit("CPrescriptionLineMedicament", "prescription_line_medicament_id");
 $do->doIt();
 

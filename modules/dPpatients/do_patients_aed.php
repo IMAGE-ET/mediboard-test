@@ -7,15 +7,9 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $m;
-
 class CDoPatientAddEdit extends CDoObjectAddEdit {
   function CDoPatientAddEdit() {
     $this->CDoObjectAddEdit("CPatient", "patient_id");
-    
-    $this->createMsg = "Patient créé";
-    $this->modifyMsg = "Patient modifié";
-    $this->deleteMsg = "Patient supprimé";
 	  
     if ($dialog = dPgetParam($_POST, "dialog")) {
       $this->redirectDelete .= $this->redirect."&a=pat_selector&dialog=1";
@@ -48,7 +42,6 @@ class CDoPatientAddEdit extends CDoObjectAddEdit {
     }
   }
 }
-
 
 $do = new CDoPatientAddEdit;
 $do->doIt();
