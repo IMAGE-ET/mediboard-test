@@ -79,8 +79,14 @@ class CSetupbloodSalvage extends CSetup {
              ADD `type_signalement` ENUM('inc','ris') NOT NULL ;";
     
     $this->addQuery($sql);
-         
-    $this->mod_version='0.03'; 
+    $this->makeRevision('0.03');
+    $sql = " ALTER TABLE `blood_salvage` 
+             ADD `sample` ENUM( 'non', 'prel', 'trans' ) NOT NULL DEFAULT 'non' ;";
+    
+    $this->addQuery($sql);
+    
+    $this->mod_version='0.1'; 
+    
   }
 }
 ?>

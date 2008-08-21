@@ -30,6 +30,8 @@ class CBloodSalvage extends CMbObject {
 	var $anticoagulant_cip = null;                                    // *Code CIP de l'anticoagulant utilisé*
 	var $receive_kit = null;
 	var $wash_kit = null;
+	var $sample = null;
+	
   // Form Fields
   var $_recuperation_start =null;
   var $_recuperation_end =null;
@@ -84,6 +86,7 @@ class CBloodSalvage extends CMbObject {
     $specs["anticoagulant_cip"]		= "numchar|7";
     $specs["wash_kit"]	        	= "varchar|32";
     $specs["receive_kit"]	       	= "varchar|32";
+    $specs["sample"]	       	    = "notNull enum list|non|prel|trans default|non";
     
     $specs["_datetime"]            = "dateTime";
     

@@ -49,5 +49,13 @@ $locales['CCellSaver.modele'] = 'Model';
 $locales['CCellSaver-modele'] = 'Model';
 $locales['CCellSaver.modify'] = 'Modify  Cell Saver';
 $locales['CCellSaver.create'] = 'Add a Cell Saver';
+$locales['config-bloodSalvage-CBloodSalvage'] = '';
+$locales['config-bloodSalvage-CBloodSalvage-inLivretTherapeutique'] = '';
+$locales['CBloodSalvage-sample'] ='';
+$locales['CBloodSalvage-sample-court'] = '';
+$locales['CBloodSalvage-sample-desc'] = '';
+$locales['CBloodSalvage.sample.non'] = '';
+$locales['CBloodSalvage.sample.prel'] = '';
+$locales['CBloodSalvage.sample.trans'] = '';
 
 ?>

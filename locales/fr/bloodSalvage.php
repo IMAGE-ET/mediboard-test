@@ -157,4 +157,10 @@ $locales['CTypeEi-title-create'] = 'Création d\'un nouveau modèle';
 $locales['CTypeEi-title-modify'] = 'Modification du modèle';
 $locales['config-bloodSalvage-CBloodSalvage'] = 'Configuration de la procédure de récupération sanguine';
 $locales['config-bloodSalvage-CBloodSalvage-inLivretTherapeutique'] = 'Anticoagulants du livret thérapeutique uniquement';
+$locales['CBloodSalvage-sample'] = 'Prélévement';
+$locales['CBloodSalvage-sample-court'] = 'Prélévément sanguin';
+$locales['CBloodSalvage-sample-desc'] = 'Prélévement sanguin pour suivi qualité';
+$locales['CBloodSalvage.sample.non'] = 'Non prescrit';
+$locales['CBloodSalvage.sample.prel'] = 'Prélévé';
+$locales['CBloodSalvage.sample.trans'] = 'Prélévé et transmis';
 ?>
