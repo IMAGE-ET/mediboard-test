@@ -239,21 +239,6 @@ class CMbArray {
   }
   
   /**
-   * Create an array of given size filled with given value
-   * @param mixed $value Value to fill in
-   * @param int $size Size of the built array
-   * @return array The built array
-   */
-  static function fillValues($value, $size) {
-    $array = array();
-    for ($i = 0; $i < $size; ++$i) {
-      $array[] = $value;
-    }
-    
-    return $array;
-  }
-  
-  /**
    * Pluck (collect) given key or attribute name of each value
    * whether the values are arrays or objects.
    * Preserves indexes
