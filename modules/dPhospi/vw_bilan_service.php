@@ -85,9 +85,6 @@ foreach($prescriptions as $_prescription){
 				  		  $prises[$sejour->_ref_patient->_id][$_heure][$line->_class_name][$line->_id][$_prise->_id] = $_prise;	
 				  		}
 				  	}
-				  	
-				  	
-				  	
 				  }
 				}
 			}

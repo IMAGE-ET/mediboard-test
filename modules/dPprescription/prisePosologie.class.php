@@ -190,20 +190,10 @@ class CPrisePosologie extends CMbMetaObject {
   
   
   function calculQuantitePrise($borne_min, $borne_max){
-
-  	//mbTrace($borne_min, "min");
-  	//mbTrace($borne_max, "max");
-  	
   	$nb_hours = mbHoursRelative($borne_min, $borne_max);
   	$nb_days  = mbDaysRelative($borne_min, $borne_max);
   	$nb_minutes = mbMinutesRelative($borne_min, $borne_max);
-  	
   
-  	/*
-  	mbTrace($nb_hours, "nombre d'heures entre le debut et la fin");
-  	mbTrace($nb_days,  "nombre de jours entre le debut et la fin");
-  	mbTrace($nb_minutes,  "nombre de minutes entre le debut et la fin");
-  	*/
   	switch($this->_unite){
   		case 'minute':
   			$nb = $nb_minutes; 
