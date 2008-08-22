@@ -77,8 +77,10 @@ foreach ($classes as $class) {
   
   // Traductions au niveau classe
   addLocale($classname, $classname, "$classname", $language);
-  addLocale($classname, $classname, "$classname.one", $language);
   addLocale($classname, $classname, "$classname.none", $language);
+  addLocale($classname, $classname, "$classname.one", $language);
+  addLocale($classname, $classname, "$classname.all", $language);
+  addLocale($classname, $classname, "$classname.select", $language);
   addLocale($classname, $classname, "$classname-msg-create", $language);
   addLocale($classname, $classname, "$classname-msg-modify", $language);
   addLocale($classname, $classname, "$classname-msg-delete", $language);
