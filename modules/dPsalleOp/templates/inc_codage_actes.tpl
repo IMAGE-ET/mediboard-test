@@ -341,7 +341,7 @@ function setToNow(element) {
 
 <script type="text/javascript">
   oElement = $('acte{{$key}}');
-  oForm = getBoundingForm(oElement);
+  oForm = getSurroundingForm(oElement);
   prepareForm(oForm);
 	Calendar.regField("formActe-{{$view}}", "execution", true);
 </script>

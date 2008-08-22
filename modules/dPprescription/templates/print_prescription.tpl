@@ -62,9 +62,9 @@ Main.add(window.print);
 				{{$function->cp}} &mdash; {{$function->ville}}
 			</td>
   	  <td class="right">
-			  Tel: {{$function->tel}}
+			  Tel: {{mb_value object=$function field=tel}}
 	  		<br />
-	  		Fax: {{$function->fax}}
+	  		Fax: {{mb_value object=$function field=fax}}
 	  	</td>
 		</tr>
   </table>

@@ -5,7 +5,7 @@
     <th>{{tr}}CProductOrderItem-quantity{{/tr}}</th>
     <th>{{tr}}CProductOrderItem-unit_price{{/tr}}</th>
     <th>{{tr}}CProductOrderItem-_price{{/tr}}</th>
-    {{if $order->date_ordered}}<th></th>{{/if}}
+    {{if $order->date_ordered}}<th>Déjà reçu</th><th></th>{{/if}}
   </tr>
   {{foreach from=$order->_ref_order_items item=curr_item}}
     <tbody id="order-item-{{$curr_item->_id}}">
@@ -13,7 +13,7 @@
     </tbody>
   {{/foreach}}
   <tr>
-    <td colspan="6" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
+    <td colspan="8" id="order-{{$order->_id}}-total" style="border-top: 1px solid #666;">
       <span style="float: right;">{{tr}}Total{{/tr}} : <span id="order-total">{{mb_value object=$order field=_total}}</span></span>
       <button type="button" class="change" onclick="refreshOrder({{$order->_id}}, {refreshLists: true})">{{tr}}Refresh{{/tr}}</button>
       

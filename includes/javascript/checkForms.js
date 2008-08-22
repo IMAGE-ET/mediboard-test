@@ -1,611 +1,515 @@
 var ElementChecker = {
   aProperties    : {},
   oElement       : null,
+  oForm          : null,
+  oLabel         : null,
+  sLabel         : null,
+  
   sTypeSpec      : null,
   oTargetElement : null,
   oCompare       : null,
-  aSpecTypes     : Array("ref", "str", "numchar", "num", 
-                      "bool", "enum", "date", "time",
-                      "dateTime", "float", "currency", "pct",
-                      "text", "html", "email", "url", "code", "password"),
-  
-  prepare : function(oElement){
-    //Initialisation
-    var aSpecFragments = null;
-    this.aProperties  = {};
-    this.oElement     = oElement;
-    this.sTypeSpec    = null;
-    
-    // Extraction des props
-    sPropSpec = oElement.title || oElement.className || '';
-    aSpecFragments = sPropSpec.split(' ');
-    
-    // Props trouvées : Recherche de la prop principale et creation propriétés
-    if(aSpecFragments){
-      aSpecFragments.each(function (value) {
-        if(ElementChecker.aSpecTypes.indexOf(value) != -1){
-          ElementChecker.sTypeSpec = value;
-        }else{
-          aParams = value.split("|");
-          if(aParams.length == 1){
-            ElementChecker.aProperties[value] = true;
-          }else{
-            key = aParams.shift();
-            ElementChecker.aProperties[key] = aParams.join("|");
-          }
-        }
-      });
-    }
-  },
-  
-  checkElement : function(){
-    if(sMsg = this.checkParams()){
-      return sMsg;
-    }
-    if (this.oElement.value == "") {
-      return null;
-    }
-    
-    sMsg = this["check_" + this.sTypeSpec]();
-    
-    // Free DOM element references
-    this.oElement = null;
-    this.oTargetElement = null;
-    this.oCompare = null;
+  oErrors        : [],
+  sValue         : null,
 
-    return sMsg;
+  prepare : function(oElement){
+    this.oElement = oElement;
+    
+    var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
+    oElement = $(isArray?oElement[0]:oElement);
+
+    this.oForm = oElement.form;
+    this.oProperties = oElement.getProperties();
+    
+    this.oLabel = oElement.getLabel();
+    this.sLabel = this.oLabel ? this.oLabel.innerHTML : oElement.name;
+    
+    this.oErrors = [];
+    this.sValue = (this.oProperties.mask ? this.oElement.rawvalue : $V(this.oElement));
+
+    Object.extend(this.check, this);
   },
+  
+  //---- Assertion functions, to check the number of arguments for each property type
+  assertMultipleArgs: function(prop, multiplicity) {
+    if (Object.isUndefined(this.oProperties[prop])) return false;
+    Assert.that(this.oProperties[prop] !== true, '"'+prop+'" nécessite '+multiplicity+((multiplicity != null) ? multiplicity : 'un ou plusieurs')+' argument(s)');
+    return this.oProperties[prop] = [this.oProperties[prop]].flatten();
+  },
+  
+  assertSingleArg: function(prop) {
+    if (Object.isUndefined(this.oProperties[prop])) return false;
+    Assert.that(((typeof this.oProperties[prop] != "boolean") && !Object.isArray(this.oProperties[prop])), '"'+prop+'" nécessite un et un seul argument');
+    return this.oProperties[prop] = [this.oProperties[prop]].flatten().reduce();
+  },
+  
+  assertNoArg: function(prop) {
+    if (Object.isUndefined(this.oProperties[prop])) return false;
+    Assert.that(this.oProperties[prop] == true, '"'+prop+'" ne doit pas avoir d\'arguments');
+    return this.oProperties[prop] = true;
+  },
+  //---------------------------------------------------------------------------------
   
   getCastFunction: function() {
-    switch (this.sTypeSpec) {
-    	case "num": return function(value) { return parseInt(value, 10); }
-			case "float": return function(value) { return parseFloat(value, 10); }
-			case "date": return function(value) { return Date.fromDATE(value); }
-    	default : return Prototype.K;
-    }
+  	if (this.oProperties["num"])   return function(value) { return parseInt(value, 10); }
+		if (this.oProperties["float"]) return function(value) { return parseFloat(value, 10); }
+		if (this.oProperties["date"])  return function(value) { return Date.fromDATE(value); }
+		return Prototype.K;
   },
   
   castCompareValues: function(sTargetElement) {
     this.oTargetElement = this.oElement.form.elements[sTargetElement];
-    if (!this.oTargetElement) {
-      return printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-    }
+    if (!this.oTargetElement)
+      printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
     
     var fCaster = this.getCastFunction();
-  	
   	this.oCompare = {
-      source : this.oElement.value ? fCaster(this.oElement.value) : null,
+      source : this.sValue               ? fCaster(this.sValue) : null,
       target : this.oTargetElement.value ? fCaster(this.oTargetElement.value) : null
   	}
-
   	return null;
   },
   
-  checkParams : function(){
-    // NotNull
-    if(this.aProperties["notNull"]){
-      if(this.oElement.value == ""){
-        return "Ne pas peut pas être vide";
-      }
+  addError: function(prop, message) {
+    if (!message) return true;
+    if (!this.oErrors.find(function (e) {return e.type == prop})) {
+      this.oErrors.push({type: prop, message: message});
     }
+    return false;
+  },
+
+  getErrorMessage: function() {
+    var msg = '';
+    this.oErrors.each(function (error) {
+      msg += "   - "+error.message+"\n";
+    });
+    return msg;
+  },
+  
+  checkElement : function() {
+    var that = this;
+    
+    if (this.oProperties.notNull || (this.sValue && !this.oProperties.notNull)) {
+      $H(this.oProperties).each(function (prop) {
+        if (that.check[prop.key])
+          that.addError(prop.key, that.check[prop.key]());
+      });
+    }
+
+    // Free DOM element references
+    this.oElement = null;
+    this.oForm = null;
+    this.oLabel = null;
+    this.oTargetElement = null;
+    this.oCompare = null;
+    
+    return this.oErrors;
+  }
+}
+
+Object.extend(ElementChecker, {
+  check: {
+    // isNumeric
+    isNumeric: function () {
+      if (isNaN(this.sValue))
+        this.addError("isNumeric", "N'est pas dans un format numérique valide");
+    },
+    
+    // notNull
+    notNull: function () {
+      this.assertNoArg("notNull");
+      if (this.sValue == "")
+        this.addError("notNull", "Ne doit pas être vide");
+    },
     
     // xor
-    if(this.aProperties["xor"]){
-      var oLabel = getLabelFor(this.oElement);
-      var sLabel = oLabel ? oLabel.innerHTML : oElement.name;
-      var iNbElements = this.oElement.value != "";
+    xor: function () {
+      var sTargetElement = this.assertMultipleArgs("xor");
+      var iNbElements = this.sValue != "";
       var sListElements = sLabel;
       var message = "";
-      this.aProperties["xor"].split("|").each(function(sTargetElement) {
-        if (!sTargetElement) {
-          message += "Spécification de chaîne de caractères invalide";
-        }
-        var oTargetElement = this.oElement.form.elements[sTargetElement];
+  
+      var that = this;
+      this.oProperties["xor"].each(function(sTargetElement) {
+        var oTargetElement = that.oForm.elements[sTargetElement];
         if (!oTargetElement) {
           message += printf("Elément cible invalide ou inexistant (nom = %s)", sTargetElement);
-        } else {
+        }
+        else {
           var oTargetLabel = getLabelFor(oTargetElement);
           var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : sTargetElement;
           iNbElements += (oTargetElement.value != "");
           sListElements += ", " + sTargetLabel;
         }
       });
-      if(message != "") {
-        return message;
-      }
-      if (iNbElements != 1){
-        return printf("Vous devez choisir une et une seule de valeur entre '%s", sListElements);  
-      }
-    }
-    
-    if(this.oElement.value == ""){
-      return null;
-    }
-    
-    var sTargetElement = null;
-    var sParamMsg = null;
+      this.addError("xor", message);
+      if (iNbElements != 1) 
+        this.addError("xor", printf("Vous devez choisir une et une seule valeur parmi '%s", sListElements));  
+    },
     
     // moreThan
-    if (sTargetElement = this.aProperties["moreThan"]) {
-    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
-    		return sParamMsg;
-    	}
-    	
-      if (this.oCompare.source <= this.oCompare.target) {
-        return printf("'%s' n'est pas strictement supérieur à '%s'", this.oElement.value,  this.oTargetElement.value);
-      }
-    }
+    moreThan: function () {
+      sTargetElement = this.assertSingleArg("moreThan");
+      this.addError("moreThan", this.castCompareValues(sTargetElement));
+      
+      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source <= this.oCompare.target))
+        this.addError("moreThan", "'%s' n'est pas strictement supérieur à '%s'", this.sValue,  this.oTargetElement.value);
+    },
     
     // moreEquals
-    if (sTargetElement = this.aProperties["moreEquals"]) {
-    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
-    		return sParamMsg;
-    	}
-    	
-      if (this.oCompare.source < this.oCompare.target) {
-        return printf("'%s' n'est pas supérieur ou égal à '%s'", this.oElement.value,  this.oTargetElement.value);
-      }
-    }
-
+    moreEquals: function () {
+      sTargetElement = this.assertSingleArg("moreEquals");
+      this.addError("moreEquals", this.castCompareValues(sTargetElement));
+      
+      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source < this.oCompare.target))
+        this.addError("moreEquals", printf("'%s' n'est pas supérieur ou égal à '%s'", this.sValue,  this.oTargetElement.value));
+    },
+    
     // sameAs
-    if (sTargetElement = this.aProperties["sameAs"]) {
-    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
-    		return sParamMsg;
-    	}
-    	
-      if (this.oCompare.source != this.oCompare.target) {
+    sameAs: function () {
+      sTargetElement = this.assertSingleArg("sameAs");
+      this.addError("sameAs", this.castCompareValues(sTargetElement));
+      
+      if (this.oCompare.source && this.oCompare.target && (this.oCompare.source != this.oCompare.target)) {
         var oTargetLabel = getLabelFor(this.oTargetElement);
-        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oElement.name;
-        return printf("Doit être identique à %s", sTargetLabel);
+        var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : this.oTargetElement.name;
+        this.addError("sameAs", printf("Doit être identique à [%s]", sTargetLabel.strip()));
       }
-    }
+    },
     
     // notContaining
-    if (sTargetElement = this.aProperties["notContaining"]) {
-    	if (sParamMsg = this.castCompareValues(sTargetElement)) {
-    		return sParamMsg;
-    	}
-    	
-      if (this.oCompare.source.match(this.oCompare.target)) {
+    notContaining: function () {
+      sTargetElement = this.assertSingleArg("notContaining");
+      this.addError("notContaining", this.castCompareValues(sTargetElement));
+
+      if (this.oCompare.source && this.oCompare.target && this.oCompare.source.match(this.oCompare.target)) {
         var oTargetLabel = getLabelFor(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
-        return printf("Ne doit pas contenir %s", sTargetLabel);
+        this.addError("notContaining", printf("Ne doit pas contenir [%s]", sTargetLabel.strip()));
       }
-    }
+    },
     
     // notNear
-    if (sTargetElement = this.aProperties["notNear"]) {
-      if (sParamMsg = this.castCompareValues(sTargetElement)) {
-        return sParamMsg;
-      }
+    notNear: function () {
+      sTargetElement = this.assertSingleArg("notNear");
+      this.addError("notNear", this.castCompareValues(sTargetElement));
       
-      if (levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
+      if (this.oCompare.source && this.oCompare.target && levenshtein(this.oCompare.target, this.oCompare.source) < 3) {
         var oTargetLabel = getLabelFor(this.oTargetElement);
         var sTargetLabel = oTargetLabel ? oTargetLabel.innerHTML : '"'+this.oCompare.target+'"';
-        return printf("Ressemble trop à %s", sTargetLabel);
+        this.addError("notNear", printf("Ressemble trop à [%s]", sTargetLabel.strip()));
       }
-    }
+    },
     
     // alphaAndNum
-   	if(this.aProperties["alphaAndNum"]){
-	  if (!this.oElement.value.match(/[A-z]/)) {
-	    return "Doit contenir au moins une lettre";
-	  }
-	  if (!this.oElement.value.match(/\d+/)) {
-		return "Doit contenir au moins un chiffre";
-	  }
-	}
-    
-    return null;
-  }
-}
-
-
-Object.extend(ElementChecker, {  
-  // ref
-  check_ref: function() {
-    if (isNaN(this.oElement.value)) {
-      return "N'est pas une référence (format non numérique)";
-    }
-    iElementValue = parseInt(this.oElement.value, 10);
-    if (iElementValue == 0) {
-      return "Ne peut pas être une référence nulle";
-    }
-    if (iElementValue < 0) {
-      return "N'est pas une référence (entier négatif)";
-    }
-    return null;
-  },
-  
-  // str
-  check_str: function() {
-    // length
-    if(this.aProperties["length"]){
-      iLength = parseInt(this.aProperties["length"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length != iLength) {
-        return printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength);
-      }
-    }
-    
-    // minLength
-    if(this.aProperties["minLength"]){
-      iLength = parseInt(this.aProperties["minLength"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur minimale invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length < iLength) {
-        return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
-      }
-    }
-    
-    // maxLength
-    if(this.aProperties["maxLength"]){
-      iLength = parseInt(this.aProperties["maxLength"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur maximale invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length > iLength) {
-        return printf("N'a pas la bonne longueur (longueur maximale souhaitée : %s)", iLength);
-      }
-    }
-    return null;
-  },
-  
-  // numchar
-  check_numchar: function() {
-    return this.check_num();
-  },
-  
-  // num
-  check_num: function() {
-    if (isNaN(this.oElement.value)) {
-      return "N'est pas une chaîne numérique";
-    }
-    
-    // pos
-    if(this.aProperties["pos"]){
-      if (this.oElement.value <= 0) {
-        return "Doit avoir une valeur positive";
-      }
-    }
-    
-    // min
-    if(this.aProperties["min"]){
-      iMin = parseInt(this.aProperties["min"], 10);
-      if (iMin == NaN) {
-        return "Spécification de minimum numérique invalide";
-      }
-      if (this.oElement.value < iMin) {
-        return printf("Soit avoir une valeur minimale de %s", iMin);
-      }
-    }
-    
-    // max
-    if(this.aProperties["max"]){
-      iMax = parseInt(this.aProperties["max"], 10);
-      if (iMax == NaN) {
-        return "Spécification de maximum numérique invalide";
-      }
-      if (this.oElement.value > iMax) {
-        return printf("Soit avoir une valeur maximale de %s", iMin);
-      }
-    }
+    alphaAndNum: function () {
+      this.assertNoArg("alphaAndNum");
+      if (!this.sValue.match(/[A-z]/) || !this.sValue.match(/\d+/))
+        this.addError("alphaAndNum", "Doit contenir au moins une lettre et un chiffre");
+    },
     
     // length
-    if(this.aProperties["length"]){
-      iLength = parseInt(this.aProperties["length"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length != iLength) {
-        return printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength);
-      }
-    }
+    length: function () { 
+      this.assertSingleArg("length");
+      iLength = parseInt(this.oProperties["length"], 10);
+      
+      if (iLength < 1 || iLength > 255)
+        Console.error(printf("Spécification de longueur invalide (longueur = %s)", iLength));
+  
+      if (this.sValue.length != iLength)
+        this.addError("length", printf("N'a pas la bonne longueur (longueur souhaitée : %s)", iLength));
+    },
     
     // minLength
-    if(this.aProperties["minLength"]){
-      iLength = parseInt(this.aProperties["minLength"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur minimale invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length < iLength) {
-        return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
-      }
-    }
+    minLength: function () { 
+      this.assertSingleArg("minLength");
+      iLength = parseInt(this.oProperties["minLength"], 10);
+      
+      if (iLength < 1 || iLength > 255)
+        Console.error(printf("Spécification de longueur minimale invalide (longueur = %s)", iLength));
+  
+      if (this.sValue.length < iLength)
+        this.addError("minLength", printf("N'atteint pas la bonne longueur (longueur souhaitée : %s)", iLength));
+    },
     
     // maxLength
-    if(this.aProperties["maxLength"]){
-      iLength = parseInt(this.aProperties["maxLength"], 10);
-      if (iLength < 1 || iLength > 255) {
-        return printf("Spécification de longueur maximale invalide (longueur = %s)", iLength);
-      }
-      if (this.oElement.value.length > iLength) {
-        return printf("N'a pas la bonne longueur (longueur maximale souhaitée : %s)", iLength);
-      }
-    }
-    
-    // minMax
-    if(this.aProperties["minMax"]){
-      aSpecFragments = this.aProperties["minMax"].split("|");
-      var iMin = parseInt(aSpecFragments[0], 10);
-      var iMax = parseInt(aSpecFragments[1], 10);
-      if (this.oElement.value > iMax || this.oElement.value < iMin) {
-        return printf("N'est pas compris entre %i et %i", iMin, iMax);
-      }
-    }
-    return null;
-  },
+    maxLength: function () { 
+      this.assertSingleArg("maxLength");
+      iLength = parseInt(this.oProperties["maxLength"], 10);
+      
+      if (iLength < 1 || iLength > 255)
+        Console.error(printf("Spécification de longueur maximale invalide (longueur = %s)", iLength));
   
-  // bool
-  check_bool: function() {
-    if (isNaN(this.oElement.value)) {
-      return "N'est pas une chaîne numérique";
-    }
-    if(this.oElement.value!=0 && this.oElement.value!=1){
-      return "Ne peut être différent de 0 ou 1";
-    }
-    return null;
-  },
-  
-  // enum
-  check_enum: function() {
-    if(!this.aProperties["list"]){
-      return "Spécification 'list' manquante pour le champ " + this.oElement.name;
-    }
-    aSpecFragments = this.aProperties["list"].split("|");
-    if (aSpecFragments.indexOf(this.oElement.value) == -1) {
-      return "N'est pas une valeur possible";
-    }
-    return null;
-  },
-  
-  // date
-  check_date: function() {
-    if(!this.oElement.value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/)) {
-      return "N'as pas un format correct";
-    }
-    return null;
-  },
-  
-  // time
-  check_time: function() {
-    if(!this.oElement.value.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/)) {
-      return "N'as pas un format correct";
-    }
-    return null;
-  },
-  
-  // dateTime
-  check_dateTime: function() {
-    if(!this.oElement.value.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/)) {
-      return "N'as pas un format correct";
-    }
-    return null;
-  },
-  
-  // float
-  check_float: function() {
-    this.oElement.value = this.oElement.value.toString().replace(',', '.');
-    
-    if(isNaN(parseFloat(this.oElement.value)) || parseFloat(this.oElement.value)!=this.oElement.value){
-      return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
-    }
+      if (this.sValue.length > iLength)
+        this.addError("maxLength", printf("Dépasse la bonne longueur (longueur souhaitée : %s)", iLength));
+    },
     
     // pos
-    if(this.aProperties["pos"]){
-      if (this.oElement.value <= 0) {
-        return "Doit avoir une valeur positive";
-      }
-    }
+    pos: function () {
+      this.assertNoArg("pos");
+      this.isNumeric();
+      if (this.sValue <= 0)
+        this.addError("pos", "Doit être une valeur positive");
+    },
     
     // min
-    if(this.aProperties["min"]){
-      iMin = parseFloat(this.aProperties["min"], 10);
-      if (iMin == NaN) {
-        return "Spécification de minimum numérique invalide";
-      }
-      if (this.oElement.value < iMin) {
-        return printf("Soit avoir une valeur minimale de %s", iMin);
-      }
-    }
+    min: function () {
+      this.assertSingleArg("min");
+      this.isNumeric();
+      
+      iMin = parseInt(this.oProperties["min"], 10);
+      if (this.sValue < iMin)
+        this.addError("min", printf("Doit avoir une valeur minimale de %s", iMin));
+    },
     
     // max
-    if(this.aProperties["max"]){
-      iMax = parseFloat(this.aProperties["max"], 10);
-      if (iMax == NaN) {
-        return "Spécification de maximum numérique invalide";
-      }
-      if (this.oElement.value > iMax) {
-        return printf("Soit avoir une valeur maximale de %s", iMin);
-      }
-    }
+    max: function () {
+      this.assertSingleArg("max");
+      this.isNumeric();
+      
+      iMax = parseInt(this.oProperties["max"], 10);
+      if (this.sValue > iMax)
+        this.addError("max", printf("Doit avoir une valeur maximale de %s", iMax));
+    },
     
-    // minMax
-    if(this.aProperties["minMax"]){
-      aSpecFragments = this.aProperties["minMax"].split("|");
-      var iMin = parseInt(aSpecFragments[0], 10);
-      var iMax = parseInt(aSpecFragments[1], 10);
-      if (this.oElement.value > iMax || this.oElement.value < iMin) {
-        return printf("N'est pas compris entre %i et %i", iMin, iMax);
-      }
-    }
-    return null;
-  },
-  
-  // currency
-  check_currency: function() {
-    return this.check_float();
-  },
-  
-  // pct
-  check_pct: function() {
-    if (!this.oElement.value.match(/^(\d+)(\.\d{1,4})?$/)) {
-      return "N'est pas une valeur décimale (utilisez le . pour la virgule)";
-    }
-    return null;
-  },
-  
-  // text
-  check_text: function() {
-    return null;
-  },
-  
-  // html
-  check_html: function() {
-    return null;
-  },
-  
-//(http|https|ftp)?(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$
-  check_url: function() {
-	  var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
-	  if (!this.oElement.value.match(regexp)) {
-       return "Le format de l'url n'est pas valide";
-    }
-    return null;
-  },
-  
-  
-  
-  // email
-  check_email: function() {
-    if (!this.oElement.value.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/)) {
-      return "Le format de l'email n'est pas valide";
-    }
-    return null;
-  },
-  
-  // code
-  check_code: function() {
+    minMax: function () {
+      this.assertMultipleArgs("minMax", 2);
+      var min = parseInt(this.oProperties.minMax[0]);
+      var max = parseInt(this.oProperties.minMax[1]);
+      if (this.sValue < min || 
+          this.sValue > max)
+        this.addError(printf("N'est pas compris entre %i et %i", min, max));
+    },
+    
     // ccam
-    if(this.aProperties["ccam"]){
-      if (!this.oElement.value.match(/^([A-Z]){4}[0-9]{3}(-[0-9](-[0-9])?)?$/i)) {
-        return "Code CCAM incorrect";
-      }
+    ccam: function() {
+      this.assertNoArg("ccam");
+      if (!this.sValue.match(/^([A-Z]){4}[0-9]{3}(-[0-9](-[0-9])?)?$/i))
+        this.addError("ccam", "Code CCAM incorrect");
+    },
     
     // cim10
-    }else if(this.aProperties["cim10"]){
-      if (!this.oElement.value.match(/^([a-z0-9]){0,5}$/i)) {
-        return "Code CCAM incorrect, doit contenir 5 lettres maximum";
-      }
-      
-    // adeli
-    }else if(this.aProperties["adeli"]){
-      if (!this.oElement.value.match("/^([0-9]){9}$/i")) {
-        return "Code Adeli incorrect, doit contenir exactement 9 chiffres";
-      }
-      
-    // insee
-    }else if(this.aProperties["insee"]) {
+    cim10: function () {
+      this.assertNoArg("cim10");
+      if (!this.sValue.match(/^([a-z0-9]){0,5}$/i))
+        this.addError("cim10", "Code CIM incorrect, doit contenir 5 lettres maximum");
+    },
     
-    	if (this.oElement.value.match(/^([0-9]{7,8}[A-Z])$/i)) {
-    	  return null;
-    	}
-    	
-      if (aMatches = this.oElement.value.match(/^([1278][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
-	      nCode = parseInt(aMatches[1], 10);
-	      nCle  = parseInt(aMatches[2], 10);
-	      if (97 - (nCode % 97) != nCle) {
-	        return "Matricule incorrect, la clé n'est pas valide";
-	      }
-	      
-	      return null;
-      }
-
-			return "Matricule incorrect";
+    // adeli
+    adeli: function() {
+      this.assertNoArg("adeli");
+      if (!this.sValue.match("/^([0-9]){9}$/i"))
+        this.addError("adeli", "Code Adeli incorrect, doit contenir exactement 9 chiffres");
+    },
+    
+    // insee
+    insee: function () {
+      this.assertNoArg("insee");
+      if (this.sValue.match(/^([0-9]{7,8}[A-Z])$/i))
+        return;
       
-    // Numero de commande
-    } else if(this.aProperties["product_order"]) {
-      if (this.oElement.value.indexOf("%id") == -1) {
-        return "Le numéro de commande doit contenir %id";
+      if (aMatches = this.sValue.match(/^([1278][0-9]{2}[0-9]{2}[0-9]{2}[0-9]{3}[0-9]{3})([0-9]{2})$/i)) {
+        nCode = parseInt(aMatches[1], 10);
+        nCle  = parseInt(aMatches[2], 10);
+        if (97 - (nCode % 97) != nCle)
+          this.addError("insee", "Matricule incorrect, la clé n'est pas valide");
+        else return;
       }
-      return null;
-      
-    // siret
-    } else if(this.aProperties["siret"]){
-      if (!luhn(this.oElement.value)) {
-        return "Code SIRET incorrect";
-      }
-      
-    // Aucune Specification
-    } else {
-      return "Spécification de code invalide";
-    }
-    return null;
-  },
   
-    // password
-  check_password: function() {
-  	// TODO: Factoriser le minLength et les autres
-    if(this.aProperties["minLength"]){
-    	iLength = parseInt(this.aProperties["minLength"]);
-    	
-	    // length
-	    if (this.oElement.value.length < iLength) {
-	    	return printf("N'a pas la bonne longueur (longueur minimale souhaitée : %s)", iLength);
-	    }
-	  }
-    return null;
-  }
-} );
+      this.addError("insee", "Matricule incorrect");
+    },
+    
+    // order number
+    product_order: function () {
+      this.assertNoArg("product_order");
+      if (this.sValue.indexOf("%id") == -1)
+        this.addError("produc_order", "Le numéro de commande doit contenir %id");
+    },
+    
+    // siret
+    siret: function () {
+      this.assertNoArg("siret");
+      if (!luhn(this.sValue))
+        this.addError("siret", "Code SIRET incorrect");
+    },
+    
+    // list
+    list: function() {
+      var list = this.assertMultipleArgs("list");
 
+      if (!this.sValue || (this.sValue && list.indexOf(this.sValue) == -1))
+        this.addError("list", "N'est pas une valeur possible");
+    },
+    
+    ///////// Data types ////////////
+    // ref
+    ref: function() {
+      this.notNull();
+      this.pos();
+    },
+    
+    // str
+    str: function () {},
+    
+    // numchar
+    numchar: function() {
+      this.num();
+    },
+    
+    // num
+    num: function() {
+      this.isNumeric();
+    },
+    
+    // bool
+    bool: function() {
+      this.isNumeric();
+      if(this.sValue != 0 && this.sValue != 1)
+        this.addError("bool", "Ne peut être différent de 0 ou 1");
+    },
+    
+    // enum
+    "enum": function() {
+      if (!this.oProperties.list) {
+        Console.error("Spécification 'list' manquante pour le champ " + this.sLabel);
+        return;
+      }
+    },
+    
+    // date
+    date: function() {
+      if(!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})$/))
+        this.addError("date", "N'a pas un format de date correct");
+    },
+    
+    // time
+    time: function() {
+      if(!this.sValue.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/))
+        this.addError("time", "N'a pas un format d'heure correct");
+    },
+    
+    // dateTime
+    dateTime: function() {
+      if(!this.sValue.match(/^(\d{4})-(\d{1,2})-(\d{1,2})[ \+](\d{1,2}):(\d{1,2}):(\d{1,2})$/))
+        this.addError("dateTime", "N'a pas un format de date/heure correct");
+    },
+    
+    // float
+    float: function() {
+      this.sValue = this.sValue.toString().replace(',', '.');
+      this.isNumeric();
+      
+      if (parseFloat(this.sValue) != this.sValue)
+        this.addError("float", "N'est pas une valeur décimale (utilisez le . pour la virgule)");
+    },
+    
+    // currency
+    currency: function() {
+      this.float();
+    },
+    
+    // pct
+    pct: function() {
+      if (!this.sValue.match(/^(\d+)(\.\d{1,4})?$/))
+        this.addError("pct", "N'est pas une valeur décimale (utilisez le . pour la virgule)");
+    },
+    
+    // text
+    text: function() {
+      this.str();
+    },
+  
+    // html
+    html: function() {
+      this.str();
+    },
+    
+    // url // (http|https|ftp)?(www\.)?([\w*])\.[a-zA-Z]{2,3}[/]?$
+    url: function() {
+      var regexp = /(ftp|http|https):\/\/(\w+:{0,1}\w*@)?(\S+)(:[0-9]+)?(\/|\/([\w#!:.?+=&%@!\-\/]))?/;
+      if (!this.sValue.match(regexp))
+         this.addError("url", "Le format de l'url n'est pas valide");
+    },
+    
+    // mask
+    mask: function() {
+      this.str();
+    },
+    
+    // email
+    email: function() {
+      if (!this.sValue.match(/^([a-zA-Z0-9_\.\-])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/))
+        this.addError("email", "Le format de l'email n'est pas valide");
+    },
+    
+    // code
+    code: function() {
+      if (!(this.oProperties.ccam || this.oProperties.cim10 || this.oProperties.adeli || this.oProperties.insee || 
+            this.oProperties.product_order || this.oProperties.siret))
+      this.addError("code", "Spécification de code invalide");
+    },
+    
+    // password
+    password: function() {
+      this.str();
+    }
+  }
+});
 
 /***************/
 
-
 function checkForm(oForm) {
+  oForm = $(oForm);
+  
   var oElementFirstFailed = null;
-  var aMsgFailed = new Array;
-  var iElement = 0;
-  while (oElement = oForm.elements[iElement++]) {
-    var aMsg   = new Array;
-    ElementChecker.prepare(oElement);
-    
-    if (ElementChecker.sTypeSpec) {
-      // Type de spec trouvé
-      var oLabel = getLabelFor(oElement);
+  var oFormErrors = [];
+  var i = 0;
+  
+  // For each element in the form
+  oForm.getElementsEx().each(function (oElement) {
+    if (oElement) { // && (!oElement.tagName.match(/button/i) || Object.isArray(oElement))) { // If the element is not a button
+      var isArray  = (!oElement.options && (Object.isArray(oElement) || Object.isElement(oElement[0])));
+      var oFirstElement = (isArray?oElement[0]:oElement);
       
-      if (sMsg = ElementChecker.checkElement()) {
-        aMsg.push("\n    - " + sMsg);
-      }
+      // Element checker preparing and error checking
+      ElementChecker.prepare(oElement);
+      var sMsgFailed = ElementChecker.sLabel ? ElementChecker.sLabel : printf("%s (val:'%s', spec:'%s')", oFirstElement.name, $V(oElement), oFirstElement.className);
+      var oErrors = ElementChecker.checkElement();
       
-      if (aMsg.length != 0) {
-        var sLabelTitle = oLabel ? oLabel.getAttribute("title") : null;
-        var sMsgFailed = sLabelTitle ? sLabelTitle : printf("%s (val:'%s', spec:'%s')", oElement.name, oElement.value, sPropSpec);
-        sMsgFailed += aMsg.join("");
-        aMsgFailed.push("- " + sMsgFailed);
-        
-        if (!oElementFirstFailed) {
-          oElementFirstFailed = oElement;
-        }
+      // If errors, we append them to the error object
+      if (oErrors.length) {
+        oFormErrors.push({
+          title: sMsgFailed,
+          element: oFirstElement.name, 
+          errors: oErrors
+        });
+        if (!oElementFirstFailed) oElementFirstFailed = oFirstElement;
+        if (oLabel) oLabel.style.color = "#f00";
       }
-      if (oLabel) {
-        oLabel.style.color = aMsg.length ? "#f00" : "#000";
+      else {
+        if (oLabel) oLabel.style.color = "#000";
       }
     }
-  }
+  });
   
-  if (aMsgFailed.length) {
+  if (oFormErrors.length) {
     var sMsg = "Merci de remplir/corriger les champs suivants : \n";
-    sMsg += aMsgFailed.join("\n")
+    oFormErrors.each(function (formError) {
+      var oElement = oForm[formError.element];
+      
+      sMsg += "  "+String.fromCharCode(8226)+" "+formError.title.strip()+":\n";
+      formError.errors.each(function (error) {
+        sMsg += "     - "+error.message.strip()+"\n";
+      });
+    });
     alert(sMsg);
     
-    if (oElementFirstFailed) {
-      if (oElementFirstFailed.type != "hidden") {
-        try {
-          oElementFirstFailed.focus();
-        }
-        catch(e){}
-      }
-      var oDoubleClick = oElementFirstFailed["ondblclick"] || Prototype.emptyFunction;
-      oDoubleClick();
+    if (oElementFirstFailed && oElementFirstFailed.type != "hidden") {
+      oElementFirstFailed.select();
     }
     return false;
   }
   FormObserver.changes = 0;
-  return true;
+  return true;Console.debug('form OK'); return false;
 }
 
 /** Validation d'un element de formulaire. 
@@ -616,23 +520,15 @@ function checkFormElement(oElement) {
 	
 	// Recuperation de l'element HTML qui accueillera le message.
 	var oMsg = $(oElement.name+'_message');
-	
-	if (ElementChecker.sTypeSpec) {
-		switch (ElementChecker.sTypeSpec) {
-		case 'password':
-			if (oMsg) {
-        var message = ElementChecker.checkElement();
-				if (message) {
-					oMsg.innerHTML = 'Sécurité trop faible : <br />'+message;
-					oMsg.style.backgroundColor = '#FF7A7A';
-				} else {
-					oMsg.innerHTML = 'Sécurité correcte';
-					oMsg.style.backgroundColor = '#33FF66';
-				}
-			}
-			break;
-			
-		default:
+	if (oMsg && ElementChecker.oProperties.password) {
+    ElementChecker.checkElement();
+		if (ElementChecker.oErrors.length) {
+			oMsg.innerHTML = 'Sécurité trop faible : <br />'+ElementChecker.getErrorMessage().gsub("\n", "<br />");
+			oMsg.style.backgroundColor = '#FF7A7A';
+		} 
+		else {
+			oMsg.innerHTML = 'Sécurité correcte';
+			oMsg.style.backgroundColor = '#33FF66';
 		}
 	}
 	if (oElement.value == '') {

@@ -211,12 +211,10 @@ td#mainHeader td.welcome {
 
 #menubar a.textNonSelected img {
   opacity: 0.6;
-  filter: alpha(opacity=60);
 }
 
 #menubar a.textNonSelected:hover img {
   opacity: 1;
-  filter: alpha(opacity=100);
 }
 
 #menubar a {

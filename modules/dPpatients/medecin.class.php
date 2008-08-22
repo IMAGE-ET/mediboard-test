@@ -28,18 +28,6 @@ class CMedecin extends CMbObject {
   var $orientations    = null;
   var $complementaires = null;
 
-  // Form fields
-	var $_tel1 = null;
-	var $_tel2 = null;
-	var $_tel3 = null;
-	var $_tel4 = null;
-	var $_tel5 = null;
-	var $_fax1 = null;
-	var $_fax2 = null;
-	var $_fax3 = null;
-	var $_fax4 = null;
-	var $_fax5 = null;
-
   // Object References
   var $_ref_patients = null;
 
@@ -68,8 +56,8 @@ class CMedecin extends CMbObject {
       "adresse"         => "text confidential",
       "ville"           => "str confidential",
       "cp"              => "numchar maxLength|5 confidential",
-      "tel"             => "numchar length|10 confidential",
-      "fax"             => "numchar length|10 confidential",
+      "tel"             => "numchar length|10 confidential mask|99S99S99S99S99",
+      "fax"             => "numchar length|10 confidential mask|99S99S99S99S99",
       "email"           => "str confidential",
       "disciplines"     => "text confidential",
       "orientations"    => "text confidential",
@@ -96,14 +84,6 @@ class CMedecin extends CMbObject {
   function updateFormFields() {
     parent::updateFormFields();
     $this->_view = "$this->nom $this->prenom";
-    
-    $this->updateFormTel("tel","_tel");
-    $this->updateFormTel("fax","_fax");
-  }
-  
-  function updateDBFields() {
-    $this->updateDBTel("tel", "_tel");
-    $this->updateDBTel("fax", "_fax");
   }
 	 
   function loadRefs() {

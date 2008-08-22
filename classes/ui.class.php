@@ -44,6 +44,9 @@ class CAppUI {
 
   /** @var string langage alert mask */
   static $locale_mask = "";
+  
+  /** @var int Global unique id */
+  static $unique_id = 0;
 
   // Global collections
   var $messages = array();
@@ -591,10 +594,24 @@ class CAppUI {
     }
     return $conf;
   }
+  
+  static function unique_id() {
+    return self::$unique_id++;
+  }
 }
 
 // choose to alert for missing translation or not
 $locale_warn = CAppUI::conf("locale_warn") ;
 $locale_alert = CAppUI::conf("locale_alert");
 CAppUI::$locale_mask = $locale_warn ? "$locale_alert%s$locale_alert" : "%s";
+
+/*if ($locale_warn) {
+  $s = '<form name="locale-edit-form" action="" onsubmit="onSubmitFormAjax(this)">
+          <span ondblclick="$(this).hide();">%s</span>
+          <input type="text" name="locale" value="" style="display: none;" />
+        </form>';
+  CAppUI::$locale_mask = $s;
+} else {
+  CAppUI::$locale_mask = "%s";
+}*/
 ?>

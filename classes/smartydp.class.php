@@ -104,8 +104,6 @@ function smarty_modifier_stripslashes($string){
  * - canNull         : {optionnel} Permet de passer outre le notNull de la spécification
  */
 function smarty_function_mb_field($params, &$smarty) {
-  global $AppUI;
-  
   require_once $smarty->_get_plugin_filepath('shared','escape_special_chars');
 
   $object  = CMbArray::extract($params, "object", null, true);
@@ -190,7 +188,7 @@ function smarty_function_mb_title($params, &$smarty) {
     $object = new $class;
   }
   
-  $field      = CMbArray::extract($params, "field" , null, true);
+  $field = CMbArray::extract($params, "field" , null, true);
 
   return $object->_specs[$field]->getTitleElement($object, $params);
 }
@@ -204,22 +202,15 @@ function smarty_function_mb_title($params, &$smarty) {
  * - other : Value if test is false
  */
 function smarty_function_mb_ternary($params, &$smarty) {
-  global $AppUI;
-  
   $var   = CMbArray::extract($params, "var"   , null, true);
   $test  = CMbArray::extract($params, "test"  , null, true);
   $value = CMbArray::extract($params, "value" , null, true);
   $other = CMbArray::extract($params, "other" , null, true);
   
   $smarty->assign($var, $test ? $value : $other);
-  
 }
 
-
-
 function smarty_function_mb_colonne($params, &$smarty) {
-  global $AppUI;
-  
   $class     = CMbArray::extract($params, "class"     , null, true);
   $field     = CMbArray::extract($params, "field"     , null, true);
   $order_col = CMbArray::extract($params, "order_col" , null, true);
@@ -242,7 +233,7 @@ function smarty_function_mb_colonne($params, &$smarty) {
 }
 
 function smarty_function_mb_include_script($params, &$smarty) {
-  global $AppUI, $version;
+  global $version;
   $version_build = $version['build'];
   
   // Dans le cas ou le path est fourni

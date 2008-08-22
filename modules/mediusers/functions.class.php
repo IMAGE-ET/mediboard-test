@@ -32,18 +32,6 @@ class CFunctions extends CMbObject {
   // Object References
   var $_ref_group = null;
   var $_ref_users = null;
-
-  // Form fields
-  var $_tel1        = null;
-  var $_tel2        = null;
-  var $_tel3        = null;
-  var $_tel4        = null;
-  var $_tel5        = null;
-  var $_fax1        = null;
-  var $_fax2        = null;
-  var $_fax3        = null;
-  var $_fax4        = null;
-  var $_fax5        = null;
 	
   function getSpec() {
     $spec = parent::getSpec();
@@ -77,8 +65,8 @@ class CFunctions extends CMbObject {
       "adresse"  => "text",
       "cp"       => "numchar length|5",
       "ville"    => "str maxLength|50",
-      "tel"      => "numchar length|10",
-      "fax"      => "numchar length|10",
+      "tel"      => "numchar length|10 mask|99S99S99S99S99",
+      "fax"      => "numchar length|10 mask|99S99S99S99S99",
       "soustitre"=> "text",
       "compta_partagee"=> "notNull bool"
     );
@@ -99,15 +87,7 @@ class CFunctions extends CMbObject {
       $this->_shortview = substr($this->text, 0, 23)."...";
     else
       $this->_shortview = $this->text;
-    
-    $this->updateFormTel("tel", "_tel");
-    $this->updateFormTel("fax", "_fax");
  	}
-  
-  function updateDBFields() {
-    $this->updateDBTel("tel", "_tel");
-    $this->updateDBTel("fax", "_fax");
-  }
   
   // Forward references
   function loadRefsFwd() {

@@ -72,8 +72,8 @@
   	<td>{{$_medecin->adresse|nl2br}}</td>
   	<td>{{$_medecin->ville}}</td>
   	<td>{{$_medecin->cp}}</td>
-  	<td>{{$_medecin->tel}}</td>
-  	<td>{{$_medecin->fax}}</td>
+  	<td>{{mb_value object=$_medecin field=tel}}</td>
+  	<td>{{mb_value object=$_medecin field=fax}}</td>
   	<td>{{$_medecin->email}}</td>
     <td>{{$_medecin->disciplines|nl2br}}</td>
     <td>{{$_medecin->complementaires|nl2br}}</td>

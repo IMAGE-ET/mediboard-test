@@ -16,14 +16,6 @@ function reloadRadio(oForm){
   url.requestUpdate('radio', { waitingText: null } );
 }
 
-function verifNonEmpty(oElement){
-  var notWhitespace = /\S/;
-  if(notWhitespace.test(oElement.value)){
-    return true;
-  }
-  return false;
-}
-
 function loadSuivi(sejour_id) {
   var url = new Url;
   url.setModuleAction("dPhospi", "httpreq_vw_dossier_suivi");

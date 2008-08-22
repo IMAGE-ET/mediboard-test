@@ -92,12 +92,12 @@ function reloadListExamComp() {
           </td>
           <td>
             <input type="hidden" name="_hidden_examen" value="" />
-            <textarea name="examen" onblur="if(verifNonEmpty(this)){submitExamComp(this.form);}"></textarea>
+            <textarea name="examen" onblur="if(!$(this).emptyValue()){submitExamComp(this.form);}"></textarea>
           </td>
         </tr>
         <tr>
           <td class="button" colspan="3">
-            <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.examen)){submitExamComp(this.form);}">Ajouter</button>
+            <button class="submit" type="button">Ajouter</button>
           </td>
         </tr>
       </table>      

@@ -52,9 +52,9 @@
     {{if $coordonnees}}
     <td>{{$curr_consult->_ref_patient->adresse}}<br />{{$curr_consult->_ref_patient->cp}} {{$curr_consult->_ref_patient->ville}}</td>
     <td>
-      {{$curr_consult->_ref_patient->tel}}
+      {{mb_value object=$curr_consult->_ref_patient field=tel}}
       <br />
-      {{$curr_consult->_ref_patient->tel2}}
+      {{mb_value object=$curr_consult->_ref_patient field=tel2}}
     </td>
     {{/if}}
     <td>

@@ -35,25 +35,6 @@ class CGroups extends CMbObject {
   var $_ref_functions = null;
   var $_ref_produits_livret = null;
   
-  // Form fields
-  var $_tel1        = null;
-  var $_tel2        = null;
-  var $_tel3        = null;
-  var $_tel4        = null;
-  var $_tel5        = null;
-  
-  var $_tel_anesth1 = null;
-  var $_tel_anesth2 = null;
-  var $_tel_anesth3 = null;
-  var $_tel_anesth4 = null;
-  var $_tel_anesth5 = null;
-  
-  var $_fax1        = null;
-  var $_fax2        = null;
-  var $_fax3        = null;
-  var $_fax4        = null;
-  var $_fax5        = null;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'groups_mediboard';
@@ -83,34 +64,16 @@ class CGroups extends CMbObject {
       "adresse"             => "text confidential",
       "cp"                  => "numchar length|5",
       "ville"               => "str maxLength|50 confidential",
-      "tel"                 => "numchar length|10",
+      "tel"                 => "numchar length|10 mask|99S99S99S99S99",
+      "fax"                 => "numchar length|10 mask|99S99S99S99S99",
+      "tel_anesth"          => "numchar length|10 mask|99S99S99S99S99",
       "service_urgences_id" => "ref class|CFunctions",
-      "tel_anesth"          => "numchar length|10",
       "directeur"           => "str maxLength|50",
       "domiciliation"       => "str maxLength|9",
       "siret"               => "str length|14",
       "ape"                 => "str maxLength|6 confidential",
       "mail"                => "email",
-      "fax"                 => "numchar length|10",
       "web"                 => "str",
-      
-      "_tel_anesth1" => "num length|2",
-      "_tel_anesth2" => "num length|2",
-      "_tel_anesth3" => "num length|2",
-      "_tel_anesth4" => "num length|2",
-      "_tel_anesth5" => "num length|2",
-      
-      "_tel1" => "num length|2",
-      "_tel2" => "num length|2",
-      "_tel3" => "num length|2",
-      "_tel4" => "num length|2",
-      "_tel5" => "num length|2",
-      
-      "_fax1" => "num length|2",
-      "_fax2" => "num length|2",
-      "_fax3" => "num length|2",
-      "_fax4" => "num length|2",
-      "_fax5" => "num length|2",
     );
     return array_merge($specsParent, $specs);
   }
@@ -128,18 +91,7 @@ class CGroups extends CMbObject {
       $this->_shortview = substr($this->text, 0, 23)."...";
     else
       $this->_shortview = $this->text;
-   
-    $this->updateFormTel("tel", "_tel");
-    $this->updateFormTel("tel_anesth", "_tel_anesth");
-    $this->updateFormTel("fax", "_fax");
   }
-  
-  function updateDBFields() {
-    $this->updateDBTel("tel", "_tel");
-    $this->updateDBTel("tel_anesth", "_tel_anesth");
-    $this->updateDBTel("fax", "_fax");
-  }
-  
   
   function loadRefLivretTherapeutique($lettre = "%", $limit = 50){
     global $g;
@@ -189,8 +141,8 @@ class CGroups extends CMbObject {
   function fillLimitedTemplate(&$template) {
     $template->addProperty("Etablissement - Nom"       , $this->text );
     $template->addProperty("Etablissement - Adresse"   , "$this->adresse $this->cp $this->ville");
-    $template->addProperty("Etablissement - Téléphone" , $this->tel        );
-    $template->addProperty("Etablissement - Fax"       , $this->fax       );
+    $template->addProperty("Etablissement - Téléphone" , $this->tel);
+    $template->addProperty("Etablissement - Fax"       , $this->fax);
   }
   
   function fillTemplate(&$template) {

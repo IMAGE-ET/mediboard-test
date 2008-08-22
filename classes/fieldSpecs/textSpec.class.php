@@ -11,7 +11,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CTextSpec extends CMbFieldSpec {
   
-  function getValue($object, $smarty, $params = null) {
+  function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     return nl2br(htmlspecialchars($propValue));

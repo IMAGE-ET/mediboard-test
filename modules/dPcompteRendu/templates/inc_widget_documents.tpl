@@ -39,7 +39,6 @@
         {{foreachelse}}
           <option value="">{{tr}}None{{/tr}}</option>
         {{/foreach}}
-        </optgroup>
       </select>
 
       {{/if}}

@@ -25,10 +25,6 @@ if ($order_id) {
   if ($_autofill) {
     $order->autofill();
   }
-  
-  foreach ($order->_ref_order_items as $item) {
-  	$item->_quantity_received = $item->quantity_received;
-  }
 }
 
 // Categories list

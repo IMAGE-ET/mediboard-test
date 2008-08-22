@@ -39,8 +39,8 @@ abstract class CSQLDataSource {
    */
   static function get($dsn) {  	
   	if (!array_key_exists($dsn, self::$dataSources)) {
-      global $dPconfig;
-  	  if (null == $dbtype = @$dPconfig["db"][$dsn]["dbtype"]) {
+
+  	  if (null == $dbtype = CAppUI::conf("db $dsn dbtype")) {
         trigger_error( "FATAL ERROR: Undefined type DSN type for '$dsn'.", E_USER_ERROR );        
         return;
   	  }
@@ -193,11 +193,8 @@ abstract class CSQLDataSource {
    */
   function init($dsn) {
     $this->dsn = $dsn;
-    
-    global $dPconfig;
-    $this->config = $dPconfig["db"][$dsn];
-    
-    
+    $this->config = CAppUI::conf("db $dsn");
+
     $this->chrono->start = new Chronometer;
     $this->link = $this->connect(
 	    $this->config["dbhost"],
@@ -414,8 +411,7 @@ abstract class CSQLDataSource {
    * @return bool job done
    **/
   function insertObject($table, &$object, $keyName = null) {
-    global $dPconfig;
-    if ($dPconfig["readonly"]) {
+    if (CAppUI::conf("readonly")) {
       return false;
     }
     
@@ -487,8 +483,7 @@ abstract class CSQLDataSource {
    * @return bool job done
    **/
   function updateObject($table, &$object, $keyName, $nullifyEmptyStrings = true) {
-    global $dPconfig;
-    if ($dPconfig["readonly"]) {
+    if (CAppUI::conf("readonly")) {
       return false;
     }
     

@@ -11,10 +11,10 @@ function main() {
 	}
 	catch (e) {
 		Console.debug(e);
-	}	
+	}
 }
 
-//document.observe('dom:loaded', main);
+document.observe('dom:loaded', main);
 
 /**
  * Main page initialisation scripts
@@ -45,6 +45,10 @@ var Main = {
   }
 };
 
+/*Event.observe(window, "beforeunload", function() {
+  return References.clean(document.documentElement);
+});*/
+
 /**
  * References manipulation
  */
@@ -53,25 +57,19 @@ var References = {
 	 * Clean references involved in memory leaks
 	 */
   clean: function(obj) {
-	  var chi, cou, len, nam;
-	  chi = obj.childNodes;
-	  if(chi) {
-	    len = chi.length;
-	    for (cou = 0; cou < len; cou++) {
-				this.clean(obj.childNodes[cou]);
-	    }
-	  }
-	  
-	  chi = obj.attributes;
-	  if(chi) {
-	    len = chi.length;
-	    for(cou = 0; cou < len; cou++) {
-	      nam = chi[cou].name;
-	      if(typeof(obj[nam]) == 'function') {
-	        obj[nam] = null;
-	      }
-	    }
-	  }
+    //alert('toto');
+    var elements = obj.descendants();
+    for (var j = 0; j < elements.length; j++) {
+      var e = elements[j];
+      if (e) {
+        if (e.attributes) {
+          for (var i = 0; i < e.attributes.length ; i++) {
+            if (Object.isFunction(e.attributes[i])) e.attributes[i] = null;
+          }
+        }
+        Element.remove(e);
+      }
+    }
   }
 }
 
@@ -81,7 +79,7 @@ var WaitingMessage = {
 		  if(FormObserver.checkChanges()) {
   		  WaitingMessage.show();
   		} else {
-  		  return "Vous avez modifié certaines informations sur cette page sans les sauvegarder.Si vous appuyez sur OK, ces données seront perdues.";
+  		  return "Vous avez modifié certaines informations sur cette page sans les sauvegarder. Si vous appuyez sur OK, ces données seront perdues.";
   		}
     };
 	},
@@ -1372,6 +1370,15 @@ function luhn (code) {
   return ((sum % 10) == 0);
 }
 
+Element.addMethods(['input', 'textarea'], {
+  emptyValue: function (element) {
+    var notWhiteSpace = /\S/;
+    return Object.isUndefined(element.value) ?
+      element.empty() : 
+      !notWhiteSpace.test(element.value);
+  }
+});
+
 
 /* Control tabs creation. It saves selected tab into a cookie name TabState */
 Object.extend (Control.Tabs, {
@@ -1407,3 +1414,55 @@ Class.extend (Control.Tabs, {
     }
   }
 } );
+
+Element.addMethods({
+  getProperties: function (element) {
+    var props = {};
+
+    element.className.split(" ").without("").each(function (value) {
+      var params = value.split("|");
+      props[params.shift()] = (params.length == 0) ? true : params.reduce();
+    });
+    return props;
+  }
+});
+
+var DOM = {
+  defineTag: function (tag) {
+    window[tag.toUpperCase()] = function () {
+      return DOM.createNode(tag, arguments);
+    };
+  },
+  
+  createNode: function (tag, args) {
+    var e;
+    try {
+      e = new Element(tag, args[0]);
+      for (var i = 1; i < args.length; i++) {
+        var arg = args[i];
+        if (arg == null) continue;
+        if (!Object.isArray(arg)) e.insert (arg);
+        else {
+          for (var j = 0; j < arg.length; j++) e.insert(arg[j]);
+        }
+      }
+    }
+    catch (ex) {
+      alert('Cannot create <' + tag + '> element:\n' + Object.insepct(args));
+      e = null;
+    }
+    return e;
+  },
+  
+  tags: [
+    'a', 'br', 'button', 'canvas', 'div', 'fieldset', 'form',
+    'h1', 'h2', 'h3', 'hr', 'img', 'input', 'label', 'legend',
+    'li', 'ol', 'optgroup', 'option', 'p', 'pre', 'select',
+    'span', 'strong', 'table', 'tbody', 'td', 'textarea',
+    'tfoot', 'th', 'thead', 'tr', 'tt', 'ul'
+  ]
+};
+
+DOM.tags.each(function (tag) {
+  DOM.defineTag (tag);
+});

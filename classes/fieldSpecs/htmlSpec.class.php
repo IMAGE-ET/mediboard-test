@@ -9,13 +9,28 @@
 
 CAppUI::requireSystemClass("mbFieldSpec");
 
+function htmlReplace($find, $replace, &$source) {
+  $matches = array();
+  $nbFound = preg_match_all("/$find/", $source, $matches);
+  $source = preg_replace("/$find/", $replace, $source);
+  return $nbFound;
+}
+
+function purgeHtmlText($regexps, &$source) {
+  $total = 0;
+  foreach ($regexps as $find => $replace) {
+    $total += htmlReplace($find, $replace, $source); 
+  }
+  return $total;
+}
+
 class CHtmlSpec extends CMbFieldSpec {
   
   function getSpecType() {
     return("html");
   }
   
-  function checkProperty($object){
+  /*function checkProperty($object){
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     // @todo Should validate against XHTML DTD
@@ -27,9 +42,9 @@ class CHtmlSpec extends CMbFieldSpec {
       "<span class=\"field\">([^\[].*)<\/span>" => "$1"
       );
     
-    // while (purgeHtmlText($regexps, $propValue));
+     while (purgeHtmlText($regexps, $propValue));
     return null;
-  }
+  }*/
   
   function sample(&$object, $consistent = true){
     parent::sample($object, $consistent);

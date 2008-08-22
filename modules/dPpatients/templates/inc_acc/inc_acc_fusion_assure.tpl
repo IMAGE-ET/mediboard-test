@@ -27,7 +27,7 @@
   {{include field="assure_cp"      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_ville"   file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="assure_pays"    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="assure_tel"     file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
-  {{include field="assure_tel2"    file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
+  {{include field="assure_tel"     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
+  {{include field="assure_tel2"    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
   {{include field="assure_rques"   file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
 </table>

@@ -75,28 +75,16 @@ Main.add(function () {
           </td>
         </tr>
         <tr>
-          <th>{{mb_label object=$etabExterne field="_tel1" defaultFor="_tel1"}}</th>
-		    <td>
-		      {{mb_field object=$etabExterne field="_tel1" tabindex="6" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel2" tabindex="7" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel3" tabindex="8" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel4" tabindex="9" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_tel5" tabindex="10"}}
-		    </td>
+          <th>{{mb_label object=$etabExterne field="tel"}}</th>
+		      <td>{{mb_field object=$etabExterne field="tel" tabindex="6"}}</td>
         </tr>
         <tr>
-           <th>{{mb_label object=$etabExterne field="_fax1" defaultFor="_fax1"}}</th>
-		   <td>
-		      {{mb_field object=$etabExterne field="_fax1" tabindex="11" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_fax2" tabindex="12" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_fax3" tabindex="13" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_fax4" tabindex="14" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$etabExterne field="_fax5" tabindex="15" size="2" maxlength="2" prop="num length|2"}}
-		  </td>
+           <th>{{mb_label object=$etabExterne field="fax"}}</th>
+		       <td>{{mb_field object=$etabExterne field="fax" tabindex="7"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$etabExterne field="finess"}}</th>
-          <td>{{mb_field object=$etabExterne field="finess" tabindex="16"}}</td>
+          <td>{{mb_field object=$etabExterne field="finess" tabindex="8"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$etabExterne field="siret"}}</th>

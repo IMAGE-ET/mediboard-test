@@ -107,26 +107,6 @@ class CPatient extends CMbObject {
   var $_jour        = null;
   var $_mois        = null;
   var $_annee       = null;
-  var $_tel1        = null;
-  var $_tel2        = null;
-  var $_tel3        = null;
-  var $_tel4        = null;
-  var $_tel5        = null;
-  var $_tel21       = null;
-  var $_tel22       = null;
-  var $_tel23       = null;
-  var $_tel24       = null;
-  var $_tel25       = null;
-  var $_tel31       = null;
-  var $_tel32       = null;
-  var $_tel33       = null;
-  var $_tel34       = null;
-  var $_tel35       = null;
-  var $_tel41       = null;
-  var $_tel42       = null;
-  var $_tel43       = null;
-  var $_tel44       = null;
-  var $_tel45       = null;
   var $_age         = null;
   var $_article     = null;
   var $_longview    = null;
@@ -140,16 +120,6 @@ class CPatient extends CMbObject {
   var $_assure_jour        = null;
   var $_assure_mois        = null;
   var $_assure_annee       = null;
-  var $_assure_tel1        = null;
-  var $_assure_tel2        = null;
-  var $_assure_tel3        = null;
-  var $_assure_tel4        = null;
-  var $_assure_tel5        = null;
-  var $_assure_tel21       = null;
-  var $_assure_tel22       = null;
-  var $_assure_tel23       = null;
-  var $_assure_tel24       = null;
-  var $_assure_tel25       = null;
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -209,7 +179,7 @@ class CPatient extends CMbObject {
     $specs["medecin1"]          = "ref class|CMedecin";
     $specs["medecin2"]          = "ref class|CMedecin";
     $specs["medecin3"]          = "ref class|CMedecin";
-    $specs["matricule"]         = "code insee confidential";
+    $specs["matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
     $specs["code_regime"]       = "numchar length|2";
     $specs["caisse_gest"]       = "numchar length|3";
     $specs["centre_gest"]       = "numchar length|4";
@@ -218,8 +188,8 @@ class CPatient extends CMbObject {
     $specs["adresse"]           = "text confidential";
     $specs["ville"]             = "str confidential";
     $specs["cp"]                = "numchar minLength|4 maxLength|5 confidential";
-    $specs["tel"]               = "numchar length|10 confidential";
-    $specs["tel2"]              = "numchar length|10 confidential";
+    $specs["tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["incapable_majeur"]  = "bool";
     $specs["ATNC"]              = "bool";
     
@@ -252,7 +222,7 @@ class CPatient extends CMbObject {
     $specs["employeur_adresse"]  = "text";
     $specs["employeur_cp"]       = "numchar length|5";
     $specs["employeur_ville"]    = "str confidential";
-    $specs["employeur_tel"]      = "numchar length|10 confidential";
+    $specs["employeur_tel"]      = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["employeur_urssaf"]   = "numchar length|11 confidential";
 
     $specs["prevenir_nom"]       = "str confidential";
@@ -260,7 +230,7 @@ class CPatient extends CMbObject {
     $specs["prevenir_adresse"]   = "text";
     $specs["prevenir_cp"]        = "numchar length|5";
     $specs["prevenir_ville"]     = "str confidential";
-    $specs["prevenir_tel"]       = "numchar length|10 confidential";
+    $specs["prevenir_tel"]       = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["prevenir_parente"]   = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
     $specs["assure_nom"]               = "str confidential";
@@ -271,14 +241,14 @@ class CPatient extends CMbObject {
     $specs["assure_adresse"]           = "text confidential";
     $specs["assure_ville"]             = "str confidential";
     $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
-    $specs["assure_tel"]               = "numchar length|10 confidential";
-    $specs["assure_tel2"]              = "numchar length|10 confidential";
+    $specs["assure_tel"]               = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["assure_tel2"]              = "numchar confidential length|10 mask|99S99S99S99S99";
     $specs["assure_pays"]              = "str";
     $specs["assure_nationalite"]       = "notNull enum list|local|etranger default|local";
     $specs["assure_lieu_naissance"]    = "str";
     $specs["assure_profession"]        = "str";
     $specs["assure_rques"]             = "text";
-    $specs["assure_matricule"]         = "code insee confidential";
+    $specs["assure_matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
     
     $specs["_jour"]                    = "num length|2 min|01 max|99";
     $specs["_mois"]                    = "num length|2 min|01 max|99";
@@ -493,14 +463,7 @@ class CPatient extends CMbObject {
     }
   
     $this->evalAge();
-    
-    // Téléphones
-	  $this->updateFormTel("tel", "_tel");
-    $this->updateFormTel("tel2", "_tel2");
-    $this->updateFormTel("prevenir_tel", "_tel3");
-    $this->updateFormTel("employeur_tel", "_tel4");
-    
-  
+
     // Assuré
     if ($this->assure_naissance && $this->assure_naissance != "0000-00-00") {
       $aNaissance = split("-", $this->assure_naissance);
@@ -509,11 +472,6 @@ class CPatient extends CMbObject {
       $this->_assure_annee = $aNaissance[0];
       //$this->_assure_naissance = mbDateToLocale($this->assure_naissance);
     }
-    
-
-    // Assuré téléphone
-    $this->updateFormTel("assure_tel", "_assure_tel");  
-    $this->updateFormTel("assure_tel2", "_assure_tel2");
     
     if ($this->_age != "??" && $this->_age <= 15){
       $this->_shortview = "Enf.";
@@ -620,11 +578,6 @@ class CPatient extends CMbObject {
       $this->prenom = ucwords(strtolower($this->prenom));
       $this->prenom_soundex2 = $soundex2->build($this->prenom);
     }
-
-    $this->updateDBTel("tel", "_tel");
-    $this->updateDBTel("tel2", "_tel2");
-    $this->updateDBTel("prevenir_tel", "_tel3");
-    $this->updateDBTel("employeur_tel", "_tel4");
     
     if ($this->cp == "00000") {
       $this->cp = "";
@@ -653,9 +606,6 @@ class CPatient extends CMbObject {
     if ($this->assure_prenom) {
       $this->assure_prenom = ucwords(strtolower($this->assure_prenom));
     }
-
-    $this->updateDBTel("assure_tel", "_assure_tel");
-  	$this->updateDBTel("assure_tel2", "_assure_tel2");
   	
     if ($this->assure_cp == "00000") {
       $this->assure_cp = "";

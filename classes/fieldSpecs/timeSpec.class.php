@@ -16,7 +16,7 @@ class CTimeSpec extends CMbFieldSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     $format = mbGetValue(@$params["format"], "%Hh%M");
-    return $propValue ? smarty_modifier_date_format($propValue, $format) : "-";
+    return $propValue ? smarty_modifier_date_format($propValue, $format) : "";
   }
   
   function getSpecType() {

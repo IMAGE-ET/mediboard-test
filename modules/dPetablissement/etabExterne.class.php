@@ -26,19 +26,6 @@ class CEtabExterne extends CMbObject {
   var $siret          = null;
   var $ape            = null;
   
-  // Form fields
-  var $_tel1        = null;
-  var $_tel2        = null;
-  var $_tel3        = null;
-  var $_tel4        = null;
-  var $_tel5        = null;
-    
-  var $_fax1        = null;
-  var $_fax2        = null;
-  var $_fax3        = null;
-  var $_fax4        = null;
-  var $_fax5        = null;
-  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'etab_externe';
@@ -60,23 +47,11 @@ class CEtabExterne extends CMbObject {
       "adresse"        => "text confidential",
       "cp"             => "numchar length|5",
       "ville"          => "str maxLength|50 confidential",
-      "tel"            => "numchar length|10",
-      "fax"            => "numchar length|10",
+      "tel"            => "numchar length|10 mask|99S99S99S99S99",
+      "fax"            => "numchar length|10 mask|99S99S99S99S99",
       "finess"         => "numchar length|9",
       "siret"          => "str length|14",
       "ape"            => "str maxLength|6 confidential",
-      
-      "_tel1" => "num length|2",
-      "_tel2" => "num length|2",
-      "_tel3" => "num length|2",
-      "_tel4" => "num length|2",
-      "_tel5" => "num length|2",
-      
-      "_fax1" => "num length|2",
-      "_fax2" => "num length|2",
-      "_fax3" => "num length|2",
-      "_fax4" => "num length|2",
-      "_fax5" => "num length|2",
     );
     return array_merge($specsParent, $specs);
   }
@@ -89,15 +64,7 @@ class CEtabExterne extends CMbObject {
  
   function updateFormFields () {
     parent::updateFormFields();
-    $this->_view = $this->nom;
-    
-    $this->updateFormTel("tel", "_tel");
-    $this->updateFormTel("fax", "_fax");   
+    $this->_view = $this->nom; 
   }
-  
-  function updateDBFields() {
-    $this->updateDBTel("tel", "_tel");
-    $this->updateDBTel("fax", "_fax");
-  }  
 }
 ?>

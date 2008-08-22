@@ -45,31 +45,30 @@
   <td id="order-item-{{$id}}-price">{{mb_value object=$curr_item field=_price}}</td>
   
   {{if $order->date_ordered}}
+  <td style="width: 1%; white-space: nowrap;">{{$curr_item->_quantity_received}}</td>
+  
   <!-- Receive item -->
   <td style="width: 1%; white-space: nowrap;">
-    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post">
+    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
       {{if $ajax}}
       <script type="text/javascript">
           prepareForm('form-item-receive-{{$curr_item->_id}}');
       </script>
       {{/if}}
       <input type="hidden" name="m" value="{{$m}}" />
-      <input type="hidden" name="dosql" value="do_order_item_aed" />
+      <input type="hidden" name="dosql" value="do_order_item_reception_aed" />
       <input type="hidden" name="order_item_id" value="{{$curr_item->_id}}" />
+      <input type="hidden" name="date" value="now" />
       {{mb_field 
         object=$curr_item 
-        field=_quantity_received 
-        onchange="
-          submitOrderItem(this.form);
-          refreshValue('order-total', 'CProductOrder', $order_id, '_total');
-          refreshValue('order-item-$id-price', 'CProductOrderItem', $id, '_price');"
+        field=quantity
         form=form-item-receive-$id 
         increment=true
         size="3"
         max=$curr_item->quantity
         min=0
       }}
-      <button type="button" class="tick" onclick="this.form._quantity_received.value = {{$curr_item->quantity}}; submitOrderItem(this.form, {refreshLists: true});">{{tr}}CProductOrder-_receive{{/tr}}</button>
+      <button type="submit" class="tick">{{tr}}CProductOrderItem-_receive{{/tr}}</button>
     </form>
   </td>
   {{/if}}

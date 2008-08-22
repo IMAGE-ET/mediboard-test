@@ -1,5 +1,4 @@
 var odPrepas;
-var notWhitespace   = /\S/;
 var saveInProgress  = 0;
 var sMsgAlertReturn = "Vous avez modifié des repas et ceux-ci n'ont pas été synchronisé.\nSi vous continuer, vous perdrez vos modifications.";
 

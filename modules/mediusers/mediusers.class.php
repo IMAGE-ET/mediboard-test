@@ -53,10 +53,6 @@ class CMediusers extends CMbObject {
   // Other fields
   var $_view            = null;
   var $_shortview       = null;
-  var $_compte_banque   = null;
-  var $_compte_guichet  = null;
-  var $_compte_numero   = null;
-  var $_compte_cle      = null;
   var $_profile_id      = null;
   var $_is_praticien    = null;
   var $_is_secretaire   = null;
@@ -98,21 +94,17 @@ class CMediusers extends CMbObject {
       "deb_activite"  => "date",
       "fin_activite"  => "date",
       "spec_cpam_id"  => "ref class|CSpecCPAM",
-      "compte"        => "code rib confidential",
+      "compte"        => "code rib confidential mask|99999S99999S99999999999S99",
       "banque_id"     => "ref class|CBanque",
       "_user_username"   => "notNull str minLength|4",
       "_user_password2"  => "password sameAs|_user_password",
       "_user_first_name" => "str",
       "_user_last_name"  => "notNull str confidential",
       "_user_email"      => "str confidential",
-      "_user_phone"      => "num length|10 confidential",
+      "_user_phone"      => "numchar confidential length|10 mask|99S99S99S99S99",
       "_user_adresse"    => "str confidential",
       "_user_cp"         => "num length|5 confidential",
       "_user_ville"      => "str confidential",
-      "_compte_banque"   => "num length|5 confidential",
-      "_compte_guichet"  => "num length|5 confidential",
-      "_compte_numero"   => "str length|11 confidential",
-      "_compte_cle"      => "num length|2 confidential",
       "_profile_id"      => "num",
       "_user_type"       => "notNull num minMax|0|20",
     );
@@ -252,23 +244,8 @@ class CMediusers extends CMbObject {
         $this->_shortview .=  strtoupper($value[0]);
       }
     }
-
-    $this->_compte_banque  = substr($this->compte, 0, 5);
-    $this->_compte_guichet = substr($this->compte, 5, 5);
-    $this->_compte_numero  = substr($this->compte, 10, 11);
-    $this->_compte_cle     = substr($this->compte, 21, 2);
     
     $this->updateSpecs();
-  }
-
-  function updateDBFields() {
-    if(($this->_compte_banque !== null) && ($this->_compte_guichet !== null) && ($this->_compte_numero !== null) && ($this->_compte_cle !== null)) {
-      $this->compte =
-      $this->_compte_banque .
-      $this->_compte_guichet .
-      $this->_compte_numero .
-      $this->_compte_cle;
-    }
   }
 
   function loadRefBanque(){

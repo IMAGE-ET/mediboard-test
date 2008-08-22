@@ -132,7 +132,7 @@
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
           <input type="hidden" name="dosql" value="do_order_aed" />
-          <input type="hidden" name="order_id" value="" />
+          <input type="hidden" name="order_id" value="{{$curr_order->_id}}" />
           <input type="hidden" name="cancelled" value="1" />
           <button type="button" class="cancel" onclick="submitOrder(this.form, {refreshLists: true, confirm: true})">{{tr}}Cancel{{/tr}}</button>
         </form>

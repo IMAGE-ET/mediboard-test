@@ -1,9 +1,9 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  *	@package Mediboard
  *	@subpackage dPtock
- *	@version $Revision: $
+ *	@version $Revision$
  *  @author Fabien Ménager
  */
 
@@ -16,17 +16,19 @@ class CProductOrderItem extends CMbObject {
   var $order_id           = null;
   var $quantity           = null;
   var $unit_price         = null; // In the case the reference price changes
-  var $date_received      = null;
-  var $quantity_received  = null;
 
   // Object References
   //    Single
   var $_ref_order         = null;
   var $_ref_reference     = null;
+  
+  //    Multiple
+  var $_ref_receptions    = null;
 
   // Form fields
   var $_price             = null;
-  var $_quantity_received  = null;
+  var $_date_received     = null;
+  var $_quantity_received = null;
 
   function getSpec() {
     $spec = parent::getSpec();
@@ -42,48 +44,29 @@ class CProductOrderItem extends CMbObject {
       'order_id'          => 'notNull ref class|CProductOrder',
       'quantity'          => 'notNull num pos',
       'unit_price'        => 'currency',
-      'date_received'     => 'dateTime',
-      'quantity_received' => 'num',
-	    '_price'            => 'currency',
+      '_price'            => 'currency',
       '_quantity_received'=> 'num',
     ));
   }
 
-  function receive() {
-  	$this->load();
+  function receive($quantity, $code = null) {
     $this->loadRefsFwd();
     
-    // if a bad quantity received is given, we set it to a normal quantity
-    if ($this->_quantity_received > $this->quantity) {
-      $this->_quantity_received = $this->quantity;
-    } else if ($this->_quantity_received < 0) {
-      $this->_quantity_received = 0;
-    }
-    
-    // the difference between before and after
-    $delta = $this->_quantity_received - $this->quantity_received;
-    
-    // the new quantity is saved
-    $this->quantity_received = $this->_quantity_received;
-    
-    // the new reception date is saved
-    if ($this->quantity_received != 0 && $delta > 0) {
-      $this->date_received = mbDateTime();
-    }
-    
-    // The quantity of this article that has been received is added to the stock
-    if ($stock = $this->getStock()) {
-      $stock->quantity += $delta * $this->_ref_reference->quantity;
-      $stock->store();
-    }
-    
-    if ($this->quantity_received == 0) {
-      $this->date_received = null;
+    if ($this->_id) {
+      $reception = new CProductOrderItemReception();
+      $reception->order_item_id = $this->_id;
+      $reception->quantity = $quantity;
+      $reception->date = mbDateTime();
+      $reception->code = $code;
+      return $reception->store();
+    } else {
+      return $this->_spec->class.'::receive failed : order_item must be stored before';
     }
   }
   
   function isReceived() {
-  	return ($this->date_received && ($this->quantity == $this->quantity_received));
+    $this->updateReceived();
+  	return ($this->_quantity_received >= $this->quantity);
   }
   
   function getStock() {
@@ -99,27 +82,49 @@ class CProductOrderItem extends CMbObject {
     return $stock;
   }
   
+  function updateReceived() {
+    $this->loadRefsBack();
+    $quantity = 0;
+    foreach ($this->_ref_receptions as $reception) {
+      $quantity += $reception->quantity;
+    }
+    $this->_quantity_received = $quantity;
+  }
+  
   function updateFormFields() {
     parent::updateFormFields();
+    $this->updateReceived();
 
-    $this->_ref_reference = new CProductReference();
-    $this->_ref_reference->load($this->reference_id);
+    $this->loadReference();
     $this->_view = $this->_ref_reference->_view;
     $this->_price = $this->unit_price * $this->quantity;
   }
   
-  function updateDBFields() {
-  	if (!is_null($this->_quantity_received)) {
-      $this->receive();
-  	}
+  function loadReference() {
+    $this->_ref_reference = new CProductReference();
+    $this->_ref_reference->load($this->reference_id);
+  }
+  
+  function loadOrder() {
+    $this->_ref_order = new CProductOrder();
+    $this->_ref_order->load($this->order_id);
   }
 
   function loadRefsFwd() {
-    $this->_ref_reference = new CProductReference();
-    $this->_ref_reference->load($this->reference_id);
+    parent::loadRefsFwd();
 
-    $this->_ref_order = new CProductOrder();
-    $this->_ref_order->load($this->order_id);
+    $this->loadReference();
+    $this->loadOrder();
+  }
+  
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs['receptions'] = 'CProductOrderItemReception order_item_id';
+    return $backRefs;
+  }
+  
+  function loadRefsBack() {
+    $this->_ref_receptions = $this->loadBackRefs('receptions', 'date DESC');
   }
 
   function store() {

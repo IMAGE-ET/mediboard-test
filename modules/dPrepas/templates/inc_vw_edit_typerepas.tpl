@@ -34,10 +34,10 @@
       <form name="editTypeRepas" action="?m={{$m}}&amp;tab=vw_edit_plats" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="m" value="dPrepas" />
       <input type="hidden" name="dosql" value="do_typerepas_aed" />
-	  <input type="hidden" name="typerepas_id" value="{{$typeRepas->typerepas_id}}" />
-	  <input type="hidden" name="group_id" value="{{if $typeRepas->typerepas_id}}{{$typeRepas->group_id}}{{else}}{{$g}}{{/if}}" />
+  	  <input type="hidden" name="typerepas_id" value="{{$typeRepas->typerepas_id}}" />
+  	  <input type="hidden" name="group_id" value="{{if $typeRepas->typerepas_id}}{{$typeRepas->group_id}}{{else}}{{$g}}{{/if}}" />
       <input type="hidden" name="del" value="0" />
-      <table class="form">
+      
       <table class="form">
         <tr>
           {{if $typeRepas->typerepas_id}}
@@ -75,6 +75,7 @@
           </td>
         </tr>  
       </table>
+      
       </form>
     </td>
   </tr>

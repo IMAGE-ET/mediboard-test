@@ -2,8 +2,6 @@
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
 
 <script type="text/javascript">
-var notWhitespace   = /\S/;
-
 function viewItem(oTd, sClassName, id, date) {
 
   // Mise en surbrillance de la plage survolée

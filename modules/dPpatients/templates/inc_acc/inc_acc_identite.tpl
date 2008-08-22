@@ -110,25 +110,13 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="tel" defaultFor="_tel1"}}</th>
-    <td>
-      {{mb_field object=$patient field="_tel1" tabindex="161" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel2" tabindex="162" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel3" tabindex="163" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel4" tabindex="164" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel5" tabindex="165" size="2" maxlength="2" prop="num length|2" onchange="copyAssureValues(this)"}}
-    </td>  
+    <th>{{mb_label object=$patient field="tel"}}</th>
+    <td>{{mb_field object=$patient field="tel" tabindex="161" onchange="copyAssureValues(this)"}}</td>  
   </tr>
 
   <tr>
-    <th>{{mb_label object=$patient field="tel2" defaultFor="_tel21"}}</th>
-    <td>
-      {{mb_field object=$patient field="_tel21" tabindex="171" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel22" tabindex="172" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel23" tabindex="173" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel24" tabindex="174" size="2" maxlength="2" prop="num length|2" onkeyup="return followUp(event)" onchange="copyAssureValues(this)"}} -
-      {{mb_field object=$patient field="_tel25" tabindex="175" size="2" maxlength="2" prop="num length|2" onchange="copyAssureValues(this)"}}
-    </td>
+    <th>{{mb_label object=$patient field="tel2"}}</th>
+    <td>{{mb_field object=$patient field="tel2" tabindex="162" onchange="copyAssureValues(this)"}}</td>  
   </tr>
     
   <tr>

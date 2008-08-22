@@ -27,8 +27,8 @@
   {{include field="adresse"         file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="cp"              file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="ville"           file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="tel"             file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
-  {{include field="fax"             file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
+  {{include field="tel"             file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
+  {{include field="fax"             file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
   {{include field="email"           file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="disciplines"     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="orientations"    file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}

@@ -15,11 +15,7 @@
      bilan sanguin et la liste des médicaments que vous prennez)<br />
      {{if $sejour->_ref_group->tel}}
        Pour tout renseignement, téléphonez au 
-       {{$sejour->_ref_group->_tel1}}
-       {{$sejour->_ref_group->_tel2}}
-       {{$sejour->_ref_group->_tel3}}
-       {{$sejour->_ref_group->_tel4}}
-       {{$sejour->_ref_group->_tel5}}
+       {{mb_value object=$sejour->_ref_group field=tel}}
      {{/if}}
     </td>
   </tr>
@@ -60,7 +56,7 @@
 
   <tr>
     <th>Téléphone </th>
-    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
+    <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
 
   <tr>
@@ -153,12 +149,7 @@
       Veuillez prendre rendez-vous avec le cabinet d'anesthésistes <strong>impérativement</strong>
       avant votre intervention.
      {{if $sejour->_ref_group->tel_anesth}}
-       Pour cela, téléphonez au
-       {{$sejour->_ref_group->_tel_anesth1}}
-       {{$sejour->_ref_group->_tel_anesth2}}
-       {{$sejour->_ref_group->_tel_anesth3}}
-       {{$sejour->_ref_group->_tel_anesth4}}
-       {{$sejour->_ref_group->_tel_anesth5}}
+       Pour cela, téléphonez au {{mb_value object=$sejour->_ref_group field=tel_anesth}}
      {{/if}}
     </td>
   <tr>

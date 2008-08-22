@@ -32,12 +32,12 @@
 
   <tr>
     <th>Téléphone: </th>
-    <td>{{$patient->tel}}</td>
+    <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
 
   <tr>
     <th>Portable :</th>
-    <td>{{$patient->tel2}}</td>
+    <td>{{mb_value object=$patient field=tel2}}</td>
   </tr>
 
   <tr>
@@ -47,7 +47,7 @@
 
   <tr>
     <th>Numero d'assuré social :</th>
-    <td>{{$patient->matricule}}</td>
+    <td>{{mb_value object=$patient field=matricule}}</td>
   </tr>
 
   <tr>

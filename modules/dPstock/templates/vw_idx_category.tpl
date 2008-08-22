@@ -12,7 +12,7 @@
         <tr {{if $curr_category->_id == $category->_id}}class="selected"{{/if}}>
           <td class="text">
             <a href="?m=dPstock&amp;tab=vw_idx_category&amp;category_id={{$curr_category->_id}}" title="{{tr}}CProductCategory.modify{{/tr}}">
-              {{$curr_category->name}}
+              {{mb_value object=$curr_category field=name}}
             </a>
           </td>
         </tr>

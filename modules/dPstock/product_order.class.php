@@ -88,6 +88,7 @@ class CProductOrder extends CMbObject {
 	/** Counts this received product's items */
 	function countReceivedItems() {
 		$count = 0;
+		$this->loadRefsBack();
 		if ($this->_ref_order_items) {
 			foreach ($this->_ref_order_items as $item) {
 				if ($item->isReceived()) {
@@ -106,8 +107,15 @@ class CProductOrder extends CMbObject {
 
 		// we mark all the items as received
 		foreach ($this->_ref_order_items as $item) {
-			$item->_quantity_received = $item->quantity;
-			$item->store();
+		  if (!$item->isReceived()) {
+		    $reception = new CProductOrderItemReception();
+		    $reception->quantity = $item->quantity - $item->_quantity_received;
+		    $reception->order_item_id = $item->_id;
+		    $reception->date = mbDateTime();
+		    if ($msg = $reception->store()) {
+		      return $msg;
+		    }
+		  }
 		}
 	}
 	
@@ -201,9 +209,9 @@ class CProductOrder extends CMbObject {
     
     $this->loadRefsBack();
     foreach ($this->_ref_order_items as $item) {
-      $item->date_received = '';
-      $item->quantity_received = '';
-      $item->store();
+      foreach($item->_ref_receptions as $reception) {
+        $reception->delete();
+      }
     }
   }
   
@@ -231,7 +239,7 @@ class CProductOrder extends CMbObject {
 			foreach ($this->_ref_order_items as $item) {
 				$item->updateFormFields();
 				$this->_total += $item->_price;
-				$this->_date_received = max(array($this->_date_received, $item->date_received));
+				$this->_date_received = isset($item->_ref_receptions[0]) ? $item->_ref_receptions[0]->date : null;
 			}
 		}
 

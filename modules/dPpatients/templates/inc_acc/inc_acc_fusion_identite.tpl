@@ -29,8 +29,8 @@
   {{include field="cp"         file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="ville"      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="pays"       file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="tel"        file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
-  {{include field="tel2"       file="inc_acc/inc_fusion_field_tel.tpl" field_name=""}}{{assign var=i value=$i+5}}
+  {{include field="tel"        file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
+  {{include field="tel2"       file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
   {{include field="fin_validite_vitale" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="rques"      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
 </table>

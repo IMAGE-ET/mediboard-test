@@ -53,6 +53,7 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
 }
 
 function getLabelFor(oElement) {
+  //if (Object.isArray(oElement) || Object.isElement(oElement[0])) oElement = oElement[0];
   var aLabels = oElement.form.select("label");
   var iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
@@ -63,6 +64,12 @@ function getLabelFor(oElement) {
   
   return null; 
 }
+
+Element.addMethods({
+  getLabel: function (element) {
+    return getLabelFor(element);
+  }
+});
 
 /** Universal get/set function for form elements
   * @param element A form element (Form.Element or id) : input, textarea, select, group of radio buttons, group of checkboxes
@@ -185,27 +192,23 @@ function putHelperContent(oElem, sFieldSelect) {
 }
 
 function notNullOK(oElement) {
-  if (oLabel = getLabelFor(oElement)) {
-    oLabel.className = oElement.value ? "notNullOK" : "notNull";
+  if (oLabel = oElement.getLabel()) {
+    oLabel.className = ($V(oElement) ? "notNullOK" : "notNull");
   } 
 }
 
 function canNullOK(oElement) {
-  if (oLabel = getLabelFor(oElement)) {
-    oLabel.className = oElement.value ? "notNullOK" : "canNull";
+  if (oLabel = oElement.getLabel()) {
+    oLabel.className = ($V(oElement) ? "notNullOK" : "canNull");
   } 
 }
 
-function getBoundingForm(oElement) {
-  if (!oElement) {
-    return null;
+function getSurroundingForm(element) {
+  var parent = element.up();
+  while (parent && !parent.nodeName.match(/^form$/i)) {
+    parent = parent.parentNode;
   }
-  
-  if (oElement.nodeName.match(/^form$/i)) {
-    return oElement;
-  }
-  
-  return getBoundingForm(oElement.parentNode);
+  return parent;
 }
 
 var bGiveFormFocus = true;
@@ -342,7 +345,8 @@ function prepareForm(oForm, bForcePrepare) {
     var aSpecFragments = null;
     while (oElement = oForm.elements[iElement++]) {
     	oElement = $(oElement);
-    	
+    	var props = oElement.getProperties();
+
     	// Locked object
     	if (oForm.lockAllFields) {
     		oElement.disabled = true;
@@ -355,22 +359,37 @@ function prepareForm(oForm, bForcePrepare) {
           oElement.id += "_" + oElement.value;
         }
       }
+
+      // If the element has a mask and other properties, they may conflict
+      if (Preferences.INFOSYSTEM && props.mask) {
+        Assert.that(!(
+          props.min || props.max || props.minMax || props.bool || props.ref || 
+          props.minLength || props.maxLength || props.pct
+        ), "'"+oElement.id+"' mask may conflit with other props");
+      }
       
 			// Not null
 		  if (oElement.hasClassName("notNull")) {
         notNullOK(oElement);
         Element.addEventHandler(oElement, "change", notNullOK);
+        Element.addEventHandler(oElement, "keyup", notNullOK);
       }
       
 			// Can null
 		  if (oElement.hasClassName("canNull")) {
         canNullOK(oElement);
         Element.addEventHandler(oElement, "change", canNullOK);
+        Element.addEventHandler(oElement, "keyup", canNullOK);
       }
       
       // Select tree
       if (oElement.hasClassName("select-tree") && Prototype.Browser.Gecko) {
         oElement.buildTree();
+      }
+
+      if (mask = props.mask) {
+        mask = mask.gsub('S', ' ').gsub('P', '|');
+        oElement.mask(mask);
       }
       
       // Focus on first text input
@@ -945,11 +964,14 @@ Element.addMethods('select', {
     }
     /////////////////////////////
     
-    // Tree -------------
-    tree = new Element('ul')
-              .addClassName(options.className);
-    tree.id = select.id+'_tree';
+    // Every element is hidden, but preserves its width
+    select.childElements().each(function(d) {
+      d.setOpacity(0.01);
+      d.setStyle({height: 0});
+    });
     
+    // Tree -------------
+    tree = new Element('ul', {"class": options.className, id: select.id+'_tree'});
     tree.display = function (e) {
       if (tree.empty()) {
         makeTree(select, tree);
@@ -1024,14 +1046,15 @@ Element.addMethods('select', {
       }
     }
     
-    list.getMatchingOptions = function(s) {
+    list.search = function(s) {
       var children = select.descendants();
       var li = null;
       list.update(null);
       if (s) {
         children.each(function (c) {
-          if (c.tagName.toLowerCase() == 'option' && c.text.toLowerCase().startsWith(s.toLowerCase())) {
-            li = new Element('li').update(c.text);
+          if (c.tagName.toLowerCase() == 'option' && c.text.toLowerCase().include(s.toLowerCase())) {
+            var re = new RegExp(s, "i");
+            li = new Element('li').update(c.text.gsub(re, function(match){return '<span class="highlight">'+match+'</span>'}));
             li.onclick = function() {
               $V(select, c.value, true);
               tree.highlight();
@@ -1065,7 +1088,7 @@ Element.addMethods('select', {
         if (keycode == 8 && search.value == '' && !select.visible()) {
           select.display(true);
         } else {
-          list.getMatchingOptions(search.value);
+          list.search(search.value);
         }
       }
       else if (keycode == 27) { // Escape
@@ -1117,13 +1140,24 @@ Element.addMethods('select', {
 });
 
 // Form getter
-function getForm(form, prepare) {
-  prepare = prepare || true;
-	if (Object.isString(form) && document.forms[form]) {
-	  if (prepare) prepareForm(document.forms[form]);
-	  return $(document.forms[form]);
-	} else {
-	  return form;
-	}
-	return null;
-}
+Element.addMethods('form', {
+  get: function (form, prepare) {
+    prepare = prepare || true;
+  	if (Object.isString(form) && document.forms[form]) {
+  	  if (prepare) prepareForm(document.forms[form]);
+  	  return $(document.forms[form]);
+  	} else {
+  	  return form;
+  	}
+  	return null;
+  },
+  
+  getElementsEx: function (form) {
+    var list = [];
+    form.getElements().each(function (element) {
+      if (!list.find(function (e) {return element.name == e.name}))
+        list.push(form.elements[element.name]);
+    });
+    return list;
+  }
+});

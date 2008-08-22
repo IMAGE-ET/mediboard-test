@@ -38,7 +38,7 @@ function checkNaissance(fieldPrefix) {
   var oLabel = getLabelFor(oJour);
 
   if (oJour.value > 31 || oMois.value > 12) {
-  	var msg = printf("Le champ '%s' correspond est une date au format lunaire (jour '%s' et mois '%s')",
+  	var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
   		oLabel.title,
   		oJour.value,
   		oMois.value
@@ -59,7 +59,9 @@ function copyAssureValues(element) {
 	// Hack pour gérer les form fields
 	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
   eOther = element.form[sPrefix + element.name];
+  
   $V(eOther, $V(element));
+  eOther.fire("mask:check");
 }
 
 function copyIdentiteAssureValues(element) {
@@ -70,21 +72,10 @@ function copyIdentiteAssureValues(element) {
 
 function confirmCreation(oForm){
   // Si date de naissance obligatoire
-  {{if $dPconfig.dPpatients.CPatient.date_naissance}}
-  if(!checkDateNaissance()){
-    return false;
-  }
-  {{/if}}
-
-  if (!checkNaissance("")) {
-    return false;
-  }
-  
-  if (!checkNaissance("_assure")) {
-    return false;
-  }
-  
-  if(!checkForm(oForm)){
+  if ({{if $dPconfig.dPpatients.CPatient.date_naissance}}!checkDateNaissance() || {{/if}}
+      !checkNaissance("") || 
+      !checkNaissance("_assure") || 
+      !checkForm(oForm)) {
     return false;
   }
   
@@ -102,12 +93,12 @@ function printPatient(id) {
 var tabs;
 Main.add(function () {
   initInseeFields("editFrm", "cp", "ville","pays");
-  initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "_tel31");
-  initInseeFields("editFrm", "employeur_cp", "employeur_ville", "_tel41");
-  initPaysField("editFrm", "pays","_tel1");
+  initInseeFields("editFrm", "prevenir_cp", "prevenir_ville", "tel3");
+  initInseeFields("editFrm", "employeur_cp", "employeur_ville", "tel4");
+  initPaysField("editFrm", "pays","tel");
   
   initInseeFields("editFrm", "assure_cp", "assure_ville","assure_pays");
-  initPaysField("editFrm", "assure_pays","_assure_tel1");
+  initPaysField("editFrm", "assure_pays","assure_tel");
   
   tabs = new Control.Tabs('tab-patient');
 });

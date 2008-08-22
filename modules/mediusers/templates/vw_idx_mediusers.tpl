@@ -265,12 +265,7 @@ function changeRemote(o) {
         </tr>
         <tr>
           <th>{{mb_label object=$mediuserSel field="compte"}}</th>
-          <td>
-              {{mb_field object=$mediuserSel field="_compte_banque" onkeyup="followUp(event)" }}
-              {{mb_field object=$mediuserSel field="_compte_guichet" onkeyup="followUp(event)" }}
-              {{mb_field object=$mediuserSel field="_compte_numero" onkeyup="followUp(event)" }}
-              {{mb_field object=$mediuserSel field="_compte_cle"}}
-          </td>
+          <td>{{mb_field object=$mediuserSel field="compte}}</td>
         </tr>
         
         {{if $banques}}

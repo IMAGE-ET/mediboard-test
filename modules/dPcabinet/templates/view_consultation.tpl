@@ -42,7 +42,7 @@
  
   <tr>
     <th>Téléphone </th>
-    <td>{{$patient->_tel1}} {{$patient->_tel2}} {{$patient->_tel3}} {{$patient->_tel4}} {{$patient->_tel5}}</td>
+    <td>{{mb_value object=$patient field=tel}}</td>
   </tr>
 
   <tr>

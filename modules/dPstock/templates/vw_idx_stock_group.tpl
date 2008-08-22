@@ -100,22 +100,3 @@ Main.add(function () {
     </td>
   </tr>
 </table>
-
-<!-- <form action="" name="test" method="get">
-  <select name="choice" class="select-tree" onchange="Console.trace(this.value+':'+this.options[this.selectedIndex].text);">
-    <option value="1">Thomas</option>
-    <option value="2" >Romain</option>
-    <option value="11" >123</option>
-    <optgroup label="Salariés">
-      <option value="3" >Alexis</option>
-      <option value="4" >Fabien</option>
-    </optgroup>
-    <optgroup label="Stagiaires">
-      <option value="8"  selected="selected">Alexandre</option>
-      <option value="9" >Un autre</option>
-      <option value="10" >encore un</option>
-    </optgroup>
-  </select>
-  <input type="text" value="bah" name="bih" />
-</form>-->
-

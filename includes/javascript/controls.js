@@ -82,7 +82,8 @@ Element.addMethods('input', {
         '*':"[A-Za-z0-9]",
         '~':"[+-]"
       },
-      completed: Prototype.emptyFunction
+      completed: Prototype.emptyFunction,
+      format: Prototype.K
     }, options);
 
     var maskArray = mask.toArray();
@@ -106,10 +107,21 @@ Element.addMethods('input', {
         firstNonMaskPos = i;
     });
     
+    // The element size and maxlength are updated
+    if (element.size) {
+      element.size += locked.findAll(Prototype.K).length;
+      element.maxlength += locked.findAll(Prototype.K).length;
+    } else {
+      element.size = mask.length;
+      element.maxlength = mask.length;
+    }
+    
+    // Add a placeholder
     function addPlaceholder (c, r) {
       element.options.charmap[c] = r;
     }
     
+    // Update the raw value, available by element.rawvalue
     function updateRawValue() {
       element.rawvalue = null;
       buffer.each(function(c, i) {
@@ -119,31 +131,33 @@ Element.addMethods('input', {
       });
     }
     
+    // Focus event, called on element.onfocus
     function focusEvent(e) {
       checkVal();
       writeBuffer();
       var f = function() {
         valid ?
-          element.caret(0, mask.length):
+          Prototype.emptyFunction :///element.caret(0, mask.length):
           element.caret(firstNonMaskPos);
       };
       f.defer();
     }
     focusEvent = focusEvent.bindAsEventListener(element);
     
+    // Key down event, called on element.onkeydown
     function keydownEvent(e) {
       var pos = element.caret();
       var k = getKeycode(e);
-      ignore = ((k < 41) && (k != 32) && (k != 16));
+      ignore = ((k < 41) && (k != 32) && (k != 16)); // ignore modifiers, home, end, ... except space and shift
       
       //delete selection before proceeding
-      if((pos.begin - pos.end) != 0 && (!ignore || k==8 || k==46)) {
+      if((pos.begin - pos.end) != 0 && (!ignore || k==8 || k==46)) { // if not ignored or is backspace or delete
         clearBuffer(pos.begin, pos.end);
       }
       
       //backspace and delete get special treatment
-      switch (k) { //backspace
-      case 8:
+      switch (k) {
+      case 8: // backspace
         while(pos.begin-- >= 0) {
           if(!locked[pos.begin]) {
             buffer[pos.begin] = element.options.placeholder;
@@ -162,14 +176,14 @@ Element.addMethods('input', {
         }
       break;
       
-      case 46: //delete
+      case 46: // delete
         clearBuffer(pos.begin, pos.begin+1);
         writeBuffer();
         element.caret(Math.max(firstNonMaskPos, pos.begin));
         return false;
       break;
 
-      case 27: //escape
+      case 27: // escape
         clearBuffer(0, mask.length);
         writeBuffer();
         element.caret(firstNonMaskPos);
@@ -229,13 +243,12 @@ Element.addMethods('input', {
     }
     
     function writeBuffer() {
-      element.value = buffer.join('');
+      $V(element, buffer.join(''), element.rawvalue != null);
+      updateRawValue();
       return element.value;
     }
     
     function checkVal() {
-      updateRawValue();
-      
       var test = element.value;
       var pos = 0;
       
@@ -272,15 +285,16 @@ Element.addMethods('input', {
     
     element.observe("focus", focusEvent);
     element.observe("blur",  checkVal);
+    element.observe("mask:check", checkVal);
     element.onkeydown  = keydownEvent;
     element.onkeypress = keypressEvent;
     
     //Paste events for IE and Mozilla thanks to Kristinn Sigmundsson
     if (Prototype.Browser.IE)
-      element.onpaste = checkVal.defer();
+      element.onpaste= function() {setTimeout(checkVal, 0);};     
     
-    if (Prototype.Browser.Gecko)
-      element.addEventListener('input', checkVal, false);
+    else if (Prototype.Browser.Gecko)
+      element.addEventListener("input", checkVal, false);
       
     checkVal();//Perform initial check for existing values
   }/*,

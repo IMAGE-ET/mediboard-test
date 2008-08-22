@@ -102,8 +102,8 @@ function reloadListTech() {
       </select>
       <button class="new notext" title="Ajouter une aide à la saisie" type="button" onclick="addHelp('CTechniqueComp', this.form._hidden_technique, 'technique')">{{tr}}New{{/tr}}</button><br />
       <input type="hidden" name="_hidden_technique" value="" />
-      <textarea name="technique" onblur="if(verifNonEmpty(this)){submitTech(this.form);}"></textarea>
-      <button class="submit" type="button" onclick="if(verifNonEmpty(this.form.technique)){submitTech(this.form);}">Ajouter</button>
+      <textarea name="technique" onblur="if(!$(this).emptyValue()){submitTech(this.form);}"></textarea>
+      <button class="submit" type="button">Ajouter</button>
       </form>
     </td>
     

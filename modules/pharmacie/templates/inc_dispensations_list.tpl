@@ -90,7 +90,6 @@
           {{foreachelse}}
             Aucune
           {{/foreach}}
-          </div>
         </td>
         <td rowspan="{{$unites|@count}}" style="text-align: center">
         {{if array_key_exists($code_cip,$delivrances)}}

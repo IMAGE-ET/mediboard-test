@@ -13,7 +13,7 @@ function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   oForm = document.forms[this.sForm];
   this.aFields.each (function (f) {
     if (oForm[f]) {
-      $A($(oForm[f])).each(function (e) {e.observe('change', element.resetRange.bindAsEventListener(element));});
+      $(oForm[f]).observe('change', element.resetRange.bindAsEventListener(element));
     }
   });
 }
@@ -71,15 +71,13 @@ Filter.prototype = {
         var r = makeRanges(total, 20);
         
         rangeSel.insert(
-          new Element('a')
-             .writeAttribute('href', '#1')
+          new Element('a', {'href': '#1'})
              .update('|&lt;&nbsp;')
              .observe('click', function () {$V(field, 20); form.onsubmit(); element.selected = 0;})
         );
         
         r.each(function (e, k) {
-          var a = new Element('a')
-                      .writeAttribute('href', '#1')
+          var a = new Element('a', {'href': '#1'})
                       .update('&nbsp;'+(k+1)+'&nbsp;')
                       .observe('click', function () {$V(field, e); form.onsubmit(); element.selected = k;});
           if (k == element.selected) {
@@ -89,8 +87,7 @@ Filter.prototype = {
         });
         
         rangeSel.insert(
-          new Element('a')
-             .writeAttribute('href', '#1')
+          new Element('a', {'href': '#1'})
              .update('&nbsp;&gt;|')
              .observe('click', 
                 function () {
@@ -114,19 +111,19 @@ Filter.prototype = {
     if (!fields) {
       this.aFields.each (function (f) {
         if (oForm[f]) {
-          oForm[f].value = null;
+          oForm[f].value = '';
           oForm[f].selectedIndex = 0;
         }
       });
     } else if (typeof fields == "string") {
       if (oForm[fields]) {
-        oForm[fields].value = null;
+        oForm[fields].value = '';
         oForm[fields].selectedIndex = 0;
       }
     } else {
       fields.each (function (f) {
         if (oForm[f]) {
-          oForm[f].value = null;
+          oForm[f].value = '';
           oForm[f].selectedIndex = 0;
         }
       });
@@ -136,6 +133,6 @@ Filter.prototype = {
   
   resetRange: function () {
     this.selected = 0;
-    $V(document.forms[this.sForm].limit, null, false);
+    document.forms[this.sForm].limit.value = '';
   }
 }

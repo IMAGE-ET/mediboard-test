@@ -42,11 +42,7 @@ Main.add(function () {
 
     <td class="halfPane">
       {{if $can->edit}}
-      
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">
-        {{tr}}CProductReference.create{{/tr}}
-      </a>
-      
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_reference&amp;reference_id=0">{{tr}}CProductReference.create{{/tr}}</a>
       <form name="edit_reference" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_reference_aed" />
 	    <input type="hidden" name="reference_id" value="{{$reference->_id}}" />

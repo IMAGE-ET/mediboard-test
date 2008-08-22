@@ -61,7 +61,7 @@ function checkChambreSejour(){
   var oForm = document.editSejour;
   var oFormEasy = document.editOpEasy;
   var valeur_chambre = $V(oForm.chambre_seule);
-  $V(oFormEasy.chambre_seule, valeur_chambre);
+  $V(oFormEasy.chambre_seule, valeur_chambre, false);
   
   if(valeur_chambre == "0"){
     oForm.prestation_id.value = "";
@@ -81,7 +81,6 @@ function checkChambreSejourEasy(){
 }
 
 {{if $mode_operation}}
-
 // Declaration d'un objet Sejour
 var Sejour = {
   sejours_collision: [],
@@ -124,9 +123,39 @@ Main.add( function(){
   Sejour.sejours_collision = {{$sejours_collision|@json}};
   var oForm = document.editOp;
   Sejour.preselectSejour(oForm._date.value);
-} );
-
+});
 {{/if}}
+
+Main.add( function(){
+  prepareForm(document.editSejour);
+  
+  dates = {
+    current: {
+      start: "{{$sejour->_date_entree_prevue}}",
+      stop: "{{$sejour->_date_sortie_prevue}}"
+    },
+    spots: {{$sejour->_dates_operations|@json}}
+  }
+  
+  Calendar.regField("editSejour", "entree_reelle", true, dates);
+  Calendar.regField("editSejour", "sortie_reelle", true, dates);
+  
+  dates.limit = {
+    start: null,
+    stop: dates.spots.first()
+  }
+  
+  Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
+  
+  dates.limit = {
+    start: dates.spots.last(),
+    stop: null 
+  }
+  
+  Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
+  
+  removePlageOp(false);
+});
 </script>
 
 <!-- $Id: $ -->
@@ -412,7 +441,7 @@ Main.add( function(){
 		    $V(oForm.reanimation, '0');
 		  }
 		  
-	    oForm.select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
+	    $(oForm).select(".reanimation").invoke(sValue == "comp" ? "show" : "hide");
 		}
 		
 		changeTypeHospi();
@@ -443,13 +472,9 @@ Main.add( function(){
 
 <tr {{if $mode_operation}}style="display: none;"{{/if}}>
   <th>{{mb_label object=$sejour field="ATNC"}}</th>
-  <td>
-    {{mb_field object=$sejour field="ATNC"}}
-  </td>
+  <td>{{mb_field object=$sejour field="ATNC"}}</td>
   <th>{{mb_label object=$sejour field="hormone_croissance"}}</th>
-  <td>
-    {{mb_field object=$sejour field="hormone_croissance"}}
-  </td>  
+  <td>{{mb_field object=$sejour field="hormone_croissance"}}</td>  
 </tr>
 
 <tr>
@@ -470,9 +495,7 @@ Main.add( function(){
   </td>
   {{else}}
   <th>{{mb_label object=$sejour field="repas_sans_sel"}}</th>
-  <td>
-    {{mb_field object=$sejour field="repas_sans_sel"}}
-  </td>
+  <td>{{mb_field object=$sejour field="repas_sans_sel"}}</td>
   {{/if}}
 </tr>
 
@@ -497,36 +520,24 @@ Main.add( function(){
 {{if !$mode_operation}}
 <tr>
   <th>{{mb_label object=$sejour field="lit_accompagnant"}}</th>
-  <td>
-    {{mb_field object=$sejour field="lit_accompagnant"}}
-  </td>
+  <td>{{mb_field object=$sejour field="lit_accompagnant"}}</td>
   <th>{{mb_label object=$sejour field="repas_sans_porc"}}</th>
-  <td>
-    {{mb_field object=$sejour field="repas_sans_porc"}}
-  </td>
+  <td>{{mb_field object=$sejour field="repas_sans_porc"}}</td>
 
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="isolement"}}</th>
-  <td>
-    {{mb_field object=$sejour field="isolement"}}
-  </td>
+  <td>{{mb_field object=$sejour field="isolement"}}</td>
   <th>{{mb_label object=$sejour field="repas_diabete"}}</th>
-  <td>
-    {{mb_field object=$sejour field="repas_diabete"}}
-  </td>
+  <td>{{mb_field object=$sejour field="repas_diabete"}}</td>
 </tr>
 
 <tr>
   <th>{{mb_label object=$sejour field="television"}}</th>
-  <td>
-    {{mb_field object=$sejour field="television"}}
-  </td>
+  <td>{{mb_field object=$sejour field="television"}}</td>
   <th>{{mb_label object=$sejour field="repas_sans_residu"}}</th>
-  <td>
-    {{mb_field object=$sejour field="repas_sans_residu"}}
-  </td>
+  <td>{{mb_field object=$sejour field="repas_sans_residu"}}</td>
 </tr>
 
 {{/if}}
@@ -584,38 +595,3 @@ Main.add( function(){
   </tr>  
 </table>
 {{/if}}
-
-
-<script type="text/javascript">
-
-// Explicit form preparation for Ajax loading
-prepareForm(document.editSejour);
-
-dates = {
-  current: {
-    start: "{{$sejour->_date_entree_prevue}}",
-    stop: "{{$sejour->_date_sortie_prevue}}"
-  },
-  spots: {{$sejour->_dates_operations|@json}}
-}
-
-Calendar.regField("editSejour", "entree_reelle", true, dates);
-Calendar.regField("editSejour", "sortie_reelle", true, dates);
-
-dates.limit = {
-  start: null,
-  stop: dates.spots.first()
-}
-
-Calendar.regField("editSejour", "_date_entree_prevue", false, dates);
-
-dates.limit = {
-  start: dates.spots.last(),
-  stop: null 
-}
-
-Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
-
-removePlageOp(false);
-
-</script>

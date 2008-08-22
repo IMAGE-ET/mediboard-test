@@ -11,14 +11,14 @@ CAppUI::requireSystemClass("mbFieldSpec");
 
 class CDateTimeSpec extends CMbFieldSpec {
   
-  function getValue($object, $smarty, $params = null) {
-    require_once $smarty->_get_plugin_filepath('modifier','date_format');
+  function getValue($object, $smarty = null, $params = null) {
+    if ($smarty) require_once $smarty->_get_plugin_filepath('modifier','date_format');
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     $format = mbGetValue(@$params["format"], "%d/%m/%Y %H:%M");
     return ($propValue && $propValue != "0000-00-00 00:00:00") ?
       smarty_modifier_date_format($propValue, $format) :
-      "-";
+      "";
   }
   
   function getSpecType() {

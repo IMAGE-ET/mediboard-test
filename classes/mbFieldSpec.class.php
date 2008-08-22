@@ -23,6 +23,7 @@ class CMbFieldSpec {
   var $notNear        = null;
   var $alphaAndNum    = null;
   var $xor            = null;
+  var $mask           = null;
 
   var $msgError       = null;
 
@@ -32,6 +33,12 @@ class CMbFieldSpec {
   static $days   = array();
   static $hours  = array();
   static $mins   = array();
+  static $charmap = array(
+    '9' => '[0-9]',
+    'a' => '[A-Za-z]',
+    '*' => '[A-Za-z0-9]',
+    '~' => '[+-]',
+  );
 
   var $_defaultLength = null;
 
@@ -58,6 +65,19 @@ class CMbFieldSpec {
   function getValue($object, $smarty, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
+    
+    if ($propValue && $this->mask) {
+      $mask = str_replace(array('S', 'P'), array(' ', '|'), $this->mask);
+      $value = '';
+      $c = 0;
+      for ($i = 0; $i < strlen($mask); $i++) {
+        $value .= isset(self::$charmap[$mask[$i]]) ? 
+          isset($propValue[$c++]) ? $propValue[$c-1] : '':
+          $mask[$i];
+      }
+      $propValue = $value;
+    }
+    
     return htmlspecialchars($propValue);
   }
 
@@ -163,6 +183,33 @@ class CMbFieldSpec {
         return 'Doit contenir au moins un chiffre ET une lettre';
       }
     }
+    
+    // input mask
+    if($field = $this->mask){
+      $mask = str_replace(array('S', 'P'), array(' ', '|'), $this->mask);
+      $regExp = '/^';
+      $rawvalue = '';
+      
+      // Could be shorter, using str_replace
+      for ($i = 0; $i < strlen($mask); $i++) {
+        if (isset(self::$charmap[$mask[$i]])) {
+          $regExp .= self::$charmap[$mask[$i]];
+          if (isset($object->{$this->fieldName}[$i])) {
+            $rawvalue .= $object->{$this->fieldName}[$i];
+          }
+        }
+        else {
+          $regExp .= (preg_match('`[A-Za-z0-9]`', $mask[$i]) ? '' : '\\').$mask[$i];
+        }
+      }
+      $regExp .= '$/';
+
+      if (!preg_match($regExp, $propValue)) {
+        return 'La donnée ne respecte pas le masque "'.$mask.'"';
+      } else {
+        $object->{$this->fieldName} = $rawvalue;
+      }
+    }
 
     return null;
   }
@@ -242,7 +289,12 @@ class CMbFieldSpec {
     if($object->_locked) {
       $params["readonly"] = "readonly";
     }
-    $value     = $object->{$this->fieldName};
+    if ($this->mask) {
+      $value = $this->getValue($object, null);
+    }
+    else {
+      $value = $object->{$this->fieldName};
+    }
     if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }
@@ -283,11 +335,7 @@ class CMbFieldSpec {
     $title = CAppUI::tr($object->_class_name."-".$this->fieldName."-court");
     $desc  = CAppUI::tr($object->_class_name."-".$this->fieldName."-desc");
 
-    $sHtml  = "<label title=\"$desc\" >";
-    $sHtml .= $title;
-    $sHtml .= "</label>";
-
-    return $sHtml;
+    return "<label title=\"$desc\" >$title</label>";
   }
 
   function getLabelForElement($object, &$params){

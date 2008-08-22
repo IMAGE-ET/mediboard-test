@@ -1,6 +1,5 @@
 /* $Id:$ */
 @import url("forms.css");
-
 @import url("print.css") print;
 
 * {
@@ -199,7 +198,7 @@ span.smarty-include {
   height: 10px;
   overflow: hidden;
   font-family: monospace;
-  font_size: 12px;
+  font-size: 12px;
   border: 1px solid #fff;
 }
 

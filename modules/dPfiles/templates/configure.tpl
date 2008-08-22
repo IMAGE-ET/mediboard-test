@@ -32,10 +32,7 @@
         {{tr}}config-{{$m}}-{{$var}}{{/tr}}
       </label>  
     </th>
-    <td>
-      <input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/>
-      </select>
-    </td>
+    <td><input type="text" class="str maxLength|4" name="{{$m}}[{{$var}}]" value="{{$dPconfig.$m.$var}}"/></td>
   </tr>  
     
   <tr>

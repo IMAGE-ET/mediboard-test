@@ -13,15 +13,6 @@ function reloadDiagnostic(sejour_id, modeDAS) {
   url.requestUpdate("cim", { 	waitingText : null } );
 }
 
-
-function verifNonEmpty(oElement){
-  var notWhitespace = /\S/;
-  if(notWhitespace.test(oElement.value)){
-    return true;
-  }
-  return false;
-}
-
 function printAllDocs() {
   var url = new Url;
   url.setModuleAction("dPcabinet", "print_select_docs");

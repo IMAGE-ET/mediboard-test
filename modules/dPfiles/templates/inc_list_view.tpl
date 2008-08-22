@@ -1,3 +1,5 @@
+{{mb_include_script module=dPcompteRendu script=document}}
+
 <script type="text/javascript">
 Main.add(function () {
   {{if $accordDossier}}

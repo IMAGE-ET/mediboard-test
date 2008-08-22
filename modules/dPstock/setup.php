@@ -219,7 +219,28 @@ class CSetupdPstock extends CSetup {
     $sql = 'ALTER TABLE `product_delivery` ADD `date_reception` DATETIME NULL AFTER `date_delivery`;';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.91';
+    $this->makeRevision('0.91');
+    $sql = 'ALTER TABLE `product_order_item` 
+      DROP `date_received`,
+      DROP `quantity_received`';
+    $this->addQuery($sql);
+    
+    $sql = 'CREATE TABLE `product_order_item_reception` (
+      `order_item_reception_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `order_item_id` INT (11) UNSIGNED NULL,
+      `quantity` INT (11) NOT NULL,
+      `code` VARCHAR (255),
+      `date` DATETIME NOT NULL
+    );';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_order_item_reception` 
+      ADD INDEX (`order_item_id`),
+      ADD INDEX (`date`),
+      ADD INDEX (`code`)';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.92';
   }
 }
 

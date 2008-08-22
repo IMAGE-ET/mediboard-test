@@ -15,7 +15,7 @@
   {{include field="prevenir_adresse" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="prevenir_cp"      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="prevenir_ville"   file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="prevenir_tel"     file="inc_acc/inc_fusion_field_tel.tpl" field_name="tel3"}}{{assign var=i value=$i+5}}
+  {{include field="prevenir_tel"     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
   {{include field="prevenir_parente" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   
   <tr>
@@ -25,6 +25,6 @@
   {{include field="employeur_adresse" file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="employeur_cp"      file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
   {{include field="employeur_ville"   file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
-  {{include field="employeur_tel"     file="inc_acc/inc_fusion_field_tel.tpl" field_name="tel4"}}{{assign var=i value=$i+5}}
+  {{include field="employeur_tel"     file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+5}}
   {{include field="employeur_urssaf"  file="inc_acc/inc_fusion_field.tpl"}}{{assign var=i value=$i+1}}
 </table>

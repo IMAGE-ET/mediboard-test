@@ -94,34 +94,16 @@ Main.add(function () {
         </tr>
         {{/if}}
         <tr>
-          <th>{{mb_label object=$usergroup field="_tel1" defaultFor="_tel1"}}</th>
-		    <td>
-		      {{mb_field object=$usergroup field="_tel1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel2" tabindex="156" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
-		    </td>
+          <th>{{mb_label object=$usergroup field="tel"}}</th>
+		      <td>{{mb_field object=$usergroup field="tel"}}</td>
         </tr>
         <tr>
-           <th>{{mb_label object=$usergroup field="_fax1" defaultFor="_fax1"}}</th>
-		   <td>
-		      {{mb_field object=$usergroup field="_fax1" tabindex="155" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_fax2" tabindex="156" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_fax3" tabindex="157" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_fax4" tabindex="158" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_fax5" tabindex="159" size="2" maxlength="2" prop="num length|2"}}
-		  </td>
+          <th>{{mb_label object=$usergroup field="fax"}}</th>
+		      <td>{{mb_field object=$usergroup field="fax"}}</td>
         </tr>
         <tr>
-          <th>{{mb_label object=$usergroup field="_tel_anesth1" defaultFor="_tel_anesth1"}}</th>
-		    <td>
-		      {{mb_field object=$usergroup field="_tel_anesth1" tabindex="160" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel_anesth2" tabindex="161" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel_anesth3" tabindex="162" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel_anesth4" tabindex="163" size="2" maxlength="2" prop="num length|2" onkeyup="followUp(event)"}} -
-		      {{mb_field object=$usergroup field="_tel_anesth5" tabindex="164" size="2" maxlength="2" prop="num length|2"}}
-		    </td>
+          <th>{{mb_label object=$usergroup field="tel_anesth"}}</th>
+		      <td>{{mb_field object=$usergroup field="tel_anesth"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$usergroup field="mail"}}</th>

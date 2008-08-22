@@ -17,7 +17,7 @@ CAppUI::requireSystemClass("mbFieldSpec");
  */
 class CBirthDateSpec extends CMbFieldSpec {
   
-  function getValue($object, $smarty, $params = null) {
+  function getValue($object, $smarty = null, $params = null) {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     

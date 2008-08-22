@@ -15,11 +15,6 @@ function reloadDiagnostic(sejour_id, modeDAS) {
 
 var tabSejour = {{$tabSejour|@json}};
 
-function verifNonEmpty(oElement){
-  var notWhitespace = /\S/;
-  return notWhitespace.test(oElement.value);
-}
-
 function view_history_consult(id){
   url = new Url();
   url.setModuleAction("dPcabinet", "vw_history");
