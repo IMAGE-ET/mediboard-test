@@ -15,6 +15,7 @@ $can->needsEdit();
 
 $module = mbGetValueFromPost("module", null);
 $tableau = mbGetValueFromPost("tableau", null);
+$language = mbGetValueFromPost("language", null);
 
 if(!$module || !$tableau || !is_array($tableau)){
   $AppUI->setMsg( "Certaines informations sont manquantes au traitement de la traduction.", UI_MSG_ERROR );
@@ -34,7 +35,7 @@ $translateModule->sourcePath = null;
 
 //Ecriture du fichier
 $translateModule->options = array("name" => "locales");
-$translateModule->targetPath = "locales/fr/$module.php";
+$translateModule->targetPath = "locales/$language/$module.php";
 
 $error = $translateModule->update($tableau, true);
 

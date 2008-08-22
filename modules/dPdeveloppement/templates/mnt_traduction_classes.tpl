@@ -16,10 +16,18 @@
       {{/foreach}}
       </select>
     </th>
+    <th>
+      <label for="language">Locales</label>
+      <select name="language" onchange="this.form.submit();">
+      {{foreach from=$locales item=langue}}
+      <option value="{{$langue}}"{{if $langue == $language}}selected="selected"{{/if}}>{{$langue}}</option>
+      {{/foreach}}
+      </select>
+    </th>
   </tr>
 </table>
-
 </form>
+
 
 <!-- Modification des items -->
 <form action="?m={{$m}}" name="translate" method="post">
@@ -28,6 +36,7 @@
 <input type="hidden" name="tab" value="{{$tab}}" />
 <input type="hidden" name="module" value="{{$module}}" />
 <input type="hidden" name="trans[]" value="{{$trans}}" />
+<input type="hidden" name="language" value="{{$language}}" />
 <input type="hidden" name="dosql" value="do_translate_aed" />
 
 <!-- Control tabs -->
@@ -39,6 +48,7 @@
   	  <small>({{$completions.$class.percent}}%)</small>
   	</a>
 	{{/foreach}}
+	</li>
 </ul>
 
 <hr class="control_tabs" />
@@ -86,7 +96,7 @@ Main.add(function () {
         <tr>
           <th>Nom</th>
           <th>Chaine</th>
-          <th>fr</th>
+          <th>{{$language}}</th>
           <th>Save</th>
         </tr>
         

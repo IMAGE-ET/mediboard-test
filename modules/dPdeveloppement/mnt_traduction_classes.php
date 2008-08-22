@@ -15,6 +15,7 @@ $can->needsEdit();
 
 $module = mbGetValueFromGetOrSession("module" , "system");
 $classes = CModule::getClassesFor($module);
+$language = mbGetValueFromGetOrSession("language",'fr');
 
 // Hack to have CModule in system locale file
 if ($module == "system") {
@@ -28,7 +29,7 @@ sort($modules);
 // Dossier des traductions
 $localesDirs = $AppUI->readDirs("locales");
 CMbArray::removeValue(".svn",$localesDirs);
-CMbArray::removeValue("en",$localesDirs);
+//CMbArray::removeValue("en",$localesDirs);
 
 // Récupération du fichier demandé pour toutes les langues
 $translateModule = new CMbConfig;
@@ -36,7 +37,7 @@ $translateModule->sourcePath = null;
 $contenu_file = array();
 foreach($localesDirs as $locale){
   $translateModule->options = array("name" => "locales");
-  $translateModule->targetPath = "locales/fr/$module.php";
+  $translateModule->targetPath = "locales/$locale/$module.php";
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
 }
@@ -55,9 +56,9 @@ $items = array();
 $completions = array();
 
 // Ajoute un item de localisation
-function addLocale($class, $cat, $name) {
+function addLocale($class, $cat, $name, $language) {
   global $trans, $items, $completions;
-  $items[$class][$cat][$name] = array_key_exists($name, $trans) ? $trans[$name]["fr"] : "";
+  $items[$class][$cat][$name] = array_key_exists($name, $trans) ? @$trans[$name][$language] : "";
   
   // Stats
   @$completions[$class]["total"]++;
@@ -75,20 +76,20 @@ foreach ($classes as $class) {
   $classname = $object->_class_name;
   
   // Traductions au niveau classe
-  addLocale($classname, $classname, "$classname");
-  addLocale($classname, $classname, "$classname.one");
-  addLocale($classname, $classname, "$classname.none");
-  addLocale($classname, $classname, "$classname-msg-create");
-  addLocale($classname, $classname, "$classname-msg-modify");
-  addLocale($classname, $classname, "$classname-msg-delete");
-  addLocale($classname, $classname, "$classname-title-create");
-  addLocale($classname, $classname, "$classname-title-modify");
+  addLocale($classname, $classname, "$classname", $language);
+  addLocale($classname, $classname, "$classname.one", $language);
+  addLocale($classname, $classname, "$classname.none", $language);
+  addLocale($classname, $classname, "$classname-msg-create", $language);
+  addLocale($classname, $classname, "$classname-msg-modify", $language);
+  addLocale($classname, $classname, "$classname-msg-delete", $language);
+  addLocale($classname, $classname, "$classname-title-create", $language);
+  addLocale($classname, $classname, "$classname-title-modify", $language);
   
   // Traductions pour la clé 
   $prop = $object->_spec->key;
-  addLocale($classname, $prop, "$classname-$prop");
-  addLocale($classname, $prop, "$classname-$prop-desc");
-  addLocale($classname, $prop, "$classname-$prop-court");
+  addLocale($classname, $prop, "$classname-$prop", $language);
+  addLocale($classname, $prop, "$classname-$prop-desc", $language);
+  addLocale($classname, $prop, "$classname-$prop-court", $language);
   
   // Traductions de chaque propriété
 	foreach ($object->_specs as $prop => $spec) { 
@@ -100,17 +101,17 @@ foreach ($classes as $class) {
       continue;
     }
     
-	  addLocale($classname, $prop, "$classname-$prop");
-	  addLocale($classname, $prop, "$classname-$prop-desc");
-	  addLocale($classname, $prop, "$classname-$prop-court");
+	  addLocale($classname, $prop, "$classname-$prop", $language);
+	  addLocale($classname, $prop, "$classname-$prop-desc", $language);
+	  addLocale($classname, $prop, "$classname-$prop-court", $language);
   
     if ($spec instanceof CEnumSpec) {
       if (!$spec->notNull) {
-	      addLocale($classname, $prop, "$classname.$prop.");
+	      addLocale($classname, $prop, "$classname.$prop.", $language);
       }
       
       foreach (explode("|", $spec->list) as $value) {
-	      addLocale($classname, $prop, "$classname.$prop.$value");
+	      addLocale($classname, $prop, "$classname.$prop.$value", $language);
       }
     }
     
@@ -121,7 +122,7 @@ foreach ($classes as $class) {
       
       // Find corresponding back name
       $backName = array_search("$spec->className $spec->fieldName", $fwdObject->_backRefs);
-	    addLocale($classname, $prop, "$spec->class-back-$backName");
+	    addLocale($classname, $prop, "$spec->class-back-$backName", $language);
     }
   }
 }
@@ -135,6 +136,7 @@ $smarty->assign("locales"  		, $localesDirs);
 $smarty->assign("modules"  		, $modules);
 $smarty->assign("module"   		, $module);
 $smarty->assign("trans"    		, $trans);
+$smarty->assign("language"    		, $language);
 
 $smarty->display("mnt_traduction_classes.tpl");
 ?>
