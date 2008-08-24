@@ -51,11 +51,13 @@ class CMediusers extends CMbObject {
   var $_user_template   = null;
 
   // Other fields
-  var $_view            = null;
-  var $_shortview       = null;
-  var $_profile_id      = null;
-  var $_is_praticien    = null;
-  var $_is_secretaire   = null;
+  var $_view                 = null;
+  var $_shortview            = null;
+  var $_profile_id           = null;
+  var $_is_praticien         = null;
+  var $_is_secretaire        = null;
+  var $_user_password_weak   = null;
+  var $_user_password_strong = null;
 
   // CPS
   var $_bind_cps = null;
