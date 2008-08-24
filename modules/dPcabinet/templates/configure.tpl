@@ -7,6 +7,26 @@
 
   <!-- Mode d'addictions -->  
   <tr>
+    <th class="category" colspan="100">Prise de rendez-vous</th>
+  </tr>
+  
+  <tr>
+    {{assign var="var" value="keepchir"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$var}}]" title="{{tr}}config-{{$m}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+      <label for="{{$m}}[{{$var}}]">Oui</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="1" {{if $dPconfig.$m.$var == "1"}}checked="checked"{{/if}}/> 
+      <label for="{{$m}}[{{$var}}]">Non</label>
+      <input type="radio" name="{{$m}}[{{$var}}]" value="0" {{if $dPconfig.$m.$var == "0"}}checked="checked"{{/if}}/>
+    </td>
+  </tr>
+
+  <!-- Mode d'addictions -->  
+  <tr>
     <th class="category" colspan="100">Mode d'addictions</th>
   </tr>
   
@@ -97,9 +117,9 @@
     </th>
     <td colspan="3">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/>
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
-      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>     
+      <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/>
     </td>
   </tr>
   <tr>

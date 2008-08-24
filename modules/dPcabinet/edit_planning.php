@@ -11,11 +11,6 @@ global $AppUI, $can, $m;
 
 $can->needsRead();
 
-// Chargement du praticien selectionne
-//$praticien_id = mbGetValueFromGetOrSession("praticien_id");
-//$praticienSel = new CMediusers();
-//$praticienSel->load($praticien_id);
-
 // Recuperation de l'id de la consultation du passage en urgence
 $consult_urgence_id = mbGetValueFromGet("consult_urgence_id");
 
@@ -48,7 +43,8 @@ if (!$consultation_id) {
   } 
   else {
     // A t'on fourni l'id du praticien
-    if ($chir_id = mbGetValueFromGet("chir_id")) {
+    $chir_id = CAppUI::conf("dPcabinet keepchir") ? mbGetValueFromGetOrSession("chir_id") : mbGetValueFromGet("chir_id");
+    if ($chir_id) {
       $chir->load($chir_id);
     }
 

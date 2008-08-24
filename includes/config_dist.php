@@ -220,6 +220,7 @@ $dPconfig["dPsalleOp"] = array(
    
 $dPconfig["dPhospi"]["pathologies"] = 1;
 
+$dPconfig["dPcabinet"]["keepchir"]   = 1;
 $dPconfig["dPcabinet"]["addictions"] = 0;
 $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "hours_start"      => "8",
