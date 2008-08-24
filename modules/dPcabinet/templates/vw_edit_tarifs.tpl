@@ -147,7 +147,7 @@ Main.add(function () {
     <td>
       <table class="tbl">
         <tr>
-          <th colspan="3">Tarifs du praticien</th>
+          <th colspan="3" class="title">Tarifs du praticien</th>
         </tr>
         {{if $is_praticien=="0" && $is_admin_or_secretaire=="0"}}
         <tr>
@@ -197,7 +197,7 @@ Main.add(function () {
       </table>
     
       <table class="tbl">
-        <tr><th colspan="3">Tarifs du cabinet</th></tr>
+        <tr><th colspan="3" class="title">Tarifs du cabinet</th></tr>
 
         <tr>
           <th>{{mb_label class=CTarif field=description}}</th>
@@ -226,9 +226,9 @@ Main.add(function () {
       {{mb_field object=$tarifMediuser field="function_id" hidden=1 prop=""}}
       <table class="form">
         {{if $tarif->tarif_id}}
-        <tr><th class="category" colspan="2">Modifier ce tarif</th></tr>
+        <tr><th class="title modify" colspan="2">Modifier ce tarif</th></tr>
         {{else}}
-        <tr><th class="category" colspan="2">Créer un nouveau tarif</th></tr>
+        <tr><th class="title" colspan="2">Créer un nouveau tarif</th></tr>
         {{/if}}
         <tr>
           <th>{{mb_label object=$tarif field="_type"}}</th>

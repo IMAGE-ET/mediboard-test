@@ -153,8 +153,7 @@ class CPlageconsult extends CMbObject {
     $where["plageconsult_id"] = "!= '$this->plageconsult_id'";
     $plages = new CPlageconsult;
     $plages = $plages->loadList($where);
-
-    //mbTrace(count($plages), "Nombre de plages avec des collisions possibles");
+    
     $msg = null;
     
     foreach ($plages as $plage) {
