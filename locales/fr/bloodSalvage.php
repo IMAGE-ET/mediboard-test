@@ -156,7 +156,7 @@ $locales['CTypeEi-msg-delete'] = 'Modèle supprimé';
 $locales['CTypeEi-msg-modify'] = 'Modèle modifié';
 $locales['CTypeEi-title-create'] = 'Création d\'un nouveau modèle';
 $locales['CTypeEi-title-modify'] = 'Modification du modèle';
-$locales['config-bloodSalvage-CBloodSalvage'] = 'Configuration de la procédure de récupération sanguine';
+$locales['config-bloodSalvage'] = 'Configuration de la procédure de récupération sanguine';
 $locales['config-bloodSalvage-inLivretTherapeutique'] = 'Anticoagulants du livret thérapeutique uniquement';
 $locales['config-bloodSalvage-AntiCoagulantList'] = 'Liste des anticoagulants utilisables';
 $locales['CBloodSalvage-sample'] = 'Prélévement';
@@ -170,4 +170,6 @@ $locales['CCellSaver.all'] = '';
 $locales['CCellSaver.select'] = '';
 $locales['CTypeEi.all'] = '';
 $locales['CTypeEi.select'] = '';
+$locales['config-bloodSalvage-CBloodSalvage-inLivretTherapeutique'] = '';
+$locales['mod-dPportail-tab-vw_blood_salvage'] = '';
 ?>

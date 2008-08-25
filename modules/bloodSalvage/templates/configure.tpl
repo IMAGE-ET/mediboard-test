@@ -5,7 +5,7 @@
 	  {{if array_key_exists('dPmedicament', $modules)}}
 		  {{assign var="var" value="inLivretTherapeutique"}}
 		  <tr>
-		    <th class="category" colspan="2">{{tr}}config-{{$m}}-{{$class}}{{/tr}}</th>
+		    <th class="category" colspan="2">{{tr}}config-{{$m}}{{/tr}}</th>
 		  </tr>
 		  <tr>
 		    <th style="width:50%">
