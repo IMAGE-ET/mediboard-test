@@ -431,9 +431,8 @@ $dPconfig["dPpmsi"] = array(
 ); 
 
 $dPconfig["bloodSalvage"] = array (
-  "CBloodSalvage" => array(
     "inLivretTherapeutique" => "1",
-  ),
+    "AntiCoagulantList" => "",
 );
   
 ?>

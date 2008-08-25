@@ -22,18 +22,26 @@ $totaltime = "00:00:00";
 $modif_operation    = $date>=mbDate();
 $timing = array();
 
-$inLivretTherapeutique = CAppUI::conf("bloodSalvage CBloodSalvage inLivretTherapeutique");
+$inLivretTherapeutique = CAppUI::conf("bloodSalvage inLivretTherapeutique");
 
-
-if($inLivretTherapeutique) {
-	$anticoagulant = new CBcbClasseATC(); 
-	$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
-}
-
-if(!$inLivretTherapeutique) {
-  $anticoagulant = new CBcbClasseATC(); 
-  $anticoagulant->loadRefsProduits("B01AB");
-  $anticoagulant_list = $anticoagulant->_ref_produits;
+if(CModule::getActive("dPmedicament")) {
+	
+	if($inLivretTherapeutique) {
+		$anticoagulant = new CBcbClasseATC(); 
+		$anticoagulant_list = $anticoagulant->loadRefProduitsLivret("B01AB");
+	}
+	
+	if(!$inLivretTherapeutique) {
+	  $anticoagulant = new CBcbClasseATC(); 
+	  $anticoagulant->loadRefsProduits("B01AB");
+	  $anticoagulant_list = $anticoagulant->_ref_produits;
+	}
+	
+} else {
+	
+	$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
+	$anticoagulant_list = explode("|",$list);
+	
 }
 
 $version_patient = CModule::getActive("dPpatients");

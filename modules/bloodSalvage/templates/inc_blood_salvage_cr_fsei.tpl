@@ -1,4 +1,5 @@
   <tr>
+  {{if !array_key_exists('dPqualite', $modules)}}
     <th>Incident</th>
     <td>
     <form name="fsei" action="?m={{$m}}" method="post">
@@ -13,9 +14,12 @@
 	      </select>
 	   </form>
     </td>
-  
     <th>Protocole qualité</th>
     <td>
+    {{else}}
+    <th>Protocole qualité</th>
+    <td colspan="4">
+    {{/if}}    
      <form name="qualite" action="?m={{$m}}" method="post">
         <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
         <input type="hidden" name="m" value="bloodSalvage" />

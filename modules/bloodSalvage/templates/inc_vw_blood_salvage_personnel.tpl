@@ -40,29 +40,7 @@
 		    {{/if}}
 		    
 		    {{$affectation->_ref_personnel->_ref_user->_view}}
-		    <!--  
-		    <form name="affectationNurse-{{$affectation_id}}" action="?m={{$m}}" method="post">
-		    <input type="hidden" name="m" value="dPpersonnel" />
-		    <input type="hidden" name="dosql" value="do_affectation_aed" />
-		    <input type="hidden" name="del" value="0" />
-		    <input type="hidden" name="affect_id" value="{{$affectation->_id}}" />
-		    <input type="hidden" name="personnel_id" value="{{$affectation->_ref_personnel->_id}}" />
-		    <input type="hidden" name="object_class" value="CBloodSalvage" />
-		    <input type="hidden" name="object_id" value="{{$blood_salvage->_id}}" />
-		    <input type="hidden" name="realise" value="0" />
-		    
-		    {{assign var=submit value=submitNurse}}
-        {{assign var="affect_id" value=$affectation->_id}}
-        {{assign var="timing" value=$timingAffect.$affect_id}}
-		    {{assign var="form" value=affectationNurse-$affect_id}}
-		    <table class="form">
-		      <tr>
-		        {{include file=../../dPsalleOp/templates/inc_field_timing.tpl object=$affectation field=_debut}}
-	          {{include file=../../dPsalleOp/templates/inc_field_timing.tpl object=$affectation field=_fin  }}
-	        </tr>
-		    </table>
-		    </form>
-		    -->
+
 			<hr />   
 		{{/foreach}}
 		</td>

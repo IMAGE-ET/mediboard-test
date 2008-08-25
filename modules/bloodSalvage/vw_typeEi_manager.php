@@ -6,6 +6,7 @@
  *  @version $Revision: $
  *  @author Alexandre Germonneau
  */
+
 $type_ei_id = mbGetValueFromGetOrSession("type_ei_id");
 
 $type_ei = new CTypeEi();

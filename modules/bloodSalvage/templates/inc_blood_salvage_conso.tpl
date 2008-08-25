@@ -13,14 +13,17 @@
 	    <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}" />
 	    <input type="hidden" name="del" value="0" />
 				<select name="anticoagulant_cip" onchange="submitFormAjax(this.form, 'systemMsg');">
-	          <option value="null">&mdash; Anticoagulants</option>
-					{{foreach from=$anticoagulant_list key=key item=anticoag}}
+			 {{foreach from=$anticoagulant_list key=key item=anticoag}}
+			 {{if array_key_exists('dPmedicament', $modules)}}
 					  {{if $inLivretTherapeutique}}
 				    <option value="{{$anticoag->code_cip}}"{{if $anticoag->code_cip == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag->_ref_produit->libelle}}</option>
 					  {{/if}}
 					  {{if !$inLivretTherapeutique}}
 				    <option value="{{$anticoag->CodeCIP}}"{{if $anticoag->CodeCIP == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag->Libelle}}</option>
 					  {{/if}}
+			 {{else}}
+            <option value="{{$key}}"{{if $key == $blood_salvage->anticoagulant_cip}}selected="selected"{{/if}}>{{$anticoag}}</option>        
+       {{/if}}
 					{{/foreach}}
 				</select>
 			</form>
