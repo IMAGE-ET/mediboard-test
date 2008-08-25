@@ -1,5 +1,5 @@
   <tr>
-  {{if !array_key_exists('dPqualite', $modules)}}
+  {{if array_key_exists('dPqualite', $modules)}}
     <th>Incident</th>
     <td>
     <form name="fsei" action="?m={{$m}}" method="post">
