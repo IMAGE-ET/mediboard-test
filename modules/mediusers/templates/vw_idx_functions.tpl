@@ -125,11 +125,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="tel"}}</th>
-          <td>{{mb_field object=$userfonction field="tel"}}</td>
+          <td>{{mb_field object=$userfunction field="tel"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$userfunction field="fax"}}</th>
-          <td>{{mb_field object=$userfonction field="fax"}}</td>
+          <td>{{mb_field object=$userfunction field="fax"}}</td>
         </tr>
         
         <tr>
