@@ -125,7 +125,7 @@ Object.extend(ElementChecker, {
     xor: function () {
       var sTargetElement = this.assertMultipleArgs("xor");
       var iNbElements = this.sValue != "";
-      var sListElements = sLabel;
+      var sListElements = this.sLabel;
       var message = "";
   
       var that = this;
