@@ -108,13 +108,12 @@ Element.addMethods('input', {
     });
     
     // The element size and maxlength are updated
-    if (element.size) {
-      element.size += locked.findAll(Prototype.K).length;
-      element.maxlength += locked.findAll(Prototype.K).length;
-    } else {
-      element.size = mask.length;
-      element.maxlength = mask.length;
-    }
+    var newChars = locked.findAll(Prototype.K).length;
+    if (element.size) element.size += newChars;
+    else              element.size = mask.length;
+
+    if (element.maxlength) element.maxlength += newChars;
+    else                   element.maxlength = mask.length;
     
     // Add a placeholder
     function addPlaceholder (c, r) {

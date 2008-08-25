@@ -509,7 +509,7 @@ function checkForm(oForm) {
     return false;
   }
   FormObserver.changes = 0;
-  return true;Console.debug('form OK'); return false;
+  return true;
 }
 
 /** Validation d'un element de formulaire. 

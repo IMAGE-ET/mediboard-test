@@ -910,7 +910,14 @@ Element.addMethods('select', {
       ul.update(null);
       
       sel.childElements().each(function (o) {
-        var li = new Element('li');
+        var li = new Element('li').addClassName(o.className);
+        li.setStyle({
+          color: o.getStyle('color'),
+          borderLeft: o.getStyle('border-left'),
+          borderRight: o.getStyle('border-right'),
+          borderTop: o.getStyle('border-top'),
+          borderBottom: o.getStyle('border-bottom')
+        });
         
         // If it is an optgroup
         if (o.tagName.toLowerCase() == 'optgroup') {
@@ -1139,23 +1146,23 @@ Element.addMethods('select', {
   }
 });
 
+function getForm (form, prepare) {
+  prepare = prepare || true;
+  if (Object.isString(form) && document.forms[form]) {
+    if (prepare) prepareForm(document.forms[form]);
+    return $(document.forms[form]);
+  } else {
+    return form;
+  }
+  return null;
+};
+
 // Form getter
 Element.addMethods('form', {
-  get: function (form, prepare) {
-    prepare = prepare || true;
-  	if (Object.isString(form) && document.forms[form]) {
-  	  if (prepare) prepareForm(document.forms[form]);
-  	  return $(document.forms[form]);
-  	} else {
-  	  return form;
-  	}
-  	return null;
-  },
-  
   getElementsEx: function (form) {
     var list = [];
     form.getElements().each(function (element) {
-      if (!list.find(function (e) {return element.name == e.name}))
+      if (!list.find(function (e) {return (!!e && element.name == e.name)}))
         list.push(form.elements[element.name]);
     });
     return list;
