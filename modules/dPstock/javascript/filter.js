@@ -10,10 +10,11 @@ function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.selected = 0;
   
   element = this;
-  oForm = document.forms[this.sForm];
+  oForm = getForm(this.sForm);
   this.aFields.each (function (f) {
-    if (oForm[f]) {
-      $(oForm[f]).observe('change', element.resetRange.bindAsEventListener(element));
+    oElement = $(oForm[f]);
+    if (oElement && oElement.observe) {
+      oElement.observe('change', element.resetRange.bindAsEventListener(element));
     }
   });
 }
@@ -133,6 +134,6 @@ Filter.prototype = {
   
   resetRange: function () {
     this.selected = 0;
-    document.forms[this.sForm].limit.value = '';
+    $V(document.forms[this.sForm].limit, '');
   }
 }
