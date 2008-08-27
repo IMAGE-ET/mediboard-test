@@ -24,7 +24,7 @@ ModeleSelector = Class.create({
   },
 
   pop: function(object_id, object_class, praticien_id) {
-    var oForm = document[this.sForm];
+    var oForm = getForm(this.sForm);
     var url = new Url();
     url.setModuleAction("dPcompteRendu", "modele_selector");
     url.addParam("object_id", object_id);
@@ -34,13 +34,10 @@ ModeleSelector = Class.create({
   },
 
   set: function(modele_id, object_id) {
-    var oForm = document[this.sForm];
-    oForm[this.sModele_id].setValue(modele_id);
-    oForm[this.sObject_id].setValue(object_id);
-    if (oForm[this.sObject_id].onchange) { // Because setValue doesn't call onchange
-      oForm[this.sObject_id].onchange(oForm[this.sObject_id]);
-    }
+    var oForm = getForm(this.sForm);
+    $V(oForm[this.sModele_id], modele_id, true);
+    $V(oForm[this.sObject_id], object_id, true);
   }
 });
 
-var modeleSelector = []; 
+var modeleSelector = modeleSelector || []; 

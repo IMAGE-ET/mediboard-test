@@ -46,12 +46,26 @@ $smarty = new CSmartyDP();
 $object = null;
 
 $canFile  = new CCanDo;
+$praticienId = null;
 
 if($selClass && $selKey){
   // Chargement de l'objet
   $object = new $selClass;
   $object->load($selKey);
   $canFile = $object->canDo();
+  
+  // To add the modele selector in the toolbar
+  $object->updateFormFields();
+  if ($selClass == 'CConsultation') {
+    $praticienId = $object->_praticien_id;
+  } 
+  else if ($selClass == 'CConsultAnesth') {
+    $praticienId = $object->_ref_consultation->_praticien_id;
+  }
+  else if ($userSel->isPraticien()) {
+    $praticienId = $userSel->_id;
+  }
+  /////
   
   $affichageFile = CFile::loadFilesAndDocsByObject($object);
   
@@ -62,6 +76,7 @@ $smarty->assign("canFile"        , $canFile);
 
 $smarty->assign("reloadlist"     , $reloadlist  ); 
 $smarty->assign("listCategory"   , $listCategory);
+$smarty->assign("praticienId"    , $praticienId );
 $smarty->assign("selClass"       , $selClass    );
 $smarty->assign("selKey"         , $selKey      );
 $smarty->assign("object"         , $object      );

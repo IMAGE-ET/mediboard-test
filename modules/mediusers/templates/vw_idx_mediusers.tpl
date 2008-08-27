@@ -239,7 +239,7 @@ function changeRemote(o) {
           <td>
             <select name="_user_type" class="{{$mediuserSel->_props._user_type}}" onChange="loadProfil(this.value)">
             {{foreach from=$utypes|smarty:nodefaults key=curr_key item=type}}
-              <option value="{{$curr_key}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
+              <option value="{{if $curr_key != 0}}{{$curr_key}}{{/if}}" {{if $curr_key == $mediuserSel->_user_type}}selected="selected"{{/if}}>{{$type}}</option>
             {{/foreach}}
             </select>
           </td>

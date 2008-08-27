@@ -1,6 +1,7 @@
 {{include file="inc_files_functions.tpl"}}
 {{mb_include_script module="system" script="object_selector"}}
 {{mb_include_script module="dPcompteRendu" script="modele_selector"}}
+{{mb_include_script module="dPcompteRendu" script="document"}}
 
 <table class="main">
   <tr>
@@ -56,7 +57,7 @@
         <tr>
           {{if $typeVue==1}}
           <td colspan="2" id="listView">
-            {{include file="inc_list_view_colonne.tpl"}}
+            {{include file="inc_list_view_colonne.tpl" praticienId=0}}
           {{else}}
           <td style="width: 400px;" id="listView">
             {{include file="inc_list_view.tpl"}}

@@ -76,8 +76,8 @@ Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
 {{assign var=collapse value=true}}
 {{/if}}
 
+{{if $collapse && $collapse!="hide"}}
 <table class="tbl">
-  {{if $collapse}}
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="2">
     	{{tr}}{{$object->_class_name}}{{/tr}} :
@@ -85,6 +85,14 @@ Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
     </th>
   </tr>
   
+  {{if $collapse == "collapse"}}
+  <script type="text/javascript">
+    Main.add(function () {
+    new PairEffect("DocsEffect-{{$object->_guid}}", { 
+      bStoreInCookie: true
+    });
+    });
+  </script>
   <tbody id="DocsEffect-{{$object->_guid}}" style="display:none;">
   {{else}}
   <tbody>
@@ -125,13 +133,5 @@ Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
 	  {{/foreach}}
 
 	</tbody>
-	
 </table>
-
-{{if $collapse}}
-<script type="text/javascript">
-  new PairEffect("DocsEffect-{{$object->_guid}}", { 
-    bStoreInCookie: true
-  });
-</script>
 {{/if}}
