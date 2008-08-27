@@ -1427,6 +1427,10 @@ Element.addMethods({
   }
 });
 
+/** DOM element creator for Prototype by Fabien Ménager
+ *  Inspired from Michael Geary 
+ *  http://mg.to/2006/02/27/easy-dom-creation-for-jquery-and-prototype
+ **/
 var DOM = {
   defineTag: function (tag) {
     window[tag.toUpperCase()] = function () {
@@ -1448,7 +1452,7 @@ var DOM = {
       }
     }
     catch (ex) {
-      alert('Cannot create <' + tag + '> element:\n' + Object.insepct(args));
+      alert('Cannot create <' + tag + '> element:\n' + Object.inspect(args));
       e = null;
     }
     return e;
