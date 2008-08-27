@@ -43,6 +43,7 @@ CAppUI::requireSystemClass("smartydp");
 $smarty = new CSmartyDP(CAppUI::conf("root_dir")."/modules/$m");
 
 $smarty->assign("templateManager", $templateManager);
+$smarty->assign("nodebug", true);
 
 $smarty->display("mb_fckeditor.tpl");
 ?>

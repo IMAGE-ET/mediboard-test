@@ -18,7 +18,7 @@ class CNumcharSpec extends CNumSpec {
   
 
   function getDBSpec(){
-    $type_sql = "BUGINT ZEROFILL";
+    $type_sql = "BIGINT ZEROFILL";
     
     if($this->maxLength || $this->length){
       $length = $this->maxLength ? $this->maxLength : $this->length;

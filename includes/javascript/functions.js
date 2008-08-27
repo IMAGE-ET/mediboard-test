@@ -1141,12 +1141,13 @@ TokenField.prototype.add = function(sValue,multiple) {
     return false;
   }
   if(this.oOptions.sProps){
-    oCode = new Object();
+    oCode = new Element('input');
     oCode.value = sValue;
     oCode.className = this.oOptions.sProps;
     ElementChecker.prepare(oCode);
-    if(sAlert = ElementChecker.checkElement()) {
-      alert(sAlert);
+    ElementChecker.checkElement();
+    if(ElementChecker.oErrors.length) {
+      alert(ElementChecker.getErrorMessage());
       return false;
     }
   }

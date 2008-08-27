@@ -378,7 +378,7 @@ class CSmartyDP extends Smarty {
    */
   function _smarty_include($params) {
     // Only at debug time
-    if (!CAppUI::conf("debug")) {
+    if (!CAppUI::conf("debug") || isset($params["smarty_include_vars"]['nodebug'])) {
       parent::_smarty_include($params);
       return;
     }
@@ -401,7 +401,7 @@ class CSmartyDP extends Smarty {
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time
-    if (!CAppUI::conf("debug")) {
+    if (!CAppUI::conf("debug") || isset($this->_tpl_vars['nodebug'])) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;
     }

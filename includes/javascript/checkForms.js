@@ -18,6 +18,9 @@ var ElementChecker = {
     oElement = $(isArray?oElement[0]:oElement);
 
     this.oForm = oElement.form;
+    if (!oElement.getProperties) {
+      Console.debug(oElement);
+    }
     this.oProperties = oElement.getProperties();
     
     this.oLabel = oElement.getLabel();

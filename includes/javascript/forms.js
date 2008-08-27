@@ -53,7 +53,8 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
 }
 
 function getLabelFor(oElement) {
-  //if (Object.isArray(oElement) || Object.isElement(oElement[0])) oElement = oElement[0];
+  if (!oElement.form) return null;
+  
   var aLabels = oElement.form.select("label");
   var iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
@@ -353,7 +354,7 @@ function prepareForm(oForm, bForcePrepare) {
     	}
     	
       // Create id for each element if id is null
-      if (!oElement.id) {
+      if (!oElement.id && oElement.name) {
         oElement.id = sFormName + "_" + oElement.name;
         if (oElement.type == "radio") {
           oElement.id += "_" + oElement.value;
