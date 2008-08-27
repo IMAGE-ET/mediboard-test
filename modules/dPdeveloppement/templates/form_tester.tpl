@@ -2,7 +2,13 @@
 var form;
 Main.add(function () {
   form = getForm("test");
-  $('dom-creator').insert(A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 'Firefox rocks !!', DIV({className: 'big-info'}, 'Voici une info')));
+  $('dom-creator').insert(
+    DIV({className: 'big-info'}, 
+      A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
+        'Firefox rocks !!'
+      )
+    )
+  );
 });
 
 </script>
