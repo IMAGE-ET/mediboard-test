@@ -10,30 +10,28 @@
 global $can;
 $can->needsRead();
 
-$specs = array(
-  'ref'       => 'CRefSpec',
-  'str'       => 'CStrSpec',
-  'numchar'   => 'CNumcharSpec',
-  'num'       => 'CNumSpec',
-  'bool'      => 'CBoolSpec',
-  'enum'      => 'CEnumSpec',
-  'date'      => 'CDateSpec',
-  'time'      => 'CTimeSpec',
-  'dateTime'  => 'CDateTimeSpec',
-  'birthDate' => 'CBirthDateSpec',
-  'float'     => 'CFloatSpec',
-  'currency'  => 'CCurrencySpec',
-  'pct'       => 'CPctSpec',
-  'text'      => 'CTextSpec',
-  'html'      => 'CHtmlSpec',
-  'email'     => 'CEmailSpec',
-  'code'      => 'CCodeSpec',
-  'password'  => 'CPasswordSpec',
-);
+class CTestClass extends CMbObject {
+  function __construct() {
+    foreach (CMbFieldSpecFactEx::$classes as $spec => $class) {
+      $this->$spec = null;
+    }
+    parent::__construct();
+  }
+  
+  function getSpecs() {
+    $specs = parent::getSpecs();
+    foreach (CMbFieldSpecFactEx::$classes as $spec => $class) {
+      $specs[$spec] = $spec;
+    }
+    $specs['enum'] = 'enum list|1|2|3|4';
+    return $specs;
+  }
+}
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign('specs', $specs);
+$smarty->assign('object', new CTestClass());
+$smarty->assign('specs', CMbFieldSpecFactEx::$classes);
 $smarty->display('form_tester.tpl');
 
 ?>

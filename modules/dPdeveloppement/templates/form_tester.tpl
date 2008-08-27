@@ -1,12 +1,8 @@
 <script type="text/javascript">
 var form;
 Main.add(function () {
-  //References.clean(document.documentElement);
-  form = Form.get("test");
-  //form.text_1.mask("~(99) 99 99 99 99", {placeholder: '_', completed: function(s) {alert(s.rawvalue)} });
-  //Console.debug(checkForm(form));
-  
-  $('bah-2').insert(A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 'Firefox rocks !!', DIV({className: 'big-info'}, 'hihi')));
+  form = getForm("test");
+  $('dom-creator').insert(A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 'Firefox rocks !!', DIV({className: 'big-info'}, 'Voici une info')));
 });
 
 </script>
@@ -17,10 +13,20 @@ Main.add(function () {
 <a href="?m={{$m}}&amp;tab={{$a}}">Lancer cette page avec les menus</a>
 {{/if}}
 
-<div id="bah-2"></div>
+<div id="dom-creator"></div>
+
 <form name="test" action="?" method="get" onsubmit="if (checkForm(this)) {Console.trace('form.submit()');} return false;" id="form-test-id">
   <input type="hidden" name="m" value="{{$m}}" />
   <input type="hidden" name="tab" value="{{$tab}}" />
+  
+  <table class="form">
+  {{foreach from=$specs item=class key=spec}}
+    <tr>
+      <th>{{mb_title object=$object field=$spec}}</th>
+      <td>{{mb_field object=$object field=$spec form=test register=1}}</td>
+    </tr>
+  {{/foreach}}
+  </table>
   
   <table>
     <tr>
@@ -42,10 +48,7 @@ Main.add(function () {
       </td>
     </tr>
     <tr>
-      <td><label for="text_1">Champ masqué</label><input type="text" name="text_1" class="mask|+(99)S99S99S99P99P notNull"/> ~(99) 99 99 99 99</td>
-    </tr>
-    <tr>
-      <td><label for="num_1">Champ numérique</label><input type="text" name="num_1" class="incrementable"/> ~(99) 99 99 99 99</td>
+      <td><label for="text_1">Champ masqué</label><input type="text" name="text_1" class="mask|+(99)S99S99S99P99P notNull"/></td>
     </tr>
     <tr>
       <td>

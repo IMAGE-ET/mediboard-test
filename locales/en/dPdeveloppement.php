@@ -7,6 +7,7 @@ $locales['mod-dPdeveloppement-tab-mnt_traduction_classes'] = "";
 $locales['mod-dPdeveloppement-tab-view_logs'] = "";
 $locales['mod-dPdeveloppement-tab-view_metrique'] = "";
 $locales['mod-dPdeveloppement-tab-vw_refMandatory'] = "";
-$locales['module-dPdeveloppement-court'] = "Outils";
-$locales['module-dPdeveloppement-long'] = "Outils";
+$locales['mod-dPdeveloppement-tab-form_tester'] = 'Form tester';
+$locales['module-dPdeveloppement-court'] = "Dev tools";
+$locales['module-dPdeveloppement-long'] = "Development tools";
 ?>
