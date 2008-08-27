@@ -33,6 +33,7 @@ $sejour->loadRefs();
 $sejour->loadRefsAffectations();   
 $operations = $sejour->_ref_operations;
 $affectations = $sejour->_ref_affectations;
+$datesOperation = array();
 
 foreach ($operations as $key) {
 	$key->loadRefPlageOp();
@@ -49,6 +50,7 @@ $tabOperationExpect = array();
 $tabOperationDone = array();
 
 $diagramme = array();
+
 foreach ($datesOperation as &$date) {
 	$estEnSalle = $date['entree_salle'] && $date['sortie_salle'] == null;
 	$estSortieSalle = $date['sortie_salle'] && $date['entree_reveil'] == null;
@@ -75,8 +77,7 @@ if ($operation_id != null) {
 	// Récuperation du sejour sélectionné
 	$operation = new COperation;
 	$operation->load($operation_id);
-	$operation->loadRefs();
-	
+	$operation->loadRefsFwd();
 	$estEnSalle = $operation->entree_salle && $operation->sortie_salle == null;
 	$estSortieSalle = $operation->sortie_salle && $operation->entree_reveil == null;
 	$estSalleReveil = $operation->sortie_salle && $operation->entree_reveil;
@@ -95,19 +96,16 @@ if ($operation_id != null) {
 		$diagramme['bloc']['checkCurrent'] = "check";
 	} else if (count($tabOperationExpect) != 0) {
 		$diagramme['bloc']['idCurrent'] = $tabOperationExpect[0]->_id;
-		if($diagramme['bloc']['checkCurrent'] != "check") {
 			$diagramme['bloc']['checkCurrent'] = "check";
-		}
+
 	} else if (count($tabOperationDone) != 0) {
 		$diagramme['bloc']['idCurrent'] = $tabOperationDone[0]->_id;
-		if($diagramme['bloc']['checkCurrent'] != "check") {
 			$diagramme['bloc']['checkCurrent'] = "check";
-		}
+
 	} else {
 		$diagramme['bloc']['idCurrent'] = $date['id'];
-		if($diagramme['bloc']['checkCurrent'] != "check") {
 			$diagramme['bloc']['checkCurrent'] = "check";
-		}
+
 	}
 } else {
 	if (count($tabOperationCurrent) != 0) {
@@ -115,27 +113,17 @@ if ($operation_id != null) {
 		$diagramme['bloc']['type'] = "current";
 		$diagramme['bloc']['checkCurrent'] = "check";
 		$operation = $tabOperationCurrent;
-	} else if (count($tabOperationExpect) != 0) {
-		$diagramme['bloc']['idCurrent'] = $tabOperationCurrent[0]->_id;
+	} else if (count($tabOperationExpect) != 0) {		
+		$diagramme['bloc']['idCurrent'] = $tabOperationExpect[0]->_id;
 		$diagramme['bloc']['type'] = "expect";
-		if($diagramme['bloc']['checkCurrent'] != "check") {
-			$diagramme['bloc']['checkCurrent'] = "check";
-		}
+		$diagramme['bloc']['checkCurrent'] = "check";
 		$operation = $tabOperationExpect[0];
 	} else if (count($tabOperationDone) != 0) {
-		$diagramme['bloc']['idCurrent'] = $tabOperationCurrent[0]->_id;
+		$diagramme['bloc']['idCurrent'] = $tabOperationDone[0]->_id;
 		$diagramme['bloc']['type'] = "done";
-		if($diagramme['bloc']['checkCurrent'] != "check") {
-			$diagramme['bloc']['checkCurrent'] = "check";
-		}
+		$diagramme['bloc']['checkCurrent'] = "check";
+
 		$operation = $tabOperationDone[0];
-	} else {
-		$diagramme['bloc']['idCurrent'] = $tabOperationCurrent->_id;
-		$diagramme['bloc']['type'] = "none";
-		if($diagramme['bloc']['checkCurrent'] != "check") {
-			$diagramme['bloc']['checkCurrent'] = "check";
-		}
-		$operation = null;
 	}
 }
 
@@ -171,6 +159,7 @@ if($today >= $sejour->entree_prevue && $today <= $sejour->sortie_prevue) {
 		$diagramme['hospitalise']['affectation'] = $affectation->_id;
 }
 if ($operation) {	
+	$operation->loadRefsFwd();
 	$diagramme['bloc']['vue'] = $operation->_view;
 	$diagramme['bloc']['id'] = $operation->_id;
 	$diagramme['bloc']['salle'] = $operation->entree_salle;
@@ -184,7 +173,6 @@ if ($operation) {
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->assign("canCabinet", CModule::getCanDo("dPcabinet"));
 
 $smarty->assign("sejour"		, $sejour);
 $smarty->assign("operations", $operations);
