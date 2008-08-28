@@ -52,6 +52,7 @@ if($type_ei_id) {
   $fiche->elem_concerne = $type_fiche->concerne;
   $fiche->descr_faits = $type_fiche->desc;
   $fiche->evenements = $type_fiche->evenements;
+  $fiche->type_incident = $type_fiche->type_signalement;
   $fiche->_ref_evenement  =  $type_fiche->_ref_evenement;
   if($blood_salvage_id) {
     $blood_salvage->load($blood_salvage_id);
