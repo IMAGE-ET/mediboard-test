@@ -27,7 +27,11 @@
   
   <tr>
     <th>Chirurgien </th>
-    <td>Dr {{$operation->_ref_chir->_view}}</td>
+    <td>
+    {{if $operation->_ref_chir}}
+      Dr {{$operation->_ref_chir->_view}}
+    {{/if}}
+    </td>
   </tr>
   
   <tr>
@@ -61,7 +65,11 @@
 
   <tr>
     <th>Medecin traitant </th>
-    <td>{{$patient->_ref_medecin_traitant->_view}}</td>
+    <td>
+    {{if $patient->_ref_medecin_traitant}}
+      {{$patient->_ref_medecin_traitant->_view}}
+    {{/if}}
+    </td>
   </tr>
   
   <tr>
