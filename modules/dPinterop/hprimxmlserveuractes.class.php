@@ -31,13 +31,13 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
     $group = new CGroups();
     $group->load($g);
-    $this->addAgent($agents, "système", $group->text, $group->text);
+    $this->addAgent($agents, "système", $group->_id, $group->text);
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
     
     $destinataire = $this->addElement($enteteMessage, "destinataire");
     $agents = $this->addElement($destinataire, "agents");
     $this->addAgent($agents, "application", "SANTEcom", "Siemens Health Services: S@NTE.com");
-    $this->addAgent($agents, "système", $group->text, $group->text);
+    $this->addAgent($agents, "système", $group->_id, $group->text);
   }
   
   function setFinalPrefix($mbOp) {
