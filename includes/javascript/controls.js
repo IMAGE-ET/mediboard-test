@@ -112,8 +112,8 @@ Element.addMethods('input', {
     if (element.size) element.size += newChars;
     else              element.size = mask.length;
 
-    if (element.maxlength) element.maxlength += newChars;
-    else                   element.maxlength = mask.length;
+    if (element.maxLength) element.maxLength += newChars;
+    else                   element.maxLength = mask.length;
     
     // Add a placeholder
     function addPlaceholder (c, r) {
