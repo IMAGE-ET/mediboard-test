@@ -41,7 +41,7 @@ Main.add(function () {
       <input type="hidden" class="notNull" name="tag" value="{{$_sejour->_ref_numdos->tag}}" />
       <input type="hidden" class="notNull" name="object_id" value="{{$_sejour->_id}}" />
       <input type="hidden" class="notNull" name="object_class" value="CSejour" />
-      <input type="hidden" class="notNull" name="last_update" value="" />
+      <input type="hidden" name="last_update" value="{{$_sejour->_ref_numdos->last_update}}" />
     </td>
     <td class="button" rowspan="2">
       <button class="submit" type="submit">Valider</button>

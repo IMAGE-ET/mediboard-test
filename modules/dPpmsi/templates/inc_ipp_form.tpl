@@ -42,7 +42,7 @@ Main.add(function () {
       <input type="hidden" class="notNull" name="tag" value="{{$patient->_ref_IPP->tag}}" />
       <input type="hidden" class="notNull" name="object_id" value="{{$patient->_id}}" />
       <input type="hidden" class="notNull" name="object_class" value="CPatient" />
-      <input type="hidden" class="notNull" name="last_update" value="" />
+      <input type="hidden" name="last_update" value="{{$patient->_ref_IPP->last_update}}" />
     </td>
     <td class="button">
       <button class="submit" type="submit">Valider</button>
