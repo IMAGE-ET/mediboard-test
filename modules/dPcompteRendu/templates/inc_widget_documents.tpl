@@ -8,6 +8,10 @@
 {{assign var=object_class value=$object->_class_name}}
 {{assign var=object_id value=$object->_id}}
 
+<script type="text/javascript">
+  Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
+</script>
+
 <form name="DocumentAdd-{{$object->_guid}}" action="?m={{$m}}" method="post">
 
 <table class="form">
@@ -67,17 +71,7 @@
 
 </form>
 
-<script>
-Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
-</script>
-
-{{assign var=collapse value=false}}
-{{*if $object->_ref_documents|@count && $mode == "collapse"*}}
-{{if $object->_ref_documents|@count}}
-{{assign var=collapse value=true}}
-{{/if}}
-
-{{if $collapse && $collapse!="hide"}}
+{{if $object->_ref_documents|@count && $mode != "hide"}}
 <table class="tbl">
   <tr id="DocsEffect-{{$object->_guid}}-trigger">
     <th class="category" colspan="2">
@@ -86,17 +80,17 @@ Main.add( function() { prepareForm("DocumentAdd-{{$object->_guid}}"); } )
     </th>
   </tr>
   
-  {{if $collapse == "collapse"}}
-  <script type="text/javascript">
-    Main.add(function () {
-    new PairEffect("DocsEffect-{{$object->_guid}}", { 
-      bStoreInCookie: true
-    });
-    });
-  </script>
-  <tbody id="DocsEffect-{{$object->_guid}}" style="display:none;">
+  {{if $mode == "collapse"}}
+    <script type="text/javascript">
+      Main.add(function () {
+        new PairEffect("DocsEffect-{{$object->_guid}}", { 
+          bStoreInCookie: true
+        });
+      });
+    </script>
+    <tbody id="DocsEffect-{{$object->_guid}}" style="display:none;">
   {{else}}
-  <tbody>
+    <tbody>
   {{/if}}
   
 	  {{foreach from=$object->_ref_documents item=document}}
