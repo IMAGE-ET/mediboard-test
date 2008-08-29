@@ -21,10 +21,6 @@ function checkPlage() {
   return true;
 }
 
-Main.add(function () {
-  regRedirectFlatCal("{{$date}}", "?m={{$m}}&tab={{$tab}}&date=");
-});
-
 function popPlanning(debut) {
   var url = new Url;
   url.setModuleAction("dPbloc", "view_planning");
