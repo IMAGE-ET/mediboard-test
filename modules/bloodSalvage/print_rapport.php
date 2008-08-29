@@ -8,10 +8,9 @@
 */
 
 
-global $AppUI, $can, $m;
+global $AppUI, $m;
 $AppUI->requireModuleFile("bloodSalvage", "inc_personnel");
 
-$can->needsEdit();
 
 $blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();

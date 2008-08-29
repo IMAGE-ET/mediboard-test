@@ -68,21 +68,7 @@ function submitBloodSalvageTiming(oForm) {
   });
 }
 
-function submitInfos(oForm) {
-  submitFormAjax(oForm, 'systemMsg', { 
-    onComplete : function() { 
-      reloadInfos(oForm.blood_salvage_id.value);
-    } 
-  });
-}
-
-function reloadInfos(blood_salvage_id) {
-  var url = new Url(); 
-    url.setModuleAction("bloodSalvage", "httpreq_vw_bloodSalvage_volumes");
-    url.addParam("blood_salvage_id", blood_salvage_id);
-    url.requestUpdate('cell-saver-infos', { waitingText: null } );
-}
-
+ 
 function reloadTotalTime(blood_salvage_id) {
   var url = new Url();
   url.setModuleAction("bloodSalvage", "httpreq_total_time");
