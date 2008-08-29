@@ -132,7 +132,7 @@
            {{tr}}CCellSaver.modele{{/tr}} : {{$blood_salvage->_ref_cell_saver->_view}} <br /> 
            {{tr}}CBloodSalvage-receive_kit{{/tr}} :{{if $blood_salvage->receive_kit}} Lot n° {{$blood_salvage->receive_kit}} {{/if}} &nbsp;
            {{tr}}CBloodSalvage-wash_kit{{/tr}} :{{if $blood_salvage->wash_kit}} Lot n° {{$blood_salvage->wash_kit}} {{/if}}<br />
-           {{tr}}CBloodSalvage-anticoagulant_cip{{/tr}} : {{$anticoagulant->libelle}} <br /> <br />
+           {{tr}}CBloodSalvage-anticoagulant_cip{{/tr}} : {{$anticoagulant}} <br /> <br />
            {{tr}}CBloodSalvage-nurse_sspi.report{{/tr}}{{if $tabAffected|@count>1}}s{{/if}}  : 
            {{foreach from=$tabAffected item=nurse name=affect}}
              {{$nurse->_ref_personnel->_ref_user->_view}} &nbsp;
@@ -192,6 +192,7 @@
         <tr>
           <td>
             {{if $blood_salvage->type_ei_id}} {{tr}}CTypeEi-type_ei_id-desc{{/tr}} : {{$blood_salvage->_ref_incident_type->_view}} {{else}} Aucun incident transfusionnel {{/if}}<br />
+            {{tr}}BloodSalvage.quality-protocole{{/tr}} : {{mb_value object=$blood_salvage field="sample"}}
           </td>
         </tr>
       </table>

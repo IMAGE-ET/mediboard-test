@@ -28,10 +28,15 @@ if($blood_salvage_id) {
 	$blood_salvage->_ref_operation->_ref_patient->loadRefs();
 	$blood_salvage->_ref_operation->_ref_patient->loadRefDossierMedical();
 	$blood_salvage->_ref_operation->_ref_patient->loadRefConstantesMedicales();
-	
-	$anticoag = new CBcbProduit();
-	if($blood_salvage->anticoagulant_cip) {
-	$anticoag->load($blood_salvage->anticoagulant_cip);
+	if(CModule::getActive("dPmedicament")){
+		$anticoag = new CBcbProduit();
+		if($blood_salvage->anticoagulant_cip) {
+	  	$anticoag->load($blood_salvage->anticoagulant_cip);
+		}
+	} else {
+		$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
+    $anticoagulant_list = explode("|",$list);
+    $anticoag = $anticoagulant_list[$blood_salvage->anticoagulant_cip];		
 	}
 	
   $list_nurse_sspi= CPersonnel::loadListPers("reveil");
@@ -48,6 +53,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("blood_salvage",$blood_salvage);
 $smarty->assign("isInDM",$isInDM);
 $smarty->assign("tabAffected",$tabAffected);
-$smarty->assign("anticoagulant",$anticoag);
+$smarty->assign("anticoagulant",CModule::getActive("dPmedicament") ? $anticoag->libelle : $anticoag);
 $smarty->display("print_rapport.tpl");
 ?>

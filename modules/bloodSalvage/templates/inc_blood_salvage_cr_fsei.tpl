@@ -14,10 +14,10 @@
 	      </select>
 	   </form>
     </td>
-    <th>Protocole qualité</th>
+    <th>{{tr}}BloodSalvage.quality-protocole{{/tr}}</th>
     <td>
     {{else}}
-    <th>Protocole qualité</th>
+    <th>{{tr}}BloodSalvage.quality-protocole{{/tr}}</th>
     <td colspan="4">
     {{/if}}    
      <form name="qualite" action="?m={{$m}}" method="post">
