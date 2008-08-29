@@ -23,7 +23,15 @@ Main.add(function(){
 	<div id="materiel">
    {{include file=inc_blood_salvage_conso.tpl}}
   </div>
- 
+ <div id="unregister" style="float:left">
+ <form name="inscriptionRSPO" action="?m={{$m}}" method="post">
+  <input type="hidden" name="blood_salvage_id" value="{{$blood_salvage->_id}}">
+  <input type="hidden" name="m" value="bloodSalvage" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="dosql" value="do_bloodSalvage_aed" />
+  <button type="button" class="cancel" onclick="confirmDeletion(this.form,{typeName:'',objName:'{{$blood_salvage->_view|smarty:nodefaults|JSAttribute}}'})">Désinscrire</button>
+  </form>
+ </div>
 {{else}}
 	<div class="big-info">
 		Aucun Cell Saver n'est prévu pour cette opération.

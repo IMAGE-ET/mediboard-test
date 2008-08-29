@@ -63,7 +63,7 @@ if ($op) {
   $where = array();
   $where["operation_id"] = "='$selOp->_id'";  
   $blood_salvage->loadObject($where);
-  
+  $blood_salvage->loadRefs();
   $timing["_recuperation_start"] = array();
   foreach($timing as $key => $value) {
     for($i = -CAppUI::conf("dPsalleOp max_sub_minutes"); $i < CAppUI::conf("dPsalleOp max_add_minutes") && $blood_salvage->$key !== null; $i++) {
