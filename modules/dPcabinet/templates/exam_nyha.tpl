@@ -26,7 +26,7 @@ window.opener.ExamDialog.reload('{{$exam_nyha->consultation_id}}');
   <tr>
     <th><strong>Classe 1</strong></th>
     <td class="text" colspan="2">
-      Patient porteur d'une cardiopathie snas limitation de l'activité physique.
+      Patient porteur d'une cardiopathie sans limitation de l'activité physique.
       Une activité physique ordinaire n'entraîne aucun symptôme.
     </td>
   </tr>
