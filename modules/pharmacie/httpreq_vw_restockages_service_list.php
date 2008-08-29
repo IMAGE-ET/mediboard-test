@@ -34,13 +34,15 @@ $deliveries_global = array();
 
 // Creation d'un tableau de patient
 $patients = array();
-foreach($deliveries as $_delivery){
-  if($_delivery->patient_id){
-    $_delivery->loadRefPatient();
-    $deliveries_nominatif[$_delivery->_id] = $_delivery;
-  } else {
-    $_delivery->loadRefService();
-    $deliveries_global[$_delivery->_id] = $_delivery;
+if (count($deliveries)) {
+  foreach($deliveries as $_delivery){
+    if($_delivery->patient_id){
+      $_delivery->loadRefPatient();
+      $deliveries_nominatif[$_delivery->_id] = $_delivery;
+    } else {
+      $_delivery->loadRefService();
+      $deliveries_global[$_delivery->_id] = $_delivery;
+    }
   }
 }
 

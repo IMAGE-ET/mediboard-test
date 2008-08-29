@@ -173,10 +173,12 @@ if($prescription_id){
 	  $list_done = $deliv->loadList($where, null, null, null, $ljoin);
 	  $done[$code] = array();
 	  
-	  if (count($list_done)) $done[$code][0] = 0;
-	  foreach ($list_done as $d) {
-	    $done[$code][] = $d;
-	    $done[$code][0] += $d->quantity;
+	  if (count($list_done)) {
+	    $done[$code][0] = 0;
+  	  foreach ($list_done as $d) {
+  	    $done[$code][] = $d;
+  	    $done[$code][0] += $d->quantity;
+  	  }
 	  }
 	  
 	  if(isset($delivrances[$code])) {

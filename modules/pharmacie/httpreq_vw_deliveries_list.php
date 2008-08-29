@@ -36,18 +36,20 @@ $stocks_service = array();
 
 // Creation d'un tableau de patient
 $patients = array();
-foreach($deliveries as $_delivery){
-  $_delivery->loadRefsFwd();
-  $_delivery->_ref_stock->loadRefsFwd();
-  if($_delivery->patient_id){
-  	$_delivery->loadRefPatient();
-    $deliveries_nominatif[$_delivery->_id] = $_delivery;
-  } else {
-  	$_delivery->loadRefService();
-  	$deliveries_global[$_delivery->_id] = $_delivery;
+if (count($deliveries)) {
+  foreach($deliveries as $_delivery){
+    $_delivery->loadRefsFwd();
+    $_delivery->_ref_stock->loadRefsFwd();
+    if($_delivery->patient_id){
+    	$_delivery->loadRefPatient();
+      $deliveries_nominatif[$_delivery->_id] = $_delivery;
+    } else {
+    	$_delivery->loadRefService();
+    	$deliveries_global[$_delivery->_id] = $_delivery;
+    }
+    
+    $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
   }
-  
-  $stocks_service[$_delivery->_id] = CProductStockService::getFromCode($_delivery->_ref_stock->_ref_product->code, $service_id);
 }
 
 // Création du template
