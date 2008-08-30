@@ -13,23 +13,25 @@ $can->needsEdit();
 
 $filter = new COperation();
 
-$debutact = $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate("-1 YEAR"));
-$rectif = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
-$debutact = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
+global $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
 
-$finact = $filter->_date_max = mbGetValueFromGetOrSession("_date_max",  mbDate());
-$rectif = mbTransformTime("+0 DAY", $filter->_date_max, "%d")-1;
-$finact = $filter->_date_max = mbDate("-$rectif DAYS", $filter->_date_max);
-$finact = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
-$finact = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
+$debutact      = $filter->_date_min = mbGetValueFromGetOrSession("_date_min", mbDate("-1 YEAR"));
+$rectif        = mbTransformTime("+0 DAY", $filter->_date_min, "%d")-1;
+$debutact      = $filter->_date_min = mbDate("-$rectif DAYS", $filter->_date_min);
 
-$salle_id = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
-$codes_ccam = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
-$prat_id = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
+$finact        = $filter->_date_max = mbGetValueFromGetOrSession("_date_max",  mbDate());
+$rectif        = mbTransformTime("+0 DAY", $filter->_date_max, "%d")-1;
+$finact        = $filter->_date_max = mbDate("-$rectif DAYS", $filter->_date_max);
+$finact        = $filter->_date_max = mbDate("+ 1 MONTH", $filter->_date_max);
+$finact        = $filter->_date_max = mbDate("-1 DAY", $filter->_date_max);
+
+$prat_id       = $filter->_prat_id = mbGetValueFromGetOrSession("prat_id", 0);
+$salle_id      = $filter->salle_id = mbGetValueFromGetOrSession("salle_id", 0);
+$discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
+$codes_ccam    = $filter->codes_ccam = strtoupper(mbGetValueFromGetOrSession("codes_ccam", ""));
 $discipline_id = $filter->_specialite = mbGetValueFromGetOrSession("discipline_id", 0);
 
 // map Graph Interventions
-global $debutact, $finact, $prat_id, $salle_id, $discipline_id, $codes_ccam;
 CAppUI::requireModuleFile($m, "inc_graph_activite");
 
 global $graph, $options;
