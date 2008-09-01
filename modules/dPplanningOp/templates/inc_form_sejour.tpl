@@ -422,7 +422,7 @@ Main.add( function(){
   <td>
     <select name="type" onchange="changeTypeHospi()">
     {{foreach from=$sejour->_enumsTrans.type item="curr_type" key="key"}}
-      {{if $key != 'urg' || !$urgInstalled}}
+      {{if $key != 'urg' || $urgInstalled}}
       <option value="{{$key}}" {{if $sejour->type == $key}}selected="selected"{{/if}}>{{$curr_type}}</option>
       {{/if}}
     {{/foreach}}
