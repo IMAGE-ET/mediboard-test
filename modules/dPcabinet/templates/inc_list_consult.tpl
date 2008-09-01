@@ -34,15 +34,19 @@
 </form>
 {{/if}}
 
+{{if !@$listPlages|@count}}
+  {{assign var="listPlages" value=false}}
+{{/if}}
+
 {{if $boardItem}}
-  {{assign var="font" value="font-size: 9px;"}} 
-  <table class="tbl">
+{{assign var="font" value="font-size: 9px;"}} 
+<table class="tbl">
 {{elseif $board}}
-  {{assign var="font" value="font-size: 100%;"}} 
-  <table class="tbl">
+{{assign var="font" value="font-size: 100%;"}} 
+<table class="tbl">
 {{else}}
-  {{assign var="font" value="font-size: 9px;"}} 
-  <table class="tbl" style="width: 250px">
+{{assign var="font" value="font-size: 9px;"}} 
+<table class="tbl" style="width: 250px">
 {{/if}}
 
   <tr>
@@ -52,8 +56,8 @@
     <th>Heure</th>
     <th colspan="2">Patient / Motif</th>
   </tr>
-{{if $listPlage|@count}}
-{{foreach from=$listPlage item=curr_plage}}
+  {{if $listPlage|@count}}
+  {{foreach from=$listPlage item=curr_plage}}
   <tr>
     <th colspan="3">{{$curr_plage->debut|date_format:"%Hh%M"}} - {{$curr_plage->fin|date_format:"%Hh%M"}}</th>
   </tr>
@@ -125,14 +129,36 @@
       {{else}}
         {{$curr_consult->motif|truncate:30:"...":true}}
       {{/if}}
+      {{if $listPlages && $canCabinet->edit}}
+      <form name="editFrm-consult{{$curr_consult->_id}}" action="?m={{$m}}" method="post">
+      <input type="hidden" name="dosql" value="do_consultation_aed" />
+      <input type="hidden" name="del" value="0" />
+      {{mb_field object=$curr_consult field="consultation_id" hidden=1 prop=""}}
+      <select name="plageconsult_id" onchange="this.form.submit();" style="font-size: 9px;">
+        <option value="" style="font-size: 9px;">
+          &mdash; Changer de praticien
+        </option>
+        {{foreach from=$listPlages item=plagesprat}}
+        {{foreach from=$plagesprat.plages item=destination}}
+        {{if $destination->_ref_chir->_id != $curr_plage->_ref_chir->_id}}
+        <option value={{$destination->_id}} style="font-size: 9px;">
+          {{$destination->_ref_chir->_view}}
+          ({{$destination->debut|date_format:"%Hh%M"}} - {{$destination->fin|date_format:"%Hh%M"}})
+        </option>
+        {{/if}}
+        {{/foreach}}
+        {{/foreach}}
+      </select>
+      </form>
+      {{/if}}
     </td>
   </tr>
   </tbody>
   {{/foreach}}
-{{/foreach}}
-{{else}}
+  {{/foreach}}
+  {{else}}
   <tr>
     <th colspan="3" style="font-weight: bold;">Pas de consultations</th>
   </tr>
-{{/if}}
+  {{/if}}
 </table>

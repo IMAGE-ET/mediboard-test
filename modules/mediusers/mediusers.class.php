@@ -571,10 +571,13 @@ class CMediusers extends CMbObject {
    * @param $group_id ref|CGroup filter on group
    * @return array<CFunctions> Found functions
    */
-  static function loadFonctions($permType = PERM_READ, $group_id = null) {
+  static function loadFonctions($permType = PERM_READ, $group_id = null, $type = null) {
     global $g;
     $functions = new CFunctions;
     $functions->group_id = mbGetValue($group_id, $g);
+    if($type) {
+      $functions->type = $type;
+    }
     $order = "text";
     $functions = $functions->loadMatchingList($order);
 
