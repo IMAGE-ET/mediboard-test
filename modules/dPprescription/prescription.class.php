@@ -625,25 +625,3 @@ class CPrescription extends CMbObject {
 }
 
 ?>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
