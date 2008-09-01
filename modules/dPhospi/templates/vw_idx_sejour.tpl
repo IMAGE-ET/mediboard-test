@@ -140,6 +140,7 @@ function loadTraitement(sejour_id, date) {
   }
 }
 
+
 function loadSuivi(sejour_id) {
   if(sejour_id) {
     var urlSuivi = new Url;

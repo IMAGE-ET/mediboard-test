@@ -60,20 +60,20 @@ ul {
     {{/foreach}}
   </tr>
   <!-- Affichage des medicaments -->
-  {{foreach from=$all_lines_med item=_all_lines_unite_prise}}
+  {{foreach from=$prescription->_lines.med item=_all_lines_unite_prise}}
     {{foreach from=$_all_lines_unite_prise key=unite_prise item=_line}}
       {{assign var=line_id value=$_line->_id}}
       <tr>
         <td class="text"  style="border: 1px solid #ccc;">{{$_line->_view}}</td>
         <td class="text"  style="border: 1px solid #ccc;">
-         {{if array_key_exists($line_id, $intitule_prise_med)}}
+         {{if array_key_exists($line_id, $prescription->_intitule_prise.med)}}
           {{if is_numeric($unite_prise)}}
           <ul>
-            <li>{{$intitule_prise_med.$line_id.autre.$unite_prise}}</li>
+            <li>{{$prescription->_intitule_prise.med.$line_id.autre.$unite_prise}}</li>
           </ul>
           {{else}}
 	        <ul>
-	        {{foreach from=$intitule_prise_med.$line_id.$unite_prise item=_prise}}
+	        {{foreach from=$prescription->_intitule_prise.med.$line_id.$unite_prise item=_prise}}
 	          <li>{{$_prise}}</li>
 	        {{/foreach}}
 	        </ul>
@@ -107,8 +107,8 @@ ul {
                      {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
                       text-align: center">
 			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($line_id, $list_prises_med.$date) && array_key_exists($unite_prise, $list_prises_med.$date.$line_id)}}
-					    {{assign var=prise_line value=$list_prises_med.$date.$line_id.$unite_prise}}	            
+			      {{if array_key_exists($line_id, $prescription->_list_prises.med.$date) && array_key_exists($unite_prise, $prescription->_list_prises.med.$date.$line_id)}}
+					    {{assign var=prise_line value=$prescription->_list_prises.med.$date.$line_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}
 	            {{/if}}
@@ -130,7 +130,7 @@ ul {
   </tr>
    
   <!-- Affichage des elements -->
-  {{foreach from=$all_lines_element key=name_chap item=elements_chap}}
+  {{foreach from=$prescription->_lines.elt key=name_chap item=elements_chap}}
     {{foreach from=$elements_chap key=name_cat item=elements_cat}}
       {{assign var=categorie value=$categories.$name_chap.$name_cat}}
       {{foreach from=$elements_cat item=_element name="foreach_cat"}}
@@ -141,11 +141,11 @@ ul {
         <td class="text" style="border: 1px solid #ccc;">
           {{if is_numeric($unite_prise)}}
           <ul>
-            <li>{{$intitule_prise_element.$element_id.autre.$unite_prise}}</li>
+            <li>{{$prescription->_intitule_prise.elt.$element_id.autre.$unite_prise}}</li>
           </ul>
           {{elseif $unite_prise != "aucune_prise"}}
 	        <ul>
-	        {{foreach from=$intitule_prise_element.$element_id.$unite_prise item=_prise}}
+	        {{foreach from=$prescription->_intitule_prise.elt.$element_id.$unite_prise item=_prise}}
 	          <li>{{$_prise}}</li>
 	        {{/foreach}}
 	        </ul>
@@ -167,8 +167,8 @@ ul {
                      {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
                       text-align: center">
 			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($element_id, $list_prises_element.$date) && array_key_exists($unite_prise, $list_prises_element.$date.$element_id)}}
-					    {{assign var=prise_line value=$list_prises_element.$date.$element_id.$unite_prise}}	            
+			      {{if array_key_exists($element_id, $prescription->_list_prises.elt.$date) && array_key_exists($unite_prise, $prescription->_list_prises.elt.$date.$element_id)}}
+					    {{assign var=prise_line value=$prescription->_list_prises.elt.$date.$element_id.$unite_prise}}	            
 	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
 	              {{assign var=quantite value=$prise_line.$_hour}}
 	            {{/if}}
@@ -183,13 +183,11 @@ ul {
 	      {{/foreach}}
         </tr>
         
-        
         {{if $smarty.foreach.foreach_elt.last && $smarty.foreach.foreach_cat.last}}
         <tr>
           <td colspan="30" style="padding:0; height: 1px; border: 1px solid black"></td>
         </tr>
         {{/if}}
-        
         {{/foreach}}
       {{/foreach}}
     {{/foreach}}

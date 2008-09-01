@@ -13,24 +13,6 @@ $date            = mbDate();
 
 $dates = array($date, mbDate("+ 1 DAY", $date), mbDate("+ 2 DAY", $date));
 $logs = array();
-
-// Initialisations
-foreach($dates as $_date){
-	// Initialisations
-	$prises_med[$_date] = array();
-	$lines_med[$_date] = array();
-	$list_prises_med[$_date] = array();
-	$prises_element[$_date] = array();
-	$lines_element[$_date] = array();
-	$list_prises_element[$_date] = array();
-	$nb_produit_by_cat[$_date] = array();
-}
-
-
-$all_lines_med = array();
-$all_lines_element = array();
-$intitule_prise_med = array();
-$intitule_prise_element = array();
 $last_log = new CUserLog();
 
 // Chargement de la prescription
@@ -70,51 +52,43 @@ $sejour->loadCurrentAffectation(mbDateTime());
 // Chargement des lignes
 $prescription->loadRefsLinesMed("1");
 $prescription->loadRefsLinesElementByCat();
-$prescription->_ref_object->loadRefPrescriptionTraitement();
-	  
-$lines["medicament"] = $prescription->_ref_prescription_lines;
-$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
-if($traitement_personnel->_id){
-  $traitement_personnel->loadRefsLinesMed("1");
-}
-$lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
+$prescription->_ref_object->loadRefPrescriptionTraitement();	  
+$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1");
 
 $hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
 sort($hours); 
 
+$types = array("med", "elt");
+foreach($types as $type){
+  $prescription->_prises[$type] = array();
+  $prescription->_lines[$type] = array();
+  $prescription->_intitule_prise[$type] = array();
+ }
+
+  
 foreach($dates as $_date){
-  $prescription->calculPlanSoin($lines, $_date, $lines_med[$_date], $prises_med[$_date], $list_prises_med[$_date], $lines_element[$_date], 
-	                              $prises_element[$_date], $list_prises_element[$_date], $nb_produit_by_cat[$_date], $all_lines_med, $all_lines_element,
-	                              $intitule_prise_med, $intitule_prise_element);
-	
+	foreach($types as $type){
+	  $prescription->_list_prises[$type][$_date] = array();
+  }
+
+  $prescription->calculPlanSoin($_date, 1);
   foreach($hours as $_hour){
   	$tabHours[$_date]["$_date $_hour:00:00"] = $_hour;
   }
 }
-
 
 // Chargement des categories
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("prescription", $prescription);
 $smarty->assign("last_log", $last_log);
 $smarty->assign("pharmacien", $pharmacien);
-$smarty->assign("list_prises_med", $list_prises_med);
-$smarty->assign("list_prises_element", $list_prises_element);
 $smarty->assign("tabHours", $tabHours);
 $smarty->assign("prescription_id", $prescription_id);
 $smarty->assign("dates", $dates);
-$smarty->assign("prises_med", $prises_med);
-$smarty->assign("lines_med", $lines_med);
-$smarty->assign("prises_element",$prises_element);
-$smarty->assign("lines_element", $lines_element);
-$smarty->assign("nb_produit_by_cat",$nb_produit_by_cat);
 $smarty->assign("categories", $categories);
-$smarty->assign("all_lines_med", $all_lines_med);
-$smarty->assign("all_lines_element", $all_lines_element);
-$smarty->assign("intitule_prise_med", $intitule_prise_med);
-$smarty->assign("intitule_prise_element", $intitule_prise_element);
 $smarty->assign("patient", $patient);
 $smarty->assign("sejour", $sejour);
 $smarty->assign("poids", $poids);

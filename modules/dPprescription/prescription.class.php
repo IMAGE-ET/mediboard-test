@@ -46,6 +46,17 @@ class CPrescription extends CMbObject {
   var $_filter_time_min = null;
   var $_filter_time_max = null;
   
+  
+  // Dossier/Feuille de soin
+  var $_prises = null;
+  var $_list_prises = null;
+  var $_lines = null;
+  var $_administrations = null;
+  var $_transmissions = null;
+	var $_prises_med = null;
+	var $_list_prises_med = null;
+				  
+ 
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'prescription';
@@ -544,179 +555,95 @@ class CPrescription extends CMbObject {
 	  return $listFavoris;  	
   }
   
-  /*
-   * Chargement des prises
-   */
-  function calculPrisesSoin($date, &$_line, &$lines, &$list_prises, &$all_lines, &$intitule_prise, &$tab_count, &$prises, $mode_feuille_soin){
-  	foreach($_line->_ref_prises as &$_prise){
-			$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
-			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
-			$poids_ok = 1;
-			if(!is_numeric($_prise->unite_prise) && $_line->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
-				//$quantite = 0;
-				$_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
-        // Dans le cas d'un unite_prise/kg
-        if($_unite_prise != $_prise->unite_prise){
-          // On recupere le poids du patient pour calculer la quantite
-          if(!$_line->_ref_prescription->_ref_object->_ref_patient){
-           $_line->_ref_prescription->_ref_object->loadRefPatient();
-          }
-          $patient =& $_line->_ref_prescription->_ref_object->_ref_patient;          
-          if(!$patient->_ref_constantes_medicales){
-            $patient->loadRefConstantesMedicales();
-          }
-          $const_med = $patient->_ref_constantes_medicales;
-          $poids     = $const_med->poids;
-					
-          if($poids){
-            $_prise->quantite  *= $poids;
-          } else {
-          	$poids_ok = 0;
-          	$_prise->quantite = 0;
-          }
-        }
-    	}
-			
-			// Stockage du nombre de ligne de medicaments
-		  if(!@array_key_exists($key_tab, $lines[$_line->_id])){
-		    if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
-		  	  @$tab_count++;
-		  	}
-			}
-			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
-				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-				if(($_line->_fin_reelle > $dateTimePrise || !$_line->_fin_reelle) && $poids_ok){
-	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
-				}
-			}
-	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
-	 	  	
-	 	  	$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-	 	  	if($_line->_fin_reelle > $dateTimePrise && $poids_ok){
-	 	  	  @$list_prises[$_line->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
-	 	  	}
-	 	  }
-	 	  if ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
-	 	  	continue;
-	 	  }
-	 	  $lines[$_line->_id][$key_tab] = $_line;
-		  $prises[$_line->_id][$key_tab][] = $_prise;
-		  $all_lines[$_line->_id][$key_tab] = $_line;			
-	 	  $intitule_prise[$_line->_id][$key_prise][$_prise->_id] = $_prise->_view;
-	  }
-  }
-  
-  /*
-   * Chargement des administrations et transmissions
-   */
-  function calculAdministrations($date, &$_line, &$lines, &$all_lines, &$administrations, &$transmissions, &$nb_produit, $mode_feuille_soin){
-    if(!$mode_feuille_soin){
-			$_line->loadRefsAdministrations($date);
-			foreach($_line->_ref_administrations as $_administration){
-				$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-				@$administrations[$_line->_id][$key_administration][$_administration->_heure]["quantite"] += $_administration->quantite;
-				
-				// Chargement du log de creation de l'administration
-			  $log = new CUserLog;
-        $log->object_id = $_administration->_id;
-				$log->object_class = $_administration->_class_name;
-				$log->loadMatchingObject();
-				$log->loadRefsFwd();
-				
-				if($_line->_class_name == "CPrescriptionLineMedicament"){
-				  $_line->_ref_produit->loadConditionnement();
-				  $log->_ref_object->_ref_object =& $_line;
-				}
-				
-				if($_administration->prise_id){
-					$_administration->loadRefPrise();
-				}
-				@$administrations[$_line->_id][$key_administration][$_administration->_heure]["administrations"][$_administration->_id] = $log;
-				$_administration->loadRefsTransmissions();  
-				@$transmissions[$_line->_id][$key_administration][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
-				@$transmissions[$_line->_id][$key_administration][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
-			}		
-    }		
-    if(!$_line->_ref_prises){
-      $_line->loadRefsPrises();
-    	}
-  }
-  
-  
-  // Generation du plan de soin sous forme de tableau
-  function calculPlanSoin(&$lines, $date, &$lines_med, &$prises_med, &$list_prises_med, &$lines_element, &$prises_element, 
-  												&$list_prises_element, &$nb_produit_by_cat, &$all_lines_med="", &$all_lines_element="", &$intitule_prise_med="", 
-  												&$intitule_prise_element="", &$administrations="", &$transmissions=""){
 
-    $mode_feuille_soin = is_array($administrations) ? 0 : 1;
-		
+  /*
+   * Génération du Dossier/Feuille de soin
+   */
+  function calculPlanSoin($date, $mode_feuille_soin = 0){  	
+    // Stockage du tableau de ligne de medicaments
+  	$lines["medicament"] = $this->_ref_prescription_lines;
+    $lines["traitement"] = $this->_ref_object->_ref_prescription_traitement->_ref_prescription_lines;
+      	
   	// Parcours des lignes
     foreach($lines as $cat_name => $lines_cat){
     	if(count($lines_cat)){
-    	foreach($lines_cat as &$_line_med){
-    		// Si la ligne est prescrite pour la date donnée
-        if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle)) || (!$_line_med->_fin_reelle && $_line_med->_fin_reelle <= $date && $date >= $_line_med->debut)){
-        	
-        	// Chargement des administrations
-        	$this->calculAdministrations($date, $_line_med, $lines_med, $all_lines_med, $administrations, $transmissions, $nb_produit_by_cat["med"], $mode_feuille_soin);
-        	
-        	// Si aucune prise
-					if(count($_line_med->_ref_prises) < 1){
-						$lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
-						$all_lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
-					  if(!@array_key_exists($key_tab, $lines_med[$_line_med->_id])){
-						  @$nb_produit_by_cat["med"]++;
+	      foreach($lines_cat as &$_line_med){
+	      	// Si la ligne est prescrite pour la date donnée
+		      if(($date >= $_line_med->debut && $date <= mbDate($_line_med->_fin_reelle)) || (!$_line_med->_fin_reelle && $_line_med->_fin_reelle <= $date && $date >= $_line_med->debut)){     	
+		       	// Chargement des administrations
+						$_line_med->calculAdministrations($date, $mode_feuille_soin);
+						// Si aucune prise
+						if(count($_line_med->_ref_prises) < 1){
+							$this->_lines["med"][$_line_med->_id]["aucune_prise"] = $_line_med;
+						  if(!@array_key_exists($key_tab, $this->_lines["med"][$_line_med->_id])){
+							  @$this->_nb_produit_by_cat["med"]++;
+							}
+							continue;
 						}
-						continue;
-					}
-
-					// Chargement des prises
-					$this->calculPrisesSoin($date, $_line_med, $lines_med, $list_prises_med, $all_lines_med, $intitule_prise_med, $nb_produit_by_cat["med"], $prises_med, $mode_feuille_soin);
-					if(!$mode_feuille_soin){
-						if(@array_key_exists("aucune_prise", $administrations[$_line_med->_id])){
-							$lines_med[$_line_med->_id]["aucune_prise"] = $_line_med;
-							 @$nb_produit_by_cat["med"]++;
-						}
-					}		
-        }
-      }
-    }	  	 
-  } 
-   
-	 // Parcours des elements
-	 foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
-	   foreach($elements_chap as $name_cat => $elements_cat){
-		   foreach($elements_cat as &$_elements){
-		 	  foreach($_elements as &$_line_element){
-		      if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
-		      	// Chargement des administrations et des transmissions
-		      	$this->calculAdministrations($date, $_line_element, $lines_element[$name_chap][$name_cat], $all_lines_element[$name_chap][$name_cat],
-		                                   $administrations[$name_chap][$name_cat], $transmissions[$name_chap][$name_cat], $nb_produit_by_cat[$name_cat], $mode_feuille_soin);
-		      	
-		        // Si aucune prise
-						if(count($_line_element->_ref_prises) < 1){
-							$lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-							$all_lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-						 if(!@array_key_exists($key_tab, $lines_element[$name_chap][$name_cat][$_line_element->_id])){
-						   @$nb_produit_by_cat[$name_cat]++;
-						 }
-						 continue;
-						}  
-	
 						// Chargement des prises
-						$this->calculPrisesSoin($date, $_line_element, $lines_element[$name_chap][$name_cat], $list_prises_element, $all_lines_element[$name_chap][$name_cat], $intitule_prise_element, $nb_produit_by_cat[$name_cat], $prises_element, $mode_feuille_soin);
+						$_line_med->calculPrises($this, $date, $mode_feuille_soin);
 						if(!$mode_feuille_soin){
-							if(@array_key_exists("aucune_prise", $administrations[$name_chap][$name_cat][$_line_element->_id])){
-							  $lines_element[$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
-							   @$nb_produit_by_cat[$name_cat]++;
-						  }
+							if(@array_key_exists("aucune_prise", $_line_med->_administrations)){
+								$this->_lines["med"][$_line_med->_id]["aucune_prise"] = $_line_med;
+								@$this->_nb_produit_by_cat["med"]++;
+							}
 						}
 		      }
-		  	}
-		  }
-	  }	  
-	 } 					  	
- }
+	      }
+    	} 
+    } 
+		// Parcours des elements
+		foreach($this->_ref_prescription_lines_element_by_cat as $name_chap => $elements_chap){
+		  foreach($elements_chap as $name_cat => $elements_cat){
+		    foreach($elements_cat as &$_elements){
+		 	    foreach($_elements as &$_line_element){
+		        if(($date >= $_line_element->debut && $date <= mbDate($_line_element->_fin_reelle))){
+		      	  // Chargement des administrations et des transmissions
+		      	  $_line_element->calculAdministrations($date, $mode_feuille_soin);
+			        // Si aucune prise
+							if(count($_line_element->_ref_prises) < 1){
+								$this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+							  if(!@array_key_exists($key_tab, $this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id])){
+							    @$this->_nb_produit_by_cat[$name_cat]++;
+							  }
+							  continue;
+							}  
+							// Chargement des prises
+							$_line_element->calculPrises($this, $date, $mode_feuille_soin, $name_chap, $name_cat);
+							if(!$mode_feuille_soin){
+							  if(@array_key_exists("aucune_prise", $_line_element->_administrations)){
+								  $this->_lines["elt"][$name_chap][$name_cat][$_line_element->_id]["aucune_prise"] = $_line_element;
+								  @$this->_nb_produit_by_cat[$name_cat]++;
+							  }
+							}
+			      }
+			  	}
+			  }
+		  }	  
+	  } 		  	
+  }
 }
 
 ?>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -25,44 +25,31 @@ $prescription->type = "sejour";
 $prescription->loadMatchingObject();
 $prescription_id = $prescription->_id;
 
-// Initialisation
-$prises_med = array();
-$lines_med = array();
-$list_prises_med = array();
-$prises_element = array();
-$lines_element = array();
-$list_prises_element = array();
-$nb_produit_by_cat = array();
-$administrations = array();
-$transmissions = array();
-
-$all_lines_med="";
-$all_lines_element="";
-$intitule_prise_med="";
-$intitule_prise_element="";
-
-// Chargement des categories
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
 
 if($prescription->_id){	
+  $types = array("med", "elt");
+ 	foreach($types as $type){
+ 	  $prescription->_prises[$type] = array();
+ 	  $prescription->_list_prises[$type][$date] = array();
+ 	  $prescription->_lines[$type] = array();
+ 	  $prescription->_intitule_prise[$type] = array();
+ 	}
+
 	// Chargement des lignes
 	$prescription->loadRefsLinesMed("1");
 	$prescription->loadRefsLinesElementByCat();
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
-		  
-	$lines["medicament"] = $prescription->_ref_prescription_lines;
+		 
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
 	if($traitement_personnel->_id){
 	  $traitement_personnel->loadRefsLinesMed("1");
 	}
-	$lines["traitement"] = $traitement_personnel->_ref_prescription_lines;
 	  	  
 	// Calcul du plan de soin pour la journée $date
-	$prescription->calculPlanSoin($lines, $date, $lines_med, $prises_med, $list_prises_med, $lines_element, $prises_element, $list_prises_element, 
-	$nb_produit_by_cat, $all_lines_med, $all_lines_element, $intitule_prise_med,$intitule_prise_element,$administrations,$transmissions);
+  $prescription->calculPlanSoin($date);
 }	
-
 
 $transmission = new CTransmissionMedicale();
 $where = array();
@@ -75,9 +62,8 @@ $transmissions_by_class = $transmission->loadList($where);
 
 foreach($transmissions_by_class as $_transmission){
   $_transmission->loadRefsFwd();
-	$transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
+	$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
 }
-
 
 $hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
 sort($hours);
@@ -87,21 +73,13 @@ foreach($hours as $_hour){
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("transmissions"       , $transmissions);
-$smarty->assign("list_prises_med"    , $list_prises_med);
-$smarty->assign("list_prises_element", $list_prises_element);
+$smarty->assign("prescription", $prescription);
 $smarty->assign("tabHours"           , $tabHours);
 $smarty->assign("sejour"             , $sejour);
 $smarty->assign("prescription_id"    , $prescription_id);
 $smarty->assign("date"               , $date);
 $smarty->assign("now"                , $now);
-$smarty->assign("prises_med"         , $prises_med);
-$smarty->assign("lines_med"          , $lines_med);
-$smarty->assign("prises_element"     , $prises_element);
-$smarty->assign("lines_element"      , $lines_element);
-$smarty->assign("nb_produit_by_cat"  , $nb_produit_by_cat);
 $smarty->assign("categories"         , $categories);
-$smarty->assign("administrations"    , $administrations);
 
 $smarty->display("inc_vw_dossier_soins.tpl");
 

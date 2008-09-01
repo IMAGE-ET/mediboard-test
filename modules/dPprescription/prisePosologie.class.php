@@ -181,7 +181,6 @@ class CPrisePosologie extends CMbMetaObject {
       $date_temp = mbDate($date_temp."+ $increment $type_increment");
   	  $tabDates[] = $date_temp;
     }
-    
     if(in_array($date, $tabDates)){
     	return true;
     } 
@@ -271,6 +270,7 @@ class CPrisePosologie extends CMbMetaObject {
     // Cas "Fois par" (avec unite_prise en jour)
     if($this->nb_fois && $this->unite_fois){
     	$quantite = $this->quantite * $nb * $this->nb_fois;
+    	
     }
     // Cas "Tous les" ...
     if($this->nb_tous_les){
