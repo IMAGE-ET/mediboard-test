@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $dPconfig, $can, $m, $tab;
-
+global $can;
 $can->needsAdmin();
 
 $listHours = range(0, 23);

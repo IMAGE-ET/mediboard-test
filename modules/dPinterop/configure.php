@@ -1,19 +1,17 @@
-<?php /* $Id: configure.php 23 2006-05-04 15:05:35Z MyttO $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPinterop
-* @version $Revision: 23 $
+* @version $Revision$
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->display("configure.tpl");
 
 ?>

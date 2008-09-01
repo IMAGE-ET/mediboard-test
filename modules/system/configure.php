@@ -1,19 +1,17 @@
-<?php /* $Id: configure.php 1738 2007-03-19 16:33:47Z maskas $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage system
-* @version $Revision:  $
+* @version $Revision$
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->display("configure.tpl");
 
 ?>

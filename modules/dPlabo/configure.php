@@ -1,19 +1,18 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoix
 */
 
-global $can, $m, $AppUI, $dPconfig;
-
+global $can;
 $can->needsAdmin();
 
 $pratId    = mbGetValueFromGetOrSession("object_id");
 $pratId400 = mbGetValueFromGetOrSession("id400");
-$date = mbDateTime();
+$date      = mbDateTime();
 
 //Création d'un nouvel id400 pour le laboratoire
 $newId400 = new CIdSante400();

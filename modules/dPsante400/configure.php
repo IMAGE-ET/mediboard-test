@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPpatients
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoix
 */
 
 global $can;
-
 $can->needsAdmin();
 
 $types = CMouvFactory::getTypes();

@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPplanningOp
-* @version $Revision: $
+* @version $Revision$
 * @author Thomas Despoix
 */
 
 global $can;
-
 $can->needsAdmin();
 
 $hours = range(0, 23);

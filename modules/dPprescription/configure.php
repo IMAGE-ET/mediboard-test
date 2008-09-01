@@ -1,15 +1,15 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPprescription
-* @version $Revision: $
+* @version $Revision$
 * @author Alexis Granger
 */
 
-global $AppUI, $dPconfig, $can, $m, $tab;
-
+global $can;
 $can->needsAdmin();
+
 $listHours = range(1, 24);
 
 $hours_matin = range(0,12);
@@ -31,5 +31,7 @@ $smarty->assign("listHoursMatin", $listHoursMatin);
 $smarty->assign("listHoursSoir", $listHoursSoir);
 $smarty->assign("listHours", $listHours);
 $smarty->assign("heures_prise", $heures_prise);
+
 $smarty->display("configure.tpl");
+
 ?>

@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
  * @package Mediboard
  * @subpackage sherpa
- * @version $Revision: $
+ * @version $Revision$
  * @author Sherpa
  */
 
 global $can;
-
 $can->needsAdmin();
 
 $spClasses = array(
@@ -20,7 +19,6 @@ $spClasses = array(
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("spClasses", $spClasses);
 $smarty->display("configure.tpl");
 

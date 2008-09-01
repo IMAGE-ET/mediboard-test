@@ -12,7 +12,6 @@ $can->needsAdmin();
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign("pass", mbGetValueFromGet("pass"));
 $smarty->display("configure.tpl");
 

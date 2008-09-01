@@ -1,14 +1,13 @@
-<?php /* $Id: $ */
+<?php /* $Id$ */
 
 /**
 * @package Mediboard
 * @subpackage dPfiles
-* @version $Revision: $
+* @version $Revision$
 * @author Sébastien Fillonneau
 */
 
 global $can;
-
 $can->needsAdmin();
 
 $listNbFiles = range(1,5);
