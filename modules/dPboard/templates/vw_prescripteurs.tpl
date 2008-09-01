@@ -1,13 +1,13 @@
-<table class="tbl" style="margin: auto; width: 50%">
+<table class="tbl">
   <tr>
-    <th class="title" colspan="2">
+    <th class="title" colspan="4">
     	Médecins traitants les plus prescripteurs
     	(max. {{$max}})
     </th>
   </tr>
 
   <tr>
-    <th>{{mb_label class=CPatient field=medecin_traitant}}</th>
+    <th colspan="3">{{mb_label class=CPatient field=medecin_traitant}}</th>
     <th>Nombre de patients</th>
   </tr>
 
@@ -15,11 +15,13 @@
   <tr>
     <td>
       {{assign var=medecin value=$medecins.$medecin_id}}
-	      <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$medecin->_class_name}}', object_id: {{$medecin->_id}} } })">
-	      {{$medecin->_view}}
-	      </span>
-      </td>
-    <td>{{$nb_patients}}</td>
+	    <span class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, { params: { object_class: '{{$medecin->_class_name}}', object_id: {{$medecin->_id}} } })">
+	    {{$medecin->_view}}
+	    </span>
+    </td>
+    <td class="text">{{$medecin->adresse}}, {{$medecin->cp}} {{$medecin->ville}}</td>
+    <td>{{$medecin->tel}}</td>
+    <td class="button">{{$nb_patients}}</td>
   </tr>
 	{{foreachelse}}
 	<tr>
