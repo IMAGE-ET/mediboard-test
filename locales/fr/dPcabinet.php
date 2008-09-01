@@ -1481,4 +1481,5 @@ $locales['CActeNGAP-executant_id'] = 'Exécutant';
 $locales['CActeNGAP-executant_id-court'] = 'Exécutant';
 $locales['CActeNGAP-executant_id-desc'] = 'Personne éxécutant l\'acte NGAP';
 $locales['config-dPcabinet-keepchir'] = 'Conserver le dernier praticien';
+$locales['mod-dPcabinet-tab-vw_journee'] = 'Journée';
 ?>

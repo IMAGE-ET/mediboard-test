@@ -1481,4 +1481,5 @@ $locales['CReglement.more'] = '';
 $locales['CReglement.none'] = '';
 $locales['CReglement.one'] = '';
 $locales['CSejour-back-'] = '';
+$locales['mod-dPcabinet-tab-vw_journee'] = '';
 ?>
