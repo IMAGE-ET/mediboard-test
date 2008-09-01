@@ -18,4 +18,9 @@
 	  <th><strong> {{mb_label object=$patient->_ref_constantes_medicales field=taille}}: </strong></th><td>{{$patient->_ref_constantes_medicales->taille}} cm</td>
 	  <th><strong> {{mb_label object=$patient->_ref_constantes_medicales field=_imc}}: </strong></th><td>{{$patient->_ref_constantes_medicales->_imc}}</td>
 	</tr>
+  <tr>
+    <th><strong>{{mb_label object=$consult_anesth field="_psa"}} : </strong></th><td> {{mb_value object=$consult_anesth field="_psa"}} ml/GR</td>
+    <th><strong>{{mb_label object=$patient->_ref_constantes_medicales field="_vst"}} : </strong></th><td colspan="3"> {{mb_value object=$patient->_ref_constantes_medicales field="_vst"}} ml</td>
+    
+  </tr>
 </table>

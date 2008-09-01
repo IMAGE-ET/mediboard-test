@@ -4,10 +4,10 @@
   <!-- Affichage d'information complementaire pour l'anestesie -->
   <tr>
     <td class="button">
-      Vu par {{$consult_anesth->_ref_consultation->_ref_chir->_view}}
+    <a href="?m=dPcabinet&amp;tab=edit_consultation&amp;selConsult={{$consult_anesth->_ref_consultation->_id}}" title="Voir ou modifier la consultation d'anesthésie">  Vu par {{$consult_anesth->_ref_consultation->_ref_chir->_view}}</a>
     </td>
   </tr>
-  
+
   <tr>
    <td>
    <table style="width: 100%">
