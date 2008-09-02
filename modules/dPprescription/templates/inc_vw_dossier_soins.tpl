@@ -68,7 +68,11 @@ Main.add(function () {
 
 <table class="tbl">
   <tr>
-    <th class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+    <th colspan="2" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+  </tr>
+  <tr>
+    <td>Poids: {{$poids}} kg</td>
+    <td>Age: {{$patient->_age}}</td>
   </tr>
 </table>
 

@@ -17,6 +17,12 @@ $sejour->load($sejour_id);
 $sejour->loadRefPatient();
 $sejour->loadRefPraticien();
 
+// Chargement du poids et de la chambre du patient
+$patient =& $sejour->_ref_patient;
+$patient->loadRefConstantesMedicales();
+$const_med = $patient->_ref_constantes_medicales;
+$poids = $const_med->poids;
+
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->object_id = $sejour_id;
@@ -73,6 +79,8 @@ foreach($hours as $_hour){
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("poids", $poids);
+$smarty->assign("patient", $patient);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("tabHours"           , $tabHours);
 $smarty->assign("sejour"             , $sejour);

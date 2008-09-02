@@ -24,6 +24,14 @@ if($traitement_personnel->_id){
   $traitement_personnel->loadRefsLinesMed("1");
 }
 
+// Chargement du poids et de la chambre du patient
+$sejour =& $prescription->_ref_object;
+$sejour->loadRefPatient();
+$patient =& $sejour->_ref_patient;
+$patient->loadRefConstantesMedicales();
+$const_med = $patient->_ref_constantes_medicales;
+$poids = $const_med->poids;
+
 $types = array("med", "elt");
 foreach($types as $type){
   $prescription->_prises[$type] = array();
@@ -47,6 +55,9 @@ $categories = CCategoryPrescription::loadCategoriesByChap();
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("sejour", $sejour);
+$smarty->assign("patient", $patient);
+$smarty->assign("poids", $poids);
 $smarty->assign("categories", $categories);
 $smarty->assign("dates", $dates);
 $smarty->assign("prescription", $prescription);

@@ -23,6 +23,16 @@
 
 <table class="tbl">
   <tr>
+    <th colspan="2" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+  </tr>
+  <tr>
+    <td>Poids: {{$poids}} kg</td>
+    <td>Age: {{$patient->_age}}</td>
+  </tr>
+</table>
+
+<table class="tbl">
+  <tr>
     <th>Libelle</th>
     {{foreach from=$dates item=date}}
     <th>
