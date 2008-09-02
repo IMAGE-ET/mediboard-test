@@ -11,7 +11,7 @@
 global $AppUI, $m;
 $AppUI->requireModuleFile("bloodSalvage", "inc_personnel");
 
-
+$anticoag ="";
 $blood_salvage_id = mbGetValueFromGet("blood_salvage_id");
 $blood_salvage = new CBloodSalvage();
 
@@ -35,7 +35,9 @@ if($blood_salvage_id) {
 	} else {
 		$list = CAppUI::conf("bloodSalvage AntiCoagulantList");
     $anticoagulant_list = explode("|",$list);
-    $anticoag = $anticoagulant_list[$blood_salvage->anticoagulant_cip];		
+    if($blood_salvage->anticoagulant_cip){
+      $anticoag = $anticoagulant_list[$blood_salvage->anticoagulant_cip];		
+    }
 	}
 	
   $list_nurse_sspi= CPersonnel::loadListPers("reveil");
