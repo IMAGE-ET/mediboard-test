@@ -7,17 +7,15 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $logPath;
+global $can, $log_path;
 
 $can->needsRead();
 
 // Création du template
 $smarty = new CSmartyDP();
 
-$smarty->display("view_logs.tpl");
+$smarty->display('view_logs.tpl');
 
-global $logPath;
-
-include($logPath);
+include($log_path);
 
 ?>
