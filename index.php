@@ -137,6 +137,7 @@ if (!$AppUI->user_id) {
     $smartyLogin->assign("time"                 , time());
     $smartyLogin->assign("redirect"             , $redirect);
     $smartyLogin->assign("uistyle"              , $uistyle);
+    $smartyLogin->assign("nodebug"              , true);
     $smartyLogin->assign("offline"              , false);
     $smartyLogin->display("login.tpl");
   }
@@ -251,6 +252,7 @@ if (!$suppressHeaders) {
   $smartyHeader->cache_dir    = "style/$uistyle/cache/";
   
   $smartyHeader->assign("offline"              , false);
+  $smartyHeader->assign("nodebug"              , true);
   $smartyHeader->assign("configOffline"        , null);
   $smartyHeader->assign("localeCharSet"        , $locale_char_set);
   $smartyHeader->assign("mediboardShortIcon"   , mbLinkShortcutIcon("style/$uistyle/images/icons/favicon.ico",1));
