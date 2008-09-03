@@ -227,10 +227,10 @@ function cancelObjects() {
             {{else}}
             <button class="cancel" type="button" onclick="cancelObjects();">{{tr}}Cancel{{/tr}}</button>
             {{/if}}
+            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
           {{else}}
             <button class="submit" type="button" onclick="submitForms();">{{tr}}Create{{/tr}}</button>
           {{/if}}
-            <button class="print" type="button" onclick="printForm();">{{tr}}Print{{/tr}}</button>
           </td>
         </tr>
 
