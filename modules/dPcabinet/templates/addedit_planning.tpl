@@ -42,6 +42,7 @@ function requestInfoPat() {
   var url = new Url;
   url.setModuleAction("dPpatients", "httpreq_get_last_refs");
   url.addElement(oForm.patient_id);
+  url.addElement(oForm.consultation_id);
   url.requestUpdate("infoPat", {
     waitingText: "Chargement des antécédents du patient"
   });
@@ -110,7 +111,7 @@ function printDocument(iDocument_id) {
 
 Main.add(function () {
   var oForm = document.editFrm;
-  
+
   requestInfoPat();
 
   {{if $plageConsult->plageconsult_id && !$consult->consultation_id}}
@@ -347,10 +348,7 @@ Main.add(function () {
     
     </td>
   </tr>
-  
 </table>
-
-</form>
 
 <table class="form">
   <tr>
@@ -374,5 +372,6 @@ Main.add(function () {
       {{/if}}
     </td>
   </tr>
-
 </table>
+
+</form>

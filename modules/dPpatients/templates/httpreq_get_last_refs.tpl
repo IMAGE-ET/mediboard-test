@@ -11,7 +11,7 @@
       </strong>
       {{foreach from=$curr_sejour->_ref_operations item=curr_op}}
       <br />
-      <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" />
+      <input type="radio" name="_operation_id" value="{{$curr_op->operation_id}}" {{if $curr_op->operation_id == $consultation->_ref_consult_anesth->operation_id}}checked="checked"{{/if}} />
       Intervention le {{$curr_op->_datetime|date_format:"%d/%m/%Y"}}
       avec le Dr {{$curr_op->_ref_chir->_view}}
       {{if $curr_op->_ext_codes_ccam|@count || $curr_op->libelle}}

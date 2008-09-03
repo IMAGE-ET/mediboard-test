@@ -10,9 +10,16 @@
 global $AppUI, $can, $m;
 
 $patient_id = mbGetValueFromGet("patient_id", 0);
+$consultation_id = mbGetValueFromGet("consultation_id", 0);
+
 $patient = new CPatient;
 $patient->load($patient_id);
 $patient->loadRefs();
+
+$consultation = new CConsultation();
+$consultation->load($consultation_id);
+$consultation->loadRefConsultAnesth();
+
 foreach($patient->_ref_sejours as $key => $sejour) {
   $patient->_ref_sejours[$key]->loadRefsOperations();
   foreach($patient->_ref_sejours[$key]->_ref_operations as $keyOp => $op) {
@@ -27,7 +34,8 @@ foreach($patient->_ref_consultations as $key => $consult) {
 if ($can->read) {
   // Création du template
   $smarty = new CSmartyDP();
-
+  
+  $smarty->assign("consultation", $consultation);
   $smarty->assign("patient", $patient);
 
   $smarty->display("httpreq_get_last_refs.tpl");
