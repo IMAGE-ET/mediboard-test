@@ -15,7 +15,7 @@ $AppUI->stepAjax("Déactivation du gestionnaire Sherpa", UI_MSG_OK);
 $can->needsAdmin();
 $spClass = mbGetValueFromGet("class");
 
-if (!class_inherits_from($spClass, "CSpObject")) {
+if (!is_subclass_of($spClass, "CSpObject")) {
   $AppUI->stepAjax("la classe  '$spClass' n'est pas une class Sherpa", UI_MSG_ERROR);
 }
 

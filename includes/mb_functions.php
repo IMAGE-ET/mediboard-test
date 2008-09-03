@@ -111,11 +111,9 @@ function mbGetValueFromPostOrSession($valName, $valDefault = null) {
  * @return any 
  **/
 function mbGetAbsValueFromPostOrSession($valName, $valDefault = null) {
-
   if (isset($_POST[$valName])) {
     $_SESSION[$valName] = $_POST[$valName];
   }
-  
   return dPgetParam($_SESSION, $valName, $valDefault);
 }
 
@@ -136,7 +134,6 @@ function mbGetValueFromSession($valName, $valDefault = null) {
  **/
 function mbSetValueToSession($valName, $value = null) {
   global $m;
-
   $_SESSION[$m][$valName] = $value;
 }
 
@@ -146,7 +143,6 @@ function mbSetValueToSession($valName, $value = null) {
  * @return void
  **/
 function mbSetAbsValueToSession($valName, $value = null) {
-
   $_SESSION[$valName] = $value;
 }
 
@@ -299,9 +295,9 @@ function mbTimeGetNearestMinsWithInterval($reference, $mins_interval) {
   $borne_sup = $mins_interval * ($div + 1);
   $mins_replace = ($min_reference - $borne_inf) < ($borne_sup - $min_reference) ? $borne_inf : $borne_sup;
   if($mins_replace == 60) {
-    $reference = str_pad(mbTransformTime(null, $reference, "%H")+1, 2, "0").":00:00";
+    $reference = sprintf('%02d:00:00',   mbTransformTime(null, $reference, "%H")+1);
   } else {
-    $reference = str_pad(mbTransformTime(null, $reference, "%H"), 2, "0").":".str_pad($mins_replace, 2, "0").":00";
+    $reference = sprintf('%02d:%02d:00', mbTransformTime(null, $reference, "%H"), $mins_replace);
   }
   return $reference;
 }
@@ -417,25 +413,6 @@ function mbEcartType($array) {
   }
 }
 
-if (!function_exists('array_diff_key')) {
-  function array_diff_key() {
-    $argCount  = func_num_args();
-    $argValues  = func_get_args();
-    $valuesDiff = array();
-    if ($argCount < 2) return false;
-    foreach ($argValues as $argParam) {
-      if (!is_array($argParam)) return false;
-    }
-    foreach ($argValues[0] as $valueKey => $valueData) {
-      for ($i = 1; $i < $argCount; $i++) {
-        if (isset($argValues[$i][$valueKey])) continue 2;
-      }
-      $valuesDiff[$valueKey] = $valueData;
-    }
-    return $valuesDiff;
-  }
-}
-
 /**
  * Remove accents from a string
  **/
@@ -454,8 +431,7 @@ function removeAccent($string) {
  * @todo : become a generic function
  **/
 
-function mbInsertCSV( $fileName, $tableName, $oldid = false )
-{
+function mbInsertCSV( $fileName, $tableName, $oldid = false ) {
     $ds = CSQLDataSource::get("std");
     $file = fopen( $fileName, 'rw' );
     if(! $file) {
@@ -470,8 +446,7 @@ function mbInsertCSV( $fileName, $tableName, $oldid = false )
     //$contents = fread ($file, filesize ($fileName));
     //$content = str_replace(chr(10), " ", $content);
   
-    while ( ! feof( $file ) )
-    {
+    while (! feof($file)){
         $k++;
         $line = str_replace("NULL", "\"NULL\"", fgets( $file, 1024));
         $size = strlen($line)-3;
@@ -705,19 +680,6 @@ function getInstalledClasses($properties = array()) {
 }
 
 /**
- * Check if a class inherits froma an ancestor
- * @return bool
- */
-function class_inherits_from($class, $ancestor) {
-	if ($class == $ancestor) {
-		return true;
-	}
-	
-	$parent = get_parent_class($class);
-	return $parent ? class_inherits_from($parent, $ancestor) : false;
-}
-
-/**
  * Check if a class has a default constructor (ie with 0 paramater)
  * @return bool
  */
@@ -788,32 +750,6 @@ function in_range($value, $min, $max) {
 }
 
 /**
- * transform a single line into a \n multiline
- * @param $string string The single line
- * @param $minlenght int The maxlenght of a line
- * @param $max mixed The upper limit
- * @return bool 
- */
-function singleToMultiline($string, $maxlength = 10) {
-  $words = explode(" ", $string);
-  $lines = array();
-  $i = 0;
-  foreach($words as $word) {
-    if(!isset($lines[$i])) {
-      $lines[$i] = $word;
-    } else {
-      if(strlen($lines[$i]) + strlen($word) < $maxlength) {
-        $lines[$i] .= " $word";
-      } else {
-        $i++;
-        $lines[$i] = $word;
-      }
-    }
-  }
-  return implode("\n", $lines);
-}
-
-/**
  * Check if a number is a valid Luhn number
  * see http://en.wikipedia.org/wiki/Luhn
  * @param code string String representing a potential Luhn number
@@ -852,6 +788,5 @@ function url_exists($url) {
   $headers = @get_headers($url);
   return (preg_match("|200|", $headers[0])); 
 }
-
 
 ?>

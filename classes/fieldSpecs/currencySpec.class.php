@@ -18,8 +18,10 @@ class CCurrencySpec extends CFloatSpec {
     $fieldName = $this->fieldName;
     $propValue = $object->$fieldName;
     
+    $decimals = CMbArray::extract($params, "decimals");
+    
     return ($propValue !== null && $propValue !== "") ? 
-      htmlspecialchars(sprintf("%.2f", $propValue).CAppUI::conf("currency_symbol")) : 
+      htmlspecialchars(sprintf("%.".($decimals ? $decimals : 2)."f", $propValue).CAppUI::conf("currency_symbol")) : 
       "-";
   }
   

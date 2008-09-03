@@ -46,7 +46,7 @@ $opbysalle = array();
 $i=0;
 foreach($salles as $salle) {
   $curr_salle_id = $salle["salle_id"];
-  $opbysalle[$curr_salle_id]["legend"] = singleToMultiline($salle["nom"]);
+  $opbysalle[$curr_salle_id]["legend"] = wordwrap($salle["nom"], 10);
   $opbysalle[$curr_salle_id]["total"] = 0;
   
   $sql = "SELECT COUNT(operations.operation_id) AS total,

@@ -47,7 +47,7 @@ $services = $ds->loadlist($sql);
 $patbyservice = array();
 foreach($services as $service) {
   $id = $service["service_id"];
-  $patbyservice[$id]["legend"] = singleToMultiline($service["nom"]);
+  $patbyservice[$id]["legend"] = wordwrap($service["nom"], 10);
   $sql = "SELECT COUNT(DISTINCT affectation.sejour_id) AS total," .
     "\nservice.nom AS nom," .
     "\nDATE_FORMAT(affectation.entree, '%m/%Y') AS mois," .

@@ -21,7 +21,7 @@ $keywords_search = explode(" ", $keywords);
 $keywords_search = array_filter($keywords_search);
 
 if ($selClass) {
-  if (!class_inherits_from($selClass, "CMbObject")) {
+  if (!is_subclass_of($selClass, "CMbObject")) {
     trigger_error("Class '$selClass' is not an CMbObject", E_USER_ERROR);
     return;
   }
