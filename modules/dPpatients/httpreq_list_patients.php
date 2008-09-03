@@ -122,25 +122,6 @@ if($patient_ipp && !$useVitale && CModule::getInstalled("dPsante400")){
 	
 	$patients        = array();
 	$patientsSoundex = array();
-	
-	if (!function_exists('array_diff_key')) {
-	  function array_diff_key() {
-	    $argCount  = func_num_args();
-	    $argValues  = func_get_args();
-	    $valuesDiff = array();
-	    if ($argCount < 2) return false;
-	    foreach ($argValues as $argParam) {
-	      if (!is_array($argParam)) return false;
-	    }
-	    foreach ($argValues[0] as $valueKey => $valueData) {
-	      for ($i = 1; $i < $argCount; $i++) {
-	        if (isset($argValues[$i][$valueKey])) continue 2;
-	      }
-	      $valuesDiff[$valueKey] = $valueData;
-	    }
-	    return $valuesDiff;
-	  }
-	}
 
 	$pat = new CPatient();
 	if ($where) {

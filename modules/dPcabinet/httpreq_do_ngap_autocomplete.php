@@ -38,6 +38,7 @@ $smarty->debugging = false;
 
 $smarty->assign("code"      , $code);
 $smarty->assign("result"    , $result);
+$smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_ngap_autocomplete.tpl");
 

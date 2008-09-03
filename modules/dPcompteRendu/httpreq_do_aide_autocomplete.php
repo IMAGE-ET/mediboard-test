@@ -23,6 +23,7 @@ $smarty->assign("object", $object);
 $smarty->assign("property", $property);
 $smarty->assign("dependField", $dependField);
 $smarty->assign("needle", $needle);
+$smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_aide_autocomplete.tpl");
 

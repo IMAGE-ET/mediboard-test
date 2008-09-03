@@ -29,6 +29,7 @@ foreach($elements as &$element){
 $smarty = new CSmartyDP();
 $smarty->assign("libelle", $libelle);
 $smarty->assign("elements", $elements);
+$smarty->assign("nodebug", true);
 $smarty->display("httpreq_do_element_autocomplete.tpl");
 
 ?>

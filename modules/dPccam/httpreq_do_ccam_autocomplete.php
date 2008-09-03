@@ -23,6 +23,7 @@ if ($can->read) {
 
   $smarty->assign("codeacte"  , $codeacte);
   $smarty->assign("result"    , $result);
+  $smarty->assign("nodebug", true);
 
   $smarty->display("httpreq_do_ccam_autocomplete.tpl");
 }

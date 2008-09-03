@@ -25,6 +25,7 @@ if ($can->read && $sql) {
 
   $smarty->assign("pays"  , $pays);
   $smarty->assign("result", $result);
+  $smarty->assign("nodebug", true);
 
   $smarty->display("httpreq_do_pays_autocomplete.tpl");
 }

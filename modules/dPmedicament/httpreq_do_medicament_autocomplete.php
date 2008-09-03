@@ -21,7 +21,7 @@ $produits = $mbProduit->searchProduitAutocomplete($produit, $produit_max, $inLiv
 // Création du template
 $smarty = new CSmartyDP();
 $smarty->assign("produits", $produits);
-$smarty->assign("nodebug", "true");
+$smarty->assign("nodebug", true);
 $smarty->display("httpreq_do_medicament_autocomplete.tpl");
 
 ?>

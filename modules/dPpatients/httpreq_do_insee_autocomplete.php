@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can;
+global $can;
 $can->needsRead();
 
 $ds = CSQLDataSource::get("INSEE");
@@ -37,5 +37,6 @@ $smarty = new CSmartyDP();
 $smarty->assign("cp"    , $cp);
 $smarty->assign("ville" , $ville);
 $smarty->assign("result", $result);
+$smarty->assign("nodebug", true);
 
 $smarty->display("httpreq_do_insee_autocomplete.tpl");
