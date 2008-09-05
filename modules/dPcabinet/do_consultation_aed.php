@@ -49,6 +49,7 @@ else {
     if(isset($_POST["_operation_id"])){
       $consultAnesth->operation_id = $_POST["_operation_id"];      
     }
+    $consultAnesth->store();
   }
 }
 
