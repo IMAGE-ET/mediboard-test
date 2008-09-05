@@ -271,7 +271,15 @@ class CSetupdPcompteRendu extends CSetup {
 			WHERE `object_id` IS NULL";
     $this->addQuery($sql);
     
-    $this->mod_version = "0.36";
+    $this->makeRevision("0.36");
+    $sql = "UPDATE `compte_rendu` 
+			SET `object_class` = 'CSejour'
+			WHERE `file_category_id` = 3
+      AND `object_class` = 'COperation'
+      AND `object_id` IS NULL;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.37";
   }
 }
 ?>

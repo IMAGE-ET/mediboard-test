@@ -190,8 +190,14 @@ class CSetupdPfiles extends CSetup {
                "\nCHANGE `file_class` `object_class` varchar(255) NOT NULL DEFAULT 'CPatients';";
     $this->addQuery($sql);
     
+    $this->makeRevision("0.18");
+    $sql = "UPDATE `files_category` 
+			SET `class` = 'CSejour'
+			WHERE `file_category_id` = 3;";
+    $this->addQuery($sql);
     
-    $this->mod_version = "0.18";
+    
+    $this->mod_version = "0.19";
   }
 }
 ?>
