@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $can, $log_path;
+global $can, $logPath;
 
 $can->needsRead();
 
@@ -16,6 +16,6 @@ $smarty = new CSmartyDP();
 
 $smarty->display('view_logs.tpl');
 
-include($log_path);
+include($logPath);
 
 ?>
