@@ -1,4 +1,4 @@
-{{include file="common.tpl"}}
+{{include file="common.tpl" nodebug=true}}
 
 <table style="width: 100%;">
   <tr>

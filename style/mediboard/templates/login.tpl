@@ -1,4 +1,4 @@
-{{include file="../../mediboard/templates/common.tpl"}}
+{{include file="../../mediboard/templates/common.tpl" nodebug=true}}
 
 <div id="login">
   <form name="loginFrm" action="?" method="post" onsubmit="return checkForm(this)">

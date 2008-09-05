@@ -1,4 +1,4 @@
-{{include file="common.tpl"}}
+{{include file="common.tpl" nodebug=true}}
 
 {{if !$offline}}
 {{if !$dialog}}

@@ -1,7 +1,7 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
 
 <title>Les global inutiles</title>
 <script type="text/javascript">
@@ -19,6 +19,9 @@ function toggle(element) {
 </head>
 
 <body>
+<p>La recherche s'effectue de la manière suivante :<br />
+On repère chaque variable déclarée en global, et si elle n'est pas répetée dans le fichier, alors elle est jugée inutile.
+Il peut y avoir des variables inutiles non reperées, mais il ne peut pas y avoir de variables jugées inutiles alors qu'elle ne le sont pas.</p> 
 
 <?php
 $list = array_merge(
@@ -48,7 +51,7 @@ foreach ($list as $file) {
   while ($line = fgets($f)) {
     
     // if it declares global variables
-    if (strstr($line, 'global')) {
+    if (substr(trim($line), 0, 6) == 'global') {
       $vars = array();
       preg_match_all('/\$[A-z0-9_]*/', $line, $vars);
       if (isset ($vars[0]))
