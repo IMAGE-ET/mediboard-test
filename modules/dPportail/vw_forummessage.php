@@ -7,8 +7,7 @@
 * @author Fabien
 */
  
-global $AppUI, $can, $m;
-
+global $AppUI, $can;
 $can->needsRead();
 
 /** Chargement du message demandé **/
@@ -21,7 +20,6 @@ if($forum_message->_id) {
     $forum_message->user_id = $AppUI->user_id;
     $forum_message->date = mbDateTime();
 }
-/** ----------------------------- **/
 
 
 /** Chargement du thread demandé  **/
@@ -36,23 +34,18 @@ if ($forum_message->forum_thread_id) {
 	}
 }
 
-/** ----------------------------- **/
-
 /** Chargement du theme demandé en fonction du thread **/
 $forum_theme = $forum_thread->_ref_forum_theme;
 if($forum_theme) {
 	$forum_theme->loadRefs();
 }
-/** ----------------------------- **/
 
 
 /** Récupération de la liste des messages du thread **/
 $listMessages = $forum_thread->_ref_forum_messages;
-
 foreach($listMessages as &$currMessage) {
     $currMessage->loadRefs();
 }
-/** ----------------------------- **/
 
 
 // Création du template
@@ -64,4 +57,5 @@ $smarty->assign('forum_thread', $forum_thread);
 $smarty->assign('forum_message', $forum_message);
 
 $smarty->display('vw_forummessage.tpl');
+
 ?>

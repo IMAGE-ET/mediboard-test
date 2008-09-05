@@ -162,7 +162,7 @@ function pasteHelperContent(oHelpElement) {
 
 function putHelperContent(oElem, sFieldSelect) {
   var oForm      = oElem.form;
-  var sDependsOn = oElem.options[oElem.selectedIndex].value;
+  var sDependsOn = $V(oElem);
 
   // Search for helpers elements in same form
   for (var i=0; i< oForm.elements.length; i++) {
@@ -193,12 +193,14 @@ function putHelperContent(oElem, sFieldSelect) {
 }
 
 function notNullOK(oElement) {
+  if (!Object.isElement(oElement)) oElement = oElement.element();
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement) ? "notNullOK" : "notNull");
   } 
 }
 
 function canNullOK(oElement) {
+  if (!Object.isElement(oElement)) oElement = oElement.element();
   if (oLabel = oElement.getLabel()) {
     oLabel.className = ($V(oElement) ? "notNullOK" : "canNull");
   } 
@@ -372,15 +374,15 @@ function prepareForm(oForm, bForcePrepare) {
 			// Not null
 		  if (oElement.hasClassName("notNull")) {
         notNullOK(oElement);
-        Element.addEventHandler(oElement, "change", notNullOK);
-        Element.addEventHandler(oElement, "keyup", notNullOK);
+        oElement.observe("change", notNullOK);
+        oElement.observe("keyup", notNullOK);
       }
       
 			// Can null
 		  if (oElement.hasClassName("canNull")) {
         canNullOK(oElement);
-        Element.addEventHandler(oElement, "change", canNullOK);
-        Element.addEventHandler(oElement, "keyup", canNullOK);
+        oElement.observe("change", canNullOK);
+        oElement.observe("keyup", canNullOK);
       }
       
       // Select tree
@@ -612,11 +614,12 @@ Object.extend(Form, {
 } );
 
 
-function NumericField (form, element, step, min, max, showPlus) {
+function NumericField (form, element, step, min, max, showPlus, decimals) {
     this.sField = form + "_" + element;
     this.min  = (min  != undefined) ? min  : null;
     this.max  = (max  != undefined) ? max  : null;
     this.step = (step != undefined) ? step : null;
+    this.decimals = (decimals != undefined) ? decimals : null;
     this.showPlus = showPlus | null;
 }
 
@@ -629,7 +632,12 @@ NumericField.prototype = {
     if (this.max != null) {
       result = (result <= this.max) ? result : this.max;
     }
-    $V(oField, (((this.showPlus && result >= 0)?'+':'')+result), true);
+    if (this.decimals !== null) {
+      result = printf("%."+this.decimals+"f", result);
+    }
+    result = ((this.showPlus && result >= 0)?'+':'')+result;
+    
+    $V(oField, result, true);
     oField.select();
   },
 
@@ -638,10 +646,12 @@ NumericField.prototype = {
     var oField = $(this.sField);
     var step = Number(this.getStep(-1));
     var result = (parseInt(Number(oField.value) / step) - 1) * step;
-    if (this.min != null) {
- 	    result = (result >= this.min) ? result : this.min;
+    if (this.decimals !== null) {
+      result = printf("%."+this.decimals+"f", result);
     }
-    $V(oField, (((this.showPlus && result >= 0)?'+':'')+result), true);
+    result = ((this.showPlus && result >= 0)?'+':'')+result;
+    
+    $V(oField, result, true);
     oField.select();
   },
   

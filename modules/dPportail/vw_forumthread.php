@@ -7,8 +7,7 @@
  * @author Fabien
  */
  
-global $AppUI, $can, $m;
-
+global $AppUI, $can;
 $can->needsRead();
 
 // Chargement du thread demandé
@@ -66,4 +65,5 @@ $smarty->assign("forum_thread", $forum_thread);
 $smarty->assign("forum_theme", $forum_theme);
 
 $smarty->display("vw_forumthread.tpl");
+
 ?>

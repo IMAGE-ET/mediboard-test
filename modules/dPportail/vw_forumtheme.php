@@ -7,8 +7,7 @@
  * @author Fabien
  */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $forum_theme_id = mbGetValueFromGetOrSession('forum_theme_id');
@@ -35,4 +34,5 @@ $smarty->assign('listThemes', $listThemes);
 $smarty->assign('forum_theme', $forum_theme);
 
 $smarty->display('vw_forumtheme.tpl');
+
 ?>

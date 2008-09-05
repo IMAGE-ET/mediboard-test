@@ -110,17 +110,34 @@ class CFloatSpec extends CMbFieldSpec {
     if ($max === null) {
       $max = $this->checkNumeric($this->max);
     }
+    
+    $decimals = CMbArray::extract($params, "decimals");
+    
     $step = $this->checkNumeric(CMbArray::extract($params, "step"));
     
     CMbArray::defaultValue($params, "size", min($maxLength, 20));
     CMbArray::defaultValue($params, "maxlength", $maxLength);
     
+    /*if ($form && $increment) {
+      $sHtml = '<script type="text/javascript">'.
+      $fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').', '.(isset($decimals)?$decimals:'null').');
+    </script>';
+
+      $sHtml .= '<table cellspacing="0" cellpadding="0" class="numericField"><tr>
+      <td rowspan="2" style="padding: 0;">';
+      $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
+      $sHtml .= '</td>
+      <td style="height: 50%; width: 1em; padding: 0;"><button type="button" name="'.$fieldId.'_spinner_up" tabIndex="10000" onclick="'.$fieldId.'_object.inc()"><img src="images/buttons/spinner_up.png" /></button></td>
+    </tr>
+    <tr><td style="height: 50%; padding: 0;"><button type="button" name="'.$fieldId.'_spinner_down" tabIndex="10001" onclick="'.$fieldId.'_object.dec()"><img src="images/buttons/spinner_down.png" /></button></td></tr>
+</table>';
+    } */
     if ($form && $increment) {
       $sHtml  = '<div class="numericField">';
       $sHtml .= $this->getFormElementText($object, $params, (($value>=0 && $showPlus)?'+':'').(($value==0&&$showPlus)?'0':$value), $className);
       $sHtml .= '
     <script type="text/javascript">
-      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').');
+      '.$fieldId.'_object = new NumericField("'.$form.'", "'.$field.'", '.($step?$step:'null').', '.($this->pos?'0':(isset($min)?$min:'null')).', '.(isset($max)?$max:'null').', '.($showPlus?'true':'null').', '.(isset($decimals)?$decimals:'null').');
     </script>
     <img alt="updown" src="./images/icons/numeric_updown.gif" usemap="#arrow_'.$fieldId.'" />
     <map name="arrow_'.$fieldId.'" >
@@ -128,7 +145,8 @@ class CFloatSpec extends CMbFieldSpec {
       <area coords="0,10,10,18" href="#1" tabIndex="10000" onclick="'.$fieldId.'_object.dec()" title="-" />
     </map>
     </div>';
-    } else {
+    }
+    else {
       $sHtml = $this->getFormElementText($object, $params, $value, $className);
     }
     return $sHtml;

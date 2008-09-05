@@ -45,19 +45,22 @@ var Main = {
   }
 };
 
-/*Event.observe(window, "beforeunload", function() {
-  return References.clean(document.documentElement);
-});*/
+/** To prevent flickering, the body is hidden 
+ * and showed only after every Main.add is finished.
+ * Doing so, the page is also displayed faster */
+/*function showBody() {
+  $('body').show();
+}
+Main.add(function() { showBody.defer(); });*/
 
 /**
  * References manipulation
  */
-var References = {   
+var References = {
 	/**
 	 * Clean references involved in memory leaks
 	 */
   clean: function(obj) {
-    //alert('toto');
     var elements = obj.descendants();
     for (var j = 0; j < elements.length; j++) {
       var e = elements[j];
@@ -1313,18 +1316,11 @@ Dom = {
         if((childNode.nodeType == Node.TEXT_NODE) && (!notWhitespace.test(childNode.nodeValue))){
           node.removeChild(node.childNodes[i]);
           i--;
-        }else if (childNode.nodeType == 1) {
+        }else if (Object.isElement(childNode)) {
           Dom.cleanWhitespace(childNode);
         } 
       }
     }
-  },
-  
-  build: function(json, root) {
-    
-    for(key in json) {
-    }
-    
   }
 }
 

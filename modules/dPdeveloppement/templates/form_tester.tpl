@@ -5,7 +5,7 @@ Main.add(function () {
   $('dom-creator').insert(
     DIV({className: 'big-info'}, 
       A({href: 'http://www.mozilla-europe.org', target: '_blank'}, 
-        'Firefox rocks !!'
+        'Cette info est générée par le DOM creator !'
       )
     )
   );
