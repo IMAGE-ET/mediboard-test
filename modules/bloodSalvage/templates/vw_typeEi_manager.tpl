@@ -123,7 +123,6 @@ Main.add(function () {
           <th>{{mb_label object=$type_ei field="type_signalement"}}</th>
           <td>{{mb_field object=$type_ei field="type_signalement"}}</td>
         </tr>
-        </tr>
         <tr>
           <th>{{mb_label object=$type_ei field="evenements"}}</th>
           <td>

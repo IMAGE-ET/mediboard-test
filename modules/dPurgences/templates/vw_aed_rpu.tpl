@@ -103,15 +103,15 @@ Main.add(function () {
 	    {{/if}}
 	  </th>
     {{/if}}
-
-		{{if $rpu->_annule}}
-		<tr>
-		  <th class="category cancelled" colspan="4">
-		  {{tr}}CRPU-_annule{{/tr}}
-		  </th>
-		</tr>
-		{{/if}}
   </tr>
+
+	{{if $rpu->_annule}}
+	<tr>
+	  <th class="category cancelled" colspan="4">
+	  {{tr}}CRPU-_annule{{/tr}}
+	  </th>
+	</tr>
+	{{/if}}
   
   <tr>
     <th>{{mb_label object=$rpu field="_responsable_id"}}</th>

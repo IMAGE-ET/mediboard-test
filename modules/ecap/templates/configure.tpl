@@ -6,8 +6,8 @@
 <input type="hidden" name="dosql" value="do_configure" />
 
 <table class="form">
-
-  <th class="category" colspan="6">DHE e-Cap</th>
+  <tr>
+    <th class="category" colspan="6">DHE e-Cap</th>
   </tr>
 
   {{assign var="mod" value="interop"}}

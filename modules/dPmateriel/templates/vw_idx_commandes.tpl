@@ -101,6 +101,7 @@ Main.add(function () {
           <th>{{mb_label object=$commande field="recu"}}</th>
           <td>{{mb_field object=$commande field="recu"}}</td>
         </tr>
+        <tr>
           <td class="button" colspan="2">
             <button class="submit" type="submit">Valider</button>
             {{if $commande->_id}}

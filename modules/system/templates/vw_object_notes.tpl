@@ -26,7 +26,7 @@
         {{$curr_note->libelle}}
       </strong><br />
       {{$curr_note->text|nl2br}}
-    </th>
+    </td>
   </tr>
   {{foreachelse}}
   <tr>

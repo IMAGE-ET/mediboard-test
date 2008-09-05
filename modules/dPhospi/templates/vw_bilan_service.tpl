@@ -105,7 +105,6 @@ changeBox = function(oCheckbox, cat_id, oTokenField){
 				  </td>
 			  </tr>
 			  {{/foreach}}
-			  </tr>
 		  {{/foreach}}
 	  {{/foreach}}
 	{{foreachelse}}

@@ -32,7 +32,7 @@ Main.add(function () {
   {{if $service_id==0}}
   <tr>
     <th class="title" colspan="4">{{$services.$keyServ->nom}}</th>
-  </th>
+  </tr>
   {{/if}}
   <tr>
     <th class="category">Praticien</th>

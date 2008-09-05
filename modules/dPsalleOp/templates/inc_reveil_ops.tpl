@@ -34,7 +34,7 @@ submitOperationForm = function(oFormOperation,sens) {
     <th>{{tr}}SSPI.Salle{{/tr}}</th>
     <th>{{tr}}SSPI.Praticien{{/tr}}</th>
     <th>{{tr}}SSPI.Patient{{/tr}}</th>
-     {{if $isbloodSalvageInstalled}}
+    {{if $isbloodSalvageInstalled}}
       <th>{{tr}}SSPI.RSPO{{/tr}}</th>
     {{/if}}
     <th>{{tr}}SSPI.SortieSalle{{/tr}}</th>
@@ -71,14 +71,14 @@ submitOperationForm = function(oFormOperation,sens) {
     {{/if}}
     <td>
       {{if $can->edit}}
-        <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
-          <input type="hidden" name="m" value="dPplanningOp" />
-          <input type="hidden" name="dosql" value="do_planning_aed" />
-          <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
-          <input type="hidden" name="del" value="0" />
-          {{mb_field object=$curr_op field="sortie_salle"}}
-       <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
-     </form>
+      <form name="editSortieBlocFrm{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
+        <input type="hidden" name="m" value="dPplanningOp" />
+        <input type="hidden" name="dosql" value="do_planning_aed" />
+        <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
+        <input type="hidden" name="del" value="0" />
+        {{mb_field object=$curr_op field="sortie_salle"}}
+        <button class="tick notext" type="button" onclick="submitOperationForm(this.form);">{{tr}}Modify{{/tr}}</button>
+      </form>
       {{else}}
       {{mb_value object=$curr_op field="sortie_salle"}}
       {{/if}}
@@ -120,10 +120,9 @@ submitOperationForm = function(oFormOperation,sens) {
     </td>
   </tr>
   {{/foreach}}
-  <script type="text/javascript">
+</table>
+
+<script type="text/javascript">
   $('liops').innerHTML = {{$listOps|@count}};
   $('heure').innerHTML = "{{$hour|date_format:"%Hh%M"}}";
 </script>
-</table>   
-</form>
-

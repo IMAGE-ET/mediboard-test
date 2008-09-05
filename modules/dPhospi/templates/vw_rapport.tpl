@@ -37,12 +37,15 @@
           <th style:"width=50px">Présents la veille</th>
           <td>{{$listPresentVeille|@count}}</td>
         </tr>
+        <tr>
           <th>Sorties du jour</th>
           <td>{{$listSortieJour|@count}}</td>
         </tr>
+        <tr>
           <th>Entrées du jour</th>
           <td>{{$listEntreeJour|@count}}</td>
         </tr>
+        <tr>
           <th>Présents du jour</th>
           <td>{{$list_affectations|@count}}</td>
         </tr>
