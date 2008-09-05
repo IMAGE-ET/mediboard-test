@@ -28,8 +28,8 @@
     {{/if}}
     <td>{{mb_value object=$curr_reference field=code}}</td>
     <td>{{mb_value object=$curr_reference field=quantity}}</td>
-    <td class="currency">{{mb_value object=$curr_reference field=price}}</td>
-    <td class="currency">{{mb_value object=$curr_reference field=_unit_price}}</td>
+    <td class="currency">{{mb_value object=$curr_reference field=price decimals=5}}</td>
+    <td class="currency">{{mb_value object=$curr_reference field=_unit_price decimals=5}}</td>
     {{if $order_id}}
     <td>
       <form name="product-reference-{{$curr_reference->_id}}" action="?" method="post">

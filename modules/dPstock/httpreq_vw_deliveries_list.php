@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $order_by = 'date_dispensation DESC';
@@ -18,9 +17,7 @@ $list_latest_deliveries = $delivery->loadList(null, $order_by, 20);
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign('list_latest_deliveries',  $list_latest_deliveries);
-
 $smarty->display('inc_deliveries_list.tpl');
 
 ?>

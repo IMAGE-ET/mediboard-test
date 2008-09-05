@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $item_id = mbGetValueFromGet('order_item_id');
@@ -28,4 +27,5 @@ $smarty->assign('curr_item', $item);
 $smarty->assign('order', $item->_ref_order);
 
 $smarty->display('inc_order_item.tpl');
+
 ?>

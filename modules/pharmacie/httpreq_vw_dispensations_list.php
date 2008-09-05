@@ -187,6 +187,7 @@ foreach($quantites as $code => &$_quantite){
   if (count($list_done)) {
     $done[$code][0] = 0;
     foreach ($list_done as $d) {
+    	$d->loadRefsBack();
       $done[$code][] = $d;
       $done[$code][0] += $d->quantity;
     }

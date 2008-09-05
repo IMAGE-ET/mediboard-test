@@ -18,7 +18,7 @@
       </td>
 	    <td>{{$curr_order->_ref_societe->_view}}</td>
 	    <td>{{$curr_order->_ref_order_items|@count}}</td>
-	    <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
+	    <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
 	    <td>
         <button type="button" class="edit" onclick="popupOrder({{$curr_order->_id}}, 800, 600);">{{tr}}Modify{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
@@ -126,7 +126,7 @@
       <td>{{$curr_order->_ref_societe->_view}}</td>
       <td>{{$curr_order->_ref_order_items|@count}}/{{$curr_order->_count_received}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <button type="button" class="tick" onclick="popupOrder({{$curr_order->_id}});">{{tr}}CProductOrder-_receive{{/tr}}</button>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
@@ -172,7 +172,7 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />
@@ -217,7 +217,7 @@
       <td>{{$curr_order->_ref_order_items|@count}}</td>
       <td class="date">{{mb_value object=$curr_order field=date_ordered}}</td>
       <td class="date">{{mb_value object=$curr_order field=_date_received}}</td>
-      <td class="currency">{{mb_value object=$curr_order field=_total}}</td>
+      <td class="currency">{{mb_value object=$curr_order field=_total decimals=5}}</td>
       <td>
         <form name="order-cancel-{{$curr_order->_id}}" action="?" method="post">
           <input type="hidden" name="m" value="{{$m}}" />

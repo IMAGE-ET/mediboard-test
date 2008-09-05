@@ -15,21 +15,19 @@ function refreshValue(element, klass, id, field) {
  *  @param options Options used to execute functions after the submit : {refreshLists, close}
  */
 function submitOrder (oForm, options) {
-  var oOptions = {
+  options = Object.extend(options, {
     close: false,
     confirm: false,
     refreshLists: false
-  };
+  });
   
-  Object.extend(oOptions, options);
-  
-  if (!oOptions.confirm || (oOptions.confirm && confirm('Voulez-vous vraiment effectuer cette action ?'))) {
+  if (!options.confirm || (options.confirm && confirm('Voulez-vous vraiment effectuer cette action ?'))) {
     submitFormAjax(oForm, 'systemMsg',{
       onComplete: function() {
-        if (oOptions.close && window.opener) {
+        if (options.close && window.opener) {
           window.close();
         } else {
-          refreshOrder($V(oForm.order_id), oOptions);
+          refreshOrder($V(oForm.order_id), options);
         }
       }
     });
@@ -60,7 +58,7 @@ function submitOrderItem (oForm, options) {
  *  Used to refresh the view of an order
 */
 function refreshOrder(order_id, options) {
-  if (options.refreshLists) {
+  if (options && options.refreshLists) {
     refreshLists();
   }
   url = new Url;
@@ -93,7 +91,7 @@ function refreshLists(keywords) {
     refreshListOrders("pending",   keywords);
     refreshListOrders("received",  keywords);
     refreshListOrders("cancelled", keywords);
-  } else {
+  } else if (window.opener.refreshLists) {
     window.opener.refreshLists();
   }
   return false;

@@ -67,7 +67,7 @@ class CProduct extends CMbObject {
 
   function updateFormFields() {
     parent::updateFormFields();
-    $this->_view = $this->name;
+    $this->_view = ($this->code ? "[$this->code] " : '') . $this->name;
   }
 
   function loadRefsBack() {

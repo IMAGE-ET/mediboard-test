@@ -1,3 +1,11 @@
+<script type="text/javascript">
+  {{if $mode_nominatif}}
+  $('list-nominatives-count').update({{$dispensations|@count}});
+  {{else}}
+  $('list-globales-count').update({{$dispensations|@count}});
+  {{/if}}
+</script>
+
 {{if $mode_nominatif && !$prescription->_id}}
   <div class="big-info">
     Veuillez sélectionner un patient pour réaliser une dispensation nominative.
@@ -47,7 +55,7 @@
         <td rowspan="{{$unites|@count}}" style="text-align: center">
           <div onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$code_cip}}'} })"
                class="tooltip-trigger">
-            <a href="#">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
+            <a href="#1">{{$quantites.$code_cip}} {{$medicament->libelle_conditionnement}}</a>
           </div>  
           <div id="tooltip-content-{{$code_cip}}" style="display: none; text-align: left;">
             <ul>
@@ -57,7 +65,7 @@
             </ul>
           </div>
         </td>
-        <td  rowspan="{{$unites|@count}}" style="text-align: center">
+        <td rowspan="{{$unites|@count}}" style="text-align: center">
           {{if array_key_exists($code_cip,$delivrances)}}
             {{assign var=delivrance value=$delivrances.$code_cip}}
             {{$delivrance->_ref_stock->quantity}}
@@ -68,24 +76,24 @@
         <td rowspan="{{$unites|@count}}" style="text-align: left">       
           {{foreach from=$done.$code_cip item=curr_done name="done"}}
             {{if !$smarty.foreach.done.first}}
-              {{if $curr_done->date_delivery}}
-                <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">délivré le {{$curr_done->date_delivery|@date_format:"%d/%m/%Y"}}</div>
+                {{foreach from=$curr_done->_ref_delivery_traces item=trace}}
+                <div id="tooltip-content-{{$curr_done->_id}}" style="display: none;">délivré le {{$trace->date_delivery|@date_format:"%d/%m/%Y"}}</div>
                 <div class="tooltip-trigger" 
                      onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$curr_done->_id}}'} })">
                   {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
                   <img src="images/icons/tick.png" alt="Délivré" title="Délivré" />
                 </div>
-              {{else}}
-                {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
-                <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
-                  <input type="hidden" name="m" value="dPstock" />
-                  <input type="hidden" name="dosql" value="do_delivery_aed" />
-                  <input type="hidden" name="del" value="1" />
-                  <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
-                  <button type="submit" class="cancel notext" title="Annuler">Annuler</button>
-                </form>
-                <br />
-              {{/if}}
+                {{foreachelse}}
+                  {{$curr_done->quantity}} {{$medicament->libelle_conditionnement}} le {{$curr_done->date_dispensation|@date_format:"%d/%m/%Y"}}
+                  <form name="form-dispensation-del-{{$curr_done->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+                    <input type="hidden" name="m" value="dPstock" />
+                    <input type="hidden" name="dosql" value="do_delivery_aed" />
+                    <input type="hidden" name="del" value="1" />
+                    <input type="hidden" name="delivery_id" value="{{$curr_done->_id}}" />
+                    <button type="submit" class="cancel notext" title="Annuler">Annuler</button>
+                  </form>
+                  <br />
+              {{/foreach}}
             {{/if}}
           {{foreachelse}}
             Aucune
@@ -96,7 +104,7 @@
           {{assign var=delivrance value=$delivrances.$code_cip}}
           {{if $delivrance->_ref_stock->quantity>0}}
           <script type="text/javascript">prepareForm('form-dispensation-{{$code_cip}}');</script>
-          <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
+          <form name="form-dispensation-{{$code_cip}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
             <input type="hidden" name="m" value="dPstock" />
             <input type="hidden" name="tab" value="{{$tab}}" />
             <input type="hidden" name="dosql" value="do_delivery_aed" />

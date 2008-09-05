@@ -7,7 +7,8 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI;
+global $can;
+$can->needsRead();
 
 $product_id  = mbGetValueFromGetOrSession('product_id', null);
 

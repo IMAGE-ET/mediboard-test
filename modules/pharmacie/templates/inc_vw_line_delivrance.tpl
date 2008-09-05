@@ -22,27 +22,32 @@
     {{$stock->quantity}}
   </td>
   <td>
-  {{assign var=id value=$curr_delivery->_id}}
-  {{if !$curr_delivery->date_delivery}}
-    {{mb_field object=$curr_delivery field=code id="code-$id"}}
-  {{else}}
-    {{mb_value object=$curr_delivery field=code}}
-  {{/if}}
-  </td>
-  <td>
-  <form name="delivery-{{$curr_delivery->_id}}" action="?" method="post" onsubmit="$V(this.code, $V($('code-{{$id}}'))); return onSubmitFormAjax(this, {onComplete: refreshDeliveriesList})">
-    <input type="hidden" name="m" value="dPstock" /> 
-    <input type="hidden" name="del" value="0" />
-    <input type="hidden" name="dosql" value="do_delivery_aed" />
-    <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
-    {{if $curr_delivery->date_delivery}}
-    <input type="hidden" name="_undeliver" value="1" />
-    <button type="submit" class="cancel">Annuler</button>
-    {{else}}
-    <input type="hidden" name="code" value="" />
-    <input type="hidden" name="_deliver" value="1" />
-    <button type="submit" class="tick">Délivrer</button>
-    {{/if}}
-  </form>
+  {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
+    {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} - <b>{{$trace->quantity}} éléments</b> - [{{$trace->code}}] 
+    <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+      <input type="hidden" name="m" value="dPstock" /> 
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+      <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
+      <input type="hidden" name="_undeliver" value="1" />
+      <button type="submit" class="cancel notext">Anuler</button>
+    </form>
+    <br />
+  {{foreachelse}}
+  Aucune délivrance effectuée pour cette dispensation<br />
+  {{/foreach}}
+    <script type="text/javascript">
+      prepareForm("delivery-trace-{{$curr_delivery->_id}}-new");
+    </script>
+    <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+      <input type="hidden" name="m" value="dPstock" /> 
+      <input type="hidden" name="del" value="0" />
+      <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+      <input type="hidden" name="delivery_id" value="{{$curr_delivery->_id}}" />
+      <input type="hidden" name="date_delivery" value="now" />
+      {{mb_field object=$curr_delivery field=quantity increment=1 form=delivery-trace-$id-new size=3}}
+      <input type="text" name="code" value="" />
+      <button type="submit" class="tick">Délivrer</button>
+    </form>
   </td>
 </tr>

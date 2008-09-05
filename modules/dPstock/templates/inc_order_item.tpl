@@ -49,7 +49,7 @@
   
   <!-- Receive item -->
   <td style="width: 1%; white-space: nowrap;">
-    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this)">
+    <form name="form-item-receive-{{$curr_item->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshOrder({{$order->_id}})})">
       {{if $ajax}}
       <script type="text/javascript">
           prepareForm('form-item-receive-{{$curr_item->_id}}');

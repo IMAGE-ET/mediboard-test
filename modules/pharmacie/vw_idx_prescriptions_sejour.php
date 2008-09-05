@@ -7,8 +7,7 @@
  *  @author Alexis Granger
  */
  
-global $AppUI, $can, $m, $g;
- 
+global $can, $g;
 $can->needsRead();
 
 // Chargement de la liste des praticiens
@@ -44,13 +43,10 @@ if(!$filter_sejour->_date_min && !$filter_sejour->_date_max){
 $lines_medicament = array();
 $where = array();
 
-
 $ljoinMedicament["prescription"] = "prescription_line_medicament.prescription_id = prescription.prescription_id";
 $ljoinMedicament["sejour"] = "prescription.object_id = sejour.sejour_id";
 	
-
 $where["prescription.type"] = " = 'sejour'";
-
 if($valide_pharma == 0){
   $where["valide_pharma"] = " = '$valide_pharma'";
 }
@@ -88,7 +84,6 @@ if($praticien_id || $service_id || ($filter_sejour->_date_min && $filter_sejour-
 }
 
 $prescriptions = array();
-
 // Chargement de toutes les prescriptions
 foreach($lines_medicament as $line_med){
 	if(!array_key_exists($line_med->prescription_id, $prescriptions)){
@@ -100,8 +95,6 @@ foreach($lines_medicament as $line_med){
     $prescriptions[$line_med->prescription_id] = $prescription;
 	}
 }
-
-
 
 // Smarty template
 $smarty = new CSmartyDP();

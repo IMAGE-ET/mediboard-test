@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m, $g;
-
+global $can, $g;
 $can->needsRead();
 
 $category_id         = mbGetValueFromGet('category_id');
@@ -37,8 +36,7 @@ $list_stocks = $stock->loadList($where, $orderby, 20, null, $leftjoin);
 
 // Smarty template
 $smarty = new CSmartyDP();
-
 $smarty->assign('list_stocks', $list_stocks);
-
 $smarty->display('inc_aed_delivery_stocks_list.tpl');
+
 ?>

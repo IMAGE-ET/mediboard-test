@@ -14,8 +14,6 @@ class CProductDelivery extends CMbObject {
   // DB Fields
   var $stock_id       = null;
   var $date_dispensation = null;
-  var $date_delivery  = null;
-  var $date_reception = null;
   var $quantity       = null;
   var $code           = null; // Lot number, lapsing date
   var $service_id     = null;
@@ -26,13 +24,10 @@ class CProductDelivery extends CMbObject {
   var $_ref_stock     = null;
   var $_ref_service   = null;
   
+  var $_ref_delivery_traces = null;
+  
   var $_date_min      = null;
   var $_date_max      = null;
-  
-  var $_deliver       = null;
-  var $_undeliver     = null;
-  var $_receive       = null;
-  var $_unreceive     = null;
   
   function getSpec() {
     $spec = parent::getSpec();
@@ -43,18 +38,14 @@ class CProductDelivery extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'stock_id'          => 'notNull ref class|CProductStockGroup',
-      'date_dispensation' => 'notNull dateTime',
-      'date_delivery'     => 'dateTime',
-      'date_reception'    => 'dateTime',
-      'quantity'          => 'notNull num',
-      'code'              => 'str maxLength|32',
-      'service_id'        => 'notNull ref class|CService',
-      'patient_id'        => 'ref class|CPatient',
-      '_date_min'         => 'notNull dateTime',
-      '_date_max'         => 'notNull dateTime moreThan|_date_min',
-    ));
+    $specs['stock_id']          = 'notNull ref class|CProductStockGroup';
+    $specs['date_dispensation'] = 'notNull dateTime';
+    $specs['quantity']          = 'notNull num';
+    $specs['service_id']        = 'notNull ref class|CService';
+    $specs['patient_id']        = 'ref class|CPatient';
+    $specs['_date_min']         = 'notNull dateTime';
+    $specs['_date_max']         = 'notNull dateTime moreThan|_date_min';
+    return $specs;
   }
 
   function updateFormFields() {
@@ -63,86 +54,34 @@ class CProductDelivery extends CMbObject {
     $this->_view = $this->quantity.'x '.$this->_ref_stock->_view.($this->service_id?" pour le service '{$this->_ref_service->_view}'":'');
   }
   
-  function store() {
-    // If it's a new object, is is a dispensation
-    if (!$this->_id) {
-      $this->date_dispensation = mbDateTime();
-    }
-    
-    // TODO: supprimer ce hack
-    $code = $this->code;
-    $this->load();
-    $this->code = $code;
-    $this->patient_id = $this->patient_id == 0 ? null : $this->patient_id;
-    if ($msg = $this->check()) return $msg;
-    
-    $this->loadRefsFwd();
-    
-    // If we want to deliver and if it hasn't been delivered yet
-    if ($this->_deliver && !$this->date_delivery) {
-      $this->_ref_stock->quantity -= $this->quantity;
-      $this->_ref_stock->store();
-      $this->_deliver = null;
-      $this->date_delivery = mbDateTime();
-    }
-    
-    // Un-deliver
-    else if ($this->_undeliver) {
-      $this->_ref_stock->quantity += $this->quantity;
-      $this->_ref_stock->store();
-      
-      $this->_undeliver = null;
-      $this->date_delivery = '';
-    }
-    
-    // If we want to receive and if it hasn't been reveived yet
-    if ($this->_receive && !$this->date_reception) {
-      $stock_service = new CProductStockService();
-      $stock_service->product_id = $this->_ref_stock->product_id;
-      $stock_service->service_id = $this->service_id;
-      
-      if ($stock_service->loadMatchingObject()) {
-        $stock_service->quantity += $this->quantity;
-      } else if ($this->quantity > 0) {
-        $stock_service->quantity = $this->quantity;
-      }
-
-      if ($msg = $stock_service->store()) {
-        return $msg;
-      }
-      $this->_receive = null;
-      $this->date_reception = mbDateTime();
-    }
-    else if ($this->_unreceive) {
-      $stock_service = new CProductStockService();
-      $stock_service->product_id = $this->_ref_stock->product_id;
-      $stock_service->service_id = $this->service_id;
-      
-      if ($stock_service->loadMatchingObject()) {
-        $stock_service->quantity -= $this->quantity;
-      }
-      
-      if ($msg = $stock_service->store()) {
-        return $msg;
-      }
-      $this->_unreceive = null;
-      $this->date_reception = '';
-    }
-
-
-    return parent::store();
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs['delivery_traces'] = 'CProductDeliveryTrace delivery_id';
+    return $backRefs;
   }
   
-  function check() {
-  	$this->loadRefsFwd();
-  	
-  	if ($this->_deliver) {
-    	if (($this->quantity == 0) || ($this->_ref_stock->quantity < $this->quantity)) {
-        return 'impossible de délivrer ce nombre d\'articles';
-      }
+  function isDelivered() {
+  	$this->loadRefsBack();
+  	$sum = 0;
+  	foreach ($this->_ref_delivery_traces as $trace) {
+  		if ($trace->date_delivery)
+  		  $sum += $trace->quantity;
   	}
-  	
-  	return parent::check();
+  	return ($sum >= $this->quantity);
+  }
+  
+  function isReceived() {
+    $this->loadRefsBack();
+    $sum = 0;
+    foreach ($this->_ref_delivery_traces as $trace) {
+      if ($trace->date_reception)
+        $sum += $trace->quantity;
+    }
+    return ($sum >= $this->quantity);
+  }
+  
+  function loadRefsBack(){
+    $this->_ref_delivery_traces = $this->loadBackRefs('delivery_traces');
   }
 
   function loadRefStock(){

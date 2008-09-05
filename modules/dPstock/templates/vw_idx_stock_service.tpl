@@ -36,7 +36,7 @@ Main.add(function () {
     </td>
 
     <td class="halfPane">
-      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
+      <a class="buttonnew" href="?m={{$m}}&amp;tab=vw_idx_stock_service&amp;stock_service_id=0">{{tr}}CProductStockService.create{{/tr}}</a>
       <form name="edit_stock_service" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
       <input type="hidden" name="dosql" value="do_stock_service_aed" />
       <input type="hidden" name="stock_id" value="{{$stock_service->_id}}" />
@@ -80,6 +80,22 @@ Main.add(function () {
             {{/foreach}}
           </select>
         </td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$stock_service field="order_threshold_critical"}}</th>
+        <td>{{mb_field object=$stock_service field="order_threshold_critical" form="edit_stock_service" increment="1" min=0}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$stock_service field="order_threshold_min"}}</th>
+        <td>{{mb_field object=$stock_service field="order_threshold_min" form="edit_stock_service" increment="1"}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$stock_service field="order_threshold_optimum"}}</th>
+        <td>{{mb_field object=$stock_service field="order_threshold_optimum" form="edit_stock_service" increment="1" min=0}}</td>
+      </tr>
+      <tr>
+        <th>{{mb_label object=$stock_service field="order_threshold_max"}}</th>
+        <td>{{mb_field object=$stock_service field="order_threshold_max" form="edit_stock_service" increment="1"}}</td>
       </tr>
       <tr>
         <td class="button" colspan="4">{{if $stock_service->_id}}

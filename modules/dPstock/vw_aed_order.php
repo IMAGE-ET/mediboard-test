@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsEdit();
 
 $order_id    = mbGetValueFromGetOrSession('order_id');

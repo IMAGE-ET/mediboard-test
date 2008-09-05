@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 // Gets objects ID from Get or Session

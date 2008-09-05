@@ -1,12 +1,3 @@
-<script type="text/javascript">
-
-Main.add(function () {
-  regFieldCalendar('filterForm', "_date_min", true);
-  regFieldCalendar('filterForm', "_date_max", true);
-});
-
-</script>
-
 {{mb_include_script module="dPmedicament" script="medicament_selector"}}
 {{mb_include_script module="dPmedicament" script="equivalent_selector"}}
 {{mb_include_script module="dPprescription" script="element_selector"}}
@@ -20,17 +11,13 @@ Main.add(function () {
 	
         <table class="form">
           <tr>
-			      <th>
-		 	        A partir du
-			      </th>
+			      <th>A partir du</th>
 			      <td class="date">  
-			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm canNull=false}}
+			        {{mb_field object=$filter_sejour field="_date_min" form=filterForm canNull=false register=true}}
 			      </td>
-			      <th>
-			        Jusqu'au 
-			      </th>
+			      <th>Jusqu'au</th>
 			      <td class="date">
-			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm canNull=false}}
+			        {{mb_field object=$filter_sejour field="_date_max" form=filterForm canNull=false register=true}}
 	          </td>
             <td>
               <select name="service_id">
@@ -42,9 +29,7 @@ Main.add(function () {
             </td>
           </tr>
           <tr>
-            <th>
-              Praticien
-            </th>
+            <th>Praticien</th>
             <td>
               <select name="praticien_id">
                 <option value="">&mdash; Praticien</option>

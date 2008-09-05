@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 $reference_id = mbGetValueFromGetOrSession('reference_id');
@@ -59,4 +58,5 @@ $smarty->assign('list_categories', $list_categories);
 $smarty->assign('list_societes',   $list_societes);
 
 $smarty->display('vw_idx_reference.tpl');
+
 ?>

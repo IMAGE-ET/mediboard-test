@@ -34,7 +34,7 @@ $smarty = new CSmartyDP();
 
 $smarty->assign('service_id',    $service_id);
 $smarty->assign('list_services', $list_services);
-$smarty->assign('delivrance', $delivrance);
+$smarty->assign('delivrance',    $delivrance);
 
 $smarty->display('vw_idx_delivrance.tpl');
 

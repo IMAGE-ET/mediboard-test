@@ -240,7 +240,49 @@ class CSetupdPstock extends CSetup {
       ADD INDEX (`code`)';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.92';
+    $this->makeRevision('0.92');
+    $sql = 'CREATE TABLE `product_delivery_trace` (
+      `delivery_trace_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+      `delivery_id` INT (11) UNSIGNED NOT NULL,
+      `quantity` INT (11) NOT NULL,
+      `code` VARCHAR (255),
+      `date_delivery` DATETIME NOT NULL,
+      `date_reception` DATETIME);';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_delivery_trace` 
+      ADD INDEX (`delivery_id`),
+      ADD INDEX (`code`),
+      ADD INDEX (`date_delivery`),
+      ADD INDEX (`date_reception`);';
+    $this->addQuery($sql);
+    
+    $sql = 'INSERT INTO `product_delivery_trace`
+      SELECT \'\', product_delivery.delivery_id, 
+                   product_delivery.quantity, 
+                   product_delivery.code, 
+                   product_delivery.date_delivery, 
+                   product_delivery.date_reception
+      FROM product_delivery';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_delivery`
+      DROP `code`, 
+      DROP `date_delivery`,
+      DROP `date_reception`';
+    $this->addQuery($sql);
+	  
+    $sql = 'ALTER TABLE `product_reference` CHANGE `price` `price` DECIMAL(10, 5) NOT NULL';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_stock_service`
+      ADD `order_threshold_critical` INT(11) UNSIGNED, 
+      ADD `order_threshold_min` INT(11) UNSIGNED NOT NULL, 
+      ADD `order_threshold_optimum` INT(11) UNSIGNED, 
+      ADD `order_threshold_max` INT(11) UNSIGNED NOT NULL';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.93';
   }
 }
 

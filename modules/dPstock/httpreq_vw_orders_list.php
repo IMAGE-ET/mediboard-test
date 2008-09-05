@@ -7,10 +7,10 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m, $g;
-$ds = CSQLDataSource::get('std');
-
+global $can, $g;
 $can->needsRead();
+
+$ds = CSQLDataSource::get('std');
 
 $type     = mbGetValueFromGetOrSession('type');
 $keywords = mbGetValueFromGetOrSession('keywords');
@@ -19,7 +19,6 @@ $order = new CProductOrder();
 $societe = new CSociete();
 
 $where = array();
-
 $leftjoin = array();
 $leftjoin['product_order_item'] = 'product_order.order_id = product_order_item.order_id';
 

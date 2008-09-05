@@ -7,8 +7,6 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI;
-
 $category_id      = mbGetValueFromGet('category_id');
 $keywords         = mbGetValueFromGet('keywords');
 $selected_product = mbGetValueFromGet('selected_product');

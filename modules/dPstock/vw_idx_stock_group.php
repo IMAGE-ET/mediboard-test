@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 $stock_id            = mbGetValueFromGetOrSession('stock_id');

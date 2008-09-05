@@ -11,7 +11,7 @@ global $can, $g;
 
 $can->needsAdmin();
 
-$stock_id         = mbGetValueFromGetOrSession('stock_id');
+$stock_service_id = mbGetValueFromGetOrSession('stock_service_id');
 $category_id      = mbGetValueFromGetOrSession('category_id');
 $service_id       = mbGetValueFromGetOrSession('service_id');
 
@@ -19,8 +19,8 @@ $service_id       = mbGetValueFromGetOrSession('service_id');
 $stock_service = new CProductStockService();
 
 // If stock_id has been provided, we load the associated product
-if ($stock_id) {
-  $stock_service->stock_id = $stock_id;
+if ($stock_service_id) {
+  $stock_service->stock_id = $stock_service_id;
   $stock_service->loadMatchingObject();
   $stock_service->loadRefsFwd();
   $stock_service->_ref_product->loadRefsFwd();

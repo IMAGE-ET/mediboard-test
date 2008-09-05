@@ -85,11 +85,11 @@ Main.add(function () {
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="quantity"}}</th>
-          <td>{{mb_field object=$reference field="quantity" increment=1 form=edit_reference min=0}}</td>
+          <td>{{mb_field object=$reference field="quantity" increment=1 form=edit_reference min="0"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="price"}}</th>
-          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference}}</td>
+          <td>{{mb_field object=$reference field="price" increment=1 form=edit_reference decimals=5 min="0" size="8"}}</td>
         </tr>
         <tr>
           <th>{{mb_label object=$reference field="code"}}</th>

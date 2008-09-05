@@ -7,7 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $can, $g;
+global $can;
 $can->needsEdit();
 
 $category_id = mbGetValueFromGet('category_id');
@@ -43,4 +43,5 @@ $smarty->assign('list_stocks_service', $list_stocks_service);
 $smarty->assign('list_stocks_service_count', $list_stocks_service_count);
 
 $smarty->display('inc_stocks_service_list.tpl');
+
 ?>

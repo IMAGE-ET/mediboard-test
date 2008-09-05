@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 $category_id = mbGetValueFromGetOrSession('category_id');

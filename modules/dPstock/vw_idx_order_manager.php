@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsEdit();
 
 $order_id = mbGetValueFromGetOrSession('order_id');
@@ -22,8 +21,7 @@ if ($order_id) {
 
 // Smarty template
 $smarty = new CSmartyDP();
-
 $smarty->assign('order', $order);
-
 $smarty->display('vw_idx_order_manager.tpl');
+
 ?>

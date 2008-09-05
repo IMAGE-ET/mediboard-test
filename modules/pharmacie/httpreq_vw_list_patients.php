@@ -7,8 +7,6 @@
  *  @author Alexis Granger
  */
 
-global $g;
-
 $patients = array();
 
 $patient_id = mbGetValueFromGetOrSession('patient_id');

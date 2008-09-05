@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
 
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $track = array();
@@ -23,9 +22,7 @@ $list = $list->loadList($where, $orderby);
 
 // Création du template
 $smarty = new CSmartyDP();
-
 $smarty->assign('list', $list);
-
 $smarty->display('vw_traceability.tpl');
 
 ?>

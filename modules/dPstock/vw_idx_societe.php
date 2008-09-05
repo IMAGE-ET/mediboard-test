@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsAdmin();
 
 $societe_id = mbGetValueFromGetOrSession('societe_id');
@@ -38,4 +37,5 @@ $smarty->assign('societe',       $societe);
 $smarty->assign('list_societes', $list_societes);
 
 $smarty->display('vw_idx_societe.tpl');
+
 ?>

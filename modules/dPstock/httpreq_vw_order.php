@@ -7,8 +7,7 @@
  *  @author Fabien Ménager
  */
  
-global $AppUI, $can, $m;
-
+global $can;
 $can->needsRead();
 
 $order_id = mbGetValueFromGet('order_id');

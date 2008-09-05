@@ -9,17 +9,19 @@
 
 global $g;
 
-$service_id = mbGetValueFromGetOrSession('service_id');
-$patient_id = mbGetValueFromGetOrSession('patient_id');
+$service_id =      mbGetValueFromGetOrSession('service_id');
+$patient_id =      mbGetValueFromGetOrSession('patient_id');
+$prescription_id = mbGetValueFromGetOrSession('prescription_id');
+
 $date_min = mbGetValueFromGetOrSession('_date_min');
 $date_max = mbGetValueFromGetOrSession('_date_max');
 mbSetValueToSession('_date_min', $date_min);
 mbSetValueToSession('_date_max', $date_max);
-$prescription_id = mbGetValueFromGetOrSession('prescription_id');
 
 if($prescription_id == "undefined"){
 	$prescription_id = "";
 }
+
 $prescription = new CPrescription();
 $dispensations = array();
 $delivrances = array();
@@ -52,6 +54,7 @@ if($prescription_id){
 	  foreach($prescription->_ref_prescription_lines as $_line_med){ 
 	  	$patients[$_line_med->code_cip][$sejour->_ref_patient->_id] = $sejour->_ref_patient;
 	    $_line_med->_ref_produit->loadConditionnement();
+	    
 	    // On remplit les bornes de la ligne avec les dates du sejour si besoin
 	    $_line_med->_debut_reel = (!$_line_med->_debut_reel) ? $sejour->_entree : $_line_med->_debut_reel;
 	    $_line_med->_fin_reelle = (!$_line_med->_fin_reelle) ? $sejour->_sortie : $_line_med->_fin_reelle;
@@ -62,11 +65,13 @@ if($prescription_id){
 	        $_line_med->_debut_reel <= $date_min && $_line_med->_fin_reelle >= $date_max)){
 	      continue;     
 	    }
+	    
 	    // Calcul de la quantite en fonction des prises
 	    $_line_med->calculQuantiteLine($date_min, $date_max);
 	    foreach($_line_med->_quantites as $unite_prise => $quantite){
 	    	$mode_kg = 0;
 	      $_unite_prise = str_replace('/kg', '', $unite_prise);
+	      
 	      // Dans le cas d'un unite_prise/kg
 	      if($_unite_prise != $unite_prise){
 	      	$mode_kg = 1;
@@ -176,6 +181,7 @@ if($prescription_id){
 	  if (count($list_done)) {
 	    $done[$code][0] = 0;
   	  foreach ($list_done as $d) {
+  	  	$d->loadRefsBack();
   	    $done[$code][] = $d;
   	    $done[$code][0] += $d->quantity;
   	  }

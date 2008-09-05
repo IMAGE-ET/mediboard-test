@@ -1,41 +1,37 @@
-{{mb_include_script module=dPstock script=filter}}
-
 <script type="text/javascript">
-Main.add(function () {
-  filterFields = ["service_id", "_date_min", "_date_max", "delivered"];
-  filter = new Filter("filter-delivrance", "{{$m}}", "httpreq_vw_deliveries_list", "list-deliveries", filterFields);
-  filter.submit();
-});
+function refreshLists() {
+  var form = getForm("filter");
+  
+  urlGlobales = new Url;
+  urlGlobales.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
+  
+  urlNominatives = new Url;
+  urlNominatives.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
 
-function refreshDeliveriesList() {
-  url = new Url;
-  url.setModuleAction("pharmacie", "httpreq_vw_deliveries_list");
-  url.requestUpdate("list-deliveries", { waitingText: null } );
+  $A(form.elements).each (function (e) {
+    urlGlobales.addParam(e.name, $V(e));
+    urlNominatives.addParam(e.name, $V(e));
+  });
+
+  // To choose wether we want global or nominative deliveries
+  urlGlobales.addParam("mode", "global");
+  urlNominatives.addParam("mode", "nominatif");
+  
+  urlGlobales.requestUpdate("list-globales", { waitingText: null } );
+  urlNominatives.requestUpdate("list-nominatives", { waitingText: null } );
+
+  return false;
 }
 </script>
 
-<form name="filter-delivrance" action="?" method="post" onsubmit="if(checkForm(this)){ return filter.submit(); } else { return false; }">
-  <input type="hidden" name="m" value="{{$m}}" />
-  <table class="form">
-    <tr>
-      <th>{{mb_label object=$delivrance field=_date_min}}</th>
-      <td class="date">{{mb_field object=$delivrance field=_date_min form=filter-delivrance register=1}}</td>
-      <th>{{mb_label object=$delivrance field=_date_max}}</th>
-      <td class="date">{{mb_field object=$delivrance field=_date_max form=filter-delivrance register=1}}</td>
-      <td>
-        <select name="service_id">
-        {{foreach from=$list_services item=curr_service}}
-          <option value="{{$curr_service->_id}}" {{if $service_id==$curr_service->_id}}selected="selected"{{/if}}>{{$curr_service->nom}}</option>
-        {{/foreach}}
-        </select>
-      </td>
-      <td>
-        <label><input name="delivered" type="radio" value="false" checked="checked" /> non délivrées</label>
-        <label><input name="delivered" type="radio" value="true" /> délivrées</label>
-      </td>
-      <td><button class="search">{{tr}}Filter{{/tr}}</button></td>
-    </tr>
-  </table>
-</form>
+{{include file=inc_filter_delivrances.tpl}}
 
-<div id="list-deliveries"></div>
+<ul id="tab_delivrances" class="control_tabs">
+  <li><a href="#list-globales">Globales (<span id="list-globales-count">0</span>)</a></li>
+  <li><a href="#list-nominatives">Nominatives (<span id="list-nominatives-count">0</span>)</a></li>
+</ul>
+<hr class="control_tabs" />
+
+<!-- Tabs containers -->
+<div id="list-globales" style="display: none;"></div>
+<div id="list-nominatives" style="display: none;"></div>
