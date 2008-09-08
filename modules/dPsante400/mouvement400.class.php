@@ -251,7 +251,7 @@ class CMouvement400 extends CRecordSante400 {
       $return = true;
     } catch (Exception $e) {
       if (self::$verbose) {
-        trigger_error($e->getMessage(), E_USER_WARNING);
+        exceptionHandler($e);
       }
       $return = false;
     }

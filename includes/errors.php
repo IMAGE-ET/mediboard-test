@@ -164,10 +164,6 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
   
   $errorTime = date("Y-m-d H:i:s");
   
-  /*
-  $divClass = CMbArray::get($divClasses, $errno);
-  $errorType = CMbArray::get($errorTypes, $errno);
-  */
   // CMbArray non chargé
   $divClass = isset($divClasses[$errno]) ? $divClasses[$errno] : null;
   $errorType = isset($errorTypes[$errno]) ? $errorTypes[$errno] : null;
@@ -227,6 +223,71 @@ function errorHandler($errno, $errstr, $errfile, $errline) {
 } 
 
 set_error_handler("errorHandler");
+
+/**
+ * Custom exception handler with backtrace
+ * @return null
+ */
+function exceptionHandler($exception) {
+  global $divClasses, $errorTypes, $errorCategories, $logPath, $AppUI, $performance;
+  
+  $divClass = "big-warning";
+  
+  $log = "\n\n<div class='$divClass'>";
+  
+  if ($AppUI && $AppUI->user_id) {
+    $log .= "\n<strong>User: </strong>$AppUI->user_first_name $AppUI->user_last_name ($AppUI->user_id)";
+  }
+  
+  $log .= "\n<strong>Query: </strong>" . @$_SERVER["QUERY_STRING"];
+  
+  $log .= "<br />";
+  
+  // Erreur générale
+  $errorTime = date("Y-m-d H:i:s");
+  $errorType = "Exception";
+  $errorFile = mbRelativePath($exception->getFile());
+  $errorLine = $exception->getLine();
+  $errorText = $exception->getMessage();
+  $log .= "\n<strong>Time: </strong>$errorTime";
+  $log .= "\n<strong>Type: </strong>$errorType";
+  $log .= "\n<strong>Text: </strong>$errorText";
+  $log .= "\n<strong>File: </strong>$errorFile";
+  $log .= "\n<strong>Line: </strong>$errorLine";
+  $log .= "<hr />";
+  
+  // Contextes 
+  $contexts = $exception->getTrace();
+  foreach($contexts as $context) {
+    $function = isset($context["class"]) ? $context["class"] . ":" : "";
+    $function.= $context["function"] . "()";
+    
+    $log .= "\n<strong>Function: </strong>" . $function;
+    
+    if (isset($context["file"])) {
+      $context["file"] = mbRelativePath($context["file"]);
+      $log .= "\n<strong>File: </strong>" . $context["file"];      
+    }
+    
+    if (isset($context["line"])) {
+      $log .= "\n<strong>Line: </strong>" . $context["line"];
+    }
+    
+    $log .= "<br />";
+  }
+  
+  $log .= "</div>";
+  
+  if (ini_get("log_errors")) {
+    file_put_contents($logPath, $log, FILE_APPEND);
+  }
+  
+  if (ini_get("display_errors")) {
+    echo $log;
+  }
+} 
+
+set_exception_handler("exceptionHandler");
 
 // Initialize custom error handler
 if (!is_file($logPath)) {

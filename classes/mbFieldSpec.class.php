@@ -185,7 +185,7 @@ class CMbFieldSpec {
     }
     
     // input mask
-    if($field = $this->mask){
+    if ($field = $this->mask){
       $regex = self::maskToRegex($this->mask);
       $rawvalue = self::unmaskData($propValue, $this->mask);
 
