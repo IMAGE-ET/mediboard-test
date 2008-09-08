@@ -116,13 +116,16 @@ class CTemplateManager {
     global $AppUI;
     // Liste de choix
     $chir = new CMediusers;
+    $compte_rendu = new CCompteRendu();
+    $compte_rendu->load($compte_rendu_id);
+    
     $where = array();
     if($user_id){
       $chir->load($user_id);
       $where[] = "(chir_id = '$chir->user_id' OR function_id = '$chir->function_id')";
     }else{
       $chir->load($AppUI->user_id); 
-      $where["function_id"] = "= '$chir->function_id'";
+      $where["function_id"] = "IN('$chir->function_id', '$compte_rendu->function_id')";
     }
     $where[] = CSQLDataSource::get("std")->prepare("`compte_rendu_id` IS NULL OR compte_rendu_id = %",$compte_rendu_id); 
     $order = "nom ASC";
