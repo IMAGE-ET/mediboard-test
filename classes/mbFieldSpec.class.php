@@ -67,15 +67,7 @@ class CMbFieldSpec {
     $propValue = $object->$fieldName;
     
     if ($propValue && $this->mask) {
-      $mask = str_replace(array('S', 'P'), array(' ', '|'), $this->mask);
-      $value = '';
-      $c = 0;
-      for ($i = 0; $i < strlen($mask); $i++) {
-        $value .= isset(self::$charmap[$mask[$i]]) ? 
-          isset($propValue[$c++]) ? $propValue[$c-1] : '':
-          $mask[$i];
-      }
-      $propValue = $value;
+      $propValue = self::maskData($propValue, $this->mask);
     }
     
     return htmlspecialchars($propValue);
@@ -322,12 +314,7 @@ class CMbFieldSpec {
     if($object->_locked) {
       $params["readonly"] = "readonly";
     }
-    if ($this->mask) {
-      $value = $this->getValue($object, null);
-    }
-    else {
-      $value = $object->{$this->fieldName};
-    }
+    $value = $this->getValue($object, null);
     if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }
@@ -422,7 +409,7 @@ class CMbFieldSpec {
     $aHtml[] = '<img id="'.$id.'_trigger" src="./images/icons/calendar.gif" alt="Choisir la date"/>';
 
     if (!$this->notNull) {
-      $aHtml[] = '<button class="cancel notext" type="button" onclick="Form.Element.setValue('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
+      $aHtml[] = '<button class="cancel notext" type="button" onclick="$V('.$field.', new String); $(\''.$id.'_da\').innerHTML = new String;">'.CAppUI::tr("Delete").'</button>';
     }
     
     if ($register) {

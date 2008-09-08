@@ -247,6 +247,7 @@ class CMbArray {
    * @return array All plucked values
    */
   static function pluck($array, $name) {
+    if (!is_array($array)) return null;
     $values = array(); 
     foreach ($array as $index => $value) {
       if (is_object($value)) {
