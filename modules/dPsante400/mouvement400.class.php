@@ -78,6 +78,7 @@ class CMouvement400 extends CRecordSante400 {
             "\n WHERE $mouv->idField IN ($recs)";
         
         $rec = new CRecordSante400;
+        $this->trace($query, "Tracing opened mouvements");
         $rec->query($query);
       }
     }
@@ -108,7 +109,7 @@ class CMouvement400 extends CRecordSante400 {
     }
     
     return $marked ? 
-      "\n WHERE $this->prodField NOT IN ('', '========')" : 
+      "\n WHERE $this->prodField NOT IN ('', 'OKOKOKOK')" : 
       "\n WHERE $this->prodField = ''";
   }
 
@@ -162,9 +163,17 @@ class CMouvement400 extends CRecordSante400 {
     }
   }
   
+/**
+ * Mark a row
+ * ======== : checked out
+ * OKOKOKOK : processed
+ * 124--*-- : steps are done :
+ *      n : times
+ *      - : undone (errors), 
+ *      * : skipped 
+ */  
   function markRow() {
-    global $dPconfig;
-    if (!$dPconfig["dPsante400"]["mark_row"]) {
+    if (!CAppUI::conf("dPsante400 mark_row")) {
       return;
     }
     
@@ -184,7 +193,9 @@ class CMouvement400 extends CRecordSante400 {
 
     $query = 
       !in_array(null, $this->statuses, true) ?
-      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+// NEVER DELETE
+//      "DELETE FROM $this->base.$this->table WHERE $this->idField = ?" :
+      "UPDATE $this->base.$this->table SET $this->prodField = 'OKOKOKOK' WHERE $this->idField = ?" :
       "UPDATE $this->base.$this->table SET $this->prodField = '$this->status' WHERE $this->idField = ?";
     $values = array (
       $this->rec,

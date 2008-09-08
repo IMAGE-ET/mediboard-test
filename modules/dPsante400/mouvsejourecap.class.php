@@ -476,15 +476,16 @@ class CMouvSejourEcap extends CMouvement400 {
     $dheECap->valuePrefix = "AT";
     $dheECap->query($query, $values);
     
-    $IDAT = $this->mapDHE($dheECap);
+    // Pas d'attendu pour ce séjour
+    if (null == $IDAT = $this->mapDHE($dheECap)) {
+      return;
+    }
     
     $tag = "eCap DHE CIDC:{$this->id400Etab->id400}";
     $this->id400DHE = new CIdSante400();
     $this->id400DHE->id400 = $IDAT;
     $this->id400DHE->tag = $tag;
         
-    
-
     $this->id400DHE->bindObject($this->sejour);
 
     $this->markStatus(self::STATUS_SEJOUR);
