@@ -314,7 +314,12 @@ class CMbFieldSpec {
     if($object->_locked) {
       $params["readonly"] = "readonly";
     }
-    $value = $this->getValue($object, null);
+    if ($this->mask) {
+      $value = $this->getValue($object, null);
+    }
+    else {
+      $value = $object->{$this->fieldName};
+    }
     if ($hidden) {
       return $this->getFormHiddenElement($object, $params, $value, $className);
     }
