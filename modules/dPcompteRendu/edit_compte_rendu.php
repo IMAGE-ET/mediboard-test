@@ -52,7 +52,8 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
 $medichir = new CMediusers;
-$medichir->load($compte_rendu->_ref_chir->user_id);
+$medichir->load($compte_rendu->_ref_object->_praticien_id);
+//$medichir->load($compte_rendu->_ref_chir->user_id);
 
 //Chargement des catégories
 $listCategory = CFilesCategory::listCatClass($compte_rendu->object_class);
