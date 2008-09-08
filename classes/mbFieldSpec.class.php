@@ -186,32 +186,65 @@ class CMbFieldSpec {
     
     // input mask
     if($field = $this->mask){
-      $mask = str_replace(array('S', 'P'), array(' ', '|'), $this->mask);
-      $regExp = '/^';
-      $rawvalue = '';
-      
-      // Could be shorter, using str_replace
-      for ($i = 0; $i < strlen($mask); $i++) {
-        if (isset(self::$charmap[$mask[$i]])) {
-          $regExp .= self::$charmap[$mask[$i]];
-          if (isset($object->{$this->fieldName}[$i])) {
-            $rawvalue .= $object->{$this->fieldName}[$i];
-          }
-        }
-        else {
-          $regExp .= (preg_match('`[A-Za-z0-9]`', $mask[$i]) ? '' : '\\').$mask[$i];
-        }
-      }
-      $regExp .= '$/';
+      $regex = self::maskToRegex($this->mask);
+      $rawvalue = self::unmaskData($propValue, $this->mask);
 
-      if (!preg_match($regExp, $propValue)) {
-        return 'La donnée ne respecte pas le masque "'.$mask.'"';
+      if (!preg_match($regex, $propValue)) {
+      	if (!preg_match($regex, self::maskData($propValue, $this->mask))) {
+          return 'La donnée ne respecte pas le masque "'.$this->mask.'"';
+      	} // else, that means the value is already the rawvalue
       } else {
         $object->{$this->fieldName} = $rawvalue;
       }
     }
 
     return null;
+  }
+  
+  static function maskToRegex($mask) {
+    $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+    $regex = '/^';
+      
+    // Could be shorter, using str_replace
+    for ($i = 0; $i < strlen($mask); $i++) {
+      $regex .= isset(self::$charmap[$mask[$i]]) ? 
+        self::$charmap[$mask[$i]] :
+        (preg_match('`[A-Za-z0-9]`', $mask[$i]) ? '' : '\\').$mask[$i];
+    }
+    $regex .= '$/';
+    
+    return $regex;
+  }
+  
+  static function unmaskData($data, $mask) {
+    $mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+    $rawvalue = '';
+      
+    // Could be shorter, using str_replace
+    for ($i = 0; $i < strlen($mask); $i++) {
+      if (isset(self::$charmap[$mask[$i]]) && isset($data[$i])) {
+        $rawvalue .= $data[$i];
+      }
+    }
+    
+    return $rawvalue;
+  }
+  
+  static function maskData($rawdata, $mask) {
+  	$mask = str_replace(array('S', 'P'), array(' ', '|'), $mask);
+  	
+  	$value = '';
+  	$n = 0;
+    for ($i = 0; $i < strlen($mask); $i++) {
+      if (isset(self::$charmap[$mask[$i]]) && isset($rawdata[$n])) {
+        $value .= $rawdata[$n++];
+      }
+      else {
+      	$value .= $mask[$i];
+      }
+    }
+    
+    return $value;
   }
 
   function checkTargetPropValue($object, $field){
