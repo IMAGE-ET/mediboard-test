@@ -52,7 +52,12 @@ $compte_rendu->_ref_object->loadRefsFwd();
 $object =& $compte_rendu->_ref_object;
 
 $medichir = new CMediusers;
-$medichir->load($compte_rendu->_ref_object->_praticien_id);
+if($compte_rendu->_ref_object->_class_name == "CConsultAnesth"){
+  $praticien_id = $compte_rendu->_ref_object->_ref_consultation->_praticien_id;
+} else {
+  $praticien_id = $compte_rendu->_ref_object->_praticien_id;
+}
+$medichir->load($praticien_id);
 //$medichir->load($compte_rendu->_ref_chir->user_id);
 
 //Chargement des catégories
