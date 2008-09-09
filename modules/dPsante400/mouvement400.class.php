@@ -164,12 +164,12 @@ class CMouvement400 extends CRecordSante400 {
   }
   
 /**
- * Mark a row
+ * Mark the mouvement row
  * ======== : checked out
  * OKOKOKOK : processed
  * 124--*-- : steps are done :
  *      n : times
- *      - : undone (errors), 
+ *      - : undone due to errors 
  *      * : skipped 
  */  
   function markRow() {

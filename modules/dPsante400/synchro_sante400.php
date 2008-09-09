@@ -9,6 +9,16 @@
 
 global $can, $dPconfig;
 
+//CRecordSante400::connect();
+//CRecordSante400::$verbose = true;
+//$record = new CRecordSante400();
+//$query = "UPDATE ECAPFILE.TRSJ0 
+//	 SET ETAT = 'TOTOTOTO' 
+//	 WHERE INDEX = ?";
+//$values = array("801817636");
+//$record->query($query, $values);
+//return;
+
 $can->needsEdit();
 
 set_time_limit(90);
