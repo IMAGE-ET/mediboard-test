@@ -8,7 +8,7 @@
 */
 
 
-global $AppUI, $can, $m, $dPconfig;
+global $AppUI, $can, $m, $g, $dPconfig;
 
 $can->needsEdit();
 $vue2_default = isset($AppUI->user_prefs["AFFCONSULT"]) ? $AppUI->user_prefs["AFFCONSULT"] : 0 ;
@@ -145,29 +145,31 @@ if ($consult->_id) {
   $patient->makeDHEUrl();
   if (CModule::getInstalled("dPsante400") && (CAppUI::conf("interop mode_compat") == "medicap")) {
     $tmpEtab = array();
+    $groupIdentEc = "";
     foreach($etablissements as $etab) {
       $idExt = new CIdSante400;
       if ($idExt->_ref_module) {
-	      $idExt->loadLatestFor($etab);
+	      $idExt->loadLatestFor($etab, "eCap");
 	      if($idExt->id400) {
 	        $tmpEtab[$idExt->id400] = $etab;
 	      }
+        if($etab->_id == $g) {
+          $groupIdentEc = $idExt->id400;
+        }
       }
     }
     $etablissements = $tmpEtab;
-
-    // ATTENTION LE TAG N'EST PAS DEFINI !
+    
     $idExt = new CIdSante400;
     if ($idExt->_ref_module) {
-      $idExt->loadLatestFor($patient);
+      $idExt->loadLatestFor($patient, "eCap CIDC:".$groupIdentEc);
 	    $patIdentEc = $idExt->id400;
 	    $patient->_urlDHEParams["patIdentEc"]      = $patIdentEc;
     }
 
-    // ATTENTION LE TAG N'EST PAS DEFINI !
     $idExt = new CIdSante400;
     if ($idExt->_ref_module) {
-	    $idExt->loadLatestFor($userSel);
+	    $idExt->loadLatestFor($userSel, "eCap CIDC:".$groupIdentEc);
 	    $codePraticienEc = $idExt->id400;
 	    $patient->_urlDHEParams["codePraticienEc"] = $codePraticienEc;
     }

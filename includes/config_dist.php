@@ -227,6 +227,7 @@ $dPconfig["dPcabinet"]["CPlageconsult"] = array (
   "hours_stop"       => "20",
   "minutes_interval" => "15",
 );
+$dPconfig["dPcabinet"]["CConsultAnesth"]["feuille_anesthesie"] = "print_fiche";
 
 $dPconfig["dPcabinet"]["CPrescription"] = array (
   "view_prescription" => "0"

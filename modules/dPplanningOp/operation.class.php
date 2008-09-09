@@ -442,7 +442,7 @@ class COperation extends CCodable {
     
     $this->updateSalle();
     
-    // Horraire global
+    // Horaire global
     $this->_datetime          = "$date $this->time_operation";
     $this->_datetime_reel     = "$date $this->debut_op";
     $this->_datetime_reel_fin = "$date $this->fin_op";

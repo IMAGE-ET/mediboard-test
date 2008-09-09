@@ -87,5 +87,7 @@ $smarty->assign("unites"    , $unites);
 $smarty->assign("listChamps", $listChamps);
 $smarty->assign("consult"   , $consult);
 
-$smarty->display("print_fiche.tpl");
+$template = CAppUI::conf("dPcabinet CConsultAnesth feuille_anesthesie");
+
+$smarty->display($template.".tpl");
 ?>

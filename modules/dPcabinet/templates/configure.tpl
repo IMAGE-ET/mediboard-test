@@ -45,6 +45,28 @@
     </td>
   </tr>
 
+  <!-- CConsultAnesth -->  
+  {{assign var="class" value="CConsultAnesth"}}
+    
+  <tr>
+    <th class="category" colspan="100">{{tr}}{{$class}}{{/tr}}</th>
+  </tr>
+  
+  <tr>
+    {{assign var="var" value="feuille_anesthesie"}}
+    <th colspan="3">
+      <label for="{{$m}}[{{$class}}][{{$var}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}{{/tr}}
+      </label>  
+    </th>
+    <td colspan="3">
+      <select class="str" name="{{$m}}[{{$class}}][{{$var}}]">
+        <option value="print_fiche" {{if "print_fiche" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche{{/tr}}</option>
+        <option value="print_fiche1" {{if "print_fiche1" == $dPconfig.$m.$class.$var}} selected="selected" {{/if}}>{{tr}}config-{{$m}}-{{$class}}-{{$var}}-print_fiche1{{/tr}}</option>
+      </select>
+    </td>
+  </tr>
+
   <!-- CPlageconsult -->  
   {{assign var="class" value="CPlageconsult"}}
     
