@@ -344,11 +344,6 @@ class CSmartyDP extends Smarty {
    * @param string $vars
    */
   function showDebugSpans($tpl_file, $vars) {
-    // Prevents rendering before DOCTYPE definition
-    if (in_array(basename($tpl_file), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
-      return;
-    }
-        
     // The span
 	  echo "\n<span class='smarty-include'>";
 	  echo "\n$tpl_file";
@@ -377,14 +372,17 @@ class CSmartyDP extends Smarty {
    * @param string $params["smarty_include_vars"]
    */
   function _smarty_include($params) {
+  	$tpl_file = $params["smarty_include_tpl_file"];
+    $vars     = $params["smarty_include_vars"];
+    
     // Only at debug time
-    if (!CAppUI::conf("debug") || isset($params["smarty_include_vars"]['nodebug'])) {
+    if (!CAppUI::conf("debug") || 
+        isset($params["smarty_include_vars"]['nodebug']) ||
+        in_array(basename($tpl_file), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::_smarty_include($params);
       return;
     }
     
-    $tpl_file = $params["smarty_include_tpl_file"];
-    $vars     = $params["smarty_include_vars"];
     $this->showDebugSpans($tpl_file, $vars);
     
     echo "\n<!-- Start include: $tpl_file -->\n";
@@ -401,7 +399,9 @@ class CSmartyDP extends Smarty {
    */
   function display($resource_name, $cache_id = null, $compile_id = null) {
     // Only at debug time
-    if (!CAppUI::conf("debug") || isset($this->_tpl_vars['nodebug'])) {
+    if (!CAppUI::conf("debug") || 
+        isset($this->_tpl_vars['nodebug']) ||
+        in_array(basename($resource_name), array("common.tpl", "header.tpl", "footer.tpl", "tabbox.tpl", "ajax_errors.tpl"))) {
       parent::display($resource_name, $cache_id, $compile_id);
       return;
     }
