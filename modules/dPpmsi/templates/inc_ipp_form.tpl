@@ -26,7 +26,7 @@ Main.add(function () {
         };
         PatHprimSelector.doSet = function(){
           var oForm = document[PatHprimSelector.sForm];
-          Form.Element.setValue(oForm[PatHprimSelector.sId]  , PatHprimSelector.prepared.id);
+          $V(oForm[PatHprimSelector.sId], PatHprimSelector.prepared.id);
           ExtRefManager.submitIPPForm();
         }
       </script>

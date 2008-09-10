@@ -32,7 +32,7 @@ var ObjectSelector = {
     
     oForm[this.sClass].value = oObject.objClass;
      
-    Form.Element.setValue(oForm[this.sId], oObject.id);
+    $V(oForm[this.sId], oObject.id);
       
   }
    

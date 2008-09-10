@@ -146,7 +146,7 @@ function reloadListActes(operation_id) {
 
 SejourHprimSelector.doSet = function(){
   var oForm = document[SejourHprimSelector.sForm];
-  Form.Element.setValue(oForm[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
+  $V(oForm[SejourHprimSelector.sId]  , SejourHprimSelector.prepared.id);
   ExtRefManager.submitNumdosForm(oForm.object_id.value);
 }
 

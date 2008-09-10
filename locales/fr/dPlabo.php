@@ -1,5 +1,5 @@
 <?php
-$locales['CCatalogueLabo-function_id-desc'] = 'Fonction associée au cataologue';
+$locales['CCatalogueLabo-function_id-desc'] = 'Fonction associée au catalogue';
 $locales['CCatalogueLabo'] = 'Catalogue d\'analyses';
 $locales['CCatalogueLabo-back-catalogues_labo'] = 'Sous-catalogue';
 $locales['CCatalogueLabo-back-examens_labo'] = 'Analyse';

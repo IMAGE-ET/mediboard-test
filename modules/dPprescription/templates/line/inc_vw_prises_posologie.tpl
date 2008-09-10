@@ -4,14 +4,14 @@
 {{if !$line->_traitement && $line->_ref_prescription->object_id}}
 {{if !$line->signee && !$line->fin}}
 	var oForm = document.forms["editDates-Med-{{$line->_id}}"];
-	Form.Element.setValue(oForm.debut,'{{$line->debut}}');
+	$V(oForm.debut,'{{$line->debut}}');
 	{{if $line->debut}}
 	  var oDiv = $('editDates-Med-'+{{$line->_id}}+'_debut_da');
 	  dDate = Date.fromDATE(oForm.debut.value);
 	  oDiv.innerHTML = dDate.toLocaleDate();
 	{{/if}}
-	Form.Element.setValue(oForm.duree,'{{$line->duree}}');
-  Form.Element.setValue(oForm.unite_duree,'{{$line->unite_duree}}');
+	$V(oForm.duree,'{{$line->duree}}');
+	$V(oForm.unite_duree,'{{$line->unite_duree}}');
 {{/if}}
 {{/if}}
 

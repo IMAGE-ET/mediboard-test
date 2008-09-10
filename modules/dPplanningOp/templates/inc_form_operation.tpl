@@ -139,7 +139,7 @@
         {{if !$op->operation_id}}updateEntreePrevue();{{/if}}
         Value.synchronize(this);
         document.editSejour._curr_op_date.value = this.value;
-        modifSejour(); Form.Element.setValue(this.form._date, this.value);">
+        modifSejour(); $V(this.form._date, this.value);">
         {{if $op->operation_id}}
         <option value="{{$op->_datetime|date_format:"%Y-%m-%d"}}" selected="selected">
           {{$op->_datetime|date_format:"%d/%m/%Y"}} (inchangée)

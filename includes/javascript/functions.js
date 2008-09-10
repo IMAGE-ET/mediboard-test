@@ -257,8 +257,7 @@ var Console = {
     if(Preferences.INFOSYSTEM == 1) {
       Element.show(this.id);
     }
-    var eDiv = document.createElement("div");
-    eDiv.className = sClass;
+    var eDiv = new Element("div", {className: sClass});
     eDiv.innerHTML = sContent.toString().escapeHTML();
 
     if (nIndent) {
@@ -266,7 +265,7 @@ var Console = {
     }
 
     var eParent = $(this.id);
-    eParent.appendChild(eDiv);
+    eParent.insert(eDiv);
     eParent.scrollTop = eParent.scrollHeight;
   },
   

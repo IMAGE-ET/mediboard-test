@@ -89,14 +89,14 @@ var PlageOpSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
    
-    Form.Element.setValue(oOpForm[PlageOpSelector.sPlage_id] , PlageOpSelector.prepared.plage_id);
-    Form.Element.setValue(oOpForm[PlageOpSelector.sSalle_id] , PlageOpSelector.prepared.salle_id);
-    Form.Element.setValue(oOpForm[PlageOpSelector.sDate]     , PlageOpSelector.prepared.sDate);
+    $V(oOpForm[PlageOpSelector.sPlage_id], PlageOpSelector.prepared.plage_id);
+    $V(oOpForm[PlageOpSelector.sSalle_id], PlageOpSelector.prepared.salle_id);
+    $V(oOpForm[PlageOpSelector.sDate]    , PlageOpSelector.prepared.sDate);
    
     if(PlageOpSelector.prepared.bAdm != "aucune"){ 
-      Form.Element.setValue(oSejourForm[PlageOpSelector.s_hour_entree_prevue], PlageOpSelector.prepared.dAdm.getHours());
-      Form.Element.setValue(oSejourForm[PlageOpSelector.s_min_entree_prevue], PlageOpSelector.prepared.dAdm.getMinutes());
-      Form.Element.setValue(oSejourForm[PlageOpSelector.s_date_entree_prevue], PlageOpSelector.prepared.dAdm.toDATE());
+      $V(oSejourForm[PlageOpSelector.s_hour_entree_prevue], PlageOpSelector.prepared.dAdm.getHours());
+      $V(oSejourForm[PlageOpSelector.s_min_entree_prevue],  PlageOpSelector.prepared.dAdm.getMinutes());
+      $V(oSejourForm[PlageOpSelector.s_date_entree_prevue], PlageOpSelector.prepared.dAdm.toDATE());
     }
   }
 }

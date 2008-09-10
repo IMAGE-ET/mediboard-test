@@ -35,11 +35,11 @@ var PatSelector = {
     var oForm     = document[PatSelector.sForm];
     var oFormEasy = document[PatSelector.sFormEasy];
     
-    Form.Element.setValue(oForm[PatSelector.sId]           , PatSelector.prepared.id);
-    Form.Element.setValue(oForm[PatSelector.sView]         , PatSelector.prepared.view);
+    $V(oForm[PatSelector.sId]             , PatSelector.prepared.id);
+    $V(oForm[PatSelector.sView]           , PatSelector.prepared.view);
     if(oFormEasy) {
-      Form.Element.setValue(oFormEasy[PatSelector.sId_easy]  , PatSelector.prepared.id);
-      Form.Element.setValue(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);
+      $V(oFormEasy[PatSelector.sId_easy]  , PatSelector.prepared.id);
+      $V(oFormEasy[PatSelector.sView_easy], PatSelector.prepared.view);
     }
   }
   

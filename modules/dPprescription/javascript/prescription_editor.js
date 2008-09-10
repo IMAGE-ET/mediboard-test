@@ -34,13 +34,10 @@ var PrescriptionEditor = {
     } );
   },
   register: function(object_id, object_class, suffixe, praticien_id){
-    // document.write cause des erreurs dans le cas de la DHE
-    // document.write('<div id=prescription-'+object_class+'-'+suffixe+'></div>');
-    $('prescription_register').insert('<div id=prescription-'+object_class+'-'+suffixe+'></div>');
+    $('prescription_register').insert(new Element('div', {id: 'prescription-'+object_class+'-'+suffixe}));
     Main.add( function() {
       Prescription.suffixes.push(suffixe);
 	    PrescriptionEditor.refresh(object_id, object_class, praticien_id);
     } );
-    
   }
 }

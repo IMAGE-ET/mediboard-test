@@ -44,9 +44,9 @@ function removePlageOp(bIgnoreGroup){
   if(oFormOp){
     if((oFormOp._group_id.value != oFormSejour.group_id.value) || bIgnoreGroup){
       oFormOp._group_id.value = oFormSejour.group_id.value;
-      Form.Element.setValue(oFormOp.plageop_id, "");
-      Form.Element.setValue(oFormOp._date, "");
-      Form.Element.setValue(oFormOp.date, "");  
+      $V(oFormOp.plageop_id, "");
+      $V(oFormOp._date, "");
+      $V(oFormOp.date, "");  
     }
   }
 }
@@ -102,7 +102,7 @@ function updateSortiePrevue() {
   dDate.addDays(nDuree);
 		
   // Update fields
-	Form.Element.setValue(oForm._date_sortie_prevue, dDate.toDATE());
+	$V(oForm._date_sortie_prevue, dDate.toDATE());
   oDiv = document.getElementById('editSejour__date_sortie_prevue_da');
   oDiv.innerHTML = dDate.toLocaleDate();
   updateHeureSortie();

@@ -125,7 +125,7 @@ function printLivret(){
           /*
        	  MedSelector.doSet = function(){
             var oForm = document[MedSelector.sForm];
-            Form.Element.setValue(oForm[MedSelector.sView], MedSelector.prepared.nom);
+            $V(oForm[MedSelector.sView], MedSelector.prepared.nom);
             Livret.addProduit(MedSelector.prepared.code);
           }*/
         </script>

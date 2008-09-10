@@ -45,6 +45,6 @@ var CIM10Selector = {
   
   doSet: function(){
     var oForm = document[CIM10Selector.sForm];
-    Form.Element.setValue(oForm[CIM10Selector.sView], CIM10Selector.prepared.code);
+    $V(oForm[CIM10Selector.sView], CIM10Selector.prepared.code);
   }
 }

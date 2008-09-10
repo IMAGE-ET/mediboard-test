@@ -18,7 +18,7 @@ var ColorSelector = {
   set: function(color) {
     oForm = document[this.sForm];
     if (color) {
-      Form.Element.setValue(oForm[this.sColor], color);
+      $V(oForm[this.sColor], color);
     }
     $('test').style.background = '#' + oForm[this.sColor].value;
    

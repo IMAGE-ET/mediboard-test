@@ -108,7 +108,7 @@ var Sejour = {
 		                Date.fromDATE(sortie_prevue).toLocaleDate());
 		      
 		      if (confirm(msg)){
-		        Form.Element.setValue(oForm.sejour_id, sejour_id);
+		        $V(oForm.sejour_id, sejour_id);
 		      }
 		    }
 		  }

@@ -39,15 +39,15 @@ var ProtocoleSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
-    Form.Element.setValue(oOpForm[this.sChir_id]  , protocole.chir_id);
+    $V(oOpForm[this.sChir_id]  , protocole.chir_id);
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
-      Form.Element.setValue(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
+      $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       oSejourForm[this.sType].value = protocole.type;
     }
     if(oOpFormEasy) {
-      Form.Element.setValue(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
-      Form.Element.setValue(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
-      Form.Element.setValue(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
+      $V(oOpFormEasy[this.sChir_id_easy]   , protocole.chir_id);
+      $V(oOpFormEasy[this.sLibelle_easy]   , protocole.libelle);
+      $V(oOpFormEasy[this.sCodes_ccam_easy], protocole.codes_ccam); 
     }
     
     oOpForm[this.sCodes_ccam].value  = protocole.codes_ccam;

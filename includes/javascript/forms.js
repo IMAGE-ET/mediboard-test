@@ -597,7 +597,7 @@ Object.extend(Form, {
     //  Récupération des données du formualaire
     aFieldsForm.each(function (value) {
       var sNameElement  = value["name"];
-      var sValueElement = Form.Element.getValue(value);
+      var sValueElement = $V(value);
       oDataForm[sNameElement] = sValueElement;
       }
     );

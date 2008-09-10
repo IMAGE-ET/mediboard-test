@@ -40,7 +40,7 @@ var MedSelector = {
   
   doSet: function(){
     var oForm = document[MedSelector.sForm];
-    Form.Element.setValue(oForm[MedSelector.sCode], MedSelector.prepared.code);
+    $V(oForm[MedSelector.sCode], MedSelector.prepared.code);
   },
       
   // Peut être appelé sans contexte : ne pas utiliser this

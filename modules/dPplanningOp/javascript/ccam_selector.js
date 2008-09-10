@@ -44,9 +44,9 @@ var CCAMSelector = {
   doSet: function(){
     var oForm = document[CCAMSelector.sForm];
 
-    Form.Element.setValue(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
+    $V(oForm[CCAMSelector.sView], CCAMSelector.prepared.code);
     if (this.sTarif) {
-	    Form.Element.setValue(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
+	    $V(oForm[CCAMSelector.sTarif], CCAMSelector.prepared.tarif);
     }
   }
 }

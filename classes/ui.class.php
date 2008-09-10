@@ -59,23 +59,17 @@ class CAppUI {
 
   static function getAllClasses() {
     $rootDir = self::conf("root_dir");
-    foreach(glob("classes/*/*.class.php") as $fileName) {
-      require_once("$rootDir/$fileName");
-    }
-
-    // Require all global classes
-    foreach(glob("classes/*.class.php") as $fileName) {
-      require_once("$rootDir/$fileName");
-    }
-
-    // Require all modules classes
-    foreach(glob("modules/*/*.class.php") as $fileName) {
-      require_once("$rootDir/$fileName");
-    }
-
-    // Require all modules setups 
-    foreach(glob("modules/*/setup.php") as $fileName) {
-      require_once("$rootDir/$fileName");
+    $dirs = array(
+      "classes/*/*.class.php", // Require all global classes
+      "classes/*.class.php", 
+      "modules/*/*.class.php", // Require all modules classes
+      "modules/*/setup.php" // Require all modules setups 
+    );
+    
+    foreach ($dirs as $dir) {
+      foreach (glob($dir) as $fileName) {
+        require_once("$rootDir/$fileName");
+      }
     }
   }
   
@@ -83,8 +77,8 @@ class CAppUI {
    * Used to include a php class file from the system classes directory
    * @param string $name The class root file name (excluding .class.php)
    */
-  static function requireSystemClass($name = null) {
-    if ($name && $root = self::conf("root_dir")) {
+  static function requireSystemClass($name) {
+    if ($root = self::conf("root_dir")) {
       return require_once("$root/classes/$name.class.php");
     }
   }
@@ -94,8 +88,8 @@ class CAppUI {
 	 * @param string <b>$name</b> The class file name (excluding .class.php)
 	 * @return string The path to the include file
 	 */
-  static function requireLegacyClass($name = null) {
-    if ($name && $root = self::conf("root_dir")) {
+  static function requireLegacyClass($name) {
+    if ($root = self::conf("root_dir")) {
       return require_once("$root/legacy/$name.class.php");
     }
   }
@@ -104,8 +98,8 @@ class CAppUI {
    * Used to include a php class file from the lib directory
    * @param string <b>$name</b> The class root file name (excluding .php)
    */
-  static function requireLibraryFile($name = null) {
-    if ($name && $root = self::conf("root_dir")) {
+  static function requireLibraryFile($name) {
+    if ($root = self::conf("root_dir")) {
       return require_once("$root/lib/$name.php");
     }
   }

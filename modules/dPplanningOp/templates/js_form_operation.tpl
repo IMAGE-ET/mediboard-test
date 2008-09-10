@@ -155,7 +155,7 @@ var Value = {
     var oOtherForm = element.form.name == "editOp" ?
       document.editOpEasy :
       document.editOp;
-    Form.Element.setValue(oOtherForm[element.name], element.value);
+    $V(oOtherForm[element.name], element.value);
   }
 }
 

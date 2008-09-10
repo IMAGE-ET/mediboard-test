@@ -30,7 +30,7 @@ var ElementSelector = {
   
   doSet: function(){
     var oForm = document[ElementSelector.sForm];
-    Form.Element.setValue(oForm[ElementSelector.sElement_id], ElementSelector.prepared.element_id);
+    $V(oForm[ElementSelector.sElement_id], ElementSelector.prepared.element_id);
   },
   
   // Peut être appelé sans contexte : ne pas utiliser this
