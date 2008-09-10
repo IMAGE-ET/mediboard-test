@@ -897,6 +897,9 @@ class CSejour extends CCodable {
     
     $this->loadRefsFwd();
     
+    // Chargement du fillTemplate du praticien
+    $this->_ref_praticien->fillTemplate($template);
+    
     // Ajout d'un fillTemplate du patient
     $this->_ref_patient->fillTemplate($template);
     
