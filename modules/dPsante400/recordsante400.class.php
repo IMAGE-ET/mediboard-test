@@ -110,7 +110,6 @@ class CRecordSante400 {
       // Fetch throws this exception in case of UPDATE or DELETE query
       if ($e->getCode() == 24000) {
         self::$chrono->stop("query");
-        mbTrace($sth->rowCount($values), "Row count");
 	      return $sth->rowCount($values);
       }
   
