@@ -159,16 +159,17 @@ class CActeCCAM extends CActe {
     }
     
     if ($this->code_activite !== null){
-      
-      $this->loadRefExecutant();
-      // si c'est un acte chir et que le prat est un anesth => break
-      //if($this->code_activite == 1 && $this->_ref_executant->isFromType(array("Anesthésiste"))){
-      //    return "$this->code_acte: Impossible de coder cet acte de chirurgie";
-      //}
-      // si c'est un acte d'anesth et que le prat est un chir
-      if($this->code_activite == 4 && $this->_ref_executant->isFromType(array("Chirurgien"))){
-          return "$this->code_acte: Impossible de coder cet acte d'anesthésie";
-      }
+
+// 			Temporairement désactivé pour les imports eCap et Sherpa      
+//      $this->loadRefExecutant();
+//      // si c'est un acte chir et que le prat est un anesth => break
+//      if($this->code_activite == 1 && $this->_ref_executant->isFromType(array("Anesthésiste"))){
+//          return "$this->code_acte: Impossible de coder cet acte de chirurgie";
+//      }
+//      // si c'est un acte d'anesth et que le prat est un chir
+//      if($this->code_activite == 4 && $this->_ref_executant->isFromType(array("Chirurgien"))){
+//          return "$this->code_acte: Impossible de coder cet acte d'anesthésie";
+//      }
     }   
  
     return parent::check(); 

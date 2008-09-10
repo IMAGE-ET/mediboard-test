@@ -15,7 +15,7 @@ class CMouvFactory {
     "medicap" => array (
       "sejour" => "CMouvSejourEcap",
       "intervention" => "CMouvInterventionECap",
-      "attendue" => "CMouvAttendueECap",
+//      "attendue" => "CMouvAttendueECap",
     ),
     "tonkin" => array (
       "sejour" => "CMouvSejourTonkin"
