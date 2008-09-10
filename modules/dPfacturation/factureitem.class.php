@@ -33,15 +33,13 @@ class CFactureItem extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "facture_id"  => "notNull ref class|CFacture",
-      "libelle"     => "notNull text",
-      "prix_ht"     => "notNull currency",
-      "taxe"        => "notNull pct",
-      "_ttc"		=> "currency",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["facture_id"] = "notNull ref class|CFacture";
+    $specs["libelle"]    = "notNull text";
+    $specs["prix_ht"]    = "notNull currency";
+    $specs["taxe"]       = "notNull pct";
+    $specs["_ttc"]		   = "currency";
+    return $specs;
   }
 
   function getHelpedFields() {
@@ -55,14 +53,10 @@ class CFactureItem extends CMbObject {
     $this->_view = $this->libelle;
     $this->_ttc += $this->prix_ht * ($this->taxe/100) + $this->prix_ht;
   }
-
-  function loadRefsBack(){
-
-  } 
   
   function loadRefsFwd(){ 
-	$this->_ref_facture = new CFacture;
-	$this->_ref_facture->load($this->facture_id);
+  	$this->_ref_facture = new CFacture;
+  	$this->_ref_facture->load($this->facture_id);
   }
 }
 ?>

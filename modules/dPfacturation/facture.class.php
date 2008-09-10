@@ -34,20 +34,18 @@ class CFacture extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["items"] = "CFactureItem facture_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["items"] = "CFactureItem facture_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "date"         => "notNull date",
-      "prix"         => "currency",
-      "sejour_id"    => "notNull ref class|CSejour",
-      "_total"       => "currency",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["date"]      = "notNull date";
+    $specs["prix"]      = "currency";
+    $specs["sejour_id"] = "notNull ref class|CSejour";
+    $specs["_total"]    = "currency";
+    return $specs;
   }
   
   function updateFormFields() {
@@ -56,26 +54,25 @@ class CFacture extends CMbObject {
   }
   
   function loadRefsBack(){
-	$item =  new CFactureItem;
-	$item->facture_id = $this->_id;
-	$this->_ref_items = $item->loadMatchingList();
-	$this->_total = 0;
-	foreach($this->_ref_items as $_item) {
-		$this->_total += $_item->_ttc;
-	}
+  	$item =  new CFactureItem;
+  	$item->facture_id = $this->_id;
+  	$this->_ref_items = $item->loadMatchingList();
+  	$this->_total = 0;
+  	foreach($this->_ref_items as $_item) {
+  		$this->_total += $_item->_ttc;
+  	}
   } 
   
   function loadRefsFwd(){ 
-	$this->_ref_sejour = new CSejour;
-	$this->_ref_sejour->load($this->sejour_id);
+  	$this->_ref_sejour = new CSejour;
+  	$this->_ref_sejour->load($this->sejour_id);
   }
-  
+    
   function getPerm($permType) {
     if(!$this->_ref_sejour) {
       $this->loadRefsFwd();
     }
     return ($this->_ref_sejour->getPerm($permType));
   }
-  
 }
 ?>

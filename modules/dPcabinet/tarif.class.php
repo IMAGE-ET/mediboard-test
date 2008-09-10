@@ -41,19 +41,17 @@ class CTarif extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chir_id"     => "ref class|CMediusers",
-      "function_id" => "ref class|CFunctions",
-      "description" => "notNull str confidential",
-      "secteur1"    => "notNull currency min|0",
-      "secteur2"    => "currency",
-      "codes_ccam"  => "str",
-      "codes_ngap"  => "str",
-      "_somme"      => "currency",
-      "_type"       => "",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["chir_id"]     = "ref class|CMediusers";
+    $specs["function_id"] = "ref class|CFunctions";
+    $specs["description"] = "notNull str confidential";
+    $specs["secteur1"]    = "notNull currency min|0";
+    $specs["secteur2"]    = "currency";
+    $specs["codes_ccam"]  = "str";
+    $specs["codes_ngap"]  = "str";
+    $specs["_somme"]      = "currency";
+    $specs["_type"]       = "";
+    return $specs;
   }
   
   function getSeeks() {
@@ -109,9 +107,7 @@ class CTarif extends CMbObject {
       }
     }
     
-    if ($msg = parent::store()) {
-      return $msg;
-    }
+    return parent::store();
   }
   
   

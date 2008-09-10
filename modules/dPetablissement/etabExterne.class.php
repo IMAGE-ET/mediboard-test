@@ -40,20 +40,18 @@ class CEtabExterne extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "nom"            => "notNull str confidential",
-      "raison_sociale" => "str maxLength|50",
-      "adresse"        => "text confidential",
-      "cp"             => "numchar length|5",
-      "ville"          => "str maxLength|50 confidential",
-      "tel"            => "numchar length|10 mask|99S99S99S99S99",
-      "fax"            => "numchar length|10 mask|99S99S99S99S99",
-      "finess"         => "numchar length|9",
-      "siret"          => "str length|14",
-      "ape"            => "str maxLength|6 confidential",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["nom"]            = "notNull str confidential";
+    $specs["raison_sociale"] = "str maxLength|50";
+    $specs["adresse"]        = "text confidential";
+    $specs["cp"]             = "numchar length|5";
+    $specs["ville"]          = "str maxLength|50 confidential";
+    $specs["tel"]            = "numchar length|10 mask|99S99S99S99S99";
+    $specs["fax"]            = "numchar length|10 mask|99S99S99S99S99";
+    $specs["finess"]         = "numchar length|9";
+    $specs["siret"]          = "str length|14";
+    $specs["ape"]            = "str maxLength|6 confidential";
+    return $specs;
   }
   
   function getSeeks() {

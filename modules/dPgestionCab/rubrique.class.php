@@ -29,18 +29,16 @@ class CRubrique extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["fiches_compta"] = "CGestionCab rubrique_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["fiches_compta"] = "CGestionCab rubrique_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "function_id" => "ref class|CFunctions",
-      "nom"         => "notNull str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["function_id"] = "ref class|CFunctions";
+    $specs["nom"]         = "notNull str";
+    return $specs;
   }
   
   function getSeeks() {

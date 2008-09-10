@@ -37,14 +37,12 @@ class CPermModule extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"     => "notNull ref class|CUser",
-      "mod_id"      => "ref class|CModule",
-      "permission"  => "notNull numchar maxLength|1",
-      "view"        => "notNull numchar maxLength|1",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]     = "notNull ref class|CUser";
+    $specs["mod_id"]      = "ref class|CModule";
+    $specs["permission"]  = "notNull numchar maxLength|1";
+    $specs["view"]        = "notNull numchar maxLength|1";
+    return $specs;
   }
   
   function loadRefDBModule() {

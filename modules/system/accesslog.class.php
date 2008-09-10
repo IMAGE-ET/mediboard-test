@@ -31,16 +31,14 @@ class CAccessLog extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "module"   => "str",
-      "action"   => "str",
-      "period"   => "dateTime",
-      "hits"     => "num pos",
-      "duration" => "float",
-      "request"  => "float"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["module"]   = "str";
+    $specs["action"]   = "str";
+    $specs["period"]   = "dateTime";
+    $specs["hits"]     = "num pos";
+    $specs["duration"] = "float";
+    $specs["request"]  = "float";
+    return $specs;
   }
   
   function updateFormFields() {
@@ -64,14 +62,11 @@ class CAccessLog extends CMbObject {
       $sql .= "\nGROUP BY grouping";
     }
     else if($groupmod == 1) {
-      $sql .= "\nGROUP BY module" .
-          "\nORDER BY module";
+      $sql .= "\nGROUP BY module ORDER BY module";
     } else {
-      $sql .= "\nGROUP BY module, action" .
-          "\nORDER BY module, action";
+      $sql .= "\nGROUP BY module, action ORDER BY module, action";
     }
-    $list = $this->loadQueryList($sql);
-    return $list;
+    return $this->loadQueryList($sql);
   }
 }
 ?>

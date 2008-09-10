@@ -36,23 +36,21 @@ class CEmployeCab extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["params_paie"] = "CParamsPaie employecab_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["params_paie"] = "CParamsPaie employecab_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "function_id" => "notNull ref class|CFunctions",
-      "nom"         => "notNull str",
-      "prenom"      => "notNull str",
-      "function"    => "notNull str",
-      "adresse"     => "text confidential",
-      "ville"       => "str",
-      "cp"          => "numchar length|5 confidential"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["function_id"] = "notNull ref class|CFunctions";
+    $specs["nom"]         = "notNull str";
+    $specs["prenom"]      = "notNull str";
+    $specs["function"]    = "notNull str";
+    $specs["adresse"]     = "text confidential";
+    $specs["ville"]       = "str";
+    $specs["cp"]          = "numchar length|5 confidential";
+    return $specs;
   }
   
   function getSeeks() {

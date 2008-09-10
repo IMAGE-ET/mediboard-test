@@ -33,16 +33,14 @@ class CTempsHospi extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "praticien_id" => "notNull ref class|CMediusers",
-      "type"         => "notNull enum list|comp|ambu|seances|ssr|psy",
-      "nb_sejour"    => "num pos",
-      "duree_moy"    => "currency pos",
-      "duree_ecart"  => "currency pos",
-      "ccam"         => "str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["praticien_id"] = "notNull ref class|CMediusers";
+    $specs["type"]         = "notNull enum list|comp|ambu|seances|ssr|psy";
+    $specs["nb_sejour"]    = "num pos";
+    $specs["duree_moy"]    = "currency pos";
+    $specs["duree_ecart"]  = "currency pos";
+    $specs["ccam"]         = "str";
+    return $specs;
   } 
 
   function loadRefsFwd(){

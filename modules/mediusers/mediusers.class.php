@@ -83,33 +83,30 @@ class CMediusers extends CMbObject {
   }
 
   function getSpecs() {
-    $parentSpecs = parent::getSpecs();
-
-    $specs = array (
-      "remote"        => "bool",
-      "adeli"         => "numchar length|9 confidential",
-      "function_id"   => "notNull ref class|CFunctions",
-      "discipline_id" => "ref class|CDiscipline",
-      "titres"        => "text",
-      "commentaires"  => "text",
-      "actif"         => "bool default|1",
-      "deb_activite"  => "date",
-      "fin_activite"  => "date",
-      "spec_cpam_id"  => "ref class|CSpecCPAM",
-      "compte"        => "code rib confidential mask|99999S99999S99999999999S99",
-      "banque_id"     => "ref class|CBanque",
-      "_user_username"   => "notNull str minLength|4",
-      "_user_password2"  => "password sameAs|_user_password",
-      "_user_first_name" => "str",
-      "_user_last_name"  => "notNull str confidential",
-      "_user_email"      => "str confidential",
-      "_user_phone"      => "numchar confidential length|10 mask|99S99S99S99S99",
-      "_user_adresse"    => "str confidential",
-      "_user_cp"         => "num length|5 confidential",
-      "_user_ville"      => "str confidential",
-      "_profile_id"      => "num",
-      "_user_type"       => "notNull num minMax|0|20",
-    );
+    $specs = parent::getSpecs();
+    $specs["remote"]        = "bool";
+    $specs["adeli"]         = "numchar length|9 confidential";
+    $specs["function_id"]   = "notNull ref class|CFunctions";
+    $specs["discipline_id"] = "ref class|CDiscipline";
+    $specs["titres"]        = "text";
+    $specs["commentaires"]  = "text";
+    $specs["actif"]         = "bool default|1";
+    $specs["deb_activite"]  = "date";
+    $specs["fin_activite"]  = "date";
+    $specs["spec_cpam_id"]  = "ref class|CSpecCPAM";
+    $specs["compte"]        = "code rib confidential mask|99999S99999S99999999999S99";
+    $specs["banque_id"]     = "ref class|CBanque";
+    $specs["_user_username"]   = "notNull str minLength|4";
+    $specs["_user_password2"]  = "password sameAs|_user_password";
+    $specs["_user_first_name"] = "str";
+    $specs["_user_last_name"]  = "notNull str confidential";
+    $specs["_user_email"]      = "str confidential";
+    $specs["_user_phone"]      = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["_user_adresse"]    = "str confidential";
+    $specs["_user_cp"]         = "num length|5 confidential";
+    $specs["_user_ville"]      = "str confidential";
+    $specs["_profile_id"]      = "num";
+    $specs["_user_type"]       = "notNull num minMax|0|20";
       
     // @TODO refactor with only $spec["propName"] = "propSpec" syntax
     
@@ -119,7 +116,7 @@ class CMediusers extends CMbObject {
 
     $specs["_user_password"] = $specs["_user_password_weak"];
 
-    return array_merge($parentSpecs, $specs);
+    return $specs;
   }
   
   /** Update the object's specs */

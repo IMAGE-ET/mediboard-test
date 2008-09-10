@@ -31,9 +31,10 @@ function showAll(patient_id) {
 
 function pasteText(formName) {
   var oForm = document.editFrmExams;
-  var aide = eval("oForm._aide_" + formName);
-  var area = eval("oForm." + formName);
-  insertAt(area, aide.value + '\n')
+  var aide = oForm["_aide_"+formName];
+  var area = $(oForm[formName]);
+  var caret = area.caret();
+  area.caret(caret.begin, caret.end, aide.value + '\n');
   aide.value = 0;
 }
 

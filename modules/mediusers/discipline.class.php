@@ -87,18 +87,16 @@ class CDiscipline extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["users"] = "CMediusers discipline_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["users"] = "CMediusers discipline_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "text"      => "notNull str",
-      "categorie" => "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["text"]      = "notNull str";
+    $specs["categorie"] = "enum list|ORT|ORL|OPH|DER|STO|GAS|ARE|RAD|GYN|EST";
+    return $specs;
   }
   
   function getSeeks() {

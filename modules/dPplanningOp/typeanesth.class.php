@@ -40,13 +40,10 @@ class CTypeAnesth extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "name" => "notNull str",
-      "ext_doc" => "enum list|1|2|3|4|5|6"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["name"]    = "notNull str";
+    $specs["ext_doc"] = "enum list|1|2|3|4|5|6";
+    return $specs;
   }
-  
 }
 ?>

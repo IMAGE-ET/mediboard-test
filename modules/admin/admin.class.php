@@ -75,29 +75,26 @@ class CUser extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-     
-    $specs = array (
-      "user_username"   => "notNull str maxLength|20",
-      "user_password"   => "str",
-      "user_type"       => "notNull num minMax|0|20",
-      "user_first_name" => "str maxLength|50",
-      "user_last_name"  => "notNull str maxLength|50 confidential",
-      "user_email"      => "str maxLength|255",
-      "user_phone"      => "str maxLength|30",
-      "user_mobile"     => "str maxLength|30",
-      "user_address1"   => "str maxLength|50",
-      "user_city"       => "str maxLength|30",
-      "user_zip"        => "str maxLength|11",
-      "user_country"    => "str maxLength|30",
-      "user_birthday"   => "dateTime",
-      "user_pic"        => "text",
-      "user_signature"  => "text",
-      "user_last_login" => "dateTime",
-      "user_login_errors"=> "num",
-      "template"        => "bool notNull default|0",
-      "profile_id"      => "ref class|CUser"
-      );
+  	$specs = parent::getSpecs();
+    $specs["user_username"]   = "notNull str maxLength|20";
+    $specs["user_password"]   = "str";
+    $specs["user_type"]       = "notNull num minMax|0|20";
+    $specs["user_first_name"] = "str maxLength|50";
+    $specs["user_last_name"]  = "notNull str maxLength|50 confidential";
+    $specs["user_email"]      = "str maxLength|255";
+    $specs["user_phone"]      = "str maxLength|30";
+    $specs["user_mobile"]     = "str maxLength|30";
+    $specs["user_address1"]   = "str maxLength|50";
+    $specs["user_city"]       = "str maxLength|30";
+    $specs["user_zip"]        = "str maxLength|11";
+    $specs["user_country"]    = "str maxLength|30";
+    $specs["user_birthday"]   = "dateTime";
+    $specs["user_pic"]        = "text";
+    $specs["user_signature"]  = "text";
+    $specs["user_last_login"] = "dateTime";
+    $specs["user_login_errors"]= "num";
+    $specs["template"]        = "bool notNull default|0";
+    $specs["profile_id"]      = "ref class|CUser";
 
     // The different levels of security are stored to be usable in JS
     $specs["_user_password_weak"]   = "password minLength|4";
@@ -109,7 +106,7 @@ class CUser extends CMbObject {
       $specs["_user_password"] = $specs["_user_password_weak"];
     }
 
-    return array_merge($specsParent, $specs);
+    return $specs;
   }
   
   /** Update the object's specs */

@@ -53,30 +53,28 @@ class CProtocole extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chir_id"         => "notNull ref class|CMediusers",
-      "type"            => "enum list|comp|ambu|exte|seances|ssr|psy default|comp",
-      "DP"              => "code cim10",
-      "convalescence"   => "text confidential",
-      "rques_sejour"    => "text confidential",
-      "libelle"         => "str confidential",
-      "examen"          => "text confidential",
-      "materiel"        => "text confidential",
-      "duree_hospi"     => "notNull num minMax|0|36500",
-      "rques_operation" => "text confidential",
-      "depassement"     => "currency min|0 confidential",
-      "forfait"         => "currency min|0 confidential",
-      "fournitures"     => "currency min|0 confidential",
-      "pathologie"      => "str length|3",
-      "septique"        => "bool",
-      "codes_ccam"      => "str",
-      "temp_operation"  => "time",
-      
-      "_hour_op" => "", 
-      "_min_op" => "", 
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["chir_id"]         = "notNull ref class|CMediusers";
+    $specs["type"]            = "enum list|comp|ambu|exte|seances|ssr|psy default|comp";
+    $specs["DP"]              = "code cim10";
+    $specs["convalescence"]   = "text confidential";
+    $specs["rques_sejour"]    = "text confidential";
+    $specs["libelle"]         = "str confidential";
+    $specs["examen"]          = "text confidential";
+    $specs["materiel"]        = "text confidential";
+    $specs["duree_hospi"]     = "notNull num minMax|0|36500";
+    $specs["rques_operation"] = "text confidential";
+    $specs["depassement"]     = "currency min|0 confidential";
+    $specs["forfait"]         = "currency min|0 confidential";
+    $specs["fournitures"]     = "currency min|0 confidential";
+    $specs["pathologie"]      = "str length|3";
+    $specs["septique"]        = "bool";
+    $specs["codes_ccam"]      = "str";
+    $specs["temp_operation"]  = "time";
+    
+    $specs["_hour_op"]        = "";
+    $specs["_min_op"]         = "";
+    return $specs;
   }
   
   function getSeeks() {
@@ -86,10 +84,6 @@ class CProtocole extends CMbObject {
       "examen"   => "like",
       "materiel" => "like"
     );
-  }
-
-  function check() {    
-    return parent::check();
   }
   
   function updateFormFields() {
@@ -121,13 +115,6 @@ class CProtocole extends CMbObject {
         $this->_hour_op.":".
         $this->_min_op.":00";
     }
-  }
-
-  function store() {
-    if ($msg = parent::store())
-      return $msg;
-    
-    return null;
   }
   
   function loadRefChir() {

@@ -61,44 +61,42 @@ class CParamsPaie extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["fiches"] = "CFichePaie params_paie_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["fiches"] = "CFichePaie params_paie_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "employecab_id" => "notNull ref class|CEmployeCab",
-      "smic"          => "notNull currency|min|0",
-      "csgnis"        => "notNull pct",
-      "csgds"         => "notNull pct",
-      "csgnds"        => "notNull pct",
-      "ssms"          => "notNull pct",
-      "ssmp"          => "notNull pct",
-      "ssvs"          => "notNull pct",
-      "ssvp"          => "notNull pct",
-      "rcs"           => "notNull pct",
-      "rcp"           => "notNull pct",
-      "agffs"         => "notNull pct",
-      "agffp"         => "notNull pct",
-      "aps"           => "notNull pct",
-      "app"           => "notNull pct",
-      "acs"           => "notNull pct",
-      "acp"           => "notNull pct",
-      "aatp"          => "notNull pct",
-      "csp"           => "notNull pct",
-      "ms"            => "notNull currency min|0",
-      "mp"            => "notNull currency min|0",
-      "nom"           => "notNull str confidential",
-      "adresse"       => "text confidential",
-      "cp"            => "numchar length|5 confidential",
-      "ville"         => "str confidential",
-      "siret"         => "numchar length|14 confidential",
-      "ape"           => "str maxLength|6 confidential",
-      "matricule"     => "code insee confidential"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["employecab_id"] = "notNull ref class|CEmployeCab";
+    $specs["smic"]          = "notNull currency|min|0";
+    $specs["csgnis"]        = "notNull pct";
+    $specs["csgds"]         = "notNull pct";
+    $specs["csgnds"]        = "notNull pct";
+    $specs["ssms"]          = "notNull pct";
+    $specs["ssmp"]          = "notNull pct";
+    $specs["ssvs"]          = "notNull pct";
+    $specs["ssvp"]          = "notNull pct";
+    $specs["rcs"]           = "notNull pct";
+    $specs["rcp"]           = "notNull pct";
+    $specs["agffs"]         = "notNull pct";
+    $specs["agffp"]         = "notNull pct";
+    $specs["aps"]           = "notNull pct";
+    $specs["app"]           = "notNull pct";
+    $specs["acs"]           = "notNull pct";
+    $specs["acp"]           = "notNull pct";
+    $specs["aatp"]          = "notNull pct";
+    $specs["csp"]           = "notNull pct";
+    $specs["ms"]            = "notNull currency min|0";
+    $specs["mp"]            = "notNull currency min|0";
+    $specs["nom"]           = "notNull str confidential";
+    $specs["adresse"]       = "text confidential";
+    $specs["cp"]            = "numchar length|5 confidential";
+    $specs["ville"]         = "str confidential";
+    $specs["siret"]         = "numchar length|14 confidential";
+    $specs["ape"]           = "str maxLength|6 confidential";
+    $specs["matricule"]     = "code insee confidential";
+    return $specs;
   }
 
   // Forward references

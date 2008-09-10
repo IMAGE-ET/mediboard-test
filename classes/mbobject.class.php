@@ -1369,13 +1369,7 @@ class CMbObject {
   }
   
   function getTemplateClasses(){
-    //$this->loadRefsFwd();
-    
-    $tab = array();
-
-    $tab[$this->_class_name] = $this->_id;
-
-    return $tab;
+    return array($this->_class_name => $this->_id);
   }
   
   

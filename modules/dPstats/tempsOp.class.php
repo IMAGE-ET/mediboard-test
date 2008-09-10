@@ -35,18 +35,16 @@ class CTempsOp extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chir_id"         => "ref class|CMediusers",
-      "nb_intervention" => "num pos",
-      "estimation"      => "time",
-      "occup_moy"       => "time",
-      "occup_ecart"     => "time",
-      "duree_moy"       => "time",
-      "duree_ecart"     => "time",
-      "ccam"            => "str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["chir_id"]         = "ref class|CMediusers";
+    $specs["nb_intervention"] = "num pos";
+    $specs["estimation"]      = "time";
+    $specs["occup_moy"]       = "time";
+    $specs["occup_ecart"]     = "time";
+    $specs["duree_moy"]       = "time";
+    $specs["duree_ecart"]     = "time";
+    $specs["ccam"]            = "str";
+    return $specs;
   }	
   
   

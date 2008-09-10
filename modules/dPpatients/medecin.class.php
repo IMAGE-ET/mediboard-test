@@ -49,20 +49,19 @@ class CMedecin extends CMbObject {
     
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      "nom"             => "notNull str confidential",
-      "prenom"          => "notNull str confidential",
-      "jeunefille"      => "str confidential",
-      "adresse"         => "text confidential",
-      "ville"           => "str confidential",
-      "cp"              => "numchar maxLength|5 confidential",
-      "tel"             => "numchar length|10 confidential mask|99S99S99S99S99",
-      "fax"             => "numchar length|10 confidential mask|99S99S99S99S99",
-      "email"           => "str confidential",
-      "disciplines"     => "text confidential",
-      "orientations"    => "text confidential",
-      "complementaires" => "text confidential"
-    ));
+    $specs["nom"]             = "notNull str confidential";
+    $specs["prenom"]          = "notNull str confidential";
+    $specs["jeunefille"]      = "str confidential";
+    $specs["adresse"]         = "text confidential";
+    $specs["ville"]           = "str confidential";
+    $specs["cp"]              = "numchar maxLength|5 confidential";
+    $specs["tel"]             = "numchar length|10 confidential mask|99S99S99S99S99";
+    $specs["fax"]             = "numchar length|10 confidential mask|99S99S99S99S99";
+    $specs["email"]           = "str confidential";
+    $specs["disciplines"]     = "text confidential";
+    $specs["orientations"]    = "text confidential";
+    $specs["complementaires"] = "text confidential";
+    return $specs;
   }
   
   function getSeeks() {

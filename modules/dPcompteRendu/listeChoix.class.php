@@ -38,15 +38,13 @@ class CListeChoix extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chir_id"         => "ref xor|function_id class|CMediusers",
-      "function_id"     => "ref xor|chir_id class|CFunctions",
-      "nom"             => "notNull str",
-      "valeurs"         => "text confidential",
-      "compte_rendu_id" => "ref class|CCompteRendu"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["chir_id"]         = "ref xor|function_id class|CMediusers";
+    $specs["function_id"]     = "ref xor|chir_id class|CFunctions";
+    $specs["nom"]             = "notNull str";
+    $specs["valeurs"]         = "text confidential";
+    $specs["compte_rendu_id"] = "ref class|CCompteRendu";
+    return $specs;
   }
   
   function check() {

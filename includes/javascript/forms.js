@@ -152,11 +152,12 @@ function pasteHelperContent(oHelpElement) {
   var aFieldFound = aFound[1].split("-");
   
   var sPropName = aFieldFound[0];
-  var oAreaField = oForm.elements[sPropName];
+  var oAreaField = $(oForm.elements[sPropName]);
 
   var sValue = oHelpElement.value;
   oHelpElement.value = "";
-  insertAt(oAreaField, sValue + '\n')
+  var caret = oAreaField.caret();
+  oAreaField.caret(caret.begin, caret.end, sValue + '\n');
   oAreaField.scrollTop = oAreaField.scrollHeight;
 }
 
@@ -512,67 +513,6 @@ function submitFormAjaxOffline(oForm, ioTarget, oOptions) {
   Object.extend(oDefaultOptions, oOptions);
 
   url.requestUpdateOffline(ioTarget, oDefaultOptions);
-}
-
-function setSelectionRange(textarea, selectionStart, selectionEnd) {
-  if (textarea.setSelectionRange) {
-    textarea.focus();
-    textarea.setSelectionRange(selectionStart, selectionEnd);
-  }
-  else if (textarea.createTextRange) {
-    var range = textarea.createTextRange();
-    textarea.collapse(true);
-    textarea.moveEnd('character', selectionEnd);
-    textarea.moveStart('character', selectionStart);
-    textarea.select();
-  }
-}
-
-function setCaretToPos (textarea, pos) {
-  setSelectionRange(textarea, pos, pos);
-}
-
-function insertAt(textarea, str) {
-  // Inserts given text at selection or cursor position
-
-  if (textarea.setSelectionRange) {
-    // Mozilla UserAgent Gecko-1.4
-    var scrollTop = textarea.scrollTop;
-
-    var selStart = textarea.selectionStart;
-    var selEnd   = textarea.selectionEnd  ;
-		
-    var strBefore = textarea.value.substring(0, selStart);
-    var strAfter  = textarea.value.substring(selEnd);
-
-    textarea.value = strBefore + str + strAfter;
-		
-    var selNewEnd = selStart + str.length;
-    if (selStart == selEnd) { 
-      // No selection: move caret
-      setCaretToPos(textarea, selNewEnd);
-    } else  {
-      // Selection: re-select insertion
-      setSelectionRange(textarea, selStart, selNewEnd);
-    }
-		
-    textarea.scrollTop = scrollTop;
-  } else if (document.selection) {
-    // UserAgent IE-6.0
-    textarea.focus();
-    var range = document.selection.createRange();
-    if (range.parentElement() == textarea) {
-      var hadSel = range.text.length > 0;
-      range.text = str;
-      if (hadSel)  {
-        range.moveStart('character', -range.text.length);
-        range.select();
-      }
-    }
-  } else { 
-    // UserAgent Gecko-1.0.1 (NN7.0)
-    textarea.value += str;
-  }
 }
 
 function followUp(event) {

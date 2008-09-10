@@ -44,27 +44,25 @@ class CExamIgs extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "consultation_id"     => "notNull ref class|CConsultation",
-      "age"                 => "enum list|0|7|12|15|16|18",
-      "FC"                  => "enum list|11|2|0|4|7",
-      "TA"                  => "enum list|13|5|0|2",
-      "temperature"         => "enum list|0|3",
-      "PAO2_FIO2"           => "enum list|11|9|6",
-      "diurese"             => "enum list|12|4|0",
-      "uree"                => "enum list|0|6|10",
-      "globules_blancs"     => "enum list|12|0|3",
-      "kaliemie"            => "enum list|3a|0|3b",
-      "natremie"            => "enum list|5|0|1",
-      "HCO3"                => "enum list|6|3|0",
-      "billirubine"         => "enum list|0|4|9",
-      "glascow"             => "enum list|26|13|7|5|0",
-      "maladies_chroniques" => "enum list|9|10|17",
-      "admission"           => "enum list|0|6|8",
-      "scoreIGS"            => "num"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["consultation_id"]     = "notNull ref class|CConsultation";
+    $specs["age"]                 = "enum list|0|7|12|15|16|18";
+    $specs["FC"]                  = "enum list|11|2|0|4|7";
+    $specs["TA"]                  = "enum list|13|5|0|2";
+    $specs["temperature"]         = "enum list|0|3";
+    $specs["PAO2_FIO2"]           = "enum list|11|9|6";
+    $specs["diurese"]             = "enum list|12|4|0";
+    $specs["uree"]                = "enum list|0|6|10";
+    $specs["globules_blancs"]     = "enum list|12|0|3";
+    $specs["kaliemie"]            = "enum list|3a|0|3b";
+    $specs["natremie"]            = "enum list|5|0|1";
+    $specs["HCO3"]                = "enum list|6|3|0";
+    $specs["billirubine"]         = "enum list|0|4|9";
+    $specs["glascow"]             = "enum list|26|13|7|5|0";
+    $specs["maladies_chroniques"] = "enum list|9|10|17";
+    $specs["admission"]           = "enum list|0|6|8";
+    $specs["scoreIGS"]            = "num";
+    return $specs;
   }
 
   function loadRefsFwd() {

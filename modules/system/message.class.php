@@ -42,16 +42,14 @@ class CMessage extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "deb"       => "notNull dateTime",
-      "fin"       => "notNull dateTime",
-      "titre"     => "notNull str maxLength|40",
-      "module_id" => "ref class|CModule",
-      "corps"     => "text",
-      "urgence"   => "notNull enum list|normal|urgent default|normal"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["deb"]       = "notNull dateTime";
+    $specs["fin"]       = "notNull dateTime";
+    $specs["titre"]     = "notNull str maxLength|40";
+    $specs["module_id"] = "ref class|CModule";
+    $specs["corps"]     = "text";
+    $specs["urgence"]   = "notNull enum list|normal|urgent default|normal";
+    return $specs;
   }
 
   // Loads messages from a publication date perspective : all, past, present, future

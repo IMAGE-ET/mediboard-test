@@ -38,14 +38,12 @@ class CPermObject extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"      => "notNull ref class|CUser",
-      "object_id"    => "ref class|CMbObject meta|object_class cascade",
-      "object_class" => "notNull str",
-      "permission"   => "notNull numchar maxLength|1"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]      = "notNull ref class|CUser";
+    $specs["object_id"]    = "ref class|CMbObject meta|object_class cascade";
+    $specs["object_class"] = "notNull str";
+    $specs["permission"]   = "notNull numchar maxLength|1";
+    return $specs;
   }
   
   function loadRefDBObject() {

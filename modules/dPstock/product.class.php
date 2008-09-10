@@ -48,13 +48,12 @@ class CProduct extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'name'        => 'notNull str maxLength|50',
-      'description' => 'text',
-      'code'        => 'str maxLength|32',
-      'category_id' => 'notNull ref class|CProductCategory',
-      'societe_id'  => 'ref class|CSociete',
-    ));
+    $specs['name']        = 'notNull str maxLength|50';
+    $specs['description'] = 'text';
+    $specs['code']        = 'str maxLength|32';
+    $specs['category_id'] = 'notNull ref class|CProductCategory';
+    $specs['societe_id']  = 'ref class|CSociete';
+    return $specs;
   }
 
   function getSeeks() {

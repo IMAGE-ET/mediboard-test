@@ -74,22 +74,20 @@ class CFichePaie extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "params_paie_id" => "notNull ref class|CParamsPaie",
-      "debut"          => "notNull date",
-      "fin"            => "notNull date moreEquals|debut",
-      "salaire"        => "notNull currency min|0",
-      "heures"         => "notNull num max|255",
-      "heures_comp"    => "notNull num max|255",
-      "heures_sup"     => "notNull num max|255",
-      "anciennete"     => "notNull pct",
-      "precarite"      => "notNull pct",
-      "conges_payes"   => "notNull pct",
-      "prime_speciale" => "notNull currency min|0",
-      "final_file"     => "html"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["params_paie_id"] = "notNull ref class|CParamsPaie";
+    $specs["debut"]          = "notNull date";
+    $specs["fin"]            = "notNull date moreEquals|debut";
+    $specs["salaire"]        = "notNull currency min|0";
+    $specs["heures"]         = "notNull num max|255";
+    $specs["heures_comp"]    = "notNull num max|255";
+    $specs["heures_sup"]     = "notNull num max|255";
+    $specs["anciennete"]     = "notNull pct";
+    $specs["precarite"]      = "notNull pct";
+    $specs["conges_payes"]   = "notNull pct";
+    $specs["prime_speciale"] = "notNull currency min|0";
+    $specs["final_file"]     = "html";
+    return $specs;
   }
   
   function updateFormFields() {

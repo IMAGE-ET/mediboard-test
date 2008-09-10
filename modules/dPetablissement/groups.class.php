@@ -43,39 +43,37 @@ class CGroups extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["documents_ged"] = "CDocGed group_id";
-      $backRefs["functions"]     = "CFunctions group_id";
-      $backRefs["menus"]         = "CMenu group_id";
-      $backRefs["plats"]         = "CPlat group_id";
-      $backRefs["salles"]        = "CSalle group_id";
-      $backRefs["sejours"]       = "CSejour group_id";
-      $backRefs["services"]      = "CService group_id";
-      $backRefs["stocks"]        = "CStock group_id";
-      $backRefs["type_repas"]    = "CTypeRepas group_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["documents_ged"] = "CDocGed group_id";
+    $backRefs["functions"]     = "CFunctions group_id";
+    $backRefs["menus"]         = "CMenu group_id";
+    $backRefs["plats"]         = "CPlat group_id";
+    $backRefs["salles"]        = "CSalle group_id";
+    $backRefs["sejours"]       = "CSejour group_id";
+    $backRefs["services"]      = "CService group_id";
+    $backRefs["stocks"]        = "CStock group_id";
+    $backRefs["type_repas"]    = "CTypeRepas group_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "text"                => "notNull str confidential",
-      "raison_sociale"      => "str maxLength|50",
-      "adresse"             => "text confidential",
-      "cp"                  => "numchar length|5",
-      "ville"               => "str maxLength|50 confidential",
-      "tel"                 => "numchar length|10 mask|99S99S99S99S99",
-      "fax"                 => "numchar length|10 mask|99S99S99S99S99",
-      "tel_anesth"          => "numchar length|10 mask|99S99S99S99S99",
-      "service_urgences_id" => "ref class|CFunctions",
-      "directeur"           => "str maxLength|50",
-      "domiciliation"       => "str maxLength|9",
-      "siret"               => "str length|14",
-      "ape"                 => "str maxLength|6 confidential",
-      "mail"                => "email",
-      "web"                 => "str",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["text"]                = "notNull str confidential";
+    $specs["raison_sociale"]      = "str maxLength|50";
+    $specs["adresse"]             = "text confidential";
+    $specs["cp"]                  = "numchar length|5";
+    $specs["ville"]               = "str maxLength|50 confidential";
+    $specs["tel"]                 = "numchar length|10 mask|99S99S99S99S99";
+    $specs["fax"]                 = "numchar length|10 mask|99S99S99S99S99";
+    $specs["tel_anesth"]          = "numchar length|10 mask|99S99S99S99S99";
+    $specs["service_urgences_id"] = "ref class|CFunctions";
+    $specs["directeur"]           = "str maxLength|50";
+    $specs["domiciliation"]       = "str maxLength|9";
+    $specs["siret"]               = "str length|14";
+    $specs["ape"]                 = "str maxLength|6 confidential";
+    $specs["mail"]                = "email";
+    $specs["web"]                 = "str";
+    return $specs;
   }
   
   function getSeeks() {

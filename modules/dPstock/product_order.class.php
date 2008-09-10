@@ -57,25 +57,24 @@ class CProductOrder extends CMbObject {
 
 	function getSpecs() {
 		$specs = parent::getSpecs();
-		return array_merge($specs, array (
-      'date_ordered'    => 'dateTime',
-      'societe_id'      => 'notNull ref class|CSociete',
-		  'group_id'        => 'notNull ref class|CGroups',
-      'locked'          => 'bool',
-		  'cancelled'       => 'bool',
-		  'deleted'         => 'bool',
-      'order_number'    => 'str maxLength|64',
-      '_total'          => 'currency',
-      '_count_received' => 'num pos',
-		  '_date_received'  => 'dateTime',
-      '_received'       => 'bool',
-      '_partial'        => 'bool',
-			'_order'          => 'bool',
-			'_receive'        => 'bool',
-			'_autofill'       => 'bool',
-			'_redo'           => 'bool',
-		  '_reset'          => 'bool',
-		));
+    $specs['date_ordered']    = 'dateTime';
+    $specs['societe_id']      = 'notNull ref class|CSociete';
+	  $specs['group_id']        = 'notNull ref class|CGroups';
+    $specs['locked']          = 'bool';
+	  $specs['cancelled']       = 'bool';
+	  $specs['deleted']         = 'bool';
+    $specs['order_number']    = 'str maxLength|64';
+    $specs['_total']          = 'currency';
+    $specs['_count_received'] = 'num pos';
+	  $specs['_date_received']  = 'dateTime';
+    $specs['_received']       = 'bool';
+    $specs['_partial']        = 'bool';
+		$specs['_order']          = 'bool';
+		$specs['_receive']        = 'bool';
+		$specs['_autofill']       = 'bool';
+		$specs['_redo']           = 'bool';
+	  $specs['_reset']          = 'bool';
+		return $specs;
 	}
 
 	function getSeeks() {

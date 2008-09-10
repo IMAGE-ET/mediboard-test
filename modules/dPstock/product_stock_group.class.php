@@ -38,12 +38,11 @@ class CProductStockGroup extends CProductStock {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'group_id'                 => 'notNull ref class|CGroups',
-      '_ordered_count'           => 'num pos',
-      '_ordered_last'            => 'dateTime',
-      '_zone_future'             => 'num',
-    ));
+    $specs['group_id']       = 'notNull ref class|CGroups';
+    $specs['_ordered_count'] = 'num pos';
+    $specs['_ordered_last']  = 'dateTime';
+    $specs['_zone_future']   = 'num';
+    return $specs;
   }
   
   function loadRefOrders() {

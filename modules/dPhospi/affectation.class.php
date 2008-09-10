@@ -54,20 +54,17 @@ class CAffectation extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "lit_id"       => "notNull ref class|CLit",
-      "sejour_id"    => "ref class|CSejour cascade",
-      "entree"       => "notNull dateTime",
-      "sortie"       => "notNull dateTime",
-      "confirme"     => "bool",
-      "effectue"     => "bool",
-      "rques"        => "text",
+  	$specs = parent::getSpecs();
+    $specs["lit_id"]       = "notNull ref class|CLit";
+    $specs["sejour_id"]    = "ref class|CSejour cascade";
+    $specs["entree"]       = "notNull dateTime";
+    $specs["sortie"]       = "notNull dateTime";
+    $specs["confirme"]     = "bool";
+    $specs["effectue"]     = "bool";
+    $specs["rques"]        = "text";
 
-      "_mode_sortie" => "enum list|normal|transfert|deces default|normal",
-
-    );
-    return array_merge($specsParent, $specs);
+    $specs["_mode_sortie"] = "enum list|normal|transfert|deces default|normal";
+    return $specs;
   }
 
   function loadView() {

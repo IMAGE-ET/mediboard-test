@@ -45,19 +45,17 @@ class CChambre extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["lits"] = "CLit chambre_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["lits"] = "CLit chambre_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "service_id"       => "notNull ref class|CService",
-      "nom"              => "notNull str",
-      "caracteristiques" => "text confidential"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["service_id"]       = "notNull ref class|CService";
+    $specs["nom"]              = "notNull str";
+    $specs["caracteristiques"] = "text confidential";
+    return $specs;
   }
   
   function getSeeks() {

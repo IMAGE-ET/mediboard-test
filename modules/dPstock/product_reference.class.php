@@ -35,14 +35,13 @@ class CProductReference extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'product_id'  => 'notNull ref class|CProduct',
-      'societe_id'  => 'notNull ref class|CSociete',
-      'quantity'    => 'notNull num pos',
-      'price'       => 'notNull currency',
-      'code'        => 'str',
-      '_unit_price' => 'notNull currency',
-    ));
+    $specs['product_id']  = 'notNull ref class|CProduct';
+    $specs['societe_id']  = 'notNull ref class|CSociete';
+    $specs['quantity']    = 'notNull num pos';
+    $specs['price']       = 'notNull currency';
+    $specs['code']        = 'str';
+    $specs['_unit_price'] = 'notNull currency';
+    return $specs;
   }
 
   function updateFormFields() {

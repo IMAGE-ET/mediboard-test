@@ -126,26 +126,22 @@ class CPermission extends CMbObject {
 
 class CPermModuleLegacy extends CPermModule {
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"     => "notNull ref class|CUser",
-      "mod_id"      => "num min|0",
-      "permission"  => "notNull numchar maxLength|1",
-      "view"        => "notNull numchar maxLength|1",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]     = "notNull ref class|CUser";
+    $specs["mod_id"]      = "num min|0";
+    $specs["permission"]  = "notNull numchar maxLength|1";
+    $specs["view"]        = "notNull numchar maxLength|1";
+    return $specs;
   }
 }
 class CPermObjectLegacy extends CPermObject {
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"      => "notNull num min|0",
-      "object_id"    => "num min|0",
-      "object_class" => "notNull str",
-      "permission"   => "notNull numchar maxLength|1"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]      = "notNull num min|0";
+    $specs["object_id"]    = "num min|0";
+    $specs["object_class"] = "notNull str";
+    $specs["permission"]   = "notNull numchar maxLength|1";
+    return $specs;
   }
 }
 ?>

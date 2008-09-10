@@ -41,36 +41,34 @@ class CFunctions extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["aides"] = "CAideSaisie function_id";
-      $backRefs["compte_rendu"] = "CCompteRendu function_id";
-      $backRefs["fiches_compta"] = "CGestionCab function_id";
-      $backRefs["liste_choix"] = "CListeChoix function_id";
-      $backRefs["users"] = "CMediusers function_id";
-      $backRefs["paiements"] = "CModePaiement function_id";
-      $backRefs["pack_examens"] = "CPackExamensLabo function_id";
-      $backRefs["plages_op"] = "CPlageOp spec_id";
-      $backRefs["rubriques"] = "CRubrique function_id";
-      $backRefs["tarifs"] = "CTarif function_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["aides"] = "CAideSaisie function_id";
+    $backRefs["compte_rendu"] = "CCompteRendu function_id";
+    $backRefs["fiches_compta"] = "CGestionCab function_id";
+    $backRefs["liste_choix"] = "CListeChoix function_id";
+    $backRefs["users"] = "CMediusers function_id";
+    $backRefs["paiements"] = "CModePaiement function_id";
+    $backRefs["pack_examens"] = "CPackExamensLabo function_id";
+    $backRefs["plages_op"] = "CPlageOp spec_id";
+    $backRefs["rubriques"] = "CRubrique function_id";
+    $backRefs["tarifs"] = "CTarif function_id";
+    return $backRefs;
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "group_id" => "notNull ref class|CGroups",
-      "type"     => "notNull enum list|administratif|cabinet",
-      "text"     => "notNull str confidential",
-      "color"    => "notNull str length|6",
-      "adresse"  => "text",
-      "cp"       => "numchar length|5",
-      "ville"    => "str maxLength|50",
-      "tel"      => "numchar length|10 mask|99S99S99S99S99",
-      "fax"      => "numchar length|10 mask|99S99S99S99S99",
-      "soustitre"=> "text",
-      "compta_partagee"=> "notNull bool"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["group_id"] = "notNull ref class|CGroups";
+    $specs["type"]     = "notNull enum list|administratif|cabinet";
+    $specs["text"]     = "notNull str confidential";
+    $specs["color"]    = "notNull str length|6";
+    $specs["adresse"]  = "text";
+    $specs["cp"]       = "numchar length|5";
+    $specs["ville"]    = "str maxLength|50";
+    $specs["tel"]      = "numchar length|10 mask|99S99S99S99S99";
+    $specs["fax"]      = "numchar length|10 mask|99S99S99S99S99";
+    $specs["soustitre"]= "text";
+    $specs["compta_partagee"]= "notNull bool";
+    return $specs;
   }
   
   function getSeeks() {

@@ -68,26 +68,23 @@ class CPlageOp extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "chir_id"          => "ref xor|spec_id class|CMediusers",
-      "anesth_id"        => "ref class|CMediusers",
-      "spec_id"          => "ref xor|chir_id class|CFunctions",
-      "salle_id"         => "notNull ref class|CSalle",
-      "date"             => "notNull date",
-      "debut"            => "notNull time",
-      "fin"              => "notNull time",
-      "temps_inter_op"   => "notNull time",
-      "max_intervention" => "num",
+  	$specs = parent::getSpecs();
+    $specs["chir_id"]          = "ref xor|spec_id class|CMediusers";
+    $specs["anesth_id"]        = "ref class|CMediusers";
+    $specs["spec_id"]          = "ref xor|chir_id class|CFunctions";
+    $specs["salle_id"]         = "notNull ref class|CSalle";
+    $specs["date"]             = "notNull date";
+    $specs["debut"]            = "notNull time";
+    $specs["fin"]              = "notNull time";
+    $specs["temps_inter_op"]   = "notNull time";
+    $specs["max_intervention"] = "num";
 
-      "_heuredeb"  =>  "num minMax|0|23",
-      "_minutedeb" =>  "num minMax|0|59",
-      "_heurefin"  =>  "num minMax|0|23",
-      "_minutefin" =>  "num minMax|0|59",
-      "_min_inter_op" => "num minMax|0|59",
-    );
-
-    return array_merge($specsParent, $specs);
+    $specs["_heuredeb"]        = "num minMax|0|23";
+    $specs["_minutedeb"]       = "num minMax|0|59";
+    $specs["_heurefin"]        = "num minMax|0|23";
+    $specs["_minutefin"]       = "num minMax|0|59";
+    $specs["_min_inter_op"]    = "num minMax|0|59";
+    return $specs;
   }
   
   function loadRefs($annulee = 1) {

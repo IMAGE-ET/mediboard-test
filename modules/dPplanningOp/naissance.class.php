@@ -32,16 +32,14 @@ class CNaissance extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "operation_id"    => "notNull ref class|COperation",
-      "nom_enfant"      => "notNull str confidential",
-      "prenom_enfant"   => "str",
-      "date_prevue"     => "date",
-      "date_reelle"     => "dateTime",
-      "debut_grossesse" => "date",
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["operation_id"]    = "notNull ref class|COperation";
+    $specs["nom_enfant"]      = "notNull str confidential";
+    $specs["prenom_enfant"]   = "str";
+    $specs["date_prevue"]     = "date";
+    $specs["date_reelle"]     = "dateTime";
+    $specs["debut_grossesse"] = "date";
+    return $specs;
   }
   
   function getSeeks() {

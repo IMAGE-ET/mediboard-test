@@ -41,20 +41,18 @@ class CGestionCab extends CMbObject {
   }
 
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "function_id"      => "notNull ref class|CFunctions",
-      "libelle"          => "notNull str",
-      "date"             => "notNull date",
-      "rubrique_id"      => "notNull ref class|CRubrique",
-      "montant"          => "notNull currency min|0",
-      "mode_paiement_id" => "notNull ref class|CModePaiement",
-      "num_facture"      => "notNull num",
-      "rques"            => "text",
-      "_date_min" 		 => "date",
-      "_date_max" 		 => "date moreThan|_date_min"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["function_id"]      = "notNull ref class|CFunctions";
+    $specs["libelle"]          = "notNull str";
+    $specs["date"]             = "notNull date";
+    $specs["rubrique_id"]      = "notNull ref class|CRubrique";
+    $specs["montant"]          = "notNull currency min|0";
+    $specs["mode_paiement_id"] = "notNull ref class|CModePaiement";
+    $specs["num_facture"]      = "notNull num";
+    $specs["rques"]            = "text";
+    $specs["_date_min"] 		   = "date";
+    $specs["_date_max"] 		   = "date moreThan|_date_min";
+    return $specs;
   }
   
   function getSeeks() {

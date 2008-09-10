@@ -44,18 +44,17 @@ class CSociete extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'name'            => 'notNull str maxLength|50',
-      'address'         => 'str',
-      'postal_code'     => 'numchar minLength|4 maxLength|5',
-      'city'            => 'str',
-      'phone'           => 'numchar length|10 mask|99S99S99S99S99',
-      'fax'             => 'numchar length|10 mask|99S99S99S99S99',
-      'siret'           => 'code siret',
-      'email'           => 'email',
-      'contact_name'    => 'str maxLength|50',
-      'contact_surname' => 'str maxLength|50',
-    ));
+    $specs['name']            = 'notNull str maxLength|50';
+    $specs['address']         = 'str';
+    $specs['postal_code']     = 'numchar minLength|4 maxLength|5';
+    $specs['city']            = 'str';
+    $specs['phone']           = 'numchar length|10 mask|99S99S99S99S99';
+    $specs['fax']             = 'numchar length|10 mask|99S99S99S99S99';
+    $specs['siret']           = 'code siret';
+    $specs['email']           = 'email';
+    $specs['contact_name']    ='str maxLength|50';
+    $specs['contact_surname'] = 'str maxLength|50';
+    return $specs;
   }
 
   function getSeeks() {

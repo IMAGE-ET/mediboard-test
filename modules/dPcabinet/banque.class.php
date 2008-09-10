@@ -23,12 +23,10 @@ class CBanque extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "nom"         => "notNull str",
-      "description" => "str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["nom"]         = "notNull str";
+    $specs["description"] = "str";
+    return $specs;
   }
   
   function getSeeks() {

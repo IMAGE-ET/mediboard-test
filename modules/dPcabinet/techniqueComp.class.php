@@ -29,12 +29,10 @@ class CTechniqueComp extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "consultation_anesth_id" => "notNull ref class|CConsultAnesth",
-      "technique"              => "text"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["consultation_anesth_id"] = "notNull ref class|CConsultAnesth";
+    $specs["technique"]              = "text";
+    return $specs;
   }
 
   function getHelpedFields(){

@@ -64,17 +64,15 @@ class CAideSaisie extends CMbObject {
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "user_id"      => "ref xor|function_id class|CMediusers",
-      "function_id"  => "ref xor|user_id class|CFunctions",
-      "class"        => "notNull str",
-      "field"        => "notNull str",
-      "name"         => "notNull str",
-      "text"         => "notNull text",
-      "depend_value" => "str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["user_id"]      = "ref xor|function_id class|CMediusers";
+    $specs["function_id"]  = "ref xor|user_id class|CFunctions";
+    $specs["class"]        = "notNull str";
+    $specs["field"]        = "notNull str";
+    $specs["name"]         = "notNull str";
+    $specs["text"]         = "notNull text";
+    $specs["depend_value"] = "str";
+    return $specs;
   }
   
   function loadRefsFwd() {

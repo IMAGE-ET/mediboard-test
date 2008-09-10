@@ -34,20 +34,19 @@ class CProductStock extends CMbObject {
 
   function getSpecs() {
     $specs = parent::getSpecs();
-    return array_merge($specs, array (
-      'product_id' => 'notNull ref class|CProduct',
-      'quantity'   => 'num notNull',
-      'order_threshold_critical' => 'num',
-      'order_threshold_min'      => 'num pos notNull moreEquals|order_threshold_critical',
-      'order_threshold_optimum'  => 'num pos moreEquals|order_threshold_min',
-      'order_threshold_max'      => 'num pos notNull moreEquals|order_threshold_optimum',
-      '_quantity'                => 'pct',
-      '_critical'                => 'pct',
-      '_min'                     => 'pct',
-      '_optimum'                 => 'pct',
-      '_max'                     => 'pct',
-      '_zone'                    => 'num',
-    ));
+    $specs['product_id']               = 'notNull ref class|CProduct';
+    $specs['quantity']                 = 'num notNull';
+    $specs['order_threshold_critical'] = 'num';
+    $specs['order_threshold_min']      = 'num pos notNull moreEquals|order_threshold_critical';
+    $specs['order_threshold_optimum']  = 'num pos moreEquals|order_threshold_min';
+    $specs['order_threshold_max']      = 'num pos notNull moreEquals|order_threshold_optimum';
+    $specs['_quantity']                = 'pct';
+    $specs['_critical']                = 'pct';
+    $specs['_min']                     = 'pct';
+    $specs['_optimum']                 = 'pct';
+    $specs['_max']                     = 'pct';
+    $specs['_zone']                    = 'num';
+    return $specs;
   }
 
   function updateFormFields() {

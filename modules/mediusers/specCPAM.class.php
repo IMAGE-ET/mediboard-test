@@ -29,18 +29,16 @@ class CSpecCPAM extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["users"] = "CMediusers spec_cpam_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["users"] = "CMediusers spec_cpam_id";
+    return $backRefs;
   }
   
   function getSpecs() {
-  	$specsParent = parent::getSpecs();
-    $specs = array (
-      "text"  => "notNull str",
-      "actes" => "notNull str"
-    );
-    return array_merge($specsParent, $specs);
+  	$specs = parent::getSpecs();
+    $specs["text"]  = "notNull str";
+    $specs["actes"] = "notNull str";
+    return $specs;
   }
   
   function getSeeks() {
