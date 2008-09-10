@@ -7,9 +7,6 @@
 * @author Alexis Granger
 */
 
-global $g;
-
-
 // Cas d'ajout de produit, affichage de la bonne lettre
 $lettre = mbGetValueFromGet("lettre");
 $code_cip = mbGetValueFromGet("code_cip");
@@ -23,13 +20,12 @@ if($code_cip){
 }
 
 // Chargement de l'etablissement courant
-$etablissement = new CGroups();
-$etablissement->load($g);
+$etablissement = CGroups::loadCurrent();
 
 // Chargement des produits du livret therapeutique
 $etablissement->loadRefLivretTherapeutique($lettre);
 
-$tabLettre = array("A","B","C","D","E","F","G","H","I","J","K","L","M","N","O","P","Q","R","S","T","U","V","W","X","Z");
+$tabLettre = range('A', 'Z');
 
 
 // Création du template
@@ -40,6 +36,5 @@ $smarty->assign("produits_livret", $etablissement->_ref_produits_livret);
 $smarty->assign("lettre", $lettre);
 
 $smarty->display("inc_vw_livret.tpl");
-
 
 ?>

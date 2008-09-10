@@ -7,7 +7,7 @@
  *  @author Romain Ollivier
  */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can;
 
 $can->needsRead();
 
@@ -22,8 +22,7 @@ if($ordonnance){
 }
 
 // Chargement de l'etablissement
-$etablissement = new CGroups();
-$etablissement->load($g);
+$etablissement = CGroups::loadCurrent();
 
 $prescription_id = mbGetValueFromGetOrSession("prescription_id");
 $prescription = new CPrescription();

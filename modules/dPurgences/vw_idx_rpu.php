@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $g;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 
@@ -27,8 +27,7 @@ $user = new CMediusers();
 $user->load($AppUI->user_id);
 $medicalView = $user->isMedical();
 
-$group = new CGroups();
-$group->load($g);
+$group = CGroups::loadCurrent();
 $listPrats = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);
 
 $sejour = new CSejour;

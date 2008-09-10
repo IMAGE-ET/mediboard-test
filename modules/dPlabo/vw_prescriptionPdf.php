@@ -7,7 +7,7 @@
  *  @author Alexis Granger
  */
 
-global $dPconfig, $g, $uistyle;
+global $uistyle;
 
 // Recuperation de l'id de la prescription
 $prescription_id = mbGetValueFromGet("prescription_id");
@@ -27,8 +27,7 @@ $tab_pack_prescription = array();
 $pdf = new CPrescriptionPdf("P", "mm", "A4", true); 
 
 // Chargement de l'etablissement
-$etab = new CGroups();
-$etab->load($g);
+$etab = CGroups::loadCurrent();
 
 // Affichage de l'entete du document
 // Impossible d'utiliser mbNormal.gif ==> format gif non supporté
@@ -79,7 +78,7 @@ $pdf->Ln();
 
 
 
-$tagCatalogue = $dPconfig['dPlabo']['CCatalogueLabo']['remote_name'];
+$tagCatalogue = CAppUI::conf('dPlabo CCatalogueLabo remote_name');
 
 // Chargement de l'id externe labo code4 du praticien
 // Chargement de l'id400 "labo code4" du praticien

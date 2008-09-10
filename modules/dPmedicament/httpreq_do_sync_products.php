@@ -7,8 +7,7 @@
 * @author Fabien Ménager
 */
 
-global $can, $g;
-
+global $can;
 $can->needsAdmin();
 
 set_time_limit(360);
@@ -22,8 +21,7 @@ if (!$category_id || !$category->load($category_id)) {
 }
 
 // Chargement du livret thérapeutique de l'établissement
-$group = new CGroups();
-$group->load($g);
+$group = CGroups::loadCurrent();
 $group->loadRefLivretTherapeutique('%', 10000);
 
 // Chargement des produits du livret thérapeutique
@@ -39,7 +37,7 @@ foreach ($group->_ref_produits_livret as $produit_livret) {
   if (!$msg) {
     $stock = new CProductStockGroup();
     $stock->product_id = $product->_id;
-    $stock->group_id = $g;
+    $stock->group_id = $group->_id;
     $stock->quantity = 1;
     $stock->order_threshold_min = 1;
     $stock->order_threshold_max = 1;

@@ -7,12 +7,11 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $tab, $g;
+global $AppUI, $can, $m, $tab;
 
 $can->needsRead();
 
-$group = new CGroups();
-$group->load($g);
+$group = CGroups::loadCurrent();
 $user = new CMediusers();
 $listResponsables = $user->loadUsers(PERM_READ, $group->service_urgences_id);
 $listPrats        = $user->loadPraticiens(PERM_READ, $group->service_urgences_id);

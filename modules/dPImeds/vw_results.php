@@ -7,15 +7,14 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
+global $AppUI, $can;
 
 // Il faut faire un test sur l'installation de sante400
 $can->read &= (CModule::getInstalled("dPsante400") != null);
 $can->needsRead();
 
 // Chargement des identifiants externes de l'établissement pour Imeds
-$etablissement = new CGroups();
-$etablissement->load($g);
+$etablissement = CGroups::loadCurrent();
 
 $idImeds = array();
 
@@ -72,7 +71,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("patient", $patient);
 $smarty->assign("sejour" , $sejour);
 $smarty->assign("idImeds", $idImeds);
-$smarty->assign("url"    , $dPconfig["dPImeds"]["url"]);
+$smarty->assign("url"    , CAppUI::conf("dPImeds url"));
 
 $smarty->display("vw_results.tpl");
 

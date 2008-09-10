@@ -7,13 +7,11 @@
 * @author Romain OLLIVIER
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
-
+global $AppUI, $can;
 $can->needsRead();
 
 // Chargement des identifiants externes de l'établissement pour Imeds
-$etablissement = new CGroups();
-$etablissement->load($g);
+$etablissement = CGroups::loadCurrent();
 
 $idImeds = array();
 $id400 = new CIdSante400;
@@ -51,6 +49,8 @@ $smarty = new CSmartyDP();
 $smarty->assign("prescription" , $prescription);
 $smarty->assign("idImeds", $idImeds);
 $smarty->assign("numPresc", $idPresc->id400);
-$smarty->assign("url"    , $dPconfig["dPImeds"]["url"]);
+$smarty->assign("url"    , CAppUI::conf("dPImeds url"));
 
 $smarty->display("inc_prescription_results.tpl");
+
+?>

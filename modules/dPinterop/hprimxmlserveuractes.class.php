@@ -29,8 +29,7 @@ class CHPrimXMLServeurActes extends CHPrimXMLDocument {
     $emetteur = $this->addElement($enteteMessage, "emetteur");
     $agents = $this->addElement($emetteur, "agents");
     $this->addAgent($agents, "application", "MediBoard", "Gestion des Etablissements de Santé");
-    $group = new CGroups();
-    $group->load($g);
+    $group = CGroups::loadCurrent();
     $this->addAgent($agents, "système", $group->_id, $group->text);
     $this->addAgent($agents, "acteur", "user$AppUI->user_id", "$AppUI->user_first_name $AppUI->user_last_name");
     
