@@ -197,11 +197,12 @@ showBefore = function(){
 
 <table class="tbl">
   <tr>
-    <th colspan="2" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
   <tr>
     <td>Poids: {{$poids}} kg</td>
     <td>Age: {{$patient->_age}}</td>
+    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}</td>
   </tr>
 </table>
 

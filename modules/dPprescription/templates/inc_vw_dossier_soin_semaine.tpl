@@ -21,13 +21,16 @@
 	
 </script>
 
+{{if $prescription->_id}}
+
 <table class="tbl">
   <tr>
-    <th colspan="2" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
   </tr>
   <tr>
-    <td>Poids: {{$poids}} kg</td>
+    <td>Poids: {{$patient->_ref_constantes_medicales->poids}} kg</td>
     <td>Age: {{$patient->_age}}</td>
+    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}
   </tr>
 </table>
 
@@ -40,6 +43,8 @@
     </th>
     {{/foreach}}
   </tr>
+  
+  
   
   <!-- Affichage des medicaments -->
   {{foreach from=$prescription->_lines.med item=lines_unite_prise name="foreach_line"}}
@@ -72,5 +77,11 @@
 	      {{/foreach}}
 	    {{/foreach}}
 	  {{/foreach}}
-	{{/foreach}}  
+	{{/foreach}}	
 </table>
+
+{{else}}
+  <div class="big-info">
+    Ce dossier ne possède pas de prescription de séjour
+  </div>
+{{/if}} 
