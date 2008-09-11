@@ -20,7 +20,7 @@ Main.add(function () {
   var tabsActes = Control.Tabs.create('tab-actes', false);
   {{/if}}
   if($('prescription_sejour')){
-    Prescription.reloadPrescSejour('', DossierMedical.sejour_id);
+    Prescription.reloadPrescSejour('', DossierMedical.sejour_id,'','1');
   }
 });
 </script>

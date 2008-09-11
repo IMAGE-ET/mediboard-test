@@ -231,13 +231,14 @@ var Prescription = {
 	    }
     }
   },
-  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id){
+  reloadPrescSejour: function(prescription_id, sejour_id, praticien_sortie_id, mode_anesth){
     var url = new Url;
     url.setModuleAction("dPprescription", "httpreq_vw_prescription");
     url.addParam("prescription_id", prescription_id);
     url.addParam("sejour_id", sejour_id);
     url.addParam("full_mode", "1");
     url.addParam("praticien_sortie_id", praticien_sortie_id);
+    url.addParam("mode_anesth", mode_anesth);
     url.requestUpdate("prescription_sejour", { waitingText: null } );
   },
   reloadPrescPharma: function(prescription_id){

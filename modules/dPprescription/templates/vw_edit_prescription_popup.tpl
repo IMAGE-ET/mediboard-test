@@ -131,9 +131,17 @@ function viewProduit(cip){
 				  <input type="hidden" name="del" value="0" />
 				  <input type="hidden" name="object_id" value="{{$sejour_id}}"/>
 				  <input type="hidden" name="object_class" value="CSejour" />
-				  <input type="hidden" name="callback" value="reloadPrescription" />				  
+				  <input type="hidden" name="callback" value="" />				  
 				  <input type="hidden" name="type" value="pre_admission" />
-				  <button type=button class="submit" onclick="submitFormAjax(this.form, 'systemMsg');">Créer une prescription de sejour</button>
+				  {{if $mode_anesth}}
+				    <button type=button class="submit" onclick="this.form.callback.value = 'reloadPrescription'; submitFormAjax(this.form, 'systemMsg');">Créer une prescription de sejour</button>				  
+				  {{else}}
+				  <button type=button class="submit" onclick="submitFormAjax(this.form, 'systemMsg', { onComplete: function() { 
+				    document.addPrescription.type.value = 'sejour';
+				    document.addPrescription.callback.value = 'reloadPrescription';
+				    submitFormAjax(document.addPrescription, 'systemMsg');
+				  } } );">Créer une prescription de sejour</button>
+				  {{/if}}
 				</form>
 		  </td>
 		</tr>

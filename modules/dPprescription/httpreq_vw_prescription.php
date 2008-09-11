@@ -25,6 +25,7 @@ $sejour_id       = mbGetValueFromGetOrSession("sejour_id");
 $type            = mbGetValueFromGetOrSession("type");
 $element_id      = mbGetValueFromGetOrSession("element_id");
 $chapitre        = mbGetValueFromGetOrSession("chapitre");
+$mode_anesth     = mbGetValueFromGetOrSession("mode_anesth");
 
 $praticien_sortie_id    = mbGetValueFromGetOrSession("praticien_sortie_id");
 $historique = array();
@@ -289,6 +290,7 @@ $prise->quantite = 1.0;
 
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("mode_anesth", $mode_anesth);
 $smarty->assign("historique", $historique);
 $smarty->assign("filter_line", $filter_line);
 $smarty->assign("hours", $hours);
@@ -326,22 +328,22 @@ $smarty->assign("dossier_medical"    , $dossier_medical);
 $smarty->assign("now_time", mbTime());
 
 if($full_mode){
-	$_sejour = new CSejour();
-	$_sejour->load($sejour_id);
+  $_sejour = new CSejour();
+  $_sejour->load($sejour_id);
   $smarty->assign("protocoles_praticien", $protocoles_praticien);
   $smarty->assign("protocoles_function", $protocoles_function);
-	$smarty->assign("praticien_sejour", $_sejour->praticien_id);
-	$smarty->display("vw_edit_prescription_popup.tpl");
-	return;
+  $smarty->assign("praticien_sejour", $_sejour->praticien_id);
+  $smarty->display("vw_edit_prescription_popup.tpl");
+  return;
 }
 
 if($mode_protocole){
-	$smarty->assign("function_id", "");
-	$smarty->assign("praticien_id", "");
-	$smarty->assign("praticiens", $praticiens);
-	$smarty->assign("functions", $functions);
-	$smarty->assign("category", "medicament");
-	$smarty->display("inc_vw_prescription.tpl");
+  $smarty->assign("function_id", "");
+  $smarty->assign("praticien_id", "");
+  $smarty->assign("praticiens", $praticiens);
+  $smarty->assign("functions", $functions);
+  $smarty->assign("category", "medicament");
+  $smarty->display("inc_vw_prescription.tpl");
 }
 
 // Premier chargement de la pharmacie
@@ -351,9 +353,9 @@ if($mode_pharma && $refresh_pharma){
 }
 	  	
 if(!$refresh_pharma && !$mode_protocole){
-	// Refresh Pharma
-	if($mode_pharma){
-		$chapitre = "medicament";
+  // Refresh Pharma
+  if($mode_pharma){
+  	$chapitre = "medicament";
 	  $smarty->display("inc_div_medicament.tpl");
 	} else {
 	  // Refresh Protocole
@@ -370,7 +372,7 @@ if(!$refresh_pharma && !$mode_protocole){
         $smarty->display("inc_div_element.tpl");
       }
     }
-	}
+  }
 }
 
 
