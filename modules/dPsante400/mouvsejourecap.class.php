@@ -334,10 +334,10 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->patient = new CPatient;
     $this->patient->nom              = $pat400->consume("ZNOM");
     $this->patient->prenom           = $pat400->consume("ZPRE");
-    $this->patient->nom_jeune_fille  = $pat400->consume("ZNJF");
     $this->patient->naissance        = $pat400->consumeDate("DNAI");
-    $this->patient->loadMatchingObject();
+    $this->patient->loadMatchingPatient();
     
+    $this->patient->nom_jeune_fille  = $pat400->consume("ZNJF");
     $this->patient->sexe             = @$transformSexe[$pat400->consume("ZSEX")];
     $this->patient->adresse          = $pat400->consumeMulti("ZAD1", "ZAD2");
     $this->patient->ville            = $pat400->consume("ZVIL");

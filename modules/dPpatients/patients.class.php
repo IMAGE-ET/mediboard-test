@@ -652,6 +652,24 @@ class CPatient extends CMbObject {
     return $sejours_collision;
   }
   
+  /**
+   * Charge le patient ayant les traits suivants :
+   * - Même nom à la casse et aux séparateurs près
+   * - Même prénom à la casse et aux séparateurs près
+   * - Strictement la même date de naissance
+   * @return Nombre d'occurences trouvées 
+   */
+  function loadMatchingPatient() {
+    $ds = $this->_spec->ds;
+    $where["nom"]       = $ds->prepare("LIKE %", preg_replace("/\W/", "_", $this->nom));
+    $where["prenom"]    = $ds->prepare("LIKE %", preg_replace("/\W/", "_", $this->prenom));
+    $where["naissance"] = $ds->prepare("= %", $this->naissance);
+    
+    $this->loadObject($where);
+    
+    return $this->countList($where);
+  }
+  
   function loadRefsConsultations($where = null) {
     $this->_ref_consultations = new CConsultation();
     if ($this->patient_id){

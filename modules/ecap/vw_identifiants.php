@@ -8,11 +8,20 @@
  */
 
 global $can;
-$can->needsEdit();
+$can->needsRead();
+
+$id400 = new CIdSante400();
+$id400->object_class = "CGroups";
+$id400->tag = "eCap";
+$idGroups = $id400->loadMatchingList();
+foreach ($idGroups as $idGroup) {
+  $idGroup->loadTargetObject();
+}
 
 // Création du template
 $smarty = new CSmartyDP();
 
+$smarty->assign("idGroups", $idGroups);
 
 $smarty->display("vw_identifiants.tpl");
 ?>
