@@ -834,4 +834,10 @@ $locales['CPrisePosologie-unite_prise-desc'] = '';
 $locales['CPrisePosologie.all'] = '';
 $locales['CPrisePosologie.select'] = '';
 $locales['config-dPprescription-CPrisePosologie'] = 'Gestion des heures';
+$locales['CPrescriptionLineMedicament-conditionnel'] = 'Conditionnel';
+$locales['CPrescriptionLineMedicament-conditionnel-desc'] = 'Conditionnel';
+$locales['CPrescriptionLineElement-conditionnel'] = 'Conditionnel';
+$locales['CPrescriptionLineElement-conditionnel-desc'] = 'Conditionnel';
+$locales['CPrescriptionLineMedicament-condition_active'] = 'Activation';
+$locales['CPrescriptionLineMedicament-condition_active-desc'] = 'Activation';
 ?>

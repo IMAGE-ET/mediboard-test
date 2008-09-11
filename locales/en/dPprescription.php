@@ -294,4 +294,10 @@ $locales['config-dPprescription-CMomentUnitaire-principaux'] = '';
 $locales['CPrisePosologie-quantite'] = '';
 $locales['CPrisePosologie-quantite-desc'] = '';
 $locales['config-dPprescription-CPrisePosologie'] = '';
+$locales['CPrescriptionLineMedicament-conditionnel'] = '';
+$locales['CPrescriptionLineMedicament-conditionnel-desc'] = '';
+$locales['CPrescriptionLineElement-conditionnel'] = '';
+$locales['CPrescriptionLineElement-conditionnel-desc'] = '';
+$locales['CPrescriptionLineMedicament-condition_active'] = '';
+$locales['CPrescriptionLineMedicament-condition_active-desc'] = '';
 ?>
