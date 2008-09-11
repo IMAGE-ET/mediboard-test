@@ -46,19 +46,20 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   var $_ref_log_validation_pharma = null;
   
   // Can fields
- 	var $_can_select_equivalent              = null;
+  var $_can_select_equivalent              = null;
   var $_can_view_historique                = null;
- 	var $_can_view_form_ald                  = null;
- 	var $_can_vw_form_traitement             = null;
- 	var $_can_view_signature_praticien       = null;
- 	var $_can_view_form_signature_praticien  = null;
- 	var $_can_view_form_signature_infirmiere = null;
+  var $_can_view_form_ald                  = null;
+  var $_can_view_form_conditionnel = null;
+  var $_can_vw_form_traitement             = null;
+  var $_can_view_signature_praticien       = null;
+  var $_can_view_form_signature_praticien  = null;
+  var $_can_view_form_signature_infirmiere = null;
   var $_can_vw_livret_therapeutique        = null;
   var $_can_vw_hospi                       = null;
   var $_can_vw_generique                   = null;
- 	var $_can_modify_poso                    = null;
+  var $_can_modify_poso                    = null;
   var $_can_delete_line                    = null;
-	var $_can_vw_form_add_line_contigue      = null;
+  var $_can_vw_form_add_line_contigue      = null;
   var $_can_modify_dates                   = null;
   var $_can_modify_comment                 = null;
   
@@ -173,6 +174,10 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
     if($perm_edit && !$this->_protocole){
     	$this->_can_view_form_ald = 1;
     }
+    // View Conditionnel
+    if($perm_edit && !$this->_protocole){
+    	$this->_can_view_form_conditionnel = 1;
+    }
     // View formulaire traitement
     if($perm_edit && !$mode_pharma && !$this->_protocole){
     	$this->_can_vw_form_traitement = 1;
@@ -268,7 +273,7 @@ class CPrescriptionLineMedicament extends CPrescriptionLine {
   	parent::loadRefsFwd();
     $this->loadRefProduit();
     $this->loadPosologie();
-  
+
     $this->_ref_produit->loadRefPosologies();
     foreach($this->_ref_produit->_ref_posologies as $_poso){
       $unite = $_poso->_code_unite_prise["LIBELLE_UNITE_DE_PRISE_PLURIEL"];

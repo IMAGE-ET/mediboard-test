@@ -36,11 +36,12 @@ ul {
     </td>
     <td>
       Feuille de soin du {{$date|date_format:"%d/%m/%Y"}}
-      </td>
+    </td>
   </tr>
 </table>
 
 <table style="border-collapse: collapse; border: 1px solid #ccc" class="tbl">
+  <!-- Header du tableau -->
   <tr>
     <th colspan="2" class="title" style="width: 7cm">Prescription</th>
     <th rowspan="2" class="title" style="width: 1cm">Prescripteur</th>
@@ -55,78 +56,23 @@ ul {
     {{foreach from=$dates item=date }}
       {{foreach from=$tabHours.$date item=_hour name=foreach_date}}
         <th style="{{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-                   {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}">{{$_hour}}h</th>
+                   {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}">
+          {{$_hour}}h
+        </th>
       {{/foreach}}
     {{/foreach}}
   </tr>
+  
   <!-- Affichage des medicaments -->
   {{foreach from=$prescription->_lines.med item=_all_lines_unite_prise}}
     {{foreach from=$_all_lines_unite_prise key=unite_prise item=_line}}
-      {{assign var=line_id value=$_line->_id}}
-      <tr>
-        <td class="text"  style="border: 1px solid #ccc;">{{$_line->_view}}</td>
-        <td class="text"  style="border: 1px solid #ccc;">
-         {{if array_key_exists($line_id, $prescription->_intitule_prise.med)}}
-          {{if is_numeric($unite_prise)}}
-          <ul>
-            <li>{{$prescription->_intitule_prise.med.$line_id.autre.$unite_prise}}</li>
-          </ul>
-          {{else}}
-	        <ul>
-	        {{foreach from=$prescription->_intitule_prise.med.$line_id.$unite_prise item=_prise}}
-	          <li>{{$_prise}}</li>
-	        {{/foreach}}
-	        </ul>
-	        {{/if}}
-	        {{/if}}
-        </td>
-  			<td class="text" style="text-align: center">
-  			  {{if $_line->_traitement}}
-  			    Traitement Personnel
-  			  {{else}}
-  			   {{$_line->_ref_praticien->_view}}
-  			  {{/if}}
-  			</td>
-  			<td style="border-left: 1px solid #ccc; text-align: center">
-          {{if !$_line->signee && !$_line->valide_pharma}}
-  			    DP
-  			  {{else}}
-  			    {{if !$_line->signee}}
-  			      D
-  			    {{/if}}
-  			    {{if !$_line->valide_pharma}}
-  			      P
-  			    {{/if}}
-  			  {{/if}}
-        </td>
-        <!-- Affichage des heures de prises des medicaments -->
-		  	{{foreach from=$dates item=date}}
-		      {{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
-		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
-		                 {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-                     {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
-                      text-align: center">
-			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($line_id, $prescription->_list_prises.med.$date) && array_key_exists($unite_prise, $prescription->_list_prises.med.$date.$line_id)}}
-					    {{assign var=prise_line value=$prescription->_list_prises.med.$date.$line_id.$unite_prise}}	            
-	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
-	              {{assign var=quantite value=$prise_line.$_hour}}
-	            {{/if}}
-		        {{/if}}
-           {{if $_line->_debut_reel > $_real_hour || ($_line->_fin_reelle && $_line->_fin_reelle < $_real_hour)}}
-             <img src="images/icons/gris.gif" />
-           {{else}}
-             {{$quantite}}
-           {{/if}}
-	        </td>
-	        {{/foreach}}
-	      {{/foreach}}
-      </tr>
+      {{include file="../../dPprescription/templates/inc_vw_line_plan_soin.tpl" line=$_line suffixe=med}}
     {{/foreach}}
   {{/foreach}} 
   
+  <!-- Séparation entre les medicaments et les elements -->
   <tr>
-    <td colspan="30" style="padding:0; height: 1px; border: 1px solid black"></td>
+    <td colspan="30" style="padding:0; height: 1px; border: 1px solid black;"></td>
   </tr>
    
   <!-- Affichage des elements -->
@@ -135,84 +81,40 @@ ul {
       {{assign var=categorie value=$categories.$name_chap.$name_cat}}
       {{foreach from=$elements_cat item=_element name="foreach_cat"}}
         {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}
-        {{assign var=element_id value=$element->_id}}
-      <tr>
-        <td class="text">{{$element->_view}}</td>
-        <td class="text" style="border: 1px solid #ccc;">
-          {{if is_numeric($unite_prise)}}
-          <ul>
-            <li>{{$prescription->_intitule_prise.elt.$element_id.autre.$unite_prise}}</li>
-          </ul>
-          {{elseif $unite_prise != "aucune_prise"}}
-	        <ul>
-	        {{foreach from=$prescription->_intitule_prise.elt.$element_id.$unite_prise item=_prise}}
-	          <li>{{$_prise}}</li>
-	        {{/foreach}}
-	        </ul>
-	        {{/if}}
-        </td>
-  			<td class="text" style="text-align: center">
-  			   {{$element->_ref_praticien->_view}} 
-  			</td>
-  			 <td style="border-left: 1px solid #ccc; text-align: center">
-  			  {{if !$element->signee}}
-  			    D
-  			  {{/if}}
-        </td>
-        <!-- Affichage des heures de prises des medicaments -->
-        {{foreach from=$dates item=date}}
-		      {{foreach from=$tabHours.$date key=_real_hour item=_hour name="foreach_date"}}
-		      <td style="padding: 0; width: 0.5cm; border: 1px solid #ccc;
-		                 {{if $smarty.foreach.foreach_date.first}}border-left: 1px solid black;{{/if}}
-                     {{if $smarty.foreach.foreach_date.last}}border-right: 1px solid black;{{/if}}
-                      text-align: center">
-			      {{assign var=quantite value=""}}  
-			      {{if array_key_exists($element_id, $prescription->_list_prises.elt.$date) && array_key_exists($unite_prise, $prescription->_list_prises.elt.$date.$element_id)}}
-					    {{assign var=prise_line value=$prescription->_list_prises.elt.$date.$element_id.$unite_prise}}	            
-	            {{if is_array($prise_line) && array_key_exists($_hour, $prise_line)}}
-	              {{assign var=quantite value=$prise_line.$_hour}}
-	            {{/if}}
-		        {{/if}}
-           {{if $element->_debut_reel > $_real_hour || $element->_fin_reelle < $_real_hour}}
-             <img src="images/icons/gris.gif" />
-           {{else}}
-             {{$quantite}}
-           {{/if}}
-	        </td>
-	        {{/foreach}}
-	      {{/foreach}}
-        </tr>
-        
-        {{if $smarty.foreach.foreach_elt.last && $smarty.foreach.foreach_cat.last}}
-        <tr>
-          <td colspan="30" style="padding:0; height: 1px; border: 1px solid black"></td>
-        </tr>
-        {{/if}}
+          {{include file="../../dPprescription/templates/inc_vw_line_plan_soin.tpl" line=$element suffixe=elt}}
+          <!-- Affichage d'une barre de separation entre chaque categorie -->
+          {{if $smarty.foreach.foreach_elt.last && $smarty.foreach.foreach_cat.last}}
+            <tr>
+              <td colspan="30" style="padding:0; height: 1px; border: 1px solid black;"></td>
+            </tr>
+          {{/if}}
         {{/foreach}}
       {{/foreach}}
     {{/foreach}}
   {{/foreach}}
-    <tbody class="hoverable">
-		  <tr>
-		    <th class="title" colspan="2">Remarque</th>
-		    <th class="title" colspan="2">Pharmacien</th>
-		    <th class="title" colspan="8">Signature IDE</th>
-		    <th class="title" colspan="8">Signature IDE</th>
-		    <th class="title" colspan="8">Signature IDE</th>
-		  </tr>
-		  <tr>
-		    <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
-		    <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
-		    {{if $pharmacien->_id}}
-		      {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
-		    {{/if}}  
-		    </td>
-		    <td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td>
-		  </tr>
-		  <tr><td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td></tr>
-		  <tr><td class="signature_ide" colspan="8" ></td><td class="signature_ide" colspan="8"></td><td class="signature_ide" colspan="8"></td></tr>
-    </tbody>
-  </table>
+  
+  <!-- Footer du tableau -->
+  <tbody class="hoverable">
+    <tr>
+	  <th class="title" colspan="2">Remarque</th>
+	  <th class="title" colspan="2">Pharmacien</th>
+	  <th class="title" colspan="{{$tabHours.$date|@count}}">Signature IDE</th>
+	  <th class="title" colspan="{{$tabHours.$date|@count}}">Signature IDE</th>
+	  <th class="title" colspan="{{$tabHours.$date|@count}}">Signature IDE</th>
+	</tr>
+	<tr>
+	  <td style="border: 1px solid #ccc; height: 1.5cm" colspan="2" rowspan="3"></td>
+	  <td class="text" style="border: 1px solid #ccc; text-align: center" colspan="2" rowspan="3">
+	  {{if $pharmacien->_id}}
+	    {{$pharmacien->_view}} {{$last_log->date|date_format:"%d/%m/%Y à %Hh%M"}}
+	  {{/if}}  
+	  </td>
+	  <td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td>
+	</tr>
+	<tr><td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td></tr>
+	<tr><td class="signature_ide" colspan="{{$tabHours.$date|@count}}" ></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td><td class="signature_ide" colspan="{{$tabHours.$date|@count}}"></td></tr>
+  </tbody>
+</table>
 
 <!-- Re-ouverture des tableaux -->
 <table>

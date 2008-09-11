@@ -16,7 +16,26 @@ $heure        = mbGetValueFromGet("heure");
 $quantite = is_numeric($quantite) ? $quantite : '';
 $prise_id = is_numeric($key_tab) ? $key_tab : '';
 $unite_prise = !is_numeric($key_tab) ? utf8_decode($key_tab) : '';
+$date_sel = mbGetValueFromGet("date_sel");
 
+$list_administrations = mbGetValueFromGet("administrations");
+$administrations = array();
+
+if($list_administrations){
+  $_administrations = explode("|",$list_administrations);
+  foreach($_administrations as $_administration_id){
+    $administration = new CAdministration();
+    $administration->load($_administration_id);
+    $administration->loadRefsFwd();
+    $administration->loadRefLog();
+    $line =& $administration->_ref_object;
+    $line->loadRefsFwd();
+    if($line->_class_name == "CPrescriptionLineMedicament"){
+      $line->_ref_produit->loadConditionnement();
+    }
+    $administrations[$administration->_id] = $administration;
+  }
+}
 
 // Si une prise est specifiée (pas de moment unitaire), on charge la prise pour stocker l'unite de prise
 if($prise_id){
@@ -40,10 +59,10 @@ $dateTime = ($heure==24) ? "$date 23:59:00" : "$date $heure:00:00";
 // Transmission
 $transmission = new CTransmissionMedicale();
 
-
-
 // Création du template
 $smarty = new CSmartyDP();
+$smarty->assign("date_sel", $date_sel);
+$smarty->assign("administrations", $administrations);
 $smarty->assign("transmission", $transmission);
 $smarty->assign("line", $line);
 $smarty->assign("unite_prise", $unite_prise);

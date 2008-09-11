@@ -9,6 +9,7 @@
 
 $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 $date      = mbGetValueFromGetOrSession("date");
+$nb_decalage = mbGetValueFromGetOrSession("nb_decalage",0);
 $now       = mbDateTime();
 
 // Chargement du sejour
@@ -33,30 +34,80 @@ $prescription_id = $prescription->_id;
 
 // Chargement des categories pour chaque chapitre
 $categories = CCategoryPrescription::loadCategoriesByChap();
+$dates = array(mbDate("- 1 DAY", $date), $date, mbDate("+ 1 DAY", $date));
+
+$types = array("med", "elt");
+foreach($types as $type){
+  $prescription->_prises[$type] = array();
+  $prescription->_lines[$type] = array();
+  $prescription->_intitule_prise[$type] = array();
+}
+ 
+$hours_deb = "02|04|06|08|10|12";
+$hours_fin = "14|16|18|20|22|24";
+$hours = $hours_deb."|".$hours_fin;
+
+$hier = mbDate("- 1 DAY", $date);
+$demain = mbDate("+ 1 DAY", $date);
+
+$hours = explode("|",$hours);
+$hours_deb = explode("|",$hours_deb);
+$hours_fin = explode("|",$hours_fin);
+
+
+foreach($hours_fin as $_hour_fin){
+  $tabHours[$hier]["$_hour_fin:00:00"] = $_hour_fin;
+}
+foreach($hours as $_hour){
+  $tabHours[$date]["$_hour:00:00"] = $_hour;
+}
+foreach($hours_deb as $_hour_deb){
+  $tabHours[$demain]["$_hour_deb:00:00"] = $_hour_deb;
+}
+
+// Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
+// dont les heures ne sont pas spécifié dans le tableau
+$heures = array();
+$list_hours = range(1,24);
+$last_hour_in_array = reset($tabHours[$date]); 
+foreach($list_hours as &$hour){
+  $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
+  if(in_array($hour, $tabHours[$date])){
+    $last_hour_in_array = $hour;
+  }
+  $heures[$hour] = $last_hour_in_array;
+}
 
 if($prescription->_id){	
   $types = array("med", "elt");
  	foreach($types as $type){
  	  $prescription->_prises[$type] = array();
- 	  $prescription->_list_prises[$type][$date] = array();
  	  $prescription->_lines[$type] = array();
  	  $prescription->_intitule_prise[$type] = array();
  	}
 
 	// Chargement des lignes
-	$prescription->loadRefsLinesMed("1");
+	$prescription->loadRefsLinesMed("1","1");
 	$prescription->loadRefsLinesElementByCat();
 	$prescription->_ref_object->loadRefPrescriptionTraitement();
 		 
 	$traitement_personnel = $prescription->_ref_object->_ref_prescription_traitement;
 	if($traitement_personnel->_id){
-	  $traitement_personnel->loadRefsLinesMed("1");
+	  $traitement_personnel->loadRefsLinesMed("1","1");
 	}
 	  	  
 	// Calcul du plan de soin pour la journée $date
-  $prescription->calculPlanSoin($date);
+  foreach($dates as $_date){
+    foreach($types as $type){
+  	  $prescription->_list_prises[$type][$_date] = array();
+    }
+    $prescription->calculPlanSoin($_date, 0, $heures);
+  }
 }	
 
+
+
+ 
 $transmission = new CTransmissionMedicale();
 $where = array();
 $where[] = "(object_class = 'CCategoryPrescription') OR 
@@ -66,29 +117,37 @@ $where[] = "(object_class = 'CCategoryPrescription') OR
 $where["sejour_id"] = " = '$sejour->_id'";
 $transmissions_by_class = $transmission->loadList($where);
 
+
+
 foreach($transmissions_by_class as $_transmission){
   $_transmission->loadRefsFwd();
 	$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
 }
 
-$hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
-sort($hours);
-foreach($hours as $_hour){
-	$tabHours["$date $_hour:00:00"] = $_hour;
-}
+
+$signe_decalage = ($nb_decalage < 0) ? "-" : "+";
+
+$real_date = mbDate();
+$real_time = mbTime();
 
 // Création du template
 $smarty = new CSmartyDP();
-$smarty->assign("poids", $poids);
-$smarty->assign("patient", $patient);
-$smarty->assign("prescription", $prescription);
+$smarty->assign("heures", $heures);
+$smarty->assign("signe_decalage"     , $signe_decalage);
+$smarty->assign("nb_decalage"        , abs($nb_decalage));
+$smarty->assign("hier"               , $hier);
+$smarty->assign("demain"             , $demain);
+$smarty->assign("poids"              , $poids);
+$smarty->assign("patient"            , $patient);
+$smarty->assign("prescription"       , $prescription);
 $smarty->assign("tabHours"           , $tabHours);
 $smarty->assign("sejour"             , $sejour);
 $smarty->assign("prescription_id"    , $prescription_id);
 $smarty->assign("date"               , $date);
 $smarty->assign("now"                , $now);
 $smarty->assign("categories"         , $categories);
-
+$smarty->assign("real_date"          , $real_date);
+$smarty->assign("real_time"          , $real_time);
 $smarty->display("inc_vw_dossier_soins.tpl");
 
 ?>

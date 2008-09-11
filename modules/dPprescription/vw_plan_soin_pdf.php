@@ -18,22 +18,7 @@ $last_log = new CUserLog();
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
-$prescription->loadRefsLinesMed();
 
-$pharmacien = new CMediusers();
-
-// Parcours et affichage des medicaments
-foreach($prescription->_ref_prescription_lines as $_line){
-	$_line->loadRefLogValidationPharma();
-	$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
-}
-
-// Chargement du dernier pharmacien qui a validé une ligne
-if($logs){
-  ksort($logs);
-  $last_log = end($logs);
-  $pharmacien->load($last_log->user_id);
-}
 
 // Chargement du patient
 $prescription->loadRefPatient();
@@ -50,10 +35,26 @@ $sejour->loadNumDossier();
 $sejour->loadCurrentAffectation(mbDateTime());
 
 // Chargement des lignes
-$prescription->loadRefsLinesMed("1");
+$prescription->loadRefsLinesMed("1","1");
 $prescription->loadRefsLinesElementByCat();
 $prescription->_ref_object->loadRefPrescriptionTraitement();	  
-$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1");
+$prescription->_ref_object->_ref_prescription_traitement->loadRefsLinesMed("1","1");
+
+$pharmacien = new CMediusers();
+
+// Parcours et affichage des medicaments
+foreach($prescription->_ref_prescription_lines as $_line){
+	$_line->loadRefLogValidationPharma();
+	$logs[$_line->_ref_log_validation_pharma->date] = $_line->_ref_log_validation_pharma;
+}
+
+// Chargement du dernier pharmacien qui a validé une ligne
+if($logs){
+  ksort($logs);
+  $last_log = end($logs);
+  $pharmacien->load($last_log->user_id);
+}
+
 
 $hours = explode("|",CAppUI::conf("dPprescription CPrisePosologie heures_prise"));
 sort($hours); 
@@ -65,13 +66,29 @@ foreach($types as $type){
   $prescription->_intitule_prise[$type] = array();
  }
 
+
+ 
+ 
+ // Calcul permettant de regrouper toutes les heures dans un tableau afin d'afficher les medicaments
+// dont les heures ne sont pas spécifié dans le tableau
+$heures = array();
+$list_hours = range(0,23);
+$last_hour_in_array = reset($hours); 
+foreach($list_hours as &$hour){
+  $hour = str_pad($hour, 2, "0", STR_PAD_LEFT);
+  if(in_array($hour, $hours)){
+    $last_hour_in_array = $hour;
+  }
+  $heures[$hour] = $last_hour_in_array;
+}
+ 
+
   
 foreach($dates as $_date){
-	foreach($types as $type){
-	  $prescription->_list_prises[$type][$_date] = array();
+  foreach($types as $type){
+	$prescription->_list_prises[$type][$_date] = array();
   }
-
-  $prescription->calculPlanSoin($_date, 1);
+  $prescription->calculPlanSoin($_date, 1, $heures);
   foreach($hours as $_hour){
   	$tabHours[$_date]["$_date $_hour:00:00"] = $_hour;
   }

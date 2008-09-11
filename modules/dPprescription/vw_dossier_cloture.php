@@ -18,6 +18,8 @@ $sejour =& $prescription->_ref_object;
 $sejour->loadRefPatient();
 
 $dossier = array();
+$lines_med = array();
+$lines_elt = array();
 
 // Chargement des lignes
 $prescription->loadRefsLinesMed();

@@ -72,7 +72,8 @@ class COperation extends CCodable {
   var $_hour_voulu     = null;
   var $_min_voulu      = null;
   var $_deplacee       = null;
-
+  var $_compteur_jour  = null;
+  
   // Distant fields
   var $_datetime = null;
   var $_datetime_reel = null;
@@ -441,6 +442,9 @@ class COperation extends CCodable {
     }    
     
     $this->updateSalle();
+    
+    //Calcul du nombre de jour entre la date actuelle et le jour de l'operation
+    $this->_compteur_jour = mbDaysRelative($date, mbDate());
     
     // Horaire global
     $this->_datetime          = "$date $this->time_operation";

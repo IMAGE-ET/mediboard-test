@@ -130,16 +130,18 @@ function loadResultLabo(sejour_id) {
   url.requestUpdate('Imeds', { waitingText : null });
 }
 
-function loadTraitement(sejour_id, date) {
+function loadTraitement(sejour_id, date, nb_decalage) {
   if(sejour_id) {
     var urlTt = new Url;
     urlTt.setModuleAction("dPprescription", "httpreq_vw_dossier_soin");
     urlTt.addParam("sejour_id", sejour_id);
     urlTt.addParam("date", date);
+    if(nb_decalage){
+      urlTt.addParam("nb_decalage", nb_decalage);
+    }
     urlTt.requestUpdate("dossier_traitement", { waitingText: null } );
   }
 }
-
 
 function loadSuivi(sejour_id) {
   if(sejour_id) {

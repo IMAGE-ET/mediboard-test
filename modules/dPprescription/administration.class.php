@@ -26,7 +26,8 @@ class CAdministration extends CMbMetaObject {
   // Object references
   var $_ref_administrateur = null;
   var $_ref_transmissions  = null;
- 
+  var $_ref_log   = null;
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'administration';
@@ -99,6 +100,14 @@ class CAdministration extends CMbMetaObject {
   function loadRefAdministrateur(){
   	$this->_ref_administrateur = new CMediusers();
   	$this->_ref_administrateur->load($this->administrateur_id);
+  }
+  
+  function loadRefLog(){
+    $this->_ref_log = new CUserLog();
+    $this->_ref_log->object_id = $this->_id;
+    $this->_ref_log->object_class = $this->_class_name;
+    $this->_ref_log->loadMatchingObject();
+    $this->_ref_log->loadRefsFwd();
   }
 }
 

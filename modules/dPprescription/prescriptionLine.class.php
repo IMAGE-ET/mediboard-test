@@ -32,6 +32,8 @@ class CPrescriptionLine extends CMbObject {
   var $jour_decalage_fin   = null;  // Jour de fin: I/S
   var $decalage_line_fin   = null;  // Decalage de la ligne
   var $time_fin            = null;  // Heure de fin de la ligne de prescription
+  var $conditionnel        = null;
+  var $condition_active    = null;
   
   // Form Fields
   var $_fin                = null;
@@ -40,6 +42,7 @@ class CPrescriptionLine extends CMbObject {
   var $_count_prises_line  = null;  
   var $_fin_reelle         = null;
   var $_debut_reel         = null;
+  var $_active             = null;
   
   // Object References
   var $_ref_prescription   = null;
@@ -55,10 +58,9 @@ class CPrescriptionLine extends CMbObject {
   var $_ref_transmissions   = null;
   
   // Dossier/Feuille de soin
-	var $_administrations = null;          // Administrations d'une ligne stockées par date, heure, type de prise
-	var $_administrations_by_line = null; // Administrations d'une ligne stockées par date
-	
-	var $_transmissions   = null;
+  var $_administrations = null;          // Administrations d'une ligne stockées par date, heure, type de prise
+  var $_administrations_by_line = null; // Administrations d'une ligne stockées par date
+  var $_transmissions   = null;
 	
   
   function getSpecs() {
@@ -83,6 +85,8 @@ class CPrescriptionLine extends CMbObject {
       "jour_decalage_fin" => "enum list|I|S",
       "decalage_line_fin" => "num",
       "time_fin"          => "time",
+      "conditionnel"      => "bool",
+      "condition_active"  => "bool",
       "_fin"              => "date moreEquals|debut",
       "_fin_reelle"   => "date"
     );
@@ -304,10 +308,11 @@ class CPrescriptionLine extends CMbObject {
       }
     }
     
-    
     // Calcul du debut reel de la ligne
     $time_debut = ($this->time_debut) ? $this->time_debut : "06:00:00";
     $this->_debut_reel = $this->debut." $time_debut";
+    
+    $this->_active = (!$this->conditionnel) ? 1 : $this->condition_active;
   }
   
   /*
@@ -322,6 +327,17 @@ class CPrescriptionLine extends CMbObject {
    */
   function duplicateLine($praticien_id, $prescription_id, $debut="", $time_debut="") {
     global $AppUI;
+    
+    if(!$debut){
+      $debut = mbDate();
+    }
+    if(!$time_debut){
+      $time_debut = mbTime();
+    }
+    
+    // Chargement de la prescription
+    $prescription = new CPrescription();
+    $prescription->load($prescription_id);
     
     // Chargement de la ligne de prescription
     $new_line = new CPrescriptionLineMedicament();
@@ -344,8 +360,7 @@ class CPrescriptionLine extends CMbObject {
     $new_line->signee = 0;
     $new_line->valide_pharma = 0;
     $new_line->valide_infirmiere = 0;
-    $prescription = new CPrescription();
-    $prescription->load($prescription_id);
+    
     
     // Si prescription de sortie, on duplique la ligne en ligne de prescription
     if($prescription->type == "sortie" && $new_line->_traitement && !$date_arret_tp){
@@ -385,36 +400,40 @@ class CPrescriptionLine extends CMbObject {
   	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
   	
     if(!$mode_feuille_soin){
-			$this->loadRefsAdministrations($date);
-			foreach($this->_ref_administrations as $_administration){
-				$key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
-
-				// Permet de stocker les administrations par unite de prise / type de prise
-				@$this->_administrations[$key_administration][$date][$_administration->_heure]["quantite"] += $_administration->quantite;
-				@$this->_administrations_by_line[$date] += $_administration->quantite;
-				
-				
-				// Chargement du log de creation de l'administration
-			  $log = new CUserLog;
-        $log->object_id = $_administration->_id;
-				$log->object_class = $_administration->_class_name;
-				$log->loadMatchingObject();
-				$log->loadRefsFwd();
-				
-				if($this->_class_name == "CPrescriptionLineMedicament"){
-					
-				  $this->_ref_produit->loadConditionnement();
-				  $log->_ref_object->_ref_object =& $this;
-				}
-				
-				if($_administration->prise_id){
-					$_administration->loadRefPrise();
-				}
-				@$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
-				$_administration->loadRefsTransmissions();  
-				@$this->_transmissions[$key_administration][$date][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
-				@$this->_transmissions[$key_administration][$date][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
-			}		
+		$this->loadRefsAdministrations($date);
+		foreach($this->_ref_administrations as $_administration){
+		  $key_administration = $_administration->prise_id ? $_administration->prise_id : $_administration->unite_prise;
+		  // Permet de stocker les administrations par unite de prise / type de prise
+		  @$this->_administrations[$key_administration][$date][$_administration->_heure]["quantite"] += $_administration->quantite;
+			
+		  // Stockage de la liste des administrations sous la forme d'un token field
+		  if(!isset($this->_administrations[$key_administration][$date][$_administration->_heure]["list"])){
+		    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] = $_administration->_id;
+		  } else {
+		    @$this->_administrations[$key_administration][$date][$_administration->_heure]["list"] .= "|".$_administration->_id;
+		  }
+		  @$this->_administrations_by_line[$date] += $_administration->quantite;
+		  	
+		  // Chargement du log de creation de l'administration
+		  $log = new CUserLog;
+	      $log->object_id = $_administration->_id;
+		  $log->object_class = $_administration->_class_name;
+		  $log->loadMatchingObject();
+		  $log->loadRefsFwd();
+		  
+		  if($this->_class_name == "CPrescriptionLineMedicament"){
+		    $this->_ref_produit->loadConditionnement();
+		    $log->_ref_object->_ref_object =& $this;
+		  }
+		  
+		  if($_administration->prise_id){
+			$_administration->loadRefPrise();
+		  }
+	  	  @$this->_administrations[$key_administration][$date][$_administration->_heure]["administrations"][$_administration->_id] = $log;
+		  $_administration->loadRefsTransmissions();  
+		  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["nb"] += count($_administration->_ref_transmissions);
+		  @$this->_transmissions[$key_administration][$date][$_administration->_heure]["list"][$_administration->_id] = $_administration->_ref_transmissions;
+	  }		
     }		
     if(!$this->_ref_prises){
       $this->loadRefsPrises();
@@ -424,16 +443,16 @@ class CPrescriptionLine extends CMbObject {
     /*
    * Chargement des prises
    */
-  function calculPrises($prescription, $date, $mode_feuille_soin = 0, $name_chap = "", $name_cat = ""){
+  function calculPrises($prescription, $date, $heures, $mode_feuille_soin = 0, $name_chap = "", $name_cat = ""){
   	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
   	
   	foreach($this->_ref_prises as &$_prise){
-  		$key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
-			$key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
-			$poids_ok = 1;
-			if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
-				//$quantite = 0;
-				$_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
+  	  $key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
+	  $key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
+	  $poids_ok = 1;
+	  if(!is_numeric($_prise->unite_prise) && $this->_class_name == "CPrescriptionLineMedicament" && !$mode_feuille_soin){
+		//$quantite = 0;
+		$_unite_prise = str_replace('/kg', '', $_prise->unite_prise);
         // Dans le cas d'un unite_prise/kg
         if($_unite_prise != $_prise->unite_prise){
           // On recupere le poids du patient pour calculer la quantite
@@ -454,59 +473,102 @@ class CPrescriptionLine extends CMbObject {
           	$_prise->quantite = 0;
           }
         }
-    	}
-				
-			// Stockage du nombre de ligne de medicaments
-		  if(!@array_key_exists($key_tab, $prescription->_lines[$type][$this->_id])){
-		    if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
-		    	if($name_cat){
-		    		@$prescription->_nb_produit_by_cat[$name_cat]++;
-          } else {
-		    	  @$prescription->_nb_produit_by_cat["med"]++;	
-		    	}
-		    }
-			}
-			if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les)){
-				$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-				if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
-					if($_prise->_ref_moment->heure){
-	 	  	    @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;
-					}
-	 	  	  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-				}
-			}
-	 	  if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)){
-	 	  	$dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
-	 	  	if($this->_fin_reelle > $dateTimePrise && $poids_ok){
-	 	  	  if($_prise->_ref_moment->heure){ 
-	 	  		  @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][substr($_prise->_ref_moment->heure, 0, 2)] += $_prise->quantite;	
-	 	  	  }
-	 	  		@$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-	 	  	}
-	 	  }
-	 	  
-	 	  if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois)){
-	 	  	if($_prise->_unite == "jour"){
-	 	  		if($_prise->nb_fois){
-	 	  		  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite * $_prise->nb_fois;
-	 	  		}
-	 	  		if($_prise->nb_tous_les && $_prise->calculDatesPrise($date)){
-	 	  		  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-	 	  		}
-	 	  	}
-	 	  }
-	 	  if ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
-	 	  	continue;
-	 	  }
-	 	  if($name_chap && $name_cat){
-	 	    $prescription->_lines[$type][$name_chap][$name_cat][$this->_id][$key_tab] = $this;		
-	 	  } else {
-	 	    $prescription->_lines[$type][$this->_id][$key_tab] = $this;
-	 	  }
-		  $prescription->_prises[$type][$this->_id][$key_tab][] = $_prise;
-		  $prescription->_intitule_prise[$type][$this->_id][$key_prise][$_prise->_id] = $_prise->_view;
-	    
-   }
+      }
+    			
+    // Stockage du nombre de ligne de medicaments
+    if(!isset($key_tab, $prescription->_lines[$type][$this->_id][$key_tab])){
+      if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
+        $cat = $name_cat ? $name_cat : "med";
+       	if(!isset($prescription->_nb_produit_by_cat[$cat])){
+       	  $prescription->_nb_produit_by_cat[$cat] = 0;
+       	}
+        $prescription->_nb_produit_by_cat[$cat]++;
+      } 
+    }
+
+    
+    
+    // Moment unitaire
+    if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les) && $this->_active){
+      $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
+	  if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
+		if($_prise->_ref_moment->heure){
+	  	      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
+		}
+	  	    @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	  }
+	} 
+		  
+	// Moment unitaire dans le cas d'un Tous les
+ 	if($_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les) && $_prise->calculDatesPrise($date)  && $this->_active){
+ 	  $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
+ 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+ 	    if($_prise->_ref_moment->heure){ 
+ 	      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;	
+ 	  	}
+ 	    @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+ 	  }
+ 	}
+ 	  
+ 	// Tous les sans moment unitaire
+ 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les && $_prise->unite_tous_les == "jour") && $_prise->calculDatesPrise($date)  && $this->_active){
+ 	  $heure = reset($_prise->_heures);
+ 	  $dateTimePrise = mbAddDateTime(mbTime($heure), $date);
+ 	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+		@$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($heure,0,2)]] += $_prise->quantite;	
+        @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	  }
+ 	}
+ 	 	
+ 	// Seulement Tous les avec comme unite les heures
+       if(!$_prise->moment_unitaire_id && $_prise->nb_tous_les && $_prise->unite_tous_les == "heure" && $this->_active){
+         $time_debut = ($this->debut == $date) ? $this->time_debut : "00:00:00";
+         $tab = range(substr($time_debut, 0, 2), 24, $_prise->nb_tous_les);
+         foreach($tab as $_hour_tab){
+           $_hour_tab = str_pad($_hour_tab, 2, "0", STR_PAD_LEFT);
+           $dateTimePrise = mbAddDateTime("$_hour_tab:00:00", $date);
+           if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+             @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[$_hour_tab]] += $_prise->quantite;	
+             @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+           }
+         }  
+       }
+ 	
+     // Fois par avec comme unite jour
+    if($_prise->nb_fois && $_prise->unite_fois == "jour" && $this->_active){
+      foreach($_prise->_heures as $_heure){
+        $dateTimePrise = mbAddDateTime($_heure, $date);
+        if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+		  @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($_heure,0,2)]] += $_prise->quantite;	
+          @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	    }
+      }
+    }
+    
+    
+ 	// Aucun moment unitaire, seulement Tous les ou Fois par, permet la generation du plan sur 5 jours
+ 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && $this->_active){
+ 	  if($_prise->_unite == "jour"){
+ 	    if($_prise->nb_fois){
+ 	  	  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite * $_prise->nb_fois;
+ 	    }
+ 	  	if($_prise->nb_tous_les && $_prise->calculDatesPrise($date)){
+ 	  	  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+ 	  	}
+ 	  }
+ 	}
+ 	  
+ 	if ($_prise->nb_tous_les && $_prise->unite_tous_les && !$_prise->calculDatesPrise($date)){
+ 	  continue;
+ 	}
+ 	if($name_chap && $name_cat){
+ 	  $prescription->_lines[$type][$name_chap][$name_cat][$this->_id][$key_tab] = $this;		
+ 	} else {
+ 	  $prescription->_lines[$type][$this->_id][$key_tab] = $this;
+ 	}
+	$prescription->_prises[$type][$this->_id][$key_tab][] = $_prise;
+	$prescription->_intitule_prise[$type][$this->_id][$key_prise][$_prise->_id] = $_prise->_view;   
+    }    
   }
 }
 

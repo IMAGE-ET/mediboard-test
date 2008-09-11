@@ -26,9 +26,9 @@
 	          {{include file="../../dPprescription/templates/line/inc_vw_equivalents_selector.tpl"}}
 	        {{/if}}	        
 	        <!-- Formulaire ALD -->
-		      {{if $line->_can_view_form_ald}}
-	            {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
-		      {{/if}}
+	        {{include file="../../dPprescription/templates/line/inc_vw_form_ald.tpl"}}
+	        <!-- Formulaire Conditionnel -->
+		    {{include file="../../dPprescription/templates/line/inc_vw_form_conditionnel.tpl"}}
 		    {{/if}}  
 	      <!-- Formulaire Traitement -->
         {{if $line->_can_vw_form_traitement}} 

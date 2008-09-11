@@ -30,6 +30,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
   var $_can_view_form_signature_praticien  = null;
   var $_can_view_form_signature_infirmiere = null;
   var $_can_view_form_ald                  = null;
+  var $_can_view_form_conditionnel         = null;
   var $_can_modify_poso                    = null;
   var $_can_modify_comment                 = null;
   var $_can_modify_dates                   = null; 
@@ -124,6 +125,10 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     // View ALD
     if($perm_edit && !$this->_protocole){
     	$this->_can_view_form_ald = 1;
+    }
+    // View Conditionnel
+    if($perm_edit && !$this->_protocole){
+    	$this->_can_view_form_conditionnel = 1;
     }
     // View signature praticien
     if(($AppUI->user_id != $this->praticien_id) && !$this->_protocole){

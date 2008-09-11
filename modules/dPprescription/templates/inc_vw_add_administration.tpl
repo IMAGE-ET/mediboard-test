@@ -1,5 +1,7 @@
 <script type="text/javascript">
 
+var oFormClick = window.opener.document.click;
+
 function submitAdmission(){
   oFormAdministration = document.addAdministration;
   submitFormAjax(oFormAdministration, 'systemMsg');
@@ -13,19 +15,70 @@ function submitTransmission(administration_id){
   oFormTransmission.object_id.value = administration_id;
   if(oFormTransmission.text.value != ''){
     submitFormAjax(oFormTransmission, 'systemMsg', { onComplete: function(){ 
-      window.opener.loadTraitement('{{$sejour_id}}','{{$date}}');
+      window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
       window.opener.loadSuivi('{{$sejour_id}}');
       window.close();
     } } )
   } else {
-    window.opener.loadTraitement('{{$sejour_id}}','{{$date}}');
+    window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
     window.close();  
   }
 }
 
+function cancelAdministration(administration_id){
+  var oFormDelAdministration = document.delAdministration;
+  oFormDelAdministration.administration_id.value = administration_id;
+  submitFormAjax(oFormDelAdministration, 'systemMsg', { onComplete: function(){
+    window.opener.loadTraitement('{{$sejour_id}}','{{$date_sel}}', oFormClick.nb_decalage.value);
+    window.close();
+  } } );
+}
+
+function checkTransmission(quantite_prevue, quantite_saisie){
+  var oFormTrans = document.editTrans;
+  if(quantite_prevue && quantite_prevue != quantite_saisie && oFormTrans.text.value == ""){
+    alert("Veuillez saisir une transmission");
+    return false;
+  }
+  return true;
+}
+
+
 </script>
 
-<form name="addAdministration" method="post" action="?">
+<table class="form">
+  <tr>
+    <th class="title">Liste des administrations</th>
+  </tr>
+  {{foreach from=$administrations item=_administration}}
+  {{assign var=log value=$_administration->_ref_log}}
+  <tr>
+    <td>
+      <button class="cancel notext" type="button" onclick="cancelAdministration('{{$_administration->_id}}')"></button>
+      {{$log->_ref_object->quantite}} 
+      {{if $line->_class_name == "CPrescriptionLineMedicament"}}
+        {{$_administration->_ref_object->_ref_produit->libelle_unite_presentation}} 
+      {{else}}
+        {{$line->_unite_prise}}
+      {{/if}}
+      administré par {{$log->_ref_user->_view}} le {{$log->date|date_format:"%d/%m/%Y à %Hh%M"}}</li>
+    </td>
+  </tr>
+  {{foreachelse}}
+  <tr>
+    <td>Aucune administration</td>
+  </tr>
+  {{/foreach}}
+</table>
+
+<form name="delAdministration" method="post" action="?">
+  <input type="hidden" name="dosql" value="do_administration_aed" />
+  <input type="hidden" name="m" value="dPprescription" />
+  <input type="hidden" name="del" value="1" />
+  <input type="hidden" name="administration_id" value="" />
+</form>
+
+<form name="addAdministration" method="post" action="?" onsubmit="return checkTransmission('{{$prise->quantite}}', this.quantite.value)">
   <input type="hidden" name="dosql" value="do_administration_aed" />
   <input type="hidden" name="m" value="dPprescription" />
   <input type="hidden" name="del" value="0" />

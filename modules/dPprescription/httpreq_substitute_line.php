@@ -22,6 +22,8 @@ $line->_id = "";
 $line->code_cip = $code_cip;
 $line->creator_id = $AppUI->user_id;
 $line->accord_praticien = "";
+$line->debut = mbDate();
+$line->time_debut = mbTime();
 $msg = $line->store();
 
 $AppUI->displayMsg($msg, "CPrescriptionLineMedicament-msg-create");

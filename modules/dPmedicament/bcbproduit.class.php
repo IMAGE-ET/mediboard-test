@@ -189,8 +189,8 @@ class CBcbProduit extends CBcbObject {
   	$this->loadRefsEquivalents();
     foreach($this->_ref_equivalents as $key => $produit_equivalent){
       if(!$produit_equivalent->inLivret){
-    		unset($this->_ref_equivalents[$key]);
-    	}
+        unset($this->_ref_equivalents[$key]);
+      }
     }
   }
   

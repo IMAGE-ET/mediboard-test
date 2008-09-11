@@ -488,15 +488,15 @@ class CSejour extends CCodable {
   		$date = mbDateTime();
   	}
   
-		$this->_ref_curr_affectation = new CAffectation();
+	$this->_ref_curr_affectation = new CAffectation();
   	$where = array();
   	$where["sejour_id"] = " = '$this->_id'";
-		$where["entree"] = "<= '$date'";
+	$where["entree"] = "<= '$date'";
     $where["sortie"] = ">= '$date'";
     $this->_ref_curr_affectation->loadObject($where);
     if($this->_ref_curr_affectation->_id){
-    	$this->_ref_curr_affectation->loadRefLit();
-    	$this->_ref_curr_affectation->_ref_lit->loadCompleteView();
+      $this->_ref_curr_affectation->loadRefLit();
+      $this->_ref_curr_affectation->_ref_lit->loadCompleteView();
     }
     
     $this->_ref_before_affectation = new CAffectation();
@@ -505,8 +505,8 @@ class CSejour extends CCodable {
     $where["sejour_id"] = " = '$this->_id'";
     $this->_ref_before_affectation->loadObject($where);
     if($this->_ref_before_affectation->_id){
-    	$this->_ref_before_affectation->loadRefLit();
-     	$this->_ref_before_affectation->_ref_lit->loadCompleteView();
+      $this->_ref_before_affectation->loadRefLit();
+       $this->_ref_before_affectation->_ref_lit->loadCompleteView();
     }
     
     $this->_ref_next_affectation = new CAffectation();
@@ -515,8 +515,8 @@ class CSejour extends CCodable {
     $where["sejour_id"] = " = '$this->_id'";
     $this->_ref_next_affectation->loadObject($where);
     if($this->_ref_next_affectation->_id){
-    	$this->_ref_next_affectation->loadRefLit();
-    	$this->_ref_next_affectation->_ref_lit->loadCompleteView();	
+      $this->_ref_next_affectation->loadRefLit();
+      $this->_ref_next_affectation->_ref_lit->loadCompleteView();	
     }  
   }
     
