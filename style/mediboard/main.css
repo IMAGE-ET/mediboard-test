@@ -16,6 +16,9 @@ body {
   body { 
     background: transparent;
   }
+  .not-printable {
+    display: none;
+  }
 }
 
 iframe {
