@@ -76,36 +76,38 @@ var reverseAfter = $$('td.{{$demain}}').reverse("false");
 Main.add(function () {
   listThHoursBefore = $$('.th_hours_{{$hier}}');
   listThHoursAfter = $$('.th_hours_{{$demain}}');
-    
-  th_before.hide();
-  th_after.hide();
-
-  th_before.colSpan = 0;
-  th_today.colSpan = 12;
-  th_after.colSpan = 0;
   
-  
-  listTdBefore.each(function(elt) { 
-    elt.hide();
-    $(elt.className).hide();
-  });
-  if(listTdBefore.size() == 0){
-   // On masque les heures
-   listThHoursBefore.each(function(elt) { 
-     elt.hide();
-   });
-  }
-  
-  
-  listTdAfter.each(function(elt) { 
-    elt.hide();
-    $(elt.className).hide();
-  });
-  if(listTdAfter.size() == 0){
-   // On masque les heures
-   listThHoursAfter.each(function(elt) { 
-     elt.hide();
-    });
+  if(th_before && th_after){  
+	th_before.hide();
+	th_after.hide();
+	
+	th_before.colSpan = 0;
+	th_today.colSpan = 12;
+	th_after.colSpan = 0;
+	  
+	  
+	listTdBefore.each(function(elt) { 
+	  elt.hide();
+	  $(elt.className).hide();
+	});
+	if(listTdBefore.size() == 0){
+	 // On masque les heures
+	 listThHoursBefore.each(function(elt) { 
+	   elt.hide();
+	 });
+	}
+	  
+	  
+	listTdAfter.each(function(elt) { 
+	  elt.hide();
+	  $(elt.className).hide();
+	});
+	if(listTdAfter.size() == 0){
+	 // On masque les heures
+	 listThHoursAfter.each(function(elt) { 
+	   elt.hide();
+	  });
+	}
   }
   
   
@@ -152,7 +154,8 @@ showHideElement = function(list_show, list_hide, th1, th2, signe){
 }
 
 showAfter = function(){
-  if(th_before.colSpan == 0){
+  
+  if(th_before && th_before.colSpan == 0){
     showHideElement(listTdAfter, listTdToday, th_after, th_today, "+");
   } else {
     showHideElement(listTdToday, listTdBefore, th_today, th_before, "+");
@@ -160,7 +163,7 @@ showAfter = function(){
 }
 
 showBefore = function(){
-  if(th_after.colSpan == 0){
+  if(th_after && th_after.colSpan == 0){
     showHideElement(reverseBefore, reverseToday, th_before, th_today, "-");
   } else {
     showHideElement(reverseToday, reverseAfter, th_today, th_after, "-");
