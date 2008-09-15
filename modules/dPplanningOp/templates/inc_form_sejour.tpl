@@ -23,19 +23,15 @@ function loadTransfert(form, mode_sortie){
   }
 }
 
-
 function checkModeSortie(){
   var oForm = document.editSejour;
   
-  if(oForm.sortie_reelle) {
-  	if (oForm.sortie_reelle.value && !oForm.mode_sortie.value) {
-	    alert("Date de sortie reelle et mode de sortie incompatible");
-      return false;
-  	}
+  if(oForm.sortie_reelle && oForm.sortie_reelle.value && !oForm.mode_sortie.value) {
+    alert("Date de sortie réelle et mode de sortie incompatibles");
+    return false;
   }
 	
 	return true;
-  
 }
 
 function checkSejour() {
@@ -114,8 +110,6 @@ var Sejour = {
 		  }
 		}
   }
-  
-  
 }
 
 
@@ -153,6 +147,10 @@ Main.add( function(){
   }
   
   Calendar.regField("editSejour", "_date_sortie_prevue", false, dates);
+
+  var sValue = document.editSejour.praticien_id.value;
+  refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_chir_id);
+  refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_anesth_id);
   
   removePlageOp(false);
 });
@@ -543,22 +541,25 @@ Main.add( function(){
 {{/if}}
 
 <tr>
-  <td class="text">
-    {{mb_label object=$sejour field="convalescence"}}
-  </td>
-  <td class="text" colspan="3">
-    {{mb_label object=$sejour field="rques"}}
-  </td>
+  <td class="text">{{mb_label object=$sejour field="convalescence"}}</td>
+  <td class="text" colspan="3">{{mb_label object=$sejour field="rques"}}</td>
 </tr>
 
 <tr>
-  <td>
-    {{mb_field object=$sejour field="convalescence" rows="3"}}
-  </td>
-  <td colspan="3">
-    {{mb_field object=$sejour field="rques" rows="3"}}
-  </td>
+  <td>{{mb_field object=$sejour field="convalescence" rows="3"}}</td>
+  <td colspan="3">{{mb_field object=$sejour field="rques" rows="3"}}</td>
 </tr>
+
+{{if !$sejour->_id && array_key_exists("dPprescription", $modules)}}
+<tr>
+  <td>{{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}</td>
+  <td colspan="3">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</td>
+</tr>
+<tr>
+  <td><select name="_protocole_prescription_anesth_id"></select></td>
+  <td colspan="3"><select name="_protocole_prescription_chir_id"></select></td>
+</tr>
+{{/if}}
 
 
 {{if !$mode_operation}}

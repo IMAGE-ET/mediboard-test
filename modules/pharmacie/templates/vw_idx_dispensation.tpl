@@ -87,7 +87,7 @@ function refreshStocks() {
   </li>
   <li><a href="#list-globales">Globales (<span id="list-globales-count">0</span>)</a></li>
   <li><a href="#list-nominatives">Nominatives (<span id="list-nominatives-count">0</span>)</a></li>
-  <li><a href="#list-stocks">{{tr}}CProductStockService{{/tr}}</a></li>
+  <li><a href="#list-stocks">{{tr}}CProductStockService.more{{/tr}}</a></li>
 </ul>
 <hr class="control_tabs" />
 

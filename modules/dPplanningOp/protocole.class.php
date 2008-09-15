@@ -21,7 +21,7 @@ class CProtocole extends CMbObject {
   var $rques_sejour  = null; // Sejour->rques
   var $pathologie    = null;
   var $septique      = null;
-  
+
   // DB Fields Operation
   var $codes_ccam      = null;
   var $libelle         = null;
@@ -33,25 +33,31 @@ class CProtocole extends CMbObject {
   var $depassement     = null;
   var $forfait         = null;
   var $fournitures     = null;
-    
+
+  // DB fields linked protocols
+  var $protocole_prescription_chir_id   = null;
+  var $protocole_prescription_anesth_id = null;
+
   // Form fields
-  var $_hour_op    = null;
-  var $_min_op     = null;
-  var $_codes_ccam = array();
-  
+  var $_hour_op        = null;
+  var $_min_op         = null;
+  var $_codes_ccam     = array();
+
   // DB References
-  var $_ref_chir = null;
-  
+  var $_ref_chir                          = null;
+  var $_ref_protocole_prescription_chir   = null;
+  var $_ref_protocole_prescription_anesth = null;
+
   // External references
   var $_ext_codes_ccam = null;
-  
+
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'protocole';
     $spec->key   = 'protocole_id';
     return $spec;
   }
-  
+
   function getSpecs() {
   	$specs = parent::getSpecs();
     $specs["chir_id"]         = "notNull ref class|CMediusers";
@@ -71,12 +77,14 @@ class CProtocole extends CMbObject {
     $specs["septique"]        = "bool";
     $specs["codes_ccam"]      = "str";
     $specs["temp_operation"]  = "time";
-    
+    $specs["protocole_prescription_chir_id"]   = "ref class|CPrescription";
+    $specs["protocole_prescription_anesth_id"] = "ref class|CPrescription";
+
     $specs["_hour_op"]        = "";
     $specs["_min_op"]         = "";
     return $specs;
   }
-  
+
   function getSeeks() {
     return array (
       "chir_id"  => "ref|CMediusers",
@@ -85,7 +93,7 @@ class CProtocole extends CMbObject {
       "materiel" => "like"
     );
   }
-  
+
   function updateFormFields() {
     parent::updateFormFields();
     $this->codes_ccam = strtoupper($this->codes_ccam);
@@ -96,7 +104,7 @@ class CProtocole extends CMbObject {
     $this->_hour_op = intval(substr($this->temp_operation, 0, 2));
     $this->_min_op  = intval(substr($this->temp_operation, 3, 2));
   }
-  
+
   function updateDBFields() {
     if($this->codes_ccam) {
       $this->codes_ccam = strtoupper($this->codes_ccam);
@@ -111,26 +119,38 @@ class CProtocole extends CMbObject {
       $this->codes_ccam = implode("|", $codes_ccam);
     }
     if ($this->_hour_op !== null and $this->_min_op !== null) {
-      $this->temp_operation = 
+      $this->temp_operation =
         $this->_hour_op.":".
         $this->_min_op.":00";
     }
   }
-  
+
   function loadRefChir() {
     $this->_ref_chir = new CMediusers;
     $this->_ref_chir->load($this->chir_id);
   }
-  
+
+  function loadRefPrescriptionChir() {
+    $this->_ref_protocole_prescription_chir = new CPrescription;
+    $this->_ref_protocole_prescription_chir->load($this->protocole_prescription_chir_id);
+  }
+
+  function loadRefPrescriptionAnesth() {
+    $this->_ref_protocole_prescription_anesth = new CPrescription;
+    $this->_ref_protocole_prescription_anesth->load($this->protocole_prescription_anesth_id);
+  }
+
   function loadExtCodesCCAM() {
     $this->_ext_codes_ccam = array();
     foreach ($this->_codes_ccam as $code) {
       $this->_ext_codes_ccam[] = CCodeCCAM::get($code, CCodeCCAM::LITE);
     }
   }
-  
+
   function loadRefsFwd() {
     $this->loadRefChir();
+    $this->loadRefPrescriptionChir();
+    $this->loadRefPrescriptionAnesth();
     $this->loadExtCodesCCAM();
     $this->_view = "Protocole du Dr {$this->_ref_chir->_view}";
     if($this->libelle) {
@@ -141,7 +161,7 @@ class CProtocole extends CMbObject {
       }
     }
   }
-  
+
   function getPerm($permType) {
     if(!$this->_ref_chir) {
       $this->loadRefChir();

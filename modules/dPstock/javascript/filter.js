@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /** A filter function, useful */
 function Filter (sForm, sModule, sAction, sList, aFields, sHiddenColumn) {
   this.sForm   = sForm;

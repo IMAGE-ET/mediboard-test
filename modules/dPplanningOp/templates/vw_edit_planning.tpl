@@ -207,6 +207,9 @@ function cancelObjects() {
         this.sChir_id_easy    = "chir_id";
         this.sLibelle_easy    = "libelle";
         this.sCodes_ccam_easy = "codes_ccam";
+
+        this.sProtoPrescAnesth = "_protocole_prescription_anesth_id";
+        this.sProtoPrescChir   = "_protocole_prescription_chir_id";
         
         this.pop();
       }

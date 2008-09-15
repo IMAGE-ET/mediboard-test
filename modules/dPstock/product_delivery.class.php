@@ -15,7 +15,6 @@ class CProductDelivery extends CMbObject {
   var $stock_id       = null;
   var $date_dispensation = null;
   var $quantity       = null;
-  var $code           = null; // Lot number, lapsing date
   var $service_id     = null;
   var $patient_id     = null;
 

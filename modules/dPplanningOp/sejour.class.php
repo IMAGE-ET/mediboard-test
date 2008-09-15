@@ -74,11 +74,13 @@ class CSejour extends CCodable {
   var $_min_entree_prevue  = null;
   var $_min_sortie_prevue  = null;
   var $_sortie_autorisee   = null;
-  var $_guess_num_dossier    = null;
+  var $_guess_num_dossier  = null;
   var $_at_midnight        = null;
   var $_couvert_cmu        = null;
   var $_curr_op_id         = null;
   var $_curr_op_date       = null;
+  var $_protocole_prescription_anesth_id = null;
+  var $_protocole_prescription_chir_id   = null;
   
   // Object References
   var $_ref_patient           = null; // Declared in CCodable
@@ -199,7 +201,7 @@ class CSejour extends CCodable {
     $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
     $specs["_admission"] 		  = "text";
     $specs["_service"] 	      = "text";
-    $specs["_type_admission"]     = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
+    $specs["_type_admission"] = "notNull enum list|comp|ambu|exte|seances|ssr|psy default|ambu";
     $specs["_specialite"]     = "text";
     $specs["_date_min_stat"]  = "date";
     $specs["_date_max_stat"]  = "date moreEquals|_date_min_stat";
@@ -211,6 +213,8 @@ class CSejour extends CCodable {
     $specs["_date_entree_prevue"] = "date";
     $specs["_date_sortie_prevue"] = "date";
     $specs["_sortie_autorisee"]   = "bool";
+    $specs["_protocole_prescription_anesth_id"] = "ref class|CPrescription";
+    $specs["_protocole_prescription_chir_id"]   = "ref class|CPrescription";
         
     return $specs;
   }
@@ -325,6 +329,26 @@ class CSejour extends CCodable {
   	if ($msg = parent::store()) {
       return $msg;
     }
+    
+    // Application du protocole de prescription
+    if ($this->_protocole_prescription_chir_id) {
+	    $prescription = new CPrescription;
+	    $prescription->object_class = "CSejour";
+	    $prescription->object_id = $this->_id;
+	    $prescription->type = "sejour";
+	    $prescription->store();
+	    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, $this->entree_prevue);
+    }
+    
+    $this->loadRefsPrescriptions();
+    if (!$this->_ref_prescriptions["pre_admission"]->_id) {
+	    $prescription = new CPrescription;
+	    $prescription->object_class = "CSejour";
+	    $prescription->object_id = $this->_id;
+	    $prescription->type = "pre_admission";
+	    $prescription->store();
+	    $this->_ref_prescriptions["pre_admission"] = $prescription;
+    }
 
     if ($this->annule) {
       $this->delAffectations();
@@ -349,13 +373,8 @@ class CSejour extends CCodable {
     }
     
     //si le sejour a une sortie ==> compléter le champ effectue de la derniere affectation
-    if($this->sortie_reelle && $lastAff->_id){
-      $this->_ref_last_affectation->effectue = 1;
-      $this->_ref_last_affectation->store();  
-    }
-    
-    if(!$this->sortie_reelle && $lastAff->_id){
-      $this->_ref_last_affectation->effectue = 0;
+    if($lastAff->_id){
+      $this->_ref_last_affectation->effectue = $this->sortie_reelle ? 1 : 0;
       $this->_ref_last_affectation->store();
     }
     

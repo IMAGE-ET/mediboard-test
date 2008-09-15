@@ -8,12 +8,12 @@
  */
 
 class CSetupdPplanningOp extends CSetup {
-  
+
   function __construct() {
     parent::__construct();
-    
+
     $this->mod_name = "dPplanningOp";
-    
+
     $this->makeRevision("all");
     $sql = "CREATE TABLE operations ( " .
           "  operation_id bigint(20) unsigned NOT NULL auto_increment" .
@@ -48,7 +48,7 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "INSERT INTO sysvals" .
           "\nVALUES ('', '1', 'AnesthType', '1|Rachi\n2|Rachi + bloc\n3|Anesthésie loco-régionnale\n4|Anesthésie locale\n5|Neurolept\n6|Anesthésie générale\n7|Anesthesie generale + bloc\n8|Anesthesie peribulbaire\n0|Non définie')";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.1");
     $sql = "ALTER TABLE operations " .
           "\nADD entree_bloc TIME AFTER temp_operation ," .
@@ -56,15 +56,15 @@ class CSetupdPplanningOp extends CSetup {
           "\nADD saisie ENUM( 'n', 'o' ) DEFAULT 'n' NOT NULL ," .
           "\nCHANGE plageop_id plageop_id BIGINT( 20 ) UNSIGNED";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.2");
     $sql = "ALTER TABLE `operations` ADD `convalescence` TEXT AFTER `materiel` ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.21");
     $sql = "ALTER TABLE `operations` ADD `depassement` INT( 4 );";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.22");
     $sql = "ALTER TABLE `operations` " .
           "\nADD `CCAM_code2` VARCHAR( 7 ) AFTER `CCAM_code`," .
@@ -74,39 +74,39 @@ class CSetupdPplanningOp extends CSetup {
           "\nADD INDEX ( `chir_id` )," .
           "\nADD INDEX ( `plageop_id` );";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.23");
     $sql = "ALTER TABLE `operations` " .
          "\nADD `modifiee` TINYINT DEFAULT '0' NOT NULL AFTER `saisie`," .
          "\nADD `annulee` TINYINT DEFAULT '0' NOT NULL ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.24");
     $sql = "ALTER TABLE `operations` " .
           "\nADD `compte_rendu` TEXT," .
           "\nADD `cr_valide` TINYINT( 4 ) DEFAULT '0' NOT NULL ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.25");
     $sql = "ALTER TABLE `operations` " .
           "\nADD `pathologie` VARCHAR( 8 ) DEFAULT NULL," .
           "\nADD `septique` TINYINT DEFAULT '0' NOT NULL ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.26");
     $sql = "ALTER TABLE `operations` " .
           "\nADD `libelle` TEXT DEFAULT NULL AFTER `CCAM_code2` ;";
     $this->addQuery($sql);
-    
+
     // CR passage des champs à enregistrements supprimé car regressif
 //    $this->makeRevision("0.27");
-    
+
     $this->makeRevision("0.28");
     $sql = "ALTER TABLE `operations` ADD `codes_ccam` VARCHAR( 160 ) AFTER `CIM10_code`";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `operations` ADD INDEX ( `codes_ccam` )";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.29");
     function setup_ccam(){
       $ds = CSQLDataSource::get("std");
@@ -118,7 +118,7 @@ class CSetupdPplanningOp extends CSetup {
         if ($obj->CCAM_code2) {
           $obj->codes_ccam .= "|$obj->CCAM_code2";
         }
-          
+
         $sql2 = "UPDATE `operations` " .
           "\nSET `codes_ccam` = '$obj->codes_ccam' " .
           "\nWHERE `operation_id` = $obj->operation_id";
@@ -127,7 +127,7 @@ class CSetupdPplanningOp extends CSetup {
       return true;
     }
     $this->addFunctions("setup_ccam");
-    
+
     $this->makeRevision("0.30");
     $sql = "ALTER TABLE `operations`
           ADD `pose_garrot` TIME AFTER `entree_bloc` ,
@@ -135,31 +135,31 @@ class CSetupdPplanningOp extends CSetup {
           ADD `fin_op` TIME AFTER `debut_op` ,
           ADD `retrait_garrot` TIME AFTER `fin_op` ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.31");
     $sql = "ALTER TABLE `operations`" .
           "\nADD `salle_id` BIGINT AFTER `plageop_id` ," .
           "\nADD `date` DATE AFTER `salle_id` ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.32");
     $sql = "ALTER TABLE `operations` ADD `venue_SHS` VARCHAR( 8 ) AFTER `chambre`;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `operations` ADD INDEX ( `venue_SHS` );";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.33");
     $sql = "ALTER TABLE `operations` ADD `code_uf` VARCHAR( 3 ) AFTER `venue_SHS`;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `operations` ADD `libelle_uf` VARCHAR( 40 ) AFTER `code_uf`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.34");
     $sql = "ALTER TABLE `operations`" .
             "\nADD `entree_reveil` TIME AFTER `sortie_bloc` ," .
             "\nADD `sortie_reveil` TIME AFTER `entree_reveil` ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.35");
     $sql = "ALTER TABLE `operations` ADD `entree_adm` DATETIME AFTER `admis`;";
     $this->addQuery($sql);
@@ -167,7 +167,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`entree_adm` = ADDTIME(date_adm, time_adm)" .
             "\nWHERE `admis` = 'o'";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.36");
     $this->addDependency("dPbloc", "0.15");
     // Réparation des opérations avec `duree_hospi` = '255'
@@ -238,7 +238,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `sejour` DROP `tmp_operation_id` ";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.37");
     // Migration de nouvelles propriétés
     $sql = "ALTER TABLE `sejour` " .
@@ -266,7 +266,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`sejour`.`modif_SHS` = `operations`.`modifiee`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.38");
     $sql = "UPDATE `sejour`, `operations` SET" .
             "\n`sejour`.`entree_reelle` = NULL" .
@@ -279,16 +279,16 @@ class CSetupdPplanningOp extends CSetup {
             "\nSET `date_anesth` = NULL" .
             "\nWHERE `date_anesth` = '0000-00-00'";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.39");
     $sql = "ALTER TABLE sejour ADD rques text;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.40");
     $sql = "ALTER TABLE operations" .
             "\nADD pause time NOT NULL default '00:00:00' AFTER temp_operation";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.41");
     $sql = "ALTER TABLE `sejour` " .
           "\nADD `pathologie` VARCHAR( 8 ) DEFAULT NULL," .
@@ -299,7 +299,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`sejour`.`septique` = `operations`.`septique`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.42");
     $sql = "ALTER TABLE `sejour` " .
           "\nADD `code_uf` VARCHAR( 8 ) DEFAULT NULL AFTER venue_SHS," .
@@ -310,7 +310,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`sejour`.`libelle_uf` = `operations`.`libelle_uf`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.43");
     $sql = "ALTER TABLE `sejour` ADD `convalescence` TEXT DEFAULT NULL;";
     $this->addQuery($sql);
@@ -318,7 +318,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`sejour`.`convalescence` = `operations`.`convalescence`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.44");
     $sql = "ALTER TABLE `sejour` DROP `code_uf`;";
     $this->addQuery($sql);
@@ -327,13 +327,13 @@ class CSetupdPplanningOp extends CSetup {
     $sql = " ALTER TABLE `sejour` " .
             "\nADD `modalite_hospitalisation` ENUM( 'office', 'libre', 'tiers' ) NOT NULL DEFAULT 'libre' AFTER `type`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.45");
     $sql = "ALTER TABLE `operations` DROP `entree_adm`;";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `operations` DROP `admis`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.46");
     $sql = "ALTER TABLE `sejour` ADD `DP`  varchar(5) default NULL AFTER `rques`;";
     $this->addQuery($sql);
@@ -341,7 +341,7 @@ class CSetupdPplanningOp extends CSetup {
             "\n`sejour`.`DP` = `operations`.`CIM10_code`" .
             "\nWHERE `operations`.`sejour_id` = `sejour`.`sejour_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.47");
     $sql = "CREATE TABLE protocole ( " .
           "  protocole_id INT UNSIGNED NOT NULL auto_increment" .
@@ -381,27 +381,27 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "DELETE FROM `operations` WHERE `pat_id` = 0";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.48");
     $sql = "ALTER TABLE `sejour` CHANGE `modalite_hospitalisation` " .
             "\n`modalite` ENUM( 'office', 'libre', 'tiers' ) DEFAULT 'libre' NOT NULL";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.49");
     $sql = "UPDATE `operations` SET `date` = NULL;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.50");
     $sql = "ALTER TABLE `operations` ADD `anesth_id` INT UNSIGNED DEFAULT NULL AFTER `chir_id`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.51");
     $this->addDependency("dPetablissement", "0.1");
     $sql = "ALTER TABLE `sejour` ADD `group_id` INT UNSIGNED NOT NULL DEFAULT 1 AFTER `praticien_id`";
     $this->addQuery($sql);
     $sql = "ALTER TABLE `sejour` ADD INDEX ( `group_id` ) ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.52");
     $sql = "ALTER TABLE `operations` DROP INDEX `operation_id` ;";
     $this->addQuery($sql);
@@ -415,7 +415,7 @@ class CSetupdPplanningOp extends CSetup {
             "\nDROP `CIM10_code`, DROP `convalescence`, DROP `pathologie`," .
             "\nDROP `septique` ;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.53");
     $sql = "CREATE TABLE `type_anesth` ( " .
           "`type_anesth_id` INT UNSIGNED NOT NULL auto_increment," .
@@ -445,12 +445,12 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "DROP TABLE sysvals;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.54");
     $sql = "ALTER TABLE `operations`" .
             "\nADD `induction` TIME AFTER `sortie_reveil`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.55");
     $sql = "CREATE TABLE `naissance` (" .
             "\n`naissance_id` INT UNSIGNED NOT NULL auto_increment," .
@@ -463,7 +463,7 @@ class CSetupdPplanningOp extends CSetup {
             "\nPRIMARY KEY ( `naissance_id` ) ," .
             "\nINDEX ( `operation_id` ))";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.56");
     $sql = "ALTER TABLE `naissance` " .
                "\nCHANGE `naissance_id` `naissance_id` int(11) unsigned NOT NULL AUTO_INCREMENT," .
@@ -542,7 +542,7 @@ class CSetupdPplanningOp extends CSetup {
                "\nCHANGE `commande_mat` `commande_mat` enum('0','1') NOT NULL DEFAULT '0'," .
                "\nCHANGE `info` `info` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.57");
     $sql = "ALTER TABLE `operations` " .
                "\nDROP `date_anesth`," .
@@ -553,7 +553,7 @@ class CSetupdPplanningOp extends CSetup {
                "\nCHANGE `sortie_bloc` `sortie_salle` time NULL," .
                "\nADD `entree_bloc` time NULL;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.58");
     $sql = "ALTER TABLE `sejour`" .
                "\nADD `ATNC` enum('0','1') NOT NULL DEFAULT '0'," .
@@ -572,13 +572,13 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `protocole` CHANGE `type` `type` enum('comp','ambu','exte','seances','ssr','psy') NOT NULL DEFAULT 'comp';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.59");
     $sql = "UPDATE `operations` SET annulee = 0 WHERE annulee = ''";
     $this->addQuery($sql);
     $sql = "UPDATE `sejour` SET annule = 0 WHERE annule = ''";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.60");
     $sql = "ALTER TABLE `operations` ADD INDEX ( `salle_id` )";
     $this->addQuery($sql);
@@ -588,7 +588,7 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "ALTER TABLE `operations` ADD INDEX ( `annulee` )";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.61");
     $sql = "ALTER TABLE `operations`" .
             "\nCHANGE `induction` `induction_debut` TIME";
@@ -596,17 +596,17 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `operations`" .
             "\nADD `induction_fin` TIME AFTER `induction_debut`";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.62");
     $sql = "ALTER TABLE `operations`" .
             "\nADD `anapath` enum('0','1') NOT NULL DEFAULT '0'," .
             "\nADD `labo` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.63");
     $sql = "UPDATE `operations` SET `anesth_id` = NULL WHERE `anesth_id` = '0';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.64");
     $sql = "ALTER TABLE `operations`" .
             "\nADD `forfait` FLOAT NULL AFTER `depassement`," .
@@ -616,40 +616,40 @@ class CSetupdPplanningOp extends CSetup {
             "\nADD `forfait` FLOAT NULL AFTER `depassement`," .
             "\nADD `fournitures` FLOAT NULL AFTER `forfait`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.65");
     $sql = "ALTER TABLE `sejour` ADD `codes_ccam` VARCHAR(255);";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.66");
     $sql = "INSERT INTO `user_preferences` ( `pref_user` , `pref_name` , `pref_value` )" .
         "\nVALUES ('0', 'mode', '1');";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.67");
     $sql = "UPDATE `user_preferences` SET `pref_name` = 'mode_dhe' WHERE `pref_name` = 'mode';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.68");
     $sql = "ALTER TABLE `sejour` ADD `mode_sortie` ENUM( 'normal', 'transfert', 'deces' );";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.69");
     $sql = "ALTER TABLE `sejour` ADD `prestation_id` INT(11) UNSIGNED;";
     $this->addQuery($sql);
 
     $this->makeRevision("0.70");
-    $sql = "ALTER TABLE `sejour` ADD `facturable` ENUM('0','1') NOT NULL DEFAULT '1';"; 
+    $sql = "ALTER TABLE `sejour` ADD `facturable` ENUM('0','1') NOT NULL DEFAULT '1';";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.71");
     $sql = "ALTER TABLE `sejour` ADD `reanimation` enum('0','1') NOT NULL DEFAULT '1' AFTER `chambre_seule`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.72");
     $sql = "ALTER TABLE `sejour` ADD `zt` enum('0','1') NOT NULL DEFAULT '1' AFTER `reanimation`;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.73");
     $sql = "ALTER TABLE `sejour`
                 CHANGE `reanimation` `reanimation` enum('0','1') NOT NULL DEFAULT '0',
@@ -657,12 +657,12 @@ class CSetupdPplanningOp extends CSetup {
     $this->addQuery($sql);
     $sql = "UPDATE `sejour` SET `sejour`.`reanimation` = 0, `sejour`.`zt` = 0;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.74");
     $sql = "ALTER TABLE `operations` CHANGE `cote` `cote` ENUM('droit','gauche','bilatéral','total','inconnu') NOT NULL;";
     $this->addQuery($sql);
-    
-    
+
+
     $this->makeRevision("0.75");
     $sql = "ALTER TABLE `sejour`
             ADD `etablissement_transfert_id` INT(11) UNSIGNED;";
@@ -672,23 +672,23 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `operations`
             ADD `horaire_voulu` TIME;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.77");
     $sql = "ALTER TABLE `sejour`
             CHANGE `type` `type` ENUM('comp','ambu','exte','seances','ssr','psy','urg') NOT NULL;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.78");
     $sql = "ALTER TABLE `type_anesth`
             ADD `ext_doc` ENUM('1','2','3','4','5','6');";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.79");
-    $sql = "ALTER TABLE `sejour` " . 
+    $sql = "ALTER TABLE `sejour` " .
       "ADD `DR` VARCHAR(5), " .
 			"CHANGE `pathologie` `pathologie` CHAR(3)";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.80");
     $sql = "UPDATE operations, plagesop
             SET operations.salle_id = plagesop.salle_id
@@ -698,33 +698,44 @@ class CSetupdPplanningOp extends CSetup {
     $sql = "ALTER TABLE `operations`
             CHANGE `salle_id` `salle_id` INT( 11 ) UNSIGNED NOT NULL;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.81");
     $sql = "ALTER TABLE `operations`
             CHANGE `salle_id` `salle_id` INT( 11 ) UNSIGNED DEFAULT NULL;";
     $this->addQuery($sql);
     $sql = "UPDATE `operations` SET salle_id = NULL WHERE salle_id = 0;";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.82");
     $this->addDependency("dPsante400", "0.1");
     $sql = "INSERT INTO `id_sante400` (id_sante400_id, object_class, object_id, tag, last_update, id400)
 						SELECT NULL , 'CSejour', `sejour_id` , 'SHS group:1', NOW( ) , `venue_SHS`
 						FROM `sejour`
-						WHERE `venue_SHS` IS NOT NULL	
+						WHERE `venue_SHS` IS NOT NULL
 						AND `venue_SHS` != 0";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.83");
     $sql = "ALTER TABLE `sejour` DROP `venue_SHS";
     $this->addQuery($sql);
-    
+
     $this->makeRevision("0.84");
     $sql = "ALTER TABLE `sejour`" .
                "\nADD `repas_sans_porc` enum('0','1') NOT NULL DEFAULT '0';";
     $this->addQuery($sql);
-    
-    $this->mod_version = "0.85";
+
+    $this->makeRevision("0.85");
+    $sql = "ALTER TABLE `protocole`
+					  ADD `protocole_prescription_chir_id` INT (11) UNSIGNED,
+					  ADD `protocole_prescription_anesth_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+
+    $sql = "ALTER TABLE `protocole`
+					  ADD INDEX (`protocole_prescription_chir_id`),
+					  ADD INDEX (`protocole_prescription_anesth_id`);";
+    $this->addQuery($sql);
+
+    $this->mod_version = "0.86";
   }
 }
 ?>

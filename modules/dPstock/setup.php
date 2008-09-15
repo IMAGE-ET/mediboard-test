@@ -282,7 +282,25 @@ class CSetupdPstock extends CSetup {
       ADD `order_threshold_max` INT(11) UNSIGNED NOT NULL';
     $this->addQuery($sql);
     
-    $this->mod_version = '0.93';
+    $this->makeRevision('0.93');
+    $sql = 'CREATE TABLE `product_discrepancy` (
+		  `discrepancy_id` INT (11) UNSIGNED NOT NULL auto_increment PRIMARY KEY,
+		  `quantity` INT (11) NOT NULL,
+		  `date` DATETIME NOT NULL,
+		  `description` TEXT,
+		  `object_id` INT (11) UNSIGNED NOT NULL,
+		  `object_class` ENUM (\'CProductStockGroup\',\'CProductStockService\') NOT NULL);';
+    $this->addQuery($sql);
+    
+		$sql = 'ALTER TABLE `product_discrepancy` 
+		  ADD INDEX (`date`),
+		  ADD INDEX (`object_id`);';
+    $this->addQuery($sql);
+    
+    $sql = 'ALTER TABLE `product_delivery_trace` CHANGE `date_delivery` `date_delivery` DATETIME NULL';
+    $this->addQuery($sql);
+    
+    $this->mod_version = '0.94';
   }
 }
 

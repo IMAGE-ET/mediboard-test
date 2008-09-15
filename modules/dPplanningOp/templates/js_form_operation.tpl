@@ -14,10 +14,10 @@ function updateTokenCcam(){
 
 function refreshListCCAM(mode) {
   if(mode=="expert"){
-    oCcamNode = document.getElementById("listCodesCcam");
+    oCcamNode = $("listCodesCcam");
   }
   if(mode=="easy"){
-    oCcamNode = document.getElementById("listCodesCcamEasy");
+    oCcamNode = ("listCodesCcamEasy");
   }
   var oForm = document.editOp;
   var aCcam = oForm.codes_ccam.value.split("|");
@@ -173,8 +173,7 @@ function synchroPrat() {
   var oOpForm = document.editOp;
   var oSejourForm = document.editSejour;
   if (!oSejourForm.sejour_id.value) {
-    oSejourForm.praticien_id.value = oOpForm.chir_id.value;
-    oSejourForm.praticien_id.onchange();
+    $V(oSejourForm.praticien_id, oOpForm.chir_id.value);
   }
   updateTime();
 }
@@ -190,7 +189,7 @@ function updateEntreePrevue() {
   if(oOpForm.date.value) {
     if(!oSejourForm._date_entree_prevue.value) {
       oSejourForm._date_entree_prevue.value = oOpForm.date.value;
-      oDiv = document.getElementById('editSejour__date_entree_prevue_da');
+      oDiv = $('editSejour__date_entree_prevue_da');
       oDiv.innerHTML = Date.fromDATE(oOpForm.date.value).toLocaleDate();
     }
   }

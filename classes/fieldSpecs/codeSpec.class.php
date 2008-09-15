@@ -65,24 +65,24 @@ class CCodeSpec extends CMbFieldSpec {
       $compte_cle     = substr($propValue, 21, 2);
       $tabcompte = "";
       $len = strlen($compte_numero);
-      for ($i=0; $i < $len; $i++) {
-                $car = substr($compte_numero, $i, 1);
-                if (!is_numeric($car)) {
-                        $c = ord($car) - 64;
-                        $b = ($c < 10) ? $c : (($c < 19) ? $c - 9 : $c - 17);
-                        $tabcompte .= $b;
-                }
-                else {
-                        $tabcompte .= $car;
-                }
+      for ($i = 0; $i < $len; $i++) {
+        $car = substr($compte_numero, $i, 1);
+        if (!is_numeric($car)) {
+           $c = ord($car) - 64;
+           $b = ($c < 10) ? $c : (($c < 19) ? $c - 9 : $c - 17);
+           $tabcompte .= $b;
         }
-        $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
-	      // Use bcmod since standard modulus
-	      if (function_exists("bcmod")) {
-	        if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
-	        	return "Rib incorrect";
-	        }
+        else {
+           $tabcompte .= $car;
+        }
+      }
+      $int = $compte_banque . $compte_guichet . $tabcompte . $compte_cle;
+	    // Use bcmod since standard modulus
+	    if (function_exists("bcmod")) {
+	      if (!((strlen($int) >= 21) && (bcmod($int, 97) == 0))){
+	        return "Rib incorrect";
 	      }
+	    }
     }
      
     // INSEE

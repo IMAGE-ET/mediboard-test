@@ -20,6 +20,8 @@ var ProtocoleSelector = {
   sConvalescence   : null,
   sDP              : null,
   sRques_sej       : null,
+  sProtoPrescAnesth: null,
+  sProtoPrescChir  : null,
   options : {
     width : 700,
     height: 500
@@ -39,7 +41,8 @@ var ProtocoleSelector = {
     var oOpForm     = document.editOp;
     var oSejourForm = document.editSejour;
     var oOpFormEasy = document.editOpEasy;
-    $V(oOpForm[this.sChir_id]  , protocole.chir_id);
+    $V(oOpForm[this.sChir_id], protocole.chir_id);
+    oOpForm[this.sChir_id].onchange(); // Pour forcer la selection du praticien du sejour
     if(!oSejourForm.sejour_id.value || oSejourForm[this.sDuree_prevu].value < protocole.duree_hospi) {
       $V(oSejourForm[this.sDuree_prevu], protocole.duree_hospi);
       oSejourForm[this.sType].value = protocole.type;
@@ -66,5 +69,8 @@ var ProtocoleSelector = {
     
     refreshListCCAM("expert");
     refreshListCCAM("easy");
+    
+    refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
+    refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
   }
 }

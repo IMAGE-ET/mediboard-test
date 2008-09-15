@@ -6,10 +6,23 @@ var listCategoriePrat = {{$categorie_prat|@json}};
 
 function modifPrat(){
   var oForm = document.editSejour;
-  var sValue = document.editSejour.praticien_id.value;
+  var sValue = oForm.praticien_id.value;
   
   oForm.pathologie.value= sValue ? 
     listCategoriePrat[sValue] || "" : "";
+    
+  refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_anesth_id);
+  refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_chir_id);
+}
+
+function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
+  if (list) {
+    var url = new Url;
+    url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
+    url.addParam("praticien_id", praticien_id);
+    url.addParam("selected_id", selected_id);
+    url.requestUpdate(list, { waitingText: null} );
+  }
 }
 
 function checkDureeHospi() {

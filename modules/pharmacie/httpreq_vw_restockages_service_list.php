@@ -25,6 +25,7 @@ if ($service_id) {
   $where['service_id'] = " = $service_id";
 }
 $where[] = "date_dispensation BETWEEN '$date_min' AND '$date_max'";
+$where['quantity'] = " > 0";
 $delivery = new CProductDelivery();
 $deliveries = $delivery->loadList($where, $order_by, 20);
 

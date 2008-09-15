@@ -335,6 +335,12 @@ Object.extend(ElementChecker, {
         this.addError("siret", "Code SIRET incorrect");
     },
     
+    // rib
+    rib: function () {
+      this.assertNoArg("rib");
+      // TODO: implement this
+    },
+    
     // list
     list: function() {
       var list = this.assertMultipleArgs("list");
@@ -447,7 +453,7 @@ Object.extend(ElementChecker, {
     // code
     code: function() {
       if (!(this.oProperties.ccam || this.oProperties.cim10 || this.oProperties.adeli || this.oProperties.insee || 
-            this.oProperties.product_order || this.oProperties.siret))
+            this.oProperties.product_order || this.oProperties.siret || this.oProperties.rib))
       this.addError("code", "Spécification de code invalide");
     },
     

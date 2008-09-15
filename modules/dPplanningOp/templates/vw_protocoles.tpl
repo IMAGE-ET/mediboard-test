@@ -51,7 +51,9 @@ aProtocoles[{{$curr_protocole->protocole_id}}] = {
   type             : "{{$curr_protocole->type}}",
   duree_hospi      : {{$curr_protocole->duree_hospi}},
   rques_sejour     : "{{$curr_protocole->rques_sejour|smarty:nodefaults|escape:"javascript"}}",
-  rques_operation  : "{{$curr_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}"
+  rques_operation  : "{{$curr_protocole->rques_operation|smarty:nodefaults|escape:"javascript"}}",
+  protocole_prescription_anesth_id: "{{$curr_protocole->protocole_prescription_anesth_id}}",
+  protocole_prescription_chir_id:   "{{$curr_protocole->protocole_prescription_chir_id}}"
 }
 {{/foreach}}
 

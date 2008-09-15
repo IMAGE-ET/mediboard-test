@@ -294,6 +294,7 @@ $locales['config-dPprescription-CMomentUnitaire-principaux'] = '';
 $locales['CPrisePosologie-quantite'] = '';
 $locales['CPrisePosologie-quantite-desc'] = '';
 $locales['config-dPprescription-CPrisePosologie'] = '';
+$locales['CPrescription.protocole.select'] = 'Chose a protocol';
 $locales['CPrescriptionLineMedicament-conditionnel'] = '';
 $locales['CPrescriptionLineMedicament-conditionnel-desc'] = '';
 $locales['CPrescriptionLineElement-conditionnel'] = '';

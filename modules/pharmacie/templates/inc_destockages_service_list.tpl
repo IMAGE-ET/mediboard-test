@@ -4,6 +4,7 @@
     <th>Stock précédent</th>
     <th>Articles théoriquement utilisés</th>
     <th>Nouveau stock</th>
+    <th>Retour à la pharmacie</th>
   </tr>
   {{foreach from=$destockages item=curr_destockage key=code}}
   {{assign var=stock value=$curr_destockage.stock}}
@@ -23,6 +24,9 @@
     <td>{{$stock->quantity+$curr_destockage.nb_produit}}</td>
     <td>{{$curr_destockage.nb_produit}}</td>
     <td>
+      <script type="text/javascript">
+        prepareForm("destockage-{{$stock->_id}}");
+      </script>
       <form name="destockage-{{$stock->_id}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})"
       {{if $stock->_ref_logs|@count>0 && false}}style="opacity: 0.5" title="Destockage déjà réalisé durant la période indiquée"{{/if}}>
         <input type="hidden" name="m" value="dPstock" /> 
@@ -30,8 +34,25 @@
         <input type="hidden" name="dosql" value="do_stock_service_aed" />
         <input type="hidden" name="stock_id" value="{{$stock->_id}}" />
         {{assign var=id value=$stock->_id}}
-        {{mb_field object=$stock field=quantity form="destockage-$id" increment=1}}
+        {{mb_field object=$stock field=quantity form="destockage-$id" increment=1 size=3}}
         <button type="submit" class="tick">Valider</button>
+      </form>
+    </td>
+    <td>
+      <script type="text/javascript">
+        prepareForm("retour-{{$code}}");
+      </script>
+      <form name="retour-{{$code}}" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshDestockagesList})">
+        <input type="hidden" name="m" value="dPstock" /> 
+        <input type="hidden" name="del" value="0" />
+        <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
+        <input type="hidden" name="_return" value="1" />
+        <input type="hidden" name="_code" value="{{$code}}" />
+        <input type="hidden" name="date_reception" value="now" />
+        <!-- <input type="hidden" name="date_delivery" value="now" /> -->
+        {{mb_field object=$stock field=quantity form="retour-$code" increment=1 size=3}}
+        <input type="text" name="code" value="" />
+        <button type="submit" class="cancel">Retour</button>
       </form>
     </td>
     {{else}}

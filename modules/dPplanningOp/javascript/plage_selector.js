@@ -62,8 +62,7 @@ var PlageOpSelector = {
         dAdm.setHours(hour_entree);
         dAdm.setMinutes(min_entree);
     
-        var div_rdv_adm = document.getElementById("editSejour__date_entree_prevue_da");
-        div_rdv_adm.innerHTML = dAdm.toLocaleDate();
+        $("editSejour__date_entree_prevue_da").update(dAdm.toLocaleDate());
       }
       
       oSejourForm._curr_op_date.value = sDate;

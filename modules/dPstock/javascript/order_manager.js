@@ -1,3 +1,5 @@
+/* $Id$ */
+
 function refreshValue(element, klass, id, field) {
   if (id && $(element)) {
     var url = new Url;

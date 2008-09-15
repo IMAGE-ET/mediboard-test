@@ -24,14 +24,18 @@
   <td>
   {{foreach from=$curr_delivery->_ref_delivery_traces item=trace}}
     {{$trace->date_delivery|@date_format:"%d/%m/%Y"}} - <b>{{$trace->quantity}} éléments</b> - [{{$trace->code}}] 
+    {{if !$trace->date_reception}}
     <form name="delivery-trace-{{$trace->_id}}-cancel" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_trace_aed" />
       <input type="hidden" name="delivery_trace_id" value="{{$trace->_id}}" />
       <input type="hidden" name="_undeliver" value="1" />
-      <button type="submit" class="cancel notext">Anuler</button>
+      <button type="submit" class="cancel notext">{{tr}}Cancel{{/tr}}</button>
     </form>
+    {{else}}
+     - déjà reçue
+    {{/if}}
     <br />
   {{foreachelse}}
   Aucune délivrance effectuée pour cette dispensation<br />
@@ -39,7 +43,7 @@
     <script type="text/javascript">
       prepareForm("delivery-trace-{{$curr_delivery->_id}}-new");
     </script>
-    <form name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
+    <form {{if $curr_delivery->isDelivered()}}style="opacity: 0.4;"{{/if}} name="delivery-trace-{{$curr_delivery->_id}}-new" action="?" method="post" onsubmit="return onSubmitFormAjax(this, {onComplete: refreshLists})">
       <input type="hidden" name="m" value="dPstock" /> 
       <input type="hidden" name="del" value="0" />
       <input type="hidden" name="dosql" value="do_delivery_trace_aed" />

@@ -17,14 +17,25 @@ function copier(){
   if(oForm.libelle.value){
     oForm.libelle.value = "Copie de "+oForm.libelle.value;
   } else {
-    oForm.libelle.value = "Copie de "+ oForm.codes_ccam.value;
+    oForm.libelle.value = "Copie de "+oForm.codes_ccam.value;
   }
   oForm.submit();
 }
 
+function refreshListProtocolesPrescription(praticien_id, selected_id) {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
+  url.addParam("praticien_id", praticien_id);
+  
+  url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
+  url.requestUpdate(document.editFrm.protocole_prescription_anesth_id, { waitingText: null } );
+
+  url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_chir_id}}");
+  url.requestUpdate(document.editFrm.protocole_prescription_chir_id, { waitingText: null } );
+}
 
 function refreshListCCAM() {
-  oCcamNode = document.getElementById("listCodesCcam");
+  oCcamNode = $("listCodesCcam");
 
   var oForm = document.editFrm;
   oForm._codeCCAM.value="";
@@ -43,7 +54,6 @@ function refreshListCCAM() {
   }
   oCcamNode.innerHTML = aCodeNodes.join(" &mdash; ");
 }
-
 
 function checkFormSejour() {
   var oForm = document.editFrm;
@@ -120,6 +130,8 @@ function checkDuree() {
 Main.add(function () {
   refreshListCCAM();
 
+  refreshListProtocolesPrescription($V(document.editFrm.chir_id));
+
   oCcamField = new TokenField(document.editFrm.codes_ccam, { 
     onChange : refreshListCCAM,
     sProps : "notNull code ccam"
@@ -175,7 +187,7 @@ Main.add(function () {
             {{mb_label object=$protocole field="chir_id"}}
           </th>
           <td colspan="2">
-            <select name="chir_id" class="{{$protocole->_props.chir_id}}">
+            <select name="chir_id" class="{{$protocole->_props.chir_id}}" onchange="refreshListProtocolesPrescription($V(this));">
               <option value="">&mdash; Choisir un praticien</option>
               {{foreach from=$listPraticiens item=curr_praticien}}
               <option class="mediuser" style="border-color: #{{$curr_praticien->_ref_function->color}};" value="{{$curr_praticien->user_id}}" {{if $chir->user_id == $curr_praticien->user_id}} selected="selected" {{/if}}>
@@ -306,6 +318,16 @@ Main.add(function () {
           <td>{{mb_field object=$protocole field="convalescence" rows="3"}}</td>
           <td colspan="2">{{mb_field object=$protocole field="rques_sejour" rows="3"}}</td>
         </tr>
+        {{if array_key_exists("dPprescription", $modules)}}
+        <tr>
+          <td>{{mb_label object=$protocole field="protocole_prescription_anesth_id"}}</td>
+          <td colspan="2">{{mb_label object=$protocole field="protocole_prescription_chir_id"}}</td>
+        </tr>
+        <tr>
+          <td><select name="protocole_prescription_anesth_id"></select></td>
+          <td colspan="2"><select name="protocole_prescription_chir_id"></select></td>
+        </tr>
+        {{/if}}
       </table>
     </td>
   </tr>

@@ -840,4 +840,5 @@ $locales['CPrescriptionLineElement-conditionnel'] = 'Conditionnel';
 $locales['CPrescriptionLineElement-conditionnel-desc'] = 'Conditionnel';
 $locales['CPrescriptionLineMedicament-condition_active'] = 'Activation';
 $locales['CPrescriptionLineMedicament-condition_active-desc'] = 'Activation';
+$locales['CPrescription.protocole.select'] = 'Choisir un protocole';
 ?>
