@@ -301,4 +301,13 @@ $locales['CPrescriptionLineElement-conditionnel'] = '';
 $locales['CPrescriptionLineElement-conditionnel-desc'] = '';
 $locales['CPrescriptionLineMedicament-condition_active'] = '';
 $locales['CPrescriptionLineMedicament-condition_active-desc'] = '';
+$locales['CPrescriptionLineMedicament.unite_decalage.jour'] = '';
+$locales['CPrescriptionLineMedicament.unite_decalage.heure'] = '';
+$locales['CPrescriptionLineElement.unite_decalage.jour'] = '';
+$locales['CPrescriptionLineElement.unite_decalage.heure'] = '';
+$locales['CPrescriptionLineMedicament.unite_decalage_fin.jour'] = '';
+$locales['CPrescriptionLineMedicament.unite_decalage_fin.heure'] = '';
+$locales['CPrescriptionLineElement.unite_decalage_fin.jour'] = '';
+$locales['CPrescriptionLineElement.unite_decalage_fin.heure'] = '';
+$locales['config-object_handlers-CPrescriptionLineHandler'] = '';
 ?>

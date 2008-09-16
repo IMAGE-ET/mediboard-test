@@ -177,9 +177,10 @@ submitProtocole = function(){
 			        </td>
 			        <td class="date">
 				 				{{if $prescription->type != "externe"}}
-				 				  <select name="debut">
-				 				    {{foreach from=$prescription->_ref_object->_dates_operations item=_date_operation}}
-				 				      <option value="{{$_date_operation}}">{{$_date_operation|date_format:"%d/%m/%Y"}}</option>
+				 				Intervention
+				 				  <select name="operation_id">
+				 				    {{foreach from=$prescription->_dates_dispo key=operation_id item=_date_operation}}
+				 				      <option value="{{$operation_id}}">{{$_date_operation|date_format:"%d/%m/%Y à %Hh%M"}}</option>
 				 				    {{/foreach}}
  									</select>
 				 				{{else}}

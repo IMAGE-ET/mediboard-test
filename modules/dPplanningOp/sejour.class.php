@@ -332,7 +332,8 @@ class CSejour extends CCodable {
     $prescription->object_id = $this->_id;
     $prescription->type = "sejour";
     $prescription->store();
-    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, $this->entree_prevue);
+    $prescription->applyProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
+    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
   }
   
   function store() {

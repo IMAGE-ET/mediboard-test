@@ -34,6 +34,9 @@ class CPrescriptionLine extends CMbObject {
   var $time_fin            = null;  // Heure de fin de la ligne de prescription
   var $conditionnel        = null;
   var $condition_active    = null;
+  var $unite_decalage      = null;
+  var $unite_decalage_fin  = null;
+  var $operation_id        = null;
   
   // Form Fields
   var $_fin                = null;
@@ -87,6 +90,9 @@ class CPrescriptionLine extends CMbObject {
       "time_fin"          => "time",
       "conditionnel"      => "bool",
       "condition_active"  => "bool",
+      "unite_decalage"    => "enum list|jour|heure default|jour",
+      "unite_decalage_fin"=> "enum list|jour|heure default|jour",
+      "operation_id"      => "ref class|COperation",
       "_fin"              => "date moreEquals|debut",
       "_fin_reelle"   => "date"
     );

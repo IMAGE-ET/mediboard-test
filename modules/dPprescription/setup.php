@@ -727,7 +727,28 @@ class CSetupdPprescription extends CSetup {
 	        ADD `conditionnel` ENUM ('0','1') DEFAULT '0',
 	        ADD `condition_active` ENUM ('0','1') DEFAULT '0';";
     $this->addQuery($sql);
-    $this->mod_version = "0.51";
+    
+    $this->makeRevision("0.51");
+    $sql = "ALTER TABLE `prescription_line_element` 
+		    ADD `unite_decalage` ENUM ('jour','heure') DEFAULT 'jour',
+	        ADD `unite_decalage_fin` ENUM ('jour','heure') DEFAULT 'jour';";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+		    ADD `unite_decalage` ENUM ('jour','heure') DEFAULT 'jour',
+	        ADD `unite_decalage_fin` ENUM ('jour','heure') DEFAULT 'jour';";
+    $this->addQuery($sql);
+
+    $this->makeRevision("0.52");
+    $sql = "ALTER TABLE `prescription_line_medicament` 
+	        ADD `operation_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $sql = "ALTER TABLE `prescription_line_element` 
+	        ADD `operation_id` INT (11) UNSIGNED;";
+    $this->addQuery($sql);
+    
+    $this->mod_version = "0.53";
   }  
 }
 

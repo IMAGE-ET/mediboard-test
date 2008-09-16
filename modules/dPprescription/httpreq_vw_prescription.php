@@ -215,12 +215,17 @@ if ($full_mode || $chapitre == "medicament" || $mode_protocole || $mode_pharma) 
 		  $poids = $constantes_medicales->poids;
 		
 		  if($object->_class_name == "CSejour"){
-		    $object->makeDatesOperations();
-		    foreach($object->_dates_operations as $date){
-		      $prescription->_dates_dispo[] = $date;
+		    $whereOp = array();
+		    $whereOp["annulee"] = " = '0'";
+		    $object->loadRefsOperations($whereOp);
+		    
+		    //$object->makeDatesOperations();
+		    foreach($object->_ref_operations as $_operation){
+		      $_operation->loadRefPlageOp();
+		      $prescription->_dates_dispo[$_operation->_id] = $_operation->_datetime;
 		    }
-		    $prescription->_dates_dispo[] = mbDate($object->_entree);
-			}
+		    //$prescription->_dates_dispo[] = mbDate($object->_entree);
+		 }
 	  }
 	}
 }

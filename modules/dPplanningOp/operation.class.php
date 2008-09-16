@@ -340,8 +340,7 @@ class COperation extends CCodable {
         $this->_ref_sejour->annule = 0;
         $this->_ref_sejour->store();
       }
-      mbTrace($this->_protocole_prescription_anesth_id);
-      mbTrace($this->_protocole_prescription_chir_id);
+
       // Application des protocoles de prescription en fonction de l'operation->_id
       if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
         $this->_ref_sejour->_protocole_prescription_chir_id = $this->_protocole_prescription_chir_id;

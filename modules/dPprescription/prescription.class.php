@@ -147,106 +147,171 @@ class CPrescription extends CMbObject {
   }
   
   // Permet d'appliquer un protocole à une prescription
-  function applyProtocole($protocole_id, $praticien_id, $date) {
+  function applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id) {
+    
   	global $AppUI;
-    // Chargement du protocole
-    $protocole = new CPrescription();
-    $protocole->load($protocole_id);
-    
-    // Chargement des lignes de medicaments, d'elements et de commentaires
-    $protocole->loadRefsLinesMed();
-    $protocole->loadRefsLinesElement();
-    $protocole->loadRefsLinesAllComments();
+	  // Chargement du protocole
+	$protocole = new CPrescription();
+	$protocole->load($protocole_id);
+	
+	// Chargement des lignes de medicaments, d'elements et de commentaires
+	$protocole->loadRefsLinesMed();
+	$protocole->loadRefsLinesElement();
+	$protocole->loadRefsLinesAllComments();
 
-    $sejour = new CSejour();
-    if($this->_ref_object->_class_name == "CSejour"){
-      $sejour =& $this->_ref_object;
-    }
-
-    $lines = array(
-      "medicament" => $protocole->_ref_prescription_lines,
-      "element"    => $protocole->_ref_prescription_lines_element
-    );
-    
-    foreach($lines as $type => $lines_by_type){
-      $object_class = ($type == "medicament") ? "CPrescriptionLineMedicament" : "CPrescriptionLineElement";
-      
-      if(count($lines_by_type)){
-        foreach($lines_by_type as $_line){
-          $_line->loadRefsPrises();
-          $_line->_id = "";
-          $_line->unite_duree = "jour";
-          
-          // Calcul de la date d'entree
-          switch($_line->jour_decalage){
-            case 'E': $date_debut = $sejour->_entree; break;
-            case 'I': $date_debut = $date; break;
-            case 'S': $date_debut = $sejour->_sortie; break;
-            case 'N': $date_debut = mbDate(); break;
-          }
-          
-          // Calcul de la date de sortie
-          $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
-          switch($_line->jour_decalage_fin){
-            case 'I': $date_fin = $date; break;
-            case 'S': $date_fin = mbDate($sejour->_sortie); break;
-          }
-          if($_line->decalage_line_fin){
-            // On ajuste la date de fin avec le decalage
-            $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin); 
-          }
-          
-          if(!$_line->jour_decalage){
-            $date_debut = $date_sel;
-          }
-          
-          $signe = ($_line->decalage_line >= 0) ? "+" : "";
-          if($type == "medicament"){
-            $_line->debut = $_line->decalage_line ? 
-              mbDate("$signe $_line->decalage_line DAYS", $date_debut) : 
-              mbDate($date_debut);
-          }
-          else if($type == "element") {
-            $chapitre = $_line->_ref_element_prescription->_ref_category_prescription->chapitre;
-            if($chapitre != "dmi") {
-              $_line->debut = $_line->decalage_line ? 
-                mbDate("$signe $_line->decalage_line DAYS", $date_debut) : 
-                mbDate($date_debut);
-            }
-          }
-        
-          // Calcul de la duree
-          if($_line->jour_decalage_fin) {
-            $_line->duree = mbDaysRelative($_line->debut, $date_fin);
-          }
-          
-          $_line->prescription_id = $this->_id;
-          $_line->praticien_id = $praticien_id;
-          $_line->creator_id = $AppUI->user_id;
-          $msg = $_line->store();
-          $AppUI->displayMsg($msg, "$object_class-msg-create");  
-            
-          // Parcours des prises
-          foreach($_line->_ref_prises as $prise){
-            $prise->_id = "";
-            $prise->object_id = $_line->_id;
-            $prise->object_class = $object_class;
-            $msg = $prise->store();
-            $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");   
-          }
-        }
-      }
-    }
-
-    // Parcours des lignes de commentaires
-    foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
-      $line_comment->_id = "";
-      $line_comment->prescription_id = $this->_id;
-      $line_comment->praticien_id = $praticien_id;
-      $line_comment->creator_id = $AppUI->user_id;
-      $msg = $line_comment->store();
-      $AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
-    }
+	// Chargement de l'operation
+	$operation = new COperation();
+	$operation->load($operation_id);
+	$operation->loadRefPlageOp();
+	
+	if($operation->_id){
+	  $hour_operation = $operation->fin_op ? $operation->fin_op : ($operation->debut_op ? $operation->debut_op : $operation->time_operation);
+	}
+	
+	$sejour = new CSejour();
+	if($this->_ref_object->_class_name == "CSejour"){
+		$sejour =& $this->_ref_object;
+	}
+	
+	$lines = array();
+	$lines["medicament"] = $protocole->_ref_prescription_lines;
+	$lines["element"] = $protocole->_ref_prescription_lines_element;
+	
+	foreach($lines as $type => $lines_by_type){
+		$object_class = ($type == "medicament") ? "CPrescriptionLineMedicament" : "CPrescriptionLineElement";
+		
+		if(count($lines_by_type)){
+			foreach($lines_by_type as $_line){
+				$_line->loadRefsPrises();
+				$_line->_id = "";
+		        $_line->unite_duree = "jour";
+		        $_line->debut = "";
+				
+		      // Calcul de la date d'entree
+			  switch($_line->jour_decalage){
+			  	case 'E': $date_debut = $sejour->_entree; break;
+			  	case 'I': 
+			  	  if($operation->_id){
+			  	    $date_debut = $operation->_ref_plageop->date; 
+		  	        $time_debut = $hour_operation;
+			  	  } else {
+			  	    $date_debut = "";
+			  	    $time_debut = "";
+			  	  }
+			  	  break;
+			  	case 'S': $date_debut = $sejour->_sortie; break;
+			  	case 'N': $date_debut = mbDate(); break;
+			  }
+			  
+		      // Calcul de la date de sortie
+			  switch($_line->jour_decalage_fin){
+			  	case 'I': 
+			  	  if($operation->_id){
+			  	    $date_fin = $operation->_ref_plageop->date;
+			  	    $time_fin = $hour_operation;
+			  	  } else {
+			  	    $date_fin = "";
+			  	    $time_fin = "";
+			  	  }
+			  	  break;
+			  	case 'S': $date_fin = mbDate($sejour->_sortie);	break;
+			  }
+			  
+	                    
+			  $unite_decalage_debut = $_line->unite_decalage == "heure" ? "HOURS" : "DAYS";
+			  $unite_decalage_fin   = $_line->unite_decalage_fin == "heure" ? "HOURS" : "DAYS";
+	
+			
+			  if(!$_line->jour_decalage){
+			    $date_debut = $date_sel;  
+			  }
+			  
+			  // Decalage de la fin
+			  if($_line->decalage_line_fin){
+			    $signe_fin = ($_line->decalage_line_fin >= 0) ? "+" : "";
+			  	if($unite_decalage_fin == "DAYS"){
+			      $date_fin = mbDate("$signe_fin $_line->decalage_line_fin DAYS", $date_fin);	
+			  	} else {
+			  	  $_line->time_fin = mbTime("$signe_fin $_line->decalage_line_fin HOURS", $time_fin);   
+			  	}
+			  }
+	
+			  // Decalage du debut
+		      if($type == "medicament"){
+			    if($_line->decalage_line){
+			      $signe = ($_line->decalage_line >= 0) ? "+" : "";
+				  if($unite_decalage_debut == "DAYS"){ 
+			        $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);	
+				  } else {
+				    $_line->debut = $date_debut;
+				    $_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);	  
+				  }
+			    } else {
+				  $_line->debut = mbDate($date_debut);
+			    }
+		      }
+		      
+			  if($type == "element"){
+				  $chapitre = $_line->_ref_element_prescription->_ref_category_prescription->chapitre;
+			    if($chapitre != "dmi"){
+				    $signe = ($_line->decalage_line >= 0) ? "+" : "";
+				    if($_line->decalage_line){
+				      if($unite_decalage_debut == "DAYS"){
+				        $_line->debut = mbDate("$signe $_line->decalage_line DAYS", $date_debut);
+				      } else {
+				        $_line->time_debut = mbTime("$signe $_line->decalage_line HOURS", $time_debut);
+				      }
+				    } else {
+				      $_line->debut = mbDate($date_debut);
+				    }
+				    	
+			    }
+			  }
+	
+			  // Calcul de la duree
+			  if($_line->jour_decalage_fin){
+			  	$_line->duree = mbDaysRelative($_line->debut, $date_fin);
+			  	$_line->duree++;
+			  }	  
+			  
+			  $_line->prescription_id = $this->_id;
+			  $_line->praticien_id = $praticien_id;
+			  $_line->creator_id = $AppUI->user_id;
+			  
+			  if($_line->jour_decalage == "I" || $_line->jour_decalage_fin == "I"){
+			    if($operation_id){
+			      $_line->operation_id = $operation_id;
+			    } else {
+			      $_line->debut = "";
+			      $_line->duree = "";
+			      $_line->time_debut = "";
+			      $_line->time_fin = "";
+			    }
+			  }
+			  $msg = $_line->store();
+			  $AppUI->displayMsg($msg, "$object_class-msg-create");  
+			  	
+				// Parcours des prises
+				foreach($_line->_ref_prises as $prise){
+				  $prise->_id = "";
+					$prise->object_id = $_line->_id;
+					$prise->object_class = $object_class;
+				  $msg = $prise->store();
+				  $AppUI->displayMsg($msg, "CPrisePosologie-msg-create");  	
+				}	  
+			}
+		}
+	}
+	
+	// Parcours des lignes de commentaires
+	foreach($protocole->_ref_prescription_lines_all_comments as $line_comment){
+		$line_comment->_id = "";
+		$line_comment->prescription_id = $this->_id;
+		$line_comment->praticien_id = $praticien_id;
+		$line_comment->creator_id = $AppUI->user_id;
+		$msg = $line_comment->store();
+		$AppUI->displayMsg($msg, "CPrescriptionLineComment-msg-create");
+	}
   }
   
   /*

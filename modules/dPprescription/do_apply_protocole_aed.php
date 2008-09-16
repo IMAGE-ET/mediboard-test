@@ -14,8 +14,9 @@ $can->needsRead();
 
 $prescription_id = mbGetValueFromPost("prescription_id");
 $protocole_id    = mbGetValueFromPost("protocole_id");
-$date_sel  = mbGetValueFromPost("debut", mbDate());
+$date_sel        = mbGetValueFromPost("debut", mbDate());
 $praticien_id    = mbGetValueFromPost("praticien_id", $AppUI->user_id);
+$operation_id    = mbGetValueFromPost("operation_id");
 
 if(!$protocole_id){
 	exit();
@@ -24,7 +25,7 @@ if(!$protocole_id){
 // Chargement de la prescription
 $prescription = new CPrescription();
 $prescription->load($prescription_id);
-$prescription->applyProtocole($protocole_id, $praticien_id, $date_sel);
+$prescription->applyProtocole($protocole_id, $praticien_id, $date_sel, $operation_id);
 
 // Lancement du refresh des lignes de la prescription
 echo "<script type='text/javascript'>Prescription.reloadPrescSejour($prescription_id)</script>";

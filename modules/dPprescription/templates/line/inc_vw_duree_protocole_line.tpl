@@ -1,3 +1,15 @@
+<script type="text/javascript">
+
+modifUniteDecal = function(oFieldJour, oFieldUnite){
+  if(oFieldJour.value != "I"){
+    $V(oFieldUnite,"jour");
+    oFieldUnite.disabled = "disabled";
+  } else {
+    oFieldUnite.disabled = "";
+  }
+}
+
+</script>
 {{assign var=line_id value=$line->_id}}
 
 {{if $typeDate != "mode_grille"}}
@@ -23,17 +35,24 @@
 				à partir de 
 			{{/if}}
 			{{if $prescription->object_class == "CSejour"}}
-			  {{mb_field object=$line field=jour_decalage onchange="$onchange" defaultOption="&mdash Choix"}}
+			  {{mb_field object=$line field=jour_decalage onchange="modifUniteDecal(this, this.form.unite_decalage); $onchange" defaultOption="&mdash Choix"}}
 			{{else}}
 			J
 			{{/if}}
-			{{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id onchange="$onchange" size="3"}} (Jours) à 
+			{{mb_field showPlus=1 object=$line field=decalage_line increment=1 form=editDuree-$typeDate-$line_id onchange="$onchange" size="3"}}
+			 {{if $prescription->object_class == "CSejour"}}
+			 {{mb_field showPlus=1 object=$line field=unite_decalage onchange="$onchange"}}
+			 {{else}}
+			 (jours)
+			 {{/if}}
+			  à 
 			{{mb_field object=$line field=time_debut form=editDuree-$typeDate-$line_id onchange="$onchange"}}
 			{{if ($typeDate != "anapath" && $typeDate != "imagerie" && $typeDate != "consult") && $prescription->object_class == "CSejour"}}
 				{{if $typeDate == "mode_grille"}}<br />{{/if}}
 				Jusqu'à 
-				{{mb_field object=$line field=jour_decalage_fin onchange="this.form.duree.value = ''; $onchange" defaultOption="&mdash Choix"}}
-				{{mb_field showPlus=1 object=$line field=decalage_line_fin increment=1 form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange" size="3"}} (Jours) à 
+				{{mb_field object=$line field=jour_decalage_fin onchange="modifUniteDecal(this, this.form.unite_decalage_fin); this.form.duree.value = ''; $onchange" defaultOption="&mdash Choix"}}
+				{{mb_field showPlus=1 object=$line field=decalage_line_fin increment=1 form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange" size="3"}}
+				 {{mb_field showPlus=1 object=$line field=unite_decalage_fin onchange="$onchange"}} à 
 				{{mb_field object=$line field=time_fin form=editDuree-$typeDate-$line_id onchange="this.form.duree.value = '';  $onchange"}}			
 		{{/if}}
     </form>

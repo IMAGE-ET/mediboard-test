@@ -840,5 +840,14 @@ $locales['CPrescriptionLineElement-conditionnel'] = 'Conditionnel';
 $locales['CPrescriptionLineElement-conditionnel-desc'] = 'Conditionnel';
 $locales['CPrescriptionLineMedicament-condition_active'] = 'Activation';
 $locales['CPrescriptionLineMedicament-condition_active-desc'] = 'Activation';
+$locales['CPrescriptionLineMedicament.unite_decalage.jour'] = 'jour(s)';
+$locales['CPrescriptionLineMedicament.unite_decalage.heure'] = 'heure(s)';
+$locales['CPrescriptionLineElement.unite_decalage.jour'] = 'jour(s)';
+$locales['CPrescriptionLineElement.unite_decalage.heure'] = 'heure(s)';
+$locales['CPrescriptionLineMedicament.unite_decalage_fin.jour'] = 'jour(s)';
+$locales['CPrescriptionLineMedicament.unite_decalage_fin.heure'] = 'heure(s)';
+$locales['CPrescriptionLineElement.unite_decalage_fin.jour'] = 'jour(s)';
+$locales['CPrescriptionLineElement.unite_decalage_fin.heure'] = 'heure(s)';
+$locales['config-object_handlers-CPrescriptionLineHandler'] = 'Modification automatique des lignes';
 $locales['CPrescription.protocole.select'] = 'Choisir un protocole';
 ?>
