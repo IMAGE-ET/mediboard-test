@@ -42,17 +42,17 @@ class CPrescriptionLineHandler extends CMbObjectHandler {
     }
     
     if($mbObject instanceof CSejour){
-      if(!$mbObject->fieldModified("entree_prevue") && !$mbObject->fieldModified("entree_reelle") && !$mbObject->fieldModified("sortie_prevue") 
-                                                    && !$mbObject->fieldModified("sortie_reelle")){
+      if(!$mbObject->fieldModified("_entree") && !$mbObject->fieldModified("_sortie")){
         return;
       }
     }
-  
     if($mbObject instanceof COperation){
-      if(!$mbObject->fieldModified("debut_op") && !$mbObject->fieldModified("fin_op") && !$mbObject->fieldModified("time_operation")){       
+      if(!$mbObject->fieldModified("debut_op") && !$mbObject->fieldModified("fin_op") && !$mbObject->fieldModified("time_operation") && !$mbObject->fieldModified("plageop_id")){       
         return;
       }
     }
+    
+    
     
    // On charge toutes les lignes qui sont définies en fonction de l'entree du sejour
    if($mbObject->_class_name == "COperation"){
