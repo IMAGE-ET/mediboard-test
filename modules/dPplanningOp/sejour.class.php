@@ -353,10 +353,6 @@ class CSejour extends CCodable {
       return $msg;
     }
     
-    if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
-      $this->applyProtocolesPrescription();
-    }
-
     if ($this->annule) {
       $this->delAffectations();
       $this->cancelOperations();
