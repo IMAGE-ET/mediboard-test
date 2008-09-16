@@ -453,6 +453,8 @@ class CPrescriptionLine extends CMbObject {
   	$type = ($this->_class_name == "CPrescriptionLineMedicament") ? "med" : "elt";
   	
   	foreach($this->_ref_prises as &$_prise){
+  	  $prise_comptee = 0;
+  	  
   	  $key_tab = $_prise->moment_unitaire_id ? $_prise->unite_prise : $_prise->_id;
 	  $key_prise = $_prise->moment_unitaire_id ? $_prise->unite_prise : "autre";
 	  $poids_ok = 1;
@@ -502,6 +504,7 @@ class CPrescriptionLine extends CMbObject {
 	  	      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
 		}
 	  	    @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	  	    $prise_comptee = 1;
 	  }
 	} 
 		  
@@ -513,6 +516,7 @@ class CPrescriptionLine extends CMbObject {
  	      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;	
  	  	}
  	    @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+ 	    $prise_comptee = 1;
  	  }
  	}
  	  
@@ -523,6 +527,7 @@ class CPrescriptionLine extends CMbObject {
  	  if($this->_fin_reelle > $dateTimePrise && $poids_ok){
 		@$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($heure,0,2)]] += $_prise->quantite;	
         @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+        $prise_comptee = 1;
 	  }
  	}
  	 	
@@ -536,6 +541,7 @@ class CPrescriptionLine extends CMbObject {
            if($this->_fin_reelle > $dateTimePrise && $poids_ok){
              @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[$_hour_tab]] += $_prise->quantite;	
              @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+             $prise_comptee = 1;
            }
          }  
        }
@@ -547,13 +553,14 @@ class CPrescriptionLine extends CMbObject {
         if($this->_fin_reelle > $dateTimePrise && $poids_ok){
 		  @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[substr($_heure,0,2)]] += $_prise->quantite;	
           @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+          $prise_comptee = 1;
 	    }
       }
     }
     
     
  	// Aucun moment unitaire, seulement Tous les ou Fois par, permet la generation du plan sur 5 jours
- 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && $this->_active){
+ 	if(!$_prise->moment_unitaire_id && ($_prise->nb_tous_les || $_prise->nb_fois) && $this->_active && !$prise_comptee){
  	  if($_prise->_unite == "jour"){
  	    if($_prise->nb_fois){
  	  	  @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite * $_prise->nb_fois;
