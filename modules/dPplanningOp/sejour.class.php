@@ -315,6 +315,26 @@ class CSejour extends CCodable {
          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue));
   }
   
+  function applyProtocolesPrescription($operation_id) {
+    $this->loadRefsPrescriptions();
+    if (!$this->_ref_prescriptions["pre_admission"]->_id) {
+      $prescription = new CPrescription;
+      $prescription->object_class = "CSejour";
+      $prescription->object_id = $this->_id;
+      $prescription->type = "pre_admission";
+      $prescription->store();
+      $this->_ref_prescriptions["pre_admission"] = $prescription;
+    }
+    
+    // Application du protocole de prescription
+    $prescription = new CPrescription;
+    $prescription->object_class = "CSejour";
+    $prescription->object_id = $this->_id;
+    $prescription->type = "sejour";
+    $prescription->store();
+    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, $this->entree_prevue);
+  }
+  
   function store() {
     if (null !== $this->mode_sortie) {
       if ("transfert" != $this->mode_sortie) {
@@ -328,26 +348,6 @@ class CSejour extends CCodable {
   	
   	if ($msg = parent::store()) {
       return $msg;
-    }
-    
-    // Application du protocole de prescription
-    if ($this->_protocole_prescription_chir_id) {
-	    $prescription = new CPrescription;
-	    $prescription->object_class = "CSejour";
-	    $prescription->object_id = $this->_id;
-	    $prescription->type = "sejour";
-	    $prescription->store();
-	    $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, $this->entree_prevue);
-    }
-    
-    $this->loadRefsPrescriptions();
-    if (!$this->_ref_prescriptions["pre_admission"]->_id) {
-	    $prescription = new CPrescription;
-	    $prescription->object_class = "CSejour";
-	    $prescription->object_id = $this->_id;
-	    $prescription->type = "pre_admission";
-	    $prescription->store();
-	    $this->_ref_prescriptions["pre_admission"] = $prescription;
     }
 
     if ($this->annule) {

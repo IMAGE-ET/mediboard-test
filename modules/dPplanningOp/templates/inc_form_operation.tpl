@@ -20,6 +20,8 @@
 <input type="hidden" name="salle_id" value="{{$op->salle_id}}" />
 <input type="hidden" name="_group_id" value="{{$sejour->group_id}}" />
 <input type="hidden" name="_class_name" value="COperation" />
+<input type="hidden" name="_protocole_prescription_anesth_id" value="" />
+<input type="hidden" name="_protocole_prescription_chir_id" value="" />
 
      
 <table class="form">

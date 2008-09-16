@@ -73,6 +73,8 @@ class COperation extends CCodable {
   var $_min_voulu      = null;
   var $_deplacee       = null;
   var $_compteur_jour  = null;
+  var $_protocole_prescription_anesth_id = null;
+  var $_protocole_prescription_chir_id   = null;
   
   // Distant fields
   var $_datetime = null;
@@ -337,6 +339,14 @@ class COperation extends CCodable {
       if($this->_ref_sejour->annule) {
         $this->_ref_sejour->annule = 0;
         $this->_ref_sejour->store();
+      }
+      mbTrace($this->_protocole_prescription_anesth_id);
+      mbTrace($this->_protocole_prescription_chir_id);
+      // Application des protocoles de prescription en fonction de l'operation->_id
+      if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
+        $this->_ref_sejour->_protocole_prescription_chir_id = $this->_protocole_prescription_chir_id;
+        $this->_ref_sejour->_protocole_prescription_anesth_id = $this->_protocole_prescription_anesth_id;
+        $this->_ref_sejour->applyProtocolesPrescription($this->_id);
       }
     } elseif($this->rank != 0) {
       $this->rank = 0;

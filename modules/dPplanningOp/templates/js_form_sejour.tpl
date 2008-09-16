@@ -177,6 +177,11 @@ function reloadListSejours() {
   sejoursUrl.setModuleAction("dPplanningOp", "httpreq_get_sejours");
   sejoursUrl.addParam("patient_id", iPatient_id);
   sejoursUrl.requestUpdate("selectSejours", { waitingText : null });
+  
+  // La liste des prescriptions doit etre rechargée
+  if (PrescriptionEditor) {
+    PrescriptionEditor.refresh($V(oForm.sejour_id), "CSejour", $V(oForm.praticien_id));
+  }
 }
 
 function reloadSejour(sejour_id) {
