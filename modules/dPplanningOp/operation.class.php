@@ -41,10 +41,12 @@ class COperation extends CCodable {
   var $anapath        = null;
   var $labo           = null;
 
-  var $depassement    = null;
-  var $forfait        = null;
-  var $fournitures    = null;
-  var $annulee        = null;
+  var $depassement        = null;
+  var $forfait            = null;
+  var $fournitures        = null;
+  var $depassement_anesth = null;
+  
+  var $annulee = null;
   
   //timings enregistrés
   var $entree_bloc     = null;
@@ -123,56 +125,57 @@ class COperation extends CCodable {
   
   function getSpecs() {
     $specs = parent::getSpecs();
-    $specs["sejour_id"]      = "notNull ref class|CSejour";
-    $specs["chir_id"]        = "notNull ref class|CMediusers";
-    $specs["anesth_id"]      = "ref class|CMediusers";
-    $specs["plageop_id"]     = "ref class|CPlageOp";
-    $specs["pause"]          = "time";
-    $specs["salle_id"]       = "ref class|CSalle";
-    $specs["date"]           = "date";
-    $specs["code_uf"]        = "str length|3";
-    $specs["libelle_uf"]     = "str maxLength|35";
-    $specs["libelle"]        = "str confidential";
-    $specs["cote"]           = "notNull enum list|droit|gauche|bilatéral|total|inconnu default|inconnu";
-    $specs["temp_operation"] = "time";
-    $specs["entree_salle"]   = "time";
-    $specs["sortie_salle"]   = "time";
-    $specs["time_operation"] = "time";
-    $specs["examen"]         = "text confidential";
-    $specs["materiel"]       = "text confidential";
-    $specs["commande_mat"]   = "bool";
-    $specs["info"]           = "bool";
-    $specs["type_anesth"]    = "ref class|CTypeAnesth";
-    $specs["rques"]          = "text confidential";
-    $specs["rank"]           = "num max|255";
-    $specs["depassement"]    = "currency min|0 confidential";
-    $specs["forfait"]        = "currency min|0 confidential";
-    $specs["fournitures"]    = "currency min|0 confidential";
-    $specs["annulee"]        = "bool";
-    $specs["pose_garrot"]    = "time";
-    $specs["debut_op"]       = "time";
-    $specs["fin_op"]         = "time";
-    $specs["retrait_garrot"] = "time";
-    $specs["entree_reveil"]  = "time";
-    $specs["sortie_reveil"]  = "time";
-    $specs["induction_debut"]= "time";
-    $specs["induction_fin"]  = "time";
-    $specs["entree_bloc"]    = "time";
-    $specs["anapath"]        = "bool";
-    $specs["labo"]           = "bool";
-    $specs["horaire_voulu"]  = "time";
+    $specs["sejour_id"]          = "notNull ref class|CSejour";
+    $specs["chir_id"]            = "notNull ref class|CMediusers";
+    $specs["anesth_id"]          = "ref class|CMediusers";
+    $specs["plageop_id"]         = "ref class|CPlageOp";
+    $specs["pause"]              = "time";
+    $specs["salle_id"]           = "ref class|CSalle";
+    $specs["date"]               = "date";
+    $specs["code_uf"]            = "str length|3";
+    $specs["libelle_uf"]         = "str maxLength|35";
+    $specs["libelle"]            = "str confidential";
+    $specs["cote"]               = "notNull enum list|droit|gauche|bilatéral|total|inconnu default|inconnu";
+    $specs["temp_operation"]     = "time";
+    $specs["entree_salle"]       = "time";
+    $specs["sortie_salle"]       = "time";
+    $specs["time_operation"]     = "time";
+    $specs["examen"]             = "text confidential";
+    $specs["materiel"]           = "text confidential";
+    $specs["commande_mat"]       = "bool";
+    $specs["info"]               = "bool";
+    $specs["type_anesth"]        = "ref class|CTypeAnesth";
+    $specs["rques"]              = "text confidential";
+    $specs["rank"]               = "num max|255";
+    $specs["depassement"]        = "currency min|0 confidential";
+    $specs["forfait"]            = "currency min|0 confidential";
+    $specs["fournitures"]        = "currency min|0 confidential";
+    $specs["depassement_anesth"] = "currency min|0 confidential";
+    $specs["annulee"]            = "bool";
+    $specs["pose_garrot"]        = "time";
+    $specs["debut_op"]           = "time";
+    $specs["fin_op"]             = "time";
+    $specs["retrait_garrot"]     = "time";
+    $specs["entree_reveil"]      = "time";
+    $specs["sortie_reveil"]      = "time";
+    $specs["induction_debut"]    = "time";
+    $specs["induction_fin"]      = "time";
+    $specs["entree_bloc"]        = "time";
+    $specs["anapath"]            = "bool";
+    $specs["labo"]               = "bool";
+    $specs["horaire_voulu"]      = "time";
 
-    $specs["_date_min"]      = "date";
-    $specs["_date_max"]      = "date moreEquals|_date_min";
-    $specs["_plage"]         = "bool";
-    $specs["_intervention"]  = "text";
-    $specs["_prat_id"]       = "text";
-    $specs["_specialite"]    = "text";
-    $specs["_ccam_libelle"]  = "bool default|1";
-    $specs["_hour_op"]       = "";
-    $specs["_min_op"]        = "";
+    $specs["_date_min"]          = "date";
+    $specs["_date_max"]          = "date moreEquals|_date_min";
+    $specs["_plage"]             = "bool";
+    $specs["_intervention"]      = "text";
+    $specs["_prat_id"]           = "text";
+    $specs["_specialite"]        = "text";
+    $specs["_ccam_libelle"]      = "bool default|1";
+    $specs["_hour_op"]           = "";
+    $specs["_min_op"]            = "";
+    $specs["_datetime"]          = "dateTime";
     
-    $specs["_datetime"]  = "dateTime";
     return $specs;
   }
   
@@ -371,10 +374,10 @@ class COperation extends CCodable {
     }
     
     // Cas de la création dans une plage de spécialité
-    if ($this->plageop_id) {
+    if($this->plageop_id) {
       $plageTmp = new CPlageOp;
       $plageTmp->load($this->plageop_id);
-      if ($plageTmp->spec_id) {
+      if($plageTmp->spec_id) {
         $plageTmp->spec_id = null;
         $chirTmp = new CMediusers;
         $chirTmp->load($this->chir_id);

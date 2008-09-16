@@ -27,11 +27,11 @@ class CPlageOp extends CMbObject {
   var $salle_id  = null;
 
   // DB fields
-  var $date              = null;
-  var $debut             = null;
-  var $fin               = null;
-  var $temps_inter_op    = null;
-  var $max_intervention  = null;
+  var $date             = null;
+  var $debut            = null;
+  var $fin              = null;
+  var $temps_inter_op   = null;
+  var $max_intervention = null;
     
   // Form Fields
   var $_day          = null;
@@ -156,13 +156,17 @@ class CPlageOp extends CMbObject {
     }
     $new_time = $this->debut;
     $i = 0;
-    foreach ($this->_ref_operations as $keyOp => $op) {
-      if($this->_ref_operations[$keyOp]->rank) {
+    foreach ($this->_ref_operations as &$op) {
+      if($op->rank) {
         $i++;
-        $this->_ref_operations[$keyOp]->rank = $i;
-        $this->_ref_operations[$keyOp]->time_operation = $new_time;
-        $this->_ref_operations[$keyOp]->updateFormFields();
-        $this->_ref_operations[$keyOp]->store(false);
+        $op->rank = $i;
+        $op->time_operation = $new_time;
+        // Pour faire suivre un changement de salle
+        if($this->salle_id) {
+          $op->salle_id = $this->salle_id;
+        }
+        $op->updateFormFields();
+        $op->store(false);
         $new_time = mbAddTime($op->temp_operation, $new_time);
         $new_time = mbAddTime($this->temps_inter_op, $new_time);
         $new_time = mbAddTime($op->pause, $new_time);
@@ -258,7 +262,7 @@ class CPlageOp extends CMbObject {
     if($this->_min_inter_op !== null) {
       $this->temps_inter_op = "00:$this->_min_inter_op:00";
     }
-    $this->reorderOp(); 
+    $this->reorderOp();
   }
   
   function becomeNext() {

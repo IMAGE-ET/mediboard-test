@@ -1482,4 +1482,7 @@ $locales['CActeNGAP-executant_id-court'] = 'Exécutant';
 $locales['CActeNGAP-executant_id-desc'] = 'Personne éxécutant l\'acte NGAP';
 $locales['config-dPcabinet-keepchir'] = 'Conserver le dernier praticien';
 $locales['mod-dPcabinet-tab-vw_journee'] = 'Journée';
+$locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie'] = 'Modèle de la feuille d\'anesthésie';
+$locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-print_fiche'] = 'Modèle standard';
+$locales['config-dPcabinet-CConsultAnesth-feuille_anesthesie-print_fiche1'] = 'Modèle n°1';
 ?>
