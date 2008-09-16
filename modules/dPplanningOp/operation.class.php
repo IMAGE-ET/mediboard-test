@@ -346,7 +346,14 @@ class COperation extends CCodable {
         $this->_ref_sejour->_protocole_prescription_chir_id = $this->_protocole_prescription_chir_id;
         $this->_ref_sejour->_protocole_prescription_anesth_id = $this->_protocole_prescription_anesth_id;
         $this->_ref_sejour->applyProtocolesPrescription($this->_id);
+        
+        // On les nullify pour eviter de les appliquer 2 fois
+        $this->_protocole_prescription_anesth_id = null;
+        $this->_protocole_prescription_chir_id = null;
+        $this->_ref_sejour->_protocole_prescription_chir_id = null;
+        $this->_ref_sejour->_protocole_prescription_anesth_id = null;
       }
+      
     } elseif($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";

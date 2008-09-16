@@ -315,7 +315,7 @@ class CSejour extends CCodable {
          or(mbDate($sejour->entree_prevue) >= mbDate($this->entree_prevue) and mbDate($sejour->sortie_prevue) <= mbDate($this->sortie_prevue));
   }
   
-  function applyProtocolesPrescription($operation_id) {
+  function applyProtocolesPrescription($operation_id = null) {
     $this->loadRefsPrescriptions();
     if (!$this->_ref_prescriptions["pre_admission"]->_id) {
       $prescription = new CPrescription;
@@ -331,7 +331,9 @@ class CSejour extends CCodable {
     $prescription->object_class = "CSejour";
     $prescription->object_id = $this->_id;
     $prescription->type = "sejour";
-    $prescription->store();
+    if ($msg = $prescription->store()) {
+      return $msg;
+    }
     $prescription->applyProtocole($this->_protocole_prescription_anesth_id, $this->praticien_id, mbDate(), $operation_id);
     $prescription->applyProtocole($this->_protocole_prescription_chir_id, $this->praticien_id, mbDate(), $operation_id);
   }
@@ -349,6 +351,10 @@ class CSejour extends CCodable {
   	
   	if ($msg = parent::store()) {
       return $msg;
+    }
+    
+    if ($this->_protocole_prescription_chir_id || $this->_protocole_prescription_anesth_id) {
+      $this->applyProtocolesPrescription();
     }
 
     if ($this->annule) {
