@@ -178,8 +178,8 @@ function reloadPrescription(prescription_id){
   
   <form name="editProtoPrescription" action="?m={{$m}}" method="post" onsubmit="return checkForm(this)">
     <input type="hidden" name="m" value="dPplanningOp" />
-    <input type="hidden" name="dosql" value="do_sejour_aed" />
-    <input type="hidden" name="sejour_id" value="{{$selOp->sejour_id}}" />
+    <input type="hidden" name="dosql" value="do_planning_aed" />
+    <input type="hidden" name="operation_id" value="{{$selOp->_id}}" />
     <input type="hidden" name="del" value="0" />
     {{tr}}CProtocole-protocole_prescription_anesth_id{{/tr}}
     <select name="_protocole_prescription_anesth_id"></select><br />

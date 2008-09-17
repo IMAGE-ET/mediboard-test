@@ -352,7 +352,7 @@ class CSejour extends CCodable {
   	if ($msg = parent::store()) {
       return $msg;
     }
-    
+
     if ($this->annule) {
       $this->delAffectations();
       $this->cancelOperations();

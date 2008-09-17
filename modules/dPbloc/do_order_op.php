@@ -20,7 +20,8 @@ $rank    = $operation->rank;
 
 switch($cmd)
 {
-  case "insert" : {
+  /*case "insert" : {
+    /// Liste des op de la plageop, avec le rang le plus grand en premier
     $sql = "SELECT operations.rank AS rank, operations.time_operation AS time,
             operations.temp_operation as duree, plagesop.debut AS debut
             FROM operations, plagesop
@@ -28,14 +29,16 @@ switch($cmd)
             AND operations.plageop_id = plagesop.plageop_id
             ORDER BY operations.rank DESC";
     $result = $ds->loadlist($sql);
+    
+    /// On insere l'operation avec le rang le plus grand + 1 (tout en bas)
     $sql = "UPDATE operations
             SET rank = '".($result[0]["rank"] + 1)."'
             WHERE operations.operation_id = '$id'";
     $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
     break;
-  }
-  case "down" : {
+  }*/
+  /*case "down" : {
     //On fait monter celui qui est en dessous
     $sql = "SELECT operation_id" .
     		"\nFROM operations" .
@@ -52,9 +55,9 @@ switch($cmd)
             WHERE operations.operation_id = '$id'";
     $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
-    break;
+    break;*/
   }
-  case "up" : {
+  /*case "up" : {
     //On fait descendre celui qui est au dessus
     $sql = "SELECT operation_id" .
     		"\nFROM operations" .
@@ -71,9 +74,11 @@ switch($cmd)
             WHERE operations.operation_id = '$id'";
     $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
-    break;
+    break;*/
   }
-  case "rm" : {
+  /*case "rm" : {
+  // l'operation n'occupe plus du tout la plage op : temps nul
+  // la vraie suppression supprime l'op et reordonne...
   	$sql = "UPDATE operations
 			SET time_operation = '00:00:00', pause = '00:00:00',rank = 0
 			WHERE operations.operation_id = '$id'";
@@ -81,8 +86,9 @@ switch($cmd)
     cleanOrderOp($plageop, "time");
     changeAffect($id, "rm");
     break;
-  }
-  case "sethour" : {
+  }*/
+ /* case "sethour" : {
+  // on change la pause
     $hour = dPgetParam( $_GET, "hour", "00" );
     $min = dPgetParam( $_GET, "min", "00" );
     $sql = "UPDATE operations
@@ -91,15 +97,15 @@ switch($cmd)
     $result = $ds->exec($sql);
     cleanOrderOp($plageop, "time");
     break;
-  }
-  case "setanesth" : {
+  }*/
+  /*case "setanesth" : {
     $type = dPgetParam( $_GET, "type", null);
     $sql = "UPDATE operations
             SET type_anesth = '$type'
             WHERE operations.operation_id = '$id'";
     $result = $ds->exec($sql);
     break;
-  }
+  }*/
 }
 
 //Réarrangement de l'ordre des interventions
@@ -128,7 +134,7 @@ function cleanOrderOp($plageop, $type = "rank") {
         $i++;
       }
     case "rank" :
-      $sql = "SELECT operations.operation_id," .
+      /*$sql = "SELECT operations.operation_id," .
           "\noperations.rank," .
           "\noperations.temp_operation," .
           "\noperations.pause," .
@@ -154,7 +160,7 @@ function cleanOrderOp($plageop, $type = "rank") {
           $debut = mbAddTime($value["temps_inter_op"], $debut); // pause d'1/4h
           $debut = mbAddTime($value["pause"], $debut);          // Pause
         }
-      }
+      }*/
       break;
   }
 }

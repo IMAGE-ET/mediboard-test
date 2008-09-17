@@ -75,8 +75,11 @@ class COperation extends CCodable {
   var $_min_voulu      = null;
   var $_deplacee       = null;
   var $_compteur_jour  = null;
+  var $_pause_min      = null;
+  var $_pause_hour     = null;
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
+  var $_move           = null;
   
   // Distant fields
   var $_datetime = null;
@@ -175,6 +178,9 @@ class COperation extends CCodable {
     $specs["_hour_op"]           = "";
     $specs["_min_op"]            = "";
     $specs["_datetime"]          = "dateTime";
+    $specs["_pause_min"]     = "numchar length|2";
+    $specs["_pause_hour"]    = "numchar length|2";
+    $specs["_move"]          = "str";
     
     return $specs;
   }
@@ -274,6 +280,11 @@ class COperation extends CCodable {
       $this->_hour_voulu = intval(substr($this->horaire_voulu, 0, 2));
       $this->_min_voulu  = intval(substr($this->horaire_voulu, 3, 2)); 
     }
+    
+    if($this->pause){
+      $this->_pause_hour = intval(substr($this->pause, 0, 2));
+      $this->_pause_min  = intval(substr($this->pause, 3, 2)); 
+    }
       
     if ($this->type_anesth != null) {
       $this->_ref_type_anesth = new CTypeAnesth;
@@ -296,8 +307,9 @@ class COperation extends CCodable {
  }
   
   function updateDBFields() {
+  global $AppUI;
     if (count($this->_codes_ccam)) {
-      $this->codes_ccam = join($this->_codes_ccam, "|");
+      $this->codes_ccam = implode("|", $this->_codes_ccam);
     }
     
     if ($this->codes_ccam) {
@@ -313,19 +325,57 @@ class COperation extends CCodable {
       $this->codes_ccam = implode("|", $codes_ccam);
     }
     if($this->_hour_op !== null and $this->_min_op !== null) {
-      $this->temp_operation = 
-        $this->_hour_op.":".
-        $this->_min_op.":00";
+      $this->temp_operation = "$this->_hour_op:$this->_min_op:00";
     }
     if($this->_hour_urgence !== null and $this->_min_urgence !== null) {
-      $this->time_operation = 
-        $this->_hour_urgence.":".
-        $this->_min_urgence.":00";
+      $this->time_operation = "$this->_hour_urgence:$this->_min_urgence:00";
     }
     if($this->_hour_voulu != null and $this->_min_voulu != null) {
-      $this->horaire_voulu = 
-        $this->_hour_voulu.":".
-        $this->_min_voulu.":00";
+      $this->horaire_voulu = "$this->_hour_voulu:$this->_min_voulu:00";
+    }
+    if($this->_pause_hour !== null and $this->_pause_min !== null) {
+      $this->pause = "$this->_pause_hour:$this->_pause_min:00";
+    }
+    
+    $this->completeField('rank');
+    $this->completeField('plageop_id');
+    if($this->_move) {
+      $op = new COperation;
+      $op->plageop_id = $this->plageop_id;
+      
+      switch ($this->_move) {
+        case 'before':
+          $op->rank = $this->rank-1;
+          if ($op->loadMatchingObject()) {
+            $op->rank = $this->rank;
+            $op->store(false);
+            $this->rank -= 1;
+          }
+        break;
+        
+        case 'after':
+          $op->rank = $this->rank+1;
+          if ($op->loadMatchingObject()) {
+            $op->rank = $this->rank;
+            $op->store(false);
+            $this->rank += 1;
+          }
+        break;
+        
+        case 'out':
+          $this->rank = 0;
+          $this->time_operation = '00:00:00';
+          $this->pause = '00:00:00';
+        break;
+        
+        case 'last':
+	        if ($op->loadMatchingObject('rank DESC')) {
+		        $this->rank = $op->rank+1;
+		      }
+		    break;
+        default;
+      }
+      $this->_move = null;
     }
   }
 
@@ -356,7 +406,6 @@ class COperation extends CCodable {
         $this->_ref_sejour->_protocole_prescription_chir_id = null;
         $this->_ref_sejour->_protocole_prescription_anesth_id = null;
       }
-      
     } elseif($this->rank != 0) {
       $this->rank = 0;
       $this->time_operation = "00:00:00";

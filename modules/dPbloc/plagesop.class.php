@@ -144,6 +144,9 @@ class CPlageOp extends CMbObject {
     }
   }
   
+	/** Mise à jour des horaires en fonction de l'ordre des operations, 
+	 *  et mise a jour des rank, de sorte qu'ils soient consecutifs
+	 **/
   function reorderOp() {
     if(!$this->debut && $this->_id) {
       $tmpPlage = new CPlageOp;
@@ -158,8 +161,7 @@ class CPlageOp extends CMbObject {
     $i = 0;
     foreach ($this->_ref_operations as &$op) {
       if($op->rank) {
-        $i++;
-        $op->rank = $i;
+        $op->rank = ++$i;
         $op->time_operation = $new_time;
         // Pour faire suivre un changement de salle
         if($this->salle_id) {
@@ -167,9 +169,9 @@ class CPlageOp extends CMbObject {
         }
         $op->updateFormFields();
         $op->store(false);
-        $new_time = mbAddTime($op->temp_operation, $new_time);
-        $new_time = mbAddTime($this->temps_inter_op, $new_time);
-        $new_time = mbAddTime($op->pause, $new_time);
+        $new_time = mbAddTime($op->temp_operation, $new_time); // Durée de l'operation
+        $new_time = mbAddTime($this->temps_inter_op, $new_time); // + durée entre les operations
+        $new_time = mbAddTime($op->pause, $new_time); // + durée de pause
       }
     }
   }

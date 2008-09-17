@@ -57,15 +57,15 @@ Main.add(function () {
       </td>
 		  <td class="text">{{$curr_op->materiel|nl2br}}</td>
 		  <td>
-  			<form name="editFrm{{$curr_op->operation_id}}" action="?" method="get">
-          <input type="hidden" name="m" value="dPbloc" />
-          <input type="hidden" name="a" value="do_edit_mat" />
-          <input type="hidden" name="id" value="{{$curr_op->operation_id}}" />
+  			<form name="editFrm{{$curr_op->operation_id}}" action="?m=dPbloc" method="post">
+          <input type="hidden" name="m" value="dPplanningOp" />
+          <input type="hidden" name="dosql" value="do_planning_aed" />
+          <input type="hidden" name="operation_id" value="{{$curr_op->_id}}" />
           {{if $typeAff}}
-          <input type="hidden" name="value" value="0" />
+          <input type="hidden" name="commande_mat" value="0" />
   		    <button type="submit" class="cancel">annulé</button>
   		    {{else}}
-          <input type="hidden" name="value" value="1" />
+          <input type="hidden" name="commande_mat" value="1" />
           <button type="submit" class="submit">commandé</button>
     			{{/if}}
   			</form>
