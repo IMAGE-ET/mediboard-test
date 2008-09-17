@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Gestion des bouton radio des dates
@@ -37,8 +37,8 @@ $mediuser->load($AppUI->user_id);
 $mediuser->loadRefFunction();
 
 $is_praticien           = $mediuser->isPraticien();
-$is_admin = in_array($utypes[$mediuser->_user_type], array("Administrator"));
-$is_admin_or_secretaire = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire"));
+$is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
+$is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"));
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
 if($is_admin_or_secretaire || $mediuser->_ref_function->compta_partagee) {

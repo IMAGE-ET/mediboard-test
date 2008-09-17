@@ -80,9 +80,6 @@ else {
 	  $patient_prenom = $patVitale->prenom;
 	  mbSetValueToSession("nom", $patVitale->nom);
 	  mbSetValueToSession("prenom", $patVitale->prenom);
-	//  $patient_day    = $patVitale->_jour;
-	//  $patient_month  = $patVitale->_mois;
-	//  $patient_year   = $patVitale->_annee;
 	  $patient_naissance = "on";
 	  mbSetValueToSession("naissance", "on");
 	  $patVitale->loadFromIdVitale();

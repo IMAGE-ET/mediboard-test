@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 
@@ -58,7 +58,7 @@ $mediuserSel->load(mbGetValueFromGetOrSession("user_id"));
 $smarty = new CSmartyDP();
 
 $smarty->assign("tabProfil"    , $tabProfil    );
-$smarty->assign("utypes"       , $utypes       );
+$smarty->assign("utypes"       , CUser::$types );
 $smarty->assign("banques"      , $banques      );
 $smarty->assign("mediuserSel"  , $mediuserSel  );
 $smarty->assign("profiles"     , $profiles     );

@@ -68,15 +68,15 @@ class CModule extends CMbObject {
 		
 		$tabClass = array();
 		foreach ($listClass as $class) {
-	  		$object = new $class;
-	  		if (!$object->_ref_module) {
-	  			continue;
-	  		}
-	  		if ($object->_ref_module->mod_name == $module) {
-	  			$tabClass[] = $object->_class_name;
-	  		}
-	  	}
-	  	return $tabClass;
+  		$object = new $class;
+  		if (!$object->_ref_module) {
+  			continue;
+  		}
+  		if ($object->_ref_module->mod_name == $module) {
+  			$tabClass[] = $object->_class_name;
+  		}
+  	}
+  	return $tabClass;
 	}
   
   function getSpec() {
@@ -379,16 +379,6 @@ class CModule extends CMbObject {
     $this->mod_id = $temp;
     
     $this->reorder();
-  }
-// overridable functions
-  function moduleInstall() {
-    return null;
-  }
-  function moduleRemove() {
-    return null;
-  }
-  function moduleUpgrade() {
-    return null;
   }
 }
 

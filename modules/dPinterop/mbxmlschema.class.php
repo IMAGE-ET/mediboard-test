@@ -8,11 +8,6 @@
 */
 
 class CMbXMLSchema extends CMbXMLDocument {
-  
-  function __construct() {
-    parent::__construct();
-  }
-  
   function addSchemaPart($filePath) {
     $schemaPart = new DomDocument;
     $schemaPart->load($filePath);

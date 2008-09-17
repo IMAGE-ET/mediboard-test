@@ -45,7 +45,7 @@
         <tr>
           <th class="title">
             {{$patient->_view}} -
-            {{$patient->_naissance}}
+            {{mb_value object=$patient field=naissance}}
             ({{$patient->_age}} ans)
           </th>
         </tr>

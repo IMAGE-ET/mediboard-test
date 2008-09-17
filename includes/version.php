@@ -1,7 +1,5 @@
 <?php
 
-global $version;
-
 // Global system version
 $version = array (
   // Manual numbering
@@ -10,8 +8,9 @@ $version = array (
   "patch" => 0,
   
   // Automated numbering (should be incremented at each commit)
-  "build" => 258,
+  "build" => 259,
 );
 
-$version["string"] = join($version, ".");
+$version["string"] = implode(".", $version);
+
 ?>

@@ -30,12 +30,8 @@
 	</tr>
 
   <tr>
-    <th>{{mb_label object=$patient field="naissance" defaultFor="_jour"}}</th>
-    <td>
-      {{mb_field object=$patient field="_jour" tabindex="105" onkeyup="followUp(event)" onchange="copyIdentiteAssureValues(this)"}}
-      {{mb_field object=$patient field="_mois" tabindex="106" onkeyup="followUp(event)" onchange="copyIdentiteAssureValues(this)"}}
-      {{mb_field object=$patient field="_annee" tabindex="107" onblur="copyIdentiteAssureValues(this)"}}
-    </td>
+    <th>{{mb_label object=$patient field="naissance"}}</th>
+    <td>{{mb_field object=$patient field="naissance" tabindex="105" onchange="copyIdentiteAssureValues(this)"}}</td>
 	</tr>
 
   <tr>

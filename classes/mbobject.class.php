@@ -188,8 +188,6 @@ class CMbObject {
       $this->_ref_files = $file->loadFilesForObject($this);
       return count($this->_ref_files);
     }
-
-    return;
   }
 
   function loadRefsDocs() {
@@ -201,8 +199,6 @@ class CMbObject {
       $this->_ref_documents = $document->loadMatchingList($order);
       return count($this->_ref_documents);
     }
-    
-    return;
   }
   
   function loadRefsFilesAndDocs() {
@@ -267,14 +263,8 @@ class CMbObject {
    * @return boolean
    */
   function fieldModified($field, $value = null) {
-      
-    // Field is not valued
-    if ($this->$field === null) {
-      return false;
-    }
-    
-    // Nothing in base
-    if (!$this->_id) {
+    // Field is not valued or Nothing in base
+    if ($this->$field === null || !$this->_id) {
       return false;
     }
     
@@ -305,13 +295,8 @@ class CMbObject {
    * @param field string Field name
    */
   function completeField($field) {
-    // Field is valued
-    if ($this->$field !== null) {
-      return;
-    }
-    
-    // Nothing in base
-    if (!$this->_id) {
+    // Field is valued or Nothing in base
+    if ($this->$field !== null || !$this->_id) {
       return;
     }
     
@@ -443,8 +428,7 @@ class CMbObject {
       return self::$objectCache[$this->_class_name][$id];
     }
     
-    $this->load($id);
-    return $this;
+    return $this->load($id);
   }
   
   /**
@@ -487,7 +471,8 @@ class CMbObject {
     $request->setLimit($limit);
 
     $this->updateDBFields();
-    foreach($this->getDBFields() as $key => $value) {
+    $db_fields = $this->getDBFields();
+    foreach($db_fields as $key => $value) {
       if ($value !== null) {        
         $request->addWhereClause($key, "= '$value'");
       }
@@ -507,7 +492,8 @@ class CMbObject {
     $request->setLimit($limit);
 
     $this->updateDBFields();
-    foreach($this->getDBFields() as $key => $value) {
+    $db_fields = $this->getDBFields();
+    foreach($db_fields as $key => $value) {
       if ($value !== null) {
         $request->addWhereClause($key, "= '$value'");
       }
@@ -581,8 +567,7 @@ class CMbObject {
   }
   
   function loadListByReq($request) {
-    $result = $this->loadQueryList($request->getRequest($this));
-  	return $result;
+  	return $this->loadQueryList($request->getRequest($this));
   }
   
   /**
@@ -756,33 +741,6 @@ class CMbObject {
     }
     
     return $msg;
-  }
-  
-  
-  /**
-   * Aggregate a birthdate from date parts
-   *
-   * @param string $birthdateField
-   * @param string $partFieldPrefix
-   */
-  function updateDBBirthDate($birthdateField, $partFieldPrefix) {
-    $anneeField = $partFieldPrefix . "_annee";
-    $moisField  = $partFieldPrefix . "_mois";
-    $jourField  = $partFieldPrefix . "_jour";
-    
-    if ($this->$anneeField === null) return;
-    if ($this->$moisField  === null) return;
-    if ($this->$jourField  === null) return;
-
-    if ($this->$anneeField === "" && $this->$moisField === "" && $this->$jourField === "") {
-      $this->$birthdateField = "";
-      return;
-    }
-
-    $this->$birthdateField = 
-      $this->$anneeField . "-" .
-      $this->$moisField . "-" .
-      $this->$jourField;
   }
 
   /**

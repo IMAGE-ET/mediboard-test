@@ -27,8 +27,8 @@ class CPaysInsee extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["numerique"] = "numchar length|3";
-    $specs["alpha_2"   ] = "str length|2";
-    $specs["alpha_3"   ] = "str length|3";
+    $specs["alpha_2"  ] = "str length|2";
+    $specs["alpha_3"  ] = "str length|3";
     $specs["nom_fr"   ] = "str";
     $specs["nom_ISO"  ] = "str";
     return $specs;
@@ -41,28 +41,9 @@ class CPaysInsee extends CMbObject {
    */
   function getPaysInfo($nom, $info) {
     self::connect();
-    $query = "SELECT `$info` FROM pays" .
-      "\nWHERE nom_fr = %";
+    $query = "SELECT `$info` FROM pays WHERE nom_fr = %";
     
     return self::$ds->loadResult(self::$ds->prepare($query, $nom));
-  }
-  
-  /**
-   * Trouve le code à 2 lettres d'un pays
-   * @param string $pays nom du pays
-   * @return string
-   */
-  function getPaysAlpha2ForNom($nom) {
-    return self::getPaysInfo($nom, "alpha_2");
-  }
-
-  /**
-   * Trouve le nom du pays pour un code à 2 lettres
-   * @param string $pays nom du pays
-   * @return string
-   */
-  function getPaysNomForAlpha2($pays) {
-    return self::getPaysInfo($pays, "alpha_2");
   }
 }
 ?>

@@ -390,6 +390,25 @@ Object.extend(ElementChecker, {
         this.addError("date", "N'a pas un format de date correct");
     },
     
+    birthDate: function() {
+      var values = /^(\d{2})(\d{2})(\d{4})$/(this.sValue);
+      
+      if (parseInt(values[1]) > 31 || parseInt(values[2]) > 12) {
+        var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
+          this.sLabel,
+          values[1],
+          values[2]
+        );
+        
+        // Attention, un seul printf() ne fonctionne pas
+        msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
+        
+        if (!confirm(msg)) {
+          this.addError("birthDate", "N'a pas un format de date correct");
+        }
+      }
+    },
+    
     // time
     time: function() {
       if(!this.sValue.match(/^(\d{1,2}):?(\d{1,2}):?(\d{1,2})?$/))

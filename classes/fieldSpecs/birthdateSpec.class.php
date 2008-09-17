@@ -33,14 +33,17 @@ class CBirthDateSpec extends CMbFieldSpec {
   
   function checkProperty($object){
     $fieldName = $this->fieldName;
-    $propValue = $object->$fieldName;
+    $propValue = &$object->$fieldName;
     
     $matches = array();
-    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue, $matches)) {
+    if (preg_match ("/^([0-9]{2})([0-9]{2})([0-9]{4})$/", $propValue, $matches)) {
+      $propValue = sprintf("%04s-%02s-%02s", $matches[3], $matches[2], $matches[1]);
+    }
+    
+    if (!preg_match ("/^([0-9]{4})-([0-9]{1,2})-([0-9]{1,2})$/", $propValue)) {
       return "format de date invalide";
     }
-  
-    //$propValue = format("%04s-%02s-%02s", $matches[1], $matches[2], $matches[3]);
+    
     return null;
   }
   

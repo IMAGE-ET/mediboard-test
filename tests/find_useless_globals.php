@@ -26,11 +26,9 @@ Il peut y avoir des variables inutiles non reperées, mais il ne peut pas y avoir
 <?php
 $list = array_merge(
   glob ("../*.php"),
-  glob ("../classes/*.php"),
-  glob ("../includes/*.php"),
-  glob ("../legacy/*.php"),
-  glob ("../locales/*.php"),
-  glob ("../modules/*/*.php")
+  glob ("../*/*.php"),
+  glob ("../*/*/*.php"),
+  glob ("../*/*/*/*.php")
 );
 
 $n = 0;

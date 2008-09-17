@@ -35,7 +35,7 @@
         {{/if}}
         <tr>
           <td colspan="2">
-            Né{{if $patient->sexe != "m"}}e{{/if}} le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
+            Né{{if $patient->sexe != "m"}}e{{/if}} le {{mb_value object=$patient field=naissance}}
             ({{$patient->_age}} ans)
             - sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}<br />
             {{if $patient->profession}}Profession : {{$patient->profession}}<br />{{/if}}          

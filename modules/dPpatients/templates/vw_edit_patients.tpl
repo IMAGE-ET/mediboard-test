@@ -18,43 +18,6 @@ Intermax.ResultHandler["Lire Vitale"] = function() {
   url.redirect();
 }
 
-function checkDateNaissance(){
-  var oForm = document.editFrm;
-  var oJour = oForm._jour.value;
-  var oMois = oForm._mois.value;
-  var oAnnee = oForm._annee.value;
-  
-  if(!oJour || !oMois || !oAnnee){
-    alert("La date de naissance est obligatoire, veuillez la renseigner");
-    return false;
-  }
-  return true;
-}
-
-function checkNaissance(fieldPrefix) {
-  var oForm = document.editFrm;
-  var oJour = oForm.elements[fieldPrefix + "_jour"];
-  var oMois = oForm.elements[fieldPrefix + "_mois"];
-  var oLabel = getLabelFor(oJour);
-
-  if (oJour.value > 31 || oMois.value > 12) {
-  	var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",
-  		oLabel.title,
-  		oJour.value,
-  		oMois.value
-  	);
-		
-		// Attention, un seul printf() ne fonctionne pas
-		msg += ".\n\nVoulez vous néanmoins sauvegarder ?";
-		
-    if (!confirm(msg)) {
-      return false;
-    }
-  } 
-
-  return true;
-}
-
 function copyAssureValues(element) {
 	// Hack pour gérer les form fields
 	var sPrefix = element.name[0] == "_" ? "_assure" : "assure_";
@@ -71,11 +34,7 @@ function copyIdentiteAssureValues(element) {
 }
 
 function confirmCreation(oForm){
-  // Si date de naissance obligatoire
-  if ({{if $dPconfig.dPpatients.CPatient.date_naissance}}!checkDateNaissance() || {{/if}}
-      !checkNaissance("") || 
-      !checkNaissance("_assure") || 
-      !checkForm(oForm)) {
+  if (!checkForm(oForm)) {
     return false;
   }
   

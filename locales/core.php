@@ -1,7 +1,7 @@
 <?php
 
-global $dPconfig, $shm;
-$root_dir = $dPconfig["root_dir"];
+global $shm;
+$root_dir = CAppUI::conf("root_dir");
 $locale = $AppUI->user_prefs["LOCALE"];
 $shared_name = "locales-$locale";
 

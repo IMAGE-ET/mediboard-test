@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $mp_status;
+global $can;
 
 $can->needsRead();
 
@@ -32,7 +32,7 @@ $smarty = new CSmartyDP();
 $smarty->assign("message"      , $message      );
 $smarty->assign("messages"     , $messages     );
 $smarty->assign("modules"      , $modules      );
-$smarty->assign("mp_status"    , $mp_status    );
+$smarty->assign("mp_status"    , CMessage::$status);
 $smarty->assign("filter_status", $filter_status);
 
 $smarty->display("view_messages.tpl");

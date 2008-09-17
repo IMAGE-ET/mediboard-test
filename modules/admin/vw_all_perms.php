@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $g, $m, $utypes;
+global $AppUI, $can, $g, $m;
 
 $can->needsAdmin();
 

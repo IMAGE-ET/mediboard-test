@@ -7,7 +7,7 @@
 * @author Thomas Despoix
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $m;
 $can->needsEdit();
 
 // Edite t'on un tarif ?
@@ -31,7 +31,7 @@ $tarifMediuser->load($mediuser->_id);
 $listeTarifsChir = null;
 
 $is_praticien           = $mediuser->isPraticien();
-$is_admin_or_secretaire = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire"));
+$is_admin_or_secretaire = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire"));
 
 if($mediuser->isPraticien()) {
   $is_praticien = 1;
@@ -64,7 +64,7 @@ $listeTarifsSpe = new CTarif();
 $listeTarifsSpe = $listeTarifsSpe->loadList($where);
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-$listPrat = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
+$listPrat = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
   $mediuser->loadPraticiens(PERM_READ) :
   array($mediuser->_id => $mediuser);
   

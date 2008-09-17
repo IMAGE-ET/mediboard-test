@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 /**
  * The CPatient Class
  */
@@ -103,10 +101,6 @@ class CPatient extends CMbObject {
   var $_static_cim10 = null;
 
   // Form fields
-  var $_naissance   = null;
-  var $_jour        = null;
-  var $_mois        = null;
-  var $_annee       = null;
   var $_age         = null;
   var $_article     = null;
   var $_longview    = null;
@@ -114,12 +108,6 @@ class CPatient extends CMbObject {
   // Vitale
   var $_bind_vitale = null;
   var $_id_vitale   = null;
-  
-  // Assuré
-  var $_assure_naissance   = null;
-  var $_assure_jour        = null;
-  var $_assure_mois        = null;
-  var $_assure_annee       = null;
   
   // Navigation Fields
   var $_dossier_cabinet_url = null;
@@ -159,11 +147,11 @@ class CPatient extends CMbObject {
   }
   
   function getBackRefs() {
-      $backRefs = parent::getBackRefs();
-      $backRefs["consultations"] = "CConsultation patient_id";
-      $backRefs["prescriptions_labo"] = "CPrescriptionLabo patient_id";
-      $backRefs["sejours"] = "CSejour patient_id";
-     return $backRefs;
+    $backRefs = parent::getBackRefs();
+    $backRefs["consultations"] = "CConsultation patient_id";
+    $backRefs["prescriptions_labo"] = "CPrescriptionLabo patient_id";
+    $backRefs["sejours"] = "CSejour patient_id";
+    return $backRefs;
   }
  
   function getSpecs() {
@@ -195,9 +183,9 @@ class CPatient extends CMbObject {
     
     
     if(CAppUI::conf("dPpatients CPatient date_naissance")){
-      $specs["naissance"]         = "notNull birthDate";
+      $specs["naissance"]       = "notNull birthDate mask|99/99/9999";
     } else {
-      $specs["naissance"]         = "birthDate";  
+      $specs["naissance"]       = "birthDate mask|99/99/9999";  
     }
     
     $specs["rques"]             = "text";
@@ -218,26 +206,26 @@ class CPatient extends CMbObject {
     $specs["lieu_naissance"]    = "str";
     $specs["profession"]        = "str";
       
-    $specs["employeur_nom"]      = "str confidential";
-    $specs["employeur_adresse"]  = "text";
-    $specs["employeur_cp"]       = "numchar length|5";
-    $specs["employeur_ville"]    = "str confidential";
-    $specs["employeur_tel"]      = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["employeur_urssaf"]   = "numchar length|11 confidential";
+    $specs["employeur_nom"]     = "str confidential";
+    $specs["employeur_adresse"] = "text";
+    $specs["employeur_cp"]      = "numchar length|5";
+    $specs["employeur_ville"]   = "str confidential";
+    $specs["employeur_tel"]     = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["employeur_urssaf"]  = "numchar length|11 confidential";
 
-    $specs["prevenir_nom"]       = "str confidential";
-    $specs["prevenir_prenom"]    = "str";
-    $specs["prevenir_adresse"]   = "text";
-    $specs["prevenir_cp"]        = "numchar length|5";
-    $specs["prevenir_ville"]     = "str confidential";
-    $specs["prevenir_tel"]       = "numchar confidential length|10 mask|99S99S99S99S99";
-    $specs["prevenir_parente"]   = "enum list|conjoint|enfant|ascendant|colateral|divers";
+    $specs["prevenir_nom"]      = "str confidential";
+    $specs["prevenir_prenom"]   = "str";
+    $specs["prevenir_adresse"]  = "text";
+    $specs["prevenir_cp"]       = "numchar length|5";
+    $specs["prevenir_ville"]    = "str confidential";
+    $specs["prevenir_tel"]      = "numchar confidential length|10 mask|99S99S99S99S99";
+    $specs["prevenir_parente"]  = "enum list|conjoint|enfant|ascendant|colateral|divers";
     
     $specs["assure_nom"]               = "str confidential";
     $specs["assure_prenom"]            = "str";
     $specs["assure_nom_jeune_fille"]   = "str confidential";
     $specs["assure_sexe"]              = "enum list|m|f|j default|m";
-    $specs["assure_naissance"]         = "birthDate confidential";
+    $specs["assure_naissance"]         = "birthDate confidential mask|99/99/9999";
     $specs["assure_adresse"]           = "text confidential";
     $specs["assure_ville"]             = "str confidential";
     $specs["assure_cp"]                = "numchar minLength|4 maxLength|5 confidential";
@@ -250,12 +238,6 @@ class CPatient extends CMbObject {
     $specs["assure_rques"]             = "text";
     $specs["assure_matricule"]         = "code insee confidential mask|9S99S99S99S999S999S99";
     
-    $specs["_jour"]                    = "num length|2 min|01 max|99";
-    $specs["_mois"]                    = "num length|2 min|01 max|99";
-    $specs["_annee"]                   = "num length|4 min|1850";
-    $specs["_assure_jour"]             = "num length|2 min|01 max|99";
-    $specs["_assure_mois"]             = "num length|2 min|01 max|99";
-    $specs["_assure_annee"]            = "num length|4 min|1850";
     $specs["_id_vitale"]               = "num";
     
     return $specs;
@@ -452,26 +434,8 @@ class CPatient extends CMbObject {
     
     $this->_nom_naissance = $this->nom_jeune_fille ? $this->nom_jeune_fille : $this->nom; 
     $this->_prenoms = array($this->prenom);
-
-    // Date de naissance et âge
-    if ($this->naissance && $this->naissance != "0000-00-00") {
-      $aNaissance = split("-", $this->naissance);
-      $this->_jour  = $aNaissance[2];
-      $this->_mois  = $aNaissance[1];
-      $this->_annee = $aNaissance[0];
-      $this->_naissance = mbDateToLocale($this->naissance);
-    }
   
     $this->evalAge();
-
-    // Assuré
-    if ($this->assure_naissance && $this->assure_naissance != "0000-00-00") {
-      $aNaissance = split("-", $this->assure_naissance);
-      $this->_assure_jour  = $aNaissance[2];
-      $this->_assure_mois  = $aNaissance[1];
-      $this->_assure_annee = $aNaissance[0];
-      //$this->_assure_naissance = mbDateToLocale($this->assure_naissance);
-    }
     
     if ($this->_age != "??" && $this->_age <= 15){
       $this->_shortview = "Enf.";
@@ -512,11 +476,16 @@ class CPatient extends CMbObject {
       $this->_age = "??";
       return;
     }
+    
+    $naissance = explode("-", $this->naissance);
+    $jourN  = $naissance[2];
+    $moisN  = $naissance[1];
+    $anneeN = $naissance[0];
 
-    $this->_age = $annee - $this->_annee;
+    $this->_age = $annee - $anneeN;
 
     // Ajustement en fonction des mois et des jours
-    if ($mois < $this->_mois || ($jour < $this->_jour && $mois == $this->_mois)) {
+    if ($mois < $moisN || ($jour < $jourN && $mois == $moisN)) {
       $this->_age--;
     }
   }
@@ -532,10 +501,15 @@ class CPatient extends CMbObject {
     if ($this->naissance == "0000-00-00" || !$this->naissance) {
       return 0;
     }
+    
+    $naissance = explode("-", $this->naissance);
+    $jourN  = $naissance[2];
+    $moisN  = $naissance[1];
+    $anneeN = $naissance[0];
 
-    $nbMois = 12*($annee - $this->_annee);
-    $nbMois += $mois - $this->_mois;
-    if($jour < $this->_jour && $mois == $this->_mois) {
+    $nbMois = 12*($annee - $anneeN);
+    $nbMois += $mois - $moisN;
+    if($jour < $jourN && $mois == $moisN) {
       $nbMois--;
     }
     return $nbMois;
@@ -582,18 +556,6 @@ class CPatient extends CMbObject {
     if ($this->cp == "00000") {
       $this->cp = "";
     }
-
-    if ($this)
-    if(($this->_annee === "") && ($this->_mois === "") && ($this->_jour === "")) {
-      $this->naissance = "";
-    }
-    
-  	if ($this->_annee && $this->_mois && $this->_jour) {
-      $this->naissance = 
-        $this->_annee . "-" .
-        $this->_mois  . "-" .
-        $this->_jour;
-  	}
   	
     if ($this->assure_nom) {
   	  $this->assure_nom = strtoupper($this->assure_nom);
@@ -610,13 +572,6 @@ class CPatient extends CMbObject {
     if ($this->assure_cp == "00000") {
       $this->assure_cp = "";
     }
-
-  	if ($this->_assure_annee && $this->_assure_mois && $this->_assure_jour) {
-      $this->assure_naissance = 
-        $this->_assure_annee . "-" .
-        $this->_assure_mois  . "-" .
-        $this->_assure_jour;
-  	}  	
   }
   
   // Backward references
@@ -841,7 +796,7 @@ class CPatient extends CMbObject {
 	    $this->_urlDHEParams["patPrenom"]       = $this->prenom;
 	    $this->_urlDHEParams["patNomJF"]        = $this->nom_jeune_fille;
 	    $this->_urlDHEParams["patSexe"]         = $this->sexe == "m" ? "1" : "2";
-	    $this->_urlDHEParams["patDateNaiss"]    = $this->_naissance;
+	    $this->_urlDHEParams["patDateNaiss"]    = mbDateToLocale($this->naissance);
 	    $this->_urlDHEParams["patAd1"]          = $this->adresse;
 	    $this->_urlDHEParams["patCP"]           = $this->cp;
 	    $this->_urlDHEParams["patVille"]        = $this->ville;

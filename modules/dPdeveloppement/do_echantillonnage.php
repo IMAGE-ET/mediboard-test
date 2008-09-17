@@ -274,9 +274,7 @@ for($i=1; $i<=$_nb_pat; $i++){
   $tabFields = array("sexe"   => $sexe,
                       "prenom" => $aPrenoms[$sexe],
                       "nom"    => $aNomFamille,
-                      "_jour"  => rand(1,28),
-                      "_mois"  => rand(1,12),
-                      "_annee" => rand(1900,$annee_max),
+                      "naissance" => rand(1,28).'-'.rand(1,12).'-'.rand(1900,$annee_max),
                       "assure_cp" => rand(1000,99999),
                       "cp" => rand(10000,95000),
                       "rques"  => "[DEMO]");

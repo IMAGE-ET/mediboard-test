@@ -422,7 +422,7 @@ class CMbFieldSpec {
       $aHtml[] = '<script type="text/javascript">Main.add(function() { regFieldCalendar("'.$form.'", "'.$field.'", '.$time.'); } ); </script>';
 		}
     
-    return join("\n", $aHtml);
+    return implode("\n", $aHtml);
   }
 
   function getFormHtmlElement($object, $params, $value, $className){
@@ -438,9 +438,7 @@ class CMbFieldSpec {
    * @param $object object bound to property
    * @return string Store-like message
    */
-  function checkProperty($object) {
-    return;
-  }
+  function checkProperty($object) {}
 
   // Return a sample value.
   //If consistent, the random value stay the same for a given initial value
@@ -452,12 +450,9 @@ class CMbFieldSpec {
     }
   }
 
-  function getDBSpec(){
-    return null;
-  }
+  function getDBSpec(){}
 
-  function checkValues(){
-  }
+  function checkValues(){}
 }
 
 CMbFieldSpec::$chars  = range("a","z");

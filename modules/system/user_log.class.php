@@ -7,8 +7,6 @@
 * @author Romain Ollivier
 */
 
-global $AppUI;
-
 /**
  * The CUserLog Class
  */
@@ -46,23 +44,22 @@ class CUserLog extends CMbMetaObject {
     $specs["type"]         = "notNull enum list|create|store|delete";
     $specs["fields"]       = "text";
 
-    $specs["_date_min"] 		  = "dateTime";
-    $specs["_date_max"] 		  = "dateTime moreEquals|_date_min";
-    
+    $specs["_date_min"]    = "dateTime";
+    $specs["_date_max"]    = "dateTime moreEquals|_date_min";
     return $specs;
   }
   
   function updateFormFields() {
     parent::updateFormFields();
     if ($this->fields) {
-      $this->_fields = split(" ", $this->fields);
+      $this->_fields = explode(" ", $this->fields);
     }
   }
   
   function updateDBFields() {
     parent::updateDBFields();
     if ($this->_fields) {
-      $this->fields = join($this->_fields, " ");
+      $this->fields = implode(" ", $this->_fields);
     }
   }
   

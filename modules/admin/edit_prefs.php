@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can;
 $ds = CSQLDataSource::get("std");
 // Utilisateur demandé
 $user_id = mbGetValueFromGet("user_id" , 0);

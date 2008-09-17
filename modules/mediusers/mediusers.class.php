@@ -7,10 +7,7 @@
  *  @author Romain Ollivier
  */
 
-global $utypes, $utypes_flip;
 CAppUI::requireModuleClass("admin");
-
-$utypes_flip = array_flip($utypes);
 
 /**
  * The CMediusers class
@@ -211,7 +208,7 @@ class CMediusers extends CMbObject {
   function updateFormFields() {
      
     parent::updateFormFields();
-    global $utypes;
+
     $user = new CUser();
     if($result = $user->load($this->user_id)) {
       $this->_user_type       = $user->user_type;
@@ -412,8 +409,6 @@ class CMediusers extends CMbObject {
   }
    
   function store() {
-    global $AppUI;
-
     $this->updateDBFields();
     $this->updateSpecs();
 
@@ -501,8 +496,6 @@ class CMediusers extends CMbObject {
   }
 
   function loadListFromType($user_types = null, $permType = PERM_READ, $function_id = null, $name = null) {
-    global $utypes_flip;
-
     $functions = $this->loadFonctions($permType);
 
     // Filter on a single function
@@ -524,6 +517,7 @@ class CMediusers extends CMbObject {
       $where["users.user_last_name"] = "LIKE '$name%'";
     }
 
+    $utypes_flip = array_flip(CUser::$types);
     if (is_array($user_types)) {
       foreach ($user_types as $key => $value) {
         $user_types[$key] = $utypes_flip[$value];
@@ -614,8 +608,7 @@ class CMediusers extends CMbObject {
 
   function isFromType($user_types) {
     // Warning: !== operator
-    global $utypes;
-    return array_search(@$utypes[$this->_user_type], $user_types) !== false;
+    return array_search(@CUser::$types[$this->_user_type], $user_types) !== false;
   }
 
   /**

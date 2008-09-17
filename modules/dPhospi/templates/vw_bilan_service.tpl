@@ -114,7 +114,7 @@ changeBox = function(oCheckbox, cat_id, oTokenField){
 	    </span>
 
 	    <strong>{{$patient->_view}}</strong>
-	    Né(e) le {{$patient->_naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
+	    Né(e) le {{mb_value object=$patient field=naissance}} - ({{$patient->_age}} ans) - ({{$patient->_ref_constantes_medicales->poids}} kg)
 	    <br />
 	    {{assign var=operation value=$sejour->_ref_last_operation}}
 	    Intervention: {{$operation->libelle}} le {{$operation->_ref_plageop->date|date_format:"%d/%m/%Y"}}

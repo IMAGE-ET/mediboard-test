@@ -7,7 +7,7 @@
 * @author Romain Ollivier
 */
 
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $m;
 
 $can->needsRead();
 
@@ -45,7 +45,7 @@ $smarty->assign("user_last_name" , $user_last_name );
 $smarty->assign("user_first_name", $user_first_name);
 $smarty->assign("user_username"  , $user_username  );
 $smarty->assign("user_type"      , $user_type      );
-$smarty->assign("utypes"         , $utypes         );
+$smarty->assign("utypes"         , CUser::$types   );
 $smarty->assign("users"          , $users          );
 $smarty->assign("user"           , $user           );
 $smarty->assign("specs"          , $user->getSpecs());

@@ -30,12 +30,8 @@
   </tr>
   
   <tr>
-    <th>{{mb_label object=$patient field="assure_naissance" defaultFor="_assure_jour"}}</th>
-    <td>
-      <input tabindex="405" type="text" class="num length|2" name="_assure_jour"  size="2" maxlength="2" value="{{if $patient->_assure_jour != "00"}}{{$patient->_assure_jour}}{{/if}}" onkeyup="followUp(event)" /> -
-      <input tabindex="406" type="text" class="num length|2" name="_assure_mois"  size="2" maxlength="2" value="{{if $patient->_assure_mois != "00"}}{{$patient->_assure_mois}}{{/if}}" onkeyup="followUp(event)" /> -
-      <input tabindex="407" type="text" class="num length|4" name="_assure_annee" size="4" maxlength="4" value="{{if $patient->_assure_annee != "0000"}}{{$patient->_assure_annee}}{{/if}}" />
-    </td>
+    <th>{{mb_label object=$patient field="assure_naissance"}}</th>
+    <td>{{mb_field object=$patient field="assure_naissance" tabindex="405"}}</td>
   </tr>
 
   <tr>

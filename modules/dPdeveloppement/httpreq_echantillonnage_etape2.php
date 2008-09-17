@@ -7,7 +7,7 @@
 * @author Sébastien Fillonneau
 */
 
-global $AppUI, $m, $utypes_flip;
+global $AppUI, $m;
 
 $group_id = mbGetValueFromGet("group_id", null);
 

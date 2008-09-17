@@ -6,7 +6,7 @@
   <tr><th class="category" colspan="2">Informations sur le patient</th></tr>
   
   <tr><th>Nom / Prenom: </th><td>{{$patient->_view}}</td></tr>
-  <tr><th>Date de naissance / Sexe: </th><td>né(e) le {{$patient->_jour}}/{{$patient->_mois}}/{{$patient->_annee}}
+  <tr><th>Date de naissance / Sexe: </th><td>né(e) le {{mb_value object=$patient field=naissance}}
   de sexe {{if $patient->sexe == "m"}} masculin {{else}} féminin {{/if}}</td></tr>
   <tr><th>Incapable majeur: </th><td>{{tr}}CPatient.incapable_majeur.{{$patient->incapable_majeur}}{{/tr}}</td></tr>
   <tr><th>Telephone: </th><td>{{mb_value object=$patient field=tel}}</td></tr>

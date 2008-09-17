@@ -228,14 +228,14 @@ class CMbArray {
    * @return string String attributes  like 'key1="value1" ... keyN="valueN"'
    **/
   static function makeXmlAttributes($array) {
-    $return = array();
+    $return = '';
     foreach ($array as $key => $value) {
       if ($value !== null) {
-      $value = trim(htmlspecialchars($value));
-      $return[] = "$key=\"$value\"";
+        $value = trim(htmlspecialchars($value));
+        $return .= "$key=\"$value\" ";
       }
     }
-    return join($return, " ");
+    return $return;
   }
   
   /**

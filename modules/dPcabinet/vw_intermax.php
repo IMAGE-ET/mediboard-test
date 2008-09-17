@@ -82,8 +82,7 @@ $mediuser->load($AppUI->user_id);
 $mediuser->loadRefFunction();
 
 // Liste des praticiens du cabinet -> on ne doit pas voir les autres...
-global $utypes;
-$prats = in_array($utypes[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
+$prats = in_array(CUser::$types[$mediuser->_user_type], array("Administrator", "Secrétaire")) ?
   $mediuser->loadPraticiens(PERM_READ) :
   array($mediuser->_id => $mediuser);
 foreach($prats as $_prat) {

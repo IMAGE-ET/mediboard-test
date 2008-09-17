@@ -17,9 +17,7 @@ class CMbBackSpec {
   function __construct($name, $backProp) {
     $this->name = $name;
 
-    $backPropParts = split(" ", $backProp);
-    $this->class = $backPropParts[0];
-    $this->field = $backPropParts[1];
+    list($this->class, $this->field) = explode(" ", $backProp);
     
     $backObject = new $this->class;
     $this->_initiator = $backObject->_specs[$this->field]->class;

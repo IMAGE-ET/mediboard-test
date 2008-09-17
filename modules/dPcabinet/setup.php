@@ -7,8 +7,6 @@
  * @author Romain Ollivier
  */
 
-global $utypes;
-
 class CSetupdPcabinet extends CSetup {
   
   function __construct() {
@@ -293,8 +291,7 @@ class CSetupdPcabinet extends CSetup {
     function setup_consultAnesth(){
       $ds = CSQLDataSource::get("std");
  
-      global $utypes;
-      $utypes_flip = array_flip($utypes);
+      $utypes_flip = array_flip(CUser::$types);
       $id_anesth = $utypes_flip["Anesthésiste"];
       $sql = "SELECT users.user_id" .
              "\nFROM users, users_mediboard" .

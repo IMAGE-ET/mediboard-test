@@ -16,18 +16,10 @@ class Chronometer {
   var $nbSteps = 0;
   
   var $report = array();
-    
-  function Chronometer() {
-  }
-  
-  function microtimeFloat() {
-    list($usec, $sec) = explode(" ", microtime());
-    return ((float)$usec + (float)$sec);
-  }
   
   function start() {
     $this->nbSteps++;
-    $this->step = microtime(true); //$this->microtimeFloat();
+    $this->step = microtime(true);
   }
   
   function stop($key = "") {

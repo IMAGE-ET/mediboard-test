@@ -20,13 +20,11 @@ SiblingsChecker = {
 
 	  var url = new Url;
 	  url.setModuleAction("dPpatients", "httpreq_get_siblings");
+	  
 	  url.addElement(oForm.patient_id);
 	  url.addElement(oForm.nom);
 	  url.addElement(oForm.prenom);
-	
-	  if (oForm._annee.value != "" && oForm._mois.value != "" && oForm._jour.value != "") {
-	    url.addParam("naissance", oForm._annee.value + "-" + oForm._mois.value + "-" + oForm._jour.value);
-	  }
+	  url.addElement(oForm.naissance);
 	  
 	  url.requestUpdate('systemMsg', { 
 	  	waitingText: "Vérification des doublons"

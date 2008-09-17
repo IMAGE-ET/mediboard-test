@@ -1,20 +1,11 @@
 <?php /* $Id$ */
 
 /**
- *	@package Mediboard
- *	@subpackage system
- *	@version $Revision$
+ *  @package Mediboard
+ *  @subpackage system
+ *  @version $Revision$
  *  @author Thomas Despoix
 */
-
-global $mp_status;
-
-$mp_status = array(
-  "all"     => "Tous les messages",
-  "past"    => "Déjà publiés",
-  "present" => "En cours de publication",
-  "future"  => "Publications à venir",
-);
 
 /**
  * Classe CMessage. 
@@ -22,7 +13,7 @@ $mp_status = array(
  */
 class CMessage extends CMbObject {
   // DB Table key
-	var $message_id = null;	
+  var $message_id = null; 
   
   // DB Fields
   var $deb     = null;
@@ -33,7 +24,14 @@ class CMessage extends CMbObject {
   var $module_id = null;
   
   var $_ref_module;
-	
+  
+  static $status = array (
+    "all"     => "Tous les messages",
+    "past"    => "Déjà publiés",
+    "present" => "En cours de publication",
+    "future"  => "Publications à venir",
+  );
+  
   function getSpec() {
     $spec = parent::getSpec();
     $spec->table = 'message';
@@ -42,7 +40,7 @@ class CMessage extends CMbObject {
   }
 
   function getSpecs() {
-  	$specs = parent::getSpecs();
+    $specs = parent::getSpecs();
     $specs["deb"]       = "notNull dateTime";
     $specs["fin"]       = "notNull dateTime";
     $specs["titre"]     = "notNull str maxLength|40";
@@ -79,13 +77,13 @@ class CMessage extends CMbObject {
     $this->_view = (($this->module_id)?'['.$this->_ref_module->_view.'] - ':''). $this->titre;
   }
   
-    function loadRefsFwd() {
-    	parent::loadRefsFwd();
-    	if ($this->module_id) {
-	    	$this->_ref_module = new CModule();
-	        $this->_ref_module->load($this->module_id);
-    	}
+  function loadRefsFwd() {
+    parent::loadRefsFwd();
+    if ($this->module_id) {
+      $this->_ref_module = new CModule();
+        $this->_ref_module->load($this->module_id);
     }
-  
+  }
 }
+
 ?>

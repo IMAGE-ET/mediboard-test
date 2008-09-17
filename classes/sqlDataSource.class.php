@@ -568,7 +568,7 @@ abstract class CSQLDataSource {
       return "IS NULL AND 0";
     }
     
-    $str = join($values, ", ");
+    $str = implode(", ", $values);
     return "IN ($str)";
   }
 
@@ -588,7 +588,7 @@ abstract class CSQLDataSource {
       return "IS NOT NULL AND 1";
     }
     
-    $str = join($values, ", ");
+    $str = implode(", ", $values);
     return "NOT IN ($str)";
   }
 }

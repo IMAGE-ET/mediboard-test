@@ -8,7 +8,7 @@
 */
 
 // !! Attention, régression importante si ajout de type de paiement
-global $AppUI, $can, $m, $utypes;
+global $AppUI, $can, $m;
 
 $ds = CSQLDataSource::get("std");
 $today = mbDate();
@@ -71,7 +71,7 @@ $where["consultation.patient_id"] = "IS NOT NULL";
 $where[] = "plageconsult.date >= '$filter->_date_min' AND plageconsult.date <= '$filter->_date_max'";
 // Tri sur les praticiens
 $listPrat = new CMediusers();
-$is_admin = in_array($utypes[$mediuser->_user_type], array("Administrator"));
+$is_admin = in_array(CUser::$types[$mediuser->_user_type], array("Administrator"));
 if($is_admin) {
   $listPrat = $listPrat->loadPraticiens(PERM_READ);
 } else {
