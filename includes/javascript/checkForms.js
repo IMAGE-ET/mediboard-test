@@ -82,9 +82,9 @@ var ElementChecker = {
 
   getErrorMessage: function() {
     var msg = '';
-    this.oErrors.each(function (error) {
+    for (error in this.oErrors) {
       msg += "   - "+error.message+"\n";
-    });
+    }
     return msg;
   },
   
@@ -391,7 +391,7 @@ Object.extend(ElementChecker, {
     },
     
     birthDate: function() {
-      var values = /^(\d{2})(\d{2})(\d{4})$/(this.sValue);
+      var values = /^(\d{2})(\d{2})(\d{4})$/.exec(this.sValue);
       
       if (parseInt(values[1]) > 31 || parseInt(values[2]) > 12) {
         var msg = printf("Le champ '%s' correspond à une date au format lunaire (jour '%s' et mois '%s')",

@@ -55,7 +55,7 @@ function confirmDeletionOffline(oForm, oFct, oOptions, oOptionsAjax) {
 function getLabelFor(oElement) {
   if (!oElement.form) return null;
   
-  var aLabels = oElement.form.select("label");
+  var aLabels = $(oElement.form).select("label");
   var iLabel = 0;
   while (oLabel = aLabels[iLabel++]) {
     if (oElement.id == oLabel.htmlFor) {
