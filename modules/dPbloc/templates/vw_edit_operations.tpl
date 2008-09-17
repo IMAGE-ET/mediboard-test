@@ -354,9 +354,7 @@
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
           <input type="hidden" name="_move" value="before" />
-          <button type="submit" class="notext" title="{{tr}}Up{{/tr}}">
-            <img src="images/icons/uparrow.png" width="12" height="12" alt="{{tr}}Up{{/tr}}" border="0" />
-          </button>
+          <button type="submit" class="up notext" title="{{tr}}Up{{/tr}}">{{tr}}Up{{/tr}}</button>
         </form><br />
         {{/if}}
         <form name="edit-del-{{$curr_op->operation_id}}" action="?m={{$m}}" method="post">
@@ -372,9 +370,7 @@
           <input type="hidden" name="dosql" value="do_planning_aed" />
           <input type="hidden" name="operation_id" value="{{$curr_op->operation_id}}" />
           <input type="hidden" name="_move" value="after" />
-          <button type="submit" class="notext" title="{{tr}}Down{{/tr}}">
-            <img src="images/icons/downarrow.png" width="12" height="12" alt="{{tr}}Down{{/tr}}" border="0" />
-          </button>
+          <button type="submit" class="down notext" title="{{tr}}Down{{/tr}}">{{tr}}Down{{/tr}}</button>
         </form><br />
         {{/if}}
       </td>

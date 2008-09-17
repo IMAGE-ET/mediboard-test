@@ -359,7 +359,8 @@ a.buttonsearch,
 a.buttonlock, 
 a.buttontick, 
 a.buttonchange, 
-a.buttondown,
+a.buttondown, 
+a.buttonup,
 a.buttonadd, 
 a.buttonremove,
 input[type=submit],
@@ -388,7 +389,8 @@ a.buttontick,
 a.buttonchange, 
 a.buttonremove, 
 a.buttonadd, 
-a.buttondown {
+a.buttondown, 
+a.buttonup {
 	padding-left: 22px;
 	padding-right: 4px;
 	padding-top: 1px;
@@ -507,6 +509,16 @@ a.buttondown {
 button.down:hover, 
 a.buttondown:hover {
   background-image: url(../tonkin/images/buttons/downover.png);
+}
+
+button.up, 
+a.buttonup {
+  background-image: url(../tonkin/images/buttons/up.png);
+}
+
+button.up:hover, 
+a.buttonup:hover {
+  background-image: url(../tonkin/images/buttons/upover.png);
 }
 
 button.change, 

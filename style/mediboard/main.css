@@ -220,7 +220,8 @@ a.buttontick,
 a.buttonchange, 
 a.buttonremove, 
 a.buttonadd, 
-a.buttondown {
+a.buttondown, 
+a.buttonup {
   color: #000;
   text-decoration: none;
   cursor: default;
@@ -251,7 +252,8 @@ a.buttonsearch:hover,
 a.buttonlock:hover 
 a.buttontick:hover, 
 a.buttonchange:hover, 
-a.buttondown:hover,
+a.buttondown:hover, 
+a.buttonup:hover,
 a.buttonadd:hover, 
 a.buttonremove:hover {
   background-color: #bbb;
@@ -355,6 +357,11 @@ button.tick, a.buttontick {
 
 button.down, a.buttondown {
   background-image: url(images/buttons/down.png);
+  padding-left: 18px;
+}
+
+button.up, a.buttonup {
+  background-image: url(images/buttons/up.png);
   padding-left: 18px;
 }
 

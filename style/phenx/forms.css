@@ -168,6 +168,10 @@ button.down:before, a.buttondown:before {
   content: url(images/buttons/down.png);
 }
 
+button.up:before, a.buttonup:before {
+  content: url(images/buttons/up.png);
+}
+
 button.change:before, a.buttonchange:before {
   content: url(images/buttons/change.png);
 }
