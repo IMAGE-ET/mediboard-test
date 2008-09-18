@@ -55,8 +55,8 @@ switch($cmd)
             WHERE operations.operation_id = '$id'";
     $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
-    break;*/
-  }
+    break;
+  }*/
   /*case "up" : {
     //On fait descendre celui qui est au dessus
     $sql = "SELECT operation_id" .
@@ -74,8 +74,8 @@ switch($cmd)
             WHERE operations.operation_id = '$id'";
     $exec = $ds->exec($sql);
     cleanOrderOp($plageop, "rank");
-    break;*/
-  }
+    break;
+  }*/
   /*case "rm" : {
   // l'operation n'occupe plus du tout la plage op : temps nul
   // la vraie suppression supprime l'op et reordonne...
