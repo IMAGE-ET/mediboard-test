@@ -52,21 +52,19 @@ function printIncident(ficheId){
 <table class="main">
   <tr>
     <td class="halfPane">
-
-      {{if $can->admin || $can->edit}}
       
     	<script type="text/javascript">
     		Main.add(function() { Control.Tabs.create('tab-incident', true) } );
     	</script>
 
       <ul id="tab-incident" class="control_tabs full_width">
-        {{if !$can->admin}}
+        {{if !$can->admin && $can->edit}}
         <li><a href="#CSATraiter">{{tr}}_CFicheEi_acc-ATT_CS{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
         <li class="linebreak"></li>
         <li><a href="#CSEnCours">{{tr}}_CFicheEi_acc-ATT_QUALITE{{/tr}} ({{$listFiches.ATT_QUALITE|@count}})</a></li>
         <li class="linebreak"></li>
         <li><a href="#CSAllEIHeader">{{tr}}_CFicheEi_acc-ALL_TERM{{/tr}} ({{$listFiches.ALL_TERM|@count}})</a></li>
-        {{else}}
+        {{elseif $can->admin}}
         <li><a href="#QualNewFiches">{{tr}}_CFicheEi_acc-VALID_FICHE{{/tr}} ({{$listFiches.VALID_FICHE|@count}})</a></li>
         <li class="linebreak"></li>
         <li><a href="#QualAttCS">{{tr}}_CFicheEi_acc-ATT_CS_adm{{/tr}} ({{$listFiches.ATT_CS|@count}})</a></li>
@@ -135,7 +133,6 @@ function printIncident(ficheId){
         {{assign var="listeFiches" value=$listFiches.AUTHOR}}
         {{include file="inc_ei_liste.tpl"}}
       </div>
-    {{/if}}
     </td>
     
     
