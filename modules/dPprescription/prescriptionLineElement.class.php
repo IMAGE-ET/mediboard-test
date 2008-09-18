@@ -127,7 +127,7 @@ class CPrescriptionLineElement extends CPrescriptionLine {
     	$this->_can_view_form_ald = 1;
     }
     // View Conditionnel
-    if($perm_edit && !$this->_protocole){
+    if($perm_edit){
     	$this->_can_view_form_conditionnel = 1;
     }
     // View signature praticien
