@@ -244,8 +244,8 @@
   </tr>
 
   <tr>
-    <th class="category" colspan="3">Blocage des operations</th>
-    <th class="category" colspan="3">Blocage des sejours</th>
+    <th class="category" colspan="3">Blocage des interventions</th>
+    <th class="category" colspan="3">Blocage des séjours</th>
   </tr>
   
   <tr>
