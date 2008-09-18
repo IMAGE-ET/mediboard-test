@@ -226,7 +226,7 @@ testPharma = function(line_id){
   <form action="?" method="get" name="searchProd" onsubmit="return false;">
     <select name="favoris" onchange="Prescription.addLine(this.value); this.value = '';" style="width: 170px;">
       <option value="">&mdash; Médicaments les plus utilisés</option>
-      {{if array_key_exists(medicament, $listFavoris)}}
+      {{if array_key_exists("medicament", $listFavoris)}}
       {{foreach from=$listFavoris.medicament item=curr_prod}}
       <option value="{{$curr_prod->code_cip}}">
         {{$curr_prod->libelle}}
