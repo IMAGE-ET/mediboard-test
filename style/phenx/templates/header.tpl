@@ -44,7 +44,7 @@
      		{{if $currModule->mod_ui_active && $currModule->_can->view}}    
         <li {{if $mod_name==$m}}class="selected"{{/if}}>
         <a href="?m={{$mod_name}}">
-          <img src="images/modules/{{$mod_name}}.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" />
+          <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" />
           {{tr}}module-{{$mod_name}}-court{{/tr}}
         </a>
         </li>
@@ -66,7 +66,7 @@
       
     	{{if !$dialog && !$offline}}
     	<div class="title">
-    	  <img src="./images/modules/{{$m}}.png" alt="Icone {{$m}}" height="24" width="24" />
+    	  <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" height="24" width="24" />
     	  <h1>{{tr}}module-{{$m}}-long{{/tr}}</h1>
       </div>
     	{{/if}}

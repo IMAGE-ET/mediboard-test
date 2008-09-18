@@ -83,7 +83,7 @@ var Menu = {
 		    {{else}}
 		    <a href="?m={{$currModule->mod_name}}" title="{{tr}}module-{{$currModule->mod_name}}-long{{/tr}}"class="textNonSelected">
 		    {{/if}}
-		      <img src="images/modules/{{$currModule->mod_name}}.png" alt="Icone {{$currModule->mod_name}}" />
+		      <img src="modules/{{$currModule->mod_name}}/images/icon.png" alt="Icone {{$currModule->mod_name}}" />
 		      {{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
 		    </a>
 	    {{/if}}
@@ -115,7 +115,7 @@ var Menu = {
             <table class="titleblock">
               <tr>
                 <td>
-                  <img src="images/modules/{{$m}}.png" alt="Icone {{$m}}" width="24" height="24" />
+                  <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" width="24" height="24" />
                 </td>
                 <td class="titlecell">
                   {{tr}}module-{{$m}}-long{{/tr}}

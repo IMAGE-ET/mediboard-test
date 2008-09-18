@@ -18,7 +18,7 @@
           {{if $currModule->mod_ui_active && $currModule->_can->view}}  
           <td align="center">
             <a href="?m={{$mod_name}}">
-              <img src="images/modules/{{$mod_name}}.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
+              <img src="./modules/{{$mod_name}}/images/icon.png" alt="{{tr}}module-{{$mod_name}}-court{{/tr}}" height="48" width="48" />
               <br />{{tr}}module-{{$currModule->mod_name}}-court{{/tr}}
             </a>
           </td>
@@ -74,7 +74,7 @@
       <table class='titleblock'>
         <tr>
           <td>
-            <img src="./images/modules/{{$m}}.png" alt="Icone {{$m}}" height="24" width="24" />
+            <img src="./modules/{{$m}}/images/icon.png" alt="Icone {{$m}}" height="24" width="24" />
           </td>
           <td class='titlecell'>
             {{tr}}module-{{$m}}-long{{/tr}}

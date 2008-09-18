@@ -25,7 +25,7 @@ function chgMenu(id, type) {
 		    {{if $currModule->mod_ui_active && $currModule->_can->view}}
         <div class="menuItem {{if $mod_name == $m}}selected{{/if}}">
           <a href="?m={{$mod_name}}" title="{{tr}}module-{{$mod_name}}-long{{/tr}}">
-            {{thumb src="images/modules/$mod_name.png" h="16" w="16" f="png"}}
+            {{thumb src="modules/$mod_name/images/icon.png" h="16" w="16" f="png"}}
             {{tr}}module-{{$mod_name}}-court{{/tr}}
           </a>
         </div>
@@ -71,7 +71,7 @@ function chgMenu(id, type) {
       </div>
     </td>
     <td class="titlecell">
-      <img src="./images/modules/{{$m}}.png" height="24" width="24" />
+      <img src="./modules/{{$m}}/images/icon.png" height="24" width="24" />
     </td>
     <td class="titlecell">
       {{tr}}module-{{$m}}-long{{/tr}}
