@@ -73,6 +73,9 @@ var reverseBefore = $$('td.{{$hier}}').reverse("false");
 var reverseToday = $$('td.{{$date}}').reverse("false");
 var reverseAfter = $$('td.{{$demain}}').reverse("false");
 
+window.periodicalBefore = null;
+window.periodicalAfter = null;
+
 Main.add(function () {
   listThHoursBefore = $$('.th_hours_{{$hier}}');
   listThHoursAfter = $$('.th_hours_{{$demain}}');
@@ -154,7 +157,6 @@ showHideElement = function(list_show, list_hide, th1, th2, signe){
 }
 
 showAfter = function(){
-  
   if(th_before && th_before.colSpan == 0){
     showHideElement(listTdAfter, listTdToday, th_after, th_today, "+");
   } else {
@@ -209,9 +211,13 @@ showBefore = function(){
 {{if $prescription_id}}
   <button type="button" class="search" style="float: right" onclick="viewDossier('{{$prescription_id}}');">Dossier cloturé</button>
 	<h2 style="text-align: center">
-	    <img src="images/icons/prev.png" onclick="showBefore();" />
+	    <a href="#1" onclick="showBefore()" onmousedown="periodicalBefore = new PeriodicalExecuter(showBefore, 0.2);" onmouseup="periodicalBefore.stop();">
+        <img src="images/icons/prev.png" alt="&lt;"/>
+      </a>
 	    Dossier de soin du {{$date|@date_format:"%d/%m/%Y"}}
-	    <img src="images/icons/next.png" onclick="showAfter();" />
+      <a href="#1" onclick="showAfter()" onmousedown="periodicalAfter = new PeriodicalExecuter(showAfter, 0.2);" onmouseup="periodicalAfter.stop();">
+	      <img src="images/icons/next.png" alt="&gt;" />
+      </a>
 	 </h2>
 	<table style="width: 100%">
 	  <tr>
