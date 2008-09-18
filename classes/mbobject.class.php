@@ -428,7 +428,8 @@ class CMbObject {
       return self::$objectCache[$this->_class_name][$id];
     }
     
-    return $this->load($id);
+    $this->load($id);
+    return $this;
   }
   
   /**
