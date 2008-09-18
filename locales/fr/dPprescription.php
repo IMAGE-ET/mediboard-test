@@ -850,4 +850,5 @@ $locales['CPrescriptionLineElement.unite_decalage_fin.jour'] = 'jour(s)';
 $locales['CPrescriptionLineElement.unite_decalage_fin.heure'] = 'heure(s)';
 $locales['config-object_handlers-CPrescriptionLineHandler'] = 'Modification automatique des lignes';
 $locales['CPrescription.protocole.select'] = 'Choisir un protocole';
+$locales['CPrescription.protocole.none'] = 'Aucun protocole';
 ?>
