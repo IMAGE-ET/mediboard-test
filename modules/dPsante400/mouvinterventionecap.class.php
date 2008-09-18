@@ -212,6 +212,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $operation->sortie_salle = mbTime($sortie_reelle);
     
     // Anesthésiste
+//    mbTrace($operECap->data, "operECap->data");
     if ($CPRT = $operECap->consume("CPRT")) {
       $this->syncPraticien($CPRT);
       $operation->anesth_id = $this->praticiens[$CPRT]->_id;
