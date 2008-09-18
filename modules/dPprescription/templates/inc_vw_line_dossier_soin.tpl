@@ -20,7 +20,7 @@
             {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
           </div>
           <div id="tooltip-content-{{$type}}" style="display: none; color: black; text-align: left">
-       		{{if array_key_exists("CCategoryPrescription", $transmissions) && array_key_exists($type, $transmissions.CCategoryPrescription)}}
+       		{{if is_array($transmissions) && array_key_exists("CCategoryPrescription", $transmissions) && array_key_exists($type, $transmissions.CCategoryPrescription)}}
   		      <ul>
   			  {{foreach from=$transmissions.CCategoryPrescription.$type item=_trans}}
   			    <li>{{$_trans->_view}} le {{$_trans->date|date_format:"%d/%m/%Y à %Hh%M"}}:<br /> {{$_trans->text}}</li>
