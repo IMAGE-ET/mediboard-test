@@ -1522,11 +1522,30 @@ span.hilite {
 
 table.dPsalleOp select,
 table.dPsalleOp option,
+table.dPsalleOp optgroup,
+table.dPsalleOp input,
+table.dPsalleOp button  {
+  font-size: 14px;
+  font-weight: normal;
+}
+
+table.dPsalleOp select,
 table.dPsalleOp input,
 table.dPsalleOp button  {
   height: 24px;
-  font-size: 14px;
-  font-weight: normal;
+}
+
+table.dPsalleOp option,
+table.dPsalleOp optgroup  {
+  padding: 2px;
+}
+
+table.dPsalleOp optgroup option {
+  padding-left: 1em;
+}
+
+table.dPsalleOp optgroup {
+  font-weight: bold;
 }
 
 table.dPsalleOp .notext  {
