@@ -311,4 +311,5 @@ $locales['CPrescriptionLineMedicament.unite_decalage_fin.heure'] = '';
 $locales['CPrescriptionLineElement.unite_decalage_fin.jour'] = '';
 $locales['CPrescriptionLineElement.unite_decalage_fin.heure'] = '';
 $locales['config-object_handlers-CPrescriptionLineHandler'] = '';
+$locales['mod-dPprescription-tab-vw_edit_liaison_admission'] = '';
 ?>

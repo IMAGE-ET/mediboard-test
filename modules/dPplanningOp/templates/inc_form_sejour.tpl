@@ -150,7 +150,7 @@ Main.add( function(){
 
   var sValue = document.editSejour.praticien_id.value;
   refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_chir_id);
-  refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_anesth_id);
+  //refreshListProtocolesPrescription(sValue, document.editSejour._protocole_prescription_anesth_id);
   
   removePlageOp(false);
 });
@@ -556,7 +556,10 @@ Main.add( function(){
   <td colspan="3">{{tr}}CProtocole-protocole_prescription_chir_id{{/tr}}</td>
 </tr>
 <tr>
-  <td><select name="_protocole_prescription_anesth_id"></select></td>
+  <td>
+    <div id="prot_anesth_view"></div>
+    <input type="hidden" name="_protocole_prescription_anesth_id" value="" />
+  </td>
   <td colspan="3"><select name="_protocole_prescription_chir_id"></select></td>
 </tr>
 {{/if}}

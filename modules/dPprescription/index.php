@@ -16,4 +16,5 @@ $module->registerTab("vw_edit_executant", null, TAB_ADMIN);
 $module->registerTab("vw_edit_protocole", null, TAB_EDIT);
 $module->registerTab("vw_edit_associations_moments", null, TAB_ADMIN);
 $module->registerTab("vw_edit_moments_unitaires", null, TAB_ADMIN);
+$module->registerTab("vw_edit_liaison_admission", null, TAB_EDIT);
 ?>

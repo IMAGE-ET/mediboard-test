@@ -70,7 +70,8 @@ var ProtocoleSelector = {
     refreshListCCAM("expert");
     refreshListCCAM("easy");
     
-    refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
+    $V(oSejourForm[this.sProtoPrescAnesth], protocole.protocole_prescription_anesth_id);
+    refreshViewProtocoleAnesth(protocole.protocole_prescription_anesth_id);
     refreshListProtocolesPrescription(protocole.chir_id, oSejourForm[this.sProtoPrescChir], protocole.protocole_prescription_chir_id);
   }
 }

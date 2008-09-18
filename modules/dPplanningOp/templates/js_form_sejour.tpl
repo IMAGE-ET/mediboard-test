@@ -11,7 +11,7 @@ function modifPrat(){
   oForm.pathologie.value= sValue ? 
     listCategoriePrat[sValue] || "" : "";
     
-  refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_anesth_id);
+  //refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_anesth_id);
   refreshListProtocolesPrescription(sValue, oForm._protocole_prescription_chir_id);
 }
 
@@ -23,6 +23,13 @@ function refreshListProtocolesPrescription(praticien_id, list, selected_id) {
     url.addParam("selected_id", selected_id);
     url.requestUpdate(list, { waitingText: null} );
   }
+}
+
+function refreshViewProtocoleAnesth(prescription_id) {
+  var url = new Url;
+  url.setModuleAction("dPplanningOp", "httpreq_vw_protocole_anesth");
+  url.addParam("prescription_id", prescription_id);
+  url.requestUpdate("prot_anesth_view", { waitingText: null} );
 }
 
 function checkDureeHospi() {

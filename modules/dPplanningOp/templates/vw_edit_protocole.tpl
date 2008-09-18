@@ -27,8 +27,8 @@ function refreshListProtocolesPrescription(praticien_id, selected_id) {
   url.setModuleAction("dPplanningOp", "httpreq_vw_list_protocoles_prescription");
   url.addParam("praticien_id", praticien_id);
   
-  url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
-  url.requestUpdate(document.editFrm.protocole_prescription_anesth_id, { waitingText: null } );
+  //url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_anesth_id}}");
+  //url.requestUpdate(document.editFrm.protocole_prescription_anesth_id, { waitingText: null } );
 
   url.addParam("selected_id", selected_id || "{{$protocole->protocole_prescription_chir_id}}");
   url.requestUpdate(document.editFrm.protocole_prescription_chir_id, { waitingText: null } );
@@ -320,11 +320,7 @@ Main.add(function () {
         </tr>
         {{if array_key_exists("dPprescription", $modules)}}
         <tr>
-          <td>{{mb_label object=$protocole field="protocole_prescription_anesth_id"}}</td>
           <td colspan="2">{{mb_label object=$protocole field="protocole_prescription_chir_id"}}</td>
-        </tr>
-        <tr>
-          <td><select name="protocole_prescription_anesth_id"></select></td>
           <td colspan="2"><select name="protocole_prescription_chir_id"></select></td>
         </tr>
         {{/if}}
