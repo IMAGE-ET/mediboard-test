@@ -1712,7 +1712,7 @@ hr.control_tabs {
   border-top: 1px solid #458;
 }
   
-ul.control_tabs {
+ul.control_tabs, ul.control_tabs_vertical {
   list-style: none;
   clear: both;
   padding: 3px 6px;
@@ -1722,17 +1722,17 @@ ul.full_width li {
 	width: 100%;
 }
 
-ul.control_tabs li {
+ul.control_tabs li, ul.control_tabs_vertical li {
   float: left;
   margin: 0px 2px;
   text-align: center;
 }
 
-ul.control_tabs li.linebreak {
+ul.control_tabs li.linebreak, ul.control_tabs_vertical li.linebreak {
 	clear: both;
 }
 
-ul.control_tabs li a {
+ul.control_tabs li a, ul.control_tabs_vertical li a {
   display: block;
   border: 1px solid #458;
   -moz-border-radius: 4px 4px 0 0;
@@ -1744,40 +1744,66 @@ ul.control_tabs li a {
   margin-bottom: -1px;
 }
 
-ul.control_tabs li a:focus {
+ul.control_tabs li a:focus, ul.control_tabs_vertical li a:focus {
   outline: 0;
 }
 
-ul.control_tabs li a:hover {
+ul.control_tabs li a:hover, ul.control_tabs_vertical li a:hover {
   background-color: #98B5DF;
   text-decoration: none;
 }
 
-ul.control_tabs li a.active {
+ul.control_tabs li a.active, ul.control_tabs_vertical li a.active {
   background-color: #FFF;
   color: #000;
   border-bottom: 1px solid #fff;
 }
 
-ul.control_tabs li a.minor {
+ul.control_tabs li a.minor, ul.control_tabs_vertical li a.minor {
   background-color: #CCCCCC;
   color: #333333;
 }
 
-ul.control_tabs li a.minor:hover {
+ul.control_tabs li a.minor:hover, ul.control_tabs_vertical li a.minor:hover {
   background-color: #BBBBBB;
   color: #000000;
 }
 
-ul.control_tabs li a.minor.active {
+ul.control_tabs li a.minor.active, ul.control_tabs_vertical li a.minor.active {
   background-color: #999999;
   color: #000000;
 }
 
-ul.control_tabs .separator {
+ul.control_tabs .separator, ul.control_tabs_vertical .separator {
   padding: 0 10px; 
   display: block;
   visibility: hidden;
+}
+
+
+ul.control_tabs_vertical{
+  float: left;
+}
+
+ul.control_tabs_vertical {
+  padding: 0;
+}
+
+ul.control_tabs_vertical li {
+  float: none;
+  text-align: right;
+}
+
+ul.control_tabs_vertical li a {
+  -moz-border-radius: 4px 0 0 4px;
+  padding: 3px 8px;
+  margin-bottom: 2px;
+}
+
+ul.control_tabs_vertical li a.active {
+  background-color: #FFF;
+  color: #000;
+  border-bottom: 1px solid #458;
 }
 
 

@@ -9,6 +9,8 @@ Main.add(function () {
       )
     )
   );
+  
+  var tabs = Control.Tabs.create('tab_categories', true);
 });
 
 </script>
@@ -71,3 +73,45 @@ Main.add(function () {
     </tr>
   </table>
 </form>
+
+
+<div>
+<ul id="tab_categories" class="control_tabs_vertical" style="margin-top: 2em;">
+  <li><a href="#cat1">cat 1</a></li>
+  <li><a href="#cat2">cat 2</a></li>
+</ul>
+<table class="tbl">
+  <tr>
+    <th style="width: 50%;">test1</th>
+    <th style="width: 50%;">test2</th>
+  </tr>
+  <tbody id="cat1" style="display: none;">
+    <tr>
+      <td>test1</td>
+      <td>test2</td>
+    </tr>
+    <tr>
+      <td>test11</td>
+      <td>test22</td>
+    </tr>
+  </tbody>
+  <tbody id="cat2" style="display: none;">
+    <tr>
+      <td>tdf hj4h</td>
+      <td>test2</td>
+    </tr>
+    <tr>
+      <td>hj fh4jgj</td>
+      <td>test22</td>
+    </tr>
+    <tr>
+      <td>ghfgvfg</td>
+      <td>vhfghfgjnkg45kg45kkfh k4fhk54hg</td>
+    </tr>
+    <tr>
+      <td>esfdgdfgdhcd</td>
+      <td>hdfghgfhd</td>
+    </tr>
+  </tbody>
+</table>
+</div>
