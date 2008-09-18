@@ -63,7 +63,7 @@ Main.add(function () {
   {{assign var=cmd value="?m=system&a=domodsql&mod_name=$module_name&cmd"}}
   <tr>
     <td>
-      <img src="images/modules/{{$mbmodule->mod_name}}.png" style="height:18px; width:18px; float: right;" alt="?" />
+      <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height:18px; width:18px; float: right;" alt="?" />
       <strong>{{$mbmodule->mod_name}}</strong>
     </td>
 
@@ -90,7 +90,7 @@ Main.add(function () {
   {{assign var=cmd value="?m=system&a=domodsql&mod_id=$module_id&cmd"}}
   <tr> 
     <td>
-      <img src="images/modules/{{$mbmodule->mod_name}}.png" style="height:18px; width:18px; float: right;" alt="?" />
+      <img src="modules/{{$mbmodule->mod_name}}/images/icon.png" style="height:18px; width:18px; float: right;" alt="?" />
       <strong>{{$mbmodule->mod_name}}</strong>
     </td>
 
