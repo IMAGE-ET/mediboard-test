@@ -1,0 +1,1 @@
+<th class="title" colspan="2">Patient</th>
