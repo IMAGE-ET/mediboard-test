@@ -98,11 +98,11 @@ Main.add(function () {
   <tbody id="cat2" style="display: none;">
     <tr>
       <td>tdf hj4h</td>
-      <td>test2</td>
+      <td>tesertyertyt2</td>
     </tr>
     <tr>
       <td>hj fh4jgj</td>
-      <td>test22</td>
+      <td>teetyerty</td>
     </tr>
     <tr>
       <td>ghfgvfg</td>

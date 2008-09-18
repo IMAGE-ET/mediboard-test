@@ -7,7 +7,7 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $g;
+global $can;
 $can->needsRead();
 
 // Chargement des etablissements externes

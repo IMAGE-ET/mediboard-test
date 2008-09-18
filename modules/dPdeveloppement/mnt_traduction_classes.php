@@ -22,14 +22,26 @@ if ($module == "system") {
   $classes[] = "CModule";
 }
 
+// If the locale files are in the module's "locales" directory
+$in_module = (is_dir("modules/$module/locales"));
+
 // liste des dossiers modules + common et styles
 $modules = array_keys(CModule::getInstalled());
 sort($modules);
 
 // Dossier des traductions
-$localesDirs = $AppUI->readDirs("locales");
-CMbArray::removeValue(".svn",$localesDirs);
-//CMbArray::removeValue("en",$localesDirs);
+$localesDirs = array();
+if ($in_module) {
+  $files = glob("modules/$module/locales/*");
+  foreach ($files as $file) {
+    $name = basename($file, ".php");
+    $localesDirs[$name] = $name;
+  }
+}
+else {
+  $localesDirs = $AppUI->readDirs("locales");
+  CMbArray::removeValue(".svn",$localesDirs);
+}
 
 // Récupération du fichier demandé pour toutes les langues
 $translateModule = new CMbConfig;
@@ -37,7 +49,7 @@ $translateModule->sourcePath = null;
 $contenu_file = array();
 foreach($localesDirs as $locale){
   $translateModule->options = array("name" => "locales");
-  $translateModule->targetPath = "locales/$locale/$module.php";
+  $translateModule->targetPath = ($in_module ? "modules/$module/locales/$locale.php" : "locales/$locale/$module.php");
   $translateModule->load();
   $contenu_file[$locale] = $translateModule->values;
 }

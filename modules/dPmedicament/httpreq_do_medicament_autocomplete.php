@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $dPconfig, $g;// Recherche du produit
-
 $produit = mbGetValueFromPost("produit", "aaa");
 $inLivret = mbGetValueFromPost("inLivret", 0);
 $produit_max = mbGetValueFromGet("produit_max", 10);

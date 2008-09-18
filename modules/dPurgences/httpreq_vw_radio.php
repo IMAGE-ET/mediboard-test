@@ -7,8 +7,6 @@
 * @author Alexis Granger
 */
 
-global $AppUI, $can, $m, $g, $dPconfig;
-
 // Chargement du rpu
 $rpu_id = mbGetValueFromGetOrSession("rpu_id");
 $rpu = new CRPU();

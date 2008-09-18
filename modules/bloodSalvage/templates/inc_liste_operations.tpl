@@ -1,7 +1,7 @@
 {{** 
   * @param $urgence bool Urgence mode
   * @param $vueReduite bool Affichage compact
-  * @param $operations array|COperation opérations à afficher
+  * @param $operations array|COperation interventions à afficher
   *}}
 
 <!-- Entêtes -->

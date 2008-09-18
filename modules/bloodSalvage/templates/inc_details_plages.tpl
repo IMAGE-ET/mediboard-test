@@ -38,7 +38,7 @@
       {{/if}}
     </th>
     {{else}}
-    <th><label for="anesth_id" title="Anesthésiste associé à la plage d'opération">Anesthésiste</label></th>
+    <th><label for="anesth_id" title="Anesthésiste associé à la plage d'intervention">Anesthésiste</label></th>
     <td>
       <select name="anesth_id" onchange="submit()">
         <option value="">&mdash; Choisir un anesthésiste</option>

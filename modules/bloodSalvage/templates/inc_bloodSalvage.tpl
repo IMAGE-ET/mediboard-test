@@ -34,7 +34,7 @@ Main.add(function(){
  </div>
 {{else}}
 	<div class="big-info">
-		Aucun Cell Saver n'est prévu pour cette opération.
+		Aucun Cell Saver n'est prévu pour cette intervention.
 	</div>
 	<div id="register" style="text-align:center">
 	<form name="inscriptionRSPO" action="?m={{$m}}" method="post">

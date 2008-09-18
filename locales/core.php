@@ -10,6 +10,10 @@ if (null == $locales = $shm->get($shared_name)) {
   foreach (glob("$root_dir/locales/$locale/*.php") as $file) {
     require_once($file);
   }
+  
+  foreach (glob("$root_dir/modules/*/locales/$locale.php") as $file) {
+    require_once($file);
+  }
 
   $shm->put($shared_name, $locales);
 }

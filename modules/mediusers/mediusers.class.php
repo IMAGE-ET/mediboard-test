@@ -82,7 +82,7 @@ class CMediusers extends CMbObject {
   function getSpecs() {
     $specs = parent::getSpecs();
     $specs["remote"]        = "bool";
-    $specs["adeli"]         = "numchar length|9 confidential";
+    $specs["adeli"]         = "numchar length|9 confidential mask|99S9S99999S9";
     $specs["function_id"]   = "notNull ref class|CFunctions";
     $specs["discipline_id"] = "ref class|CDiscipline";
     $specs["titres"]        = "text";

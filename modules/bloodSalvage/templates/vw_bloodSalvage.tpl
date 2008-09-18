@@ -28,7 +28,7 @@ Main.add(function () {
 			  <div id="bloodSalvage"></div>
 			{{else}}
 				<div class="big-info">
-					Veuillez sélectionner une opération dans la liste.
+					Veuillez sélectionner une intervention dans la liste.
 				</div>
 			{{/if}}
 		</td>

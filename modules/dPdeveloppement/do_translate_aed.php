@@ -35,7 +35,11 @@ $translateModule->sourcePath = null;
 
 //Ecriture du fichier
 $translateModule->options = array("name" => "locales");
-$translateModule->targetPath = "locales/$language/$module.php";
+if (is_file("locales/$language/$module.php")) {
+  $translateModule->targetPath = "locales/$language/$module.php";
+} else {
+  $translateModule->targetPath = "modules/$module/locales/$language.php";
+}
 
 $error = $translateModule->update($tableau, true);
 

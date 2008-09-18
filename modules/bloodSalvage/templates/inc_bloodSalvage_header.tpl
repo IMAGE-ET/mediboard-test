@@ -1,4 +1,4 @@
-<!-- Haut de page, informations patient et opération (idem Salle d'op) -->
+<!-- Haut de page, informations patient et intervention (idem Salle d'op) -->
 <table class="tbl">
   {{assign var=patient value=$selOp->_ref_sejour->_ref_patient}}
   <tr>

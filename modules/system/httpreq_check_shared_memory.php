@@ -15,7 +15,8 @@ $can->needsEdit();
 foreach (glob("locales/*", GLOB_ONLYDIR) as $localeDir) {
   $localeName = basename($localeDir);
   $locales = array();
-  foreach (glob("locales/$localeName/*.php") as $localeFile) {
+  $localeFiles = array_merge(glob("locales/$localeName/*.php"), glob("modules/*/locales/$localeName.php"));
+  foreach ($localeFiles as $localeFile) {
     if (basename($localeFile) != "encoding.php") {
       require $localeFile;
     }
