@@ -13,175 +13,195 @@
 <table class="form" id="admission" style="page-break-after: always;">
   <tr>
     <td colspan="2">
+      <!-- Bordereau d'en-tête -->
       <table width="100%">
         <tr>
-          <th class="title" colspan="4">
+          <th class="title" colspan="6">
             <a href="#" onclick="window.print()">
-              Dossier d'anesthésie (1/2)
+              Dossier d'anesthésie de {{$patient->_view}}
             </a>
           </th>
         </tr>
         <tr>
-          <th class="category" colspan="4">
-            {{$patient->_view}}
-          </th>
-        </tr>
-        <tr>
           <th>Telephone</th>
-          <td>{{$patient->tel}}</td>
-          <th>Mobile</th>
-          <td>{{$patient->tel2}}</td>
+          <td style="white-space: nowrap;">{{mb_value object=$patient field="tel"}}</td>
+          <th>Age</th>
+          <td style="white-space: nowrap;">{{$patient->_age}} ans</td>
+          <th>C.A.</th>
+          <td>
+            Dr {{$consult->_ref_chir->_view}}
+            - le {{mb_value object=$consult->_ref_plageconsult field="date"}}</td>
         </tr>
         <tr>
-          <th>Age</th>
-          <td>{{$patient->_age}} ans</td>
+          <th>Mobile</th>
+          <td style="white-space: nowrap;">{{mb_value object=$patient field="tel2"}}</td>
+          <th>Taille</th>
+          <td style="white-space: nowrap;">{{if $const_med->taille}}{{$const_med->taille}} cm{{else}}-{{/if}}</td>
+          <th>Séjour</th>
+          <td>
+            {{mb_value object=$sejour field="type"}}
+            du {{mb_value object=$sejour field="_entree"}}
+            au {{mb_value object=$sejour field="_sortie"}}
+          </td>
+        </tr>
+        <tr>
           <th>Profession</th>
           <td>{{$patient->profession}}</td>
-        </tr>
-        <tr>
           <th>Poids</th>
-          <td>{{if $const_med->poids}}{{$const_med->poids}} kg{{else}}-{{/if}}</td>
-          <th>Taille</th>
-          <td>{{if $const_med->taille}}{{$const_med->taille}} cm{{else}}-{{/if}}</td>
-        </tr>
-        <tr>
-          <th>Anesthésiste</th>
-          <td>Dr {{$consult->_ref_chir->_view}}</td>
-          <th>Consultation</th>
-          <td>{{$consult->_ref_plageconsult->date|date_format:"%A %d %B %Y"}}</td>
-        </tr>
-        <tr>
+          <td style="white-space: nowrap;">{{if $const_med->poids}}{{$const_med->poids}} kg{{else}}-{{/if}}</td>
           <th>Intervention</th>
-          <td>{{$operation->libelle}}</td>
-          <th>Date</th>
-          <td>Dr {{$operation->_ref_chir->_view}}</td>
+          <td>Dr {{$operation->_ref_chir->_view}} - le {{mb_value object=$operation->_ref_plageop field="date"}}</td>
         </tr>
       </table>
     </td>
   </tr>
   <tr>
     <td width="50%">
+      <!-- Examens complémentaires / Traitements / Allergies -->
       <table width="100%">
         <tr>
-          <th class="category" colspan="2">Séjour</th>
+          <th class="category">Examens complémentaires</th>
+        </tr>
+        {{foreach from=$consult->_types_examen key=curr_type item=list_exams}}
+        {{if $list_exams|@count}}
+        <tr>
+          <td>
+            {{tr}}CExamComp.realisation.{{$curr_type}}{{/tr}}
+          </td>
         </tr>
         <tr>
-          <th>Type</th>
-          <td>{{mb_value object=$sejour field="type"}}</td>
-        </tr>
-        <tr>
-          <th>Entrée</th>
-          <td>{{mb_value object=$sejour field="_entree"}}</td>
-        </tr>
-        <tr>
-          <th>Sortie</th>
-          <td>{{mb_value object=$sejour field="_sortie"}}</td>
-        </tr>
-      </table>
-    </td>
-    <td width="50%">
-      <table width="100%">
-        <tr>
-          <th class="category" colspan="2">Intervention</th>
-        </tr>
-        <tr>
-          <th>Date</th>
-          <td>{{mb_value object=$operation->_ref_plageop field="date"}}</td>
-        </tr>
-        <tr>
-          <th>Chirurgien</th>
-          <td>Dr {{$operation->_ref_chir->_view}}</td>
-        </tr>
-        <tr>
-          <th>Libellé</th>
           <td>
             <ul>
-              {{if $operation->libelle}}
-                <li><em>[{{$operation->libelle}}]</em></li>
-              {{/if}}
-              {{foreach from=$operation->_ext_codes_ccam item=curr_code}}
-              <li><em>{{$curr_code->libelleLong}}</em> ({{$curr_code->code}}) (coté {{tr}}COperation.cote.{{$operation->cote}}{{/tr}})</li>
+              {{foreach from=$list_exams item=curr_examcomp}}
+              <li>
+                {{$curr_examcomp->examen}}
+                {{if $curr_examcomp->fait}}
+                  (Fait)
+                {{else}}
+                  (A Faire)
+                {{/if}}
+              </li>
               {{/foreach}}
             </ul>
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table width="100%">
+       {{/if}}
+       {{foreachelse}}
+       <tr>
+        <td>
+          Pas d'examen complémentaire
+        </td>
+      </tr>
+      {{/foreach}}
         <tr>
-          <th class="category">Examen clinique</th>
+          <th class="category">Traitements</th>
         </tr>
         <tr>
           <td>
             <ul>
+              {{foreach from=$dossier_medical->_ref_traitements item=curr_trmt}}
               <li>
-                <strong>Cardiovasculaire</strong>
-                <br />
-                {{$consult_anesth->examenCardio|nl2br}}
+                {{if $curr_trmt->fin}}
+                  Du {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} au {{$curr_trmt->fin|date_format:"%d/%m/%Y"}} :
+                {{elseif $curr_trmt->debut}}
+                  Depuis le {{$curr_trmt->debut|date_format:"%d/%m/%Y"}} :
+                {{/if}}
+                <i>{{$curr_trmt->traitement}}</i>
               </li>
-              <li>
-                <strong>Pulmonaire</strong>
-                <br />
-                {{$consult_anesth->examenPulmo|nl2br}}
-              </li>
-              <li>
-                <strong>Autre</strong>
-                <br />
-                {{$consult->examen|nl2br}}
-              </li>
+              {{foreachelse}}
+              <li>Pas de traitements</li>
+              {{/foreach}}
             </ul>
+          </td>
+        </tr>
+        <tr>
+          <th class="category">Allergies</th>
+        </tr>
+        <tr>
+          <td style="font-weight: bold; white-space: normal; font-size:130%;">
+          {{if $dossier_medical->_ref_antecedents}}
+            {{foreach from=$dossier_medical->_ref_antecedents.alle item=currAnt}}
+              <ul>
+                <li> 
+                  {{if $currAnt->date|date_format:"%d/%m/%Y"}}
+                    {{$currAnt->date|date_format:"%d/%m/%Y"}} :
+                  {{/if}}
+                  {{$currAnt->rques}} 
+                </li>
+              </ul>
+            {{/foreach}}
+          {{else}}
+            <ul>
+              <li>Pas d'allergie saisie</li>
+            </ul>
+          {{/if}}
           </td>
         </tr>
       </table>
     </td>
-    <td>
+    <td width="50%">
+      <!-- Addictions / docs édités / Intubation / Prémédication -->
       <table width="100%">
         <tr>
           <th class="category">Addictions</th>
         </tr>
         <tr>
           <td>
-            {{if $dossier_medical->_ref_addictions}}
-              {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
-                {{if $list_addiction|@count}}
-                <strong>{{tr}}CAddiction.type.{{$curr_type}}{{/tr}}</strong>
-                {{foreach from=$list_addiction item=curr_addiction}}
-                  <ul>
-                    <li>
-                      {{$curr_addiction->addiction}}
-                    </li>
-                  </ul>
-                {{/foreach}}
-                {{/if}}
+          {{if $dossier_medical->_ref_addictions}}
+            {{foreach from=$dossier_medical->_ref_types_addiction key=curr_type item=list_addiction}}
+              {{if $list_addiction|@count}}
+              {{tr}}CAddiction.type.{{$curr_type}}{{/tr}} :
+              {{foreach from=$list_addiction item=curr_addiction}}
+                {{$curr_addiction->addiction}} ;
               {{/foreach}}
-            {{/if}}
+              <br />
+              {{/if}}
+            {{/foreach}}
+          {{/if}}
           </td>
         </tr>
-      </table>
-    </td>
-  </tr>
-  <tr>
-    <td>
-      <table width="100%">
         <tr>
-          <th class="category">Traitements</th>
+          <th class="category">Documents édités</th>
         </tr>
         <tr>
           <td>
+            {{foreach from=$consult->_ref_documents item=currDoc}}
+              {{$currDoc->nom}} ;
+            {{foreachelse}}
+            Aucun Document
+            {{/foreach}}
+            </ul>
           </td>
         </tr>
-      </table>
-    </td>
-    <td>
-      <table width="100%">
         <tr>
           <th class="category">Intubation</th>
         </tr>
         <tr>
           <td>
+            <strong>Mallampati :</strong>
+            {{tr}}CConsultAnesth.mallampati.{{$consult->_ref_consult_anesth->mallampati}}{{/tr}}
+            <br />
+            <strong>Ouverture de la bouche :</strong>
+            {{tr}}CConsultAnesth.bouche.{{$consult->_ref_consult_anesth->bouche}}{{/tr}}
+            <br />
+            <strong>Distance thyro-mentonière :</strong>
+            {{tr}}CConsultAnesth.distThyro.{{$consult->_ref_consult_anesth->distThyro}}{{/tr}}
+            <br />
+            <strong>Etat bucco-dentaire :</strong>
+            {{$consult->_ref_consult_anesth->etatBucco|nl2br}}
+            <br />
+            <strong>Conclusion :</strong>
+            {{$consult->_ref_consult_anesth->conclusion|nl2br}}
+            <br />
+            {{if $consult->_ref_consult_anesth->_intub_difficile}}
+            <span style="font-weight: bold; text-align:center; color:#F00;">
+              Intubation Difficile Prévisible
+            </span>
+            {{else}}
+            <span style="font-weight: bold; text-align:center;">
+              Pas Intubation Difficile Prévisible
+            </span>        
+            {{/if}}
           </td>
         </tr>
         <tr>
@@ -189,68 +209,65 @@
         </tr>
         <tr>
           <td>
+            {{$consult->_ref_consult_anesth->premedication|nl2br}}
           </td>
         </tr>
       </table>
     </td>
   </tr>
-</table>
-
-<table class="form" id="admission" style="page-break-after: always;">
   <tr>
-    <td>
+    <td colspan="2">
       <table width="100%">
         <tr>
-          <th class="title" colspan="4">
-            <a href="#" onclick="window.print()">
-              Dossier d'anesthésie (2/2)
-            </a>
-          </th>
+          <th class="category">Antécédents</th>
+        </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td>
+      <!-- Atcd chirurgicaux / anesthésiques -->
+      <table width="100%">
+        <tr>
+          <th class="category">Chirurgicaux</th>
         </tr>
         <tr>
-          <th class="category" colspan="4">
-            Antécédents chirgicaux et anesthésiques
-          </th>
+          <th class="category">Anesthésiques</th>
+        </tr>
+      </table>
+    </td>
+    <td>
+      <!-- Atcd Cardio / Uro-Nephro / NeuroPsy / Endoc / Gyneco / Autres -->
+      <table width="100%">
+        <tr>
+          <th class="category">Cardiovasculaires</th>
         </tr>
         <tr>
-          <th class="category" colspan="4">
-            Cardiovasculaire
-          </th>
+          <th class="category">Uro-nephrologiques</th>
         </tr>
         <tr>
-          <th class="category" colspan="4">
-            Pulmonaire
-          </th>
+          <th class="category">Neuro-psychiatriques</th>
         </tr>
         <tr>
-          <th class="category" colspan="4">
-            Digestif
-          </th>
+          <th class="category">Endocrinologiques</th>
         </tr>
         <tr>
-          <th class="category" colspan="2">
-            Uro-nephrologie
-          </th>
-          <th class="category" colspan="2">
-            Neuro-psychiatrie
-          </th>
+          <th class="category">Gynécologiques</th>
         </tr>
         <tr>
-          <th class="category" colspan="2">
-            Gyneco-obstétrique
-          </th>
-          <th class="category" colspan="2">
-            Endocrinologie
-          </th>
+          <th class="category">Autres</th>
         </tr>
+      </table>
+    </td>
+  </tr>
+  <tr>
+    <td colspan="2">
+      <!-- Biologie -->
+      <table width="100%">
         <tr>
-          <th class="category" colspan="2">
-            Hématologie - hémostase
-          </th>
-          <th class="category" colspan="2">
-            Divers
-          </th>
+          <th class="category">Biologie</th>
         </tr>
+      
       </table>
     </td>
   </tr>
