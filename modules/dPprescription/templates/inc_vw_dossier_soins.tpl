@@ -112,9 +112,9 @@ Main.add(function () {
 	  });
 	}
   }
-  
-  
+
   new Control.Tabs('tab_dossier_soin');
+  var tabs = Control.Tabs.create('tab_categories', true);
 });
 
 var oFormClick = document.click;
@@ -231,72 +231,100 @@ showBefore = function(){
 	    </td>
 	  </tr>
 	</table>
-	
 
-	<table class="tbl">
+  {{assign var=administrations value=$prescription->_administrations}}
+	{{assign var=transmissions value=$prescription->_transmissions}}	  
+	{{assign var=prises value=$prescription->_prises}}
+	{{assign var=list_prises value=$prescription->_list_prises}}
+  {{assign var=lines value=$prescription->_lines}}
+  <table style="width: 100%">
 	  <tr>
-	    <th rowspan="2">Type</th>
-	    <th rowspan="2">Conditionnelle</th>
-	    <th rowspan="2">Libelle</th>
-	    <th rowspan="2">Posologie</th>
-	    {{foreach from=$tabHours key=_date item=_hours_by_date}}
-	     <th id="th-{{$_date}}">{{$_date|date_format:"%d/%m"}}</th>
-	    {{/foreach}}
-	    <th rowspan="2" colspan="2">Signatures<br /> Prat. / Pharm.</th>
+	    <td style="width: 1%">
+		 	 <table>
+			 	 <tr>
+					 <td>
+					   <ul id="tab_categories" class="control_tabs_vertical">
+						    {{if $lines.med}}
+						      <li><a href="#_med">Médicaments</a></li>
+						    {{/if}}
+							  {{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
+							  {{foreach from=$specs_chapitre->_list item=_chapitre}}
+							    {{if array_key_exists($_chapitre, $lines.elt)}}
+							    <li><a href="#_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+							    {{/if}}
+							  {{/foreach}}
+							</ul>	
+				 	 	</td>
+			 	 	</tr>
+		 	 	</table>
+		 	 	</td>
+		 	 	<td>
+				<table class="tbl" >
+				  {{if $lines.med || $lines.elt}}
+					  <tr>
+					    <th rowspan="2">Catégorie</th>
+					    <th rowspan="2">Cond.</th>
+					    <th rowspan="2">Libelle</th>
+					    <th rowspan="2">Posologie</th>
+					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
+					     <th id="th-{{$_date}}">{{$_date|date_format:"%d/%m"}}</th>
+					    {{/foreach}}
+					    <th rowspan="2" colspan="2">Signatures<br /> Prat. / Pharm.</th>
+					  </tr>
+					  <tr>
+					    {{foreach from=$tabHours key=_date item=_hours_by_date}}
+				          {{foreach from=$_hours_by_date item=_hour}}
+						    <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}">{{$_hour}}h</th>          
+						  {{/foreach}} 
+					    {{/foreach}}
+					  </tr>
+			    {{/if}}
+			
+				  <!-- Affichage des medicaments -->
+				  <tbody id="_med" style="display: none;">
+				  {{foreach from=$lines.med item=_line name="foreach_med"}}
+				    {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
+					  {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+					            line=$line_med
+					            nodebug=true
+					            first_foreach=foreach_med
+					            last_foreach=foreach_line
+					            type=med
+					            suffixe=med
+					            nb_line=$_line|@count
+					            dosql=do_prescription_line_medicament_aed}}	         
+					{{/foreach}} 		 
+				  {{/foreach}}
+			    </tbody>
+					
+				  <!-- Affichage des elements -->
+				  {{foreach from=$lines.elt key=name_chap item=elements_chap name="foreach_element"}}
+				       {{if !$smarty.foreach.foreach_element.first}}
+				         </tbody>
+				       {{/if}}
+					     <tbody id="_cat-{{$name_chap}}" style="display: none;">  
+							    {{foreach from=$elements_chap key=name_cat item=elements_cat}}
+							      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
+							      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
+							        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 	          
+							          {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
+							                    line=$element
+							                    nodebug=true
+							                    first_foreach=foreach_cat
+							                    last_foreach=foreach_elt
+							                    type=$name_cat
+							                    suffixe=elt
+							                    nb_line=$_element|@count
+							                    dosql=do_prescription_line_element_aed}}
+							   {{/foreach}}
+							  {{/foreach}}
+							{{/foreach}}
+						{{/foreach}}
+					 </tbody>
+				</table>
+	    </td>
 	  </tr>
-	  <tr>
-	    {{foreach from=$tabHours key=_date item=_hours_by_date}}
-          {{foreach from=$_hours_by_date item=_hour}}
-		    <th id="{{$_date}} {{$_hour}}:00:00" class="th_hours_{{$_date}}">{{$_hour}}h</th>          
-		  {{/foreach}} 
-	    {{/foreach}}
-	  </tr>
-	  
-	  {{assign var=administrations value=$prescription->_administrations}}
-	  {{assign var=transmissions value=$prescription->_transmissions}}	  
-	  {{assign var=prises value=$prescription->_prises}}
-	  {{assign var=list_prises value=$prescription->_list_prises}}
-	  {{assign var=lines value=$prescription->_lines}}
-		
-		
-	  <!-- Affichage des medicaments -->
-	  {{foreach from=$lines.med item=_line name="foreach_med"}}
-	    {{foreach from=$_line key=unite_prise item=line_med name="foreach_line"}} 
-		  {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-		            line=$line_med
-		            nodebug=true
-		            first_foreach=foreach_med
-		            last_foreach=foreach_line
-		            type=med
-		            suffixe=med
-		            nb_line=$_line|@count
-		            dosql=do_prescription_line_medicament_aed}}	         
-		{{/foreach}} 		 
-	  {{/foreach}}
-
-		
-	  <!-- Affichage des elements -->
-	  {{foreach from=$lines.elt key=name_chap item=elements_chap}}
-	    {{foreach from=$elements_chap key=name_cat item=elements_cat}}
-	      {{assign var=categorie value=$categories.$name_chap.$name_cat}}
-	      {{foreach from=$elements_cat item=_element name="foreach_cat"}}
-	        {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}}   
-	          {{include file="../../dPprescription/templates/inc_vw_line_dossier_soin.tpl" 
-	                    line=$element
-	                    nodebug=true
-	                    first_foreach=foreach_cat
-	                    last_foreach=foreach_elt
-	                    type=$name_cat
-	                    suffixe=elt
-	                    nb_line=$_element|@count
-	                    dosql=do_prescription_line_element_aed}}
-	    	{{/foreach}}
-	      {{/foreach}}
-	    {{/foreach}}
-	  {{/foreach}}
-	</table>
-
-	
+  </table>
 {{else}}
   <div class="big-info">
 	Ce dossier ne possède pas de prescription de séjour

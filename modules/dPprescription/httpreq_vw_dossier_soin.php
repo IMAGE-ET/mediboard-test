@@ -105,9 +105,28 @@ if($prescription->_id){
   }
 }	
 
+// Calcul du rowspan pour les medicaments
+$prescription->_nb_produit_by_cat["med"] = 0;
+foreach($prescription->_lines["med"] as $_line){
+  foreach($_line as $line_med){
+    $prescription->_nb_produit_by_cat["med"]++;
+  }
+}
 
+// Calcul du rowspan pour les elements
+foreach($prescription->_lines["elt"] as $elements_chap){
+  foreach($elements_chap as $name_cat => $elements_cat){
+    if(!isset($this->_nb_produit_by_cat[$name_cat])){
+      $prescription->_nb_produit_by_cat[$name_cat] = 0;
+    }
+    foreach($elements_cat as $_element){
+      foreach($_element as $element){
+        $prescription->_nb_produit_by_cat[$name_cat]++;
+      }
+    }
+  }
+}     
 
- 
 $transmission = new CTransmissionMedicale();
 $where = array();
 $where[] = "(object_class = 'CCategoryPrescription') OR 
@@ -117,13 +136,10 @@ $where[] = "(object_class = 'CCategoryPrescription') OR
 $where["sejour_id"] = " = '$sejour->_id'";
 $transmissions_by_class = $transmission->loadList($where);
 
-
-
 foreach($transmissions_by_class as $_transmission){
   $_transmission->loadRefsFwd();
 	$prescription->_transmissions[$_transmission->object_class][$_transmission->object_id][$_transmission->_id] = $_transmission;
 }
-
 
 $signe_decalage = ($nb_decalage < 0) ? "-" : "+";
 
@@ -148,6 +164,7 @@ $smarty->assign("now"                , $now);
 $smarty->assign("categories"         , $categories);
 $smarty->assign("real_date"          , $real_date);
 $smarty->assign("real_time"          , $real_time);
+$smarty->assign("categorie"          , new CCategoryPrescription());
 $smarty->display("inc_vw_dossier_soins.tpl");
 
 ?>

@@ -15,7 +15,7 @@
         {{assign var=categorie_id value=$categorie->_id}}
         <th class="{{if @$transmissions.CCategoryPrescription.$categorie_id|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$type}}" 
-            onclick="addCibleTransmission('CCategoryPrescription','{{$type}}','{{tr}}CCategoryPrescription.chapitre.{{$type}}{{/tr}} - {{$categorie->nom}}');">
+            onclick="addCibleTransmission('CCategoryPrescription','{{$type}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
           <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$type}}'} })">
             {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
           </div>
@@ -27,7 +27,7 @@
   			  {{/foreach}}
   		      </ul>
   			{{else}}
-  			  Pas de {{tr}}CCategoryPrescription.chapitre.{{$type}}{{/tr}}
+  			  Pas de {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}
   			{{/if}}
 		  </div>           
 	    </th>         

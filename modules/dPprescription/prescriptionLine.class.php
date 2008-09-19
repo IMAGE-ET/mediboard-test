@@ -482,29 +482,16 @@ class CPrescriptionLine extends CMbObject {
           }
         }
       }
-    			
-    // Stockage du nombre de ligne de medicaments
-    if(!isset($key_tab, $prescription->_lines[$type][$this->_id][$key_tab])){
-      if($_prise->nb_tous_les && $_prise->calculDatesPrise($date) || !$_prise->nb_tous_les){
-        $cat = $name_cat ? $name_cat : "med";
-       	if(!isset($prescription->_nb_produit_by_cat[$cat])){
-       	  $prescription->_nb_produit_by_cat[$cat] = 0;
-       	}
-        $prescription->_nb_produit_by_cat[$cat]++;
-      } 
-    }
 
-    
-    
-    // Moment unitaire
+      // Moment unitaire
     if($_prise->moment_unitaire_id && !($_prise->nb_tous_les && $_prise->unite_tous_les) && $this->_active){
       $dateTimePrise = mbAddDateTime(mbTime($_prise->_ref_moment->heure), $date);
 	  if(($this->_fin_reelle > $dateTimePrise || !$this->_fin_reelle) && $poids_ok){
 		if($_prise->_ref_moment->heure){
-	  	      @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
+	    @$prescription->_list_prises[$type][$date][$this->_id][$_prise->unite_prise][$heures[substr($_prise->_ref_moment->heure, 0, 2)]] += $_prise->quantite;
 		}
-	  	    @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
-	  	    $prise_comptee = 1;
+	  	@$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
+	  	$prise_comptee = 1;
 	  }
 	} 
 		  
@@ -575,7 +562,7 @@ class CPrescriptionLine extends CMbObject {
  	  continue;
  	}
  	if($name_chap && $name_cat){
- 	  $prescription->_lines[$type][$name_chap][$name_cat][$this->_id][$key_tab] = $this;		
+ 	  $prescription->_lines[$type][$name_chap][$name_cat][$this->_id][$key_tab] = $this;
  	} else {
  	  $prescription->_lines[$type][$this->_id][$key_tab] = $this;
  	}
