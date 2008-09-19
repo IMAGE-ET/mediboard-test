@@ -34,6 +34,14 @@ if($praticien && !$service_id && !$praticien_id) {
   $praticien_id = $userCourant->user_id;
 }
 
+// Récupération de la liste des services
+$where = array();
+$where["group_id"] = "= '$g'";
+$service = new CService;
+$order = "nom";
+$services = $praticien_id ?
+  $service->loadList($where, $order) :
+  $service->loadListWithPerms(PERM_READ, $where, $order);
 
 $changeSejour = mbGetValueFromGet("service_id") || mbGetValueFromGet("praticien_id");
 $changeSejour = $changeSejour || (!$service_id && !$praticien_id);
@@ -45,7 +53,6 @@ if($changeSejour) {
   $sejour_id = mbGetValueFromGetOrSession("sejour_id");
 }
 
-
 // Récupération du service à ajouter/éditer
 $totalLits = 0;
 
@@ -53,6 +60,7 @@ $totalLits = 0;
 $heureLimit = "16:00:00";
 
 // Initialisation
+
 $service = new CService;
 $groupSejourNonAffectes = array();
 $sejoursParService = array();
@@ -61,6 +69,47 @@ $sejoursParService = array();
 $prat = new CMediusers();
 $praticiens = $prat->loadPraticiens(PERM_READ);
 
+// Restructuration minimal des services
+global $sejoursParService;
+$sejoursParService = array();
+function cacheLit($affectation) {
+  
+  // Cache des lits
+  $lit_id = $affectation->lit_id;
+  static $lits = array();
+  if (!array_key_exists($lit_id, $lits)) {
+    $lit = new CLit();
+    $lit->load($lit_id);
+    $lits[$lit_id] = $lit;     
+  }
+  
+  $lit =& $lits[$lit_id];
+  $lit->_ref_affectations[$affectation->_id] = $affectation;
+
+  // Cache des chambres
+  $chambre_id = $lit->chambre_id;
+  static $chambres = array();
+  if (!array_key_exists($chambre_id, $chambres)) {
+  	$chambre = new CChambre();
+  	$chambre->load($chambre_id);
+  	$chambres[$chambre_id] = $chambre;
+  }
+
+  $chambre =& $chambres[$chambre_id];
+  $chambre->_ref_lits[$lit_id] =& $lit;
+  
+  // Cache de services
+  global $sejoursParService;
+  $service_id = $chambre->service_id;
+  if (!array_key_exists($service_id, $sejoursParService)) {
+  	$service = new CService();
+  	$service->load($service_id);
+  	$sejoursParService[$service_id] = $service;
+  }
+
+  $service =& $sejoursParService[$service_id];
+  $service->_ref_chambres[$chambre_id] =& $chambre;
+}
 
 // Si seulement le praticien est indiqué
 if($praticien_id && !$service_id){
@@ -74,21 +123,6 @@ if($praticien_id && !$service_id){
 	
 	$sejours = $sejour->loadList($where);
 	foreach($sejours as &$_sejour){
-		$_sejour->loadRefsPrescriptions();
-
-		if($_sejour->_ref_prescriptions){
-		  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
-			   $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"];
-			   $prescription_sejour->countNoValideLines();
-			}
-		}
-	  
-		$_sejour->loadRefPatient();
-		$_sejour->loadRefPraticien();
-		$_sejour->_ref_praticien->loadRefFunction();
-		$_sejour->loadNumDossier();
-
-		// Recherche de toutes les affectations pour la journee courante
 		$affectations = array();
 		$affectation = new CAffectation();
 		$where = array();
@@ -99,31 +133,46 @@ if($praticien_id && !$service_id){
 
     if(count($affectations) >= 1){
 	    foreach($affectations as &$_affectation){
-	    	$_affectation->loadRefLit();
-    	  $_affectation->_ref_lit->loadCompleteView();
-		  	// Cache de services
-				$_service_id = $_affectation->_ref_lit->_ref_chambre->service_id;
-				if(!array_key_exists($_service_id, $sejoursParService)) {
-		  		$_service = new CService();
-		  		$_service->load($_service_id);
-		  		$sejoursParService[$_service->_id] = $_service;	
-		  	} 
-	  		$service =& $sejoursParService[$_service_id];
-		  	$chambre =& $_affectation->_ref_lit->_ref_chambre;
-		  	$lit =& $_affectation->_ref_lit;
-		  	$affectation =& $_affectation;
-		  	$affectation->_ref_sejour =& $_sejour;
-		  	$affectation->_ref_sejour->loadRefPraticien();
-		  	$affectation->_ref_sejour->_ref_praticien->loadRefFunction();
-		  	$service->_ref_chambres[$chambre->_id] = $chambre;
-		  	$service->_ref_chambres[$chambre->_id]->_ref_lits[$lit->_id] = $lit;
-				$service->_ref_chambres[$chambre->_id]->_ref_lits[$lit->_id]->_ref_affectations[$affectation->_id] = $affectation; 
+	      cacheLit($_affectation);
 		  }
     } else {
+      $_sejour->loadRefsPrescriptions();
+   		$_sejour->loadRefPatient();
+	    $_sejour->loadRefPraticien();
+	    $_sejour->_ref_praticien->loadRefFunction();
+	    $_sejour->loadNumDossier();
 		  $sejoursParService["NP"][$_sejour->_id] = $_sejour;
-	  }
+    }
 	}
 }
+
+
+foreach ($sejoursParService as $key => $_service) {
+  if($key != "NP"){
+    ksort($_service->_ref_chambres);
+	  foreach ($_service->_ref_chambres as $_chambre) {
+	    foreach ($_chambre->_ref_lits as $_lit) {
+	      foreach ($_lit->_ref_affectations as $_affectation) {
+	        $_affectation->loadRefSejour();
+	        $_sejour =& $_affectation->_ref_sejour;
+	      	$_sejour->loadRefsPrescriptions();
+	    		$_sejour->loadRefPatient();
+			    $_sejour->loadRefPraticien();
+			    $_sejour->_ref_praticien->loadRefFunction();
+			    $_sejour->loadNumDossier();
+			
+					if($_sejour->_ref_prescriptions){
+					  if(array_key_exists('sejour', $_sejour->_ref_prescriptions)){
+						   $prescription_sejour =& $_sejour->_ref_prescriptions["sejour"];
+						   $prescription_sejour->countNoValideLines();
+						}
+					}
+	      }
+	    }
+		}
+  }
+}
+
 
 // Tri des sejours par services
 ksort($sejoursParService);
@@ -134,19 +183,6 @@ $sejour->load($sejour_id);
 $sejour->loadRefs();
 $sejour->loadRefsPrescriptions();
 $sejour->loadRefsDocs();
-
-
-// Récupération de la liste des services
-$where = array();
-$where["group_id"] = "= '$g'";
-$services = new CService;
-$order = "nom";
-if($praticien_id) {
-  $services = $services->loadList($where, $order);
-} else {
-  $services = $services->loadListWithPerms(PERM_READ, $where, $order);
-}
-
 
 if($service_id){
 	// Chargement des séjours à afficher
