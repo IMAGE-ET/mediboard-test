@@ -239,9 +239,14 @@ $dPconfig["dPbloc"]["CPlageOp"] = array (
   "minutes_interval" => "15",
   "plage_vide"       => "0",
   "libelle_ccam"     => "1", 
-  "locked"          => "1"
+  "locked"          => "1",
+  "planning" => array (
+  	"col1" => "interv",
+	"col2" => "sejour",
+	"col3" => "patient"
+  )
 );
-    
+
 $dPconfig["dPImeds"]["url"] = "http://localhost/listedossiers.aspx";
 
 $dPconfig["dPfiles"] = array (

@@ -49,19 +49,34 @@
    <th class="category" colspan="4">Paramètres d'affichage de l'impression de plannings</th>
  </tr>
  <tr>
-   <th class="category" colspan="2">Plages vides</th>
-   <th class="category" colspan="2">Libellés ccam</th>
+   <th class="category">Plages vides</th>
+   <th class="category" colspan="2">Ordre des colones</th>
+   <th class="category">Libellés ccam</th>
  </tr>
  <tr>
     {{assign var="var" value="plage_vide"}}
-    <td colspan="2">
+    <td style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="0" {{if $dPconfig.$m.$class.$var == "0"}}checked="checked"{{/if}}/> 
-    </td>     
+    </td> 
+    {{assign var="var" value="planning"}}
+    <td colspan="2" style="text-align: center">
+    {{foreach from=$dPconfig.$m.$class.$var item=value key=col}}
+	  <label for="{{$m}}[{{$class}}][{{$var}}][{{$col}}]" title="{{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}">
+        {{tr}}config-{{$m}}-{{$class}}-{{$var}}-{{$col}}{{/tr}}
+      </label>
+      <select name="{{$m}}[{{$class}}][{{$var}}][{{$col}}]">
+      	<option value="patient" {{if $value=="patient"}} selected="selected"{{/if}}>Patient</option>
+        <option value="sejour" {{if $value=="sejour"}} selected="selected"{{/if}}>Sejour</option>
+      	<option value="interv" {{if $value=="interv"}} selected="selected"{{/if}}>Intervention</option>
+      </select>
+      <br />
+	{{/foreach}}
+    </td>
     {{assign var="var" value="libelle_ccam"}}
-    <td colspan="2">
+    <td style="text-align: center">
       <label for="{{$m}}[{{$class}}][{{$var}}]">Oui</label>
       <input type="radio" name="{{$m}}[{{$class}}][{{$var}}]" value="1" {{if $dPconfig.$m.$class.$var == "1"}}checked="checked"{{/if}}/> 
       <label for="{{$m}}[{{$class}}][{{$var}}]">Non</label>

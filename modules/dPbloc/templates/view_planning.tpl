@@ -60,24 +60,30 @@ function printAdmission(id) {
     <td>
 	  <table class="tbl">
 	    <tr>
-	    	{{include file=inc_planning/interv_title.tpl}}
-	    	{{include file=inc_planning/sejour_title.tpl}}
-	    	{{include file=inc_planning/patient_title.tpl}}
+     {{assign var="col1" value=$dPconfig.dPbloc.CPlageOp.planning.col1}}
+     {{assign var="col2" value=$dPconfig.dPbloc.CPlageOp.planning.col2}}
+     {{assign var="col3" value=$dPconfig.dPbloc.CPlageOp.planning.col3}}
+     
+     {{assign var=suffixe value="_title.tpl"}}
+     {{include file=inc_planning/$col1$suffixe}}
+     {{include file=inc_planning/$col2$suffixe}}
+     {{include file=inc_planning/$col3$suffixe}}
 		</tr>
 		<tr>
-			{{include file=inc_planning/interv_header.tpl}}
-			{{include file=inc_planning/sejour_header.tpl}}
-			{{include file=inc_planning/patient_header.tpl}}
+     {{assign var=suffixe value="_header.tpl"}}
+     {{include file=inc_planning/$col1$suffixe}}
+     {{include file=inc_planning/$col2$suffixe}}
+     {{include file=inc_planning/$col3$suffixe}}
 		</tr>
 		{{foreach from=$curr_plageop->_ref_operations item=curr_op}}
 		<tr>
-		  	{{include file=inc_planning/interv_content.tpl}}
-		  	
-		  	{{assign var=sejour value=$curr_op->_ref_sejour}}
-      		{{include file=inc_planning/sejour_content.tpl}}
-      		
-      		{{assign var=patient value=$sejour->_ref_patient}}
-			{{include file=inc_planning/patient_content.tpl}}
+     {{assign var=sejour value=$curr_op->_ref_sejour}}
+     {{assign var=patient value=$sejour->_ref_patient}}
+   
+     {{assign var=suffixe value="_content.tpl"}}
+     {{include file=inc_planning/$col1$suffixe}}
+     {{include file=inc_planning/$col2$suffixe}}
+     {{include file=inc_planning/$col3$suffixe}}
 		</tr>
 		{{/foreach}}
 	  </table>
