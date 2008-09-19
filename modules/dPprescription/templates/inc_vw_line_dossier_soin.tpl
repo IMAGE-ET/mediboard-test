@@ -13,11 +13,11 @@
     {{else}}
         <!-- Cas d'une ligne d'element, possibilité de rajouter une transmission à la categorie -->
         {{assign var=categorie_id value=$categorie->_id}}
-        <th class="{{if @$transmissions.CCategoryPrescription.$categorie_id|@count}}transmission{{else}}transmission_possible{{/if}}" 
+        <th class="text {{if @$transmissions.CCategoryPrescription.$categorie_id|@count}}transmission{{else}}transmission_possible{{/if}}" 
             rowspan="{{$prescription->_nb_produit_by_cat.$type}}" 
             onclick="addCibleTransmission('CCategoryPrescription','{{$type}}','{{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}} - {{$categorie->nom}}');">
           <div class="tooltip-trigger" onmouseover="ObjectTooltip.create(this, {mode: 'dom',  params: {element: 'tooltip-content-{{$type}}'} })">
-            {{tr}}CCategoryPrescription.chapitre.{{$name_chap}}{{/tr}}<br /><a href="#">{{$categorie->nom}}</a>
+            <a href="#">{{$categorie->nom}}</a>
           </div>
           <div id="tooltip-content-{{$type}}" style="display: none; color: black; text-align: left">
        		{{if is_array($transmissions) && array_key_exists("CCategoryPrescription", $transmissions) && array_key_exists($type, $transmissions.CCategoryPrescription)}}
