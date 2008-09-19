@@ -82,9 +82,9 @@ var ElementChecker = {
 
   getErrorMessage: function() {
     var msg = '';
-    for (error in this.oErrors) {
+    this.oErrors.each(function (error) {
       msg += "   - "+error.message+"\n";
-    }
+    });
     return msg;
   },
   
