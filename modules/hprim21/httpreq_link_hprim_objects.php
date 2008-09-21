@@ -10,7 +10,7 @@
 global $AppUI, $can, $m, $dPconfig;
 
 $date_limite = mbDate("- 1 year");
-$qte_limite  = 3000;
+$qte_limite  = 1000;
 
 $g = CGroups::loadCurrent()->_id;
 $tag_ipp = CAppUI::conf("dPpatients CPatient tag_ipp");
