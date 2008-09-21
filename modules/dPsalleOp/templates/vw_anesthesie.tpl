@@ -34,7 +34,7 @@ function printAllDocs() {
             <th class="category">Consultation</th>
           </tr>
           <tr>
-            <td>Il n'y a aucune consultation d'anesthésie pour cette opération</td>
+            <td>Il n'y a aucune consultation d'anesthésie pour cette intervention</td>
           </tr>
         </table>
       {{elseif $op}}

@@ -71,7 +71,7 @@
   {{foreach from=$_sejour->_ref_operations item=_operation}}
   <tr>
     <th colspan="11">
-	    Opération du {{$_operation->_datetime}} 
+	    Intervention du {{$_operation->_datetime}} 
 	    {{if $_operation->libelle}}
 	    <em>[{{$_operation->libelle}}]</em>
 	    {{/if}}

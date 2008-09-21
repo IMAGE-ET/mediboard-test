@@ -129,7 +129,7 @@ function checkCompatOpAdm() {
   // cas des urgences
   if(oOpForm.date.value && oSejourForm._date_entree_prevue.value) {
     if(oOpForm.date.value < oSejourForm._date_entree_prevue.value) {
-      alert("Date d'admission superieure à la date d'opération");
+      alert("Date d'admission superieure à la date d'intervention");
       oSejourForm._date_entree_prevue.focus();
       return false;
     }
@@ -137,7 +137,7 @@ function checkCompatOpAdm() {
   // cas normal
   if(oOpForm._date.value && oSejourForm._date_entree_prevue.value) {
     if(oOpForm._date.value < oSejourForm._date_entree_prevue.value) {
-      alert("Date d'admission superieure à la date d'opération");
+      alert("Date d'admission superieure à la date d'intervention");
       oSejourForm._date_entree_prevue.focus();
       return false;
     }
@@ -204,8 +204,8 @@ function cancelOperation() {
   var oElement = oForm.annulee;
   
   if (oElement.value == "0") {
-    if (confirm("Voulez-vous vraiment annuler l'opération ?")) {
-      if (confirm("Souhaitez-vous annuler le Séjour correspondant ?\n\nATTENTION, cette action annulera toutes les opérations de ce séjour !")) {
+    if (confirm("Voulez-vous vraiment annuler l'intervention ?")) {
+      if (confirm("Souhaitez-vous annuler le Séjour correspondant ?\n\nATTENTION, cette action annulera toutes les interventions de ce séjour !")) {
         document.editSejour.annule.value = 1;
       }
       oElement.value = "1";
@@ -217,9 +217,9 @@ function cancelOperation() {
   if (oElement.value == "1") {
     var txtalert = "";
     if(document.editSejour.annule.value == 1){
-      txtalert = "\n\n ATTENTION ! Cette opération va rétablir le séjour choisi.";
+      txtalert = "\n\n ATTENTION ! Cette intervention va rétablir le séjour choisi.";
     }      
-    if (confirm("Voulez-vous vraiment rétablir l'opération ?" + txtalert)) {
+    if (confirm("Voulez-vous vraiment rétablir l'intervention ?" + txtalert)) {
       oElement.value = "0";
       oForm.submit();
       return;

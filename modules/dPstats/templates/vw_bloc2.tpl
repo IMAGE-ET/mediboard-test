@@ -41,7 +41,7 @@ Main.add(function () {
           <th rowspan="2">Code<br />ASA</th>
           <th rowspan="2">Placement<br />programme</th>
           <th rowspan="2">Attribution<br />n° d'ordre</th>
-          <th colspan="9">Timings opération</th>
+          <th colspan="9">Timings intervention</th>
           <th colspan="2">Timings reveil</th>
         </tr>
         <tr>

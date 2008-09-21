@@ -36,7 +36,7 @@ Main.add(function () {
 		  <th>Date</th>
 		  <th>Chirurgien</th>
 		  <th>Patient</th>
-		  <th>Opération</th>
+		  <th>Intervention</th>
 		  <th>Matériel à commander</th>
 		  <th>Valider</th>
 		</tr>

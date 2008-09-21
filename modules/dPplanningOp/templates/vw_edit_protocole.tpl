@@ -178,7 +178,7 @@ Main.add(function () {
       <table class="form">
         <tr>
           <th class="category" colspan="3">
-            Informations concernant l'opération
+            Informations concernant l'intervention
           </th>
         </tr>
         

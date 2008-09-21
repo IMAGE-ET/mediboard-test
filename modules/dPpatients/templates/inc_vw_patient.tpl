@@ -328,7 +328,7 @@ Document.refreshList = function(){
       <ul>
       <li>
       <a class="actionPat" href="#" onclick="printIntervention({{$curr_op->operation_id}})">
-        <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'opération"/>
+        <img src="images/icons/print.png" alt="Imprimer" title="Imprimer l'intervention" />
       </a>
       {{if $curr_sejour->group_id == $g && $curr_op->_canEdit}}
       <a class="actionPat" title="Modifier l'intervention" href="{{$curr_op->_link_editor}}">

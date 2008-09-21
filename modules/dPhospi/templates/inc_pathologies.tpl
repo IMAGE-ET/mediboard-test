@@ -64,7 +64,7 @@
       </select>
       <br />
       <input type="radio" name="septique" value="0" {{if $curr_sejour->septique == 0}} checked="checked" {{/if}} />
-      <label for="septique_0" title="Opération propre">Propre</label>
+      <label for="septique_0" title="Intervention propre">Propre</label>
       <input type="radio" name="septique" value="1" {{if $curr_sejour->septique == 1}} checked="checked" {{/if}} />
       <label for="septique_1" title="Séjour septique">Septique</label>
       <button type="button"

@@ -150,7 +150,7 @@ function viewProduit(cip){
 		    <td>
 		      <div class="big-info">
 		        {{if $full_mode}}
-		          Veuillez selectionner un séjour ou une opération pour pouvoir créer une prescription
+		          Veuillez selectionner un séjour ou une Intervention pour pouvoir créer une prescription
 		        {{else}}
 		          Veuillez choisir un contexte (séjour ou consultation) pour la prescription
 		        {{/if}}

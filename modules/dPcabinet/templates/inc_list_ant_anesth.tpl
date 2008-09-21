@@ -120,7 +120,7 @@ copyAddiction = function(addiction_id) {
 </ul>
 {{/if}}
 
-<strong>Diagnostics significatifs de l'opération</strong>
+<strong>Diagnostics significatifs de l'intervention</strong>
 <ul>
   {{foreach from=$dossier_medical->_ext_codes_cim item=curr_code}}
   <li>

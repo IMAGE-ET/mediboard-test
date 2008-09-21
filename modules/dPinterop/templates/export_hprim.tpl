@@ -120,7 +120,7 @@ function choosePreselection(oSelect) {
         </li>
         {{if $typeObject == "op"}}
         <li>
-          Visualiser <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$mbObject->_id}}">l'opération correspondante</a>
+          Visualiser <a href="?m=dPplanningOp&amp;tab=vw_edit_planning&amp;operation_id={{$mbObject->_id}}">l'intervention correspondante</a>
         </li>
         {{/if}}
       </ul>
@@ -162,7 +162,7 @@ function choosePreselection(oSelect) {
           <th class="category" colspan="2">Identifiants Mediboard</th>
         </tr>
         <tr>	
-          <th>Opération</th>
+          <th>Intervention</th>
           <td>
             <input type="hidden" class="notNull ref class|COperation" name="mb_operation_id" value="{{$mbObject->_id}}"/>
 	          {{if $mbObject->_id}}
@@ -189,7 +189,7 @@ function choosePreselection(oSelect) {
         </tr>
         <tr>
           <th>
-            <label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'opération">Identifiant de patient</label>
+            <label for="sc_patient_id" title="Choisir un identifiant de patient correspondant à l'intervention">Identifiant de patient</label>
           </th>
           <td>
             <input type="text" class="notNull num length|8" name="sc_patient_id" value="{{$mbSejour->_ref_patient->_IPP}}" size="8" maxlength="8" />
@@ -197,7 +197,7 @@ function choosePreselection(oSelect) {
         </tr>
         <tr>
           <th>
-            <label for="sc_venue_id" title="Choisir un identifiant pour la venue correspondant à l'opération">Identifiant de venue</label><br />
+            <label for="sc_venue_id" title="Choisir un identifiant pour la venue correspondant à l'intervention">Identifiant de venue</label><br />
             Suggestion :
           </th>
           <td>

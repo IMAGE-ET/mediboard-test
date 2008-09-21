@@ -9,7 +9,7 @@
 		  <th>Date</th>
 		  <th>Chirurgien</th>
 		  <th>Patient</th>
-		  <th>Opération</th>
+		  <th>Intervention</th>
 		  <th>Matériel à commander</th>
 		</tr>
 		{{foreach from=$op1 item=curr_op}}
@@ -41,7 +41,7 @@
 		  <th>Date</th>
 		  <th>Chirurgien</th>
 		  <th>Patient</th>
-		  <th>Opération</th>
+		  <th>Intervention</th>
 		  <th>Matériel commandé</th>
 		</tr>
 		{{foreach from=$op2 item=curr_op}}

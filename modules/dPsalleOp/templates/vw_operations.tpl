@@ -93,7 +93,7 @@ Main.add(function () {
       {{include file=inc_operation.tpl}}
       {{else}}
       <div class="big-info">
-      	Veuillez sélectionner une opération dans la liste pour pouvoir :
+      	Veuillez sélectionner une intervention dans la liste pour pouvoir :
       	<ul>
       	  <li>coder les actes</li>
       	  <li>coder les diagnostics</li>

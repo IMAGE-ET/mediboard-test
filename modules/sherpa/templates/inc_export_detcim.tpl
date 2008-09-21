@@ -19,7 +19,7 @@
     {{/if}}
     {{/if}}
 
-		<!-- Cas du de l'opération -->
+		<!-- Cas du de l'intervention -->
 		{{if $codable_class == "COperation"}}
 		{{assign var=_operation value=$_codable}}
 		Anapath: {{mb_value object=$_operation field=anapath}}<br />
