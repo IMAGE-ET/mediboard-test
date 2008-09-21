@@ -9,7 +9,7 @@
 
 global $AppUI, $can, $m, $dPconfig;
 
-$date_limite = mbDate("- 1 year");
+$date_limite = mbDate("- 1 month");
 $qte_limite  = 1000;
 
 $g = CGroups::loadCurrent()->_id;
