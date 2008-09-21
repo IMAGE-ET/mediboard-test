@@ -616,8 +616,8 @@ class CPatient extends CMbObject {
    */
   function loadMatchingPatient() {
     $ds = $this->_spec->ds;
-    $where["nom"]       = $ds->prepare("LIKE %", preg_replace("/\W/", "_", $this->nom));
-    $where["prenom"]    = $ds->prepare("LIKE %", preg_replace("/\W/", "_", $this->prenom));
+    $where["nom"]       = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->nom));
+    $where["prenom"]    = $ds->prepare("LIKE %", preg_replace("/\W/", "%", $this->prenom));
     $where["naissance"] = $ds->prepare("= %", $this->naissance);
     
     $this->loadObject($where);
