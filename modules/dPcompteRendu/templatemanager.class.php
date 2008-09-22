@@ -23,8 +23,12 @@ class CTemplateManager {
   var $printMode = false;
   
   function CTemplateManager() {
+    global $AppUI;
+    $user = new CMediusers();
+    $user->load($AppUI->user_id);
     $this->addProperty("Général - date du jour"  , mbTransformTime(null, null, "%d/%m/%Y"));
     $this->addProperty("Général - heure courante", mbTransformTime(null, null, "%Hh%M"));
+    $this->addProperty("Général - rédacteur"     , $user->_view);
   }
 
   function makeSpan($spanClass, $text) {
