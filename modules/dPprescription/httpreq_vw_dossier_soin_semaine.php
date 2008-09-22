@@ -31,6 +31,7 @@ if($prescription_id){
   // Chargement du poids et de la chambre du patient
   $sejour =& $prescription->_ref_object;
   $sejour->loadRefPatient();
+  $sejour->loadRefPraticien();
   $patient =& $sejour->_ref_patient;
   $patient->loadRefConstantesMedicales();
 
