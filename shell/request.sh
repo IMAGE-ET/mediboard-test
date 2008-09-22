@@ -33,6 +33,7 @@ mediboard_connect()
   curl $url/index.php \
     --output $file \
     --create-dirs \
+    --silent \
     --insecure \
     --data login=ok \
     --data username=$user \
@@ -47,6 +48,8 @@ mediboard_request()
   curl $url/index.php?$params\
     --output $file \
     --create-dirs \
+    --silent \
+    --write-out '- cUrled URL: %{url_effective}\n- download size %{size_download}\n- total time %{time_total}\n' \
     --insecure \
     --cookie $cookie
   check_errs $? "Failed to request to Mediboard" "Mediboard requested!"
