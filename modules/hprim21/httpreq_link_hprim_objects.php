@@ -77,8 +77,8 @@ foreach($listHprimPatients as $curr_pat) {
   $patient->nom = $curr_pat->nom;
   $patient->prenom = $curr_pat->prenom;
   $patient->naissance = $curr_pat->naissance;
-  $patient->loadMatchingPatient();
-  if($patient->_id) {
+  $return = $patient->loadMatchingPatient();
+  if($return == 1) {
     $idSante400->object_id   = $patient->_id;
     $idSante400->last_update = mbDateTime();
     $idSante400->store();
