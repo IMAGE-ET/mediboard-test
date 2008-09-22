@@ -350,6 +350,8 @@ Main.add(function () {
   </tr>
 </table>
 
+</form>
+
 <table class="form">
   <tr>
     <th id="clickPat" class="category" style="width: 50%">
@@ -374,4 +376,3 @@ Main.add(function () {
   </tr>
 </table>
 
-</form>

@@ -115,7 +115,7 @@
 		    	{{tr}}Delete{{/tr}}
 		    </button>
 		  </td>  
-		<tr>
+		</tr>
 	  {{foreachelse}}
 	  <tr>
 	    <td>
