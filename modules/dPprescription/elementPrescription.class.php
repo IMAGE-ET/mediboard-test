@@ -39,6 +39,12 @@ class CElementPrescription extends CMbObject {
     return array_merge($specsParent, $specs);
   }
   
+  function getBackRefs() {
+    $backRefs = parent::getBackRefs();
+    $backRefs["prescription_line_element"] = "CPrescriptionLineElement prescription_line_element_id";
+    return $backRefs;
+  }
+  
   function updateFormFields(){
   	parent::updateFormFields();
   	$this->_view = $this->libelle;
