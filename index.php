@@ -115,7 +115,6 @@ if (!$suppressHeaders || $ajax) {
 
 // check if we are logged in
 if (!$AppUI->user_id) {
-  
   $redirect = mbGetValueFromGet("logout") ?  "" : @$_SERVER["QUERY_STRING"]; 
   
   // Ajax login alert
@@ -148,6 +147,9 @@ if (!$AppUI->user_id) {
   exit;
 }
 
+// Show errors to admin
+ini_set("display_errors", $AppUI->user_prefs["INFOSYSTEM"]);
+  
 $user = new CMediusers();
 if ($user->isInstalled()) {
   $user->load($AppUI->user_id);

@@ -486,6 +486,7 @@ class CMouvSejourEcap extends CMouvement400 {
     $this->id400DHE->id400 = $IDAT;
     $this->id400DHE->tag = $tag;
         
+    $this->sejour->_check_bounds = false;
     $this->id400DHE->bindObject($this->sejour);
 
     $this->markStatus(self::STATUS_SEJOUR);
@@ -533,7 +534,7 @@ class CMouvSejourEcap extends CMouvement400 {
    */
   function mapSej(CRecordSante400 $sejECap) {
     // Praticien
-    $CPRT = $this->consume("CPRT");
+    $CPRT = $sejECap->consume("CPRT");
     $this->syncPraticien($CPRT);
     
     // Références principales
@@ -599,6 +600,7 @@ class CMouvSejourEcap extends CMouvement400 {
     }
             
     $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer");
+    $this->sejour->_check_bounds = false;
     $this->id400Sej->bindObject($this->sejour);
     
     $this->markStatus(self::STATUS_SEJOUR);

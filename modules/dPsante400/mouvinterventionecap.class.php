@@ -34,6 +34,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
   function findSejour() {
     // Séjour DHE eCap
     $IDAT = $this->consume("IDAT");
+    $tag = array();
     $tags[] = "eCap";
     $tags[] = "DHE";
     $tags[] = "CIDC:{$this->id400Etab->id400}";
@@ -46,6 +47,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     // Séjour Sej eCap
     $NDOS = $this->consume("NDOS");
+    $tag = array();
     $tags[] = "eCap";
     $tags[] = "NDOS";
     $tags[] = "CIDC:{$this->id400Etab->id400}";
@@ -116,6 +118,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     if ($dheECap->data) {
       $this->mapDHE($dheECap);
       $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer depuis DHE eCap");
+      $this->sejour->_check_bounds = false;
       $this->id400DHE->bindObject($this->sejour);
     }
 
@@ -152,10 +155,12 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $sejECap->valuePrefix = "SJ";
     $sejECap->query($query, $values);
     
+    
     // Si l'enregistrement existe toujours
     if ($sejECap->data) {
 	    $this->mapSej($sejECap);
 	    $this->trace($this->sejour->getDBFields(), "Séjour à enregistrer depuis Sej eCap");
+      $this->sejour->_check_bounds = false;
 	    $this->id400Sej->bindObject($this->sejour);
     }
     
@@ -212,7 +217,6 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     $operation->sortie_salle = mbTime($sortie_reelle);
     
     // Anesthésiste
-//    mbTrace($operECap->data, "operECap->data");
     if ($CPRT = $operECap->consume("CPRT")) {
       $this->syncPraticien($CPRT);
       $operation->anesth_id = $this->praticiens[$CPRT]->_id;

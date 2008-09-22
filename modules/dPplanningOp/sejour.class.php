@@ -17,7 +17,6 @@ class CSejour extends CCodable {
   // DB Table key
   var $sejour_id = null;
   
-  
   // DB Réference
   var $patient_id         = null; // remplace $op->pat_id
   var $praticien_id       = null; // clone $op->chir_id
@@ -81,6 +80,9 @@ class CSejour extends CCodable {
   var $_curr_op_date       = null;
   var $_protocole_prescription_anesth_id = null;
   var $_protocole_prescription_chir_id   = null;
+  
+  // Behaviour fields
+  var $_check_bounds = true;
   
   // Object References
   var $_ref_patient           = null; // Declared in CCodable
@@ -237,29 +239,31 @@ class CSejour extends CCodable {
     }
     
     // Test de coherence de date avec les interventions
-    $this->completeField("entree_prevue");
-    $this->completeField("sortie_prevue");
-    $entree = $this->entree_prevue;
-    $sortie = $this->sortie_prevue;
-
-    if ($entree !== null && $sortie !== null) {
-    	$this->makeDatesOperations();
-    	foreach($this->_dates_operations as $operation_id => $date_operation){
-    	  $isCurrOp = $this->_curr_op_id == $operation_id;
-        if ($isCurrOp) {
-          $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
-        } 
-        else {
-          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
-        }
-        if (!$opInBounds) {
-           $msg.= "Interventions en dehors des nouvelles dates du sejour";  
-        }	
-    	}
-    }
-
-    foreach ($this->getCollisions() as $collision) {
-      $msg .= "Collision avec le sejour du $collision->entree_prevue au $collision->sortie_prevue<br />"; 
+    if ($this->_check_bounds) {
+	    $this->completeField("entree_prevue");
+	    $this->completeField("sortie_prevue");
+	    $entree = $this->entree_prevue;
+	    $sortie = $this->sortie_prevue;
+	
+	    if ($entree !== null && $sortie !== null) {
+	    	$this->makeDatesOperations();
+	    	foreach($this->_dates_operations as $operation_id => $date_operation){
+	    	  $isCurrOp = $this->_curr_op_id == $operation_id;
+	        if ($isCurrOp) {
+	          $opInBounds = $this->_curr_op_date >= mbDate($entree) && $this->_curr_op_date <= mbDate($sortie);
+	        } 
+	        else {
+	          $opInBounds = $date_operation >= mbDate($entree) && $date_operation <= mbDate($sortie);
+	        }
+	        if (!$opInBounds) {
+	           $msg.= "Interventions en dehors des nouvelles dates du sejour";  
+	        }	
+	    	}
+	    }
+	
+	    foreach ($this->getCollisions() as $collision) {
+	      $msg .= "Collision avec le sejour du $collision->entree_prevue au $collision->sortie_prevue<br />"; 
+	    }
     }
     
     return $msg . parent::check();
