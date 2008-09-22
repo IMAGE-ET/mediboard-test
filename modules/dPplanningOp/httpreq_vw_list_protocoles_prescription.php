@@ -7,10 +7,6 @@
 * @author Fabien Ménager
 */
 
-global $can;
-
-$can->needsEdit();
-
 $praticien_id = mbGetValueFromGetOrSession("praticien_id", 0);
 $selected_id = mbGetValueFromGetOrSession("selected_id", 0);
 
