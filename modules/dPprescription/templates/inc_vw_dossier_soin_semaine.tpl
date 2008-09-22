@@ -19,67 +19,103 @@
 	  } });              		        
 	}
 	
+Main.add(function () {
+  var tabs = Control.Tabs.create('tab_categories_plan', true);
+});
+
 </script>
 
 {{if $prescription->_id}}
-
-<table class="tbl">
-  <tr>
-    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
-  </tr>
-  <tr>
-    <td>Poids: {{$patient->_ref_constantes_medicales->poids}} kg</td>
-    <td>Age: {{$patient->_age}}</td>
-    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}
-  </tr>
-</table>
-
-<table class="tbl">
-  <tr>
-    <th>Libelle</th>
-    {{foreach from=$dates item=date}}
-    <th>
-      {{$date|date_format:"%d/%m/%Y"}}
-    </th>
-    {{/foreach}}
-  </tr>
-  
-  
-  
-  <!-- Affichage des medicaments -->
-  {{foreach from=$prescription->_lines.med item=lines_unite_prise name="foreach_line"}}
-    {{assign var=prescription_id value=$prescription->_id}}
-    {{foreach from=$lines_unite_prise key=unite_prise item=line_med name="foreach_med"}}
-      <!-- Si l'unite de prise est bien exprimé en format texte et pas en identifiant de prise -->
-       {{if $smarty.foreach.foreach_med.first}}
-        {{include file="inc_vw_line_dossier_soin_semaine.tpl" 
-                  line=$line_med 
-                  dosql=do_prescription_line_medicament_aed 
-                  type=med
-                  nodebug=true}}    
-	    {{/if}}
-    {{/foreach}}
-  {{/foreach}}
-  
-	<!-- Affichage des elements -->
-	{{foreach from=$prescription->_lines.elt key=name_chap item=elements_chap}}
-	 {{foreach from=$elements_chap key=name_cat item=elements_cat}}
-	   {{assign var=categorie value=$categories.$name_chap.$name_cat}}
-	   {{foreach from=$elements_cat item=_element name="foreach_cat"}}
-	     {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 
-	        {{if $smarty.foreach.foreach_elt.first}}
-	         {{include file="inc_vw_line_dossier_soin_semaine.tpl" 
-	                   line=$element 
-	                   dosql=do_prescription_line_element_aed 
-	                   type=elt
-	                   nodebug=true}} 
-	        {{/if}}
-	      {{/foreach}}
-	    {{/foreach}}
-	  {{/foreach}}
-	{{/foreach}}	
-</table>
-
+	<table class="tbl">
+	  <tr>
+	    <th colspan="3" class="title">{{$sejour->_view}} (Dr {{$sejour->_ref_praticien->_view}})</th>
+	  </tr>
+	  <tr>
+	    <td>Poids: {{$patient->_ref_constantes_medicales->poids}} kg</td>
+	    <td>Age: {{$patient->_age}}</td>
+	    <td>Taille: {{$patient->_ref_constantes_medicales->taille}}
+	  </tr>
+	</table>
+	<table>
+	  <tr>
+	    <td style="width: 1%">
+			 <table>
+			 	<tr>
+				  <td>
+					  <ul id="tab_categories_plan" class="control_tabs_vertical">
+						  {{if $prescription->_lines.med}}
+						    <li><a href="#plan_med">Médicaments</a></li>
+						  {{/if}}
+							{{assign var=specs_chapitre value=$categorie->_specs.chapitre}}
+							{{foreach from=$specs_chapitre->_list item=_chapitre}}
+							  {{if array_key_exists($_chapitre, $prescription->_lines.elt)}}
+							    <li><a href="#plan_cat-{{$_chapitre}}">{{tr}}CCategoryPrescription.chapitre.{{$_chapitre}}{{/tr}}</a></li>
+							  {{/if}}
+							{{/foreach}}
+					  </ul>	
+		 	      </td>
+	 	      </tr>
+	      </table>  
+	    </td>
+	    <td>
+	      <table class="tbl">  
+				  <tr>
+				    <th>Catégorie</th>
+				    <th>Libelle</th>
+				    {{foreach from=$dates item=date}}
+				    <th>
+				      {{$date|date_format:"%d/%m/%Y"}}
+				    </th>
+				    {{/foreach}}
+				  </tr>
+	
+				  <!-- Affichage des medicaments -->
+				  <tbody id="plan_med" style="display: none;">
+				  {{foreach from=$prescription->_lines.med item=lines_unite_prise name="foreach_line"}}
+				    {{assign var=prescription_id value=$prescription->_id}}
+				    {{foreach from=$lines_unite_prise key=unite_prise item=line_med name="foreach_med"}}
+				      <!-- Si l'unite de prise est bien exprimé en format texte et pas en identifiant de prise -->
+				       {{if $smarty.foreach.foreach_med.first}}
+				        {{include file="inc_vw_line_dossier_soin_semaine.tpl" 
+				                  line=$line_med 
+				                  dosql=do_prescription_line_medicament_aed 
+				                  type=med
+				                  nodebug=true
+				                  first_foreach=foreach_med
+				                  last_foreach=foreach_line}}    
+					    {{/if}}
+				    {{/foreach}}
+				  {{/foreach}}
+				  </tbody>
+	  
+					<!-- Affichage des elements -->
+					{{foreach from=$prescription->_lines.elt key=name_chap item=elements_chap name="foreach_element"}}
+					  {{if !$smarty.foreach.foreach_element.first}}
+						</tbody>
+						{{/if}}
+						<tbody id="plan_cat-{{$name_chap}}" style="display: none;">  
+					 {{foreach from=$elements_chap key=name_cat item=elements_cat}}
+					   {{assign var=categorie value=$categories.$name_chap.$name_cat}}
+					   {{foreach from=$elements_cat item=_element name="foreach_cat"}}
+					     {{foreach from=$_element key=unite_prise item=element name="foreach_elt"}} 
+					        {{if $smarty.foreach.foreach_elt.first}}
+					         {{include file="inc_vw_line_dossier_soin_semaine.tpl" 
+					                   line=$element 
+					                   dosql=do_prescription_line_element_aed 
+					                   type=elt
+					                   nodebug=true
+					                   first_foreach=foreach_cat
+							               last_foreach=foreach_elt}} 
+					        {{/if}}
+					      {{/foreach}}
+					    {{/foreach}}
+					  {{/foreach}}
+					{{/foreach}}	
+	        </tbody>
+	      </table>
+	    </td>
+	  </tr>
+	</table>
 {{else}}
   <div class="big-info">
     Ce dossier ne possède pas de prescription de séjour

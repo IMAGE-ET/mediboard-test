@@ -41,7 +41,6 @@ if($prescription_id){
     $prescription->_intitule_prise[$type] = array();
   }
 
- 	
   // Calcul du plan de soin 
   foreach($dates as $_date){
     foreach($types as $type){
@@ -50,6 +49,26 @@ if($prescription_id){
     $prescription->calculPlanSoin($_date);
   }
 }
+
+// Calcul du rowspan pour les medicaments
+$prescription->_nb_produit_by_cat["med"] = 0;
+foreach($prescription->_lines["med"] as $_line){
+  foreach($_line as $line_med){
+    $prescription->_nb_produit_by_cat["med"]++;
+  }
+}
+
+// Calcul du rowspan pour les elements
+foreach($prescription->_lines["elt"] as $elements_chap){
+  foreach($elements_chap as $name_cat => $elements_cat){
+    if(!isset($this->_nb_produit_by_cat[$name_cat])){
+      $prescription->_nb_produit_by_cat[$name_cat] = 0;
+    }
+    foreach($elements_cat as $_element){
+      $prescription->_nb_produit_by_cat[$name_cat]++;
+    }
+  }
+}     
 
 $now = mbDate();
 
@@ -64,6 +83,7 @@ $smarty->assign("categories", $categories);
 $smarty->assign("dates", $dates);
 $smarty->assign("prescription", $prescription);
 $smarty->assign("now", $now);
+$smarty->assign("categorie", new CCategoryPrescription());
 $smarty->display("../../dPprescription/templates/inc_vw_dossier_soin_semaine.tpl");
 
 ?>
