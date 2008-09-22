@@ -34,7 +34,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
   function findSejour() {
     // Séjour DHE eCap
     $IDAT = $this->consume("IDAT");
-    $tag = array();
+    $tags = array();
     $tags[] = "eCap";
     $tags[] = "DHE";
     $tags[] = "CIDC:{$this->id400Etab->id400}";
@@ -47,7 +47,7 @@ class CMouvInterventionECap extends CMouvSejourEcap {
     
     // Séjour Sej eCap
     $NDOS = $this->consume("NDOS");
-    $tag = array();
+    $tags = array();
     $tags[] = "eCap";
     $tags[] = "NDOS";
     $tags[] = "CIDC:{$this->id400Etab->id400}";
