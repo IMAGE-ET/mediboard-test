@@ -12,12 +12,22 @@ Main.add( function(){
 } );
 
 // Fonction permettant de modifier le tokenField lors de la selection des checkboxs
-changeBox = function(oCheckbox, cat_id, oTokenField){
+changeBox = function(oCheckbox, oTokenField){
   if(oCheckbox.checked){
-    oTokenField.add(cat_id);
+    oTokenField.add(oCheckbox.value);
   } else {
-    oTokenField.remove(cat_id);
+    oTokenField.remove(oCheckbox.value);
   }
+}
+
+
+selectChap = function(name_chap, oField){
+  $$('input.'+name_chap).each(function(oCheckbox) { 
+    if(!oCheckbox.checked){
+      oCheckbox.checked = true;
+      oField.add(oCheckbox.value);
+    }
+  });
 }
 	
 </script>
@@ -53,16 +63,19 @@ changeBox = function(oCheckbox, cat_id, oTokenField){
              <strong>Médicaments</strong>
            </td>
            <td>
-             <input type="checkbox" value="med" onclick="changeBox(this,'med',oCatField)" />
+             <input type="checkbox" value="med" onclick="changeBox(this, oCatField)" />
            </td>
          </tr>
          {{foreach from=$categories item=categories_by_chap key=name name="foreach_cat"}}
            {{if $categories_by_chap|@count}}
 	           <tr>
-	             <td><strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong></td>
+	             <td>
+	               <button type="button" onclick="selectChap('{{$name}}', oCatField);" class="tick">Tous</button>
+	               <strong>{{tr}}CCategoryPrescription.chapitre.{{$name}}{{/tr}}</strong>  
+	             </td>
 	             {{foreach from=$categories_by_chap item=categorie}}
 	               <td class="text">
-	                 <input type="checkbox" value="{{$categorie->_id}}" onclick="changeBox(this,'{{$categorie->_id}}',oCatField)"/> {{$categorie->_view}}
+	                 <input class="{{$name}}" type="checkbox" value="{{$categorie->_id}}" onclick="changeBox(this, oCatField)"/> {{$categorie->_view}}
 	               </td>
 	             {{/foreach}}
 	           </tr>
@@ -92,7 +105,7 @@ changeBox = function(oCheckbox, cat_id, oTokenField){
 </tr>
 <tr>
   <td>Catégorie(s) sélectionnée(s)</td>
-  <td>
+  <td class="text">
 {{foreach from=$cat_used item=_cat_view name=cat}}
   <strong>{{$_cat_view}}{{if !$smarty.foreach.cat.last}},{{/if}}</strong>
 {{/foreach}}

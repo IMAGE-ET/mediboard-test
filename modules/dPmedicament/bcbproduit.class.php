@@ -262,10 +262,14 @@ class CBcbProduit extends CBcbObject {
     
     // Chargement de chaque posologie
     $this->_ref_posologies = array();
+    $view_poso = array();
     foreach($posologies as $key => $posologie){
       $mbposologie = new CBcbPosologie();
       $mbposologie->load($posologie["CODE_CIP"], $posologie["NO_POSO"]);
-      $this->_ref_posologies[] = $mbposologie;
+      if(!in_array($mbposologie->_view, $view_poso)){
+        $this->_ref_posologies[] = $mbposologie;
+      }
+      $view_poso[] = $mbposologie->_view;
     }
     return $this->_ref_posologies;
   }

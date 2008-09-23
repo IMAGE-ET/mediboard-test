@@ -525,7 +525,7 @@ class CPrescriptionLine extends CMbObject {
          foreach($tab as $_hour_tab){
            $_hour_tab = str_pad($_hour_tab, 2, "0", STR_PAD_LEFT);
            $dateTimePrise = mbAddDateTime("$_hour_tab:00:00", $date);
-           if($this->_fin_reelle > $dateTimePrise && $poids_ok){
+           if($this->_fin_reelle > $dateTimePrise && $poids_ok && @$heures[$_hour_tab] != ""){
              @$prescription->_list_prises[$type][$date][$this->_id][$_prise->_id][$heures[$_hour_tab]] += $_prise->quantite;	
              @$prescription->_list_prises[$type][$date][$this->_id]["total"] += $_prise->quantite;
              $prise_comptee = 1;

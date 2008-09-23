@@ -39,16 +39,18 @@ $ljoin['lit'] = 'affectation.lit_id = lit.lit_id';
 $ljoin['chambre'] = 'lit.chambre_id = chambre.chambre_id';
 $ljoin['service'] = 'chambre.service_id = service.service_id';
 $where['prescription.type'] = " = 'sejour'";
-$where[] = "(sejour.entree_prevue BETWEEN '$date_min' AND '$date_max') OR 
-            (sejour.sortie_prevue BETWEEN '$date_min' AND '$date_max') OR
-            (sejour.entree_prevue <= '$date_min' AND sejour.sortie_prevue >= '$date_max')"; 
+$where[] = "(sejour.entree_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR 
+            (sejour.sortie_prevue BETWEEN '$date_min 00:00:00' AND '$date_max 23:59:59') OR
+            (sejour.entree_prevue <= '$date_min 00:00:00' AND sejour.sortie_prevue >= '$date_max 23:59:59')";
+
 $where['service.service_id'] = " = '$service_id'";
 $prescription = new CPrescription();
 $prescriptions = $prescription->loadList($where, null, null, null, $ljoin);
+
 $lines = array();
 $patients = array();
-
 $lines_by_patient = array();
+$sejours = array();
 
 $list_heures = range(0,23);
 foreach($list_heures as &$heure){
@@ -79,27 +81,27 @@ foreach($prescriptions as $_prescription){
   $sejours[$sejour->_id] = $sejour;
 
   if(in_array("med", $cats)){
-	foreach($_prescription->_ref_prescription_lines as $_line){
-	  $lines["med"][$_line->_id] = $_line; 
-	}
-	foreach($_prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $_line){
-	  $lines["med"][$_line->_id] = $_line; 
-	}
+		foreach($_prescription->_ref_prescription_lines as $_line_med){
+		  $lines["med"][$_line_med->_id] = $_line_med; 
+		}
+		foreach($_prescription->_ref_object->_ref_prescription_traitement->_ref_prescription_lines as $_line_trait){
+		  $lines["med"][$_line_trait->_id] = $_line_trait; 
+		}
   }
   
   // Chargement des lignes d'elements
   $_prescription->loadRefsLinesElement();
   foreach($_prescription->_ref_prescription_lines_element as $_line_element){
     if(in_array($_line_element->_ref_element_prescription->category_prescription_id, $cats)){
-	  $lines["elt"][$_line_element->_id] = $_line_element;
-	}
+	    $lines["elt"][$_line_element->_id] = $_line_element;
+	  }
   }  	
 
   foreach($dates as $_date){
     $_prescription->calculPlanSoin($_date, 1, $heures);
   }
 
-  $patient_id = $sejour->_ref_patient->_id;
+ $patient_id = $sejour->_ref_patient->_id;
  if($_prescription->_list_prises){
  foreach($_prescription->_list_prises as $type => $prises){
   foreach($prises as $_date => $prises_by_date){
@@ -113,15 +115,15 @@ foreach($prescriptions as $_prescription){
               $unite_prise = $prise->unite_prise;
             }
             $dateTimePrise = "$_date $_hour:00:00";
-			if(array_key_exists($line_id, $lines[$type])){
-	          if($dateTimePrise > $dateTime_min && $dateTimePrise < $dateTime_max) {
-		        @$lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$_hour][$type][$line_id][$unite_prise] += $quantite;
-	    	  } 
-			}
+			      if(array_key_exists($line_id, $lines[$type])){
+	            if($dateTimePrise > $dateTime_min && $dateTimePrise < $dateTime_max) {
+		            @$lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date][$_hour][$type][$line_id][$unite_prise] += $quantite;
+	    	      } 
+			      }
           }  
         }
         // Tri par heures croissantes
-        if(isset($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id])){
+        if(isset($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date])){
           ksort($lines_by_patient[$sejour->_ref_curr_affectation->_ref_lit->_ref_chambre->_view][$sejour->_id][$_date]);
         }
       }
