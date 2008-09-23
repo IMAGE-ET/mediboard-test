@@ -90,12 +90,12 @@ class CMouvInterventionECap extends CMouvSejourEcap {
       return;
     }
     
-//    // Déjà synchronisé, on laisse
-//    if ($this->id400DHE->_id) {
-//      $this->markStatus(self::STATUS_SEJOUR);
-//      $this->markStatus(self::STATUS_PRATICIEN);
-//      return;
-//    }
+    // Déjà synchronisé, on laisse
+    if ($this->id400DHE->_id) {
+      $this->markStatus(self::STATUS_SEJOUR);
+      $this->markStatus(self::STATUS_PRATICIEN);
+      return;
+    }
 
     // Chargement de la DHE
     $values = array (
